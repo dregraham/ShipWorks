@@ -1,11 +1,8 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using Interapptive.Shared.Utility;
 using Shared.System.ComponentModel.DataAnnotations;
-using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Services;
@@ -17,11 +14,6 @@ namespace ShipWorks.Shipping.Carriers.BestRate
     /// </summary>
     public class BestRatePackageAdapter : IPackageAdapter
     {
-        [SuppressMessage("SonarQube", "S2290:Field-like events should not be virtual", Justification = "Event is virtual to allow tests to fire it")]
-        public virtual event PropertyChangedEventHandler PropertyChanged;
-        public event PropertyChangingEventHandler PropertyChanging;
-        private readonly PropertyChangedHandler handler;
-
         private readonly ShipmentEntity shipment;
         private IInsuranceChoice insuranceChoice;
 
@@ -33,7 +25,6 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         {
             MethodConditions.EnsureArgumentIsNotNull(shipment.BestRate, nameof(shipment.BestRate));
 
-            handler = new PropertyChangedHandler(this, () => PropertyChanged, () => PropertyChanging);
             this.shipment = shipment;
             this.insuranceChoice = new InsuranceChoice(shipment, shipment, shipment.BestRate, null);
         }
@@ -61,10 +52,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         public double Weight
         {
             get { return shipment.ContentWeight; }
-            set
-            {
-                handler.Set(nameof(Weight), v => shipment.ContentWeight = value, shipment.ContentWeight, value, false);
-            }
+            set { shipment.ContentWeight = value; }
         }
 
         /// <summary>
@@ -75,10 +63,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         public double AdditionalWeight
         {
             get { return shipment.BestRate.DimsWeight; }
-            set
-            {
-                handler.Set(nameof(AdditionalWeight), v => shipment.BestRate.DimsWeight = value, shipment.BestRate.DimsWeight, value, false);
-            }
+            set { shipment.BestRate.DimsWeight = value; }
         }
 
         /// <summary>
@@ -88,10 +73,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         public bool ApplyAdditionalWeight
         {
             get { return shipment.BestRate.DimsAddWeight; }
-            set
-            {
-                handler.Set(nameof(ApplyAdditionalWeight), v => shipment.BestRate.DimsAddWeight = value, shipment.BestRate.DimsAddWeight, value, false);
-            }
+            set { shipment.BestRate.DimsAddWeight = value; }
         }
 
         /// <summary>
@@ -112,10 +94,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         public double DimsLength
         {
             get { return shipment.BestRate.DimsLength; }
-            set
-            {
-                handler.Set(nameof(DimsLength), v => shipment.BestRate.DimsLength = value, shipment.BestRate.DimsLength, value, false);
-            }
+            set { shipment.BestRate.DimsLength = value; }
         }
 
         /// <summary>
@@ -126,10 +105,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         public double DimsWidth
         {
             get { return shipment.BestRate.DimsWidth; }
-            set
-            {
-                handler.Set(nameof(DimsWidth), v => shipment.BestRate.DimsWidth = value, shipment.BestRate.DimsWidth, value, false);
-            }
+            set { shipment.BestRate.DimsWidth = value; }
         }
 
         /// <summary>
@@ -140,10 +116,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         public double DimsHeight
         {
             get { return shipment.BestRate.DimsHeight; }
-            set
-            {
-                handler.Set(nameof(DimsHeight), v => shipment.BestRate.DimsHeight = value, shipment.BestRate.DimsHeight, value, false);
-            }
+            set { shipment.BestRate.DimsHeight = value; }
         }
 
         /// <summary>
@@ -153,10 +126,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         public long DimsProfileID
         {
             get { return shipment.BestRate.DimsProfileID; }
-            set
-            {
-                handler.Set(nameof(DimsProfileID), v => shipment.BestRate.DimsProfileID = value, shipment.BestRate.DimsProfileID, value, false);
-            }
+            set { shipment.BestRate.DimsProfileID = value; }
         }
 
         /// <summary>
@@ -166,10 +136,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         public IInsuranceChoice InsuranceChoice
         {
             get { return insuranceChoice; }
-            set
-            {
-                handler.Set(nameof(InsuranceChoice), ref insuranceChoice, value);
-            }
+            set { insuranceChoice = value; }
         }
 
         /// <summary>

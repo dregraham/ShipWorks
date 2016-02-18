@@ -1,11 +1,9 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using Interapptive.Shared.Utility;
 using Shared.System.ComponentModel.DataAnnotations;
-using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Services;
@@ -17,13 +15,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon
     /// </summary>
     public class AmazonPackageAdapter : IPackageAdapter
     {
-        [SuppressMessage("SonarQube", "S2290:Field-like events should not be virtual", Justification = "Event is virtual to allow tests to fire it")]
-        [SuppressMessage("SonarQube", "CS0067:The event is never used", Justification = "It is being used, but this message is still being shown.")]
-        public virtual event PropertyChangedEventHandler PropertyChanged;
-        public event PropertyChangingEventHandler PropertyChanging;
-        private readonly PropertyChangedHandler handler;
-        private IInsuranceChoice insuranceChoice;
-
         private readonly ShipmentEntity shipment;
 
         /// <summary>
@@ -34,9 +25,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         {
             MethodConditions.EnsureArgumentIsNotNull(shipment.Amazon, nameof(shipment.Amazon));
 
-            handler = new PropertyChangedHandler(this, () => PropertyChanged, () => PropertyChanging);
             this.shipment = shipment;
-            this.insuranceChoice = new AmazonInsuranceChoice(shipment);
+            InsuranceChoice = new AmazonInsuranceChoice(shipment);
         }
 
         /// <summary>
@@ -64,10 +54,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         public double Length
         {
             get { return shipment.Amazon.DimsLength; }
-            set
-            {
-                handler.Set(nameof(Length), v => shipment.Amazon.DimsLength = value, shipment.Amazon.DimsLength, value, false);
-            }
+            set { shipment.Amazon.DimsLength = value; }
         }
 
         /// <summary>
@@ -78,10 +65,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         public double Width
         {
             get { return shipment.Amazon.DimsWidth; }
-            set
-            {
-                handler.Set(nameof(Width), v => shipment.Amazon.DimsWidth = value, shipment.Amazon.DimsWidth, value, false);
-            }
+            set { shipment.Amazon.DimsWidth = value; }
         }
 
         /// <summary>
@@ -92,10 +76,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         public double Height
         {
             get { return shipment.Amazon.DimsHeight; }
-            set
-            {
-                handler.Set(nameof(Height), v => shipment.Amazon.DimsHeight = value, shipment.Amazon.DimsHeight, value, false);
-            }
+            set { shipment.Amazon.DimsHeight = value; }
         }
 
         /// <summary>
@@ -106,10 +87,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         public double Weight
         {
             get { return shipment.ContentWeight; }
-            set
-            {
-                handler.Set(nameof(Weight), v => shipment.ContentWeight = value, shipment.ContentWeight, value, false);
-            }
+            set { shipment.ContentWeight = value; }
         }
 
         /// <summary>
@@ -120,10 +98,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         public double AdditionalWeight
         {
             get { return shipment.Amazon.DimsWeight; }
-            set
-            {
-                handler.Set(nameof(AdditionalWeight), v => shipment.Amazon.DimsWeight = value, shipment.Amazon.DimsWeight, value, false);
-            }
+            set { shipment.Amazon.DimsWeight = value; }
         }
 
         /// <summary>
@@ -133,10 +108,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         public bool ApplyAdditionalWeight
         {
             get { return shipment.Amazon.DimsAddWeight; }
-            set
-            {
-                handler.Set(nameof(ApplyAdditionalWeight), v => shipment.Amazon.DimsAddWeight = value, shipment.Amazon.DimsAddWeight, value, false);
-            }
+            set { shipment.Amazon.DimsAddWeight = value; }
         }
 
         /// <summary>
@@ -159,10 +131,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         public double DimsLength
         {
             get { return shipment.Amazon.DimsLength; }
-            set
-            {
-                handler.Set(nameof(DimsLength), v => shipment.Amazon.DimsLength = value, shipment.Amazon.DimsLength, value, false);
-            }
+            set { shipment.Amazon.DimsLength = value; }
         }
 
         /// <summary>
@@ -173,10 +142,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         public double DimsWidth
         {
             get { return shipment.Amazon.DimsWidth; }
-            set
-            {
-                handler.Set(nameof(DimsWidth), v => shipment.Amazon.DimsWidth = value, shipment.Amazon.DimsWidth, value, false);
-            }
+            set { shipment.Amazon.DimsWidth = value; }
         }
 
         /// <summary>
@@ -187,10 +153,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         public double DimsHeight
         {
             get { return shipment.Amazon.DimsHeight; }
-            set
-            {
-                handler.Set(nameof(DimsHeight), v => shipment.Amazon.DimsHeight = value, shipment.Amazon.DimsHeight, value, false);
-            }
+            set { shipment.Amazon.DimsHeight = value; }
         }
 
         /// <summary>
@@ -200,24 +163,14 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         public long DimsProfileID
         {
             get { return shipment.Amazon.DimsProfileID; }
-            set
-            {
-                handler.Set(nameof(DimsProfileID), v => shipment.Amazon.DimsProfileID = value, shipment.Amazon.DimsProfileID, value, false);
-            }
+            set { shipment.Amazon.DimsProfileID = value; }
         }
 
         /// <summary>
         /// Gets or sets the insurance choice.
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public IInsuranceChoice InsuranceChoice
-        {
-            get { return insuranceChoice; }
-            set
-            {
-                handler.Set(nameof(InsuranceChoice), ref insuranceChoice, value);
-            }
-        }
+        public IInsuranceChoice InsuranceChoice { get; set; }
 
         /// <summary>
         /// Update the insurance fields on the package

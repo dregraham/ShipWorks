@@ -1,11 +1,8 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using Interapptive.Shared.Utility;
 using Shared.System.ComponentModel.DataAnnotations;
-using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Services;
@@ -17,10 +14,6 @@ namespace ShipWorks.Shipping.Carriers.Postal
     /// </summary>
     public class PostalPackageAdapter : IPackageAdapter
     {
-        [SuppressMessage("SonarQube", "S2290:Field-like events should not be virtual", Justification = "Event is virtual to allow tests to fire it")]
-        public virtual event PropertyChangedEventHandler PropertyChanged;
-        public event PropertyChangingEventHandler PropertyChanging;
-        private readonly PropertyChangedHandler handler;
         private readonly ShipmentEntity shipment;
         private IInsuranceChoice insuranceChoice;
 
@@ -32,7 +25,6 @@ namespace ShipWorks.Shipping.Carriers.Postal
         {
             MethodConditions.EnsureArgumentIsNotNull(shipment.Postal, nameof(shipment.Postal));
 
-            handler = new PropertyChangedHandler(this, () => PropertyChanged, () => PropertyChanging);
             this.shipment = shipment;
             this.insuranceChoice = new InsuranceChoice(shipment, shipment, shipment.Postal, null);
         }
@@ -60,10 +52,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
         public double Weight
         {
             get { return shipment.ContentWeight; }
-            set
-            {
-                handler.Set(nameof(Weight), v => shipment.ContentWeight = value, shipment.ContentWeight, value, false);
-            }
+            set { shipment.ContentWeight = value; }
         }
 
         /// <summary>
@@ -74,10 +63,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
         public double AdditionalWeight
         {
             get { return shipment.Postal.DimsWeight; }
-            set
-            {
-                handler.Set(nameof(AdditionalWeight), v => shipment.Postal.DimsWeight = value, shipment.Postal.DimsWeight, value, false);
-            }
+            set { shipment.Postal.DimsWeight = value; }
 
         }
 
@@ -88,10 +74,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
         public bool ApplyAdditionalWeight
         {
             get { return shipment.Postal.DimsAddWeight; }
-            set
-            {
-                handler.Set(nameof(ApplyAdditionalWeight), v => shipment.Postal.DimsAddWeight = value, shipment.Postal.DimsAddWeight, value, false);
-            }
+            set { shipment.Postal.DimsAddWeight = value; }
         }
 
         /// <summary>
@@ -112,10 +95,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
         public double DimsLength
         {
             get { return shipment.Postal.DimsLength; }
-            set
-            {
-                handler.Set(nameof(DimsLength), v => shipment.Postal.DimsLength = value, shipment.Postal.DimsLength, value, false);
-            }
+            set { shipment.Postal.DimsLength = value; }
         }
 
         /// <summary>
@@ -126,10 +106,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
         public double DimsWidth
         {
             get { return shipment.Postal.DimsWidth; }
-            set
-            {
-                handler.Set(nameof(DimsWidth), v => shipment.Postal.DimsWidth = value, shipment.Postal.DimsWidth, value, false);
-            }
+            set { shipment.Postal.DimsWidth = value; }
         }
 
         /// <summary>
@@ -140,10 +117,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
         public double DimsHeight
         {
             get { return shipment.Postal.DimsHeight; }
-            set
-            {
-                handler.Set(nameof(DimsHeight), v => shipment.Postal.DimsHeight = value, shipment.Postal.DimsHeight, value, false);
-            }
+            set { shipment.Postal.DimsHeight = value; }
         }
 
         /// <summary>
@@ -153,10 +127,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
         public long DimsProfileID
         {
             get { return shipment.Postal.DimsProfileID; }
-            set
-            {
-                handler.Set(nameof(DimsProfileID), v => shipment.Postal.DimsProfileID = value, shipment.Postal.DimsProfileID, value, false);
-            }
+            set { shipment.Postal.DimsProfileID = value; }
         }
 
         /// <summary>
@@ -166,10 +137,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
         public IInsuranceChoice InsuranceChoice
         {
             get { return insuranceChoice; }
-            set
-            {
-                handler.Set(nameof(InsuranceChoice), ref insuranceChoice, value);
-            }
+            set { insuranceChoice = value; }
         }
 
         /// <summary>

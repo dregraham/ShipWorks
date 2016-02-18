@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using Autofac.Extras.Moq;
 using Moq;
@@ -655,7 +654,6 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
                 });
 
             ShipmentViewModel testObject = mock.Create<ShipmentViewModel>();
-            testObject.PropertyChanged += OnPropertyChanged;
 
             testObject.CustomsAllowed = true;
             testObject.Load(shipmentAdapter.Object);
@@ -994,7 +992,6 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
             for (int i = 1; i <= numberOfPackages; i++)
             {
                 TestPackageAdapter packageAdapter = new TestPackageAdapter();
-                packageAdapter.PropertyChanged += OnPropertyChanged;
                 packageAdapter.PackagingType = (int) UpsPackagingType.Custom;
                 packageAdapter.AdditionalWeight = 0.1 * i;
                 packageAdapter.ApplyAdditionalWeight = false;
@@ -1040,11 +1037,6 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
 
             Mock<IDimensionsManager> dimsMgr = autoMock.Mock<IDimensionsManager>();
             dimsMgr.Setup(d => d.Profiles(It.IsAny<IPackageAdapter>())).Returns(dims);
-        }
-
-        private void OnPropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            // Only used for testing.
         }
 
         public void Dispose()

@@ -1,11 +1,9 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using Interapptive.Shared.Utility;
 using Shared.System.ComponentModel.DataAnnotations;
-using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Services;
@@ -19,12 +17,6 @@ namespace ShipWorks.Shipping.Carriers.Other
         Justification = "This package adapter does not set much data, so the value parameter is not needed")]
     public class OtherPackageAdapter : IPackageAdapter
     {
-        [SuppressMessage("SonarQube", "S2290:Field-like events should not be virtual", Justification = "Event is virtual to allow tests to fire it")]
-        public virtual event PropertyChangedEventHandler PropertyChanged;
-        public event PropertyChangingEventHandler PropertyChanging;
-        private readonly PropertyChangedHandler handler;
-        private IInsuranceChoice insuranceChoice;
-
         private readonly ShipmentEntity shipment;
 
         /// <summary>
@@ -35,9 +27,8 @@ namespace ShipWorks.Shipping.Carriers.Other
         {
             MethodConditions.EnsureArgumentIsNotNull(shipment.Other, nameof(shipment.Other));
 
-            handler = new PropertyChangedHandler(this, () => PropertyChanged, () => PropertyChanging);
             this.shipment = shipment;
-            this.insuranceChoice = new InsuranceChoice(shipment, shipment, shipment.Other, null);
+            InsuranceChoice = new InsuranceChoice(shipment, shipment, shipment.Other, null);
         }
 
         /// <summary>
@@ -63,10 +54,7 @@ namespace ShipWorks.Shipping.Carriers.Other
         public double Weight
         {
             get { return shipment.ContentWeight; }
-            set
-            {
-                handler.Set(nameof(Weight), v => shipment.ContentWeight = value, shipment.ContentWeight, value, false);
-            }
+            set { shipment.ContentWeight = value; }
         }
 
         /// <summary>
@@ -147,14 +135,7 @@ namespace ShipWorks.Shipping.Carriers.Other
         /// Gets or sets the insurance choice.
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public IInsuranceChoice InsuranceChoice
-        {
-            get { return insuranceChoice; }
-            set
-            {
-                handler.Set(nameof(InsuranceChoice), ref insuranceChoice, value);
-            }
-        }
+        public IInsuranceChoice InsuranceChoice { get; set; }
 
         /// <summary>
         /// Update the insurance fields on the package

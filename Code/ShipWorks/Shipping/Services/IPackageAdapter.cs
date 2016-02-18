@@ -8,10 +8,10 @@ namespace ShipWorks.Shipping.Services
     /// <summary>
     /// An interface intended to be used for shuffling package data between classes.
     /// </summary>
-    public interface IPackageAdapter : INotifyPropertyChanged, IDataErrorInfo
+    public interface IPackageAdapter : IDataErrorInfo
     {
         /// <summary>
-        /// Id of the packge to which this adapter applies
+        /// Id of the package to which this adapter applies
         /// </summary>
         long PackageId { get; }
 

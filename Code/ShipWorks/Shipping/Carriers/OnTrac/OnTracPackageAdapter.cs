@@ -1,11 +1,8 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using Interapptive.Shared.Utility;
 using Shared.System.ComponentModel.DataAnnotations;
-using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Services;
@@ -17,11 +14,6 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
     /// </summary>
     public class OnTracPackageAdapter : IPackageAdapter
     {
-        [SuppressMessage("SonarQube", "S2290:Field-like events should not be virtual", Justification = "Event is virtual to allow tests to fire it")]
-        public virtual event PropertyChangedEventHandler PropertyChanged;
-        public event PropertyChangingEventHandler PropertyChanging;
-        private readonly PropertyChangedHandler handler;
-
         private readonly ShipmentEntity shipment;
         private IInsuranceChoice insuranceChoice;
 
@@ -33,7 +25,6 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         {
             MethodConditions.EnsureArgumentIsNotNull(shipment.OnTrac, nameof(shipment.OnTrac));
 
-            handler = new PropertyChangedHandler(this, () => PropertyChanged, () => PropertyChanging);
             this.shipment = shipment;
             this.insuranceChoice = new InsuranceChoice(shipment, shipment, shipment.OnTrac, shipment.OnTrac);
         }
@@ -61,10 +52,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         public double Weight
         {
             get { return shipment.ContentWeight; }
-            set
-            {
-                handler.Set(nameof(Weight), v => shipment.ContentWeight = value, shipment.ContentWeight, value, false);
-            }
+            set { shipment.ContentWeight = value; }
         }
 
         /// <summary>
@@ -75,10 +63,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         public double AdditionalWeight
         {
             get { return shipment.OnTrac.DimsWeight; }
-            set
-            {
-                handler.Set(nameof(AdditionalWeight), v => shipment.OnTrac.DimsWeight = value, shipment.OnTrac.DimsWeight, value, false);
-            }
+            set { shipment.OnTrac.DimsWeight = value; }
         }
 
         /// <summary>
@@ -88,10 +73,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         public bool ApplyAdditionalWeight
         {
             get { return shipment.OnTrac.DimsAddWeight; }
-            set
-            {
-                handler.Set(nameof(ApplyAdditionalWeight), v => shipment.OnTrac.DimsAddWeight = value, shipment.OnTrac.DimsAddWeight, value, false);
-            }
+            set { shipment.OnTrac.DimsAddWeight = value; }
         }
 
         /// <summary>
@@ -112,10 +94,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         public double DimsLength
         {
             get { return shipment.OnTrac.DimsLength; }
-            set
-            {
-                handler.Set(nameof(DimsLength), v => shipment.OnTrac.DimsLength = value, shipment.OnTrac.DimsLength, value, false);
-            }
+            set { shipment.OnTrac.DimsLength = value; }
         }
 
         /// <summary>
@@ -126,10 +105,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         public double DimsWidth
         {
             get { return shipment.OnTrac.DimsWidth; }
-            set
-            {
-                handler.Set(nameof(DimsWidth), v => shipment.OnTrac.DimsWidth = value, shipment.OnTrac.DimsWidth, value, false);
-            }
+            set { shipment.OnTrac.DimsWidth = value; }
         }
 
         /// <summary>
@@ -140,10 +116,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         public double DimsHeight
         {
             get { return shipment.OnTrac.DimsHeight; }
-            set
-            {
-                handler.Set(nameof(DimsHeight), v => shipment.OnTrac.DimsHeight = value, shipment.OnTrac.DimsHeight, value, false);
-            }
+            set { shipment.OnTrac.DimsHeight = value; }
         }
 
         /// <summary>
@@ -153,10 +126,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         public long DimsProfileID
         {
             get { return shipment.OnTrac.DimsProfileID; }
-            set
-            {
-                handler.Set(nameof(DimsProfileID), v => shipment.OnTrac.DimsProfileID = value, shipment.OnTrac.DimsProfileID, value, false);
-            }
+            set { shipment.OnTrac.DimsProfileID = value; }
         }
 
         /// <summary>
@@ -166,10 +136,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         public IInsuranceChoice InsuranceChoice
         {
             get { return insuranceChoice; }
-            set
-            {
-                handler.Set(nameof(InsuranceChoice), ref insuranceChoice, value);
-            }
+            set { insuranceChoice = value; }
         }
 
         /// <summary>
