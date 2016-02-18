@@ -12,6 +12,7 @@ using System.Windows.Forms;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Editions;
 
 namespace ShipWorks.Tests.ApplicationCore.Licensing
 {
@@ -160,6 +161,56 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
         }
 
         [Fact]
+        public void EnforceCapabilitiesWithEditionFeature_CallsEnforceOnEnforcerWithMatchingEditionFeature()
+        {
+            using (var mock1 = AutoMock.GetLoose())
+            using (var mock2= AutoMock.GetLoose())
+            {
+                Mock<ILicenseEnforcer> enforcerTwo = mock2.Mock<ILicenseEnforcer>();
+                enforcerTwo.SetupGet(e => e.EditionFeature).Returns(EditionFeature.EndiciaAccountLimit);
+                enforcerTwo.Setup(e => e.Enforce(It.IsAny<ILicenseCapabilities>(), It.IsAny<EnforcementContext>()))
+                    .Returns(new EnumResult<ComplianceLevel>(ComplianceLevel.NotCompliant,
+                        "enforcerTwo is not compliant."));
+
+                Mock<ILicenseEnforcer> enforcerOne = mock1.Mock<ILicenseEnforcer>();
+                enforcerOne.SetupGet(e => e.EditionFeature).Returns(EditionFeature.ChannelCount);
+                enforcerOne.Setup(e => e.Enforce(It.IsAny<ILicenseCapabilities>(), It.IsAny<EnforcementContext>()))
+                    .Returns(new EnumResult<ComplianceLevel>(ComplianceLevel.NotCompliant,
+                        "enforcerOne is not compliant."));
+                
+                CustomerLicense testObject = mock1.Create<CustomerLicense>(new NamedParameter("key", "SomeKey"),
+                    new TypedParameter(typeof(IEnumerable<ILicenseEnforcer>),
+                        new[] { enforcerOne.Object, enforcerTwo.Object }));
+
+                testObject.EnforceCapabilities(EditionFeature.ChannelCount, EnforcementContext.NotSpecified);
+
+                enforcerOne.Verify(e => e.Enforce(It.IsAny<ILicenseCapabilities>(), It.IsAny<EnforcementContext>()), Times.Once);
+                enforcerTwo.Verify(e => e.Enforce(It.IsAny<ILicenseCapabilities>(), It.IsAny<EnforcementContext>()), Times.Never);
+            }
+        }
+
+        [Fact]
+        public void EnforceCapabilitiesWithOwner_CallsEnforceeOnAllEnforcersWithOwner()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                Mock<IWin32Window> owner = mock.Mock<IWin32Window>();
+                Mock<ILicenseEnforcer> enforcerOne = mock.Mock<ILicenseEnforcer>();
+                Mock<ILicenseEnforcer> enforcerTwo = mock.Mock<ILicenseEnforcer>();
+
+                mock.Mock<ITangoWebClient>();
+                mock.Provide(new List<ILicenseEnforcer> { enforcerOne.Object, enforcerTwo.Object });
+
+                CustomerLicense testObject = mock.Create<CustomerLicense>(new NamedParameter("key", "SomeKey"));
+
+                testObject.EnforceCapabilities(EnforcementContext.NotSpecified, owner.Object);
+
+                enforcerOne.Verify(e => e.Enforce(It.IsAny<ILicenseCapabilities>(), It.IsAny<EnforcementContext>(), owner.Object), Times.Once);
+                enforcerTwo.Verify(e => e.Enforce(It.IsAny<ILicenseCapabilities>(), It.IsAny<EnforcementContext>(), owner.Object), Times.Once);
+            }
+        }
+
+        [Fact]
         public void EnforceCapabilitiesWithOwner_RefreshesLicense()
         {
             using (var mock = AutoMock.GetLoose())
@@ -177,7 +228,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
         }
 
         [Fact]
-        public void EnforceCapabilities_RefreshesLicense_IfCapabilitiesIsNull()
+        public void EnforceCapabilities_RefreshesLicense_WhenCapabilitiesIsNull()
         {
             using (var mock = AutoMock.GetLoose())
             {
@@ -197,7 +248,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
         }
 
         [Fact]
-        public void EnforceCapabilities_CallsEnforce_OnAllEnforcers()
+        public void EnforceCapabilities_CallsEnforceOnAllEnforcers()
         {
             using (var mock = AutoMock.GetLoose())
             {
@@ -222,7 +273,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
         }
 
         [Fact]
-        public void EnforceCapabilities_ThrowsShipWorksLicenseException_WithFirstEnforcerError()
+        public void EnforceCapabilities_ThrowsShipWorksLicenseExceptionWithFirstEnforcerError()
         {
             using (var mock = AutoMock.GetLoose())
             {

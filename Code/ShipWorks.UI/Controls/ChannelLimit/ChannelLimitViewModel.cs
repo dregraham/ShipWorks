@@ -138,10 +138,10 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         /// <summary>
         /// Loads the list of active stores
         /// </summary>
-        public void Load(ICustomerLicense customerLicense, IChannelLimitBehavior channelLimitBehavior)
+        public void Load(ICustomerLicense customerLicense, IChannelLimitBehavior behavior)
         {
             license = customerLicense;
-            this.channelLimitBehavior = channelLimitBehavior;
+            channelLimitBehavior = behavior;
 
             // Check to make sure we are getting a CustomerLicense
             if (license == null)
@@ -212,7 +212,7 @@ namespace ShipWorks.UI.Controls.ChannelLimit
 
             Load();
 
-            if (license.EnforceCapabilities(channelLimitBehavior.EditionFeature, EnforcementContext).FirstOrDefault()?.Value == ComplianceLevel.Compliant)
+            if (IsCompliant())
             {
                 owner?.Close();
             }
@@ -272,10 +272,20 @@ namespace ShipWorks.UI.Controls.ChannelLimit
 
             IsDeleting = false;
 
-            if (license.EnforceCapabilities(channelLimitBehavior.EditionFeature, EnforcementContext).FirstOrDefault()?.Value == ComplianceLevel.Compliant)
+            if (IsCompliant())
             {
                 owner?.Close();
             }
+        }
+
+        /// <summary>
+        /// Returns true if we are compliant with the enforcer
+        /// </summary>
+        private bool IsCompliant()
+        {
+            return license.EnforceCapabilities(channelLimitBehavior.EditionFeature, EnforcementContext)
+                          .FirstOrDefault()?
+                          .Value == ComplianceLevel.Compliant;
         }
 
         /// <summary>
