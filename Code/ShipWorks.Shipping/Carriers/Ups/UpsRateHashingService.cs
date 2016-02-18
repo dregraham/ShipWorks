@@ -23,7 +23,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 ratingField = base.RatingFields;
                 ratingField.ShipmentFields.Add(UpsShipmentFields.UpsAccountID);
                 ratingField.ShipmentFields.Add(UpsShipmentFields.SaturdayDelivery);
-                ratingField.ShipmentFields.Add(UpsShipmentFields.SaturdayDelivery);
                 ratingField.ShipmentFields.Add(UpsShipmentFields.CodAmount);
                 ratingField.ShipmentFields.Add(UpsShipmentFields.CodEnabled);
                 ratingField.ShipmentFields.Add(UpsShipmentFields.CodPaymentType);
@@ -32,6 +31,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 ratingField.PackageFields.Add(UpsPackageFields.PackagingType);
                 ratingField.PackageFields.Add(UpsPackageFields.DeclaredValue);
                 ratingField.PackageFields.Add(UpsPackageFields.VerbalConfirmationEnabled);
+                ratingField.PackageFields.Add(UpsPackageFields.DimsAddWeight);
                 ratingField.PackageFields.Add(UpsPackageFields.DimsWeight);
                 ratingField.PackageFields.Add(UpsPackageFields.DimsLength);
                 ratingField.PackageFields.Add(UpsPackageFields.DimsHeight);

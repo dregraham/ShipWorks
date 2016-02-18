@@ -36,6 +36,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 ratingField.ShipmentFields.Add(FedExShipmentFields.NonStandardContainer);
 
                 ratingField.PackageFields.Add(FedExPackageFields.DimsWeight);
+                ratingField.PackageFields.Add(FedExPackageFields.DimsAddWeight);
                 ratingField.PackageFields.Add(FedExPackageFields.DeclaredValue);
                 ratingField.PackageFields.Add(FedExPackageFields.DimsLength);
                 ratingField.PackageFields.Add(FedExPackageFields.DimsHeight);

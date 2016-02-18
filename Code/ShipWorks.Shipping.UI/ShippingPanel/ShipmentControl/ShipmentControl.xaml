@@ -260,12 +260,12 @@
             <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" Margin="4 5 0 0">
                 <TextBlock Margin="0 4 0 0" Style="{StaticResource GridLabel}">Add to weight</TextBlock>
                 <CheckBox Margin="4 4 0 0"
-                    IsChecked="{Binding ApplyAdditionalWeight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    IsChecked="{Binding DimsAddWeight}"/>
                 <weight:WeightInput
                     Margin="0,1,0,0"
                     HorizontalAlignment="Left"
                     Width="60"
-                    Weight="{Binding AdditionalWeight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                    Weight="{Binding DimsWeight}">
                     <weight:WeightInput.IsEnabled>
                         <Binding Path="SelectedDimensionsProfile.DimensionsProfileID" Converter="{StaticResource ValueEqualToParameter}">
                             <Binding.ConverterParameter>

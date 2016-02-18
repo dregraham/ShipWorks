@@ -27,6 +27,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
 
                 ratingField.PackageFields.Add(IParcelPackageFields.Weight);
                 ratingField.PackageFields.Add(IParcelPackageFields.DimsWeight);
+                ratingField.PackageFields.Add(IParcelPackageFields.DimsAddWeight);
                 ratingField.PackageFields.Add(IParcelPackageFields.DimsWidth);
                 ratingField.PackageFields.Add(IParcelPackageFields.DimsHeight);
                 ratingField.PackageFields.Add(IParcelPackageFields.DimsLength);
@@ -38,7 +39,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
                 return ratingField;
             }
         }
-        
+
         /// <summary>
         /// Gets the rating hash based on the shipment's configuration.
         /// </summary>

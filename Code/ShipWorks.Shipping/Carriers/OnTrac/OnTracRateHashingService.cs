@@ -32,6 +32,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
                 ratingField.ShipmentFields.Add(OnTracShipmentFields.DimsLength);
                 ratingField.ShipmentFields.Add(OnTracShipmentFields.DimsWidth);
                 ratingField.ShipmentFields.Add(OnTracShipmentFields.DimsWeight);
+                ratingField.ShipmentFields.Add(OnTracShipmentFields.DimsAddWeight);
 
                 return ratingField;
             }

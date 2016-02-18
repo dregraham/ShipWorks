@@ -95,8 +95,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
                 suppressExternalChangeNotifications = true;
 
                 PackagingType = SelectedPackageAdapter.PackagingType;
-                ApplyAdditionalWeight = SelectedPackageAdapter.ApplyAdditionalWeight;
-                AdditionalWeight = SelectedPackageAdapter.AdditionalWeight;
+                DimsAddWeight = SelectedPackageAdapter.ApplyAdditionalWeight;
+                DimsWeight = SelectedPackageAdapter.AdditionalWeight;
                 DimsLength = SelectedPackageAdapter.DimsLength;
                 DimsWidth = SelectedPackageAdapter.DimsWidth;
                 DimsHeight = SelectedPackageAdapter.DimsHeight;
@@ -120,8 +120,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
             }
 
             SelectedPackageAdapter.PackagingType = PackagingType;
-            SelectedPackageAdapter.ApplyAdditionalWeight = ApplyAdditionalWeight;
-            SelectedPackageAdapter.AdditionalWeight = AdditionalWeight;
+            SelectedPackageAdapter.ApplyAdditionalWeight = DimsAddWeight;
+            SelectedPackageAdapter.AdditionalWeight = DimsWeight;
             SelectedPackageAdapter.DimsLength = DimsLength;
             SelectedPackageAdapter.DimsWidth = DimsWidth;
             SelectedPackageAdapter.DimsHeight = DimsHeight;
@@ -312,7 +312,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
             double originalLength = DimsLength;
             double originalWidth = DimsWidth;
             double originalHeight = DimsHeight;
-            double originalWeight = AdditionalWeight;
+            double originalWeight = DimsWeight;
 
             // Refresh the dimensions profiles.
             RefreshDimensionsProfiles();
@@ -359,7 +359,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
                 DimsLength = originalLength;
                 DimsWidth = originalWidth;
                 DimsHeight = originalHeight;
-                AdditionalWeight = originalWeight;
+                DimsWeight = originalWeight;
             }
         }
 

@@ -28,6 +28,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
                 ratingField.ShipmentFields.Add(AmazonShipmentFields.DimsHeight);
                 ratingField.ShipmentFields.Add(AmazonShipmentFields.DimsLength);
                 ratingField.ShipmentFields.Add(AmazonShipmentFields.DimsWeight);
+                ratingField.ShipmentFields.Add(AmazonShipmentFields.DimsAddWeight);
 
                 return ratingField;
             }
