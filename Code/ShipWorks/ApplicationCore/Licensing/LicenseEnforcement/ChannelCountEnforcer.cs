@@ -58,11 +58,16 @@ namespace ShipWorks.ApplicationCore.Licensing.LicenseEnforcement
         /// </summary>
         public EnumResult<ComplianceLevel> Enforce(ILicenseCapabilities capabilities, EnforcementContext context)
         {
+            if (capabilities.IsInTrial)
+            {
+                return new EnumResult<ComplianceLevel>(ComplianceLevel.Compliant, string.Empty);
+            }
+
             // Determine how man channels over the limit we are
             int numberOfChannelsOverLimit = capabilities.ActiveChannels - capabilities.ChannelLimit;
 
             // We are over the channel limit, display an error stating how many channels need to be removed
-            if ((numberOfChannelsOverLimit > 0) && !capabilities.IsInTrial)
+            if ((numberOfChannelsOverLimit > 0))
             {
                 // Determine if we should use the plural for of channel in our error message
                 string plural = numberOfChannelsOverLimit > 1 ? "s" : string.Empty;
@@ -81,8 +86,7 @@ namespace ShipWorks.ApplicationCore.Licensing.LicenseEnforcement
 
             // We are not over the limit but we are trying to add a new channel which would put us over the limit
             if (numberOfChannelsOverLimit == 0 && 
-                context == EnforcementContext.AddingStoreOverLimitErrorThrown && 
-                !capabilities.IsInTrial)
+                context == EnforcementContext.AddingStoreOverLimitErrorThrown)
             {
                 return new EnumResult<ComplianceLevel>(ComplianceLevel.NotCompliant,
                     "You will exceed your channel limit. Please upgrade your plan or delete an existing channel to add a new channel");

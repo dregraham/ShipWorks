@@ -168,5 +168,59 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.LicenseEnforcement
                 dlg.Verify(d => d.ShowDialog(), Times.Never);
             }
         }
+
+        [Fact]
+        public void Enforce_ErrorReferencesAddingANewStore_WhenContextIsBeforeAddStoreAndNotComplient()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                ChannelCountEnforcer testObject = mock.Create<ChannelCountEnforcer>();
+
+                Mock<ILicenseCapabilities> licenseCapabilities = mock.Mock<ILicenseCapabilities>();
+
+                licenseCapabilities.Setup(l => l.ActiveChannels).Returns(6);
+                licenseCapabilities.Setup(l => l.ChannelLimit).Returns(5);
+
+                EnumResult<ComplianceLevel> result = testObject.Enforce(licenseCapabilities.Object, EnforcementContext.BeforeAddStore);
+
+                Assert.Contains("adding a new store", result.Message);
+            }
+        }
+
+        [Fact]
+        public void Enforce_ErrorReferencesAddingANewStore_WhenContextIsAddingStoreOverLimitErrorThrownAndNotComplient()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                ChannelCountEnforcer testObject = mock.Create<ChannelCountEnforcer>();
+
+                Mock<ILicenseCapabilities> licenseCapabilities = mock.Mock<ILicenseCapabilities>();
+
+                licenseCapabilities.Setup(l => l.ActiveChannels).Returns(6);
+                licenseCapabilities.Setup(l => l.ChannelLimit).Returns(5);
+
+                EnumResult<ComplianceLevel> result = testObject.Enforce(licenseCapabilities.Object, EnforcementContext.AddingStoreOverLimitErrorThrown);
+
+                Assert.Contains("adding a new store", result.Message);
+            }
+        }
+
+        [Fact]
+        public void Enforce_ErrorReferencesWillExceedChannelLimit_WhenContextIsAddingStoreOverLimitErrorThrownAndActiveChannelsEqualsChannelLimits()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                ChannelCountEnforcer testObject = mock.Create<ChannelCountEnforcer>();
+
+                Mock<ILicenseCapabilities> licenseCapabilities = mock.Mock<ILicenseCapabilities>();
+
+                licenseCapabilities.Setup(l => l.ActiveChannels).Returns(5);
+                licenseCapabilities.Setup(l => l.ChannelLimit).Returns(5);
+
+                EnumResult<ComplianceLevel> result = testObject.Enforce(licenseCapabilities.Object, EnforcementContext.AddingStoreOverLimitErrorThrown);
+
+                Assert.Contains("will exceed your channel limit", result.Message);
+            }
+        }
     }
 }
