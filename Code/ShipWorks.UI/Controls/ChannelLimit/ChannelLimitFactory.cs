@@ -1,4 +1,5 @@
 ﻿using System;
+using Autofac.Features.Indexed;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Editions;
 using ShipWorks.Stores;
@@ -12,14 +13,14 @@ namespace ShipWorks.UI.Controls.ChannelLimit
     {
         private readonly Func<ChannelLimitControl> channelLimitControlFactory;
         private readonly IChannelLimitViewModel viewModel;
-        private readonly Func<EditionFeature, IChannelLimitBehavior> behaviorFactory;
+        private readonly IIndex<EditionFeature, IChannelLimitBehavior> behaviorFactory;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ChannelLimitFactory"/> class.
         /// </summary>
         public ChannelLimitFactory(Func<ChannelLimitControl> channelLimitControlFactory,
             IChannelLimitViewModel viewModel,
-            Func<EditionFeature, IChannelLimitBehavior> behaviorFactory)
+            IIndex<EditionFeature, IChannelLimitBehavior> behaviorFactory)
         {
             this.channelLimitControlFactory = channelLimitControlFactory;
             this.viewModel = viewModel;
@@ -33,7 +34,7 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         {
             ChannelLimitControl channelLimitControl = channelLimitControlFactory();
             channelLimitControl.DataContext = viewModel;
-            viewModel.Load(customerLicense, behaviorFactory(feature));
+            viewModel.Load(customerLicense, behaviorFactory[feature]);
 
             return channelLimitControl;
         }
