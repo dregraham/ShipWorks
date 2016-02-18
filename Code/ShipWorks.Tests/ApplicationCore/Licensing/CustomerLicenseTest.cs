@@ -6,6 +6,10 @@ using ShipWorks.ApplicationCore.Licensing;
 using Xunit;
 using log4net;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using Interapptive.Shared.Utility;
+using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Tests.ApplicationCore.Licensing
@@ -151,6 +155,78 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
                 var result = testObject.Activate(new StoreEntity());
 
                 Assert.Equal(LicenseActivationState.OverChannelLimit, result.Value);
+            }
+        }
+
+        [Fact]
+        public void EnforceCapabilities_RefreshesLicense_IfCapabilitiesIsNull()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                Mock<ILicenseEnforcer> enforcer = mock.Mock<ILicenseEnforcer>();
+                enforcer.Setup(e => e.Enforce(It.IsAny<ILicenseCapabilities>(), It.IsAny<EnforcementContext>()))
+                        .Returns(new EnumResult<ComplianceLevel>(ComplianceLevel.Compliant, string.Empty));
+
+                Mock<ITangoWebClient> tangoWebClient = mock.Mock<ITangoWebClient>();
+                mock.Provide(new List<ILicenseEnforcer> {enforcer.Object});
+
+                CustomerLicense testObject = mock.Create<CustomerLicense>(new NamedParameter("key", "SomeKey"));
+
+                testObject.EnforceCapabilities(EnforcementContext.NotSpecified);
+
+                tangoWebClient.Verify(w => w.GetLicenseCapabilities(testObject), Times.Once);
+            }
+        }
+
+        [Fact]
+        public void EnforceCapabilities_CallsEnforce_OnAllEnforcers()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                Mock<ILicenseEnforcer> enforcerOne = mock.Mock<ILicenseEnforcer>();
+                enforcerOne.Setup(e => e.Enforce(It.IsAny<ILicenseCapabilities>(), It.IsAny<EnforcementContext>()))
+                        .Returns(new EnumResult<ComplianceLevel>(ComplianceLevel.Compliant, string.Empty));
+
+                Mock<ILicenseEnforcer> enforcerTwo = mock.Mock<ILicenseEnforcer>();
+                enforcerTwo.Setup(e => e.Enforce(It.IsAny<ILicenseCapabilities>(), It.IsAny<EnforcementContext>()))
+                        .Returns(new EnumResult<ComplianceLevel>(ComplianceLevel.Compliant, string.Empty));
+
+                mock.Mock<ITangoWebClient>();
+                mock.Provide(new List<ILicenseEnforcer> { enforcerOne.Object, enforcerTwo.Object });
+
+                CustomerLicense testObject = mock.Create<CustomerLicense>(new NamedParameter("key", "SomeKey"));
+
+                testObject.EnforceCapabilities(EnforcementContext.NotSpecified);
+
+                enforcerOne.Verify(e => e.Enforce(It.IsAny<ILicenseCapabilities>(), It.IsAny<EnforcementContext>()), Times.Once);
+                enforcerTwo.Verify(e => e.Enforce(It.IsAny<ILicenseCapabilities>(), It.IsAny<EnforcementContext>()), Times.Once);
+            }
+        }
+
+        [Fact]
+        public void EnforceCapabilities_ThrowsShipWorksLicenseException_WithFirstEnforcerError()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                Mock<ILicenseEnforcer> enforcerOne = mock.Mock<ILicenseEnforcer>();
+                enforcerOne.Setup(e => e.Enforce(It.IsAny<ILicenseCapabilities>(), It.IsAny<EnforcementContext>()))
+                        .Returns(new EnumResult<ComplianceLevel>(ComplianceLevel.Compliant, string.Empty));
+
+                Mock<ILicenseEnforcer> enforcerTwo = mock.Mock<ILicenseEnforcer>();
+                enforcerTwo.Setup(e => e.Enforce(It.IsAny<ILicenseCapabilities>(), It.IsAny<EnforcementContext>()))
+                        .Returns(new EnumResult<ComplianceLevel>(ComplianceLevel.NotCompliant, "Something about not being compliant"));
+
+                mock.Provide(new List<ILicenseEnforcer> { enforcerOne.Object, enforcerTwo.Object });
+
+                mock.Mock<ITangoWebClient>();
+                
+                CustomerLicense testObject = mock.Create<CustomerLicense>(new NamedParameter("key", "SomeKey"));
+
+                ShipWorksLicenseException ex =
+                    Assert.Throws<ShipWorksLicenseException>(
+                        () => testObject.EnforceCapabilities(EnforcementContext.NotSpecified));
+
+                Assert.Equal("Something about not being compliant", ex.Message);
             }
         }
     }
