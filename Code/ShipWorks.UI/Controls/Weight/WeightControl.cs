@@ -5,7 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 
-namespace ShipWorks.Shipping.UI.ShippingPanel.Weight
+namespace ShipWorks.UI.Controls.Weight
 {
     /// <summary>
     /// Control for editing weight

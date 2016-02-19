@@ -2,7 +2,7 @@
 using System.Text.RegularExpressions;
 using System.Windows.Controls;
 
-namespace ShipWorks.Shipping.UI.ShippingPanel.Weight
+namespace ShipWorks.UI.Controls.Weight
 {
     /// <summary>
     /// Validate a weight entered with lbs or oz
@@ -39,12 +39,12 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.Weight
             // if we find a match then the validation rule is satisfied and returns true
             // if no match is found or value is null we return false
             bool result = valueAsString != null &&
-                (poundsOzRegex.Match(valueAsString).Success || 
+                (poundsOzRegex.Match(valueAsString).Success ||
                 ouncesRegex.Match(valueAsString).Success ||
                  poundsRegex.Match(valueAsString).Success);
 
             // Weight is valid, check to see if someone tried to be smart
-            // and enter a negative number 
+            // and enter a negative number
             if (result && valueAsString.Contains("-"))
             {
                 return new ValidationResult(false, "The weight cannot be negative.");

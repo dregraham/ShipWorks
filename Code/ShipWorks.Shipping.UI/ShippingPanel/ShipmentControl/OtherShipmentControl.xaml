@@ -4,7 +4,6 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl"
-             xmlns:weight="clr-namespace:ShipWorks.Shipping.UI.ShippingPanel.Weight"
              xmlns:ui="http://schemas.shipworks.com/ui"
              xmlns:insurancePromoControl="clr-namespace:ShipWorks.Shipping.UI.ShippingPanel.InsurancePromoControl"
              mc:Ignorable="d" d:DataContext="{d:DesignInstance Type=local:OtherShipmentViewModel}"
@@ -59,7 +58,7 @@
 
         <TextBlock Grid.Row="3" Grid.Column="0" Margin="0,8,0,0"
                    Style="{StaticResource GridLabel}">Weight:</TextBlock>
-        <weight:WeightControl Grid.Row="3" Grid.Column="1"
+        <ui:WeightControl Grid.Row="3" Grid.Column="1"
                 Margin="0,3,0,0"
 				HorizontalAlignment="Left"
 				Weight="{Binding ShipmentContentWeight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=true, NotifyOnValidationError=true}"/>
@@ -87,11 +86,11 @@
 
         <StackPanel Grid.Row="7" Grid.Column="1"
                     Orientation="Horizontal">
-            <TextBlock Style="{StaticResource GridLabel}" 
+            <TextBlock Style="{StaticResource GridLabel}"
                        Text="{Binding InsuranceViewModel.InsuranceValueLabelDisplayText, UpdateSourceTrigger=PropertyChanged, FallbackValue='Insured Value:'}"></TextBlock>
             <TextBox Width="80"  Margin="4 4 0 0" Style="{DynamicResource TextBoxErrorTemplate}"
                      IsEnabled="{Binding InsuranceViewModel.InsuranceChoice.Insured, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                     Text="{Binding InsuranceViewModel.InsuranceValue, Mode=TwoWay, UpdateSourceTrigger=LostFocus, StringFormat=c, FallbackValue='50.50', 
+                     Text="{Binding InsuranceViewModel.InsuranceValue, Mode=TwoWay, UpdateSourceTrigger=LostFocus, StringFormat=c, FallbackValue='50.50',
                      Converter={StaticResource EmptyMoney},
                      TargetNullValue='', ValidatesOnDataErrors=true, NotifyOnValidationError=true}"/>
 

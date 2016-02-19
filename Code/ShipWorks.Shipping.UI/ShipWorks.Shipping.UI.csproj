@@ -334,10 +334,6 @@
     <Compile Include="Carriers\Ups\UpsShippingModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ShippingModule.cs" />
-    <Compile Include="ShippingPanel\Weight\ScaleButton.cs" />
-    <Compile Include="ShippingPanel\Weight\WeightControl.cs" />
-    <Compile Include="ShippingPanel\Weight\WeightInput.cs" />
-    <Compile Include="ShippingPanel\Weight\WeightValidationRule.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Interapptive.Shared\Interapptive.Shared.csproj">
@@ -550,22 +546,6 @@
     <Page Include="Templates\TextBoxErrorTemplate.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Themes\Controls\ScaleButton.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Themes\Controls\WeightControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Themes\Controls\WeightInput.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Themes\Generic.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

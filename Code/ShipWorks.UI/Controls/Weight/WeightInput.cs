@@ -4,9 +4,8 @@ using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using ShipWorks.UI.Controls;
 
-namespace ShipWorks.Shipping.UI.ShippingPanel.Weight
+namespace ShipWorks.UI.Controls.Weight
 {
     /// <summary>
     /// Control for editing weight
@@ -60,6 +59,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.Weight
         /// Weight in fractional lbs
         /// </summary>
         [Bindable(true)]
+        [Obfuscation(Exclude = true)]
         public double Weight
         {
             get { return (double) GetValue(WeightProperty); }

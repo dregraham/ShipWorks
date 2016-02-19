@@ -5,7 +5,6 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
              xmlns:ui="http://schemas.shipworks.com/ui"
-             xmlns:weight="clr-namespace:ShipWorks.Shipping.UI.ShippingPanel.Weight"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:insurancePromoControl="clr-namespace:ShipWorks.Shipping.UI.ShippingPanel.InsurancePromoControl"
              mc:Ignorable="d"
@@ -165,7 +164,7 @@
             </Grid.ColumnDefinitions>
 
             <TextBlock Grid.Column="0" Style="{StaticResource GridLabel}">Weight:</TextBlock>
-            <weight:WeightControl Grid.Column="1"
+            <ui:WeightControl Grid.Column="1"
                 Margin="0,0,0,0"
                 HorizontalAlignment="Left"
                 Weight="{Binding TotalWeight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,
@@ -261,19 +260,19 @@
                 <TextBlock Margin="0 4 0 0" Style="{StaticResource GridLabel}">Add to weight</TextBlock>
                 <CheckBox Margin="4 4 0 0"
                     IsChecked="{Binding DimsAddWeight}"/>
-                <weight:WeightInput
+                <ui:WeightInput
                     Margin="0,1,0,0"
                     HorizontalAlignment="Left"
                     Width="60"
                     Weight="{Binding DimsWeight}">
-                    <weight:WeightInput.IsEnabled>
+                    <ui:WeightInput.IsEnabled>
                         <Binding Path="SelectedDimensionsProfile.DimensionsProfileID" Converter="{StaticResource ValueEqualToParameter}">
                             <Binding.ConverterParameter>
                                 <sys:Int64>0</sys:Int64>
                             </Binding.ConverterParameter>
                         </Binding>
-                    </weight:WeightInput.IsEnabled>
-                </weight:WeightInput>
+                    </ui:WeightInput.IsEnabled>
+                </ui:WeightInput>
             </StackPanel>
         </Grid>
         <Grid>

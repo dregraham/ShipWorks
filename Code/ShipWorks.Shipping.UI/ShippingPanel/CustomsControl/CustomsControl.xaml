@@ -7,7 +7,6 @@
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:ui="http://schemas.shipworks.com/ui"
              xmlns:system="clr-namespace:System;assembly=mscorlib"
-             xmlns:weight="clr-namespace:ShipWorks.Shipping.UI.ShippingPanel.Weight"
              xmlns:geography="clr-namespace:Interapptive.Shared.Business.Geography;assembly=Interapptive.Shared"
              mc:Ignorable="d"
              d:DesignHeight="350" d:DesignWidth="320">
@@ -45,11 +44,11 @@
         <TextBlock Grid.Row="0" Grid.Column="0" Style="{DynamicResource GroupSectionHeader}">General</TextBlock>
 
         <TextBlock Grid.Row="1" Grid.Column="0" Style="{DynamicResource GridLabel}" >Value:</TextBlock>
-        <TextBox Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" Width="75" Margin="4 2" MaxLength="12" 
+        <TextBox Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" Width="75" Margin="4 2" MaxLength="12"
                  Style="{DynamicResource TextBoxErrorTemplate}"
-                 Text="{Binding TotalCustomsValue, StringFormat=C, Mode=TwoWay, UpdateSourceTrigger=LostFocus, 
+                 Text="{Binding TotalCustomsValue, StringFormat=C, Mode=TwoWay, UpdateSourceTrigger=LostFocus,
                         ValidatesOnDataErrors=true, NotifyOnValidationError=true}">
-            
+
             <i:Interaction.Behaviors>
                 <ui:TextBoxInputRegExBehavior RegularExpression="^[+]?\$? ?((\d{1,3}(,\d{3})+)|\d*)\.?(\d+)?$" EmptyValue="" MaxLength="15" />
                 <ui:TextBoxInputRegExBehavior RegularExpression="^\S*$" EmptyValue="" MaxLength="15" />
@@ -112,10 +111,10 @@
                 <TextBlock Grid.Row="0" Grid.Column="0" Style="{DynamicResource GridLabel}" >Quantity:</TextBlock>
                 <TextBox Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left" Width="75" Margin="4 2"  MaxLength="5"
                          Style="{DynamicResource TextBoxErrorTemplate}"
-                         Text="{Binding SelectedCustomsItem.Quantity, 
-                         Converter={StaticResource EmptyDouble}, 
+                         Text="{Binding SelectedCustomsItem.Quantity,
+                         Converter={StaticResource EmptyDouble},
                          ConverterParameter=1,
-                         Mode=TwoWay, UpdateSourceTrigger=LostFocus, 
+                         Mode=TwoWay, UpdateSourceTrigger=LostFocus,
                          ValidatesOnDataErrors=true, NotifyOnValidationError=true}">
                     <i:Interaction.Behaviors>
                         <ui:TextBoxInputRegExBehavior RegularExpression="^?\d+(,\d+)*(\.\d+(e\d+)?)?(\.)?$" EmptyValue="" MaxLength="6" />
@@ -125,18 +124,18 @@
                 <TextBlock Grid.Row="1" Grid.Column="0" Style="{DynamicResource GridLabel}" >Description:</TextBlock>
                 <TextBox Grid.Row="1" Grid.Column="1" Margin="4 2" MaxLength="150"
                          Style="{DynamicResource TextBoxErrorTemplate}"
-                         Text="{Binding SelectedCustomsItem.Description, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, 
+                         Text="{Binding SelectedCustomsItem.Description, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,
                          ValidatesOnDataErrors=true, NotifyOnValidationError=true}"></TextBox>
 
                 <TextBlock Grid.Row="2" Grid.Column="0" Style="{DynamicResource GridLabel}" VerticalAlignment="Center" >Weight:</TextBlock>
-                <weight:WeightControl Grid.Row="2" Grid.Column="1" Margin="0 2 0 0"
-                        Weight="{Binding SelectedCustomsItem.Weight, Mode=TwoWay, UpdateSourceTrigger=LostFocus, 
+                <ui:WeightControl Grid.Row="2" Grid.Column="1" Margin="0 2 0 0"
+                        Weight="{Binding SelectedCustomsItem.Weight, Mode=TwoWay, UpdateSourceTrigger=LostFocus,
                         ValidatesOnDataErrors=true, NotifyOnValidationError=true}"/>
 
                 <TextBlock Grid.Row="3" Grid.Column="0" Style="{DynamicResource GridLabel}" >Value:</TextBlock>
                 <TextBox Grid.Row="3" Grid.Column="1" HorizontalAlignment="Left" Width="75" Margin="4 2"  MaxLength="12"
                          Style="{DynamicResource TextBoxErrorTemplate}"
-                         Text="{Binding SelectedCustomsItem.UnitValue, Converter={StaticResource EmptyMoney}, StringFormat=C, Mode=TwoWay, UpdateSourceTrigger=LostFocus, 
+                         Text="{Binding SelectedCustomsItem.UnitValue, Converter={StaticResource EmptyMoney}, StringFormat=C, Mode=TwoWay, UpdateSourceTrigger=LostFocus,
                          ValidatesOnDataErrors=true, NotifyOnValidationError=true}">
                     <i:Interaction.Behaviors>
                         <ui:TextBoxInputRegExBehavior RegularExpression="^[+]?\$? ?((\d{1,3}(,\d{3})+)|\d*)\.?(\d+)?$" EmptyValue="" MaxLength="15" />
@@ -146,7 +145,7 @@
                 <TextBlock Grid.Row="4" Grid.Column="0" Style="{DynamicResource GridLabel}" >Harmonized Code:</TextBlock>
                 <TextBox Grid.Row="4" Grid.Column="1" Margin="4 2" HorizontalAlignment="Left" Width="75" MaxLength="14"
                          Style="{DynamicResource TextBoxErrorTemplate}"
-                         Text="{Binding SelectedCustomsItem.HarmonizedCode, Mode=TwoWay, UpdateSourceTrigger=LostFocus, 
+                         Text="{Binding SelectedCustomsItem.HarmonizedCode, Mode=TwoWay, UpdateSourceTrigger=LostFocus,
                          ValidatesOnDataErrors=true, NotifyOnValidationError=true}"></TextBox>
 
                 <TextBlock Grid.Row="5" Grid.Column="0" Style="{DynamicResource GridLabel}" >Country of Origin:</TextBlock>
