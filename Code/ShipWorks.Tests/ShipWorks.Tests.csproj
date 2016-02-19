@@ -212,6 +212,7 @@
     <Compile Include="ApplicationCore\Licensing\LicenseEnforcement\ShipmentCountEnforcerTest.cs" />
     <Compile Include="ApplicationCore\Licensing\LicenseServiceTest.cs" />
     <Compile Include="ApplicationCore\Licensing\LicenseEncryptionProviderTest.cs" />
+    <Compile Include="ApplicationCore\Licensing\StoreLicenseTest.cs" />
     <Compile Include="ApplicationCore\Nudges\NudgeDeserializerTest.cs" />
     <Compile Include="ApplicationCore\Nudges\NudgeOptionDeserializerTest.cs" />
     <Compile Include="ApplicationCore\Nudges\NudgeOptionTest.cs" />

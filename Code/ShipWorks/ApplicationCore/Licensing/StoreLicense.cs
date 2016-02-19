@@ -145,7 +145,10 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public IEnumerable<EnumResult<ComplianceLevel>> EnforceCapabilities(EditionFeature feature, EnforcementContext context)
         {
-            throw new NotImplementedException();
+            return new List<EnumResult<ComplianceLevel>>
+            {
+                new EnumResult<ComplianceLevel>(ComplianceLevel.Compliant, string.Empty)
+            };
         }
     }
 }
