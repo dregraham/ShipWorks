@@ -170,7 +170,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.LicenseEnforcement
         }
 
         [Fact]
-        public void Enforce_ErrorReferencesAddingANewStore_WhenContextIsBeforeAddStoreAndNotCompliant()
+        public void Enforce_ErrorReferencesAddingANewStore_WhenContextIsOnAddingStoreAndNotCompliant()
         {
             using (var mock = AutoMock.GetLoose())
             {
@@ -188,7 +188,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.LicenseEnforcement
         }
 
         [Fact]
-        public void Enforce_ErrorReferencesAddingANewStore_WhenContextIsAddingStoreOverLimitErrorThrownAndNotCompliant()
+        public void Enforce_ErrorReferencesAddingANewStore_WhenContextIsExceedingChannelLimitErrorAndNotCompliant()
         {
             using (var mock = AutoMock.GetLoose())
             {
