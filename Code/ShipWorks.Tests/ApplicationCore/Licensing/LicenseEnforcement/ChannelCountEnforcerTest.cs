@@ -188,7 +188,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.LicenseEnforcement
         }
 
         [Fact]
-        public void Enforce_ErrorReferencesAddingANewStore_WhenContextIsExceedingChannelLimitErrorAndNotCompliant()
+        public void Enforce_ErrorReferencesAddingANewStore_WhenContextIsAddingStoreOverLimitErrorThrownAndNotCompliant()
         {
             using (var mock = AutoMock.GetLoose())
             {
@@ -206,7 +206,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.LicenseEnforcement
         }
 
         [Fact]
-        public void Enforce_ErrorReferencesWillExceedChannelLimit_WhenContextIsAddingStoreOverLimitErrorThrownAndActiveChannelsEqualsChannelLimits()
+        public void Enforce_Compliant_WhenContextIsExceedingChannelLimitAndActiveChannelsEqualsChannelLimits()
         {
             using (var mock = AutoMock.GetLoose())
             {
@@ -219,7 +219,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.LicenseEnforcement
 
                 EnumResult<ComplianceLevel> result = testObject.Enforce(licenseCapabilities.Object, EnforcementContext.ExceedingChannelLimit);
 
-                Assert.Contains("will exceed your channel limit", result.Message);
+                Assert.Equal(ComplianceLevel.Compliant, result.Value);
             }
         }
     }

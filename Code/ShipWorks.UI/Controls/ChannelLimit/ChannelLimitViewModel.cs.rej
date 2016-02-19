@@ -1,0 +1,10 @@
+diff a/Code/ShipWorks.UI/Controls/ChannelLimit/ChannelLimitViewModel.cs b/Code/ShipWorks.UI/Controls/ChannelLimit/ChannelLimitViewModel.cs	(rejected hunks)
+@@ -285,5 +285,5 @@
+         {
+-            return license.EnforceCapabilities(channelLimitBehavior.EditionFeature, EnforcementContext)
+-                          .FirstOrDefault()?
+-                          .Value == ComplianceLevel.Compliant;
++            return
++                license.EnforceCapabilities(channelLimitBehavior.EditionFeature, EnforcementContext)
++                    .FirstOrDefault(c => c.Value == ComplianceLevel.NotCompliant) != null;
+         }

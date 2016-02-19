@@ -153,17 +153,11 @@ namespace ShipWorks.ApplicationCore
         /// </summary>
         private static void RegisterLicenseEnforcers(ContainerBuilder builder)
         {
-            builder.RegisterType<ChannelCountEnforcer>()
-                .As<ILicenseEnforcer>();
-
-            builder.RegisterType<ShipmentCountEnforcer>()
-                .As<ILicenseEnforcer>();
-
-            builder.RegisterType<GenericFileEnforcer>()
-                .As<ILicenseEnforcer>();
-
-            builder.RegisterType<GenericModuleEnforcer>()
-                .As<ILicenseEnforcer>();
+            builder
+                .RegisterAssemblyTypes(Assembly.GetAssembly(typeof(ILicenseEnforcer)))
+                .Where(t => typeof(ILicenseEnforcer).IsAssignableFrom(t))
+                .InstancePerLifetimeScope()
+                .AsImplementedInterfaces();
         }
 
         /// <summary>
