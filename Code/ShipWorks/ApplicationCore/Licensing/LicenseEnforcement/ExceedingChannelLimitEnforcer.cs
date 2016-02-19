@@ -35,8 +35,7 @@ namespace ShipWorks.ApplicationCore.Licensing.LicenseEnforcement
         public EnumResult<ComplianceLevel> Enforce(ILicenseCapabilities capabilities, EnforcementContext context)
         {
             // We are not over the limit but we are trying to add a new channel which would put us over the limit
-            if (capabilities.ActiveChannels == capabilities.ChannelLimit &&
-                context == EnforcementContext.ExceedingChannelLimit)
+            if (capabilities.ActiveChannels == capabilities.ChannelLimit && context == EnforcementContext.ExceedingChannelLimit)
             {
                 return new EnumResult<ComplianceLevel>(ComplianceLevel.NotCompliant,
                     "You will exceed your channel limit. Please upgrade your plan or delete an existing channel to add a new channel");
