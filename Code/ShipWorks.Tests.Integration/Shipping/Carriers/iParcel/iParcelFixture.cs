@@ -59,7 +59,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.iParcel
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
                 IRatingService ratingService = lifetimeScope.ResolveKeyed<IRatingService>(ShipmentTypeCode.iParcel);
-                return ratingService.GetRates(shipment).Rates.Sum(x=>x.Amount);
+                return ratingService.GetRates(shipment).Rates.Sum(x=>x.AmountOrDefault);
             }
         }
 

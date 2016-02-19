@@ -72,7 +72,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                     // Check Express1 amount
                     RateResult express1Rate = GetExpress1Rate(shipment, express1Account);
 
-                    useExpress1 = express1Rate?.Amount <= endiciaRate?.Amount;
+                    useExpress1 = express1Rate?.AmountOrDefault <= endiciaRate?.AmountOrDefault;
                 }
                 catch (EndiciaApiException apiException)
                 {

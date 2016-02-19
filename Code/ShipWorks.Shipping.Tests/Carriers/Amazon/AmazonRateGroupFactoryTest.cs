@@ -42,7 +42,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
             RateResult rateResult = result.Rates.FirstOrDefault();
 
             Assert.Equal("UPS", rateResult.Description);
-            Assert.Equal(2.34M, rateResult.Amount);
+            Assert.Equal(2.34M, rateResult.AmountOrDefault);
             Assert.Equal("Foo", ((AmazonRateTag) rateResult.Tag).ShippingServiceId);
             Assert.Equal("Bar", ((AmazonRateTag) rateResult.Tag).ShippingServiceOfferId);
         }
@@ -137,7 +137,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
             testObject.GetRateGroupFromResponse(response);
 
             Assert.Equal(1, filteredRate.Rates.Count);
-            Assert.Equal(2.34M, filteredRate.Rates.First().Amount);
+            Assert.Equal(2.34M, filteredRate.Rates.First().AmountOrDefault);
         }
 
         public GetEligibleShippingServicesResponse ResponseWithServices(Func<IEnumerable<ShippingService>> serviceCreator)

@@ -295,7 +295,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                     // over mechanism in case the processing with the first rate fails
                     ratesToApplyToReturnedShipments = rateGroups
                         .SelectMany(x => x.Rates)
-                        .Where(r => !r.IsCounterRate && r.Amount == bestRate.Amount)
+                        .Where(r => !r.IsCounterRate && r.AmountOrDefault == bestRate.AmountOrDefault)
                         .ToList();
                 }
             }
@@ -360,7 +360,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             List<RateResult> ratesToApplyToReturnedShipments = rateGroups
                 .ToList()
                 .SelectMany(x => x.Rates)
-                .Where(r => r.Amount == selectedRate.Amount && r.OriginalTag != null && selectedRate.OriginalTag != null && r.OriginalTag.Equals(selectedRate.OriginalTag))
+                .Where(r => r.AmountOrDefault == selectedRate.AmountOrDefault && r.OriginalTag != null && selectedRate.OriginalTag != null && r.OriginalTag.Equals(selectedRate.OriginalTag))
                 .ToList();
 
             if (selectedRate.IsCounterRate)

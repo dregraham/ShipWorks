@@ -32,6 +32,29 @@
             <Style TargetType="DataGridCell" x:Key="NoSelection">
                 <Setter Property="BorderThickness" Value="0" />
                 <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+                <Setter Property="Foreground" Value="Black"/>
+                <Style.Triggers>
+                    <Trigger Property="IsEnabled" Value="False">
+                        <Setter Property="Foreground" Value="Black"/>
+                    </Trigger>
+                    <Trigger Property="IsSelected" Value="True">
+                        <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}"/>
+                        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                    </Trigger>
+                    <MultiTrigger>
+                        <MultiTrigger.Conditions>
+                            <Condition Property="IsSelected" Value="true"/>
+                            <Condition Property="Selector.IsSelectionActive" Value="false"/>
+                        </MultiTrigger.Conditions>
+                        <Setter Property="Background" Value="DarkGray"/>
+                        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                        <Setter Property="Foreground" Value="LightGray"/>
+                    </MultiTrigger>
+                    <Trigger Property="IsEnabled" Value="false">
+                        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+                    </Trigger>
+                </Style.Triggers>
             </Style>
             <Style TargetType="DataGridCell" x:Key="SpacingStyle" BasedOn="{StaticResource NoSelection}">
                 <Setter Property="Padding" Value="4,0,4,0"/>
@@ -79,6 +102,19 @@
                         SelectionMode="Single"
                         CellStyle="{StaticResource NoSelection}"
                         IsReadOnly="True">
+                <DataGrid.RowStyle>
+                    <Style TargetType="{x:Type DataGridRow}">
+                        <Setter Property="Foreground" Value="Red" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Selectable}" Value="False">
+                                <Setter Property="IsEnabled" Value="False" />
+                            </DataTrigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Foreground" Value="Yellow" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGrid.RowStyle>
                 <DataGrid.Columns>
                     <DataGridTemplateColumn Header="Provider">
                         <DataGridTemplateColumn.CellTemplate>

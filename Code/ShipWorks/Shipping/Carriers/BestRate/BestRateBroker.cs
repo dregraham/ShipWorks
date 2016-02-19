@@ -484,7 +484,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// </summary>
         private static bool IsValidRate(RateResult rate)
         {
-            return rate != null && rate.Tag != null && rate.Selectable && rate.Amount > 0;
+            return rate != null && rate.Tag != null && rate.Selectable && rate.AmountOrDefault > 0;
         }
 
         /// <summary>
