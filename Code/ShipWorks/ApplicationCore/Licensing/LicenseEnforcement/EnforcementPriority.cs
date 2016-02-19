@@ -7,7 +7,7 @@ namespace ShipWorks.ApplicationCore.Licensing.LicenseEnforcement
     /// Enum for the EnforcerPriority
     /// </summary>
     [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
-    public enum EnforcerPriority
+    public enum EnforcementPriority
     {
         [Description("Medium priority and should be performed last.")]
         Low = 0,

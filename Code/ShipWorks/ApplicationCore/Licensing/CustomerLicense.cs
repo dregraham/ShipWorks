@@ -73,7 +73,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// The license capabilities.
         /// </summary>
         private ILicenseCapabilities LicenseCapabilities { get; set; }
-        
+
         /// <summary>
         /// Activate a new store
         /// </summary>
@@ -183,7 +183,8 @@ namespace ShipWorks.ApplicationCore.Licensing
         }
 
         /// <summary>
-        /// Enforces and throws ShipWorksLicenseException if any enforcer is not compliant
+        /// Enforces license capabilities and throws ShipWorksLicenseException
+        /// if any enforcer returns not compliant
         /// </summary>
         public void EnforceCapabilities(EnforcementContext context)
         {
@@ -221,7 +222,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         }
 
         /// <summary>
-        /// Enforces using the given feature
+        /// Enforces capabilities based on the given feature
         /// </summary>
         public IEnumerable<EnumResult<ComplianceLevel>> EnforceCapabilities(EditionFeature feature, EnforcementContext context)
         {

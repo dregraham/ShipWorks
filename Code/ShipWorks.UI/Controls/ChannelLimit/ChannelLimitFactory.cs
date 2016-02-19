@@ -12,32 +12,20 @@ namespace ShipWorks.UI.Controls.ChannelLimit
     /// </summary>
     public class ChannelLimitFactory : IChannelLimitFactory
     {
-        private readonly Func<ChannelLimitControl> channelLimitControlFactory;
+        private readonly Func<IChannelLimitControl> channelLimitControlFactory;
         private readonly IChannelLimitViewModel viewModel;
         private readonly IIndex<EditionFeature, IChannelLimitBehavior> behaviorFactory;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ChannelLimitFactory"/> class.
         /// </summary>
-        public ChannelLimitFactory(Func<ChannelLimitControl> channelLimitControlFactory,
+        public ChannelLimitFactory(Func<IChannelLimitControl> channelLimitControlFactory,
             IChannelLimitViewModel viewModel,
             IIndex<EditionFeature, IChannelLimitBehavior> behaviorFactory)
         {
             this.channelLimitControlFactory = channelLimitControlFactory;
             this.viewModel = viewModel;
             this.behaviorFactory = behaviorFactory;
-        }
-
-        /// <summary>
-        /// Creates the ChannelLimitControl.
-        /// </summary>
-        private IChannelLimitControl CreateControl(ICustomerLicense customerLicense, EditionFeature feature)
-        {
-            ChannelLimitControl channelLimitControl = channelLimitControlFactory();
-            channelLimitControl.DataContext = viewModel;
-            viewModel.Load(customerLicense, behaviorFactory[feature]);
-
-            return channelLimitControl;
         }
 
         /// <summary>
@@ -51,7 +39,12 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         {
             viewModel.ChannelToAdd = channelToAdd;
             viewModel.EnforcementContext = EnforcementContext.ExceedingChannelLimit;
-            return CreateControl(customerLicense, feature);
+
+            IChannelLimitControl channelLimitControl = channelLimitControlFactory();
+            channelLimitControl.DataContext = viewModel;
+            viewModel.Load(customerLicense, behaviorFactory[feature]);
+
+            return channelLimitControl;
         }
     }
 }

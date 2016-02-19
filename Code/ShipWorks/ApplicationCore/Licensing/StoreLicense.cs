@@ -127,21 +127,21 @@ namespace ShipWorks.ApplicationCore.Licensing
         }
 
         /// <summary>
-        /// No enforcement for store licenses 
+        /// No enforcement for store licenses
         /// </summary>
         public void EnforceCapabilities(EnforcementContext context)
         {
         }
 
         /// <summary>
-        /// No enforcement for store licenses 
+        /// No enforcement for store licenses
         /// </summary>
         public void EnforceCapabilities(EnforcementContext context, IWin32Window owner)
         {
         }
 
         /// <summary>
-        /// No enforcement for store licenses 
+        /// No enforcement for store licenses
         /// </summary>
         public IEnumerable<EnumResult<ComplianceLevel>> EnforceCapabilities(EditionFeature feature, EnforcementContext context)
         {

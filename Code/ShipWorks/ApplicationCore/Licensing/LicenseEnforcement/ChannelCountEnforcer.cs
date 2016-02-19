@@ -27,7 +27,7 @@ namespace ShipWorks.ApplicationCore.Licensing.LicenseEnforcement
         /// <summary>
         /// Medium Priority
         /// </summary>
-        public EnforcerPriority Priority => EnforcerPriority.Medium;
+        public EnforcementPriority Priority => EnforcementPriority.Medium;
 
         /// <summary>
         /// Enforces the ChannelCount feature
@@ -78,8 +78,7 @@ namespace ShipWorks.ApplicationCore.Licensing.LicenseEnforcement
             }
 
             // We are not over the limit but we are trying to add a new channel which would put us over the limit
-            if (numberOfChannelsOverLimit == 0 && 
-                context == EnforcementContext.ExceedingChannelLimit)
+            if (numberOfChannelsOverLimit == 0 && context == EnforcementContext.ExceedingChannelLimit)
             {
                 return new EnumResult<ComplianceLevel>(ComplianceLevel.NotCompliant,
                     "You will exceed your channel limit. Please upgrade your plan or delete an existing channel to add a new channel");

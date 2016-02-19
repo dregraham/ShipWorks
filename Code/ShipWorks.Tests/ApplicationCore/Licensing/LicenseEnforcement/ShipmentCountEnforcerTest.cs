@@ -12,13 +12,13 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.LicenseEnforcement
     public class ShipmentCountEnforcerTest
     {
         [Fact]
-        public void Priority_Returns1()
+        public void Priority_ReturnsHigh()
         {
             using (var mock = AutoMock.GetLoose())
             {
                 ShipmentCountEnforcer testObject = mock.Create<ShipmentCountEnforcer>();
 
-                Assert.Equal(EnforcerPriority.High, testObject.Priority);
+                Assert.Equal(EnforcementPriority.High, testObject.Priority);
             }
         }
 
@@ -41,7 +41,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.LicenseEnforcement
                 ShipmentCountEnforcer testObject = mock.Create<ShipmentCountEnforcer>();
 
                 EnumResult<ComplianceLevel> result = testObject.Enforce(null, EnforcementContext.Login);
-                
+
                 Assert.Equal(ComplianceLevel.Compliant, result.Value);
             }
         }
@@ -145,7 +145,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.LicenseEnforcement
                 Mock<IDialog> dlg = mock.Mock<IDialog>();
 
                 dlgFactory.Setup(f => f.Create(It.IsAny<string>(), It.IsAny<IWin32Window>())).Returns(dlg.Object);
-                
+
                 ShipmentCountEnforcer testObject = mock.Create<ShipmentCountEnforcer>();
 
                 Mock<ILicenseCapabilities> licenseCapabilities = mock.Mock<ILicenseCapabilities>();
@@ -190,7 +190,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.LicenseEnforcement
                 Mock<IDialog> dlg = mock.Mock<IDialog>();
                 Mock<IUpgradePlanDlgFactory> dlgFactory = mock.Mock<IUpgradePlanDlgFactory>();
                 dlgFactory.Setup(c => c.Create(It.IsAny<string>(), null)).Returns(dlg.Object);
-                
+
                 ShipmentCountEnforcer testObject = mock.Create<ShipmentCountEnforcer>();
 
                 Mock<ILicenseCapabilities> licenseCapabilities = mock.Mock<ILicenseCapabilities>();
@@ -201,6 +201,29 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.LicenseEnforcement
                 testObject.Enforce(licenseCapabilities.Object, EnforcementContext.CreateLabel, null);
 
                 dlgFactory.Verify(d => d.Create("You have reached your shipment limit for this billing cycle. Please upgrade your plan to create labels.", null), Times.Once);
+            }
+        }
+
+        [Fact]
+        public void Enforce_ReturnsCompliant_WhenOverLimitsAndInTrial()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                ShipmentCountEnforcer testObject = mock.Create<ShipmentCountEnforcer>();
+
+                Mock<ILicenseCapabilities> licenseCapabilities = mock.Mock<ILicenseCapabilities>();
+
+                licenseCapabilities.Setup(l => l.ProcessedShipments).Returns(10);
+                licenseCapabilities.Setup(l => l.ShipmentLimit).Returns(5);
+
+                licenseCapabilities.Setup(l => l.ActiveChannels).Returns(10);
+                licenseCapabilities.Setup(l => l.ChannelLimit).Returns(5);
+
+                licenseCapabilities.Setup(l => l.IsInTrial).Returns(true);
+
+                EnumResult<ComplianceLevel> result = testObject.Enforce(licenseCapabilities.Object, EnforcementContext.CreateLabel);
+
+                Assert.Equal(ComplianceLevel.Compliant, result.Value);
             }
         }
     }

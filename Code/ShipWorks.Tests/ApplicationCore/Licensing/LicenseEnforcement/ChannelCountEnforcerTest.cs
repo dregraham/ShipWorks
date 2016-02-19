@@ -18,7 +18,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.LicenseEnforcement
             {
                 ChannelCountEnforcer testObject = mock.Create<ChannelCountEnforcer>();
 
-                Assert.Equal(EnforcerPriority.Medium, testObject.Priority);
+                Assert.Equal(EnforcementPriority.Medium, testObject.Priority);
             }
         }
 
@@ -32,7 +32,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.LicenseEnforcement
                 Assert.Equal(EditionFeature.ChannelCount, testObject.EditionFeature);
             }
         }
-        
+
         [Fact]
         public void Enforce_ReturnsNotCompliant_WhenActiveChannelsHigherThanChannelLimit()
         {
@@ -78,7 +78,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.LicenseEnforcement
 
                 Mock<ILicenseCapabilities> licenseCapabilities = mock.Mock<ILicenseCapabilities>();
 
-                licenseCapabilities.Setup(l => l.ActiveChannels).Returns(5);
+                licenseCapabilities.Setup(l => l.ActiveChannels).Returns(4);
                 licenseCapabilities.Setup(l => l.ChannelLimit).Returns(5);
 
                 EnumResult<ComplianceLevel> result = testObject.Enforce(licenseCapabilities.Object, EnforcementContext.CreateLabel);
@@ -122,7 +122,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.LicenseEnforcement
                 Assert.Equal("You have exceeded your channel limit. Please upgrade your plan or delete 3 channels to continue downloading orders and creating shipment labels.", result.Message);
             }
         }
-        
+
         [Fact]
         public void Enforce_ShowsDialog_WhenNotCompliant()
         {
@@ -170,7 +170,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.LicenseEnforcement
         }
 
         [Fact]
-        public void Enforce_ErrorReferencesAddingANewStore_WhenContextIsBeforeAddStoreAndNotComplient()
+        public void Enforce_ErrorReferencesAddingANewStore_WhenContextIsBeforeAddStoreAndNotCompliant()
         {
             using (var mock = AutoMock.GetLoose())
             {
@@ -188,7 +188,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.LicenseEnforcement
         }
 
         [Fact]
-        public void Enforce_ErrorReferencesAddingANewStore_WhenContextIsAddingStoreOverLimitErrorThrownAndNotComplient()
+        public void Enforce_ErrorReferencesAddingANewStore_WhenContextIsAddingStoreOverLimitErrorThrownAndNotCompliant()
         {
             using (var mock = AutoMock.GetLoose())
             {

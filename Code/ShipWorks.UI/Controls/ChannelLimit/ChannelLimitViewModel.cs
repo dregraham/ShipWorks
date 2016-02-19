@@ -61,7 +61,7 @@ namespace ShipWorks.UI.Controls.ChannelLimit
 
             // Set the default enforcement context
             EnforcementContext = EnforcementContext.NotSpecified;
-            
+
             log = logFactory(typeof (ChannelLimitViewModel));
 
             DeleteStoreClickCommand = new RelayCommand<Window>(DeleteChannel, CanExecuteDeleteStore);
@@ -136,6 +136,15 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         public string Title => channelLimitBehavior.Title;
 
         /// <summary>
+        /// Since we already have a license and channelLimitBehavior internally,
+        /// we should just call this...
+        /// </summary>
+        private void Load()
+        {
+            Load(license, channelLimitBehavior);
+        }
+
+        /// <summary>
         /// Loads the list of active stores
         /// </summary>
         public void Load(ICustomerLicense customerLicense, IChannelLimitBehavior behavior)
@@ -162,15 +171,6 @@ namespace ShipWorks.UI.Controls.ChannelLimit
             channelLimitBehavior.PopulateChannels(channelCollection, ChannelToAdd);
 
             UpdateErrorMesssage();
-        }
-
-        /// <summary>
-        /// Since we already have a license and channelLimitBehavior internally,
-        /// we should just call this...
-        /// </summary>
-        private void Load()
-        {
-            Load(license, channelLimitBehavior);
         }
 
         /// <summary>
