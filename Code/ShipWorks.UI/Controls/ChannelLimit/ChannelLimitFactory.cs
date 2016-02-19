@@ -50,7 +50,7 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         public IChannelLimitControl CreateControl(ICustomerLicense customerLicense, StoreTypeCode channelToAdd, EditionFeature feature)
         {
             viewModel.ChannelToAdd = channelToAdd;
-            viewModel.EnforcementContext = EnforcementContext.AddingStoreOverLimitErrorThrown;
+            viewModel.EnforcementContext = EnforcementContext.ExceedingChannelLimit;
             return CreateControl(customerLicense, feature);
         }
     }

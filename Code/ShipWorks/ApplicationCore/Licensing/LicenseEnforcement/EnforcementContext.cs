@@ -22,9 +22,9 @@ namespace ShipWorks.ApplicationCore.Licensing.LicenseEnforcement
         Download, 
 
         [Description("Before adding the store")]
-        BeforeAddStore,
+        OnAddingStore,
 
         [Description("Tango threw over channel limit while adding a store")]
-        AddingStoreOverLimitErrorThrown,
+        ExceedingChannelLimit,
     }
 }

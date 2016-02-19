@@ -4,7 +4,7 @@ using System.Reflection;
 namespace ShipWorks.ApplicationCore.Licensing.LicenseEnforcement
 {
     /// <summary>
-    /// Enum for license enforcement context
+    /// Enum for the EnforcerPriority
     /// </summary>
     [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
     public enum EnforcerPriority

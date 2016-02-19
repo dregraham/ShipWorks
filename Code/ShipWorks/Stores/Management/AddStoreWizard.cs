@@ -91,7 +91,7 @@ namespace ShipWorks.Stores.Management
 
             try
             {
-                if (!IsLicenseAllowed(owner))
+                if (!IsLicenseCompliant(owner))
                 {
                     return false;
                 }
@@ -122,12 +122,13 @@ namespace ShipWorks.Stores.Management
         }
 
         /// <summary>
-        /// Returns true if allowed.
+        /// Returns true if license is in compliance.
         /// </summary>
         /// <remarks>
-        /// This also gives the user to fix the issue...
+        /// Prompts user to get in compliance if needed. 
+        /// Then it checks to see if they are now in compliance and returns the result.
         /// </remarks>
-        private static bool IsLicenseAllowed(IWin32Window owner)
+        private static bool IsLicenseCompliant(IWin32Window owner)
         {
             using (ILifetimeScope scope = IoC.BeginLifetimeScope())
             {
@@ -139,11 +140,11 @@ namespace ShipWorks.Stores.Management
                     return true; // must be legacy and no store set up...
                 }
 
-                license.EnforceCapabilities(EnforcementContext.BeforeAddStore, owner);
+                license.EnforceCapabilities(EnforcementContext.OnAddingStore, owner);
 
                 try
                 {
-                    license.EnforceCapabilities(EnforcementContext.BeforeAddStore);
+                    license.EnforceCapabilities(EnforcementContext.OnAddingStore);
                     return true;
                 }
                 catch (ShipWorksLicenseException ex)
