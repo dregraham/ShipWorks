@@ -285,7 +285,7 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         {
             return
                 license.EnforceCapabilities(channelLimitBehavior.EditionFeature, EnforcementContext)
-                    .FirstOrDefault(c => c.Value == ComplianceLevel.NotCompliant) != null;
+                    .FirstOrDefault(c => c.Value == ComplianceLevel.NotCompliant) == null;
         }
 
         /// <summary>
