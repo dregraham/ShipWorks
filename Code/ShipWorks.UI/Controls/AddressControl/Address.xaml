@@ -40,7 +40,8 @@
             <TextBlock Grid.Row="0" Grid.Column="0"
                        Style="{StaticResource GridLabel}">Full Name:</TextBlock>
             <TextBox Grid.Row="0" Grid.Column="1"
-                     Text="{Binding FullName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                     Text="{Binding FullName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                     props:EntityFieldLength.FieldName="PersonNameFull" />
             <TextBlock Grid.Row="1" Grid.Column="0"
                        Style="{StaticResource GridLabel}">Company:</TextBlock>
             <TextBox Grid.Row="1" Grid.Column="1"
@@ -102,7 +103,7 @@
             <TextBox Grid.Row="1" Grid.Column="1"
                      MinLines="3" MaxLines="3"
                      AcceptsReturn="True"
-                     MaxLength="180"
+                     props:EntityFieldLength.FieldName="PersonStreetFull"
                      Text="{Binding Street, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
             <TextBlock Grid.Row="2" Grid.Column="0"
