@@ -162,6 +162,8 @@
     <Compile Include="Controls\ChannelLimit\ChannelLimitBehavior\GenericFileBehaviorTest.cs" />
     <Compile Include="Controls\ChannelLimit\ChannelLimitBehavior\GenericModuleBehaviorTest.cs" />
     <Compile Include="Controls\ChannelLimit\ChannelLimitBehavior\OverChannelLimitBehaviorTest.cs" />
+    <Compile Include="Controls\ChannelLimit\ChannelLimitDlgFactoryTest.cs" />
+    <Compile Include="Controls\ChannelLimit\ChannelLimitFactoryTest.cs" />
     <Compile Include="Controls\ChannelLimit\ChannelLimitViewModelTest.cs" />
     <Compile Include="Controls\CustomerLicenseActivation\CustomerLicenseActivationViewModelTest.cs" />
     <Compile Include="Controls\MultiValueBinders\CheckboxMultiValueBinderTest.cs" />

@@ -36,7 +36,9 @@ namespace ShipWorks.UI
             builder.RegisterType<ChannelLimitFactory>()
                 .AsImplementedInterfaces();
 
-            builder.RegisterType<ChannelLimitControl>();
+            builder.RegisterType<ChannelLimitControl>()
+                .AsImplementedInterfaces()
+                .AsSelf();
 
             builder.RegisterType<ChannelLimitDlg>()
                 .AsImplementedInterfaces();
