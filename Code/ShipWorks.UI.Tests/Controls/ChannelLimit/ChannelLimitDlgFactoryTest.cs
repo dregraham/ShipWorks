@@ -21,7 +21,6 @@ namespace ShipWorks.UI.Tests.Controls.ChannelLimit
         {
             using (var mock = AutoMock.GetLoose())
             {
-                Mock<IChannelLimitViewModel> viewModel = mock.Mock<IChannelLimitViewModel>();
                 Mock<ILicenseService> licenseService = mock.Mock<ILicenseService>();
                 Mock<ICustomerLicense> customerlicense = mock.Mock<ICustomerLicense>();
                 Mock<IChannelLimitDlg> control = mock.Mock<IChannelLimitDlg>();
@@ -153,7 +152,6 @@ namespace ShipWorks.UI.Tests.Controls.ChannelLimit
         {
             using (var mock = AutoMock.GetLoose())
             {
-                Mock<IChannelLimitViewModel> viewModel = mock.Mock<IChannelLimitViewModel>();
                 Mock<ILicenseService> licenseService = mock.Mock<ILicenseService>();
                 Mock<ICustomerLicense> customerlicense = mock.Mock<ICustomerLicense>();
                 Mock<IChannelLimitDlg> control = mock.Mock<IChannelLimitDlg>();

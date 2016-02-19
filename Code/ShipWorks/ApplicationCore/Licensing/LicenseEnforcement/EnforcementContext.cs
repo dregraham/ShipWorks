@@ -2,7 +2,7 @@
 using System.Reflection;
 
 namespace ShipWorks.ApplicationCore.Licensing.LicenseEnforcement
-{ 
+{
     /// <summary>
     /// Enum for license enforcement context
     /// </summary>
@@ -24,7 +24,11 @@ namespace ShipWorks.ApplicationCore.Licensing.LicenseEnforcement
         [Description("Before adding the store")]
         OnAddingStore,
 
-        [Description("Tango threw over channel limit while adding a store")]
+        /// <summary>
+        /// This comes into play when Tango throws an error when adding a store
+        /// because it will take the customer over the channel limit.
+        /// </summary>
+        [Description("Exceeding Channel Limit")]
         ExceedingChannelLimit,
     }
 }

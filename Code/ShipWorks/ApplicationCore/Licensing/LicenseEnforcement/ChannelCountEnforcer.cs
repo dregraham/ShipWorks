@@ -65,16 +65,17 @@ namespace ShipWorks.ApplicationCore.Licensing.LicenseEnforcement
                 // Determine if we should use the plural for of channel in our error message
                 string plural = numberOfChannelsOverLimit > 1 ? "s" : string.Empty;
 
-                StringBuilder error =
-                    new StringBuilder(
-                        $"You have exceeded your channel limit. Please upgrade your plan or delete {numberOfChannelsOverLimit} channel{plural} to continue ");
 
-                error.Append(context == EnforcementContext.OnAddingStore || context == EnforcementContext.ExceedingChannelLimit
-                    ? "to continue adding a new store."
-                    : "downloading orders and creating shipment labels.");
+                string forbiddenActivity = context == EnforcementContext.OnAddingStore ||
+                                           context == EnforcementContext.ExceedingChannelLimit
+                    ? "adding a new store."
+                    : "downloading orders and creating shipment labels.";
 
+                string error = "You have exceeded your channel limit. Please upgrade your plan or delete " +
+                               $"{numberOfChannelsOverLimit} channel{plural} to continue {forbiddenActivity}";
+                
                 // Return not compliant and an error to display to the user
-                return new EnumResult<ComplianceLevel>(ComplianceLevel.NotCompliant, error.ToString());
+                return new EnumResult<ComplianceLevel>(ComplianceLevel.NotCompliant, error);
             }
 
             return new EnumResult<ComplianceLevel>(ComplianceLevel.Compliant, string.Empty);
