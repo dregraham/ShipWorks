@@ -61,11 +61,21 @@ namespace ShipWorks.UI.Controls.UpgradePlan
             Uri uri = new Uri("https://www.interapptive.com/account/changeplan.php");
             IDialog browserDlg = webBrowserFactory.Create(uri, "Upgrade your account", owner);
             browserDlg.ShowDialog();
-
-            if (license.EnforceCapabilities(EditionFeature.ChannelCount, EnforcementContext.NotSpecified).FirstOrDefault()?.Value == ComplianceLevel.Compliant)
+            
+            if (IsCompliant())
             {
                 owner?.Close();
             }
+        }
+
+        /// <summary>
+        /// Returns true if we are compliant with the enforcer
+        /// </summary>
+        private bool IsCompliant()
+        {
+            return
+                license.EnforceCapabilities(EditionFeature.ChannelCount, EnforcementContext.NotSpecified)
+                    .FirstOrDefault(c => c.Value == ComplianceLevel.NotCompliant) == null;
         }
     }
 }
