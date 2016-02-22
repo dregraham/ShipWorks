@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using Autofac;
 using ShipWorks.ApplicationCore.Licensing;
+using ShipWorks.Properties;
 using ShipWorks.UI;
 
 namespace ShipWorks.ApplicationCore.Dashboard.Content
@@ -17,10 +18,13 @@ namespace ShipWorks.ApplicationCore.Dashboard.Content
         /// </summary>
         public override void Initialize(DashboardBar dashboardBar)
         {
+            base.Initialize(dashboardBar);
+
             DashboardBar.CanUserDismiss = false;
 
             DashboardBar.PrimaryText = "Licensing";
             DashboardBar.SecondaryText = "You are nearing your monthly shipment limit.";
+            DashboardBar.Image = Resources.warning16;
             DashboardBar.ApplyActions(new List<DashboardAction>
             {
                 new DashboardActionMethod("[link]Upgrade your plan[/link] now", OnUpgradePlan)
