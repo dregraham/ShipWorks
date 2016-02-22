@@ -493,22 +493,25 @@ namespace ShipWorks.ApplicationCore.Dashboard
         /// </summary>
         private static void CheckForLicenseDependentChanges()
         {
-            // Remove all dashboard items of DashboardLicenseItem type
-            dashboardItems.OfType<DashboardLicenseItem>().ToList().ForEach(RemoveDashboardItem);
-            
-            DashboardLicenseItem item;
+            DashboardLicenseItem dashboardItem;
 
+            // Resolve the license and get its dashboard item
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
                 ILicenseService licenseService = lifetimeScope.Resolve<ILicenseService>();
-
-                item = licenseService.GetLicenses().FirstOrDefault()?.CreateDashboardMessage();
+                dashboardItem = licenseService.GetLicenses().FirstOrDefault()?.CreateDashboardMessage();
             }
-            
-            // If the license service returned a valid dashboard item add it
-            if (item != null)
+
+            if (dashboardItem == null)
             {
-                AddDashboardItem(item);
+                // the license returned no dashboard license item so we remove any existing 
+                // dashboard items of type DashboardLicenseItem
+                dashboardItems.OfType<DashboardLicenseItem>().ToList().ForEach(RemoveDashboardItem);
+            }
+            else
+            {
+                // The license returned a valid DashboardLicenseItem, add it to the dashboard
+                AddDashboardItem(dashboardItem);
             }
         }
 
