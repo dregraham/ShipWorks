@@ -59,7 +59,7 @@ namespace ShipWorks.UI.Controls.UpgradePlan
         private void UpgradeAccount(Window owner)
         {
             Uri uri = new Uri(CustomerLicense.UpgradeUrl);
-            IDialog browserDlg = webBrowserFactory.Create(uri, "Upgrade your account", owner);
+            IDialog browserDlg = webBrowserFactory.Create(uri, "Upgrade your plan", owner);
             browserDlg.ShowDialog();
             
             if (IsCompliant())

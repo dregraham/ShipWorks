@@ -19,11 +19,11 @@ namespace ShipWorks.ApplicationCore.Dashboard.Content
         {
             DashboardBar.CanUserDismiss = false;
 
-            DashboardBar.PrimaryText = "Approaching Shipment Limit";
-            DashboardBar.SecondaryText = "To continue shipping, please upgrade your plan.";
+            DashboardBar.PrimaryText = "Licensing";
+            DashboardBar.SecondaryText = "You are nearing your monthly shipment limit.";
             DashboardBar.ApplyActions(new List<DashboardAction>
             {
-                new DashboardActionMethod("[link] Upgrade Plan[/link]", OnUpgradePlan)
+                new DashboardActionMethod("[link]Upgrade your plan[/link] now", OnUpgradePlan)
             });
         }
 
@@ -35,7 +35,7 @@ namespace ShipWorks.ApplicationCore.Dashboard.Content
             using (ILifetimeScope scope = IoC.BeginLifetimeScope())
             {
                 IWebBrowserFactory webBrowser = scope.Resolve<IWebBrowserFactory>();
-                webBrowser.Create(new Uri(CustomerLicense.UpgradeUrl), "Upgrade your account", null);
+                webBrowser.Create(new Uri(CustomerLicense.UpgradeUrl), "Upgrade your plan", null);
             }
         }
     }
