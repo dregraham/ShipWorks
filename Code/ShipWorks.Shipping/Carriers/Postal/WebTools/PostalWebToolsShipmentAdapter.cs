@@ -92,6 +92,20 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
         }
 
         /// <summary>
+        /// Perform the service update
+        /// </summary>
+        protected override void UpdateServiceFromRate(RateResult rate)
+        {
+            PostalRateSelection rateSelection = rate.Tag as PostalRateSelection;
+
+            if (rateSelection != null)
+            {
+                Shipment.Postal.Service = (int) rateSelection.ServiceType;
+                Shipment.Postal.Confirmation = (int) rateSelection.ConfirmationType;
+            }
+        }
+
+        /// <summary>
         /// Perform the clone of the adapter using the cloned shipment
         /// </summary>
         /// <returns></returns>
