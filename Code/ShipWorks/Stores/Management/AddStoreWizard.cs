@@ -140,6 +140,7 @@ namespace ShipWorks.Stores.Management
                     return true; // must be legacy and no store set up...
                 }
 
+                license.Refresh();
                 license.EnforceCapabilities(EnforcementContext.OnAddingStore, owner);
 
                 try
