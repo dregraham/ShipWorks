@@ -28,6 +28,16 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// The dialogs owner
         /// </summary>
         Window Owner { get; set; }
+
+        /// <summary>
+        /// Starting location of the window
+        /// </summary>
+        WindowStartupLocation WindowStartupLocation { get; set; }
+
+        /// <summary>
+        /// Topmost window or not
+        /// </summary>
+        bool Topmost { get; set; }
     }
 }
 

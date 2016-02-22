@@ -206,7 +206,7 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         /// </summary>
         private void UpgradeAccount(Window owner)
         {
-            Uri uri = new Uri("https://www.interapptive.com/account/changeplan.php");
+            Uri uri = new Uri(CustomerLicense.UpgradeUrl);
             IDialog browserDlg = webBrowserFactory.Create(uri, "Upgrade your account", owner);
             browserDlg.ShowDialog();
 

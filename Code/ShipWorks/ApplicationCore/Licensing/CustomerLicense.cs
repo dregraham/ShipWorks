@@ -18,6 +18,8 @@ namespace ShipWorks.ApplicationCore.Licensing
     /// </summary>
     public class CustomerLicense : ICustomerLicense
     {
+        public const string UpgradeUrl = "https://www.interapptive.com/account/changeplan.php";
+
         private readonly ITangoWebClient tangoWebClient;
         private readonly ICustomerLicenseWriter licenseWriter;
         private readonly ILog log;

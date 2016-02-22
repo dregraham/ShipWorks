@@ -24,14 +24,22 @@ namespace ShipWorks.UI.Controls.WebBrowser
         /// <summary>
         /// Creates the specified URI.
         /// </summary>
-        /// <param name="uri">The URI to navigate to.</param>
-        /// <param name="title">The title of the dialog window.</param>
-        /// <param name="owner"></param>
         public IDialog Create(Uri uri, string title, Window owner)
         {
             webBrowserDlgViewModel.Load(uri, title);
             IDialog browserDlg = webBrowserDlgFactory("WebBrowserDlg");
-            browserDlg.Owner = owner;
+
+            // If not coming from WPF, this makes it a lot easier...
+            if (owner == null)
+            {
+                browserDlg.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+                browserDlg.Topmost = true;
+            }
+            else
+            {
+                // Set owner
+                browserDlg.Owner = owner;
+            }
 
             browserDlg.DataContext = webBrowserDlgViewModel;
 
