@@ -70,13 +70,22 @@ namespace ShipWorks.UI.Controls
         private static object HandleValueCoercion(DependencyObject d, object value)
         {
             object newValue = existingMetadata.CoerceValueCallback(d, value);
+            ComboBox comboBox = (ComboBox) d;
 
-            if (value != null && newValue == null)
+            if (WasValueCoercedToNull(value, newValue) || comboBox.SelectedItem == null)
             {
-                SelectNewValue(d as ComboBox);
+                SelectNewValue(comboBox);
             }
 
             return newValue;
+        }
+
+        /// <summary>
+        /// Was the value coerced to null instead of starting as null
+        /// </summary>
+        private static bool WasValueCoercedToNull(object value, object newValue)
+        {
+            return value != null && newValue == null;
         }
 
         /// <summary>
@@ -84,11 +93,6 @@ namespace ShipWorks.UI.Controls
         /// </summary>
         private static void SelectNewValue(ComboBox combo)
         {
-            if (combo == null)
-            {
-                return;
-            }
-
             RelativeIndex relativeIndex = GetSelectedIndexWhenNull(combo);
             if (relativeIndex == RelativeIndex.None || !combo.HasItems)
             {
