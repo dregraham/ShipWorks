@@ -249,10 +249,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public DashboardLicenseItem CreateDashboardMessage()
         {
-            if (LicenseCapabilities == null)
-            {
-                Refresh();
-            }
+            Refresh();
 
             if (LicenseCapabilities.IsInTrial)
             {
