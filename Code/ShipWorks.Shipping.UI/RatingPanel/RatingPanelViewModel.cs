@@ -112,7 +112,7 @@ namespace ShipWorks.Shipping.UI.RatingPanel
         /// </summary>
         private void SelectRate(ICarrierShipmentAdapter shipmentAdapter)
         {
-            if (shipmentAdapter == null)
+            if (shipmentAdapter == null || Rates == null)
             {
                 SelectedRate = null;
                 return;

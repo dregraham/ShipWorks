@@ -29,7 +29,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
         {
             this.schedulerProvider = schedulerProvider;
         }
-        
+
         /// <summary>
         /// Register the pipeline on the view model
         /// </summary>
@@ -41,11 +41,12 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
                 .Where(domesticAffectingProperties.Contains)
                 .Select(_ => viewModel.ShipmentAdapter)
                 .Throttle(TimeSpan.FromMilliseconds(250), schedulerProvider.Default)
+                .ObserveOn(schedulerProvider.Dispatcher)
                 .Subscribe(shipmentAdapter => Update(viewModel, shipmentAdapter));
         }
 
         /// <summary>
-        /// Update the person adapters and set DomesticInternationalText appropriately 
+        /// Update the person adapters and set DomesticInternationalText appropriately
         /// </summary>
         private void Update(ShippingPanelViewModel viewModel, ICarrierShipmentAdapter shipmentAdapter)
         {
@@ -65,6 +66,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
                 UpdatePersonalAdapterValues(shipmentAdapter.Shipment.ShipPerson, viewModel.Destination);
             }
 
+            viewModel.UpdateServices();
             viewModel.DomesticInternationalText = viewModel.IsDomestic ? "Domestic" : "International";
         }
 

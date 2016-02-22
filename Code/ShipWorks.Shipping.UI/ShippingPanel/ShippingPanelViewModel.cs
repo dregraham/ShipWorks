@@ -330,12 +330,12 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// <summary>
         /// Updates the service types.
         /// </summary>
-        private void UpdateServices() => ShipmentViewModel?.RefreshServiceTypes();
+        public void UpdateServices() => ShipmentViewModel?.RefreshServiceTypes();
 
         /// <summary>
         /// Updates the package types.
         /// </summary>
-        private void UpdatePackages() => ShipmentViewModel?.RefreshPackageTypes();
+        public void UpdatePackages() => ShipmentViewModel?.RefreshPackageTypes();
 
         /// <summary>
         /// Handle a property change before it actually happens
