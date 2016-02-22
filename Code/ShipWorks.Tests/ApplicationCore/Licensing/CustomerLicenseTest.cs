@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using Interapptive.Shared.Utility;
+using ShipWorks.ApplicationCore.Dashboard.Content;
 using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Editions;
@@ -90,7 +91,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
                 Assert.Equal("some random exception", ex.Message);
             }
         }
-        
+
         [Fact]
         public void Activate_ReturnsActive_WhenTangoReturnsSuccess()
         {
@@ -177,7 +178,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
                 enforcerOne.Setup(e => e.Enforce(It.IsAny<ILicenseCapabilities>(), It.IsAny<EnforcementContext>()))
                     .Returns(new EnumResult<ComplianceLevel>(ComplianceLevel.NotCompliant,
                         "enforcerOne is not compliant."));
-                
+
                 CustomerLicense testObject = mock1.Create<CustomerLicense>(new NamedParameter("key", "SomeKey"),
                     new TypedParameter(typeof(IEnumerable<ILicenseEnforcer>),
                         new[] { enforcerOne.Object, enforcerTwo.Object }));
@@ -288,7 +289,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
                 mock.Provide(new List<ILicenseEnforcer> { enforcerOne.Object, enforcerTwo.Object });
 
                 mock.Mock<ITangoWebClient>();
-                
+
                 CustomerLicense testObject = mock.Create<CustomerLicense>(new NamedParameter("key", "SomeKey"));
 
                 ShipWorksLicenseException ex =
@@ -296,6 +297,94 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
                         () => testObject.EnforceCapabilities(EnforcementContext.NotSpecified));
 
                 Assert.Equal("Something about not being compliant", ex.Message);
+            }
+        }
+
+        [Fact]
+        public void CreateDashboardMessage_ReturnsDashboardLicenseItem_WhenOverShipmentLimitWarningThreshold()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                Mock<ILicenseCapabilities> licenseCapabilities = mock.Mock<ILicenseCapabilities>();
+
+                licenseCapabilities.Setup(l => l.IsInTrial).Returns(false);
+                licenseCapabilities.Setup(l => l.ProcessedShipments).Returns(9);
+                licenseCapabilities.Setup(l => l.ShipmentLimit).Returns(10);
+
+                mock.Mock<ITangoWebClient>().Setup(w => w.GetLicenseCapabilities(It.IsAny<ICustomerLicense>()))
+                    .Returns(licenseCapabilities.Object);
+
+                CustomerLicense testObject = mock.Create<CustomerLicense>(new NamedParameter("key", "SomeKey"));
+
+                DashboardLicenseItem result = testObject.CreateDashboardMessage();
+
+                Assert.NotNull(result);
+            }
+        }
+
+        [Fact]
+        public void CreateDashboardMessage_ReturnsDashboardLicenseItem_WhenAtShipmentLimitWarningThreshold()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                Mock<ILicenseCapabilities> licenseCapabilities = mock.Mock<ILicenseCapabilities>();
+
+                licenseCapabilities.Setup(l => l.IsInTrial).Returns(false);
+                licenseCapabilities.Setup(l => l.ProcessedShipments).Returns(8);
+                licenseCapabilities.Setup(l => l.ShipmentLimit).Returns(10);
+
+                mock.Mock<ITangoWebClient>().Setup(w => w.GetLicenseCapabilities(It.IsAny<ICustomerLicense>()))
+                    .Returns(licenseCapabilities.Object);
+
+                CustomerLicense testObject = mock.Create<CustomerLicense>(new NamedParameter("key", "SomeKey"));
+
+                DashboardLicenseItem result = testObject.CreateDashboardMessage();
+
+                Assert.NotNull(result);
+            }
+        }
+
+        [Fact]
+        public void CreateDashboardMessage_ReturnsNull_WhenUnderShipmentLimitWarningThreshold()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                Mock<ILicenseCapabilities> licenseCapabilities = mock.Mock<ILicenseCapabilities>();
+
+                licenseCapabilities.Setup(l => l.IsInTrial).Returns(false);
+                licenseCapabilities.Setup(l => l.ProcessedShipments).Returns(7);
+                licenseCapabilities.Setup(l => l.ShipmentLimit).Returns(10);
+
+                mock.Mock<ITangoWebClient>().Setup(w => w.GetLicenseCapabilities(It.IsAny<ICustomerLicense>()))
+                    .Returns(licenseCapabilities.Object);
+
+                CustomerLicense testObject = mock.Create<CustomerLicense>(new NamedParameter("key", "SomeKey"));
+
+                DashboardLicenseItem result = testObject.CreateDashboardMessage();
+
+                Assert.Null(result);
+            }
+        }
+
+        [Fact]
+        public void CreateDashboardMessage_ReturnsNull_WhenIsInTrialAndOverShipmentLimitWarningThreshold()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                Mock<ILicenseCapabilities> licenseCapabilities = mock.Mock<ILicenseCapabilities>();
+
+                licenseCapabilities.Setup(l => l.IsInTrial).Returns(true);
+                licenseCapabilities.Setup(l => l.ProcessedShipments).Returns(9);
+                licenseCapabilities.Setup(l => l.ShipmentLimit).Returns(10);
+
+                mock.Mock<ITangoWebClient>().Setup(w => w.GetLicenseCapabilities(It.IsAny<ICustomerLicense>()))
+                    .Returns(licenseCapabilities.Object);
+
+                CustomerLicense testObject = mock.Create<CustomerLicense>(new NamedParameter("key", "SomeKey"));
+
+                DashboardLicenseItem result = testObject.CreateDashboardMessage();
+
+                Assert.Null(result);
             }
         }
     }

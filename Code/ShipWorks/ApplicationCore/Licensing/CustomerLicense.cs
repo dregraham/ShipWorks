@@ -20,6 +20,7 @@ namespace ShipWorks.ApplicationCore.Licensing
     public class CustomerLicense : ICustomerLicense
     {
         public const string UpgradeUrl = "https://www.interapptive.com/account/changeplan.php";
+        private const float ShipmentLimitWarningThreshold = 0.8f;
 
         private readonly ITangoWebClient tangoWebClient;
         private readonly ICustomerLicenseWriter licenseWriter;
@@ -248,7 +249,19 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public DashboardLicenseItem CreateDashboardMessage()
         {
-            return null;
+            if (LicenseCapabilities == null)
+            {
+                Refresh();
+            }
+
+            if (LicenseCapabilities.IsInTrial)
+            {
+                return null;
+            }
+
+            float currentShipmentPercentage = (float) LicenseCapabilities.ProcessedShipments / LicenseCapabilities.ShipmentLimit;
+
+            return currentShipmentPercentage >= ShipmentLimitWarningThreshold ? new DashboardLicenseItem() : null;
         }
     }
 }
