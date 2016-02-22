@@ -39,7 +39,7 @@ namespace ShipWorks.ApplicationCore.Dashboard.Content
             using (ILifetimeScope scope = IoC.BeginLifetimeScope())
             {
                 IWebBrowserFactory webBrowser = scope.Resolve<IWebBrowserFactory>();
-                IDialog dialog = webBrowser.Create(new Uri(CustomerLicense.UpgradeUrl), "Upgrade your account", null);
+                IDialog dialog = webBrowser.Create(new Uri(CustomerLicense.UpgradeUrl), "Upgrade your plan", null);
                 dialog.ShowDialog();
             }
         }
