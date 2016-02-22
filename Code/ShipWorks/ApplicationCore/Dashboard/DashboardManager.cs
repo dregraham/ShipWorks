@@ -25,6 +25,7 @@ using ShipWorks.Email;
 using ShipWorks.ApplicationCore.Dashboard.Content;
 using ShipWorks.Users;
 using System.Collections;
+using Autofac;
 using ShipWorks.Actions;
 using ShipWorks.Actions.Tasks;
 using ShipWorks.Common.Threading;
@@ -484,6 +485,31 @@ namespace ShipWorks.ApplicationCore.Dashboard
             CheckForEmailChanges();
             CheckForActionChanges();
             CheckForSchedulerServiceStoppedChanges();
+            CheckForLicenseDependentChanges();
+        }
+
+        /// <summary>
+        /// Update the dashboard with license issues
+        /// </summary>
+        private static void CheckForLicenseDependentChanges()
+        {
+            // Remove all dashboard items of DashboardLicenseItem type
+            dashboardItems.OfType<DashboardLicenseItem>().ToList().ForEach(RemoveDashboardItem);
+            
+            DashboardLicenseItem item;
+
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                ILicenseService licenseService = lifetimeScope.Resolve<ILicenseService>();
+
+                item = licenseService.GetLicenses().FirstOrDefault()?.CreateDashboardMessage();
+            }
+            
+            // If the license service returned a valid dashboard item add it
+            if (item != null)
+            {
+                AddDashboardItem(item);
+            }
         }
 
         /// <summary>
