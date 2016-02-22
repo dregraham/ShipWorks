@@ -13,6 +13,13 @@ namespace ShipWorks.ApplicationCore.Dashboard.Content
     /// </summary>
     public class DashboardLicenseItem : DashboardItem
     {
+        private readonly DateTime billingEndDate;
+
+        public DashboardLicenseItem(DateTime billingEndDate)
+        {
+            this.billingEndDate = billingEndDate;
+        }
+
         /// <summary>
         /// Initialize the item with given bar that it will display its information in
         /// </summary>
@@ -23,11 +30,11 @@ namespace ShipWorks.ApplicationCore.Dashboard.Content
             DashboardBar.CanUserDismiss = false;
 
             DashboardBar.PrimaryText = "Licensing";
-            DashboardBar.SecondaryText = "You are nearing your monthly shipment limit.";
+            DashboardBar.SecondaryText = $"You are nearing your shipment limit for the current billing cycle (ending {billingEndDate.ToString("d/M")}).";
             DashboardBar.Image = Resources.warning16;
             DashboardBar.ApplyActions(new List<DashboardAction>
             {
-                new DashboardActionMethod("[link]Upgrade your plan[/link] now", OnUpgradePlan)
+                new DashboardActionMethod("[link]Click here to upgrade your plan now.[/link]", OnUpgradePlan)
             });
         }
 
