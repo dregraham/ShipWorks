@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Autofac.Core;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.UPS;
@@ -75,9 +76,20 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups
 
             builder.RegisterType<UpsApiRateClient>();
 
+            RegisterRatingServiceFor(ShipmentTypeCode.UpsOnLineTools, builder);
+            RegisterRatingServiceFor(ShipmentTypeCode.UpsWorldShip, builder);
+        }
+
+        /// <summary>
+        /// Register the rating service for the given shipment type
+        /// </summary>
+        private void RegisterRatingServiceFor(ShipmentTypeCode shipmentType, ContainerBuilder builder)
+        {
             builder.RegisterType<UpsRatingService>()
-                .Keyed<IRatingService>(ShipmentTypeCode.UpsOnLineTools)
-                .Keyed<IRatingService>(ShipmentTypeCode.UpsWorldShip);
+                .Keyed<IRatingService>(shipmentType)
+                .WithParameter(new ResolvedParameter(
+                    (parameters, _) => parameters.ParameterType == typeof(UpsShipmentType),
+                    (_, context) => context.ResolveKeyed<ShipmentType>(shipmentType)));
         }
     }
 }
