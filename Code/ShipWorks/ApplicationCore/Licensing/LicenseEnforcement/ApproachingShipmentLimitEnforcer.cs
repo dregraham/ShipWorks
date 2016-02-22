@@ -11,10 +11,11 @@ namespace ShipWorks.ApplicationCore.Licensing.LicenseEnforcement
     /// </summary>
     public class ApproachingShipmentLimitEnforcer : ILicenseEnforcer
     {
-        private readonly IUpgradePlanDlgFactory upgradePlanDlgFactory;
-        private readonly ILog log;
         private const string ShipmentLimitWarningMessage = "You are approaching your shipment limit for the current billing cycle";
         private const float ShipmentLimitWarningThreshold = 0.8f;
+
+        private readonly IUpgradePlanDlgFactory upgradePlanDlgFactory;
+        private readonly ILog log;
 
         /// <summary>
         /// Constructor
@@ -65,14 +66,9 @@ namespace ShipWorks.ApplicationCore.Licensing.LicenseEnforcement
 
             string message = string.Empty;
 
-            if (currentShipmentPercentage >= ShipmentLimitWarningThreshold)
+            if (!capabilities.IsInTrial && currentShipmentPercentage >= ShipmentLimitWarningThreshold)
             {
                 message = ShipmentLimitWarningMessage;
-            }
-
-            if (capabilities.IsInTrial)
-            {
-                message = string.Empty;
             }
 
             return new EnumResult<ComplianceLevel>(ComplianceLevel.Compliant, message);
