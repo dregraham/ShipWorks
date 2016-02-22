@@ -28,7 +28,7 @@ namespace ShipWorks.ApplicationCore.Licensing.LicenseEnforcement
         /// This comes into play when Tango throws an error when adding a store
         /// because it will take the customer over the channel limit.
         /// </summary>
-        [Description("Exceeding Channel Limit")]
-        ExceedingChannelLimit,
+        [Description("Exceeding channel limit")]
+        ExceedingChannelLimit
     }
 }
