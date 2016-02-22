@@ -152,7 +152,8 @@
     <Compile Include="Controls\AddressControl\AddressViewModel.cs" />
     <Compile Include="Controls\AddressControl\AddressViewModel.Properties.cs" />
     <Compile Include="Controls\AlignmentWrapPanel.cs" />
-    <Compile Include="Controls\NullSelectionComboBox.cs" />
+    <Compile Include="Controls\RelativeIndex.cs" />
+    <Compile Include="Controls\ShipWorksComboBox.cs" />
     <Compile Include="Controls\TypeBasedTemplateSelector\Template.cs" />
     <Compile Include="Controls\TypeBasedTemplateSelector\TemplateCollection.cs" />
     <Compile Include="Controls\TypeBasedTemplateSelector\TypeBasedTemplateSelector.cs" />
