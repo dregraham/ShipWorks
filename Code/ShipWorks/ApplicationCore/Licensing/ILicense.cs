@@ -2,6 +2,7 @@
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using System.Windows.Forms;
+using ShipWorks.ApplicationCore.Dashboard.Content;
 using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
 using ShipWorks.Editions;
 
@@ -60,9 +61,15 @@ namespace ShipWorks.ApplicationCore.Licensing
         void EnforceCapabilities(EnforcementContext context, IWin32Window owner);
 
         /// <summary>
-        /// Enforces the capabilites for this license,
+        /// Enforces the capabilities for this license,
         /// related to the given EditionFeature.
         /// </summary>
         IEnumerable<EnumResult<ComplianceLevel>> EnforceCapabilities(EditionFeature feature, EnforcementContext context);
+
+        /// <summary>
+        /// Returns a dashboard item to display to the user
+        /// </summary>
+        /// <returns></returns>
+        DashboardLicenseItem CreateDashboardMessage();
     }
 }

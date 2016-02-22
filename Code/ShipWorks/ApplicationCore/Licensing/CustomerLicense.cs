@@ -8,6 +8,7 @@ using ShipWorks.Data;
 using System.Linq;
 using System.Windows.Forms;
 using Interapptive.Shared;
+using ShipWorks.ApplicationCore.Dashboard.Content;
 using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
 using ShipWorks.Editions;
 
@@ -240,6 +241,14 @@ namespace ShipWorks.ApplicationCore.Licensing
                 .ForEach(e => result.Add(e.Enforce(LicenseCapabilities, context)));
 
             return result;
+        }
+
+        /// <summary>
+        /// There are no dashboard items for Storelicense so it returns null
+        /// </summary>
+        public DashboardLicenseItem CreateDashboardMessage()
+        {
+            return null;
         }
     }
 }

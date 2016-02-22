@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using Interapptive.Shared.Utility;
 using log4net;
+using ShipWorks.ApplicationCore.Dashboard.Content;
 using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data;
@@ -149,6 +150,14 @@ namespace ShipWorks.ApplicationCore.Licensing
             {
                 new EnumResult<ComplianceLevel>(ComplianceLevel.Compliant, string.Empty)
             };
+        }
+
+        /// <summary>
+        /// There are no dashboard items for Storelicense so it returns null
+        /// </summary>
+        public DashboardLicenseItem CreateDashboardMessage()
+        {
+            return null;
         }
     }
 }

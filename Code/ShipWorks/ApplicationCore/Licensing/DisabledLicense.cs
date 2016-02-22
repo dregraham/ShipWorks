@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 using Interapptive.Shared.Utility;
+using ShipWorks.ApplicationCore.Dashboard.Content;
 using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Editions;
@@ -111,6 +112,14 @@ namespace ShipWorks.ApplicationCore.Licensing
         public IEnumerable<EnumResult<ComplianceLevel>> EnforceCapabilities(EditionFeature feature, EnforcementContext context)
         {
             throw new ShipWorksLicenseException("Capabilities are not valid for a disabled license.");
+        }
+
+        /// <summary>
+        /// There are no dashboard items for disabled license so it returns null
+        /// </summary>
+        public DashboardLicenseItem CreateDashboardMessage()
+        {
+            return null;
         }
     }
 }
