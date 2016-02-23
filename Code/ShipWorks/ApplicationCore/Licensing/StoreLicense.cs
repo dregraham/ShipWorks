@@ -163,17 +163,15 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Checks the restriction for a specific feature
         /// </summary>
-        public EditionRestrictionLevel CheckRestriction(EditionFeature feature, object data)
-        {
-            throw new NotImplementedException();
-        }
+        public EditionRestrictionLevel CheckRestriction(EditionFeature feature, object data) => 
+            EditionManager.ActiveRestrictions.CheckRestriction(feature, data).Level;
+
 
         /// <summary>
         /// Handles the restriction for a specific feature
         /// </summary>
-        public bool HandleRestriction(EditionFeature feature, object data, IWin32Window owner)
-        {
-            throw new NotImplementedException();
-        }
+        public bool HandleRestriction(EditionFeature feature, object data, IWin32Window owner) =>
+            EditionManager.HandleRestrictionIssue(owner,
+                EditionManager.ActiveRestrictions.CheckRestriction(feature, data));
     }
 }
