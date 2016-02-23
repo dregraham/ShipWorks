@@ -11,6 +11,8 @@
         d:DesignWidth="300"
         SizeToContent="WidthAndHeight"
         WindowStartupLocation="CenterOwner"
+        WindowStyle="ToolWindow"
+        ShowInTaskbar="False"
         mc:Ignorable="d"
         FontFamily="Tahoma" FontSize="8.25pt">
     <Grid>

@@ -142,7 +142,6 @@
     <Compile Include="Controls\UpgradePlan\UpgradePlanDlgFactory.cs" />
     <Compile Include="Controls\UpgradePlan\UpgradePlanDlgViewModel.cs" />
     <Compile Include="Controls\WebBrowser\IWebBrowserDlgViewModel.cs" />
-    <Compile Include="Controls\WebBrowser\IWebBrowserFactory.cs" />
     <Compile Include="Controls\WebBrowser\WebBrowserDlg.xaml.cs">
       <DependentUpon>WebBrowserDlg.xaml</DependentUpon>
     </Compile>

@@ -8,6 +8,7 @@ using ShipWorks.Data;
 using System.Linq;
 using System.Windows.Forms;
 using Interapptive.Shared;
+using ShipWorks.ApplicationCore.Dashboard.Content;
 using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
 using ShipWorks.Editions;
 
@@ -18,6 +19,9 @@ namespace ShipWorks.ApplicationCore.Licensing
     /// </summary>
     public class CustomerLicense : ICustomerLicense
     {
+        public const string UpgradeUrl = "https://www.interapptive.com/account/changeplan.php";
+        private const float ShipmentLimitWarningThreshold = 0.8f;
+
         private readonly ITangoWebClient tangoWebClient;
         private readonly ICustomerLicenseWriter licenseWriter;
         private readonly ILog log;
@@ -238,6 +242,23 @@ namespace ShipWorks.ApplicationCore.Licensing
                 .ForEach(e => result.Add(e.Enforce(LicenseCapabilities, context)));
 
             return result;
+        }
+
+        /// <summary>
+        /// There are no dashboard items for Storelicense so it returns null
+        /// </summary>
+        public DashboardLicenseItem CreateDashboardMessage()
+        {
+            Refresh();
+
+            if (LicenseCapabilities.IsInTrial)
+            {
+                return null;
+            }
+
+            float currentShipmentPercentage = (float) LicenseCapabilities.ProcessedShipments / LicenseCapabilities.ShipmentLimit;
+
+            return currentShipmentPercentage >= ShipmentLimitWarningThreshold ? new DashboardLicenseItem(LicenseCapabilities.BillingEndDate) : null;
         }
     }
 }

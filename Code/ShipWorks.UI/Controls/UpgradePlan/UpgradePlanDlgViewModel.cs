@@ -58,8 +58,8 @@ namespace ShipWorks.UI.Controls.UpgradePlan
         /// </summary>
         private void UpgradeAccount(Window owner)
         {
-            Uri uri = new Uri("https://www.interapptive.com/account/changeplan.php");
-            IDialog browserDlg = webBrowserFactory.Create(uri, "Upgrade your account", owner);
+            Uri uri = new Uri(CustomerLicense.UpgradeUrl);
+            IDialog browserDlg = webBrowserFactory.Create(uri, "Upgrade your plan", owner);
             browserDlg.ShowDialog();
             
             if (IsCompliant())

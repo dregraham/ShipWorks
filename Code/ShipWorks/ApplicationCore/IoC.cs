@@ -113,8 +113,7 @@ namespace ShipWorks.ApplicationCore
         {
             builder.RegisterType<CustomerLicense>()
                 .AsImplementedInterfaces()
-                .AsSelf()
-                .SingleInstance();
+                .AsSelf();
 
             builder.RegisterType<LicenseService>()
                 .AsImplementedInterfaces()

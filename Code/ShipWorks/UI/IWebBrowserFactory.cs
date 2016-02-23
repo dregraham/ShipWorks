@@ -2,7 +2,7 @@
 using System.Windows;
 using ShipWorks.ApplicationCore.Licensing;
 
-namespace ShipWorks.UI.Controls.WebBrowser
+namespace ShipWorks.UI
 {
     /// <summary>
     /// Interface for WebBrowserFactory

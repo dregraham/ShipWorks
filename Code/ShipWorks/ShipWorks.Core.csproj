@@ -587,6 +587,7 @@
     <Compile Include="ApplicationCore\CommandLineOptions\UninstallShipWorksCommandLineOption.cs" />
     <Compile Include="ApplicationCore\Crashes\CrashResponse.cs" />
     <Compile Include="ApplicationCore\Crashes\ServiceCrash.cs" />
+    <Compile Include="ApplicationCore\Dashboard\Content\DashboardLicenseItem.cs" />
     <Compile Include="ApplicationCore\Dashboard\Content\DashboardSchedulerServiceStoppedItem.cs" />
     <Compile Include="ApplicationCore\Dashboard\Content\DashboardStoreItem.cs" />
     <Compile Include="ApplicationCore\Dashboard\Content\ShipWorksOnlineVersion.cs" />
@@ -639,6 +640,7 @@
     <Compile Include="ApplicationCore\Licensing\IUpgradePlanDlgFactory.cs" />
     <Compile Include="ApplicationCore\Licensing\LicenseCapabilities.cs" />
     <Compile Include="ApplicationCore\Licensing\LicenseEncryptionProvider.cs" />
+    <Compile Include="ApplicationCore\Licensing\LicenseEnforcement\ApproachingShipmentLimitEnforcer.cs" />
     <Compile Include="ApplicationCore\Licensing\LicenseEnforcement\ChannelCountEnforcer.cs" />
     <Compile Include="ApplicationCore\Licensing\LicenseEnforcement\ChannelTypeEnforcer.cs" />
     <Compile Include="ApplicationCore\Licensing\LicenseEnforcement\EnforcementContext.cs" />
@@ -3555,6 +3557,7 @@
     <Compile Include="Stores\Platforms\Newegg\WizardPages\NeweggAccountPage.Designer.cs">
       <DependentUpon>NeweggAccountPage.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\IWebBrowserFactory.cs" />
     <Compile Include="UI\PropertyChangedHandler.cs" />
     <Compile Include="UI\Utility\ActiveEnumerationBindingSource.cs">
       <SubType>Component</SubType>

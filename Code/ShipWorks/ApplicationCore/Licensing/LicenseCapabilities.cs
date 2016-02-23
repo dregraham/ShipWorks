@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Xml;
 using System.Xml.XPath;
 using Interapptive.Shared.Utility;
@@ -43,7 +44,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             RateDiscountMessaging = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='RateDiscountMessaging']/Value", 0) == 1;
             ShippingAccountConversion = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='ShippingAccountConversion']/Value", 0) == 1;
             IsInTrial = XPathUtility.Evaluate(xpath, "//IsInTrial", false);
-            
+
             SetPricingPlanCapabilties(xpath);
             SetStampsCapabilities(xpath);
             SetEndiciaCapabilities(xpath);
@@ -320,6 +321,11 @@ namespace ShipWorks.ApplicationCore.Licensing
 
             ActiveChannels = XPathUtility.Evaluate(xpath, "//UserLevels/NameValuePair[Name ='NumberOfChannels']/Value", 0);
             ProcessedShipments = XPathUtility.Evaluate(xpath, "//UserLevels/NameValuePair[Name ='NumberOfShipments']/Value", 0);
+
+            string date = XPathUtility.Evaluate(xpath, "//BillingEndDate",
+                DateTime.MinValue.ToString(CultureInfo.InvariantCulture));
+
+            BillingEndDate = DateTime.Parse(date);
         }
 
         /// <summary>
