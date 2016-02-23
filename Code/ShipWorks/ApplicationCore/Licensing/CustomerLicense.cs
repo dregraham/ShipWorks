@@ -260,5 +260,21 @@ namespace ShipWorks.ApplicationCore.Licensing
 
             return currentShipmentPercentage >= ShipmentLimitWarningThreshold ? new DashboardLicenseItem(LicenseCapabilities.BillingEndDate) : null;
         }
+
+        /// <summary>
+        /// Checks the restriction for a specific feature
+        /// </summary>
+        public EditionRestrictionLevel CheckRestriction(EditionFeature feature, object data)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Handles the restriction for a specific feature
+        /// </summary>
+        public bool HandleRestriction(EditionFeature feature, object data, IWin32Window owner)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
