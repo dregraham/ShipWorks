@@ -30,7 +30,7 @@ namespace ShipWorks.ApplicationCore.Dashboard.Content
             DashboardBar.CanUserDismiss = false;
 
             DashboardBar.PrimaryText = "Licensing";
-            DashboardBar.SecondaryText = $"You are nearing your shipment limit for the current billing cycle (ending {billingEndDate.ToString("M/d")}).";
+            DashboardBar.SecondaryText = $"You are nearing your shipment limit for the current billing cycle ending {billingEndDate.ToString("M/d")}.";
             DashboardBar.Image = Resources.warning16;
             DashboardBar.ApplyActions(new List<DashboardAction>
             {
