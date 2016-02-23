@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using System;
+using System.Windows.Forms;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Utility;
 using Moq;
@@ -44,11 +45,12 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.LicenseEnforcement
 
                 licenseCapabilities.Setup(l => l.ProcessedShipments).Returns(9);
                 licenseCapabilities.Setup(l => l.ShipmentLimit).Returns(10);
+                licenseCapabilities.Setup(l => l.BillingEndDate).Returns(DateTime.Parse("2/22/2016"));
 
                 EnumResult<ComplianceLevel> result = testObject.Enforce(licenseCapabilities.Object, EnforcementContext.Login);
 
                 Assert.Equal(ComplianceLevel.Compliant, result.Value);
-                Assert.Equal("You are approaching your shipment limit for the current billing cycle", result.Message);
+                Assert.Equal("You are nearing your shipment limit for the current billing cycle ending 2/22.", result.Message);
             }
         }
 
@@ -63,11 +65,12 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.LicenseEnforcement
 
                 licenseCapabilities.Setup(l => l.ProcessedShipments).Returns(8);
                 licenseCapabilities.Setup(l => l.ShipmentLimit).Returns(10);
+                licenseCapabilities.Setup(l => l.BillingEndDate).Returns(DateTime.Parse("2/22/2016"));
 
                 EnumResult<ComplianceLevel> result = testObject.Enforce(licenseCapabilities.Object, EnforcementContext.Login);
 
                 Assert.Equal(ComplianceLevel.Compliant, result.Value);
-                Assert.Equal("You are approaching your shipment limit for the current billing cycle", result.Message);
+                Assert.Equal("You are nearing your shipment limit for the current billing cycle ending 2/22.", result.Message);
             }
         }
 
@@ -126,12 +129,13 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.LicenseEnforcement
 
                 licenseCapabilities.Setup(l => l.ProcessedShipments).Returns(9);
                 licenseCapabilities.Setup(l => l.ShipmentLimit).Returns(10);
+                licenseCapabilities.Setup(l => l.BillingEndDate).Returns(DateTime.Parse("2/22/2016"));
 
                 testObject.Enforce(licenseCapabilities.Object, EnforcementContext.Login, null);
 
                 dlg.Verify(d => d.ShowDialog(), Times.Once);
                 dlgFactory.Verify(d =>
-                    d.Create("You are approaching your shipment limit for the current billing cycle", null),
+                    d.Create("You are nearing your shipment limit for the current billing cycle ending 2/22.", null),
                     Times.Once);
             }
         }

@@ -67,7 +67,7 @@ namespace ShipWorks.ApplicationCore.Licensing.LicenseEnforcement
 
             if (!capabilities.IsInTrial && currentShipmentPercentage >= ShipmentLimitWarningThreshold)
             {
-                message = $"You are nearing your shipment limit for the current billing cycle (ending {capabilities.BillingEndDate.ToString("M/d")}).";
+                message = $"You are nearing your shipment limit for the current billing cycle ending {capabilities.BillingEndDate.ToString("M/d")}.";
             }
 
             return new EnumResult<ComplianceLevel>(ComplianceLevel.Compliant, message);
