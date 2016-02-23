@@ -21,19 +21,19 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 }
 
                 ratingField = base.RatingFields;
-                ratingField.ShipmentFields.Add(FedExShipmentFields.FedExAccountID);
-                ratingField.ShipmentFields.Add(FedExShipmentFields.WeightUnitType);
-                ratingField.ShipmentFields.Add(FedExShipmentFields.Signature);
-                ratingField.ShipmentFields.Add(FedExShipmentFields.Service);
-                ratingField.ShipmentFields.Add(FedExShipmentFields.PackagingType);
-                ratingField.ShipmentFields.Add(FedExShipmentFields.DropoffType);
-                ratingField.ShipmentFields.Add(FedExShipmentFields.SaturdayDelivery);
-                ratingField.ShipmentFields.Add(FedExShipmentFields.OriginResidentialDetermination);
-                ratingField.ShipmentFields.Add(FedExShipmentFields.SmartPostHubID);
-                ratingField.ShipmentFields.Add(FedExShipmentFields.SmartPostIndicia);
-                ratingField.ShipmentFields.Add(FedExShipmentFields.SmartPostEndorsement);
-                ratingField.ShipmentFields.Add(FedExShipmentFields.CodEnabled);
-                ratingField.ShipmentFields.Add(FedExShipmentFields.NonStandardContainer);
+                ratingField.AddShipmentField(FedExShipmentFields.FedExAccountID, genericAccountIdFieldName);
+                ratingField.AddShipmentField(FedExShipmentFields.WeightUnitType);
+                ratingField.AddShipmentField(FedExShipmentFields.Signature);
+                ratingField.AddShipmentField(FedExShipmentFields.Service);
+                ratingField.AddShipmentField(FedExShipmentFields.PackagingType);
+                ratingField.AddShipmentField(FedExShipmentFields.DropoffType);
+                ratingField.AddShipmentField(FedExShipmentFields.SaturdayDelivery);
+                ratingField.AddShipmentField(FedExShipmentFields.OriginResidentialDetermination);
+                ratingField.AddShipmentField(FedExShipmentFields.SmartPostHubID);
+                ratingField.AddShipmentField(FedExShipmentFields.SmartPostIndicia);
+                ratingField.AddShipmentField(FedExShipmentFields.SmartPostEndorsement);
+                ratingField.AddShipmentField(FedExShipmentFields.CodEnabled);
+                ratingField.AddShipmentField(FedExShipmentFields.NonStandardContainer);
 
                 ratingField.PackageFields.Add(FedExPackageFields.DimsWeight);
                 ratingField.PackageFields.Add(FedExPackageFields.DimsAddWeight);

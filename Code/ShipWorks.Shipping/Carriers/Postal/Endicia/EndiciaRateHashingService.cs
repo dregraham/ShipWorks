@@ -19,10 +19,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 }
 
                 ratingField = base.RatingFields;
-                ratingField.ShipmentFields.Add(EndiciaShipmentFields.EndiciaAccountID);
-                ratingField.ShipmentFields.Add(EndiciaShipmentFields.OriginalEndiciaAccountID);
-                ratingField.ShipmentFields.Add(PostalShipmentFields.SortType);
-                ratingField.ShipmentFields.Add(PostalShipmentFields.EntryFacility);
+                ratingField.AddShipmentField(EndiciaShipmentFields.EndiciaAccountID, genericAccountIdFieldName);
+                ratingField.AddShipmentField(EndiciaShipmentFields.OriginalEndiciaAccountID);
+                ratingField.AddShipmentField(PostalShipmentFields.SortType);
+                ratingField.AddShipmentField(PostalShipmentFields.EntryFacility);
 
                 return ratingField;
             }

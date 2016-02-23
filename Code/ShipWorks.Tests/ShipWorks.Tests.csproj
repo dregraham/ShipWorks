@@ -461,6 +461,7 @@
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsExpress1RateConsolidatorTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsRateGroupConsolidatorTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsShipmentTypeTest.cs" />
+    <Compile Include="Shipping\Carriers\RatingFieldsTest.cs" />
     <Compile Include="Shipping\Carriers\UPS\BestRate\UpsBestRateBrokerTest.cs" />
     <Compile Include="Shipping\Carriers\UPS\BestRate\UpsWorldShipBrokerFilterTest.cs" />
     <Compile Include="Shipping\Carriers\UPS\UpsPackageAdapterTest.cs" />

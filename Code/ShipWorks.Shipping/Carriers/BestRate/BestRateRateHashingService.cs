@@ -21,11 +21,11 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                 }
 
                 ratingField = base.RatingFields;
-                ratingField.ShipmentFields.Add(BestRateShipmentFields.DimsAddWeight);
-                ratingField.ShipmentFields.Add(BestRateShipmentFields.DimsHeight);
-                ratingField.ShipmentFields.Add(BestRateShipmentFields.DimsLength);
-                ratingField.ShipmentFields.Add(BestRateShipmentFields.DimsWidth);
-                ratingField.ShipmentFields.Add(BestRateShipmentFields.DimsWeight);
+                ratingField.AddShipmentField(BestRateShipmentFields.DimsAddWeight);
+                ratingField.AddShipmentField(BestRateShipmentFields.DimsHeight);
+                ratingField.AddShipmentField(BestRateShipmentFields.DimsLength);
+                ratingField.AddShipmentField(BestRateShipmentFields.DimsWidth);
+                ratingField.AddShipmentField(BestRateShipmentFields.DimsWeight);
 
                 return ratingField;
             }

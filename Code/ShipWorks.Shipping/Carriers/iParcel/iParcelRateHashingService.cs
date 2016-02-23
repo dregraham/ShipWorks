@@ -18,12 +18,12 @@ namespace ShipWorks.Shipping.Carriers.iParcel
                 }
 
                 ratingField = base.RatingFields;
-                ratingField.ShipmentFields.Add(IParcelShipmentFields.IParcelAccountID);
-                ratingField.ShipmentFields.Add(IParcelShipmentFields.IsDeliveryDutyPaid);
-                ratingField.ShipmentFields.Add(OrderFields.OrderTotal);
-                ratingField.ShipmentFields.Add(OrderFields.RollupItemCount);
-                ratingField.ShipmentFields.Add(IParcelShipmentFields.TrackByEmail);
-                ratingField.ShipmentFields.Add(IParcelShipmentFields.TrackBySMS);
+                ratingField.AddShipmentField(IParcelShipmentFields.IParcelAccountID, genericAccountIdFieldName);
+                ratingField.AddShipmentField(IParcelShipmentFields.IsDeliveryDutyPaid);
+                ratingField.AddShipmentField(OrderFields.OrderTotal);
+                ratingField.AddShipmentField(OrderFields.RollupItemCount);
+                ratingField.AddShipmentField(IParcelShipmentFields.TrackByEmail);
+                ratingField.AddShipmentField(IParcelShipmentFields.TrackBySMS);
 
                 ratingField.PackageFields.Add(IParcelPackageFields.Weight);
                 ratingField.PackageFields.Add(IParcelPackageFields.DimsWeight);

@@ -30,7 +30,6 @@ namespace ShipWorks.Shipping.Tests.Carriers
             RatingFields testObject = emptyRatingHashingService.RatingFields;
 
             Assert.Equal(0, testObject.PackageFields.Count);
-            Assert.Equal(0, testObject.ShipmentFields.Count);
         }
     }
 }

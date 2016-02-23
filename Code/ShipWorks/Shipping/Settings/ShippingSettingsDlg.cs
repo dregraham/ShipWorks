@@ -304,9 +304,12 @@ namespace ShipWorks.Shipping.Settings
         /// </summary>
         private void SaveSettings()
         {
-            using (SqlAdapter adapter = new SqlAdapter(true))
+            bool wasDirty;
+            ShippingSettingsEntity settings;
+
+            using (SqlAdapter adapter = SqlAdapter.Create(true))
             {
-                ShippingSettingsEntity settings = ShippingSettings.Fetch();
+                settings = ShippingSettings.Fetch();
                 List<int> existingExcludedTypes = settings.ExcludedTypes.ToList();
                 settings.ExcludedTypes = panelProviders.UnselectedShipmentTypes.Select(x => (int) x.ShipmentTypeCode).ToArray();
 
@@ -344,15 +347,15 @@ namespace ShipWorks.Shipping.Settings
                 ExcludedPackageTypeRepository excludedPackageTypeRepository = new ExcludedPackageTypeRepository();
                 excludedPackageTypeRepository.Save(excludedPackages);
 
-                bool wasDirty = settings.IsDirty;
+                wasDirty = settings.IsDirty;
                 ShippingSettings.Save(settings);
 
                 adapter.Commit();
+            }
 
-                if (wasDirty)
-                {
-                    Messenger.Current.Send(new ShippingSettingsChangedMessage(this, settings));
-                }
+            if (wasDirty)
+            {
+                Messenger.Current.Send(new ShippingSettingsChangedMessage(this, settings));
             }
         }
 

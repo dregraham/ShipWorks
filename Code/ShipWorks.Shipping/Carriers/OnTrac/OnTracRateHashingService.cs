@@ -21,18 +21,18 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
                 }
 
                 ratingField = base.RatingFields;
-                ratingField.ShipmentFields.Add(OnTracShipmentFields.OnTracAccountID);
-                ratingField.ShipmentFields.Add(OnTracShipmentFields.CodAmount);
-                ratingField.ShipmentFields.Add(OnTracShipmentFields.CodType);
-                ratingField.ShipmentFields.Add(OnTracShipmentFields.SaturdayDelivery);
-                ratingField.ShipmentFields.Add(OnTracShipmentFields.DeclaredValue);
-                ratingField.ShipmentFields.Add(OnTracShipmentFields.PackagingType);
-                ratingField.ShipmentFields.Add(OnTracShipmentFields.DimsAddWeight);
-                ratingField.ShipmentFields.Add(OnTracShipmentFields.DimsHeight);
-                ratingField.ShipmentFields.Add(OnTracShipmentFields.DimsLength);
-                ratingField.ShipmentFields.Add(OnTracShipmentFields.DimsWidth);
-                ratingField.ShipmentFields.Add(OnTracShipmentFields.DimsWeight);
-                ratingField.ShipmentFields.Add(OnTracShipmentFields.DimsAddWeight);
+                ratingField.AddShipmentField(OnTracShipmentFields.OnTracAccountID, genericAccountIdFieldName);
+                ratingField.AddShipmentField(OnTracShipmentFields.CodAmount);
+                ratingField.AddShipmentField(OnTracShipmentFields.CodType);
+                ratingField.AddShipmentField(OnTracShipmentFields.SaturdayDelivery);
+                ratingField.AddShipmentField(OnTracShipmentFields.DeclaredValue);
+                ratingField.AddShipmentField(OnTracShipmentFields.PackagingType);
+                ratingField.AddShipmentField(OnTracShipmentFields.DimsAddWeight);
+                ratingField.AddShipmentField(OnTracShipmentFields.DimsHeight);
+                ratingField.AddShipmentField(OnTracShipmentFields.DimsLength);
+                ratingField.AddShipmentField(OnTracShipmentFields.DimsWidth);
+                ratingField.AddShipmentField(OnTracShipmentFields.DimsWeight);
+                ratingField.AddShipmentField(OnTracShipmentFields.DimsAddWeight);
 
                 return ratingField;
             }
