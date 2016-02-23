@@ -1,25 +1,19 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
+using System.Linq;
 using System.Windows.Forms;
+using Autofac;
 using ShipWorks.UI.Wizard;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Properties;
-using ShipWorks.Data.Grid.Columns;
-using ShipWorks.Filters.Management;
-using Interapptive.Shared;
-using ShipWorks.Data;
-using ShipWorks.UI;
 using ShipWorks.Filters.Controls;
-using Interapptive.Shared.Utility;
 using ShipWorks.Data.Connection;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
 using ShipWorks.ApplicationCore.Appearance;
 using Interapptive.Shared.UI;
+using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Filters.Grid;
 using ShipWorks.Editions;
 
@@ -167,16 +161,23 @@ namespace ShipWorks.Filters.Management
             // Edition restriction check on My Filters
             if (FilterHelper.IsMyFilter(filterTree.SelectedFilterNode))
             {
-                if (!EditionManager.HandleRestrictionIssue(this, EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.MyFilters)))
+                using (ILifetimeScope scope = IoC.BeginLifetimeScope())
                 {
-                    e.NextPage = CurrentPage;
-                    return;
+                    ILicenseService licenseService = scope.Resolve<ILicenseService>();
+                    if (!licenseService?
+                        .GetLicenses()?
+                        .FirstOrDefault()?
+                        .HandleRestriction(EditionFeature.MyFilters, null, this) ?? false)
+                    {
+                        e.NextPage = CurrentPage;
+                        return;
+                    }
                 }
             }
 
             filter.Name = filterName;
 
-            if (fakeFilterNode == null || fakeFilterNode.ParentNode != filterTree.SelectedFilterNode)
+            if (fakeFilterNode == null || !ReferenceEquals(fakeFilterNode.ParentNode, filterTree.SelectedFilterNode))
             {
                 CreateFakeFilterNode();
 
