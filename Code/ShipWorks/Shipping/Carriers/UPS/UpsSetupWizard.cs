@@ -12,6 +12,7 @@ using System.Xml;
 using Interapptive.Shared.Net;
 using ShipWorks.Data.Model.EntityClasses;
 using System.Reflection;
+using Autofac;
 using Interapptive.Shared;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Connection;
@@ -24,6 +25,8 @@ using ShipWorks.Common.IO.Hardware.Printers;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Win32;
+using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Editions;
 
 namespace ShipWorks.Shipping.Carriers.UPS
@@ -448,11 +451,17 @@ namespace ShipWorks.Shipping.Carriers.UPS
             personControl.SaveToEntity(new PersonAdapter(upsAccount, string.Empty));
             upsAccount.AccountNumber = EnteredAccountNumber();
 
-            // Edition check
-            if (!EditionManager.HandleRestrictionIssue(this, EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.UpsAccountNumbers, upsAccount.AccountNumber)))
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                e.NextPage = CurrentPage;
-                return;
+                ILicenseService lifetimeService = lifetimeScope.Resolve<ILicenseService>();
+
+                // Edition check
+                ILicense license = lifetimeService.GetLicenses().FirstOrDefault();
+                if (license != null && !license.HandleRestriction(EditionFeature.UpsAccountNumbers, upsAccount.AccountNumber, this))
+                {
+                    e.NextPage = CurrentPage;
+                    return;
+                }
             }
 
             RequiredFieldChecker checker = new RequiredFieldChecker();
