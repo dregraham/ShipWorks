@@ -243,6 +243,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
             {
                 PackageTypes.Add(entry);
             }
+
+            PackagingType = SelectedPackageAdapter?.PackagingType ?? 0;
         }
 
         /// <summary>
@@ -288,6 +290,9 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
             }
 
             InsuranceViewModel.Load(PackageAdapters, SelectedPackageAdapter, shipmentAdapter);
+
+            RefreshServiceTypes();
+            RefreshPackageTypes();
         }
 
         #region Dimensions
