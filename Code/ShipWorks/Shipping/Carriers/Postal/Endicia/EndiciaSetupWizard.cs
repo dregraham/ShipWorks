@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using Autofac;
 using Interapptive.Shared;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Profiles;
@@ -14,6 +15,7 @@ using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Account;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.UI;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Editions;
 using ShipWorks.Editions.Freemium;
@@ -100,7 +102,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 Pages.Remove(wizardPagePayment);
             }
 
-            // If its not already setup, load all the the settings\configuration pages
+            // If its not already setup, load all the settings\configuration pages
             if (!ShippingManager.IsShipmentTypeConfigured(ShipmentTypeCode.Endicia))
             {
                 optionsControl.LoadSettings(EndiciaReseller.None);
@@ -513,8 +515,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 }
             }
 
-            // If we aren't a freemium edition, we know we are creating a freemium account, b\c we wouldnt be here asking for credit card info in the case of DAZzle
-            // For freemium edition, we DO ask for credit card either way, so in that case we only create the ELS account if "new account" is chedked
+            // If we aren't a freemium edition, we know we are creating a freemium account, b\c we wouldn't be here asking for credit card info in the case of DAZzle
+            // For freemium edition, we DO ask for credit card either way, so in that case we only create the ELS account if "new account" is checked
             if (freemiumEdition == null || radioNewAccount.Checked)
             {
                 try
@@ -605,11 +607,17 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 return;
             }
 
-            // Edition check
-            if (!EditionManager.HandleRestrictionIssue(this, EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.EndiciaAccountNumber, accountNumber.Text.Trim())))
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                e.NextPage = CurrentPage;
-                return;
+                ILicenseService lifetimeService = lifetimeScope.Resolve<ILicenseService>();
+                
+                // Edition check
+                ILicense license = lifetimeService.GetLicenses().FirstOrDefault();
+                if (license != null && !license.HandleRestriction(EditionFeature.EndiciaAccountNumber, accountNumber.Text.Trim(), this))
+                {
+                    e.NextPage = CurrentPage;
+                    return;
+                }
             }
 
             Cursor.Current = Cursors.WaitCursor;
@@ -634,7 +642,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                     adapter.SaveAndRefetch(account);
                 }
 
-                // For freemium, we have to now permenantly associate this account with the store
+                // For freemium, we have to now permanently associate this account with the store
                 if (freemiumEdition != null)
                 {
                     try
@@ -707,12 +715,18 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 e.NextPage = CurrentPage;
                 return;
             }
-
-            // Edition check
-            if (!EditionManager.HandleRestrictionIssue(this, EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.EndiciaAccountNumber, accountExisting.Text.Trim())))
+            
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                e.NextPage = CurrentPage;
-                return;
+                ILicenseService lifetimeService = lifetimeScope.Resolve<ILicenseService>();
+
+                // Edition check
+                ILicense license = lifetimeService.GetLicenses().FirstOrDefault();
+                if (license != null && !license.HandleRestriction(EditionFeature.EndiciaAccountNumber, accountExisting.Text.Trim(), this))
+                {
+                    e.NextPage = CurrentPage;
+                    return;
+                }
             }
 
             Cursor.Current = Cursors.WaitCursor;
