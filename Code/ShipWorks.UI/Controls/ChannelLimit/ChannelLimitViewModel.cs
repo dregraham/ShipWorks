@@ -1,6 +1,5 @@
 ﻿using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Core.UI;
-using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -15,7 +14,7 @@ using System.Windows.Input;
 using GalaSoft.MvvmLight.Command;
 using Interapptive.Shared.Utility;
 using log4net;
-using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
 using ShipWorks.Data.Utility;
 using ShipWorks.UI.Controls.WebBrowser;
 
@@ -38,6 +37,7 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         private readonly IMessageHelper messageHelper;
         private readonly ILog log;
         private bool isDeleting;
+        private IChannelLimitBehavior channelLimitBehavior;
 
         /// <summary>
         /// Constructor
@@ -58,6 +58,9 @@ namespace ShipWorks.UI.Controls.ChannelLimit
 
             // Set the selected store type to invalid
             SelectedStoreType = StoreTypeCode.Invalid;
+
+            // Set the default enforcement context
+            EnforcementContext = EnforcementContext.NotSpecified;
 
             log = logFactory(typeof (ChannelLimitViewModel));
 
@@ -123,11 +126,31 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         }
 
         /// <summary>
+        /// Context of which the view model is being invoked in
+        /// </summary>
+        public EnforcementContext EnforcementContext { get; set; }
+
+        /// <summary>
+        /// Gets or sets the title.
+        /// </summary>
+        public string Title => channelLimitBehavior.Title;
+
+        /// <summary>
+        /// Since we already have a license and channelLimitBehavior internally,
+        /// we should just call this...
+        /// </summary>
+        private void Load()
+        {
+            Load(license, channelLimitBehavior);
+        }
+
+        /// <summary>
         /// Loads the list of active stores
         /// </summary>
-        public void Load(ICustomerLicense customerLicense)
+        public void Load(ICustomerLicense customerLicense, IChannelLimitBehavior behavior)
         {
             license = customerLicense;
+            channelLimitBehavior = behavior;
 
             // Check to make sure we are getting a CustomerLicense
             if (license == null)
@@ -139,26 +162,13 @@ namespace ShipWorks.UI.Controls.ChannelLimit
 
             license.Refresh();
 
-            // if we dont have a store collection make one
+            // if we don't have a store collection make one
             if (ChannelCollection == null)
             {
                 ChannelCollection = new ObservableCollection<StoreTypeCode>();
             }
 
-            // clear the collection
-            ChannelCollection.Clear();
-
-            // Load the collection with the licenses active stores
-            // If ChannelToAdd is set, fitler out 
-            IEnumerable<StoreTypeCode> activeTangoChannels = license.GetActiveStores().Select(s=> new ShipWorksLicense(s.StoreLicenseKey).StoreTypeCode);
-            IEnumerable<StoreTypeCode> activeStoresInShipWorks = storeManager.GetAllStores().Select(s=>(StoreTypeCode)s.TypeCode);
-
-            activeTangoChannels.Union(activeStoresInShipWorks)
-                .Distinct()
-                .Where(s => !ChannelToAdd.HasValue || s != ChannelToAdd.Value)
-                .ToList()
-                // if we did not find a match add it to the collection 
-                .ForEach(s => ChannelCollection.Add(s));
+            channelLimitBehavior.PopulateChannels(channelCollection, ChannelToAdd);
 
             UpdateErrorMesssage();
         }
@@ -184,15 +194,11 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         /// </summary>
         private void UpdateErrorMesssage()
         {
-            int channelsToDelete = license.NumberOfChannelsOverLimit;
-            if (ChannelToAdd != null)
-            {
-                channelsToDelete ++;
-            }
+            IEnumerable<EnumResult<ComplianceLevel>> channelLimitCompliance = license.EnforceCapabilities(channelLimitBehavior.EditionFeature, EnforcementContext);
 
-            string plural = channelsToDelete > 1 ? "s" : string.Empty;
-            ErrorMessage =
-                $"You have exceeded your channel limit. Please upgrade your plan or delete {channelsToDelete} channel{plural} to continue downloading orders and creating shipment labels.";
+            EnumResult<ComplianceLevel> nonCompliantResult = channelLimitCompliance.FirstOrDefault(c => c.Value == ComplianceLevel.NotCompliant);
+
+            ErrorMessage = nonCompliantResult == null ? "Please click next." : nonCompliantResult.Message;
         }
 
         /// <summary>
@@ -204,9 +210,9 @@ namespace ShipWorks.UI.Controls.ChannelLimit
             IDialog browserDlg = webBrowserFactory.Create(uri, "Upgrade your account", owner);
             browserDlg.ShowDialog();
 
-            Load(license);
+            Load();
 
-            if (!license.IsOverChannelLimit)
+            if (IsCompliant())
             {
                 owner?.Close();
             }
@@ -221,7 +227,7 @@ namespace ShipWorks.UI.Controls.ChannelLimit
                 storeManager.GetAllStores().Select(s => (StoreTypeCode) s.TypeCode).Distinct().ToList();
 
             // If we are trying to delete the only store type in ShipWorks and they are not trying to add another one
-            // display an error and dont delete
+            // display an error and don't delete
             if (localStoreTypeCodes.Count == 1 && localStoreTypeCodes.Contains(SelectedStoreType) && ChannelToAdd == null)
             {
                 messageHelper.ShowError($"You cannot remove {EnumHelper.GetDescription(selectedStoreType)} because it is " +
@@ -256,7 +262,7 @@ namespace ShipWorks.UI.Controls.ChannelLimit
             try
             {
                 // call load to refresh everything
-                Load(license);
+                Load();
             }
             catch (ShipWorksLicenseException ex)
             {
@@ -266,10 +272,20 @@ namespace ShipWorks.UI.Controls.ChannelLimit
 
             IsDeleting = false;
 
-            if (!license.IsOverChannelLimit)
+            if (IsCompliant())
             {
                 owner?.Close();
             }
+        }
+
+        /// <summary>
+        /// Returns true if we are compliant with the enforcer
+        /// </summary>
+        private bool IsCompliant()
+        {
+            return
+                license.EnforceCapabilities(channelLimitBehavior.EditionFeature, EnforcementContext)
+                    .FirstOrDefault(c => c.Value == ComplianceLevel.NotCompliant) == null;
         }
 
         /// <summary>

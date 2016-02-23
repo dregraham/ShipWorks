@@ -1,31 +1,17 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
-using System.Text;
 using System.Linq;
 using System.Windows.Forms;
-using ShipWorks.AddressValidation;
 using ShipWorks.UI.Wizard;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.ApplicationCore.Licensing;
 using Interapptive.Shared;
-using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Data;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Adapter.Custom;
-using ShipWorks.UI;
 using Interapptive.Shared.Net;
 using ShipWorks.Data.Connection;
-using ShipWorks.Stores.Platforms;
-using ShipWorks.Templates.Emailing;
-using ShipWorks.Email;
-using ShipWorks.Email.Accounts;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
-using ShipWorks.Common.Threading;
-using System.Threading;
 using Interapptive.Shared.Utility;
 using Interapptive.Shared.UI;
 using ShipWorks.Data.Utility;
@@ -34,19 +20,15 @@ using ShipWorks.Actions.Tasks;
 using ShipWorks.Actions.Triggers;
 using ShipWorks.ApplicationCore.Nudges;
 using ShipWorks.Filters;
-using ShipWorks.Filters.Content;
-using ShipWorks.Filters.Content.Conditions.Orders;
-using ShipWorks.Filters.Content.Conditions;
 using ShipWorks.Editions;
 using ShipWorks.Editions.Freemium;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping;
-using ShipWorks.Editions.Brown;
 using ShipWorks.ApplicationCore.Setup;
 using ShipWorks.UI.Controls;
-using ShipWorks.Stores.Communication;
 using ShipWorks.ApplicationCore;
 using Autofac;
+using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
 using ShipWorks.Users.Logon;
 using Control = System.Windows.Controls.Control;
 
@@ -109,6 +91,11 @@ namespace ShipWorks.Stores.Management
 
             try
             {
+                if (!IsLicenseCompliant(owner))
+                {
+                    return false;
+                }
+
                 using (ShipWorksSetupLock wizardLock = new ShipWorksSetupLock())
                 {
                     using (AddStoreWizard wizard = new AddStoreWizard())
@@ -131,6 +118,41 @@ namespace ShipWorks.Stores.Management
             {
                 MessageHelper.ShowInformation(owner, "Another user is already setting up ShipWorks.  This can only be done on one computer at a time.");
                 return false;
+            }
+        }
+
+        /// <summary>
+        /// Returns true if license is in compliance.
+        /// </summary>
+        /// <remarks>
+        /// Prompts user to get in compliance if needed. 
+        /// Then it checks to see if they are now in compliance and returns the result.
+        /// </remarks>
+        private static bool IsLicenseCompliant(IWin32Window owner)
+        {
+            using (ILifetimeScope scope = IoC.BeginLifetimeScope())
+            {
+                ILicenseService licenseService = scope.Resolve<ILicenseService>();
+                ILicense license = licenseService.GetLicenses().FirstOrDefault();
+
+                if (license == null)
+                {
+                    return true; // must be legacy and no store set up...
+                }
+
+                license.Refresh();
+                license.EnforceCapabilities(EnforcementContext.OnAddingStore, owner);
+
+                try
+                {
+                    license.EnforceCapabilities(EnforcementContext.OnAddingStore);
+                    return true;
+                }
+                catch (ShipWorksLicenseException ex)
+                {
+                    MessageHelper.ShowError(owner, ex.Message);
+                    return false;
+                }
             }
         }
 
@@ -974,7 +996,9 @@ namespace ShipWorks.Stores.Management
                     if (activateResult.Value == LicenseActivationState.OverChannelLimit)
                     {
                         IChannelLimitFactory factory = IoC.UnsafeGlobalLifetimeScope.Resolve<IChannelLimitFactory>();
-                        Control channelLimitControl = (Control)factory.CreateControl((ICustomerLicense)license, (StoreTypeCode) Store.TypeCode);
+                        Control channelLimitControl =
+                            (Control) factory.CreateControl((ICustomerLicense) license, (StoreTypeCode) Store.TypeCode,
+                                    EditionFeature.ChannelCount);
                         wizardPageActivationError.SetElementHost(channelLimitControl);
                     }
 

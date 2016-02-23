@@ -8,6 +8,8 @@ using ShipWorks.Data;
 using System.Linq;
 using System.Windows.Forms;
 using Interapptive.Shared;
+using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
+using ShipWorks.Editions;
 
 namespace ShipWorks.ApplicationCore.Licensing
 {
@@ -18,10 +20,9 @@ namespace ShipWorks.ApplicationCore.Licensing
     {
         private readonly ITangoWebClient tangoWebClient;
         private readonly ICustomerLicenseWriter licenseWriter;
-        private readonly IUpgradePlanDlgFactory upgradePlanDlgFactory;
         private readonly ILog log;
         private readonly IDeletionService deletionService;
-        private readonly IChannelLimitDlgFactory channelLimitDlgFactory;
+        private readonly IEnumerable<ILicenseEnforcer> licenseEnforcers;
 
         /// <summary>
         /// Constructor
@@ -33,22 +34,20 @@ namespace ShipWorks.ApplicationCore.Licensing
             ICustomerLicenseWriter licenseWriter,
             Func<Type, ILog> logFactory,
             IDeletionService deletionService,
-            IChannelLimitDlgFactory channelLimitDlgFactory,
-            IUpgradePlanDlgFactory upgradePlanDlgFactory)
+            IEnumerable<ILicenseEnforcer> licenseEnforcers)
         {
             Key = key;
             this.tangoWebClient = tangoWebClient;
             this.licenseWriter = licenseWriter;
-            this.upgradePlanDlgFactory = upgradePlanDlgFactory;
             log = logFactory(typeof(CustomerLicense));
             this.deletionService = deletionService;
-            this.channelLimitDlgFactory = channelLimitDlgFactory;
+            this.licenseEnforcers = licenseEnforcers.OrderByDescending(e => (int) e.Priority);
         }
 
         /// <summary>
         /// The license key
         /// </summary>
-        public string Key { get; private set; }
+        public string Key { get; }
 
         /// <summary>
         /// Is the license legacy
@@ -74,48 +73,6 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// The license capabilities.
         /// </summary>
         private ILicenseCapabilities LicenseCapabilities { get; set; }
-
-        /// <summary>
-        /// Is the license over the ChannelLimit
-        /// </summary>
-        public bool IsOverChannelLimit
-        {
-            get
-            {
-                return (LicenseCapabilities.ActiveChannels > LicenseCapabilities.ChannelLimit) &&
-                    !LicenseCapabilities.IsInTrial;
-            }
-        }
-
-        /// <summary>
-        /// Is the license over the ChannelLimit
-        /// </summary>
-        public bool IsShipmentLimitReached
-        {
-            get
-            {
-                return (LicenseCapabilities.ProcessedShipments >= LicenseCapabilities.ShipmentLimit) &&
-                    !LicenseCapabilities.IsInTrial;
-            }
-        }
-
-        /// <summary>
-        /// The number of licenses needed to be deleted to be in compliance
-        /// </summary>
-        public int NumberOfChannelsOverLimit
-        {
-            get
-            {
-                int numberOfChannelsOverLimit = 0;
-
-                if (IsOverChannelLimit)
-                {
-                    numberOfChannelsOverLimit = LicenseCapabilities.ActiveChannels - LicenseCapabilities.ChannelLimit;
-                }
-
-                return numberOfChannelsOverLimit;
-            }
-        }
 
         /// <summary>
         /// Activate a new store
@@ -148,57 +105,6 @@ namespace ShipWorks.ApplicationCore.Licensing
         public void Save()
         {
             licenseWriter.Write(this);
-        }
-
-
-        /// <summary>
-        /// If License is over the channel limit prompt user to delete channels
-        /// </summary>
-        /// <param name="owner"></param>
-        public void EnforceChannelLimit(IWin32Window owner)
-        {
-            Refresh();
-
-            if (IsOverChannelLimit)
-            {
-                try
-                {
-                    IChannelLimitDlg channelLimitDlg = channelLimitDlgFactory.GetChannelLimitDlg(this, owner);
-                    channelLimitDlg.ShowDialog();
-                }
-                catch (ShipWorksLicenseException ex)
-                {
-                    log.Error("Error thrown when displaying channel limit dialog", ex);
-                }
-            }
-        }
-
-        /// <summary>
-        /// If license is at shipment limit, prompt user to upgrade
-        /// when attempting to process a shipment
-        /// </summary>
-        public void EnforceShipmentLimit(IWin32Window owner)
-        {
-            Refresh();
-
-            if (IsShipmentLimitReached)
-            {
-                try
-                {
-                    IDialog dialog = upgradePlanDlgFactory.Create(
-                        "You have reached your shipment limit for this billing cycle. Please upgrade your plan to create labels.",
-                        this,
-                        owner);
-
-                    dialog.ShowDialog();
-                }
-                catch (ShipWorksLicenseException ex)
-                {
-                    log.Error("Error thrown when displaying shipment limit dialog", ex);
-                }
-
-            }
-
         }
 
         /// <summary>
@@ -274,6 +180,64 @@ namespace ShipWorks.ApplicationCore.Licensing
             // but are not in ShipWorks and tell tango to delete them
             IEnumerable<string> licensesToDelete = GetActiveStores().Where(a => a.StoreType == storeType).Select(a => a.StoreLicenseKey);
             tangoWebClient.DeleteStores(this, licensesToDelete);
+        }
+
+        /// <summary>
+        /// Enforces license capabilities and throws ShipWorksLicenseException
+        /// if any enforcer returns not compliant
+        /// </summary>
+        public void EnforceCapabilities(EnforcementContext context)
+        {
+            if (LicenseCapabilities == null)
+            {
+                Refresh();
+            }
+
+            EnumResult<ComplianceLevel> enforcerNotInCompliance =
+                licenseEnforcers
+                    .Select(enforcer => enforcer.Enforce(LicenseCapabilities, context))
+                    .FirstOrDefault(result => result.Value == ComplianceLevel.NotCompliant);
+
+            if (enforcerNotInCompliance != null)
+            {
+                throw new ShipWorksLicenseException(enforcerNotInCompliance.Message);
+            }
+        }
+
+        /// <summary>
+        /// Enforces capabilities and shows dialog on the given owner
+        /// </summary>
+        public void EnforceCapabilities(EnforcementContext context, IWin32Window owner)
+        {
+            if (LicenseCapabilities == null)
+            {
+                Refresh();
+            }
+
+            licenseEnforcers
+                .ToList()
+                .ForEach(e => e.Enforce(LicenseCapabilities, context, owner));
+
+            Refresh();
+        }
+
+        /// <summary>
+        /// Enforces capabilities based on the given feature
+        /// </summary>
+        public IEnumerable<EnumResult<ComplianceLevel>> EnforceCapabilities(EditionFeature feature, EnforcementContext context)
+        {
+            if (LicenseCapabilities == null)
+            {
+                Refresh();
+            }
+
+            List<EnumResult<ComplianceLevel>> result = new List<EnumResult<ComplianceLevel>>();
+
+            licenseEnforcers.Where(e => e.EditionFeature == feature)
+                .ToList()
+                .ForEach(e => result.Add(e.Enforce(LicenseCapabilities, context)));
+
+            return result;
         }
     }
 }

@@ -1,6 +1,9 @@
+using System.Collections.Generic;
 using System.Windows.Forms;
 using Interapptive.Shared.Utility;
+using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Editions;
 
 namespace ShipWorks.ApplicationCore.Licensing
 {
@@ -76,21 +79,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         {
             throw new ShipWorksLicenseException("Activate not valid for a disabled license.");
         }
-
-        /// <summary>
-        /// Trhows - We shouldn't enforce a channel limit on a disabled store.
-        /// </summary>
-        /// <param name="owner"></param>
-        public void EnforceChannelLimit(IWin32Window owner)
-        {
-            throw new ShipWorksLicenseException("Shipment Limit not valid for a disabled license.");
-        }
-
-        public void EnforceShipmentLimit(IWin32Window owner)
-        {
-            throw new ShipWorksLicenseException("Channel Limit not valid for a disabled license.");
-        }
-
+        
         /// <summary>
         /// Throws we should not try to delete a disabled license
         /// </summary>
@@ -98,6 +87,30 @@ namespace ShipWorks.ApplicationCore.Licensing
         public void DeleteStore(StoreEntity store)
         {
             throw new ShipWorksLicenseException("Cannot delete a store using a disabled store license");
+        }
+
+        /// <summary>
+        /// Throws should not enforce disabled license
+        /// </summary>
+        public void EnforceCapabilities(EnforcementContext context)
+        {
+            throw new ShipWorksLicenseException("Capabilities are not valid for a disabled license.");
+        }
+
+        /// <summary>
+        /// Throws should not enforce disabled license
+        /// </summary>
+        public void EnforceCapabilities(EnforcementContext context, IWin32Window owner)
+        {
+            throw new ShipWorksLicenseException("Capabilities are not valid for a disabled license.");
+        }
+
+        /// <summary>
+        /// Throws should not enforce disabled license
+        /// </summary>
+        public IEnumerable<EnumResult<ComplianceLevel>> EnforceCapabilities(EditionFeature feature, EnforcementContext context)
+        {
+            throw new ShipWorksLicenseException("Capabilities are not valid for a disabled license.");
         }
     }
 }

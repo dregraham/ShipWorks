@@ -8,6 +8,7 @@ using Interapptive.Shared.Pdf;
 using log4net;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Licensing.Activation;
+using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Common;
 using ShipWorks.Data;
@@ -100,6 +101,7 @@ namespace ShipWorks.ApplicationCore
 
             RegisterWrappers(builder);
             RegisterLicenseTypes(builder);
+            RegisterLicenseEnforcers(builder);
 
             current = builder.Build();
         }
@@ -111,7 +113,8 @@ namespace ShipWorks.ApplicationCore
         {
             builder.RegisterType<CustomerLicense>()
                 .AsImplementedInterfaces()
-                .AsSelf();
+                .AsSelf()
+                .SingleInstance();
 
             builder.RegisterType<LicenseService>()
                 .AsImplementedInterfaces()
@@ -139,6 +142,21 @@ namespace ShipWorks.ApplicationCore
                 .SingleInstance();
 
             builder.RegisterType<CustomerLicenseActivationService>()
+                .AsImplementedInterfaces();
+
+            builder.RegisterType<ShipWorksLicense>()
+                .AsImplementedInterfaces();
+        }
+
+        /// <summary>
+        /// Registers the Enforcers
+        /// </summary>
+        private static void RegisterLicenseEnforcers(ContainerBuilder builder)
+        {
+            builder
+                .RegisterAssemblyTypes(Assembly.GetAssembly(typeof(ILicenseEnforcer)))
+                .Where(t => typeof(ILicenseEnforcer).IsAssignableFrom(t))
+                .InstancePerLifetimeScope()
                 .AsImplementedInterfaces();
         }
 

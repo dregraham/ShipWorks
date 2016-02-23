@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 using Interapptive.Shared.Utility;
 using log4net;
+using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data;
+using ShipWorks.Editions;
 
 namespace ShipWorks.ApplicationCore.Licensing
 {
@@ -121,6 +124,31 @@ namespace ShipWorks.ApplicationCore.Licensing
         public void DeleteStore(StoreEntity store)
         {
             DeletionService.DeleteStore(store);
+        }
+
+        /// <summary>
+        /// No enforcement for store licenses
+        /// </summary>
+        public void EnforceCapabilities(EnforcementContext context)
+        {
+        }
+
+        /// <summary>
+        /// No enforcement for store licenses
+        /// </summary>
+        public void EnforceCapabilities(EnforcementContext context, IWin32Window owner)
+        {
+        }
+
+        /// <summary>
+        /// No enforcement for store licenses
+        /// </summary>
+        public IEnumerable<EnumResult<ComplianceLevel>> EnforceCapabilities(EditionFeature feature, EnforcementContext context)
+        {
+            return new List<EnumResult<ComplianceLevel>>
+            {
+                new EnumResult<ComplianceLevel>(ComplianceLevel.Compliant, string.Empty)
+            };
         }
     }
 }

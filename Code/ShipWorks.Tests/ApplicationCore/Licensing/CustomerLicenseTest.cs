@@ -6,15 +6,20 @@ using ShipWorks.ApplicationCore.Licensing;
 using Xunit;
 using log4net;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
+using Interapptive.Shared.Utility;
+using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Editions;
 
 namespace ShipWorks.Tests.ApplicationCore.Licensing
 {
     public class CustomerLicenseTest
     {
         [Fact]
-        public void Refresh_SetsLicenseCapabilities_GetLicenseCapabilitiesResponse()
+        public void Refresh_DefersGettingLicenseCapabilitiesToTangoWebClient()
         {
             using (var mock = AutoMock.GetLoose())
             {
@@ -35,7 +40,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
         }
 
         [Fact]
-        public void Refresh_SetsDisabledReason_GetLicenseCapabilitiesResponse()
+        public void Refresh_SetsDisabledReasonFromLicenseCapabilitiesResponse()
         {
             using (var mock = AutoMock.GetLoose())
             {
@@ -47,12 +52,12 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
 
                 customerLicense.Refresh();
 
-                Assert.Equal(customerLicense.DisabledReason, "Disabled for some reason");
+                Assert.Equal("Disabled for some reason", customerLicense.DisabledReason);
             }
         }
 
         [Fact]
-        public void Refresh_LogsDisabledReason_ActivationResponse()
+        public void Refresh_LogsDisabledReason_WhenTangoWebClientThrowsException()
         {
             using (var mock = AutoMock.GetLoose())
             {
@@ -71,7 +76,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
         }
 
         [Fact]
-        public void Save_RethrowsException_FromLicenseWriter()
+        public void Save_RethrowsExceptionFromLicenseWriter()
         {
             using (var mock = AutoMock.GetLoose())
             {
@@ -85,384 +90,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
                 Assert.Equal("some random exception", ex.Message);
             }
         }
-
-        [Fact]
-        public void IsOverChannelLimit_ReturnsTrue_WhenActiveChannelsExceedChannelLimitAndNotInTrial()
-        {
-            using (var mock = AutoMock.GetLoose())
-            {
-                var licenseCapabilities = mock.Mock<ILicenseCapabilities>();
-
-                licenseCapabilities
-                    .Setup(lc => lc.ActiveChannels)
-                    .Returns(5);
-
-                licenseCapabilities
-                    .Setup(lc => lc.IsInTrial)
-                    .Returns(false);
-
-                mock.Mock<ITangoWebClient>()
-                    .Setup(w => w.GetLicenseCapabilities(It.IsAny<ICustomerLicense>()))
-                    .Returns(licenseCapabilities.Object);
-
-                CustomerLicense testObject = mock.Create<CustomerLicense>(new NamedParameter("key", "SomeKey"));
-                testObject.Refresh();
-
-                Assert.True(testObject.IsOverChannelLimit);
-            }
-        }
-
-        [Fact]
-        public void IsOverChannelLimit_ReturnsFalse_WhenActiveChannelsExceedChannelLimitAndInTrial()
-        {
-            using (var mock = AutoMock.GetLoose())
-            {
-                var licenseCapabilities = mock.Mock<ILicenseCapabilities>();
-
-                licenseCapabilities
-                    .Setup(lc => lc.ActiveChannels)
-                    .Returns(5);
-
-                licenseCapabilities
-                    .Setup(lc => lc.IsInTrial)
-                    .Returns(true);
-
-                mock.Mock<ITangoWebClient>()
-                    .Setup(w => w.GetLicenseCapabilities(It.IsAny<ICustomerLicense>()))
-                    .Returns(licenseCapabilities.Object);
-
-                CustomerLicense testObject = mock.Create<CustomerLicense>(new NamedParameter("key", "SomeKey"));
-                testObject.Refresh();
-
-                Assert.False(testObject.IsOverChannelLimit);
-            }
-        }
-
-        [Fact]
-        public void IsOverChannelLimit_ReturnsFalse_WhenActiveChannelsLessThanChannelLimitAndNotInTrial()
-        {
-            using (var mock = AutoMock.GetLoose())
-            {
-                var licenseCapabilities = mock.Mock<ILicenseCapabilities>();
-
-                licenseCapabilities
-                    .Setup(lc => lc.ActiveChannels)
-                    .Returns(5);
-
-                licenseCapabilities
-                    .Setup(lc => lc.ChannelLimit)
-                    .Returns(5);
-
-                licenseCapabilities
-                    .Setup(lc => lc.IsInTrial)
-                    .Returns(false);
-
-                mock.Mock<ITangoWebClient>()
-                    .Setup(w => w.GetLicenseCapabilities(It.IsAny<ICustomerLicense>()))
-                    .Returns(licenseCapabilities.Object);
-
-                CustomerLicense testObject = mock.Create<CustomerLicense>(new NamedParameter("key", "SomeKey"));
-                testObject.Refresh();
-                Assert.False(testObject.IsOverChannelLimit);
-            }
-        }
-
-        [Fact]
-        public void NumberOfChannelsOverLimit_Returns0_WhenActiveChannelsLessThanChannelLimitAndNotInTrial()
-        {
-            using (var mock = AutoMock.GetLoose())
-            {
-                var licenseCapabilities = mock.Mock<ILicenseCapabilities>();
-
-                licenseCapabilities
-                    .Setup(lc => lc.ActiveChannels)
-                    .Returns(5);
-
-                licenseCapabilities
-                    .Setup(lc => lc.ChannelLimit)
-                    .Returns(5);
-
-                licenseCapabilities
-                    .Setup(lc => lc.IsInTrial)
-                    .Returns(false);
-
-                mock.Mock<ITangoWebClient>()
-                    .Setup(w => w.GetLicenseCapabilities(It.IsAny<ICustomerLicense>()))
-                    .Returns(licenseCapabilities.Object);
-
-                CustomerLicense testObject = mock.Create<CustomerLicense>(new NamedParameter("key", "SomeKey"));
-                testObject.Refresh();
-                Assert.Equal(0, testObject.NumberOfChannelsOverLimit);
-            }
-        }
-
-        [Fact]
-        public void NumberOfChannelsOverLimit_Returns0_WhenActiveChannelsMoreThanChannelLimitAndInTrial()
-        {
-            using (var mock = AutoMock.GetLoose())
-            {
-                var licenseCapabilities = mock.Mock<ILicenseCapabilities>();
-
-                licenseCapabilities
-                    .Setup(lc => lc.ActiveChannels)
-                    .Returns(10);
-
-                licenseCapabilities
-                    .Setup(lc => lc.ChannelLimit)
-                    .Returns(5);
-
-                licenseCapabilities
-                    .Setup(lc => lc.IsInTrial)
-                    .Returns(true);
-
-                mock.Mock<ITangoWebClient>()
-                    .Setup(w => w.GetLicenseCapabilities(It.IsAny<ICustomerLicense>()))
-                    .Returns(licenseCapabilities.Object);
-
-                CustomerLicense testObject = mock.Create<CustomerLicense>(new NamedParameter("key", "SomeKey"));
-                testObject.Refresh();
-                Assert.Equal(0, testObject.NumberOfChannelsOverLimit);
-            }
-        }
-
-        [Fact]
-        public void NumberOfChannelsOverLimit_ReturnsNumberOverLimit_WhenActiveChannelsMoreThanChannelLimitAndNotInTrial()
-        {
-            using (var mock = AutoMock.GetLoose())
-            {
-                var licenseCapabilities = mock.Mock<ILicenseCapabilities>();
-
-                licenseCapabilities
-                    .Setup(lc => lc.ActiveChannels)
-                    .Returns(10);
-
-                licenseCapabilities
-                    .Setup(lc => lc.ChannelLimit)
-                    .Returns(5);
-
-                licenseCapabilities
-                    .Setup(lc => lc.IsInTrial)
-                    .Returns(false);
-
-                mock.Mock<ITangoWebClient>()
-                    .Setup(w => w.GetLicenseCapabilities(It.IsAny<ICustomerLicense>()))
-                    .Returns(licenseCapabilities.Object);
-
-                CustomerLicense testObject = mock.Create<CustomerLicense>(new NamedParameter("key", "SomeKey"));
-                testObject.Refresh();
-                Assert.Equal(5, testObject.NumberOfChannelsOverLimit);
-            }
-        }
-
-        [Fact]
-        public void EnforceChannelLimit_DialogShown_WhenLicenseOverChannelLimit()
-        {
-            using (var mock = AutoMock.GetLoose())
-            {
-                var licenseCapabilities = mock.Mock<ILicenseCapabilities>();
-
-                licenseCapabilities
-                    .Setup(lc => lc.ActiveChannels)
-                    .Returns(5);
-
-                mock.Mock<ITangoWebClient>()
-                    .Setup(w => w.GetLicenseCapabilities(It.IsAny<ICustomerLicense>()))
-                    .Returns(licenseCapabilities.Object);
-
-                Mock<IChannelLimitDlg> channelLimitDlg = mock.Mock<IChannelLimitDlg>();
-
-                mock.Mock<IChannelLimitDlgFactory>()
-                    .Setup(c => c.GetChannelLimitDlg(It.IsAny<ICustomerLicense>(), It.IsAny<IWin32Window>()))
-                    .Returns(channelLimitDlg.Object);
-
-                CustomerLicense testObject = mock.Create<CustomerLicense>(new NamedParameter("key", "SomeKey"));
-
-                testObject.EnforceChannelLimit(null);
-
-                channelLimitDlg.Verify(d => d.ShowDialog(), Times.Once);
-            }
-        }
-
-        [Fact]
-        public void EnforceChannelLimit_DialogNotShown_WhenUnderChannelLimit()
-        {
-            using (var mock = AutoMock.GetLoose())
-            {
-                var licenseCapabilities = mock.Mock<ILicenseCapabilities>();
-
-                licenseCapabilities
-                    .Setup(lc => lc.ActiveChannels)
-                    .Returns(0);
-
-                mock.Mock<ITangoWebClient>()
-                    .Setup(w => w.GetLicenseCapabilities(It.IsAny<ICustomerLicense>()))
-                    .Returns(licenseCapabilities.Object);
-
-                var channelLimitDlg = mock.Mock<IChannelLimitDlg>();
-
-                CustomerLicense testObject = mock.Create<CustomerLicense>(new NamedParameter("key", "SomeKey"));
-
-                testObject.EnforceChannelLimit(null);
-
-                channelLimitDlg.Verify(d => d.ShowDialog(), Times.Never);
-            }
-        }
-
-        [Fact]
-        public void EnforceChannelLimit_RefreshIsCalled_WhenOverChannelLimit()
-        {
-            using (var mock = AutoMock.GetLoose())
-            {
-                var licenseCapabilities = mock.Mock<ILicenseCapabilities>();
-
-                licenseCapabilities
-                    .Setup(lc => lc.ActiveChannels)
-                    .Returns(5);
-
-                Mock<ITangoWebClient> webClient = MockWebClientToReturnCapabilities(mock, licenseCapabilities);
-
-                Mock<IChannelLimitDlg> channelLimitDlg = mock.Mock<IChannelLimitDlg>();
-
-                mock.Mock<IChannelLimitDlgFactory>()
-                    .Setup(c => c.GetChannelLimitDlg(It.IsAny<ICustomerLicense>(), It.IsAny<IWin32Window>()))
-                    .Returns(channelLimitDlg.Object);
-
-                CustomerLicense testObject = mock.Create<CustomerLicense>(new NamedParameter("key", "SomeKey"));
-
-                testObject.EnforceChannelLimit(null);
-
-                // The only way to verify that Refresh is called is by making sure
-                // GetLicenseCapabilities is called because that is all refresh does.
-                webClient.Verify(d => d.GetLicenseCapabilities(testObject), Times.Once);
-            }
-        }
-
-        private static Mock<ITangoWebClient> MockWebClientToReturnCapabilities(AutoMock mock, Mock<ILicenseCapabilities> licenseCapabilities)
-        {
-            var webClient = mock.Mock<ITangoWebClient>();
-            webClient
-                .Setup(w => w.GetLicenseCapabilities(It.IsAny<ICustomerLicense>()))
-                .Returns(licenseCapabilities.Object);
-            return webClient;
-        }
-
-        [Fact]
-        public void IsShipmentLimitReached_IsTrue_WhenOverShipmentLimit()
-        {
-            using (var mock = AutoMock.GetLoose())
-            {
-                var licenseCapabilities = mock.Mock<ILicenseCapabilities>();
-
-                licenseCapabilities.Setup(c => c.ProcessedShipments)
-                    .Returns(101);
-
-                licenseCapabilities.Setup(c => c.ShipmentLimit)
-                    .Returns(100);
-
-                MockWebClientToReturnCapabilities(mock, licenseCapabilities);
-
-                CustomerLicense testObject = mock.Create<CustomerLicense>(new NamedParameter("key", "SomeKey"));
-                testObject.Refresh();
-
-                Assert.True(testObject.IsShipmentLimitReached);
-            }
-        }
-
-        [Fact]
-        public void IsShipmentLimitReached_IsTrue_WhenAtShipmentLimit()
-        {
-            using (var mock = AutoMock.GetLoose())
-            {
-                var licenseCapabilities = mock.Mock<ILicenseCapabilities>();
-
-                licenseCapabilities.Setup(c => c.ProcessedShipments)
-                    .Returns(100);
-
-                licenseCapabilities.Setup(c => c.ShipmentLimit)
-                    .Returns(100);
-
-                MockWebClientToReturnCapabilities(mock, licenseCapabilities);
-
-                CustomerLicense testObject = mock.Create<CustomerLicense>(new NamedParameter("key", "SomeKey"));
-                testObject.Refresh();
-
-                Assert.True(testObject.IsShipmentLimitReached);
-            }
-        }
-
-        [Fact]
-        public void IsShipmentLimitReached_IsFalse_WhenAtShipmentLimitAndInTrial()
-        {
-            using (var mock = AutoMock.GetLoose())
-            {
-                var licenseCapabilities = mock.Mock<ILicenseCapabilities>();
-
-                licenseCapabilities.Setup(c => c.ProcessedShipments)
-                    .Returns(100);
-
-                licenseCapabilities.Setup(c => c.ShipmentLimit)
-                    .Returns(100);
-
-                licenseCapabilities.Setup(c => c.IsInTrial)
-                    .Returns(true);
-
-                MockWebClientToReturnCapabilities(mock, licenseCapabilities);
-
-                CustomerLicense testObject = mock.Create<CustomerLicense>(new NamedParameter("key", "SomeKey"));
-                testObject.Refresh();
-
-                Assert.False(testObject.IsShipmentLimitReached);
-            }
-        }
-
-        [Fact]
-        public void EnforceShipmentLimit_CallsShowDialog_WhenShipmentLimitReached()
-        {
-            using (var mock = AutoMock.GetLoose())
-            {
-                var licenseCapabilities = mock.Mock<ILicenseCapabilities>();
-                MockWebClientToReturnCapabilities(mock, licenseCapabilities);
-
-                var dlg = mock.Mock<IDialog>();
-
-                mock.Mock<IUpgradePlanDlgFactory>()
-                    .Setup(f => f.Create(It.IsAny<string>(), It.IsAny<ICustomerLicense>(), It.IsAny<IWin32Window>()))
-                    .Returns(dlg.Object);
-
-                CustomerLicense testObject = mock.Create<CustomerLicense>(new NamedParameter("key", "SomeKey"));
-
-                testObject.EnforceShipmentLimit(null);
-
-                dlg.Verify(d=>d.ShowDialog(), Times.Once);
-            }
-        }
-
-        [Fact]
-        public void EnforceShipmentLimit_DoesNotCallShowDialog_WhenShipmentLimitNotReached()
-        {
-            using (var mock = AutoMock.GetLoose())
-            {
-                var licenseCapabilities = mock.Mock<ILicenseCapabilities>();
-
-                licenseCapabilities.Setup(c => c.ShipmentLimit)
-                    .Returns(100);
-
-                MockWebClientToReturnCapabilities(mock, licenseCapabilities);
-
-                var dlg = mock.Mock<IDialog>();
-
-                mock.Mock<IUpgradePlanDlgFactory>()
-                    .Setup(f => f.Create(It.IsAny<string>(), It.IsAny<ICustomerLicense>(), It.IsAny<IWin32Window>()))
-                    .Returns(dlg.Object);
-
-                CustomerLicense testObject = mock.Create<CustomerLicense>(new NamedParameter("key", "SomeKey"));
-
-                testObject.EnforceShipmentLimit(null);
-
-                dlg.Verify(d => d.ShowDialog(), Times.Never);
-            }
-        }
-
+        
         [Fact]
         public void Activate_ReturnsActive_WhenTangoReturnsSuccess()
         {
@@ -529,6 +157,145 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
                 var result = testObject.Activate(new StoreEntity());
 
                 Assert.Equal(LicenseActivationState.OverChannelLimit, result.Value);
+            }
+        }
+
+        [Fact]
+        public void EnforceCapabilitiesWithEditionFeature_CallsEnforceOnEnforcerWithMatchingEditionFeature()
+        {
+            using (var mock1 = AutoMock.GetLoose())
+            using (var mock2= AutoMock.GetLoose())
+            {
+                Mock<ILicenseEnforcer> enforcerTwo = mock2.Mock<ILicenseEnforcer>();
+                enforcerTwo.SetupGet(e => e.EditionFeature).Returns(EditionFeature.EndiciaAccountLimit);
+                enforcerTwo.Setup(e => e.Enforce(It.IsAny<ILicenseCapabilities>(), It.IsAny<EnforcementContext>()))
+                    .Returns(new EnumResult<ComplianceLevel>(ComplianceLevel.NotCompliant,
+                        "enforcerTwo is not compliant."));
+
+                Mock<ILicenseEnforcer> enforcerOne = mock1.Mock<ILicenseEnforcer>();
+                enforcerOne.SetupGet(e => e.EditionFeature).Returns(EditionFeature.ChannelCount);
+                enforcerOne.Setup(e => e.Enforce(It.IsAny<ILicenseCapabilities>(), It.IsAny<EnforcementContext>()))
+                    .Returns(new EnumResult<ComplianceLevel>(ComplianceLevel.NotCompliant,
+                        "enforcerOne is not compliant."));
+                
+                CustomerLicense testObject = mock1.Create<CustomerLicense>(new NamedParameter("key", "SomeKey"),
+                    new TypedParameter(typeof(IEnumerable<ILicenseEnforcer>),
+                        new[] { enforcerOne.Object, enforcerTwo.Object }));
+
+                testObject.EnforceCapabilities(EditionFeature.ChannelCount, EnforcementContext.NotSpecified);
+
+                enforcerOne.Verify(e => e.Enforce(It.IsAny<ILicenseCapabilities>(), It.IsAny<EnforcementContext>()), Times.Once);
+                enforcerTwo.Verify(e => e.Enforce(It.IsAny<ILicenseCapabilities>(), It.IsAny<EnforcementContext>()), Times.Never);
+            }
+        }
+
+        [Fact]
+        public void EnforceCapabilitiesWithOwner_CallsEnforceeOnAllEnforcersWithOwner()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                Mock<IWin32Window> owner = mock.Mock<IWin32Window>();
+                Mock<ILicenseEnforcer> enforcerOne = mock.Mock<ILicenseEnforcer>();
+                Mock<ILicenseEnforcer> enforcerTwo = mock.Mock<ILicenseEnforcer>();
+
+                mock.Mock<ITangoWebClient>();
+                mock.Provide(new List<ILicenseEnforcer> { enforcerOne.Object, enforcerTwo.Object });
+
+                CustomerLicense testObject = mock.Create<CustomerLicense>(new NamedParameter("key", "SomeKey"));
+
+                testObject.EnforceCapabilities(EnforcementContext.NotSpecified, owner.Object);
+
+                enforcerOne.Verify(e => e.Enforce(It.IsAny<ILicenseCapabilities>(), It.IsAny<EnforcementContext>(), owner.Object), Times.Once);
+                enforcerTwo.Verify(e => e.Enforce(It.IsAny<ILicenseCapabilities>(), It.IsAny<EnforcementContext>(), owner.Object), Times.Once);
+            }
+        }
+
+        [Fact]
+        public void EnforceCapabilitiesWithOwner_RefreshesLicense()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                Mock<ILicenseEnforcer> enforcer = mock.Mock<ILicenseEnforcer>();
+                Mock<ITangoWebClient> tangoWebClient = mock.Mock<ITangoWebClient>();
+                mock.Provide(new List<ILicenseEnforcer> { enforcer.Object });
+
+                CustomerLicense testObject = mock.Create<CustomerLicense>(new NamedParameter("key", "SomeKey"));
+
+                testObject.EnforceCapabilities(EnforcementContext.NotSpecified, null);
+
+                tangoWebClient.Verify(w => w.GetLicenseCapabilities(testObject), Times.AtLeastOnce);
+            }
+        }
+
+        [Fact]
+        public void EnforceCapabilities_RefreshesLicense_WhenCapabilitiesIsNull()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                Mock<ILicenseEnforcer> enforcer = mock.Mock<ILicenseEnforcer>();
+                enforcer.Setup(e => e.Enforce(It.IsAny<ILicenseCapabilities>(), It.IsAny<EnforcementContext>()))
+                        .Returns(new EnumResult<ComplianceLevel>(ComplianceLevel.Compliant, string.Empty));
+
+                Mock<ITangoWebClient> tangoWebClient = mock.Mock<ITangoWebClient>();
+                mock.Provide(new List<ILicenseEnforcer> {enforcer.Object});
+
+                CustomerLicense testObject = mock.Create<CustomerLicense>(new NamedParameter("key", "SomeKey"));
+
+                testObject.EnforceCapabilities(EnforcementContext.NotSpecified);
+
+                tangoWebClient.Verify(w => w.GetLicenseCapabilities(testObject), Times.Once);
+            }
+        }
+
+        [Fact]
+        public void EnforceCapabilities_CallsEnforceOnAllEnforcers()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                Mock<ILicenseEnforcer> enforcerOne = mock.Mock<ILicenseEnforcer>();
+                enforcerOne.Setup(e => e.Enforce(It.IsAny<ILicenseCapabilities>(), It.IsAny<EnforcementContext>()))
+                        .Returns(new EnumResult<ComplianceLevel>(ComplianceLevel.Compliant, string.Empty));
+
+                Mock<ILicenseEnforcer> enforcerTwo = mock.Mock<ILicenseEnforcer>();
+                enforcerTwo.Setup(e => e.Enforce(It.IsAny<ILicenseCapabilities>(), It.IsAny<EnforcementContext>()))
+                        .Returns(new EnumResult<ComplianceLevel>(ComplianceLevel.Compliant, string.Empty));
+
+                mock.Mock<ITangoWebClient>();
+                mock.Provide(new List<ILicenseEnforcer> { enforcerOne.Object, enforcerTwo.Object });
+
+                CustomerLicense testObject = mock.Create<CustomerLicense>(new NamedParameter("key", "SomeKey"));
+
+                testObject.EnforceCapabilities(EnforcementContext.NotSpecified);
+
+                enforcerOne.Verify(e => e.Enforce(It.IsAny<ILicenseCapabilities>(), It.IsAny<EnforcementContext>()), Times.Once);
+                enforcerTwo.Verify(e => e.Enforce(It.IsAny<ILicenseCapabilities>(), It.IsAny<EnforcementContext>()), Times.Once);
+            }
+        }
+
+        [Fact]
+        public void EnforceCapabilities_ThrowsShipWorksLicenseExceptionWithFirstEnforcerError()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                Mock<ILicenseEnforcer> enforcerOne = mock.Mock<ILicenseEnforcer>();
+                enforcerOne.Setup(e => e.Enforce(It.IsAny<ILicenseCapabilities>(), It.IsAny<EnforcementContext>()))
+                        .Returns(new EnumResult<ComplianceLevel>(ComplianceLevel.Compliant, string.Empty));
+
+                Mock<ILicenseEnforcer> enforcerTwo = mock.Mock<ILicenseEnforcer>();
+                enforcerTwo.Setup(e => e.Enforce(It.IsAny<ILicenseCapabilities>(), It.IsAny<EnforcementContext>()))
+                        .Returns(new EnumResult<ComplianceLevel>(ComplianceLevel.NotCompliant, "Something about not being compliant"));
+
+                mock.Provide(new List<ILicenseEnforcer> { enforcerOne.Object, enforcerTwo.Object });
+
+                mock.Mock<ITangoWebClient>();
+                
+                CustomerLicense testObject = mock.Create<CustomerLicense>(new NamedParameter("key", "SomeKey"));
+
+                ShipWorksLicenseException ex =
+                    Assert.Throws<ShipWorksLicenseException>(
+                        () => testObject.EnforceCapabilities(EnforcementContext.NotSpecified));
+
+                Assert.Equal("Something about not being compliant", ex.Message);
             }
         }
     }

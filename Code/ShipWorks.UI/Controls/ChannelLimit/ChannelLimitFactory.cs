@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows.Controls;
+using Autofac.Features.Indexed;
 using ShipWorks.ApplicationCore.Licensing;
+using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
+using ShipWorks.Editions;
 using ShipWorks.Stores;
 
 namespace ShipWorks.UI.Controls.ChannelLimit
@@ -13,34 +12,39 @@ namespace ShipWorks.UI.Controls.ChannelLimit
     /// </summary>
     public class ChannelLimitFactory : IChannelLimitFactory
     {
-        private readonly Func<ChannelLimitControl> channelLimitControlFactory;
+        private readonly Func<IChannelLimitControl> channelLimitControlFactory;
         private readonly IChannelLimitViewModel viewModel;
+        private readonly IIndex<EditionFeature, IChannelLimitBehavior> behaviorFactory;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ChannelLimitFactory"/> class.
         /// </summary>
-        public ChannelLimitFactory(Func<ChannelLimitControl> channelLimitControlFactory, IChannelLimitViewModel viewModel)
+        public ChannelLimitFactory(Func<IChannelLimitControl> channelLimitControlFactory,
+            IChannelLimitViewModel viewModel,
+            IIndex<EditionFeature, IChannelLimitBehavior> behaviorFactory)
         {
             this.channelLimitControlFactory = channelLimitControlFactory;
             this.viewModel = viewModel;
+            this.behaviorFactory = behaviorFactory;
         }
 
         /// <summary>
-        /// Creates the ChannelLimitControl.
+        /// Creates the control
         /// </summary>
-        public IChannelLimitControl CreateControl(ICustomerLicense customerLicense)
-        {
-            ChannelLimitControl channelLimitControl = channelLimitControlFactory();
-            channelLimitControl.DataContext = viewModel;
-            viewModel.Load(customerLicense);
-
-            return channelLimitControl;
-        }
-
-        public IChannelLimitControl CreateControl(ICustomerLicense customerLicense, StoreTypeCode channelToAdd)
+        /// <remarks>
+        /// This instance will take the store being added into account
+        /// It shouldn't be available to delete and be counted against the customer's limit.
+        /// </remarks>
+        public IChannelLimitControl CreateControl(ICustomerLicense customerLicense, StoreTypeCode channelToAdd, EditionFeature feature)
         {
             viewModel.ChannelToAdd = channelToAdd;
-            return CreateControl(customerLicense);
+            viewModel.EnforcementContext = EnforcementContext.ExceedingChannelLimit;
+
+            IChannelLimitControl channelLimitControl = channelLimitControlFactory();
+            channelLimitControl.DataContext = viewModel;
+            viewModel.Load(customerLicense, behaviorFactory[feature]);
+
+            return channelLimitControl;
         }
     }
 }

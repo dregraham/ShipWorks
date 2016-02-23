@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows.Input;
+using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
 using ShipWorks.Stores;
 
 namespace ShipWorks.ApplicationCore.Licensing
@@ -13,6 +14,11 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// Collection of Store Channels
         /// </summary>
         ObservableCollection<StoreTypeCode> ChannelCollection { get; set; }
+
+        /// <summary>
+        /// Context of which the view model is being invoked in
+        /// </summary>
+        EnforcementContext EnforcementContext { get; set; }
 
         /// <summary>
         /// Command for deleting a channel
@@ -45,8 +51,13 @@ namespace ShipWorks.ApplicationCore.Licensing
         StoreTypeCode? ChannelToAdd { get; set; }
 
         /// <summary>
+        /// Gets or sets the title.
+        /// </summary>
+        string Title { get; }
+
+        /// <summary>
         /// Loads the given customer license 
         /// </summary>
-        void Load(ICustomerLicense customerLicense);
+        void Load(ICustomerLicense customerLicense, IChannelLimitBehavior channelLimitBehavior);
     }
 }

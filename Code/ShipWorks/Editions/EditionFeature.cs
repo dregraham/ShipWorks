@@ -222,5 +222,29 @@ namespace ShipWorks.Editions
         /// </summary>
         [Description("Your ShipWorks account does not support template customization")]
         TemplateCustomization,
+
+        /// <summary>
+        /// The channel count
+        /// </summary>
+        [Description("Your ShipWorks account does not support the amount of installed channels")]
+        ChannelCount,
+
+        /// <summary>
+        /// The shipment count
+        /// </summary>
+        [Description("You have reached your Shipment Limit under your current plan. Please upgrade.")]
+        ShipmentCount,
+
+        /// <summary>
+        /// The generic module
+        /// </summary>
+        [Description("Your Shipworks account does not support a Generic Module")]
+        GenericModule,
+
+        /// <summary>
+        /// The generic file
+        /// </summary>
+        [Description("Your ShipWorks account does not support a Generic File")]
+        GenericFile,
     }
 }

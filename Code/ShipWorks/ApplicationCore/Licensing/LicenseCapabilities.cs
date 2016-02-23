@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Xml;
 using System.Xml.XPath;
 using Interapptive.Shared.Utility;
+using ShipWorks.Stores;
 
 namespace ShipWorks.ApplicationCore.Licensing
 {
@@ -10,6 +12,8 @@ namespace ShipWorks.ApplicationCore.Licensing
     /// </summary>
     public class LicenseCapabilities : ILicenseCapabilities
     {
+        private List<StoreTypeCode> forbiddenChannels;
+
         /// <summary>
         /// Constructor - Sets capabilities based on the xml response.
         /// </summary>
@@ -46,78 +50,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             SetUpsCapabilities(xpath);
         }
 
-        /// <summary>
-        /// Throw error if fault in XML.
-        /// </summary>
-        private static void CheckForFault(XPathNamespaceNavigator xpath)
-        {
-            // Check to see if the response contains a fault
-            XPathNavigator fault = xpath.SelectSingleNode("//s:Fault/detail");
-
-            if (fault != null)
-            {
-                string message = XPathUtility.Evaluate(fault, "//*[local-name()='Message']", "");
-                throw new ShipWorksLicenseException(string.IsNullOrWhiteSpace(message)
-                    ? "There was an error validating your license"
-                    : message);
-            }
-        }
-
-        /// <summary>
-        /// Set Ups Capabilities
-        /// </summary>
-        private void SetUpsCapabilities(XPathNamespaceNavigator xpath)
-        {
-            UpsAccountLimit = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='UpsAccountLimit']/Value", 0) == 1;
-            UpsAccountNumbers = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='UpsAccountNumbers']/Value", 0) == 1;
-            UpsSurePost = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='UpsSurePost']/Value", 0) == 1;
-            PostalApoFpoPoboxOnly = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='PostalApoFpoPoboxOnly']/Value", 0) == 1;
-        }
-
-        /// <summary>
-        /// Set capabilities typically associated with a pricing plan
-        /// </summary>
-        private void SetPricingPlanCapabilties(XPathNamespaceNavigator xpath)
-        {
-            AdvancedShipping = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='AdvancedShippingFeatures']/Value", string.Empty) == "Yes";
-            Crm = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='Crm']/Value", string.Empty) == "Yes";
-            CustomDataSources = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='CustomDataSources']/Value", string.Empty) == "Yes";
-            TemplateCustomization = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='TemplateCustomization']/Value", string.Empty) == "Yes";
-            ChannelLimit = XPathUtility.Evaluate(xpath, "//UserCapabilities/NameValuePair[Name ='NumberOfChannels']/Value", 0);
-            ShipmentLimit = XPathUtility.Evaluate(xpath, "//UserCapabilities/NameValuePair[Name ='NumberOfShipments']/Value", 0);
-
-            ActiveChannels = XPathUtility.Evaluate(xpath, "//UserLevels/NameValuePair[Name ='NumberOfChannels']/Value", 0);
-            ProcessedShipments = XPathUtility.Evaluate(xpath, "//UserLevels/NameValuePair[Name ='NumberOfShipments']/Value", 0);
-        }
-
-        /// <summary>
-        /// Set Stamps Capabilities
-        /// </summary>
-        private void SetStampsCapabilities(XPathNamespaceNavigator xpath)
-        {
-            StampsInsurance = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='StampsInsurance']/Value", 0) == 1;
-            StampsDhl = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='StampsDhl']/Value", 0) == 1;
-            StampsAscendiaConsolidator = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='StampsAscendiaConsolidator']/Value", 0) == 1;
-            StampsDhlConsolidator = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='StampsDhlConsolidator']/Value", 0) == 1;
-            StampsGlobegisticsConsolidator = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='StampsGlobegisticsConsolidator']/Value", 0) == 1;
-            StampsIbcConsolidator = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='StampsIbcConsolidator']/Value", 0) == 1;
-            StampsRrDonnelleyConsolidator = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='StampsRrDonnelleyConsolidator']/Value", 0) == 1;
-        }
-
-        /// <summary>
-        /// Set Endicia Capabilities
-        /// </summary>
-        private void SetEndiciaCapabilities(XPathNamespaceNavigator xpath)
-        {
-            EndiciaScanForm = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='EndiciaScanForm']/Value", 0) == 1;
-            EndiciaAccountLimit = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='EndiciaAccountLimit']/Value", 0) == 1;
-            EndiciaAccountNumber = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='EndiciaAccountNumber']/Value", 0) == 1;
-            EndiciaDhl = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='EndiciaDhl']/Value", 0) == 1;
-            EndiciaInsurance = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='EndiciaInsurance']/Value", 0) == 1;
-            EndiciaConsolidator = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='EndiciaConsolidator']/Value", 0) == 1;
-            EndiciaScanBasedReturns = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='EndiciaScanBasedReturns']/Value", 0) == 1;
-        }
-
+        #region Properties
         /// <summary>
         /// No specific feature
         /// </summary>
@@ -326,5 +259,95 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// The number of processed shipments in tango
         /// </summary>
         public int ProcessedShipments { get; private set; }
+
+        #endregion Properties
+
+        /// <summary>
+        /// Determines whether [is channel allowed] [the specified store type].
+        /// </summary>
+        public bool IsChannelAllowed(StoreTypeCode storeType)
+        {
+            return !forbiddenChannels.Contains(storeType);
+        }
+
+        /// <summary>
+        /// Throw error if fault in XML.
+        /// </summary>
+        private static void CheckForFault(XPathNamespaceNavigator xpath)
+        {
+            // Check to see if the response contains a fault
+            XPathNavigator fault = xpath.SelectSingleNode("//s:Fault/detail");
+
+            if (fault != null)
+            {
+                string message = XPathUtility.Evaluate(fault, "//*[local-name()='Message']", "");
+                throw new ShipWorksLicenseException(string.IsNullOrWhiteSpace(message)
+                    ? "There was an error validating your license"
+                    : message);
+            }
+        }
+
+        /// <summary>
+        /// Set Ups Capabilities
+        /// </summary>
+        private void SetUpsCapabilities(XPathNamespaceNavigator xpath)
+        {
+            UpsAccountLimit = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='UpsAccountLimit']/Value", 0) == 1;
+            UpsAccountNumbers = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='UpsAccountNumbers']/Value", 0) == 1;
+            UpsSurePost = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='UpsSurePost']/Value", 0) == 1;
+            PostalApoFpoPoboxOnly = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='PostalApoFpoPoboxOnly']/Value", 0) == 1;
+        }
+
+        /// <summary>
+        /// Set capabilities typically associated with a pricing plan
+        /// </summary>
+        private void SetPricingPlanCapabilties(XPathNamespaceNavigator xpath)
+        {
+            AdvancedShipping = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='AdvancedShippingFeatures']/Value", string.Empty) == "Yes";
+            Crm = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='Crm']/Value", string.Empty) == "Yes";
+            CustomDataSources = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='CustomDataSources']/Value", string.Empty) == "Yes";
+
+            forbiddenChannels = new List<StoreTypeCode>();
+            if (!CustomDataSources)
+            {
+                forbiddenChannels.Add(StoreTypeCode.GenericFile);
+                forbiddenChannels.Add(StoreTypeCode.GenericModule);
+            }
+
+            TemplateCustomization = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='TemplateCustomization']/Value", string.Empty) == "Yes";
+            ChannelLimit = XPathUtility.Evaluate(xpath, "//UserCapabilities/NameValuePair[Name ='NumberOfChannels']/Value", 0);
+            ShipmentLimit = XPathUtility.Evaluate(xpath, "//UserCapabilities/NameValuePair[Name ='NumberOfShipments']/Value", 0);
+
+            ActiveChannels = XPathUtility.Evaluate(xpath, "//UserLevels/NameValuePair[Name ='NumberOfChannels']/Value", 0);
+            ProcessedShipments = XPathUtility.Evaluate(xpath, "//UserLevels/NameValuePair[Name ='NumberOfShipments']/Value", 0);
+        }
+
+        /// <summary>
+        /// Set Stamps Capabilities
+        /// </summary>
+        private void SetStampsCapabilities(XPathNamespaceNavigator xpath)
+        {
+            StampsInsurance = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='StampsInsurance']/Value", 0) == 1;
+            StampsDhl = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='StampsDhl']/Value", 0) == 1;
+            StampsAscendiaConsolidator = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='StampsAscendiaConsolidator']/Value", 0) == 1;
+            StampsDhlConsolidator = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='StampsDhlConsolidator']/Value", 0) == 1;
+            StampsGlobegisticsConsolidator = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='StampsGlobegisticsConsolidator']/Value", 0) == 1;
+            StampsIbcConsolidator = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='StampsIbcConsolidator']/Value", 0) == 1;
+            StampsRrDonnelleyConsolidator = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='StampsRrDonnelleyConsolidator']/Value", 0) == 1;
+        }
+
+        /// <summary>
+        /// Set Endicia Capabilities
+        /// </summary>
+        private void SetEndiciaCapabilities(XPathNamespaceNavigator xpath)
+        {
+            EndiciaScanForm = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='EndiciaScanForm']/Value", 0) == 1;
+            EndiciaAccountLimit = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='EndiciaAccountLimit']/Value", 0) == 1;
+            EndiciaAccountNumber = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='EndiciaAccountNumber']/Value", 0) == 1;
+            EndiciaDhl = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='EndiciaDhl']/Value", 0) == 1;
+            EndiciaInsurance = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='EndiciaInsurance']/Value", 0) == 1;
+            EndiciaConsolidator = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='EndiciaConsolidator']/Value", 0) == 1;
+            EndiciaScanBasedReturns = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='EndiciaScanBasedReturns']/Value", 0) == 1;
+        }
     }
 }

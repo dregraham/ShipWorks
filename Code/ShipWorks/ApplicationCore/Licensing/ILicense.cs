@@ -1,6 +1,9 @@
-﻿using Interapptive.Shared.Utility;
+﻿using System.Collections.Generic;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using System.Windows.Forms;
+using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
+using ShipWorks.Editions;
 
 namespace ShipWorks.ApplicationCore.Licensing
 {
@@ -35,41 +38,31 @@ namespace ShipWorks.ApplicationCore.Licensing
         bool IsLegacy { get; }
 
         /// <summary>
-        /// Is the user over their channel limit
-        /// </summary>
-        bool IsOverChannelLimit { get; }
-
-        /// <summary>
-        /// The number of licenses needed to be deleted to be in compliance
-        /// </summary>
-        int NumberOfChannelsOverLimit { get; }
-
-        /// <summary>
-        /// Is the user over their shipment limit
-        /// </summary>
-        bool IsShipmentLimitReached { get; }
-
-        /// <summary>
         /// Activate a new store
         /// </summary>
         EnumResult<LicenseActivationState> Activate(StoreEntity store);
 
         /// <summary>
-        /// If License is over the channel limit prompt user to delete channels
-        /// </summary>
-        /// <param name="owner"></param>
-        void EnforceChannelLimit(IWin32Window owner);
-
-        /// <summary>
-        /// If license is at shipment limit, prompt user to upgrade
-        /// when attempting to process a shipment
-        /// </summary>
-        void EnforceShipmentLimit(IWin32Window owner);
-
-        /// <summary>
         /// Deletes a store
         /// </summary>
-        /// <param name="store"></param>
         void DeleteStore(StoreEntity store);
+
+        /// <summary>
+        /// Enforces the capabilities for this license.
+        /// Throws ShipWorksLicenseException when out of compliance
+        /// </summary>
+        void EnforceCapabilities(EnforcementContext context);
+
+        /// <summary>
+        /// Enforces the capabilities for this license.
+        /// Prompts user to take action when out of compliance
+        /// </summary>
+        void EnforceCapabilities(EnforcementContext context, IWin32Window owner);
+
+        /// <summary>
+        /// Enforces the capabilites for this license,
+        /// related to the given EditionFeature.
+        /// </summary>
+        IEnumerable<EnumResult<ComplianceLevel>> EnforceCapabilities(EditionFeature feature, EnforcementContext context);
     }
 }

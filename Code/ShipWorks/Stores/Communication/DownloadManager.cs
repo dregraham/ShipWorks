@@ -23,6 +23,7 @@ using ShipWorks.Data.Utility;
 using ShipWorks.Users.Security;
 using ShipWorks.Users.Audit;
 using ShipWorks.ApplicationCore.ExecutionMode;
+using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
 
 namespace ShipWorks.Stores.Communication
 {
@@ -534,12 +535,8 @@ namespace ShipWorks.Stores.Communication
                     throw new ShipWorksLicenseException(license.DisabledReason);
                 }
 
-                if (license.IsOverChannelLimit)
-                {
-                    string plural = license.NumberOfChannelsOverLimit > 1 ? "s" : string.Empty;
-                    throw new ShipWorksLicenseException(
-                        $"You have exceeded your channel limit. Please upgrade your plan or delete {license.NumberOfChannelsOverLimit} channel{plural} to download orders.");
-                }
+                // Possible license exception is caught upstream
+                license.EnforceCapabilities(EnforcementContext.Download);
             }
         }
 

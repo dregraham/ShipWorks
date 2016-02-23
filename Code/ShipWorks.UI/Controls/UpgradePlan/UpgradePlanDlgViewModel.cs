@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Linq;
 using System.Reflection;
 using System.Windows;
 using GalaSoft.MvvmLight.Command;
 using ShipWorks.ApplicationCore.Licensing;
+using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
+using ShipWorks.Editions;
 using ShipWorks.UI.Controls.WebBrowser;
 
 namespace ShipWorks.UI.Controls.UpgradePlan
@@ -51,18 +54,28 @@ namespace ShipWorks.UI.Controls.UpgradePlan
         }
 
         /// <summary>
-        /// Clicking Upgrade Plan opens the browswer dlg with the upgrade url
+        /// Clicking Upgrade Plan opens the browser dlg with the upgrade url
         /// </summary>
         private void UpgradeAccount(Window owner)
         {
             Uri uri = new Uri("https://www.interapptive.com/account/changeplan.php");
             IDialog browserDlg = webBrowserFactory.Create(uri, "Upgrade your account", owner);
             browserDlg.ShowDialog();
-
-            if (!license.IsOverChannelLimit)
+            
+            if (IsCompliant())
             {
                 owner?.Close();
             }
+        }
+
+        /// <summary>
+        /// Returns true if we are compliant with the enforcer
+        /// </summary>
+        private bool IsCompliant()
+        {
+            return
+                license.EnforceCapabilities(EditionFeature.ChannelCount, EnforcementContext.NotSpecified)
+                    .FirstOrDefault(c => c.Value == ComplianceLevel.NotCompliant) == null;
         }
     }
 }
