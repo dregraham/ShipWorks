@@ -453,10 +453,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                ILicenseService lifetimeService = lifetimeScope.Resolve<ILicenseService>();
-
                 // Edition check
-                ILicense license = lifetimeService.GetLicenses().FirstOrDefault();
+                ILicense license = lifetimeScope.Resolve<ILicenseService>().GetLicenses().FirstOrDefault();
                 if (license != null && !license.HandleRestriction(EditionFeature.UpsAccountNumbers, upsAccount.AccountNumber, this))
                 {
                     e.NextPage = CurrentPage;

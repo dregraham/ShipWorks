@@ -609,10 +609,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                ILicenseService lifetimeService = lifetimeScope.Resolve<ILicenseService>();
-                
                 // Edition check
-                ILicense license = lifetimeService.GetLicenses().FirstOrDefault();
+                ILicense license = lifetimeScope.Resolve<ILicenseService>().GetLicenses().FirstOrDefault();
                 if (license != null && !license.HandleRestriction(EditionFeature.EndiciaAccountNumber, accountNumber.Text.Trim(), this))
                 {
                     e.NextPage = CurrentPage;
