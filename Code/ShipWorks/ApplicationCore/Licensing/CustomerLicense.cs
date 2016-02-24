@@ -50,6 +50,26 @@ namespace ShipWorks.ApplicationCore.Licensing
             this.deletionService = deletionService;
             this.featureRestrictions = featureRestrictions;
             this.licenseEnforcers = licenseEnforcers.OrderByDescending(e => (int) e.Priority);
+
+            EnsureOnlyOneFeatureRestrictionPerEditionFeature();
+        }
+
+        private void EnsureOnlyOneFeatureRestrictionPerEditionFeature()
+        {
+            IEnumerable<EditionFeature> editionFeatures = featureRestrictions
+                .GroupBy(f => f.EditionFeature)
+                .Where(grouping => grouping.Count() > 1)
+                .Select(grouping => grouping.Key)
+                .ToList();
+
+            if (editionFeatures.Any())
+            {
+                string featureNames = string.Join(Environment.NewLine, editionFeatures.Select(f => f.ToString()));
+                throw new InvalidOperationException(
+                    "The following EditionFeatures have more than one associated Feature Restriction:" +
+                    $"{Environment.NewLine}{featureNames}");
+            }
+            
         }
 
         /// <summary>

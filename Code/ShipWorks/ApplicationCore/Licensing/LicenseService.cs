@@ -65,7 +65,6 @@ namespace ShipWorks.ApplicationCore.Licensing
             }
         }
 
-
         /// <summary>
         /// Checks the restriction for a specific feature
         /// </summary>

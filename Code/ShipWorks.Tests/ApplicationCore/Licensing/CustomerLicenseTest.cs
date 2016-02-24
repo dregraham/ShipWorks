@@ -21,6 +21,58 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
     public class CustomerLicenseTest
     {
         [Fact]
+        public void Constructor_NoErrorThrown_WhenFeatureRestrictionsHaveUniqueEditionFeatures()
+        {
+            using (var mock1 = AutoMock.GetLoose())
+            using (var mock2 = AutoMock.GetLoose())
+            {
+                Mock<IFeatureRestriction> feature1 = mock1.Mock<IFeatureRestriction>();
+                feature1.SetupGet(f => f.EditionFeature)
+                    .Returns(EditionFeature.Crm);
+
+                Mock<IFeatureRestriction> feature2 = mock2.Mock<IFeatureRestriction>();
+                feature2.SetupGet(f => f.EditionFeature)
+                    .Returns(EditionFeature.EndiciaAccountNumber);
+
+                var featureRestrictions = new List<IFeatureRestriction> {feature1.Object, feature2.Object};
+
+                mock1.Create<CustomerLicense>(
+                    new NamedParameter("key", "SomeKey"),
+                    new TypedParameter(typeof (IEnumerable<IFeatureRestriction>), featureRestrictions));
+            }
+        }
+
+        [Fact]
+        public void Constructor_ThrowsInvalidOperationException_WhenFeatureRestrictionsHaveCommonEditionFeature()
+        {
+            using (var mock1 = AutoMock.GetLoose())
+            using (var mock2 = AutoMock.GetLoose())
+            {
+                Mock<IFeatureRestriction> feature1 = mock1.Mock<IFeatureRestriction>();
+                feature1.SetupGet(f => f.EditionFeature)
+                    .Returns(EditionFeature.Crm);
+
+                Mock<IFeatureRestriction> feature2 = mock2.Mock<IFeatureRestriction>();
+                feature2.SetupGet(f => f.EditionFeature)
+                    .Returns(EditionFeature.Crm);
+
+                var featureRestrictions = new List<IFeatureRestriction> {feature1.Object, feature2.Object};
+
+                try
+                {
+                    mock1.Create<CustomerLicense>(
+                        new NamedParameter("key", "SomeKey"),
+                        new TypedParameter(typeof (IEnumerable<IFeatureRestriction>), featureRestrictions));
+                }
+                catch (Exception ex)
+                {
+                    Assert.IsType(typeof(InvalidOperationException), ex.InnerException);
+                }
+            }
+        }
+        
+
+        [Fact]
         public void Refresh_DefersGettingLicenseCapabilitiesToTangoWebClient()
         {
             using (var mock = AutoMock.GetLoose())
