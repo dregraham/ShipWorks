@@ -164,10 +164,7 @@ namespace ShipWorks.Filters.Management
                 using (ILifetimeScope scope = IoC.BeginLifetimeScope())
                 {
                     ILicenseService licenseService = scope.Resolve<ILicenseService>();
-                    if (!licenseService?
-                        .GetLicenses()?
-                        .FirstOrDefault()?
-                        .HandleRestriction(EditionFeature.MyFilters, null, this) ?? false)
+                    if (!licenseService.HandleRestriction(EditionFeature.MyFilters, null, this))
                     {
                         e.NextPage = CurrentPage;
                         return;

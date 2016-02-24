@@ -932,11 +932,11 @@ namespace ShipWorks.Data.Grid.Paging
             EditionRestrictionLevel restrictionLevel = EditionRestrictionLevel.None;
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                ILicense license = lifetimeScope.Resolve<ILicenseService>().GetLicenses().FirstOrDefault();
+                ILicenseService licenseService = lifetimeScope.Resolve<ILicenseService>();
 
-                if (license != null)
+                if (licenseService != null)
                 {
-                    restrictionLevel = license.CheckRestriction(EditionFeature.SelectionLimit, virtualSelection.Count);
+                    restrictionLevel = licenseService.CheckRestriction(EditionFeature.SelectionLimit, virtualSelection.Count);
                 }
 
                 if (restrictionLevel != EditionRestrictionLevel.None)
@@ -979,7 +979,7 @@ namespace ShipWorks.Data.Grid.Paging
 
                 if (restrictionLevel != EditionRestrictionLevel.None)
                 {
-                    license?.HandleRestriction(EditionFeature.SelectionLimit, virtualSelection.Count, this);
+                    licenseService?.HandleRestriction(EditionFeature.SelectionLimit, virtualSelection.Count, this);
                 }
             }
         }

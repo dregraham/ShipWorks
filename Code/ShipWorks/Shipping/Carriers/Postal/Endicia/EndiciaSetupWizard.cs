@@ -610,8 +610,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
                 // Edition check
-                ILicense license = lifetimeScope.Resolve<ILicenseService>().GetLicenses().FirstOrDefault();
-                if (license != null && !license.HandleRestriction(EditionFeature.EndiciaAccountNumber, accountNumber.Text.Trim(), this))
+                ILicenseService licenseService = lifetimeScope.Resolve<ILicenseService>();
+                if (!licenseService.HandleRestriction(EditionFeature.EndiciaAccountNumber, accountNumber.Text.Trim(), this))
                 {
                     e.NextPage = CurrentPage;
                     return;
@@ -716,11 +716,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                ILicenseService lifetimeService = lifetimeScope.Resolve<ILicenseService>();
+                ILicenseService licenseService = lifetimeScope.Resolve<ILicenseService>();
 
                 // Edition check
-                ILicense license = lifetimeService.GetLicenses().FirstOrDefault();
-                if (license != null && !license.HandleRestriction(EditionFeature.EndiciaAccountNumber, accountExisting.Text.Trim(), this))
+                if (licenseService.HandleRestriction(EditionFeature.EndiciaAccountNumber, accountExisting.Text.Trim(), this))
                 {
                     e.NextPage = CurrentPage;
                     return;

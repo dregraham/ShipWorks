@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Forms;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Editions;
 using ShipWorks.Stores;
 
 namespace ShipWorks.ApplicationCore.Licensing
@@ -62,6 +64,28 @@ namespace ShipWorks.ApplicationCore.Licensing
             }
         }
 
+
+        /// <summary>
+        /// Checks the restriction for a specific feature
+        /// </summary>
+        public EditionRestrictionLevel CheckRestriction(EditionFeature feature, object data)
+        {
+            return IsLegacy
+                ? EditionManager.ActiveRestrictions.CheckRestriction(feature, data).Level
+                : customerLicenseFactory(CustomerKey).CheckRestriction(feature, data);
+        }
+
+        /// <summary>
+        /// Handles the restriction for a specific feature
+        /// </summary>
+        public bool HandleRestriction(EditionFeature feature, object data, IWin32Window owner)
+        {
+            return IsLegacy
+                ? EditionManager.HandleRestrictionIssue(owner,
+                    EditionManager.ActiveRestrictions.CheckRestriction(feature, data))
+                : customerLicenseFactory(CustomerKey).HandleRestriction(feature, data, owner);
+        }
+
         /// <summary>
         /// Gets all Licenses.
         /// </summary>
@@ -110,5 +134,7 @@ namespace ShipWorks.ApplicationCore.Licensing
                 new EnumResult<LogOnRestrictionLevel>(LogOnRestrictionLevel.Forbidden, customerLicense.DisabledReason) :
                 new EnumResult<LogOnRestrictionLevel>(LogOnRestrictionLevel.None);
         }
+
+
     }
 }

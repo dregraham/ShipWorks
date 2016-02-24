@@ -15,6 +15,7 @@ using ShipWorks.UI;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
 using Interapptive.Shared.UI;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Utility;
 using ShipWorks.Editions;
 
@@ -47,13 +48,19 @@ namespace ShipWorks.Shipping.Settings
             labelUpgrade.Text = string.Format(labelUpgrade.Text, shipmentType.ShipmentTypeName);
             panelUpgrade.Location = panelSetup.Location;
 
-            if (EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.ShipmentType, shipmentType.ShipmentTypeCode).Level != EditionRestrictionLevel.None)
+            using (ILifetimeScope scope = IoC.BeginLifetimeScope())
             {
-                panelSetup.Visible = false;
-            }
-            else
-            {
-                panelUpgrade.Visible = false;
+                ILicenseService licenseService = scope.Resolve<ILicenseService>();
+
+                EditionRestrictionLevel editionRestrictionLevel = licenseService.CheckRestriction(EditionFeature.ShipmentType, shipmentType.ShipmentTypeCode);
+                if (editionRestrictionLevel != EditionRestrictionLevel.None)
+                {
+                    panelSetup.Visible = false;
+                }
+                else
+                {
+                    panelUpgrade.Visible = false;
+                }
             }
         }
 
