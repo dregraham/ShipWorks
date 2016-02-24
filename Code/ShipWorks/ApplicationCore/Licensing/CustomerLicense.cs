@@ -9,6 +9,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Interapptive.Shared;
 using ShipWorks.ApplicationCore.Dashboard.Content;
+using ShipWorks.ApplicationCore.Licensing.FeatureRestrictions;
 using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
 using ShipWorks.Editions;
 
@@ -26,6 +27,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         private readonly ICustomerLicenseWriter licenseWriter;
         private readonly ILog log;
         private readonly IDeletionService deletionService;
+        private readonly IEnumerable<IFeatureRestriction> featureRestrictions;
         private readonly IEnumerable<ILicenseEnforcer> licenseEnforcers;
 
         /// <summary>
@@ -38,13 +40,15 @@ namespace ShipWorks.ApplicationCore.Licensing
             ICustomerLicenseWriter licenseWriter,
             Func<Type, ILog> logFactory,
             IDeletionService deletionService,
-            IEnumerable<ILicenseEnforcer> licenseEnforcers)
+            IEnumerable<ILicenseEnforcer> licenseEnforcers,
+            IEnumerable<IFeatureRestriction> featureRestrictions)
         {
             Key = key;
             this.tangoWebClient = tangoWebClient;
             this.licenseWriter = licenseWriter;
-            log = logFactory(typeof(CustomerLicense));
+            log = logFactory(typeof (CustomerLicense));
             this.deletionService = deletionService;
+            this.featureRestrictions = featureRestrictions;
             this.licenseEnforcers = licenseEnforcers.OrderByDescending(e => (int) e.Priority);
         }
 
@@ -90,8 +94,9 @@ namespace ShipWorks.ApplicationCore.Licensing
             // The license activation state will be one of three values: Active, Invalid,
             // or OverChannelLimit. Rely on the success flag initially then dig into
             // the response to determine if the license is over the channel limit.
-            LicenseActivationState activationState = response.Success ?
-                LicenseActivationState.Active : LicenseActivationState.Invalid;
+            LicenseActivationState activationState = response.Success
+                ? LicenseActivationState.Active
+                : LicenseActivationState.Invalid;
 
             if ((response.Error?.IndexOf("OverChannelLimit", StringComparison.Ordinal) ?? -1) >= 0)
             {
@@ -182,7 +187,8 @@ namespace ShipWorks.ApplicationCore.Licensing
 
             // Get a list of licenses that are active in tango and match the channel we are deleting
             // but are not in ShipWorks and tell tango to delete them
-            IEnumerable<string> licensesToDelete = GetActiveStores().Where(a => a.StoreType == storeType).Select(a => a.StoreLicenseKey);
+            IEnumerable<string> licensesToDelete =
+                GetActiveStores().Where(a => a.StoreType == storeType).Select(a => a.StoreLicenseKey);
             tangoWebClient.DeleteStores(this, licensesToDelete);
         }
 
@@ -228,7 +234,8 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Enforces capabilities based on the given feature
         /// </summary>
-        public IEnumerable<EnumResult<ComplianceLevel>> EnforceCapabilities(EditionFeature feature, EnforcementContext context)
+        public IEnumerable<EnumResult<ComplianceLevel>> EnforceCapabilities(EditionFeature feature,
+            EnforcementContext context)
         {
             if (LicenseCapabilities == null)
             {
@@ -256,9 +263,12 @@ namespace ShipWorks.ApplicationCore.Licensing
                 return null;
             }
 
-            float currentShipmentPercentage = (float) LicenseCapabilities.ProcessedShipments / LicenseCapabilities.ShipmentLimit;
+            float currentShipmentPercentage = (float) LicenseCapabilities.ProcessedShipments/
+                                              LicenseCapabilities.ShipmentLimit;
 
-            return currentShipmentPercentage >= ShipmentLimitWarningThreshold ? new DashboardLicenseItem(LicenseCapabilities.BillingEndDate) : null;
+            return currentShipmentPercentage >= ShipmentLimitWarningThreshold
+                ? new DashboardLicenseItem(LicenseCapabilities.BillingEndDate)
+                : null;
         }
 
         /// <summary>
@@ -266,7 +276,9 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public EditionRestrictionLevel CheckRestriction(EditionFeature feature, object data)
         {
-            throw new NotImplementedException();
+            IFeatureRestriction restriction = featureRestrictions.SingleOrDefault(r => r.EditionFeature == feature);
+
+            return restriction?.Check(LicenseCapabilities, data) ?? EditionRestrictionLevel.Hidden;
         }
 
         /// <summary>
@@ -274,7 +286,10 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public bool HandleRestriction(EditionFeature feature, object data, IWin32Window owner)
         {
-            throw new NotImplementedException();
+            return featureRestrictions
+                .Where(restriction => restriction.EditionFeature == feature)
+                .Select(restriction => restriction.Handle(owner, data))
+                .SingleOrDefault();
         }
     }
 }
