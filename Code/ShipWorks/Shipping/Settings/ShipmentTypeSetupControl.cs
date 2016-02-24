@@ -124,10 +124,15 @@ namespace ShipWorks.Shipping.Settings
         /// </summary>
         private void OnUpgrade(object sender, EventArgs e)
         {
-            if (EditionManager.HandleRestrictionIssue(this, EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.ShipmentType, shipmentType.ShipmentTypeCode)))
+            using (ILifetimeScope scope = IoC.BeginLifetimeScope())
             {
-                panelSetup.Visible = true;
-                panelUpgrade.Visible = false;
+                ILicenseService licenseService = scope.Resolve<ILicenseService>();
+
+                if (licenseService.HandleRestriction(EditionFeature.ShipmentType, shipmentType.ShipmentTypeCode, this))
+                {
+                    panelSetup.Visible = true;
+                    panelUpgrade.Visible = false;
+                }
             }
         }
 
@@ -136,10 +141,7 @@ namespace ShipWorks.Shipping.Settings
         /// </summary>
         private void RaiseSetupComplete()
         {
-            if (SetupComplete != null)
-            {
-                SetupComplete(this, EventArgs.Empty);
-            }
+            SetupComplete?.Invoke(this, EventArgs.Empty);
         }
     }
 }
