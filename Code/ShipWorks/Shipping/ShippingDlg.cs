@@ -2419,7 +2419,7 @@ namespace ShipWorks.Shipping
             }
 
             // Check restriction
-            if (!EditionManager.HandleRestrictionIssue(this, EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.SelectionLimit, shipments.Count())))
+            if (!licenseService.HandleRestriction(EditionFeature.SelectionLimit, shipments.Count(), this))
             {
                 return;
             }
