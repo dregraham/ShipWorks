@@ -3,6 +3,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Autofac.Features.Indexed;
 using ShipWorks.ApplicationCore.Licensing;
+using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
 using ShipWorks.Editions;
 
 namespace ShipWorks.UI.Controls.ChannelLimit
@@ -34,7 +35,7 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         /// <summary>
         /// Gets the channel limit dialog.
         /// </summary>
-        public IChannelLimitDlg GetChannelLimitDlg(IWin32Window owner, EditionFeature feature)
+        public IChannelLimitDlg GetChannelLimitDlg(IWin32Window owner, EditionFeature feature, EnforcementContext context)
         {
             ICustomerLicense customerLicense = licenseService.GetLicenses().FirstOrDefault() as ICustomerLicense;
 
@@ -43,6 +44,7 @@ namespace ShipWorks.UI.Controls.ChannelLimit
                 throw new InvalidCastException("Expected a ICustomerLicense from the LicenseService");
             }
 
+            viewModel.EnforcementContext = context;
             // load the customer license into the view model
             viewModel.Load(customerLicense, behaviorFactory[feature]);
 

@@ -42,7 +42,7 @@ namespace ShipWorks.UI.Tests.Controls.ChannelLimit
 
                 ChannelLimitDlgFactory testObject = mock.Create<ChannelLimitDlgFactory>();
 
-                testObject.GetChannelLimitDlg(owner.Object, EditionFeature.ActionLimit);
+                testObject.GetChannelLimitDlg(owner.Object, EditionFeature.ActionLimit, It.IsAny<EnforcementContext>());
 
                 licenseService.Verify(l => l.GetLicenses(), Times.Once);
             }
@@ -76,7 +76,7 @@ namespace ShipWorks.UI.Tests.Controls.ChannelLimit
 
                 InvalidCastException ex =
                     Assert.Throws<InvalidCastException>(
-                        () => testObject.GetChannelLimitDlg(owner.Object, EditionFeature.ActionLimit));
+                        () => testObject.GetChannelLimitDlg(owner.Object, EditionFeature.ActionLimit, It.));
                 Assert.Equal("Expected a ICustomerLicense from the LicenseService", ex.Message);
             }
         }

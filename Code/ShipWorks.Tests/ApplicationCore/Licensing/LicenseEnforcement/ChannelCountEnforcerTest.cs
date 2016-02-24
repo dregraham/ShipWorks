@@ -131,7 +131,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.LicenseEnforcement
                 Mock<IChannelLimitDlgFactory> dlgFactory = mock.Mock<IChannelLimitDlgFactory>();
                 Mock<IChannelLimitDlg> dlg = mock.Mock<IChannelLimitDlg>();
 
-                dlgFactory.Setup(f => f.GetChannelLimitDlg(It.IsAny<IWin32Window>(), It.IsAny<EditionFeature>())).Returns(dlg.Object);
+                dlgFactory.Setup(f => f.GetChannelLimitDlg(It.IsAny<IWin32Window>(), It.IsAny<EditionFeature>(), It.IsAny<EnforcementContext>())).Returns(dlg.Object);
 
                 ChannelCountEnforcer testObject = mock.Create<ChannelCountEnforcer>();
 

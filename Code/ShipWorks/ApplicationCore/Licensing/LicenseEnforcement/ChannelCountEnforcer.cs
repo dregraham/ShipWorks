@@ -41,7 +41,7 @@ namespace ShipWorks.ApplicationCore.Licensing.LicenseEnforcement
         {
             if (Enforce(capabilities,context).Value == ComplianceLevel.NotCompliant)
             {
-                    IChannelLimitDlg channelLimitDlg = channelLimitDlgFactory.GetChannelLimitDlg(owner, EditionFeature);
+                    IChannelLimitDlg channelLimitDlg = channelLimitDlgFactory.GetChannelLimitDlg(owner, EditionFeature, context);
                     channelLimitDlg.ShowDialog();
             }
         }
