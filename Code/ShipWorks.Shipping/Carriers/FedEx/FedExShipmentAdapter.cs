@@ -133,7 +133,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <summary>
         /// Perform the clone of the adapter using the cloned shipment
         /// </summary>
-        /// <returns></returns>
         public override ICarrierShipmentAdapter Clone() => new FedExShipmentAdapter(this);
     }
 }

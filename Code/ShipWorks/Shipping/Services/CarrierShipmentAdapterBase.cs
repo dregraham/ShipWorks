@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data;
@@ -349,6 +350,56 @@ namespace ShipWorks.Shipping.Services
                 packageCollection.Remove(package);
                 UpdateDynamicData();
             }
+        }
+
+        /// <summary>
+        /// Get a list of customs item adapters for this shipment
+        /// </summary>
+        public IEnumerable<IShipmentCustomsItemAdapter> GetCustomsItemAdapters()
+        {
+            if (!shipment.Processed)
+            {
+                UpdateDynamicData();
+            }
+
+            return shipment.CustomsItems
+                .Select(x => new ShipmentCustomsItemAdapter(x))
+                .ToReadOnly();
+        }
+
+        /// <summary>
+        /// Add a new customs item
+        /// </summary>
+        public IShipmentCustomsItemAdapter AddCustomsItem()
+        {
+            ShipmentCustomsItemEntity shipmentCustomsItemEntity = customsManager.CreateCustomsItem(shipment);
+            shipment.CustomsItems.Add(shipmentCustomsItemEntity);
+            UpdateDynamicData();
+
+            return new ShipmentCustomsItemAdapter(shipmentCustomsItemEntity);
+        }
+
+        /// <summary>
+        /// Delete a customs item from the shipment
+        /// </summary>
+        public void DeleteCustomsItem(IShipmentCustomsItemAdapter customsItem)
+        {
+            ShipmentCustomsItemEntity existingItem = shipment.CustomsItems
+                .FirstOrDefault(x => x.ShipmentCustomsItemID == customsItem.ShipmentCustomsItemID);
+
+            if (existingItem == null)
+            {
+                return;
+            }
+
+            // If this isn't set, removing packages won't actually remove them from the database
+            if (shipment.CustomsItems.RemovedEntitiesTracker == null)
+            {
+                shipment.CustomsItems.RemovedEntitiesTracker = new EntityCollection<ShipmentCustomsItemEntity>();
+            }
+
+            shipment.CustomsItems.Remove(existingItem);
+            UpdateDynamicData();
         }
     }
 }

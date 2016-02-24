@@ -42,7 +42,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ValueConverters
                 KeyValuePair<string, long> item1 = new KeyValuePair<string, long>("Foo", 1);
                 KeyValuePair<string, long> item2 = new KeyValuePair<string, long>("Bar", 2);
 
-                mock.WithShipmentTypeFromFactory(type =>
+                mock.WithShipmentTypeFromShipmentManager(type =>
                 {
                     type.Setup(x => x.GetOrigins())
                         .Returns(new List<KeyValuePair<string, long>> { item1, item2 });

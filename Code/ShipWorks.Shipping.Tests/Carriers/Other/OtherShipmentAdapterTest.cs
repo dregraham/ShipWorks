@@ -1,18 +1,21 @@
-﻿using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.Postal.Other;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using Autofac;
+using Autofac.Extras.Moq;
 using Moq;
-using ShipWorks.AddressValidation;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Other;
+using ShipWorks.Shipping.Carriers.Postal.Other;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Tests.Shared;
 using Xunit;
 
 namespace ShipWorks.Shipping.Tests.Carriers.Other
 {
-    public class OtherShipmentAdapterTest
+    public class OtherShipmentAdapterTest : IDisposable
     {
+        readonly AutoMock mock;
         readonly ShipmentEntity shipment;
         private readonly Mock<IShipmentTypeManager> shipmentTypeManager;
         private readonly Mock<ICustomsManager> customsManager;
@@ -21,6 +24,8 @@ namespace ShipWorks.Shipping.Tests.Carriers.Other
 
         public OtherShipmentAdapterTest()
         {
+            mock = AutoMockExtensions.GetLooseThatReturnsMocks();
+
             shipmentType = new OtherShipmentType();
             shipment = new ShipmentEntity()
             {
@@ -171,6 +176,126 @@ namespace ShipWorks.Shipping.Tests.Carriers.Other
             testObject.ShipDate = testObject.ShipDate.AddDays(1);
 
             Assert.Equal(shipment.ShipDate, testObject.ShipDate);
+        }
+
+        [Fact]
+        public void AddCustomsItem_AddsNewCustomsItemToList()
+        {
+            var testObject = mock.Create<OtherShipmentAdapter>(TypedParameter.From(shipment));
+            testObject.AddCustomsItem();
+
+            Assert.Equal(1, shipment.CustomsItems.Count);
+        }
+
+        [Fact]
+        public void AddCustomsItem_ReturnsCustomsItemAdapter_ForNewCustomsItem()
+        {
+            var testObject = mock.Create<OtherShipmentAdapter>(TypedParameter.From(shipment));
+            var newCustomsItem = testObject.AddCustomsItem();
+
+            Assert.NotNull(newCustomsItem);
+        }
+
+        [Fact]
+        public void AddCustomsItem_DelegatesToShipmentType_WhenNewCustomsItemIsAdded()
+        {
+            var shipmentTypeMock = mock.WithShipmentTypeFromShipmentManager(x => { });
+
+            var testObject = mock.Create<OtherShipmentAdapter>(TypedParameter.From(shipment));
+            testObject.AddCustomsItem();
+
+            shipmentTypeMock.Verify(x => x.UpdateDynamicShipmentData(shipment));
+            shipmentTypeMock.Verify(x => x.UpdateTotalWeight(shipment));
+        }
+
+        [Fact]
+        public void AddCustomsItem_DelegatesToCustomsManager_WhenNewCustomsItemIsAdded()
+        {
+            var testObject = mock.Create<OtherShipmentAdapter>(TypedParameter.From(shipment));
+            testObject.AddCustomsItem();
+
+            mock.Mock<ICustomsManager>().Verify(x => x.EnsureCustomsLoaded(new[] { shipment }));
+        }
+
+        [Fact]
+        public void DeleteCustomsItem_RemovesCustomsItemAssociatedWithAdapter()
+        {
+            var customsItem = new ShipmentCustomsItemEntity(2);
+
+            shipment.CustomsItems.Add(new ShipmentCustomsItemEntity(1));
+            shipment.CustomsItems.Add(customsItem);
+            shipment.CustomsItems.Add(new ShipmentCustomsItemEntity(3));
+
+            var testObject = mock.Create<OtherShipmentAdapter>(TypedParameter.From(shipment));
+            testObject.DeleteCustomsItem(new ShipmentCustomsItemAdapter(customsItem));
+
+            Assert.DoesNotContain(customsItem, shipment.CustomsItems);
+        }
+
+        [Fact]
+        public void DeleteCustomsItem_DoesNotRemoveCustomsItem_WhenCustomsItemDoesNotExist()
+        {
+            var CustomsItem = new ShipmentCustomsItemEntity(2);
+            var CustomsItem2 = new ShipmentCustomsItemEntity(2);
+
+            shipment.CustomsItems.Add(CustomsItem);
+            shipment.CustomsItems.Add(CustomsItem2);
+
+            var testObject = mock.Create<OtherShipmentAdapter>(TypedParameter.From(shipment));
+            testObject.DeleteCustomsItem(new ShipmentCustomsItemAdapter(new ShipmentCustomsItemEntity(12)));
+
+            Assert.Contains(CustomsItem, shipment.CustomsItems);
+            Assert.Contains(CustomsItem2, shipment.CustomsItems);
+        }
+
+        [Fact]
+        public void DeleteCustomsItem_DelegatesToShipmentType_WhenCustomsItemIsRemoved()
+        {
+            var shipmentTypeMock = mock.WithShipmentTypeFromShipmentManager(x => { });
+
+            var CustomsItem = new ShipmentCustomsItemEntity(2);
+
+            shipment.CustomsItems.Add(CustomsItem);
+            shipment.CustomsItems.Add(new ShipmentCustomsItemEntity(3));
+
+            var testObject = mock.Create<OtherShipmentAdapter>(TypedParameter.From(shipment));
+            testObject.DeleteCustomsItem(new ShipmentCustomsItemAdapter(CustomsItem));
+
+            shipmentTypeMock.Verify(x => x.UpdateDynamicShipmentData(shipment));
+            shipmentTypeMock.Verify(x => x.UpdateTotalWeight(shipment));
+        }
+
+        [Fact]
+        public void DeleteCustomsItem_DelegatesToCustomsManager_WhenCustomsItemIsRemoved()
+        {
+            var CustomsItem = new ShipmentCustomsItemEntity(2);
+
+            shipment.CustomsItems.Add(CustomsItem);
+            shipment.CustomsItems.Add(new ShipmentCustomsItemEntity(3));
+
+            var testObject = mock.Create<OtherShipmentAdapter>(TypedParameter.From(shipment));
+            testObject.DeleteCustomsItem(new ShipmentCustomsItemAdapter(CustomsItem));
+
+            mock.Mock<ICustomsManager>().Verify(x => x.EnsureCustomsLoaded(new[] { shipment }));
+        }
+
+        [Fact]
+        public void DeleteCustomsItem_AddsCustomsItemToRemovedEntityCollection_WhenCustomsItemIsRemoved()
+        {
+            var CustomsItem = new ShipmentCustomsItemEntity(2);
+
+            shipment.CustomsItems.Add(CustomsItem);
+            shipment.CustomsItems.Add(new ShipmentCustomsItemEntity(3));
+
+            var testObject = mock.Create<OtherShipmentAdapter>(TypedParameter.From(shipment));
+            testObject.DeleteCustomsItem(new ShipmentCustomsItemAdapter(CustomsItem));
+
+            Assert.Contains(CustomsItem, shipment.CustomsItems.RemovedEntitiesTracker.OfType<ShipmentCustomsItemEntity>());
+        }
+
+        public void Dispose()
+        {
+            mock.Dispose();
         }
     }
 }
