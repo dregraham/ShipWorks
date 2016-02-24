@@ -438,7 +438,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
         }
 
         [Fact]
-        public void CheckRestriction_ReturnsHidden_WhenCannotFindRestriction()
+        public void CheckRestriction_ReturnsNone_WhenCannotFindRestriction()
         {
             using (var mock = AutoMock.GetLoose())
             {
@@ -453,7 +453,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
 
                 var editionRestrictionLevel = testObject.CheckRestriction(EditionFeature.GenericFile, null);
 
-                Assert.Equal(EditionRestrictionLevel.Hidden, editionRestrictionLevel);
+                Assert.Equal(EditionRestrictionLevel.None, editionRestrictionLevel);
             }
         }
 

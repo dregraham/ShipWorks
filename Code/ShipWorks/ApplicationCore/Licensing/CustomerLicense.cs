@@ -266,9 +266,9 @@ namespace ShipWorks.ApplicationCore.Licensing
             float currentShipmentPercentage = (float) LicenseCapabilities.ProcessedShipments/
                                               LicenseCapabilities.ShipmentLimit;
 
-            return currentShipmentPercentage >= ShipmentLimitWarningThreshold
-                ? new DashboardLicenseItem(LicenseCapabilities.BillingEndDate)
-                : null;
+            return currentShipmentPercentage >= ShipmentLimitWarningThreshold ?
+                new DashboardLicenseItem(LicenseCapabilities.BillingEndDate) :
+                null;
         }
 
         /// <summary>
@@ -278,7 +278,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         {
             IFeatureRestriction restriction = featureRestrictions.SingleOrDefault(r => r.EditionFeature == feature);
 
-            return restriction?.Check(LicenseCapabilities, data) ?? EditionRestrictionLevel.Hidden;
+            return restriction?.Check(LicenseCapabilities, data) ?? EditionRestrictionLevel.None;
         }
 
         /// <summary>

@@ -2,10 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Autofac;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Utility;
+using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Editions;
 using ShipWorks.Shipping.Carriers.Postal.Endicia;
@@ -168,27 +171,39 @@ namespace ShipWorks.Shipping.Carriers.Postal
                     services.Remove(PostalServiceType.StandardPost);
                 }
 
-                if (shipmentType == ShipmentTypeCode.Endicia)
+                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
                 {
-                    // If consolidation is supported, add it in
-                    if (EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.EndiciaConsolidator).Level == EditionRestrictionLevel.None)
+                    var licenseService = lifetimeScope.Resolve<ILicenseService>();
+
+                    if (shipmentType == ShipmentTypeCode.Endicia)
                     {
-                        services.Add(PostalServiceType.ConsolidatorDomestic);
+                        // If consolidation is supported, add it in
+                        if (
+                            EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.EndiciaConsolidator).Level ==
+                            EditionRestrictionLevel.None)
+                        {
+                            services.Add(PostalServiceType.ConsolidatorDomestic);
+                        }
+
+                        // If not restricted from Endicia DHL, add them in
+                        if (licenseService.CheckRestriction(EditionFeature.EndiciaDhl, null) == EditionRestrictionLevel.None)
+                        {
+                            services.AddRange(
+                                EnumHelper.GetEnumList<PostalServiceType>(
+                                    service => ShipmentTypeManager.IsEndiciaDhl(service)).Select(entry => entry.Value));
+                        }
                     }
 
-                    // If not restricted from Endicia DHL, add them in
-                    if (EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.EndiciaDhl).Level == EditionRestrictionLevel.None)
+                    if (shipmentType == ShipmentTypeCode.Usps)
                     {
-                        services.AddRange(EnumHelper.GetEnumList<PostalServiceType>(service => ShipmentTypeManager.IsEndiciaDhl(service)).Select(entry => entry.Value));
-                    }
-                }
-
-                if (shipmentType == ShipmentTypeCode.Usps)
-                {
-                    // If not restricted from Stamps DHL, add them in
-                    if (EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.StampsDhl).Level == EditionRestrictionLevel.None)
-                    {
-                        services.AddRange(EnumHelper.GetEnumList<PostalServiceType>(service => ShipmentTypeManager.IsStampsDhl(service)).Select(entry => entry.Value));
+                        // If not restricted from Stamps DHL, add them in
+                        if (EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.StampsDhl).Level ==
+                            EditionRestrictionLevel.None)
+                        {
+                            services.AddRange(
+                                EnumHelper.GetEnumList<PostalServiceType>(
+                                    service => ShipmentTypeManager.IsStampsDhl(service)).Select(entry => entry.Value));
+                        }
                     }
                 }
 

@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Autofac;
+using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Editions;
 using ShipWorks.Shipping.Carriers.UPS;
@@ -84,7 +87,11 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// </summary>
         public bool IsEndiciaDHLEnabled()
         {
-            return (activeRestrictions.CheckRestriction(EditionFeature.EndiciaDhl).Level == EditionRestrictionLevel.None);
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                return (lifetimeScope.Resolve<ILicenseService>().CheckRestriction(EditionFeature.EndiciaDhl, null) ==
+                    EditionRestrictionLevel.None);
+            }
         }
 
         /// <summary>
