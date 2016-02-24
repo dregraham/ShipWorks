@@ -1,14 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Drawing;
 using ShipWorks.Properties;
 using System.Windows.Forms;
 using System.Reflection;
+using Autofac;
+using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.UI.Controls;
+using IContainer = System.ComponentModel.IContainer;
 
 namespace ShipWorks.Editions
 {
@@ -47,7 +49,7 @@ namespace ShipWorks.Editions
             EditionManager.RestrictionsChanged += new EventHandler(OnEditionRestrictionsChanged);
         }
 
-        /// <summary> 
+        /// <summary>
         /// Clean up any resources being used.
         /// </summary>
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
@@ -105,7 +107,7 @@ namespace ShipWorks.Editions
             var element = new ManagedElement(component, feature, dataProvider);
             element.UpdateUI();
 
-            managedElements.Add(element);            
+            managedElements.Add(element);
         }
 
         /// <summary>
@@ -193,37 +195,44 @@ namespace ShipWorks.Editions
             /// </summary>
             public void UpdateUI()
             {
-                EditionRestrictionIssue restriction = EditionManager.ActiveRestrictions.CheckRestriction(feature, dataProvider != null ? dataProvider() : null);
-
-                if (restriction.Level == EditionRestrictionLevel.Hidden)
+                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
                 {
-                    throw new InvalidOperationException("Completely hiding GUI elements is not currently supported.");
-                }
+                    ILicenseService service = lifetimeScope.Resolve<ILicenseService>();
 
-                bool needsRestricted = restriction.Level != EditionRestrictionLevel.None;
+                    EditionRestrictionLevel restriction = service?.CheckRestriction(feature, dataProvider?.Invoke()) ?? EditionRestrictionLevel.None;
 
-                if ((needsRestricted && !isRestricted) || (!needsRestricted && isRestricted))
-                {
-                    ApplyRestriction(component as Button, restriction);
-                    ApplyRestriction(component as LinkControl, restriction);
-                    ApplyRestriction(component as ToolStripMenuItem, restriction);
-                    ApplyRestriction(component as Divelements.SandRibbon.Button, restriction);
+                    if (restriction == EditionRestrictionLevel.Hidden)
+                    {
+                        throw new InvalidOperationException("Completely hiding GUI elements is not currently supported.");
+                    }
+
+                    bool needsRestricted = restriction != EditionRestrictionLevel.None;
+
+                    if ((needsRestricted && !isRestricted) || (!needsRestricted && isRestricted))
+                    {
+                        ApplyRestriction(component as Button, restriction);
+                        ApplyRestriction(component as LinkControl, restriction);
+                        ApplyRestriction(component as ToolStripMenuItem, restriction);
+                        ApplyRestriction(component as Divelements.SandRibbon.Button, restriction);
+                    }
                 }
             }
 
             /// <summary>
             /// Handler that gets called when we intercept the original click
             /// </summary>
-            private void InterceptOriginalClick(EditionRestrictionIssue restriction)
+            private void InterceptOriginalClick()
             {
                 IWin32Window owner = GetWindow(component);
 
-                if (EditionManager.HandleRestrictionIssue(owner, restriction))
+                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
                 {
-                    // Could be null in Ribbon popup case
-                    if (originalClick != null)
+                    ILicenseService licenseService = lifetimeScope.Resolve<ILicenseService>();
+
+                    if (licenseService?.HandleRestriction(feature, null, owner) ?? false)
                     {
-                        originalClick(component, EventArgs.Empty);
+                        // Could be null in Ribbon popup case
+                        originalClick?.Invoke(component, EventArgs.Empty);
                     }
                 }
             }
@@ -231,7 +240,7 @@ namespace ShipWorks.Editions
             /// <summary>
             /// Setup the restriction
             /// </summary>
-            private void ApplyRestriction(Button button, EditionRestrictionIssue restriction)
+            private void ApplyRestriction(Button button, EditionRestrictionLevel restriction)
             {
                 if (button == null)
                 {
@@ -239,7 +248,7 @@ namespace ShipWorks.Editions
                 }
 
                 EventHandlerList handlerList = (EventHandlerList) componentEventsProperty.GetValue(button, null);
-                bool restrict = restriction.Level != EditionRestrictionLevel.None;
+                bool restrict = restriction != EditionRestrictionLevel.None;
 
                 if (restrict)
                 {
@@ -247,7 +256,7 @@ namespace ShipWorks.Editions
                     originalClick = (EventHandler) handlerList[formsButtonClickEventID];
 
                     button.Image = EditionGuiHelper.GetLockImage(originalImage.Size.Width);
-                    handlerList[formsButtonClickEventID] = new EventHandler((object sender, EventArgs e) => InterceptOriginalClick(restriction));
+                    handlerList[formsButtonClickEventID] = new EventHandler((object sender, EventArgs e) => InterceptOriginalClick());
                 }
                 else
                 {
@@ -261,7 +270,7 @@ namespace ShipWorks.Editions
             /// <summary>
             /// Setup the restriction
             /// </summary>
-            private void ApplyRestriction(LinkControl link, EditionRestrictionIssue restriction)
+            private void ApplyRestriction(LinkControl link, EditionRestrictionLevel restriction)
             {
                 if (link == null)
                 {
@@ -269,15 +278,15 @@ namespace ShipWorks.Editions
                 }
 
                 EventHandlerList handlerList = (EventHandlerList) componentEventsProperty.GetValue(link, null);
-                bool restrict = restriction.Level != EditionRestrictionLevel.None;
+                bool restrict = restriction != EditionRestrictionLevel.None;
 
                 if (restrict)
                 {
                     originalImage = link.Image;
                     originalClick = (EventHandler) handlerList[formsButtonClickEventID];
 
-                    link.Image = EditionGuiHelper.GetLockImage(originalImage != null ? originalImage.Size.Width : link.Height);
-                    handlerList[formsButtonClickEventID] = new EventHandler((object sender, EventArgs e) => InterceptOriginalClick(restriction));
+                    link.Image = EditionGuiHelper.GetLockImage(originalImage?.Size.Width ?? link.Height);
+                    handlerList[formsButtonClickEventID] = new EventHandler((object sender, EventArgs e) => InterceptOriginalClick());
 
                     if (originalImage == null)
                     {
@@ -304,7 +313,7 @@ namespace ShipWorks.Editions
             /// <summary>
             /// Setup the restriction
             /// </summary>
-            private void ApplyRestriction(ToolStripMenuItem menuItem, EditionRestrictionIssue restriction)
+            private void ApplyRestriction(ToolStripMenuItem menuItem, EditionRestrictionLevel restriction)
             {
                 if (menuItem == null)
                 {
@@ -312,7 +321,7 @@ namespace ShipWorks.Editions
                 }
 
                 EventHandlerList handlerList = (EventHandlerList) componentEventsProperty.GetValue(menuItem, null);
-                bool restrict = restriction.Level != EditionRestrictionLevel.None;
+                bool restrict = restriction != EditionRestrictionLevel.None;
 
                 if (restrict)
                 {
@@ -320,7 +329,7 @@ namespace ShipWorks.Editions
                     originalClick = (EventHandler) handlerList[toolStripClickEventID];
 
                     menuItem.Image = EditionGuiHelper.GetLockImage(originalImage.Size.Width);
-                    handlerList[toolStripClickEventID] = new EventHandler((object sender, EventArgs e) => InterceptOriginalClick(restriction));
+                    handlerList[toolStripClickEventID] = new EventHandler((object sender, EventArgs e) => InterceptOriginalClick());
                 }
                 else
                 {
@@ -334,14 +343,14 @@ namespace ShipWorks.Editions
             /// <summary>
             /// Setup the restriction
             /// </summary>
-            private void ApplyRestriction(Divelements.SandRibbon.Button button, EditionRestrictionIssue restriction)
+            private void ApplyRestriction(Divelements.SandRibbon.Button button, EditionRestrictionLevel restriction)
             {
                 if (button == null)
                 {
                     return;
                 }
 
-                bool restrict = restriction.Level != EditionRestrictionLevel.None;
+                bool restrict = restriction != EditionRestrictionLevel.None;
 
                 if (restrict)
                 {
@@ -350,7 +359,7 @@ namespace ShipWorks.Editions
                     originalSandPopup = button.PopupWidget;
 
                     button.Image = EditionGuiHelper.GetLockImage(originalImage.Size.Width);
-                    sandWidgetActivatedField.SetValue(button, new EventHandler((object sender, EventArgs e) => InterceptOriginalClick(restriction)));
+                    sandWidgetActivatedField.SetValue(button, new EventHandler((object sender, EventArgs e) => InterceptOriginalClick()));
                     button.PopupWidget = null;
                 }
                 else

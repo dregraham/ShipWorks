@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using Interapptive.Shared.Utility;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Editions;
 using ShipWorks.Stores;
@@ -10,7 +11,7 @@ using ShipWorks.Stores;
 namespace ShipWorks.ApplicationCore.Licensing
 {
     /// <summary>
-    /// Service for license related tasks 
+    /// Service for license related tasks
     /// </summary>
     public class LicenseService : ILicenseService
     {
@@ -31,7 +32,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         }
 
         /// <summary>
-        /// Customer Key read from the reader. 
+        /// Customer Key read from the reader.
         /// </summary>
         /// <exception cref="EncryptionException"></exception>
         private string CustomerKey => reader.Read();
@@ -70,7 +71,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public EditionRestrictionLevel CheckRestriction(EditionFeature feature, object data)
         {
-            return IsLegacy
+            return SqlSession.Current == null || IsLegacy
                 ? EditionManager.ActiveRestrictions.CheckRestriction(feature, data).Level
                 : customerLicenseFactory(CustomerKey).CheckRestriction(feature, data);
         }
@@ -80,7 +81,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public bool HandleRestriction(EditionFeature feature, object data, IWin32Window owner)
         {
-            return IsLegacy
+            return SqlSession.Current == null || IsLegacy
                 ? EditionManager.HandleRestrictionIssue(owner,
                     EditionManager.ActiveRestrictions.CheckRestriction(feature, data))
                 : customerLicenseFactory(CustomerKey).HandleRestriction(feature, data, owner);
@@ -126,7 +127,7 @@ namespace ShipWorks.ApplicationCore.Licensing
 
             ILicense customerLicense = customerLicenseFactory(CustomerKey);
 
-            // Customer licenses that are disabled cannot logon, refresh the 
+            // Customer licenses that are disabled cannot logon, refresh the
             // license info with tango before checking if the license is disabled
             customerLicense.Refresh();
 
