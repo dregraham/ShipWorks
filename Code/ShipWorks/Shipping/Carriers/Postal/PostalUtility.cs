@@ -72,7 +72,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
                     PostalServiceType.RrdEpsePacketService,
                     PostalServiceType.RrdGeneric
                 }
-            },
+            }
         };
 
         /// <summary>
@@ -135,7 +135,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// <summary>
         /// Get the domestic services valid for the given shipment type
         /// </summary>
-        [NDependIgnoreComplexMethodAttribute]
+        [NDependIgnoreComplexMethod]
         public static List<PostalServiceType> GetDomesticServices(ShipmentTypeCode shipmentType)
         {
             ShippingSettingsEntity settings = ShippingSettings.Fetch();
@@ -146,69 +146,61 @@ namespace ShipWorks.Shipping.Carriers.Postal
                 return new List<PostalServiceType>
                     {
                         PostalServiceType.PriorityMail,
-                        PostalServiceType.ExpressMail,
+                        PostalServiceType.ExpressMail
                     };
             }
-            else
+
+            var services = new List<PostalServiceType>
             {
-                var services = new List<PostalServiceType>
-                    {
-                        PostalServiceType.PriorityMail,
-                        PostalServiceType.ExpressMail,
-                        PostalServiceType.FirstClass,
-                        PostalServiceType.ParcelSelect,
-                        PostalServiceType.MediaMail,
-                        PostalServiceType.LibraryMail,
-                        PostalServiceType.CriticalMail,
-                        PostalServiceType.StandardPost
-                    };
+                PostalServiceType.PriorityMail,
+                PostalServiceType.ExpressMail,
+                PostalServiceType.FirstClass,
+                PostalServiceType.ParcelSelect,
+                PostalServiceType.MediaMail,
+                PostalServiceType.LibraryMail,
+                PostalServiceType.CriticalMail,
+                PostalServiceType.StandardPost
+            };
 
-                if (shipmentType == ShipmentTypeCode.Usps ||
-                    shipmentType == ShipmentTypeCode.Express1Usps ||
-                    shipmentType == ShipmentTypeCode.Express1Endicia)
-                {
-                    // As of the 01/28/2013 changes, Stamps.com does not support Parcel Post (now Standard Post)
-                    services.Remove(PostalServiceType.StandardPost);
-                }
-
-                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
-                {
-                    var licenseService = lifetimeScope.Resolve<ILicenseService>();
-
-                    if (shipmentType == ShipmentTypeCode.Endicia)
-                    {
-                        // If consolidation is supported, add it in
-                        if (licenseService.CheckRestriction(EditionFeature.EndiciaConsolidator, null) ==
-                            EditionRestrictionLevel.None)
-                        {
-                            services.Add(PostalServiceType.ConsolidatorDomestic);
-                        }
-
-                        // If not restricted from Endicia DHL, add them in
-                        if (licenseService.CheckRestriction(EditionFeature.EndiciaDhl, null) ==
-                            EditionRestrictionLevel.None)
-                        {
-                            services.AddRange(
-                                EnumHelper.GetEnumList<PostalServiceType>(ShipmentTypeManager.IsEndiciaDhl)
-                                .Select(entry => entry.Value));
-                        }
-                    }
-
-                    if (shipmentType == ShipmentTypeCode.Usps)
-                    {
-                        // If not restricted from Stamps DHL, add them in
-                        if (EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.StampsDhl).Level ==
-                            EditionRestrictionLevel.None)
-                        {
-                            services.AddRange(
-                                EnumHelper.GetEnumList<PostalServiceType>(
-                                    service => ShipmentTypeManager.IsStampsDhl(service)).Select(entry => entry.Value));
-                        }
-                    }
-                }
-
-                return services;
+            if (shipmentType == ShipmentTypeCode.Usps || shipmentType == ShipmentTypeCode.Express1Usps ||
+                shipmentType == ShipmentTypeCode.Express1Endicia)
+            {
+                // As of the 01/28/2013 changes, Stamps.com does not support Parcel Post (now Standard Post)
+                services.Remove(PostalServiceType.StandardPost);
             }
+
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                var licenseService = lifetimeScope.Resolve<ILicenseService>();
+
+                if (shipmentType == ShipmentTypeCode.Endicia)
+                {
+                    // If consolidation is supported, add it in
+                    if (licenseService.CheckRestriction(EditionFeature.EndiciaConsolidator, null) == EditionRestrictionLevel.None)
+                    {
+                        services.Add(PostalServiceType.ConsolidatorDomestic);
+                    }
+
+                    // If not restricted from Endicia DHL, add them in
+                    if (licenseService.CheckRestriction(EditionFeature.EndiciaDhl, null) == EditionRestrictionLevel.None)
+                    {
+                        services.AddRange(EnumHelper.GetEnumList<PostalServiceType>(ShipmentTypeManager.IsEndiciaDhl)
+                            .Select(entry => entry.Value));
+                    }
+                }
+
+                if (shipmentType == ShipmentTypeCode.Usps)
+                {
+                    // If not restricted from Stamps DHL, add them in
+                    if (licenseService.CheckRestriction(EditionFeature.StampsDhl, null) == EditionRestrictionLevel.None)
+                    {
+                        services.AddRange(EnumHelper.GetEnumList<PostalServiceType>(ShipmentTypeManager.IsStampsDhl)
+                            .Select(entry => entry.Value));
+                    }
+                }
+            }
+
+            return services;
         }
 
         /// <summary>
@@ -224,56 +216,51 @@ namespace ShipWorks.Shipping.Carriers.Postal
                 return new List<PostalServiceType>
                     {
                         PostalServiceType.InternationalPriority,
-                        PostalServiceType.InternationalExpress,
+                        PostalServiceType.InternationalExpress
                     };
             }
-            else
+
+            var services = new List<PostalServiceType>
             {
-                var services = new List<PostalServiceType>
-                    {
-                        PostalServiceType.InternationalPriority,
-                        PostalServiceType.InternationalFirst,
-                        PostalServiceType.InternationalExpress,
+                PostalServiceType.InternationalPriority,
+                PostalServiceType.InternationalFirst,
+                PostalServiceType.InternationalExpress,
 
-                        // Deprecated values, these get filtered out before being bound to a ComboBox
-                        PostalServiceType.ExpressMailPremium,
-                        PostalServiceType.GlobalExpressGuaranteed,
-                        PostalServiceType.GlobalExpressGuaranteedNonDocument
-                    };
+                // Deprecated values, these get filtered out before being bound to a ComboBox
+                PostalServiceType.ExpressMailPremium,
+                PostalServiceType.GlobalExpressGuaranteed,
+                PostalServiceType.GlobalExpressGuaranteedNonDocument
+            };
 
-                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                var licenseService = lifetimeScope.Resolve<ILicenseService>();
+
+                if (shipmentType == ShipmentTypeCode.Endicia)
                 {
-                    var licenseService = lifetimeScope.Resolve<ILicenseService>();
-
-                    if (shipmentType == ShipmentTypeCode.Endicia)
+                    // If consolidation is supported, add it in
+                    if (licenseService.CheckRestriction(EditionFeature.EndiciaConsolidator, null) ==
+                        EditionRestrictionLevel.None)
                     {
-                        // If consolidation is supported, add it in
-                        if (licenseService.CheckRestriction(EditionFeature.EndiciaConsolidator, null) ==
-                            EditionRestrictionLevel.None)
-                        {
-                            services.Add(PostalServiceType.ConsolidatorInternational);
-                            services.Add(PostalServiceType.ConsolidatorIpa);
-                            services.Add(PostalServiceType.ConsolidatorIsal);
-                            services.Add(PostalServiceType.CommercialePacket);
-                        }
+                        services.Add(PostalServiceType.ConsolidatorInternational);
+                        services.Add(PostalServiceType.ConsolidatorIpa);
+                        services.Add(PostalServiceType.ConsolidatorIsal);
+                        services.Add(PostalServiceType.CommercialePacket);
                     }
-
-                    if (shipmentType == ShipmentTypeCode.Usps)
-                    {
-                        // Get a list of any consolidators that should be available to customers
-                        IEnumerable<PostalServiceType> accesibleConsolidatorTypes = uspsConsolidatorServiceTypes
-                            .Where(
-                                x =>
-                                    EditionManager.ActiveRestrictions.CheckRestriction(x.Key).Level ==
-                                    EditionRestrictionLevel.None)
-                            .SelectMany(x => x.Value)
-                            .ToList();
-
-                        services.AddRange(accesibleConsolidatorTypes);
-                    }
-
-                    return services;
                 }
+
+                if (shipmentType == ShipmentTypeCode.Usps)
+                {
+                    // Get a list of any consolidators that should be available to customers
+                    IEnumerable<PostalServiceType> accesibleConsolidatorTypes = uspsConsolidatorServiceTypes
+                        .Where(x =>licenseService.CheckRestriction(x.Key, null) == EditionRestrictionLevel.None)
+                        .SelectMany(x => x.Value)
+                        .ToList();
+
+                    services.AddRange(accesibleConsolidatorTypes);
+                }
+
+                return services;
             }
         }
 
