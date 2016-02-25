@@ -198,12 +198,6 @@ namespace ShipWorks.Editions
         /// </summary>
         [Description("Your ShipWorks account does not support using RR Donnelley as a consolidator through Stamps.")]
         StampsRrDonnelleyConsolidator,
-        
-        /// <summary>
-        /// Custom data source restriction
-        /// </summary>
-        [Description("Your ShipWorks account does not support using custom data sources")]
-        CustomDataSources,
 
         /// <summary>
         /// The channel count
