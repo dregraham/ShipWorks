@@ -591,6 +591,18 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         }
 
         /// <summary>
+        /// Checks to see if the given account number is allowed based on the edition of ShipWorks
+        /// </summary>
+        private bool AccountAllowed(string endiciaAccountNumber)
+        {
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                return lifetimeScope.Resolve<ILicenseService>()
+                        .HandleRestriction(EditionFeature.EndiciaAccountNumber, endiciaAccountNumber, this);
+            }
+        }
+
+        /// <summary>
         /// Stepping next from the account page
         /// </summary>
         private void OnStepNextAccount(object sender, WizardStepEventArgs e)
@@ -607,15 +619,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 return;
             }
 
-            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            if (!AccountAllowed(accountNumber.Text.Trim()))
             {
-                // Edition check
-                ILicenseService licenseService = lifetimeScope.Resolve<ILicenseService>();
-                if (!licenseService.HandleRestriction(EditionFeature.EndiciaAccountNumber, accountNumber.Text.Trim(), this))
-                {
-                    e.NextPage = CurrentPage;
-                    return;
-                }
+                e.NextPage = CurrentPage;
+                return;
             }
 
             Cursor.Current = Cursors.WaitCursor;
