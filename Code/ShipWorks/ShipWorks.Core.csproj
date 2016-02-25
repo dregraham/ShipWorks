@@ -606,6 +606,7 @@
     <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\EndiciaDhlRestriction.cs" />
     <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\EndiciaScanBasedReturnsRestriction.cs" />
     <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\IFeatureRestriction.cs" />
+    <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\StampsAscendiaConsolidatorRestriction.cs" />
     <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\StampsInsuranceRestriction.cs" />
     <Compile Include="ApplicationCore\Licensing\IActivationResponse.cs" />
     <Compile Include="ApplicationCore\Licensing\IAddStoreResponse.cs" />
