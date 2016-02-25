@@ -7,12 +7,12 @@ namespace ShipWorks.ApplicationCore.Licensing.FeatureRestrictions
         /// <summary>
         /// The edition feature
         /// </summary>
-        public EditionFeature EditionFeature => EditionFeature.EndiciaConsolidator;
+        public override EditionFeature EditionFeature => EditionFeature.EndiciaConsolidator;
 
         /// <summary>
         /// Checks the license capabilities to see if Endicia consolidators are enabled
         /// </summary>
-        public EditionRestrictionLevel Check(ILicenseCapabilities capabilities, object data)
+        public override EditionRestrictionLevel Check(ILicenseCapabilities capabilities, object data)
         {
             return capabilities.EndiciaConsolidator ? EditionRestrictionLevel.None : EditionRestrictionLevel.Hidden;
         }

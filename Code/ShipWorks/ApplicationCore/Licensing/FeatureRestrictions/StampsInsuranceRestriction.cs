@@ -7,12 +7,12 @@ namespace ShipWorks.ApplicationCore.Licensing.FeatureRestrictions
         /// <summary>
         /// The edition feature
         /// </summary>
-        public EditionFeature EditionFeature => EditionFeature.StampsInsurance;
+        public override EditionFeature EditionFeature => EditionFeature.StampsInsurance;
 
         /// <summary>
         /// Checks the license capabilities to see if StampsInsurance is enabled
         /// </summary>
-        public EditionRestrictionLevel Check(ILicenseCapabilities capabilities, object data)
+        public override EditionRestrictionLevel Check(ILicenseCapabilities capabilities, object data)
         {
             return capabilities.StampsInsurance ? EditionRestrictionLevel.None : EditionRestrictionLevel.Hidden;
         }

@@ -306,9 +306,14 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public bool HandleRestriction(EditionFeature feature, object data, IWin32Window owner)
         {
+            if (LicenseCapabilities==null)
+            {
+                Refresh();
+            }
+
             return featureRestrictions
                 .Where(restriction => restriction.EditionFeature == feature)
-                .Select(restriction => restriction.Handle(owner, data))
+                .Select(restriction => restriction.Handle(owner, LicenseCapabilities, data))
                 .SingleOrDefault();
         }
     }

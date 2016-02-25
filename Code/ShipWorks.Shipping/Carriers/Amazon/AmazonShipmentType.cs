@@ -182,7 +182,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// <summary>
         /// Gets a value indicating whether this instance is shipment type restricted.
         /// </summary>
-        /// 
+        /// <remarks>
         /// Overridden to use dependency
         /// </remarks>
         public override bool IsShipmentTypeRestricted

@@ -7,12 +7,12 @@ namespace ShipWorks.ApplicationCore.Licensing.FeatureRestrictions
         /// <summary>
         /// The edition feature
         /// </summary>
-        public EditionFeature EditionFeature => EditionFeature.StampsDhlConsolidator;
+        public override EditionFeature EditionFeature => EditionFeature.StampsDhlConsolidator;
 
         /// <summary>
         /// Checks the license capabilities to see if StampsDhlConsolidator is enabled
         /// </summary>
-        public EditionRestrictionLevel Check(ILicenseCapabilities capabilities, object data)
+        public override EditionRestrictionLevel Check(ILicenseCapabilities capabilities, object data)
         {
             return capabilities.StampsDhlConsolidator ? EditionRestrictionLevel.None : EditionRestrictionLevel.Hidden;
         }

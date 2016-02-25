@@ -7,12 +7,12 @@ namespace ShipWorks.ApplicationCore.Licensing.FeatureRestrictions
         /// <summary>
         /// Gets the edition feature.
         /// </summary>
-        public EditionFeature EditionFeature => EditionFeature.EndiciaInsurance;
+        public override EditionFeature EditionFeature => EditionFeature.EndiciaInsurance;
 
         /// <summary>
         /// Checks the restriction for this feature
         /// </summary>
-        public EditionRestrictionLevel Check(ILicenseCapabilities capabilities, object data)
+        public override EditionRestrictionLevel Check(ILicenseCapabilities capabilities, object data)
         {
             return capabilities.EndiciaInsurance ? EditionRestrictionLevel.None : EditionRestrictionLevel.Hidden;
         }

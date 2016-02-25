@@ -18,6 +18,6 @@ namespace ShipWorks.ApplicationCore.Licensing.FeatureRestrictions
         /// <summary>
         /// Handles the restriction for this feature
         /// </summary>
-        bool Handle(IWin32Window owner, object data);
+        bool Handle(IWin32Window owner, ILicenseCapabilities capabilities, object data);
     }
 }

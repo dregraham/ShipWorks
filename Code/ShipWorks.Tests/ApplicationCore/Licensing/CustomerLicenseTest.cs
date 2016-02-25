@@ -543,7 +543,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
 
                 testObject.HandleRestriction(EditionFeature.EndiciaAccountLimit, null, window.Object);
 
-                feature.Verify(f=>f.Handle(It.IsAny<IWin32Window>(), It.IsAny<object>()));
+                feature.Verify(f=>f.Handle(It.IsAny<IWin32Window>(), It.IsAny<ILicenseCapabilities>(), It.IsAny<object>()));
             }
         }
 
@@ -558,7 +558,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
                 feature.SetupGet(f => f.EditionFeature)
                     .Returns(EditionFeature.EndiciaAccountLimit);
 
-                feature.Setup(f => f.Handle(It.IsAny<IWin32Window>(), It.IsAny<object>()))
+                feature.Setup(f => f.Handle(It.IsAny<IWin32Window>(), It.IsAny<ILicenseCapabilities>(), It.IsAny<object>()))
                     .Returns(value);
 
                 Mock<IWin32Window> window = mock.Mock<IWin32Window>();
@@ -605,7 +605,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
 
                 testObject.HandleRestriction(EditionFeature.EndiciaAccountLimit, "foo", window.Object);
 
-                feature.Verify(f => f.Handle(It.IsAny<IWin32Window>(), "foo"));
+                feature.Verify(f => f.Handle(It.IsAny<IWin32Window>(), It.IsAny<ILicenseCapabilities>(), "foo"));
             }
         }
     }
