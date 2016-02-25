@@ -1,5 +1,6 @@
 using System;
 using System.Windows.Forms;
+using Autofac;
 using Interapptive.Shared;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores;
@@ -185,8 +186,14 @@ namespace ShipWorks.ApplicationCore.Licensing
             }
 
             // Check store count limitation
-            EditionRestrictionIssue issue = EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.SingleStore);
-            if (issue.Level != EditionRestrictionLevel.None)
+            EditionRestrictionLevel restrictionLevel;
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                ILicenseService licenseService = lifetimeScope.Resolve<ILicenseService>();
+                restrictionLevel = licenseService.CheckRestriction(EditionFeature.SelectionLimit, virtualSelection.Count);
+            }
+
+            if (restrictionLevel != EditionRestrictionLevel.None)
             {
                 if (StoreManager.GetAllStores().Count > 1)
                 {

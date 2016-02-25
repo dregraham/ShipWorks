@@ -13,7 +13,6 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.FeatureRestrictions
         private readonly AutoMock mock;
         private readonly EndiciaInsuranceRestriction testObject;
 
-
         public EndiciaInsuranceRestrictionTest()
         {
             mock = AutoMock.GetLoose();
