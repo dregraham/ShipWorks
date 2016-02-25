@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Utility;
@@ -156,88 +155,9 @@ namespace ShipWorks.Shipping.Services
         public abstract int ServiceType { get; set; }
 
         /// <summary>
-        /// The shipment's customs items
-        /// </summary>
-        public virtual EntityCollection<ShipmentCustomsItemEntity> CustomsItems
-        {
-            get
-            {
-                if (customsItems == null || !customsItems.Any() || !shipment.CustomsGenerated)
-                {
-                    UpdateDynamicData();
-                    customsItems = shipment.CustomsItems;
-                }
-
-                return customsItems;
-            }
-            set
-            {
-                customsItems = value;
-
-                if (customsItems == null)
-                {
-                    return;
-                }
-
-                try
-                {
-                    List<ShipmentCustomsItemEntity> objectIDsToAdd =
-                    customsItems.Where(ci => ci.IsNew)
-                        .Select(ci => ci.ObjectID)
-                        .Except(shipment.CustomsItems.Select(ci => ci.ObjectID))
-                        .Select(ci => customsItems.First(sci => sci.ObjectID == ci))
-                        .ToList();
-
-                    List<Guid> objectIDsToDelete =
-                        shipment.CustomsItems.Select(ci => ci.ObjectID)
-                            .Except(customsItems.Select(ci => ci.ObjectID))
-                            .ToList();
-
-                    UpdateCustomsItemsForShipment(objectIDsToAdd, objectIDsToDelete);
-                }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine(ex.Message);
-                }
-            }
-        }
-
-        /// <summary>
         /// Clone the shipment adapter and shipment
         /// </summary>
         public abstract ICarrierShipmentAdapter Clone();
-
-        /// <summary>
-        /// Add/Remove customs items
-        /// </summary>
-        private void UpdateCustomsItemsForShipment(List<ShipmentCustomsItemEntity> objectIDsToAdd, List<Guid> objectIDsToDelete)
-        {
-            foreach (ShipmentCustomsItemEntity sci in objectIDsToAdd)
-            {
-                sci.Shipment = Shipment;
-            }
-
-            foreach (Guid objectID in objectIDsToDelete)
-            {
-                ShipmentCustomsItemEntity sci = shipment.CustomsItems.First(ci => ci.ObjectID == objectID);
-                shipment.CustomsItems.Remove(sci);
-            }
-
-            for (int i = 0; i < customsItems.Count; i++)
-            {
-                ShipmentCustomsItemEntity newShipmentCustomsItem = customsItems[i];
-                ShipmentCustomsItemEntity origShipmentCustomsItem = shipment.CustomsItems[i];
-                origShipmentCustomsItem.CountryOfOrigin = newShipmentCustomsItem.CountryOfOrigin;
-                origShipmentCustomsItem.Description = newShipmentCustomsItem.Description;
-                origShipmentCustomsItem.HarmonizedCode = newShipmentCustomsItem.HarmonizedCode;
-                origShipmentCustomsItem.NumberOfPieces = newShipmentCustomsItem.NumberOfPieces;
-                origShipmentCustomsItem.Quantity = newShipmentCustomsItem.Quantity;
-                origShipmentCustomsItem.ShipmentCustomsItemID = newShipmentCustomsItem.ShipmentCustomsItemID;
-                origShipmentCustomsItem.UnitPriceAmount = newShipmentCustomsItem.UnitPriceAmount;
-                origShipmentCustomsItem.UnitValue = newShipmentCustomsItem.UnitValue;
-                origShipmentCustomsItem.Weight = newShipmentCustomsItem.Weight;
-            }
-        }
 
         /// <summary>
         /// List of package adapters for the shipment
@@ -355,7 +275,7 @@ namespace ShipWorks.Shipping.Services
         /// <summary>
         /// Get a list of customs item adapters for this shipment
         /// </summary>
-        public IEnumerable<IShipmentCustomsItemAdapter> GetCustomsItemAdapters()
+        public virtual IEnumerable<IShipmentCustomsItemAdapter> GetCustomsItemAdapters()
         {
             if (!shipment.Processed)
             {
