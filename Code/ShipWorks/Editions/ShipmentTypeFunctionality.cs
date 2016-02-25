@@ -25,10 +25,11 @@ namespace ShipWorks.Editions
         {
             shipmentTypeRestrictions = new Dictionary<ShipmentTypeCode, List<ShipmentTypeRestrictionType>>();
         }
-        
+
         /// <summary>
         /// Deserializes the XML in the specified path looking for data in the ShipmentTypeFunctionality node.
         /// </summary>
+        /// <param name="storeId">the storeid</param>
         /// <param name="path">The path.</param>
         /// <returns>An instance of ShipmentTypeFunctionality.</returns>
         public static ShipmentTypeFunctionality Deserialize(long storeId, XPathNavigator path)
@@ -46,6 +47,7 @@ namespace ShipWorks.Editions
         /// <summary>
         /// Deserializes the specified source.
         /// </summary>
+        /// <param name="storeId">the storeid</param>
         /// <param name="source">The source.</param>
         /// <returns></returns>
         public static ShipmentTypeFunctionality Deserialize(long storeId, XElement source)
@@ -57,6 +59,7 @@ namespace ShipWorks.Editions
         /// Deserializes the XML in the specified XElement for data in the ShipmentTypeFunctionality node; no restrictions
         /// are configured if the node is not found.
         /// </summary>
+        /// <param name="storeId">the storeid</param>
         /// <param name="source">The source.</param>
         /// <param name="storePolicyConfigurationAction">Action to store policy configuration.</param>
         /// <returns>
@@ -105,9 +108,10 @@ namespace ShipWorks.Editions
         /// Gets the <see cref="IEnumerable{ShipmentTypeRestrictionType}"/> with the specified key.
         /// </summary>
         public IEnumerable<ShipmentTypeRestrictionType> this[ShipmentTypeCode key]
-        {
-            get { return shipmentTypeRestrictions.ContainsKey(key) ? shipmentTypeRestrictions[key] : new List<ShipmentTypeRestrictionType>(); }
-        }
+            =>
+                shipmentTypeRestrictions.ContainsKey(key)
+                    ? shipmentTypeRestrictions[key]
+                    : new List<ShipmentTypeRestrictionType>();
 
         /// <summary>
         /// Returns a <see cref="System.String" /> that represents this instance.
@@ -146,7 +150,6 @@ namespace ShipWorks.Editions
                 // No restrictions for this key yet, so add them
                 shipmentTypeRestrictions.Add(shipmentTypeCode, restrictions);
             }
-            
         }
     }
 }

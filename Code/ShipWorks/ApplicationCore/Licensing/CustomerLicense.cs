@@ -296,6 +296,11 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public EditionRestrictionLevel CheckRestriction(EditionFeature feature, object data)
         {
+            if (LicenseCapabilities == null)
+            {
+                Refresh();
+            }
+
             IFeatureRestriction restriction = featureRestrictions.SingleOrDefault(r => r.EditionFeature == feature);
 
             return restriction?.Check(LicenseCapabilities, data) ?? EditionRestrictionLevel.None;
@@ -306,15 +311,15 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public bool HandleRestriction(EditionFeature feature, object data, IWin32Window owner)
         {
-            if (LicenseCapabilities==null)
+            if (LicenseCapabilities == null)
             {
                 Refresh();
             }
 
             return featureRestrictions
-                .Where(restriction => restriction.EditionFeature == feature)
-                .Select(restriction => restriction.Handle(owner, LicenseCapabilities, data))
-                .SingleOrDefault();
+                .Where(r => r.EditionFeature == feature)
+                .Select(r => (bool?) r.Handle(owner, data))
+                .SingleOrDefault() ?? true;
         }
     }
 }

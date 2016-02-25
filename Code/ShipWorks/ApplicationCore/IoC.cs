@@ -8,6 +8,7 @@ using Interapptive.Shared.Pdf;
 using log4net;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Licensing.Activation;
+using ShipWorks.ApplicationCore.Licensing.FeatureRestrictions;
 using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Common;
@@ -155,6 +156,12 @@ namespace ShipWorks.ApplicationCore
             builder
                 .RegisterAssemblyTypes(Assembly.GetAssembly(typeof(ILicenseEnforcer)))
                 .Where(t => typeof(ILicenseEnforcer).IsAssignableFrom(t))
+                .InstancePerLifetimeScope()
+                .AsImplementedInterfaces();
+
+            builder
+                .RegisterAssemblyTypes(Assembly.GetAssembly(typeof(IFeatureRestriction)))
+                .Where(t => typeof(IFeatureRestriction).IsAssignableFrom(t))
                 .InstancePerLifetimeScope()
                 .AsImplementedInterfaces();
         }

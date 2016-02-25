@@ -1,9 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Xml;
+using System.Xml.Linq;
 using System.Xml.XPath;
 using Interapptive.Shared.Utility;
+using ShipWorks.Editions;
+using ShipWorks.Shipping;
+using ShipWorks.Shipping.Policies;
 using ShipWorks.Stores;
 
 namespace ShipWorks.ApplicationCore.Licensing
@@ -22,6 +27,9 @@ namespace ShipWorks.ApplicationCore.Licensing
         {
             MethodConditions.EnsureArgumentIsNotNull(xmlResponse, nameof(xmlResponse));
 
+            ShipmentTypeRestriction = new Dictionary<ShipmentTypeCode, IEnumerable<ShipmentTypeRestrictionType>>();
+            ShipmentTypeShippingPolicy = new Dictionary<ShipmentTypeCode, Dictionary<ShippingPolicyType, string>>();
+            
             XPathNamespaceNavigator xpath = new XPathNamespaceNavigator(xmlResponse);
             xpath.Namespaces.AddNamespace("s", "http://schemas.xmlsoap.org/soap/envelope/");
             xpath.Namespaces.AddNamespace("a", "http://schemas.datacontract.org/2004/07/Sdc.Server.ShipWorksNet.Protocol.CustomerLicenseInfo");
@@ -36,9 +44,9 @@ namespace ShipWorks.ApplicationCore.Licensing
             MyFilters = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='MyFilters']/Value", 0) == 1;
             SelectionLimit = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='SelectionLimit']/Value", 0) == 1;
             AddOrderCustomer = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='AddOrderCustomer']/Value", 0) == 1;
-            ShipmentType = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='ShipmentType']/Value", 0) == 1;
             SingleStore = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='SingleStore']/Value", 0) == 1;
             ShipmentTypeRegistration = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='ShipmentTypeRegistration']/Value", 0) == 1;
+            ShipmentTypeFunctionality(xpath);
             ProcessShipment = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='ProcessShipment']/Value", 0) == 1;
             PurchasePostage = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='PurchasePostage']/Value", 0) == 1;
             RateDiscountMessaging = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='RateDiscountMessaging']/Value", 0) == 1;
@@ -110,7 +118,12 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// ShipmentType, can be forbidden or just restricted to upgrade
         /// </summary>
-        public bool ShipmentType { get; set; }
+        public Dictionary<ShipmentTypeCode, IEnumerable<ShipmentTypeRestrictionType>> ShipmentTypeRestriction { get; }
+
+        /// <summary>
+        /// ShipmentType, can be forbidden or just restricted to upgrade
+        /// </summary>
+        public Dictionary<ShipmentTypeCode, Dictionary<ShippingPolicyType, string>> ShipmentTypeShippingPolicy { get; }
 
         /// <summary>
         /// Restricted to a single store
@@ -269,6 +282,55 @@ namespace ShipWorks.ApplicationCore.Licensing
         public bool IsChannelAllowed(StoreTypeCode storeType)
         {
             return !forbiddenChannels.Contains(storeType);
+        }
+
+        /// <summary>
+        /// Checks for ShipmentType Functionality restrictions
+        /// </summary>
+        private void ShipmentTypeFunctionality(XPathNamespaceNavigator xpath)
+        {
+            XPathNodeIterator shipmentTypeFunctionality = xpath.Select("//ShipmentTypeFunctionality/ShipmentType");
+
+            while (shipmentTypeFunctionality.MoveNext())
+            {
+                XPathNavigator shipmentXpath = shipmentTypeFunctionality.Current;
+                int shipmentTypeCode;
+
+                if (Int32.TryParse(shipmentXpath.GetAttribute("TypeCode", ""), out shipmentTypeCode))
+                {
+                    List<ShipmentTypeRestrictionType> restrictionsList = new List<ShipmentTypeRestrictionType>();
+
+                    XPathNodeIterator restrictions = shipmentXpath.Select("Restriction");
+                    while (restrictions.MoveNext())
+                    {
+                        XPathNavigator restriction = restrictions.Current;
+                        restrictionsList.Add(EnumHelper.GetEnumByApiValue<ShipmentTypeRestrictionType>(restriction.SelectSingleNode(".")?.Value));
+                    }
+
+                    ShipmentTypeRestriction.Add((ShipmentTypeCode)shipmentTypeCode, restrictionsList);
+
+
+                    Dictionary<ShippingPolicyType, string> featureList = new Dictionary<ShippingPolicyType, string>();
+
+                    XPathNodeIterator features = shipmentXpath.Select("Feature");
+                    while (features.MoveNext())
+                    {
+                        XPathNavigator feature = features.Current;
+                        
+                        string type = feature.SelectSingleNode("Type")?.Value;
+                        string value = feature.SelectSingleNode("Config")?.Value;
+
+                        ShippingPolicyType policy;
+
+                        if (Enum.TryParse(type, true, out policy))
+                        {
+                            featureList.Add(policy, value);
+                        }
+                    }
+
+                    ShipmentTypeShippingPolicy.Add((ShipmentTypeCode)shipmentTypeCode, featureList);
+                }
+            }
         }
 
         /// <summary>

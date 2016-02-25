@@ -1,4 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using ShipWorks.Editions;
+using ShipWorks.Shipping;
+using ShipWorks.Shipping.Policies;
 using ShipWorks.Stores;
 
 namespace ShipWorks.ApplicationCore.Licensing
@@ -63,7 +67,9 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// ShipmentType, can be forbidden or just restricted to upgrade
         /// </summary>
-        bool ShipmentType { get; set; }
+        Dictionary<ShipmentTypeCode, IEnumerable<ShipmentTypeRestrictionType>> ShipmentTypeRestriction { get;}
+
+        Dictionary<ShipmentTypeCode, Dictionary<ShippingPolicyType, string>> ShipmentTypeShippingPolicy { get; }
 
         /// <summary>
         /// Restricted to a single store
