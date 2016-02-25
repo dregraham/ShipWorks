@@ -607,7 +607,11 @@
     <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\EndiciaScanBasedReturnsRestriction.cs" />
     <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\IFeatureRestriction.cs" />
     <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\StampsAscendiaConsolidatorRestriction.cs" />
+    <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\StampsDhlConsolidatorRestriction.cs" />
+    <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\StampsGlobegisticsConsolidatorRestriction.cs" />
+    <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\StampsIbcConsolidatorRestriction.cs" />
     <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\StampsInsuranceRestriction.cs" />
+    <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\StampsRrDonnelleyConsolidatorRestriction.cs" />
     <Compile Include="ApplicationCore\Licensing\IActivationResponse.cs" />
     <Compile Include="ApplicationCore\Licensing\IAddStoreResponse.cs" />
     <Compile Include="ApplicationCore\Licensing\IChannelLimitBehavior.cs" />
