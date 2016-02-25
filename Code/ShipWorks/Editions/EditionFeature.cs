@@ -70,7 +70,7 @@ namespace ShipWorks.Editions
         EndiciaDhl,
 
         /// <summary>
-        /// Constrols if using Endicia insurance is enabled for Endicia users
+        /// Controls if using Endicia insurance is enabled for Endicia users
         /// </summary>
         [Description("Your ShipWorks account does not support using Endicia insurance.")]
         EndiciaInsurance,
