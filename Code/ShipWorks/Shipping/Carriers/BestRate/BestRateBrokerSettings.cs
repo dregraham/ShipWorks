@@ -83,7 +83,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         }
 
         /// <summary>
-        /// Determines if endicia DHL is enabled.
+        /// Determines if Endicia DHL is enabled.
         /// </summary>
         public bool IsEndiciaDHLEnabled()
         {
@@ -95,13 +95,15 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         }
 
         /// <summary>
-        /// Determines if Consolidator enabled.
+        /// Determines if Endicia consolidator is enabled.
         /// </summary>
-        /// <returns></returns>
-        /// <exception cref="System.NotImplementedException"></exception>
         public bool IsEndiciaConsolidatorEnabled()
         {
-            return (activeRestrictions.CheckRestriction(EditionFeature.EndiciaConsolidator).Level == EditionRestrictionLevel.None);
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                return (lifetimeScope.Resolve<ILicenseService>().CheckRestriction(EditionFeature.EndiciaConsolidator, null) ==
+                        EditionRestrictionLevel.None);
+            }
         }
     }
 }

@@ -28,15 +28,15 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// <summary>
         /// Lookup of what service types are associated with which edition features
         /// </summary>
-        private static readonly Dictionary<EditionFeature, List<PostalServiceType>> uspsConsolidatorServiceTypes = 
+        private static readonly Dictionary<EditionFeature, List<PostalServiceType>> uspsConsolidatorServiceTypes =
             new Dictionary<EditionFeature, List<PostalServiceType>>
         {
             {
                 EditionFeature.StampsAscendiaConsolidator, new List<PostalServiceType>
                 {
-                    PostalServiceType.AsendiaGeneric, 
-                    PostalServiceType.AsendiaIpa, 
-                    PostalServiceType.AsendiaIsal, 
+                    PostalServiceType.AsendiaGeneric,
+                    PostalServiceType.AsendiaIpa,
+                    PostalServiceType.AsendiaIsal,
                     PostalServiceType.AsendiaePacket
                 }
             },
@@ -127,7 +127,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
         {
             MethodConditions.EnsureArgumentIsNotNull(address, "address");
 
-            return address.CountryCode == "US" || 
+            return address.CountryCode == "US" ||
                 address.CountryCode == "DC" ||
                 address.IsUSInternationalTerritory();
         }
@@ -178,19 +178,19 @@ namespace ShipWorks.Shipping.Carriers.Postal
                     if (shipmentType == ShipmentTypeCode.Endicia)
                     {
                         // If consolidation is supported, add it in
-                        if (
-                            EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.EndiciaConsolidator).Level ==
+                        if (licenseService.CheckRestriction(EditionFeature.EndiciaConsolidator, null) ==
                             EditionRestrictionLevel.None)
                         {
                             services.Add(PostalServiceType.ConsolidatorDomestic);
                         }
 
                         // If not restricted from Endicia DHL, add them in
-                        if (licenseService.CheckRestriction(EditionFeature.EndiciaDhl, null) == EditionRestrictionLevel.None)
+                        if (licenseService.CheckRestriction(EditionFeature.EndiciaDhl, null) ==
+                            EditionRestrictionLevel.None)
                         {
                             services.AddRange(
-                                EnumHelper.GetEnumList<PostalServiceType>(
-                                    service => ShipmentTypeManager.IsEndiciaDhl(service)).Select(entry => entry.Value));
+                                EnumHelper.GetEnumList<PostalServiceType>(ShipmentTypeManager.IsEndiciaDhl)
+                                .Select(entry => entry.Value));
                         }
                     }
 
@@ -241,30 +241,39 @@ namespace ShipWorks.Shipping.Carriers.Postal
                         PostalServiceType.GlobalExpressGuaranteedNonDocument
                     };
 
-                if (shipmentType == ShipmentTypeCode.Endicia)
+                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
                 {
-                    // If consolidation is supported, add it in
-                    if (EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.EndiciaConsolidator).Level == EditionRestrictionLevel.None)
+                    var licenseService = lifetimeScope.Resolve<ILicenseService>();
+
+                    if (shipmentType == ShipmentTypeCode.Endicia)
                     {
-                        services.Add(PostalServiceType.ConsolidatorInternational);
-                        services.Add(PostalServiceType.ConsolidatorIpa);
-                        services.Add(PostalServiceType.ConsolidatorIsal);
-                        services.Add(PostalServiceType.CommercialePacket);
+                        // If consolidation is supported, add it in
+                        if (licenseService.CheckRestriction(EditionFeature.EndiciaConsolidator, null) ==
+                            EditionRestrictionLevel.None)
+                        {
+                            services.Add(PostalServiceType.ConsolidatorInternational);
+                            services.Add(PostalServiceType.ConsolidatorIpa);
+                            services.Add(PostalServiceType.ConsolidatorIsal);
+                            services.Add(PostalServiceType.CommercialePacket);
+                        }
                     }
+
+                    if (shipmentType == ShipmentTypeCode.Usps)
+                    {
+                        // Get a list of any consolidators that should be available to customers
+                        IEnumerable<PostalServiceType> accesibleConsolidatorTypes = uspsConsolidatorServiceTypes
+                            .Where(
+                                x =>
+                                    EditionManager.ActiveRestrictions.CheckRestriction(x.Key).Level ==
+                                    EditionRestrictionLevel.None)
+                            .SelectMany(x => x.Value)
+                            .ToList();
+
+                        services.AddRange(accesibleConsolidatorTypes);
+                    }
+
+                    return services;
                 }
-
-                if (shipmentType == ShipmentTypeCode.Usps)
-                {
-                    // Get a list of any consolidators that should be available to customers
-                    IEnumerable<PostalServiceType> accesibleConsolidatorTypes = uspsConsolidatorServiceTypes
-                        .Where(x => EditionManager.ActiveRestrictions.CheckRestriction(x.Key).Level == EditionRestrictionLevel.None)
-                        .SelectMany(x => x.Value)
-                        .ToList();
-
-                    services.AddRange(accesibleConsolidatorTypes);
-                }
-
-                return services;
             }
         }
 
@@ -545,7 +554,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
         {
             get
             {
-                return uspsConsolidatorServiceTypes.SelectMany(x => x.Value);   
+                return uspsConsolidatorServiceTypes.SelectMany(x => x.Value);
             }
         }
 
