@@ -437,9 +437,18 @@ namespace ShipWorks.Shipping.Carriers.UPS
             {
                 return wsUpsAccountNumber.Text.Trim();
             }
-            else
+            return account.Text.Trim();
+        }
+
+        /// <summary>
+        /// Checks to see if the given account number is allowed based on the edition of ShipWorks
+        /// </summary>
+        private bool AccountAllowed(string upsAccountNumber)
+        {
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                return account.Text.Trim();
+                return lifetimeScope.Resolve<ILicenseService>()
+                        .HandleRestriction(EditionFeature.UpsAccountNumbers, upsAccountNumber, this);
             }
         }
 
@@ -451,17 +460,13 @@ namespace ShipWorks.Shipping.Carriers.UPS
             personControl.SaveToEntity(new PersonAdapter(upsAccount, string.Empty));
             upsAccount.AccountNumber = EnteredAccountNumber();
 
-            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            // Edition check
+            if (!AccountAllowed(upsAccount.AccountNumber))
             {
-                // Edition check
-                ILicenseService licenseService = lifetimeScope.Resolve<ILicenseService>();
-                if (!licenseService.HandleRestriction(EditionFeature.UpsAccountNumbers, upsAccount.AccountNumber, this))
-                {
-                    e.NextPage = CurrentPage;
-                    return;
-                }
+                e.NextPage = CurrentPage;
+                return;
             }
-
+            
             RequiredFieldChecker checker = new RequiredFieldChecker();
             checker.Check("UPS Account", upsAccount.AccountNumber);
             checker.Check("Full Name", upsAccount.FirstName);
@@ -642,18 +647,12 @@ namespace ShipWorks.Shipping.Carriers.UPS
                             return ProcessRegistration(tries - 1, showErrorMessage);
                         }
 
-                        else
-                        {
-                            const string message = "A unique UserID could not be generated.  Please try again.";
-                            ShowOrThrowErrorMessage(showErrorMessage, message, ex);
-                            return false;
-                        }
-                    }
-                    else
-                    {
-                        ShowOrThrowErrorMessage(showErrorMessage, ex.Message, ex);
+                        const string message = "A unique UserID could not be generated.  Please try again.";
+                        ShowOrThrowErrorMessage(showErrorMessage, message, ex);
                         return false;
                     }
+                    ShowOrThrowErrorMessage(showErrorMessage, ex.Message, ex);
+                    return false;
                 }
             }
         }
@@ -750,13 +749,11 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 if (newAccount.Checked)
                 {
                     labelSetupComplete1.Text = "Congratulations, you successfully created a UPS account within ShipWorks!";
-                    labelSetupComplete2.Text = string.Format(
-                        "Your new UPS account number: {0}",
-                        upsAccount.AccountNumber);
+                    labelSetupComplete2.Text = $"Your new UPS account number: {upsAccount.AccountNumber}";
                     labelSetupComplete3.Text = "Please watch your email for a confirmation from UPS and more information on how to use your account.";
                     if (notifyTime.HasValue)
                     {
-                        labelSetupCompleteNotifyTime.Text = string.Format("UPS Smart Pickup Notify Time: {0}", notifyTime.Value.ToString("t"));
+                        labelSetupCompleteNotifyTime.Text = $"UPS Smart Pickup Notify Time: {notifyTime.Value.ToString("t")}";
                     }
                 }
             }
@@ -777,19 +774,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 // We need to clear out the rate cache since rates (especially best rate) are no longer valid now
                 // that a new account has been added.
                 RateCache.Instance.Clear();
-            }
-        }
-
-        /// <summary> 
-        /// Called when [stepping into open account business info]. 
-        /// </summary> 
-        /// <param name="sender">The sender.</param> 
-        /// <param name="e">The <see cref="WizardSteppingIntoEventArgs" /> instance containing the event data.</param> 
-        private void OnSteppingIntoBusinessInfo(object sender, WizardSteppingIntoEventArgs e)
-        {
-            if (openAccountRequest.AccountCharacteristics.CustomerClassification.Code != EnumHelper.GetApiValue(UpsCustomerClassificationCode.Business))
-            {
-                e.Skip = true;
             }
         }
 
