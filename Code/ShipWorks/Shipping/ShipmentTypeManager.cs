@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Autofac;
 using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Editions;
 using ShipWorks.Shipping.Carriers.BestRate;
@@ -34,47 +35,53 @@ namespace ShipWorks.Shipping
         {
             get
             {
-                List<ShipmentType> shipmentTypes = new List<ShipmentType>();
-
-                foreach (ShipmentTypeCode typeCode in Enum.GetValues(typeof(ShipmentTypeCode)))
+                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
                 {
-                    // If the active edition doesn't allow this ShipmentType, skip it
-                    if (EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.ShipmentType, typeCode).Level == EditionRestrictionLevel.Hidden)
-                    {
-                        continue;
-                    }
+                    ILicenseService licenseService = lifetimeScope.Resolve<ILicenseService>();
 
-                    if (typeCode == ShipmentTypeCode.Express1Usps)
+                    List<ShipmentType> shipmentTypes = new List<ShipmentType>();
+
+                    foreach (ShipmentTypeCode typeCode in Enum.GetValues(typeof (ShipmentTypeCode)))
                     {
-                        // The only time Express1 for USPS should be excluded is when USPS has never been setup but Endicia has been setup
-                        if (!ShippingManager.IsShipmentTypeActivated(ShipmentTypeCode.Usps) &&
-                            !ShippingManager.IsShipmentTypeActivated(ShipmentTypeCode.Express1Usps) && ShippingManager.IsShipmentTypeActivated(ShipmentTypeCode.Endicia))
+                        // If the active edition doesn't allow this ShipmentType, skip it
+                        if (licenseService.CheckRestriction(EditionFeature.ShipmentType, typeCode) == EditionRestrictionLevel.Hidden)
                         {
-                            // USPS has never been setup, so we want to exclude the Express1/USPS type since Endicia IS setup in ShipWorks
                             continue;
                         }
-                        
-                    }
-                    else if (typeCode == ShipmentTypeCode.Express1Endicia)
-                    {
-                        // We have an Express1 for Endicia shipment type which should be excluded if Endicia has never been setup
-                        if (!ShippingManager.IsShipmentTypeActivated(ShipmentTypeCode.Endicia) && !ShippingManager.IsShipmentTypeActivated(ShipmentTypeCode.Express1Endicia))
+
+                        if (typeCode == ShipmentTypeCode.Express1Usps)
                         {
-                            // The Endicia type has never been setup, so we want to exclude the Express1 for Endicia type
-                            continue;
+                            // The only time Express1 for USPS should be excluded is when USPS has never been setup but Endicia has been setup
+                            if (!ShippingManager.IsShipmentTypeActivated(ShipmentTypeCode.Usps) &&
+                                !ShippingManager.IsShipmentTypeActivated(ShipmentTypeCode.Express1Usps) &&
+                                ShippingManager.IsShipmentTypeActivated(ShipmentTypeCode.Endicia))
+                            {
+                                // USPS has never been setup, so we want to exclude the Express1/USPS type since Endicia IS setup in ShipWorks
+                                continue;
+                            }
+
                         }
+                        else if (typeCode == ShipmentTypeCode.Express1Endicia)
+                        {
+                            // We have an Express1 for Endicia shipment type which should be excluded if Endicia has never been setup
+                            if (!ShippingManager.IsShipmentTypeActivated(ShipmentTypeCode.Endicia) &&
+                                !ShippingManager.IsShipmentTypeActivated(ShipmentTypeCode.Express1Endicia))
+                            {
+                                // The Endicia type has never been setup, so we want to exclude the Express1 for Endicia type
+                                continue;
+                            }
+                        }
+
+                        shipmentTypes.Add(GetType(typeCode));
                     }
 
-                    shipmentTypes.Add(GetType(typeCode));
+                    // Sort based on the shipment type name
+                    shipmentTypes.Sort(
+                        (left, right) =>
+                            GetSortValue(left.ShipmentTypeCode).CompareTo(GetSortValue(right.ShipmentTypeCode)));
+
+                    return shipmentTypes;
                 }
-
-                // Sort based on the shipment type name
-                shipmentTypes.Sort(delegate(ShipmentType left, ShipmentType right)
-                {
-                    return GetSortValue(left.ShipmentTypeCode).CompareTo(GetSortValue(right.ShipmentTypeCode));
-                });
-
-                return shipmentTypes;
             }
         }
 

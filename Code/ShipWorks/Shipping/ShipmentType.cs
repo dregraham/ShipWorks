@@ -36,6 +36,7 @@ using System.Xml.Linq;
 using Interapptive.Shared;
 using Interapptive.Shared.Business.Geography;
 using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Amazon;
@@ -188,8 +189,13 @@ namespace ShipWorks.Shipping
         {
             get
             {
-                EditionRestrictionIssue restriction = EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.ShipmentType, ShipmentTypeCode);
-                return restriction.Level == EditionRestrictionLevel.Hidden;
+                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+                {
+                    ILicenseService licenseService = lifetimeScope.Resolve<ILicenseService>();
+
+                    return licenseService.CheckRestriction(EditionFeature.ShipmentType, ShipmentTypeCode) ==
+                           EditionRestrictionLevel.Hidden;
+                }
             }
         }
 

@@ -51,9 +51,8 @@ namespace ShipWorks.Shipping.Settings
             using (ILifetimeScope scope = IoC.BeginLifetimeScope())
             {
                 ILicenseService licenseService = scope.Resolve<ILicenseService>();
-
-                EditionRestrictionLevel editionRestrictionLevel = licenseService.CheckRestriction(EditionFeature.ShipmentType, shipmentType.ShipmentTypeCode);
-                if (editionRestrictionLevel != EditionRestrictionLevel.None)
+                
+                if (licenseService.CheckRestriction(EditionFeature.ShipmentType, shipmentType.ShipmentTypeCode) != EditionRestrictionLevel.None)
                 {
                     panelSetup.Visible = false;
                 }
