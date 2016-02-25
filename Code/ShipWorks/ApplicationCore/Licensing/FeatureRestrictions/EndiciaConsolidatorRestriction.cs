@@ -21,9 +21,6 @@ namespace ShipWorks.ApplicationCore.Licensing.FeatureRestrictions
         /// <summary>
         /// Nothing to handle, return false
         /// </summary>
-        public bool Handle(IWin32Window owner, object data)
-        {
-            return false;
-        }
+        public bool Handle(IWin32Window owner, object data) => false;
     }
 }
