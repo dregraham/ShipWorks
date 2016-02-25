@@ -190,7 +190,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
                 ILicenseService licenseService = lifetimeScope.Resolve<ILicenseService>();
-                restrictionLevel = licenseService.CheckRestriction(EditionFeature.SelectionLimit, virtualSelection.Count);
+                restrictionLevel = licenseService.CheckRestriction(EditionFeature.SingleStore, null);
             }
 
             if (restrictionLevel != EditionRestrictionLevel.None)
