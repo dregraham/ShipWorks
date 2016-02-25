@@ -28,7 +28,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
             {
                 Mock<IFeatureRestriction> feature1 = mock1.Mock<IFeatureRestriction>();
                 feature1.SetupGet(f => f.EditionFeature)
-                    .Returns(EditionFeature.Crm);
+                    .Returns(EditionFeature.EndiciaAccountLimit);
 
                 Mock<IFeatureRestriction> feature2 = mock2.Mock<IFeatureRestriction>();
                 feature2.SetupGet(f => f.EditionFeature)
@@ -50,11 +50,11 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
             {
                 Mock<IFeatureRestriction> feature1 = mock1.Mock<IFeatureRestriction>();
                 feature1.SetupGet(f => f.EditionFeature)
-                    .Returns(EditionFeature.Crm);
+                    .Returns(EditionFeature.EndiciaAccountLimit);
 
                 Mock<IFeatureRestriction> feature2 = mock2.Mock<IFeatureRestriction>();
                 feature2.SetupGet(f => f.EditionFeature)
-                    .Returns(EditionFeature.Crm);
+                    .Returns(EditionFeature.EndiciaAccountLimit);
 
                 var featureRestrictions = new List<IFeatureRestriction> {feature1.Object, feature2.Object};
 
@@ -457,11 +457,11 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
             {
                 Mock<IFeatureRestriction> feature = mock.Mock<IFeatureRestriction>();
                 feature.SetupGet(f => f.EditionFeature)
-                    .Returns(EditionFeature.Crm);
+                    .Returns(EditionFeature.EndiciaAccountLimit);
 
                 CustomerLicense testObject = mock.Create<CustomerLicense>(new NamedParameter("key", "SomeKey"));
 
-                testObject.CheckRestriction(EditionFeature.Crm, null);
+                testObject.CheckRestriction(EditionFeature.EndiciaAccountLimit, null);
 
                 feature.Verify(x=>x.Check(It.IsAny<ILicenseCapabilities>(), null));
             }
@@ -476,14 +476,14 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
             {
                 Mock<IFeatureRestriction> feature = mock.Mock<IFeatureRestriction>();
                 feature.SetupGet(f => f.EditionFeature)
-                    .Returns(EditionFeature.Crm);
+                    .Returns(EditionFeature.EndiciaAccountLimit);
 
                 feature.Setup(f => f.Check(It.IsAny<ILicenseCapabilities>(), It.IsAny<object>()))
                     .Returns(level);
 
                 CustomerLicense testObject = mock.Create<CustomerLicense>(new NamedParameter("key", "SomeKey"));
 
-                var editionRestrictionLevel = testObject.CheckRestriction(EditionFeature.Crm, null);
+                var editionRestrictionLevel = testObject.CheckRestriction(EditionFeature.EndiciaAccountLimit, null);
 
                 Assert.Equal(level, editionRestrictionLevel);
             }
@@ -496,7 +496,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
             {
                 Mock<IFeatureRestriction> feature = mock.Mock<IFeatureRestriction>();
                 feature.SetupGet(f => f.EditionFeature)
-                    .Returns(EditionFeature.Crm);
+                    .Returns(EditionFeature.EndiciaAccountLimit);
 
                 feature.Setup(f => f.Check(It.IsAny<ILicenseCapabilities>(), It.IsAny<object>()))
                     .Returns(EditionRestrictionLevel.None);
@@ -516,13 +516,13 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
             {
                 Mock<IFeatureRestriction> feature = mock.Mock<IFeatureRestriction>();
                 feature.SetupGet(f => f.EditionFeature)
-                    .Returns(EditionFeature.Crm);
+                    .Returns(EditionFeature.EndiciaAccountLimit);
 
                 Mock<IWin32Window> window = mock.Mock<IWin32Window>();
 
                 CustomerLicense testObject = mock.Create<CustomerLicense>(new NamedParameter("key", "SomeKey"));
 
-                testObject.CheckRestriction(EditionFeature.Crm, "foo");
+                testObject.CheckRestriction(EditionFeature.EndiciaAccountLimit, "foo");
 
                 feature.Verify(f => f.Check(It.IsAny<ILicenseCapabilities>(),"foo"));
             }
@@ -535,13 +535,13 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
             {
                 Mock<IFeatureRestriction> feature = mock.Mock<IFeatureRestriction>();
                 feature.SetupGet(f => f.EditionFeature)
-                    .Returns(EditionFeature.Crm);
+                    .Returns(EditionFeature.EndiciaAccountLimit);
 
                 Mock<IWin32Window> window = mock.Mock<IWin32Window>();
 
                 CustomerLicense testObject = mock.Create<CustomerLicense>(new NamedParameter("key", "SomeKey"));
 
-                testObject.HandleRestriction(EditionFeature.Crm, null, window.Object);
+                testObject.HandleRestriction(EditionFeature.EndiciaAccountLimit, null, window.Object);
 
                 feature.Verify(f=>f.Handle(It.IsAny<IWin32Window>(), It.IsAny<object>()));
             }
@@ -556,7 +556,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
             {
                 Mock<IFeatureRestriction> feature = mock.Mock<IFeatureRestriction>();
                 feature.SetupGet(f => f.EditionFeature)
-                    .Returns(EditionFeature.Crm);
+                    .Returns(EditionFeature.EndiciaAccountLimit);
 
                 feature.Setup(f => f.Handle(It.IsAny<IWin32Window>(), It.IsAny<object>()))
                     .Returns(value);
@@ -565,7 +565,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
 
                 CustomerLicense testObject = mock.Create<CustomerLicense>(new NamedParameter("key", "SomeKey"));
 
-                bool result = testObject.HandleRestriction(EditionFeature.Crm, null, window.Object);
+                bool result = testObject.HandleRestriction(EditionFeature.EndiciaAccountLimit, null, window.Object);
 
                 Assert.Equal(value,result);
             }
@@ -578,7 +578,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
             {
                 Mock<IFeatureRestriction> feature = mock.Mock<IFeatureRestriction>();
                 feature.SetupGet(f => f.EditionFeature)
-                    .Returns(EditionFeature.Crm);
+                    .Returns(EditionFeature.EndiciaAccountLimit);
 
                 Mock<IWin32Window> window = mock.Mock<IWin32Window>();
 
@@ -597,13 +597,13 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
             {
                 Mock<IFeatureRestriction> feature = mock.Mock<IFeatureRestriction>();
                 feature.SetupGet(f => f.EditionFeature)
-                    .Returns(EditionFeature.Crm);
+                    .Returns(EditionFeature.EndiciaAccountLimit);
 
                 Mock<IWin32Window> window = mock.Mock<IWin32Window>();
 
                 CustomerLicense testObject = mock.Create<CustomerLicense>(new NamedParameter("key", "SomeKey"));
 
-                testObject.HandleRestriction(EditionFeature.Crm, "foo", window.Object);
+                testObject.HandleRestriction(EditionFeature.EndiciaAccountLimit, "foo", window.Object);
 
                 feature.Verify(f => f.Handle(It.IsAny<IWin32Window>(), "foo"));
             }

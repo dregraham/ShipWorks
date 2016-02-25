@@ -198,30 +198,12 @@ namespace ShipWorks.Editions
         /// </summary>
         [Description("Your ShipWorks account does not support using RR Donnelley as a consolidator through Stamps.")]
         StampsRrDonnelleyConsolidator,
-
-        /// <summary>
-        /// Advanced shipping features restriction
-        /// </summary>
-        [Description("Your ShipWorks account does not support using advanced shipping features")]
-        AdvancedShipping,
-
-        /// <summary>
-        /// CRM features restriction
-        /// </summary>
-        [Description("Your ShipWorks account does not support using CRM features")]
-        Crm,
-
+        
         /// <summary>
         /// Custom data source restriction
         /// </summary>
         [Description("Your ShipWorks account does not support using custom data sources")]
         CustomDataSources,
-
-        /// <summary>
-        /// Template customization restriction
-        /// </summary>
-        [Description("Your ShipWorks account does not support template customization")]
-        TemplateCustomization,
 
         /// <summary>
         /// The channel count

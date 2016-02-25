@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Xml.Linq;
 using System.Xml.XPath;
 using Interapptive.Shared.Utility;
-using Microsoft.Web.Services3.Configuration;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Policies;
 
