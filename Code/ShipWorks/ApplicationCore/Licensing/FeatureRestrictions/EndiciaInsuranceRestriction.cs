@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using ShipWorks.Editions;
+﻿using ShipWorks.Editions;
 
 namespace ShipWorks.ApplicationCore.Licensing.FeatureRestrictions
 {
@@ -19,9 +14,7 @@ namespace ShipWorks.ApplicationCore.Licensing.FeatureRestrictions
         /// </summary>
         public EditionRestrictionLevel Check(ILicenseCapabilities capabilities, object data)
         {
-            return capabilities.EndiciaInsurance ? 
-                EditionRestrictionLevel.None : 
-                EditionRestrictionLevel.Hidden;
+            return capabilities.EndiciaInsurance ? EditionRestrictionLevel.None : EditionRestrictionLevel.Hidden;
         }
     }
 }

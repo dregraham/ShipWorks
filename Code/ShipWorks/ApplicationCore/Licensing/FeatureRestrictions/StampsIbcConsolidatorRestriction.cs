@@ -1,9 +1,8 @@
-﻿using System.Windows.Forms;
-using ShipWorks.Editions;
+﻿using ShipWorks.Editions;
 
 namespace ShipWorks.ApplicationCore.Licensing.FeatureRestrictions
 {
-    public class StampsIbcConsolidatorRestriction : IFeatureRestriction
+    public class StampsIbcConsolidatorRestriction : FeatureRestriction, IFeatureRestriction
     {
         /// <summary>
         /// The edition feature
@@ -17,10 +16,5 @@ namespace ShipWorks.ApplicationCore.Licensing.FeatureRestrictions
         {
             return capabilities.StampsIbcConsolidator ? EditionRestrictionLevel.None : EditionRestrictionLevel.Hidden;
         }
-
-        /// <summary>
-        /// Nothing to handle, return false
-        /// </summary>
-        public bool Handle(IWin32Window owner, object data) => false;
     }
 }
