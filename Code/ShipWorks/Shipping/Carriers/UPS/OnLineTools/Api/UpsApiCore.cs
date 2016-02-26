@@ -7,11 +7,14 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using System.Xml;
+using Autofac;
 using Interapptive.Shared;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api.ElementWriters;
 using ShipWorks.Shipping.Carriers.UPS.ServiceManager;
 using ShipWorks.Templates.Tokens;
 using Interapptive.Shared.Business;
+using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Editions;
 using ShipWorks.Shipping.Api;
 
@@ -83,16 +86,18 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                 throw new UpsException("No UPS account is selected for the shipment.");
             }
 
-            var accountRestriction = EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.UpsAccountNumbers, account.AccountNumber);
+            var accountRestriction = EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.UpsAccountNumbers, UpsAccountManager.Accounts);
             if (accountRestriction.Level != EditionRestrictionLevel.None)
             {
                 throw new UpsException(accountRestriction.GetDescription());
             }
 
-            var quantityRestriction = EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.UpsAccountLimit, UpsAccountManager.Accounts.Count);
-            if (quantityRestriction.Level != EditionRestrictionLevel.None)
+            using (var scope = IoC.BeginLifetimeScope())
             {
-                throw new UpsException(quantityRestriction.GetDescription());
+                ILicenseService licenseService = scope.Resolve<ILicenseService>();
+                // The window handler is null because A: we are in a static method and B: the 
+                // UpsAccountLimitFeatureRestriction doesn't use it at all.
+                licenseService.HandleRestriction(EditionFeature.UpsAccountLimit, UpsAccountManager.Accounts.Count, null);
             }
 
             return account;

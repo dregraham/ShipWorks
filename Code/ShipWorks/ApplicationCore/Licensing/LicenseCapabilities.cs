@@ -7,6 +7,7 @@ using System.Xml.Linq;
 using System.Xml.XPath;
 using Interapptive.Shared.Utility;
 using ShipWorks.Editions;
+using ShipWorks.Editions.Brown;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Policies;
 using ShipWorks.Stores;
@@ -136,22 +137,27 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Restricted to a specific number of UPS accounts
         /// </summary>
-        public bool UpsAccountLimit { get; set; }
+        public int UpsAccountLimit { get; set; }
 
         /// <summary>
         ///  Restricted to a specific UPS account number
         ///  </summary>
-        public bool UpsAccountNumbers { get; set; }
+        public IEnumerable<string> UpsAccountNumbers { get; set; }
 
         /// <summary>
         /// Restricted to using only postal APO\FPO\POBox services
         /// </summary>
-        public bool PostalApoFpoPoboxOnly { get; set; }
+        public BrownPostalAvailability PostalAvailability { get; set; }
 
         /// <summary>
         /// UPS SurePost service type can be restricted
         /// </summary>
         public bool UpsSurePost { get; set; }
+
+        /// <summary>
+        /// Gets or sets the ups status.
+        /// </summary>
+        public UpsStatus UpsStatus { get; set; }
 
         /// <summary>
         /// Endicia consolidator
@@ -358,10 +364,15 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         private void SetUpsCapabilities(XPathNamespaceNavigator xpath)
         {
-            UpsAccountLimit = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='UpsAccountLimit']/Value", 0) == 1;
-            UpsAccountNumbers = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='UpsAccountNumbers']/Value", 0) == 1;
-            UpsSurePost = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='UpsSurePost']/Value", 0) == 1;
-            PostalApoFpoPoboxOnly = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='PostalApoFpoPoboxOnly']/Value", 0) == 1;
+            UpsStatus = (UpsStatus)XPathUtility.Evaluate(xpath, "//UpsOnly/@status", 0);
+            UpsAccountNumbers = XPathUtility.Evaluate(xpath, "//UpsOnly", "").Split(';');
+
+            UpsAccountLimit = UpsStatus == UpsStatus.Discount ? 
+                1 : 
+                UpsAccountNumbers.Count();
+
+            UpsSurePost = XPathUtility.Evaluate(xpath, "//UpsSurePostEnabled/@status", 0) == 1;
+            PostalAvailability = (BrownPostalAvailability)XPathUtility.Evaluate(xpath, "//UpsOnly/@postal", (int)BrownPostalAvailability.ApoFpoPobox);
         }
 
         /// <summary>

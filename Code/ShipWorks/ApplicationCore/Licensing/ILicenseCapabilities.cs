@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using ShipWorks.Editions;
+using ShipWorks.Editions.Brown;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Policies;
 using ShipWorks.Stores;
@@ -79,22 +80,27 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Restricted to a specific number of UPS accounts
         /// </summary>
-        bool UpsAccountLimit { get; set; }
+        int UpsAccountLimit { get; set; }
 
         /// <summary>
         ///  Restricted to a specific UPS account number
         ///  </summary>
-        bool UpsAccountNumbers { get; set; }
+        IEnumerable<string> UpsAccountNumbers { get; set; }
 
         /// <summary>
         /// Restricted to using only postal APO\FPO\POBox services
         /// </summary>
-        bool PostalApoFpoPoboxOnly { get; set; }
+        BrownPostalAvailability PostalAvailability { get; set; }
 
         /// <summary>
         /// UPS SurePost service type can be restricted
         /// </summary>
         bool UpsSurePost { get; set; }
+
+        /// <summary>
+        /// Gets or sets the ups status.
+        /// </summary>
+        UpsStatus UpsStatus { get; set; }
 
         /// <summary>
         /// Endicia consolidator

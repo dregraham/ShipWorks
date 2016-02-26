@@ -618,6 +618,7 @@
     <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\StampsIbcConsolidatorRestriction.cs" />
     <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\StampsInsuranceRestriction.cs" />
     <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\StampsRrDonnelleyConsolidatorRestriction.cs" />
+    <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\Ups\UpsAccountLimitRestriction.cs" />
     <Compile Include="ApplicationCore\Licensing\IActivationResponse.cs" />
     <Compile Include="ApplicationCore\Licensing\IAddStoreResponse.cs" />
     <Compile Include="ApplicationCore\Licensing\IChannelLimitBehavior.cs" />
@@ -671,6 +672,7 @@
     <Compile Include="ApplicationCore\Licensing\StoreLicense.cs" />
     <Compile Include="ApplicationCore\Licensing\TangoWebClientFactory.cs" />
     <Compile Include="ApplicationCore\Licensing\TangoWebClientWrapper.cs" />
+    <Compile Include="ApplicationCore\Licensing\UpsStatus.cs" />
     <Compile Include="ApplicationCore\Logging\ILogEntryFactory.cs" />
     <Compile Include="ApplicationCore\Logging\LogActionType.cs" />
     <Compile Include="ApplicationCore\Logging\LogEntryFactory.cs" />
