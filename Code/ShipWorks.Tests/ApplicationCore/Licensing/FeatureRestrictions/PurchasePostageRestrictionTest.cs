@@ -10,15 +10,15 @@ using Xunit;
 
 namespace ShipWorks.Tests.ApplicationCore.Licensing.FeatureRestrictions
 {
-    public class ProcessShipmentRestrictionTest : IDisposable
+    public class PurchasePostageRestrictionTest : IDisposable
     {
         private readonly AutoMock mock;
-        private readonly ProcessShipmentRestriction testObject;
+        private readonly PurchasePostageRestriction testObject;
 
-        public ProcessShipmentRestrictionTest()
+        public PurchasePostageRestrictionTest()
         {
             mock = AutoMock.GetLoose();
-            testObject = mock.Create<ProcessShipmentRestriction>();
+            testObject = mock.Create<PurchasePostageRestriction>();
         }
 
         public void Dispose()
@@ -29,17 +29,17 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.FeatureRestrictions
         [Fact]
         public void EditionFeature_IsProcessShipment()
         {
-            Assert.Equal(EditionFeature.ProcessShipment, testObject.EditionFeature);
+            Assert.Equal(EditionFeature.PurchasePostage, testObject.EditionFeature);
         }
 
         [Fact]
-        public void Check_ReturnsForbidden_WhenProcessShipmentIsRestrictedForTheGivenShipmentType()
+        public void Check_ReturnsForbidden_WhenPurchasePostageIsRestrictedForTheGivenShipmentType()
         {
             var restrictions = new Dictionary<ShipmentTypeCode, IEnumerable<ShipmentTypeRestrictionType>>
             {
                 {
                     ShipmentTypeCode.Amazon,
-                    new List<ShipmentTypeRestrictionType> {ShipmentTypeRestrictionType.Processing}
+                    new List<ShipmentTypeRestrictionType> {ShipmentTypeRestrictionType.Purchasing}
                 }
             };
 
@@ -51,7 +51,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.FeatureRestrictions
         }
 
         [Fact]
-        public void Check_ReturnsNone_WhenProcessShipmentIsNotRestrictedForTheGivenShipmentType()
+        public void Check_ReturnsNone_WhenPurchasePostageIsNotRestrictedForTheGivenShipmentType()
         {
             var restrictions = new Dictionary<ShipmentTypeCode, IEnumerable<ShipmentTypeRestrictionType>>
             {
@@ -81,13 +81,13 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.FeatureRestrictions
         }
 
         [Fact]
-        public void Check_ReturnsForbidden_WhenProcessShipmentIsRestrictedForTheGivenShipmentTypeButNotRestrictedForAnotherShipmentType()
+        public void Check_ReturnsForbidden_WhenPurchasePostageIsRestrictedForTheGivenShipmentTypeButNotRestrictedForAnotherShipmentType()
         {
             var restrictions = new Dictionary<ShipmentTypeCode, IEnumerable<ShipmentTypeRestrictionType>>
             {
                 {
                     ShipmentTypeCode.Amazon,
-                    new List<ShipmentTypeRestrictionType> {ShipmentTypeRestrictionType.Processing}
+                    new List<ShipmentTypeRestrictionType> {ShipmentTypeRestrictionType.Purchasing }
                 },
                 {
                     ShipmentTypeCode.FedEx,
@@ -102,7 +102,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.FeatureRestrictions
             Assert.Equal(EditionRestrictionLevel.Forbidden, testObject.Check(licenseCapabilities.Object, ShipmentTypeCode.Amazon));
         }
         [Fact]
-        public void Check_ReturnsNone_WhenProcessShipmentIsNotRestrictedForTheGivenShipmentTypeButIsRestrictedForAnotherShipmentType()
+        public void Check_ReturnsNone_WhenPurchasePostageIsNotRestrictedForTheGivenShipmentTypeButIsRestrictedForAnotherShipmentType()
         {
             var restrictions = new Dictionary<ShipmentTypeCode, IEnumerable<ShipmentTypeRestrictionType>>
             {
@@ -112,7 +112,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.FeatureRestrictions
                 },
                 {
                     ShipmentTypeCode.FedEx,
-                    new List<ShipmentTypeRestrictionType> {ShipmentTypeRestrictionType.Processing }
+                    new List<ShipmentTypeRestrictionType> {ShipmentTypeRestrictionType.Purchasing }
                 }
             };
 
