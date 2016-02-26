@@ -721,39 +721,35 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 return;
             }
             
-            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            // Edition check
+            if (!AccountAllowed(accountExisting.Text.Trim()))
             {
-                ILicenseService licenseService = lifetimeScope.Resolve<ILicenseService>();
-
-                // Edition check
-                if (licenseService.HandleRestriction(EditionFeature.EndiciaAccountNumber, accountExisting.Text.Trim(), this))
-                {
-                    e.NextPage = CurrentPage;
-                    return;
-                }
+                e.NextPage = CurrentPage;
+                return;
             }
-
+            
             Cursor.Current = Cursors.WaitCursor;
 
             try
             {
-                account = new EndiciaAccountEntity();
+                account = new EndiciaAccountEntity()
+                {
+                    AccountNumber = accountExisting.Text.Trim(),
+                    ApiUserPassword = SecureText.Encrypt(passwordExisting.Text, "Endicia"),
+                    CreatedByShipWorks = false,
+                    EndiciaReseller = (int)EndiciaReseller.None,
 
-                account.AccountNumber = accountExisting.Text.Trim();
-                account.ApiUserPassword = SecureText.Encrypt(passwordExisting.Text, "Endicia");
-                account.CreatedByShipWorks = false;
-                account.EndiciaReseller = (int)EndiciaReseller.None;
+                    // Stuff that only applies when signing up
+                    SignupConfirmation = "",
+                    WebPassword = "",
+                    ApiInitialPassword = "",
 
-                // Stuff that only applies when signing up
-                account.SignupConfirmation = "";
-                account.WebPassword = "";
-                account.ApiInitialPassword = "";
+                    // Account type stuff
+                    AccountType = -1,
+                    TestAccount = false,
+                    ScanFormAddressSource = (int)EndiciaScanFormAddressSource.Provider
+                };
                 
-                // Account type stuff
-                account.AccountType = -1;
-                account.TestAccount = false;
-                account.ScanFormAddressSource = (int) EndiciaScanFormAddressSource.Provider;
-
                 // Address
                 personControl.SaveToEntity(new PersonAdapter(account, ""));
                 account.MailingPostalCode = account.PostalCode;
