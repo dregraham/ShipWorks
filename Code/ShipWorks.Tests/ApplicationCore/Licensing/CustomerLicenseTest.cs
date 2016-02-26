@@ -572,7 +572,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
         }
 
         [Fact]
-        public void HandleRestriction_ReturnsFalse_WhenCannotFindFeature()
+        public void HandleRestriction_ReturnsTrue_WhenCannotFindFeature()
         {
             using (var mock = AutoMock.GetLoose())
             {
@@ -586,7 +586,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
 
                 bool result = testObject.HandleRestriction(EditionFeature.AddOrderCustomer, null, window.Object);
 
-                Assert.Equal(false, result);
+                Assert.Equal(true, result);
             }
         }
 

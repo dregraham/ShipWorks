@@ -36,8 +36,9 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
                 .Returns(EditionRestrictionLevel.None);
 
             ShipmentEntity shipment = new ShipmentEntity();
-            mock.Mock<IOrderManager>()
-                .Setup(o => o.PopulateOrderDetails(shipment))
+            Mock<IOrderManager> orderManager = mock.Mock<IOrderManager>();
+
+            orderManager.Setup(o => o.PopulateOrderDetails(shipment))
                 .Callback<ShipmentEntity>(s => s.Order = new AmazonOrderEntity())
                 .Verifiable();
             
@@ -45,7 +46,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
 
             testObject.IsAllowedFor(shipment);
 
-            mock.VerifyAll = true;
+            orderManager.VerifyAll();
         }
 
         [Fact]
