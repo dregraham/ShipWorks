@@ -4,18 +4,15 @@ using ShipWorks.Shipping;
 
 namespace ShipWorks.ApplicationCore.Licensing.FeatureRestrictions
 {
-    /// <summary>
-    /// ShipmentType restriction
-    /// </summary>
-    public class ShipmentTypeRestriction : FeatureRestriction
+    public class ProcessShipmentRestriction : FeatureRestriction
     {
         /// <summary>
-        /// Works on the ShipmentType edition feature
+        /// The edition feature
         /// </summary>
-        public override EditionFeature EditionFeature => EditionFeature.ShipmentType;
+        public override EditionFeature EditionFeature => EditionFeature.ProcessShipment;
 
         /// <summary>
-        /// Checks to see if the given ShipmentTypeCode is restricted
+        /// Checks the license capabilities to see if processing shipments for the given shipment type is enabled
         /// </summary>
         public override EditionRestrictionLevel Check(ILicenseCapabilities capabilities, object data)
         {
@@ -23,9 +20,9 @@ namespace ShipWorks.ApplicationCore.Licensing.FeatureRestrictions
 
             if (shipmentType != ShipmentTypeCode.None &&
                 capabilities.ShipmentTypeRestriction.ContainsKey(shipmentType) &&
-                capabilities.ShipmentTypeRestriction[shipmentType].Contains(ShipmentTypeRestrictionType.Disabled))
+                capabilities.ShipmentTypeRestriction[shipmentType].Contains(ShipmentTypeRestrictionType.Processing))
             {
-                return EditionRestrictionLevel.Hidden;
+                return EditionRestrictionLevel.Forbidden;
             }
 
             return EditionRestrictionLevel.None;

@@ -608,6 +608,7 @@
     <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\EndiciaInsuranceRestriction.cs" />
     <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\FeatureRestriction.cs" />
     <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\IFeatureRestriction.cs" />
+    <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\ProcessShipmentRestriction.cs" />
     <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\StampsAscendiaConsolidatorRestriction.cs" />
     <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\StampsDhlConsolidatorRestriction.cs" />
     <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\StampsDhlRestriction.cs" />

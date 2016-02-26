@@ -998,7 +998,8 @@ namespace ShipWorks.Shipping
                         throw new ShipmentAlreadyProcessedException("The shipment has already been processed.");
                     }
 
-                    if (EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.ProcessShipment, (ShipmentTypeCode)shipment.ShipmentType).Level == EditionRestrictionLevel.Forbidden)
+                    if (lifetimeScope.Resolve<ILicenseService>().CheckRestriction(EditionFeature.ProcessShipment,
+                        (ShipmentTypeCode)shipment.ShipmentType) == EditionRestrictionLevel.Forbidden)
                     {
                         throw new ShippingException(string.Format("ShipWorks can no longer process {0} shipments. Please try using USPS.", EnumHelper.GetDescription((ShipmentTypeCode)shipment.ShipmentType)));
                     }

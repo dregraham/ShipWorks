@@ -115,6 +115,9 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public bool EndiciaInsurance { get; set; }
 
+        
+        
+        
         /// <summary>
         /// ShipmentType, can be forbidden or just restricted to upgrade
         /// </summary>
