@@ -1,6 +1,6 @@
 ﻿using ShipWorks.Editions;
 
-namespace ShipWorks.ApplicationCore.Licensing.FeatureRestrictions
+namespace ShipWorks.ApplicationCore.Licensing.FeatureRestrictions.Ups
 {
     public class UpsSurePostRestriction : FeatureRestriction
     {
