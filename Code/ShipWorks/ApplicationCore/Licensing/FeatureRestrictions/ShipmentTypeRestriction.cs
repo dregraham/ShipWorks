@@ -14,6 +14,10 @@ namespace ShipWorks.ApplicationCore.Licensing.FeatureRestrictions
     {
         private readonly IIndex<ShipmentTypeCode, ICarrierAccountRepository<EndiciaAccountEntity>> accountRepository;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="accountRepository"></param>
         public ShipmentTypeRestriction(IIndex<ShipmentTypeCode, ICarrierAccountRepository<EndiciaAccountEntity>> accountRepository)
         {
             this.accountRepository = accountRepository;

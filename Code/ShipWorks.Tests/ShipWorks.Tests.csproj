@@ -214,6 +214,7 @@
     <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\FeatureRestrictionTest.cs" />
     <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\ProcessShipmentRestrictionTest.cs" />
     <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\PurchasePostageRestrictionTest.cs" />
+    <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\ShipmentTypeRestrictionTest.cs" />
     <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\StampsAscendiaConsolidatorRestrictionTest.cs" />
     <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\StampsDhlConsolidatorRestrictionTest.cs" />
     <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\StampsDhlRestrictionTest.cs" />
