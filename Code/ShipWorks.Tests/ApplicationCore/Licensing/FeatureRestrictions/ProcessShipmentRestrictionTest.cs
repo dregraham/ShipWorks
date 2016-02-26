@@ -119,7 +119,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.FeatureRestrictions
             licenseCapabilities.Setup(c => c.ShipmentTypeRestriction)
                 .Returns(restrictions);
 
-            Assert.Equal(EditionRestrictionLevel.Forbidden, testObject.Check(licenseCapabilities.Object, ShipmentTypeCode.Amazon));
+            Assert.Equal(EditionRestrictionLevel.None, testObject.Check(licenseCapabilities.Object, ShipmentTypeCode.Amazon));
         }
     }
 }
