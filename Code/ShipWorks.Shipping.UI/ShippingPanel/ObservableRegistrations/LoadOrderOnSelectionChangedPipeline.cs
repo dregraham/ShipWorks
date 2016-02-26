@@ -32,7 +32,11 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
         {
             return new CompositeDisposable(
                 changeHandler.OrderChangingStream()
-                    .Subscribe(_ => viewModel.AllowEditing = false),
+                    .Subscribe(_ =>
+                    {
+                        viewModel.SaveToDatabase();
+                        viewModel.AllowEditing = false;
+                    }),
                 changeHandler.ShipmentLoadedStream()
                     .ObserveOn(schedulerProvider.Dispatcher)
                     .Do(_ => viewModel.AllowEditing = true)
