@@ -6,7 +6,10 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using Autofac;
 using Interapptive.Shared.Utility;
+using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
@@ -55,8 +58,13 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
             bool isMiAvailable = shipmentType.IsMailInnovationsEnabled();
 
             // Check if SurePost is enabled
-            bool isSurePostAvailable = EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.UpsSurePost).Level == EditionRestrictionLevel.None;
-
+            bool isSurePostAvailable;
+            using (var lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                isSurePostAvailable =
+                    lifetimeScope.Resolve<ILicenseService>().CheckRestriction(EditionFeature.UpsSurePost, null) ==
+                    EditionRestrictionLevel.None;
+            }
             List<UpsServiceType> excludedServices = shipmentType.GetExcludedServiceTypes().Select(exclusion => (UpsServiceType) exclusion).ToList();
 
             List<UpsServiceType> upsServices = Enum.GetValues(typeof (UpsServiceType)).Cast<UpsServiceType>()
@@ -79,7 +87,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
         }
 
         /// <summary>
-        /// Save the settings 
+        /// Save the settings
         /// </summary>
         public override void SaveSettings(ShippingSettingsEntity settings)
         {

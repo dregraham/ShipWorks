@@ -8,10 +8,13 @@ using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
 using System.Xml;
+using Autofac;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Adapter.Custom;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -31,7 +34,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
     /// UPS utility functions
     /// </summary>
     public static class UpsUtility
-    {        
+    {
 		private static Lazy<bool> hasSurePostShipments = new Lazy<bool>(SurePostShipmentsExist);
         private static IEnumerable<UpsServiceType> surePostShipmentTypes;
 
@@ -357,9 +360,9 @@ namespace ShipWorks.Shipping.Carriers.UPS
             {
                 return surePostShipmentTypes ?? (surePostShipmentTypes = new ReadOnlyCollection<UpsServiceType>(new []
                 {
-                    UpsServiceType.UpsSurePost1LbOrGreater, 
-                    UpsServiceType.UpsSurePostBoundPrintedMatter, 
-                    UpsServiceType.UpsSurePostMedia, 
+                    UpsServiceType.UpsSurePost1LbOrGreater,
+                    UpsServiceType.UpsSurePostBoundPrintedMatter,
+                    UpsServiceType.UpsSurePostMedia,
                     UpsServiceType.UpsSurePostLessThan1Lb
                 }));
             }
@@ -379,7 +382,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 // UPS Shipment service type  IN ([surePostServiceTypeValues])
                 UpsShipmentFields.Service == surePostServiceTypeValues
             );
-            
+
             using (UpsShipmentCollection upsShipmentCollection = new UpsShipmentCollection())
             {
                 return SqlAdapter.Default.GetDbCount(upsShipmentCollection, bucket) > 0;
@@ -391,7 +394,11 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// </summary>
         public static bool CanUseSurePost()
         {
-            return EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.UpsSurePost).Level == EditionRestrictionLevel.None;
+            using (var lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                return lifetimeScope.Resolve<ILicenseService>().CheckRestriction(EditionFeature.UpsSurePost, null) ==
+                       EditionRestrictionLevel.None;
+            }
         }
 
         /// <summary>
@@ -423,7 +430,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         }
 
         /// <summary>
-        /// UPS only allows email addresses less than or equal to 50 characters.  
+        /// UPS only allows email addresses less than or equal to 50 characters.
         /// </summary>
         /// <returns>
         /// If the email address length is 50 or less, emailAddress is returned.

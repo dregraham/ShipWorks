@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Autofac;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Utility;
@@ -12,6 +13,8 @@ using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
 using ShipWorks.Shipping.Settings;
 using log4net;
+using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Licensing;
 
 namespace ShipWorks.Shipping.Carriers.UPS.ServiceManager.Countries
 {
@@ -88,7 +91,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.ServiceManager.Countries
                 mapping = LoadUpsServiceMappings().FirstOrDefault(m => m.RateServiceCode.ToUpperInvariant() == rateCode.ToUpperInvariant()
                                                     && m.DestinationCountryCode.ToUpperInvariant() == InternationalCountryCode.ToUpperInvariant());
             }
-            
+
             if (mapping == null)
             {
                 // Still didn't find a mapping - throw an exception
@@ -274,17 +277,28 @@ namespace ShipWorks.Shipping.Carriers.UPS.ServiceManager.Countries
         {
             List<UpsServiceMapping> surePostServices = new List<UpsServiceMapping>();
             bool isDomesticCountry = new AddressAdapter {CountryCode = destinationCountryCode}.IsDomesticCountry();
-
-            // Postal domestic country restrictions apply to SurePost the service
-            if (isDomesticCountry && EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.UpsSurePost).Level == EditionRestrictionLevel.None)
+            using (var lifetimeScope = IoC.BeginLifetimeScope())
             {
-                surePostServices.Add(new UpsServiceMapping(UpsServiceType.UpsSurePostLessThan1Lb, destinationCountryCode, "92", "92", string.Empty, "USL", WorldShipServiceDescriptions.UpsSurePostLessThan1Lb, false, true));
-                surePostServices.Add(new UpsServiceMapping(UpsServiceType.UpsSurePost1LbOrGreater, destinationCountryCode, "93", "93", string.Empty, "USG", WorldShipServiceDescriptions.UpsSurePost1LbOrGreater, false, true));
-                surePostServices.Add(new UpsServiceMapping(UpsServiceType.UpsSurePostBoundPrintedMatter, destinationCountryCode, "94", string.Empty, "94", "USB", WorldShipServiceDescriptions.UpsSurePostBoundPrintedMatter, false, true));
-                surePostServices.Add(new UpsServiceMapping(UpsServiceType.UpsSurePostMedia, destinationCountryCode, "95", "95", "USM", string.Empty, WorldShipServiceDescriptions.UpsSurePostMedia, false, true));
-            }
+                // Postal domestic country restrictions apply to SurePost the service
+                if (isDomesticCountry &&
+                    lifetimeScope.Resolve<ILicenseService>().CheckRestriction(EditionFeature.UpsSurePost, null) ==
+                    EditionRestrictionLevel.None)
+                {
+                    surePostServices.Add(new UpsServiceMapping(UpsServiceType.UpsSurePostLessThan1Lb,
+                        destinationCountryCode, "92", "92", string.Empty, "USL",
+                        WorldShipServiceDescriptions.UpsSurePostLessThan1Lb, false, true));
+                    surePostServices.Add(new UpsServiceMapping(UpsServiceType.UpsSurePost1LbOrGreater,
+                        destinationCountryCode, "93", "93", string.Empty, "USG",
+                        WorldShipServiceDescriptions.UpsSurePost1LbOrGreater, false, true));
+                    surePostServices.Add(new UpsServiceMapping(UpsServiceType.UpsSurePostBoundPrintedMatter,
+                        destinationCountryCode, "94", string.Empty, "94", "USB",
+                        WorldShipServiceDescriptions.UpsSurePostBoundPrintedMatter, false, true));
+                    surePostServices.Add(new UpsServiceMapping(UpsServiceType.UpsSurePostMedia, destinationCountryCode,
+                        "95", "95", "USM", string.Empty, WorldShipServiceDescriptions.UpsSurePostMedia, false, true));
+                }
 
-            return surePostServices;
+                return surePostServices;
+            }
         }
 
 
