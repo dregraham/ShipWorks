@@ -4,6 +4,7 @@ using Autofac.Core;
 using Autofac.Extras.Moq;
 using Moq;
 using Moq.Language.Flow;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Editions;
 using ShipWorks.Shipping.Carriers.Amazon;
@@ -30,12 +31,16 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         {
             MockShipmentTypeRestriction(EditionRestrictionLevel.None);
 
+            mock.Mock<ILicenseService>()
+                .Setup(l => l.CheckRestriction(It.IsAny<EditionFeature>(), It.IsAny<ShipmentTypeCode>()))
+                .Returns(EditionRestrictionLevel.None);
+
             ShipmentEntity shipment = new ShipmentEntity();
             mock.Mock<IOrderManager>()
                 .Setup(o => o.PopulateOrderDetails(shipment))
                 .Callback<ShipmentEntity>(s => s.Order = new AmazonOrderEntity())
                 .Verifiable();
-
+            
             AmazonShipmentType testObject = mock.Create<AmazonShipmentType>();
 
             testObject.IsAllowedFor(shipment);
@@ -114,6 +119,10 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
             };
 
             var store = new ChannelAdvisorStoreEntity { TypeCode = (int)StoreTypeCode.ChannelAdvisor };
+
+            mock.Mock<ILicenseService>()
+                .Setup(l => l.CheckRestriction(It.IsAny<EditionFeature>(), It.IsAny<ShipmentTypeCode>()))
+                .Returns(restrictionLevel);
 
             mock.Mock<IStoreManager>()
                 .Setup(m => m.GetStore(It.IsAny<long>()))

@@ -318,7 +318,7 @@ namespace ShipWorks.ApplicationCore.Licensing
 
             return featureRestrictions
                 .Where(r => r.EditionFeature == feature)
-                .Select(r => (bool?) r.Handle(owner, data))
+                .Select(r => (bool?) r.Handle(owner, LicenseCapabilities, data))
                 .SingleOrDefault() ?? true;
         }
     }

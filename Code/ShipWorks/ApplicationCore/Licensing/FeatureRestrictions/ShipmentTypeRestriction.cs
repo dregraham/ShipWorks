@@ -37,7 +37,7 @@ namespace ShipWorks.ApplicationCore.Licensing.FeatureRestrictions
         /// Handles ShipmentType feature restrictions
         /// </summary>
         /// <remarks>bool if the issue has been resolved</remarks>
-        public bool Handle(IWin32Window owner, object data)
+        public bool Handle(IWin32Window owner, ILicenseCapabilities capabilities, object data)
         {
             return false;
         }
