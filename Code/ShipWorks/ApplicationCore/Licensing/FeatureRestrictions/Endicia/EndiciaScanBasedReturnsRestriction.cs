@@ -2,7 +2,7 @@
 
 namespace ShipWorks.ApplicationCore.Licensing.FeatureRestrictions.Endicia
 {
-    public class EndiciaScanBasedReturnsRestriction : FeatureRestriction, IFeatureRestriction
+    public class EndiciaScanBasedReturnsRestriction : FeatureRestriction
     {
         /// <summary>
         /// The edition feature

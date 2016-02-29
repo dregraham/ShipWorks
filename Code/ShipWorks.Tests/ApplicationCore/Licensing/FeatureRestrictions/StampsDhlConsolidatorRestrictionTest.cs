@@ -2,6 +2,7 @@
 using Moq;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Licensing.FeatureRestrictions;
+using ShipWorks.ApplicationCore.Licensing.FeatureRestrictions.Stamps;
 using ShipWorks.Editions;
 using Xunit;
 

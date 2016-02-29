@@ -1,8 +1,8 @@
 ﻿using ShipWorks.Editions;
 
-namespace ShipWorks.ApplicationCore.Licensing.FeatureRestrictions
+namespace ShipWorks.ApplicationCore.Licensing.FeatureRestrictions.Stamps
 {
-    public class StampsDhlRestriction : FeatureRestriction, IFeatureRestriction
+    public class StampsDhlRestriction : FeatureRestriction
     {
         /// <summary>
         /// The edition feature

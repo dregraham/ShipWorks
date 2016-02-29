@@ -1,8 +1,8 @@
 ﻿using ShipWorks.Editions;
 
-namespace ShipWorks.ApplicationCore.Licensing.FeatureRestrictions
+namespace ShipWorks.ApplicationCore.Licensing.FeatureRestrictions.Endicia
 {
-    public class EndiciaConsolidatorRestriction : FeatureRestriction, IFeatureRestriction
+    public class EndiciaConsolidatorRestriction : FeatureRestriction
     {
         /// <summary>
         /// The edition feature

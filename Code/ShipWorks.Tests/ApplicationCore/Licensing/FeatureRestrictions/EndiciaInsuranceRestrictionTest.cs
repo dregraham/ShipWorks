@@ -3,6 +3,7 @@ using Autofac.Extras.Moq;
 using Moq;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Licensing.FeatureRestrictions;
+using ShipWorks.ApplicationCore.Licensing.FeatureRestrictions.Endicia;
 using ShipWorks.Editions;
 using Xunit;
 

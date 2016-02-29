@@ -1,8 +1,8 @@
 ﻿using ShipWorks.Editions;
 
-namespace ShipWorks.ApplicationCore.Licensing.FeatureRestrictions
+namespace ShipWorks.ApplicationCore.Licensing.FeatureRestrictions.Endicia
 {
-    public class EndiciaInsuranceRestriction : FeatureRestriction, IFeatureRestriction
+    public class EndiciaInsuranceRestriction : FeatureRestriction
     {
         /// <summary>
         /// Gets the edition feature.
