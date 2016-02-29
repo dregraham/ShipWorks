@@ -451,6 +451,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
                 {
                     packageAdapter.Weight = ShipmentContentWeight / PackageAdapters.Count();
                 }
+
+                LoadDimensionsFromSelectedPackageAdapter();
             }
         }
         #endregion Customs
