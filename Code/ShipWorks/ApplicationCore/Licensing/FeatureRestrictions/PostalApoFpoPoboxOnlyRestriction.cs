@@ -7,11 +7,19 @@ using ShipWorks.Shipping.Carriers.Postal;
 
 namespace ShipWorks.ApplicationCore.Licensing.FeatureRestrictions
 {
+    /// <summary>
+    /// Restricts Postal shipments to Apo Fpo and PoBox
+    /// </summary>
     public class PostalApoFpoPoboxOnlyRestriction : FeatureRestriction
     {
+        /// <summary>
+        /// Returns the Edition Feature
+        /// </summary>
         public override EditionFeature EditionFeature => EditionFeature.PostalApoFpoPoboxOnly;
 
-
+        /// <summary>
+        /// Checks to see if we should restrict postal shipments to just APO FPO or PoBox
+        /// </summary>
         public override EditionRestrictionLevel Check(ILicenseCapabilities capabilities, object data)
         {
             ShipmentEntity shipment = data as ShipmentEntity;
@@ -46,21 +54,7 @@ namespace ShipWorks.ApplicationCore.Licensing.FeatureRestrictions
                 return EditionRestrictionLevel.None;
             }
 
-            // Apo Fpo PoBox only and we got this far so the shipment must not be
-            // one of the three, return forbidden 
-            if (capabilities.PostalAvailability == BrownPostalAvailability.ApoFpoPobox)
-            {
-                return EditionRestrictionLevel.Forbidden;
-            }
-
-
-            if (capabilities.PostalAvailability == BrownPostalAvailability.None)
-            {
-                return EditionRestrictionLevel.Forbidden;
-            }
-
             return EditionRestrictionLevel.Forbidden;
-            
         }
     }
 }

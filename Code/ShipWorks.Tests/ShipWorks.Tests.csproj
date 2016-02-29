@@ -212,6 +212,7 @@
     <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\EndiciaInsuranceRestrictionTest.cs" />
     <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\EndiciaScanBasedReturnsRestrictionTest.cs" />
     <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\FeatureRestrictionTest.cs" />
+    <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\PostalApoFpoPoboxOnlyRestrictionTest.cs" />
     <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\ShipmentTypeFunctionality\AccountRegistrationRestrictionTest.cs" />
     <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\ShipmentTypeFunctionality\ProcessShipmentRestrictionTest.cs" />
     <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\ShipmentTypeFunctionality\PurchasePostageRestrictionTest.cs" />
