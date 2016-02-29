@@ -623,6 +623,7 @@
     <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\Stamps\StampsIbcConsolidatorRestriction.cs" />
     <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\Stamps\StampsInsuranceRestriction.cs" />
     <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\Stamps\StampsRrDonnelleyConsolidatorRestriction.cs" />
+    <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\Ups\UpsAccountNumberRestriction.cs" />
     <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\Ups\UpsSurePostRestriction.cs" />
     <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\Ups\UpsAccountLimitRestriction.cs" />
     <Compile Include="ApplicationCore\Licensing\IActivationResponse.cs" />

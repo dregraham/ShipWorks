@@ -365,7 +365,9 @@ namespace ShipWorks.ApplicationCore.Licensing
         private void SetUpsCapabilities(XPathNamespaceNavigator xpath)
         {
             UpsStatus = (UpsStatus)XPathUtility.Evaluate(xpath, "//UpsOnly/@status", 0);
-            UpsAccountNumbers = XPathUtility.Evaluate(xpath, "//UpsOnly", "").Split(';');
+            UpsAccountNumbers = XPathUtility.Evaluate(xpath, "//UpsOnly", "").Split(';')
+                                            .Select(a => a.Trim().ToLower())
+                                            .ToArray();
 
             UpsAccountLimit = UpsStatus == UpsStatus.Discount ? 
                 1 : 
