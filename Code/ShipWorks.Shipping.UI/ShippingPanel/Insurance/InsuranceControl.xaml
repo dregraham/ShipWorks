@@ -28,23 +28,23 @@
         </Grid.RowDefinitions>
 
         <TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource GridLabel}"
-                       Text="{Binding InsuranceViewModel.InsuranceLabelDisplayText, FallbackValue='Insurance:'}"></TextBlock>
+                       Text="{Binding InsuranceLabelDisplayText, FallbackValue='Insurance:'}"></TextBlock>
         <StackPanel  Grid.Row="0" Grid.Column="1" Orientation="Horizontal">
             <CheckBox Margin="4 4 0 0" Name="IsInsured"
-                    Content="{Binding InsuranceViewModel.InsuranceTypeLabelDisplayText, FallbackValue='Insurance Type'}"
-                    IsChecked="{Binding InsuranceViewModel.Insurance}"/>
+                    Content="{Binding InsuranceTypeLabelDisplayText, FallbackValue='Insurance Type'}"
+                    IsChecked="{Binding Insurance}"/>
         </StackPanel>
 
         <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal">
             <TextBlock Style="{StaticResource GridLabel}"
-                           Text="{Binding InsuranceViewModel.InsuranceValueLabelDisplayText, FallbackValue='Insured Value:'}"></TextBlock>
+                           Text="{Binding InsuranceValueLabelDisplayText, FallbackValue='Insured Value:'}"></TextBlock>
             <TextBox Width="80"  Margin="4 4 0 0" Style="{DynamicResource TextBoxErrorTemplate}"
-                         IsEnabled="{Binding InsuranceViewModel.Insurance}"
-                         Text="{Binding InsuranceViewModel.DeclaredValue, StringFormat=c, FallbackValue='50.50',
+                         IsEnabled="{Binding Insurance}"
+                         Text="{Binding DeclaredValue, StringFormat=c, FallbackValue='50.50',
                          Converter={StaticResource EmptyMoney},
                          TargetNullValue='', ValidatesOnDataErrors=true, NotifyOnValidationError=true}"/>
 
-            <local:InsurancePromoControl DataContext="{Binding Path=InsuranceViewModel, Mode=OneWay}"/>
+            <local:InsurancePromoControl />
         </StackPanel>
     </Grid>
 </UserControl>

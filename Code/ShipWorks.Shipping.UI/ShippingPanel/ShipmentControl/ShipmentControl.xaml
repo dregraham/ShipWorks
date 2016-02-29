@@ -275,6 +275,6 @@
                 </ui:WeightInput>
             </StackPanel>
         </Grid>
-        <ins:InsuranceControl />
+        <ins:InsuranceControl DataContext="{Binding InsuranceViewModel}" />
     </StackPanel>
 </UserControl>

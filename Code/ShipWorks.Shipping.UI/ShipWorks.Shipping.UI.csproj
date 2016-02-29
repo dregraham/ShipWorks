@@ -200,8 +200,8 @@
       <DependentUpon>CustomsControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="ShippingPanel\IInsuranceViewModel.cs" />
-    <Compile Include="ShippingPanel\Insurance\Insurance.xaml.cs">
-      <DependentUpon>Insurance.xaml</DependentUpon>
+    <Compile Include="ShippingPanel\Insurance\InsuranceControl.xaml.cs">
+      <DependentUpon>InsuranceControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="ShippingPanel\Insurance\InsurancePromoControl.xaml.cs">
       <DependentUpon>InsurancePromoControl.xaml</DependentUpon>
@@ -502,7 +502,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ShippingPanel\Insurance\Insurance.xaml">
+    <Page Include="ShippingPanel\Insurance\InsuranceControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
