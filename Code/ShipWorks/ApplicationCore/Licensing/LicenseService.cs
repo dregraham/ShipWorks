@@ -19,6 +19,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         private readonly Func<string, ICustomerLicense> customerLicenseFactory;
         private readonly Func<StoreEntity, StoreLicense> storeLicenseFactory;
         private readonly IStoreManager storeManager;
+        private ICustomerLicense licenseCache;
 
         /// <summary>
         /// Constructor
@@ -57,7 +58,7 @@ namespace ShipWorks.ApplicationCore.Licensing
                 // If Legacy, return store license, else return customer license
                 return IsLegacy
                     ? (ILicense) storeLicenseFactory(store)
-                    : customerLicenseFactory(CustomerKey);
+                    : GetCustomerLicense();
             }
             catch (ShipWorksLicenseException ex)
             {
@@ -72,7 +73,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         {
             return SqlSession.Current == null || IsLegacy
                 ? EditionManager.ActiveRestrictions.CheckRestriction(feature, data).Level
-                : customerLicenseFactory(CustomerKey).CheckRestriction(feature, data);
+                : GetCustomerLicense().CheckRestriction(feature, data);
         }
 
         /// <summary>
@@ -83,7 +84,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             return SqlSession.Current == null || IsLegacy
                 ? EditionManager.HandleRestrictionIssue(owner,
                     EditionManager.ActiveRestrictions.CheckRestriction(feature, data))
-                : customerLicenseFactory(CustomerKey).HandleRestriction(feature, data, owner);
+                : GetCustomerLicense().HandleRestriction(feature, data, owner);
         }
 
         /// <summary>
@@ -94,10 +95,12 @@ namespace ShipWorks.ApplicationCore.Licensing
         {
             try
             {
-                // If Legacy, return store licenses for each store, else return a single customer license
-                return IsLegacy
-                    ? storeManager.GetEnabledStores().Select(GetLicense)
-                    : new[] {customerLicenseFactory(CustomerKey)};
+                if (IsLegacy)
+                {
+                    return storeManager.GetEnabledStores().Select(GetLicense);
+                }
+
+                return new[] { GetCustomerLicense() };
             }
             catch (ShipWorksLicenseException ex)
             {
@@ -123,8 +126,8 @@ namespace ShipWorks.ApplicationCore.Licensing
             {
                 return new EnumResult<LogOnRestrictionLevel>(LogOnRestrictionLevel.Forbidden, ex.Message);
             }
-
-            ILicense customerLicense = customerLicenseFactory(CustomerKey);
+            
+            ILicense customerLicense = GetCustomerLicense();
 
             // Customer licenses that are disabled cannot logon, refresh the
             // license info with tango before checking if the license is disabled
@@ -135,6 +138,12 @@ namespace ShipWorks.ApplicationCore.Licensing
                 new EnumResult<LogOnRestrictionLevel>(LogOnRestrictionLevel.None);
         }
 
-
+        /// <summary>
+        /// Returns the cached customer license or creates a new license if there is no cache
+        /// </summary>
+        private ICustomerLicense GetCustomerLicense()
+        {
+            return licenseCache ?? (licenseCache = customerLicenseFactory(CustomerKey));
+        }
     }
 }

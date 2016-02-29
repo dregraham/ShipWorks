@@ -411,13 +411,13 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         private void SetStampsCapabilities(XPathNamespaceNavigator xpath)
         {
-            StampsInsurance = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='StampsInsurance']/Value", 0) == 1;
-            StampsDhl = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='StampsDhl']/Value", 0) == 1;
-            StampsAscendiaConsolidator = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='StampsAscendiaConsolidator']/Value", 0) == 1;
-            StampsDhlConsolidator = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='StampsDhlConsolidator']/Value", 0) == 1;
-            StampsGlobegisticsConsolidator = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='StampsGlobegisticsConsolidator']/Value", 0) == 1;
-            StampsIbcConsolidator = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='StampsIbcConsolidator']/Value", 0) == 1;
-            StampsRrDonnelleyConsolidator = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='StampsRrDonnelleyConsolidator']/Value", 0) == 1;
+            StampsInsurance = XPathUtility.Evaluate(xpath, "//StampsInsuranceEnabled/@status", 0) == 1;
+            StampsDhl = XPathUtility.Evaluate(xpath, "//StampsDhlEnabled/@status", 0) == 1;
+            StampsAscendiaConsolidator = XPathUtility.Evaluate(xpath, "//StampsAscendiaEnabled/@status", 0) == 1;
+            StampsDhlConsolidator = XPathUtility.Evaluate(xpath, "//StampsDhlConsolidatorEnabled/@status", 0) == 1;
+            StampsGlobegisticsConsolidator = XPathUtility.Evaluate(xpath, "//StampsGlobegisticsEnabled/@status", 0) == 1;
+            StampsIbcConsolidator = XPathUtility.Evaluate(xpath, "//StampsIbcEnabled/@status", 0) == 1;
+            StampsRrDonnelleyConsolidator = XPathUtility.Evaluate(xpath, "//StampsRrDonnelleyEnabled/@status", 0) == 1;
         }
 
         /// <summary>
@@ -425,13 +425,10 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         private void SetEndiciaCapabilities(XPathNamespaceNavigator xpath)
         {
-            EndiciaScanForm = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='EndiciaScanForm']/Value", 0) == 1;
-            EndiciaAccountLimit = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='EndiciaAccountLimit']/Value", 0) == 1;
-            EndiciaAccountNumber = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='EndiciaAccountNumber']/Value", 0) == 1;
-            EndiciaDhl = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='EndiciaDhl']/Value", 0) == 1;
-            EndiciaInsurance = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='EndiciaInsurance']/Value", 0) == 1;
-            EndiciaConsolidator = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='EndiciaConsolidator']/Value", 0) == 1;
-            EndiciaScanBasedReturns = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='EndiciaScanBasedReturns']/Value", 0) == 1;
+            EndiciaDhl = XPathUtility.Evaluate(xpath, "//EndiciaDhlEnabled/@status", 0) == 1;
+            EndiciaInsurance = XPathUtility.Evaluate(xpath, "//EndiciaInsuranceEnabled/@status", 0) == 1;
+            EndiciaConsolidator = XPathUtility.Evaluate(xpath, "//EndiciaConsolidator/@status", 0) == 1;
+            EndiciaScanBasedReturns = XPathUtility.Evaluate(xpath, "//EndiciaScanBasedReturns/@status", 0) == 1;
         }
     }
 }
