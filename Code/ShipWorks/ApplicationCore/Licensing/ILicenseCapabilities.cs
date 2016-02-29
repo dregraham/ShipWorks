@@ -70,6 +70,9 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         Dictionary<ShipmentTypeCode, IEnumerable<ShipmentTypeRestrictionType>> ShipmentTypeRestriction { get;}
 
+        /// <summary>
+        /// Gets the shipping policy for a specific shipment type.
+        /// </summary>
         Dictionary<ShipmentTypeCode, Dictionary<ShippingPolicyType, string>> ShipmentTypeShippingPolicy { get; }
 
         /// <summary>

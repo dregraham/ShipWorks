@@ -59,12 +59,14 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
 
             // Check if SurePost is enabled
             bool isSurePostAvailable;
-            using (var lifetimeScope = IoC.BeginLifetimeScope())
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                isSurePostAvailable =
-                    lifetimeScope.Resolve<ILicenseService>().CheckRestriction(EditionFeature.UpsSurePost, null) ==
-                    EditionRestrictionLevel.None;
+                ILicenseService licenseService = lifetimeScope.Resolve<ILicenseService>();
+                EditionRestrictionLevel restrictionLevel = licenseService.CheckRestriction(EditionFeature.UpsSurePost, null);
+
+                isSurePostAvailable = restrictionLevel == EditionRestrictionLevel.None;
             }
+
             List<UpsServiceType> excludedServices = shipmentType.GetExcludedServiceTypes().Select(exclusion => (UpsServiceType) exclusion).ToList();
 
             List<UpsServiceType> upsServices = Enum.GetValues(typeof (UpsServiceType)).Cast<UpsServiceType>()

@@ -186,14 +186,8 @@ namespace ShipWorks.ApplicationCore.Licensing
             }
 
             // Check store count limitation
-            EditionRestrictionLevel restrictionLevel;
-            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
-            {
-                ILicenseService licenseService = lifetimeScope.Resolve<ILicenseService>();
-                restrictionLevel = licenseService.CheckRestriction(EditionFeature.SingleStore, null);
-            }
-
-            if (restrictionLevel != EditionRestrictionLevel.None)
+            EditionRestrictionIssue issue = EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.SingleStore);
+            if (issue.Level != EditionRestrictionLevel.None)
             {
                 if (StoreManager.GetAllStores().Count > 1)
                 {

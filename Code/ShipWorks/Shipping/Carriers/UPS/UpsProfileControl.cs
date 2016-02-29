@@ -89,10 +89,12 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
             bool isSurePostAvailable;
 
-            using (var lifetimeScope = IoC.BeginLifetimeScope())
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                isSurePostAvailable = lifetimeScope.Resolve<ILicenseService>().CheckRestriction(EditionFeature.UpsSurePost, null) ==
-                EditionRestrictionLevel.None;
+                ILicenseService licenseService = lifetimeScope.Resolve<ILicenseService>();
+                EditionRestrictionLevel restrictionLevel = licenseService.CheckRestriction(EditionFeature.UpsSurePost, null);
+
+                isSurePostAvailable = restrictionLevel == EditionRestrictionLevel.None;
             }
 
             if (isSurePostAvailable || isMIAvailable)

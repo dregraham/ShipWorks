@@ -91,10 +91,11 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                 // from SurePost either
                 firstExceptionEncountered = e;
             }
-            using (var lifetimeScope = IoC.BeginLifetimeScope())
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                if (lifetimeScope.Resolve<ILicenseService>().CheckRestriction(EditionFeature.UpsSurePost, null) ==
-                    EditionRestrictionLevel.None)
+                ILicenseService licenseService = lifetimeScope.Resolve<ILicenseService>();
+                EditionRestrictionLevel restrictionLevel = licenseService.CheckRestriction(EditionFeature.UpsSurePost, null);
+                if (restrictionLevel == EditionRestrictionLevel.None)
                 {
                     UpsServiceManagerFactory serviceManagerFactory = new UpsServiceManagerFactory(shipment);
                     IUpsServiceManager upsServiceManager = serviceManagerFactory.Create(shipment);

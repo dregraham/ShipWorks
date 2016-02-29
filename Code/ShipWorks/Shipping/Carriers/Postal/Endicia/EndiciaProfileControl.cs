@@ -98,15 +98,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         }
 
         /// <summary>
-        /// Determines if endicia scan-based returns are enabled.
+        /// Determines if Endicia scan-based returns are enabled.
         /// </summary>
         private static bool IsScanBasedReturnsEnabled()
         {
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                return
-                    lifetimeScope.Resolve<ILicenseService>().CheckRestriction(EditionFeature.EndiciaScanBasedReturns, null) ==
-                    EditionRestrictionLevel.None;
+                ILicenseService licenseService = lifetimeScope.Resolve<ILicenseService>();
+                EditionRestrictionLevel restrictionLevel = licenseService.CheckRestriction(EditionFeature.EndiciaScanBasedReturns, null);
+
+                return restrictionLevel == EditionRestrictionLevel.None;
             }
         }
     }

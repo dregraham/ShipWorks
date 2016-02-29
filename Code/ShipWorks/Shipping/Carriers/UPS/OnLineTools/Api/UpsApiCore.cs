@@ -92,11 +92,11 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                 throw new UpsException(accountRestriction.GetDescription());
             }
 
-            using (var scope = IoC.BeginLifetimeScope())
+            using (ILifetimeScope scope = IoC.BeginLifetimeScope())
             {
-                ILicenseService licenseService = scope.Resolve<ILicenseService>();
                 // The window handler is null because A: we are in a static method and B: the 
                 // UpsAccountLimitFeatureRestriction doesn't use it at all.
+                ILicenseService licenseService = scope.Resolve<ILicenseService>();
                 licenseService.HandleRestriction(EditionFeature.UpsAccountLimit, UpsAccountManager.Accounts.Count, null);
             }
 

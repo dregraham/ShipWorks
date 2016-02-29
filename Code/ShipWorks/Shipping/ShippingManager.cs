@@ -998,8 +998,10 @@ namespace ShipWorks.Shipping
                         throw new ShipmentAlreadyProcessedException("The shipment has already been processed.");
                     }
 
-                    if (lifetimeScope.Resolve<ILicenseService>().CheckRestriction(EditionFeature.ProcessShipment,
-                        (ShipmentTypeCode)shipment.ShipmentType) == EditionRestrictionLevel.Forbidden)
+                    ILicenseService licenseService = lifetimeScope.Resolve<ILicenseService>();
+                    EditionRestrictionLevel restrictionLevel = licenseService.CheckRestriction(EditionFeature.ProcessShipment, (ShipmentTypeCode) shipment.ShipmentType);
+
+                    if (restrictionLevel == EditionRestrictionLevel.Forbidden)
                     {
                         throw new ShippingException(string.Format("ShipWorks can no longer process {0} shipments. Please try using USPS.", EnumHelper.GetDescription((ShipmentTypeCode)shipment.ShipmentType)));
                     }
@@ -1159,8 +1161,7 @@ namespace ShipWorks.Shipping
                     // Determine residential status
                     if (shipmentType.IsResidentialStatusRequired(shipment))
                     {
-                        shipment.ResidentialResult =
-                            ResidentialDeterminationService.DetermineResidentialAddress(shipment);
+                        shipment.ResidentialResult = ResidentialDeterminationService.DetermineResidentialAddress(shipment);
                     }
 
                     InsuranceUtility.ValidateShipment(shipment);

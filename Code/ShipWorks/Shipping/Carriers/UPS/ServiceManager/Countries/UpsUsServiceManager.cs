@@ -277,12 +277,13 @@ namespace ShipWorks.Shipping.Carriers.UPS.ServiceManager.Countries
         {
             List<UpsServiceMapping> surePostServices = new List<UpsServiceMapping>();
             bool isDomesticCountry = new AddressAdapter {CountryCode = destinationCountryCode}.IsDomesticCountry();
-            using (var lifetimeScope = IoC.BeginLifetimeScope())
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
+                ILicenseService licenseService = lifetimeScope.Resolve<ILicenseService>();
+                EditionRestrictionLevel restrictionLevel = licenseService.CheckRestriction(EditionFeature.UpsSurePost, null);
+                
                 // Postal domestic country restrictions apply to SurePost the service
-                if (isDomesticCountry &&
-                    lifetimeScope.Resolve<ILicenseService>().CheckRestriction(EditionFeature.UpsSurePost, null) ==
-                    EditionRestrictionLevel.None)
+                if (isDomesticCountry && restrictionLevel == EditionRestrictionLevel.None)
                 {
                     surePostServices.Add(new UpsServiceMapping(UpsServiceType.UpsSurePostLessThan1Lb,
                         destinationCountryCode, "92", "92", string.Empty, "USL",

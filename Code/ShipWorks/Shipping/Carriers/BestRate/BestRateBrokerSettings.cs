@@ -87,11 +87,8 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// </summary>
         public bool IsEndiciaDHLEnabled()
         {
-            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
-            {
-                return (lifetimeScope.Resolve<ILicenseService>().CheckRestriction(EditionFeature.EndiciaDhl, null) ==
-                    EditionRestrictionLevel.None);
-            }
+            EditionRestrictionLevel restrictionLevel = GetRestrictionLevel(EditionFeature.EndiciaDhl);
+            return restrictionLevel == EditionRestrictionLevel.None;
         }
 
         /// <summary>
@@ -99,10 +96,19 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// </summary>
         public bool IsEndiciaConsolidatorEnabled()
         {
+            EditionRestrictionLevel restrictionLevel = GetRestrictionLevel(EditionFeature.EndiciaConsolidator);
+            return restrictionLevel == EditionRestrictionLevel.None;
+        }
+
+        /// <summary>
+        /// A helper method to get the restriction level for a given feature.
+        /// </summary>
+        private EditionRestrictionLevel GetRestrictionLevel(EditionFeature feature)
+        {
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                return (lifetimeScope.Resolve<ILicenseService>().CheckRestriction(EditionFeature.EndiciaConsolidator, null) ==
-                        EditionRestrictionLevel.None);
+                EditionRestrictionLevel restrictionLevel = lifetimeScope.Resolve<ILicenseService>().CheckRestriction(feature, null);
+                return restrictionLevel;
             }
         }
     }

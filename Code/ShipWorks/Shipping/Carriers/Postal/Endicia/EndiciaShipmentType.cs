@@ -317,11 +317,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         {
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
+                ILicenseService licenseService = lifetimeScope.Resolve<ILicenseService>();
+                EditionRestrictionLevel restrictionLevel = licenseService.CheckRestriction(EditionFeature.EndiciaScanBasedReturns, null);
+
                 return shipment.ReturnShipment &&
                        shipment.Postal.Endicia.ScanBasedReturn &&
                        shipment.ShipmentType == (int) ShipmentTypeCode.Endicia &&
-                       lifetimeScope.Resolve<ILicenseService>().CheckRestriction(EditionFeature.EndiciaScanBasedReturns, null) ==
-                       EditionRestrictionLevel.None;
+                       restrictionLevel == EditionRestrictionLevel.None;
             }
         }
 
@@ -380,9 +382,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 }
             }
         }
-
-                        // Show the single account dialog if there are Express1 accounts and customer is not using USPS
-                    // (Express1) rate discount messaging is restricted, so we're allowed to add the USPS
+        
         /// <summary>
         /// Gets the processing synchronizer to be used during the PreProcessing of a shipment.
         /// </summary>
@@ -528,11 +528,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         {
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
+                ILicenseService licenseService = lifetimeScope.Resolve<ILicenseService>();
+                EditionRestrictionLevel restrictionLevel = licenseService.CheckRestriction(EditionFeature.EndiciaScanBasedReturns, null);
+
                 // If scan based returns is not allowed, show the the default returns control
-                return lifetimeScope.Resolve<ILicenseService>().CheckRestriction(EditionFeature.EndiciaScanBasedReturns, null) !=
-                       EditionRestrictionLevel.None ?
-                       base.CreateReturnsControl() :
-                       new EndiciaReturnsControl();
+                if (restrictionLevel != EditionRestrictionLevel.None)
+                {
+                    return base.CreateReturnsControl();
+                }
+
+                return new EndiciaReturnsControl();
             }
         }
 

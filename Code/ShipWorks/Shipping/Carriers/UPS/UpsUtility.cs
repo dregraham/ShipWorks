@@ -394,10 +394,12 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// </summary>
         public static bool CanUseSurePost()
         {
-            using (var lifetimeScope = IoC.BeginLifetimeScope())
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                return lifetimeScope.Resolve<ILicenseService>().CheckRestriction(EditionFeature.UpsSurePost, null) ==
-                       EditionRestrictionLevel.None;
+                ILicenseService licenseService = lifetimeScope.Resolve<ILicenseService>();
+                EditionRestrictionLevel restrictionLevel = licenseService.CheckRestriction(EditionFeature.UpsSurePost, null);
+                
+                return restrictionLevel == EditionRestrictionLevel.None;
             }
         }
 

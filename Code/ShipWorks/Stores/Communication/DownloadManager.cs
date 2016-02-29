@@ -526,7 +526,7 @@ namespace ShipWorks.Stores.Communication
         {
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                LicenseService licenseService = lifetimeScope.Resolve<LicenseService>();
+                ILicenseService licenseService = lifetimeScope.Resolve<ILicenseService>();
                 ILicense license = licenseService.GetLicense(store);
                 license.Refresh();
 

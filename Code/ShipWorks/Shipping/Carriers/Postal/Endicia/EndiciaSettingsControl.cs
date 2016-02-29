@@ -63,10 +63,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 // Showing the insurance control is dependent on if its allowed in tango
                 insuranceProviderChooser.InsuranceProvider = (InsuranceProvider)settings.EndiciaInsuranceProvider;
 
-                using (var scope = IoC.BeginLifetimeScope())
+                using (ILifetimeScope scope = IoC.BeginLifetimeScope())
                 {
-                    LicenseService licenseService = scope.Resolve<LicenseService>();
+                    ILicenseService licenseService = scope.Resolve<ILicenseService>();
                     EditionRestrictionLevel restrictionLevel = licenseService.CheckRestriction(EditionFeature.EndiciaInsurance, null);
+
                     panelInsurance.Visible = restrictionLevel == EditionRestrictionLevel.None;
                 }
             }

@@ -287,7 +287,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             using (ILifetimeScope scope = IoC.BeginLifetimeScope())
             {
                 ILicenseService licenseService = scope.Resolve<ILicenseService>();
-                return licenseService.CheckRestriction(EditionFeature.ShippingAccountConversion, ShipmentTypeCode.Usps) == EditionRestrictionLevel.Forbidden;
+                EditionRestrictionLevel restrictionLevel = licenseService.CheckRestriction(EditionFeature.ShippingAccountConversion, ShipmentTypeCode.Usps);
+                
+                return restrictionLevel == EditionRestrictionLevel.Forbidden;
             }
         }
 

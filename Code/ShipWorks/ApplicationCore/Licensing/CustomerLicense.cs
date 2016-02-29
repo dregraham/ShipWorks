@@ -54,6 +54,10 @@ namespace ShipWorks.ApplicationCore.Licensing
             EnsureOnlyOneFeatureRestrictionPerEditionFeature();
         }
 
+        /// <summary>
+        /// Ensures there is only one restriction per edition-feature.
+        /// </summary>
+        /// <exception cref="System.InvalidOperationException">Thrown when there is more than one restriction per edition-feature.</exception>
         private void EnsureOnlyOneFeatureRestrictionPerEditionFeature()
         {
             IEnumerable<EditionFeature> editionFeatures = featureRestrictions

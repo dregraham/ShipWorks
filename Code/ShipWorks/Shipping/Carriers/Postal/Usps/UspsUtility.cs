@@ -180,9 +180,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             {
                 using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
                 {
+                    ILicenseService licenseService = lifetimeScope.Resolve<ILicenseService>();
+                    EditionRestrictionLevel restrictionLevel = licenseService.CheckRestriction(EditionFeature.StampsInsurance, null);
+                    
                     // If scan based returns is not allowed, show the the default returns control
-                    return lifetimeScope.Resolve<ILicenseService>().CheckRestriction(EditionFeature.StampsInsurance, null) ==
-                           EditionRestrictionLevel.None;
+                    return restrictionLevel == EditionRestrictionLevel.None;
                 }
             }
         }

@@ -42,12 +42,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             // Set the local account so we can use it
             this.account = account;
 
-            using (var lifetimeScope = IoC.BeginLifetimeScope())
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
+                ILicenseService licenseService = lifetimeScope.Resolve<ILicenseService>();
+                EditionRestrictionLevel restrictionLevel = licenseService.CheckRestriction(EditionFeature.PurchasePostage, ShipmentTypeCode.Endicia);
+
                 // If purchasing is restricted for Endicia, set the variable
-                if (!IsExpress1() &&
-                    lifetimeScope.Resolve<ILicenseService>().CheckRestriction(EditionFeature.PurchasePostage,
-                        ShipmentTypeCode.Endicia) == EditionRestrictionLevel.Forbidden)
+                if (!IsExpress1() && restrictionLevel == EditionRestrictionLevel.Forbidden)
                 {
                     purchaseRestricted = true;
                 }

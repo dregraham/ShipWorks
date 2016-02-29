@@ -198,7 +198,6 @@ namespace ShipWorks.Editions
                 using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
                 {
                     ILicenseService service = lifetimeScope.Resolve<ILicenseService>();
-
                     EditionRestrictionLevel restriction = service?.CheckRestriction(feature, dataProvider?.Invoke()) ?? EditionRestrictionLevel.None;
 
                     if (restriction == EditionRestrictionLevel.Hidden)
@@ -207,7 +206,6 @@ namespace ShipWorks.Editions
                     }
 
                     bool needsRestricted = restriction != EditionRestrictionLevel.None;
-
                     if ((needsRestricted && !isRestricted) || (!needsRestricted && isRestricted))
                     {
                         ApplyRestriction(component as Button, restriction);

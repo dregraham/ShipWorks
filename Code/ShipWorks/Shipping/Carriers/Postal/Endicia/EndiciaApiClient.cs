@@ -661,17 +661,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             {
                 using (var lifetimeScope = IoC.BeginLifetimeScope())
                 {
-                    var licenseService = lifetimeScope.Resolve<ILicenseService>();
+                    ILicenseService licenseService = lifetimeScope.Resolve<ILicenseService>();
+                    EditionRestrictionLevel accountRestriction = licenseService.CheckRestriction(EditionFeature.EndiciaAccountNumber, account.AccountNumber);
 
-                    var accountRestriction =
-                        licenseService.CheckRestriction(EditionFeature.EndiciaAccountNumber, account.AccountNumber);
                     if (accountRestriction != EditionRestrictionLevel.None)
                     {
                         throw new ShippingException(EnumHelper.GetDescription(EditionFeature.EndiciaAccountNumber));
                     }
 
-                    var quantityRestriction =
-                        licenseService.CheckRestriction(EditionFeature.EndiciaAccountLimit, accountRepository.Accounts.Count());
+                    EditionRestrictionLevel quantityRestriction = licenseService.CheckRestriction(EditionFeature.EndiciaAccountLimit, accountRepository.Accounts.Count());
                     if (quantityRestriction != EditionRestrictionLevel.None)
                     {
                         throw new ShippingException(EnumHelper.GetDescription(EditionFeature.EndiciaAccountLimit));

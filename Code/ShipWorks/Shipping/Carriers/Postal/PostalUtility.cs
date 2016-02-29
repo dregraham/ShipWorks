@@ -171,7 +171,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
 
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                var licenseService = lifetimeScope.Resolve<ILicenseService>();
+                ILicenseService licenseService = lifetimeScope.Resolve<ILicenseService>();
 
                 if (shipmentType == ShipmentTypeCode.Endicia)
                 {
@@ -234,13 +234,12 @@ namespace ShipWorks.Shipping.Carriers.Postal
 
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                var licenseService = lifetimeScope.Resolve<ILicenseService>();
+                ILicenseService licenseService = lifetimeScope.Resolve<ILicenseService>();
 
                 if (shipmentType == ShipmentTypeCode.Endicia)
                 {
                     // If consolidation is supported, add it in
-                    if (licenseService.CheckRestriction(EditionFeature.EndiciaConsolidator, null) ==
-                        EditionRestrictionLevel.None)
+                    if (licenseService.CheckRestriction(EditionFeature.EndiciaConsolidator, null) == EditionRestrictionLevel.None)
                     {
                         services.Add(PostalServiceType.ConsolidatorInternational);
                         services.Add(PostalServiceType.ConsolidatorIpa);

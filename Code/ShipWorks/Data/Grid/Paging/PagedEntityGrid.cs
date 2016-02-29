@@ -929,11 +929,10 @@ namespace ShipWorks.Data.Grid.Paging
             }
 
             // See if this number of items is restricted
-            EditionRestrictionLevel restrictionLevel;
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
                 ILicenseService licenseService = lifetimeScope.Resolve<ILicenseService>();
-                restrictionLevel = licenseService.CheckRestriction(EditionFeature.SelectionLimit, virtualSelection.Count);
+                EditionRestrictionLevel restrictionLevel = licenseService.CheckRestriction(EditionFeature.SelectionLimit, virtualSelection.Count);
 
                 if (restrictionLevel != EditionRestrictionLevel.None)
                 {

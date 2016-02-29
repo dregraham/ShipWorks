@@ -60,12 +60,13 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
             // Check if Mi is enabled
             bool isMIAvailable = shipmentType.IsMailInnovationsEnabled();
 
-            using (var lifetimeScope = IoC.BeginLifetimeScope())
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
+                ILicenseService licenseService = lifetimeScope.Resolve<ILicenseService>();
+                EditionRestrictionLevel restrictionLevel = licenseService.CheckRestriction(EditionFeature.UpsSurePost, null);
+
                 // Check if SurePost is enabled
-                bool isSurePostAvailable =
-                    lifetimeScope.Resolve<ILicenseService>().CheckRestriction(EditionFeature.UpsSurePost, null) ==
-                    EditionRestrictionLevel.None;
+                bool isSurePostAvailable = restrictionLevel == EditionRestrictionLevel.None;
 
                 List<UpsServiceType> excludedServices =
                     shipmentType.GetExcludedServiceTypes().Select(exclusion => (UpsServiceType) exclusion).ToList();

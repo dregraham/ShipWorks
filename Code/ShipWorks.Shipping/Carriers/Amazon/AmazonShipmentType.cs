@@ -190,8 +190,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         {
             get
             {
-                return licenseService.CheckRestriction(EditionFeature.ShipmentType, ShipmentTypeCode) ==
-                       EditionRestrictionLevel.Hidden;
+                return licenseService.CheckRestriction(EditionFeature.ShipmentType, ShipmentTypeCode) == EditionRestrictionLevel.Hidden;
             }
         }
 
