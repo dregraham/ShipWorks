@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl"
              xmlns:ui="http://schemas.shipworks.com/ui"
-             xmlns:insurancePromoControl="clr-namespace:ShipWorks.Shipping.UI.ShippingPanel.InsurancePromoControl"
+             xmlns:ins="clr-namespace:ShipWorks.Shipping.UI.ShippingPanel.Insurance"
              mc:Ignorable="d" d:DataContext="{d:DesignInstance Type=local:OtherShipmentViewModel}"
              Grid.IsSharedSizeScope="True"
              d:DesignHeight="224.36" d:DesignWidth="300">
@@ -74,35 +74,6 @@
                  ui:EntityFieldLength.FieldName="ShipmentTracking"
                  Text="{Binding TrackingNumber, ValidatesOnDataErrors=true, NotifyOnValidationError=true}"  />
         </Grid>
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition SharedSizeGroup="Label" />
-                <ColumnDefinition SharedSizeGroup="Value" />
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
-
-            <TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource GridLabel}"
-                       Text="{Binding InsuranceViewModel.InsuranceLabelDisplayText, FallbackValue='Insurance:'}"></TextBlock>
-            <StackPanel  Grid.Row="0" Grid.Column="1" Orientation="Horizontal">
-                <CheckBox Margin="4 4 0 0" Name="IsInsured"
-                    Content="{Binding InsuranceViewModel.InsuranceTypeLabelDisplayText, FallbackValue='Insurance Type'}"
-                    IsChecked="{Binding InsuranceViewModel.Insurance}"/>
-            </StackPanel>
-
-            <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal">
-                <TextBlock Style="{StaticResource GridLabel}"
-                           Text="{Binding InsuranceViewModel.InsuranceValueLabelDisplayText, FallbackValue='Insured Value:'}"></TextBlock>
-                <TextBox Width="80"  Margin="4 4 0 0" Style="{DynamicResource TextBoxErrorTemplate}"
-                         IsEnabled="{Binding InsuranceViewModel.Insurance}"
-                         Text="{Binding InsuranceViewModel.DeclaredValue, StringFormat=c, FallbackValue='50.50',
-                         Converter={StaticResource EmptyMoney},
-                         TargetNullValue='', ValidatesOnDataErrors=true, NotifyOnValidationError=true}"/>
-
-                <insurancePromoControl:InsurancePromoControl  DataContext="{Binding Path=InsuranceViewModel, Mode=OneWay}"/>
-            </StackPanel>
-        </Grid>
+        <ins:InsuranceControl />
     </StackPanel>
 </UserControl>
