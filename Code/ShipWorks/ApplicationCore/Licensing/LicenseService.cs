@@ -143,7 +143,13 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         private ICustomerLicense GetCustomerLicense()
         {
-            return licenseCache ?? (licenseCache = customerLicenseFactory(CustomerKey));
+            // If the cache is null or the key has changed do to a new license being activated
+            if (licenseCache == null || licenseCache.Key != CustomerKey)
+            {
+                licenseCache = customerLicenseFactory(CustomerKey);
+            }
+            
+            return licenseCache;
         }
     }
 }

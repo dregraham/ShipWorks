@@ -76,6 +76,19 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         }
 
         /// <summary>
+        /// Checks to see if the given account number is allowed based on the edition of ShipWorks
+        /// </summary>
+        private static bool AccountAllowed(string upsAccountNumber)
+        {
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                return lifetimeScope.Resolve<ILicenseService>()
+                    .CheckRestriction(EditionFeature.UpsAccountNumbers, upsAccountNumber) ==
+                       EditionRestrictionLevel.None;
+            }
+        }
+
+        /// <summary>
         /// Get the UPS account associated with the given shipment.  Throws an exception if it does not exist.
         /// </summary>
         public static UpsAccountEntity GetUpsAccount(ShipmentEntity shipment, ICarrierAccountRepository<UpsAccountEntity> accountRepository)
@@ -85,11 +98,11 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             {
                 throw new UpsException("No UPS account is selected for the shipment.");
             }
-
-            var accountRestriction = EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.UpsAccountNumbers, UpsAccountManager.Accounts);
-            if (accountRestriction.Level != EditionRestrictionLevel.None)
+            
+            if (!AccountAllowed(account.AccountNumber))
             {
-                throw new UpsException(accountRestriction.GetDescription());
+                throw new UpsException(
+                    $"You must contact Interapptive to enable use of UPS account '{account.AccountNumber}'.");
             }
 
             using (ILifetimeScope scope = IoC.BeginLifetimeScope())
