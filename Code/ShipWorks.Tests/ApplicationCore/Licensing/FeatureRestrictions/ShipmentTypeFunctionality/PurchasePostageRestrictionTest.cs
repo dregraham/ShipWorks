@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using Autofac.Extras.Moq;
 using Moq;
 using ShipWorks.ApplicationCore.Licensing;
-using ShipWorks.ApplicationCore.Licensing.FeatureRestrictions;
+using ShipWorks.ApplicationCore.Licensing.FeatureRestrictions.ShipmentTypeFunctionality;
 using ShipWorks.Editions;
 using ShipWorks.Shipping;
 using Xunit;
 
-namespace ShipWorks.Tests.ApplicationCore.Licensing.FeatureRestrictions
+namespace ShipWorks.Tests.ApplicationCore.Licensing.FeatureRestrictions.ShipmentTypeFunctionality
 {
     public class PurchasePostageRestrictionTest : IDisposable
     {
@@ -27,7 +27,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.FeatureRestrictions
         }
 
         [Fact]
-        public void EditionFeature_IsProcessShipment()
+        public void EditionFeature_IsPurchasePostage()
         {
             Assert.Equal(EditionFeature.PurchasePostage, testObject.EditionFeature);
         }

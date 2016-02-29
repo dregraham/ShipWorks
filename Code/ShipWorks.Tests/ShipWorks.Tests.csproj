@@ -212,8 +212,10 @@
     <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\EndiciaInsuranceRestrictionTest.cs" />
     <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\EndiciaScanBasedReturnsRestrictionTest.cs" />
     <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\FeatureRestrictionTest.cs" />
-    <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\ProcessShipmentRestrictionTest.cs" />
-    <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\PurchasePostageRestrictionTest.cs" />
+    <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\ShipmentTypeFunctionality\AccountRegistrationRestrictionTest.cs" />
+    <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\ShipmentTypeFunctionality\ProcessShipmentRestrictionTest.cs" />
+    <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\ShipmentTypeFunctionality\PurchasePostageRestrictionTest.cs" />
+    <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\ShipmentTypeFunctionality\RateDiscountMessagingRestrictionTest.cs" />
     <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\ShipmentTypeRestrictionTest.cs" />
     <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\StampsAscendiaConsolidatorRestrictionTest.cs" />
     <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\StampsDhlConsolidatorRestrictionTest.cs" />
@@ -222,6 +224,7 @@
     <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\StampsIbcConsolidatorRestrictionTest.cs" />
     <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\StampsInsuranceRestrictionTest.cs" />
     <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\StampsRrDonnelleyConsolidatorRestrictionTest.cs" />
+    <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\ShipmentTypeFunctionality\ShippingAccountConversionRestrictionTest.cs" />
     <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\Ups\UpsAccountLimitRestrictionTest.cs" />
     <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\Ups\UpsSurePostRestrictionTest.cs" />
     <Compile Include="ApplicationCore\Licensing\LicenseEnforcement\ApproachingShipmentLimitEnforcerTest.cs" />

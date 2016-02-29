@@ -608,8 +608,12 @@
     <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\EndiciaInsuranceRestriction.cs" />
     <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\FeatureRestriction.cs" />
     <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\IFeatureRestriction.cs" />
-    <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\ProcessShipmentRestriction.cs" />
-    <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\PurchasePostageRestriction.cs" />
+    <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\ShipmentTypeFunctionality\AccountRegistrationRestriction.cs" />
+    <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\ShipmentTypeFunctionality\ProcessShipmentRestriction.cs" />
+    <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\ShipmentTypeFunctionality\PurchasePostageRestriction.cs" />
+    <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\ShipmentTypeFunctionality\RateDiscountMessagingRestriction.cs" />
+    <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\ShipmentTypeFunctionality\ShipmentTypeFunctionalityRestriction.cs" />
+    <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\ShipmentTypeFunctionality\ShippingAccountConversionRestriction.cs" />
     <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\StampsAscendiaConsolidatorRestriction.cs" />
     <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\StampsDhlConsolidatorRestriction.cs" />
     <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\StampsDhlRestriction.cs" />

@@ -177,8 +177,7 @@ namespace ShipWorks.Shipping
         {
             get
             {
-                EditionRestrictionIssue restriction = EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.ShipmentTypeRegistration, ShipmentTypeCode);
-                return restriction.Level != EditionRestrictionLevel.Hidden;
+                return GetRestrictionLevel(EditionFeature.ShipmentTypeRegistration) != EditionRestrictionLevel.Hidden;
             }
         }
 
@@ -189,13 +188,7 @@ namespace ShipWorks.Shipping
         {
             get
             {
-                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
-                {
-                    ILicenseService licenseService = lifetimeScope.Resolve<ILicenseService>();
-
-                    return licenseService.CheckRestriction(EditionFeature.ShipmentType, ShipmentTypeCode) ==
-                           EditionRestrictionLevel.Hidden;
-                }
+                return GetRestrictionLevel(EditionFeature.ShipmentType) == EditionRestrictionLevel.Hidden;
             }
         }
 
@@ -206,8 +199,21 @@ namespace ShipWorks.Shipping
         {
             get
             {
-                EditionRestrictionIssue restriction = EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.RateDiscountMessaging, ShipmentTypeCode);
-                return restriction.Level == EditionRestrictionLevel.Forbidden;
+                return GetRestrictionLevel(EditionFeature.RateDiscountMessaging) == EditionRestrictionLevel.Forbidden;
+            }
+        }
+
+        /// <summary>
+        /// Gets the restriction level of the given feature for this shipment type.
+        /// </summary>
+        private EditionRestrictionLevel GetRestrictionLevel(EditionFeature feature)
+        {
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                ILicenseService licenseService = lifetimeScope.Resolve<ILicenseService>();
+                EditionRestrictionLevel restrictionLevel = licenseService.CheckRestriction(feature, ShipmentTypeCode);
+
+                return restrictionLevel;
             }
         }
 

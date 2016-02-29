@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Autofac;
 using Autofac.Features.Indexed;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Net;
@@ -265,7 +266,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             // We may not want to show the conversion promotion for multi-user USPS accounts due 
             // to a limitation on USPS' side. (Tango will send these to ShipWorks via data contained
             // in ShipmentTypeFunctionality
-            bool accountConversionRestricted = EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.ShippingAccountConversion, ShipmentTypeCode.Usps).Level == EditionRestrictionLevel.Forbidden;
+            bool accountConversionRestricted = IsAccountConversionRestricted();
             TimeSpan accountCreatedTimespan = dateTimeProvider.UtcNow - uspsAccount.CreatedDate;
 
             if (contractType == UspsAccountContractType.Commercial &&
@@ -274,6 +275,19 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             {
                 // Show the promotional footer for discounted rates 
                 rateGroup.AddFootnoteFactory(new UspsRatePromotionFootnoteFactory(shipmentTypeFactory[ShipmentTypeCode.Usps], shipment, false));
+            }
+        }
+
+        /// <summary>
+        /// Uses the license service to determine whether account conversion is restricted.
+        /// </summary>
+        /// <returns><c>true</c> if [account is conversion restricted]; otherwise, <c>false</c>.</returns>
+        private bool IsAccountConversionRestricted()
+        {
+            using (ILifetimeScope scope = IoC.BeginLifetimeScope())
+            {
+                ILicenseService licenseService = scope.Resolve<ILicenseService>();
+                return licenseService.CheckRestriction(EditionFeature.ShippingAccountConversion, ShipmentTypeCode.Usps) == EditionRestrictionLevel.Forbidden;
             }
         }
 
