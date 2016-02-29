@@ -62,6 +62,18 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         }
 
         /// <summary>
+        /// Gets the sure post restriction level.
+        /// </summary>
+        private EditionRestrictionLevel GetSurePostRestrictionLevel()
+        {
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                ILicenseService licenseService = lifetimeScope.Resolve<ILicenseService>();
+                return licenseService.CheckRestriction(EditionFeature.UpsSurePost, null);
+            }
+        }
+
+        /// <summary>
         /// Get the rates for the given shipment
         /// </summary>
         /// <param name="shipment">The shipment.</param>
@@ -91,47 +103,44 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                 // from SurePost either
                 firstExceptionEncountered = e;
             }
-            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+
+            if (GetSurePostRestrictionLevel() == EditionRestrictionLevel.None)
             {
-                ILicenseService licenseService = lifetimeScope.Resolve<ILicenseService>();
-                EditionRestrictionLevel restrictionLevel = licenseService.CheckRestriction(EditionFeature.UpsSurePost, null);
-                if (restrictionLevel == EditionRestrictionLevel.None)
+                // Get SurePost rates since SurePost is not restricted
+                UpsServiceManagerFactory serviceManagerFactory = new UpsServiceManagerFactory(shipment);
+                IUpsServiceManager upsServiceManager = serviceManagerFactory.Create(shipment);
+                IEnumerable<UpsServiceType> surePostServiceTypes =
+                    upsServiceManager.GetServices(shipment).Where(s => s.IsSurePost).Select(s => s.UpsServiceType);
+
+                foreach (UpsServiceType serviceType in surePostServiceTypes)
                 {
-                    UpsServiceManagerFactory serviceManagerFactory = new UpsServiceManagerFactory(shipment);
-                    IUpsServiceManager upsServiceManager = serviceManagerFactory.Create(shipment);
-                    IEnumerable<UpsServiceType> surePostServiceTypes =
-                        upsServiceManager.GetServices(shipment).Where(s => s.IsSurePost).Select(s => s.UpsServiceType);
-
-                    foreach (UpsServiceType serviceType in surePostServiceTypes)
+                    try
                     {
-                        try
-                        {
-                            rates.AddRange(GetSurePostRate(shipment, account, serviceType));
-                        }
-                        catch (UpsException e)
-                        {
-                            // Log and eat the exception, so that some rates are returned in the event there's an error obtaining SurePost rates
-                            // for one or all of the SurePost service types
-                            log.WarnFormat("An error was received trying to get the SurePost rates: {0}", e.Message);
+                        rates.AddRange(GetSurePostRate(shipment, account, serviceType));
+                    }
+                    catch (UpsException e)
+                    {
+                        // Log and eat the exception, so that some rates are returned in the event there's an error obtaining SurePost rates
+                        // for one or all of the SurePost service types
+                        log.WarnFormat("An error was received trying to get the SurePost rates: {0}", e.Message);
 
-                            if (firstExceptionEncountered == null)
-                            {
-                                firstExceptionEncountered = e;
-                            }
+                        if (firstExceptionEncountered == null)
+                        {
+                            firstExceptionEncountered = e;
                         }
                     }
                 }
-
-                if (!rates.Any() && firstExceptionEncountered != null)
-                {
-                    // There weren't any rates found for the given shipment, but there was an exception
-                    // encountered. Throw the exception to give the user feedback as to why there aren't
-                    // any rates
-                    throw firstExceptionEncountered;
-                }
-
-                return rates;
             }
+
+            if (!rates.Any() && firstExceptionEncountered != null)
+            {
+                // There weren't any rates found for the given shipment, but there was an exception
+                // encountered. Throw the exception to give the user feedback as to why there aren't
+                // any rates
+                throw firstExceptionEncountered;
+            }
+
+            return rates;
         }
 
         /// <summary>
