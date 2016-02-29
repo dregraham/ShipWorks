@@ -1177,7 +1177,8 @@ namespace ShipWorks.Shipping
 
                     if (licenseService.CheckRestriction(EditionFeature.ShipmentType, shipmentType.ShipmentTypeCode) != EditionRestrictionLevel.None)
                     {
-                        throw new ShippingException($"Your edition of ShipWorks does not support shipping with '{shipmentType.ShipmentTypeName}'.");
+                        throw new ShippingException(
+                            $"Your edition of ShipWorks does not support shipping with '{shipmentType.ShipmentTypeName}'.");
                     }
 
                     // If they had set this shipment to be a return - we want to make sure it's not processed as one if they switched to something that doesnt support it
