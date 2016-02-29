@@ -20,6 +20,10 @@ namespace ShipWorks.UI.Controls.Weight
                 new FrameworkPropertyMetadata(0.0,
                     FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
+        public static readonly DependencyProperty MaxWeightProperty =
+            DependencyProperty.Register("MaxWeight", typeof(double), typeof(WeightControl),
+                new FrameworkPropertyMetadata(WeightInput.MaxWeightDefault));
+
         /// <summary>
         /// Static constructor
         /// </summary>
@@ -37,6 +41,17 @@ namespace ShipWorks.UI.Controls.Weight
         {
             get { return (double) GetValue(WeightProperty); }
             set { SetValue(WeightProperty, value); }
+        }
+
+        /// <summary>
+        /// Maximum weight
+        /// </summary>
+        [Bindable(true)]
+        [Obfuscation(Exclude = true)]
+        public double MaxWeight
+        {
+            get { return (double) GetValue(MaxWeightProperty); }
+            set { SetValue(MaxWeightProperty, value); }
         }
 
         /// <summary>
