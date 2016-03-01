@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
+using System.Web.Services.Protocols;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.XPath;
@@ -14,6 +15,7 @@ using Interapptive.Shared.Business;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using log4net;
+using ShipWorks.ApplicationCore.Licensing.Activation;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.ApplicationCore.Nudges;
 using ShipWorks.Data.Connection;
@@ -38,6 +40,8 @@ namespace ShipWorks.ApplicationCore.Licensing
     /// </summary>
     public static class TangoWebClient
     {
+        private const string ActivationUrl = "http://shipworks.stamps.com/ShipWorksNet/ActivationV1.svc";
+
         // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(TangoWebClient));
 
@@ -1078,67 +1082,37 @@ namespace ShipWorks.ApplicationCore.Licensing
         }
 
         /// <summary>
-        /// Inspects the response XML for error and updates the result object
-        /// </summary>
-        /// <remarks>
-        /// returns true if there is an error otherwise it returns false
-        /// </remarks>
-        private static bool RaiseError<T>(XmlDocument xmlResponse, GenericResult<T> result)
-        {
-            // Create an Xpath navigator and add namespaces to it
-            XPathNamespaceNavigator xpath = new XPathNamespaceNavigator(xmlResponse);
-            xpath.Namespaces.AddNamespace("s", "http://schemas.xmlsoap.org/soap/envelope/");
-
-            // Check to see if the response contains a fault
-            XPathNavigator fault = xpath.SelectSingleNode("//s:Fault/detail");
-
-            if (fault != null)
-            {
-                result.Success = false;
-
-                string message = XPathUtility.Evaluate(fault, "//*[local-name()='Message']", "");
-
-                if (message == "Authentication failed.")
-                {
-                    result.Message = "The email or password entered is not correct.";
-                }
-
-                return true;
-            }
-
-            return false;
-        }
-
-        /// <summary>
         /// Gets license information for the given email and password
         /// </summary>
         public static GenericResult<IActivationResponse> ActivateLicense(string email, string password)
         {
-            GenericResult<IActivationResponse> result = new GenericResult<IActivationResponse>(null);
+            Activation.Activation service = new Activation.Activation()
+            {
+                Url = ActivationUrl
+            };
 
-            HttpVariableRequestSubmitter postRequest = new HttpVariableRequestSubmitter { Verb = HttpVerb.Post };
+            CustomerLicenseInfoV1 customerLicenseInfo;
 
-            postRequest.Variables.Add("action", "activateShipWorks");
-            postRequest.Variables.Add("email", email);
-            postRequest.Variables.Add("password", password);
-
-            XmlDocument xmlResponse;
             try
             {
-                xmlResponse = ProcessXmlRequest(postRequest, "ActivateCustomerLicense");
+                customerLicenseInfo = service.GetCustomerLicenseInfo(email, password);
             }
-            catch (TangoException ex)
+            catch (SoapException ex)
             {
-                result.Success = false;
-                result.Message = ex.Message;
-                return result;
+                GenericResult<IActivationResponse> errorResult = new GenericResult<IActivationResponse>(null)
+                {
+                    Success = false,
+                    Message = ex.Message
+                };
+
+                return errorResult;
             }
 
-            if(!RaiseError(xmlResponse, result))
+            GenericResult<IActivationResponse> result = new GenericResult<IActivationResponse>(null)
             {
-                result.Context = new ActivationResponse(xmlResponse);
-                result.Success = true;
-            }
+                Context = new ActivationResponse(customerLicenseInfo),
+                Success = true
+            };
 
             return result;
         }
