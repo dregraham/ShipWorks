@@ -366,6 +366,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         {
             UpsStatus = (UpsStatus)XPathUtility.Evaluate(xpath, "//UpsOnly/@status", 0);
             UpsAccountNumbers = XPathUtility.Evaluate(xpath, "//UpsOnly", "").Split(';')
+                                            .Where(a => !string.IsNullOrWhiteSpace(a))
                                             .Select(a => a.Trim().ToLower())
                                             .ToArray();
 
