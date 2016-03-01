@@ -1151,7 +1151,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             HttpVariableRequestSubmitter postRequest = new HttpVariableRequestSubmitter();
 
             postRequest.Variables.Add("action", "login");
-            postRequest.Variables.Add("custlicense", license.Key);
+            postRequest.Variables.Add("customerlicense", license.Key);
             postRequest.Variables.Add("version", Assembly.GetExecutingAssembly().GetName().Version.ToString(4));
 
             XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "GetLicenseCapabilities");
