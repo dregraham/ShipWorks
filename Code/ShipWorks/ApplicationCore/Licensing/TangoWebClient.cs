@@ -1236,13 +1236,23 @@ namespace ShipWorks.ApplicationCore.Licensing
             HttpVariableRequestSubmitter postRequest = new HttpVariableRequestSubmitter();
 
             postRequest.Variables.Add("action", "deletestore");
-            postRequest.Variables.Add("custlicense", customerLicense.Key);
+            postRequest.Variables.Add("customerlicense", customerLicense.Key);
             postRequest.Variables.Add("storelicensekey[]", storeLicenseKey);
             postRequest.Variables.Add("version", Assembly.GetExecutingAssembly().GetName().Version.ToString(4));
 
             XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "GetActiveStores");
 
-            CheckResponseForErrors(xmlResponse);
+            try
+            {
+                CheckResponseForErrors(xmlResponse);
+            }
+            catch (TangoException ex)
+            {
+                // Tango returned an error while deleting the store
+                // at this point the store has been removed from 
+                // the shipworks database, log the error and move on
+                log.Error(ex.Message);
+            }
         }
 
         /// <summary>
@@ -1255,13 +1265,24 @@ namespace ShipWorks.ApplicationCore.Licensing
             HttpVariableRequestSubmitter postRequest = new HttpVariableRequestSubmitter();
 
             postRequest.Variables.Add("action", "deletestore");
-            postRequest.Variables.Add("custlicense", customerLicense.Key);
+            postRequest.Variables.Add("customerlicense", customerLicense.Key);
             postRequest.Variables.Add("storelicensekey[]", licenseKeyParam);
             postRequest.Variables.Add("version", Assembly.GetExecutingAssembly().GetName().Version.ToString(4));
 
             XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "GetActiveStores");
 
-            CheckResponseForErrors(xmlResponse);
+            try
+            {
+                CheckResponseForErrors(xmlResponse);
+            }
+            catch (TangoException ex)
+            {
+                // Tango returned an error while deleting the store
+                // at this point the store has been removed from 
+                // the shipworks database, log the error and move on
+                log.Error(ex.Message);
+            }
+            
         }
 
         /// <summary>
