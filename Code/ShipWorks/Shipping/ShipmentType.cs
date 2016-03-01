@@ -177,7 +177,7 @@ namespace ShipWorks.Shipping
         {
             get
             {
-                return GetRestrictionLevel(EditionFeature.ShipmentTypeRegistration) != EditionRestrictionLevel.Hidden;
+                return GetRestrictionLevel(EditionFeature.ShipmentTypeRegistration) == EditionRestrictionLevel.None;
             }
         }
 
@@ -188,7 +188,7 @@ namespace ShipWorks.Shipping
         {
             get
             {
-                return GetRestrictionLevel(EditionFeature.ShipmentType) == EditionRestrictionLevel.Hidden;
+                return GetRestrictionLevel(EditionFeature.ShipmentType) != EditionRestrictionLevel.None;
             }
         }
 
@@ -199,7 +199,7 @@ namespace ShipWorks.Shipping
         {
             get
             {
-                return GetRestrictionLevel(EditionFeature.RateDiscountMessaging) == EditionRestrictionLevel.Forbidden;
+                return GetRestrictionLevel(EditionFeature.RateDiscountMessaging) != EditionRestrictionLevel.None;
             }
         }
 
