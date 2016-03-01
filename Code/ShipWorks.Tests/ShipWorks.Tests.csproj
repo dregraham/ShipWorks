@@ -229,6 +229,7 @@
     <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\Ups\UpsAccountLimitRestrictionTest.cs" />
     <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\Ups\UpsAccountNumberRestrictionTest.cs" />
     <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\Ups\UpsSurePostRestrictionTest.cs" />
+    <Compile Include="ApplicationCore\Licensing\GetActiveStoresResponseTest.cs" />
     <Compile Include="ApplicationCore\Licensing\LicenseEnforcement\ApproachingShipmentLimitEnforcerTest.cs" />
     <Compile Include="ApplicationCore\Licensing\LicenseEnforcement\ChannelCountEnforcerTest.cs" />
     <Compile Include="ApplicationCore\Licensing\LicenseEnforcement\ChannelTypeEnforcerTest.cs" />

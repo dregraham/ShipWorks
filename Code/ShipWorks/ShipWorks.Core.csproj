@@ -626,6 +626,7 @@
     <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\Ups\UpsAccountNumberRestriction.cs" />
     <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\Ups\UpsSurePostRestriction.cs" />
     <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\Ups\UpsAccountLimitRestriction.cs" />
+    <Compile Include="ApplicationCore\Licensing\GetActiveStoresResponse.cs" />
     <Compile Include="ApplicationCore\Licensing\IActivationResponse.cs" />
     <Compile Include="ApplicationCore\Licensing\IAddStoreResponse.cs" />
     <Compile Include="ApplicationCore\Licensing\IChannelLimitBehavior.cs" />

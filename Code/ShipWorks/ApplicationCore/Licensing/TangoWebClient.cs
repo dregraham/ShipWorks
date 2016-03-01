@@ -1201,23 +1201,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "GetActiveStores");
 
             CheckResponseForErrors(xmlResponse);
-
-            List<ActiveStore> activeStores = new List<ActiveStore>();
-
-            XPathNamespaceNavigator navigator = new XPathNamespaceNavigator(xmlResponse);
-
-            foreach (XPathNavigator tempXpath in navigator.Select("//ActiveStore"))
-            {
-                XPathNamespaceNavigator xpath = new XPathNamespaceNavigator(tempXpath, navigator.Namespaces);
-
-                ActiveStore activeStore = new ActiveStore()
-                {
-                    Name = XPathUtility.Evaluate(xpath, "storeInfo", string.Empty),
-                    StoreLicenseKey = XPathUtility.Evaluate(xpath, "license", string.Empty),
-                };
-
-                activeStores.Add(activeStore);
-            }
+            List<ActiveStore> activeStores = new GetActiveStoresResponse(xmlResponse).ActiveStores;
 
             return activeStores;
         }
