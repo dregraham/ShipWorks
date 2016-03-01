@@ -375,7 +375,7 @@ namespace ShipWorks.ApplicationCore.Licensing
                 UpsAccountNumbers.Count();
 
             UpsSurePost = XPathUtility.Evaluate(xpath, "//UpsSurePostEnabled/@status", 0) == 1;
-            PostalAvailability = (BrownPostalAvailability)XPathUtility.Evaluate(xpath, "//UpsOnly/@postal", (int)BrownPostalAvailability.ApoFpoPobox);
+            PostalAvailability = (BrownPostalAvailability)XPathUtility.Evaluate(xpath, "//UpsOnly/@postal", (int)BrownPostalAvailability.AllServices);
         }
 
         /// <summary>
