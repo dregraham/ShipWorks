@@ -139,13 +139,14 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
             }
 
             IPackageAdapter packageAdapter = SelectedPackageAdapter;
+            shipmentAdapter.DeletePackage(packageAdapter);
+
             int location = PackageAdapters.IndexOf(packageAdapter);
             SelectedPackageAdapter = PackageAdapters.Last() == packageAdapter ?
                 PackageAdapters.ElementAt(location - 1) :
                 PackageAdapters.ElementAt(location + 1);
 
             PackageAdapters.Remove(packageAdapter);
-            shipmentAdapter.DeletePackage(packageAdapter);
         }
 
         /// <summary>
