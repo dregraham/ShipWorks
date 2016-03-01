@@ -8326,7 +8326,6 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.9\3.9.0.3.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.0.9.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.1.1.sql" />
-    <None Include="ApplicationCore\Licensing\WSDL\Activation_v1.wsdl" />
     <None Include="packages.config" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.4\4.4.1.2.sql" />
     <None Include="Properties\interapptive_public.snk" />

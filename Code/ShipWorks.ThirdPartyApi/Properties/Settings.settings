@@ -1,9 +1,0 @@
-﻿<?xml version='1.0' encoding='utf-8'?>
-<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="ShipWorks.Properties" GeneratedClassName="Settings">
-  <Profiles />
-  <Settings>
-    <Setting Name="ShipWorks_ThirdPartyApi_ApplicationCore_Licensing_Activation_Activation" Type="(Web Service URL)" Scope="Application">
-      <Value Profile="(Default)">http://shpwrk002.qasc.stamps.com/ShipWorksNet/ActivationV1.svc</Value>
-    </Setting>
-  </Settings>
-</SettingsFile>
