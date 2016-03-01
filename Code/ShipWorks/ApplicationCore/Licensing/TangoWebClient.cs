@@ -47,6 +47,26 @@ namespace ShipWorks.ApplicationCore.Licensing
 
         private static InsureShipAffiliateProvider insureShipAffiliateProvider = new InsureShipAffiliateProvider();
 
+        private static Version version;
+
+        /// <summary>
+        /// Gets the version - If version is under 4.9.0.0, return 4.9.0.0
+        /// </summary>
+        public static string Version
+        {
+            get
+            {
+                if (version== null)
+                {
+                    Version assemblyVersion = Assembly.GetExecutingAssembly().GetName().Version;
+                    Version minimumVersion = new Version(4, 9, 0, 0);
+
+                    version = assemblyVersion > minimumVersion ? assemblyVersion : minimumVersion;
+                }
+                return version.ToString(4);
+            }
+        }
+
         /// <summary>
         /// Activate the given license key to the specified store identifier
         /// </summary>
@@ -995,7 +1015,7 @@ namespace ShipWorks.ApplicationCore.Licensing
                 e.HttpWebRequest.KeepAlive = false;
 
                 e.HttpWebRequest.UserAgent = "shipworks";
-                e.HttpWebRequest.Headers.Add("X-SHIPWORKS-VERSION", Assembly.GetExecutingAssembly().GetName().Version.ToString(4));
+                e.HttpWebRequest.Headers.Add("X-SHIPWORKS-VERSION", Version);
 
                 e.HttpWebRequest.Headers.Add("X-SHIPWORKS-USER", SecureText.Decrypt("C5NOiKdNaM/324R7sIjFUA==", "interapptive"));
                 e.HttpWebRequest.Headers.Add("X-SHIPWORKS-PASS", SecureText.Decrypt("lavEgsQoKGM=", "interapptive"));
@@ -1126,7 +1146,7 @@ namespace ShipWorks.ApplicationCore.Licensing
 
             postRequest.Variables.Add("action", "login");
             postRequest.Variables.Add("customerlicense", license.Key);
-            postRequest.Variables.Add("version", Assembly.GetExecutingAssembly().GetName().Version.ToString(4));
+            postRequest.Variables.Add("version", Version);
 
             XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "GetLicenseCapabilities");
 
@@ -1150,10 +1170,10 @@ namespace ShipWorks.ApplicationCore.Licensing
             StoreType storeType = StoreTypeManager.GetType(store);
 
             postRequest.Variables.Add("action", "createstore");
-            postRequest.Variables.Add("custlicense", license.Key);
+            postRequest.Variables.Add("customerlicense", license.Key);
             postRequest.Variables.Add("storecode", storeType.TangoCode);
             postRequest.Variables.Add("identifier", storeType.LicenseIdentifier);
-            postRequest.Variables.Add("version", Assembly.GetExecutingAssembly().GetName().Version.ToString(4));
+            postRequest.Variables.Add("version", Version);
 
             XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "AddStore");
 
@@ -1175,8 +1195,8 @@ namespace ShipWorks.ApplicationCore.Licensing
             HttpVariableRequestSubmitter postRequest = new HttpVariableRequestSubmitter();
 
             postRequest.Variables.Add("action", "getactivestores");
-            postRequest.Variables.Add("custlicense", license.Key);
-            postRequest.Variables.Add("version", Assembly.GetExecutingAssembly().GetName().Version.ToString(4));
+            postRequest.Variables.Add("customerlicense", license.Key);
+            postRequest.Variables.Add("version", Version);
 
             XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "GetActiveStores");
 
@@ -1212,7 +1232,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             postRequest.Variables.Add("action", "deletestore");
             postRequest.Variables.Add("customerlicense", customerLicense.Key);
             postRequest.Variables.Add("storelicensekey[]", storeLicenseKey);
-            postRequest.Variables.Add("version", Assembly.GetExecutingAssembly().GetName().Version.ToString(4));
+            postRequest.Variables.Add("version", Version);
 
             XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "GetActiveStores");
 
@@ -1241,7 +1261,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             postRequest.Variables.Add("action", "deletestore");
             postRequest.Variables.Add("customerlicense", customerLicense.Key);
             postRequest.Variables.Add("storelicensekey[]", licenseKeyParam);
-            postRequest.Variables.Add("version", Assembly.GetExecutingAssembly().GetName().Version.ToString(4));
+            postRequest.Variables.Add("version", Version);
 
             XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "GetActiveStores");
 

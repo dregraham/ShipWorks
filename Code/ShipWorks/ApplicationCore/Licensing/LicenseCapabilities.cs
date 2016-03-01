@@ -353,9 +353,17 @@ namespace ShipWorks.ApplicationCore.Licensing
             if (fault != null)
             {
                 string message = XPathUtility.Evaluate(fault, "//*[local-name()='Message']", "");
-                throw new ShipWorksLicenseException(string.IsNullOrWhiteSpace(message)
-                    ? "There was an error validating your license"
-                    : message);
+                throw new ShipWorksLicenseException(string.IsNullOrWhiteSpace(message) ? 
+                    "There was an error validating your license" :
+                    message);
+            }
+
+            XPathNavigator error = xpath.SelectSingleNode("//Error");
+            if (error != null)
+            {
+                throw new ShipWorksLicenseException(string.IsNullOrWhiteSpace(error.Value) ?
+                    "There was an error validating your license" :
+                    error.Value);
             }
         }
 

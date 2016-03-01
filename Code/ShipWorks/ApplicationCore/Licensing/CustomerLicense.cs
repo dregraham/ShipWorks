@@ -122,7 +122,7 @@ namespace ShipWorks.ApplicationCore.Licensing
                 ? LicenseActivationState.Active
                 : LicenseActivationState.Invalid;
 
-            if ((response.Error?.IndexOf("OverChannelLimit", StringComparison.Ordinal) ?? -1) >= 0)
+            if ((response.Error?.IndexOf("CreateStoreActivity_103", StringComparison.Ordinal) ?? -1) >= 0)
             {
                 // The response from Tango indicates the license will be over the channel limit
                 activationState = LicenseActivationState.OverChannelLimit;
