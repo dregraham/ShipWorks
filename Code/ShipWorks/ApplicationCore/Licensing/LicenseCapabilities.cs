@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Xml;
-using System.Xml.Linq;
 using System.Xml.XPath;
 using Interapptive.Shared.Utility;
 using ShipWorks.Editions;
@@ -19,7 +18,7 @@ namespace ShipWorks.ApplicationCore.Licensing
     /// </summary>
     public class LicenseCapabilities : ILicenseCapabilities
     {
-        private List<StoreTypeCode> forbiddenChannels;
+        private readonly List<StoreTypeCode> forbiddenChannels;
 
         /// <summary>
         /// Constructor - Sets capabilities based on the xml response.
@@ -30,34 +29,25 @@ namespace ShipWorks.ApplicationCore.Licensing
 
             ShipmentTypeRestriction = new Dictionary<ShipmentTypeCode, IEnumerable<ShipmentTypeRestrictionType>>();
             ShipmentTypeShippingPolicy = new Dictionary<ShipmentTypeCode, Dictionary<ShippingPolicyType, string>>();
+            forbiddenChannels = new List<StoreTypeCode>();
             
-            XPathNamespaceNavigator xpath = new XPathNamespaceNavigator(xmlResponse);
-            xpath.Namespaces.AddNamespace("s", "http://schemas.xmlsoap.org/soap/envelope/");
-            xpath.Namespaces.AddNamespace("a", "http://schemas.datacontract.org/2004/07/Sdc.Server.ShipWorksNet.Protocol.CustomerLicenseInfo");
-            xpath.Namespaces.AddNamespace("i", "http://www.w3.org/2001/XMLSchema-instance");
-            xpath.Namespaces.AddNamespace("", "http://stamps.com/xml/namespace/2015/09/shipworks/activationv1");
+            // Check the response for errors and throw a ShipWorksLicenseException
+            CheckResponseForErrors(xmlResponse);
 
-            CheckForFault(xpath);
+            // parse the ShipmentTypeFunctionality node from the response
+            ShipmentTypeFunctionality(xmlResponse);
 
-            None = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='None']/Value", 0) == 1;
-            ActionLimit = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='ActionLimit']/Value", 0) == 1;
-            FilterLimit = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='FilterLimit']/Value", 0) == 1;
-            MyFilters = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='MyFilters']/Value", 0) == 1;
-            SelectionLimit = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='SelectionLimit']/Value", 0) == 1;
-            AddOrderCustomer = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='AddOrderCustomer']/Value", 0) == 1;
-            SingleStore = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='SingleStore']/Value", 0) == 1;
-            ShipmentTypeRegistration = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='ShipmentTypeRegistration']/Value", 0) == 1;
-            ShipmentTypeFunctionality(xpath);
-            ProcessShipment = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='ProcessShipment']/Value", 0) == 1;
-            PurchasePostage = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='PurchasePostage']/Value", 0) == 1;
-            RateDiscountMessaging = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='RateDiscountMessaging']/Value", 0) == 1;
-            ShippingAccountConversion = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='ShippingAccountConversion']/Value", 0) == 1;
-            IsInTrial = XPathUtility.Evaluate(xpath, "//IsInTrial", false);
+            // parse the license capabilities
+            SetPricingPlanCapabilties(xmlResponse);
 
-            SetPricingPlanCapabilties(xpath);
-            SetStampsCapabilities(xpath);
-            SetEndiciaCapabilities(xpath);
-            SetUpsCapabilities(xpath);
+            // parse the stamps specific capabilities
+            SetStampsCapabilities(xmlResponse);
+
+            // parse the endicia specific capabilities
+            SetEndiciaCapabilities(xmlResponse);
+
+            // parse the ups specific capabilities
+            SetUpsCapabilities(xmlResponse);
         }
 
         #region Properties
@@ -296,8 +286,10 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Checks for ShipmentType Functionality restrictions
         /// </summary>
-        private void ShipmentTypeFunctionality(XPathNamespaceNavigator xpath)
+        private void ShipmentTypeFunctionality(XmlNode response)
         {
+            XPathNavigator xpath = response.CreateNavigator();
+
             XPathNodeIterator shipmentTypeFunctionality = xpath.Select("//ShipmentTypeFunctionality/ShipmentType");
 
             while (shipmentTypeFunctionality.MoveNext())
@@ -345,33 +337,28 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Throw error if fault in XML.
         /// </summary>
-        private static void CheckForFault(XPathNamespaceNavigator xpath)
+        /// <summary>
+        /// Checks the response for errors.
+        /// </summary>
+        private static void CheckResponseForErrors(XmlNode xmlResponse)
         {
-            // Check to see if the response contains a fault
-            XPathNavigator fault = xpath.SelectSingleNode("//s:Fault/detail");
+            XPathNavigator xpath = xmlResponse.CreateNavigator();
 
-            if (fault != null)
-            {
-                string message = XPathUtility.Evaluate(fault, "//*[local-name()='Message']", "");
-                throw new ShipWorksLicenseException(string.IsNullOrWhiteSpace(message) ? 
-                    "There was an error validating your license" :
-                    message);
-            }
+            string error = XPathUtility.Evaluate(xpath, "//Error", string.Empty);
 
-            XPathNavigator error = xpath.SelectSingleNode("//Error");
-            if (error != null)
+            if (!error.Equals(string.Empty))
             {
-                throw new ShipWorksLicenseException(string.IsNullOrWhiteSpace(error.Value) ?
-                    "There was an error validating your license" :
-                    error.Value);
+                throw new ShipWorksLicenseException(error);
             }
         }
 
         /// <summary>
         /// Set Ups Capabilities
         /// </summary>
-        private void SetUpsCapabilities(XPathNamespaceNavigator xpath)
+        private void SetUpsCapabilities(XmlNode xmlResponse)
         {
+            XPathNavigator xpath = xmlResponse.CreateNavigator();
+
             UpsStatus = (UpsStatus)XPathUtility.Evaluate(xpath, "//UpsOnly/@status", 0);
             UpsAccountNumbers = XPathUtility.Evaluate(xpath, "//UpsOnly", "").Split(';')
                                             .Select(a => a.Trim().ToLower())
@@ -388,28 +375,34 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Set capabilities typically associated with a pricing plan
         /// </summary>
-        private void SetPricingPlanCapabilties(XPathNamespaceNavigator xpath)
+        private void SetPricingPlanCapabilties(XmlNode response)
         {
-            AdvancedShipping = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='AdvancedShippingFeatures']/Value", string.Empty) == "Yes";
-            Crm = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='Crm']/Value", string.Empty) == "Yes";
-            CustomDataSources = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='CustomDataSources']/Value", string.Empty) == "Yes";
+            XPathNavigator xpath = response.CreateNavigator();
 
-            forbiddenChannels = new List<StoreTypeCode>();
-            if (!CustomDataSources)
+            IsInTrial = XPathUtility.Evaluate(xpath, "//IsInTrial", false);
+
+            CustomDataSources = GetBoolValueFromNameValuePair("CustomDataSources", GetUserCapabilities(response));
+
+            // If custom data sources is disabled we add GenericFile to the list of stores that are not allowed
+            if (!GetBoolValueFromNameValuePair("CustomDataSources", GetUserCapabilities(response)))
             {
                 forbiddenChannels.Add(StoreTypeCode.GenericFile);
+            }
+
+            // If custom data sources api is disabled we add GenericModule to the list of stores that are not allowed
+            if (!GetBoolValueFromNameValuePair("CustomDataSourcesAPI", GetUserCapabilities(response)))
+            {
                 forbiddenChannels.Add(StoreTypeCode.GenericModule);
             }
 
-            TemplateCustomization = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='TemplateCustomization']/Value", string.Empty) == "Yes";
-            ChannelLimit = XPathUtility.Evaluate(xpath, "//UserCapabilities/NameValuePair[Name ='NumberOfChannels']/Value", 0);
-            ShipmentLimit = XPathUtility.Evaluate(xpath, "//UserCapabilities/NameValuePair[Name ='NumberOfShipments']/Value", 0);
+            ChannelLimit = GetIntValueFromNameValuePair("NumberOfChannels", GetUserCapabilities(response));
 
-            ActiveChannels = XPathUtility.Evaluate(xpath, "//UserLevels/NameValuePair[Name ='NumberOfChannels']/Value", 0);
-            ProcessedShipments = XPathUtility.Evaluate(xpath, "//UserLevels/NameValuePair[Name ='NumberOfShipments']/Value", 0);
+            ShipmentLimit = GetIntValueFromNameValuePair("NumberOfShipments", GetUserCapabilities(response));
 
-            string date = XPathUtility.Evaluate(xpath, "//BillingEndDate",
-                DateTime.MinValue.ToString(CultureInfo.InvariantCulture));
+            ActiveChannels = GetIntValueFromNameValuePair("NumberOfShipments", GetUserLevels(response));
+            ProcessedShipments = GetIntValueFromNameValuePair("NumberOfShipments", GetUserLevels(response));
+
+            string date = XPathUtility.Evaluate(xpath, "//BillingEndDate", DateTime.MinValue.ToString(CultureInfo.InvariantCulture));
 
             BillingEndDate = DateTime.Parse(date);
         }
@@ -417,8 +410,10 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Set Stamps Capabilities
         /// </summary>
-        private void SetStampsCapabilities(XPathNamespaceNavigator xpath)
+        private void SetStampsCapabilities(XmlNode response)
         {
+            XPathNavigator xpath = response.CreateNavigator();
+
             StampsInsurance = XPathUtility.Evaluate(xpath, "//StampsInsuranceEnabled/@status", 0) == 1;
             StampsDhl = XPathUtility.Evaluate(xpath, "//StampsDhlEnabled/@status", 0) == 1;
             StampsAscendiaConsolidator = XPathUtility.Evaluate(xpath, "//StampsAscendiaEnabled/@status", 0) == 1;
@@ -431,12 +426,69 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Set Endicia Capabilities
         /// </summary>
-        private void SetEndiciaCapabilities(XPathNamespaceNavigator xpath)
+        private void SetEndiciaCapabilities(XmlNode response)
         {
+            XPathNavigator xpath = response.CreateNavigator();
+
             EndiciaDhl = XPathUtility.Evaluate(xpath, "//EndiciaDhlEnabled/@status", 0) == 1;
             EndiciaInsurance = XPathUtility.Evaluate(xpath, "//EndiciaInsuranceEnabled/@status", 0) == 1;
             EndiciaConsolidator = XPathUtility.Evaluate(xpath, "//EndiciaConsolidator/@status", 0) == 1;
             EndiciaScanBasedReturns = XPathUtility.Evaluate(xpath, "//EndiciaScanBasedReturns/@status", 0) == 1;
+        }
+
+        /// <summary>
+        /// Gets the string value for the given name 
+        /// </summary>
+        /// <remarks>returns empty string if the name or value are not found</remarks>
+        private static string GetStringValueFromNameValuePair(string name, XmlNode document)
+        {
+            // Find the node with the given name 
+            XmlNode namedNode = document.SelectSingleNode($"//*[local-name()='{name}']");
+
+            // Grab its parent and then find the value node inside of the parent
+            XmlNode parentNode = namedNode?.ParentNode?.SelectSingleNode("//*[local-name()='Value']");
+
+            // return the value
+            return parentNode?.InnerText ?? string.Empty;
+        }
+
+        /// <summary>
+        /// Gets the int value for the given name
+        /// </summary>
+        /// <remarks>returns 0 if the name or value are not found or not an int</remarks>
+        private static int GetIntValueFromNameValuePair(string name, XmlNode document)
+        {
+            string value = GetStringValueFromNameValuePair(name, document);
+            int result;
+
+            return Int32.TryParse(value, out result) ? result : 0;
+        }
+
+        /// <summary>
+        /// Gets the int value for the given name
+        /// </summary>
+        /// <remarks>returns 0 if the name or value are not found or not an int</remarks>
+        private static bool GetBoolValueFromNameValuePair(string name, XmlNode document)
+        {
+            string value = GetStringValueFromNameValuePair(name, document);
+
+            return value.ToLower() == "yes";
+        }
+
+        /// <summary>
+        /// Returns the UserCapabilities node from the response
+        /// </summary>
+        private static XmlNode GetUserCapabilities(XmlNode response)
+        {
+            return response.SelectSingleNode("//*[local-name()='UserCapabilities']");
+        }
+
+        /// <summary>
+        /// Returns the UserLevels node from the response
+        /// </summary>
+        private static XmlNode GetUserLevels(XmlNode response)
+        {
+            return response.SelectSingleNode("//*[local-name()='UserLevels']");
         }
     }
 }
