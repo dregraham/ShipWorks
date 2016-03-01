@@ -12,7 +12,7 @@
     <SourceMonitorExe>C:\Program Files (x86)\SourceMonitor\SourceMonitor.exe</SourceMonitorExe>
     <VaultExe>C:\Program Files (x86)\SourceGear\Vault Client\vault.exe</VaultExe>
     <MsTestExe>C:\Program Files (x86)\Microsoft Visual Studio 10.0\Common7\IDE\MSTest.exe</MsTestExe>
-    <ObfuscationCommand>C:\Program Files (x86)\PreEmptive Solutions\Dotfuscator Professional Edition 4.20.0\dotfuscator.exe" ..\ShipWorksDotfuscator.xml"</ObfuscationCommand>
+    <ObfuscationCommand>"C:\Program Files (x86)\PreEmptive Solutions\Dotfuscator Professional Edition 4.20.0\dotfuscator.exe" "..\ShipWorksDotfuscator.xml"</ObfuscationCommand>
   </PropertyGroup>
 
   <PropertyGroup>
