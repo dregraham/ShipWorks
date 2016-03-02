@@ -1174,6 +1174,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             postRequest.Variables.Add("storecode", storeType.TangoCode);
             postRequest.Variables.Add("identifier", storeType.LicenseIdentifier);
             postRequest.Variables.Add("version", Version);
+            postRequest.Variables.Add("storeinfo", store.StoreName);
 
             XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "AddStore");
 
