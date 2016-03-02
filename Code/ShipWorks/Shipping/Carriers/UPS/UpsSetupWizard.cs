@@ -449,10 +449,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
             {
                 bool accountAllowed = lifetimeScope.Resolve<ILicenseService>()
                         .HandleRestriction(EditionFeature.UpsAccountNumbers, upsAccountNumber, this);
-                if (!accountAllowed)
-                {
-                    MessageHelper.ShowError(this, $"You must contact Interapptive to enable use of UPS account '{upsAccountNumber}'.");
-                }
 
                 return accountAllowed;
             }

@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
-using Interapptive.Shared.UI;
 
-namespace ShipWorks.UI.Services
+namespace Interapptive.Shared.UI
 {
     /// <summary>
     /// Wraps the static message helper class

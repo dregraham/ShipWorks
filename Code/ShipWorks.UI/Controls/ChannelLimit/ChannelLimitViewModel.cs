@@ -12,11 +12,11 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.Command;
+using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
 using ShipWorks.Data.Utility;
-using ShipWorks.UI.Controls.WebBrowser;
 
 namespace ShipWorks.UI.Controls.ChannelLimit
 {

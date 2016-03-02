@@ -1,4 +1,5 @@
 ﻿using Autofac.Extras.Moq;
+using Interapptive.Shared.UI;
 using Moq;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Licensing.FeatureRestrictions.Ups;
@@ -9,10 +10,20 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.FeatureRestrictions.Ups
 {
     public class UpsAccountNumberRestrictionTest
     {
+        private readonly AutoMock mock = AutoMock.GetLoose();
+        private readonly Mock<IMessageHelper> messageHelper;
+
+        public UpsAccountNumberRestrictionTest()
+        {
+            messageHelper = mock.Mock<IMessageHelper>();
+        }
+
         [Fact]
         public void EditionFeature_ReturnsUpsAccountNumbers()
         {
-            UpsAccountNumberRestriction testObject= new UpsAccountNumberRestriction();
+
+
+                UpsAccountNumberRestriction testObject= new UpsAccountNumberRestriction(messageHelper.Object);
 
             Assert.Equal(EditionFeature.UpsAccountNumbers, testObject.EditionFeature);
         }
@@ -23,7 +34,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.FeatureRestrictions.Ups
             using (var mock = AutoMock.GetLoose())
             {
                 Mock<ILicenseCapabilities> licenseCapabilities = mock.Mock<ILicenseCapabilities>();
-                UpsAccountNumberRestriction testObject = new UpsAccountNumberRestriction();
+                UpsAccountNumberRestriction testObject = new UpsAccountNumberRestriction(messageHelper.Object);
 
                 Assert.Equal(EditionRestrictionLevel.None, testObject.Check(licenseCapabilities.Object, string.Empty));
             }
@@ -35,7 +46,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.FeatureRestrictions.Ups
             using (var mock = AutoMock.GetLoose())
             {
                 Mock<ILicenseCapabilities> licenseCapabilities = mock.Mock<ILicenseCapabilities>();
-                UpsAccountNumberRestriction testObject = new UpsAccountNumberRestriction();
+                UpsAccountNumberRestriction testObject = new UpsAccountNumberRestriction(messageHelper.Object);
 
                 Assert.Equal(EditionRestrictionLevel.None, testObject.Check(licenseCapabilities.Object, null));
             }
@@ -47,7 +58,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.FeatureRestrictions.Ups
             using (var mock = AutoMock.GetLoose())
             {
                 Mock<ILicenseCapabilities> licenseCapabilities = mock.Mock<ILicenseCapabilities>();
-                UpsAccountNumberRestriction testObject = new UpsAccountNumberRestriction();
+                UpsAccountNumberRestriction testObject = new UpsAccountNumberRestriction(messageHelper.Object);
 
                 Assert.Equal(EditionRestrictionLevel.None, testObject.Check(licenseCapabilities.Object, "     "));
             }
@@ -60,7 +71,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.FeatureRestrictions.Ups
             {
                 Mock<ILicenseCapabilities> licenseCapabilities = mock.Mock<ILicenseCapabilities>();
                 licenseCapabilities.SetupGet(l => l.UpsAccountNumbers).Returns(new string[] {});
-                UpsAccountNumberRestriction testObject = new UpsAccountNumberRestriction();
+                UpsAccountNumberRestriction testObject = new UpsAccountNumberRestriction(messageHelper.Object);
 
                 Assert.Equal(EditionRestrictionLevel.None, testObject.Check(licenseCapabilities.Object, "abcdefg"));
             }
@@ -73,7 +84,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.FeatureRestrictions.Ups
             {
                 Mock<ILicenseCapabilities> licenseCapabilities = mock.Mock<ILicenseCapabilities>();
                 licenseCapabilities.SetupGet(l => l.UpsAccountNumbers).Returns(new[] {"abcdefg"});
-                UpsAccountNumberRestriction testObject = new UpsAccountNumberRestriction();
+                UpsAccountNumberRestriction testObject = new UpsAccountNumberRestriction(messageHelper.Object);
 
                 Assert.Equal(EditionRestrictionLevel.None, testObject.Check(licenseCapabilities.Object, "abcdefg"));
             }
@@ -86,7 +97,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.FeatureRestrictions.Ups
             {
                 Mock<ILicenseCapabilities> licenseCapabilities = mock.Mock<ILicenseCapabilities>();
                 licenseCapabilities.SetupGet(l => l.UpsAccountNumbers).Returns(new[] { "123456" });
-                UpsAccountNumberRestriction testObject = new UpsAccountNumberRestriction();
+                UpsAccountNumberRestriction testObject = new UpsAccountNumberRestriction(messageHelper.Object);
 
                 Assert.Equal(EditionRestrictionLevel.Forbidden, testObject.Check(licenseCapabilities.Object, "abcdefg"));
             }
