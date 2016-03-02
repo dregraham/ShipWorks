@@ -114,6 +114,25 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.LicenseEnforcement
         }
 
         [Fact]
+        public void Enforce_ReturnsCompliantWithEmptyMessage_WhenUnderShipmentLimitIsNegativeOne()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                ApproachingShipmentLimitEnforcer testObject = mock.Create<ApproachingShipmentLimitEnforcer>();
+
+                Mock<ILicenseCapabilities> licenseCapabilities = mock.Mock<ILicenseCapabilities>();
+
+                licenseCapabilities.Setup(l => l.ProcessedShipments).Returns(7);
+                licenseCapabilities.Setup(l => l.ShipmentLimit).Returns(-1);
+
+                EnumResult<ComplianceLevel> result = testObject.Enforce(licenseCapabilities.Object, EnforcementContext.Login);
+
+                Assert.Equal(ComplianceLevel.Compliant, result.Value);
+                Assert.Equal(string.Empty, result.Message);
+            }
+        }
+
+        [Fact]
         public void Enforce_ShowsDialogWithShipmentLimitWarningMessage_WhenContextIsLoginAndOverShipmentLimitWarningThreshold()
         {
             using (var mock = AutoMock.GetLoose())
