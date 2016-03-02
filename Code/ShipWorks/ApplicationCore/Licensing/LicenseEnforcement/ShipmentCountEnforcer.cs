@@ -60,7 +60,7 @@ namespace ShipWorks.ApplicationCore.Licensing.LicenseEnforcement
         public EnumResult<ComplianceLevel> Enforce(ILicenseCapabilities capabilities, EnforcementContext context)
         {
             // If we are in trial or the ShipmentLimit is -1 we always return compliant
-            if (capabilities.IsInTrial && capabilities.ShipmentLimit == -1)
+            if (capabilities.IsInTrial || capabilities.ShipmentLimit == -1)
             {
                 return new EnumResult<ComplianceLevel>(ComplianceLevel.Compliant, string.Empty);
             }
