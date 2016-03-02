@@ -11,6 +11,7 @@ namespace ShipWorks.ApplicationCore.Licensing.LicenseEnforcement
     /// </summary>
     public class ApproachingShipmentLimitEnforcer : ILicenseEnforcer
     {
+        private const int UnlimitedShipments = -1;
         private const float ShipmentLimitWarningThreshold = 0.8f;
 
         private readonly IUpgradePlanDlgFactory upgradePlanDlgFactory;
@@ -64,17 +65,15 @@ namespace ShipWorks.ApplicationCore.Licensing.LicenseEnforcement
             string message = string.Empty;
 
             // unlimited shipment limit is always in compliance 
-            if (capabilities.ShipmentLimit == -1)
+            if (capabilities.ShipmentLimit != UnlimitedShipments)
             {
-                return new EnumResult<ComplianceLevel>(ComplianceLevel.Compliant, message);
-            }
+                float currentShipmentPercentage = (float) capabilities.ProcessedShipments / capabilities.ShipmentLimit;
 
-            float currentShipmentPercentage = (float) capabilities.ProcessedShipments / capabilities.ShipmentLimit;
-            
-            // Check to see if our current shipment percentage is greater than or equal to the threshold 
-            if (!capabilities.IsInTrial && currentShipmentPercentage >= ShipmentLimitWarningThreshold)
-            {
-                message = $"You are nearing your shipment limit for the current billing cycle ending {capabilities.BillingEndDate.ToString("M/d")}.";
+                if (!capabilities.IsInTrial && currentShipmentPercentage >= ShipmentLimitWarningThreshold)
+                {
+                    // The current shipment percentage is greater than or equal to the threshold 
+                    message = $"You are nearing your shipment limit for the current billing cycle ending {capabilities.BillingEndDate.ToString("M/d")}.";
+                }
             }
 
             return new EnumResult<ComplianceLevel>(ComplianceLevel.Compliant, message);
