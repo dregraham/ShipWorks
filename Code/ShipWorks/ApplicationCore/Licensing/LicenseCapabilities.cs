@@ -356,14 +356,26 @@ namespace ShipWorks.ApplicationCore.Licensing
                 return string.Empty;
             }
 
-            // Find the node with the given name 
-            XmlNode namedNode = document.SelectSingleNode($"//*[local-name()='{name}']");
+            XPathNavigator xpath = document.CreateNavigator();
 
-            // Grab its parent and then find the value node inside of the parent
-            XmlNode parentNode = namedNode?.ParentNode?.SelectSingleNode("//*[local-name()='Value']");
+            XPathNodeIterator iterator = xpath.Select("//*[local-name()='NameValuePair']");
 
-            // return the value
-            return parentNode?.InnerText ?? string.Empty;
+            while (iterator.MoveNext())
+            {
+                if (iterator.Current.NameTable != null)
+                {
+                    XmlNamespaceManager nsmanager = new XmlNamespaceManager(iterator.Current.NameTable);
+
+                    nsmanager.AddNamespace("n", iterator.Current.NamespaceURI);
+
+                    if (iterator.Current?.SelectSingleNode("n:Name", nsmanager)?.Value == name)
+                    {
+                        return iterator.Current?.SelectSingleNode("n:Value", nsmanager)?.Value ?? string.Empty;
+                    }
+                }
+            }
+
+            return string.Empty;
         }
 
         /// <summary>
