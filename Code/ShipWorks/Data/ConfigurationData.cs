@@ -1,18 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
-using ShipWorks.ApplicationCore.Options;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Connection;
-using ShipWorks.Users.Logon;
 using System.Threading;
+using ShipWorks.ApplicationCore.Options;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Users.Logon;
 
 namespace ShipWorks.Data
 {
     /// <summary>
-    /// Provices access to the global configuration object
+    /// Provides access to the global configuration object
     /// </summary>
     public static class ConfigurationData
     {
@@ -85,7 +80,7 @@ namespace ShipWorks.Data
             config.CustomerUpdateShipping = true;
 
             config.CustomerUpdateModifiedBilling = (int) ModifiedOrderCustomerUpdateBehavior.NeverCopy;
-            config.CustomerUpdateModifiedShipping = (int)ModifiedOrderCustomerUpdateBehavior.NeverCopy;
+            config.CustomerUpdateModifiedShipping = (int) ModifiedOrderCustomerUpdateBehavior.NeverCopy;
 
             config.AuditNewOrders = false;
             config.AuditDeletedOrders = false;

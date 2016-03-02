@@ -116,11 +116,13 @@ namespace ShipWorks.Shipping
                 log.Error(ex);
             }
 
-            progressDlg.Visible = false;
-            OnLoadShipmentsCompleted();
             progressDlg.CloseForced();
+            OnLoadShipmentsCompleted();
         }
 
+        /// <summary>
+        /// Should the loader validate addresses?
+        /// </summary>
         private bool ShouldValidate => StoreManager.DoAnyStoresHaveAutomaticValidationEnabled();
 
         /// <summary>

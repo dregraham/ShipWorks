@@ -759,6 +759,7 @@
     <Compile Include="Common\DateTimeProvider.cs" />
     <Compile Include="Data\Administration\Retry\ISqlAdapterRetry.cs" />
     <Compile Include="Data\Administration\SqlChangeTracking.cs" />
+    <Compile Include="Data\ConfigurationDataWrapper.cs" />
     <Compile Include="Data\Connection\ISqlDateTimeProvider.cs" />
     <Compile Include="Data\Connection\ReconnectResult.cs" />
     <Compile Include="Data\Connection\SqlDateTimeProvider.cs" />
@@ -778,6 +779,9 @@
     <Compile Include="Data\Administration\Indexing\TableIndex.cs" />
     <Compile Include="Data\Administration\Retry\SqlAdapterRetry.cs" />
     <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="Messaging\Messages\CustomerDeletedMessage.cs" />
+    <Compile Include="Messaging\Messages\StoreDeletedMessage.cs" />
+    <Compile Include="Messaging\Messages\OrderDeletedMessage.cs" />
     <Compile Include="Messaging\Messages\ShippingSettingsChangedMessage.cs" />
     <Compile Include="Messaging\Messages\Shipping\RatesRetrievedMessage.cs" />
     <Compile Include="Messaging\Messages\Shipping\RatesRetrievingMessage.cs" />

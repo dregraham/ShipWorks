@@ -387,12 +387,17 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// </summary>
         private void DisplayError(IDictionary<ShipmentEntity, Exception> errors)
         {
-            if (errors.ContainsKey(ShipmentAdapter.Shipment))
+            Exception error = null;
+
+            if (errors.TryGetValue(ShipmentAdapter.Shipment, out error))
             {
                 messageHelper.ShowError("The selected shipments were edited or deleted by another ShipWorks user and your changes could not be saved.\n\n" +
                                         "The shipments will be refreshed to reflect the recent changes.");
 
-                messenger.Send(new OrderSelectionChangingMessage(this, new[] { ShipmentAdapter.Shipment.OrderID }));
+                if (!error.Message.Contains("delete"))
+                {
+                    messenger.Send(new OrderSelectionChangingMessage(this, new[] { ShipmentAdapter.Shipment.OrderID }));
+                }
             }
         }
 

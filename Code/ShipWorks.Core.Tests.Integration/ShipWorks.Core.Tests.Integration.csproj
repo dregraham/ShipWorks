@@ -150,6 +150,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DatabaseCollection.cs" />
+    <Compile Include="Data\DeletionServiceTest.cs" />
     <Compile Include="Filters\FilterHelperWrapperTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Shipping\CustomsManagerTest.cs" />

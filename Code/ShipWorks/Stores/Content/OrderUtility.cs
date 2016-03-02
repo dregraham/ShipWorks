@@ -355,8 +355,11 @@ namespace ShipWorks.Stores.Content
         /// </summary>
         public static OrderEntity FetchOrder(long orderID)
         {
-            OrderEntity order = DataProvider.GetEntity(orderID, true) as OrderEntity;
-            PopulateOrderDetails(order);
+            OrderEntity order = DataProvider.GetEntity(orderID) as OrderEntity;
+            if (order != null)
+            {
+                PopulateOrderDetails(order);
+            }
             return order;
         }
 
