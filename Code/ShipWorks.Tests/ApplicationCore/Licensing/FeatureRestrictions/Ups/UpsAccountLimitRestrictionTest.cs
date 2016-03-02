@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Autofac.Extras.Moq;
+using Interapptive.Shared.UI;
+using Interapptive.Shared.Utility;
 using Moq;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Licensing.FeatureRestrictions.Ups;
@@ -69,14 +71,18 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.FeatureRestrictions.Ups
         }
 
         [Fact]
-        public void Handle_ThrowsUpsException_WhenCheckReturnsForbidden()
+        public void Handle_CallsMessageHelperShowError_WhenCheckReturnsForbidden()
         {
             var licenseCapabilities = mock.Mock<ILicenseCapabilities>();
+            var messageHelper = mock.Mock<IMessageHelper>();
             licenseCapabilities.Setup(l => l.UpsStatus)
                 .Returns(UpsStatus.Discount);
 
-            Assert.Throws<UpsException>(()=> testObject.Handle(null, licenseCapabilities.Object, 5));
-        }
+            var testObject = mock.Create<UpsAccountLimitRestriction>();
 
+            testObject.Handle(null, licenseCapabilities.Object, 5);
+
+            messageHelper.Verify(m => m.ShowError(EnumHelper.GetDescription(testObject.EditionFeature)), Times.Once);
+        }
     }
 }

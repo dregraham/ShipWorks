@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Windows.Forms;
+using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using ShipWorks.Editions;
 using ShipWorks.Shipping.Carriers.UPS;
@@ -12,6 +13,17 @@ namespace ShipWorks.ApplicationCore.Licensing.FeatureRestrictions.Ups
     /// </summary>
     public class UpsAccountLimitRestriction : FeatureRestriction
     {
+        private readonly IMessageHelper messageHelper;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="messageHelper"></param>
+        public UpsAccountLimitRestriction(IMessageHelper messageHelper)
+        {
+            this.messageHelper = messageHelper;
+        }
+
         /// <summary>
         /// Gets the edition feature.
         /// </summary>
@@ -52,7 +64,8 @@ namespace ShipWorks.ApplicationCore.Licensing.FeatureRestrictions.Ups
             EditionRestrictionLevel restriction = Check(capabilities, data);
             if (restriction != EditionRestrictionLevel.None)
             {
-                throw new UpsException(EnumHelper.GetDescription(EditionFeature));
+                messageHelper.ShowError(EnumHelper.GetDescription(EditionFeature));
+                return false;
             }
 
             return true;

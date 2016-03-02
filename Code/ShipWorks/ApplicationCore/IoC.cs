@@ -14,7 +14,9 @@ using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Common;
 using ShipWorks.Data;
 using ShipWorks.Editions;
+using ShipWorks.Editions.Brown;
 using ShipWorks.Shipping.Carriers;
+using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Users;
 using ShipWorks.Stores;
@@ -197,6 +199,12 @@ namespace ShipWorks.ApplicationCore
                 .AsImplementedInterfaces();
 
             builder.RegisterType<UserSessionWrapper>()
+                .AsImplementedInterfaces();
+
+            builder.RegisterType<BrownEditionUtility>()
+                .AsImplementedInterfaces();
+
+            builder.RegisterType<PostalUtilityWrapper>()
                 .AsImplementedInterfaces();
         }
     }

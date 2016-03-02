@@ -1,4 +1,4 @@
-﻿namespace ShipWorks.UI
+﻿namespace Interapptive.Shared.UI
 {
     /// <summary>
     /// Display messages to the user without taking a dependency on the UI

@@ -447,8 +447,10 @@ namespace ShipWorks.Shipping.Carriers.UPS
         {
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                return lifetimeScope.Resolve<ILicenseService>()
+                bool accountAllowed = lifetimeScope.Resolve<ILicenseService>()
                         .HandleRestriction(EditionFeature.UpsAccountNumbers, upsAccountNumber, this);
+
+                return accountAllowed;
             }
         }
 

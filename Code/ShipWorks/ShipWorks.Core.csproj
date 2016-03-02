@@ -800,6 +800,7 @@
     <Compile Include="Data\IObjectReferenceManager.cs" />
     <Compile Include="Data\ObjectReferenceManagerWrapper.cs" />
     <Compile Include="Data\Utility\SqlAdapterExtensions.cs" />
+    <Compile Include="Editions\Brown\IBrownEditionUtility.cs" />
     <Compile Include="Editions\EditionManagerWrapper.cs" />
     <Compile Include="Editions\IEditionManager.cs" />
     <Compile Include="Filters\Content\Conditions\AddressValidationStatusCondition.cs" />
@@ -917,6 +918,8 @@
     <Compile Include="Shipping\Carriers\FedEx\Api\FedExLabelRepositoryFactory.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\IFedExLabelRepositoryFactory.cs" />
     <Compile Include="Shipping\Carriers\IRateHashingService.cs" />
+    <Compile Include="Shipping\Carriers\Postal\IPostalUtility.cs" />
+    <Compile Include="Shipping\Carriers\Postal\PostalUtilityWrapper.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\IUspsAccountManager.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsAccountManagerWrapper.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Registration\Promotion\Express1RegistrationPromotion.cs" />

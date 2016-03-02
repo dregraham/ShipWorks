@@ -270,6 +270,7 @@ namespace ShipWorks.ApplicationCore.Licensing
 
             UpsStatus = (UpsStatus)XPathUtility.Evaluate(xpath, "//UpsOnly/@status", 0);
             UpsAccountNumbers = XPathUtility.Evaluate(xpath, "//UpsOnly", "").Split(';')
+                                            .Where(a => !string.IsNullOrWhiteSpace(a))
                                             .Select(a => a.Trim().ToLower())
                                             .ToArray();
 
@@ -278,7 +279,7 @@ namespace ShipWorks.ApplicationCore.Licensing
                 UpsAccountNumbers.Count();
 
             UpsSurePost = XPathUtility.Evaluate(xpath, "//UpsSurePostEnabled/@status", 0) == 1;
-            PostalAvailability = (BrownPostalAvailability)XPathUtility.Evaluate(xpath, "//UpsOnly/@postal", (int)BrownPostalAvailability.ApoFpoPobox);
+            PostalAvailability = (BrownPostalAvailability)XPathUtility.Evaluate(xpath, "//UpsOnly/@postal", (int)BrownPostalAvailability.AllServices);
         }
 
         /// <summary>

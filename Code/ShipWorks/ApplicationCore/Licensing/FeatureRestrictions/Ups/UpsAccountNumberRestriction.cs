@@ -1,4 +1,6 @@
 ﻿using System.Linq;
+using System.Windows.Forms;
+using Interapptive.Shared.UI;
 using ShipWorks.Editions;
 
 namespace ShipWorks.ApplicationCore.Licensing.FeatureRestrictions.Ups
@@ -8,6 +10,17 @@ namespace ShipWorks.ApplicationCore.Licensing.FeatureRestrictions.Ups
     /// </summary>
     public class UpsAccountNumberRestriction : FeatureRestriction
     {
+        private readonly IMessageHelper messageHelper;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="messageHelper"></param>
+        public UpsAccountNumberRestriction(IMessageHelper messageHelper)
+        {
+            this.messageHelper = messageHelper;
+        }
+
         /// <summary>
         /// Works on the UpsAccountNumbers EditionFeature
         /// </summary>
@@ -31,6 +44,22 @@ namespace ShipWorks.ApplicationCore.Licensing.FeatureRestrictions.Ups
             }
 
             return EditionRestrictionLevel.None;
+        }
+
+        /// <summary>
+        /// Nothing to handle, return false
+        /// </summary>
+        public override bool Handle(IWin32Window owner, ILicenseCapabilities capabilities, object data)
+        {
+            EditionRestrictionLevel level = Check(capabilities, data);
+            
+            if (level != EditionRestrictionLevel.None)
+            {
+                string account = data as string;
+                messageHelper.ShowError($"You must contact Interapptive to enable use of UPS account '{account}'.");
+            }
+
+            return level == EditionRestrictionLevel.None;
         }
     }
 }

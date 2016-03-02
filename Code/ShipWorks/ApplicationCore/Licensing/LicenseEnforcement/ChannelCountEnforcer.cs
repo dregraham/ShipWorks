@@ -51,7 +51,8 @@ namespace ShipWorks.ApplicationCore.Licensing.LicenseEnforcement
         /// </summary>
         public EnumResult<ComplianceLevel> Enforce(ILicenseCapabilities capabilities, EnforcementContext context)
         {
-            if (capabilities.IsInTrial)
+            // If in trial or unlimited then return compliant
+            if (capabilities.IsInTrial || capabilities.ChannelLimit == -1)
             {
                 return new EnumResult<ComplianceLevel>(ComplianceLevel.Compliant, string.Empty);
             }

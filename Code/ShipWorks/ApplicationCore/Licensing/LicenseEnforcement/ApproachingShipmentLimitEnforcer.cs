@@ -61,10 +61,17 @@ namespace ShipWorks.ApplicationCore.Licensing.LicenseEnforcement
         /// </summary>
         public EnumResult<ComplianceLevel> Enforce(ILicenseCapabilities capabilities, EnforcementContext context)
         {
-            float currentShipmentPercentage = (float) capabilities.ProcessedShipments / capabilities.ShipmentLimit;
-
             string message = string.Empty;
 
+            // unlimited shipment limit is always in compliance 
+            if (capabilities.ShipmentLimit == -1)
+            {
+                return new EnumResult<ComplianceLevel>(ComplianceLevel.Compliant, message);
+            }
+
+            float currentShipmentPercentage = (float) capabilities.ProcessedShipments / capabilities.ShipmentLimit;
+            
+            // Check to see if our current shipment percentage is greater than or equal to the threshold 
             if (!capabilities.IsInTrial && currentShipmentPercentage >= ShipmentLimitWarningThreshold)
             {
                 message = $"You are nearing your shipment limit for the current billing cycle ending {capabilities.BillingEndDate.ToString("M/d")}.";
