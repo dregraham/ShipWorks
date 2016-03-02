@@ -51,7 +51,6 @@ namespace ShipWorks.ApplicationCore.Licensing
         }
 
         #region Properties
-
         /// <summary>
         /// Controls if DHL is enabled for Endicia users
         /// </summary>
@@ -201,7 +200,7 @@ namespace ShipWorks.ApplicationCore.Licensing
                 XPathNavigator shipmentXpath = shipmentTypeFunctionality.Current;
                 int shipmentTypeCode;
 
-                if (Int32.TryParse(shipmentXpath.GetAttribute("TypeCode", ""), out shipmentTypeCode))
+                if (int.TryParse(shipmentXpath.GetAttribute("TypeCode", ""), out shipmentTypeCode))
                 {
                     List<ShipmentTypeRestrictionType> restrictionsList = new List<ShipmentTypeRestrictionType>();
 
@@ -209,7 +208,13 @@ namespace ShipWorks.ApplicationCore.Licensing
                     while (restrictions.MoveNext())
                     {
                         XPathNavigator restriction = restrictions.Current;
-                        restrictionsList.Add(EnumHelper.GetEnumByApiValue<ShipmentTypeRestrictionType>(restriction.SelectSingleNode(".")?.Value));
+
+                        ShipmentTypeRestrictionType restrictionType;
+
+                        if (Enum.TryParse(restriction.SelectSingleNode(".")?.Value, true, out restrictionType))
+                        {
+                            restrictionsList.Add(restrictionType);
+                        }
                     }
 
                     ShipmentTypeRestriction.Add((ShipmentTypeCode)shipmentTypeCode, restrictionsList);
@@ -346,6 +351,11 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <remarks>returns empty string if the name or value are not found</remarks>
         private static string GetStringValueFromNameValuePair(string name, XmlNode document)
         {
+            if (document == null)
+            {
+                return string.Empty;
+            }
+
             // Find the node with the given name 
             XmlNode namedNode = document.SelectSingleNode($"//*[local-name()='{name}']");
 
@@ -365,7 +375,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             string value = GetStringValueFromNameValuePair(name, document);
             int result;
 
-            return Int32.TryParse(value, out result) ? result : 0;
+            return int.TryParse(value, out result) ? result : 0;
         }
 
         /// <summary>
