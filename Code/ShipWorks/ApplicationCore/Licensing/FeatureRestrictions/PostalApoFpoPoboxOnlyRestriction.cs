@@ -22,6 +22,12 @@ namespace ShipWorks.ApplicationCore.Licensing.FeatureRestrictions
         /// </summary>
         public override EditionRestrictionLevel Check(ILicenseCapabilities capabilities, object data)
         {
+            // All services are allowed
+            if (capabilities.PostalAvailability == BrownPostalAvailability.AllServices)
+            {
+                return EditionRestrictionLevel.None;
+            }
+
             ShipmentEntity shipment = data as ShipmentEntity;
     
             // For some reason the data passed is not a shipment
@@ -30,7 +36,7 @@ namespace ShipWorks.ApplicationCore.Licensing.FeatureRestrictions
                 return EditionRestrictionLevel.None;
             }
 
-            // Not a postal shipment so we dont care
+            // Not a postal shipment so we don't care
             if (!PostalUtility.IsPostalShipmentType((ShipmentTypeCode)shipment.ShipmentType))
             {
                 return EditionRestrictionLevel.None;
@@ -44,12 +50,6 @@ namespace ShipWorks.ApplicationCore.Licensing.FeatureRestrictions
 
             // PoBox shipments are allowed
             if (Regex.Match(shipment.ShipStreet1 + " " + shipment.ShipStreet2 + " " + shipment.ShipStreet3, "P.{0,2}O.{0,2}[ ]?Box", RegexOptions.IgnoreCase).Success)
-            {
-                return EditionRestrictionLevel.None;
-            }
-
-            // All services are allowed
-            if (capabilities.PostalAvailability == BrownPostalAvailability.AllServices)
             {
                 return EditionRestrictionLevel.None;
             }
