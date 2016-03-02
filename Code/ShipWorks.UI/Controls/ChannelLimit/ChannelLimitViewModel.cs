@@ -160,7 +160,9 @@ namespace ShipWorks.UI.Controls.ChannelLimit
 
             SelectedStoreType = StoreTypeCode.Invalid;
 
-            license.Refresh();
+            // We need to force the refresh at this point to make sure we have the most 
+            // recent store/channel information
+            license.ForceRefresh();
 
             // if we don't have a store collection make one
             if (ChannelCollection == null)
@@ -178,7 +180,9 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         /// </summary>
         public void Dismiss()
         {
-            license.Refresh();
+            // We need to force the refresh at this point to make sure we have the most 
+            // recent store/channel information
+            license.ForceRefresh();
         }
 
         /// <summary>

@@ -1080,11 +1080,9 @@ namespace ShipWorks.Shipping
         private static void CheckLicense(StoreEntity storeEntity)
         {
             ILicenseService licenseService = IoC.UnsafeGlobalLifetimeScope.Resolve<ILicenseService>();
-
             ILicense license = licenseService.GetLicense(storeEntity);
 
             license.Refresh();
-
             if (license.IsDisabled)
             {
                 throw new ShippingException(license.DisabledReason);

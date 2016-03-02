@@ -61,7 +61,11 @@ namespace ShipWorks.UI.Controls.UpgradePlan
             Uri uri = new Uri(CustomerLicense.UpgradeUrl);
             IDialog browserDlg = webBrowserFactory.Create(uri, "Upgrade your plan", owner);
             browserDlg.ShowDialog();
-            
+
+            // The browser dialog has closed. We need to force a refresh of the license 
+            // in the event the plan was changed before checking for compliance.
+            license.ForceRefresh();
+
             if (IsCompliant())
             {
                 owner?.Close();

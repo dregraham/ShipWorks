@@ -22,6 +22,14 @@ namespace ShipWorks.ApplicationCore.Licensing
         }
 
         /// <summary>
+        /// Does nothing.
+        /// </summary>
+        public void ForceRefresh()
+        {
+            // Do nothing
+        }
+
+        /// <summary>
         /// Does nothing
         /// </summary>
         public void Refresh()

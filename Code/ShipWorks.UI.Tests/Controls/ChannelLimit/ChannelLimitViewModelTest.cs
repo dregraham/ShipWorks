@@ -63,7 +63,7 @@ namespace ShipWorks.UI.Tests.Controls.ChannelLimit
         }
 
         [Fact]
-        public void Load_RefreshesLicense()
+        public void Load_ForcesLicenseRefresh()
         {
             using (var mock = AutoMock.GetLoose())
             {
@@ -77,7 +77,7 @@ namespace ShipWorks.UI.Tests.Controls.ChannelLimit
                 // Call load
                 testObject.Load(customerLicense.Object, behavior.Object);
 
-                customerLicense.Verify(c => c.Refresh(), Times.Once);
+                customerLicense.Verify(c => c.ForceRefresh(), Times.Once);
             }
         }
 
@@ -104,7 +104,7 @@ namespace ShipWorks.UI.Tests.Controls.ChannelLimit
         }
 
         [Fact]
-        public void Deletechannel_ShowsError_WhenOneChannel()
+        public void DeleteChannel_ShowsError_WhenOneChannel()
         {
             using (var mock = AutoMock.GetLoose())
             {
@@ -129,7 +129,7 @@ namespace ShipWorks.UI.Tests.Controls.ChannelLimit
         }
 
         [Fact]
-        public void Deletechannel_ShowsConfirmDeleteDlg()
+        public void DeleteChannel_ShowsConfirmDeleteDlg()
         {
             using (var mock = AutoMock.GetLoose())
             {
@@ -168,7 +168,7 @@ namespace ShipWorks.UI.Tests.Controls.ChannelLimit
         }
 
         [Fact]
-        public void Deletechannel_DeletesChannel_WhenConfirmDeleteTrue()
+        public void DeleteChannel_DeletesChannel_WhenConfirmDeleteTrue()
         {
             using (var mock = AutoMock.GetLoose())
             {
@@ -206,7 +206,7 @@ namespace ShipWorks.UI.Tests.Controls.ChannelLimit
         }
 
         [Fact]
-        public void Deletechannel_ChannelNotDeleted_WhenConfirmDeleteDeclined()
+        public void DeleteChannel_ChannelNotDeleted_WhenConfirmDeleteDeclined()
         {
             using (var mock = AutoMock.GetLoose())
             {

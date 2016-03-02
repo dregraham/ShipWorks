@@ -101,9 +101,9 @@ namespace ShipWorks.ApplicationCore.Licensing
         }
 
         /// <summary>
-        /// Refreshes store license data.
+        /// Bypasses any caching and forces a refresh of the license capabilities.
         /// </summary>
-        public void Refresh()
+        public void ForceRefresh()
         {
             try
             {
@@ -116,6 +116,15 @@ namespace ShipWorks.ApplicationCore.Licensing
                 log.Warn(ex.Message, ex);
                 DisabledReason = ex.Message;
             }
+        }
+
+        /// <summary>
+        /// Refresh the license capabilities from Tango
+        /// </summary>
+        public void Refresh()
+        {
+            // Always refresh the license for now to mimic historical behavior
+            ForceRefresh();
         }
 
         /// <summary>
