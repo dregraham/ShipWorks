@@ -71,19 +71,18 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
             }
         }
         
-
         [Fact]
         public void Refresh_DefersGettingLicenseCapabilitiesToTangoWebClient()
         {
             using (var mock = AutoMock.GetLoose())
             {
-                LicenseCapabilities licenseResponse = new LicenseCapabilities(new XmlDocument());
+                var licenseCapabilities = mock.Mock<ILicenseCapabilities>();
 
                 var tangoWebClient =
                     mock.Mock<ITangoWebClient>();
 
                 tangoWebClient.Setup(w => w.GetLicenseCapabilities(It.IsAny<ICustomerLicense>()))
-                    .Returns(licenseResponse);
+                    .Returns(licenseCapabilities.Object);
 
                 CustomerLicense customerLicense = mock.Create<CustomerLicense>(new NamedParameter("key", "SomeKey"));
 
@@ -200,7 +199,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
                     .Returns(false);
 
                 response.SetupGet(r => r.Error)
-                    .Returns("OverChannelLimit");
+                    .Returns(" CreateStoreActivity_103 ");
 
                 mock.Mock<ITangoWebClient>()
                     .Setup(w => w.AddStore(It.IsAny<CustomerLicense>(), It.IsAny<StoreEntity>()))
