@@ -11,57 +11,12 @@ namespace ShipWorks.ApplicationCore.Licensing
     public interface ILicenseCapabilities
     {
         /// <summary>
-        /// No specific feature
-        /// </summary>
-        bool None { get; set; }
-
-        /// <summary>
-        /// Action count limitation
-        /// </summary>
-        bool ActionLimit { get; set; }
-
-        /// <summary>
-        /// Filter count limitation
-        /// </summary>
-        bool FilterLimit { get; set; }
-
-        /// <summary>
-        /// Can't create 'My' (private) filters when filters are being limited
-        /// </summary>
-        bool MyFilters { get; set; }
-
-        /// <summary>
-        /// Selection count limitation
-        /// </summary>
-        bool SelectionLimit { get; set; }
-
-        /// <summary>
-        /// Can't add new orders\customers
-        /// </summary>
-        bool AddOrderCustomer { get; set; }
-
-        /// <summary>
-        /// Create \ prbool Endicia scan forms
-        /// </summary>
-        bool EndiciaScanForm { get; set; }
-
-        /// <summary>
-        /// Restricted to a specific number of Endicia accounts
-        /// </summary>
-        bool EndiciaAccountLimit { get; set; }
-
-        /// <summary>
-        /// Restricted to a specific Endicia account number
-        /// </summary>
-        bool EndiciaAccountNumber { get; set; }
-
-        /// <summary>
         /// Controls if DHL is enabled for Endicia users
         /// </summary>
         bool EndiciaDhl { get; set; }
 
         /// <summary>
-        /// Constrols if using Endicia insurance is enabled for Endicia users
+        /// Controls if using Endicia insurance is enabled for Endicia users
         /// </summary>
         bool EndiciaInsurance { get; set; }
 
@@ -74,11 +29,6 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// Gets the shipping policy for a specific shipment type.
         /// </summary>
         Dictionary<ShipmentTypeCode, Dictionary<ShippingPolicyType, string>> ShipmentTypeShippingPolicy { get; }
-
-        /// <summary>
-        /// Restricted to a single store
-        /// </summary>
-        bool SingleStore { get; set; }
 
         /// <summary>
         /// Restricted to a specific number of UPS accounts
@@ -114,38 +64,9 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// Endicia Scan Based Returns can be Restricted
         /// </summary>
         bool EndiciaScanBasedReturns { get; set; }
-
+        
         /// <summary>
-        /// The ability to add shipping accounts can be restricted.
-        /// </summary>
-        bool ShipmentTypeRegistration { get; set; }
-
-        /// <summary>
-        /// The ability to process shipments for specific carriers can be restricted.
-        /// </summary>
-        bool ProcessShipment { get; set; }
-
-        /// <summary>
-        /// The ability to purchase postage for specific carriers can be restricted.
-        /// </summary>
-        bool PurchasePostage { get; set; }
-
-        /// <summary>
-        /// The ability to display discount messaging for specific carriers can be restricted.
-        /// </summary>
-        bool RateDiscountMessaging { get; set; }
-
-        /// <summary>
-        /// The ability to display a conversion promo/message for a shipping provider can be restricted.
-        /// This is sort of out of place and pertains only to USPS. This is a result of a problem
-        /// on the USPS side when USPS customers have multi-user accounts where they don't
-        /// want to allow these customers to convert through ShipWorks. After USPS has reached
-        /// out to these customers and converted their accounts this can be removed.
-        /// </summary>
-        bool ShippingAccountConversion { get; set; }
-
-        /// <summary>
-        /// Constrols if using Stamps insurance is enabled for Usps users
+        /// Controls if using Stamps insurance is enabled for Usps users
         /// </summary>
         bool StampsInsurance { get; set; }
 
@@ -180,25 +101,10 @@ namespace ShipWorks.ApplicationCore.Licensing
         bool StampsRrDonnelleyConsolidator { get; set; }
 
         /// <summary>
-        /// Advanced shipping features restriction
-        /// </summary>
-        bool AdvancedShipping { get; set; }
-
-        /// <summary>
-        /// CRM features restriction
-        /// </summary>
-        bool Crm { get; set; }
-
-        /// <summary>
         /// Custom data source restriction
         /// </summary>
         bool CustomDataSources { get; set; }
-
-        /// <summary>
-        /// Template customization restriction
-        /// </summary>
-        bool TemplateCustomization { get; set; }
-
+        
         /// <summary>
         /// Number of selling channels the license allows
         /// </summary>
