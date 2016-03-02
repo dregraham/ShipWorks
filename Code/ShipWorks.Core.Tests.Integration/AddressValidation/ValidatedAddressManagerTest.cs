@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using ShipWorks.AddressValidation;
 using ShipWorks.AddressValidation.Enums;
 using ShipWorks.Startup;
@@ -21,7 +22,7 @@ namespace ShipWorks.Core.Tests.Integration.AddressValidation
         }
 
         [Fact]
-        public void ValidateShipmentAsync_DoesNotChangeOrderInstanceOnShipment_WhenOrderIsAlreadyLoaded()
+        public async Task ValidateShipmentAsync_DoesNotChangeOrderInstanceOnShipment_WhenOrderIsAlreadyLoaded()
         {
             var addressValidator = context.Mock.CreateMock<IAddressValidator>();
             var order = Modify.Order(context.Order)
@@ -32,7 +33,7 @@ namespace ShipWorks.Core.Tests.Integration.AddressValidation
                 .Set(x => x.ShipAddressValidationStatus = (int) AddressValidationStatusType.Pending)
                 .Save();
 
-            ValidatedAddressManager.ValidateShipmentAsync(shipment, addressValidator.Object);
+            await ValidatedAddressManager.ValidateShipmentAsync(shipment, addressValidator.Object);
 
             Assert.Same(context.Order, shipment.Order);
         }

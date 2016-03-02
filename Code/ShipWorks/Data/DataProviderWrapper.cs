@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.ExecutionMode;
@@ -9,7 +10,7 @@ namespace ShipWorks.Data
     /// <summary>
     /// Central location for obtaining singleton entity cache objects
     /// </summary>
-    public class DataProviderWrapper : IDataProvider, IInitializeForCurrentDatabase
+    public class DataProviderWrapper : IDataProvider, IInitializeForCurrentDatabase, IDisposable
     {
         /// <summary>
         /// Get all entities of the given type that are related to the specified entityID
@@ -22,5 +23,13 @@ namespace ShipWorks.Data
         /// </summary>
         public void InitializeForCurrentDatabase(ExecutionMode executionMode) =>
             DataProvider.InitializeForCurrentDatabase(executionMode);
+
+        /// <summary>
+        /// Dispose
+        /// </summary>
+        public void Dispose()
+        {
+            DataProvider.StopTrackingChanges();
+        }
     }
 }
