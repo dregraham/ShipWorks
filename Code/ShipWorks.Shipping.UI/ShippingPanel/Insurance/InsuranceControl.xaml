@@ -41,7 +41,7 @@
             <TextBox Width="80"  Margin="4 4 0 0" Style="{DynamicResource TextBoxErrorTemplate}"
                          IsEnabled="{Binding Insurance}"
                          Text="{Binding DeclaredValue, StringFormat=c, FallbackValue='50.50',
-                         Converter={StaticResource EmptyMoney}, UpdateSourceTrigger=PropertyChanged,
+                         Converter={StaticResource EmptyMoney}, 
                          TargetNullValue='', ValidatesOnDataErrors=true, NotifyOnValidationError=true}"/>
 
             <local:InsurancePromoControl />
