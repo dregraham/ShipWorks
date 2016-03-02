@@ -68,6 +68,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
 
             viewModel.UpdateServices();
             viewModel.DomesticInternationalText = viewModel.IsDomestic ? "Domestic" : "International";
+            viewModel.RefreshInsurance();
         }
 
         /// <summary>

@@ -23,6 +23,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
             Justification = "Event is virtual to allow tests to fire it")]
         public virtual event PropertyChangedEventHandler PropertyChanged;
         public event PropertyChangingEventHandler PropertyChanging;
+        private IPackageAdapter packageAdapter;
 
         /// <summary>
         /// Constructor for use by tests and WPF designer
@@ -58,7 +59,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
             TotalWeight = shipmentAdapter.TotalWeight;
             ShipmentContentWeight = shipmentAdapter.ContentWeight;
 
-            IPackageAdapter packageAdapter = shipmentAdapter.GetPackageAdapters().FirstOrDefault();
+            packageAdapter = shipmentAdapter.GetPackageAdapters().FirstOrDefault();
             InsuranceViewModel.Load(new[] { packageAdapter }, packageAdapter, shipmentAdapter);
 
             OtherShipmentEntity otherShipment = shipmentAdapter.Shipment.Other;
@@ -222,6 +223,14 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         public void RefreshPackageTypes()
         {
             // Other shipment type does not support packages
+        }
+
+        /// <summary>
+        /// Updates the insurance view for the shipment.
+        /// </summary>
+        public void RefreshInsurance()
+        {
+            InsuranceViewModel.Load(new[] { packageAdapter }, packageAdapter, shipmentAdapter);
         }
 
         /// <summary>

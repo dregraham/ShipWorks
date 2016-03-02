@@ -231,6 +231,14 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         }
 
         /// <summary>
+        /// Updates the insurance view for the shipment.
+        /// </summary>
+        public void RefreshInsurance()
+        {
+            InsuranceViewModel.Load(PackageAdapters, SelectedPackageAdapter, shipmentAdapter);
+        }
+
+        /// <summary>
         /// Refreshes the package types.
         /// </summary>
         public void RefreshPackageTypes()

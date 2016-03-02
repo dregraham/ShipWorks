@@ -343,6 +343,11 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         public void UpdatePackages() => ShipmentViewModel?.RefreshPackageTypes();
 
         /// <summary>
+        /// Updates the insurance view for the shipment.
+        /// </summary>
+        public void RefreshInsurance() => ShipmentViewModel?.RefreshInsurance();
+
+        /// <summary>
         /// Handle a property change before it actually happens
         /// </summary>
         private void OnPropertyChanging(object sender, PropertyChangingEventArgs e)
