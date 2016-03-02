@@ -778,8 +778,9 @@ namespace ShipWorks
             // Update our edition for each store.  Eventually this will also be where we log with tango the sw version being used and maybe other things
             ILicenseService licenseService = IoC.UnsafeGlobalLifetimeScope.Resolve<ILicenseService>();
             List<ILicense> licenses = licenseService.GetLicenses().ToList();
-            licenses.ForEach(license => license.Refresh());
 
+           // Force a license refresh at login
+            licenses.ForEach(license => license.ForceRefresh());
             ForceHeartbeat();
         }
 

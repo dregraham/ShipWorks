@@ -15,7 +15,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
     public class LicenseServiceTest
     {
         [Fact]
-        public void AllowsLogOn_CallsLicenseRefresh()
+        public void AllowsLogOn_ForcesLicenseRefresh()
         {
             using (var mock = AutoMock.GetLoose())
             {
@@ -27,15 +27,13 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
 
                 // Mock up the CustomerLicense constructor parameter Func<string, ICustomerLicense>
                 Mock<Func<string, ICustomerLicense>> repo = mock.MockRepository.Create<Func<string, ICustomerLicense>>();
-                repo.Setup(x => x(It.IsAny<string>()))
-                    .Returns(customerLicense.Object);
+                repo.Setup(x => x(It.IsAny<string>())).Returns(customerLicense.Object);
                 mock.Provide(repo.Object);
 
                 LicenseService testObject = mock.Create<LicenseService>();
-
                 testObject.AllowsLogOn();
 
-                customerLicense.Verify(l => l.Refresh(), Times.Once);
+                customerLicense.Verify(l => l.ForceRefresh(), Times.Once);
             }
         }
 
@@ -49,7 +47,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
                     .Returns("foo");
 
                 Mock<ICustomerLicense> customerLicense = mock.Mock<ICustomerLicense>();
-                customerLicense.Setup(l => l.Refresh())
+                customerLicense.Setup(l => l.ForceRefresh())
                     .Throws(new Exception("something went wrong"));
 
 

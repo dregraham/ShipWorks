@@ -19,7 +19,9 @@ namespace ShipWorks.ApplicationCore.Licensing
         private readonly Func<string, ICustomerLicense> customerLicenseFactory;
         private readonly Func<StoreEntity, StoreLicense> storeLicenseFactory;
         private readonly IStoreManager storeManager;
-        private ICustomerLicense licenseCache;
+
+        private ICustomerLicense cachedCustomerLicense;
+
 
         /// <summary>
         /// Constructor
@@ -36,14 +38,15 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// Customer Key read from the reader.
         /// </summary>
         /// <exception cref="EncryptionException"></exception>
-        private string CustomerKey => reader.Read();
+        private string CustomerKey
+        {
+            get { return reader.Read(); }
+        } 
 
         /// <summary>
         /// True if Legacy Customer
         /// </summary>
-        /// <remarks>
-        /// True if CustomerKey is null or empty
-        /// </remarks>
+        /// <remarks>True if CustomerKey is null or empty</remarks>
         /// <exception cref="EncryptionException" />
         private bool IsLegacy => string.IsNullOrEmpty(CustomerKey);
 
@@ -56,9 +59,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             try
             {
                 // If Legacy, return store license, else return customer license
-                return IsLegacy
-                    ? (ILicense) storeLicenseFactory(store)
-                    : GetCustomerLicense();
+                return IsLegacy ? (ILicense) storeLicenseFactory(store) : GetCustomerLicense();
             }
             catch (ShipWorksLicenseException ex)
             {
@@ -82,8 +83,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         public bool HandleRestriction(EditionFeature feature, object data, IWin32Window owner)
         {
             return SqlSession.Current == null || IsLegacy
-                ? EditionManager.HandleRestrictionIssue(owner,
-                    EditionManager.ActiveRestrictions.CheckRestriction(feature, data))
+                ? EditionManager.HandleRestrictionIssue(owner, EditionManager.ActiveRestrictions.CheckRestriction(feature, data))
                 : GetCustomerLicense().HandleRestriction(feature, data, owner);
         }
 
@@ -131,7 +131,7 @@ namespace ShipWorks.ApplicationCore.Licensing
 
             // Customer licenses that are disabled cannot logon, refresh the
             // license info with tango before checking if the license is disabled
-            customerLicense.Refresh();
+            customerLicense.ForceRefresh();
 
             return customerLicense.IsDisabled ?
                 new EnumResult<LogOnRestrictionLevel>(LogOnRestrictionLevel.Forbidden, customerLicense.DisabledReason) :
@@ -144,12 +144,12 @@ namespace ShipWorks.ApplicationCore.Licensing
         private ICustomerLicense GetCustomerLicense()
         {
             // If the cache is null or the key has changed do to a new license being activated
-            if (licenseCache == null)
+            if (cachedCustomerLicense == null)
             {
-                licenseCache = customerLicenseFactory(CustomerKey);
+                cachedCustomerLicense = customerLicenseFactory(CustomerKey);
             }
             
-            return licenseCache;
+            return cachedCustomerLicense;
         }
     }
 }
