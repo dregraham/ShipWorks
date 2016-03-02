@@ -26,12 +26,20 @@ namespace ShipWorks.Data.Model.EntityClasses
         /// <summary>
         /// Gets the origin as a person adapter
         /// </summary>
-        public PersonAdapter OriginPerson => new PersonAdapter(this, "Origin");
+        public PersonAdapter OriginPerson
+        {
+            get { return new PersonAdapter(this, "Origin"); }
+            set { PersonAdapter.Copy(value, OriginPerson); }
+        }
 
         /// <summary>
         /// Gets the shipping address as a person adapter
         /// </summary>
-        public PersonAdapter ShipPerson => new PersonAdapter(this, "Ship");
+        public PersonAdapter ShipPerson
+        {
+            get { return new PersonAdapter(this, "Ship"); }
+            set { PersonAdapter.Copy(value, ShipPerson); }
+        }
 
         /// <summary>
         /// Indicates if the shipment is known to have been deleted from the database.  This flag is used instead of using Entity.Fields.State = EntityState.Deleted

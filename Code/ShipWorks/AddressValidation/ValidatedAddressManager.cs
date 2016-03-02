@@ -308,7 +308,7 @@ namespace ShipWorks.AddressValidation
                 return;
             }
 
-            OrderEntity order = DataProvider.GetEntity(shipment.OrderID) as OrderEntity;
+            OrderEntity order = shipment.Order ?? DataProvider.GetEntity(shipment.OrderID) as OrderEntity;
             if (order == null)
             {
                 return;

@@ -96,6 +96,16 @@ namespace ShipWorks.Tests.Shared.EntityBuilders
         }
 
         /// <summary>
+        /// Set the shipping address on the order
+        /// </summary>
+        public EntityBuilder<T> WithAddress(Expression<Func<T, PersonAdapter>> addressAdapter, PersonAdapter fromAdapter)
+        {
+            Set(addressAdapter, fromAdapter);
+
+            return this;
+        }
+
+        /// <summary>
         /// Do not set default values on the built entity
         /// </summary>
         /// <returns></returns>

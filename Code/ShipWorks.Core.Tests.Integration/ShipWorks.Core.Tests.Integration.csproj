@@ -149,6 +149,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AddressValidation\ValidatedAddressManagerTest.cs" />
     <Compile Include="DatabaseCollection.cs" />
     <Compile Include="Data\DeletionServiceTest.cs" />
     <Compile Include="Filters\FilterHelperWrapperTest.cs" />
