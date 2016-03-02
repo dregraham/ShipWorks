@@ -41,7 +41,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         private string CustomerKey
         {
             get { return reader.Read(); }
-        } 
+        }
 
         /// <summary>
         /// True if Legacy Customer
@@ -126,7 +126,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             {
                 return new EnumResult<LogOnRestrictionLevel>(LogOnRestrictionLevel.Forbidden, ex.Message);
             }
-            
+
             ILicense customerLicense = GetCustomerLicense();
 
             // Customer licenses that are disabled cannot logon, refresh the
@@ -143,12 +143,12 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         private ICustomerLicense GetCustomerLicense()
         {
-            // If the cache is null or the key has changed do to a new license being activated
-            if (cachedCustomerLicense == null)
+            // If the cache is null or the key has changed due to a new license being activated
+            if (cachedCustomerLicense == null || CustomerKey != cachedCustomerLicense.Key)
             {
                 cachedCustomerLicense = customerLicenseFactory(CustomerKey);
             }
-            
+
             return cachedCustomerLicense;
         }
     }
