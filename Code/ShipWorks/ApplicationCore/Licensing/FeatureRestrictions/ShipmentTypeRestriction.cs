@@ -88,6 +88,12 @@ namespace ShipWorks.ApplicationCore.Licensing.FeatureRestrictions
         /// </summary>
         private bool CheckBrownPostalRestriction(ILicenseCapabilities capabilities, ShipmentTypeCode shipmentType)
         {
+            // WebTools is the only postal service that a user cannot access even if BrownPostalAvailability is AllServices
+            if (shipmentType == ShipmentTypeCode.PostalWebTools)
+            {
+                return false;
+            }
+
             return capabilities.PostalAvailability != BrownPostalAvailability.None &&
                             (postalUtility.IsPostalShipmentType(shipmentType));
         }
