@@ -19,6 +19,8 @@ namespace ShipWorks.ApplicationCore.Licensing
     public class LicenseCapabilities : ILicenseCapabilities
     {
         private readonly List<StoreTypeCode> forbiddenChannels;
+        private const string userCapabilityNamespace = "http://ShipWorks.com/UserCapabilitiesV1.xsd";
+        private const string userLevelNamespace = "http://ShipWorks.com/UserLevelsV1.xsd";
 
         /// <summary>
         /// Constructor - Sets capabilities based on the xml response.
@@ -291,26 +293,26 @@ namespace ShipWorks.ApplicationCore.Licensing
 
             IsInTrial = XPathUtility.Evaluate(xpath, "//IsInTrial", false);
 
-            CustomDataSources = GetBoolValueFromNameValuePair("CustomDataSources", GetUserCapabilities(response));
+            CustomDataSources = GetBoolValueFromNameValuePair("CustomDataSources", response, userCapabilityNamespace);
 
             // If custom data sources is disabled we add GenericFile to the list of stores that are not allowed
-            if (!GetBoolValueFromNameValuePair("CustomDataSources", GetUserCapabilities(response)))
+            if (!GetBoolValueFromNameValuePair("CustomDataSources", response, userCapabilityNamespace))
             {
                 forbiddenChannels.Add(StoreTypeCode.GenericFile);
             }
 
             // If custom data sources api is disabled we add GenericModule to the list of stores that are not allowed
-            if (!GetBoolValueFromNameValuePair("CustomDataSourcesAPI", GetUserCapabilities(response)))
+            if (!GetBoolValueFromNameValuePair("CustomDataSourcesAPI", response, userCapabilityNamespace))
             {
                 forbiddenChannels.Add(StoreTypeCode.GenericModule);
             }
 
-            ChannelLimit = GetIntValueFromNameValuePair("NumberOfChannels", GetUserCapabilities(response));
+            ChannelLimit = GetIntValueFromNameValuePair("NumberOfChannels", response, userCapabilityNamespace);
 
-            ShipmentLimit = GetIntValueFromNameValuePair("NumberOfShipments", GetUserCapabilities(response));
+            ShipmentLimit = GetIntValueFromNameValuePair("NumberOfShipments", response, userCapabilityNamespace);
 
-            ActiveChannels = GetIntValueFromNameValuePair("NumberOfShipments", GetUserLevels(response));
-            ProcessedShipments = GetIntValueFromNameValuePair("NumberOfShipments", GetUserLevels(response));
+            ActiveChannels = GetIntValueFromNameValuePair("NumberOfChannels", response, userLevelNamespace);
+            ProcessedShipments = GetIntValueFromNameValuePair("NumberOfShipments", response, userLevelNamespace);
 
             string date = XPathUtility.Evaluate(xpath, "//BillingEndDate", DateTime.MinValue.ToString(CultureInfo.InvariantCulture));
 
@@ -350,28 +352,26 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// Gets the string value for the given name 
         /// </summary>
         /// <remarks>returns empty string if the name or value are not found</remarks>
-        private static string GetStringValueFromNameValuePair(string name, XmlNode document)
+        private static string GetStringValueFromNameValuePair(string name, XmlNode document, string ns)
         {
-            if (document == null)
+            XPathNavigator xpath = document?.CreateNavigator();
+
+            if (xpath?.NameTable != null)
             {
-                return string.Empty;
-            }
+                XmlNamespaceManager nsmanager = new XmlNamespaceManager(xpath.NameTable);
 
-            XPathNavigator xpath = document.CreateNavigator();
+                nsmanager.AddNamespace("x", ns);
 
-            XPathNodeIterator iterator = xpath.Select("//*[local-name()='NameValuePair']");
+                XPathNodeIterator iterator = xpath.Select("//x:NameValuePair", nsmanager);
 
-            while (iterator.MoveNext())
-            {
-                if (iterator.Current.NameTable != null)
+                while (iterator.MoveNext())
                 {
-                    XmlNamespaceManager nsmanager = new XmlNamespaceManager(iterator.Current.NameTable);
-
-                    nsmanager.AddNamespace("n", iterator.Current.NamespaceURI);
-
-                    if (iterator.Current?.SelectSingleNode("n:Name", nsmanager)?.Value == name)
+                    if (iterator.Current.NameTable != null)
                     {
-                        return iterator.Current?.SelectSingleNode("n:Value", nsmanager)?.Value ?? string.Empty;
+                        if (iterator.Current?.SelectSingleNode("x:Name", nsmanager)?.Value == name)
+                        {
+                            return iterator.Current?.SelectSingleNode("x:Value", nsmanager)?.Value ?? string.Empty;
+                        }
                     }
                 }
             }
@@ -383,9 +383,9 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// Gets the int value for the given name
         /// </summary>
         /// <remarks>returns 0 if the name or value are not found or not an int</remarks>
-        private static int GetIntValueFromNameValuePair(string name, XmlNode document)
+        private static int GetIntValueFromNameValuePair(string name, XmlNode document, string ns)
         {
-            string value = GetStringValueFromNameValuePair(name, document);
+            string value = GetStringValueFromNameValuePair(name, document, ns);
             int result;
 
             return int.TryParse(value, out result) ? result : 0;
@@ -395,27 +395,11 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// Gets the int value for the given name
         /// </summary>
         /// <remarks>returns 0 if the name or value are not found or not an int</remarks>
-        private static bool GetBoolValueFromNameValuePair(string name, XmlNode document)
+        private static bool GetBoolValueFromNameValuePair(string name, XmlNode document, string ns)
         {
-            string value = GetStringValueFromNameValuePair(name, document);
+            string value = GetStringValueFromNameValuePair(name, document, ns);
 
             return value.ToLower() == "yes";
-        }
-
-        /// <summary>
-        /// Returns the UserCapabilities node from the response
-        /// </summary>
-        private static XmlNode GetUserCapabilities(XmlNode response)
-        {
-            return response.SelectSingleNode("//*[local-name()='UserCapabilities']");
-        }
-
-        /// <summary>
-        /// Returns the UserLevels node from the response
-        /// </summary>
-        private static XmlNode GetUserLevels(XmlNode response)
-        {
-            return response.SelectSingleNode("//*[local-name()='UserLevels']");
         }
     }
 }
