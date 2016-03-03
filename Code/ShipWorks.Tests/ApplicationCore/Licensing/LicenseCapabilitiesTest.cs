@@ -264,7 +264,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
 
             LicenseCapabilities licenseCapabilities = new LicenseCapabilities(xmlResponse);
 
-            Assert.Equal(10, licenseCapabilities.ActiveChannels);
+            Assert.Equal(2, licenseCapabilities.ActiveChannels);
         }
 
         [Fact]
