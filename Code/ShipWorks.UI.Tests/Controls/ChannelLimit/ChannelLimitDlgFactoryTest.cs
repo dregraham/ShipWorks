@@ -42,7 +42,7 @@ namespace ShipWorks.UI.Tests.Controls.ChannelLimit
 
                 ChannelLimitDlgFactory testObject = mock.Create<ChannelLimitDlgFactory>();
 
-                testObject.GetChannelLimitDlg(owner.Object, EditionFeature.ActionLimit);
+                testObject.GetChannelLimitDlg(owner.Object, EditionFeature.ActionLimit, It.IsAny<EnforcementContext>());
 
                 licenseService.Verify(l => l.GetLicenses(), Times.Once);
             }
@@ -76,7 +76,7 @@ namespace ShipWorks.UI.Tests.Controls.ChannelLimit
 
                 InvalidCastException ex =
                     Assert.Throws<InvalidCastException>(
-                        () => testObject.GetChannelLimitDlg(owner.Object, EditionFeature.ActionLimit));
+                        () => testObject.GetChannelLimitDlg(owner.Object, EditionFeature.ActionLimit, It.IsAny<EnforcementContext>()));
                 Assert.Equal("Expected a ICustomerLicense from the LicenseService", ex.Message);
             }
         }
@@ -108,7 +108,7 @@ namespace ShipWorks.UI.Tests.Controls.ChannelLimit
 
                 ChannelLimitDlgFactory testObject = mock.Create<ChannelLimitDlgFactory>();
 
-                testObject.GetChannelLimitDlg(owner.Object, EditionFeature.ActionLimit);
+                testObject.GetChannelLimitDlg(owner.Object, EditionFeature.ActionLimit, It.IsAny<EnforcementContext>());
 
                 viewModel.Verify(v => v.Load(customerlicense.Object, It.IsAny<IChannelLimitBehavior>()));
             }
@@ -141,7 +141,7 @@ namespace ShipWorks.UI.Tests.Controls.ChannelLimit
 
                 ChannelLimitDlgFactory testObject = mock.Create<ChannelLimitDlgFactory>();
 
-                testObject.GetChannelLimitDlg(owner.Object, EditionFeature.ActionLimit);
+                testObject.GetChannelLimitDlg(owner.Object, EditionFeature.ActionLimit, It.IsAny<EnforcementContext>());
 
                 viewModel.Verify(v => v.Load(It.IsAny<ICustomerLicense>(), behavior.Object));
             }
@@ -173,7 +173,7 @@ namespace ShipWorks.UI.Tests.Controls.ChannelLimit
 
                 ChannelLimitDlgFactory testObject = mock.Create<ChannelLimitDlgFactory>();
 
-                testObject.GetChannelLimitDlg(owner.Object, EditionFeature.ActionLimit);
+                testObject.GetChannelLimitDlg(owner.Object, EditionFeature.ActionLimit, It.IsAny<EnforcementContext>());
 
                 dlgFactoryRepo.Verify(f => f(owner.Object));
             }
@@ -206,7 +206,7 @@ namespace ShipWorks.UI.Tests.Controls.ChannelLimit
 
                 ChannelLimitDlgFactory testObject = mock.Create<ChannelLimitDlgFactory>();
 
-                testObject.GetChannelLimitDlg(owner.Object, EditionFeature.ActionLimit);
+                testObject.GetChannelLimitDlg(owner.Object, EditionFeature.ActionLimit, It.IsAny<EnforcementContext>());
 
                 dialog.VerifySet(d => d.DataContext = viewModel.Object);
             }

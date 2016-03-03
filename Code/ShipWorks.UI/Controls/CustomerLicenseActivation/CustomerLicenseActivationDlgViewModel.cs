@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Windows;
 using GalaSoft.MvvmLight.Command;
+using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Core.UI;

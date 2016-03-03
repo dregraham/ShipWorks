@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Input;
 using Autofac.Extras.Moq;
+using Interapptive.Shared.UI;
 using Moq;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Model.EntityClasses;
@@ -10,7 +11,6 @@ using ShipWorks.Editions;
 using ShipWorks.Stores;
 using ShipWorks.UI.Controls.ChannelConfirmDelete;
 using ShipWorks.UI.Controls.ChannelLimit;
-using ShipWorks.UI.Controls.WebBrowser;
 using Xunit;
 
 namespace ShipWorks.UI.Tests.Controls.ChannelLimit

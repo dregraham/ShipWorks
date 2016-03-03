@@ -8,6 +8,17 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration.DTO
     public class YahooCatalogItem
     {
         [XmlElement(ElementName = "ShipWeight")]
-        public double ShipWeight { get; set; }
+        public string ShipWeightTransport { get; set; }
+
+        [XmlIgnore]
+        public double ShipWeight
+        {
+            get
+            {
+                double result;
+                double.TryParse(ShipWeightTransport, out result);
+                return result;
+            }
+        }
     }
 }

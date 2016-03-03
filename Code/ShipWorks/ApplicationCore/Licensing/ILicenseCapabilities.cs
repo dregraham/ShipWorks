@@ -1,4 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using ShipWorks.Editions;
+using ShipWorks.Editions.Brown;
+using ShipWorks.Shipping;
+using ShipWorks.Shipping.Policies;
 using ShipWorks.Stores;
 
 namespace ShipWorks.ApplicationCore.Licensing
@@ -63,7 +68,12 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// ShipmentType, can be forbidden or just restricted to upgrade
         /// </summary>
-        bool ShipmentType { get; set; }
+        Dictionary<ShipmentTypeCode, IEnumerable<ShipmentTypeRestrictionType>> ShipmentTypeRestriction { get;}
+
+        /// <summary>
+        /// Gets the shipping policy for a specific shipment type.
+        /// </summary>
+        Dictionary<ShipmentTypeCode, Dictionary<ShippingPolicyType, string>> ShipmentTypeShippingPolicy { get; }
 
         /// <summary>
         /// Restricted to a single store
@@ -73,22 +83,27 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Restricted to a specific number of UPS accounts
         /// </summary>
-        bool UpsAccountLimit { get; set; }
+        int UpsAccountLimit { get; set; }
 
         /// <summary>
         ///  Restricted to a specific UPS account number
         ///  </summary>
-        bool UpsAccountNumbers { get; set; }
+        IEnumerable<string> UpsAccountNumbers { get; set; }
 
         /// <summary>
         /// Restricted to using only postal APO\FPO\POBox services
         /// </summary>
-        bool PostalApoFpoPoboxOnly { get; set; }
+        BrownPostalAvailability PostalAvailability { get; set; }
 
         /// <summary>
         /// UPS SurePost service type can be restricted
         /// </summary>
         bool UpsSurePost { get; set; }
+
+        /// <summary>
+        /// Gets or sets the ups status.
+        /// </summary>
+        UpsStatus UpsStatus { get; set; }
 
         /// <summary>
         /// Endicia consolidator

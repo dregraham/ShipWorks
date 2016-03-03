@@ -37,7 +37,7 @@ namespace ShipWorks.UI.Tests.Controls.ChannelLimit
 
                 ChannelLimitFactory testObject = mock.Create<ChannelLimitFactory>();
                 
-                testObject.CreateControl(license.Object, StoreTypeCode.Amazon, EditionFeature.Crm);
+                testObject.CreateControl(license.Object, StoreTypeCode.Amazon, EditionFeature.EndiciaAccountLimit);
 
                 viewModel.VerifySet(m => m.ChannelToAdd = StoreTypeCode.Amazon);
             }
@@ -65,7 +65,7 @@ namespace ShipWorks.UI.Tests.Controls.ChannelLimit
 
                 ChannelLimitFactory testObject = mock.Create<ChannelLimitFactory>();
 
-                testObject.CreateControl(license.Object, StoreTypeCode.Amazon, EditionFeature.Crm);
+                testObject.CreateControl(license.Object, StoreTypeCode.Amazon, EditionFeature.EndiciaAccountLimit);
 
                 viewModel.VerifySet(m => m.EnforcementContext = EnforcementContext.ExceedingChannelLimit);
             }
@@ -93,7 +93,7 @@ namespace ShipWorks.UI.Tests.Controls.ChannelLimit
 
                 ChannelLimitFactory testObject = mock.Create<ChannelLimitFactory>();
 
-                testObject.CreateControl(license.Object, StoreTypeCode.Amazon, EditionFeature.Crm);
+                testObject.CreateControl(license.Object, StoreTypeCode.Amazon, EditionFeature.EndiciaAccountLimit);
 
                 channelLimitCtrlRepo.Verify(f => f(), Times.Once);
             }
@@ -121,7 +121,7 @@ namespace ShipWorks.UI.Tests.Controls.ChannelLimit
 
                 ChannelLimitFactory testObject = mock.Create<ChannelLimitFactory>();
 
-                testObject.CreateControl(license.Object, StoreTypeCode.Amazon, EditionFeature.Crm);
+                testObject.CreateControl(license.Object, StoreTypeCode.Amazon, EditionFeature.EndiciaAccountLimit);
 
                 control.VerifySet(c => c.DataContext = viewModel.Object);
             }
@@ -149,7 +149,7 @@ namespace ShipWorks.UI.Tests.Controls.ChannelLimit
 
                 ChannelLimitFactory testObject = mock.Create<ChannelLimitFactory>();
 
-                testObject.CreateControl(license.Object, StoreTypeCode.Amazon, EditionFeature.Crm);
+                testObject.CreateControl(license.Object, StoreTypeCode.Amazon, EditionFeature.EndiciaAccountLimit);
 
                 viewModel.Verify(v => v.Load(license.Object, It.IsAny<IChannelLimitBehavior>()), Times.Once);
             }
@@ -177,7 +177,7 @@ namespace ShipWorks.UI.Tests.Controls.ChannelLimit
 
                 ChannelLimitFactory testObject = mock.Create<ChannelLimitFactory>();
 
-                testObject.CreateControl(license.Object, StoreTypeCode.Amazon, EditionFeature.Crm);
+                testObject.CreateControl(license.Object, StoreTypeCode.Amazon, EditionFeature.EndiciaAccountLimit);
 
                 viewModel.Verify(v => v.Load(It.IsAny<ICustomerLicense>(), behavior.Object), Times.Once);
             }

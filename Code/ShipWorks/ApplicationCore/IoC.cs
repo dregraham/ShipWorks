@@ -8,12 +8,15 @@ using Interapptive.Shared.Pdf;
 using log4net;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Licensing.Activation;
+using ShipWorks.ApplicationCore.Licensing.FeatureRestrictions;
 using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Common;
 using ShipWorks.Data;
 using ShipWorks.Editions;
+using ShipWorks.Editions.Brown;
 using ShipWorks.Shipping.Carriers;
+using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Users;
 using ShipWorks.Stores;
@@ -117,7 +120,8 @@ namespace ShipWorks.ApplicationCore
 
             builder.RegisterType<LicenseService>()
                 .AsImplementedInterfaces()
-                .AsSelf();
+                .AsSelf()
+                .SingleInstance();
 
             builder.RegisterType<CustomerLicenseActivationActivity>()
                 .AsImplementedInterfaces()
@@ -157,6 +161,12 @@ namespace ShipWorks.ApplicationCore
                 .Where(t => typeof(ILicenseEnforcer).IsAssignableFrom(t))
                 .InstancePerLifetimeScope()
                 .AsImplementedInterfaces();
+
+            builder
+                .RegisterAssemblyTypes(Assembly.GetAssembly(typeof(IFeatureRestriction)))
+                .Where(t => typeof(IFeatureRestriction).IsAssignableFrom(t))
+                .InstancePerLifetimeScope()
+                .AsImplementedInterfaces();
         }
 
         /// <summary>
@@ -189,6 +199,12 @@ namespace ShipWorks.ApplicationCore
                 .AsImplementedInterfaces();
 
             builder.RegisterType<UserSessionWrapper>()
+                .AsImplementedInterfaces();
+
+            builder.RegisterType<BrownEditionUtility>()
+                .AsImplementedInterfaces();
+
+            builder.RegisterType<PostalUtilityWrapper>()
                 .AsImplementedInterfaces();
         }
     }

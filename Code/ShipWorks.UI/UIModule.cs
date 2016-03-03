@@ -1,16 +1,14 @@
 ﻿using System;
-using System.Collections.ObjectModel;
 using Autofac;
+using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Editions;
-using ShipWorks.Stores;
 using ShipWorks.UI.Controls.ChannelConfirmDelete;
 using ShipWorks.UI.Controls.ChannelLimit;
 using ShipWorks.UI.Controls.ChannelLimit.ChannelLimitBehavior;
 using ShipWorks.UI.Controls.CustomerLicenseActivation;
 using ShipWorks.UI.Controls.UpgradePlan;
 using ShipWorks.UI.Controls.WebBrowser;
-using ShipWorks.UI.Services;
 
 namespace ShipWorks.UI
 {

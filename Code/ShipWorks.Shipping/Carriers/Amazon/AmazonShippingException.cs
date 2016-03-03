@@ -102,6 +102,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon
                         return "The order specified is from a marketplace where the Merchant Fulfillment API section is not supported.";
                     case "shippingservicenotavailable":
                         return "The shipping service specified does not exist or is not available for the specified parameters (for example, Weight).";
+                    case "resourcenotfound":
+                        return "The resource specified (such as ShipmentId or AmazonOrderId) does not exist.";
                     default:
                         return message;
                 }

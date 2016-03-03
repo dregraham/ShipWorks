@@ -629,13 +629,6 @@ namespace ShipWorks
                 return;
             }
 
-            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
-            {
-                ILicenseService licenseService = lifetimeScope.Resolve<ILicenseService>();
-
-                licenseService.GetLicenses().FirstOrDefault()?.EnforceCapabilities(EnforcementContext.Login, this);
-            }
-
             // If there are no stores, we need to make sure one is added before continuing
             if (StoreManager.GetDatabaseStoreCount() == 0)
             {
@@ -647,6 +640,14 @@ namespace ShipWorks
                     ShowBlankUI();
 
                     return;
+                }
+            }
+            else
+            {
+                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+                {
+                    ILicenseService licenseService = lifetimeScope.Resolve<ILicenseService>();
+                    licenseService.GetLicenses().FirstOrDefault()?.EnforceCapabilities(EnforcementContext.Login, this);
                 }
             }
 
@@ -775,8 +776,8 @@ namespace ShipWorks
         private void LogonToShipWorksAsyncGetLicenseStatus(object state)
         {
             // Update our edition for each store.  Eventually this will also be where we log with tango the sw version being used and maybe other things
-            LicenseService licenseService = IoC.UnsafeGlobalLifetimeScope.Resolve<LicenseService>();
-            var licenses = licenseService.GetLicenses().ToList();
+            ILicenseService licenseService = IoC.UnsafeGlobalLifetimeScope.Resolve<ILicenseService>();
+            List<ILicense> licenses = licenseService.GetLicenses().ToList();
             licenses.ForEach(license => license.Refresh());
 
             ForceHeartbeat();

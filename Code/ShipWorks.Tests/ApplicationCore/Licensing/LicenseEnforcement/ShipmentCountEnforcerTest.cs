@@ -101,6 +101,24 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.LicenseEnforcement
         }
 
         [Fact]
+        public void Enforce_ReturnsCompliant_WhenShipmentLimitIsNegativeOne()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                ShipmentCountEnforcer testObject = mock.Create<ShipmentCountEnforcer>();
+
+                Mock<ILicenseCapabilities> licenseCapabilities = mock.Mock<ILicenseCapabilities>();
+
+                licenseCapabilities.Setup(l => l.ProcessedShipments).Returns(4);
+                licenseCapabilities.Setup(l => l.ShipmentLimit).Returns(-1);
+
+                EnumResult<ComplianceLevel> result = testObject.Enforce(licenseCapabilities.Object, EnforcementContext.CreateLabel);
+
+                Assert.Equal(ComplianceLevel.Compliant, result.Value);
+            }
+        }
+
+        [Fact]
         public void Enforce_ReturnsNoErrorMessage_WhenCompliant()
         {
             using (var mock = AutoMock.GetLoose())

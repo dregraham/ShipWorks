@@ -1,5 +1,7 @@
 ﻿using ShipWorks.Stores;
 using System.Collections.Generic;
+using System.Windows.Forms;
+using ShipWorks.Editions;
 
 namespace ShipWorks.ApplicationCore.Licensing
 {
@@ -27,5 +29,15 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// Deletes the given channel
         /// </summary>
         void DeleteChannel(StoreTypeCode storeType);
+
+        /// <summary>
+        /// Checks the restriction for a specific feature
+        /// </summary>
+        EditionRestrictionLevel CheckRestriction(EditionFeature feature, object data);
+
+        /// <summary>
+        /// Handles the restriction for a specific feature
+        /// </summary>
+        bool HandleRestriction(EditionFeature feature, object data, IWin32Window owner);
     }
 }

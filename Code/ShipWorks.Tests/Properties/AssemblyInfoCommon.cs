@@ -21,4 +21,4 @@ using System;
 [assembly: ComVisible(false)]
 
 // CLS Compliance
-[assembly: CLSCompliant(true)]
+[assembly: CLSCompliant(false)]

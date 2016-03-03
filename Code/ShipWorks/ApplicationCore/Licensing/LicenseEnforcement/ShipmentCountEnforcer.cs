@@ -11,6 +11,8 @@ namespace ShipWorks.ApplicationCore.Licensing.LicenseEnforcement
     /// </summary>
     public class ShipmentCountEnforcer : ILicenseEnforcer
     {
+        private const int UnlimitedShipments = -1;
+
         private readonly IUpgradePlanDlgFactory upgradePlanDlgFactory;
         private readonly ILog log;
 
@@ -59,10 +61,13 @@ namespace ShipWorks.ApplicationCore.Licensing.LicenseEnforcement
         /// </summary>
         public EnumResult<ComplianceLevel> Enforce(ILicenseCapabilities capabilities, EnforcementContext context)
         {
-            if ((context == EnforcementContext.CreateLabel) && (capabilities.ProcessedShipments >= capabilities.ShipmentLimit) && !capabilities.IsInTrial)
+            if (context == EnforcementContext.CreateLabel && !capabilities.IsInTrial && capabilities.ShipmentLimit != UnlimitedShipments)
             {
-                return new EnumResult<ComplianceLevel>(ComplianceLevel.NotCompliant,
-                    "You have reached your shipment limit for this billing cycle. Please upgrade your plan to create labels.");
+                if (capabilities.ProcessedShipments >= capabilities.ShipmentLimit)
+                {
+                    return new EnumResult<ComplianceLevel>(ComplianceLevel.NotCompliant,
+                        "You have reached your shipment limit for this billing cycle. Please upgrade your plan to create labels.");
+                }
             }
 
             return new EnumResult<ComplianceLevel>(ComplianceLevel.Compliant, string.Empty);

@@ -1,4 +1,5 @@
 ﻿using System.Windows.Forms;
+using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
 using ShipWorks.Editions;
 
 namespace ShipWorks.ApplicationCore.Licensing
@@ -11,6 +12,6 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Gets the channel limit dialog.
         /// </summary>
-        IChannelLimitDlg GetChannelLimitDlg(IWin32Window owner, EditionFeature feature);
+        IChannelLimitDlg GetChannelLimitDlg(IWin32Window owner, EditionFeature feature, EnforcementContext context);
     }
 }

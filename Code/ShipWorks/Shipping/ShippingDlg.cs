@@ -2393,7 +2393,7 @@ namespace ShipWorks.Shipping
             Cursor.Current = Cursors.WaitCursor;
             cancelProcessing = false;
 
-            LicenseService licenseService = lifetimeScope.Resolve<LicenseService>();
+            ILicenseService licenseService = lifetimeScope.Resolve<ILicenseService>();
             licenseService.GetLicenses().FirstOrDefault()?.EnforceCapabilities(EnforcementContext.CreateLabel, this);
 
             // Save changes to the current selection in memory.  We save to the database later on a per-shipment basis in the background thread.
@@ -2419,7 +2419,7 @@ namespace ShipWorks.Shipping
             }
 
             // Check restriction
-            if (!EditionManager.HandleRestrictionIssue(this, EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.SelectionLimit, shipments.Count())))
+            if (!licenseService.HandleRestriction(EditionFeature.SelectionLimit, shipments.Count(), this))
             {
                 return;
             }

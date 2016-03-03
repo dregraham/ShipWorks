@@ -25,8 +25,6 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public string Read()
         {
-            ConfigurationData.CheckForChangesNeeded();
-
             ConfigurationEntity config = ConfigurationData.Fetch();
             return encryptionProvider.Decrypt(config.CustomerKey);
         }

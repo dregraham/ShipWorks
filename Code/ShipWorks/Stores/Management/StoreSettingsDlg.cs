@@ -151,8 +151,7 @@ namespace ShipWorks.Stores.Management
         /// <param name="storeEntity">The store entity.</param>
         private void CheckLicense(StoreEntity storeEntity)
         {
-            LicenseService licenseService = IoC.UnsafeGlobalLifetimeScope.Resolve<LicenseService>();
-
+            ILicenseService licenseService = IoC.UnsafeGlobalLifetimeScope.Resolve<ILicenseService>();
             ILicense license = licenseService.GetLicense(storeEntity);
 
             // If legacy customer or magic keys down, display license

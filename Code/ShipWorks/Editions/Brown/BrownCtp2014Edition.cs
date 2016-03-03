@@ -20,7 +20,7 @@ namespace ShipWorks.Editions.Brown
         {
             foreach (ShipmentTypeCode shipmentType in Enum.GetValues(typeof(ShipmentTypeCode)))
             {
-                if (BrownEditionUtility.IsShipmentTypeAllowed(shipmentType))
+                if ((new BrownEditionUtility()).IsShipmentTypeAllowed(shipmentType))
                 {
                     continue;
                 }
