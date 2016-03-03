@@ -1270,21 +1270,24 @@ namespace ShipWorks
         /// </summary>
         private void UpdateCommandState()
         {
-            int selectionCount = gridControl.Selection.Count;
-
             selectionDependentEnabler.UpdateCommandState(gridControl.Selection.Count, gridControl.ActiveFilterTarget);
 
-            // Don't show the shipping context menu if we aren't in the Orders view
-            if (gridControl.ActiveFilterTarget != FilterTarget.Orders)
+            int selectionCount = gridControl.Selection.Count;
+            if (selectionCount == 0)
             {
                 ribbon.SetEditingContext(null);
                 return;
             }
 
-            // Don't show the shipping context menu if we have nothing selected
-            if (selectionCount <= 0)
+            if (gridControl.ActiveFilterTarget == FilterTarget.Customers)
             {
-                ribbon.SetEditingContext(null);
+                ribbon.SetEditingContext("CUSTOMERS");
+                return;
+            }
+
+            // Don't show the shipping context menu if we aren't in the Orders view
+            if (gridControl.ActiveFilterTarget != FilterTarget.Orders)
+            {
                 return;
             }
 
@@ -1292,9 +1295,9 @@ namespace ShipWorks
             DockControl shipmentDock = sandDockManager.GetDockControls().FirstOrDefault(d => d.Name == "dockableWindowShipment");
 
             // Don't show the shipping context menu if the shipping panel doesn't exist or isn't open
-            if (shipmentDock == null || !shipmentDock.IsOpen)
+            if (shipmentDock?.IsOpen != true)
             {
-                ribbon.SetEditingContext(null);
+                ribbon.SetEditingContext("ORDERS");
                 return;
             }
 
@@ -1305,7 +1308,6 @@ namespace ShipWorks
             buttonShipAgain.Enabled = selectionCount == 1;
             buttonReprint.Enabled = selectionCount == 1;
 
-            // Set the 
             ribbon.SetEditingContext("SHIPPINGMENU");
         }
 
@@ -1348,7 +1350,7 @@ namespace ShipWorks
 
             return TaskUtility.CompletedTask;
         }
-        
+
         /// <summary>
         /// The popup window for displaying panels is opening
         /// </summary>
