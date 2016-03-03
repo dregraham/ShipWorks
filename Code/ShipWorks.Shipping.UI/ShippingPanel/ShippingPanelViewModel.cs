@@ -31,7 +31,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
     public partial class ShippingPanelViewModel : INotifyPropertyChanged, INotifyPropertyChanging, IDisposable, IDataErrorInfo
     {
         private readonly PropertyChangedHandler handler;
-        private OrderSelectionLoaded orderSelectionLoaded;
+        private LoadedOrderSelection loadedOrderSelection;
 
         private readonly HashSet<string> internalFields = new HashSet<string> { nameof(AllowEditing) };
 
@@ -44,6 +44,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
 
         private bool isLoadingShipment;
         private IDisposable shipmentChangedSubscription;
+        private long[] selectedOrderIds;
 
         public event PropertyChangedEventHandler PropertyChanged;
         public event PropertyChangingEventHandler PropertyChanging;
@@ -90,7 +91,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
 
             PropertyChanging += OnPropertyChanging;
 
-            CreateLabelCommand = new RelayCommand(ProcessShipment);
+            CreateLabelCommand = new RelayCommand(CreateLabel);
         }
 
         /// <summary>
@@ -180,18 +181,26 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// </summary>
         public virtual void LoadOrder(OrderSelectionChangedMessage orderMessage)
         {
-            int orders = orderMessage.LoadedOrderSelection.HasMoreOrLessThanCount(1);
+            selectedOrderIds = orderMessage.LoadedOrderSelection.Select(x => x.OrderID).ToArray();
+            int orders = orderMessage.LoadedOrderSelection.OfType<LoadedOrderSelection>().HasMoreOrLessThanCount(1);
             if (orders != 0)
             {
+                UnloadShipment();
+
+                if (selectedOrderIds.Length > 1)
+                {
+                    LoadedShipmentResult = ShippingPanelLoadedShipmentResult.Multiple;
+                }
+
                 return;
             }
 
-            orderSelectionLoaded = orderMessage.LoadedOrderSelection.Single();
-            LoadedShipmentResult = GetLoadedShipmentResult(orderSelectionLoaded);
+            loadedOrderSelection = orderMessage.LoadedOrderSelection.OfType<LoadedOrderSelection>().Single();
+            LoadedShipmentResult = GetLoadedShipmentResult(loadedOrderSelection);
 
             if (LoadedShipmentResult == ShippingPanelLoadedShipmentResult.Success)
             {
-                Populate(orderSelectionLoaded.ShipmentAdapters.Single());
+                Populate(loadedOrderSelection.ShipmentAdapters.Single());
             }
             else
             {
@@ -202,7 +211,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// <summary>
         /// Sets the LoadedShipmentResult based on orderSelectionLoaded
         /// </summary>
-        private ShippingPanelLoadedShipmentResult GetLoadedShipmentResult(OrderSelectionLoaded loadedSelection)
+        private ShippingPanelLoadedShipmentResult GetLoadedShipmentResult(LoadedOrderSelection loadedSelection)
         {
             if (loadedSelection.Exception != null)
             {
@@ -248,7 +257,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
 
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ShipmentType)));
 
-            RequestedShippingMethod = orderSelectionLoaded.Order?.RequestedShipping;
+            RequestedShippingMethod = loadedOrderSelection.Order?.RequestedShipping;
 
             SupportsAccounts = ShipmentAdapter.SupportsAccounts;
 
@@ -263,7 +272,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
 
             AllowEditing = !ShipmentAdapter.Shipment.Processed;
 
-            DestinationAddressEditableState = orderSelectionLoaded.DestinationAddressEditable;
+            DestinationAddressEditableState = loadedOrderSelection.DestinationAddressEditable;
 
             Origin.SetAddressFromOrigin(OriginAddressType, ShipmentAdapter.Shipment?.OrderID ?? 0, AccountId, ShipmentType);
 
@@ -287,18 +296,27 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// <summary>
         /// Process the current shipment using the specified processor
         /// </summary>
-        public void ProcessShipment()
+        public void CreateLabel()
         {
-            if (!AllowEditing || (ShipmentAdapter?.Shipment?.Processed ?? true))
+            if (loadedShipmentResult == ShippingPanelLoadedShipmentResult.Multiple)
             {
+                messenger.Send(new OpenShippingDialogWithOrdersMessage(this, selectedOrderIds));
                 return;
             }
 
-            SaveToDatabase();
+            if (loadedShipmentResult == ShippingPanelLoadedShipmentResult.Success)
+            {
+                if (!AllowEditing || (ShipmentAdapter?.Shipment?.Processed ?? true))
+                {
+                    return;
+                }
 
-            AllowEditing = false;
+                SaveToDatabase();
 
-            messenger.Send(new ProcessShipmentsMessage(this, new[] { ShipmentAdapter.Shipment }));
+                AllowEditing = false;
+
+                messenger.Send(new ProcessShipmentsMessage(this, new[] { ShipmentAdapter.Shipment }));
+            }
         }
 
         /// <summary>
@@ -375,7 +393,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         {
             // Call save before asking the shipping dialog to open, that way the shipment is in the db
             // prior to the shipping dialog getting the shipment.
-            Save();
+            SaveToDatabase();
 
             AllowEditing = false;
 
@@ -394,10 +412,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
                 messageHelper.ShowError("The selected shipments were edited or deleted by another ShipWorks user and your changes could not be saved.\n\n" +
                                         "The shipments will be refreshed to reflect the recent changes.");
 
-                if (!error.Message.Contains("delete"))
-                {
-                    messenger.Send(new OrderSelectionChangingMessage(this, new[] { ShipmentAdapter.Shipment.OrderID }));
-                }
+                messenger.Send(new OrderSelectionChangingMessage(this, new[] { ShipmentAdapter.Shipment.OrderID }));
             }
         }
 

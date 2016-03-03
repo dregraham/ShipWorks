@@ -62,7 +62,7 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Load the shipments for the given collection of orders or shipments
         /// </summary>
-        public async Task LoadAsync(IEnumerable<long> keys)
+        public async Task<ShipmentsLoadedEventArgs> LoadAsync(IEnumerable<long> keys)
         {
             MethodConditions.EnsureArgumentIsNotNull(keys, nameof(keys));
 
@@ -117,7 +117,10 @@ namespace ShipWorks.Shipping
             }
 
             progressDlg.CloseForced();
-            OnLoadShipmentsCompleted();
+
+            ShipmentsLoadedEventArgs eventArgs = new ShipmentsLoadedEventArgs(null, wasCanceled, null, globalShipments);
+            OnLoadShipmentsCompleted(eventArgs);
+            return eventArgs;
         }
 
         /// <summary>
@@ -245,7 +248,7 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// The async loading of shipments for shipping has completed
         /// </summary>
-        void OnLoadShipmentsCompleted()
+        void OnLoadShipmentsCompleted(ShipmentsLoadedEventArgs args)
         {
             if (wasCanceled)
             {
@@ -255,7 +258,6 @@ namespace ShipWorks.Shipping
             ShipmentsLoadedEventHandler handler = LoadCompleted;
             if (handler != null)
             {
-                ShipmentsLoadedEventArgs args = new ShipmentsLoadedEventArgs(null, wasCanceled, null, globalShipments);
                 if (owner.InvokeRequired)
                 {
                     owner.Invoke((Action) (() => handler(this, args)));

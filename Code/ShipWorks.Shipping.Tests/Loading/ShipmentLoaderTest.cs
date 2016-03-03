@@ -66,7 +66,7 @@ namespace ShipWorks.Shipping.Tests.Loading
 
             testObject = mock.Create<ShipmentLoader>();
 
-            OrderSelectionLoaded orderSelectionLoaded = await testObject.Load(orderEntity.OrderID);
+            LoadedOrderSelection orderSelectionLoaded = await testObject.Load(orderEntity.OrderID);
 
             Assert.Equal(2, orderSelectionLoaded.ShipmentAdapters.Count());
             Assert.Contains(adapter1, orderSelectionLoaded.ShipmentAdapters);
@@ -80,7 +80,7 @@ namespace ShipWorks.Shipping.Tests.Loading
 
             testObject = mock.Create<ShipmentLoader>();
 
-            OrderSelectionLoaded orderSelectionLoaded = await testObject.Load(orderEntity.OrderID);
+            LoadedOrderSelection orderSelectionLoaded = await testObject.Load(orderEntity.OrderID);
 
             Assert.Equal(0, orderSelectionLoaded.ShipmentAdapters.Count());
             Assert.NotEqual(null, orderSelectionLoaded.Order);
@@ -130,7 +130,7 @@ namespace ShipWorks.Shipping.Tests.Loading
 
             testObject = mock.Create<ShipmentLoader>();
 
-            OrderSelectionLoaded orderSelectionLoaded = await testObject.Load(0);
+            LoadedOrderSelection orderSelectionLoaded = await testObject.Load(0);
 
             Assert.NotNull(orderSelectionLoaded.Exception);
         }

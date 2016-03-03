@@ -1,4 +1,5 @@
-﻿using TD.SandDock;
+﻿using Divelements.SandRibbon;
+using TD.SandDock;
 
 namespace ShipWorks.ApplicationCore
 {
@@ -10,6 +11,6 @@ namespace ShipWorks.ApplicationCore
         /// <summary>
         /// Register a panel with the dock manager
         /// </summary>
-        void Register(SandDockManager dockManager);
+        void Register(SandDockManager dockManager, Ribbon ribbon);
     }
 }

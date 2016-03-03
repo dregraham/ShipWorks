@@ -34,7 +34,7 @@ namespace ShipWorks.Shipping.UI.MessageHandlers
         {
             return messageStream.OfType<OrderSelectionChangingMessage>()
                 .CombineLatest(messageStream.OfType<OrderSelectionChangedMessage>(), (x, y) => new { OrderIdList = x.OrderIdList, Message = y })
-                .Where(x => x.OrderIdList.Intersect(x.Message.LoadedOrderSelection.Select(y => y.Order?.OrderID ?? -1)).Any())
+                .Where(x => !x.OrderIdList.Except(x.Message.LoadedOrderSelection.Select(y => y.OrderID)).Any())
                 .Select(x => x.Message);
         }
     }

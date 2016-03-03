@@ -11,6 +11,6 @@ namespace ShipWorks.Shipping.Loading
         /// <summary>
         /// Load an order selection
         /// </summary>
-        Task<OrderSelectionLoaded> Load(long orderID);
+        Task<LoadedOrderSelection> Load(long orderID);
     }
 }

@@ -135,7 +135,7 @@ namespace ShipWorks
             {
                 foreach (IRegisterDockableWindow registration in lifetimeScope.Resolve<IEnumerable<IRegisterDockableWindow>>())
                 {
-                    registration.Register(sandDockManager);
+                    registration.Register(sandDockManager, ribbon);
                 }
             }
 
@@ -144,6 +144,7 @@ namespace ShipWorks
 
             // Persist size\position of the window
             WindowStateSaver wss = new WindowStateSaver(this, WindowStateSaverOptions.FullState | WindowStateSaverOptions.InitialMaximize, "MainForm");
+            shipmentDock = new Lazy<DockControl>(GetShipmentDockControl);
         }
 
         #region Initialization \ Shutdown
@@ -1265,50 +1266,54 @@ namespace ShipWorks
             labelStatusSelected.Text = string.Format("Selected: {0:#,##0}", gridControl.Selection.Count);
         }
 
+        Lazy<DockControl> shipmentDock;
+
+        private DockControl GetShipmentDockControl()
+        {
+            return sandDockManager.GetDockControls().FirstOrDefault(d => d.Name == "dockableWindowShipment");
+        }
+
         /// <summary>
         /// Update the state of the ribbon buttons based on the current selection
         /// </summary>
         private void UpdateCommandState()
         {
-            selectionDependentEnabler.UpdateCommandState(gridControl.Selection.Count, gridControl.ActiveFilterTarget);
-
             int selectionCount = gridControl.Selection.Count;
-            if (selectionCount == 0)
+            selectionDependentEnabler.UpdateCommandState(selectionCount, gridControl.ActiveFilterTarget);
+
+            if (selectionCount == 0 || gridControl.ActiveFilterTarget != FilterTarget.Orders)
             {
                 ribbon.SetEditingContext(null);
                 return;
             }
 
-            if (gridControl.ActiveFilterTarget == FilterTarget.Customers)
-            {
-                ribbon.SetEditingContext("CUSTOMERS");
-                return;
-            }
-
-            // Don't show the shipping context menu if we aren't in the Orders view
-            if (gridControl.ActiveFilterTarget != FilterTarget.Orders)
-            {
-                return;
-            }
-
-            // Grab the Shipment Dock
-            DockControl shipmentDock = sandDockManager.GetDockControls().FirstOrDefault(d => d.Name == "dockableWindowShipment");
-
             // Don't show the shipping context menu if the shipping panel doesn't exist or isn't open
-            if (shipmentDock?.IsOpen != true)
+            if (shipmentDock.Value?.IsOpen != true)
             {
-                ribbon.SetEditingContext("ORDERS");
+                ribbon.SetEditingContext(null);
                 return;
             }
 
-            // Update state of each button based on it's criteria.
-            buttonCreateLabel.Enabled = selectionCount >= 1;
-            buttonVoid.Enabled = selectionCount >= 1;
-            buttonReturn.Enabled = selectionCount == 1;
-            buttonShipAgain.Enabled = selectionCount == 1;
-            buttonReprint.Enabled = selectionCount == 1;
+            //// Update state of each button based on it's criteria.
+            //buttonCreateLabel.Enabled = selectionCount >= 1;
+            //buttonVoid.Enabled = selectionCount >= 1;
+            //buttonReturn.Enabled = selectionCount == 1;
+            //buttonShipAgain.Enabled = selectionCount == 1;
+            //buttonReprint.Enabled = selectionCount == 1;
 
             ribbon.SetEditingContext("SHIPPINGMENU");
+        }
+
+        private void OnCreateLabelClick(object sender, EventArgs e)
+        {
+            if (shipmentDock.Value?.IsOpen == true)
+            {
+                MessageHelper.ShowInformation(this, "Temp processing");
+            }
+            else
+            {
+                OnShipOrders(sender, e);
+            }
         }
 
         /// <summary>

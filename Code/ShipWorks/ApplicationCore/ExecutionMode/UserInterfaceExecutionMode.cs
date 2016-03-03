@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using ActiproSoftware.SyntaxEditor;
 using Autofac;
@@ -165,9 +166,13 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
 
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                lifetimeScope.Resolve<IMessenger>()
-                    .OfType<OpenShippingDialogMessage>()
+                IMessenger messenger = lifetimeScope.Resolve<IMessenger>();
+
+                messenger.OfType<OpenShippingDialogMessage>()
                     .Subscribe(HandleOpenShippingDialogMessage);
+
+                messenger.OfType<OpenShippingDialogWithOrdersMessage>()
+                    .Subscribe(async x => await LoadOrdersForShippingDialog(x));
             }
         }
 
@@ -243,6 +248,27 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
             // Application.Exit does not guaranteed that the windows close.  It only tries.  If an exception
             // gets thrown, or they set e.Cancel = true, they won't have closed.
             Application.ExitThread();
+        }
+
+        private async Task LoadOrdersForShippingDialog(OpenShippingDialogWithOrdersMessage message)
+        {
+            Control owner = IoC.UnsafeGlobalLifetimeScope.Resolve<Control>();
+
+            if (message.OrderIDs.Count() > ShipmentsLoader.MaxAllowedOrders)
+            {
+                MessageHelper.ShowInformation(owner, string.Format("You can only ship up to {0} orders at a time.", ShipmentsLoader.MaxAllowedOrders));
+                return;
+            }
+
+            ShipmentsLoader loader = new ShipmentsLoader(owner);
+            ShipmentsLoadedEventArgs results = await loader.LoadAsync(message.OrderIDs).ConfigureAwait(false);
+
+            if (results.Cancelled)
+            {
+                return;
+            }
+
+            Messenger.Current.Send(new OpenShippingDialogMessage(this, results.Shipments, message.InitialDisplay));
         }
 
         /// <summary>
