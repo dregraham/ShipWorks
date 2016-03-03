@@ -1113,7 +1113,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         {
             try
             {
-                Activation.Activation service = new Activation.Activation() { Url = ActivationUrl };
+                Activation.Activation service = new Activation.Activation(new ApiLogEntry(ApiLogSource.ShipWorks, "Activation")) { Url = ActivationUrl };
                 CustomerLicenseInfoV1 customerLicenseInfo = service.GetCustomerLicenseInfo(email, password);
 
                 GenericResult<IActivationResponse> result = new GenericResult<IActivationResponse>(null)
