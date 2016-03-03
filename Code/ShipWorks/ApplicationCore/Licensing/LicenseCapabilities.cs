@@ -261,6 +261,22 @@ namespace ShipWorks.ApplicationCore.Licensing
             {
                 throw new ShipWorksLicenseException(error);
             }
+
+            // Grab the nodes that are vital to shipworks functioning 
+            string shipmentLimitSanityCheck = GetStringValueFromNameValuePair("NumberOfChannels", xmlResponse, userCapabilityNamespace);
+            string channelLimitSanityCheck = GetStringValueFromNameValuePair("NumberOfShipments", xmlResponse, userCapabilityNamespace);
+            string userShipmentLimitSanityCheck = GetStringValueFromNameValuePair("NumberOfChannels", xmlResponse, userLevelNamespace);
+            string userChannelLimitSanityCheck = GetStringValueFromNameValuePair("NumberOfShipments", xmlResponse, userLevelNamespace);
+            string customerStatus = XPathUtility.Evaluate(xpath, "//CustomerStatus/Valid", "");
+
+            if (string.IsNullOrWhiteSpace(shipmentLimitSanityCheck) ||
+                string.IsNullOrWhiteSpace(channelLimitSanityCheck) ||
+                string.IsNullOrWhiteSpace(userShipmentLimitSanityCheck) ||
+                string.IsNullOrWhiteSpace(userChannelLimitSanityCheck) ||
+                string.IsNullOrWhiteSpace(customerStatus))
+            {
+                throw new ShipWorksLicenseException("The license associated with this account is invalid.");
+            }
         }
 
         /// <summary>
