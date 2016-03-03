@@ -298,5 +298,33 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.FeatureRestrictions
                 Assert.Equal(EditionRestrictionLevel.None, result);
             }
         }
+
+        [Fact]
+        public void Check_RetrunsHidden_WhenGivenWebToolsAndBrown()
+        {
+            using (AutoMock mock = AutoMock.GetLoose())
+            {
+                var shipmentTypeRestriction = new Dictionary<ShipmentTypeCode, IEnumerable<ShipmentTypeRestrictionType>>();
+
+                Mock<ILicenseCapabilities> licenseCapabilities = mock.Mock<ILicenseCapabilities>();
+                licenseCapabilities.SetupGet(c => c.ShipmentTypeRestriction).Returns(shipmentTypeRestriction);
+                licenseCapabilities.SetupGet(c => c.UpsStatus).Returns(UpsStatus.Subsidized);
+                licenseCapabilities.SetupGet(c => c.PostalAvailability).Returns(BrownPostalAvailability.AllServices);
+
+                Mock<IBrownEditionUtility> brownEditionUtility = mock.Mock<IBrownEditionUtility>();
+                brownEditionUtility.Setup(u => u.IsShipmentTypeAllowed(It.IsAny<ShipmentTypeCode>()))
+                    .Returns(false);
+
+                var postalUtility = mock.Mock<IPostalUtility>();
+                postalUtility.Setup(p => p.IsPostalShipmentType(It.IsAny<ShipmentTypeCode>()))
+                    .Returns(true);
+
+                ShipmentTypeRestriction testObject = mock.Create<ShipmentTypeRestriction>();
+
+                EditionRestrictionLevel result = testObject.Check(licenseCapabilities.Object, ShipmentTypeCode.PostalWebTools);
+
+                Assert.Equal(EditionRestrictionLevel.Hidden, result);
+            }
+        }
     }
 }

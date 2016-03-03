@@ -227,7 +227,7 @@ namespace ShipWorks.Editions
                 {
                     ILicenseService licenseService = lifetimeScope.Resolve<ILicenseService>();
 
-                    if (licenseService?.HandleRestriction(feature, dataProvider.Invoke(), owner) ?? false)
+                    if (licenseService?.HandleRestriction(feature, dataProvider?.Invoke(), owner) ?? false)
                     {
                         // Could be null in Ribbon popup case
                         originalClick?.Invoke(component, EventArgs.Empty);
