@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Data.SqlClient;
 using System.Security.Cryptography;
 using System.Text;
 using Interapptive.Shared.Utility;
 using Quartz.Util;
+using ShipWorks.Data.Administration;
+using ShipWorks.Data.Connection;
 
 namespace ShipWorks.ApplicationCore.Licensing
 {
@@ -19,15 +22,18 @@ namespace ShipWorks.ApplicationCore.Licensing
     public class LicenseEncryptionProvider : IEncryptionProvider
     {
         private readonly IDatabaseIdentifier databaseId;
+        private readonly ISqlSchemaVersion sqlSchemaVersion;
         private const string LegacyUserLicense = "ShipWorks legacy user";
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LicenseEncryptionProvider"/> class.
         /// </summary>
         /// <param name="databaseId">The database identifier.</param>
-        public LicenseEncryptionProvider(IDatabaseIdentifier databaseId)
+        /// <param name="sqlSchemaVersion">Gives us the Sql schema version</param>
+        public LicenseEncryptionProvider(IDatabaseIdentifier databaseId, ISqlSchemaVersion sqlSchemaVersion)
         {
             this.databaseId = databaseId;
+            this.sqlSchemaVersion = sqlSchemaVersion;
         }
 
         /// <summary>
@@ -105,6 +111,17 @@ namespace ShipWorks.ApplicationCore.Licensing
             }
             catch (Exception ex)
             {
+                SqlException sqlEx = (SqlException)ex.InnerException?.InnerException;
+
+                Version installedSqlSchemaVersion = sqlSchemaVersion.GetInstalledSchemaVersion();
+
+                // Could not find stored procedure GetDataGuid, we must be in the process
+                // of upgrading, or pre 4.8.0.0 schema version
+                if (sqlEx?.Number == 2812 && installedSqlSchemaVersion < Version.Parse("4.8.0.0"))
+                {
+                    return string.Empty;
+                }
+                
                 throw new EncryptionException(ex.Message, ex);
             }
         }

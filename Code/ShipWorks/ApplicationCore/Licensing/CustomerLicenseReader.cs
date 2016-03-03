@@ -2,6 +2,7 @@
 using ShipWorks.Data.Model.EntityClasses;
 using System;
 using System.Data.SqlClient;
+using System.Security.Cryptography;
 using Interapptive.Shared.Utility;
 
 namespace ShipWorks.ApplicationCore.Licensing
@@ -32,17 +33,14 @@ namespace ShipWorks.ApplicationCore.Licensing
             {
                 return encryptionProvider.Decrypt(config.CustomerKey);
             }
-            catch (EncryptionException ex) when(ex.InnerException.InnerException.InnerException is SqlException)
+            catch (EncryptionException ex) when(ex.InnerException is CryptographicException)
             {
-                SqlException sqlEx = (SqlException)ex.InnerException.InnerException.InnerException;
+                // Crashed because the config data is old, we just have restored  
+                // databases, refresh the config data and try again.
+                ConfigurationData.CheckForChangesNeeded();
+                config = ConfigurationData.Fetch();
 
-                // Could not find stored procedure GetDataGuid, we must be in the process
-                // of upgrading/restoring a legacy database, return empty string for the key
-                if (sqlEx.Number == 2812)
-                {
-                    return string.Empty;
-                }
-                throw;
+                return encryptionProvider.Decrypt(config.CustomerKey);
             }
         }
     }
