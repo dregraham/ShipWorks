@@ -50,14 +50,14 @@ namespace ShipWorks.Shipping.Carriers.Postal
 
             RateGroup rates = new RateGroup(Enumerable.Empty<RateResult>());
 
-            if (!shipmentTypeManager[(ShipmentTypeCode) shipment.ShipmentType].IsShipmentTypeRestricted)
+            if (!shipmentTypeManager[shipment.ShipmentTypeCode].IsShipmentTypeRestricted)
             {
                 // Only get counter rates if the shipment type has not been restricted
                 rates = ratingServiceFactory[ShipmentTypeCode.PostalWebTools].GetRates(shipment);
 
                 foreach (RateResult rate in rates.Rates.Where(rate => rate.ProviderLogo != null))
                 {
-                    rate.ProviderLogo = EnumHelper.GetImage((ShipmentTypeCode) shipment.ShipmentType);
+                    rate.ProviderLogo = EnumHelper.GetImage(shipment.ShipmentTypeCode);
                 }
             }
 
@@ -69,7 +69,11 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// </summary>
         protected virtual List<RateResult> FilterRatesByExcludedServices(ShipmentEntity shipment, List<RateResult> rates)
         {
-            List<PostalServiceType> availableServiceTypes = shipmentTypeManager[(ShipmentTypeCode) shipment.ShipmentType].GetAvailableServiceTypes().Select(s => (PostalServiceType) s).Union(new List<PostalServiceType> { (PostalServiceType) shipment.Postal.Service }).ToList();
+            List<PostalServiceType> availableServiceTypes = shipmentTypeManager[shipment.ShipmentTypeCode]
+                .GetAvailableServiceTypes()
+                .OfType<PostalServiceType>()
+                .Union(new List<PostalServiceType> { (PostalServiceType) shipment.Postal.Service })
+                .ToList();
             return rates.Where(r => r.Tag is PostalRateSelection && availableServiceTypes.Contains(((PostalRateSelection) r.Tag).ServiceType)).ToList();
         }
 

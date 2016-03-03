@@ -5,10 +5,9 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using Interapptive.Shared.IO.Hardware.Scales;
-using ShipWorks.UI.Controls;
 using ShipWorks.UI.Controls.Design;
 
-namespace ShipWorks.Shipping.UI.ShippingPanel.Weight
+namespace ShipWorks.UI.Controls.Weight
 {
     /// <summary>
     /// Control to read weight from a scale

@@ -82,7 +82,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         {
             IUspsWebClient client = uspsShipmentType.CreateWebClient();
             IEnumerable<UspsAccountEntity> accounts = uspsRatingService.GetRates(shipment).Rates
-                    .OrderBy(x => x.Amount)
+                    .OrderBy(x => x.AmountOrDefault)
                     .Select(x => x.OriginalTag)
                     .OfType<UspsPostalRateSelection>()
                     .Where(x => x.IsRateFor(shipment))

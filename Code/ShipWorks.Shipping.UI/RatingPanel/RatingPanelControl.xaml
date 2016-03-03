@@ -4,7 +4,9 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:ui="http://schemas.shipworks.com/ui"
+             xmlns:sw="http://schemas.shipworks.com/sw"
              xmlns:local="clr-namespace:ShipWorks.Shipping.UI.RatingPanel"
+             xmlns:amz="clr-namespace:ShipWorks.Shipping.UI.Carriers.Amazon"
              d:DataContext="{d:DesignInstance local:TestRatingPanelViewModel, IsDesignTimeCreatable=True}"
              mc:Ignorable="d"
              FontFamily="Tahoma"
@@ -30,6 +32,29 @@
             <Style TargetType="DataGridCell" x:Key="NoSelection">
                 <Setter Property="BorderThickness" Value="0" />
                 <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+                <Setter Property="Foreground" Value="Black"/>
+                <Style.Triggers>
+                    <Trigger Property="IsEnabled" Value="False">
+                        <Setter Property="Foreground" Value="Black"/>
+                    </Trigger>
+                    <Trigger Property="IsSelected" Value="True">
+                        <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}"/>
+                        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                    </Trigger>
+                    <MultiTrigger>
+                        <MultiTrigger.Conditions>
+                            <Condition Property="IsSelected" Value="true"/>
+                            <Condition Property="Selector.IsSelectionActive" Value="false"/>
+                        </MultiTrigger.Conditions>
+                        <Setter Property="Background" Value="DarkGray"/>
+                        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                        <Setter Property="Foreground" Value="LightGray"/>
+                    </MultiTrigger>
+                    <Trigger Property="IsEnabled" Value="false">
+                        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+                    </Trigger>
+                </Style.Triggers>
             </Style>
             <Style TargetType="DataGridCell" x:Key="SpacingStyle" BasedOn="{StaticResource NoSelection}">
                 <Setter Property="Padding" Value="4,0,4,0"/>
@@ -77,6 +102,19 @@
                         SelectionMode="Single"
                         CellStyle="{StaticResource NoSelection}"
                         IsReadOnly="True">
+                <DataGrid.RowStyle>
+                    <Style TargetType="{x:Type DataGridRow}">
+                        <Setter Property="Foreground" Value="Red" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Selectable}" Value="False">
+                                <Setter Property="IsEnabled" Value="False" />
+                            </DataTrigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Foreground" Value="Yellow" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGrid.RowStyle>
                 <DataGrid.Columns>
                     <DataGridTemplateColumn Header="Provider">
                         <DataGridTemplateColumn.CellTemplate>
@@ -146,6 +184,32 @@
                         </Setter>
                     </Style>
                 </ListBox.ItemContainerStyle>
+                <ui:TypeBasedTemplateSelector.Templates>
+                    <ui:Template Value="{x:Type amz:AmazonCarrierTermsAndConditionsNotAcceptedFootnoteViewModel}"
+                                 DataTemplate="{StaticResource AmazonCarrierTermsAndConditionsNotAcceptedFootnoteViewModelTemplate}" />
+                    <ui:Template Value="{x:Type amz:AmazonNotLinkedFootnoteViewModel}"
+                                 DataTemplate="{StaticResource AmazonNotLinkedFootnoteViewModelTemplate}" />
+                    <ui:Template Value="{x:Type sw:BrokerExceptionsRateFootnoteViewModel}"
+                                 DataTemplate="{StaticResource BrokerExceptionsRateFootnoteViewModelTemplate}" />
+                    <ui:Template Value="{x:Type sw:CounterRatesInvalidStoreAddressFootnoteViewModel}"
+                                 DataTemplate="{StaticResource CounterRatesInvalidStoreAddressFootnoteViewModelTemplate}" />
+                    <ui:Template Value="{x:Type sw:ExceptionsRateFootnoteViewModel}"
+                                 DataTemplate="{StaticResource ExceptionsRateFootnoteViewModelTemplate}" />
+                    <ui:Template Value="{x:Type sw:Express1DiscountedRateFootnoteViewModel}"
+                                 DataTemplate="{StaticResource Express1DiscountedRateFootnoteViewModelTemplate}" />
+                    <ui:Template Value="{x:Type sw:Express1RateNotQualifiedFootnoteViewModel}"
+                                 DataTemplate="{StaticResource Express1RateNotQualifiedFootnoteViewModelTemplate}" />
+                    <ui:Template Value="{x:Type sw:Express1RatePromotionFootnoteViewModel}"
+                                 DataTemplate="{StaticResource Express1RatePromotionFootnoteViewModelTemplate}" />
+                    <ui:Template Value="{x:Type sw:InformationFootnoteViewModel}"
+                                 DataTemplate="{StaticResource InformationFootnoteViewModelTemplate}" />
+                    <ui:Template Value="{x:Type sw:UspsRateDiscountedFootnoteViewModel}"
+                                 DataTemplate="{StaticResource UspsRateDiscountedFootnoteViewModelTemplate}" />
+                    <ui:Template Value="{x:Type sw:UspsRateNotQualifiedFootnoteViewModel}"
+                                 DataTemplate="{StaticResource UspsRateNotQualifiedFootnoteViewModelTemplate}" />
+                    <ui:Template Value="{x:Type sw:UspsRatePromotionFootnoteViewModel}"
+                                 DataTemplate="{StaticResource UspsRatePromotionFootnoteViewModelTemplate}" />
+                </ui:TypeBasedTemplateSelector.Templates>
             </ListBox>
 
             <Border Background="White"

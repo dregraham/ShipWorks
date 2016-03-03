@@ -46,5 +46,10 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         /// Select the given rate
         /// </summary>
         void SelectRate(RateResult selectedRate);
+
+        /// <summary>
+        /// Refresh the insurance view model for this shipment
+        /// </summary>
+        void RefreshInsurance();
     }
 }

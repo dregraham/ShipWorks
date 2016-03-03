@@ -152,10 +152,15 @@
     <Compile Include="Controls\AddressControl\AddressViewModel.cs" />
     <Compile Include="Controls\AddressControl\AddressViewModel.Properties.cs" />
     <Compile Include="Controls\AlignmentWrapPanel.cs" />
-    <Compile Include="Controls\NullSelectionComboBox.cs" />
+    <Compile Include="Controls\RelativeIndex.cs" />
+    <Compile Include="Controls\ShipWorksComboBox.cs" />
     <Compile Include="Controls\TypeBasedTemplateSelector\Template.cs" />
     <Compile Include="Controls\TypeBasedTemplateSelector\TemplateCollection.cs" />
     <Compile Include="Controls\TypeBasedTemplateSelector\TypeBasedTemplateSelector.cs" />
+    <Compile Include="Controls\Weight\ScaleButton.cs" />
+    <Compile Include="Controls\Weight\WeightControl.cs" />
+    <Compile Include="Controls\Weight\WeightInput.cs" />
+    <Compile Include="Controls\Weight\WeightValidationRule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="AttachedProperties\ExpanderState.cs" />
     <Compile Include="Services\MessageHelperWrapper.cs" />
@@ -214,6 +219,22 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="Controls\AddressControl\Address.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\Controls\ScaleButton.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\Controls\WeightControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\Controls\WeightInput.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\Generic.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

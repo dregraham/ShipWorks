@@ -150,25 +150,30 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// </summary>
         public void SaveToDatabase()
         {
+            // Only call save if we were in an "editing" allowed mode.
+            // This handles the case where we lost focus due to opening the shipping dialog.
+            // The view model needs to save itself before opening the shipping dialog.
+            // So just return if we are in a non editing state...no need to save.
             if (!AllowEditing || (ShipmentAdapter?.Shipment?.Processed ?? true))
             {
                 return;
             }
 
-            // Only call save if we were in an "editing" allowed mode.
-            // This handles the case where we lost focus due to opening the shipping dialog.
-            // The view model needs to save itself before opening the shipping dialog.
-            // So just return if we are in a non editing state...no need to save.
-            if (!AllowEditing)
-            {
-                return;
-            }
+            CommitBindings?.Invoke();
 
             Save();
 
             IDictionary<ShipmentEntity, Exception> errors = shippingManager.SaveShipmentToDatabase(ShipmentAdapter.Shipment, false);
             DisplayError(errors);
         }
+
+        /// <summary>
+        /// Commit any outstanding bindings
+        /// </summary>
+        /// <remarks>This is necessary for UI elements that are bound using LostFocus as
+        /// the update trigger. There are some cases where SaveToDatabase gets called before
+        /// these bindings are committed</remarks>
+        public Action CommitBindings { get; set; }
 
         /// <summary>
         /// Load the shipment from the given order
@@ -330,12 +335,17 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// <summary>
         /// Updates the service types.
         /// </summary>
-        private void UpdateServices() => ShipmentViewModel?.RefreshServiceTypes();
+        public void UpdateServices() => ShipmentViewModel?.RefreshServiceTypes();
 
         /// <summary>
         /// Updates the package types.
         /// </summary>
-        private void UpdatePackages() => ShipmentViewModel?.RefreshPackageTypes();
+        public void UpdatePackages() => ShipmentViewModel?.RefreshPackageTypes();
+
+        /// <summary>
+        /// Updates the insurance view for the shipment.
+        /// </summary>
+        public void RefreshInsurance() => ShipmentViewModel?.RefreshInsurance();
 
         /// <summary>
         /// Handle a property change before it actually happens
@@ -377,12 +387,17 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// </summary>
         private void DisplayError(IDictionary<ShipmentEntity, Exception> errors)
         {
-            if (errors.ContainsKey(ShipmentAdapter.Shipment))
+            Exception error = null;
+
+            if (errors.TryGetValue(ShipmentAdapter.Shipment, out error))
             {
                 messageHelper.ShowError("The selected shipments were edited or deleted by another ShipWorks user and your changes could not be saved.\n\n" +
                                         "The shipments will be refreshed to reflect the recent changes.");
 
-                messenger.Send(new OrderSelectionChangingMessage(this, new[] { ShipmentAdapter.Shipment.OrderID }));
+                if (!error.Message.Contains("delete"))
+                {
+                    messenger.Send(new OrderSelectionChangingMessage(this, new[] { ShipmentAdapter.Shipment.OrderID }));
+                }
             }
         }
 

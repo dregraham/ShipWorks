@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.iParcel;
 using ShipWorks.Shipping.Insurance;
@@ -37,7 +33,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
 
             iParcelPackageAdapter testObject = new iParcelPackageAdapter(shipment, package, 1)
             {
-                PackagingType = new PackageTypeBinding() { PackageTypeID = 999999 },
+                PackagingType = 999999,
                 AdditionalWeight = 3.1,
                 ApplyAdditionalWeight = true,
                 DimsHeight = 2.2,
@@ -48,7 +44,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
 
             string firstTry = testObject.HashCode();
 
-            testObject.PackagingType = new PackageTypeBinding() { PackageTypeID = 0 };
+            testObject.PackagingType = 0;
             string secondTry = testObject.HashCode();
 
             // Make sure PackagingType WAS NOT PART OF THE HASH!
@@ -66,7 +62,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
         [Fact]
         public void Constructor_PopulatesValues_Correctly_Test()
         {
-            Assert.Null(testObject.PackagingType);
             Assert.Equal(1, testObject.Index);
             Assert.Equal(package.DimsLength, testObject.DimsLength);
             Assert.Equal(package.DimsWidth, testObject.DimsWidth);
@@ -124,14 +119,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
             testObject.ApplyAdditionalWeight = !package.DimsAddWeight;
 
             Assert.Equal(testObject.ApplyAdditionalWeight, package.DimsAddWeight);
-        }
-
-        [Fact]
-        public void Changing_PackagingType_IsStillNull_Test()
-        {
-            testObject.PackagingType = new PackageTypeBinding();
-
-            Assert.Null(testObject.PackagingType);
         }
 
         [Fact]

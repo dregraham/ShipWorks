@@ -1,34 +1,11 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Linq;
-using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 
 namespace ShipWorks.UI.Controls
 {
-    [Obfuscation(Feature = "PreserveLiteralValues", Exclude = true, StripAfterObfuscation = false)]
-    /// Named locations in a list
-    /// </summary>
-    public enum RelativeIndex
-    {
-        [Description("None")]
-        /// Don't select a location
-        /// </summary>
-        None,
-
-        [Description("First")]
-        /// Select the first item in a list
-        /// </summary>
-        First,
-
-        [Description("Last")]
-        /// Select the last item in a list
-        /// </summary>
-        Last
-    }
-
     /// <summary>
     /// Combo box that has ShipWorks customizations
     /// </summary>
@@ -70,13 +47,22 @@ namespace ShipWorks.UI.Controls
         private static object HandleValueCoercion(DependencyObject d, object value)
         {
             object newValue = existingMetadata.CoerceValueCallback(d, value);
+            ComboBox comboBox = (ComboBox) d;
 
-            if (value != null && newValue == null)
+            if (WasValueCoercedToNull(value, newValue) || comboBox.SelectedItem == null)
             {
-                SelectNewValue(d as ComboBox);
+                SelectNewValue(comboBox);
             }
 
             return newValue;
+        }
+
+        /// <summary>
+        /// Was the value coerced to null instead of starting as null
+        /// </summary>
+        private static bool WasValueCoercedToNull(object value, object newValue)
+        {
+            return value != null && newValue == null;
         }
 
         /// <summary>
@@ -84,11 +70,6 @@ namespace ShipWorks.UI.Controls
         /// </summary>
         private static void SelectNewValue(ComboBox combo)
         {
-            if (combo == null)
-            {
-                return;
-            }
-
             RelativeIndex relativeIndex = GetSelectedIndexWhenNull(combo);
             if (relativeIndex == RelativeIndex.None || !combo.HasItems)
             {

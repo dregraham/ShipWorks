@@ -103,6 +103,7 @@
       <namespace name="*\.Tests\.*.*" regex="true" />
       <namespace name="ShipWorks\.Stores\.Platforms\.LemonStand\.DTO\.*.*" regex="true" />
       <namespace name="ShipWorks\.UI\.Controls\.Html\..*" regex="true" />
+      <namespace name="ShipWorks.UI.Controls.Weight" />
       <type name=".*" regex="true">
         <customattribute name="ShipWorks.Filters.Content.ConditionElementAttribute" />
       </type>

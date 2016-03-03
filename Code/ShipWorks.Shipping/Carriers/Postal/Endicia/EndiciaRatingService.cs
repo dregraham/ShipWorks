@@ -176,7 +176,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                     }
 
                     // If Express1 returned a rate, check to make sure it is a lower amount
-                    if (express1Rate != null && express1Rate.Amount <= endiciaRate.Amount)
+                    if (express1Rate != null && express1Rate.AmountOrDefault <= endiciaRate.AmountOrDefault)
                     {
                         // If the logo is currently set, make sure it's set to Endicia
                         if (express1Rate.ProviderLogo != null)

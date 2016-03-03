@@ -7,7 +7,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Services;
 
@@ -24,6 +23,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
             Justification = "Event is virtual to allow tests to fire it")]
         public virtual event PropertyChangedEventHandler PropertyChanged;
         public event PropertyChangingEventHandler PropertyChanging;
+        private IPackageAdapter packageAdapter;
 
         /// <summary>
         /// Constructor for use by tests and WPF designer
@@ -59,7 +59,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
             TotalWeight = shipmentAdapter.TotalWeight;
             ShipmentContentWeight = shipmentAdapter.ContentWeight;
 
-            IPackageAdapter packageAdapter = shipmentAdapter.GetPackageAdapters().FirstOrDefault();
+            packageAdapter = shipmentAdapter.GetPackageAdapters().FirstOrDefault();
             InsuranceViewModel.Load(new[] { packageAdapter }, packageAdapter, shipmentAdapter);
 
             OtherShipmentEntity otherShipment = shipmentAdapter.Shipment.Other;
@@ -91,11 +91,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
             otherShipment.Carrier = CarrierName;
             otherShipment.Service = Service;
 
-            if (CustomsAllowed && CustomsItems != null)
-            {
-                shipmentAdapter.CustomsItems = new EntityCollection<ShipmentCustomsItemEntity>(CustomsItems.Select(ci => ci.ShipmentCustomsItemEntity).ToList());
-            }
-
             shipmentAdapter.ContentWeight = ShipmentContentWeight;
         }
 
@@ -113,7 +108,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
                 return;
             }
 
-            CustomsItems = new ObservableCollection<IShipmentCustomsItemAdapter>(shipmentAdapter?.CustomsItems?.Select(ci => new ShipmentCustomsItemAdapter(ci)).ToList());
+            CustomsItems = new ObservableCollection<IShipmentCustomsItemAdapter>(shipmentAdapter.GetCustomsItemAdapters());
 
             TotalCustomsValue = shipmentAdapter.Shipment.CustomsValue;
 
@@ -125,16 +120,9 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         /// </summary>
         private void AddCustomsItem()
         {
-            if (CustomsItems == null)
-            {
-                LoadCustoms();
-            }
-
-            // Pass null as the shipment for now so that we don't have db updates/syncing until we actually want to save.
-            ShipmentCustomsItemEntity shipmentCustomsItemEntity = customsManager.CreateCustomsItem(null);
-            IShipmentCustomsItemAdapter shipmentCustomsItemAdapter = new ShipmentCustomsItemAdapter(shipmentCustomsItemEntity);
-            CustomsItems.Add(shipmentCustomsItemAdapter);
-            SelectedCustomsItem = shipmentCustomsItemAdapter;
+            IShipmentCustomsItemAdapter newItem = shipmentAdapter.AddCustomsItem();
+            CustomsItems.Add(newItem);
+            SelectedCustomsItem = newItem;
         }
 
         /// <summary>
@@ -142,13 +130,21 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         /// </summary>
         private void DeleteCustomsItem()
         {
-            customsItems.Remove(SelectedCustomsItem);
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CustomsItems)));
-            SelectedCustomsItem = CustomsItems.FirstOrDefault();
-
             ShipmentContentWeight = CustomsItems.Sum(ci => ci.Weight * ci.Quantity);
-
             TotalCustomsValue = CustomsItems.Sum(ci => ci.UnitValue * (decimal) ci.Quantity);
+
+            IShipmentCustomsItemAdapter selectedItem = SelectedCustomsItem;
+            int location = CustomsItems.IndexOf(selectedItem);
+
+            if (CustomsItems.Count > 1)
+            {
+                SelectedCustomsItem = CustomsItems.Last() == selectedItem ?
+                    CustomsItems.ElementAt(location - 1) :
+                    CustomsItems.ElementAt(location + 1);
+            }
+
+            CustomsItems.Remove(selectedItem);
+            shipmentAdapter.DeleteCustomsItem(selectedItem);
         }
 
         /// <summary>
@@ -227,6 +223,14 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         public void RefreshPackageTypes()
         {
             // Other shipment type does not support packages
+        }
+
+        /// <summary>
+        /// Updates the insurance view for the shipment.
+        /// </summary>
+        public void RefreshInsurance()
+        {
+            InsuranceViewModel.Load(new[] { packageAdapter }, packageAdapter, shipmentAdapter);
         }
 
         /// <summary>

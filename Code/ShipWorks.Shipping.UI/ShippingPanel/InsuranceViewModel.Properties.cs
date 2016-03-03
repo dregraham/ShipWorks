@@ -61,6 +61,9 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
                 {
                     InsuranceChoice = SelectedPackageAdapter.InsuranceChoice;
 
+                    Insurance = InsuranceChoice.Insured;
+                    DeclaredValue = InsuranceChoice.InsuranceValue;
+
                     UpdateInsuranceLabelDisplayText();
                     UpdateInsuranceTypeLabelDisplayText();
                     UpdateInsuranceValueLabelDisplayText();

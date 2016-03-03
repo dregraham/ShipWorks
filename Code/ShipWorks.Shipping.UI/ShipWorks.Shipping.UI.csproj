@@ -200,12 +200,16 @@
       <DependentUpon>CustomsControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="ShippingPanel\IInsuranceViewModel.cs" />
-    <Compile Include="ShippingPanel\InsurancePromoControl\InsurancePromoControl.xaml.cs">
+    <Compile Include="ShippingPanel\Insurance\InsuranceControl.xaml.cs">
+      <DependentUpon>InsuranceControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ShippingPanel\Insurance\InsurancePromoControl.xaml.cs">
       <DependentUpon>InsurancePromoControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="ShippingPanel\InsuranceViewModel.Properties.cs" />
     <Compile Include="ShippingPanel\InsuranceViewModel.cs" />
     <Compile Include="ShippingPanel\IShippingViewModelFactory.cs" />
+    <Compile Include="ShippingPanel\ObservableRegistrations\CarrierConfiguredPipeline.cs" />
     <Compile Include="ShippingPanel\ObservableRegistrations\ChangeOriginAddressFromTypePipeline.cs" />
     <Compile Include="ShippingPanel\ObservableRegistrations\ChangeShipmentTypePipeline.cs" />
     <Compile Include="ShippingPanel\ObservableRegistrations\DomesticInternationalDisplayPipeline.cs" />
@@ -334,10 +338,6 @@
     <Compile Include="Carriers\Ups\UpsShippingModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ShippingModule.cs" />
-    <Compile Include="ShippingPanel\Weight\ScaleButton.cs" />
-    <Compile Include="ShippingPanel\Weight\WeightControl.cs" />
-    <Compile Include="ShippingPanel\Weight\WeightInput.cs" />
-    <Compile Include="ShippingPanel\Weight\WeightValidationRule.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Interapptive.Shared\Interapptive.Shared.csproj">
@@ -351,6 +351,10 @@
     <ProjectReference Include="..\ShipWorks.Data.Model\ShipWorks.Data.Model.csproj">
       <Project>{6f05267c-1883-4526-8d83-e46b7b2d2faf}</Project>
       <Name>ShipWorks.Data.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ShipWorks.Res\ShipWorks.Res.csproj">
+      <Project>{3451502d-c78c-44ec-86ac-8f50a6531f5c}</Project>
+      <Name>ShipWorks.Res</Name>
     </ProjectReference>
     <ProjectReference Include="..\ShipWorks.Shared\ShipWorks.Shared.csproj">
       <Project>{dfcf14ea-6596-4b9c-b743-d7ce9e5f4348}</Project>
@@ -499,7 +503,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ShippingPanel\InsurancePromoControl\InsurancePromoControl.xaml">
+    <Page Include="ShippingPanel\Insurance\InsuranceControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ShippingPanel\Insurance\InsurancePromoControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -546,22 +554,6 @@
     <Page Include="Templates\TextBoxErrorTemplate.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Themes\Controls\ScaleButton.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Themes\Controls\WeightControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Themes\Controls\WeightInput.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Themes\Generic.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

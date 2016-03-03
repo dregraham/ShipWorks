@@ -1,42 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Data.Model.EntityClasses;
-using Interapptive.Shared.Utility;
-using ShipWorks.ApplicationCore.Logging;
-using ShipWorks.Shipping.Carriers.Postal.Endicia.BestRate;
-using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
-using ShipWorks.Shipping.Carriers.Postal.Endicia.WebServices.LabelService;
-using System.Web.Services.Protocols;
-using System.Net;
-using ShipWorks.Data;
-using System.IO;
+using System.Diagnostics;
 using System.Drawing;
-using ShipWorks.Data.Connection;
-using ShipWorks.Shipping.Editing;
-using ShipWorks.Shipping.Carriers.Postal.Endicia.Account;
-using ShipWorks.Shipping.Editing.Rating;
-using ShipWorks.Shipping.Settings;
-using ShipWorks.Stores.Platforms.Newegg.Net.Errors.Response;
-using ShipWorks.Templates.Tokens;
-using log4net;
-using ShipWorks.Shipping.Carriers.Postal.WebTools;
-using Interapptive.Shared.Business;
-using Interapptive.Shared.Win32;
-using ShipWorks.UI;
 using System.Drawing.Imaging;
-using ShipWorks.ApplicationCore;
+using System.IO;
+using System.Linq;
+using Interapptive.Shared;
+using Interapptive.Shared.Business;
 using Interapptive.Shared.Net;
+using Interapptive.Shared.Utility;
+using log4net;
+using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Common.IO.Hardware.Printers;
+using ShipWorks.Data;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Editions;
 using ShipWorks.Editions.Freemium;
-using ShipWorks.Shipping.Carriers.Postal.Express1;
-using System.Diagnostics;
-using Interapptive.Shared;
-using ShipWorks.Shipping.Carriers.FedEx.Enums;
-using ShipWorks.Shipping.Insurance;
-using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Shipping.Carriers.BestRate;
+using ShipWorks.Shipping.Carriers.Postal.Endicia.Account;
+using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
+using ShipWorks.Shipping.Carriers.Postal.Endicia.WebServices.LabelService;
+using ShipWorks.Shipping.Carriers.Postal.Express1;
+using ShipWorks.Shipping.Carriers.Postal.WebTools;
+using ShipWorks.Shipping.Editing.Rating;
+using ShipWorks.Shipping.Insurance;
+using ShipWorks.Shipping.Settings;
+using ShipWorks.Templates.Tokens;
+using ShipWorks.UI;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 {
@@ -101,10 +92,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         {
             get
             {
-                int useTestServerUrl = InterapptiveOnly.Registry.GetValue("EndiciaUseTestServerUrl", (int)EndiciaTestServer.Envmgr);
+                int useTestServerUrl = InterapptiveOnly.Registry.GetValue("EndiciaUseTestServerUrl", (int) EndiciaTestServer.Envmgr);
 
                 // Make sure it's a valid enum.  If not, default to old test server.
-                if (!Enum.IsDefined(typeof (EndiciaTestServer), useTestServerUrl))
+                if (!Enum.IsDefined(typeof(EndiciaTestServer), useTestServerUrl))
                 {
                     useTestServerUrl = (int) EndiciaTestServer.Envmgr;
                 }
@@ -113,7 +104,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             }
             set
             {
-                InterapptiveOnly.Registry.SetValue("EndiciaUseTestServerUrl", (int)value);
+                InterapptiveOnly.Registry.SetValue("EndiciaUseTestServerUrl", (int) value);
             }
         }
 
@@ -179,24 +170,24 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             {
                 // Express1
                 case EndiciaReseller.Express1:
-                {
-                    IApiLogEntry apiLogEntry = logEntryFactory.GetLogEntry(ApiLogSource.UspsExpress1Endicia, logName, logActionType);
+                    {
+                        IApiLogEntry apiLogEntry = logEntryFactory.GetLogEntry(ApiLogSource.UspsExpress1Endicia, logName, logActionType);
 
-                    webService = new Express1EndiciaServiceWrapper(apiLogEntry);
-                                 
-                    webService.Url = Express1EndiciaUtility.UseTestServer ? Express1EndiciaUtility.Express1DevelopmentUrl : Express1EndiciaUtility.Express1ProductionUrl;
-                    break;
-                }
+                        webService = new Express1EndiciaServiceWrapper(apiLogEntry);
+
+                        webService.Url = Express1EndiciaUtility.UseTestServer ? Express1EndiciaUtility.Express1DevelopmentUrl : Express1EndiciaUtility.Express1ProductionUrl;
+                        break;
+                    }
 
                 // Endicia Label Server
                 default:
-                {
-                    IApiLogEntry apiLogEntry = logEntryFactory.GetLogEntry(ApiLogSource.UspsEndicia, logName, logActionType);
+                    {
+                        IApiLogEntry apiLogEntry = logEntryFactory.GetLogEntry(ApiLogSource.UspsEndicia, logName, logActionType);
 
-                    webService = new EwsLabelService(apiLogEntry);
-                    webService.Url = UseTestServer ? EnumHelper.GetApiValue(UseTestServerUrl) : productionUrl;
-                    break;
-                }
+                        webService = new EwsLabelService(apiLogEntry);
+                        webService.Url = UseTestServer ? EnumHelper.GetApiValue(UseTestServerUrl) : productionUrl;
+                        break;
+                    }
             }
 
             return webService;
@@ -234,7 +225,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             bool isInternational = PostalUtility.GetInternationalServices(ShipmentTypeCode.Endicia).Contains(serviceType);
 
             // Express1
-            if (shipment.ShipmentType == (int)ShipmentTypeCode.Express1Endicia)
+            if (shipment.ShipmentType == (int) ShipmentTypeCode.Express1Endicia)
             {
                 request.Test = (Express1EndiciaUtility.UseTestServer || account.TestAccount) ? "YES" : "NO";
 
@@ -258,7 +249,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 }
                 else
                 {
-                    request.Test = account.TestAccount ? "YES" : "NO"; 
+                    request.Test = account.TestAccount ? "YES" : "NO";
                 }
             }
 
@@ -267,11 +258,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             // Determine what thermal type, if any to use.  Use the Endicia settings if it is an Endicia shipment being auto-switched to an Express1 shipment
             if (shipment.ShipmentType == (int) ShipmentTypeCode.Endicia || shipment.Postal.Endicia.OriginalEndiciaAccountID != null)
             {
-                thermalType = shipment.RequestedLabelFormat == (int)ThermalLanguage.None ? null : (ThermalLanguage?)shipment.RequestedLabelFormat;
+                thermalType = shipment.RequestedLabelFormat == (int) ThermalLanguage.None ? null : (ThermalLanguage?) shipment.RequestedLabelFormat;
             }
             else if (shipment.ShipmentType == (int) ShipmentTypeCode.Express1Endicia)
             {
-                thermalType = shipment.RequestedLabelFormat == (int)ThermalLanguage.None ? null : (ThermalLanguage?)shipment.RequestedLabelFormat;
+                thermalType = shipment.RequestedLabelFormat == (int) ThermalLanguage.None ? null : (ThermalLanguage?) shipment.RequestedLabelFormat;
             }
             else
             {
@@ -383,7 +374,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             }
 
             // Set the thermal type for the shipment
-            shipment.ActualLabelFormat = (int?)thermalType;
+            shipment.ActualLabelFormat = (int?) thermalType;
             request.ImageFormat = thermalType == null ? "PNG" : (thermalType == ThermalLanguage.EPL) ? "EPL2" : "ZPLII";
 
             // Not sure why these are required fields - i don't think they show up anywhere
@@ -395,7 +386,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             request.MailpieceShape = GetMailpieceShapeCode(packagingType);
 
             // Date advance
-            request.ShipDate = shipment.ShipDate.ToString("MM/dd/yyyy"); 
+            request.ShipDate = shipment.ShipDate.ToString("MM/dd/yyyy");
             request.DateAdvance = (int) Math.Max(0, ((TimeSpan) (shipment.ShipDate.Date - DateTime.Now.Date)).TotalDays);
 
             // Weight
@@ -432,8 +423,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             // Service options
             request.Services = new SpecialServices();
             request.Services.SignatureConfirmation = (postal.Confirmation == (int) PostalConfirmationType.Signature) ? "ON" : "OFF";
-            request.Services.AdultSignature = (postal.Confirmation == (int)PostalConfirmationType.AdultSignatureRequired) ? "ON" : "OFF";
-            request.Services.AdultSignatureRestrictedDelivery = (postal.Confirmation == (int)PostalConfirmationType.AdultSignatureRestricted) ? "ON" : "OFF";
+            request.Services.AdultSignature = (postal.Confirmation == (int) PostalConfirmationType.AdultSignatureRequired) ? "ON" : "OFF";
+            request.Services.AdultSignatureRestrictedDelivery = (postal.Confirmation == (int) PostalConfirmationType.AdultSignatureRestricted) ? "ON" : "OFF";
 
             // request.Services.DeliveryConfirmation = (postal.Confirmation == (int) PostalConfirmationType.Delivery) ? "ON" : "OFF"; -> Documented as set automatically and ignored by ELS
 
@@ -647,7 +638,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             EndiciaAccountEntity account = accountRepository.GetAccount(postal.Endicia.EndiciaAccountID);
             if (account == null)
             {
-                throw new EndiciaException($"No {EnumHelper.GetDescription((ShipmentTypeCode)postal.Shipment.ShipmentType)} account is selected for the shipment.");
+                throw new EndiciaException($"No {EnumHelper.GetDescription((ShipmentTypeCode) postal.Shipment.ShipmentType)} account is selected for the shipment.");
             }
             else if (account.IsDazzleMigrationPending)
             {
@@ -844,7 +835,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             request.CertifiedIntermediary.PassPhrase = SecureText.Decrypt(account.ApiUserPassword, "Endicia");
 
             // Used to rate shipments having a future ship date; seven days is the upper bound
-            request.DateAdvance = (int)Math.Max(0, (int)Math.Min((shipment.ShipDate.Date - DateTime.Now.Date).TotalDays, 7));
+            request.DateAdvance = (int) Math.Max(0, (int) Math.Min((shipment.ShipDate.Date - DateTime.Now.Date).TotalDays, 7));
 
             // Default the weight to 14oz for best rate if it is 0, so we can get a rate without needing the user to provide a value.  We do 14oz so it kicks it into a Priority shipment, which
             // is the category that most of our users will be in.
@@ -956,7 +947,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                             {
                                 // Use an error message that is slightly more informative, to let the user know which of their accounts
                                 // had the problem in the event that they have multiple accounts for Endicia and/or have an Express1 account
-                                errorMessage = string.Format("ShipWorks was unable to connect to {0} with account {1}.{2}Check that your account credentials are correct.", 
+                                errorMessage = string.Format("ShipWorks was unable to connect to {0} with account {1}.{2}Check that your account credentials are correct.",
                                     account.EndiciaReseller == 0 ? "Endicia" : "Express1",
                                     account.AccountNumber,
                                     Environment.NewLine);
@@ -972,7 +963,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                     {
                         return new List<RateResult>();
                     }
-                    
+
                     // Go through each item in the result
                     foreach (PostagePrice price in response.PostagePrice)
                     {
@@ -1064,7 +1055,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                     {
                         // As of 01/28/2013 Endicia is not returning Parcel Select in the GetAllRates call - they are returning Standard Post instead.  If we can't find Parcel Select, try
                         // to get those rates manually.  In the future if Endicia updates\fixes it we may be able to remove this.
-                        if (account.EndiciaReseller == (int)EndiciaReseller.None &&
+                        if (account.EndiciaReseller == (int) EndiciaReseller.None &&
                             !rates.Any(r => r.Selectable && ((PostalRateSelection) r.OriginalTag).ServiceType == PostalServiceType.ParcelSelect))
                         {
                             try
@@ -1204,11 +1195,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                                 resultsWithDays.Add(new RateResult(
                                     result.Description,
                                     webToolRate.Days,
-                                    result.Amount,
+                                    result.AmountOrDefault,
                                     result.Tag)
-                                    {
-                                        ProviderLogo = EnumHelper.GetImage(ShipmentTypeCode.Endicia)
-                                    });
+                                {
+                                    ProviderLogo = EnumHelper.GetImage(ShipmentTypeCode.Endicia)
+                                });
                             }
                             else
                             {
@@ -1311,7 +1302,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             request.CertifiedIntermediary.PassPhrase = SecureText.Decrypt(account.ApiUserPassword, "Endicia");
 
             // Used to rate shipments having a future ship date; seven days is the upper bound
-            request.DateAdvance = (int)Math.Max(0, (int)Math.Min((shipment.ShipDate.Date - DateTime.Now.Date).TotalDays, 7));
+            request.DateAdvance = (int) Math.Max(0, (int) Math.Min((shipment.ShipDate.Date - DateTime.Now.Date).TotalDays, 7));
 
             // Default the weight to 14oz for best rate if it is 0, so we can get a rate without needing the user to provide a value.  We do 14oz so it kicks it into a Priority shipment, which
             // is the category that most of our users will be in.
@@ -1365,7 +1356,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             {
                 request.FromPostalCode = from.PostalCode;
             }
-            
+
             // Address stuff
             request.ToPostalCode = recipient.PostalCode5;
             request.ToCountryCode = recipient.AdjustedCountryCode((ShipmentTypeCode) shipment.ShipmentType);
@@ -1461,7 +1452,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             // We just use the shipment to verify
             if (shipment != null)
             {
-                if (endiciaReseller != ((shipment.ShipmentType == (int)ShipmentTypeCode.Endicia) ? EndiciaReseller.None : EndiciaReseller.Express1))
+                if (endiciaReseller != ((shipment.ShipmentType == (int) ShipmentTypeCode.Endicia) ? EndiciaReseller.None : EndiciaReseller.Express1))
                 {
                     throw new ShippingException(string.Format("The selected account is not for use with {0}.", ShipmentTypeManager.GetType((ShipmentTypeCode) shipment.ShipmentType).ShipmentTypeName));
                 }
@@ -1527,7 +1518,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                     AccountStatusRequest request = new AccountStatusRequest();
                     request.RequesterID = GetInterapptivePartnerID(GetReseller(account));
                     request.RequestID = Guid.NewGuid().ToString();
-                    request.CertifiedIntermediary = new CertifiedIntermediary 
+                    request.CertifiedIntermediary = new CertifiedIntermediary
                     {
                         AccountID = account.AccountNumber,
                         PassPhrase = SecureText.Decrypt(account.ApiUserPassword, "Endicia")
@@ -1564,10 +1555,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                     request.RequesterID = GetInterapptivePartnerID(reseller);
                     request.RequestID = Guid.NewGuid().ToString();
 
-                    request.CertifiedIntermediary = new CertifiedIntermediary 
+                    request.CertifiedIntermediary = new CertifiedIntermediary
                     {
-                        AccountID = accountNumber, 
-                        PassPhrase = oldPassword 
+                        AccountID = accountNumber,
+                        PassPhrase = oldPassword
                     };
 
                     request.NewPassPhrase = newPassword;
@@ -1589,7 +1580,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 throw WebHelper.TranslateWebException(ex, typeof(EndiciaException));
             }
         }
-        
+
         /// <summary>
         /// Get the mail piece shape code to use for the given packaging type
         /// </summary>
@@ -1695,7 +1686,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 // Endicia changed the value to First Class Package International Service; keeping the original 
                 // case statement for First Class Mail International per Brian in case Endicia changes it back
                 case "FirstClassMailInternational":
-                case "FirstClassPackageInternational": 
+                case "FirstClassPackageInternational":
                 case "FirstClassPackageInternationalService": return PostalServiceType.InternationalFirst;
             }
 
@@ -1721,7 +1712,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             CertificateRequest certificateRequest = new CertificateRequest(new Uri(service.Url), certificateInspector);
             if (certificateRequest.Submit() != CertificateSecurityLevel.Trusted)
             {
-                string description = EnumHelper.GetDescription((ShipmentTypeCode)shipmentType);
+                string description = EnumHelper.GetDescription((ShipmentTypeCode) shipmentType);
                 throw new EndiciaException(string.Format("ShipWorks is unable to make a secure connection to {0}.", description));
             }
         }

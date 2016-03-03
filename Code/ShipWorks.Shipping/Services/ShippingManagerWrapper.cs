@@ -57,11 +57,11 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Get the shipment of the specified ID.  The Order will be attached.
         /// </summary>
-        public ShipmentEntity GetShipment(long shipmentID)
+        public ICarrierShipmentAdapter GetShipment(long shipmentID)
         {
             ShipmentEntity shipment = ShippingManager.GetShipment(shipmentID);
             EnsureShipmentLoaded(shipment);
-            return shipment;
+            return shipmentAdapterFactory.Get(shipment);
         }
 
         /// <summary>

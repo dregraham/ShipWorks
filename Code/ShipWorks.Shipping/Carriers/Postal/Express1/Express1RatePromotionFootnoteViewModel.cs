@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using System.Reflection;
+using System.Windows.Forms;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.Command;
 using ShipWorks.Core.Messaging;
@@ -29,16 +30,19 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
         /// <summary>
         /// Activate the available discount
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public ICommand ActivateDiscount { get; private set; }
 
         /// <summary>
         /// Settings for the Express 1 dialog
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public IExpress1SettingsFacade Settings { get; set; }
 
         /// <summary>
         /// Shipment associated with the rates
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public ICarrierShipmentAdapter ShipmentAdapter { get; set; }
 
         /// <summary>

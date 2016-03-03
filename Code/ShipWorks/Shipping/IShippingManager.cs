@@ -44,7 +44,7 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Get the shipment of the specified ID.  The Order will be attached.
         /// </summary>
-        ShipmentEntity GetShipment(long shipmentID);
+        ICarrierShipmentAdapter GetShipment(long shipmentID);
 
         /// <summary>
         /// Removes the specified shipment from the cache

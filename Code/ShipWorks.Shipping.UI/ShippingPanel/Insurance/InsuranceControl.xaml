@@ -1,0 +1,50 @@
+﻿<UserControl x:Class="ShipWorks.Shipping.UI.ShippingPanel.Insurance.InsuranceControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:ui="http://schemas.shipworks.com/ui"
+             xmlns:local="clr-namespace:ShipWorks.Shipping.UI.ShippingPanel.Insurance"
+             mc:Ignorable="d"
+             d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/ShipWorks.Shipping.UI;component/ShippingPanel/Styles/ServiceControlStyle.xaml"/>
+                <ResourceDictionary Source="/ShipWorks.Shipping.UI;component/Templates/TextBoxErrorTemplate.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+            <ui:EmptyMoneyConverter x:Key="EmptyMoney" />
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition SharedSizeGroup="Label" />
+            <ColumnDefinition SharedSizeGroup="Value" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource GridLabel}"
+                       Text="{Binding InsuranceLabelDisplayText, FallbackValue='Insurance:'}"></TextBlock>
+        <StackPanel  Grid.Row="0" Grid.Column="1" Orientation="Horizontal">
+            <CheckBox Margin="4 4 0 0" Name="IsInsured"
+                    Content="{Binding InsuranceTypeLabelDisplayText, FallbackValue='Insurance Type'}"
+                    IsChecked="{Binding Insurance}"/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal">
+            <TextBlock Style="{StaticResource GridLabel}"
+                           Text="{Binding InsuranceValueLabelDisplayText, FallbackValue='Insured Value:'}"></TextBlock>
+            <TextBox Width="80"  Margin="4 4 0 0" Style="{DynamicResource TextBoxErrorTemplate}"
+                         IsEnabled="{Binding Insurance}"
+                         Text="{Binding DeclaredValue, StringFormat=c, FallbackValue='50.50',
+                         Converter={StaticResource EmptyMoney}, 
+                         TargetNullValue='', ValidatesOnDataErrors=true, NotifyOnValidationError=true}"/>
+
+            <local:InsurancePromoControl />
+        </StackPanel>
+    </Grid>
+</UserControl>

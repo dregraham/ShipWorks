@@ -157,7 +157,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Endicia
         {
             using (AutoMock mock = AutoMockExtensions.GetLooseThatReturnsMocks())
             {
-                Mock<EndiciaShipmentType> shipmentTypeMock2 = mock.WithShipmentTypeFromFactory<EndiciaShipmentType>(x => { });
+                Mock<EndiciaShipmentType> shipmentTypeMock2 = mock.WithShipmentTypeFromShipmentManager<EndiciaShipmentType>(x => { });
                 EndiciaShipmentAdapter testObject = mock.Create<EndiciaShipmentAdapter>(new TypedParameter(typeof(ShipmentEntity), shipment));
                 testObject.UpdateDynamicData();
 

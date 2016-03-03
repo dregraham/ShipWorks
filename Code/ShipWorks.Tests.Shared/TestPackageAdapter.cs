@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics.CodeAnalysis;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Services;
@@ -9,9 +7,6 @@ namespace ShipWorks.Tests.Shared
 {
     public class TestPackageAdapter : IPackageAdapter
     {
-        [SuppressMessage("CSharp", "CS0067: ", Justification = "For now, we're fine with fire and forget here")]
-        public event PropertyChangedEventHandler PropertyChanged;
-
         public long PackageId => -1;
         public int Index { get; set; }
         public double Weight { get; set; }
@@ -21,17 +16,12 @@ namespace ShipWorks.Tests.Shared
         public double DimsWidth { get; set; }
         public double DimsHeight { get; set; }
         public long DimsProfileID { get; set; }
-        public PackageTypeBinding PackagingType { get; set; }
+        public int PackagingType { get; set; }
         public IInsuranceChoice InsuranceChoice { get; set; }
 
         public string HashCode()
         {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(nameof(HashCode)));
-            }
-
-            return this.HashCode();
+            return "Test";
         }
 
         /// <summary>

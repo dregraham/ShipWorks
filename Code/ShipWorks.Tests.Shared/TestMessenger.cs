@@ -1,13 +1,16 @@
 ﻿using System;
-using ShipWorks.Core.Messaging;
+using System.Diagnostics.CodeAnalysis;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
+using ShipWorks.Core.Messaging;
 
 namespace ShipWorks.Tests.Shared
 {
     /// <summary>
     /// Message that can be used for testing
     /// </summary>
+    [SuppressMessage("Code Analysis", "CA2213: Disposable fields should be disposed",
+        Justification = "Subject *does* get disposed, so this feels like a false positive")]
     public class TestMessenger : IMessenger, IDisposable
     {
         readonly Subject<IShipWorksMessage> subject = new Subject<IShipWorksMessage>();

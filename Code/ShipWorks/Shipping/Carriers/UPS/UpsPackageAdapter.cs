@@ -1,13 +1,9 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using Interapptive.Shared.Utility;
 using Shared.System.ComponentModel.DataAnnotations;
-using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Services;
 
@@ -20,13 +16,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
     {
         private readonly ShipmentEntity shipmentEntity;
         private readonly UpsPackageEntity packageEntity;
-        private PackageTypeBinding packagingType;
         private int index;
 
-        [SuppressMessage("SonarQube", "S2290:Field-like events should not be virtual", Justification = "Event is virtual to allow tests to fire it")]
-        public virtual event PropertyChangedEventHandler PropertyChanged;
-        public event PropertyChangingEventHandler PropertyChanging;
-        private readonly PropertyChangedHandler handler;
         private IInsuranceChoice insuranceChoice;
 
         /// <summary>
@@ -39,17 +30,10 @@ namespace ShipWorks.Shipping.Carriers.UPS
         {
             MethodConditions.EnsureArgumentIsNotNull(shipmentEntity.Ups, nameof(shipmentEntity.Ups));
 
-            handler = new PropertyChangedHandler(this, () => PropertyChanged, () => PropertyChanging);
             this.shipmentEntity = shipmentEntity;
             this.packageEntity = packageEntity;
             this.Index = packageIndex;
             this.insuranceChoice = new InsuranceChoice(shipmentEntity, packageEntity, packageEntity, packageEntity);
-
-            packagingType = new PackageTypeBinding()
-            {
-                PackageTypeID = packageEntity.PackagingType,
-                Name = EnumHelper.GetDescription((UpsPackagingType) packageEntity.PackagingType)
-            };
         }
 
         /// <summary>
@@ -64,10 +48,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         public int Index
         {
             get { return index; }
-            set
-            {
-                handler.Set(nameof(Index), ref index, value);
-            }
+            set { index = value; }
         }
 
         /// <summary>
@@ -93,7 +74,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
                     shipmentEntity.ContentWeight = value;
                 }
 
-                handler.Set(nameof(Weight), v => packageEntity.Weight = value, packageEntity.Weight, value, false);
+                packageEntity.Weight = value;
             }
         }
 
@@ -105,10 +86,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         public double AdditionalWeight
         {
             get { return packageEntity.DimsWeight; }
-            set
-            {
-                handler.Set(nameof(AdditionalWeight), v => packageEntity.DimsWeight = value, packageEntity.DimsWeight, value, false);
-            }
+            set { packageEntity.DimsWeight = value; }
         }
 
         /// <summary>
@@ -118,33 +96,17 @@ namespace ShipWorks.Shipping.Carriers.UPS
         public bool ApplyAdditionalWeight
         {
             get { return packageEntity.DimsAddWeight; }
-            set
-            {
-                handler.Set(nameof(ApplyAdditionalWeight), v => packageEntity.DimsAddWeight = value, packageEntity.DimsAddWeight, value, false);
-            }
+            set { packageEntity.DimsAddWeight = value; }
         }
 
         /// <summary>
         /// Gets or sets the packaging type.
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public PackageTypeBinding PackagingType
+        public int PackagingType
         {
-            get
-            {
-                return packagingType;
-            }
-            set
-            {
-                packagingType = value;
-
-                // value can be null when switching between shipments, so only update the underlying value
-                // if we have a valid packagingType.
-                if (packagingType != null)
-                {
-                    handler.Set(nameof(PackagingType), v => packageEntity.PackagingType = packagingType.PackageTypeID, packageEntity.PackagingType, packagingType.PackageTypeID);
-                }
-            }
+            get { return packageEntity.PackagingType; }
+            set { packageEntity.PackagingType = value; }
         }
 
         /// <summary>
@@ -155,10 +117,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         public double DimsLength
         {
             get { return packageEntity.DimsLength; }
-            set
-            {
-                handler.Set(nameof(DimsLength), v => packageEntity.DimsLength = value, packageEntity.DimsLength, value);
-            }
+            set { packageEntity.DimsLength = value; }
         }
 
         /// <summary>
@@ -169,10 +128,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         public double DimsWidth
         {
             get { return packageEntity.DimsWidth; }
-            set
-            {
-                handler.Set(nameof(DimsWidth), v => packageEntity.DimsWidth = value, packageEntity.DimsWidth, value, false);
-            }
+            set { packageEntity.DimsWidth = value; }
         }
 
         /// <summary>
@@ -183,10 +139,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         public double DimsHeight
         {
             get { return packageEntity.DimsHeight; }
-            set
-            {
-                handler.Set(nameof(DimsHeight), v => packageEntity.DimsHeight = value, packageEntity.DimsHeight, value, false);
-            }
+            set { packageEntity.DimsHeight = value; }
         }
 
         /// <summary>
@@ -196,10 +149,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         public long DimsProfileID
         {
             get { return packageEntity.DimsProfileID; }
-            set
-            {
-                handler.Set(nameof(DimsProfileID), v => packageEntity.DimsProfileID = value, packageEntity.DimsProfileID, value, false);
-            }
+            set { packageEntity.DimsProfileID = value; }
         }
 
         /// <summary>
@@ -209,10 +159,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         public IInsuranceChoice InsuranceChoice
         {
             get { return insuranceChoice; }
-            set
-            {
-                handler.Set(nameof(InsuranceChoice), ref insuranceChoice, value);
-            }
+            set { insuranceChoice = value; }
         }
 
         /// <summary>

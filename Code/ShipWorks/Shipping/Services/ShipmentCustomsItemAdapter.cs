@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using System.Reflection;
-using System.Text;
 using Shared.System.ComponentModel.DataAnnotations;
-using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping.Services
@@ -140,7 +136,7 @@ namespace ShipWorks.Shipping.Services
         }
 
         /// <summary>
-        /// The number of pices
+        /// The number of pieces
         /// </summary>
         [Obfuscation(Exclude = true)]
         [Range(0, 99999, ErrorMessage = @"Please select a valid 'Number of Pieces'.")]

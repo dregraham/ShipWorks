@@ -43,7 +43,7 @@ namespace ShipWorks.Shipping.Services
 
             OrderSelectionLoaded orderSelectionLoaded = await shipmentLoader.Load(entityID);
 
-            OrderSelectionChangedMessage orderSelectionChangedMessage = new OrderSelectionChangedMessage(null, new List<OrderSelectionLoaded> { orderSelectionLoaded });
+            OrderSelectionChangedMessage orderSelectionChangedMessage = new OrderSelectionChangedMessage(this, new List<OrderSelectionLoaded> { orderSelectionLoaded });
 
             messenger.Send(orderSelectionChangedMessage);
         }

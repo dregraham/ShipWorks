@@ -9,7 +9,6 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.BestRate.Footnote;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
-using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api;
 using ShipWorks.Shipping.Editing.Rating;
 
@@ -23,7 +22,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         private readonly ICarrierAccountRepository<UpsAccountEntity> accountRepository;
         private readonly UpsApiTransitTimeClient transitTimeClient;
         private readonly UpsApiRateClient upsApiRateClient;
-        private readonly UpsOltShipmentType shipmentType;
+        private readonly UpsShipmentType shipmentType;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UpsRatingService"/> class.
@@ -32,7 +31,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             ICarrierAccountRepository<UpsAccountEntity> accountRepository,
             UpsApiTransitTimeClient transitTimeClient,
             UpsApiRateClient upsApiRateClient,
-            UpsOltShipmentType shipmentType)
+            UpsShipmentType shipmentType)
         {
             this.accountRepository = accountRepository;
             this.transitTimeClient = transitTimeClient;
@@ -128,7 +127,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 {
                     ServiceLevel = UpsServiceLevelConverter.GetServiceLevel(serviceRate, transitTime),
                     ExpectedDeliveryDate = transitTime?.ArrivalDate ?? ShippingManager.CalculateExpectedDeliveryDate(serviceRate.GuaranteedDaysToDelivery, DayOfWeek.Saturday, DayOfWeek.Sunday),
-                    ShipmentType = ShipmentTypeCode.UpsOnLineTools,
+                    ShipmentType = shipmentType.ShipmentTypeCode,
                     ProviderLogo = EnumHelper.GetImage(ShipmentTypeCode.UpsOnLineTools)
                 };
 

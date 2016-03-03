@@ -20,15 +20,15 @@ namespace ShipWorks.Shipping.Carriers.Postal
                 }
 
                 ratingField = base.RatingFields;
-                ratingField.ShipmentFields.Add(PostalShipmentFields.PackagingType);
-                ratingField.ShipmentFields.Add(PostalShipmentFields.DimsHeight);
-                ratingField.ShipmentFields.Add(PostalShipmentFields.DimsLength);
-                ratingField.ShipmentFields.Add(PostalShipmentFields.DimsWidth);
-                ratingField.ShipmentFields.Add(PostalShipmentFields.DimsAddWeight);
-                ratingField.ShipmentFields.Add(PostalShipmentFields.DimsWeight);
-                ratingField.ShipmentFields.Add(PostalShipmentFields.NonMachinable);
-                ratingField.ShipmentFields.Add(PostalShipmentFields.NonRectangular);
-                ratingField.ShipmentFields.Add(PostalShipmentFields.InsuranceValue);
+                ratingField.AddShipmentField(PostalShipmentFields.PackagingType);
+                ratingField.AddShipmentField(PostalShipmentFields.DimsHeight);
+                ratingField.AddShipmentField(PostalShipmentFields.DimsLength);
+                ratingField.AddShipmentField(PostalShipmentFields.DimsWidth);
+                ratingField.AddShipmentField(PostalShipmentFields.DimsAddWeight);
+                ratingField.AddShipmentField(PostalShipmentFields.DimsWeight);
+                ratingField.AddShipmentField(PostalShipmentFields.NonMachinable);
+                ratingField.AddShipmentField(PostalShipmentFields.NonRectangular);
+                ratingField.AddShipmentField(PostalShipmentFields.InsuranceValue);
 
                 return ratingField;
             }

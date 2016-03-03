@@ -1,7 +1,6 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:local="clr-namespace:ShipWorks.Shipping.UI.Themes.Controls"
-                    xmlns:weight="clr-namespace:ShipWorks.Shipping.UI.ShippingPanel.Weight">
+                    xmlns:weight="clr-namespace:ShipWorks.UI.Controls.Weight">
     <ControlTemplate x:Key="WeightErrorTemplate">
         <DockPanel>
             <AdornedElementPlaceholder x:Name="adorner"/>
@@ -50,7 +49,8 @@
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
                         <weight:WeightInput x:Name="PART_Entry"
-                                            Grid.Column="0">
+                                            Grid.Column="0"
+                                            MaxWeight="{TemplateBinding MaxWeight}">
                         </weight:WeightInput>
                         <weight:ScaleButton x:Name="PART_ScaleButton" Grid.Column="1"
                                Weight="{Binding Weight,RelativeSource={RelativeSource TemplatedParent},Mode=OneWayToSource}"/>

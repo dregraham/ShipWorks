@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using Interapptive.Shared.Utility;
@@ -14,11 +13,6 @@ namespace ShipWorks.Shipping.Services
     /// </summary>
     public class NullPackageAdapter : IPackageAdapter
     {
-        [SuppressMessage("SonarQube", "S2290:Field-like events should not be virtual", Justification = "Event is virtual to allow tests to fire it")]
-#pragma warning disable CS0067
-        public virtual event PropertyChangedEventHandler PropertyChanged;
-#pragma warning restore CS0067
-
         /// <summary>
         /// Id of the underlying package
         /// </summary>
@@ -63,17 +57,13 @@ namespace ShipWorks.Shipping.Services
         /// <summary>
         /// Gets or sets the packaging type.
         /// </summary>
-        public PackageTypeBinding PackagingType
+        [SuppressMessage("SonarQube", "S3237: \"value\" parameters should be used",
+            Justification = "Package type isn't supported for Amazon, so the setter is not necessary")]
+        [Obfuscation(Exclude = true)]
+        public int PackagingType
         {
-            get
-            {
-                return new PackageTypeBinding()
-                {
-                    PackageTypeID = 0,
-                    Name = "None"
-                };
-            }
-            set { }
+            get { return -1; }
+            set { /* Not applicable */ }
         }
 
         /// <summary>

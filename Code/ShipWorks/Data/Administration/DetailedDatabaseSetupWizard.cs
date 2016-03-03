@@ -2,50 +2,37 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
-using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
-using ShipWorks.UI.Wizard;
-using Interapptive.Shared;
-using System.Text.RegularExpressions;
-using System.Data.Sql;
 using System.Data.SqlClient;
-using System.IO;
-using Interapptive.Shared.Net;
-using System.Net;
-using log4net;
-using System.Collections;
 using System.Diagnostics;
-using System.Reflection;
-using ShipWorks.Users;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.UI;
-using ShipWorks.ApplicationCore.MessageBoxes;
-using Interapptive.Shared.Utility;
-using ShipWorks.Common.Threading;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.ApplicationCore;
-using ShipWorks.Data.Connection;
-using ShipWorks.Templates.Emailing;
-using ShipWorks.Email;
-using Microsoft.Win32;
+using System.Drawing;
+using System.IO;
 using System.Linq;
-using System.Xml.Linq;
-using ShipWorks.ApplicationCore.Interaction;
-using ShipWorks.Data.Administration.SqlServerSetup;
-using ShipWorks.Users.Security;
-using Interapptive.Shared.Data;
-using Interapptive.Shared.UI;
-using ShipWorks.Data.Administration.UpdateFrom2x;
-using ShipWorks.Data.Administration.UpdateFrom2x.Configuration;
-using Interapptive.Shared.Win32;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using ShipWorks.Properties;
+using System.Windows.Forms;
+using System.Xml.Linq;
 using Divelements.SandGrid;
-using ShipWorks.UI.Controls;
-using ShipWorks.ApplicationCore.Setup;
+using Interapptive.Shared;
+using Interapptive.Shared.Data;
+using Interapptive.Shared.Net;
+using Interapptive.Shared.UI;
+using log4net;
+using ShipWorks.ApplicationCore.Interaction;
+using ShipWorks.ApplicationCore.MessageBoxes;
+using ShipWorks.Common.Threading;
+using ShipWorks.Core.Messaging;
+using ShipWorks.Data.Administration.SqlServerSetup;
+using ShipWorks.Data.Administration.UpdateFrom2x.Configuration;
+using ShipWorks.Data.Connection;
+using ShipWorks.Email;
+using ShipWorks.Messaging.Messages;
+using ShipWorks.Properties;
 using ShipWorks.Stores.Management;
+using ShipWorks.UI.Controls;
+using ShipWorks.UI.Wizard;
+using ShipWorks.Users;
 using ShipWorks.Users.Logon;
+using ShipWorks.Users.Security;
 
 namespace ShipWorks.Data.Administration
 {
@@ -61,7 +48,7 @@ namespace ShipWorks.Data.Administration
         // The current state of the SQL Session data
         SqlSession sqlSession = new SqlSession();
 
-        // The session and SQL instance that we are currently testing in the background for succesfully connect
+        // The session and SQL instance that we are currently testing in the background for successfully connect
         SqlSession connectionSession = null;
 
         // Navigation helpers
@@ -88,7 +75,7 @@ namespace ShipWorks.Data.Administration
         // Determines if the admin user has been created during this session.
         bool adminUserCreated = false;
 
-        // Determines if the db has been succesfully restored 
+        // Determines if the db has been successfully restored
         bool databaseRestored = false;
 
         // The user that will be used for restoring the db
@@ -181,7 +168,7 @@ namespace ShipWorks.Data.Administration
                     });
             Pages.Insert(placeholderIndex, windowsInstallerPage);
 
-            // The first prereq is Windows installer 4.5 which then chains to .net 3.5
+            // The first prerequisite is Windows installer 4.5 which then chains to .net 3.5
             pageFirstPrerequisite = windowsInstallerPage;
 
             // Event not available in the designer
@@ -279,7 +266,7 @@ namespace ShipWorks.Data.Administration
                         radioInstallSqlServer.Checked = true;
                         instanceName.Text = (string) StartupController.StartupArgument.Element("InstanceName");
 
-                        // If we are here after rebooting from a successful install that needed a reboot, fastforward past the install page
+                        // If we are here after rebooting from a successful install that needed a reboot, fast-forward past the install page
                         var afterInstallSuccess = StartupController.StartupArgument.Element("AfterInstallSuccess");
                         if (afterInstallSuccess != null && (bool) afterInstallSuccess)
                         {
@@ -341,7 +328,7 @@ namespace ShipWorks.Data.Administration
         #region Setup or Connect
 
         /// <summary>
-        /// The option the user has choosen on the first page of the wizard.  The reason for all this mess is we use two different layouts, for the same options, depending
+        /// The option the user has chosen on the first page of the wizard.  The reason for all this mess is we use two different layouts, for the same options, depending
         /// on if the user's machine supports SQL 2012
         /// </summary>
         private ChooseWiselyOption ChooseWisely
@@ -480,7 +467,7 @@ namespace ShipWorks.Data.Administration
 
             Cursor.Current = Cursors.WaitCursor;
 
-            // Bring the upgrading message up and diable and the browsing buttons
+            // Bring the upgrading message up and disable and the browsing buttons
             panelUpgradeLocalDb.Location = panelUpgradeLocalDbReady.Location;
             panelUpgradeLocalDb.Visible = true;
             panelUpgradeLocalDbReady.Visible = false;
@@ -509,7 +496,7 @@ namespace ShipWorks.Data.Administration
                     MessageHelper.ShowError(this, "An error occurred while enabling support for remote connections:\n\n" + ex.Message);
                 }
 
-                // Reset the gui
+                // Reset the GUI
                 panelUpgradeLocalDb.Visible = false;
                 panelUpgradeLocalDbReady.Visible = true;
                 NextEnabled = true;
@@ -518,7 +505,7 @@ namespace ShipWorks.Data.Administration
         }
 
         /// <summary>
-        /// Simple UI timer we use to keep the progress of SQL Server install aproximated
+        /// Simple UI timer we use to keep the progress of SQL Server install approximated
         /// </summary>
         void OnUpgradeLocalDbProgressTimer(object sender, EventArgs e)
         {
@@ -605,7 +592,7 @@ namespace ShipWorks.Data.Administration
                 BackEnabled = true;
             }
 
-            // Reset the gui
+            // Reset the GUI
             panelUpgradeLocalDb.Visible = false;
             panelUpgradeLocalDbReady.Visible = true;
         }
@@ -654,9 +641,9 @@ namespace ShipWorks.Data.Administration
                 }
             }
         }
-        
+
         /// <summary>
-        /// Steppign next from the store option page.
+        /// Stepping next from the store option page.
         /// </summary>
         private void OnStepNextRestoreOption(object sender, WizardStepEventArgs e)
         {
@@ -993,7 +980,7 @@ namespace ShipWorks.Data.Administration
 
             if (e.FirstTime)
             {
-                // Prepopulate the instance box with the current
+                // Pre-populate the instance box with the current
                 if (SqlSession.IsConfigured)
                 {
                     comboSqlServers.Text = SqlSession.Current.Configuration.IsLocalDb() ?
@@ -1038,7 +1025,7 @@ namespace ShipWorks.Data.Administration
         }
 
         /// <summary>
-        /// Custom command key procesing for hitting enter in the combo box
+        /// Custom command key processing for hitting enter in the combo box
         /// </summary>
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
@@ -1051,7 +1038,7 @@ namespace ShipWorks.Data.Administration
             {
                 return base.ProcessCmdKey(ref msg, keyData);
             }
-         }
+        }
 
         /// <summary>
         /// The selected SQL Server instance has changed
@@ -1094,7 +1081,7 @@ namespace ShipWorks.Data.Administration
         {
             string selectedInstance = (comboSqlServers.Text == localDbDisplayName) ? SqlInstanceUtility.LocalDbServerInstance : comboSqlServers.Text;
 
-            // If we are already conected to or connecting to this exact session, then forget it.
+            // If we are already connected to or connecting to this exact session, then forget it.
             if (connectionSession != null)
             {
                 // Same server
@@ -1134,7 +1121,7 @@ namespace ShipWorks.Data.Administration
 
                 return;
             }
-            else 
+            else
             {
                 panelSelectedInstance.Visible = true;
             }
@@ -1517,7 +1504,7 @@ namespace ShipWorks.Data.Administration
 
             Cursor.Current = Cursors.WaitCursor;
 
-            // Bring the installing message up and diable and the browsing buttons
+            // Bring the installing message up and disable and the browsing buttons
             panelSqlServerInstallProgress.Location = panelSqlServerInstallReady.Location;
             panelSqlServerInstallProgress.Visible = true;
             panelSqlServerInstallReady.Visible = false;
@@ -1546,7 +1533,7 @@ namespace ShipWorks.Data.Administration
                     MessageHelper.ShowError(this, "An error occurred while installing SQL Server:\n\n" + ex.Message);
                 }
 
-                // Reset the gui
+                // Reset the GUI
                 panelSqlServerInstallProgress.Visible = false;
                 panelSqlServerInstallReady.Visible = true;
                 NextEnabled = true;
@@ -1555,7 +1542,7 @@ namespace ShipWorks.Data.Administration
         }
 
         /// <summary>
-        /// Simple UI timer we use to keep the progress of SQL Server install aproximated
+        /// Simple UI timer we use to keep the progress of SQL Server install approximated
         /// </summary>
         void OnInstallSqlServerProgressTimer(object sender, EventArgs e)
         {
@@ -1621,7 +1608,7 @@ namespace ShipWorks.Data.Administration
             else if (sqlInstaller.LastExitCode == SqlServerInstaller.ExitCodeSuccessRebootRequired)
             {
                 Pages.Add(new RebootRequiredPage(
-                    "SQL Server", 
+                    "SQL Server",
                     StartupAction.OpenDatabaseSetup,
                     () =>
                         {
@@ -1642,13 +1629,13 @@ namespace ShipWorks.Data.Administration
                 BackEnabled = true;
             }
 
-            // Reset the gui
+            // Reset the GUI
             panelSqlServerInstallProgress.Visible = false;
             panelSqlServerInstallReady.Visible = true;
         }
 
         /// <summary>
-        /// Cancell the installation of sql server
+        /// Cancel the installation of sql server
         /// </summary>
         private void OnCancellInstallSqlServer(object sender, CancelEventArgs e)
         {
@@ -1677,7 +1664,7 @@ namespace ShipWorks.Data.Administration
             // See if the server had changed...
             if (dataFileSqlInstance != sqlSession.Configuration.ServerInstance)
             {
-                Cursor.Current = Cursors.WaitCursor; 
+                Cursor.Current = Cursors.WaitCursor;
 
                 linkChooseDataLocation.Visible = true;
                 panelDataFiles.Visible = false;
@@ -1771,8 +1758,7 @@ namespace ShipWorks.Data.Administration
         }
 
         /// <summary>
-        /// Drop the database that we created due to the use going back or cancelling
-        /// the wizard.
+        /// Drop the database that we created due to the use going back or canceling the wizard.
         /// </summary>
         private void DropPendingDatabase()
         {
@@ -2116,7 +2102,7 @@ namespace ShipWorks.Data.Administration
             {
                 invoker.EndInvoke(asyncResult);
 
-                // Close when the progress closes if it wasn't cancelled
+                // Close when the progress closes if it wasn't canceled
                 if (!progressDlg.ProgressProvider.CancelRequested)
                 {
                     databaseRestored = true;
@@ -2126,10 +2112,10 @@ namespace ShipWorks.Data.Administration
                 // If this is an old backup file, the upgrade wizard will run, and it will get the default
                 // place to get templates from this.
                 ConfigurationMigrationState.ApplicationDataSource = new ShipWorks2xApplicationDataSource
-                    {
-                        SourceType = ShipWorks2xApplicationDataSourceType.BackupFile,
-                        Path = backupFile.Text
-                    };
+                {
+                    SourceType = ShipWorks2xApplicationDataSourceType.BackupFile,
+                    Path = backupFile.Text
+                };
             }
             catch (Exception ex)
             {
@@ -2236,7 +2222,12 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         private void OnSteppingIntoComplete(object sender, WizardSteppingIntoEventArgs e)
         {
-            // This is so we dont delete the pending db in the OnClose
+            // This is the last chance consumers have to clean themselves up using the previous database.
+            // It was added specifically to ensure that the shipping panel could flush changes before the associated
+            // store no longer existed.
+            Messenger.Current.Send(new WindowResettingMessage(this));
+
+            // This is so we don't delete the pending db in the OnClose
             pendingDatabaseCreated = false;
             pendingDatabaseName = "";
 
@@ -2274,7 +2265,7 @@ namespace ShipWorks.Data.Administration
             }
         }
 
-        #endregion    
+        #endregion
     }
 }
 

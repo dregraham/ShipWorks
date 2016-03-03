@@ -4,9 +4,9 @@ using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using ShipWorks.UI.Controls;
+using Interapptive.Shared.Utility;
 
-namespace ShipWorks.Shipping.UI.ShippingPanel.Weight
+namespace ShipWorks.UI.Controls.Weight
 {
     /// <summary>
     /// Control for editing weight
@@ -14,6 +14,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.Weight
     [TemplatePart(Name = "PART_Entry", Type = typeof(TextBox))]
     public class WeightInput : Control
     {
+        public const double MaxWeightDefault = 10000D;
         TextBox entry;
 
         public static readonly DependencyProperty WeightProperty =
@@ -21,6 +22,12 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.Weight
                 new FrameworkPropertyMetadata(0.0,
                     FrameworkPropertyMetadataOptions.BindsTwoWayByDefault,
                     new PropertyChangedCallback(OnWeightChanged)));
+
+        public static readonly DependencyProperty MaxWeightProperty =
+            DependencyProperty.Register("MaxWeight", typeof(double), typeof(WeightInput),
+                new FrameworkPropertyMetadata(MaxWeightDefault,
+                    FrameworkPropertyMetadataOptions.None,
+                    new PropertyChangedCallback(OnMaxWeightChanged)));
 
         public static readonly DependencyProperty TextProperty =
             DependencyProperty.Register("Text", typeof(string), typeof(WeightInput),
@@ -60,10 +67,22 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.Weight
         /// Weight in fractional lbs
         /// </summary>
         [Bindable(true)]
+        [Obfuscation(Exclude = true)]
         public double Weight
         {
             get { return (double) GetValue(WeightProperty); }
             set { SetValue(WeightProperty, value); }
+        }
+
+        /// <summary>
+        /// Max weight
+        /// </summary>
+        [Bindable(true)]
+        [Obfuscation(Exclude = true)]
+        public double MaxWeight
+        {
+            get { return (double) GetValue(MaxWeightProperty); }
+            set { SetValue(MaxWeightProperty, value); }
         }
 
         /// <summary>
@@ -96,8 +115,10 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.Weight
 
             if (weight.HasValue)
             {
-                d.SetCurrentValue(WeightProperty, weight.Value);
-                return WeightConverter.Current.FormatWeight(weight.Value);
+                double maxWeight = (double) d.GetValue(MaxWeightProperty);
+                double clampedWeight = weight.Value.Clamp(0, maxWeight);
+                d.SetCurrentValue(WeightProperty, clampedWeight);
+                return WeightConverter.Current.FormatWeight(clampedWeight);
             }
             else
             {
@@ -110,6 +131,20 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.Weight
         /// </summary>
         private static void OnWeightChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) =>
             SetEntryWeightValue(d as WeightInput, (double) e.NewValue);
+
+        /// <summary>
+        /// The max value has changed
+        /// </summary>
+        private static void OnMaxWeightChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            double existingWeight = (double) d.GetValue(WeightProperty); ;
+            double newValue = (double) e.NewValue;
+
+            if (newValue < existingWeight)
+            {
+                d.SetCurrentValue(WeightProperty, newValue);
+            }
+        }
 
         /// <summary>
         /// Set the value of the entry box

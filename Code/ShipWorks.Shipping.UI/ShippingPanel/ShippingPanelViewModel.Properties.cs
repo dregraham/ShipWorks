@@ -1,8 +1,6 @@
 ﻿using System.Reflection;
 using System.Windows.Input;
-using log4net;
 using ShipWorks.Shipping.Loading;
-using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl;
 using ShipWorks.UI.Controls.AddressControl;
 

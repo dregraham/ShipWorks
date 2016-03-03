@@ -1,5 +1,5 @@
 ﻿using System.Windows.Controls;
-using ShipWorks.Shipping.UI.ShippingPanel.Weight;
+using ShipWorks.UI.Controls.Weight;
 using Xunit;
 
 namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.Weight

@@ -5,7 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 
-namespace ShipWorks.Shipping.UI.ShippingPanel.Weight
+namespace ShipWorks.UI.Controls.Weight
 {
     /// <summary>
     /// Control for editing weight
@@ -19,6 +19,10 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.Weight
             DependencyProperty.Register("Weight", typeof(double), typeof(WeightControl),
                 new FrameworkPropertyMetadata(0.0,
                     FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
+
+        public static readonly DependencyProperty MaxWeightProperty =
+            DependencyProperty.Register("MaxWeight", typeof(double), typeof(WeightControl),
+                new FrameworkPropertyMetadata(WeightInput.MaxWeightDefault));
 
         /// <summary>
         /// Static constructor
@@ -37,6 +41,17 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.Weight
         {
             get { return (double) GetValue(WeightProperty); }
             set { SetValue(WeightProperty, value); }
+        }
+
+        /// <summary>
+        /// Maximum weight
+        /// </summary>
+        [Bindable(true)]
+        [Obfuscation(Exclude = true)]
+        public double MaxWeight
+        {
+            get { return (double) GetValue(MaxWeightProperty); }
+            set { SetValue(MaxWeightProperty, value); }
         }
 
         /// <summary>

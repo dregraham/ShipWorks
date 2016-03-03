@@ -72,6 +72,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
             viewModel.Origin.CountryCode = "UK";
 
             testScheduler.Default.AdvanceBy(TimeSpan.FromMilliseconds(250).Ticks);
+            testScheduler.Dispatcher.Start();
 
             Assert.Equal(text, viewModel.DomesticInternationalText);
         }
@@ -105,6 +106,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
             changeProperty(viewModel);
 
             testScheduler.Default.AdvanceBy(TimeSpan.FromMilliseconds(250).Ticks);
+            testScheduler.Dispatcher.Start();
 
             mock.VerifyAll = true;
         }

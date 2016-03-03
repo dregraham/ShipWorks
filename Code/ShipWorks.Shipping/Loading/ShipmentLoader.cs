@@ -52,6 +52,13 @@ namespace ShipWorks.Shipping.Loading
             {
                 OrderEntity order = orderManager.LoadOrder(orderID, orderPrefetchPath.Value);
 
+                // If we don't mark customs as loaded here, any changes to customs items will be lost when
+                // EnsureCustomsLoaded is true.  Since this is called all over the place, this is the simpler solution
+                foreach (ShipmentEntity shipment in order.Shipments)
+                {
+                    shipment.CustomsItemsLoaded = true;
+                }
+
                 shipmentFactory.AutoCreateIfNecessary(order);
 
                 await ValidateShipments(order.Shipments).ConfigureAwait(false);

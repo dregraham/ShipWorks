@@ -1,4 +1,5 @@
-﻿using ShipWorks.Shipping.Editing.Rating;
+﻿using System.Reflection;
+using ShipWorks.Shipping.Editing.Rating;
 
 namespace ShipWorks.Shipping.Rating
 {
@@ -10,6 +11,7 @@ namespace ShipWorks.Shipping.Rating
         /// <summary>
         /// Text that should be displayed
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public string InformationText { get; set; }
     }
 }

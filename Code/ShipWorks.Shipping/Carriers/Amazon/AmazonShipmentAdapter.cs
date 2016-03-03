@@ -1,8 +1,8 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Carriers.Amazon.Api.DTOs;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Services;
@@ -45,13 +45,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// <summary>
         /// Does this shipment type support accounts?
         /// </summary>
-        public override bool SupportsAccounts
-        {
-            get
-            {
-                return false;
-            }
-        }
+        public override bool SupportsAccounts => false;
 
         /// <summary>
         /// Does this shipment type support package Types?
@@ -62,15 +56,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// Service type selected
         /// </summary>
         public override int ServiceType { get; set; } = 0;
-
-        /// <summary>
-        /// The shipment's customs items
-        /// </summary>
-        public override EntityCollection<ShipmentCustomsItemEntity> CustomsItems
-        {
-            get { return new EntityCollection<ShipmentCustomsItemEntity>(); }
-            set { throw new NotImplementedException(); }
-        }
 
         /// <summary>
         /// Perform the clone of the adapter using the cloned shipment
@@ -106,5 +91,11 @@ namespace ShipWorks.Shipping.Carriers.Amazon
                 Shipment.Amazon.CarrierName = rateTag.CarrierName ?? string.Empty;
             }
         }
+
+        /// <summary>
+        /// Amazon does not have customs items
+        /// </summary>
+        public override IEnumerable<IShipmentCustomsItemAdapter> GetCustomsItemAdapters() =>
+            Enumerable.Empty<IShipmentCustomsItemAdapter>();
     }
 }

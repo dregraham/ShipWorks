@@ -31,8 +31,9 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         private double dimsWidth;
         private double dimsHeight;
         private long dimsProfileID;
-        private double additionalWeight;
-        private bool applyAdditionalWeight;
+        private double dimsWeight;
+        private bool dimsAddWeight;
+        private int packagingType;
 
         /// <summary>
         /// The insurance view model to use.
@@ -54,7 +55,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         /// Observable collection of carrier package types
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public ObservableCollection<PackageTypeBinding> PackageTypes { get; }
+        public ObservableCollection<KeyValuePair<int, string>> PackageTypes { get; }
 
         /// <summary>
         /// Shipment ship date
@@ -180,7 +181,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
                         DimsLength = SelectedDimensionsProfile.Length;
                         DimsWidth = SelectedDimensionsProfile.Width;
                         DimsHeight = SelectedDimensionsProfile.Height;
-                        AdditionalWeight = SelectedDimensionsProfile.Weight;
+                        DimsWeight = SelectedDimensionsProfile.Weight;
                     }
                 }
             }
@@ -240,20 +241,30 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         /// Additional weight of the package
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public double AdditionalWeight
+        public double DimsWeight
         {
-            get { return additionalWeight; }
-            set { handler.Set(nameof(AdditionalWeight), ref additionalWeight, value, true); }
+            get { return dimsWeight; }
+            set { handler.Set(nameof(DimsWeight), ref dimsWeight, value, true); }
         }
 
         /// <summary>
         /// Apply additional weight to the package
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public bool ApplyAdditionalWeight
+        public bool DimsAddWeight
         {
-            get { return applyAdditionalWeight; }
-            set { handler.Set(nameof(ApplyAdditionalWeight), ref applyAdditionalWeight, value, true); }
+            get { return dimsAddWeight; }
+            set { handler.Set(nameof(DimsAddWeight), ref dimsAddWeight, value, true); }
+        }
+
+        /// <summary>
+        /// Type of packaging
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public int PackagingType
+        {
+            get { return packagingType; }
+            set { handler.Set(nameof(PackagingType), ref packagingType, value, true); }
         }
     }
 }

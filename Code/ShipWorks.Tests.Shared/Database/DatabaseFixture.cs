@@ -30,6 +30,8 @@ namespace ShipWorks.Tests.Shared.Database
         Justification = "We're not disposing this class because some ShipWorks functions run a little after we" +
         "dispose of the sql session. This would cause the test runner to crash even though all tests" +
         "ran successfully")]
+    [SuppressMessage("Code Analysis", "CA2213: Disposable fields should be disposed",
+        Justification = "We don't want to dispose these fields since they need to live during the test")]
     public class DatabaseFixture : IDisposable
     {
         private readonly Checkpoint checkpoint;

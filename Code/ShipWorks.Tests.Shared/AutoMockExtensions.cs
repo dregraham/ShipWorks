@@ -35,13 +35,13 @@ namespace ShipWorks.Tests.Shared
         /// <summary>
         /// Configure a shipment type that will be returned by an instance of IShipmentTypeManager
         /// </summary>
-        public static Mock<ShipmentType> WithShipmentTypeFromFactory(this AutoMock mock, Action<Mock<ShipmentType>> shipmentTypeConfiguration) =>
-            WithShipmentTypeFromFactory<ShipmentType>(mock, shipmentTypeConfiguration);
+        public static Mock<ShipmentType> WithShipmentTypeFromShipmentManager(this AutoMock mock, Action<Mock<ShipmentType>> shipmentTypeConfiguration) =>
+            WithShipmentTypeFromShipmentManager<ShipmentType>(mock, shipmentTypeConfiguration);
 
         /// <summary>
         /// Configure a shipment type that will be returned by an instance of IShipmentTypeManager
         /// </summary>
-        public static Mock<T> WithShipmentTypeFromFactory<T>(this AutoMock mock, Action<Mock<T>> shipmentTypeConfiguration) where T : ShipmentType
+        public static Mock<T> WithShipmentTypeFromShipmentManager<T>(this AutoMock mock, Action<Mock<T>> shipmentTypeConfiguration) where T : ShipmentType
         {
             var shipmentTypeMock = mock.MockRepository.Create<T>();
             shipmentTypeConfiguration(shipmentTypeMock);

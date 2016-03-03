@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Forms;
+using System.Windows.Input;
 using Autofac;
 using Common.Logging;
 using ShipWorks.ApplicationCore;
@@ -48,6 +50,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             base.OnLoad(e);
 
             shippingPanelControl = new ShippingPanelControl(viewModel);
+            viewModel.CommitBindings = CommitBindingsOnFocusedControl;
 
             shipmentPanelelementHost.Child = shippingPanelControl;
 
@@ -105,23 +108,45 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// <summary>
         /// Saves the shipment to the database when the shipping panel loses focus.
         /// </summary>
-        private void OnIsKeyboardFocusWithinChanged(object sender, System.Windows.DependencyPropertyChangedEventArgs e)
+        private void OnIsKeyboardFocusWithinChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
             // The other Focus events, like LostFocus, don't seem to work the way we need, but IsKeyBoardFocusWithinChanged does.
             // If the new value is false, meaning we had focus within this control and it's children and then lost it, and it wasn't already false,
             // save to the db.
             if (!((bool) e.NewValue) && e.NewValue != e.OldValue)
             {
-                SaveToDatabase();
+                viewModel.SaveToDatabase();
             }
         }
 
         /// <summary>
-        /// Tell the view model to save to the database
+        /// Commit any LostFocus bindings on the currently focused control
         /// </summary>
-        private void SaveToDatabase()
+        private void CommitBindingsOnFocusedControl()
         {
-            viewModel.SaveToDatabase();
+            IInputElement focusedElement = FindFocusedInputElement(shippingPanelControl);
+            CommitBindings(focusedElement);
+        }
+
+        /// <summary>
+        /// Find the element that is currently focused within the given dependency object
+        /// </summary>
+        private IInputElement FindFocusedInputElement(DependencyObject container)
+        {
+            DependencyObject focusScope = FocusManager.GetFocusScope(shippingPanelControl);
+            return focusScope == null ?
+                null :
+                FocusManager.GetFocusedElement(focusScope);
+        }
+
+        /// <summary>
+        /// Commit the bindings on the given input element
+        /// </summary>
+        /// <remarks>This sends a lost focus event to force a control that has
+        /// LostFocus bindings to commit the bindings</remarks>
+        private void CommitBindings(IInputElement element)
+        {
+            element?.RaiseEvent(new RoutedEventArgs(UIElement.LostFocusEvent, element));
         }
     }
 }

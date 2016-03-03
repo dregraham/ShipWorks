@@ -5,9 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
              xmlns:ui="http://schemas.shipworks.com/ui"
-             xmlns:weight="clr-namespace:ShipWorks.Shipping.UI.ShippingPanel.Weight"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-             xmlns:insurancePromoControl="clr-namespace:ShipWorks.Shipping.UI.ShippingPanel.InsurancePromoControl"
+             xmlns:ins="clr-namespace:ShipWorks.Shipping.UI.ShippingPanel.Insurance"
              mc:Ignorable="d"
              Grid.IsSharedSizeScope="True" d:DesignWidth="393.72">
     <UserControl.Resources>
@@ -108,7 +107,7 @@
                           SelectionMode="Single"
                           MaxHeight="150"
                           ItemsSource="{Binding PackageAdapters}"
-                          SelectedValue ="{Binding SelectedPackageAdapter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" >
+                          SelectedValue ="{Binding SelectedPackageAdapter}" >
                     <ListView.View>
                         <GridView>
                             <GridViewColumn Header="Packages (Select to Edit)" Width="Auto"
@@ -153,9 +152,10 @@
 
             <TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource GridLabel}">Packaging:</TextBlock>
             <ComboBox Grid.Row="0" Grid.Column="1"
-                ItemsSource ="{Binding PackageTypes, UpdateSourceTrigger=PropertyChanged}"
-                SelectedValue="{Binding SelectedPackageAdapter.PackagingType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                DisplayMemberPath="Name" />
+                      ItemsSource ="{Binding PackageTypes}"
+                      SelectedValue="{Binding PackagingType}"
+                      SelectedValuePath="Key"
+                      DisplayMemberPath="Value" />
         </Grid>
         <Grid>
             <Grid.ColumnDefinitions>
@@ -164,7 +164,7 @@
             </Grid.ColumnDefinitions>
 
             <TextBlock Grid.Column="0" Style="{StaticResource GridLabel}">Weight:</TextBlock>
-            <weight:WeightControl Grid.Column="1"
+            <ui:WeightControl Grid.Column="1"
                 Margin="0,0,0,0"
                 HorizontalAlignment="Left"
                 Weight="{Binding TotalWeight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,
@@ -259,51 +259,22 @@
             <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" Margin="4 5 0 0">
                 <TextBlock Margin="0 4 0 0" Style="{StaticResource GridLabel}">Add to weight</TextBlock>
                 <CheckBox Margin="4 4 0 0"
-                    IsChecked="{Binding ApplyAdditionalWeight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                <weight:WeightInput
+                    IsChecked="{Binding DimsAddWeight}"/>
+                <ui:WeightInput
                     Margin="0,1,0,0"
                     HorizontalAlignment="Left"
                     Width="60"
-                    Weight="{Binding AdditionalWeight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                    <weight:WeightInput.IsEnabled>
+                    Weight="{Binding DimsWeight}">
+                    <ui:WeightInput.IsEnabled>
                         <Binding Path="SelectedDimensionsProfile.DimensionsProfileID" Converter="{StaticResource ValueEqualToParameter}">
                             <Binding.ConverterParameter>
                                 <sys:Int64>0</sys:Int64>
                             </Binding.ConverterParameter>
                         </Binding>
-                    </weight:WeightInput.IsEnabled>
-                </weight:WeightInput>
+                    </ui:WeightInput.IsEnabled>
+                </ui:WeightInput>
             </StackPanel>
         </Grid>
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition SharedSizeGroup="Label" />
-                <ColumnDefinition SharedSizeGroup="Value" />
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
-
-            <TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource GridLabel}"
-                       Text="{Binding InsuranceViewModel.InsuranceLabelDisplayText, FallbackValue='Insurance:'}"></TextBlock>
-            <StackPanel  Grid.Row="0" Grid.Column="1" Orientation="Horizontal">
-                <CheckBox Margin="4 4 0 0" Name="IsInsured"
-                    Content="{Binding InsuranceViewModel.InsuranceTypeLabelDisplayText, FallbackValue='Insurance Type'}"
-                    IsChecked="{Binding InsuranceViewModel.Insurance}"/>
-            </StackPanel>
-
-            <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal">
-                <TextBlock Style="{StaticResource GridLabel}"
-                           Text="{Binding InsuranceViewModel.InsuranceValueLabelDisplayText, FallbackValue='Insured Value:'}"></TextBlock>
-                <TextBox Width="80"  Margin="4 4 0 0" Style="{DynamicResource TextBoxErrorTemplate}"
-                         IsEnabled="{Binding InsuranceViewModel.Insurance}"
-                         Text="{Binding InsuranceViewModel.DeclaredValue, StringFormat=c, FallbackValue='50.50',
-                         Converter={StaticResource EmptyMoney},
-                         TargetNullValue='', ValidatesOnDataErrors=true, NotifyOnValidationError=true}"/>
-
-                <insurancePromoControl:InsurancePromoControl  DataContext="{Binding Path=InsuranceViewModel, Mode=OneWay}"/>
-            </StackPanel>
-        </Grid>
+        <ins:InsuranceControl DataContext="{Binding InsuranceViewModel}" />
     </StackPanel>
 </UserControl>

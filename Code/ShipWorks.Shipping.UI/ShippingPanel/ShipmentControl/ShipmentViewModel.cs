@@ -6,12 +6,12 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Reflection;
 using GalaSoft.MvvmLight.Command;
 using log4net;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Services;
@@ -46,7 +46,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         {
             handler = new PropertyChangedHandler(this, () => PropertyChanged, () => PropertyChanging);
             Services = new ObservableCollection<KeyValuePair<int, string>>();
-            PackageTypes = new ObservableCollection<PackageTypeBinding>();
+            PackageTypes = new ObservableCollection<KeyValuePair<int, string>>();
         }
 
         /// <summary>
@@ -93,8 +93,9 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
             {
                 suppressExternalChangeNotifications = true;
 
-                ApplyAdditionalWeight = SelectedPackageAdapter.ApplyAdditionalWeight;
-                AdditionalWeight = SelectedPackageAdapter.AdditionalWeight;
+                PackagingType = SelectedPackageAdapter.PackagingType;
+                DimsAddWeight = SelectedPackageAdapter.ApplyAdditionalWeight;
+                DimsWeight = SelectedPackageAdapter.AdditionalWeight;
                 DimsLength = SelectedPackageAdapter.DimsLength;
                 DimsWidth = SelectedPackageAdapter.DimsWidth;
                 DimsHeight = SelectedPackageAdapter.DimsHeight;
@@ -117,8 +118,9 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
                 return;
             }
 
-            SelectedPackageAdapter.ApplyAdditionalWeight = ApplyAdditionalWeight;
-            SelectedPackageAdapter.AdditionalWeight = AdditionalWeight;
+            SelectedPackageAdapter.PackagingType = PackagingType;
+            SelectedPackageAdapter.ApplyAdditionalWeight = DimsAddWeight;
+            SelectedPackageAdapter.AdditionalWeight = DimsWeight;
             SelectedPackageAdapter.DimsLength = DimsLength;
             SelectedPackageAdapter.DimsWidth = DimsWidth;
             SelectedPackageAdapter.DimsHeight = DimsHeight;
@@ -137,13 +139,14 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
             }
 
             IPackageAdapter packageAdapter = SelectedPackageAdapter;
+            shipmentAdapter.DeletePackage(packageAdapter);
+
             int location = PackageAdapters.IndexOf(packageAdapter);
             SelectedPackageAdapter = PackageAdapters.Last() == packageAdapter ?
                 PackageAdapters.ElementAt(location - 1) :
                 PackageAdapters.ElementAt(location + 1);
 
             PackageAdapters.Remove(packageAdapter);
-            shipmentAdapter.DeletePackage(packageAdapter);
         }
 
         /// <summary>
@@ -228,6 +231,14 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         }
 
         /// <summary>
+        /// Updates the insurance view for the shipment.
+        /// </summary>
+        public void RefreshInsurance()
+        {
+            InsuranceViewModel.Load(PackageAdapters, SelectedPackageAdapter, shipmentAdapter);
+        }
+
+        /// <summary>
         /// Refreshes the package types.
         /// </summary>
         public void RefreshPackageTypes()
@@ -238,12 +249,10 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
             PackageTypes.Clear();
             foreach (KeyValuePair<int, string> entry in packageTypes)
             {
-                PackageTypes.Add(new PackageTypeBinding()
-                {
-                    PackageTypeID = entry.Key,
-                    Name = entry.Value
-                });
+                PackageTypes.Add(entry);
             }
+
+            PackagingType = SelectedPackageAdapter?.PackagingType ?? 0;
         }
 
         /// <summary>
@@ -253,12 +262,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         {
             shipmentAdapter.ShipDate = ShipDate;
             shipmentAdapter.ServiceType = ServiceType;
-
-            if (CustomsAllowed && CustomsItems != null)
-            {
-                shipmentAdapter.CustomsItems = new EntityCollection<ShipmentCustomsItemEntity>(CustomsItems.Select(ci => ci.ShipmentCustomsItemEntity).ToList());
-            }
-
             shipmentAdapter.ContentWeight = PackageAdapters.Sum(pa => pa.Weight);
             SaveDimensionsToSelectedPackageAdapter();
         }
@@ -289,6 +292,9 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
             }
 
             InsuranceViewModel.Load(PackageAdapters, SelectedPackageAdapter, shipmentAdapter);
+
+            RefreshServiceTypes();
+            RefreshPackageTypes();
         }
 
         #region Dimensions
@@ -313,7 +319,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
             double originalLength = DimsLength;
             double originalWidth = DimsWidth;
             double originalHeight = DimsHeight;
-            double originalWeight = AdditionalWeight;
+            double originalWeight = DimsWeight;
 
             // Refresh the dimensions profiles.
             RefreshDimensionsProfiles();
@@ -338,7 +344,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         ///  Updates the Dimensions selected item.
         ///  There's an issue with the combo box when updating it's data source where the items in the drop down will be updated
         ///  but the text displayed as the selected item, when the drop down items are not show, is still the old value.
-        /// 
+        ///
         ///  The hack to get it updated is to switch the selected item, SelectedDimensionsProfile, and then switch it back to the
         ///  real selected item.
         ///  </summary>
@@ -360,7 +366,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
                 DimsLength = originalLength;
                 DimsWidth = originalWidth;
                 DimsHeight = originalHeight;
-                AdditionalWeight = originalWeight;
+                DimsWeight = originalWeight;
             }
         }
 
@@ -380,7 +386,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
                 return;
             }
 
-            CustomsItems = new ObservableCollection<IShipmentCustomsItemAdapter>(shipmentAdapter?.CustomsItems?.Select(ci => new ShipmentCustomsItemAdapter(ci)).ToList());
+            CustomsItems = new ObservableCollection<IShipmentCustomsItemAdapter>(shipmentAdapter.GetCustomsItemAdapters());
 
             TotalCustomsValue = shipmentAdapter.Shipment.CustomsValue;
 
@@ -392,16 +398,9 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         /// </summary>
         private void AddCustomsItem()
         {
-            if (CustomsItems == null)
-            {
-                LoadCustoms();
-            }
-
-            // Pass null as the shipment for now so that we don't have db updates/syncing until we actually want to save.
-            ShipmentCustomsItemEntity shipmentCustomsItemEntity = customsManager.CreateCustomsItem(null);
-            IShipmentCustomsItemAdapter shipmentCustomsItemAdapter = new ShipmentCustomsItemAdapter(shipmentCustomsItemEntity);
-            CustomsItems.Add(shipmentCustomsItemAdapter);
-            SelectedCustomsItem = shipmentCustomsItemAdapter;
+            IShipmentCustomsItemAdapter newItem = shipmentAdapter.AddCustomsItem();
+            CustomsItems.Add(newItem);
+            SelectedCustomsItem = newItem;
         }
 
         /// <summary>
@@ -409,17 +408,23 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         /// </summary>
         private void DeleteCustomsItem()
         {
-            customsItems.Remove(SelectedCustomsItem);
-
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CustomsItems)));
-
-            SelectedCustomsItem = CustomsItems.FirstOrDefault();
-
             double originalShipmentcontentWeight = ShipmentContentWeight;
             ShipmentContentWeight = CustomsItems.Sum(ci => ci.Weight * ci.Quantity);
             RedistributeContentWeight(originalShipmentcontentWeight);
-
             TotalCustomsValue = CustomsItems.Sum(ci => ci.UnitValue * (decimal) ci.Quantity);
+
+            IShipmentCustomsItemAdapter selectedItem = SelectedCustomsItem;
+            int location = CustomsItems.IndexOf(selectedItem);
+
+            if (CustomsItems.Count > 1)
+            {
+                SelectedCustomsItem = CustomsItems.Last() == selectedItem ?
+                    CustomsItems.ElementAt(location - 1) :
+                    CustomsItems.ElementAt(location + 1);
+            }
+
+            CustomsItems.Remove(selectedItem);
+            shipmentAdapter.DeleteCustomsItem(selectedItem);
         }
 
         /// <summary>
@@ -455,6 +460,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
                 {
                     packageAdapter.Weight = ShipmentContentWeight / PackageAdapters.Count();
                 }
+
+                LoadDimensionsFromSelectedPackageAdapter();
             }
         }
         #endregion Customs
@@ -486,11 +493,13 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         /// <summary>
         /// Command to add a new package
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public RelayCommand AddPackageCommand { get; }
 
         /// <summary>
         /// Command to delete a package
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public RelayCommand DeletePackageCommand { get; }
 
         /// <summary>
