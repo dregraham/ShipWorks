@@ -52,17 +52,22 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Gets the version - If version is under 4.9.0.0, return 4.9.0.0
         /// </summary>
-        public static string Version
+        private static string Version
         {
             get
             {
-                if (version== null)
+                if (version == null)
                 {
+                    // Tango requires a specific version in order to know when to return 
+                    // legacy responses or new response for the customer license. This is
+                    // primarily for debug/internal versions of ShipWorks that have 0.0.0.x
+                    // version number.
                     Version assemblyVersion = Assembly.GetExecutingAssembly().GetName().Version;
                     Version minimumVersion = new Version(4, 9, 0, 0);
 
-                    version = assemblyVersion > minimumVersion ? assemblyVersion : minimumVersion;
+                    version = assemblyVersion.Major == 0 ? minimumVersion: assemblyVersion;
                 }
+
                 return version.ToString(4);
             }
         }
@@ -1106,16 +1111,18 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public static GenericResult<IActivationResponse> ActivateLicense(string email, string password)
         {
-            Activation.Activation service = new Activation.Activation()
-            {
-                Url = ActivationUrl
-            };
-
-            CustomerLicenseInfoV1 customerLicenseInfo;
-
             try
             {
-                customerLicenseInfo = service.GetCustomerLicenseInfo(email, password);
+                Activation.Activation service = new Activation.Activation() { Url = ActivationUrl };
+                CustomerLicenseInfoV1 customerLicenseInfo = service.GetCustomerLicenseInfo(email, password);
+
+                GenericResult<IActivationResponse> result = new GenericResult<IActivationResponse>(null)
+                {
+                    Context = new ActivationResponse(customerLicenseInfo),
+                    Success = true
+                };
+
+                return result;
             }
             catch (SoapException ex)
             {
@@ -1127,14 +1134,6 @@ namespace ShipWorks.ApplicationCore.Licensing
 
                 return errorResult;
             }
-
-            GenericResult<IActivationResponse> result = new GenericResult<IActivationResponse>(null)
-            {
-                Context = new ActivationResponse(customerLicenseInfo),
-                Success = true
-            };
-
-            return result;
         }
 
         /// <summary>
