@@ -779,8 +779,8 @@ namespace ShipWorks
             ILicenseService licenseService = IoC.UnsafeGlobalLifetimeScope.Resolve<ILicenseService>();
             List<ILicense> licenses = licenseService.GetLicenses().ToList();
 
-           // Force a license refresh at login
-            licenses.ForEach(license => license.ForceRefresh());
+           // refresh the license if it is older than 10 mins
+            licenses.ForEach(license => license.Refresh());
             ForceHeartbeat();
         }
 
