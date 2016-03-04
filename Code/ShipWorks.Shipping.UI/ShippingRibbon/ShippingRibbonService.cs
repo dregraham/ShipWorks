@@ -8,7 +8,6 @@ using ShipWorks.Core.Messaging.Messages.Shipping;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Messaging.Messages.Shipping;
-using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Shipping.UI.ShippingRibbon
 {
@@ -20,7 +19,8 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
         readonly IMessenger messages;
         IShippingRibbonActions shippingRibbonActions;
         IDisposable subscription;
-        IEnumerable<IOrderSelection> currentOrderSelection;
+        private ShipmentEntity currentShipment;
+        private IEnumerable<long> currentOrderIDs;
 
         /// <summary>
         /// Constructor
@@ -56,26 +56,14 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
         /// </summary>
         private void OnCreateLabel(object sender, EventArgs e)
         {
-            if (currentOrderSelection == null)
+            if (currentShipment != null && !currentShipment.Processed)
             {
-                return;
+                messages.Send(new CreateLabelMessage(this, currentShipment.ShipmentID));
             }
-
-            List<ShipmentEntity> shipmentIDs = currentOrderSelection.OfType<LoadedOrderSelection>()
-                .SelectMany(x => x.ShipmentAdapters)
-                .Select(x => x.Shipment).ToList();
-
-            if (shipmentIDs.Count == 1)
+            else if (currentOrderIDs?.Any() == true)
             {
-                if (!shipmentIDs[0].Processed)
-                {
-                    messages.Send(new CreateLabelMessage(this, shipmentIDs[0].ShipmentID));
-                }
-
-                return;
+                messages.Send(new OpenShippingDialogWithOrdersMessage(this, currentOrderIDs));
             }
-
-            messages.Send(new OpenShippingDialogWithOrdersMessage(this, currentOrderSelection.Select(x => x.OrderID)));
         }
 
         /// <summary>
@@ -83,7 +71,13 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
         /// </summary>
         private void HandleShipmentsProcessed(ShipmentsProcessedMessage message)
         {
-            //TODO: Implement this
+            ShipmentEntity processedShipment = message.Shipments.Select(x => x.Shipment).FirstOrDefault(x => x.ShipmentID == currentShipment.ShipmentID);
+            if (processedShipment != null)
+            {
+                currentShipment = processedShipment;
+            }
+
+            SetEnabledOnButtons();
         }
 
         /// <summary>
@@ -91,27 +85,46 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
         /// </summary>
         private void HandleOrderSelectionChanged(OrderSelectionChangedMessage message)
         {
-            currentOrderSelection = message.LoadedOrderSelection;
+            List<IOrderSelection> orderSelections = message.LoadedOrderSelection.ToList();
+            List<LoadedOrderSelection> loadedOrders = orderSelections.OfType<LoadedOrderSelection>().ToList();
 
-            if (message.LoadedOrderSelection.OfType<LoadedOrderSelection>().Any())
+            if (loadedOrders.Count == 1)
             {
-                IEnumerable<ICarrierShipmentAdapter> shipments = message.LoadedOrderSelection
-                    .OfType<LoadedOrderSelection>()
-                    .SelectMany(y => y.ShipmentAdapters);
-
-                shippingRibbonActions.CreateLabel.Enabled = shipments.Any(y => !y.Shipment.Processed);
-                shippingRibbonActions.Void.Enabled = shipments.Any(y => y.Shipment.Processed && !y.Shipment.Voided);
-                shippingRibbonActions.Return.Enabled = !shipments.Skip(1).Any() && shipments.Any(y => y.Shipment.Processed && !y.Shipment.Voided);
-                shippingRibbonActions.Reprint.Enabled = !shipments.Skip(1).Any() && shipments.Any(y => y.Shipment.Processed && !y.Shipment.Voided);
-                shippingRibbonActions.ShipAgain.Enabled = !shipments.Skip(1).Any() && shipments.Any(y => y.Shipment.Processed);
-                return;
+                currentShipment = loadedOrders[0].ShipmentAdapters.Count() == 1 ?
+                    loadedOrders[0].ShipmentAdapters.Single().Shipment :
+                    null;
+                currentOrderIDs = Enumerable.Empty<long>();
+            }
+            else
+            {
+                currentShipment = null;
+                currentOrderIDs = orderSelections.Select(x => x.OrderID).ToList();
             }
 
-            shippingRibbonActions.CreateLabel.Enabled = message.LoadedOrderSelection.Any();
-            shippingRibbonActions.Void.Enabled = message.LoadedOrderSelection.Any();
-            shippingRibbonActions.Return.Enabled = false;
-            shippingRibbonActions.Reprint.Enabled = false;
-            shippingRibbonActions.ShipAgain.Enabled = false;
+            SetEnabledOnButtons();
+        }
+
+        /// <summary>
+        /// Update which buttons are enabled and whic are disabled
+        /// </summary>
+        private void SetEnabledOnButtons()
+        {
+            if (currentShipment != null)
+            {
+                shippingRibbonActions.CreateLabel.Enabled = !currentShipment.Processed;
+                shippingRibbonActions.Void.Enabled = currentShipment.Processed && !currentShipment.Voided;
+                shippingRibbonActions.Return.Enabled = currentShipment.Processed && !currentShipment.Voided;
+                shippingRibbonActions.Reprint.Enabled = currentShipment.Processed && !currentShipment.Voided;
+                shippingRibbonActions.ShipAgain.Enabled = currentShipment.Processed;
+            }
+            else
+            {
+                shippingRibbonActions.CreateLabel.Enabled = currentOrderIDs.Any();
+                shippingRibbonActions.Void.Enabled = currentOrderIDs.Any();
+                shippingRibbonActions.Return.Enabled = false;
+                shippingRibbonActions.Reprint.Enabled = false;
+                shippingRibbonActions.ShipAgain.Enabled = false;
+            }
         }
 
         /// <summary>

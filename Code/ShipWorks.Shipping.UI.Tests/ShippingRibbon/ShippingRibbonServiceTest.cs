@@ -90,6 +90,29 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingRibbon
             Assert.Equal(expected, actions.Object.CreateLabel.Enabled);
         }
 
+        [Theory]
+        [InlineData(true, false)]
+        [InlineData(false, true)]
+        public void HandleShipmentsProcessedMessage_SetsEnabledOnCreateLabel_WhenSingleUnprocessedShipmentIsLoaded(bool isProcessed, bool expected)
+        {
+            actions.Object.CreateLabel.Enabled = !expected;
+            var testObject = mock.Create<ShippingRibbonService>();
+            testObject.Register(actions.Object);
+
+            SendOrderSelectionChangedMessageWithLoadedOrderSelection(CreateShipmentAdapter(x =>
+            {
+                x.Processed = false;
+                x.ShipmentID = 123;
+            }));
+
+            messenger.Send(new ShipmentsProcessedMessage(this, new[]
+            {
+                new ProcessShipmentResult(new ShipmentEntity { ShipmentID = 123, Processed = isProcessed })
+            }));
+
+            Assert.Equal(expected, actions.Object.CreateLabel.Enabled);
+        }
+
         [Fact]
         public void CreateLabelClick_SendsCreateLabelMessage_WhenSingleUnprocessedShipmentIsLoaded()
         {
