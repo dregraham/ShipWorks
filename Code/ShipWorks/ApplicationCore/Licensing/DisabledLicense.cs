@@ -80,7 +80,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         {
             throw new ShipWorksLicenseException("Activate not valid for a disabled license.");
         }
-        
+
         /// <summary>
         /// Throws we should not try to delete a disabled license
         /// </summary>
@@ -120,6 +120,13 @@ namespace ShipWorks.ApplicationCore.Licensing
         public DashboardLicenseItem CreateDashboardMessage()
         {
             return null;
+        }
+
+        /// <summary>
+        /// Can't do anything with disabled license
+        /// </summary>
+        public void AssociateStampsUsername(UspsAccountEntity uspsAccount)
+        {
         }
 
         /// <summary>

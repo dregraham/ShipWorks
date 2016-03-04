@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using Autofac;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
@@ -10,6 +11,8 @@ using Interapptive.Shared.Net;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Controls;
 using ShipWorks.Data.Model.EntityClasses;
@@ -103,7 +106,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             ShipmentType shipmentType = ShipmentTypeManager.GetType(shipmentTypeCode);
 
             optionsControl.LoadSettings();
-            
+
             if (!allowRegisteringExistingAccount)
             {
                 // Registering an existing account is not allowed, so choose new account (since the options have
@@ -509,6 +512,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         private void OnSteppingIntoAccountInfo(object sender, WizardSteppingIntoEventArgs e)
         {
             uspsAccountInfo.Initialize(UspsAccount);
+
+            // Try to associate the Stamps account with the license
+            using (var lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                var license = lifetimeScope.Resolve<ILicenseService>().GetLicenses().FirstOrDefault();
+
+                license?.AssociateStampsUsername(UspsAccount);
+            }
         }
 
         /// <summary>
