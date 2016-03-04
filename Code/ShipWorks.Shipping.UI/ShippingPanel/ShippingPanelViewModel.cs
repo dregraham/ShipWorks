@@ -296,7 +296,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// <summary>
         /// Process the current shipment using the specified processor
         /// </summary>
-        public void CreateLabel()
+        public virtual void CreateLabel()
         {
             if (loadedShipmentResult == ShippingPanelLoadedShipmentResult.Multiple)
             {

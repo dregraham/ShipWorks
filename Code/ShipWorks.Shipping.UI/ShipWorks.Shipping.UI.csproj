@@ -212,6 +212,7 @@
     <Compile Include="ShippingPanel\ObservableRegistrations\CarrierConfiguredPipeline.cs" />
     <Compile Include="ShippingPanel\ObservableRegistrations\ChangeOriginAddressFromTypePipeline.cs" />
     <Compile Include="ShippingPanel\ObservableRegistrations\ChangeShipmentTypePipeline.cs" />
+    <Compile Include="ShippingPanel\ObservableRegistrations\CreateLabelPipeline.cs" />
     <Compile Include="ShippingPanel\ObservableRegistrations\DomesticInternationalDisplayPipeline.cs" />
     <Compile Include="ShippingPanel\ObservableRegistrations\IShippingPanelObservableRegistration.cs" />
     <Compile Include="ShippingPanel\ObservableRegistrations\LoadOrderOnSelectionChangedPipeline.cs" />

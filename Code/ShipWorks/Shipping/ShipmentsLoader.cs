@@ -52,7 +52,7 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// The maximum number of orders that we support loading at a time.
         /// </summary>
-        public static int MaxAllowedOrders => 2;
+        public static int MaxAllowedOrders => 1000;
 
         /// <summary>
         /// User defined data that can be associated with the loader
