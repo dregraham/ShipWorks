@@ -71,5 +71,11 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         /// <returns></returns>
         DashboardLicenseItem CreateDashboardMessage();
+
+        /// <summary>
+        /// Associates a free Stamps.com account with a customer license.
+        /// </summary>
+        /// <param name="uspsAccount">The usps account.</param>
+        void AssociateStampsUsername(UspsAccountEntity uspsAccount);
     }
 }

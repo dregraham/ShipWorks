@@ -1240,7 +1240,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             postRequest.Variables.Add("storelicensekey[]", storeLicenseKey);
             postRequest.Variables.Add("version", Assembly.GetExecutingAssembly().GetName().Version.ToString(4));
 
-            XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "GetActiveStores");
+            XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "DeleteStore");
 
             CheckResponseForErrors(xmlResponse);
         }
@@ -1259,9 +1259,34 @@ namespace ShipWorks.ApplicationCore.Licensing
             postRequest.Variables.Add("storelicensekey[]", licenseKeyParam);
             postRequest.Variables.Add("version", Assembly.GetExecutingAssembly().GetName().Version.ToString(4));
 
-            XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "GetActiveStores");
+            XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "DeleteStores");
 
             CheckResponseForErrors(xmlResponse);
+        }
+
+        /// <summary>
+        /// Associates a free Stamps.com account with a customer license.
+        /// </summary>
+        public static void AssociateStampsUsernameWithLicense(string licenseKey, string stampsUsername, string stampsPassword)
+        {
+            HttpVariableRequestSubmitter postRequest = new HttpVariableRequestSubmitter();
+
+            postRequest.Variables.Add("action", "associatestampsuser");
+            postRequest.Variables.Add("customerlicense", licenseKey);
+            postRequest.Variables.Add("version", Assembly.GetExecutingAssembly().GetName().Version.ToString(4));
+            postRequest.Variables.Add("stampsusername", stampsUsername);
+            postRequest.Variables.Add("stampspassword", stampsPassword);
+
+            XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "AssociateStampsUsernameWithLicense");
+
+            try
+            {
+                CheckResponseForErrors(xmlResponse);
+            }
+            catch (TangoException ex)
+            {
+                log.Error(ex.Message);
+            }
         }
 
         /// <summary>
