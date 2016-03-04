@@ -299,6 +299,25 @@ namespace ShipWorks.ApplicationCore.Licensing
         }
 
         /// <summary>
+        /// Associates the given UspsAccount with this license in tango
+        /// </summary>
+        public void AssociateStampsUsername(UspsAccountEntity uspsAccount)
+        {
+            try
+            {
+                tangoWebClient.AssociateStampsUsernameWithLicense(Key, uspsAccount.Username,
+                    SecureText.Decrypt(uspsAccount.Password, uspsAccount.Username));
+            }
+            catch (Exception ex)
+            {
+                // gobble up any exception and log, this is to ensure that if
+                // the association fails ShipWorks continues to function.
+                log.Error("Error when associating stamps account with license.", ex);
+            }
+
+        }
+
+        /// <summary>
         /// Checks the restriction for a specific feature
         /// </summary>
         public EditionRestrictionLevel CheckRestriction(EditionFeature feature, object data)
