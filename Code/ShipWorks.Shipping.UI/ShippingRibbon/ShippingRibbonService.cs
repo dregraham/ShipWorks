@@ -48,12 +48,12 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
         /// </summary>
         private void HandleOrderSelectionChanged(OrderSelectionChangedMessage message)
         {
-            IEnumerable<ICarrierShipmentAdapter> shipments = message.LoadedOrderSelection
-                .OfType<LoadedOrderSelection>()
-                .SelectMany(y => y.ShipmentAdapters);
-
-            if (shipments.Any())
+            if (message.LoadedOrderSelection.OfType<LoadedOrderSelection>().Any())
             {
+                IEnumerable<ICarrierShipmentAdapter> shipments = message.LoadedOrderSelection
+                    .OfType<LoadedOrderSelection>()
+                    .SelectMany(y => y.ShipmentAdapters);
+
                 shippingRibbonActions.CreateLabel.Enabled = shipments.Any(y => !y.Shipment.Processed);
                 shippingRibbonActions.Void.Enabled = shipments.Any(y => y.Shipment.Processed && !y.Shipment.Voided);
                 shippingRibbonActions.Return.Enabled = !shipments.Skip(1).Any() && shipments.Any(y => y.Shipment.Processed && !y.Shipment.Voided);
@@ -62,8 +62,8 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
                 return;
             }
 
-            shippingRibbonActions.CreateLabel.Enabled = message.LoadedOrderSelection.Skip(1).Any();
-            shippingRibbonActions.Void.Enabled = message.LoadedOrderSelection.Skip(1).Any();
+            shippingRibbonActions.CreateLabel.Enabled = message.LoadedOrderSelection.Any();
+            shippingRibbonActions.Void.Enabled = message.LoadedOrderSelection.Any();
             shippingRibbonActions.Return.Enabled = false;
             shippingRibbonActions.Reprint.Enabled = false;
             shippingRibbonActions.ShipAgain.Enabled = false;
