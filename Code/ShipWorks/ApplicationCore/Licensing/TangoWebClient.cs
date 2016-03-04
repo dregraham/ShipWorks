@@ -58,7 +58,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             {
                 if (version == null)
                 {
-                    // Tango requires a specific version in order to know when to return 
+                    // Tango requires a specific version in order to know when to return
                     // legacy responses or new response for the customer license. This is
                     // primarily for debug/internal versions of ShipWorks that have 0.0.0.x
                     // version number.
@@ -1227,7 +1227,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             catch (TangoException ex)
             {
                 // Tango returned an error while deleting the store
-                // at this point the store has been removed from 
+                // at this point the store has been removed from
                 // the shipworks database, log the error and move on
                 log.Error(ex.Message);
             }
@@ -1256,11 +1256,10 @@ namespace ShipWorks.ApplicationCore.Licensing
             catch (TangoException ex)
             {
                 // Tango returned an error while deleting the store
-                // at this point the store has been removed from 
+                // at this point the store has been removed from
                 // the shipworks database, log the error and move on
                 log.Error(ex.Message);
             }
-            
         }
 
         /// <summary>
@@ -1272,7 +1271,7 @@ namespace ShipWorks.ApplicationCore.Licensing
 
             postRequest.Variables.Add("action", "associatestampsuser");
             postRequest.Variables.Add("customerlicense", licenseKey);
-            postRequest.Variables.Add("version", Assembly.GetExecutingAssembly().GetName().Version.ToString(4));
+            postRequest.Variables.Add("version", Version);
             postRequest.Variables.Add("stampsusername", stampsUsername);
             postRequest.Variables.Add("stampspassword", stampsPassword);
 
