@@ -52,11 +52,6 @@ namespace ShipWorks.Shipping.Services
                 orderSelection = new IOrderSelection[] { orderSelectionLoaded };
             }
 
-
-            //long entityID = entityIDs?.FirstOrDefault() ?? 0;
-
-            //LoadedOrderSelection orderSelectionLoaded = await shipmentLoader.Load(entityID);
-
             OrderSelectionChangedMessage orderSelectionChangedMessage = new OrderSelectionChangedMessage(this, orderSelection);
 
             messenger.Send(orderSelectionChangedMessage);

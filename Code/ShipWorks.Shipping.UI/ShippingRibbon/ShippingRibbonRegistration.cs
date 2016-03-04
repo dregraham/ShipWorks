@@ -1,36 +1,30 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.Linq;
-using System.Reactive.Linq;
 using Divelements.SandRibbon;
 using ShipWorks.ApplicationCore;
-using ShipWorks.Core.Messaging;
-using ShipWorks.Core.Messaging.Messages.Shipping;
-using ShipWorks.Messaging.Messages;
-using ShipWorks.Shipping.Services;
+using ShipWorks.Core.UI.SandRibbon;
 using TD.SandDock;
 
-namespace ShipWorks.Shipping.UI.ShippingPanel
+namespace ShipWorks.Shipping.UI.ShippingRibbon
 {
     /// <summary>
     /// Register the shipping ribbon
     /// </summary>
-    public class ShippingRibbonRegistration : IMainFormElementRegistration
+    public class ShippingRibbonRegistration : IMainFormElementRegistration, IShippingRibbonActions, IDisposable
     {
-        readonly IObservable<IShipWorksMessage> messages;
         readonly ComponentResourceManager resources;
-        Button buttonCreateLabel;
-        Button buttonVoid;
-        Button buttonReturn;
-        Button buttonReprint;
-        Button buttonShipAgain;
+        readonly IShippingRibbonService shippingRibbonService;
+        RibbonButton createLabelButton;
+        RibbonButton voidButton;
+        RibbonButton returnButton;
+        RibbonButton reprintButton;
+        RibbonButton shipAgainButton;
 
-        public ShippingRibbonRegistration(IObservable<IShipWorksMessage> messages)
+        public ShippingRibbonRegistration(IShippingRibbonService shippingRibbonService)
         {
-            this.messages = messages;
             resources = new ComponentResourceManager(typeof(MainForm));
+            this.shippingRibbonService = shippingRibbonService;
         }
 
         /// <summary>
@@ -40,7 +34,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         {
             ribbon.SuspendLayout();
 
-            buttonCreateLabel = new Button
+            createLabelButton = new RibbonButton
             {
                 Guid = new Guid("ec40e12c-fa12-4b2b-8b81-0fed6863162e"),
                 Image = GetImgeResource("buttonCreateLabel.Image"),
@@ -49,7 +43,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
                 TextContentRelation = TextContentRelation.Underneath,
             };
 
-            buttonVoid = new Button
+            voidButton = new RibbonButton
             {
                 Guid = new Guid("b477925d-b26f-47d7-91ee-619685bf1c7e"),
                 Image = GetImgeResource("buttonVoid.Image"),
@@ -57,7 +51,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
                 TextContentRelation = TextContentRelation.Underneath,
             };
 
-            buttonReturn = new Button
+            returnButton = new RibbonButton
             {
                 Guid = new Guid("33800ee1-71e4-4940-b1c6-a4496e33ff91"),
                 Image = Properties.Resources.document_out1,
@@ -65,14 +59,14 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
                 TextContentRelation = TextContentRelation.Underneath,
             };
 
-            buttonReprint = new Button
+            reprintButton = new RibbonButton
             {
                 Guid = new Guid("ccc7cca3-4a1e-4975-a736-7a6449ece5c1"),
                 Image = Properties.Resources.printer_preferences,
                 Text = "Reprint",
             };
 
-            buttonShipAgain = new Button
+            shipAgainButton = new RibbonButton
             {
                 Guid = new Guid("8584db42-473a-4adf-a089-047e781d8728"),
                 Image = GetImgeResource("buttonShipAgain.Image"),
@@ -81,19 +75,19 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
 
             StripLayout stripLayoutReprint = new StripLayout
             {
-                Items = { buttonReprint, buttonShipAgain },
+                Items = { reprintButton, shipAgainButton },
                 LayoutDirection = LayoutDirection.Vertical,
             };
 
             RibbonChunk shippingShippingChunk = new RibbonChunk
             {
-                Items = { buttonVoid, buttonReturn, stripLayoutReprint },
+                Items = { voidButton, returnButton, stripLayoutReprint },
                 Text = "Shipping",
             };
 
             RibbonChunk shippingOutputChunk = new RibbonChunk
             {
-                Items = { buttonCreateLabel },
+                Items = { createLabelButton },
                 Text = "Output"
             };
 
@@ -113,27 +107,33 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
 
             ribbon.ResumeLayout();
 
-            messages.OfType<OrderSelectionChangedMessage>()
-                .Subscribe(HandleOrderSelectionChanged);
+            shippingRibbonService.Register(this);
         }
 
         /// <summary>
-        /// Handle order selection changed message
+        /// Create label action
         /// </summary>
-        private void HandleOrderSelectionChanged(OrderSelectionChangedMessage message)
-        {
-            IEnumerable<ICarrierShipmentAdapter> shipments = message.LoadedOrderSelection
-                .OfType<LoadedOrderSelection>()
-                .SelectMany(y => y.ShipmentAdapters);
+        public IRibbonButton CreateLabel => createLabelButton;
 
-            if (shipments.Any())
-            {
-                buttonCreateLabel.Enabled = shipments.Any(y => !y.Shipment.Processed);
-                return;
-            }
+        /// <summary>
+        /// Void label action
+        /// </summary>
+        public IRibbonButton Void => voidButton;
 
-            buttonCreateLabel.Enabled = message.LoadedOrderSelection.Skip(1).Any();
-        }
+        /// <summary>
+        /// Create return shipment action
+        /// </summary>
+        public IRibbonButton Return => returnButton;
+
+        /// <summary>
+        /// Reprint shipment action
+        /// </summary>
+        public IRibbonButton Reprint => reprintButton;
+
+        /// <summary>
+        /// Ship again action
+        /// </summary>
+        public IRibbonButton ShipAgain => shipAgainButton;
 
         /// <summary>
         /// Get an image resource with the specified name
@@ -141,6 +141,18 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         private Image GetImgeResource(string name)
         {
             return (Image) resources.GetObject("buttonCreateLabel.Image");
+        }
+
+        /// <summary>
+        /// Dispose held resources
+        /// </summary>
+        public void Dispose()
+        {
+            createLabelButton?.Dispose();
+            voidButton?.Dispose();
+            returnButton?.Dispose();
+            reprintButton?.Dispose();
+            shipAgainButton?.Dispose();
         }
     }
 }

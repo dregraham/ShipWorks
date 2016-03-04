@@ -3571,6 +3571,10 @@
     <Compile Include="UI\Controls\NameValueGrid.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="UI\Controls\SandRibbon\IRibbonButton.cs" />
+    <Compile Include="UI\Controls\SandRibbon\RibbonButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="UI\Controls\TextBoxWithDeleteButtonControl.cs">
       <SubType>UserControl</SubType>
     </Compile>

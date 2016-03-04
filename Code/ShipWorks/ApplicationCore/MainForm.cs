@@ -131,12 +131,9 @@ namespace ShipWorks
         {
             InitializeComponent();
 
-            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            foreach (IMainFormElementRegistration registration in IoC.UnsafeGlobalLifetimeScope.Resolve<IEnumerable<IMainFormElementRegistration>>())
             {
-                foreach (IMainFormElementRegistration registration in lifetimeScope.Resolve<IEnumerable<IMainFormElementRegistration>>())
-                {
-                    registration.Register(sandDockManager, ribbon);
-                }
+                registration.Register(sandDockManager, ribbon);
             }
 
             // Create the heartbeat

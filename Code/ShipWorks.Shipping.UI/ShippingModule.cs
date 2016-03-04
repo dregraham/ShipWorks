@@ -15,6 +15,7 @@ using ShipWorks.Shipping.UI.MessageHandlers;
 using ShipWorks.Shipping.UI.RatingPanel;
 using ShipWorks.Shipping.UI.ShippingPanel;
 using ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl;
+using ShipWorks.Shipping.UI.ShippingRibbon;
 
 namespace ShipWorks.Shipping.UI
 {
@@ -158,6 +159,9 @@ namespace ShipWorks.Shipping.UI
                 .FindConstructorsWith(new NonDefaultConstructorFinder());
 
             builder.RegisterType<ShippingProfileEditorDlg>();
+
+            builder.RegisterType<ShippingRibbonService>()
+                .As<IShippingRibbonService>();
 
             builder.RegisterType<ShippingViewModelFactory>()
                 .AsImplementedInterfaces()

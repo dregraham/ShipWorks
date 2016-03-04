@@ -40,7 +40,6 @@ namespace ShipWorks
             Divelements.SandRibbon.Shortcut shortcut1;
             Divelements.SandRibbon.Menu menu1;
             Divelements.SandRibbon.Menu menu2;
-            //Divelements.SandRibbon.StripLayout stripLayoutReprint;
             Divelements.SandRibbon.Rendering.RibbonRenderer ribbonRenderer1 = new Divelements.SandRibbon.Rendering.RibbonRenderer();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.labelStatusTotal = new Divelements.SandRibbon.Label();
@@ -79,8 +78,6 @@ namespace ShipWorks
             this.menuItemHelpAbout = new Divelements.SandRibbon.MenuItem();
             this.mainMenuItemSetupDatabase = new Divelements.SandRibbon.MainMenuItem();
             this.mainMenuItemBackupDatabase = new Divelements.SandRibbon.MainMenuItem();
-            //this.buttonReprint = new Divelements.SandRibbon.Button();
-            //this.buttonShipAgain = new Divelements.SandRibbon.Button();
             this.buttonRestore = new Divelements.SandRibbon.Button();
             this.buttonSetupDatabase = new Divelements.SandRibbon.Button();
             this.stripLayoutModifyOrders = new Divelements.SandRibbon.StripLayout();
@@ -278,12 +275,6 @@ namespace ShipWorks
             this.buttonBuySupplies = new Divelements.SandRibbon.Button();
             this.ribbonChunkAbout = new Divelements.SandRibbon.RibbonChunk();
             this.buttonHelpAbout = new Divelements.SandRibbon.Button();
-            //this.ribbonTabShipping = new Divelements.SandRibbon.RibbonTab();
-            //this.shippingOutputChunk = new Divelements.SandRibbon.RibbonChunk();
-            //this.buttonCreateLabel = new Divelements.SandRibbon.Button();
-            //this.shippingShippingChunk = new Divelements.SandRibbon.RibbonChunk();
-            //this.buttonVoid = new Divelements.SandRibbon.Button();
-            //this.buttonReturn = new Divelements.SandRibbon.Button();
             this.quickAccessToolBar = new Divelements.SandRibbon.QuickAccessToolBar();
             this.pictureBox6 = new System.Windows.Forms.PictureBox();
             this.pictureBox7 = new System.Windows.Forms.PictureBox();
@@ -304,7 +295,6 @@ namespace ShipWorks
             shortcut1 = new Divelements.SandRibbon.Shortcut();
             menu1 = new Divelements.SandRibbon.Menu();
             menu2 = new Divelements.SandRibbon.Menu();
-            //stripLayoutReprint = new Divelements.SandRibbon.StripLayout();
             ((System.ComponentModel.ISupportInitialize) (this.downloadingStatusLabel.PictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize) (this.emailingStatusLabel.PictureBox)).BeginInit();
             this.panelDockingArea.SuspendLayout();
@@ -727,25 +717,6 @@ namespace ShipWorks
             this.mainMenuItemBackupDatabase.QuickAccessKey = "B";
             this.mainMenuItemBackupDatabase.Text = "&Backup";
             this.mainMenuItemBackupDatabase.Activate += new System.EventHandler(this.OnBackupShipWorks);
-            ////
-            //// stripLayoutReprint
-            ////
-            //stripLayoutReprint.Items.AddRange(new Divelements.SandRibbon.WidgetBase[] {
-            //this.buttonReprint,
-            //this.buttonShipAgain});
-            //stripLayoutReprint.LayoutDirection = Divelements.SandRibbon.LayoutDirection.Vertical;
-            ////
-            //// buttonReprint
-            ////
-            //this.buttonReprint.Guid = new System.Guid("ccc7cca3-4a1e-4975-a736-7a6449ece5c1");
-            //this.buttonReprint.Image = global::ShipWorks.Properties.Resources.printer_preferences;
-            //this.buttonReprint.Text = "Reprint";
-            ////
-            //// buttonShipAgain
-            ////
-            //this.buttonShipAgain.Guid = new System.Guid("8584db42-473a-4adf-a089-047e781d8728");
-            //this.buttonShipAgain.Image = ((System.Drawing.Image) (resources.GetObject("buttonShipAgain.Image")));
-            //this.buttonShipAgain.Text = "Ship Again";
             //
             // buttonRestore
             //
@@ -2056,7 +2027,6 @@ namespace ShipWorks
             this.ribbon.Controls.Add(this.ribbonTabAdmin);
             this.ribbon.Controls.Add(this.ribbonTabView);
             this.ribbon.Controls.Add(this.ribbonTabHelp);
-            //this.ribbon.Controls.Add(this.ribbonTabShipping);
             this.ribbon.Location = new System.Drawing.Point(3, 3);
             this.ribbon.Manager = this.ribbonManager;
             this.ribbon.Name = "ribbon";
@@ -2667,56 +2637,6 @@ namespace ShipWorks
             this.buttonHelpAbout.Text = "About ShipWorks";
             this.buttonHelpAbout.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
             this.buttonHelpAbout.Activate += new System.EventHandler(this.OnAboutShipWorks);
-            ////
-            //// ribbonTabShipping
-            ////
-            //this.ribbonTabShipping.Chunks.AddRange(new Divelements.SandRibbon.WidgetBase[] {
-            //this.shippingOutputChunk,
-            //this.shippingShippingChunk});
-            //this.ribbonTabShipping.EditingContextReference = "SHIPPINGMENU";
-            //this.ribbonTabShipping.Location = new System.Drawing.Point(1, 53);
-            //this.ribbonTabShipping.Manager = this.ribbonManager;
-            //this.ribbonTabShipping.Name = "ribbonTabShipping";
-            //this.ribbonTabShipping.Size = new System.Drawing.Size(967, 90);
-            //this.ribbonTabShipping.TabIndex = 7;
-            //this.ribbonTabShipping.Text = "Shipping";
-            ////
-            //// shippingOutputChunk
-            ////
-            //this.shippingOutputChunk.Items.AddRange(new Divelements.SandRibbon.WidgetBase[] {
-            //this.buttonCreateLabel});
-            //this.shippingOutputChunk.Text = "Output";
-            ////
-            //// buttonCreateLabel
-            ////
-            //this.buttonCreateLabel.Guid = new System.Guid("ec40e12c-fa12-4b2b-8b81-0fed6863162e");
-            //this.buttonCreateLabel.Image = ((System.Drawing.Image) (resources.GetObject("buttonCreateLabel.Image")));
-            //this.buttonCreateLabel.Padding = new Divelements.SandRibbon.WidgetEdges(10, 2, 10, 2);
-            //this.buttonCreateLabel.Text = "Create\r\nLabel";
-            //this.buttonCreateLabel.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
-            //this.buttonCreateLabel.Activate += OnCreateLabelClick;
-            ////
-            //// shippingShippingChunk
-            ////
-            //this.shippingShippingChunk.Items.AddRange(new Divelements.SandRibbon.WidgetBase[] {
-            //this.buttonVoid,
-            //this.buttonReturn,
-            //stripLayoutReprint});
-            //this.shippingShippingChunk.Text = "Shipping";
-            ////
-            //// buttonVoid
-            ////
-            //this.buttonVoid.Guid = new System.Guid("b477925d-b26f-47d7-91ee-619685bf1c7e");
-            //this.buttonVoid.Image = ((System.Drawing.Image) (resources.GetObject("buttonVoid.Image")));
-            //this.buttonVoid.Text = "Void";
-            //this.buttonVoid.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
-            ////
-            //// buttonReturn
-            ////
-            //this.buttonReturn.Guid = new System.Guid("33800ee1-71e4-4940-b1c6-a4496e33ff91");
-            //this.buttonReturn.Image = global::ShipWorks.Properties.Resources.document_out1;
-            //this.buttonReturn.Text = "Return";
-            //this.buttonReturn.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
             //
             // quickAccessToolBar
             //
@@ -2952,7 +2872,6 @@ namespace ShipWorks
         private System.Windows.Forms.ToolStripMenuItem contextOrderOnlineUpdate;
         private System.Windows.Forms.ToolStripSeparator contextOrderSep1;
         private System.Windows.Forms.ContextMenuStrip contextMenuCustomerGrid;
-
         private System.Windows.Forms.ToolStripMenuItem contextCustomerEditCustomer;
         private System.Windows.Forms.ToolStripSeparator contextCustomerSep1;
         private System.Windows.Forms.ToolStripMenuItem contextCustomerNewOrder;
@@ -3087,14 +3006,6 @@ namespace ShipWorks
         private Divelements.SandRibbon.Button buttonUship;
         private System.Windows.Forms.ToolStripMenuItem contextOrderInsuranceClaim;
         private Divelements.SandRibbon.Button buttonInsuranceClaim;
-        //private Divelements.SandRibbon.RibbonTab ribbonTabShipping;
-        //private Divelements.SandRibbon.RibbonChunk shippingOutputChunk;
-        //private Divelements.SandRibbon.Button buttonCreateLabel;
-        //private Divelements.SandRibbon.RibbonChunk shippingShippingChunk;
-        //private Divelements.SandRibbon.Button buttonVoid;
-        //private Divelements.SandRibbon.Button buttonReturn;
-        //private Divelements.SandRibbon.Button buttonReprint;
-        //private Divelements.SandRibbon.Button buttonShipAgain;
     }
 }
 
