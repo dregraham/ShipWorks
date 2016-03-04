@@ -608,5 +608,74 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
                 feature.Verify(f => f.Handle(It.IsAny<IWin32Window>(), It.IsAny<ILicenseCapabilities>(), "foo"));
             }
         }
+
+        [Fact]
+        public void AssociateStampsUsername_CallsTangoWebClientWithDecriptedPassword()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                Mock<ITangoWebClient> tangoWebClient = mock.Mock<ITangoWebClient>();
+
+                CustomerLicense testObject = mock.Create<CustomerLicense>(new NamedParameter("key", "SomeKey"));
+
+                UspsAccountEntity account = new UspsAccountEntity
+                {
+                    Username = "foo",
+                    Password = SecureText.Encrypt("bar", "foo")
+                };
+
+                testObject.AssociateStampsUsername(account);
+
+                tangoWebClient.Verify(t => t.AssociateStampsUsernameWithLicense(testObject.Key, "foo", "bar"), Times.Once);
+            }
+        }
+
+        [Fact]
+        public void AssociateStampsUsername_CallsTangoWebClientWithKey()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                Mock<ITangoWebClient> tangoWebClient = mock.Mock<ITangoWebClient>();
+
+                CustomerLicense testObject = mock.Create<CustomerLicense>(new NamedParameter("key", "SomeKey"));
+
+                UspsAccountEntity account = new UspsAccountEntity
+                {
+                    Username = "foo",
+                    Password = SecureText.Encrypt("bar", "foo")
+                };
+
+                testObject.AssociateStampsUsername(account);
+
+                tangoWebClient.Verify(t => t.AssociateStampsUsernameWithLicense("SomeKey", "foo", "bar"), Times.Once);
+            }
+        }
+
+        [Fact]
+        public void AssociateStampsUsername_LoggsException_WhenTangoWebClientThrowsException()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                var ex = new Exception("something went wrong");
+
+                Mock<ITangoWebClient> tangoWebClient = mock.Mock<ITangoWebClient>();
+                tangoWebClient.Setup(t => t.AssociateStampsUsernameWithLicense(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+                    .Throws(ex);
+
+                Mock<ILog> log = mock.Mock<ILog>();
+                
+                CustomerLicense testObject = mock.Create<CustomerLicense>(new NamedParameter("key", "SomeKey"));
+
+                UspsAccountEntity account = new UspsAccountEntity
+                {
+                    Username = "foo",
+                    Password = SecureText.Encrypt("bar", "foo")
+                };
+
+                testObject.AssociateStampsUsername(account);
+
+                log.Verify(l => l.Error("Error when associating stamps account with license.", ex), Times.Once);
+            }
+        }
     }
 }
