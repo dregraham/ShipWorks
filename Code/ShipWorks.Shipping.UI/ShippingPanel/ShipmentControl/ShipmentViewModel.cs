@@ -263,7 +263,18 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
             shipmentAdapter.ShipDate = ShipDate;
             shipmentAdapter.ServiceType = ServiceType;
             shipmentAdapter.ContentWeight = PackageAdapters.Sum(pa => pa.Weight);
+
             SaveDimensionsToSelectedPackageAdapter();
+            SaveInsuranceToSelectedPackageAdapter();
+        }
+
+        /// <summary>
+        /// Saves insurance values to selected package adapter
+        /// </summary>
+        private void SaveInsuranceToSelectedPackageAdapter()
+        {
+            SelectedPackageAdapter.InsuranceChoice.InsuranceValue = InsuranceViewModel.DeclaredValue;
+            SelectedPackageAdapter.InsuranceChoice.Insured = InsuranceViewModel.Insurance;
         }
 
         /// <summary>
