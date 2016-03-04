@@ -14,11 +14,6 @@ namespace ShipWorks.ApplicationCore.Licensing
     public interface ILicense
     {
         /// <summary>
-        /// Refresh the License capabilities from Tango
-        /// </summary>
-        void Refresh();
-
-        /// <summary>
         /// Reason the license is Disabled
         /// </summary>
         string DisabledReason { get; set; }
@@ -37,6 +32,16 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// Is the license legacy
         /// </summary>
         bool IsLegacy { get; }
+
+        /// <summary>
+        /// Refresh the license capabilities from Tango
+        /// </summary>
+        void Refresh();
+
+        /// <summary>
+        /// Bypasses any caching and forces a refresh of the license capabilities.
+        /// </summary>
+        void ForceRefresh();
 
         /// <summary>
         /// Activate a new store

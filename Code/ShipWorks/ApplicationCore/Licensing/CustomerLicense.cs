@@ -30,6 +30,9 @@ namespace ShipWorks.ApplicationCore.Licensing
         private readonly IEnumerable<IFeatureRestriction> featureRestrictions;
         private readonly IEnumerable<ILicenseEnforcer> licenseEnforcers;
 
+        private readonly TimeSpan capabilitiesTimeToLive;
+        private DateTime lastRefreshTimeInUtc;
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -50,6 +53,10 @@ namespace ShipWorks.ApplicationCore.Licensing
             this.deletionService = deletionService;
             this.featureRestrictions = featureRestrictions;
             this.licenseEnforcers = licenseEnforcers.OrderByDescending(e => (int) e.Priority);
+
+            // The license info/capabilities should be cached for 10 minutes
+            capabilitiesTimeToLive = new TimeSpan(0, 10, 0);
+            lastRefreshTimeInUtc = DateTime.MinValue;
 
             EnsureOnlyOneFeatureRestrictionPerEditionFeature();
         }
@@ -122,7 +129,7 @@ namespace ShipWorks.ApplicationCore.Licensing
                 ? LicenseActivationState.Active
                 : LicenseActivationState.Invalid;
 
-            if ((response.Error?.IndexOf("OverChannelLimit", StringComparison.Ordinal) ?? -1) >= 0)
+            if ((response.Error?.IndexOf("CreateStoreActivity_103", StringComparison.Ordinal) ?? -1) >= 0)
             {
                 // The response from Tango indicates the license will be over the channel limit
                 activationState = LicenseActivationState.OverChannelLimit;
@@ -141,19 +148,33 @@ namespace ShipWorks.ApplicationCore.Licensing
         }
 
         /// <summary>
-        /// Refresh the License capabilities from Tango
+        /// Bypasses any caching and forces a refresh of the license capabilities.
         /// </summary>
-        public void Refresh()
+        public void ForceRefresh()
         {
             try
             {
+                // Refresh the license capabilities and note the time they were refreshed
                 LicenseCapabilities = tangoWebClient.GetLicenseCapabilities(this);
+                lastRefreshTimeInUtc = DateTime.UtcNow;
             }
             catch (TangoException ex)
             {
                 LicenseCapabilities = null; // may want to use a null object pattern here...
                 DisabledReason = ex.Message;
                 log.Warn(ex);
+            }
+        }
+
+        /// <summary>
+        /// Refresh the license capabilities from Tango
+        /// </summary>
+        public void Refresh()
+        {
+            if (DateTime.UtcNow.Subtract(lastRefreshTimeInUtc) > capabilitiesTimeToLive)
+            {
+                // The license capabilities have expired
+                ForceRefresh();
             }
         }
 
@@ -211,8 +232,10 @@ namespace ShipWorks.ApplicationCore.Licensing
 
             // Get a list of licenses that are active in tango and match the channel we are deleting
             // but are not in ShipWorks and tell tango to delete them
-            IEnumerable<string> licensesToDelete =
-                GetActiveStores().Where(a => a.StoreType == storeType).Select(a => a.StoreLicenseKey);
+            IEnumerable<string> licensesToDelete = GetActiveStores()
+                                                    .Where(a => a.StoreType == storeType)
+                                                    .Select(a => a.StoreLicenseKey);
+
             tangoWebClient.DeleteStores(this, licensesToDelete);
         }
 
@@ -248,9 +271,7 @@ namespace ShipWorks.ApplicationCore.Licensing
                 Refresh();
             }
 
-            licenseEnforcers
-                .ToList()
-                .ForEach(e => e.Enforce(LicenseCapabilities, context, owner));
+            licenseEnforcers.ToList().ForEach(e => e.Enforce(LicenseCapabilities, context, owner));
 
             Refresh();
         }
@@ -258,8 +279,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Enforces capabilities based on the given feature
         /// </summary>
-        public IEnumerable<EnumResult<ComplianceLevel>> EnforceCapabilities(EditionFeature feature,
-            EnforcementContext context)
+        public IEnumerable<EnumResult<ComplianceLevel>> EnforceCapabilities(EditionFeature feature, EnforcementContext context)
         {
             if (LicenseCapabilities == null)
             {
@@ -290,8 +310,7 @@ namespace ShipWorks.ApplicationCore.Licensing
                 return null;
             }
 
-            float currentShipmentPercentage = (float) LicenseCapabilities.ProcessedShipments/
-                                              LicenseCapabilities.ShipmentLimit;
+            float currentShipmentPercentage = (float) LicenseCapabilities.ProcessedShipments / LicenseCapabilities.ShipmentLimit;
 
             return currentShipmentPercentage >= ShipmentLimitWarningThreshold ?
                 new DashboardLicenseItem(LicenseCapabilities.BillingEndDate) :
@@ -328,7 +347,6 @@ namespace ShipWorks.ApplicationCore.Licensing
             }
 
             IFeatureRestriction restriction = featureRestrictions.SingleOrDefault(r => r.EditionFeature == feature);
-
             return restriction?.Check(LicenseCapabilities, data) ?? EditionRestrictionLevel.None;
         }
 

@@ -13,6 +13,7 @@ using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Common;
 using ShipWorks.Data;
+using ShipWorks.Data.Administration;
 using ShipWorks.Editions;
 using ShipWorks.Editions.Brown;
 using ShipWorks.Shipping.Carriers;
@@ -148,6 +149,9 @@ namespace ShipWorks.ApplicationCore
                 .AsImplementedInterfaces();
 
             builder.RegisterType<ShipWorksLicense>()
+                .AsImplementedInterfaces();
+
+            builder.RegisterType<SqlSchemaVersion>()
                 .AsImplementedInterfaces();
         }
 

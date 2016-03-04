@@ -1,6 +1,8 @@
 ﻿using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using System;
+using System.Data.SqlClient;
+using System.Security.Cryptography;
 using Interapptive.Shared.Utility;
 
 namespace ShipWorks.ApplicationCore.Licensing
@@ -26,7 +28,20 @@ namespace ShipWorks.ApplicationCore.Licensing
         public string Read()
         {
             ConfigurationEntity config = ConfigurationData.Fetch();
-            return encryptionProvider.Decrypt(config.CustomerKey);
+
+            try
+            {
+                return encryptionProvider.Decrypt(config.CustomerKey);
+            }
+            catch (EncryptionException ex) when(ex.InnerException is CryptographicException)
+            {
+                // Crashed because the config data is old, we just have restored  
+                // databases, refresh the config data and try again.
+                ConfigurationData.CheckForChangesNeeded();
+                config = ConfigurationData.Fetch();
+
+                return encryptionProvider.Decrypt(config.CustomerKey);
+            }
         }
     }
 }

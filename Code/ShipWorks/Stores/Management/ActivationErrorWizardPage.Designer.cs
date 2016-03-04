@@ -73,6 +73,7 @@
             this.elementHost.TabIndex = 3;
             this.elementHost.Text = "elementHost";
             this.elementHost.Child = null;
+            this.elementHost.Visible = false;
             // 
             // ActivationErrorWizardPage
             // 

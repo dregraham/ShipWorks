@@ -626,6 +626,7 @@
     <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\Ups\UpsAccountNumberRestriction.cs" />
     <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\Ups\UpsSurePostRestriction.cs" />
     <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\Ups\UpsAccountLimitRestriction.cs" />
+    <Compile Include="ApplicationCore\Licensing\GetActiveStoresResponse.cs" />
     <Compile Include="ApplicationCore\Licensing\IActivationResponse.cs" />
     <Compile Include="ApplicationCore\Licensing\IAddStoreResponse.cs" />
     <Compile Include="ApplicationCore\Licensing\IChannelLimitBehavior.cs" />
@@ -788,8 +789,10 @@
     <Compile Include="ApplicationCore\Services\ShipWorksServiceManager.cs" />
     <Compile Include="AddressValidation\AddressValidationDatabaseUpgrade.cs" />
     <Compile Include="Common\DateTimeProvider.cs" />
+    <Compile Include="Data\Administration\ISqlSchemaVersion.cs" />
     <Compile Include="Data\Administration\Retry\ISqlAdapterRetry.cs" />
     <Compile Include="Data\Administration\SqlChangeTracking.cs" />
+    <Compile Include="Data\Administration\SqlSchemaVersion.cs" />
     <Compile Include="Data\Connection\ISqlSession.cs" />
     <Compile Include="Data\Connection\ReconnectResult.cs" />
     <Compile Include="Data\DataResourceManagerWrapper.cs" />
@@ -8329,6 +8332,7 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.9\3.9.0.3.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.0.9.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.1.1.sql" />
+    <None Include="ApplicationCore\Licensing\WSDL\Activation_v1.wsdl" />
     <None Include="packages.config" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.4\4.4.1.2.sql" />
     <None Include="Properties\interapptive_public.snk" />
