@@ -12,6 +12,7 @@ using Interapptive.Shared.Data;
 using Interapptive.Shared.UI;
 using log4net;
 using ShipWorks.ApplicationCore.Crashes;
+using ShipWorks.ApplicationCore.Dashboard;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.ApplicationCore.Nudges;
@@ -250,13 +251,21 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
             Application.ExitThread();
         }
 
+        private IDictionary<InitialShippingTabDisplay, string> shippingPanelTabNames = new Dictionary<InitialShippingTabDisplay, string>
+            {
+            {InitialShippingTabDisplay.Shipping, "ship"},
+            {InitialShippingTabDisplay.Tracking, "track"},
+            {InitialShippingTabDisplay.Insurance, "submit claims on" }
+            };
+
         private async Task LoadOrdersForShippingDialog(OpenShippingDialogWithOrdersMessage message)
         {
             Control owner = IoC.UnsafeGlobalLifetimeScope.Resolve<Control>();
 
             if (message.OrderIDs.Count() > ShipmentsLoader.MaxAllowedOrders)
             {
-                MessageHelper.ShowInformation(owner, string.Format("You can only ship up to {0} orders at a time.", ShipmentsLoader.MaxAllowedOrders));
+                string actionName = shippingPanelTabNames[message.InitialDisplay];
+                MessageHelper.ShowInformation(owner, $"You can only {actionName} up to {ShipmentsLoader.MaxAllowedOrders} orders at a time.");
                 return;
             }
 
@@ -299,6 +308,10 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
 
                 dlg.ShowDialog(Program.MainForm);
             }
+
+            // We always check for new server messages after shipping, since if there was a shipping problem
+            // it could be we put out a server message related to it.
+            DashboardManager.DownloadLatestServerMessages();
         }
 
         /// <summary>

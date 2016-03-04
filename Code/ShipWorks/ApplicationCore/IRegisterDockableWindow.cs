@@ -4,12 +4,12 @@ using TD.SandDock;
 namespace ShipWorks.ApplicationCore
 {
     /// <summary>
-    /// Allow dockable windows to be registered with the main SandDock manager
+    /// Allow controls and other elements to be registered with the main form
     /// </summary>
-    public interface IRegisterDockableWindow
+    public interface IMainFormElementRegistration
     {
         /// <summary>
-        /// Register a panel with the dock manager
+        /// Register an element in the main form containers
         /// </summary>
         void Register(SandDockManager dockManager, Ribbon ribbon);
     }

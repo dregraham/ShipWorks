@@ -3,7 +3,6 @@ using Interapptive.Shared;
 using Interapptive.Shared.Net;
 using ShipWorks.AddressValidation;
 using ShipWorks.Core.ApplicationCode;
-using ShipWorks.Shipping.Carriers.BestRate.Footnote;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Loading;
 using ShipWorks.Shipping.Profiles;
@@ -80,10 +79,6 @@ namespace ShipWorks.Shipping.UI
 
             builder.RegisterType<OtherShipmentViewModel>();
 
-            builder.RegisterType<RatingPanelRegistration>()
-                .AsImplementedInterfaces()
-                .PreserveExistingDefaults();
-
             builder.RegisterType<RateSelectionFactory>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
@@ -158,10 +153,6 @@ namespace ShipWorks.Shipping.UI
             builder.RegisterType<ShippingOriginManagerWrapper>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
-
-            builder.RegisterType<ShippingPanelRegistration>()
-                .AsImplementedInterfaces()
-                .PreserveExistingDefaults();
 
             builder.RegisterType<ShippingPanelViewModel>()
                 .FindConstructorsWith(new NonDefaultConstructorFinder());

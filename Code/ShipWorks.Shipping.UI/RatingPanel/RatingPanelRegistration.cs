@@ -11,7 +11,7 @@ namespace ShipWorks.Shipping.UI.RatingPanel
     /// <summary>
     /// Register the rating panel
     /// </summary>
-    public class RatingPanelRegistration : IRegisterDockableWindow
+    public class RatingPanelRegistration : IMainFormElementRegistration
     {
         /// <summary>
         /// Register a panel with the dock manager
