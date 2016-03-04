@@ -782,6 +782,11 @@
     <Compile Include="Messaging\Messages\CustomerDeletedMessage.cs" />
     <Compile Include="Messaging\Messages\OpenShippingDialogWithOrdersMessage.cs" />
     <Compile Include="Messaging\Messages\Shipping\BasicOrderSelection.cs" />
+    <Compile Include="Messaging\Messages\Shipping\CreateReturnShipmentLabel.cs" />
+    <Compile Include="Messaging\Messages\Shipping\ReprintLabelMessage.cs" />
+    <Compile Include="Messaging\Messages\Shipping\ShipAgainMessage.cs" />
+    <Compile Include="Messaging\Messages\Shipping\VoidLabelMessage.cs" />
+    <Compile Include="Messaging\Messages\Shipping\CreateLabelMessage.cs" />
     <Compile Include="Messaging\Messages\Shipping\IOrderSelection.cs" />
     <Compile Include="Messaging\Messages\StoreDeletedMessage.cs" />
     <Compile Include="Messaging\Messages\OrderDeletedMessage.cs" />
