@@ -16,6 +16,7 @@ using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.ApplicationCore.Licensing.Activation;
+using ShipWorks.ApplicationCore.Licensing.Activation.WebServices;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.ApplicationCore.Nudges;
 using ShipWorks.Data.Connection;
@@ -1113,8 +1114,8 @@ namespace ShipWorks.ApplicationCore.Licensing
         {
             try
             {
-                Activation.Activation service = new Activation.Activation(new ApiLogEntry(ApiLogSource.ShipWorks, "Activation")) { Url = ActivationUrl };
-                CustomerLicenseInfoV1 customerLicenseInfo = service.GetCustomerLicenseInfo(email, password);
+                Activation.WebServices.Activation activationService = new Activation.WebServices.Activation(new ApiLogEntry(ApiLogSource.ShipWorks, "Activation")) { Url = ActivationUrl };
+                CustomerLicenseInfoV1 customerLicenseInfo = activationService.GetCustomerLicenseInfo(email, password);
 
                 GenericResult<IActivationResponse> result = new GenericResult<IActivationResponse>(null)
                 {

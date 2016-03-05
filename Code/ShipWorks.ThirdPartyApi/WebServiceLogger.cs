@@ -9,7 +9,7 @@ using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Logging;
 using Interapptive.Shared.Net;
 
-namespace ShipWorks.ApplicationCore.Licensing.Activation
+namespace ShipWorks.ApplicationCore.Licensing.Activation.WebServices
 {
     /// <summary>
     /// Partial class for the webservices generated class, to help with logging

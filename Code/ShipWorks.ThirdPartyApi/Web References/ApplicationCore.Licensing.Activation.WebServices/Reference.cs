@@ -13,7 +13,7 @@
 // 
 #pragma warning disable 1591
 
-namespace ShipWorks.ApplicationCore.Licensing.Activation {
+namespace ShipWorks.ApplicationCore.Licensing.Activation.WebServices {
     using System;
     using System.Web.Services;
     using System.Diagnostics;
@@ -23,7 +23,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Activation {
     
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1038.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1055.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Web.Services.WebServiceBindingAttribute(Name="BasicHttpBinding_IActivationV1", Namespace="http://stamps.com/xml/namespace/2015/09/shipworks/activationv1")]
@@ -35,7 +35,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Activation {
         
         /// <remarks/>
         public Activation() {
-            this.Url = global::ShipWorks.Properties.Settings.Default.ShipWorks_ThirdPartyApi_ApplicationCore_Licensing_Activation_Activation;
+            this.Url = global::ShipWorks.Properties.Settings.Default.ShipWorks_ThirdPartyApi_ApplicationCore_Licensing_Activation_WebServices_Activation;
             if ((this.IsLocalFileSystemWebService(this.Url) == true)) {
                 this.UseDefaultCredentials = true;
                 this.useDefaultCredentialsSetExplicitly = false;
@@ -125,7 +125,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Activation {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1055.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
@@ -186,11 +186,11 @@ namespace ShipWorks.ApplicationCore.Licensing.Activation {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1038.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1055.0")]
     public delegate void GetCustomerLicenseInfoCompletedEventHandler(object sender, GetCustomerLicenseInfoCompletedEventArgs e);
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1038.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1055.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class GetCustomerLicenseInfoCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
