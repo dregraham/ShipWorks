@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Xml;
 using Interapptive.Shared.Utility;
-using ShipWorks.ApplicationCore.Licensing.Activation;
+using ShipWorks.ApplicationCore.Licensing.Activation.WebServices;
 
 namespace ShipWorks.ApplicationCore.Licensing
 {

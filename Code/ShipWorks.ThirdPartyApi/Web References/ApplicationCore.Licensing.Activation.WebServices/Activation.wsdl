@@ -98,7 +98,7 @@
   </wsdl:binding>
   <wsdl:service name="Activation">
     <wsdl:port name="BasicHttpBinding_IActivationV1" binding="tns:BasicHttpBinding_IActivationV1">
-      <soap:address location="http://shpwrk002.qasc.stamps.com/ShipWorksNet/ActivationV1.svc" />
+      <soap:address location="http://shpwrk003.qasc.stamps.com/ShipWorksNet/ActivationV1.svc" />
     </wsdl:port>
   </wsdl:service>
 </wsdl:definitions>

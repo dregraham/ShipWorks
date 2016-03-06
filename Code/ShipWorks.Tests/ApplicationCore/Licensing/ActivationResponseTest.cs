@@ -2,6 +2,7 @@
 using System.Xml;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Licensing.Activation;
+using ShipWorks.ApplicationCore.Licensing.Activation.WebServices;
 using Xunit;
 
 namespace ShipWorks.Tests.ApplicationCore.Licensing
