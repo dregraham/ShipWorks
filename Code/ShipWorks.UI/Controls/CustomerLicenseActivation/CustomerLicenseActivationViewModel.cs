@@ -98,7 +98,7 @@ namespace ShipWorks.UI.Controls.CustomerLicenseActivation
         /// </summary>
         [Obfuscation(Exclude = true)]
         public string CreateAccountLink =>
-            "https://registration.shipworks.com/#!&p=create-account";
+            "http://www.shipworks.com/registration/?source=si10883693";
 
         /// <summary>
         /// Saves the user to the database
