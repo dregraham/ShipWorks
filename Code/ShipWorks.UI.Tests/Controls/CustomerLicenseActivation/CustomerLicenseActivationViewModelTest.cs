@@ -168,5 +168,27 @@ namespace ShipWorks.UI.Tests.Controls.CustomerLicenseActivation
                 }
             }
         }
+
+        [Fact]
+        public void CreateAccountLink_ReturnsCorrectUrl()
+        {
+            using(var mock = AutoMock.GetLoose())
+            {
+                var testObject = mock.Create<CustomerLicenseActivationViewModel>();
+
+                Assert.Equal("http://www.shipworks.com/registration/?source=si10883693", testObject.CreateAccountLink);
+            }
+        }
+
+        [Fact]
+        public void PasswordResetLink_ReturnsCorrectUrl()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                var testObject = mock.Create<CustomerLicenseActivationViewModel>();
+
+                Assert.Equal("https://www.interapptive.com/account/forgotpassword.php", testObject.PasswordResetLink);
+            }
+        }
     }
 }
