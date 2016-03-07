@@ -609,7 +609,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
         }
 
         [Fact]
-        public void AssociateStampsUsername_CallsTangoWebClientWithDecriptedPassword()
+        public void AssociateUspsAccount_CallsTangoWebClientWithDecriptedPassword()
         {
             using (var mock = AutoMock.GetLoose())
             {
@@ -623,14 +623,14 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
                     Password = SecureText.Encrypt("bar", "foo")
                 };
 
-                testObject.AssociateStampsUsername(account);
+                testObject.AssociateUspsAccount(account);
 
                 tangoWebClient.Verify(t => t.AssociateStampsUsernameWithLicense(testObject.Key, "foo", "bar"), Times.Once);
             }
         }
 
         [Fact]
-        public void AssociateStampsUsername_CallsTangoWebClientWithKey()
+        public void AssociateUspsAccount_CallsTangoWebClientWithKey()
         {
             using (var mock = AutoMock.GetLoose())
             {
@@ -644,14 +644,14 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
                     Password = SecureText.Encrypt("bar", "foo")
                 };
 
-                testObject.AssociateStampsUsername(account);
+                testObject.AssociateUspsAccount(account);
 
                 tangoWebClient.Verify(t => t.AssociateStampsUsernameWithLicense("SomeKey", "foo", "bar"), Times.Once);
             }
         }
 
         [Fact]
-        public void AssociateStampsUsername_LoggsException_WhenTangoWebClientThrowsException()
+        public void AssociateUspsAccount_LoggsException_WhenTangoWebClientThrowsException()
         {
             using (var mock = AutoMock.GetLoose())
             {
@@ -671,9 +671,78 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
                     Password = SecureText.Encrypt("bar", "foo")
                 };
 
-                testObject.AssociateStampsUsername(account);
+                testObject.AssociateUspsAccount(account);
 
                 log.Verify(l => l.Error("Error when associating stamps account with license.", ex), Times.Once);
+            }
+        }
+
+        [Fact]
+        public void AssociateUspsAccount_ThrowsShipWorksLicenseException_WhenUspsAccountIsNull()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                Mock<ILog> log = mock.Mock<ILog>();
+
+                CustomerLicense testObject = mock.Create<CustomerLicense>(new NamedParameter("key", "SomeKey"));
+
+                testObject.AssociateUspsAccount(null);
+
+                log.Verify(
+                    l =>
+                        l.Error("Error when associating stamps account with license.",
+                            It.Is<ShipWorksLicenseException>(ex => ex.Message == "Cannot associate empty Usps account.")),
+                    Times.Once);
+            }
+        }
+
+        [Fact]
+        public void AssociateUspsAccount_ThrowsShipWorksLicenseException_WhenUspsAccountUsernameIsBlank()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                Mock<ILog> log = mock.Mock<ILog>();
+
+                CustomerLicense testObject = mock.Create<CustomerLicense>(new NamedParameter("key", "SomeKey"));
+
+                UspsAccountEntity account = new UspsAccountEntity
+                {
+                    Username = "",
+                    Password = SecureText.Encrypt("bar", "")
+                };
+
+                testObject.AssociateUspsAccount(account);
+
+                log.Verify(
+                    l =>
+                        l.Error("Error when associating stamps account with license.",
+                            It.Is<ShipWorksLicenseException>(ex => ex.Message == "Cannot associate empty Usps account.")),
+                    Times.Once);
+            }
+        }
+
+        [Fact]
+        public void AssociateUspsAccount_ThrowsShipWorksLicenseException_WhenUspsAccountPasswordIsBlank()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                Mock<ILog> log = mock.Mock<ILog>();
+
+                CustomerLicense testObject = mock.Create<CustomerLicense>(new NamedParameter("key", "SomeKey"));
+
+                UspsAccountEntity account = new UspsAccountEntity
+                {
+                    Username = "foo",
+                    Password = ""
+                };
+
+                testObject.AssociateUspsAccount(account);
+
+                log.Verify(
+                    l =>
+                        l.Error("Error when associating stamps account with license.",
+                            It.Is<ShipWorksLicenseException>(ex => ex.Message == "Cannot associate empty Usps account.")),
+                    Times.Once);
             }
         }
     }

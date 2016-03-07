@@ -320,10 +320,15 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Associates the given UspsAccount with this license in tango
         /// </summary>
-        public void AssociateStampsUsername(UspsAccountEntity uspsAccount)
+        public void AssociateUspsAccount(UspsAccountEntity uspsAccount)
         {
             try
             {
+                if (string.IsNullOrWhiteSpace(uspsAccount?.Username) || string.IsNullOrWhiteSpace(uspsAccount.Password))
+                {
+                    throw new ShipWorksLicenseException("Cannot associate empty Usps account.");
+                }
+
                 tangoWebClient.AssociateStampsUsernameWithLicense(Key, uspsAccount.Username,
                     SecureText.Decrypt(uspsAccount.Password, uspsAccount.Username));
             }

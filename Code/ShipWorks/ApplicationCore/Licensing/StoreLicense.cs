@@ -172,7 +172,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Does nothing for store licenses
         /// </summary>
-        public void AssociateStampsUsername(UspsAccountEntity uspsAccount)
+        public void AssociateUspsAccount(UspsAccountEntity uspsAccount)
         {
         }
     }

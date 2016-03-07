@@ -133,7 +133,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Can't do anything with disabled license
         /// </summary>
-        public void AssociateStampsUsername(UspsAccountEntity uspsAccount)
+        public void AssociateUspsAccount(UspsAccountEntity uspsAccount)
         {
         }
 

@@ -514,11 +514,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             uspsAccountInfo.Initialize(UspsAccount);
 
             // Try to associate the Stamps account with the license
-            using (var lifetimeScope = IoC.BeginLifetimeScope())
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                var license = lifetimeScope.Resolve<ILicenseService>().GetLicenses().FirstOrDefault();
+                ILicense license = lifetimeScope.Resolve<ILicenseService>().GetLicenses().FirstOrDefault();
 
-                license?.AssociateStampsUsername(UspsAccount);
+                license?.AssociateUspsAccount(UspsAccount);
             }
         }
 

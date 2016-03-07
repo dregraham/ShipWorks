@@ -1274,11 +1274,11 @@ namespace ShipWorks.ApplicationCore.Licensing
             postRequest.Variables.Add("version", Version);
             postRequest.Variables.Add("stampsusername", stampsUsername);
             postRequest.Variables.Add("stampspassword", stampsPassword);
-
-            XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "AssociateStampsUsernameWithLicense");
-
+            
             try
             {
+                XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "AssociateStampsUsernameWithLicense");
+
                 CheckResponseForErrors(xmlResponse);
             }
             catch (TangoException ex)
