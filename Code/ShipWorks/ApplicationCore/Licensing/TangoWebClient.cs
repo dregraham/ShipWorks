@@ -1219,7 +1219,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             postRequest.Variables.Add("storelicensekey[]", storeLicenseKey);
             postRequest.Variables.Add("version", Version);
 
-            XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "GetActiveStores");
+            XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "DeleteStore");
 
             try
             {
@@ -1248,7 +1248,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             postRequest.Variables.Add("storelicensekey[]", licenseKeyParam);
             postRequest.Variables.Add("version", Version);
 
-            XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "GetActiveStores");
+            XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "DeleteStores");
 
             try
             {
