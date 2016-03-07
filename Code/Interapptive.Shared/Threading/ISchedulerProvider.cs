@@ -20,6 +20,12 @@ namespace Interapptive.Shared.Threading
         IScheduler Dispatcher { get; }
 
         /// <summary>
+        /// Schedule work on the Windows Forms event loop
+        /// </summary>
+        /// <remarks>This is equivalent to calling Control.Invoke</remarks>
+        IScheduler WindowsFormsEventLoop { get; }
+
+        /// <summary>
         /// Immediate scheduler
         /// </summary>
         /// <remarks>This is the default for Empty, GetSchedulerForCurrentContext, Return,

@@ -16,7 +16,7 @@ namespace ShipWorks.Shipping.Services
     /// <summary>
     /// Implementation for ShipmentLoaderService
     /// </summary>
-    public class ShipmentLoaderService : IShipmentLoaderService<LoadedOrderSelection>, IInitializeForCurrentSession
+    public class ShipmentLoaderService : IInitializeForCurrentSession
     {
         private readonly IShipmentLoader shipmentLoader;
         private readonly IMessenger messenger;

@@ -24,6 +24,7 @@ namespace ShipWorks.Startup
         /// </summary>
         public static IContainer Initialize(IContainer container) =>
             IoC.Initialize(container,
+                typeof(Shipping.Services.ShippingDialogService).Assembly,
                 typeof(ShippingModule).Assembly,
                 typeof(LemonStandStoreModule).Assembly,
                 typeof(EnumImageConverter).Assembly);

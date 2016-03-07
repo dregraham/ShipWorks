@@ -1,27 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Reactive.Linq;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using ActiproSoftware.SyntaxEditor;
-using Autofac;
 using Interapptive.Shared.Data;
 using Interapptive.Shared.UI;
 using log4net;
 using ShipWorks.ApplicationCore.Crashes;
-using ShipWorks.ApplicationCore.Dashboard;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.ApplicationCore.Nudges;
-using ShipWorks.Core.Messaging;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Messaging.Messages;
-using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net;
 using ShipWorks.Stores;
 using ShipWorks.UI;
@@ -164,17 +156,6 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
             DataResourceManager.RegisterResourceCacheCleanup();
             DataPath.RegisterTempFolderCleanup();
             LogSession.RegisterLogCleanup();
-
-            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
-            {
-                IMessenger messenger = lifetimeScope.Resolve<IMessenger>();
-
-                messenger.OfType<OpenShippingDialogMessage>()
-                    .Subscribe(HandleOpenShippingDialogMessage);
-
-                messenger.OfType<OpenShippingDialogWithOrdersMessage>()
-                    .Subscribe(async x => await LoadOrdersForShippingDialog(x));
-            }
         }
 
         /// <summary>
@@ -249,80 +230,6 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
             // Application.Exit does not guaranteed that the windows close.  It only tries.  If an exception
             // gets thrown, or they set e.Cancel = true, they won't have closed.
             Application.ExitThread();
-        }
-
-        private IDictionary<InitialShippingTabDisplay, string> shippingPanelTabNames = new Dictionary<InitialShippingTabDisplay, string>
-            {
-            {InitialShippingTabDisplay.Shipping, "ship"},
-            {InitialShippingTabDisplay.Tracking, "track"},
-            {InitialShippingTabDisplay.Insurance, "submit claims on" }
-            };
-
-        private async Task LoadOrdersForShippingDialog(OpenShippingDialogWithOrdersMessage message)
-        {
-            Control owner = IoC.UnsafeGlobalLifetimeScope.Resolve<Control>();
-
-            if (message.OrderIDs.Count() > ShipmentsLoader.MaxAllowedOrders)
-            {
-                string actionName = shippingPanelTabNames[message.InitialDisplay];
-                MessageHelper.ShowInformation(owner, $"You can only {actionName} up to {ShipmentsLoader.MaxAllowedOrders} orders at a time.");
-                return;
-            }
-
-            ShipmentsLoader loader = new ShipmentsLoader(owner);
-            ShipmentsLoadedEventArgs results = await loader.LoadAsync(message.OrderIDs).ConfigureAwait(false);
-
-            if (results.Cancelled)
-            {
-                return;
-            }
-
-            Messenger.Current.Send(new OpenShippingDialogMessage(this, results.Shipments, message.InitialDisplay));
-        }
-
-        /// <summary>
-        /// Handle the open shipping dialog message
-        /// </summary>
-        /// <param name="obj"></param>
-        private void HandleOpenShippingDialogMessage(OpenShippingDialogMessage message)
-        {
-            if (MainForm.InvokeRequired)
-            {
-                MainForm.Invoke((Action) (() => OpenShippingDialog(message)));
-            }
-            else
-            {
-                OpenShippingDialog(message);
-            }
-        }
-
-        /// <summary>
-        /// Open the shipping dialog
-        /// </summary>
-        private void OpenShippingDialog(OpenShippingDialogMessage message)
-        {
-            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope(ConfigureShippingDialogDependencies))
-            {
-                // Show the shipping window.
-                ShippingDlg dlg = lifetimeScope.Resolve<ShippingDlg>(new TypedParameter(typeof(OpenShippingDialogMessage), message));
-
-                dlg.ShowDialog(Program.MainForm);
-            }
-
-            // We always check for new server messages after shipping, since if there was a shipping problem
-            // it could be we put out a server message related to it.
-            DashboardManager.DownloadLatestServerMessages();
-        }
-
-        /// <summary>
-        /// Configure extra dependencies for the shipping dialog
-        /// </summary>
-        private void ConfigureShippingDialogDependencies(ContainerBuilder builder)
-        {
-            builder.RegisterType<ShippingDlg>()
-                .AsSelf()
-                .As<Control>()
-                .SingleInstance();
         }
     }
 }

@@ -32,17 +32,12 @@ namespace ShipWorks.Shipping
         List<ShipmentEntity> globalShipments;
         bool wasCanceled;
         bool finishedLoadingShipments;
-        Control owner;
-
-        /// <summary>
-        /// Raised when an async load as completed
-        /// </summary>
-        public event ShipmentsLoadedEventHandler LoadCompleted;
+        IWin32Window owner;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShipmentsLoader(Control owner)
+        public ShipmentsLoader(IWin32Window owner)
         {
             this.owner = MethodConditions.EnsureArgumentIsNotNull(owner, nameof(owner));
             globalShipments = new List<ShipmentEntity>();
@@ -118,9 +113,12 @@ namespace ShipWorks.Shipping
 
             progressDlg.CloseForced();
 
-            ShipmentsLoadedEventArgs eventArgs = new ShipmentsLoadedEventArgs(null, wasCanceled, null, globalShipments);
-            OnLoadShipmentsCompleted(eventArgs);
-            return eventArgs;
+            if (wasCanceled)
+            {
+                globalShipments.Clear();
+            }
+
+            return new ShipmentsLoadedEventArgs(null, wasCanceled, null, globalShipments);
         }
 
         /// <summary>
@@ -243,30 +241,6 @@ namespace ShipWorks.Shipping
             }
 
             workProgress.Completed();
-        }
-
-        /// <summary>
-        /// The async loading of shipments for shipping has completed
-        /// </summary>
-        void OnLoadShipmentsCompleted(ShipmentsLoadedEventArgs args)
-        {
-            if (wasCanceled)
-            {
-                globalShipments.Clear();
-            }
-
-            ShipmentsLoadedEventHandler handler = LoadCompleted;
-            if (handler != null)
-            {
-                if (owner.InvokeRequired)
-                {
-                    owner.Invoke((Action) (() => handler(this, args)));
-                }
-                else
-                {
-                    handler(this, args);
-                }
-            }
         }
     }
 }

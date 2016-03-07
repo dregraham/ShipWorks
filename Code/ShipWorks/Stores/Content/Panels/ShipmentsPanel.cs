@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -11,7 +12,6 @@ using Divelements.SandGrid;
 using Interapptive.Shared.UI;
 using log4net;
 using ShipWorks.AddressValidation;
-using ShipWorks.Core.Common.Threading;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
@@ -57,6 +57,9 @@ namespace ShipWorks.Stores.Content.Panels
 
             // Load the copy menu
             menuCopy.DropDownItems.AddRange(entityGrid.CreateCopyMenuItems(false));
+
+            Messenger.Current.Where(x => x.Sender is ShippingDlg)
+                .Subscribe(_ => ReloadContent());
         }
 
         /// <summary>
@@ -194,8 +197,6 @@ namespace ShipWorks.Stores.Content.Panels
             {
                 MessageHelper.ShowMessage(this, "The order of the shipment has been deleted.");
             }
-
-            await ReloadContent();
         }
 
         /// <summary>
@@ -231,7 +232,7 @@ namespace ShipWorks.Stores.Content.Panels
 
             if (action == GridLinkAction.Edit)
             {
-                EditShipments(new List<long> { entityID }).Forget();
+                EditShipments(new List<long> { entityID });
             }
         }
 
@@ -240,7 +241,7 @@ namespace ShipWorks.Stores.Content.Panels
         /// </summary>
         protected override void OnEntityDoubleClicked(long entityID)
         {
-            EditShipments(new long[] { entityID }).Forget();
+            EditShipments(new long[] { entityID });
         }
 
         /// <summary>
@@ -250,7 +251,7 @@ namespace ShipWorks.Stores.Content.Panels
         {
             if (entityGrid.Selection.Count > 0)
             {
-                EditShipments(entityGrid.Selection.Keys).Forget();
+                EditShipments(entityGrid.Selection.Keys);
             }
         }
 
@@ -301,16 +302,7 @@ namespace ShipWorks.Stores.Content.Panels
         /// </summary>
         private void OnTrackShipment(object sender, EventArgs e)
         {
-            if (entityGrid.Selection.Count == 1)
-            {
-                ShipmentEntity shipment = ShippingManager.GetShipment(entityGrid.Selection.Keys.First());
-                if (shipment != null)
-                {
-                    Messenger.Current.Send(new OpenShippingDialogMessage(this, new[] { shipment }, InitialShippingTabDisplay.Tracking));
-
-                    ReloadContent();
-                }
-            }
+            OpenSingleShipmentInDialog(InitialShippingTabDisplay.Tracking);
         }
 
         /// <summary>
@@ -318,14 +310,20 @@ namespace ShipWorks.Stores.Content.Panels
         /// </summary>
         private void OnSubmitClaim(object sender, EventArgs e)
         {
+            OpenSingleShipmentInDialog(InitialShippingTabDisplay.Insurance);
+        }
+
+        /// <summary>
+        /// Open a single shipment in the dialog
+        /// </summary>
+        private void OpenSingleShipmentInDialog(InitialShippingTabDisplay initialTab)
+        {
             if (entityGrid.Selection.Count == 1)
             {
                 ShipmentEntity shipment = ShippingManager.GetShipment(entityGrid.Selection.Keys.First());
                 if (shipment != null)
                 {
-                    Messenger.Current.Send(new OpenShippingDialogMessage(this, new[] { shipment }, InitialShippingTabDisplay.Insurance));
-
-                    ReloadContent();
+                    Messenger.Current.Send(new OpenShippingDialogMessage(this, new[] { shipment }, initialTab));
                 }
             }
         }
@@ -333,32 +331,9 @@ namespace ShipWorks.Stores.Content.Panels
         /// <summary>
         /// Edit the shipment with the given ID
         /// </summary>
-        private async Task EditShipments(IEnumerable<long> shipmentKeys)
+        private void EditShipments(IEnumerable<long> shipmentKeys)
         {
-            if (shipmentKeys.Count() > ShipmentsLoader.MaxAllowedOrders)
-            {
-                MessageHelper.ShowInformation(this, string.Format("You can only ship up to {0} orders at a time.", ShipmentsLoader.MaxAllowedOrders));
-                return;
-            }
-
-            ShipmentsLoader loader = new ShipmentsLoader(this);
-            loader.LoadCompleted += OnShipOrdersLoadShipmentsCompleted;
-            await loader.LoadAsync(shipmentKeys);
-        }
-
-        /// <summary>
-        /// The async loading of shipments for shipping has completed
-        /// </summary>
-        void OnShipOrdersLoadShipmentsCompleted(object sender, ShipmentsLoadedEventArgs e)
-        {
-            if (IsDisposed || e.Cancelled)
-            {
-                return;
-            }
-
-            Messenger.Current.Send(new OpenShippingDialogMessage(this, e.Shipments));
-
-            ReloadContent();
+            Messenger.Current.Send(new OpenShippingDialogWithOrdersMessage(this, shipmentKeys));
         }
 
         /// <summary>

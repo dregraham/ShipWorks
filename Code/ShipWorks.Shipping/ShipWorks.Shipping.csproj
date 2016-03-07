@@ -225,7 +225,6 @@
     <Compile Include="Services\CarrierShipmentAdapterFactory.cs" />
     <Compile Include="Services\DimensionsManagerWrapper.cs" />
     <Compile Include="Services\IDimensionsManager.cs" />
-    <Compile Include="Services\IShipmentLoaderService.cs" />
     <Compile Include="Rating\IRateSelection.cs" />
     <Compile Include="IValidator.cs" />
     <Compile Include="Rating\IRateSelectionFactory.cs" />
@@ -240,6 +239,7 @@
     <Compile Include="Services\ShipmentProcessorService.cs" />
     <Compile Include="Services\ShipmentTypeManagerWrapper.cs" />
     <Compile Include="Services\ShipmentTypeProvider.cs" />
+    <Compile Include="Services\ShippingDialogService.cs" />
     <Compile Include="Services\ShippingManagerWrapper.cs" />
     <Compile Include="Services\ShippingProfileManagerWrapper.cs" />
     <Compile Include="ShipmentAddressValidator.cs" />

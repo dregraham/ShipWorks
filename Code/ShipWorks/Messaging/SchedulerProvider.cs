@@ -1,4 +1,6 @@
-﻿using System.Reactive.Concurrency;
+﻿using System;
+using System.Reactive.Concurrency;
+using ShipWorks;
 
 namespace Interapptive.Shared.Threading
 {
@@ -7,6 +9,8 @@ namespace Interapptive.Shared.Threading
     /// </summary>
     public sealed class SchedulerProvider : ISchedulerProvider
     {
+        Lazy<IScheduler> windowsFormsEventLoopScheduler = new Lazy<IScheduler>(() => new ControlScheduler(Program.MainForm));
+
         /// <summary>
         /// Current thread scheduler
         /// </summary>
@@ -16,6 +20,12 @@ namespace Interapptive.Shared.Threading
         /// Dispatcher scheduler
         /// </summary>
         public IScheduler Dispatcher => DispatcherScheduler.Current;
+
+        /// <summary>
+        /// Schedule work on the Windows Forms event loop
+        /// </summary>
+        /// <remarks>This is equivalent to calling Control.Invoke</remarks>
+        public IScheduler WindowsFormsEventLoop => windowsFormsEventLoopScheduler.Value;
 
         /// <summary>
         /// Immediate scheduler

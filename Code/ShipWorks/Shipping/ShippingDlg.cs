@@ -49,7 +49,7 @@ namespace ShipWorks.Shipping
     /// Window from which all shipments are created
     /// </summary>
     [NDependIgnoreLongTypes]
-    partial class ShippingDlg : Form
+    public partial class ShippingDlg : Form
     {
         // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(ShippingDlg));
