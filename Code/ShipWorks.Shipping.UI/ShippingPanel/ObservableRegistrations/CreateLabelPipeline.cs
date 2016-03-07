@@ -31,7 +31,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
         public IDisposable Register(ShippingPanelViewModel viewModel)
         {
             return messageStream.OfType<CreateLabelMessage>()
-                .Where(x => x.ShipmentID == viewModel.Shipment.ShipmentID)
+                .Where(x => x.ShipmentID == viewModel.Shipment?.ShipmentID)
                 .CatchAndContinue((Exception ex) => log.Error("An error occurred while handling processed shipment", ex))
                 .Subscribe(_ => viewModel.CreateLabel());
         }

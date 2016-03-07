@@ -41,6 +41,8 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
             shippingRibbonActions.CreateLabel.Activate += OnCreateLabel;
 
             shippingRibbonActions.Void.Enabled = false;
+            shippingRibbonActions.Void.Activate += OnVoidLabel;
+
             shippingRibbonActions.Return.Enabled = false;
             shippingRibbonActions.Reprint.Enabled = false;
             shippingRibbonActions.ShipAgain.Enabled = false;
@@ -49,6 +51,21 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
                 messages.OfType<OrderSelectionChangedMessage>().Subscribe(HandleOrderSelectionChanged),
                 messages.OfType<ShipmentsProcessedMessage>().Subscribe(HandleShipmentsProcessed)
             );
+        }
+
+        /// <summary>
+        /// Void label
+        /// </summary>
+        private void OnVoidLabel(object sender, EventArgs e)
+        {
+            if (currentShipment != null && currentShipment.Processed && !currentShipment.Voided)
+            {
+                messages.Send(new VoidLabelMessage(this, currentShipment.ShipmentID));
+            }
+            else if (currentOrderIDs?.Any() == true)
+            {
+                messages.Send(new OpenShippingDialogWithOrdersMessage(this, currentOrderIDs));
+            }
         }
 
         /// <summary>
