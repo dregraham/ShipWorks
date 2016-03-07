@@ -122,20 +122,7 @@ namespace ShipWorks.ApplicationCore.Licensing
 
             store.License = response.Key;
 
-            // The license activation state will be one of three values: Active, Invalid,
-            // or OverChannelLimit. Rely on the success flag initially then dig into
-            // the response to determine if the license is over the channel limit.
-            LicenseActivationState activationState = response.Success
-                ? LicenseActivationState.Active
-                : LicenseActivationState.Invalid;
-
-            if ((response.Error?.IndexOf("CreateStoreActivity_103", StringComparison.Ordinal) ?? -1) >= 0)
-            {
-                // The response from Tango indicates the license will be over the channel limit
-                activationState = LicenseActivationState.OverChannelLimit;
-            }
-
-            return new EnumResult<LicenseActivationState>(activationState, response.Error);
+            return new EnumResult<LicenseActivationState>(response.Result, EnumHelper.GetDescription(response.Result));
         }
 
         /// <summary>

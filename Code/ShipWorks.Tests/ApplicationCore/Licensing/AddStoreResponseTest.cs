@@ -1,6 +1,7 @@
 ﻿using System.Xml;
 using ShipWorks.ApplicationCore.Licensing;
 using Xunit;
+using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Tests.ApplicationCore.Licensing
 {
@@ -57,17 +58,17 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
 
             AddStoreResponse testObject = new AddStoreResponse(xmlDocument);
 
-            Assert.True(string.IsNullOrEmpty(testObject.Error));
+            Assert.Equal(LicenseActivationState.Active, testObject.Result);
         }
 
         [Fact]
         public void Key_IsEmptyString_WhenNoKey()
         {
-            string error = "some random error";
+            string errorCode = EnumHelper.GetApiValue(LicenseActivationState.CustIdClosed);
 
             string standardOutput = "<?xml version='1.0'?>" +
                                     "<CreateStoreActivityResponse xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:xsd='http://www.w3.org/2001/XMLSchema'>" +
-                                    $"  <Error>{error}</Error>" +
+                                    $"  <Error><Code>{errorCode}</Code></Error>" +
                                     "</CreateStoreActivityResponse>";
 
             XmlDocument xmlDocument = new XmlDocument();
@@ -81,11 +82,11 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
         [Fact]
         public void Error_IsSet_WhenError()
         {
-            string error = "some random error";
+            string errorCode = EnumHelper.GetApiValue(LicenseActivationState.CustIdClosed);
 
             string standardOutput = "<?xml version='1.0'?>" +
                                     "<CreateStoreActivityResponse xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:xsd='http://www.w3.org/2001/XMLSchema'>" +
-                                    $"  <Error>{error}</Error>" +
+                                    $"  <Error><Code>{errorCode}</Code></Error>" +
                                     "</CreateStoreActivityResponse>";
 
             XmlDocument xmlDocument = new XmlDocument();
@@ -93,18 +94,18 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
 
             AddStoreResponse testObject = new AddStoreResponse(xmlDocument);
 
-            Assert.Equal(error, testObject.Error);
+            Assert.Equal(LicenseActivationState.CustIdClosed, testObject.Result);
         }
 
         [Fact]
         public void Success_IsFalse_WhenError()
         {
-            string error = "some random error";
+            string errorCode = EnumHelper.GetApiValue(LicenseActivationState.CustIdClosed);
             string key = "random key";
 
             string standardOutput = "<?xml version='1.0'?>" +
                                     "<CreateStoreActivityResponse xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:xsd='http://www.w3.org/2001/XMLSchema'>" +
-                                    $"  <Error>{error}</Error>" +
+                                    $"  <Error><Code>{errorCode}</Code></Error>" +
                                     $"  <LicenseKey>{key}</LicenseKey>" +
                                     "</CreateStoreActivityResponse>";
 

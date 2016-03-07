@@ -1,5 +1,6 @@
 ﻿using System.Xml;
 using Interapptive.Shared.Utility;
+using System;
 
 namespace ShipWorks.ApplicationCore.Licensing
 {
@@ -14,10 +15,21 @@ namespace ShipWorks.ApplicationCore.Licensing
         public AddStoreResponse(XmlDocument xmlResponse)
         {
             XPathNamespaceNavigator xpath = new XPathNamespaceNavigator(xmlResponse);
-            Error = XPathUtility.Evaluate(xpath, "//Error", "");
+
+            int error = XPathUtility.Evaluate(xpath, "//Error/Code", 0);
+
+            try
+            {
+                Result = EnumHelper.GetEnumByApiValue<LicenseActivationState>(error.ToString());
+            }
+            catch (InvalidOperationException)
+            {
+                Result = LicenseActivationState.UnknownError;
+            }
+
             Key = XPathUtility.Evaluate(xpath, "//LicenseKey", "");
 
-            Success = string.IsNullOrEmpty(Error);
+            Success = Result == LicenseActivationState.Active;
         }
 
         /// <summary>
@@ -28,7 +40,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Error Message
         /// </summary>
-        public string Error { get; }
+        public LicenseActivationState Result { get; }
 
         /// <summary>
         /// Success!
