@@ -111,7 +111,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Gets or sets the stamps username to create when creating a new stamps account.
         /// </summary>
-        string StampsUsername { get; set; }
+        public string StampsUsername { get; set; }
 
         /// <summary>
         /// The license capabilities.

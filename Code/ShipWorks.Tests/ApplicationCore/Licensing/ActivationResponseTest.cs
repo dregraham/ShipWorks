@@ -16,7 +16,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
         }
 
         [Fact]
-        public void ActivationResponse_SetsKey_FromXmlDocument()
+        public void ActivationResponse_SetsKey()
         {
             CustomerLicenseInfoV1 licenseInfo = new CustomerLicenseInfoV1()
             {
@@ -29,7 +29,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
         }
 
         [Fact]
-        public void ActivationResponse_SetsAssociatedStampsUserName_FromXmlDocument()
+        public void ActivationResponse_SetsAssociatedStampsUserName()
         {
             CustomerLicenseInfoV1 licenseInfo = new CustomerLicenseInfoV1()
             {
@@ -38,7 +38,20 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
 
             ActivationResponse activationResponse = new ActivationResponse(licenseInfo);
 
-            Assert.Equal("bob", activationResponse.AssociatedStampsUserName);
+            Assert.Equal("bob", activationResponse.AssociatedStampsUsername);
+        }
+
+        [Fact]
+        public void ActivationResponse_SetsStampsUsername()
+        {
+            CustomerLicenseInfoV1 licenseInfo = new CustomerLicenseInfoV1()
+            {
+                StampsUserName = "tom"
+            };
+
+            ActivationResponse activationResponse = new ActivationResponse(licenseInfo);
+
+            Assert.Equal("tom", activationResponse.StampsUsername);
         }
     }
 }

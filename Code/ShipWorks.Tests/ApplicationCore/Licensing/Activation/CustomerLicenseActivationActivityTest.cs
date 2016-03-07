@@ -130,7 +130,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.Activation
                 .Returns(key);
 
             activationResponseMock
-                .Setup(r => r.AssociatedStampsUserName)
+                .Setup(r => r.AssociatedStampsUsername)
                 .Returns(associatedUserName);
 
             return activationResponseMock.Object;
