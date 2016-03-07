@@ -49,7 +49,8 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
 
             subscription = new CompositeDisposable(
                 messages.OfType<OrderSelectionChangedMessage>().Subscribe(HandleOrderSelectionChanged),
-                messages.OfType<ShipmentsProcessedMessage>().Subscribe(HandleShipmentsProcessed)
+                messages.OfType<ShipmentsProcessedMessage>().Subscribe(HandleShipmentsProcessed),
+                messages.OfType<ShipmentsVoidedMessage>().Subscribe(HandleLabelsVoided)
             );
         }
 
@@ -92,6 +93,23 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
             if (processedShipment != null)
             {
                 currentShipment = processedShipment;
+            }
+
+            SetEnabledOnButtons();
+        }
+
+        /// <summary>
+        /// Handle shipments voided message
+        /// </summary>
+        private void HandleLabelsVoided(ShipmentsVoidedMessage message)
+        {
+            ShipmentEntity voidedShipment = message.VoidShipmentResults.
+                Select(x => x.Shipment).
+                FirstOrDefault(x => x.ShipmentID == currentShipment.ShipmentID);
+
+            if (voidedShipment?.ShipmentID == currentShipment.ShipmentID)
+            {
+                currentShipment = voidedShipment;
             }
 
             SetEnabledOnButtons();

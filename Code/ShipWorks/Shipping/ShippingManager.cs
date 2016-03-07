@@ -790,16 +790,18 @@ namespace ShipWorks.Shipping
         /// it was voided is logged to tango.
         /// </summary>
         [NDependIgnoreLongMethod]
-        public static void VoidShipment(long shipmentID)
+        public static ShipmentEntity VoidShipment(long shipmentID)
         {
             UserSession.Security.DemandPermission(PermissionType.ShipmentsVoidDelete, shipmentID);
+
+            ShipmentEntity shipment = null;
 
             try
             {
                 // Ensure's we are the only one who processes this shipment, if other ShipWorks are running
                 using (SqlEntityLock processLock = new SqlEntityLock(shipmentID, "Process Shipment"))
                 {
-                    ShipmentEntity shipment = GetShipment(shipmentID);
+                    shipment = GetShipment(shipmentID);
 
                     if (shipment == null)
                     {
@@ -809,7 +811,7 @@ namespace ShipWorks.Shipping
                     // If it's already voided, its all good
                     if (shipment.Voided)
                     {
-                        return;
+                        return shipment;
                     }
 
                     StoreEntity store = StoreManager.GetStore(shipment.Order.StoreID);
@@ -912,6 +914,8 @@ namespace ShipWorks.Shipping
             {
                 throw new ShippingException(ex.Message, ex);
             }
+
+            return shipment;
         }
 
         /// <summary>

@@ -8,7 +8,9 @@ using ShipWorks.ApplicationCore.ExecutionMode;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Shipping.Services;
+using ShipWorks.Stores.Content;
 
 namespace ShipWorks.Shipping
 {
@@ -155,7 +157,12 @@ namespace ShipWorks.Shipping
         /// Void the given shipment.  If the shipment is already voided, then no action is taken and no error is reported.  The fact that
         /// it was voided is logged to tango.
         /// </summary>
-        public void VoidShipment(long shipmentID) => ShippingManager.VoidShipment(shipmentID);
+        public ICarrierShipmentAdapter VoidShipment(long shipmentID)
+        {
+            ShipmentEntity shipment = ShippingManager.VoidShipment(shipmentID);
+
+            return shipmentAdapterFactory.Get(shipment);
+        }
 
         /// <summary>
         /// Indicates if the shipment type of the given type code has gone through the full setup wizard \ configuration
