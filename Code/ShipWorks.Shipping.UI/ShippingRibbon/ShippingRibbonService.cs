@@ -44,6 +44,8 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
             shippingRibbonActions.Void.Activate += OnVoidLabel;
 
             shippingRibbonActions.Return.Enabled = false;
+            shippingRibbonActions.Return.Activate += OnCreateReturn;
+
             shippingRibbonActions.Reprint.Enabled = false;
             shippingRibbonActions.ShipAgain.Enabled = false;
 
@@ -52,6 +54,17 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
                 messages.OfType<ShipmentsProcessedMessage>().Subscribe(HandleShipmentsProcessed),
                 messages.OfType<ShipmentsVoidedMessage>().Subscribe(HandleLabelsVoided)
             );
+        }
+
+        /// <summary>
+        /// Create return shipment
+        /// </summary>
+        private void OnCreateReturn(object sender, EventArgs e)
+        {
+            if (currentShipment != null && currentShipment.Processed)
+            {
+                messages.Send(new CreateReturnShipmentMessage(this, currentShipment.ShipmentID));
+            }
         }
 
         /// <summary>
