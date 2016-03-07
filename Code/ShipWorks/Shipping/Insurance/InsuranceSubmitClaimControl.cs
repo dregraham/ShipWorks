@@ -42,8 +42,6 @@ namespace ShipWorks.Shipping.Insurance
         {
             this.shipment = shipment;
 
-            submitClaimLink.Visible = !string.IsNullOrWhiteSpace(shipment.OnlineShipmentID);
-            
             // Make sure that controls are reset even if the data is empty
             claimType.SelectedValue = (InsureShipClaimType) shipment.InsurancePolicy.ClaimType.GetValueOrDefault((int) InsureShipClaimType.Damage);
             damageValue.Amount = shipment.InsurancePolicy.DamageValue.GetValueOrDefault(InsuranceUtility.GetInsuredValue(shipment));
