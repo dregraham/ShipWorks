@@ -66,7 +66,7 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
         {
             if (currentShipment != null && currentShipment.Processed)
             {
-                messages.Send(new ShipAgainMessage(this, currentShipment.ShipmentID));
+                messages.Send(new ShipAgainMessage(this, currentShipment));
             }
         }
 
@@ -77,7 +77,7 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
         {
             if (currentShipment != null && currentShipment.Processed && !currentShipment.Voided)
             {
-                messages.Send(new ReprintLabelMessage(this, currentShipment.ShipmentID));
+                messages.Send(new ReprintLabelsMessage(this, new[] { currentShipment }));
             }
         }
 
@@ -88,7 +88,7 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
         {
             if (currentShipment != null && currentShipment.Processed && !currentShipment.Voided)
             {
-                messages.Send(new CreateReturnShipmentMessage(this, currentShipment.ShipmentID));
+                messages.Send(new CreateReturnShipmentMessage(this, currentShipment));
             }
         }
 

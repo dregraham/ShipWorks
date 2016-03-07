@@ -11,7 +11,9 @@ using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Dashboard;
 using ShipWorks.Core.Messaging;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages;
+using ShipWorks.Messaging.Messages.Shipping;
 
 namespace ShipWorks.Shipping.Services
 {
@@ -51,8 +53,33 @@ namespace ShipWorks.Shipping.Services
                     .ObserveOn(schedulerProvider.WindowsFormsEventLoop)
                     .Subscribe(OpenShippingDialog),
                 messenger.OfType<OpenShippingDialogWithOrdersMessage>()
-                    .Subscribe(async x => await LoadOrdersForShippingDialog(x).ConfigureAwait(false))
+                    .Subscribe(async x => await LoadOrdersForShippingDialog(x).ConfigureAwait(false)),
+                messenger.OfType<ShipAgainMessage>()
+                    .Select(ShipAgain)
+                    .Subscribe(OpenShippingDialog),
+                messenger.OfType<CreateReturnShipmentMessage>()
+                    .Select(CreateReturnShipment)
+                    .Subscribe(OpenShippingDialog)
             );
+        }
+
+        /// <summary>
+        /// Create a return shipment
+        /// </summary>
+        private OpenShippingDialogMessage CreateReturnShipment(CreateReturnShipmentMessage message)
+        {
+            ShipmentEntity shipment = ShippingManager.CreateShipment(message.Shipment);
+            shipment.ReturnShipment = true;
+            return new OpenShippingDialogMessage(this, new[] { shipment });
+        }
+
+        /// <summary>
+        /// Ship the order again
+        /// </summary>
+        private OpenShippingDialogMessage ShipAgain(ShipAgainMessage message)
+        {
+            ShipmentEntity shipment = ShippingManager.CreateShipment(message.Shipment);
+            return new OpenShippingDialogMessage(this, new[] { shipment });
         }
 
         /// <summary>

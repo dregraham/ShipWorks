@@ -1,19 +1,22 @@
-﻿using ShipWorks.Core.Messaging;
+﻿using System.Collections.Generic;
+using Interapptive.Shared.Collections;
+using ShipWorks.Core.Messaging;
+using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Messaging.Messages.Shipping
 {
     /// <summary>
-    /// Request that a single label be reprinted
+    /// Request that a labels be reprinted
     /// </summary>
-    public struct ReprintLabelMessage : IShipWorksMessage
+    public struct ReprintLabelsMessage : IShipWorksMessage
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        public ReprintLabelMessage(object sender, long shipmentID)
+        public ReprintLabelsMessage(object sender, IEnumerable<ShipmentEntity> shipments)
         {
             Sender = sender;
-            ShipmentID = shipmentID;
+            Shipments = shipments.ToReadOnly();
         }
 
         /// <summary>
@@ -24,6 +27,6 @@ namespace ShipWorks.Messaging.Messages.Shipping
         /// <summary>
         /// Id of the shipment to Reprint a label for
         /// </summary>
-        public long ShipmentID { get; }
+        public IEnumerable<ShipmentEntity> Shipments { get; }
     }
 }

@@ -115,9 +115,6 @@ namespace ShipWorks.Shipping.UI
             builder.RegisterType<ShipmentProcessor>()
                 .AsImplementedInterfaces();
 
-            builder.RegisterType<ShipmentProcessorService>()
-                .AsImplementedInterfaces();
-
             builder.RegisterType<ShippingProfileManagerWrapper>()
                 .AsImplementedInterfaces()
                 .SingleInstance();

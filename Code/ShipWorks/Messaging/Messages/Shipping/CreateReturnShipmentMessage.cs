@@ -1,4 +1,5 @@
 ﻿using ShipWorks.Core.Messaging;
+using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Messaging.Messages.Shipping
 {
@@ -10,10 +11,10 @@ namespace ShipWorks.Messaging.Messages.Shipping
         /// <summary>
         /// Constructor
         /// </summary>
-        public CreateReturnShipmentMessage(object sender, long shipmentID)
+        public CreateReturnShipmentMessage(object sender, ShipmentEntity shipment)
         {
             Sender = sender;
-            ShipmentID = shipmentID;
+            Shipment = shipment;
         }
 
         /// <summary>
@@ -24,6 +25,6 @@ namespace ShipWorks.Messaging.Messages.Shipping
         /// <summary>
         /// Id of the shipment to create a return shipment for
         /// </summary>
-        public long ShipmentID { get; }
+        public ShipmentEntity Shipment { get; }
     }
 }

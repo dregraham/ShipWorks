@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Windows.Forms;
 using Autofac;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Data;
@@ -109,6 +110,18 @@ namespace ShipWorks.Tests.Shared.Database
 
             initializeContainer(mock.Container);
             configureMock?.Invoke(mock);
+
+            var builder = new ContainerBuilder();
+            builder.Register(c => new Control())
+                .As<Control>()
+                .As<IWin32Window>()
+                .ExternallyOwned();
+            builder.Update(mock.Container);
+
+            //foreach (IComponentRegistration registration in builder.Build().ComponentRegistry.Registrations)
+            //{
+            //    mock.Container.ComponentRegistry.Register(registration);
+            //}
 
             using (new AuditBehaviorScope(AuditBehaviorUser.SuperUser, AuditReason.Default, AuditState.Disabled))
             {

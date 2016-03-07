@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Reactive.Concurrency;
-using ShipWorks;
+using System.Windows.Forms;
 
 namespace Interapptive.Shared.Threading
 {
@@ -9,7 +9,12 @@ namespace Interapptive.Shared.Threading
     /// </summary>
     public sealed class SchedulerProvider : ISchedulerProvider
     {
-        Lazy<IScheduler> windowsFormsEventLoopScheduler = new Lazy<IScheduler>(() => new ControlScheduler(Program.MainForm));
+        Lazy<IScheduler> windowsFormsEventLoopScheduler;
+
+        public SchedulerProvider(Func<Control> getSchedulerControl)
+        {
+            windowsFormsEventLoopScheduler = new Lazy<IScheduler>(() => new ControlScheduler(getSchedulerControl()));
+        }
 
         /// <summary>
         /// Current thread scheduler

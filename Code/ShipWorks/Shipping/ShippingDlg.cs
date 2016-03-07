@@ -14,7 +14,6 @@ using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore;
-using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Common.Threading;
 using ShipWorks.Core.Common.Threading;
 using ShipWorks.Core.Messaging;
@@ -22,7 +21,6 @@ using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Filters;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Shipping.Carriers;
@@ -35,10 +33,6 @@ using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.ShipSense;
 using ShipWorks.Stores;
 using ShipWorks.Stores.Content;
-using ShipWorks.Templates;
-using ShipWorks.Templates.Media;
-using ShipWorks.Templates.Printing;
-using ShipWorks.Templates.Processing;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
 using Timer = System.Windows.Forms.Timer;
@@ -1782,127 +1776,9 @@ namespace ShipWorks.Shipping
         /// </summary>
         private void OnPrint(object sender, EventArgs e)
         {
-            BackgroundExecutor<ShipmentEntity> executor = new BackgroundExecutor<ShipmentEntity>(this,
-                "Print Shipments",
-                "ShipWorks is printing labels.",
-                "Printing {0} of {1}");
-
-            // We are prepared for exceptions
-            executor.PropagateException = true;
-
-            // What to do before it gets started (but is on the background thread)
-            executor.ExecuteStarting += (object s, EventArgs args) =>
-                FilterHelper.EnsureFiltersUpToDate(TimeSpan.FromSeconds(15));
-
-            // Some of the printing will be delayed b\c we are waiting for label sheets to fill up
-            Dictionary<TemplateEntity, List<long>> delayedPrints = new Dictionary<TemplateEntity, List<long>>(TemplateHelper.TemplateEqualityComparer);
-
-            // Executes right after things finish - but still on the background thread
-            executor.ExecuteCompleting += (object s, EventArgs args) =>
-                {
-                    foreach (PrintJob printJob in delayedPrints.Select(pair => PrintJob.Create(pair.Key, pair.Value)))
-                    {
-                        printJob.Print();
-                    }
-                };
-
-            // Executes after everything is totally done, and is on the UI thread
-            executor.ExecuteCompleted += (object s, BackgroundExecutorCompletedEventArgs<ShipmentEntity> args) =>
-            {
-                if (args.ErrorException == null)
-                {
-                    return;
-                }
-
-                if (args.ErrorException is PrintingException)
-                {
-                    if (!(args.ErrorException is PrintingNoTemplateOutputException))
-                    {
-                        MessageHelper.ShowError(this, args.ErrorException.Message);
-                    }
-                }
-                else
-                {
-                    throw new InvalidOperationException(args.ErrorException.Message, args.ErrorException);
-                }
-            };
-
-            executor.ExecuteAsync((shipment, state, issueAdder) =>
-            {
-                List<TemplateEntity> templates = ShipmentPrintHelper.DetermineTemplatesToPrint(shipment);
-
-                // Print with each template
-                foreach (TemplateEntity template in templates)
-                {
-                    PrintTemplate(template, shipment, delayedPrints);
-                }
-            },
-            // Each shipment to print.  Send in a cloned collection so changes on other threads don't affect it.
-            EntityUtility.CloneEntityCollection(shipmentControl.SelectedShipments.Where(s => !s.DeletedFromDatabase && s.Processed && !s.Voided))
-            );
-        }
-
-        /// <summary>
-        /// Print a given template
-        /// </summary>
-        private static void PrintTemplate(TemplateEntity template, ShipmentEntity shipment, Dictionary<TemplateEntity, List<long>> delayedPrints)
-        {
-            // If it's standard or thermal we can print it right away
-            if (template.Type == (int) TemplateType.Standard || template.Type == (int) TemplateType.Thermal)
-            {
-                PrintJob printJob = PrintJob.Create(template, new List<long> { shipment.ShipmentID });
-                printJob.Print();
-            }
-            else
-            {
-                // Get the list of keys that have been delayed so far for this template
-                List<long> delayedKeys;
-                if (!delayedPrints.TryGetValue(template, out delayedKeys))
-                {
-                    delayedKeys = new List<long>();
-                    delayedPrints[template] = delayedKeys;
-                }
-
-                // Add this as a delayed key
-                delayedKeys.Add(shipment.ShipmentID);
-
-                PrintLabelTemplate(template, delayedKeys, delayedPrints);
-            }
-        }
-
-        /// <summary>
-        /// Print a label template
-        /// </summary>
-        private static void PrintLabelTemplate(TemplateEntity template, List<long> delayedKeys, IDictionary<TemplateEntity, List<long>> delayedPrints)
-        {
-            // It must be a label template
-            if (template.Type != (int) TemplateType.Label)
-            {
-                return;
-            }
-
-            LabelSheetEntity labelSheet = LabelSheetManager.GetLabelSheet(template.LabelSheetID);
-
-            if (labelSheet != null)
-            {
-                int cells = labelSheet.Rows * labelSheet.Columns;
-
-                // To know how many cell's we'll use, we have to translate
-                int inputs = TemplateContextTranslator.Translate(delayedKeys, template).Count;
-
-                // If we have enough to fill a sheet, print now
-                if (inputs % cells == 0)
-                {
-                    PrintJob printJob = PrintJob.Create(template, delayedKeys);
-                    printJob.Print();
-
-                    delayedPrints.Remove(template);
-                }
-            }
-            else
-            {
-                delayedPrints.Remove(template);
-            }
+            IEnumerable<ShipmentEntity> shipmentsToPrint = shipmentControl.SelectedShipments
+                .Where(s => !s.DeletedFromDatabase && s.Processed && !s.Voided);
+            messenger.Send(new ReprintLabelsMessage(this, shipmentsToPrint));
         }
 
         /// <summary>

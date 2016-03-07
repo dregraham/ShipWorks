@@ -401,7 +401,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingRibbon
                 x.ShipmentID = 1234;
             }));
 
-            messenger.OfType<CreateReturnShipmentMessage>().Subscribe(x => shipmentID = x.ShipmentID);
+            messenger.OfType<CreateReturnShipmentMessage>().Subscribe(x => shipmentID = x.Shipment.ShipmentID);
 
             Mock.Get(actions.Object.Return).Raise(x => x.Activate += null, EventArgs.Empty);
 
@@ -511,7 +511,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingRibbon
                 x.ShipmentID = 1234;
             }));
 
-            messenger.OfType<ReprintLabelMessage>().Subscribe(x => shipmentID = x.ShipmentID);
+            messenger.OfType<ReprintLabelsMessage>().Subscribe(x => shipmentID = x.Shipments.First().ShipmentID);
 
             Mock.Get(actions.Object.Reprint).Raise(x => x.Activate += null, EventArgs.Empty);
 
@@ -621,7 +621,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingRibbon
                 x.ShipmentID = 1234;
             }));
 
-            messenger.OfType<ShipAgainMessage>().Subscribe(x => shipmentID = x.ShipmentID);
+            messenger.OfType<ShipAgainMessage>().Subscribe(x => shipmentID = x.Shipment.ShipmentID);
 
             Mock.Get(actions.Object.ShipAgain).Raise(x => x.Activate += null, EventArgs.Empty);
 

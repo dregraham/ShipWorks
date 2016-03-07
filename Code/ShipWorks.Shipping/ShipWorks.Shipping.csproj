@@ -230,6 +230,7 @@
     <Compile Include="Rating\IRateSelectionFactory.cs" />
     <Compile Include="Rating\RateSelection.cs" />
     <Compile Include="Rating\RateSelectionFactory.cs" />
+    <Compile Include="Services\LabelPrintingService.cs" />
     <Compile Include="Services\RatesRetriever.cs" />
     <Compile Include="Services\RatesRetrieverService.cs" />
     <Compile Include="Services\ShipmentFactory.cs" />
