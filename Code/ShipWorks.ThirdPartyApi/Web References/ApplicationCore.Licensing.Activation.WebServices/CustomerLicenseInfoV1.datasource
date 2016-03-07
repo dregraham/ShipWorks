@@ -6,5 +6,5 @@
     cause the file to be unrecognizable by the program.
 -->
 <GenericObjectDataSource DisplayName="CustomerLicenseInfoV1" Version="1.0" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
-   <TypeInfo>ShipWorks.ApplicationCore.Licensing.Activation.CustomerLicenseInfoV1, Web References.ApplicationCore.Licensing.Activation.Reference.cs.dll, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null</TypeInfo>
+   <TypeInfo>ShipWorks.ApplicationCore.Licensing.Activation.WebServices.CustomerLicenseInfoV1, Web References.ApplicationCore.Licensing.Activation.WebServices.Reference.cs.dll, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null</TypeInfo>
 </GenericObjectDataSource>

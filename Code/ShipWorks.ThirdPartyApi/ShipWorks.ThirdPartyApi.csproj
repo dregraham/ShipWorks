@@ -191,7 +191,7 @@
     <Compile Include="Shipping\Carriers\FedEx\Api\WebServices\Ship\ProcessShipmentRequest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Express1\Net\RewriteScanFormMessageAttribute.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Express1\Net\RewriteScanFormMessageSoapExtension.cs" />
-    <Compile Include="Web References\ApplicationCore.Licensing.Activation\Reference.cs">
+    <Compile Include="Web References\ApplicationCore.Licensing.Activation.WebServices\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.map</DependentUpon>
@@ -387,11 +387,11 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-    <None Include="Web References\ApplicationCore.Licensing.Activation\Activation.wsdl" />
-    <None Include="Web References\ApplicationCore.Licensing.Activation\CustomerLicenseInfoV1.datasource">
+    <None Include="Web References\ApplicationCore.Licensing.Activation.WebServices\Activation.wsdl" />
+    <None Include="Web References\ApplicationCore.Licensing.Activation.WebServices\CustomerLicenseInfoV1.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
-    <None Include="Web References\ApplicationCore.Licensing.Activation\Reference.map">
+    <None Include="Web References\ApplicationCore.Licensing.Activation.WebServices\Reference.map">
       <Generator>MSDiscoCodeGenerator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
@@ -1989,17 +1989,6 @@
       <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
       <CachedSettingsPropName>ShipWorks_Shipping_Carriers_FedEx_WebServices_v2013_Ship_ShipService</CachedSettingsPropName>
     </WebReferenceUrl>
-    <WebReferenceUrl Include="C:\work\ShipWorks\Code\ShipWorks\ApplicationCore\Licensing\WSDL\Activation_v1.wsdl">
-      <UrlBehavior>Dynamic</UrlBehavior>
-      <RelPath>Web References\ApplicationCore.Licensing.Activation\</RelPath>
-      <UpdateFromURL>C:\work\ShipWorks\Code\ShipWorks\ApplicationCore\Licensing\WSDL\Activation_v1.wsdl</UpdateFromURL>
-      <ServiceLocationURL>
-      </ServiceLocationURL>
-      <CachedDynamicPropName>
-      </CachedDynamicPropName>
-      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
-      <CachedSettingsPropName>ShipWorks_ThirdPartyApi_ApplicationCore_Licensing_Activation_Activation</CachedSettingsPropName>
-    </WebReferenceUrl>
     <WebReferenceUrl Include="D:\Development\Applications\ShipWorks3x\Trunk\Code\ShipWorks\Shipping\Carriers\UPS\OnLineTools\Wsdl\RegistrationWebService.wsdl">
       <UrlBehavior>Static</UrlBehavior>
       <RelPath>Web References\Shipping.Carriers.UPS.OnLineTools.WebServices.Registration\</RelPath>
@@ -2065,6 +2054,17 @@
       </CachedDynamicPropName>
       <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
       <CachedSettingsPropName>ShipWorks_Stores_Platforms_Magento_WebServices_MagentoService</CachedSettingsPropName>
+    </WebReferenceUrl>
+    <WebReferenceUrl Include="http://shipworks.stamps.com/ShipWorksNet/ActivationV1.svc%3fsingleWsdl">
+      <UrlBehavior>Dynamic</UrlBehavior>
+      <RelPath>Web References\ApplicationCore.Licensing.Activation.WebServices\</RelPath>
+      <UpdateFromURL>http://shipworks.stamps.com/ShipWorksNet/ActivationV1.svc%3fsingleWsdl</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>ShipWorks_ThirdPartyApi_ApplicationCore_Licensing_Activation_WebServices_Activation</CachedSettingsPropName>
     </WebReferenceUrl>
     <WebReferenceUrl Include="http://www.express1dev.com/Services/CustomerService.svc%3fwsdl">
       <UrlBehavior>Static</UrlBehavior>
