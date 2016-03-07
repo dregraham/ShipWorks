@@ -309,6 +309,32 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingRibbon
 
             Assert.Null(message);
         }
+
+        [Theory]
+        [InlineData(true, true, false)]
+        [InlineData(true, false, true)]
+        [InlineData(false, true, false)]
+        [InlineData(false, false, false)]
+        public void HandleLabelVoidedMessage_SetsEnabledOnVoid_WhenSingleProcessedShipmentIsLoaded(bool isProcessed, bool voided, bool expected)
+        {
+            actions.Object.Void.Enabled = !expected;
+            var testObject = mock.Create<ShippingRibbonService>();
+            testObject.Register(actions.Object);
+
+            SendOrderSelectionChangedMessageWithLoadedOrderSelection(CreateShipmentAdapter(x =>
+            {
+                x.Processed = isProcessed;
+                x.Voided = voided;
+                x.ShipmentID = 123;
+            }));
+
+            messenger.Send(new ShipmentsVoidedMessage(this, new[]
+            {
+                new VoidShipmentResult(new ShipmentEntity { ShipmentID = 123, Processed = isProcessed, Voided = voided})
+            }));
+
+            Assert.Equal(expected, actions.Object.Void.Enabled);
+        }
         #endregion
 
         [Theory]

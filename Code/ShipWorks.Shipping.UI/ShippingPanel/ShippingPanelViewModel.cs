@@ -328,7 +328,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// <summary>
         /// Void a shipment
         /// </summary>
-        public void VoidLabel(VoidLabelMessage voidLabelMessage)
+        public virtual void VoidLabel(VoidLabelMessage voidLabelMessage)
         {
             ShipmentEntity shipment = ShipmentAdapter?.Shipment;
 
