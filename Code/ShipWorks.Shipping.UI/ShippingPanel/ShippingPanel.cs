@@ -127,12 +127,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             IInputElement focusedElement = FindFocusedInputElement(shippingPanelControl);
             CommitBindings(focusedElement);
         }
-
-        internal void CreateLabel()
-        {
-            viewModel.CreateLabel();
-        }
-
+        
         /// <summary>
         /// Find the element that is currently focused within the given dependency object
         /// </summary>
