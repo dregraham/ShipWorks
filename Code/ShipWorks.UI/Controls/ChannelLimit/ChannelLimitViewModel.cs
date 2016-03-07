@@ -17,6 +17,7 @@ using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
 using ShipWorks.Data.Utility;
+using ShipWorks.Users.Security;
 
 namespace ShipWorks.UI.Controls.ChannelLimit
 {
@@ -256,6 +257,10 @@ namespace ShipWorks.UI.Controls.ChannelLimit
                 catch (SqlAppResourceLockException)
                 {
                     messageHelper.ShowError("Unable to delete store while it is in the process of a download.");
+                }
+                catch (PermissionException)
+                {
+                    messageHelper.ShowError("Please log in as an administrator to delete this channel.");
                 }
             }
 
