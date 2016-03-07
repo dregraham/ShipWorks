@@ -47,7 +47,10 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
             shippingRibbonActions.Return.Activate += OnCreateReturn;
 
             shippingRibbonActions.Reprint.Enabled = false;
+            shippingRibbonActions.Reprint.Activate += OnReprintLabel;
+
             shippingRibbonActions.ShipAgain.Enabled = false;
+            shippingRibbonActions.ShipAgain.Activate += OnShipAgain;
 
             subscription = new CompositeDisposable(
                 messages.OfType<OrderSelectionChangedMessage>().Subscribe(HandleOrderSelectionChanged),
@@ -57,11 +60,33 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
         }
 
         /// <summary>
+        /// Ship again
+        /// </summary>
+        private void OnShipAgain(object sender, EventArgs e)
+        {
+            if (currentShipment != null && currentShipment.Processed)
+            {
+                messages.Send(new ShipAgainMessage(this, currentShipment.ShipmentID));
+            }
+        }
+
+        /// <summary>
+        /// Reprint the label
+        /// </summary>
+        private void OnReprintLabel(object sender, EventArgs e)
+        {
+            if (currentShipment != null && currentShipment.Processed && !currentShipment.Voided)
+            {
+                messages.Send(new ReprintLabelMessage(this, currentShipment.ShipmentID));
+            }
+        }
+
+        /// <summary>
         /// Create return shipment
         /// </summary>
         private void OnCreateReturn(object sender, EventArgs e)
         {
-            if (currentShipment != null && currentShipment.Processed)
+            if (currentShipment != null && currentShipment.Processed && !currentShipment.Voided)
             {
                 messages.Send(new CreateReturnShipmentMessage(this, currentShipment.ShipmentID));
             }
@@ -153,7 +178,7 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
         }
 
         /// <summary>
-        /// Update which buttons are enabled and whic are disabled
+        /// Update which buttons are enabled and which are disabled
         /// </summary>
         private void SetEnabledOnButtons()
         {
