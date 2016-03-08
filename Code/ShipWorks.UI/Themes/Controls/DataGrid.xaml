@@ -4,16 +4,17 @@
     <Style TargetType="TextBlock" x:Key="ShipWorksDataGrid.AmountStyle" >
         <Setter Property="HorizontalAlignment" Value="Right" />
     </Style>
-
+    
+    <Style TargetType="TextBlock" x:Key="ShipWorksDataGrid.AmountStyleGray" >
+        <Setter Property="HorizontalAlignment" Value="Right" />
+        <Setter Property="Foreground" Value="#FF6D6D6D" />
+    </Style>
+    
     <Style TargetType="DataGridCell" x:Key="ShipWorksDataGrid.NoSelection">
         <Setter Property="Foreground" Value="#FF000000"/>
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="FocusVisualStyle" Value="{x:Null}" />
         <Style.Triggers>
-            <Trigger Property="IsEnabled" Value="False">
-                <Setter Property="Foreground" Value="#FF000000"/>
-                <Setter Property="Background" Value="#FFDCE6F0"/>
-            </Trigger>
             <Trigger Property="IsSelected" Value="True">
                 <Setter Property="Background" Value="#FF3399FF"/>
                 <Setter Property="Foreground" Value="#FFFFFFFF"/>
@@ -28,9 +29,6 @@
                 <Setter Property="BorderBrush" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
                 <Setter Property="Foreground" Value="#FF000000"/>
             </MultiTrigger>
-            <Trigger Property="IsEnabled" Value="false">
-                <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
-            </Trigger>
         </Style.Triggers>
     </Style>
     

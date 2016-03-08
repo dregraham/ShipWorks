@@ -10,6 +10,7 @@ using ShipWorks.Core.Messaging;
 using ShipWorks.Core.UI;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Messaging.Messages.Shipping;
+using ShipWorks.Shipping.Carriers.Amazon.Api.DTOs;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Services;
 
@@ -59,7 +60,7 @@ namespace ShipWorks.Shipping.UI.RatingPanel
             subscriptions = new CompositeDisposable(
                 messenger.OfType<RatesRetrievingMessage>()
                     .ObserveOn(schedulerProvider.Dispatcher)
-                    .Subscribe(_ => IsLoading = true),
+                    .Subscribe(_ => ShowSpinner()),
                 messenger.OfType<RatesRetrievingMessage>()
                     .CombineLatest(messenger.OfType<RatesRetrievedMessage>(), (x, y) => new { RetrievingHash = x.RatingHash, Message = y })
                     .Where(x => x.RetrievingHash == x.Message.RatingHash)
@@ -73,6 +74,18 @@ namespace ShipWorks.Shipping.UI.RatingPanel
                     .Where(_ => SelectedRate != null)
                     .Subscribe(_ => messenger.Send(new SelectedRateChangedMessage(this, SelectedRate)))
             );
+        }
+
+        /// <summary>
+        /// Blank out items that can show so that the user can't see them
+        /// while rates are being retrieved, and show the spinner.
+        /// </summary>
+        private void ShowSpinner()
+        {
+            Rates = Enumerable.Empty<RateResult>();
+            Footnotes = Enumerable.Empty<object>();
+            ShowEmptyMessage = false;
+            IsLoading = true;
         }
 
         /// <summary>
