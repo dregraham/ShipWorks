@@ -43,6 +43,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Activation
             
             ICustomerLicense license = licenseFactory(activateLicenseResponse.Context.Key);
             license.AssociatedStampsUsername = activateLicenseResponse.Context.AssociatedStampsUsername;
+            license.StampsUsername = activateLicenseResponse.Context.StampsUsername;
             license.Save();
 
             return license;
