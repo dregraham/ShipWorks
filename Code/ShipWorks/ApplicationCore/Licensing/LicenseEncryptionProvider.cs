@@ -3,9 +3,7 @@ using System.Data.SqlClient;
 using System.Security.Cryptography;
 using System.Text;
 using Interapptive.Shared.Utility;
-using Quartz.Util;
 using ShipWorks.Data.Administration;
-using ShipWorks.Data.Connection;
 
 namespace ShipWorks.ApplicationCore.Licensing
 {
@@ -45,7 +43,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             // a legacy customer license, set the key to a fixed string,
             // so that when we decrypt later, we know it is actually
             // supposed to be an empty string.
-            if (plainText.IsNullOrWhiteSpace())
+            if (string.IsNullOrWhiteSpace(plainText))
             {
                 plainText = LegacyUserLicense;
             }
@@ -58,7 +56,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public string Decrypt(string encryptedText)
         {
-            if (encryptedText.IsNullOrWhiteSpace())
+            if (string.IsNullOrWhiteSpace(encryptedText))
             {
                 throw new EncryptionException("Cannot decrypt an empty string");
             }
