@@ -8,7 +8,7 @@
         /// <summary>
         /// Error Message
         /// </summary>
-        string Error { get; }
+        LicenseActivationState Result { get; }
 
         /// <summary>
         /// License Key
