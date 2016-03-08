@@ -4,11 +4,8 @@
                     xmlns:local="clr-namespace:ShipWorks.Shipping.UI.RatingPanel.FootnoteTemplates">
     <DataTemplate x:Key="InformationFootnoteViewModelTemplate">
         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-            <Image Source="/Shipworks.Core;component/Resources/information2.png"
-                    Width="16"
-                    Height="16"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center" />
+            <Image Style="{DynamicResource Image.Icon}"
+                   Source="/Shipworks.Core;component/Resources/information2.png" />
             <TextBlock Margin="6,1,0,0" Text="{Binding InformationText}" />
         </StackPanel>
     </DataTemplate>

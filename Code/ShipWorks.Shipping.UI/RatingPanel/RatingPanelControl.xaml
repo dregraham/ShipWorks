@@ -10,10 +10,15 @@
              d:DataContext="{d:DesignInstance local:TestRatingPanelViewModel, IsDesignTimeCreatable=True}"
              mc:Ignorable="d"
              FontFamily="Tahoma"
-             d:DesignHeight="300" d:DesignWidth="400">
+             d:DesignHeight="300" d:DesignWidth="400"
+             UseLayoutRounding="True"
+             SnapsToDevicePixels="True"
+            >
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/ShipWorks.UI;component/Styles/GlobalStyle.xaml"/>
+                <ResourceDictionary Source="/ShipWorks.UI;component/Themes/Controls/DataGrid.xaml"/>
                 <ResourceDictionary Source="FootnoteTemplates/FootnoteTemplates.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
@@ -25,57 +30,10 @@
 
             <FrameworkElement x:Key="ProxyElement"
                           DataContext="{Binding}"/>
-
-            <Style TargetType="TextBlock" x:Key="AmountStyle">
-                <Setter Property="HorizontalAlignment" Value="Right" />
-            </Style>
-            <Style TargetType="DataGridCell" x:Key="NoSelection">
-                <Setter Property="BorderThickness" Value="0" />
-                <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-                <Setter Property="Foreground" Value="Black"/>
-                <Style.Triggers>
-                    <Trigger Property="IsEnabled" Value="False">
-                        <Setter Property="Foreground" Value="Black"/>
-                    </Trigger>
-                    <Trigger Property="IsSelected" Value="True">
-                        <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
-                        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}"/>
-                        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
-                    </Trigger>
-                    <MultiTrigger>
-                        <MultiTrigger.Conditions>
-                            <Condition Property="IsSelected" Value="true"/>
-                            <Condition Property="Selector.IsSelectionActive" Value="false"/>
-                        </MultiTrigger.Conditions>
-                        <Setter Property="Background" Value="DarkGray"/>
-                        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
-                        <Setter Property="Foreground" Value="LightGray"/>
-                    </MultiTrigger>
-                    <Trigger Property="IsEnabled" Value="false">
-                        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
-                    </Trigger>
-                </Style.Triggers>
-            </Style>
-            <Style TargetType="DataGridCell" x:Key="SpacingStyle" BasedOn="{StaticResource NoSelection}">
-                <Setter Property="Padding" Value="4,0,4,0"/>
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="{x:Type DataGridCell}">
-                            <Border Padding="{TemplateBinding Padding}"
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="{TemplateBinding BorderThickness}"
-                                Background="{TemplateBinding Background}"
-                                SnapsToDevicePixels="True">
-                                <ContentPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
-                            </Border>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-            </Style>
         </ResourceDictionary>
     </UserControl.Resources>
     <DockPanel>
-        <Grid Margin="4,4,4,4">
+        <Grid Margin="0,0,0,0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
@@ -83,75 +41,49 @@
             </Grid.RowDefinitions>
             <ContentControl Visibility="Collapsed"
                             Content="{StaticResource ProxyElement}"/>
-            <TextBlock>Rates</TextBlock>
+            
             <DataGrid Grid.Row="1"
-                        IsEnabled="{Binding IsLoading,Converter={StaticResource InvertBoolean}}"
-                        ItemsSource="{Binding Rates}"
-                        SelectedItem="{Binding SelectedRate}"
-                        HeadersVisibility="Column"
-                        AutoGenerateColumns="false"
-                        CanUserAddRows="False"
-                        CanUserDeleteRows="False"
-                        CanUserResizeRows="False"
-                        AlternatingRowBackground="#FFF6F6F6"
-                        HorizontalGridLinesBrush="#FFCCCCCC"
-                        VerticalGridLinesBrush="#FFCCCCCC"
-                        CanUserSortColumns="False"
-                        CanUserReorderColumns="False"
-                        CanUserResizeColumns="False"
-                        SelectionMode="Single"
-                        CellStyle="{StaticResource NoSelection}"
-                        IsReadOnly="True">
-                <DataGrid.RowStyle>
-                    <Style TargetType="{x:Type DataGridRow}">
-                        <Setter Property="Foreground" Value="Red" />
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding Selectable}" Value="False">
-                                <Setter Property="IsEnabled" Value="False" />
-                            </DataTrigger>
-                            <Trigger Property="IsEnabled" Value="False">
-                                <Setter Property="Foreground" Value="Yellow" />
-                            </Trigger>
-                        </Style.Triggers>
-                    </Style>
-                </DataGrid.RowStyle>
+                      IsEnabled="{Binding IsLoading,Converter={StaticResource InvertBoolean}}"
+                      ItemsSource="{Binding Rates}"
+                      SelectedItem="{Binding SelectedRate}" 
+                      BorderThickness="0">
                 <DataGrid.Columns>
                     <DataGridTemplateColumn Header="Provider">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <Image Source="{Binding ProviderLogo,Converter={StaticResource ImageToBitmapSource}}" />
+                                <Image Style="{DynamicResource Image.Icon}"
+                                       Source="{Binding ProviderLogo, Converter={StaticResource ImageToBitmapSource}}" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTextColumn Header="Service"
+                    <DataGridTextColumn Header="Service" 
                                         Width="*"
-                                        Binding="{Binding Description}" />
+                                        Binding="{Binding Description}"  >
+                        </DataGridTextColumn>
                     <DataGridTextColumn Header="Days"
+                                        MinWidth="164"
                                         Binding="{Binding Days}" />
                     <DataGridTextColumn Header="Shipping"
-                                        CellStyle="{StaticResource SpacingStyle}"
-                                        ElementStyle="{StaticResource AmountStyle}"
+                                        ElementStyle="{StaticResource ShipWorksDataGrid.AmountStyle}"
                                         Visibility="{Binding DataContext.ShowShipping,
                                             Source={StaticResource ProxyElement},
                                             Converter={StaticResource BooleanToVisibility}}"
                                         Binding="{Binding Shipping, Converter={StaticResource HalfCentCurrency}}" />
                     <DataGridTextColumn Header="Tax"
-                                        CellStyle="{StaticResource SpacingStyle}"
-                                        ElementStyle="{StaticResource AmountStyle}"
+                                        ElementStyle="{StaticResource ShipWorksDataGrid.AmountStyle}"
                                         Visibility="{Binding DataContext.ShowTaxes,
                                             Source={StaticResource ProxyElement},
                                             Converter={StaticResource BooleanToVisibility}}"
                                         Binding="{Binding Taxes, Converter={StaticResource HalfCentCurrency}}" />
                     <DataGridTextColumn Header="Duty"
-                                        CellStyle="{StaticResource SpacingStyle}"
-                                        ElementStyle="{StaticResource AmountStyle}"
+                                        ElementStyle="{StaticResource ShipWorksDataGrid.AmountStyle}"
                                         Visibility="{Binding DataContext.ShowDuties,
                                             Source={StaticResource ProxyElement},
                                             Converter={StaticResource BooleanToVisibility}}"
                                         Binding="{Binding Duties, Converter={StaticResource HalfCentCurrency}}" />
                     <DataGridTextColumn Header="Rate"
-                                        CellStyle="{StaticResource SpacingStyle}"
-                                        ElementStyle="{StaticResource AmountStyle}"
+                                        MinWidth="112"
+                                        ElementStyle="{StaticResource ShipWorksDataGrid.AmountStyle}"
                                         Binding="{Binding Amount, Converter={StaticResource HalfCentCurrency}}" />
                 </DataGrid.Columns>
             </DataGrid>

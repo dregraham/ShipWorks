@@ -13,19 +13,12 @@
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/ShipWorks.Shipping.UI;component/Styles/GlobalStyle.xaml" />
-                <ResourceDictionary Source="/ShipWorks.Shipping.UI;component/Styles/Controls/LinkButton.xaml"/>
-                <ResourceDictionary Source="/ShipWorks.Shipping.UI;component/ShippingPanel/Styles/ServiceControlStyle.xaml"/>
-                <ResourceDictionary Source="/ShipWorks.Shipping.UI;component/Styles/EmptyButtonStyle.xaml"/>
+                <ResourceDictionary Source="/ShipWorks.UI;component/Styles/GlobalStyle.xaml" />
                 <ResourceDictionary Source="/ShipWorks.Shipping.UI;component/Templates/TextBoxErrorTemplate.xaml"/>
             </ResourceDictionary.MergedDictionaries>
             <ui:EmptyMoneyConverter x:Key="EmptyMoney" />
             <ui:EmptyDoubleConverter x:Key="EmptyDouble" />
             <ui:BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
-            <Style x:Key="GroupSectionHeader" TargetType="{x:Type TextBlock}" >
-                <Setter Property="FontWeight" Value="Bold"></Setter>
-                <Setter Property="Margin" Value="5 5 5 5"></Setter>
-            </Style>
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid Visibility="{Binding CustomsAllowed, Converter={StaticResource BooleanToVisibility}, UpdateSourceTrigger=PropertyChanged}">
@@ -78,18 +71,8 @@
                 </ListView.View>
             </ListView>
             <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Vertical">
-                <Button HorizontalAlignment="Stretch" Width="Auto" Command="{Binding AddCustomsItemCommand}">
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Width="60">
-                        <Image Width="16" Height="16" Margin="0 0 5 0" Source="/ShipWorks.Core;component/Resources/add2.png" HorizontalAlignment="Left"/>
-                        <TextBlock>Add</TextBlock>
-                    </StackPanel>
-                </Button>
-                <Button HorizontalAlignment="Stretch" Width="Auto" Command="{Binding DeleteCustomsItemCommand}">
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Width="60">
-                        <Image Width="16" Margin="0 0 5 0" Source="/ShipWorks.Core;component/Resources/delete2.png"/>
-                        <TextBlock>Delete</TextBlock>
-                    </StackPanel>
-                </Button>
+                <Button Style="{DynamicResource Button.Add}" Command="{Binding AddCustomsItemCommand}" />
+                <Button Style="{DynamicResource Button.Delete}" Command="{Binding DeleteCustomsItemCommand}" />
             </StackPanel>
         </Grid>
 

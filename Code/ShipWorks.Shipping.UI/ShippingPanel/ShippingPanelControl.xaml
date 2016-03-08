@@ -18,10 +18,9 @@
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/ShipWorks.Shipping.UI;component/Styles/GlobalStyle.xaml" />
-                <ResourceDictionary Source="Styles/ShipWorksExpanderStyle.xaml"/>
-                <ResourceDictionary Source="Styles/ServiceControlStyle.xaml" />
-                <ResourceDictionary Source="/ShipWorks.Shipping.UI;component/Styles/Controls/LinkButton.xaml"/>
+                <ResourceDictionary Source="/ShipWorks.UI;component/Styles/GlobalStyle.xaml" />
+                <ResourceDictionary Source="/ShipWorks.UI;component/Styles/ShipWorksExpanderStyle.xaml"/>
+                
                 <ResourceDictionary Source="/ShipWorks.Shipping.UI;component/Templates/TextBoxErrorTemplate.xaml"/>
             </ResourceDictionary.MergedDictionaries>
             <ui:VisibleWhenEqualToParameterConverter x:Key="VisibleWhenEqualToParameter" />
@@ -251,7 +250,7 @@
                 </StackPanel>
                 <WrapPanel Margin="5,5" Orientation="Horizontal">
                     <TextBlock>Need to configure specific shipment options?</TextBlock>
-                    <Button Margin="2,0,2,0" Content="Click here" Command="{Binding OpenShippingDialogCommand}" Style="{StaticResource LinkButtonStyle}" />
+                    <Button Margin="2,0,2,0" Content="Click here" Command="{Binding OpenShippingDialogCommand}" Style="{DynamicResource Button.Link}" />
                     <TextBlock TextWrapping="WrapWithOverflow">to use the Shipping Dialog.</TextBlock>
                 </WrapPanel>
             </StackPanel>

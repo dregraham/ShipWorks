@@ -3,11 +3,8 @@
                     xmlns:ui="http://schemas.shipworks.com/ui">
     <DataTemplate x:Key="UspsRateNotQualifiedFootnoteViewModelTemplate">
         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-            <Image Source="/Shipworks.Core;component/Resources/information2.png"
-                    Width="16"
-                    Height="16"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center" />
+            <Image Style="{DynamicResource Image.Icon}"
+                   Source="/Shipworks.Core;component/Resources/information2.png" />
             <TextBlock Margin="6,1,0,0">
                 The selected packaging option does not qualify for a rate discount.
             </TextBlock>

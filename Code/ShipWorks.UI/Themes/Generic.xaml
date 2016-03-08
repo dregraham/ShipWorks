@@ -7,5 +7,6 @@
         <ResourceDictionary Source="/ShipWorks.UI;component/Themes/Controls/WeightInput.xaml"/>
         <ResourceDictionary Source="/ShipWorks.UI;component/Themes/Controls/ScaleButton.xaml"/>
         <ResourceDictionary Source="/ShipWorks.UI;component/Themes/Controls/WeightControl.xaml"/>
+        <ResourceDictionary Source="/ShipWorks.UI;component/Themes/Controls/DataGrid.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>
