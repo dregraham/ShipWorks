@@ -10,6 +10,7 @@ using Interapptive.Shared.Net;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Controls;
 using ShipWorks.Data.Model.EntityClasses;
@@ -103,7 +104,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             ShipmentType shipmentType = ShipmentTypeManager.GetType(shipmentTypeCode);
 
             optionsControl.LoadSettings();
-            
+
             if (!allowRegisteringExistingAccount)
             {
                 // Registering an existing account is not allowed, so choose new account (since the options have
@@ -111,7 +112,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 radioNewAccount.Checked = true;
                 radioExistingAccount.Checked = false;
             }
-            else if (UspsAccount != null && UspsAccount.PendingInitialAccount)
+            else if (UspsAccount != null && UspsAccount.PendingInitialAccount == (int) UspsPendingAccountType.Existing)
             {
                 radioNewAccount.Checked = false;
                 radioExistingAccount.Checked = true;
@@ -150,7 +151,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
             // Hide the panel that lets the customer select to register a new account or use an existing account
             // until USPS has enabled ShipWorks to register new accounts
-            accountTypePanel.Visible = allowRegisteringExistingAccount && !UspsAccount.PendingInitialAccount;
+            accountTypePanel.Visible = allowRegisteringExistingAccount && UspsAccount.PendingInitialAccount == (int) UspsPendingAccountType.None;
 
             uspsUsageType.Items.Add(new UspsAccountUsageDropdownItem(AccountType.Individual, "Individual"));
             uspsUsageType.Items.Add(new UspsAccountUsageDropdownItem(AccountType.HomeOffice, "Home Office"));
@@ -529,16 +530,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             if (DialogResult != DialogResult.OK &&
                 UspsAccount != null &&
                 !UspsAccount.IsNew &&
-                !UspsAccount.PendingInitialAccount)
+                UspsAccount.PendingInitialAccount == (int) UspsPendingAccountType.None)
             {
                 UspsAccountManager.DeleteAccount(UspsAccount);
             }
             else if (DialogResult == DialogResult.OK)
             {
-                if (UspsAccount != null && UspsAccount.PendingInitialAccount)
+                if (UspsAccount != null && UspsAccount.PendingInitialAccount == (int) UspsPendingAccountType.Existing)
                 {
                     // We need to denote that the account is completely configured/initialized
-                    UspsAccount.PendingInitialAccount = false;
+                    UspsAccount.PendingInitialAccount = (int) UspsPendingAccountType.None;
                     UspsAccountManager.SaveAccount(UspsAccount);
                 }
 
@@ -767,7 +768,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         private void OnStepNextWelcome(object sender, WizardStepEventArgs e)
         {
-            if (UspsAccount.PendingInitialAccount)
+            if (UspsAccount.PendingInitialAccount == (int) UspsPendingAccountType.Existing)
             {
                 e.NextPage = wizardPageOptions;
             }

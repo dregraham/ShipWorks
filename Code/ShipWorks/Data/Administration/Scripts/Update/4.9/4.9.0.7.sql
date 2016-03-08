@@ -37,7 +37,7 @@ CREATE TABLE [dbo].[tmp_rg_xx_UspsAccount]
 [UspsReseller] [int] NOT NULL,
 [ContractType] [int] NOT NULL,
 [CreatedDate] [datetime] NOT NULL,
-[PendingInitialAccount] [bit] NOT NULL
+[PendingInitialAccount] [int] NOT NULL
 )
 GO
 SET IDENTITY_INSERT [dbo].[tmp_rg_xx_UspsAccount] ON
