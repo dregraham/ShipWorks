@@ -36,11 +36,13 @@ namespace ShipWorks.Stores.Management
 
             elementHost.Child = control;
 
-            // There was a weird issue where the backgounrd of the WPF control was black.
+            // There was a weird issue where the background of the WPF control was black.
             // This fixes it.
             Color color = SystemColors.Control;
             control.Background = new System.Windows.Media.SolidColorBrush(
               System.Windows.Media.Color.FromRgb(color.R, color.G, color.B));
+
+            elementHost.Visible = true;
         }
     }
 }

@@ -1,6 +1,8 @@
 ﻿using System;
 using Autofac.Extras.Moq;
+using Moq;
 using ShipWorks.ApplicationCore.Licensing;
+using ShipWorks.Data.Administration;
 using Xunit;
 
 namespace ShipWorks.Tests.ApplicationCore.Licensing
@@ -21,8 +23,10 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
             using (var mock = AutoMock.GetLoose())
             {
                 mock.Mock<IDatabaseIdentifier>().Setup(x => x.Get()).Returns(guid);
+                Mock<ISqlSchemaVersion> sqlVersion = mock.Mock<ISqlSchemaVersion>();
+                sqlVersion.Setup(s => s.GetInstalledSchemaVersion()).Returns(Version.Parse("4.9.0.0"));
 
-                testObject = new LicenseEncryptionProvider(mock.Mock<IDatabaseIdentifier>().Object);
+                testObject = new LicenseEncryptionProvider(mock.Mock<IDatabaseIdentifier>().Object, sqlVersion.Object);
             }
         }
 
@@ -71,7 +75,10 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
             {
                 mock.Mock<IDatabaseIdentifier>().Setup(x => x.Get()).Throws<DatabaseIdentifierException>();
 
-                var testObject = new LicenseEncryptionProvider(mock.Mock<IDatabaseIdentifier>().Object);
+                Mock<ISqlSchemaVersion> sqlVersion = mock.Mock<ISqlSchemaVersion>();
+                sqlVersion.Setup(s => s.GetInstalledSchemaVersion()).Returns(Version.Parse("4.9.0.0"));
+
+                var testObject = new LicenseEncryptionProvider(mock.Mock<IDatabaseIdentifier>().Object, sqlVersion.Object);
 
                 Assert.Throws<EncryptionException>(() => testObject.Encrypt("test"));
             }
@@ -84,7 +91,10 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
             {
                 mock.Mock<IDatabaseIdentifier>().Setup(x => x.Get()).Throws<DatabaseIdentifierException>();
 
-                var testObject = new LicenseEncryptionProvider(mock.Mock<IDatabaseIdentifier>().Object);
+                Mock<ISqlSchemaVersion> sqlVersion = mock.Mock<ISqlSchemaVersion>();
+                sqlVersion.Setup(s => s.GetInstalledSchemaVersion()).Returns(Version.Parse("4.9.0.0"));
+
+                var testObject = new LicenseEncryptionProvider(mock.Mock<IDatabaseIdentifier>().Object, sqlVersion.Object);
 
                 Assert.Throws<EncryptionException>(() => testObject.Decrypt("test"));
             }

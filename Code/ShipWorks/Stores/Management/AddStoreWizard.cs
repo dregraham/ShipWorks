@@ -85,7 +85,7 @@ namespace ShipWorks.Stores.Management
             // See if we have permissions
             if (!(UserSession.Security.HasPermission(PermissionType.ManageStores)))
             {
-                MessageHelper.ShowInformation(owner, "An administrator must log on to setup to ShipWorks.");
+                MessageHelper.ShowInformation(owner, "An administrator must log on to setup ShipWorks.");
                 return false;
             }
 
@@ -100,7 +100,7 @@ namespace ShipWorks.Stores.Management
                 {
                     using (AddStoreWizard wizard = new AddStoreWizard())
                     {
-                        // If it was succesful, make sure our local list of stores is refreshed
+                        // If it was successful, make sure our local list of stores is refreshed
                         if (wizard.ShowDialog(owner) == DialogResult.OK)
                         {
                             StoreManager.CheckForChanges();
@@ -116,7 +116,7 @@ namespace ShipWorks.Stores.Management
             }
             catch (SqlAppResourceLockException)
             {
-                MessageHelper.ShowInformation(owner, "Another user is already setting up ShipWorks.  This can only be done on one computer at a time.");
+                MessageHelper.ShowInformation(owner, "Another user is already setting up ShipWorks. This can only be done on one computer at a time.");
                 return false;
             }
         }
@@ -140,7 +140,9 @@ namespace ShipWorks.Stores.Management
                     return true; // must be legacy and no store set up...
                 }
 
-                license.Refresh();
+                // We need to force the refresh at this point to make sure we have the most 
+                // recent store/channel information prior to enforcing capabilities
+                license.ForceRefresh();
                 license.EnforceCapabilities(EnforcementContext.OnAddingStore, owner);
 
                 try
@@ -910,7 +912,7 @@ namespace ShipWorks.Stores.Management
                 {
                     return;
                 }
-                
+
                 using (SqlAdapter adapter = new SqlAdapter(true))
                 {
                     // Create the default presets
@@ -939,6 +941,10 @@ namespace ShipWorks.Stores.Management
                 // not have run to force the check yet.
                 StoreManager.CheckForChanges();
                 NudgeManager.Refresh(StoreManager.GetAllStores());
+
+                // Ensure the license has the latest capabilities now that a new store
+                // has been added.
+                licenseService.GetLicense(store)?.ForceRefresh();
             }
             catch (DuplicateNameException ex)
             {
@@ -993,12 +999,12 @@ namespace ShipWorks.Stores.Management
                 }
                 else
                 {
-                    if (activateResult.Value == LicenseActivationState.OverChannelLimit)
+                    if (activateResult.Value == LicenseActivationState.MaxChannelsExceeded)
                     {
                         IChannelLimitFactory factory = IoC.UnsafeGlobalLifetimeScope.Resolve<IChannelLimitFactory>();
                         Control channelLimitControl =
-                            (Control) factory.CreateControl((ICustomerLicense) license, (StoreTypeCode) Store.TypeCode,
-                                    EditionFeature.ChannelCount);
+                            (Control) factory.CreateControl((ICustomerLicense) license, (StoreTypeCode) Store.TypeCode, EditionFeature.ChannelCount);
+
                         wizardPageActivationError.SetElementHost(channelLimitControl);
                     }
 
@@ -1007,7 +1013,7 @@ namespace ShipWorks.Stores.Management
                     e.SkipToPage = wizardPageActivationError;
                 }
             }
-
+            
             return !e.Skip;
         }
 

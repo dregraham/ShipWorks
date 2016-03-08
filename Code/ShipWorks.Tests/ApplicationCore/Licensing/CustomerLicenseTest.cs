@@ -71,19 +71,18 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
             }
         }
         
-
         [Fact]
         public void Refresh_DefersGettingLicenseCapabilitiesToTangoWebClient()
         {
             using (var mock = AutoMock.GetLoose())
             {
-                LicenseCapabilities licenseResponse = new LicenseCapabilities(new XmlDocument());
+                var licenseCapabilities = mock.Mock<ILicenseCapabilities>();
 
                 var tangoWebClient =
                     mock.Mock<ITangoWebClient>();
 
                 tangoWebClient.Setup(w => w.GetLicenseCapabilities(It.IsAny<ICustomerLicense>()))
-                    .Returns(licenseResponse);
+                    .Returns(licenseCapabilities.Object);
 
                 CustomerLicense customerLicense = mock.Create<CustomerLicense>(new NamedParameter("key", "SomeKey"));
 
@@ -175,8 +174,8 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
                 response.SetupGet(r => r.Success)
                     .Returns(false);
 
-                response.SetupGet(r => r.Error)
-                    .Returns("blah");
+                response.SetupGet(r => r.Result)
+                    .Returns(LicenseActivationState.CustIdDisabled);
 
                 mock.Mock<ITangoWebClient>()
                     .Setup(w => w.AddStore(It.IsAny<CustomerLicense>(), It.IsAny<StoreEntity>()))
@@ -186,7 +185,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
 
                 var result = testObject.Activate(new StoreEntity());
 
-                Assert.Equal(LicenseActivationState.Invalid, result.Value);
+                Assert.Equal(LicenseActivationState.CustIdDisabled, result.Value);
             }
         }
 
@@ -199,8 +198,8 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
                 response.SetupGet(r => r.Success)
                     .Returns(false);
 
-                response.SetupGet(r => r.Error)
-                    .Returns("OverChannelLimit");
+                response.SetupGet(r => r.Result)
+                    .Returns(LicenseActivationState.MaxChannelsExceeded);
 
                 mock.Mock<ITangoWebClient>()
                     .Setup(w => w.AddStore(It.IsAny<CustomerLicense>(), It.IsAny<StoreEntity>()))
@@ -210,7 +209,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
 
                 var result = testObject.Activate(new StoreEntity());
 
-                Assert.Equal(LicenseActivationState.OverChannelLimit, result.Value);
+                Assert.Equal(LicenseActivationState.MaxChannelsExceeded, result.Value);
             }
         }
 

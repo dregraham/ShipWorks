@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Xml;
-using System.Xml.Linq;
 using System.Xml.XPath;
 using Interapptive.Shared.Utility;
 using ShipWorks.Editions;
@@ -19,7 +18,9 @@ namespace ShipWorks.ApplicationCore.Licensing
     /// </summary>
     public class LicenseCapabilities : ILicenseCapabilities
     {
-        private List<StoreTypeCode> forbiddenChannels;
+        private readonly List<StoreTypeCode> forbiddenChannels;
+        private const string userCapabilityNamespace = "http://ShipWorks.com/UserCapabilitiesV1.xsd";
+        private const string userLevelNamespace = "http://ShipWorks.com/UserLevelsV1.xsd";
 
         /// <summary>
         /// Constructor - Sets capabilities based on the xml response.
@@ -30,95 +31,38 @@ namespace ShipWorks.ApplicationCore.Licensing
 
             ShipmentTypeRestriction = new Dictionary<ShipmentTypeCode, IEnumerable<ShipmentTypeRestrictionType>>();
             ShipmentTypeShippingPolicy = new Dictionary<ShipmentTypeCode, Dictionary<ShippingPolicyType, string>>();
-            
-            XPathNamespaceNavigator xpath = new XPathNamespaceNavigator(xmlResponse);
-            xpath.Namespaces.AddNamespace("s", "http://schemas.xmlsoap.org/soap/envelope/");
-            xpath.Namespaces.AddNamespace("a", "http://schemas.datacontract.org/2004/07/Sdc.Server.ShipWorksNet.Protocol.CustomerLicenseInfo");
-            xpath.Namespaces.AddNamespace("i", "http://www.w3.org/2001/XMLSchema-instance");
-            xpath.Namespaces.AddNamespace("", "http://stamps.com/xml/namespace/2015/09/shipworks/activationv1");
+            forbiddenChannels = new List<StoreTypeCode>();
 
-            CheckForFault(xpath);
+            // Check the response for errors and throw a ShipWorksLicenseException
+            CheckResponseForErrors(xmlResponse);
 
-            None = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='None']/Value", 0) == 1;
-            ActionLimit = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='ActionLimit']/Value", 0) == 1;
-            FilterLimit = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='FilterLimit']/Value", 0) == 1;
-            MyFilters = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='MyFilters']/Value", 0) == 1;
-            SelectionLimit = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='SelectionLimit']/Value", 0) == 1;
-            AddOrderCustomer = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='AddOrderCustomer']/Value", 0) == 1;
-            SingleStore = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='SingleStore']/Value", 0) == 1;
-            ShipmentTypeRegistration = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='ShipmentTypeRegistration']/Value", 0) == 1;
-            ShipmentTypeFunctionality(xpath);
-            ProcessShipment = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='ProcessShipment']/Value", 0) == 1;
-            PurchasePostage = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='PurchasePostage']/Value", 0) == 1;
-            RateDiscountMessaging = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='RateDiscountMessaging']/Value", 0) == 1;
-            ShippingAccountConversion = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='ShippingAccountConversion']/Value", 0) == 1;
-            IsInTrial = XPathUtility.Evaluate(xpath, "//IsInTrial", false);
+            // parse the ShipmentTypeFunctionality node from the response
+            ShipmentTypeFunctionality(xmlResponse);
 
-            SetPricingPlanCapabilties(xpath);
-            SetStampsCapabilities(xpath);
-            SetEndiciaCapabilities(xpath);
-            SetUpsCapabilities(xpath);
+            // parse the license capabilities
+            SetPricingPlanCapabilties(xmlResponse);
+
+            // parse the stamps specific capabilities
+            SetStampsCapabilities(xmlResponse);
+
+            // parse the endicia specific capabilities
+            SetEndiciaCapabilities(xmlResponse);
+
+            // parse the ups specific capabilities
+            SetUpsCapabilities(xmlResponse);
         }
 
         #region Properties
-        /// <summary>
-        /// No specific feature
-        /// </summary>
-        public bool None { get; set; }
-
-        /// <summary>
-        /// Action count limitation
-        /// </summary>
-        public bool ActionLimit { get; set; }
-
-        /// <summary>
-        /// Filter count limitation
-        /// </summary>
-        public bool FilterLimit { get; set; }
-
-        /// <summary>
-        /// Can't create 'My' (private) filters when filters are being limited
-        /// </summary>
-        public bool MyFilters { get; set; }
-
-        /// <summary>
-        /// Selection count limitation
-        /// </summary>
-        public bool SelectionLimit { get; set; }
-
-        /// <summary>
-        /// Can't add new orders\customers
-        /// </summary>
-        public bool AddOrderCustomer { get; set; }
-
-        /// <summary>
-        /// Create \ prbool Endicia scan forms
-        /// </summary>
-        public bool EndiciaScanForm { get; set; }
-
-        /// <summary>
-        /// Restricted to a specific number of Endicia accounts
-        /// </summary>
-        public bool EndiciaAccountLimit { get; set; }
-
-        /// <summary>
-        /// Restricted to a specific Endicia account number
-        /// </summary>
-        public bool EndiciaAccountNumber { get; set; }
-
         /// <summary>
         /// Controls if DHL is enabled for Endicia users
         /// </summary>
         public bool EndiciaDhl { get; set; }
 
         /// <summary>
-        /// Constrols if using Endicia insurance is enabled for Endicia users
+        /// Controls if using Endicia insurance is enabled for Endicia users
         /// </summary>
         public bool EndiciaInsurance { get; set; }
 
-        
-        
-        
         /// <summary>
         /// ShipmentType, can be forbidden or just restricted to upgrade
         /// </summary>
@@ -128,11 +72,6 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// ShipmentType, can be forbidden or just restricted to upgrade
         /// </summary>
         public Dictionary<ShipmentTypeCode, Dictionary<ShippingPolicyType, string>> ShipmentTypeShippingPolicy { get; }
-
-        /// <summary>
-        /// Restricted to a single store
-        /// </summary>
-        public bool SingleStore { get; set; }
 
         /// <summary>
         /// Restricted to a specific number of UPS accounts
@@ -170,35 +109,6 @@ namespace ShipWorks.ApplicationCore.Licensing
         public bool EndiciaScanBasedReturns { get; set; }
 
         /// <summary>
-        /// The ability to add shipping accounts can be restricted.
-        /// </summary>
-        public bool ShipmentTypeRegistration { get; set; }
-
-        /// <summary>
-        /// The ability to process shipments for specific carriers can be restricted.
-        /// </summary>
-        public bool ProcessShipment { get; set; }
-
-        /// <summary>
-        /// The ability to purchase postage for specific carriers can be restricted.
-        /// </summary>
-        public bool PurchasePostage { get; set; }
-
-        /// <summary>
-        /// The ability to display discount messaging for specific carriers can be restricted.
-        /// </summary>
-        public bool RateDiscountMessaging { get; set; }
-
-        /// <summary>
-        /// The ability to display a conversion promo/message for a shipping provider can be restricted.
-        /// This is sort of out of place and pertains only to USPS. This is a result of a problem
-        /// on the USPS side when USPS customers have multi-user accounts where they don't
-        /// want to allow these customers to convert through ShipWorks. After USPS has reached
-        /// out to these customers and converted their accounts this can be removed.
-        /// </summary>
-        public bool ShippingAccountConversion { get; set; }
-
-        /// <summary>
         /// Constrols if using Stamps insurance is enabled for Usps users
         /// </summary>
         public bool StampsInsurance { get; set; }
@@ -234,24 +144,9 @@ namespace ShipWorks.ApplicationCore.Licensing
         public bool StampsRrDonnelleyConsolidator { get; set; }
 
         /// <summary>
-        /// Advanced shipping features restriction
-        /// </summary>
-        public bool AdvancedShipping { get; set; }
-
-        /// <summary>
-        /// CRM features restriction
-        /// </summary>
-        public bool Crm { get; set; }
-
-        /// <summary>
         /// Custom data source restriction
         /// </summary>
         public bool CustomDataSources { get; set; }
-
-        /// <summary>
-        /// Template customization restriction
-        /// </summary>
-        public bool TemplateCustomization { get; set; }
 
         /// <summary>
         /// Number of selling channels the license allows
@@ -296,82 +191,137 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Checks for ShipmentType Functionality restrictions
         /// </summary>
-        private void ShipmentTypeFunctionality(XPathNamespaceNavigator xpath)
+        private void ShipmentTypeFunctionality(XmlNode response)
         {
+            XPathNavigator xpath = response.CreateNavigator();
             XPathNodeIterator shipmentTypeFunctionality = xpath.Select("//ShipmentTypeFunctionality/ShipmentType");
 
+            // Iterate over each ShipmentType in ShipmentTypeFunctionality
             while (shipmentTypeFunctionality.MoveNext())
             {
                 XPathNavigator shipmentXpath = shipmentTypeFunctionality.Current;
                 int shipmentTypeCode;
 
-                if (Int32.TryParse(shipmentXpath.GetAttribute("TypeCode", ""), out shipmentTypeCode))
+                if (int.TryParse(shipmentXpath.GetAttribute("TypeCode", ""), out shipmentTypeCode))
                 {
+                    // Empty list of restrictions for the shipmenttypecode we are on
                     List<ShipmentTypeRestrictionType> restrictionsList = new List<ShipmentTypeRestrictionType>();
 
                     XPathNodeIterator restrictions = shipmentXpath.Select("Restriction");
                     while (restrictions.MoveNext())
                     {
-                        XPathNavigator restriction = restrictions.Current;
-                        restrictionsList.Add(EnumHelper.GetEnumByApiValue<ShipmentTypeRestrictionType>(restriction.SelectSingleNode(".")?.Value));
+                        // Add the restriction to our list of restrictions for the carrier
+                        AddRestrictionToList(restrictions.Current, restrictionsList);
                     }
 
                     ShipmentTypeRestriction.Add((ShipmentTypeCode)shipmentTypeCode, restrictionsList);
 
-
-                    Dictionary<ShippingPolicyType, string> featureList = new Dictionary<ShippingPolicyType, string>();
+                    // Create an empty dictionary of ShippingPolicyType, string to keep track of features
+                    // for the shipmenttypecode we are on
+                    Dictionary<ShippingPolicyType, string> featureDictionary = new Dictionary<ShippingPolicyType, string>();
 
                     XPathNodeIterator features = shipmentXpath.Select("Feature");
                     while (features.MoveNext())
                     {
-                        XPathNavigator feature = features.Current;
-                        
-                        string type = feature.SelectSingleNode("Type")?.Value;
-                        string value = feature.SelectSingleNode("Config")?.Value;
-
-                        ShippingPolicyType policy;
-
-                        if (Enum.TryParse(type, true, out policy))
-                        {
-                            featureList.Add(policy, value);
-                        }
+                        // Add the feature to our list of features
+                        AddFeatureToDictionary(features.Current, featureDictionary);
                     }
 
-                    ShipmentTypeShippingPolicy.Add((ShipmentTypeCode)shipmentTypeCode, featureList);
+                    ShipmentTypeShippingPolicy.Add((ShipmentTypeCode)shipmentTypeCode, featureDictionary);
                 }
+            }
+        }
+
+        /// <summary>
+        /// Takes the given XPathNavigator feature and adds it to the featureDictionary
+        /// </summary>
+        private void AddFeatureToDictionary(XPathNavigator feature, Dictionary<ShippingPolicyType, string> featureDictionary)
+        {
+            try
+            {
+                string shippingPolicyNode = feature.SelectSingleNode("Type")?.Value;
+                if (!string.IsNullOrWhiteSpace(shippingPolicyNode))
+                {
+                    ShippingPolicyType policy = EnumHelper.GetEnumByApiValue<ShippingPolicyType>(shippingPolicyNode);
+                    featureDictionary.Add(policy, feature.SelectSingleNode("Config")?.Value);
+                }
+            }
+            catch (InvalidOperationException)
+            {
+                // The value could not be found in the given enum
+            }
+        }
+
+        /// <summary>
+        /// Takes the give XPathNavigator restriction and adds it to the restrictionList
+        /// </summary>
+        private void AddRestrictionToList(XPathNavigator restriction, List<ShipmentTypeRestrictionType> restrictionsList)
+        {
+            try
+            {
+                string restrictionNode = restriction.SelectSingleNode(".")?.Value;
+                if (!string.IsNullOrWhiteSpace(restrictionNode))
+                {
+                    // Try to get the enum value
+                    ShipmentTypeRestrictionType restrictionType = EnumHelper.GetEnumByApiValue<ShipmentTypeRestrictionType>(restrictionNode);
+                    restrictionsList.Add(restrictionType);
+                }
+            }
+            catch (InvalidOperationException)
+            {
+                // The value could not be found in the given enum
             }
         }
 
         /// <summary>
         /// Throw error if fault in XML.
         /// </summary>
-        private static void CheckForFault(XPathNamespaceNavigator xpath)
+        /// <summary>
+        /// Checks the response for errors.
+        /// </summary>
+        private static void CheckResponseForErrors(XmlNode xmlResponse)
         {
-            // Check to see if the response contains a fault
-            XPathNavigator fault = xpath.SelectSingleNode("//s:Fault/detail");
+            XPathNavigator xpath = xmlResponse.CreateNavigator();
 
-            if (fault != null)
+            string error = XPathUtility.Evaluate(xpath, "//Error", string.Empty);
+
+            if (!error.Equals(string.Empty))
             {
-                string message = XPathUtility.Evaluate(fault, "//*[local-name()='Message']", "");
-                throw new ShipWorksLicenseException(string.IsNullOrWhiteSpace(message)
-                    ? "There was an error validating your license"
-                    : message);
+                throw new ShipWorksLicenseException(error);
+            }
+
+            // Grab the nodes that are vital to shipworks functioning 
+            string channelLimitSanityCheck = GetStringValueFromNameValuePair("NumberOfChannels", xmlResponse, userCapabilityNamespace);
+            string shipmentLimitSanityCheck = GetStringValueFromNameValuePair("NumberOfShipments", xmlResponse, userCapabilityNamespace);
+            string userChannelLimitSanityCheck = GetStringValueFromNameValuePair("NumberOfChannels", xmlResponse, userLevelNamespace);
+            string userShipmentLimitSanityCheck = GetStringValueFromNameValuePair("NumberOfShipments", xmlResponse, userLevelNamespace);
+            string customerStatus = XPathUtility.Evaluate(xpath, "//CustomerStatus/Valid", "");
+
+            if (string.IsNullOrWhiteSpace(shipmentLimitSanityCheck) ||
+                string.IsNullOrWhiteSpace(channelLimitSanityCheck) ||
+                string.IsNullOrWhiteSpace(userShipmentLimitSanityCheck) ||
+                string.IsNullOrWhiteSpace(userChannelLimitSanityCheck) ||
+                string.IsNullOrWhiteSpace(customerStatus))
+            {
+                throw new ShipWorksLicenseException("The license associated with this account is invalid.");
             }
         }
 
         /// <summary>
         /// Set Ups Capabilities
         /// </summary>
-        private void SetUpsCapabilities(XPathNamespaceNavigator xpath)
+        private void SetUpsCapabilities(XmlNode xmlResponse)
         {
+            XPathNavigator xpath = xmlResponse.CreateNavigator();
+
             UpsStatus = (UpsStatus)XPathUtility.Evaluate(xpath, "//UpsOnly/@status", 0);
             UpsAccountNumbers = XPathUtility.Evaluate(xpath, "//UpsOnly", "").Split(';')
                                             .Where(a => !string.IsNullOrWhiteSpace(a))
                                             .Select(a => a.Trim().ToLower())
                                             .ToArray();
 
-            UpsAccountLimit = UpsStatus == UpsStatus.Discount ? 
-                1 : 
+            UpsAccountLimit = UpsStatus == UpsStatus.Discount ?
+                1 :
                 UpsAccountNumbers.Count();
 
             UpsSurePost = XPathUtility.Evaluate(xpath, "//UpsSurePostEnabled/@status", 0) == 1;
@@ -381,28 +331,34 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Set capabilities typically associated with a pricing plan
         /// </summary>
-        private void SetPricingPlanCapabilties(XPathNamespaceNavigator xpath)
+        private void SetPricingPlanCapabilties(XmlNode response)
         {
-            AdvancedShipping = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='AdvancedShippingFeatures']/Value", string.Empty) == "Yes";
-            Crm = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='Crm']/Value", string.Empty) == "Yes";
-            CustomDataSources = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='CustomDataSources']/Value", string.Empty) == "Yes";
+            XPathNavigator xpath = response.CreateNavigator();
 
-            forbiddenChannels = new List<StoreTypeCode>();
-            if (!CustomDataSources)
+            IsInTrial = XPathUtility.Evaluate(xpath, "//IsInTrial", false);
+
+            CustomDataSources = GetBoolValueFromNameValuePair("CustomDataSources", response, userCapabilityNamespace);
+
+            // If custom data sources is disabled we add GenericFile to the list of stores that are not allowed
+            if (!GetBoolValueFromNameValuePair("CustomDataSources", response, userCapabilityNamespace))
             {
                 forbiddenChannels.Add(StoreTypeCode.GenericFile);
+            }
+
+            // If custom data sources api is disabled we add GenericModule to the list of stores that are not allowed
+            if (!GetBoolValueFromNameValuePair("CustomDataSourcesAPI", response, userCapabilityNamespace))
+            {
                 forbiddenChannels.Add(StoreTypeCode.GenericModule);
             }
 
-            TemplateCustomization = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='TemplateCustomization']/Value", string.Empty) == "Yes";
-            ChannelLimit = XPathUtility.Evaluate(xpath, "//UserCapabilities/NameValuePair[Name ='NumberOfChannels']/Value", 0);
-            ShipmentLimit = XPathUtility.Evaluate(xpath, "//UserCapabilities/NameValuePair[Name ='NumberOfShipments']/Value", 0);
+            ChannelLimit = GetIntValueFromNameValuePair("NumberOfChannels", response, userCapabilityNamespace);
 
-            ActiveChannels = XPathUtility.Evaluate(xpath, "//UserLevels/NameValuePair[Name ='NumberOfChannels']/Value", 0);
-            ProcessedShipments = XPathUtility.Evaluate(xpath, "//UserLevels/NameValuePair[Name ='NumberOfShipments']/Value", 0);
+            ShipmentLimit = GetIntValueFromNameValuePair("NumberOfShipments", response, userCapabilityNamespace);
 
-            string date = XPathUtility.Evaluate(xpath, "//BillingEndDate",
-                DateTime.MinValue.ToString(CultureInfo.InvariantCulture));
+            ActiveChannels = GetIntValueFromNameValuePair("NumberOfChannels", response, userLevelNamespace);
+            ProcessedShipments = GetIntValueFromNameValuePair("NumberOfShipments", response, userLevelNamespace);
+
+            string date = XPathUtility.Evaluate(xpath, "//BillingEndDate", DateTime.MinValue.ToString(CultureInfo.InvariantCulture));
 
             BillingEndDate = DateTime.Parse(date);
         }
@@ -410,8 +366,10 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Set Stamps Capabilities
         /// </summary>
-        private void SetStampsCapabilities(XPathNamespaceNavigator xpath)
+        private void SetStampsCapabilities(XmlNode response)
         {
+            XPathNavigator xpath = response.CreateNavigator();
+
             StampsInsurance = XPathUtility.Evaluate(xpath, "//StampsInsuranceEnabled/@status", 0) == 1;
             StampsDhl = XPathUtility.Evaluate(xpath, "//StampsDhlEnabled/@status", 0) == 1;
             StampsAscendiaConsolidator = XPathUtility.Evaluate(xpath, "//StampsAscendiaEnabled/@status", 0) == 1;
@@ -424,12 +382,68 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Set Endicia Capabilities
         /// </summary>
-        private void SetEndiciaCapabilities(XPathNamespaceNavigator xpath)
+        private void SetEndiciaCapabilities(XmlNode response)
         {
+            XPathNavigator xpath = response.CreateNavigator();
+
             EndiciaDhl = XPathUtility.Evaluate(xpath, "//EndiciaDhlEnabled/@status", 0) == 1;
             EndiciaInsurance = XPathUtility.Evaluate(xpath, "//EndiciaInsuranceEnabled/@status", 0) == 1;
             EndiciaConsolidator = XPathUtility.Evaluate(xpath, "//EndiciaConsolidator/@status", 0) == 1;
             EndiciaScanBasedReturns = XPathUtility.Evaluate(xpath, "//EndiciaScanBasedReturns/@status", 0) == 1;
+        }
+
+        /// <summary>
+        /// Gets the string value for the given name 
+        /// </summary>
+        /// <remarks>returns empty string if the name or value are not found</remarks>
+        private static string GetStringValueFromNameValuePair(string name, XmlNode document, string ns)
+        {
+            XPathNavigator xpath = document?.CreateNavigator();
+
+            if (xpath?.NameTable != null)
+            {
+                XmlNamespaceManager nsmanager = new XmlNamespaceManager(xpath.NameTable);
+
+                nsmanager.AddNamespace("x", ns);
+
+                XPathNodeIterator iterator = xpath.Select("//x:NameValuePair", nsmanager);
+
+                while (iterator.MoveNext())
+                {
+                    if (iterator.Current.NameTable != null)
+                    {
+                        if (iterator.Current?.SelectSingleNode("x:Name", nsmanager)?.Value == name)
+                        {
+                            return iterator.Current?.SelectSingleNode("x:Value", nsmanager)?.Value ?? string.Empty;
+                        }
+                    }
+                }
+            }
+
+            return string.Empty;
+        }
+
+        /// <summary>
+        /// Gets the int value for the given name
+        /// </summary>
+        /// <remarks>returns 0 if the name or value are not found or not an int</remarks>
+        private static int GetIntValueFromNameValuePair(string name, XmlNode document, string ns)
+        {
+            string value = GetStringValueFromNameValuePair(name, document, ns);
+            int result;
+
+            return int.TryParse(value, out result) ? result : 0;
+        }
+
+        /// <summary>
+        /// Gets the int value for the given name
+        /// </summary>
+        /// <remarks>returns 0 if the name or value are not found or not an int</remarks>
+        private static bool GetBoolValueFromNameValuePair(string name, XmlNode document, string ns)
+        {
+            string value = GetStringValueFromNameValuePair(name, document, ns);
+
+            return value.ToLower() == "yes";
         }
     }
 }
