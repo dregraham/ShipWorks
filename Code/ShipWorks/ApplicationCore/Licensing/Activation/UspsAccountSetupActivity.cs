@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Net;
 using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.Data.Model.EntityClasses;
@@ -65,7 +66,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Activation
                     log.Info("The USPS account has been saved. Setting USPS as the default shipping provider.");
                     shippingSettings.SetDefaultProvider(ShipmentTypeCode.Usps);
                 }
-                catch (Exception ex) when (ex is UspsApiException || ex is UspsException)
+                catch (Exception ex) when (ex is UspsApiException || ex is UspsException || ex is WebException)
                 {
                     // Populating the account information failed, due to an issue with USPS
                     // log the error and continue with the activation process
