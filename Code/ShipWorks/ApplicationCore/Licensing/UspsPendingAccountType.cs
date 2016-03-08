@@ -1,7 +1,9 @@
 ﻿using System.ComponentModel;
+using System.Reflection;
 
 namespace ShipWorks.ApplicationCore.Licensing
 {
+    [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
     public enum UspsPendingAccountType
     {
         [Description("None")]
