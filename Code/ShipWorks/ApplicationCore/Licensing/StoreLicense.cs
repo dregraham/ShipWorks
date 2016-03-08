@@ -168,5 +168,12 @@ namespace ShipWorks.ApplicationCore.Licensing
         {
             return null;
         }
+
+        /// <summary>
+        /// Does nothing for store licenses
+        /// </summary>
+        public void AssociateUspsAccount(UspsAccountEntity uspsAccount)
+        {
+        }
     }
 }
