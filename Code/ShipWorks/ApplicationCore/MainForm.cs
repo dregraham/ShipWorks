@@ -647,7 +647,21 @@ namespace ShipWorks
                 using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
                 {
                     ILicenseService licenseService = lifetimeScope.Resolve<ILicenseService>();
-                    licenseService.GetLicenses().FirstOrDefault()?.EnforceCapabilities(EnforcementContext.Login, this);
+                    try
+                    {
+                        licenseService.GetLicenses().FirstOrDefault()?.EnforceCapabilities(EnforcementContext.Login, this);
+                    }
+                    catch (ShipWorksLicenseException ex)
+                    {
+                        // The enforcer threw a ShipWorksLicenseException
+                        MessageHelper.ShowError(this, ex.Message);
+
+                        // Log off
+                        UserSession.Logoff(false);
+                        UserSession.Reset();
+                        ShowBlankUI();
+                        return;
+                    }
                 }
             }
 
