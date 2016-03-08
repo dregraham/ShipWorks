@@ -185,7 +185,7 @@ namespace ShipWorks.Shipping
 
         /// <summary>
         /// Called when the shipping settings for using USPS has changed. We need to refresh the
-        /// shipment data displayed to accurately reflect the new shimpent type (USPS).
+        /// shipment data displayed to accurately reflect the new shipment type (USPS).
         /// </summary>
         private void OnStampsUspsAutomaticExpeditedChanged(UspsAutomaticExpeditedChangedMessage message)
         {
@@ -700,7 +700,7 @@ namespace ShipWorks.Shipping
                 .Where(r => loadedShipmentEntities.All(s => s.ShipmentID != r.Shipment.ShipmentID))
                 .ToList();
 
-            // Disable handling shipment selection while we are de selecting rows
+            // Disable handling shipment selection while we are selecting rows
             shipmentControl.SelectionChanged -= OnChangeSelectedShipments;
 
             // Unselected all the rows we ended up not loading
@@ -1282,7 +1282,7 @@ namespace ShipWorks.Shipping
                 // Refresh the shipment control, so any status changes are reflected
                 shipmentControl.RefreshAndResort();
 
-                // Refresh the items in the customs control after synching with ShipSense. This
+                // Refresh the items in the customs control after syncing with ShipSense. This
                 // retains any customs items that were selected prior to the sync.
                 CustomsControl?.RefreshItems();
             }
@@ -1401,7 +1401,7 @@ namespace ShipWorks.Shipping
             else
             {
                 // If we didn't successfully save, we need to reload the grid completely instead of just updating the customs display.
-                // Don't want to do it directly, as we're in the middle of a change event - and reloading the UI out from undering could
+                // Don't want to do it directly, as we're in the middle of a change event - and reloading the UI out from under it could
                 // really goof that up.
                 BeginInvoke(new MethodInvoker(() => LoadSelectedShipments(true)));
             }

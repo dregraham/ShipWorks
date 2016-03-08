@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 
@@ -37,7 +36,7 @@ namespace ShipWorks.Core.Messaging
         /// Get the current messenger instance
         /// </summary>
         public static IMessenger Current { get; private set; }
-        
+
         /// <summary>
         /// Send a message to any listeners
         /// </summary>
@@ -46,7 +45,7 @@ namespace ShipWorks.Core.Messaging
         /// <summary>
         /// Subscribe to the message stream
         /// </summary>
-        public IDisposable Subscribe(IObserver<IShipWorksMessage> observer) => 
+        public IDisposable Subscribe(IObserver<IShipWorksMessage> observer) =>
             messageStream.Subscribe(observer);
     }
 }

@@ -6,6 +6,7 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Autofac;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore;
@@ -22,25 +23,31 @@ namespace ShipWorks.Shipping.Services
     /// </summary>
     public class ShippingDialogService : IInitializeForCurrentSession, IDisposable
     {
-        private readonly IDictionary<InitialShippingTabDisplay, string> shippingPanelTabNames = new Dictionary<InitialShippingTabDisplay, string>
+        private readonly IDictionary<InitialShippingTabDisplay, string> shippingPanelTabNames =
+            new Dictionary<InitialShippingTabDisplay, string>
             {
-            {InitialShippingTabDisplay.Shipping, "ship"},
-            {InitialShippingTabDisplay.Tracking, "track"},
-            {InitialShippingTabDisplay.Insurance, "submit claims on" }
+                {InitialShippingTabDisplay.Shipping, "ship"},
+                {InitialShippingTabDisplay.Tracking, "track"},
+                {InitialShippingTabDisplay.Insurance, "submit claims on" }
             };
         private readonly IMessenger messenger;
         private CompositeDisposable subscriptions;
         private readonly IMessageHelper messageHelper;
         private readonly ISchedulerProvider schedulerProvider;
         private readonly IWin32Window mainWindow;
+        private readonly IShippingManager shippingManager;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public ShippingDialogService(IMessenger messenger, IMessageHelper messageHelper,
-            ISchedulerProvider schedulerProvider, IWin32Window mainWindow)
+            ISchedulerProvider schedulerProvider, IWin32Window mainWindow, IShippingManager shippingManager)
         {
             this.messenger = messenger;
             this.messageHelper = messageHelper;
             this.schedulerProvider = schedulerProvider;
             this.mainWindow = mainWindow;
+            this.shippingManager = shippingManager;
         }
 
         /// <summary>
@@ -55,10 +62,12 @@ namespace ShipWorks.Shipping.Services
                 messenger.OfType<OpenShippingDialogWithOrdersMessage>()
                     .Subscribe(async x => await LoadOrdersForShippingDialog(x).ConfigureAwait(false)),
                 messenger.OfType<ShipAgainMessage>()
-                    .Select(ShipAgain)
+                    .SelectInBackgroundWithDialog(schedulerProvider, CreateProgressDialog, ShipAgain)
+                    .Do(x => messenger.Send(new OrderSelectionChangingMessage(this, x.Shipments.Select(s => s.OrderID))))
                     .Subscribe(OpenShippingDialog),
                 messenger.OfType<CreateReturnShipmentMessage>()
-                    .Select(CreateReturnShipment)
+                    .SelectInBackgroundWithDialog(schedulerProvider, CreateProgressDialog, CreateReturnShipment)
+                    .Do(x => messenger.Send(new OrderSelectionChangingMessage(this, x.Shipments.Select(s => s.OrderID))))
                     .Subscribe(OpenShippingDialog)
             );
         }
@@ -68,7 +77,7 @@ namespace ShipWorks.Shipping.Services
         /// </summary>
         private OpenShippingDialogMessage CreateReturnShipment(CreateReturnShipmentMessage message)
         {
-            ShipmentEntity shipment = ShippingManager.CreateShipment(message.Shipment);
+            ShipmentEntity shipment = shippingManager.CreateShipment(message.Shipment.Order);
             shipment.ReturnShipment = true;
             return new OpenShippingDialogMessage(this, new[] { shipment });
         }
@@ -78,7 +87,7 @@ namespace ShipWorks.Shipping.Services
         /// </summary>
         private OpenShippingDialogMessage ShipAgain(ShipAgainMessage message)
         {
-            ShipmentEntity shipment = ShippingManager.CreateShipment(message.Shipment);
+            ShipmentEntity shipment = shippingManager.CreateShipment(message.Shipment.Order);
             return new OpenShippingDialogMessage(this, new[] { shipment });
         }
 
@@ -134,6 +143,15 @@ namespace ShipWorks.Shipping.Services
                 .AsSelf()
                 .As<Control>()
                 .SingleInstance();
+        }
+
+        /// <summary>
+        /// Create a progress dialog that will be displayed when creating new shipments
+        /// </summary>
+        private IDisposable CreateProgressDialog()
+        {
+            return messageHelper.ShowProgressDialog("Create Shipment",
+                "ShipWorks is creating a new shipment for the selected orders.");
         }
 
         /// <summary>

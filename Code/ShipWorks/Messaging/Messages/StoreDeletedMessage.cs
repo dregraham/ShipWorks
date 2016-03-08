@@ -1,11 +1,9 @@
-﻿using ShipWorks.Core.Messaging;
-
-namespace ShipWorks.Messaging.Messages
+﻿namespace ShipWorks.Messaging.Messages
 {
     /// <summary>
     /// A store has been deleted
     /// </summary>
-    public struct StoreDeletedMessage : IShipWorksMessage
+    public struct StoreDeletedMessage : IEntityDeletedMessage
     {
         /// <summary>
         /// Constructor
@@ -13,7 +11,7 @@ namespace ShipWorks.Messaging.Messages
         public StoreDeletedMessage(object sender, long deletedStoreId)
         {
             Sender = sender;
-            DeletedStoreId = deletedStoreId;
+            DeletedEntityID = deletedStoreId;
         }
 
         /// <summary>
@@ -24,6 +22,6 @@ namespace ShipWorks.Messaging.Messages
         /// <summary>
         /// Id of the store that was deleted
         /// </summary>
-        public long DeletedStoreId { get; }
+        public long DeletedEntityID { get; }
     }
 }

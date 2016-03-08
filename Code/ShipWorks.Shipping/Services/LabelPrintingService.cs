@@ -4,7 +4,9 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.UI;
+using log4net;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Common.Threading;
@@ -20,26 +22,42 @@ using ShipWorks.Templates.Processing;
 
 namespace ShipWorks.Shipping.Services
 {
+    /// <summary>
+    /// Service that handles printing labels
+    /// </summary>
     public class LabelPrintingService : IInitializeForCurrentSession
     {
         private readonly IMessageHelper messageHelper;
         private readonly IObservable<IShipWorksMessage> messages;
         private readonly Control owner;
+        private readonly ILog log;
         IDisposable subscription;
 
-        public LabelPrintingService(IObservable<IShipWorksMessage> messages, IMessageHelper messageHelper, Control owner)
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public LabelPrintingService(IObservable<IShipWorksMessage> messages, IMessageHelper messageHelper,
+            Func<Type, ILog> logManager, Control owner)
         {
             this.messages = messages;
             this.messageHelper = messageHelper;
+            this.log = logManager(typeof(LabelPrintingService));
             this.owner = owner;
         }
 
+        /// <summary>
+        /// Initialize the service for the current session
+        /// </summary>
         public void InitializeForCurrentSession()
         {
             subscription = messages.OfType<ReprintLabelsMessage>()
+                .CatchAndContinue((Exception ex) => log.Error("Unable to print the requested labels", ex))
                 .Subscribe(async x => await ReprintLabel(x).ConfigureAwait(false));
         }
 
+        /// <summary>
+        /// Reprint labels for the shipments in the message
+        /// </summary>
         private async Task ReprintLabel(ReprintLabelsMessage message)
         {
             Control currentOwner = message.Sender as Control ?? owner;
@@ -112,7 +130,8 @@ namespace ShipWorks.Shipping.Services
         /// <summary>
         /// Print a given template
         /// </summary>
-        private static void PrintTemplate(TemplateEntity template, ShipmentEntity shipment, Dictionary<TemplateEntity, List<long>> delayedPrints)
+        private static void PrintTemplate(TemplateEntity template, ShipmentEntity shipment,
+            Dictionary<TemplateEntity, List<long>> delayedPrints)
         {
             // If it's standard or thermal we can print it right away
             if (template.Type == (int) TemplateType.Standard || template.Type == (int) TemplateType.Thermal)
@@ -140,7 +159,8 @@ namespace ShipWorks.Shipping.Services
         /// <summary>
         /// Print a label template
         /// </summary>
-        private static void PrintLabelTemplate(TemplateEntity template, List<long> delayedKeys, IDictionary<TemplateEntity, List<long>> delayedPrints)
+        private static void PrintLabelTemplate(TemplateEntity template, List<long> delayedKeys,
+            IDictionary<TemplateEntity, List<long>> delayedPrints)
         {
             // It must be a label template
             if (template.Type != (int) TemplateType.Label)

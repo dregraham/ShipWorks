@@ -110,18 +110,7 @@ namespace ShipWorks.Tests.Shared.Database
 
             initializeContainer(mock.Container);
             configureMock?.Invoke(mock);
-
-            var builder = new ContainerBuilder();
-            builder.Register(c => new Control())
-                .As<Control>()
-                .As<IWin32Window>()
-                .ExternallyOwned();
-            builder.Update(mock.Container);
-
-            //foreach (IComponentRegistration registration in builder.Build().ComponentRegistry.Registrations)
-            //{
-            //    mock.Container.ComponentRegistry.Register(registration);
-            //}
+            OverrideMainFormInAutofacContainer(mock);
 
             using (new AuditBehaviorScope(AuditBehaviorUser.SuperUser, AuditReason.Default, AuditState.Disabled))
             {
@@ -143,6 +132,20 @@ namespace ShipWorks.Tests.Shared.Database
             UserSession.InitializeForCurrentSession();
 
             return new DataContext(mock, context.Item1, context.Item2);
+        }
+
+        /// <summary>
+        /// Override registration for Control, which is usually MainForm
+        /// </summary>
+        /// <remarks>MainForm doesn't exist in tests, so this needs to be done</remarks>
+        private static void OverrideMainFormInAutofacContainer(AutoMock mock)
+        {
+            var builder = new ContainerBuilder();
+            builder.Register(c => new Control())
+                .As<Control>()
+                .As<IWin32Window>()
+                .ExternallyOwned();
+            builder.Update(mock.Container);
         }
 
         /// <summary>

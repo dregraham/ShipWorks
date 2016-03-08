@@ -56,7 +56,6 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         private const string usCountryCode = "US";
         private const string caCountryCode = "CA";
 
-
         [Theory]
         [InlineData(100.00, pennyOneNo, providerCarrier, insuredYes, linkVisibleNo, costVisibleNo, infoTipVisibleNo, noPromoFormat, noToolTipText)]
         [InlineData(101.00, pennyOneNo, providerCarrier, insuredYes, linkVisibleYes, costVisibleNo, infoTipVisibleNo, "(Learn how to save $1.70)", noToolTipText)]

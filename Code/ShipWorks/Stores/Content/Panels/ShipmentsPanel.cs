@@ -192,6 +192,7 @@ namespace ShipWorks.Stores.Content.Panels
                 await ValidatedAddressManager.ValidateShipmentAsync(shipment, new AddressValidator());
 
                 Messenger.Current.Send(new OpenShippingDialogMessage(this, new[] { shipment }));
+                Messenger.Current.Send(new OrderSelectionChangingMessage(this, new[] { shipment.OrderID }));
             }
             catch (SqlForeignKeyException)
             {
@@ -358,6 +359,7 @@ namespace ShipWorks.Stores.Content.Panels
             if (result == DialogResult.OK)
             {
                 ShipmentEntity shipment = ShippingManager.GetShipment(shipmentID);
+                long orderID = shipment.OrderID;
 
                 if (shipment == null)
                 {
@@ -366,6 +368,7 @@ namespace ShipWorks.Stores.Content.Panels
                 else
                 {
                     ShippingManager.DeleteShipment(shipment);
+                    Messenger.Current.Send(new OrderSelectionChangingMessage(this, new[] { orderID }));
                 }
 
                 ReloadContent();

@@ -784,6 +784,7 @@
     <Compile Include="Data\Administration\Retry\SqlAdapterRetry.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Messaging\Messages\CustomerDeletedMessage.cs" />
+    <Compile Include="Messaging\Messages\IEntityDeleted.cs" />
     <Compile Include="Messaging\Messages\OpenShippingDialogWithOrdersMessage.cs" />
     <Compile Include="Messaging\Messages\Shipping\BasicOrderSelection.cs" />
     <Compile Include="Messaging\Messages\Shipping\CreateReturnShipmentMessage.cs" />

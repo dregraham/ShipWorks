@@ -16,7 +16,7 @@ namespace ShipWorks.Common.Threading
     /// <summary>
     /// Window for displaying detailed progress updates.
     /// </summary>
-    partial class ProgressDlg : Form
+    public partial class ProgressDlg : Form
     {
         // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(ProgressDlg));

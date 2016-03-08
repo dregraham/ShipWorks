@@ -150,6 +150,9 @@ namespace ShipWorks.Shipping
             return CreateShipment(order);
         }
 
+        /// <summary>
+        /// Create a shipment for the given order
+        /// </summary>
         public static ShipmentEntity CreateShipment(OrderEntity order)
         {
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())

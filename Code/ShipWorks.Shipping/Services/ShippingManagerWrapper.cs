@@ -8,9 +8,7 @@ using ShipWorks.ApplicationCore.ExecutionMode;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Shipping.Services;
-using ShipWorks.Stores.Content;
 
 namespace ShipWorks.Shipping
 {
@@ -169,6 +167,11 @@ namespace ShipWorks.Shipping
         /// </summary>
         public bool IsShipmentTypeConfigured(ShipmentTypeCode shipmentTypeCode) =>
             ShippingManager.IsShipmentTypeConfigured(shipmentTypeCode);
+
+        /// <summary>
+        /// Create a new shipment for the given order
+        /// </summary>
+        public ShipmentEntity CreateShipment(OrderEntity order) => ShippingManager.CreateShipment(order);
 
         /// <summary>
         /// Gets the service used.

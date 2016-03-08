@@ -38,7 +38,7 @@ namespace ShipWorks.Core.Tests.Integration.Data
 
             subscriptions = lifetimeScope.Resolve<IObservable<IShipWorksMessage>>()
                 .OfType<StoreDeletedMessage>()
-                .Subscribe(x => deletedStoreId = x.DeletedStoreId);
+                .Subscribe(x => deletedStoreId = x.DeletedEntityID);
 
             DeletionService.DeleteStore(context.Store, lifetimeScope.Resolve<ISecurityContext>());
 
@@ -54,7 +54,7 @@ namespace ShipWorks.Core.Tests.Integration.Data
 
             subscriptions = lifetimeScope.Resolve<IObservable<IShipWorksMessage>>()
                 .OfType<OrderDeletedMessage>()
-                .Subscribe(x => deletedOrderId = x.DeletedOrderId);
+                .Subscribe(x => deletedOrderId = x.DeletedEntityID);
 
             DeletionService.DeleteOrder(orderId);
 
@@ -85,7 +85,7 @@ namespace ShipWorks.Core.Tests.Integration.Data
 
             subscriptions = lifetimeScope.Resolve<IObservable<IShipWorksMessage>>()
                 .OfType<CustomerDeletedMessage>()
-                .Subscribe(x => deletedCustomerId = x.DeletedCustomerId);
+                .Subscribe(x => deletedCustomerId = x.DeletedEntityID);
 
             DeletionService.DeleteCustomer(CustomerId);
 

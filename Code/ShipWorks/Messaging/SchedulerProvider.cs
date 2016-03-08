@@ -11,8 +11,14 @@ namespace Interapptive.Shared.Threading
     {
         Lazy<IScheduler> windowsFormsEventLoopScheduler;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="getSchedulerControl"></param>
         public SchedulerProvider(Func<Control> getSchedulerControl)
         {
+            // We need to load this lazily because the Control that we need may not be set up when this constructor
+            // is called
             windowsFormsEventLoopScheduler = new Lazy<IScheduler>(() => new ControlScheduler(getSchedulerControl()));
         }
 

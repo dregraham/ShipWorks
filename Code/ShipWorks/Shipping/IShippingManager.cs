@@ -75,6 +75,11 @@ namespace ShipWorks.Shipping
         bool IsShipmentTypeConfigured(ShipmentTypeCode shipmentTypeCode);
 
         /// <summary>
+        /// Create a new shipment for the given order
+        /// </summary>
+        ShipmentEntity CreateShipment(OrderEntity order);
+
+        /// <summary>
         /// Gets the service used.
         /// </summary>
         string GetServiceUsed(ShipmentEntity shipment);
