@@ -1,3 +1,6 @@
-ActiproSoftware.SyntaxEditor.SyntaxEditor, ActiproSoftware.SyntaxEditor.Net20, Version=4.0.283.0, Culture=neutral, PublicKeyToken=21a821480e210563
-Divelements.SandGrid.SandGrid, Divelements.SandGrid, Version=2.2.4.1, Culture=neutral, PublicKeyToken=75b7ec17dd7c14c3
 ActiproSoftware.SyntaxEditor.Addons.Xml.XmlSyntaxLanguage, ActiproSoftware.SyntaxEditor.Addons.Web.Net20, Version=4.0.283.0, Culture=neutral, PublicKeyToken=21a821480e210563
+Divelements.SandRibbon.RibbonForm, Divelements.SandRibbon, Version=1.6.6.1, Culture=neutral, PublicKeyToken=75b7ec17dd7c14c3
+Divelements.SandRibbon.RibbonTab, Divelements.SandRibbon, Version=1.6.6.1, Culture=neutral, PublicKeyToken=75b7ec17dd7c14c3
+Divelements.SandGrid.SandGrid, Divelements.SandGrid, Version=2.2.4.1, Culture=neutral, PublicKeyToken=75b7ec17dd7c14c3
+ActiproSoftware.SyntaxEditor.SyntaxEditor, ActiproSoftware.SyntaxEditor.Net20, Version=4.0.283.0, Culture=neutral, PublicKeyToken=21a821480e210563
+TD.SandDock.DockContainer, SandDock, Version=3.0.4.1, Culture=neutral, PublicKeyToken=75b7ec17dd7c14c3

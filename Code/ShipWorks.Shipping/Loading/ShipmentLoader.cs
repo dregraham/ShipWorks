@@ -45,7 +45,7 @@ namespace ShipWorks.Shipping.Loading
         /// <summary>
         /// Load all the shipments on a background thread
         /// </summary>
-        public async Task<OrderSelectionLoaded> Load(long orderID)
+        public async Task<LoadedOrderSelection> Load(long orderID)
         {
             // Execute the work
             try
@@ -63,13 +63,13 @@ namespace ShipWorks.Shipping.Loading
 
                 await ValidateShipments(order.Shipments).ConfigureAwait(false);
 
-                return new OrderSelectionLoaded(order,
+                return new LoadedOrderSelection(order,
                     order.Shipments.Select(carrierShipmentAdapterFactory.Get),
                     GetDestinationAddressEditable(order));
             }
             catch (Exception ex)
             {
-                return new OrderSelectionLoaded(ex);
+                return new LoadedOrderSelection(ex);
             }
         }
 

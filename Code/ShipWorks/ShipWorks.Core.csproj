@@ -305,6 +305,10 @@
       <HintPath>..\..\packages\Rx-PlatformServices.2.2.5\lib\net40\System.Reactive.PlatformServices.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Reactive.Windows.Forms, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Rx-WinForms.2.2.5\lib\net40\System.Reactive.Windows.Forms.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Reactive.Windows.Threading, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Rx-XAML.2.2.5\lib\net40\System.Reactive.Windows.Threading.dll</HintPath>
       <Private>True</Private>
@@ -780,6 +784,17 @@
     <Compile Include="Data\Administration\Retry\SqlAdapterRetry.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Messaging\Messages\CustomerDeletedMessage.cs" />
+    <Compile Include="Messaging\Messages\IEntityDeleted.cs" />
+    <Compile Include="Messaging\Messages\OpenShippingDialogWithOrdersMessage.cs" />
+    <Compile Include="Messaging\Messages\Shipping\BasicOrderSelection.cs" />
+    <Compile Include="Messaging\Messages\Shipping\CreateReturnShipmentMessage.cs" />
+    <Compile Include="Messaging\Messages\Shipping\VoidShipmentResult.cs" />
+    <Compile Include="Messaging\Messages\Shipping\ReprintLabelMessage.cs" />
+    <Compile Include="Messaging\Messages\Shipping\ShipAgainMessage.cs" />
+    <Compile Include="Messaging\Messages\Shipping\ShipmentsVoidedMessage.cs" />
+    <Compile Include="Messaging\Messages\Shipping\VoidLabelMessage.cs" />
+    <Compile Include="Messaging\Messages\Shipping\CreateLabelMessage.cs" />
+    <Compile Include="Messaging\Messages\Shipping\IOrderSelection.cs" />
     <Compile Include="Messaging\Messages\StoreDeletedMessage.cs" />
     <Compile Include="Messaging\Messages\OrderDeletedMessage.cs" />
     <Compile Include="Messaging\Messages\ShippingSettingsChangedMessage.cs" />
@@ -888,7 +903,7 @@
     <Compile Include="Messaging\Messages\ShipmentChangedMessage.cs" />
     <Compile Include="Messaging\Messages\DimensionsProfilesChangedMessage.cs" />
     <Compile Include="Messaging\Messages\ShippingAccountsChangedMessage.cs" />
-    <Compile Include="Messaging\Messages\Shipping\OrderSelectionLoaded.cs" />
+    <Compile Include="Messaging\Messages\Shipping\LoadedOrderSelection.cs" />
     <Compile Include="Messaging\Messages\Shipping\ProcessShipmentResult.cs" />
     <Compile Include="Messaging\Messages\Shipping\ProcessShipmentsMessage.cs" />
     <Compile Include="Messaging\Messages\Shipping\ShipmentDeletedMessage.cs" />
@@ -3561,6 +3576,10 @@
     <Compile Include="Stores\Platforms\Shopify\ShopifyWebClient.cs" />
     <Compile Include="Templates\Saving\SavingNoTemplateOutputException.cs" />
     <Compile Include="UI\Controls\NameValueGrid.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UI\Controls\SandRibbon\IRibbonButton.cs" />
+    <Compile Include="UI\Controls\SandRibbon\RibbonButton.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="UI\Controls\TextBoxWithDeleteButtonControl.cs">

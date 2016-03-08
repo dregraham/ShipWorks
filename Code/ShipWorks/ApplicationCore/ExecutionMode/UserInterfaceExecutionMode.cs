@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Reactive.Linq;
 using System.Threading;
 using System.Windows.Forms;
 using ActiproSoftware.SyntaxEditor;
-using Autofac;
 using Interapptive.Shared.Data;
 using Interapptive.Shared.UI;
 using log4net;
@@ -14,12 +11,9 @@ using ShipWorks.ApplicationCore.Crashes;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.ApplicationCore.Nudges;
-using ShipWorks.Core.Messaging;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Messaging.Messages;
-using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net;
 using ShipWorks.Stores;
 using ShipWorks.UI;
@@ -162,13 +156,6 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
             DataResourceManager.RegisterResourceCacheCleanup();
             DataPath.RegisterTempFolderCleanup();
             LogSession.RegisterLogCleanup();
-
-            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
-            {
-                lifetimeScope.Resolve<IMessenger>()
-                    .OfType<OpenShippingDialogMessage>()
-                    .Subscribe(HandleOpenShippingDialogMessage);
-            }
         }
 
         /// <summary>
@@ -243,47 +230,6 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
             // Application.Exit does not guaranteed that the windows close.  It only tries.  If an exception
             // gets thrown, or they set e.Cancel = true, they won't have closed.
             Application.ExitThread();
-        }
-
-        /// <summary>
-        /// Handle the open shipping dialog message
-        /// </summary>
-        /// <param name="obj"></param>
-        private void HandleOpenShippingDialogMessage(OpenShippingDialogMessage message)
-        {
-            if (MainForm.InvokeRequired)
-            {
-                MainForm.Invoke((Action) (() => OpenShippingDialog(message)));
-            }
-            else
-            {
-                OpenShippingDialog(message);
-            }
-        }
-
-        /// <summary>
-        /// Open the shipping dialog
-        /// </summary>
-        private void OpenShippingDialog(OpenShippingDialogMessage message)
-        {
-            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope(ConfigureShippingDialogDependencies))
-            {
-                // Show the shipping window.
-                ShippingDlg dlg = lifetimeScope.Resolve<ShippingDlg>(new TypedParameter(typeof(OpenShippingDialogMessage), message));
-
-                dlg.ShowDialog(Program.MainForm);
-            }
-        }
-
-        /// <summary>
-        /// Configure extra dependencies for the shipping dialog
-        /// </summary>
-        private void ConfigureShippingDialogDependencies(ContainerBuilder builder)
-        {
-            builder.RegisterType<ShippingDlg>()
-                .AsSelf()
-                .As<Control>()
-                .SingleInstance();
         }
     }
 }

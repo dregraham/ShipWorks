@@ -61,6 +61,7 @@ namespace ShipWorks.ApplicationCore
         [NDependIgnoreLongMethod]
         public static IContainer Initialize(IContainer container, params Assembly[] assemblies)
         {
+            Assembly[] allAssemblies = assemblies.Union(new[] { typeof(IoC).Assembly }).ToArray();
             var builder = new ContainerBuilder();
 
             builder.RegisterType<DataProviderWrapper>()
@@ -130,7 +131,7 @@ namespace ShipWorks.ApplicationCore
                 .As<ISecurityContext>()
                 .ExternallyOwned();
 
-            builder.RegisterAssemblyModules(assemblies.Union(new[] { typeof(IoC).Assembly }).ToArray());
+            builder.RegisterAssemblyModules(allAssemblies);
 
             builder.RegisterType<EditionManagerWrapper>()
                 .AsImplementedInterfaces();
@@ -151,10 +152,11 @@ namespace ShipWorks.ApplicationCore
             builder.RegisterType<WeightConverter>()
                 .AsImplementedInterfaces();
 
-            builder.RegisterAssemblyTypes(typeof(IoC).Assembly)
+            builder.RegisterAssemblyTypes(allAssemblies)
                 .Where(x => x.IsAssignableTo<IInitializeForCurrentSession>() ||
                     x.IsAssignableTo<ICheckForChangesNeeded>() ||
-                    x.IsAssignableTo<IInitializeForCurrentDatabase>())
+                    x.IsAssignableTo<IInitializeForCurrentDatabase>() ||
+                    x.IsAssignableTo<IMainFormElementRegistration>())
                 .AsImplementedInterfaces()
                 .SingleInstance();
 

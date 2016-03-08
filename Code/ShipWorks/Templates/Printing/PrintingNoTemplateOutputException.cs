@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using ShipWorks.Common.IO.Hardware.Printers;
 
 namespace ShipWorks.Templates.Printing
@@ -9,7 +6,7 @@ namespace ShipWorks.Templates.Printing
     /// <summary>
     /// Thrown when a print job can't do anything because there was no output returned from template processing
     /// </summary>
-    class PrintingNoTemplateOutputException : PrintingException
+    public class PrintingNoTemplateOutputException : PrintingException
     {
         public PrintingNoTemplateOutputException()
         {

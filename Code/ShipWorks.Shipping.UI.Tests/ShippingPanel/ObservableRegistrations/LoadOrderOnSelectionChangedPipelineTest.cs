@@ -55,7 +55,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
             var testObject = mock.Create<LoadOrderOnSelectionChangedPipeline>();
             testObject.Register(viewModelMock.Object);
 
-            orderChangedSubject.OnNext(new OrderSelectionChangedMessage(this, Enumerable.Empty<OrderSelectionLoaded>()));
+            orderChangedSubject.OnNext(new OrderSelectionChangedMessage(this, Enumerable.Empty<IOrderSelection>()));
 
             schedulerProvider.Dispatcher.AdvanceBy(1);
 
@@ -69,7 +69,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
             var testObject = mock.Create<LoadOrderOnSelectionChangedPipeline>();
             testObject.Register(viewModelMock.Object);
 
-            var message = new OrderSelectionChangedMessage(this, Enumerable.Empty<OrderSelectionLoaded>());
+            var message = new OrderSelectionChangedMessage(this, Enumerable.Empty<IOrderSelection>());
             orderChangedSubject.OnNext(message);
 
             schedulerProvider.Dispatcher.AdvanceBy(1);

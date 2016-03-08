@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Reactive.Linq;
-using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Messaging.Messages.Shipping;
@@ -16,14 +15,14 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
     /// </summary>
     public class ShipmentDeletedPipeline : IShippingPanelObservableRegistration
     {
-        readonly IObservable<IShipWorksMessage> messages;
+        readonly IObservable<IEntityDeletedMessage> messages;
         private readonly IStoreManager storeManager;
         private readonly IOrderManager orderManager;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShipmentDeletedPipeline(IObservable<IShipWorksMessage> messages, IStoreManager storeManager, IOrderManager orderManager)
+        public ShipmentDeletedPipeline(IObservable<IEntityDeletedMessage> messages, IStoreManager storeManager, IOrderManager orderManager)
         {
             this.messages = messages;
             this.storeManager = storeManager;
@@ -35,7 +34,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
         /// </summary>
         public IDisposable Register(ShippingPanelViewModel viewModel)
         {
-            return messages.Where(x => ShouldUnloadShipment(x, viewModel.Shipment))
+            return messages.OfType<IEntityDeletedMessage>()
+                .Where(x => ShouldUnloadShipment(x, viewModel.Shipment))
                 .Subscribe(x =>
                 {
                     viewModel.LoadedShipmentResult = ShippingPanelLoadedShipmentResult.Deleted;
@@ -46,7 +46,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
         /// <summary>
         /// Should the shipment be unloaded
         /// </summary>
-        private bool ShouldUnloadShipment(IShipWorksMessage message, ShipmentEntity shipment)
+        private bool ShouldUnloadShipment(IEntityDeletedMessage message, ShipmentEntity shipment)
         {
             if (shipment == null)
             {
@@ -62,38 +62,38 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
         /// <summary>
         /// Is the shipment deleted?
         /// </summary>
-        private bool IsShipmentDeleted(IShipWorksMessage message, long shipmentID)
+        private bool IsShipmentDeleted(IEntityDeletedMessage message, long shipmentID)
         {
             return message is ShipmentDeletedMessage &&
-                ((ShipmentDeletedMessage) message).DeletedShipmentId == shipmentID;
+                 message.DeletedEntityID == shipmentID;
         }
 
         /// <summary>
         /// Is the order deleted?
         /// </summary>
-        private bool IsOrderDeleted(IShipWorksMessage message, long orderID)
+        private bool IsOrderDeleted(IEntityDeletedMessage message, long orderID)
         {
             return message is OrderDeletedMessage &&
-                ((OrderDeletedMessage) message).DeletedOrderId == orderID;
+                message.DeletedEntityID == orderID;
         }
 
         /// <summary>
         /// Is the store deleted?
         /// </summary>
-        private bool IsStoreDeleted(IShipWorksMessage message, ShipmentEntity shipment) =>
-            IsOrderAssociationDeleted<StoreDeletedMessage>(shipment, x => x.StoreID, message, x => x.DeletedStoreId);
+        private bool IsStoreDeleted(IEntityDeletedMessage message, ShipmentEntity shipment) =>
+            IsOrderAssociationDeleted<StoreDeletedMessage>(shipment, x => x.StoreID, message, x => x.DeletedEntityID);
 
         /// <summary>
         /// Is the customer deleted?
         /// </summary>
-        private bool IsCustomerDeleted(IShipWorksMessage message, ShipmentEntity shipment) =>
-            IsOrderAssociationDeleted<CustomerDeletedMessage>(shipment, x => x.CustomerID, message, x => x.DeletedCustomerId);
+        private bool IsCustomerDeleted(IEntityDeletedMessage message, ShipmentEntity shipment) =>
+            IsOrderAssociationDeleted<CustomerDeletedMessage>(shipment, x => x.CustomerID, message, x => x.DeletedEntityID);
 
         /// <summary>
         /// Is this the deletion of an order association?
         /// </summary>
         private bool IsOrderAssociationDeleted<T>(ShipmentEntity shipment, Func<OrderEntity, long> getAssociationIdFromOrder,
-            IShipWorksMessage message, Func<T, long> getAssociationIdFromMessage)
+            IEntityDeletedMessage message, Func<T, long> getAssociationIdFromMessage)
         {
             if (!(message is T))
             {

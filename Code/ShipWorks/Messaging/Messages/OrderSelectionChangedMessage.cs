@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
+using Interapptive.Shared.Collections;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Core.Messaging.Messages.Shipping;
-using Interapptive.Shared.Collections;
 
 namespace ShipWorks.Messaging.Messages
 {
@@ -13,7 +13,7 @@ namespace ShipWorks.Messaging.Messages
         /// <summary>
         /// Constructor
         /// </summary>
-        public OrderSelectionChangedMessage(object sender, IEnumerable<OrderSelectionLoaded> loadedSelection)
+        public OrderSelectionChangedMessage(object sender, IEnumerable<IOrderSelection> loadedSelection)
         {
             Sender = sender;
             LoadedOrderSelection = loadedSelection.ToReadOnly();
@@ -27,6 +27,6 @@ namespace ShipWorks.Messaging.Messages
         /// <summary>
         /// Order IDs that have changed
         /// </summary>
-        public IEnumerable<OrderSelectionLoaded> LoadedOrderSelection { get; }
+        public IEnumerable<IOrderSelection> LoadedOrderSelection { get; }
     }
 }

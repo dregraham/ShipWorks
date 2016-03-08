@@ -11,10 +11,13 @@ using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.UI;
+using Interapptive.Shared.Utility;
 using log4net;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Core.Messaging.Messages.Shipping;
 using ShipWorks.Core.UI;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Messaging.Messages.Shipping;
@@ -31,7 +34,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
     public partial class ShippingPanelViewModel : INotifyPropertyChanged, INotifyPropertyChanging, IDisposable, IDataErrorInfo
     {
         private readonly PropertyChangedHandler handler;
-        private OrderSelectionLoaded orderSelectionLoaded;
+        private LoadedOrderSelection loadedOrderSelection;
 
         private readonly HashSet<string> internalFields = new HashSet<string> { nameof(AllowEditing) };
 
@@ -41,9 +44,11 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         private readonly IMessageHelper messageHelper;
         private readonly IShippingViewModelFactory shippingViewModelFactory;
         private readonly ILog log;
+        private readonly IShippingErrorManager errorManager;
 
         private bool isLoadingShipment;
         private IDisposable shipmentChangedSubscription;
+        private long[] selectedOrderIds;
 
         public event PropertyChangedEventHandler PropertyChanged;
         public event PropertyChangingEventHandler PropertyChanging;
@@ -67,13 +72,15 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             IShippingManager shippingManager,
             IMessageHelper messageHelper,
             IShippingViewModelFactory shippingViewModelFactory,
-            Func<Type, ILog> logFactory) : this()
+            Func<Type, ILog> logFactory, 
+            IShippingErrorManager errorManager) : this()
         {
             this.shippingManager = shippingManager;
             this.messenger = messenger;
             this.messageHelper = messageHelper;
             this.shippingViewModelFactory = shippingViewModelFactory;
             log = logFactory(typeof(ShippingPanelViewModel));
+            this.errorManager = errorManager;
 
             OpenShippingDialogCommand = new RelayCommand(SendShowShippingDlgMessage);
 
@@ -90,7 +97,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
 
             PropertyChanging += OnPropertyChanging;
 
-            CreateLabelCommand = new RelayCommand(ProcessShipment);
+            CreateLabelCommand = new RelayCommand(CreateLabel);
         }
 
         /// <summary>
@@ -180,18 +187,26 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// </summary>
         public virtual void LoadOrder(OrderSelectionChangedMessage orderMessage)
         {
-            int orders = orderMessage.LoadedOrderSelection.HasMoreOrLessThanCount(1);
+            selectedOrderIds = orderMessage.LoadedOrderSelection.Select(x => x.OrderID).ToArray();
+            int orders = orderMessage.LoadedOrderSelection.OfType<LoadedOrderSelection>().HasMoreOrLessThanCount(1);
             if (orders != 0)
             {
+                UnloadShipment();
+
+                if (selectedOrderIds.Length > 1)
+                {
+                    LoadedShipmentResult = ShippingPanelLoadedShipmentResult.Multiple;
+                }
+
                 return;
             }
 
-            orderSelectionLoaded = orderMessage.LoadedOrderSelection.Single();
-            LoadedShipmentResult = GetLoadedShipmentResult(orderSelectionLoaded);
+            loadedOrderSelection = orderMessage.LoadedOrderSelection.OfType<LoadedOrderSelection>().Single();
+            LoadedShipmentResult = GetLoadedShipmentResult(loadedOrderSelection);
 
             if (LoadedShipmentResult == ShippingPanelLoadedShipmentResult.Success)
             {
-                Populate(orderSelectionLoaded.ShipmentAdapters.Single());
+                Populate(loadedOrderSelection.ShipmentAdapters.Single());
             }
             else
             {
@@ -202,7 +217,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// <summary>
         /// Sets the LoadedShipmentResult based on orderSelectionLoaded
         /// </summary>
-        private ShippingPanelLoadedShipmentResult GetLoadedShipmentResult(OrderSelectionLoaded loadedSelection)
+        private ShippingPanelLoadedShipmentResult GetLoadedShipmentResult(LoadedOrderSelection loadedSelection)
         {
             if (loadedSelection.Exception != null)
             {
@@ -248,7 +263,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
 
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ShipmentType)));
 
-            RequestedShippingMethod = orderSelectionLoaded.Order?.RequestedShipping;
+            RequestedShippingMethod = loadedOrderSelection.Order?.RequestedShipping;
 
             SupportsAccounts = ShipmentAdapter.SupportsAccounts;
 
@@ -263,7 +278,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
 
             AllowEditing = !ShipmentAdapter.Shipment.Processed;
 
-            DestinationAddressEditableState = orderSelectionLoaded.DestinationAddressEditable;
+            DestinationAddressEditableState = loadedOrderSelection.DestinationAddressEditable;
 
             Origin.SetAddressFromOrigin(OriginAddressType, ShipmentAdapter.Shipment?.OrderID ?? 0, AccountId, ShipmentType);
 
@@ -287,9 +302,37 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// <summary>
         /// Process the current shipment using the specified processor
         /// </summary>
-        public void ProcessShipment()
+        public virtual void CreateLabel()
         {
-            if (!AllowEditing || (ShipmentAdapter?.Shipment?.Processed ?? true))
+            if (loadedShipmentResult == ShippingPanelLoadedShipmentResult.Multiple)
+            {
+                messenger.Send(new OpenShippingDialogWithOrdersMessage(this, selectedOrderIds));
+                return;
+            }
+
+            if (loadedShipmentResult == ShippingPanelLoadedShipmentResult.Success)
+            {
+                if (!AllowEditing || (ShipmentAdapter?.Shipment?.Processed ?? true))
+                {
+                    return;
+                }
+
+                SaveToDatabase();
+
+                AllowEditing = false;
+
+                messenger.Send(new ProcessShipmentsMessage(this, new[] { ShipmentAdapter.Shipment }));
+            }
+        }
+
+        /// <summary>
+        /// Void a shipment
+        /// </summary>
+        public virtual void VoidLabel(VoidLabelMessage voidLabelMessage)
+        {
+            ShipmentEntity shipment = ShipmentAdapter?.Shipment;
+
+            if (shipment == null || !shipment.Processed || shipment.Voided)
             {
                 return;
             }
@@ -298,7 +341,37 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
 
             AllowEditing = false;
 
-            messenger.Send(new ProcessShipmentsMessage(this, new[] { ShipmentAdapter.Shipment }));
+            string errorMessage = string.Empty;
+            ICarrierShipmentAdapter voidedShipmentAdapter = null;
+            long shipmentID = shipment.ShipmentID;
+
+            try
+            {
+                // Void it
+                voidedShipmentAdapter = shippingManager.VoidShipment(shipmentID);
+            }
+            catch (Exception ex) when (ex is ORMConcurrencyException ||
+                                        ex is ObjectDeletedException ||
+                                        ex is SqlForeignKeyException)
+            {
+                errorMessage = errorManager.SetShipmentErrorMessage(shipmentID, ex, "voided");
+            }
+            catch (ShippingException ex)
+            {
+                errorMessage = errorManager.SetShipmentErrorMessage(shipmentID, ex);
+            }
+
+            if (!string.IsNullOrWhiteSpace(errorMessage))
+            {
+                messageHelper.ShowError(errorMessage);
+                return;
+            }
+
+            if (voidedShipmentAdapter != null)
+            {
+                VoidShipmentResult voidShipmentResult = new VoidShipmentResult(voidedShipmentAdapter.Shipment);
+                messenger.Send(new ShipmentsVoidedMessage(this, new[] { voidShipmentResult }));
+            }
         }
 
         /// <summary>
@@ -375,7 +448,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         {
             // Call save before asking the shipping dialog to open, that way the shipment is in the db
             // prior to the shipping dialog getting the shipment.
-            Save();
+            SaveToDatabase();
 
             AllowEditing = false;
 
@@ -394,10 +467,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
                 messageHelper.ShowError("The selected shipments were edited or deleted by another ShipWorks user and your changes could not be saved.\n\n" +
                                         "The shipments will be refreshed to reflect the recent changes.");
 
-                if (!error.Message.Contains("delete"))
-                {
-                    messenger.Send(new OrderSelectionChangingMessage(this, new[] { ShipmentAdapter.Shipment.OrderID }));
-                }
+                messenger.Send(new OrderSelectionChangingMessage(this, new[] { ShipmentAdapter.Shipment.OrderID }));
             }
         }
 

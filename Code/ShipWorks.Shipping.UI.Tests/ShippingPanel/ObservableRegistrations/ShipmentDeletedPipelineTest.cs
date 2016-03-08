@@ -2,7 +2,6 @@
 using System.Reactive.Subjects;
 using Autofac.Extras.Moq;
 using Moq;
-using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Messaging.Messages.Shipping;
@@ -17,13 +16,13 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
     public class ShipmentDeletedPipelineTest : IDisposable
     {
         readonly AutoMock mock;
-        readonly Subject<IShipWorksMessage> testSubject;
+        readonly Subject<IEntityDeletedMessage> testSubject;
 
         public ShipmentDeletedPipelineTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
-            testSubject = new Subject<IShipWorksMessage>();
-            mock.Provide<IObservable<IShipWorksMessage>>(testSubject);
+            testSubject = new Subject<IEntityDeletedMessage>();
+            mock.Provide<IObservable<IEntityDeletedMessage>>(testSubject);
         }
 
         [Fact]

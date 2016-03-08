@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
+using Interapptive.Shared.Collections;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Core.Messaging.Messages.Shipping;
@@ -15,7 +16,7 @@ namespace ShipWorks.Shipping.Services
     /// <summary>
     /// Implementation for ShipmentLoaderService
     /// </summary>
-    public class ShipmentLoaderService : IShipmentLoaderService<OrderSelectionLoaded>, IInitializeForCurrentSession
+    public class ShipmentLoaderService : IInitializeForCurrentSession
     {
         private readonly IShipmentLoader shipmentLoader;
         private readonly IMessenger messenger;
@@ -39,11 +40,19 @@ namespace ShipWorks.Shipping.Services
         /// </summary>
         public async Task LoadAndNotify(IEnumerable<long> entityIDs)
         {
-            long entityID = entityIDs?.FirstOrDefault() ?? 0;
+            IEnumerable<IOrderSelection> orderSelection;
 
-            OrderSelectionLoaded orderSelectionLoaded = await shipmentLoader.Load(entityID);
+            if (entityIDs.HasMoreOrLessThanCount(1) != 0)
+            {
+                orderSelection = entityIDs.Select(x => new BasicOrderSelection(x)).Cast<IOrderSelection>().ToArray();
+            }
+            else
+            {
+                LoadedOrderSelection orderSelectionLoaded = await shipmentLoader.Load(entityIDs.Single());
+                orderSelection = new IOrderSelection[] { orderSelectionLoaded };
+            }
 
-            OrderSelectionChangedMessage orderSelectionChangedMessage = new OrderSelectionChangedMessage(this, new List<OrderSelectionLoaded> { orderSelectionLoaded });
+            OrderSelectionChangedMessage orderSelectionChangedMessage = new OrderSelectionChangedMessage(this, orderSelection);
 
             messenger.Send(orderSelectionChangedMessage);
         }

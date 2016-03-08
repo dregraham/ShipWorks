@@ -11,12 +11,12 @@ namespace ShipWorks.Core.Messaging.Messages.Shipping
     /// <summary>
     /// Class representing the loading of an order's shipment(s).
     /// </summary>
-    public struct OrderSelectionLoaded
+    public struct LoadedOrderSelection : IOrderSelection
     {
         /// <summary>
         /// Constructor for success
         /// </summary>
-        public OrderSelectionLoaded(OrderEntity order, IEnumerable<ICarrierShipmentAdapter> shipmentAdapters, ShippingAddressEditStateType destinationAddressEditable)
+        public LoadedOrderSelection(OrderEntity order, IEnumerable<ICarrierShipmentAdapter> shipmentAdapters, ShippingAddressEditStateType destinationAddressEditable)
         {
             Order = order;
             ShipmentAdapters = shipmentAdapters.ToReadOnly();
@@ -27,7 +27,7 @@ namespace ShipWorks.Core.Messaging.Messages.Shipping
         /// <summary>
         /// Constructor for errors
         /// </summary>
-        public OrderSelectionLoaded(Exception ex)
+        public LoadedOrderSelection(Exception ex)
         {
             Order = null;
             ShipmentAdapters = Enumerable.Empty<ICarrierShipmentAdapter>();
@@ -54,5 +54,10 @@ namespace ShipWorks.Core.Messaging.Messages.Shipping
         /// Returns the ShippingAddressEditStateType of the shipment.
         /// </summary>
         public ShippingAddressEditStateType DestinationAddressEditable { get; }
+
+        /// <summary>
+        /// Id of the order selection
+        /// </summary>
+        public long OrderID => Order?.OrderID ?? -1;
     }
 }

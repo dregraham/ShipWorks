@@ -13,6 +13,7 @@ namespace ShipWorks.Tests.Shared
     {
         private readonly TestScheduler currentThread = new TestScheduler();
         private readonly TestScheduler dispatcher = new TestScheduler();
+        private readonly TestScheduler windowsFormsEventLoop = new TestScheduler();
         private readonly TestScheduler immediate = new TestScheduler();
         private readonly TestScheduler newThread = new TestScheduler();
         private readonly TestScheduler threadPool = new TestScheduler();
@@ -22,6 +23,7 @@ namespace ShipWorks.Tests.Shared
         #region Explicit implementation of ISchedulerService
         IScheduler ISchedulerProvider.CurrentThread => currentThread;
         IScheduler ISchedulerProvider.Dispatcher => dispatcher;
+        IScheduler ISchedulerProvider.WindowsFormsEventLoop => windowsFormsEventLoop;
         IScheduler ISchedulerProvider.Immediate => immediate;
         IScheduler ISchedulerProvider.NewThread => newThread;
         IScheduler ISchedulerProvider.ThreadPool => threadPool;
@@ -31,6 +33,7 @@ namespace ShipWorks.Tests.Shared
 
         public TestScheduler CurrentThread => currentThread;
         public TestScheduler Dispatcher => dispatcher;
+        public TestScheduler WindowsFormsEventLoop => windowsFormsEventLoop;
         public TestScheduler Immediate => immediate;
         public TestScheduler NewThread => newThread;
         public TestScheduler ThreadPool => threadPool;
