@@ -33,6 +33,7 @@ using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Insurance.InsureShip;
 using ShipWorks.Stores;
 using ShipWorks.Stores.Content;
+using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
 
 namespace ShipWorks.ApplicationCore.Licensing
 {
@@ -94,6 +95,47 @@ namespace ShipWorks.ApplicationCore.Licensing
             postRequest.Variables.Add("action", "activate");
 
             return ProcessAccountRequest(postRequest, store, license);
+        }
+
+        /// <summary>
+        /// Associates the shipworks with itself.
+        /// </summary>
+        internal static EnumResult<AssociateShipWorksWithItselfResponseType> AssociateShipworksWithItself(AssociateShipworksWithItselfRequest request)
+        {
+            HttpVariableRequestSubmitter postRequest = new HttpVariableRequestSubmitter();
+            
+            postRequest.Variables.Add("action", "associateshipworkswithitself");
+            postRequest.Variables.Add("license", request.CustomerKey);
+
+            postRequest.Variables.Add("ccholder", request.CardHolder);
+            postRequest.Variables.Add("cc_cardType", ((int)request.CardType).ToString());
+            postRequest.Variables.Add("cc_account_number", request.CardAccountNumber);
+            postRequest.Variables.Add("cc_cvn", request.CardCvn);
+            postRequest.Variables.Add("cc_expiration_month", request.CardExpirationMonth.ToString());
+            postRequest.Variables.Add("cc_expiration_year", request.CardExpirationYear.ToString());
+            postRequest.Variables.Add("cc_billing_street_1", request.CardBillingAddress.Street1);
+            postRequest.Variables.Add("cc_billing_city", request.CardBillingAddress.City);
+            postRequest.Variables.Add("cc_billing_state", request.CardBillingAddress.StateProvCode);
+            postRequest.Variables.Add("cc_billing_zipcode", request.CardBillingAddress.PostalCode);
+            postRequest.Variables.Add("sendMarketingInfo", "false");
+
+            if(request.MatchedPhysicalAddress != null)
+            {
+                Address matchedAddress = request.MatchedPhysicalAddress;
+                postRequest.Variables.Add("pStreet", matchedAddress.Address1);
+                postRequest.Variables.Add("pCity", matchedAddress.City);
+                postRequest.Variables.Add("pState", matchedAddress.State);
+                postRequest.Variables.Add("pZipcode", matchedAddress.ZIPCode);
+                postRequest.Variables.Add("pAddOn", matchedAddress.ZIPCodeAddOn);
+                postRequest.Variables.Add("pDPCode", matchedAddress.DPB);
+                postRequest.Variables.Add("pChkDigit", matchedAddress.CheckDigit);
+                postRequest.Variables.Add("pZipStandard", "zip_standardized");
+            }
+
+            // Process the request
+            XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "associateshipworkswithitself");
+
+            return new EnumResult<AssociateShipWorksWithItselfResponseType>(AssociateShipWorksWithItselfResponseType.Success,string.Empty);
         }
 
         /// <summary>

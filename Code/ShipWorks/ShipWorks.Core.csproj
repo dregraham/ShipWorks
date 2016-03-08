@@ -559,6 +559,7 @@
     <Compile Include="AddressValidation\Enums\AddressValidationStatusType.cs" />
     <Compile Include="AddressValidation\Enums\AddressValidationStoreSettingType.cs" />
     <Compile Include="AddressValidation\Enums\ValidationDetailStatusType.cs" />
+    <Compile Include="AddressValidation\IAddressValidator.cs" />
     <Compile Include="AddressValidation\Predicates\AddressSuggestionsForConsumerPredicate.cs" />
     <Compile Include="AddressValidation\AddressValidationQueue.cs" />
     <Compile Include="AddressValidation\AddressValidationResult.cs" />
@@ -601,8 +602,10 @@
     <Compile Include="ApplicationCore\Licensing\Activation\ICustomerLicenseActivationActivity.cs" />
     <Compile Include="ApplicationCore\Licensing\Activation\IUspsAccountSetupActivity.cs" />
     <Compile Include="ApplicationCore\Licensing\Activation\UspsAccountSetupActivity.cs" />
+    <Compile Include="ApplicationCore\Licensing\AssociateShipworksWithItselfRequest.cs" />
     <Compile Include="ApplicationCore\Licensing\AssociateShipWorksWithItselfResponseType.cs" />
     <Compile Include="ApplicationCore\Licensing\ComplianceLevel.cs" />
+    <Compile Include="ApplicationCore\Licensing\CreditCardType.cs" />
     <Compile Include="ApplicationCore\Licensing\UspsPendingAccountType.cs" />
     <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\Endicia\EndiciaConsolidatorRestriction.cs" />
     <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\Endicia\EndiciaDhlRestriction.cs" />

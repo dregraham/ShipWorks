@@ -24,6 +24,8 @@ using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Defaults;
 using ShipWorks.Shipping.Settings.WizardPages;
 using ShipWorks.UI.Wizard;
+using ShipWorks.ApplicationCore;
+using Autofac;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {
@@ -768,9 +770,44 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         private void OnStepNextWelcome(object sender, WizardStepEventArgs e)
         {
-            if (UspsAccount.PendingInitialAccount == (int) UspsPendingAccountType.Existing)
+            switch ((UspsPendingAccountType)UspsAccount.PendingInitialAccount)
             {
-                e.NextPage = wizardPageOptions;
+                case UspsPendingAccountType.None:
+                    return;
+                case UspsPendingAccountType.Create:
+                    if (radioExistingAccount.Checked)
+                    {
+                        return;
+                    }
+
+                    e.NextPage = wizardPageNewAccountPaymentAndBilling;
+
+                    break;
+                case UspsPendingAccountType.Existing:
+                    e.NextPage = wizardPageOptions;
+                    break;
+            }            
+        }
+
+        private void OnStepNextNewAccountPaymentAndBilling(object sender, WizardStepEventArgs e)
+        {
+            using (ILifetimeScope ioc = IoC.BeginLifetimeScope())
+            {
+                IUspsWebClient uspsWebClient =
+                    ioc.Resolve<IUspsWebClient>(new NamedParameter("uspsResellerType", UspsResellerType.None));
+
+                AssociateShipworksWithItselfRequest request = 
+                    ioc.Resolve<AssociateShipworksWithItselfRequest>(new TypedParameter(typeof(IUspsWebClient), uspsWebClient));
+
+                request.CardAccountNumber = paymentAndBillingAddress.CardNumber;
+                request.CardType = paymentAndBillingAddress.CardType;
+                request.CardHolder = paymentAndBillingAddress.CardHolderName;
+                request.CardExpirationMonth = paymentAndBillingAddress.CreditCardExpirationMonth;
+                request.CardExpirationYear = paymentAndBillingAddress.CreditCardExpirationYear;
+
+                request.CardBillingAddress = paymentAndBillingAddress.BillingAddress;
+
+                request.Execute();
             }
         }
     }

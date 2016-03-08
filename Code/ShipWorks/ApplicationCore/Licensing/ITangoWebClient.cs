@@ -42,6 +42,11 @@ namespace ShipWorks.ApplicationCore.Licensing
         TrialDetail ExtendTrial(StoreEntity store);
 
         /// <summary>
+        /// Associates the shipworks with itself.
+        /// </summary>
+        EnumResult<AssociateShipWorksWithItselfResponseType> AssociateShipworksWithItself(AssociateShipworksWithItselfRequest associateShipworksWithItselfRequest);
+
+        /// <summary>
         /// Activates ShipWorks using the given user
         /// </summary>
         GenericResult<IActivationResponse> ActivateLicense(string email, string password);

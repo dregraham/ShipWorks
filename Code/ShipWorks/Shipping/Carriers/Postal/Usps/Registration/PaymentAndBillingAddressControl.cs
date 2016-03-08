@@ -2,14 +2,14 @@
 using System.Text;
 using System.Windows.Forms;
 using Interapptive.Shared.UI;
-using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
+using Interapptive.Shared.Utility;
+using ShipWorks.ApplicationCore.Licensing;
+using Interapptive.Shared.Business;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps.Registration
 {
     public partial class PaymentAndBillingAddressControl : UserControl
     {
-        private const string CreditCardPaymentMethod = "Credit Card";
-
         public PaymentAndBillingAddressControl()
         {
             InitializeComponent();
@@ -22,13 +22,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Registration
         /// <param name="e"></param>
         private void OnLoad(object sender, EventArgs e)
         {
-            // Load the card types
-            cardType.Items.Add(new CreditCardTypeDropDownItem(CreditCardType.Visa, "Visa"));
-            cardType.Items.Add(new CreditCardTypeDropDownItem(CreditCardType.MasterCard, "MasterCard"));
-            cardType.Items.Add(new CreditCardTypeDropDownItem(CreditCardType.AmericanExpress, "American Express"));
-            cardType.Items.Add(new CreditCardTypeDropDownItem(CreditCardType.Discover, "Discover"));
-            cardType.SelectedIndex = 0;
-
+            EnumHelper.BindComboBox<CreditCardType>(cardType);
+                        
             // Set the minimum/maximum value of the credit card expiration month and year to adjust
             // for the current date
             creditCardExpirationMonth.Value = DateTime.Now.Month;
@@ -39,7 +34,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Registration
         /// <summary>
         /// Gets the credit card expiration year.
         /// </summary>
-        private int CreditCardExpirationYear
+        public int CreditCardExpirationYear
         {
             get { return Convert.ToInt32(creditCardExpirationYear.Value); }
         }
@@ -47,7 +42,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Registration
         /// <summary>
         /// Gets the credit card expiration month.
         /// </summary>
-        private int CreditCardExpirationMonth
+        public int CreditCardExpirationMonth
         {
             get { return Convert.ToInt32(creditCardExpirationMonth.Value); }
         }
@@ -55,29 +50,43 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Registration
         /// <summary>
         /// Gets the type of the card.
         /// </summary>
-        private CreditCardType CardType
-        {
-            get { return ((CreditCardTypeDropDownItem)cardType.SelectedItem).CardType; }
-        }
-
-        /// <summary>
-        /// Gets the credit card and information provided if the selected payment is credit card. A null
-        /// value is returned if the selected payment method is not credit card.
-        /// </summary>
-        public CreditCard CreditCard
+        public CreditCardType CardType
         {
             get
             {
-                return new CreditCard()
-                {
-                    AccountNumber = creditCardNumber.Text,
-                    ExpirationDate = new DateTime(CreditCardExpirationYear, CreditCardExpirationMonth, 1),
-                    CreditCardType = CardType,
-                    BillingAddress = new Address()
-                    {
-                        FullName = cardholderName.Text,
-                    }
-                };
+                return (CreditCardType) cardType.SelectedValue;
+            }
+        }
+
+        /// <summary>
+        /// Gets the name of the card holder.
+        /// </summary>
+        /// <value>
+        /// The name of the card holder.
+        /// </value>
+        public string CardHolderName
+        {
+            get
+            {
+                return cardholderName.Text;
+            }
+        }
+
+        public string CardNumber
+        {
+            get
+            {
+                return creditCardNumber.Text;
+            }
+        }
+
+        public PersonAdapter BillingAddress
+        {
+            get
+            {
+                PersonAdapter billingAddressAdapter = new PersonAdapter();
+                billingAddress.SaveToEntity(billingAddressAdapter);
+                return billingAddressAdapter;
             }
         }
 
@@ -88,7 +97,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Registration
         public bool ValidateData()
         {
             bool isValid = true;
-            StringBuilder validationMessages = addressControl.GetValidationErrors();
+            if(!billingAddress.ValidateRequiredFields())
+            {
+                return false;
+            }
+
+            StringBuilder validationMessages = new StringBuilder();
 
             if (string.IsNullOrEmpty(cardholderName.Text))
             {

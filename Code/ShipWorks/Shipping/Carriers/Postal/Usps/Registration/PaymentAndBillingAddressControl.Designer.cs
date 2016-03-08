@@ -46,7 +46,7 @@
             this.labelPaymentInfo = new System.Windows.Forms.Label();
             this.labelPaymentHeading = new System.Windows.Forms.Label();
             this.labelBillingAddress = new System.Windows.Forms.Label();
-            this.addressControl = new ShipWorks.Shipping.Carriers.Postal.Usps.Registration.SimpleAddressControl();
+            this.billingAddress = new ShipWorks.Data.Controls.AutofillPersonControl();
             this.creditCardPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.creditCardExpirationYear)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.creditCardExpirationMonth)).BeginInit();
@@ -246,18 +246,22 @@
             this.labelBillingAddress.TabIndex = 45;
             this.labelBillingAddress.Text = "Billing Address";
             // 
-            // addressControl
+            // billingAddress
             // 
-            this.addressControl.Location = new System.Drawing.Point(53, 222);
-            this.addressControl.Name = "addressControl";
-            this.addressControl.Size = new System.Drawing.Size(344, 134);
-            this.addressControl.TabIndex = 46;
+            this.billingAddress.AvailableFields = ((ShipWorks.Data.Controls.PersonFields)((((ShipWorks.Data.Controls.PersonFields.Street | ShipWorks.Data.Controls.PersonFields.City) 
+            | ShipWorks.Data.Controls.PersonFields.State) 
+            | ShipWorks.Data.Controls.PersonFields.Postal)));
+            this.billingAddress.Location = new System.Drawing.Point(61, 215);
+            this.billingAddress.MaxStreetLines = 1;
+            this.billingAddress.Name = "billingAddress";
+            this.billingAddress.Size = new System.Drawing.Size(346, 165);
+            this.billingAddress.TabIndex = 46;
             // 
             // PaymentAndBillingAddressControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.addressControl);
+            this.Controls.Add(this.billingAddress);
             this.Controls.Add(this.labelBillingAddress);
             this.Controls.Add(this.labelNote);
             this.Controls.Add(this.labelPaymentInfo);
@@ -296,6 +300,6 @@
         private System.Windows.Forms.Label labelPaymentInfo;
         private System.Windows.Forms.Label labelPaymentHeading;
         private System.Windows.Forms.Label labelBillingAddress;
-        private SimpleAddressControl addressControl;
+        private Data.Controls.AutofillPersonControl billingAddress;
     }
 }

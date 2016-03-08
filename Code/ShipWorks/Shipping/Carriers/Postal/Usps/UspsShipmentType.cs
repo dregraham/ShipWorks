@@ -544,9 +544,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <returns></returns>
         private UspsAccountEntity GetPendingAccount()
         {
-            return AccountRepository.Accounts.Any(a => a.PendingInitialAccount == (int) UspsPendingAccountType.Existing) ?
-                AccountRepository.Accounts.FirstOrDefault(a => a.PendingInitialAccount == (int)UspsPendingAccountType.Existing) :
-                null;
+            return AccountRepository.Accounts
+                .FirstOrDefault(a => a.PendingInitialAccount == (int)UspsPendingAccountType.Existing ||
+                a.PendingInitialAccount == (int)UspsPendingAccountType.Create);
         }
     }
 }

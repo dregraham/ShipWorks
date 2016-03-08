@@ -66,7 +66,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Activation
             {
                 Username = username,
                 Password = SecureText.Encrypt(password, username),
-                PendingInitialAccount = (int) UspsPendingAccountType.Existing
+                PendingInitialAccount = (int)UspsPendingAccountType.Existing
             };
 
             try
@@ -99,9 +99,10 @@ namespace ShipWorks.ApplicationCore.Licensing.Activation
             {
                 Username = username,
                 Password = SecureText.Encrypt(password, username),
-                PendingInitialAccount = (int) UspsPendingAccountType.Create
+                PendingInitialAccount = (int)UspsPendingAccountType.Create,
+                CreatedDate = DateTime.UtcNow
             };
-
+            uspsAccount.InitializeNullsToDefault();
             uspsAccountRepository.Save(uspsAccount);
 
             shippingSettings.SetDefaultProvider(ShipmentTypeCode.Usps);

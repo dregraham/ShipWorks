@@ -17,6 +17,6 @@ namespace ShipWorks.ApplicationCore.Licensing
         UnknownError = 1,
 
         [Description("PO Box Not Allowed")]
-        POBoxNotAllowed = 2
+        POBoxNotAllowed = 2,         
     }
 }

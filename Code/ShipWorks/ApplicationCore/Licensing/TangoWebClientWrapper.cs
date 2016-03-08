@@ -270,5 +270,13 @@ namespace ShipWorks.ApplicationCore.Licensing
         {
             return TangoWebClient.AddStore(license, store);
         }
+
+        /// <summary>
+        /// Associates the shipworks with itself.
+        /// </summary>
+        public EnumResult<AssociateShipWorksWithItselfResponseType> AssociateShipworksWithItself(AssociateShipworksWithItselfRequest associateShipworksWithItselfRequest)
+        {
+            return TangoWebClient.AssociateShipworksWithItself(associateShipworksWithItselfRequest);
+        }
     }
 }

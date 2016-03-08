@@ -1334,5 +1334,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
                     throw new ArgumentOutOfRangeException("contentType");
             }
         }
+
+        /// <summary>
+        /// Not implemented in Express1
+        /// </summary>
+        public UspsAddressValidationResults ValidateAddress(PersonAdapter address)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

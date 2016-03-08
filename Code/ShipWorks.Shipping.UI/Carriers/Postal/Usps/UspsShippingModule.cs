@@ -6,6 +6,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 using ShipWorks.Shipping.Carriers.Ups;
+using ShipWorks.ApplicationCore.Licensing;
 
 namespace ShipWorks.Shipping.Carriers.Usps
 {
@@ -46,6 +47,8 @@ namespace ShipWorks.Shipping.Carriers.Usps
 
             builder.RegisterType<UspsAccountManagerWrapper>()
                 .AsImplementedInterfaces();
+
+            builder.RegisterType<AssociateShipworksWithItselfRequest>();    
         }
     }
 }
