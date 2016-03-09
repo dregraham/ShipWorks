@@ -26,8 +26,6 @@ using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Defaults;
 using ShipWorks.Shipping.Settings.WizardPages;
 using ShipWorks.UI.Wizard;
-using ShipWorks.ApplicationCore;
-using Autofac;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {
