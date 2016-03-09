@@ -105,7 +105,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             HttpVariableRequestSubmitter postRequest = new HttpVariableRequestSubmitter();
 
             postRequest.Variables.Add("action", "associateshipworkswithitself");
-            postRequest.Variables.Add("license", request.CustomerKey);
+            postRequest.Variables.Add("customerlicense", request.CustomerKey);
 
             postRequest.Variables.Add("cc_holder", request.CardHolderName);
             postRequest.Variables.Add("cc_cardType", ((int) request.CardType).ToString());
