@@ -28,7 +28,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// IEnumerable of ActiveStores for the license
         /// </summary>
-        IEnumerable<ActiveStore> GetActiveStores();
+        IEnumerable<IActiveStore> GetActiveStores();
 
         /// <summary>
         /// Deletes the given channel

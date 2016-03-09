@@ -633,6 +633,7 @@
     <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\Ups\UpsAccountLimitRestriction.cs" />
     <Compile Include="ApplicationCore\Licensing\GetActiveStoresResponse.cs" />
     <Compile Include="ApplicationCore\Licensing\IActivationResponse.cs" />
+    <Compile Include="ApplicationCore\Licensing\IActiveStore.cs" />
     <Compile Include="ApplicationCore\Licensing\IAddStoreResponse.cs" />
     <Compile Include="ApplicationCore\Licensing\IChannelLimitBehavior.cs" />
     <Compile Include="ApplicationCore\Licensing\IChannelLimitControl.cs" />
@@ -672,6 +673,7 @@
     <Compile Include="ApplicationCore\Licensing\LicenseEncryptionProvider.cs" />
     <Compile Include="ApplicationCore\Licensing\LicenseEnforcement\ApproachingShipmentLimitEnforcer.cs" />
     <Compile Include="ApplicationCore\Licensing\LicenseEnforcement\ChannelCountEnforcer.cs" />
+    <Compile Include="ApplicationCore\Licensing\LicenseEnforcement\ChannelSyncEnforcer.cs" />
     <Compile Include="ApplicationCore\Licensing\LicenseEnforcement\ChannelTypeEnforcer.cs" />
     <Compile Include="ApplicationCore\Licensing\LicenseEnforcement\EnforcementContext.cs" />
     <Compile Include="ApplicationCore\Licensing\LicenseEnforcement\ExceedingChannelLimitEnforcer.cs" />

@@ -174,7 +174,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// IEnumerable of ActiveStores for the license
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<ActiveStore> GetActiveStores()
+        public IEnumerable<IActiveStore> GetActiveStores()
         {
             try
             {
@@ -307,6 +307,30 @@ namespace ShipWorks.ApplicationCore.Licensing
             return currentShipmentPercentage >= ShipmentLimitWarningThreshold ?
                 new DashboardLicenseItem(LicenseCapabilities.BillingEndDate) :
                 null;
+        }
+
+        /// <summary>
+        /// Associates the given UspsAccount with this license in tango
+        /// </summary>
+        public void AssociateUspsAccount(UspsAccountEntity uspsAccount)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(uspsAccount?.Username) || string.IsNullOrWhiteSpace(uspsAccount.Password))
+                {
+                    throw new ShipWorksLicenseException("Cannot associate empty Usps account.");
+                }
+
+                tangoWebClient.AssociateStampsUsernameWithLicense(Key, uspsAccount.Username,
+                    SecureText.Decrypt(uspsAccount.Password, uspsAccount.Username));
+            }
+            catch (Exception ex)
+            {
+                // gobble up any exception and log, this is to ensure that if
+                // the association fails ShipWorks continues to function.
+                log.Error("Error when associating stamps account with license.", ex);
+            }
+
         }
 
         /// <summary>

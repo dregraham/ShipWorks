@@ -1,4 +1,5 @@
-﻿using ShipWorks.Editions;
+﻿using Interapptive.Shared.UI;
+using ShipWorks.Editions;
 
 namespace ShipWorks.ApplicationCore.Licensing.FeatureRestrictions.ShipmentTypeFunctionality
 {
@@ -12,17 +13,14 @@ namespace ShipWorks.ApplicationCore.Licensing.FeatureRestrictions.ShipmentTypeFu
         /// <summary>
         /// Initializes a new instance of the <see cref="ShippingAccountConversionRestriction"/> class.
         /// </summary>
-        public ShippingAccountConversionRestriction()
-            : base(ShipmentTypeRestrictionType.ShippingAccountConversion)
+        public ShippingAccountConversionRestriction(IMessageHelper messageHelper)
+            : base(ShipmentTypeRestrictionType.ShippingAccountConversion, messageHelper)
         {
         }
 
         /// <summary>
         /// Gets the edition feature.
         /// </summary>
-        public override EditionFeature EditionFeature
-        {
-            get { return EditionFeature.ShippingAccountConversion; }
-        }
+        public override EditionFeature EditionFeature => EditionFeature.ShippingAccountConversion;
     }
 }

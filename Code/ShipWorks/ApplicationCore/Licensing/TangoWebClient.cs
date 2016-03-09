@@ -1312,7 +1312,31 @@ namespace ShipWorks.ApplicationCore.Licensing
                 // the shipworks database, log the error and move on
                 log.Error(ex.Message);
             }
+        }
 
+        /// <summary>
+        /// Associates a free Stamps.com account with a customer license.
+        /// </summary>
+        public static void AssociateStampsUsernameWithLicense(string licenseKey, string stampsUsername, string stampsPassword)
+        {
+            HttpVariableRequestSubmitter postRequest = new HttpVariableRequestSubmitter();
+
+            postRequest.Variables.Add("action", "associatestampsuser");
+            postRequest.Variables.Add("customerlicense", licenseKey);
+            postRequest.Variables.Add("version", Version);
+            postRequest.Variables.Add("stampsusername", stampsUsername);
+            postRequest.Variables.Add("stampspassword", stampsPassword);
+            
+            try
+            {
+                XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "AssociateStampsUsernameWithLicense");
+
+                CheckResponseForErrors(xmlResponse);
+            }
+            catch (TangoException ex)
+            {
+                log.Error(ex.Message);
+            }
         }
 
         /// <summary>

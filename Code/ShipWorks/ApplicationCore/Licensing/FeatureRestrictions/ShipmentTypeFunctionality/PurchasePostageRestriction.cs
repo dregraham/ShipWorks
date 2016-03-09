@@ -1,4 +1,5 @@
-﻿using ShipWorks.Editions;
+﻿using Interapptive.Shared.UI;
+using ShipWorks.Editions;
 
 namespace ShipWorks.ApplicationCore.Licensing.FeatureRestrictions.ShipmentTypeFunctionality
 {
@@ -9,8 +10,8 @@ namespace ShipWorks.ApplicationCore.Licensing.FeatureRestrictions.ShipmentTypeFu
         /// <summary>
         /// Initializes a new instance of the <see cref="PurchasePostageRestriction"/> class.
         /// </summary>
-        public PurchasePostageRestriction()
-            : base(ShipmentTypeRestrictionType.Purchasing)
+        public PurchasePostageRestriction(IMessageHelper messageHelper)
+            : base(ShipmentTypeRestrictionType.Purchasing, messageHelper)
         {
         }
 

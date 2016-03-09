@@ -291,10 +291,10 @@ namespace ShipWorks.ApplicationCore.Licensing
             }
 
             // Grab the nodes that are vital to shipworks functioning 
-            string shipmentLimitSanityCheck = GetStringValueFromNameValuePair("NumberOfChannels", xmlResponse, userCapabilityNamespace);
-            string channelLimitSanityCheck = GetStringValueFromNameValuePair("NumberOfShipments", xmlResponse, userCapabilityNamespace);
-            string userShipmentLimitSanityCheck = GetStringValueFromNameValuePair("NumberOfChannels", xmlResponse, userLevelNamespace);
-            string userChannelLimitSanityCheck = GetStringValueFromNameValuePair("NumberOfShipments", xmlResponse, userLevelNamespace);
+            string channelLimitSanityCheck = GetStringValueFromNameValuePair("NumberOfChannels", xmlResponse, userCapabilityNamespace);
+            string shipmentLimitSanityCheck = GetStringValueFromNameValuePair("NumberOfShipments", xmlResponse, userCapabilityNamespace);
+            string userChannelLimitSanityCheck = GetStringValueFromNameValuePair("NumberOfChannels", xmlResponse, userLevelNamespace);
+            string userShipmentLimitSanityCheck = GetStringValueFromNameValuePair("NumberOfShipments", xmlResponse, userLevelNamespace);
             string customerStatus = XPathUtility.Evaluate(xpath, "//CustomerStatus/Valid", "");
 
             if (string.IsNullOrWhiteSpace(shipmentLimitSanityCheck) ||

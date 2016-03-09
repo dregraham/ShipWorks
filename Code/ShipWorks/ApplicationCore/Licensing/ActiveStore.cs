@@ -1,13 +1,11 @@
-﻿using Interapptive.Shared.Utility;
-using ShipWorks.Stores;
-using System.Drawing;
+﻿using ShipWorks.Stores;
 
 namespace ShipWorks.ApplicationCore.Licensing
 {
     /// <summary>
     /// An active store retrieved from Tango
     /// </summary>
-    public class ActiveStore
+    public class ActiveStore : IActiveStore
     {
         /// <summary>
         /// The store license key.
@@ -22,12 +20,6 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// The store icon
         /// </summary>
-        public StoreTypeCode StoreType
-        {
-            get
-            {
-                return new ShipWorksLicense(StoreLicenseKey).StoreTypeCode;
-            }
-        }
+        public StoreTypeCode StoreType => new ShipWorksLicense(StoreLicenseKey).StoreTypeCode;
     }
 }
