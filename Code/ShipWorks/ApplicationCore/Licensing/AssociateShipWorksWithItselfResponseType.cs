@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
+﻿using System.ComponentModel;
 using System.Reflection;
-using System.Text;
 
 namespace ShipWorks.ApplicationCore.Licensing
 {
@@ -17,6 +13,6 @@ namespace ShipWorks.ApplicationCore.Licensing
         UnknownError = 1,
 
         [Description("PO Box Not Allowed")]
-        POBoxNotAllowed = 2,         
+        POBoxNotAllowed = 2,
     }
 }

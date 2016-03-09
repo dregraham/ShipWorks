@@ -10,6 +10,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Registration
 {
     public partial class PaymentAndBillingAddressControl : UserControl
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PaymentAndBillingAddressControl"/> class.
+        /// </summary>
         public PaymentAndBillingAddressControl()
         {
             InitializeComponent();
@@ -18,12 +21,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Registration
         /// <summary>
         /// Initialization
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void OnLoad(object sender, EventArgs e)
         {
             EnumHelper.BindComboBox<CreditCardType>(cardType);
-                        
+
             // Set the minimum/maximum value of the credit card expiration month and year to adjust
             // for the current date
             creditCardExpirationMonth.Value = DateTime.Now.Month;
@@ -50,36 +51,21 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Registration
         /// <summary>
         /// Gets the type of the card.
         /// </summary>
-        public CreditCardType CardType
-        {
-            get
-            {
-                return (CreditCardType) cardType.SelectedValue;
-            }
-        }
+        public CreditCardType CardType => (CreditCardType) cardType.SelectedValue;
 
         /// <summary>
         /// Gets the name of the card holder.
         /// </summary>
-        /// <value>
-        /// The name of the card holder.
-        /// </value>
-        public string CardHolderName
-        {
-            get
-            {
-                return cardholderName.Text;
-            }
-        }
+        public string CardHolderName => cardholderName.Text;
 
-        public string CardNumber
-        {
-            get
-            {
-                return creditCardNumber.Text;
-            }
-        }
+        /// <summary>
+        /// Gets the card number.
+        /// </summary>
+        public string CardNumber => creditCardNumber.Text;
 
+        /// <summary>
+        /// Gets the billing address.
+        /// </summary>
         public PersonAdapter BillingAddress
         {
             get

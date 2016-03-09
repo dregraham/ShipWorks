@@ -42,7 +42,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         TrialDetail ExtendTrial(StoreEntity store);
 
         /// <summary>
-        /// Associates the shipworks with itself.
+        /// Associates a Usps account created in ShipWorks as the users free Stamps.com account
         /// </summary>
         EnumResult<AssociateShipWorksWithItselfResponseType> AssociateShipworksWithItself(AssociateShipworksWithItselfRequest associateShipworksWithItselfRequest);
 

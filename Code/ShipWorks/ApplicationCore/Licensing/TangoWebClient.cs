@@ -98,7 +98,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         }
 
         /// <summary>
-        /// Associates the shipworks with itself.
+        /// Associates a Usps account created in ShipWorks as the users free Stamps.com account
         /// </summary>
         internal static EnumResult<AssociateShipWorksWithItselfResponseType> AssociateShipworksWithItself(AssociateShipworksWithItselfRequest request)
         {
@@ -107,9 +107,9 @@ namespace ShipWorks.ApplicationCore.Licensing
             postRequest.Variables.Add("action", "associateshipworkswithitself");
             postRequest.Variables.Add("license", request.CustomerKey);
 
-            postRequest.Variables.Add("cc_holder", request.CardHolder);
-            postRequest.Variables.Add("cc_cardType", ((int)request.CardType).ToString());
-            postRequest.Variables.Add("cc_account_number", request.CardAccountNumber);
+            postRequest.Variables.Add("cc_holder", request.CardHolderName);
+            postRequest.Variables.Add("cc_cardType", ((int) request.CardType).ToString());
+            postRequest.Variables.Add("cc_account_number", request.CardNumber);
             postRequest.Variables.Add("cc_cvn", request.CardCvn);
             postRequest.Variables.Add("cc_expiration_month", request.CardExpirationMonth.ToString());
             postRequest.Variables.Add("cc_expiration_year", request.CardExpirationYear.ToString());

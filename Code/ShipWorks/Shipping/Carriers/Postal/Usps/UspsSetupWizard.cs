@@ -860,9 +860,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 				
   	        ICustomerLicense customerLicense = (ICustomerLicense) ioc.Resolve<ILicenseService>().GetLicenses().Single();
 
-            request.CardAccountNumber = paymentAndBillingAddress.CardNumber;
+            request.CardNumber = paymentAndBillingAddress.CardNumber;
             request.CardType = paymentAndBillingAddress.CardType;
-            request.CardHolder = paymentAndBillingAddress.CardHolderName;
+            request.CardHolderName = paymentAndBillingAddress.CardHolderName;
             request.CardExpirationMonth = paymentAndBillingAddress.CreditCardExpirationMonth;
             request.CardExpirationYear = paymentAndBillingAddress.CreditCardExpirationYear;
             request.CardBillingAddress = paymentAndBillingAddress.BillingAddress;
