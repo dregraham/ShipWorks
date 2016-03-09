@@ -13,7 +13,7 @@ namespace ShipWorks.ApplicationCore.Licensing.FeatureRestrictions
         /// <summary>
         /// Constructor
         /// </summary>
-        protected FeatureRestriction(IMessageHelper messageHelper)
+        public FeatureRestriction(IMessageHelper messageHelper)
         {
             this.messageHelper = messageHelper;
         }
@@ -35,10 +35,8 @@ namespace ShipWorks.ApplicationCore.Licensing.FeatureRestrictions
         {
             EditionRestrictionLevel level = Check(capabilities, data);
             
-            if (EditionFeature == EditionFeature.ShipmentType)
+            if (EditionFeature == EditionFeature.ShipmentType && level == EditionRestrictionLevel.Forbidden)
             {
-                string carrier = ShipmentTypeManager.GetType((ShipmentTypeCode)data).ShipmentTypeName;
-
                 // You can optional separate "RequiresUpgrade" and "Forbidden" descriptions with a Pipe
                 string[] descriptions = EnumHelper.GetDescription(EditionFeature).Split('|');
 
@@ -51,7 +49,7 @@ namespace ShipWorks.ApplicationCore.Licensing.FeatureRestrictions
                     description = descriptions[1];
                 }
 
-                messageHelper.ShowError(string.Format(description, carrier));
+                messageHelper.ShowError(string.Format(description));
             }
             
             return level == EditionRestrictionLevel.None;
