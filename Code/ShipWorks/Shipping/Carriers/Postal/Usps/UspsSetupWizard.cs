@@ -809,6 +809,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 {
                     case AssociateShipWorksWithItselfResponseType.Success:
                         e.NextPage = wizardPageOptions;
+                        PopulateAccountFromAssociateShipworksWithItselfRequest(request);
                         break;
 
                     case AssociateShipWorksWithItselfResponseType.UnknownError:
@@ -820,6 +821,20 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                         break;
                 }
             }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        private void PopulateAccountFromAssociateShipworksWithItselfRequest(AssociateShipworksWithItselfRequest request)
+        {
+            PersonAdapter accountAddress = request.MatchedPersonAdapter ?? request.CardBillingAddress;
+            accountAddress.ParsedName = PersonName.Parse(request.CardHolderName);
+
+            var accountAdapter = new PersonAdapter(UspsAccount, "");
+            PersonAdapter.Copy(accountAddress, accountAdapter);
+
+            UspsAccount.Description = UspsAccountManager.GetDefaultDescription(UspsAccount);
         }
 
         /// <summary>
@@ -840,6 +855,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 switch (response.Value)
                 {
                     case AssociateShipWorksWithItselfResponseType.Success:
+                        PopulateAccountFromAssociateShipworksWithItselfRequest(request);
                         break;
 
                     case AssociateShipWorksWithItselfResponseType.UnknownError:

@@ -65,6 +65,28 @@ namespace ShipWorks.ApplicationCore.Licensing
         public Address MatchedPhysicalAddress { get; set; }
 
         /// <summary>
+        /// The validated address as a person adapter.
+        /// </summary>
+        public PersonAdapter MatchedPersonAdapter
+        {
+            get
+            {
+                if (MatchedPhysicalAddress == null)
+                {
+                    return null;
+                }
+
+                return new PersonAdapter()
+                {
+                    Street1 = MatchedPhysicalAddress.Address1,
+                    City = MatchedPhysicalAddress.City,
+                    StateProvCode = MatchedPhysicalAddress.State,
+                    PostalCode = MatchedPhysicalAddress.PostalCode
+                };
+            }
+        }
+
+        /// <summary>
         /// Gets or sets the customer key.
         /// </summary>
         public string CustomerKey { get; set; }
