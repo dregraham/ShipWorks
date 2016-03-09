@@ -40,6 +40,7 @@ namespace ShipWorks.ApplicationCore.Licensing
     /// <summary>
     /// Interface for working with the interapptive license server
     /// </summary>
+    [NDependIgnoreLongTypesAttribute]
     public static class TangoWebClient
     {
         private const string ActivationUrl = "http://shipworks.stamps.com/ShipWorksNet/ActivationV1.svc";
