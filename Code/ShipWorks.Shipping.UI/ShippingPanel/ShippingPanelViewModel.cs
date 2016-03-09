@@ -72,7 +72,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             IShippingManager shippingManager,
             IMessageHelper messageHelper,
             IShippingViewModelFactory shippingViewModelFactory,
-            Func<Type, ILog> logFactory, 
+            Func<Type, ILog> logFactory,
             IShippingErrorManager errorManager) : this()
         {
             this.shippingManager = shippingManager;
@@ -273,6 +273,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
 
             AccountId = ShipmentAdapter.AccountId.GetValueOrDefault();
 
+            ShipmentViewModel.Load(ShipmentAdapter);
+
             Origin.Load(ShipmentAdapter.Shipment.OriginPerson);
             Destination.Load(ShipmentAdapter.Shipment.ShipPerson);
 
@@ -283,8 +285,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             Origin.SetAddressFromOrigin(OriginAddressType, ShipmentAdapter.Shipment?.OrderID ?? 0, AccountId, ShipmentType);
 
             SupportsMultiplePackages = ShipmentAdapter.SupportsMultiplePackages;
-
-            ShipmentViewModel.Load(ShipmentAdapter);
 
             isLoadingShipment = false;
 

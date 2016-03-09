@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Reactive.Linq;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Threading;
 using ShipWorks.Shipping.Services;
 using ShipWorks.UI.Controls.AddressControl;
@@ -76,7 +77,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
         /// </summary>
         private void UpdatePersonalAdapterValues(PersonAdapter shipmentPersonalAdapter, AddressViewModel addressViewModel)
         {
-            shipmentPersonalAdapter.StateProvCode = addressViewModel.StateProvCode;
+            shipmentPersonalAdapter.StateProvCode = Geography.GetStateProvCode(addressViewModel.StateProvCode);
             shipmentPersonalAdapter.PostalCode = addressViewModel.PostalCode;
             shipmentPersonalAdapter.CountryCode = addressViewModel.CountryCode;
         }
