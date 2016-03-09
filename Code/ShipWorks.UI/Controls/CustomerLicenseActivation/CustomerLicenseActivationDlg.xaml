@@ -33,12 +33,14 @@
                     Orientation="Horizontal">
             <Button Width="55"
                     Margin="0 0 10 10"
+                    IsDefault="True"
                     Command="{Binding OkClickCommand}"
                     CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}}">
                 OK
             </Button>
             <Button Width="55"
                     Margin="0 0 10 10"
+                    IsCancel="True"
                     Click="OnClickCancel">
                 Cancel
             </Button>
