@@ -169,7 +169,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// IEnumerable of ActiveStores for the license
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<ActiveStore> GetActiveStores()
+        public IEnumerable<IActiveStore> GetActiveStores()
         {
             try
             {

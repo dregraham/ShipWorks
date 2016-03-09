@@ -47,7 +47,7 @@ namespace ShipWorks.ApplicationCore.Licensing.LicenseEnforcement
         {
             if (Enforce(capabilities, context).Value == ComplianceLevel.NotCompliant)
             {
-                IChannelLimitDlg channelLimitDlg = channelLimitDlgFactory.GetChannelLimitDlg(owner, EditionFeature, context);
+                IChannelLimitDlg channelLimitDlg = channelLimitDlgFactory.GetChannelLimitDlg(owner, EditionFeature, EnforcementContext.NotSpecified);
                 channelLimitDlg.ShowDialog();
             }
 
@@ -71,7 +71,7 @@ namespace ShipWorks.ApplicationCore.Licensing.LicenseEnforcement
 
                 if (license != null)
                 {
-                    ActiveStore[] tangoStores = license.GetActiveStores().ToArray();
+                    IActiveStore[] tangoStores = license.GetActiveStores().ToArray();
 
                     IEnumerable<StoreEntity> localStores = storeManager.GetAllStores().ToArray();
 
@@ -101,7 +101,7 @@ namespace ShipWorks.ApplicationCore.Licensing.LicenseEnforcement
         /// </summary>
         private int ChannelsToDelete(ICustomerLicense customerLicense, IEnumerable<StoreEntity> localStores)
         {
-            IEnumerable<ActiveStore> activeStores = customerLicense.GetActiveStores();
+            IEnumerable<IActiveStore> activeStores = customerLicense.GetActiveStores();
 
             List<StoreTypeCode> allowedChannels = activeStores.Select(activeStore => activeStore.StoreType).Distinct().ToList();
 
