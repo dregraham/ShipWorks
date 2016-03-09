@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Windows.Forms;
 using Autofac;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Data;
@@ -109,6 +110,7 @@ namespace ShipWorks.Tests.Shared.Database
 
             initializeContainer(mock.Container);
             configureMock?.Invoke(mock);
+            OverrideMainFormInAutofacContainer(mock);
 
             using (new AuditBehaviorScope(AuditBehaviorUser.SuperUser, AuditReason.Default, AuditState.Disabled))
             {
@@ -130,6 +132,20 @@ namespace ShipWorks.Tests.Shared.Database
             UserSession.InitializeForCurrentSession();
 
             return new DataContext(mock, context.Item1, context.Item2);
+        }
+
+        /// <summary>
+        /// Override registration for Control, which is usually MainForm
+        /// </summary>
+        /// <remarks>MainForm doesn't exist in tests, so this needs to be done</remarks>
+        private static void OverrideMainFormInAutofacContainer(AutoMock mock)
+        {
+            var builder = new ContainerBuilder();
+            builder.Register(c => new Control())
+                .As<Control>()
+                .As<IWin32Window>()
+                .ExternallyOwned();
+            builder.Update(mock.Container);
         }
 
         /// <summary>

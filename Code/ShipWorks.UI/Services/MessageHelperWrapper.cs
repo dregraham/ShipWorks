@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Reactive.Disposables;
 using System.Windows.Forms;
 using Interapptive.Shared.UI;
+using ShipWorks.Common.Threading;
 
 namespace ShipWorks.UI.Services
 {
@@ -28,5 +30,35 @@ namespace ShipWorks.UI.Services
         /// Show an information message
         /// </summary>
         public void ShowInformation(string message) => MessageHelper.ShowInformation(ownerFactory(), message);
+
+        /// <summary>
+        /// Show a new progress dialog
+        /// </summary>
+        public IDisposable ShowProgressDialog(string title, string description)
+        {
+            ProgressItem progressItem = new ProgressItem(title);
+            progressItem.Starting();
+
+            ProgressProvider progressProvider = new ProgressProvider
+            {
+                ProgressItems = { progressItem }
+            };
+
+            ProgressDlg progressDialog = new ProgressDlg(progressProvider)
+            {
+                Title = title,
+                Description = description
+            };
+
+            progressDialog.Show(ownerFactory());
+
+
+            return Disposable.Create(() =>
+            {
+                progressItem.Completed();
+                progressDialog.CloseForced();
+                progressDialog.Dispose();
+            });
+        }
     }
 }

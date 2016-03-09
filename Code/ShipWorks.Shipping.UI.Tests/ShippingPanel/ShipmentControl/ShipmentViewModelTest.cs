@@ -8,6 +8,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Editing.Rating;
+using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Services.Builders;
 using ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl;
@@ -52,7 +53,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
         }
 
         [Fact]
-        public void ShipDate_MatchesShipmentAdapterValue_Test()
+        public void ShipDate_MatchesShipmentAdapterValue()
         {
             CreateDefaultShipmentAdapter(mock, 2);
 
@@ -63,7 +64,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
         }
 
         [Fact]
-        public void TotalWeight_MatchesShipmentAdapterValue_Test()
+        public void TotalWeight_MatchesShipmentAdapterValue()
         {
             CreateDefaultShipmentAdapter(mock, 2);
 
@@ -74,7 +75,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
         }
 
         [Fact]
-        public void ServiceType_MatchesShipmentAdapterValue_Test()
+        public void ServiceType_MatchesShipmentAdapterValue()
         {
             CreateDefaultShipmentAdapter(mock, 2);
 
@@ -85,7 +86,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
         }
 
         [Fact]
-        public void SupportsMultiplePackages_MatchesShipmentAdapterValue_Test()
+        public void SupportsMultiplePackages_MatchesShipmentAdapterValue()
         {
             CreateDefaultShipmentAdapter(mock, 2);
 
@@ -96,7 +97,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
         }
 
         [Fact]
-        public void SupportsPackageTypes_MatchesShipmentAdapterValue_Test()
+        public void SupportsPackageTypes_MatchesShipmentAdapterValue()
         {
             CreateDefaultShipmentAdapter(mock, 2);
 
@@ -107,7 +108,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
         }
 
         [Fact]
-        public void PackageCountList_HasTwentyFiveEntries_Test()
+        public void PackageCountList_HasTwentyFiveEntries()
         {
             CreateDefaultShipmentAdapter(mock, 2);
 
@@ -118,7 +119,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
         }
 
         [Fact]
-        public void SelectedPackageAdapter_DefaultsToFirstInList_Test()
+        public void SelectedPackageAdapter_DefaultsToFirstInList()
         {
             CreateDefaultShipmentAdapter(mock, 2);
 
@@ -129,7 +130,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
         }
 
         [Fact]
-        public void Load_GetsServices_Test()
+        public void Load_GetsServices()
         {
             expectedServices = new Dictionary<int, string>();
             expectedServices.Add(0, "Service 0");
@@ -143,7 +144,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
         }
 
         [Fact]
-        public void RefreshServiceTypes_UpdatesServices_Test()
+        public void RefreshServiceTypes_UpdatesServices()
         {
             expectedServices = new Dictionary<int, string>();
             expectedServices.Add(0, "Service 0");
@@ -161,7 +162,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
         }
 
         [Fact]
-        public void RefreshServiceTypes_ReturnsErrorService_WhenInvalidRateGroupShippingException_Test()
+        public void RefreshServiceTypes_ReturnsErrorService_WhenInvalidRateGroupShippingException()
         {
             CreateDefaultShipmentAdapter(mock, 2);
             shipmentServicesBuilder.Setup(sb => sb.BuildServiceTypeDictionary(It.IsAny<IEnumerable<ShipmentEntity>>()))
@@ -175,7 +176,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
         }
 
         [Fact]
-        public void RefreshServiceTypes_SetsServiceType_Test()
+        public void RefreshServiceTypes_SetsServiceType()
         {
             CreateDefaultShipmentAdapter(mock, 2);
 
@@ -189,7 +190,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
         }
 
         [Fact]
-        public void Load_GetsPackageTypes_Test()
+        public void Load_GetsPackageTypes()
         {
             expectedPackageTypes = new Dictionary<int, string>();
             expectedPackageTypes.Add(0, "Package Type 0");
@@ -204,7 +205,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
         }
 
         [Fact]
-        public void DimensionsProfiles_MatchDimensionsProfilesManagerValues_Test()
+        public void DimensionsProfiles_MatchDimensionsProfilesManagerValues()
         {
             CreateDefaultShipmentAdapter(mock, 2);
             CreateDimensionsProfilesManager(mock);
@@ -230,7 +231,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
         }
 
         [Fact]
-        public void UpdateSelectedDimensionsProfile_MatchDimensionsProfilesManagerValues_Test()
+        public void UpdateSelectedDimensionsProfile_MatchDimensionsProfilesManagerValues()
         {
             CreateDefaultShipmentAdapter(mock, 2);
             CreateDimensionsProfilesManager(mock);
@@ -256,7 +257,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
         }
 
         [Fact]
-        public void UpdateSelectedDimensionsProfile_ReturnsDefaultProfile_WhenSelectedDimensionsProfileIDIsNotInDimsManager_Test()
+        public void UpdateSelectedDimensionsProfile_ReturnsDefaultProfile_WhenSelectedDimensionsProfileIDIsNotInDimsManager()
         {
             CreateDefaultShipmentAdapter(mock, 2);
             CreateDimensionsProfilesManager(mock);
@@ -271,7 +272,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
         }
 
         [Fact]
-        public void ManageDimensionsProfiles_UpdatesDimensionsProfiles_WhenDimensionsProfilesChangedMessageReceived_Test()
+        public void ManageDimensionsProfiles_UpdatesDimensionsProfiles_WhenDimensionsProfilesChangedMessageReceived()
         {
             TestMessenger testMessenger = new TestMessenger();
             mock.Provide<IMessenger>(testMessenger);
@@ -300,7 +301,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
         }
 
         [Fact]
-        public void ManageDimensionsProfiles_UpdatesDimensionsProfiles_WhenSelectedDimsProfileIsNotDefaultAndDimensionsProfilesChangedMessageReceived_Test()
+        public void ManageDimensionsProfiles_UpdatesDimensionsProfiles_WhenSelectedDimsProfileIsNotDefaultAndDimensionsProfilesChangedMessageReceived()
         {
             TestMessenger testMessenger = new TestMessenger();
             mock.Provide<IMessenger>(testMessenger);
@@ -331,7 +332,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
         }
 
         [Fact]
-        public void SelectedDimensionsProfile_UpdatesSelectedPackageAdapter_WhenProfileExists_Test()
+        public void SelectedDimensionsProfile_UpdatesSelectedPackageAdapter_WhenProfileExists()
         {
             CreateDefaultShipmentAdapter(mock, 2);
             CreateDimensionsProfilesManager(mock);
@@ -350,7 +351,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
         }
 
         [Fact]
-        public void SupportsDimensions_IsFalse_WhenShipmentTypeIsOther_Test()
+        public void SupportsDimensions_IsFalse_WhenShipmentTypeIsOther()
         {
             CreateDefaultShipmentAdapter(mock, 2);
             CreateDimensionsProfilesManager(mock);
@@ -365,7 +366,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
         }
 
         [Fact]
-        public void SupportsDimensions_IsTrue_WhenShipmentTypeIsNotOther_Test()
+        public void SupportsDimensions_IsTrue_WhenShipmentTypeIsNotOther()
         {
             CreateDefaultShipmentAdapter(mock, 2);
             CreateDimensionsProfilesManager(mock);
@@ -380,7 +381,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
         }
 
         [Fact]
-        public void SelectedCustomsItem_UpdatesWithNewValue_Test()
+        public void SelectedCustomsItem_UpdatesWithNewValue()
         {
             CreateDefaultShipmentAdapter(mock, 2);
 
@@ -403,7 +404,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
         }
 
         [Fact]
-        public void OnSelectedCustomsItemPropertyChanged_UpdatesTotalCustomsValue_WhenUnitValueAndOrQuantityChanges_Test()
+        public void OnSelectedCustomsItemPropertyChanged_UpdatesTotalCustomsValue_WhenUnitValueAndOrQuantityChanges()
         {
             CreateDefaultShipmentAdapter(mock, 2);
             shipmentAdapter.Setup(sa => sa.CustomsAllowed).Returns(true);
@@ -435,7 +436,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
         }
 
         [Fact]
-        public void OnSelectedCustomsItemPropertyChanged_UpdatesShipmentContentWeight_WhenWeightAndOrQuantityChanges_Test()
+        public void OnSelectedCustomsItemPropertyChanged_UpdatesShipmentContentWeight_WhenWeightAndOrQuantityChanges()
         {
             CreateDefaultShipmentAdapter(mock, 2);
             shipmentAdapter.Setup(sa => sa.CustomsAllowed).Returns(true);
@@ -467,7 +468,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
         }
 
         [Fact]
-        public void RedistributeContentWeight_UpdatesPackageAdapterWeights_WhenWeightAndOrQuantityChanges_Test()
+        public void RedistributeContentWeight_UpdatesPackageAdapterWeights_WhenWeightAndOrQuantityChanges()
         {
             CreateDefaultShipmentAdapter(mock, 2);
             shipmentAdapter.Setup(sa => sa.CustomsAllowed).Returns(true);
@@ -501,7 +502,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
         }
 
         [Fact]
-        public void RefreshPackageTypes_UpdatesPackageTypes_Test()
+        public void RefreshPackageTypes_UpdatesPackageTypes()
         {
             expectedPackageTypes = new Dictionary<int, string>();
             expectedPackageTypes.Add(0, "Package Type 0");
@@ -519,7 +520,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
         }
 
         [Fact]
-        public void Save_UpdatesShipmentAdapter_WithViewModelValue_Test()
+        public void Save_UpdatesShipmentAdapter_WithViewModelValue()
         {
             CreateDefaultShipmentAdapter(mock, 2);
 
@@ -559,7 +560,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
         }
 
         [Fact]
-        public void DeleteCustomsItemCommand_CanNotExecute_WhenSelectedCustomsItemIsNull_Test()
+        public void DeleteCustomsItemCommand_CanNotExecute_WhenSelectedCustomsItemIsNull()
         {
             CreateDefaultShipmentAdapter(mock, 2);
 
@@ -576,7 +577,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
         }
 
         [Fact]
-        public void DeleteCustomsItemCommand_CanNotExecute_WhenCustomsItemsDoesNotContainSelectedCustomsItem_Test()
+        public void DeleteCustomsItemCommand_CanNotExecute_WhenCustomsItemsDoesNotContainSelectedCustomsItem()
         {
             CreateDefaultShipmentAdapter(mock, 2);
 
@@ -593,7 +594,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
         }
 
         [Fact]
-        public void AddCustomsItemCommand_CanExecute_Test()
+        public void AddCustomsItemCommand_CanExecute()
         {
             CreateDefaultShipmentAdapter(mock, 2);
 
@@ -610,7 +611,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
         }
 
         [Fact]
-        public void AddCustomsItemCommand_AddsCustomsItem_Test()
+        public void AddCustomsItemCommand_AddsCustomsItem()
         {
             CreateDefaultShipmentAdapter(mock, 2);
 
@@ -627,7 +628,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
         }
 
         [Fact]
-        public void DeleteCustomsItemCommand_DeletesCustomsItem_Test()
+        public void DeleteCustomsItemCommand_DeletesCustomsItem()
         {
             CreateDefaultShipmentAdapter(mock, 2);
 
@@ -653,7 +654,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
         }
 
         [Fact]
-        public void HandleShippingSettingsChangedMessage_DoesNotUpdateInsuranceFields_WhenShipmentIsProcessed_Test()
+        public void HandleShippingSettingsChangedMessage_DoesNotUpdateInsuranceFields_WhenShipmentIsProcessed()
         {
             using (TestMessenger messenger = new TestMessenger())
             {
@@ -675,7 +676,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
         }
 
         [Fact]
-        public void HandleShippingSettingsChangedMessage_UpdatesInsuranceFields_WhenShipmentIsNotProcessed_Test()
+        public void HandleShippingSettingsChangedMessage_UpdatesInsuranceFields_WhenShipmentIsNotProcessed()
         {
             messenger = new TestMessenger();
             mock.Provide<IMessenger>(messenger);
@@ -707,7 +708,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
         }
 
         [Fact]
-        public void Indexer_ReturnsEmptyString_WhenShipmentIsProcessed_Test()
+        public void Indexer_ReturnsEmptyString_WhenShipmentIsProcessed()
         {
             messenger = new TestMessenger();
             mock.Provide<IMessenger>(messenger);
@@ -723,7 +724,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
         }
 
         [Fact]
-        public void Indexer_ReturnsError_WhenTotalCustomsValueIsInvalid_Test()
+        public void Indexer_ReturnsError_WhenTotalCustomsValueIsInvalid()
         {
             messenger = new TestMessenger();
             mock.Provide<IMessenger>(messenger);
@@ -740,7 +741,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
         }
 
         [Fact]
-        public void AllErrors_ReturnsListOfErrors_WhenTotalCustomsValueIsInvalid_Test()
+        public void AllErrors_ReturnsListOfErrors_WhenTotalCustomsValueIsInvalid()
         {
             messenger = new TestMessenger();
             mock.Provide<IMessenger>(messenger);
@@ -758,7 +759,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
         }
 
         [Fact]
-        public void Error_ReturnsNull_Test()
+        public void Error_ReturnsNull()
         {
             messenger = new TestMessenger();
             mock.Provide<IMessenger>(messenger);
@@ -967,7 +968,6 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
             shipmentAdapter.Setup(sa => sa.GetPackageAdapters()).Returns(packageAdapters);
 
             shipmentAdapter.Setup(sa => sa.CustomsAllowed).Returns(false);
-            //shipmentAdapter.Setup(sa => sa.CustomsItems).Returns(new EntityCollection<ShipmentCustomsItemEntity>());
 
             return expectedServices;
         }
@@ -987,6 +987,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
                 packageAdapter.DimsLength = 2 * i;
                 packageAdapter.DimsWidth = 1 * i;
                 packageAdapter.Weight = 0.5 * i;
+                packageAdapter.InsuranceChoice = mock.Create<IInsuranceChoice>();
 
                 packageAdapters.Add(packageAdapter);
             }

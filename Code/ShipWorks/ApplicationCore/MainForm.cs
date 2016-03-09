@@ -131,12 +131,9 @@ namespace ShipWorks
         {
             InitializeComponent();
 
-            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            foreach (IMainFormElementRegistration registration in IoC.UnsafeGlobalLifetimeScope.Resolve<IEnumerable<IMainFormElementRegistration>>())
             {
-                foreach (IRegisterDockableWindow registration in lifetimeScope.Resolve<IEnumerable<IRegisterDockableWindow>>())
-                {
-                    registration.Register(sandDockManager);
-                }
+                registration.Register(sandDockManager, ribbon);
             }
 
             // Create the heartbeat
@@ -144,6 +141,7 @@ namespace ShipWorks
 
             // Persist size\position of the window
             WindowStateSaver wss = new WindowStateSaver(this, WindowStateSaverOptions.FullState | WindowStateSaverOptions.InitialMaximize, "MainForm");
+            shipmentDock = new Lazy<DockControl>(GetShipmentDockControl);
         }
 
         #region Initialization \ Shutdown
@@ -224,6 +222,8 @@ namespace ShipWorks
             ShipWorksDisplay.LoadDefault();
 
             ApplyDisplaySettings();
+
+            ApplyEditingContext();
         }
 
         /// <summary>
@@ -1248,7 +1248,7 @@ namespace ShipWorks
             }
 
             UpdateStatusBar();
-            UpdateComandState();
+            UpdateCommandState();
             UpdatePanelState();
 
             ribbonSecurityProvider.UpdateSecurityUI();
@@ -1263,12 +1263,62 @@ namespace ShipWorks
             labelStatusSelected.Text = string.Format("Selected: {0:#,##0}", gridControl.Selection.Count);
         }
 
+        Lazy<DockControl> shipmentDock;
+
+        private DockControl GetShipmentDockControl()
+        {
+            return sandDockManager.GetDockControls().FirstOrDefault(d => d.Name == "dockableWindowShipment");
+        }
+
         /// <summary>
         /// Update the state of the ribbon buttons based on the current selection
         /// </summary>
-        private void UpdateComandState()
+        private void UpdateCommandState()
         {
-            selectionDependentEnabler.UpdateCommandState(gridControl.Selection.Count, gridControl.ActiveFilterTarget);
+            int selectionCount = gridControl.Selection.Count;
+            selectionDependentEnabler.UpdateCommandState(selectionCount, gridControl.ActiveFilterTarget);
+
+            if (selectionCount == 0 || gridControl.ActiveFilterTarget != FilterTarget.Orders)
+            {
+                ribbon.SetEditingContext(null);
+                return;
+            }
+
+            // Don't show the shipping context menu if the shipping panel doesn't exist or isn't open
+            if (shipmentDock.Value?.IsOpen != true)
+            {
+                ribbon.SetEditingContext(null);
+                return;
+            }
+
+            //// Update state of each button based on it's criteria.
+            //buttonCreateLabel.Enabled = selectionCount >= 1;
+            //buttonVoid.Enabled = selectionCount >= 1;
+            //buttonReturn.Enabled = selectionCount == 1;
+            //buttonShipAgain.Enabled = selectionCount == 1;
+            //buttonReprint.Enabled = selectionCount == 1;
+
+            ribbon.SetEditingContext("SHIPPINGMENU");
+        }
+
+        private void OnCreateLabelClick(object sender, EventArgs e)
+        {
+            if (shipmentDock.Value?.IsOpen == true)
+            {
+                MessageHelper.ShowInformation(this, "Temp processing");
+            }
+            else
+            {
+                OnShipOrders(sender, e);
+            }
+        }
+
+        /// <summary>
+        /// Adds Editing Contexts to the ribbon
+        /// </summary>
+        private void ApplyEditingContext()
+        {
+            ribbon.EditingContexts.Add(new EditingContext("Shipping Tools", "SHIPPINGMENU", System.Drawing.Color.LightBlue));
         }
 
         /// <summary>
@@ -3374,76 +3424,82 @@ namespace ShipWorks
         /// <summary>
         /// Ship the selected orders
         /// </summary>
-        private async void OnShipOrders(object sender, EventArgs e)
+        private void OnShipOrders(object sender, EventArgs e)
         {
-            if (gridControl.Selection.Count > ShipmentsLoader.MaxAllowedOrders)
-            {
-                MessageHelper.ShowInformation(this, string.Format("You can only ship up to {0} orders at a time.", ShipmentsLoader.MaxAllowedOrders));
-                return;
-            }
+            //if (gridControl.Selection.Count > ShipmentsLoader.MaxAllowedOrders)
+            //{
+            //    MessageHelper.ShowInformation(this, string.Format("You can only ship up to {0} orders at a time.", ShipmentsLoader.MaxAllowedOrders));
+            //    return;
+            //}
 
-            ShipmentsLoader loader = new ShipmentsLoader(this);
-            loader.Tag = InitialShippingTabDisplay.Shipping;
+            Messenger.Current.Send(new OpenShippingDialogWithOrdersMessage(this, gridControl.Selection.OrderedKeys, InitialShippingTabDisplay.Shipping));
 
-            loader.LoadCompleted += OnShipOrdersLoadShipmentsCompleted;
-            await loader.LoadAsync(gridControl.Selection.OrderedKeys).ConfigureAwait(false);
+            //ShipmentsLoader loader = new ShipmentsLoader(this);
+            //loader.Tag = InitialShippingTabDisplay.Shipping;
+
+            //loader.LoadCompleted += OnShipOrdersLoadShipmentsCompleted;
+            //await loader.LoadAsync(gridControl.Selection.OrderedKeys).ConfigureAwait(false);
         }
 
         /// <summary>
         /// Track shipments for the selected orders
         /// </summary>
-        private async void OnTrackShipments(object sender, EventArgs e)
+        private void OnTrackShipments(object sender, EventArgs e)
         {
-            if (gridControl.Selection.Count > ShipmentsLoader.MaxAllowedOrders)
-            {
-                MessageHelper.ShowInformation(this, string.Format("You can only track up to {0} orders at a time.", ShipmentsLoader.MaxAllowedOrders));
-                return;
-            }
+            //if (gridControl.Selection.Count > ShipmentsLoader.MaxAllowedOrders)
+            //{
+            //    MessageHelper.ShowInformation(this, string.Format("You can only track up to {0} orders at a time.", ShipmentsLoader.MaxAllowedOrders));
+            //    return;
+            //}
 
-            ShipmentsLoader loader = new ShipmentsLoader(this);
-            loader.Tag = InitialShippingTabDisplay.Tracking;
+            Messenger.Current.Send(new OpenShippingDialogWithOrdersMessage(this, gridControl.Selection.OrderedKeys, InitialShippingTabDisplay.Tracking));
+            //ShipmentsLoader loader = new ShipmentsLoader(this);
+            //loader.Tag = InitialShippingTabDisplay.Tracking;
 
-            loader.LoadCompleted += OnShipOrdersLoadShipmentsCompleted;
-            await loader.LoadAsync(gridControl.Selection.OrderedKeys).ConfigureAwait(false);
+            //loader.LoadCompleted += OnShipOrdersLoadShipmentsCompleted;
+            //await loader.LoadAsync(gridControl.Selection.OrderedKeys).ConfigureAwait(false);
         }
 
         /// <summary>
         /// Submit an insurance claim for the selected orders
         /// </summary>
-        private async void OnSubmitClaim(object sender, EventArgs e)
+        private void OnSubmitClaim(object sender, EventArgs e)
         {
-            if (gridControl.Selection.Count > ShipmentsLoader.MaxAllowedOrders)
-            {
-                MessageHelper.ShowInformation(this, string.Format("You can only submit claims on up to {0} orders at a time.", ShipmentsLoader.MaxAllowedOrders));
-                return;
-            }
+            //if (gridControl.Selection.Count > ShipmentsLoader.MaxAllowedOrders)
+            //{
+            //    MessageHelper.ShowInformation(this, string.Format("You can only submit claims on up to {0} orders at a time.", ShipmentsLoader.MaxAllowedOrders));
+            //    return;
+            //}
 
-            ShipmentsLoader loader = new ShipmentsLoader(this);
-            loader.Tag = InitialShippingTabDisplay.Insurance;
+            Messenger.Current.Send(new OpenShippingDialogWithOrdersMessage(this, gridControl.Selection.OrderedKeys, InitialShippingTabDisplay.Insurance));
 
-            loader.LoadCompleted += OnShipOrdersLoadShipmentsCompleted;
-            await loader.LoadAsync(gridControl.Selection.OrderedKeys).ConfigureAwait(false);
+
+            //ShipmentsLoader loader = new ShipmentsLoader(this);
+            //loader.Tag = InitialShippingTabDisplay.Insurance;
+
+            //loader.LoadCompleted += OnShipOrdersLoadShipmentsCompleted;
+            //await loader.LoadAsync(gridControl.Selection.OrderedKeys).ConfigureAwait(false);
         }
 
-        /// <summary>
-        /// The async loading of shipments for shipping has completed
-        /// </summary>
-        void OnShipOrdersLoadShipmentsCompleted(object sender, ShipmentsLoadedEventArgs e)
-        {
-            if (IsDisposed || e.Cancelled)
-            {
-                return;
-            }
+        ///// <summary>
+        ///// The async loading of shipments for shipping has completed
+        ///// </summary>
+        //void OnShipOrdersLoadShipmentsCompleted(object sender, ShipmentsLoadedEventArgs e)
+        //{
+        //    if (IsDisposed || e.Cancelled)
+        //    {
+        //        return;
+        //    }
 
-            // The Tag property hold the value of whether to show shipping, tracking, or insurance
-            InitialShippingTabDisplay initialDisplay = (InitialShippingTabDisplay) ((ShipmentsLoader) sender).Tag;
+        //    // The Tag property hold the value of whether to show shipping, tracking, or insurance
+        //    InitialShippingTabDisplay initialDisplay = (InitialShippingTabDisplay) ((ShipmentsLoader) sender).Tag;
 
-            Messenger.Current.Send(new OpenShippingDialogMessage(this, e.Shipments, initialDisplay));
+        //    Messenger.Current.Send(new OpenShippingDialogMessage(this, e.Shipments, initialDisplay));
 
-            // We always check for new server messages after shipping, since if there was a shipping problem
-            // it could be we put out a server message related to it.
-            DashboardManager.DownloadLatestServerMessages();
-        }
+        //    // We always check for new server messages after shipping, since if there was a shipping problem
+        //    // it could be we put out a server message related to it.
+        //    DashboardManager.DownloadLatestServerMessages();
+        //}
 
         /// <summary>
         /// The FedEx Close popup menu is opening, so we need to dynamically populate it
@@ -4180,6 +4236,5 @@ namespace ShipWorks
         #endregion
 
         #endregion
-
     }
 }

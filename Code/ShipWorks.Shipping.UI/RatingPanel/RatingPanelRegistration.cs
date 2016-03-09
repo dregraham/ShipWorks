@@ -2,6 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Windows.Forms;
+using Divelements.SandRibbon;
 using ShipWorks.ApplicationCore;
 using TD.SandDock;
 
@@ -10,7 +11,7 @@ namespace ShipWorks.Shipping.UI.RatingPanel
     /// <summary>
     /// Register the rating panel
     /// </summary>
-    public class RatingPanelRegistration : IRegisterDockableWindow
+    public class RatingPanelRegistration : IMainFormElementRegistration
     {
         /// <summary>
         /// Register a panel with the dock manager
@@ -19,7 +20,7 @@ namespace ShipWorks.Shipping.UI.RatingPanel
             Justification = "The DockableWindow is used by the dockManager")]
         [SuppressMessage("SonarQube", "S2930:\"IDisposables\" should be disposed",
             Justification = "The dock manager owns the panel, so we can't dispose it")]
-        public void Register(SandDockManager dockManager)
+        public void Register(SandDockManager dockManager, Ribbon ribbon)
         {
             RatingPanel panelRating = new RatingPanel
             {

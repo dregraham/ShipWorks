@@ -32,17 +32,12 @@ namespace ShipWorks.Shipping
         List<ShipmentEntity> globalShipments;
         bool wasCanceled;
         bool finishedLoadingShipments;
-        Control owner;
-
-        /// <summary>
-        /// Raised when an async load as completed
-        /// </summary>
-        public event ShipmentsLoadedEventHandler LoadCompleted;
+        IWin32Window owner;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShipmentsLoader(Control owner)
+        public ShipmentsLoader(IWin32Window owner)
         {
             this.owner = MethodConditions.EnsureArgumentIsNotNull(owner, nameof(owner));
             globalShipments = new List<ShipmentEntity>();
@@ -62,7 +57,7 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Load the shipments for the given collection of orders or shipments
         /// </summary>
-        public async Task LoadAsync(IEnumerable<long> keys)
+        public async Task<ShipmentsLoadedEventArgs> LoadAsync(IEnumerable<long> keys)
         {
             MethodConditions.EnsureArgumentIsNotNull(keys, nameof(keys));
 
@@ -117,7 +112,13 @@ namespace ShipWorks.Shipping
             }
 
             progressDlg.CloseForced();
-            OnLoadShipmentsCompleted();
+
+            if (wasCanceled)
+            {
+                globalShipments.Clear();
+            }
+
+            return new ShipmentsLoadedEventArgs(null, wasCanceled, null, globalShipments);
         }
 
         /// <summary>
@@ -240,31 +241,6 @@ namespace ShipWorks.Shipping
             }
 
             workProgress.Completed();
-        }
-
-        /// <summary>
-        /// The async loading of shipments for shipping has completed
-        /// </summary>
-        void OnLoadShipmentsCompleted()
-        {
-            if (wasCanceled)
-            {
-                globalShipments.Clear();
-            }
-
-            ShipmentsLoadedEventHandler handler = LoadCompleted;
-            if (handler != null)
-            {
-                ShipmentsLoadedEventArgs args = new ShipmentsLoadedEventArgs(null, wasCanceled, null, globalShipments);
-                if (owner.InvokeRequired)
-                {
-                    owner.Invoke((Action) (() => handler(this, args)));
-                }
-                else
-                {
-                    handler(this, args);
-                }
-            }
         }
     }
 }

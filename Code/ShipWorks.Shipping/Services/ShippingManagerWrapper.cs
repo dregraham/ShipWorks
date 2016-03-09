@@ -155,13 +155,23 @@ namespace ShipWorks.Shipping
         /// Void the given shipment.  If the shipment is already voided, then no action is taken and no error is reported.  The fact that
         /// it was voided is logged to tango.
         /// </summary>
-        public void VoidShipment(long shipmentID) => ShippingManager.VoidShipment(shipmentID);
+        public ICarrierShipmentAdapter VoidShipment(long shipmentID)
+        {
+            ShipmentEntity shipment = ShippingManager.VoidShipment(shipmentID);
+
+            return shipmentAdapterFactory.Get(shipment);
+        }
 
         /// <summary>
         /// Indicates if the shipment type of the given type code has gone through the full setup wizard \ configuration
         /// </summary>
         public bool IsShipmentTypeConfigured(ShipmentTypeCode shipmentTypeCode) =>
             ShippingManager.IsShipmentTypeConfigured(shipmentTypeCode);
+
+        /// <summary>
+        /// Create a new shipment for the given order
+        /// </summary>
+        public ShipmentEntity CreateShipment(OrderEntity order) => ShippingManager.CreateShipment(order);
 
         /// <summary>
         /// Gets the service used.

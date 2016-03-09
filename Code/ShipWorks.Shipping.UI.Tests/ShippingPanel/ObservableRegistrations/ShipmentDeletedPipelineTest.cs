@@ -17,12 +17,12 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
     public class ShipmentDeletedPipelineTest : IDisposable
     {
         readonly AutoMock mock;
-        readonly Subject<IShipWorksMessage> testSubject;
+        readonly Subject<IEntityDeletedMessage> testSubject;
 
         public ShipmentDeletedPipelineTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
-            testSubject = new Subject<IShipWorksMessage>();
+            testSubject = new Subject<IEntityDeletedMessage>();
             mock.Provide<IObservable<IShipWorksMessage>>(testSubject);
         }
 

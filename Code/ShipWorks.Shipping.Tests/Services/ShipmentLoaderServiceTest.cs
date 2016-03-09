@@ -26,7 +26,7 @@ namespace ShipWorks.Shipping.Tests.Services
 
         private readonly Mock<ICarrierShipmentAdapterFactory> shipmentAdapterFactory;
         private readonly Mock<ICarrierShipmentAdapter> shipmentAdapter;
-        private OrderSelectionLoaded orderSelectionLoaded;
+        private LoadedOrderSelection orderSelectionLoaded;
 
         public ShipmentLoaderServiceTest()
         {
@@ -43,7 +43,7 @@ namespace ShipWorks.Shipping.Tests.Services
             shipmentAdapterFactory = new Mock<ICarrierShipmentAdapterFactory>();
             shipmentAdapterFactory.Setup(s => s.Get(It.IsAny<ShipmentEntity>())).Returns(shipmentAdapter.Object);
 
-            orderSelectionLoaded = new OrderSelectionLoaded(orderEntity,
+            orderSelectionLoaded = new LoadedOrderSelection(orderEntity,
                 new List<ICarrierShipmentAdapter>() { shipmentAdapterFactory.Object.Get(shipmentEntity) },
                 ShippingAddressEditStateType.Editable
                 );
@@ -59,10 +59,11 @@ namespace ShipWorks.Shipping.Tests.Services
         [Fact]
         public async Task MessageCorrect_WhenOrderHasOneShipment_ReturnsThatShipment_Test()
         {
-            OrderSelectionLoaded handlededOrderSelectionLoaded = new OrderSelectionLoaded();
+            LoadedOrderSelection handlededOrderSelectionLoaded = new LoadedOrderSelection();
 
             messenger.OfType<OrderSelectionChangedMessage>()
-                .Subscribe((OrderSelectionChangedMessage orderSelectionChangedMessage) => handlededOrderSelectionLoaded = orderSelectionChangedMessage.LoadedOrderSelection.FirstOrDefault());
+                .Subscribe((OrderSelectionChangedMessage orderSelectionChangedMessage) =>
+                handlededOrderSelectionLoaded = orderSelectionChangedMessage.LoadedOrderSelection.OfType<LoadedOrderSelection>().Single());
 
             await testObject.LoadAndNotify(new List<long> { orderEntity.OrderID });
 
@@ -75,7 +76,7 @@ namespace ShipWorks.Shipping.Tests.Services
         public async Task MessageCorrect_WhenOrderHasMoreThanOneShipment_ReturnsFirstShipment_Test()
         {
             ShipmentEntity secondShipmentEntity = new ShipmentEntity(2031);
-            orderSelectionLoaded = new OrderSelectionLoaded(orderEntity, new List<ICarrierShipmentAdapter>()
+            orderSelectionLoaded = new LoadedOrderSelection(orderEntity, new List<ICarrierShipmentAdapter>()
                 {
                     shipmentAdapterFactory.Object.Get(shipmentEntity),
                     shipmentAdapterFactory.Object.Get(secondShipmentEntity)

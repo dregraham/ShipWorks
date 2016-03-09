@@ -1,4 +1,6 @@
-﻿using System.Reactive.Concurrency;
+﻿using System;
+using System.Reactive.Concurrency;
+using System.Windows.Forms;
 
 namespace Interapptive.Shared.Threading
 {
@@ -7,6 +9,19 @@ namespace Interapptive.Shared.Threading
     /// </summary>
     public sealed class SchedulerProvider : ISchedulerProvider
     {
+        Lazy<IScheduler> windowsFormsEventLoopScheduler;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="getSchedulerControl"></param>
+        public SchedulerProvider(Func<Control> getSchedulerControl)
+        {
+            // We need to load this lazily because the Control that we need may not be set up when this constructor
+            // is called
+            windowsFormsEventLoopScheduler = new Lazy<IScheduler>(() => new ControlScheduler(getSchedulerControl()));
+        }
+
         /// <summary>
         /// Current thread scheduler
         /// </summary>
@@ -16,6 +31,12 @@ namespace Interapptive.Shared.Threading
         /// Dispatcher scheduler
         /// </summary>
         public IScheduler Dispatcher => DispatcherScheduler.Current;
+
+        /// <summary>
+        /// Schedule work on the Windows Forms event loop
+        /// </summary>
+        /// <remarks>This is equivalent to calling Control.Invoke</remarks>
+        public IScheduler WindowsFormsEventLoop => windowsFormsEventLoopScheduler.Value;
 
         /// <summary>
         /// Immediate scheduler

@@ -3,7 +3,6 @@ using Interapptive.Shared;
 using Interapptive.Shared.Net;
 using ShipWorks.AddressValidation;
 using ShipWorks.Core.ApplicationCode;
-using ShipWorks.Shipping.Carriers.BestRate.Footnote;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Loading;
 using ShipWorks.Shipping.Profiles;
@@ -16,6 +15,7 @@ using ShipWorks.Shipping.UI.MessageHandlers;
 using ShipWorks.Shipping.UI.RatingPanel;
 using ShipWorks.Shipping.UI.ShippingPanel;
 using ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl;
+using ShipWorks.Shipping.UI.ShippingRibbon;
 
 namespace ShipWorks.Shipping.UI
 {
@@ -80,10 +80,6 @@ namespace ShipWorks.Shipping.UI
 
             builder.RegisterType<OtherShipmentViewModel>();
 
-            builder.RegisterType<RatingPanelRegistration>()
-                .AsImplementedInterfaces()
-                .PreserveExistingDefaults();
-
             builder.RegisterType<RateSelectionFactory>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
@@ -112,18 +108,11 @@ namespace ShipWorks.Shipping.UI
                 .AsImplementedInterfaces()
                 .SingleInstance();
 
-            builder.RegisterType<ShipmentLoaderService>()
-                .AsImplementedInterfaces()
-                .SingleInstance();
-
             builder.RegisterType<ShipmentPackageTypesBuilderFactory>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
 
             builder.RegisterType<ShipmentProcessor>()
-                .AsImplementedInterfaces();
-
-            builder.RegisterType<ShipmentProcessorService>()
                 .AsImplementedInterfaces();
 
             builder.RegisterType<ShippingProfileManagerWrapper>()
@@ -159,14 +148,13 @@ namespace ShipWorks.Shipping.UI
                 .AsImplementedInterfaces()
                 .SingleInstance();
 
-            builder.RegisterType<ShippingPanelRegistration>()
-                .AsImplementedInterfaces()
-                .PreserveExistingDefaults();
-
             builder.RegisterType<ShippingPanelViewModel>()
                 .FindConstructorsWith(new NonDefaultConstructorFinder());
 
             builder.RegisterType<ShippingProfileEditorDlg>();
+
+            builder.RegisterType<ShippingRibbonService>()
+                .As<IShippingRibbonService>();
 
             builder.RegisterType<ShippingViewModelFactory>()
                 .AsImplementedInterfaces()

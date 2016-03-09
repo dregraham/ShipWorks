@@ -32,21 +32,17 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         private ShippingPanelViewModel testObject;
         private readonly DataContext context;
         private readonly ShipmentEntity shipment;
-        private readonly TestSchedulerProvider scheduler;
         private IDisposable subscription;
 
         public ShippingPanelViewModelTest(DatabaseFixture db)
         {
-            scheduler = new TestSchedulerProvider();
-
             context = db.CreateDataContext(x => ContainerInitializer.Initialize(x),
                 mock =>
-            {
-                mock.Provide<ISchedulerProvider>(scheduler);
-
-                mock.Provide<Control>(new Control());
-                mock.Provide<Func<Control>>(() => new Control());
-            });
+                {
+                    mock.Provide<ISchedulerProvider>(new ImmediateSchedulerProvider());
+                    mock.Provide<Control>(new Control());
+                    mock.Provide<Func<Control>>(() => new Control());
+                });
 
             context.Mock.Override<ITangoWebClient>();
             context.Mock.Override<IMessageHelper>();
@@ -85,8 +81,6 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
             testObject.CreateLabelCommand.Execute(null);
 
             var message = await source.Task;
-
-            scheduler.Dispatcher.Start();
 
             Assert.Equal(testObject.ShipmentAdapter.Shipment.RowVersion,
                 message.Shipments.FirstOrDefault().Shipment.RowVersion);

@@ -70,7 +70,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// <summary>
         /// Does the control support multi select
         /// </summary>
-        public bool SupportsMultiSelect => false;
+        public bool SupportsMultiSelect => true;
 
         /// <summary>
         /// Change the content of the control
@@ -127,7 +127,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             IInputElement focusedElement = FindFocusedInputElement(shippingPanelControl);
             CommitBindings(focusedElement);
         }
-
+        
         /// <summary>
         /// Find the element that is currently focused within the given dependency object
         /// </summary>

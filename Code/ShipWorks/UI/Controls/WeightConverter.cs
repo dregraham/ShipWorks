@@ -95,7 +95,6 @@ namespace ShipWorks.UI.Controls
             {
                 return null;
             }
-
             try
             {
                 // See if both pounds and ounces are present

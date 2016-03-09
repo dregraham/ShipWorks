@@ -12,6 +12,7 @@ namespace ShipWorks.Tests.Shared
     {
         public IScheduler CurrentThread => ImmediateScheduler.Instance;
         public IScheduler Dispatcher => ImmediateScheduler.Instance;
+        public IScheduler WindowsFormsEventLoop => ImmediateScheduler.Instance;
         public IScheduler Immediate => ImmediateScheduler.Instance;
         public IScheduler NewThread => ImmediateScheduler.Instance;
         public IScheduler ThreadPool => ImmediateScheduler.Instance;

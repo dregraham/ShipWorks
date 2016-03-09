@@ -118,7 +118,7 @@
             this.menuInsuranceClaim.Image = global::ShipWorks.Properties.Resources.message;
             this.menuInsuranceClaim.Name = "menuInsuranceClaim";
             this.menuInsuranceClaim.Size = new System.Drawing.Size(198, 22);
-            this.menuInsuranceClaim.Text = "Insurance Claim";
+            this.menuInsuranceClaim.Text = "File Claim";
             this.menuInsuranceClaim.Click += new System.EventHandler(this.OnSubmitClaim);
             // 
             // menuSep2

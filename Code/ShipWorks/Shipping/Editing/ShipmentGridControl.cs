@@ -1,40 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using ShipWorks.AddressValidation;
-using ShipWorks.Data.Grid.Columns.DisplayTypes;
-using ShipWorks.Shipping.Editing;
-using ShipWorks.UI.Utility;
-using ShipWorks.Data.Grid.Columns;
-using Divelements.SandGrid;
-using ShipWorks.ApplicationCore.Appearance;
-using ShipWorks.Filters;
-using Divelements.SandGrid.Rendering;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Connection;
-using ShipWorks.UI;
-using ShipWorks.Data.Controls;
-using ShipWorks.Common.Threading;
-using ShipWorks.Data.Grid;
-using System.Collections;
-using Interapptive.Shared.Utility;
 using System.Diagnostics;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Model.HelperClasses;
+using System.Linq;
+using System.Windows.Forms;
+using Divelements.SandGrid;
+using Divelements.SandGrid.Rendering;
+using Interapptive.Shared;
+using Interapptive.Shared.UI;
+using ShipWorks.AddressValidation;
+using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Appearance;
+using ShipWorks.Common.Threading;
+using ShipWorks.Data;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Controls;
+using ShipWorks.Data.Grid;
+using ShipWorks.Data.Grid.Columns;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Filters;
+using ShipWorks.UI.Utility;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
-using ShipWorks.Stores;
-using ShipWorks.Data;
-using Interapptive.Shared.UI;
-using ShipWorks.Shipping.CoreExtensions.Grid;
-using ShipWorks.ApplicationCore;
-using System.Threading;
-using Interapptive.Shared;
 
 namespace ShipWorks.Shipping.Editing
 {
@@ -49,7 +37,7 @@ namespace ShipWorks.Shipping.Editing
         Dictionary<long, ShipmentGridRow> shipmentRowMap = new Dictionary<long, ShipmentGridRow>();
 
         // Custom column used for hidden secondary sort
-        ShipmentGridHiddenSortColumn shipmentNumberSorter = new ShipmentGridHiddenSortColumn(r => ShippingManager.GetSiblingData(r.Shipment).ShipmentNumber );
+        ShipmentGridHiddenSortColumn shipmentNumberSorter = new ShipmentGridHiddenSortColumn(r => ShippingManager.GetSiblingData(r.Shipment).ShipmentNumber);
         ShipmentGridHiddenSortColumn orderGridPositionSorter = new ShipmentGridHiddenSortColumn(r => r.SortIndex);
 
         static Guid gridSettingsKey = new Guid("{F933A7D5-33D3-460b-9EA8-EA6D9D9285F3}");
@@ -66,7 +54,7 @@ namespace ShipWorks.Shipping.Editing
         /// The grid selection has changed
         /// </summary>
         public event ShipmentSelectionChangedEventHandler SelectionChanged;
-        
+
         /// <summary>
         /// Raised when shipments are added to the grid
         /// </summary>
@@ -263,8 +251,8 @@ namespace ShipWorks.Shipping.Editing
             deleteShipmentButton.Enabled = entityGrid.SelectedElements.Count > 0 && SelectedShipments.Any(s => UserSession.Security.HasPermission(PermissionType.ShipmentsVoidDelete, s.OrderID));
             removeShipmentButton.Enabled = entityGrid.SelectedElements.Count > 0;
             menuItemCopyShipment.Enabled = entityGrid.SelectedElements.Count > 0 && SelectedShipments.Any(s => UserSession.Security.HasPermission(PermissionType.ShipmentsCreateEditProcess, s.OrderID));
-            menuCopyShipmentReturn.Enabled = entityGrid.SelectedElements.Count > 0 && singleShipment != null && 
-                                             UserSession.Security.HasPermission(PermissionType.ShipmentsCreateEditProcess, singleOrder.StoreID) && 
+            menuCopyShipmentReturn.Enabled = entityGrid.SelectedElements.Count > 0 && singleShipment != null &&
+                                             UserSession.Security.HasPermission(PermissionType.ShipmentsCreateEditProcess, singleOrder.StoreID) &&
                                              ShipmentTypeManager.GetType(singleShipment).SupportsReturns;
         }
 
@@ -402,7 +390,7 @@ namespace ShipWorks.Shipping.Editing
         }
 
         /// <summary>
-        /// Add the given shipments to the grid.  Their order will be preservied as a secondary sort to any grid sort column.
+        /// Add the given shipments to the grid.  Their order will be preserved as a secondary sort to any grid sort column.
         /// </summary>
         public void AddShipments(IEnumerable<ShipmentEntity> shipments)
         {
@@ -472,7 +460,7 @@ namespace ShipWorks.Shipping.Editing
 
                 Resort();
 
-                ShipmentGridShipmentsChangedEventArgs eventArgs = new ShipmentGridShipmentsChangedEventArgs(new List<ShipmentEntity>() {shipment}, null);
+                ShipmentGridShipmentsChangedEventArgs eventArgs = new ShipmentGridShipmentsChangedEventArgs(new List<ShipmentEntity>() { shipment }, null);
                 RaiseShipmentsAdded(eventArgs);
             }
             catch (SqlForeignKeyException)
@@ -517,8 +505,8 @@ namespace ShipWorks.Shipping.Editing
                 if (dlg.ShowDialog(this) == DialogResult.OK)
                 {
                     ShipmentsLoader loader = new ShipmentsLoader(this);
-                    loader.LoadCompleted += OnLoadMoreShipmentsCompleted;
-                    await loader.LoadAsync(dlg.Selection.OrderedKeys);
+                    ShipmentsLoadedEventArgs result = await loader.LoadAsync(dlg.Selection.OrderedKeys);
+                    OnLoadMoreShipmentsCompleted(this, result);
                 }
             }
         }
@@ -786,7 +774,7 @@ namespace ShipWorks.Shipping.Editing
         }
 
         /// <summary>
-        /// Apply the secondary sort on the shipment number column, if necesaary
+        /// Apply the secondary sort on the shipment number column, if necessary
         /// </summary>
         private void ApplySecondarySort()
         {
@@ -809,7 +797,7 @@ namespace ShipWorks.Shipping.Editing
         }
 
         /// <summary>
-        /// Sort the grid using the current sort, for after we add\remove shipment rows.
+        /// Sort the grid using the current sort, for after we add or remove shipment rows.
         /// </summary>
         private void Resort()
         {
@@ -855,7 +843,7 @@ namespace ShipWorks.Shipping.Editing
 
                 try
                 {
-                    // save 
+                    // save
                     ShippingManager.SaveShipment(copy);
 
                     using (SqlAdapter sqlAdapter = new SqlAdapter(true))
