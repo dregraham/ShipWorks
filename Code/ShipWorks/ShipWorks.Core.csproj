@@ -934,12 +934,6 @@
     <Compile Include="Shipping\Carriers\Postal\Usps\Registration\PaymentAndBillingAddressControl.Designer.cs">
       <DependentUpon>PaymentAndBillingAddressControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Shipping\Carriers\Postal\Usps\Registration\SimpleAddressControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Shipping\Carriers\Postal\Usps\Registration\SimpleAddressControl.Designer.cs">
-      <DependentUpon>SimpleAddressControl.cs</DependentUpon>
-    </Compile>
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsAccountManagerWrapper.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Registration\Promotion\Express1RegistrationPromotion.cs" />
     <Compile Include="Shipping\Carriers\UPS\OnLineTools\IUpsOltShipmentValidator.cs" />
@@ -7843,9 +7837,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\Postal\Usps\Registration\PaymentAndBillingAddressControl.resx">
       <DependentUpon>PaymentAndBillingAddressControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Shipping\Carriers\Postal\Usps\Registration\SimpleAddressControl.resx">
-      <DependentUpon>SimpleAddressControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\Postal\Usps\Registration\UspsPaymentControl.resx">
       <DependentUpon>UspsPaymentControl.cs</DependentUpon>
