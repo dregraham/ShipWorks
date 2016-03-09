@@ -46,9 +46,7 @@ namespace ShipWorks.ApplicationCore.Licensing.LicenseEnforcement
         {
             if (Enforce(capabilities, context).Value == ComplianceLevel.NotCompliant)
             {
-                // pass not specified context to the channel limit dlg factory because it calls the enforcers again
-                // if we pass the login context it will call this enforcer again which results in multiple unneeded api calls
-                IChannelLimitDlg channelLimitDlg = channelLimitDlgFactory.GetChannelLimitDlg(owner, EditionFeature, EnforcementContext.NotSpecified);
+                IChannelLimitDlg channelLimitDlg = channelLimitDlgFactory.GetChannelLimitDlg(owner, EditionFeature, context);
                 channelLimitDlg.ShowDialog();
             }
 
@@ -86,13 +84,15 @@ namespace ShipWorks.ApplicationCore.Licensing.LicenseEnforcement
                     {
                         // Call activate on all of the stores that tango does not know about
                         EnumResult<LicenseActivationState> activationResult = license.Activate(store);
-
+                        
                         // If it failed then we return not compliant
                         if (activationResult.Value == LicenseActivationState.MaxChannelsExceeded)
                         {
                             return new EnumResult<ComplianceLevel>(ComplianceLevel.NotCompliant,
                                 $"{activationResult.Message} Please delete {ChannelsToDelete(license, localStores)} channel(s).");
                         }
+
+                        storeManager.SaveStore(store);
                     }
                 }
             }
