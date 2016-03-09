@@ -1,9 +1,20 @@
-﻿using ShipWorks.Editions;
+﻿using Interapptive.Shared.UI;
+using ShipWorks.Editions;
 
 namespace ShipWorks.ApplicationCore.Licensing.FeatureRestrictions.Stamps
 {
+    /// <summary>
+    /// Stamps Dhl Consolidator restriction
+    /// </summary>
     public class StampsDhlConsolidatorRestriction : FeatureRestriction
     {
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public StampsDhlConsolidatorRestriction(IMessageHelper messageHelper) : base(messageHelper)
+        {
+        }
+
         /// <summary>
         /// The edition feature
         /// </summary>

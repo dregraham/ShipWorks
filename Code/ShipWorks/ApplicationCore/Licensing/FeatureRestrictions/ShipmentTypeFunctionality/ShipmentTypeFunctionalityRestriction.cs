@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Interapptive.Shared.UI;
 using ShipWorks.Editions;
 using ShipWorks.Shipping;
 
@@ -17,7 +18,7 @@ namespace ShipWorks.ApplicationCore.Licensing.FeatureRestrictions.ShipmentTypeFu
         /// Initializes a new instance of the <see cref="ShipmentTypeFunctionalityRestriction"/> class.
         /// </summary>
         /// <param name="restrictionType">The type of shipment type restriction that should be checked.</param>
-        protected ShipmentTypeFunctionalityRestriction(ShipmentTypeRestrictionType restrictionType)
+        protected ShipmentTypeFunctionalityRestriction(ShipmentTypeRestrictionType restrictionType, IMessageHelper messageHelper) : base(messageHelper)
         {
             this.restrictionType = restrictionType;
         }

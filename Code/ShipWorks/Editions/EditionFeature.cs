@@ -78,7 +78,7 @@ namespace ShipWorks.Editions
         /// <summary>
         /// ShipmentType, can be forbidden or just restricted to upgrade
         /// </summary>
-        [Description("You must upgrade your ShipWorks edition to use {0}.|You must contact Interapptive to use additonal shipping carriers.")]
+        [Description("You must upgrade your ShipWorks edition to use {0}.|You must contact Interapptive to use additional shipping carriers.")]
         ShipmentType,
 
         /// <summary>

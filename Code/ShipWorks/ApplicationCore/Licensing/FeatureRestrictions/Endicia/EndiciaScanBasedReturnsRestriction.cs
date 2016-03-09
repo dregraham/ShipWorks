@@ -1,9 +1,20 @@
-﻿using ShipWorks.Editions;
+﻿using Interapptive.Shared.UI;
+using ShipWorks.Editions;
 
 namespace ShipWorks.ApplicationCore.Licensing.FeatureRestrictions.Endicia
 {
+    /// <summary>
+    /// Endicia scan based returns
+    /// </summary>
     public class EndiciaScanBasedReturnsRestriction : FeatureRestriction
     {
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public EndiciaScanBasedReturnsRestriction(IMessageHelper messageHelper) : base(messageHelper)
+        {
+        }
+
         /// <summary>
         /// The edition feature
         /// </summary>

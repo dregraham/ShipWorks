@@ -1,4 +1,5 @@
-﻿using ShipWorks.Editions;
+﻿using Interapptive.Shared.UI;
+using ShipWorks.Editions;
 
 namespace ShipWorks.ApplicationCore.Licensing.FeatureRestrictions.ShipmentTypeFunctionality
 {
@@ -9,8 +10,8 @@ namespace ShipWorks.ApplicationCore.Licensing.FeatureRestrictions.ShipmentTypeFu
         /// <summary>
         /// Initializes a new instance of the <see cref="AccountRegistrationRestriction"/> class.
         /// </summary>
-        public AccountRegistrationRestriction()
-            : base(ShipmentTypeRestrictionType.AccountRegistration)
+        public AccountRegistrationRestriction(IMessageHelper messageHelper)
+            : base(ShipmentTypeRestrictionType.AccountRegistration, messageHelper)
         {            
         }
 

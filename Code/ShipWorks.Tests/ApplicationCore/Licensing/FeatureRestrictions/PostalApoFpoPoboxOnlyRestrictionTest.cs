@@ -1,4 +1,5 @@
 ﻿using Autofac.Extras.Moq;
+using Interapptive.Shared.UI;
 using Moq;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Licensing.FeatureRestrictions;
@@ -15,9 +16,14 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.FeatureRestrictions
         [Fact]
         public void EditionFeature_ReturnsEditionFeaturePostalApoFpoPoboxOnly()
         {
-            PostalApoFpoPoboxOnlyRestriction testObject = new PostalApoFpoPoboxOnlyRestriction();
-            
-            Assert.Equal(EditionFeature.PostalApoFpoPoboxOnly, testObject.EditionFeature);
+            using (AutoMock mock = AutoMock.GetLoose())
+            {
+                Mock<IMessageHelper> messagehelper = mock.Mock<IMessageHelper>();
+
+                PostalApoFpoPoboxOnlyRestriction testObject = new PostalApoFpoPoboxOnlyRestriction(messagehelper.Object);
+
+                Assert.Equal(EditionFeature.PostalApoFpoPoboxOnly, testObject.EditionFeature);
+            }
         }
 
         [Fact]
@@ -26,8 +32,9 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.FeatureRestrictions
             using (var mock = AutoMock.GetLoose())
             {
                 Mock<ILicenseCapabilities> licenseCapabilities = mock.Mock<ILicenseCapabilities>();
-                
-                PostalApoFpoPoboxOnlyRestriction testObject = new PostalApoFpoPoboxOnlyRestriction();
+                Mock<IMessageHelper> messagehelper = mock.Mock<IMessageHelper>();
+
+                PostalApoFpoPoboxOnlyRestriction testObject = new PostalApoFpoPoboxOnlyRestriction(messagehelper.Object);
                 
                 Assert.Equal(EditionRestrictionLevel.None, testObject.Check(licenseCapabilities.Object, null));
             }
@@ -39,13 +46,14 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.FeatureRestrictions
             using (var mock = AutoMock.GetLoose())
             {
                 Mock<ILicenseCapabilities> licenseCapabilities = mock.Mock<ILicenseCapabilities>();
+                Mock<IMessageHelper> messagehelper = mock.Mock<IMessageHelper>();
 
                 var shipment = new ShipmentEntity()
                 {
                     ShipmentType = (int) ShipmentTypeCode.iParcel
                 };
                 
-                PostalApoFpoPoboxOnlyRestriction testObject = new PostalApoFpoPoboxOnlyRestriction();
+                PostalApoFpoPoboxOnlyRestriction testObject = new PostalApoFpoPoboxOnlyRestriction(messagehelper.Object);
 
                 Assert.Equal(EditionRestrictionLevel.None, testObject.Check(licenseCapabilities.Object, shipment));
             }
@@ -57,13 +65,14 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.FeatureRestrictions
             using (var mock = AutoMock.GetLoose())
             {
                 Mock<ILicenseCapabilities> licenseCapabilities = mock.Mock<ILicenseCapabilities>();
+                Mock<IMessageHelper> messagehelper = mock.Mock<IMessageHelper>();
 
                 var shipment = new ShipmentEntity()
                 {
                     ShipStateProvCode = "AA"
                 };
 
-                PostalApoFpoPoboxOnlyRestriction testObject = new PostalApoFpoPoboxOnlyRestriction();
+                PostalApoFpoPoboxOnlyRestriction testObject = new PostalApoFpoPoboxOnlyRestriction(messagehelper.Object);
 
                 Assert.Equal(EditionRestrictionLevel.None, testObject.Check(licenseCapabilities.Object, shipment));
             }
@@ -75,6 +84,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.FeatureRestrictions
             using (var mock = AutoMock.GetLoose())
             {
                 Mock<ILicenseCapabilities> licenseCapabilities = mock.Mock<ILicenseCapabilities>();
+                Mock<IMessageHelper> messagehelper = mock.Mock<IMessageHelper>();
 
                 var shipment = new ShipmentEntity()
                 {
@@ -83,7 +93,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.FeatureRestrictions
                     ShipStreet3 = ""
                 };
 
-                PostalApoFpoPoboxOnlyRestriction testObject = new PostalApoFpoPoboxOnlyRestriction();
+                PostalApoFpoPoboxOnlyRestriction testObject = new PostalApoFpoPoboxOnlyRestriction(messagehelper.Object);
 
                 Assert.Equal(EditionRestrictionLevel.None, testObject.Check(licenseCapabilities.Object, shipment));
             }
@@ -96,13 +106,14 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.FeatureRestrictions
             {
                 Mock<ILicenseCapabilities> licenseCapabilities = mock.Mock<ILicenseCapabilities>();
                 licenseCapabilities.SetupGet(c => c.PostalAvailability).Returns(BrownPostalAvailability.AllServices);
+                Mock<IMessageHelper> messagehelper = mock.Mock<IMessageHelper>();
 
                 var shipment = new ShipmentEntity()
                 {
                     ShipmentType = (int) ShipmentTypeCode.Usps
                 };
 
-                PostalApoFpoPoboxOnlyRestriction testObject = new PostalApoFpoPoboxOnlyRestriction();
+                PostalApoFpoPoboxOnlyRestriction testObject = new PostalApoFpoPoboxOnlyRestriction(messagehelper.Object);
 
                 Assert.Equal(EditionRestrictionLevel.None, testObject.Check(licenseCapabilities.Object, shipment));
             }
@@ -115,6 +126,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.FeatureRestrictions
             {
                 Mock<ILicenseCapabilities> licenseCapabilities = mock.Mock<ILicenseCapabilities>();
                 licenseCapabilities.SetupGet(c => c.PostalAvailability).Returns(BrownPostalAvailability.ApoFpoPobox);
+                Mock<IMessageHelper> messagehelper = mock.Mock<IMessageHelper>();
 
                 var shipment = new ShipmentEntity()
                 {
@@ -124,7 +136,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.FeatureRestrictions
                     ShipStreet3 = ""
                 };
 
-                PostalApoFpoPoboxOnlyRestriction testObject = new PostalApoFpoPoboxOnlyRestriction();
+                PostalApoFpoPoboxOnlyRestriction testObject = new PostalApoFpoPoboxOnlyRestriction(messagehelper.Object);
 
                 Assert.Equal(EditionRestrictionLevel.Forbidden, testObject.Check(licenseCapabilities.Object, shipment));
             }
@@ -137,6 +149,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.FeatureRestrictions
             {
                 Mock<ILicenseCapabilities> licenseCapabilities = mock.Mock<ILicenseCapabilities>();
                 licenseCapabilities.SetupGet(c => c.PostalAvailability).Returns(BrownPostalAvailability.None);
+                Mock<IMessageHelper> messagehelper = mock.Mock<IMessageHelper>();
 
                 var shipment = new ShipmentEntity()
                 {
@@ -146,7 +159,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.FeatureRestrictions
                     ShipStreet3 = ""
                 };
 
-                PostalApoFpoPoboxOnlyRestriction testObject = new PostalApoFpoPoboxOnlyRestriction();
+                PostalApoFpoPoboxOnlyRestriction testObject = new PostalApoFpoPoboxOnlyRestriction(messagehelper.Object);
 
                 Assert.Equal(EditionRestrictionLevel.Forbidden, testObject.Check(licenseCapabilities.Object, shipment));
             }
