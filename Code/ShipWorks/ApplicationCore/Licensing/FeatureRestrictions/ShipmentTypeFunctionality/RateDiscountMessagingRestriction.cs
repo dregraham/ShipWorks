@@ -1,4 +1,5 @@
-﻿using ShipWorks.Editions;
+﻿using Interapptive.Shared.UI;
+using ShipWorks.Editions;
 
 namespace ShipWorks.ApplicationCore.Licensing.FeatureRestrictions.ShipmentTypeFunctionality
 {
@@ -12,8 +13,8 @@ namespace ShipWorks.ApplicationCore.Licensing.FeatureRestrictions.ShipmentTypeFu
         /// <summary>
         /// Initializes a new instance of the <see cref="ShippingAccountConversionRestriction"/> class.
         /// </summary>
-        public RateDiscountMessagingRestriction()
-            : base(ShipmentTypeRestrictionType.RateDiscountMessaging)
+        public RateDiscountMessagingRestriction(IMessageHelper messageHelper)
+            : base(ShipmentTypeRestrictionType.RateDiscountMessaging, messageHelper)
         {
         }
 

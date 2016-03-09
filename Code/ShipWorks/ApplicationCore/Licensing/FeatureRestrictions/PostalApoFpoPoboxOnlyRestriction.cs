@@ -1,4 +1,5 @@
 ﻿using System.Text.RegularExpressions;
+using Interapptive.Shared.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Editions;
 using ShipWorks.Editions.Brown;
@@ -12,6 +13,13 @@ namespace ShipWorks.ApplicationCore.Licensing.FeatureRestrictions
     /// </summary>
     public class PostalApoFpoPoboxOnlyRestriction : FeatureRestriction
     {
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public PostalApoFpoPoboxOnlyRestriction(IMessageHelper messageHelper) : base(messageHelper)
+        {
+        }
+
         /// <summary>
         /// Returns the Edition Feature
         /// </summary>

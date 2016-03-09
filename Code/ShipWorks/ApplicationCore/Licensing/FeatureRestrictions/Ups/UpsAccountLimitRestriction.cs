@@ -19,7 +19,7 @@ namespace ShipWorks.ApplicationCore.Licensing.FeatureRestrictions.Ups
         /// Constructor
         /// </summary>
         /// <param name="messageHelper"></param>
-        public UpsAccountLimitRestriction(IMessageHelper messageHelper)
+        public UpsAccountLimitRestriction(IMessageHelper messageHelper) : base(messageHelper)
         {
             this.messageHelper = messageHelper;
         }

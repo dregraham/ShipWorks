@@ -1,9 +1,20 @@
-﻿using ShipWorks.Editions;
+﻿using Interapptive.Shared.UI;
+using ShipWorks.Editions;
 
 namespace ShipWorks.ApplicationCore.Licensing.FeatureRestrictions.Stamps
 {
+    /// <summary>
+    /// Stamps globegistics consolidator
+    /// </summary>
     public class StampsGlobegisticsConsolidatorRestriction : FeatureRestriction
     {
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public StampsGlobegisticsConsolidatorRestriction(IMessageHelper messageHelper) : base(messageHelper)
+        {
+        }
+
         /// <summary>
         /// The edition feature
         /// </summary>

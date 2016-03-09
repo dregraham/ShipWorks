@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using Autofac.Features.Indexed;
+using Interapptive.Shared.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Editions;
 using ShipWorks.Editions.Brown;
@@ -24,7 +25,8 @@ namespace ShipWorks.ApplicationCore.Licensing.FeatureRestrictions
         public ShipmentTypeRestriction(
             IIndex<ShipmentTypeCode, ICarrierAccountRepository<EndiciaAccountEntity>> accountRepository, 
             IBrownEditionUtility brownEditionUtility, 
-            IPostalUtility postalUtility)
+            IPostalUtility postalUtility,
+            IMessageHelper messageHelper) : base(messageHelper)
         {
             this.accountRepository = accountRepository;
             this.brownEditionUtility = brownEditionUtility;

@@ -1,9 +1,17 @@
-﻿using ShipWorks.Editions;
+﻿using Interapptive.Shared.UI;
+using ShipWorks.Editions;
 
 namespace ShipWorks.ApplicationCore.Licensing.FeatureRestrictions.Stamps
 {
     public class StampsRrDonnelleyConsolidatorRestriction : FeatureRestriction
     {
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public StampsRrDonnelleyConsolidatorRestriction(IMessageHelper messageHelper) : base(messageHelper)
+        {
+        }
+
         /// <summary>
         /// The edition feature
         /// </summary>
