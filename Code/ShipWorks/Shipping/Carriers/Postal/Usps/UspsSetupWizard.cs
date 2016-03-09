@@ -788,23 +788,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             }
         }
 
+        /// <summary>
+        /// Called when [step next new account payment and billing].
+        /// </summary>
         private void OnStepNextNewAccountPaymentAndBilling(object sender, WizardStepEventArgs e)
         {
             using (ILifetimeScope ioc = IoC.BeginLifetimeScope())
             {
-                IUspsWebClient uspsWebClient =
-                    ioc.Resolve<IUspsWebClient>(new NamedParameter("uspsResellerType", UspsResellerType.None));
-
-                AssociateShipworksWithItselfRequest request =
-                    ioc.Resolve<AssociateShipworksWithItselfRequest>(new TypedParameter(typeof(IUspsWebClient), uspsWebClient));
-
-                request.CardAccountNumber = paymentAndBillingAddress.CardNumber;
-                request.CardType = paymentAndBillingAddress.CardType;
-                request.CardHolder = paymentAndBillingAddress.CardHolderName;
-                request.CardExpirationMonth = paymentAndBillingAddress.CreditCardExpirationMonth;
-                request.CardExpirationYear = paymentAndBillingAddress.CreditCardExpirationYear;
-
-                request.CardBillingAddress = paymentAndBillingAddress.BillingAddress;
+                AssociateShipworksWithItselfRequest request = PopulateAssociateWithSelfRequestWithBilling(ioc);
 
                 EnumResult<AssociateShipWorksWithItselfResponseType> response = request.Execute();
 
@@ -823,26 +814,17 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             }
         }
 
+        /// <summary>
+        /// Called when [step next postage meter address].
+        /// </summary>
         private void OnStepNextPostageMeterAddress(object sender, WizardStepEventArgs e)
         {
             using (ILifetimeScope ioc = IoC.BeginLifetimeScope())
             {
-                IUspsWebClient uspsWebClient =
-                    ioc.Resolve<IUspsWebClient>(new NamedParameter("uspsResellerType", UspsResellerType.None));
-
-                AssociateShipworksWithItselfRequest request =
-                    ioc.Resolve<AssociateShipworksWithItselfRequest>(new TypedParameter(typeof(IUspsWebClient), uspsWebClient));
-
-                request.CardAccountNumber = paymentAndBillingAddress.CardNumber;
-                request.CardType = paymentAndBillingAddress.CardType;
-                request.CardHolder = paymentAndBillingAddress.CardHolderName;
-                request.CardExpirationMonth = paymentAndBillingAddress.CreditCardExpirationMonth;
-                request.CardExpirationYear = paymentAndBillingAddress.CreditCardExpirationYear;
-                request.CardBillingAddress = paymentAndBillingAddress.BillingAddress;
-
                 PersonAdapter meterAddressAdapter = new PersonAdapter();
                 postageMeterAddress.SaveToEntity(meterAddressAdapter);
 
+                AssociateShipworksWithItselfRequest request = PopulateAssociateWithSelfRequestWithBilling(ioc);
                 request.PhysicalAddress = meterAddressAdapter;
 
                 EnumResult<AssociateShipWorksWithItselfResponseType> response = request.Execute();
@@ -861,6 +843,27 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                         break;
                 }
             }
+        }
+
+        /// <summary>
+        /// Populates the AssociateShipworksWithItselfRequest with billing information.
+        /// </summary>
+        private AssociateShipworksWithItselfRequest PopulateAssociateWithSelfRequestWithBilling(ILifetimeScope ioc)
+        {
+            IUspsWebClient uspsWebClient =
+                ioc.Resolve<IUspsWebClient>(new NamedParameter("uspsResellerType", UspsResellerType.None));
+
+            AssociateShipworksWithItselfRequest request =
+                ioc.Resolve<AssociateShipworksWithItselfRequest>(new TypedParameter(typeof (IUspsWebClient), uspsWebClient));
+
+            request.CardAccountNumber = paymentAndBillingAddress.CardNumber;
+            request.CardType = paymentAndBillingAddress.CardType;
+            request.CardHolder = paymentAndBillingAddress.CardHolderName;
+            request.CardExpirationMonth = paymentAndBillingAddress.CreditCardExpirationMonth;
+            request.CardExpirationYear = paymentAndBillingAddress.CreditCardExpirationYear;
+            request.CardBillingAddress = paymentAndBillingAddress.BillingAddress;
+
+            return request;
         }
     }
 }
