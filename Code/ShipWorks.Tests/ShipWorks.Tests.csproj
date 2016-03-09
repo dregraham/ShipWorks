@@ -232,6 +232,7 @@
     <Compile Include="ApplicationCore\Licensing\GetActiveStoresResponseTest.cs" />
     <Compile Include="ApplicationCore\Licensing\LicenseCapabilitiesTest.cs" />
     <Compile Include="ApplicationCore\Licensing\LicenseEnforcement\ApproachingShipmentLimitEnforcerTest.cs" />
+    <Compile Include="ApplicationCore\Licensing\LicenseEnforcement\ChannelSyncEnforcerTest.cs" />
     <Compile Include="ApplicationCore\Licensing\LicenseEnforcement\ChannelCountEnforcerTest.cs" />
     <Compile Include="ApplicationCore\Licensing\LicenseEnforcement\ChannelTypeEnforcerTest.cs" />
     <Compile Include="ApplicationCore\Licensing\LicenseEnforcement\ExceedingChannelLimitEnforcerTest.cs" />
