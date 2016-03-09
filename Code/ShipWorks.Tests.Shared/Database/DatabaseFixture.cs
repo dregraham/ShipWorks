@@ -129,7 +129,7 @@ namespace ShipWorks.Tests.Shared.Database
             }
 
             // This initializes all the other dependencies
-            UserSession.InitializeForCurrentSession();
+            UserSession.InitializeForCurrentSession(ExecutionModeScope.Current);
 
             return new DataContext(mock, context.Item1, context.Item2);
         }

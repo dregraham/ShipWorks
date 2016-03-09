@@ -643,6 +643,7 @@
     <Compile Include="ApplicationCore\ICheckForChangesNeeded.cs" />
     <Compile Include="ApplicationCore\IInitializeForCurrentDatabase.cs" />
     <Compile Include="ApplicationCore\IInitializeForCurrentSession.cs" />
+    <Compile Include="ApplicationCore\IInitializeForCurrentUISession.cs" />
     <Compile Include="ApplicationCore\IoC.cs" />
     <Compile Include="ApplicationCore\IRegisterDockableWindow.cs" />
     <Compile Include="ApplicationCore\Licensing\FakeTangoWebClient.cs" />

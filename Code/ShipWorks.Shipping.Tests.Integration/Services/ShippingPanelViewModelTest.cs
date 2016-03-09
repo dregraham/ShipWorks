@@ -82,6 +82,8 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
 
             var message = await source.Task;
 
+            await TaskEx.Delay(3000);
+
             Assert.Equal(testObject.ShipmentAdapter.Shipment.RowVersion,
                 message.Shipments.FirstOrDefault().Shipment.RowVersion);
         }

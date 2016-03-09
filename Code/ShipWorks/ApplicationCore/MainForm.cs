@@ -719,7 +719,7 @@ namespace ShipWorks
 
             try
             {
-                UserSession.InitializeForCurrentSession();
+                UserSession.InitializeForCurrentSession(Program.ExecutionMode);
 
                 logonAsyncLoadSuccess = true;
             }

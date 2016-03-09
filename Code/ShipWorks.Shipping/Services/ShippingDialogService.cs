@@ -21,7 +21,7 @@ namespace ShipWorks.Shipping.Services
     /// <summary>
     /// Service for handling and opening the shipping dialog
     /// </summary>
-    public class ShippingDialogService : IInitializeForCurrentSession, IDisposable
+    public class ShippingDialogService : IInitializeForCurrentUISession, IDisposable
     {
         private readonly IDictionary<InitialShippingTabDisplay, string> shippingPanelTabNames =
             new Dictionary<InitialShippingTabDisplay, string>
