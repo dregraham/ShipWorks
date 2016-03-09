@@ -537,7 +537,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             }
             else if (DialogResult == DialogResult.OK)
             {
-                if (UspsAccount != null && UspsAccount.PendingInitialAccount == (int) UspsPendingAccountType.Existing)
+                if (UspsAccount != null && UspsAccount.PendingInitialAccount != (int) UspsPendingAccountType.None)
                 {
                     // We need to denote that the account is completely configured/initialized
                     UspsAccount.PendingInitialAccount = (int) UspsPendingAccountType.None;
