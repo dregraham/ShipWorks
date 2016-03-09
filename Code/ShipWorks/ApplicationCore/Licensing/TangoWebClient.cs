@@ -60,7 +60,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             {
                 if (version == null)
                 {
-                    // Tango requires a specific version in order to know when to return 
+                    // Tango requires a specific version in order to know when to return
                     // legacy responses or new response for the customer license. This is
                     // primarily for debug/internal versions of ShipWorks that have 0.0.0.x
                     // version number.
@@ -103,7 +103,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         internal static EnumResult<AssociateShipWorksWithItselfResponseType> AssociateShipworksWithItself(AssociateShipworksWithItselfRequest request)
         {
             HttpVariableRequestSubmitter postRequest = new HttpVariableRequestSubmitter();
-            
+
             postRequest.Variables.Add("action", "associateshipworkswithitself");
             postRequest.Variables.Add("license", request.CustomerKey);
 
@@ -131,9 +131,17 @@ namespace ShipWorks.ApplicationCore.Licensing
                 postRequest.Variables.Add("pChkDigit", matchedAddress.CheckDigit);
                 postRequest.Variables.Add("pZipStandard", "zip_standardized");
             }
-
-            // Process the request
-            XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "associateshipworkswithitself");
+            try
+            {
+                XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "associateshipworkswithitself");
+                CheckResponseForErrors(xmlResponse);
+            }
+            catch (TangoException ex)
+            {
+                return ex.Message.Contains("0x002b0808") ?
+                    new EnumResult<AssociateShipWorksWithItselfResponseType>(AssociateShipWorksWithItselfResponseType.POBoxNotAllowed, ex.Message) :
+                    new EnumResult<AssociateShipWorksWithItselfResponseType>(AssociateShipWorksWithItselfResponseType.UnknownError, ex.Message);
+            }
 
             return new EnumResult<AssociateShipWorksWithItselfResponseType>(AssociateShipWorksWithItselfResponseType.Success,string.Empty);
         }
@@ -1270,7 +1278,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             catch (TangoException ex)
             {
                 // Tango returned an error while deleting the store
-                // at this point the store has been removed from 
+                // at this point the store has been removed from
                 // the shipworks database, log the error and move on
                 log.Error(ex.Message);
             }
@@ -1299,11 +1307,11 @@ namespace ShipWorks.ApplicationCore.Licensing
             catch (TangoException ex)
             {
                 // Tango returned an error while deleting the store
-                // at this point the store has been removed from 
+                // at this point the store has been removed from
                 // the shipworks database, log the error and move on
                 log.Error(ex.Message);
             }
-            
+
         }
 
         /// <summary>

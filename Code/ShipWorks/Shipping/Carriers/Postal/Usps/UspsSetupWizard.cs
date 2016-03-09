@@ -43,7 +43,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         private readonly bool allowRegisteringExistingAccount;
         private readonly int initialPersonControlHeight;
 
-
         /// <summary>
         /// Initializes a new instance of the <see cref="UspsSetupWizard"/> class.
         /// </summary>
@@ -153,7 +152,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
             // Hide the panel that lets the customer select to register a new account or use an existing account
             // until USPS has enabled ShipWorks to register new accounts
-            accountTypePanel.Visible = allowRegisteringExistingAccount && UspsAccount.PendingInitialAccount == (int) UspsPendingAccountType.None;
+            accountTypePanel.Visible = allowRegisteringExistingAccount && UspsAccount.PendingInitialAccount != (int) UspsPendingAccountType.Existing;
 
             uspsUsageType.Items.Add(new UspsAccountUsageDropdownItem(AccountType.Individual, "Individual"));
             uspsUsageType.Items.Add(new UspsAccountUsageDropdownItem(AccountType.HomeOffice, "Home Office"));
@@ -786,7 +785,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 case UspsPendingAccountType.Existing:
                     e.NextPage = wizardPageOptions;
                     break;
-            }            
+            }
         }
 
         private void OnStepNextNewAccountPaymentAndBilling(object sender, WizardStepEventArgs e)
@@ -796,7 +795,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 IUspsWebClient uspsWebClient =
                     ioc.Resolve<IUspsWebClient>(new NamedParameter("uspsResellerType", UspsResellerType.None));
 
-                AssociateShipworksWithItselfRequest request = 
+                AssociateShipworksWithItselfRequest request =
                     ioc.Resolve<AssociateShipworksWithItselfRequest>(new TypedParameter(typeof(IUspsWebClient), uspsWebClient));
 
                 request.CardAccountNumber = paymentAndBillingAddress.CardNumber;
@@ -807,7 +806,60 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
                 request.CardBillingAddress = paymentAndBillingAddress.BillingAddress;
 
-                request.Execute();
+                EnumResult<AssociateShipWorksWithItselfResponseType> response = request.Execute();
+
+                switch (response.Value)
+                {
+                    case AssociateShipWorksWithItselfResponseType.Success:
+                        e.NextPage = wizardPageOptions;
+                        break;
+                    case AssociateShipWorksWithItselfResponseType.UnknownError:
+                        MessageHelper.ShowError(this, response.Message);
+                        e.NextPage = CurrentPage;
+                        break;
+                    case AssociateShipWorksWithItselfResponseType.POBoxNotAllowed:
+                        break;
+                }
+            }
+        }
+
+        private void OnStepNextPostageMeterAddress(object sender, WizardStepEventArgs e)
+        {
+            using (ILifetimeScope ioc = IoC.BeginLifetimeScope())
+            {
+                IUspsWebClient uspsWebClient =
+                    ioc.Resolve<IUspsWebClient>(new NamedParameter("uspsResellerType", UspsResellerType.None));
+
+                AssociateShipworksWithItselfRequest request =
+                    ioc.Resolve<AssociateShipworksWithItselfRequest>(new TypedParameter(typeof(IUspsWebClient), uspsWebClient));
+
+                request.CardAccountNumber = paymentAndBillingAddress.CardNumber;
+                request.CardType = paymentAndBillingAddress.CardType;
+                request.CardHolder = paymentAndBillingAddress.CardHolderName;
+                request.CardExpirationMonth = paymentAndBillingAddress.CreditCardExpirationMonth;
+                request.CardExpirationYear = paymentAndBillingAddress.CreditCardExpirationYear;
+                request.CardBillingAddress = paymentAndBillingAddress.BillingAddress;
+
+                PersonAdapter meterAddressAdapter = new PersonAdapter();
+                postageMeterAddress.SaveToEntity(meterAddressAdapter);
+
+                request.PhysicalAddress = meterAddressAdapter;
+
+                EnumResult<AssociateShipWorksWithItselfResponseType> response = request.Execute();
+
+                switch (response.Value)
+                {
+                    case AssociateShipWorksWithItselfResponseType.Success:
+                        break;
+                    case AssociateShipWorksWithItselfResponseType.UnknownError:
+                        MessageHelper.ShowError(this, response.Message);
+                        e.NextPage = CurrentPage;
+                        break;
+                    case AssociateShipWorksWithItselfResponseType.POBoxNotAllowed:
+                        MessageHelper.ShowError(this, response.Message);
+                        e.NextPage = CurrentPage;
+                        break;
+                }
             }
         }
     }

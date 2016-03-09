@@ -68,7 +68,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             this.wizardPageNewAccountPaymentAndBilling = new ShipWorks.UI.Wizard.WizardPage();
             this.paymentAndBillingAddress = new ShipWorks.Shipping.Carriers.Postal.Usps.Registration.PaymentAndBillingAddressControl();
             this.wizardPagePostageMeterAddress = new ShipWorks.UI.Wizard.WizardPage();
-            this.simpleAddressControl1 = new ShipWorks.Shipping.Carriers.Postal.Usps.Registration.SimpleAddressControl();
+            this.postageMeterAddress = new ShipWorks.Data.Controls.AutofillPersonControl();
             this.labelDescription = new System.Windows.Forms.Label();
             this.lableTitle = new System.Windows.Forms.Label();
             this.mainPanel.SuspendLayout();
@@ -102,7 +102,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             // 
             // mainPanel
             // 
-            this.mainPanel.Controls.Add(this.wizardPageWelcome);
+            this.mainPanel.Controls.Add(this.wizardPagePostageMeterAddress);
             this.mainPanel.Size = new System.Drawing.Size(733, 540);
             // 
             // etchBottom
@@ -532,7 +532,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             // 
             // wizardPagePostageMeterAddress
             // 
-            this.wizardPagePostageMeterAddress.Controls.Add(this.simpleAddressControl1);
+            this.wizardPagePostageMeterAddress.Controls.Add(this.postageMeterAddress);
             this.wizardPagePostageMeterAddress.Controls.Add(this.labelDescription);
             this.wizardPagePostageMeterAddress.Controls.Add(this.lableTitle);
             this.wizardPagePostageMeterAddress.Description = "Create a new Stamps.com account for use with ShipWorks";
@@ -543,13 +543,18 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             this.wizardPagePostageMeterAddress.Size = new System.Drawing.Size(733, 540);
             this.wizardPagePostageMeterAddress.TabIndex = 0;
             this.wizardPagePostageMeterAddress.Title = "Account Registration";
+            this.wizardPagePostageMeterAddress.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextPostageMeterAddress);
             // 
-            // simpleAddressControl1
+            // postageMeterAddress
             // 
-            this.simpleAddressControl1.Location = new System.Drawing.Point(56, 88);
-            this.simpleAddressControl1.Name = "simpleAddressControl1";
-            this.simpleAddressControl1.Size = new System.Drawing.Size(344, 134);
-            this.simpleAddressControl1.TabIndex = 2;
+            this.postageMeterAddress.AvailableFields = ((ShipWorks.Data.Controls.PersonFields)((((ShipWorks.Data.Controls.PersonFields.Street | ShipWorks.Data.Controls.PersonFields.City) 
+            | ShipWorks.Data.Controls.PersonFields.State) 
+            | ShipWorks.Data.Controls.PersonFields.Postal)));
+            this.postageMeterAddress.Location = new System.Drawing.Point(56, 68);
+            this.postageMeterAddress.MaxStreetLines = 1;
+            this.postageMeterAddress.Name = "postageMeterAddress";
+            this.postageMeterAddress.Size = new System.Drawing.Size(346, 165);
+            this.postageMeterAddress.TabIndex = 47;
             // 
             // labelDescription
             // 
@@ -669,6 +674,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         private UI.Wizard.WizardPage wizardPagePostageMeterAddress;
         private System.Windows.Forms.Label labelDescription;
         private System.Windows.Forms.Label lableTitle;
-        private SimpleAddressControl simpleAddressControl1;
+        private Data.Controls.AutofillPersonControl postageMeterAddress;
     }
 }
