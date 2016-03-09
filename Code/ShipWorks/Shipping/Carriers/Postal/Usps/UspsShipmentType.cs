@@ -182,6 +182,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         private void EnsureAccountsHaveCurrentContractData()
         {
             Task[] tasks = AccountRepository.Accounts
+                .Where(account => account.PendingInitialAccount != (int)UspsPendingAccountType.Create)
                 .Select(account => Task.Factory.StartNew(() => UpdateContractType(account)))
                 .ToArray();
 

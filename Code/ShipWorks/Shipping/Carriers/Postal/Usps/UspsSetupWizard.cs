@@ -644,8 +644,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <summary>
         /// Excludes the given shipment type from the list of active shipping providers.
         /// </summary>
-        /// <param name="settings">The settings being updated.</param>
-        /// <param name="shipmentTypeToExclude">The shipment type code to be excluded.</param>
         private static void ExcludeShipmentType(ShippingSettingsEntity settings, ShipmentTypeCode shipmentTypeToExclude)
         {
             if (!settings.ExcludedTypes.Any(t => t == (int)shipmentTypeToExclude))
@@ -773,15 +771,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             {
                 case UspsPendingAccountType.None:
                     return;
+
                 case UspsPendingAccountType.Create:
                     if (radioExistingAccount.Checked)
                     {
                         return;
                     }
-
                     e.NextPage = wizardPageNewAccountPaymentAndBilling;
-
                     break;
+
                 case UspsPendingAccountType.Existing:
                     e.NextPage = wizardPageOptions;
                     break;
@@ -804,10 +802,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                     case AssociateShipWorksWithItselfResponseType.Success:
                         e.NextPage = wizardPageOptions;
                         break;
+
                     case AssociateShipWorksWithItselfResponseType.UnknownError:
                         MessageHelper.ShowError(this, response.Message);
                         e.NextPage = CurrentPage;
                         break;
+
                     case AssociateShipWorksWithItselfResponseType.POBoxNotAllowed:
                         break;
                 }
@@ -833,10 +833,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 {
                     case AssociateShipWorksWithItselfResponseType.Success:
                         break;
+
                     case AssociateShipWorksWithItselfResponseType.UnknownError:
                         MessageHelper.ShowError(this, response.Message);
                         e.NextPage = CurrentPage;
                         break;
+
                     case AssociateShipWorksWithItselfResponseType.POBoxNotAllowed:
                         MessageHelper.ShowError(this, response.Message);
                         e.NextPage = CurrentPage;
@@ -855,6 +857,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
             AssociateShipworksWithItselfRequest request =
                 ioc.Resolve<AssociateShipworksWithItselfRequest>(new TypedParameter(typeof (IUspsWebClient), uspsWebClient));
+				
+  	        ICustomerLicense customerLicense = (ICustomerLicense) ioc.Resolve<ILicenseService>().GetLicenses().Single();
 
             request.CardAccountNumber = paymentAndBillingAddress.CardNumber;
             request.CardType = paymentAndBillingAddress.CardType;
@@ -862,6 +866,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             request.CardExpirationMonth = paymentAndBillingAddress.CreditCardExpirationMonth;
             request.CardExpirationYear = paymentAndBillingAddress.CreditCardExpirationYear;
             request.CardBillingAddress = paymentAndBillingAddress.BillingAddress;
+			
+            request.CustomerKey = customerLicense.Key;
 
             return request;
         }

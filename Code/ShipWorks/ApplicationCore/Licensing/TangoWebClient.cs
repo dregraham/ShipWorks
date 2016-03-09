@@ -107,7 +107,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             postRequest.Variables.Add("action", "associateshipworkswithitself");
             postRequest.Variables.Add("license", request.CustomerKey);
 
-            postRequest.Variables.Add("ccholder", request.CardHolder);
+            postRequest.Variables.Add("cc_holder", request.CardHolder);
             postRequest.Variables.Add("cc_cardType", ((int)request.CardType).ToString());
             postRequest.Variables.Add("cc_account_number", request.CardAccountNumber);
             postRequest.Variables.Add("cc_cvn", request.CardCvn);
@@ -118,6 +118,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             postRequest.Variables.Add("cc_billing_state", request.CardBillingAddress.StateProvCode);
             postRequest.Variables.Add("cc_billing_zipcode", request.CardBillingAddress.PostalCode);
             postRequest.Variables.Add("sendMarketingInfo", "false");
+            postRequest.Variables.Add("version", Version);
 
             if(request.MatchedPhysicalAddress != null)
             {
