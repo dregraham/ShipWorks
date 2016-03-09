@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Windows;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Linq;
@@ -94,6 +95,7 @@ using SandMenuItem = Divelements.SandRibbon.MenuItem;
 using Autofac;
 using Interapptive.Shared;
 using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
+using Application = System.Windows.Forms.Application;
 
 namespace ShipWorks
 {
@@ -566,6 +568,8 @@ namespace ShipWorks
                         IDialog customerLicenseActivation = lifetimeScope.ResolveNamed<IDialog>("CustomerLicenseActivationDlg");
                         customerLicenseActivation.DataContext =
                             lifetimeScope.Resolve<ICustomerLicenseActivartionDlgViewModel>();
+                        customerLicenseActivation.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+                        customerLicenseActivation.Topmost = true;
 
                         if (customerLicenseActivation.ShowDialog() ?? false)
                         {
