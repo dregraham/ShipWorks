@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Reactive.Linq;
+using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Messaging.Messages.Shipping;
@@ -15,14 +16,14 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
     /// </summary>
     public class ShipmentDeletedPipeline : IShippingPanelObservableRegistration
     {
-        readonly IObservable<IEntityDeletedMessage> messages;
+        readonly IObservable<IShipWorksMessage> messages;
         private readonly IStoreManager storeManager;
         private readonly IOrderManager orderManager;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShipmentDeletedPipeline(IObservable<IEntityDeletedMessage> messages, IStoreManager storeManager, IOrderManager orderManager)
+        public ShipmentDeletedPipeline(IObservable<IShipWorksMessage> messages, IStoreManager storeManager, IOrderManager orderManager)
         {
             this.messages = messages;
             this.storeManager = storeManager;
