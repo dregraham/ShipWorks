@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Windows;
 using System.Windows.Forms;
 using Autofac;
 using ShipWorks.ApplicationCore.Licensing;
@@ -46,7 +47,8 @@ namespace ShipWorks.ApplicationCore.Dashboard.Content
             using (ILifetimeScope scope = IoC.BeginLifetimeScope())
             {
                 IWebBrowserFactory webBrowser = scope.Resolve<IWebBrowserFactory>();
-                IDialog dialog = webBrowser.Create(new Uri(CustomerLicense.UpgradeUrl), "Upgrade your plan", null);
+                IDialog dialog = webBrowser.Create(new Uri(CustomerLicense.UpgradeUrl), "Upgrade your plan",
+                    DashboardBar, new Size(1053, 1010));
                 dialog.ShowDialog();
             }
         }

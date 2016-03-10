@@ -212,7 +212,7 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         private void UpgradeAccount(Window owner)
         {
             Uri uri = new Uri(CustomerLicense.UpgradeUrl);
-            IDialog browserDlg = webBrowserFactory.Create(uri, "Upgrade your plan", owner);
+            IDialog browserDlg = webBrowserFactory.Create(uri, "Upgrade your plan", owner, new Size(1053, 1010));
             browserDlg.ShowDialog();
 
             Load();
