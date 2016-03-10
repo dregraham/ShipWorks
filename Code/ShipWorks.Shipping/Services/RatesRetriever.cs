@@ -49,8 +49,11 @@ namespace ShipWorks.Shipping.Services
 
             if (!shipmentType.SupportsGetRates)
             {
-                string message = $"The provider \"{shipmentType.ShipmentTypeName}\" does not support retrieving rates.";
-                return GenericResult.FromError(message, new RateGroup(Enumerable.Empty<RateResult>()));
+                string message = $"The carrier \"{shipmentType.ShipmentTypeName}\" does not support retrieving rates.";
+
+                RateGroup rateGroup = new RateGroup(Enumerable.Empty<RateResult>());
+                rateGroup.AddFootnoteFactory(new InformationFootnoteFactory("Select another carrier to get rates."));
+                return GenericResult.FromError(message, rateGroup);
             }
 
             // Ensure data is valid and up-to-date
