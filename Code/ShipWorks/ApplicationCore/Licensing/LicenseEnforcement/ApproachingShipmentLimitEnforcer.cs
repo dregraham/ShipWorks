@@ -18,8 +18,6 @@ namespace ShipWorks.ApplicationCore.Licensing.LicenseEnforcement
         private const float ShipmentLimitExceededThreshold = 1f;
         private const string ApproachingShipmentLimitUrl = "https://www.interapptive.com/shipworks/notifications/shipment-limit/approaching/259854_ShipWorks_Nudge_ShipmentLimit_Approching.html";
         private const string ApproachingShipmentLimitTitle = "Approaching Shipment Limit";
-        private const double BrowserWidth = 1000;
-        private const double BrowserHeight = 1000;
 
         private readonly IWebBrowserFactory webBrowserDlgFactory;
         private readonly ILog log;
@@ -54,8 +52,10 @@ namespace ShipWorks.ApplicationCore.Licensing.LicenseEnforcement
             {
                 if (context == EnforcementContext.Login && enforcementResult.Message != string.Empty)
                 {
-                    IDialog browserDialog = webBrowserDlgFactory.Create(new Uri(ApproachingShipmentLimitUrl),
-                        ApproachingShipmentLimitTitle, owner, new Size(BrowserWidth, BrowserHeight));
+                    Size size = new Size(920, 500);
+                    Uri uri = new Uri(ApproachingShipmentLimitUrl);
+
+                    IDialog browserDialog = webBrowserDlgFactory.Create(uri, ApproachingShipmentLimitTitle, owner, size);
                     browserDialog.ShowDialog();
                 }
             }

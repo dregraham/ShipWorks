@@ -14,8 +14,8 @@ namespace ShipWorks.ApplicationCore.Licensing.LicenseEnforcement
     public class ExceedingShipmentLimitEnforcer : ILicenseEnforcer
     {
         private const int UnlimitedShipments = -1;
-        private const string shipmentLimitExceeded = "http://www.shipworks.com/shipworks/notifications/shipment-limit/exceeded/259854_ShipWorks_Nudge_ShipmentLimit_Exceed.html";
-        private const string title = "Shipment limit exceeded";
+        private const string ShipmentLimitExceeded = "http://www.shipworks.com/shipworks/notifications/shipment-limit/exceeded/259854_ShipWorks_Nudge_ShipmentLimit_Exceed.html";
+        private const string Title = "Shipment Limit Exceeded";
         
         private readonly IWebBrowserFactory webBrowserFactory;
         private readonly ILog log;
@@ -51,9 +51,9 @@ namespace ShipWorks.ApplicationCore.Licensing.LicenseEnforcement
                 try
                 {
                     Size size = new Size(920, 500);
-                    Uri uri = new Uri(shipmentLimitExceeded);
+                    Uri uri = new Uri(ShipmentLimitExceeded);
 
-                    IDialog dialog = webBrowserFactory.Create(uri, title, owner, size);
+                    IDialog dialog = webBrowserFactory.Create(uri, Title, owner, size);
                     dialog.ShowDialog();
                 }
                 catch (ShipWorksLicenseException ex)
