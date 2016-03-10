@@ -1,15 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using ShipWorks.Core.Messaging;
-using Interapptive.Shared.Utility;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Profiles;
-using Interapptive.Shared.Collections;
-using ShipWorks.AddressValidation;
-using ShipWorks.Messaging.Messages;
-using System.Reactive.Linq;
 using System.Reactive.Disposables;
+using System.Reactive.Linq;
+using Interapptive.Shared.Collections;
+using Interapptive.Shared.Utility;
+using ShipWorks.Core.Messaging;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Messaging.Messages;
+using ShipWorks.Shipping.Profiles;
 
 namespace ShipWorks.Shipping
 {
@@ -28,7 +27,7 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Constructor
         /// </summary>
-        public CarrierConfigurationShipmentRefresher(IObservable<IShipWorksMessage> messenger, IShippingErrorManager errorManager, 
+        public CarrierConfigurationShipmentRefresher(IObservable<IShipWorksMessage> messenger, IShippingErrorManager errorManager,
             IShippingProfileManager shippingProfileManager, IShippingManager shippingManager)
         {
             this.messenger = MethodConditions.EnsureArgumentIsNotNull(messenger, "messenger");
@@ -53,7 +52,7 @@ namespace ShipWorks.Shipping
         {
             // Save all loaded shipments in preparation for possibly changing the requested label type
             // This will cause any shipments that have been changed elsewhere to be noted
-            IEnumerable<ShipmentEntity> unprocessedShipments = RetrieveShipments()
+            IEnumerable<ShipmentEntity> unprocessedShipments = AllShipments
                 .Except(shipmentsProcessing, x => x.ShipmentID)
                 .Where(x => !x.Processed);
             IDictionary<ShipmentEntity, Exception> errors = shippingManager.SaveShipmentsToDatabase(unprocessedShipments, true);
@@ -106,7 +105,7 @@ namespace ShipWorks.Shipping
         /// </summary>
         private void UpdateShipments(IEnumerable<ShipmentEntity> shipments, ShipmentTypeCode shipmentTypeCode, int requestedLabelFormat)
         {
-            foreach (ShipmentEntity shipment in shipments.Where(x => x.ShipmentType == (int)shipmentTypeCode))
+            foreach (ShipmentEntity shipment in shipments.Where(x => x.ShipmentType == (int) shipmentTypeCode))
             {
                 shippingManager.RefreshShipment(shipment);
                 shipment.RequestedLabelFormat = requestedLabelFormat;
@@ -117,7 +116,7 @@ namespace ShipWorks.Shipping
         /// Gets a list of all shipments in the current context
         /// </summary>
         /// <returns></returns>
-        private IEnumerable<ShipmentEntity> AllShipments => 
+        private IEnumerable<ShipmentEntity> AllShipments =>
             RetrieveShipments?.Invoke() ?? Enumerable.Empty<ShipmentEntity>();
 
         /// <summary>

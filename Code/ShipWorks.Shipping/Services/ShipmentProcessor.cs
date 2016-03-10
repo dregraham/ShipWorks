@@ -130,7 +130,7 @@ namespace ShipWorks.Shipping.Services
                 WorldShipUtility.LaunchWorldShip(owner);
             }
 
-            RefreshShipSensStatusForUnprocessedShipments(shipmentRefresher, shipmentsToProcess, executionState);
+            RefreshShipSenseStatusForUnprocessedShipments(shipmentRefresher, shipmentsToProcess, executionState);
 
             shipmentRefresher.FinishProcessing();
 
@@ -144,7 +144,7 @@ namespace ShipWorks.Shipping.Services
         /// </summary>
         /// <remarks>This was initially intended to apply ShipSense to all unprocessed shipments outside of
         /// the shipping dialog, but now that we have the shipping panel it applies to more.</remarks>
-        private void RefreshShipSensStatusForUnprocessedShipments(ICarrierConfigurationShipmentRefresher shipmentRefresher,
+        private void RefreshShipSenseStatusForUnprocessedShipments(ICarrierConfigurationShipmentRefresher shipmentRefresher,
             IEnumerable<ShipmentEntity> shipmentsToProcess, ShipmentProcessorExecutionState executionState)
         {
             // Exclude shipments that are in the current context but are not being processed,
@@ -212,7 +212,7 @@ namespace ShipWorks.Shipping.Services
             }
             catch (Exception ex) when (ex is ORMConcurrencyException ||
                                        ex is ObjectDeletedException ||
-                                       ex is SqlForeignKeyException )
+                                       ex is SqlForeignKeyException)
             {
                 errorMessage = errorManager.SetShipmentErrorMessage(shipmentID, ex, "processed");
             }
