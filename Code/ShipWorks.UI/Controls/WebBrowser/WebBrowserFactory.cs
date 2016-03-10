@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Windows;
+using System.Windows.Interop;
 using ShipWorks.ApplicationCore.Licensing;
+using IWin32Window = System.Windows.Forms.IWin32Window;
 
 namespace ShipWorks.UI.Controls.WebBrowser
 {
@@ -22,28 +24,56 @@ namespace ShipWorks.UI.Controls.WebBrowser
         }
 
         /// <summary>
-        /// Creates the specified URI.
+        /// Creates a browser dlg with the given parameters
         /// </summary>
-        public IDialog Create(Uri uri, string title, Window owner)
+        public IDialog Create(Uri uri, string title, Window owner, double height, double width)
         {
-            webBrowserDlgViewModel.Load(uri, title);
-            IDialog browserDlg = webBrowserDlgFactory("WebBrowserDlg");
+            IDialog browserDlg = CreateDialog(uri, title, height, width);
 
-            // If not coming from WPF, this makes it a lot easier...
-            if (owner == null)
-            {
-                browserDlg.WindowStartupLocation = WindowStartupLocation.CenterScreen;
-                browserDlg.Topmost = true;
-            }
-            else
+            if (owner != null)
             {
                 // Set owner
                 browserDlg.Owner = owner;
             }
-
-            browserDlg.DataContext = webBrowserDlgViewModel;
-
+            
             return browserDlg;
+        }
+
+        /// <summary>
+        /// Creates a browser dlg with the given parameters
+        /// </summary>
+        public IDialog Create(Uri uri, string title, IWin32Window owner, double height, double width)
+        {
+            IDialog browserDlg = CreateDialog(uri, title, height, width);
+
+            Window window = browserDlg as Window;
+            if (window != null && owner != null)
+            {
+                new WindowInteropHelper(window) { Owner = owner.Handle };
+            }
+            
+            return browserDlg;
+        }
+
+        /// <summary>
+        /// Creates the dialog using the given parameters
+        /// </summary>
+        private IDialog CreateDialog(Uri uri, string title, double height, double width)
+        {
+            // Create the dialog and set the view model
+            webBrowserDlgViewModel.Load(uri, title);
+            IDialog dialog = webBrowserDlgFactory("WebBrowserDlg");
+            dialog.DataContext = webBrowserDlgViewModel;
+
+            // Set the dimensions
+            Window window = dialog as Window;
+            if (window != null)
+            {
+                window.Height = height;
+                window.Width = width;
+            }
+
+            return dialog;
         }
     }
 }

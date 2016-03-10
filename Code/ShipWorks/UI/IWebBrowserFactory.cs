@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows;
+using System.Windows.Forms;
 using ShipWorks.ApplicationCore.Licensing;
 
 namespace ShipWorks.UI
@@ -12,6 +13,11 @@ namespace ShipWorks.UI
         /// <summary>
         /// Creates an IDialog with the given URI and title
         /// </summary>
-        IDialog Create(Uri uri, string title, Window owner);
+        IDialog Create(Uri uri, string title, Window owner, double height, double width);
+
+        /// <summary>
+        /// Creates an IDialog with the given URI and title
+        /// </summary>
+        IDialog Create(Uri uri, string title, IWin32Window owner, double height, double width);
     }
 }
