@@ -206,6 +206,7 @@
     <Compile Include="ApplicationCore\Licensing\AddStoreResponseTest.cs" />
     <Compile Include="ApplicationCore\Licensing\Activation\CustomerLicenseActivationServiceTest.cs" />
     <Compile Include="ApplicationCore\Licensing\AssociateShipworksWithItselfRequestTest.cs" />
+    <Compile Include="ApplicationCore\Licensing\AssociateShipworksWithItselfResponseTest.cs" />
     <Compile Include="ApplicationCore\Licensing\CustomerLicenseTest.cs" />
     <Compile Include="ApplicationCore\Licensing\DisabledLicenseTest.cs" />
     <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\EndiciaConsolidatorRestrictionTest.cs" />

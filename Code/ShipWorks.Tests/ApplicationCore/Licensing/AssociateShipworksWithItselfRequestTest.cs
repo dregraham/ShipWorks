@@ -65,7 +65,9 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
 
             testObject.PhysicalAddress = new PersonAdapter();
 
-            Assert.Throws<AddressValidationException>(()=> testObject.Execute());          
+            var result = testObject.Execute();
+
+            Assert.Equal(AssociateShipWorksWithItselfResponseType.AddressValidationFailed, result.ResponseType);
         }
 
         [Fact]
