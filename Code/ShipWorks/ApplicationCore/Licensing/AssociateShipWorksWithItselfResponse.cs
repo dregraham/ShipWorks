@@ -1,12 +1,11 @@
 ﻿using Interapptive.Shared.Utility;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Xml;
 
 namespace ShipWorks.ApplicationCore.Licensing
 {
+    /// <summary>
+    /// Response from AssociateShipWorksWithItselfRequest
+    /// </summary>
     public class AssociateShipWorksWithItselfResponse
     {
         public AssociateShipWorksWithItselfResponseType ResponseType { get; private set; }
@@ -18,14 +17,13 @@ namespace ShipWorks.ApplicationCore.Licensing
         public AssociateShipWorksWithItselfResponse(XmlDocument xmlResponse)
         {
             XPathNamespaceNavigator navigator = new XPathNamespaceNavigator(xmlResponse);
-
             string error = XPathUtility.Evaluate(navigator, "//Error/Code", string.Empty);
 
             if (string.IsNullOrEmpty(error))
             {
                 ResponseType = AssociateShipWorksWithItselfResponseType.Success;
             }
-            else if (error=="100")
+            else if (error == EnumHelper.GetApiValue(AssociateShipWorksWithItselfResponseType.POBoxNotAllowed))
             {
                 ResponseType = AssociateShipWorksWithItselfResponseType.POBoxNotAllowed;
                 Message = EnumHelper.GetDescription(ResponseType);

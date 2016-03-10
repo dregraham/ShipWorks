@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using Interapptive.Shared.Utility;
+using System.ComponentModel;
 using System.Reflection;
 
 namespace ShipWorks.ApplicationCore.Licensing
@@ -13,6 +14,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         UnknownError = 1,
 
         [Description("PO Box Not Allowed")]
+        [ApiValue("100")]
         POBoxNotAllowed = 2,
 
         [Description("Could not validate address.")]

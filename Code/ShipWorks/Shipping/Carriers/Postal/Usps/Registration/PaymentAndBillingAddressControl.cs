@@ -72,6 +72,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Registration
             {
                 PersonAdapter billingAddressAdapter = new PersonAdapter();
                 billingAddress.SaveToEntity(billingAddressAdapter);
+
                 return billingAddressAdapter;
             }
         }

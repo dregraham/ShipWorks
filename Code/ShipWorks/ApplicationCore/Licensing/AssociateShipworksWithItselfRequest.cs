@@ -7,12 +7,18 @@ using Interapptive.Shared.Utility;
 
 namespace ShipWorks.ApplicationCore.Licensing
 {
+    /// <summary>
+    /// A Request to associate a shipworks account with a new stamps account that
+    /// stamps creates when a user creates a shipworks account.
+    /// </summary>
     public class AssociateShipworksWithItselfRequest
     {
-        readonly IUspsWebClient uspsWebClient;
+        private readonly IUspsWebClient uspsWebClient;
+        private readonly ITangoWebClient tangoWebClient;
 
-        readonly ITangoWebClient tangoWebClient;
-
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AssociateShipworksWithItselfRequest"/> class.
+        /// </summary>
         public AssociateShipworksWithItselfRequest(IUspsWebClient uspsWebClient, ITangoWebClient tangoWebClient)
         {
             this.uspsWebClient = uspsWebClient;
@@ -96,19 +102,20 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public AssociateShipWorksWithItselfResponse Execute()
         {
-            if(!ValidatePhysicalAddressIfRequired())
+            if(!IsPhysicalAddressValid())
             {
                 return new AssociateShipWorksWithItselfResponse(
                     AssociateShipWorksWithItselfResponseType.AddressValidationFailed, 
                     EnumHelper.GetDescription(AssociateShipWorksWithItselfResponseType.AddressValidationFailed));
             }
+
             return tangoWebClient.AssociateShipworksWithItself(this);
         }
 
         /// <summary>
         /// If PhysicalAddress set, calls AddressValidation to populate MatchedAddress
         /// </summary>
-        private bool ValidatePhysicalAddressIfRequired()
+        private bool IsPhysicalAddressValid()
         {
             if (PhysicalAddress == null)
             {

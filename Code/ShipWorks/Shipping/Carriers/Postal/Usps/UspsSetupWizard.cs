@@ -824,14 +824,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         }
 
         /// <summary>
-        /// 
+        /// Populates the account from the AssociateShipworksWithItselfRequest
         /// </summary>
         private void PopulateAccountFromAssociateShipworksWithItselfRequest(AssociateShipworksWithItselfRequest request)
         {
             PersonAdapter accountAddress = request.MatchedPersonAdapter ?? request.CardBillingAddress;
             accountAddress.ParsedName = PersonName.Parse(request.CardHolderName);
 
-            var accountAdapter = new PersonAdapter(UspsAccount, "");
+            PersonAdapter accountAdapter = new PersonAdapter(UspsAccount, "");
             PersonAdapter.Copy(accountAddress, accountAdapter);
 
             UspsAccount.Description = UspsAccountManager.GetDefaultDescription(UspsAccount);
