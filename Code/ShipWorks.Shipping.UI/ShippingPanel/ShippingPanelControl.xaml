@@ -33,13 +33,6 @@
             <vc:ShipmentTypeToOriginAddressesConverter x:Key="ShipmentTypeToOriginAddresses" />
             <vc:ShipmentTypeToAccountsConverter x:Key="ShipmentTypeToAccountsConverter" />
             <vc:OriginAddressListConverter x:Key="OriginAddressList" />
-            <Thickness x:Key="SectionMargin" Left="0" Top="6" Right="0" Bottom="0" />
-            <Style TargetType="Border">
-                <Setter Property="BorderBrush" Value="Gray" />
-                <Setter Property="BorderThickness" Value="1" />
-                <Setter Property="CornerRadius" Value="2" />
-                <Setter Property="Margin" Value="{StaticResource SectionMargin}" />
-            </Style>
         </ResourceDictionary>
     </UserControl.Resources>
 
@@ -90,7 +83,7 @@
                         <Expander
                             IsEnabled="True"
                         IsExpanded="{Binding IsOriginExpanded, Source={x:Static ui:ExpanderState.Current}, Mode=TwoWay, FallbackValue=True}"
-                        Style="{StaticResource ExpanderStyle}">
+                        Style="{StaticResource Expander.Style}">
                             <Expander.Header>
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock Margin="0,0,8,0">From</TextBlock>
@@ -168,7 +161,7 @@
                     <Border>
                         <Expander Header="{Binding}"
                               IsExpanded="{Binding IsDestinationExpanded, Source={x:Static ui:ExpanderState.Current}, Mode=TwoWay, FallbackValue=True}"
-                              Style="{StaticResource ExpanderStyle}">
+                              Style="{StaticResource Expander.Style}">
                             <Expander.HeaderTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Vertical">
@@ -215,7 +208,7 @@
                         <Expander Header="Shipment Details"
                               IsExpanded="{Binding IsDetailsExpanded, Source={x:Static ui:ExpanderState.Current}, Mode=TwoWay, FallbackValue=True}"
                               DataContext="{Binding ShipmentViewModel}"
-                              Style="{StaticResource ExpanderStyle}">
+                              Style="{StaticResource Expander.Style}">
 
                             <StackPanel IsEnabled="{Binding DataContext.AllowEditing,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:ShippingPanelControl}}}">
                                 <shipmentControl:ShipmentControl Visibility="{
@@ -235,7 +228,7 @@
                             Visibility="{Binding CustomsAllowed, Converter={StaticResource BooleanToVisibility}}">
                         <Expander Header="Customs"
                                   IsExpanded="{Binding IsCustomsExpanded, Source={x:Static ui:ExpanderState.Current}, Mode=TwoWay, FallbackValue=True}"
-                                  Style="{StaticResource ExpanderStyle}">
+                                  Style="{StaticResource Expander.Style}">
                             <customsControl:CustomsControl IsEnabled="{Binding DataContext.AllowEditing,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:ShippingPanelControl}}}" />
                         </Expander>
                     </Border>

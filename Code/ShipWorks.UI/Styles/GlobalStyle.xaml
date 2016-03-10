@@ -15,6 +15,8 @@
         <Setter Property="FontWeight" Value="Normal"></Setter>
     </Style>
 
+    <Thickness x:Key="SectionMargin" Left="0" Top="6" Right="0" Bottom="0" />
+
     <Style TargetType="Hyperlink">
         <Setter Property="Foreground" Value="#FF0000FF"></Setter>
     </Style>
