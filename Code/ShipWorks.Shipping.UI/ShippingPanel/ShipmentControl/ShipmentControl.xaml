@@ -215,25 +215,16 @@
                 <TextBox Width="40" Margin="1 0 5 0" x:Name="dimsLength" Style="{DynamicResource TextBoxErrorTemplate}"
                     Text="{Binding DimsLength, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,
                         ValidatesOnDataErrors=true, NotifyOnValidationError=true}" >
-                    <i:Interaction.Behaviors>
-                        <ui:TextBoxInputRegExBehavior RegularExpression="^-?\d+(,\d+)*(\.\d+(e\d+)?)?(\.)?$" EmptyValue="" MaxLength="3" />
-                    </i:Interaction.Behaviors>
                 </TextBox>
                 <TextBlock Margin="10 1 0 0">W:</TextBlock>
                 <TextBox Width="40" Margin="1 0 5 0" Style="{DynamicResource TextBoxErrorTemplate}"
                     Text="{Binding DimsWidth, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,
                         ValidatesOnDataErrors=true, NotifyOnValidationError=true}">
-                    <i:Interaction.Behaviors>
-                        <ui:TextBoxInputRegExBehavior RegularExpression="^-?\d+(,\d+)*(\.\d+(e\d+)?)?(\.)?$" EmptyValue="0" MaxLength="3" />
-                    </i:Interaction.Behaviors>
                 </TextBox>
                 <TextBlock Margin="10 1 0 0">H:</TextBlock>
                 <TextBox Width="40" Margin="1 0 5 0" Style="{DynamicResource TextBoxErrorTemplate}"
                     Text="{Binding DimsHeight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,
                         ValidatesOnDataErrors=true, NotifyOnValidationError=true}" >
-                    <i:Interaction.Behaviors>
-                        <ui:TextBoxInputRegExBehavior RegularExpression="^-?\d+(,\d+)*(\.\d+(e\d+)?)?(\.)?$" EmptyValue="0" MaxLength="3" />
-                    </i:Interaction.Behaviors>
                 </TextBox>
                 <TextBlock Margin="10 1 0 0">in.</TextBlock>
             </StackPanel>
