@@ -273,8 +273,13 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         /// </summary>
         private void SaveInsuranceToSelectedPackageAdapter()
         {
-            SelectedPackageAdapter.InsuranceChoice.InsuranceValue = InsuranceViewModel.DeclaredValue;
+            if (SelectedPackageAdapter?.InsuranceChoice == null)
+            {
+                return;
+            }
+
             SelectedPackageAdapter.InsuranceChoice.Insured = InsuranceViewModel.Insurance;
+            SelectedPackageAdapter.InsuranceChoice.InsuranceValue = InsuranceViewModel.DeclaredValue;
         }
 
         /// <summary>

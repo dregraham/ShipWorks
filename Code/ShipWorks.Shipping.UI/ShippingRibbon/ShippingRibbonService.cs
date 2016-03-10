@@ -53,6 +53,7 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
             shippingRibbonActions.ShipAgain.Activate += OnShipAgain;
 
             subscription = new CompositeDisposable(
+                messages.OfType<ShipmentChangedMessage>().Subscribe(HandleShipmentChanged),
                 messages.OfType<OrderSelectionChangedMessage>().Subscribe(HandleOrderSelectionChanged),
                 messages.OfType<ShipmentsProcessedMessage>().Subscribe(HandleShipmentsProcessed),
                 messages.OfType<ShipmentsVoidedMessage>().Subscribe(HandleLabelsVoided)
@@ -178,17 +179,38 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
         }
 
         /// <summary>
+        /// Handle order selection changed message
+        /// </summary>
+        private void HandleShipmentChanged(ShipmentChangedMessage message)
+        {
+            currentShipment = message.ShipmentAdapter.Shipment;
+            SetEnabledOnButtons();
+        }
+
+        /// <summary>
         /// Update which buttons are enabled and which are disabled
         /// </summary>
         private void SetEnabledOnButtons()
         {
             if (currentShipment != null)
             {
-                shippingRibbonActions.CreateLabel.Enabled = !currentShipment.Processed;
-                shippingRibbonActions.Void.Enabled = currentShipment.Processed && !currentShipment.Voided;
-                shippingRibbonActions.Return.Enabled = currentShipment.Processed && !currentShipment.Voided;
-                shippingRibbonActions.Reprint.Enabled = currentShipment.Processed && !currentShipment.Voided;
-                shippingRibbonActions.ShipAgain.Enabled = currentShipment.Processed;
+                // No action is allowed for None shipment type
+                if (currentShipment.ShipmentTypeCode == ShipmentTypeCode.None)
+                {
+                    shippingRibbonActions.CreateLabel.Enabled = false;
+                    shippingRibbonActions.Void.Enabled = false;
+                    shippingRibbonActions.Return.Enabled = false;
+                    shippingRibbonActions.Reprint.Enabled = false;
+                    shippingRibbonActions.ShipAgain.Enabled = false;
+                }
+                else
+                {
+                    shippingRibbonActions.CreateLabel.Enabled = !currentShipment.Processed;
+                    shippingRibbonActions.Void.Enabled = currentShipment.Processed && !currentShipment.Voided;
+                    shippingRibbonActions.Return.Enabled = currentShipment.Processed && !currentShipment.Voided;
+                    shippingRibbonActions.Reprint.Enabled = currentShipment.Processed && !currentShipment.Voided;
+                    shippingRibbonActions.ShipAgain.Enabled = currentShipment.Processed;
+                }
             }
             else
             {
