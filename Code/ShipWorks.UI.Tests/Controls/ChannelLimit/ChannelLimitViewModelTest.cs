@@ -88,7 +88,7 @@ namespace ShipWorks.UI.Tests.Controls.ChannelLimit
             {
                 var dialog = mock.Mock<IDialog>();
                 var webBrowserFactory = mock.Mock<IWebBrowserFactory>();
-                webBrowserFactory.Setup(w => w.Create(It.IsAny<Uri>(), It.IsAny<string>(), It.IsAny<Window>(), It.IsAny<double>(), It.IsAny<double>())).Returns(dialog.Object);
+                webBrowserFactory.Setup(w => w.Create(It.IsAny<Uri>(), It.IsAny<string>(), It.IsAny<Window>(), It.IsAny<Size>())).Returns(dialog.Object);
                 var behavior = MockChannelLimitBehavior(mock);
 
                 Mock<ICustomerLicense> license = mock.Mock<ICustomerLicense>();

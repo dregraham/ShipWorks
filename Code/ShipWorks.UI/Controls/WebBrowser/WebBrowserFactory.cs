@@ -26,9 +26,9 @@ namespace ShipWorks.UI.Controls.WebBrowser
         /// <summary>
         /// Creates a browser dlg with the given parameters
         /// </summary>
-        public IDialog Create(Uri uri, string title, Window owner, double height, double width)
+        public IDialog Create(Uri uri, string title, Window owner, Size size)
         {
-            IDialog browserDlg = CreateDialog(uri, title, height, width);
+            IDialog browserDlg = CreateDialog(uri, title, size);
 
             if (owner != null)
             {
@@ -42,9 +42,9 @@ namespace ShipWorks.UI.Controls.WebBrowser
         /// <summary>
         /// Creates a browser dlg with the given parameters
         /// </summary>
-        public IDialog Create(Uri uri, string title, IWin32Window owner, double height, double width)
+        public IDialog Create(Uri uri, string title, IWin32Window owner, Size size)
         {
-            IDialog browserDlg = CreateDialog(uri, title, height, width);
+            IDialog browserDlg = CreateDialog(uri, title, size);
 
             Window window = browserDlg as Window;
             if (window != null && owner != null)
@@ -58,7 +58,7 @@ namespace ShipWorks.UI.Controls.WebBrowser
         /// <summary>
         /// Creates the dialog using the given parameters
         /// </summary>
-        private IDialog CreateDialog(Uri uri, string title, double height, double width)
+        private IDialog CreateDialog(Uri uri, string title, Size size)
         {
             // Create the dialog and set the view model
             webBrowserDlgViewModel.Load(uri, title);
@@ -69,8 +69,8 @@ namespace ShipWorks.UI.Controls.WebBrowser
             Window window = dialog as Window;
             if (window != null)
             {
-                window.Height = height;
-                window.Width = width;
+                window.Height = size.Height;
+                window.Width = size.Width;
             }
 
             return dialog;
