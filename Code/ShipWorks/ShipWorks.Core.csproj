@@ -643,6 +643,7 @@
     <Compile Include="ApplicationCore\ICheckForChangesNeeded.cs" />
     <Compile Include="ApplicationCore\IInitializeForCurrentDatabase.cs" />
     <Compile Include="ApplicationCore\IInitializeForCurrentSession.cs" />
+    <Compile Include="ApplicationCore\IInitializeForCurrentUISession.cs" />
     <Compile Include="ApplicationCore\IoC.cs" />
     <Compile Include="ApplicationCore\IRegisterDockableWindow.cs" />
     <Compile Include="ApplicationCore\Licensing\FakeTangoWebClient.cs" />
@@ -10497,6 +10498,7 @@
     <None Include="Resources\house.png" />
     <None Include="Resources\island.jpg" />
     <None Include="Resources\island.png" />
+    <None Include="Resources\box_next_32_32.png" />
     <Content Include="Resources\info.png" />
     <Resource Include="Resources\info_20x20.png" />
     <Content Include="Resources\message32.png" />

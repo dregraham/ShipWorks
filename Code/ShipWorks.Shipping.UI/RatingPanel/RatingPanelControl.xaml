@@ -51,6 +51,7 @@
                 <DataGrid.RowStyle>
                     <Style TargetType="DataGridRow">
                         <Setter Property="IsEnabled" Value="{Binding Selectable}"></Setter>
+                        <Setter Property="Height" Value="20"></Setter>
                     </Style>
                 </DataGrid.RowStyle>
                 <DataGrid.Columns>
@@ -64,10 +65,12 @@
                     </DataGridTemplateColumn>
                     <DataGridTextColumn Header="Service" 
                                         Width="*"
-                                        Binding="{Binding Description}"  >
-                        </DataGridTextColumn>
+                                        Binding="{Binding Description}" 
+                                        ElementStyle="{StaticResource ShipWorksDataGrid.ElementStyleVerticalCenter}">
+                    </DataGridTextColumn>
                     <DataGridTextColumn Header="Days"
-                                        Binding="{Binding Days}" />
+                                        Binding="{Binding Days}"
+                                        ElementStyle="{StaticResource ShipWorksDataGrid.ElementStyleVerticalCenter}" />
                     <DataGridTextColumn Header="Shipping"
                                         ElementStyle="{StaticResource ShipWorksDataGrid.AmountStyleGray}"
                                         Visibility="{Binding DataContext.ShowShipping,
@@ -96,7 +99,7 @@
             <Border Grid.Row="1"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
-                    Margin="5 25 0 0"
+                    Margin="5, 32, 0, 0"
                     Visibility="{Binding ShowEmptyMessage, Converter={StaticResource BooleanToVisibility}}">
                 <TextBlock Text="{Binding EmptyMessage}" Style="{StaticResource EmptyTextStyle}" />
             </Border>

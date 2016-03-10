@@ -9,7 +9,7 @@ using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Messaging.Messages.Shipping;
+using ShipWorks.Messaging.Messages;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.UI.ShippingPanel;
@@ -72,18 +72,17 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         public async Task CreateLabel_ReloadsShipment_WhenProcessingFails()
         {
             testObject = context.Mock.Create<ShippingPanelViewModel>();
-            var source = new TaskCompletionSource<ShipmentsProcessedMessage>();
-
-            subscription = Messenger.Current.OfType<ShipmentsProcessedMessage>()
-                .Subscribe(x => source.SetResult(x));
+            var source = new TaskCompletionSource<ShipmentChangedMessage>();
 
             testObject.Populate(context.Mock.Create<CarrierShipmentAdapterFactory>().Get(shipment));
+            subscription = Messenger.Current.OfType<ShipmentChangedMessage>().Subscribe(x => source.SetResult(x));
+
             testObject.CreateLabelCommand.Execute(null);
 
             var message = await source.Task;
 
             Assert.Equal(testObject.ShipmentAdapter.Shipment.RowVersion,
-                message.Shipments.FirstOrDefault().Shipment.RowVersion);
+                message.ShipmentAdapter.Shipment.RowVersion);
         }
 
         [Fact]

@@ -15,7 +15,7 @@ namespace ShipWorks.Shipping.Services
     /// <summary>
     /// Service that retrieves rates when shipments change
     /// </summary>
-    public class RatesRetrieverService : IInitializeForCurrentSession, IDisposable
+    public class RatesRetrieverService : IInitializeForCurrentUISession, IDisposable
     {
         const double ThrottleTime = 250;
         private readonly IMessenger messenger;

@@ -452,7 +452,17 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
 
             AllowEditing = false;
 
-            messenger.Send(new OpenShippingDialogMessage(this, new[] { Shipment }));
+            // If there's no shipment and multiple order ids, send the message to open the shipping
+            // dialog with order ids.
+            // Otherwise, send the single shipment message if the shipment isn't null.
+            if (Shipment == null && selectedOrderIds.Length > 1)
+            {
+                messenger.Send(new OpenShippingDialogWithOrdersMessage(this, selectedOrderIds));
+            }
+            else if (Shipment != null)
+            {
+                messenger.Send(new OpenShippingDialogMessage(this, new []{ Shipment }));
+            }
         }
 
         /// <summary>

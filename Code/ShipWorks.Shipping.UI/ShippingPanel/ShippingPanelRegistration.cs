@@ -33,7 +33,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
                 TabIndex = 1
             };
 
-            new DockableWindow(dockManager, panelShipment, "Shipment")
+            new DockableWindow(dockManager, panelShipment, "Quick Ship")
             {
                 BorderStyle = TD.SandDock.Rendering.BorderStyle.Flat,
                 Guid = new Guid("574C96CC-5D02-4689-9463-4FB4DBCE22AD"),

@@ -37,7 +37,7 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
             createLabelButton = new RibbonButton
             {
                 Guid = new Guid("ec40e12c-fa12-4b2b-8b81-0fed6863162e"),
-                Image = GetImgeResource("buttonCreateLabel.Image"),
+                Image = Properties.Resources.box_next_32_32,
                 Padding = new WidgetEdges(10, 2, 10, 2),
                 Text = "Create\r\nLabel",
                 TextContentRelation = TextContentRelation.Underneath,
@@ -140,7 +140,7 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
         /// </summary>
         private Image GetImgeResource(string name)
         {
-            return (Image) resources.GetObject("buttonCreateLabel.Image");
+            return (Image) resources.GetObject(name);
         }
 
         /// <summary>

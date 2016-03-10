@@ -154,6 +154,7 @@ namespace ShipWorks.ApplicationCore
 
             builder.RegisterAssemblyTypes(allAssemblies)
                 .Where(x => x.IsAssignableTo<IInitializeForCurrentSession>() ||
+                    x.IsAssignableTo<IInitializeForCurrentUISession>() ||
                     x.IsAssignableTo<ICheckForChangesNeeded>() ||
                     x.IsAssignableTo<IInitializeForCurrentDatabase>() ||
                     x.IsAssignableTo<IMainFormElementRegistration>())

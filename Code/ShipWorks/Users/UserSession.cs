@@ -143,7 +143,7 @@ namespace ShipWorks.Users
         /// Required initialization that must take place after a user logs in to get various resources and managers ready
         /// </summary>
         [NDependIgnoreLongMethod]
-        public static void InitializeForCurrentSession()
+        public static void InitializeForCurrentSession(ExecutionMode executionMode)
         {
             ServiceStatusManager.InitializeForCurrentSession();
             ObjectLabelManager.InitializeForCurrentSession();
@@ -180,6 +180,14 @@ namespace ShipWorks.Users
             foreach (IInitializeForCurrentSession service in lifetimeScope.Resolve<IEnumerable<IInitializeForCurrentSession>>())
             {
                 service.InitializeForCurrentSession();
+            }
+
+            if (executionMode.IsUISupported)
+            {
+                foreach (IInitializeForCurrentUISession service in lifetimeScope.Resolve<IEnumerable<IInitializeForCurrentUISession>>())
+                {
+                    service.InitializeForCurrentSession();
+                }
             }
         }
 

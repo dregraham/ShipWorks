@@ -122,7 +122,7 @@ namespace ShipWorks.Stores.Management
             {
                 // Initialize the session
                 UserManager.InitializeForCurrentUser();
-                UserSession.InitializeForCurrentSession();
+                UserSession.InitializeForCurrentSession(Program.ExecutionMode);
 
                 originalWizard.BeginInvoke(new MethodInvoker(originalWizard.Hide));
 

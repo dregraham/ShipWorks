@@ -25,7 +25,7 @@ namespace ShipWorks.Shipping.Services
     /// <summary>
     /// Service that handles printing labels
     /// </summary>
-    public class LabelPrintingService : IInitializeForCurrentSession
+    public class LabelPrintingService : IInitializeForCurrentUISession
     {
         private readonly IMessageHelper messageHelper;
         private readonly IObservable<IShipWorksMessage> messages;
