@@ -29,7 +29,7 @@ namespace ShipWorks.UI.Services
         /// <summary>
         /// Show an information message
         /// </summary>
-        public void ShowInformation(string message) => MessageHelper.ShowMessage(ownerFactory(), message);
+        public void ShowInformation(string message) => MessageHelper.ShowInformation(ownerFactory(), message);
 
         /// <summary>
         /// Show a new progress dialog

@@ -4,20 +4,18 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:ShipWorks.Shipping.UI.ShippingPanel.Insurance"
-             mc:Ignorable="d" d:DesignWidth="300" Height="24.538">
+             mc:Ignorable="d" d:DesignWidth="300" >
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/ShipWorks.Shipping.UI;component/Styles/Controls/LinkButton.xaml"/>
+                <ResourceDictionary Source="/ShipWorks.UI;component/Styles/GlobalStyle.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <StackPanel  Orientation="Horizontal">
-        <Image Width="16" Height="16" Margin="0 0 0 0"
-                Visibility="{Binding InfoTipVisibility, FallbackValue=Visible}"
-                VerticalAlignment="Center"
-                Source="/ShipWorks.Core;component/Resources/InfoTip.png">
+    <StackPanel Orientation="Horizontal">
+        <Image Style="{StaticResource Image.InfoTip}" Margin="0 6 0 0"
+               Visibility="{Binding InfoTipVisibility, FallbackValue=Visible}" >
             <Image.ToolTip>
                 <ToolTip>
                     <Grid>
@@ -29,10 +27,11 @@
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
 
-                        <Image Grid.Row="0" Grid.Column="0" Width="22" Height="22" Margin="2 4 5 2"
-                            Source="/ShipWorks.Core;component/Resources/info_20x20.png"
-                            VerticalAlignment="Top"
-                            Stretch="None"/>
+                        <Image Grid.Row="0" Grid.Column="0" 
+                               Style="{StaticResource Image.Info20x20}"
+                               Margin="2 4 5 2"
+                               VerticalAlignment="Top"
+                               Stretch="None"/>
 
                         <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Vertical" VerticalAlignment="Center">
                             <TextBlock Text="{Binding InsuranceInfoTipCaptionText}" FontWeight="Bold"></TextBlock>
@@ -50,7 +49,7 @@
         <Button Margin="5 0 0 0" VerticalAlignment="Center"
                 Visibility="{Binding LinkVisibility, FallbackValue=Visible}"
                 Content="{Binding Path=InsuranceLinkDisplayText, FallbackValue='$50.00'}"
-                Style="{StaticResource LinkButtonStyle}"
+                Style="{DynamicResource Button.Link}"
                 Command="{Binding ShowInsurancePromoDialogCommand}"
                 />
     </StackPanel>

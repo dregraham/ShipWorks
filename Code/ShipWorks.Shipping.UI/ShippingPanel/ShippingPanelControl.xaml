@@ -18,10 +18,9 @@
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/ShipWorks.Shipping.UI;component/Styles/GlobalStyle.xaml" />
-                <ResourceDictionary Source="Styles/ShipWorksExpanderStyle.xaml"/>
-                <ResourceDictionary Source="Styles/ServiceControlStyle.xaml" />
-                <ResourceDictionary Source="/ShipWorks.Shipping.UI;component/Styles/Controls/LinkButton.xaml"/>
+                <ResourceDictionary Source="/ShipWorks.UI;component/Styles/GlobalStyle.xaml" />
+                <ResourceDictionary Source="/ShipWorks.UI;component/Styles/ShipWorksExpanderStyle.xaml"/>
+                
                 <ResourceDictionary Source="/ShipWorks.Shipping.UI;component/Templates/TextBoxErrorTemplate.xaml"/>
             </ResourceDictionary.MergedDictionaries>
             <ui:VisibleWhenEqualToParameterConverter x:Key="VisibleWhenEqualToParameter" />
@@ -247,29 +246,33 @@
 
                 <StackPanel Margin="5,5"
                             Visibility="{Binding ShipmentType,Converter={StaticResource VisibleWhenEqualToParameter},ConverterParameter={x:Static sw:ShipmentTypeCode.None}}">
-                    <TextBlock>Select a shipping carrier from the list above.</TextBlock>
+                    <TextBlock Style="{StaticResource EmptyTextStyle}">Select a shipping carrier from the list above.</TextBlock>
                 </StackPanel>
                 <StackPanel Margin="5,5">
-                    <TextBlock Margin="0, 0, 0, 5">Need to configure specific shipment options?</TextBlock>
-                    <WrapPanel Orientation="Horizontal">
-                        <Button Margin="0,0,2,0" Content="Click here" Command="{Binding OpenShippingDialogCommand}" Style="{StaticResource LinkButtonStyle}" />
-                        <TextBlock TextWrapping="WrapWithOverflow">to use the Shipping Dialog.</TextBlock>
-                    </WrapPanel>
+                    <TextBlock Style="{StaticResource EmptyTextStyle}" 
+                               TextWrapping="WrapWithOverflow"
+                               Margin="0, 0, 0, 5">
+                        Need to configure specific shipment options?
+                        <Hyperlink Command="{Binding OpenShippingDialogCommand}">Click here </Hyperlink>
+                        to use the Ship Orders dialog.
+                    </TextBlock>
                 </StackPanel>
             </StackPanel>
             <StackPanel Margin="5,5">
                 <StackPanel Visibility="{Binding LoadedShipmentResult,Converter={StaticResource VisibleWhenEqualToParameter},ConverterParameter={x:Static sw:ShippingPanelLoadedShipmentResult.Multiple}}">
-                    <TextBlock Margin="0, 0, 0, 5">Need to configure create labels for multiple shipments?</TextBlock>
-                    <WrapPanel Orientation="Horizontal">
-                        <Button Margin="0,0,2,0" Content="Click here" Command="{Binding OpenShippingDialogCommand}" Style="{StaticResource LinkButtonStyle}" />
-                        <TextBlock TextWrapping="WrapWithOverflow">to use the Shipping Dialog.</TextBlock>
-                    </WrapPanel>
+                    <TextBlock Style="{StaticResource EmptyTextStyle}" 
+                               TextWrapping="WrapWithOverflow"
+                               Margin="0, 0, 0, 5">
+                        Need to configure create labels for multiple shipments?
+                        <Hyperlink Command="{Binding OpenShippingDialogCommand}">Click here </Hyperlink>
+                        to use the Ship Orders dialog.
+                    </TextBlock>
                 </StackPanel>
                 <StackPanel Visibility="{Binding LoadedShipmentResult,Converter={StaticResource VisibleWhenEqualToParameter},ConverterParameter={x:Static sw:ShippingPanelLoadedShipmentResult.Deleted}}">
-                    <TextBlock>Shipment has been deleted.</TextBlock>
+                    <TextBlock Style="{StaticResource EmptyTextStyle}">Shipment has been deleted.</TextBlock>
                 </StackPanel>
                 <StackPanel Visibility="{Binding LoadedShipmentResult,Converter={StaticResource VisibleWhenEqualToParameter},ConverterParameter={x:Static sw:ShippingPanelLoadedShipmentResult.NotCreated}}">
-                    <TextBlock>No shipments were found for this order.  Shipment auto creation is probably turned off.</TextBlock>
+                    <TextBlock Style="{StaticResource EmptyTextStyle}">No shipments were found for this order.  Shipment auto creation is probably turned off.</TextBlock>
                 </StackPanel>
             </StackPanel>
         </StackPanel>

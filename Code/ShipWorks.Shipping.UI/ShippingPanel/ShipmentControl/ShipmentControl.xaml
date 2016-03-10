@@ -12,15 +12,12 @@
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/ShipWorks.Shipping.UI;component/ShippingPanel/Styles/ServiceControlStyle.xaml"/>
-                <ResourceDictionary Source="/ShipWorks.Shipping.UI;component/Styles/EmptyButtonStyle.xaml"/>
-                <ResourceDictionary Source="/ShipWorks.Shipping.UI;component/Styles/Controls/LinkButton.xaml"/>
+                <ResourceDictionary Source="/ShipWorks.UI;component/Styles/GlobalStyle.xaml"/>
+                
                 <ResourceDictionary Source="/ShipWorks.Shipping.UI;component/Templates/BlinkingRedErrorTemplate.xaml"/>
                 <ResourceDictionary Source="/ShipWorks.Shipping.UI;component/Templates/TextBoxErrorTemplate.xaml"/>
                 <ResourceDictionary Source="/ShipWorks.Shipping.UI;component/Templates/DatePickerErrorTemplate.xaml"/>
             </ResourceDictionary.MergedDictionaries>
-
-            <SolidColorBrush x:Key="brushWatermarkForeground" Color="LightSteelBlue" />
 
             <ui:VisibleWhenEqualToParameterConverter x:Key="VisibleWhenEqualToParameter" />
             <ui:VisibleWhenEqualToParameterConverter x:Key="VisibleWhenNotEqualToParameter" Invert="true" />
@@ -119,8 +116,6 @@
                 <StackPanel Grid.Column="1">
                     <StackPanel.Resources>
                         <Style TargetType="Image">
-                            <Setter Property="Width" Value="16" />
-                            <Setter Property="Height" Value="16" />
                             <Setter Property="Margin" Value="0,0,5,0" />
                         </Style>
                         <Style TargetType="Button">
@@ -129,18 +124,8 @@
                             <Setter Property="Padding" Value="4,2,6,2" />
                         </Style>
                     </StackPanel.Resources>
-                    <Button Command="{Binding AddPackageCommand}">
-                        <StackPanel Orientation="Horizontal">
-                            <Image Source="/ShipWorks.Core;component/Resources/add2.png" />
-                            <TextBlock>Add</TextBlock>
-                        </StackPanel>
-                    </Button>
-                    <Button Command="{Binding DeletePackageCommand}">
-                        <StackPanel Orientation="Horizontal">
-                            <Image Source="/ShipWorks.Core;component/Resources/delete2.png"/>
-                            <TextBlock>Delete</TextBlock>
-                        </StackPanel>
-                    </Button>
+                    <Button Style="{DynamicResource Button.Add}" Command="{Binding AddPackageCommand}" />
+                    <Button Style="{DynamicResource Button.Delete}" Command="{Binding DeletePackageCommand}" />
                 </StackPanel>
             </Grid>
         </Grid>
@@ -212,7 +197,7 @@
                 </ComboBox>
                 <Button Margin="5"
                         Content="Manage..."
-                        Style="{StaticResource LinkButtonStyle}"
+                        Style="{DynamicResource Button.Link}"
                         Click="OnManageDimensionsProfiles" />
             </StackPanel>
             <!--

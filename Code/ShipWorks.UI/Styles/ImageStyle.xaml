@@ -1,0 +1,24 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Style x:Key="Image.Icon" TargetType="Image">
+        <Setter Property="UseLayoutRounding" Value="True"></Setter>
+        <Setter Property="Height" Value="16"></Setter>
+        <Setter Property="Width" Value="16"></Setter>
+        <Setter Property="HorizontalAlignment" Value="Center"></Setter>
+        <Setter Property="VerticalAlignment" Value="Center"></Setter>
+    </Style>
+
+    <Style x:Key="Image.InfoTip" BasedOn="{StaticResource Image.Icon}" TargetType="Image">
+        <Setter Property="Height" Value="16"></Setter>
+        <Setter Property="Width" Value="16"></Setter>
+        <Setter Property="Source" Value="/ShipWorks.Core;component/Resources/InfoTip.png"></Setter>
+    </Style>
+
+    <Style x:Key="Image.Info20x20" BasedOn="{StaticResource Image.Icon}" TargetType="Image">
+        <Setter Property="Height" Value="20"></Setter>
+        <Setter Property="Width" Value="20"></Setter>
+        <Setter Property="Source" Value="/ShipWorks.Core;component/Resources/info_20x20.png"></Setter>
+    </Style>
+    
+</ResourceDictionary>

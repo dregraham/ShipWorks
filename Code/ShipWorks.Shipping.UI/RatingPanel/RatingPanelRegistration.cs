@@ -33,7 +33,7 @@ namespace ShipWorks.Shipping.UI.RatingPanel
                 TabIndex = 1
             };
 
-            new DockableWindow(dockManager, panelRating, "Rating")
+            new DockableWindow(dockManager, panelRating, "Rates")
             {
                 BorderStyle = TD.SandDock.Rendering.BorderStyle.Flat,
                 Guid = new Guid("B82A3A5F-931A-40E7-AB35-9189D564C187"),

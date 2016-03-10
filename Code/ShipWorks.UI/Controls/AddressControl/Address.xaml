@@ -16,9 +16,9 @@
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/ShipWorks.Shipping.UI;component/ShippingPanel/Styles/ServiceControlStyle.xaml" />
-                <ResourceDictionary Source="/ShipWorks.Shipping.UI;component/Styles/Controls/LinkButton.xaml" />
+                <ResourceDictionary Source="/ShipWorks.UI;component/Styles/GlobalStyle.xaml"/>
             </ResourceDictionary.MergedDictionaries>
+            
             <valueConverters:StateProvinceConverter x:Key="StateProvinceConverter" />
             <valueConverters:EnumDescriptionConverter x:Key="EnumDescription" />
             <valueConverters:EnumImageConverter x:Key="EnumImage" />
@@ -26,7 +26,7 @@
         </ResourceDictionary>
     </UserControl.Resources>
     <StackPanel>
-        <TextBlock Style="{StaticResource Header}">Name</TextBlock>
+        <TextBlock Style="{StaticResource GroupSectionHeader}">Name</TextBlock>
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="75" />
@@ -79,7 +79,7 @@
                             HorizontalAlignment="Right"
                             VerticalAlignment="Center">
                     <StackPanel.Resources>
-                        <Style BasedOn="{StaticResource LinkButtonStyle}"
+                        <Style BasedOn="{StaticResource Button.Link}"
                                TargetType="Button" />
                     </StackPanel.Resources>
                     <Button Visibility="{Binding CanValidateAddress, Converter={StaticResource BooleanToVisibility}}"
