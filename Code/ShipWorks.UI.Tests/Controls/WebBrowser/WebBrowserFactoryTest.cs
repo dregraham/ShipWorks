@@ -19,7 +19,7 @@ namespace ShipWorks.UI.Tests.Controls.WebBrowser
                 var webBrowserFactory = mock.Create<WebBrowserFactory>();
 
                 Uri uri = new Uri("http://www.shipworks.com");
-                webBrowserFactory.Create(uri, "title", new UserControl());
+                webBrowserFactory.Create(uri, "title", new UserControl(), 1, 1);
 
                 viewModel.Verify(v => v.Load(uri, "title"), Times.Once);
             }
