@@ -158,7 +158,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.LicenseEnforcement
                     d.Create(new Uri("https://www.interapptive.com/shipworks/notifications/shipment-limit/approaching/259854_ShipWorks_Nudge_ShipmentLimit_Approching.html"),
                     "Approaching Shipment Limit",
                     (IWin32Window) null,
-                    new Size(1000, 1000)),
+                    It.IsAny<Size>()),
                     Times.Once);
             }
         }
