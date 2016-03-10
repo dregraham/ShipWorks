@@ -94,10 +94,11 @@
             </DataGrid>
 
             <Border Grid.Row="1"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Margin="5 25 0 0"
                     Visibility="{Binding ShowEmptyMessage, Converter={StaticResource BooleanToVisibility}}">
-                <TextBlock Text="{Binding EmptyMessage}" />
+                <TextBlock Text="{Binding EmptyMessage}" Style="{StaticResource EmptyTextStyle}" />
             </Border>
 
             <ListBox Grid.Row="2"

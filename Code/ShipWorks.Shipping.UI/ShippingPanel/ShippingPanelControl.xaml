@@ -256,13 +256,13 @@
             </StackPanel>
             <StackPanel Margin="5,5">
                 <StackPanel Visibility="{Binding LoadedShipmentResult,Converter={StaticResource VisibleWhenEqualToParameter},ConverterParameter={x:Static sw:ShippingPanelLoadedShipmentResult.Multiple}}">
-                    <TextBlock>Multiple shipments.</TextBlock>
+                    <TextBlock Style="{StaticResource EmptyTextStyle}">Multiple shipments.</TextBlock>
                 </StackPanel>
                 <StackPanel Visibility="{Binding LoadedShipmentResult,Converter={StaticResource VisibleWhenEqualToParameter},ConverterParameter={x:Static sw:ShippingPanelLoadedShipmentResult.Deleted}}">
-                    <TextBlock>Shipment has been deleted.</TextBlock>
+                    <TextBlock Style="{StaticResource EmptyTextStyle}">Shipment has been deleted.</TextBlock>
                 </StackPanel>
                 <StackPanel Visibility="{Binding LoadedShipmentResult,Converter={StaticResource VisibleWhenEqualToParameter},ConverterParameter={x:Static sw:ShippingPanelLoadedShipmentResult.NotCreated}}">
-                    <TextBlock>No shipments were found for this order.  Shipment auto creation is probably turned off.</TextBlock>
+                    <TextBlock Style="{StaticResource EmptyTextStyle}">No shipments were found for this order.  Shipment auto creation is probably turned off.</TextBlock>
                 </StackPanel>
             </StackPanel>
         </StackPanel>

@@ -59,7 +59,9 @@
         <Setter Property="Margin" Value="0,0,0,8" />
     </Style>
 
-
+    <Style TargetType="TextBlock" x:Key="EmptyTextStyle">
+        <Setter Property="Foreground" Value="#FF696969"></Setter>
+    </Style>
 
 
 
