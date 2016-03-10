@@ -803,21 +803,21 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             {
                 AssociateShipworksWithItselfRequest request = PopulateAssociateWithSelfRequestWithBilling(ioc);
 
-                EnumResult<AssociateShipWorksWithItselfResponseType> response = request.Execute();
+                AssociateShipWorksWithItselfResponse response = request.Execute();
 
-                switch (response.Value)
+                switch (response.ResponseType)
                 {
                     case AssociateShipWorksWithItselfResponseType.Success:
                         e.NextPage = wizardPageOptions;
                         PopulateAccountFromAssociateShipworksWithItselfRequest(request);
-                        break;
-
-                    case AssociateShipWorksWithItselfResponseType.UnknownError:
-                        MessageHelper.ShowError(this, response.Message);
-                        e.NextPage = CurrentPage;
-                        break;
+                        break;                   
 
                     case AssociateShipWorksWithItselfResponseType.POBoxNotAllowed:
+                        break;
+
+                    default:
+                        MessageHelper.ShowError(this, response.Message);
+                        e.NextPage = CurrentPage;
                         break;
                 }
             }
@@ -850,20 +850,20 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 AssociateShipworksWithItselfRequest request = PopulateAssociateWithSelfRequestWithBilling(ioc);
                 request.PhysicalAddress = meterAddressAdapter;
 
-                EnumResult<AssociateShipWorksWithItselfResponseType> response = request.Execute();
+                AssociateShipWorksWithItselfResponse response = request.Execute();
 
-                switch (response.Value)
+                switch (response.ResponseType)
                 {
                     case AssociateShipWorksWithItselfResponseType.Success:
                         PopulateAccountFromAssociateShipworksWithItselfRequest(request);
                         break;
 
-                    case AssociateShipWorksWithItselfResponseType.UnknownError:
+                    case AssociateShipWorksWithItselfResponseType.POBoxNotAllowed:
                         MessageHelper.ShowError(this, response.Message);
                         e.NextPage = CurrentPage;
                         break;
 
-                    case AssociateShipWorksWithItselfResponseType.POBoxNotAllowed:
+                    default:
                         MessageHelper.ShowError(this, response.Message);
                         e.NextPage = CurrentPage;
                         break;

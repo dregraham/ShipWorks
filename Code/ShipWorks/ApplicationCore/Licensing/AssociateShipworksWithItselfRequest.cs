@@ -94,30 +94,36 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Executes the associate ShipWorks with itself request
         /// </summary>
-        public EnumResult<AssociateShipWorksWithItselfResponseType> Execute()
+        public AssociateShipWorksWithItselfResponse Execute()
         {
-            ValidatePhysicalAddress();
+            if(!ValidatePhysicalAddressIfRequired())
+            {
+                return new AssociateShipWorksWithItselfResponse(
+                    AssociateShipWorksWithItselfResponseType.AddressValidationFailed, 
+                    EnumHelper.GetDescription(AssociateShipWorksWithItselfResponseType.AddressValidationFailed));
+            }
             return tangoWebClient.AssociateShipworksWithItself(this);
         }
 
         /// <summary>
         /// If PhysicalAddress set, calls AddressValidation to populate MatchedAddress
         /// </summary>
-        private void ValidatePhysicalAddress()
+        private bool ValidatePhysicalAddressIfRequired()
         {
             if (PhysicalAddress == null)
             {
-                return;
+                return true;
             }
 
             // Call AV server
             UspsAddressValidationResults uspsResult = uspsWebClient.ValidateAddress(PhysicalAddress);
             if (!uspsResult.IsSuccessfulMatch)
             {
-                throw new AddressValidationException("Cannot validate address.");
+                return false;
             }
 
             MatchedPhysicalAddress = uspsResult.MatchedAddress;
+            return true;
         }
     }
 }

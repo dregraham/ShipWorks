@@ -101,7 +101,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Associates a Usps account created in ShipWorks as the users free Stamps.com account
         /// </summary>
-        internal static EnumResult<AssociateShipWorksWithItselfResponseType> AssociateShipworksWithItself(AssociateShipworksWithItselfRequest request)
+        internal static AssociateShipWorksWithItselfResponse AssociateShipworksWithItself(AssociateShipworksWithItselfRequest request)
         {
             HttpVariableRequestSubmitter postRequest = new HttpVariableRequestSubmitter();
 
@@ -136,16 +136,12 @@ namespace ShipWorks.ApplicationCore.Licensing
             try
             {
                 XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "associateshipworkswithitself");
-                CheckResponseForErrors(xmlResponse);
+                return new AssociateShipWorksWithItselfResponse(xmlResponse);
             }
             catch (TangoException ex)
             {
-                return ex.Message.Contains("0x002b0808") ?
-                    new EnumResult<AssociateShipWorksWithItselfResponseType>(AssociateShipWorksWithItselfResponseType.POBoxNotAllowed, ex.Message) :
-                    new EnumResult<AssociateShipWorksWithItselfResponseType>(AssociateShipWorksWithItselfResponseType.UnknownError, ex.Message);
+                return new AssociateShipWorksWithItselfResponse(AssociateShipWorksWithItselfResponseType.UnknownError, ex.Message);
             }
-
-            return new EnumResult<AssociateShipWorksWithItselfResponseType>(AssociateShipWorksWithItselfResponseType.Success,string.Empty);
         }
 
         /// <summary>

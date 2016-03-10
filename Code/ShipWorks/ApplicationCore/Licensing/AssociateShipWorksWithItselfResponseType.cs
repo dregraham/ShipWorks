@@ -14,5 +14,8 @@ namespace ShipWorks.ApplicationCore.Licensing
 
         [Description("PO Box Not Allowed")]
         POBoxNotAllowed = 2,
+
+        [Description("Could not validate address.")]
+        AddressValidationFailed = 3,
     }
 }

@@ -44,7 +44,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Associates a Usps account created in ShipWorks as the users free Stamps.com account
         /// </summary>
-        EnumResult<AssociateShipWorksWithItselfResponseType> AssociateShipworksWithItself(AssociateShipworksWithItselfRequest associateShipworksWithItselfRequest);
+        AssociateShipWorksWithItselfResponse AssociateShipworksWithItself(AssociateShipworksWithItselfRequest associateShipworksWithItselfRequest);
 
         /// <summary>
         /// Activates ShipWorks using the given user
