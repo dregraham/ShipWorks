@@ -1,31 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Data.SqlClient;
 using System.Drawing;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
+using Autofac;
 using Interapptive.Shared;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.UI;
-using ShipWorks.Data;
+using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
-using ShipWorks.Data.Grid.Columns;
-using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Data.Connection;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Interaction;
+using ShipWorks.Core.Messaging;
+using ShipWorks.Data;
+using ShipWorks.Data.Administration.Retry;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Controls;
+using ShipWorks.Data.Grid.Columns;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Filters;
+using ShipWorks.Messaging.Messages;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
-using ShipWorks.Data.Controls;
-using ShipWorks.Data.Grid.Paging;
-using ShipWorks.Filters;
-using Interapptive.Shared.UI;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Administration.Retry;
-using Autofac;
-using ShipWorks.ApplicationCore;
 
 namespace ShipWorks.Stores.Content
 {
@@ -130,7 +127,7 @@ namespace ShipWorks.Stores.Content
                 // Can't update requested shipping
                 requestedShipping.ReadOnly = true;
             }
-            
+
             // See if the user can edit the status
             if (!UserSession.Security.HasPermission(PermissionType.OrdersEditStatus, orderID))
             {
@@ -177,7 +174,7 @@ namespace ShipWorks.Stores.Content
                 });
             }
         }
-        
+
         /// <summary>
         /// Update the contents of the editor
         /// </summary>
@@ -332,7 +329,7 @@ namespace ShipWorks.Stores.Content
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
                 ShipBillAddressEditorDlg dlg = lifetimeScope.Resolve<ShipBillAddressEditorDlg>(
-                    new TypedParameter(typeof(EntityBase2), order), 
+                    new TypedParameter(typeof(EntityBase2), order),
                     new TypedParameter(typeof(bool), true));
                 dlg.ShowDialog(this);
             }
@@ -373,6 +370,8 @@ namespace ShipWorks.Stores.Content
                                                   "Your changes to this order were not saved.");
                     }
                 });
+
+                Messenger.Current.Send(new OrderSelectionChangingMessage(this, new[] { order.OrderID }));
             }
 
             invoiceControl.SaveState();
