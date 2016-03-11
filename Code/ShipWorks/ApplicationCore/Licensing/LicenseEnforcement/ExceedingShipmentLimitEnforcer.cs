@@ -1,28 +1,32 @@
 ﻿using System;
+using System.Windows;
 using System.Windows.Forms;
 using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.Editions;
+using ShipWorks.UI;
 
 namespace ShipWorks.ApplicationCore.Licensing.LicenseEnforcement
 {
     /// <summary>
     /// Enforces shipment counts
     /// </summary>
-    public class ShipmentCountEnforcer : ILicenseEnforcer
+    public class ExceedingShipmentLimitEnforcer : ILicenseEnforcer
     {
         private const int UnlimitedShipments = -1;
-
-        private readonly IUpgradePlanDlgFactory upgradePlanDlgFactory;
+        private const string ShipmentLimitExceeded = "http://www.shipworks.com/shipworks/notifications/shipment-limit/exceeded/259854_ShipWorks_Nudge_ShipmentLimit_Exceed.html";
+        private const string Title = "Shipment Limit Exceeded";
+        
+        private readonly IWebBrowserFactory webBrowserFactory;
         private readonly ILog log;
-
+        
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShipmentCountEnforcer(Func<Type, ILog> logFactory, IUpgradePlanDlgFactory upgradePlanDlgFactory)
+        public ExceedingShipmentLimitEnforcer(Func<Type, ILog> logFactory, IWebBrowserFactory webBrowserFactory)
         {
-            this.upgradePlanDlgFactory = upgradePlanDlgFactory;
-            log = logFactory(typeof(ShipmentCountEnforcer));
+            this.webBrowserFactory = webBrowserFactory;
+            log = logFactory(typeof(ExceedingShipmentLimitEnforcer));
         }
 
         /// <summary>
@@ -46,7 +50,10 @@ namespace ShipWorks.ApplicationCore.Licensing.LicenseEnforcement
             {
                 try
                 {
-                    IDialog dialog = upgradePlanDlgFactory.Create(compliant.Message, owner);
+                    Size size = new Size(920, 500);
+                    Uri uri = new Uri(ShipmentLimitExceeded);
+
+                    IDialog dialog = webBrowserFactory.Create(uri, Title, owner, size);
                     dialog.ShowDialog();
                 }
                 catch (ShipWorksLicenseException ex)

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows;
 using System.Windows.Forms;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Utility;
@@ -6,6 +7,7 @@ using Moq;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
 using ShipWorks.Editions;
+using ShipWorks.UI;
 using Xunit;
 
 namespace ShipWorks.Tests.ApplicationCore.Licensing.LicenseEnforcement
@@ -133,14 +135,14 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.LicenseEnforcement
         }
 
         [Fact]
-        public void Enforce_ShowsDialogWithShipmentLimitWarningMessage_WhenContextIsLoginAndOverShipmentLimitWarningThreshold()
+        public void Enforce_ShowsBrowserDialogWithShipmentLimitWarningContent_WhenContextIsLoginAndOverShipmentLimitWarningThreshold()
         {
             using (var mock = AutoMock.GetLoose())
             {
-                Mock<IUpgradePlanDlgFactory> dlgFactory = mock.Mock<IUpgradePlanDlgFactory>();
+                Mock<IWebBrowserFactory> dlgFactory = mock.Mock<IWebBrowserFactory>();
                 Mock<IDialog> dlg = mock.Mock<IDialog>();
 
-                dlgFactory.Setup(f => f.Create(It.IsAny<string>(), It.IsAny<IWin32Window>())).Returns(dlg.Object);
+                dlgFactory.Setup(f => f.Create(It.IsAny<Uri>(), It.IsAny<string>(), It.IsAny<IWin32Window>(), It.IsAny<Size>())).Returns(dlg.Object);
 
                 ApproachingShipmentLimitEnforcer testObject = mock.Create<ApproachingShipmentLimitEnforcer>();
 
@@ -148,13 +150,15 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.LicenseEnforcement
 
                 licenseCapabilities.Setup(l => l.ProcessedShipments).Returns(9);
                 licenseCapabilities.Setup(l => l.ShipmentLimit).Returns(10);
-                licenseCapabilities.Setup(l => l.BillingEndDate).Returns(DateTime.Parse("2/22/2016"));
 
                 testObject.Enforce(licenseCapabilities.Object, EnforcementContext.Login, null);
 
                 dlg.Verify(d => d.ShowDialog(), Times.Once);
                 dlgFactory.Verify(d =>
-                    d.Create("You are nearing your shipment limit for the current billing cycle ending 2/22.", null),
+                    d.Create(new Uri("https://www.interapptive.com/shipworks/notifications/shipment-limit/approaching/259854_ShipWorks_Nudge_ShipmentLimit_Approching.html"),
+                    "Approaching Shipment Limit",
+                    (IWin32Window) null,
+                    It.IsAny<Size>()),
                     Times.Once);
             }
         }

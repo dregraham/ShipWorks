@@ -1,22 +1,25 @@
-﻿using System.Windows.Forms;
+﻿using System;
+using System.Windows;
+using System.Windows.Forms;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Utility;
 using Moq;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
 using ShipWorks.Editions;
+using ShipWorks.UI;
 using Xunit;
 
 namespace ShipWorks.Tests.ApplicationCore.Licensing.LicenseEnforcement
 {
-    public class ShipmentCountEnforcerTest
+    public class ExceedingShipmentLimitEnforcerTest
     {
         [Fact]
         public void Priority_ReturnsHigh()
         {
             using (var mock = AutoMock.GetLoose())
             {
-                ShipmentCountEnforcer testObject = mock.Create<ShipmentCountEnforcer>();
+                ExceedingShipmentLimitEnforcer testObject = mock.Create<ExceedingShipmentLimitEnforcer>();
 
                 Assert.Equal(EnforcementPriority.High, testObject.Priority);
             }
@@ -27,7 +30,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.LicenseEnforcement
         {
             using (var mock = AutoMock.GetLoose())
             {
-                ShipmentCountEnforcer testObject = mock.Create<ShipmentCountEnforcer>();
+                ExceedingShipmentLimitEnforcer testObject = mock.Create<ExceedingShipmentLimitEnforcer>();
 
                 Assert.Equal(EditionFeature.ShipmentCount, testObject.EditionFeature);
             }
@@ -38,7 +41,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.LicenseEnforcement
         {
             using (var mock = AutoMock.GetLoose())
             {
-                ShipmentCountEnforcer testObject = mock.Create<ShipmentCountEnforcer>();
+                ExceedingShipmentLimitEnforcer testObject = mock.Create<ExceedingShipmentLimitEnforcer>();
 
                 EnumResult<ComplianceLevel> result = testObject.Enforce(null, EnforcementContext.Login);
 
@@ -51,7 +54,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.LicenseEnforcement
         {
             using (var mock = AutoMock.GetLoose())
             {
-                ShipmentCountEnforcer testObject = mock.Create<ShipmentCountEnforcer>();
+                ExceedingShipmentLimitEnforcer testObject = mock.Create<ExceedingShipmentLimitEnforcer>();
 
                 Mock<ILicenseCapabilities> licenseCapabilities = mock.Mock<ILicenseCapabilities>();
 
@@ -69,7 +72,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.LicenseEnforcement
         {
             using (var mock = AutoMock.GetLoose())
             {
-                ShipmentCountEnforcer testObject = mock.Create<ShipmentCountEnforcer>();
+                ExceedingShipmentLimitEnforcer testObject = mock.Create<ExceedingShipmentLimitEnforcer>();
 
                 Mock<ILicenseCapabilities> licenseCapabilities = mock.Mock<ILicenseCapabilities>();
 
@@ -87,7 +90,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.LicenseEnforcement
         {
             using (var mock = AutoMock.GetLoose())
             {
-                ShipmentCountEnforcer testObject = mock.Create<ShipmentCountEnforcer>();
+                ExceedingShipmentLimitEnforcer testObject = mock.Create<ExceedingShipmentLimitEnforcer>();
 
                 Mock<ILicenseCapabilities> licenseCapabilities = mock.Mock<ILicenseCapabilities>();
 
@@ -105,7 +108,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.LicenseEnforcement
         {
             using (var mock = AutoMock.GetLoose())
             {
-                ShipmentCountEnforcer testObject = mock.Create<ShipmentCountEnforcer>();
+                ExceedingShipmentLimitEnforcer testObject = mock.Create<ExceedingShipmentLimitEnforcer>();
 
                 Mock<ILicenseCapabilities> licenseCapabilities = mock.Mock<ILicenseCapabilities>();
 
@@ -123,7 +126,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.LicenseEnforcement
         {
             using (var mock = AutoMock.GetLoose())
             {
-                ShipmentCountEnforcer testObject = mock.Create<ShipmentCountEnforcer>();
+                ExceedingShipmentLimitEnforcer testObject = mock.Create<ExceedingShipmentLimitEnforcer>();
 
                 Mock<ILicenseCapabilities> licenseCapabilities = mock.Mock<ILicenseCapabilities>();
 
@@ -141,7 +144,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.LicenseEnforcement
         {
             using (var mock = AutoMock.GetLoose())
             {
-                ShipmentCountEnforcer testObject = mock.Create<ShipmentCountEnforcer>();
+                ExceedingShipmentLimitEnforcer testObject = mock.Create<ExceedingShipmentLimitEnforcer>();
 
                 Mock<ILicenseCapabilities> licenseCapabilities = mock.Mock<ILicenseCapabilities>();
 
@@ -159,12 +162,12 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.LicenseEnforcement
         {
             using (var mock = AutoMock.GetLoose())
             {
-                Mock<IUpgradePlanDlgFactory> dlgFactory = mock.Mock<IUpgradePlanDlgFactory>();
+                Mock<IWebBrowserFactory> dlgFactory = mock.Mock<IWebBrowserFactory>();
                 Mock<IDialog> dlg = mock.Mock<IDialog>();
 
-                dlgFactory.Setup(f => f.Create(It.IsAny<string>(), It.IsAny<IWin32Window>())).Returns(dlg.Object);
+                dlgFactory.Setup(f => f.Create(It.IsAny<Uri>(), It.IsAny<string>(), It.IsAny<IWin32Window>(), It.IsAny<Size>())).Returns(dlg.Object);
 
-                ShipmentCountEnforcer testObject = mock.Create<ShipmentCountEnforcer>();
+                ExceedingShipmentLimitEnforcer testObject = mock.Create<ExceedingShipmentLimitEnforcer>();
 
                 Mock<ILicenseCapabilities> licenseCapabilities = mock.Mock<ILicenseCapabilities>();
 
@@ -187,7 +190,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.LicenseEnforcement
 
                 dlgFactory.Setup(f => f.Create(It.IsAny<string>(), It.IsAny<IWin32Window>())).Returns(dlg.Object);
 
-                ShipmentCountEnforcer testObject = mock.Create<ShipmentCountEnforcer>();
+                ExceedingShipmentLimitEnforcer testObject = mock.Create<ExceedingShipmentLimitEnforcer>();
 
                 Mock<ILicenseCapabilities> licenseCapabilities = mock.Mock<ILicenseCapabilities>();
 
@@ -201,15 +204,15 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.LicenseEnforcement
         }
 
         [Fact]
-        public void Enforce_CallsCreateOnDialogFactoryWithErrorMessage_WhenNotCompliant()
+        public void Enforce_CallsCreateOnWebBrowserFactoryWithErrorMessage_WhenNotCompliant()
         {
             using (var mock = AutoMock.GetLoose())
             {
                 Mock<IDialog> dlg = mock.Mock<IDialog>();
-                Mock<IUpgradePlanDlgFactory> dlgFactory = mock.Mock<IUpgradePlanDlgFactory>();
-                dlgFactory.Setup(c => c.Create(It.IsAny<string>(), null)).Returns(dlg.Object);
+                Mock<IWebBrowserFactory> dlgFactory = mock.Mock<IWebBrowserFactory>();
+                dlgFactory.Setup(c => c.Create(It.IsAny<Uri>(), It.IsAny<string>(), It.IsAny<IWin32Window>(), It.IsAny<Size>())).Returns(dlg.Object);
 
-                ShipmentCountEnforcer testObject = mock.Create<ShipmentCountEnforcer>();
+                ExceedingShipmentLimitEnforcer testObject = mock.Create<ExceedingShipmentLimitEnforcer>();
 
                 Mock<ILicenseCapabilities> licenseCapabilities = mock.Mock<ILicenseCapabilities>();
 
@@ -218,7 +221,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.LicenseEnforcement
 
                 testObject.Enforce(licenseCapabilities.Object, EnforcementContext.CreateLabel, null);
 
-                dlgFactory.Verify(d => d.Create("You have reached your shipment limit for this billing cycle. Please upgrade your plan to create labels.", null), Times.Once);
+                dlgFactory.Verify(d => d.Create(It.IsAny<Uri>(), It.IsAny<string>(), It.IsAny<IWin32Window>(), It.IsAny<Size>()), Times.Once);
             }
         }
 
@@ -227,7 +230,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.LicenseEnforcement
         {
             using (var mock = AutoMock.GetLoose())
             {
-                ShipmentCountEnforcer testObject = mock.Create<ShipmentCountEnforcer>();
+                ExceedingShipmentLimitEnforcer testObject = mock.Create<ExceedingShipmentLimitEnforcer>();
 
                 Mock<ILicenseCapabilities> licenseCapabilities = mock.Mock<ILicenseCapabilities>();
 
