@@ -444,6 +444,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// </summary>
         public virtual void UnloadShipment()
         {
+            shipmentChangedSubscription?.Dispose();
             ShipmentAdapter = null;
         }
 

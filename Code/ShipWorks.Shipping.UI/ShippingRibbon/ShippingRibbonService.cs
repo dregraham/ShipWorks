@@ -183,7 +183,7 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
         /// </summary>
         private void HandleShipmentChanged(ShipmentChangedMessage message)
         {
-            currentShipment = message.ShipmentAdapter.Shipment;
+            currentShipment = message.ShipmentAdapter?.Shipment;
             SetEnabledOnButtons();
         }
 

@@ -41,6 +41,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
                         }
 
                         viewModel.AllowEditing = false;
+                        viewModel.UnloadShipment();
                     }),
                 changeHandler.ShipmentLoadedStream()
                     .ObserveOn(schedulerProvider.Dispatcher)
