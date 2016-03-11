@@ -8,6 +8,7 @@ using System.Reactive.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Autofac;
 using Divelements.SandGrid;
 using Interapptive.Shared.UI;
 using log4net;
@@ -21,6 +22,7 @@ using ShipWorks.Data.Grid.Columns.DisplayTypes;
 using ShipWorks.Data.Grid.Paging;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Filters;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Properties;
@@ -59,6 +61,14 @@ namespace ShipWorks.Stores.Content.Panels
             menuCopy.DropDownItems.AddRange(entityGrid.CreateCopyMenuItems(false));
 
             Messenger.Current.Where(x => x.Sender is ShippingDlg)
+                .Subscribe(_ => ReloadContent());
+
+            // Update the shipment when the provider changes. This keeps things in sync, updates the displayed rates
+            // immediately. This means we no longer need to hide rates when the shipping pane is shown because they
+            // should not get out of sync.
+            Messenger.Current.OfType<ShipmentChangedMessage>()
+                .Where(x => x.ChangedField == ShipmentFields.ShipmentType.Name)
+                .Do(_ => Program.MainForm.ForceHeartbeat())
                 .Subscribe(_ => ReloadContent());
         }
 

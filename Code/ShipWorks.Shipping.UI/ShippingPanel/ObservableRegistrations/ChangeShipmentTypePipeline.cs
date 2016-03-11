@@ -34,7 +34,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
                 .Where(x => viewModel.IsProcessed.HasValue && !viewModel.IsProcessed.Value)
                 .Select(_ => ChangeShipmentType(viewModel))
                 .CatchAndContinue((Exception ex) => log.Error("An error occurred while changing shipment types", ex))
-                .Subscribe(x => viewModel.Populate(x));
+                .Do(x => viewModel.Populate(x, nameof(viewModel.ShipmentType)))
+                .Subscribe(_ => viewModel.SaveToDatabase());
         }
 
         /// <summary>

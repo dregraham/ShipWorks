@@ -77,6 +77,22 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
         }
 
         [Fact]
+        public void Register_SavesShipment_WhenShipmentTypeChangesAndShipmentIsNotProcessed()
+        {
+            var newAdapter = mock.Create<ICarrierShipmentAdapter>();
+            mock.Mock<IShippingManager>()
+                .Setup(x => x.ChangeShipmentType(It.IsAny<ShipmentTypeCode>(), It.IsAny<ShipmentEntity>()))
+                .Returns(newAdapter);
+
+            var testObject = mock.Create<ChangeShipmentTypePipeline>();
+            testObject.Register(viewModel);
+
+            viewModel.ShipmentType = ShipmentTypeCode.Usps;
+
+            viewModelMock.Verify(x => x.SaveToDatabase());
+        }
+
+        [Fact]
         public void Register_DoesNotChangeShipmentType_WhenShipmentTypeChangesButShipmentIsProcessed()
         {
             viewModelMock.Setup(x => x.IsProcessed).Returns(true);

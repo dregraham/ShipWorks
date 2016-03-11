@@ -247,7 +247,13 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// <summary>
         /// Populate the view model with the current state of the shipment
         /// </summary>
-        public virtual void Populate(ICarrierShipmentAdapter fromShipmentAdapter)
+        public virtual void Populate(ICarrierShipmentAdapter fromShipmentAdapter) =>
+            Populate(fromShipmentAdapter, null);
+
+        /// <summary>
+        /// Populate the view model with the current state of the shipment
+        /// </summary>
+        public virtual void Populate(ICarrierShipmentAdapter fromShipmentAdapter, string changedField)
         {
             shipmentChangedSubscription?.Dispose();
             isLoadingShipment = true;
@@ -296,7 +302,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
                 .CatchAndContinue((NullReferenceException ex) => log.Error("Error occurred while handling property changed", ex))
                 .Subscribe(x => messenger.Send(new ShipmentChangedMessage(this, ShipmentAdapter, x)));
 
-            messenger.Send(new ShipmentChangedMessage(this, ShipmentAdapter));
+            messenger.Send(new ShipmentChangedMessage(this, ShipmentAdapter, changedField));
         }
 
         /// <summary>
@@ -461,7 +467,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             }
             else if (Shipment != null)
             {
-                messenger.Send(new OpenShippingDialogMessage(this, new []{ Shipment }));
+                messenger.Send(new OpenShippingDialogMessage(this, new[] { Shipment }));
             }
         }
 
