@@ -27,6 +27,7 @@
     </UserControl.Resources>
     <StackPanel>
         <TextBlock Style="{StaticResource GroupSectionHeader}">Name</TextBlock>
+
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="75" />
@@ -101,8 +102,7 @@
                        Grid.Column="0"
                        Style="{StaticResource GridLabel}">Street:</TextBlock>
             <TextBox Grid.Row="1" Grid.Column="1"
-                     MinLines="3" MaxLines="3"
-                     AcceptsReturn="True"
+                     Style="{StaticResource Address.Street}"
                      props:EntityFieldLength.FieldName="PersonStreetFull"
                      Text="{Binding Street, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
