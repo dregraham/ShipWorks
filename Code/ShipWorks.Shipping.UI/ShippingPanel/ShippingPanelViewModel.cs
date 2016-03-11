@@ -155,7 +155,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// <summary>
         /// Save the current shipment to the database
         /// </summary>
-        public void SaveToDatabase()
+        public virtual void SaveToDatabase()
         {
             // Only call save if we were in an "editing" allowed mode.
             // This handles the case where we lost focus due to opening the shipping dialog.

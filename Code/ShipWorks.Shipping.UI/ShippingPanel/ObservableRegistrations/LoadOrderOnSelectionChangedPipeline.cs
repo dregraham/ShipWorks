@@ -35,7 +35,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
                     .Subscribe(message =>
                     {
                         // If the view model sent the message, it's to reload the order. So don't try saving first
-                        if (message.Sender == viewModel)
+                        if (message.Sender != viewModel)
                         {
                             viewModel.SaveToDatabase();
                         }

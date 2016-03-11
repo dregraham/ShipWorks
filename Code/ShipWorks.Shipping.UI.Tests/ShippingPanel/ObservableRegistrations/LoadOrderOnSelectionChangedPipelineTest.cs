@@ -3,6 +3,7 @@ using System.Linq;
 using System.Reactive.Subjects;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Threading;
+using Moq;
 using ShipWorks.Core.Messaging.Messages.Shipping;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Shipping.UI.MessageHandlers;
@@ -46,6 +47,30 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
             orderChangingSubject.OnNext(new OrderSelectionChangingMessage(this, new[] { 1L }));
 
             viewModelMock.VerifySet(x => x.AllowEditing = false);
+        }
+
+        [Fact]
+        public void Register_SavesShipment_WhenOrderChangingMessageIsSentFromOtherSource()
+        {
+            var viewModelMock = mock.CreateMock<ShippingPanelViewModel>();
+            var testObject = mock.Create<LoadOrderOnSelectionChangedPipeline>();
+            testObject.Register(viewModelMock.Object);
+
+            orderChangingSubject.OnNext(new OrderSelectionChangingMessage(this, new[] { 1L }));
+
+            viewModelMock.Verify(x => x.SaveToDatabase());
+        }
+
+        [Fact]
+        public void Register_DoesNotSaveShipment_WhenOrderChangingMessageIsSentFromViewModel()
+        {
+            var viewModelMock = mock.CreateMock<ShippingPanelViewModel>();
+            var testObject = mock.Create<LoadOrderOnSelectionChangedPipeline>();
+            testObject.Register(viewModelMock.Object);
+
+            orderChangingSubject.OnNext(new OrderSelectionChangingMessage(viewModelMock.Object, new[] { 1L }));
+
+            viewModelMock.Verify(x => x.SaveToDatabase(), Times.Never);
         }
 
         [Fact]
