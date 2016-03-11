@@ -147,7 +147,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             try
             {
                 // Refresh the license capabilities and note the time they were refreshed
-                LicenseCapabilities = tangoWebClient.GetLicenseCapabilities((ICustomerLicense) this);
+                LicenseCapabilities = tangoWebClient.GetLicenseCapabilities(this);
                 lastRefreshTimeInUtc = DateTime.UtcNow;
             }
             catch (TangoException ex)
