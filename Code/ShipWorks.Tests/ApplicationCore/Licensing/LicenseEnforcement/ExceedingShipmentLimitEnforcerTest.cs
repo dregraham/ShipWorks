@@ -223,29 +223,6 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.LicenseEnforcement
 
                 dlgFactory.Verify(d => d.Create(It.IsAny<Uri>(), It.IsAny<string>(), It.IsAny<IWin32Window>(), It.IsAny<Size>()), Times.Once);
             }
-        }
-
-        [Fact]
-        public void Enforce_ReturnsCompliant_WhenOverLimitsAndInTrial()
-        {
-            using (var mock = AutoMock.GetLoose())
-            {
-                ExceedingShipmentLimitEnforcer testObject = mock.Create<ExceedingShipmentLimitEnforcer>();
-
-                Mock<ILicenseCapabilities> licenseCapabilities = mock.Mock<ILicenseCapabilities>();
-
-                licenseCapabilities.Setup(l => l.ProcessedShipments).Returns(10);
-                licenseCapabilities.Setup(l => l.ShipmentLimit).Returns(5);
-
-                licenseCapabilities.Setup(l => l.ActiveChannels).Returns(10);
-                licenseCapabilities.Setup(l => l.ChannelLimit).Returns(5);
-
-                licenseCapabilities.Setup(l => l.IsInTrial).Returns(true);
-
-                EnumResult<ComplianceLevel> result = testObject.Enforce(licenseCapabilities.Object, EnforcementContext.CreateLabel);
-
-                Assert.Equal(ComplianceLevel.Compliant, result.Value);
-            }
-        }
+        }       
     }
 }

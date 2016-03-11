@@ -68,7 +68,7 @@ namespace ShipWorks.ApplicationCore.Licensing.LicenseEnforcement
         /// </summary>
         public EnumResult<ComplianceLevel> Enforce(ILicenseCapabilities capabilities, EnforcementContext context)
         {
-            if (context == EnforcementContext.CreateLabel && !capabilities.IsInTrial && capabilities.ShipmentLimit != UnlimitedShipments)
+            if (context == EnforcementContext.CreateLabel && capabilities.ShipmentLimit != UnlimitedShipments)
             {
                 if (capabilities.ProcessedShipments >= capabilities.ShipmentLimit)
                 {

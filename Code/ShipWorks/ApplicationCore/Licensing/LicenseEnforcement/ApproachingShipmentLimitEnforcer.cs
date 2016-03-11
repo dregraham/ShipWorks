@@ -77,7 +77,7 @@ namespace ShipWorks.ApplicationCore.Licensing.LicenseEnforcement
             {
                 float currentShipmentPercentage = (float) capabilities.ProcessedShipments / capabilities.ShipmentLimit;
 
-                if (!capabilities.IsInTrial && currentShipmentPercentage >= ShipmentLimitWarningThreshold && currentShipmentPercentage < ShipmentLimitExceededThreshold)
+                if (currentShipmentPercentage >= ShipmentLimitWarningThreshold && currentShipmentPercentage < ShipmentLimitExceededThreshold)
                 {
                     // The current shipment percentage is greater than or equal to the threshold
                     message = $"You are nearing your shipment limit for the current billing cycle ending {capabilities.BillingEndDate.ToString("M/d")}.";
