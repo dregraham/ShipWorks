@@ -42,6 +42,11 @@ namespace ShipWorks.ApplicationCore.Licensing
         TrialDetail ExtendTrial(StoreEntity store);
 
         /// <summary>
+        /// Associates a Usps account created in ShipWorks as the users free Stamps.com account
+        /// </summary>
+        AssociateShipWorksWithItselfResponse AssociateShipworksWithItself(AssociateShipworksWithItselfRequest associateShipworksWithItselfRequest);
+
+        /// <summary>
         /// Activates ShipWorks using the given user
         /// </summary>
         GenericResult<IActivationResponse> ActivateLicense(string email, string password);

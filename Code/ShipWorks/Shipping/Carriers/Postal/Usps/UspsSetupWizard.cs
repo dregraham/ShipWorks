@@ -43,7 +43,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         private readonly bool allowRegisteringExistingAccount;
         private readonly int initialPersonControlHeight;
 
-
         /// <summary>
         /// Initializes a new instance of the <see cref="UspsSetupWizard"/> class.
         /// </summary>
@@ -114,7 +113,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 radioNewAccount.Checked = true;
                 radioExistingAccount.Checked = false;
             }
-            else if (UspsAccount != null && UspsAccount.PendingInitialAccount)
+            else if (UspsAccount != null && UspsAccount.PendingInitialAccount == (int) UspsPendingAccountType.Existing)
             {
                 radioNewAccount.Checked = false;
                 radioExistingAccount.Checked = true;
@@ -153,7 +152,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
             // Hide the panel that lets the customer select to register a new account or use an existing account
             // until USPS has enabled ShipWorks to register new accounts
-            accountTypePanel.Visible = allowRegisteringExistingAccount && !UspsAccount.PendingInitialAccount;
+            accountTypePanel.Visible = allowRegisteringExistingAccount && UspsAccount.PendingInitialAccount != (int) UspsPendingAccountType.Existing;
 
             uspsUsageType.Items.Add(new UspsAccountUsageDropdownItem(AccountType.Individual, "Individual"));
             uspsUsageType.Items.Add(new UspsAccountUsageDropdownItem(AccountType.HomeOffice, "Home Office"));
@@ -540,16 +539,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             if (DialogResult != DialogResult.OK &&
                 UspsAccount != null &&
                 !UspsAccount.IsNew &&
-                !UspsAccount.PendingInitialAccount)
+                UspsAccount.PendingInitialAccount == (int) UspsPendingAccountType.None)
             {
                 UspsAccountManager.DeleteAccount(UspsAccount);
             }
             else if (DialogResult == DialogResult.OK)
             {
-                if (UspsAccount != null && UspsAccount.PendingInitialAccount)
+                if (UspsAccount != null && UspsAccount.PendingInitialAccount != (int) UspsPendingAccountType.None)
                 {
                     // We need to denote that the account is completely configured/initialized
-                    UspsAccount.PendingInitialAccount = false;
+                    UspsAccount.PendingInitialAccount = (int) UspsPendingAccountType.None;
                     UspsAccountManager.SaveAccount(UspsAccount);
                 }
 
@@ -653,8 +652,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <summary>
         /// Excludes the given shipment type from the list of active shipping providers.
         /// </summary>
-        /// <param name="settings">The settings being updated.</param>
-        /// <param name="shipmentTypeToExclude">The shipment type code to be excluded.</param>
         private static void ExcludeShipmentType(ShippingSettingsEntity settings, ShipmentTypeCode shipmentTypeToExclude)
         {
             if (!settings.ExcludedTypes.Any(t => t == (int)shipmentTypeToExclude))
@@ -778,10 +775,125 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         private void OnStepNextWelcome(object sender, WizardStepEventArgs e)
         {
-            if (UspsAccount.PendingInitialAccount)
+            switch ((UspsPendingAccountType)UspsAccount.PendingInitialAccount)
             {
-                e.NextPage = wizardPageOptions;
+                case UspsPendingAccountType.None:
+                    return;
+
+                case UspsPendingAccountType.Create:
+                    if (radioExistingAccount.Checked)
+                    {
+                        return;
+                    }
+                    e.NextPage = wizardPageNewAccountPaymentAndBilling;
+                    break;
+
+                case UspsPendingAccountType.Existing:
+                    e.NextPage = wizardPageOptions;
+                    break;
             }
+        }
+
+        /// <summary>
+        /// Called when [step next new account payment and billing].
+        /// </summary>
+        private void OnStepNextNewAccountPaymentAndBilling(object sender, WizardStepEventArgs e)
+        {
+            using (ILifetimeScope ioc = IoC.BeginLifetimeScope())
+            {
+                AssociateShipworksWithItselfRequest request = PopulateAssociateWithSelfRequestWithBilling(ioc);
+
+                AssociateShipWorksWithItselfResponse response = request.Execute();
+
+                switch (response.ResponseType)
+                {
+                    case AssociateShipWorksWithItselfResponseType.Success:
+                        e.NextPage = wizardPageOptions;
+                        PopulateAccountFromAssociateShipworksWithItselfRequest(request);
+                        break;                   
+
+                    case AssociateShipWorksWithItselfResponseType.POBoxNotAllowed:
+                        break;
+
+                    default:
+                        MessageHelper.ShowError(this, response.Message);
+                        e.NextPage = CurrentPage;
+                        break;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Populates the account from the AssociateShipworksWithItselfRequest
+        /// </summary>
+        private void PopulateAccountFromAssociateShipworksWithItselfRequest(AssociateShipworksWithItselfRequest request)
+        {
+            PersonAdapter accountAddress = request.MatchedPersonAdapter ?? request.CardBillingAddress;
+            accountAddress.ParsedName = PersonName.Parse(request.CardHolderName);
+
+            PersonAdapter accountAdapter = new PersonAdapter(UspsAccount, "");
+            PersonAdapter.Copy(accountAddress, accountAdapter);
+
+            UspsAccount.Description = UspsAccountManager.GetDefaultDescription(UspsAccount);
+        }
+
+        /// <summary>
+        /// Called when [step next postage meter address].
+        /// </summary>
+        private void OnStepNextPostageMeterAddress(object sender, WizardStepEventArgs e)
+        {
+            using (ILifetimeScope ioc = IoC.BeginLifetimeScope())
+            {
+                PersonAdapter meterAddressAdapter = new PersonAdapter();
+                postageMeterAddress.SaveToEntity(meterAddressAdapter);
+
+                AssociateShipworksWithItselfRequest request = PopulateAssociateWithSelfRequestWithBilling(ioc);
+                request.PhysicalAddress = meterAddressAdapter;
+
+                AssociateShipWorksWithItselfResponse response = request.Execute();
+
+                switch (response.ResponseType)
+                {
+                    case AssociateShipWorksWithItselfResponseType.Success:
+                        PopulateAccountFromAssociateShipworksWithItselfRequest(request);
+                        break;
+
+                    case AssociateShipWorksWithItselfResponseType.POBoxNotAllowed:
+                        MessageHelper.ShowError(this, response.Message);
+                        e.NextPage = CurrentPage;
+                        break;
+
+                    default:
+                        MessageHelper.ShowError(this, response.Message);
+                        e.NextPage = CurrentPage;
+                        break;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Populates the AssociateShipworksWithItselfRequest with billing information.
+        /// </summary>
+        private AssociateShipworksWithItselfRequest PopulateAssociateWithSelfRequestWithBilling(ILifetimeScope ioc)
+        {
+            IUspsWebClient uspsWebClient =
+                ioc.Resolve<IUspsWebClient>(new NamedParameter("uspsResellerType", UspsResellerType.None));
+
+            AssociateShipworksWithItselfRequest request =
+                ioc.Resolve<AssociateShipworksWithItselfRequest>(new TypedParameter(typeof (IUspsWebClient), uspsWebClient));
+				
+  	        ICustomerLicense customerLicense = (ICustomerLicense) ioc.Resolve<ILicenseService>().GetLicenses().Single();
+
+            request.CardNumber = paymentAndBillingAddress.CardNumber;
+            request.CardType = paymentAndBillingAddress.CardType;
+            request.CardHolderName = paymentAndBillingAddress.CardHolderName;
+            request.CardExpirationMonth = paymentAndBillingAddress.CreditCardExpirationMonth;
+            request.CardExpirationYear = paymentAndBillingAddress.CreditCardExpirationYear;
+            request.CardBillingAddress = paymentAndBillingAddress.BillingAddress;
+			
+            request.CustomerKey = customerLicense.Key;
+
+            return request;
         }
     }
 }

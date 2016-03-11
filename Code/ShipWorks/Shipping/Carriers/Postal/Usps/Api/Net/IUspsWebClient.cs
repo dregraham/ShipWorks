@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Xml.Linq;
+using Interapptive.Shared.Business;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
 using ShipWorks.Shipping.Editing.Rating;
@@ -27,6 +28,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// Checks with USPS API to get the contract type of the account.
         /// </summary>
         UspsAccountContractType GetContractType(UspsAccountEntity account);
+
+        /// <summary>
+        /// Validates the address.
+        /// </summary>
+        UspsAddressValidationResults ValidateAddress(PersonAdapter physicalAddress);
 
         /// <summary>
         /// Purchase postage for the given account for the specified amount.  ControlTotal is the ControlTotal value last retrieved from GetAccountInfo.

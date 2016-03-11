@@ -65,6 +65,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             this.wizardPageNewAccountPayment = new ShipWorks.UI.Wizard.WizardPage();
             this.uspsPaymentControl = new ShipWorks.Shipping.Carriers.Postal.Usps.Registration.UspsPaymentControl();
             this.linkStampsPrivacy = new ShipWorks.UI.Controls.LinkControl();
+            this.wizardPageNewAccountPaymentAndBilling = new ShipWorks.UI.Wizard.WizardPage();
+            this.paymentAndBillingAddress = new ShipWorks.Shipping.Carriers.Postal.Usps.Registration.PaymentAndBillingAddressControl();
+            this.wizardPagePostageMeterAddress = new ShipWorks.UI.Wizard.WizardPage();
+            this.postageMeterAddress = new ShipWorks.Data.Controls.AutofillPersonControl();
+            this.labelDescription = new System.Windows.Forms.Label();
+            this.lableTitle = new System.Windows.Forms.Label();
             this.mainPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             this.topPanel.SuspendLayout();
@@ -78,6 +84,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             this.panelAccountType.SuspendLayout();
             this.wizardPageNewAccountCredentials.SuspendLayout();
             this.wizardPageNewAccountPayment.SuspendLayout();
+            this.wizardPageNewAccountPaymentAndBilling.SuspendLayout();
+            this.wizardPagePostageMeterAddress.SuspendLayout();
             this.SuspendLayout();
             // 
             // next
@@ -94,7 +102,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             // 
             // mainPanel
             // 
-            this.mainPanel.Controls.Add(this.wizardPageNewAccountCredentials);
+            this.mainPanel.Controls.Add(this.wizardPagePostageMeterAddress);
             this.mainPanel.Size = new System.Drawing.Size(733, 540);
             // 
             // etchBottom
@@ -124,7 +132,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             this.wizardPageWelcome.Size = new System.Drawing.Size(733, 540);
             this.wizardPageWelcome.TabIndex = 0;
             this.wizardPageWelcome.Title = "Setup Stamps.com Shipping";
-            this.wizardPageWelcome.StepNext += OnStepNextWelcome;
+            this.wizardPageWelcome.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextWelcome);
             // 
             // accountTypePanel
             // 
@@ -216,7 +224,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             this.wizardPageExistingAccountCredentials.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.wizardPageExistingAccountCredentials.Location = new System.Drawing.Point(0, 0);
             this.wizardPageExistingAccountCredentials.Name = "wizardPageExistingAccountCredentials";
-            this.wizardPageExistingAccountCredentials.Size = new System.Drawing.Size(542, 540);
+            this.wizardPageExistingAccountCredentials.Size = new System.Drawing.Size(733, 540);
             this.wizardPageExistingAccountCredentials.TabIndex = 0;
             this.wizardPageExistingAccountCredentials.Title = "Stamps.com Credentials";
             this.wizardPageExistingAccountCredentials.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextExistingCredentials);
@@ -272,7 +280,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             this.wizardPageStampsAccount.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.wizardPageStampsAccount.Location = new System.Drawing.Point(0, 0);
             this.wizardPageStampsAccount.Name = "wizardPageStampsAccount";
-            this.wizardPageStampsAccount.Size = new System.Drawing.Size(542, 540);
+            this.wizardPageStampsAccount.Size = new System.Drawing.Size(733, 540);
             this.wizardPageStampsAccount.TabIndex = 0;
             this.wizardPageStampsAccount.Title = "Stamps.com Account";
             this.wizardPageStampsAccount.SteppingInto += new System.EventHandler<ShipWorks.UI.Wizard.WizardSteppingIntoEventArgs>(this.OnSteppingIntoAccountInfo);
@@ -293,7 +301,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             this.wizardPageOptions.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.wizardPageOptions.Location = new System.Drawing.Point(0, 0);
             this.wizardPageOptions.Name = "wizardPageOptions";
-            this.wizardPageOptions.Size = new System.Drawing.Size(542, 540);
+            this.wizardPageOptions.Size = new System.Drawing.Size(733, 540);
             this.wizardPageOptions.TabIndex = 0;
             this.wizardPageOptions.Title = "Stamps.com Settings";
             this.wizardPageOptions.SteppingInto += new System.EventHandler<ShipWorks.UI.Wizard.WizardSteppingIntoEventArgs>(this.OnSteppingIntoOptions);
@@ -317,7 +325,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             this.wizardPageAccountAddress.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.wizardPageAccountAddress.Location = new System.Drawing.Point(0, 0);
             this.wizardPageAccountAddress.Name = "wizardPageAccountAddress";
-            this.wizardPageAccountAddress.Size = new System.Drawing.Size(542, 540);
+            this.wizardPageAccountAddress.Size = new System.Drawing.Size(733, 540);
             this.wizardPageAccountAddress.TabIndex = 0;
             this.wizardPageAccountAddress.Title = "Account Registration";
             this.wizardPageAccountAddress.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextAccountAddress);
@@ -474,7 +482,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             this.wizardPageNewAccountPayment.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.wizardPageNewAccountPayment.Location = new System.Drawing.Point(0, 0);
             this.wizardPageNewAccountPayment.Name = "wizardPageNewAccountPayment";
-            this.wizardPageNewAccountPayment.Size = new System.Drawing.Size(542, 540);
+            this.wizardPageNewAccountPayment.Size = new System.Drawing.Size(733, 540);
             this.wizardPageNewAccountPayment.TabIndex = 0;
             this.wizardPageNewAccountPayment.Title = "Account Registration";
             this.wizardPageNewAccountPayment.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextNewAccountPayment);
@@ -501,6 +509,73 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             this.linkStampsPrivacy.Text = "Stamps.com Privacy Policy";
             this.linkStampsPrivacy.Click += new System.EventHandler(this.OnLinkUspsPrivacyPolicy);
             // 
+            // wizardPageNewAccountPaymentAndBilling
+            // 
+            this.wizardPageNewAccountPaymentAndBilling.Controls.Add(this.paymentAndBillingAddress);
+            this.wizardPageNewAccountPaymentAndBilling.Description = "Create a new Stamps.com account for use with ShipWorks";
+            this.wizardPageNewAccountPaymentAndBilling.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.wizardPageNewAccountPaymentAndBilling.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.wizardPageNewAccountPaymentAndBilling.Location = new System.Drawing.Point(0, 0);
+            this.wizardPageNewAccountPaymentAndBilling.Name = "wizardPageNewAccountPaymentAndBilling";
+            this.wizardPageNewAccountPaymentAndBilling.Size = new System.Drawing.Size(733, 540);
+            this.wizardPageNewAccountPaymentAndBilling.TabIndex = 0;
+            this.wizardPageNewAccountPaymentAndBilling.Title = "Account Registration";
+            this.wizardPageNewAccountPaymentAndBilling.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextNewAccountPaymentAndBilling);
+            // 
+            // paymentAndBillingAddress
+            // 
+            this.paymentAndBillingAddress.Font = new System.Drawing.Font("Tahoma", 8.25F);
+            this.paymentAndBillingAddress.Location = new System.Drawing.Point(23, 3);
+            this.paymentAndBillingAddress.Name = "paymentAndBillingAddress";
+            this.paymentAndBillingAddress.Size = new System.Drawing.Size(450, 500);
+            this.paymentAndBillingAddress.TabIndex = 0;
+            // 
+            // wizardPagePostageMeterAddress
+            // 
+            this.wizardPagePostageMeterAddress.Controls.Add(this.postageMeterAddress);
+            this.wizardPagePostageMeterAddress.Controls.Add(this.labelDescription);
+            this.wizardPagePostageMeterAddress.Controls.Add(this.lableTitle);
+            this.wizardPagePostageMeterAddress.Description = "Create a new Stamps.com account for use with ShipWorks";
+            this.wizardPagePostageMeterAddress.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.wizardPagePostageMeterAddress.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.wizardPagePostageMeterAddress.Location = new System.Drawing.Point(0, 0);
+            this.wizardPagePostageMeterAddress.Name = "wizardPagePostageMeterAddress";
+            this.wizardPagePostageMeterAddress.Size = new System.Drawing.Size(733, 540);
+            this.wizardPagePostageMeterAddress.TabIndex = 0;
+            this.wizardPagePostageMeterAddress.Title = "Account Registration";
+            this.wizardPagePostageMeterAddress.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextPostageMeterAddress);
+            // 
+            // postageMeterAddress
+            // 
+            this.postageMeterAddress.AvailableFields = ((ShipWorks.Data.Controls.PersonFields)((((ShipWorks.Data.Controls.PersonFields.Street | ShipWorks.Data.Controls.PersonFields.City) 
+            | ShipWorks.Data.Controls.PersonFields.State) 
+            | ShipWorks.Data.Controls.PersonFields.Postal)));
+            this.postageMeterAddress.Location = new System.Drawing.Point(56, 68);
+            this.postageMeterAddress.MaxStreetLines = 1;
+            this.postageMeterAddress.Name = "postageMeterAddress";
+            this.postageMeterAddress.Size = new System.Drawing.Size(346, 165);
+            this.postageMeterAddress.TabIndex = 47;
+            // 
+            // labelDescription
+            // 
+            this.labelDescription.Location = new System.Drawing.Point(40, 32);
+            this.labelDescription.Name = "labelDescription";
+            this.labelDescription.Size = new System.Drawing.Size(502, 33);
+            this.labelDescription.TabIndex = 1;
+            this.labelDescription.Text = "The mailing address you provided cannot be used as your USPS Postage Meter addres" +
+    "s. Please provide a physical address (not a PO Box) where you will use your Stam" +
+    "ps.com account to print postage";
+            // 
+            // lableTitle
+            // 
+            this.lableTitle.AutoSize = true;
+            this.lableTitle.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lableTitle.Location = new System.Drawing.Point(20, 9);
+            this.lableTitle.Name = "lableTitle";
+            this.lableTitle.Size = new System.Drawing.Size(212, 13);
+            this.lableTitle.TabIndex = 0;
+            this.lableTitle.Text = "Stamps.com Postage Meter Address";
+            // 
             // UspsSetupWizard
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -516,6 +591,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             this.wizardPageAccountAddress,
             this.wizardPageNewAccountCredentials,
             this.wizardPageNewAccountPayment,
+            this.wizardPageNewAccountPaymentAndBilling,
+            this.wizardPagePostageMeterAddress,
             this.wizardPageExistingAccountCredentials,
             this.wizardPageOptions,
             this.wizardPageStampsAccount});
@@ -547,6 +624,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             this.panelAccountType.PerformLayout();
             this.wizardPageNewAccountCredentials.ResumeLayout(false);
             this.wizardPageNewAccountPayment.ResumeLayout(false);
+            this.wizardPageNewAccountPaymentAndBilling.ResumeLayout(false);
+            this.wizardPagePostageMeterAddress.ResumeLayout(false);
+            this.wizardPagePostageMeterAddress.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -589,5 +669,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         private System.Windows.Forms.CheckBox termsCheckBox;
         private System.Windows.Forms.Label labelTerms;
         private ShipWorks.Data.Controls.AutofillPersonControl personControl;
+        private UI.Wizard.WizardPage wizardPageNewAccountPaymentAndBilling;
+        private PaymentAndBillingAddressControl paymentAndBillingAddress;
+        private UI.Wizard.WizardPage wizardPagePostageMeterAddress;
+        private System.Windows.Forms.Label labelDescription;
+        private System.Windows.Forms.Label lableTitle;
+        private Data.Controls.AutofillPersonControl postageMeterAddress;
     }
 }

@@ -12,6 +12,7 @@ using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.AddressValidation;
 using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data;
@@ -258,7 +259,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                 account.UspsReseller = (int) UspsResellerType.None;
                 account.ContractType = (int) GetUspsAccountContractType(accountInfo.RatesetType);
                 account.CreatedDate = DateTime.UtcNow;
-                account.PendingInitialAccount = true;
+                account.PendingInitialAccount = (int) UspsPendingAccountType.Existing;
             }
 
             return account;

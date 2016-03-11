@@ -2910,7 +2910,7 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementFieldMapping( "UspsAccountEntity", "UspsReseller", "UspsReseller", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 20 );
 			base.AddElementFieldMapping( "UspsAccountEntity", "ContractType", "ContractType", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 21 );
 			base.AddElementFieldMapping( "UspsAccountEntity", "CreatedDate", "CreatedDate", false, (int)SqlDbType.DateTime, 0, 0, 0, false, "", null, typeof(System.DateTime), 22 );
-			base.AddElementFieldMapping( "UspsAccountEntity", "PendingInitialAccount", "PendingInitialAccount", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 23 );
+			base.AddElementFieldMapping( "UspsAccountEntity", "PendingInitialAccount", "PendingInitialAccount", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 23 );
 		}
 		/// <summary>Inits UspsProfileEntity's mappings</summary>
 		private void InitUspsProfileEntityMappings()

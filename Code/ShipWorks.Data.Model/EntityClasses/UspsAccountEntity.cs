@@ -824,11 +824,11 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary> The PendingInitialAccount property of the Entity UspsAccount<br/><br/>
 		/// </summary>
 		/// <remarks>Mapped on  table field: "UspsAccount"."PendingInitialAccount"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Boolean PendingInitialAccount
+		public virtual System.Int32 PendingInitialAccount
 		{
-			get { return (System.Boolean)GetValue((int)UspsAccountFieldIndex.PendingInitialAccount, true); }
+			get { return (System.Int32)GetValue((int)UspsAccountFieldIndex.PendingInitialAccount, true); }
 			set	{ SetValue((int)UspsAccountFieldIndex.PendingInitialAccount, value); }
 		}
 

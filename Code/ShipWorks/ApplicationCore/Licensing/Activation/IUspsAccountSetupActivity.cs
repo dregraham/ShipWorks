@@ -10,8 +10,6 @@ namespace ShipWorks.ApplicationCore.Licensing.Activation
         /// Uses the user name and password provided to populate and save an USPS
         /// account entity.
         /// </summary>
-        /// <param name="stampsUserName">The user name of the SDC account.</param>
-        /// <param name="password">The password.</param>
-        void Execute(string stampsUserName, string password);
+        void Execute(ICustomerLicense license, string password);
     }
 }

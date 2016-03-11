@@ -11,6 +11,11 @@ namespace ShipWorks.ApplicationCore.Licensing
     public interface ICustomerLicense : ILicense
     {
         /// <summary>
+        /// Gets or sets the stamps username to create when creating a new stamps account.
+        /// </summary>
+        string StampsUsername { get; set; }
+
+        /// <summary>
         /// Gets or sets the user name of the SDC account associated with this license.
         /// </summary>
         string AssociatedStampsUsername { get; set; }

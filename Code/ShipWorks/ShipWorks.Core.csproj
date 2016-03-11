@@ -559,6 +559,7 @@
     <Compile Include="AddressValidation\Enums\AddressValidationStatusType.cs" />
     <Compile Include="AddressValidation\Enums\AddressValidationStoreSettingType.cs" />
     <Compile Include="AddressValidation\Enums\ValidationDetailStatusType.cs" />
+    <Compile Include="AddressValidation\IAddressValidator.cs" />
     <Compile Include="AddressValidation\Predicates\AddressSuggestionsForConsumerPredicate.cs" />
     <Compile Include="AddressValidation\AddressValidationQueue.cs" />
     <Compile Include="AddressValidation\AddressValidationResult.cs" />
@@ -601,7 +602,12 @@
     <Compile Include="ApplicationCore\Licensing\Activation\ICustomerLicenseActivationActivity.cs" />
     <Compile Include="ApplicationCore\Licensing\Activation\IUspsAccountSetupActivity.cs" />
     <Compile Include="ApplicationCore\Licensing\Activation\UspsAccountSetupActivity.cs" />
+    <Compile Include="ApplicationCore\Licensing\AssociateShipworksWithItselfRequest.cs" />
+    <Compile Include="ApplicationCore\Licensing\AssociateShipWorksWithItselfResponse.cs" />
+    <Compile Include="ApplicationCore\Licensing\AssociateShipWorksWithItselfResponseType.cs" />
     <Compile Include="ApplicationCore\Licensing\ComplianceLevel.cs" />
+    <Compile Include="ApplicationCore\Licensing\CreditCardType.cs" />
+    <Compile Include="ApplicationCore\Licensing\UspsPendingAccountType.cs" />
     <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\Endicia\EndiciaConsolidatorRestriction.cs" />
     <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\Endicia\EndiciaDhlRestriction.cs" />
     <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\Endicia\EndiciaInsuranceRestriction.cs" />
@@ -925,6 +931,12 @@
     <Compile Include="Shipping\Carriers\Postal\IPostalUtility.cs" />
     <Compile Include="Shipping\Carriers\Postal\PostalUtilityWrapper.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\IUspsAccountManager.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\Registration\PaymentAndBillingAddressControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Shipping\Carriers\Postal\Usps\Registration\PaymentAndBillingAddressControl.Designer.cs">
+      <DependentUpon>PaymentAndBillingAddressControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsAccountManagerWrapper.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Registration\Promotion\Express1RegistrationPromotion.cs" />
     <Compile Include="Shipping\Carriers\UPS\OnLineTools\IUpsOltShipmentValidator.cs" />
@@ -7825,6 +7837,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\Postal\Usps\Express1\Express1UspsProfileControl.resx">
       <DependentUpon>Express1UspsProfileControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\Carriers\Postal\Usps\Registration\PaymentAndBillingAddressControl.resx">
+      <DependentUpon>PaymentAndBillingAddressControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\Postal\Usps\Registration\UspsPaymentControl.resx">
       <DependentUpon>UspsPaymentControl.cs</DependentUpon>
