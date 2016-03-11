@@ -36,6 +36,14 @@ namespace ShipWorks.UI.Controls.Weight
                     new PropertyChangedCallback(OnTextChanged),
                     new CoerceValueCallback(CoerceTextPropertyChanges)));
 
+        public static readonly DependencyPropertyKey ErrorMessagePropertyKey =
+            DependencyProperty.RegisterReadOnly("ErrorMessage",
+                typeof(string),
+                typeof(WeightInput),
+                new PropertyMetadata(string.Empty));
+
+        public static readonly DependencyProperty ErrorMessageProperty = ErrorMessagePropertyKey.DependencyProperty;
+
         /// <summary>
         /// The text has changed
         /// </summary>
@@ -86,6 +94,14 @@ namespace ShipWorks.UI.Controls.Weight
         }
 
         /// <summary>
+        /// Most recent error message
+        /// </summary>
+        public string ErrorMessage
+        {
+            get { return (string) GetValue(ErrorMessageProperty); }
+        }
+
+        /// <summary>
         /// Apply the template
         /// </summary>
         public override void OnApplyTemplate()
@@ -111,6 +127,8 @@ namespace ShipWorks.UI.Controls.Weight
         /// </summary>
         private static object CoerceTextPropertyChanges(DependencyObject d, object baseValue)
         {
+            d.SetValue(ErrorMessagePropertyKey, string.Empty);
+
             double? weight = WeightConverter.Current.ParseWeight(baseValue as string);
 
             if (weight.HasValue)
@@ -122,6 +140,7 @@ namespace ShipWorks.UI.Controls.Weight
             }
             else
             {
+                d.SetValue(ErrorMessagePropertyKey, "The input was not valid.");
                 return WeightConverter.Current.FormatWeight((double) d.GetValue(WeightProperty));
             }
         }

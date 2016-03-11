@@ -175,6 +175,7 @@
     <Compile Include="ValueConverters\ImageToBitmapSourceConverter.cs" />
     <Compile Include="ValueConverters\EnumImageConverter.cs" />
     <Compile Include="ValueConverters\InvertBooleanConverter.cs" />
+    <Compile Include="ValueConverters\IsEmptyConverter.cs" />
     <Compile Include="ValueConverters\StateProvinceConverter.cs" />
     <Compile Include="ValueConverters\StringEmptyWhenEqualToParameterConverter.cs" />
     <Compile Include="ValueConverters\HalfCentCurrencyConverter.cs" />

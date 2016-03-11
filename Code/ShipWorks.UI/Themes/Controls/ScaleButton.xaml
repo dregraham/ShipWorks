@@ -36,7 +36,7 @@
                     <Border x:Name="border"
                             Background="{TemplateBinding Background}"
                             SnapsToDevicePixels="true"
-                             Padding="4,4,4,4"
+                            Padding="4,4,4,4"
                             CornerRadius="3">
                         <ContentPresenter x:Name="contentPresenter"
                                           Focusable="False"
