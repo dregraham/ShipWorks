@@ -27,14 +27,6 @@ namespace ShipWorks.UI.Controls.Weight
                 typeof(ScaleButton),
                 new PropertyMetadata(WeightDisplayFormat.FractionalPounds));
 
-        public static readonly DependencyPropertyKey ErrorMessagePropertyKey =
-            DependencyProperty.RegisterReadOnly("ErrorMessage",
-                typeof(string),
-                typeof(ScaleButton),
-                new PropertyMetadata(string.Empty));
-
-        public static readonly DependencyProperty ErrorMessageProperty = ErrorMessagePropertyKey.DependencyProperty;
-
         IDisposable weightSubscription;
         ButtonBase scaleButton;
         TextBlock display;
@@ -45,6 +37,7 @@ namespace ShipWorks.UI.Controls.Weight
         static ScaleButton()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(ScaleButton), new FrameworkPropertyMetadata(typeof(ScaleButton)));
+            WeightControl.ErrorMessageProperty.AddOwner(typeof(ScaleButton));
         }
 
         /// <summary>
@@ -69,7 +62,7 @@ namespace ShipWorks.UI.Controls.Weight
         /// </summary>
         public string ErrorMessage
         {
-            get { return (string) GetValue(ErrorMessageProperty); }
+            get { return (string) GetValue(WeightControl.ErrorMessageProperty); }
         }
 
         /// <summary>
@@ -143,7 +136,7 @@ namespace ShipWorks.UI.Controls.Weight
 
             if (readResult.Status == ScaleReadStatus.Success && readResult.Weight >= 0)
             {
-                SetValue(ErrorMessagePropertyKey, string.Empty);
+                SetValue(WeightControl.ErrorMessagePropertyKey, string.Empty);
                 display.Visibility = Visibility.Visible;
                 display.Text = FormatWeight(readResult.Weight);
             }
@@ -158,7 +151,7 @@ namespace ShipWorks.UI.Controls.Weight
         /// </summary>
         private async void OnScaleButtonClick(object sender, RoutedEventArgs e)
         {
-            SetValue(ErrorMessagePropertyKey, string.Empty);
+            SetValue(WeightControl.ErrorMessagePropertyKey, string.Empty);
             scaleButton.IsEnabled = false;
 
             ScaleReadResult result = await ScaleReader.ReadScale();
@@ -167,7 +160,7 @@ namespace ShipWorks.UI.Controls.Weight
 
             if (result.Status != ScaleReadStatus.Success)
             {
-                SetValue(ErrorMessagePropertyKey, result.Message);
+                SetValue(WeightControl.ErrorMessagePropertyKey, result.Message);
                 return;
             }
 

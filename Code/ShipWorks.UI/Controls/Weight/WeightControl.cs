@@ -98,29 +98,32 @@ namespace ShipWorks.UI.Controls.Weight
             textBinding.Mode = BindingMode.TwoWay;
             entry.SetBinding(WeightInput.WeightProperty, textBinding);
 
-            DependencyPropertyDescriptor scaleButtonDescriptor =
-                    DependencyPropertyDescriptor.FromProperty(ScaleButton.ErrorMessageProperty, typeof(ScaleButton));
-            scaleButtonDescriptor.AddValueChanged(scaleButton, new EventHandler(OnErrorChanged));
-
-            DependencyPropertyDescriptor entryDescriptor =
-                    DependencyPropertyDescriptor.FromProperty(WeightInput.ErrorMessageProperty, typeof(WeightInput));
-            entryDescriptor.AddValueChanged(entry, new EventHandler(OnErrorChanged));
+            AddErrorMessageValueChangedHandler(scaleButton);
+            AddErrorMessageValueChangedHandler(entry);
         }
 
+        /// <summary>
+        /// Add an error message value changed handler for a control
+        /// </summary>
+        private void AddErrorMessageValueChangedHandler(DependencyObject control)
+        {
+            DependencyPropertyDescriptor descriptor =
+                                DependencyPropertyDescriptor.FromProperty(ErrorMessageProperty, control.GetType());
+            descriptor.AddValueChanged(control, new EventHandler(OnErrorChanged));
+        }
+
+        /// <summary>
+        /// Handle the error message changing
+        /// </summary>
         private void OnErrorChanged(object sender, EventArgs e)
         {
-            string message = string.Empty;
-
-            if (sender == entry)
+            DependencyObject d = sender as DependencyObject;
+            if (d == null)
             {
-                message = entry.GetValue(WeightInput.ErrorMessageProperty) as string;
+                return;
             }
 
-            if (sender == scaleButton)
-            {
-                message = scaleButton.GetValue(ScaleButton.ErrorMessageProperty) as string;
-            }
-
+            string message = d.GetValue(ErrorMessageProperty) as string;
             SetValue(ErrorMessagePropertyKey, message);
         }
     }

@@ -66,6 +66,7 @@
         </Setter>
     </Style>
     <Style TargetType="{x:Type weight:ScaleButton}">
+        <Setter Property="KeyboardNavigation.IsTabStop" Value="False" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type weight:ScaleButton}">
