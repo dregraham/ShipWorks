@@ -40,7 +40,7 @@
         <StackPanel Margin="6, 6, 6, 6" >
             <StackPanel Visibility="{Binding LoadedShipmentResult, Converter={StaticResource VisibleWhenEqualToParameter}, ConverterParameter={x:Static sw:ShippingPanelLoadedShipmentResult.Success}}">
                 <WrapPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0, 0, 0, 6">
-                    <TextBlock VerticalAlignment="Center">Carrier:</TextBlock>
+                    <TextBlock VerticalAlignment="Center">Provider:</TextBlock>
 
                     <ComboBox VerticalAlignment="Center" SelectedValuePath="Value"
                               DisplayMemberPath="Description"
@@ -59,13 +59,13 @@
                         </ComboBox.SelectedValue>
                     </ComboBox>
 
-                    <TextBlock VerticalAlignment="Center" Padding="8, 0, 4, 0" 
+                    <TextBlock VerticalAlignment="Center" Padding="8, 0, 4, 0"
                                TextWrapping="WrapWithOverflow">Requested shipping:</TextBlock>
 
-                    <TextBlock VerticalAlignment="Center" TextWrapping="WrapWithOverflow" 
+                    <TextBlock VerticalAlignment="Center" TextWrapping="WrapWithOverflow"
                                Text="{Binding RequestedShippingMethod}" />
                 </WrapPanel>
-                
+
                 <StackPanel Visibility="{Binding ShipmentType, Converter={StaticResource VisibleWhenNotEqualToParameter}, ConverterParameter={x:Static sw:ShipmentTypeCode.None}}">
                     <Border>
                         <Expander
@@ -115,7 +115,7 @@
                                                 Mode="OneWay" />
                                         </ComboBox.ItemsSource>
                                     </ui:ShipWorksComboBox>
-                                    
+
                                     <TextBlock Grid.Row="2" Grid.Column="0"
                                            Style="{StaticResource GridLabel}">Origin:</TextBlock>
                                     <ui:ShipWorksComboBox Grid.Row="2" Grid.Column="1"
@@ -235,7 +235,7 @@
                     <TextBlock Style="{StaticResource EmptyTextStyle}">Select a shipping carrier from the list above.</TextBlock>
                 </StackPanel>
                 <StackPanel Margin="5,5">
-                    <TextBlock Style="{StaticResource EmptyTextStyle}" 
+                    <TextBlock Style="{StaticResource EmptyTextStyle}"
                                TextWrapping="WrapWithOverflow"
                                Margin="0, 0, 0, 5">
                         Need to configure specific shipment options?
@@ -246,7 +246,7 @@
             </StackPanel>
             <StackPanel Margin="5,5">
                 <StackPanel Visibility="{Binding LoadedShipmentResult,Converter={StaticResource VisibleWhenEqualToParameter},ConverterParameter={x:Static sw:ShippingPanelLoadedShipmentResult.Multiple}}">
-                    <TextBlock Style="{StaticResource EmptyTextStyle}" 
+                    <TextBlock Style="{StaticResource EmptyTextStyle}"
                                TextWrapping="WrapWithOverflow"
                                Margin="0, 0, 0, 5">
                         Need to configure create labels for multiple shipments?
