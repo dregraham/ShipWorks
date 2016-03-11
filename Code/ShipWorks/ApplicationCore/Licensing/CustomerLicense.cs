@@ -147,7 +147,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             try
             {
                 // Refresh the license capabilities and note the time they were refreshed
-                LicenseCapabilities = tangoWebClient.GetLicenseCapabilities(this);
+                LicenseCapabilities = tangoWebClient.GetLicenseCapabilities((ICustomerLicense) this);
                 lastRefreshTimeInUtc = DateTime.UtcNow;
             }
             catch (TangoException ex)
@@ -237,9 +237,11 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public void EnforceCapabilities(EnforcementContext context)
         {
-            if (LicenseCapabilities == null)
+            Refresh();
+
+            if (LicenseCapabilities.IsInTrial)
             {
-                Refresh();
+                return;
             }
 
             EnumResult<ComplianceLevel> enforcerNotInCompliance =
@@ -258,14 +260,14 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public void EnforceCapabilities(EnforcementContext context, IWin32Window owner)
         {
-            if (LicenseCapabilities == null)
+            Refresh();
+
+            if (LicenseCapabilities.IsInTrial)
             {
-                Refresh();
+                return;
             }
 
             licenseEnforcers.ToList().ForEach(e => e.Enforce(LicenseCapabilities, context, owner));
-
-            Refresh();
         }
 
         /// <summary>
@@ -273,12 +275,14 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public IEnumerable<EnumResult<ComplianceLevel>> EnforceCapabilities(EditionFeature feature, EnforcementContext context)
         {
-            if (LicenseCapabilities == null)
-            {
-                Refresh();
-            }
+            Refresh();
 
             List<EnumResult<ComplianceLevel>> result = new List<EnumResult<ComplianceLevel>>();
+
+            if (LicenseCapabilities.IsInTrial)
+            {
+                return result;
+            }
 
             licenseEnforcers.Where(e => e.EditionFeature == feature)
                 .ToList()
@@ -292,10 +296,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public DashboardLicenseItem CreateDashboardMessage()
         {
-            if (LicenseCapabilities == null)
-            {
-                Refresh();
-            }
+            Refresh();
             
             if (LicenseCapabilities.IsInTrial)
             {
@@ -338,11 +339,8 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public EditionRestrictionLevel CheckRestriction(EditionFeature feature, object data)
         {
-            if (LicenseCapabilities == null)
-            {
-                Refresh();
-            }
-
+            Refresh();
+            
             IFeatureRestriction restriction = featureRestrictions.SingleOrDefault(r => r.EditionFeature == feature);
             return restriction?.Check(LicenseCapabilities, data) ?? EditionRestrictionLevel.None;
         }
@@ -352,10 +350,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public bool HandleRestriction(EditionFeature feature, object data, IWin32Window owner)
         {
-            if (LicenseCapabilities == null)
-            {
-                Refresh();
-            }
+            Refresh();
 
             return featureRestrictions
                 .Where(r => r.EditionFeature == feature)
