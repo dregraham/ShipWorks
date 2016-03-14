@@ -7,13 +7,12 @@
              xmlns:ui="http://schemas.shipworks.com/ui"
              xmlns:ins="clr-namespace:ShipWorks.Shipping.UI.ShippingPanel.Insurance"
              mc:Ignorable="d" d:DataContext="{d:DesignInstance Type=local:OtherShipmentViewModel}"
-             Grid.IsSharedSizeScope="True"
-             d:DesignHeight="224.36" d:DesignWidth="300">
+             Grid.IsSharedSizeScope="False"
+             d:DesignHeight="220" d:DesignWidth="400">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/ShipWorks.UI;component/Styles/GlobalStyle.xaml"/>
-                
                 <ResourceDictionary Source="/ShipWorks.Shipping.UI;component/Templates/BlinkingRedErrorTemplate.xaml"/>
                 <ResourceDictionary Source="/ShipWorks.Shipping.UI;component/Templates/TextBoxErrorTemplate.xaml"/>
                 <ResourceDictionary Source="/ShipWorks.Shipping.UI;component/Templates/DatePickerErrorTemplate.xaml"/>
@@ -24,10 +23,11 @@
     <StackPanel>
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="75" SharedSizeGroup="Label" />
-                <ColumnDefinition Width="*" SharedSizeGroup="Value" />
+                <ColumnDefinition Width="85" />
+                <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
@@ -49,18 +49,22 @@
                  Text="{Binding Service, ValidatesOnDataErrors=true, NotifyOnValidationError=true}" />
 
             <TextBlock Grid.Row="2" Grid.Column="0"
-                   Style="{StaticResource GridLabel}">Ship date:</TextBlock>
+                       Margin="0, 5, 12, 0"
+                       Style="{StaticResource GridLabel}">Ship date:</TextBlock>
             <DatePicker Grid.Row="2" Grid.Column="1" Style="{DynamicResource DatePickerErrorTemplate}"
                     Width="125" HorizontalAlignment="Left"
-                    Margin="4 0 0 0"
-                    SelectedDate="{Binding ShipDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=true, NotifyOnValidationError=true}" />
+                    Padding="1"
+                    SelectedDate="{Binding ShipDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=true, NotifyOnValidationError=true}" >
+            </DatePicker>
 
-            <TextBlock Grid.Row="3" Grid.Column="0" Margin="0,8,0,0"
-                   Style="{StaticResource GridLabel}">Weight:</TextBlock>
+            <TextBlock Grid.Row="3" Grid.Column="0"
+                       Style="{StaticResource GridLabel}"
+		               VerticalAlignment="Center"
+                       >Weight:</TextBlock>
             <ui:WeightControl Grid.Row="3" Grid.Column="1"
-                Margin="0,3,0,0"
+                Margin="0, 0, 0, 2"
                 HorizontalAlignment="Left"
-                Weight="{Binding ShipmentContentWeight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=true, NotifyOnValidationError=true}"/>
+                Weight="{Binding ShipmentContentWeight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=true, NotifyOnValidationError=true, FallbackValue='0.5'}"/>
 
             <TextBlock Grid.Row="4" Grid.Column="0"
                    Style="{StaticResource GridLabel}">Cost:</TextBlock>
@@ -72,7 +76,10 @@
             <TextBox Grid.Row="5" Grid.Column="1" Style="{DynamicResource TextBoxErrorTemplate}"
                  ui:EntityFieldLength.FieldName="ShipmentTracking"
                  Text="{Binding TrackingNumber, ValidatesOnDataErrors=true, NotifyOnValidationError=true}"  />
+
+            <StackPanel Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" Margin="0 0 0 0">
+                <ins:InsuranceControl DataContext="{Binding InsuranceViewModel}" />
+            </StackPanel>
         </Grid>
-        <ins:InsuranceControl DataContext="{Binding InsuranceViewModel}" />
     </StackPanel>
 </UserControl>

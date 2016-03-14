@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:ui="http://schemas.shipworks.com/ui"
              xmlns:local="clr-namespace:ShipWorks.Shipping.UI.ShippingPanel.Insurance"
+             Grid.IsSharedSizeScope="False"
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="400">
     <UserControl.Resources>
@@ -18,7 +19,7 @@
     </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="75" />
+            <ColumnDefinition Width="85" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
@@ -28,16 +29,16 @@
 
         <TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource GridLabel}"
                        Text="{Binding InsuranceLabelDisplayText, FallbackValue='Insurance:'}"></TextBlock>
-        <StackPanel  Grid.Row="0" Grid.Column="1" Orientation="Horizontal">
-            <CheckBox Margin="3 3 0 0" Name="IsInsured"
+        <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal">
+            <CheckBox Margin="-1 2 0 0" Name="IsInsured"
                       VerticalContentAlignment="Center"
-                    Content="{Binding InsuranceTypeLabelDisplayText, FallbackValue='Insurance Type'}"
-                    IsChecked="{Binding Insurance}"/>
+                      Content="{Binding InsuranceTypeLabelDisplayText, FallbackValue='Insurance Type'}"
+                      IsChecked="{Binding Insurance}"/>
         </StackPanel>
 
         <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal">
-            <TextBlock Margin="3 0 2 0" Height="15"
-                        Text="{Binding InsuranceValueLabelDisplayText, FallbackValue='Insured Value:'}"></TextBlock>
+            <TextBlock Margin="0 0 2 0" Height="15"
+                       Text="{Binding InsuranceValueLabelDisplayText, FallbackValue='Insured Value:'}"></TextBlock>
             <TextBox
                      Style="{DynamicResource TextBoxErrorTemplate}"
                      IsEnabled="{Binding Insurance}"
@@ -45,7 +46,7 @@
                             Converter={StaticResource EmptyMoney}, 
                             TargetNullValue='', ValidatesOnDataErrors=true, NotifyOnValidationError=true}" 
                      Width="80" 
-                     Margin="3, 0, 0, 3" 
+                     Margin="0, 0, 0, 3" 
                      VerticalAlignment="Center"
                      />
 

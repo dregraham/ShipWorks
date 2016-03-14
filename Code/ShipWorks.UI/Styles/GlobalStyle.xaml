@@ -115,7 +115,4 @@
     <Style TargetType="TextBlock" x:Key="EmptyTextStyle" BasedOn="{StaticResource DefaultTextBlockFont}">
         <Setter Property="Foreground" Value="#FF696969"></Setter>
     </Style>
-
-
-
 </ResourceDictionary>
