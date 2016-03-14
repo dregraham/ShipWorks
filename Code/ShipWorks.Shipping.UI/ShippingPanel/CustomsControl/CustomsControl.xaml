@@ -19,6 +19,7 @@
             <ui:EmptyMoneyConverter x:Key="EmptyMoney" />
             <ui:EmptyDoubleConverter x:Key="EmptyDouble" />
             <ui:BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
+            <ui:VisibleWhenEqualToParameterConverter x:Key="VisibleWhenEqualToParameter" />
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid Visibility="{Binding CustomsAllowed, Converter={StaticResource BooleanToVisibility}, UpdateSourceTrigger=PropertyChanged}">
@@ -59,18 +60,24 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
-            <ListView x:Name="CustomsList" Grid.Row="0" Grid.Column="0" Margin="4 0 0 0"
-                SelectionMode="Single"
-                ItemsSource="{Binding CustomsItems}"
-                SelectedValue ="{Binding SelectedCustomsItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" >
-                <ListView.View>
-                    <GridView>
-                        <GridViewColumn Width="{Binding ElementName=CustomsList, Path=Width}" 
-                            DisplayMemberBinding="{Binding Description, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, FallbackValue=''}">Description</GridViewColumn>
-                    </GridView>
-                </ListView.View>
-            </ListView>
-            <StackPanel Grid.Row="0" Grid.Column="1" 
+            <ListBox Grid.Row="0" Grid.Column="0" Margin="4 0 0 0"
+                    SelectionMode="Single"
+                    ItemsSource="{Binding CustomsItems}"
+                    SelectedValue ="{Binding SelectedCustomsItem}" >
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <TextBlock Text="{Binding Description}" />
+                            <TextBlock Text="No description"
+                                       Foreground="LightGray"
+                                       FontStyle="Italic"
+                                       Visibility="{Binding Description, Converter={StaticResource VisibleWhenEqualToParameter}, ConverterParameter=''}" />
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+
+            <StackPanel Grid.Row="0" Grid.Column="1"
                         Margin="4, 0, 5, 0"
                         Orientation="Vertical">
                 <Button Style="{DynamicResource Button.Add}"
@@ -97,14 +104,14 @@
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
 
-                <TextBlock Grid.Row="0" Grid.Column="0" 
-                           Style="{StaticResource GridLabel}" 
+                <TextBlock Grid.Row="0" Grid.Column="0"
+                           Style="{StaticResource GridLabel}"
                            Margin="0, 3, 8, 0">Quantity:</TextBlock>
                 <TextBox Grid.Row="0" Grid.Column="1"
-                         Style="{StaticResource TextBoxErrorTemplate}" 
-                         HorizontalAlignment="Left" 
-                         Width="75" 
-                         Margin="4 2"  
+                         Style="{StaticResource TextBoxErrorTemplate}"
+                         HorizontalAlignment="Left"
+                         Width="75"
+                         Margin="4 2"
                          MaxLength="5"
                          Text="{Binding SelectedCustomsItem.Quantity,
                          Converter={StaticResource EmptyDouble},
@@ -116,15 +123,15 @@
                     </i:Interaction.Behaviors>
                 </TextBox>
 
-                <TextBlock Grid.Row="1" Grid.Column="0" 
+                <TextBlock Grid.Row="1" Grid.Column="0"
                            Style="{StaticResource GridLabel}"
                            Margin="0, 3, 8, 0">Description:</TextBlock>
-                <TextBox Grid.Row="1" Grid.Column="1" 
+                <TextBox Grid.Row="1" Grid.Column="1"
                          Style="{StaticResource TextBoxErrorTemplate}"
                          Margin="4 2" MaxLength="150"
                          Text="{Binding SelectedCustomsItem.Description, ValidatesOnDataErrors=true, NotifyOnValidationError=true}" />
 
-                <TextBlock Grid.Row="2" Grid.Column="0" 
+                <TextBlock Grid.Row="2" Grid.Column="0"
                            Style="{StaticResource GridLabel}"
                            Margin="0, 3, 8, 0"
                            VerticalAlignment="Center" >Weight:</TextBlock>
@@ -132,12 +139,12 @@
                         Weight="{Binding SelectedCustomsItem.Weight, Mode=TwoWay, UpdateSourceTrigger=LostFocus,
                         ValidatesOnDataErrors=true, NotifyOnValidationError=true}"/>
 
-                <TextBlock Grid.Row="3" Grid.Column="0" 
+                <TextBlock Grid.Row="3" Grid.Column="0"
                            Style="{StaticResource GridLabel}"
                            Margin="0, 3, 8, 0" >Value:</TextBlock>
-                <TextBox Grid.Row="3" Grid.Column="1" 
+                <TextBox Grid.Row="3" Grid.Column="1"
                          Style="{StaticResource TextBoxErrorTemplate}"
-                         HorizontalAlignment="Left" Width="75" 
+                         HorizontalAlignment="Left" Width="75"
                          Margin="4 2"  MaxLength="12"
                          Text="{Binding SelectedCustomsItem.UnitValue, Converter={StaticResource EmptyMoney}, StringFormat=C, Mode=TwoWay, UpdateSourceTrigger=LostFocus,
                                 ValidatesOnDataErrors=true, NotifyOnValidationError=true}">
@@ -146,19 +153,19 @@
                     </i:Interaction.Behaviors>
                 </TextBox>
 
-                <TextBlock Grid.Row="4" Grid.Column="0" 
+                <TextBlock Grid.Row="4" Grid.Column="0"
                            Style="{StaticResource GridLabel}"
                            Margin="0, 3, 8, 0">Harmonized Code:</TextBlock>
                 <TextBox Grid.Row="4" Grid.Column="1"
                          Style="{StaticResource TextBoxErrorTemplate}"
-                         Margin="4 2" 
-                         HorizontalAlignment="Left" 
-                         Width="75" 
+                         Margin="4 2"
+                         HorizontalAlignment="Left"
+                         Width="75"
                          MaxLength="14"
                          Text="{Binding SelectedCustomsItem.HarmonizedCode, Mode=TwoWay, UpdateSourceTrigger=LostFocus,
                                 ValidatesOnDataErrors=true, NotifyOnValidationError=true}"></TextBox>
 
-                <TextBlock Grid.Row="5" Grid.Column="0" 
+                <TextBlock Grid.Row="5" Grid.Column="0"
                            Style="{StaticResource GridLabel}"
                            Margin="0, 3, 8, 0" >Country of Origin:</TextBlock>
                 <ComboBox Grid.Row="5" Grid.Column="1"
