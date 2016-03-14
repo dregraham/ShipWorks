@@ -12,8 +12,8 @@
             </Trigger>
         </Style.Triggers>
     </Style>
-    
-    <Style x:Key="Insurance.CurrencyGreen" TargetType="TextBlock">
+
+    <Style x:Key="Insurance.CurrencyGreen" TargetType="TextBlock" BasedOn="{StaticResource DefaultTextBlockFont}">
         <Setter Property="Foreground" Value="#FF008066"></Setter>
         <Setter Property="FontWeight" Value="Bold"></Setter>
         <Style.Triggers>

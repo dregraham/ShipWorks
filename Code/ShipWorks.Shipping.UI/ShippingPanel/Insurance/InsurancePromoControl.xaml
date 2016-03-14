@@ -51,7 +51,7 @@
                    Visibility="{Binding CostVisibility, FallbackValue=Visible}"
                    Text="{Binding Path=InsuranceCostDisplayText, FallbackValue='$0.55'}">
             <TextBlock.Style>
-                <Style TargetType="TextBlock">
+                <Style TargetType="TextBlock" BasedOn="{StaticResource DefaultTextBlockFont}">
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding Insurance}" Value="True">
                             <Setter Property="Foreground" Value="#FF008066"/>

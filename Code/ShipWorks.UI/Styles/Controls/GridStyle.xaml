@@ -1,7 +1,10 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/ShipWorks.UI;component/Styles/DefaultFontStyle.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
 
-    <Style x:Key="GridLabel" TargetType="TextBlock">
+    <Style x:Key="GridLabel" TargetType="TextBlock" BasedOn="{StaticResource DefaultTextBlockFont}">
         <Setter Property="FontWeight" Value="Regular" />
         <Setter Property="HorizontalAlignment" Value="Right" />
         <Setter Property="Margin" Value="0, 3, 12, 0"></Setter>

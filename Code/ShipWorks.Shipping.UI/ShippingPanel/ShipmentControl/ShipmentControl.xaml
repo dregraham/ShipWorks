@@ -109,7 +109,7 @@
                     <ListView.View>
                         <GridView>
                             <GridViewColumn Header="Packages (Select to Edit)" Width="Auto"
-                            DisplayMemberBinding="{Binding Index, StringFormat=Package \{0\}}"/>
+                                            DisplayMemberBinding="{Binding Index, StringFormat=Package \{0\}}"/>
                         </GridView>
                     </ListView.View>
                 </ListView>

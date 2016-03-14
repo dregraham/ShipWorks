@@ -2,20 +2,13 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:controls="clr-namespace:ShipWorks.UI.Controls">
     <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/ShipWorks.UI;component/Styles/DefaultFontStyle.xaml"/>
         <ResourceDictionary Source="/ShipWorks.UI;component/Styles/Controls/ButtonStyle.xaml"/>
         <ResourceDictionary Source="/ShipWorks.UI;component/Styles/Controls/GridStyle.xaml"/>
         <ResourceDictionary Source="/ShipWorks.UI;component/Styles/Controls/AddressControlStyle.xaml"/>
         <ResourceDictionary Source="/ShipWorks.UI;component/Styles/EmptyButtonStyle.xaml"/>
         <ResourceDictionary Source="/ShipWorks.UI;component/Styles/ImageStyle.xaml"/>
     </ResourceDictionary.MergedDictionaries>
-    
-    <Style TargetType="UserControl">
-        <Setter Property="FontFamily" Value="Tahoma" />
-        <Setter Property="FontSize" Value="8.25 pt"></Setter>
-        <Setter Property="FontStyle" Value="Normal"></Setter>
-        <Setter Property="FontStretch" Value="Normal"></Setter>
-        <Setter Property="FontWeight" Value="Normal"></Setter>
-    </Style>
 
     <Thickness x:Key="SectionMargin" Left="0" Top="6" Right="0" Bottom="0" />
 
@@ -30,17 +23,17 @@
     </VisualBrush>
 
 
-    <Style x:Key="GroupSectionHeader" TargetType="{x:Type TextBlock}" >
+    <Style x:Key="GroupSectionHeader" TargetType="TextBlock" BasedOn="{StaticResource DefaultTextBlockFont}" >
         <Setter Property="FontWeight" Value="Bold"></Setter>
         <Setter Property="Margin" Value="5, 5, 5, 5"></Setter>
     </Style>
-    
-    <Style x:Key="Header" TargetType="TextBlock">
+
+    <Style x:Key="Header" TargetType="TextBlock" BasedOn="{StaticResource DefaultTextBlockFont}">
         <Setter Property="FontWeight" Value="Bold" />
         <Setter Property="Margin" Value="4, 0, 0, 4"></Setter>
     </Style>
 
-    <Style TargetType="TextBox">
+    <Style TargetType="TextBox" BasedOn="{StaticResource DefaultTextBoxFont}">
         <Setter Property="Margin" Value="4, 0, 7, 4" />
         <Setter Property="Height" Value="21" />
         <Setter Property="VerticalAlignment" Value="Center"></Setter>
@@ -119,7 +112,7 @@
         <Setter Property="Margin" Value="0, 0, 0, 8" />
     </Style>
 
-    <Style TargetType="TextBlock" x:Key="EmptyTextStyle">
+    <Style TargetType="TextBlock" x:Key="EmptyTextStyle" BasedOn="{StaticResource DefaultTextBlockFont}">
         <Setter Property="Foreground" Value="#FF696969"></Setter>
     </Style>
 
