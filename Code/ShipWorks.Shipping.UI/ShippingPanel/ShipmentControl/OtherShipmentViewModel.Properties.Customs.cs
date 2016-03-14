@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 using GalaSoft.MvvmLight.Command;
 using Shared.System.ComponentModel.DataAnnotations;
-using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
@@ -20,7 +18,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         private bool customsAllowed;
         private decimal totalCustomsValue;
         private double shipmentContentWeight;
-        
+
         /// <summary>
         /// The list of customs items
         /// </summary>
@@ -87,9 +85,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         /// The shipment content weight
         /// </summary>
         [Obfuscation(Exclude = true)]
-        [Required(AllowEmptyStrings = false, ErrorMessage = @"Weight value is required.")]
-        [Range(0.0001, 999999999, ErrorMessage = @"Please enter a valid weight.")]
-        [DoubleCompare(0, ValueCompareOperatorType.GreaterThanOrEqualTo, ErrorMessage = @"Weight must be greater than or equal $0.00.")]
         public double ShipmentContentWeight
         {
             get { return shipmentContentWeight; }
