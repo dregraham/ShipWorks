@@ -517,6 +517,16 @@ namespace ShipWorks.ApplicationCore.Dashboard
                     // The license returned a valid DashboardLicenseItem, add it to the dashboard
                     AddDashboardItem(dashboardItem);
                 }
+                else
+                {
+                    // There's already a dashboard item; confirm whether it needs to be swapped out based 
+                    // on the delta of the IsUnderShipmentLimit property, so we get the appropriate messaging
+                    if (existingItem.IsUnderShipmentLimit != dashboardItem.IsUnderShipmentLimit)
+                    {
+                        dashboardItems.OfType<DashboardLicenseItem>().ToList().ForEach(RemoveDashboardItem);
+                        AddDashboardItem(dashboardItem);
+                    }
+                }
             }
         }
 

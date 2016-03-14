@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Windows;
 using System.Windows.Forms;
 using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.Editions;
+using ShipWorks.UI;
 
 namespace ShipWorks.ApplicationCore.Licensing.LicenseEnforcement
 {
@@ -13,16 +15,19 @@ namespace ShipWorks.ApplicationCore.Licensing.LicenseEnforcement
     {
         private const int UnlimitedShipments = -1;
         private const float ShipmentLimitWarningThreshold = 0.8f;
+        private const float ShipmentLimitExceededThreshold = 1f;
+        private const string ApproachingShipmentLimitUrl = "https://www.interapptive.com/shipworks/notifications/shipment-limit/approaching/259854_ShipWorks_Nudge_ShipmentLimit_Approching.html";
+        private const string ApproachingShipmentLimitTitle = "Approaching Shipment Limit";
 
-        private readonly IUpgradePlanDlgFactory upgradePlanDlgFactory;
+        private readonly IWebBrowserFactory webBrowserDlgFactory;
         private readonly ILog log;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ApproachingShipmentLimitEnforcer(IUpgradePlanDlgFactory upgradePlanDlgFactory, Func<Type, ILog> logFactory)
+        public ApproachingShipmentLimitEnforcer(IWebBrowserFactory webBrowserDlgFactory, Func<Type, ILog> logFactory)
         {
-            this.upgradePlanDlgFactory = upgradePlanDlgFactory;
+            this.webBrowserDlgFactory = webBrowserDlgFactory;
             log = logFactory(typeof(ApproachingShipmentLimitEnforcer));
         }
 
@@ -47,8 +52,11 @@ namespace ShipWorks.ApplicationCore.Licensing.LicenseEnforcement
             {
                 if (context == EnforcementContext.Login && enforcementResult.Message != string.Empty)
                 {
-                    IDialog upgradeLimitDlg = upgradePlanDlgFactory.Create(enforcementResult.Message, owner);
-                    upgradeLimitDlg.ShowDialog();
+                    Size size = new Size(920, 500);
+                    Uri uri = new Uri(ApproachingShipmentLimitUrl);
+
+                    IDialog browserDialog = webBrowserDlgFactory.Create(uri, ApproachingShipmentLimitTitle, owner, size);
+                    browserDialog.ShowDialog();
                 }
             }
             catch (ShipWorksLicenseException ex)
@@ -64,14 +72,14 @@ namespace ShipWorks.ApplicationCore.Licensing.LicenseEnforcement
         {
             string message = string.Empty;
 
-            // unlimited shipment limit is always in compliance 
+            // unlimited shipment limit is always in compliance
             if (capabilities.ShipmentLimit != UnlimitedShipments)
             {
                 float currentShipmentPercentage = (float) capabilities.ProcessedShipments / capabilities.ShipmentLimit;
 
-                if (!capabilities.IsInTrial && currentShipmentPercentage >= ShipmentLimitWarningThreshold)
+                if (!capabilities.IsInTrial && currentShipmentPercentage >= ShipmentLimitWarningThreshold && currentShipmentPercentage < ShipmentLimitExceededThreshold)
                 {
-                    // The current shipment percentage is greater than or equal to the threshold 
+                    // The current shipment percentage is greater than or equal to the threshold
                     message = $"You are nearing your shipment limit for the current billing cycle ending {capabilities.BillingEndDate.ToString("M/d")}.";
                 }
             }
