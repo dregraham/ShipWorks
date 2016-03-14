@@ -33,7 +33,9 @@ namespace ShipWorks.ApplicationCore.Licensing
                 string errorDescription = XPathUtility.Evaluate(navigator, "//Error/Description", string.Empty);
 
                 ResponseType = AssociateShipWorksWithItselfResponseType.UnknownError;
-                Message = $"Unknown error. Message = {errorDescription}";
+                Message = "An unknown error occured. Please check that the information entered is correct and try again. " +
+                          "If your are still experiencing problems, contact ShipWorks support at 1-800-952-7784. " +
+                          $"\nError message: {errorDescription}";
             }
         }
 
