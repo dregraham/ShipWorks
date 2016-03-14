@@ -271,41 +271,8 @@
                 </StackPanel>
             </StackPanel>
         </ScrollViewer>
-        <Border Background="White"
-                BorderBrush="Black"
-                BorderThickness="1"
-                Padding="8"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center"
-                Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibility}}">
-            <StackPanel>
-                <Image Grid.Column="2"
-                           RenderTransformOrigin=".5,.5"
-                           Width="24"
-                           Height="24"
-                           HorizontalAlignment="Center"
-                           VerticalAlignment="Center"
-                           Source="/Shipworks.Core;component/Resources/Progress/circle_ball_blue.gif">
-                    <Image.RenderTransform>
-                        <RotateTransform x:Name="AnimatedRotateTransform" Angle="0" />
-                    </Image.RenderTransform>
-                    <Image.Triggers>
-                        <EventTrigger RoutedEvent="Control.Loaded">
-                            <BeginStoryboard>
-                                <Storyboard>
-                                    <DoubleAnimation By="10"
-                                                 Duration="0:0:1"
-                                                 RepeatBehavior="Forever"
-                                                 Storyboard.TargetName="AnimatedRotateTransform"
-                                                 Storyboard.TargetProperty="Angle"
-                                                 To="360" />
-                                </Storyboard>
-                            </BeginStoryboard>
-                        </EventTrigger>
-                    </Image.Triggers>
-                </Image>
-                <TextBlock>Loading...</TextBlock>
-            </StackPanel>
-        </Border>
+        <ui:WaitSpinner Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibility}}">
+            Loading...
+        </ui:WaitSpinner>
     </Grid>
 </UserControl>
