@@ -113,6 +113,8 @@ namespace ShipWorks.UI.Controls.Weight
             textBinding.Path = new PropertyPath(nameof(Text));
             textBinding.Mode = BindingMode.TwoWay;
             entry.SetBinding(TextBox.TextProperty, textBinding);
+
+            SetEntryWeightValue(this, 0D);
         }
 
         /// <summary>
