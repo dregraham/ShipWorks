@@ -96,26 +96,6 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.LicenseEnforcement
         }
 
         [Fact]
-        public void Enforce_ReturnsCompliantWithNoMessage_WhenIsInTrialAndOverShipmentLimitWarningThreshold()
-        {
-            using (var mock = AutoMock.GetLoose())
-            {
-                ApproachingShipmentLimitEnforcer testObject = mock.Create<ApproachingShipmentLimitEnforcer>();
-
-                Mock<ILicenseCapabilities> licenseCapabilities = mock.Mock<ILicenseCapabilities>();
-
-                licenseCapabilities.Setup(l => l.IsInTrial).Returns(true);
-                licenseCapabilities.Setup(l => l.ProcessedShipments).Returns(9);
-                licenseCapabilities.Setup(l => l.ShipmentLimit).Returns(10);
-
-                EnumResult<ComplianceLevel> result = testObject.Enforce(licenseCapabilities.Object, EnforcementContext.Login);
-
-                Assert.Equal(ComplianceLevel.Compliant, result.Value);
-                Assert.Equal(string.Empty, result.Message);
-            }
-        }
-
-        [Fact]
         public void Enforce_ReturnsCompliantWithEmptyMessage_WhenUnderShipmentLimitIsNegativeOne()
         {
             using (var mock = AutoMock.GetLoose())

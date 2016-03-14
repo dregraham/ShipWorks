@@ -18,7 +18,8 @@ namespace ShipWorks.ApplicationCore.Licensing
             MethodConditions.EnsureArgumentIsNotNull(response, nameof(response));
 
             Key = response.CustomerLicenseKey;
-            AssociatedStampsUserName = response.AssociatedStampsUserName;
+            AssociatedStampsUsername = response.AssociatedStampsUserName;
+            StampsUsername = response.StampsUserName;
         }
 
         /// <summary>
@@ -29,6 +30,11 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// The associated stamps username. If empty, do not create new Stamps account in ShipWorks
         /// </summary>
-        public string AssociatedStampsUserName { get; }
+        public string AssociatedStampsUsername { get; }
+
+        /// <summary>
+        /// The stamps username to use when creating the first stamps account.
+        /// </summary>
+        public string StampsUsername { get; set; }
     }
 }

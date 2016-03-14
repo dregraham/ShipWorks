@@ -71,14 +71,11 @@ namespace ShipWorks.ApplicationCore.Licensing.LicenseEnforcement
             // Need to check at login and when labels are created
             if (context == EnforcementContext.CreateLabel || context == EnforcementContext.Login)
             {
-                if (!capabilities.IsInTrial && capabilities.ShipmentLimit != UnlimitedShipments)
+                if (capabilities.ShipmentLimit != UnlimitedShipments && capabilities.ProcessedShipments >= capabilities.ShipmentLimit)
                 {
-                    if (capabilities.ProcessedShipments >= capabilities.ShipmentLimit)
-                    {
-                        return new EnumResult<ComplianceLevel>(ComplianceLevel.NotCompliant,
-                            "You have reached your shipment limit for this billing cycle. Please upgrade your plan to create labels.");
-                    }
-                }
+                    return new EnumResult<ComplianceLevel>(ComplianceLevel.NotCompliant,
+                        "You have reached your shipment limit for this billing cycle. Please upgrade your plan to create labels.");
+                }                
             }
 
             return new EnumResult<ComplianceLevel>(ComplianceLevel.Compliant, string.Empty);

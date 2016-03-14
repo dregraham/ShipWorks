@@ -278,5 +278,13 @@ namespace ShipWorks.ApplicationCore.Licensing
         {
             TangoWebClient.AssociateStampsUsernameWithLicense(licenseKey, stampsUsername, stampsPassword);
         }
+
+        /// <summary>
+        /// Associates a Usps account created in ShipWorks as the users free Stamps.com account
+        /// </summary>
+        public AssociateShipWorksWithItselfResponse AssociateShipworksWithItself(AssociateShipworksWithItselfRequest associateShipworksWithItselfRequest)
+        {
+            return TangoWebClient.AssociateShipworksWithItself(associateShipworksWithItselfRequest);
+        }
     }
 }

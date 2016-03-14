@@ -33,12 +33,14 @@ using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Insurance.InsureShip;
 using ShipWorks.Stores;
 using ShipWorks.Stores.Content;
+using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
 
 namespace ShipWorks.ApplicationCore.Licensing
 {
     /// <summary>
     /// Interface for working with the interapptive license server
     /// </summary>
+    [NDependIgnoreLongTypesAttribute]
     public static class TangoWebClient
     {
         private const string ActivationUrl = "http://shipworks.stamps.com/ShipWorksNet/ActivationV1.svc";
@@ -94,6 +96,52 @@ namespace ShipWorks.ApplicationCore.Licensing
             postRequest.Variables.Add("action", "activate");
 
             return ProcessAccountRequest(postRequest, store, license);
+        }
+
+        /// <summary>
+        /// Associates a Usps account created in ShipWorks as the users free Stamps.com account
+        /// </summary>
+        internal static AssociateShipWorksWithItselfResponse AssociateShipworksWithItself(AssociateShipworksWithItselfRequest request)
+        {
+            HttpVariableRequestSubmitter postRequest = new HttpVariableRequestSubmitter();
+
+            postRequest.Variables.Add("action", "associateshipworkswithitself");
+            postRequest.Variables.Add("customerlicense", request.CustomerKey);
+
+            postRequest.Variables.Add("cc_holder", request.CardHolderName);
+            postRequest.Variables.Add("cc_cardType", ((int) request.CardType).ToString());
+            postRequest.Variables.Add("cc_account_number", request.CardNumber);
+            postRequest.Variables.Add("cc_cvn", request.CardCvn);
+            postRequest.Variables.Add("cc_expiration_month", request.CardExpirationMonth.ToString());
+            postRequest.Variables.Add("cc_expiration_year", request.CardExpirationYear.ToString());
+            postRequest.Variables.Add("cc_billing_street_1", request.CardBillingAddress.Street1);
+            postRequest.Variables.Add("cc_billing_city", request.CardBillingAddress.City);
+            postRequest.Variables.Add("cc_billing_state", request.CardBillingAddress.StateProvCode);
+            postRequest.Variables.Add("cc_billing_zipcode", request.CardBillingAddress.PostalCode);
+            postRequest.Variables.Add("sendMarketingInfo", "false");
+            postRequest.Variables.Add("version", Version);
+
+            if(request.MatchedPhysicalAddress != null)
+            {
+                Address matchedAddress = request.MatchedPhysicalAddress;
+                postRequest.Variables.Add("pStreet", matchedAddress.Address1);
+                postRequest.Variables.Add("pCity", matchedAddress.City);
+                postRequest.Variables.Add("pState", matchedAddress.State);
+                postRequest.Variables.Add("pZipcode", matchedAddress.ZIPCode);
+                postRequest.Variables.Add("pAddOn", matchedAddress.ZIPCodeAddOn);
+                postRequest.Variables.Add("pDPCode", matchedAddress.DPB);
+                postRequest.Variables.Add("pChkDigit", matchedAddress.CheckDigit);
+                postRequest.Variables.Add("pZipStandard", "zip_standardized");
+            }
+            try
+            {
+                XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "associateshipworkswithitself");
+                return new AssociateShipWorksWithItselfResponse(xmlResponse);
+            }
+            catch (TangoException ex)
+            {
+                return new AssociateShipWorksWithItselfResponse(AssociateShipWorksWithItselfResponseType.UnknownError, ex.Message);
+            }
         }
 
         /// <summary>

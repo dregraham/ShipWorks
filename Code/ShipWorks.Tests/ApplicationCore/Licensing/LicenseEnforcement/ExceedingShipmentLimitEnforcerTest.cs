@@ -44,7 +44,6 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.LicenseEnforcement
                 Mock<ILicenseCapabilities> licenseCapabilities = mock.Mock<ILicenseCapabilities>();
                 licenseCapabilities.Setup(l => l.ProcessedShipments).Returns(4);
                 licenseCapabilities.Setup(l => l.ShipmentLimit).Returns(5);
-                licenseCapabilities.Setup(l => l.IsInTrial).Returns(false);
 
                 ExceedingShipmentLimitEnforcer testObject = mock.Create<ExceedingShipmentLimitEnforcer>();
                 EnumResult<ComplianceLevel> result = testObject.Enforce(licenseCapabilities.Object, EnforcementContext.Login);
@@ -61,7 +60,6 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.LicenseEnforcement
                 Mock<ILicenseCapabilities> licenseCapabilities = mock.Mock<ILicenseCapabilities>();
                 licenseCapabilities.Setup(l => l.ProcessedShipments).Returns(6);
                 licenseCapabilities.Setup(l => l.ShipmentLimit).Returns(5);
-                licenseCapabilities.Setup(l => l.IsInTrial).Returns(false);
 
                 ExceedingShipmentLimitEnforcer testObject = mock.Create<ExceedingShipmentLimitEnforcer>();
                 EnumResult<ComplianceLevel> result = testObject.Enforce(licenseCapabilities.Object, EnforcementContext.Login);
@@ -78,7 +76,6 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.LicenseEnforcement
                 Mock<ILicenseCapabilities> licenseCapabilities = mock.Mock<ILicenseCapabilities>();
                 licenseCapabilities.Setup(l => l.ProcessedShipments).Returns(5);
                 licenseCapabilities.Setup(l => l.ShipmentLimit).Returns(5);
-                licenseCapabilities.Setup(l => l.IsInTrial).Returns(false);
 
                 ExceedingShipmentLimitEnforcer testObject = mock.Create<ExceedingShipmentLimitEnforcer>();
                 EnumResult<ComplianceLevel> result = testObject.Enforce(licenseCapabilities.Object, EnforcementContext.Login);
@@ -258,52 +255,6 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.LicenseEnforcement
                 testObject.Enforce(licenseCapabilities.Object, EnforcementContext.CreateLabel, null);
 
                 dlgFactory.Verify(d => d.Create(It.IsAny<Uri>(), It.IsAny<string>(), It.IsAny<IWin32Window>(), It.IsAny<Size>()), Times.Once);
-            }
-        }
-
-        [Fact]
-        public void Enforce_ReturnsCompliant_WhenContextIsCreateLabel_AndOverLimitsAndInTrial()
-        {
-            using (var mock = AutoMock.GetLoose())
-            {
-                ExceedingShipmentLimitEnforcer testObject = mock.Create<ExceedingShipmentLimitEnforcer>();
-
-                Mock<ILicenseCapabilities> licenseCapabilities = mock.Mock<ILicenseCapabilities>();
-
-                licenseCapabilities.Setup(l => l.ProcessedShipments).Returns(10);
-                licenseCapabilities.Setup(l => l.ShipmentLimit).Returns(5);
-
-                licenseCapabilities.Setup(l => l.ActiveChannels).Returns(10);
-                licenseCapabilities.Setup(l => l.ChannelLimit).Returns(5);
-
-                licenseCapabilities.Setup(l => l.IsInTrial).Returns(true);
-
-                EnumResult<ComplianceLevel> result = testObject.Enforce(licenseCapabilities.Object, EnforcementContext.CreateLabel);
-
-                Assert.Equal(ComplianceLevel.Compliant, result.Value);
-            }
-        }
-
-        [Fact]
-        public void Enforce_ReturnsCompliant_WhenContextIsLogin_AndOverLimitsAndInTrial()
-        {
-            using (var mock = AutoMock.GetLoose())
-            {
-                ExceedingShipmentLimitEnforcer testObject = mock.Create<ExceedingShipmentLimitEnforcer>();
-
-                Mock<ILicenseCapabilities> licenseCapabilities = mock.Mock<ILicenseCapabilities>();
-
-                licenseCapabilities.Setup(l => l.ProcessedShipments).Returns(10);
-                licenseCapabilities.Setup(l => l.ShipmentLimit).Returns(5);
-
-                licenseCapabilities.Setup(l => l.ActiveChannels).Returns(10);
-                licenseCapabilities.Setup(l => l.ChannelLimit).Returns(5);
-
-                licenseCapabilities.Setup(l => l.IsInTrial).Returns(true);
-
-                EnumResult<ComplianceLevel> result = testObject.Enforce(licenseCapabilities.Object, EnforcementContext.Login);
-
-                Assert.Equal(ComplianceLevel.Compliant, result.Value);
             }
         }
     }

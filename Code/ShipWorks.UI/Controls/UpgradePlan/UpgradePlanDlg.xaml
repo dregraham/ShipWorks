@@ -32,11 +32,13 @@
                     Orientation="Horizontal">
             <Button Width="80"
                     Margin="0 0 10 10"
+                    IsDefault="True"
                     Command="{Binding UpgradePlanClickCommand}"
                     CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
                     Content="Upgrade Plan" />
             <Button Width="80"
                     Margin="0 0 10 10"
+                    IsCancel="True"
                     Click="OnClickCancel"
                     Content="Close" />
         </StackPanel>

@@ -5,7 +5,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Activation
     /// workflow required to activate a license are managed/coordinated here.
     /// </summary>
     public class CustomerLicenseActivationService : ICustomerLicenseActivationService
-    {   
+    {
         private readonly ICustomerLicenseActivationActivity licenseActivationActivity;
         private readonly IUspsAccountSetupActivity uspsAccountSetupActivity;
 
@@ -14,7 +14,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Activation
         /// </summary>
         /// <param name="uspsAccountSetupActivity"></param>
         /// <param name="licenseActivationActivity"></param>
-        public CustomerLicenseActivationService(ICustomerLicenseActivationActivity licenseActivationActivity, 
+        public CustomerLicenseActivationService(ICustomerLicenseActivationActivity licenseActivationActivity,
             IUspsAccountSetupActivity uspsAccountSetupActivity)
         {
             this.licenseActivationActivity = licenseActivationActivity;
@@ -27,8 +27,8 @@ namespace ShipWorks.ApplicationCore.Licensing.Activation
         public ICustomerLicense Activate(string email, string password)
         {
             ICustomerLicense license = licenseActivationActivity.Execute(email, password);
-            uspsAccountSetupActivity.Execute(license.AssociatedStampsUsername, password);
-            
+            uspsAccountSetupActivity.Execute(license, password);
+
             return license;
         }
     }

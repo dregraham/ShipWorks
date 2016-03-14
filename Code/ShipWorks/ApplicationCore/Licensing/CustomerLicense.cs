@@ -109,6 +109,11 @@ namespace ShipWorks.ApplicationCore.Licensing
         public string AssociatedStampsUsername { get; set; }
 
         /// <summary>
+        /// Gets or sets the stamps username to create when creating a new stamps account.
+        /// </summary>
+        public string StampsUsername { get; set; }
+
+        /// <summary>
         /// The license capabilities.
         /// </summary>
         private ILicenseCapabilities LicenseCapabilities { get; set; }
@@ -119,7 +124,6 @@ namespace ShipWorks.ApplicationCore.Licensing
         public EnumResult<LicenseActivationState> Activate(StoreEntity store)
         {
             IAddStoreResponse response = tangoWebClient.AddStore(this, store);
-
             store.License = response.Key;
 
             return new EnumResult<LicenseActivationState>(response.Result, EnumHelper.GetDescription(response.Result));
@@ -232,19 +236,20 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public void EnforceCapabilities(EnforcementContext context)
         {
-            if (LicenseCapabilities == null)
-            {
-                Refresh();
-            }
+            Refresh();
 
-            EnumResult<ComplianceLevel> enforcerNotInCompliance =
-                licenseEnforcers
-                    .Select(enforcer => enforcer.Enforce(LicenseCapabilities, context))
-                    .FirstOrDefault(result => result.Value == ComplianceLevel.NotCompliant);
-
-            if (enforcerNotInCompliance != null)
+            if (!LicenseCapabilities.IsInTrial)
             {
-                throw new ShipWorksLicenseException(enforcerNotInCompliance.Message);
+                // Enforce restrictions when not in the trial period
+                EnumResult<ComplianceLevel> enforcerNotInCompliance =
+                    licenseEnforcers
+                        .Select(enforcer => enforcer.Enforce(LicenseCapabilities, context))
+                        .FirstOrDefault(result => result.Value == ComplianceLevel.NotCompliant);
+
+                if (enforcerNotInCompliance != null)
+                {
+                    throw new ShipWorksLicenseException(enforcerNotInCompliance.Message);
+                }
             }
         }
 
@@ -253,14 +258,13 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public void EnforceCapabilities(EnforcementContext context, IWin32Window owner)
         {
-            if (LicenseCapabilities == null)
-            {
-                Refresh();
-            }
-
-            licenseEnforcers.ToList().ForEach(e => e.Enforce(LicenseCapabilities, context, owner));
-
             Refresh();
+
+            if (!LicenseCapabilities.IsInTrial)
+            {
+                // Enforce restrictions when not in the trial period
+                licenseEnforcers.ToList().ForEach(e => e.Enforce(LicenseCapabilities, context, owner));
+            }
         }
 
         /// <summary>
@@ -268,40 +272,47 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public IEnumerable<EnumResult<ComplianceLevel>> EnforceCapabilities(EditionFeature feature, EnforcementContext context)
         {
-            if (LicenseCapabilities == null)
-            {
-                Refresh();
-            }
-
             List<EnumResult<ComplianceLevel>> result = new List<EnumResult<ComplianceLevel>>();
-
-            licenseEnforcers.Where(e => e.EditionFeature == feature)
-                .ToList()
-                .ForEach(e => result.Add(e.Enforce(LicenseCapabilities, context)));
+            
+            Refresh();
+            if (!LicenseCapabilities.IsInTrial)
+            {
+                // Enforce restrictions when not in the trial period
+                licenseEnforcers.Where(e => e.EditionFeature == feature)
+                    .ToList()
+                    .ForEach(e => result.Add(e.Enforce(LicenseCapabilities, context)));
+            }
 
             return result;
         }
 
         /// <summary>
-        /// There are no dashboard items for Storelicense so it returns null
+        /// Returns a dashboard item to notify the user about an aspect/status of his/her license. A null
+        /// value is returned when there is nothing to display.
         /// </summary>
+        /// <remarks>
+        /// A dashboard item is returned when the customer has exceeded 80% of the 
+        /// shipping volume allowed by the license during the current billing cycle.
+        /// </remarks>
         public DashboardLicenseItem CreateDashboardMessage()
         {
-            if (LicenseCapabilities == null)
+            DashboardLicenseItem dashboardItem = null;
+
+            Refresh();
+
+            if (!LicenseCapabilities.IsInTrial)
             {
-                Refresh();
-            }
-            
-            if (LicenseCapabilities.IsInTrial)
-            {
-                return null;
+                // The dashboard item should not be created when in the trial period since 
+                // the shipment count is unlimited.
+                float currentShipmentPercentage = (float) LicenseCapabilities.ProcessedShipments / LicenseCapabilities.ShipmentLimit;
+                if (currentShipmentPercentage >= ShipmentLimitWarningThreshold)
+                {
+                    // This shipping volume is within the warning threshold. Create the dashboard item.
+                    dashboardItem = new DashboardLicenseItem(LicenseCapabilities.BillingEndDate, currentShipmentPercentage);
+                }
             }
 
-            float currentShipmentPercentage = (float) LicenseCapabilities.ProcessedShipments / LicenseCapabilities.ShipmentLimit;
-
-            return currentShipmentPercentage >= ShipmentLimitWarningThreshold ?
-                new DashboardLicenseItem(LicenseCapabilities.BillingEndDate, currentShipmentPercentage) :
-                null;
+            return dashboardItem;
         }
 
         /// <summary>
@@ -333,11 +344,8 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public EditionRestrictionLevel CheckRestriction(EditionFeature feature, object data)
         {
-            if (LicenseCapabilities == null)
-            {
-                Refresh();
-            }
-
+            Refresh();
+            
             IFeatureRestriction restriction = featureRestrictions.SingleOrDefault(r => r.EditionFeature == feature);
             return restriction?.Check(LicenseCapabilities, data) ?? EditionRestrictionLevel.None;
         }
@@ -347,10 +355,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public bool HandleRestriction(EditionFeature feature, object data, IWin32Window owner)
         {
-            if (LicenseCapabilities == null)
-            {
-                Refresh();
-            }
+            Refresh();
 
             return featureRestrictions
                 .Where(r => r.EditionFeature == feature)

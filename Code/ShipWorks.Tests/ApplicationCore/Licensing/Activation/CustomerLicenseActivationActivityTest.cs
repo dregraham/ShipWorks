@@ -91,6 +91,36 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.Activation
         }
 
         [Fact]
+        public void Execute_SetsStampsUsername_FromActivationResponse()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                var activationResponse = MockActivateLicense(mock, "TheKey", "bob");
+                activationResponse.StampsUsername = "stampsUsername";
+
+                mock.Mock<ITangoWebClient>()
+                    .Setup(w => w.ActivateLicense(It.IsAny<string>(), It.IsAny<string>()))
+                    .Returns(new GenericResult<IActivationResponse>(null)
+                    {
+                        Success = true,
+                        Context = activationResponse
+                    });
+
+                string setStampsUsername = string.Empty;
+
+                var customerLicense = mock.Mock<ICustomerLicense>(new NamedParameter("key", "someKey"));
+                customerLicense.SetupSet(l => l.StampsUsername = It.IsAny<string>())
+                    .Callback<string>(value => setStampsUsername = value);
+
+                var testObject = mock.Create<CustomerLicenseActivationActivity>();
+
+                testObject.Execute("foo@bar.com", "baz");
+
+                Assert.Equal(activationResponse.StampsUsername, setStampsUsername);
+            }
+        }
+
+        [Fact]
         public void Activate_DelegatestToTangoWebClient_ToActivateLicense_WithEmailAndPassword()
         {
             using (var mock = AutoMock.GetLoose())
@@ -111,16 +141,6 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.Activation
             }
         }
 
-        //private void MockSuccessfullActivateLicense(AutoMock mock, string associatedUsername)
-        //{
-        //    mock.Mock<ITangoWebClient>()
-        //        .Setup(c => c.ActivateLicense(It.IsAny<string>(), It.IsAny<string>()))
-        //        .Returns(new GenericResult<IActivationResponse>(MockActivateLicense(mock, "key", associatedUsername))
-        //        {
-        //            Success = true
-        //        });
-        //}
-
         private IActivationResponse MockActivateLicense(AutoMock mock, string key, string associatedUserName)
         {
             var activationResponseMock = mock.Mock<IActivationResponse>();
@@ -130,7 +150,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.Activation
                 .Returns(key);
 
             activationResponseMock
-                .Setup(r => r.AssociatedStampsUserName)
+                .Setup(r => r.AssociatedStampsUsername)
                 .Returns(associatedUserName);
 
             return activationResponseMock.Object;
