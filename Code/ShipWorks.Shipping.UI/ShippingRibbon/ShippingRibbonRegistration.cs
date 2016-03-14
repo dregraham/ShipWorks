@@ -81,12 +81,16 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
 
             RibbonChunk shippingShippingChunk = new RibbonChunk
             {
+                FurtherOptions = false,
+                ItemJustification = ItemJustification.Stretch,
                 Items = { voidButton, returnButton, stripLayoutReprint },
                 Text = "Shipping",
             };
 
             RibbonChunk shippingOutputChunk = new RibbonChunk
             {
+                FurtherOptions = false,
+                ItemJustification = ItemJustification.Stretch,
                 Items = { createLabelButton },
                 Text = "Output"
             };
