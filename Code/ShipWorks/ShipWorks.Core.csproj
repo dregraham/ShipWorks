@@ -10498,7 +10498,7 @@
     <None Include="Resources\house.png" />
     <None Include="Resources\island.jpg" />
     <None Include="Resources\island.png" />
-    <None Include="Resources\box_next_32_32.png" />
+    <Resource Include="Resources\box_next_32_32.png" />
     <Content Include="Resources\info.png" />
     <Resource Include="Resources\info_20x20.png" />
     <Content Include="Resources\message32.png" />

@@ -11,7 +11,7 @@
              xmlns:sw="http://schemas.shipworks.com/sw"
              xmlns:customsControl="clr-namespace:ShipWorks.Shipping.UI.ShippingPanel.CustomsControl"
              mc:Ignorable="d" d:DataContext="{d:DesignInstance Type=local:ShippingPanelViewModel}"
-             d:DesignHeight="1550" d:DesignWidth="350"
+             d:DesignHeight="2050" d:DesignWidth="350"
              SnapsToDevicePixels="True"
              Focusable="True"
              IsTabStop="True">
@@ -234,7 +234,18 @@
                             </Expander>
                         </Border>
                         <Grid Margin="{StaticResource SectionMargin}" IsEnabled="{Binding AllowEditing}">
-                            <Button Command="{Binding CreateLabelCommand}">Create Label</Button>
+                            <Button Command="{Binding CreateLabelCommand}"
+                                    HorizontalAlignment="Center"
+                                    Padding="8">
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Height="16"
+                                           Width="16" 
+                                           Source="/ShipWorks.Core;component/Resources/box_next_32_32.png"
+                                           VerticalAlignment="Center"/>
+                                    <TextBlock Margin="6, 0, 0, 0"
+                                               VerticalAlignment="Center">Create Label</TextBlock>
+                                </StackPanel>
+                            </Button>
                         </Grid>
                     </StackPanel>
 
