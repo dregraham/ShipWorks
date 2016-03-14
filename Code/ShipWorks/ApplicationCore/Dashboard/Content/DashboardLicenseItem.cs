@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Windows;
 using Autofac;
 using ShipWorks.ApplicationCore.Licensing;
@@ -34,6 +35,7 @@ namespace ShipWorks.ApplicationCore.Dashboard.Content
         /// <summary>
         /// Initialize the item with given bar that it will display its information in
         /// </summary>
+        [SuppressMessage("SonarQube", "S2758")]
         public override void Initialize(DashboardBar dashboardBar)
         {
             base.Initialize(dashboardBar);
