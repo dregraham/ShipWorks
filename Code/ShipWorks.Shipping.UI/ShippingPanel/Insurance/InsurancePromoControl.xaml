@@ -8,13 +8,17 @@
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/ShipWorks.UI;component/Styles/GlobalStyle.xaml"/>
+                <ResourceDictionary Source="/ShipWorks.UI;component/Styles/Controls/InsurancePromoControlStyle.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
+        
     </UserControl.Resources>
 
     <StackPanel Orientation="Horizontal">
-        <Image Style="{StaticResource Image.InfoTip}" Margin="0 6 0 0"
+        <Image Style="{StaticResource Image.InfoTip}" 
+               Margin="5 6 0 0"
+               Width="12"
+               Height="12"
                Visibility="{Binding InfoTipVisibility, FallbackValue=Visible}" >
             <Image.ToolTip>
                 <ToolTip>
@@ -42,14 +46,29 @@
             </Image.ToolTip>
         </Image>
 
-        <TextBlock Margin="5 0 0 0" VerticalAlignment="Center"
-                        Visibility="{Binding CostVisibility, FallbackValue=Visible}"
-                        Text="{Binding Path=InsuranceCostDisplayText, FallbackValue='$0.55'}"></TextBlock>
+        <TextBlock Margin="5 5 0 0" 
+                   VerticalAlignment="Center"
+                   Visibility="{Binding CostVisibility, FallbackValue=Visible}"
+                   Text="{Binding Path=InsuranceCostDisplayText, FallbackValue='$0.55'}">
+            <TextBlock.Style>
+                <Style TargetType="TextBlock">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Insurance}" Value="True">
+                            <Setter Property="Foreground" Value="#FF008066"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Insurance}" Value="False">
+                            <Setter Property="Foreground" Value="Gray"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+        </TextBlock>
 
-        <Button Margin="5 0 0 0" VerticalAlignment="Center"
+        <Button Style="{DynamicResource Button.InsuranceLink}"
+                Margin="5 5 0 0" 
+                VerticalAlignment="Center"
                 Visibility="{Binding LinkVisibility, FallbackValue=Visible}"
                 Content="{Binding Path=InsuranceLinkDisplayText, FallbackValue='$50.00'}"
-                Style="{DynamicResource Button.Link}"
                 Command="{Binding ShowInsurancePromoDialogCommand}"
                 />
     </StackPanel>

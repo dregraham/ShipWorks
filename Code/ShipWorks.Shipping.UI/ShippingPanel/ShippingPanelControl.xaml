@@ -159,7 +159,7 @@
                                 <DataTemplate>
                                     <StackPanel Orientation="Vertical">
                                         <StackPanel Orientation="Horizontal">
-                                            <TextBlock Margin="0,0,8,0">To</TextBlock>
+                                            <TextBlock Margin="0,0,8,0" Foreground="Gray">To</TextBlock>
                                             <TextBlock Foreground="Gray">
                                                 <TextBlock.Text>
                                                     <MultiBinding StringFormat="{}{0}, {1} ">
@@ -202,8 +202,14 @@
                               IsExpanded="{Binding IsDetailsExpanded, Source={x:Static ui:ExpanderState.Current}, Mode=TwoWay, FallbackValue=True}"
                               DataContext="{Binding ShipmentViewModel}"
                               Style="{StaticResource Expander.Style}">
+                            <Expander.HeaderTemplate>
+                                <DataTemplate>
+                                    <TextBlock Foreground="Gray">Shipment Details</TextBlock>
+                                </DataTemplate>
+                            </Expander.HeaderTemplate>
 
-                            <StackPanel IsEnabled="{Binding DataContext.AllowEditing,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:ShippingPanelControl}}}">
+                            <StackPanel IsEnabled="{Binding DataContext.AllowEditing,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:ShippingPanelControl}}}"
+                                        Margin="0, 8, 0, 0">
                                 <shipmentControl:ShipmentControl Visibility="{
                                     Binding DataContext.ShipmentType,
                                     RelativeSource={RelativeSource AncestorType=UserControl},

@@ -64,16 +64,18 @@
                 <RowDefinition />
             </Grid.RowDefinitions>
 
-            <TextBlock Style="{StaticResource Header}">Address</TextBlock>
-            <controls:AlignmentWrapPanel Grid.Column="1"
+            <TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource Header}"
+                       Margin="4, 2, 0, 4">Address</TextBlock>
+            <controls:AlignmentWrapPanel Grid.Row="0" Grid.Column="1"
                     VerticalAlignment="Top"
                     HorizontalAlignment="Stretch"
-                    Visibility="{Binding IsAddressValidationEnabled, Converter={StaticResource BooleanToVisibility}}">
+                    Margin="0, 0, 0, 6">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                    <Image VerticalAlignment="Center"
+                    <Image VerticalAlignment="Top"
                            Margin="4,0,8,0"
                            Source="{Binding ValidationStatus, Converter={StaticResource EnumImage}}" />
-                    <TextBlock VerticalAlignment="Center"
+                    <TextBlock VerticalAlignment="Top"
+                        Margin="0, 2, 0, 0"
                            Text="{Binding ValidationStatus, Converter={StaticResource EnumDescription}}" />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal"
@@ -81,7 +83,9 @@
                             VerticalAlignment="Center">
                     <StackPanel.Resources>
                         <Style BasedOn="{StaticResource Button.Link}"
-                               TargetType="Button" />
+                               TargetType="Button" >
+                            <Setter Property="Margin" Value="0, 0, 7, 0" />
+                        </Style>
                     </StackPanel.Resources>
                     <Button Visibility="{Binding CanValidateAddress, Converter={StaticResource BooleanToVisibility}}"
                             Command="{Binding ValidateCommand}">
