@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows;
-using System.Windows.Forms;
 using Autofac;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Properties;
@@ -15,10 +14,21 @@ namespace ShipWorks.ApplicationCore.Dashboard.Content
     public class DashboardLicenseItem : DashboardItem
     {
         private readonly DateTime billingEndDate;
+        private readonly float currentShipmentPercentage;
 
-        public DashboardLicenseItem(DateTime billingEndDate)
+        public DashboardLicenseItem(DateTime billingEndDate, float currentShipmentPercentage)
         {
             this.billingEndDate = billingEndDate;
+            this.currentShipmentPercentage = currentShipmentPercentage;
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether this instance is under shipment limit.
+        /// </summary>
+        /// <value><c>true</c> if this instance is under shipment limit; otherwise, <c>false</c>.</value>
+        public bool IsUnderShipmentLimit
+        {
+            get { return currentShipmentPercentage < 1.0; }
         }
 
         /// <summary>
@@ -29,9 +39,13 @@ namespace ShipWorks.ApplicationCore.Dashboard.Content
             base.Initialize(dashboardBar);
 
             DashboardBar.CanUserDismiss = false;
-
             DashboardBar.PrimaryText = "Licensing";
-            DashboardBar.SecondaryText = $"You are nearing your shipment limit for the current billing cycle ending {billingEndDate.ToString("M/d")}.";
+
+            // Tailor the message to the depending on where the customer is at within their shipment
+            DashboardBar.SecondaryText = IsUnderShipmentLimit 
+                ? $"You are nearing your shipment limit for the current billing cycle ending {billingEndDate.ToString("M/d")}." 
+                : $"You have reached your shipment limit for the current billing cycle ending {billingEndDate.ToString("M/d")}.";
+
             DashboardBar.Image = Resources.warning16;
             DashboardBar.ApplyActions(new List<DashboardAction>
             {

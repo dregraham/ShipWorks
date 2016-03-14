@@ -300,7 +300,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             float currentShipmentPercentage = (float) LicenseCapabilities.ProcessedShipments / LicenseCapabilities.ShipmentLimit;
 
             return currentShipmentPercentage >= ShipmentLimitWarningThreshold ?
-                new DashboardLicenseItem(LicenseCapabilities.BillingEndDate) :
+                new DashboardLicenseItem(LicenseCapabilities.BillingEndDate, currentShipmentPercentage) :
                 null;
         }
 
