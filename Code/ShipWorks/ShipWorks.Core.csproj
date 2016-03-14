@@ -1240,6 +1240,11 @@
     <Compile Include="Stores\Platforms\OpenSky\OpenSkyStoreType.cs" />
     <Compile Include="Stores\Platforms\OrderBot\OrderBotStoreType.cs" />
     <Compile Include="Stores\Platforms\RevolutionParts\RevolutionPartsStoreType.cs" />
+    <Compile Include="Stores\Platforms\ThreeDCart\RestApi\Responses\ThreeDCartOrder.cs" />
+    <Compile Include="Stores\Platforms\ThreeDCart\RestApi\Responses\ThreeDCartOrderItem.cs" />
+    <Compile Include="Stores\Platforms\ThreeDCart\RestApi\Responses\ThreeDCartShipment.cs" />
+    <Compile Include="Stores\Platforms\ThreeDCart\RestApi\Responses\ThreeDCartTransaction.cs" />
+    <Compile Include="Stores\Platforms\ThreeDCart\RestApi\ThreeDCartRestWebClient.cs" />
     <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooAddressInfo.cs" />
     <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooAppliedPromotion.cs" />
     <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooBillToInfo.cs" />

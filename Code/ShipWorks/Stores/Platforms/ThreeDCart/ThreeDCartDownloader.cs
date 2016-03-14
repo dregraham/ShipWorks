@@ -22,6 +22,8 @@ using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.ThreeDCart.Enums;
 using log4net;
 using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Stores.Platforms.ThreeDCart.RestApi;
+using ShipWorks.Stores.Platforms.ThreeDCart.RestApi.Responses;
 
 namespace ShipWorks.Stores.Platforms.ThreeDCart
 {
@@ -76,47 +78,52 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
             try
             {
                 // Update the orders statuses from online
-                UpdateOrderStatuses();
+                //UpdateOrderStatuses();
 
                 Progress.Detail = "Checking for new orders...";
 
-                // Get the number of orders for the range
-                ThreeDCartWebClientOrderSearchCriteria orderSearchCriteria =
-                    GetOrderSearchCriteria(ThreeDCartWebClientOrderDateSearchType.CreatedDate);
+                DateTime startDate = new DateTime();
 
-                totalCount = WebClient.GetOrderCount(orderSearchCriteria);
+                IEnumerable<ThreeDCartOrder> orders = DownloadOrders(startDate);
 
-                if (totalCount != 0)
-                {
-                    // Download any newly created orders (thier modified dates could be older than the last last modified date SW has)
-                    DownloadOrders(orderSearchCriteria);
-                }
+                LoadOrders(orders);
+                //// Get the number of orders for the range
+                //ThreeDCartWebClientOrderSearchCriteria orderSearchCriteria =
+                //    GetOrderSearchCriteria(ThreeDCartWebClientOrderDateSearchType.CreatedDate);
 
-                if (threeDCartStore.DownloadModifiedNumberOfDaysBack > 0)
-                {
-                    // Now Download modified orders
-                    Progress.Detail = "Checking for modified orders...";
-                    lastModifiedOrderDateProcessed = DateTime.UtcNow.AddDays(-7);
-                    orderSearchCriteria =
-                        GetOrderSearchCriteria(ThreeDCartWebClientOrderDateSearchType.ModifiedDate);
+                //totalCount = WebClient.GetOrderCount(orderSearchCriteria);
 
-                    int modifiedCount = WebClient.GetOrderCount(orderSearchCriteria);
-                    if (modifiedCount == 0)
-                    {
-                        Progress.Detail = "No orders to download.";
-                        Progress.PercentComplete = 100;
-                        return;
-                    }
+                //if (totalCount != 0)
+                //{
+                //    // Download any newly created orders (thier modified dates could be older than the last last modified date SW has)
+                //    DownloadOrders(orderSearchCriteria);
+                //}
 
-                    // Update the total count to included the modified orders
-                    totalCount += modifiedCount;
+                //if (threeDCartStore.DownloadModifiedNumberOfDaysBack > 0)
+                //{
+                //    // Now Download modified orders
+                //    Progress.Detail = "Checking for modified orders...";
+                //    lastModifiedOrderDateProcessed = DateTime.UtcNow.AddDays(-7);
+                //    orderSearchCriteria =
+                //        GetOrderSearchCriteria(ThreeDCartWebClientOrderDateSearchType.ModifiedDate);
 
-                    // Update the progress bar for the new count
-                    Progress.PercentComplete = QuantitySaved/totalCount;
+                //    int modifiedCount = WebClient.GetOrderCount(orderSearchCriteria);
+                //    if (modifiedCount == 0)
+                //    {
+                //        Progress.Detail = "No orders to download.";
+                //        Progress.PercentComplete = 100;
+                //        return;
+                //    }
 
-                    // Download the modified orders
-                    DownloadOrders(orderSearchCriteria);
-                }
+                //    // Update the total count to included the modified orders
+                //    totalCount += modifiedCount;
+
+                //    // Update the progress bar for the new count
+                //    Progress.PercentComplete = QuantitySaved/totalCount;
+
+                //    // Download the modified orders
+                //    DownloadOrders(orderSearchCriteria);
+                //}
             }
             catch (ThreeDCartException ex)
             {
@@ -133,6 +140,26 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
                 log.Error(ex);
                 throw WebHelper.TranslateWebException(ex, typeof(DownloadException));
             }
+        }
+
+        private void LoadOrders(IEnumerable<ThreeDCartOrder> orders)
+        {
+            foreach (ThreeDCartOrder order in orders)
+            {
+                LoadOrder(order);
+            }
+        }
+
+        private void LoadOrder(ThreeDCartOrder order)
+        {
+
+        }
+
+        private IEnumerable<ThreeDCartOrder> DownloadOrders(DateTime startDate)
+        {
+            ThreeDCartRestWebClient restClient = new ThreeDCartRestWebClient(Store as ThreeDCartStoreEntity);
+
+            return restClient.GetOrders(startDate);
         }
 
         /// <summary>
@@ -172,7 +199,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         }
 
         /// <summary>
-        /// Download the next range of orders. 
+        /// Download the next range of orders.
         /// </summary>
         /// <param name="orderSearchCriteria">The ThreeDCartWebClientOrderSearchCriteria for which to download orders.</param>
         /// <returns>True if orders were loaded, false if the user clicks cancel or if no orders were left to download</returns>
@@ -185,12 +212,12 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
             }
 
             // Update progress reporter that we are now downloading orders
-            Progress.Detail = string.Format("Downloading {0} orders...", 
+            Progress.Detail = string.Format("Downloading {0} orders...",
                 orderSearchCriteria.OrderDateSearchType == ThreeDCartWebClientOrderDateSearchType.CreatedDate ? "new" : "modified");
 
             // Download the orders to process
             // The web client will use SQL to get the correct number of orders in this "page" to process
-            List<XmlNode> orders = WebClient.GetOrders(orderSearchCriteria); 
+            List<XmlNode> orders = WebClient.GetOrders(orderSearchCriteria);
 
             // Check to see that we received some orders to process (just in case another ShipWorks instance downloaded them before we got to them)
             if (orders.Count == 0)
@@ -205,7 +232,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         }
 
         /// <summary>
-        /// Gets the order search criteria 
+        /// Gets the order search criteria
         /// </summary>
         /// <returns>ThreeDCartWebClientOrderSearchCriteria </returns>
         private ThreeDCartWebClientOrderSearchCriteria GetOrderSearchCriteria(ThreeDCartWebClientOrderDateSearchType orderDateSearchType)
@@ -232,15 +259,15 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
             DateTime modifiedDateEndPoint = DateTime.UtcNow;
 
             DateTime? createdDateStartingPoint = GetOrderDateStartingPoint();
-            
+
             // If the date has a value, add 1 second
             createdDateStartingPoint = createdDateStartingPoint.HasValue ? createdDateStartingPoint.Value.AddSeconds(1) : DateTime.UtcNow.AddYears(-10);
-            
+
             // Set end date to now
             DateTime createdDateEndPoint = DateTime.UtcNow;
 
             ThreeDCartWebClientOrderSearchCriteria orderSearchCriteria = new ThreeDCartWebClientOrderSearchCriteria(orderDateSearchType,
-                modifiedDateStartingPoint.Value, modifiedDateEndPoint, 
+                modifiedDateStartingPoint.Value, modifiedDateEndPoint,
                 createdDateStartingPoint.Value, createdDateEndPoint,
                 threeDCartStore, ThreeDCartConstants.MaxResultsToReturn, 1);
 
@@ -404,8 +431,8 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
                 {
                     AddKitAdjustment(order, xmlOrderTotal - total);
                 }
-             
-                // If this is a sub order, or it's the first order that has sub orders, calculate the total 
+
+                // If this is a sub order, or it's the first order that has sub orders, calculate the total
                 if (isSubOrder || hasSubOrders)
                 {
                     order.OrderTotal = total;
@@ -493,17 +520,17 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
             ThreeDCartOrderItemEntity item = (ThreeDCartOrderItemEntity) InstantiateOrderItem(order);
 
             // Set item properties
-            // The item name will be determined in the LoadProductAndRelatedObjects as we 
+            // The item name will be determined in the LoadProductAndRelatedObjects as we
             // have to parse the product name for options and the name itself
             item.Code = XPathUtility.Evaluate(xpath, "./ProductID", "");
-            item.SKU = item.Code; 
+            item.SKU = item.Code;
             item.Quantity = XPathUtility.Evaluate(xpath, "./Quantity", 0d);
             item.UnitCost = XPathUtility.Evaluate(xpath, "./UnitCost", 0.0m);
             item.Weight = XPathUtility.Evaluate(xpath, "./Weight", 0.0d);
 
             // Save the 3D Cart ShipmentID with which this item is associated
             item.ThreeDCartShipmentID = XPathUtility.Evaluate(xpath, "./ShipmentID", 0);
-                
+
             //Now load all the item options
             LoadProductAndRelatedObjects(item, xpath);
 
@@ -527,14 +554,14 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
             ThreeDCartProductDTO product = null;
             const RegexOptions regexOptions = RegexOptions.IgnoreCase | RegexOptions.Multiline;
             const string newLine = @"\n";
-            
+
             string productName = XPathUtility.Evaluate(xpath, "./ProductName", "");
             string productId = XPathUtility.Evaluate(xpath, "./ProductID", "");
 
             /*
              * The item's product name text contains multiple lines, with the first line being the
              * actual product name, then the next lines are the attributes, one per line.
-             * 
+             *
 				<ProductName>
 					<![CDATA[Custom Cap
                              Size: Small - $1.00]]>
@@ -559,7 +586,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
                     int numberOfDashes = optionLine.Count(f => f == '-');
                     int numberOfColons = optionLine.Count(f => f == ':');
 
-                    // Sometimes the name will have "- $x.xx" pricing...  so if there is only 1 dash, 
+                    // Sometimes the name will have "- $x.xx" pricing...  so if there is only 1 dash,
                     // take the left of the dash as the name of the option.  Otherwise use the full option line
                     product = WebClient.GetProduct(item.Order.OrderNumber, productId, numberOfDashes == 1 ? optionLine.Split('-')[0] : optionLine);
                     if (product != null)
@@ -698,7 +725,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
                 decimal giftCertificateAmount = -XPathUtility.Evaluate(giftCertificate, "./Amount", 0.0m);
 
                 //Load charge for each gift certificate
-                LoadCharge(order, "Gift Certificate", 
+                LoadCharge(order, "Gift Certificate",
                     XPathUtility.Evaluate(giftCertificate, "./Code", "Unknown Gift Certificate Code"),
                     giftCertificateAmount);
 
@@ -735,8 +762,8 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
                 string shippingMethod = string.Empty;
                 while (shipmentMethods.MoveNext())
                 {
-                    shippingMethod += string.Format("{0}{1}", 
-                        shipmentMethods.Current.Value, 
+                    shippingMethod += string.Format("{0}{1}",
+                        shipmentMethods.Current.Value,
                         shipmentMethods.CurrentPosition < shipmentMethods.Count ? ", " : string.Empty);
                 }
 
@@ -767,7 +794,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
                 promoTotal = -promoTotal;
             }
 
-            // Determine if the discount and promo sum matches.  
+            // Determine if the discount and promo sum matches.
             bool promoTotalMatchesDiscount = (discountAmount == 0 || promoTotal == discountAmount);
 
             XPathNodeIterator promotionNodes = orderXPath.Select("./Promotions/Promotion");
@@ -783,7 +810,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
 
                 // If the promoTotal matches the discount, we want to to use the promo description.  If they do not match,
                 // we will add the amount to the end of the description.
-                
+
                 if(!promoTotalMatchesDiscount)
                 {
                     // If the promoTotal matches the discount, we want to to use the promo description.  If they do not match,
@@ -872,14 +899,14 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         {
             string orderComment = XPathUtility.Evaluate(xpath, "./Comments/OrderComment", string.Empty);
             InstantiateNote(order, orderComment, DateTime.Now, NoteVisibility.Public, true);
-            
+
             string orderInternalComment = XPathUtility.Evaluate(xpath, "./Comments/OrderInternalComment", string.Empty);
             InstantiateNote(order, orderInternalComment, DateTime.Now, NoteVisibility.Internal, true);
-            
+
             string orderExternalComment = XPathUtility.Evaluate(xpath, "./Comments/OrderExternalComment", string.Empty);
             InstantiateNote(order, orderExternalComment, DateTime.Now, NoteVisibility.Internal, true);
 
-            //Iterate through each checkout question, and a note for each one 
+            //Iterate through each checkout question, and a note for each one
             XPathNodeIterator orderCheckoutQuestions = xpath.Select("./CheckoutQuestions/Question");
             if (orderCheckoutQuestions != null)
             {
