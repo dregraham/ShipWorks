@@ -18,7 +18,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/ShipWorks.UI;component/Styles/GlobalStyle.xaml"/>
             </ResourceDictionary.MergedDictionaries>
-            
+
             <valueConverters:StateProvinceConverter x:Key="StateProvinceConverter" />
             <valueConverters:EnumDescriptionConverter x:Key="EnumDescription" />
             <valueConverters:EnumImageConverter x:Key="EnumImage" />
@@ -121,7 +121,9 @@
             <ComboBox Grid.Row="3" Grid.Column="1"
                       props:EntityFieldLength.FieldName="PersonState"
                       ItemsSource="{Binding SelectedValue,ElementName=CountryComboBox,Converter={StaticResource StateProvinceConverter}}"
-                      Text="{Binding StateProvCode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEditable="True" />
+                      Text="{Binding StateProvCode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                      IsEditable="True"
+                      IsTextSearchEnabled="True" />
 
             <TextBlock Grid.Row="4" Grid.Column="0"
                        Style="{StaticResource GridLabel}">Postal Code:</TextBlock>
