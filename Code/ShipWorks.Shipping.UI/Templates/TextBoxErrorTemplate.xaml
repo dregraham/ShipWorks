@@ -3,10 +3,13 @@
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/ShipWorks.UI;component/Styles/DefaultFontStyle.xaml"/>
     </ResourceDictionary.MergedDictionaries>
-    
+
     <Style x:Key="TextBoxErrorTemplate" TargetType="TextBox" BasedOn="{StaticResource DefaultTextBoxFont}">
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="Margin" Value="0,2,40,2" />
+        <Setter Property="Height" Value="21" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="Validation.ErrorTemplate">
             <Setter.Value>
                 <ControlTemplate>

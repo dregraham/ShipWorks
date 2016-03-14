@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using Interapptive.Shared.Utility;
+using ShipWorks.UI.Controls.Design;
 
 namespace ShipWorks.UI.Controls.Weight
 {
@@ -114,7 +115,10 @@ namespace ShipWorks.UI.Controls.Weight
             textBinding.Mode = BindingMode.TwoWay;
             entry.SetBinding(TextBox.TextProperty, textBinding);
 
-            SetEntryWeightValue(this, 0D);
+            if (!DesignModeDetector.IsDesignerHosted())
+            {
+                SetEntryWeightValue(this, 0D);
+            }
         }
 
         /// <summary>

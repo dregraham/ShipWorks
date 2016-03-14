@@ -7,7 +7,10 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type weight:WeightInput}">
-                    <TextBox Name="PART_Entry" />
+                    <TextBox Name="PART_Entry"
+                             Height="21"
+                             VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                             VerticalContentAlignment="Center" />
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

@@ -8,6 +8,7 @@
 
     <converters:IsEmptyConverter x:Key="IsEmpty" />
     <Style TargetType="{x:Type weight:WeightControl}">
+        <Setter Property="Validation.ErrorTemplate" Value="{x:Null}" />
         <Setter Property="KeyboardNavigation.IsTabStop" Value="False" />
         <Setter Property="Template">
             <Setter.Value>
@@ -21,6 +22,7 @@
                         </Grid.ColumnDefinitions>
                         <weight:WeightInput x:Name="PART_Entry"
                                             Grid.Column="0"
+                                            VerticalAlignment="Center"
                                             MaxWeight="{TemplateBinding MaxWeight}">
                         </weight:WeightInput>
                         <weight:ScaleButton x:Name="PART_ScaleButton" Grid.Column="1"
