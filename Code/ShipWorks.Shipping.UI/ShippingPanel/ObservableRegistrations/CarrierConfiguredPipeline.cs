@@ -44,7 +44,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
                 .ObserveOn(schedulerProvider.Dispatcher)
                 .Where(x => viewModel.Shipment.ShipmentID == x.Shipment.ShipmentID)
                 .CatchAndContinue((Exception ex) => log.Error("An error occurred while changing shipment types", ex))
-                .Subscribe(viewModel.Populate);
+                .Subscribe(viewModel.LoadShipment);
         }
     }
 }

@@ -32,76 +32,78 @@
             <vc:ShipmentTypeToOriginAddressesConverter x:Key="ShipmentTypeToOriginAddresses" />
             <vc:ShipmentTypeToAccountsConverter x:Key="ShipmentTypeToAccountsConverter" />
             <vc:OriginAddressListConverter x:Key="OriginAddressList" />
+            <ui:InvertBooleanConverter x:Key="InvertBoolean" />
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <ScrollViewer VerticalScrollBarVisibility="Visible"
+    <Grid>
+        <ScrollViewer VerticalScrollBarVisibility="Visible"
                   HorizontalScrollBarVisibility="Disabled">
-        <StackPanel Margin="6, 6, 6, 6" >
-            <StackPanel Visibility="{Binding LoadedShipmentResult, Converter={StaticResource VisibleWhenEqualToParameter}, ConverterParameter={x:Static sw:ShippingPanelLoadedShipmentResult.Success}}">
-                <WrapPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0, 0, 0, 6">
-                    <TextBlock VerticalAlignment="Center">Provider:</TextBlock>
+            <StackPanel Margin="6, 6, 6, 6">
+                <StackPanel IsEnabled="{Binding IsLoading, Converter={StaticResource InvertBoolean}}">
+                    <WrapPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0, 0, 0, 6">
+                        <TextBlock VerticalAlignment="Center">Provider:</TextBlock>
 
-                    <ComboBox VerticalAlignment="Center" SelectedValuePath="Value"
+                        <ComboBox VerticalAlignment="Center" SelectedValuePath="Value"
                               DisplayMemberPath="Description"
                               Width="150"
                               HorizontalAlignment="Left"
                               Margin="8, 0, 0, 0"
                               IsEnabled="{Binding AllowEditing}">
-                        <ComboBox.ItemsSource>
-                            <MultiBinding Converter="{StaticResource ShipmentTypeList}">
-                                <Binding Path="Available" Source="{x:Static sw:ShipmentTypeProvider.Current}" />
-                                <Binding Path="InitialShipmentTypeCode" Mode="OneWay" />
-                            </MultiBinding>
-                        </ComboBox.ItemsSource>
-                        <ComboBox.SelectedValue>
-                            <Binding Path="ShipmentType" />
-                        </ComboBox.SelectedValue>
-                    </ComboBox>
+                            <ComboBox.ItemsSource>
+                                <MultiBinding Converter="{StaticResource ShipmentTypeList}">
+                                    <Binding Path="Available" Source="{x:Static sw:ShipmentTypeProvider.Current}" />
+                                    <Binding Path="InitialShipmentTypeCode" Mode="OneWay" />
+                                </MultiBinding>
+                            </ComboBox.ItemsSource>
+                            <ComboBox.SelectedValue>
+                                <Binding Path="ShipmentType" />
+                            </ComboBox.SelectedValue>
+                        </ComboBox>
 
-                    <TextBlock VerticalAlignment="Center" Padding="8, 0, 4, 0"
+                        <TextBlock VerticalAlignment="Center" Padding="8, 0, 4, 0"
                                TextWrapping="WrapWithOverflow">Requested shipping:</TextBlock>
 
-                    <TextBlock VerticalAlignment="Center" TextWrapping="WrapWithOverflow"
+                        <TextBlock VerticalAlignment="Center" TextWrapping="WrapWithOverflow"
                                Text="{Binding RequestedShippingMethod}" />
-                </WrapPanel>
+                    </WrapPanel>
 
-                <StackPanel Visibility="{Binding ShipmentType, Converter={StaticResource VisibleWhenNotEqualToParameter}, ConverterParameter={x:Static sw:ShipmentTypeCode.None}}">
-                    <Border>
-                        <Expander
+                    <StackPanel Visibility="{Binding ShipmentType, Converter={StaticResource VisibleWhenNotEqualToParameter}, ConverterParameter={x:Static sw:ShipmentTypeCode.None}}">
+                        <Border>
+                            <Expander
                             IsEnabled="True"
                             IsExpanded="{Binding IsOriginExpanded, Source={x:Static ui:ExpanderState.Current}, Mode=TwoWay, FallbackValue=True}"
                             Style="{StaticResource Expander.Style}">
-                            <Expander.Header>
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Margin="0,0,8,0" Foreground="Gray">From</TextBlock>
-                                    <TextBlock Visibility="{Binding SupportsAccounts, Converter={StaticResource BooleanToVisibility}}" Foreground="Gray">Account:</TextBlock>
-                                    <TextBlock Visibility="{Binding Visibility, ElementName=AccountDropDown}"
+                                <Expander.Header>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Margin="0,0,8,0" Foreground="Gray">From</TextBlock>
+                                        <TextBlock Visibility="{Binding SupportsAccounts, Converter={StaticResource BooleanToVisibility}}" Foreground="Gray">Account:</TextBlock>
+                                        <TextBlock Visibility="{Binding Visibility, ElementName=AccountDropDown}"
                                            Text="{Binding Text, ElementName=AccountDropDown, StringFormat=' {0}, '}"
                                            Foreground="Gray"/>
-                                    <TextBlock Text="{Binding Text, ElementName=OriginDropDown}"
+                                        <TextBlock Text="{Binding Text, ElementName=OriginDropDown}"
                                            Foreground="Gray"/>
-                                </StackPanel>
-                            </Expander.Header>
-                            <StackPanel IsEnabled="{Binding AllowEditing}"
+                                    </StackPanel>
+                                </Expander.Header>
+                                <StackPanel IsEnabled="{Binding AllowEditing}"
                                         Margin="0, 1, 0, 0">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="75" />
-                                        <ColumnDefinition Width="*" />
-                                    </Grid.ColumnDefinitions>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition />
-                                        <RowDefinition />
-                                        <RowDefinition />
-                                    </Grid.RowDefinitions>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="75" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
 
-                                    <TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource GroupSectionHeader}">Origin</TextBlock>
+                                        <TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource GroupSectionHeader}">Origin</TextBlock>
 
-                                    <TextBlock Grid.Row="1" Grid.Column="0"
+                                        <TextBlock Grid.Row="1" Grid.Column="0"
                                         Visibility="{Binding SupportsAccounts, Converter={StaticResource BooleanToVisibility}}"
                                         Style="{StaticResource GridLabel}">Account:</TextBlock>
-                                    <ui:ShipWorksComboBox Grid.Row="1" Grid.Column="1"
+                                        <ui:ShipWorksComboBox Grid.Row="1" Grid.Column="1"
                                         x:Name="AccountDropDown"
                                         Visibility="{Binding SupportsAccounts, Converter={StaticResource BooleanToVisibility}}"
                                         SelectedIndexWhenNull="{x:Static ui:RelativeIndex.First}"
@@ -109,96 +111,96 @@
                                         SelectedValue="{Binding AccountId}"
                                         DisplayMemberPath="Description"
                                         SelectedValuePath="AccountId">
-                                        <ComboBox.ItemsSource>
-                                            <Binding Path="ShipmentType"
+                                            <ComboBox.ItemsSource>
+                                                <Binding Path="ShipmentType"
                                                 Converter="{StaticResource ShipmentTypeToAccountsConverter}"
                                                 Mode="OneWay" />
-                                        </ComboBox.ItemsSource>
-                                    </ui:ShipWorksComboBox>
+                                            </ComboBox.ItemsSource>
+                                        </ui:ShipWorksComboBox>
 
-                                    <TextBlock Grid.Row="2" Grid.Column="0"
+                                        <TextBlock Grid.Row="2" Grid.Column="0"
                                            Style="{StaticResource GridLabel}">Origin:</TextBlock>
-                                    <ui:ShipWorksComboBox Grid.Row="2" Grid.Column="1"
+                                        <ui:ShipWorksComboBox Grid.Row="2" Grid.Column="1"
                                           DisplayMemberPath="Key"
                                           SelectedValuePath="Value"
                                           SelectedIndexWhenNull="{x:Static ui:RelativeIndex.Last}"
                                           ui:UpdateWhenMessageReceived.MessageType="{x:Type sw:OriginAddressChangedMessage}"
                                           x:Name="OriginDropDown">
-                                        <ComboBox.ItemsSource>
-                                            <Binding Path="ShipmentType" Converter="{StaticResource ShipmentTypeToOriginAddresses}" Mode="OneWay" />
-                                        </ComboBox.ItemsSource>
-                                        <ComboBox.SelectedValue>
-                                            <Binding Path="OriginAddressType" />
-                                        </ComboBox.SelectedValue>
-                                    </ui:ShipWorksComboBox>
-                                </Grid>
-                                <ui:Address DataContext="{Binding Origin}">
-                                    <ui:Address.IsEnabled>
-                                        <MultiBinding Converter="{StaticResource BooleanAnd}">
-                                            <Binding Path="DataContext.AllowEditing"
+                                            <ComboBox.ItemsSource>
+                                                <Binding Path="ShipmentType" Converter="{StaticResource ShipmentTypeToOriginAddresses}" Mode="OneWay" />
+                                            </ComboBox.ItemsSource>
+                                            <ComboBox.SelectedValue>
+                                                <Binding Path="OriginAddressType" />
+                                            </ComboBox.SelectedValue>
+                                        </ui:ShipWorksComboBox>
+                                    </Grid>
+                                    <ui:Address DataContext="{Binding Origin}">
+                                        <ui:Address.IsEnabled>
+                                            <MultiBinding Converter="{StaticResource BooleanAnd}">
+                                                <Binding Path="DataContext.AllowEditing"
                                                      Mode="OneWay"
                                                      RelativeSource="{RelativeSource AncestorType=UserControl}" />
-                                            <Binding Path="SelectedValue"
+                                                <Binding Path="SelectedValue"
                                                  ElementName="OriginDropDown"
                                                  Converter="{StaticResource ValueEqualToParameter}">
                                                     <Binding.ConverterParameter>
                                                         <sys:Int64>1</sys:Int64>
                                                     </Binding.ConverterParameter>
-                                            </Binding>
-                                        </MultiBinding>
-                                    </ui:Address.IsEnabled>
-                                </ui:Address>
-                            </StackPanel>
-                        </Expander>
-                    </Border>
-                    <Border>
-                        <Expander Header="{Binding}"
+                                                </Binding>
+                                            </MultiBinding>
+                                        </ui:Address.IsEnabled>
+                                    </ui:Address>
+                                </StackPanel>
+                            </Expander>
+                        </Border>
+                        <Border>
+                            <Expander Header="{Binding}"
                               IsExpanded="{Binding IsDestinationExpanded, Source={x:Static ui:ExpanderState.Current}, Mode=TwoWay, FallbackValue=True}"
                               Style="{StaticResource Expander.Style}">
-                            <Expander.HeaderTemplate>
-                                <DataTemplate>
-                                    <StackPanel Orientation="Vertical">
-                                        <StackPanel Orientation="Horizontal">
+                                <Expander.HeaderTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Vertical">
+                                            <StackPanel Orientation="Horizontal">
                                             <TextBlock Margin="0,0,8,0" Foreground="Gray">To</TextBlock>
-                                            <TextBlock Foreground="Gray">
+                                                <TextBlock Foreground="Gray">
+                                                    <TextBlock.Text>
+                                                        <MultiBinding StringFormat="{}{0}, {1} ">
+                                                            <Binding Path="Destination.FullName" Mode="OneWay" UpdateSourceTrigger="PropertyChanged" />
+                                                            <Binding Path="DomesticInternationalText" Mode="OneWay" UpdateSourceTrigger="PropertyChanged" />
+                                                        </MultiBinding>
+                                                    </TextBlock.Text>
+                                                </TextBlock>
+                                            </StackPanel>
+                                            <TextBlock Margin="20,0,8,0" Foreground="Gray" Visibility="{Binding DestinationAddressEditableState, Converter={StaticResource VisibleWhenNotEqualToParameter}, ConverterParameter={x:Static sw:ShippingAddressEditStateType.Editable}}">
                                                 <TextBlock.Text>
-                                                    <MultiBinding StringFormat="{}{0}, {1} ">
-                                                        <Binding Path="Destination.FullName" Mode="OneWay" UpdateSourceTrigger="PropertyChanged" />
-                                                        <Binding Path="DomesticInternationalText" Mode="OneWay" UpdateSourceTrigger="PropertyChanged" />
+                                                    <MultiBinding StringFormat="{}({0})">
+                                                        <Binding Path="DestinationAddressEditableState"
+                                                             Converter="{StaticResource EnumDescription}" />
                                                     </MultiBinding>
                                                 </TextBlock.Text>
                                             </TextBlock>
                                         </StackPanel>
-                                        <TextBlock Margin="20,0,8,0" Foreground="Gray" Visibility="{Binding DestinationAddressEditableState, Converter={StaticResource VisibleWhenNotEqualToParameter}, ConverterParameter={x:Static sw:ShippingAddressEditStateType.Editable}}">
-                                            <TextBlock.Text>
-                                                <MultiBinding StringFormat="{}({0})">
-                                                    <Binding Path="DestinationAddressEditableState"
-                                                             Converter="{StaticResource EnumDescription}" />
-                                                </MultiBinding>
-                                            </TextBlock.Text>
-                                        </TextBlock>
-                                    </StackPanel>
-                                </DataTemplate>
-                            </Expander.HeaderTemplate>
+                                    </DataTemplate>
+                                </Expander.HeaderTemplate>
 
-                            <ui:Address DataContext="{Binding Destination}">
-                                <ui:Address.IsEnabled>
-                                    <MultiBinding Converter="{StaticResource BooleanAnd}">
-                                        <Binding Path="DataContext.AllowEditing"
+                                <ui:Address DataContext="{Binding Destination}">
+                                    <ui:Address.IsEnabled>
+                                        <MultiBinding Converter="{StaticResource BooleanAnd}">
+                                            <Binding Path="DataContext.AllowEditing"
                                                  Mode="OneWay"
                                                  RelativeSource="{RelativeSource AncestorType=UserControl}" />
-                                        <Binding Path="DataContext.DestinationAddressEditableState"
+                                            <Binding Path="DataContext.DestinationAddressEditableState"
                                                  RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type local:ShippingPanelControl}}"
                                                  Converter="{StaticResource ValueEqualToParameter}"
                                                  ConverterParameter="{x:Static sw:ShippingAddressEditStateType.Editable}">
-                                        </Binding>
-                                    </MultiBinding>
-                                </ui:Address.IsEnabled>
-                            </ui:Address>
-                        </Expander>
-                    </Border>
-                    <Border>
-                        <Expander Header="Shipment Details"
+                                            </Binding>
+                                        </MultiBinding>
+                                    </ui:Address.IsEnabled>
+                                </ui:Address>
+                            </Expander>
+                        </Border>
+                        <Border>
+                            <Expander Header="Shipment Details"
                               IsExpanded="{Binding IsDetailsExpanded, Source={x:Static ui:ExpanderState.Current}, Mode=TwoWay, FallbackValue=True}"
                               DataContext="{Binding ShipmentViewModel}"
                               Style="{StaticResource Expander.Style}">
@@ -210,63 +212,100 @@
 
                             <StackPanel IsEnabled="{Binding DataContext.AllowEditing,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:ShippingPanelControl}}}"
                                         Margin="0, 8, 0, 0">
-                                <shipmentControl:ShipmentControl Visibility="{
+                                    <shipmentControl:ShipmentControl Visibility="{
                                     Binding DataContext.ShipmentType,
                                     RelativeSource={RelativeSource AncestorType=UserControl},
                                     Converter={StaticResource VisibleWhenNotEqualToParameter},
                                     ConverterParameter={x:Static sw:ShipmentTypeCode.Other}}" />
-                                <shipmentControl:OtherShipmentControl Visibility="{
+                                    <shipmentControl:OtherShipmentControl Visibility="{
                                     Binding DataContext.ShipmentType,
                                     RelativeSource={RelativeSource AncestorType=UserControl},
                                     Converter={StaticResource VisibleWhenEqualToParameter},
                                     ConverterParameter={x:Static sw:ShipmentTypeCode.Other}}" />
-                            </StackPanel>
-                        </Expander>
-                    </Border>
-                    <Border DataContext="{Binding ShipmentViewModel}"
+                                </StackPanel>
+                            </Expander>
+                        </Border>
+                        <Border DataContext="{Binding ShipmentViewModel}"
                             Visibility="{Binding CustomsAllowed, Converter={StaticResource BooleanToVisibility}}">
-                        <Expander Header="Customs"
+                            <Expander Header="Customs"
                                   IsExpanded="{Binding IsCustomsExpanded, Source={x:Static ui:ExpanderState.Current}, Mode=TwoWay, FallbackValue=True}"
                                   Style="{StaticResource Expander.Style}">
-                            <customsControl:CustomsControl IsEnabled="{Binding DataContext.AllowEditing,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:ShippingPanelControl}}}" />
-                        </Expander>
-                    </Border>
-                    <Grid Margin="{StaticResource SectionMargin}" IsEnabled="{Binding AllowEditing}">
-                        <Button Command="{Binding CreateLabelCommand}">Create Label</Button>
-                    </Grid>
-                </StackPanel>
+                                <customsControl:CustomsControl IsEnabled="{Binding DataContext.AllowEditing,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:ShippingPanelControl}}}" />
+                            </Expander>
+                        </Border>
+                        <Grid Margin="{StaticResource SectionMargin}" IsEnabled="{Binding AllowEditing}">
+                            <Button Command="{Binding CreateLabelCommand}">Create Label</Button>
+                        </Grid>
+                    </StackPanel>
 
-                <StackPanel Margin="5,5"
+                    <StackPanel Margin="5,5"
                             Visibility="{Binding ShipmentType,Converter={StaticResource VisibleWhenEqualToParameter},ConverterParameter={x:Static sw:ShipmentTypeCode.None}}">
-                    <TextBlock Style="{StaticResource EmptyTextStyle}">Select a shipping carrier from the list above.</TextBlock>
-                </StackPanel>
-                <StackPanel Margin="5,5">
-                    <TextBlock Style="{StaticResource EmptyTextStyle}"
+                        <TextBlock Style="{StaticResource EmptyTextStyle}">Select a shipping carrier from the list above.</TextBlock>
+                    </StackPanel>
+                    <StackPanel Margin="5,5">
+                        <TextBlock Style="{StaticResource EmptyTextStyle}"
                                TextWrapping="WrapWithOverflow"
                                Margin="0, 0, 0, 5">
                         Need to configure specific shipment options?
                         <Hyperlink Command="{Binding OpenShippingDialogCommand}">Click here </Hyperlink>
                         to use the Ship Orders dialog.
-                    </TextBlock>
+                        </TextBlock>
+                    </StackPanel>
                 </StackPanel>
-            </StackPanel>
-            <StackPanel Margin="5,5">
-                <StackPanel Visibility="{Binding LoadedShipmentResult,Converter={StaticResource VisibleWhenEqualToParameter},ConverterParameter={x:Static sw:ShippingPanelLoadedShipmentResult.Multiple}}">
-                    <TextBlock Style="{StaticResource EmptyTextStyle}"
+                <StackPanel Margin="5,5">
+                    <StackPanel Visibility="{Binding LoadedShipmentResult,Converter={StaticResource VisibleWhenEqualToParameter},ConverterParameter={x:Static sw:ShippingPanelLoadedShipmentResult.Multiple}}">
+                        <TextBlock Style="{StaticResource EmptyTextStyle}"
                                TextWrapping="WrapWithOverflow"
                                Margin="0, 0, 0, 5">
                         Need to configure create labels for multiple shipments?
                         <Hyperlink Command="{Binding OpenShippingDialogCommand}">Click here </Hyperlink>
                         to use the Ship Orders dialog.
-                    </TextBlock>
-                </StackPanel>
-                <StackPanel Visibility="{Binding LoadedShipmentResult,Converter={StaticResource VisibleWhenEqualToParameter},ConverterParameter={x:Static sw:ShippingPanelLoadedShipmentResult.Deleted}}">
-                    <TextBlock Style="{StaticResource EmptyTextStyle}">Shipment has been deleted.</TextBlock>
-                </StackPanel>
-                <StackPanel Visibility="{Binding LoadedShipmentResult,Converter={StaticResource VisibleWhenEqualToParameter},ConverterParameter={x:Static sw:ShippingPanelLoadedShipmentResult.NotCreated}}">
-                    <TextBlock Style="{StaticResource EmptyTextStyle}">No shipments were found for this order.  Shipment auto creation is probably turned off.</TextBlock>
+                        </TextBlock>
+                    </StackPanel>
+                    <StackPanel Visibility="{Binding LoadedShipmentResult,Converter={StaticResource VisibleWhenEqualToParameter},ConverterParameter={x:Static sw:ShippingPanelLoadedShipmentResult.Deleted}}">
+                        <TextBlock Style="{StaticResource EmptyTextStyle}">Shipment has been deleted.</TextBlock>
+                    </StackPanel>
+                    <StackPanel Visibility="{Binding LoadedShipmentResult,Converter={StaticResource VisibleWhenEqualToParameter},ConverterParameter={x:Static sw:ShippingPanelLoadedShipmentResult.NotCreated}}">
+                        <TextBlock Style="{StaticResource EmptyTextStyle}">No shipments were found for this order.  Shipment auto creation is probably turned off.</TextBlock>
+                    </StackPanel>
                 </StackPanel>
             </StackPanel>
-        </StackPanel>
-    </ScrollViewer>
+        </ScrollViewer>
+        <Border Background="White"
+                BorderBrush="Black"
+                BorderThickness="1"
+                Padding="8"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibility}}">
+            <StackPanel>
+                <Image Grid.Column="2"
+                           RenderTransformOrigin=".5,.5"
+                           Width="24"
+                           Height="24"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           Source="/Shipworks.Core;component/Resources/Progress/circle_ball_blue.gif">
+                    <Image.RenderTransform>
+                        <RotateTransform x:Name="AnimatedRotateTransform" Angle="0" />
+                    </Image.RenderTransform>
+                    <Image.Triggers>
+                        <EventTrigger RoutedEvent="Control.Loaded">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimation By="10"
+                                                 Duration="0:0:1"
+                                                 RepeatBehavior="Forever"
+                                                 Storyboard.TargetName="AnimatedRotateTransform"
+                                                 Storyboard.TargetProperty="Angle"
+                                                 To="360" />
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Image.Triggers>
+                </Image>
+                <TextBlock>Loading...</TextBlock>
+            </StackPanel>
+        </Border>
+    </Grid>
 </UserControl>

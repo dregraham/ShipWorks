@@ -35,7 +35,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
 
             subject.OnNext(new ShipmentChangedMessage(viewModel.Object, mock.Create<ICarrierShipmentAdapter>()));
 
-            viewModel.Verify(x => x.Populate(It.IsAny<ICarrierShipmentAdapter>()), Times.Never);
+            viewModel.Verify(x => x.LoadShipment(It.IsAny<ICarrierShipmentAdapter>()), Times.Never);
         }
 
         [Fact]
@@ -49,7 +49,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
             var adapter = mock.CreateMock<ICarrierShipmentAdapter>(a => a.Setup(x => x.Shipment).Returns((ShipmentEntity) null)).Object;
             subject.OnNext(new ShipmentChangedMessage(new object(), adapter));
 
-            viewModel.Verify(x => x.Populate(It.IsAny<ICarrierShipmentAdapter>()), Times.Never);
+            viewModel.Verify(x => x.LoadShipment(It.IsAny<ICarrierShipmentAdapter>()), Times.Never);
         }
 
         [Fact]
@@ -63,7 +63,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
             var adapter = mock.CreateMock<ICarrierShipmentAdapter>(a => a.Setup(x => x.Shipment).Returns(new ShipmentEntity())).Object;
             subject.OnNext(new ShipmentChangedMessage(new object(), adapter));
 
-            viewModel.Verify(x => x.Populate(It.IsAny<ICarrierShipmentAdapter>()), Times.Never);
+            viewModel.Verify(x => x.LoadShipment(It.IsAny<ICarrierShipmentAdapter>()), Times.Never);
         }
 
         [Fact]
@@ -77,7 +77,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
             var adapter = mock.CreateMock<ICarrierShipmentAdapter>(a => a.Setup(x => x.Shipment).Returns(new ShipmentEntity { ShipmentID = 5 })).Object;
             subject.OnNext(new ShipmentChangedMessage(new object(), adapter));
 
-            viewModel.Verify(x => x.Populate(It.IsAny<ICarrierShipmentAdapter>()), Times.Never);
+            viewModel.Verify(x => x.LoadShipment(It.IsAny<ICarrierShipmentAdapter>()), Times.Never);
         }
 
         [Fact]
@@ -91,7 +91,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
             var adapter = mock.CreateMock<ICarrierShipmentAdapter>(a => a.Setup(x => x.Shipment).Returns(new ShipmentEntity { ShipmentID = 3 })).Object;
             subject.OnNext(new ShipmentChangedMessage(new object(), adapter));
 
-            viewModel.Verify(x => x.Populate(adapter));
+            viewModel.Verify(x => x.LoadShipment(adapter));
         }
 
         public void Dispose()

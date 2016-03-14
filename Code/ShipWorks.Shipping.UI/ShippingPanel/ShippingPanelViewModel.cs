@@ -198,6 +198,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
                     LoadedShipmentResult = ShippingPanelLoadedShipmentResult.Multiple;
                 }
 
+                IsLoading = false;
                 return;
             }
 
@@ -206,12 +207,14 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
 
             if (LoadedShipmentResult == ShippingPanelLoadedShipmentResult.Success)
             {
-                Populate(loadedOrderSelection.ShipmentAdapters.Single());
+                LoadShipment(loadedOrderSelection.ShipmentAdapters.Single());
             }
             else
             {
                 ShipmentAdapter = null;
             }
+
+            IsLoading = false;
         }
 
         /// <summary>
@@ -247,50 +250,20 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// <summary>
         /// Populate the view model with the current state of the shipment
         /// </summary>
-        public virtual void Populate(ICarrierShipmentAdapter fromShipmentAdapter) =>
-            Populate(fromShipmentAdapter, null);
+        public virtual void LoadShipment(ICarrierShipmentAdapter fromShipmentAdapter) =>
+            LoadShipment(fromShipmentAdapter, null);
 
         /// <summary>
-        /// Populate the view model with the current state of the shipment
+        /// Load the shipment into the view model
         /// </summary>
-        public virtual void Populate(ICarrierShipmentAdapter fromShipmentAdapter, string changedField)
+        public virtual void LoadShipment(ICarrierShipmentAdapter fromShipmentAdapter, string changedField)
         {
             shipmentChangedSubscription?.Dispose();
             isLoadingShipment = true;
 
             ShipmentAdapter = fromShipmentAdapter;
-            InitialShipmentTypeCode = ShipmentAdapter.ShipmentTypeCode;
 
-            // Set the shipment type without going back through the shipment changed machinery
-            selectedShipmentType = ShipmentAdapter.ShipmentTypeCode;
-
-            ShipmentViewModel?.Dispose();
-            ShipmentViewModel = shippingViewModelFactory.GetShipmentViewModel(selectedShipmentType);
-
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ShipmentType)));
-
-            RequestedShippingMethod = loadedOrderSelection.Order?.RequestedShipping;
-
-            SupportsAccounts = ShipmentAdapter.SupportsAccounts;
-
-            // If the shipment type does not support accounts, and the current origin id is account, default to store origin.
-            OriginAddressType = !ShipmentAdapter.SupportsAccounts && ShipmentAdapter.Shipment.OriginOriginID == 2 ? 0 : ShipmentAdapter.Shipment.OriginOriginID;
-            InitialOriginAddressType = OriginAddressType;
-
-            AccountId = ShipmentAdapter.AccountId.GetValueOrDefault();
-
-            ShipmentViewModel.Load(ShipmentAdapter);
-
-            Origin.Load(ShipmentAdapter.Shipment.OriginPerson);
-            Destination.Load(ShipmentAdapter.Shipment.ShipPerson);
-
-            AllowEditing = !ShipmentAdapter.Shipment.Processed;
-
-            DestinationAddressEditableState = loadedOrderSelection.DestinationAddressEditable;
-
-            Origin.SetAddressFromOrigin(OriginAddressType, ShipmentAdapter.Shipment?.OrderID ?? 0, AccountId, ShipmentType);
-
-            SupportsMultiplePackages = ShipmentAdapter.SupportsMultiplePackages;
+            Populate(ShipmentAdapter);
 
             isLoadingShipment = false;
 
@@ -486,6 +459,45 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
 
                 messenger.Send(new OrderSelectionChangingMessage(this, new[] { ShipmentAdapter.Shipment.OrderID }));
             }
+        }
+
+        /// <summary>
+        /// Populate the view model with the current state of the shipment
+        /// </summary>
+        private void Populate(ICarrierShipmentAdapter fromShipmentAdapter)
+        {
+            InitialShipmentTypeCode = fromShipmentAdapter.ShipmentTypeCode;
+
+            // Set the shipment type without going back through the shipment changed machinery
+            selectedShipmentType = fromShipmentAdapter.ShipmentTypeCode;
+
+            ShipmentViewModel?.Dispose();
+            ShipmentViewModel = shippingViewModelFactory.GetShipmentViewModel(selectedShipmentType);
+
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ShipmentType)));
+
+            RequestedShippingMethod = loadedOrderSelection.Order?.RequestedShipping;
+
+            SupportsAccounts = fromShipmentAdapter.SupportsAccounts;
+
+            // If the shipment type does not support accounts, and the current origin id is account, default to store origin.
+            OriginAddressType = !fromShipmentAdapter.SupportsAccounts && fromShipmentAdapter.Shipment.OriginOriginID == 2 ? 0 : fromShipmentAdapter.Shipment.OriginOriginID;
+            InitialOriginAddressType = OriginAddressType;
+
+            AccountId = fromShipmentAdapter.AccountId.GetValueOrDefault();
+
+            ShipmentViewModel.Load(fromShipmentAdapter);
+
+            Origin.Load(fromShipmentAdapter.Shipment.OriginPerson);
+            Destination.Load(fromShipmentAdapter.Shipment.ShipPerson);
+
+            AllowEditing = !fromShipmentAdapter.Shipment.Processed;
+
+            DestinationAddressEditableState = loadedOrderSelection.DestinationAddressEditable;
+
+            Origin.SetAddressFromOrigin(OriginAddressType, fromShipmentAdapter.Shipment?.OrderID ?? 0, AccountId, ShipmentType);
+
+            SupportsMultiplePackages = fromShipmentAdapter.SupportsMultiplePackages;
         }
 
         #region IDataErrorInfo

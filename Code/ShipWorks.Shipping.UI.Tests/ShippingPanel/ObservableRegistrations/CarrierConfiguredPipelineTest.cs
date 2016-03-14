@@ -90,7 +90,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
             viewModel.Setup(x => x.Shipment).Returns(new ShipmentEntity { ShipmentID = 999 });
             schedulerProvider.Dispatcher.Start();
 
-            viewModel.Verify(x => x.Populate(It.IsAny<ICarrierShipmentAdapter>()), Times.Never);
+            viewModel.Verify(x => x.LoadShipment(It.IsAny<ICarrierShipmentAdapter>()), Times.Never);
         }
 
         [Fact]
@@ -110,7 +110,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
             schedulerProvider.TaskPool.Start();
             viewModel.Setup(x => x.Shipment).Returns(shipment);
 
-            viewModel.Verify(x => x.Populate(It.IsAny<ICarrierShipmentAdapter>()), Times.Never);
+            viewModel.Verify(x => x.LoadShipment(It.IsAny<ICarrierShipmentAdapter>()), Times.Never);
         }
 
         [Fact]
@@ -131,7 +131,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
             viewModel.Setup(x => x.Shipment).Returns(shipment);
             schedulerProvider.Dispatcher.Start();
 
-            viewModel.Verify(x => x.Populate(shipmentAdapter.Object));
+            viewModel.Verify(x => x.LoadShipment(shipmentAdapter.Object));
         }
 
         public void Dispose()

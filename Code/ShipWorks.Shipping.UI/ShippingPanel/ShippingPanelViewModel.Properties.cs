@@ -21,6 +21,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         private bool supportsAccounts;
         private string domesticInternationalText;
         private IShipmentViewModel shipmentViewModel;
+        private bool isLoading;
 
         /// <summary>
         /// Command to open the shipping dialog
@@ -168,6 +169,16 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         {
             get { return supportsAccounts; }
             set { handler.Set(nameof(SupportsAccounts), ref supportsAccounts, value); }
+        }
+
+        /// <summary>
+        /// Is the selection loading
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public bool IsLoading
+        {
+            get { return isLoading; }
+            set { handler.Set(nameof(IsLoading), ref isLoading, value); }
         }
     }
 }

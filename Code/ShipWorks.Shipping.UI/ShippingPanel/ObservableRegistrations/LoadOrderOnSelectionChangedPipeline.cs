@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.Threading;
+using log4net;
 using ShipWorks.Shipping.UI.MessageHandlers;
 
 namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
@@ -12,6 +14,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
     public class LoadOrderOnSelectionChangedPipeline : IShippingPanelObservableRegistration
     {
         readonly IOrderSelectionChangedHandler changeHandler;
+        readonly ILog log;
         readonly ISchedulerProvider schedulerProvider;
 
         /// <summary>
@@ -19,10 +22,12 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
         /// </summary>
         public LoadOrderOnSelectionChangedPipeline(
             IOrderSelectionChangedHandler changeHandler,
-            ISchedulerProvider schedulerProvider)
+            ISchedulerProvider schedulerProvider,
+            Func<Type, ILog> logManager)
         {
             this.changeHandler = changeHandler;
             this.schedulerProvider = schedulerProvider;
+            log = logManager(typeof(LoadOrderOnSelectionChangedPipeline));
         }
 
         /// <summary>
@@ -32,8 +37,10 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
         {
             return new CompositeDisposable(
                 changeHandler.OrderChangingStream()
-                    .Subscribe(message =>
+                    .Do(message =>
                     {
+                        viewModel.IsLoading = true;
+
                         // If the view model sent the message, it's to reload the order. So don't try saving first
                         if (message.Sender != viewModel)
                         {
@@ -41,11 +48,20 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
                         }
 
                         viewModel.AllowEditing = false;
+
                         viewModel.UnloadShipment();
+                    })
+                    .CatchAndContinue((Exception ex) => log.Error("An error occurred while selecting an order", ex))
+                    .Subscribe(message =>
+                    {
+
+
+
                     }),
                 changeHandler.ShipmentLoadedStream()
                     .ObserveOn(schedulerProvider.Dispatcher)
                     .Do(_ => viewModel.AllowEditing = true)
+                    .CatchAndContinue((Exception ex) => log.Error("An error occurred while loading order selection", ex))
                     .Subscribe(viewModel.LoadOrder)
             );
         }

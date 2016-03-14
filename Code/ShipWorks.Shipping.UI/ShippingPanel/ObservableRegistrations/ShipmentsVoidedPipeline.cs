@@ -54,7 +54,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
         {
             ICarrierShipmentAdapter voidedShipmentAdapter = shipmentAdapterFactory.Get(voidedShipmentResult.Shipment);
 
-            viewModel.Populate(voidedShipmentAdapter);
+            viewModel.LoadShipment(voidedShipmentAdapter);
 
             viewModel.AllowEditing = !voidedShipmentAdapter.Shipment?.Processed ?? true;
         }

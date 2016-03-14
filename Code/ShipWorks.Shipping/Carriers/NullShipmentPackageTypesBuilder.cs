@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Interapptive.Shared.Utility;
+﻿using System.Collections.Generic;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Services.Builders;
 
 namespace ShipWorks.Shipping.Carriers

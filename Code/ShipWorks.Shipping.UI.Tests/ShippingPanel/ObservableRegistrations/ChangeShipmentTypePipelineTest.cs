@@ -23,7 +23,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
             viewModelMock = mock.CreateMock<ShippingPanelViewModel>(v =>
             {
                 v.Setup(x => x.IsProcessed).Returns(false);
-                v.Setup(x => x.Populate(It.IsAny<ICarrierShipmentAdapter>(), It.IsAny<string>()));
+                v.Setup(x => x.LoadShipment(It.IsAny<ICarrierShipmentAdapter>(), It.IsAny<string>()));
                 v.CallBase = true;
             });
             viewModel = viewModelMock.Object;
@@ -73,7 +73,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
 
             viewModel.ShipmentType = ShipmentTypeCode.Usps;
 
-            viewModelMock.Verify(x => x.Populate(newAdapter, "ShipmentType"));
+            viewModelMock.Verify(x => x.LoadShipment(newAdapter, "ShipmentType"));
         }
 
         [Fact]

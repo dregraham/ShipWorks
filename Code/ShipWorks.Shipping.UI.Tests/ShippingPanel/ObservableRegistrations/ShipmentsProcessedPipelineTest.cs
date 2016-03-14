@@ -45,7 +45,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
 
             subject.OnNext(mock.Create<IShipWorksMessage>());
 
-            viewModelMock.Verify(x => x.Populate(It.IsAny<ICarrierShipmentAdapter>()), Times.Never);
+            viewModelMock.Verify(x => x.LoadShipment(It.IsAny<ICarrierShipmentAdapter>()), Times.Never);
         }
 
         [Fact]
@@ -57,7 +57,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
             subject.OnNext(new ShipmentsProcessedMessage(this,
                 new[] { new ProcessShipmentResult(new ShipmentEntity { ShipmentID = 456 }) }));
 
-            viewModelMock.Verify(x => x.Populate(It.IsAny<ICarrierShipmentAdapter>()), Times.Never);
+            viewModelMock.Verify(x => x.LoadShipment(It.IsAny<ICarrierShipmentAdapter>()), Times.Never);
         }
 
         [Fact]
@@ -75,7 +75,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
             subject.OnNext(new ShipmentsProcessedMessage(this,
                 new[] { new ProcessShipmentResult(processedShipment) }));
 
-            viewModelMock.Verify(x => x.Populate(shipmentAdapter));
+            viewModelMock.Verify(x => x.LoadShipment(shipmentAdapter));
         }
 
         [Fact]

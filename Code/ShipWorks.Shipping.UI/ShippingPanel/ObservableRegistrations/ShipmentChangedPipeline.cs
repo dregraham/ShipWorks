@@ -49,7 +49,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
 
             if (shipmentChangedMessage.ShipmentAdapter.Shipment.ShipmentID == viewModel.Shipment.ShipmentID)
             {
-                viewModel.Populate(shipmentChangedMessage.ShipmentAdapter);
+                viewModel.LoadShipment(shipmentChangedMessage.ShipmentAdapter);
             }
         }
     }

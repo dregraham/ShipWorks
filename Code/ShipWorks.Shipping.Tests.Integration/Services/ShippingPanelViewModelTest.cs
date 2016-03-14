@@ -74,7 +74,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
             testObject = context.Mock.Create<ShippingPanelViewModel>();
             var source = new TaskCompletionSource<ShipmentChangedMessage>();
 
-            testObject.Populate(context.Mock.Create<CarrierShipmentAdapterFactory>().Get(shipment));
+            testObject.LoadShipment(context.Mock.Create<CarrierShipmentAdapterFactory>().Get(shipment));
             subscription = Messenger.Current.OfType<ShipmentChangedMessage>().Subscribe(x => source.SetResult(x));
 
             testObject.CreateLabelCommand.Execute(null);
@@ -93,7 +93,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
 
             Modify.Shipment(shipment).Set(x => x.ShipStateProvCode, "MO").Save();
 
-            testObject.Populate(context.Mock.Create<CarrierShipmentAdapterFactory>().Get(shipment));
+            testObject.LoadShipment(context.Mock.Create<CarrierShipmentAdapterFactory>().Get(shipment));
 
             Assert.Equal("MO", shipment.ShipStateProvCode);
         }
@@ -106,7 +106,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
 
             Modify.Shipment(shipment).Set(x => x.OriginStateProvCode, "MO").Save();
 
-            testObject.Populate(context.Mock.Create<CarrierShipmentAdapterFactory>().Get(shipment));
+            testObject.LoadShipment(context.Mock.Create<CarrierShipmentAdapterFactory>().Get(shipment));
 
             Assert.Equal("MO", shipment.OriginStateProvCode);
         }
@@ -122,7 +122,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
                 .Set(x => x.ShipCountryCode, "UK")
                 .Save();
 
-            testObject.Populate(context.Mock.Create<CarrierShipmentAdapterFactory>().Get(shipment));
+            testObject.LoadShipment(context.Mock.Create<CarrierShipmentAdapterFactory>().Get(shipment));
 
             Assert.Equal(1, (testObject.ShipmentViewModel as ShipmentViewModel).CustomsItems.Count);
         }
@@ -138,7 +138,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
                 .Set(x => x.ShipCountryCode, "US")
                 .Save();
 
-            testObject.Populate(context.Mock.Create<CarrierShipmentAdapterFactory>().Get(shipment));
+            testObject.LoadShipment(context.Mock.Create<CarrierShipmentAdapterFactory>().Get(shipment));
 
             Assert.Null((testObject.ShipmentViewModel as ShipmentViewModel).CustomsItems);
 
