@@ -308,7 +308,7 @@ namespace ShipWorks.ApplicationCore.Licensing
                 if (currentShipmentPercentage >= ShipmentLimitWarningThreshold)
                 {
                     // This shipping volume is within the warning threshold. Create the dashboard item.
-                    dashboardItem = new DashboardLicenseItem(LicenseCapabilities.BillingEndDate);
+                    dashboardItem = new DashboardLicenseItem(LicenseCapabilities.BillingEndDate, currentShipmentPercentage);
                 }
             }
 
