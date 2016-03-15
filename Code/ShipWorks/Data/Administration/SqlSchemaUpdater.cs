@@ -342,7 +342,7 @@ namespace ShipWorks.Data.Administration
 
                             // update Configuration table Key column to have an encrypted empty string
                             // using the GetDatabaseGuid stored procedure as the salt.
-                            if (installed < new Version(4, 8, 0, 0))
+                            if (installed < new Version(5, 0, 0, 0))
                             {
                                 using (ILifetimeScope iocScope = IoC.BeginLifetimeScope())
                                 {

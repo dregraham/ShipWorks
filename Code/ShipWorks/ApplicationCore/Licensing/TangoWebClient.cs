@@ -53,7 +53,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         private static Version version;
 
         /// <summary>
-        /// Gets the version - If version is under 4.9.0.0, return 4.9.0.0
+        /// Gets the version - If version is under 5.0.0.0, return 5.0.0.0
         /// </summary>
         private static string Version
         {
@@ -66,7 +66,7 @@ namespace ShipWorks.ApplicationCore.Licensing
                     // primarily for debug/internal versions of ShipWorks that have 0.0.0.x
                     // version number.
                     Version assemblyVersion = Assembly.GetExecutingAssembly().GetName().Version;
-                    Version minimumVersion = new Version(4, 9, 0, 0);
+                    Version minimumVersion = new Version(5, 0, 0, 0);
 
                     version = assemblyVersion.Major == 0 ? minimumVersion: assemblyVersion;
                 }
@@ -1323,7 +1323,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             postRequest.Variables.Add("version", Version);
             postRequest.Variables.Add("stampsusername", stampsUsername);
             postRequest.Variables.Add("stampspassword", stampsPassword);
-            
+
             try
             {
                 XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "AssociateStampsUsernameWithLicense");
