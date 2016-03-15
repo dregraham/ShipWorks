@@ -320,7 +320,7 @@ namespace ShipWorks.ApplicationCore.Licensing
                                             .Select(a => a.Trim().ToLower())
                                             .ToArray();
 
-            UpsAccountLimit = UpsStatus == UpsStatus.Discount ?
+            UpsAccountLimit = UpsStatus == UpsStatus.Discount || UpsStatus == UpsStatus.Tier1 ?
                 1 :
                 UpsAccountNumbers.Count();
 
