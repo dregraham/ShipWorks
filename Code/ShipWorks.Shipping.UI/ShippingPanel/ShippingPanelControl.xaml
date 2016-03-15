@@ -18,10 +18,13 @@
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <!--<ResourceDictionary Source="/ShipWorks.UI;component/Styles/GlobalStyle.xaml" />-->
-                <ResourceDictionary Source="/ShipWorks.UI;component/Styles/ShipWorksExpanderStyle.xaml"/>
+                <ResourceDictionary Source="/ShipWorks.UI;component/Styles/GlobalStyle.xaml" />
                 <ResourceDictionary Source="/ShipWorks.Shipping.UI;component/Templates/TextBoxErrorTemplate.xaml"/>
             </ResourceDictionary.MergedDictionaries>
+
+            <Style TargetType="Expander" BasedOn="{StaticResource Expander.Style}" />
+            <Style TargetType="Border" BasedOn="{StaticResource Border.Expander}" />
+
             <ui:VisibleWhenEqualToParameterConverter x:Key="VisibleWhenEqualToParameter" />
             <ui:VisibleWhenEqualToParameterConverter x:Key="VisibleWhenNotEqualToParameter" Invert="true" />
             <ui:ValueEqualToParameterConverter x:Key="ValueEqualToParameter" />
@@ -41,15 +44,24 @@
                   HorizontalScrollBarVisibility="Disabled">
             <StackPanel Margin="6, 6, 6, 6">
                 <StackPanel IsEnabled="{Binding IsLoading, Converter={StaticResource InvertBoolean}}">
-                    <WrapPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0, 0, 0, 6">
-                        <TextBlock VerticalAlignment="Center">Provider:</TextBlock>
+                    <Grid Margin="7, 0, 5, 4">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="75" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
 
-                        <ComboBox VerticalAlignment="Center" SelectedValuePath="Value"
-                              DisplayMemberPath="Description"
-                              Width="150"
-                              HorizontalAlignment="Left"
-                              Margin="8, 0, 0, 0"
-                              IsEnabled="{Binding AllowEditing}">
+                        <TextBlock Style="{StaticResource Grid.TextBlock.Label}">Provider:</TextBlock>
+                        <ComboBox Grid.Column="1"
+                                  Style="{StaticResource Grid.ComboBox.Default}"
+                                  HorizontalAlignment="Left"
+                                  Width="150"
+                                  SelectedValuePath="Value"
+                                  DisplayMemberPath="Description"
+                                  IsEnabled="{Binding AllowEditing}">
                             <ComboBox.ItemsSource>
                                 <MultiBinding Converter="{StaticResource ShipmentTypeList}">
                                     <Binding Path="Available" Source="{x:Static sw:ShipmentTypeProvider.Current}" />
@@ -61,19 +73,16 @@
                             </ComboBox.SelectedValue>
                         </ComboBox>
 
-                        <TextBlock VerticalAlignment="Center" Padding="8, 0, 4, 0"
-                               TextWrapping="WrapWithOverflow">Requested shipping:</TextBlock>
-
-                        <TextBlock VerticalAlignment="Center" TextWrapping="WrapWithOverflow"
-                               Text="{Binding RequestedShippingMethod}" />
-                    </WrapPanel>
+                        <TextBlock Grid.Column="1" Grid.Row="1" TextWrapping="Wrap">
+                            <Run>Requested shipping:</Run>
+                            <Run Text="{Binding RequestedShippingMethod}" />
+                        </TextBlock>
+                    </Grid>
 
                     <StackPanel Visibility="{Binding ShipmentType, Converter={StaticResource VisibleWhenNotEqualToParameter}, ConverterParameter={x:Static sw:ShipmentTypeCode.None}}">
-                        <Border>
-                            <Expander
-                            IsEnabled="True"
-                            IsExpanded="{Binding IsOriginExpanded, Source={x:Static ui:ExpanderState.Current}, Mode=TwoWay, FallbackValue=True}"
-                            Style="{StaticResource Expander.Style}">
+                        <Border Margin="0,0,0,8">
+                            <Expander IsEnabled="True"
+                                      IsExpanded="{Binding IsOriginExpanded, Source={x:Static ui:ExpanderState.Current}, Mode=TwoWay, FallbackValue=True}">
                                 <Expander.Header>
                                     <StackPanel Orientation="Horizontal">
                                         <TextBlock Margin="0,0,8,0" Foreground="Gray">From</TextBlock>
@@ -86,8 +95,9 @@
                                     </StackPanel>
                                 </Expander.Header>
                                 <StackPanel IsEnabled="{Binding AllowEditing}"
-                                        Margin="0, 1, 0, 0">
-                                    <Grid>
+                                            Style="{StaticResource Expander.Content}">
+                                    <TextBlock Style="{StaticResource TextBlock.SectionHeader}">Origin</TextBlock>
+                                    <Grid Style="{StaticResource Expander.Content.Section}">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="75" />
                                             <ColumnDefinition Width="*" />
@@ -95,22 +105,20 @@
                                         <Grid.RowDefinitions>
                                             <RowDefinition />
                                             <RowDefinition />
-                                            <RowDefinition />
                                         </Grid.RowDefinitions>
 
-                                        <TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource GroupSectionHeader}">Origin</TextBlock>
-
-                                        <TextBlock Grid.Row="1" Grid.Column="0"
-                                        Visibility="{Binding SupportsAccounts, Converter={StaticResource BooleanToVisibility}}"
-                                        Style="{StaticResource GridLabel}">Account:</TextBlock>
-                                        <ui:ShipWorksComboBox Grid.Row="1" Grid.Column="1"
-                                        x:Name="AccountDropDown"
-                                        Visibility="{Binding SupportsAccounts, Converter={StaticResource BooleanToVisibility}}"
-                                        SelectedIndexWhenNull="{x:Static ui:RelativeIndex.First}"
-                                        ui:UpdateWhenMessageReceived.MessageType="{x:Type sw:ShippingAccountsChangedMessage}"
-                                        SelectedValue="{Binding AccountId}"
-                                        DisplayMemberPath="Description"
-                                        SelectedValuePath="AccountId">
+                                        <TextBlock Grid.Row="0" Grid.Column="0"
+                                                Visibility="{Binding SupportsAccounts, Converter={StaticResource BooleanToVisibility}}"
+                                                Style="{StaticResource Grid.TextBlock.Label}">Account:</TextBlock>
+                                        <ui:ShipWorksComboBox Grid.Row="0" Grid.Column="1"
+                                                              x:Name="AccountDropDown"
+                                                              Style="{StaticResource Grid.ShipWorksComboBox.Default}"
+                                                              Visibility="{Binding SupportsAccounts, Converter={StaticResource BooleanToVisibility}}"
+                                                              SelectedIndexWhenNull="{x:Static ui:RelativeIndex.First}"
+                                                              ui:UpdateWhenMessageReceived.MessageType="{x:Type sw:ShippingAccountsChangedMessage}"
+                                                              SelectedValue="{Binding AccountId}"
+                                                              DisplayMemberPath="Description"
+                                                              SelectedValuePath="AccountId">
                                             <ComboBox.ItemsSource>
                                                 <Binding Path="ShipmentType"
                                                 Converter="{StaticResource ShipmentTypeToAccountsConverter}"
@@ -118,14 +126,15 @@
                                             </ComboBox.ItemsSource>
                                         </ui:ShipWorksComboBox>
 
-                                        <TextBlock Grid.Row="2" Grid.Column="0"
-                                           Style="{StaticResource GridLabel}">Origin:</TextBlock>
+                                        <TextBlock Grid.Row="1" Grid.Column="0"
+                                                   Style="{StaticResource Grid.TextBlock.Label}">Origin:</TextBlock>
                                         <ui:ShipWorksComboBox Grid.Row="2" Grid.Column="1"
-                                          DisplayMemberPath="Key"
-                                          SelectedValuePath="Value"
-                                          SelectedIndexWhenNull="{x:Static ui:RelativeIndex.Last}"
-                                          ui:UpdateWhenMessageReceived.MessageType="{x:Type sw:OriginAddressChangedMessage}"
-                                          x:Name="OriginDropDown">
+                                                              Style="{StaticResource Grid.ShipWorksComboBox.Default}"
+                                                              DisplayMemberPath="Key"
+                                                              SelectedValuePath="Value"
+                                                              SelectedIndexWhenNull="{x:Static ui:RelativeIndex.Last}"
+                                                              ui:UpdateWhenMessageReceived.MessageType="{x:Type sw:OriginAddressChangedMessage}"
+                                                              x:Name="OriginDropDown">
                                             <ComboBox.ItemsSource>
                                                 <Binding Path="ShipmentType" Converter="{StaticResource ShipmentTypeToOriginAddresses}" Mode="OneWay" />
                                             </ComboBox.ItemsSource>
@@ -155,8 +164,7 @@
                         </Border>
                         <Border>
                             <Expander Header="{Binding}"
-                              IsExpanded="{Binding IsDestinationExpanded, Source={x:Static ui:ExpanderState.Current}, Mode=TwoWay, FallbackValue=True}"
-                              Style="{StaticResource Expander.Style}">
+                                      IsExpanded="{Binding IsDestinationExpanded, Source={x:Static ui:ExpanderState.Current}, Mode=TwoWay, FallbackValue=True}">
                                 <Expander.HeaderTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Vertical">
@@ -183,7 +191,8 @@
                                     </DataTemplate>
                                 </Expander.HeaderTemplate>
 
-                                <ui:Address DataContext="{Binding Destination}">
+                                <ui:Address DataContext="{Binding Destination}"
+                                            Style="{StaticResource Expander.Content}">
                                     <ui:Address.IsEnabled>
                                         <MultiBinding Converter="{StaticResource BooleanAnd}">
                                             <Binding Path="DataContext.AllowEditing"
@@ -201,60 +210,63 @@
                         </Border>
                         <Border>
                             <Expander Header="Shipment Details"
-                              IsExpanded="{Binding IsDetailsExpanded, Source={x:Static ui:ExpanderState.Current}, Mode=TwoWay, FallbackValue=True}"
-                              DataContext="{Binding ShipmentViewModel}"
-                              Style="{StaticResource Expander.Style}">
-                            <Expander.HeaderTemplate>
-                                <DataTemplate>
-                                    <TextBlock Foreground="Gray">Shipment Details</TextBlock>
-                                </DataTemplate>
-                            </Expander.HeaderTemplate>
+                                      IsExpanded="{Binding IsDetailsExpanded, Source={x:Static ui:ExpanderState.Current}, Mode=TwoWay, FallbackValue=True}"
+                                      DataContext="{Binding ShipmentViewModel}"
+                                      Style="{StaticResource Expander.Style}">
+                                <Expander.HeaderTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Foreground="Gray">Shipment Details</TextBlock>
+                                    </DataTemplate>
+                                </Expander.HeaderTemplate>
 
-                            <StackPanel IsEnabled="{Binding DataContext.AllowEditing,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:ShippingPanelControl}}}"
-                                        Margin="0, 8, 0, 0">
-                                    <shipmentControl:ShipmentControl Visibility="{
-                                    Binding DataContext.ShipmentType,
-                                    RelativeSource={RelativeSource AncestorType=UserControl},
-                                    Converter={StaticResource VisibleWhenNotEqualToParameter},
-                                    ConverterParameter={x:Static sw:ShipmentTypeCode.Other}}" />
-                                    <shipmentControl:OtherShipmentControl Visibility="{
-                                    Binding DataContext.ShipmentType,
-                                    RelativeSource={RelativeSource AncestorType=UserControl},
-                                    Converter={StaticResource VisibleWhenEqualToParameter},
-                                    ConverterParameter={x:Static sw:ShipmentTypeCode.Other}}" />
+                                <StackPanel IsEnabled="{Binding DataContext.AllowEditing,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:ShippingPanelControl}}}"
+                                            Style="{StaticResource Expander.Content}">
+                                    <shipmentControl:ShipmentControl Margin="0, 6, 0, 0"
+                                                                     Visibility="{
+                                        Binding DataContext.ShipmentType,
+                                        RelativeSource={RelativeSource AncestorType=UserControl},
+                                        Converter={StaticResource VisibleWhenNotEqualToParameter},
+                                        ConverterParameter={x:Static sw:ShipmentTypeCode.Other}}" />
+                                    <shipmentControl:OtherShipmentControl Margin="0, 6, 0, 0"
+                                                                     Visibility="{
+                                        Binding DataContext.ShipmentType,
+                                        RelativeSource={RelativeSource AncestorType=UserControl},
+                                        Converter={StaticResource VisibleWhenEqualToParameter},
+                                        ConverterParameter={x:Static sw:ShipmentTypeCode.Other}}" />
                                 </StackPanel>
                             </Expander>
                         </Border>
                         <Border DataContext="{Binding ShipmentViewModel}"
-                            Visibility="{Binding CustomsAllowed, Converter={StaticResource BooleanToVisibility}}">
+                                Visibility="{Binding CustomsAllowed, Converter={StaticResource BooleanToVisibility}}">
                             <Expander Header="Customs"
                                   IsExpanded="{Binding IsCustomsExpanded, Source={x:Static ui:ExpanderState.Current}, Mode=TwoWay, FallbackValue=True}"
                                   Style="{StaticResource Expander.Style}">
-                                <customsControl:CustomsControl IsEnabled="{Binding DataContext.AllowEditing,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:ShippingPanelControl}}}" />
+                                <customsControl:CustomsControl IsEnabled="{Binding DataContext.AllowEditing,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:ShippingPanelControl}}}"
+                                            Style="{StaticResource Expander.Content}" />
                             </Expander>
                         </Border>
-                        <Grid Margin="{StaticResource SectionMargin}" IsEnabled="{Binding AllowEditing}">
-                            <Button Command="{Binding CreateLabelCommand}"
-                                    HorizontalAlignment="Center"
-                                    Padding="8">
-                                <StackPanel Orientation="Horizontal">
-                                    <Image Height="16"
-                                           Width="16" 
-                                           Source="/ShipWorks.Core;component/Resources/box_next_32_32.png"
-                                           VerticalAlignment="Center"/>
-                                    <TextBlock Margin="6, 0, 0, 0"
-                                               VerticalAlignment="Center">Create Label</TextBlock>
-                                </StackPanel>
-                            </Button>
-                        </Grid>
+
+                        <Button Command="{Binding CreateLabelCommand}"
+                                IsEnabled="{Binding AllowEditing}"
+                                HorizontalAlignment="Center"
+                                Padding="8">
+                            <StackPanel Orientation="Horizontal">
+                                <Image Height="16"
+                                       Width="16"
+                                       Source="/ShipWorks.Core;component/Resources/box_next_32_32.png"
+                                       VerticalAlignment="Center"/>
+                                <TextBlock Margin="6, 0, 0, 0"
+                                           VerticalAlignment="Center">Create Label</TextBlock>
+                            </StackPanel>
+                        </Button>
                     </StackPanel>
 
                     <StackPanel Margin="5,5"
                             Visibility="{Binding ShipmentType,Converter={StaticResource VisibleWhenEqualToParameter},ConverterParameter={x:Static sw:ShipmentTypeCode.None}}">
-                        <TextBlock Style="{StaticResource EmptyTextStyle}">Select a shipping carrier from the list above.</TextBlock>
+                        <TextBlock Style="{StaticResource TextBlock.Empty}">Select a shipping carrier from the list above.</TextBlock>
                     </StackPanel>
                     <StackPanel Margin="5,5">
-                        <TextBlock Style="{StaticResource EmptyTextStyle}"
+                        <TextBlock Style="{StaticResource TextBlock.Empty}"
                                TextWrapping="WrapWithOverflow"
                                Margin="0, 0, 0, 5">
                         Need to configure specific shipment options?
@@ -265,7 +277,7 @@
                 </StackPanel>
                 <StackPanel Margin="5,5">
                     <StackPanel Visibility="{Binding LoadedShipmentResult,Converter={StaticResource VisibleWhenEqualToParameter},ConverterParameter={x:Static sw:ShippingPanelLoadedShipmentResult.Multiple}}">
-                        <TextBlock Style="{StaticResource EmptyTextStyle}"
+                        <TextBlock Style="{StaticResource TextBlock.Empty}"
                                TextWrapping="WrapWithOverflow"
                                Margin="0, 0, 0, 5">
                         Need to configure create labels for multiple shipments?
@@ -274,10 +286,10 @@
                         </TextBlock>
                     </StackPanel>
                     <StackPanel Visibility="{Binding LoadedShipmentResult,Converter={StaticResource VisibleWhenEqualToParameter},ConverterParameter={x:Static sw:ShippingPanelLoadedShipmentResult.Deleted}}">
-                        <TextBlock Style="{StaticResource EmptyTextStyle}">Shipment has been deleted.</TextBlock>
+                        <TextBlock Style="{StaticResource TextBlock.Empty}">Shipment has been deleted.</TextBlock>
                     </StackPanel>
                     <StackPanel Visibility="{Binding LoadedShipmentResult,Converter={StaticResource VisibleWhenEqualToParameter},ConverterParameter={x:Static sw:ShippingPanelLoadedShipmentResult.NotCreated}}">
-                        <TextBlock Style="{StaticResource EmptyTextStyle}">No shipments were found for this order.  Shipment auto creation is probably turned off.</TextBlock>
+                        <TextBlock Style="{StaticResource TextBlock.Empty}">No shipments were found for this order.  Shipment auto creation is probably turned off.</TextBlock>
                     </StackPanel>
                 </StackPanel>
             </StackPanel>

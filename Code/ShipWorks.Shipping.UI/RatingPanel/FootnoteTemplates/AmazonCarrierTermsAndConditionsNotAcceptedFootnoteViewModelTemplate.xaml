@@ -1,7 +1,6 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:ui="http://schemas.shipworks.com/ui"
-                    xmlns:local="clr-namespace:ShipWorks.Shipping.UI.RatingPanel.FootnoteTemplates">
+                    xmlns:ui="http://schemas.shipworks.com/ui">
     <DataTemplate x:Key="AmazonCarrierTermsAndConditionsNotAcceptedFootnoteViewModelTemplate">
         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
             <Image  Style="{DynamicResource Image.Icon}"

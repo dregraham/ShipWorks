@@ -101,7 +101,7 @@
                     VerticalAlignment="Top"
                     Margin="5, 32, 0, 0"
                     Visibility="{Binding ShowEmptyMessage, Converter={StaticResource BooleanToVisibility}}">
-                <TextBlock Text="{Binding EmptyMessage}" Style="{StaticResource EmptyTextStyle}" />
+                <TextBlock Text="{Binding EmptyMessage}" Style="{StaticResource TextBlock.Empty}" />
             </Border>
 
             <ListBox Grid.Row="2"

@@ -3,8 +3,14 @@
                     xmlns:controls="clr-namespace:ShipWorks.UI.Controls">
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/ShipWorks.UI;component/Styles/Controls/ButtonStyle.xaml"/>
+        <ResourceDictionary Source="/ShipWorks.UI;component/Styles/Controls/DatePickerStyle.xaml"/>
+        <ResourceDictionary Source="/ShipWorks.UI;component/Styles/Controls/ExpanderStyle.xaml" />
         <ResourceDictionary Source="/ShipWorks.UI;component/Styles/Controls/ImageStyle.xaml"/>
     </ResourceDictionary.MergedDictionaries>
+
+    <Style x:Key="TextBlock.Empty" TargetType="TextBlock">
+        <Setter Property="Foreground" Value="#FF696969" />
+    </Style>
 
     <Style x:Key="TextBlock.SectionHeader" TargetType="TextBlock">
         <Setter Property="FontWeight" Value="Bold"></Setter>
@@ -25,13 +31,36 @@
     <Style x:Key="Grid.TextBox.Default"
            TargetType="TextBox"
            BasedOn="{StaticResource Grid.Cell}">
-        <Setter Property="Padding" Value="2, 2, 2, 2" />
+        <Setter Property="Padding" Value="2" />
+    </Style>
+
+    <Style x:Key="Grid.DatePicker.Default"
+           TargetType="DatePicker"
+           BasedOn="{StaticResource DatePickerStyle.Centered}">
+        <Setter Property="Padding" Value="2, 1, 1, 1" />
+        <Setter Property="Width" Value="125" />
+        <Setter Property="HorizontalAlignment" Value="Left" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Margin" Value="0, 2, 0, 2" />
     </Style>
 
     <Style x:Key="Grid.ComboBox.Default"
            TargetType="ComboBox"
            BasedOn="{StaticResource Grid.Cell}">
-        <Setter Property="Padding" Value="2, 2, 2, 2" />
+        <Setter Property="Padding" Value="3, 3, 2, 3" />
+    </Style>
+
+    <Style x:Key="Grid.ShipWorksComboBox.Default"
+           TargetType="controls:ShipWorksComboBox"
+           BasedOn="{StaticResource Grid.ComboBox.Default}">
+        <Setter Property="Padding" Value="5, 3, 2, 3" />
+    </Style>
+
+    <Style x:Key="Grid.CheckBox.Default"
+           TargetType="CheckBox"
+           BasedOn="{StaticResource Grid.Cell}">
+        <Setter Property="Margin" Value="-1, 2, 0, 2" />
     </Style>
 
     <Style x:Key="Grid.TextBox.Number"
@@ -40,6 +69,15 @@
         <Setter Property="HorizontalAlignment" Value="Left" />
         <Setter Property="Width" Value="75" />
         <Setter Property="MaxLength" Value="12" />
+    </Style>
+
+    <Style x:Key="Grid.TextBox.Dimension"
+           TargetType="TextBox"
+           BasedOn="{StaticResource Grid.TextBox.Default}">
+        <Setter Property="HorizontalAlignment" Value="Left" />
+        <Setter Property="Width" Value="30" />
+        <Setter Property="MaxLength" Value="3" />
+        <Setter Property="Margin" Value="0, 2, 5, 2" />
     </Style>
 
     <ControlTemplate x:Key="Template.Error">

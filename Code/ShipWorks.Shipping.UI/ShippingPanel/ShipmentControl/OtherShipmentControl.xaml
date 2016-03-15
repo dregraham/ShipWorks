@@ -13,10 +13,8 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/ShipWorks.UI;component/Styles/GlobalStyle.xaml"/>
-                <ResourceDictionary Source="/ShipWorks.Shipping.UI;component/Templates/BlinkingRedErrorTemplate.xaml"/>
-                <ResourceDictionary Source="/ShipWorks.Shipping.UI;component/Templates/TextBoxErrorTemplate.xaml"/>
-                <ResourceDictionary Source="/ShipWorks.Shipping.UI;component/Templates/DatePickerErrorTemplate.xaml"/>
             </ResourceDictionary.MergedDictionaries>
+
             <ui:EmptyMoneyConverter x:Key="EmptyMoney" />
         </ResourceDictionary>
     </UserControl.Resources>
@@ -37,50 +35,52 @@
             </Grid.RowDefinitions>
 
             <TextBlock Grid.Row="0" Grid.Column="0"
-                   Style="{StaticResource GridLabel}">Carrier Name:</TextBlock>
-            <TextBox Grid.Row="0" Grid.Column="1" Style="{DynamicResource TextBoxErrorTemplate}"
-                 ui:EntityFieldLength.FieldName="ShipmentOtherCarrier"
-                 Text="{Binding CarrierName, ValidatesOnDataErrors=true, NotifyOnValidationError=true}"/>
+                   Style="{StaticResource Grid.TextBlock.Label}">Carrier Name:</TextBlock>
+            <TextBox Grid.Row="0" Grid.Column="1"
+                     Style="{StaticResource Grid.TextBox.Default}"
+                     Validation.ErrorTemplate="{StaticResource Template.Error}"
+                     ui:EntityFieldLength.FieldName="ShipmentOtherCarrier"
+                     Text="{Binding CarrierName, ValidatesOnDataErrors=true, NotifyOnValidationError=true}"/>
 
             <TextBlock Grid.Row="1" Grid.Column="0"
-                   Style="{StaticResource GridLabel}">Service:</TextBlock>
-            <TextBox Grid.Row="1" Grid.Column="1" Style="{DynamicResource TextBoxErrorTemplate}"
-                 ui:EntityFieldLength.FieldName="ShipmentOtherService"
-                 Text="{Binding Service, ValidatesOnDataErrors=true, NotifyOnValidationError=true}" />
+                   Style="{StaticResource Grid.TextBlock.Label}">Service:</TextBlock>
+            <TextBox Grid.Row="1" Grid.Column="1"
+                     Style="{StaticResource Grid.TextBox.Default}"
+                     Validation.ErrorTemplate="{StaticResource Template.Error}"
+                     ui:EntityFieldLength.FieldName="ShipmentOtherService"
+                     Text="{Binding Service, ValidatesOnDataErrors=true, NotifyOnValidationError=true}" />
 
             <TextBlock Grid.Row="2" Grid.Column="0"
-                       Margin="0, 5, 12, 0"
-                       Style="{StaticResource GridLabel}">Ship date:</TextBlock>
-            <DatePicker Grid.Row="2" Grid.Column="1" Style="{DynamicResource DatePickerErrorTemplate}"
-                    Width="125" HorizontalAlignment="Left"
-                    Padding="1"
-                    SelectedDate="{Binding ShipDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=true, NotifyOnValidationError=true}" >
+                   Style="{StaticResource Grid.TextBlock.Label}">Ship date:</TextBlock>
+            <DatePicker Grid.Row="2" Grid.Column="1"
+                        Style="{StaticResource Grid.DatePicker.Default}"
+                        Validation.ErrorTemplate="{StaticResource Template.Error}"
+                        SelectedDate="{Binding ShipDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=true, NotifyOnValidationError=true}" >
             </DatePicker>
 
             <TextBlock Grid.Row="3" Grid.Column="0"
-                       Style="{StaticResource GridLabel}"
-		               VerticalAlignment="Center"
-                       >Weight:</TextBlock>
+                   Style="{StaticResource Grid.TextBlock.Label}">Weight:</TextBlock>
             <ui:WeightControl Grid.Row="3" Grid.Column="1"
-                Margin="0, 0, 0, 0"
                 HorizontalAlignment="Left"
                 Weight="{Binding ShipmentContentWeight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,
                     ValidatesOnDataErrors=true, NotifyOnValidationError=true}"/>
 
             <TextBlock Grid.Row="4" Grid.Column="0"
-                   Style="{StaticResource GridLabel}">Cost:</TextBlock>
-            <TextBox Grid.Row="4" Grid.Column="1" Style="{DynamicResource TextBoxErrorTemplate}"
+                   Style="{StaticResource Grid.TextBlock.Label}">Cost:</TextBlock>
+            <TextBox Grid.Row="4" Grid.Column="1"
+                     Style="{StaticResource Grid.TextBox.Number}"
+                     Validation.ErrorTemplate="{StaticResource Template.Error}"
                  Text="{Binding Cost, StringFormat=C, Converter={StaticResource EmptyMoney}, ValidatesOnDataErrors=true, NotifyOnValidationError=true}" />
 
             <TextBlock Grid.Row="5" Grid.Column="0"
-                   Style="{StaticResource GridLabel}">Tracking #:</TextBlock>
-            <TextBox Grid.Row="5" Grid.Column="1" Style="{DynamicResource TextBoxErrorTemplate}"
+                   Style="{StaticResource Grid.TextBlock.Label}">Tracking #:</TextBlock>
+            <TextBox Grid.Row="5" Grid.Column="1"
+                     Style="{StaticResource Grid.TextBox.Default}"
+                     Validation.ErrorTemplate="{StaticResource Template.Error}"
                  ui:EntityFieldLength.FieldName="ShipmentTracking"
                  Text="{Binding TrackingNumber, ValidatesOnDataErrors=true, NotifyOnValidationError=true}"  />
-
-            <StackPanel Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" Margin="0 0 0 0">
-                <ins:InsuranceControl DataContext="{Binding InsuranceViewModel}" />
-            </StackPanel>
         </Grid>
+
+        <ins:InsuranceControl DataContext="{Binding InsuranceViewModel}" />
     </StackPanel>
 </UserControl>

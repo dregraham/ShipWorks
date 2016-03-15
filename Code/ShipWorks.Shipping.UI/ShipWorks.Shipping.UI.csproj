@@ -203,9 +203,6 @@
     <Compile Include="ShippingPanel\Insurance\InsuranceControl.xaml.cs">
       <DependentUpon>InsuranceControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ShippingPanel\Insurance\InsurancePromoControl.xaml.cs">
-      <DependentUpon>InsurancePromoControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="ShippingPanel\InsuranceViewModel.Properties.cs" />
     <Compile Include="ShippingPanel\InsuranceViewModel.cs" />
     <Compile Include="ShippingPanel\IShippingViewModelFactory.cs" />
@@ -513,10 +510,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ShippingPanel\Insurance\InsuranceControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="ShippingPanel\Insurance\InsurancePromoControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
