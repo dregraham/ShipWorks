@@ -10,15 +10,14 @@
     </Style>
 
     <Style x:Key="Image.InfoTip" BasedOn="{StaticResource Image.Icon}" TargetType="Image">
-        <Setter Property="Height" Value="16"></Setter>
-        <Setter Property="Width" Value="16"></Setter>
-        <Setter Property="Source" Value="/ShipWorks.Core;component/Resources/InfoTip.png"></Setter>
+        <Setter Property="Height" Value="16" />
+        <Setter Property="Width" Value="16" />
+        <Setter Property="Source" Value="/ShipWorks.Core;component/Resources/InfoTip.png" />
     </Style>
 
     <Style x:Key="Image.Info20x20" BasedOn="{StaticResource Image.Icon}" TargetType="Image">
-        <Setter Property="Height" Value="20"></Setter>
-        <Setter Property="Width" Value="20"></Setter>
-        <Setter Property="Source" Value="/ShipWorks.Core;component/Resources/info_20x20.png"></Setter>
+        <Setter Property="Height" Value="20" />
+        <Setter Property="Width" Value="20" />
+        <Setter Property="Source" Value="/ShipWorks.Core;component/Resources/info_20x20.png" />
     </Style>
-    
 </ResourceDictionary>

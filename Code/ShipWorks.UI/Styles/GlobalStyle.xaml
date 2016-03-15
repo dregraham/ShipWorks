@@ -2,6 +2,62 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:controls="clr-namespace:ShipWorks.UI.Controls">
     <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/ShipWorks.UI;component/Styles/Controls/ButtonStyle.xaml"/>
+        <ResourceDictionary Source="/ShipWorks.UI;component/Styles/Controls/ImageStyle.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
+
+    <Style x:Key="TextBlock.SectionHeader" TargetType="TextBlock">
+        <Setter Property="FontWeight" Value="Bold"></Setter>
+        <Setter Property="Margin" Value="0, 5, 5, 5"></Setter>
+    </Style>
+
+    <Style x:Key="Grid.Cell" TargetType="FrameworkElement">
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="Margin" Value="0, 2, 0, 2" />
+    </Style>
+
+    <Style x:Key="Grid.TextBlock.Label"
+           TargetType="TextBlock"
+           BasedOn="{StaticResource Grid.Cell}">
+        <Setter Property="Margin" Value="0, 2, 6, 2" />
+    </Style>
+
+    <Style x:Key="Grid.TextBox.Default"
+           TargetType="TextBox"
+           BasedOn="{StaticResource Grid.Cell}">
+        <Setter Property="Padding" Value="2, 2, 2, 2" />
+    </Style>
+
+    <Style x:Key="Grid.ComboBox.Default"
+           TargetType="ComboBox"
+           BasedOn="{StaticResource Grid.Cell}">
+        <Setter Property="Padding" Value="2, 2, 2, 2" />
+    </Style>
+
+    <Style x:Key="Grid.TextBox.Number"
+           TargetType="TextBox"
+           BasedOn="{StaticResource Grid.TextBox.Default}">
+        <Setter Property="HorizontalAlignment" Value="Left" />
+        <Setter Property="Width" Value="75" />
+        <Setter Property="MaxLength" Value="12" />
+    </Style>
+
+    <ControlTemplate x:Key="Template.Error">
+        <DockPanel LastChildFill="true">
+            <Image Width="16" Height="16" Margin="0 0 5 0"
+                                       DockPanel.Dock="right"
+                                       Source="/ShipWorks.Core;component/Resources/warning.png"
+                                       HorizontalAlignment="Right"
+                                       ToolTip="{Binding ElementName=customAdorner, Path=AdornedElement.(Validation.Errors)[0].ErrorContent}"/>
+            <AdornedElementPlaceholder Name="customAdorner" VerticalAlignment="Center" >
+                <Border BorderBrush="Red" BorderThickness="0" />
+            </AdornedElementPlaceholder>
+        </DockPanel>
+    </ControlTemplate>
+
+
+    <!--
+    <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/ShipWorks.UI;component/Styles/DefaultFontStyle.xaml"/>
         <ResourceDictionary Source="/ShipWorks.UI;component/Styles/Controls/ButtonStyle.xaml"/>
         <ResourceDictionary Source="/ShipWorks.UI;component/Styles/Controls/GridStyle.xaml"/>
@@ -115,4 +171,5 @@
     <Style TargetType="TextBlock" x:Key="EmptyTextStyle" BasedOn="{StaticResource DefaultTextBlockFont}">
         <Setter Property="Foreground" Value="#FF696969"></Setter>
     </Style>
+    -->
 </ResourceDictionary>

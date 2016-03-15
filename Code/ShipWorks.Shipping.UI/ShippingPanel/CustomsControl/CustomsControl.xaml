@@ -9,49 +9,51 @@
              xmlns:system="clr-namespace:System;assembly=mscorlib"
              xmlns:geography="clr-namespace:Interapptive.Shared.Business.Geography;assembly=Interapptive.Shared"
              mc:Ignorable="d"
-             d:DesignHeight="350" d:DesignWidth="400">
+             d:DesignHeight="350" d:DesignWidth="350">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/ShipWorks.UI;component/Styles/GlobalStyle.xaml" />
                 <ResourceDictionary Source="/ShipWorks.Shipping.UI;component/Templates/TextBoxErrorTemplate.xaml"/>
             </ResourceDictionary.MergedDictionaries>
+
             <ui:EmptyMoneyConverter x:Key="EmptyMoney" />
             <ui:EmptyDoubleConverter x:Key="EmptyDouble" />
             <ui:BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
             <ui:VisibleWhenEqualToParameterConverter x:Key="VisibleWhenEqualToParameter" />
         </ResourceDictionary>
     </UserControl.Resources>
-    <Grid Visibility="{Binding CustomsAllowed, Converter={StaticResource BooleanToVisibility}, UpdateSourceTrigger=PropertyChanged}">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="75" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
+    <StackPanel Visibility="{Binding CustomsAllowed, Converter={StaticResource BooleanToVisibility}}">
+        <TextBlock Style="{StaticResource TextBlock.SectionHeader}">General</TextBlock>
 
-        <TextBlock Grid.Row="0" Grid.Column="0" Style="{DynamicResource GroupSectionHeader}">General</TextBlock>
+        <Grid>
+            <Grid.Resources>
+                <Style TargetType="TextBlock" BasedOn="{StaticResource Grid.TextBlock.Label}" />
+                <Style TargetType="TextBox" BasedOn="{StaticResource Grid.TextBox.Default}" />
+            </Grid.Resources>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="75" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
 
-        <TextBlock Grid.Row="1" Grid.Column="0" Style="{DynamicResource GridLabel}" >Value:</TextBlock>
-        <TextBox Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" Width="75" Margin="4 2" MaxLength="12"
-                 Style="{DynamicResource TextBoxErrorTemplate}"
-                 Text="{Binding TotalCustomsValue, StringFormat=C, Mode=TwoWay, UpdateSourceTrigger=LostFocus,
-                        ValidatesOnDataErrors=true, NotifyOnValidationError=true}">
+            <TextBlock Grid.Row="1" Grid.Column="0">Value:</TextBlock>
+            <TextBox Grid.Row="1" Grid.Column="1"
+                     MaxLength="12"
+                     Style="{StaticResource Grid.TextBox.Number}"
+                     Validation.ErrorTemplate="{StaticResource Template.Error}"
+                     Text="{Binding TotalCustomsValue, StringFormat=C,
+                         ValidatesOnDataErrors=true, NotifyOnValidationError=true}">
 
-            <i:Interaction.Behaviors>
-                <ui:TextBoxInputRegExBehavior RegularExpression="^[+]?\$? ?((\d{1,3}(,\d{3})+)|\d*)\.?(\d+)?$" EmptyValue="" MaxLength="15" />
-                <ui:TextBoxInputRegExBehavior RegularExpression="^\S*$" EmptyValue="" MaxLength="15" />
-            </i:Interaction.Behaviors>
-        </TextBox>
+                <i:Interaction.Behaviors>
+                    <ui:TextBoxInputRegExBehavior RegularExpression="^[+]?\$? ?((\d{1,3}(,\d{3})+)|\d*)\.?(\d+)?$" EmptyValue="" MaxLength="15" />
+                    <ui:TextBoxInputRegExBehavior RegularExpression="^\S*$" EmptyValue="" MaxLength="15" />
+                </i:Interaction.Behaviors>
+            </TextBox>
+        </Grid>
 
-        <TextBlock Grid.Row="2" Grid.Column="0" Style="{DynamicResource GroupSectionHeader}">Contents</TextBlock>
+        <TextBlock Style="{StaticResource TextBlock.SectionHeader}">Contents</TextBlock>
 
-        <Grid Grid.Row="3" Grid.ColumnSpan="2" Grid.Column="0">
+        <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="75" />
@@ -60,7 +62,7 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
-            <ListBox Grid.Row="0" Grid.Column="0" Margin="4 0 0 0"
+            <ListBox Grid.Row="0" Grid.Column="0"
                     SelectionMode="Single"
                     ItemsSource="{Binding CustomsItems}"
                     SelectedValue ="{Binding SelectedCustomsItem}" >
@@ -78,21 +80,27 @@
             </ListBox>
 
             <StackPanel Grid.Row="0" Grid.Column="1"
-                        Margin="4, 0, 5, 0"
+                        Margin="4, 0, 0, 0"
                         Orientation="Vertical">
-                <Button Style="{DynamicResource Button.Add}"
-                        Margin="0 0 0 2"
+                <Button Style="{StaticResource Button.Add}"
+                        Margin="0, 0, 0, 4"
                         Command="{Binding AddCustomsItemCommand}" />
-                <Button Style="{DynamicResource Button.Delete}" Command="{Binding DeleteCustomsItemCommand}" />
+                <Button Style="{StaticResource Button.Delete}"
+                        Command="{Binding DeleteCustomsItemCommand}" />
             </StackPanel>
         </Grid>
 
-        <GroupBox Grid.Row="4" Grid.ColumnSpan="2" Grid.Column="0" Header="Selected Content"
-                  Margin="4 4 4 0"
-                  Padding="0 4 0 0">
+        <GroupBox Header="Selected Content"
+                  Margin="0, 4, 4, 0"
+                  Padding="0, 4, 0, 0">
             <Grid>
+                <Grid.Resources>
+                    <Style TargetType="TextBlock" BasedOn="{StaticResource Grid.TextBlock.Label}" />
+                    <Style TargetType="ComboBox" BasedOn="{StaticResource Grid.ComboBox.Default}" />
+                    <Style TargetType="TextBox" BasedOn="{StaticResource Grid.TextBox.Default}" />
+                </Grid.Resources>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="101" />
+                    <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
@@ -104,48 +112,35 @@
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
 
-                <TextBlock Grid.Row="0" Grid.Column="0"
-                           Style="{StaticResource GridLabel}"
-                           Margin="0, 3, 8, 0">Quantity:</TextBlock>
+                <TextBlock Grid.Row="0" Grid.Column="0">Quantity:</TextBlock>
                 <TextBox Grid.Row="0" Grid.Column="1"
-                         Style="{StaticResource TextBoxErrorTemplate}"
-                         HorizontalAlignment="Left"
-                         Width="75"
-                         Margin="4 2"
-                         MaxLength="5"
+                         Style="{StaticResource Grid.TextBox.Number}"
+                         Validation.ErrorTemplate="{StaticResource Template.Error}"
                          Text="{Binding SelectedCustomsItem.Quantity,
-                         Converter={StaticResource EmptyDouble},
-                         ConverterParameter=1,
-                         UpdateSourceTrigger=LostFocus,
-                         ValidatesOnDataErrors=true, NotifyOnValidationError=true}">
+                             Converter={StaticResource EmptyDouble},
+                             ConverterParameter=1,
+                             ValidatesOnDataErrors=true, NotifyOnValidationError=true}">
                     <i:Interaction.Behaviors>
                         <ui:TextBoxInputRegExBehavior RegularExpression="^?\d+(,\d+)*(\.\d+(e\d+)?)?(\.)?$" EmptyValue="" MaxLength="6" />
                     </i:Interaction.Behaviors>
                 </TextBox>
 
-                <TextBlock Grid.Row="1" Grid.Column="0"
-                           Style="{StaticResource GridLabel}"
-                           Margin="0, 3, 8, 0">Description:</TextBlock>
+                <TextBlock Grid.Row="1" Grid.Column="0">Description:</TextBlock>
                 <TextBox Grid.Row="1" Grid.Column="1"
-                         Style="{StaticResource TextBoxErrorTemplate}"
-                         Margin="4 2" MaxLength="150"
-                         Text="{Binding SelectedCustomsItem.Description, ValidatesOnDataErrors=true, NotifyOnValidationError=true}" />
+                         Validation.ErrorTemplate="{StaticResource Template.Error}"
+                         MaxLength="150"
+                         Text="{Binding SelectedCustomsItem.Description,
+                                ValidatesOnDataErrors=true, NotifyOnValidationError=true}" />
 
-                <TextBlock Grid.Row="2" Grid.Column="0"
-                           Style="{StaticResource GridLabel}"
-                           Margin="0, 3, 8, 0"
-                           VerticalAlignment="Center" >Weight:</TextBlock>
-                <ui:WeightControl Grid.Row="2" Grid.Column="1" Margin="0 2 0 0"
+                <TextBlock Grid.Row="2" Grid.Column="0">Weight:</TextBlock>
+                <ui:WeightControl Grid.Row="2" Grid.Column="1"
                         Weight="{Binding SelectedCustomsItem.Weight, Mode=TwoWay, UpdateSourceTrigger=LostFocus,
                         ValidatesOnDataErrors=true, NotifyOnValidationError=true}"/>
 
-                <TextBlock Grid.Row="3" Grid.Column="0"
-                           Style="{StaticResource GridLabel}"
-                           Margin="0, 3, 8, 0" >Value:</TextBlock>
+                <TextBlock Grid.Row="3" Grid.Column="0">Value:</TextBlock>
                 <TextBox Grid.Row="3" Grid.Column="1"
-                         Style="{StaticResource TextBoxErrorTemplate}"
-                         HorizontalAlignment="Left" Width="75"
-                         Margin="4 2"  MaxLength="12"
+                         Style="{StaticResource Grid.TextBox.Number}"
+                         Validation.ErrorTemplate="{StaticResource Template.Error}"
                          Text="{Binding SelectedCustomsItem.UnitValue, Converter={StaticResource EmptyMoney}, StringFormat=C, Mode=TwoWay, UpdateSourceTrigger=LostFocus,
                                 ValidatesOnDataErrors=true, NotifyOnValidationError=true}">
                     <i:Interaction.Behaviors>
@@ -153,24 +148,15 @@
                     </i:Interaction.Behaviors>
                 </TextBox>
 
-                <TextBlock Grid.Row="4" Grid.Column="0"
-                           Style="{StaticResource GridLabel}"
-                           Margin="0, 3, 8, 0">Harmonized Code:</TextBlock>
+                <TextBlock Grid.Row="4" Grid.Column="0">Harmonized Code:</TextBlock>
                 <TextBox Grid.Row="4" Grid.Column="1"
-                         Style="{StaticResource TextBoxErrorTemplate}"
-                         Margin="4 2"
-                         HorizontalAlignment="Left"
-                         Width="75"
+                         Style="{StaticResource Grid.TextBox.Number}"
                          MaxLength="14"
-                         Text="{Binding SelectedCustomsItem.HarmonizedCode, Mode=TwoWay, UpdateSourceTrigger=LostFocus,
-                                ValidatesOnDataErrors=true, NotifyOnValidationError=true}"></TextBox>
+                         Text="{Binding SelectedCustomsItem.HarmonizedCode,
+                                ValidatesOnDataErrors=true, NotifyOnValidationError=true}" />
 
-                <TextBlock Grid.Row="5" Grid.Column="0"
-                           Style="{StaticResource GridLabel}"
-                           Margin="0, 3, 8, 0" >Country of Origin:</TextBlock>
+                <TextBlock Grid.Row="5" Grid.Column="0">Country of Origin:</TextBlock>
                 <ComboBox Grid.Row="5" Grid.Column="1"
-                          Width="200"
-                          HorizontalAlignment="Left"
                       x:Name="CountryComboBox"
                       DisplayMemberPath="Key"
                       SelectedValuePath="Value"
@@ -178,5 +164,5 @@
                       ItemsSource="{Binding Source={x:Static geography:CountryList.Countries}, Mode=OneTime}"></ComboBox>
             </Grid>
         </GroupBox>
-    </Grid>
+    </StackPanel>
 </UserControl>
