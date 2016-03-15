@@ -34,7 +34,9 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.FeatureRestrictions.Ups
 
         [Theory]
         [InlineData(UpsStatus.None, 0, 100, EditionRestrictionLevel.None)]
-        [InlineData(UpsStatus.Tier1, 0, 100, EditionRestrictionLevel.None)]
+        [InlineData(UpsStatus.Tier1, 1, 100, EditionRestrictionLevel.Forbidden)]
+        [InlineData(UpsStatus.Tier1, 1, 1, EditionRestrictionLevel.None)]
+        [InlineData(UpsStatus.Tier1, 1, 0, EditionRestrictionLevel.None)]
         [InlineData(UpsStatus.Tier2, 0, 100, EditionRestrictionLevel.None)]
         [InlineData(UpsStatus.Tier3, 0, 100, EditionRestrictionLevel.None)]
         [InlineData(UpsStatus.Subsidized, 10, 11, EditionRestrictionLevel.Forbidden)]
