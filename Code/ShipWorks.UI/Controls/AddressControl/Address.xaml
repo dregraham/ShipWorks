@@ -88,7 +88,7 @@
                     <StackPanel.Resources>
                         <Style BasedOn="{StaticResource Button.Link}"
                                TargetType="Button" >
-                            <Setter Property="Margin" Value="0, 0, 7, 0" />
+                            <Setter Property="Margin" Value="0, 0, 0, 0" />
                         </Style>
                     </StackPanel.Resources>
                     <Button Visibility="{Binding CanValidateAddress, Converter={StaticResource BooleanToVisibility}}"
