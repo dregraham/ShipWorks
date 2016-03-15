@@ -8575,7 +8575,6 @@
     <None Include="Stores\Platforms\LoadedCommerce\shipworks3.php" />
     <None Include="Stores\Platforms\Magento\MagentoConnectExtension\app\code\local\Interapptive\ShipWorks\Model\Objectmodel\Api.php" />
     <None Include="Stores\Platforms\Magento\MagentoConnectExtension\Module.zip" />
-    <None Include="Stores\Platforms\Magento\MagentoTwoModule\Interapptive.zip" />
     <None Include="Stores\Platforms\PrestaShop\shipworks3.php" />
     <None Include="Stores\Platforms\OpenCart\shipworks3.php" />
     <None Include="Stores\Platforms\VirtueMart\Modules\VirtueMart2\shipworks3.php" />
