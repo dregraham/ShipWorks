@@ -1628,7 +1628,7 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementMapping( "MagentoStoreEntity", "ShipWorksLocal", @"dbo", "MagentoStore", 3 );
 			base.AddElementFieldMapping( "MagentoStoreEntity", "StoreID", "StoreID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 0 );
 			base.AddElementFieldMapping( "MagentoStoreEntity", "MagentoTrackingEmails", "MagentoTrackingEmails", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 1 );
-			base.AddElementFieldMapping( "MagentoStoreEntity", "MagentoConnect", "MagentoConnect", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 2 );
+			base.AddElementFieldMapping( "MagentoStoreEntity", "MagentoVersion", "MagentoVersion", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 2 );
 		}
 		/// <summary>Inits MarketplaceAdvisorOrderEntity's mappings</summary>
 		private void InitMarketplaceAdvisorOrderEntityMappings()

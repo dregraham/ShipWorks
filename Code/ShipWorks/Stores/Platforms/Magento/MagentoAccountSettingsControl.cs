@@ -1,10 +1,12 @@
-﻿using ShipWorks.Stores.Platforms.GenericModule;
+﻿using System;
+using ShipWorks.Stores.Platforms.GenericModule;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model;
 using System.Net;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Net;
 using System.Xml;
+using ShipWorks.Stores.Platforms.Magento.Enums;
 
 namespace ShipWorks.Stores.Platforms.Magento
 {
@@ -35,7 +37,23 @@ namespace ShipWorks.Stores.Platforms.Magento
             MagentoStoreEntity magentoStore = (MagentoStoreEntity)store;
             storeCodeTextBox.Text = magentoStore.ModuleOnlineStoreCode;
 
-            radioMagentoConnect.Checked = magentoStore.MagentoConnect;
+           
+
+            switch ((MagentoVersion)magentoStore.MagentoVersion)
+            {
+                case MagentoVersion.PhpFile:
+                    radioModuleDirect.Checked = true;
+                    break;
+                case MagentoVersion.MagentoConnect:
+                    radioMagentoConnect.Checked = true;
+                    break;
+                case MagentoVersion.MagentoTwo:
+                    radioMagentoTwo.Checked = true;
+                    break;
+                default:
+                    throw new NotImplementedException("Unknown Magento Version");
+            }
+
         }
 
         /// <summary>
@@ -45,8 +63,21 @@ namespace ShipWorks.Stores.Platforms.Magento
         {
             MagentoStoreEntity magentoStore = (MagentoStoreEntity)store;
             magentoStore.ModuleOnlineStoreCode = storeCodeTextBox.Text;
-            magentoStore.MagentoConnect = radioMagentoConnect.Checked;
 
+            if (radioModuleDirect.Checked)
+            {
+                magentoStore.MagentoVersion = (int)MagentoVersion.PhpFile;
+            }
+
+            if (radioMagentoConnect.Checked)
+            {
+                magentoStore.MagentoVersion = (int)MagentoVersion.MagentoConnect;
+            }
+
+            if (radioMagentoTwo.Checked)
+            {
+                magentoStore.MagentoVersion = (int)MagentoVersion.MagentoTwo;
+            }
             return base.SaveToEntity(store);
         }
 
@@ -112,7 +143,7 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// </summary>
         protected override bool ConnectionVerificationNeeded(GenericModuleStoreEntity genericStore)
         {
-            if (genericStore.Fields[(int)MagentoStoreFieldIndex.MagentoConnect].IsChanged)
+            if (genericStore.Fields[(int)MagentoStoreFieldIndex.MagentoVersion].IsChanged)
             {
                 return true;
             }

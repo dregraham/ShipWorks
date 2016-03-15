@@ -1,17 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using log4net;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.ApplicationCore.Logging;
-using Interapptive.Shared.Net;
 using ShipWorks.Common.Threading;
 using ShipWorks.Data;
-using ShipWorks.Data.Grid.Paging;
-using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
@@ -19,7 +13,7 @@ using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.GenericModule;
 using ShipWorks.Stores.Platforms.Magento.WizardPages;
 using ShipWorks.UI.Wizard;
-using ShipWorks.Data.Grid;
+using ShipWorks.Stores.Platforms.Magento.Enums;
 
 namespace ShipWorks.Stores.Platforms.Magento
 {
@@ -61,7 +55,7 @@ namespace ShipWorks.Stores.Platforms.Magento
 
             // default
             magentoStore.MagentoTrackingEmails = false;
-            magentoStore.MagentoConnect = false;
+            magentoStore.MagentoVersion = (int)MagentoVersion.PhpFile;
 
             return magentoStore;
         }
@@ -252,16 +246,17 @@ namespace ShipWorks.Stores.Platforms.Magento
         {
             MagentoStoreEntity magentoStore = Store as MagentoStoreEntity;
 
-            // the web client used depends on the type of connection we need to make
-            if (magentoStore.MagentoConnect)
+            switch ((MagentoVersion)magentoStore.MagentoVersion)
             {
-                // for connecting to our Magento Connect Extenion via SOAP
-                return new MagentoConnectWebClient(magentoStore);
-            }
-            else
-            {
-                // for connecting to our php file
-                return new MagentoWebClient(magentoStore);
+                case MagentoVersion.PhpFile:
+                    return new MagentoWebClient(magentoStore);
+                case MagentoVersion.MagentoConnect:
+                    // for connecting to our Magento Connect Extenion via SOAP
+                    return new MagentoConnectWebClient(magentoStore);
+                case MagentoVersion.MagentoTwo:
+                    return new MagentoTwoWebClient(magentoStore);
+                default:
+                    throw new NotImplementedException("Magento Version not supported");
             }
         }
 

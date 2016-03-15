@@ -1236,6 +1236,8 @@
     <Compile Include="Stores\Platforms\Choxi\ChoxiTemplate.cs" />
     <Compile Include="Stores\Platforms\Groupon\CoreExtensions\Filters\GrouponOrderIdCondition.cs" />
     <Compile Include="Stores\Platforms\InstanteStore\InstanteStoreStoreType.cs" />
+    <Compile Include="Stores\Platforms\Magento\Enums\MagentoVersion.cs" />
+    <Compile Include="Stores\Platforms\Magento\MagentoTwoWebClient.cs" />
     <Compile Include="Stores\Platforms\Newegg\Enums\NeweggChannelType.cs" />
     <Compile Include="Stores\Platforms\OpenSky\OpenSkyStoreType.cs" />
     <Compile Include="Stores\Platforms\OrderBot\OrderBotStoreType.cs" />
@@ -8573,6 +8575,7 @@
     <None Include="Stores\Platforms\LoadedCommerce\shipworks3.php" />
     <None Include="Stores\Platforms\Magento\MagentoConnectExtension\app\code\local\Interapptive\ShipWorks\Model\Objectmodel\Api.php" />
     <None Include="Stores\Platforms\Magento\MagentoConnectExtension\Module.zip" />
+    <None Include="Stores\Platforms\Magento\MagentoTwoModule\Interapptive.zip" />
     <None Include="Stores\Platforms\PrestaShop\shipworks3.php" />
     <None Include="Stores\Platforms\OpenCart\shipworks3.php" />
     <None Include="Stores\Platforms\VirtueMart\Modules\VirtueMart2\shipworks3.php" />
@@ -10509,6 +10512,7 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.7\4.7.0.1.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.7\4.7.0.2.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.7\4.7.1.0.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\4.8\4.8.0.0.sql" />
     <Content Include="Resources\add.png" />
     <None Include="Resources\blank16.png" />
     <None Include="Resources\calendar_31.png" />
