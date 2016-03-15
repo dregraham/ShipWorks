@@ -46,6 +46,9 @@ namespace ShipWorks.ApplicationCore.Licensing.FeatureRestrictions.Ups
 
                 case UpsStatus.None:
                 case UpsStatus.Tier1:
+                    return numberOfInstalledAccounts > 1 ?
+                        EditionRestrictionLevel.Forbidden :
+                        EditionRestrictionLevel.None;
                 case UpsStatus.Tier2:
                 case UpsStatus.Tier3:
                     return EditionRestrictionLevel.None;
