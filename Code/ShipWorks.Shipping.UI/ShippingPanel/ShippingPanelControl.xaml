@@ -12,6 +12,13 @@
              xmlns:customsControl="clr-namespace:ShipWorks.Shipping.UI.ShippingPanel.CustomsControl"
              mc:Ignorable="d" d:DataContext="{d:DesignInstance Type=local:ShippingPanelViewModel}"
              d:DesignHeight="2050" d:DesignWidth="350"
+
+             FontFamily="Tahoma"
+             FontSize="8.25 pt"
+             FontStyle="Normal"
+             FontStretch="Normal"
+             FontWeight="Normal"
+
              SnapsToDevicePixels="True"
              Focusable="True"
              IsTabStop="True">
@@ -83,14 +90,12 @@
                             <Expander IsEnabled="True"
                                       IsExpanded="{Binding IsOriginExpanded, Source={x:Static ui:ExpanderState.Current}, Mode=TwoWay, FallbackValue=True}">
                                 <Expander.Header>
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock Margin="0,0,8,0" Foreground="Gray">From</TextBlock>
-                                        <TextBlock Visibility="{Binding SupportsAccounts, Converter={StaticResource BooleanToVisibility}}" Foreground="Gray">Account:</TextBlock>
+                                    <StackPanel Style="{StaticResource Expander.Header}" Orientation="Horizontal">
+                                        <TextBlock Style="{StaticResource Expander.Header.Label}">From</TextBlock>
+                                        <TextBlock Visibility="{Binding SupportsAccounts, Converter={StaticResource BooleanToVisibility}}">Account:</TextBlock>
                                         <TextBlock Visibility="{Binding Visibility, ElementName=AccountDropDown}"
-                                           Text="{Binding Text, ElementName=AccountDropDown, StringFormat=' {0}, '}"
-                                           Foreground="Gray"/>
-                                        <TextBlock Text="{Binding Text, ElementName=OriginDropDown}"
-                                           Foreground="Gray"/>
+                                           Text="{Binding Text, ElementName=AccountDropDown, StringFormat=' {0}, '}" />
+                                        <TextBlock Text="{Binding Text, ElementName=OriginDropDown}" />
                                     </StackPanel>
                                 </Expander.Header>
                                 <StackPanel IsEnabled="{Binding AllowEditing}"
@@ -166,10 +171,11 @@
                                       IsExpanded="{Binding IsDestinationExpanded, Source={x:Static ui:ExpanderState.Current}, Mode=TwoWay, FallbackValue=True}">
                                 <Expander.HeaderTemplate>
                                     <DataTemplate>
-                                        <StackPanel Orientation="Vertical">
+                                        <StackPanel Orientation="Vertical"
+                                                    Style="{StaticResource Expander.Header}">
                                             <StackPanel Orientation="Horizontal">
-                                            <TextBlock Margin="0,0,8,0" Foreground="Gray">To</TextBlock>
-                                                <TextBlock Foreground="Gray">
+                                                <TextBlock Style="{StaticResource Expander.Header.Label}">To</TextBlock>
+                                                <TextBlock>
                                                     <TextBlock.Text>
                                                         <MultiBinding StringFormat="{}{0}, {1} ">
                                                             <Binding Path="Destination.FullName" Mode="OneWay" UpdateSourceTrigger="PropertyChanged" />
@@ -178,7 +184,7 @@
                                                     </TextBlock.Text>
                                                 </TextBlock>
                                             </StackPanel>
-                                            <TextBlock Margin="20,0,8,0" Foreground="Gray" Visibility="{Binding DestinationAddressEditableState, Converter={StaticResource VisibleWhenNotEqualToParameter}, ConverterParameter={x:Static sw:ShippingAddressEditStateType.Editable}}">
+                                            <TextBlock Margin="20,0,8,0" Visibility="{Binding DestinationAddressEditableState, Converter={StaticResource VisibleWhenNotEqualToParameter}, ConverterParameter={x:Static sw:ShippingAddressEditStateType.Editable}}">
                                                 <TextBlock.Text>
                                                     <MultiBinding StringFormat="{}({0})">
                                                         <Binding Path="DestinationAddressEditableState"
@@ -214,7 +220,9 @@
                                       Style="{StaticResource Expander.Style}">
                                 <Expander.HeaderTemplate>
                                     <DataTemplate>
-                                        <TextBlock Foreground="Gray">Shipment Details</TextBlock>
+                                        <StackPanel Style="{StaticResource Expander.Header}">
+                                            <TextBlock Style="{StaticResource Expander.Header.Label}">Shipment Details</TextBlock>
+                                        </StackPanel>
                                     </DataTemplate>
                                 </Expander.HeaderTemplate>
 
@@ -237,9 +245,16 @@
                         </Border>
                         <Border DataContext="{Binding ShipmentViewModel}"
                                 Visibility="{Binding CustomsAllowed, Converter={StaticResource BooleanToVisibility}}">
-                            <Expander Header="Customs"
-                                  IsExpanded="{Binding IsCustomsExpanded, Source={x:Static ui:ExpanderState.Current}, Mode=TwoWay, FallbackValue=True}"
-                                  Style="{StaticResource Expander.Style}">
+                            <Expander IsExpanded="{Binding IsCustomsExpanded, Source={x:Static ui:ExpanderState.Current}, Mode=TwoWay, FallbackValue=True}"
+                                      Style="{StaticResource Expander.Style}">
+                                <Expander.HeaderTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Style="{StaticResource Expander.Header}">
+                                            <TextBlock Style="{StaticResource Expander.Header.Label}">Customs</TextBlock>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </Expander.HeaderTemplate>
+
                                 <customsControl:CustomsControl IsEnabled="{Binding DataContext.AllowEditing,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:ShippingPanelControl}}}"
                                             Style="{StaticResource Expander.Content}" />
                             </Expander>
@@ -248,6 +263,7 @@
                         <Button Command="{Binding CreateLabelCommand}"
                                 IsEnabled="{Binding AllowEditing}"
                                 HorizontalAlignment="Center"
+
                                 Padding="8">
                             <StackPanel Orientation="Horizontal">
                                 <Image Height="16"

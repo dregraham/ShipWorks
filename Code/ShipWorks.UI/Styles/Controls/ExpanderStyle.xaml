@@ -240,6 +240,15 @@
         </Setter>
     </Style>
 
+    <Style x:Key="Expander.Header" TargetType="FrameworkElement">
+        <Setter Property="TextBlock.Foreground" Value="DarkGray" />
+    </Style>
+
+    <Style x:Key="Expander.Header.Label" TargetType="TextBlock">
+        <Setter Property="Margin" Value="0, 0, 8, 0" />
+        <Setter Property="Foreground" Value="Gray" />
+    </Style>
+
     <Style x:Key="Expander.Content" TargetType="FrameworkElement">
         <Setter Property="Margin" Value="8, 0, 8, 8" />
     </Style>
