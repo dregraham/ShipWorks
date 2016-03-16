@@ -11,6 +11,9 @@ using System.Xml;
 
 namespace ShipWorks.Stores.Platforms.Magento
 {
+    /// <summary>
+    /// Magento two web client
+    /// </summary>
     class MagentoTwoWebClient : MagentoWebClient
     {
         private readonly MagentoStoreEntity store;
@@ -32,39 +35,27 @@ namespace ShipWorks.Stores.Platforms.Magento
             switch (action)
             {
                 case "getstatuscodes":
-                    return ProcessGetStatusCodes();
+                    return ProcessGetRequest("/store/statuscodes", "GetStatusCodes", request);
 
                 case "getorders":
-                    return ProcessGetOrders(request);
+                    return ProcessGetRequest("/orders", "GetOrders", request);
 
                 case "getcount":
-                    return ProcessGetCount(request);
+                    return ProcessGetRequest("/orders/count", "GetCount", request);
 
                 case "getmodule":
-                    return ProcessGetModule();
+                    return ProcessGetRequest("/module", "GetModule", request);
 
                 case "updateorder":
                     return ProcessUpdateOrder(request);
 
                 case "getstore":
-                    return ProcessGetStore();
+                    return ProcessGetRequest("/store", "GetStore", request);
 
                 default:
                     throw new InvalidOperationException("MagentoTwoWebClient doesn't support action: " + action);
             }
         }
-
-        private GenericModuleResponse ProcessGetStore()
-        {
-            HttpXmlVariableRequestSubmitter xmlRequest = new HttpXmlVariableRequestSubmitter
-            {
-                Uri = new Uri(Store.ModuleUrl + "/store"),
-                Verb = HttpVerb.Get
-            };
-            
-            return ProcessRequestInternal(xmlRequest, "GetStore");
-        }
-
         private GenericModuleResponse ProcessUpdateOrder(HttpVariableRequestSubmitter request)
         {
             HttpXmlVariableRequestSubmitter xmlRequest = new HttpXmlVariableRequestSubmitter
@@ -72,74 +63,60 @@ namespace ShipWorks.Stores.Platforms.Magento
                 Uri = new Uri(Store.ModuleUrl + "/orders/update")
             };
 
-            XElement requestXml = new XElement("request");
+            // Generate the body of the request and add it to our request
+            XElement postRequestBody = GeneratePostRequestBody(request);
+            xmlRequest.Variables.Add(string.Empty, postRequestBody.ToString());
 
+            return ProcessRequestInternal(xmlRequest, "UpdateOrder");
+        }
+
+        /// <summary>
+        /// Generates an XElement document in the correct format for our magento module
+        /// that contains the parameters from the HttpVaribleRequestSubmitter
+        /// </summary>
+        private XElement GeneratePostRequestBody(HttpVariableRequestSubmitter request)
+        {
+            // All of the variables go into the data element
             XElement body = new XElement("data");
 
+            // add all of the variables to the data element
             foreach (HttpVariable var in request.Variables)
             {
                 body.Add(new XElement(var.Name, var.Value));
             }
 
+            // Create the document root element and add the body to it
+            XElement requestXml = new XElement("request");
             requestXml.Add(body);
 
-            xmlRequest.Variables.Add(string.Empty, requestXml.ToString());
-
-            return ProcessRequestInternal(xmlRequest, "UpdateOrder");
+            return requestXml;
         }
 
-        private GenericModuleResponse ProcessGetModule()
+        /// <summary>
+        /// Processes a get request using the given parameters
+        /// </summary>
+        private GenericModuleResponse ProcessGetRequest(string path, string logName, HttpVariableRequestSubmitter request)
         {
             HttpXmlVariableRequestSubmitter xmlRequest = new HttpXmlVariableRequestSubmitter
             {
-                Uri = new Uri(Store.ModuleUrl + "/module"),
-                Verb = HttpVerb.Get
-            };
-
-            return ProcessRequestInternal(xmlRequest, "GetModule");
-        }
-
-        private GenericModuleResponse ProcessGetCount(HttpVariableRequestSubmitter request)
-        {
-            HttpXmlVariableRequestSubmitter xmlRequest = new HttpXmlVariableRequestSubmitter
-            {
-                Uri = new Uri(Store.ModuleUrl + "/orders/count"),
+                Uri = new Uri(Store.ModuleUrl + $"{path}"),
                 Verb = HttpVerb.Get
             };
             
-            foreach (HttpVariable httpVariable in request.Variables)
+            AddVariablesToGetRequest(request, xmlRequest);
+
+            return ProcessRequestInternal(xmlRequest, logName);
+        }
+
+        /// <summary>
+        /// Takes the variables from one HttpVariableRequestSubmitter and moves them to another
+        /// </summary>
+        private void AddVariablesToGetRequest(HttpVariableRequestSubmitter from, HttpVariableRequestSubmitter to)
+        {
+            foreach (HttpVariable httpVariable in from.Variables)
             {
-                xmlRequest.Variables.Add(httpVariable);
+                to.Variables.Add(httpVariable);
             }
-            
-            return ProcessRequestInternal(xmlRequest, "GetCount");
-        }
-
-        private GenericModuleResponse ProcessGetOrders(HttpVariableRequestSubmitter request)
-        {
-            HttpXmlVariableRequestSubmitter xmlRequest = new HttpXmlVariableRequestSubmitter
-            {
-                Uri = new Uri(Store.ModuleUrl + "/orders"),
-                Verb = HttpVerb.Get
-            };
-            
-            foreach (HttpVariable httpVariable in request.Variables)
-            {
-                xmlRequest.Variables.Add(httpVariable);
-            }
-            
-            return ProcessRequestInternal(xmlRequest, "GetOrders");
-        }
-
-        private GenericModuleResponse ProcessGetStatusCodes()
-        {
-            HttpXmlVariableRequestSubmitter xmlRequest = new HttpXmlVariableRequestSubmitter
-            {
-                Uri = new Uri(Store.ModuleUrl + "/store/statuscodes"),
-                Verb = HttpVerb.Get
-            };
-
-            return ProcessRequestInternal(xmlRequest, "GetStatusCodes");
         }
 
         /// <summary>
@@ -158,15 +135,12 @@ namespace ShipWorks.Stores.Platforms.Magento
                 using (IHttpResponseReader reader = request.GetResponse())
                 {
                     string result = reader.ReadResult();
-                    
                     logEntry.LogResponse(result, "txt");
 
                     XmlDocument xmlResponse = new XmlDocument {XmlResolver = null};
-                    
                     xmlResponse.LoadXml(result);
 
                     XPathNavigator xpath = xmlResponse.CreateNavigator();
-                    
                     GenericModuleResponse response = new GenericModuleResponse(xpath.Value);
 
                     // Valid the module version and schema version
