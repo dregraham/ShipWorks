@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi.Responses
+namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi.DTO
 {
     public class ThreeDCartOrder
     {
@@ -97,7 +97,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi.Responses
         public double SalesTax3 { get; set; }
 
         [JsonProperty("OrderAmount")]
-        public double OrderAmount { get; set; }
+        public decimal OrderAmount { get; set; }
 
         [JsonProperty("AffiliateCommission")]
         public double AffiliateCommission { get; set; }
@@ -105,8 +105,8 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi.Responses
         [JsonProperty("TransactionList")]
         public IList<ThreeDCartTransaction> TransactionList { get; set; }
 
-        //[JsonProperty("CardType")]
-        //public string CardType { get; set; }
+        [JsonProperty("CardType")]
+        public string CardType { get; set; }
 
         //[JsonProperty("CardNumber")]
         //public string CardNumber { get; set; }
@@ -138,8 +138,8 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi.Responses
         //[JsonProperty("RewardPoints")]
         //public string RewardPoints { get; set; }
 
-        //[JsonProperty("QuestionList")]
-        //public IList<QuestionList> QuestionList { get; set; }
+        [JsonProperty("QuestionList")]
+        public IEnumerable<ThreeDCartQuestion> QuestionList { get; set; }
 
         //[JsonProperty("Referer")]
         //public string Referer { get; set; }

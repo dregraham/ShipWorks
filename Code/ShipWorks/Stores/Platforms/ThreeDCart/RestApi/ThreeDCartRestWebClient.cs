@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores.Platforms.ThreeDCart.RestApi.Responses;
+using ShipWorks.Stores.Platforms.ThreeDCart.RestApi.DTO;
 
 namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
 {
@@ -30,9 +31,9 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
 
             submitter = new HttpVariableRequestSubmitter();
             submitter.ContentType = ContentType;
-            submitter.Headers.Add($"SecureUrl: {secureUrl}");
-            submitter.Headers.Add($"PrivateKey: {privateKey}");
-            submitter.Headers.Add($"Token: {token}");
+            submitter.Headers.Add(HttpRequestHeader.Authorization, $"SecureUrl: {secureUrl}");
+            submitter.Headers.Add(HttpRequestHeader.Authorization, $"PrivateKey: {privateKey}");
+            submitter.Headers.Add(HttpRequestHeader.Authorization, $"Token: {token}");
 
             GetOrderUri = new Uri($"{HttpHost}{GetOrderApiVersion}{OrderUrlExtension}");
         }

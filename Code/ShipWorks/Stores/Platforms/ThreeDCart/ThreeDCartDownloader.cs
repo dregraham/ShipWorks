@@ -23,7 +23,7 @@ using ShipWorks.Stores.Platforms.ThreeDCart.Enums;
 using log4net;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Stores.Platforms.ThreeDCart.RestApi;
-using ShipWorks.Stores.Platforms.ThreeDCart.RestApi.Responses;
+using ShipWorks.Stores.Platforms.ThreeDCart.RestApi.DTO;
 
 namespace ShipWorks.Stores.Platforms.ThreeDCart
 {
@@ -146,13 +146,170 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         {
             foreach (ThreeDCartOrder order in orders)
             {
-                LoadOrder(order);
+                bool isSubOrder = false;
+                bool hasSubOrders = order.ShipmentList.Count() > 1;
+                int shipmentIndex = 1;
+                foreach (ThreeDCartShipment shipment in order.ShipmentList)
+                {
+                    string invoiceNumberPostFix = hasSubOrders ? $"-{shipmentIndex}" : string.Empty;
+
+                    LoadOrder(order, shipment, invoiceNumberPostFix, isSubOrder, hasSubOrders);
+
+                    shipmentIndex++;
+                    isSubOrder = true;
+                }
             }
         }
 
-        private void LoadOrder(ThreeDCartOrder order)
+        private void LoadOrder(ThreeDCartOrder threeDCartOrder, ThreeDCartShipment shipment, string invoiceNumberPostFix,
+            bool isSubOrder, bool hasSubOrders)
         {
+            MethodConditions.EnsureArgumentIsNotNull(threeDCartOrder, "order");
 
+            ThreeDCartOrderIdentifier orderIdentifier = CreateOrderIdentifier(threeDCartOrder, invoiceNumberPostFix);
+
+            OrderEntity order = InstantiateOrder(orderIdentifier);
+
+            // If this order does not have sub orders, set the order total to that which we received from 3D Cart
+            // If it does have sub orders, we'll calculate the order total after we add items for this shipment/charges/payment
+            if (order.IsNew && !hasSubOrders)
+            {
+                // Set the total.  It will be calculated and verified later.
+                order.OrderTotal = threeDCartOrder.OrderAmount;
+            }
+
+            if (order.CustomerID <= MissingCustomerID)
+            {
+                order.OnlineCustomerID = null;
+            }
+            else
+            {
+                order.OnlineCustomerID = order.CustomerID;
+            }
+
+            order.OrderDate = threeDCartOrder.OrderDate;
+            order.OnlineLastModified = threeDCartOrder.LastUpdate;
+
+            order.OnlineStatus = threeDCartOrder.OrderStatusID.ToString();
+
+            LoadAddress(order, threeDCartOrder, shipment);
+
+            LoadOrderNotes(order, threeDCartOrder);
+
+            if (order.IsNew)
+            {
+                LoadItems(order, threeDCartOrder, shipment);
+
+                if (!isSubOrder)
+                {
+                    LoadOrderCharges(order, threeDCartOrder);
+
+                    LoadPaymentDetails(order, threeDCartOrder);
+                }
+
+                AdjustOrderTotal(order, threeDCartOrder);
+            }
+        }
+
+        private void LoadPaymentDetails(OrderEntity order, ThreeDCartOrder threeDCartOrder)
+        {
+            if(!string.IsNullOrWhiteSpace(threeDCartOrder.BillingPaymentMethod))
+            {
+                LoadPaymentDetail(order, "Payment Type", threeDCartOrder.BillingPaymentMethod);
+            }
+
+            if (!string.IsNullOrWhiteSpace(threeDCartOrder.CardType))
+            {
+                LoadPaymentDetail(order, "Card Type", threeDCartOrder.CardType);
+            }
+        }
+
+        private void LoadOrderCharges(OrderEntity order, ThreeDCartOrder threeDCartOrder)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void AdjustOrderTotal(OrderEntity order, ThreeDCartOrder threeDCartOrder)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void LoadItems(OrderEntity order, ThreeDCartOrder threeDCartOrder, ThreeDCartShipment shipment)
+        {
+            IEnumerable<ThreeDCartOrderItem> shipmentItems = threeDCartOrder.OrderItemList.Where(i => i.ItemShipmentID == shipment.ShipmentID);
+
+            foreach (ThreeDCartOrderItem item in shipmentItems)
+            {
+                LoadItem(order, item);
+            }
+        }
+
+        private void LoadItem(OrderEntity order, ThreeDCartOrderItem threeDCartItem)
+        {
+            ThreeDCartOrderItemEntity item = (ThreeDCartOrderItemEntity) InstantiateOrderItem(order);
+
+            item.Code = threeDCartItem.ItemID;
+            item.SKU = item.Code;
+            item.Quantity = threeDCartItem.ItemQuantity;
+            item.UnitCost = threeDCartItem.ItemUnitCost;
+            item.Weight = threeDCartItem.ItemWeight;
+            item.ThreeDCartShipmentID = threeDCartItem.ItemShipmentID;
+
+            LoadOrderItemAttributes(item, threeDCartItem);
+        }
+
+        private void LoadOrderItemAttributes(ThreeDCartOrderItemEntity item, ThreeDCartOrderItem threeDCartItem)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void LoadOrderNotes(OrderEntity order, ThreeDCartOrder threeDCartOrder)
+        {
+            InstantiateNote(order, threeDCartOrder.CustomerComments, DateTime.Now, NoteVisibility.Public, true);
+            InstantiateNote(order, threeDCartOrder.InternalComments, DateTime.Now, NoteVisibility.Internal, true);
+            InstantiateNote(order, threeDCartOrder.ExternalComments, DateTime.Now, NoteVisibility.Internal, true);
+
+            foreach (ThreeDCartQuestion question in threeDCartOrder.QuestionList)
+            {
+                string questionNote = question.QuestionTitle;
+                if (!string.IsNullOrWhiteSpace(question.QuestionAnswer))
+                {
+                    questionNote += $" : {question.QuestionAnswer}";
+                }
+
+                InstantiateNote(order, questionNote, DateTime.Now, NoteVisibility.Internal, true);
+            }
+        }
+
+        private void LoadAddress(OrderEntity order, ThreeDCartOrder threeDCartOrder, ThreeDCartShipment shipment)
+        {
+            PersonAdapter billAdapter = new PersonAdapter(order, "Bill")
+            {
+                FirstName = threeDCartOrder.BillingFirstName,
+                LastName = threeDCartOrder.BillingLastName,
+                Company = threeDCartOrder.BillingCompany,
+                Phone = threeDCartOrder.BillingPhoneNumber,
+                Street1 = threeDCartOrder.BillingAddress,
+                Street2 = threeDCartOrder.BillingAddress2,
+                City = threeDCartOrder.BillingCity,
+                StateProvCode = Geography.GetStateProvCode(threeDCartOrder.BillingState),
+                PostalCode = threeDCartOrder.BillingZipCode,
+                CountryCode = Geography.GetCountryCode(threeDCartOrder.BillingCountry)
+            };
+
+            PersonAdapter shipAdapter = new PersonAdapter(order, "Ship")
+            {
+                FirstName = shipment.ShipmentFirstName,
+                LastName = shipment.ShipmentLastName,
+                Company = shipment.ShipmentCompany,
+                Phone = shipment.ShipmentPhone,
+                Street1 = shipment.ShipmentAddress,
+                Street2 = shipment.ShipmentAddress2,
+                City = shipment.ShipmentCity,
+                StateProvCode = Geography.GetStateProvCode(shipment.ShipmentState),
+                PostalCode = shipment.ShipmentZipCode,
+                CountryCode = Geography.GetCountryCode(shipment.ShipmentCountry)
+            };
         }
 
         private IEnumerable<ThreeDCartOrder> DownloadOrders(DateTime startDate)
@@ -492,6 +649,47 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
             ThreeDCartOrderIdentifier threeDCartOrderIdentifier = new ThreeDCartOrderIdentifier(invoiceNum, string.Empty, invoiceNumberPostFix);
             OrderEntity order = FindOrder(threeDCartOrderIdentifier);
             if (order == null)
+            {
+                threeDCartOrderIdentifier = new ThreeDCartOrderIdentifier(invoiceNum, invoiceNumberPrefix, invoiceNumberPostFix);
+            }
+
+            return threeDCartOrderIdentifier;
+        }
+
+        private ThreeDCartOrderIdentifier CreateOrderIdentifier(ThreeDCartOrder order, string invoiceNumberPostFix)
+        {
+            // Now extract the Invoice number and ThreeDCart Order Id
+            long orderId = order.OrderID;
+
+            // Invoice number is defined as an integer in the 3D Cart schema
+            // So we can safely remove the prefix to get to a long
+            long invoiceNum = 0;
+            string invoiceNumber = order.InvoiceNumber.ToString();
+            string invoiceNumberPrefix = order.InvoiceNumberPrefix;
+
+            // I've seen invoice number as blank in one of the 3D Cart test stores...  so instead of blank, we'll put the 3D Cart Order ID
+            if (string.IsNullOrWhiteSpace(invoiceNumber))
+            {
+                invoiceNumber = orderId.ToString();
+            }
+            else if (!string.IsNullOrWhiteSpace(invoiceNumberPrefix))
+            {
+                // 3d Cart allows you to add a prefix to the invoice number.
+                // The legacy order importer stripped the prefix, so we'll do that here too.
+                invoiceNumber = invoiceNumber.Replace(invoiceNumberPrefix, string.Empty);
+            }
+
+            if (!long.TryParse(invoiceNumber, out invoiceNum))
+            {
+                log.ErrorFormat("3D Cart returned an invalid invoice number: {0}.", invoiceNumber);
+                throw new ThreeDCartException("3D Cart returned an invalid response while downloading orders");
+            }
+
+            // Create an order identifier without a prefix.  If we find an order, it must have been downloaded prior to
+            // the upgrade.  If an order is found, we will not use the prefix.  If we don't find an order, we'll use the prefix.
+            ThreeDCartOrderIdentifier threeDCartOrderIdentifier = new ThreeDCartOrderIdentifier(invoiceNum, string.Empty, invoiceNumberPostFix);
+            OrderEntity orderEntity = FindOrder(threeDCartOrderIdentifier);
+            if (orderEntity == null)
             {
                 threeDCartOrderIdentifier = new ThreeDCartOrderIdentifier(invoiceNum, invoiceNumberPrefix, invoiceNumberPostFix);
             }

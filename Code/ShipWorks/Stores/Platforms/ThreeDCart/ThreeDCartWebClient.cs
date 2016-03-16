@@ -56,7 +56,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
 
             if (string.IsNullOrWhiteSpace(store.ApiUserKey))
             {
-                throw new ThreeDCartException(string.Format("The 3D Cart Store API User Key is missing.  Please enter your API User Key by going to Manage > Stores > {0} > Edit > Store Connection.  You will find instructions on how to find the API User Key there. ", store.StoreName));
+                throw new ThreeDCartException(string.Format("The 3D Cart Store API User Key is missing. Please enter your API User Key by going to Manage > Stores > {0} > Edit > Store Connection.  You will find instructions on how to find the API User Key there. ", store.StoreName));
             }
 
             this.store = store;
@@ -263,7 +263,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         /// </summary>
         /// <param name="responseToCheck">The api xml response to check</param>
         /// <returns>
-        /// If there is an error node, the error node is returned.  Otherwise, null.  
+        /// If there is an error node, the error node is returned.  Otherwise, null.
         /// If responseToCheck is null, a new error node is returned nothing that an error communicating with 3D Cart occurred. </returns>
         private static XmlNode GetErrorFromResponse(XmlNode responseToCheck)
         {
@@ -339,13 +339,13 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
                 throw new ThreeDCartException(string.Format("ShipWorks was unable to update the order status for order number {0}.", invoiceNumber), errorNode);
             }
         }
-        
+
         /// <summary>
         /// Make a call to ThreeDCart requesting a count of orders matching criteria.
         /// </summary>
         /// <param name="orderSearchCriteria">Filter by ThreeDCartWebClientOrderSearchCriteria.</param>
         /// <returns>Number of orders matching criteria</returns>
-        public int GetOrderCount(ThreeDCartWebClientOrderSearchCriteria orderSearchCriteria) 
+        public int GetOrderCount(ThreeDCartWebClientOrderSearchCriteria orderSearchCriteria)
         {
             int orderCount = 0;
             RequestThrottleParameters requestThrottleArgs = new RequestThrottleParameters(ThreeDCartWebClientApiCall.GetOrderCount, null, progressReporter);
@@ -355,7 +355,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
             {
                 string orderCountSqlQuery = ApiQueryProvider.QueryOrderCount(orderSearchCriteria);
 
-                // Make the call and get the response. 
+                // Make the call and get the response.
                 throttler.ExecuteRequest(requestThrottleArgs, () =>
                 {
                     orderCountResultXml = MakeAdvancedCartApiQuery(advancedCartApiWebService, orderCountSqlQuery, "Get order count");
@@ -370,7 +370,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
 
             return orderCount;
         }
-        
+
         /// <summary>
         /// Make the call to ThreeDCart to get a list of orders matching criteria
         /// </summary>
@@ -389,11 +389,11 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
                 string sqlQuery;
                 if (orderSearchCriteria.OrderDateSearchType == ThreeDCartWebClientOrderDateSearchType.CreatedDate)
                 {
-                    sqlQuery = ApiQueryProvider.QueryByOrderCreateDate(orderSearchCriteria);   
+                    sqlQuery = ApiQueryProvider.QueryByOrderCreateDate(orderSearchCriteria);
                 }
                 else
                 {
-                    sqlQuery = ApiQueryProvider.QueryByOrderModifiedDate(orderSearchCriteria); 
+                    sqlQuery = ApiQueryProvider.QueryByOrderModifiedDate(orderSearchCriteria);
                 }
 
                 throttler.ExecuteRequest(requestThrottleArgs, () =>
@@ -405,7 +405,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
             XmlNodeList ordersToGet = ordersResultXml.SelectNodes("//runQueryRecord");
 
             FetchOrders(ordersToGet, ordersToReturn);
-            
+
             return SortOrders(ordersToReturn, orderSearchCriteria).ToList();
         }
 
@@ -453,7 +453,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
 
                 orderResultXml = orderResultXml.FirstChild;
 
-                // 3d Cart orders can have an invoice number prefix.  
+                // 3d Cart orders can have an invoice number prefix.
                 // So we'll get the InvoiceNumber that doesn't have the prefix from the advanced api query,
                 // then add the InvoiceNumberPrefix node so that the downloader can work with both values
                 XmlNode invoiceNumberPrefixNode = orderResultXml.OwnerDocument.CreateNode(XmlNodeType.Element, "InvoiceNumberPrefix", orderResultXml.NamespaceURI);
@@ -648,7 +648,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
                 }
                 else
                 {
-                    // 3D Cart joins the attribute and value by a : in the item product name, so use that format to 
+                    // 3D Cart joins the attribute and value by a : in the item product name, so use that format to
                     // create a string to check based on the store's products, removing spaces to get an accurate search.
                     // The attribute/value combination could be anywhere in the product name, so just see if it's in there anywhere
                     // If so, set the product, option, and value.
@@ -778,7 +778,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
                     {
                         productsXml = api.getProduct(store.StoreDomain, store.ApiUserKey, batchSize, startNumber, productId, string.Empty);
                     });
-                    
+
                     // 3dcart seems to be double decoding the xml requests, so if we get back a not well-formed error, try the request again
                     // but double encode the product id.  We end up sending &lt;![CDATA[foo&amp;bar]]&gt; instead of foo&amp;bar, which is what it should be
                     if (ResponseIsNotWellFormedError(productsXml))

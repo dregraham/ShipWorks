@@ -1,7 +1,7 @@
 ﻿using System;
 using Newtonsoft.Json;
 
-namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi.Responses
+namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi.DTO
 {
     public class ThreeDCartTransaction
     {

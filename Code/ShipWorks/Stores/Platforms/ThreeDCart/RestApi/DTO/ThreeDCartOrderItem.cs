@@ -1,7 +1,7 @@
 ﻿using System;
 using Newtonsoft.Json;
 
-namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi.Responses
+namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi.DTO
 {
     public class ThreeDCartOrderItem
     {
@@ -51,7 +51,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi.Responses
         public DateTime ItemDateAdded { get; set; }
 
         [JsonProperty("ItemUnitCost")]
-        public double ItemUnitCost { get; set; }
+        public decimal ItemUnitCost { get; set; }
 
         [JsonProperty("ItemUnitStock")]
         public int ItemUnitStock { get; set; }
