@@ -8,8 +8,14 @@
              xmlns:local="clr-namespace:ShipWorks.Shipping.UI.RatingPanel"
              xmlns:amz="clr-namespace:ShipWorks.Shipping.UI.Carriers.Amazon"
              d:DataContext="{d:DesignInstance local:TestRatingPanelViewModel, IsDesignTimeCreatable=True}"
-             mc:Ignorable="d"
+
              FontFamily="Tahoma"
+             FontSize="8.25 pt"
+             FontStyle="Normal"
+             FontStretch="Normal"
+             FontWeight="Normal"
+
+             mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="400"
              UseLayoutRounding="True"
              SnapsToDevicePixels="True"
@@ -18,7 +24,6 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/ShipWorks.UI;component/Styles/GlobalStyle.xaml"/>
-                <ResourceDictionary Source="/ShipWorks.UI;component/Themes/Controls/DataGrid.xaml"/>
                 <ResourceDictionary Source="FootnoteTemplates/FootnoteTemplates.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
@@ -58,7 +63,7 @@
                     <DataGridTemplateColumn Header="Provider" Width="50">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <Image Style="{DynamicResource Image.Icon}"
+                                <Image Style="{StaticResource Image.Icon}"
                                        Source="{Binding ProviderLogo, Converter={StaticResource ImageToBitmapSource}}" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>

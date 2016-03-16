@@ -47,7 +47,7 @@
             <TextBlock Grid.Row="1" Grid.Column="0"
                        Style="{StaticResource Grid.TextBlock.Label}">Ship date:</TextBlock>
             <DatePicker Grid.Row="1" Grid.Column="1"
-                        Style="{DynamicResource Grid.DatePicker.Default}"
+                        Style="{StaticResource Grid.DatePicker.Default}"
                         SelectedDate="{Binding ShipDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,
                             ValidatesOnDataErrors=true, NotifyOnValidationError=true}"/>
         </Grid>
@@ -81,9 +81,9 @@
                 </ListBox>
 
                 <StackPanel Grid.Column="1">
-                    <Button Style="{DynamicResource Button.Add}" Margin="0, 0, 0, 4"
+                    <Button Style="{StaticResource Button.Add}" Margin="0, 0, 0, 4"
                             Command="{Binding AddPackageCommand}" />
-                    <Button Style="{DynamicResource Button.Delete}"
+                    <Button Style="{StaticResource Button.Delete}"
                             Command="{Binding DeletePackageCommand}" />
                 </StackPanel>
             </Grid>
@@ -159,7 +159,7 @@
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
                 </ComboBox>
-                <Button Style="{DynamicResource Button.Link}"
+                <Button Style="{StaticResource Button.Link}"
                         VerticalAlignment="Center"
                         Margin="3, 0, 0, 0"
                         Content="Manage..."

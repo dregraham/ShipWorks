@@ -3,7 +3,7 @@
                     xmlns:ui="http://schemas.shipworks.com/ui">
     <DataTemplate x:Key="AmazonCarrierTermsAndConditionsNotAcceptedFootnoteViewModelTemplate">
         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-            <Image  Style="{DynamicResource Image.Icon}"
+            <Image  Style="{StaticResource Image.Icon}"
                     Source="/Shipworks.Core;component/Resources/information2.png" />
             <TextBlock Margin="6,1,0,0">
                 Additional rates are available. For more info,
