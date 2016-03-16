@@ -30,7 +30,7 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <summary>
         /// Load magento-specific features
         /// </summary>
-        public override void LoadStore(ShipWorks.Data.Model.EntityClasses.StoreEntity store)
+        public override void LoadStore(StoreEntity store)
         {
             base.LoadStore(store);
 
@@ -44,12 +44,15 @@ namespace ShipWorks.Stores.Platforms.Magento
                 case MagentoVersion.PhpFile:
                     radioModuleDirect.Checked = true;
                     break;
+
                 case MagentoVersion.MagentoConnect:
                     radioMagentoConnect.Checked = true;
                     break;
+
                 case MagentoVersion.MagentoTwo:
                     radioMagentoTwo.Checked = true;
                     break;
+
                 default:
                     throw new NotImplementedException("Unknown Magento Version");
             }
@@ -59,25 +62,24 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <summary>
         /// Save magento-specific features
         /// </summary>
-        public override bool SaveToEntity(ShipWorks.Data.Model.EntityClasses.StoreEntity store)
+        public override bool SaveToEntity(StoreEntity store)
         {
-            MagentoStoreEntity magentoStore = (MagentoStoreEntity)store;
+            MagentoStoreEntity magentoStore = (MagentoStoreEntity) store;
             magentoStore.ModuleOnlineStoreCode = storeCodeTextBox.Text;
 
             if (radioModuleDirect.Checked)
             {
-                magentoStore.MagentoVersion = (int)MagentoVersion.PhpFile;
+                magentoStore.MagentoVersion = (int) MagentoVersion.PhpFile;
+            }
+            else if (radioMagentoConnect.Checked)
+            {
+                magentoStore.MagentoVersion = (int) MagentoVersion.MagentoConnect;
+            }
+            else if (radioMagentoTwo.Checked)
+            {
+                magentoStore.MagentoVersion = (int) MagentoVersion.MagentoTwo;
             }
 
-            if (radioMagentoConnect.Checked)
-            {
-                magentoStore.MagentoVersion = (int)MagentoVersion.MagentoConnect;
-            }
-
-            if (radioMagentoTwo.Checked)
-            {
-                magentoStore.MagentoVersion = (int)MagentoVersion.MagentoTwo;
-            }
             return base.SaveToEntity(store);
         }
 
@@ -87,20 +89,14 @@ namespace ShipWorks.Stores.Platforms.Magento
         protected override void ShowConnectionException(GenericStoreException ex)
         {
             WebException webEx = ex.InnerException as WebException;
-            if (webEx != null)
+            HttpWebResponse webResponse = webEx?.Response as HttpWebResponse;
+            if (webResponse?.StatusCode == HttpStatusCode.NotFound)
             {
-                HttpWebResponse webResponse = webEx.Response as HttpWebResponse;
-                if (webResponse != null)
-                {
-                    if (webResponse.StatusCode == HttpStatusCode.NotFound)
-                    {
-                        MessageHelper.ShowError(this, "The ShipWorks module was not found at the Module URL specified." +
-                                "\n\nEnsure the Add Secret Keys to URLs setting in your Magento store is set to No.  This is " + 
-                                "a common cause of this error.");
+                MessageHelper.ShowError(this, "The ShipWorks module was not found at the Module URL specified." +
+                                              "\n\nEnsure the Add Secret Keys to URLs setting in your Magento store is set to No.  This is " + 
+                                              "a common cause of this error.");
 
-                        return;
-                    }
-                }
+                return;
             }
 
             InvalidSoapException invalidSoapEx = ex.InnerException as InvalidSoapException;
@@ -134,7 +130,7 @@ namespace ShipWorks.Stores.Platforms.Magento
                 return;
             }
 
-            // fallback to base error message
+            // fall back to base error message
             base.ShowConnectionException(ex);
         }
 
@@ -147,10 +143,7 @@ namespace ShipWorks.Stores.Platforms.Magento
             {
                 return true;
             }
-            else
-            {
-                return base.ConnectionVerificationNeeded(genericStore);
-            }
+            return base.ConnectionVerificationNeeded(genericStore);
         }
     }
 }
