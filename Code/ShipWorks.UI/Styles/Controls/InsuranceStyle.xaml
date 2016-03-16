@@ -16,8 +16,8 @@
     </Style>
 
     <Style x:Key="Insurance.Currency" TargetType="TextBlock">
-        <Setter Property="Foreground" Value="#FF008066"></Setter>
-        <Setter Property="FontWeight" Value="Bold"></Setter>
+        <Setter Property="Foreground" Value="#FF008066" />
+        <Setter Property="FontWeight" Value="Bold" />
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="Foreground" Value="#FF008066"/>

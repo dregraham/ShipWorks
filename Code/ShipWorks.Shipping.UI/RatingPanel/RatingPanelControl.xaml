@@ -50,8 +50,8 @@
                       BorderThickness="0">
                 <DataGrid.RowStyle>
                     <Style TargetType="DataGridRow">
-                        <Setter Property="IsEnabled" Value="{Binding Selectable}"></Setter>
-                        <Setter Property="Height" Value="20"></Setter>
+                        <Setter Property="IsEnabled" Value="{Binding Selectable}" />
+                        <Setter Property="Height" Value="20" />
                     </Style>
                 </DataGrid.RowStyle>
                 <DataGrid.Columns>

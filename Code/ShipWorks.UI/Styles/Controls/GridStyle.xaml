@@ -1,12 +1,71 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="/ShipWorks.UI;component/Styles/DefaultFontStyle.xaml"/>
-    </ResourceDictionary.MergedDictionaries>
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:controls="clr-namespace:ShipWorks.UI.Controls">
 
-    <Style x:Key="GridLabel" TargetType="TextBlock" BasedOn="{StaticResource DefaultTextBlockFont}">
-        <Setter Property="FontWeight" Value="Regular" />
-        <Setter Property="HorizontalAlignment" Value="Right" />
-        <Setter Property="Margin" Value="0, 3, 12, 0"></Setter>
+    <Style x:Key="Grid.Cell" TargetType="FrameworkElement">
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="Margin" Value="0, 2, 0, 2" />
+    </Style>
+
+    <Style x:Key="Grid.CheckBox.Default"
+           TargetType="CheckBox"
+           BasedOn="{StaticResource Grid.Cell}">
+        <Setter Property="Margin" Value="-1, 2, 0, 2" />
+    </Style>
+
+    <Style x:Key="Grid.ComboBox.Default"
+           TargetType="ComboBox"
+           BasedOn="{StaticResource Grid.Cell}">
+        <Setter Property="Padding" Value="3, 3, 2, 3" />
+    </Style>
+
+    <Style x:Key="Grid.DatePicker.Default"
+           TargetType="DatePicker"
+           BasedOn="{StaticResource DatePickerStyle.Centered}">
+        <Setter Property="Padding" Value="2, 1, 1, 1" />
+        <Setter Property="Width" Value="125" />
+        <Setter Property="HorizontalAlignment" Value="Left" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Margin" Value="0, 2, 0, 2" />
+        <Setter Property="Validation.ErrorTemplate" Value="{StaticResource Template.Error.DatePicker}" />
+    </Style>
+
+    <Style x:Key="Grid.ShipWorksComboBox.Default"
+           TargetType="controls:ShipWorksComboBox"
+           BasedOn="{StaticResource Grid.ComboBox.Default}">
+        <Setter Property="Padding" Value="5, 3, 2, 3" />
+    </Style>
+
+    <Style x:Key="Grid.TextBlock.Label"
+           TargetType="TextBlock"
+           BasedOn="{StaticResource Grid.Cell}">
+        <Setter Property="Margin" Value="0, 2, 6, 2" />
+    </Style>
+
+    <Style x:Key="Grid.TextBox.Default"
+           TargetType="TextBox"
+           BasedOn="{StaticResource Grid.Cell}">
+        <Setter Property="Padding" Value="2" />
+        <Setter Property="Validation.ErrorTemplate" Value="{StaticResource Template.Error.TextBox}" />
+    </Style>
+
+    <Style x:Key="Grid.TextBox.Dimension"
+           TargetType="TextBox"
+           BasedOn="{StaticResource Grid.TextBox.Default}">
+        <Setter Property="HorizontalAlignment" Value="Left" />
+        <Setter Property="Width" Value="30" />
+        <Setter Property="MaxLength" Value="3" />
+        <Setter Property="Margin" Value="0, 2, 5, 2" />
+        <Setter Property="Validation.ErrorTemplate" Value="{StaticResource Template.Error.TextBox}" />
+    </Style>
+
+    <Style x:Key="Grid.TextBox.Number"
+           TargetType="TextBox"
+           BasedOn="{StaticResource Grid.TextBox.Default}">
+        <Setter Property="HorizontalAlignment" Value="Left" />
+        <Setter Property="Width" Value="75" />
+        <Setter Property="MaxLength" Value="12" />
+        <Setter Property="Validation.ErrorTemplate" Value="{StaticResource Template.Error.TextBox}" />
     </Style>
 </ResourceDictionary>

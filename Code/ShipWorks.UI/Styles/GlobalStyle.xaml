@@ -5,6 +5,7 @@
         <ResourceDictionary Source="/ShipWorks.UI;component/Styles/Controls/ButtonStyle.xaml"/>
         <ResourceDictionary Source="/ShipWorks.UI;component/Styles/Controls/DatePickerStyle.xaml"/>
         <ResourceDictionary Source="/ShipWorks.UI;component/Styles/Controls/ExpanderStyle.xaml" />
+        <ResourceDictionary Source="/ShipWorks.UI;component/Styles/Controls/GridStyle.xaml" />
         <ResourceDictionary Source="/ShipWorks.UI;component/Styles/Controls/ImageStyle.xaml"/>
         <ResourceDictionary Source="/ShipWorks.UI;component/Styles/ErrorTemplates.xaml" />
     </ResourceDictionary.MergedDictionaries>
@@ -14,76 +15,11 @@
     </Style>
 
     <Style x:Key="TextBlock.SectionHeader" TargetType="TextBlock">
-        <Setter Property="FontWeight" Value="Bold"></Setter>
-        <Setter Property="Margin" Value="0, 5, 5, 5"></Setter>
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="Margin" Value="0, 5, 5, 5" />
     </Style>
 
-    <Style x:Key="Grid.Cell" TargetType="FrameworkElement">
-        <Setter Property="VerticalAlignment" Value="Center" />
-        <Setter Property="Margin" Value="0, 2, 0, 2" />
-    </Style>
 
-    <Style x:Key="Grid.TextBlock.Label"
-           TargetType="TextBlock"
-           BasedOn="{StaticResource Grid.Cell}">
-        <Setter Property="Margin" Value="0, 2, 6, 2" />
-    </Style>
-
-    <Style x:Key="Grid.TextBox.Default"
-           TargetType="TextBox"
-           BasedOn="{StaticResource Grid.Cell}">
-        <Setter Property="Padding" Value="2" />
-        <Setter Property="Validation.ErrorTemplate" Value="{StaticResource Template.Error.TextBox}" />
-    </Style>
-
-    <Style x:Key="Grid.DatePicker.Default"
-           TargetType="DatePicker"
-           BasedOn="{StaticResource DatePickerStyle.Centered}">
-        <Setter Property="Padding" Value="2, 1, 1, 1" />
-        <Setter Property="Width" Value="125" />
-        <Setter Property="HorizontalAlignment" Value="Left" />
-        <Setter Property="VerticalAlignment" Value="Center" />
-        <Setter Property="VerticalContentAlignment" Value="Center" />
-        <Setter Property="Margin" Value="0, 2, 0, 2" />
-        <Setter Property="Validation.ErrorTemplate" Value="{StaticResource Template.Error.DatePicker}" />
-    </Style>
-
-    <Style x:Key="Grid.ComboBox.Default"
-           TargetType="ComboBox"
-           BasedOn="{StaticResource Grid.Cell}">
-        <Setter Property="Padding" Value="3, 3, 2, 3" />
-    </Style>
-
-    <Style x:Key="Grid.ShipWorksComboBox.Default"
-           TargetType="controls:ShipWorksComboBox"
-           BasedOn="{StaticResource Grid.ComboBox.Default}">
-        <Setter Property="Padding" Value="5, 3, 2, 3" />
-    </Style>
-
-    <Style x:Key="Grid.CheckBox.Default"
-           TargetType="CheckBox"
-           BasedOn="{StaticResource Grid.Cell}">
-        <Setter Property="Margin" Value="-1, 2, 0, 2" />
-    </Style>
-
-    <Style x:Key="Grid.TextBox.Number"
-           TargetType="TextBox"
-           BasedOn="{StaticResource Grid.TextBox.Default}">
-        <Setter Property="HorizontalAlignment" Value="Left" />
-        <Setter Property="Width" Value="75" />
-        <Setter Property="MaxLength" Value="12" />
-        <Setter Property="Validation.ErrorTemplate" Value="{StaticResource Template.Error.TextBox}" />
-    </Style>
-
-    <Style x:Key="Grid.TextBox.Dimension"
-           TargetType="TextBox"
-           BasedOn="{StaticResource Grid.TextBox.Default}">
-        <Setter Property="HorizontalAlignment" Value="Left" />
-        <Setter Property="Width" Value="30" />
-        <Setter Property="MaxLength" Value="3" />
-        <Setter Property="Margin" Value="0, 2, 5, 2" />
-        <Setter Property="Validation.ErrorTemplate" Value="{StaticResource Template.Error.TextBox}" />
-    </Style>
 
 
     <!--
@@ -91,7 +27,6 @@
         <ResourceDictionary Source="/ShipWorks.UI;component/Styles/DefaultFontStyle.xaml"/>
         <ResourceDictionary Source="/ShipWorks.UI;component/Styles/Controls/ButtonStyle.xaml"/>
         <ResourceDictionary Source="/ShipWorks.UI;component/Styles/Controls/GridStyle.xaml"/>
-        <ResourceDictionary Source="/ShipWorks.UI;component/Styles/Controls/AddressControlStyle.xaml"/>
         <ResourceDictionary Source="/ShipWorks.UI;component/Styles/EmptyButtonStyle.xaml"/>
         <ResourceDictionary Source="/ShipWorks.UI;component/Styles/ImageStyle.xaml"/>
     </ResourceDictionary.MergedDictionaries>
@@ -99,7 +34,7 @@
     <Thickness x:Key="SectionMargin" Left="0" Top="6" Right="0" Bottom="0" />
 
     <Style TargetType="Hyperlink">
-        <Setter Property="Foreground" Value="#FF0000FF"></Setter>
+        <Setter Property="Foreground" Value="#FF0000FF" />
     </Style>
 
     <VisualBrush x:Key="MultipleValuesTextBrush" AlignmentX="Left" AlignmentY="Center" Stretch="None">
@@ -110,13 +45,13 @@
 
 
     <Style x:Key="GroupSectionHeader" TargetType="TextBlock" BasedOn="{StaticResource DefaultTextBlockFont}" >
-        <Setter Property="FontWeight" Value="Bold"></Setter>
-        <Setter Property="Margin" Value="5, 5, 5, 5"></Setter>
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="Margin" Value="5, 5, 5, 5" />
     </Style>
 
     <Style x:Key="Header" TargetType="TextBlock" BasedOn="{StaticResource DefaultTextBlockFont}">
         <Setter Property="FontWeight" Value="Bold" />
-        <Setter Property="Margin" Value="4, 0, 0, 4"></Setter>
+        <Setter Property="Margin" Value="4, 0, 0, 4" />
     </Style>
 
     <Style TargetType="TextBox" BasedOn="{StaticResource DefaultTextBoxFont}">
@@ -148,17 +83,17 @@
     </Style>
 
     <Style TargetType="ComboBoxItem">
-        <Setter Property="Height" Value="18"></Setter>
+        <Setter Property="Height" Value="18" />
         <Setter Property="Margin" Value="0, 0, 0, 0" />
         <Setter Property="Padding" Value="2, 0, 0, 0" />
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
 
         <Setter Property="FontFamily" Value="Tahoma" />
-        <Setter Property="FontSize" Value="8.25 pt"></Setter>
-        <Setter Property="FontStyle" Value="Normal"></Setter>
-        <Setter Property="FontStretch" Value="Normal"></Setter>
-        <Setter Property="FontWeight" Value="Normal"></Setter>
+        <Setter Property="FontSize" Value="8.25 pt" />
+        <Setter Property="FontStyle" Value="Normal" />
+        <Setter Property="FontStretch" Value="Normal" />
+        <Setter Property="FontWeight" Value="Normal" />
 
         <Setter Property="Template">
             <Setter.Value>
@@ -199,7 +134,7 @@
     </Style>
 
     <Style TargetType="TextBlock" x:Key="EmptyTextStyle" BasedOn="{StaticResource DefaultTextBlockFont}">
-        <Setter Property="Foreground" Value="#FF696969"></Setter>
+        <Setter Property="Foreground" Value="#FF696969" />
     </Style>
     -->
 </ResourceDictionary>
