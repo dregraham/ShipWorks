@@ -40,7 +40,6 @@
             <TextBox Grid.Row="1" Grid.Column="1"
                      MaxLength="12"
                      Style="{StaticResource Grid.TextBox.Number}"
-                     Validation.ErrorTemplate="{StaticResource Template.Error}"
                      Text="{Binding TotalCustomsValue, StringFormat=C,
                          ValidatesOnDataErrors=true, NotifyOnValidationError=true}">
 
@@ -116,7 +115,6 @@
                     <TextBlock Grid.Row="0" Grid.Column="0">Quantity:</TextBlock>
                     <TextBox Grid.Row="0" Grid.Column="1"
                          Style="{StaticResource Grid.TextBox.Number}"
-                         Validation.ErrorTemplate="{StaticResource Template.Error}"
                          Text="{Binding SelectedCustomsItem.Quantity,
                              Converter={StaticResource EmptyDouble},
                              ConverterParameter=1,
@@ -128,7 +126,7 @@
 
                     <TextBlock Grid.Row="1" Grid.Column="0">Description:</TextBlock>
                     <TextBox Grid.Row="1" Grid.Column="1"
-                         Validation.ErrorTemplate="{StaticResource Template.Error}"
+                         Validation.ErrorTemplate="{StaticResource Template.Error.TextBox}"
                          MaxLength="150"
                          Text="{Binding SelectedCustomsItem.Description,
                                 ValidatesOnDataErrors=true, NotifyOnValidationError=true}" />
@@ -141,7 +139,6 @@
                     <TextBlock Grid.Row="3" Grid.Column="0">Value:</TextBlock>
                     <TextBox Grid.Row="3" Grid.Column="1"
                          Style="{StaticResource Grid.TextBox.Number}"
-                         Validation.ErrorTemplate="{StaticResource Template.Error}"
                          Text="{Binding SelectedCustomsItem.UnitValue, Converter={StaticResource EmptyMoney}, StringFormat=C, Mode=TwoWay, UpdateSourceTrigger=LostFocus,
                                 ValidatesOnDataErrors=true, NotifyOnValidationError=true}">
                         <i:Interaction.Behaviors>

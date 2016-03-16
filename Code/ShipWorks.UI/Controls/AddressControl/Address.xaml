@@ -121,8 +121,6 @@
                 <RowDefinition />
             </Grid.RowDefinitions>
 
-
-
             <TextBlock Grid.Row="1"
                        Grid.Column="0"
                        Padding="0, 3, 0, 2"

@@ -19,7 +19,6 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/ShipWorks.UI;component/Styles/GlobalStyle.xaml" />
-                <ResourceDictionary Source="/ShipWorks.Shipping.UI;component/Templates/TextBoxErrorTemplate.xaml"/>
             </ResourceDictionary.MergedDictionaries>
 
             <Style TargetType="Expander" BasedOn="{StaticResource Expander.Style}" />
@@ -44,7 +43,7 @@
                   HorizontalScrollBarVisibility="Disabled">
             <StackPanel Margin="6, 6, 6, 6">
                 <StackPanel IsEnabled="{Binding IsLoading, Converter={StaticResource InvertBoolean}}">
-                    <Grid Margin="7, 0, 5, 4">
+                    <Grid Margin="7, 0, 5, 8">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="75" />
                             <ColumnDefinition Width="*" />

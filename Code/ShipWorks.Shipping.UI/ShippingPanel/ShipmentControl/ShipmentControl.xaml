@@ -48,7 +48,6 @@
                        Style="{StaticResource Grid.TextBlock.Label}">Ship date:</TextBlock>
             <DatePicker Grid.Row="1" Grid.Column="1"
                         Style="{DynamicResource Grid.DatePicker.Default}"
-                        Validation.ErrorTemplate="{StaticResource Template.Error}"
                         SelectedDate="{Binding ShipDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,
                             ValidatesOnDataErrors=true, NotifyOnValidationError=true}"/>
         </Grid>

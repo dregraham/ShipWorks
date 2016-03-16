@@ -38,7 +38,6 @@
                    Style="{StaticResource Grid.TextBlock.Label}">Carrier Name:</TextBlock>
             <TextBox Grid.Row="0" Grid.Column="1"
                      Style="{StaticResource Grid.TextBox.Default}"
-                     Validation.ErrorTemplate="{StaticResource Template.Error}"
                      ui:EntityFieldLength.FieldName="ShipmentOtherCarrier"
                      Text="{Binding CarrierName, ValidatesOnDataErrors=true, NotifyOnValidationError=true}"/>
 
@@ -46,7 +45,6 @@
                    Style="{StaticResource Grid.TextBlock.Label}">Service:</TextBlock>
             <TextBox Grid.Row="1" Grid.Column="1"
                      Style="{StaticResource Grid.TextBox.Default}"
-                     Validation.ErrorTemplate="{StaticResource Template.Error}"
                      ui:EntityFieldLength.FieldName="ShipmentOtherService"
                      Text="{Binding Service, ValidatesOnDataErrors=true, NotifyOnValidationError=true}" />
 
@@ -54,7 +52,6 @@
                    Style="{StaticResource Grid.TextBlock.Label}">Ship date:</TextBlock>
             <DatePicker Grid.Row="2" Grid.Column="1"
                         Style="{StaticResource Grid.DatePicker.Default}"
-                        Validation.ErrorTemplate="{StaticResource Template.Error}"
                         SelectedDate="{Binding ShipDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=true, NotifyOnValidationError=true}" >
             </DatePicker>
 
@@ -69,14 +66,12 @@
                    Style="{StaticResource Grid.TextBlock.Label}">Cost:</TextBlock>
             <TextBox Grid.Row="4" Grid.Column="1"
                      Style="{StaticResource Grid.TextBox.Number}"
-                     Validation.ErrorTemplate="{StaticResource Template.Error}"
                  Text="{Binding Cost, StringFormat=C, Converter={StaticResource EmptyMoney}, ValidatesOnDataErrors=true, NotifyOnValidationError=true}" />
 
             <TextBlock Grid.Row="5" Grid.Column="0"
                    Style="{StaticResource Grid.TextBlock.Label}">Tracking #:</TextBlock>
             <TextBox Grid.Row="5" Grid.Column="1"
                      Style="{StaticResource Grid.TextBox.Default}"
-                     Validation.ErrorTemplate="{StaticResource Template.Error}"
                  ui:EntityFieldLength.FieldName="ShipmentTracking"
                  Text="{Binding TrackingNumber, ValidatesOnDataErrors=true, NotifyOnValidationError=true}"  />
         </Grid>

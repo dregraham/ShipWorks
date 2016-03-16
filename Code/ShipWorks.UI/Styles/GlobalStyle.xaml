@@ -6,6 +6,7 @@
         <ResourceDictionary Source="/ShipWorks.UI;component/Styles/Controls/DatePickerStyle.xaml"/>
         <ResourceDictionary Source="/ShipWorks.UI;component/Styles/Controls/ExpanderStyle.xaml" />
         <ResourceDictionary Source="/ShipWorks.UI;component/Styles/Controls/ImageStyle.xaml"/>
+        <ResourceDictionary Source="/ShipWorks.UI;component/Styles/ErrorTemplates.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
     <Style x:Key="TextBlock.Empty" TargetType="TextBlock">
@@ -32,6 +33,7 @@
            TargetType="TextBox"
            BasedOn="{StaticResource Grid.Cell}">
         <Setter Property="Padding" Value="2" />
+        <Setter Property="Validation.ErrorTemplate" Value="{StaticResource Template.Error.TextBox}" />
     </Style>
 
     <Style x:Key="Grid.DatePicker.Default"
@@ -43,6 +45,7 @@
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="Margin" Value="0, 2, 0, 2" />
+        <Setter Property="Validation.ErrorTemplate" Value="{StaticResource Template.Error.DatePicker}" />
     </Style>
 
     <Style x:Key="Grid.ComboBox.Default"
@@ -69,6 +72,7 @@
         <Setter Property="HorizontalAlignment" Value="Left" />
         <Setter Property="Width" Value="75" />
         <Setter Property="MaxLength" Value="12" />
+        <Setter Property="Validation.ErrorTemplate" Value="{StaticResource Template.Error.TextBox}" />
     </Style>
 
     <Style x:Key="Grid.TextBox.Dimension"
@@ -78,20 +82,8 @@
         <Setter Property="Width" Value="30" />
         <Setter Property="MaxLength" Value="3" />
         <Setter Property="Margin" Value="0, 2, 5, 2" />
+        <Setter Property="Validation.ErrorTemplate" Value="{StaticResource Template.Error.TextBox}" />
     </Style>
-
-    <ControlTemplate x:Key="Template.Error">
-        <DockPanel LastChildFill="true">
-            <Image Width="16" Height="16" Margin="0 0 5 0"
-                                       DockPanel.Dock="right"
-                                       Source="/ShipWorks.Core;component/Resources/warning.png"
-                                       HorizontalAlignment="Right"
-                                       ToolTip="{Binding ElementName=customAdorner, Path=AdornedElement.(Validation.Errors)[0].ErrorContent}"/>
-            <AdornedElementPlaceholder Name="customAdorner" VerticalAlignment="Center" >
-                <Border BorderBrush="Red" BorderThickness="0" />
-            </AdornedElementPlaceholder>
-        </DockPanel>
-    </ControlTemplate>
 
 
     <!--

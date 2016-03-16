@@ -43,8 +43,7 @@
             <TextBlock VerticalAlignment="Center"
                        Margin="0, 0, 4, 0"
                        Text="{Binding InsuranceValueLabelDisplayText, FallbackValue='Insured Value:'}" />
-            <TextBox Validation.ErrorTemplate="{StaticResource Template.Error}"
-                     IsEnabled="{Binding Insurance}"
+            <TextBox IsEnabled="{Binding Insurance}"
                      VerticalAlignment="Center"
                      Text="{Binding DeclaredValue, StringFormat=c, FallbackValue='50.50',
                             Converter={StaticResource EmptyMoney},
