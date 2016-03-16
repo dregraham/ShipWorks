@@ -407,6 +407,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
             TotalCustomsValue = shipmentAdapter.Shipment.CustomsValue;
 
             SelectedCustomsItem = CustomsItems.FirstOrDefault();
+            DeleteCustomsItemCommand.RaiseCanExecuteChanged();
         }
 
         /// <summary>

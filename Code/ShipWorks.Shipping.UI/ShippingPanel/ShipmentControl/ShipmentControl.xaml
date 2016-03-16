@@ -59,31 +59,33 @@
             </Grid.ColumnDefinitions>
 
             <TextBlock Grid.Column="0"
+                       VerticalAlignment="Top"
+                       Padding="0, 1, 0 , 0"
                        Style="{StaticResource Grid.TextBlock.Label}">Packages:</TextBlock>
 
-            <Grid Grid.Column="1" Margin="0, 0, 2, 4">
+            <Grid Grid.Column="1" Style="{StaticResource Grid.Cell}">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
 
-                <ListView Grid.Column="0"
-                          x:Name="PackagesList"
-                          Margin="0 0 4 0"
-                          SelectionMode="Single"
+                <ListBox Grid.Column="0"
+                          Margin="0, 0, 4, 0"
+                        SelectionMode="Single"
                           ItemsSource="{Binding PackageAdapters}"
                           SelectedValue ="{Binding SelectedPackageAdapter}" >
-                    <ListView.View>
-                        <GridView>
-                            <GridViewColumn Header="Packages (Select to Edit)" Width="Auto"
-                                            DisplayMemberBinding="{Binding Index, StringFormat=Package \{0\}}"/>
-                        </GridView>
-                    </ListView.View>
-                </ListView>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Index, StringFormat=Package \{0\}}" />
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
 
                 <StackPanel Grid.Column="1">
-                    <Button Style="{DynamicResource Button.Add}" Margin="0 0 0 4" Command="{Binding AddPackageCommand}" />
-                    <Button Style="{DynamicResource Button.Delete}" Command="{Binding DeletePackageCommand}" />
+                    <Button Style="{DynamicResource Button.Add}" Margin="0, 0, 0, 4"
+                            Command="{Binding AddPackageCommand}" />
+                    <Button Style="{DynamicResource Button.Delete}"
+                            Command="{Binding DeletePackageCommand}" />
                 </StackPanel>
             </Grid>
         </Grid>
@@ -201,8 +203,6 @@
                           IsChecked="{Binding DimsAddWeight}"/>
                 <ui:WeightInput VerticalAlignment="Center"
                                 Margin="2"
-                                HorizontalAlignment="Left"
-                                Width="60"
                                 Weight="{Binding DimsWeight}">
                     <ui:WeightInput.IsEnabled>
                         <Binding Path="SelectedDimensionsProfile.DimensionsProfileID" Converter="{StaticResource ValueEqualToParameter}">
