@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Drawing;
+using System.Linq;
 using Divelements.SandRibbon;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Core.UI.SandRibbon;
@@ -20,6 +21,10 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
         RibbonButton returnButton;
         RibbonButton reprintButton;
         RibbonButton shipAgainButton;
+        RibbonButton applyProfileButton;
+        RibbonButton manageProfilesButton;
+        Popup applyProfilePopup;
+        Menu applyProfileMenu;
 
         public ShippingRibbonRegistration(IShippingRibbonService shippingRibbonService)
         {
@@ -73,10 +78,50 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
                 Text = "Ship Again",
             };
 
+            applyProfileMenu = new Menu
+            {
+                Text = "Foo",
+                Guid = new Guid("7DC9AA2C-DB1A-447E-B717-DB252CC39338")
+            };
+
+            applyProfilePopup = new Popup
+            {
+                Items = { applyProfileMenu }
+            };
+
+            applyProfilePopup.BeforePopup += new BeforePopupEventHandler(OnApplyProfileBeforePopup);
+
+            applyProfileButton = new RibbonButton
+            {
+                DropDownStyle = DropDownStyle.Integral,
+                Guid = new Guid("D2AF2859-5B48-4CA1-AA6B-649A033462BB"),
+                Image = Properties.Resources.document_out1,
+                PopupWidget = applyProfilePopup,
+                Text = "Apply",
+                TextContentRelation = TextContentRelation.Underneath
+            };
+
+            manageProfilesButton = new RibbonButton
+            {
+                Guid = new Guid("0E7A63DD-0BDB-4AF4-BC24-05666022EF75"),
+                Image = Properties.Resources.graphics_tablet,
+                Text = "Manage",
+                TextContentRelation = TextContentRelation.Underneath
+            };
+
+
             StripLayout stripLayoutReprint = new StripLayout
             {
                 Items = { reprintButton, shipAgainButton },
                 LayoutDirection = LayoutDirection.Vertical,
+            };
+
+            RibbonChunk profilesChunk = new RibbonChunk
+            {
+                FurtherOptions = false,
+                ItemJustification = ItemJustification.Stretch,
+                Items = { applyProfileButton, manageProfilesButton },
+                Text = "Profiles",
             };
 
             RibbonChunk shippingShippingChunk = new RibbonChunk
@@ -97,7 +142,7 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
 
             RibbonTab ribbonTabShipping = new RibbonTab
             {
-                Chunks = { shippingOutputChunk, shippingShippingChunk },
+                Chunks = { shippingOutputChunk, shippingShippingChunk, profilesChunk },
                 EditingContextReference = "SHIPPINGMENU",
                 Location = new Point(1, 53),
                 Manager = ribbon.Manager,
@@ -112,6 +157,12 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
             ribbon.ResumeLayout();
 
             shippingRibbonService.Register(this);
+        }
+
+        private void OnApplyProfileBeforePopup(object sender, BeforePopupEventArgs e)
+        {
+            applyProfileMenu.Items.Clear();
+            applyProfileMenu.Items.AddRange(Enumerable.Range(0, (new Random()).Next(10)).Select(x => new MenuItem(x.ToString())).ToArray());
         }
 
         /// <summary>
@@ -157,6 +208,9 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
             returnButton?.Dispose();
             reprintButton?.Dispose();
             shipAgainButton?.Dispose();
+            applyProfileButton?.Dispose();
+            manageProfilesButton?.Dispose();
+            applyProfilePopup?.Dispose();
         }
     }
 }
