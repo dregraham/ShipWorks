@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.XPath;
@@ -207,7 +208,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
                     LoadPaymentDetails(order, threeDCartOrder);
                 }
 
-                AdjustOrderTotal(order, threeDCartOrder);
+                AdjustOrderTotal(order, threeDCartOrder, isSubOrder, hasSubOrders);
             }
         }
 
@@ -226,12 +227,53 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
 
         private void LoadOrderCharges(OrderEntity order, ThreeDCartOrder threeDCartOrder)
         {
-            throw new NotImplementedException();
+            if (threeDCartOrder.OrderDiscount < 0)
+            {
+                LoadCharge(order, "Discount", "Discount", threeDCartOrder.OrderDiscount);
+            }
+
+            // Still want to show tax even if it's 0
+            LoadCharge(order, "Tax", "Tax", threeDCartOrder.SalesTax);
+
+            if (threeDCartOrder.SalesTax2 > 0)
+            {
+                LoadCharge(order, "Tax", "Tax 2", threeDCartOrder.SalesTax2);
+            }
+
+            if (threeDCartOrder.SalesTax3 > 0)
+            {
+                LoadCharge(order, "Tax", "Tax 3", threeDCartOrder.SalesTax3);
+            }
+
+            IEnumerable<ThreeDCartShipment> shipments = threeDCartOrder.ShipmentList;
+
+            foreach (ThreeDCartShipment shipment in shipments)
+            {
+                if (shipment.ShipmentCost > 0)
+                {
+                    LoadCharge(order, "Shipping", shipment.ShipmentMethodName, shipment.ShipmentCost);
+                }
+            }
         }
 
-        private void AdjustOrderTotal(OrderEntity order, ThreeDCartOrder threeDCartOrder)
+        private void AdjustOrderTotal(OrderEntity order, ThreeDCartOrder threeDCartOrder, bool isSubOrder, bool hasSubOrders)
         {
-            throw new NotImplementedException();
+            decimal total = new OrderManager().CalculateOrderTotal(order);
+
+            var items = order.OrderItems;
+
+            bool hasKitItems = items.Any(x => x.Name.StartsWith("KIT ITEM:", StringComparison.OrdinalIgnoreCase));
+
+            if (hasKitItems && threeDCartOrder.OrderAmount != total)
+            {
+                AddKitAdjustment(order, threeDCartOrder.OrderAmount - total);
+            }
+
+            // If this is a sub order, or it's the first order that has sub orders, calculate the total
+            if (isSubOrder || hasSubOrders)
+            {
+                order.OrderTotal = total;
+            }
         }
 
         private void LoadItems(OrderEntity order, ThreeDCartOrder threeDCartOrder, ThreeDCartShipment shipment)
@@ -255,12 +297,59 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
             item.Weight = threeDCartItem.ItemWeight;
             item.ThreeDCartShipmentID = threeDCartItem.ItemShipmentID;
 
-            LoadOrderItemAttributes(item, threeDCartItem);
+            LoadProductImagesAndLocation(item, threeDCartItem.CatalogID);
+            LoadItemNameAndAttributes(item, threeDCartItem);
         }
 
-        private void LoadOrderItemAttributes(ThreeDCartOrderItemEntity item, ThreeDCartOrderItem threeDCartItem)
+        private void LoadItemNameAndAttributes(ThreeDCartOrderItemEntity item, ThreeDCartOrderItem threeDCartItem)
         {
-            throw new NotImplementedException();
+            string description = threeDCartItem.ItemDescription;
+
+            string[] splitDescription = description.Split("<br><b>".ToCharArray());
+
+            item.Name = splitDescription[0];
+
+            if (splitDescription.Count() > 1)
+            {
+                for (int i = 1; i < splitDescription.Count(); i++)
+                {
+                    string[] option = splitDescription.ToString().Split("</b>&nbsp;".ToCharArray());
+
+                    if (option[0].EndsWith(":"))
+                    {
+                        option[0].Remove(option[0].Length - 1);
+                    }
+                    string optionName = option[0];
+
+                    int lastDashIndex = option[1].LastIndexOf('-');
+
+                    string optionValue = option[1].Substring(0, lastDashIndex).Trim();
+                    string optionPriceString = option[1].Substring(lastDashIndex + 1).Trim();
+                    optionPriceString = Regex.Replace(optionPriceString, "[^.0-9]", string.Empty);
+
+                    decimal optionPrice;
+                    decimal.TryParse(optionPriceString, out optionPrice);
+
+                    OrderItemAttributeEntity attribute = InstantiateOrderItemAttribute(item);
+                    attribute.Name = optionName;
+                    attribute.Description = optionValue;
+                    attribute.UnitPrice = optionPrice;
+                }
+            }
+        }
+
+        private void LoadProductImagesAndLocation(ThreeDCartOrderItemEntity item, int catalogID)
+        {
+            ThreeDCartRestWebClient client = new ThreeDCartRestWebClient(threeDCartStore);
+
+            ThreeDCartProduct product = client.GetProduct(catalogID);
+
+            if (product != null)
+            {
+                item.Thumbnail = product.ThumbnailFile;
+                item.Image = product.MainImageFile ?? string.Empty;
+                item.Location = product.WarehouseBin;
+            }
         }
 
         private void LoadOrderNotes(OrderEntity order, ThreeDCartOrder threeDCartOrder)

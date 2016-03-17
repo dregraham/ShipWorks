@@ -36,7 +36,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi.DTO
         public string ShipmentCompany { get; set; }
 
         [JsonProperty("ShipmentCost")]
-        public double ShipmentCost { get; set; }
+        public decimal ShipmentCost { get; set; }
 
         [JsonProperty("ShipmentCountry")]
         public string ShipmentCountry { get; set; }

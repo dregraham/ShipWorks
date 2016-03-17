@@ -14,5 +14,13 @@ namespace ShipWorks.Stores.Content
         {
             OrderUtility.PopulateOrderDetails(shipment);
         }
+
+        /// <summary>
+        /// Calculates the order total.
+        /// </summary>
+        public decimal CalculateOrderTotal(OrderEntity order)
+        {
+            return OrderUtility.CalculateTotal(order);
+        }
     }
 }

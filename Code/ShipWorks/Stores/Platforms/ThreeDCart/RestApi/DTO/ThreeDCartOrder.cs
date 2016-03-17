@@ -85,16 +85,16 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi.DTO
         public IEnumerable<ThreeDCartOrderItem> OrderItemList { get; set; }
 
         [JsonProperty("OrderDiscount")]
-        public double OrderDiscount { get; set; }
+        public decimal OrderDiscount { get; set; }
 
         [JsonProperty("SalesTax")]
-        public double SalesTax { get; set; }
+        public decimal SalesTax { get; set; }
 
         [JsonProperty("SalesTax2")]
-        public double SalesTax2 { get; set; }
+        public decimal SalesTax2 { get; set; }
 
         [JsonProperty("SalesTax3")]
-        public double SalesTax3 { get; set; }
+        public decimal SalesTax3 { get; set; }
 
         [JsonProperty("OrderAmount")]
         public decimal OrderAmount { get; set; }

@@ -16,9 +16,12 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
         private const string HttpHost = "https://apirest.3dcart.com/3dCartWebAPI/";
         private const string GetOrderApiVersion = "v1/";
         private const string OrderUrlExtension = "Orders/";
+        private const string GetProductApiVersion = "v1/";
+        private const string ProductUrlExtension = "Products/";
         private const string ContentType = "application/json";
         private const string GetOrderLimit = "600";
-        private readonly Uri GetOrderUri;
+        private readonly Uri getOrderUri;
+        private Uri getProductUri;
         private readonly string secureUrl;
         private readonly string privateKey;
         private readonly string token;
@@ -35,21 +38,33 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
             submitter.Headers.Add(HttpRequestHeader.Authorization, $"PrivateKey: {privateKey}");
             submitter.Headers.Add(HttpRequestHeader.Authorization, $"Token: {token}");
 
-            GetOrderUri = new Uri($"{HttpHost}{GetOrderApiVersion}{OrderUrlExtension}");
+            getOrderUri = new Uri($"{HttpHost}{GetOrderApiVersion}{OrderUrlExtension}");
         }
 
         public IEnumerable<ThreeDCartOrder> GetOrders(DateTime startDate)
         {
             submitter.Verb = HttpVerb.Get;
-            submitter.Uri = GetOrderUri;
+            submitter.Uri = getOrderUri;
 
             submitter.Variables.Add("datestart", startDate.ToShortDateString());
-
+            submitter.Variables.Add("limit", GetOrderLimit);
             string response = ProcessRequest("GetOrders");
 
             IEnumerable<ThreeDCartOrder> orders = JsonConvert.DeserializeObject<IEnumerable<ThreeDCartOrder>>(response);
 
             return orders;
+        }
+
+        public ThreeDCartProduct GetProduct(int catalogID)
+        {
+            getProductUri = new Uri($"{HttpHost}{GetProductApiVersion}{ProductUrlExtension}{catalogID}");
+
+            submitter.Verb = HttpVerb.Get;
+            submitter.Uri = getProductUri;
+
+            string response = ProcessRequest("GetProduct");
+
+            return null;
         }
 
         /// <summary>
