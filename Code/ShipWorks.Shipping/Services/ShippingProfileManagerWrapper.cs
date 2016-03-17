@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping.Profiles
@@ -52,6 +54,14 @@ namespace ShipWorks.Shipping.Profiles
             }
 
             return profile;
+        }
+
+        /// <summary>
+        /// Get profiles for the given shipment type
+        /// </summary>
+        public IEnumerable<ShippingProfileEntity> GetProfilesFor(ShipmentTypeCode value)
+        {
+            return ShippingProfileManager.Profiles.Where(x => x.ShipmentTypeCode == value);
         }
     }
 }

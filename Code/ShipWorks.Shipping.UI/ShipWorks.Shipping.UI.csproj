@@ -206,6 +206,7 @@
     <Compile Include="ShippingPanel\InsuranceViewModel.Properties.cs" />
     <Compile Include="ShippingPanel\InsuranceViewModel.cs" />
     <Compile Include="ShippingPanel\IShippingViewModelFactory.cs" />
+    <Compile Include="ShippingPanel\ObservableRegistrations\ApplyProfilePipeline.cs" />
     <Compile Include="ShippingPanel\ObservableRegistrations\CarrierConfiguredPipeline.cs" />
     <Compile Include="ShippingPanel\ObservableRegistrations\ChangeOriginAddressFromTypePipeline.cs" />
     <Compile Include="ShippingPanel\ObservableRegistrations\ChangeShipmentTypePipeline.cs" />
@@ -247,6 +248,7 @@
     <Compile Include="ShippingPanel\ShippingPanelRegistration.cs" />
     <Compile Include="ShippingPanel\ShippingPanelViewModel.cs" />
     <Compile Include="ShippingPanel\ShippingPanelViewModel.Properties.cs" />
+    <Compile Include="ShippingRibbon\ApplyProfileButtonWrapper.cs" />
     <Compile Include="ShippingRibbon\IShippingRibbonActions.cs" />
     <Compile Include="ShippingRibbon\IShippingRibbonService.cs" />
     <Compile Include="ShippingRibbon\ShippingRibbonRegistration.cs" />

@@ -16,5 +16,10 @@ namespace ShipWorks.Core.UI.SandRibbon
         /// Activate handler
         /// </summary>
         event EventHandler Activate;
+
+        /// <summary>
+        /// Tag associated with the element
+        /// </summary>
+        object Tag { get; }
     }
 }

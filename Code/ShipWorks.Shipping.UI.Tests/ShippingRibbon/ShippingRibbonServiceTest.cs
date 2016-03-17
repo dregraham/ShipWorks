@@ -679,6 +679,147 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingRibbon
         }
         #endregion
 
+        #region Create Label
+        [Theory]
+        [InlineData(true, false)]
+        [InlineData(false, true)]
+        public void HandleOrderSelectionChanged_DisablesApplyProfile_WhenLoadedShipmentIsProcessed(bool isProcessed, bool expected)
+        {
+            actions.Object.ApplyProfile.Enabled = !expected;
+            var testObject = mock.Create<ShippingRibbonService>();
+            testObject.Register(actions.Object);
+
+            SendOrderSelectionChangedMessageWithLoadedOrderSelection(CreateShipmentAdapter(x => x.Processed = isProcessed));
+
+            Assert.Equal(expected, actions.Object.ApplyProfile.Enabled);
+        }
+
+        [Fact]
+        public void HandleOrderSelectionChanged_DisablesApplyProfile_WhenLoadedOrderHasNoShipments()
+        {
+            actions.Object.ApplyProfile.Enabled = true;
+            var testObject = mock.Create<ShippingRibbonService>();
+            testObject.Register(actions.Object);
+
+            SendOrderSelectionChangedMessageWithLoadedOrderSelection();
+
+            Assert.False(actions.Object.ApplyProfile.Enabled);
+        }
+
+        [Theory]
+        [InlineData(0, false)]
+        [InlineData(1, false)]
+        [InlineData(2, false)]
+        public void HandleOrderSelectionChanged_SetsEnabledOnApplyProfile_WhenMessageHasNoLoadedOrders(int selectionCount, bool expected)
+        {
+            actions.Object.ApplyProfile.Enabled = !expected;
+            var testObject = mock.Create<ShippingRibbonService>();
+            testObject.Register(actions.Object);
+
+            var orderSelections = Enumerable.Range(0, selectionCount)
+                .Select(x => new BasicOrderSelection(x)).OfType<IOrderSelection>();
+            messenger.Send(new OrderSelectionChangedMessage(this, orderSelections));
+
+            Assert.Equal(expected, actions.Object.ApplyProfile.Enabled);
+        }
+
+        [Theory]
+        [InlineData(true, false)]
+        [InlineData(false, true)]
+        public void HandleShipmentsProcessedMessage_SetsEnabledOnApplyProfile_WhenSingleUnprocessedShipmentIsLoaded(bool isProcessed, bool expected)
+        {
+            actions.Object.ApplyProfile.Enabled = !expected;
+            var testObject = mock.Create<ShippingRibbonService>();
+            testObject.Register(actions.Object);
+
+            SendOrderSelectionChangedMessageWithLoadedOrderSelection(CreateShipmentAdapter(x =>
+            {
+                x.Processed = false;
+                x.ShipmentID = 123;
+            }));
+
+            messenger.Send(new ShipmentsProcessedMessage(this, new[]
+            {
+                new ProcessShipmentResult(new ShipmentEntity { ShipmentID = 123, Processed = isProcessed })
+            }));
+
+            Assert.Equal(expected, actions.Object.ApplyProfile.Enabled);
+        }
+
+        [Fact]
+        public void ApplyProfileClick_SendsApplyProfileMessage_WhenSingleUnprocessedShipmentIsLoaded()
+        {
+            long shipmentID = 0;
+            var testObject = mock.Create<ShippingRibbonService>();
+            testObject.Register(actions.Object);
+            SendOrderSelectionChangedMessageWithLoadedOrderSelection(CreateShipmentAdapter(x =>
+            {
+                x.Processed = false;
+                x.ShipmentID = 1234;
+            }));
+
+            messenger.OfType<ApplyProfileMessage>().Subscribe(x => shipmentID = x.ShipmentID);
+
+            Mock<IRibbonButton> applyProfileButton = Mock.Get(actions.Object.ApplyProfile);
+            applyProfileButton.SetupGet(x => x.Tag).Returns(new ShippingProfileEntity());
+            applyProfileButton.Raise(x => x.Activate += null, EventArgs.Empty);
+
+            Assert.Equal(1234, shipmentID);
+        }
+
+        [Fact]
+        public void ApplyProfileClick_DoesNotSendAMessage_WhenSingleProcessedShipmentIsLoaded()
+        {
+            IShipWorksMessage message = null;
+            var testObject = mock.Create<ShippingRibbonService>();
+            testObject.Register(actions.Object);
+            SendOrderSelectionChangedMessageWithLoadedOrderSelection(CreateShipmentAdapter(x =>
+            {
+                x.Processed = true;
+                x.ShipmentID = 1234;
+            }));
+
+            messenger.Subscribe(x => message = x);
+
+            Mock.Get(actions.Object.ApplyProfile).Raise(x => x.Activate += null, EventArgs.Empty);
+
+            Assert.Null(message);
+        }
+
+        [Fact]
+        public void ApplyProfileClick_DoesNotSendAMessage_WhenSingleUnProcessedShipmentIsLoadedAndButtonHasNoTag()
+        {
+            IShipWorksMessage message = null;
+            var testObject = mock.Create<ShippingRibbonService>();
+            testObject.Register(actions.Object);
+            SendOrderSelectionChangedMessageWithLoadedOrderSelection(CreateShipmentAdapter(x =>
+            {
+                x.Processed = false;
+                x.ShipmentID = 1234;
+            }));
+
+            messenger.Subscribe(x => message = x);
+
+            Mock.Get(actions.Object.ApplyProfile).Raise(x => x.Activate += null, EventArgs.Empty);
+
+            Assert.Null(message);
+        }
+
+        [Fact]
+        public void ApplyProfileClick_DoesNotSendAMessage_WhenCurrentSelectionHasNotBeenSet()
+        {
+            IShipWorksMessage message = null;
+            var testObject = mock.Create<ShippingRibbonService>();
+            testObject.Register(actions.Object);
+
+            messenger.Subscribe(x => message = x);
+
+            Mock.Get(actions.Object.ApplyProfile).Raise(x => x.Activate += null, EventArgs.Empty);
+
+            Assert.Null(message);
+        }
+        #endregion
+
         private void DoesNotSendMessageWhenSingleInvalidShipmentIsLoaded(IRibbonButton button, bool isProcessed, bool isVoided)
         {
             IShipWorksMessage message = null;
