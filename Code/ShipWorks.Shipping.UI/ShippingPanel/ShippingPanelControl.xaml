@@ -49,7 +49,8 @@
         <ScrollViewer VerticalScrollBarVisibility="Visible"
                   HorizontalScrollBarVisibility="Disabled">
             <StackPanel Margin="6, 6, 6, 6">
-                <StackPanel IsEnabled="{Binding IsLoading, Converter={StaticResource InvertBoolean}}">
+                <StackPanel Visibility="{Binding LoadedShipmentResult,Converter={StaticResource VisibleWhenEqualToParameter},ConverterParameter={x:Static sw:ShippingPanelLoadedShipmentResult.Success}}" 
+                            IsEnabled="{Binding IsLoading, Converter={StaticResource InvertBoolean}}">
                     <Grid Margin="7, 0, 5, 8">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="75" />

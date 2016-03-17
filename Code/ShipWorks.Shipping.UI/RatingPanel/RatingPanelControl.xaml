@@ -48,6 +48,7 @@
                             Content="{StaticResource ProxyElement}"/>
 
             <DataGrid Grid.Row="1"
+                      Style="{StaticResource DataGrid.Static}"
                       IsEnabled="{Binding IsLoading, Converter={StaticResource InvertBoolean}}"
                       ItemsSource="{Binding Rates}"
                       SelectedItem="{Binding SelectedRate}"
@@ -71,32 +72,32 @@
                     <DataGridTextColumn Header="Service"
                                         Width="*"
                                         Binding="{Binding Description}"
-                                        ElementStyle="{StaticResource ShipWorksDataGrid.ElementStyleVerticalCenter}">
+                                        ElementStyle="{StaticResource DataGrid.Element.Default}">
                     </DataGridTextColumn>
                     <DataGridTextColumn Header="Days"
                                         Binding="{Binding Days}"
-                                        ElementStyle="{StaticResource ShipWorksDataGrid.ElementStyleVerticalCenter}" />
+                                        ElementStyle="{StaticResource DataGrid.Element.Default}" />
                     <DataGridTextColumn Header="Shipping"
-                                        ElementStyle="{StaticResource ShipWorksDataGrid.AmountStyleGray}"
+                                        ElementStyle="{StaticResource DataGrid.Element.Amount.Other}"
                                         Visibility="{Binding DataContext.ShowShipping,
                                             Source={StaticResource ProxyElement},
                                             Converter={StaticResource BooleanToVisibility}}"
                                         Binding="{Binding Shipping, Converter={StaticResource HalfCentCurrency}}" />
                     <DataGridTextColumn Header="Tax"
-                                        ElementStyle="{StaticResource ShipWorksDataGrid.AmountStyleGray}"
+                                        ElementStyle="{StaticResource DataGrid.Element.Amount.Other}"
                                         Visibility="{Binding DataContext.ShowTaxes,
                                             Source={StaticResource ProxyElement},
                                             Converter={StaticResource BooleanToVisibility}}"
                                         Binding="{Binding Taxes, Converter={StaticResource HalfCentCurrency}}" />
                     <DataGridTextColumn Header="Duty"
-                                        ElementStyle="{StaticResource ShipWorksDataGrid.AmountStyleGray}"
+                                        ElementStyle="{StaticResource DataGrid.Element.Amount.Other}"
                                         Visibility="{Binding DataContext.ShowDuties,
                                             Source={StaticResource ProxyElement},
                                             Converter={StaticResource BooleanToVisibility}}"
                                         Binding="{Binding Duties, Converter={StaticResource HalfCentCurrency}}" />
                     <DataGridTextColumn Header="Rate"
                                         MinWidth="112"
-                                        ElementStyle="{StaticResource ShipWorksDataGrid.AmountStyle}"
+                                        ElementStyle="{StaticResource DataGrid.Element.Amount}"
                                         Binding="{Binding Amount, Converter={StaticResource HalfCentCurrency}}" />
                 </DataGrid.Columns>
             </DataGrid>
