@@ -50,6 +50,17 @@
         <ScrollViewer VerticalScrollBarVisibility="Visible"
                   HorizontalScrollBarVisibility="Disabled">
             <StackPanel Margin="6, 6, 6, 6">
+
+                <StackPanel Margin="0,0,0,8"
+                    Visibility="{Binding IsProcessed, Converter={StaticResource BooleanToVisibility}}"
+                    >
+                    <TextBlock Text="Processed"
+                               FontSize="16"
+                               FontWeight="Bold"
+                               Foreground="#FF009900">
+                    </TextBlock>
+                    <TextBlock>Tracking #<Hyperlink>12512306</Hyperlink></TextBlock>
+                </StackPanel>
                 <StackPanel Visibility="{Binding LoadedShipmentResult,Converter={StaticResource VisibleWhenEqualToParameter},ConverterParameter={x:Static sw:ShippingPanelLoadedShipmentResult.Success}}"
                             IsEnabled="{Binding IsLoading, Converter={StaticResource InvertBoolean}}">
                     <Grid Margin="7, 0, 5, 8">
@@ -314,19 +325,6 @@
                 </StackPanel>
             </StackPanel>
         </ScrollViewer>
-        <Viewbox VerticalAlignment="Stretch"
-                 HorizontalAlignment="Stretch"
-                 StretchDirection="Both"
-                 Stretch="Uniform"
-                 Visibility="{Binding IsProcessed, Converter={StaticResource BooleanToVisibility}}">
-            <TextBlock Text="Processed"
-                       Foreground="#66009900"
-                       RenderTransformOrigin="0.5,0.5">
-                <TextBlock.RenderTransform>
-                    <RotateTransform Angle="-50" />
-                </TextBlock.RenderTransform>
-            </TextBlock>
-        </Viewbox>
         <ui:WaitSpinner Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibility}}">
             Loading...
         </ui:WaitSpinner>
