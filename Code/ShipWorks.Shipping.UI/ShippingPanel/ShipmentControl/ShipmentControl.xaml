@@ -69,10 +69,11 @@
                 </Grid.ColumnDefinitions>
 
                 <ListBox Grid.Column="0"
-                          Margin="0, 0, 4, 0"
-                        SelectionMode="Single"
-                          ItemsSource="{Binding PackageAdapters}"
-                          SelectedValue ="{Binding SelectedPackageAdapter}" >
+                         Margin="0, 0, 4, 0"
+                         SelectionMode="Single"
+                         MaxHeight="90"
+                         ItemsSource="{Binding PackageAdapters}"
+                         SelectedValue ="{Binding SelectedPackageAdapter}" >
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding Index, StringFormat=Package \{0\}}" />

@@ -42,6 +42,7 @@
             <vc:ShipmentTypeToAccountsConverter x:Key="ShipmentTypeToAccountsConverter" />
             <vc:OriginAddressListConverter x:Key="OriginAddressList" />
             <ui:InvertBooleanConverter x:Key="InvertBoolean" />
+            <ui:DefaultWhenNullOrEmptyConverter x:Key="DefaultWhenNullOrEmpty" />
         </ResourceDictionary>
     </UserControl.Resources>
 
@@ -49,7 +50,7 @@
         <ScrollViewer VerticalScrollBarVisibility="Visible"
                   HorizontalScrollBarVisibility="Disabled">
             <StackPanel Margin="6, 6, 6, 6">
-                <StackPanel Visibility="{Binding LoadedShipmentResult,Converter={StaticResource VisibleWhenEqualToParameter},ConverterParameter={x:Static sw:ShippingPanelLoadedShipmentResult.Success}}" 
+                <StackPanel Visibility="{Binding LoadedShipmentResult,Converter={StaticResource VisibleWhenEqualToParameter},ConverterParameter={x:Static sw:ShippingPanelLoadedShipmentResult.Success}}"
                             IsEnabled="{Binding IsLoading, Converter={StaticResource InvertBoolean}}">
                     <Grid Margin="7, 0, 5, 8">
                         <Grid.ColumnDefinitions>
@@ -87,7 +88,7 @@
                     </Grid>
 
                     <StackPanel Visibility="{Binding ShipmentType, Converter={StaticResource VisibleWhenNotEqualToParameter}, ConverterParameter={x:Static sw:ShipmentTypeCode.None}}">
-                        <Border Margin="0,0,0,8">
+                        <Border>
                             <Expander IsEnabled="True"
                                       IsExpanded="{Binding IsOriginExpanded, Source={x:Static ui:ExpanderState.Current}, Mode=TwoWay, FallbackValue=True}">
                                 <Expander.Header>
@@ -179,7 +180,11 @@
                                                 <TextBlock>
                                                     <TextBlock.Text>
                                                         <MultiBinding StringFormat="{}{0}, {1} ">
-                                                            <Binding Path="Destination.FullName" Mode="OneWay" UpdateSourceTrigger="PropertyChanged" />
+                                                            <Binding Path="Destination.FullName"
+                                                                     Mode="OneWay"
+                                                                     UpdateSourceTrigger="PropertyChanged"
+                                                                     Converter="{StaticResource DefaultWhenNullOrEmpty}"
+                                                                     ConverterParameter="(No name)"/>
                                                             <Binding Path="DomesticInternationalText" Mode="OneWay" UpdateSourceTrigger="PropertyChanged" />
                                                         </MultiBinding>
                                                     </TextBlock.Text>
@@ -264,7 +269,6 @@
                         <Button Command="{Binding CreateLabelCommand}"
                                 IsEnabled="{Binding AllowEditing}"
                                 HorizontalAlignment="Center"
-
                                 Padding="8">
                             <StackPanel Orientation="Horizontal">
                                 <Image Height="16"

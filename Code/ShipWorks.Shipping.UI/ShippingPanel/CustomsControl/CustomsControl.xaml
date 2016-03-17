@@ -62,9 +62,10 @@
                 </Grid.RowDefinitions>
 
                 <ListBox Grid.Row="0" Grid.Column="0"
-                    SelectionMode="Single"
-                    ItemsSource="{Binding CustomsItems}"
-                    SelectedValue ="{Binding SelectedCustomsItem}" >
+                         SelectionMode="Single"
+                         MaxHeight="90"
+                         ItemsSource="{Binding CustomsItems}"
+                         SelectedValue ="{Binding SelectedCustomsItem}" >
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <Grid>
