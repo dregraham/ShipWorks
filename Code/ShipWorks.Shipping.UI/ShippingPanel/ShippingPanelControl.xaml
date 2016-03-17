@@ -314,6 +314,19 @@
                 </StackPanel>
             </StackPanel>
         </ScrollViewer>
+        <Viewbox VerticalAlignment="Stretch"
+                 HorizontalAlignment="Stretch"
+                 StretchDirection="Both"
+                 Stretch="Uniform"
+                 Visibility="{Binding IsProcessed, Converter={StaticResource BooleanToVisibility}}">
+            <TextBlock Text="Processed"
+                       Foreground="#66009900"
+                       RenderTransformOrigin="0.5,0.5">
+                <TextBlock.RenderTransform>
+                    <RotateTransform Angle="-50" />
+                </TextBlock.RenderTransform>
+            </TextBlock>
+        </Viewbox>
         <ui:WaitSpinner Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibility}}">
             Loading...
         </ui:WaitSpinner>

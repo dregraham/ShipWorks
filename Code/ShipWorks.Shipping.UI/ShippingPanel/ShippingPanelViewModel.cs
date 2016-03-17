@@ -134,6 +134,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// <summary>
         /// Is the current shipment processed
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public virtual bool? IsProcessed => ShipmentAdapter?.Shipment?.Processed;
 
         /// <summary>
@@ -498,6 +499,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             Origin.SetAddressFromOrigin(OriginAddressType, fromShipmentAdapter.Shipment?.OrderID ?? 0, AccountId, ShipmentType);
 
             SupportsMultiplePackages = fromShipmentAdapter.SupportsMultiplePackages;
+
+            handler.RaisePropertyChanged(nameof(IsProcessed));
         }
 
         #region IDataErrorInfo
