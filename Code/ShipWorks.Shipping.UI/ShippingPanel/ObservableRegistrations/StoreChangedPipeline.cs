@@ -37,7 +37,11 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
         /// </summary>
         private void OnStoreChanged(ShippingPanelViewModel viewModel)
         {
-            if (viewModel.OriginAddressType != (int) ShipmentOriginSource.Store)
+            // If an order is not selected, there's no order on which to set an origin address
+            // so just return.
+            if (viewModel.OriginAddressType != (int) ShipmentOriginSource.Store ||
+                viewModel.OrderID == null ||
+                viewModel.OrderID <= 0)
             {
                 return;
             }
