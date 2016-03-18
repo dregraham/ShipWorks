@@ -6,7 +6,7 @@
     </ResourceDictionary.MergedDictionaries>
 
     <ui:BooleanToVisibilityConverter x:Key="ShowWhenTrue" />
-    <ui:BooleanToVisibilityConverter x:Key="HideWhenTrue" True="Collapsed" False="Visible" />
+    <ui:VisibleWhenEqualToParameterConverter x:Key="VisibleWhenNotEqualToParameter" Invert="False" />
 
     <DataTemplate x:Key="CounterRatesInvalidStoreAddressFootnoteViewModelTemplate">
         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
@@ -18,7 +18,7 @@
                 <Hyperlink Command="{Binding EditStoreAddress}">Enter address...</Hyperlink>
             </TextBlock>
             <TextBlock Margin="6,1,0,0"
-                       Visibility="{Binding CanEditStoreAddress,Converter={StaticResource HideWhenTrue}}">
+                       Visibility="{Binding CanEditStoreAddress,Converter={StaticResource VisibleWhenNotEqualToParameter}}">
                 ShipWorks needs your address to get rates.
             </TextBlock>
         </StackPanel>
