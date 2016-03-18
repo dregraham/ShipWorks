@@ -2,19 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Net;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.XPath;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
-using Interapptive.Shared.Enums;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -22,7 +17,6 @@ using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.ThreeDCart.Enums;
 using log4net;
-using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Stores.Platforms.ThreeDCart.RestApi;
 using ShipWorks.Stores.Platforms.ThreeDCart.RestApi.DTO;
 
@@ -42,16 +36,26 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
 
         // provider for status codes
         ThreeDCartStatusCodeProvider statusProvider;
+        private readonly IThreeDCartRestWebClient threeDCartRestWebClient;
+        private readonly ISqlAdapterRetry sqlAdapterRetry;
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="store">Store for which this downloader will operate</param>
         public ThreeDCartDownloader(ThreeDCartStoreEntity store)
-            : base(store)
+            : this(store,
+                new ThreeDCartRestWebClient(store),
+                new SqlAdapterRetry<SqlException>(5, -5, "ThreeDCartDownloader.LoadOrder"))
         {
             threeDCartStore = store;
             totalCount = 0;
+        }
+
+        public ThreeDCartDownloader(ThreeDCartStoreEntity store, IThreeDCartRestWebClient threeDCartRestWebClient, ISqlAdapterRetry sqlAdapterRetry) : base(store)
+        {
+            this.threeDCartRestWebClient = threeDCartRestWebClient;
+            this.sqlAdapterRetry = sqlAdapterRetry;
         }
 
         /// <summary>
@@ -143,7 +147,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
             }
         }
 
-        private void LoadOrders(IEnumerable<ThreeDCartOrder> orders)
+        public void LoadOrders(IEnumerable<ThreeDCartOrder> orders)
         {
             foreach (ThreeDCartOrder order in orders)
             {
@@ -162,7 +166,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
             }
         }
 
-        private void LoadOrder(ThreeDCartOrder threeDCartOrder, ThreeDCartShipment shipment, string invoiceNumberPostFix,
+        public OrderEntity LoadOrder(ThreeDCartOrder threeDCartOrder, ThreeDCartShipment shipment, string invoiceNumberPostFix,
             bool isSubOrder, bool hasSubOrders)
         {
             MethodConditions.EnsureArgumentIsNotNull(threeDCartOrder, "order");
@@ -210,6 +214,10 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
 
                 AdjustOrderTotal(order, threeDCartOrder, isSubOrder, hasSubOrders);
             }
+
+            sqlAdapterRetry.ExecuteWithRetry(() => SaveDownloadedOrder(order));
+
+            return order;
         }
 
         private void LoadPaymentDetails(OrderEntity order, ThreeDCartOrder threeDCartOrder)
@@ -340,9 +348,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
 
         private void LoadProductImagesAndLocation(ThreeDCartOrderItemEntity item, int catalogID)
         {
-            ThreeDCartRestWebClient client = new ThreeDCartRestWebClient(threeDCartStore);
-
-            ThreeDCartProduct product = client.GetProduct(catalogID);
+            ThreeDCartProduct product = threeDCartRestWebClient.GetProduct(catalogID);
 
             if (product != null)
             {
@@ -401,11 +407,9 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
             };
         }
 
-        private IEnumerable<ThreeDCartOrder> DownloadOrders(DateTime startDate)
+        public IEnumerable<ThreeDCartOrder> DownloadOrders(DateTime startDate)
         {
-            ThreeDCartRestWebClient restClient = new ThreeDCartRestWebClient(Store as ThreeDCartStoreEntity);
-
-            return restClient.GetOrders(startDate);
+            return threeDCartRestWebClient.GetOrders(startDate);
         }
 
         /// <summary>

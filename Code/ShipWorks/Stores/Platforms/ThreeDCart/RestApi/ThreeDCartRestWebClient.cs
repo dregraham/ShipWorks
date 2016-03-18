@@ -4,14 +4,13 @@ using System.Net;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.ThreeDCart.RestApi.DTO;
 
 namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
 {
-    public class ThreeDCartRestWebClient
+    public class ThreeDCartRestWebClient : IThreeDCartRestWebClient
     {
         private const string HttpHost = "https://apirest.3dcart.com/3dCartWebAPI/";
         private const string GetOrderApiVersion = "v1/";
