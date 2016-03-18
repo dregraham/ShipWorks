@@ -115,13 +115,6 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
                 Text = "Manage",
                 TextContentRelation = TextContentRelation.Underneath
             };
-            manageProfilesButton.Activate += (s, e) =>
-            {
-                using (ShippingProfileManagerDlg dlg = new ShippingProfileManagerDlg(null))
-                {
-                    dlg.ShowDialog(Program.MainForm);
-                }
-            };
 
             StripLayout stripLayoutReprint = new StripLayout
             {

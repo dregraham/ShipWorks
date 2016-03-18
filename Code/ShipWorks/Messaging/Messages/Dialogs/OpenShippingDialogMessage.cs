@@ -5,7 +5,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Editing.Rating;
 
-namespace ShipWorks.Messaging.Messages
+namespace ShipWorks.Messaging.Messages.Dialogs
 {
     /// <summary>
     /// Request that the shipping dialog be opened
@@ -18,7 +18,7 @@ namespace ShipWorks.Messaging.Messages
         public OpenShippingDialogMessage(object sender, IEnumerable<ShipmentEntity> shipments) :
             this(sender, shipments, InitialShippingTabDisplay.Shipping)
         {
-            
+
         }
 
         /// <summary>

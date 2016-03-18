@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Windows.Forms;
 using Autofac;
 using ShipWorks.ApplicationCore;
+using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Messaging.Messages.Dialogs;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.UI.Utility;
 
@@ -120,10 +123,7 @@ namespace ShipWorks.Shipping.Settings.Defaults
                 profileEditor.ShowDialog(this);
             }
 
-            if (ProfileEdited != null)
-            {
-                ProfileEdited(this, EventArgs.Empty);
-            }
+            ProfileEdited?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -131,17 +131,18 @@ namespace ShipWorks.Shipping.Settings.Defaults
         /// </summary>
         void OnManageProfiles(object sender, EventArgs e)
         {
-            using (ShippingProfileManagerDlg dlg = new ShippingProfileManagerDlg(shipmentType.ShipmentTypeCode))
-            {
-                dlg.ShowDialog(this);
-            }
+            OpenProfileManagerDialogMessage openMessage = new OpenProfileManagerDialogMessage(this);
 
-            if (ProfileEdited != null)
-            {
-                ProfileEdited(this, EventArgs.Empty);
-            }
+            Messenger.Current.OfType<ProfileManagerDialogClosedMessage>()
+                .Where(x => x.OpenMessage.Equals(openMessage))
+                .Take(1)
+                .Subscribe(x =>
+                {
+                    ProfileEdited?.Invoke(this, EventArgs.Empty);
+                    UpdateLayout();
+                });
 
-            UpdateLayout();
+            Messenger.Current.Send(openMessage);
         }
 
         /// <summary>

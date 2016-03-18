@@ -8,6 +8,7 @@ using ShipWorks.Core.Messaging.Messages.Shipping;
 using ShipWorks.Core.UI.SandRibbon;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages;
+using ShipWorks.Messaging.Messages.Dialogs;
 using ShipWorks.Messaging.Messages.Shipping;
 
 namespace ShipWorks.Shipping.UI.ShippingRibbon
@@ -56,12 +57,22 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
             shippingRibbonActions.ApplyProfile.Enabled = false;
             shippingRibbonActions.ApplyProfile.Activate += OnApplyProfile;
 
+            shippingRibbonActions.ManageProfiles.Activate += OnManageProfiles;
+
             subscription = new CompositeDisposable(
                 messages.OfType<ShipmentChangedMessage>().Subscribe(HandleShipmentChanged),
                 messages.OfType<OrderSelectionChangedMessage>().Subscribe(HandleOrderSelectionChanged),
                 messages.OfType<ShipmentsProcessedMessage>().Subscribe(HandleShipmentsProcessed),
                 messages.OfType<ShipmentsVoidedMessage>().Subscribe(HandleLabelsVoided)
             );
+        }
+
+        /// <summary>
+        /// Manage profiles
+        /// </summary>
+        private void OnManageProfiles(object sender, EventArgs e)
+        {
+            messages.Send(new OpenProfileManagerDialogMessage(this));
         }
 
         /// <summary>

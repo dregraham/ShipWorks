@@ -4,7 +4,7 @@ using ShipWorks.Core.Messaging;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Editing.Rating;
 
-namespace ShipWorks.Messaging.Messages
+namespace ShipWorks.Messaging.Messages.Dialogs
 {
     /// <summary>
     /// Request that the shipping dialog be opened

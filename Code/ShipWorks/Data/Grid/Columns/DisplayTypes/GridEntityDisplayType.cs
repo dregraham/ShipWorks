@@ -1,38 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Data.Grid.Columns;
-using ShipWorks.Data.Grid.Columns.DisplayTypes;
-using ShipWorks.Data.Model;
-using ShipWorks.Data;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Grid;
-using ShipWorks.UI;
-using ShipWorks.Shipping;
 using System.Drawing;
-using ShipWorks.Data.Connection;
-using ShipWorks.Data.Grid.Columns.DisplayTypes.Editors;
-using System.Xml.Serialization;
-using Interapptive.Shared.Utility;
-using ShipWorks.Stores.Content;
 using System.Windows.Forms;
-using ShipWorks.Users;
-using ShipWorks.Users.Security;
-using ShipWorks.Templates;
-using ShipWorks.Templates.Management;
-using ShipWorks.Users.Audit;
-using ShipWorks.Properties;
-using ShipWorks.Stores.Content.Panels;
+using Interapptive.Shared;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.UI;
-using ShipWorks.Data.Grid.Columns.DisplayTypes.Decorators;
-using ShipWorks.ApplicationCore;
-using Autofac;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Core.Messaging;
-using ShipWorks.Messaging.Messages;
-using Interapptive.Shared;
+using ShipWorks.Data.Grid.Columns.DisplayTypes.Decorators;
+using ShipWorks.Data.Grid.Columns.DisplayTypes.Editors;
+using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Messaging.Messages.Dialogs;
+using ShipWorks.Properties;
+using ShipWorks.Shipping;
+using ShipWorks.Stores.Content;
+using ShipWorks.Stores.Content.Panels;
+using ShipWorks.Templates;
+using ShipWorks.Templates.Management;
+using ShipWorks.Users;
+using ShipWorks.Users.Audit;
+using ShipWorks.Users.Security;
 
 namespace ShipWorks.Data.Grid.Columns.DisplayTypes
 {
@@ -284,7 +272,7 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes
                             {
                                 OrderEditorDlg.Open(keys[0], owner);
                             }
-                       }
+                        }
                         break;
 
                     case EntityType.CustomerEntity:
