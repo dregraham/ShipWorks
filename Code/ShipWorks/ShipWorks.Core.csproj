@@ -10355,6 +10355,8 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Maintenance\ShrinkDatabase.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Installation\InitialData.sql" />
     <None Include="Resources\add - Copy.png" />
+    <None Include="ApplicationCore\Appearance\WindowLayoutDefault\panels.xml" />
+    <None Include="ApplicationCore\Appearance\WindowLayoutDefault\ribbon.xml" />
     <Content Include="Resources\add.png" />
     <None Include="Resources\blank16.png" />
     <None Include="Resources\calendar_31.png" />
