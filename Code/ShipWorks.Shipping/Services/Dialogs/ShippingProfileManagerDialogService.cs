@@ -14,7 +14,7 @@ namespace ShipWorks.Shipping.Services.Dialogs
     /// </summary>
     public class ShippingProfileManagerDialogService : IInitializeForCurrentUISession, IDisposable
     {
-        readonly IMessenger messenger;
+        readonly IObservable<IShipWorksMessage> messenger;
         readonly IWin32Window mainWindow;
         readonly ISchedulerProvider schedulerProvider;
         IDisposable subscription;
@@ -22,7 +22,7 @@ namespace ShipWorks.Shipping.Services.Dialogs
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShippingProfileManagerDialogService(IMessenger messenger,
+        public ShippingProfileManagerDialogService(IObservable<IShipWorksMessage> messenger,
             ISchedulerProvider schedulerProvider, IWin32Window mainWindow)
         {
             this.messenger = messenger;
@@ -45,14 +45,12 @@ namespace ShipWorks.Shipping.Services.Dialogs
         /// </summary>
         private void OpenProfileManagerDialog(OpenProfileManagerDialogMessage message)
         {
-            DialogResult result = DialogResult.Cancel;
-
             using (ShippingProfileManagerDlg dlg = new ShippingProfileManagerDlg(null))
             {
-                result = dlg.ShowDialog(message.Sender as IWin32Window ?? mainWindow);
+                dlg.ShowDialog(message.Sender as IWin32Window ?? mainWindow);
             }
 
-            messenger.Send(new ProfileManagerDialogClosedMessage(this, message));
+            message.OnComplete?.Invoke();
         }
 
         /// <summary>

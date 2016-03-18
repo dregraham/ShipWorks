@@ -131,18 +131,16 @@ namespace ShipWorks.Shipping.Settings.Defaults
         /// </summary>
         void OnManageProfiles(object sender, EventArgs e)
         {
-            OpenProfileManagerDialogMessage openMessage = new OpenProfileManagerDialogMessage(this);
+            Messenger.Current.Send(new OpenProfileManagerDialogMessage(this, shipmentType.ShipmentTypeCode, ManageProfilesCompleted));
+        }
 
-            Messenger.Current.OfType<ProfileManagerDialogClosedMessage>()
-                .Where(x => x.OpenMessage.Equals(openMessage))
-                .Take(1)
-                .Subscribe(x =>
-                {
-                    ProfileEdited?.Invoke(this, EventArgs.Empty);
-                    UpdateLayout();
-                });
-
-            Messenger.Current.Send(openMessage);
+        /// <summary>
+        /// The manage profile dialog has just closed
+        /// </summary>
+        private void ManageProfilesCompleted()
+        {
+            ProfileEdited?.Invoke(this, EventArgs.Empty);
+            UpdateLayout();
         }
 
         /// <summary>

@@ -786,7 +786,6 @@
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Messaging\Messages\CustomerDeletedMessage.cs" />
     <Compile Include="Messaging\Messages\Dialogs\OpenProfileManagerDialogMessage.cs" />
-    <Compile Include="Messaging\Messages\Dialogs\ProfileManagerDialogClosedMessage.cs" />
     <Compile Include="Messaging\Messages\IEntityDeleted.cs" />
     <Compile Include="Messaging\Messages\Dialogs\OpenShippingDialogWithOrdersMessage.cs" />
     <Compile Include="Messaging\Messages\Shipping\BasicOrderSelection.cs" />

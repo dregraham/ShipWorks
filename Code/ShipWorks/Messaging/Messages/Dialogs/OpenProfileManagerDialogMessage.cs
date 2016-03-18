@@ -1,4 +1,5 @@
-﻿using ShipWorks.Core.Messaging;
+﻿using System;
+using ShipWorks.Core.Messaging;
 using ShipWorks.Shipping;
 
 namespace ShipWorks.Messaging.Messages.Dialogs
@@ -15,15 +16,17 @@ namespace ShipWorks.Messaging.Messages.Dialogs
         {
             Sender = sender;
             RestrictToShipmentType = null;
+            OnComplete = null;
         }
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public OpenProfileManagerDialogMessage(object sender, ShipmentTypeCode restrictToShipmentType)
+        public OpenProfileManagerDialogMessage(object sender, ShipmentTypeCode restrictToShipmentType, Action onComplete)
         {
             Sender = sender;
             RestrictToShipmentType = restrictToShipmentType;
+            OnComplete = onComplete;
         }
 
         /// <summary>
@@ -35,5 +38,10 @@ namespace ShipWorks.Messaging.Messages.Dialogs
         /// Restrict the dialog to the specified shipment type
         /// </summary>
         public ShipmentTypeCode? RestrictToShipmentType { get; }
+
+        /// <summary>
+        /// Action to perform when the dialog is closed
+        /// </summary>
+        public Action OnComplete { get; }
     }
 }
