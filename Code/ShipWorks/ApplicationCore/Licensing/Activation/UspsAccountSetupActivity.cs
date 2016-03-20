@@ -103,6 +103,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Activation
                 PendingInitialAccount = (int)UspsPendingAccountType.Create,
                 CreatedDate = DateTime.UtcNow
             };
+
             uspsAccount.InitializeNullsToDefault();
             uspsAccountRepository.Save(uspsAccount);
 
