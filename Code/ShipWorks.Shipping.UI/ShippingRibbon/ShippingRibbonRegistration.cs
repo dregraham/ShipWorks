@@ -134,21 +134,13 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
             {
                 FurtherOptions = false,
                 ItemJustification = ItemJustification.Stretch,
-                Items = { voidButton, returnButton, stripLayoutReprint },
+                Items = { createLabelButton, voidButton, returnButton, stripLayoutReprint },
                 Text = "Shipping",
-            };
-
-            RibbonChunk shippingOutputChunk = new RibbonChunk
-            {
-                FurtherOptions = false,
-                ItemJustification = ItemJustification.Stretch,
-                Items = { createLabelButton },
-                Text = "Output"
             };
 
             RibbonTab ribbonTabShipping = new RibbonTab
             {
-                Chunks = { shippingOutputChunk, shippingShippingChunk, profilesChunk },
+                Chunks = { shippingShippingChunk, profilesChunk },
                 EditingContextReference = "SHIPPINGMENU",
                 Location = new Point(1, 53),
                 Manager = ribbon.Manager,
