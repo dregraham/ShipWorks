@@ -138,7 +138,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
                 return;
             }
 
-            IPackageAdapter packageAdapter = SelectedPackageAdapter;
+            PackageAdapterWrapper packageAdapter = SelectedPackageAdapter;
             shipmentAdapter.DeletePackage(packageAdapter);
 
             int location = PackageAdapters.IndexOf(packageAdapter);
@@ -147,6 +147,11 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
                 PackageAdapters.ElementAt(location + 1);
 
             PackageAdapters.Remove(packageAdapter);
+
+            for (int i = 0; i < PackageAdapters.Count; i++)
+            {
+                PackageAdapters[i].Index = i + 1;
+            }
         }
 
         /// <summary>
@@ -159,7 +164,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
                 return;
             }
 
-            IPackageAdapter packageAdapter = shipmentAdapter.AddPackage();
+            PackageAdapterWrapper packageAdapter = new PackageAdapterWrapper(shipmentAdapter.AddPackage());
             PackageAdapters.Add(packageAdapter);
             SelectedPackageAdapter = packageAdapter;
         }
@@ -192,11 +197,11 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
             RefreshServiceTypes();
             RefreshPackageTypes();
 
-            PackageAdapters = new ObservableCollection<IPackageAdapter>(shipmentAdapter.GetPackageAdapters());
+            PackageAdapters = new ObservableCollection<PackageAdapterWrapper>(shipmentAdapter.GetPackageAdapters().Select(x => new PackageAdapterWrapper(x)));
 
             RefreshDimensionsProfiles();
 
-            IPackageAdapter packageAdapter = PackageAdapters.FirstOrDefault();
+            PackageAdapterWrapper packageAdapter = PackageAdapters.FirstOrDefault();
             InsuranceViewModel.Load(PackageAdapters, packageAdapter, shipmentAdapter);
             SelectedPackageAdapter = packageAdapter;
 

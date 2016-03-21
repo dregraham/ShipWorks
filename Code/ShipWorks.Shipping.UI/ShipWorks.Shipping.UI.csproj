@@ -223,6 +223,7 @@
     <Compile Include="ShippingPanel\ObservableRegistrations\RateSelectedPipeline.cs" />
     <Compile Include="ShippingPanel\ObservableRegistrations\StoreChangedPipeline.cs" />
     <Compile Include="ShippingPanel\ObservableRegistrations\WindowUnloadingPipeline.cs" />
+    <Compile Include="ShippingPanel\ShipmentControl\PackageAdapterWrapper.cs" />
     <Compile Include="ShippingPanel\ShipmentControl\IShipmentViewModel.cs" />
     <Compile Include="ShippingPanel\ShipmentControl\OtherShipmentControl.xaml.cs">
       <DependentUpon>OtherShipmentControl.xaml</DependentUpon>
