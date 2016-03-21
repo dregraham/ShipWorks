@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 using System.Windows.Input;
 using ShipWorks.Shipping.Loading;
 using ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl;
@@ -22,6 +23,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         private string domesticInternationalText;
         private IShipmentViewModel shipmentViewModel;
         private bool isLoading;
+        private string trackingNumber;
+        private DateTime processedDate;
 
         /// <summary>
         /// Command to open the shipping dialog
@@ -179,6 +182,26 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         {
             get { return isLoading; }
             set { handler.Set(nameof(IsLoading), ref isLoading, value); }
+        }
+
+        /// <summary>
+        /// Tracking number of the shipment
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public string TrackingNumber
+        {
+            get { return trackingNumber; }
+            set { handler.Set(nameof(TrackingNumber), ref trackingNumber, value); }
+        }
+
+        /// <summary>
+        /// Date the shipment was processed
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public DateTime ProcessedDate
+        {
+            get { return processedDate; }
+            set { handler.Set(nameof(ProcessedDate), ref processedDate, value); }
         }
     }
 }

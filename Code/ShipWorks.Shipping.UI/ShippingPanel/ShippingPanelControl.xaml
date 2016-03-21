@@ -43,6 +43,7 @@
             <vc:OriginAddressListConverter x:Key="OriginAddressList" />
             <ui:InvertBooleanConverter x:Key="InvertBoolean" />
             <ui:DefaultWhenNullOrEmptyConverter x:Key="DefaultWhenNullOrEmpty" />
+            <ui:FriendlyDateConverter x:Key="FriendlyDate" />
         </ResourceDictionary>
     </UserControl.Resources>
 
@@ -50,17 +51,27 @@
         <ScrollViewer VerticalScrollBarVisibility="Visible"
                   HorizontalScrollBarVisibility="Disabled">
             <StackPanel Margin="6, 6, 6, 6">
+                <Grid Margin="0,0,0,12"
+                      Visibility="{Binding IsProcessed, Converter={StaticResource BooleanToVisibility}}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
 
-                <StackPanel Margin="0,0,0,8"
-                    Visibility="{Binding IsProcessed, Converter={StaticResource BooleanToVisibility}}"
-                    >
                     <TextBlock Text="Processed"
                                FontSize="16"
                                FontWeight="Bold"
                                Foreground="#FF009900">
                     </TextBlock>
-                    <TextBlock>Tracking #<Hyperlink>12512306</Hyperlink></TextBlock>
-                </StackPanel>
+                    <TextBlock Grid.Column="1" Text="{Binding ProcessedDate,Converter={StaticResource FriendlyDate}}"
+                               FontSize="16" />
+                    <TextBlock Grid.Row="1"
+                               Grid.ColumnSpan="2">Tracking #<Hyperlink Command="{Binding TrackShipmentCommand}"><Run Text="{Binding TrackingNumber}" /></Hyperlink></TextBlock>
+                </Grid>
                 <StackPanel Visibility="{Binding LoadedShipmentResult,Converter={StaticResource VisibleWhenEqualToParameter},ConverterParameter={x:Static sw:ShippingPanelLoadedShipmentResult.Success}}"
                             IsEnabled="{Binding IsLoading, Converter={StaticResource InvertBoolean}}">
                     <Grid Margin="7, 0, 5, 8">

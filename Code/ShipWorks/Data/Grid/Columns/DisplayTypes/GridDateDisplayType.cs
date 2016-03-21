@@ -1,10 +1,7 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
-using Divelements.SandGrid.Specialized;
-using Divelements.SandGrid;
-using ShipWorks.Data.Grid.Columns.DisplayTypes.Editors;
+using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Data.Grid.Columns.DisplayTypes.Editors;
 
 namespace ShipWorks.Data.Grid.Columns.DisplayTypes
 {
@@ -117,20 +114,7 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes
 
             if (UseDescriptiveDates)
             {
-                if (dateTime.Date == DateTime.Now.Date)
-                {
-                    return "Today";
-                }
-
-                if (dateTime.Date == DateTime.Now.AddDays(-1).Date)
-                {
-                    return "Yesterday";
-                }
-
-                if (dateTime.Date == DateTime.Now.AddDays(1).Date)
-                {
-                    return "Tomorrow";
-                }
+                return dateTime.FormatFriendlyDate();
             }
 
             return dateTime.ToString(dateFormat);

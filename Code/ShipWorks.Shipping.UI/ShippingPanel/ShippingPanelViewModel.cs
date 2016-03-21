@@ -99,6 +99,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             PropertyChanging += OnPropertyChanging;
 
             CreateLabelCommand = new RelayCommand(CreateLabel);
+            TrackShipmentCommand = new RelayCommand(TrackShipment);
         }
 
         /// <summary>
@@ -106,6 +107,12 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// </summary>
         [Obfuscation(Exclude = true)]
         public ICommand CreateLabelCommand { get; }
+
+        /// <summary>
+        /// Command that opens the shipping dialog to the tracking tab
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public ICommand TrackShipmentCommand { get; }
 
         /// <summary>
         /// Is the current shipment domestic
@@ -307,6 +314,14 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         }
 
         /// <summary>
+        /// Track the current shipment
+        /// </summary>
+        private void TrackShipment()
+        {
+            messenger.Send(new OpenShippingDialogMessage(this, new[] { ShipmentAdapter.Shipment }, InitialShippingTabDisplay.Tracking));
+        }
+
+        /// <summary>
         /// Void a shipment
         /// </summary>
         public virtual void VoidLabel(VoidLabelMessage voidLabelMessage)
@@ -500,6 +515,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             Origin.SetAddressFromOrigin(OriginAddressType, fromShipmentAdapter.Shipment?.OrderID ?? 0, AccountId, ShipmentType);
 
             SupportsMultiplePackages = fromShipmentAdapter.SupportsMultiplePackages;
+            TrackingNumber = fromShipmentAdapter.Shipment.TrackingNumber;
+            ProcessedDate = fromShipmentAdapter.Shipment.ProcessedDate.GetValueOrDefault();
 
             handler.RaisePropertyChanged(nameof(IsProcessed));
         }
