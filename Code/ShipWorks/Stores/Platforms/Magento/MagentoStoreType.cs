@@ -101,7 +101,14 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// </summary>
         public override OnlineUpdateActionControlBase CreateAddStoreWizardOnlineUpdateActionControl()
         {
-            return new MagentoOnlineUpdateActionControl();
+            MagentoStoreEntity magentoStore = Store as MagentoStoreEntity;
+
+            if (magentoStore == null)
+            {
+                throw new InvalidOperationException("Not a magento store.");
+            }
+
+            return new MagentoOnlineUpdateActionControl(magentoStore.MagentoVersion == (int)MagentoVersion.MagentoTwo);
         }
 
         /// <summary>

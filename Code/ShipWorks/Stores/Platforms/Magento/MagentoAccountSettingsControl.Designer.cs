@@ -164,6 +164,7 @@
             this.radioMagentoTwo.TabIndex = 19;
             this.radioMagentoTwo.Text = "Magento2";
             this.radioMagentoTwo.UseVisualStyleBackColor = true;
+            this.radioMagentoTwo.CheckedChanged += new System.EventHandler(this.OnMagentoTwoChecked);
             // 
             // MagentoAccountSettingsControl
             // 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using ShipWorks.Stores.Platforms.GenericModule;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model;
@@ -36,9 +37,7 @@ namespace ShipWorks.Stores.Platforms.Magento
 
             MagentoStoreEntity magentoStore = (MagentoStoreEntity)store;
             storeCodeTextBox.Text = magentoStore.ModuleOnlineStoreCode;
-
-           
-
+            
             switch ((MagentoVersion)magentoStore.MagentoVersion)
             {
                 case MagentoVersion.PhpFile:
@@ -144,6 +143,29 @@ namespace ShipWorks.Stores.Platforms.Magento
                 return true;
             }
             return base.ConnectionVerificationNeeded(genericStore);
+        }
+
+        private void OnMagentoTwoChecked(object sender, EventArgs e)
+        {
+            if (radioMagentoTwo.Checked)
+            {
+                username.Hide();
+                label2.Hide();
+                label1.Text = @"Enter the access token ShipWorks should use to connect to your store:";
+
+                label3.Text = @"Token:";
+                label3.Location = label2.Location;
+                password.Location = username.Location;
+            }
+            else
+            {
+                username.Show();
+                label2.Show();
+                label1.Text = @"Enter the administrator username and password you use to login to your online store:";
+                label3.Text = @"Password:";
+                label3.Location = new Point(52, 171);
+                password.Location = new Point(117, 168);
+            }
         }
     }
 }
