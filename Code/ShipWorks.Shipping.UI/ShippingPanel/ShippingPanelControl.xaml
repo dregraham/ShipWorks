@@ -51,27 +51,44 @@
         <ScrollViewer VerticalScrollBarVisibility="Visible"
                   HorizontalScrollBarVisibility="Disabled">
             <StackPanel Margin="6, 6, 6, 6">
-                <Grid Margin="0,0,0,12"
-                      Visibility="{Binding IsProcessed, Converter={StaticResource BooleanToVisibility}}">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                    </Grid.RowDefinitions>
-
-                    <TextBlock Text="Processed"
-                               FontSize="16"
-                               FontWeight="Bold"
-                               Foreground="#FF009900">
-                    </TextBlock>
-                    <TextBlock Grid.Column="1" Text="{Binding ProcessedDate,Converter={StaticResource FriendlyDate}}"
+                <Border Margin="0,0,0,12"
+                        BorderThickness="2"
+                        BorderBrush="#FF009900"
+                        Visibility="{Binding IsProcessed, Converter={StaticResource BooleanToVisibility}}"
+                        >
+                    <StackPanel Orientation="Horizontal">
+                        <Border BorderThickness="0"
+                                CornerRadius="0"
+                                Margin="0"
+                                VerticalAlignment="Stretch"
+                                Background="#FF009900" Padding="4,0,8,0">
+                            <TextBlock Foreground="White"
+                                       FontWeight="Bold"
+                                       FontSize="24"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center">✓</TextBlock>
+                        </Border>
+                        <StackPanel Margin="8">
+                            <WrapPanel Orientation="Horizontal">
+                                <TextBlock Text="Processed"
+                                   FontSize="16"
+                                   FontWeight="Bold"
+                                   Foreground="#FF009900"
+                                           Margin="0,0,8,0">
+                                </TextBlock>
+                                <TextBlock Grid.Column="1" Text="{Binding ProcessedDate,Converter={StaticResource FriendlyDate}}"
                                FontSize="16" />
-                    <TextBlock Grid.Row="1"
-                               Grid.ColumnSpan="2">Tracking #<Hyperlink Command="{Binding TrackShipmentCommand}"><Run Text="{Binding TrackingNumber}" /></Hyperlink></TextBlock>
-                </Grid>
+                            </WrapPanel>
+                            <TextBlock Grid.Row="1"
+                               Grid.ColumnSpan="1">Tracking #<Hyperlink Command="{Binding TrackShipmentCommand}">
+                                   <Run Text="{Binding TrackingNumber}" />
+                               </Hyperlink>
+                            </TextBlock>
+                        </StackPanel>
+                    </StackPanel>
+
+                </Border>
+
                 <StackPanel Visibility="{Binding LoadedShipmentResult,Converter={StaticResource VisibleWhenEqualToParameter},ConverterParameter={x:Static sw:ShippingPanelLoadedShipmentResult.Success}}"
                             IsEnabled="{Binding IsLoading, Converter={StaticResource InvertBoolean}}">
                     <Grid Margin="7, 0, 5, 8">
