@@ -1,9 +1,12 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Drawing;
+using System.Linq;
 using Divelements.SandRibbon;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Core.UI.SandRibbon;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Profiles;
 using TD.SandDock;
 
 namespace ShipWorks.Shipping.UI.ShippingRibbon
@@ -15,16 +18,23 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
     {
         readonly ComponentResourceManager resources;
         readonly IShippingRibbonService shippingRibbonService;
+        readonly IShippingProfileManager profileManager;
         RibbonButton createLabelButton;
         RibbonButton voidButton;
         RibbonButton returnButton;
         RibbonButton reprintButton;
         RibbonButton shipAgainButton;
+        ApplyProfileButtonWrapper applyProfileButton;
+        RibbonButton manageProfilesButton;
+        Popup applyProfilePopup;
+        Menu applyProfileMenu;
+        ShipmentTypeCode? currentShipmentType;
 
-        public ShippingRibbonRegistration(IShippingRibbonService shippingRibbonService)
+        public ShippingRibbonRegistration(IShippingRibbonService shippingRibbonService, IShippingProfileManager profileManager)
         {
             resources = new ComponentResourceManager(typeof(MainForm));
             this.shippingRibbonService = shippingRibbonService;
+            this.profileManager = profileManager;
         }
 
         /// <summary>
@@ -73,31 +83,64 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
                 Text = "Ship Again",
             };
 
+            applyProfileMenu = new Menu
+            {
+                Text = "Profile List",
+                Guid = new Guid("7DC9AA2C-DB1A-447E-B717-DB252CC39338")
+            };
+
+            applyProfilePopup = new Popup
+            {
+                Items = { applyProfileMenu }
+            };
+
+            applyProfilePopup.BeforePopup += new BeforePopupEventHandler(OnApplyProfileBeforePopup);
+
+            RibbonButton actualApplyProfileButton = new RibbonButton
+            {
+                DropDownStyle = DropDownStyle.Integral,
+                Guid = new Guid("D2AF2859-5B48-4CA1-AA6B-649A033462BB"),
+                Image = Properties.Resources.document_out1,
+                PopupWidget = applyProfilePopup,
+                Text = "Apply",
+                TextContentRelation = TextContentRelation.Underneath
+            };
+
+            applyProfileButton = new ApplyProfileButtonWrapper(actualApplyProfileButton);
+
+            manageProfilesButton = new RibbonButton
+            {
+                Guid = new Guid("0E7A63DD-0BDB-4AF4-BC24-05666022EF75"),
+                Image = Properties.Resources.graphics_tablet,
+                Text = "Manage",
+                TextContentRelation = TextContentRelation.Underneath
+            };
+
             StripLayout stripLayoutReprint = new StripLayout
             {
                 Items = { reprintButton, shipAgainButton },
                 LayoutDirection = LayoutDirection.Vertical,
             };
 
+            RibbonChunk profilesChunk = new RibbonChunk
+            {
+                FurtherOptions = false,
+                ItemJustification = ItemJustification.Stretch,
+                Items = { actualApplyProfileButton, manageProfilesButton },
+                Text = "Profiles",
+            };
+
             RibbonChunk shippingShippingChunk = new RibbonChunk
             {
                 FurtherOptions = false,
                 ItemJustification = ItemJustification.Stretch,
-                Items = { voidButton, returnButton, stripLayoutReprint },
+                Items = { createLabelButton, voidButton, returnButton, stripLayoutReprint },
                 Text = "Shipping",
-            };
-
-            RibbonChunk shippingOutputChunk = new RibbonChunk
-            {
-                FurtherOptions = false,
-                ItemJustification = ItemJustification.Stretch,
-                Items = { createLabelButton },
-                Text = "Output"
             };
 
             RibbonTab ribbonTabShipping = new RibbonTab
             {
-                Chunks = { shippingOutputChunk, shippingShippingChunk },
+                Chunks = { shippingShippingChunk, profilesChunk },
                 EditingContextReference = "SHIPPINGMENU",
                 Location = new Point(1, 53),
                 Manager = ribbon.Manager,
@@ -112,6 +155,43 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
             ribbon.ResumeLayout();
 
             shippingRibbonService.Register(this);
+        }
+
+        /// <summary>
+        /// Load the profile menu list
+        /// </summary>
+        private void OnApplyProfileBeforePopup(object sender, BeforePopupEventArgs e)
+        {
+            applyProfileMenu.Items.Clear();
+
+            if (!currentShipmentType.HasValue)
+            {
+                return;
+            }
+
+            WidgetBase[] menuItems = profileManager.GetProfilesFor(currentShipmentType.Value)
+                .OrderBy(x => x.ShipmentTypePrimary)
+                .ThenBy(x => x.Name)
+                .Select(x => CreateMenuItem(x, x.ShipmentTypePrimary ? "Default" : "Custom"))
+                .ToArray();
+
+            if (!menuItems.Any())
+            {
+                menuItems = new[] { new MenuItem { Text = "(None)", Enabled = false } };
+            }
+
+            applyProfileMenu.Items.AddRange(menuItems);
+        }
+
+        /// <summary>
+        /// Create a menu item from the given profile
+        /// </summary>
+        private WidgetBase CreateMenuItem(ShippingProfileEntity profile, string groupName)
+        {
+            MenuItem menuItem = new MenuItem(profile.Name);
+            menuItem.GroupName = groupName;
+            menuItem.Activate += (s, evt) => applyProfileButton.ApplyProfile(profile);
+            return menuItem;
         }
 
         /// <summary>
@@ -140,6 +220,24 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
         public IRibbonButton ShipAgain => shipAgainButton;
 
         /// <summary>
+        /// Apply a profile to the given shipment
+        /// </summary>
+        public IRibbonButton ApplyProfile => applyProfileButton;
+
+        /// <summary>
+        /// Manage profiles
+        /// </summary>
+        public IRibbonButton ManageProfiles => manageProfilesButton;
+
+        /// <summary>
+        /// Set the type of the currently selected shipment, if any
+        /// </summary>
+        public void SetCurrentShipmentType(ShipmentTypeCode? shipmentType)
+        {
+            currentShipmentType = shipmentType;
+        }
+
+        /// <summary>
         /// Get an image resource with the specified name
         /// </summary>
         private Image GetImgeResource(string name)
@@ -157,6 +255,10 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
             returnButton?.Dispose();
             reprintButton?.Dispose();
             shipAgainButton?.Dispose();
+            applyProfileButton?.Dispose();
+            manageProfilesButton?.Dispose();
+            applyProfilePopup?.Dispose();
+            applyProfileMenu?.Dispose();
         }
     }
 }

@@ -18,8 +18,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         private DateTime shipDate;
         private double totalWeight;
         private int serviceType;
-        private ObservableCollection<IPackageAdapter> packageAdapters;
-        private IPackageAdapter selectedPackageAdapter;
+        private ObservableCollection<PackageAdapterWrapper> packageAdapters;
+        private PackageAdapterWrapper selectedPackageAdapter;
         private bool supportsMultiplePackages;
         private bool supportsPackageTypes;
         private bool supportsDimensions;
@@ -102,7 +102,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         /// List of package adapters for the shipment
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public ObservableCollection<IPackageAdapter> PackageAdapters
+        public ObservableCollection<PackageAdapterWrapper> PackageAdapters
         {
             get { return packageAdapters; }
             set
@@ -116,7 +116,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         /// Currently selected package adapter
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public IPackageAdapter SelectedPackageAdapter
+        public PackageAdapterWrapper SelectedPackageAdapter
         {
             get { return selectedPackageAdapter; }
             set { handler.Set(nameof(SelectedPackageAdapter), ref selectedPackageAdapter, value, true); }

@@ -25,6 +25,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Filters;
 using ShipWorks.Messaging.Messages;
+using ShipWorks.Messaging.Messages.Dialogs;
 using ShipWorks.Properties;
 using ShipWorks.Shipping;
 using ShipWorks.Users;

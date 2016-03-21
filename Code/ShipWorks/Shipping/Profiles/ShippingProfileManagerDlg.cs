@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Windows.Forms;
-using ShipWorks.Data.Model.EntityClasses;
-using Divelements.SandGrid;
-using ShipWorks.Data.Connection;
-using Interapptive.Shared.Utility;
-using Interapptive.Shared.UI;
-using ShipWorks.ApplicationCore.MessageBoxes;
 using Autofac;
+using Divelements.SandGrid;
+using Interapptive.Shared.UI;
+using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.MessageBoxes;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping.Profiles
 {
@@ -103,11 +103,11 @@ namespace ShipWorks.Shipping.Profiles
             {
                 if (profile.ShipmentType == (int) shipmentTypeCode)
                 {
-                    GridRow row = new GridRow(new GridCell[] 
-                    { 
+                    GridRow row = new GridRow(new GridCell[]
+                    {
                         new GridCell(profile.Name),
                         new GridCell((profile.ShipmentType == (int) ShipmentTypeCode.None)
-                            ? "Any" 
+                            ? "Any"
                             : ShipmentTypeManager.GetType((ShipmentTypeCode) profile.ShipmentType).ShipmentTypeName)
                     });
 
@@ -213,7 +213,7 @@ namespace ShipWorks.Shipping.Profiles
             string question = string.Format("Delete the profile '{0}'?", profile.Name);
 
             // Profiles can be referenced by shipping rules
-            using (DeleteObjectReferenceDlg dlg = new DeleteObjectReferenceDlg(question, new List<long> { profile.ShippingProfileID } ))
+            using (DeleteObjectReferenceDlg dlg = new DeleteObjectReferenceDlg(question, new List<long> { profile.ShippingProfileID }))
             {
                 if (dlg.ShowDialog(this) == DialogResult.Cancel)
                 {
@@ -243,7 +243,7 @@ namespace ShipWorks.Shipping.Profiles
 
                 if (profileEditor.ShowDialog(this) == DialogResult.OK)
                 {
-                    LoadProfiles((ShipmentTypeCode)profile.ShipmentType);
+                    LoadProfiles((ShipmentTypeCode) profile.ShipmentType);
                     return true;
                 }
 

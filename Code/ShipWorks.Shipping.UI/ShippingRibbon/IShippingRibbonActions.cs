@@ -31,5 +31,20 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
         /// Ship again action
         /// </summary>
         IRibbonButton ShipAgain { get; }
+
+        /// <summary>
+        /// Apply a profile to the given shipment
+        /// </summary>
+        IRibbonButton ApplyProfile { get; }
+
+        /// <summary>
+        /// Manage profiles
+        /// </summary>
+        IRibbonButton ManageProfiles { get; }
+
+        /// <summary>
+        /// Set the type of the currently selected shipment, if any
+        /// </summary>
+        void SetCurrentShipmentType(ShipmentTypeCode? shipmentType);
     }
 }

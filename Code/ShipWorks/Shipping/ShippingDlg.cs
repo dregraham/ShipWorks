@@ -22,6 +22,7 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Messaging.Messages;
+using ShipWorks.Messaging.Messages.Dialogs;
 using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Editing;
@@ -1503,10 +1504,7 @@ namespace ShipWorks.Shipping
         /// </summary>
         private void OnProfiles(object sender, EventArgs e)
         {
-            using (ShippingProfileManagerDlg dlg = new ShippingProfileManagerDlg(null))
-            {
-                dlg.ShowDialog(this);
-            }
+            messenger.Send(new OpenProfileManagerDialogMessage(this));
         }
 
         /// <summary>

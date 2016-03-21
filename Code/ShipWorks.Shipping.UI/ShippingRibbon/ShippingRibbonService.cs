@@ -5,8 +5,10 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Core.Messaging.Messages.Shipping;
+using ShipWorks.Core.UI.SandRibbon;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages;
+using ShipWorks.Messaging.Messages.Dialogs;
 using ShipWorks.Messaging.Messages.Shipping;
 
 namespace ShipWorks.Shipping.UI.ShippingRibbon
@@ -52,12 +54,38 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
             shippingRibbonActions.ShipAgain.Enabled = false;
             shippingRibbonActions.ShipAgain.Activate += OnShipAgain;
 
+            shippingRibbonActions.ApplyProfile.Enabled = false;
+            shippingRibbonActions.ApplyProfile.Activate += OnApplyProfile;
+
+            shippingRibbonActions.ManageProfiles.Activate += OnManageProfiles;
+
             subscription = new CompositeDisposable(
                 messages.OfType<ShipmentChangedMessage>().Subscribe(HandleShipmentChanged),
                 messages.OfType<OrderSelectionChangedMessage>().Subscribe(HandleOrderSelectionChanged),
                 messages.OfType<ShipmentsProcessedMessage>().Subscribe(HandleShipmentsProcessed),
                 messages.OfType<ShipmentsVoidedMessage>().Subscribe(HandleLabelsVoided)
             );
+        }
+
+        /// <summary>
+        /// Manage profiles
+        /// </summary>
+        private void OnManageProfiles(object sender, EventArgs e)
+        {
+            messages.Send(new OpenProfileManagerDialogMessage(this));
+        }
+
+        /// <summary>
+        /// Apply a profile to a shipment
+        /// </summary>
+        private void OnApplyProfile(object sender, EventArgs e)
+        {
+            ShippingProfileEntity profile = (sender as IRibbonButton)?.Tag as ShippingProfileEntity;
+
+            if (currentShipment != null && !currentShipment.Processed && profile != null)
+            {
+                messages.Send(new ApplyProfileMessage(this, currentShipment.ShipmentID, profile));
+            }
         }
 
         /// <summary>
@@ -202,6 +230,7 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
                     shippingRibbonActions.Return.Enabled = false;
                     shippingRibbonActions.Reprint.Enabled = false;
                     shippingRibbonActions.ShipAgain.Enabled = false;
+                    shippingRibbonActions.ApplyProfile.Enabled = false;
                 }
                 else
                 {
@@ -210,7 +239,10 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
                     shippingRibbonActions.Return.Enabled = currentShipment.Processed && !currentShipment.Voided;
                     shippingRibbonActions.Reprint.Enabled = currentShipment.Processed && !currentShipment.Voided;
                     shippingRibbonActions.ShipAgain.Enabled = currentShipment.Processed;
+                    shippingRibbonActions.ApplyProfile.Enabled = !currentShipment.Processed;
                 }
+
+                shippingRibbonActions.SetCurrentShipmentType(currentShipment.ShipmentTypeCode);
             }
             else
             {
@@ -219,6 +251,9 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
                 shippingRibbonActions.Return.Enabled = false;
                 shippingRibbonActions.Reprint.Enabled = false;
                 shippingRibbonActions.ShipAgain.Enabled = false;
+                shippingRibbonActions.ApplyProfile.Enabled = false;
+
+                shippingRibbonActions.SetCurrentShipmentType(null);
             }
         }
 

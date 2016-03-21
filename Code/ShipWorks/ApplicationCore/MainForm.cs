@@ -61,6 +61,7 @@ using ShipWorks.Filters.Grid;
 using ShipWorks.Filters.Management;
 using ShipWorks.Filters.Search;
 using ShipWorks.Messaging.Messages;
+using ShipWorks.Messaging.Messages.Dialogs;
 using ShipWorks.Properties;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.FedEx;
@@ -3426,19 +3427,7 @@ namespace ShipWorks
         /// </summary>
         private void OnShipOrders(object sender, EventArgs e)
         {
-            //if (gridControl.Selection.Count > ShipmentsLoader.MaxAllowedOrders)
-            //{
-            //    MessageHelper.ShowInformation(this, string.Format("You can only ship up to {0} orders at a time.", ShipmentsLoader.MaxAllowedOrders));
-            //    return;
-            //}
-
             Messenger.Current.Send(new OpenShippingDialogWithOrdersMessage(this, gridControl.Selection.OrderedKeys, InitialShippingTabDisplay.Shipping));
-
-            //ShipmentsLoader loader = new ShipmentsLoader(this);
-            //loader.Tag = InitialShippingTabDisplay.Shipping;
-
-            //loader.LoadCompleted += OnShipOrdersLoadShipmentsCompleted;
-            //await loader.LoadAsync(gridControl.Selection.OrderedKeys).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -3446,18 +3435,7 @@ namespace ShipWorks
         /// </summary>
         private void OnTrackShipments(object sender, EventArgs e)
         {
-            //if (gridControl.Selection.Count > ShipmentsLoader.MaxAllowedOrders)
-            //{
-            //    MessageHelper.ShowInformation(this, string.Format("You can only track up to {0} orders at a time.", ShipmentsLoader.MaxAllowedOrders));
-            //    return;
-            //}
-
             Messenger.Current.Send(new OpenShippingDialogWithOrdersMessage(this, gridControl.Selection.OrderedKeys, InitialShippingTabDisplay.Tracking));
-            //ShipmentsLoader loader = new ShipmentsLoader(this);
-            //loader.Tag = InitialShippingTabDisplay.Tracking;
-
-            //loader.LoadCompleted += OnShipOrdersLoadShipmentsCompleted;
-            //await loader.LoadAsync(gridControl.Selection.OrderedKeys).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -3465,41 +3443,8 @@ namespace ShipWorks
         /// </summary>
         private void OnSubmitClaim(object sender, EventArgs e)
         {
-            //if (gridControl.Selection.Count > ShipmentsLoader.MaxAllowedOrders)
-            //{
-            //    MessageHelper.ShowInformation(this, string.Format("You can only submit claims on up to {0} orders at a time.", ShipmentsLoader.MaxAllowedOrders));
-            //    return;
-            //}
-
             Messenger.Current.Send(new OpenShippingDialogWithOrdersMessage(this, gridControl.Selection.OrderedKeys, InitialShippingTabDisplay.Insurance));
-
-
-            //ShipmentsLoader loader = new ShipmentsLoader(this);
-            //loader.Tag = InitialShippingTabDisplay.Insurance;
-
-            //loader.LoadCompleted += OnShipOrdersLoadShipmentsCompleted;
-            //await loader.LoadAsync(gridControl.Selection.OrderedKeys).ConfigureAwait(false);
         }
-
-        ///// <summary>
-        ///// The async loading of shipments for shipping has completed
-        ///// </summary>
-        //void OnShipOrdersLoadShipmentsCompleted(object sender, ShipmentsLoadedEventArgs e)
-        //{
-        //    if (IsDisposed || e.Cancelled)
-        //    {
-        //        return;
-        //    }
-
-        //    // The Tag property hold the value of whether to show shipping, tracking, or insurance
-        //    InitialShippingTabDisplay initialDisplay = (InitialShippingTabDisplay) ((ShipmentsLoader) sender).Tag;
-
-        //    Messenger.Current.Send(new OpenShippingDialogMessage(this, e.Shipments, initialDisplay));
-
-        //    // We always check for new server messages after shipping, since if there was a shipping problem
-        //    // it could be we put out a server message related to it.
-        //    DashboardManager.DownloadLatestServerMessages();
-        //}
 
         /// <summary>
         /// The FedEx Close popup menu is opening, so we need to dynamically populate it

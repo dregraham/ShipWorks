@@ -785,9 +785,11 @@
     <Compile Include="Data\Administration\Retry\SqlAdapterRetry.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Messaging\Messages\CustomerDeletedMessage.cs" />
+    <Compile Include="Messaging\Messages\Dialogs\OpenProfileManagerDialogMessage.cs" />
     <Compile Include="Messaging\Messages\IEntityDeleted.cs" />
-    <Compile Include="Messaging\Messages\OpenShippingDialogWithOrdersMessage.cs" />
+    <Compile Include="Messaging\Messages\Dialogs\OpenShippingDialogWithOrdersMessage.cs" />
     <Compile Include="Messaging\Messages\Shipping\BasicOrderSelection.cs" />
+    <Compile Include="Messaging\Messages\Shipping\ApplyProfileMessage.cs" />
     <Compile Include="Messaging\Messages\Shipping\CreateReturnShipmentMessage.cs" />
     <Compile Include="Messaging\Messages\Shipping\VoidShipmentResult.cs" />
     <Compile Include="Messaging\Messages\Shipping\ReprintLabelMessage.cs" />
@@ -896,7 +898,7 @@
     <Compile Include="Messaging\Messages\EnabledCarriersChangedMessage.cs" />
     <Compile Include="Messaging\Messages\FedExServiceTypeChangedMessage.cs" />
     <Compile Include="Messaging\Messages\FilterNodeEditedMessage.cs" />
-    <Compile Include="Messaging\Messages\OpenShippingDialogMessage.cs" />
+    <Compile Include="Messaging\Messages\Dialogs\OpenShippingDialogMessage.cs" />
     <Compile Include="Messaging\Messages\OrderSelectionChangedMessage.cs" />
     <Compile Include="Messaging\Messages\OrderSelectionChangingMessage.cs" />
     <Compile Include="Messaging\Messages\OriginAddressChangedMessage.cs" />
@@ -10353,6 +10355,8 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Maintenance\ShrinkDatabase.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Installation\InitialData.sql" />
     <None Include="Resources\add - Copy.png" />
+    <None Include="ApplicationCore\Appearance\WindowLayoutDefault\panels.xml" />
+    <None Include="ApplicationCore\Appearance\WindowLayoutDefault\ribbon.xml" />
     <Content Include="Resources\add.png" />
     <None Include="Resources\blank16.png" />
     <None Include="Resources\calendar_31.png" />

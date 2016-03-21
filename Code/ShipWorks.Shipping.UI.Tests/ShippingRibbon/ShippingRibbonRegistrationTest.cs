@@ -38,7 +38,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingRibbon
             Assert.Equal(1, ribbon.Controls.Count);
             var tab = ribbon.Controls[0] as RibbonTab;
 
-            Assert.Equal(2, tab.Chunks.Count);
+            Assert.Equal(3, tab.Chunks.Count);
         }
 
         public void Dispose()

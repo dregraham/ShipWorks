@@ -14,9 +14,10 @@ using ShipWorks.ApplicationCore.Dashboard;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages;
+using ShipWorks.Messaging.Messages.Dialogs;
 using ShipWorks.Messaging.Messages.Shipping;
 
-namespace ShipWorks.Shipping.Services
+namespace ShipWorks.Shipping.Services.Dialogs
 {
     /// <summary>
     /// Service for handling and opening the shipping dialog

@@ -1,4 +1,5 @@
-﻿using ShipWorks.Data.Model.EntityClasses;
+﻿using System.Collections.Generic;
+using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping.Profiles
 {
@@ -16,5 +17,10 @@ namespace ShipWorks.Shipping.Profiles
         /// Gets or creates a profile with the default settings for the shipment type
         /// </summary>
         ShippingProfileEntity GetOrCreatePrimaryProfile(ShipmentType shipmentType);
+
+        /// <summary>
+        /// Get profiles for the given shipment type
+        /// </summary>
+        IEnumerable<ShippingProfileEntity> GetProfilesFor(ShipmentTypeCode value);
     }
 }

@@ -266,7 +266,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
 
             testObject.Load(shipmentAdapter.Object);
             IPackageAdapter nonExistentPackageAdapter = new TestPackageAdapter() { DimsProfileID = 999 };
-            testObject.SelectedPackageAdapter = nonExistentPackageAdapter;
+            testObject.SelectedPackageAdapter = new PackageAdapterWrapper(nonExistentPackageAdapter);
 
             Assert.Equal(0, testObject.DimsProfileID);
         }
@@ -840,7 +840,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
 
             for (int i = 0; i < 25; i++)
             {
-                testObject.PackageAdapters.Add(mock.CreateMock<IPackageAdapter>().Object);
+                testObject.PackageAdapters.Add(mock.CreateMock<PackageAdapterWrapper>().Object);
             }
 
             testObject.AddPackageCommand.Execute(null);
@@ -858,7 +858,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
 
             testObject.DeletePackageCommand.Execute(null);
 
-            shipmentAdapter.Verify(x => x.DeletePackage(It.IsAny<IPackageAdapter>()), Times.Never);
+            shipmentAdapter.Verify(x => x.DeletePackage(It.IsAny<PackageAdapterWrapper>()), Times.Never);
         }
 
         [Fact]
@@ -926,7 +926,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
         [Fact]
         public void DeletePackage_SelectsPreviousPackageAdapter_WhenDeletedPackageIsAtTheEndOfTheList()
         {
-            IPackageAdapter packageAdapter = mock.CreateMock<IPackageAdapter>().Object;
+            PackageAdapterWrapper packageAdapter = mock.CreateMock<PackageAdapterWrapper>().Object;
             IPackageAdapter expectedPackageAdapter = mock.CreateMock<IPackageAdapter>().Object;
             shipmentAdapter = mock.CreateMock<ICarrierShipmentAdapter>();
             shipmentAdapter.Setup(x => x.GetPackageAdapters())
