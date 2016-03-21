@@ -52,76 +52,49 @@
                   HorizontalScrollBarVisibility="Disabled">
             <ScrollViewer.Resources>
                 <SolidColorBrush x:Key="Green" Color="#FF009900" />
-                <SolidColorBrush x:Key="Yellow" Color="#FFFEBB2C" />
+                <SolidColorBrush x:Key="Yellow" Color="#FFE8A800" />
+                <Style TargetType="ui:NotificationBorder">
+                    <Setter Property="Margin" Value="0,0,0,12" />
+                </Style>
             </ScrollViewer.Resources>
             <StackPanel Margin="6, 6, 6, 6">
-                <Border Margin="0,0,0,12"
-                        BorderThickness="2"
-                        BorderBrush="{StaticResource Green}"
-                        Visibility="{Binding ShipmentStatus, Converter={StaticResource VisibleWhenEqualToParameter}, ConverterParameter={x:Static sw:ShipmentStatus.Processed}}"
-                        >
-                    <StackPanel Orientation="Horizontal">
-                        <Border BorderThickness="0"
-                                CornerRadius="0"
-                                Margin="0"
-                                VerticalAlignment="Stretch"
-                                Width="30"
-                                Background="{StaticResource Green}" Padding="4,0,8,0">
-                            <TextBlock Foreground="White"
+                <ui:NotificationBorder BorderBrush="{StaticResource Green}"
+                                       Visibility="{Binding ShipmentStatus, Converter={StaticResource VisibleWhenEqualToParameter}, ConverterParameter={x:Static sw:ShipmentStatus.Processed}}"
+                                       IconCharacter="✓">
+                    <StackPanel>
+                        <WrapPanel Orientation="Horizontal">
+                            <TextBlock Text="Processed"
+                                       FontSize="16"
                                        FontWeight="Bold"
-                                       FontSize="24"
-                                       HorizontalAlignment="Center"
-                                       VerticalAlignment="Center">✓</TextBlock>
-                        </Border>
-                        <StackPanel Margin="8">
-                            <WrapPanel Orientation="Horizontal">
-                                <TextBlock Text="Processed"
-                                   FontSize="16"
-                                   FontWeight="Bold"
-                                   Foreground="{StaticResource Green}"
-                                           Margin="0,0,8,4">
-                                </TextBlock>
-                                <TextBlock Grid.Column="1" Text="{Binding StatusDate,Converter={StaticResource FriendlyDate}}"
-                               FontSize="16" />
-                            </WrapPanel>
-                            <TextBlock Grid.Row="1"
+                                       Foreground="{StaticResource Green}"
+                                       Margin="0,0,8,4">
+                            </TextBlock>
+                            <TextBlock Grid.Column="1"
+                                       Text="{Binding StatusDate,Converter={StaticResource FriendlyDate}}"
+                                       FontSize="16" />
+                        </WrapPanel>
+                        <TextBlock Grid.Row="1"
                                Grid.ColumnSpan="1">Tracking #<Hyperlink Command="{Binding TrackShipmentCommand}">
                                    <Run Text="{Binding TrackingNumber}" />
                                </Hyperlink>
-                            </TextBlock>
-                        </StackPanel>
+                        </TextBlock>
                     </StackPanel>
-                </Border>
-                <Border Margin="0,0,0,12"
-                        BorderThickness="2"
-                        BorderBrush="{StaticResource Yellow}"
-                        Visibility="{Binding ShipmentStatus, Converter={StaticResource VisibleWhenEqualToParameter}, ConverterParameter={x:Static sw:ShipmentStatus.Voided}}"
-                        >
-                    <StackPanel Orientation="Horizontal">
-                        <Border BorderThickness="0"
-                                CornerRadius="0"
-                                Margin="0"
-                                Width="30"
-                                VerticalAlignment="Stretch"
-                                Background="{StaticResource Yellow}" Padding="4,0,8,0">
-                            <TextBlock Foreground="White"
-                                       FontWeight="Bold"
-                                       FontSize="24"
-                                       HorizontalAlignment="Center"
-                                       VerticalAlignment="Center">!</TextBlock>
-                        </Border>
-                        <WrapPanel Orientation="Horizontal" Margin="8">
-                            <TextBlock Text="Voided"
+                </ui:NotificationBorder>
+                <ui:NotificationBorder BorderBrush="{StaticResource Yellow}"
+                                       Visibility="{Binding ShipmentStatus, Converter={StaticResource VisibleWhenEqualToParameter}, ConverterParameter={x:Static sw:ShipmentStatus.Voided}}"
+                                       IconCharacter="!">
+                    <WrapPanel Orientation="Horizontal">
+                        <TextBlock Text="Voided"
                                    FontSize="16"
                                    FontWeight="Bold"
                                    Foreground="{StaticResource Yellow}"
                                    Margin="0,0,8,0">
-                            </TextBlock>
-                            <TextBlock Grid.Column="1" Text="{Binding StatusDate,Converter={StaticResource FriendlyDate}}"
-                               FontSize="16" />
-                        </WrapPanel>
-                    </StackPanel>
-                </Border>
+                        </TextBlock>
+                        <TextBlock Grid.Column="1"
+                                   Text="{Binding StatusDate,Converter={StaticResource FriendlyDate}}"
+                                   FontSize="16" />
+                    </WrapPanel>
+                </ui:NotificationBorder>
 
                 <StackPanel Visibility="{Binding LoadedShipmentResult,Converter={StaticResource VisibleWhenEqualToParameter},ConverterParameter={x:Static sw:ShippingPanelLoadedShipmentResult.Success}}"
                             IsEnabled="{Binding IsLoading, Converter={StaticResource InvertBoolean}}">

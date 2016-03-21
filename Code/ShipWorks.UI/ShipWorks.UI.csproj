@@ -153,6 +153,7 @@
     <Compile Include="Controls\AddressControl\AddressViewModel.cs" />
     <Compile Include="Controls\AddressControl\AddressViewModel.Properties.cs" />
     <Compile Include="Controls\AlignmentWrapPanel.cs" />
+    <Compile Include="Controls\NotificationBorder.cs" />
     <Compile Include="Controls\RelativeIndex.cs" />
     <Compile Include="Controls\ShipWorksComboBox.cs" />
     <Compile Include="Controls\TypeBasedTemplateSelector\Template.cs" />
@@ -264,6 +265,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Styles\Controls\DataGridStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\Controls\NotificationBorder.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

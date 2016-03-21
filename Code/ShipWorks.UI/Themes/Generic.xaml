@@ -4,6 +4,7 @@
     xmlns:local="clr-namespace:ShipWorks.UI">
 
     <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/ShipWorks.UI;component/Themes/Controls/NotificationBorder.xaml"/>
         <ResourceDictionary Source="/ShipWorks.UI;component/Themes/Controls/WeightInput.xaml"/>
         <ResourceDictionary Source="/ShipWorks.UI;component/Themes/Controls/ScaleButton.xaml"/>
         <ResourceDictionary Source="/ShipWorks.UI;component/Themes/Controls/WeightControl.xaml"/>
