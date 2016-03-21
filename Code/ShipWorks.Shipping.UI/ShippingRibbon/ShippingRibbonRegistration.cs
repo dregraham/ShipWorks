@@ -56,7 +56,7 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
             voidButton = new RibbonButton
             {
                 Guid = new Guid("b477925d-b26f-47d7-91ee-619685bf1c7e"),
-                Image = GetImgeResource("buttonVoid.Image"),
+                Image = Properties.Resources.box_void_32_32,
                 Text = "Void",
                 TextContentRelation = TextContentRelation.Underneath,
             };
@@ -64,7 +64,7 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
             returnButton = new RibbonButton
             {
                 Guid = new Guid("33800ee1-71e4-4940-b1c6-a4496e33ff91"),
-                Image = Properties.Resources.document_out1,
+                Image = Properties.Resources.box_previous_32_32,
                 Text = "Return",
                 TextContentRelation = TextContentRelation.Underneath,
             };
@@ -72,14 +72,14 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
             reprintButton = new RibbonButton
             {
                 Guid = new Guid("ccc7cca3-4a1e-4975-a736-7a6449ece5c1"),
-                Image = Properties.Resources.printer_preferences,
+                Image = Properties.Resources.printer_redo_16_16,
                 Text = "Reprint",
             };
 
             shipAgainButton = new RibbonButton
             {
                 Guid = new Guid("8584db42-473a-4adf-a089-047e781d8728"),
-                Image = GetImgeResource("buttonShipAgain.Image"),
+                Image = Properties.Resources.box_closed_redo_16_16,
                 Text = "Ship Again",
             };
 
@@ -111,7 +111,7 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
             manageProfilesButton = new RibbonButton
             {
                 Guid = new Guid("0E7A63DD-0BDB-4AF4-BC24-05666022EF75"),
-                Image = Properties.Resources.graphics_tablet,
+                Image = Properties.Resources.document_gear_32_32,
                 Text = "Manage",
                 TextContentRelation = TextContentRelation.Underneath
             };

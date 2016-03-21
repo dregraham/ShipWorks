@@ -803,6 +803,11 @@
     <Compile Include="Messaging\Messages\ShippingSettingsChangedMessage.cs" />
     <Compile Include="Messaging\Messages\Shipping\RatesRetrievedMessage.cs" />
     <Compile Include="Messaging\Messages\Shipping\RatesRetrievingMessage.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\XamlNamespaces.cs" />
     <EmbeddedResource Include="ApplicationCore\MessageBoxes\ListSeparatorFormatRequiredDlg.resx">
       <DependentUpon>ListSeparatorFormatRequiredDlg.cs</DependentUpon>
@@ -7681,8 +7686,8 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="ApplicationCore\SplashScreen.resx">
       <SubType>Designer</SubType>
@@ -8319,11 +8324,6 @@
       <SubType>Designer</SubType>
       <DependentUpon>WizardForm.cs</DependentUpon>
     </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
@@ -10503,6 +10503,11 @@
     <None Include="Resources\island.jpg" />
     <None Include="Resources\island.png" />
     <Resource Include="Resources\box_next_32_32.png" />
+    <Resource Include="Resources\box_previous_32_32.png" />
+    <Resource Include="Resources\index_32_32.png" />
+    <Resource Include="Resources\box_closed_redo_16_16.png" />
+    <Resource Include="Resources\box_void_32_32.png" />
+    <Resource Include="Resources\document_gear_32_32.png" />
     <Content Include="Resources\info.png" />
     <Resource Include="Resources\info_20x20.png" />
     <Content Include="Resources\message32.png" />
@@ -10555,6 +10560,7 @@
     <None Include="Resources\revolutionparts.png" />
     <None Include="Resources\orderbot.png" />
     <None Include="Resources\opensky.png" />
+    <Resource Include="Resources\printer_redo_16_16.png" />
     <Content Include="Resources\shape_circle.png" />
     <None Include="Resources\shield_ok.png" />
     <None Include="Resources\shield_ok1.png" />

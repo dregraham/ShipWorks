@@ -1540,4 +1540,22 @@
   <data name="box_next_32_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\box_next_32_32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="box_previous_32_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\box_previous_32_32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="index_32_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\index_32_32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="box_closed_redo_16_16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\box_closed_redo_16_16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="box_void_32_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\box_void_32_32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="document_gear_32_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\document_gear_32_32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="printer_redo_16_16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\printer_redo_16_16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

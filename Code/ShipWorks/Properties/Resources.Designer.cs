@@ -363,6 +363,16 @@ namespace ShipWorks.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap box_closed_redo_16_16 {
+            get {
+                object obj = ResourceManager.GetObject("box_closed_redo_16_16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap box_closed_with_label {
             get {
                 object obj = ResourceManager.GetObject("box_closed_with_label", resourceCulture);
@@ -453,6 +463,16 @@ namespace ShipWorks.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap box_previous_32_32 {
+            get {
+                object obj = ResourceManager.GetObject("box_previous_32_32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap box_software {
             get {
                 object obj = ResourceManager.GetObject("box_software", resourceCulture);
@@ -486,6 +506,16 @@ namespace ShipWorks.Properties {
         public static System.Drawing.Bitmap box_view32 {
             get {
                 object obj = ResourceManager.GetObject("box_view32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap box_void_32_32 {
+            get {
+                object obj = ResourceManager.GetObject("box_void_32_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -1306,6 +1336,16 @@ namespace ShipWorks.Properties {
         public static System.Drawing.Bitmap document_delete {
             get {
                 object obj = ResourceManager.GetObject("document_delete", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap document_gear_32_32 {
+            get {
+                object obj = ResourceManager.GetObject("document_gear_32_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -2236,6 +2276,16 @@ namespace ShipWorks.Properties {
         public static System.Drawing.Bitmap indent {
             get {
                 object obj = ResourceManager.GetObject("indent", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap index_32_32 {
+            get {
+                object obj = ResourceManager.GetObject("index_32_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -3286,6 +3336,16 @@ namespace ShipWorks.Properties {
         public static System.Drawing.Bitmap printer_preferences1 {
             get {
                 object obj = ResourceManager.GetObject("printer_preferences1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap printer_redo_16_16 {
+            get {
+                object obj = ResourceManager.GetObject("printer_redo_16_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
