@@ -69,12 +69,13 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// </summary>
         protected virtual List<RateResult> FilterRatesByExcludedServices(ShipmentEntity shipment, List<RateResult> rates)
         {
-            List<PostalServiceType> availableServiceTypes = shipmentTypeManager[shipment.ShipmentTypeCode]
-                .GetAvailableServiceTypes()
-                .OfType<PostalServiceType>()
-                .Union(new List<PostalServiceType> { (PostalServiceType) shipment.Postal.Service })
-                .ToList();
-            return rates.Where(r => r.Tag is PostalRateSelection && availableServiceTypes.Contains(((PostalRateSelection) r.Tag).ServiceType)).ToList();
+            IEnumerable<PostalServiceType> availableServiceTypes1 = shipmentTypeManager[shipment.ShipmentTypeCode]
+                    .GetAvailableServiceTypes()
+                    .Cast<PostalServiceType>();
+            IEnumerable<PostalServiceType> unionWithSelected = availableServiceTypes1.Union(new List<PostalServiceType> {(PostalServiceType) shipment.Postal.Service});
+            List<RateResult> results = rates.Where(r => r.Tag is PostalRateSelection && unionWithSelected.Contains(((PostalRateSelection)r.Tag).ServiceType)).ToList();
+
+            return results;
         }
 
         /// <summary>
