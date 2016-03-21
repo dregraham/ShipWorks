@@ -137,6 +137,11 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         }
 
         /// <summary>
+        /// Package adapter that this object is wrapping
+        /// </summary>
+        public IPackageAdapter WrappedAdapter => packageAdapter;
+
+        /// <summary>
         /// Gets an error for the given column name
         /// </summary>
         public string this[string columnName]

@@ -45,10 +45,13 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
             viewModelMock.Verify(x => x.Origin.SetAddressFromOrigin((long) ShipmentOriginSource.Store, 92, 102, ShipmentTypeCode.Usps));
         }
 
-        [Fact]
-        public void Register_SendsZeroAsOrderId_WhenOrderIdIsNull()
+        [Theory]
+        [InlineData(null)]
+        [InlineData(0L)]
+        [InlineData(-1L)]
+        public void Register_DoesNotDelegateToOrigin_WhenOrderIdIsInvalid(long? testOrderId)
         {
-            var viewModelMock = mock.CreateMock<ShippingPanelViewModel>(v => v.Setup(x => x.OrderID).Returns((long?) null));
+            var viewModelMock = mock.CreateMock<ShippingPanelViewModel>(v => v.Setup(x => x.OrderID).Returns(testOrderId));
             var viewModel = viewModelMock.Object;
 
             var testObject = mock.Create<StoreChangedPipeline>();
@@ -56,8 +59,8 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
 
             testSubject.OnNext(new StoreChangedMessage(new object(), new StoreEntity()));
 
-            viewModelMock.Verify(x => x.Origin.SetAddressFromOrigin(It.IsAny<long>(), 0,
-                It.IsAny<long>(), It.IsAny<ShipmentTypeCode>()));
+            viewModelMock.Verify(x => x.Origin.SetAddressFromOrigin(It.IsAny<long>(), It.IsAny<long>(),
+                It.IsAny<long>(), It.IsAny<ShipmentTypeCode>()), Times.Never());
         }
 
         [Theory]

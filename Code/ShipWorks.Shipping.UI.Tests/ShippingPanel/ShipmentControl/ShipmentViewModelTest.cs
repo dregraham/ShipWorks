@@ -812,7 +812,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
 
             testObject.AddPackageCommand.Execute(null);
 
-            Assert.Equal(packageAdapter, testObject.PackageAdapters.Last());
+            Assert.Equal(packageAdapter, testObject.PackageAdapters.Last().WrappedAdapter);
         }
 
         [Fact]
@@ -827,7 +827,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
 
             testObject.AddPackageCommand.Execute(null);
 
-            Assert.Equal(packageAdapter, testObject.SelectedPackageAdapter);
+            Assert.Equal(packageAdapter, testObject.SelectedPackageAdapter.WrappedAdapter);
         }
 
         [Fact]
@@ -840,7 +840,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
 
             for (int i = 0; i < 25; i++)
             {
-                testObject.PackageAdapters.Add(mock.CreateMock<PackageAdapterWrapper>().Object);
+                testObject.PackageAdapters.Add(new PackageAdapterWrapper(mock.CreateMock<IPackageAdapter>().Object));
             }
 
             testObject.AddPackageCommand.Execute(null);
@@ -920,13 +920,13 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
 
             testObject.DeletePackageCommand.Execute(null);
 
-            Assert.Equal(expectedPackageAdapter, testObject.SelectedPackageAdapter);
+            Assert.Equal(expectedPackageAdapter, testObject.SelectedPackageAdapter.WrappedAdapter);
         }
 
         [Fact]
         public void DeletePackage_SelectsPreviousPackageAdapter_WhenDeletedPackageIsAtTheEndOfTheList()
         {
-            PackageAdapterWrapper packageAdapter = mock.CreateMock<PackageAdapterWrapper>().Object;
+            IPackageAdapter packageAdapter = mock.CreateMock<IPackageAdapter>().Object;
             IPackageAdapter expectedPackageAdapter = mock.CreateMock<IPackageAdapter>().Object;
             shipmentAdapter = mock.CreateMock<ICarrierShipmentAdapter>();
             shipmentAdapter.Setup(x => x.GetPackageAdapters())
@@ -934,11 +934,11 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
             shipmentAdapter.Setup(x => x.SupportsMultiplePackages).Returns(true);
             ShipmentViewModel testObject = mock.Create<ShipmentViewModel>();
             testObject.Load(shipmentAdapter.Object);
-            testObject.SelectedPackageAdapter = packageAdapter;
+            testObject.SelectedPackageAdapter = testObject.PackageAdapters.Last();
 
             testObject.DeletePackageCommand.Execute(null);
 
-            Assert.Equal(expectedPackageAdapter, testObject.SelectedPackageAdapter);
+            Assert.Equal(expectedPackageAdapter, testObject.SelectedPackageAdapter.WrappedAdapter);
         }
 
         private Dictionary<int, string> CreateDefaultShipmentAdapter(AutoMock autoMock, int numberOfPackages)
