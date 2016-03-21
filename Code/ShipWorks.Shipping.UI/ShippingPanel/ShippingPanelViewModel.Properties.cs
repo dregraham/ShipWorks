@@ -24,7 +24,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         private IShipmentViewModel shipmentViewModel;
         private bool isLoading;
         private string trackingNumber;
-        private DateTime processedDate;
+        private DateTime statusDate;
+        private ShipmentStatus shipmentStatus;
 
         /// <summary>
         /// Command to open the shipping dialog
@@ -198,10 +199,20 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// Date the shipment was processed
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public DateTime ProcessedDate
+        public DateTime StatusDate
         {
-            get { return processedDate; }
-            set { handler.Set(nameof(ProcessedDate), ref processedDate, value); }
+            get { return statusDate; }
+            set { handler.Set(nameof(StatusDate), ref statusDate, value); }
+        }
+
+        /// <summary>
+        /// Status of the shipment
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public ShipmentStatus ShipmentStatus
+        {
+            get { return shipmentStatus; }
+            set { handler.Set(nameof(ShipmentStatus), ref shipmentStatus, value); }
         }
     }
 }

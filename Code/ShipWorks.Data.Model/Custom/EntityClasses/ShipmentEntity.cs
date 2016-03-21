@@ -42,6 +42,19 @@ namespace ShipWorks.Data.Model.EntityClasses
         }
 
         /// <summary>
+        /// Status of the shipment
+        /// </summary>
+        public ShipmentStatus Status
+        {
+            get
+            {
+                return Voided ? ShipmentStatus.Voided :
+                    Processed ? ShipmentStatus.Processed :
+                    ShipmentStatus.Unprocessed;
+            }
+        }
+
+        /// <summary>
         /// Indicates if the shipment is known to have been deleted from the database.  This flag is used instead of using Entity.Fields.State = EntityState.Deleted
         /// because when that is set LLBLgen throws an exception if you try to do anything with the entity - which due to threading we may still be showing and dealing
         /// with data from it shortly after its deleted.

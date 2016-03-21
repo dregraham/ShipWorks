@@ -31,7 +31,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
         {
             return viewModel.PropertyChangeStream
                 .Where(x => x == nameof(viewModel.ShipmentType))
-                .Where(x => viewModel.IsProcessed.HasValue && !viewModel.IsProcessed.Value)
+                .Where(x => viewModel.Shipment != null && viewModel.ShipmentStatus == ShipmentStatus.Unprocessed)
                 .Select(_ => ChangeShipmentType(viewModel))
                 .CatchAndContinue((Exception ex) => log.Error("An error occurred while changing shipment types", ex))
                 .Do(x => viewModel.LoadShipment(x, nameof(viewModel.ShipmentType)))

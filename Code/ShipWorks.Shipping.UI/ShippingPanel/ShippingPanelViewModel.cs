@@ -140,12 +140,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         public virtual long? OrderID => ShipmentAdapter?.Shipment?.OrderID;
 
         /// <summary>
-        /// Is the current shipment processed
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public virtual bool? IsProcessed => ShipmentAdapter?.Shipment?.Processed;
-
-        /// <summary>
         /// Load customs when address properties change
         /// </summary>
         private IDisposable LoadCustomsWhenAddressChanges(AddressViewModel model, Func<string, PersonAdapter> getAdapter)
@@ -436,6 +430,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         {
             shipmentChangedSubscription?.Dispose();
             ShipmentAdapter = null;
+            ShipmentStatus = ShipmentStatus.Unprocessed;
+            StatusDate = DateTime.MinValue;
         }
 
         /// <summary>
@@ -516,9 +512,17 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
 
             SupportsMultiplePackages = fromShipmentAdapter.SupportsMultiplePackages;
             TrackingNumber = fromShipmentAdapter.Shipment.TrackingNumber;
-            ProcessedDate = fromShipmentAdapter.Shipment.ProcessedDate.GetValueOrDefault();
+            ShipmentStatus = fromShipmentAdapter.Shipment.Status;
 
-            handler.RaisePropertyChanged(nameof(IsProcessed));
+            if (ShipmentStatus == ShipmentStatus.Voided)
+            {
+                StatusDate = fromShipmentAdapter.Shipment.VoidedDate.GetValueOrDefault();
+            }
+
+            if (ShipmentStatus == ShipmentStatus.Processed)
+            {
+                StatusDate = fromShipmentAdapter.Shipment.ProcessedDate.GetValueOrDefault();
+            }
         }
 
         #region IDataErrorInfo

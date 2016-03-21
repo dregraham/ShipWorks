@@ -22,7 +22,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
             viewModelMock = mock.CreateMock<ShippingPanelViewModel>(v =>
             {
-                v.Setup(x => x.IsProcessed).Returns(false);
+                v.Setup(x => x.ShipmentStatus).Returns(ShipmentStatus.Unprocessed);
                 v.Setup(x => x.LoadShipment(It.IsAny<ICarrierShipmentAdapter>(), It.IsAny<string>()));
                 v.CallBase = true;
             });
@@ -95,7 +95,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
         [Fact]
         public void Register_DoesNotChangeShipmentType_WhenShipmentTypeChangesButShipmentIsProcessed()
         {
-            viewModelMock.Setup(x => x.IsProcessed).Returns(true);
+            viewModelMock.Setup(x => x.ShipmentStatus).Returns(ShipmentStatus.Processed);
 
             var testObject = mock.Create<ChangeShipmentTypePipeline>();
             testObject.Register(viewModel);
