@@ -314,14 +314,16 @@
 
                         <Button Command="{Binding CreateLabelCommand}"
                                 IsEnabled="{Binding AllowEditing}"
-                                HorizontalAlignment="Center"
+                                Visibility="{Binding ShipmentStatus, Converter={StaticResource VisibleWhenEqualToParameter}, ConverterParameter={x:Static sw:ShipmentStatus.Unprocessed}}"
+                                HorizontalAlignment="Stretch"
                                 Padding="8">
                             <StackPanel Orientation="Horizontal">
-                                <Image Height="16"
-                                       Width="16"
+                                <Image Height="32"
+                                       Width="32"
                                        Source="/ShipWorks.Core;component/Resources/box_next_32_32.png"
                                        VerticalAlignment="Center"/>
                                 <TextBlock Margin="6, 0, 0, 0"
+                                           FontSize="16"
                                            VerticalAlignment="Center">Create Label</TextBlock>
                             </StackPanel>
                         </Button>
