@@ -153,6 +153,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
             {
                 PackageAdapters[i].Index = i + 1;
             }
+
+            messenger.Send(new ShipmentChangedMessage(this, shipmentAdapter));
         }
 
         /// <summary>
@@ -168,6 +170,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
             PackageAdapterWrapper packageAdapter = new PackageAdapterWrapper(shipmentAdapter.AddPackage());
             PackageAdapters.Add(packageAdapter);
             SelectedPackageAdapter = packageAdapter;
+
+            messenger.Send(new ShipmentChangedMessage(this, shipmentAdapter));
         }
 
         /// <summary>
