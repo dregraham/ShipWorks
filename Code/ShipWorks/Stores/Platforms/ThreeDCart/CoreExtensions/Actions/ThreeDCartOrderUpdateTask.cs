@@ -7,6 +7,7 @@ using ShipWorks.Actions.Tasks;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Actions;
+using ShipWorks.Stores.Platforms.ThreeDCart.RestApi;
 
 namespace ShipWorks.Stores.Platforms.ThreeDCart.CoreExtensions.Actions
 {
@@ -16,8 +17,6 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.CoreExtensions.Actions
     [ActionTask("Update store status", "ThreeDCartOrderUpdate", ActionTaskCategory.UpdateOnline)]
     public class ThreeDCartOrderUpdateTask : StoreInstanceTaskBase
     {
-        int statusCode = -1;
-
         /// <summary>
         /// Indicates if the task is supported for the specified store
         /// </summary>
@@ -29,33 +28,17 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.CoreExtensions.Actions
         /// <summary>
         /// The status code the task will be run with
         /// </summary>
-        public int StatusCode
-        {
-            get { return statusCode; }
-            set { statusCode = value; }
-        }
+        public int StatusCode { get; set; } = -1;
 
         /// <summary>
         /// How to label input selection for the task
         /// </summary>
-        public override string InputLabel
-        {
-            get
-            {
-                return "Set status of:";
-            }
-        }
+        public override string InputLabel => "Set status of:";
 
         /// <summary>
         /// This task only operates on orders
         /// </summary>
-        public override EntityType? InputEntityType
-        {
-            get
-            {
-                return EntityType.OrderEntity;
-            }
-        }
+        public override EntityType? InputEntityType => EntityType.OrderEntity;
 
         /// <summary>
         /// Insantiates the editor for this action
@@ -83,10 +66,10 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.CoreExtensions.Actions
 
             try
             {
-                ThreeDCartOnlineUpdater updater = new ThreeDCartOnlineUpdater(store);
+                ThreeDCartRestOnlineUpdater updater = new ThreeDCartRestOnlineUpdater(store);
                 foreach (long orderID in inputKeys)
                 {
-                    updater.UpdateOrderStatus(orderID, statusCode, context.CommitWork);
+                    updater.UpdateOrderStatus(orderID, StatusCode, context.CommitWork);
                 }
             }
             catch (ThreeDCartException ex)

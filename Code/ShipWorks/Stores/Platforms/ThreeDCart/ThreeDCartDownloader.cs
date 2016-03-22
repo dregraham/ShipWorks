@@ -36,7 +36,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
 
         // provider for status codes
         ThreeDCartStatusCodeProvider statusProvider;
-        private readonly IThreeDCartRestWebClient threeDCartRestWebClient;
+        private readonly IThreeDCartRestWebClient restWebClient;
         private readonly ISqlAdapterRetry sqlAdapterRetry;
 
         /// <summary>
@@ -52,9 +52,9 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
             totalCount = 0;
         }
 
-        public ThreeDCartDownloader(ThreeDCartStoreEntity store, IThreeDCartRestWebClient threeDCartRestWebClient, ISqlAdapterRetry sqlAdapterRetry) : base(store)
+        public ThreeDCartDownloader(ThreeDCartStoreEntity store, IThreeDCartRestWebClient restWebClient, ISqlAdapterRetry sqlAdapterRetry) : base(store)
         {
-            this.threeDCartRestWebClient = threeDCartRestWebClient;
+            this.restWebClient = restWebClient;
             this.sqlAdapterRetry = sqlAdapterRetry;
         }
 
@@ -84,7 +84,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
             {
                 // Update the orders statuses from online
                 //UpdateOrderStatuses();
-
+                restWebClient.LoadProgressReporter(Progress);
                 Progress.Detail = "Checking for new orders...";
 
                 DateTime startDate = new DateTime();
@@ -92,6 +92,8 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
                 IEnumerable<ThreeDCartOrder> orders = DownloadOrders(startDate);
 
                 LoadOrders(orders);
+
+                totalCount = restWebClient.GetOrderCount();
                 //// Get the number of orders for the range
                 //ThreeDCartWebClientOrderSearchCriteria orderSearchCriteria =
                 //    GetOrderSearchCriteria(ThreeDCartWebClientOrderDateSearchType.CreatedDate);
@@ -348,7 +350,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
 
         private void LoadProductImagesAndLocation(ThreeDCartOrderItemEntity item, int catalogID)
         {
-            ThreeDCartProduct product = threeDCartRestWebClient.GetProduct(catalogID);
+            ThreeDCartProduct product = restWebClient.GetProduct(catalogID);
 
             if (product != null)
             {
@@ -409,7 +411,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
 
         public IEnumerable<ThreeDCartOrder> DownloadOrders(DateTime startDate)
         {
-            return threeDCartRestWebClient.GetOrders(startDate);
+            return restWebClient.GetOrders(startDate);
         }
 
         /// <summary>

@@ -6,6 +6,9 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi.DTO
 {
     public class ThreeDCartOrder
     {
+        [JsonProperty("TotalCount")]
+        public int TotalCount { get; set; }
+
         [JsonProperty("InvoiceNumberPrefix")]
         public string InvoiceNumberPrefix { get; set; }
 

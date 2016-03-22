@@ -8,6 +8,7 @@ using ShipWorks.Actions.Tasks.Common.Editors;
 using ShipWorks.Data.Model;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Platforms.ThreeDCart.RestApi;
 
 namespace ShipWorks.Stores.Platforms.ThreeDCart.CoreExtensions.Actions
 {
@@ -80,7 +81,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.CoreExtensions.Actions
 
                 try
                 {
-                    ThreeDCartOnlineUpdater updater = new ThreeDCartOnlineUpdater(storeEntity);
+                    ThreeDCartRestOnlineUpdater updater = new ThreeDCartRestOnlineUpdater(storeEntity);
                     updater.UpdateShipmentDetails(entityID);
                 }
                 catch (ThreeDCartException ex)

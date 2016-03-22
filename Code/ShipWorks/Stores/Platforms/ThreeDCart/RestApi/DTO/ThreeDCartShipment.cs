@@ -6,10 +6,10 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi.DTO
     public class ThreeDCartShipment
     {
         [JsonProperty("ShipmentID")]
-        public int ShipmentID { get; set; }
+        public long ShipmentID { get; set; }
 
         [JsonProperty("ShipmentLastUpdate")]
-        public DateTime ShipmentLastUpdate { get; set; }
+        public string ShipmentLastUpdate { get; set; }
 
         [JsonProperty("ShipmentBoxes")]
         public int ShipmentBoxes { get; set; }
