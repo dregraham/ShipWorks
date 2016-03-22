@@ -41,7 +41,7 @@ namespace ShipWorks.Shipping.UI.RatingPanel
                 Name = "dockableWindowRating",
                 ShowOptions = false,
                 Size = new Size(378, 170),
-                TabImage = Properties.Resources.add16,
+                TabImage = Properties.Resources.table_dollar_sign_16_16,
                 TabIndex = 0
             };
         }

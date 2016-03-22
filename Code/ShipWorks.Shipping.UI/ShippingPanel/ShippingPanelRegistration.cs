@@ -41,7 +41,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
                 Name = "dockableWindowShipment",
                 ShowOptions = false,
                 Size = new Size(378, 170),
-                TabImage = Properties.Resources.add16,
+                TabImage = Properties.Resources.box_next,
                 TabIndex = 0
             };
         }

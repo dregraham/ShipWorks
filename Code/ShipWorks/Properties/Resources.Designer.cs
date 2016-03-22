@@ -4133,6 +4133,16 @@ namespace ShipWorks.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap table_dollar_sign_16_16 {
+            get {
+                object obj = ResourceManager.GetObject("table_dollar_sign_16_16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap table_guides {
             get {
                 object obj = ResourceManager.GetObject("table_guides", resourceCulture);
