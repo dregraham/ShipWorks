@@ -1,15 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Windows.Forms;
 using GalaSoft.MvvmLight.Command;
 using Shared.System.ComponentModel.DataAnnotations;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
@@ -121,7 +114,10 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         /// </summary>
         private bool DeleteCustomsItemCanExecute()
         {
-            return SelectedCustomsItem != null && CustomsItems != null && CustomsItems.Contains(SelectedCustomsItem);
+            return SelectedCustomsItem != null &&
+                CustomsItems != null &&
+                CustomsItems.Count > 0 &&
+                CustomsItems.Contains(SelectedCustomsItem);
         }
     }
 }

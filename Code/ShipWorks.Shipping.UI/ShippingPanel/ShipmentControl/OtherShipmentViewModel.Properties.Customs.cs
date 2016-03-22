@@ -111,7 +111,10 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         /// </summary>
         private bool DeleteCustomsItemCanExecute()
         {
-            return SelectedCustomsItem != null && CustomsItems != null && CustomsItems.Contains(SelectedCustomsItem);
+            return SelectedCustomsItem != null &&
+                CustomsItems != null &&
+                CustomsItems.Count > 0 &&
+                CustomsItems.Contains(SelectedCustomsItem);
         }
     }
 }

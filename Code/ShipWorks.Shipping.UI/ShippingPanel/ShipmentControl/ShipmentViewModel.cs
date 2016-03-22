@@ -66,8 +66,9 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
 
             InsuranceViewModel = shippingViewModelFactory.GetInsuranceViewModel();
 
-            AddPackageCommand = new RelayCommand(AddPackageAction);
-            DeletePackageCommand = new RelayCommand(DeletePackageAction, () => SelectedPackageAdapter != null);
+            AddPackageCommand = new RelayCommand(AddPackageAction, () => PackageAdapters?.Count < 25);
+            DeletePackageCommand = new RelayCommand(DeletePackageAction,
+                () => SelectedPackageAdapter != null && PackageAdapters.Count > 1);
 
             subscriptions = new CompositeDisposable(
                 messenger.OfType<DimensionsProfilesChangedMessage>().Subscribe(ManageDimensionsProfiles),
