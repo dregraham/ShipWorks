@@ -18,18 +18,38 @@ namespace ShipWorks.Stores.Tests.Platforms.ThreeDCart
         private readonly Mock<IThreeDCartRestWebClient> webClient = new Mock<IThreeDCartRestWebClient>();
         private readonly Mock<ISqlAdapterRetry> sqlAdapter = new Mock<ISqlAdapterRetry>();
         readonly OrderEntity orderEntity;
+        private readonly string orderJsonNoAttributes;
+        private readonly string orderJsonOneAttribute;
+        private readonly string orderJsonTwoAttributes;
+        private readonly string orderJsonWithKitItem;
+        private List<ThreeDCartOrder> orders;
 
         public ThreeDCartDownloaderTest()
         {
-            string orderJson =
+            orderJsonNoAttributes =
                 EmbeddedResourceHelper.GetEmbeddedResourceString(
-                    "ShipWorks.Stores.Tests.Platforms.ThreeDCart.Artifacts.GetOrderResponse.json");
-            List<ThreeDCartOrder> orders = JsonConvert.DeserializeObject<List<ThreeDCartOrder>>(orderJson);
+                    "ShipWorks.Stores.Tests.Platforms.ThreeDCart.Artifacts.GetOrderResponseItemHasNoAttributes.json");
+
+            orderJsonOneAttribute =
+                EmbeddedResourceHelper.GetEmbeddedResourceString(
+                    "ShipWorks.Stores.Tests.Platforms.ThreeDCart.Artifacts.GetOrderResponseItemHasOneAttribute.json");
+
+            orderJsonTwoAttributes =
+                EmbeddedResourceHelper.GetEmbeddedResourceString(
+                    "ShipWorks.Stores.Tests.Platforms.ThreeDCart.Artifacts.GetOrderResponseItemHasTwoAttributes.json");
+
+            orderJsonWithKitItem =
+                EmbeddedResourceHelper.GetEmbeddedResourceString(
+                    "ShipWorks.Stores.Tests.Platforms.ThreeDCart.Artifacts.GetOrderResponseWithKitItem.json");
+
+            orders = JsonConvert.DeserializeObject<List<ThreeDCartOrder>>(orderJsonNoAttributes);
 
             string productJson =
                 EmbeddedResourceHelper.GetEmbeddedResourceString(
                     "ShipWorks.Stores.Tests.Platforms.ThreeDCart.Artifacts.GetProductResponse.json");
-            ThreeDCartProduct product = JsonConvert.DeserializeObject<ThreeDCartProduct>(productJson);
+
+            ThreeDCartProduct product =
+                JsonConvert.DeserializeObject<List<ThreeDCartProduct>>(productJson).FirstOrDefault();
 
             webClient.Setup(x => x.GetOrders(It.IsAny<DateTime>())).Returns(orders);
             webClient.Setup(x => x.GetProduct(It.IsAny<int>())).Returns(product);
@@ -41,15 +61,20 @@ namespace ShipWorks.Stores.Tests.Platforms.ThreeDCart
 
             testObject = new ThreeDCartDownloader(storeEntity, webClient.Object, sqlAdapter.Object);
 
-            orderEntity = new OrderEntity();
-
-            orderEntity = testObject.LoadOrder(orders.FirstOrDefault(), orders.FirstOrDefault()?.ShipmentList.FirstOrDefault(), "", false, false);
+            orderEntity = testObject.LoadOrder(new OrderEntity(), orders.FirstOrDefault(),
+                orders.FirstOrDefault()?.ShipmentList.FirstOrDefault(), string.Empty);
         }
 
         [Fact]
-        public void LoadOrder_LoadsOrderDetails()
+        public void LoadOrder_LoadsOrderStatus()
         {
-            Assert.Equal(new DateTime(2016, 3, 16), orderEntity.OnlineLastModified);
+            Assert.Equal("New", orderEntity.OnlineStatus);
+        }
+
+        [Fact]
+        public void LoadOrder_LoadsLastModifiedDate()
+        {
+            Assert.Equal(new DateTime(2016, 3, 16, 17, 16, 9), orderEntity.OnlineLastModified);
         }
 
         [Fact]
@@ -97,17 +122,48 @@ namespace ShipWorks.Stores.Tests.Platforms.ThreeDCart
         [Fact]
         public void LoadOrder_LoadsItemName_WhenDescriptionIsOnlyName()
         {
-
+            Assert.Equal("Custom Cap 2", orderEntity.OrderItems.FirstOrDefault()?.Name);
         }
 
         [Fact]
-        public void LoadOrder_LoadsItemNameAndAttributes_WhenDescriptionIsNameAndOneAttribute()
+        public void LoadOrder_LoadsItemNameAndAttribute_WhenDescriptionIsNameAndOneAttribute()
         {
+            List<ThreeDCartOrder> orders = JsonConvert.DeserializeObject<List<ThreeDCartOrder>>(orderJsonOneAttribute);
+
+            OrderEntity order = testObject.LoadOrder(new OrderEntity(), orders.FirstOrDefault(),
+                orders.FirstOrDefault()?.ShipmentList.FirstOrDefault(), string.Empty);
+
+            OrderItemAttributeEntity actualAttribute = order.OrderItems.FirstOrDefault()?.OrderItemAttributes?.FirstOrDefault();
+
+            Assert.Equal("Custom Cap 2", order.OrderItems.FirstOrDefault()?.Name);
+
+            Assert.Equal("CustCap: Size:", actualAttribute.Name);
+            Assert.Equal("Extra: Small", actualAttribute.Description);
+            Assert.Equal(2, actualAttribute.UnitPrice);
         }
 
         [Fact]
         public void LoadOrder_LoadsItemNameAndAttributes_WhenDescriptionIsNameAndMultipleAttributes()
         {
+            List<ThreeDCartOrder> orders = JsonConvert.DeserializeObject<List<ThreeDCartOrder>>(orderJsonTwoAttributes);
+
+            OrderEntity order = testObject.LoadOrder(new OrderEntity(), orders.FirstOrDefault(),
+                orders.FirstOrDefault()?.ShipmentList.FirstOrDefault(), string.Empty);
+
+            OrderItemAttributeEntity actualAttribute1 = order.OrderItems.FirstOrDefault()?.OrderItemAttributes?.
+                FirstOrDefault(a => a.UnitPrice == 2);
+            OrderItemAttributeEntity actualAttribute2 = order.OrderItems.FirstOrDefault()?.OrderItemAttributes?.
+                FirstOrDefault(a => a.UnitPrice == 3);
+
+            Assert.Equal("Custom Cap 2", order.OrderItems.FirstOrDefault()?.Name);
+
+            Assert.Equal("CustCap: Size:", actualAttribute1.Name);
+            Assert.Equal("Extra: Small", actualAttribute1.Description);
+            Assert.Equal(2, actualAttribute1.UnitPrice);
+
+            Assert.Equal("CustCap: Color:", actualAttribute2.Name);
+            Assert.Equal("CustCap: Blue", actualAttribute2.Description);
+            Assert.Equal(3, actualAttribute2.UnitPrice);
         }
 
         [Fact]
@@ -125,7 +181,17 @@ namespace ShipWorks.Stores.Tests.Platforms.ThreeDCart
         [Fact]
         public void LoadOrder_AddsKitAdjustments_WhenOrderContainsKitItems()
         {
+            List<ThreeDCartOrder> orders = JsonConvert.DeserializeObject<List<ThreeDCartOrder>>(orderJsonWithKitItem);
 
+            OrderEntity order = testObject.LoadOrder(new OrderEntity(), orders.FirstOrDefault(),
+                orders.FirstOrDefault()?.ShipmentList.FirstOrDefault(), string.Empty);
+
+            OrderChargeEntity actualCharge =
+                order.OrderCharges.FirstOrDefault(c => c.Description == "Kit Adjustment");
+
+            Assert.Equal("KIT ADJUSTMENT", actualCharge.Type);
+            Assert.Equal("Kit Adjustment", actualCharge.Description);
+            Assert.Equal(21.99m, actualCharge.Amount);
         }
     }
 }

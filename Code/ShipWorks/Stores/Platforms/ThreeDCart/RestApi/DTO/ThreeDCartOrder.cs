@@ -156,5 +156,9 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi.DTO
 
         [JsonProperty("ExternalComments")]
         public string ExternalComments { get; set; }
+
+        public bool isSubOrder { get; set; }
+
+        public bool hasSubOrders { get; set; }
     }
 }

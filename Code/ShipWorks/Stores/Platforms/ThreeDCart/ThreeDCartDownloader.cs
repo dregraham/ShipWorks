@@ -149,35 +149,36 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
 
         public void LoadOrders(IEnumerable<ThreeDCartOrder> orders)
         {
-            foreach (ThreeDCartOrder order in orders)
+            foreach (ThreeDCartOrder threeDCartOrder in orders)
             {
-                bool isSubOrder = false;
-                bool hasSubOrders = order.ShipmentList.Count() > 1;
+                threeDCartOrder.isSubOrder = false;
+                threeDCartOrder.hasSubOrders = threeDCartOrder.ShipmentList.Count() > 1;
                 int shipmentIndex = 1;
-                foreach (ThreeDCartShipment shipment in order.ShipmentList)
+                foreach (ThreeDCartShipment shipment in threeDCartOrder.ShipmentList)
                 {
-                    string invoiceNumberPostFix = hasSubOrders ? $"-{shipmentIndex}" : string.Empty;
+                    string invoiceNumberPostFix = threeDCartOrder.hasSubOrders ? $"-{shipmentIndex}" : string.Empty;
 
-                    LoadOrder(order, shipment, invoiceNumberPostFix, isSubOrder, hasSubOrders);
+                    ThreeDCartOrderIdentifier orderIdentifier = CreateOrderIdentifier(threeDCartOrder, invoiceNumberPostFix);
+
+                    OrderEntity order = InstantiateOrder(orderIdentifier);
+
+                    order = LoadOrder(order, threeDCartOrder, shipment, invoiceNumberPostFix);
+
+                    sqlAdapterRetry.ExecuteWithRetry(() => SaveDownloadedOrder(order));
 
                     shipmentIndex++;
-                    isSubOrder = true;
+                    threeDCartOrder.isSubOrder = true;
                 }
             }
         }
 
-        public OrderEntity LoadOrder(ThreeDCartOrder threeDCartOrder, ThreeDCartShipment shipment, string invoiceNumberPostFix,
-            bool isSubOrder, bool hasSubOrders)
+        public OrderEntity LoadOrder(OrderEntity order, ThreeDCartOrder threeDCartOrder, ThreeDCartShipment threeDCartShipment, string invoiceNumberPostFix)
         {
             MethodConditions.EnsureArgumentIsNotNull(threeDCartOrder, "order");
 
-            ThreeDCartOrderIdentifier orderIdentifier = CreateOrderIdentifier(threeDCartOrder, invoiceNumberPostFix);
-
-            OrderEntity order = InstantiateOrder(orderIdentifier);
-
             // If this order does not have sub orders, set the order total to that which we received from 3D Cart
             // If it does have sub orders, we'll calculate the order total after we add items for this shipment/charges/payment
-            if (order.IsNew && !hasSubOrders)
+            if (order.IsNew && !threeDCartOrder.hasSubOrders)
             {
                 // Set the total.  It will be calculated and verified later.
                 order.OrderTotal = threeDCartOrder.OrderAmount;
@@ -194,28 +195,27 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
 
             order.OrderDate = threeDCartOrder.OrderDate;
             order.OnlineLastModified = threeDCartOrder.LastUpdate;
+            order.OnlineStatusCode = threeDCartOrder.OrderStatusID;
+            order.OnlineStatus = EnumHelper.GetDescription((Enums.ThreeDCartOrderStatus) threeDCartOrder.OrderStatusID);
+            order.RequestedShipping = threeDCartShipment.ShipmentMethodName;
 
-            order.OnlineStatus = threeDCartOrder.OrderStatusID.ToString();
-
-            LoadAddress(order, threeDCartOrder, shipment);
+            LoadAddress(order, threeDCartOrder, threeDCartShipment);
 
             LoadOrderNotes(order, threeDCartOrder);
 
             if (order.IsNew)
             {
-                LoadItems(order, threeDCartOrder, shipment);
+                LoadItems(order, threeDCartOrder, threeDCartShipment);
 
-                if (!isSubOrder)
+                if (!threeDCartOrder.isSubOrder)
                 {
                     LoadOrderCharges(order, threeDCartOrder);
 
                     LoadPaymentDetails(order, threeDCartOrder);
                 }
 
-                AdjustOrderTotal(order, threeDCartOrder, isSubOrder, hasSubOrders);
+                AdjustAndSetOrderTotal(order, threeDCartOrder);
             }
-
-            sqlAdapterRetry.ExecuteWithRetry(() => SaveDownloadedOrder(order));
 
             return order;
         }
@@ -264,7 +264,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
             }
         }
 
-        private void AdjustOrderTotal(OrderEntity order, ThreeDCartOrder threeDCartOrder, bool isSubOrder, bool hasSubOrders)
+        private void AdjustAndSetOrderTotal(OrderEntity order, ThreeDCartOrder threeDCartOrder)
         {
             decimal total = new OrderManager().CalculateOrderTotal(order);
 
@@ -278,7 +278,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
             }
 
             // If this is a sub order, or it's the first order that has sub orders, calculate the total
-            if (isSubOrder || hasSubOrders)
+            if (threeDCartOrder.isSubOrder || threeDCartOrder.hasSubOrders)
             {
                 order.OrderTotal = total;
             }
@@ -313,7 +313,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         {
             string description = threeDCartItem.ItemDescription;
 
-            string[] splitDescription = description.Split("<br><b>".ToCharArray());
+            string[] splitDescription = description.Split(new [] { "<br><b>" }, StringSplitOptions.RemoveEmptyEntries);
 
             item.Name = splitDescription[0];
 
@@ -321,7 +321,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
             {
                 for (int i = 1; i < splitDescription.Count(); i++)
                 {
-                    string[] option = splitDescription.ToString().Split("</b>&nbsp;".ToCharArray());
+                    string[] option = splitDescription[i].Split(new [] { "</b>&nbsp;"}, StringSplitOptions.RemoveEmptyEntries);
 
                     if (option[0].EndsWith(":"))
                     {
