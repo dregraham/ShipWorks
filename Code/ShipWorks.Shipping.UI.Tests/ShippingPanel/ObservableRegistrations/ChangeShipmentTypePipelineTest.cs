@@ -24,6 +24,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
             {
                 v.Setup(x => x.ShipmentStatus).Returns(ShipmentStatus.Unprocessed);
                 v.Setup(x => x.LoadShipment(It.IsAny<ICarrierShipmentAdapter>(), It.IsAny<string>()));
+                v.Setup(x => x.Shipment).Returns(new ShipmentEntity());
                 v.CallBase = true;
             });
             viewModel = viewModelMock.Object;

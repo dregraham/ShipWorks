@@ -209,7 +209,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// Status of the shipment
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public ShipmentStatus ShipmentStatus
+        public virtual ShipmentStatus ShipmentStatus
         {
             get { return shipmentStatus; }
             set { handler.Set(nameof(ShipmentStatus), ref shipmentStatus, value); }

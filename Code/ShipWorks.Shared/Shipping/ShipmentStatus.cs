@@ -1,8 +1,11 @@
-﻿namespace ShipWorks.Shipping
+﻿using System.Reflection;
+
+namespace ShipWorks.Shipping
 {
     /// <summary>
     /// Status of the shipment
     /// </summary>
+    [Obfuscation]
     public enum ShipmentStatus
     {
         /// <summary>

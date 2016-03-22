@@ -186,8 +186,10 @@ namespace ShipWorks.Shipping.UI.Tests.RatingPanel
         }
 
         [Fact]
-        public void ClearsMessaging_WhenResultsAreSuccessful()
+        public void ClearsMessaging_WhenResultsAreSuccessfulWithRates()
         {
+            testResult.Value.Rates.Add(new RateResult("Foo", "3"));
+
             var testObject = mock.Create<RatingPanelViewModel>();
             messenger.Send(new RatesRetrievingMessage(this, string.Empty));
             messenger.Send(new RatesRetrievedMessage(this, string.Empty, testResult, null));

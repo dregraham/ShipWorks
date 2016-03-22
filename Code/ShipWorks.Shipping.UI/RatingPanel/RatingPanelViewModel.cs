@@ -10,7 +10,6 @@ using ShipWorks.Core.Messaging;
 using ShipWorks.Core.UI;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Messaging.Messages.Shipping;
-using ShipWorks.Shipping.Carriers.Amazon.Api.DTOs;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Services;
 
@@ -57,21 +56,21 @@ namespace ShipWorks.Shipping.UI.RatingPanel
             this.messenger = messenger;
             this.ratingServiceLookup = ratingServiceLookup;
 
-            // When a RatesRetrievingMessage comes in, we want to wait for it's completed 
+            // When a RatesRetrievingMessage comes in, we want to wait for it's completed
             // RatesRetrievedMessage before calling LoadRates.  The following code allows us to do that.
             // See the Switch example at http://download.microsoft.com/download/C/5/D/C5D669F9-01DF-4FAF-BBA9-29C096C462DB/Rx%20HOL%20.NET.pdf
-            // for more info.  
-            IObservable<RatesRetrievedMessage> mergedMessages = 
+            // for more info.
+            IObservable<RatesRetrievedMessage> mergedMessages =
                 (from rateRetrievingMsg in messenger.OfType<RatesRetrievingMessage>()
                  select messenger.OfType<RatesRetrievedMessage>()
                                  .Where(rateRetrivedMsg => rateRetrievingMsg.RatingHash == rateRetrivedMsg.RatingHash)
                 ).Switch();
-                      
+
             subscriptions = new CompositeDisposable(
                 messenger.OfType<RatesRetrievingMessage>()
                     .ObserveOn(schedulerProvider.Dispatcher)
                     .Subscribe(_ => ShowSpinner()),
-                mergedMessages.Throttle(TimeSpan.FromMilliseconds(250))
+                mergedMessages.Throttle(TimeSpan.FromMilliseconds(250), schedulerProvider.Default)
                     .Select(x => x)
                     .ObserveOn(schedulerProvider.Dispatcher)
                     .Subscribe(LoadRates),
