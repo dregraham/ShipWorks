@@ -119,6 +119,14 @@ namespace ShipWorks.Shipping.UI.RatingPanel
                 .ToList() ?? Enumerable.Empty<object>();
             ShowFootnotes = Footnotes.Any();
 
+            // If we didn't get any footnotes, and no error message, and not rates,
+            // show the no rates message.
+            if (!ShowFootnotes && !Rates.Any() && !ShowEmptyMessage)
+            {
+                ShowEmptyMessage = true;
+                EmptyMessage = "No rates are available for the shipment.";
+            }
+
             ShowDuties = Rates.Any(x => x.Duties.HasValue);
             ShowTaxes = Rates.Any(x => x.Taxes.HasValue);
             ShowShipping = Rates.Any(x => x.Shipping.HasValue);
