@@ -207,6 +207,7 @@
     <Compile Include="ShippingPanel\InsuranceViewModel.cs" />
     <Compile Include="ShippingPanel\IShippingViewModelFactory.cs" />
     <Compile Include="ShippingPanel\ObservableRegistrations\ApplyProfilePipeline.cs" />
+    <Compile Include="ShippingPanel\ObservableRegistrations\RefreshRatesPipeline.cs" />
     <Compile Include="ShippingPanel\ObservableRegistrations\CarrierConfiguredPipeline.cs" />
     <Compile Include="ShippingPanel\ObservableRegistrations\ChangeOriginAddressFromTypePipeline.cs" />
     <Compile Include="ShippingPanel\ObservableRegistrations\ChangeShipmentTypePipeline.cs" />
