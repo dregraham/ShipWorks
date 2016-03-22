@@ -139,7 +139,15 @@ namespace ShipWorks.Shipping.UI.RatingPanel
                 return;
             }
 
-            SelectedRate = Rates.FirstOrDefault(rate => shipmentAdapter.DoesRateMatchSelectedService(rate));
+            RateResult rate = Rates.FirstOrDefault(rateToTest => shipmentAdapter.DoesRateMatchSelectedService(rateToTest));
+
+            // If the rate isn't null and isn't selectable, see if it has a kid
+            if (!rate?.Selectable == true)
+            {
+                rate = shipmentAdapter.GetChildRateForRate(rate, Rates);
+            }
+
+            SelectedRate = rate;
         }
 
         /// <summary>

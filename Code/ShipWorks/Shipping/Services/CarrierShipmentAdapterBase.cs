@@ -230,6 +230,14 @@ namespace ShipWorks.Shipping.Services
         }
 
         /// <summary>
+        /// For rates that are not selectable, find their first child that is.
+        /// </summary>
+        public virtual RateResult GetChildRateForRate(RateResult parentRate, IEnumerable<RateResult> rates)
+        {
+            return parentRate;
+        }
+
+        /// <summary>
         /// Get the service type as an integer from the given tag
         /// </summary>
         protected virtual int? GetServiceTypeAsIntFromTag(object tag)

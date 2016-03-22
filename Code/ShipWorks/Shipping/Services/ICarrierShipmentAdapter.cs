@@ -128,5 +128,10 @@ namespace ShipWorks.Shipping.Services
         /// Does the given rate match the service selected for the shipment
         /// </summary>
         bool DoesRateMatchSelectedService(RateResult rate);
+
+        /// <summary>
+        /// For rates that are not selectable, find their first child that is.
+        /// </summary>
+        RateResult GetChildRateForRate(RateResult parentRate, IEnumerable<RateResult> rates);
     }
 }

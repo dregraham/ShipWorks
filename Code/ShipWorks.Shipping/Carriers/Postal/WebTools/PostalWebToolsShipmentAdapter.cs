@@ -1,4 +1,6 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing.Rating;
@@ -81,6 +83,23 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
             return selection != null &&
                 (int) selection.ServiceType == ServiceType &&
                 (int) selection.ConfirmationType == Shipment.Postal.Confirmation;
+        }
+
+        /// <summary>
+        /// For rates that are not selectable, find their first child that is.
+        /// </summary>
+        public override RateResult GetChildRateForRate(RateResult parentRate, IEnumerable<RateResult> rates)
+        {
+            RateResult childRate = parentRate;
+            PostalRateSelection selection = parentRate.Tag as PostalRateSelection;
+
+            if (!parentRate.Selectable && selection != null)
+            {
+                childRate = rates.FirstOrDefault(
+                    r => r.Selectable && ((PostalRateSelection)r.Tag).ServiceType == selection.ServiceType);
+            }
+
+            return childRate;
         }
 
         /// <summary>
