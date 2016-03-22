@@ -61,7 +61,8 @@
                     </Style>
                 </DataGrid.RowStyle>
                 <DataGrid.Columns>
-                    <DataGridTemplateColumn Header="Provider" Width="50">
+                    <DataGridTemplateColumn Width="26"
+                                            CanUserResize="False">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Image Style="{StaticResource Image.Icon}"
@@ -96,7 +97,7 @@
                                             Converter={StaticResource BooleanToVisibility}}"
                                         Binding="{Binding Duties, Converter={StaticResource HalfCentCurrency}}" />
                     <DataGridTextColumn Header="Rate"
-                                        MinWidth="112"
+                                        Width="Auto"
                                         ElementStyle="{StaticResource DataGrid.Element.Amount}"
                                         Binding="{Binding Amount, Converter={StaticResource HalfCentCurrency}}" />
                 </DataGrid.Columns>

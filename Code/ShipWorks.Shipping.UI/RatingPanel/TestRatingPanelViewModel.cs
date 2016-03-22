@@ -12,6 +12,7 @@ namespace ShipWorks.Shipping.UI.RatingPanel
             {
                 new RateResult("Foo", "1", 5.6M, null),
                 new RateResult("Bar", "1-2", 23.605M, new RateAmountComponents(1.23M, 4.56M, 9.12M), null),
+                new RateResult("Bar", "10-25", 923.605M, new RateAmountComponents(91.23M, 94.56M, 99.12M), null),
                 new RateResult("Baz", "2-8", 15.6M, null),
             };
 
