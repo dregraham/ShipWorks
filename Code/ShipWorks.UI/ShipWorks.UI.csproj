@@ -144,6 +144,8 @@
       <Link>Properties\AssemblyInfoCommon.cs</Link>
     </Compile>
     <Compile Include="AttachedProperties\EntityFieldLength.cs" />
+    <Compile Include="AttachedProperties\LimitScrollSize.cs" />
+    <Compile Include="AttachedProperties\LimitScrollSizeMode.cs" />
     <Compile Include="AttachedProperties\PopupClickManager.cs" />
     <Compile Include="AttachedProperties\UpdateWhenMessageReceived.cs" />
     <Compile Include="Behaviors\TextBoxInputRegExBehavior.cs" />

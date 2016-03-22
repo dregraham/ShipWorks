@@ -1,4 +1,6 @@
-﻿using System.Windows;
+﻿using System.ComponentModel;
+using System.Reflection;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace ShipWorks.UI.Controls
@@ -24,6 +26,8 @@ namespace ShipWorks.UI.Controls
         /// <summary>
         /// Character to use for the icon
         /// </summary>
+        [Bindable(true)]
+        [Obfuscation(Exclude = true)]
         public string IconCharacter
         {
             get { return (string) GetValue(IconCharacterProperty); }
