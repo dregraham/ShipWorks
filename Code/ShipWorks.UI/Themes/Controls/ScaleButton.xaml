@@ -1,6 +1,10 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:weight="clr-namespace:ShipWorks.UI.Controls.Weight">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/ShipWorks.UI;component/Styles/Controls/ImageStyle.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
+
     <Style x:Key="FocusVisual">
         <Setter Property="Control.Template">
             <Setter.Value>
@@ -75,7 +79,7 @@
                                 Margin="{TemplateBinding Margin}">
                         <Button Name="PART_Button"
                                 Style="{StaticResource EmptyButtonStyle}">
-                            <Image Width="15"
+                            <Image Style="{StaticResource Image.Icon}"
                                    Source="/ShipWorks.Core;component/Resources/weigh.png"/>
                         </Button>
                         <TextBlock Name="PART_Display"
