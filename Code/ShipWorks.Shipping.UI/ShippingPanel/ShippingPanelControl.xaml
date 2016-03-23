@@ -60,8 +60,10 @@
             <StackPanel Margin="6, 6, 6, 6"
                         MinWidth="296">
                 <ui:NotificationBorder BorderBrush="{StaticResource Green}"
-                                       Visibility="{Binding ShipmentStatus, Converter={StaticResource VisibleWhenEqualToParameter}, ConverterParameter={x:Static sw:ShipmentStatus.Processed}}"
-                                       IconCharacter="✓">
+                                       Visibility="{Binding ShipmentStatus, Converter={StaticResource VisibleWhenEqualToParameter}, ConverterParameter={x:Static sw:ShipmentStatus.Processed}}">
+                    <ui:NotificationBorder.IconControl>
+                        <Path Style="{StaticResource Path.Checkmark}" Stroke="White" />
+                    </ui:NotificationBorder.IconControl>
                     <StackPanel>
                         <WrapPanel Orientation="Horizontal">
                             <TextBlock Text="Processed"
@@ -83,7 +85,8 @@
                 </ui:NotificationBorder>
                 <ui:NotificationBorder BorderBrush="{StaticResource Yellow}"
                                        Visibility="{Binding ShipmentStatus, Converter={StaticResource VisibleWhenEqualToParameter}, ConverterParameter={x:Static sw:ShipmentStatus.Voided}}"
-                                       IconCharacter="!">
+                                       IconControl="!"
+                                       IconFontFamily="Tahoma">
                     <WrapPanel Orientation="Horizontal">
                         <TextBlock Text="Voided"
                                    FontSize="16"

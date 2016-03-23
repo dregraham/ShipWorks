@@ -42,4 +42,13 @@
             </Setter.Value>
         </Setter>
     </Style>
+
+    <Style x:Key="Path.Checkmark" TargetType="Path">
+        <Setter Property="StrokeThickness" Value="3" />
+        <Setter Property="StrokeMiterLimit" Value="10" />
+        <Setter Property="StrokeLineJoin" Value="Round" />
+        <Setter Property="StrokeStartLineCap" Value="Square" />
+        <Setter Property="StrokeEndLineCap" Value="Square" />
+        <Setter Property="Data" Value="M3,10 L7,16 Q12,4 16,0" />
+    </Style>
 </ResourceDictionary>

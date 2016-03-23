@@ -16,12 +16,13 @@
                                     VerticalAlignment="Stretch"
                                     MinWidth="30"
                                     Background="{TemplateBinding BorderBrush}" Padding="4,0,8,0">
-                                <TextBlock Text="{Binding Path=IconCharacter, RelativeSource={RelativeSource TemplatedParent}}"
-                                           Foreground="White"
-                                           FontWeight="Bold"
-                                           FontSize="24"
-                                           HorizontalAlignment="Center"
-                                           VerticalAlignment="Center" />
+                                <ContentControl TextBlock.Foreground="White"
+                                                TextBlock.FontWeight="Bold"
+                                                TextBlock.FontSize="24"
+                                                TextBlock.FontFamily="{Binding Path=IconFontFamily, RelativeSource={RelativeSource TemplatedParent}}"
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Center"
+                                                Content="{Binding Path=IconControl, RelativeSource={RelativeSource TemplatedParent}}" />
                             </Border>
                             <ContentPresenter Margin="8" />
                         </StackPanel>

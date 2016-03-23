@@ -2,6 +2,7 @@
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace ShipWorks.UI.Controls
 {
@@ -10,9 +11,14 @@ namespace ShipWorks.UI.Controls
     /// </summary>
     public class NotificationBorder : ContentControl
     {
-        public static readonly DependencyProperty IconCharacterProperty =
-            DependencyProperty.Register("IconCharacter",
-                typeof(string),
+        public static readonly DependencyProperty IconFontFamilyProperty =
+            DependencyProperty.Register("IconFontFamily",
+                typeof(FontFamily),
+                typeof(NotificationBorder));
+
+        public static readonly DependencyProperty IconControlProperty =
+            DependencyProperty.Register("IconControl",
+                typeof(object),
                 typeof(NotificationBorder));
 
         /// <summary>
@@ -24,14 +30,27 @@ namespace ShipWorks.UI.Controls
         }
 
         /// <summary>
-        /// Character to use for the icon
+        /// FontFamily to use for the icon
         /// </summary>
         [Bindable(true)]
         [Obfuscation(Exclude = true)]
-        public string IconCharacter
+        [Localizability(LocalizationCategory.Font)]
+        [TypeConverter(typeof(FontFamilyConverter))]
+        public FontFamily IconFontFamily
         {
-            get { return (string) GetValue(IconCharacterProperty); }
-            set { SetValue(IconCharacterProperty, value); }
+            get { return (FontFamily) GetValue(IconFontFamilyProperty); }
+            set { SetValue(IconFontFamilyProperty, value); }
+        }
+
+        /// <summary>
+        /// Custom content to use for the
+        /// </summary>
+        [Bindable(true)]
+        [Obfuscation(Exclude = true)]
+        public object IconControl
+        {
+            get { return GetValue(IconControlProperty); }
+            set { SetValue(IconControlProperty, value); }
         }
     }
 }
