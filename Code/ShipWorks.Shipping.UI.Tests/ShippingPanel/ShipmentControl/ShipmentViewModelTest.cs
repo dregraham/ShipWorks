@@ -539,12 +539,36 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
         }
 
         [Fact]
+        public void Save_SetsContentWeightCorrectly_WhenSelectedPackageWeightHasChanged()
+        {
+            var package1 = mock.CreateMock<IPackageAdapter>(p => p.SetupProperty(x => x.Weight));
+            package1.Object.Weight = 1;
+            var package2 = mock.CreateMock<IPackageAdapter>(p => p.SetupProperty(x => x.Weight));
+            package2.Object.Weight = 1;
+
+            shipmentAdapter = mock.CreateMock<ICarrierShipmentAdapter>();
+            shipmentAdapter.SetupProperty(x => x.ContentWeight);
+            shipmentAdapter.Setup(x => x.GetPackageAdapters()).Returns(new[] { package1.Object, package2.Object });
+
+            var testObject = mock.Create<ShipmentViewModel>();
+            testObject.Load(shipmentAdapter.Object);
+
+            testObject.SelectedPackageAdapter = testObject.PackageAdapters.First();
+            testObject.TotalWeight = 2;
+
+            testObject.Save();
+
+            Assert.Equal(3, shipmentAdapter.Object.ContentWeight);
+            Assert.Equal(2, package1.Object.Weight);
+            Assert.Equal(1, package2.Object.Weight);
+        }
+
+        [Fact]
         public void AddCustomsItem_DelegatesToShipmentAdapter_WithViewModelValue()
         {
             CreateDefaultShipmentAdapter(mock, 2);
 
             shipmentAdapter.Setup(sa => sa.CustomsAllowed).Returns(true);
-            //shipmentAdapter.Setup(sa => sa.CustomsItems).Returns(new EntityCollection<ShipmentCustomsItemEntity>());
 
             ShipmentViewModel testObject = mock.Create<ShipmentViewModel>();
 
@@ -565,7 +589,6 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
             CreateDefaultShipmentAdapter(mock, 2);
 
             shipmentAdapter.Setup(sa => sa.CustomsAllowed).Returns(true);
-            //shipmentAdapter.Setup(sa => sa.CustomsItems).Returns(new EntityCollection<ShipmentCustomsItemEntity>());
 
             ShipmentViewModel testObject = mock.Create<ShipmentViewModel>();
 
@@ -582,7 +605,6 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
             CreateDefaultShipmentAdapter(mock, 2);
 
             shipmentAdapter.Setup(sa => sa.CustomsAllowed).Returns(true);
-            //shipmentAdapter.Setup(sa => sa.CustomsItems).Returns(new EntityCollection<ShipmentCustomsItemEntity>());
 
             ShipmentViewModel testObject = mock.Create<ShipmentViewModel>();
 
@@ -599,7 +621,6 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
             CreateDefaultShipmentAdapter(mock, 2);
 
             shipmentAdapter.Setup(sa => sa.CustomsAllowed).Returns(true);
-            //shipmentAdapter.Setup(sa => sa.CustomsItems).Returns(new EntityCollection<ShipmentCustomsItemEntity>());
 
             ShipmentViewModel testObject = mock.Create<ShipmentViewModel>();
 
@@ -616,7 +637,6 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
             CreateDefaultShipmentAdapter(mock, 2);
 
             shipmentAdapter.Setup(sa => sa.CustomsAllowed).Returns(true);
-            //shipmentAdapter.Setup(sa => sa.CustomsItems).Returns(new EntityCollection<ShipmentCustomsItemEntity>());
 
             ShipmentViewModel testObject = mock.Create<ShipmentViewModel>();
 

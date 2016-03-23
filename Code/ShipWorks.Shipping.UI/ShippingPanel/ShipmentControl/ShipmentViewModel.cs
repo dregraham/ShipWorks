@@ -270,12 +270,12 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         /// </summary>
         public virtual void Save()
         {
+            SaveDimensionsToSelectedPackageAdapter();
+            SaveInsuranceToSelectedPackageAdapter();
+
             shipmentAdapter.ShipDate = ShipDate;
             shipmentAdapter.ServiceType = ServiceType;
             shipmentAdapter.ContentWeight = PackageAdapters.Sum(pa => pa.Weight);
-
-            SaveDimensionsToSelectedPackageAdapter();
-            SaveInsuranceToSelectedPackageAdapter();
         }
 
         /// <summary>
