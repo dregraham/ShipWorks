@@ -71,15 +71,16 @@
                        Style="{StaticResource TextBlock.SectionHeader}"
                        >Address</TextBlock>
             <controls:AlignmentWrapPanel Grid.Row="0" Grid.Column="1"
-                    VerticalAlignment="Center"
-                    HorizontalAlignment="Stretch"
-                    Margin="12, 0, 0, 0">
+                                         Visibility="{Binding IsAddressValidationEnabled, Converter={StaticResource BooleanToVisibility}}"
+                                         VerticalAlignment="Center"
+                                         HorizontalAlignment="Stretch"
+                                         Margin="12, 0, 0, 0">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                    <Image VerticalAlignment="Top"
-                           Margin="0,0,8,0"
+                    <Image Margin="0,0,8,0"
+                           Style="{StaticResource Image.Icon}"
                            Source="{Binding ValidationStatus, Converter={StaticResource EnumImage}}" />
-                    <TextBlock VerticalAlignment="Top"
-                        Margin="0, 2, 0, 0"
+                    <TextBlock VerticalAlignment="Center"
+                            Margin="0, 2, 0, 0"
                            Text="{Binding ValidationStatus, Converter={StaticResource EnumDescription}}" />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal"
