@@ -15,14 +15,12 @@ namespace ShipWorks.Stores.Platforms.Fortune3
         public Fortune3StoreType(StoreEntity store)
             : base(store)
         {}
-
-
+        
         /// <summary>
         /// Gets the type code for this store
         /// </summary>
         public override StoreTypeCode TypeCode => StoreTypeCode.Fortune3;
-
-
+        
         /// <summary>
         /// Get the log source
         /// </summary>
