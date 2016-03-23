@@ -236,6 +236,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
             UpsPackageEntity package = UpsUtility.CreateDefaultPackage();
             shipment.Ups.Packages.Add(package);
+            shipment.Ups.Packages.RemovedEntitiesTracker = new UpsPackageCollection();
 
             // Weight of the first package equals the total shipment content weight
             package.Weight = shipment.ContentWeight;
