@@ -5,6 +5,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Amazon.Api;
 using ShipWorks.Shipping.Carriers.Amazon.Api.DTOs;
 using ShipWorks.Stores.Content;
+using ShipWorks.Stores.Platforms.Amazon;
 using ShipWorks.Stores.Platforms.Amazon.Mws;
 
 namespace ShipWorks.Shipping.Carriers.Amazon
@@ -43,7 +44,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
 
             orderManager.PopulateOrderDetails(shipment);
-            AmazonOrderEntity order = shipment.Order as AmazonOrderEntity;
+            IAmazonOrder order = shipment.Order as IAmazonOrder;
             
             ShipmentRequestDetails requestDetails = requestFactory.Create(shipment, order);
             IAmazonMwsWebClientSettings amazonSettings = settingsFactory.Create(shipment.Amazon);
