@@ -334,12 +334,21 @@ namespace ShipWorks.ApplicationCore.Licensing
             XPathNavigator xpath = xmlResponse.CreateNavigator();
 
             UpsStatus = (UpsStatus)XPathUtility.Evaluate(xpath, "//UpsOnly/@status", 0);
-            UpsAccountNumbers = XPathUtility.Evaluate(xpath, "//UpsOnly", "").Split(';')
-                                            .Where(a => !string.IsNullOrWhiteSpace(a))
-                                            .Select(a => a.Trim().ToLower())
-                                            .ToArray();
 
-            UpsAccountLimit = UpsStatus == UpsStatus.Discount ?
+            // Only subsidized accounts are limited to specific ups accounts
+            if (UpsStatus == UpsStatus.Subsidized)
+            {
+                UpsAccountNumbers = XPathUtility.Evaluate(xpath, "//UpsOnly", "").Split(';')
+                                .Where(a => !string.IsNullOrWhiteSpace(a))
+                                .Select(a => a.Trim().ToLower())
+                                .ToArray();
+            }
+            else
+            {
+                UpsAccountNumbers = Enumerable.Empty<string>();
+            }
+
+            UpsAccountLimit = UpsStatus == UpsStatus.Discount || UpsStatus == UpsStatus.Tier1 ?
                 1 :
                 UpsAccountNumbers.Count();
 
