@@ -190,6 +190,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// </summary>
         public virtual void LoadOrder(OrderSelectionChangedMessage orderMessage)
         {
+            ShipmentStatus = ShipmentStatus.None;
             selectedOrderIds = orderMessage.LoadedOrderSelection.Select(x => x.OrderID).ToArray();
             int orders = orderMessage.LoadedOrderSelection.OfType<LoadedOrderSelection>().HasMoreOrLessThanCount(1);
             if (orders != 0)
@@ -430,7 +431,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         {
             shipmentChangedSubscription?.Dispose();
             ShipmentAdapter = null;
-            ShipmentStatus = ShipmentStatus.Unprocessed;
+            ShipmentStatus = ShipmentStatus.None;
             StatusDate = DateTime.MinValue;
         }
 

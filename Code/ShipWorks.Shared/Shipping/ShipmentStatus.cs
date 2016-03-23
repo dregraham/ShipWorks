@@ -21,6 +21,11 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Shipment has been voided
         /// </summary>
-        Voided
+        Voided,
+
+        /// <summary>
+        /// No status
+        /// </summary>
+        None
     }
 }

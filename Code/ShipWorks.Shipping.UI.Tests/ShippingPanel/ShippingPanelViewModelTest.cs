@@ -864,6 +864,54 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
                 .Verify(x => x.Send(It.IsAny<OpenShippingDialogWithOrdersMessage>()));
         }
 
+        [Fact]
+        public void LoadOrder_SetsShipmentStatusToNone_WhenMultipleOrdersAreLoaded()
+        {
+            var testObject = mock.Create<ShippingPanelViewModel>();
+
+            testObject.LoadOrder(new OrderSelectionChangedMessage(this, new[] {
+                mock.Create<IOrderSelection>(),
+                mock.Create<IOrderSelection>()
+            }));
+
+            Assert.Equal(ShipmentStatus.None, testObject.ShipmentStatus);
+        }
+
+        [Fact]
+        public void LoadOrder_SetsShipmentStatusToNone_WhenSingleOrderWithMultipleShipmentsLoaded()
+        {
+            var testObject = mock.Create<ShippingPanelViewModel>();
+
+            testObject.LoadOrder(new OrderSelectionChangedMessage(this, new IOrderSelection[] {
+                new LoadedOrderSelection(new OrderEntity(), new [] {
+                    mock.Create<ICarrierShipmentAdapter>(),
+                    mock.Create<ICarrierShipmentAdapter>()
+                }, ShippingAddressEditStateType.Editable)
+            }));
+
+            Assert.Equal(ShipmentStatus.None, testObject.ShipmentStatus);
+        }
+
+        [Theory]
+        [InlineData(false, false, ShipmentStatus.Unprocessed)]
+        [InlineData(true, false, ShipmentStatus.Processed)]
+        [InlineData(true, true, ShipmentStatus.Voided)]
+        public void LoadOrder_SetsShipmentStatusToUnprocessed_WhenSingleUnprocessShipmentLoaded(
+            bool processed, bool voided, ShipmentStatus expected)
+        {
+            var shipment = new ShipmentEntity { Processed = processed, Voided = voided };
+
+            var testObject = mock.Create<ShippingPanelViewModel>();
+
+            testObject.LoadOrder(new OrderSelectionChangedMessage(this, new IOrderSelection[] {
+                new LoadedOrderSelection(new OrderEntity(), new [] {
+                    mock.CreateMock<ICarrierShipmentAdapter>(c => c.Setup(x => x.Shipment).Returns(shipment)).Object
+                }, ShippingAddressEditStateType.Editable)
+            }));
+
+            Assert.Equal(expected, testObject.ShipmentStatus);
+        }
+
         public void Dispose()
         {
             mock?.Dispose();

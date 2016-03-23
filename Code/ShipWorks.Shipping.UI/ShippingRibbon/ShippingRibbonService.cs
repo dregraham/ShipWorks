@@ -211,7 +211,13 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
         /// </summary>
         private void HandleShipmentChanged(ShipmentChangedMessage message)
         {
-            currentShipment = message.ShipmentAdapter?.Shipment;
+            // We only want to set the current shipment if it's an updated version
+            // We only handle changing the shipment when the order selection changes
+            if (currentShipment?.ShipmentID == message.ShipmentAdapter?.Shipment?.ShipmentID)
+            {
+                currentShipment = message.ShipmentAdapter?.Shipment;
+            }
+
             SetEnabledOnButtons();
         }
 
