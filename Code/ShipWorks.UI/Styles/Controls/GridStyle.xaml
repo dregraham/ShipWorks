@@ -61,7 +61,7 @@
         <Setter Property="Width" Value="30" />
         <Setter Property="MaxLength" Value="3" />
         <Setter Property="Margin" Value="0, 2, 5, 2" />
-        <Setter Property="Validation.ErrorTemplate" Value="{StaticResource Template.Error.TextBox}" />
+        <Setter Property="Validation.ErrorTemplate" Value="{x:Null}" />
     </Style>
 
     <Style x:Key="Grid.TextBox.Number"
