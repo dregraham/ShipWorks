@@ -345,7 +345,12 @@
                         </TextBlock>
                     </StackPanel>
                 </StackPanel>
-                <StackPanel Margin="5,5">
+                <StackPanel>
+                    <StackPanel.Style>
+                        <Style TargetType="StackPanel">
+                            <Setter Property="Margin" Value="12,10" />
+                        </Style>
+                    </StackPanel.Style>
                     <StackPanel Visibility="{Binding LoadedShipmentResult,Converter={StaticResource VisibleWhenEqualToParameter},ConverterParameter={x:Static sw:ShippingPanelLoadedShipmentResult.Multiple}}">
                         <TextBlock Style="{StaticResource TextBlock.Empty}"
                                TextWrapping="WrapWithOverflow"
