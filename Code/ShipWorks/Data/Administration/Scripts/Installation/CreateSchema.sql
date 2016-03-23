@@ -472,7 +472,7 @@ CREATE TABLE [dbo].[Order]
 [ShipUnparsedName] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [ShipSenseHashKey] [nvarchar] (64) COLLATE SQL_Latin1_General_CP1_CS_AS NOT NULL,
 [ShipSenseRecognitionStatus] int NOT NULL,
-[ShipAddressType] [int] NOT NULL 
+[ShipAddressType] [int] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_Order] on [dbo].[Order]'
@@ -3505,7 +3505,8 @@ CREATE TABLE [dbo].[ThreeDCartStore]
 [ApiUserKey] [nvarchar] (65) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [TimeZoneID] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [StatusCodes] [xml] NULL,
-[DownloadModifiedNumberOfDaysBack] [int] NOT NULL
+[DownloadModifiedNumberOfDaysBack] [int] NOT NULL,
+[RestUser] [bit] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_ThreeDCartStore] on [dbo].[ThreeDCartStore]'

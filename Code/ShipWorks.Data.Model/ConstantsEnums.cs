@@ -9499,6 +9499,8 @@ namespace ShipWorks.Data.Model
 		StatusCodes,
 		///<summary>DownloadModifiedNumberOfDaysBack. </summary>
 		DownloadModifiedNumberOfDaysBack,
+		///<summary>RestUser. </summary>
+		RestUser,
 		/// <summary></summary>
 		AmountOfFields
 	}
