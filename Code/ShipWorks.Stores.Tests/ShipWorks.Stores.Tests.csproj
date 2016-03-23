@@ -139,6 +139,7 @@
     <Compile Include="EmbeddedResourceHelper.cs" />
     <EmbeddedResource Include="Platforms\ThreeDCart\Artifacts\GetProductResponse.json" />
     <Compile Include="Platforms\ThreeDCart\ThreeDCartDownloaderTest.cs" />
+    <Compile Include="Platforms\ThreeDCart\ThreeDCartOnlineUpdaterTest.cs" />
     <Compile Include="Platforms\Yahoo\YahooApiDownloaderTest.cs" />
     <Compile Include="Platforms\Yahoo\YahooApiOnlineUpdaterTest.cs" />
     <Compile Include="Platforms\Yahoo\YahooApiWebClientTest.cs" />

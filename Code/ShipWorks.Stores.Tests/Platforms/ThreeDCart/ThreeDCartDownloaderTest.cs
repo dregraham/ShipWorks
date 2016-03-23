@@ -14,7 +14,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ThreeDCart
 {
     public class ThreeDCartDownloaderTest
     {
-        private readonly ThreeDCartDownloader testObject;
+        private readonly ThreeDCartSoapDownloader testObject;
         private readonly Mock<IThreeDCartRestWebClient> webClient = new Mock<IThreeDCartRestWebClient>();
         private readonly Mock<ISqlAdapterRetry> sqlAdapter = new Mock<ISqlAdapterRetry>();
         readonly OrderEntity orderEntity;
@@ -59,7 +59,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ThreeDCart
             ThreeDCartStoreEntity storeEntity = new ThreeDCartStoreEntity();
             storeEntity.TypeCode = (int) StoreTypeCode.ThreeDCart;
 
-            testObject = new ThreeDCartDownloader(storeEntity, webClient.Object, sqlAdapter.Object);
+            testObject = new ThreeDCartSoapDownloader(storeEntity, webClient.Object, sqlAdapter.Object);
 
             orderEntity = testObject.LoadOrder(new OrderEntity(), orders.FirstOrDefault(),
                 orders.FirstOrDefault()?.ShipmentList.FirstOrDefault(), string.Empty);

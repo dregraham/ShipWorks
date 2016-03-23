@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using Interapptive.Shared.Utility;
@@ -9,6 +11,9 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping;
+using ShipWorks.Shipping.Carriers.Postal;
+using ShipWorks.Shipping.Carriers.UPS;
+using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.ThreeDCart.RestApi.DTO;
 
@@ -145,8 +150,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
             {
                 ShipmentID = threeDCartOrderItem.ThreeDCartShipmentID,
                 ShipmentOrderStatus = (int) Enums.ThreeDCartOrderStatus.Shipped,
-                ShipmentMethodID = GetShipmentMethodID(shipmentEntity),
-                ShipmentMethodName = "",
+                ShipmentMethodName = GetShipmentMethodName(shipmentEntity),
                 ShipmentPhone = shipmentEntity.ShipPhone,
                 ShipmentFirstName = shipmentEntity.ShipFirstName,
                 ShipmentLastName = shipmentEntity.ShipLastName,
@@ -168,13 +172,103 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
         }
 
         /// <summary>
-        /// Gets the shipment method id.
+        /// Gets the name of the shipment method.
+        /// </summary>
+        private string GetShipmentMethodName(ShipmentEntity shipmentEntity)
+        {
+            ShipmentTypeCode typeCode = ((ShipmentTypeCode) shipmentEntity.ShipmentType);
+
+            List<string> methods = new List<string>
+            {
+                CheckForUsps(shipmentEntity, typeCode),
+                CheckForFedex(shipmentEntity, typeCode),
+                CheckForUps(shipmentEntity, typeCode),
+                CheckForOthers(shipmentEntity, typeCode)
+            };
+
+            foreach (string method in methods.Where(method => !string.IsNullOrWhiteSpace(method)))
+            {
+                return method;
+            }
+
+            return string.Empty;
+        }
+
+        /// <summary>
+        /// Checks for usps shipping method
+        /// </summary>
+        private string CheckForUsps(ShipmentEntity shipmentEntity, ShipmentTypeCode typeCode)
+        {
+            if (typeCode != ShipmentTypeCode.Express1Endicia &&
+                typeCode != ShipmentTypeCode.Express1Usps &&
+                typeCode != ShipmentTypeCode.PostalWebTools &&
+                typeCode != ShipmentTypeCode.Usps &&
+                typeCode != ShipmentTypeCode.Endicia)
+            {
+                return string.Empty;
+            }
+
+            if (shipmentEntity.Postal != null && ShipmentTypeManager.IsDhl((PostalServiceType)shipmentEntity.Postal.Service))
+            {
+                return $"DHL - {shipmentEntity.Postal.Service}";
+            }
+
+            if (shipmentEntity.Postal != null && ShipmentTypeManager.IsConsolidator((PostalServiceType)shipmentEntity.Postal.Service))
+            {
+                return $"Consolidator - {shipmentEntity.Postal.Service}";
+            }
+
+            return $"USPS - {shipmentEntity.Postal?.Service}";
+        }
+
+        /// <summary>
+        /// Checks for fedex shipping method
+        /// </summary>
+        private string CheckForFedex(ShipmentEntity shipmentEntity, ShipmentTypeCode typeCode)
+        {
+            return typeCode == ShipmentTypeCode.FedEx ? $"FEDEX - {shipmentEntity.FedEx.Service}" : string.Empty;
+        }
+
+        /// <summary>
+        /// Checks for ups shipping method
+        /// </summary>
+        private string CheckForUps(ShipmentEntity shipmentEntity, ShipmentTypeCode typeCode)
+        {
+            if (typeCode != ShipmentTypeCode.UpsOnLineTools && typeCode != ShipmentTypeCode.UpsWorldShip)
+            {
+                return string.Empty;
+            }
+            // Adjust tracking details per Mail Innovations and others
+            if (UpsUtility.IsUpsMiService((UpsServiceType)shipmentEntity.Ups.Service))
+            {
+                if (shipmentEntity.Ups.UspsTrackingNumber.Length > 0)
+                {
+                    return $"UPS MI - {shipmentEntity.Ups.Service}";
+                }
+            }
+
+            return $"UPS - {shipmentEntity.Ups.Service}";
+        }
+
+        /// <summary>
+        /// Checks for other shipping methods
         /// </summary>
         /// <param name="shipmentEntity">The shipment entity.</param>
+        /// <param name="typeCode">The type code.</param>
         /// <returns></returns>
-        private int GetShipmentMethodID(ShipmentEntity shipmentEntity)
+        private string CheckForOthers(ShipmentEntity shipmentEntity, ShipmentTypeCode typeCode)
         {
-            throw new NotImplementedException();
+            switch (typeCode)
+            {
+                case ShipmentTypeCode.OnTrac:
+                    return $"OnTrac - {shipmentEntity.OnTrac.Service}";
+                case ShipmentTypeCode.iParcel:
+                    return $"iParcel - {shipmentEntity.IParcel.Service}";
+                case ShipmentTypeCode.Other:
+                    return $"{shipmentEntity.Other.Carrier} - {shipmentEntity.Other.Service}";
+                default:
+                    return string.Empty;
+            }
         }
     }
 }

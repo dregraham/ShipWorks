@@ -7,16 +7,36 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
 {
     public interface IThreeDCartRestWebClient
     {
+        /// <summary>
+        /// Gets the orders.
+        /// </summary>
         IEnumerable<ThreeDCartOrder> GetOrders(DateTime startDate);
 
+        /// <summary>
+        /// Gets the product.
+        /// </summary>
+        /// <param name="catalogID">The catalog identifier.</param>
+        /// <returns></returns>
         ThreeDCartProduct GetProduct(int catalogID);
 
+        /// <summary>
+        /// Uploads the shipment details.
+        /// </summary>
         void UploadShipmentDetails(long orderID, ThreeDCartShipment shipment);
 
+        /// <summary>
+        /// Updates the order status.
+        /// </summary>
         void UpdateOrderStatus(long orderID, int statusID);
 
+        /// <summary>
+        /// Loads the progress reporter.
+        /// </summary>
         void LoadProgressReporter(IProgressReporter progressReporter);
 
+        /// <summary>
+        /// Gets the order count.
+        /// </summary>
         int GetOrderCount();
     }
 }

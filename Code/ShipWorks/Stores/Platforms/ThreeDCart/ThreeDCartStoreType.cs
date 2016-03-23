@@ -154,7 +154,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         /// </summary>
         public override StoreDownloader CreateDownloader()
         {
-            return new ThreeDCartDownloader((ThreeDCartStoreEntity)Store);
+            return new ThreeDCartSoapDownloader((ThreeDCartStoreEntity)Store);
         }
 
         /// <summary>

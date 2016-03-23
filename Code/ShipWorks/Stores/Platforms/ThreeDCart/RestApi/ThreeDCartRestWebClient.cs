@@ -51,11 +51,17 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
             submitter.Headers.Add(HttpRequestHeader.Authorization, $"Token: {token}");
         }
 
+        /// <summary>
+        /// Loads the progress reporter. Needed to display throttling message.
+        /// </summary>
         public void LoadProgressReporter(IProgressReporter progressReporter)
         {
             this.progressReporter = progressReporter;
         }
 
+        /// <summary>
+        /// Gets the order count.
+        /// </summary>
         public int GetOrderCount()
         {
             submitter.Verb = HttpVerb.Get;

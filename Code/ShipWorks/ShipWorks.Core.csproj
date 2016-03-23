@@ -1252,6 +1252,7 @@
     <Compile Include="Stores\Platforms\ThreeDCart\RestApi\DTO\ThreeDCartTransaction.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\RestApi\IThreeDCartRestWebClient.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\RestApi\ThreeDCartProductCache.cs" />
+    <Compile Include="Stores\Platforms\ThreeDCart\RestApi\ThreeDCartRestDownloader.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\RestApi\ThreeDCartRestOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\RestApi\ThreeDCartRestWebClient.cs" />
     <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooAddressInfo.cs" />
