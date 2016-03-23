@@ -105,7 +105,7 @@ namespace ShipWorks.ApplicationCore
                 .AsImplementedInterfaces();
 
             RegisterWrappers(builder);
-            RegisterLicenseTypes(builder);
+            RegisterLicensingDependencies(builder);
             RegisterLicenseEnforcers(builder);
 
             current = builder.Build();
@@ -114,7 +114,7 @@ namespace ShipWorks.ApplicationCore
         /// <summary>
         /// Registers the license types.
         /// </summary>
-        private static void RegisterLicenseTypes(ContainerBuilder builder)
+        private static void RegisterLicensingDependencies(ContainerBuilder builder)
         {
             builder.RegisterType<CustomerLicense>()
                 .AsImplementedInterfaces()
