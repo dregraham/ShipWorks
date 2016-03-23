@@ -17,6 +17,15 @@
            BasedOn="{StaticResource DataGrid.Element.Default}" >
         <Setter Property="HorizontalAlignment" Value="Right" />
         <Setter Property="Foreground" Value="#FF6D6D6D" />
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=DataGridCell}}"
+                         Value="True">
+                <Setter Property="Foreground" Value="#FFFFFFFF"/>
+            </DataTrigger>
+            <Trigger Property="Selector.IsSelectionActive" Value="False">
+                <Setter Property="Foreground" Value="#FF6D6D6D"/>
+            </Trigger>
+        </Style.Triggers>
     </Style>
 
     <Style x:Key="DataGrid.Cell.NoSelection"
