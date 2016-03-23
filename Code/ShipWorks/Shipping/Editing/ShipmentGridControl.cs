@@ -5,11 +5,11 @@ using System.Data;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows.Forms;
+using Autofac;
 using Divelements.SandGrid;
 using Divelements.SandGrid.Rendering;
 using Interapptive.Shared;
 using Interapptive.Shared.UI;
-using ShipWorks.AddressValidation;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Appearance;
 using ShipWorks.Common.Threading;
@@ -830,35 +830,31 @@ namespace ShipWorks.Shipping.Editing
             int failureCount = 0;
 
             int totalCount = 0;
-            foreach (ShipmentEntity shipment in shipments)
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                totalCount++;
-                ShipmentEntity copy = ShippingManager.CreateShipmentCopy(shipment);
+                IShippingManager shippingManager = lifetimeScope.Resolve<IShippingManager>();
 
-                // mark it as a return
-                if (forReturn)
+                foreach (ShipmentEntity shipment in shipments)
                 {
-                    copy.ReturnShipment = true;
-                }
+                    totalCount++;
 
-                try
-                {
-                    // save
-                    ShippingManager.SaveShipment(copy);
-
-                    using (SqlAdapter sqlAdapter = new SqlAdapter(true))
+                    try
                     {
-                        ValidatedAddressManager.CopyValidatedAddresses(sqlAdapter, shipment.ShipmentID, "Ship", copy.ShipmentID, "Ship");
+                        ShipmentEntity copy = shippingManager.CreateShipmentCopy(shipment, x =>
+                        {
+                            if (forReturn)
+                            {
+                                x.ReturnShipment = forReturn;
+                            }
+                        });
 
-                        sqlAdapter.Commit();
+                        // remember for loading later
+                        createdShipments.Add(copy);
                     }
-
-                    // remember for loading later
-                    createdShipments.Add(copy);
-                }
-                catch (SqlForeignKeyException)
-                {
-                    failureCount++;
+                    catch (SqlForeignKeyException)
+                    {
+                        failureCount++;
+                    }
                 }
             }
 

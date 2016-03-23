@@ -12,6 +12,7 @@ using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Dashboard;
 using ShipWorks.Core.Messaging;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Messaging.Messages.Dialogs;
@@ -64,10 +65,12 @@ namespace ShipWorks.Shipping.Services.Dialogs
                     .Subscribe(async x => await LoadOrdersForShippingDialog(x).ConfigureAwait(false)),
                 messenger.OfType<ShipAgainMessage>()
                     .SelectInBackgroundWithDialog(schedulerProvider, CreateProgressDialog, ShipAgain)
+                    .Where(x => x != null)
                     .Do(x => messenger.Send(new OrderSelectionChangingMessage(this, x.Shipments.Select(s => s.OrderID))))
                     .Subscribe(OpenShippingDialog),
                 messenger.OfType<CreateReturnShipmentMessage>()
                     .SelectInBackgroundWithDialog(schedulerProvider, CreateProgressDialog, CreateReturnShipment)
+                    .Where(x => x != null)
                     .Do(x => messenger.Send(new OrderSelectionChangingMessage(this, x.Shipments.Select(s => s.OrderID))))
                     .Subscribe(OpenShippingDialog)
             );
@@ -78,9 +81,7 @@ namespace ShipWorks.Shipping.Services.Dialogs
         /// </summary>
         private OpenShippingDialogMessage CreateReturnShipment(CreateReturnShipmentMessage message)
         {
-            ShipmentEntity shipment = shippingManager.CreateShipment(message.Shipment.Order);
-            shipment.ReturnShipment = true;
-            return new OpenShippingDialogMessage(this, new[] { shipment });
+            return CreateShipmentCopy(message.Shipment, x => x.ReturnShipment = true);
         }
 
         /// <summary>
@@ -88,8 +89,7 @@ namespace ShipWorks.Shipping.Services.Dialogs
         /// </summary>
         private OpenShippingDialogMessage ShipAgain(ShipAgainMessage message)
         {
-            ShipmentEntity shipment = shippingManager.CreateShipment(message.Shipment.Order);
-            return new OpenShippingDialogMessage(this, new[] { shipment });
+            return CreateShipmentCopy(message.Shipment, null);
         }
 
         /// <summary>
@@ -153,6 +153,23 @@ namespace ShipWorks.Shipping.Services.Dialogs
         {
             return messageHelper.ShowProgressDialog("Create Shipment",
                 "ShipWorks is creating a new shipment for the selected orders.");
+        }
+
+        /// <summary>
+        /// Create a copy of the shipment
+        /// </summary>
+        private OpenShippingDialogMessage CreateShipmentCopy(ShipmentEntity shipment, Action<ShipmentEntity> configure)
+        {
+            try
+            {
+                ShipmentEntity copy = shippingManager.CreateShipmentCopy(shipment, configure);
+                return new OpenShippingDialogMessage(this, new[] { copy });
+            }
+            catch (SqlForeignKeyException)
+            {
+                messageHelper.ShowError("This order has been deleted, ShipWorks was unable to create a copy of the shipment.");
+                return null;
+            }
         }
 
         /// <summary>

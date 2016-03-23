@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reactive.Disposables;
 using System.Windows.Forms;
+using Interapptive.Shared.Threading;
 using Interapptive.Shared.UI;
 using ShipWorks.Common.Threading;
 
@@ -12,24 +13,42 @@ namespace ShipWorks.UI.Services
     public class MessageHelperWrapper : IMessageHelper
     {
         private readonly Func<IWin32Window> ownerFactory;
+        private readonly ISchedulerProvider schedulerProvider;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public MessageHelperWrapper(Func<IWin32Window> ownerFactory)
+        public MessageHelperWrapper(Func<IWin32Window> ownerFactory, ISchedulerProvider schedulerProvider)
         {
             this.ownerFactory = ownerFactory;
+            this.schedulerProvider = schedulerProvider;
         }
 
         /// <summary>
         /// Show an error message box with the given error text.
         /// </summary>
-        public void ShowError(string message) => MessageHelper.ShowError(ownerFactory(), message);
+        public void ShowError(string message)
+        {
+            schedulerProvider.WindowsFormsEventLoop
+                .Schedule(new { Owner = ownerFactory(), Message = message }, (x, y) =>
+            {
+                MessageHelper.ShowError(y.Owner, y.Message);
+                return Disposable.Empty;
+            });
+        }
 
         /// <summary>
         /// Show an information message
         /// </summary>
-        public void ShowInformation(string message) => MessageHelper.ShowInformation(ownerFactory(), message);
+        public void ShowInformation(string message)
+        {
+            schedulerProvider.WindowsFormsEventLoop
+                .Schedule(new { Owner = ownerFactory(), Message = message }, (x, y) =>
+                {
+                    MessageHelper.ShowInformation(y.Owner, y.Message);
+                    return Disposable.Empty;
+                });
+        }
 
         /// <summary>
         /// Show a new progress dialog
@@ -51,7 +70,6 @@ namespace ShipWorks.UI.Services
             };
 
             progressDialog.Show(ownerFactory());
-
 
             return Disposable.Create(() =>
             {

@@ -19,6 +19,7 @@ namespace ShipWorks.Shipping
     {
         private readonly ICarrierShipmentAdapterFactory shipmentAdapterFactory;
         private readonly IValidatedAddressScope validatedAddressScope;
+        private readonly IValidatedAddressManager validatedAddressManager;
 
         /// <summary>
         /// Constructor
@@ -26,10 +27,12 @@ namespace ShipWorks.Shipping
         /// <param name="shipmentAdapterFactor"></param>
         public ShippingManagerWrapper(
             ICarrierShipmentAdapterFactory shipmentAdapterFactor,
-            IValidatedAddressScope validatedAddressScope)
+            IValidatedAddressScope validatedAddressScope,
+            IValidatedAddressManager validatedAddressManager)
         {
             this.shipmentAdapterFactory = shipmentAdapterFactor;
             this.validatedAddressScope = validatedAddressScope;
+            this.validatedAddressManager = validatedAddressManager;
         }
 
         /// <summary>
@@ -172,6 +175,33 @@ namespace ShipWorks.Shipping
         /// Create a new shipment for the given order
         /// </summary>
         public ShipmentEntity CreateShipment(OrderEntity order) => ShippingManager.CreateShipment(order);
+
+        /// <summary>
+        /// Create a shipment as a copy of an existing shipment
+        /// </summary>
+        public ShipmentEntity CreateShipmentCopy(ShipmentEntity shipment) => CreateShipmentCopy(shipment, null);
+
+        /// <summary>
+        /// Create a shipment as a copy of an existing shipment
+        /// </summary>
+        public ShipmentEntity CreateShipmentCopy(ShipmentEntity shipment, Action<ShipmentEntity> configuration)
+        {
+            ShipmentEntity copy = ShippingManager.CreateShipmentCopy(shipment);
+
+            configuration?.Invoke(copy);
+
+            // save
+            ShippingManager.SaveShipment(copy);
+
+            using (SqlAdapter sqlAdapter = new SqlAdapter(true))
+            {
+                validatedAddressManager.CopyValidatedAddresses(sqlAdapter, shipment.ShipmentID, "Ship", copy.ShipmentID, "Ship");
+
+                sqlAdapter.Commit();
+            }
+
+            return copy;
+        }
 
         /// <summary>
         /// Gets the service used.

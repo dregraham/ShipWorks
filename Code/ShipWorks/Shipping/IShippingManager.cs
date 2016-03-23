@@ -80,6 +80,16 @@ namespace ShipWorks.Shipping
         ShipmentEntity CreateShipment(OrderEntity order);
 
         /// <summary>
+        /// Create a shipment as a copy of an existing shipment
+        /// </summary>
+        ShipmentEntity CreateShipmentCopy(ShipmentEntity shipment);
+
+        /// <summary>
+        /// Create a shipment as a copy of an existing shipment
+        /// </summary>
+        ShipmentEntity CreateShipmentCopy(ShipmentEntity shipment, Action<ShipmentEntity> configure);
+
+        /// <summary>
         /// Gets the service used.
         /// </summary>
         string GetServiceUsed(ShipmentEntity shipment);
