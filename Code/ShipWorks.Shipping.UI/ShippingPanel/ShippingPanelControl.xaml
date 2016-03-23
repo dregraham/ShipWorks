@@ -139,7 +139,8 @@
                             <Expander IsEnabled="True"
                                       IsExpanded="{Binding IsOriginExpanded, Source={x:Static ui:ExpanderState.Current}, Mode=TwoWay, FallbackValue=True}">
                                 <Expander.Header>
-                                    <StackPanel Style="{StaticResource Expander.Header}" Orientation="Horizontal">
+                                    <StackPanel Style="{StaticResource Expander.Header}"
+                                                Orientation="Horizontal">
                                         <TextBlock Style="{StaticResource Expander.Header.Label}">From</TextBlock>
                                         <TextBlock Visibility="{Binding SupportsAccounts, Converter={StaticResource BooleanToVisibility}}">Account:</TextBlock>
                                         <TextBlock Visibility="{Binding Visibility, ElementName=AccountDropDown}"
