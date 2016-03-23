@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Windows.Forms.VisualStyles;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
@@ -9,6 +8,7 @@ using ShipWorks.Core.Messaging;
 using ShipWorks.Core.Messaging.Messages.Shipping;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages;
+using ShipWorks.Messaging.Messages.Dialogs;
 using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Shipping.Loading;
 using ShipWorks.Shipping.Services;
@@ -813,6 +813,55 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
 
             mock.Mock<IMessenger>()
                 .Verify(x => x.Send(It.IsAny<ShipmentsVoidedMessage>()), Times.Never);
+        }
+
+        [Fact]
+        public void OpenShippingDialogCommand_SendsOpenDialogMessage_WhenSingleOrderWithMultipleShipmentsLoaded()
+        {
+            var shipment = new ShipmentEntity();
+            var testObject = mock.Create<ShippingPanelViewModel>();
+            var orderSelection = new LoadedOrderSelection(new OrderEntity(), new[]
+            {
+                mock.CreateMock<ICarrierShipmentAdapter>(csa => csa.Setup(x => x.Shipment).Returns(shipment)).Object
+            }, ShippingAddressEditStateType.Editable);
+            testObject.LoadOrder(new OrderSelectionChangedMessage(this, new IOrderSelection[] { orderSelection }));
+
+            testObject.OpenShippingDialogCommand.Execute(null);
+
+            mock.Mock<IMessenger>()
+                .Verify(x => x.Send(It.IsAny<OpenShippingDialogMessage>()));
+        }
+
+        [Fact]
+        public void OpenShippingDialogCommand_SendsOpenShippingDialogWithOrdersMessage_WhenSingleOrderWithMultipleShipmentsLoaded()
+        {
+            var testObject = mock.Create<ShippingPanelViewModel>();
+            var orderSelection = new LoadedOrderSelection(new OrderEntity(), new[]
+            {
+                mock.Create<ICarrierShipmentAdapter>(),
+                mock.Create<ICarrierShipmentAdapter>()
+            }, ShippingAddressEditStateType.Editable);
+            testObject.LoadOrder(new OrderSelectionChangedMessage(this, new IOrderSelection[] { orderSelection }));
+
+            testObject.OpenShippingDialogCommand.Execute(null);
+
+            mock.Mock<IMessenger>()
+                .Verify(x => x.Send(It.IsAny<OpenShippingDialogWithOrdersMessage>()));
+        }
+
+        [Fact]
+        public void OpenShippingDialogCommand_SendsOpenShippingDialogWithOrdersMessage_WhenMultipleOrdersLoaded()
+        {
+            var testObject = mock.Create<ShippingPanelViewModel>();
+            testObject.LoadOrder(new OrderSelectionChangedMessage(this, new[] {
+                mock.Create<IOrderSelection>(),
+                mock.Create<IOrderSelection>()
+            }));
+
+            testObject.OpenShippingDialogCommand.Execute(null);
+
+            mock.Mock<IMessenger>()
+                .Verify(x => x.Send(It.IsAny<OpenShippingDialogWithOrdersMessage>()));
         }
 
         public void Dispose()
