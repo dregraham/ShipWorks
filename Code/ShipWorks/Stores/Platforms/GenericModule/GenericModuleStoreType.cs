@@ -443,7 +443,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
                     values.Add(name);
                 }
 
-                return values;
+                return values.Distinct().ToList();
             }
         }
 
