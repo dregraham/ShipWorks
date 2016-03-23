@@ -43,11 +43,9 @@ namespace ShipWorks.Stores.Platforms.SparkPay
 
         public override StoreEntity CreateStoreInstance()
         {
-            SparkPayStoreEntity store = new SparkPayStoreEntity();
+            StoreEntity store = new StoreEntity();
 
             InitializeStoreDefaults(store);
-            store.Token = "";
-            store.StoreUrl = "";
             store.StoreName = "My SparkPay Store";
 
             return store;
