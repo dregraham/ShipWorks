@@ -22,6 +22,7 @@ using ShipWorks.Shipping.Settings;
 using ShipWorks.Users;
 using ShipWorks.Stores;
 using ShipWorks.Stores.Content;
+using ShipWorks.Shipping.Profiles;
 
 namespace ShipWorks.ApplicationCore
 {
@@ -153,6 +154,9 @@ namespace ShipWorks.ApplicationCore
 
             builder.RegisterType<SqlSchemaVersion>()
                 .AsImplementedInterfaces();
+
+            builder.RegisterType<ShipmentTypeSetupActivity>()
+                .AsImplementedInterfaces();
         }
 
         /// <summary>
@@ -209,6 +213,9 @@ namespace ShipWorks.ApplicationCore
                 .AsImplementedInterfaces();
 
             builder.RegisterType<PostalUtilityWrapper>()
+                .AsImplementedInterfaces();
+
+            builder.RegisterType<ShippingProfileManagerWrapper>()
                 .AsImplementedInterfaces();
         }
     }

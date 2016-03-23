@@ -14,5 +14,13 @@ namespace ShipWorks.Shipping.Profiles
         {
             return ShippingProfileManager.GetDefaultProfile(shipmentTypeCode);
         }
+
+        /// <summary>
+        /// Saves the given profile
+        /// </summary>
+        public void SaveProfile(ShippingProfileEntity profile)
+        {
+            ShippingProfileManager.SaveProfile(profile);
+        }
     }
 }

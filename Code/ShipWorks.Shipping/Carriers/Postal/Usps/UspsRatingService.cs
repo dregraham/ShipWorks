@@ -70,11 +70,19 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             UspsAccountEntity account = accountRepository.GetAccount(shipment.Postal.Usps.UspsAccountID);
             UpdateContractType(account);
 
+            bool useCounterRates = false;
+            
+            // All of the accounts are pending accounts that do not exist yet so we use counter rates
+            if (accountRepository.Accounts.All(a => a.PendingInitialAccount == (int)UspsPendingAccountType.Create))
+            {
+                useCounterRates = true;
+            }
+
             // Get counter rates if we don't have any Endicia accounts, letting the Postal shipment type take care of caching
             // since it should be using a different cache key
             try
             {
-                return accountRepository.Accounts.Any() ?
+                return useCounterRates ?
                     GetRatesInternal(shipment) :
                     GetCounterRates(shipment);
             }
@@ -326,7 +334,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <param name="account">The account.</param>
         private void UpdateContractType(UspsAccountEntity account)
         {
-            if (account == null)
+            if (account == null || account.PendingInitialAccount != (int)UspsPendingAccountType.None)
             {
                 return;
             }

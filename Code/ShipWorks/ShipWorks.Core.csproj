@@ -601,7 +601,9 @@
     <Compile Include="ApplicationCore\Licensing\Activation\CustomerLicenseActivationService.cs" />
     <Compile Include="ApplicationCore\Licensing\Activation\ICustomerLicenseActivationActivity.cs" />
     <Compile Include="ApplicationCore\Licensing\Activation\IUspsAccountSetupActivity.cs" />
+    <Compile Include="ApplicationCore\Licensing\Activation\IShipmentTypeSetupActivity.cs" />
     <Compile Include="ApplicationCore\Licensing\Activation\UspsAccountSetupActivity.cs" />
+    <Compile Include="ApplicationCore\Licensing\Activation\ShipmentTypeSetupActivity.cs" />
     <Compile Include="ApplicationCore\Licensing\AssociateShipworksWithItselfRequest.cs" />
     <Compile Include="ApplicationCore\Licensing\AssociateShipWorksWithItselfResponse.cs" />
     <Compile Include="ApplicationCore\Licensing\AssociateShipWorksWithItselfResponseType.cs" />
