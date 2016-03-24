@@ -140,6 +140,8 @@
     <Compile Include="Imaging\EdgeDetection.cs" />
     <Compile Include="InterapptiveOnly.cs" />
     <Compile Include="Pdf\IPdfDocument.cs" />
+    <Compile Include="UI\IMessageHelper.cs" />
+    <Compile Include="UI\MessageHelperWrapper.cs" />
     <Compile Include="Utility\ActionRetry.cs" />
     <Compile Include="Utility\DetailsAttribute.cs" />
     <Compile Include="Utility\DoubleExtensions.cs" />

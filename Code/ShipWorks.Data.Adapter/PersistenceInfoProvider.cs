@@ -55,7 +55,7 @@ namespace ShipWorks.Data.Adapter
 		/// <summary>Method which initializes the internal datastores with the structure of hierarchical types.</summary>
 		private void Init()
 		{
-			base.InitClass((172 + 0));
+			base.InitClass((173 + 0));
 			InitActionEntityMappings();
 			InitActionFilterTriggerEntityMappings();
 			InitActionQueueEntityMappings();
@@ -195,6 +195,7 @@ namespace ShipWorks.Data.Adapter
 			InitShopifyOrderItemEntityMappings();
 			InitShopifyStoreEntityMappings();
 			InitShopSiteStoreEntityMappings();
+			InitSparkPayStoreEntityMappings();
 			InitStatusPresetEntityMappings();
 			InitStoreEntityMappings();
 			InitSystemDataEntityMappings();
@@ -2515,6 +2516,15 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementFieldMapping( "ShopSiteStoreEntity", "DownloadPageSize", "DownloadPageSize", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 5 );
 			base.AddElementFieldMapping( "ShopSiteStoreEntity", "RequestTimeout", "RequestTimeout", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 6 );
 		}
+		/// <summary>Inits SparkPayStoreEntity's mappings</summary>
+		private void InitSparkPayStoreEntityMappings()
+		{
+			base.AddElementMapping( "SparkPayStoreEntity", "ShipWorksLocal", @"dbo", "SparkPayStore", 4 );
+			base.AddElementFieldMapping( "SparkPayStoreEntity", "StoreID", "StoreID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 0 );
+			base.AddElementFieldMapping( "SparkPayStoreEntity", "Token", "Token", false, (int)SqlDbType.NVarChar, 70, 0, 0, false, "", null, typeof(System.String), 1 );
+			base.AddElementFieldMapping( "SparkPayStoreEntity", "StoreUrl", "StoreUrl", false, (int)SqlDbType.NVarChar, 350, 0, 0, false, "", null, typeof(System.String), 2 );
+			base.AddElementFieldMapping( "SparkPayStoreEntity", "StatusCodes", "StatusCodes", true, (int)SqlDbType.Xml, 2147483647, 0, 0, false, "", null, typeof(System.String), 3 );
+		}
 		/// <summary>Inits StatusPresetEntity's mappings</summary>
 		private void InitStatusPresetEntityMappings()
 		{
@@ -2654,13 +2664,14 @@ namespace ShipWorks.Data.Adapter
 		/// <summary>Inits ThreeDCartStoreEntity's mappings</summary>
 		private void InitThreeDCartStoreEntityMappings()
 		{
-			base.AddElementMapping( "ThreeDCartStoreEntity", "ShipWorksLocal", @"dbo", "ThreeDCartStore", 6 );
+			base.AddElementMapping( "ThreeDCartStoreEntity", "ShipWorksLocal", @"dbo", "ThreeDCartStore", 7 );
 			base.AddElementFieldMapping( "ThreeDCartStoreEntity", "StoreID", "StoreID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 0 );
 			base.AddElementFieldMapping( "ThreeDCartStoreEntity", "StoreUrl", "StoreUrl", false, (int)SqlDbType.NVarChar, 110, 0, 0, false, "", null, typeof(System.String), 1 );
 			base.AddElementFieldMapping( "ThreeDCartStoreEntity", "ApiUserKey", "ApiUserKey", false, (int)SqlDbType.NVarChar, 65, 0, 0, false, "", null, typeof(System.String), 2 );
 			base.AddElementFieldMapping( "ThreeDCartStoreEntity", "TimeZoneID", "TimeZoneID", true, (int)SqlDbType.NVarChar, 100, 0, 0, false, "", null, typeof(System.String), 3 );
 			base.AddElementFieldMapping( "ThreeDCartStoreEntity", "StatusCodes", "StatusCodes", true, (int)SqlDbType.Xml, 2147483647, 0, 0, false, "", null, typeof(System.String), 4 );
 			base.AddElementFieldMapping( "ThreeDCartStoreEntity", "DownloadModifiedNumberOfDaysBack", "DownloadModifiedNumberOfDaysBack", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 5 );
+			base.AddElementFieldMapping( "ThreeDCartStoreEntity", "RestUser", "RestUser", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 6 );
 		}
 		/// <summary>Inits UpsAccountEntity's mappings</summary>
 		private void InitUpsAccountEntityMappings()

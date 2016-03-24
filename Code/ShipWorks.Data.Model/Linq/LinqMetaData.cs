@@ -478,6 +478,9 @@ namespace ShipWorks.Data.Model.Linq
 				case ShipWorks.Data.Model.EntityType.ShopSiteStoreEntity:
 					toReturn = this.ShopSiteStore;
 					break;
+				case ShipWorks.Data.Model.EntityType.SparkPayStoreEntity:
+					toReturn = this.SparkPayStore;
+					break;
 				case ShipWorks.Data.Model.EntityType.StatusPresetEntity:
 					toReturn = this.StatusPreset;
 					break;
@@ -1416,6 +1419,12 @@ namespace ShipWorks.Data.Model.Linq
 		public DataSource2<ShopSiteStoreEntity> ShopSiteStore
 		{
 			get { return new DataSource2<ShopSiteStoreEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting SparkPayStoreEntity instances in the database.</summary>
+		public DataSource2<SparkPayStoreEntity> SparkPayStore
+		{
+			get { return new DataSource2<SparkPayStoreEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
 		}
 		
 		/// <summary>returns the datasource to use in a Linq query when targeting StatusPresetEntity instances in the database.</summary>

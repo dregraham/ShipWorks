@@ -14,5 +14,13 @@ namespace ShipWorks.Stores.Content
         {
             OrderUtility.PopulateOrderDetails(shipment);
         }
+
+        /// <summary>
+        /// Get a populated order from a order ID
+        /// </summary>
+        public OrderEntity FetchOrder(long orderID)
+        {
+            return OrderUtility.FetchOrder(orderID);
+        }
     }
 }

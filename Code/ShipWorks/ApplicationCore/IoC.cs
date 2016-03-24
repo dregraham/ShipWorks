@@ -10,6 +10,7 @@ using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Stores;
 using ShipWorks.Stores.Content;
+using System.Windows.Forms;
 
 namespace ShipWorks.ApplicationCore
 {
@@ -77,6 +78,11 @@ namespace ShipWorks.ApplicationCore
             builder.RegisterInstance(Messenger.Current)
                 .AsImplementedInterfaces()
                 .SingleInstance();
+
+            builder.Register(c => Program.MainForm)
+                .As<Control>()
+                .As<IWin32Window>()
+                .ExternallyOwned();
 
             builder.RegisterAssemblyModules(assemblies);
 
