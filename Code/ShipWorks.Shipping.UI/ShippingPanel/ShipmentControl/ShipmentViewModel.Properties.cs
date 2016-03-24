@@ -39,7 +39,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         /// The insurance view model to use.
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public IInsuranceViewModel InsuranceViewModel
+        public virtual IInsuranceViewModel InsuranceViewModel
         {
             get { return insuranceViewModel; }
             set { handler.Set(nameof(InsuranceViewModel), ref insuranceViewModel, value); }

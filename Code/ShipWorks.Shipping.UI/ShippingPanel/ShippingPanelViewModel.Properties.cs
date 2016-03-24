@@ -159,7 +159,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// The Shipment view model.
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public IShipmentViewModel ShipmentViewModel
+        public virtual IShipmentViewModel ShipmentViewModel
         {
             get { return shipmentViewModel; }
             set { handler.Set(nameof(ShipmentViewModel), ref shipmentViewModel, value); }

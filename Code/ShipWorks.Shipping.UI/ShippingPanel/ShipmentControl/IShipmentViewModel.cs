@@ -51,5 +51,10 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         /// Refresh the insurance view model for this shipment
         /// </summary>
         void RefreshInsurance();
+
+        /// <summary>
+        /// The insurance view model of the shipment
+        /// </summary>
+        IInsuranceViewModel InsuranceViewModel { get; }
     }
 }

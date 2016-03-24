@@ -36,7 +36,11 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
         private void OnShipmentChanged(ShipmentChangedMessage shipmentChangedMessage, ShippingPanelViewModel viewModel)
         {
             // Don't handle shipment changed messages from ourselves
-            if (viewModel.Equals(shipmentChangedMessage.Sender))
+            if (viewModel.Equals(shipmentChangedMessage.Sender) ||
+                viewModel.ShipmentViewModel.Equals(shipmentChangedMessage.Sender) ||
+                viewModel.ShipmentViewModel.InsuranceViewModel.Equals(shipmentChangedMessage.Sender) ||
+                viewModel.Origin.Equals(shipmentChangedMessage.Sender) ||
+                viewModel.Destination.Equals(shipmentChangedMessage.Sender))
             {
                 return;
             }

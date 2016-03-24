@@ -8,7 +8,9 @@ using ShipWorks.Messaging.Messages;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.UI.ShippingPanel;
 using ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations;
+using ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl;
 using ShipWorks.Tests.Shared;
+using ShipWorks.UI.Controls.AddressControl;
 using Xunit;
 
 namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
@@ -26,7 +28,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
         }
 
         [Fact]
-        public void Register_DoesNotCallPopulate_WhenSenderIsViewModel()
+        public void Register_DoesNotCallPopulate_WhenSenderIsShippingPanelViewModel()
         {
             var viewModel = mock.CreateMock<ShippingPanelViewModel>();
 
@@ -39,9 +41,57 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
         }
 
         [Fact]
+        public void Register_DoesNotCallPopulate_WhenSenderIsShipmentViewModel()
+        {
+            var viewModel = mock.CreateMock<ShippingPanelViewModel>()
+                .WithShipment(null)
+                .WithShipmentViewModel();
+
+            var testObject = mock.Create<ShipmentChangedPipeline>();
+            testObject.Register(viewModel.Object);
+
+            subject.OnNext(new ShipmentChangedMessage(viewModel.Object.ShipmentViewModel, mock.Create<ICarrierShipmentAdapter>()));
+
+            viewModel.Verify(x => x.LoadShipment(It.IsAny<ICarrierShipmentAdapter>()), Times.Never);
+        }
+
+        [Fact]
+        public void Register_DoesNotCallPopulate_WhenSenderIsInsuranceViewModel()
+        {
+            var viewModel = mock.CreateMock<ShippingPanelViewModel>()
+                .WithShipment(null)
+                .WithShipmentViewModel();
+
+            var testObject = mock.Create<ShipmentChangedPipeline>();
+            testObject.Register(viewModel.Object);
+
+            subject.OnNext(new ShipmentChangedMessage(viewModel.Object.ShipmentViewModel.InsuranceViewModel, mock.Create<ICarrierShipmentAdapter>()));
+
+            viewModel.Verify(x => x.LoadShipment(It.IsAny<ICarrierShipmentAdapter>()), Times.Never);
+        }
+
+        [Fact]
+        public void Register_DoesNotCallPopulate_WhenSenderIsAddressViewModel()
+        {
+            var viewModel = mock.CreateMock<ShippingPanelViewModel>()
+                .WithShipment(null)
+                .WithShipmentViewModel();
+
+            var testObject = mock.Create<ShipmentChangedPipeline>();
+            testObject.Register(viewModel.Object);
+
+            subject.OnNext(new ShipmentChangedMessage(viewModel.Object.Origin, mock.Create<ICarrierShipmentAdapter>()));
+            subject.OnNext(new ShipmentChangedMessage(viewModel.Object.Destination, mock.Create<ICarrierShipmentAdapter>()));
+
+            viewModel.Verify(x => x.LoadShipment(It.IsAny<ICarrierShipmentAdapter>()), Times.Never);
+        }
+
+        [Fact]
         public void Register_DoesNotCallPopulate_WhenMessageShipmentIsNull()
         {
-            var viewModel = mock.CreateMock<ShippingPanelViewModel>().WithShipment(new ShipmentEntity());
+            var viewModel = mock.CreateMock<ShippingPanelViewModel>()
+                .WithShipment(new ShipmentEntity())
+                .WithShipmentViewModel();
 
             var testObject = mock.Create<ShipmentChangedPipeline>();
             testObject.Register(viewModel.Object);
@@ -55,7 +105,9 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
         [Fact]
         public void Register_DoesNotCallPopulate_WhenViewModelShipmentIsNull()
         {
-            var viewModel = mock.CreateMock<ShippingPanelViewModel>().WithShipment(null);
+            var viewModel = mock.CreateMock<ShippingPanelViewModel>()
+                .WithShipment(null)
+                .WithShipmentViewModel();
 
             var testObject = mock.Create<ShipmentChangedPipeline>();
             testObject.Register(viewModel.Object);
@@ -69,7 +121,9 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
         [Fact]
         public void Register_DoesNotCallPopulate_WhenShipmentIdsDoNotMatch()
         {
-            var viewModel = mock.CreateMock<ShippingPanelViewModel>().WithShipment(new ShipmentEntity { ShipmentID = 3 });
+            var viewModel = mock.CreateMock<ShippingPanelViewModel>()
+                .WithShipment(new ShipmentEntity { ShipmentID = 3 })
+                .WithShipmentViewModel();
 
             var testObject = mock.Create<ShipmentChangedPipeline>();
             testObject.Register(viewModel.Object);
@@ -83,7 +137,9 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
         [Fact]
         public void Register_CallsPopulate_WhenShipmentIdsMatch()
         {
-            var viewModel = mock.CreateMock<ShippingPanelViewModel>().WithShipment(new ShipmentEntity { ShipmentID = 3 });
+            var viewModel = mock.CreateMock<ShippingPanelViewModel>()
+                .WithShipment(new ShipmentEntity { ShipmentID = 3 })
+                .WithShipmentViewModel();
 
             var testObject = mock.Create<ShipmentChangedPipeline>();
             testObject.Register(viewModel.Object);
