@@ -51,6 +51,14 @@ namespace ShipWorks.UI.Services
         }
 
         /// <summary>
+        /// Show a yes/no question with the given text
+        /// </summary>
+        public DialogResult ShowQuestion(string message)
+        {
+            return MessageHelper.ShowQuestion(ownerFactory(), message);
+        }
+
+        /// <summary>
         /// Show a new progress dialog
         /// </summary>
         public IDisposable ShowProgressDialog(string title, string description)
@@ -77,6 +85,17 @@ namespace ShipWorks.UI.Services
                 progressDialog.CloseForced();
                 progressDialog.Dispose();
             });
+        }
+
+        /// <summary>
+        /// Show a dialog and get the results
+        /// </summary>
+        public DialogResult ShowDialog(Func<Form> createDialog)
+        {
+            using (Form dlg = createDialog())
+            {
+                return dlg.ShowDialog(ownerFactory());
+            }
         }
     }
 }

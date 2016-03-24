@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.UI;
-using Interapptive.Shared.Utility;
 using Moq;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Core.Messaging.Messages.Shipping;
@@ -692,127 +691,6 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
 
             mock.Mock<IMessenger>()
                 .Verify(x => x.Send(It.IsAny<OrderSelectionChangingMessage>()));
-        }
-
-        [Fact]
-        public void Void_CallsMessageHelperShowError_WhenShippingManagerReturnsErrors()
-        {
-            var testObject = mock.Create<ShippingPanelViewModel>();
-
-            Mock<ICarrierShipmentAdapter> shipmentAdapter =
-                mock.CreateMock<ICarrierShipmentAdapter>(s => s.Setup(x => x.Shipment).Returns(new ShipmentEntity()
-                {
-                    Processed = true,
-                    Voided = false
-                }));
-
-            shippingErrorManager.Setup(m => m.SetShipmentErrorMessage(It.IsAny<long>(), It.IsAny<Exception>(), It.IsAny<string>()))
-                .Returns("an error");
-            shippingErrorManager.Setup(m => m.SetShipmentErrorMessage(It.IsAny<long>(), It.IsAny<Exception>()))
-                .Returns("an error");
-
-            testObject.LoadShipment(shipmentAdapter.Object);
-
-            mock.Mock<IShippingManager>()
-                .Setup(x => x.VoidShipment(It.IsAny<long>()))
-                .Throws(new ObjectDeletedException(""));
-
-            VoidLabelMessage voidLabelMessage = new VoidLabelMessage(this, testObject.Shipment.ShipmentID);
-
-            testObject.VoidLabel(voidLabelMessage);
-
-            mock.Mock<IMessageHelper>()
-                .Verify(x => x.ShowError(It.IsAny<string>()), Times.Once);
-        }
-
-        [Fact]
-        public void Void_CallsMessageHelperShowError_WhenShippingManagerReturnsShippingException()
-        {
-            var testObject = mock.Create<ShippingPanelViewModel>();
-
-            Mock<ICarrierShipmentAdapter> shipmentAdapter =
-                mock.CreateMock<ICarrierShipmentAdapter>(s => s.Setup(x => x.Shipment).Returns(new ShipmentEntity()
-                {
-                    Processed = true,
-                    Voided = false
-                }));
-
-            shippingErrorManager.Setup(m => m.SetShipmentErrorMessage(It.IsAny<long>(), It.IsAny<Exception>(), It.IsAny<string>()))
-                .Returns("an error");
-            shippingErrorManager.Setup(m => m.SetShipmentErrorMessage(It.IsAny<long>(), It.IsAny<Exception>()))
-                .Returns("an error");
-
-            testObject.LoadShipment(shipmentAdapter.Object);
-
-            mock.Mock<IShippingManager>()
-                .Setup(x => x.VoidShipment(It.IsAny<long>()))
-                .Throws(new ShippingException(""));
-
-            VoidLabelMessage voidLabelMessage = new VoidLabelMessage(this, testObject.Shipment.ShipmentID);
-
-            testObject.VoidLabel(voidLabelMessage);
-
-            mock.Mock<IMessageHelper>()
-                .Verify(x => x.ShowError(It.IsAny<string>()), Times.Once);
-        }
-
-        [Fact]
-        public void Void_SendsShipmentsVoidedMessage_WhenShipmentVoidedSuccessfully()
-        {
-            var testObject = mock.Create<ShippingPanelViewModel>();
-
-            Mock<ICarrierShipmentAdapter> shipmentAdapter =
-                mock.CreateMock<ICarrierShipmentAdapter>(s => s.Setup(x => x.Shipment).Returns(new ShipmentEntity()
-                {
-                    Processed = true,
-                    Voided = false
-                }));
-
-            Mock<ICarrierShipmentAdapter> successShipmentAdapter =
-                mock.CreateMock<ICarrierShipmentAdapter>(s => s.Setup(x => x.Shipment).Returns(new ShipmentEntity()
-                {
-                    Processed = true,
-                    Voided = true
-                }));
-
-            testObject.LoadShipment(shipmentAdapter.Object);
-
-            mock.Mock<IShippingManager>()
-                .Setup(x => x.VoidShipment(It.IsAny<long>()))
-                .Returns(successShipmentAdapter.Object);
-
-            VoidLabelMessage voidLabelMessage = new VoidLabelMessage(this, testObject.Shipment.ShipmentID);
-
-            testObject.VoidLabel(voidLabelMessage);
-
-            mock.Mock<IMessenger>()
-                .Verify(x => x.Send(It.IsAny<ShipmentsVoidedMessage>()), Times.Once);
-        }
-
-        [Fact]
-        public void Void_DoesNotSendShipmentsVoidedMessage_WhenShipmentFailsVoiding()
-        {
-            var testObject = mock.Create<ShippingPanelViewModel>();
-
-            Mock<ICarrierShipmentAdapter> shipmentAdapter =
-                mock.CreateMock<ICarrierShipmentAdapter>(s => s.Setup(x => x.Shipment).Returns(new ShipmentEntity()
-                {
-                    Processed = true,
-                    Voided = false
-                }));
-
-            testObject.LoadShipment(shipmentAdapter.Object);
-
-            mock.Mock<IShippingManager>()
-                .Setup(x => x.VoidShipment(It.IsAny<long>()))
-                .Returns<ICarrierShipmentAdapter>(null);
-
-            VoidLabelMessage voidLabelMessage = new VoidLabelMessage(this, testObject.Shipment.ShipmentID);
-
-            testObject.VoidLabel(voidLabelMessage);
-
-            mock.Mock<IMessenger>()
-                .Verify(x => x.Send(It.IsAny<ShipmentsVoidedMessage>()), Times.Never);
         }
 
         [Fact]

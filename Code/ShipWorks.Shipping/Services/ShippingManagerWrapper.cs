@@ -158,11 +158,23 @@ namespace ShipWorks.Shipping
         /// Void the given shipment.  If the shipment is already voided, then no action is taken and no error is reported.  The fact that
         /// it was voided is logged to tango.
         /// </summary>
-        public ICarrierShipmentAdapter VoidShipment(long shipmentID)
+        public GenericResult<ICarrierShipmentAdapter> VoidShipment(long shipmentID, IShippingErrorManager errorManager)
         {
-            ShipmentEntity shipment = ShippingManager.VoidShipment(shipmentID);
-
-            return shipmentAdapterFactory.Get(shipment);
+            try
+            {
+                ShipmentEntity shipment = ShippingManager.VoidShipment(shipmentID);
+                return GenericResult.FromSuccess(shipmentAdapterFactory.Get(shipment));
+            }
+            catch (Exception ex) when (ex is ORMConcurrencyException ||
+                                        ex is ObjectDeletedException ||
+                                        ex is SqlForeignKeyException)
+            {
+                return GenericResult.FromError<ICarrierShipmentAdapter>(errorManager.SetShipmentErrorMessage(shipmentID, ex, "voided"));
+            }
+            catch (ShippingException ex)
+            {
+                return GenericResult.FromError<ICarrierShipmentAdapter>(errorManager.SetShipmentErrorMessage(shipmentID, ex));
+            }
         }
 
         /// <summary>

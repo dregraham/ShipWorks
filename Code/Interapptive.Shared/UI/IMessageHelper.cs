@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows.Forms;
 
 namespace Interapptive.Shared.UI
 {
@@ -21,5 +22,16 @@ namespace Interapptive.Shared.UI
         /// Show a new progress dialog
         /// </summary>
         IDisposable ShowProgressDialog(string title, string description);
+
+        /// <summary>
+        /// Show a yes/no question with the given text
+        /// </summary>
+        DialogResult ShowQuestion(string text);
+
+        /// <summary>
+        /// Show a dialog and get the results
+        /// </summary>
+        /// <returns></returns>
+        DialogResult ShowDialog(Func<Form> createDialog);
     }
 }

@@ -23,7 +23,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
     {
         static readonly ILog log = LogManager.GetLogger(typeof(ShippingPanel));
         ShippingPanelControl shippingPanelControl;
-        readonly ShippingPanelViewModel viewModel;
+        ShippingPanelViewModel viewModel;
         readonly IMessenger messenger;
 
         /// <summary>
@@ -38,7 +38,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
                 return;
             }
 
-            viewModel = IoC.UnsafeGlobalLifetimeScope.Resolve<ShippingPanelViewModel>();
             messenger = IoC.UnsafeGlobalLifetimeScope.Resolve<IMessenger>();
         }
 
@@ -48,6 +47,9 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
+
+            // We have to instantiate the view model in the load event to ensure that the MainForm is available
+            viewModel = IoC.UnsafeGlobalLifetimeScope.Resolve<ShippingPanelViewModel>();
 
             shippingPanelControl = new ShippingPanelControl(viewModel);
             viewModel.CommitBindings = CommitBindingsOnFocusedControl;
@@ -127,7 +129,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             IInputElement focusedElement = FindFocusedInputElement(shippingPanelControl);
             CommitBindings(focusedElement);
         }
-        
+
         /// <summary>
         /// Find the element that is currently focused within the given dependency object
         /// </summary>

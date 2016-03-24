@@ -1981,31 +1981,16 @@ namespace ShipWorks.Shipping
                 long shipmentID = shipment.ShipmentID;
                 string errorMessage = null;
 
-                try
-                {
-                    // Process it
-                    shippingManager.VoidShipment(shipmentID);
+                // Process it
+                GenericResult<ICarrierShipmentAdapter> result = shippingManager.VoidShipment(shipmentID, ErrorManager);
 
-                    // Clear any previous errors
+                if (result.Success)
+                {
                     ErrorManager.Remove(shipmentID);
                 }
-                catch (ORMConcurrencyException ex)
+                else
                 {
-                    errorMessage = ErrorManager.SetShipmentErrorMessage(shipmentID, ex, "voided");
-                }
-                catch (ObjectDeletedException ex)
-                {
-                    errorMessage = ErrorManager.SetShipmentErrorMessage(shipmentID, ex, "voided");
-                }
-                catch (SqlForeignKeyException ex)
-                {
-                    errorMessage = ErrorManager.SetShipmentErrorMessage(shipmentID, ex, "voided");
-                }
-                catch (ShippingException ex)
-                {
-                    errorMessage = ErrorManager.SetShipmentErrorMessage(shipmentID, ex);
-                    //errorMessage = ex.Message;
-                    //processingErrors[shipmentID] = ex;
+                    errorMessage = result.Message;
                 }
 
                 try

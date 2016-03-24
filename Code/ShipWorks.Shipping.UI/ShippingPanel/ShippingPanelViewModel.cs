@@ -11,13 +11,10 @@ using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.UI;
-using Interapptive.Shared.Utility;
 using log4net;
-using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Core.Messaging.Messages.Shipping;
 using ShipWorks.Core.UI;
-using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Messaging.Messages.Dialogs;
@@ -45,7 +42,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         private readonly IMessageHelper messageHelper;
         private readonly IShippingViewModelFactory shippingViewModelFactory;
         private readonly ILog log;
-        private readonly IShippingErrorManager errorManager;
 
         private bool isLoadingShipment;
         private IDisposable shipmentChangedSubscription;
@@ -73,15 +69,13 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             IShippingManager shippingManager,
             IMessageHelper messageHelper,
             IShippingViewModelFactory shippingViewModelFactory,
-            Func<Type, ILog> logFactory,
-            IShippingErrorManager errorManager) : this()
+            Func<Type, ILog> logFactory) : this()
         {
             this.shippingManager = shippingManager;
             this.messenger = messenger;
             this.messageHelper = messageHelper;
             this.shippingViewModelFactory = shippingViewModelFactory;
             log = logFactory(typeof(ShippingPanelViewModel));
-            this.errorManager = errorManager;
 
             OpenShippingDialogCommand = new RelayCommand(SendShowShippingDlgMessage);
 
@@ -314,55 +308,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         private void TrackShipment()
         {
             messenger.Send(new OpenShippingDialogMessage(this, new[] { ShipmentAdapter.Shipment }, InitialShippingTabDisplay.Tracking));
-        }
-
-        /// <summary>
-        /// Void a shipment
-        /// </summary>
-        public virtual void VoidLabel(VoidLabelMessage voidLabelMessage)
-        {
-            ShipmentEntity shipment = ShipmentAdapter?.Shipment;
-
-            if (shipment == null || !shipment.Processed || shipment.Voided)
-            {
-                return;
-            }
-
-            SaveToDatabase();
-
-            AllowEditing = false;
-
-            string errorMessage = string.Empty;
-            ICarrierShipmentAdapter voidedShipmentAdapter = null;
-            long shipmentID = shipment.ShipmentID;
-
-            try
-            {
-                // Void it
-                voidedShipmentAdapter = shippingManager.VoidShipment(shipmentID);
-            }
-            catch (Exception ex) when (ex is ORMConcurrencyException ||
-                                        ex is ObjectDeletedException ||
-                                        ex is SqlForeignKeyException)
-            {
-                errorMessage = errorManager.SetShipmentErrorMessage(shipmentID, ex, "voided");
-            }
-            catch (ShippingException ex)
-            {
-                errorMessage = errorManager.SetShipmentErrorMessage(shipmentID, ex);
-            }
-
-            if (!string.IsNullOrWhiteSpace(errorMessage))
-            {
-                messageHelper.ShowError(errorMessage);
-                return;
-            }
-
-            if (voidedShipmentAdapter != null)
-            {
-                VoidShipmentResult voidShipmentResult = new VoidShipmentResult(voidedShipmentAdapter.Shipment);
-                messenger.Send(new ShipmentsVoidedMessage(this, new[] { voidShipmentResult }));
-            }
         }
 
         /// <summary>

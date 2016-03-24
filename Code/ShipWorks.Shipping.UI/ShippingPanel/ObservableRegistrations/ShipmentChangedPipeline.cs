@@ -12,6 +12,13 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
     public class ShipmentChangedPipeline : IShippingPanelObservableRegistration
     {
         readonly IObservable<IShipWorksMessage> messages;
+        readonly Func<ShippingPanelViewModel, object>[] viewModelsToIgnore = {
+            x => x,
+            x => x.ShipmentViewModel,
+            x => x.ShipmentViewModel.InsuranceViewModel,
+            x => x.Origin,
+            x => x.Destination
+        };
 
         /// <summary>
         /// Constructor
@@ -35,12 +42,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
         /// </summary>
         private void OnShipmentChanged(ShipmentChangedMessage shipmentChangedMessage, ShippingPanelViewModel viewModel)
         {
-            // Don't handle shipment changed messages from ourselves
-            if (viewModel.Equals(shipmentChangedMessage.Sender) ||
-                viewModel.ShipmentViewModel.Equals(shipmentChangedMessage.Sender) ||
-                viewModel.ShipmentViewModel.InsuranceViewModel.Equals(shipmentChangedMessage.Sender) ||
-                viewModel.Origin.Equals(shipmentChangedMessage.Sender) ||
-                viewModel.Destination.Equals(shipmentChangedMessage.Sender))
+            if (IsSenderViewModelOrDescendant(shipmentChangedMessage, viewModel))
             {
                 return;
             }
@@ -55,6 +57,14 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
             {
                 viewModel.LoadShipment(shipmentChangedMessage.ShipmentAdapter);
             }
+        }
+
+        /// <summary>
+        /// We don't want to reload the shipment if the message was sent by the view model or one of its descendants
+        /// </summary>
+        private bool IsSenderViewModelOrDescendant(ShipmentChangedMessage shipmentChangedMessage, ShippingPanelViewModel viewModel)
+        {
+            return viewModelsToIgnore.Select(x => x(viewModel)).Any(vm => vm.Equals(shipmentChangedMessage.Sender));
         }
     }
 }

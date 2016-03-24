@@ -104,7 +104,7 @@ namespace Interapptive.Shared.UI
         /// </summary>
         public static DialogResult ShowQuestion(IWin32Window owner, string text)
         {
-            return MessageHelper.ShowQuestion(owner, MessageBoxIcon.Question, text);
+            return ShowQuestion(owner, MessageBoxIcon.Question, text);
         }
 
         /// <summary>
