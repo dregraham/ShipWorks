@@ -23,6 +23,6 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Is the given field a rating field
         /// </summary>
-        public bool IsRatingField(string changedField) => false;
+        public bool IsRatingField(string changedField) => true;
     }
 }
