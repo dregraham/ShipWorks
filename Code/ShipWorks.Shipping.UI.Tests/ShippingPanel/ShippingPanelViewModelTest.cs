@@ -402,6 +402,34 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
         }
 
         [Fact]
+        public void Load_LoadedShipmentResult_IsUnsupportedShipmentType_WhenAmazonShipmentType()
+        {
+            shipmentEntity.ShipmentTypeCode = ShipmentTypeCode.Amazon;
+            orderSelectionLoaded = new LoadedOrderSelection(orderEntity,
+                new List<ICarrierShipmentAdapter>() { shipmentAdapterFactory.Object.Get(shipmentEntity) },
+                ShippingAddressEditStateType.Editable
+                );
+
+            ShippingPanelViewModel testObject = GetViewModelWithLoadedShipment(mock);
+
+            Assert.Equal(ShippingPanelLoadedShipmentResult.UnsupportedShipmentType, testObject.LoadedShipmentResult);
+        }
+
+        [Fact]
+        public void Load_LoadedShipmentResult_IsUnsupportedShipmentType_WhenBestRateShipmentType()
+        {
+            shipmentEntity.ShipmentTypeCode = ShipmentTypeCode.BestRate;
+            orderSelectionLoaded = new LoadedOrderSelection(orderEntity,
+                new List<ICarrierShipmentAdapter>() { shipmentAdapterFactory.Object.Get(shipmentEntity) },
+                ShippingAddressEditStateType.Editable
+                );
+
+            ShippingPanelViewModel testObject = GetViewModelWithLoadedShipment(mock);
+
+            Assert.Equal(ShippingPanelLoadedShipmentResult.UnsupportedShipmentType, testObject.LoadedShipmentResult);
+        }
+
+        [Fact]
         public void Save_DoesNotCallSaveToDatabase_WhenShipmentIsProcessed()
         {
             shipmentEntity.Processed = true;

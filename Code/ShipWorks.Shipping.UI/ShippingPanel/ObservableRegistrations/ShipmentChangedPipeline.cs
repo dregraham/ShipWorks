@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Reactive.Linq;
 using ShipWorks.Core.Messaging;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages;
 
 namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
@@ -47,8 +48,11 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
                 return;
             }
 
-            if (shipmentChangedMessage?.ShipmentAdapter?.Shipment == null ||
-                viewModel.Shipment == null)
+            ShipmentEntity shipment = shipmentChangedMessage?.ShipmentAdapter?.Shipment;
+            if (shipment == null ||
+                viewModel.Shipment == null ||
+                shipment.ShipmentTypeCode == ShipmentTypeCode.Amazon ||
+                shipment.ShipmentTypeCode == ShipmentTypeCode.BestRate)
             {
                 return;
             }

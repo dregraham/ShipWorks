@@ -237,6 +237,13 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
                 return ShippingPanelLoadedShipmentResult.NotCreated;
             }
 
+            ICarrierShipmentAdapter shipmetAdapter = loadedSelection.ShipmentAdapters.FirstOrDefault();
+            if (shipmetAdapter?.ShipmentTypeCode == ShipmentTypeCode.Amazon ||
+                shipmetAdapter?.ShipmentTypeCode == ShipmentTypeCode.BestRate)
+            {
+                return ShippingPanelLoadedShipmentResult.UnsupportedShipmentType;
+            }
+
             return ShippingPanelLoadedShipmentResult.Success;
         }
 
@@ -260,6 +267,15 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             isLoadingShipment = true;
 
             ShipmentAdapter = fromShipmentAdapter;
+
+            // If we are an unsupported shipment type, stop and show the appropriate message.
+            if (ShipmentAdapter.Shipment.ShipmentTypeCode == ShipmentTypeCode.Amazon ||
+                ShipmentAdapter.Shipment.ShipmentTypeCode == ShipmentTypeCode.BestRate)
+            {
+                LoadedShipmentResult = ShippingPanelLoadedShipmentResult.UnsupportedShipmentType;
+                isLoadingShipment = false;
+                return;
+            }
 
             Populate(ShipmentAdapter);
 

@@ -238,6 +238,17 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
                     shippingRibbonActions.ShipAgain.Enabled = false;
                     shippingRibbonActions.ApplyProfile.Enabled = false;
                 }
+                // No action is allowed for None shipment type
+                else if (currentShipment.ShipmentTypeCode == ShipmentTypeCode.Amazon ||
+                         currentShipment.ShipmentTypeCode == ShipmentTypeCode.BestRate)
+                {
+                    shippingRibbonActions.CreateLabel.Enabled = true;
+                    shippingRibbonActions.Void.Enabled = true;
+                    shippingRibbonActions.Return.Enabled = false;
+                    shippingRibbonActions.Reprint.Enabled = false;
+                    shippingRibbonActions.ShipAgain.Enabled = false;
+                    shippingRibbonActions.ApplyProfile.Enabled = false;
+                }
                 else
                 {
                     shippingRibbonActions.CreateLabel.Enabled = !currentShipment.Processed;

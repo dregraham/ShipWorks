@@ -354,6 +354,16 @@
                             <Setter Property="Margin" Value="12,10" />
                         </Style>
                     </StackPanel.Style>
+                    <StackPanel Visibility="{Binding LoadedShipmentResult,
+                                Converter={StaticResource VisibleWhenEqualToParameter},
+                                ConverterParameter={x:Static sw:ShippingPanelLoadedShipmentResult.UnsupportedShipmentType}}">
+                        <TextBlock Style="{StaticResource TextBlock.Empty}"
+                               TextWrapping="WrapWithOverflow"
+                               Margin="0, 0, 0, 5">
+                            <Hyperlink Command="{Binding OpenShippingDialogCommand}">Click here </Hyperlink>
+                            to use the Ship Orders dialog for this carrier.
+                        </TextBlock>
+                    </StackPanel>
                     <StackPanel Visibility="{Binding LoadedShipmentResult,Converter={StaticResource VisibleWhenEqualToParameter},ConverterParameter={x:Static sw:ShippingPanelLoadedShipmentResult.Multiple}}">
                         <TextBlock Style="{StaticResource TextBlock.Empty}"
                                TextWrapping="WrapWithOverflow"
