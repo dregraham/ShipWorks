@@ -68,7 +68,15 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
         /// </summary>
         private bool IsSenderViewModelOrDescendant(ShipmentChangedMessage shipmentChangedMessage, ShippingPanelViewModel viewModel)
         {
-            return viewModelsToIgnore.Select(x => x(viewModel)).Any(vm => vm.Equals(shipmentChangedMessage.Sender));
+            if (shipmentChangedMessage?.Sender == null)
+            {
+                return false;
+            }
+
+            return viewModelsToIgnore.Select(x => x(viewModel)).Any(vm =>
+            {
+                return vm?.Equals(shipmentChangedMessage?.Sender) ?? true;
+            });
         }
     }
 }
