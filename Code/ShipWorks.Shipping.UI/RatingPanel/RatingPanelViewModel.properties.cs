@@ -101,7 +101,7 @@ namespace ShipWorks.Shipping.UI.RatingPanel
         }
 
         /// <summary>
-        /// Should the empty message be shown
+        /// Empty message to be shown
         /// </summary>
         [Obfuscation(Exclude = true)]
         public string EmptyMessage

@@ -203,6 +203,14 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             loadedOrderSelection = orderMessage.LoadedOrderSelection.OfType<LoadedOrderSelection>().Single();
             LoadedShipmentResult = GetLoadedShipmentResult(loadedOrderSelection);
 
+            // If multiple shipment adaptors or multiple shipments on an order are received,
+            // tell the rating panel 
+            if (loadedOrderSelection.ShipmentAdapters?.Count() > 1 ||
+                loadedOrderSelection.ShipmentAdapters?.Sum(sa => sa.Shipment?.Order?.Shipments?.Count) > 1)
+            {
+                messenger.Send(new RatesNotSupportedMessage(this, "Unable to get rates for orders with multiple shipments."));
+            }
+
             if (LoadedShipmentResult == ShippingPanelLoadedShipmentResult.Success)
             {
                 LoadShipment(loadedOrderSelection.ShipmentAdapters.Single());

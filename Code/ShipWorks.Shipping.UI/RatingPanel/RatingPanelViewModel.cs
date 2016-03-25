@@ -77,10 +77,23 @@ namespace ShipWorks.Shipping.UI.RatingPanel
                 messenger.OfType<ShipmentChangedMessage>()
                     .Where(x => x.ChangedField == "ServiceType")
                     .Subscribe(x => SelectRate(x.ShipmentAdapter)),
+                messenger.OfType<RatesNotSupportedMessage>()
+                    .Subscribe(HandleRatesNotSupportedMessage),
                 handler.Where(x => nameof(SelectedRate).Equals(x, StringComparison.Ordinal))
                     .Where(_ => SelectedRate != null)
                     .Subscribe(_ => messenger.Send(new SelectedRateChangedMessage(this, SelectedRate)))
             );
+        }
+
+        /// <summary>
+        /// Handle a rates not supported message.
+        /// </summary>
+        private void HandleRatesNotSupportedMessage(RatesNotSupportedMessage message)
+        {
+            Footnotes = Enumerable.Empty<object>();
+            Rates = Enumerable.Empty<RateResult>();
+            EmptyMessage = message.Message;
+            ShowEmptyMessage = true;
         }
 
         /// <summary>
@@ -102,9 +115,20 @@ namespace ShipWorks.Shipping.UI.RatingPanel
         {
             if (message.Success)
             {
-                Rates = message.RateGroup.Rates.ToArray();
-                ShowEmptyMessage = false;
-                EmptyMessage = string.Empty;
+                // Do not show rates if the order has more than 1 shipment
+                if (message?.ShipmentAdapter?.Shipment?.Order?.Shipments?.Count > 1)
+                {
+                    Footnotes = Enumerable.Empty<object>();
+                    Rates = Enumerable.Empty<RateResult>();
+                    EmptyMessage = "Unable to get rates for orders with multiple shipments.";
+                    ShowEmptyMessage = true;
+                }
+                else
+                {
+                    Rates = message.RateGroup.Rates.ToArray();
+                    ShowEmptyMessage = false;
+                    EmptyMessage = string.Empty;
+                }
             }
             else
             {

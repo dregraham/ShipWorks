@@ -791,6 +791,7 @@
     <Compile Include="Messaging\Messages\Shipping\BasicOrderSelection.cs" />
     <Compile Include="Messaging\Messages\Shipping\ApplyProfileMessage.cs" />
     <Compile Include="Messaging\Messages\Shipping\CreateReturnShipmentMessage.cs" />
+    <Compile Include="Messaging\Messages\Shipping\RatesNotSupportedMessage.cs" />
     <Compile Include="Messaging\Messages\Shipping\VoidShipmentResult.cs" />
     <Compile Include="Messaging\Messages\Shipping\ReprintLabelMessage.cs" />
     <Compile Include="Messaging\Messages\Shipping\ShipAgainMessage.cs" />

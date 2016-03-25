@@ -6,6 +6,7 @@ using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
 using Moq;
 using ShipWorks.Core.Messaging;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Services;
@@ -21,6 +22,7 @@ namespace ShipWorks.Shipping.UI.Tests.RatingPanel
         readonly TestMessenger messenger;
         readonly GenericResult<RateGroup> testResult;
         readonly RateGroup testRateGroup;
+        readonly RateGroup successRateGroup = new RateGroup(new List<RateResult> { new RateResult("x", "y") });
 
         public RatingPanelViewModelTest()
         {
@@ -262,7 +264,65 @@ namespace ShipWorks.Shipping.UI.Tests.RatingPanel
             Assert.Equal(3, testObject.Rates.Count());
             Assert.Equal("Bar", testObject.SelectedRate.Description);
         }
+        
+        [Fact]
+        public void ShowEmptyMessage_SetToTrue_WhenRatesNotSupportedMessageIsReceived()
+        {
+            var testObject = mock.Create<RatingPanelViewModel>();
+            messenger.Send(new RatesNotSupportedMessage(this, string.Empty));
 
+            Assert.True(testObject.ShowEmptyMessage);
+        }
+
+        [Fact]
+        public void EmptyMessage_Set_WhenRatesNotSupportedMessageIsReceived()
+        {
+            var testObject = mock.Create<RatingPanelViewModel>();
+            messenger.Send(new RatesNotSupportedMessage(this, "Bad rates!"));
+
+            Assert.Equal("Bad rates!", testObject.EmptyMessage);
+        }
+
+        [Fact]
+        public void EmptyMessage_Set_WhenRatesRetrievedMessageContainsMultipleShipments()
+        {
+            ShipmentEntity shipment = new ShipmentEntity(3);
+            OrderEntity order = new OrderEntity(6);
+            order.Shipments.Add(shipment);
+            order.Shipments.Add(new ShipmentEntity(4));
+            shipment.Order = order;
+
+            Mock<ICarrierShipmentAdapter> shipmentAdapter = new Mock<ICarrierShipmentAdapter>();
+            shipmentAdapter.Setup(sa => sa.Shipment).Returns(shipment);
+
+            var testObject = mock.Create<RatingPanelViewModel>();
+            messenger.Send(new RatesRetrievingMessage(this, string.Empty));
+            messenger.Send(new RatesRetrievedMessage(this, string.Empty, GenericResult.FromSuccess(successRateGroup), shipmentAdapter.Object));
+
+            Assert.True(testObject.ShowEmptyMessage);
+            Assert.NotNull(testObject.EmptyMessage);
+            Assert.False(string.IsNullOrWhiteSpace(testObject.EmptyMessage));
+        }
+
+        [Fact]
+        public void EmptyMessage_NotSet_WhenRatesRetrievedMessageContainsSingleShipment()
+        {
+            ShipmentEntity shipment = new ShipmentEntity(3);
+            OrderEntity order = new OrderEntity(6);
+            order.Shipments.Add(shipment);
+            shipment.Order = order;
+
+            Mock<ICarrierShipmentAdapter> shipmentAdapter = new Mock<ICarrierShipmentAdapter>();
+            shipmentAdapter.Setup(sa => sa.Shipment).Returns(shipment);
+
+            var testObject = mock.Create<RatingPanelViewModel>();
+            messenger.Send(new RatesRetrievingMessage(this, string.Empty));
+            messenger.Send(new RatesRetrievedMessage(this, string.Empty, GenericResult.FromSuccess(successRateGroup), shipmentAdapter.Object));
+
+            Assert.False(testObject.ShowEmptyMessage);
+            Assert.True(string.IsNullOrWhiteSpace(testObject.EmptyMessage));
+        }
+        
         public void Dispose()
         {
             mock?.Dispose();

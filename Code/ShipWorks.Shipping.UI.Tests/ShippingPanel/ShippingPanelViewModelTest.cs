@@ -817,6 +817,35 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
 
             Assert.Equal(expected, testObject.ShipmentStatus);
         }
+        [Fact]
+        public void LoadOrder_SendsRatesNotSupportedMessage_WhenMultipleShipmentAdapters()
+        {
+            shipmentEntity.Order.Shipments.Add(new ShipmentEntity(59945));
+            shipmentEntity.Order.Shipments.Add(new ShipmentEntity(59946));
+            shipmentAdapter.Setup(sa => sa.Shipment).Returns(shipmentEntity);
+
+            orderSelectionLoaded = new LoadedOrderSelection(orderEntity, new[] { shipmentAdapter.Object, shipmentAdapter.Object.Clone() }, ShippingAddressEditStateType.Editable);
+
+            ShippingPanelViewModel testObject = mock.Create<ShippingPanelViewModel>();
+            testObject.LoadOrder(new OrderSelectionChangedMessage(this, new IOrderSelection[] { orderSelectionLoaded }));
+
+            mock.Mock<IMessenger>().Verify(s => s.Send(It.IsAny<RatesNotSupportedMessage>()), Times.Once);
+        }
+
+        [Fact]
+        public void LoadOrder_SendsRatesNotSupportedMessage_WhenOrderHasMultipleShipments()
+        {
+            shipmentEntity.Order.Shipments.Add(new ShipmentEntity(59945));
+            shipmentEntity.Order.Shipments.Add(new ShipmentEntity(59946));
+            shipmentAdapter.Setup(sa => sa.Shipment).Returns(shipmentEntity);
+
+            orderSelectionLoaded = new LoadedOrderSelection(orderEntity, new[] {shipmentAdapter.Object}, ShippingAddressEditStateType.Editable);
+
+            ShippingPanelViewModel testObject = mock.Create<ShippingPanelViewModel>();
+            testObject.LoadOrder(new OrderSelectionChangedMessage(this, new IOrderSelection[] { orderSelectionLoaded }));
+
+            mock.Mock<IMessenger>().Verify(s => s.Send(It.IsAny<RatesNotSupportedMessage>()), Times.Once);
+        }
 
         public void Dispose()
         {
