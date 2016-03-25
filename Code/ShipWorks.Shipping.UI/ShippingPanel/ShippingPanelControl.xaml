@@ -76,11 +76,16 @@
                                        Text="{Binding StatusDate,Converter={StaticResource FriendlyDate}}"
                                        FontSize="16" />
                         </WrapPanel>
-                        <TextBlock Grid.Row="1"
-                               Grid.ColumnSpan="1">Tracking #<Hyperlink Command="{Binding TrackShipmentCommand}">
-                                   <Run Text="{Binding TrackingNumber}" />
-                               </Hyperlink>
-                        </TextBlock>
+                        <WrapPanel Orientation="Horizontal">
+                            <TextBlock Grid.Row="1"
+                                   Grid.ColumnSpan="1">Tracking #<Hyperlink Command="{Binding TrackShipmentCommand}">
+                                       <Run Text="{Binding TrackingNumber}" />
+                                   </Hyperlink>
+                            </TextBlock>
+                            <Button Command="{Binding CopyTrackingNumberToClipboardCommand}" 
+                                    Visibility="{Binding TrackingNumber, Converter={StaticResource VisibleWhenNotEqualToParameter}, ConverterParameter={x:Static sys:String.Empty}}"
+                                    Style="{StaticResource Button.Copy}" />
+                        </WrapPanel>
                     </StackPanel>
                 </ui:NotificationBorder>
                 <ui:NotificationBorder BorderBrush="{StaticResource Yellow}"

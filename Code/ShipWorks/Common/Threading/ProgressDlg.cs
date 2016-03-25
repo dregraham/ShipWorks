@@ -2,12 +2,14 @@ using System;
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
+using Autofac;
 using Divelements.SandGrid;
 using Divelements.SandGrid.Specialized;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Win32;
 using log4net;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Properties;
 using ShipWorks.UI.Controls.SandGrid;
 
@@ -618,7 +620,10 @@ namespace ShipWorks.Common.Threading
         {
             string error = progressGrid.ActiveGrid.Rows[0].Cells[0].Text;
 
-            ClipboardHelper.SetText(error, TextDataFormat.Text, this);
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                lifetimeScope.Resolve<ClipboardHelper>().SetText(error, TextDataFormat.Text, null);
+            }
         }
 
         #endregion

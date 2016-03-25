@@ -7,6 +7,7 @@ using Autofac.Core;
 using Interapptive.Shared;
 using Interapptive.Shared.Pdf;
 using Interapptive.Shared.Threading;
+using Interapptive.Shared.Win32;
 using log4net;
 using ShipWorks.AddressValidation;
 using ShipWorks.ApplicationCore.Licensing;
@@ -66,6 +67,10 @@ namespace ShipWorks.ApplicationCore
 
             builder.RegisterType<DataProviderWrapper>()
                 .AsImplementedInterfaces();
+
+            builder.RegisterType<ClipboardHelper>()
+                .AsSelf()
+                .SingleInstance();
 
             builder.RegisterType<ShippingSettingsWrapper>()
                 .AsImplementedInterfaces()

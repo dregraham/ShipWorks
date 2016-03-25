@@ -5,13 +5,17 @@ using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reflection;
+using System.Windows.Forms;
 using System.Windows.Input;
+using Autofac;
 using GalaSoft.MvvmLight.Command;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.UI;
+using Interapptive.Shared.Win32;
 using log4net;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Core.Messaging.Messages.Shipping;
 using ShipWorks.Core.UI;
@@ -94,6 +98,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
 
             CreateLabelCommand = new RelayCommand(CreateLabel);
             TrackShipmentCommand = new RelayCommand(TrackShipment);
+            CopyTrackingNumberToClipboardCommand = new RelayCommand(CopyTrackingNumberToClipboard);
         }
 
         /// <summary>
@@ -107,6 +112,12 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// </summary>
         [Obfuscation(Exclude = true)]
         public ICommand TrackShipmentCommand { get; }
+
+        /// <summary>
+        /// Command that opens the shipping dialog to the tracking tab
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public ICommand CopyTrackingNumberToClipboardCommand { get; }
 
         /// <summary>
         /// Is the current shipment domestic
@@ -332,6 +343,17 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         private void TrackShipment()
         {
             messenger.Send(new OpenShippingDialogMessage(this, new[] { ShipmentAdapter.Shipment }, InitialShippingTabDisplay.Tracking));
+        }
+
+        /// <summary>
+        /// Copy the tracking number to the clipboard
+        /// </summary>
+        private void CopyTrackingNumberToClipboard()
+        {
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                lifetimeScope.Resolve<ClipboardHelper>().SetText(TrackingNumber, TextDataFormat.Text, null);
+            }
         }
 
         /// <summary>
