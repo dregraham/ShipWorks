@@ -61,7 +61,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
         /// </summary>
         public void UpdateOrderStatus(long orderID, int statusID, UnitOfWork2 unitOfWork)
         {
-            OrderEntity order = (OrderEntity) DataProvider.GetEntity(orderID);
+            ThreeDCartOrderEntity order = (ThreeDCartOrderEntity) DataProvider.GetEntity(orderID);
             if (order != null)
             {
                 if (order.IsManual)
@@ -69,15 +69,50 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
                     log.InfoFormat($"Not uploading order status since order {order.OrderID} is manual.");
                     return;
                 }
+                string status = EnumHelper.GetDescription((Enums.ThreeDCartOrderStatus) statusID);
 
-                webClient.UpdateOrderStatus(order.OrderNumber, statusID);
+                order.OnlineStatus = status;
+                order.OnlineStatusCode = statusID;
+
+                // Fetch the order items
+                using (SqlAdapter adapter = new SqlAdapter())
+                {
+                    adapter.FetchEntityCollection(order.OrderItems, new RelationPredicateBucket(OrderItemFields.OrderID == order.OrderID));
+                }
+
+                ThreeDCartOrderItemEntity item = order.OrderItems?.FirstOrDefault() as ThreeDCartOrderItemEntity;
+
+                if (item == null)
+                {
+                    throw new ThreeDCartException("No items were found on the order. ShipWorks cannot upload order status information without items from 3D Cart.");
+                }
+
+                ThreeDCartShipment shipment = new ThreeDCartShipment()
+                {
+                    OrderID = order.ThreeDCartOrderID,
+                    ShipmentID = item.ThreeDCartShipmentID,
+                    ShipmentOrderStatus = (int)EnumHelper.GetEnumByApiValue<Enums.ThreeDCartOrderStatus>(order.OnlineStatus),
+                    ShipmentPhone = order.ShipPhone,
+                    ShipmentFirstName = order.ShipFirstName,
+                    ShipmentLastName = order.ShipLastName,
+                    ShipmentAddress = order.ShipStreet1,
+                    ShipmentAddress2 = order.ShipStreet2,
+                    ShipmentCity = order.ShipCity,
+                    ShipmentState = order.ShipStateProvCode,
+                    ShipmentZipCode = order.ShipPostalCode,
+                    ShipmentCountry = order.ShipCountryCode,
+                    ShipmentCompany = order.ShipCompany,
+                    ShipmentEmail = order.ShipEmail,
+                };
+
+                webClient.UpdateOrderStatus(shipment);
 
                 // Update the local database with the new status
                 OrderEntity basePrototype = new OrderEntity(orderID)
                 {
                     IsNew = false,
                     OnlineStatusCode = statusID,
-                    OnlineStatus = EnumHelper.GetDescription((Enums.ThreeDCartOrderStatus) statusID)
+                    OnlineStatus = status
                 };
 
                 unitOfWork.AddForSave(basePrototype);
@@ -125,7 +160,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
         /// </summary>
         private void UpdateShipmentDetails(ShipmentEntity shipmentEntity)
         {
-            OrderEntity order = shipmentEntity.Order;
+            ThreeDCartOrderEntity order = (ThreeDCartOrderEntity) shipmentEntity.Order;
             if (order.IsManual)
             {
                 log.WarnFormat("Not updating order {0} since it is manual.", shipmentEntity.Order.OrderNumberComplete);
@@ -148,8 +183,9 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
 
             ThreeDCartShipment shipment = new ThreeDCartShipment()
             {
+                OrderID = order.ThreeDCartOrderID,
                 ShipmentID = threeDCartOrderItem.ThreeDCartShipmentID,
-                ShipmentOrderStatus = (int) Enums.ThreeDCartOrderStatus.Shipped,
+                ShipmentOrderStatus = (int) EnumHelper.GetEnumByApiValue<Enums.ThreeDCartOrderStatus>(order.OnlineStatus),
                 ShipmentMethodName = GetShipmentMethodName(shipmentEntity),
                 ShipmentPhone = shipmentEntity.ShipPhone,
                 ShipmentFirstName = shipmentEntity.ShipFirstName,
@@ -168,7 +204,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
                 ShipmentWeight = shipmentEntity.TotalWeight
             };
 
-            webClient.UploadShipmentDetails(order.OrderNumber, shipment);
+            webClient.UploadShipmentDetails(shipment);
         }
 
         /// <summary>

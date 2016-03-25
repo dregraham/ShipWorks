@@ -14,9 +14,9 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
     /// <summary>
     /// Updates ThreeDCart order status/shipments
     /// </summary>
-    public class ThreeDCartOnlineUpdater
+    public class ThreeDCartSoapOnlineUpdater
     {
-        static readonly ILog log = LogManager.GetLogger(typeof(ThreeDCartOnlineUpdater));
+        static readonly ILog log = LogManager.GetLogger(typeof(ThreeDCartSoapOnlineUpdater));
         readonly ThreeDCartStoreEntity threeDCartStore;
 
         // status code provider
@@ -25,7 +25,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         /// <summary>
         /// Constructor
         /// </summary>
-        public ThreeDCartOnlineUpdater(ThreeDCartStoreEntity store)
+        public ThreeDCartSoapOnlineUpdater(ThreeDCartStoreEntity store)
         {
             threeDCartStore = store;
         }

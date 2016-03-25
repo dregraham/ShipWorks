@@ -5,6 +5,7 @@ using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Management;
 using log4net;
+using ShipWorks.Stores.Platforms.ThreeDCart.RestApi;
 
 namespace ShipWorks.Stores.Platforms.ThreeDCart
 {
@@ -89,11 +90,19 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
 
                 try
                 {
-                    ThreeDCartWebClient webClient = new ThreeDCartWebClient(threeDCartStore, null);
-                    webClient.TestConnection();
+                    if (threeDCartStore.RestUser)
+                    {
+                        ThreeDCartRestWebClient webClient = new ThreeDCartRestWebClient(threeDCartStore);
+                        webClient.TestConnection();
+                    }
+                    else
+                    {
+                        ThreeDCartWebClient webClient = new ThreeDCartWebClient(threeDCartStore, null);
+                        webClient.TestConnection();
 
-                    ThreeDCartStatusCodeProvider statusProvider = new ThreeDCartStatusCodeProvider(threeDCartStore);
-                    statusProvider.UpdateFromOnlineStore();
+                        ThreeDCartStatusCodeProvider statusProvider = new ThreeDCartStatusCodeProvider(threeDCartStore);
+                        statusProvider.UpdateFromOnlineStore();
+                    }
                 }
                 catch (ThreeDCartException ex)
                 {

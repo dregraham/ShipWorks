@@ -3,8 +3,10 @@ using Newtonsoft.Json;
 
 namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi.DTO
 {
-    public class ThreeDCartShipment
+   public class ThreeDCartShipment
     {
+        public long OrderID { get; set; }
+
         [JsonProperty("ShipmentID")]
         public long ShipmentID { get; set; }
 

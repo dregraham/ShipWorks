@@ -91,7 +91,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
 
 
 
-                totalCount = restWebClient.GetOrderCount();
+                totalCount = restWebClient.GetOrderCount(startDate);
 
                 if (totalCount != 0)
                 {
@@ -99,43 +99,43 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
 
                     LoadOrders(orders);
                 }
-                //// Get the number of orders for the range
-                //ThreeDCartWebClientOrderSearchCriteria orderSearchCriteria =
-                //    GetOrderSearchCriteria(ThreeDCartWebClientOrderDateSearchType.CreatedDate);
+                // Get the number of orders for the range
+                ThreeDCartWebClientOrderSearchCriteria orderSearchCriteria =
+                    GetOrderSearchCriteria(ThreeDCartWebClientOrderDateSearchType.CreatedDate);
 
-                //totalCount = WebClient.GetOrderCount(orderSearchCriteria);
+                totalCount = WebClient.GetOrderCount(orderSearchCriteria);
 
-                //if (totalCount != 0)
-                //{
-                //    // Download any newly created orders (thier modified dates could be older than the last last modified date SW has)
-                //    DownloadOrders(orderSearchCriteria);
-                //}
+                if (totalCount != 0)
+                {
+                    // Download any newly created orders (thier modified dates could be older than the last last modified date SW has)
+                    DownloadOrders(orderSearchCriteria);
+                }
 
-                //if (threeDCartStore.DownloadModifiedNumberOfDaysBack > 0)
-                //{
-                //    // Now Download modified orders
-                //    Progress.Detail = "Checking for modified orders...";
-                //    lastModifiedOrderDateProcessed = DateTime.UtcNow.AddDays(-7);
-                //    orderSearchCriteria =
-                //        GetOrderSearchCriteria(ThreeDCartWebClientOrderDateSearchType.ModifiedDate);
+                if (threeDCartStore.DownloadModifiedNumberOfDaysBack > 0)
+                {
+                    // Now Download modified orders
+                    Progress.Detail = "Checking for modified orders...";
+                    lastModifiedOrderDateProcessed = DateTime.UtcNow.AddDays(-7);
+                    orderSearchCriteria =
+                        GetOrderSearchCriteria(ThreeDCartWebClientOrderDateSearchType.ModifiedDate);
 
-                //    int modifiedCount = WebClient.GetOrderCount(orderSearchCriteria);
-                //    if (modifiedCount == 0)
-                //    {
-                //        Progress.Detail = "No orders to download.";
-                //        Progress.PercentComplete = 100;
-                //        return;
-                //    }
+                    int modifiedCount = WebClient.GetOrderCount(orderSearchCriteria);
+                    if (modifiedCount == 0)
+                    {
+                        Progress.Detail = "No orders to download.";
+                        Progress.PercentComplete = 100;
+                        return;
+                    }
 
-                //    // Update the total count to included the modified orders
-                //    totalCount += modifiedCount;
+                    // Update the total count to included the modified orders
+                    totalCount += modifiedCount;
 
-                //    // Update the progress bar for the new count
-                //    Progress.PercentComplete = QuantitySaved/totalCount;
+                    // Update the progress bar for the new count
+                    Progress.PercentComplete = QuantitySaved/totalCount;
 
-                //    // Download the modified orders
-                //    DownloadOrders(orderSearchCriteria);
-                //}
+                    // Download the modified orders
+                    DownloadOrders(orderSearchCriteria);
+                }
             }
             catch (ThreeDCartException ex)
             {

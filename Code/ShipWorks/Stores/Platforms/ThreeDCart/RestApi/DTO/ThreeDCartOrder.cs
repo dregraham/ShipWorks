@@ -16,7 +16,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi.DTO
         public int InvoiceNumber { get; set; }
 
         [JsonProperty("OrderID")]
-        public int OrderID { get; set; }
+        public long OrderID { get; set; }
 
         [JsonProperty("CustomerID")]
         public int CustomerID { get; set; }

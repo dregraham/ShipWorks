@@ -27,7 +27,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi.DTO
         public string ItemDescription { get; set; }
 
         [JsonProperty("ItemUnitPrice")]
-        public double ItemUnitPrice { get; set; }
+        public decimal ItemUnitPrice { get; set; }
 
         [JsonProperty("ItemWeight")]
         public double ItemWeight { get; set; }

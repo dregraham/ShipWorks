@@ -8,7 +8,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
 {
     /// <summary>
     /// Uniquely identifies an ThreeDCart order in the database
-    /// 
+    ///
     /// Since 3D Cart orders can have an invoice prefix, when using the regular OrderNumberIdentifier, orders would not be found
     /// What was happening:
     /// - Download order 1100, with prefix AB- for the first time
@@ -75,6 +75,14 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
 
             order.ApplyOrderNumberPrefix(orderPrefix);
             order.ApplyOrderNumberPostfix(orderPostfix);
+        }
+
+        /// <summary>
+        /// Returns a string version of the identifier
+        /// </summary>
+        public override string ToString()
+        {
+            return $"{OrderPrefix}{OrderNumber}{orderPostfix}";
         }
     }
 }

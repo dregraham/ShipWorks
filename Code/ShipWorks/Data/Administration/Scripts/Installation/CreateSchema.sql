@@ -3484,6 +3484,26 @@ PRINT N'Creating primary key [PK_TemplateUserSettings] on [dbo].[TemplateUserSet
 GO
 ALTER TABLE [dbo].[TemplateUserSettings] ADD CONSTRAINT [PK_TemplateUserSettings] PRIMARY KEY CLUSTERED  ([TemplateUserSettingsID])
 GO
+SET NUMERIC_ROUNDABORT OFF
+GO
+SET ANSI_PADDING, ANSI_WARNINGS, CONCAT_NULL_YIELDS_NULL, ARITHABORT, QUOTED_IDENTIFIER, ANSI_NULLS ON
+GO
+PRINT N'Creating [dbo].[ThreeDCartOrder]'
+GO
+CREATE TABLE [dbo].[ThreeDCartOrder]
+(
+[OrderID] [bigint] NOT NULL,
+[ThreeDCartOrderID] [bigint] NOT NULL
+)
+GO
+PRINT N'Creating primary key [PK_ThreeDCartOrder] on [dbo].[ThreeDCartOrder]'
+GO
+ALTER TABLE [dbo].[ThreeDCartOrder] ADD CONSTRAINT [PK_ThreeDCartOrder] PRIMARY KEY CLUSTERED  ([OrderID])
+GO
+PRINT N'Adding foreign keys to [dbo].[ThreeDCartOrder]'
+GO
+ALTER TABLE [dbo].[ThreeDCartOrder] ADD CONSTRAINT [FK_ThreeDCartOrder_Order] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[Order] ([OrderID])
+GO
 PRINT N'Creating [dbo].[ThreeDCartOrderItem]'
 GO
 CREATE TABLE [dbo].[ThreeDCartOrderItem]

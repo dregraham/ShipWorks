@@ -5,9 +5,11 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.Data.Administration.Retry;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
@@ -23,6 +25,9 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
         private ISqlAdapterRetry sqlAdapterRetry;
         private readonly ILog log;
         const int MissingCustomerID = 0;
+        private int newOrderCount;
+        private int modifiedOrderCount;
+        private DateTime modifiedOrderEndDate;
 
         /// <summary>
         /// Constructor
@@ -50,20 +55,60 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
         /// </summary>
         protected override void Download()
         {
-            restWebClient.LoadProgressReporter(Progress);
-            Progress.Detail = "Checking for new orders...";
-
-            DateTime startDate = new DateTime();
-
-
-
-            totalCount = restWebClient.GetOrderCount();
-
-            if (totalCount != 0)
+            try
             {
-                IEnumerable<ThreeDCartOrder> orders = DownloadOrders(startDate);
+                restWebClient.LoadProgressReporter(Progress);
 
-                LoadOrders(orders);
+                DateTime? startDate = GetOrderDateStartingPoint();
+                if (!startDate.HasValue)
+                {
+                    startDate = DateTime.Today;
+                }
+
+                modifiedOrderEndDate = startDate.Value;
+
+                if (threeDCartStore.DownloadModifiedNumberOfDaysBack > 0)
+                {
+                    startDate = startDate.Value.AddDays(-threeDCartStore.DownloadModifiedNumberOfDaysBack);
+                    Progress.Detail = "Checking for new and modified orders...";
+                }
+                else
+                {
+                    Progress.Detail = "Checking for new orders...";
+                }
+
+                totalCount = restWebClient.GetOrderCount(startDate.Value);
+
+                if (totalCount != 0)
+                {
+                    IEnumerable<ThreeDCartOrder> orders = DownloadOrders(startDate.Value);
+
+                    LoadOrders(orders);
+                }
+                else
+                {
+                    Progress.Detail = "No orders to download.";
+                }
+
+                newOrderCount = 0;
+                modifiedOrderCount = 0;
+                // Update the progress bar for the new count
+                Progress.PercentComplete = QuantitySaved/totalCount;
+            }
+            catch (ThreeDCartException ex)
+            {
+                log.Error(ex);
+                throw new DownloadException(ex.Message, ex);
+            }
+            catch (SqlForeignKeyException ex)
+            {
+                log.Error(ex);
+                throw new DownloadException(ex.Message, ex);
+            }
+            catch (Exception ex)
+            {
+                log.Error(ex);
+                throw WebHelper.TranslateWebException(ex, typeof(DownloadException));
             }
         }
         /// <summary>
@@ -118,18 +163,37 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
         /// </summary>
         public void LoadOrders(IEnumerable<ThreeDCartOrder> orders)
         {
+            int newOrderTotal = 0;
+
             foreach (ThreeDCartOrder threeDCartOrder in orders)
             {
                 threeDCartOrder.isSubOrder = false;
                 threeDCartOrder.hasSubOrders = threeDCartOrder.ShipmentList.Count() > 1;
                 int shipmentIndex = 1;
+
                 foreach (ThreeDCartShipment shipment in threeDCartOrder.ShipmentList)
                 {
+
                     string invoiceNumberPostFix = threeDCartOrder.hasSubOrders ? $"-{shipmentIndex}" : string.Empty;
 
                     ThreeDCartOrderIdentifier orderIdentifier = CreateOrderIdentifier(threeDCartOrder, invoiceNumberPostFix);
 
-                    OrderEntity order = InstantiateOrder(orderIdentifier);
+                    if (threeDCartOrder.OrderDate < modifiedOrderEndDate)
+                    {
+                        Progress.Detail = $"Checking order {orderIdentifier} for modifications...";
+                        ++modifiedOrderCount;
+                    }
+                    else
+                    {
+                        if (newOrderCount == 0)
+                        {
+                            newOrderTotal = orders.Count() - modifiedOrderCount;
+                        }
+
+                        Progress.Detail = $"Processing new order {++newOrderCount} of {newOrderTotal}";
+                    }
+
+                    ThreeDCartOrderEntity order = (ThreeDCartOrderEntity) InstantiateOrder(orderIdentifier);
 
                     order = LoadOrder(order, threeDCartOrder, shipment, invoiceNumberPostFix);
 
@@ -144,7 +208,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
         /// <summary>
         /// Loads the order.
         /// </summary>
-        public OrderEntity LoadOrder(OrderEntity order, ThreeDCartOrder threeDCartOrder, ThreeDCartShipment threeDCartShipment, string invoiceNumberPostFix)
+        public ThreeDCartOrderEntity LoadOrder(ThreeDCartOrderEntity order, ThreeDCartOrder threeDCartOrder, ThreeDCartShipment threeDCartShipment, string invoiceNumberPostFix)
         {
             MethodConditions.EnsureArgumentIsNotNull(threeDCartOrder, "order");
 
@@ -164,7 +228,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
             {
                 order.OnlineCustomerID = order.CustomerID;
             }
-
+            order.ThreeDCartOrderID = threeDCartOrder.OrderID;
             order.OrderDate = threeDCartOrder.OrderDate;
             order.OnlineLastModified = threeDCartOrder.LastUpdate;
             order.OnlineStatusCode = threeDCartOrder.OrderStatusID;
@@ -289,6 +353,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
             item.SKU = item.Code;
             item.Quantity = threeDCartItem.ItemQuantity;
             item.UnitCost = threeDCartItem.ItemUnitCost;
+            item.UnitPrice = threeDCartItem.ItemUnitPrice;
             item.Weight = threeDCartItem.ItemWeight;
             item.ThreeDCartShipmentID = threeDCartItem.ItemShipmentID;
 
@@ -315,7 +380,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
 
                     if (option[0].EndsWith(":"))
                     {
-                        option[0].Remove(option[0].Length - 1);
+                       option[0] = option[0].Remove(option[0].Length - 1);
                     }
                     string optionName = option[0];
 

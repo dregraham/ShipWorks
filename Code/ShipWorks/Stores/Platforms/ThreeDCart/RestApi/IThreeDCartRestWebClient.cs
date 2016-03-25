@@ -22,12 +22,12 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
         /// <summary>
         /// Uploads the shipment details.
         /// </summary>
-        void UploadShipmentDetails(long orderID, ThreeDCartShipment shipment);
+        void UploadShipmentDetails(ThreeDCartShipment shipment);
 
         /// <summary>
         /// Updates the order status.
         /// </summary>
-        void UpdateOrderStatus(long orderID, int statusID);
+        void UpdateOrderStatus(ThreeDCartShipment shipment);
 
         /// <summary>
         /// Loads the progress reporter.
@@ -37,6 +37,6 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
         /// <summary>
         /// Gets the order count.
         /// </summary>
-        int GetOrderCount();
+        int GetOrderCount(DateTime startDate);
     }
 }

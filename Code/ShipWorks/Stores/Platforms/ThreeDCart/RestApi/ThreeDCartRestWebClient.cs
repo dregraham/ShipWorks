@@ -32,7 +32,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
         private readonly string token;
         private readonly ThreeDCartWebClientRequestThrottle throttler = new ThreeDCartWebClientRequestThrottle();
 
-        private HttpVariableRequestSubmitter submitter;
+        private HttpJsonVariableRequestSubmitter submitter;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ThreeDCartRestWebClient"/> class.
@@ -44,11 +44,11 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
             secureUrl = store.StoreUrl;
             token = store.ApiUserKey;
 
-            submitter = new HttpVariableRequestSubmitter();
-            submitter.ContentType = ContentType;
-            submitter.Headers.Add(HttpRequestHeader.Authorization, $"SecureUrl: {secureUrl}");
-            submitter.Headers.Add(HttpRequestHeader.Authorization, $"PrivateKey: {PrivateKey}");
-            submitter.Headers.Add(HttpRequestHeader.Authorization, $"Token: {token}");
+            submitter = new HttpJsonVariableRequestSubmitter();
+            submitter.Headers.Add($"Content-Type: {ContentType}");
+            submitter.Headers.Add($"SecureUrl: {secureUrl}");
+            submitter.Headers.Add($"PrivateKey: {PrivateKey}");
+            submitter.Headers.Add($"Token: {token}");
         }
 
         /// <summary>
@@ -60,12 +60,21 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
         }
 
         /// <summary>
+        /// Attempt to get an order count to test connecting to ThreeDCart.  If any error, assume connection failed.
+        /// </summary>
+        public void TestConnection()
+        {
+            GetOrderCount(DateTime.Today);
+        }
+
+        /// <summary>
         /// Gets the order count.
         /// </summary>
-        public int GetOrderCount()
+        public int GetOrderCount(DateTime startDate)
         {
             submitter.Verb = HttpVerb.Get;
             submitter.Uri = new Uri($"{HttpHost}/{OrderApiVersion}/{OrderUrlExtension}");
+            submitter.Variables.Add("datestart", startDate.ToShortDateString());
             submitter.Variables.Add("countonly", "1");
 
             string response = string.Empty;
@@ -137,13 +146,11 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
         /// <summary>
         /// Uploads the shipment details.
         /// </summary>
-        public void UploadShipmentDetails(long orderID, ThreeDCartShipment shipment)
+        public void UploadShipmentDetails(ThreeDCartShipment shipment)
         {
-            string body = JsonConvert.SerializeObject(shipment);
-
             submitter.Verb = HttpVerb.Put;
-            submitter.Uri = new Uri($"{HttpHost}/{OrderApiVersion}/{OrderUrlExtension}/{orderID}/{ShipmentUrlExtension}/{shipment.ShipmentID}");
-            submitter.Variables.Add(string.Empty, body);
+            submitter.Uri = new Uri($"{HttpHost}/{OrderApiVersion}/{OrderUrlExtension}/{shipment.OrderID}/{ShipmentUrlExtension}/{shipment.ShipmentID}");
+            submitter.RequestBody = JsonConvert.SerializeObject(shipment);
 
             throttler.ExecuteRequest(new RequestThrottleParameters(ThreeDCartWebClientApiCall.CreateFulfillment, null, progressReporter), () =>
             {
@@ -154,13 +161,11 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
         /// <summary>
         /// Updates the order status.
         /// </summary>
-        public void UpdateOrderStatus(long orderID, int statusID)
+        public void UpdateOrderStatus(ThreeDCartShipment shipment)
         {
-            string body = $"{{OrderStatusID: {statusID}}}";
-
             submitter.Verb = HttpVerb.Put;
-            submitter.Uri = new Uri($"{HttpHost}/{OrderApiVersion}/{OrderUrlExtension}/{orderID}");
-            submitter.Variables.Add(string.Empty, body);
+            submitter.Uri = new Uri($"{HttpHost}/{OrderApiVersion}/{OrderUrlExtension}/{shipment.OrderID}");
+            submitter.RequestBody = JsonConvert.SerializeObject(shipment);
 
             throttler.ExecuteRequest(new RequestThrottleParameters(ThreeDCartWebClientApiCall.UpdateOrderStatus, null, progressReporter), () =>
             {
@@ -182,6 +187,9 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
                 {
                     string responseData = reader.ReadResult();
                     logEntry.LogResponse(responseData, "txt");
+
+                    // Clear variables for next reqeust
+                    submitter.Variables.Clear();
 
                     return responseData;
                 }
