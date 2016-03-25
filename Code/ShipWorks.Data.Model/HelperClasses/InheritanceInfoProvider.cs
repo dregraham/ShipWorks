@@ -121,6 +121,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddEntityInfo("ShopifyStoreEntity", "StoreEntity", new ShopifyStoreRelations(), new ShopifyStoreEntityFactory(),  (30-30));
 			base.AddEntityInfo("ShopSiteStoreEntity", "StoreEntity", new ShopSiteStoreRelations(), new ShopSiteStoreEntityFactory(),  (30-30));
 			base.AddEntityInfo("StoreEntity", string.Empty, new StoreRelations(), new StoreEntityFactory());
+			base.AddEntityInfo("ThreeDCartOrderEntity", "OrderEntity", new ThreeDCartOrderRelations(), new ThreeDCartOrderEntityFactory(),  (74-74));
 			base.AddEntityInfo("ThreeDCartOrderItemEntity", "OrderItemEntity", new ThreeDCartOrderItemRelations(), new ThreeDCartOrderItemEntityFactory(),  (18-18));
 			base.AddEntityInfo("ThreeDCartStoreEntity", "StoreEntity", new ThreeDCartStoreRelations(), new ThreeDCartStoreEntityFactory(),  (30-30));
 			base.AddEntityInfo("VolusionStoreEntity", "StoreEntity", new VolusionStoreRelations(), new VolusionStoreEntityFactory(),  (30-30));

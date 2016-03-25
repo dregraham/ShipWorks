@@ -55,7 +55,7 @@ namespace ShipWorks.Data.Adapter
 		/// <summary>Method which initializes the internal datastores with the structure of hierarchical types.</summary>
 		private void Init()
 		{
-			base.InitClass((172 + 0));
+			base.InitClass((173 + 0));
 			InitActionEntityMappings();
 			InitActionFilterTriggerEntityMappings();
 			InitActionQueueEntityMappings();
@@ -203,6 +203,7 @@ namespace ShipWorks.Data.Adapter
 			InitTemplateFolderEntityMappings();
 			InitTemplateStoreSettingsEntityMappings();
 			InitTemplateUserSettingsEntityMappings();
+			InitThreeDCartOrderEntityMappings();
 			InitThreeDCartOrderItemEntityMappings();
 			InitThreeDCartStoreEntityMappings();
 			InitUpsAccountEntityMappings();
@@ -2643,6 +2644,13 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementFieldMapping( "TemplateUserSettingsEntity", "PreviewCount", "PreviewCount", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 4 );
 			base.AddElementFieldMapping( "TemplateUserSettingsEntity", "PreviewFilterNodeID", "PreviewFilterNodeID", true, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 5 );
 			base.AddElementFieldMapping( "TemplateUserSettingsEntity", "PreviewZoom", "PreviewZoom", false, (int)SqlDbType.NVarChar, 10, 0, 0, false, "", null, typeof(System.String), 6 );
+		}
+		/// <summary>Inits ThreeDCartOrderEntity's mappings</summary>
+		private void InitThreeDCartOrderEntityMappings()
+		{
+			base.AddElementMapping( "ThreeDCartOrderEntity", "ShipWorksLocal", @"dbo", "ThreeDCartOrder", 2 );
+			base.AddElementFieldMapping( "ThreeDCartOrderEntity", "OrderID", "OrderID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 0 );
+			base.AddElementFieldMapping( "ThreeDCartOrderEntity", "ThreeDCartOrderID", "ThreeDCartOrderID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 1 );
 		}
 		/// <summary>Inits ThreeDCartOrderItemEntity's mappings</summary>
 		private void InitThreeDCartOrderItemEntityMappings()

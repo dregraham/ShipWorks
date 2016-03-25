@@ -473,6 +473,9 @@ namespace ShipWorks.Data.Model.FactoryClasses
 				case ShipWorks.Data.Model.EntityType.TemplateUserSettingsEntity:
 					fieldsToReturn = fieldProvider.GetEntityFields(inheritanceProvider, "TemplateUserSettingsEntity");
 					break;
+				case ShipWorks.Data.Model.EntityType.ThreeDCartOrderEntity:
+					fieldsToReturn = fieldProvider.GetEntityFields(inheritanceProvider, "ThreeDCartOrderEntity");
+					break;
 				case ShipWorks.Data.Model.EntityType.ThreeDCartOrderItemEntity:
 					fieldsToReturn = fieldProvider.GetEntityFields(inheritanceProvider, "ThreeDCartOrderItemEntity");
 					break;
