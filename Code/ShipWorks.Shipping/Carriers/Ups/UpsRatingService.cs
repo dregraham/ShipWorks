@@ -63,8 +63,9 @@ namespace ShipWorks.Shipping.Carriers.Ups
                     CounterRatesOriginAddressValidator.EnsureValidAddress(shipment);
 
                     // Get the transit times and services
-                    transitTimes = transitTimeClient.GetTransitTimes(shipment, true);
-                    serviceRates = upsApiRateClient.GetRates(shipment, true);
+                    //transitTimes = transitTimeClient.GetTransitTimes(shipment, true);
+                    //serviceRates = upsApiRateClient.GetRates(shipment, true);
+                    return RateGroup.ShippingAccountRequiredRateGroup();
                 }
                 else
                 {
@@ -84,20 +85,19 @@ namespace ShipWorks.Shipping.Carriers.Ups
                 ValidatePackageDimensions(shipment);
 
                 List<RateResult> rates = AddRateForEachService(allNegotiated, serviceRates, transitTimes);
-
                 AddMessageResult(shipment, wantedNegotiated, anyNegotiated, allNegotiated, rates);
 
                 // Filter out any excluded services, but always include the service that the shipment is configured with
                 List<RateResult> finalRatesFilteredByAvailableServices = FilterRatesByExcludedServices(shipment, rates);
 
                 RateGroup finalGroup = new RateGroup(finalRatesFilteredByAvailableServices);
-
                 return finalGroup;
             }
             catch (CounterRatesOriginAddressException)
             {
                 RateGroup errorRates = new RateGroup(new List<RateResult>());
                 errorRates.AddFootnoteFactory(new CounterRatesInvalidStoreAddressFootnoteFactory(shipmentType));
+
                 return errorRates;
             }
             catch (Exception ex) when (ex is UpsException || ex is InvalidPackageDimensionsException)
