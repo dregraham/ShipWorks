@@ -26,6 +26,7 @@ using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Origin;
 using ShipWorks.Shipping.Tracking;
+using ShipWorks.Shipping.ShipSense.Packaging;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 
 
@@ -85,6 +86,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
 
             IParcelPackageEntity package = CreateDefaultPackage();
             iParcelShipmentEntity.Packages.Add(package);
+            shipment.IParcel.Packages.RemovedEntitiesTracker = new IParcelPackageCollection();
 
             // Weight of the first package equals the total shipment content weight
             package.Weight = shipment.ContentWeight;

@@ -19,7 +19,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
     {
         // the store this instance is for
         private readonly ILemonStandWebClient client;
-        // Logger 
+        // Logger
         private readonly ILog log;
         private readonly LemonStandStoreEntity store;
         private LemonStandStatusCodeProvider statusCodeProvider;
@@ -53,10 +53,10 @@ namespace ShipWorks.Stores.Platforms.LemonStand
 
                 return statusCodeProvider;
             }
-        } 
+        }
 
         /// <summary>
-        /// Changes the status of an BigCommerce order to that specified
+        /// Changes the status of an LemonStand order to that specified
         /// </summary>
         public void UpdateOrderStatus(long orderID, int statusCode)
         {
@@ -71,19 +71,17 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         }
 
         /// <summary>
-        /// Changes the status of an BigCommerce order to that specified
+        /// Changes the status of an LemonStand order to that specified
         /// </summary>
         public void UpdateOrderStatus(long orderID, int statusCode, UnitOfWork2 unitOfWork)
         {
-            LemonStandOrderEntity order = (LemonStandOrderEntity)DataProvider.GetEntity(orderID);
-            if (order != null)
-            {
-                if (order.IsManual)
-                {
-                    return;
-                }
+            OrderEntity order = DataProvider.GetEntity(orderID) as OrderEntity;
 
-                client.UpdateOrderStatus(order.LemonStandOrderID, StatusCodeProvider.GetCodeName(statusCode));
+            if (order != null && !order.IsManual)
+            {
+                LemonStandOrderEntity lemonStandOrder = (LemonStandOrderEntity)order;
+
+                client.UpdateOrderStatus(lemonStandOrder.LemonStandOrderID, StatusCodeProvider.GetCodeName(statusCode));
 
                 // Update the local database with the new status
                 OrderEntity basePrototype = new OrderEntity(orderID)
@@ -117,8 +115,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
                     continue;
                 }
 
-                LemonStandOrderEntity order = (LemonStandOrderEntity) shipment.Order;
-                if (!order.IsManual)
+                if (!shipment.Order.IsManual)
                 {
                     string shipmentID = GetShipmentID(shipment);
 
@@ -133,10 +130,8 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         public void UpdateShipmentDetails(ShipmentEntity shipment)
         {
             MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
-           
-            LemonStandOrderEntity order = (LemonStandOrderEntity)shipment.Order;
 
-            if (!order.IsManual)
+            if (!shipment.Order.IsManual)
             {
                 string shipmentID = GetShipmentID(shipment);
 

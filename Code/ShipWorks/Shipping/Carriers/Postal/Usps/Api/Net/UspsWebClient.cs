@@ -528,7 +528,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             {
                 badAddressMessage = result.CityStateZipOK ?
                     "City, State and ZIP Code are valid, but street address is not a match." :
-                    "The address as submitted could not be found. Check for excessive abbreviations in the street address line or in the City name.";
+                        "The address as submitted could not be found. Check for excessive abbreviations in the street address line or in the City name."; 
             }
 
             return new UspsAddressValidationResults
@@ -1425,13 +1425,21 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             }
             catch (SoapException ex)
             {
-                log.ErrorFormat("Failed connecting to USPS.  Account: {0}, Error Code: '{1}', Exception Message: {2}", account.UspsAccountID, UspsApiException.GetErrorCode(ex), ex.Message);
+                log.ErrorFormat("Failed connecting to USPS.  Account: {0}, Error Code: '{1}', Exception Message: {2}",
+                    account.UspsAccountID, UspsApiException.GetErrorCode(ex), ex.Message);
 
                 throw new UspsApiException(ex);
             }
             catch (WebException ex)
             {
-                throw new UspsException(ex.Message, ex);
+                if (ex.Message.Contains("Unable to connect to the remote server") ||
+                    ex.Message.Contains("The underlying connection was closed") ||
+                    ex.Message.Contains("Bad gateway"))
+                {
+                    throw new UspsException("ShipWorks is unable to connect to USPS.");
+                }
+
+                throw WebHelper.TranslateWebException(ex, typeof(UspsException));
             }
             catch (InvalidOperationException ex)
             {
@@ -1445,7 +1453,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             }
             catch (Exception ex)
             {
-                throw WebHelper.TranslateWebException(ex, typeof(UspsException));
+                throw WebHelper.TranslateWebException(ex, typeof (UspsException));
             }
         }
 
