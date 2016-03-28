@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -25,6 +26,7 @@ namespace ShipWorks.Shipping.Loading
         private readonly IShipmentFactory shipmentFactory;
         private readonly ICarrierShipmentAdapterFactory carrierShipmentAdapterFactory;
         private readonly IValidatedAddressManager validatedAddressManager;
+        private readonly IShippingManager shippingManager;
 
         /// <summary>
         /// Constructor
@@ -33,13 +35,15 @@ namespace ShipWorks.Shipping.Loading
                               IOrderManager orderManager,
                               IShipmentFactory shipmentFactory,
                               ICarrierShipmentAdapterFactory carrierShipmentAdapterFactory,
-                              IValidatedAddressManager validatedAddressManager)
+                              IValidatedAddressManager validatedAddressManager,
+                              IShippingManager shippingManager)
         {
             this.storeTypeManager = storeTypeManager;
             this.orderManager = orderManager;
             this.shipmentFactory = shipmentFactory;
             this.carrierShipmentAdapterFactory = carrierShipmentAdapterFactory;
             this.validatedAddressManager = validatedAddressManager;
+            this.shippingManager = shippingManager;
         }
 
         /// <summary>
@@ -62,10 +66,9 @@ namespace ShipWorks.Shipping.Loading
                 shipmentFactory.AutoCreateIfNecessary(order);
 
                 await ValidateShipments(order.Shipments).ConfigureAwait(false);
+                IEnumerable<ICarrierShipmentAdapter> adapters = CreateUpdatedShipmentAdapters(order);
 
-                return new LoadedOrderSelection(order,
-                    order.Shipments.Select(carrierShipmentAdapterFactory.Get),
-                    GetDestinationAddressEditable(order));
+                return new LoadedOrderSelection(order, adapters, GetDestinationAddressEditable(order));
             }
             catch (Exception ex)
             {
@@ -73,6 +76,26 @@ namespace ShipWorks.Shipping.Loading
             }
         }
 
+        /// <summary>
+        /// Create a collection of shipment adapters that have been fully updated
+        /// </summary>
+        private IEnumerable<ICarrierShipmentAdapter> CreateUpdatedShipmentAdapters(OrderEntity order)
+        {
+            List<ICarrierShipmentAdapter> adapters = order.Shipments.Select(carrierShipmentAdapterFactory.Get).ToList();
+            foreach (ICarrierShipmentAdapter adapter in adapters)
+            {
+                adapter.UpdateDynamicData();
+                if (adapter.Shipment.IsDirty)
+                {
+                    shippingManager.SaveShipmentToDatabase(adapter.Shipment, false);
+                }
+            }
+            return adapters;
+        }
+
+        /// <summary>
+        /// Validate the collection of shipments
+        /// </summary>
         private Task ValidateShipments(EntityCollection<ShipmentEntity> shipments)
         {
             Task[] validationTasks = shipments

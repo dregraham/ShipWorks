@@ -763,11 +763,15 @@ namespace ShipWorks.Shipping
             {
                 using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
                 {
+                    // We need to use a temporary address so that we only do a single update on the destination address
+                    // This is necessary because the source has a null parsed name which causes the destination to
+                    // look dirty even if we end up setting the ParsedName to what it originally was.
                     StoreEntity store = lifetimeScope.Resolve<IStoreManager>().GetRelatedStore(shipment);
+                    PersonAdapter storeCopy = new PersonAdapter();
+                    PersonAdapter.Copy(store, string.Empty, storeCopy);
+                    storeCopy.ParsedName = PersonName.Parse(store.StoreName);
 
-                    PersonAdapter.Copy(store, "", person);
-
-                    person.ParsedName = PersonName.Parse(store.StoreName);
+                    PersonAdapter.Copy(storeCopy, person);
                 }
 
                 return true;

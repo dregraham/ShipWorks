@@ -285,6 +285,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             shipmentChangedSubscription?.Dispose();
             isLoadingShipment = true;
 
+            fromShipmentAdapter.UpdateDynamicData();
             ShipmentAdapter = fromShipmentAdapter;
 
             // If we are an unsupported shipment type, stop and show the appropriate message.

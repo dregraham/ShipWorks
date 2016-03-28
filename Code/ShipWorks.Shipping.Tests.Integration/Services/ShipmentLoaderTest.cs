@@ -52,18 +52,18 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         [Fact]
         public async Task Load_ReturnsOrder_WhenOrderHasShipment()
         {
-            Create.Shipment(order).AsUps().Save();
+            Create.Shipment(order).AsUps(x => x.WithPackage()).Save();
 
             var loadedOrder = await testObject.Load(order.OrderID);
 
             Assert.Equal(order.OrderID, loadedOrder.Order.OrderID);
         }
-
+        
         [Fact]
         public async Task Load_ReturnsShipmentAdapters_FromLoadedShipments()
         {
             Modify.Shipment(order.Shipments[0]).AsPostal(x => x.AsUsps()).Save();
-            Modify.Shipment(order.Shipments[1]).AsFedEx().Save();
+            Modify.Shipment(order.Shipments[1]).AsFedEx(x => x.WithPackage()).Save();
 
             var loadedOrder = await testObject.Load(order.OrderID);
 
