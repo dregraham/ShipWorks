@@ -63,9 +63,8 @@ namespace ShipWorks.Shipping.Carriers.Ups
                     CounterRatesOriginAddressValidator.EnsureValidAddress(shipment);
 
                     // Get the transit times and services
-                    //transitTimes = transitTimeClient.GetTransitTimes(shipment, true);
-                    //serviceRates = upsApiRateClient.GetRates(shipment, true);
-                    return RateGroup.ShippingAccountRequiredRateGroup();
+                    transitTimes = transitTimeClient.GetTransitTimes(shipment, true);
+                    serviceRates = upsApiRateClient.GetRates(shipment, true);
                 }
                 else
                 {

@@ -363,9 +363,11 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.FeatureRestrictions
         }
 
         [Fact]
-        public void Check_ReturnsHidden_WhenShipmentTypeIsBestRate_AndBestRateIsDisabled_AndUpsAccountsDoNotExist()
+        public void Check_ReturnsNone_WhenShipmentTypeIsBestRate_AndBestRateIsDisabled_AndUpsAccountsDoNotExist()
         {
-            // Test that best rate is available when there are not any UPS accounts in ShipWorks
+            // Test that best rate is available when there are not any UPS accounts in ShipWorks and ignores the 
+            // server setting for customers on the new pricing plan (since the ShipmentTypeRestriction only 
+            // applies to the CustomerLicense).
             using (AutoMock mock = AutoMock.GetLoose())
             {
                 Dictionary<ShipmentTypeCode, IEnumerable<ShipmentTypeRestrictionType>> shipmentTypeRestriction =
@@ -392,7 +394,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.FeatureRestrictions
 
                 EditionRestrictionLevel result = testObject.Check(licenseCapabilities.Object, ShipmentTypeCode.BestRate);
 
-                Assert.Equal(EditionRestrictionLevel.Hidden, result);
+                Assert.Equal(EditionRestrictionLevel.None, result);
             }
         }
 

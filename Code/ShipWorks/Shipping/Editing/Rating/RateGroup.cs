@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using ShipWorks.Shipping.Carriers.BestRate.Footnote;
 
 namespace ShipWorks.Shipping.Editing.Rating
 {
@@ -83,10 +84,10 @@ namespace ShipWorks.Shipping.Editing.Rating
         /// A factory method to create a rate group indicating that a shipping account is required.
         /// </summary>
         /// <returns>A RateGroup without any rate results and an informational footnote.</returns>
-        public static RateGroup ShippingAccountRequiredRateGroup()
+        public static RateGroup ShippingAccountRequiredRateGroup(ShipmentTypeCode shipmentTypeCode)
         {
             RateGroup group = new RateGroup(new List<RateResult>());
-            group.AddFootnoteFactory(new InformationFootnoteFactory("An account is required to view rates."));
+            group.AddFootnoteFactory(new ShippingAccountRequiredForRatingFootnoteFactory(shipmentTypeCode));
 
             return group;
         }

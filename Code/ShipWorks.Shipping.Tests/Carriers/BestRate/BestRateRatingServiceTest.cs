@@ -3,7 +3,9 @@ using System.Linq;
 using Autofac.Extras.Moq;
 using Autofac.Features.Indexed;
 using Moq;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Editions;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.BestRate.Footnote;
 using ShipWorks.Shipping.Editing.Rating;
@@ -60,42 +62,66 @@ namespace ShipWorks.Shipping.Tests.Carriers.BestRate
         }
 
         [Fact]
+        public void GetRates_ReturnsInvalidRateGroup_WhenBestRateIsHidden()
+        {
+            Mock<ILicenseService> licenseService = mock.Mock<ILicenseService>();
+            licenseService.Setup(s => s.CheckRestriction(EditionFeature.ShipmentType, ShipmentTypeCode.BestRate)).Returns(EditionRestrictionLevel.Hidden);
+            
+            ShipmentEntity shipment = new ShipmentEntity { BestRateEvents = (int)BestRateEventTypes.RateSelected };
+
+            BestRateRatingService testObject = mock.Create<BestRateRatingService>();
+            RateGroup rateGroup = testObject.GetRates(shipment);
+
+            Assert.IsAssignableFrom<InvalidRateGroup>(rateGroup);
+        }
+
+        [Fact]
+        public void GetRates_ReturnsInvalidRateGroup_WhenBestRateIsForbidden()
+        {
+            Mock<ILicenseService> licenseService = mock.Mock<ILicenseService>();
+            licenseService.Setup(s => s.CheckRestriction(EditionFeature.ShipmentType, ShipmentTypeCode.BestRate)).Returns(EditionRestrictionLevel.Forbidden);
+
+            ShipmentEntity shipment = new ShipmentEntity { BestRateEvents = (int)BestRateEventTypes.RateSelected };
+
+            BestRateRatingService testObject = mock.Create<BestRateRatingService>();
+            RateGroup rateGroup = testObject.GetRates(shipment);
+
+            Assert.IsAssignableFrom<InvalidRateGroup>(rateGroup);
+        }
+
+        [Fact]
         public void GetRates_ReturnsRateGroup_WhenFactoryCreatesZeroBrokers()
         {
             mock.Mock<IBestRateShippingBrokerFactory>().Setup(f => f.CreateBrokers(It.IsAny<ShipmentEntity>(), It.IsAny<bool>())).Returns(new List<IBestRateShippingBroker>());
-
-            BestRateRatingService testObject = mock.Create<BestRateRatingService>();
-
             ShipmentEntity shipment = new ShipmentEntity();
 
+            BestRateRatingService testObject = mock.Create<BestRateRatingService>();
             RateGroup rateGroup = testObject.GetRates(shipment);
 
             Assert.NotNull(rateGroup);
         }
 
         [Fact]
-        public void GetRates_RateGroupHasExceptionFootnoteFactory_WhenFactoryCreatesZeroBrokers()
+        public void GetRates_RateGroupHasShippingAccountRequiredForRatingFootnoteFactory_WhenFactoryCreatesZeroBrokers()
         {
             mock.Mock<IBestRateShippingBrokerFactory>().Setup(f => f.CreateBrokers(It.IsAny<ShipmentEntity>(), It.IsAny<bool>())).Returns(new List<IBestRateShippingBroker>());
 
-            BestRateRatingService testObject = mock.Create<BestRateRatingService>();
-
             ShipmentEntity shipment = new ShipmentEntity();
 
+            BestRateRatingService testObject = mock.Create<BestRateRatingService>();
             RateGroup rateGroup = testObject.GetRates(shipment);
 
             Assert.Equal(1, rateGroup.FootnoteFactories.Count());
-            Assert.IsAssignableFrom<ExceptionsRateFootnoteFactory>(rateGroup.FootnoteFactories.First());
+            Assert.IsAssignableFrom<ShippingAccountRequiredForRatingFootnoteFactory>(rateGroup.FootnoteFactories.First());
         }
 
         [Fact]
         public void GetRates_DelegatesToBrokerFactory()
         {
             Mock<IBestRateShippingBrokerFactory> brokerFactory = mock.Mock<IBestRateShippingBrokerFactory>();
-            BestRateRatingService testObject = mock.Create<BestRateRatingService>();
-
             ShipmentEntity shipment = new ShipmentEntity();
 
+            BestRateRatingService testObject = mock.Create<BestRateRatingService>();
             testObject.GetRates(shipment);
 
             brokerFactory.Verify(f => f.CreateBrokers(shipment, It.IsAny<bool>()), Times.Once());
@@ -106,9 +132,9 @@ namespace ShipWorks.Shipping.Tests.Carriers.BestRate
         {
             // Setup the broker to return an empty list of rate results
             mock.Mock<IBestRateShippingBroker>().Setup(b => b.GetBestRates(It.IsAny<ShipmentEntity>(), It.IsAny<List<BrokerException>>())).Returns(new RateGroup(new List<RateResult>()));
-            BestRateRatingService testObject = mock.Create<BestRateRatingService>();
             ShipmentEntity shipment = new ShipmentEntity();
 
+            BestRateRatingService testObject = mock.Create<BestRateRatingService>();
             RateGroup rateGroup = testObject.GetRates(shipment);
 
             Assert.Equal(0, rateGroup.Rates.Count());

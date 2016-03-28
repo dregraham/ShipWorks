@@ -113,18 +113,34 @@ namespace ShipWorks.ApplicationCore.Licensing.FeatureRestrictions
         /// </summary>
         private bool IsShipmentTypeDisabled(ILicenseCapabilities capabilities, ShipmentTypeCode shipmentTypeCode)
         {
-            bool isDisabled = shipmentTypeCode != ShipmentTypeCode.None &&
-                   capabilities.ShipmentTypeRestriction.ContainsKey(shipmentTypeCode) &&
-                   capabilities.ShipmentTypeRestriction[shipmentTypeCode].Contains(ShipmentTypeRestrictionType.Disabled);
-
-            if (shipmentTypeCode == ShipmentTypeCode.BestRate && !isDisabled)
+            if (shipmentTypeCode == ShipmentTypeCode.BestRate)
             {
                 // Best rate is not disabled on the server, but we have one additional check to perform:
                 // best rate is disabled if there are any UPS accounts
-                isDisabled = upsAccountRepository[ShipmentTypeCode.UpsOnLineTools].Accounts.Any();
+                return upsAccountRepository[ShipmentTypeCode.UpsOnLineTools].Accounts.Any();
             }
 
-            return isDisabled;
+            return shipmentTypeCode != ShipmentTypeCode.None &&
+                   capabilities.ShipmentTypeRestriction.ContainsKey(shipmentTypeCode) &&
+                   capabilities.ShipmentTypeRestriction[shipmentTypeCode].Contains(ShipmentTypeRestrictionType.Disabled);
+
+
+            // The code below is applicable if it is desired to continue to enforce best rate restrictions at
+            // the server for the new pricing plans as well (i.e. Tango still needs to indicate best rate is 
+            // available AND no UPS accounts are in ShiPWorks.
+
+            //bool isDisabled = shipmentTypeCode != ShipmentTypeCode.None &&
+            //       capabilities.ShipmentTypeRestriction.ContainsKey(shipmentTypeCode) &&
+            //       capabilities.ShipmentTypeRestriction[shipmentTypeCode].Contains(ShipmentTypeRestrictionType.Disabled);
+
+            //if (shipmentTypeCode == ShipmentTypeCode.BestRate && !isDisabled)
+            //{
+            //    // Best rate is not disabled on the server, but we have one additional check to perform:
+            //    // best rate is disabled if there are any UPS accounts
+            //    isDisabled = upsAccountRepository[ShipmentTypeCode.UpsOnLineTools].Accounts.Any();
+            //}
+
+            //return isDisabled;
         }
     }
 }
