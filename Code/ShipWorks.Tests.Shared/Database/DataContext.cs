@@ -69,8 +69,16 @@ namespace ShipWorks.Tests.Shared.Database
         /// </summary>
         public void SetDefaultShipmentType(ShipmentTypeCode defaultType)
         {
+            UpdateShippingSetting(x => x.DefaultShipmentTypeCode = defaultType);
+        }
+
+        /// <summary>
+        /// Update arbitrary shipping settings
+        /// </summary>
+        public void UpdateShippingSetting(Action<ShippingSettingsEntity> configureSettings)
+        {
             var settings = ShippingSettings.Fetch();
-            settings.DefaultShipmentTypeCode = defaultType;
+            configureSettings(settings);
             ShippingSettings.Save(settings);
         }
 

@@ -1,24 +1,20 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
-using ShipWorks.Data.Model.FactoryClasses;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Filters;
-using ShipWorks.Data.Adapter.Custom;
 using System.Diagnostics;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model;
-using ShipWorks.Data.Adapter;
 using System.Drawing;
-using ShipWorks.Properties;
-using ShipWorks.Shipping;
-using System.Linq;
-using ShipWorks.Data.Connection;
-using ShipWorks.Data.Model.HelperClasses;
 using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
+using System.Linq;
 using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
 using Interapptive.Shared;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Data.Adapter;
+using ShipWorks.Data.Adapter.Custom;
+using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.FactoryClasses;
+using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Properties;
 using ShipWorks.Templates;
 
 namespace ShipWorks.Data
@@ -210,7 +206,7 @@ namespace ShipWorks.Data
         }
 
         /// <summary>
-        /// Clone the given entity collection using a deep clone.  
+        /// Clone the given entity collection using a deep clone.
         /// </summary>
         public static List<T> CloneEntityCollection<T>(IEnumerable<T> collection) where T : EntityBase2
         {
@@ -318,7 +314,7 @@ namespace ShipWorks.Data
 
             return fieldValue;
         }
-        
+
         /// <summary>
         /// Find a chain of relations that goes from the given entity to the given entity. OneToMany relationships are considered.
         /// Returns null if no such chain is found. Many to Many relationships are never considered.
@@ -493,7 +489,7 @@ namespace ShipWorks.Data
                 RelationCollection relations = CheckKnownRelations(fromEntityType, toEntityType);
                 if (relations != null)
                 {
-                    // If any of the relations revisit one of our visited, that violates how we use visited, and probably generated a longer, and invalid relation path.  The first 
+                    // If any of the relations revisit one of our visited, that violates how we use visited, and probably generated a longer, and invalid relation path.  The first
                     // one will obviously contain the "fromType" since that's what we are coming from - so we skip that.
                     foreach (EntityRelation relation in relations.Cast<EntityRelation>().Skip(1))
                     {
@@ -660,7 +656,7 @@ namespace ShipWorks.Data
 
             return GetEntityImage(GetEntityType(entityID), size);
         }
-        
+
         /// <summary>
         /// Get a 16x16 image representing the given EntityType
         /// </summary>
@@ -697,7 +693,7 @@ namespace ShipWorks.Data
 
                 case EntityType.OrderItemEntity:
                     return size == 16 ? Resources.shoppingcart16 : Resources.shoppingcart32;
-                
+
                 case EntityType.OrderChargeEntity:
                     return size == 16 ? Resources.currency_dollar16 : Resources.currency_dollar32;
 
@@ -807,12 +803,20 @@ namespace ShipWorks.Data
 
             object keyValue = primaryKeyNotParent.Single().CurrentValue;
 
-            if ( keyValue is long)
+            if (keyValue is long)
             {
                 return (long) keyValue;
             }
 
             return 0;
+        }
+
+        public static IDictionary<IEntity2, IEnumerable<IEntityField2>> GetDirtyGraph(this IEntity2 entity)
+        {
+            return new ObjectGraphUtils()
+                .ProduceTopologyOrderedList(entity)
+                .Where(x => x.IsDirty).ToDictionary(x => x,
+                x => x.Fields.OfType<IEntityField2>().Where(field => field.IsChanged).ToList() as IEnumerable<IEntityField2>);
         }
     }
 }

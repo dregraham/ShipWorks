@@ -652,7 +652,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             // Default to a valid service type if the current one is invalid
             if (!serviceTypes.Contains(serviceType))
             {
-                shipment.Ups.Service = (int) (UpsServiceType) serviceTypes.First();
+                shipment.Ups.Service = (int) serviceTypes.First();
             }
 
             RedistributeContentWeight(shipment);

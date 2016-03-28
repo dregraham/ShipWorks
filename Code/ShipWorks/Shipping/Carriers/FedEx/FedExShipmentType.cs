@@ -9,7 +9,9 @@ using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Common;
 using ShipWorks.Common.IO.Hardware.Printers;
+using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Adapter.Custom;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
@@ -43,11 +45,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         private readonly IExcludedServiceTypeRepository excludedServiceTypeRepository;
         private readonly IExcludedPackageTypeRepository excludedPackageTypeRepository;
         private ICarrierSettingsRepository settingsRepository;
+        private readonly IShippingSettings shippingSettings;
+        private readonly IDateTimeProvider dateTimeProvider;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FedExShipmentType"/> class.
         /// </summary>
-        public FedExShipmentType() : this(new ExcludedServiceTypeRepository(), new ExcludedPackageTypeRepository())
+        public FedExShipmentType() : this(new ExcludedServiceTypeRepository(), new ExcludedPackageTypeRepository(),
+            new ShippingSettingsWrapper(Messenger.Current), new DateTimeProvider())
         {
         }
 
@@ -56,10 +61,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// </summary>
         /// <param name="excludedServiceTypeRepository">The excluded service type repository.</param>
         /// <param name="excludedPackageTypeRepository"></param>
-        public FedExShipmentType(IExcludedServiceTypeRepository excludedServiceTypeRepository, IExcludedPackageTypeRepository excludedPackageTypeRepository)
+        public FedExShipmentType(IExcludedServiceTypeRepository excludedServiceTypeRepository,
+            IExcludedPackageTypeRepository excludedPackageTypeRepository, IShippingSettings shippingSettings,
+            IDateTimeProvider dateTimeProvider)
         {
             this.excludedServiceTypeRepository = excludedServiceTypeRepository;
             this.excludedPackageTypeRepository = excludedPackageTypeRepository;
+            this.shippingSettings = shippingSettings;
+            this.dateTimeProvider = dateTimeProvider;
         }
 
         /// <summary>
@@ -766,9 +775,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         {
             base.UpdateDynamicShipmentData(shipment);
 
-            if (shipment.FedEx.HomeDeliveryDate < DateTime.Now.Date)
+            if (shipment.FedEx.HomeDeliveryDate < dateTimeProvider.Now.Date)
             {
-                shipment.FedEx.HomeDeliveryDate = DateTime.Now.Date.AddHours(12);
+                shipment.FedEx.HomeDeliveryDate = dateTimeProvider.Now.Date.AddHours(12);
             }
 
             // Ensure the cod address is up-to-date
@@ -796,14 +805,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // Consider the shipment insured of any package is insured
             shipment.Insurance = shipment.FedEx.Packages.Any(p => p.Insurance);
 
-            // Set the provider type based on fedex settings
-            shipment.InsuranceProvider = settings.FedExInsuranceProvider;
-
             // Right now ShipWorks Insurance (due to Tango limitation) doesn't support multi-package - so in that case just auto-revert to carrier insurance
-            if (shipment.FedEx.Packages.Count > 1)
-            {
-                shipment.InsuranceProvider = (int) InsuranceProvider.Carrier;
-            }
+            // We're setting this once to avoid marking the entity as dirty
+            shipment.InsuranceProvider = shipment.FedEx.Packages.Count > 1 ?
+                (int) InsuranceProvider.Carrier :
+                settings.UpsInsuranceProvider;
 
             shipment.RequestedLabelFormat = shipment.FedEx.RequestedLabelFormat;
 

@@ -26,7 +26,6 @@ using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Origin;
 using ShipWorks.Shipping.Tracking;
-using ShipWorks.Shipping.ShipSense.Packaging;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 
 
@@ -375,16 +374,13 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             // Consider the shipment insured of any package is insured
             shipment.Insurance = shipment.IParcel.Packages.Any(p => p.Insurance);
 
-            // Set the provider type based on i-Parcel settings
-            shipment.InsuranceProvider = settings.IParcelInsuranceProvider;
-
             shipment.RequestedLabelFormat = shipment.IParcel.RequestedLabelFormat;
 
             // Right now ShipWorks Insurance (due to Tango limitation) doesn't support multi-package - so in that case just auto-revert to carrier insurance
-            if (shipment.IParcel.Packages.Count > 1)
-            {
-                shipment.InsuranceProvider = (int) InsuranceProvider.Carrier;
-            }
+            // We're setting this once to avoid marking the entity as dirty
+            shipment.InsuranceProvider = shipment.IParcel.Packages.Count > 1 ?
+                (int) InsuranceProvider.Carrier :
+                settings.UpsInsuranceProvider;
 
             // Check the IParcel wide PennyOne settings and get them updated
             foreach (var package in shipment.IParcel.Packages)

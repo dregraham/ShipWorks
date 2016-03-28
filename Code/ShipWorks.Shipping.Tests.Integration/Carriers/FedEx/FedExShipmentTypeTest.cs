@@ -2,7 +2,7 @@
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data;
-using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
+using ShipWorks.Shipping.Carriers.FedEx;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Settings.Origin;
 using ShipWorks.Startup;
@@ -11,26 +11,26 @@ using ShipWorks.Tests.Shared.Database;
 using ShipWorks.Tests.Shared.EntityBuilders;
 using Xunit;
 
-namespace ShipWorks.Shipping.Tests.Integration.Carriers.Ups
+namespace ShipWorks.Shipping.Tests.Integration.Carriers.FedEx
 {
     [Collection("Database collection")]
     [Trait("Category", "ContinuousIntegration")]
-    public class UpsShipmentTypeTest : IDisposable
+    public class FedExShipmentTypeTest : IDisposable
     {
         private readonly DataContext context;
 
-        public UpsShipmentTypeTest(DatabaseFixture db)
+        public FedExShipmentTypeTest(DatabaseFixture db)
         {
             context = db.CreateDataContext(x => ContainerInitializer.Initialize(x));
             context.Mock.Provide<ISchedulerProvider>(new ImmediateSchedulerProvider());
-            context.UpdateShippingSetting(x => x.UpsInsuranceProvider = (int) InsuranceProvider.ShipWorks);
+            context.UpdateShippingSetting(x => x.FedExInsuranceProvider = (int) InsuranceProvider.ShipWorks);
         }
 
         [Fact]
         public void SavingThroughShippingManager_ShouldNotUpdateRowVersion_WhenNoDataHasChanged()
         {
             var shipment = Create.Shipment(context.Order)
-                .AsUps(x => x.WithPackage()).Save();
+                .AsFedEx(x => x.WithPackage()).Save();
 
             CarrierTestUtilities.VerifyRowVersionDoesNotChangeAfterSecondSave(this, shipment);
         }
@@ -39,7 +39,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Ups
         public void SavingThroughShippingManager_ShouldNotUpdateRowVersion_WhenNoDataHasChangedWithMultiplePackages()
         {
             var shipment = Create.Shipment(context.Order)
-                .AsUps(x => x.WithPackage().WithPackage())
+                .AsFedEx(x => x.WithPackage().WithPackage())
                 .Save();
 
             CarrierTestUtilities.VerifyRowVersionDoesNotChangeAfterSecondSave(this, shipment);
@@ -49,12 +49,14 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Ups
         public void UpdateDynamicShipmentData_SetsInsuranceProviderToCarrier_WhenShipmentHasMultiplePackages()
         {
             var shipment = Create.Shipment(context.Order)
-                .AsUps(x => x.WithPackage().WithPackage())
+                .AsFedEx(x => x.WithPackage()
+                    .WithPackage()
+                    .Set(f => f.CodOriginID, (int) ShipmentOriginSource.Other))
                 .Set(x => x.InsuranceProvider, (int) InsuranceProvider.ShipWorks)
                 .Set(x => x.OriginOriginID, (int) ShipmentOriginSource.Other)
                 .Save();
 
-            var testObject = context.Mock.Create<UpsOltShipmentType>();
+            var testObject = context.Mock.Create<FedExShipmentType>();
 
             testObject.UpdateDynamicShipmentData(shipment);
 
@@ -65,12 +67,13 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Ups
         public void UpdateDynamicShipmentData_SetsInsuranceProviderToShippingSetting_WhenShipmentHasSinglePackages()
         {
             var shipment = Create.Shipment(context.Order)
-                .AsUps(x => x.WithPackage())
+                .AsFedEx(x => x.WithPackage()
+                    .Set(f => f.CodOriginID, (int) ShipmentOriginSource.Other))
                 .Set(x => x.InsuranceProvider, (int) InsuranceProvider.Carrier)
                 .Set(x => x.OriginOriginID, (int) ShipmentOriginSource.Other)
                 .Save();
 
-            var testObject = context.Mock.Create<UpsOltShipmentType>();
+            var testObject = context.Mock.Create<FedExShipmentType>();
 
             testObject.UpdateDynamicShipmentData(shipment);
 
@@ -81,18 +84,19 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Ups
         public void UpdateDynamicShipmentData_DoesNotChangeShipment_WhenInsuranceProviderHasNotChanged()
         {
             var shipment = Create.Shipment(context.Order)
-                .AsUps(x => x.WithPackage().WithPackage())
+                .AsFedEx(x => x.WithPackage()
+                    .WithPackage()
+                    .Set(f => f.HomeDeliveryDate, new DateTime(2016, 3, 26))
+                    .Set(f => f.CodOriginID, (int) ShipmentOriginSource.Other))
                 .Set(x => x.InsuranceProvider, (int) InsuranceProvider.Carrier)
                 .Set(x => x.OriginOriginID, (int) ShipmentOriginSource.Other)
                 .Set(x => x.ShipDate, new DateTime(2016, 3, 26))
-                .Set(x => x.ShipCountryCode, "US")
-                .Set(x => x.OriginCountryCode, "US")
                 .Save();
 
             context.Mock.Override<IDateTimeProvider>()
                 .Setup(x => x.Now).Returns(new DateTime(2016, 3, 26));
 
-            var testObject = context.Mock.Create<UpsOltShipmentType>();
+            var testObject = context.Mock.Create<FedExShipmentType>();
 
             testObject.UpdateDynamicShipmentData(shipment);
             var dirtyEntities = shipment.GetDirtyGraph();
