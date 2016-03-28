@@ -148,8 +148,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Carriers\CarrierTestUtilities.cs" />
+    <Compile Include="Carriers\Other\OtherShipmentTypeTest.cs" />
+    <Compile Include="Carriers\OnTrac\OnTracShipmentTypeTest.cs" />
     <Compile Include="Carriers\FedEx\FedExShipmentTypeTest.cs" />
     <Compile Include="Carriers\iParcel\iParcelShipmentTypeTest.cs" />
+    <Compile Include="Carriers\Postal\Express1\Express1EndiciaShipmentTypeTest.cs" />
+    <Compile Include="Carriers\Postal\Express1\Express1UspsShipmentTypeTest.cs" />
+    <Compile Include="Carriers\Postal\WebTools\WebToolsShipmentTypeTest.cs" />
+    <Compile Include="Carriers\Postal\Usps\UspsShipmentTypeTest.cs" />
+    <Compile Include="Carriers\Postal\Endicia\EndiciaShipmentTypeTest.cs" />
     <Compile Include="Carriers\Ups\UpsShipmentTypeTest.cs" />
     <Compile Include="DatabaseCollection.cs" />
     <Compile Include="GlobalSuppressions.cs" />

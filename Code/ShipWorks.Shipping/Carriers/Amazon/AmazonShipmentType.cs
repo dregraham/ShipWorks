@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing.Imaging;
 using System.Linq;
-using Interapptive.Shared;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
@@ -13,15 +13,12 @@ using ShipWorks.Shipping.Carriers.Amazon.Enums;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Profiles;
-using ShipWorks.Shipping.ShipSense.Packaging;
+using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Tracking;
 using ShipWorks.Stores;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Amazon;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
-using ShipWorks.Core.Messaging;
-using System.Diagnostics.CodeAnalysis;
-using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Shipping.Carriers.Amazon
 {
@@ -34,7 +31,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         private readonly IOrderManager orderManager;
         private readonly IShippingManager shippingManager;
         private readonly IEditionManager editionManager;
-        
+
         /// <summary>
         /// Constructor for tests
         /// </summary>
@@ -47,7 +44,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// </summary>
         public AmazonShipmentType(IStoreManager storeManager, IOrderManager orderManager, IShippingManager shippingManager, IEditionManager editionManager)
         {
-            // TODO: Refactor constuctor params down to 5 or less
             this.storeManager = storeManager;
             this.orderManager = orderManager;
             this.shippingManager = shippingManager;
@@ -104,7 +100,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
                 TotalWeight = shipment.TotalWeight
             };
         }
-          
+
         /// <summary>
         /// Create the XML input to the XSL engine
         /// </summary>
@@ -169,7 +165,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// Amazon supports rates
         /// </summary>
         public override bool SupportsGetRates => true;
-                
+
 
         /// <summary>
         /// Checks whether this shipment type is allowed for the given shipment
@@ -193,7 +189,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// <summary>
         /// Gets a value indicating whether this instance is shipment type restricted.
         /// </summary>
-        /// 
+        ///
         /// Overridden to use dependency
         /// </remarks>
         public override bool IsShipmentTypeRestricted
@@ -279,7 +275,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon
                 shipment.TotalWeight += shipment.Amazon.DimsWeight;
             }
         }
-
 
         /// <summary>
         /// Tracks the shipment.

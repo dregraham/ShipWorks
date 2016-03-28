@@ -30,6 +30,17 @@ namespace ShipWorks.Tests.Shared.EntityBuilders
             SetShipmentType(builderConfiguration, ShipmentTypeCode.Usps, x => x.Usps);
 
         /// <summary>
+        /// Make the shipment an Express1 Usps shipment
+        /// </summary>
+        public PostalShipmentEntityBuilder AsExpress1Usps() => AsExpress1Usps(null);
+
+        /// <summary>
+        /// Make the shipment an Express1 Usps shipment
+        /// </summary>
+        public PostalShipmentEntityBuilder AsExpress1Usps(Action<EntityBuilder<UspsShipmentEntity>> builderConfiguration) =>
+            SetShipmentType(builderConfiguration, ShipmentTypeCode.Express1Usps, x => x.Usps);
+
+        /// <summary>
         /// Make the shipment an Endicia shipment
         /// </summary>
         public PostalShipmentEntityBuilder AsEndicia() => AsEndicia(null);
@@ -39,6 +50,17 @@ namespace ShipWorks.Tests.Shared.EntityBuilders
         /// </summary>
         public PostalShipmentEntityBuilder AsEndicia(Action<EntityBuilder<EndiciaShipmentEntity>> builderConfiguration) =>
             SetShipmentType(builderConfiguration, ShipmentTypeCode.Endicia, x => x.Endicia);
+
+        /// <summary>
+        /// Make the shipment an Express1 Endicia shipment
+        /// </summary>
+        public PostalShipmentEntityBuilder AsExpress1Endicia() => AsExpress1Endicia(null);
+
+        /// <summary>
+        /// Make the shipment an Express1 Endicia shipment
+        /// </summary>
+        public PostalShipmentEntityBuilder AsExpress1Endicia(Action<EntityBuilder<EndiciaShipmentEntity>> builderConfiguration) =>
+            SetShipmentType(builderConfiguration, ShipmentTypeCode.Express1Endicia, x => x.Endicia);
 
         /// <summary>
         /// Set the shipment type

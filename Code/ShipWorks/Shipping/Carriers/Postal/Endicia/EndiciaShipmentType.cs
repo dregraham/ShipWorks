@@ -37,7 +37,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         public override ShipmentTypeCode ShipmentTypeCode => ShipmentTypeCode.Endicia;
 
         /// <summary>
-        /// Reller of Endicia services.
+        /// Reseller of Endicia services.
         /// </summary>
         public virtual EndiciaReseller EndiciaReseller => EndiciaReseller.None;
 
@@ -270,7 +270,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         public override bool UpdatePersonAddress(ShipmentEntity shipment, PersonAdapter person, long originID)
         {
 
-            // A null reference error was being thrown.  Discoverred by Crash Reports.
+            // A null reference error was being thrown.  Discovered by Crash Reports.
             // Let's figure out what is null....
             if (shipment == null)
             {
@@ -519,7 +519,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// </summary>
         public override ReturnsControlBase CreateReturnsControl()
         {
-            // If scan based returns is not allowed, show the the default returns control
+            // If scan based returns is not allowed, show the default returns control
             if (EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.EndiciaScanBasedReturns).Level != EditionRestrictionLevel.None)
             {
                 return base.CreateReturnsControl();

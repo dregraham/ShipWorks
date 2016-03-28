@@ -4,22 +4,18 @@ using System.Linq;
 using Interapptive.Shared;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Utility;
-using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
-using ShipWorks.Shipping.Carriers.BestRate.Footnote;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.WebTools;
 using ShipWorks.Shipping.Editing;
-using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Origin;
-using ShipWorks.Shipping.ShipSense.Packaging;
 using ShipWorks.Shipping.Tracking;
 
 namespace ShipWorks.Shipping.Carriers.Postal
@@ -70,72 +66,19 @@ namespace ShipWorks.Shipping.Carriers.Postal
         }
 
         /// <summary>
-        /// Gets the service types that have been available for this shipment type (i.e have not 
-        /// been excluded). The integer values are intended to correspond to the appropriate 
-        /// enumeration values of the specific shipment type (i.e. the integer values would 
+        /// Gets the service types that have been available for this shipment type (i.e have not
+        /// been excluded). The integer values are intended to correspond to the appropriate
+        /// enumeration values of the specific shipment type (i.e. the integer values would
         /// correspond to PostalServiceType values for this shipment type)
         /// </summary>
         public override IEnumerable<int> GetAvailableServiceTypes(IExcludedServiceTypeRepository repository)
         {
             IEnumerable<int> allServiceTypes = PostalUtility.GetDomesticServices(ShipmentTypeCode)
                 .Union(PostalUtility.GetInternationalServices(ShipmentTypeCode))
-                .Select(service => (int)service);
+                .Select(service => (int) service);
 
             return allServiceTypes.Except(GetExcludedServiceTypes(repository));
         }
-
-        ///// <summary>
-        ///// Gets the AvailableServiceTypes for this shipment type and shipment along with their descriptions.
-        ///// </summary>
-        //public override Dictionary<int, string> BuildServiceTypeDictionary(List<ShipmentEntity> shipments, IExcludedServiceTypeRepository excludedServiceTypeRepository)
-        //{
-        //    List<ShipmentEntity> overriddenShipments = shipments.Select(ShippingManager.GetOverriddenStoreShipment).ToList();
-
-        //    bool allInternational = overriddenShipments.None(s => s.ShipPerson.IsDomesticCountry());
-        //    bool allDomestic = overriddenShipments.All(s => s.ShipPerson.IsDomesticCountry());
-
-        //    List<PostalServiceType> availableServices = GetAvailableServiceTypes(excludedServiceTypeRepository).Select(s => (PostalServiceType)s).ToList();
-
-        //    // If they are all international we can load up all the international services
-        //    if (allInternational)
-        //    {
-        //        // We need to build the list of international services to use as the data source taking into account only the available 
-        //        // service types as well as the service type that the shipment is already configured with
-        //        List<PostalServiceType> allInternationalServices = PostalUtility.GetInternationalServices(ShipmentTypeCode);
-        //        List<PostalServiceType> internationalServicesToLoad = allInternationalServices.Intersect(availableServices).ToList();
-        //        if (shipments.Any())
-        //        {
-        //            // Always include the service type that the shipment is currently configured in the 
-        //            // event the shipment was configured prior to a service being excluded
-        //            internationalServicesToLoad = internationalServicesToLoad.Union(allInternationalServices.Intersect(new List<PostalServiceType> { (PostalServiceType)shipments.First().Postal.Service })).ToList();
-        //        }
-
-        //        // Bind the drop down to the international services
-        //        return internationalServicesToLoad.ToDictionary(s => (int) s, PostalUtility.GetPostalServiceTypeDescription);
-        //    }
-        //    // If they are all domestic we can load up all the domestic services
-        //    else if (allDomestic)
-        //    {
-        //        // We need to build the list of domestic services to use as the data source taking into account only the available 
-        //        // service types as well as the service type that the shipment is already configured with
-        //        List<PostalServiceType> allDomesticServices = PostalUtility.GetDomesticServices(ShipmentTypeCode);
-        //        List<PostalServiceType> domesticServicesToLoad = allDomesticServices.Intersect(availableServices).ToList();
-        //        if (shipments.Any())
-        //        {
-        //            // Always include the service type that the shipment is currently configured in the 
-        //            // event the shipment was configured prior to a service being excluded
-        //            domesticServicesToLoad = domesticServicesToLoad.Union(allDomesticServices.Intersect(new List<PostalServiceType> { (PostalServiceType)shipments.First().Postal.Service })).ToList();
-        //        }
-
-        //        return domesticServicesToLoad.ToDictionary(s => (int) s, PostalUtility.GetPostalServiceTypeDescription);
-
-        //    }
-        //    else
-        //    {
-        //        // Otherwise there is nothing to choose from
-        //        return new Dictionary<int, string>();
-        //    }
-        //}
 
         /// <summary>
         /// Gets the package types that have been available for this shipment type
@@ -145,7 +88,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
             IEnumerable<PostalPackagingType> packageTypes = EnumHelper.GetEnumList<PostalPackagingType>()
                 .Select(x => x.Value)
                 .Except(GetExcludedPackageTypes(repository).Cast<PostalPackagingType>());
-            
+
             // The cubic packaging type is only used by Express1/Endicia
             return packageTypes.Except(new List<PostalPackagingType> { PostalPackagingType.Cubic }).Cast<int>();
         }
@@ -267,7 +210,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
         }
 
         /// <summary>
-        /// Update the dyamic data of the shipment
+        /// Update the dynamic data of the shipment
         /// </summary>
         [NDependIgnoreLongMethod]
         public override void UpdateDynamicShipmentData(ShipmentEntity shipment)
@@ -278,7 +221,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
             // it may have effected the shipping services available (i.e. the eBay GSP program)
             ShipmentEntity overriddenShipment = ShippingManager.GetOverriddenStoreShipment(shipment);
 
-            // A null reference error was being thrown.  Discoverred by Crash Reports.
+            // A null reference error was being thrown.  Discovered by Crash Reports.
             // Let's figure out what is null....
             if (shipment == null)
             {
@@ -289,7 +232,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
             {
                 throw new NullReferenceException("shipment.Postal cannot be null.");
             }
-            
+
             if (overriddenShipment == null)
             {
                 throw new NullReferenceException("overriddenShipment cannot be null.");
@@ -316,13 +259,12 @@ namespace ShipWorks.Shipping.Carriers.Postal
                 if (!domesticServices.Contains(serviceType))
                 {
                     serviceType = PostalServiceType.PriorityMail;
-                    shipment.Postal.Service = (int)serviceType;
+                    shipment.Postal.Service = (int) serviceType;
                 }
             }
             else
             {
-                // If its international ensure an internatinoal service - use the overridden shipment for comparing the ShipToCountry
-
+                // If its international ensure an international service - use the overridden shipment for comparing the ShipToCountry
                 List<PostalServiceType> internationalServices = PostalUtility.GetInternationalServices(ShipmentTypeCode);
 
                 if (internationalServices == null)
@@ -333,27 +275,24 @@ namespace ShipWorks.Shipping.Carriers.Postal
                 if (!internationalServices.Contains(serviceType))
                 {
                     serviceType = PostalServiceType.InternationalPriority;
-                    shipment.Postal.Service = (int)serviceType;
+                    shipment.Postal.Service = (int) serviceType;
                 }
             }
 
             List<PostalConfirmationType> availableConfirmationTypes = GetAvailableConfirmationTypes(overriddenShipment.ShipCountryCode, serviceType, packagingType);
             if (availableConfirmationTypes == null)
             {
-                    throw new NullReferenceException("availableConfirmationTypes was null.");
+                throw new NullReferenceException("availableConfirmationTypes was null.");
             }
 
             // Make sure a valid confirmation is selected
             if (!availableConfirmationTypes.Contains((PostalConfirmationType) shipment.Postal.Confirmation))
             {
-                shipment.Postal.Confirmation = (int)availableConfirmationTypes.First();
+                shipment.Postal.Confirmation = (int) availableConfirmationTypes.First();
             }
 
             // Update the dimensions info
             DimensionsManager.UpdateDimensions(new DimensionsAdapter(shipment.Postal));
-
-            // Postal only has the option to use ShipWorks Insurance
-            shipment.InsuranceProvider = (int) InsuranceProvider.ShipWorks;
         }
 
         /// <summary>
@@ -502,7 +441,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
         {
             return base.IsDomestic(shipmentEntity) || IsShipmentBetweenUnitedStatesAndPuertoRico(shipmentEntity);
         }
-		
+
         /// <summary>
         /// Gets an instance to the best rate shipping broker for the USPS web tools shipment type based on the shipment configuration.
         /// </summary>
@@ -520,14 +459,14 @@ namespace ShipWorks.Shipping.Carriers.Postal
 
             if (!uspsAccountsExist && !uspsExpeditedAccountsExist)
             {
-                // There aren't any postal based accounts setup, so we want to see if we should 
+                // There aren't any postal based accounts setup, so we want to see if we should
                 // show counter rates (depending whether USPS has been excluded)
 
                 ShippingSettingsEntity shippingSettings = ShippingSettings.Fetch();
 
-                if (!shippingSettings.BestRateExcludedTypes.Contains((int)ShipmentTypeCode.Usps))
+                if (!shippingSettings.BestRateExcludedTypes.Contains((int) ShipmentTypeCode.Usps))
                 {
-                    // USPS has not been excluded from Best Rate, and there aren't any 
+                    // USPS has not been excluded from Best Rate, and there aren't any
                     // USPS accounts, so use the counter rates broker for USPS
                     broker = new UspsCounterRatesBroker(new UspsCounterRateAccountRepository(TangoCredentialStore.Instance));
                 }
@@ -610,7 +549,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
         protected virtual List<string> CountriesEligibleForFreeInternationalDeliveryConfirmation()
         {
             // Allowable country codes include Australia, Belgium, Brazil, Canada, Croatia, Denmark, Estonia, Finland,
-            // France, Germany, Gibraltar, Great Britain, Hungary, Northern Ireland, Israel, Italy, Latvia, Lithuania, Luxembourg, Malaysia, 
+            // France, Germany, Gibraltar, Great Britain, Hungary, Northern Ireland, Israel, Italy, Latvia, Lithuania, Luxembourg, Malaysia,
             // Malta, Netherlands, New Zealand, Portugal, Singapore, Spain, Switzerland
             List<string> eligibleCountryCodes = new List<string>
             {

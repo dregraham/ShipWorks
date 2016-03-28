@@ -10,6 +10,7 @@ using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 using ShipWorks.Data;
 using System.Drawing.Imaging;
 using System.Drawing;
+using ShipWorks.Shipping.Insurance;
 
 namespace ShipWorks.Shipping.Carriers.Postal.WebTools
 {
@@ -131,11 +132,22 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
         /// </summary>
         public override List<PostalConfirmationType> GetAvailableConfirmationTypes(string countryCode, PostalServiceType service, PostalPackagingType? packaging)
         {
-            IEnumerable<PostalConfirmationType> baseAvailableConfirmationTypes =  base.GetAvailableConfirmationTypes(countryCode, service, packaging);
+            IEnumerable<PostalConfirmationType> baseAvailableConfirmationTypes = base.GetAvailableConfirmationTypes(countryCode, service, packaging);
 
             // Remove the Adult Sig types since we aren't supporting them.
             return baseAvailableConfirmationTypes.Where(ct => ct != PostalConfirmationType.AdultSignatureRequired &&
                                                               ct != PostalConfirmationType.AdultSignatureRestricted).ToList();
+        }
+
+        /// <summary>
+        /// Update the dynamic data of the shipment
+        /// </summary>
+        public override void UpdateDynamicShipmentData(ShipmentEntity shipment)
+        {
+            base.UpdateDynamicShipmentData(shipment);
+
+            // Postal only has the option to use ShipWorks Insurance
+            shipment.InsuranceProvider = (int) InsuranceProvider.ShipWorks;
         }
     }
 }
