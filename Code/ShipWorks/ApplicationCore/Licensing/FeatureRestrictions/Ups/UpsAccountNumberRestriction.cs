@@ -56,7 +56,7 @@ namespace ShipWorks.ApplicationCore.Licensing.FeatureRestrictions.Ups
             if (level != EditionRestrictionLevel.None)
             {
                 string account = data as string;
-                messageHelper.ShowError($"You must contact Interapptive to enable use of UPS account '{account}'.");
+                messageHelper.ShowError(owner, $"You must contact Interapptive to enable use of UPS account '{account}'.");
             }
 
             return level == EditionRestrictionLevel.None;

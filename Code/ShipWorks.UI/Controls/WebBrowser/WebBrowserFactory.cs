@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Interop;
+using Autofac;
+using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing;
 using IWin32Window = System.Windows.Forms.IWin32Window;
 
@@ -11,32 +13,14 @@ namespace ShipWorks.UI.Controls.WebBrowser
     /// </summary>
     public class WebBrowserFactory : IWebBrowserFactory
     {
-        private readonly Func<string, IDialog> webBrowserDlgFactory;
         private readonly IWebBrowserDlgViewModel webBrowserDlgViewModel;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="WebBrowserFactory"/> class.
         /// </summary>
-        public WebBrowserFactory(Func<string, IDialog> webBrowserDlgFactory, IWebBrowserDlgViewModel webBrowserDlgViewModel)
+        public WebBrowserFactory(IWebBrowserDlgViewModel webBrowserDlgViewModel)
         {
-            this.webBrowserDlgFactory = webBrowserDlgFactory;
             this.webBrowserDlgViewModel = webBrowserDlgViewModel;
-        }
-
-        /// <summary>
-        /// Creates a browser dlg with the given parameters
-        /// </summary>
-        public IDialog Create(Uri uri, string title, Window owner, Size size)
-        {
-            IDialog browserDlg = CreateDialog(uri, title, size);
-
-            if (owner != null)
-            {
-                // Set owner
-                browserDlg.Owner = owner;
-            }
-            
-            return browserDlg;
         }
 
         /// <summary>
@@ -44,36 +28,19 @@ namespace ShipWorks.UI.Controls.WebBrowser
         /// </summary>
         public IDialog Create(Uri uri, string title, IWin32Window owner, Size size)
         {
-            IDialog browserDlg = CreateDialog(uri, title, size);
-
-            Window window = browserDlg as Window;
-            if (window != null && owner != null)
-            {
-                new WindowInteropHelper(window) { Owner = owner.Handle };
-            }
-            
-            return browserDlg;
-        }
-
-        /// <summary>
-        /// Creates the dialog using the given parameters
-        /// </summary>
-        private IDialog CreateDialog(Uri uri, string title, Size size)
-        {
             // Create the dialog and set the view model
             webBrowserDlgViewModel.Load(uri, title);
-            IDialog dialog = webBrowserDlgFactory("WebBrowserDlg");
-            dialog.DataContext = webBrowserDlgViewModel;
 
-            // Set the dimensions
-            Window window = dialog as Window;
-            if (window != null)
+            using (ILifetimeScope scope = IoC.BeginLifetimeScope())
             {
-                window.Height = size.Height;
-                window.Width = size.Width;
-            }
+                IDialog dialog = scope.ResolveNamed<IDialog>("WebBrowserDlg",
+                    new TypedParameter(typeof (IWin32Window), owner));
+                dialog.DataContext = webBrowserDlgViewModel;
+                dialog.Height = size.Height;
+                dialog.Width = size.Width;
 
-            return dialog;
+                return dialog;
+            }
         }
     }
 }

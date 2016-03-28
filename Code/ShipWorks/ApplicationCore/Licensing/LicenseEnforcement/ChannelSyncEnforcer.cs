@@ -46,7 +46,7 @@ namespace ShipWorks.ApplicationCore.Licensing.LicenseEnforcement
         {
             if (Enforce(capabilities, context).Value == ComplianceLevel.NotCompliant)
             {
-                IChannelLimitDlg channelLimitDlg = channelLimitDlgFactory.GetChannelLimitDlg(owner, EditionFeature, context);
+                IDialog channelLimitDlg = channelLimitDlgFactory.GetChannelLimitDlg(owner, EditionFeature, context);
                 channelLimitDlg.ShowDialog();
             }
 
@@ -84,7 +84,7 @@ namespace ShipWorks.ApplicationCore.Licensing.LicenseEnforcement
                     {
                         // Call activate on all of the stores that tango does not know about
                         EnumResult<LicenseActivationState> activationResult = license.Activate(store);
-                        
+
                         // If it failed then we return not compliant
                         if (activationResult.Value == LicenseActivationState.MaxChannelsExceeded)
                         {

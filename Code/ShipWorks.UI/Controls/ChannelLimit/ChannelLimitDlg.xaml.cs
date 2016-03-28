@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Input;
 using System.Windows.Interop;
 using ShipWorks.ApplicationCore.Licensing;
@@ -9,7 +10,7 @@ namespace ShipWorks.UI.Controls.ChannelLimit
     /// <summary>
     /// Interaction logic for ChannelLimitDlg.xaml
     /// </summary>
-    public partial class ChannelLimitDlg : IChannelLimitDlg
+    public partial class ChannelLimitDlg : IWin32Window, IDialog
     {
         /// <summary>
         /// Constructor
@@ -24,11 +25,12 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         /// </summary>
         public ChannelLimitDlg(IWin32Window owner) : this()
         {
+            Handle = owner.Handle;
+
             new WindowInteropHelper(this)
             {
                 Owner = owner.Handle
             };
-            
         }
 
         /// <summary>
@@ -39,7 +41,7 @@ namespace ShipWorks.UI.Controls.ChannelLimit
             close.IsEnabled = (bool)dependencyPropertyChangedEventArgs.NewValue;
             Cursor = (bool)dependencyPropertyChangedEventArgs.NewValue ? Cursors.Arrow : Cursors.Wait;
         }
-        
+
         /// <summary>
         /// Called when [click close].
         /// </summary>
@@ -47,5 +49,10 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         {
             Close();
         }
+
+        /// <summary>
+        /// Window handle.
+        /// </summary>
+        public IntPtr Handle { get; }
     }
 }

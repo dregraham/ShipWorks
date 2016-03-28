@@ -38,6 +38,16 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// Topmost window or not
         /// </summary>
         bool Topmost { get; set; }
+
+        /// <summary>
+        /// Dialog window height.
+        /// </summary>
+        double Height { get; set; }
+
+        /// <summary>
+        /// Dialog window width.
+        /// </summary>
+        double Width { get; set; }
     }
 }
 

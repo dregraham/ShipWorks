@@ -13,13 +13,13 @@
         Title= "{Binding Title}"
         FontFamily="Tahoma" FontSize="8.25pt"
         ShowInTaskbar="False"
-        WindowStartupLocation="CenterOwner"
-        >
+        WindowStartupLocation="CenterOwner">
     <Grid>
         <local:ChannelLimitControl
             x:Name="ChannelLimitControl"
             Padding="7 10 0 0"
-            IsEnabledChanged="OnEnabledChanged"/>
+            IsEnabledChanged="OnEnabledChanged"
+            />
 
         <Button
             x:Name="close"

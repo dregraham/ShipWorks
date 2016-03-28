@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Windows;
+using System.Windows.Forms;
 using GalaSoft.MvvmLight.Command;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
@@ -40,24 +41,24 @@ namespace ShipWorks.UI.Controls.CustomerLicenseActivation
         /// <summary>
         /// Command for clicking OK
         /// </summary>
-        public RelayCommand<Window> OkClickCommand
+        public RelayCommand<CustomerLicenseActivationDlg> OkClickCommand
         {
             get
             {
-                return new RelayCommand<Window>(ActivateShipWorks);
+                return new RelayCommand<CustomerLicenseActivationDlg>(ActivateShipWorks);
             }
         }
 
         /// <summary>
         /// Activates ShipWorks using the LicenseActivationViewModel
         /// </summary>
-        public void ActivateShipWorks(Window window)
+        public void ActivateShipWorks(CustomerLicenseActivationDlg window)
         {
             GenericResult<ICustomerLicense> result = licenseActivationViewModel.Save(false);
 
             if (!result.Success)
             {
-                messageHelper.ShowError(result.Message);
+                messageHelper.ShowError(window, result.Message);
                 return;
             }
 

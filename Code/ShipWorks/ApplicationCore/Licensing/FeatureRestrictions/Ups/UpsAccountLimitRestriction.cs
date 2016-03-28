@@ -65,7 +65,7 @@ namespace ShipWorks.ApplicationCore.Licensing.FeatureRestrictions.Ups
             EditionRestrictionLevel restriction = Check(capabilities, data);
             if (restriction != EditionRestrictionLevel.None)
             {
-                messageHelper.ShowError(EnumHelper.GetDescription(EditionFeature));
+                messageHelper.ShowError(owner, EnumHelper.GetDescription(EditionFeature));
                 return false;
             }
 

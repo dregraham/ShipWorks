@@ -2,6 +2,9 @@
 using System;
 using System.Windows;
 using System.Windows.Forms;
+using Autofac;
+using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Licensing;
 
 namespace ShipWorks.UI.Controls.ChannelConfirmDelete
 {
@@ -10,50 +13,39 @@ namespace ShipWorks.UI.Controls.ChannelConfirmDelete
     /// </summary>
     public class ChannelConfirmDeleteFactory : IChannelConfirmDeleteFactory
     {
-        private readonly Func<IChannelConfirmDeleteDlg> dialogFactory;
         private readonly Func<IConfirmChannelDeleteViewModel> viewModelFactory;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ChannelConfirmDeleteFactory(Func<IChannelConfirmDeleteDlg> dialogFactory, Func<IConfirmChannelDeleteViewModel> viewModelFactory)
+        public ChannelConfirmDeleteFactory(Func<IConfirmChannelDeleteViewModel> viewModelFactory)
         {
-            this.dialogFactory = dialogFactory;
             this.viewModelFactory = viewModelFactory;
         }
 
         /// <summary>
         /// Creates a ChannelConfirmationDeleteDlg using the given store type
         /// </summary>
-        public IChannelConfirmDeleteDlg GetConfirmDeleteDlg(StoreTypeCode storeType, Window owner)
+        public IDialog GetConfirmDeleteDlg(StoreTypeCode storeType, IWin32Window owner)
         {
-            // Get a new Dialog
-            IChannelConfirmDeleteDlg dlg = dialogFactory();
-
-            // Get a new View Model
-            IConfirmChannelDeleteViewModel viewModel = viewModelFactory();
-
-            // Load the store type into the view model
-            viewModel.Load(storeType);
-
-            // set the data context of the dialog to the view model
-            dlg.DataContext = viewModel;
-
-            // When deleting a channel from the AddStoreWizard, the owner is null, since the
-            // AddStoreWizard is not WPF. So just throw it front and center screen and call it a day.
-            if (owner == null)
+            using (ILifetimeScope scope = IoC.BeginLifetimeScope())
             {
-                dlg.WindowStartupLocation = WindowStartupLocation.CenterScreen;
-                dlg.Topmost = true;
-            }
-            else
-            {
-                // Set owner
-                dlg.Owner = owner;
-            }
+                // Get a new Dialog
+                IDialog dlg = scope.ResolveNamed<IDialog>("ChannelConfirmDeleteDlg",
+                    new TypedParameter(typeof(IWin32Window), owner));
 
-            // return the dialog
-            return dlg;
+                // Get a new View Model
+                IConfirmChannelDeleteViewModel viewModel = viewModelFactory();
+
+                // Load the store type into the view model
+                viewModel.Load(storeType);
+
+                // set the data context of the dialog to the view model
+                dlg.DataContext = viewModel;
+
+                // return the dialog
+                return dlg;
+            }
         }
     }
 }
