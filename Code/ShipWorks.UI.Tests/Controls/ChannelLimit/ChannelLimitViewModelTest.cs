@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows;
+using System.Windows.Forms;
 using System.Windows.Input;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.UI;
@@ -88,7 +89,7 @@ namespace ShipWorks.UI.Tests.Controls.ChannelLimit
             {
                 var dialog = mock.Mock<IDialog>();
                 var webBrowserFactory = mock.Mock<IWebBrowserFactory>();
-                webBrowserFactory.Setup(w => w.Create(It.IsAny<Uri>(), It.IsAny<string>(), It.IsAny<Window>(), It.IsAny<Size>())).Returns(dialog.Object);
+                webBrowserFactory.Setup(w => w.Create(It.IsAny<Uri>(), It.IsAny<string>(), It.IsAny<IWin32Window>(), It.IsAny<Size>())).Returns(dialog.Object);
                 var behavior = MockChannelLimitBehavior(mock);
 
                 Mock<ICustomerLicense> license = mock.Mock<ICustomerLicense>();
@@ -124,7 +125,7 @@ namespace ShipWorks.UI.Tests.Controls.ChannelLimit
                 ICommand deleteCommand = testObject.DeleteStoreClickCommand;
                 deleteCommand.Execute(null);
 
-                messageHelper.Verify(m => m.ShowError("You cannot remove Amazon because it is the only channel in your ShipWorks database."), Times.Once);
+                messageHelper.Verify(m => m.ShowError(It.IsAny<IWin32Window>(), "You cannot remove Amazon because it is the only channel in your ShipWorks database."), Times.Once);
             }
         }
 
@@ -144,12 +145,12 @@ namespace ShipWorks.UI.Tests.Controls.ChannelLimit
                 storeManager.Setup(s => s.GetAllStores())
                     .Returns(stores);
 
-                Mock<IChannelConfirmDeleteDlg> confirmDelete = mock.Mock<IChannelConfirmDeleteDlg>();
+                Mock<IDialog> confirmDelete = mock.Mock<IDialog>();
                 confirmDelete.Setup(d => d.DialogResult)
                     .Returns(false);
 
                 Mock<IChannelConfirmDeleteFactory> confirmDeleteFactgory = mock.Mock<IChannelConfirmDeleteFactory>();
-                confirmDeleteFactgory.Setup(c => c.GetConfirmDeleteDlg(It.IsAny<StoreTypeCode>(), It.IsAny<Window>()))
+                confirmDeleteFactgory.Setup(c => c.GetConfirmDeleteDlg(It.IsAny<StoreTypeCode>(), It.IsAny<IWin32Window>()))
                     .Returns(confirmDelete.Object);
 
                 var behavior = MockChannelLimitBehavior(mock);
@@ -181,12 +182,12 @@ namespace ShipWorks.UI.Tests.Controls.ChannelLimit
                 storeManager.Setup(s => s.GetAllStores())
                     .Returns(stores);
 
-                Mock<IChannelConfirmDeleteDlg> confirmDelete = mock.Mock<IChannelConfirmDeleteDlg>();
+                Mock<IDialog> confirmDelete = mock.Mock<IDialog>();
                 confirmDelete.Setup(d => d.DialogResult)
                     .Returns(true);
 
                 Mock<IChannelConfirmDeleteFactory> confirmDeleteFactgory = mock.Mock<IChannelConfirmDeleteFactory>();
-                confirmDeleteFactgory.Setup(c => c.GetConfirmDeleteDlg(It.IsAny<StoreTypeCode>(), It.IsAny<Window>()))
+                confirmDeleteFactgory.Setup(c => c.GetConfirmDeleteDlg(It.IsAny<StoreTypeCode>(), It.IsAny<IWin32Window>()))
                     .Returns(confirmDelete.Object);
 
                 Mock<ICustomerLicense> license = mock.Mock<ICustomerLicense>();
@@ -219,16 +220,18 @@ namespace ShipWorks.UI.Tests.Controls.ChannelLimit
                 storeManager.Setup(s => s.GetAllStores())
                     .Returns(stores);
 
-                Mock<IChannelConfirmDeleteDlg> confirmDelete = mock.Mock<IChannelConfirmDeleteDlg>();
+                Mock<IDialog> confirmDelete = mock.Mock<IDialog>();
                 confirmDelete.Setup(d => d.DialogResult)
                     .Returns(false);
 
                 Mock<IChannelConfirmDeleteFactory> confirmDeleteFactgory = mock.Mock<IChannelConfirmDeleteFactory>();
-                confirmDeleteFactgory.Setup(c => c.GetConfirmDeleteDlg(It.IsAny<StoreTypeCode>(), It.IsAny<Window>()))
+                confirmDeleteFactgory.Setup(c => c.GetConfirmDeleteDlg(It.IsAny<StoreTypeCode>(), It.IsAny<IWin32Window>()))
                     .Returns(confirmDelete.Object);
 
                 Mock<ICustomerLicense> license = mock.Mock<ICustomerLicense>();
                 var behavior = MockChannelLimitBehavior(mock);
+
+                Mock<IChannelLimitControl> control = mock.Mock<IChannelLimitControl>();
 
                 // Test
                 var testObject = mock.Create<ChannelLimitViewModel>();
@@ -236,7 +239,7 @@ namespace ShipWorks.UI.Tests.Controls.ChannelLimit
                 testObject.SelectedStoreType = StoreTypeCode.Ebay;
 
                 ICommand deleteCommand = testObject.DeleteStoreClickCommand;
-                deleteCommand.Execute(null);
+                deleteCommand.Execute(control.Object);
 
                 // Verify
                 license.Verify(l => l.DeleteChannel(StoreTypeCode.Ebay), Times.Never);

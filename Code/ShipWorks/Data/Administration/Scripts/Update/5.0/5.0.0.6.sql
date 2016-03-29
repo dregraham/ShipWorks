@@ -9,6 +9,5 @@ DROP INDEX [IX_OrderNote_ObjectID] ON [dbo].[Note]
 GO
 PRINT N'Creating index [IX_OrderNote_ObjectID] on [dbo].[Note]'
 GO
-CREATE UNIQUE NONCLUSTERED INDEX [IX_OrderNote_ObjectID] ON [dbo].[Note] ([ObjectID] ASC, [NoteID] ASC) INCLUDE ([Edited]) 
-WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)
+CREATE UNIQUE NONCLUSTERED INDEX [IX_OrderNote_ObjectID] ON [dbo].[Note] ([ObjectID] ASC, [NoteID] ASC) INCLUDE ([Edited])
 GO

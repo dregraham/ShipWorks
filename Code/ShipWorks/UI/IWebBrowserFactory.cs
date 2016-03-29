@@ -13,11 +13,6 @@ namespace ShipWorks.UI
         /// <summary>
         /// Creates an IDialog with the given URI and title
         /// </summary>
-        IDialog Create(Uri uri, string title, Window owner, Size size);
-
-        /// <summary>
-        /// Creates an IDialog with the given URI and title
-        /// </summary>
         IDialog Create(Uri uri, string title, IWin32Window owner, Size size);
     }
 }

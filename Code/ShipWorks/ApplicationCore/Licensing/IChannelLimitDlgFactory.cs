@@ -12,6 +12,6 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Gets the channel limit dialog.
         /// </summary>
-        IChannelLimitDlg GetChannelLimitDlg(IWin32Window owner, EditionFeature feature, EnforcementContext context);
+        IDialog GetChannelLimitDlg(IWin32Window owner, EditionFeature feature, EnforcementContext context);
     }
 }

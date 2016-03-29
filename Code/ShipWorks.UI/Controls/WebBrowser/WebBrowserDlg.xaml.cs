@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Interop;
 using ShipWorks.ApplicationCore.Licensing;
 using IWin32Window = System.Windows.Forms.IWin32Window;
@@ -8,7 +9,7 @@ namespace ShipWorks.UI.Controls.WebBrowser
     /// <summary>
     /// Interaction logic for WebBrowserDlg.xaml
     /// </summary>
-    public partial class WebBrowserDlg : IDialog
+    public partial class WebBrowserDlg : IWin32Window, IDialog
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="WebBrowserDlg"/> class.
@@ -19,16 +20,9 @@ namespace ShipWorks.UI.Controls.WebBrowser
         }
 
         /// <summary>
-        /// Constructor
+        /// Window handle.
         /// </summary>
-        public WebBrowserDlg(IWin32Window owner) : this()
-        {
-            new WindowInteropHelper(this)
-            {
-                Owner = owner.Handle
-            };
-
-        }
+        public IntPtr Handle { get; set; }
 
         /// <summary>
         /// Called when [click close].
@@ -36,6 +30,19 @@ namespace ShipWorks.UI.Controls.WebBrowser
         private void OnClickClose(object sender, RoutedEventArgs e)
         {
             Close();
+        }
+
+        /// <summary>
+        /// Loads the owner.
+        /// </summary>
+        public void LoadOwner(IWin32Window owner)
+        {
+            Handle = owner.Handle;
+
+            new WindowInteropHelper(this)
+            {
+                Owner = owner.Handle
+            };
         }
     }
 }

@@ -129,7 +129,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.LicenseEnforcement
             using (var mock = AutoMock.GetLoose())
             {
                 Mock<IChannelLimitDlgFactory> dlgFactory = mock.Mock<IChannelLimitDlgFactory>();
-                Mock<IChannelLimitDlg> dlg = mock.Mock<IChannelLimitDlg>();
+                Mock<IDialog> dlg = mock.Mock<IDialog>();
 
                 dlgFactory.Setup(f => f.GetChannelLimitDlg(It.IsAny<IWin32Window>(), It.IsAny<EditionFeature>(), It.IsAny<EnforcementContext>())).Returns(dlg.Object);
 
@@ -152,7 +152,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.LicenseEnforcement
             using (var mock = AutoMock.GetLoose())
             {
                 Mock<IChannelLimitDlgFactory> dlgFactory = mock.Mock<IChannelLimitDlgFactory>();
-                Mock<IChannelLimitDlg> dlg = mock.Mock<IChannelLimitDlg>();
+                Mock<IDialog> dlg = mock.Mock<IDialog>();
 
                 dlgFactory.Setup(f => f.GetChannelLimitDlg(It.IsAny<IWin32Window>(), It.IsAny<EditionFeature>(), It.IsAny<EnforcementContext>())).Returns(dlg.Object);
 

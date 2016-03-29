@@ -1,45 +1,47 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Interop;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using ShipWorks.ApplicationCore.Licensing;
+using IWin32Window = System.Windows.Forms.IWin32Window;
 
 namespace ShipWorks.UI.Controls.CustomerLicenseActivation
 {
     /// <summary>
     /// Interaction logic for CustomerLicenseActivationDlg.xaml
     /// </summary>
-    public partial class CustomerLicenseActivationDlg : IDialog
+    public partial class CustomerLicenseActivationDlg : IWin32Window, IDialog
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CustomerLicenseActivationDlg"/> class.
+        /// </summary>
         public CustomerLicenseActivationDlg()
         {
             InitializeComponent();
         }
 
         /// <summary>
-        /// Constructor
+        /// Window handle.
         /// </summary>
-        public CustomerLicenseActivationDlg(IWin32Window owner) : this()
+        public IntPtr Handle { get; set; }
+
+        /// <summary>
+        /// Called when [click cancel].
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
+        private void OnClickCancel(object sender, RoutedEventArgs e)
         {
+            Close();
+        }
+
+        public void LoadOwner(IWin32Window owner)
+        {
+            Handle = owner.Handle;
+
             new WindowInteropHelper(this)
             {
                 Owner = owner.Handle
             };
-        }
-
-        private void OnClickCancel(object sender, RoutedEventArgs e)
-        {
-            Close();
         }
     }
 }

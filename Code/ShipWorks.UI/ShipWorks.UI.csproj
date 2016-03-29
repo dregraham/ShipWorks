@@ -106,7 +106,6 @@
     <Compile Include="Controls\ChannelConfirmDelete\ChannelConfirmDeleteDlg.xaml.cs">
       <DependentUpon>ChannelConfirmDeleteDlg.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\ChannelConfirmDelete\IChannelConfirmDeleteDlg.cs" />
     <Compile Include="Controls\ChannelConfirmDelete\IChannelConfirmDeleteFactory.cs" />
     <Compile Include="Controls\ChannelConfirmDelete\IConfirmChannelDeleteViewModel.cs" />
     <Compile Include="Controls\ChannelLimit\ChannelLimitBehavior\GenericFileBehavior.cs" />
@@ -135,12 +134,6 @@
       <DependentUpon>CustomerLicenseActivationDlg.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\CustomerLicenseActivation\CustomerLicenseActivationViewModel.cs" />
-    <Compile Include="Controls\UpgradePlan\IUpgradePlanDlgViewModel.cs" />
-    <Compile Include="Controls\UpgradePlan\UpgradePlanDlg.xaml.cs">
-      <DependentUpon>UpgradePlanDlg.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\UpgradePlan\UpgradePlanDlgFactory.cs" />
-    <Compile Include="Controls\UpgradePlan\UpgradePlanDlgViewModel.cs" />
     <Compile Include="Controls\WebBrowser\IWebBrowserDlgViewModel.cs" />
     <Compile Include="Controls\WebBrowser\WebBrowserDlg.xaml.cs">
       <DependentUpon>WebBrowserDlg.xaml</DependentUpon>
@@ -214,10 +207,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\WebBrowser\WebBrowserDlg.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Controls\UpgradePlan\UpgradePlanDlg.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

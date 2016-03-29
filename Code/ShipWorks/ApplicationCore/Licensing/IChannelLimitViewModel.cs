@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Windows.Forms;
 using System.Windows.Input;
 using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
 using ShipWorks.Stores;
@@ -56,8 +57,13 @@ namespace ShipWorks.ApplicationCore.Licensing
         string Title { get; }
 
         /// <summary>
-        /// Loads the given customer license 
+        /// Loads the given customer license
         /// </summary>
         void Load(ICustomerLicense customerLicense, IChannelLimitBehavior channelLimitBehavior);
+
+        /// <summary>
+        /// The owner, if using the control
+        /// </summary>
+        IWin32Window ControlOwner { get; set; }
     }
 }

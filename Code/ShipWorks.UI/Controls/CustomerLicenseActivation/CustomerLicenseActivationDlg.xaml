@@ -9,6 +9,7 @@
         Height="180"
         ResizeMode="NoResize"
         WindowStyle="ToolWindow"
+        WindowStartupLocation="CenterOwner"
         ShowInTaskbar="False"
         d:DataContext="{d:DesignInstance local:CustomerLicenseActivationDlgViewModel}"
         d:DesignHeight="261"

@@ -1003,7 +1003,7 @@ namespace ShipWorks.Stores.Management
                     {
                         IChannelLimitFactory factory = IoC.UnsafeGlobalLifetimeScope.Resolve<IChannelLimitFactory>();
                         Control channelLimitControl =
-                            (Control) factory.CreateControl((ICustomerLicense) license, (StoreTypeCode) Store.TypeCode, EditionFeature.ChannelCount);
+                            (Control) factory.CreateControl((ICustomerLicense) license, (StoreTypeCode) Store.TypeCode, EditionFeature.ChannelCount, this);
 
                         wizardPageActivationError.SetElementHost(channelLimitControl);
                     }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows.Forms;
 using Autofac;
 using Autofac.Extras.Moq;
 using Autofac.Features.Indexed;
@@ -24,7 +25,8 @@ namespace ShipWorks.UI.Tests.Controls.ChannelLimit
                 Mock<ICustomerLicense> license = mock.Mock<ICustomerLicense>();
                 Mock<IChannelLimitControl> control = mock.Mock<IChannelLimitControl>();
                 Mock<IChannelLimitBehavior> behavior = mock.Mock<IChannelLimitBehavior>();
-                
+                Mock<IWin32Window> owner = mock.Mock<IWin32Window>();
+
                 Mock<Func<IChannelLimitControl>> channelLimitCtrlRepo = mock.MockRepository.Create<Func<IChannelLimitControl>>();
                 channelLimitCtrlRepo.Setup(x => x())
                     .Returns(control.Object);
@@ -36,8 +38,8 @@ namespace ShipWorks.UI.Tests.Controls.ChannelLimit
                 mock.Provide(channelLimitBehaviorRepo.Object);
 
                 ChannelLimitFactory testObject = mock.Create<ChannelLimitFactory>();
-                
-                testObject.CreateControl(license.Object, StoreTypeCode.Amazon, EditionFeature.EndiciaAccountLimit);
+
+                testObject.CreateControl(license.Object, StoreTypeCode.Amazon, EditionFeature.EndiciaAccountLimit, owner.Object);
 
                 viewModel.VerifySet(m => m.ChannelToAdd = StoreTypeCode.Amazon);
             }
@@ -52,6 +54,7 @@ namespace ShipWorks.UI.Tests.Controls.ChannelLimit
                 Mock<ICustomerLicense> license = mock.Mock<ICustomerLicense>();
                 Mock<IChannelLimitControl> control = mock.Mock<IChannelLimitControl>();
                 Mock<IChannelLimitBehavior> behavior = mock.Mock<IChannelLimitBehavior>();
+                Mock<IWin32Window> owner = mock.Mock<IWin32Window>();
 
                 Mock<Func<IChannelLimitControl>> channelLimitCtrlRepo = mock.MockRepository.Create<Func<IChannelLimitControl>>();
                 channelLimitCtrlRepo.Setup(x => x())
@@ -65,7 +68,7 @@ namespace ShipWorks.UI.Tests.Controls.ChannelLimit
 
                 ChannelLimitFactory testObject = mock.Create<ChannelLimitFactory>();
 
-                testObject.CreateControl(license.Object, StoreTypeCode.Amazon, EditionFeature.EndiciaAccountLimit);
+                testObject.CreateControl(license.Object, StoreTypeCode.Amazon, EditionFeature.EndiciaAccountLimit, owner.Object);
 
                 viewModel.VerifySet(m => m.EnforcementContext = EnforcementContext.ExceedingChannelLimit);
             }
@@ -80,6 +83,7 @@ namespace ShipWorks.UI.Tests.Controls.ChannelLimit
                 Mock<ICustomerLicense> license = mock.Mock<ICustomerLicense>();
                 Mock<IChannelLimitControl> control = mock.Mock<IChannelLimitControl>();
                 Mock<IChannelLimitBehavior> behavior = mock.Mock<IChannelLimitBehavior>();
+                Mock<IWin32Window> owner = mock.Mock<IWin32Window>();
 
                 Mock<Func<IChannelLimitControl>> channelLimitCtrlRepo = mock.MockRepository.Create<Func<IChannelLimitControl>>();
                 channelLimitCtrlRepo.Setup(x => x())
@@ -93,7 +97,7 @@ namespace ShipWorks.UI.Tests.Controls.ChannelLimit
 
                 ChannelLimitFactory testObject = mock.Create<ChannelLimitFactory>();
 
-                testObject.CreateControl(license.Object, StoreTypeCode.Amazon, EditionFeature.EndiciaAccountLimit);
+                testObject.CreateControl(license.Object, StoreTypeCode.Amazon, EditionFeature.EndiciaAccountLimit, owner.Object);
 
                 channelLimitCtrlRepo.Verify(f => f(), Times.Once);
             }
@@ -108,6 +112,7 @@ namespace ShipWorks.UI.Tests.Controls.ChannelLimit
                 Mock<ICustomerLicense> license = mock.Mock<ICustomerLicense>();
                 Mock<IChannelLimitControl> control = mock.Mock<IChannelLimitControl>();
                 Mock<IChannelLimitBehavior> behavior = mock.Mock<IChannelLimitBehavior>();
+                Mock<IWin32Window> owner = mock.Mock<IWin32Window>();
 
                 Mock<Func<IChannelLimitControl>> channelLimitCtrlRepo = mock.MockRepository.Create<Func<IChannelLimitControl>>();
                 channelLimitCtrlRepo.Setup(x => x())
@@ -121,7 +126,7 @@ namespace ShipWorks.UI.Tests.Controls.ChannelLimit
 
                 ChannelLimitFactory testObject = mock.Create<ChannelLimitFactory>();
 
-                testObject.CreateControl(license.Object, StoreTypeCode.Amazon, EditionFeature.EndiciaAccountLimit);
+                testObject.CreateControl(license.Object, StoreTypeCode.Amazon, EditionFeature.EndiciaAccountLimit, owner.Object);
 
                 control.VerifySet(c => c.DataContext = viewModel.Object);
             }
@@ -136,6 +141,7 @@ namespace ShipWorks.UI.Tests.Controls.ChannelLimit
                 Mock<ICustomerLicense> license = mock.Mock<ICustomerLicense>();
                 Mock<IChannelLimitControl> control = mock.Mock<IChannelLimitControl>();
                 Mock<IChannelLimitBehavior> behavior = mock.Mock<IChannelLimitBehavior>();
+                Mock<IWin32Window> owner = mock.Mock<IWin32Window>();
 
                 Mock<Func<IChannelLimitControl>> channelLimitCtrlRepo = mock.MockRepository.Create<Func<IChannelLimitControl>>();
                 channelLimitCtrlRepo.Setup(x => x())
@@ -149,7 +155,7 @@ namespace ShipWorks.UI.Tests.Controls.ChannelLimit
 
                 ChannelLimitFactory testObject = mock.Create<ChannelLimitFactory>();
 
-                testObject.CreateControl(license.Object, StoreTypeCode.Amazon, EditionFeature.EndiciaAccountLimit);
+                testObject.CreateControl(license.Object, StoreTypeCode.Amazon, EditionFeature.EndiciaAccountLimit, owner.Object);
 
                 viewModel.Verify(v => v.Load(license.Object, It.IsAny<IChannelLimitBehavior>()), Times.Once);
             }
@@ -164,6 +170,7 @@ namespace ShipWorks.UI.Tests.Controls.ChannelLimit
                 Mock<ICustomerLicense> license = mock.Mock<ICustomerLicense>();
                 Mock<IChannelLimitControl> control = mock.Mock<IChannelLimitControl>();
                 Mock<IChannelLimitBehavior> behavior = mock.Mock<IChannelLimitBehavior>();
+                Mock<IWin32Window> owner = mock.Mock<IWin32Window>();
 
                 Mock<Func<IChannelLimitControl>> channelLimitCtrlRepo = mock.MockRepository.Create<Func<IChannelLimitControl>>();
                 channelLimitCtrlRepo.Setup(x => x())
@@ -177,7 +184,7 @@ namespace ShipWorks.UI.Tests.Controls.ChannelLimit
 
                 ChannelLimitFactory testObject = mock.Create<ChannelLimitFactory>();
 
-                testObject.CreateControl(license.Object, StoreTypeCode.Amazon, EditionFeature.EndiciaAccountLimit);
+                testObject.CreateControl(license.Object, StoreTypeCode.Amazon, EditionFeature.EndiciaAccountLimit, owner.Object);
 
                 viewModel.Verify(v => v.Load(It.IsAny<ICustomerLicense>(), behavior.Object), Times.Once);
             }

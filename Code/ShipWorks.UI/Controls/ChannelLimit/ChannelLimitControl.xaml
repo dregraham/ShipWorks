@@ -136,7 +136,7 @@
                 Margin="0 0 0 10"
                 Height="20" Width="128"
                 Command="{Binding UpgradeClickCommand}"
-                CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}}">
+                CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:ChannelLimitControl}}}">
                 <DockPanel Width="125">
                     <Image DockPanel.Dock="Left" Width="14" HorizontalAlignment="Left" Source="/Shipworks.Core;component/Resources/arrow_up_blue.png"/>
                     <TextBlock
@@ -152,7 +152,7 @@
                 Margin="0 0 0 10"
                 Height="20" Width="128"
                 Command="{Binding DeleteStoreClickCommand}"
-                CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}}">
+                CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:ChannelLimitControl}}}">
                 <DockPanel Width="125">
                     <Image DockPanel.Dock="Left" Width="14" HorizontalAlignment="Left" Source="/Shipworks.Core;component/Resources/delete2.png"/>
                     <TextBlock TextAlignment="Center" Margin="-14 0 0 0">Delete</TextBlock>
