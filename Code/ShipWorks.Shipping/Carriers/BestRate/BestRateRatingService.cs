@@ -99,11 +99,6 @@ namespace ShipWorks.Shipping.Carriers.BestRate
 
             if (!bestRateShippingBrokers.Any())
             {
-                //string message =
-                //    $"No accounts are configured to use with best rate.{Environment.NewLine}Check the shipping settings to ensure " +
-                //    "your shipping accounts have been setup for the shipping providers being used with best rate.";
-
-                //throw new BestRateException(message);
                 return new List<RateGroup> { RateGroup.ShippingAccountRequiredRateGroup(ShipmentTypeCode.BestRate) };
             }
 

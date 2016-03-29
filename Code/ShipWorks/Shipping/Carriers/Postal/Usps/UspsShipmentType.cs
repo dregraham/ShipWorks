@@ -333,10 +333,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 return new UspsBestRateBroker(this, AccountRepository);
             }
 
-            // No accounts, so use the counter rates broker to allow the user to
-            // sign up for the account. We can use the UspsCounterRateAccountRepository
-            // here because the underlying accounts being used are the same.
-            return new UspsCounterRatesBroker(new UspsCounterRateAccountRepository(TangoCredentialStore.Instance));
+            // No accounts, so use the null broker for Best Rate
+            return new NullShippingBroker();
         }
 
         /// <summary>

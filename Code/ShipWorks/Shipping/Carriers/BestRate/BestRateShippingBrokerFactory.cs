@@ -30,9 +30,11 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// providers that are activated and configured.
         /// </summary>
         /// <param name="shipment">The shipment.</param>
-        /// <param name="createCounterRateBrokers">Should counter rate brokers be created</param>
-        /// <returns>The shipping broker for all activated and configured shipment types that have not
-        /// been excluded from being used to find the best rate.</returns>
+        /// <param name="createCounterRateBrokers">Should counter rate brokers be created?</param>
+        /// <returns>
+        /// The shipping broker for all activated and configured shipment types that have not
+        /// been excluded from being used to find the best rate.
+        /// </returns>
         public IEnumerable<IBestRateShippingBroker> CreateBrokers(ShipmentEntity shipment, bool createCounterRateBrokers)
         {
             ShippingSettingsEntity shippingSettings = ShippingSettings.Fetch();

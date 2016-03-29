@@ -25,7 +25,8 @@ namespace ShipWorks.Shipping.Carriers.BestRate.RateGroupFiltering
             List<RateResult> rates = rateGroup.Rates;
 
             // Remove the footnote factories that do not have associated rates in the rate group
-            // We want to keep the footnote for an invalid store address when getting counter rates though.
+            // We want to keep the footnotes for an invalid store address and ShippingAccountRequired
+            // when getting counter rates though.
             List<IRateFootnoteFactory> footnoteFactories = rateGroup.FootnoteFactories
                                                         .Where(f => f.GetType() == typeof(CounterRatesInvalidStoreAddressFootnoteFactory) 
                                                                     || f.GetType() == typeof(ShippingAccountRequiredForRatingFootnoteFactory)
