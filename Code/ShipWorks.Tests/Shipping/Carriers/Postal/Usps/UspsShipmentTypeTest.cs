@@ -37,14 +37,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
         }
 
         [Fact]
-        public void GetShippingBroker_ReturnsUspsCounterRateBroker_WhenNoUspsAccountsExist()
+        public void GetShippingBroker_ReturnsNullShippingBroker_WhenNoUspsAccountsExist()
         {
             accountRepository.Setup(r => r.Accounts).Returns(new List<UspsAccountEntity>());
             testObject.AccountRepository = accountRepository.Object;
 
             IBestRateShippingBroker broker = testObject.GetShippingBroker(new ShipmentEntity());
 
-            Assert.IsAssignableFrom<UspsCounterRatesBroker>(broker);
+            Assert.IsAssignableFrom<NullShippingBroker>(broker);
         }
 
         [Fact]

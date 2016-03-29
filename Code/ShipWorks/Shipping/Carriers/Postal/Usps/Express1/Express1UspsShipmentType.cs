@@ -146,16 +146,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1
         }
 
         /// <summary>
-        /// Gets an instance to the best rate shipping broker for the Express1 for USPS shipment type based on the shipment configuration.
-        /// </summary>
-        /// <param name="shipment">The shipment.</param>
-        /// <returns>An instance of an Express1UspsBestRateBroker.</returns>
-        public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment)
-        {
-            return new NullShippingBroker();
-        }
-
-        /// <summary>
         /// Will just assign the contract type of the account to Unknown and save the account to the repository.
         /// </summary>
         /// <param name="account">The account.</param>
