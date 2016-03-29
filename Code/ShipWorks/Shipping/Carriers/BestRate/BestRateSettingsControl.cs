@@ -11,7 +11,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
     /// </summary>
     public partial class BestRateSettingsControl : SettingsControlBase
     {
-        private static readonly List<ShipmentTypeCode> NonCarrierShipmentTypes = new List<ShipmentTypeCode>
+        private static readonly List<ShipmentTypeCode> ExcludedShipmentTypes = new List<ShipmentTypeCode>
         {
             ShipmentTypeCode.None,
             ShipmentTypeCode.BestRate,
@@ -21,7 +21,8 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             ShipmentTypeCode.Express1Endicia,
             ShipmentTypeCode.Express1Usps,
             ShipmentTypeCode.UpsOnLineTools,
-            ShipmentTypeCode.UpsWorldShip
+            ShipmentTypeCode.UpsWorldShip,
+            ShipmentTypeCode.Amazon
         };
 
         private bool isDirty;
@@ -71,7 +72,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             // Finally, remove explicitly included shipment types to remove previously excluded types that are now shown globally
             settings.BestRateExcludedTypes = panelProviders.UnselectedShipmentTypes.Select(x => (int) x.ShipmentTypeCode)
                 .Union(settings.BestRateExcludedTypes)
-                .Union(NonCarrierShipmentTypes.Cast<int>())
+                .Union(ExcludedShipmentTypes.Cast<int>())
                 .Except(panelProviders.SelectedShipmentTypes.Select(x => (int) x.ShipmentTypeCode))
                 .ToArray();
 
@@ -101,7 +102,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// <param name="shipmentType">The shipment type to test</param>
         private static bool IsCarrierShippingType(ShipmentType shipmentType)
         {
-            return !NonCarrierShipmentTypes.Contains(shipmentType.ShipmentTypeCode);
+            return !ExcludedShipmentTypes.Contains(shipmentType.ShipmentTypeCode);
         }
     }
 }
