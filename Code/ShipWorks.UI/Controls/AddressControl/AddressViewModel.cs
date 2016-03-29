@@ -247,9 +247,9 @@ namespace ShipWorks.UI.Controls.AddressControl
         /// </summary>
         private IEnumerable<KeyValuePair<string, ValidatedAddressEntity>> BuildDictionary(IEnumerable<ValidatedAddressEntity> validatedAddresses)
         {
-            return validatedAddresses.ToDictionary(
-                    x => addressSelector.FormatAddress(x),
-                    x => x);
+            // Stamps has sent us duplicates, so we can't use a dictionary here
+            return validatedAddresses
+                .Select(x => new KeyValuePair<string, ValidatedAddressEntity>(addressSelector.FormatAddress(x), x));
         }
 
         /// <summary>
