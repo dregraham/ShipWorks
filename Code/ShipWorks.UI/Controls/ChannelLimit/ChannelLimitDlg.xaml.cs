@@ -21,9 +21,14 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         }
 
         /// <summary>
-        /// Constructor
+        /// Window handle.
         /// </summary>
-        public ChannelLimitDlg(IWin32Window owner) : this()
+        public IntPtr Handle { get; set; }
+
+        /// <summary>
+        /// Loads the owner.
+        /// </summary>
+        public void LoadOwner(IWin32Window owner)
         {
             Handle = owner.Handle;
 
@@ -49,10 +54,5 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         {
             Close();
         }
-
-        /// <summary>
-        /// Window handle.
-        /// </summary>
-        public IntPtr Handle { get; }
     }
 }

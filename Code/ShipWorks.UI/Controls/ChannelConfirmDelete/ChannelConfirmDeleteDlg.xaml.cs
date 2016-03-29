@@ -20,19 +20,6 @@ namespace ShipWorks.UI.Controls.ChannelConfirmDelete
         }
 
         /// <summary>
-        /// Constructor
-        /// </summary>
-        public ChannelConfirmDeleteDlg(IWin32Window owner) : this()
-        {
-            Handle = owner.Handle;
-
-            new WindowInteropHelper(this)
-            {
-                Owner = owner.Handle
-            };
-        }
-
-        /// <summary>
         /// Window handle.
         /// </summary>
         public IntPtr Handle { get; set; }
@@ -53,6 +40,16 @@ namespace ShipWorks.UI.Controls.ChannelConfirmDelete
         {
             DialogResult = false;
             Close();
+        }
+
+        public void LoadOwner(IWin32Window owner)
+        {
+            Handle = owner.Handle;
+
+            new WindowInteropHelper(this)
+            {
+                Owner = owner.Handle
+            };
         }
     }
 }

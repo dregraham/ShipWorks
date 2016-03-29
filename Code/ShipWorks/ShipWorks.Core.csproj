@@ -656,7 +656,6 @@
     <Compile Include="ApplicationCore\Licensing\FakeTangoWebClient.cs" />
     <Compile Include="ApplicationCore\Licensing\ICustomerLicenseActivationService.cs" />
     <Compile Include="ApplicationCore\Licensing\IDialog.cs" />
-    <Compile Include="ApplicationCore\Licensing\IChannelLimitDlg.cs" />
     <Compile Include="ApplicationCore\Licensing\ICustomerLicense.cs" />
     <Compile Include="ApplicationCore\Licensing\ICustomerLicenseActivation.cs" />
     <Compile Include="ApplicationCore\Licensing\ICustomerLicenseActivationViewModel.cs" />

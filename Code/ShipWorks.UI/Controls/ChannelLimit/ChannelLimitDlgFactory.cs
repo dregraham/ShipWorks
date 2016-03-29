@@ -18,17 +18,20 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         private readonly ILicenseService licenseService;
         private readonly IChannelLimitViewModel viewModel;
         private readonly IIndex<EditionFeature, IChannelLimitBehavior> behaviorFactory;
+        private readonly Func<string, IDialog> dialogFactory;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ChannelLimitDlgFactory"/> class.
         /// </summary>
         public ChannelLimitDlgFactory(ILicenseService licenseService,
             IChannelLimitViewModel viewModel,
-            IIndex<EditionFeature, IChannelLimitBehavior> behaviorFactory)
+            IIndex<EditionFeature, IChannelLimitBehavior> behaviorFactory,
+            Func<string, IDialog> dialogFactory)
         {
             this.licenseService = licenseService;
             this.viewModel = viewModel;
             this.behaviorFactory = behaviorFactory;
+            this.dialogFactory = dialogFactory;
         }
 
         /// <summary>
@@ -46,14 +49,13 @@ namespace ShipWorks.UI.Controls.ChannelLimit
             viewModel.EnforcementContext = context;
             // load the customer license into the view model
             viewModel.Load(customerLicense, behaviorFactory[feature]);
-            using (ILifetimeScope scope = IoC.BeginLifetimeScope())
-            {
-                // Get the dialog
-                IDialog dialog = scope.ResolveNamed<IDialog>("ChannelLimitDlg", new TypedParameter(typeof(IWin32Window), owner));
-                dialog.DataContext = viewModel;
 
-                return dialog;
-            }
+            // Get the dialog
+            IDialog dialog = dialogFactory("ChannelLimitDlg");
+            dialog.LoadOwner(owner);
+            dialog.DataContext = viewModel;
+
+            return dialog;
         }
     }
 }

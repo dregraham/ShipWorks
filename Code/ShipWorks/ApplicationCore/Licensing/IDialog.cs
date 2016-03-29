@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using System.Windows.Forms;
 
 namespace ShipWorks.ApplicationCore.Licensing
 {
@@ -48,6 +49,11 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// Dialog window width.
         /// </summary>
         double Width { get; set; }
+
+        /// <summary>
+        /// Gets or sets the load owner.
+        /// </summary>
+        void LoadOwner(IWin32Window owner);
     }
 }
 

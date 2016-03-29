@@ -24,7 +24,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.FeatureRestrictions
             {
                 Mock<IWin32Window> owner = mock.Mock<IWin32Window>();
                 TestHiddenRestriction testObject = mock.Create<TestHiddenRestriction>();
-                
+
                 Assert.False(testObject.Handle(owner.Object, It.IsAny<ILicenseCapabilities>(), null));
             }
         }
@@ -64,7 +64,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.FeatureRestrictions
 
                 testObject.Handle(owner.Object, It.IsAny<ILicenseCapabilities>(), null);
 
-                messageHelper.Verify(m => m.ShowError("You must contact Interapptive to use additional shipping carriers."), Times.Once);
+                messageHelper.Verify(m => m.ShowError(owner.Object, "You must contact Interapptive to use additional shipping carriers."), Times.Once);
             }
         }
     }

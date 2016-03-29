@@ -7,6 +7,7 @@ using System.Linq;
 using ShipWorks.UI.Controls.ChannelConfirmDelete;
 using System.Collections.Generic;
 using System;
+using System.Diagnostics;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
@@ -239,6 +240,11 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         /// </summary>
         private IWin32Window GetOwner(ChannelLimitControl control)
         {
+            if(control == null)
+            {
+                return null;
+            }
+
             // Get handle for wpf control
             HwndSource wpfHandle = PresentationSource.FromVisual(control) as HwndSource;
 
@@ -268,7 +274,7 @@ namespace ShipWorks.UI.Controls.ChannelLimit
             List<StoreTypeCode> localStoreTypeCodes =
                 storeManager.GetAllStores().Select(s => (StoreTypeCode) s.TypeCode).Distinct().ToList();
 
-            IWin32Window owner = GetOwner(control);
+             IWin32Window owner = GetOwner(control);
 
             // If we are trying to delete the only store type in ShipWorks and they are not trying to add another one
             // display an error and don't delete

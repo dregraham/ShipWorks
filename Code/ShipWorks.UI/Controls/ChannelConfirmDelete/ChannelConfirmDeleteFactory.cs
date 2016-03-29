@@ -14,13 +14,15 @@ namespace ShipWorks.UI.Controls.ChannelConfirmDelete
     public class ChannelConfirmDeleteFactory : IChannelConfirmDeleteFactory
     {
         private readonly Func<IConfirmChannelDeleteViewModel> viewModelFactory;
+        private readonly Func<string, IDialog> dialogFactory;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ChannelConfirmDeleteFactory(Func<IConfirmChannelDeleteViewModel> viewModelFactory)
+        public ChannelConfirmDeleteFactory(Func<IConfirmChannelDeleteViewModel> viewModelFactory, Func<string, IDialog> dialogFactory)
         {
             this.viewModelFactory = viewModelFactory;
+            this.dialogFactory = dialogFactory;
         }
 
         /// <summary>
@@ -28,24 +30,23 @@ namespace ShipWorks.UI.Controls.ChannelConfirmDelete
         /// </summary>
         public IDialog GetConfirmDeleteDlg(StoreTypeCode storeType, IWin32Window owner)
         {
-            using (ILifetimeScope scope = IoC.BeginLifetimeScope())
-            {
-                // Get a new Dialog
-                IDialog dlg = scope.ResolveNamed<IDialog>("ChannelConfirmDeleteDlg",
-                    new TypedParameter(typeof(IWin32Window), owner));
+            // Get a new Dialog
+            IDialog dlg = dialogFactory("ChannelConfirmDeleteDlg");
 
-                // Get a new View Model
-                IConfirmChannelDeleteViewModel viewModel = viewModelFactory();
+            // Set owner
+            dlg.LoadOwner(owner);
 
-                // Load the store type into the view model
-                viewModel.Load(storeType);
+            // Get a new View Model
+            IConfirmChannelDeleteViewModel viewModel = viewModelFactory();
 
-                // set the data context of the dialog to the view model
-                dlg.DataContext = viewModel;
+            // Load the store type into the view model
+            viewModel.Load(storeType);
 
-                // return the dialog
-                return dlg;
-            }
+            // set the data context of the dialog to the view model
+            dlg.DataContext = viewModel;
+
+            // return the dialog
+            return dlg;
         }
     }
 }

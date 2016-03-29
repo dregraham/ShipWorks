@@ -565,8 +565,8 @@ namespace ShipWorks
                     {
                         log.Error("Error logging in", ex);
 
-                        IDialog customerLicenseActivation = lifetimeScope.ResolveNamed<IDialog>("CustomerLicenseActivationDlg",
-                            new TypedParameter(typeof(IWin32Window), this));
+                        IDialog customerLicenseActivation = lifetimeScope.ResolveNamed<IDialog>("CustomerLicenseActivationDlg");
+                        customerLicenseActivation.LoadOwner(this);
                         customerLicenseActivation.DataContext =
                             lifetimeScope.Resolve<ICustomerLicenseActivartionDlgViewModel>();
 

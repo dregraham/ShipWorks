@@ -20,20 +20,6 @@ namespace ShipWorks.UI.Controls.WebBrowser
         }
 
         /// <summary>
-        /// Constructor
-        /// </summary>
-        public WebBrowserDlg(IWin32Window owner) : this()
-        {
-            Handle = owner.Handle;
-
-            new WindowInteropHelper(this)
-            {
-                Owner = owner.Handle
-            };
-
-        }
-
-        /// <summary>
         /// Window handle.
         /// </summary>
         public IntPtr Handle { get; set; }
@@ -44,6 +30,19 @@ namespace ShipWorks.UI.Controls.WebBrowser
         private void OnClickClose(object sender, RoutedEventArgs e)
         {
             Close();
+        }
+
+        /// <summary>
+        /// Loads the owner.
+        /// </summary>
+        public void LoadOwner(IWin32Window owner)
+        {
+            Handle = owner.Handle;
+
+            new WindowInteropHelper(this)
+            {
+                Owner = owner.Handle
+            };
         }
     }
 }

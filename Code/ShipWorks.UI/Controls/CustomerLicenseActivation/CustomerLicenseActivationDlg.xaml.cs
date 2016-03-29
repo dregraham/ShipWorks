@@ -20,23 +20,9 @@ namespace ShipWorks.UI.Controls.CustomerLicenseActivation
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CustomerLicenseActivationDlg"/> class.
-        /// </summary>
-        /// <param name="owner">The owner.</param>
-        public CustomerLicenseActivationDlg(IWin32Window owner) : this()
-        {
-            Handle = owner.Handle;
-
-            new WindowInteropHelper(this)
-            {
-                Owner = owner.Handle
-            };
-        }
-
-        /// <summary>
         /// Window handle.
         /// </summary>
-        public IntPtr Handle { get; }
+        public IntPtr Handle { get; set; }
 
         /// <summary>
         /// Called when [click cancel].
@@ -46,6 +32,16 @@ namespace ShipWorks.UI.Controls.CustomerLicenseActivation
         private void OnClickCancel(object sender, RoutedEventArgs e)
         {
             Close();
+        }
+
+        public void LoadOwner(IWin32Window owner)
+        {
+            Handle = owner.Handle;
+
+            new WindowInteropHelper(this)
+            {
+                Owner = owner.Handle
+            };
         }
     }
 }
