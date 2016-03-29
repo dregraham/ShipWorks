@@ -16,5 +16,10 @@ namespace ShipWorks.Shipping.Profiles
         /// Saves the given profile
         /// </summary>
         void SaveProfile(ShippingProfileEntity profile);
+
+        /// <summary>
+        /// Initialize ShippingProfileManager
+        /// </summary>
+        void InitializeForCurrentSession();
     }
 }

@@ -9,6 +9,7 @@ using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 using ShipWorks.Shipping.Settings.Origin;
+using ShipWorks.Shipping.Profiles;
 
 namespace ShipWorks.ApplicationCore.Licensing.Activation
 {
@@ -23,6 +24,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Activation
         private readonly ICarrierAccountRepository<UspsAccountEntity> uspsAccountRepository;
         private readonly ILog log;
         private readonly IShipmentTypeSetupActivity shipmentTypeSetupActivity;
+        private readonly IShippingProfileManager shippingProfileManager;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UspsAccountSetupActivity"/> class.
@@ -30,11 +32,13 @@ namespace ShipWorks.ApplicationCore.Licensing.Activation
         public UspsAccountSetupActivity(Func<UspsResellerType, IUspsWebClient> uspsWebClientFactory,
             ICarrierAccountRepository<UspsAccountEntity> uspsAccountRepository,
             IShipmentTypeSetupActivity shipmentTypeSetupActivity,
+            IShippingProfileManager shippingProfileManager,
             Func<Type, ILog> logFactory)
         {
             this.shipmentTypeSetupActivity = shipmentTypeSetupActivity;
             this.uspsWebClientFactory = uspsWebClientFactory;
             this.uspsAccountRepository = uspsAccountRepository;
+            this.shippingProfileManager = shippingProfileManager;
             log = logFactory(typeof(UspsAccountSetupActivity));
         }
 
@@ -46,6 +50,8 @@ namespace ShipWorks.ApplicationCore.Licensing.Activation
         {
             if (!uspsAccountRepository.Accounts.Any())
             {
+                shippingProfileManager.InitializeForCurrentSession();
+
                 if (!string.IsNullOrWhiteSpace(license?.AssociatedStampsUsername))
                 {
                     CreateExistingAccount(license.AssociatedStampsUsername, password);
