@@ -76,8 +76,14 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         {
             OrderEntity order = DataProvider.GetEntity(orderID) as OrderEntity;
 
-            if (order != null && !order.IsManual)
+            if (order != null)
             {
+                if (order.IsManual)
+                {
+                    log.InfoFormat($"Not uploading order status since order {order.OrderID} is manual.");
+                    return;
+                }
+
                 LemonStandOrderEntity lemonStandOrder = (LemonStandOrderEntity)order;
 
                 client.UpdateOrderStatus(lemonStandOrder.LemonStandOrderID, StatusCodeProvider.GetCodeName(statusCode));
@@ -94,7 +100,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
             }
             else
             {
-                log.WarnFormat("Unable to update online status for order {0}: cannot find order", orderID);
+                log.WarnFormat($"Unable to update online status for order {orderID}: cannot find order");
             }
         }
 

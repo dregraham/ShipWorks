@@ -27,7 +27,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
         private const string ContentType = "application/json";
         private const string GetOrderLimit = "600";
         private const string PrivateKey = "c9fc5ce5b29d27121753baae724968b1";
-
+        private readonly Type exceptionToRethrow = typeof (ThreeDCartException);
         private readonly string secureUrl;
         private readonly string token;
         private readonly ThreeDCartWebClientRequestThrottle throttler = new ThreeDCartWebClientRequestThrottle();
@@ -81,7 +81,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
 
             throttler.ExecuteRequest(new RequestThrottleParameters(ThreeDCartWebClientApiCall.GetOrderCount, null, progressReporter), () =>
             {
-                response = ProcessRequest("GetOrderCount");
+                response = submitter.ProcessRequest(CreateLogEntry("GetOrderCount"), exceptionToRethrow);
             });
 
             ThreeDCartOrder order = JsonConvert.DeserializeObject<ThreeDCartOrder>(response);
@@ -103,7 +103,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
 
             throttler.ExecuteRequest(new RequestThrottleParameters(ThreeDCartWebClientApiCall.GetOrders, null, progressReporter), () =>
             {
-                response = ProcessRequest("GetOrders");
+                response = submitter.ProcessRequest(CreateLogEntry("GetOrders"), exceptionToRethrow);
             });
 
             IEnumerable<ThreeDCartOrder> orders = JsonConvert.DeserializeObject<IEnumerable<ThreeDCartOrder>>(response);
@@ -129,7 +129,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
 
                 throttler.ExecuteRequest(new RequestThrottleParameters(ThreeDCartWebClientApiCall.GetProduct, null, progressReporter), () =>
                 {
-                    response = ProcessRequest("GetProduct");
+                    response = submitter.ProcessRequest(CreateLogEntry("GetProduct"), exceptionToRethrow);
                 });
 
                 ThreeDCartProduct product = JsonConvert.DeserializeObject<IEnumerable<ThreeDCartProduct>>(response).FirstOrDefault();
@@ -148,13 +148,11 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
         /// </summary>
         public void UploadShipmentDetails(ThreeDCartShipment shipment)
         {
-            submitter.Verb = HttpVerb.Put;
-            submitter.Uri = new Uri($"{HttpHost}/{OrderApiVersion}/{OrderUrlExtension}/{shipment.OrderID}/{ShipmentUrlExtension}/{shipment.ShipmentID}");
-            submitter.RequestBody = JsonConvert.SerializeObject(shipment);
+            SetupUpdateRequest(shipment);
 
             throttler.ExecuteRequest(new RequestThrottleParameters(ThreeDCartWebClientApiCall.CreateFulfillment, null, progressReporter), () =>
             {
-                ProcessRequest("UploadShipmentDetails");
+                submitter.ProcessRequest(CreateLogEntry("UploadShipmentDetails"), exceptionToRethrow);
             });
         }
 
@@ -163,41 +161,34 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
         /// </summary>
         public void UpdateOrderStatus(ThreeDCartShipment shipment)
         {
-            submitter.Verb = HttpVerb.Put;
-            submitter.Uri = new Uri($"{HttpHost}/{OrderApiVersion}/{OrderUrlExtension}/{shipment.OrderID}");
-            submitter.RequestBody = JsonConvert.SerializeObject(shipment);
+            SetupUpdateRequest(shipment);
 
             throttler.ExecuteRequest(new RequestThrottleParameters(ThreeDCartWebClientApiCall.UpdateOrderStatus, null, progressReporter), () =>
             {
-                ProcessRequest("UpdateOrderStatus");
+                submitter.ProcessRequest(CreateLogEntry("UpdateOrderStatus"), exceptionToRethrow);
             });
         }
 
+
         /// <summary>
-        /// Executes a request
+        /// Sets up the update request.
         /// </summary>
-        private string ProcessRequest(string action)
+        private void SetupUpdateRequest(ThreeDCartShipment shipment)
         {
-            try
-            {
-                ApiLogEntry logEntry = new ApiLogEntry(ApiLogSource.ThreeDCart, action);
-                logEntry.LogRequest(submitter);
+            submitter.Verb = HttpVerb.Put;
+            submitter.Uri =
+                new Uri(
+                    $"{HttpHost}/{OrderApiVersion}/{OrderUrlExtension}/{shipment.OrderID}/{ShipmentUrlExtension}/{shipment.ShipmentID}");
+            submitter.RequestBody = JsonConvert.SerializeObject(shipment, Formatting.None,
+                new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore});
+        }
 
-                using (IHttpResponseReader reader = submitter.GetResponse())
-                {
-                    string responseData = reader.ReadResult();
-                    logEntry.LogResponse(responseData, "txt");
-
-                    // Clear variables for next reqeust
-                    submitter.Variables.Clear();
-
-                    return responseData;
-                }
-            }
-            catch (Exception ex)
-            {
-                throw WebHelper.TranslateWebException(ex, typeof(ThreeDCartException));
-            }
+        /// <summary>
+        /// Creates the log entry.
+        /// </summary>
+        private ApiLogEntry CreateLogEntry(string action)
+        {
+            return new ApiLogEntry(ApiLogSource.ThreeDCart, action);
         }
     }
 }

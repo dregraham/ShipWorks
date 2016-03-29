@@ -167,13 +167,19 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
 
             foreach (ThreeDCartOrder threeDCartOrder in orders)
             {
+                // Don't download abandoned orders
+                if (threeDCartOrder.InvoiceNumber == 0 &&
+                    threeDCartOrder.OrderStatusID == (int) Enums.ThreeDCartOrderStatus.NotCompleted)
+                {
+                    continue;
+                }
+
                 threeDCartOrder.isSubOrder = false;
                 threeDCartOrder.hasSubOrders = threeDCartOrder.ShipmentList.Count() > 1;
                 int shipmentIndex = 1;
 
                 foreach (ThreeDCartShipment shipment in threeDCartOrder.ShipmentList)
                 {
-
                     string invoiceNumberPostFix = threeDCartOrder.hasSubOrders ? $"-{shipmentIndex}" : string.Empty;
 
                     ThreeDCartOrderIdentifier orderIdentifier = CreateOrderIdentifier(threeDCartOrder, invoiceNumberPostFix);
@@ -185,12 +191,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
                     }
                     else
                     {
-                        if (newOrderCount == 0)
-                        {
-                            newOrderTotal = orders.Count() - modifiedOrderCount;
-                        }
-
-                        Progress.Detail = $"Processing new order {++newOrderCount} of {newOrderTotal}";
+                        Progress.Detail = $"Processing new order {++newOrderCount}";
                     }
 
                     ThreeDCartOrderEntity order = (ThreeDCartOrderEntity) InstantiateOrder(orderIdentifier);

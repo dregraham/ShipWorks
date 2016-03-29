@@ -15,6 +15,7 @@ using System.Security;
 using Common.Logging.Log4Net;
 using Common.Logging;
 using Interapptive.Shared;
+using Interapptive.Shared.Net;
 using NameValueCollection = Common.Logging.Configuration.NameValueCollection;
 
 namespace ShipWorks.ApplicationCore.Logging

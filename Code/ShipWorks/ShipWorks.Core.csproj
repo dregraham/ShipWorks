@@ -601,6 +601,7 @@
     <Compile Include="ApplicationCore\Licensing\ITangoWebClient.cs" />
     <Compile Include="ApplicationCore\Licensing\TangoWebClientFactory.cs" />
     <Compile Include="ApplicationCore\Licensing\TangoWebClientWrapper.cs" />
+    <Compile Include="ApplicationCore\Logging\ApiLogSource.cs" />
     <Compile Include="ApplicationCore\Logging\ILogEntryFactory.cs" />
     <Compile Include="ApplicationCore\Logging\LogActionType.cs" />
     <Compile Include="ApplicationCore\Logging\LogEntryFactory.cs" />
@@ -6281,7 +6282,6 @@
     </Compile>
     <Compile Include="ApplicationCore\Licensing\TrialDetail.cs" />
     <Compile Include="ApplicationCore\Logging\ApiLogEntry.cs" />
-    <Compile Include="ApplicationCore\Logging\ApiLogSource.cs" />
     <Compile Include="ApplicationCore\Logging\ApiPrivateLogSourceAttribute.cs" />
     <Compile Include="Common\Threading\ProgressProvider.cs" />
     <Compile Include="Common\Threading\ProgressItemCollection.cs" />

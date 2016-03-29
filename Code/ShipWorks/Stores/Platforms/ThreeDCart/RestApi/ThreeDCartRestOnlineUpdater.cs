@@ -11,6 +11,9 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping;
+using ShipWorks.Shipping.Carriers.FedEx.Enums;
+using ShipWorks.Shipping.Carriers.iParcel.Enums;
+using ShipWorks.Shipping.Carriers.OnTrac.Enums;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
@@ -133,7 +136,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
             if (shipment == null)
             {
                 // log that there was no shipment, and return
-                log.DebugFormat("There was no shipment found for order Id: {0}", order.OrderID);
+                log.DebugFormat($"There was no shipment found for order Id: {order.OrderID}");
                 return;
             }
 
@@ -148,7 +151,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
             ShipmentEntity shipment = ShippingManager.GetShipment(shipmentID);
             if (shipment == null)
             {
-                log.WarnFormat("Not updating status of shipment {0} as it has gone away.", shipmentID);
+                log.WarnFormat($"Not updating status of shipment {shipmentID} as it has gone away.");
                 return;
             }
 
@@ -160,10 +163,11 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
         /// </summary>
         private void UpdateShipmentDetails(ShipmentEntity shipmentEntity)
         {
+            ShippingManager.EnsureShipmentLoaded(shipmentEntity);
             ThreeDCartOrderEntity order = (ThreeDCartOrderEntity) shipmentEntity.Order;
             if (order.IsManual)
             {
-                log.WarnFormat("Not updating order {0} since it is manual.", shipmentEntity.Order.OrderNumberComplete);
+                log.WarnFormat($"Not updating order {shipmentEntity.Order.OrderNumberComplete} since it is manual.");
                 return;
             }
 
@@ -181,11 +185,12 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
                 throw new ThreeDCartException("No items were found on the order. ShipWorks cannot upload tracking information without items from 3D Cart.");
             }
 
-            ThreeDCartShipment shipment = new ThreeDCartShipment()
+            ThreeDCartShipment shipment = new ThreeDCartShipment
             {
                 OrderID = order.ThreeDCartOrderID,
                 ShipmentID = threeDCartOrderItem.ThreeDCartShipmentID,
-                ShipmentOrderStatus = (int) EnumHelper.GetEnumByApiValue<Enums.ThreeDCartOrderStatus>(order.OnlineStatus),
+                ShipmentOrderStatus =
+                    (int) EnumHelper.GetEnumByApiValue<Enums.ThreeDCartOrderStatus>(order.OnlineStatus),
                 ShipmentMethodName = GetShipmentMethodName(shipmentEntity),
                 ShipmentPhone = shipmentEntity.ShipPhone,
                 ShipmentFirstName = shipmentEntity.ShipFirstName,
@@ -222,12 +227,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
                 CheckForOthers(shipmentEntity, typeCode)
             };
 
-            foreach (string method in methods.Where(method => !string.IsNullOrWhiteSpace(method)))
-            {
-                return method;
-            }
-
-            return string.Empty;
+            return methods.FirstOrDefault(m => !string.IsNullOrWhiteSpace(m)) ?? string.Empty;
         }
 
         /// <summary>
@@ -244,17 +244,19 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
                 return string.Empty;
             }
 
-            if (shipmentEntity.Postal != null && ShipmentTypeManager.IsDhl((PostalServiceType)shipmentEntity.Postal.Service))
+            PostalServiceType service = (PostalServiceType) shipmentEntity.Postal.Service;
+
+            if (shipmentEntity.Postal != null && ShipmentTypeManager.IsDhl(service))
             {
-                return $"DHL - {shipmentEntity.Postal.Service}";
+                return $"DHL - {EnumHelper.GetDescription(service)}";
             }
 
-            if (shipmentEntity.Postal != null && ShipmentTypeManager.IsConsolidator((PostalServiceType)shipmentEntity.Postal.Service))
+            if (shipmentEntity.Postal != null && ShipmentTypeManager.IsConsolidator(service))
             {
-                return $"Consolidator - {shipmentEntity.Postal.Service}";
+                return $"Consolidator - {EnumHelper.GetDescription(service)}";
             }
 
-            return $"USPS - {shipmentEntity.Postal?.Service}";
+            return $"USPS - {EnumHelper.GetDescription(service)}";
         }
 
         /// <summary>
@@ -262,7 +264,8 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
         /// </summary>
         private string CheckForFedex(ShipmentEntity shipmentEntity, ShipmentTypeCode typeCode)
         {
-            return typeCode == ShipmentTypeCode.FedEx ? $"FEDEX - {shipmentEntity.FedEx.Service}" : string.Empty;
+            return typeCode == ShipmentTypeCode.FedEx ? $"{EnumHelper.GetDescription((FedExServiceType) shipmentEntity.FedEx.Service)}"
+                : string.Empty;
         }
 
         /// <summary>
@@ -274,16 +277,19 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
             {
                 return string.Empty;
             }
+
+            UpsServiceType service = (UpsServiceType) shipmentEntity.Ups.Service;
+
             // Adjust tracking details per Mail Innovations and others
-            if (UpsUtility.IsUpsMiService((UpsServiceType)shipmentEntity.Ups.Service))
+            if (UpsUtility.IsUpsMiService(service))
             {
                 if (shipmentEntity.Ups.UspsTrackingNumber.Length > 0)
                 {
-                    return $"UPS MI - {shipmentEntity.Ups.Service}";
+                    return $"UPS MI - {EnumHelper.GetDescription(service)}";
                 }
             }
 
-            return $"UPS - {shipmentEntity.Ups.Service}";
+            return $"{EnumHelper.GetDescription(service)}";
         }
 
         /// <summary>
@@ -297,9 +303,9 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
             switch (typeCode)
             {
                 case ShipmentTypeCode.OnTrac:
-                    return $"OnTrac - {shipmentEntity.OnTrac.Service}";
+                    return $"OnTrac - {EnumHelper.GetDescription((OnTracServiceType) shipmentEntity.OnTrac.Service)}";
                 case ShipmentTypeCode.iParcel:
-                    return $"iParcel - {shipmentEntity.IParcel.Service}";
+                    return $"iParcel - {EnumHelper.GetDescription((iParcelServiceType) shipmentEntity.IParcel.Service)}";
                 case ShipmentTypeCode.Other:
                     return $"{shipmentEntity.Other.Carrier} - {shipmentEntity.Other.Service}";
                 default:

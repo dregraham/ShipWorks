@@ -13,12 +13,6 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi.DTO
         [JsonProperty("ShipmentLastUpdate")]
         public string ShipmentLastUpdate { get; set; }
 
-        [JsonProperty("ShipmentBoxes")]
-        public int ShipmentBoxes { get; set; }
-
-        [JsonProperty("ShipmentInternalComment")]
-        public string ShipmentInternalComment { get; set; }
-
         [JsonProperty("ShipmentOrderStatus")]
         public int ShipmentOrderStatus { get; set; }
 
@@ -28,9 +22,6 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi.DTO
         [JsonProperty("ShipmentAddress2")]
         public string ShipmentAddress2 { get; set; }
 
-        [JsonProperty("ShipmentAlias")]
-        public string ShipmentAlias { get; set; }
-
         [JsonProperty("ShipmentCity")]
         public string ShipmentCity { get; set; }
 
@@ -38,7 +29,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi.DTO
         public string ShipmentCompany { get; set; }
 
         [JsonProperty("ShipmentCost")]
-        public decimal ShipmentCost { get; set; }
+        public decimal ShipmentCost { get;  set; }
 
         [JsonProperty("ShipmentCountry")]
         public string ShipmentCountry { get; set; }
@@ -51,9 +42,6 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi.DTO
 
         [JsonProperty("ShipmentLastName")]
         public string ShipmentLastName { get; set; }
-
-        [JsonProperty("ShipmentMethodID")]
-        public int ShipmentMethodID { get; set; }
 
         [JsonProperty("ShipmentMethodName")]
         public string ShipmentMethodName { get; set; }
@@ -70,22 +58,20 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi.DTO
         [JsonProperty("ShipmentZipCode")]
         public string ShipmentZipCode { get; set; }
 
-        [JsonProperty("ShipmentTax")]
-        public double ShipmentTax { get; set; }
-
         [JsonProperty("ShipmentWeight")]
         public double ShipmentWeight { get; set; }
 
         [JsonProperty("ShipmentTrackingCode")]
         public string ShipmentTrackingCode { get; set; }
 
-        [JsonProperty("ShipmentUserID")]
-        public string ShipmentUserID { get; set; }
+        public bool ShouldSerializeShipmentCost()
+        {
+            return false;
+        }
 
-        [JsonProperty("ShipmentNumber")]
-        public int ShipmentNumber { get; set; }
-
-        [JsonProperty("ShipmentAddressTypeID")]
-        public int ShipmentAddressTypeID { get; set; }
+       public bool ShouldSerializeShipmentWeight()
+       {
+           return ShipmentWeight > 0;
+       }
     }
 }

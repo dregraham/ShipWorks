@@ -177,8 +177,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ApiLogEncryption.cs" />
-    <Compile Include="IApiLogEntry.cs" />
     <Compile Include="Properties\AssemblyInfoCommon.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\WebServices\Ship\IFedExNativeShipmentReply.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\WebServices\Ship\IFedExNativeShipmentRequest.cs" />

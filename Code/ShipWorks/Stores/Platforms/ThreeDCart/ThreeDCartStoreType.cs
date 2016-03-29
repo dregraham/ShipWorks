@@ -134,6 +134,14 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         }
 
         /// <summary>
+        /// Creates the order instance.
+        /// </summary>
+        protected override OrderEntity CreateOrderInstance()
+        {
+            return new ThreeDCartOrderEntity();
+        }
+
+        /// <summary>
         /// Get a list of supported online ThreeDCart statuses
         /// </summary>
         public override ICollection<string> GetOnlineStatusChoices()

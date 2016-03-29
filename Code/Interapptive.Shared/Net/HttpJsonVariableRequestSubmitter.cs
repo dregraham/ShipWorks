@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 
 namespace Interapptive.Shared.Net
 {
@@ -34,6 +35,29 @@ namespace Interapptive.Shared.Net
         {
             // Not URL encoding the content since it is being posted as XML
             return Encoding.Default.GetBytes(RequestBody);
+        }
+
+        public string ProcessRequest(IApiLogEntry logEntry, Type exceptionTypeToRethrow)
+        {
+            try
+            {
+                logEntry.LogRequest(this);
+
+                using (IHttpResponseReader reader = GetResponse())
+                {
+                    string responseData = reader.ReadResult();
+                    logEntry.LogResponse(responseData, "txt");
+
+                    // Clear variables for next reqeust
+                    Variables.Clear();
+
+                    return responseData;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw WebHelper.TranslateWebException(ex, exceptionTypeToRethrow);
+            }
         }
     }
 }
