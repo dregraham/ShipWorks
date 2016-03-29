@@ -95,7 +95,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         public IEnumerable<RateGroup> GetRates(ShipmentEntity shipment, List<BrokerException> exceptionHandler)
         {
             // Don't create counter rate brokers
-            List<IBestRateShippingBroker> bestRateShippingBrokers = brokerFactory.CreateBrokers(shipment, false).ToList();
+            List<IBestRateShippingBroker> bestRateShippingBrokers = brokerFactory.CreateBrokers(shipment).ToList();
 
             if (!bestRateShippingBrokers.Any())
             {
