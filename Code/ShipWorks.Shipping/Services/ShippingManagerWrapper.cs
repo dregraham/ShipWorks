@@ -5,6 +5,7 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.AddressValidation;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.ExecutionMode;
+using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
@@ -109,6 +110,8 @@ namespace ShipWorks.Shipping
             {
                 try
                 {
+                    shipment.ResetDirtyFlagOnUnchangedEntityFields();
+
                     // Force the shipment to look dirty so it's forced to save. This is to make sure that if any other
                     // changes had been made by other users we pick up the concurrency violation.
                     if (forceSave && !shipment.IsDirty)
