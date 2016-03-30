@@ -15,6 +15,7 @@ using Interapptive.Shared.Collections;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Win32;
 using log4net;
+using ShipWorks.AddressValidation.Enums;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Core.Messaging.Messages.Shipping;
@@ -214,8 +215,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             loadedOrderSelection = orderMessage.LoadedOrderSelection.OfType<LoadedOrderSelection>().Single();
             LoadedShipmentResult = GetLoadedShipmentResult(loadedOrderSelection);
 
-            // If multiple shipment adaptors or multiple shipments on an order are received,
-            // tell the rating panel 
+            // If multiple shipment adapters or multiple shipments on an order are received,
+            // tell the rating panel
             if (loadedOrderSelection.ShipmentAdapters?.Count() > 1 ||
                 loadedOrderSelection.ShipmentAdapters?.Sum(sa => sa.Shipment?.Order?.Shipments?.Count) > 1)
             {
@@ -487,7 +488,9 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             SupportsAccounts = fromShipmentAdapter.SupportsAccounts;
 
             // If the shipment type does not support accounts, and the current origin id is account, default to store origin.
-            OriginAddressType = !fromShipmentAdapter.SupportsAccounts && fromShipmentAdapter.Shipment.OriginOriginID == 2 ? 0 : fromShipmentAdapter.Shipment.OriginOriginID;
+            OriginAddressType = !fromShipmentAdapter.SupportsAccounts && fromShipmentAdapter.Shipment.OriginOriginID == 2 ?
+                0 :
+                fromShipmentAdapter.Shipment.OriginOriginID;
             InitialOriginAddressType = OriginAddressType;
 
             AccountId = fromShipmentAdapter.AccountId.GetValueOrDefault();
@@ -496,6 +499,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
 
             Origin.Load(fromShipmentAdapter.Shipment.OriginPerson);
             Destination.Load(fromShipmentAdapter.Shipment.ShipPerson);
+            Destination.IsAddressValidationEnabled = fromShipmentAdapter.Store.AddressValidationSetting != (int) AddressValidationStoreSettingType.ValidationDisabled;
 
             AllowEditing = !fromShipmentAdapter.Shipment.Processed;
 

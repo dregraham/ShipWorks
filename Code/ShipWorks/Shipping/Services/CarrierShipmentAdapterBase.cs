@@ -16,7 +16,6 @@ namespace ShipWorks.Shipping.Services
     /// </summary>
     public abstract class CarrierShipmentAdapterBase : ICarrierShipmentAdapter
     {
-        private ShipmentEntity shipment;
         private ShipmentType shipmentType;
         private ICustomsManager customsManager;
         private EntityCollection<ShipmentCustomsItemEntity> customsItems;
@@ -26,7 +25,7 @@ namespace ShipWorks.Shipping.Services
         /// </summary>
         protected CarrierShipmentAdapterBase(CarrierShipmentAdapterBase adapterToCopy)
         {
-            shipment = EntityUtility.CloneEntity(adapterToCopy.shipment, true);
+            Shipment = EntityUtility.CloneEntity(adapterToCopy.Shipment, true);
             customsManager = adapterToCopy.customsManager;
             shipmentType = adapterToCopy.shipmentType;
         }
@@ -39,7 +38,7 @@ namespace ShipWorks.Shipping.Services
             MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
             MethodConditions.EnsureArgumentIsNotNull(shipmentTypeManager, nameof(shipmentTypeManager));
 
-            this.shipment = shipment;
+            Shipment = shipment;
             this.customsManager = customsManager;
             shipmentType = shipmentTypeManager.Get(shipment);
         }
@@ -52,12 +51,14 @@ namespace ShipWorks.Shipping.Services
         /// <summary>
         /// The shipment associated with this adapter
         /// </summary>
-        public ShipmentEntity Shipment
+        public ShipmentEntity Shipment { get; }
+
+        /// <summary>
+        /// The store associated with the shipment
+        /// </summary>
+        public StoreEntity Store
         {
-            get
-            {
-                return shipment;
-            }
+            get { return Shipment.Order.Store; }
         }
 
         /// <summary>
@@ -67,7 +68,7 @@ namespace ShipWorks.Shipping.Services
         {
             get
             {
-                return shipment.ShipmentTypeCode;
+                return Shipment.ShipmentTypeCode;
             }
         }
 
@@ -94,7 +95,7 @@ namespace ShipWorks.Shipping.Services
         {
             get
             {
-                return shipmentType.IsDomestic(shipment);
+                return shipmentType.IsDomestic(Shipment);
             }
         }
 
@@ -104,15 +105,15 @@ namespace ShipWorks.Shipping.Services
         /// <returns>Dictionary of shipments and exceptions.</returns>
         public virtual IDictionary<ShipmentEntity, Exception> UpdateDynamicData()
         {
-            if (!shipment.Processed)
+            if (!Shipment.Processed)
             {
-                shipmentType.UpdateTotalWeight(shipment);
-                shipmentType.UpdateDynamicShipmentData(shipment);
+                shipmentType.UpdateTotalWeight(Shipment);
+                shipmentType.UpdateDynamicShipmentData(Shipment);
             }
 
             if (customsManager != null)
             {
-                return customsManager.EnsureCustomsLoaded(new[] { shipment });
+                return customsManager.EnsureCustomsLoaded(new[] { Shipment });
             }
 
             return new Dictionary<ShipmentEntity, Exception>();
@@ -128,8 +129,8 @@ namespace ShipWorks.Shipping.Services
         /// </summary>
         public DateTime ShipDate
         {
-            get { return shipment.ShipDate; }
-            set { shipment.ShipDate = value; }
+            get { return Shipment.ShipDate; }
+            set { Shipment.ShipDate = value; }
         }
 
         /// <summary>
@@ -137,7 +138,7 @@ namespace ShipWorks.Shipping.Services
         /// </summary>
         public double TotalWeight
         {
-            get { return shipment.TotalWeight; }
+            get { return Shipment.TotalWeight; }
         }
 
         /// <summary>
@@ -145,8 +146,8 @@ namespace ShipWorks.Shipping.Services
         /// </summary>
         public double ContentWeight
         {
-            get { return shipment.ContentWeight; }
-            set { shipment.ContentWeight = value; }
+            get { return Shipment.ContentWeight; }
+            set { Shipment.ContentWeight = value; }
         }
 
         /// <summary>
@@ -164,12 +165,12 @@ namespace ShipWorks.Shipping.Services
         /// </summary>
         public IEnumerable<IPackageAdapter> GetPackageAdapters()
         {
-            if (!shipment.Processed)
+            if (!Shipment.Processed)
             {
                 UpdateDynamicData();
             }
 
-            return shipmentType.GetPackageAdapters(shipment);
+            return shipmentType.GetPackageAdapters(Shipment);
         }
 
         /// <summary>
@@ -193,7 +194,7 @@ namespace ShipWorks.Shipping.Services
         /// </summary>
         public virtual bool CustomsAllowed
         {
-            get { return !shipmentType.IsDomestic(shipment); }
+            get { return !shipmentType.IsDomestic(Shipment); }
         }
 
         /// <summary>
@@ -285,12 +286,12 @@ namespace ShipWorks.Shipping.Services
         /// </summary>
         public virtual IEnumerable<IShipmentCustomsItemAdapter> GetCustomsItemAdapters()
         {
-            if (!shipment.Processed)
+            if (!Shipment.Processed)
             {
                 UpdateDynamicData();
             }
 
-            return shipment.CustomsItems
+            return Shipment.CustomsItems
                 .Select(x => new ShipmentCustomsItemAdapter(x))
                 .ToReadOnly();
         }
@@ -300,8 +301,8 @@ namespace ShipWorks.Shipping.Services
         /// </summary>
         public IShipmentCustomsItemAdapter AddCustomsItem()
         {
-            ShipmentCustomsItemEntity shipmentCustomsItemEntity = customsManager.CreateCustomsItem(shipment);
-            shipment.CustomsItems.Add(shipmentCustomsItemEntity);
+            ShipmentCustomsItemEntity shipmentCustomsItemEntity = customsManager.CreateCustomsItem(Shipment);
+            Shipment.CustomsItems.Add(shipmentCustomsItemEntity);
             UpdateDynamicData();
 
             return new ShipmentCustomsItemAdapter(shipmentCustomsItemEntity);
@@ -312,7 +313,7 @@ namespace ShipWorks.Shipping.Services
         /// </summary>
         public void DeleteCustomsItem(IShipmentCustomsItemAdapter customsItem)
         {
-            ShipmentCustomsItemEntity existingItem = shipment.CustomsItems
+            ShipmentCustomsItemEntity existingItem = Shipment.CustomsItems
                 .FirstOrDefault(x => x.ShipmentCustomsItemID == customsItem.ShipmentCustomsItemID);
 
             if (existingItem == null)
@@ -321,12 +322,12 @@ namespace ShipWorks.Shipping.Services
             }
 
             // If this isn't set, removing packages won't actually remove them from the database
-            if (shipment.CustomsItems.RemovedEntitiesTracker == null)
+            if (Shipment.CustomsItems.RemovedEntitiesTracker == null)
             {
-                shipment.CustomsItems.RemovedEntitiesTracker = new EntityCollection<ShipmentCustomsItemEntity>();
+                Shipment.CustomsItems.RemovedEntitiesTracker = new EntityCollection<ShipmentCustomsItemEntity>();
             }
 
-            shipment.CustomsItems.Remove(existingItem);
+            Shipment.CustomsItems.Remove(existingItem);
             UpdateDynamicData();
         }
     }

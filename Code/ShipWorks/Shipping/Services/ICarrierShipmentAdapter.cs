@@ -22,6 +22,11 @@ namespace ShipWorks.Shipping.Services
         ShipmentEntity Shipment { get; }
 
         /// <summary>
+        /// The store associated with this shipment
+        /// </summary>
+        StoreEntity Store { get; }
+
+        /// <summary>
         /// The shipment type code of this shipment adapter
         /// </summary>
         ShipmentTypeCode ShipmentTypeCode { get; }
