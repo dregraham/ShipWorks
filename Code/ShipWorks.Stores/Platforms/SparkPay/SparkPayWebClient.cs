@@ -20,6 +20,11 @@ namespace ShipWorks.Stores.Platforms.SparkPay
         private int OverApiLimitStatusCode = 429;
         private SparkPayWebClientRequestThrottle throttler;
 
+        public SparkPayWebClient()
+        {
+            this.throttler = new SparkPayWebClientRequestThrottle();
+        }
+
         public SparkPayWebClient(SparkPayWebClientRequestThrottle throttler)
         {
             this.throttler = throttler;

@@ -15,7 +15,7 @@ namespace ShipWorks.Stores.UI.Platforms.SparkPay.WizardPages
         {
             this.viewModel = viewModel;
             InitializeComponent();
-            this.accountPage.DataContext = viewModel;
+            accountPage.DataContext = viewModel;
         }
 
         /// <summary>

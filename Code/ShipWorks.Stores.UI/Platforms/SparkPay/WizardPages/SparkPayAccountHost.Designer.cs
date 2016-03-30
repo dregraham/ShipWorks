@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.elementHost1 = new System.Windows.Forms.Integration.ElementHost();
-            this.accountPage = new ShipWorks.Stores.UI.Platforms.SparkPay.WizardPages.SparkPayAccountPage();
+            this.accountPage = new ShipWorks.Stores.UI.Platforms.SparkPay.WizardPages.SparkPayAccountControl();
             this.SuspendLayout();
             // 
             // elementHost1
@@ -58,6 +58,6 @@
         #endregion
 
         private System.Windows.Forms.Integration.ElementHost elementHost1;
-        private SparkPayAccountPage accountPage;
+        private SparkPayAccountControl accountPage;
     }
 }

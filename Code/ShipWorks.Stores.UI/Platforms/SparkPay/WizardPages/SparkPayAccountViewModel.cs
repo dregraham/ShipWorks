@@ -36,6 +36,14 @@ namespace ShipWorks.Stores.UI.Platforms.SparkPay.WizardPages
         /// <summary>
         /// The token
         /// </summary>
+        public string HelpUrl
+        {
+            get { return "www.google.com"; }
+        }
+
+        /// <summary>
+        /// The token
+        /// </summary>
         public string Token
         {
             get { return token; }
@@ -49,6 +57,12 @@ namespace ShipWorks.Stores.UI.Platforms.SparkPay.WizardPages
         {
             get { return url; }
             set { handler.Set(nameof(Url), ref url, value); }
+        }
+
+        public void Load(SparkPayStoreEntity store)
+        {
+            Url = store.StoreUrl;
+            Token = store.Token;
         }
 
         /// <summary>
@@ -122,25 +136,21 @@ namespace ShipWorks.Stores.UI.Platforms.SparkPay.WizardPages
             catch (SparkPayException ex)
             {
                 WebException innerException = ex.InnerException as WebException;
-                if (innerException != null && innerException.Status == WebExceptionStatus.ProtocolError)
+                if (innerException != null && innerException.Status == WebExceptionStatus.ProtocolError && ((HttpWebResponse)innerException.Response)?.StatusCode == HttpStatusCode.NotFound)
                 {
-                    HttpWebResponse webResponse = innerException.Response as HttpWebResponse;
-                    if (webResponse != null && webResponse.StatusCode == HttpStatusCode.NotFound)
+                    // Path was wrong so we try again using the string that was entered
+                    try
                     {
-                        // Path was wrong so we try again using the string that was entered
-                        try
-                        {
-                            response.Add(Url, GetStore(Token, Url));
-                        }
-                        catch (SparkPayException x)
-                        {
-                            messageHelper.ShowError($"The Url entered is not a valid SparkPay store url. {x.Message}");
-                        }
+                        response.Add(Url, GetStore(Token, Url));
+                    }
+                    catch (SparkPayException x)
+                    {
+                        messageHelper.ShowError($"The Url entered is not a valid SparkPay store url. {x.Message}");
                     }
                 }
                 else
                 {
-                    messageHelper.ShowError($"The Url entered is not a valid SparkPay store url. {ex.Message}");
+                    messageHelper.ShowError($"Error connecting to SparkPay: {ex.Message}");
                 }
             }
 

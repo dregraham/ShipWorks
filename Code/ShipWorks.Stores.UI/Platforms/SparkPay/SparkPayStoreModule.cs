@@ -49,7 +49,7 @@ namespace ShipWorks.Stores.UI.Platforms.SparkPay
             builder.RegisterType<SparkPayAccountViewModel>()
                 .AsImplementedInterfaces();
 
-            builder.RegisterType<SparkPayAccountPage>()
+            builder.RegisterType<SparkPayAccountControl>()
                 .AsSelf();
 
             builder.RegisterType<SparkPayWebClient>()
@@ -89,6 +89,10 @@ namespace ShipWorks.Stores.UI.Platforms.SparkPay
 
             builder.RegisterType<SparkPayOrderUpdateTaskEditor>()
                 .Keyed<ActionTaskEditor>(StoreTypeCode.SparkPay)
+                .ExternallyOwned();
+
+            builder.RegisterType<SparkPaySettingsControl>()
+                .Keyed<AccountSettingsControlBase>(StoreTypeCode.SparkPay)
                 .ExternallyOwned();
         }
     }

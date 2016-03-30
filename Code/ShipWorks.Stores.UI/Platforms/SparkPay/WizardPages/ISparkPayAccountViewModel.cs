@@ -11,5 +11,7 @@ namespace ShipWorks.Stores.UI.Platforms.SparkPay.WizardPages
         event PropertyChangedEventHandler PropertyChanged;
 
         bool Save(SparkPayStoreEntity store);
+
+        void Load(SparkPayStoreEntity store);
     }
 }
