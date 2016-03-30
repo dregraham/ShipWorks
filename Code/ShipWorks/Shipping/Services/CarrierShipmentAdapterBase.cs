@@ -106,8 +106,8 @@ namespace ShipWorks.Shipping.Services
         {
             if (!shipment.Processed)
             {
-                shipmentType.UpdateDynamicShipmentData(shipment);
                 shipmentType.UpdateTotalWeight(shipment);
+                shipmentType.UpdateDynamicShipmentData(shipment);
             }
 
             if (customsManager != null)

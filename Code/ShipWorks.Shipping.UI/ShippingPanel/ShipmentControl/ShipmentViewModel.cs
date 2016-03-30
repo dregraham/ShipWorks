@@ -7,6 +7,7 @@ using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reflection;
+using System.Windows.Input;
 using GalaSoft.MvvmLight.Command;
 using log4net;
 using ShipWorks.Core.Messaging;
@@ -140,6 +141,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
             }
 
             PackageAdapterWrapper packageAdapter = SelectedPackageAdapter;
+            SelectedPackageAdapter = null;
             shipmentAdapter.DeletePackage(packageAdapter.WrappedAdapter);
 
             int location = PackageAdapters.IndexOf(packageAdapter);
@@ -521,13 +523,13 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         /// Command to add a new package
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public RelayCommand AddPackageCommand { get; }
+        public ICommand AddPackageCommand { get; }
 
         /// <summary>
         /// Command to delete a package
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public RelayCommand DeletePackageCommand { get; }
+        public ICommand DeletePackageCommand { get; }
 
         /// <summary>
         /// List of all validation errors
