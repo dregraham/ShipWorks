@@ -83,8 +83,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             try
             {
                 return useCounterRates ?
-                    GetRatesInternal(shipment) :
-                    GetCounterRates(shipment);
+                    GetCounterRates(shipment) :
+                    GetRatesInternal(shipment);
             }
             catch (UspsException ex)
             {
