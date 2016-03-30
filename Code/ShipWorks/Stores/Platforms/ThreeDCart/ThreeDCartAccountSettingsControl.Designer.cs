@@ -2,12 +2,12 @@
 {
     partial class ThreeDCartAccountSettingsControl
     {
-        /// <summary> 
+        /// <summary>
         /// Required designer variable.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
 
-        /// <summary> 
+        /// <summary>
         /// Clean up any resources being used.
         /// </summary>
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
@@ -22,20 +22,20 @@
 
         #region Component Designer generated code
 
-        /// <summary> 
-        /// Required method for Designer support - do not modify 
+        /// <summary>
+        /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ThreeDCartAccountSettingsControl));
             this.apiUserKey = new System.Windows.Forms.TextBox();
             this.lblSecretKey = new System.Windows.Forms.Label();
             this.storeUrl = new System.Windows.Forms.TextBox();
             this.lblStoreUrl = new System.Windows.Forms.Label();
             this.lblEnterCredentials = new System.Windows.Forms.Label();
-            this.label7 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.helpLink = new ShipWorks.ApplicationCore.Interaction.HelpLink();
             this.SuspendLayout();
             // 
             // apiUserKey
@@ -50,11 +50,11 @@
             // lblSecretKey
             // 
             this.lblSecretKey.AutoSize = true;
-            this.lblSecretKey.Location = new System.Drawing.Point(19, 80);
+            this.lblSecretKey.Location = new System.Drawing.Point(31, 80);
             this.lblSecretKey.Name = "lblSecretKey";
-            this.lblSecretKey.Size = new System.Drawing.Size(74, 13);
+            this.lblSecretKey.Size = new System.Drawing.Size(60, 13);
             this.lblSecretKey.TabIndex = 18;
-            this.lblSecretKey.Text = "API User Key:";
+            this.lblSecretKey.Text = "API Token:";
             this.lblSecretKey.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // storeUrl
@@ -69,7 +69,7 @@
             // lblStoreUrl
             // 
             this.lblStoreUrl.AutoSize = true;
-            this.lblStoreUrl.Location = new System.Drawing.Point(40, 34);
+            this.lblStoreUrl.Location = new System.Drawing.Point(38, 34);
             this.lblStoreUrl.Name = "lblStoreUrl";
             this.lblStoreUrl.Size = new System.Drawing.Size(53, 13);
             this.lblStoreUrl.TabIndex = 16;
@@ -83,20 +83,9 @@
             this.lblEnterCredentials.AutoSize = true;
             this.lblEnterCredentials.Location = new System.Drawing.Point(3, 6);
             this.lblEnterCredentials.Name = "lblEnterCredentials";
-            this.lblEnterCredentials.Size = new System.Drawing.Size(347, 13);
+            this.lblEnterCredentials.Size = new System.Drawing.Size(333, 13);
             this.lblEnterCredentials.TabIndex = 15;
-            this.lblEnterCredentials.Text = "Enter your Store Url and the API User Key provided to you by 3D Cart:";
-            // 
-            // label7
-            // 
-            this.label7.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.label7.ForeColor = System.Drawing.Color.DimGray;
-            this.label7.Location = new System.Drawing.Point(96, 100);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(292, 72);
-            this.label7.TabIndex = 20;
-            this.label7.Text = resources.GetString("label7.Text");
+            this.lblEnterCredentials.Text = "Enter your Store Url and the API Token provided to you by 3D Cart:";
             // 
             // label1
             // 
@@ -109,12 +98,38 @@
             this.label1.TabIndex = 21;
             this.label1.Text = "For example: http://MyStore.3dcartstores.com";
             // 
+            // label2
+            // 
+            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.label2.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.label2.Location = new System.Drawing.Point(3, 101);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(174, 13);
+            this.label2.TabIndex = 22;
+            this.label2.Text = "For help adding your 3dCart store, ";
+            // 
+            // helpLink
+            // 
+            this.helpLink.AutoSize = true;
+            this.helpLink.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.helpLink.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline);
+            this.helpLink.ForeColor = System.Drawing.Color.Blue;
+            this.helpLink.Location = new System.Drawing.Point(174, 101);
+            this.helpLink.Name = "helpLink";
+            this.helpLink.Size = new System.Drawing.Size(51, 13);
+            this.helpLink.TabIndex = 24;
+            this.helpLink.Text = "click here";
+            this.helpLink.Url = "http://support.shipworks.com/support/solutions/articles/167787-adding-a-3dcart-st" +
+    "ore-";
+            // 
             // ThreeDCartAccountSettingsControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.helpLink);
+            this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.label7);
             this.Controls.Add(this.apiUserKey);
             this.Controls.Add(this.lblSecretKey);
             this.Controls.Add(this.storeUrl);
@@ -134,12 +149,8 @@
         private System.Windows.Forms.TextBox storeUrl;
         private System.Windows.Forms.Label lblStoreUrl;
         private System.Windows.Forms.Label lblEnterCredentials;
-        private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label1;
-
-
-
-
-
+        private System.Windows.Forms.Label label2;
+        private ApplicationCore.Interaction.HelpLink helpLink;
     }
 }

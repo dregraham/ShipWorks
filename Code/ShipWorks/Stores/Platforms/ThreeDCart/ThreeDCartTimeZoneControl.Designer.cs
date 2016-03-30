@@ -45,7 +45,7 @@
             this.labelInfo2.Name = "labelInfo2";
             this.labelInfo2.Size = new System.Drawing.Size(444, 27);
             this.labelInfo2.TabIndex = 27;
-            this.labelInfo2.Text = "This setting can be found in the Regional Settings of your 3DCart Admin Area.";
+            this.labelInfo2.Text = "This setting can be found in the Store Settings of your 3DCart Admin Area.";
             // 
             // labelInfo1
             // 

@@ -91,7 +91,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
 
 
 
-                totalCount = restWebClient.GetOrderCount(startDate);
+                totalCount = restWebClient.GetOrderCount(startDate, 0);
 
                 if (totalCount != 0)
                 {
@@ -1317,7 +1317,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         /// </summary>
         public IEnumerable<ThreeDCartOrder> DownloadOrders(DateTime startDate)
         {
-            return restWebClient.GetOrders(startDate);
+            return restWebClient.GetOrders(startDate, 0);
         }
         #endregion
     }

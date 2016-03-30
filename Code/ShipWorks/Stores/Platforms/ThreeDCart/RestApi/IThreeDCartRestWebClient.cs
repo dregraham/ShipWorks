@@ -10,7 +10,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
         /// <summary>
         /// Gets the orders.
         /// </summary>
-        IEnumerable<ThreeDCartOrder> GetOrders(DateTime startDate);
+        IEnumerable<ThreeDCartOrder> GetOrders(DateTime startDate, int offset);
 
         /// <summary>
         /// Gets the product.
@@ -37,6 +37,6 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
         /// <summary>
         /// Gets the order count.
         /// </summary>
-        int GetOrderCount(DateTime startDate);
+        int GetOrderCount(DateTime startDate, int offset);
     }
 }

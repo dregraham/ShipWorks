@@ -19,14 +19,13 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
 {
     public class ThreeDCartRestDownloader : StoreDownloader
     {
-        private IThreeDCartRestWebClient restWebClient;
-        private ThreeDCartStoreEntity threeDCartStore;
+        private readonly IThreeDCartRestWebClient restWebClient;
+        private readonly ThreeDCartStoreEntity threeDCartStore;
         private int totalCount;
-        private ISqlAdapterRetry sqlAdapterRetry;
+        private readonly ISqlAdapterRetry sqlAdapterRetry;
         private readonly ILog log;
         const int MissingCustomerID = 0;
         private int newOrderCount;
-        private int modifiedOrderCount;
         private DateTime modifiedOrderEndDate;
 
         /// <summary>
@@ -57,7 +56,12 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
         {
             try
             {
+                // Need to give the web client the progress bar because if
+                // we get throttled, we want to display it in the progress
                 restWebClient.LoadProgressReporter(Progress);
+
+                bool ordersToDownload = true;
+                int offset = 1;
 
                 DateTime? startDate = GetOrderDateStartingPoint();
                 if (!startDate.HasValue)
@@ -77,21 +81,30 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
                     Progress.Detail = "Checking for new orders...";
                 }
 
-                totalCount = restWebClient.GetOrderCount(startDate.Value);
-
-                if (totalCount != 0)
+                while (ordersToDownload)
                 {
-                    IEnumerable<ThreeDCartOrder> orders = DownloadOrders(startDate.Value);
+                    totalCount = restWebClient.GetOrderCount(startDate.Value, offset);
 
-                    LoadOrders(orders);
-                }
-                else
-                {
-                    Progress.Detail = "No orders to download.";
+                    // Either first download page, with no orders or not first page
+                    // with the only order being the last one we downloaded.
+                    if (totalCount == 0 || (offset != 1 && totalCount == 1))
+                    {
+                        Progress.Detail = "Done - No new orders to download.";
+                        ordersToDownload = false;
+                    }
+                    else
+                    {
+                        IEnumerable<ThreeDCartOrder> orders = restWebClient.GetOrders(startDate.Value, offset);
+
+                        LoadOrders(orders);
+
+                        // -1 because if we give an offset that doesn't exist we get a 500 error.
+                        // So instead of checking for no new orders on the next page, we'll just check
+                        // that we only get the last order we downloaded.
+                        offset += totalCount - 1;
+                    }
                 }
 
-                newOrderCount = 0;
-                modifiedOrderCount = 0;
                 // Update the progress bar for the new count
                 Progress.PercentComplete = QuantitySaved/totalCount;
             }
@@ -108,7 +121,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
             catch (Exception ex)
             {
                 log.Error(ex);
-                throw WebHelper.TranslateWebException(ex, typeof(DownloadException));
+                throw WebHelper.TranslateWebException(ex, typeof (DownloadException));
             }
         }
         /// <summary>
@@ -124,7 +137,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
 
             // Invoice number is defined as an integer in the 3D Cart schema
             // So we can safely remove the prefix to get to a long
-            long invoiceNum = 0;
+            long invoiceNum;
             string invoiceNumber = order.InvoiceNumber.ToString();
             string invoiceNumberPrefix = order.InvoiceNumberPrefix;
 
@@ -163,8 +176,6 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
         /// </summary>
         public void LoadOrders(IEnumerable<ThreeDCartOrder> orders)
         {
-            int newOrderTotal = 0;
-
             foreach (ThreeDCartOrder threeDCartOrder in orders)
             {
                 // Don't download abandoned orders
@@ -184,15 +195,9 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
 
                     ThreeDCartOrderIdentifier orderIdentifier = CreateOrderIdentifier(threeDCartOrder, invoiceNumberPostFix);
 
-                    if (threeDCartOrder.OrderDate < modifiedOrderEndDate)
-                    {
-                        Progress.Detail = $"Checking order {orderIdentifier} for modifications...";
-                        ++modifiedOrderCount;
-                    }
-                    else
-                    {
-                        Progress.Detail = $"Processing new order {++newOrderCount}";
-                    }
+                    Progress.Detail = threeDCartOrder.OrderDate < modifiedOrderEndDate ?
+                        $"Checking order {orderIdentifier} for modifications..." :
+                        $"Processing new order {++newOrderCount}";
 
                     ThreeDCartOrderEntity order = (ThreeDCartOrderEntity) InstantiateOrder(orderIdentifier);
 
@@ -202,6 +207,12 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
 
                     shipmentIndex++;
                     threeDCartOrder.isSubOrder = true;
+
+                    // check for cancellation
+                    if (Progress.IsCancelRequested)
+                    {
+                        return;
+                    }
                 }
             }
         }
@@ -221,20 +232,9 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
                 order.OrderTotal = threeDCartOrder.OrderAmount;
             }
 
-            if (order.CustomerID <= MissingCustomerID)
-            {
-                order.OnlineCustomerID = null;
-            }
-            else
-            {
-                order.OnlineCustomerID = order.CustomerID;
-            }
-            order.ThreeDCartOrderID = threeDCartOrder.OrderID;
-            order.OrderDate = threeDCartOrder.OrderDate;
-            order.OnlineLastModified = threeDCartOrder.LastUpdate;
+            order.OnlineLastModified = DateTimeUtility.ConvertTimeToUtcForTimeZone(threeDCartOrder.LastUpdate, threeDCartStore.StoreTimeZone);
             order.OnlineStatusCode = threeDCartOrder.OrderStatusID;
             order.OnlineStatus = EnumHelper.GetDescription((Enums.ThreeDCartOrderStatus)threeDCartOrder.OrderStatusID);
-            order.RequestedShipping = threeDCartShipment.ShipmentMethodName;
 
             LoadAddress(order, threeDCartOrder, threeDCartShipment);
 
@@ -242,6 +242,19 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
 
             if (order.IsNew)
             {
+                if (order.CustomerID <= MissingCustomerID)
+                {
+                    order.OnlineCustomerID = null;
+                }
+                else
+                {
+                    order.OnlineCustomerID = order.CustomerID;
+                }
+
+                order.ThreeDCartOrderID = threeDCartOrder.OrderID;
+                order.RequestedShipping = threeDCartShipment.ShipmentMethodName;
+                order.OrderDate = DateTimeUtility.ConvertTimeToUtcForTimeZone(threeDCartOrder.OrderDate, threeDCartStore.StoreTimeZone);
+
                 LoadItems(order, threeDCartOrder, threeDCartShipment);
 
                 if (!threeDCartOrder.isSubOrder)
@@ -278,9 +291,9 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
         /// </summary>
         private void LoadOrderCharges(OrderEntity order, ThreeDCartOrder threeDCartOrder)
         {
-            if (threeDCartOrder.OrderDiscount < 0)
+            if (threeDCartOrder.OrderDiscount > 0)
             {
-                LoadCharge(order, "Discount", "Discount", threeDCartOrder.OrderDiscount);
+                LoadCharge(order, "Discount", "Discount", -threeDCartOrder.OrderDiscount);
             }
 
             // Still want to show tax even if it's 0
@@ -471,14 +484,6 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
                 PostalCode = shipment.ShipmentZipCode,
                 CountryCode = Geography.GetCountryCode(shipment.ShipmentCountry)
             };
-        }
-
-        /// <summary>
-        /// Downloads the orders.
-        /// </summary>
-        public IEnumerable<ThreeDCartOrder> DownloadOrders(DateTime startDate)
-        {
-            return restWebClient.GetOrders(startDate);
         }
 
         /// <summary>

@@ -25,14 +25,14 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
         private const string ProductUrlExtension = "Products";
         private const string ShipmentUrlExtension = "Shipments";
         private const string ContentType = "application/json";
-        private const string GetOrderLimit = "600";
+        private const string GetOrderLimit = "50";
         private const string PrivateKey = "c9fc5ce5b29d27121753baae724968b1";
         private readonly Type exceptionToRethrow = typeof (ThreeDCartException);
         private readonly string secureUrl;
         private readonly string token;
         private readonly ThreeDCartWebClientRequestThrottle throttler = new ThreeDCartWebClientRequestThrottle();
 
-        private HttpJsonVariableRequestSubmitter submitter;
+        private readonly HttpJsonVariableRequestSubmitter submitter;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ThreeDCartRestWebClient"/> class.
@@ -64,17 +64,19 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
         /// </summary>
         public void TestConnection()
         {
-            GetOrderCount(DateTime.Today);
+            GetOrderCount(DateTime.Today, 0);
         }
 
         /// <summary>
         /// Gets the order count.
         /// </summary>
-        public int GetOrderCount(DateTime startDate)
+        public int GetOrderCount(DateTime startDate, int offset)
         {
             submitter.Verb = HttpVerb.Get;
             submitter.Uri = new Uri($"{HttpHost}/{OrderApiVersion}/{OrderUrlExtension}");
             submitter.Variables.Add("datestart", startDate.ToShortDateString());
+            submitter.Variables.Add("limit", GetOrderLimit);
+            submitter.Variables.Add("offset", offset.ToString());
             submitter.Variables.Add("countonly", "1");
 
             string response = string.Empty;
@@ -92,12 +94,13 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
         /// <summary>
         /// Gets the orders.
         /// </summary>
-        public IEnumerable<ThreeDCartOrder> GetOrders(DateTime startDate)
+        public IEnumerable<ThreeDCartOrder> GetOrders(DateTime startDate, int offset)
         {
             submitter.Verb = HttpVerb.Get;
             submitter.Uri = new Uri($"{HttpHost}/{OrderApiVersion}/{OrderUrlExtension}");
             submitter.Variables.Add("datestart", startDate.ToShortDateString());
             submitter.Variables.Add("limit", GetOrderLimit);
+            submitter.Variables.Add("offset", offset.ToString());
 
             string response = string.Empty;
 
