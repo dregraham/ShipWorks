@@ -111,7 +111,6 @@
     <Compile Include="..\ShipWorks\Properties\AssemblyInfoCommon.cs">
       <Link>Properties\AssemblyInfoCommon.cs</Link>
     </Compile>
-    <Compile Include="PlatformInterfaces\IDownloader.cs" />
     <Compile Include="Platforms\LemonStand\CoreExtensions\Actions\LemonStandOrderUpdateTask.cs" />
     <Compile Include="Platforms\LemonStand\CoreExtensions\Actions\LemonStandShipmentUploadTask.cs" />
     <Compile Include="Platforms\LemonStand\CoreExtensions\Filters\LemonStandOrderIdCondition.cs" />
@@ -144,12 +143,8 @@
     <Compile Include="Platforms\SparkPay\DTO\OrdersResponse.cs" />
     <Compile Include="Platforms\SparkPay\DTO\OrderStatus.cs" />
     <Compile Include="Platforms\SparkPay\DTO\OrderStatusResponse.cs" />
-    <Compile Include="PlatformInterfaces\IInternalLicenseIdentifier.cs" />
-    <Compile Include="PlatformInterfaces\IOrderIdentifierFactory.cs" />
-    <Compile Include="PlatformInterfaces\IStoreInstanceFactory.cs" />
     <Compile Include="Platforms\SparkPay\DTO\Payment.cs" />
     <Compile Include="Platforms\SparkPay\DTO\Shipment.cs" />
-    <Compile Include="PlatformInterfaces\IOnlineUpdateInstanceCommandsFactory.cs" />
     <Compile Include="Platforms\SparkPay\DTO\StoresResponse.cs" />
     <Compile Include="Platforms\SparkPay\Enums\SparkPayWebClientApiCall.cs" />
     <Compile Include="Platforms\SparkPay\Factories\HttpJsonVariableRequestSubmitter.cs" />
@@ -158,9 +153,6 @@
     <Compile Include="Platforms\SparkPay\SparkPayOnlineUpdater.cs" />
     <Compile Include="Platforms\SparkPay\SparkPayException.cs" />
     <Compile Include="Platforms\SparkPay\SparkPayDownloader.cs" />
-    <Compile Include="Platforms\SparkPay\Factories\SparkPayInternalLicenseIdentifierFactory.cs" />
-    <Compile Include="Platforms\SparkPay\Factories\SparkPayOrderIdentifierFactory.cs" />
-    <Compile Include="Platforms\SparkPay\Factories\SparkPayStoreInstanceFactory.cs" />
     <Compile Include="Platforms\SparkPay\SparkPayStatusCodeProvider.cs" />
     <Compile Include="Platforms\SparkPay\SparkPayStoreType.cs" />
     <Compile Include="Platforms\SparkPay\SparkPayWebClient.cs" />

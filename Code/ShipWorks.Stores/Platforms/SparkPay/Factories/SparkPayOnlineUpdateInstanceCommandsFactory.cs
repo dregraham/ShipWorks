@@ -1,31 +1,29 @@
-﻿using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.ApplicationCore.Interaction;
+﻿using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Common.Threading;
-using ShipWorks.Data;
-using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Content;
-using ShipWorks.Stores.PlatforInterfaces;
-using ShipWorks.Stores.Platforms.SparkPay.DTO;
 using System;
 using System.Collections.Generic;
 
 namespace ShipWorks.Stores.Platforms.SparkPay.Factories
 {
-    public class SparkPayOnlineUpdateInstanceCommandsFactory : IOnlineUpdateInstanceCommandsFactory
+    /// <summary>
+    /// Creates the menu commands for spark pay stores
+    /// </summary>
+    public class SparkPayOnlineUpdateInstanceCommandsFactory
     {
-        private readonly StoreEntity store;
+        private readonly SparkPayStoreEntity store;
         private readonly StatusCodeProvider<int> statusCodeProvider;
         private readonly SparkPayOnlineUpdater onlineUpdater;
 
         public SparkPayOnlineUpdateInstanceCommandsFactory(
-            StoreEntity store, 
+            SparkPayStoreEntity store, 
             Func<SparkPayStoreEntity, SparkPayStatusCodeProvider> statusCodeProviderFactory,
             SparkPayOnlineUpdater onlineUpdater
             )
         {
             this.store = store;
-            this.statusCodeProvider = statusCodeProviderFactory((SparkPayStoreEntity)store);
+            statusCodeProvider = statusCodeProviderFactory(store);
             this.onlineUpdater = onlineUpdater;
         }
 

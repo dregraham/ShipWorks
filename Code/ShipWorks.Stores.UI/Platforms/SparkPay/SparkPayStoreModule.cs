@@ -3,7 +3,6 @@ using Interapptive.Shared.UI;
 using ShipWorks.Actions.Tasks;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Management;
-using ShipWorks.Stores.PlatforInterfaces;
 using ShipWorks.Stores.Platforms.SparkPay;
 using ShipWorks.Stores.Platforms.SparkPay.CoreExtensions.Actions;
 using ShipWorks.Stores.Platforms.SparkPay.Factories;
@@ -30,17 +29,8 @@ namespace ShipWorks.Stores.UI.Platforms.SparkPay
                 .Keyed<StoreDownloader>(StoreTypeCode.SparkPay)
                 .ExternallyOwned();
 
-            builder.RegisterType<SparkPayInternalLicenseIdentifierFactory>()
-                .Keyed<IInternalLicenseIdentifierFactory>(StoreTypeCode.SparkPay);
-
             builder.RegisterType<SparkPayOnlineUpdateInstanceCommandsFactory>()
-                .Keyed<IOnlineUpdateInstanceCommandsFactory>(StoreTypeCode.SparkPay);
-
-            builder.RegisterType<SparkPayStoreInstanceFactory>()
-                .Keyed<IStoreInstanceFactory>(StoreTypeCode.SparkPay);
-
-            builder.RegisterType<SparkPayOrderIdentifierFactory>()
-                .Keyed<IOrderIdentifierFactory>(StoreTypeCode.SparkPay);
+                .ExternallyOwned();
 
             builder.RegisterType<SparkPayAccountHost>()
                 .Keyed<WizardPage>(StoreTypeCode.SparkPay)

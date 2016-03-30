@@ -1,9 +1,10 @@
 ﻿using Autofac.Features.Indexed;
+using ShipWorks.AddressValidation.Enums;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
-using ShipWorks.Stores.PlatforInterfaces;
+using ShipWorks.Stores.Platforms.SparkPay.Factories;
 using System;
 using System.Collections.Generic;
 
@@ -13,10 +14,7 @@ namespace ShipWorks.Stores.Platforms.SparkPay
     {
         readonly StoreEntity store;
         readonly IIndex<StoreTypeCode, Func<StoreEntity, StoreDownloader>> downloaderFactory;
-        readonly IIndex<StoreTypeCode, IInternalLicenseIdentifierFactory> licenseIdentifierFactory;
-        readonly IIndex<StoreTypeCode, IOrderIdentifierFactory> orderIdentifierFactory;
-        readonly IIndex<StoreTypeCode, IStoreInstanceFactory> storeInstanceFactory;
-        readonly IIndex<StoreTypeCode, Func<StoreEntity, IOnlineUpdateInstanceCommandsFactory>> onlineUpdateInstanceCommandsFactory;
+        readonly Func<SparkPayStoreEntity, SparkPayOnlineUpdateInstanceCommandsFactory> onlineUpdateInstanceCommandsFactory;
         readonly Func<SparkPayStoreEntity, SparkPayStatusCodeProvider> statusCodeProviderFactory;
 
         /// <summary>
@@ -26,17 +24,11 @@ namespace ShipWorks.Stores.Platforms.SparkPay
         public SparkPayStoreType(
             StoreEntity store,
             IIndex<StoreTypeCode, Func<StoreEntity, StoreDownloader>> downloaderFactory,
-            IIndex<StoreTypeCode, IInternalLicenseIdentifierFactory> licenseIdentifierFactory,
-            IIndex<StoreTypeCode, IOrderIdentifierFactory> orderIdentifierFactory,
-            IIndex<StoreTypeCode, IStoreInstanceFactory> storeInstanceFactory,
-            IIndex<StoreTypeCode, Func<StoreEntity, IOnlineUpdateInstanceCommandsFactory>> onlineUpdateInstanceCommandsFactory,
+            Func<SparkPayStoreEntity, SparkPayOnlineUpdateInstanceCommandsFactory> onlineUpdateInstanceCommandsFactory,
             Func<SparkPayStoreEntity, SparkPayStatusCodeProvider> statusCodeProviderFactory
             ) : base(store)
         {
-            this.storeInstanceFactory = storeInstanceFactory;
-            this.orderIdentifierFactory = orderIdentifierFactory;
             this.downloaderFactory = downloaderFactory;
-            this.licenseIdentifierFactory = licenseIdentifierFactory;
             this.onlineUpdateInstanceCommandsFactory = onlineUpdateInstanceCommandsFactory;
             this.statusCodeProviderFactory = statusCodeProviderFactory;
             this.store = store;
@@ -55,7 +47,21 @@ namespace ShipWorks.Stores.Platforms.SparkPay
         /// <summary>
         /// Creates the license identifier
         /// </summary>
-        protected override string InternalLicenseIdentifier => licenseIdentifierFactory[TypeCode].Create(store);
+        protected override string InternalLicenseIdentifier
+        {
+            get
+            {
+                SparkPayStoreEntity sparkPayStore = (SparkPayStoreEntity)store;
+
+                if (sparkPayStore == null)
+                {
+                    throw new NullReferenceException("Non SparkPay store passed to SparkPay license identifier");
+                }
+
+                return sparkPayStore.StoreUrl;
+            }
+        }
+
 
         /// <summary>
         /// Creates a downloader
@@ -65,17 +71,55 @@ namespace ShipWorks.Stores.Platforms.SparkPay
         /// <summary>
         /// Creates the order identifier
         /// </summary>
-        public override OrderIdentifier CreateOrderIdentifier(OrderEntity order) => orderIdentifierFactory[TypeCode].Create(order);
+        public override OrderIdentifier CreateOrderIdentifier(OrderEntity order) => new OrderNumberIdentifier(order.OrderNumber);
 
         /// <summary>
         /// Creates the store instance
         /// </summary>
-        public override StoreEntity CreateStoreInstance() => storeInstanceFactory[TypeCode].CreateStoreInstance();
+        public override StoreEntity CreateStoreInstance()
+        {
+            return new SparkPayStoreEntity
+            {
+                Enabled = true,
+                SetupComplete = false,
+                Edition = "",
+
+                TypeCode = (int)StoreTypeCode.SparkPay,
+                CountryCode = "US",
+
+                AutoDownload = false,
+                AutoDownloadMinutes = 2,
+                AutoDownloadOnlyAway = true,
+
+                ComputerDownloadPolicy = "",
+
+                ManualOrderPrefix = "",
+                ManualOrderPostfix = "-M",
+
+                DefaultEmailAccountID = -1,
+
+                AddressValidationSetting = (int)AddressValidationStoreSettingType.ValidateAndApply,
+
+                Token = "",
+                StoreUrl = "",
+                StoreName = "My SparkPay Store",
+            };
+        }
 
         /// <summary>
         /// Create menu commands for uploading shipment details
         /// </summary>
-        public override List<MenuCommand> CreateOnlineUpdateInstanceCommands() => onlineUpdateInstanceCommandsFactory[TypeCode](store).Create();
+        public override List<MenuCommand> CreateOnlineUpdateInstanceCommands()
+        {
+            SparkPayStoreEntity sparkPayStore = (SparkPayStoreEntity)store;
+
+            if (sparkPayStore == null)
+            {
+                throw new NullReferenceException("Non SparkPay store passed to SparkPay license identifier");
+            }
+            
+            return onlineUpdateInstanceCommandsFactory(sparkPayStore).Create();
+        }
 
         /// <summary>
         /// Get a list of supported online SparkPay statuses

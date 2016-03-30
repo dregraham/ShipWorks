@@ -8,8 +8,10 @@
              FontFamily="Tahoma"
              FontSize="11"
              d:DataContext="{d:DesignInstance local:SparkPayAccountViewModel}"
-             d:DesignWidth="500">
-    <StackPanel Margin="40 10 10 10">
+             d:DesignWidth="500"
+             RenderOptions.EdgeMode="Aliased">
+    
+    <StackPanel Margin="48 10 50 10">
         <Label Margin="-30 0 0 10">
             Enter your SparkPay account information
         </Label>
@@ -30,15 +32,15 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <Label Grid.Row="0" Grid.Column="0" HorizontalAlignment="Right">Store URL:</Label>
+            <Label Margin="0 0 8 0" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Right">Store URL:</Label>
             <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Url}"/>
 
-            <Label Grid.Row="1" Grid.Column="0" HorizontalAlignment="Right">Access Token:</Label>
+            <Label Margin="0 0 8 0" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Right">Access Token:</Label>
             <TextBox Grid.Row="1"  Grid.Column="1" Text="{Binding Token}"/>
         </Grid>
-        <TextBlock Margin="80 5 0 0">
+        <TextBlock Margin="87 0 0 0">
             <Run>For help adding your SparkPay store,</Run>
-            <Hyperlink NavigateUri="{Binding HelpUrl}" RequestNavigate="HyperlinkOnRequestNavigate">click here.</Hyperlink>
+            <Hyperlink Foreground="Blue" NavigateUri="{Binding HelpUrl}" RequestNavigate="HyperlinkOnRequestNavigate">click here.</Hyperlink>
         </TextBlock>
     </StackPanel>
     

@@ -9,9 +9,13 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 
 namespace ShipWorks.Stores.UI.Platforms.SparkPay.WizardPages
 {
+    /// <summary>
+    /// View model for the Spark Pay account control
+    /// </summary>
     class SparkPayAccountViewModel : INotifyPropertyChanged, ISparkPayAccountViewModel
     {
         private readonly Func<SparkPayStoreEntity, SparkPayStatusCodeProvider> statusCodeProviderFactory;
@@ -36,14 +40,16 @@ namespace ShipWorks.Stores.UI.Platforms.SparkPay.WizardPages
         /// <summary>
         /// The token
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public string HelpUrl
         {
-            get { return "www.google.com"; }
+            get { return "http://support.shipworks.com/helpdesk"; }
         }
 
         /// <summary>
         /// The token
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public string Token
         {
             get { return token; }
@@ -53,12 +59,16 @@ namespace ShipWorks.Stores.UI.Platforms.SparkPay.WizardPages
         /// <summary>
         /// The store url
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public string Url
         {
             get { return url; }
             set { handler.Set(nameof(Url), ref url, value); }
         }
 
+        /// <summary>
+        /// Loads the store info
+        /// </summary>
         public void Load(SparkPayStoreEntity store)
         {
             Url = store.StoreUrl;
@@ -107,6 +117,9 @@ namespace ShipWorks.Stores.UI.Platforms.SparkPay.WizardPages
             return false;
         }
 
+        /// <summary>
+        /// Validates the credentials and returns a dictionary of url/stores for the given credentials
+        /// </summary>
         private Dictionary<string, StoresResponse> ValidCredentials()
         {
             if (string.IsNullOrEmpty(Token))
@@ -157,11 +170,17 @@ namespace ShipWorks.Stores.UI.Platforms.SparkPay.WizardPages
             return response;
         }
 
+        /// <summary>
+        /// Returns the stores for the given uri/token
+        /// </summary>
         private StoresResponse GetStore(string token, string uri)
         {
             return webClient.GetStores(token, $"{uri}/stores");
         }
 
+        /// <summary>
+        /// Returns the api path for the given uri
+        /// </summary>
         private static string GetApiUrl(Uri uri)
         {
             return $"https://{uri.Host}/api/v1";

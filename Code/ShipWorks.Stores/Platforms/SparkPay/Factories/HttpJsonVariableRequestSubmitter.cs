@@ -1,12 +1,11 @@
 ﻿using Interapptive.Shared.Net;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 
 namespace ShipWorks.Stores.Platforms.SparkPay.Factories
 {
-
+    /// <summary>
+    /// Http json variable request submitter
+    /// </summary>
     public class HttpJsonVariableRequestSubmitter : HttpVariableRequestSubmitter
     {
         private const string ResponseFormat = "application/json";
