@@ -115,9 +115,10 @@ namespace ShipWorks.ApplicationCore.Licensing.FeatureRestrictions
         {
             if (shipmentTypeCode == ShipmentTypeCode.BestRate)
             {
-                // Best rate is not disabled on the server, but we have one additional check to perform:
-                // best rate is disabled if there are any UPS accounts
-                return upsAccountRepository[ShipmentTypeCode.UpsOnLineTools].Accounts.Any();
+                // Special checks for best rate as it is part of plan capabilities along with a 
+                // check to see if there are any UPS accounts: Best rate is disabled if the 
+                // plan tells us it's not or if there are any UPS accounts
+                return !capabilities.IsBestRateAllowed || upsAccountRepository[ShipmentTypeCode.UpsOnLineTools].Accounts.Any();
             }
 
             return shipmentTypeCode != ShipmentTypeCode.None &&
