@@ -19,12 +19,12 @@ namespace ShipWorks.Stores.Platforms.SparkPay.Factories
         public SparkPayOnlineUpdateInstanceCommandsFactory(
             SparkPayStoreEntity store, 
             Func<SparkPayStoreEntity, SparkPayStatusCodeProvider> statusCodeProviderFactory,
-            SparkPayOnlineUpdater onlineUpdater
+            Func<SparkPayStoreEntity, SparkPayOnlineUpdater> onlineUpdaterFactory
             )
         {
             this.store = store;
             statusCodeProvider = statusCodeProviderFactory(store);
-            this.onlineUpdater = onlineUpdater;
+            onlineUpdater = onlineUpdaterFactory(store);
         }
 
         /// <summary>

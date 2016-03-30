@@ -15,16 +15,25 @@ using System.Net;
 
 namespace ShipWorks.Stores.Platforms.SparkPay
 {
+    /// <summary>
+    /// The SparkPay web client
+    /// </summary>
     public class SparkPayWebClient
     {
         private int OverApiLimitStatusCode = 429;
         private SparkPayWebClientRequestThrottle throttler;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public SparkPayWebClient()
         {
-            this.throttler = new SparkPayWebClientRequestThrottle();
+            throttler = new SparkPayWebClientRequestThrottle();
         }
-
+        
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public SparkPayWebClient(SparkPayWebClientRequestThrottle throttler)
         {
             this.throttler = throttler;
@@ -240,8 +249,7 @@ namespace ShipWorks.Stores.Platforms.SparkPay
                 NullValueHandling = NullValueHandling.Ignore
             };
         }
-
-
+        
         /// <summary>
         /// Deserializes the response 
         /// </summary>

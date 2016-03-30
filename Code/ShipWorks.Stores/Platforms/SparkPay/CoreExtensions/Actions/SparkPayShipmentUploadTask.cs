@@ -86,7 +86,7 @@ namespace ShipWorks.Stores.Platforms.SparkPay.CoreExtensions.Actions
                     foreach (long shipmentKey in shipmentKeys)
                     {
                         ShipmentEntity shipment = ShippingManager.GetShipment(shipmentKey);
-                        SparkPayOnlineUpdater updater = scope.Resolve<SparkPayOnlineUpdater>();
+                        SparkPayOnlineUpdater updater = scope.Resolve<SparkPayOnlineUpdater>(new TypedParameter(typeof(SparkPayStoreEntity), store));
 
                         updater.UpdateShipmentDetails(shipment);
                     }

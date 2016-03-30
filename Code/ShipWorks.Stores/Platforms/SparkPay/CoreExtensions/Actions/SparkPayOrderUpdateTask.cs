@@ -57,7 +57,7 @@ namespace ShipWorks.Stores.Platforms.SparkPay.CoreExtensions.Actions
                 throw new ActionTaskRunException("A store has not been configured for the task.");
             }
 
-            LemonStandStoreEntity store = StoreManager.GetStore(StoreID) as LemonStandStoreEntity;
+            SparkPayStoreEntity store = StoreManager.GetStore(StoreID) as SparkPayStoreEntity;
             if (store == null)
             {
                 throw new ActionTaskRunException("The store configured for the task has been deleted.");
@@ -67,7 +67,7 @@ namespace ShipWorks.Stores.Platforms.SparkPay.CoreExtensions.Actions
             {
                 using (ILifetimeScope scope = IoC.BeginLifetimeScope())
                 {
-                    SparkPayOnlineUpdater updater = scope.Resolve<SparkPayOnlineUpdater>();
+                    SparkPayOnlineUpdater updater = scope.Resolve<SparkPayOnlineUpdater>(new TypedParameter(typeof(SparkPayStoreEntity), store));
                     foreach (long orderID in inputKeys)
                     {
                         updater.UpdateOrderStatus(orderID, statusCode, context.CommitWork);

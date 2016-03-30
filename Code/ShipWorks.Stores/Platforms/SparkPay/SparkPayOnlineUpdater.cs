@@ -15,15 +15,23 @@ namespace ShipWorks.Stores.Platforms.SparkPay
     public class SparkPayOnlineUpdater
     {
         // the store this instance is for
-        private readonly SparkPayWebClient webClient;
         private readonly SparkPayStoreEntity store;
-        private StatusCodeProvider<int> statusCodeProvider;
+        private readonly SparkPayWebClient webClient;
+        private readonly StatusCodeProvider<int> statusCodeProvider;
         private readonly IOrderManager orderManager;
         private readonly SparkPayShipmentFactory shipmentFactory;
 
-
-        public SparkPayOnlineUpdater(SparkPayWebClient webClient, Func<SparkPayStoreEntity, SparkPayStatusCodeProvider> statusCodeProviderFactory, IOrderManager orderManager, SparkPayShipmentFactory shipmentFactory)
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public SparkPayOnlineUpdater(
+            SparkPayStoreEntity store,
+            SparkPayWebClient webClient, 
+            Func<SparkPayStoreEntity, SparkPayStatusCodeProvider> statusCodeProviderFactory, 
+            IOrderManager orderManager, 
+            SparkPayShipmentFactory shipmentFactory)
         {
+            this.store = store;
             this.webClient = webClient;
             statusCodeProvider = statusCodeProviderFactory(store);
             this.orderManager = orderManager;

@@ -2,7 +2,6 @@
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
-using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.SparkPay.DTO;
 using System;
 
@@ -37,7 +36,7 @@ namespace ShipWorks.Stores.Platforms.SparkPay.Factories
         /// <summary>
         /// Get the carrier name for the given shipment type
         /// </summary>
-        public string GetCarrierName(ShipmentEntity shipment)
+        private string GetCarrierName(ShipmentEntity shipment)
         {
             ShipmentTypeCode shipmentTypeCode = (ShipmentTypeCode)shipment.ShipmentType;
             shippingManager.EnsureShipmentLoaded(shipment);
