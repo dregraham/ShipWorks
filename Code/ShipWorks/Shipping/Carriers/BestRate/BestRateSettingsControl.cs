@@ -22,7 +22,8 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             ShipmentTypeCode.Express1Usps,
             ShipmentTypeCode.UpsOnLineTools,
             ShipmentTypeCode.UpsWorldShip,
-            ShipmentTypeCode.Amazon
+            ShipmentTypeCode.Amazon,
+            ShipmentTypeCode.iParcel
         };
 
         private bool isDirty;
