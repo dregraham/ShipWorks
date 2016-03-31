@@ -260,17 +260,20 @@ namespace ShipWorks.Stores.Platforms.SparkPay
         /// </summary>
         private static void SetStreetAddress(PersonAdapter personAdapter, Address sparkPayAddress)
         {
-            personAdapter.FirstName = sparkPayAddress.FirstName;
-            personAdapter.LastName = sparkPayAddress.LastName;
-            personAdapter.Street1 = sparkPayAddress.AddressLine1;
-            personAdapter.Street2 = sparkPayAddress.AddressLine2;
-            personAdapter.City = sparkPayAddress.City;
-            personAdapter.StateProvCode = Geography.GetStateProvCode(sparkPayAddress.State);
-            personAdapter.PostalCode = sparkPayAddress.PostalCode;
-            personAdapter.CountryCode = Geography.GetCountryCode(sparkPayAddress.Country);
-            personAdapter.Phone = sparkPayAddress.Phone;
-            personAdapter.Company = sparkPayAddress.Company;
-            personAdapter.Fax = sparkPayAddress.Fax;
+            if (sparkPayAddress != null)
+            {
+                personAdapter.FirstName = sparkPayAddress.FirstName;
+                personAdapter.LastName = sparkPayAddress.LastName;
+                personAdapter.Street1 = sparkPayAddress.AddressLine1;
+                personAdapter.Street2 = sparkPayAddress.AddressLine2;
+                personAdapter.City = sparkPayAddress.City;
+                personAdapter.StateProvCode = Geography.GetStateProvCode(sparkPayAddress.State);
+                personAdapter.PostalCode = sparkPayAddress.PostalCode;
+                personAdapter.CountryCode = Geography.GetCountryCode(sparkPayAddress.Country);
+                personAdapter.Phone = sparkPayAddress.Phone;
+                personAdapter.Company = sparkPayAddress.Company;
+                personAdapter.Fax = sparkPayAddress.Fax;
+            }
         }
 
         /// <summary>
