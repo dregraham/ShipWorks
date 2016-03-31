@@ -115,6 +115,13 @@ namespace ShipWorks.ApplicationCore.Licensing.FeatureRestrictions
         {
             if (shipmentTypeCode == ShipmentTypeCode.BestRate)
             {
+                if (capabilities.IsInTrial)
+                {
+                    // All customers can use best rate when in trial as long as there
+                    // aren't any UPS accounts in ShipWorks.
+                    return upsAccountRepository[ShipmentTypeCode.UpsOnLineTools].Accounts.Any();
+                }
+
                 // Special checks for best rate as it is part of plan capabilities along with a 
                 // check to see if there are any UPS accounts: Best rate is disabled if the 
                 // plan tells us it's not or if there are any UPS accounts

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Autofac.Extras.Moq;
 using Autofac.Features.Indexed;
 using Moq;
@@ -326,6 +325,80 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.FeatureRestrictions
                 Assert.Equal(EditionRestrictionLevel.Hidden, result);
             }
         }
+
+        [Fact]
+        public void Check_ReturnsNone_WhenShipmentTypeIsBestRate_AndCapabilitiesIsInTrial_AndDoesNotAllowBestRate_AndUpsAccountsDoNotExist()
+        {
+            // Test that best rate is hidden when UPS accounts exist in ShipWorks
+            using (AutoMock mock = AutoMock.GetLoose())
+            {
+                Dictionary<ShipmentTypeCode, IEnumerable<ShipmentTypeRestrictionType>> shipmentTypeRestriction =
+                    new Dictionary<ShipmentTypeCode, IEnumerable<ShipmentTypeRestrictionType>>
+                    {
+                        {
+                            ShipmentTypeCode.Usps,
+                            new List<ShipmentTypeRestrictionType> {ShipmentTypeRestrictionType.Disabled}
+                        }
+                    };
+
+                // Setup the UPS account repository to have an account
+                Mock<ICarrierAccountRepository<UpsAccountEntity>> upsAccountRepository = mock.Mock<ICarrierAccountRepository<UpsAccountEntity>>();
+                upsAccountRepository.SetupGet(r => r.Accounts).Returns(new List<UpsAccountEntity>());
+
+                Mock<IIndex<ShipmentTypeCode, ICarrierAccountRepository<UpsAccountEntity>>> upsAccountRepoProvider = mock.MockRepository.Create<IIndex<ShipmentTypeCode, ICarrierAccountRepository<UpsAccountEntity>>>();
+
+                upsAccountRepoProvider.Setup(x => x[ShipmentTypeCode.UpsOnLineTools]).Returns(upsAccountRepository.Object);
+                mock.Provide(upsAccountRepoProvider.Object);
+
+                Mock<ILicenseCapabilities> licenseCapabilities = mock.Mock<ILicenseCapabilities>();
+                licenseCapabilities.SetupGet(c => c.ShipmentTypeRestriction).Returns(shipmentTypeRestriction);
+                licenseCapabilities.SetupGet(c => c.IsBestRateAllowed).Returns(false);
+                licenseCapabilities.SetupGet(c => c.IsInTrial).Returns(true);
+
+                ShipmentTypeRestriction testObject = mock.Create<ShipmentTypeRestriction>();
+                EditionRestrictionLevel result = testObject.Check(licenseCapabilities.Object, ShipmentTypeCode.BestRate);
+
+                Assert.Equal(EditionRestrictionLevel.None, result);
+            }
+        }
+
+        [Fact]
+        public void Check_ReturnsHidden_WhenShipmentTypeIsBestRate_AndCapabilitiesIsInTrial_AndDoesNotAllowBestRate_AndUpsAccountsExist()
+        {
+            // Test that best rate is hidden when UPS accounts exist in ShipWorks
+            using (AutoMock mock = AutoMock.GetLoose())
+            {
+                Dictionary<ShipmentTypeCode, IEnumerable<ShipmentTypeRestrictionType>> shipmentTypeRestriction =
+                    new Dictionary<ShipmentTypeCode, IEnumerable<ShipmentTypeRestrictionType>>
+                    {
+                        {
+                            ShipmentTypeCode.Usps,
+                            new List<ShipmentTypeRestrictionType> {ShipmentTypeRestrictionType.Disabled}
+                        }
+                    };
+
+                // Setup the UPS account repository to have an account
+                Mock<ICarrierAccountRepository<UpsAccountEntity>> upsAccountRepository = mock.Mock<ICarrierAccountRepository<UpsAccountEntity>>();
+                upsAccountRepository.SetupGet(r => r.Accounts).Returns(new List<UpsAccountEntity> { new UpsAccountEntity() });
+
+                Mock<IIndex<ShipmentTypeCode, ICarrierAccountRepository<UpsAccountEntity>>> upsAccountRepoProvider = mock.MockRepository.Create<IIndex<ShipmentTypeCode, ICarrierAccountRepository<UpsAccountEntity>>>();
+
+                upsAccountRepoProvider.Setup(x => x[ShipmentTypeCode.UpsOnLineTools]).Returns(upsAccountRepository.Object);
+                mock.Provide(upsAccountRepoProvider.Object);
+
+                Mock<ILicenseCapabilities> licenseCapabilities = mock.Mock<ILicenseCapabilities>();
+                licenseCapabilities.SetupGet(c => c.ShipmentTypeRestriction).Returns(shipmentTypeRestriction);
+                licenseCapabilities.SetupGet(c => c.IsBestRateAllowed).Returns(false);
+                licenseCapabilities.Setup(c => c.IsInTrial).Returns(true);
+
+
+                ShipmentTypeRestriction testObject = mock.Create<ShipmentTypeRestriction>();
+                EditionRestrictionLevel result = testObject.Check(licenseCapabilities.Object, ShipmentTypeCode.BestRate);
+
+                Assert.Equal(EditionRestrictionLevel.Hidden, result);
+            }
+        }
+
 
         [Fact]
         public void Check_ReturnsHidden_WhenShipmentTypeIsBestRate_AndCapabilitiesDoesNotAllowBestRate_AndUpsAccountsDoNotExist()
