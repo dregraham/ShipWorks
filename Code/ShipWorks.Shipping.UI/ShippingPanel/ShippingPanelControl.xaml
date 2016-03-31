@@ -118,7 +118,7 @@
                         </Grid.RowDefinitions>
 
                         <TextBlock Style="{StaticResource Grid.TextBlock.Label}">Provider:</TextBlock>
-                        <ComboBox Grid.Column="1"
+                        <ui:ShipWorksComboBox Grid.Column="1"
                                   Style="{StaticResource Grid.ComboBox.Default}"
                                   HorizontalAlignment="Left"
                                   Width="150"
@@ -134,7 +134,7 @@
                             <ComboBox.SelectedValue>
                                 <Binding Path="ShipmentType" />
                             </ComboBox.SelectedValue>
-                        </ComboBox>
+                        </ui:ShipWorksComboBox>
 
                         <TextBlock Grid.Column="1" Grid.Row="1" TextWrapping="Wrap">
                             <Run>Requested shipping:</Run>

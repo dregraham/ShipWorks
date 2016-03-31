@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 
 namespace ShipWorks.UI.Controls
 {
@@ -84,6 +87,23 @@ namespace ShipWorks.UI.Controls
                     combo.Items.OfType<object>().Last() :
                     combo.Items.OfType<object>().First();
             }), null);
+        }
+
+        /// <summary>
+        /// Override OnIsKeyboardFocusWithinChanged so that we can handle the issue where the user
+        /// clicks a letter inside the ComboBox and then hits TAB.  MS knows about this:
+        /// https://connect.microsoft.com/VisualStudio/feedback/details/1660886/system-windows-controls-combobox-coerceisselectionboxhighlighted-bug
+        /// </summary>
+        protected override void OnIsKeyboardFocusWithinChanged(DependencyPropertyChangedEventArgs e)
+        {
+            // This is the nasty hack.  See the link above as to why.
+            System.Reflection.FieldInfo fieldInfo = typeof(ComboBox)
+                .GetField("_highlightedInfo",
+                    System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+
+            fieldInfo?.SetValue(this, null);
+
+            base.OnIsKeyboardFocusWithinChanged(e);
         }
     }
 }
