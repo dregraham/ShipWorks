@@ -1242,7 +1242,6 @@
     <Compile Include="Stores\Platforms\OrderBot\OrderBotStoreType.cs" />
     <Compile Include="Stores\Platforms\RevolutionParts\RevolutionPartsStoreType.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\Enums\ThreeDCartOrderStatus.cs" />
-    <Compile Include="Stores\Platforms\ThreeDCart\RestApi\DTO\ThreeDCartImageGallery.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\RestApi\DTO\ThreeDCartOption.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\RestApi\DTO\ThreeDCartOptionSet.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\RestApi\DTO\ThreeDCartOrder.cs" />
@@ -3131,7 +3130,7 @@
     <Compile Include="Stores\Platforms\ThreeDCart\ThreeDCartDownloadCriteriaControl.Designer.cs">
       <DependentUpon>ThreeDCartDownloadCriteriaControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Stores\Platforms\ThreeDCart\ThreeDCartDownloader.cs" />
+    <Compile Include="Stores\Platforms\ThreeDCart\ThreeDCartSoapDownloader.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\ThreeDCartException.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\ThreeDCartOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\ThreeDCartOrderIdentifier.cs">

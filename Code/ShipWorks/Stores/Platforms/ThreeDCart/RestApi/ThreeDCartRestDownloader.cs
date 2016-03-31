@@ -38,8 +38,6 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
                 new SqlAdapterRetry<SqlException>(5, -5, "ThreeDCartRestDownloader.LoadOrder"),
                 LogManager.GetLogger(typeof(ThreeDCartRestDownloader)))
         {
-            threeDCartStore = store;
-            totalCount = 0;
         }
 
         public ThreeDCartRestDownloader(ThreeDCartStoreEntity store, IThreeDCartRestWebClient restWebClient, ISqlAdapterRetry sqlAdapterRetry, ILog log) : base(store)
@@ -47,6 +45,8 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
             this.restWebClient = restWebClient;
             this.sqlAdapterRetry = sqlAdapterRetry;
             this.log = log;
+            threeDCartStore = store;
+            totalCount = 0;
         }
 
         /// <summary>
@@ -242,13 +242,13 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
 
             if (order.IsNew)
             {
-                if (order.CustomerID <= MissingCustomerID)
+                if (threeDCartOrder.CustomerID <= MissingCustomerID)
                 {
                     order.OnlineCustomerID = null;
                 }
                 else
                 {
-                    order.OnlineCustomerID = order.CustomerID;
+                    order.OnlineCustomerID = threeDCartOrder.CustomerID;
                 }
 
                 order.ThreeDCartOrderID = threeDCartOrder.OrderID;

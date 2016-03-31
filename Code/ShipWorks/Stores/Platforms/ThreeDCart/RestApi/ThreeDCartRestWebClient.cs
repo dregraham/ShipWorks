@@ -119,7 +119,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
         /// </summary>
         public ThreeDCartProduct GetProduct(int catalogID)
         {
-            LruCache<int, ThreeDCartProduct> cache = ThreeDCartProductCache.GetStoreProductCache(secureUrl, token);
+            LruCache<int, ThreeDCartProduct> cache = ThreeDCartProductCache.Instance.GetStoreProductCache(secureUrl, token);
 
             ThreeDCartProduct productFromCache = cache[catalogID];
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using log4net;
 using Moq;
 using Newtonsoft.Json;
 using ShipWorks.Data.Administration.Retry;
@@ -14,9 +15,10 @@ namespace ShipWorks.Stores.Tests.Platforms.ThreeDCart
 {
     public class ThreeDCartDownloaderTest
     {
-        private readonly ThreeDCartSoapDownloader testObject;
+        private readonly ThreeDCartRestDownloader testObject;
         private readonly Mock<IThreeDCartRestWebClient> webClient = new Mock<IThreeDCartRestWebClient>();
         private readonly Mock<ISqlAdapterRetry> sqlAdapter = new Mock<ISqlAdapterRetry>();
+        private readonly Mock<ILog> log = new Mock<ILog>();
         readonly OrderEntity orderEntity;
         private readonly string orderJsonNoAttributes;
         private readonly string orderJsonOneAttribute;
@@ -51,17 +53,19 @@ namespace ShipWorks.Stores.Tests.Platforms.ThreeDCart
             ThreeDCartProduct product =
                 JsonConvert.DeserializeObject<List<ThreeDCartProduct>>(productJson).FirstOrDefault();
 
-            webClient.Setup(x => x.GetOrders(It.IsAny<DateTime>())).Returns(orders);
+            webClient.Setup(x => x.GetOrders(It.IsAny<DateTime>(), It.IsAny<int>())).Returns(orders);
             webClient.Setup(x => x.GetProduct(It.IsAny<int>())).Returns(product);
 
             sqlAdapter.Setup((r => r.ExecuteWithRetry(It.IsAny<Action>()))).Callback((Action x) => x.Invoke());
+            ThreeDCartStoreEntity store = new ThreeDCartStoreEntity
+            {
+                TypeCode = (int) StoreTypeCode.ThreeDCart,
+                StoreTimeZone = TimeZoneInfo.Utc
+            };
 
-            ThreeDCartStoreEntity storeEntity = new ThreeDCartStoreEntity();
-            storeEntity.TypeCode = (int) StoreTypeCode.ThreeDCart;
+            testObject = new ThreeDCartRestDownloader(store, webClient.Object, sqlAdapter.Object, log.Object);
 
-            testObject = new ThreeDCartSoapDownloader(storeEntity, webClient.Object, sqlAdapter.Object);
-
-            orderEntity = testObject.LoadOrder(new OrderEntity(), orders.FirstOrDefault(),
+            orderEntity = testObject.LoadOrder(new ThreeDCartOrderEntity(), orders.FirstOrDefault(),
                 orders.FirstOrDefault()?.ShipmentList.FirstOrDefault(), string.Empty);
         }
 
@@ -74,7 +78,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ThreeDCart
         [Fact]
         public void LoadOrder_LoadsLastModifiedDate()
         {
-            Assert.Equal(new DateTime(2016, 3, 16, 17, 16, 9), orderEntity.OnlineLastModified);
+            Assert.Equal(new DateTime(2016, 3, 16, 22, 16, 9, DateTimeKind.Utc), orderEntity.OnlineLastModified);
         }
 
         [Fact]
@@ -130,14 +134,14 @@ namespace ShipWorks.Stores.Tests.Platforms.ThreeDCart
         {
             List<ThreeDCartOrder> orders = JsonConvert.DeserializeObject<List<ThreeDCartOrder>>(orderJsonOneAttribute);
 
-            OrderEntity order = testObject.LoadOrder(new OrderEntity(), orders.FirstOrDefault(),
+            OrderEntity order = testObject.LoadOrder(new ThreeDCartOrderEntity(), orders.FirstOrDefault(),
                 orders.FirstOrDefault()?.ShipmentList.FirstOrDefault(), string.Empty);
 
             OrderItemAttributeEntity actualAttribute = order.OrderItems.FirstOrDefault()?.OrderItemAttributes?.FirstOrDefault();
 
             Assert.Equal("Custom Cap 2", order.OrderItems.FirstOrDefault()?.Name);
 
-            Assert.Equal("CustCap: Size:", actualAttribute.Name);
+            Assert.Equal("CustCap: Size", actualAttribute.Name);
             Assert.Equal("Extra: Small", actualAttribute.Description);
             Assert.Equal(2, actualAttribute.UnitPrice);
         }
@@ -147,7 +151,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ThreeDCart
         {
             List<ThreeDCartOrder> orders = JsonConvert.DeserializeObject<List<ThreeDCartOrder>>(orderJsonTwoAttributes);
 
-            OrderEntity order = testObject.LoadOrder(new OrderEntity(), orders.FirstOrDefault(),
+            OrderEntity order = testObject.LoadOrder(new ThreeDCartOrderEntity(), orders.FirstOrDefault(),
                 orders.FirstOrDefault()?.ShipmentList.FirstOrDefault(), string.Empty);
 
             OrderItemAttributeEntity actualAttribute1 = order.OrderItems.FirstOrDefault()?.OrderItemAttributes?.
@@ -157,11 +161,11 @@ namespace ShipWorks.Stores.Tests.Platforms.ThreeDCart
 
             Assert.Equal("Custom Cap 2", order.OrderItems.FirstOrDefault()?.Name);
 
-            Assert.Equal("CustCap: Size:", actualAttribute1.Name);
+            Assert.Equal("CustCap: Size", actualAttribute1.Name);
             Assert.Equal("Extra: Small", actualAttribute1.Description);
             Assert.Equal(2, actualAttribute1.UnitPrice);
 
-            Assert.Equal("CustCap: Color:", actualAttribute2.Name);
+            Assert.Equal("CustCap: Color", actualAttribute2.Name);
             Assert.Equal("CustCap: Blue", actualAttribute2.Description);
             Assert.Equal(3, actualAttribute2.UnitPrice);
         }
@@ -183,7 +187,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ThreeDCart
         {
             List<ThreeDCartOrder> orders = JsonConvert.DeserializeObject<List<ThreeDCartOrder>>(orderJsonWithKitItem);
 
-            OrderEntity order = testObject.LoadOrder(new OrderEntity(), orders.FirstOrDefault(),
+            OrderEntity order = testObject.LoadOrder(new ThreeDCartOrderEntity(), orders.FirstOrDefault(),
                 orders.FirstOrDefault()?.ShipmentList.FirstOrDefault(), string.Empty);
 
             OrderChargeEntity actualCharge =
@@ -191,7 +195,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ThreeDCart
 
             Assert.Equal("KIT ADJUSTMENT", actualCharge.Type);
             Assert.Equal("Kit Adjustment", actualCharge.Description);
-            Assert.Equal(21.99m, actualCharge.Amount);
+            Assert.Equal(11m, actualCharge.Amount);
         }
     }
 }

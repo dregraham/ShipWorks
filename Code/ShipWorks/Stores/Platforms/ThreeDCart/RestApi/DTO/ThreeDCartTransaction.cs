@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Reflection;
 using Newtonsoft.Json;
 
 namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi.DTO
 {
+    [Obfuscation(Feature = "PreserveLiteralValues", Exclude = true, StripAfterObfuscation = false)]
     public class ThreeDCartTransaction
     {
         [JsonProperty("TransactionIndexID")]

@@ -42,24 +42,12 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         /// <summary>
         /// Returns the order prefix used by this ThreeDCartOrderIdentifier
         /// </summary>
-        public string OrderPrefix
-        {
-            get
-            {
-                return orderPrefix;
-            }
-        }
+        public string OrderPrefix => orderPrefix;
 
         /// <summary>
         /// Returns the order postfix used by this ThreeDCartOrderIdentifier
         /// </summary>
-        public string OrderPostfix
-        {
-            get
-            {
-                return orderPostfix;
-            }
-        }
+        public string OrderPostfix => orderPostfix;
 
         /// <summary>
         /// Apply the order number and order prefix to the order provided

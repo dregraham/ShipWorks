@@ -33,6 +33,9 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
 
             storeUrl.Text = threeDCartStore.StoreUrl;
             apiUserKey.Text = threeDCartStore.ApiUserKey;
+
+            ThreeDCartStoreType storeType = new ThreeDCartStoreType(threeDCartStore);
+            helpLink.Url = storeType.AccountSettingsHelpUrl;
         }
 
         /// <summary>

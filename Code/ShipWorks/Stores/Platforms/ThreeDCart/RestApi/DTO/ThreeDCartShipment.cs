@@ -1,9 +1,10 @@
-﻿using System;
+﻿using System.Reflection;
 using Newtonsoft.Json;
 
 namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi.DTO
 {
-   public class ThreeDCartShipment
+    [Obfuscation(Feature = "PreserveLiteralValues", Exclude = true, StripAfterObfuscation = false)]
+    public class ThreeDCartShipment
     {
         public long OrderID { get; set; }
 

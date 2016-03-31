@@ -46,6 +46,19 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         private bool RestUser => ((ThreeDCartStoreEntity)Store).RestUser;
 
         /// <summary>
+        /// Link to article on adding a 3dCart store
+        /// </summary>
+        public string AccountSettingsHelpUrl
+        {
+            get
+            {
+                return RestUser ?
+                    "http://support.shipworks.com/solution/articles/4000076906-adding-3dcart-using-rest-api" :
+                    "http://support.shipworks.com/support/solutions/articles/167787-adding-a-3dcart-store-";
+            }
+        }
+
+        /// <summary>
         /// This is a string that uniquely identifies the store.
         /// Since current customers can have the legacy implementation of 3D Cart, we need to support
         /// the old identifier as well, so use the same algorithm as before.

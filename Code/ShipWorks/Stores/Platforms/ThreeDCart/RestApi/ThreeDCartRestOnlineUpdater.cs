@@ -30,7 +30,8 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
         /// <summary>
         /// Initializes a new instance of the <see cref="ThreeDCartRestOnlineUpdater"/> class.
         /// </summary>
-        public ThreeDCartRestOnlineUpdater(ThreeDCartStoreEntity store)
+        public
+            ThreeDCartRestOnlineUpdater(ThreeDCartStoreEntity store)
             : this(LogManager.GetLogger(typeof (ThreeDCartRestOnlineUpdater)), new ThreeDCartRestWebClient(store))
         {
         }
@@ -191,7 +192,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
                 ShipmentID = threeDCartOrderItem.ThreeDCartShipmentID,
                 ShipmentOrderStatus =
                     (int) EnumHelper.GetEnumByApiValue<Enums.ThreeDCartOrderStatus>(order.OnlineStatus),
-                ShipmentMethodName = GetShipmentMethodName(shipmentEntity),
+                ShipmentMethodName = GetShipmentMethod(shipmentEntity),
                 ShipmentPhone = shipmentEntity.ShipPhone,
                 ShipmentFirstName = shipmentEntity.ShipFirstName,
                 ShipmentLastName = shipmentEntity.ShipLastName,
@@ -215,7 +216,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
         /// <summary>
         /// Gets the name of the shipment method.
         /// </summary>
-        private string GetShipmentMethodName(ShipmentEntity shipmentEntity)
+        public string GetShipmentMethod(ShipmentEntity shipmentEntity)
         {
             ShipmentTypeCode typeCode = ((ShipmentTypeCode) shipmentEntity.ShipmentType);
 
@@ -248,12 +249,13 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
 
             if (shipmentEntity.Postal != null && ShipmentTypeManager.IsDhl(service))
             {
-                return $"DHL - {EnumHelper.GetDescription(service)}";
+                // Don't prefix with DHL since it is in the service name
+                return $"{EnumHelper.GetDescription(service)}";
             }
 
             if (shipmentEntity.Postal != null && ShipmentTypeManager.IsConsolidator(service))
             {
-                return $"Consolidator - {EnumHelper.GetDescription(service)}";
+                return $"USPS - {EnumHelper.GetDescription(service)}";
             }
 
             return $"USPS - {EnumHelper.GetDescription(service)}";
@@ -264,6 +266,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
         /// </summary>
         private string CheckForFedex(ShipmentEntity shipmentEntity, ShipmentTypeCode typeCode)
         {
+            // Don't prefix with FedEx since it is in the service name
             return typeCode == ShipmentTypeCode.FedEx ? $"{EnumHelper.GetDescription((FedExServiceType) shipmentEntity.FedEx.Service)}"
                 : string.Empty;
         }
@@ -289,6 +292,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
                 }
             }
 
+            // Don't prefix with UPS since it is in the service name
             return $"{EnumHelper.GetDescription(service)}";
         }
 
