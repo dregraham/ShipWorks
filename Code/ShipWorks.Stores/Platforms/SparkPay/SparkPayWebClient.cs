@@ -1,5 +1,6 @@
 ﻿using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
+using log4net;
 using Newtonsoft.Json;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Common.Threading;
@@ -23,6 +24,9 @@ namespace ShipWorks.Stores.Platforms.SparkPay
         private int OverApiLimitStatusCode = 429;
         private SparkPayWebClientRequestThrottle throttler;
 
+        // Logger 
+        static readonly ILog log = LogManager.GetLogger(typeof(SparkPayWebClient));
+        
         /// <summary>
         /// Constructor
         /// </summary>

@@ -36,21 +36,21 @@ namespace ShipWorks.Stores.Platforms.SparkPay
                 using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
                 {
                     SparkPayWebClient webClient = lifetimeScope.Resolve<SparkPayWebClient>();
-
+                    log.Debug("Getting statuses from web client");
                     IEnumerable<OrderStatus> statuses = webClient.GetStatuses(store).Statuses;
-
+                    log.Debug($"Got statuses");
                     foreach (OrderStatus orderStatus in statuses)
                     {
+                        log.Debug($"Adding status {orderStatus.Name}");
                         codeMap.Add(orderStatus.Id, orderStatus.Name);
                     }
                 }
-
+                log.Debug($"Done with statuses");
                 return codeMap;
             }
             catch (SparkPayException ex)
             {
                 log.ErrorFormat("Failed to fetch online status codes from SparkPay: {0}", ex);
-
                 return null;
             }
         }

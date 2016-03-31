@@ -57,6 +57,7 @@ namespace ShipWorks.Stores.Platforms.SparkPay.DTO
         public int profile_id { get; set; }
     }
 
+    [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
     public class StoresResponse
     {
         [JsonProperty("total_count")]
