@@ -45,46 +45,13 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         /// <returns>True if the entered settings can successfully connect to the store.</returns>
         public override bool SaveToEntity(StoreEntity store)
         {
-            // Check the store url for validity
-            // First check for blank
-            string storeUrlToCheck = storeUrl.Text.Trim();
-            if (string.IsNullOrWhiteSpace(storeUrlToCheck))
-            {
-                MessageHelper.ShowError(this, "Please enter the URL of your 3D Cart store.");
-                return false;
-            }
+            string storeUrlToSave = CheckStoreUrlForErrors();
 
-            // Check for the url scheme, and add https if not present
-            if (storeUrlToCheck.IndexOf(Uri.SchemeDelimiter) == -1)
-            {
-                storeUrlToCheck = string.Format("https://{0}", storeUrlToCheck);
-            }
-
-            // Now check the url to see if it's a valid address
-            if (!Uri.IsWellFormedUriString(storeUrlToCheck, UriKind.Absolute))
-            {
-                MessageHelper.ShowError(this, "The specified URL is not a valid address.");
-                return false;
-            }
-
-            // To make a call to the store, we need a valid api user key, so check that next.
-            string apiUserKeyToCheck = apiUserKey.Text.Trim();
-            if (string.IsNullOrWhiteSpace(apiUserKeyToCheck))
-            {
-                MessageHelper.ShowError(this, "Please enter the Api User Key for your 3D Cart store.");
-                return false;
-            }
-
-            // As per the api documentation, the api user key must be 32 characters
-            if (apiUserKeyToCheck.Length != 32)
-            {
-                MessageHelper.ShowError(this, "The specified Api User Key is not valid, it must be 32 characters in length.");
-                return false;
-            }
+            string apiUserKeyToSave = CheckTokenForErrors();
 
             ThreeDCartStoreEntity threeDCartStore = GetThreeDCartStore(store);
-            threeDCartStore.StoreUrl = storeUrlToCheck;
-            threeDCartStore.ApiUserKey = apiUserKeyToCheck;
+            threeDCartStore.StoreUrl = storeUrlToSave;
+            threeDCartStore.ApiUserKey = apiUserKeyToSave;
 
             // Now try to make a call to the store with the user's entered settings
             if (ConnectionVerificationNeeded(threeDCartStore))
@@ -118,6 +85,58 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
 
             // Everything succeeded, so return true
             return true;
+        }
+
+        /// <summary>
+        /// Checks the store URL for errors.
+        /// </summary>
+        private string CheckStoreUrlForErrors()
+        {
+            // Check the store url for validity
+            // First check for blank
+            string storeUrlToCheck = storeUrl.Text.Trim();
+            if (string.IsNullOrWhiteSpace(storeUrlToCheck))
+            {
+                MessageHelper.ShowError(this, "Please enter the URL of your 3D Cart store.");
+                return storeUrlToCheck;
+            }
+
+            // Check for the url scheme, and add https if not present
+            if (storeUrlToCheck.IndexOf(Uri.SchemeDelimiter) == -1)
+            {
+                storeUrlToCheck = string.Format("https://{0}", storeUrlToCheck);
+            }
+
+            // Now check the url to see if it's a valid address
+            if (!Uri.IsWellFormedUriString(storeUrlToCheck, UriKind.Absolute))
+            {
+                MessageHelper.ShowError(this, "The specified URL is not a valid address.");
+                return storeUrlToCheck;
+            }
+
+            return storeUrlToCheck;
+        }
+
+        /// <summary>
+        /// Checks the token for errors.
+        /// </summary>
+        private string CheckTokenForErrors()
+        {
+            // To make a call to the store, we need a valid api user key, so check that next.
+            string apiUserKeyToCheck = apiUserKey.Text.Trim();
+            if (string.IsNullOrWhiteSpace(apiUserKeyToCheck))
+            {
+                MessageHelper.ShowError(this, "Please enter the Api User Key for your 3D Cart store.");
+                return apiUserKeyToCheck;
+            }
+
+            // As per the api documentation, the api user key must be 32 characters
+            if (apiUserKeyToCheck.Length != 32)
+            {
+                MessageHelper.ShowError(this, "The specified Api User Key is not valid, it must be 32 characters in length.");
+                return apiUserKeyToCheck;
+            }
+            return apiUserKeyToCheck;
         }
 
         /// <summary>
