@@ -2522,7 +2522,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("ThreeDCartStoreEntity", "TimeZoneID", typeof(System.String), false, false, false, true,  (int)ThreeDCartStoreFieldIndex.TimeZoneID, 100, 0, 0);
 			base.AddElementFieldInfo("ThreeDCartStoreEntity", "StatusCodes", typeof(System.String), false, false, false, true,  (int)ThreeDCartStoreFieldIndex.StatusCodes, 2147483647, 0, 0);
 			base.AddElementFieldInfo("ThreeDCartStoreEntity", "DownloadModifiedNumberOfDaysBack", typeof(System.Int32), false, false, false, false,  (int)ThreeDCartStoreFieldIndex.DownloadModifiedNumberOfDaysBack, 0, 0, 10);
-			base.AddElementFieldInfo("ThreeDCartStoreEntity", "RestUser", typeof(System.Boolean), false, false, false, false,  (int)ThreeDCartStoreFieldIndex.RestUser, 0, 0, 0);
 		}
 		/// <summary>Inits UpsAccountEntity's FieldInfo objects</summary>
 		private void InitUpsAccountEntityInfos()

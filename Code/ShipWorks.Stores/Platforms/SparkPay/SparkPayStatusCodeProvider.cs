@@ -37,7 +37,9 @@ namespace ShipWorks.Stores.Platforms.SparkPay
                 {
                     SparkPayWebClient webClient = lifetimeScope.Resolve<SparkPayWebClient>();
                     log.Debug("Getting statuses from web client");
-                    IEnumerable<OrderStatus> statuses = webClient.GetStatuses(store).Statuses;
+                    OrderStatusResponse response = webClient.GetStatuses(store);
+                    log.Debug("Getting statuses from response");
+                    IEnumerable<OrderStatus> statuses = response.Statuses;
                     log.Debug($"Got statuses");
                     foreach (OrderStatus orderStatus in statuses)
                     {

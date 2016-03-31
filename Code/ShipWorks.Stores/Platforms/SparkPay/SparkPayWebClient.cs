@@ -64,12 +64,14 @@ namespace ShipWorks.Stores.Platforms.SparkPay
         /// </summary>
         public OrderStatusResponse GetStatuses(SparkPayStoreEntity store)
         {
+            log.Debug("start getting statuses");
             SparkPayWebClientApiCall call = SparkPayWebClientApiCall.GetStatuses;
-
+            log.Debug("set call");
             HttpVariableRequestSubmitter submitter = new HttpVariableRequestSubmitter();
+            log.Debug("create submitter and configure request");
             ConfigureRequest(submitter, store, call, null, HttpVerb.Get);
-
-            return ProcessThrottledRequest<OrderStatusResponse>(submitter, call, null);
+            log.Debug("configured request");
+            return ProcessRequest<OrderStatusResponse>(submitter, call);
         }
 
         /// <summary>
@@ -99,7 +101,7 @@ namespace ShipWorks.Stores.Platforms.SparkPay
 
             ConfigureRequest(submitter, store, SparkPayWebClientApiCall.AddShipment, new[] { new HttpVariable("", shipmentJson) }, HttpVerb.Post);
 
-            ProcessThrottledRequest<OrdersResponse>(submitter, call, null);
+            ProcessRequest<OrdersResponse>(submitter, call);
         }
 
         /// <summary>
@@ -114,7 +116,7 @@ namespace ShipWorks.Stores.Platforms.SparkPay
 
             ConfigureRequest(submitter, store, path, new[] { new HttpVariable("", $"{{\"order_status_id\":{statusId}}}") }, HttpVerb.Put);
 
-            return ProcessThrottledRequest<Order>(submitter, call, null);
+            return ProcessRequest<Order>(submitter, call);
         }
 
         /// <summary>
@@ -156,7 +158,7 @@ namespace ShipWorks.Stores.Platforms.SparkPay
             
             submitter.AllowHttpStatusCodes(new[] { HttpStatusCode.Created });
         }
-
+        
         /// <summary>
         /// Executes a request
         /// </summary>
@@ -164,11 +166,8 @@ namespace ShipWorks.Stores.Platforms.SparkPay
         {
             try
             {
-                ApiLogEntry logEntry = new ApiLogEntry(ApiLogSource.SparkPay, EnumHelper.GetDescription(call));
-                logEntry.LogRequest(submitter);
-
+                ApiLogEntry logEntry = GetLogEntry(submitter, call);
                 RequestThrottleParameters requestThrottleArgs = new RequestThrottleParameters(call, submitter, progressReporter);
-
                 using (IHttpResponseReader reader = throttler.ExecuteRequest<HttpRequestSubmitter, IHttpResponseReader>(requestThrottleArgs, MakeRequest))
                 {
                     string responseData = reader.ReadResult();
@@ -190,14 +189,16 @@ namespace ShipWorks.Stores.Platforms.SparkPay
         {
             try
             {
-                ApiLogEntry logEntry = new ApiLogEntry(ApiLogSource.SparkPay, EnumHelper.GetDescription(call));
-                logEntry.LogRequest(submitter);
-                
+                log.Debug("Getting log entry");
+                ApiLogEntry logEntry = GetLogEntry(submitter, call);
+                log.Debug("Getting response");
                 using (IHttpResponseReader reader = submitter.GetResponse())
                 {
+                    log.Debug("reading response");
                     string responseData = reader.ReadResult();
+                    log.Debug("logging response");
                     logEntry.LogResponse(responseData, "txt");
-
+                    log.Debug($"deserializing response {typeof(T)}");
                     return DeserializeResponse<T>(responseData);
                 }
             }
@@ -205,6 +206,17 @@ namespace ShipWorks.Stores.Platforms.SparkPay
             {
                 throw WebHelper.TranslateWebException(ex, typeof(SparkPayException));
             }
+        }
+
+        /// <summary>
+        /// Gets the log entry for the request
+        /// </summary>
+        private ApiLogEntry GetLogEntry(HttpRequestSubmitter submitter, SparkPayWebClientApiCall call)
+        {
+            ApiLogEntry logEntry = new ApiLogEntry(ApiLogSource.SparkPay, EnumHelper.GetDescription(call));
+            logEntry.LogRequest(submitter);
+
+            return logEntry;
         }
 
         /// <summary>
