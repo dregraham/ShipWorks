@@ -20,7 +20,7 @@ namespace ShipWorks.Stores.Platforms.SparkPay.Enums
         GetStatuses = 1,
 
         [Description("GetAddress")]
-        [ApiValue("addresses")]
+        [ApiValue("order_addresses")]
         GetAddresses = 2,
 
         [Description("AddShipment")]

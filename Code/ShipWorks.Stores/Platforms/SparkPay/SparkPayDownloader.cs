@@ -193,7 +193,7 @@ namespace ShipWorks.Stores.Platforms.SparkPay
             charge.Type = type;
             charge.Description = description;
             charge.Amount = amount;
-        }      
+        }
 
         /// <summary>
         /// Loads the order items into the order
@@ -234,7 +234,6 @@ namespace ShipWorks.Stores.Platforms.SparkPay
                     attribute.UnitPrice = 0;
                 }
             }
-
         }
 
         /// <summary>
@@ -242,17 +241,25 @@ namespace ShipWorks.Stores.Platforms.SparkPay
         /// </summary>
         private void LoadAddresses(OrderEntity order, Order sparkPayOrder)
         {
+            Address shipAddress = null;
+            Address billAddress = null;
+
             if (sparkPayOrder.OrderShippingAddressId != null)
             {
-                Address address = webClient.GetAddress(store, sparkPayOrder.OrderShippingAddressId.Value, Progress).Addresses.FirstOrDefault();
-                SetStreetAddress(new PersonAdapter(order, "Ship"), address);
+                shipAddress = webClient.GetAddress(store, sparkPayOrder.OrderShippingAddressId.Value, Progress).Addresses.FirstOrDefault();
+                SetStreetAddress(new PersonAdapter(order, "Ship"), shipAddress);
             }
 
-            if (sparkPayOrder.OrderBillingAddressId != null)
+            if (sparkPayOrder.OrderBillingAddressId != null && sparkPayOrder.OrderBillingAddressId == sparkPayOrder.OrderShippingAddressId)
             {
-                Address address = webClient.GetAddress(store, sparkPayOrder.OrderBillingAddressId.Value, Progress).Addresses.FirstOrDefault();
-                SetStreetAddress(new PersonAdapter(order, "Bill"), address);
+                billAddress = shipAddress;
             }
+            else
+            {
+                billAddress = webClient.GetAddress(store, sparkPayOrder.OrderBillingAddressId.Value, Progress).Addresses.FirstOrDefault();
+            }
+
+            SetStreetAddress(new PersonAdapter(order, "Ship"), shipAddress);
         }
 
         /// <summary>
