@@ -22,7 +22,11 @@ namespace ShipWorks.Stores.Platforms.SparkPay
         readonly SparkPayWebClient webClient;
         readonly SparkPayStatusCodeProvider statusProvider;
 
-        public SparkPayDownloader(StoreEntity store, SparkPayWebClient webClient, Func<SparkPayStoreEntity, SparkPayStatusCodeProvider> statusProviderFactory) : base(store)
+        /// <summary>
+        /// The spark pay downloader
+        /// </summary>
+        public SparkPayDownloader(StoreEntity store, SparkPayWebClient webClient, Func<SparkPayStoreEntity, SparkPayStatusCodeProvider> statusProviderFactory)
+            : base(store)
         {
             this.webClient = webClient;
             this.store = (SparkPayStoreEntity)store;
@@ -30,7 +34,7 @@ namespace ShipWorks.Stores.Platforms.SparkPay
         }
 
         /// <summary>
-        /// The download method
+        /// Downloads orders for the given store using the newest last modified or store default or 30.
         /// </summary>
         protected override void Download()
         {
@@ -72,7 +76,7 @@ namespace ShipWorks.Stores.Platforms.SparkPay
 
         private void LoadOrders(IEnumerable<Order> sparkPayOrders)
         {
-            if (Progress.IsCancelRequested)
+            if (Progress.IsCancelRequested || !sparkPayOrders.Any())
             {
                 return;
             }
@@ -85,7 +89,7 @@ namespace ShipWorks.Stores.Platforms.SparkPay
 
         private void LoadOrder(Order sparkPayOrder)
         {
-            if (Progress.IsCancelRequested)
+            if (Progress.IsCancelRequested || sparkPayOrder == null)
             {
                 return;
             }

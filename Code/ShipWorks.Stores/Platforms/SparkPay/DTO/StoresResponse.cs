@@ -4,7 +4,7 @@ using System.Reflection;
 
 namespace ShipWorks.Stores.Platforms.SparkPay.DTO
 {
-    [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
+    [Obfuscation(Feature = "PreserveLiteralValues", Exclude = true, StripAfterObfuscation = false)]
     public class Store
     {
         [JsonProperty("id")]
@@ -57,7 +57,7 @@ namespace ShipWorks.Stores.Platforms.SparkPay.DTO
         public int profile_id { get; set; }
     }
 
-    [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
+    [Obfuscation(Feature = "PreserveLiteralValues", Exclude = true, StripAfterObfuscation = false)]
     public class StoresResponse
     {
         [JsonProperty("total_count")]

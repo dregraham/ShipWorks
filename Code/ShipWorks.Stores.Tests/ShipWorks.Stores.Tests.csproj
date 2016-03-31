@@ -136,7 +136,6 @@
     <Compile Include="Platforms\LemonStand\LemonStandDownloaderTest.cs" />
     <Compile Include="Platforms\LemonStand\LemonStandOrderIdentifierTest.cs" />
     <Compile Include="Platforms\LemonStand\LemonStandStoreTypeTest.cs" />
-    <Compile Include="Platforms\SparkPay\ICustomerLicense.cs" />
     <Compile Include="Platforms\SparkPay\SparkPayShipmentFactoryTest.cs" />
     <Compile Include="Platforms\Yahoo\EmbeddedResourceHelper.cs" />
     <Compile Include="Platforms\Yahoo\YahooApiDownloaderTest.cs" />

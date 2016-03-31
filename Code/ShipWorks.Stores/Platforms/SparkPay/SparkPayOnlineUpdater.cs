@@ -10,7 +10,7 @@ using ShipWorks.Stores.Platforms.SparkPay.Factories;
 namespace ShipWorks.Stores.Platforms.SparkPay
 {
     /// <summary>
-    ///     Uploads shipment information to LemonStand
+    ///     Uploads shipment information to SparkPay
     /// </summary>
     public class SparkPayOnlineUpdater
     {
@@ -39,7 +39,7 @@ namespace ShipWorks.Stores.Platforms.SparkPay
         }
 
         /// <summary>
-        /// Changes the status of an LemonStand order to that specified
+        /// Changes the status of an SparkPay order to that specified
         /// </summary>
         public void UpdateOrderStatus(long orderID, int statusCode)
         {
@@ -54,7 +54,7 @@ namespace ShipWorks.Stores.Platforms.SparkPay
         }
 
         /// <summary>
-        /// Changes the status of an LemonStand order to that specified
+        /// Changes the status of an SparkPay order to that specified
         /// </summary>
         public void UpdateOrderStatus(long orderID, int statusCode, UnitOfWork2 unitOfWork)
         {

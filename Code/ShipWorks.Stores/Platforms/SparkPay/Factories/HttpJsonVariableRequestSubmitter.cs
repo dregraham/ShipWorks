@@ -15,7 +15,7 @@ namespace ShipWorks.Stores.Platforms.SparkPay.Factories
         /// </summary>
         public HttpJsonVariableRequestSubmitter()
                 : base()
-            {
+        {
             // Subscribe to the request submitting event, so we can set the content type
             // and what format we expect the response to be in
             this.RequestSubmitting += new HttpRequestSubmittingEventHandler(OnRequestSubmitting);
