@@ -10,7 +10,7 @@ namespace Interapptive.Shared.Usb
     {
         // Listen for device added (2) and device configuration changed (1) events
         private const string eventSelectionQuery = "SELECT * FROM Win32_DeviceChangeEvent WHERE EventType = 2 OR EventType = 1";
-        private ManagementEventWatcher deviceWatcher;
+        private readonly ManagementEventWatcher deviceWatcher;
 
         /// <summary>
         /// Create an instance of the DeviceListener class
@@ -20,7 +20,6 @@ namespace Interapptive.Shared.Usb
             deviceWatcher = new ManagementEventWatcher();
             deviceWatcher.EventArrived += OnDeviceWatcherEventArrived;
             deviceWatcher.Query = new WqlEventQuery(eventSelectionQuery);
-            deviceWatcher.Start();
         }
 
         /// <summary>
@@ -37,6 +36,14 @@ namespace Interapptive.Shared.Usb
             {
                 DeviceChanged?.Invoke(this, EventArgs.Empty);
             }
+        }
+
+        /// <summary>
+        /// Start the device watcher
+        /// </summary>
+        internal void Start()
+        {
+            deviceWatcher.Start();
         }
 
         /// <summary>
@@ -65,7 +72,6 @@ namespace Interapptive.Shared.Usb
                 deviceWatcher.Stop();
                 deviceWatcher.EventArrived -= OnDeviceWatcherEventArrived;
                 deviceWatcher.Dispose();
-                deviceWatcher = null;
             }
         }
     }

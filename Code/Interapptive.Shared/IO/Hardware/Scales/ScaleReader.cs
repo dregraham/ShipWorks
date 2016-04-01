@@ -39,7 +39,11 @@ namespace Interapptive.Shared.IO.Hardware.Scales
         {
             DeviceListener.DeviceChanged += OnDeviceListenerDeviceChanged;
 
-            TaskEx.Run(() => SetUsbScale());
+            TaskEx.Run(() =>
+            {
+                SetUsbScale();
+                DeviceListener.Start();
+            });
 
             ReadEvents = Observable.Interval(TimeSpan.FromMilliseconds(250))
                 .Select(_ => ReadScale(true))
