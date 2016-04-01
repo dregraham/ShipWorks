@@ -289,6 +289,18 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             fromShipmentAdapter.UpdateDynamicData();
             ShipmentAdapter = fromShipmentAdapter;
 
+            // If LoadShipment is called directly without going through LoadOrder, the LoadedShipmentResult could
+            // be out of sync.  So we find the requested shipment in the list of order selection shipment adapters
+            // and replace it with the requested shipment adapter.  Then update the LoadedShipmentResult so that
+            // panels update correctly.
+            List<ICarrierShipmentAdapter> tmpShipmentAdapters = loadedOrderSelection.ShipmentAdapters.Where(
+                sa => sa?.Shipment?.ShipmentID != fromShipmentAdapter?.Shipment?.ShipmentID).ToList();
+            tmpShipmentAdapters.Add(fromShipmentAdapter);
+
+            loadedOrderSelection = new LoadedOrderSelection(loadedOrderSelection.Order, tmpShipmentAdapters, loadedOrderSelection.DestinationAddressEditable);
+
+            LoadedShipmentResult = GetLoadedShipmentResult(loadedOrderSelection);
+
             // If we are an unsupported shipment type, stop and show the appropriate message.
             if (ShipmentAdapter.Shipment.ShipmentTypeCode == ShipmentTypeCode.Amazon ||
                 ShipmentAdapter.Shipment.ShipmentTypeCode == ShipmentTypeCode.BestRate)

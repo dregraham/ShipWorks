@@ -15,10 +15,10 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
         readonly IObservable<IShipWorksMessage> messages;
         readonly Func<ShippingPanelViewModel, object>[] viewModelsToIgnore = {
             x => x,
-            x => x.ShipmentViewModel,
-            x => x.ShipmentViewModel.InsuranceViewModel,
-            x => x.Origin,
-            x => x.Destination
+            x => x?.ShipmentViewModel,
+            x => x?.ShipmentViewModel?.InsuranceViewModel,
+            x => x?.Origin,
+            x => x?.Destination
         };
 
         /// <summary>
@@ -49,15 +49,13 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
             }
 
             ShipmentEntity shipment = shipmentChangedMessage?.ShipmentAdapter?.Shipment;
-            if (shipment == null ||
-                viewModel.Shipment == null ||
-                shipment.ShipmentTypeCode == ShipmentTypeCode.Amazon ||
-                shipment.ShipmentTypeCode == ShipmentTypeCode.BestRate)
+            if (shipment == null)
             {
                 return;
             }
 
-            if (shipmentChangedMessage.ShipmentAdapter.Shipment.ShipmentID == viewModel.Shipment.ShipmentID)
+            if (viewModel.Shipment == null ||
+                shipmentChangedMessage.ShipmentAdapter.Shipment.ShipmentID == viewModel.Shipment.ShipmentID)
             {
                 viewModel.LoadShipment(shipmentChangedMessage.ShipmentAdapter);
             }
@@ -75,7 +73,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
 
             return viewModelsToIgnore.Select(x => x(viewModel)).Any(vm =>
             {
-                return vm?.Equals(shipmentChangedMessage?.Sender) ?? true;
+                return vm?.Equals(shipmentChangedMessage?.Sender) ?? false;
             });
         }
     }

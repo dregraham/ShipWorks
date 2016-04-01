@@ -4,6 +4,7 @@ using System.Reactive.Linq;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Shipping.Editing.Rating;
+using ShipWorks.Shipping.Loading;
 
 namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
 {
@@ -29,7 +30,11 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
         public IDisposable Register(ShippingPanelViewModel viewModel)
         {
             return messages.OfType<SelectedRateChangedMessage>()
-                .Where(x => x.Sender != viewModel && x.Sender != viewModel.ShipmentViewModel)
+                .Where(x => x.Sender != viewModel && 
+                       x.Sender != viewModel.ShipmentViewModel &&
+                       viewModel.LoadedShipmentResult == ShippingPanelLoadedShipmentResult.Success &&
+                       x.RateResult.ShipmentType != ShipmentTypeCode.Amazon &&
+                       x.RateResult.ShipmentType != ShipmentTypeCode.BestRate)
                 .Subscribe(x => SelectRate(viewModel, x.RateResult));
         }
 

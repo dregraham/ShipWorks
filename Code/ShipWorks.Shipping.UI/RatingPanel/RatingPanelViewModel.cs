@@ -123,11 +123,24 @@ namespace ShipWorks.Shipping.UI.RatingPanel
                     EmptyMessage = "Unable to get rates for orders with multiple shipments.";
                     ShowEmptyMessage = true;
                 }
+                else if (message?.ShipmentAdapter?.ShipmentTypeCode == ShipmentTypeCode.Amazon ||
+                         message?.ShipmentAdapter?.ShipmentTypeCode == ShipmentTypeCode.BestRate)
+                {
+                    Footnotes = Enumerable.Empty<object>();
+                    Rates = Enumerable.Empty<RateResult>();
+                    EmptyMessage = "Please use Ship Orders to get rates for this carrier.";
+                    ShowEmptyMessage = true;
+                }
                 else
                 {
                     Rates = message.RateGroup.Rates.ToArray();
                     ShowEmptyMessage = false;
                     EmptyMessage = string.Empty;
+
+                    Footnotes = message.RateGroup.FootnoteFactories
+                        .Select(x => x.CreateViewModel(message.ShipmentAdapter))
+                        .ToList() ?? Enumerable.Empty<object>();
+                    ShowFootnotes = Footnotes.Any();
                 }
             }
             else
@@ -136,11 +149,6 @@ namespace ShipWorks.Shipping.UI.RatingPanel
                 EmptyMessage = message.ErrorMessage;
                 ShowEmptyMessage = true;
             }
-
-            Footnotes = message.RateGroup.FootnoteFactories
-                .Select(x => x.CreateViewModel(message.ShipmentAdapter))
-                .ToList() ?? Enumerable.Empty<object>();
-            ShowFootnotes = Footnotes.Any();
 
             // If we didn't get any footnotes, and no error message, and not rates,
             // show the no rates message.
