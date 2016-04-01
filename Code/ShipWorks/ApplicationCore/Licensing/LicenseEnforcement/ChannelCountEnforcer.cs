@@ -13,15 +13,13 @@ namespace ShipWorks.ApplicationCore.Licensing.LicenseEnforcement
     public class ChannelCountEnforcer : ILicenseEnforcer
     {
         private readonly IChannelLimitDlgFactory channelLimitDlgFactory;
-        private readonly ILog log;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ChannelCountEnforcer(IChannelLimitDlgFactory channelLimitDlgFactory, Func<Type, ILog> logFactory)
+        public ChannelCountEnforcer(IChannelLimitDlgFactory channelLimitDlgFactory)
         {
             this.channelLimitDlgFactory = channelLimitDlgFactory;
-            log = logFactory(typeof(ChannelCountEnforcer));
         }
 
         /// <summary>

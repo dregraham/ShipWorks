@@ -222,5 +222,11 @@ namespace ShipWorks.Editions
         /// </summary>
         [Description("Your ShipWorks account does not support a Generic File")]
         GenericFile,
+
+        /// <summary>
+        /// All the stores in Shipworks match a store in Tango.
+        /// </summary>
+        [Description("You must upgrade ShipWorks or delete these channel(s) to use Shipworks.")]
+        ClientChannelsAccountedFor
     }
 }

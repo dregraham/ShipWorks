@@ -108,6 +108,7 @@
     </Compile>
     <Compile Include="Controls\ChannelConfirmDelete\IChannelConfirmDeleteFactory.cs" />
     <Compile Include="Controls\ChannelConfirmDelete\IConfirmChannelDeleteViewModel.cs" />
+    <Compile Include="Controls\ChannelLimit\ChannelLimitBehavior\ChannelsOutOfSyncBehavior.cs" />
     <Compile Include="Controls\ChannelLimit\ChannelLimitBehavior\GenericFileBehavior.cs" />
     <Compile Include="Controls\ChannelLimit\ChannelLimitBehavior\GenericModuleBehavior.cs" />
     <Compile Include="Controls\ChannelLimit\ChannelLimitBehavior\OverChannelLimitBehavior.cs" />
