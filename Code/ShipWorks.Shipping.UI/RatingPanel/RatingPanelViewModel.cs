@@ -60,17 +60,29 @@ namespace ShipWorks.Shipping.UI.RatingPanel
             // RatesRetrievedMessage before calling LoadRates.  The following code allows us to do that.
             // See the Switch example at http://download.microsoft.com/download/C/5/D/C5D669F9-01DF-4FAF-BBA9-29C096C462DB/Rx%20HOL%20.NET.pdf
             // for more info.
-            IObservable<RatesRetrievedMessage> mergedMessages =
-                (from rateRetrievingMsg in messenger.OfType<RatesRetrievingMessage>()
-                 select messenger.OfType<RatesRetrievedMessage>()
-                                 .Where(rateRetrivedMsg => rateRetrievingMsg.RatingHash == rateRetrivedMsg.RatingHash)
-                ).Switch();
+            //IObservable<RatesRetrievedMessage> mergedMessages =
+            //    (from rateRetrievingMsg in messenger.OfType<RatesRetrievingMessage>()
+            //     select messenger.OfType<RatesRetrievedMessage>()
+            //                     .Where(rateRetrivedMsg => rateRetrievingMsg.RatingHash == rateRetrivedMsg.RatingHash)
+            //    ).Switch();
+
+            //messenger.OfType<RatesRetrievingMessage>()
+            //    .Select(GetMatchingRatesRetrievedMessage)
+            //    .Switch()
+            //    .Throttle(TimeSpan.FromMilliseconds(250), schedulerProvider.Default)
+            //    .Select(x => x)
+            //    .ObserveOn(schedulerProvider.Dispatcher)
+            //    .Subscribe(LoadRates);
+
 
             subscriptions = new CompositeDisposable(
                 messenger.OfType<RatesRetrievingMessage>()
                     .ObserveOn(schedulerProvider.Dispatcher)
                     .Subscribe(_ => ShowSpinner()),
-                mergedMessages.Throttle(TimeSpan.FromMilliseconds(250), schedulerProvider.Default)
+                messenger.OfType<RatesRetrievingMessage>()
+                    .Select(GetMatchingRatesRetrievedMessage)
+                    .Switch()
+                    .Throttle(TimeSpan.FromMilliseconds(250), schedulerProvider.Default)
                     .Select(x => x)
                     .ObserveOn(schedulerProvider.Dispatcher)
                     .Subscribe(LoadRates),
@@ -83,6 +95,15 @@ namespace ShipWorks.Shipping.UI.RatingPanel
                     .Where(_ => SelectedRate != null)
                     .Subscribe(_ => messenger.Send(new SelectedRateChangedMessage(this, SelectedRate)))
             );
+        }
+
+        /// <summary>
+        /// Get rates retrieved messages that match the rates retrieving message
+        /// </summary>
+        private IObservable<RatesRetrievedMessage> GetMatchingRatesRetrievedMessage(RatesRetrievingMessage rateRetrievingMsg)
+        {
+            return messenger.OfType<RatesRetrievedMessage>()
+               .Where(rateRetrivedMsg => rateRetrievingMsg.RatingHash == rateRetrivedMsg.RatingHash);
         }
 
         /// <summary>

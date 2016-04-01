@@ -8,6 +8,7 @@ using Interapptive.Shared.Threading;
 using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Core.Messaging;
+using ShipWorks.Core.Messaging.Messages.Shipping;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Shipping.Services;
@@ -29,7 +30,6 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
     [Trait("Category", "ContinuousIntegration")]
     public class ShippingPanelViewModelTest : IDisposable
     {
-        private ShippingPanelViewModel testObject;
         private readonly DataContext context;
         private readonly ShipmentEntity shipment;
         private IDisposable subscription;
@@ -71,10 +71,11 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         [Fact]
         public async Task CreateLabel_ReloadsShipment_WhenProcessingFails()
         {
-            testObject = context.Mock.Create<ShippingPanelViewModel>();
+            var testObject = context.Mock.Create<ShippingPanelViewModel>();
             var source = new TaskCompletionSource<ShipmentChangedMessage>();
 
-            testObject.LoadShipment(context.Mock.Create<CarrierShipmentAdapterFactory>().Get(shipment));
+            LoadOrderIntoViewModelWithShipment(testObject, shipment);
+
             subscription = Messenger.Current.OfType<ShipmentChangedMessage>().Subscribe(x => source.SetResult(x));
 
             testObject.CreateLabelCommand.Execute(null);
@@ -88,12 +89,12 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         [Fact]
         public void Populate_DoesNotModifyShipmentDestination_WhenPreviousShipmentWasLoaded()
         {
-            testObject = context.Mock.Create<ShippingPanelViewModel>();
+            var testObject = context.Mock.Create<ShippingPanelViewModel>();
             testObject.Destination.StateProvCode = "Missouri";
 
             Modify.Shipment(shipment).Set(x => x.ShipStateProvCode, "MO").Save();
 
-            testObject.LoadShipment(context.Mock.Create<CarrierShipmentAdapterFactory>().Get(shipment));
+            LoadOrderIntoViewModelWithShipment(testObject, shipment);
 
             Assert.Equal("MO", shipment.ShipStateProvCode);
         }
@@ -101,12 +102,12 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         [Fact]
         public void Populate_DoesNotModifyShipmentOrigin_WhenPreviousShipmentWasLoaded()
         {
-            testObject = context.Mock.Create<ShippingPanelViewModel>();
+            var testObject = context.Mock.Create<ShippingPanelViewModel>();
             testObject.Origin.StateProvCode = "Missouri";
 
             Modify.Shipment(shipment).Set(x => x.OriginStateProvCode, "MO").Save();
 
-            testObject.LoadShipment(context.Mock.Create<CarrierShipmentAdapterFactory>().Get(shipment));
+            LoadOrderIntoViewModelWithShipment(testObject, shipment);
 
             Assert.Equal("MO", shipment.OriginStateProvCode);
         }
@@ -114,7 +115,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         [Fact]
         public void Populate_LoadsCustoms_WhenShipmentIsInternational()
         {
-            testObject = context.Mock.Create<ShippingPanelViewModel>();
+            var testObject = context.Mock.Create<ShippingPanelViewModel>();
 
             Modify.Shipment(shipment).AsPostal(x => x.AsUsps())
                 .WithCustomsItem()
@@ -122,7 +123,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
                 .Set(x => x.ShipCountryCode, "UK")
                 .Save();
 
-            testObject.LoadShipment(context.Mock.Create<CarrierShipmentAdapterFactory>().Get(shipment));
+            LoadOrderIntoViewModelWithShipment(testObject, shipment);
 
             Assert.Equal(1, (testObject.ShipmentViewModel as ShipmentViewModel).CustomsItems.Count);
         }
@@ -130,7 +131,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         [Fact]
         public void LoadsCustoms_WhenShipmentSwitchesFromDomesticToInternational()
         {
-            testObject = context.Mock.Create<ShippingPanelViewModel>();
+            var testObject = context.Mock.Create<ShippingPanelViewModel>();
 
             Modify.Shipment(shipment).AsPostal(x => x.AsUsps())
                 .WithCustomsItem()
@@ -138,13 +139,22 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
                 .Set(x => x.ShipCountryCode, "US")
                 .Save();
 
-            testObject.LoadShipment(context.Mock.Create<CarrierShipmentAdapterFactory>().Get(shipment));
+            LoadOrderIntoViewModelWithShipment(testObject, shipment);
 
             Assert.Null((testObject.ShipmentViewModel as ShipmentViewModel).CustomsItems);
 
             testObject.Destination.CountryCode = "UK";
 
             Assert.Equal(1, (testObject.ShipmentViewModel as ShipmentViewModel).CustomsItems.Count);
+        }
+
+        private void LoadOrderIntoViewModelWithShipment(ShippingPanelViewModel viewModel, ShipmentEntity shipmentToLoad)
+        {
+            viewModel.LoadOrder(new OrderSelectionChangedMessage(this, new IOrderSelection[] {
+                new LoadedOrderSelection(shipmentToLoad.Order, new [] {
+                    context.Mock.Create<CarrierShipmentAdapterFactory>().Get(shipmentToLoad)
+                }, ShippingAddressEditStateType.Editable)
+            }));
         }
 
         public void Dispose()
