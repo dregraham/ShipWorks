@@ -3,6 +3,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.OnTrac.Enums;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Services;
+using ShipWorks.Stores;
 
 namespace ShipWorks.Shipping.Carriers.OnTrac
 {
@@ -22,7 +23,9 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         /// <summary>
         /// Constructor
         /// </summary>
-        public OnTracShipmentAdapter(ShipmentEntity shipment, IShipmentTypeManager shipmentTypeManager, ICustomsManager customsManager) : base(shipment, shipmentTypeManager, customsManager)
+        public OnTracShipmentAdapter(ShipmentEntity shipment, IShipmentTypeManager shipmentTypeManager,
+            ICustomsManager customsManager, IStoreManager storeManager) :
+            base(shipment, shipmentTypeManager, customsManager, storeManager)
         {
             MethodConditions.EnsureArgumentIsNotNull(shipment.OnTrac, nameof(shipment.OnTrac));
             MethodConditions.EnsureArgumentIsNotNull(customsManager, nameof(customsManager));

@@ -9,7 +9,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.iParcel;
 using ShipWorks.Shipping.Carriers.iParcel.Enums;
 using ShipWorks.Shipping.Editing.Rating;
-using ShipWorks.Shipping.Services;
+using ShipWorks.Stores;
 using ShipWorks.Tests.Shared;
 using Xunit;
 
@@ -21,10 +21,6 @@ namespace ShipWorks.Shipping.Tests.Carriers.iParcel
     {
         readonly ShipmentEntity shipment;
         private readonly AutoMock mock;
-        private readonly Mock<IShipmentTypeManager> shipmentTypeManager;
-        private readonly Mock<ICustomsManager> customsManager;
-        private readonly Mock<iParcelShipmentType> shipmentTypeMock;
-        private readonly ShipmentType shipmentType;
 
         public iParcelShipmentAdapterTest()
         {
@@ -42,36 +38,30 @@ namespace ShipWorks.Shipping.Tests.Carriers.iParcel
                     Service = (int) iParcelServiceType.Immediate
                 }
             };
-
-            customsManager = new Mock<ICustomsManager>();
-            customsManager.Setup(c => c.EnsureCustomsLoaded(It.IsAny<IEnumerable<ShipmentEntity>>())).Returns(new Dictionary<ShipmentEntity, Exception>());
-
-            shipmentTypeMock = new Mock<iParcelShipmentType>(MockBehavior.Strict);
-            shipmentTypeMock.Setup(b => b.UpdateDynamicShipmentData(shipment)).Verifiable();
-            shipmentTypeMock.Setup(b => b.UpdateTotalWeight(shipment)).Verifiable();
-            shipmentTypeMock.Setup(b => b.SupportsMultiplePackages).Returns(() => shipmentType.SupportsMultiplePackages);
-            shipmentTypeMock.Setup(b => b.IsDomestic(It.IsAny<ShipmentEntity>())).Returns(() => shipmentType.IsDomestic(shipment));
-
-            shipmentTypeManager = new Mock<IShipmentTypeManager>();
-            shipmentTypeManager.Setup(x => x.Get(shipment)).Returns(shipmentTypeMock.Object);
-
-            shipmentType = mock.Create<iParcelShipmentType>();
         }
 
         [Fact]
         public void Constructor_ThrowsArgumentNullExcpetion_WhenShipmentIsNull()
         {
-            Assert.Throws<ArgumentNullException>(() => new iParcelShipmentAdapter(null, shipmentTypeManager.Object, customsManager.Object));
-            Assert.Throws<ArgumentNullException>(() => new iParcelShipmentAdapter(new ShipmentEntity(), shipmentTypeManager.Object, customsManager.Object));
-            Assert.Throws<ArgumentNullException>(() => new iParcelShipmentAdapter(shipment, null, customsManager.Object));
-            Assert.Throws<ArgumentNullException>(() => new iParcelShipmentAdapter(shipment, shipmentTypeManager.Object, null));
+            Assert.Throws<ArgumentNullException>(() =>
+                new iParcelShipmentAdapter(null, mock.Create<IShipmentTypeManager>(),
+                    mock.Create<ICustomsManager>(), mock.Create<IStoreManager>()));
+            Assert.Throws<ArgumentNullException>(() =>
+                new iParcelShipmentAdapter(new ShipmentEntity(), mock.Create<IShipmentTypeManager>(),
+                    mock.Create<ICustomsManager>(), mock.Create<IStoreManager>()));
+            Assert.Throws<ArgumentNullException>(() =>
+                new iParcelShipmentAdapter(shipment, null,
+                    mock.Create<ICustomsManager>(), mock.Create<IStoreManager>()));
+            Assert.Throws<ArgumentNullException>(() =>
+                new iParcelShipmentAdapter(shipment, mock.Create
+                    <IShipmentTypeManager>(), null, mock.Create<IStoreManager>()));
         }
 
         [Fact]
         public void AccountId_ReturnsShipmentValue()
         {
             shipment.IParcel.IParcelAccountID = 12;
-            var testObject = new iParcelShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            var testObject = mock.Create<iParcelShipmentAdapter>(TypedParameter.From(shipment));
             Assert.Equal(12, testObject.AccountId);
         }
 
@@ -81,7 +71,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.iParcel
         [InlineData(10009238)]
         public void AccountId_StoresSpecifiedValue_WhenValueIsValid(long value)
         {
-            var testObject = new iParcelShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            var testObject = mock.Create<iParcelShipmentAdapter>(TypedParameter.From(shipment));
             testObject.AccountId = value;
             Assert.Equal(value, shipment.IParcel.IParcelAccountID);
         }
@@ -89,7 +79,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.iParcel
         [Fact]
         public void AccountId_StoresZero_WhenValueIsNull()
         {
-            var testObject = new iParcelShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            var testObject = mock.Create<iParcelShipmentAdapter>(TypedParameter.From(shipment));
             testObject.AccountId = null;
             Assert.Equal(0, shipment.IParcel.IParcelAccountID);
         }
@@ -97,21 +87,21 @@ namespace ShipWorks.Shipping.Tests.Carriers.iParcel
         [Fact]
         public void Shipment_IsNotNull()
         {
-            var testObject = new iParcelShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            var testObject = mock.Create<iParcelShipmentAdapter>(TypedParameter.From(shipment));
             Assert.NotNull(testObject.Shipment);
         }
 
         [Fact]
         public void ShipmentTypeCode_IsIParcel()
         {
-            var testObject = new iParcelShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            var testObject = mock.Create<iParcelShipmentAdapter>(TypedParameter.From(shipment));
             Assert.Equal(ShipmentTypeCode.iParcel, testObject.ShipmentTypeCode);
         }
 
         [Fact]
         public void SupportsAccounts_IsTrue()
         {
-            iParcelShipmentAdapter testObject = new iParcelShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            var testObject = mock.Create<iParcelShipmentAdapter>(TypedParameter.From(shipment));
 
             Assert.True(testObject.SupportsAccounts);
         }
@@ -119,18 +109,24 @@ namespace ShipWorks.Shipping.Tests.Carriers.iParcel
         [Fact]
         public void SupportsMultiplePackages_IsTrue()
         {
-            iParcelShipmentAdapter testObject = new iParcelShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            mock.WithShipmentTypeFromShipmentManager(x => x.Setup(b => b.SupportsMultiplePackages).Returns(true));
+
+            var testObject = mock.Create<iParcelShipmentAdapter>(TypedParameter.From(shipment));
+
             Assert.True(testObject.SupportsMultiplePackages);
         }
 
-        [Fact]
-        public void SupportsMultiplePackages_DomesticIsTrue_WhenShipCountryIsUs()
+        [Theory]
+        [InlineData(true, true)]
+        [InlineData(false, false)]
+        public void SupportsMultiplePackages_DomesticIsTrue_WhenShipCountryIsUs(bool isDomestic, bool expected)
         {
-            shipment.OriginCountryCode = "US";
-            shipment.ShipCountryCode = "US";
+            mock.WithShipmentTypeFromShipmentManager(x =>
+                x.Setup(b => b.IsDomestic(It.IsAny<ShipmentEntity>())).Returns(isDomestic));
 
-            iParcelShipmentAdapter testObject = new iParcelShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
-            Assert.True(testObject.IsDomestic);
+            var testObject = mock.Create<iParcelShipmentAdapter>(TypedParameter.From(shipment));
+
+            Assert.Equal(expected, testObject.IsDomestic);
         }
 
         [Fact]
@@ -139,20 +135,21 @@ namespace ShipWorks.Shipping.Tests.Carriers.iParcel
             shipment.OriginCountryCode = "US";
             shipment.ShipCountryCode = "CA";
 
-            iParcelShipmentAdapter testObject = new iParcelShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            var testObject = mock.Create<iParcelShipmentAdapter>(TypedParameter.From(shipment));
             Assert.False(testObject.IsDomestic);
         }
 
         [Fact]
         public void UpdateDynamicData_DelegatesToShipmentTypeAndCustomsManager()
         {
-            iParcelShipmentAdapter testObject = new iParcelShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            var shipmentType = mock.WithShipmentTypeFromShipmentManager();
+
+            var testObject = mock.Create<iParcelShipmentAdapter>(TypedParameter.From(shipment));
             testObject.UpdateDynamicData();
 
-            shipmentTypeMock.Verify(b => b.UpdateDynamicShipmentData(It.IsAny<ShipmentEntity>()), Times.Once);
-            shipmentTypeMock.Verify(b => b.UpdateTotalWeight(It.IsAny<ShipmentEntity>()), Times.Once);
-
-            customsManager.Verify(b => b.EnsureCustomsLoaded(It.IsAny<IEnumerable<ShipmentEntity>>()), Times.Once);
+            shipmentType.Verify(b => b.UpdateDynamicShipmentData(shipment));
+            shipmentType.Verify(b => b.UpdateTotalWeight(shipment));
+            mock.Mock<ICustomsManager>().Verify(x => x.EnsureCustomsLoaded(new[] { shipment }));
         }
 
         [Fact]
@@ -161,9 +158,10 @@ namespace ShipWorks.Shipping.Tests.Carriers.iParcel
             Dictionary<ShipmentEntity, Exception> errors = new Dictionary<ShipmentEntity, Exception>();
             errors.Add(shipment, new Exception("test"));
 
-            customsManager.Setup(c => c.EnsureCustomsLoaded(It.IsAny<IEnumerable<ShipmentEntity>>())).Returns(errors);
+            mock.Mock<ICustomsManager>()
+                .Setup(c => c.EnsureCustomsLoaded(It.IsAny<IEnumerable<ShipmentEntity>>())).Returns(errors);
 
-            iParcelShipmentAdapter testObject = new iParcelShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            var testObject = mock.Create<iParcelShipmentAdapter>(TypedParameter.From(shipment));
 
             Assert.NotNull(testObject.UpdateDynamicData());
             Assert.Equal(1, testObject.UpdateDynamicData().Count);
@@ -172,7 +170,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.iParcel
         [Fact]
         public void SupportsPackageTypes_IsFalse()
         {
-            ICarrierShipmentAdapter testObject = new iParcelShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            var testObject = mock.Create<iParcelShipmentAdapter>(TypedParameter.From(shipment));
 
             Assert.False(testObject.SupportsPackageTypes);
         }
@@ -180,14 +178,14 @@ namespace ShipWorks.Shipping.Tests.Carriers.iParcel
         [Fact]
         public void ShipDate_ReturnsShipmentValue()
         {
-            ICarrierShipmentAdapter testObject = new iParcelShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            var testObject = mock.Create<iParcelShipmentAdapter>(TypedParameter.From(shipment));
             Assert.Equal(shipment.ShipDate, testObject.ShipDate);
         }
 
         [Fact]
         public void ShipDate_IsUpdated()
         {
-            ICarrierShipmentAdapter testObject = new iParcelShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            var testObject = mock.Create<iParcelShipmentAdapter>(TypedParameter.From(shipment));
 
             testObject.ShipDate = testObject.ShipDate.AddDays(1);
 
@@ -197,14 +195,14 @@ namespace ShipWorks.Shipping.Tests.Carriers.iParcel
         [Fact]
         public void ServiceType_ReturnsShipmentValue()
         {
-            ICarrierShipmentAdapter testObject = new iParcelShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            var testObject = mock.Create<iParcelShipmentAdapter>(TypedParameter.From(shipment));
             Assert.Equal(shipment.IParcel.Service, testObject.ServiceType);
         }
 
         [Fact]
         public void ServiceType_IsUpdated()
         {
-            ICarrierShipmentAdapter testObject = new iParcelShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            var testObject = mock.Create<iParcelShipmentAdapter>(TypedParameter.From(shipment));
 
             shipment.IParcel.Service = (int) iParcelServiceType.Immediate;
             testObject.ServiceType = (int) iParcelServiceType.Preferred;
@@ -218,13 +216,20 @@ namespace ShipWorks.Shipping.Tests.Carriers.iParcel
         [InlineData(iParcelServiceType.SaverDeferred)]
         public void UpdateServiceFromRate_SetsService_WhenTagIsValid(iParcelServiceType serviceType)
         {
-            shipmentTypeManager.Setup(x => x.Get(shipment)).Returns(shipmentType);
-            var testObject = new iParcelShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            mock.WithShipmentTypeFromShipmentManager(x =>
+            {
+                x.Setup(b => b.SupportsGetRates).Returns(true);
+                x.Setup(b => b.ShipmentTypeCode).Returns(ShipmentTypeCode.iParcel);
+            });
+
+            var testObject = mock.Create<iParcelShipmentAdapter>(TypedParameter.From(shipment));
+
             testObject.SelectServiceFromRate(new RateResult("Foo", "1", 1M, (int) serviceType)
             {
                 Selectable = true,
                 ShipmentType = ShipmentTypeCode.iParcel
             });
+
             Assert.Equal((int) serviceType, shipment.IParcel.Service);
         }
 
@@ -234,13 +239,19 @@ namespace ShipWorks.Shipping.Tests.Carriers.iParcel
         [InlineData(iParcelServiceType.SaverDeferred)]
         public void UpdateServiceFromRate_SetsService_WhenTagIsValidServiceType(iParcelServiceType serviceType)
         {
-            shipmentTypeManager.Setup(x => x.Get(shipment)).Returns(shipmentType);
-            var testObject = new iParcelShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            mock.WithShipmentTypeFromShipmentManager(x =>
+            {
+                x.Setup(b => b.SupportsGetRates).Returns(true);
+                x.Setup(b => b.ShipmentTypeCode).Returns(ShipmentTypeCode.iParcel);
+            });
+            var testObject = mock.Create<iParcelShipmentAdapter>(TypedParameter.From(shipment));
+
             testObject.SelectServiceFromRate(new RateResult("Foo", "1", 1M, serviceType)
             {
                 Selectable = true,
                 ShipmentType = ShipmentTypeCode.iParcel
             });
+
             Assert.Equal((int) serviceType, shipment.IParcel.Service);
         }
 
@@ -250,13 +261,19 @@ namespace ShipWorks.Shipping.Tests.Carriers.iParcel
         [InlineData(iParcelServiceType.SaverDeferred)]
         public void UpdateServiceFromRate_SetsService_WhenTagIsValidRateSelection(iParcelServiceType serviceType)
         {
-            shipmentTypeManager.Setup(x => x.Get(shipment)).Returns(shipmentType);
-            var testObject = new iParcelShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            mock.WithShipmentTypeFromShipmentManager(x =>
+            {
+                x.Setup(b => b.SupportsGetRates).Returns(true);
+                x.Setup(b => b.ShipmentTypeCode).Returns(ShipmentTypeCode.iParcel);
+            });
+            var testObject = mock.Create<iParcelShipmentAdapter>(TypedParameter.From(shipment));
+
             testObject.SelectServiceFromRate(new RateResult("Foo", "1", 1M, new iParcelRateSelection(serviceType))
             {
                 Selectable = true,
                 ShipmentType = ShipmentTypeCode.iParcel
             });
+
             Assert.Equal((int) serviceType, shipment.IParcel.Service);
         }
 
@@ -265,21 +282,27 @@ namespace ShipWorks.Shipping.Tests.Carriers.iParcel
         [InlineData("Foo")]
         public void UpdateServiceFromRate_DoesNotSetService_WhenTagIsNotValid(string value)
         {
-            shipmentTypeManager.Setup(x => x.Get(shipment)).Returns(shipmentType);
+            mock.WithShipmentTypeFromShipmentManager(x =>
+            {
+                x.Setup(b => b.SupportsGetRates).Returns(true);
+                x.Setup(b => b.ShipmentTypeCode).Returns(ShipmentTypeCode.iParcel);
+            });
             shipment.IParcel.Service = (int) iParcelServiceType.SaverDeferred;
-            var testObject = new iParcelShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            var testObject = mock.Create<iParcelShipmentAdapter>(TypedParameter.From(shipment));
+
             testObject.SelectServiceFromRate(new RateResult("Foo", "1", 1M, value)
             {
                 Selectable = true,
                 ShipmentType = ShipmentTypeCode.iParcel
             });
+
             Assert.Equal((int) iParcelServiceType.SaverDeferred, shipment.IParcel.Service);
         }
 
         [Fact]
         public void AddPackage_AddsNewPackageToList()
         {
-            var testObject = new iParcelShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            var testObject = mock.Create<iParcelShipmentAdapter>(TypedParameter.From(shipment));
             testObject.AddPackage();
 
             Assert.Equal(1, shipment.IParcel.Packages.Count);
@@ -288,7 +311,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.iParcel
         [Fact]
         public void AddPackage_ReturnsPackageAdapter_ForNewPackage()
         {
-            var testObject = new iParcelShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            var testObject = mock.Create<iParcelShipmentAdapter>(TypedParameter.From(shipment));
             var newPackage = testObject.AddPackage();
 
             Assert.NotNull(newPackage);
@@ -297,20 +320,22 @@ namespace ShipWorks.Shipping.Tests.Carriers.iParcel
         [Fact]
         public void AddPackage_DelegatesToShipmentType_WhenNewPackageIsAdded()
         {
-            var testObject = new iParcelShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            Mock<ShipmentType> shipmentType = mock.WithShipmentTypeFromShipmentManager();
+
+            var testObject = mock.Create<iParcelShipmentAdapter>(TypedParameter.From(shipment));
             testObject.AddPackage();
 
-            shipmentTypeMock.Verify(x => x.UpdateDynamicShipmentData(shipment));
-            shipmentTypeMock.Verify(x => x.UpdateTotalWeight(shipment));
+            shipmentType.Verify(b => b.UpdateDynamicShipmentData(shipment));
+            shipmentType.Verify(b => b.UpdateTotalWeight(shipment));
         }
 
         [Fact]
         public void AddPackage_DelegatesToCustomsManager_WhenNewPackageIsAdded()
         {
-            var testObject = new iParcelShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            var testObject = mock.Create<iParcelShipmentAdapter>(TypedParameter.From(shipment));
             testObject.AddPackage();
 
-            customsManager.Verify(x => x.EnsureCustomsLoaded(new[] { shipment }));
+            mock.Mock<ICustomsManager>().Verify(x => x.EnsureCustomsLoaded(new[] { shipment }));
         }
 
         [Fact]
@@ -322,7 +347,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.iParcel
             shipment.IParcel.Packages.Add(package);
             shipment.IParcel.Packages.Add(new IParcelPackageEntity(3));
 
-            var testObject = new iParcelShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            var testObject = mock.Create<iParcelShipmentAdapter>(TypedParameter.From(shipment));
             testObject.DeletePackage(new iParcelPackageAdapter(shipment, package, 1));
 
             Assert.DoesNotContain(package, shipment.IParcel.Packages);
@@ -335,7 +360,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.iParcel
 
             shipment.IParcel.Packages.Add(package);
 
-            var testObject = new iParcelShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            var testObject = mock.Create<iParcelShipmentAdapter>(TypedParameter.From(shipment));
             testObject.DeletePackage(new iParcelPackageAdapter(shipment, package, 1));
 
             Assert.Contains(package, shipment.IParcel.Packages);
@@ -350,7 +375,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.iParcel
             shipment.IParcel.Packages.Add(package);
             shipment.IParcel.Packages.Add(package2);
 
-            var testObject = new iParcelShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            var testObject = mock.Create<iParcelShipmentAdapter>(TypedParameter.From(shipment));
             testObject.DeletePackage(new iParcelPackageAdapter(shipment, new IParcelPackageEntity(12), 1));
 
             Assert.Contains(package, shipment.IParcel.Packages);
@@ -365,11 +390,16 @@ namespace ShipWorks.Shipping.Tests.Carriers.iParcel
             shipment.IParcel.Packages.Add(package);
             shipment.IParcel.Packages.Add(new IParcelPackageEntity(3));
 
-            var testObject = new iParcelShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            var shipmentType = mock.WithShipmentTypeFromShipmentManager(x =>
+            {
+                x.SetupGet(b => b.SupportsMultiplePackages).Returns(true);
+            });
+
+            var testObject = mock.Create<iParcelShipmentAdapter>(TypedParameter.From(shipment));
             testObject.DeletePackage(new iParcelPackageAdapter(shipment, package, 1));
 
-            shipmentTypeMock.Verify(x => x.UpdateDynamicShipmentData(shipment));
-            shipmentTypeMock.Verify(x => x.UpdateTotalWeight(shipment));
+            shipmentType.Verify(b => b.UpdateDynamicShipmentData(shipment));
+            shipmentType.Verify(b => b.UpdateTotalWeight(shipment));
         }
 
         [Fact]
@@ -380,10 +410,10 @@ namespace ShipWorks.Shipping.Tests.Carriers.iParcel
             shipment.IParcel.Packages.Add(package);
             shipment.IParcel.Packages.Add(new IParcelPackageEntity(3));
 
-            var testObject = new iParcelShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            var testObject = mock.Create<iParcelShipmentAdapter>(TypedParameter.From(shipment));
             testObject.DeletePackage(new iParcelPackageAdapter(shipment, package, 1));
 
-            customsManager.Verify(x => x.EnsureCustomsLoaded(new[] { shipment }));
+            mock.Mock<ICustomsManager>().Verify(x => x.EnsureCustomsLoaded(new[] { shipment }));
         }
 
         [Fact]
@@ -394,7 +424,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.iParcel
             shipment.IParcel.Packages.Add(package);
             shipment.IParcel.Packages.Add(new IParcelPackageEntity(3));
 
-            var testObject = new iParcelShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            var testObject = mock.Create<iParcelShipmentAdapter>(TypedParameter.From(shipment));
             testObject.DeletePackage(new iParcelPackageAdapter(shipment, package, 1));
 
             Assert.Contains(package, shipment.IParcel.Packages.RemovedEntitiesTracker.OfType<IParcelPackageEntity>());

@@ -7,7 +7,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Editing.Rating;
-using ShipWorks.Shipping.Services;
+using ShipWorks.Stores;
 using ShipWorks.Tests.Shared;
 using Xunit;
 
@@ -17,15 +17,10 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
     {
         readonly AutoMock mock;
         readonly ShipmentEntity shipment;
-        private readonly Mock<IShipmentTypeManager> shipmentTypeManager;
-        private readonly Mock<ICustomsManager> customsManager;
-        private readonly Mock<UspsShipmentType> shipmentTypeMock;
-        private readonly ShipmentType shipmentType;
 
         public UspsShipmentAdapterTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
-            shipmentType = new UspsShipmentType();
             shipment = new ShipmentEntity
             {
                 ShipmentTypeCode = ShipmentTypeCode.Usps,
@@ -40,30 +35,25 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
                     Usps = new UspsShipmentEntity()
                 }
             };
-
-            customsManager = new Mock<ICustomsManager>();
-            customsManager.Setup(c => c.EnsureCustomsLoaded(It.IsAny<IEnumerable<ShipmentEntity>>())).Returns(new Dictionary<ShipmentEntity, Exception>());
-
-            shipmentTypeMock = new Mock<UspsShipmentType>(MockBehavior.Strict);
-            shipmentTypeMock.Setup(b => b.UpdateDynamicShipmentData(shipment)).Verifiable();
-            shipmentTypeMock.Setup(b => b.UpdateTotalWeight(shipment)).Verifiable();
-            shipmentTypeMock.Setup(b => b.SupportsMultiplePackages).Returns(() => shipmentType.SupportsMultiplePackages);
-            shipmentTypeMock.Setup(b => b.IsDomestic(It.IsAny<ShipmentEntity>())).Returns(() => shipmentType.IsDomestic(shipment));
-            shipmentTypeMock.Setup(b => b.ShipmentTypeCode).Returns(() => shipmentType.ShipmentTypeCode);
-
-            shipmentTypeManager = new Mock<IShipmentTypeManager>();
-            shipmentTypeManager.Setup(x => x.Get(shipment)).Returns(shipmentTypeMock.Object);
         }
 
         [Fact]
         public void Constructor_ThrowsArgumentNullExcpetion_WhenShipmentIsNull()
         {
-            Assert.Throws<ArgumentNullException>(() => new UspsShipmentAdapter(null, shipmentTypeManager.Object, customsManager.Object));
-            Assert.Throws<ArgumentNullException>(() => new UspsShipmentAdapter(new ShipmentEntity(), shipmentTypeManager.Object, customsManager.Object));
-            Assert.Throws<ArgumentNullException>(() => new UspsShipmentAdapter(new ShipmentEntity { Postal = new PostalShipmentEntity() }, shipmentTypeManager.Object, customsManager.Object));
+            Assert.Throws<ArgumentNullException>(() =>
+                new UspsShipmentAdapter(null, mock.Create<IShipmentTypeManager>(),
+                    mock.Create<ICustomsManager>(), mock.Create<IStoreManager>()));
+            Assert.Throws<ArgumentNullException>(() =>
+                new UspsShipmentAdapter(new ShipmentEntity(), mock.Create<IShipmentTypeManager>(),
+                    mock.Create<ICustomsManager>(), mock.Create<IStoreManager>()));
+            Assert.Throws<ArgumentNullException>(() =>
+                new UspsShipmentAdapter(new ShipmentEntity { Postal = new PostalShipmentEntity() }, mock.Create<IShipmentTypeManager>(),
+                    mock.Create<ICustomsManager>(), mock.Create<IStoreManager>()));
 
-            Assert.Throws<ArgumentNullException>(() => new UspsShipmentAdapter(shipment, null, customsManager.Object));
-            Assert.Throws<ArgumentNullException>(() => new UspsShipmentAdapter(shipment, shipmentTypeManager.Object, null));
+            Assert.Throws<ArgumentNullException>(() =>
+                new UspsShipmentAdapter(shipment, null,
+                    mock.Create<ICustomsManager>(), mock.Create<IStoreManager>()));
+            Assert.Throws<ArgumentNullException>(() => new UspsShipmentAdapter(shipment, mock.Create<IShipmentTypeManager>(), null, mock.Create<IStoreManager>()));
 
         }
 
@@ -71,7 +61,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
         public void AccountId_ReturnsShipmentValue()
         {
             shipment.Postal.Usps.UspsAccountID = 12;
-            var testObject = new UspsShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            var testObject = mock.Create<UspsShipmentAdapter>(TypedParameter.From(shipment));
             Assert.Equal(12, testObject.AccountId);
         }
 
@@ -81,7 +71,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
         [InlineData(10009238)]
         public void AccountId_StoresSpecifiedValue_WhenValueIsValid(long value)
         {
-            var testObject = new UspsShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            var testObject = mock.Create<UspsShipmentAdapter>(TypedParameter.From(shipment));
             testObject.AccountId = value;
             Assert.Equal(value, shipment.Postal.Usps.UspsAccountID);
         }
@@ -89,7 +79,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
         [Fact]
         public void AccountId_StoresZero_WhenValueIsNull()
         {
-            var testObject = new UspsShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            var testObject = mock.Create<UspsShipmentAdapter>(TypedParameter.From(shipment));
             testObject.AccountId = null;
             Assert.Equal(0, shipment.Postal.Usps.UspsAccountID);
         }
@@ -97,14 +87,14 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
         [Fact]
         public void Shipment_IsNotNull()
         {
-            var testObject = new UspsShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            var testObject = mock.Create<UspsShipmentAdapter>(TypedParameter.From(shipment));
             Assert.NotNull(testObject.Shipment);
         }
 
         [Fact]
         public void ShipmentTypeCode_IsUsps()
         {
-            var testObject = new UspsShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            var testObject = mock.Create<UspsShipmentAdapter>(TypedParameter.From(shipment));
             Assert.Equal(ShipmentTypeCode.Usps, testObject.ShipmentTypeCode);
         }
 
@@ -112,14 +102,14 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
         public void ShipmentTypeCode_IsExpress1Usps()
         {
             shipment.ShipmentTypeCode = ShipmentTypeCode.Express1Usps;
-            var testObject = new UspsShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            var testObject = mock.Create<UspsShipmentAdapter>(TypedParameter.From(shipment));
             Assert.Equal(ShipmentTypeCode.Express1Usps, testObject.ShipmentTypeCode);
         }
 
         [Fact]
         public void SupportsAccounts_IsTrue()
         {
-            UspsShipmentAdapter testObject = new UspsShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            var testObject = mock.Create<UspsShipmentAdapter>(TypedParameter.From(shipment));
 
             Assert.True(testObject.SupportsAccounts);
         }
@@ -127,40 +117,34 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
         [Fact]
         public void SupportsMultiplePackages_IsFalse()
         {
-            UspsShipmentAdapter testObject = new UspsShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            var testObject = mock.Create<UspsShipmentAdapter>(TypedParameter.From(shipment));
             Assert.False(testObject.SupportsMultiplePackages);
         }
 
-        [Fact]
-        public void SupportsMultiplePackages_DomesticIsTrue_WhenShipCountryIsUs()
+        [Theory]
+        [InlineData(true, true)]
+        [InlineData(true, true)]
+        public void IsDomestic_DelegatesToIsDomestic_OnShipmentType(bool isDomestic, bool expected)
         {
-            shipment.OriginCountryCode = "US";
-            shipment.ShipCountryCode = "US";
+            mock.WithShipmentTypeFromShipmentManager(x => x.Setup(b => b.IsDomestic(shipment)).Returns(isDomestic));
 
-            UspsShipmentAdapter testObject = new UspsShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
-            Assert.True(testObject.IsDomestic);
-        }
+            var testObject = mock.Create<UspsShipmentAdapter>(TypedParameter.From(shipment));
 
-        [Fact]
-        public void SupportsMultiplePackages_DomesticIsFalse_WhenShipCountryIsCa()
-        {
-            shipment.OriginCountryCode = "US";
-            shipment.ShipCountryCode = "CA";
-
-            UspsShipmentAdapter testObject = new UspsShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
-            Assert.False(testObject.IsDomestic);
+            Assert.Equal(expected, testObject.IsDomestic);
         }
 
         [Fact]
         public void UpdateDynamicData_DelegatesToShipmentTypeAndCustomsManager()
         {
-            UspsShipmentAdapter testObject = new UspsShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            var shipmentType = mock.WithShipmentTypeFromShipmentManager();
+
+            var testObject = mock.Create<UspsShipmentAdapter>(TypedParameter.From(shipment));
             testObject.UpdateDynamicData();
 
-            shipmentTypeMock.Verify(b => b.UpdateDynamicShipmentData(It.IsAny<ShipmentEntity>()), Times.Once);
-            shipmentTypeMock.Verify(b => b.UpdateTotalWeight(It.IsAny<ShipmentEntity>()), Times.Once);
+            shipmentType.Verify(b => b.UpdateDynamicShipmentData(It.IsAny<ShipmentEntity>()), Times.Once);
+            shipmentType.Verify(b => b.UpdateTotalWeight(It.IsAny<ShipmentEntity>()), Times.Once);
 
-            customsManager.Verify(b => b.EnsureCustomsLoaded(It.IsAny<IEnumerable<ShipmentEntity>>()), Times.Once);
+            mock.Mock<ICustomsManager>().Verify(b => b.EnsureCustomsLoaded(It.IsAny<IEnumerable<ShipmentEntity>>()));
         }
 
         [Fact]
@@ -169,9 +153,10 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
             Dictionary<ShipmentEntity, Exception> errors = new Dictionary<ShipmentEntity, Exception>();
             errors.Add(shipment, new Exception("test"));
 
-            customsManager.Setup(c => c.EnsureCustomsLoaded(It.IsAny<IEnumerable<ShipmentEntity>>())).Returns(errors);
+            mock.Mock<ICustomsManager>()
+                .Setup(c => c.EnsureCustomsLoaded(It.IsAny<IEnumerable<ShipmentEntity>>())).Returns(errors);
 
-            UspsShipmentAdapter testObject = new UspsShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            var testObject = mock.Create<UspsShipmentAdapter>(TypedParameter.From(shipment));
 
             Assert.NotNull(testObject.UpdateDynamicData());
             Assert.Equal(1, testObject.UpdateDynamicData().Count);
@@ -180,7 +165,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
         [Fact]
         public void SupportsPackageTypes_IsTrue()
         {
-            ICarrierShipmentAdapter testObject = new UspsShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            var testObject = mock.Create<UspsShipmentAdapter>(TypedParameter.From(shipment));
 
             Assert.True(testObject.SupportsPackageTypes);
         }
@@ -188,14 +173,14 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
         [Fact]
         public void ShipDate_ReturnsShipmentValue()
         {
-            ICarrierShipmentAdapter testObject = new UspsShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            var testObject = mock.Create<UspsShipmentAdapter>(TypedParameter.From(shipment));
             Assert.Equal(shipment.ShipDate, testObject.ShipDate);
         }
 
         [Fact]
         public void ShipDate_IsUpdated()
         {
-            ICarrierShipmentAdapter testObject = new UspsShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            var testObject = mock.Create<UspsShipmentAdapter>(TypedParameter.From(shipment));
 
             testObject.ShipDate = testObject.ShipDate.AddDays(1);
 
@@ -205,14 +190,14 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
         [Fact]
         public void ServiceType_ReturnsShipmentValue()
         {
-            ICarrierShipmentAdapter testObject = new UspsShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            var testObject = mock.Create<UspsShipmentAdapter>(TypedParameter.From(shipment));
             Assert.Equal(shipment.Postal.Service, testObject.ServiceType);
         }
 
         [Fact]
         public void ServiceType_IsUpdated()
         {
-            ICarrierShipmentAdapter testObject = new UspsShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            var testObject = mock.Create<UspsShipmentAdapter>(TypedParameter.From(shipment));
 
             shipment.Postal.Service = (int) PostalServiceType.FirstClass;
             testObject.ServiceType = (int) PostalServiceType.ParcelSelect;
@@ -226,8 +211,12 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
         [InlineData(PostalServiceType.ExpressMail, PostalConfirmationType.None)]
         public void UpdateServiceFromRate_SetsService_WhenTagIsValid(PostalServiceType serviceType, PostalConfirmationType confirmationType)
         {
-            shipmentTypeManager.Setup(x => x.Get(shipment)).Returns(shipmentType);
-            var testObject = new UspsShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            mock.WithShipmentTypeFromShipmentManager(x =>
+            {
+                x.Setup(b => b.SupportsGetRates).Returns(true);
+                x.Setup(b => b.ShipmentTypeCode).Returns(ShipmentTypeCode.Usps);
+            });
+            var testObject = mock.Create<UspsShipmentAdapter>(TypedParameter.From(shipment));
             testObject.SelectServiceFromRate(new RateResult("Foo", "1", 1M, new PostalRateSelection(serviceType, confirmationType))
             {
                 Selectable = true,
@@ -242,11 +231,15 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
         [InlineData("Foo")]
         public void UpdateServiceFromRate_DoesNotSetService_WhenTagIsNotValid(string value)
         {
-            shipmentTypeManager.Setup(x => x.Get(shipment)).Returns(shipmentType);
+            mock.WithShipmentTypeFromShipmentManager(x =>
+            {
+                x.Setup(b => b.SupportsGetRates).Returns(true);
+                x.Setup(b => b.ShipmentTypeCode).Returns(ShipmentTypeCode.Usps);
+            });
             shipment.Postal.Service = (int) PostalServiceType.PriorityMail;
             shipment.Postal.Confirmation = (int) PostalConfirmationType.AdultSignatureRestricted;
 
-            var testObject = new UspsShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            var testObject = mock.Create<UspsShipmentAdapter>(TypedParameter.From(shipment));
             testObject.SelectServiceFromRate(new RateResult("Foo", "1", 1M, value)
             {
                 Selectable = true,
@@ -259,7 +252,12 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
         [Fact]
         public void DoesRateMatchSelectedService_ReturnsFalse_WhenRateShipmentTypeDoesNotMatch()
         {
-            var testObject = mock.Create<UspsShipmentAdapter>(new TypedParameter(typeof(ShipmentEntity), shipment));
+            mock.WithShipmentTypeFromShipmentManager(x =>
+            {
+                x.Setup(b => b.SupportsGetRates).Returns(true);
+                x.Setup(b => b.ShipmentTypeCode).Returns(ShipmentTypeCode.Usps);
+            });
+            var testObject = mock.Create<UspsShipmentAdapter>(TypedParameter.From(shipment));
             var rate = new RateResult("Foo", "1", 0, 1) { ShipmentType = ShipmentTypeCode.None };
 
             var result = testObject.DoesRateMatchSelectedService(rate);
@@ -267,39 +265,20 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
             Assert.False(result);
         }
 
-        [Fact]
-        public void DoesRateMatchSelectedService_ReturnsFalse_WhenServiceAndConfirmationDoNotMatch()
+        [Theory]
+        [InlineData(PostalServiceType.AsendiaGeneric, PostalConfirmationType.Signature)]
+        [InlineData(PostalServiceType.AsendiaGeneric, PostalConfirmationType.Delivery)]
+        [InlineData(PostalServiceType.FirstClass, PostalConfirmationType.Signature)]
+        public void DoesRateMatchSelectedService_ReturnsFalse_WhenServiceAndConfirmationDoNotMatch(PostalServiceType serviceType, PostalConfirmationType confirmation)
         {
-            var testObject = mock.Create<UspsShipmentAdapter>(new TypedParameter(typeof(ShipmentEntity), shipment));
-            var rate = new RateResult("Foo", "1", 0, new PostalRateSelection(PostalServiceType.AsendiaGeneric, PostalConfirmationType.Signature))
+            mock.WithShipmentTypeFromShipmentManager(x =>
             {
-                ShipmentType = ShipmentTypeCode.Usps
-            };
+                x.Setup(b => b.SupportsGetRates).Returns(true);
+                x.Setup(b => b.ShipmentTypeCode).Returns(ShipmentTypeCode.Usps);
+            });
 
-            var result = testObject.DoesRateMatchSelectedService(rate);
-
-            Assert.False(result);
-        }
-
-        [Fact]
-        public void DoesRateMatchSelectedService_ReturnsFalse_WhenServiceDoesNotMatch()
-        {
-            var testObject = mock.Create<UspsShipmentAdapter>(new TypedParameter(typeof(ShipmentEntity), shipment));
-            var rate = new RateResult("Foo", "1", 0, new PostalRateSelection(PostalServiceType.AsendiaGeneric, PostalConfirmationType.Delivery))
-            {
-                ShipmentType = ShipmentTypeCode.Usps
-            };
-
-            var result = testObject.DoesRateMatchSelectedService(rate);
-
-            Assert.False(result);
-        }
-
-        [Fact]
-        public void DoesRateMatchSelectedService_ReturnsFalse_WhenConfirmationDoesNotMatch()
-        {
-            var testObject = mock.Create<UspsShipmentAdapter>(new TypedParameter(typeof(ShipmentEntity), shipment));
-            var rate = new RateResult("Foo", "1", 0, new PostalRateSelection(PostalServiceType.FirstClass, PostalConfirmationType.Signature))
+            var testObject = mock.Create<UspsShipmentAdapter>(TypedParameter.From(shipment));
+            var rate = new RateResult("Foo", "1", 0, new PostalRateSelection(serviceType, confirmation))
             {
                 ShipmentType = ShipmentTypeCode.Usps
             };
@@ -312,7 +291,13 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
         [Fact]
         public void DoesRateMatchSelectedService_ReturnsFalse_WhenRateTagIsOtherObject()
         {
-            var testObject = mock.Create<UspsShipmentAdapter>(new TypedParameter(typeof(ShipmentEntity), shipment));
+            mock.WithShipmentTypeFromShipmentManager(x =>
+            {
+                x.Setup(b => b.SupportsGetRates).Returns(true);
+                x.Setup(b => b.ShipmentTypeCode).Returns(ShipmentTypeCode.Usps);
+            });
+
+            var testObject = mock.Create<UspsShipmentAdapter>(TypedParameter.From(shipment));
             var rate = new RateResult("Foo", "1", 0, "NOT A RATE")
             {
                 ShipmentType = ShipmentTypeCode.Usps
@@ -326,7 +311,13 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
         [Fact]
         public void DoesRateMatchSelectedService_ReturnsTrue_WhenServiceAndConfirmationMatches()
         {
-            var testObject = mock.Create<UspsShipmentAdapter>(new TypedParameter(typeof(ShipmentEntity), shipment));
+            mock.WithShipmentTypeFromShipmentManager(x =>
+            {
+                x.Setup(b => b.SupportsGetRates).Returns(true);
+                x.Setup(b => b.ShipmentTypeCode).Returns(ShipmentTypeCode.Usps);
+            });
+
+            var testObject = mock.Create<UspsShipmentAdapter>(TypedParameter.From(shipment));
             var rate = new RateResult("Foo", "1", 0, new PostalRateSelection(PostalServiceType.FirstClass, PostalConfirmationType.Delivery))
             {
                 ShipmentType = ShipmentTypeCode.Usps

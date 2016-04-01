@@ -4,6 +4,7 @@ using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Services;
+using ShipWorks.Stores;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 {
@@ -23,8 +24,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <summary>
         /// Constructor
         /// </summary>
-        public EndiciaShipmentAdapter(ShipmentEntity shipment, IShipmentTypeManager shipmentTypeManager, ICustomsManager customsManager) :
-            base(shipment, shipmentTypeManager, customsManager)
+        public EndiciaShipmentAdapter(ShipmentEntity shipment, IShipmentTypeManager shipmentTypeManager,
+            ICustomsManager customsManager, IStoreManager storeManager) :
+            base(shipment, shipmentTypeManager, customsManager, storeManager)
         {
             MethodConditions.EnsureArgumentIsNotNull(shipment.Postal, nameof(shipment.Postal));
             MethodConditions.EnsureArgumentIsNotNull(shipment.Postal.Endicia, nameof(shipment.Postal.Endicia));
@@ -101,7 +103,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             if (!parentRate.Selectable && selection != null)
             {
                 childRate = rates.FirstOrDefault(
-                    r => r.Selectable && ((PostalRateSelection)r.Tag).ServiceType == selection.ServiceType);
+                    r => r.Selectable && ((PostalRateSelection) r.Tag).ServiceType == selection.ServiceType);
             }
 
             return childRate;

@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using Autofac;
 using Autofac.Extras.Moq;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
-using ShipWorks.Shipping.Services;
+using ShipWorks.Stores;
 using ShipWorks.Tests.Shared;
 using Xunit;
 
@@ -14,9 +15,6 @@ namespace ShipWorks.Shipping.Tests.Carriers.BestRate
     {
         private readonly ShipmentEntity shipment;
         private readonly AutoMock mock;
-        private readonly Mock<IShipmentTypeManager> shipmentTypeManager;
-        private readonly Mock<ICustomsManager> customsManager;
-        private readonly Mock<BestRateShipmentType> shipmentTypeMock;
 
         public BestRateShipmentAdapterTest()
         {
@@ -31,62 +29,61 @@ namespace ShipWorks.Shipping.Tests.Carriers.BestRate
                 Insurance = true,
                 BestRate = new BestRateShipmentEntity()
             };
-
-            customsManager = mock.CreateMock<ICustomsManager>();
-
-            shipmentTypeMock = mock.CreateMock<BestRateShipmentType>();
-
-            shipmentTypeManager = new Mock<IShipmentTypeManager>();
-            shipmentTypeManager.Setup(x => x.Get(shipment)).Returns(shipmentTypeMock.Object);
         }
 
         [Fact]
         public void Constructor_ThrowsArgumentNullExcpetion_WhenParamsNull()
         {
-            Assert.Throws<ArgumentNullException>(() => new BestRateShipmentAdapter(null, shipmentTypeManager.Object, customsManager.Object));
-            Assert.Throws<ArgumentNullException>(() => new BestRateShipmentAdapter(new ShipmentEntity(), null, customsManager.Object));
-            Assert.Throws<ArgumentNullException>(() => new BestRateShipmentAdapter(new ShipmentEntity(), shipmentTypeManager.Object, null));
+            Assert.Throws<ArgumentNullException>(() =>
+                new BestRateShipmentAdapter(null, mock.Create<IShipmentTypeManager>(), mock.Create<ICustomsManager>(),
+                mock.Create<IStoreManager>()));
+            Assert.Throws<ArgumentNullException>(() =>
+                new BestRateShipmentAdapter(new ShipmentEntity(), null, mock.Create<ICustomsManager>(),
+                mock.Create<IStoreManager>()));
+            Assert.Throws<ArgumentNullException>(() =>
+                new BestRateShipmentAdapter(new ShipmentEntity(), mock.Create<IShipmentTypeManager>(), null,
+                mock.Create<IStoreManager>()));
         }
 
         [Fact]
         public void AccountId_ReturnsNull()
         {
-            var testObject = new BestRateShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            var testObject = mock.Create<BestRateShipmentAdapter>(TypedParameter.From(shipment));
             Assert.Null(testObject.AccountId);
         }
 
         [Fact]
         public void AccountId_DoesNotThrow_WhenValueIsValid()
         {
-            var testObject = new BestRateShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            var testObject = mock.Create<BestRateShipmentAdapter>(TypedParameter.From(shipment));
             testObject.AccountId = 6;
         }
 
         [Fact]
         public void AccountId_DoesNotThrow_WhenValueIsNull()
         {
-            var testObject = new BestRateShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            var testObject = mock.Create<BestRateShipmentAdapter>(TypedParameter.From(shipment));
             testObject.AccountId = null;
         }
 
         [Fact]
         public void Shipment_IsNotNull()
         {
-            var testObject = new BestRateShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            var testObject = mock.Create<BestRateShipmentAdapter>(TypedParameter.From(shipment));
             Assert.NotNull(testObject.Shipment);
         }
 
         [Fact]
         public void ShipmentTypeCode_IsBestRate()
         {
-            var testObject = new BestRateShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            var testObject = mock.Create<BestRateShipmentAdapter>(TypedParameter.From(shipment));
             Assert.Equal(ShipmentTypeCode.BestRate, testObject.ShipmentTypeCode);
         }
 
         [Fact]
         public void SupportsAccounts_IsFalse()
         {
-            BestRateShipmentAdapter testObject = new BestRateShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            var testObject = mock.Create<BestRateShipmentAdapter>(TypedParameter.From(shipment));
 
             Assert.False(testObject.SupportsAccounts);
         }
@@ -94,42 +91,36 @@ namespace ShipWorks.Shipping.Tests.Carriers.BestRate
         [Fact]
         public void SupportsMultiplePackages_IsFalse()
         {
-            BestRateShipmentAdapter testObject = new BestRateShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            var testObject = mock.Create<BestRateShipmentAdapter>(TypedParameter.From(shipment));
             Assert.False(testObject.SupportsMultiplePackages);
         }
 
-        [Fact]
-        public void SupportsMultiplePackages_DomesticIsTrue_WhenShipCountryIsUs()
+        [Theory]
+        [InlineData(true, true)]
+        [InlineData(false, false)]
+        public void SupportsMultiplePackages_DomesticIsTrue_WhenShipCountryIsUs(bool isDomestic, bool expected)
         {
-            shipmentTypeMock.CallBase = true;
+            mock.WithShipmentTypeFromShipmentManager(x => x.Setup(s => s.IsDomestic(shipment)).Returns(isDomestic));
 
-            shipment.OriginCountryCode = "US";
-            shipment.ShipCountryCode = "US";
-
-            BestRateShipmentAdapter testObject = new BestRateShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
-            Assert.True(testObject.IsDomestic);
-        }
-
-        [Fact]
-        public void SupportsMultiplePackages_DomesticIsFalse_WhenShipCountryIsCa()
-        {
-            shipment.OriginCountryCode = "US";
-            shipment.ShipCountryCode = "CA";
-
-            BestRateShipmentAdapter testObject = new BestRateShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
-            Assert.False(testObject.IsDomestic);
+            var testObject = mock.Create<BestRateShipmentAdapter>(TypedParameter.From(shipment));
+            Assert.Equal(expected, testObject.IsDomestic);
         }
 
         [Fact]
         public void UpdateDynamicData_DelegatesToShipmentTypeAndCustomsManager()
         {
-            BestRateShipmentAdapter testObject = new BestRateShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            mock.WithShipmentTypeFromShipmentManager(x =>
+            {
+                x.Setup(b => b.UpdateDynamicShipmentData(shipment)).Verifiable();
+                x.Setup(b => b.UpdateTotalWeight(shipment)).Verifiable();
+            });
+
+            mock.Mock<ICustomsManager>().Setup(b => b.EnsureCustomsLoaded(new[] { shipment })).Verifiable();
+
+            var testObject = mock.Create<BestRateShipmentAdapter>(TypedParameter.From(shipment));
             testObject.UpdateDynamicData();
 
-            shipmentTypeMock.Verify(b => b.UpdateDynamicShipmentData(It.IsAny<ShipmentEntity>()), Times.Once);
-            shipmentTypeMock.Verify(b => b.UpdateTotalWeight(It.IsAny<ShipmentEntity>()), Times.Once);
-
-            customsManager.Verify(b => b.EnsureCustomsLoaded(It.IsAny<IEnumerable<ShipmentEntity>>()), Times.Once);
+            mock.VerifyAll = true;
         }
 
         [Fact]
@@ -138,9 +129,9 @@ namespace ShipWorks.Shipping.Tests.Carriers.BestRate
             Dictionary<ShipmentEntity, Exception> errors = new Dictionary<ShipmentEntity, Exception>();
             errors.Add(shipment, new Exception("test"));
 
-            customsManager.Setup(c => c.EnsureCustomsLoaded(It.IsAny<IEnumerable<ShipmentEntity>>())).Returns(errors);
+            mock.Mock<ICustomsManager>().Setup(c => c.EnsureCustomsLoaded(It.IsAny<IEnumerable<ShipmentEntity>>())).Returns(errors);
 
-            BestRateShipmentAdapter testObject = new BestRateShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            var testObject = mock.Create<BestRateShipmentAdapter>(TypedParameter.From(shipment));
 
             Assert.NotNull(testObject.UpdateDynamicData());
             Assert.Equal(1, testObject.UpdateDynamicData().Count);
@@ -149,7 +140,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.BestRate
         [Fact]
         public void SupportsPackageTypes_IsFalse()
         {
-            ICarrierShipmentAdapter testObject = new BestRateShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            var testObject = mock.Create<BestRateShipmentAdapter>(TypedParameter.From(shipment));
 
             Assert.False(testObject.SupportsPackageTypes);
         }
@@ -157,14 +148,14 @@ namespace ShipWorks.Shipping.Tests.Carriers.BestRate
         [Fact]
         public void ShipDate_ReturnsShipmentValue()
         {
-            ICarrierShipmentAdapter testObject = new BestRateShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            var testObject = mock.Create<BestRateShipmentAdapter>(TypedParameter.From(shipment));
             Assert.Equal(shipment.ShipDate, testObject.ShipDate);
         }
 
         [Fact]
         public void ShipDate_IsUpdated()
         {
-            ICarrierShipmentAdapter testObject = new BestRateShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            var testObject = mock.Create<BestRateShipmentAdapter>(TypedParameter.From(shipment));
 
             testObject.ShipDate = testObject.ShipDate.AddDays(1);
 

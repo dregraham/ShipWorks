@@ -1,10 +1,11 @@
-﻿using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.None;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using Autofac;
+using Autofac.Extras.Moq;
 using Moq;
-using ShipWorks.AddressValidation;
-using ShipWorks.Shipping.Services;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.None;
+using ShipWorks.Stores;
 using ShipWorks.Tests.Shared;
 using Xunit;
 
@@ -13,15 +14,13 @@ namespace ShipWorks.Shipping.Tests.Carriers.None
     public class NoneShipmentAdapterTest
     {
         readonly ShipmentEntity shipment;
-        private readonly Mock<IShipmentTypeManager> shipmentTypeManager;
-        private readonly Mock<ICustomsManager> customsManager;
-        private readonly Mock<NoneShipmentType> shipmentTypeMock;
-        private readonly ShipmentType shipmentType;
+        private readonly AutoMock mock;
 
         public NoneShipmentAdapterTest()
         {
-            shipmentType = new NoneShipmentType();
-            shipment = new ShipmentEntity()
+            mock = AutoMockExtensions.GetLooseThatReturnsMocks();
+
+            shipment = new ShipmentEntity
             {
                 ShipmentTypeCode = ShipmentTypeCode.None,
                 ShipDate = new DateTime(2015, 11, 24, 10, 10, 10),
@@ -29,65 +28,55 @@ namespace ShipWorks.Shipping.Tests.Carriers.None
                 TotalWeight = 1,
                 Insurance = true,
             };
-
-            customsManager = new Mock<ICustomsManager>();
-            customsManager.Setup(c => c.EnsureCustomsLoaded(It.IsAny<IEnumerable<ShipmentEntity>>())).Returns(new Dictionary<ShipmentEntity, Exception>());
-
-            shipmentTypeMock = new Mock<NoneShipmentType>(MockBehavior.Strict);
-            shipmentTypeMock.Setup(b => b.UpdateDynamicShipmentData(shipment)).Verifiable();
-            shipmentTypeMock.Setup(b => b.UpdateTotalWeight(shipment)).Verifiable();
-            shipmentTypeMock.Setup(b => b.SupportsMultiplePackages).Returns(() => shipmentType.SupportsMultiplePackages);
-            shipmentTypeMock.Setup(b => b.IsDomestic(It.IsAny<ShipmentEntity>())).Returns(() => shipmentType.IsDomestic(shipment));
-
-            shipmentTypeManager = new Mock<IShipmentTypeManager>();
-            shipmentTypeManager.Setup(x => x.Get(shipment)).Returns(shipmentTypeMock.Object);
         }
 
         [Fact]
         public void Constructor_ThrowsArgumentNullExcpetion_WhenShipmentIsNull()
         {
-            Assert.Throws<ArgumentNullException>(() => new NoneShipmentAdapter(null, shipmentTypeManager.Object, customsManager.Object));
+            Assert.Throws<ArgumentNullException>(() =>
+                new NoneShipmentAdapter(null, mock.Create<IShipmentTypeManager>(),
+                    mock.Create<ICustomsManager>(), mock.Create<IStoreManager>()));
         }
 
         [Fact]
         public void AccountId_ReturnsNull()
         {
-            var testObject = new NoneShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            var testObject = mock.Create<NoneShipmentAdapter>(TypedParameter.From(shipment));
             Assert.Null(testObject.AccountId);
         }
 
         [Fact]
         public void AccountId_DoesNotThrow_WhenValueIsValid()
         {
-            var testObject = new NoneShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            var testObject = mock.Create<NoneShipmentAdapter>(TypedParameter.From(shipment));
             testObject.AccountId = 6;
         }
 
         [Fact]
         public void AccountId_DoesNotThrow_WhenValueIsNull()
         {
-            var testObject = new NoneShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            var testObject = mock.Create<NoneShipmentAdapter>(TypedParameter.From(shipment));
             testObject.AccountId = null;
         }
 
         [Fact]
         public void Shipment_IsNotNull()
         {
-            var testObject = new NoneShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            var testObject = mock.Create<NoneShipmentAdapter>(TypedParameter.From(shipment));
             Assert.NotNull(testObject.Shipment);
         }
 
         [Fact]
         public void ShipmentTypeCode_IsNone()
         {
-            var testObject = new NoneShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            var testObject = mock.Create<NoneShipmentAdapter>(TypedParameter.From(shipment));
             Assert.Equal(ShipmentTypeCode.None, testObject.ShipmentTypeCode);
         }
 
         [Fact]
         public void SupportsAccounts_IsFalse()
         {
-            NoneShipmentAdapter testObject = new NoneShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            var testObject = mock.Create<NoneShipmentAdapter>(TypedParameter.From(shipment));
 
             Assert.False(testObject.SupportsAccounts);
         }
@@ -95,40 +84,36 @@ namespace ShipWorks.Shipping.Tests.Carriers.None
         [Fact]
         public void SupportsMultiplePackages_IsFalse()
         {
-            NoneShipmentAdapter testObject = new NoneShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            var testObject = mock.Create<NoneShipmentAdapter>(TypedParameter.From(shipment));
             Assert.False(testObject.SupportsMultiplePackages);
         }
 
-        [Fact]
-        public void SupportsMultiplePackages_DomesticIsTrue_WhenShipCountryIsUs()
+        [Theory]
+        [InlineData(true, true)]
+        [InlineData(false, false)]
+        public void IsDomestic_DomesticIsFalse_WhenShipCountryIsCa(bool isDomestic, bool expected)
         {
-            shipment.OriginCountryCode = "US";
-            shipment.ShipCountryCode = "US";
+            mock.WithShipmentTypeFromShipmentManager(x =>
+                x.Setup(b => b.IsDomestic(It.IsAny<ShipmentEntity>())).Returns(isDomestic));
 
-            NoneShipmentAdapter testObject = new NoneShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
-            Assert.True(testObject.IsDomestic);
-        }
+            var testObject = mock.Create<NoneShipmentAdapter>(TypedParameter.From(shipment));
 
-        [Fact]
-        public void SupportsMultiplePackages_DomesticIsFalse_WhenShipCountryIsCa()
-        {
-            shipment.OriginCountryCode = "US";
-            shipment.ShipCountryCode = "CA";
-
-            NoneShipmentAdapter testObject = new NoneShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
-            Assert.False(testObject.IsDomestic);
+            Assert.Equal(expected, testObject.IsDomestic);
         }
 
         [Fact]
         public void UpdateDynamicData_DelegatesToShipmentTypeAndCustomsManager()
         {
-            NoneShipmentAdapter testObject = new NoneShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            var shipmentType = mock.WithShipmentTypeFromShipmentManager();
+
+            var testObject = mock.Create<NoneShipmentAdapter>(TypedParameter.From(shipment));
             testObject.UpdateDynamicData();
 
-            shipmentTypeMock.Verify(b => b.UpdateDynamicShipmentData(It.IsAny<ShipmentEntity>()), Times.Never);
-            shipmentTypeMock.Verify(b => b.UpdateTotalWeight(It.IsAny<ShipmentEntity>()), Times.Never);
+            shipmentType.Verify(b => b.UpdateDynamicShipmentData(It.IsAny<ShipmentEntity>()), Times.Never);
+            shipmentType.Verify(b => b.UpdateTotalWeight(It.IsAny<ShipmentEntity>()), Times.Never);
 
-            customsManager.Verify(b => b.EnsureCustomsLoaded(It.IsAny<IEnumerable<ShipmentEntity>>()), Times.Never);
+            mock.Mock<ICustomsManager>()
+                .Verify(b => b.EnsureCustomsLoaded(It.IsAny<IEnumerable<ShipmentEntity>>()), Times.Never);
         }
 
         [Fact]
@@ -137,9 +122,10 @@ namespace ShipWorks.Shipping.Tests.Carriers.None
             Dictionary<ShipmentEntity, Exception> errors = new Dictionary<ShipmentEntity, Exception>();
             errors.Add(shipment, new Exception("test"));
 
-            customsManager.Setup(c => c.EnsureCustomsLoaded(It.IsAny<IEnumerable<ShipmentEntity>>())).Returns(errors);
+            mock.Mock<ICustomsManager>()
+                .Setup(c => c.EnsureCustomsLoaded(It.IsAny<IEnumerable<ShipmentEntity>>())).Returns(errors);
 
-            NoneShipmentAdapter testObject = new NoneShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            var testObject = mock.Create<NoneShipmentAdapter>(TypedParameter.From(shipment));
 
             Assert.NotNull(testObject.UpdateDynamicData());
             Assert.Equal(0, testObject.UpdateDynamicData().Count);
@@ -148,7 +134,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.None
         [Fact]
         public void SupportsPackageTypes_IsFalse()
         {
-            ICarrierShipmentAdapter testObject = new NoneShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            var testObject = mock.Create<NoneShipmentAdapter>(TypedParameter.From(shipment));
 
             Assert.False(testObject.SupportsPackageTypes);
         }
@@ -156,14 +142,14 @@ namespace ShipWorks.Shipping.Tests.Carriers.None
         [Fact]
         public void ShipDate_ReturnsShipmentValue()
         {
-            ICarrierShipmentAdapter testObject = new NoneShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            var testObject = mock.Create<NoneShipmentAdapter>(TypedParameter.From(shipment));
             Assert.Equal(shipment.ShipDate, testObject.ShipDate);
         }
 
         [Fact]
         public void ShipDate_IsUpdated()
         {
-            ICarrierShipmentAdapter testObject = new NoneShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            var testObject = mock.Create<NoneShipmentAdapter>(TypedParameter.From(shipment));
 
             testObject.ShipDate = testObject.ShipDate.AddDays(1);
 

@@ -4,6 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Services;
+using ShipWorks.Stores;
 
 namespace ShipWorks.Shipping.Carriers.None
 {
@@ -23,8 +24,9 @@ namespace ShipWorks.Shipping.Carriers.None
         /// <summary>
         /// Constructor
         /// </summary>
-        public NoneShipmentAdapter(ShipmentEntity shipment, IShipmentTypeManager shipmentTypeManager, ICustomsManager customsManager)
-            : base(shipment, shipmentTypeManager, customsManager)
+        public NoneShipmentAdapter(ShipmentEntity shipment, IShipmentTypeManager shipmentTypeManager,
+            ICustomsManager customsManager, IStoreManager storeManager)
+            : base(shipment, shipmentTypeManager, customsManager, storeManager)
         {
             MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
         }

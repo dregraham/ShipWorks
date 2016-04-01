@@ -7,7 +7,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.OnTrac;
 using ShipWorks.Shipping.Carriers.OnTrac.Enums;
 using ShipWorks.Shipping.Editing.Rating;
-using ShipWorks.Shipping.Services;
+using ShipWorks.Stores;
 using ShipWorks.Tests.Shared;
 using Xunit;
 
@@ -17,15 +17,10 @@ namespace ShipWorks.Shipping.Tests.Carriers.OnTrac
     {
         readonly AutoMock mock;
         readonly ShipmentEntity shipment;
-        private readonly Mock<IShipmentTypeManager> shipmentTypeManager;
-        private readonly Mock<ICustomsManager> customsManager;
-        private readonly Mock<OnTracShipmentType> shipmentTypeMock;
-        private readonly ShipmentType shipmentType;
 
         public OnTracShipmentAdapterTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
-            shipmentType = new OnTracShipmentType();
             shipment = new ShipmentEntity
             {
                 ShipmentTypeCode = ShipmentTypeCode.OnTrac,
@@ -38,40 +33,38 @@ namespace ShipWorks.Shipping.Tests.Carriers.OnTrac
                     Service = (int) OnTracServiceType.Ground
                 }
             };
-
-            customsManager = new Mock<ICustomsManager>();
-            customsManager.Setup(c => c.EnsureCustomsLoaded(It.IsAny<IEnumerable<ShipmentEntity>>())).Returns(new Dictionary<ShipmentEntity, Exception>());
-
-            shipmentTypeMock = new Mock<OnTracShipmentType>(MockBehavior.Strict);
-            shipmentTypeMock.Setup(b => b.UpdateDynamicShipmentData(shipment)).Verifiable();
-            shipmentTypeMock.Setup(b => b.UpdateTotalWeight(shipment)).Verifiable();
-            shipmentTypeMock.Setup(b => b.SupportsMultiplePackages).Returns(() => shipmentType.SupportsMultiplePackages);
-            shipmentTypeMock.Setup(b => b.IsDomestic(It.IsAny<ShipmentEntity>())).Returns(() => shipmentType.IsDomestic(shipment));
-
-            shipmentTypeManager = new Mock<IShipmentTypeManager>();
-            shipmentTypeManager.Setup(x => x.Get(shipment)).Returns(shipmentTypeMock.Object);
         }
 
         [Fact]
         public void Constructor_ThrowsArgumentNullExcpetion_WhenShipmentIsNull()
         {
-            Assert.Throws<ArgumentNullException>(() => new OnTracShipmentAdapter(null, shipmentTypeManager.Object, customsManager.Object));
-            Assert.Throws<ArgumentNullException>(() => new OnTracShipmentAdapter(new ShipmentEntity(), shipmentTypeManager.Object, customsManager.Object));
-            Assert.Throws<ArgumentNullException>(() => new OnTracShipmentAdapter(shipment, null, customsManager.Object));
-            Assert.Throws<ArgumentNullException>(() => new OnTracShipmentAdapter(shipment, shipmentTypeManager.Object, null));
+            Assert.Throws<ArgumentNullException>(() =>
+                new OnTracShipmentAdapter(null, mock.Create<IShipmentTypeManager>(),
+                    mock.Create<ICustomsManager>(), mock.Create<IStoreManager>()));
+            Assert.Throws<ArgumentNullException>(() =>
+                new OnTracShipmentAdapter(new ShipmentEntity(), mock.Create<IShipmentTypeManager>(),
+                    mock.Create<ICustomsManager>(), mock.Create<IStoreManager>()));
+            Assert.Throws<ArgumentNullException>(() =>
+                new OnTracShipmentAdapter(shipment, null,
+                    mock.Create<ICustomsManager>(), mock.Create<IStoreManager>()));
+            Assert.Throws<ArgumentNullException>(() =>
+                new OnTracShipmentAdapter(shipment, mock.Create<IShipmentTypeManager>(), null,
+                    mock.Create<IStoreManager>()));
         }
 
         [Fact]
         public void Constructor_ThrowsArgumentNullExcpetion_WhenOnTracShipmentIsNull()
         {
-            Assert.Throws<ArgumentNullException>(() => new OnTracShipmentAdapter(new ShipmentEntity(), shipmentTypeManager.Object, customsManager.Object));
+            Assert.Throws<ArgumentNullException>(() =>
+                new OnTracShipmentAdapter(new ShipmentEntity(), mock.Create<IShipmentTypeManager>(),
+                    mock.Create<ICustomsManager>(), mock.Create<IStoreManager>()));
         }
 
         [Fact]
         public void AccountId_ReturnsShipmentValue()
         {
             shipment.OnTrac.OnTracAccountID = 12;
-            var testObject = new OnTracShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            var testObject = mock.Create<OnTracShipmentAdapter>(TypedParameter.From(shipment));
             Assert.Equal(12, testObject.AccountId);
         }
 
@@ -81,7 +74,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.OnTrac
         [InlineData(10009238)]
         public void AccountId_StoresSpecifiedValue_WhenValueIsValid(long value)
         {
-            var testObject = new OnTracShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            var testObject = mock.Create<OnTracShipmentAdapter>(TypedParameter.From(shipment));
             testObject.AccountId = value;
             Assert.Equal(value, shipment.OnTrac.OnTracAccountID);
         }
@@ -89,7 +82,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.OnTrac
         [Fact]
         public void AccountId_StoresZero_WhenValueIsNull()
         {
-            var testObject = new OnTracShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            var testObject = mock.Create<OnTracShipmentAdapter>(TypedParameter.From(shipment));
             testObject.AccountId = null;
             Assert.Equal(0, shipment.OnTrac.OnTracAccountID);
         }
@@ -97,21 +90,21 @@ namespace ShipWorks.Shipping.Tests.Carriers.OnTrac
         [Fact]
         public void Shipment_IsNotNull()
         {
-            var testObject = new OnTracShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            var testObject = mock.Create<OnTracShipmentAdapter>(TypedParameter.From(shipment));
             Assert.NotNull(testObject.Shipment);
         }
 
         [Fact]
         public void ShipmentTypeCode_IsOnTrac()
         {
-            var testObject = new OnTracShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            var testObject = mock.Create<OnTracShipmentAdapter>(TypedParameter.From(shipment));
             Assert.Equal(ShipmentTypeCode.OnTrac, testObject.ShipmentTypeCode);
         }
 
         [Fact]
         public void SupportsAccounts_IsTrue()
         {
-            OnTracShipmentAdapter testObject = new OnTracShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            var testObject = mock.Create<OnTracShipmentAdapter>(TypedParameter.From(shipment));
 
             Assert.True(testObject.SupportsAccounts);
         }
@@ -119,40 +112,36 @@ namespace ShipWorks.Shipping.Tests.Carriers.OnTrac
         [Fact]
         public void SupportsMultiplePackages_IsFalse()
         {
-            OnTracShipmentAdapter testObject = new OnTracShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            var testObject = mock.Create<OnTracShipmentAdapter>(TypedParameter.From(shipment));
             Assert.False(testObject.SupportsMultiplePackages);
         }
 
-        [Fact]
-        public void SupportsMultiplePackages_DomesticIsTrue_WhenShipCountryIsUs()
+        [Theory]
+        [InlineData(true, true)]
+        [InlineData(true, true)]
+        public void IsDomestic_DomesticIsTrue_WhenShipCountryIsUs(bool isDomestic, bool expected)
         {
-            shipment.OriginCountryCode = "US";
-            shipment.ShipCountryCode = "US";
+            mock.WithShipmentTypeFromShipmentManager(x =>
+                x.Setup(b => b.IsDomestic(It.IsAny<ShipmentEntity>())).Returns(isDomestic));
 
-            OnTracShipmentAdapter testObject = new OnTracShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
-            Assert.True(testObject.IsDomestic);
-        }
+            var testObject = mock.Create<OnTracShipmentAdapter>(TypedParameter.From(shipment));
 
-        [Fact]
-        public void SupportsMultiplePackages_DomesticIsFalse_WhenShipCountryIsCa()
-        {
-            shipment.OriginCountryCode = "US";
-            shipment.ShipCountryCode = "CA";
-
-            OnTracShipmentAdapter testObject = new OnTracShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
-            Assert.False(testObject.IsDomestic);
+            Assert.Equal(expected, testObject.IsDomestic);
         }
 
         [Fact]
         public void UpdateDynamicData_DelegatesToShipmentTypeAndCustomsManager()
         {
-            OnTracShipmentAdapter testObject = new OnTracShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            var shipmentType = mock.WithShipmentTypeFromShipmentManager();
+
+            var testObject = mock.Create<OnTracShipmentAdapter>(TypedParameter.From(shipment));
             testObject.UpdateDynamicData();
 
-            shipmentTypeMock.Verify(b => b.UpdateDynamicShipmentData(It.IsAny<ShipmentEntity>()), Times.Once);
-            shipmentTypeMock.Verify(b => b.UpdateTotalWeight(It.IsAny<ShipmentEntity>()), Times.Once);
+            shipmentType.Verify(b => b.UpdateDynamicShipmentData(It.IsAny<ShipmentEntity>()));
+            shipmentType.Verify(b => b.UpdateTotalWeight(It.IsAny<ShipmentEntity>()));
 
-            customsManager.Verify(b => b.EnsureCustomsLoaded(It.IsAny<IEnumerable<ShipmentEntity>>()), Times.Once);
+            mock.Mock<ICustomsManager>()
+                .Verify(b => b.EnsureCustomsLoaded(It.IsAny<IEnumerable<ShipmentEntity>>()));
         }
 
         [Fact]
@@ -161,9 +150,10 @@ namespace ShipWorks.Shipping.Tests.Carriers.OnTrac
             Dictionary<ShipmentEntity, Exception> errors = new Dictionary<ShipmentEntity, Exception>();
             errors.Add(shipment, new Exception("test"));
 
-            customsManager.Setup(c => c.EnsureCustomsLoaded(It.IsAny<IEnumerable<ShipmentEntity>>())).Returns(errors);
+            mock.Mock<ICustomsManager>()
+                .Setup(c => c.EnsureCustomsLoaded(It.IsAny<IEnumerable<ShipmentEntity>>())).Returns(errors);
 
-            OnTracShipmentAdapter testObject = new OnTracShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            var testObject = mock.Create<OnTracShipmentAdapter>(TypedParameter.From(shipment));
 
             Assert.NotNull(testObject.UpdateDynamicData());
             Assert.Equal(1, testObject.UpdateDynamicData().Count);
@@ -172,7 +162,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.OnTrac
         [Fact]
         public void SupportsPackageTypes_IsTrue()
         {
-            ICarrierShipmentAdapter testObject = new OnTracShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            var testObject = mock.Create<OnTracShipmentAdapter>(TypedParameter.From(shipment));
 
             Assert.True(testObject.SupportsPackageTypes);
         }
@@ -180,14 +170,14 @@ namespace ShipWorks.Shipping.Tests.Carriers.OnTrac
         [Fact]
         public void ShipDate_ReturnsShipmentValue()
         {
-            ICarrierShipmentAdapter testObject = new OnTracShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            var testObject = mock.Create<OnTracShipmentAdapter>(TypedParameter.From(shipment));
             Assert.Equal(shipment.ShipDate, testObject.ShipDate);
         }
 
         [Fact]
         public void ShipDate_IsUpdated()
         {
-            ICarrierShipmentAdapter testObject = new OnTracShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            var testObject = mock.Create<OnTracShipmentAdapter>(TypedParameter.From(shipment));
 
             testObject.ShipDate = testObject.ShipDate.AddDays(1);
 
@@ -197,14 +187,14 @@ namespace ShipWorks.Shipping.Tests.Carriers.OnTrac
         [Fact]
         public void ServiceType_ReturnsShipmentValue()
         {
-            ICarrierShipmentAdapter testObject = new OnTracShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            var testObject = mock.Create<OnTracShipmentAdapter>(TypedParameter.From(shipment));
             Assert.Equal(shipment.OnTrac.Service, testObject.ServiceType);
         }
 
         [Fact]
         public void ServiceType_IsUpdated()
         {
-            ICarrierShipmentAdapter testObject = new OnTracShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            var testObject = mock.Create<OnTracShipmentAdapter>(TypedParameter.From(shipment));
 
             shipment.OnTrac.Service = (int) OnTracServiceType.Sunrise;
             testObject.ServiceType = (int) OnTracServiceType.SunriseGold;
@@ -218,13 +208,15 @@ namespace ShipWorks.Shipping.Tests.Carriers.OnTrac
         [InlineData(OnTracServiceType.SunriseGold)]
         public void UpdateServiceFromRate_SetsService_WhenTagIsValid(OnTracServiceType serviceType)
         {
-            shipmentTypeManager.Setup(x => x.Get(shipment)).Returns(shipmentType);
-            var testObject = new OnTracShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            mock.WithShipmentTypeFromShipmentManager(x => x.Setup(b => b.SupportsGetRates).Returns(true));
+            var testObject = mock.Create<OnTracShipmentAdapter>(TypedParameter.From(shipment));
+
             testObject.SelectServiceFromRate(new RateResult("Foo", "1", 1M, (int) serviceType)
             {
                 Selectable = true,
                 ShipmentType = ShipmentTypeCode.OnTrac
             });
+
             Assert.Equal((int) serviceType, shipment.OnTrac.Service);
         }
 
@@ -234,8 +226,8 @@ namespace ShipWorks.Shipping.Tests.Carriers.OnTrac
         [InlineData(OnTracServiceType.SunriseGold)]
         public void UpdateServiceFromRate_SetsService_WhenTagIsValidServiceType(OnTracServiceType serviceType)
         {
-            shipmentTypeManager.Setup(x => x.Get(shipment)).Returns(shipmentType);
-            var testObject = new OnTracShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            mock.WithShipmentTypeFromShipmentManager(x => x.Setup(b => b.SupportsGetRates).Returns(true));
+            var testObject = mock.Create<OnTracShipmentAdapter>(TypedParameter.From(shipment));
             testObject.SelectServiceFromRate(new RateResult("Foo", "1", 1M, serviceType)
             {
                 Selectable = true,
@@ -249,9 +241,9 @@ namespace ShipWorks.Shipping.Tests.Carriers.OnTrac
         [InlineData("Foo")]
         public void UpdateServiceFromRate_DoesNotSetService_WhenTagIsNotValid(string value)
         {
-            shipmentTypeManager.Setup(x => x.Get(shipment)).Returns(shipmentType);
+            mock.WithShipmentTypeFromShipmentManager(x => x.Setup(b => b.SupportsGetRates).Returns(true));
             shipment.OnTrac.Service = (int) OnTracServiceType.PalletizedFreight;
-            var testObject = new OnTracShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            var testObject = mock.Create<OnTracShipmentAdapter>(TypedParameter.From(shipment));
             testObject.SelectServiceFromRate(new RateResult("Foo", "1", 1M, value)
             {
                 Selectable = true,

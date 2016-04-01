@@ -7,7 +7,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.Postal.Endicia;
 using ShipWorks.Shipping.Editing.Rating;
-using ShipWorks.Shipping.Services;
+using ShipWorks.Stores;
 using ShipWorks.Tests.Shared;
 using Xunit;
 
@@ -17,15 +17,10 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Endicia
     {
         readonly AutoMock mock;
         readonly ShipmentEntity shipment;
-        private readonly Mock<IShipmentTypeManager> shipmentTypeManager;
-        private readonly Mock<ICustomsManager> customsManager;
-        private readonly Mock<EndiciaShipmentType> shipmentTypeMock;
-        private readonly ShipmentType shipmentType;
 
         public EndiciaShipmentAdapterTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
-            shipmentType = new EndiciaShipmentType();
             shipment = new ShipmentEntity
             {
                 ShipmentTypeCode = ShipmentTypeCode.Endicia,
@@ -40,39 +35,37 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Endicia
                     Endicia = new EndiciaShipmentEntity()
                 }
             };
-
-            customsManager = new Mock<ICustomsManager>();
-            customsManager.Setup(c => c.EnsureCustomsLoaded(It.IsAny<IEnumerable<ShipmentEntity>>())).Returns(new Dictionary<ShipmentEntity, Exception>());
-
-            shipmentTypeMock = new Mock<EndiciaShipmentType>(MockBehavior.Strict);
-            shipmentTypeMock.Setup(b => b.UpdateDynamicShipmentData(shipment)).Verifiable();
-            shipmentTypeMock.Setup(b => b.UpdateTotalWeight(shipment)).Verifiable();
-            shipmentTypeMock.Setup(b => b.SupportsMultiplePackages).Returns(() => shipmentType.SupportsMultiplePackages);
-            shipmentTypeMock.Setup(b => b.IsDomestic(It.IsAny<ShipmentEntity>())).Returns(() => shipmentType.IsDomestic(shipment));
-            shipmentTypeMock.Setup(b => b.ShipmentTypeCode).Returns(() => shipmentType.ShipmentTypeCode);
-
-            shipmentTypeManager = new Mock<IShipmentTypeManager>();
-            shipmentTypeManager.Setup(x => x.Get(shipment)).Returns(shipmentTypeMock.Object);
         }
 
         [Fact]
         public void Constructor_ThrowsArgumentNullExcpetion_WhenShipmentIsNull()
         {
-            Assert.Throws<ArgumentNullException>(() => new EndiciaShipmentAdapter(null, shipmentTypeManager.Object, customsManager.Object));
-            Assert.Throws<ArgumentNullException>(() => new EndiciaShipmentAdapter(new ShipmentEntity(), shipmentTypeManager.Object, customsManager.Object));
+            Assert.Throws<ArgumentNullException>(() =>
+                new EndiciaShipmentAdapter(null, mock.Create<IShipmentTypeManager>(), mock.Create<ICustomsManager>(),
+                mock.Create<IStoreManager>()));
+            Assert.Throws<ArgumentNullException>(() =>
+                new EndiciaShipmentAdapter(new ShipmentEntity(), mock.Create<IShipmentTypeManager>(),
+                mock.Create<ICustomsManager>(), mock.Create<IStoreManager>()));
 
             shipment.Postal.Endicia = null;
-            Assert.Throws<ArgumentNullException>(() => new EndiciaShipmentAdapter(new ShipmentEntity(), shipmentTypeManager.Object, customsManager.Object));
 
-            Assert.Throws<ArgumentNullException>(() => new EndiciaShipmentAdapter(shipment, null, customsManager.Object));
-            Assert.Throws<ArgumentNullException>(() => new EndiciaShipmentAdapter(shipment, shipmentTypeManager.Object, null));
+            Assert.Throws<ArgumentNullException>(() =>
+                new EndiciaShipmentAdapter(new ShipmentEntity(), mock.Create<IShipmentTypeManager>(),
+                mock.Create<ICustomsManager>(), mock.Create<IStoreManager>()));
+
+            Assert.Throws<ArgumentNullException>(() =>
+                new EndiciaShipmentAdapter(shipment, null, mock.Create<ICustomsManager>(),
+                mock.Create<IStoreManager>()));
+            Assert.Throws<ArgumentNullException>(() =>
+                new EndiciaShipmentAdapter(shipment, mock.Create<IShipmentTypeManager>(), null,
+                mock.Create<IStoreManager>()));
         }
 
         [Fact]
         public void AccountId_ReturnsShipmentValue()
         {
             shipment.Postal.Endicia.EndiciaAccountID = 12;
-            var testObject = new EndiciaShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            var testObject = mock.Create<EndiciaShipmentAdapter>(TypedParameter.From(shipment));
             Assert.Equal(12, testObject.AccountId);
         }
 
@@ -82,7 +75,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Endicia
         [InlineData(10009238)]
         public void AccountId_StoresSpecifiedValue_WhenValueIsValid(long value)
         {
-            var testObject = new EndiciaShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            var testObject = mock.Create<EndiciaShipmentAdapter>(TypedParameter.From(shipment));
             testObject.AccountId = value;
             Assert.Equal(value, shipment.Postal.Endicia.EndiciaAccountID);
         }
@@ -90,7 +83,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Endicia
         [Fact]
         public void AccountId_StoresZero_WhenValueIsNull()
         {
-            var testObject = new EndiciaShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            var testObject = mock.Create<EndiciaShipmentAdapter>(TypedParameter.From(shipment));
             testObject.AccountId = null;
             Assert.Equal(0, shipment.Postal.Endicia.EndiciaAccountID);
         }
@@ -98,14 +91,14 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Endicia
         [Fact]
         public void Shipment_IsNotNull()
         {
-            var testObject = new EndiciaShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            var testObject = mock.Create<EndiciaShipmentAdapter>(TypedParameter.From(shipment));
             Assert.NotNull(testObject.Shipment);
         }
 
         [Fact]
         public void ShipmentTypeCode_IsEndicia()
         {
-            var testObject = new EndiciaShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            var testObject = mock.Create<EndiciaShipmentAdapter>(TypedParameter.From(shipment));
             Assert.Equal(ShipmentTypeCode.Endicia, testObject.ShipmentTypeCode);
         }
 
@@ -113,14 +106,14 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Endicia
         public void ShipmentTypeCode_IsExpress1Endicia()
         {
             shipment.ShipmentTypeCode = ShipmentTypeCode.Express1Endicia;
-            var testObject = new EndiciaShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            var testObject = mock.Create<EndiciaShipmentAdapter>(TypedParameter.From(shipment));
             Assert.Equal(ShipmentTypeCode.Express1Endicia, testObject.ShipmentTypeCode);
         }
 
         [Fact]
         public void SupportsAccounts_IsTrue()
         {
-            EndiciaShipmentAdapter testObject = new EndiciaShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            var testObject = mock.Create<EndiciaShipmentAdapter>(TypedParameter.From(shipment));
 
             Assert.True(testObject.SupportsAccounts);
         }
@@ -128,45 +121,32 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Endicia
         [Fact]
         public void SupportsMultiplePackages_IsFalse()
         {
-            EndiciaShipmentAdapter testObject = new EndiciaShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            var testObject = mock.Create<EndiciaShipmentAdapter>(TypedParameter.From(shipment));
             Assert.False(testObject.SupportsMultiplePackages);
         }
 
-        [Fact]
-        public void SupportsMultiplePackages_DomesticIsTrue_WhenShipCountryIsUs()
+        [Theory]
+        [InlineData(true, true)]
+        [InlineData(false, false)]
+        public void SupportsMultiplePackages_DomesticIsTrue_WhenShipCountryIsUs(bool isDomestic, bool expected)
         {
-            shipment.OriginCountryCode = "US";
-            shipment.ShipCountryCode = "US";
-
-            EndiciaShipmentAdapter testObject = new EndiciaShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
-            Assert.True(testObject.IsDomestic);
-        }
-
-        [Fact]
-        public void SupportsMultiplePackages_DomesticIsFalse_WhenShipCountryIsCa()
-        {
-            shipment.OriginCountryCode = "US";
-            shipment.ShipCountryCode = "CA";
-
-            EndiciaShipmentAdapter testObject = new EndiciaShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
-            Assert.False(testObject.IsDomestic);
+            mock.WithShipmentTypeFromShipmentManager(x => x.Setup(b => b.IsDomestic(shipment)).Returns(isDomestic));
+            var testObject = mock.Create<EndiciaShipmentAdapter>(TypedParameter.From(shipment));
+            Assert.Equal(expected, testObject.IsDomestic);
         }
 
         [Fact]
         public void UpdateDynamicData_DelegatesToShipmentTypeAndCustomsManager()
         {
-            using (AutoMock mock = AutoMockExtensions.GetLooseThatReturnsMocks())
-            {
-                Mock<EndiciaShipmentType> shipmentTypeMock2 = mock.WithShipmentTypeFromShipmentManager<EndiciaShipmentType>(x => { });
-                EndiciaShipmentAdapter testObject = mock.Create<EndiciaShipmentAdapter>(new TypedParameter(typeof(ShipmentEntity), shipment));
-                testObject.UpdateDynamicData();
+            Mock<EndiciaShipmentType> shipmentTypeMock2 = mock.WithShipmentTypeFromShipmentManager<EndiciaShipmentType>(x => { });
+            EndiciaShipmentAdapter testObject = mock.Create<EndiciaShipmentAdapter>(new TypedParameter(typeof(ShipmentEntity), shipment));
+            testObject.UpdateDynamicData();
 
-                shipmentTypeMock2.Verify(b => b.UpdateDynamicShipmentData(It.IsAny<ShipmentEntity>()));
-                shipmentTypeMock2.Verify(b => b.UpdateTotalWeight(It.IsAny<ShipmentEntity>()));
+            shipmentTypeMock2.Verify(b => b.UpdateDynamicShipmentData(It.IsAny<ShipmentEntity>()));
+            shipmentTypeMock2.Verify(b => b.UpdateTotalWeight(It.IsAny<ShipmentEntity>()));
 
-                mock.Mock<ICustomsManager>()
-                    .Verify(b => b.EnsureCustomsLoaded(It.IsAny<IEnumerable<ShipmentEntity>>()));
-            }
+            mock.Mock<ICustomsManager>()
+                .Verify(b => b.EnsureCustomsLoaded(It.IsAny<IEnumerable<ShipmentEntity>>()));
         }
 
         [Fact]
@@ -175,9 +155,10 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Endicia
             Dictionary<ShipmentEntity, Exception> errors = new Dictionary<ShipmentEntity, Exception>();
             errors.Add(shipment, new Exception("test"));
 
-            customsManager.Setup(c => c.EnsureCustomsLoaded(It.IsAny<IEnumerable<ShipmentEntity>>())).Returns(errors);
+            mock.Mock<ICustomsManager>()
+                .Setup(c => c.EnsureCustomsLoaded(It.IsAny<IEnumerable<ShipmentEntity>>())).Returns(errors);
 
-            EndiciaShipmentAdapter testObject = new EndiciaShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            var testObject = mock.Create<EndiciaShipmentAdapter>(TypedParameter.From(shipment));
 
             Assert.NotNull(testObject.UpdateDynamicData());
             Assert.Equal(1, testObject.UpdateDynamicData().Count);
@@ -186,7 +167,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Endicia
         [Fact]
         public void SupportsPackageTypes_IsTrue()
         {
-            ICarrierShipmentAdapter testObject = new EndiciaShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            var testObject = mock.Create<EndiciaShipmentAdapter>(TypedParameter.From(shipment));
 
             Assert.True(testObject.SupportsPackageTypes);
         }
@@ -194,14 +175,14 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Endicia
         [Fact]
         public void ShipDate_ReturnsShipmentValue()
         {
-            ICarrierShipmentAdapter testObject = new EndiciaShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            var testObject = mock.Create<EndiciaShipmentAdapter>(TypedParameter.From(shipment));
             Assert.Equal(shipment.ShipDate, testObject.ShipDate);
         }
 
         [Fact]
         public void ShipDate_IsUpdated()
         {
-            ICarrierShipmentAdapter testObject = new EndiciaShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            var testObject = mock.Create<EndiciaShipmentAdapter>(TypedParameter.From(shipment));
 
             testObject.ShipDate = testObject.ShipDate.AddDays(1);
 
@@ -211,14 +192,14 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Endicia
         [Fact]
         public void ServiceType_ReturnsShipmentValue()
         {
-            ICarrierShipmentAdapter testObject = new EndiciaShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            var testObject = mock.Create<EndiciaShipmentAdapter>(TypedParameter.From(shipment));
             Assert.Equal(shipment.Postal.Service, testObject.ServiceType);
         }
 
         [Fact]
         public void ServiceType_IsUpdated()
         {
-            ICarrierShipmentAdapter testObject = new EndiciaShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            var testObject = mock.Create<EndiciaShipmentAdapter>(TypedParameter.From(shipment));
 
             shipment.Postal.Service = (int) PostalServiceType.FirstClass;
             testObject.ServiceType = (int) PostalServiceType.ParcelSelect;
@@ -232,13 +213,20 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Endicia
         [InlineData(PostalServiceType.ExpressMail, PostalConfirmationType.None)]
         public void UpdateServiceFromRate_SetsService_WhenTagIsValid(PostalServiceType serviceType, PostalConfirmationType confirmationType)
         {
-            shipmentTypeManager.Setup(x => x.Get(shipment)).Returns(shipmentType);
-            var testObject = new EndiciaShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            mock.WithShipmentTypeFromShipmentManager(x =>
+            {
+                x.Setup(b => b.SupportsGetRates).Returns(true);
+                x.Setup(b => b.ShipmentTypeCode).Returns(ShipmentTypeCode.Endicia);
+            });
+
+            var testObject = mock.Create<EndiciaShipmentAdapter>(TypedParameter.From(shipment));
+
             testObject.SelectServiceFromRate(new RateResult("Foo", "1", 1M, new PostalRateSelection(serviceType, confirmationType))
             {
                 Selectable = true,
                 ShipmentType = ShipmentTypeCode.Endicia
             });
+
             Assert.Equal((int) serviceType, shipment.Postal.Service);
             Assert.Equal((int) confirmationType, shipment.Postal.Confirmation);
         }
@@ -248,11 +236,12 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Endicia
         [InlineData("Foo")]
         public void UpdateServiceFromRate_DoesNotSetService_WhenTagIsNotValid(string value)
         {
-            shipmentTypeManager.Setup(x => x.Get(shipment)).Returns(shipmentType);
+            mock.WithShipmentTypeFromShipmentManager(x => x.Setup(b => b.SupportsGetRates).Returns(true));
+
             shipment.Postal.Service = (int) PostalServiceType.PriorityMail;
             shipment.Postal.Confirmation = (int) PostalConfirmationType.AdultSignatureRestricted;
 
-            var testObject = new EndiciaShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            var testObject = mock.Create<EndiciaShipmentAdapter>(TypedParameter.From(shipment));
             testObject.SelectServiceFromRate(new RateResult("Foo", "1", 1M, value)
             {
                 Selectable = true,

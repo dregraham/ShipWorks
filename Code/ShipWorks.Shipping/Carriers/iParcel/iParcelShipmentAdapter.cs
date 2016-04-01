@@ -4,6 +4,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.iParcel.Enums;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Services;
+using ShipWorks.Stores;
 
 namespace ShipWorks.Shipping.Carriers.iParcel
 {
@@ -25,7 +26,9 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// <summary>
         /// Constructor
         /// </summary>
-        public iParcelShipmentAdapter(ShipmentEntity shipment, IShipmentTypeManager shipmentTypeManager, ICustomsManager customsManager) : base(shipment, shipmentTypeManager, customsManager)
+        public iParcelShipmentAdapter(ShipmentEntity shipment, IShipmentTypeManager shipmentTypeManager,
+            ICustomsManager customsManager, IStoreManager storeManager) :
+            base(shipment, shipmentTypeManager, customsManager, storeManager)
         {
             MethodConditions.EnsureArgumentIsNotNull(shipment.IParcel, nameof(shipment.IParcel));
             MethodConditions.EnsureArgumentIsNotNull(customsManager, nameof(customsManager));

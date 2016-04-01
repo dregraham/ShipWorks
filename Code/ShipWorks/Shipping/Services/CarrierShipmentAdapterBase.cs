@@ -8,6 +8,7 @@ using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Editing.Rating;
+using ShipWorks.Stores;
 
 namespace ShipWorks.Shipping.Services
 {
@@ -19,6 +20,7 @@ namespace ShipWorks.Shipping.Services
         private ShipmentType shipmentType;
         private ICustomsManager customsManager;
         private EntityCollection<ShipmentCustomsItemEntity> customsItems;
+        private readonly IStoreManager storeManager;
 
         /// <summary>
         /// Copy constructor
@@ -33,13 +35,15 @@ namespace ShipWorks.Shipping.Services
         /// <summary>
         /// Constructor
         /// </summary>
-        protected CarrierShipmentAdapterBase(ShipmentEntity shipment, IShipmentTypeManager shipmentTypeManager, ICustomsManager customsManager)
+        protected CarrierShipmentAdapterBase(ShipmentEntity shipment, IShipmentTypeManager shipmentTypeManager,
+            ICustomsManager customsManager, IStoreManager storeManager)
         {
             MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
             MethodConditions.EnsureArgumentIsNotNull(shipmentTypeManager, nameof(shipmentTypeManager));
 
             Shipment = shipment;
             this.customsManager = customsManager;
+            this.storeManager = storeManager;
             shipmentType = shipmentTypeManager.Get(shipment);
         }
 
@@ -58,7 +62,7 @@ namespace ShipWorks.Shipping.Services
         /// </summary>
         public StoreEntity Store
         {
-            get { return Shipment.Order.Store; }
+            get { return Shipment.Order?.Store ?? storeManager.GetRelatedStore(Shipment); }
         }
 
         /// <summary>
