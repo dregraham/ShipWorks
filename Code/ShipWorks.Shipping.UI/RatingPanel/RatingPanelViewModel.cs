@@ -60,21 +60,6 @@ namespace ShipWorks.Shipping.UI.RatingPanel
             // RatesRetrievedMessage before calling LoadRates.  The following code allows us to do that.
             // See the Switch example at http://download.microsoft.com/download/C/5/D/C5D669F9-01DF-4FAF-BBA9-29C096C462DB/Rx%20HOL%20.NET.pdf
             // for more info.
-            //IObservable<RatesRetrievedMessage> mergedMessages =
-            //    (from rateRetrievingMsg in messenger.OfType<RatesRetrievingMessage>()
-            //     select messenger.OfType<RatesRetrievedMessage>()
-            //                     .Where(rateRetrivedMsg => rateRetrievingMsg.RatingHash == rateRetrivedMsg.RatingHash)
-            //    ).Switch();
-
-            //messenger.OfType<RatesRetrievingMessage>()
-            //    .Select(GetMatchingRatesRetrievedMessage)
-            //    .Switch()
-            //    .Throttle(TimeSpan.FromMilliseconds(250), schedulerProvider.Default)
-            //    .Select(x => x)
-            //    .ObserveOn(schedulerProvider.Dispatcher)
-            //    .Subscribe(LoadRates);
-
-
             subscriptions = new CompositeDisposable(
                 messenger.OfType<RatesRetrievingMessage>()
                     .ObserveOn(schedulerProvider.Dispatcher)
