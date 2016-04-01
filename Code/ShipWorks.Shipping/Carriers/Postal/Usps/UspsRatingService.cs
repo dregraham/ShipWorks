@@ -74,7 +74,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             // since it should be using a different cache key
             try
             {
-                return accountRepository.Accounts.Any() ?
+                return accountRepository.Accounts.Any(a=>a.PendingInitialAccount != (int) UspsPendingAccountType.Create) ?
                     GetRatesInternal(shipment) :
                     GetCounterRates(shipment);
             }
