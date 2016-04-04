@@ -77,8 +77,8 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingRibbon
 
         [Theory]
         [InlineData(0, false)]
-        [InlineData(1, true)]
-        [InlineData(2, true)]
+        [InlineData(1, false)]
+        [InlineData(2, false)]
         public void HandleOrderSelectionChanged_SetsEnabledOnCreateLabel_WhenMessageHasNoLoadedOrders(int selectionCount, bool expected)
         {
             actions.Object.CreateLabel.Enabled = !expected;
@@ -222,8 +222,8 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingRibbon
 
         [Theory]
         [InlineData(0, false)]
-        [InlineData(1, true)]
-        [InlineData(2, true)]
+        [InlineData(1, false)]
+        [InlineData(2, false)]
         public void HandleOrderSelectionChanged_SetsEnabledOnVoid_WhenMessageHasNoLoadedOrders(int selectionCount, bool expected)
         {
             actions.Object.Void.Enabled = !expected;

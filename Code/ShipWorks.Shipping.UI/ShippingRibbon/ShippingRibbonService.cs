@@ -228,22 +228,13 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
         {
             if (currentShipment != null)
             {
-                // No action is allowed for None shipment type
-                if (currentShipment.ShipmentTypeCode == ShipmentTypeCode.None)
+                // No action is allowed for None, Amazon, and Best rate shipment type
+                if (currentShipment.ShipmentTypeCode == ShipmentTypeCode.None ||
+                    currentShipment.ShipmentTypeCode == ShipmentTypeCode.Amazon ||
+                    currentShipment.ShipmentTypeCode == ShipmentTypeCode.BestRate)
                 {
                     shippingRibbonActions.CreateLabel.Enabled = false;
                     shippingRibbonActions.Void.Enabled = false;
-                    shippingRibbonActions.Return.Enabled = false;
-                    shippingRibbonActions.Reprint.Enabled = false;
-                    shippingRibbonActions.ShipAgain.Enabled = false;
-                    shippingRibbonActions.ApplyProfile.Enabled = false;
-                }
-                // No action is allowed for None shipment type
-                else if (currentShipment.ShipmentTypeCode == ShipmentTypeCode.Amazon ||
-                         currentShipment.ShipmentTypeCode == ShipmentTypeCode.BestRate)
-                {
-                    shippingRibbonActions.CreateLabel.Enabled = true;
-                    shippingRibbonActions.Void.Enabled = true;
                     shippingRibbonActions.Return.Enabled = false;
                     shippingRibbonActions.Reprint.Enabled = false;
                     shippingRibbonActions.ShipAgain.Enabled = false;
@@ -263,8 +254,8 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
             }
             else
             {
-                shippingRibbonActions.CreateLabel.Enabled = currentOrderIDs.Any();
-                shippingRibbonActions.Void.Enabled = currentOrderIDs.Any();
+                shippingRibbonActions.CreateLabel.Enabled = false;
+                shippingRibbonActions.Void.Enabled = false;
                 shippingRibbonActions.Return.Enabled = false;
                 shippingRibbonActions.Reprint.Enabled = false;
                 shippingRibbonActions.ShipAgain.Enabled = false;
