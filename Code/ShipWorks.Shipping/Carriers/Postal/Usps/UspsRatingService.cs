@@ -82,10 +82,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             {
                 throw new ShippingException(ex.Message, ex);
             }
-
         }
-        
-
         
         /// <summary>
         /// Gets counter rates for a postal shipment
