@@ -325,7 +325,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <param name="account">The account.</param>
         private void UpdateContractType(UspsAccountEntity account)
         {
-            if (account == null)
+            if (account == null || account.PendingInitialAccount != (int)UspsPendingAccountType.None)
             {
                 return;
             }
