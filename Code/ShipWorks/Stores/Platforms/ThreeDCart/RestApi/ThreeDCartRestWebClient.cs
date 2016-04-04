@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
@@ -17,11 +16,10 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
 {
     public class ThreeDCartRestWebClient : IThreeDCartRestWebClient
     {
-        private IProgressReporter progressReporter;
         private const string HttpHost = "https://apirest.3dcart.com/3dCartWebAPI";
         private const string OrderApiVersion = "v1";
-        private const string OrderUrlExtension = "Orders";
         private const string ProductApiVersion = "v1";
+        private const string OrderUrlExtension = "Orders";
         private const string ProductUrlExtension = "Products";
         private const string ShipmentUrlExtension = "Shipments";
         private const string ContentType = "application/json";
@@ -31,8 +29,8 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
         private readonly string secureUrl;
         private readonly string token;
         private readonly ThreeDCartWebClientRequestThrottle throttler = new ThreeDCartWebClientRequestThrottle();
-
         private readonly HttpJsonVariableRequestSubmitter submitter;
+        private IProgressReporter progressReporter;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ThreeDCartRestWebClient"/> class.
@@ -54,9 +52,9 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
         /// <summary>
         /// Loads the progress reporter. Needed to display throttling message.
         /// </summary>
-        public void LoadProgressReporter(IProgressReporter progressReporter)
+        public void LoadProgressReporter(IProgressReporter progress)
         {
-            this.progressReporter = progressReporter;
+            progressReporter = progress;
         }
 
         /// <summary>

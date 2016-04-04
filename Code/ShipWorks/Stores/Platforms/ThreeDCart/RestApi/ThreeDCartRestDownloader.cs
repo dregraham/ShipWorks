@@ -17,15 +17,19 @@ using ShipWorks.Stores.Platforms.ThreeDCart.RestApi.DTO;
 
 namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
 {
+
+    /// <summary>
+    /// Downloader for 3dCart that uses their REST API
+    /// </summary>
     public class ThreeDCartRestDownloader : StoreDownloader
     {
+        const int MissingCustomerID = 0;
         private readonly IThreeDCartRestWebClient restWebClient;
         private readonly ThreeDCartStoreEntity threeDCartStore;
-        private int totalCount;
         private readonly ISqlAdapterRetry sqlAdapterRetry;
         private readonly ILog log;
-        const int MissingCustomerID = 0;
         private int newOrderCount;
+        private int totalCount;
         private DateTime modifiedOrderEndDate;
 
         /// <summary>
@@ -40,6 +44,10 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
         {
         }
 
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ThreeDCartRestDownloader"/> class.
+        /// </summary>
         public ThreeDCartRestDownloader(ThreeDCartStoreEntity store, IThreeDCartRestWebClient restWebClient, ISqlAdapterRetry sqlAdapterRetry, ILog log) : base(store)
         {
             this.restWebClient = restWebClient;

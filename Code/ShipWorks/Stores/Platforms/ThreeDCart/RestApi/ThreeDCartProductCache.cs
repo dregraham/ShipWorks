@@ -5,6 +5,9 @@ using ShipWorks.Stores.Platforms.ThreeDCart.RestApi.DTO;
 
 namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
 {
+    /// <summary>
+    /// Cache for storing product information that requires a 2nd web call to retrieve
+    /// </summary>
     public class ThreeDCartProductCache
     {
         private readonly Dictionary<string, LruCache<int, ThreeDCartProduct>> storeProductCaches =

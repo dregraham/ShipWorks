@@ -5,6 +5,10 @@ using Rebex.Mail;
 
 namespace Interapptive.Shared.Net
 {
+    /// <summary>
+    /// Interface for logging request\response from the various API's that ShipWorks
+    /// works with.
+    /// </summary>
     public interface IApiLogEntry
     {
         /// <summary>

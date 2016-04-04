@@ -15,8 +15,6 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
         /// <summary>
         /// Gets the product.
         /// </summary>
-        /// <param name="catalogID">The catalog identifier.</param>
-        /// <returns></returns>
         ThreeDCartProduct GetProduct(int catalogID);
 
         /// <summary>

@@ -3,12 +3,21 @@ using System.Text;
 
 namespace Interapptive.Shared.Net
 {
+    /// <summary>
+    /// Http request submitter with the ability to make POST requests with a JSON body
+    /// </summary>
     public class HttpJsonVariableRequestSubmitter : HttpVariableRequestSubmitter
     {
         private const string ResponseFormat = "application/json";
 
+        /// <summary>
+        /// Gets or sets the request body.
+        /// </summary>
         public string RequestBody { get; set; }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="HttpJsonVariableRequestSubmitter"/> class.
+        /// </summary>
         public HttpJsonVariableRequestSubmitter()
         {
             // Subscribe to the request submitting event, so we can set the content type
@@ -33,10 +42,13 @@ namespace Interapptive.Shared.Net
         /// </summary>
         public override byte[] GetPostContent()
         {
-            // Not URL encoding the content since it is being posted as XML
+            // Not URL encoding the content since it is being posted as JSON
             return Encoding.Default.GetBytes(RequestBody);
         }
 
+        /// <summary>
+        /// Processes the request.
+        /// </summary>
         public string ProcessRequest(IApiLogEntry logEntry, Type exceptionTypeToRethrow)
         {
             try

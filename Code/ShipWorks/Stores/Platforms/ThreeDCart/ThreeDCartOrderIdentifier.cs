@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Linq;
-using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Content;
 
@@ -68,9 +66,6 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         /// <summary>
         /// Returns a string version of the identifier
         /// </summary>
-        public override string ToString()
-        {
-            return $"{OrderPrefix}{OrderNumber}{orderPostfix}";
-        }
+        public override string ToString() => $"{OrderPrefix}{OrderNumber}{orderPostfix}";
     }
 }

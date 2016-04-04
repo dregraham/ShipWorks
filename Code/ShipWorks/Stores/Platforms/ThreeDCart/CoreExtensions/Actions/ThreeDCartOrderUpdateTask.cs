@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using ShipWorks.Actions.Tasks.Common;
 using ShipWorks.Actions.Tasks;
 using ShipWorks.Data.Model;
@@ -66,10 +63,21 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.CoreExtensions.Actions
 
             try
             {
-                ThreeDCartRestOnlineUpdater updater = new ThreeDCartRestOnlineUpdater(store);
-                foreach (long orderID in inputKeys)
+                if (store.RestUser)
                 {
-                    updater.UpdateOrderStatus(orderID, StatusCode, context.CommitWork);
+                    ThreeDCartRestOnlineUpdater updater = new ThreeDCartRestOnlineUpdater(store);
+                    foreach (long orderID in inputKeys)
+                    {
+                        updater.UpdateOrderStatus(orderID, StatusCode, context.CommitWork);
+                    }
+                }
+                else
+                {
+                    ThreeDCartSoapOnlineUpdater updater = new ThreeDCartSoapOnlineUpdater(store);
+                    foreach (long orderID in inputKeys)
+                    {
+                        updater.UpdateOrderStatus(orderID, StatusCode, context.CommitWork);
+                    }
                 }
             }
             catch (ThreeDCartException ex)

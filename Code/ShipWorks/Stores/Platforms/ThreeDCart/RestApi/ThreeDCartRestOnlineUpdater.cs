@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using Interapptive.Shared.Utility;
@@ -30,8 +29,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
         /// <summary>
         /// Initializes a new instance of the <see cref="ThreeDCartRestOnlineUpdater"/> class.
         /// </summary>
-        public
-            ThreeDCartRestOnlineUpdater(ThreeDCartStoreEntity store)
+        public ThreeDCartRestOnlineUpdater(ThreeDCartStoreEntity store)
             : this(LogManager.GetLogger(typeof (ThreeDCartRestOnlineUpdater)), new ThreeDCartRestWebClient(store))
         {
         }
@@ -95,7 +93,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
                 {
                     OrderID = order.ThreeDCartOrderID,
                     ShipmentID = item.ThreeDCartShipmentID,
-                    ShipmentOrderStatus = (int)EnumHelper.GetEnumByApiValue<Enums.ThreeDCartOrderStatus>(order.OnlineStatus),
+                    ShipmentOrderStatus = (int) EnumHelper.GetEnumByApiValue<Enums.ThreeDCartOrderStatus>(order.OnlineStatus),
                     ShipmentPhone = order.ShipPhone,
                     ShipmentFirstName = order.ShipFirstName,
                     ShipmentLastName = order.ShipLastName,
@@ -223,7 +221,6 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
             List<string> methods = new List<string>
             {
                 CheckForUsps(shipmentEntity, typeCode),
-                CheckForFedex(shipmentEntity, typeCode),
                 CheckForUps(shipmentEntity, typeCode),
                 CheckForOthers(shipmentEntity, typeCode)
             };
@@ -236,11 +233,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
         /// </summary>
         private string CheckForUsps(ShipmentEntity shipmentEntity, ShipmentTypeCode typeCode)
         {
-            if (typeCode != ShipmentTypeCode.Express1Endicia &&
-                typeCode != ShipmentTypeCode.Express1Usps &&
-                typeCode != ShipmentTypeCode.PostalWebTools &&
-                typeCode != ShipmentTypeCode.Usps &&
-                typeCode != ShipmentTypeCode.Endicia)
+            if (!PostalUtility.IsPostalShipmentType(typeCode))
             {
                 return string.Empty;
             }
@@ -253,22 +246,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
                 return $"{EnumHelper.GetDescription(service)}";
             }
 
-            if (shipmentEntity.Postal != null && ShipmentTypeManager.IsConsolidator(service))
-            {
-                return $"USPS - {EnumHelper.GetDescription(service)}";
-            }
-
             return $"USPS - {EnumHelper.GetDescription(service)}";
-        }
-
-        /// <summary>
-        /// Checks for fedex shipping method
-        /// </summary>
-        private string CheckForFedex(ShipmentEntity shipmentEntity, ShipmentTypeCode typeCode)
-        {
-            // Don't prefix with FedEx since it is in the service name
-            return typeCode == ShipmentTypeCode.FedEx ? $"{EnumHelper.GetDescription((FedExServiceType) shipmentEntity.FedEx.Service)}"
-                : string.Empty;
         }
 
         /// <summary>
@@ -306,6 +284,9 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
         {
             switch (typeCode)
             {
+                // Don't prefix with FedEx since it is in the service name
+                case ShipmentTypeCode.FedEx:
+                    return $"{EnumHelper.GetDescription((FedExServiceType) shipmentEntity.FedEx.Service)}";
                 case ShipmentTypeCode.OnTrac:
                     return $"OnTrac - {EnumHelper.GetDescription((OnTracServiceType) shipmentEntity.OnTrac.Service)}";
                 case ShipmentTypeCode.iParcel:

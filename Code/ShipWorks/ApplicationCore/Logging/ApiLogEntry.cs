@@ -1,15 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using System.IO;
 using System.Xml;
-using System.Xml.Serialization;
 using System.Xml.XPath;
 using Interapptive.Shared.Utility;
-using System.Diagnostics;
 using log4net;
-using System.Web;
 using Interapptive.Shared.Net;
 using Rebex.Mail;
 using System.Xml.Linq;
@@ -58,7 +54,7 @@ namespace ShipWorks.ApplicationCore.Logging
         /// <summary>
         /// Contols how the log output will be encrypted
         /// </summary>
-        public ApiLogEncryption Encryption 
+        public ApiLogEncryption Encryption
         {
             get { return encryption; }
             set { encryption = value; }
