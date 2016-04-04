@@ -1,16 +1,12 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
 using ShipWorks.Stores;
 using ShipWorks.ApplicationCore.Licensing.Decoding;
-using ShipWorks.Stores.Platforms;
 
 namespace ShipWorks.ApplicationCore.Licensing
 {
     /// <summary>
     /// Represents a license in ShipWorks
     /// </summary>
-    public class ShipWorksLicense
+    public class ShipWorksLicense : IShipWorksLicense
     {
         StoreTypeCode typeCode = StoreTypeCode.Invalid;
 
@@ -25,30 +21,30 @@ namespace ShipWorks.ApplicationCore.Licensing
         public ShipWorksLicense(string key)
         {
             this.key = key;
-			
+
             ReadLicense(key);
         }
 
         /// <summary>
         /// The store type the license represents
         /// </summary>
-        public StoreTypeCode StoreTypeCode 
-        { 
-            get 
+        public StoreTypeCode StoreTypeCode
+        {
+            get
             {
                 return typeCode;
-            } 
+            }
         }
 
         /// <summary>
         /// The actual license key
         /// </summary>
-        public string Key 
-        { 
-            get 
+        public string Key
+        {
+            get
             {
                 return key;
-            } 
+            }
         }
 
 		/// <summary>
@@ -123,7 +119,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             {
                 license = LicenseDecoder.Decode(key, "2.m");
             }
-			
+
 	        // Now see if its a freemium license
 			if (license == null)
 			{

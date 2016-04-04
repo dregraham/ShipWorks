@@ -47,7 +47,7 @@ namespace ShipWorks.Editions
             {
                 string editionValue = ConfigurationManager.AppSettings["edition"] ?? "standard";
 
-                log.InfoFormat("Insalled edition: {0}", editionValue);
+                log.InfoFormat("Installed edition: {0}", editionValue);
 
                 foreach (var value in EnumHelper.GetEnumList<EditionInstalledType>())
                 {
@@ -77,7 +77,7 @@ namespace ShipWorks.Editions
             // Convert to a List so we can iterate it more than once.
             List<StoreEntity> storeEntities = (List<StoreEntity>) (stores as IList<StoreEntity> ?? stores.ToList());
 
-            // If no stores were passed, like from Initalization, just return.
+            // If no stores were passed, like from Initialization, just return.
             if (!storeEntities.Any())
             {
                 return;
@@ -123,14 +123,14 @@ namespace ShipWorks.Editions
 
             if (restrictionData != null)
             {
-                allFeatureRestrictions = allFeatureRestrictions.Where(r => object.Equals(r.Data, restrictionData)).ToList();
+                allFeatureRestrictions = allFeatureRestrictions.Where(r => Equals(r.Data, restrictionData)).ToList();
             }
 
             List<StoreEntity> restrictedStores = allFeatureRestrictions.Select(r => r.Edition.Store).ToList();
 
             // Only check for enabled stores, as they are the only ones with up to date restrictions.
             // If there are any stores left over that don't have restrictions, then we should allow the feature, so
-            // remove the restictions from the list.
+            // remove the restrictions from the list.
             if (stores.Where(s => s.Enabled).Except(restrictedStores).Any())
             {
                 restrictions = restrictions.Except(allFeatureRestrictions).ToList();

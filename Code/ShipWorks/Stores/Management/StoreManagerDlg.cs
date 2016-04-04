@@ -5,12 +5,14 @@ using System.Drawing;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
+using Autofac;
 using Divelements.SandGrid;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Common.Threading;
-using ShipWorks.Data;
 using ShipWorks.Data.Adapter.Custom;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -87,8 +89,10 @@ namespace ShipWorks.Stores.Management
 
                 string storeType = StoreTypeManager.GetType(store).StoreTypeName;
 
-                GridRow row = new GridRow(new string[] { store.StoreName, storeType, GetLastDownloadDescription(store) });
-                row.Tag = store;
+                GridRow row = new GridRow(new[] { store.StoreName, storeType, GetLastDownloadDescription(store) })
+                {
+                    Tag = store
+                };
 
                 sandGrid.Rows.Add(row);
 
@@ -229,27 +233,30 @@ namespace ShipWorks.Stores.Management
             StoreEntity store = e.Row.Tag as StoreEntity;
             string proposed = e.Value.ToString().Trim();
 
-            if (proposed == store.StoreName || proposed.Length == 0)
+            if (store != null && (proposed == store.StoreName || proposed.Length == 0))
             {
                 e.Cancel = true;
                 return;
             }
 
-            IEntityFields2 fields = store.Fields.Clone();
-            store.StoreName = proposed;
-
-            try
+            if (store != null)
             {
-                StoreManager.SaveStore(store);
-            }
-            catch (DuplicateNameException ex)
-            {
-                MessageHelper.ShowInformation(this, ex.Message);
+                IEntityFields2 fields = store.Fields.Clone();
+                store.StoreName = proposed;
 
-                // Reload it to get its name back the way it was
-                store.Fields = fields;
+                try
+                {
+                    StoreManager.SaveStore(store);
+                }
+                catch (DuplicateNameException ex)
+                {
+                    MessageHelper.ShowInformation(this, ex.Message);
 
-                e.Cancel = true;
+                    // Reload it to get its name back the way it was
+                    store.Fields = fields;
+
+                    e.Cancel = true;
+                }
             }
         }
 
@@ -258,24 +265,29 @@ namespace ShipWorks.Stores.Management
         /// </summary>
         private void OnDelete(object sender, EventArgs e)
         {
-            using (StoreConfirmDeleteDlg dlg = new StoreConfirmDeleteDlg(SelectedStore.StoreName))
+            using (StoreConfirmDeleteDlg dlg = new StoreConfirmDeleteDlg(SelectedStore))
             {
                 if (dlg.ShowDialog(this) == DialogResult.OK)
                 {
-                    // Progress Provider
-                    ProgressProvider progressProvider = new ProgressProvider();
-
                     // Progress Item
-                    ProgressItem workProgress = new ProgressItem("Delete Store");
-                    workProgress.Detail = string.Format("Deleting store '{0}'...", SelectedStore.StoreName);
-                    workProgress.CanCancel = false;
-                    progressProvider.ProgressItems.Add(workProgress);
+                    ProgressItem workProgress = new ProgressItem("Delete Store")
+                    {
+                        Detail = $"Deleting store '{SelectedStore.StoreName}'...",
+                        CanCancel = false
+                    };
+
                     workProgress.Starting();
 
+                    // Progress Provider
+                    ProgressProvider progressProvider = new ProgressProvider();
+                    progressProvider.ProgressItems.Add(workProgress);
+
                     // Progress Dialog
-                    ProgressDlg progressDlg = new ProgressDlg(progressProvider);
-                    progressDlg.Title = "Delete";
-                    progressDlg.Description = "ShipWorks is deleting the store.";
+                    ProgressDlg progressDlg = new ProgressDlg(progressProvider)
+                    {
+                        Title = "Delete",
+                        Description = "ShipWorks is deleting the store."
+                    };
 
                     // Create the progress delayer - don't show the progress window if it happens too quickly
                     ProgressDisplayDelayer delayer = new ProgressDisplayDelayer(progressDlg);
@@ -363,9 +375,14 @@ namespace ShipWorks.Stores.Management
             BackgroundDeleteState state = (BackgroundDeleteState) userData;
 
             // We don't audit anything for deleting a store
-            using (AuditBehaviorScope auditScope = new AuditBehaviorScope(AuditState.Disabled))
+            using (new AuditBehaviorScope(AuditState.Disabled))
             {
-                DeletionService.DeleteStore(state.Store, UserSession.Security);
+                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+                {
+                    // Delete the store using the license service
+                    ILicenseService licenseService = lifetimeScope.Resolve<ILicenseService>();
+                    licenseService.GetLicense(state.Store).DeleteStore(state.Store, UserSession.Security);
+                }
             }
 
             state.ProgressProvider.ProgressItems[0].Completed();
@@ -403,13 +420,11 @@ namespace ShipWorks.Stores.Management
         /// </summary>
         private void OnAddStore(object sender, EventArgs e)
         {
-            if (AddStoreWizard.RunWizard(this))
-            {
-                LoadStores();
+            AddStoreWizard.RunWizard(this);
+            LoadStores();
 
-                SelectedStore = StoreManager.GetEnabledStores().OrderByDescending(s => s.StoreID).FirstOrDefault();
-                ActiveControl = sandGrid;
-            }
+            SelectedStore = StoreManager.GetEnabledStores().OrderByDescending(s => s.StoreID).FirstOrDefault();
+            ActiveControl = sandGrid;
         }
 
         /// <summary>
@@ -437,12 +452,12 @@ namespace ShipWorks.Stores.Management
         /// </summary>
         private void UpdateDisabledStoresControls()
         {
-            int disabledCount = StoreManager.GetAllStores().Where(s => !s.Enabled).Count();
+            int disabledCount = StoreManager.GetAllStores().Count(s => !s.Enabled);
 
             showDisabledStores.Visible = disabledCount > 0;
             labelDisabledCount.Visible = disabledCount > 0;
 
-            labelDisabledCount.Text = string.Format("({0} disabled store{1})", disabledCount, disabledCount > 1 ? "s" : "");
+            labelDisabledCount.Text = $"({disabledCount} disabled store{(disabledCount > 1 ? "s" : "")})";
         }
 
         /// <summary>

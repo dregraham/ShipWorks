@@ -20,6 +20,9 @@ using System;
 using System.Collections.Generic;
 using System.Drawing.Imaging;
 using System.Linq;
+using Autofac;
+using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Shipping.Carriers.BestRate;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Endicia
@@ -312,10 +315,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// </summary>
         public static bool IsScanBasedReturnsAllowed(ShipmentEntity shipment)
         {
-            return shipment.ReturnShipment &&
-                   shipment.Postal.Endicia.ScanBasedReturn &&
-                   shipment.ShipmentType == (int) ShipmentTypeCode.Endicia &&
-                   EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.EndiciaScanBasedReturns).Level == EditionRestrictionLevel.None;
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                ILicenseService licenseService = lifetimeScope.Resolve<ILicenseService>();
+                EditionRestrictionLevel restrictionLevel = licenseService.CheckRestriction(EditionFeature.EndiciaScanBasedReturns, null);
+
+                return shipment.ReturnShipment &&
+                       shipment.Postal.Endicia.ScanBasedReturn &&
+                       shipment.ShipmentType == (int) ShipmentTypeCode.Endicia &&
+                       restrictionLevel == EditionRestrictionLevel.None;
+            }
         }
 
         /// <summary>
@@ -373,9 +382,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 }
             }
         }
-            
-                        // Show the single account dialog if there are Express1 accounts and customer is not using USPS 
-                    // (Express1) rate discount messaging is restricted, so we're allowed to add the USPS 
+        
         /// <summary>
         /// Gets the processing synchronizer to be used during the PreProcessing of a shipment.
         /// </summary>
@@ -519,14 +526,19 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// </summary>
         public override ReturnsControlBase CreateReturnsControl()
         {
-            // If scan based returns is not allowed, show the default returns control
-            if (EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.EndiciaScanBasedReturns).Level != EditionRestrictionLevel.None)
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                return base.CreateReturnsControl();
-            }
+                ILicenseService licenseService = lifetimeScope.Resolve<ILicenseService>();
+                EditionRestrictionLevel restrictionLevel = licenseService.CheckRestriction(EditionFeature.EndiciaScanBasedReturns, null);
 
-            // It's allowed, so show the scan based returns control.
-            return new EndiciaReturnsControl();
+            // If scan based returns is not allowed, show the the default returns control
+                if (restrictionLevel != EditionRestrictionLevel.None)
+                {
+                    return base.CreateReturnsControl();
+                }
+
+                return new EndiciaReturnsControl();
+            }
         }
 
         /// <summary>

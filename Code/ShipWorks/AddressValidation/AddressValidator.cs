@@ -9,6 +9,7 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.AddressValidation.Enums;
 using ShipWorks.Data.Model.EntityClasses;
 using System.Threading.Tasks;
+using ShipWorks.Shipping.Carriers.Postal;
 
 namespace ShipWorks.AddressValidation
 {

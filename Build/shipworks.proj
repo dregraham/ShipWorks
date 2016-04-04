@@ -305,6 +305,7 @@
     <ObfuscationExcludedAssemblies Include="SD.LLBLGen.Pro.LinqSupportClasses.NET35, Version=2.6.0.0, Culture=neutral, PublicKeyToken=ca73b74ba4e3ff27" />
     <ObfuscationExcludedAssemblies Include="SD.LLBLGen.Pro.ORMSupportClasses.NET20, Version=2.6.0.0, Culture=neutral, PublicKeyToken=ca73b74ba4e3ff27" />
     <ObfuscationExcludedAssemblies Include="SpreadsheetGear, Version=6.0.3.190, Culture=neutral, PublicKeyToken=39c186f5904944ec" />
+    <ObfuscationExcludedAssemblies Include="System.IO, Version=2.6.10.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
     <ObfuscationExcludedAssemblies Include="System.Reactive.Core, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
     <ObfuscationExcludedAssemblies Include="System.Reactive.Interfaces, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
     <ObfuscationExcludedAssemblies Include="System.Reactive.Linq, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
@@ -314,6 +315,7 @@
     <ObfuscationExcludedAssemblies Include="System.Runtime, Version=2.6.10.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
     <ObfuscationExcludedAssemblies Include="System.Threading.Tasks, Version=2.6.10.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
     <ObfuscationExcludedAssemblies Include="System.Windows.Interactivity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
+    <ObfuscationExcludedAssemblies Include="ShipWorks.UI, Version=0.0.0.*, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
   </ItemGroup>
   <ItemGroup>
     <ObfuscationExcludedRegEx Include="^(Triggers|UserDefinedFunctions|StoredProcedures)::.+" />
@@ -331,6 +333,7 @@
     <ObfuscationExcludedRegEx Include="ShipWorks\.Stores\.Platforms\.Newegg\.Net.*Response\..+::.+" />
     <ObfuscationExcludedRegEx Include="ShipWorks\.Stores\.Platforms\.BigCommerce\.DTO\..+::.+" />
     <ObfuscationExcludedRegEx Include="ShipWorks\.Shipping\.Carriers\.Amazon\.Api\.DTOs\..+::.+" />
+    <ObfuscationExcludedRegEx Include="ShipWorks\.UI\.Controls\..+\..+(::.+)?" />
   </ItemGroup>
   <Target Name="Obfuscate" Condition=" $(Obfuscate) == 'True' ">
 

@@ -124,6 +124,7 @@ namespace ShipWorks.Tests.Core
                 "ShipWorks.ApplicationCore.Interaction.StartupAction".ToUpperInvariant(),
                 "ShipWorks.ApplicationCore.Licensing.Decoding.LicenseKeyPatternType".ToUpperInvariant(),
                 "ShipWorks.ApplicationCore.Licensing.LicenseActivationState".ToUpperInvariant(),
+                "ShipWorks.ApplicationCore.Licensing.LogOnRestrictionLevel".ToUpperInvariant(),
                 "ShipWorks.ApplicationCore.Logging.ApiLogCategory".ToUpperInvariant(),
                 "ShipWorks.ApplicationCore.Logging.ApiLogEncryption".ToUpperInvariant(),
                 "ShipWorks.ApplicationCore.Logging.LogActionType".ToUpperInvariant(),
@@ -276,6 +277,7 @@ namespace ShipWorks.Tests.Core
                 "ShipWorks.Users.Audit.AuditChangeGroup".ToUpperInvariant(),
                 "ShipWorks.Users.Security.PermissionScope".ToUpperInvariant(),
                 "ShipWorks.Users.Security.StorePermissionCoverage".ToUpperInvariant(),
+                "ShipWorks.Users.UserServiceLogonResultType".ToUpperInvariant(),
                 "ShipWorks.Users.UserSettingsDlg+Section".ToUpperInvariant(),
                 "ShipWorks.Filters.FilterState".ToUpperInvariant(),
             };

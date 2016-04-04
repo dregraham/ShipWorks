@@ -79,7 +79,7 @@ namespace ShipWorks.AddressValidation
                 CountryCode = address.Country ?? string.Empty,
                 IsValid = isValid,
                 POBox = ConvertPoBox(uspsResult.IsPoBox),
-                ResidentialStatus = ConvertResidentialStatus(uspsResult.ResidentialIndicator),
+                ResidentialStatus = ConvertResidentialStatus(uspsResult.ResidentialIndicator)
             };
 
             addressValidationResult.ParseStreet1();

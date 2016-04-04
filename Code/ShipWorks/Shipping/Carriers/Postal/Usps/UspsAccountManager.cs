@@ -160,12 +160,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         public static string GetDefaultDescription(UspsAccountEntity account)
         {
-            // Express1 uses terribly long account numbers
-            if (account.UspsReseller != 1)
-            {
-                return account.Username;
-            }
-
             string descriptionBase = account.Username;
 
             // only shorten so long as we know they're still using long account numbers.

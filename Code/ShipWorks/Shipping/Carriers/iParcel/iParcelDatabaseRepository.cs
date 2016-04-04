@@ -24,11 +24,6 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         private const string PackageTotalCurrencyColumnName = "PackageTotalCurrency";
 
         private readonly ILog log = LogManager.GetLogger(typeof(iParcelDatabaseRepository));
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="iParcelDatabaseRepository" /> class.
-        /// </summary>
-        /// <param name="logger">The logger.</param>
         public iParcelDatabaseRepository(Func<Type, ILog> logger)
         {
             log = logger(typeof(iParcelDatabaseRepository));

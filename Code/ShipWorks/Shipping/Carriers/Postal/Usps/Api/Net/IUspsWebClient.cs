@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Xml.Linq;
+using Interapptive.Shared.Business;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
 using ShipWorks.Shipping.Editing.Rating;
@@ -27,7 +29,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// Checks with USPS API to get the contract type of the account.
         /// </summary>
         UspsAccountContractType GetContractType(UspsAccountEntity account);
-        
+
+        /// <summary>
+        /// Validates the address.
+        /// </summary>
+        Task<UspsAddressValidationResults> ValidateAddressAsync(PersonAdapter physicalAddress);
+
         /// <summary>
         /// Purchase postage for the given account for the specified amount.  ControlTotal is the ControlTotal value last retrieved from GetAccountInfo.
         /// </summary>
@@ -37,13 +44,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// Get the rates for the given shipment based on its settings
         /// </summary>
         List<RateResult> GetRates(ShipmentEntity shipment);
-            
+
         /// <summary>
         /// Creates the scan form.
         /// </summary>
         /// <param name="shipments">The shipments.</param>
         /// <param name="uspsAccountEntity">The USPS account entity.</param>
-        /// <returns>An XDocument having a ScanForm node as the root which contains a TransactionId and Url nodes to 
+        /// <returns>An XDocument having a ScanForm node as the root which contains a TransactionId and Url nodes to
         /// identify results from USPS</returns>
         XDocument CreateScanForm(IEnumerable<UspsShipmentEntity> shipments, UspsAccountEntity uspsAccountEntity);
 
@@ -56,5 +63,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// Process the given shipment, downloading label images and tracking information
         /// </summary>
         void ProcessShipment(ShipmentEntity shipment);
+
+        /// <summary>
+        /// Populates a usps account entity.
+        /// </summary>
+        /// <param name="account">The account.</param>
+        void PopulateUspsAccountEntity(UspsAccountEntity account);
     }
 }

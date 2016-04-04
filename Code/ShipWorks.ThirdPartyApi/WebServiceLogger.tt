@@ -7,7 +7,8 @@
 
 <#
 	var services = new object[]
-	{
+    {
+        "ShipWorks.ApplicationCore.Licensing.Activation.WebServices", "Activation",
 		"ShipWorks.Shipping.Carriers.Postal.Usps.WebServices", "SwsimV49",
 		"ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v36", "SwsimV36",
 		"ShipWorks.Shipping.Carriers.Postal.Endicia.WebServices.LabelService", "EwsLabelService",

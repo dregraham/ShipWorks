@@ -5,6 +5,7 @@ using Autofac;
 using Autofac.Features.OwnedInstances;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Editions;
 using ShipWorks.Shipping.Carriers.FedEx;
@@ -28,9 +29,6 @@ namespace ShipWorks.Shipping
                 .Where(IsCarrierAllowed)
                 .OrderBy(x => GetSortValue(x));
 
-        /// <summary>
-        /// Returns all shipment types in ShipWorks
-        /// </summary>
         public static List<ShipmentType> ShipmentTypes =>
             ShipmentTypeCodes.Select(x => GetType(x)).ToList();
 
@@ -211,33 +209,38 @@ namespace ShipWorks.Shipping
 
         private static bool IsCarrierAllowed(ShipmentTypeCode typeCode)
         {
-            // If the active edition doesn't allow this ShipmentType, skip it
-            if (EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.ShipmentType, typeCode).Level == EditionRestrictionLevel.Hidden)
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                return false;
-            }
+                ILicenseService licenseService = lifetimeScope.Resolve<ILicenseService>();
 
-            if (typeCode == ShipmentTypeCode.Express1Usps)
-            {
-                // The only time Express1 for USPS should be excluded is when USPS has never been setup but Endicia has been setup
-                if (!ShippingManager.IsShipmentTypeActivated(ShipmentTypeCode.Usps) &&
-                    !ShippingManager.IsShipmentTypeActivated(ShipmentTypeCode.Express1Usps) && ShippingManager.IsShipmentTypeActivated(ShipmentTypeCode.Endicia))
+                // If the active edition doesn't allow this ShipmentType, skip it
+                if (licenseService.CheckRestriction(EditionFeature.ShipmentType, typeCode) == EditionRestrictionLevel.Hidden)
                 {
-                    // USPS has never been setup, so we want to exclude the Express1/USPS type since Endicia IS setup in ShipWorks
                     return false;
                 }
-            }
-            else if (typeCode == ShipmentTypeCode.Express1Endicia)
-            {
-                // We have an Express1 for Endicia shipment type which should be excluded if Endicia has never been setup
-                if (!ShippingManager.IsShipmentTypeActivated(ShipmentTypeCode.Endicia) && !ShippingManager.IsShipmentTypeActivated(ShipmentTypeCode.Express1Endicia))
-                {
-                    // The Endicia type has never been setup, so we want to exclude the Express1 for Endicia type
-                    return false;
-                }
-            }
 
-            return true;
+                if (typeCode == ShipmentTypeCode.Express1Usps)
+                {
+                    // The only time Express1 for USPS should be excluded is when USPS has never been setup but Endicia has been setup
+                    if (!ShippingManager.IsShipmentTypeActivated(ShipmentTypeCode.Usps) &&
+                        !ShippingManager.IsShipmentTypeActivated(ShipmentTypeCode.Express1Usps) && ShippingManager.IsShipmentTypeActivated(ShipmentTypeCode.Endicia))
+                    {
+                        // USPS has never been setup, so we want to exclude the Express1/USPS type since Endicia IS setup in ShipWorks
+                        return false;
+                    }
+                }
+                else if (typeCode == ShipmentTypeCode.Express1Endicia)
+                {
+                    // We have an Express1 for Endicia shipment type which should be excluded if Endicia has never been setup
+                    if (!ShippingManager.IsShipmentTypeActivated(ShipmentTypeCode.Endicia) && !ShippingManager.IsShipmentTypeActivated(ShipmentTypeCode.Express1Endicia))
+                    {
+                        // The Endicia type has never been setup, so we want to exclude the Express1 for Endicia type
+                        return false;
+                    }
+                }
+
+                return true;
+            }
         }
     }
 }

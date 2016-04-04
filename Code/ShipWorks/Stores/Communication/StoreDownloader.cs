@@ -1,35 +1,22 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Web.UI.WebControls.WebParts;
-using Microsoft.Web.Services3.Addressing;
 using ShipWorks.AddressValidation;
 using ShipWorks.ApplicationCore.Options;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.Linq;
-using ShipWorks.Shipping;
 using ShipWorks.Shipping.ShipSense;
-using ShipWorks.Stores.Platforms.Newegg.CoreExtensions.Actions;
-using ShipWorks.Stores.Platforms.Amazon.WebServices.Associates;
-using ShipWorks.UI;
 using ShipWorks.Stores.Content;
 using log4net;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.HelperClasses;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Adapter.Custom;
-using ShipWorks.Templates.Processing;
 using System.Diagnostics;
-using ShipWorks.Data.Controls;
 using ShipWorks.Data.Connection;
 using ShipWorks.Common.Threading;
-using ShipWorks.Stores.Platforms;
 using System.Linq;
 using ShipWorks.Templates.Tokens;
 using ShipWorks.Data.Model;
 using ShipWorks.Actions;
 using Interapptive.Shared.Business;
-using ShipWorks.Data.Caching;
 using ShipWorks.Data.Model.FactoryClasses;
 using ShipWorks.Users.Audit;
 using System.Reflection;
@@ -710,7 +697,7 @@ namespace ShipWorks.Stores.Communication
             address.AddressValidationSuggestionCount = 0;
             address.AddressValidationError = string.Empty;
             address.AddressType = (int) AddressType.NotChecked;
-            
+
             ValidatedAddressManager.DeleteExistingAddresses(adapter, order.OrderID, prefix);
 
             if (ValidatedAddressManager.EnsureAddressCanBeValidated(address))

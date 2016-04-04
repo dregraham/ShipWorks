@@ -475,6 +475,30 @@
   <ItemGroup>
     <EmbeddedResource Include="Data\Administration\UpdateFrom2x\Database\Scripts\UpdateUnsupportedCarts.sql" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\5.0\5.0.0.0.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\5.0\5.0.0.1.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\5.0\5.0.0.2.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\5.0\5.0.0.3.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\5.0\5.0.0.4.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\5.0\5.0.0.5.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\5.0\5.0.0.6.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\5.0\5.0.0.7.sql" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

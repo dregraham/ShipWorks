@@ -21,6 +21,9 @@ using ShipWorks.Messaging.Messages;
 using ShipWorks.UI.Controls;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
+using Autofac;
+using ShipWorks.ApplicationCore;
+using ShipWorks.Shipping;
 
 namespace ShipWorks.Stores.Management
 {
@@ -127,6 +130,29 @@ namespace ShipWorks.Stores.Management
 
             // If the store is not enabled, we disable\hide certain settings
             UpdateStoreEnabledDisplay();
+
+            // Check whether or not to display license tab
+            CheckLicense(store);
+        }
+
+        /// <summary>
+        /// Checks the license to determine whether or not to display the license tab.
+        /// </summary>
+        /// <remarks>
+        /// If store license (legacy customer), display it.
+        /// If customer license (new customer), don't display it.
+        /// </remarks>
+        /// <param name="storeEntity">The store entity.</param>
+        private void CheckLicense(StoreEntity storeEntity)
+        {
+            ILicenseService licenseService = IoC.UnsafeGlobalLifetimeScope.Resolve<ILicenseService>();
+            ILicense license = licenseService.GetLicense(storeEntity);
+
+            // If legacy customer or magic keys down, display license
+            if (!license.IsLegacy && !InterapptiveOnly.MagicKeysDown)
+            {
+                optionControl.Controls.Remove(optionPageLicense);
+            }
         }
 
         /// <summary>

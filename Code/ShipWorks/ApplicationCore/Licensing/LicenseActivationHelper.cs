@@ -2,7 +2,7 @@ using System;
 using System.Windows.Forms;
 using Interapptive.Shared;
 using Interapptive.Shared.UI;
-using ShipWorks.ApplicationCore.Licensing.MessageBoxes;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Editions;
 using ShipWorks.Stores;
@@ -15,20 +15,37 @@ namespace ShipWorks.ApplicationCore.Licensing
     public static class LicenseActivationHelper
     {
         /// <summary>
-        /// Attempt to activate the given license key.  Any problems or failues with activation will be displayed
-        /// as a message with owner as the window parent.  If the license is succesfully activated, then it is set to the in-memory StoreEntity.
+        /// Attempt to activate the given license key.  Any problems or failures with activation will be displayed
+        /// as a message with owner as the window parent.  If the license is successfully activated, then it is set to the in-memory StoreEntity.
         /// </summary>
         public static LicenseActivationState ActivateAndSetLicense(StoreEntity store, string licenseKey, IWin32Window owner)
+        {
+            EnumResult<LicenseActivationState> activateLicenseResult = ActivateAndSetLicense(store, licenseKey);
+            if (!string.IsNullOrEmpty(activateLicenseResult.Message))
+            {
+                MessageHelper.ShowError(owner, activateLicenseResult.Message);
+            }
+
+            return activateLicenseResult.Value;
+        }
+
+        /// <summary>
+        /// Attempt to activate the given license key.  Any problems or failures with activation will be returned
+        /// in the message.  If the license is successfully activated, then it is set to the in-memory StoreEntity.
+        /// </summary>
+        public static EnumResult<LicenseActivationState> ActivateAndSetLicense(StoreEntity store, string licenseKey)
         {
             if (store == null)
             {
                 throw new ArgumentNullException("store");
             }
 
+            EnumResult<LicenseActivationState> licenseValidity = CheckLicenseValidity(store, licenseKey);
+
             // Before connecting to the web client, make sure its valid
-            if (!CheckLicenseValidity(store, licenseKey, owner))
+            if (licenseValidity.Value == LicenseActivationState.Invalid)
             {
-                return LicenseActivationState.Invalid;
+                return licenseValidity;
             }
 
             Cursor.Current = Cursors.WaitCursor;
@@ -38,32 +55,28 @@ namespace ShipWorks.ApplicationCore.Licensing
             {
                 accountDetail = TangoWebClient.ActivateLicense(licenseKey, store);
 
-                CheckAccountValidity(accountDetail, owner);
-
                 if (accountDetail.ActivationState == LicenseActivationState.Active)
                 {
                     store.License = licenseKey;
                     store.Edition = accountDetail.Edition.Serialize();
                 }
 
-                return accountDetail.ActivationState;
+                return new EnumResult<LicenseActivationState>(
+                    accountDetail.ActivationState,
+                    GetActivationStateMessage(accountDetail));
             }
             catch (ShipWorksLicenseException ex)
             {
-                MessageHelper.ShowError(owner,
+                return new EnumResult<LicenseActivationState>(LicenseActivationState.Invalid,
                     "There is a problem with the license that was entered.\n\n" +
-                    "Details: " + ex.Message);
-
-                return LicenseActivationState.Invalid;
+                    $"Details: {ex.Message}");
             }
             catch (TangoException ex)
             {
-                MessageHelper.ShowError(owner,
+                return new EnumResult<LicenseActivationState>(LicenseActivationState.Invalid,
                     "The license entered is valid, but ShipWorks was unable to connect\n" +
                     "to the license server to determine the status of the license.\n\n" +
-                    "Details: " + ex.Message);
-
-                return LicenseActivationState.Invalid;
+                    $"Details: {ex.Message}");
             }
         }
 
@@ -183,9 +196,9 @@ namespace ShipWorks.ApplicationCore.Licensing
         }
 
         /// <summary>
-        /// Check the account detail for validity and display any problems to the user
+        /// Check the account detail for validity and return message for the user.
         /// </summary>
-        public static void CheckAccountValidity(LicenseAccountDetail accountDetail, IWin32Window owner)
+        public static string GetActivationStateMessage(LicenseAccountDetail accountDetail)
         {
             if (accountDetail == null)
             {
@@ -197,57 +210,44 @@ namespace ShipWorks.ApplicationCore.Licensing
                 // Everything is ok
                 case LicenseActivationState.Active:
                     {
-                        break;
+                        return string.Empty;
                     }
-
                 // This shouldn't happen - if it was active nowhere,
                 // then it should have been activated to us
                 case LicenseActivationState.ActiveNowhere:
                     {
-                        MessageHelper.ShowError(owner,
-                            "An unknown problem occurred activating the license.\n\n" +
-                            "Please contact Interapptive for support.");
-
-                        break;
+                        return "An unknown problem occurred activating the license.\n\n" +
+                               "Please contact Interapptive for support.";
                     }
-
                 case LicenseActivationState.ActiveElsewhere:
                     {
-                        using (LicenseActiveElsewhereDlg dlg = new LicenseActiveElsewhereDlg())
-                        {
-                            dlg.ShowDialog(owner);
-                        }
-
-                        break;
+                        return "The ShipWorks license you entered is already being used by another store. \n\n" +
+                               "You can reset the license and make it available for use by logging in to your \n" +
+                               "Interapptive account using the following link.\n\n" +
+                               "https://www.interapptive.com/account";
                     }
-
                 case LicenseActivationState.Deactivated:
                     {
-                        MessageHelper.ShowError(owner,
-                            "Your ShipWorks license has been disabled.\n\n" +
-                            "Reason: " + accountDetail.DisabledReason);
+                        return "Your ShipWorks license has been disabled.\n\n" +
+                               $"Reason: {accountDetail.DisabledReason}";
 
-                        break;
                     }
-
                 case LicenseActivationState.Canceled:
                     {
-                        using (LicenseCanceledDlg dlg = new LicenseCanceledDlg())
-                        {
-                            dlg.ShowDialog(owner);
-                        }
-
-                        break;
+                        return "The ShipWorks license you entered has been canceled. \n\n" +
+                               "You can activate the license and by logging in to your\n" +
+                               " Interapptive account using the following link. \n\n" +
+                               "https://www.interapptive.com/account";
                     }
-
                 case LicenseActivationState.Invalid:
                     {
-                        MessageHelper.ShowError(owner,
-                            "The license entered is a valid ShipWorks license, but was\n" +
-                            "not found in the Interapptive database.\n\n" +
-                            "Please contact Interapptive for support.");
-
-                        break;
+                        return "The license entered is a valid ShipWorks license, but was\n" +
+                               "not found in the Interapptive database.\n\n" +
+                               "Please contact Interapptive for support.";
+                    }
+                default:
+                    {
+                        return string.Empty;
                     }
             }
         }
@@ -255,14 +255,13 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Check that the given license and store combination represents a potentially valid ShipWorks license.
         /// </summary>
-        private static bool CheckLicenseValidity(StoreEntity store, string licenseKey, IWin32Window owner)
+        private static EnumResult<LicenseActivationState> CheckLicenseValidity(StoreEntity store, string licenseKey)
         {
             // Check for empty
             if (licenseKey.Length == 0)
             {
-                MessageHelper.ShowMessage(owner, "Please enter a license key.");
-
-                return false;
+                return new EnumResult<LicenseActivationState>(LicenseActivationState.Invalid,
+                    "Please enter a license key.");
             }
 
             // Parse the license
@@ -271,35 +270,30 @@ namespace ShipWorks.ApplicationCore.Licensing
             // Check for validity
             if (!license.IsValid)
             {
-                MessageHelper.ShowError(owner,
+                return new EnumResult<LicenseActivationState>(LicenseActivationState.Invalid,
                     "The license is not valid.\n\n" +
                     "Please check that the license was entered correctly.");
-
-                return false;
             }
 
             if ((StoreTypeCode) store.TypeCode != license.StoreTypeCode)
             {
-                MessageHelper.ShowInformation(owner,
-                    string.Format(
+                return new EnumResult<LicenseActivationState>(LicenseActivationState.Invalid,
                     "The license entered is a valid ShipWorks license, but it can only\n" +
-                    "be used for {0} stores.", StoreTypeManager.GetType(license.StoreTypeCode).StoreTypeName));
-
-                return false;
+                    $"be used for {StoreTypeManager.GetType(license.StoreTypeCode).StoreTypeName} stores.");
             }
 
             // See if its a metered license
             if (!license.IsMetered)
             {
-                using (NeedMeteredLicenseDlg dlg = new NeedMeteredLicenseDlg())
-                {
-                    dlg.ShowDialog(owner);
-                }
-
-                return false;
+                return new EnumResult<LicenseActivationState>(LicenseActivationState.Invalid,
+                    "Your ShipWorks license is not valid for this version of ShipWorks. \n\n" +
+                    "A license that is billed monthly is required to use the current version " +
+                    "of ShipWorks.  Use the link below to go to the Interapptive website and " +
+                    "sign up for a new license.\n\n" +
+                    "https://www.interapptive.com/store");
             }
 
-            return true;
+            return new EnumResult<LicenseActivationState>(LicenseActivationState.Active);
         }
     }
 }

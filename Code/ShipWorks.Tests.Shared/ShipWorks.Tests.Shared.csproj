@@ -123,6 +123,7 @@
     <Compile Include="AutoMockExtensions.cs" />
     <Compile Include="Database\DatabaseFixture.cs" />
     <Compile Include="Database\DataContext.cs" />
+    <Compile Include="Database\DummyLegacyLicense.cs" />
     <Compile Include="EntityBuilders\CarrierAccountEntityBuilder.cs" />
     <Compile Include="EntityBuilders\Create.cs" />
     <Compile Include="EntityBuilders\EntityBuilder.cs" />

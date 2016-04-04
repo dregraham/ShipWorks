@@ -1851,6 +1851,8 @@ namespace ShipWorks.Data.Model
 		AuditNewOrders,
 		///<summary>AuditDeletedOrders. </summary>
 		AuditDeletedOrders,
+		///<summary>CustomerKey. </summary>
+		CustomerKey,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -10004,6 +10006,8 @@ namespace ShipWorks.Data.Model
 		ContractType,
 		///<summary>CreatedDate. </summary>
 		CreatedDate,
+		///<summary>PendingInitialAccount. </summary>
+		PendingInitialAccount,
 		/// <summary></summary>
 		AmountOfFields
 	}

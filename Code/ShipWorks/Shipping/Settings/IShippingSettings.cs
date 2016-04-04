@@ -9,6 +9,11 @@ namespace ShipWorks.Shipping.Settings
     public interface IShippingSettings
     {
         /// <summary>
+        /// Initialize for the currently logged on user
+        /// </summary>
+        void InitializeForCurrentDatabase();
+
+        /// <summary>
         /// Should shipments be auto created
         /// </summary>
         bool AutoCreateShipments { get; }
@@ -28,6 +33,11 @@ namespace ShipWorks.Shipping.Settings
         /// </summary>
         IEnumerable<ShipmentTypeCode> GetConfiguredTypes();
 
+        /// <summary>
+        /// Sets the default shipping provider to the given shipment type code.
+        /// </summary>
+        void SetDefaultProvider(ShipmentTypeCode shimentTypeCode);
+		
         /// <summary>
         /// Save the current shipping settings
         /// </summary>

@@ -62,8 +62,16 @@
       <HintPath>..\..\packages\Autofac.Mef.3.0.3\lib\net40\Autofac.Integration.Mef.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="GalaSoft.MvvmLight, Version=5.2.0.37223, Culture=neutral, PublicKeyToken=0e453835af4ee6ce, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\MvvmLightLibs.5.2.0.0\lib\net40\GalaSoft.MvvmLight.dll</HintPath>
+    </Reference>
     <Reference Include="log4net, Version=1.2.13.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Reactive.Testing, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -121,6 +129,10 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\MvvmLightLibs.5.2.0.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -146,6 +158,18 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controls\CannelConfirmDelete\ChannelConfirmDeleteFactoryTest.cs" />
+    <Compile Include="Controls\CannelConfirmDelete\ChannelConfirmDeleteViewModelTest.cs" />
+    <Compile Include="Controls\ChannelLimit\ChannelLimitBehavior\GenericFileBehaviorTest.cs" />
+    <Compile Include="Controls\ChannelLimit\ChannelLimitBehavior\GenericModuleBehaviorTest.cs" />
+    <Compile Include="Controls\ChannelLimit\ChannelLimitBehavior\OverChannelLimitBehaviorTest.cs" />
+    <Compile Include="Controls\ChannelLimit\ChannelLimitDlgFactoryTest.cs" />
+    <Compile Include="Controls\ChannelLimit\ChannelLimitFactoryTest.cs" />
+    <Compile Include="Controls\ChannelLimit\ChannelLimitViewModelTest.cs" />
+    <Compile Include="Controls\CustomerLicenseActivation\CustomerLicenseActivationViewModelTest.cs" />
+    <Compile Include="Controls\MultiValueBinders\CheckboxMultiValueBinderTest.cs" />
+    <Compile Include="Controls\MultiValueBinders\GenericMultiValueBinderTest.cs" />
+    <Compile Include="Controls\WebBrowser\WebBrowserFactoryTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Controls\AddressControl\AddressViewModelTest.cs" />
     <Compile Include="ValueConverters\EmptyDoubleConverterTest.cs" />

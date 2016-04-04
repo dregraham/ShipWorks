@@ -14,6 +14,8 @@ using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Licensing;
+using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
 using ShipWorks.Common.Threading;
 using ShipWorks.Core.Common.Threading;
 using ShipWorks.Core.Messaging;
@@ -1473,17 +1475,24 @@ namespace ShipWorks.Shipping
 
             foreach (ShipmentEntity shipment in shipments)
             {
-                if (!shipment.Processed)
+                try
                 {
-                    ShipmentType shipmentType = shipmentTypeManager.Get(shipment);
-                    shipmentType.UpdateDynamicShipmentData(shipment);
-                    shipmentType.UpdateTotalWeight(shipment);
-
-                    // If the there is a specific shipment type selected, set it
-                    if (!comboShipmentType.MultiValued)
+                    if (!shipment.Processed)
                     {
-                        shipment.ShipmentTypeCode = (ShipmentTypeCode) comboShipmentType.SelectedValue;
+                        ShipmentType shipmentType = shipmentTypeManager.Get(shipment);
+                        shipmentType.UpdateDynamicShipmentData(shipment);
+                        shipmentType.UpdateTotalWeight(shipment);
+
+                        // If the there is a specific shipment type selected, set it
+                        if (!comboShipmentType.MultiValued)
+                        {
+                            shipment.ShipmentTypeCode = (ShipmentTypeCode) comboShipmentType.SelectedValue;
+                        }
                     }
+                }
+                catch (Exception ex)
+                {
+                    log.Error(ex.Message);
                 }
             }
         }
@@ -2047,6 +2056,9 @@ namespace ShipWorks.Shipping
         {
             Cursor.Current = Cursors.WaitCursor;
 
+            ILicenseService licenseService = lifetimeScope.Resolve<ILicenseService>();
+            licenseService.GetLicenses().FirstOrDefault()?.EnforceCapabilities(EnforcementContext.CreateLabel, this);
+
             // Save changes to the current selection in memory.  We save to the database later on a per-shipment basis in the background thread.
             SaveChangesToUIDisplayedShipments();
 
@@ -2068,7 +2080,6 @@ namespace ShipWorks.Shipping
                 rateControl.LoadRates(shipmentProcessor.FilteredRates);
             }
 
-
             // Apply any changes made during processing to the grid
             ApplyShipmentsToGridRows(results.Select(x => x.Shipment));
 
@@ -2076,7 +2087,6 @@ namespace ShipWorks.Shipping
             shipmentControl.SelectionChanged -= OnChangeSelectedShipments;
             shipmentControl.RefreshAndResort();
             shipmentControl.SelectionChanged += OnChangeSelectedShipments;
-
 
             await LoadSelectedShipments(true);
 
@@ -2093,11 +2103,10 @@ namespace ShipWorks.Shipping
         {
             // This is for a specific shipment type, so we're always going to need to show the wizard
             Invoke((MethodInvoker) delegate
-             {
-                 ServiceControl.SaveToShipments();
-                 ServiceControl.LoadAccounts();
-             });
-
+            {
+                ServiceControl.SaveToShipments();
+                ServiceControl.LoadAccounts();
+            });
         }
 
         /// <summary>

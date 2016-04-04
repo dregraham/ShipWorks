@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Services.Protocols;
 using System.Xml.Linq;
 using Interapptive.Shared;
@@ -612,6 +613,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
                 // This isn't an exception we can handle, so just throw the original exception
                 throw;
             }
+        }
+
+        /// <summary>
+        /// This should never be called, only here because of interface
+        /// </summary>
+        /// <param name="account">The account.</param>
+        public void PopulateUspsAccountEntity(UspsAccountEntity account)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -1325,6 +1335,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
                 default:
                     throw new ArgumentOutOfRangeException("contentType");
             }
+        }
+
+        /// <summary>
+        /// Not implemented in Express1
+        /// </summary>
+        public Task<UspsAddressValidationResults> ValidateAddressAsync(PersonAdapter address)
+        {
+            throw new NotImplementedException();
         }
     }
 }

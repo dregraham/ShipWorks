@@ -8,6 +8,8 @@ using Interapptive.Shared;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.ApplicationCore.Licensing;
+using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
 using ShipWorks.ApplicationCore.Nudges;
 using ShipWorks.Common.Threading;
 using ShipWorks.Data;
@@ -36,6 +38,7 @@ namespace ShipWorks.Shipping.Services
         private readonly IShippingManager shippingManager;
         private readonly Func<Control> ownerRetriever;
         private readonly ILifetimeScope lifetimeScope;
+        private readonly ILicenseService licenseService;
         private RateResult chosenRate;
         private int shipmentCount;
         private Action counterRateCarrierConfiguredWhileProcessing;
@@ -45,12 +48,13 @@ namespace ShipWorks.Shipping.Services
         /// Constructor
         /// </summary>
         public ShipmentProcessor(Func<Control> ownerRetriever, IShippingErrorManager errorManager,
-            ILifetimeScope lifetimeScope, IShippingManager shippingManager)
+            ILifetimeScope lifetimeScope, IShippingManager shippingManager, ILicenseService licenseService)
         {
             this.shippingManager = shippingManager;
             this.errorManager = errorManager;
             this.ownerRetriever = ownerRetriever;
             this.lifetimeScope = lifetimeScope;
+            this.licenseService = licenseService;
         }
 
         /// <summary>
@@ -81,6 +85,8 @@ namespace ShipWorks.Shipping.Services
 
             cancelProcessing = false;
 
+            licenseService.GetLicenses().FirstOrDefault()?.EnforceCapabilities(EnforcementContext.CreateLabel, owner);
+
             // Create clones to be processed - that way any changes made don't have race conditions with the UI trying to paint with them
             filteredShipments = EntityUtility.CloneEntityCollection(filteredShipments);
             shipmentCount = filteredShipments.Count();
@@ -94,7 +100,7 @@ namespace ShipWorks.Shipping.Services
             }
 
             // Check restriction
-            if (!EditionManager.HandleRestrictionIssue(owner, EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.SelectionLimit, filteredShipments.Count())))
+            if (!licenseService.HandleRestriction(EditionFeature.SelectionLimit, filteredShipments.Count(), owner))
             {
                 return Enumerable.Empty<ProcessShipmentResult>();
             }

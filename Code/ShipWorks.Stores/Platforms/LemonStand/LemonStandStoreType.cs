@@ -40,7 +40,6 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         {
             log = LogManager.GetLogger(typeof(LemonStandStoreType));
         }
-
         /// <summary>
         /// Constructor
         /// </summary>

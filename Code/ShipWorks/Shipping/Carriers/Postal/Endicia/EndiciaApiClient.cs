@@ -28,6 +28,8 @@ using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Templates.Tokens;
 using ShipWorks.UI;
+using Autofac;
+using ShipWorks.ApplicationCore.Licensing;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 {
@@ -404,7 +406,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             }
             else if (packagingType == PostalPackagingType.Cubic)
             {
-                // To be eligible for cubic rates, the package must be 1/2 cubic foot or less, so don't 
+                // To be eligible for cubic rates, the package must be 1/2 cubic foot or less, so don't
                 // round up to 1 like is done with the Package type
                 request.MailpieceDimensions = new Dimensions();
 
@@ -604,8 +606,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                         {
                             string errorMessage = response.ErrorMessage;
 
-                            // We know error code 55001 maps to cubic pricing not being supported, but it also could mask other messages such as 
-                            // an authentication error message in the response; also do some fuzzy logic in case there are other errors when 
+                            // We know error code 55001 maps to cubic pricing not being supported, but it also could mask other messages such as
+                            // an authentication error message in the response; also do some fuzzy logic in case there are other errors when
                             // rates are not found for cubic packages
                             if (response.Status == 55001 && response.ErrorMessage.ToUpperInvariant().Contains("CUBIC"))
                             {
@@ -640,23 +642,29 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             {
                 throw new EndiciaException($"No {EnumHelper.GetDescription((ShipmentTypeCode) postal.Shipment.ShipmentType)} account is selected for the shipment.");
             }
-            else if (account.IsDazzleMigrationPending)
+
+            if (account.IsDazzleMigrationPending)
             {
                 throw new EndiciaException("The Endicia account selected for the shipment was migrated from ShipWorks 2, and has not yet been configured for ShipWorks 3.");
             }
 
             if (postal.Shipment.ShipmentType == (int) ShipmentTypeCode.Endicia)
             {
-                var accountRestriction = EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.EndiciaAccountNumber, account.AccountNumber);
-                if (accountRestriction.Level != EditionRestrictionLevel.None)
+                using (var lifetimeScope = IoC.BeginLifetimeScope())
                 {
-                    throw new ShippingException(accountRestriction.GetDescription());
-                }
+                    ILicenseService licenseService = lifetimeScope.Resolve<ILicenseService>();
+                    EditionRestrictionLevel accountRestriction = licenseService.CheckRestriction(EditionFeature.EndiciaAccountNumber, account.AccountNumber);
 
-                var quantityRestriction = EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.EndiciaAccountLimit, accountRepository.Accounts.Count());
-                if (quantityRestriction.Level != EditionRestrictionLevel.None)
-                {
-                    throw new ShippingException(quantityRestriction.GetDescription());
+                    if (accountRestriction != EditionRestrictionLevel.None)
+                    {
+                        throw new ShippingException(EnumHelper.GetDescription(EditionFeature.EndiciaAccountNumber));
+                    }
+
+                    EditionRestrictionLevel quantityRestriction = licenseService.CheckRestriction(EditionFeature.EndiciaAccountLimit, accountRepository.Accounts.Count());
+                    if (quantityRestriction != EditionRestrictionLevel.None)
+                    {
+                        throw new ShippingException(EnumHelper.GetDescription(EditionFeature.EndiciaAccountLimit));
+                    }
                 }
             }
 
@@ -739,7 +747,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// </summary>
         private static void SaveLabelImages(ShipmentEntity shipment, LabelRequestResponse response)
         {
-            // If we had saved an image for this shipment previously clear it.  
+            // If we had saved an image for this shipment previously clear it.
             ObjectReferenceManager.ClearReferences(shipment.ShipmentID);
 
             // Primary image
@@ -859,7 +867,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             }
             else if (packagingType == PostalPackagingType.Cubic)
             {
-                // To be eligible for cubic rates, the package must be 1/2 cubic foot or less, so don't 
+                // To be eligible for cubic rates, the package must be 1/2 cubic foot or less, so don't
                 // round up to 1 like is done with the Package type
                 request.MailpieceDimensions = new Dimensions();
 
@@ -935,11 +943,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
                         if (response.Status == 55001 && errorMessage != null)
                         {
-                            // We know error code 55001 maps to cubic pricing not being supported, but it also could mask other messages such as 
+                            // We know error code 55001 maps to cubic pricing not being supported, but it also could mask other messages such as
                             // an authentication error message in the response; do some fuzzy logic to determine what the error actually is
                             if (errorMessage.ToUpperInvariant().Contains("CUBIC") && !errorMessage.ToUpperInvariant().StartsWith("DIMENSIONS"))
                             {
-                                // The error is in reference to cubic packaging; use our own error message, here so we can 
+                                // The error is in reference to cubic packaging; use our own error message, here so we can
                                 // direct the user to contact Express1 to try to reduce ShipWorks call volume
                                 errorMessage = "The selected Express1 account does not support cubic pricing. Please contact Express1 to apply.";
                             }
@@ -978,7 +986,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                         PostalServiceType serviceType = serviceResult.Value;
 
                         // If the person has selected Parcel Select as their shipment type, don't include Parcel Select rates here
-                        // We'll pick it up below by getting individual rates so we can include the Parcel Select specific fields 
+                        // We'll pick it up below by getting individual rates so we can include the Parcel Select specific fields
                         // and therefore get a more accurate rate
                         if (serviceType == PostalServiceType.ParcelSelect && shipment.Postal.Service == (int) PostalServiceType.ParcelSelect)
                         {
@@ -1092,8 +1100,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <summary>
         /// Calculates the weight to use when sending a rating and label request to Endicia. The Endicia API only supports
         /// ounces weights to one decimal place, so we need to round up to the next tenth of an ounce if the weight calls
-        /// for more than one decimal place being sent (i.e. this will always round up to the next tenth of an ounce unless 
-        /// the total weight is divisible by 0.1). For example, 3.11 would result in 3.2 being returned; 3.1 would result 
+        /// for more than one decimal place being sent (i.e. this will always round up to the next tenth of an ounce unless
+        /// the total weight is divisible by 0.1). For example, 3.11 would result in 3.2 being returned; 3.1 would result
         /// in 3.1 being returned.
         /// </summary>
         /// <param name="shipment">The shipment.</param>
@@ -1229,7 +1237,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                         EndiciaApiException apiEx = e as EndiciaApiException;
                         if (apiEx != null)
                         {
-                            // Indicates the PackagingType isn't valid for service.  For rates ignore the error - the 
+                            // Indicates the PackagingType isn't valid for service.  For rates ignore the error - the
                             // user just won't get the rate for it (which makes sense)
                             return !(apiEx.ErrorCode == 1001 && apiEx.ErrorDetail.Contains("MailpieceShape"));
                         }
@@ -1324,7 +1332,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             }
             else if (packagingType == PostalPackagingType.Cubic)
             {
-                // To be eligible for cubic rates, the package must be 1/2 cubic foot or less, so don't 
+                // To be eligible for cubic rates, the package must be 1/2 cubic foot or less, so don't
                 // round up to 1 like is done with the Package type
                 request.MailpieceDimensions = new Dimensions();
 
@@ -1683,7 +1691,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 case "ExpressMailInternational": return PostalServiceType.InternationalExpress;
                 case "PriorityMailInternational": return PostalServiceType.InternationalPriority;
 
-                // Endicia changed the value to First Class Package International Service; keeping the original 
+                // Endicia changed the value to First Class Package International Service; keeping the original
                 // case statement for First Class Mail International per Brian in case Endicia changes it back
                 case "FirstClassMailInternational":
                 case "FirstClassPackageInternational":

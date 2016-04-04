@@ -10,6 +10,7 @@ using Interapptive.Shared.Data;
 using Moq;
 using Respawn;
 using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data;
 using ShipWorks.Data.Administration;
 using ShipWorks.Data.Connection;
@@ -114,7 +115,15 @@ namespace ShipWorks.Tests.Shared.Database
 
             using (new AuditBehaviorScope(AuditBehaviorUser.SuperUser, AuditReason.Default, AuditState.Disabled))
             {
-                checkpoint.Reset(SqlSession.Current.OpenConnection());
+                using (var connection = SqlSession.Current.OpenConnection())
+                {
+                    checkpoint.Reset(connection);
+                    var command = connection.CreateCommand();
+                    command.CommandText =
+@"IF OBJECTPROPERTY(object_id('dbo.GetDatabaseGuid'), N'IsProcedure') = 1
+DROP PROCEDURE [dbo].[GetDatabaseGuid]";
+                    command.ExecuteNonQuery();
+                }
             }
 
             var context = SetupFreshData();
@@ -155,6 +164,12 @@ namespace ShipWorks.Tests.Shared.Database
         {
             ShipWorksDatabaseUtility.AddInitialDataAndVersion(SqlSession.Current.OpenConnection());
             ShipWorksDatabaseUtility.AddRequiredData();
+
+            using (var lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                var writer = lifetimeScope.Resolve<ICustomerLicenseWriter>();
+                writer.Write(new DummyLegacyLicense());
+            }
 
             using (SqlAdapter sqlAdapter = new SqlAdapter(SqlSession.Current.OpenConnection()))
             {

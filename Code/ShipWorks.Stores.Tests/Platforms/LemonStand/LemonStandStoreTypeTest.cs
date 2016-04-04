@@ -42,13 +42,6 @@ namespace ShipWorks.Stores.Tests.Platforms.LemonStand
         }
 
         [Fact]
-        public void CreateDownloader_ReturnsLemonStandDownloader_WhenCalled()
-        {
-            testObject = new LemonStandStoreType(lemonStandStore.Object);
-            Assert.IsAssignableFrom<LemonStandDownloader>(testObject.CreateDownloader());
-        }
-
-        [Fact]
         public void CreateStoreInstance_ReturnsLemonStandStoreEntity_WhenCalled()
         {
             testObject = new LemonStandStoreType(lemonStandStore.Object);

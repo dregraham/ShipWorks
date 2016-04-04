@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Linq;
@@ -97,6 +98,8 @@ using SandButton = Divelements.SandRibbon.Button;
 using SandComboBox = Divelements.SandRibbon.ComboBox;
 using SandLabel = Divelements.SandRibbon.Label;
 using SandMenuItem = Divelements.SandRibbon.MenuItem;
+using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
+using Application = System.Windows.Forms.Application;
 
 namespace ShipWorks
 {
@@ -248,9 +251,12 @@ namespace ShipWorks
             // If the action is to open the DB setup, we can do that now - no need to logon first.
             if (StartupController.StartupAction == StartupAction.OpenDatabaseSetup)
             {
-                using (DetailedDatabaseSetupWizard dlg = new DetailedDatabaseSetupWizard())
+                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
                 {
-                    dlg.ShowDialog(this);
+                    using (DetailedDatabaseSetupWizard dlg = new DetailedDatabaseSetupWizard(lifetimeScope))
+                    {
+                        dlg.ShowDialog(this);
+                    }
                 }
             }
 
@@ -282,33 +288,37 @@ namespace ShipWorks
         /// </summary>
         private bool OpenDatabaseConfiguration()
         {
-            // If we aren't configured at all
-            if (!SqlSession.IsConfigured)
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                // If we aren't configured and 2012 is supported, open the fast track setup wizard
-                if (SqlServerInstaller.IsSqlServer2012Supported)
+                // If we aren't configured at all
+                if (!SqlSession.IsConfigured)
                 {
-                    using (SimpleDatabaseSetupWizard wizard = new SimpleDatabaseSetupWizard())
-                    {
-                        return wizard.ShowDialog(this) == DialogResult.OK;
-                    }
+
+                        // If we aren't configured and 2012 is supported, open the fast track setup wizard
+                        if (SqlServerInstaller.IsSqlServer2012Supported)
+                        {
+                            using (SimpleDatabaseSetupWizard wizard = new SimpleDatabaseSetupWizard(lifetimeScope))
+                            {
+                                return wizard.ShowDialog(this) == DialogResult.OK;
+                            }
+                        }
+                        else
+                        {
+                            using (DetailedDatabaseSetupWizard wizard = new DetailedDatabaseSetupWizard(lifetimeScope))
+                            {
+                                return wizard.ShowDialog(this) == DialogResult.OK;
+                            }
+                        }
                 }
+                // Otherwise, we use our normal database setup wizard
                 else
                 {
-                    using (DetailedDatabaseSetupWizard wizard = new DetailedDatabaseSetupWizard())
+                    using (DatabaseDetailsDlg dlg = new DatabaseDetailsDlg(lifetimeScope))
                     {
-                        return wizard.ShowDialog(this) == DialogResult.OK;
-                    }
-                }
-            }
-            // Otherwise, we use our normal database setup wizard
-            else
-            {
-                using (DatabaseDetailsDlg dlg = new DatabaseDetailsDlg())
-                {
-                    dlg.ShowDialog(this);
+                        dlg.ShowDialog(this);
 
-                    return dlg.DatabaseConfigurationChanged;
+                        return dlg.DatabaseConfigurationChanged;
+                    }
                 }
             }
         }
@@ -558,13 +568,49 @@ namespace ShipWorks
             // May already be logged on
             if (!UserSession.IsLoggedOn)
             {
-                if (!UserSession.LogonLastUser())
+                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
                 {
-                    using (LogonDlg dlg = new LogonDlg())
+
+                    IUserService userService = lifetimeScope.Resolve<IUserService>();
+                    EnumResult<UserServiceLogonResultType> logonResult;
+
+                    try
                     {
-                        if (dlg.ShowDialog(this) != DialogResult.OK)
+                        logonResult = userService.Logon();
+                    }
+                    catch (EncryptionException ex)
+                    {
+                        log.Error("Error logging in", ex);
+
+                        IDialog customerLicenseActivation = lifetimeScope.ResolveNamed<IDialog>("CustomerLicenseActivationDlg");
+                        customerLicenseActivation.LoadOwner(this);
+                        customerLicenseActivation.DataContext =
+                            lifetimeScope.Resolve<ICustomerLicenseActivartionDlgViewModel>();
+
+                        if (customerLicenseActivation.ShowDialog() ?? false)
+                        {
+                            logonResult = userService.Logon();
+                        }
+                        else
                         {
                             return;
+                        }
+                    }
+
+                    if (logonResult.Value == UserServiceLogonResultType.TangoAccountDisabled)
+                    {
+                        MessageHelper.ShowError(this, logonResult.Message);
+                        return;
+                    }
+
+                    if (logonResult.Value == UserServiceLogonResultType.InvalidCredentials)
+                    {
+                        using (LogonDlg dlg = new LogonDlg())
+                        {
+                            if (dlg.ShowDialog(this) != DialogResult.OK)
+                            {
+                                return;
+                            }
                         }
                     }
                 }
@@ -614,6 +660,28 @@ namespace ShipWorks
                     ShowBlankUI();
 
                     return;
+                }
+            }
+            else
+            {
+                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+                {
+                    ILicenseService licenseService = lifetimeScope.Resolve<ILicenseService>();
+                    try
+                    {
+                        licenseService.GetLicenses().FirstOrDefault()?.EnforceCapabilities(EnforcementContext.Login, this);
+                    }
+                    catch (ShipWorksLicenseException ex)
+                    {
+                        // The enforcer threw a ShipWorksLicenseException
+                        MessageHelper.ShowError(this, ex.Message);
+
+                        // Log off
+                        UserSession.Logoff(false);
+                        UserSession.Reset();
+                        ShowBlankUI();
+                        return;
+                    }
                 }
             }
 
@@ -741,46 +809,13 @@ namespace ShipWorks
         /// </summary>
         private void LogonToShipWorksAsyncGetLicenseStatus(object state)
         {
-            bool editionChanged = false;
-
             // Update our edition for each store.  Eventually this will also be where we log with tango the ShipWorks version being used and maybe other things
-            foreach (StoreEntity store in StoreManager.GetEnabledStores())
-            {
-                try
-                {
-                    ShipWorksLicense license = new ShipWorksLicense(store.License);
-                    if (!license.IsTrial)
-                    {
-                        ILicenseAccountDetail accountDetail = new TangoWebClientFactory().CreateWebClient().GetLicenseStatus(store.License, store);
+            ILicenseService licenseService = IoC.UnsafeGlobalLifetimeScope.Resolve<ILicenseService>();
+            List<ILicense> licenses = licenseService.GetLicenses().ToList();
 
-                        if (accountDetail.ActivationState == LicenseActivationState.Active ||
-                            accountDetail.ActivationState == LicenseActivationState.ActiveElsewhere ||
-                            accountDetail.ActivationState == LicenseActivationState.ActiveNowhere)
-                        {
-                            editionChanged |= EditionManager.UpdateStoreEdition(store, accountDetail.Edition);
-                        }
-                    }
-                    else
-                    {
-                        TrialDetail trialDetail = new TangoWebClientFactory().CreateWebClient().GetTrial(store);
-
-                        editionChanged |= EditionManager.UpdateStoreEdition(store, trialDetail.Edition);
-                    }
-                }
-                catch (ShipWorksLicenseException ex)
-                {
-                    log.Warn(string.Format("Could not check status of license {0}", store.License), ex);
-                }
-                catch (TangoException ex)
-                {
-                    log.Warn(string.Format("Could not check status of license {0}", store.License), ex);
-                }
-            }
-
-            if (editionChanged)
-            {
-                ForceHeartbeat();
-            }
+           // refresh the license if it is older than 10 mins
+            licenses.ForEach(license => license.Refresh());
+            ForceHeartbeat();
         }
 
         /// <summary>
@@ -972,12 +1007,10 @@ namespace ShipWorks
                 throw new AppearanceException("The file is not a valid ShipWorks layout.", ex);
             }
 
-
             // Read the panels.xml file that was extracted
             string panelXml = File.ReadAllText(Path.Combine(tempPath, "panels.xml"), Encoding.Unicode);
             XmlDocument panelDoc = new XmlDocument();
             panelDoc.LoadXml(panelXml);
-
 
             // Check to see if the Window GUID for the rates panel is present. The GUID value is set at
             // design-time by the designer sandDockManager, so we can look for it
@@ -2394,6 +2427,13 @@ namespace ShipWorks
 
             if (stores.Count > 0)
             {
+                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+                {
+                    ILicenseService licenseService = lifetimeScope.Resolve<ILicenseService>();
+
+                    licenseService.GetLicenses().FirstOrDefault()?.EnforceCapabilities(EnforcementContext.Download, this);
+                }
+
                 // Start the download
                 DownloadManager.StartDownload(stores, DownloadInitiatedBy.User);
 
@@ -2413,6 +2453,12 @@ namespace ShipWorks
             Divelements.SandRibbon.MenuItem menuItem = (Divelements.SandRibbon.MenuItem) sender;
             StoreEntity store = (StoreEntity) menuItem.Tag;
 
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                ILicenseService licenseService = lifetimeScope.Resolve<ILicenseService>();
+
+                licenseService.GetLicenses().FirstOrDefault()?.EnforceCapabilities(EnforcementContext.Download, this);
+            }
             // Start the download
             DownloadManager.StartDownload(new List<StoreEntity> { store }, DownloadInitiatedBy.User);
 
@@ -3444,6 +3490,7 @@ namespace ShipWorks
         private void OnSubmitClaim(object sender, EventArgs e)
         {
             Messenger.Current.Send(new OpenShippingDialogWithOrdersMessage(this, gridControl.Selection.OrderedKeys, InitialShippingTabDisplay.Insurance));
+                // Show the shipping window.  
         }
 
         /// <summary>
@@ -3486,7 +3533,6 @@ namespace ShipWorks
                 MessageHelper.ShowError(this, ex.Message);
             }
         }
-
 
         /// <summary>
         /// User has initiated the FedEx SmartPost close

@@ -30,7 +30,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
         public IDisposable Register(ShippingPanelViewModel viewModel)
         {
             return messages.OfType<SelectedRateChangedMessage>()
-                .Where(x => x.Sender != viewModel && 
+                .Where(x => x.Sender != viewModel &&
                        x.Sender != viewModel.ShipmentViewModel &&
                        viewModel.LoadedShipmentResult == ShippingPanelLoadedShipmentResult.Success &&
                        x.RateResult.ShipmentType != ShipmentTypeCode.Amazon &&

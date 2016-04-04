@@ -8,11 +8,13 @@ using System.Web.Services.Protocols;
 using System.Xml.Linq;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.AddressValidation;
 using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Core.Common.Threading;
@@ -59,7 +61,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <param name="uspsResellerType">Type of the USPS reseller.</param>
         public UspsWebClient(UspsResellerType uspsResellerType)
             : this(new UspsAccountRepository(), new LogEntryFactory(), new TrustingCertificateInspector(), uspsResellerType)
-        { }
+        {
+        }
+
+        public UspsWebClient(ICarrierAccountRepository<UspsAccountEntity> accountRepository,
+            ILogEntryFactory logEntryFactory, Func<string, ICertificateInspector> certificateInspectorFactory,
+            UspsResellerType uspsResellerType)
+            : this(accountRepository, logEntryFactory, certificateInspectorFactory(string.Empty), uspsResellerType)
+        {
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UspsWebClient" /> class.
@@ -200,6 +210,62 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             }
 
             return accountInfo;
+        }
+
+        /// <summary>
+        /// Populates a usps account entity.
+        /// </summary>
+        /// <param name="account">The account.</param>
+        public void PopulateUspsAccountEntity(UspsAccountEntity account)
+        {
+            ExceptionWrapper(() => PopulateUspsAccountEntityInternal(account), account);
+        }
+
+        /// <summary>
+        /// The internal PopulateUspsAccountEntity implementation that is intended to be wrapped by the exception wrapper
+        /// </summary>
+        /// <param name="account">The account.</param>
+        /// <returns></returns>
+        public UspsAccountEntity PopulateUspsAccountEntityInternal(UspsAccountEntity account)
+        {
+            using (SwsimV49 webService = CreateWebService("GetAccountInfo"))
+            {
+                AccountInfo accountInfo;
+                // Address and CustomerEmail are not returned by Express1, so do not use them.
+                Address address;
+                string email;
+
+                webService.GetAccountInfo(GetCredentials(account), out accountInfo, out address, out email);
+
+                account.UspsAccountID = accountInfo.AccountId;
+                account.Description = UspsAccountManager.GetDefaultDescription(account) ?? string.Empty;
+
+                Address accountAddress = accountInfo.MeterPhysicalAddress ?? address;
+
+                account.FirstName = accountAddress.FirstName ?? string.Empty;
+                account.MiddleName = accountAddress.MiddleName ?? string.Empty;
+                account.LastName = accountAddress.LastName ?? string.Empty;
+                account.Company = accountAddress.Company ?? string.Empty;
+                account.Street1 = accountAddress.Address1 ?? string.Empty;
+                account.Street2 = accountAddress.Address2 ?? string.Empty;
+                account.Street3 = accountAddress.Address3 ?? string.Empty;
+                account.City = accountAddress.City ?? string.Empty;
+                account.StateProvCode = Geography.GetStateProvCode(accountAddress.State) ?? string.Empty;
+
+                account.PostalCode = accountAddress.ZIPCode ?? accountAddress.PostalCode ?? string.Empty;
+                account.MailingPostalCode = accountAddress.ZIPCode ?? accountAddress.PostalCode ?? string.Empty;
+
+                account.CountryCode = Geography.GetCountryCode(accountAddress.Country) ?? string.Empty;
+                account.Phone = accountAddress.PhoneNumber ?? string.Empty;
+                account.Email = email ?? string.Empty;
+                account.Website = string.Empty;
+                account.UspsReseller = (int) UspsResellerType.None;
+                account.ContractType = (int) GetUspsAccountContractType(accountInfo.RatesetType);
+                account.CreatedDate = DateTime.UtcNow;
+                account.PendingInitialAccount = (int) UspsPendingAccountType.Existing;
+            }
+
+            return account;
         }
 
         /// <summary>
@@ -528,7 +594,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             {
                 badAddressMessage = result.CityStateZipOK ?
                     "City, State and ZIP Code are valid, but street address is not a match." :
-                        "The address as submitted could not be found. Check for excessive abbreviations in the street address line or in the City name."; 
+                        "The address as submitted could not be found. Check for excessive abbreviations in the street address line or in the City name.";
             }
 
             return new UspsAddressValidationResults
@@ -1365,7 +1431,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// </summary>
         private UspsAccountContractType InternalGetContractType(UspsAccountEntity account)
         {
-            UspsAccountContractType contract = UspsAccountContractType.Unknown;
             AccountInfo accountInfo;
 
             using (SwsimV49 webService = CreateWebService("GetContractType"))
@@ -1380,28 +1445,43 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             }
 
             RatesetType? rateset = accountInfo.RatesetType;
-            if (rateset.HasValue)
+
+            return GetUspsAccountContractType(rateset);
+        }
+
+        /// <summary>
+        /// Gets the UspsAccountContractType enum value
+        /// </summary>
+        /// <param name="rateset">The rateset.</param>
+        /// <returns></returns>
+        private UspsAccountContractType GetUspsAccountContractType(RatesetType? rateset)
+        {
+            UspsAccountContractType contract = UspsAccountContractType.Unknown;
+
+            if (!rateset.HasValue)
             {
-                switch (rateset)
-                {
-                    case RatesetType.CBP:
-                    case RatesetType.Retail:
-                        contract = UspsAccountContractType.Commercial;
-                        break;
+                return contract;
+            }
 
-                    case RatesetType.CPP:
-                    case RatesetType.NSA:
-                        contract = UspsAccountContractType.CommercialPlus;
-                        break;
+            switch (rateset)
+            {
+                case RatesetType.CBP:
+                case RatesetType.Retail:
+                    contract = UspsAccountContractType.Commercial;
+                    break;
 
-                    case RatesetType.STMP:
-                        contract = UspsAccountContractType.Reseller;
-                        break;
+                case RatesetType.CPP:
+                case RatesetType.NSA:
+                    contract = UspsAccountContractType.CommercialPlus;
+                    break;
 
-                    default:
-                        contract = UspsAccountContractType.Unknown;
-                        break;
-                }
+                case RatesetType.STMP:
+                    contract = UspsAccountContractType.Reseller;
+                    break;
+
+                default:
+                    contract = UspsAccountContractType.Unknown;
+                    break;
             }
 
             return contract;
@@ -1453,7 +1533,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             }
             catch (Exception ex)
             {
-                throw WebHelper.TranslateWebException(ex, typeof (UspsException));
+                throw WebHelper.TranslateWebException(ex, typeof(UspsException));
             }
         }
 

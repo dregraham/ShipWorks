@@ -3967,6 +3967,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ConfigurationFieldIndex.AuditDeletedOrders);}
 		}
+		/// <summary>Creates a new ConfigurationEntity.CustomerKey field instance</summary>
+		public static EntityField2 CustomerKey
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ConfigurationFieldIndex.CustomerKey);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity CustomerEntity</summary>
@@ -21446,6 +21451,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 CreatedDate
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(UspsAccountFieldIndex.CreatedDate);}
+		}
+		/// <summary>Creates a new UspsAccountEntity.PendingInitialAccount field instance</summary>
+		public static EntityField2 PendingInitialAccount
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UspsAccountFieldIndex.PendingInitialAccount);}
 		}
 	}
 

@@ -11,20 +11,22 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Linq;
+using Autofac;
 using Divelements.SandGrid;
 using Interapptive.Shared;
 using Interapptive.Shared.Data;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.UI;
+using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.ApplicationCore.Interaction;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.MessageBoxes;
 using ShipWorks.Common.Threading;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Administration.SqlServerSetup;
 using ShipWorks.Data.Administration.UpdateFrom2x.Configuration;
 using ShipWorks.Data.Connection;
-using ShipWorks.Email;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Properties;
 using ShipWorks.Stores.Management;
@@ -75,7 +77,7 @@ namespace ShipWorks.Data.Administration
         // Determines if the admin user has been created during this session.
         bool adminUserCreated = false;
 
-        // Determines if the db has been successfully restored
+        // Determines if the db has been succesfully restored
         bool databaseRestored = false;
 
         // The user that will be used for restoring the db
@@ -93,6 +95,10 @@ namespace ShipWorks.Data.Administration
         // To mark our special comboBox items
         object serverSearchAgain = new object();
         object serverSearching = new object();
+
+        // The user setup wizard page
+        private ICustomerLicenseActivation tangoUserControlHost;
+        private ILifetimeScope lifetimeScope;
 
         /// <summary>
         /// Let's consumers control what the user is allowed to do in the wizard
@@ -116,8 +122,8 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Constructor.
         /// </summary>
-        public DetailedDatabaseSetupWizard()
-            : this(SetupMode.Default)
+        public DetailedDatabaseSetupWizard(ILifetimeScope lifetimeScope)
+            : this(SetupMode.Default, lifetimeScope)
         {
 
         }
@@ -126,7 +132,7 @@ namespace ShipWorks.Data.Administration
         /// Constructor.
         /// </summary>
         [NDependIgnoreLongMethod]
-        public DetailedDatabaseSetupWizard(SetupMode setupMode)
+        public DetailedDatabaseSetupWizard(SetupMode setupMode, ILifetimeScope lifetimeScope)
         {
             InitializeComponent();
 
@@ -149,11 +155,11 @@ namespace ShipWorks.Data.Administration
                 wizardPageInstallSqlServer,
                 StartupAction.OpenDatabaseSetup,
                 () =>
-                    {
-                        return new XElement("Replay",
-                            new XElement("InstanceName", instanceName.Text),
-                            new XElement("Restore", (ChooseWisely == ChooseWiselyOption.Restore)));
-                    });
+                {
+                    return new XElement("Replay",
+                        new XElement("InstanceName", instanceName.Text),
+                        new XElement("Restore", (ChooseWisely == ChooseWiselyOption.Restore)));
+                });
             Pages.Insert(placeholderIndex, dotNet35Page);
 
             // Add the pages to detect and install windows installer if necessary
@@ -161,11 +167,11 @@ namespace ShipWorks.Data.Administration
                 dotNet35Page,
                 StartupAction.OpenDatabaseSetup,
                 () =>
-                    {
-                        return new XElement("Replay",
-                            new XElement("InstanceName", instanceName.Text),
-                            new XElement("Restore", (ChooseWisely == ChooseWiselyOption.Restore)));
-                    });
+                {
+                    return new XElement("Replay",
+                        new XElement("InstanceName", instanceName.Text),
+                        new XElement("Restore", (ChooseWisely == ChooseWiselyOption.Restore)));
+                });
             Pages.Insert(placeholderIndex, windowsInstallerPage);
 
             // The first prerequisite is Windows installer 4.5 which then chains to .net 3.5
@@ -173,6 +179,16 @@ namespace ShipWorks.Data.Administration
 
             // Event not available in the designer
             comboSqlServers.MouseWheel += new MouseEventHandler(OnSqlServerMouseWheel);
+
+            this.lifetimeScope = lifetimeScope;
+
+            // Resolve the user control
+            tangoUserControlHost = lifetimeScope.Resolve<ICustomerLicenseActivation>();
+            tangoUserControlHost.StepNext += OnStepNextShipWorksAdmin;
+            tangoUserControlHost.SteppingInto += OnSteppingIntoShipWorksAdmin;
+
+            // Replace the user wizard page with the new tango user wizard page
+            Pages.Insert(Pages.Count - 1, (WizardPage) tangoUserControlHost);
         }
 
         /// <summary>
@@ -1145,76 +1161,76 @@ namespace ShipWorks.Data.Administration
 
             // Start the background task to try to log in and figure out the background databases...
             var task = Task.Factory.StartNew(() =>
-                {
-                    SqlSessionConfiguration configuration = SqlInstanceUtility.DetermineCredentials(backgroundSession.Configuration.ServerInstance, firstTryConfiguration);
+            {
+                SqlSessionConfiguration configuration = SqlInstanceUtility.DetermineCredentials(backgroundSession.Configuration.ServerInstance, firstTryConfiguration);
 
-                    if (configuration != null)
+                if (configuration != null)
+                {
+                    using (SqlConnection con = new SqlSession(configuration).OpenConnection())
                     {
-                        using (SqlConnection con = new SqlSession(configuration).OpenConnection())
-                        {
-                            return Tuple.Create(configuration, ShipWorksDatabaseUtility.GetDatabaseDetails(con));
-                        }
+                        return Tuple.Create(configuration, ShipWorksDatabaseUtility.GetDatabaseDetails(con));
                     }
-                    else
-                    {
-                        return null;
-                    }
-                });
+                }
+                else
+                {
+                    return null;
+                }
+            });
 
             task.ContinueWith(t =>
+            {
+                // If the background session we know about isn't the same as the current connection session, then the user has changed
+                // it in the meantime on us and we discard the results
+                if (backgroundSession != connectionSession)
                 {
-                    // If the background session we know about isn't the same as the current connection session, then the user has changed
-                    // it in the meantime on us and we discard the results
-                    if (backgroundSession != connectionSession)
-                    {
-                        return;
-                    }
+                    return;
+                }
 
-                    // Whether it worked or not, this is now the SQL Instance this session is configured for.  This is especially important to set now in case
-                    // the user opens the window to try to change the credentials.
-                    sqlSession.Configuration.ServerInstance = selectedInstance;
+                // Whether it worked or not, this is now the SQL Instance this session is configured for.  This is especially important to set now in case
+                // the user opens the window to try to change the credentials.
+                sqlSession.Configuration.ServerInstance = selectedInstance;
 
-                    string instanceDisplay = (selectedInstance == SqlInstanceUtility.LocalDbServerInstance) ? localDbDisplayName : selectedInstance;
+                string instanceDisplay = (selectedInstance == SqlInstanceUtility.LocalDbServerInstance) ? localDbDisplayName : selectedInstance;
 
-                    // Null indicates error
-                    if (t.Result == null)
-                    {
-                        pictureSqlConnection.Image = Resources.warning16;
-                        labelSqlConnection.Text = string.Format("Could not connect to '{0}'", instanceDisplay);
-                        linkSqlInstanceAccount.Text = "Try changing the account";
+                // Null indicates error
+                if (t.Result == null)
+                {
+                    pictureSqlConnection.Image = Resources.warning16;
+                    labelSqlConnection.Text = string.Format("Could not connect to '{0}'", instanceDisplay);
+                    linkSqlInstanceAccount.Text = "Try changing the account";
 
-                        gridDatabses.EmptyText = "";
-                        gridDatabses.Visible = false;
-                    }
-                    else
-                    {
-                        SqlSessionConfiguration configuration = t.Result.Item1;
-                        List<SqlDatabaseDetail> databases = t.Result.Item2;
+                    gridDatabses.EmptyText = "";
+                    gridDatabses.Visible = false;
+                }
+                else
+                {
+                    SqlSessionConfiguration configuration = t.Result.Item1;
+                    List<SqlDatabaseDetail> databases = t.Result.Item2;
 
-                        pictureSqlConnection.Image = Resources.check16;
-                        labelSqlConnection.Text = string.Format("Connected to '{0}' using {1} account.", instanceDisplay, configuration.WindowsAuth ? "your Windows" : string.Format("the '{0}'", configuration.Username));
-                        linkSqlInstanceAccount.Text = "Change";
+                    pictureSqlConnection.Image = Resources.check16;
+                    labelSqlConnection.Text = string.Format("Connected to '{0}' using {1} account.", instanceDisplay, configuration.WindowsAuth ? "your Windows" : string.Format("the '{0}'", configuration.Username));
+                    linkSqlInstanceAccount.Text = "Change";
 
-                        gridDatabses.EmptyText = "No databases were found.";
-                        gridDatabses.Visible = sqlInstanceChooseDatabase;
+                    gridDatabses.EmptyText = "No databases were found.";
+                    gridDatabses.Visible = sqlInstanceChooseDatabase;
 
-                        // Save the credentials
-                        sqlSession.Configuration.Username = configuration.Username;
-                        sqlSession.Configuration.Password = configuration.Password;
-                        sqlSession.Configuration.WindowsAuth = configuration.WindowsAuth;
+                    // Save the credentials
+                    sqlSession.Configuration.Username = configuration.Username;
+                    sqlSession.Configuration.Password = configuration.Password;
+                    sqlSession.Configuration.WindowsAuth = configuration.WindowsAuth;
 
-                        // We also have to save them to our connectionSession, so we can properly track when\if it changes
-                        connectionSession.Configuration.Username = configuration.Username;
-                        connectionSession.Configuration.Password = configuration.Password;
-                        connectionSession.Configuration.WindowsAuth = configuration.WindowsAuth;
+                    // We also have to save them to our connectionSession, so we can properly track when\if it changes
+                    connectionSession.Configuration.Username = configuration.Username;
+                    connectionSession.Configuration.Password = configuration.Password;
+                    connectionSession.Configuration.WindowsAuth = configuration.WindowsAuth;
 
-                        LoadDatabaseList(databases, configuration);
-                    }
+                    LoadDatabaseList(databases, configuration);
+                }
 
-                    linkSqlInstanceAccount.Left = labelSqlConnection.Right;
-                    linkSqlInstanceAccount.Visible = !backgroundSession.Configuration.IsLocalDb();
+                linkSqlInstanceAccount.Left = labelSqlConnection.Right;
+                linkSqlInstanceAccount.Visible = !backgroundSession.Configuration.IsLocalDb();
 
-                }, TaskScheduler.FromCurrentSynchronizationContext());
+            }, TaskScheduler.FromCurrentSynchronizationContext());
         }
 
         /// <summary>
@@ -1436,7 +1452,7 @@ namespace ShipWorks.Data.Administration
                         sqlSession.Configuration.DatabaseName = database;
 
                         // Complete
-                        e.NextPage = wizardPageShipWorksAdmin;
+                        e.NextPage = (WizardPage) tangoUserControlHost;
                     }
                     else
                     {
@@ -1611,12 +1627,12 @@ namespace ShipWorks.Data.Administration
                     "SQL Server",
                     StartupAction.OpenDatabaseSetup,
                     () =>
-                        {
-                            return new XElement("Replay",
-                                new XElement("InstanceName", instanceName.Text),
-                                new XElement("Restore", (ChooseWisely == ChooseWiselyOption.Restore)),
-                                new XElement("AfterInstallSuccess", true));
-                        }));
+                    {
+                        return new XElement("Replay",
+                            new XElement("InstanceName", instanceName.Text),
+                            new XElement("Restore", (ChooseWisely == ChooseWiselyOption.Restore)),
+                            new XElement("AfterInstallSuccess", true));
+                    }));
 
                 MoveNext();
             }
@@ -1742,7 +1758,7 @@ namespace ShipWorks.Data.Administration
                         throw;
                     }
 
-                    e.NextPage = wizardPageShipWorksAdmin;
+                    e.NextPage = (WizardPage) tangoUserControlHost;
                 }
             }
             catch (SqlException ex)
@@ -2168,48 +2184,26 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         private void OnStepNextShipWorksAdmin(object sender, WizardStepEventArgs e)
         {
-            string username = swUsername.Text.Trim();
-
             // Default to not moving on
             WizardPage nextPage = e.NextPage;
             e.NextPage = CurrentPage;
 
-            if (username.Length == 0)
+            GenericResult<ICustomerLicense> result;
+
+            using (new SqlSessionScope(sqlSession))
             {
-                MessageHelper.ShowMessage(this, "Please enter a username.");
-                return;
+                result = tangoUserControlHost.Save();
             }
 
-            if (!EmailUtility.IsValidEmailAddress(swEmail.Text))
+            if (result.Success)
             {
-                MessageHelper.ShowMessage(this, "Please enter a valid email address.");
-                return;
-            }
-
-            if (swPassword.Text != swPasswordAgain.Text)
-            {
-                MessageHelper.ShowMessage(this, "The passwords you typed do not match.");
-                return;
-            }
-
-            try
-            {
-                using (SqlSessionScope scope = new SqlSessionScope(sqlSession))
-                {
-                    UserUtility.CreateUser(username, swEmail.Text, swPassword.Text, true);
-                    adminUserCreated = true;
-                }
-
-                // Now we can move on
+                //Now we can move on
+                adminUserCreated = true;
                 e.NextPage = nextPage;
             }
-            catch (SqlException ex)
+            else
             {
-                MessageHelper.ShowMessage(this, ex.Message);
-            }
-            catch (DuplicateNameException ex)
-            {
-                MessageHelper.ShowMessage(this, ex.Message);
+                MessageHelper.ShowMessage(this, result.Message);
             }
         }
 
@@ -2236,7 +2230,7 @@ namespace ShipWorks.Data.Administration
             // If we created this database, then seamlessly continue this wizard into the add store wizard
             if (ChooseWisely == ChooseWiselyOption.Create)
             {
-                AddStoreWizard.ContinueAfterCreateDatabase(this, swUsername.Text.Trim(), swPassword.Text);
+                AddStoreWizard.ContinueAfterCreateDatabase(this, tangoUserControlHost.ViewModel.Email, tangoUserControlHost.ViewModel.DecryptedPassword);
             }
             else
             {
@@ -2249,7 +2243,14 @@ namespace ShipWorks.Data.Administration
                 // If we created the admin user, go ahead and log that user in
                 if (adminUserCreated)
                 {
-                    UserSession.Logon(swUsername.Text.Trim(), swPassword.Text, true);
+                    IUserService userService = lifetimeScope.Resolve<IUserService>();
+
+                    EnumResult<UserServiceLogonResultType> logonResult = userService.Logon(new LogonCredentials(tangoUserControlHost.ViewModel.Email, tangoUserControlHost.ViewModel.DecryptedPassword, true));
+
+                    if (logonResult.Value != UserServiceLogonResultType.Success)
+                    {
+                        MessageHelper.ShowError(this, logonResult.Message);
+                    }
                 }
             }
         }

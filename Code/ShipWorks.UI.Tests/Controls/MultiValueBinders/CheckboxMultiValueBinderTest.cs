@@ -3,17 +3,17 @@ using System.Windows.Forms;
 using ShipWorks.UI.Controls.MultiValueBinders;
 using Xunit;
 
-namespace ShipWorks.Tests.UI.Controls.MultiValueBinders
+namespace ShipWorks.UI.Tests.Controls.MultiValueBinders
 {
     public class CheckboxMultiValueBinderTest 
     {
-        private List<GenericMultiValueBinderDto<bool, string>> allDistinctValuesDataSource = new List<GenericMultiValueBinderDto<bool, string>>()
+        private readonly List<GenericMultiValueBinderDto<bool, string>> allDistinctValuesDataSource = new List<GenericMultiValueBinderDto<bool, string>>()
             {
                 new GenericMultiValueBinderDto<bool, string>(true, "one"),
                 new GenericMultiValueBinderDto<bool, string>(true, "one"),
                 new GenericMultiValueBinderDto<bool, string>(true, "one")
             };
-        private List<GenericMultiValueBinderDto<bool, string>> allDifferentValuesDataSource = new List<GenericMultiValueBinderDto<bool, string>>()
+        private readonly List<GenericMultiValueBinderDto<bool, string>> allDifferentValuesDataSource = new List<GenericMultiValueBinderDto<bool, string>>()
             {
                 new GenericMultiValueBinderDto<bool, string>(true, "one"),
                 new GenericMultiValueBinderDto<bool, string>(false, "one"),
