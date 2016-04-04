@@ -923,6 +923,13 @@
     <Compile Include="Shipping\Carriers\Amazon\AmazonShippingToken.cs" />
     <Compile Include="Shipping\Carriers\Amazon\AmazonShippingTokenExtensions.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateConsolidatePostalRates.cs" />
+    <Compile Include="Shipping\Carriers\BestRate\Footnote\ShippingAccountRequiredForRatingFootnoteFactory.cs" />
+    <Compile Include="Shipping\Carriers\BestRate\Footnote\ShippingAccountRequiredForRatingFootnoteControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Shipping\Carriers\BestRate\Footnote\ShippingAccountRequiredForRatingFootnoteControl.Designer.cs">
+      <DependentUpon>ShippingAccountRequiredForRatingFootnoteControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Shipping\Carriers\BestRate\IBestRateBrokerRatingService.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\FedExLabelRepositoryFactory.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\IFedExLabelRepositoryFactory.cs" />
@@ -7716,6 +7723,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\BestRate\BestRateSettingsControl.resx">
       <DependentUpon>BestRateSettingsControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\Carriers\BestRate\Footnote\ShippingAccountRequiredForRatingFootnoteControl.resx">
+      <DependentUpon>ShippingAccountRequiredForRatingFootnoteControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\BestRate\Setup\CounterRateProcessingSetupWizard.resx">
       <DependentUpon>CounterRateProcessingSetupWizard.cs</DependentUpon>
