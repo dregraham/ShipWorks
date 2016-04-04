@@ -10342,7 +10342,7 @@
     <None Include="Resources\currency_dollar_green16.png" />
     <None Include="Resources\logo_sdc.png" />
     <None Include="Resources\glo_ups_brandmark_pfv.gif" />
-    <None Include="Resources\box_closed3.png" />
+    <Resource Include="Resources\box_closed3.png" />
     <None Include="Resources\barcode.png" />
     <None Include="Resources\box_preferences1.png" />
     <CodeAnalysisDictionary Include="..\..\Build\AnalysisDictionary.xml">
