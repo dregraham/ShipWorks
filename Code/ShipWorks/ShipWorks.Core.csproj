@@ -10816,6 +10816,7 @@
     <None Include="Resources\splash.png" />
     <None Include="Resources\solidcommerce.png" />
     <None Include="Resources\stagebloc.png" />
+    <None Include="Resources\sparkpay.png" />
     <Content Include="Resources\Stores\Icons\cart66.png" />
     <Content Include="Resources\Stores\Icons\channelsale.png" />
     <Content Include="Resources\Stores\Icons\jigoshop.png" />

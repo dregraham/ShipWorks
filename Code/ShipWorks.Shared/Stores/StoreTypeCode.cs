@@ -358,7 +358,7 @@ namespace ShipWorks.Stores
 
         [Description("SparkPay")]
         [StoreTypeIdentity("WISH", "WSH")]
-        [StoreTypeIcon("genericmodule")]
+        [StoreTypeIcon("sparkpay")]
         SparkPay = 69
     }
 }

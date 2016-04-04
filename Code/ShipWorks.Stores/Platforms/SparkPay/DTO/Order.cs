@@ -87,7 +87,7 @@ namespace ShipWorks.Stores.Platforms.SparkPay.DTO
         public int? SessionId { get; set; }
 
         [JsonProperty("handling_total")]
-        public double? HandlingTotal { get; set; }
+        public decimal? HandlingTotal { get; set; }
 
         [JsonProperty("is_payment_order_only")]
         public bool IsPaymentOrderOnly { get; set; }
@@ -99,7 +99,7 @@ namespace ShipWorks.Stores.Platforms.SparkPay.DTO
         public string SelectedShippingProviderService { get; set; }
 
         [JsonProperty("additional_fees")]
-        public double? AdditionalFees { get; set; }
+        public decimal? AdditionalFees { get; set; }
 
         [JsonProperty("adcode_id")]
         public int? AdCodeId { get; set; }

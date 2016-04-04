@@ -101,21 +101,21 @@ namespace ShipWorks.Stores.Platforms.SparkPay
             order.OnlineLastModified = sparkPayOrder.UpdatedAt.GetValueOrDefault(DateTime.UtcNow).UtcDateTime;
             order.RequestedShipping = sparkPayOrder.SelectedShippingMethod;
 
-            LoadAddresses(order, sparkPayOrder);
-            LoadOrderNotes(order, sparkPayOrder);
-
             if (order.IsNew)
             {
                 order.OrderDate = sparkPayOrder.OrderedAt.GetValueOrDefault(DateTime.UtcNow).UtcDateTime;
                 order.OrderNumber = sparkPayOrder.Id.Value;
                 order.OrderTotal = sparkPayOrder.GrandTotal.GetValueOrDefault(0);
-                
+
                 LoadOrderItems(order, sparkPayOrder.Items);
                 LoadOrderCharges(order, sparkPayOrder);
                 LoadOrderGiftMessages(order, sparkPayOrder);
-                
+
                 LoadOrderPayments(order, sparkPayOrder);
             }
+
+            LoadAddresses(order, sparkPayOrder);
+            LoadOrderNotes(order, sparkPayOrder);
             
             ISqlAdapterRetry retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "SparkPayDownloader.LoadOrder");
             retryAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(order));
@@ -181,7 +181,9 @@ namespace ShipWorks.Stores.Platforms.SparkPay
         private static void LoadOrderCharges(OrderEntity order, Order sparkPayOrder)
         {
             LoadOrderCharge(order, "SHIPPING", "Shipping", sparkPayOrder.ShippingTotal.GetValueOrDefault(0));
+            LoadOrderCharge(order, "HANDLING", "Handling Fee", sparkPayOrder.HandlingTotal.GetValueOrDefault(0));
             LoadOrderCharge(order, "TAX", "Tax", sparkPayOrder.TaxTotal.GetValueOrDefault(0));
+            LoadOrderCharge(order, "ADDITIONAL FEES", "Additional Fees", sparkPayOrder.AdditionalFees.GetValueOrDefault(0));
             LoadOrderCharge(order, "DISCOUNT", "Discount", -sparkPayOrder.DiscountTotal.GetValueOrDefault(0));
         }
          
