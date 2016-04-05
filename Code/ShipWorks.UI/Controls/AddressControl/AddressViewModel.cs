@@ -305,7 +305,7 @@ namespace ShipWorks.UI.Controls.AddressControl
         /// </summary>
         public void Dispose()
         {
-            addressValidationSubscriptions.Dispose();
+            addressValidationSubscriptions?.Dispose();
         }
     }
 }
