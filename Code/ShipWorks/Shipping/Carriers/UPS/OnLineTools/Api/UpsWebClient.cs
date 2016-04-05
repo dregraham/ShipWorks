@@ -347,7 +347,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             }
             catch (Exception ex)
             {
-                throw WebHelper.TranslateWebException(ex, typeof (UpsException));
+                throw WebHelper.TranslateWebException(ex, typeof(UpsException));
             }
         }
         
