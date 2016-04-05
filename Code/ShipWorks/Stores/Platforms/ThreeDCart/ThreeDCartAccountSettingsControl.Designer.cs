@@ -103,7 +103,7 @@
             this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label2.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.label2.Location = new System.Drawing.Point(3, 101);
+            this.label2.Location = new System.Drawing.Point(94, 101);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(174, 13);
             this.label2.TabIndex = 22;
@@ -115,11 +115,11 @@
             this.helpLink.Cursor = System.Windows.Forms.Cursors.Hand;
             this.helpLink.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline);
             this.helpLink.ForeColor = System.Drawing.Color.Blue;
-            this.helpLink.Location = new System.Drawing.Point(174, 101);
+            this.helpLink.Location = new System.Drawing.Point(265, 101);
             this.helpLink.Name = "helpLink";
-            this.helpLink.Size = new System.Drawing.Size(51, 13);
+            this.helpLink.Size = new System.Drawing.Size(55, 13);
             this.helpLink.TabIndex = 24;
-            this.helpLink.Text = "click here";
+            this.helpLink.Text = "click here.";
             this.helpLink.Url = "http://support.shipworks.com/support/solutions/articles/167787-adding-a-3dcart-st" +
     "ore-";
             // 
