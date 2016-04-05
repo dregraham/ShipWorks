@@ -30,12 +30,26 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
         public IDisposable Register(ShippingPanelViewModel viewModel)
         {
             return messages.OfType<SelectedRateChangedMessage>()
-                .Where(x => x.Sender != viewModel &&
-                       x.Sender != viewModel.ShipmentViewModel &&
+                .Where(x => IsSenderOutsideShippingPanel(x.Sender, viewModel) &&
                        viewModel.LoadedShipmentResult == ShippingPanelLoadedShipmentResult.Success &&
-                       x.RateResult.ShipmentType != ShipmentTypeCode.Amazon &&
-                       x.RateResult.ShipmentType != ShipmentTypeCode.BestRate)
+                       IsValidShipmentType(x.RateResult.ShipmentType))
                 .Subscribe(x => SelectRate(viewModel, x.RateResult));
+        }
+
+        /// <summary>
+        /// Is the sender something other than the shipping panel
+        /// </summary>
+        private bool IsSenderOutsideShippingPanel(object sender, ShippingPanelViewModel viewModel)
+        {
+            return sender != viewModel && sender != viewModel.ShipmentViewModel;
+        }
+
+        /// <summary>
+        /// Is the shipment type valid for rating in the panel
+        /// </summary>
+        private bool IsValidShipmentType(ShipmentTypeCode shipmentTypeCode)
+        {
+            return shipmentTypeCode != ShipmentTypeCode.Amazon && shipmentTypeCode != ShipmentTypeCode.BestRate;
         }
 
         /// <summary>
