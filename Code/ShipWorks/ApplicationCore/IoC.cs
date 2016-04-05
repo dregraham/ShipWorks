@@ -65,9 +65,6 @@ namespace ShipWorks.ApplicationCore
             Assembly[] allAssemblies = assemblies.Union(new[] { typeof(IoC).Assembly }).ToArray();
             var builder = new ContainerBuilder();
 
-            builder.RegisterType<DataProviderWrapper>()
-                .AsImplementedInterfaces();
-
             builder.RegisterType<ClipboardHelper>()
                 .AsSelf()
                 .SingleInstance();
