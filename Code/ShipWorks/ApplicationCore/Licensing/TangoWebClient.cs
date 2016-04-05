@@ -43,7 +43,7 @@ namespace ShipWorks.ApplicationCore.Licensing
     [NDependIgnoreLongTypesAttribute]
     public static class TangoWebClient
     {
-        private const string ActivationUrl = "http://shipworks.stamps.com/ShipWorksNet/ActivationV1.svc";
+        private const string ActivationUrl = "https://shipworks.stamps.com/ShipWorksNet/ActivationV1.svc";
 
         // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(TangoWebClient));
@@ -1109,6 +1109,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public static void ValidateSecureConnection(Uri uri)
         {
+#if !DEBUG
             HttpWebRequest request = (HttpWebRequest) WebRequest.Create(uri);
             request.KeepAlive = false;
             request.UserAgent = "shipworks";
@@ -1117,6 +1118,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             {
                 ValidateInterapptiveCertificate(request);
             }
+#endif
         }
 
         /// <summary>

@@ -34,7 +34,7 @@ namespace ShipWorks.ApplicationCore.Licensing.FeatureRestrictions
         public virtual bool Handle(IWin32Window owner, ILicenseCapabilities capabilities, object data)
         {
             EditionRestrictionLevel level = Check(capabilities, data);
-            
+
             if (EditionFeature == EditionFeature.ShipmentType && level == EditionRestrictionLevel.Forbidden)
             {
                 // You can optional separate "RequiresUpgrade" and "Forbidden" descriptions with a Pipe
@@ -49,9 +49,9 @@ namespace ShipWorks.ApplicationCore.Licensing.FeatureRestrictions
                     description = descriptions[1];
                 }
 
-                messageHelper.ShowError(string.Format(description));
+                messageHelper.ShowError(owner, string.Format(description));
             }
-            
+
             return level == EditionRestrictionLevel.None;
         }
     }

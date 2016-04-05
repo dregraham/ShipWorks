@@ -286,35 +286,6 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.Activation
         }
 
         [Fact]
-        public void Execute_DelegatesToShippingSetting_ToMarkUspsAsConfigured()
-        {
-            using (var mock = AutoMock.GetLoose())
-            {
-                string password = "1234";
-                UspsAccountEntity createdAccount = null;
-
-                var repo = mock.Mock<ICarrierAccountRepository<UspsAccountEntity>>();
-                repo.Setup(r => r.Accounts)
-                    .Returns(new List<UspsAccountEntity>());
-
-                repo.Setup(r => r.Save(It.IsAny<UspsAccountEntity>()))
-                    .Callback((UspsAccountEntity account) => createdAccount = account);
-
-                Mock<IShippingSettings> shippingSettings = mock.Mock<IShippingSettings>();
-                shippingSettings.Setup(s => s.SetDefaultProvider(It.IsAny<ShipmentTypeCode>()));
-
-                Mock<ICustomerLicense> license = mock.Mock<ICustomerLicense>();
-                license.Setup(l => l.AssociatedStampsUsername).Returns("bob");
-
-                UspsAccountSetupActivity testObject = mock.Create<UspsAccountSetupActivity>();
-                testObject.Execute(license.Object, password);
-
-                shippingSettings.Verify(s => s.SetDefaultProvider(ShipmentTypeCode.Usps), Times.Once());
-            }
-        }
-
-
-        [Fact]
         public void Execute_AccountIsNotCreated_WhenUspsAccountExists()
         {
             using (var mock = AutoMock.GetLoose())

@@ -3,6 +3,7 @@ using ShipWorks.Stores;
 using ShipWorks.UI.Controls.ChannelConfirmDelete;
 using Xunit;
 using Moq;
+using ShipWorks.ApplicationCore.Licensing;
 
 namespace ShipWorks.UI.Tests.Controls.CannelConfirmDelete
 {
@@ -13,7 +14,7 @@ namespace ShipWorks.UI.Tests.Controls.CannelConfirmDelete
         {
             using (var mock = AutoMock.GetLoose())
             {
-                mock.Mock<IChannelConfirmDeleteDlg>();
+                mock.Mock<IDialog>();
 
                 Mock<IConfirmChannelDeleteViewModel> viewModel = mock.Mock<IConfirmChannelDeleteViewModel>();
 

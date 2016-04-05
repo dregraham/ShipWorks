@@ -30,7 +30,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             {
                 // Checking for pending initial accounts here as well, so the
                 // a label can't be processed with an account in the pending state.
-                return accountRepository.Accounts.Any() && accountRepository.Accounts.None(a => a.PendingInitialAccount == (int) UspsPendingAccountType.Existing);
+                return accountRepository.Accounts.Any() &&
+                       accountRepository.Accounts.All(a => a.PendingInitialAccount == (int) UspsPendingAccountType.None);
             }
         }
 

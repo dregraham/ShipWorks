@@ -29,14 +29,16 @@ namespace ShipWorks.ApplicationCore.Licensing.LicenseEnforcement
         }
 
         /// <summary>
-        /// High Priority
+        /// Medium Priority - We want to make sure Tango is compliant via the ChannelCountEnforcer 
+        /// prior to making sure we are in sync with Tango.  This makes attempting to 
+        /// add a store more likely to succeed.
         /// </summary>
-        public EnforcementPriority Priority => EnforcementPriority.High;
+        public EnforcementPriority Priority => EnforcementPriority.Medium;
 
         /// <summary>
         /// Works on ChannelCount
         /// </summary>
-        public EditionFeature EditionFeature => EditionFeature.ChannelCount;
+        public EditionFeature EditionFeature => EditionFeature.ClientChannelsAccountedFor;
 
         /// <summary>
         /// Checks to see if we are in compliant, if not display a dlg showing the channels to delete
@@ -46,7 +48,7 @@ namespace ShipWorks.ApplicationCore.Licensing.LicenseEnforcement
         {
             if (Enforce(capabilities, context).Value == ComplianceLevel.NotCompliant)
             {
-                IChannelLimitDlg channelLimitDlg = channelLimitDlgFactory.GetChannelLimitDlg(owner, EditionFeature, context);
+                IDialog channelLimitDlg = channelLimitDlgFactory.GetChannelLimitDlg(owner, EditionFeature, context);
                 channelLimitDlg.ShowDialog();
             }
 
@@ -62,9 +64,9 @@ namespace ShipWorks.ApplicationCore.Licensing.LicenseEnforcement
         /// <summary>
         /// Returns not compliant when the number of local channels exceeds the number allowed
         /// </summary>
-        /// <returns></returns>
         public EnumResult<ComplianceLevel> Enforce(ILicenseCapabilities capabilities, EnforcementContext context)
         {
+            bool maxChannelsExceeded = false;
             if (context == EnforcementContext.Login)
             {
                 ICustomerLicense license = licenseService.GetLicenses().FirstOrDefault() as ICustomerLicense;
@@ -84,36 +86,28 @@ namespace ShipWorks.ApplicationCore.Licensing.LicenseEnforcement
                     {
                         // Call activate on all of the stores that tango does not know about
                         EnumResult<LicenseActivationState> activationResult = license.Activate(store);
-                        
+
                         // If it failed then we return not compliant
                         if (activationResult.Value == LicenseActivationState.MaxChannelsExceeded)
                         {
-                            return new EnumResult<ComplianceLevel>(ComplianceLevel.NotCompliant,
-                                $"{activationResult.Message} Please delete {ChannelsToDelete(license, localStores)} channel(s).");
+                            maxChannelsExceeded = true;
                         }
-
-                        storeManager.SaveStore(store);
+                        else
+                        {
+                            storeManager.SaveStore(store);
+                        }
                     }
                 }
             }
+
+            if (maxChannelsExceeded)
+            {
+                return new EnumResult<ComplianceLevel>(ComplianceLevel.NotCompliant,
+                        EnumHelper.GetDescription(EditionFeature.ClientChannelsAccountedFor));
+            }
+            
             // We got this far so we are compliant
-            return new EnumResult<ComplianceLevel>(ComplianceLevel.Compliant, string.Empty);
+            return new EnumResult<ComplianceLevel>(ComplianceLevel.Compliant);
         }
-
-        /// <summary>
-        /// Compares the number of channels from the active stores response to the local number
-        /// </summary>
-        private int ChannelsToDelete(ICustomerLicense customerLicense, IEnumerable<StoreEntity> localStores)
-        {
-            // Get an up to date list of stores in tango
-            IEnumerable<IActiveStore> activeStores = customerLicense.GetActiveStores();
-
-            // Find all of the channels in tango (not actual individual stores but channels e.g. Magento, Amazon, ChannelAdvisor)
-            List<StoreTypeCode> allowedChannels = activeStores.Select(activeStore => activeStore.StoreType).Distinct().ToList();
-
-            // Check to see if there are any local stores that do not belong to a channel that we are allowed to have
-            return localStores.Count(store => allowedChannels.All(t => t != (StoreTypeCode) store.TypeCode));
-        }
-
     }
 }

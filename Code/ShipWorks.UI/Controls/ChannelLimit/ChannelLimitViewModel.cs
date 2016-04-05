@@ -7,10 +7,14 @@ using System.Linq;
 using ShipWorks.UI.Controls.ChannelConfirmDelete;
 using System.Collections.Generic;
 using System;
+using System.Diagnostics;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Forms;
+using System.Windows.Forms.Integration;
 using System.Windows.Input;
+using System.Windows.Interop;
 using GalaSoft.MvvmLight.Command;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
@@ -18,6 +22,7 @@ using log4net;
 using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
 using ShipWorks.Data.Utility;
 using ShipWorks.Users.Security;
+using IWin32Window = System.Windows.Forms.IWin32Window;
 
 namespace ShipWorks.UI.Controls.ChannelLimit
 {
@@ -65,8 +70,8 @@ namespace ShipWorks.UI.Controls.ChannelLimit
 
             log = logFactory(typeof (ChannelLimitViewModel));
 
-            DeleteStoreClickCommand = new RelayCommand<Window>(DeleteChannel, CanExecuteDeleteStore);
-            UpgradeClickCommand = new RelayCommand<Window>(UpgradeAccount);
+            DeleteStoreClickCommand = new RelayCommand<ChannelLimitControl>(DeleteChannel, CanExecuteDeleteStore);
+            UpgradeClickCommand = new RelayCommand<ChannelLimitControl>(UpgradeAccount);
         }
 
         /// <summary>
@@ -161,7 +166,7 @@ namespace ShipWorks.UI.Controls.ChannelLimit
 
             SelectedStoreType = StoreTypeCode.Invalid;
 
-            // We need to force the refresh at this point to make sure we have the most 
+            // We need to force the refresh at this point to make sure we have the most
             // recent store/channel information
             license.ForceRefresh();
 
@@ -181,7 +186,7 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         /// </summary>
         public void Dismiss()
         {
-            // We need to force the refresh at this point to make sure we have the most 
+            // We need to force the refresh at this point to make sure we have the most
             // recent store/channel information
             license.ForceRefresh();
         }
@@ -189,7 +194,7 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         /// <summary>
         /// True if a store is selected
         /// </summary>
-        private bool CanExecuteDeleteStore(Window owner)
+        private bool CanExecuteDeleteStore(ChannelLimitControl owner)
         {
             return SelectedStoreType != StoreTypeCode.Invalid;
         }
@@ -203,47 +208,86 @@ namespace ShipWorks.UI.Controls.ChannelLimit
 
             EnumResult<ComplianceLevel> nonCompliantResult = channelLimitCompliance.FirstOrDefault(c => c.Value == ComplianceLevel.NotCompliant);
 
-            ErrorMessage = nonCompliantResult == null ? "Please click next." : nonCompliantResult.Message;
+            // If ControlOwner is null, it is the dialog being displayed. So show Close instead of Next.
+            string button = (ControlOwner == null) ? "Close" : "Next";
+
+            ErrorMessage = nonCompliantResult == null ? $"Please click {button}." : nonCompliantResult.Message;
         }
 
         /// <summary>
         /// Upgrade the account
         /// </summary>
-        private void UpgradeAccount(Window owner)
+        private void UpgradeAccount(ChannelLimitControl control)
         {
             Uri uri = new Uri(CustomerLicense.UpgradeUrl);
+
+            IWin32Window owner = GetOwner(control);
+
             IDialog browserDlg = webBrowserFactory.Create(uri, "Upgrade your plan", owner, new Size(1053, 1010));
+
             browserDlg.ShowDialog();
 
             Load();
 
             if (IsCompliant())
             {
-                owner?.Close();
+                (owner as ChannelLimitDlg)?.Close();
             }
+        }
+
+        /// <summary>
+        /// Gets the IWin32Window owner from the control.
+        /// </summary>
+        private IWin32Window GetOwner(ChannelLimitControl control)
+        {
+            if(control == null)
+            {
+                return null;
+            }
+
+            // Get handle for wpf control
+            HwndSource wpfHandle = PresentationSource.FromVisual(control) as HwndSource;
+
+            if (wpfHandle != null)
+            {
+                // Get the ElementHost if the control is owned by one.
+                ElementHost host = Control.FromChildHandle(wpfHandle.Handle) as ElementHost;
+
+                if (host != null)
+                {
+                    // We go up the parent chain here becuase the dialogs opened with the wizard page
+                    // as the owner were not appearing center screen. So we set the owner as the AddStoreWizard instead.
+                    // ElementHost -> ActivationErrorWizardPage -> WizardPage -> AddStoreWizard
+                    return host.Parent.Parent.Parent;
+                }
+            }
+
+            // Wasn't owned by element host, so it must be the wpf dialog
+            return wpfHandle?.RootVisual as ChannelLimitDlg;
         }
 
         /// <summary>
         /// Delete the selected store
         /// </summary>
-        private async void DeleteChannel(Window owner)
+        private async void DeleteChannel(ChannelLimitControl control)
         {
             List<StoreTypeCode> localStoreTypeCodes =
                 storeManager.GetAllStores().Select(s => (StoreTypeCode) s.TypeCode).Distinct().ToList();
+
+             IWin32Window owner = GetOwner(control);
 
             // If we are trying to delete the only store type in ShipWorks and they are not trying to add another one
             // display an error and don't delete
             if (localStoreTypeCodes.Count == 1 && localStoreTypeCodes.Contains(SelectedStoreType) && ChannelToAdd == null)
             {
-                messageHelper.ShowError($"You cannot remove {EnumHelper.GetDescription(selectedStoreType)} because it is " +
+                messageHelper.ShowError(owner, $"You cannot remove {EnumHelper.GetDescription(selectedStoreType)} because it is " +
                                         "the only channel in your ShipWorks database.");
                 return;
             }
 
             IsDeleting = true;
 
-            IChannelConfirmDeleteDlg deleteDlg = confirmDeleteFactory.GetConfirmDeleteDlg(selectedStoreType, owner);
-
+            IDialog deleteDlg = confirmDeleteFactory.GetConfirmDeleteDlg(selectedStoreType, owner);
             deleteDlg.ShowDialog();
 
             if (deleteDlg.DialogResult == true)
@@ -256,15 +300,15 @@ namespace ShipWorks.UI.Controls.ChannelLimit
                 catch (ShipWorksLicenseException ex)
                 {
                     log.Error("Error deleting channel", ex);
-                    messageHelper.ShowError("Error deleting Channel. Please try again.");
+                    messageHelper.ShowError(owner, "Error deleting Channel. Please try again.");
                 }
                 catch (SqlAppResourceLockException)
                 {
-                    messageHelper.ShowError("Unable to delete store while it is in the process of a download.");
+                    messageHelper.ShowError(owner, "Unable to delete store while it is in the process of a download.");
                 }
                 catch (PermissionException)
                 {
-                    messageHelper.ShowError("Please log in as an administrator to delete this channel.");
+                    messageHelper.ShowError(owner, "Please log in as an administrator to delete this channel.");
                 }
             }
 
@@ -283,7 +327,7 @@ namespace ShipWorks.UI.Controls.ChannelLimit
 
             if (IsCompliant())
             {
-                owner?.Close();
+                (owner as ChannelLimitDlg)?.Close();
             }
         }
 
@@ -304,5 +348,10 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         {
             return TaskEx.Run(() => license.DeleteChannel(selectedStoreType));
         }
+
+        /// <summary>
+        /// The owner, if using the control
+        /// </summary>
+        public IWin32Window ControlOwner { get; set; }
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping.Profiles
@@ -13,6 +14,22 @@ namespace ShipWorks.Shipping.Profiles
         public ShippingProfileEntity GetDefaultProfile(ShipmentTypeCode shipmentTypeCode)
         {
             return ShippingProfileManager.GetDefaultProfile(shipmentTypeCode);
+        }
+
+        /// <summary>
+        /// Initialize ShippingProfileManager
+        /// </summary>
+        public void InitializeForCurrentSession()
+        {
+            ShippingProfileManager.InitializeForCurrentSession();
+        }
+
+        /// <summary>
+        /// Saves the given profile
+        /// </summary>
+        public void SaveProfile(ShippingProfileEntity profile)
+        {
+            ShippingProfileManager.SaveProfile(profile);
         }
     }
 }

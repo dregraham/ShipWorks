@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Xml;
+using System.Xml.Linq;
 using System.Xml.XPath;
 using Interapptive.Shared.Utility;
 using ShipWorks.Editions;
@@ -19,8 +20,8 @@ namespace ShipWorks.ApplicationCore.Licensing
     public class LicenseCapabilities : ILicenseCapabilities
     {
         private readonly List<StoreTypeCode> forbiddenChannels;
-        private const string userCapabilityNamespace = "http://ShipWorks.com/UserCapabilitiesV1.xsd";
-        private const string userLevelNamespace = "http://ShipWorks.com/UserLevelsV1.xsd";
+        private readonly XmlNode userLevelsNode;
+        private readonly XmlNode capabilitiesNode;
 
         /// <summary>
         /// Constructor - Sets capabilities based on the xml response.
@@ -32,15 +33,20 @@ namespace ShipWorks.ApplicationCore.Licensing
             ShipmentTypeRestriction = new Dictionary<ShipmentTypeCode, IEnumerable<ShipmentTypeRestrictionType>>();
             ShipmentTypeShippingPolicy = new Dictionary<ShipmentTypeCode, Dictionary<ShippingPolicyType, string>>();
             forbiddenChannels = new List<StoreTypeCode>();
-
+            
             // Check the response for errors and throw a ShipWorksLicenseException
             CheckResponseForErrors(xmlResponse);
+
+            // Determine the capabilities node to use and extract the current user levels
+            userLevelsNode = xmlResponse.SelectSingleNode("//UserLevels");
+            capabilitiesNode = GetPricingCapabilitiesNode(xmlResponse);
+            ValidateCapabilitiesAndUserLevels(xmlResponse);
 
             // parse the ShipmentTypeFunctionality node from the response
             ShipmentTypeFunctionality(xmlResponse);
 
             // parse the license capabilities
-            SetPricingPlanCapabilties(xmlResponse);
+            SetPricingPlanCapabilities(xmlResponse);
 
             // parse the stamps specific capabilities
             SetStampsCapabilities(xmlResponse);
@@ -178,6 +184,12 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public int ProcessedShipments { get; private set; }
 
+        /// <summary>
+        /// Gets a value indicating whether best rate allowed given for this instance.
+        /// </summary>
+        /// <value><c>true</c> if this the capabilities allows best rate; otherwise, <c>false</c>.</value>
+        public bool IsBestRateAllowed { get; private set; }
+
         #endregion Properties
 
         /// <summary>
@@ -279,22 +291,34 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Checks the response for errors.
         /// </summary>
-        private static void CheckResponseForErrors(XmlNode xmlResponse)
+        private void CheckResponseForErrors(XmlNode xmlResponse)
         {
             XPathNavigator xpath = xmlResponse.CreateNavigator();
-
             string error = XPathUtility.Evaluate(xpath, "//Error", string.Empty);
 
             if (!error.Equals(string.Empty))
             {
                 throw new ShipWorksLicenseException(error);
             }
+        }
 
-            // Grab the nodes that are vital to shipworks functioning 
-            string channelLimitSanityCheck = GetStringValueFromNameValuePair("NumberOfChannels", xmlResponse, userCapabilityNamespace);
-            string shipmentLimitSanityCheck = GetStringValueFromNameValuePair("NumberOfShipments", xmlResponse, userCapabilityNamespace);
-            string userChannelLimitSanityCheck = GetStringValueFromNameValuePair("NumberOfChannels", xmlResponse, userLevelNamespace);
-            string userShipmentLimitSanityCheck = GetStringValueFromNameValuePair("NumberOfShipments", xmlResponse, userLevelNamespace);
+        /// <summary>
+        /// Validates the capabilities and user levels from the XmlNode provided.
+        /// </summary>
+        /// <param name="xmlResponse">The XML response.</param>
+        /// <exception cref="ShipWorksLicenseException">The license associated with this account is invalid.</exception>
+        private void ValidateCapabilitiesAndUserLevels(XmlNode xmlResponse)
+        {
+            XPathNavigator xpath = xmlResponse.CreateNavigator();
+
+            // Grab the nodes that are vital to ShipWorks functioning 
+            string channelLimitSanityCheck = GetStringValueFromNameValuePair("NumberOfChannels", capabilitiesNode);
+            string shipmentLimitSanityCheck = GetStringValueFromNameValuePair("NumberOfShipments", capabilitiesNode);
+
+
+            string userChannelLimitSanityCheck = GetStringValueFromNameValuePair("NumberOfChannels", userLevelsNode);
+            string userShipmentLimitSanityCheck = GetStringValueFromNameValuePair("NumberOfShipments", userLevelsNode);
+
             string customerStatus = XPathUtility.Evaluate(xpath, "//CustomerStatus/Valid", "");
 
             if (string.IsNullOrWhiteSpace(shipmentLimitSanityCheck) ||
@@ -315,12 +339,21 @@ namespace ShipWorks.ApplicationCore.Licensing
             XPathNavigator xpath = xmlResponse.CreateNavigator();
 
             UpsStatus = (UpsStatus)XPathUtility.Evaluate(xpath, "//UpsOnly/@status", 0);
-            UpsAccountNumbers = XPathUtility.Evaluate(xpath, "//UpsOnly", "").Split(';')
-                                            .Where(a => !string.IsNullOrWhiteSpace(a))
-                                            .Select(a => a.Trim().ToLower())
-                                            .ToArray();
 
-            UpsAccountLimit = UpsStatus == UpsStatus.Discount ?
+            // Only subsidized accounts are limited to specific ups accounts
+            if (UpsStatus == UpsStatus.Subsidized)
+            {
+                UpsAccountNumbers = XPathUtility.Evaluate(xpath, "//UpsOnly", "").Split(';')
+                                .Where(a => !string.IsNullOrWhiteSpace(a))
+                                .Select(a => a.Trim().ToLower())
+                                .ToArray();
+            }
+            else
+            {
+                UpsAccountNumbers = Enumerable.Empty<string>();
+            }
+
+            UpsAccountLimit = UpsStatus == UpsStatus.Discount || UpsStatus == UpsStatus.Tier1 ?
                 1 :
                 UpsAccountNumbers.Count();
 
@@ -329,37 +362,89 @@ namespace ShipWorks.ApplicationCore.Licensing
         }
 
         /// <summary>
+        /// Extracts the appropriate pricing capabilities to use from the response.
+        /// </summary>
+        /// <param name="sourceNode">The source node.</param>
+        /// <returns>The XmlNode containing the capabilities data.</returns>
+        /// <exception cref="ShipWorksLicenseException">The license associated with this account is invalid.</exception>
+        private XmlNode GetPricingCapabilitiesNode(XmlNode sourceNode)
+        {
+            // When changing plans in the middle of a billing cycle there will be two groups of capabilities 
+            // that need to be inspected. When upgrading a plan, the increased capabilities should take effect 
+            // immediately while capabilities of downgraded plans should not take effect until the next 
+            // billing cycle (i.e. always choose the plan with the higher capabilities). The plan with the 
+            // higher capabilities can be determined by shipment limit.
+
+            try
+            {
+                const int unlimitedShipments = -1;
+                XmlNode pricingCapabilitiesNode = sourceNode.SelectSingleNode("//UserCapabilities");
+                int shipmentLimit = GetIntValueFromNameValuePair("NumberOfShipments", pricingCapabilitiesNode);
+
+                // There's no need to inspect pending capabilities if the current plan offers unlimited shipments
+                if (shipmentLimit != unlimitedShipments)
+                {
+                    // The shipment limit is not unlimited, so we need to check the pending capabilities
+                    XmlNode pendingNode = sourceNode.SelectSingleNode("//PendingUserCapabilities");
+                    if (pendingNode != null && pendingNode.HasChildNodes)
+                    {
+                        // The pending node is not empty, so the customer has changed plans.
+                        int pendingShipmentLimit = GetIntValueFromNameValuePair("NumberOfShipments", pendingNode);
+                        if (pendingShipmentLimit == unlimitedShipments || pendingShipmentLimit > shipmentLimit)
+                        {
+                            // The plan has been upgraded, so use the capabilities associated with the
+                            // pending plan
+                            pricingCapabilitiesNode = pendingNode;
+                        }
+                    }
+                }
+
+                return pricingCapabilitiesNode;
+            }
+            catch (Exception exception)
+            {
+                throw new ShipWorksLicenseException("The license associated with this account is invalid.", exception);
+            }
+        }
+
+        /// <summary>
         /// Set capabilities typically associated with a pricing plan
         /// </summary>
-        private void SetPricingPlanCapabilties(XmlNode response)
+        private void SetPricingPlanCapabilities(XmlNode response)
         {
             XPathNavigator xpath = response.CreateNavigator();
 
             IsInTrial = XPathUtility.Evaluate(xpath, "//IsInTrial", false);
+            
+            CustomDataSources = GetBoolValueFromNameValuePair("CustomDataSources", capabilitiesNode);
 
-            CustomDataSources = GetBoolValueFromNameValuePair("CustomDataSources", response, userCapabilityNamespace);
-
-            // If custom data sources is disabled we add GenericFile to the list of stores that are not allowed
-            if (!GetBoolValueFromNameValuePair("CustomDataSources", response, userCapabilityNamespace))
+            // Generic file channel capability
+            if (!GetBoolValueFromNameValuePair("CustomDataSources", capabilitiesNode))
             {
+                // Custom data sources is disabled. Add GenericFile to the list of stores that are not allowed.
                 forbiddenChannels.Add(StoreTypeCode.GenericFile);
             }
-
-            // If custom data sources api is disabled we add GenericModule to the list of stores that are not allowed
-            if (!GetBoolValueFromNameValuePair("CustomDataSourcesAPI", response, userCapabilityNamespace))
+            
+            // Generic module channel capability
+            if (!GetBoolValueFromNameValuePair("CustomDataSourcesAPI", capabilitiesNode))
             {
+                // Custom data sources API is disabled. Add GenericModule to the list of stores that are not allowed.
                 forbiddenChannels.Add(StoreTypeCode.GenericModule);
             }
 
-            ChannelLimit = GetIntValueFromNameValuePair("NumberOfChannels", response, userCapabilityNamespace);
+            // Channel and shipment limits
+            ChannelLimit = GetIntValueFromNameValuePair("NumberOfChannels", capabilitiesNode);
+            ShipmentLimit = GetIntValueFromNameValuePair("NumberOfShipments", capabilitiesNode);
 
-            ShipmentLimit = GetIntValueFromNameValuePair("NumberOfShipments", response, userCapabilityNamespace);
+            // Get the current number of channels and shipments
+            XmlNode userLevels = response.SelectSingleNode("//UserLevels");
+            ActiveChannels = GetIntValueFromNameValuePair("NumberOfChannels", userLevels);
+            ProcessedShipments = GetIntValueFromNameValuePair("NumberOfShipments", userLevels);
 
-            ActiveChannels = GetIntValueFromNameValuePair("NumberOfChannels", response, userLevelNamespace);
-            ProcessedShipments = GetIntValueFromNameValuePair("NumberOfShipments", response, userLevelNamespace);
+            IsBestRateAllowed = GetBoolValueFromNameValuePair("RateCompare", capabilitiesNode);
 
+            // Grab the billing date
             string date = XPathUtility.Evaluate(xpath, "//BillingEndDate", DateTime.MinValue.ToString(CultureInfo.InvariantCulture));
-
             BillingEndDate = DateTime.Parse(date);
         }
 
@@ -393,30 +478,18 @@ namespace ShipWorks.ApplicationCore.Licensing
         }
 
         /// <summary>
-        /// Gets the string value for the given name 
+        /// Gets the string value for the given name from the XmlNode provided.
         /// </summary>
-        /// <remarks>returns empty string if the name or value are not found</remarks>
-        private static string GetStringValueFromNameValuePair(string name, XmlNode document, string ns)
+        /// <returns>Returns empty string if the name or value are not found.</returns>
+        private static string GetStringValueFromNameValuePair(string name, XmlNode document)
         {
-            XPathNavigator xpath = document?.CreateNavigator();
-
-            if (xpath?.NameTable != null)
+            XElement xDoc = XElement.Parse(document.OuterXml);
+            IEnumerable<XElement> nameValuePairElements = xDoc.Descendants().Where(e => e.Name.LocalName == "NameValuePair");
+            foreach (XElement element in nameValuePairElements)
             {
-                XmlNamespaceManager nsmanager = new XmlNamespaceManager(xpath.NameTable);
-
-                nsmanager.AddNamespace("x", ns);
-
-                XPathNodeIterator iterator = xpath.Select("//x:NameValuePair", nsmanager);
-
-                while (iterator.MoveNext())
+                if (element.Descendants().FirstOrDefault(d => d.Name.LocalName == "Name")?.Value == name)
                 {
-                    if (iterator.Current.NameTable != null)
-                    {
-                        if (iterator.Current?.SelectSingleNode("x:Name", nsmanager)?.Value == name)
-                        {
-                            return iterator.Current?.SelectSingleNode("x:Value", nsmanager)?.Value ?? string.Empty;
-                        }
-                    }
+                    return element.Descendants().FirstOrDefault(d => d.Name.LocalName == "Value")?.Value ?? string.Empty;
                 }
             }
 
@@ -426,10 +499,10 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Gets the int value for the given name
         /// </summary>
-        /// <remarks>returns 0 if the name or value are not found or not an int</remarks>
-        private static int GetIntValueFromNameValuePair(string name, XmlNode document, string ns)
+        /// <returns>returns 0 if the name or value are not found or not an int</returns>
+        private static int GetIntValueFromNameValuePair(string name, XmlNode document)
         {
-            string value = GetStringValueFromNameValuePair(name, document, ns);
+            string value = GetStringValueFromNameValuePair(name, document);
             int result;
 
             return int.TryParse(value, out result) ? result : 0;
@@ -438,10 +511,10 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Gets the int value for the given name
         /// </summary>
-        /// <remarks>returns 0 if the name or value are not found or not an int</remarks>
-        private static bool GetBoolValueFromNameValuePair(string name, XmlNode document, string ns)
+        /// <returns>returns false if the name or value are not found or not an int</returns>
+        private static bool GetBoolValueFromNameValuePair(string name, XmlNode document)
         {
-            string value = GetStringValueFromNameValuePair(name, document, ns);
+            string value = GetStringValueFromNameValuePair(name, document);
 
             return value.ToLower() == "yes";
         }

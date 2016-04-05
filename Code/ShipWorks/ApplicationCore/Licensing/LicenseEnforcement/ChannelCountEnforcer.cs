@@ -13,15 +13,13 @@ namespace ShipWorks.ApplicationCore.Licensing.LicenseEnforcement
     public class ChannelCountEnforcer : ILicenseEnforcer
     {
         private readonly IChannelLimitDlgFactory channelLimitDlgFactory;
-        private readonly ILog log;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ChannelCountEnforcer(IChannelLimitDlgFactory channelLimitDlgFactory, Func<Type, ILog> logFactory)
+        public ChannelCountEnforcer(IChannelLimitDlgFactory channelLimitDlgFactory)
         {
             this.channelLimitDlgFactory = channelLimitDlgFactory;
-            log = logFactory(typeof(ChannelCountEnforcer));
         }
 
         /// <summary>
@@ -41,7 +39,7 @@ namespace ShipWorks.ApplicationCore.Licensing.LicenseEnforcement
         {
             if (Enforce(capabilities,context).Value == ComplianceLevel.NotCompliant)
             {
-                    IChannelLimitDlg channelLimitDlg = channelLimitDlgFactory.GetChannelLimitDlg(owner, EditionFeature, context);
+                    IDialog channelLimitDlg = channelLimitDlgFactory.GetChannelLimitDlg(owner, EditionFeature, context);
                     channelLimitDlg.ShowDialog();
             }
         }
@@ -52,7 +50,7 @@ namespace ShipWorks.ApplicationCore.Licensing.LicenseEnforcement
         public EnumResult<ComplianceLevel> Enforce(ILicenseCapabilities capabilities, EnforcementContext context)
         {
             const int unlimitedChannels = -1;
-            
+
             if (capabilities.ChannelLimit == unlimitedChannels)
             {
                 return new EnumResult<ComplianceLevel>(ComplianceLevel.Compliant, string.Empty);
@@ -75,7 +73,7 @@ namespace ShipWorks.ApplicationCore.Licensing.LicenseEnforcement
 
                 string error = "You have exceeded your channel limit. Please upgrade your plan or delete " +
                                $"{numberOfChannelsOverLimit} channel{plural} to continue {forbiddenActivity}";
-                
+
                 // Return not compliant and an error to display to the user
                 return new EnumResult<ComplianceLevel>(ComplianceLevel.NotCompliant, error);
             }

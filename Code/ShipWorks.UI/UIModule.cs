@@ -7,7 +7,6 @@ using ShipWorks.UI.Controls.ChannelConfirmDelete;
 using ShipWorks.UI.Controls.ChannelLimit;
 using ShipWorks.UI.Controls.ChannelLimit.ChannelLimitBehavior;
 using ShipWorks.UI.Controls.CustomerLicenseActivation;
-using ShipWorks.UI.Controls.UpgradePlan;
 using ShipWorks.UI.Controls.WebBrowser;
 
 namespace ShipWorks.UI
@@ -39,13 +38,13 @@ namespace ShipWorks.UI
                 .AsSelf();
 
             builder.RegisterType<ChannelLimitDlg>()
-                .AsImplementedInterfaces();
+                .Named<IDialog>("ChannelLimitDlg");
 
             builder.RegisterType<ChannelConfirmDeleteViewModel>()
                 .AsImplementedInterfaces();
 
             builder.RegisterType<ChannelConfirmDeleteDlg>()
-                .AsImplementedInterfaces();
+                .Named<IDialog>("ChannelConfirmDeleteDlg");
 
             builder.RegisterType<ChannelConfirmDeleteFactory>()
                 .AsImplementedInterfaces();
@@ -72,18 +71,6 @@ namespace ShipWorks.UI
                     return named => resolved.ResolveNamed<IDialog>(named);
                 });
 
-            builder.RegisterType<UpgradePlanDlg>()
-                .Named<IDialog>("UpgradePlanDlg");
-
-            builder.RegisterType<UpgradePlanDlgViewModel>()
-                .AsImplementedInterfaces();
-
-            builder.RegisterType<UpgradePlanDlg>()
-                .AsImplementedInterfaces();
-
-            builder.RegisterType<UpgradePlanDlgFactory>()
-                .AsImplementedInterfaces();
-
             builder.RegisterType<ChannelLimitDlgFactory>()
                 .AsImplementedInterfaces();
 
@@ -95,6 +82,9 @@ namespace ShipWorks.UI
 
             builder.RegisterType<GenericModuleBehavior>()
                 .Keyed<IChannelLimitBehavior>(EditionFeature.GenericModule);
+
+            builder.RegisterType<ChannelsOutOfSyncBehavior>()
+                .Keyed<IChannelLimitBehavior>(EditionFeature.ClientChannelsAccountedFor);
         }
     }
 }

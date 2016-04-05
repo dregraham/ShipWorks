@@ -38,7 +38,6 @@ namespace ShipWorks.Shipping
                 using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
                 {
                     ILicenseService licenseService = lifetimeScope.Resolve<ILicenseService>();
-
                     List<ShipmentType> shipmentTypes = new List<ShipmentType>();
 
                     foreach (ShipmentTypeCode typeCode in Enum.GetValues(typeof (ShipmentTypeCode)))

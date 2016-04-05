@@ -37,15 +37,16 @@ namespace ShipWorks.ApplicationCore.Licensing.FeatureRestrictions.Ups
             int numberOfInstalledAccounts = (int) data;
             switch (capabilities.UpsStatus)
             {
-                // For Discount and Subsidized, the limit in capabilities is set properly
+                // For Discount Tier1 and Subsidized, the limit in capabilities is set properly
                 case UpsStatus.Discount:
                 case UpsStatus.Subsidized:
+                case UpsStatus.Tier1:
                     return numberOfInstalledAccounts > capabilities.UpsAccountLimit ?
                         EditionRestrictionLevel.Forbidden :
                         EditionRestrictionLevel.None;
 
+                // For Tier2, Tier3 and None there is no account limit
                 case UpsStatus.None:
-                case UpsStatus.Tier1:
                 case UpsStatus.Tier2:
                 case UpsStatus.Tier3:
                     return EditionRestrictionLevel.None;
@@ -64,7 +65,7 @@ namespace ShipWorks.ApplicationCore.Licensing.FeatureRestrictions.Ups
             EditionRestrictionLevel restriction = Check(capabilities, data);
             if (restriction != EditionRestrictionLevel.None)
             {
-                messageHelper.ShowError(EnumHelper.GetDescription(EditionFeature));
+                messageHelper.ShowError(owner, EnumHelper.GetDescription(EditionFeature));
                 return false;
             }
 

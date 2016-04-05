@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text.RegularExpressions;
 using System.Web.Services.Protocols;
 using System.Xml.Linq;
@@ -1483,9 +1484,21 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             }
             catch (SoapException ex)
             {
-                log.ErrorFormat("Failed connecting to USPS.  Account: {0}, Error Code: '{1}', Exception Message: {2}", account.UspsAccountID, UspsApiException.GetErrorCode(ex), ex.Message);
+                log.ErrorFormat("Failed connecting to USPS.  Account: {0}, Error Code: '{1}', Exception Message: {2}",
+                    account.UspsAccountID, UspsApiException.GetErrorCode(ex), ex.Message);
 
                 throw new UspsApiException(ex);
+            }
+            catch (WebException ex)
+            {
+                if (ex.Message.Contains("Unable to connect to the remote server") ||
+                    ex.Message.Contains("The underlying connection was closed") ||
+                    ex.Message.Contains("Bad gateway"))
+                {
+                    throw new UspsException("ShipWorks is unable to connect to USPS.");
+                }
+
+                throw WebHelper.TranslateWebException(ex, typeof(UspsException));
             }
             catch (InvalidOperationException ex)
             {
@@ -1499,7 +1512,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             }
             catch (Exception ex)
             {
-                throw WebHelper.TranslateWebException(ex, typeof(UspsException));
+                throw WebHelper.TranslateWebException(ex, typeof (UspsException));
             }
         }
 

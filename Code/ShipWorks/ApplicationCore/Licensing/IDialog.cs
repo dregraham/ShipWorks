@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using System.Windows.Forms;
 
 namespace ShipWorks.ApplicationCore.Licensing
 {
@@ -38,6 +39,21 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// Topmost window or not
         /// </summary>
         bool Topmost { get; set; }
+
+        /// <summary>
+        /// Dialog window height.
+        /// </summary>
+        double Height { get; set; }
+
+        /// <summary>
+        /// Dialog window width.
+        /// </summary>
+        double Width { get; set; }
+
+        /// <summary>
+        /// Gets or sets the load owner.
+        /// </summary>
+        void LoadOwner(IWin32Window owner);
     }
 }
 

@@ -15,20 +15,21 @@ namespace ShipWorks.ApplicationCore.Licensing.FeatureRestrictions
     /// </summary>
     public class ShipmentTypeRestriction : FeatureRestriction
     {
-        private readonly IIndex<ShipmentTypeCode, ICarrierAccountRepository<EndiciaAccountEntity>> accountRepository;
+        private readonly IIndex<ShipmentTypeCode, ICarrierAccountRepository<EndiciaAccountEntity>> endiciaAccountRepository;
+        private readonly IIndex<ShipmentTypeCode, ICarrierAccountRepository<UpsAccountEntity>> upsAccountRepository;
         private readonly IBrownEditionUtility brownEditionUtility;
         private readonly IPostalUtility postalUtility;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShipmentTypeRestriction(
-            IIndex<ShipmentTypeCode, ICarrierAccountRepository<EndiciaAccountEntity>> accountRepository, 
-            IBrownEditionUtility brownEditionUtility, 
-            IPostalUtility postalUtility,
-            IMessageHelper messageHelper) : base(messageHelper)
+        public ShipmentTypeRestriction(IIndex<ShipmentTypeCode, ICarrierAccountRepository<EndiciaAccountEntity>> endiciaAccountRepository,
+                                        IIndex<ShipmentTypeCode, ICarrierAccountRepository<UpsAccountEntity>> upsAccountRepository,
+                                        IBrownEditionUtility brownEditionUtility, IPostalUtility postalUtility, IMessageHelper messageHelper) 
+            : base(messageHelper)
         {
-            this.accountRepository = accountRepository;
+            this.endiciaAccountRepository = endiciaAccountRepository;
+            this.upsAccountRepository = upsAccountRepository;
             this.brownEditionUtility = brownEditionUtility;
             this.postalUtility = postalUtility;
         }
@@ -44,7 +45,6 @@ namespace ShipWorks.ApplicationCore.Licensing.FeatureRestrictions
         public override EditionRestrictionLevel Check(ILicenseCapabilities capabilities, object data)
         {
             ShipmentTypeCode shipmentType = data as ShipmentTypeCode? ?? ShipmentTypeCode.None;
-
             if (IsShipmentTypeDisabled(capabilities, shipmentType) || CheckEndiciaRestriction(shipmentType))
             {
                 return EditionRestrictionLevel.Hidden;
@@ -56,7 +56,6 @@ namespace ShipWorks.ApplicationCore.Licensing.FeatureRestrictions
             }
 
             //After this point, we know it is a UPS restricted edition
-
             if (brownEditionUtility.IsShipmentTypeAllowed(shipmentType))
             {
                 return EditionRestrictionLevel.None;
@@ -106,17 +105,50 @@ namespace ShipWorks.ApplicationCore.Licensing.FeatureRestrictions
         /// </summary>
         private bool CheckEndiciaRestriction(ShipmentTypeCode shipmentType)
         {
-            return shipmentType == ShipmentTypeCode.Endicia && !accountRepository[shipmentType].Accounts.Any();
+            return shipmentType == ShipmentTypeCode.Endicia && !endiciaAccountRepository[shipmentType].Accounts.Any();
         }
 
         /// <summary>
-        /// Determines whether [is shipment type disabled]
+        /// Determines whether the specified shipment type is disabled.
         /// </summary>
-        private static bool IsShipmentTypeDisabled(ILicenseCapabilities capabilities, ShipmentTypeCode shipmentType)
+        private bool IsShipmentTypeDisabled(ILicenseCapabilities capabilities, ShipmentTypeCode shipmentTypeCode)
         {
-            return shipmentType != ShipmentTypeCode.None &&
-                            capabilities.ShipmentTypeRestriction.ContainsKey(shipmentType) &&
-                            capabilities.ShipmentTypeRestriction[shipmentType].Contains(ShipmentTypeRestrictionType.Disabled);
+            if (shipmentTypeCode == ShipmentTypeCode.BestRate)
+            {
+                if (capabilities.IsInTrial)
+                {
+                    // All customers can use best rate when in trial as long as there
+                    // aren't any UPS accounts in ShipWorks.
+                    return upsAccountRepository[ShipmentTypeCode.UpsOnLineTools].Accounts.Any();
+                }
+
+                // Special checks for best rate as it is part of plan capabilities along with a 
+                // check to see if there are any UPS accounts: Best rate is disabled if the 
+                // plan tells us it's not or if there are any UPS accounts
+                return !capabilities.IsBestRateAllowed || upsAccountRepository[ShipmentTypeCode.UpsOnLineTools].Accounts.Any();
+            }
+
+            return shipmentTypeCode != ShipmentTypeCode.None &&
+                   capabilities.ShipmentTypeRestriction.ContainsKey(shipmentTypeCode) &&
+                   capabilities.ShipmentTypeRestriction[shipmentTypeCode].Contains(ShipmentTypeRestrictionType.Disabled);
+
+
+            // The code below is applicable if it is desired to continue to enforce best rate restrictions at
+            // the server for the new pricing plans as well (i.e. Tango still needs to indicate best rate is 
+            // available AND no UPS accounts are in ShiPWorks.
+
+            //bool isDisabled = shipmentTypeCode != ShipmentTypeCode.None &&
+            //       capabilities.ShipmentTypeRestriction.ContainsKey(shipmentTypeCode) &&
+            //       capabilities.ShipmentTypeRestriction[shipmentTypeCode].Contains(ShipmentTypeRestrictionType.Disabled);
+
+            //if (shipmentTypeCode == ShipmentTypeCode.BestRate && !isDisabled)
+            //{
+            //    // Best rate is not disabled on the server, but we have one additional check to perform:
+            //    // best rate is disabled if there are any UPS accounts
+            //    isDisabled = upsAccountRepository[ShipmentTypeCode.UpsOnLineTools].Accounts.Any();
+            //}
+
+            //return isDisabled;
         }
     }
 }

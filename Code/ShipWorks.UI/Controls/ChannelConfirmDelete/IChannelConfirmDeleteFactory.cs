@@ -1,4 +1,6 @@
 ﻿using System.Windows;
+using System.Windows.Forms;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Stores;
 
 namespace ShipWorks.UI.Controls.ChannelConfirmDelete
@@ -11,6 +13,6 @@ namespace ShipWorks.UI.Controls.ChannelConfirmDelete
         /// <summary>
         /// Gets ChannelConfirmDeleteDlg
         /// </summary>
-        IChannelConfirmDeleteDlg GetConfirmDeleteDlg(StoreTypeCode storeType, Window owner);
+        IDialog GetConfirmDeleteDlg(StoreTypeCode storeType, IWin32Window owner);
     }
 }
