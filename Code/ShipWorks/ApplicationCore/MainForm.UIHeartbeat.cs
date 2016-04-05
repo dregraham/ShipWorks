@@ -1,14 +1,12 @@
 ﻿using System;
-using System.Diagnostics;
 using Interapptive.Shared.Win32;
+using log4net;
 using ShipWorks.ApplicationCore;
-using ShipWorks.Data.Connection;
+using ShipWorks.ApplicationCore.Enums;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Filters;
 using ShipWorks.Filters.Grid;
 using ShipWorks.UI;
-using log4net;
-using ShipWorks.ApplicationCore.Enums;
 
 namespace ShipWorks
 {
@@ -154,7 +152,7 @@ namespace ShipWorks
                         // changes to definitions and such are reported as IsLayoutDirty
                         foreach (FilterEntity filter in FilterLayoutContext.Current.RefreshFilters())
                         {
-                            mainForm.UpdateFilter(filter);    
+                            mainForm.UpdateFilter(filter);
                         }
 
                         // Ensure the filter tree is showing up-to-date counts

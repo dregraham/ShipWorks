@@ -28,6 +28,7 @@ using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Filters;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Messaging.Messages.Dialogs;
+using ShipWorks.Messaging.Messages.Panels;
 using ShipWorks.Properties;
 using ShipWorks.Shipping;
 using ShipWorks.Users;
@@ -80,6 +81,18 @@ namespace ShipWorks.Stores.Content.Panels
             messenger.OfType<OrderSelectionChangedMessage>()
                 .ObserveOn(lifetimeScope.Resolve<ISchedulerProvider>().WindowsFormsEventLoop)
                 .Subscribe(x => ReloadContent());
+
+            messenger.OfType<PanelShownMessage>()
+                .Where(x => DockPanelIdentifiers.IsRatingPanel(x.Panel))
+                .Subscribe(_ => ratesControl.Visible = false);
+
+            messenger.OfType<PanelHiddenMessage>()
+                .Where(x => DockPanelIdentifiers.IsRatingPanel(x.Panel))
+                .Subscribe(_ =>
+                {
+                    ratesControl.Visible = true;
+                    RefreshSelectedShipments();
+                });
         }
 
         /// <summary>
@@ -175,6 +188,11 @@ namespace ShipWorks.Stores.Content.Panels
         /// </summary>
         private void RefreshSelectedShipments()
         {
+            if (!ratesControl.Visible)
+            {
+                return;
+            }
+
             int shipmentSelectionCount = entityGrid.Selection.Count;
 
             if (entityGrid.Rows.Count == 1)

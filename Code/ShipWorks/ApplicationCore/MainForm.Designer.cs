@@ -1072,6 +1072,7 @@ namespace ShipWorks
             this.sandDockManager.OwnerForm = this;
             this.sandDockManager.Renderer = new TD.SandDock.Rendering.Office2007Renderer();
             this.sandDockManager.DockControlActivated += new TD.SandDock.DockControlEventHandler(this.OnDockControlActivated);
+            this.sandDockManager.DockControlClosing += new TD.SandDock.DockControlClosingEventHandler(this.OnDockControlClosing);
             //
             // dockContainer
             //

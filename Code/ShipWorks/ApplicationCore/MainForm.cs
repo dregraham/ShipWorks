@@ -62,6 +62,7 @@ using ShipWorks.Filters.Management;
 using ShipWorks.Filters.Search;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Messaging.Messages.Dialogs;
+using ShipWorks.Messaging.Messages.Panels;
 using ShipWorks.Properties;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.FedEx;
@@ -125,6 +126,8 @@ namespace ShipWorks
         // The FilterNode to restore if search is canceled
         long searchRestoreFilterNodeID = 0;
 
+        Lazy<DockControl> shipmentDock;
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -144,6 +147,11 @@ namespace ShipWorks
             WindowStateSaver wss = new WindowStateSaver(this, WindowStateSaverOptions.FullState | WindowStateSaverOptions.InitialMaximize, "MainForm");
             shipmentDock = new Lazy<DockControl>(GetShipmentDockControl);
         }
+
+        /// <summary>
+        /// Collection of panels on the main form
+        /// </summary>
+        public IEnumerable<DockControl> Panels => sandDockManager.GetDockControls();
 
         #region Initialization \ Shutdown
 
@@ -182,7 +190,7 @@ namespace ShipWorks
 
             // Load the options for what panels can be shown
             menuShowPanels.Items.Clear();
-            foreach (DockControl dockControl in sandDockManager.GetDockControls().OrderBy(d => d.Text))
+            foreach (DockControl dockControl in Panels.OrderBy(d => d.Text))
             {
                 SandMenuItem menuItem = new SandMenuItem(dockControl.Text);
                 menuItem.Image = dockControl.TabImage;
@@ -424,7 +432,7 @@ namespace ShipWorks
             // uninstalled).
             if (SqlServerInstaller.IsMsdeMigrationInProgress)
             {
-                log.InfoFormat("Forcing Database Upgrade window open to to MSDE migration file existing.");
+                log.InfoFormat("Forcing Database Upgrade window open to MSDE migration file existing.");
 
                 using (ConnectionSensitiveScope scope = new ConnectionSensitiveScope("update the database", this))
                 {
@@ -669,6 +677,23 @@ namespace ShipWorks
             {
                 ShowDownloadProgress();
             }
+
+            SendPanelStateMessages();
+        }
+
+        /// <summary>
+        /// Send the state of each panel as a message
+        /// </summary>
+        private void SendPanelStateMessages()
+        {
+            foreach (DockControl panel in Panels)
+            {
+                IShipWorksMessage message = panel.IsOpen ?
+                    (IShipWorksMessage) new PanelShownMessage(this, panel) :
+                    (IShipWorksMessage) new PanelHiddenMessage(this, panel);
+
+                Messenger.Current.Send(message);
+            }
         }
 
         /// <summary>
@@ -816,7 +841,7 @@ namespace ShipWorks
 
                     if (DatabaseUpdateWizard.Run(this))
                     {
-                        // If the upgrade went OK, we still need to check that the current user has adequate permissions to work in the restored datbase
+                        // If the upgrade went OK, we still need to check that the current user has adequate permissions to work in the restored database
                         if (!SqlSession.Current.CheckPermissions(SqlSessionPermissionSet.Standard, this))
                         {
                             return false;
@@ -861,7 +886,7 @@ namespace ShipWorks
             ApplicationText = "";
 
             // Hide all dock windows.  Hide them first so they don't attempt to save when the filter changes (due to the tree being cleared)
-            foreach (DockControl control in sandDockManager.GetDockControls())
+            foreach (DockControl control in Panels)
             {
                 control.Close();
             }
@@ -989,7 +1014,7 @@ namespace ShipWorks
             {
                 // There wasn't an item in the user settings for the rate panel, meaning the user just
                 // upgraded from a previous version without the rate panel
-                DockControl dockControl = sandDockManager.GetDockControls().FirstOrDefault(c => c.Guid == Guid.Parse(RatePanelID));
+                DockControl dockControl = Panels.FirstOrDefault(c => c.Guid == Guid.Parse(RatePanelID));
                 if (dockControl != null)
                 {
                     // We want to display the rate panel for everyone after an upgrade by default
@@ -1119,7 +1144,7 @@ namespace ShipWorks
             panelDockingArea.BackColor = ribbonManager.Renderer.ColorTable.RibbonTabStripBackground;
             this.BackColor = panelDockingArea.BackColor;
 
-            // Apply themne to grids
+            // Apply theme to grids
             gridControl.ApplyDisplaySettings();
 
             // Apply krypton scheme
@@ -1165,7 +1190,7 @@ namespace ShipWorks
         }
 
         /// <summary>
-        /// Apply the properites that need to be set for hiding in the system tray based on our current state
+        /// Apply the properties that need to be set for hiding in the system tray based on our current state
         /// </summary>
         private void ApplySystemTrayProperties()
         {
@@ -1209,12 +1234,12 @@ namespace ShipWorks
                 holder.UpdateStoreDependentUI();
             }
 
-            // Update the availabilty of ribbon items based on security
+            // Update the availability of ribbon items based on security
             ribbonSecurityProvider.UpdateSecurityUI();
         }
 
         /// <summary>
-        /// Apply the given set of MenuCommands to the given menuitem and ribbon poup
+        /// Apply the given set of MenuCommands to the given menuitem and ribbon popup
         /// </summary>
         private void ApplyMenuCommands(List<MenuCommand> commands, ToolStripMenuItem menuItem, Popup ribbonPopup, EventHandler actionHandler)
         {
@@ -1264,11 +1289,12 @@ namespace ShipWorks
             labelStatusSelected.Text = string.Format("Selected: {0:#,##0}", gridControl.Selection.Count);
         }
 
-        Lazy<DockControl> shipmentDock;
-
+        /// <summary>
+        /// Get the shipment dock control
+        /// </summary>
         private DockControl GetShipmentDockControl()
         {
-            return sandDockManager.GetDockControls().FirstOrDefault(d => d.Name == "dockableWindowShipment");
+            return Panels.FirstOrDefault(d => d.Name == "dockableWindowShipment");
         }
 
         /// <summary>
@@ -1292,26 +1318,7 @@ namespace ShipWorks
                 return;
             }
 
-            //// Update state of each button based on it's criteria.
-            //buttonCreateLabel.Enabled = selectionCount >= 1;
-            //buttonVoid.Enabled = selectionCount >= 1;
-            //buttonReturn.Enabled = selectionCount == 1;
-            //buttonShipAgain.Enabled = selectionCount == 1;
-            //buttonReprint.Enabled = selectionCount == 1;
-
             ribbon.SetEditingContext("SHIPPINGMENU");
-        }
-
-        private void OnCreateLabelClick(object sender, EventArgs e)
-        {
-            if (shipmentDock.Value?.IsOpen == true)
-            {
-                MessageHelper.ShowInformation(this, "Temp processing");
-            }
-            else
-            {
-                OnShipOrders(sender, e);
-            }
         }
 
         /// <summary>
@@ -1327,7 +1334,7 @@ namespace ShipWorks
         /// </summary>
         private void UpdatePanelState()
         {
-            IEnumerable<DockControl> controls = sandDockManager.GetDockControls().Where(d => d.Controls.Count == 1).ToList();
+            IEnumerable<DockControl> controls = Panels.Where(d => d.Controls.Count == 1).ToList();
             IEnumerable<Task> updateTasks = controls.Select(x => UpdatePanelState(x)).ToList();
         }
 
@@ -1364,8 +1371,8 @@ namespace ShipWorks
                 DockControl dockControl = (DockControl) menuItem.Tag;
 
                 // Change this to IsOpen if the behavior requirement changes so that it would be
-                // checked only if its actually visible... So like if it was a non ative tab, or minimized,
-                // it wouldnt get a check.  This way, it gets a check if its on the screen at all.
+                // checked only if its actually visible... So like if it was a non active tab, or minimized,
+                // it wouldn't get a check.  This way, it gets a check if its on the screen at all.
                 menuItem.Checked = dockControl.DockSituation != DockSituation.None;
             }
         }
@@ -1973,7 +1980,7 @@ namespace ShipWorks
         }
 
         /// <summary>
-        /// Force a heartbeat to occur before its next scheduled time.  If the paramter changesExpected is true,
+        /// Force a heartbeat to occur before its next scheduled time.  If the parameter changesExpected is true,
         /// this method will increase the heart rate until changes are found, or until the forced heart rate
         /// time period expires.  This is allowed to be called from any thread.
         /// </summary>
@@ -1983,7 +1990,7 @@ namespace ShipWorks
         }
 
         /// <summary>
-        /// Force a heartbeat to occur before its next scheduled time.  If the paramter changesExpected is true,
+        /// Force a heartbeat to occur before its next scheduled time.  If the parameter changesExpected is true,
         /// this method will increase the heart rate until changes are found, or until the forced heart rate
         /// time period expires.  This is allowed to be called from any thread.
         /// </summary>
@@ -2045,11 +2052,11 @@ namespace ShipWorks
         }
 
         /// <summary>
-        /// A connection senstive scope is about to be acquired
+        /// A connection sensitive scope is about to be acquired
         /// </summary>
         void OnAcquiringConnectionSensitiveScope(object sender, EventArgs e)
         {
-            // Search has to be canceled before potentialy changing databases, otherwise it wouldnt have a chance to cleanup in the current database.
+            // Search has to be canceled before potential changing databases, otherwise it wouldn't have a chance to cleanup in the current database.
             gridControl.CancelSearch();
         }
 
@@ -2066,7 +2073,7 @@ namespace ShipWorks
         #region Filtering
 
         /// <summary>
-        ///  Update filter tree fitler counts
+        ///  Update filter tree filter counts
         /// </summary>
         public void UpdateFilterCounts()
         {
@@ -2157,7 +2164,7 @@ namespace ShipWorks
                 }
                 else
                 {
-                    // There is a selcted node, force a refresh of the UI
+                    // There is a selected node, force a refresh of the UI
                     OnSelectedFilterNodeChanged(currentFilterTree, null);
                 }
             }
@@ -2904,10 +2911,12 @@ namespace ShipWorks
             dockControl.Open(WindowOpenMethod.OnScreenActivate);
         }
 
-        // A dock control that didnt used to be open now is
+        // A dock control that didn't used to be open now is
         private void OnDockControlActivated(object sender, DockControlEventArgs e)
         {
             UpdateSelectionDependentUI();
+
+            Messenger.Current.Send(new PanelShownMessage(this, e.DockControl));
         }
 
         /// <summary>
@@ -2926,7 +2935,10 @@ namespace ShipWorks
                     gridControl.ActiveFilterNode = orderFilterTree.SelectedFilterNode;
                 }
             }
+
+            Messenger.Current.Send(new PanelHiddenMessage(this, e.DockControl));
         }
+
         /// <summary>
         /// Open the editor for the context menu of the active grid
         /// </summary>
@@ -3175,11 +3187,11 @@ namespace ShipWorks
         /// <summary>
         /// Initialize the panels for the current user
         /// </summary>
-        [NDependIgnoreLongMethodAttribute]
+        [NDependIgnoreLongMethod]
         private void InitializePanels()
         {
             // First go through each panel and wrap it in a Panel control that will allow us to show messages to the user like "No orders are selected.";
-            foreach (DockControl dockControl in sandDockManager.GetDockControls())
+            foreach (DockControl dockControl in Panels)
             {
                 // See if this is one that needs wrapped
                 if (dockControl.Controls.Count == 1 && dockControl.Controls[0] is IDockingPanelContent)
@@ -3281,7 +3293,7 @@ namespace ShipWorks
         {
             List<DockingPanelContentHolder> holders = new List<DockingPanelContentHolder>();
 
-            foreach (DockControl dockControl in sandDockManager.GetDockControls().Where(d => d.Controls.Count == 1))
+            foreach (DockControl dockControl in Panels.Where(d => d.Controls.Count == 1))
             {
                 DockingPanelContentHolder holder = dockControl.Controls[0] as DockingPanelContentHolder;
                 if (holder != null)
