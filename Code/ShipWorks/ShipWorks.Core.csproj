@@ -3132,7 +3132,7 @@
     </Compile>
     <Compile Include="Stores\Platforms\ThreeDCart\ThreeDCartSoapDownloader.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\ThreeDCartException.cs" />
-    <Compile Include="Stores\Platforms\ThreeDCart\ThreeDCartOnlineUpdater.cs" />
+    <Compile Include="Stores\Platforms\ThreeDCart\ThreeDCartSoapOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\ThreeDCartOrderIdentifier.cs">
       <SubType>Code</SubType>
     </Compile>

@@ -63,26 +63,36 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
         /// </summary>
         public void UpdateOrderStatus(long orderID, int statusID, UnitOfWork2 unitOfWork)
         {
-            ThreeDCartOrderEntity order = (ThreeDCartOrderEntity) DataProvider.GetEntity(orderID);
+            OrderEntity order = (OrderEntity) DataProvider.GetEntity(orderID);
+
             if (order != null)
             {
                 if (order.IsManual)
                 {
-                    log.InfoFormat($"Not uploading order status since order {order.OrderID} is manual.");
+                    log.InfoFormat($"Not uploading order status since order {order.OrderNumberComplete} is manual.");
                     return;
                 }
+
+                ThreeDCartOrderEntity threeDCartOrder = order as ThreeDCartOrderEntity;
+
+                if (threeDCartOrder == null)
+                {
+                    log.WarnFormat($"Unable to update online status for order {order.OrderNumberComplete}: cannot find order");
+                    return;
+                }
+
                 string status = EnumHelper.GetDescription((Enums.ThreeDCartOrderStatus) statusID);
 
-                order.OnlineStatus = status;
-                order.OnlineStatusCode = statusID;
+                threeDCartOrder.OnlineStatus = status;
+                threeDCartOrder.OnlineStatusCode = statusID;
 
                 // Fetch the order items
                 using (SqlAdapter adapter = new SqlAdapter())
                 {
-                    adapter.FetchEntityCollection(order.OrderItems, new RelationPredicateBucket(OrderItemFields.OrderID == order.OrderID));
+                    adapter.FetchEntityCollection(threeDCartOrder.OrderItems, new RelationPredicateBucket(OrderItemFields.OrderID == threeDCartOrder.OrderID));
                 }
 
-                ThreeDCartOrderItemEntity item = order.OrderItems?.FirstOrDefault() as ThreeDCartOrderItemEntity;
+                ThreeDCartOrderItemEntity item = threeDCartOrder.OrderItems?.FirstOrDefault() as ThreeDCartOrderItemEntity;
 
                 if (item == null)
                 {
@@ -91,20 +101,20 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
 
                 ThreeDCartShipment shipment = new ThreeDCartShipment()
                 {
-                    OrderID = order.ThreeDCartOrderID,
+                    OrderID = threeDCartOrder.ThreeDCartOrderID,
                     ShipmentID = item.ThreeDCartShipmentID,
-                    ShipmentOrderStatus = (int) EnumHelper.GetEnumByApiValue<Enums.ThreeDCartOrderStatus>(order.OnlineStatus),
-                    ShipmentPhone = order.ShipPhone,
-                    ShipmentFirstName = order.ShipFirstName,
-                    ShipmentLastName = order.ShipLastName,
-                    ShipmentAddress = order.ShipStreet1,
-                    ShipmentAddress2 = order.ShipStreet2,
-                    ShipmentCity = order.ShipCity,
-                    ShipmentState = order.ShipStateProvCode,
-                    ShipmentZipCode = order.ShipPostalCode,
-                    ShipmentCountry = order.ShipCountryCode,
-                    ShipmentCompany = order.ShipCompany,
-                    ShipmentEmail = order.ShipEmail,
+                    ShipmentOrderStatus = (int) EnumHelper.GetEnumByApiValue<Enums.ThreeDCartOrderStatus>(threeDCartOrder.OnlineStatus),
+                    ShipmentPhone = threeDCartOrder.ShipPhone,
+                    ShipmentFirstName = threeDCartOrder.ShipFirstName,
+                    ShipmentLastName = threeDCartOrder.ShipLastName,
+                    ShipmentAddress = threeDCartOrder.ShipStreet1,
+                    ShipmentAddress2 = threeDCartOrder.ShipStreet2,
+                    ShipmentCity = threeDCartOrder.ShipCity,
+                    ShipmentState = threeDCartOrder.ShipStateProvCode,
+                    ShipmentZipCode = threeDCartOrder.ShipPostalCode,
+                    ShipmentCountry = threeDCartOrder.ShipCountryCode,
+                    ShipmentCompany = threeDCartOrder.ShipCompany,
+                    ShipmentEmail = threeDCartOrder.ShipEmail,
                 };
 
                 webClient.UpdateOrderStatus(shipment);
@@ -121,7 +131,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
             }
             else
             {
-                log.WarnFormat($"Unable to update online status for order {orderID}: cannot find order");
+                log.WarnFormat($"Unable to update online status for order {orderID}: Unable to find order");
             }
         }
 
@@ -163,20 +173,28 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
         private void UpdateShipmentDetails(ShipmentEntity shipmentEntity)
         {
             ShippingManager.EnsureShipmentLoaded(shipmentEntity);
-            ThreeDCartOrderEntity order = (ThreeDCartOrderEntity) shipmentEntity.Order;
+            OrderEntity order = shipmentEntity.Order;
             if (order.IsManual)
             {
                 log.WarnFormat($"Not updating order {shipmentEntity.Order.OrderNumberComplete} since it is manual.");
                 return;
             }
 
+            ThreeDCartOrderEntity threeDCartOrder = order as ThreeDCartOrderEntity;
+
+            if (threeDCartOrder == null)
+            {
+                log.WarnFormat($"Unable to update shipment details for order {order.OrderNumberComplete}: Unable to find order");
+                return;
+            }
+
             // Fetch the order items
             using (SqlAdapter adapter = new SqlAdapter())
             {
-                adapter.FetchEntityCollection(order.OrderItems, new RelationPredicateBucket(OrderItemFields.OrderID == order.OrderID));
+                adapter.FetchEntityCollection(threeDCartOrder.OrderItems, new RelationPredicateBucket(OrderItemFields.OrderID == threeDCartOrder.OrderID));
             }
 
-            ThreeDCartOrderItemEntity threeDCartOrderItem = order.OrderItems?.FirstOrDefault(oi => oi is ThreeDCartOrderItemEntity) as ThreeDCartOrderItemEntity;
+            ThreeDCartOrderItemEntity threeDCartOrderItem = threeDCartOrder.OrderItems?.FirstOrDefault(oi => oi is ThreeDCartOrderItemEntity) as ThreeDCartOrderItemEntity;
 
             // Get the 3D Cart shipment id from the first 3D Cart order item
             if (threeDCartOrderItem == null)
@@ -186,10 +204,10 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
 
             ThreeDCartShipment shipment = new ThreeDCartShipment
             {
-                OrderID = order.ThreeDCartOrderID,
+                OrderID = threeDCartOrder.ThreeDCartOrderID,
                 ShipmentID = threeDCartOrderItem.ThreeDCartShipmentID,
                 ShipmentOrderStatus =
-                    (int) EnumHelper.GetEnumByApiValue<Enums.ThreeDCartOrderStatus>(order.OnlineStatus),
+                    (int) EnumHelper.GetEnumByApiValue<Enums.ThreeDCartOrderStatus>(threeDCartOrder.OnlineStatus),
                 ShipmentMethodName = GetShipmentMethod(shipmentEntity),
                 ShipmentPhone = shipmentEntity.ShipPhone,
                 ShipmentFirstName = shipmentEntity.ShipFirstName,
