@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using Autofac;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Editions;
 using ShipWorks.Shipping.Carriers.Postal.Express1.Registration;
 using log4net;
 using Interapptive.Shared.UI;
+using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Nudges;
 using ShipWorks.ApplicationCore.Licensing;
 
@@ -40,17 +42,23 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             // Set the local account so we can use it
             this.account = account;
 
-            // If purchasing is restricted for Endicia, set the variable
-            if (!IsExpress1() && EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.PurchasePostage, ShipmentTypeCode.Endicia).Level == EditionRestrictionLevel.Forbidden)
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                purchaseRestricted = true;
+                ILicenseService licenseService = lifetimeScope.Resolve<ILicenseService>();
+                EditionRestrictionLevel restrictionLevel = licenseService.CheckRestriction(EditionFeature.PurchasePostage, ShipmentTypeCode.Endicia);
+
+                // If purchasing is restricted for Endicia, set the variable
+                if (!IsExpress1() && restrictionLevel == EditionRestrictionLevel.Forbidden)
+                {
+                    purchaseRestricted = true;
+                }
             }
 
             InitializeComponent();
         }
 
         /// <summary>
-        /// Determine if this is for express1 
+        /// Determine if this is for express1
         /// </summary>
         /// <returns>False if account is null or account is not Express1.  True otherwise.</returns>
         private bool IsExpress1()
@@ -114,7 +122,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
                 MessageHelper.ShowError(this, ex.Message);
             }
-        }        
+        }
 
         /// <summary>
         /// This will show the dialog using the information for the given Endicia account entity provided.

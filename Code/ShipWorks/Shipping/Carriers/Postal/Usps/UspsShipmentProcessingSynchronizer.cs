@@ -1,4 +1,6 @@
 ﻿using System.Linq;
+using Interapptive.Shared.Collections;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
@@ -24,7 +26,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </value>
         public bool HasAccounts
         {
-            get { return accountRepository.Accounts.Any(); }
+            get
+            {
+                // Checking for pending initial accounts here as well, so the
+                // a label can't be processed with an account in the pending state.
+                return accountRepository.Accounts.Any() &&
+                       accountRepository.Accounts.All(a => a.PendingInitialAccount == (int) UspsPendingAccountType.None);
+            }
         }
 
         /// <summary>

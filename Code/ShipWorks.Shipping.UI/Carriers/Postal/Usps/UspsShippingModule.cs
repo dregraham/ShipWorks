@@ -1,8 +1,12 @@
-﻿using Autofac;
+﻿using System;
+using Autofac;
+using Interapptive.Shared.Net;
+using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 using ShipWorks.Shipping.Carriers.Ups;
+using ShipWorks.ApplicationCore.Licensing;
 
 namespace ShipWorks.Shipping.Carriers.Usps
 {
@@ -30,7 +34,21 @@ namespace ShipWorks.Shipping.Carriers.Usps
 
             builder.RegisterType<UspsAccountRepository>()
                 .As<ICarrierAccountRepository<UspsAccountEntity>>();
-            
+
+            builder.RegisterType<UspsWebClient>()
+                .AsImplementedInterfaces()
+                .UsingConstructor(typeof (ICarrierAccountRepository<UspsAccountEntity>),
+                    typeof (ILogEntryFactory),
+                    typeof (Func<string, ICertificateInspector>),
+                    typeof (UspsResellerType));
+
+            builder.RegisterType<UspsResellerType>()
+                .AsImplementedInterfaces();
+
+            builder.RegisterType<UspsAccountManagerWrapper>()
+                .AsImplementedInterfaces();
+
+            builder.RegisterType<AssociateShipworksWithItselfRequest>();    
         }
     }
 }

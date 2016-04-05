@@ -60,7 +60,11 @@ namespace ShipWorks.Stores.Management
 
                 if (accountDetail.ActivationState != LicenseActivationState.Active)
                 {
-                    LicenseActivationHelper.CheckAccountValidity(accountDetail, this);
+                    string activationStateMessage = LicenseActivationHelper.GetActivationStateMessage(accountDetail);
+                    if (string.IsNullOrEmpty(activationStateMessage))
+                    {
+                        MessageHelper.ShowError(this, activationStateMessage);
+                    }
                     return;
                 }
 

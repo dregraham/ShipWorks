@@ -1,4 +1,6 @@
 ﻿using Autofac;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.Ups;
 using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
@@ -23,6 +25,9 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups
             builder.RegisterType<UpsAccountRepository>()
                 .AsImplementedInterfaces()
                 .AsSelf();
+
+            builder.RegisterType<UpsAccountRepository>()
+                .Keyed<ICarrierAccountRepository<UpsAccountEntity>>(ShipmentTypeCode.UpsOnLineTools);
 
             builder.RegisterType<UpsOltLabelService>()
                 .Keyed<ILabelService>(ShipmentTypeCode.UpsOnLineTools);

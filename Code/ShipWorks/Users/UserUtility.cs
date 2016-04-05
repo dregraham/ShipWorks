@@ -1,8 +1,6 @@
 using System;
-using System.Collections.Generic;
 using System.Text;
 using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using System.Security.Cryptography;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -11,17 +9,12 @@ using System.Data.SqlClient;
 using System.Data;
 using ShipWorks.Filters;
 using ShipWorks.Data.Adapter.Custom;
-using Interapptive.Shared;
 using ShipWorks.ApplicationCore.Appearance;
 using ShipWorks.UI.Controls;
-using ShipWorks.Shipping;
 using Interapptive.Shared.Utility;
 using System.Diagnostics;
 using ShipWorks.Stores;
-using System.ComponentModel;
 using ShipWorks.Data.Connection;
-using ShipWorks.Data.Grid.Columns;
-using ShipWorks.Data.Grid;
 using ShipWorks.Data.Model;
 using ShipWorks.Users.Security;
 using ShipWorks.Filters.Grid;
@@ -109,14 +102,15 @@ namespace ShipWorks.Users
                 throw new InvalidOperationException("A transaction must be in progress for CreateUser.");
             }
 
-            UserEntity user = new UserEntity();
-            user.Username = username;
-            user.Password = HashPassword(password);
-
-            user.Email = email;
-            user.IsAdmin = admin;
-            user.IsDeleted = false;
-
+            UserEntity user = new UserEntity
+            {
+                Username = username,
+                Password = HashPassword(password),
+                Email = email,
+                IsAdmin = admin,
+                IsDeleted = false
+            };
+            
             try
             {
                 adapter.SaveAndRefetch(user);
@@ -132,7 +126,7 @@ namespace ShipWorks.Users
                 {
                     log.ErrorFormat("User '{0}' already exists.", username);
 
-                    throw new DuplicateNameException(string.Format("The username '{0}' already exists.", username), ex);
+                    throw new DuplicateNameException($"The username '{username}' already exists.", ex);
                 }
 
                 throw;
@@ -226,12 +220,11 @@ namespace ShipWorks.Users
         /// </summary>
         public static UserEntity GetShipWorksUser(string username, string password)
         {
-            PrefetchPath2 settingsPrefetch = new PrefetchPath2(EntityType.UserEntity);
-            settingsPrefetch.Add(UserEntity.PrefetchPathSettings);
+            PrefetchPath2 settingsPrefetch = new PrefetchPath2(EntityType.UserEntity) {UserEntity.PrefetchPathSettings};
 
-            UserCollection users = UserCollection.Fetch(SqlAdapter.Default, 
-                UserFields.Username == username & UserFields.Password == UserUtility.HashPassword(password) & UserFields.IsDeleted == false,
-                settingsPrefetch);
+            UserCollection users = UserCollection.Fetch(SqlAdapter.Default,
+                UserFields.Username == username & UserFields.Password == HashPassword(password) &
+                UserFields.IsDeleted == false, settingsPrefetch);
 
             // If we got a user, its the one we need.
             if (users.Count == 1)
@@ -240,7 +233,7 @@ namespace ShipWorks.Users
 
                 if (user.Settings == null)
                 {
-                    throw new NotFoundException(string.Format("Could not find settings for user '{0}'.", username));
+                    throw new NotFoundException($"Could not find settings for user '{username}'.");
                 }
 
                 return user;
@@ -259,7 +252,7 @@ namespace ShipWorks.Users
                 SqlCommand cmd = SqlCommandProvider.Create(con);
                 cmd.CommandText = "SELECT UserID FROM [User] WHERE Username = @Username and Password = @Password and IsDeleted = 0";
                 cmd.Parameters.AddWithValue("@Username", username);
-                cmd.Parameters.AddWithValue("@Password", UserUtility.HashPassword(password));
+                cmd.Parameters.AddWithValue("@Password", HashPassword(password));
 
                 object result = SqlCommandProvider.ExecuteScalar(cmd);
                 if (result == null || result is DBNull)
@@ -281,7 +274,7 @@ namespace ShipWorks.Users
                 SqlCommand cmd = SqlCommandProvider.Create(con);
                 cmd.CommandText = "select count(*) as 'IsAdmin' from users where Username = @Username and Password = @Password and IsAdmin = 1 and Deleted = 0";
                 cmd.Parameters.AddWithValue("@Username", username);
-                cmd.Parameters.AddWithValue("@Password", UserUtility.HashPassword(password));
+                cmd.Parameters.AddWithValue("@Password", HashPassword(password));
 
                 bool result = ((int) SqlCommandProvider.ExecuteScalar(cmd)) > 0;
 
