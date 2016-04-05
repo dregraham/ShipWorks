@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Reactive.Concurrency;
+using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using Interapptive.Shared.Threading;
 
 namespace Interapptive.Shared.Collections
@@ -9,6 +12,21 @@ namespace Interapptive.Shared.Collections
     /// </summary>
     public static class ObservableExtensions
     {
+        /// <summary>
+        /// Extension to process the first X events, but ignore subsequent events for the specified timespan.
+        /// https://social.msdn.microsoft.com/Forums/windowsapps/en-US/b8be2034-dcdf-4577-b264-7dd9d0668318/throttle-with-count-and-time-and-result-returned-immidiattelly?forum=rx
+        /// </summary>
+        public static IObservable<T> IntervalCountThrottle<T>(this IObservable<T> source, TimeSpan interval, int count, IScheduler scheduler)
+        {
+            return Observable.Create<T>(o =>
+            {
+                IConnectableObservable<long> timer = Observable.Timer(TimeSpan.Zero, interval).Publish();
+                IConnectableObservable<T> src = source.Publish();
+                IDisposable main = src.SkipUntil(timer).Take(count).Repeat().Subscribe(o.OnNext, o.OnError, o.OnCompleted);
+                return new CompositeDisposable(timer.Connect(), src.Connect(), main);
+            });
+        }
+
         /// <summary>
         /// Catch a specified exception, log it, and continue
         /// </summary>

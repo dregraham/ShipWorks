@@ -59,9 +59,11 @@ namespace ShipWorks.Shipping.Services.Dialogs
         {
             subscriptions = new CompositeDisposable(
                 messenger.OfType<OpenShippingDialogMessage>()
+                    .IntervalCountThrottle(TimeSpan.FromSeconds(2), 1, schedulerProvider.WindowsFormsEventLoop)
                     .ObserveOn(schedulerProvider.WindowsFormsEventLoop)
                     .Subscribe(OpenShippingDialog),
                 messenger.OfType<OpenShippingDialogWithOrdersMessage>()
+                    .IntervalCountThrottle(TimeSpan.FromSeconds(2), 1, schedulerProvider.WindowsFormsEventLoop)
                     .Subscribe(async x => await LoadOrdersForShippingDialog(x).ConfigureAwait(false)),
                 messenger.OfType<ShipAgainMessage>()
                     .SelectInBackgroundWithDialog(schedulerProvider, CreateProgressDialog, ShipAgain)
