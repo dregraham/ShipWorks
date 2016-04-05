@@ -313,7 +313,8 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                         int errorCode = XPathUtility.Evaluate(xpath, "//Response/Error/ErrorCode", 0);
 
                         // Extract the offending request XML element that may be the cause 
-                        string errorLocation = XPathUtility.Evaluate(xpath, "//Response/Error/ErrorLocation/ErrorLocationElementName", "");
+                        string errorLocation = XPathUtility.Evaluate(xpath,
+                            "//Response/Error/ErrorLocation/ErrorLocationElementName", "");
 
                         // Extract the error description (may not be there)
                         string errorDescription = XPathUtility.Evaluate(xpath, "//Response/Error/ErrorDescription", "");
@@ -327,7 +328,9 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                         }
                         else if (errorCode == UpsApiConstants.ErrorNoShipmentFoundForVoid)
                         {
-                            throw new UpsApiException(status, errorCode.ToString(), "UPS does not have a record for this shipment, and therefore cannot void the shipment.", errorLocation); 
+                            throw new UpsApiException(status, errorCode.ToString(),
+                                "UPS does not have a record for this shipment, and therefore cannot void the shipment.",
+                                errorLocation);
                         }
                         else
                         {
@@ -338,9 +341,13 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                     return xmlResponse;
                 }
             }
+            catch (XmlException ex)
+            {
+                throw new UpsException("UPS did not provide valid rates for this shipment.", ex);
+            }
             catch (Exception ex)
             {
-                throw WebHelper.TranslateWebException(ex, typeof(UpsException));
+                throw WebHelper.TranslateWebException(ex, typeof (UpsException));
             }
         }
         
