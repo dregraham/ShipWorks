@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.AddressValidation;
+using ShipWorks.AddressValidation.Enums;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.ExecutionMode;
 using ShipWorks.Data;
@@ -120,11 +122,19 @@ namespace ShipWorks.Shipping
                         shipment.Fields.IsDirty = true;
                     }
 
-                    ShippingManager.SaveShipment(shipment);
-
                     using (SqlAdapter sqlAdapter = new SqlAdapter(true))
                     {
                         validatedAddressScope?.FlushAddressesToDatabase(sqlAdapter, shipment.ShipmentID, "Ship");
+
+                        shipment.ShipAddressValidationSuggestionCount = validatedAddressScope?.LoadValidatedAddresses(shipment.ShipmentID, "Ship")?.Count() ?? 0;
+
+                        if (shipment.ShipAddressValidationSuggestionCount == 0)
+                        {
+                            shipment.ShipAddressValidationStatus = (int) AddressValidationStatusType.NotChecked;
+                        }
+
+                        ShippingManager.SaveShipment(shipment);
+
                         sqlAdapter.Commit();
                     }
                 }
