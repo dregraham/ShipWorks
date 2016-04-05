@@ -202,29 +202,32 @@ namespace ShipWorks.UI.Controls.AddressControl
                 return;
             }
 
-            long currentEntityId = entityId.Value;
-
-            PersonAdapter personAdapter = new PersonAdapter();
-            AddressAdapter addressAdapter = new AddressAdapter();
-
-            SaveToEntity(personAdapter);
-            personAdapter.CopyTo(addressAdapter);
-
-            ValidatedAddressData validationData = await validator.ValidateAsync(addressAdapter, true);
-
-            // See if the loaded address has changed since we started validating
-            if (currentEntityId != entityId)
+            using (messageHelper.ShowProgressDialog("Validating Addresses", "ShipWorks is validating the addresses."))
             {
-                return;
+                long currentEntityId = entityId.Value;
+
+                PersonAdapter personAdapter = new PersonAdapter();
+                AddressAdapter addressAdapter = new AddressAdapter();
+
+                SaveToEntity(personAdapter);
+                personAdapter.CopyTo(addressAdapter);
+
+                ValidatedAddressData validationData = await validator.ValidateAsync(addressAdapter, true);
+
+                // See if the loaded address has changed since we started validating
+                if (currentEntityId != entityId)
+                {
+                    return;
+                }
+
+                addressAdapter.CopyTo(personAdapter);
+
+                validatedAddressScope.StoreAddresses(entityId.Value, validationData.AllAddresses, prefix);
+                AddressSuggestions = BuildDictionary(validationData.AllAddresses);
+
+                PopulateAddress(personAdapter);
+                PopulateValidationDetails(personAdapter);
             }
-
-            addressAdapter.CopyTo(personAdapter);
-
-            validatedAddressScope.StoreAddresses(entityId.Value, validationData.AllAddresses, prefix);
-            AddressSuggestions = BuildDictionary(validationData.AllAddresses);
-
-            PopulateAddress(personAdapter);
-            PopulateValidationDetails(personAdapter);
         }
 
         /// <summary>
