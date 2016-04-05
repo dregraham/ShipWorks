@@ -1546,7 +1546,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			base.AddElementFieldInfo("MagentoStoreEntity", "StoreID", typeof(System.Int64), true, false, false, false,  (int)MagentoStoreFieldIndex.StoreID, 0, 0, 19);
 			base.AddElementFieldInfo("MagentoStoreEntity", "MagentoTrackingEmails", typeof(System.Boolean), false, false, false, false,  (int)MagentoStoreFieldIndex.MagentoTrackingEmails, 0, 0, 0);
-			base.AddElementFieldInfo("MagentoStoreEntity", "MagentoConnect", typeof(System.Boolean), false, false, false, false,  (int)MagentoStoreFieldIndex.MagentoConnect, 0, 0, 0);
+			base.AddElementFieldInfo("MagentoStoreEntity", "MagentoVersion", typeof(System.Int32), false, false, false, false,  (int)MagentoStoreFieldIndex.MagentoVersion, 0, 0, 10);
 		}
 		/// <summary>Inits MarketplaceAdvisorOrderEntity's FieldInfo objects</summary>
 		private void InitMarketplaceAdvisorOrderEntityInfos()

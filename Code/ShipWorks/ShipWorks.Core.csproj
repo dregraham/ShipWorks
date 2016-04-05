@@ -1353,6 +1353,8 @@
     <Compile Include="Stores\Platforms\Choxi\ChoxiTemplate.cs" />
     <Compile Include="Stores\Platforms\Groupon\CoreExtensions\Filters\GrouponOrderIdCondition.cs" />
     <Compile Include="Stores\Platforms\InstanteStore\InstanteStoreStoreType.cs" />
+    <Compile Include="Stores\Platforms\Magento\Enums\MagentoVersion.cs" />
+    <Compile Include="Stores\Platforms\Magento\MagentoTwoWebClient.cs" />
     <Compile Include="Stores\Platforms\Newegg\Enums\NeweggChannelType.cs" />
     <Compile Include="Stores\Platforms\OpenSky\OpenSkyStoreType.cs" />
     <Compile Include="Stores\Platforms\OrderBot\OrderBotStoreType.cs" />
@@ -10651,6 +10653,7 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\5.0\5.0.0.5.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\5.0\5.0.0.6.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\5.0\5.0.0.7.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\5.0\5.0.0.8.sql" />
     <Content Include="Resources\add.png" />
     <None Include="Resources\blank16.png" />
     <None Include="Resources\calendar_31.png" />

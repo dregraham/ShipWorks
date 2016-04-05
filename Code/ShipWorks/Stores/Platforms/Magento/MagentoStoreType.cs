@@ -1,17 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using log4net;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.ApplicationCore.Logging;
-using Interapptive.Shared.Net;
 using ShipWorks.Common.Threading;
 using ShipWorks.Data;
-using ShipWorks.Data.Grid.Paging;
-using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
@@ -19,7 +13,7 @@ using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.GenericModule;
 using ShipWorks.Stores.Platforms.Magento.WizardPages;
 using ShipWorks.UI.Wizard;
-using ShipWorks.Data.Grid;
+using ShipWorks.Stores.Platforms.Magento.Enums;
 
 namespace ShipWorks.Stores.Platforms.Magento
 {
@@ -37,7 +31,6 @@ namespace ShipWorks.Stores.Platforms.Magento
         public MagentoStoreType(StoreEntity store)
             : base(store)
         {
-
         }
 
         /// <summary>
@@ -51,17 +44,22 @@ namespace ShipWorks.Stores.Platforms.Magento
         public override ApiLogSource LogSource => ApiLogSource.Magento;
 
         /// <summary>
+        /// The url to support article
+        /// </summary>
+        public override string AccountSettingsHelpUrl => "http://support.shipworks.com/support/solutions/articles/4000049745";
+
+        /// <summary>
         /// Create the magento-specific store entity
         /// </summary>
         public override StoreEntity CreateStoreInstance()
         {
-            MagentoStoreEntity magentoStore = new MagentoStoreEntity();
+            MagentoStoreEntity magentoStore = new MagentoStoreEntity
+            {
+                MagentoTrackingEmails = false,
+                MagentoVersion = (int) MagentoVersion.PhpFile
+            };
 
             InitializeStoreDefaults(magentoStore);
-
-            // default
-            magentoStore.MagentoTrackingEmails = false;
-            magentoStore.MagentoConnect = false;
 
             return magentoStore;
         }
@@ -71,11 +69,10 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// </summary>
         protected override OrderEntity CreateOrderInstance()
         {
-            MagentoOrderEntity magentoOrder = new MagentoOrderEntity();
-
-            magentoOrder.MagentoOrderID = 0;
-
-            return magentoOrder;
+            return new MagentoOrderEntity
+            {
+                MagentoOrderID = 0
+            };
         }
 
         /// <summary>
@@ -104,7 +101,14 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// </summary>
         public override OnlineUpdateActionControlBase CreateAddStoreWizardOnlineUpdateActionControl()
         {
-            return new MagentoOnlineUpdateActionControl();
+            MagentoStoreEntity magentoStore = Store as MagentoStoreEntity;
+
+            if (magentoStore == null)
+            {
+                throw new InvalidOperationException("Not a magento store.");
+            }
+
+            return new MagentoOnlineUpdateActionControl(magentoStore.MagentoVersion == (int)MagentoVersion.MagentoTwo);
         }
 
         /// <summary>
@@ -131,23 +135,19 @@ namespace ShipWorks.Stores.Platforms.Magento
             List<MenuCommand> commands = new List<MenuCommand>();
 
             // take actions to Cancel the order
-            MenuCommand command = new MenuCommand("Cancel", new MenuCommandExecutor(OnOrderCommand));
-            command.Tag = "cancel";
+            MenuCommand command = new MenuCommand("Cancel", OnOrderCommand) {Tag = "cancel"};
             commands.Add(command);
 
             // try to complete the shipment - which creates an invoice (online), uploads shipping details if they exist, and 
             // sets the order "state" online to complete
-            command = new MenuCommand("Complete", new MenuCommandExecutor(OnOrderCommand));
-            command.Tag = "complete";
+            command = new MenuCommand("Complete", OnOrderCommand) {Tag = "complete"};
             commands.Add(command);
 
             // place the order into Hold status
-            command = new MenuCommand("Hold", new MenuCommandExecutor(OnOrderCommand));
-            command.Tag = "hold";
+            command = new MenuCommand("Hold", OnOrderCommand) {Tag = "hold"};
             commands.Add(command);
 
-            command = new MenuCommand("With Comments...", new MenuCommandExecutor(OnOrderCommand));
-            command.BreakBefore = true;
+            command = new MenuCommand("With Comments...", OnOrderCommand) {BreakBefore = true};
             commands.Add(command);
 
             return commands;
@@ -164,11 +164,11 @@ namespace ShipWorks.Stores.Platforms.Magento
                 "Updating order {0} of {1}...");
 
             MenuCommand command = context.MenuCommand;
-            string action = "";
+            string action;
             string comments = "";
             if (command.Tag == null)
             {
-                // open a window for hte user to select an action and comments
+                // open a window for the user to select an action and comments
                 using (MagentoActionCommentsDlg dlg = new MagentoActionCommentsDlg())
                 {
                     if (dlg.ShowDialog(context.Owner) == DialogResult.OK)
@@ -207,7 +207,7 @@ namespace ShipWorks.Stores.Platforms.Magento
             string action = state["action"];
             string comments = state["comments"];
 
-            // create the updateer and execute the command
+            // create the updater and execute the command
             MagentoOnlineUpdater updater = (MagentoOnlineUpdater)CreateOnlineUpdater();
 
             try
@@ -252,19 +252,26 @@ namespace ShipWorks.Stores.Platforms.Magento
         {
             MagentoStoreEntity magentoStore = Store as MagentoStoreEntity;
 
-            // the web client used depends on the type of connection we need to make
-            if (magentoStore.MagentoConnect)
+            if (magentoStore == null)
             {
-                // for connecting to our Magento Connect Extenion via SOAP
-                return new MagentoConnectWebClient(magentoStore);
+                throw new InvalidOperationException("Not a magento store.");
             }
-            else
+
+            switch ((MagentoVersion)magentoStore.MagentoVersion)
             {
-                // for connecting to our php file
-                return new MagentoWebClient(magentoStore);
+                case MagentoVersion.PhpFile:
+                    return new MagentoWebClient(magentoStore);
+
+                case MagentoVersion.MagentoConnect:
+                    // for connecting to our Magento Connect Extension via SOAP
+                    return new MagentoConnectWebClient(magentoStore);
+
+                case MagentoVersion.MagentoTwo:
+                    return new MagentoTwoWebClient(magentoStore);
+
+                default:
+                    throw new NotImplementedException("Magento Version not supported");
             }
         }
-
-        public override string AccountSettingsHelpUrl => "http://support.shipworks.com/support/solutions/articles/4000049745";
     }
 }
