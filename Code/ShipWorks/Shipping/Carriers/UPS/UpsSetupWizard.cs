@@ -25,6 +25,8 @@ using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Editions;
+using ShipWorks.Shipping.Carriers.Api;
+using ShipWorks.Shipping.Carriers.UPS.InvoiceRegistration;
 
 namespace ShipWorks.Shipping.Carriers.UPS
 {
@@ -485,20 +487,37 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 return;
             }
 
-            if (ShippingSettings.Fetch().UpsAccessKey == null)
+            try
             {
-                if (!GetUpsAccessKey())
+                UpsClerk clerk = new UpsClerk(upsAccount);
+
+                UpsRegistrationStatus registrationStatus = clerk.RegisterAccount(upsAccount, upsInvoiceAuthorizationControl.InvoiceAuthorizationData);
+
+                if (registrationStatus == UpsRegistrationStatus.Success)
                 {
-                    e.NextPage = CurrentPage;
-                    return;
+                    Pages.Remove(wizardPageInvoiceAuthentication);
                 }
             }
-
-            if (!ProcessRegistration(3, true))
+            catch (UpsWebServiceException ex)
             {
-                e.NextPage = CurrentPage;
-                return;
+                string errorMessage = ex.Message + Environment.NewLine + Environment.NewLine + "Note: UPS will lock out accounts for a 24 hour period if your invoice information cannot be authenticated after two attempts.";
+                throw new CarrierException(errorMessage, ex);
             }
+
+            //if (ShippingSettings.Fetch().UpsAccessKey == null)
+            //{
+            //    if (!GetUpsAccessKey())
+            //    {
+            //        e.NextPage = CurrentPage;
+            //        return;
+            //    }
+            //}
+
+            //if (!ProcessRegistration(3, true))
+            //{
+            //    e.NextPage = CurrentPage;
+            //    return;
+            //}
 
             using (SqlAdapter adapter = new SqlAdapter(true))
             {

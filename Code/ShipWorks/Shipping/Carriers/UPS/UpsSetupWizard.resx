@@ -126,4 +126,7 @@
   <data name="labelWorldShipInfo1.Text" xml:space="preserve">
     <value>Most shippers are able to eliminate the use of WorldShip by using the UPS shipping functionality that has been built-in to ShipWorks.  To use the integrated UPS shipping use the shipping provider 'UPS' instead of 'UPS (WorldShip)'.  This uses your existing UPS account(s) just like WorldShip does.</value>
   </data>
+  <metadata name="fieldLengthProvider.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
+  </metadata>
 </root>
