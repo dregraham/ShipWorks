@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Windows.Forms;
-using ShipWorks.Data.Controls;
-using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.UPS.OpenAccount;
 using ShipWorks.Shipping.Carriers.UPS.WebServices.OpenAccount;
 using ShipWorks.Shipping.Editing.Rating;
@@ -24,7 +22,6 @@ using ShipWorks.Shipping.Carriers.UPS.WorldShip;
 using ShipWorks.Common.IO.Hardware.Printers;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.UI;
-using Interapptive.Shared.Win32;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Editions;
@@ -85,7 +82,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 case UpsBusinessIndustry.Automotive:
                 case UpsBusinessIndustry.HighTech:
                 case UpsBusinessIndustry.IndustrialManufacturingAndDistribution:
-                case UpsBusinessIndustry.Government:                    
+                case UpsBusinessIndustry.Government:
                     upsPharmaceuticalControl.Visible = false;
                     break;
                 case UpsBusinessIndustry.RetailAndConsumerGoods:
@@ -277,7 +274,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             // Validate the entered account number
             if (string.IsNullOrWhiteSpace(accountNumber) && existingAccount.Checked)
             {
-                // Note: this will need to be refactored when we unhide the ability to create 
+                // Note: this will need to be refactored when we unhide the ability to create
                 // a new UPS account from ShipWorks
                 MessageHelper.ShowMessage(this, "Please enter your account number.");
                 e.NextPage = CurrentPage;
@@ -423,7 +420,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             {
                 url = "https://www.ups.com/one-to-one/login?loc=en_PR";
             }
-            
+
             WebHelper.OpenUrl(url, this);
         }
 
@@ -468,7 +465,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 e.NextPage = CurrentPage;
                 return;
             }
-            
+
             RequiredFieldChecker checker = new RequiredFieldChecker();
             checker.Check("UPS Account", upsAccount.AccountNumber);
             checker.Check("Full Name", upsAccount.FirstName);
@@ -673,22 +670,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
             else
             {
                 throw new UpsException(message, ex);
-            }
-        }
-
-        /// <summary>
-        /// Stepping next from the rates page
-        /// </summary>
-        private void OnStepNextRates(object sender, WizardStepEventArgs e)
-        {
-            try
-            {
-                upsRateTypeControl.RegisterAndSaveToEntity();
-            }
-            catch (CarrierException ex)
-            {
-                MessageHelper.ShowMessage(this, ex.Message);
-                e.NextPage = CurrentPage;
             }
         }
 
