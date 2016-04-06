@@ -46,7 +46,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
         UpsAccountEntity upsAccount = new UpsAccountEntity();
 
         private OpenAccountRequest openAccountRequest;
-        private bool invoiceAuthenticationNeeded;
 
         /// <summary>
         /// Constructor
@@ -491,7 +490,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
             try
             {
                 UpsClerk clerk = new UpsClerk(upsAccount);
-
                 UpsRegistrationStatus registrationStatus = clerk.RegisterAccount(upsAccount);
 
                 switch (registrationStatus)
@@ -507,9 +505,15 @@ namespace ShipWorks.Shipping.Carriers.UPS
                         break;
                 }
             }
-            catch (UpsWebServiceException ex)
+            catch (UpsException ex)
             {
                 MessageHelper.ShowError(this, ex.Message);
+                e.NextPage = CurrentPage;
+                return;
+            }
+			
+            if (!GetUpsAccessKey())
+            {
                 e.NextPage = CurrentPage;
                 return;
             }
@@ -543,78 +547,83 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 return;
             }
         }
-
+		
         /// <summary>
-        /// Get a UserId and Password
+        /// Get the global instanced UPS access key
         /// </summary>
         [NDependIgnoreLongMethod]
-        private bool ProcessRegistration(int tries, bool showErrorMessage)
+        private bool GetUpsAccessKey()
         {
-            // Create the client for connecting to the UPS server
-            using (XmlTextWriter xmlWriter = UpsWebClient.CreateRequest(UpsOnLineToolType.Register, null))
+            if (ShippingSettings.Fetch().UpsAccessKey != null)
             {
-                string userId = Guid.NewGuid().ToString("N").Substring(0, 16);
-                string password = Guid.NewGuid().ToString("N").Substring(0, 8);
+                return false;
+            }
 
-                xmlWriter.WriteElementString("UserId", userId);
-                xmlWriter.WriteElementString("Password", password);
+            // Create the client for connecting to the UPS server
+            XmlTextWriter xmlWriter = UpsWebClient.CreateRequest(UpsOnLineToolType.AccessKey, null);
 
-                xmlWriter.WriteStartElement("RegistrationInformation");
-                xmlWriter.WriteElementString("UserName", new PersonName(new PersonAdapter(upsAccount, "")).FullName);
-                xmlWriter.WriteElementString("CompanyName", upsAccount.Company);
-                xmlWriter.WriteElementString("Title", "N\\A");
+            xmlWriter.WriteStartElement("AccessLicenseProfile");
+            xmlWriter.WriteElementString("CountryCode", upsAccount.CountryCode);
+            xmlWriter.WriteElementString("LanguageCode", "EN");
+            xmlWriter.WriteElementString("AccessLicenseText", upsLicense);
+            xmlWriter.WriteEndElement();
 
-                xmlWriter.WriteStartElement("Address");
-                xmlWriter.WriteElementString("AddressLine1", upsAccount.Street1);
-                xmlWriter.WriteElementString("AddressLine2", upsAccount.Street2);
-                xmlWriter.WriteElementString("AddressLine3", upsAccount.Street3);
-                xmlWriter.WriteElementString("City", upsAccount.City);
-                xmlWriter.WriteElementString("StateProvinceCode", upsAccount.StateProvCode);
-                xmlWriter.WriteElementString("PostalCode", upsAccount.PostalCode);
-                xmlWriter.WriteElementString("CountryCode", upsAccount.CountryCode);
-                xmlWriter.WriteEndElement();
+            xmlWriter.WriteElementString("CompanyName", upsAccount.Company);
+            xmlWriter.WriteElementString("CompanyURL", upsAccount.Website);
+            xmlWriter.WriteElementString("ShipperNumber", upsAccount.AccountNumber);
 
-                xmlWriter.WriteElementString("PhoneNumber", new PersonAdapter(upsAccount, "").Phone10Digits);
-                xmlWriter.WriteElementString("EMailAddress", upsAccount.Email);
+            xmlWriter.WriteStartElement("Address");
+            xmlWriter.WriteElementString("AddressLine1", upsAccount.Street1);
+            xmlWriter.WriteElementString("AddressLine2", upsAccount.Street2);
+            xmlWriter.WriteElementString("AddressLine3", upsAccount.Street3);
+            xmlWriter.WriteElementString("City", upsAccount.City);
+            xmlWriter.WriteElementString("StateProvinceCode", upsAccount.StateProvCode);
+            xmlWriter.WriteElementString("PostalCode", upsAccount.PostalCode);
+            xmlWriter.WriteElementString("CountryCode", upsAccount.CountryCode);
+            xmlWriter.WriteEndElement();
 
-                xmlWriter.WriteStartElement("ShipperAccount");
-                xmlWriter.WriteElementString("AccountName", "Interapptive");
-                xmlWriter.WriteElementString("ShipperNumber", upsAccount.AccountNumber);
-                xmlWriter.WriteElementString("PickupPostalCode", upsAccount.PostalCode);
-                xmlWriter.WriteElementString("PickupCountryCode", upsAccount.CountryCode);
-                xmlWriter.WriteEndElement();
+            xmlWriter.WriteStartElement("PrimaryContact");
+            xmlWriter.WriteElementString("Name", new PersonName(new PersonAdapter(upsAccount, "")).FullName);
+            xmlWriter.WriteElementString("Title", "N\\A");
+            xmlWriter.WriteElementString("EMailAddress", upsAccount.Email);
+            xmlWriter.WriteElementString("PhoneNumber", new PersonAdapter(upsAccount, "").Phone10Digits);
+            xmlWriter.WriteEndElement();
 
-                xmlWriter.WriteEndElement();
+            UpsWebClient.AppendToolList(xmlWriter);
 
-                try
-                {
-                    Cursor.Current = Cursors.WaitCursor;
+            xmlWriter.WriteStartElement("ClientSoftwareProfile");
+            xmlWriter.WriteElementString("SoftwareInstaller", "User");
+            xmlWriter.WriteElementString("SoftwareProductName", "ShipWorks");
+            xmlWriter.WriteElementString("SoftwareProvider", "Interapptive, Inc.");
+            xmlWriter.WriteElementString("SoftwareVersionNumber", Assembly.GetExecutingAssembly().GetName().Version.ToString(2));
+            xmlWriter.WriteEndElement();
 
-                    UpsWebClient.ProcessRequest(xmlWriter);
+            try
+            {
+                Cursor.Current = Cursors.WaitCursor;
 
-                    upsAccount.UserID = userId;
-                    upsAccount.Password = password;
+                // Process the XML request
+                XmlDocument upsResponse = UpsWebClient.ProcessRequest(xmlWriter);
 
-                    return true;
-                }
-                catch (UpsException ex)
-                {
-                    // If UserId is already taken, try again
-                    if (ex.ErrorCode == "160500")
-                    {
-                        // If we still want to try some more
-                        if (tries > 0)
-                        {
-                            return ProcessRegistration(tries - 1, showErrorMessage);
-                        }
+                // Now we can get the Access License number
+                string accessKey = (string) upsResponse.CreateNavigator().Evaluate("string(//AccessLicenseNumber)");
 
-                        const string message = "A unique UserID could not be generated.  Please try again.";
-                        ShowOrThrowErrorMessage(showErrorMessage, message, ex);
-                        return false;
-                    }
-                    ShowOrThrowErrorMessage(showErrorMessage, ex.Message, ex);
-                    return false;
-                }
+                ShippingSettingsEntity settings = ShippingSettings.Fetch();
+                settings.UpsAccessKey = SecureText.Encrypt(accessKey, "UPS");
+
+                ShippingSettings.Save(settings);
+
+                return true;
+            }
+            catch (UpsException ex)
+            {
+                MessageBox.Show(this,
+                    "An error occurred: " + ex.Message,
+                    "ShipWorks",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+
+                return false;
             }
         }
 
@@ -634,23 +643,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
             }
         }
 
-
-        /// <summary>
-        /// Shows the error message or throws an error with the message.
-        /// </summary>
-        /// <exception cref="UpsException"></exception>
-        private void ShowOrThrowErrorMessage(bool showErrorMessage, string message, UpsException ex)
-        {
-            if (showErrorMessage)
-            {
-                // Give up for now
-                MessageHelper.ShowError(this, message);
-            }
-            else
-            {
-                throw new UpsException(message, ex);
-            }
-        }
 
         /// <summary>
         /// Stepping next from the options page
@@ -905,7 +897,18 @@ namespace ShipWorks.Shipping.Carriers.UPS
             upsAccount.AccountNumber = newAccountNumber;
             try
             {
-                ProcessRegistration(3, false);
+                UpsClerk upsClerk = new UpsClerk(upsAccount);
+                UpsRegistrationStatus registrationStatus = upsClerk.RegisterAccount(upsAccount);
+
+                if (registrationStatus != UpsRegistrationStatus.Success)
+                {
+                    throw new UpsException("Could not register your new account in ShipWorks.");
+                }
+
+                if (!GetUpsAccessKey())
+                {
+                    throw new UpsException("Could not obtain access key from UPS.");
+                }
 
                 NextEnabled = true;
 
