@@ -51,25 +51,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
             description.PromptText = UpsAccountManager.GetDefaultDescription(account);
 
-            bool invoiceAuthenticationRequired = false;
-
-            try
-            {
-                UpsClerk clerk = new UpsClerk(account);
-
-                UpsRegistrationStatus status = clerk.RegisterAccount(account);
-
-                if (status == UpsRegistrationStatus.InvoiceAuthenticationRequired)
-                {
-                    invoiceAuthenticationRequired = true;
-                }
-            }
-            catch (UpsWebServiceException ex)
-            {
-                MessageHelper.ShowError(this, ex.Message);
-            }
-
-            upsRateTypeControl.Initialize(account, false, invoiceAuthenticationRequired);
+            upsRateTypeControl.Initialize(account, false);
         }
 
         /// <summary>

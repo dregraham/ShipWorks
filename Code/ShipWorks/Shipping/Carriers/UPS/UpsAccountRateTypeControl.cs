@@ -25,13 +25,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <summary>
         /// Initialize the control with the settings from the given account
         /// </summary>
-        public void Initialize(UpsAccountEntity account, bool isCreatingNewUpsAccount, bool invoiceAuthenticationNeeded)
+        public void Initialize(UpsAccountEntity account, bool isCreatingNewUpsAccount)
         {
-            if (!invoiceAuthenticationNeeded)
-            {
-                invoiceAuthNeededPanel.Visible = false;
-            }
-
             if (!isInitialized)
             {
                 isInitialized = true;

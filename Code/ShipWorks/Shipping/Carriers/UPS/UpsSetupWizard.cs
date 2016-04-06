@@ -496,15 +496,15 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
                 switch (registrationStatus)
                 {
-                    case UpsRegistrationStatus.InvoiceAuthenticationRequired:
-                        invoiceAuthenticationNeeded = true;
-                        break;
                     case UpsRegistrationStatus.Success:
-                    e.NextPage = wizardPageRates;
+                        e.NextPage = wizardPageRates;
                         break;
                     case UpsRegistrationStatus.Failed:
                         e.NextPage = CurrentPage;
-                        return;
+                        break;
+                    case UpsRegistrationStatus.InvoiceAuthenticationRequired:
+                        e.NextPage = wizardPageInvoiceAuthentication;
+                        break;
                 }
             }
             catch (UpsWebServiceException ex)
@@ -542,8 +542,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 e.NextPage = CurrentPage;
                 return;
             }
-
-            invoiceAuthenticationNeeded = false;
         }
 
         /// <summary>
@@ -851,7 +849,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <param name="e">The <see cref="WizardSteppingIntoEventArgs"/> instance containing the event data.</param>
         private void OnSteppingIntoRates(object sender, WizardSteppingIntoEventArgs e)
         {
-            upsRateTypeControl.Initialize(upsAccount, newAccount.Checked, invoiceAuthenticationNeeded);
+            upsRateTypeControl.Initialize(upsAccount, newAccount.Checked);
         }
 
         /// <summary>
