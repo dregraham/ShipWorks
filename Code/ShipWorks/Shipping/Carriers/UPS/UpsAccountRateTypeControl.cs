@@ -12,7 +12,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
     public partial class UpsAccountRateTypeControl : UserControl
     {
         private bool isInitialized = false;
-
         /// <summary>
         /// Constructor
         /// </summary>
@@ -21,14 +20,22 @@ namespace ShipWorks.Shipping.Carriers.UPS
             InitializeComponent();
         }
 
+        public UpsRateType SelectedRateType => (UpsRateType) rateType.SelectedValue;
+
         /// <summary>
         /// Initialize the control with the settings from the given account
         /// </summary>
-        public void Initialize(UpsAccountEntity account, bool isCreatingNewUpsAccount)
+        public void Initialize(UpsAccountEntity account, bool isCreatingNewUpsAccount, bool invoiceAuthenticationNeeded)
         {
+            if (!invoiceAuthenticationNeeded)
+            {
+                invoiceAuthNeededPanel.Visible = false;
+            }
+
             if (!isInitialized)
             {
                 isInitialized = true;
+                authorizationControl.Visible = false;
 
                 if (isCreatingNewUpsAccount)
                 {
@@ -40,10 +47,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
                     if (account.InvoiceAuth)
                     {
                         panelAlreadyRegisterred.Visible = true;
-                    }
-                    else
-                    {
-                        authorizationControl.Visible = true;
                     }
                 }
 

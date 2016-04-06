@@ -14,6 +14,8 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.UI;
+using ShipWorks.Shipping.Carriers.UPS.InvoiceRegistration;
+using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api;
 
 namespace ShipWorks.Shipping.Carriers.UPS
 {
@@ -49,7 +51,25 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
             description.PromptText = UpsAccountManager.GetDefaultDescription(account);
 
-            upsRateTypeControl.Initialize(account, false);
+            bool invoiceAuthenticationRequired = false;
+
+            try
+            {
+                UpsClerk clerk = new UpsClerk(account);
+
+                UpsRegistrationStatus status = clerk.RegisterAccount(account);
+
+                if (status == UpsRegistrationStatus.InvoiceAuthenticationRequired)
+                {
+                    invoiceAuthenticationRequired = true;
+                }
+            }
+            catch (UpsWebServiceException ex)
+            {
+                MessageHelper.ShowError(this, ex.Message);
+            }
+
+            upsRateTypeControl.Initialize(account, false, invoiceAuthenticationRequired);
         }
 
         /// <summary>

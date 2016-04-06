@@ -138,7 +138,7 @@
             // 
             // mainPanel
             // 
-            this.mainPanel.Controls.Add(this.wizardPageInvoiceAuthentication);
+            this.mainPanel.Controls.Add(this.wizardPageRates);
             this.mainPanel.Size = new System.Drawing.Size(579, 474);
             // 
             // etchBottom
@@ -408,6 +408,7 @@
             this.wizardPageRates.Size = new System.Drawing.Size(579, 474);
             this.wizardPageRates.TabIndex = 0;
             this.wizardPageRates.Title = "Account Registration";
+            this.wizardPageRates.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextRates);
             this.wizardPageRates.SteppingInto += new System.EventHandler<ShipWorks.UI.Wizard.WizardSteppingIntoEventArgs>(this.OnSteppingIntoRates);
             // 
             // upsRateTypeControl
@@ -859,6 +860,7 @@
             this.wizardPageInvoiceAuthentication.Size = new System.Drawing.Size(579, 474);
             this.wizardPageInvoiceAuthentication.TabIndex = 0;
             this.wizardPageInvoiceAuthentication.Title = "Account Registration";
+            this.wizardPageInvoiceAuthentication.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextInvoiceAuthentication);
             // 
             // labelNegotiated7
             // 

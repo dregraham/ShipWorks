@@ -46,6 +46,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         UpsAccountEntity upsAccount = new UpsAccountEntity();
 
         private OpenAccountRequest openAccountRequest;
+        private bool invoiceAuthenticationNeeded;
 
         /// <summary>
         /// Constructor
@@ -493,31 +494,25 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
                 UpsRegistrationStatus registrationStatus = clerk.RegisterAccount(upsAccount);
 
-                if (registrationStatus == UpsRegistrationStatus.Success)
+                switch (registrationStatus)
                 {
+                    case UpsRegistrationStatus.InvoiceAuthenticationRequired:
+                        invoiceAuthenticationNeeded = true;
+                        break;
+                    case UpsRegistrationStatus.Success:
                     e.NextPage = wizardPageRates;
+                        break;
+                    case UpsRegistrationStatus.Failed:
+                        e.NextPage = CurrentPage;
+                        return;
                 }
             }
             catch (UpsWebServiceException ex)
             {
-                string errorMessage = ex.Message + Environment.NewLine + Environment.NewLine + "Note: UPS will lock out accounts for a 24 hour period if your invoice information cannot be authenticated after two attempts.";
-                throw new CarrierException(errorMessage, ex);
+                MessageHelper.ShowError(this, ex.Message);
+                e.NextPage = CurrentPage;
+                return;
             }
-
-            //if (ShippingSettings.Fetch().UpsAccessKey == null)
-            //{
-            //    if (!GetUpsAccessKey())
-            //    {
-            //        e.NextPage = CurrentPage;
-            //        return;
-            //    }
-            //}
-
-            //if (!ProcessRegistration(3, true))
-            //{
-            //    e.NextPage = CurrentPage;
-            //    return;
-            //}
 
             using (SqlAdapter adapter = new SqlAdapter(true))
             {
@@ -529,77 +524,26 @@ namespace ShipWorks.Shipping.Carriers.UPS
         }
 
         /// <summary>
-        /// Get the global instanced UPS access key
+        /// Step next from invoice authentication page
         /// </summary>
-        [NDependIgnoreLongMethod]
-        private bool GetUpsAccessKey()
+        private void OnStepNextInvoiceAuthentication(object sender, WizardStepEventArgs e)
         {
-            // Create the client for connecting to the UPS server
-            XmlTextWriter xmlWriter = UpsWebClient.CreateRequest(UpsOnLineToolType.AccessKey, null);
-
-            xmlWriter.WriteStartElement("AccessLicenseProfile");
-            xmlWriter.WriteElementString("CountryCode", upsAccount.CountryCode);
-            xmlWriter.WriteElementString("LanguageCode", "EN");
-            xmlWriter.WriteElementString("AccessLicenseText", upsLicense);
-            xmlWriter.WriteEndElement();
-
-            xmlWriter.WriteElementString("CompanyName", upsAccount.Company);
-            xmlWriter.WriteElementString("CompanyURL", upsAccount.Website);
-            xmlWriter.WriteElementString("ShipperNumber", upsAccount.AccountNumber);
-
-            xmlWriter.WriteStartElement("Address");
-            xmlWriter.WriteElementString("AddressLine1", upsAccount.Street1);
-            xmlWriter.WriteElementString("AddressLine2", upsAccount.Street2);
-            xmlWriter.WriteElementString("AddressLine3", upsAccount.Street3);
-            xmlWriter.WriteElementString("City", upsAccount.City);
-            xmlWriter.WriteElementString("StateProvinceCode", upsAccount.StateProvCode);
-            xmlWriter.WriteElementString("PostalCode", upsAccount.PostalCode);
-            xmlWriter.WriteElementString("CountryCode", upsAccount.CountryCode);
-            xmlWriter.WriteEndElement();
-
-            xmlWriter.WriteStartElement("PrimaryContact");
-            xmlWriter.WriteElementString("Name", new PersonName(new PersonAdapter(upsAccount, "")).FullName);
-            xmlWriter.WriteElementString("Title", "N\\A");
-            xmlWriter.WriteElementString("EMailAddress", upsAccount.Email);
-            xmlWriter.WriteElementString("PhoneNumber", new PersonAdapter(upsAccount, "").Phone10Digits);
-            xmlWriter.WriteEndElement();
-
-            UpsWebClient.AppendToolList(xmlWriter);
-
-            xmlWriter.WriteStartElement("ClientSoftwareProfile");
-            xmlWriter.WriteElementString("SoftwareInstaller", "User");
-            xmlWriter.WriteElementString("SoftwareProductName", "ShipWorks");
-            xmlWriter.WriteElementString("SoftwareProvider", "Interapptive, Inc.");
-            xmlWriter.WriteElementString("SoftwareVersionNumber", Assembly.GetExecutingAssembly().GetName().Version.ToString(2));
-            xmlWriter.WriteEndElement();
-
             try
             {
-                Cursor.Current = Cursors.WaitCursor;
+                UpsClerk clerk = new UpsClerk(upsAccount);
 
-                // Process the XML request
-                XmlDocument upsResponse = UpsWebClient.ProcessRequest(xmlWriter);
-
-                // Now we can get the Access License number
-                string accessKey = (string) upsResponse.CreateNavigator().Evaluate("string(//AccessLicenseNumber)");
-
-                ShippingSettingsEntity settings = ShippingSettings.Fetch();
-                settings.UpsAccessKey = SecureText.Encrypt(accessKey, "UPS");
-
-                ShippingSettings.Save(settings);
-
-                return true;
+                clerk.RegisterAccount(upsAccount, upsInvoiceAuthorizationControl.InvoiceAuthorizationData);
             }
-            catch (UpsException ex)
+            catch (UpsWebServiceException ex)
             {
-                MessageBox.Show(this,
-                    "An error occurred: " + ex.Message,
-                    "ShipWorks",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-
-                return false;
+                string errorMessage = ex.Message + Environment.NewLine + Environment.NewLine +
+                    "Note: UPS will lock out accounts for a 24 hour period if your invoice information cannot be authenticated after two attempts.";
+                MessageHelper.ShowError(this, errorMessage);
+                e.NextPage = CurrentPage;
+                return;
             }
+
+            invoiceAuthenticationNeeded = false;
         }
 
         /// <summary>
@@ -675,6 +619,23 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 }
             }
         }
+
+        /// <summary>
+        /// Stepping next from the rates page
+        /// </summary>
+        private void OnStepNextRates(object sender, WizardStepEventArgs e)
+        {
+            try
+            {
+                upsAccount.RateType = (int) upsRateTypeControl.SelectedRateType;
+            }
+            catch (CarrierException ex)
+            {
+                MessageHelper.ShowMessage(this, ex.Message);
+                e.NextPage = CurrentPage;
+            }
+        }
+
 
         /// <summary>
         /// Shows the error message or throws an error with the message.
@@ -890,7 +851,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <param name="e">The <see cref="WizardSteppingIntoEventArgs"/> instance containing the event data.</param>
         private void OnSteppingIntoRates(object sender, WizardSteppingIntoEventArgs e)
         {
-            upsRateTypeControl.Initialize(upsAccount, newAccount.Checked);
+            upsRateTypeControl.Initialize(upsAccount, newAccount.Checked, invoiceAuthenticationNeeded);
         }
 
         /// <summary>
@@ -1075,7 +1036,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <param name="billingAddressType">Type of the billing address.</param>
         /// <returns></returns>
         /// <exception cref="ShipWorks.Shipping.Carriers.UPS.OpenAccount.UpsOpenAccountInvalidAddressException">If address suggested and user cancels, throw</exception>
-        private static bool CorrectBillingAddress(AddressKeyCandidateType addressCandidate, BillingAddressType billingAddressType)
+        private static bool CorrectBillingAddress(AddressKeyCandidateType addressCandidate,
+            BillingAddressType billingAddressType)
         {
             bool isAddressCorrected = false;
 
