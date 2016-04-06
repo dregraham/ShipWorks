@@ -12,7 +12,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
     /// <summary>
     /// Handle configuration of a carrier
     /// </summary>
-    public class CarrierConfiguredPipeline : IShippingPanelObservableRegistration
+    public class CarrierConfiguredPipeline : IShippingPanelGlobalPipeline
     {
         private readonly IObservable<IShipWorksMessage> messages;
         private readonly ILog log;

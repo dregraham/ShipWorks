@@ -10,7 +10,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
     /// <summary>
     /// Pipeline for changing shipments
     /// </summary>
-    public class ShipmentChangedPipeline : IShippingPanelObservableRegistration
+    public class ShipmentChangedPipeline : IShippingPanelTransientPipeline
     {
         readonly IObservable<IShipWorksMessage> messages;
         readonly Func<ShippingPanelViewModel, object>[] viewModelsToIgnore = {
@@ -20,6 +20,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
             x => x?.Origin,
             x => x?.Destination
         };
+        private IDisposable subscription;
 
         /// <summary>
         /// Constructor
@@ -32,9 +33,9 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
         /// <summary>
         /// Register the pipeline on the view model
         /// </summary>
-        public IDisposable Register(ShippingPanelViewModel viewModel)
+        public void Register(ShippingPanelViewModel viewModel)
         {
-            return messages.OfType<ShipmentChangedMessage>()
+            subscription = messages.OfType<ShipmentChangedMessage>()
                 .Subscribe(msg => OnShipmentChanged(msg, viewModel));
         }
 
@@ -75,6 +76,14 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
             {
                 return vm?.Equals(shipmentChangedMessage?.Sender) ?? false;
             });
+        }
+
+        /// <summary>
+        /// Dispose the subscription
+        /// </summary>
+        public void Dispose()
+        {
+            subscription?.Dispose();
         }
     }
 }

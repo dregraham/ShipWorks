@@ -42,7 +42,7 @@ namespace ShipWorks.Shipping.Services
         {
             IEnumerable<IOrderSelection> orderSelection;
 
-            if (entityIDs.HasMoreOrLessThanCount(1) != 0)
+            if (entityIDs.CompareCountTo(1) != ComparisonResult.Equal)
             {
                 orderSelection = entityIDs.Select(x => new BasicOrderSelection(x)).Cast<IOrderSelection>().ToArray();
             }

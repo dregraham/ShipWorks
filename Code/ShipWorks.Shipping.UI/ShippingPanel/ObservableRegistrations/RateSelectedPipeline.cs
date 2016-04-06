@@ -11,9 +11,10 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
     /// <summary>
     /// Handle the store changing
     /// </summary>
-    public class RateSelectedPipeline : IShippingPanelObservableRegistration
+    public class RateSelectedPipeline : IShippingPanelTransientPipeline
     {
         readonly IObservable<IShipWorksMessage> messages;
+        private IDisposable subscription;
 
         /// <summary>
         /// Constructor
@@ -27,15 +28,22 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
         /// <summary>
         /// Register the pipeline on the view model
         /// </summary>
-        public IDisposable Register(ShippingPanelViewModel viewModel)
+        public void Register(ShippingPanelViewModel viewModel)
         {
-            return messages.OfType<SelectedRateChangedMessage>()
-                .Where(x => x.Sender != viewModel && 
+            subscription = messages.OfType<SelectedRateChangedMessage>()
+                .Where(x => x.Sender != viewModel &&
                        x.Sender != viewModel.ShipmentViewModel &&
                        viewModel.LoadedShipmentResult == ShippingPanelLoadedShipmentResult.Success &&
-                       x.RateResult.ShipmentType != ShipmentTypeCode.Amazon &&
-                       x.RateResult.ShipmentType != ShipmentTypeCode.BestRate)
+                       IsValidShipmentType(x.RateResult.ShipmentType))
                 .Subscribe(x => SelectRate(viewModel, x.RateResult));
+        }
+
+        /// <summary>
+        /// Is the shipment type valid for the shipping panel
+        /// </summary>
+        private bool IsValidShipmentType(ShipmentTypeCode shipmentType)
+        {
+            return shipmentType != ShipmentTypeCode.Amazon && shipmentType != ShipmentTypeCode.BestRate;
         }
 
         /// <summary>
@@ -44,6 +52,14 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
         private void SelectRate(ShippingPanelViewModel viewModel, RateResult selectedRate)
         {
             viewModel.ShipmentViewModel.SelectRate(selectedRate);
+        }
+
+        /// <summary>
+        /// Dispose the subscription
+        /// </summary>
+        public void Dispose()
+        {
+            subscription?.Dispose();
         }
     }
 }

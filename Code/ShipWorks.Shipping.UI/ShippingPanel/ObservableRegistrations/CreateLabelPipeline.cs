@@ -11,10 +11,11 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
     /// <summary>
     /// Handle when a label should be created
     /// </summary>
-    public class CreateLabelPipeline : IShippingPanelObservableRegistration
+    public class CreateLabelPipeline : IShippingPanelTransientPipeline
     {
         private readonly IObservable<IShipWorksMessage> messageStream;
         private readonly ILog log;
+        private IDisposable subscription;
 
         /// <summary>
         /// Constructor
@@ -28,12 +29,20 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
         /// <summary>
         /// Register the pipeline on the view model
         /// </summary>
-        public IDisposable Register(ShippingPanelViewModel viewModel)
+        public void Register(ShippingPanelViewModel viewModel)
         {
-            return messageStream.OfType<CreateLabelMessage>()
+            subscription = messageStream.OfType<CreateLabelMessage>()
                 .Where(x => x.ShipmentID == viewModel.Shipment?.ShipmentID)
                 .CatchAndContinue((Exception ex) => log.Error("An error occurred while handling processed shipment", ex))
                 .Subscribe(_ => viewModel.CreateLabel());
+        }
+
+        /// <summary>
+        /// Dispose the subscription
+        /// </summary>
+        public void Dispose()
+        {
+            subscription?.Dispose();
         }
     }
 }

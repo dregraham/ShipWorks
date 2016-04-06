@@ -143,6 +143,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Collections\ComparisonResult.cs" />
     <Compile Include="NDependIgnoreAttribute.cs" />
     <Compile Include="NDependIgnoreComplexMethodAttribute.cs" />
     <Compile Include="NDependIgnoreTooManyParamsAttribute.cs" />

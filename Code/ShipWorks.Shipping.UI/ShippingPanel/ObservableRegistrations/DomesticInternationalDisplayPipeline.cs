@@ -12,7 +12,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
     /// <summary>
     /// Display Domestic/International when the origin or destination changes
     /// </summary>
-    public class DomesticInternationalDisplayPipeline : IShippingPanelObservableRegistration
+    public class DomesticInternationalDisplayPipeline : IShippingPanelTransientPipeline
     {
         readonly HashSet<string> domesticAffectingProperties = new HashSet<string>
         {
@@ -22,6 +22,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
         };
 
         readonly ISchedulerProvider schedulerProvider;
+        private IDisposable subscription;
 
         /// <summary>
         /// Constructor
@@ -34,9 +35,9 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
         /// <summary>
         /// Register the pipeline on the view model
         /// </summary>
-        public IDisposable Register(ShippingPanelViewModel viewModel)
+        public void Register(ShippingPanelViewModel viewModel)
         {
-            return Observable.Merge(
+            subscription = Observable.Merge(
                     viewModel.Origin.PropertyChangeStream,
                     viewModel.Destination.PropertyChangeStream)
                 .Where(domesticAffectingProperties.Contains)
@@ -80,6 +81,14 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
             shipmentPersonalAdapter.StateProvCode = Geography.GetStateProvCode(addressViewModel.StateProvCode);
             shipmentPersonalAdapter.PostalCode = addressViewModel.PostalCode;
             shipmentPersonalAdapter.CountryCode = addressViewModel.CountryCode;
+        }
+
+        /// <summary>
+        /// Dispose the subscription
+        /// </summary>
+        public void Dispose()
+        {
+            subscription?.Dispose();
         }
     }
 }

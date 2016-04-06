@@ -13,12 +13,13 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
     /// <summary>
     /// Handle when shipments have been processed
     /// </summary>
-    public class ShipmentsProcessedPipeline : IShippingPanelObservableRegistration
+    public class ShipmentsProcessedPipeline : IShippingPanelTransientPipeline
     {
         private readonly IObservable<IShipWorksMessage> messageStream;
         private readonly ICarrierShipmentAdapterFactory shipmentAdapterFactory;
         private readonly ISchedulerProvider schedulerProvider;
         private readonly ILog log;
+        private IDisposable subscription;
 
         /// <summary>
         /// Constructor
@@ -37,9 +38,9 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
         /// <summary>
         /// Register the pipeline on the view model
         /// </summary>
-        public IDisposable Register(ShippingPanelViewModel viewModel)
+        public void Register(ShippingPanelViewModel viewModel)
         {
-            return messageStream.OfType<ShipmentsProcessedMessage>()
+            subscription = messageStream.OfType<ShipmentsProcessedMessage>()
                 .Select(x => x.Shipments.FirstOrDefault(r => r.Shipment.ShipmentID == viewModel.Shipment.ShipmentID))
                 .Where(x => x.Shipment != null)
                 .ObserveOn(schedulerProvider.Dispatcher)
@@ -56,6 +57,14 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
             viewModel.LoadShipment(shipmentAdapter);
 
             viewModel.AllowEditing = !processResults.Shipment?.Processed ?? true;
+        }
+
+        /// <summary>
+        /// Dispose the subscription
+        /// </summary>
+        public void Dispose()
+        {
+            subscription?.Dispose();
         }
     }
 }

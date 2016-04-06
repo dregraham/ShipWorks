@@ -80,6 +80,9 @@ namespace ShipWorks.Shipping.UI
 
             builder.RegisterType<OtherShipmentViewModel>();
 
+            builder.RegisterType<PipelineRegistrationContainer>()
+                .As<IPipelineRegistrationContainer>();
+
             builder.RegisterType<RateSelectionFactory>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
