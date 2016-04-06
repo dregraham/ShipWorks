@@ -83,20 +83,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OpenAccount
         }
         #endregion
 
-        [Fact]
-        public void RegisterAccount_ThrowsUpsException_WhenAuthorizatioInvoiceIsNull()
-        {
-            Assert.Throws<UpsException>(() => testObject.RegisterAccount(new UpsAccountEntity(), null));
-        }
-
-        [Fact]
-        public void RegisterAccount_ThrowsUpsException_WhenInvoiceNumberNotProvided()
-        {
-            authorizationData.InvoiceNumber = string.Empty;
-            Assert.Throws<UpsException>(() => testObject.RegisterAccount(new UpsAccountEntity(), authorizationData));
-        }
-
-        [Fact]
+       [Fact]
         public void RegisterAccount_DelegatesToInvoiceRegistrationRequest()
         {
             UpsAccountEntity account = new UpsAccountEntity();

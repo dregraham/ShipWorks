@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Interapptive.Shared.Net;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.UPS.InvoiceRegistration.Api.Request;
@@ -39,7 +40,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.InvoiceRegistration
         {
             var requestManipulators = new List<ICarrierRequestManipulator>
             {
-                new UpsInvoiceRegistrationAddressManipulator(account),
+                new UpsInvoiceRegistrationAddressManipulator(account, new NetworkUtility()),
                 new UpsInvoiceRegistrationInvoiceInfoManipulator(invoiceAuthorizationData),
                 new UpsInvoiceRegistrationNewProfileCredentialsManipulator(),
                 new UpsInvoiceRegistrationShipperInfoManipulator(account)

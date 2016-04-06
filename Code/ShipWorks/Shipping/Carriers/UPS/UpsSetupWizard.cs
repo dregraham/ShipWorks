@@ -491,7 +491,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             {
                 UpsClerk clerk = new UpsClerk(upsAccount);
 
-                UpsRegistrationStatus registrationStatus = clerk.RegisterAccount(upsAccount, upsInvoiceAuthorizationControl.InvoiceAuthorizationData);
+                UpsRegistrationStatus registrationStatus = clerk.RegisterAccount(upsAccount);
 
                 if (registrationStatus == UpsRegistrationStatus.Success)
                 {
