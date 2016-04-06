@@ -495,7 +495,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
                 if (registrationStatus == UpsRegistrationStatus.Success)
                 {
-                    Pages.Remove(wizardPageInvoiceAuthentication);
+                    e.NextPage = wizardPageRates;
                 }
             }
             catch (UpsWebServiceException ex)
