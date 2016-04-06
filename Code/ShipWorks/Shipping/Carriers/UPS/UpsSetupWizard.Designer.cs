@@ -94,9 +94,9 @@
             this.labelCreateAccountRegistrationFailed2 = new System.Windows.Forms.Label();
             this.labelCreateAccountRegistrationFailed3 = new System.Windows.Forms.Label();
             this.labelCreateAccountRegistrationFailed1 = new System.Windows.Forms.Label();
-            this.InvoiceAuthenticationPage = new ShipWorks.UI.Wizard.WizardPage();
-            this.upsInvoiceAuthorizationControl1 = new ShipWorks.Shipping.Carriers.UPS.UpsInvoiceAuthorizationControl();
+            this.wizardPageInvoiceAuthentication = new ShipWorks.UI.Wizard.WizardPage();
             this.labelNegotiated7 = new System.Windows.Forms.Label();
+            this.upsInvoiceAuthorizationControl1 = new ShipWorks.Shipping.Carriers.UPS.UpsInvoiceAuthorizationControl();
             this.mainPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             this.topPanel.SuspendLayout();
@@ -121,7 +121,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.helpPickupLocation)).BeginInit();
             this.wizardPageOpenAccountPickupLocation.SuspendLayout();
             this.wizardPageFinishCreateAccountRegistrationFailed.SuspendLayout();
-            this.InvoiceAuthenticationPage.SuspendLayout();
+            this.wizardPageInvoiceAuthentication.SuspendLayout();
             this.SuspendLayout();
             //
             // next
@@ -138,7 +138,7 @@
             //
             // mainPanel
             //
-            this.mainPanel.Controls.Add(this.wizardPageAccount);
+            this.mainPanel.Controls.Add(this.wizardPageInvoiceAuthentication);
             this.mainPanel.Size = new System.Drawing.Size(579, 474);
             //
             // etchBottom
@@ -847,25 +847,18 @@
             this.labelCreateAccountRegistrationFailed1.TabIndex = 3;
             this.labelCreateAccountRegistrationFailed1.Text = "You have successfully created a UPS account within ShipWorks!";
             //
-            // InvoiceAuthenticationPage
+            // wizardPageInvoiceAuthentication
             //
-            this.InvoiceAuthenticationPage.Controls.Add(this.labelNegotiated7);
-            this.InvoiceAuthenticationPage.Controls.Add(this.upsInvoiceAuthorizationControl1);
-            this.InvoiceAuthenticationPage.Description = "Account invoice authentication required";
-            this.InvoiceAuthenticationPage.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.InvoiceAuthenticationPage.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.InvoiceAuthenticationPage.Location = new System.Drawing.Point(0, 0);
-            this.InvoiceAuthenticationPage.Name = "InvoiceAuthenticationPage";
-            this.InvoiceAuthenticationPage.Size = new System.Drawing.Size(579, 474);
-            this.InvoiceAuthenticationPage.TabIndex = 0;
-            this.InvoiceAuthenticationPage.Title = "Account Registration";
-            //
-            // upsInvoiceAuthorizationControl1
-            //
-            this.upsInvoiceAuthorizationControl1.Location = new System.Drawing.Point(23, 39);
-            this.upsInvoiceAuthorizationControl1.Name = "upsInvoiceAuthorizationControl1";
-            this.upsInvoiceAuthorizationControl1.Size = new System.Drawing.Size(357, 135);
-            this.upsInvoiceAuthorizationControl1.TabIndex = 0;
+            this.wizardPageInvoiceAuthentication.Controls.Add(this.labelNegotiated7);
+            this.wizardPageInvoiceAuthentication.Controls.Add(this.upsInvoiceAuthorizationControl1);
+            this.wizardPageInvoiceAuthentication.Description = "Account invoice authentication required";
+            this.wizardPageInvoiceAuthentication.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.wizardPageInvoiceAuthentication.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.wizardPageInvoiceAuthentication.Location = new System.Drawing.Point(0, 0);
+            this.wizardPageInvoiceAuthentication.Name = "wizardPageInvoiceAuthentication";
+            this.wizardPageInvoiceAuthentication.Size = new System.Drawing.Size(579, 474);
+            this.wizardPageInvoiceAuthentication.TabIndex = 0;
+            this.wizardPageInvoiceAuthentication.Title = "Account Registration";
             //
             // labelNegotiated7
             //
@@ -876,6 +869,13 @@
             this.labelNegotiated7.TabIndex = 21;
             this.labelNegotiated7.Text = "You must validate your account by providing information from an invoice received " +
     "within the last 45 days.";
+            //
+            // upsInvoiceAuthorizationControl1
+            //
+            this.upsInvoiceAuthorizationControl1.Location = new System.Drawing.Point(23, 39);
+            this.upsInvoiceAuthorizationControl1.Name = "upsInvoiceAuthorizationControl1";
+            this.upsInvoiceAuthorizationControl1.Size = new System.Drawing.Size(357, 135);
+            this.upsInvoiceAuthorizationControl1.TabIndex = 0;
             //
             // UpsSetupWizard
             //
@@ -896,7 +896,7 @@
             this.wizardPageOpenAccountPickupSchedule,
             this.wizardPageOpenAccountPageBillingContactInfo,
             this.wizardPageOpenAccountPickupLocation,
-            this.InvoiceAuthenticationPage,
+            this.wizardPageInvoiceAuthentication,
             this.wizardPageRates,
             this.wizardPageOptionsOlt,
             this.wizardPageOptionsWorldShip,
@@ -946,7 +946,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.helpPickupLocation)).EndInit();
             this.wizardPageOpenAccountPickupLocation.ResumeLayout(false);
             this.wizardPageFinishCreateAccountRegistrationFailed.ResumeLayout(false);
-            this.InvoiceAuthenticationPage.ResumeLayout(false);
+            this.wizardPageInvoiceAuthentication.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -1018,7 +1018,7 @@
         private OpenAccount.UpsShipmentCharacteristicsControl shipmentCharacteristics;
         private System.Windows.Forms.Label labelSetupCompleteNotifyTime;
         private OpenAccount.UpsPharmaceuticalControl upsPharmaceuticalControl;
-        private UI.Wizard.WizardPage InvoiceAuthenticationPage;
+        private UI.Wizard.WizardPage wizardPageInvoiceAuthentication;
         private UpsInvoiceAuthorizationControl upsInvoiceAuthorizationControl1;
         private System.Windows.Forms.Label labelNegotiated7;
     }
