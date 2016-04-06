@@ -5,6 +5,8 @@ using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api;
 using ShipWorks.Shipping.Carriers.UPS.OpenAccount.Api;
 using ShipWorks.Shipping.Carriers.UPS.WebServices.OpenAccount;
+using ShipWorks.Shipping.Carriers.UPS.OnLineTools.WebServices.Registration;
+using System.Linq;
 
 namespace ShipWorks.Shipping.Carriers.UPS
 {
@@ -69,11 +71,10 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <exception cref="UpsException">A unique UserID could not be generated.  Please try again.</exception>
         public UpsRegistrationStatus RegisterAccount(UpsAccountEntity accountEntity, UpsOltInvoiceAuthorizationData invoiceAuthorizationData)
         {
-            bool isAccountCreated = false;
             UpsWebServiceException lastUniqueException = null;
 
             // Three attempts are made to create the account in case there are user ID collisions
-            for (int i = 0; i < 3 && !isAccountCreated; i++)
+            for (int i = 0; i < 3; i++)
             {
                 try
                 {
@@ -82,7 +83,15 @@ namespace ShipWorks.Shipping.Carriers.UPS
                     ICarrierResponse response = registrationRequest.Submit();
                     response.Process();
 
-                    isAccountCreated = true;
+                    RegisterResponse nativeResponse = response.NativeResponse as RegisterResponse;
+
+                    if (nativeResponse != null && nativeResponse.ShipperAccountStatus.Any(s => s.Code == "045"))
+                    {
+                        // The shipper code is 045 which means that we did not send
+                        // invoice info but the account requires invoice info
+                        return UpsRegistrationStatus.InvoiceAuthenticationRequired;
+                    }
+
                     return UpsRegistrationStatus.Success;
                 }
                 catch (UpsWebServiceException upsEx)
@@ -93,11 +102,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
                         // be used if the account was not created after three attempts
                         lastUniqueException = upsEx;
                     }
-                    else if (upsEx.Code == "0495")
-                    {
-                        // Ups requires invoice information
-                        return UpsRegistrationStatus.InvoiceAuthenticationRequired;
-                    }
                     else
                     {
                         // An exception occurred not related to the uniqueness of the User ID
@@ -106,12 +110,9 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 }
             }
 
-            if (!isAccountCreated)
-            {
-                throw new UpsException("A unique User ID could not be generated.  Please try again.", lastUniqueException);
-            }
-
-            return UpsRegistrationStatus.Failed;
+            // We should never get this far unless for some reason the three attempts from above
+            // failed each time with error code "9570100"
+            throw new UpsException("A unique User ID could not be generated.  Please try again.", lastUniqueException);
         }
     }
 }
