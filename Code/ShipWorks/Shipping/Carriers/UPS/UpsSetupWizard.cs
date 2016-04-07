@@ -859,11 +859,11 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <exception cref="System.NotImplementedException"></exception>
         private void CreateAccount()
         {
-            UpsOpenAccountResponseDTO upsOpenAccountResponse = OpenUpsAccount(new UpsClerk(upsAccount));
-
             try
             {
-                RegisterNewAccount(upsOpenAccountResponse.AccountNumber);
+                RegisterNewAccount();
+                UpsOpenAccountResponseDTO upsOpenAccountResponse = OpenUpsAccount(new UpsClerk(upsAccount));
+
                 notifyTime = upsOpenAccountResponse.NotifyTime;
             }
             catch (UpsException ex)
@@ -875,9 +875,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <summary>
         /// Registers the account.
         /// </summary>
-        private void RegisterNewAccount(string newAccountNumber)
+        private void RegisterNewAccount()
         {
-            upsAccount.AccountNumber = newAccountNumber;
             try
             {
                 UpsClerk upsClerk = new UpsClerk(upsAccount);
@@ -933,7 +932,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
             try
             {
                 OpenAccountResponse response = clerk.OpenAccount(openAccountRequest);
-
 
                 upsOpenAccountResponse = new UpsOpenAccountResponseDTO(response.ShipperNumber, response.NotifyTime);
 
