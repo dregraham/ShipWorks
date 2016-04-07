@@ -556,7 +556,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         {
             if (ShippingSettings.Fetch().UpsAccessKey != null)
             {
-                return false;
+                return true;
             }
 
             // Create the client for connecting to the UPS server
