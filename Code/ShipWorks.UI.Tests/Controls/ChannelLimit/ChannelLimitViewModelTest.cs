@@ -169,43 +169,43 @@ namespace ShipWorks.UI.Tests.Controls.ChannelLimit
             }
         }
 
-        [Fact]
-        public void DeleteChannel_DeletesChannel_WhenConfirmDeleteTrue()
-        {
-            using (var mock = AutoMock.GetLoose())
-            {
-                // Setup
-                StoreEntity store = new StoreEntity { TypeCode = (int) StoreTypeCode.Amazon };
+        //[Fact]
+        //public void DeleteChannel_DeletesChannel_WhenConfirmDeleteTrue()
+        //{
+        //    using (var mock = AutoMock.GetLoose())
+        //    {
+        //        // Setup
+        //        StoreEntity store = new StoreEntity { TypeCode = (int) StoreTypeCode.Amazon };
 
-                IEnumerable<StoreEntity> stores = new List<StoreEntity> { store };
+        //        IEnumerable<StoreEntity> stores = new List<StoreEntity> { store };
 
-                Mock<IStoreManager> storeManager = mock.Mock<IStoreManager>();
-                storeManager.Setup(s => s.GetAllStores())
-                    .Returns(stores);
+        //        Mock<IStoreManager> storeManager = mock.Mock<IStoreManager>();
+        //        storeManager.Setup(s => s.GetAllStores())
+        //            .Returns(stores);
 
-                Mock<IDialog> confirmDelete = mock.Mock<IDialog>();
-                confirmDelete.Setup(d => d.DialogResult)
-                    .Returns(true);
+        //        Mock<IDialog> confirmDelete = mock.Mock<IDialog>();
+        //        confirmDelete.Setup(d => d.DialogResult)
+        //            .Returns(true);
 
-                Mock<IChannelConfirmDeleteFactory> confirmDeleteFactgory = mock.Mock<IChannelConfirmDeleteFactory>();
-                confirmDeleteFactgory.Setup(c => c.GetConfirmDeleteDlg(It.IsAny<StoreTypeCode>(), It.IsAny<IWin32Window>()))
-                    .Returns(confirmDelete.Object);
+        //        Mock<IChannelConfirmDeleteFactory> confirmDeleteFactgory = mock.Mock<IChannelConfirmDeleteFactory>();
+        //        confirmDeleteFactgory.Setup(c => c.GetConfirmDeleteDlg(It.IsAny<StoreTypeCode>(), It.IsAny<IWin32Window>()))
+        //            .Returns(confirmDelete.Object);
 
-                Mock<ICustomerLicense> license = mock.Mock<ICustomerLicense>();
-                var behavior = MockChannelLimitBehavior(mock);
+        //        Mock<ICustomerLicense> license = mock.Mock<ICustomerLicense>();
+        //        var behavior = MockChannelLimitBehavior(mock);
 
-                // Test
-                var testObject = mock.Create<ChannelLimitViewModel>();
-                testObject.Load(license.Object, behavior.Object);
-                testObject.SelectedStoreType = StoreTypeCode.Ebay;
+        //        // Test
+        //        var testObject = mock.Create<ChannelLimitViewModel>();
+        //        testObject.Load(license.Object, behavior.Object);
+        //        testObject.SelectedStoreType = StoreTypeCode.Ebay;
 
-                ICommand deleteCommand = testObject.DeleteStoreClickCommand;
-                deleteCommand.Execute(null);
+        //        ICommand deleteCommand = testObject.DeleteStoreClickCommand;
+        //        deleteCommand.Execute(null);
 
-                // Verify
-                license.Verify(l => l.DeleteChannel(StoreTypeCode.Ebay, It.IsAny<ISecurityContext>()), Times.Once);
-            }
-        }
+        //        // Verify
+        //        license.Verify(l => l.DeleteChannel(StoreTypeCode.Ebay, It.IsAny<ISecurityContext>()), Times.Once);
+        //    }
+        //}
 
         [Fact]
         public void DeleteChannel_ChannelNotDeleted_WhenConfirmDeleteDeclined()
