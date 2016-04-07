@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
@@ -12,7 +13,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <summary>
         /// Returns a list of USPS accounts.
         /// </summary>
-        public override IEnumerable<UspsAccountEntity> Accounts => UspsAccountManager.UspsAccounts.ToList();
+        public override IEnumerable<UspsAccountEntity> Accounts => UspsAccountManager.UspsAccounts.Where(a => a.PendingInitialAccount != (int) UspsPendingAccountType.Create).ToList();
+
 
         /// <summary>
         /// Force a check for changes
