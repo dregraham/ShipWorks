@@ -15,7 +15,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         public override IEnumerable<UspsAccountEntity> Accounts => UspsAccountManager.UspsAccounts.Where(a => a.PendingInitialAccount != (int) UspsPendingAccountType.Create).ToList();
 
-
         /// <summary>
         /// Force a check for changes
         /// </summary>
