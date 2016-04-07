@@ -9,7 +9,7 @@ namespace ShipWorks.Shipping.Services
     /// <summary>
     /// State used when processing shipments
     /// </summary>
-    internal struct ShipmentProcessorExecutionState
+    internal class ShipmentProcessorExecutionState
     {
         /// <summary>
         /// Constructor
