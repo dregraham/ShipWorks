@@ -3,6 +3,8 @@ using System.Windows.Forms;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using Interapptive.Shared.Utility;
+using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api;
+using Interapptive.Shared.UI;
 
 namespace ShipWorks.Shipping.Carriers.UPS
 {
@@ -11,7 +13,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
     /// </summary>
     public partial class UpsAccountRateTypeControl : UserControl
     {
-        private bool isInitialized = false;
+        private UpsAccountEntity account;
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -20,37 +23,27 @@ namespace ShipWorks.Shipping.Carriers.UPS
             InitializeComponent();
         }
 
-        public UpsRateType SelectedRateType => (UpsRateType) rateType.SelectedValue;
-
         /// <summary>
         /// Initialize the control with the settings from the given account
         /// </summary>
         public void Initialize(UpsAccountEntity account, bool isCreatingNewUpsAccount)
         {
-            if (!isInitialized)
+            this.account = account;
+
+            if (isCreatingNewUpsAccount)
             {
-                isInitialized = true;
-                authorizationControl.Visible = false;
-
-                if (isCreatingNewUpsAccount)
-                {
-                    panelNewAccount.Visible = true;
-                }
-                else
-                {
-                    panelAuthorizationInstructions.Visible = true;
-                    if (account.InvoiceAuth)
-                    {
-                        panelAlreadyRegisterred.Visible = true;
-                    }
-                }
-
-                EnumHelper.BindComboBox<UpsRateType>(rateType);
-
-                rateType.SelectedValue = (UpsRateType) account.RateType;
-
-                HideOrShowNegotiatedRates();
+                panelNewAccount.Visible = true;
             }
+            else
+            {
+                panelAuthorizationInstructions.Visible = true;
+            }
+
+            EnumHelper.BindComboBox<UpsRateType>(rateType);
+
+            rateType.SelectedValue = (UpsRateType) account.RateType;
+
+            HideOrShowNegotiatedRates();
         }
 
         /// <summary>
@@ -68,7 +61,36 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// </summary>
         private void HideOrShowNegotiatedRates()
         {
-            panelInvoiceAuthorizationHolder.Visible = ((UpsRateType) rateType.SelectedValue == UpsRateType.Negotiated);
+            bool showNegotiatedRatesDependentControls = (!account.InvoiceAuth && (UpsRateType)rateType.SelectedValue == UpsRateType.Negotiated);
+
+            panelInvoiceAuthorizationHolder.Visible = showNegotiatedRatesDependentControls;
+            authorizationControl.Visible = showNegotiatedRatesDependentControls;
+        }
+
+        /// <summary>
+        /// Register the account and save
+        /// </summary>
+        public bool RegisterAndSaveToEntity()
+        {
+            // If the account has not done invoice auth and they have selected negotiated rates
+            if (!account.InvoiceAuth && (UpsRateType)rateType.SelectedValue == UpsRateType.Negotiated)
+            {
+                try
+                {
+                    // Register the account using invoice auth
+                    UpsClerk clerk = new UpsClerk(account);
+                    clerk.RegisterAccount(account, authorizationControl.InvoiceAuthorizationData);
+                }
+                catch (UpsWebServiceException ex)
+                {
+                    string errorMessage = ex.Message + Environment.NewLine + Environment.NewLine +
+                        "Note: UPS will lock out accounts for a 24 hour period if your invoice information cannot be authenticated after two attempts.";
+                    MessageHelper.ShowError(this, errorMessage);
+                    return false;
+                }
+            }
+            account.RateType = (int)rateType.SelectedValue;
+            return true;
         }
     }
 }

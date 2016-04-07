@@ -42,8 +42,6 @@
             this.labelNegotiated5 = new System.Windows.Forms.Label();
             this.labelNegotiated4 = new System.Windows.Forms.Label();
             this.labelNegotiated2 = new System.Windows.Forms.Label();
-            this.panelAlreadyRegisterred = new System.Windows.Forms.Panel();
-            this.labelAlreadyRegistered = new System.Windows.Forms.Label();
             this.panelNewAccount = new System.Windows.Forms.Panel();
             this.labelNewAccount = new System.Windows.Forms.Label();
             this.invoiceAuthNeededPanel = new System.Windows.Forms.Panel();
@@ -52,7 +50,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxRateWarning)).BeginInit();
             this.panelInvoiceAuthorizationHolder.SuspendLayout();
             this.panelAuthorizationInstructions.SuspendLayout();
-            this.panelAlreadyRegisterred.SuspendLayout();
             this.panelNewAccount.SuspendLayout();
             this.invoiceAuthNeededPanel.SuspendLayout();
             this.SuspendLayout();
@@ -98,7 +95,6 @@
             // panelInvoiceAuthorizationHolder
             // 
             this.panelInvoiceAuthorizationHolder.Controls.Add(this.panelAuthorizationInstructions);
-            this.panelInvoiceAuthorizationHolder.Controls.Add(this.panelAlreadyRegisterred);
             this.panelInvoiceAuthorizationHolder.Controls.Add(this.panelNewAccount);
             this.panelInvoiceAuthorizationHolder.Controls.Add(this.invoiceAuthNeededPanel);
             this.panelInvoiceAuthorizationHolder.Controls.Add(this.authorizationControl);
@@ -192,27 +188,10 @@
             this.labelNegotiated2.TabIndex = 15;
             this.labelNegotiated2.Text = "1.";
             // 
-            // panelAlreadyRegisterred
-            // 
-            this.panelAlreadyRegisterred.Controls.Add(this.labelAlreadyRegistered);
-            this.panelAlreadyRegisterred.Location = new System.Drawing.Point(3, 149);
-            this.panelAlreadyRegisterred.Name = "panelAlreadyRegisterred";
-            this.panelAlreadyRegisterred.Size = new System.Drawing.Size(373, 43);
-            this.panelAlreadyRegisterred.TabIndex = 21;
-            this.panelAlreadyRegisterred.Visible = false;
-            // 
-            // labelAlreadyRegistered
-            // 
-            this.labelAlreadyRegistered.Location = new System.Drawing.Point(2, 0);
-            this.labelAlreadyRegistered.Name = "labelAlreadyRegistered";
-            this.labelAlreadyRegistered.Size = new System.Drawing.Size(334, 28);
-            this.labelAlreadyRegistered.TabIndex = 0;
-            this.labelAlreadyRegistered.Text = "Step 3 complete.";
-            // 
             // panelNewAccount
             // 
             this.panelNewAccount.Controls.Add(this.labelNewAccount);
-            this.panelNewAccount.Location = new System.Drawing.Point(3, 198);
+            this.panelNewAccount.Location = new System.Drawing.Point(3, 149);
             this.panelNewAccount.Name = "panelNewAccount";
             this.panelNewAccount.Size = new System.Drawing.Size(373, 79);
             this.panelNewAccount.TabIndex = 22;
@@ -231,7 +210,7 @@
             // invoiceAuthNeededPanel
             // 
             this.invoiceAuthNeededPanel.Controls.Add(this.invoiceAuthNeededLabel);
-            this.invoiceAuthNeededPanel.Location = new System.Drawing.Point(3, 283);
+            this.invoiceAuthNeededPanel.Location = new System.Drawing.Point(3, 234);
             this.invoiceAuthNeededPanel.Name = "invoiceAuthNeededPanel";
             this.invoiceAuthNeededPanel.Size = new System.Drawing.Size(374, 70);
             this.invoiceAuthNeededPanel.TabIndex = 23;
@@ -246,7 +225,7 @@
             // 
             // authorizationControl
             // 
-            this.authorizationControl.Location = new System.Drawing.Point(3, 359);
+            this.authorizationControl.Location = new System.Drawing.Point(3, 310);
             this.authorizationControl.Name = "authorizationControl";
             this.authorizationControl.Size = new System.Drawing.Size(372, 128);
             this.authorizationControl.TabIndex = 10;
@@ -268,7 +247,6 @@
             this.panelInvoiceAuthorizationHolder.ResumeLayout(false);
             this.panelAuthorizationInstructions.ResumeLayout(false);
             this.panelAuthorizationInstructions.PerformLayout();
-            this.panelAlreadyRegisterred.ResumeLayout(false);
             this.panelNewAccount.ResumeLayout(false);
             this.invoiceAuthNeededPanel.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -292,8 +270,6 @@
         private System.Windows.Forms.Label labelNegotiated5;
         private System.Windows.Forms.Label labelNegotiated4;
         private System.Windows.Forms.Label labelNegotiated2;
-        private System.Windows.Forms.Panel panelAlreadyRegisterred;
-        private System.Windows.Forms.Label labelAlreadyRegistered;
         private System.Windows.Forms.Panel panelNewAccount;
         private System.Windows.Forms.Label labelNewAccount;
         private System.Windows.Forms.Panel invoiceAuthNeededPanel;

@@ -511,7 +511,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 e.NextPage = CurrentPage;
                 return;
             }
-			
+
             if (!GetUpsAccessKey())
             {
                 e.NextPage = CurrentPage;
@@ -547,7 +547,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 return;
             }
         }
-		
+
         /// <summary>
         /// Get the global instanced UPS access key
         /// </summary>
@@ -626,23 +626,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 return false;
             }
         }
-
-        /// <summary>
-        /// Stepping next from the rates page
-        /// </summary>
-        private void OnStepNextRates(object sender, WizardStepEventArgs e)
-        {
-            try
-            {
-                upsAccount.RateType = (int) upsRateTypeControl.SelectedRateType;
-            }
-            catch (CarrierException ex)
-            {
-                MessageHelper.ShowMessage(this, ex.Message);
-                e.NextPage = CurrentPage;
-            }
-        }
-
 
         /// <summary>
         /// Stepping next from the options page

@@ -92,7 +92,10 @@ namespace ShipWorks.Shipping.Carriers.UPS
             }
             try
             {
-                //upsRateTypeControl.RegisterAndSaveToEntity();
+                if (!upsRateTypeControl.RegisterAndSaveToEntity())
+                {
+                    return;
+                }
 
                 UpsAccountManager.SaveAccount(account);
 
