@@ -13,7 +13,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterAssemblyTypes(ThisAssembly)
-                .Where(x => x.IsAssignableTo<IShippingPanelObservableRegistration>())
+                .Where(x => x.IsAssignableTo<IShippingPanelGlobalPipeline>() ||
+                    x.IsAssignableTo<IShippingPanelTransientPipeline>())
                 .AsImplementedInterfaces();
         }
     }

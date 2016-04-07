@@ -16,7 +16,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
     /// <summary>
     /// Handle when a label should be voided
     /// </summary>
-    public class VoidLabelPipeline : IShippingPanelObservableRegistration
+    public class VoidLabelPipeline : IShippingPanelTransientPipeline
     {
         private readonly IMessenger messenger;
         private readonly ISchedulerProvider schedulerProvider;
@@ -24,6 +24,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
         private readonly IShippingManager shippingManager;
         private readonly IShippingErrorManager errorManager;
         private readonly ILog log;
+        private IDisposable subscription;
 
         /// <summary>
         /// Constructor
@@ -43,9 +44,9 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
         /// <summary>
         /// Register the pipeline on the view model
         /// </summary>
-        public IDisposable Register(ShippingPanelViewModel viewModel)
+        public void Register(ShippingPanelViewModel viewModel)
         {
-            return messenger.OfType<VoidLabelMessage>()
+            subscription = messenger.OfType<VoidLabelMessage>()
                 .ObserveOn(schedulerProvider.WindowsFormsEventLoop)
                 .Where(x => x.ShipmentID == viewModel.Shipment?.ShipmentID)
                 .Where(x => messageHelper.ShowDialog(() => new ShipmentVoidConfirmDlg()) == DialogResult.OK)
@@ -84,6 +85,14 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
         private IDisposable CreateProgressDialog()
         {
             return messageHelper.ShowProgressDialog("Voiding Shipments", "ShipWorks is voiding the shipments.");
+        }
+
+        /// <summary>
+        /// Dispose the subscription
+        /// </summary>
+        public void Dispose()
+        {
+            subscription?.Dispose();
         }
     }
 }

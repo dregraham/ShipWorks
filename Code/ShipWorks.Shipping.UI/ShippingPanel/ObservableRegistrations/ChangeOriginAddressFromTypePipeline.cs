@@ -7,14 +7,16 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
     /// <summary>
     /// Pipeline for changing Origin details
     /// </summary>
-    public class ChangeOriginAddressFromTypePipeline : IShippingPanelObservableRegistration
+    public class ChangeOriginAddressFromTypePipeline : IShippingPanelTransientPipeline
     {
+        IDisposable subscription;
+
         /// <summary>
         /// Register the pipeline on the view model
         /// </summary>
-        public IDisposable Register(ShippingPanelViewModel viewModel)
+        public void Register(ShippingPanelViewModel viewModel)
         {
-            return viewModel.PropertyChangeStream
+            subscription = viewModel.PropertyChangeStream
                 .Where(x => x == nameof(viewModel.OriginAddressType))
                 .Subscribe(_ => UpdateOriginAddress(viewModel));
         }
@@ -28,6 +30,14 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
                 viewModel.OrderID ?? 0,
                 viewModel.AccountId,
                 viewModel.ShipmentType);
+        }
+
+        /// <summary>
+        /// Dispose the subscription
+        /// </summary>
+        public void Dispose()
+        {
+            subscription?.Dispose();
         }
     }
 }

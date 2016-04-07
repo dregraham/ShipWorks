@@ -127,7 +127,6 @@ namespace ShipWorks.Shipping.UI.RatingPanel
                     Footnotes = Enumerable.Empty<object>();
                     Rates = Enumerable.Empty<RateResult>();
                     EmptyMessage = "Unable to get rates for orders with multiple shipments.";
-                    ShowEmptyMessage = true;
                 }
                 else if (message?.ShipmentAdapter?.ShipmentTypeCode == ShipmentTypeCode.Amazon ||
                          message?.ShipmentAdapter?.ShipmentTypeCode == ShipmentTypeCode.BestRate)
@@ -135,26 +134,29 @@ namespace ShipWorks.Shipping.UI.RatingPanel
                     Footnotes = Enumerable.Empty<object>();
                     Rates = Enumerable.Empty<RateResult>();
                     EmptyMessage = "Please use Ship Orders to get rates for this carrier.";
-                    ShowEmptyMessage = true;
                 }
                 else
                 {
                     Rates = message.RateGroup.Rates.ToArray();
-                    ShowEmptyMessage = false;
                     EmptyMessage = string.Empty;
 
                     Footnotes = message.RateGroup.FootnoteFactories
                         .Select(x => x.CreateViewModel(message.ShipmentAdapter))
                         .ToList() ?? Enumerable.Empty<object>();
-                    ShowFootnotes = Footnotes.Any();
                 }
             }
             else
             {
                 Rates = Enumerable.Empty<RateResult>();
                 EmptyMessage = message.ErrorMessage;
-                ShowEmptyMessage = true;
+
+                Footnotes = message.RateGroup.FootnoteFactories
+                        .Select(x => x.CreateViewModel(message.ShipmentAdapter))
+                        .ToList() ?? Enumerable.Empty<object>();
             }
+
+            ShowFootnotes = Footnotes.Any();
+            ShowEmptyMessage = !string.IsNullOrEmpty(EmptyMessage);
 
             // If we didn't get any footnotes, and no error message, and not rates,
             // show the no rates message.

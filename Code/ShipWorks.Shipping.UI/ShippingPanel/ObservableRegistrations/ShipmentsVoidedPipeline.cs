@@ -13,12 +13,13 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
     /// <summary>
     /// Handle when shipments have been voided
     /// </summary>
-    public class ShipmentsVoidedPipeline : IShippingPanelObservableRegistration
+    public class ShipmentsVoidedPipeline : IShippingPanelTransientPipeline
     {
         private readonly IObservable<IShipWorksMessage> messageStream;
         private readonly ICarrierShipmentAdapterFactory shipmentAdapterFactory;
         private readonly ISchedulerProvider schedulerProvider;
         private readonly ILog log;
+        private IDisposable subscription;
 
         /// <summary>
         /// Constructor
@@ -37,14 +38,14 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
         /// <summary>
         /// Register the pipeline on the view model
         /// </summary>
-        public IDisposable Register(ShippingPanelViewModel viewModel)
+        public void Register(ShippingPanelViewModel viewModel)
         {
-            return messageStream.OfType<ShipmentsVoidedMessage>()
-                    .Select(x => x.VoidShipmentResults.FirstOrDefault(r => r.Shipment.ShipmentID == viewModel.Shipment.ShipmentID))
-                    .Where(x => x.Shipment != null)
-                    .ObserveOn(schedulerProvider.Dispatcher)
-                    .CatchAndContinue((Exception ex) => log.Error("An error occurred while handling voiding shipment.", ex))
-                    .Subscribe(x => HandleShipmentsVoided(viewModel, x));
+            subscription = messageStream.OfType<ShipmentsVoidedMessage>()
+                .Select(x => x.VoidShipmentResults.FirstOrDefault(r => r.Shipment.ShipmentID == viewModel.Shipment.ShipmentID))
+                .Where(x => x.Shipment != null)
+                .ObserveOn(schedulerProvider.Dispatcher)
+                .CatchAndContinue((Exception ex) => log.Error("An error occurred while handling voiding shipment.", ex))
+                .Subscribe(x => HandleShipmentsVoided(viewModel, x));
         }
 
         /// <summary>
@@ -57,6 +58,14 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
             viewModel.LoadShipment(voidedShipmentAdapter);
 
             viewModel.AllowEditing = !voidedShipmentAdapter.Shipment?.Processed ?? true;
+        }
+
+        /// <summary>
+        /// Dispose the subscription
+        /// </summary>
+        public void Dispose()
+        {
+            subscription?.Dispose();
         }
     }
 }

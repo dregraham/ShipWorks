@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Autofac.Features.Indexed;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -11,6 +12,7 @@ namespace ShipWorks.Shipping.Services
 {
     public class RatesRetriever : IRatesRetriever
     {
+        private const string errorMessage = "ShipWorks could not get rates for this shipment";
         private readonly ICachedRatesService cachedRateService;
         private readonly IIndex<ShipmentTypeCode, IRatingService> ratingServiceLookup;
         private readonly IIndex<ShipmentTypeCode, ShipmentType> shipmentTypeLookup;
@@ -88,22 +90,29 @@ namespace ShipWorks.Shipping.Services
                 // Copy back any best rate events that were set on the clone
                 shipment.BestRateEvents |= clonedShipment.BestRateEvents;
 
-                return GenericResult.FromSuccess(rateResults);
+                return rateResults is InvalidRateGroup ?
+                    GenericResult.FromError(errorMessage, rateResults) :
+                    GenericResult.FromSuccess(rateResults);
             }
             catch (ORMEntityOutOfSyncException ex)
             {
-                RateGroup rateGroup = new RateGroup(Enumerable.Empty<RateResult>());
-                rateGroup.AddFootnoteFactory(new ExceptionsRateFootnoteFactory(shipment.ShipmentTypeCode, ex));
-
-                return GenericResult.FromError("ShipWorks could not get rates for this shipment", rateGroup);
+                return BuildResultsFromException(shipment, ex);
             }
             catch (ShippingException ex)
             {
-                RateGroup rateGroup = new RateGroup(Enumerable.Empty<RateResult>());
-                rateGroup.AddFootnoteFactory(new ExceptionsRateFootnoteFactory(shipment.ShipmentTypeCode, ex));
-
-                return GenericResult.FromError("ShipWorks could not get rates for this shipment", rateGroup);
+                return BuildResultsFromException(shipment, ex);
             }
+        }
+
+        /// <summary>
+        /// Build a rate result from the given shipment and exception
+        /// </summary>
+        private static GenericResult<RateGroup> BuildResultsFromException(ShipmentEntity shipment, Exception ex)
+        {
+            RateGroup rateGroup = new RateGroup(Enumerable.Empty<RateResult>());
+            rateGroup.AddFootnoteFactory(new ExceptionsRateFootnoteFactory(shipment.ShipmentTypeCode, ex));
+
+            return GenericResult.FromError(errorMessage, rateGroup);
         }
     }
 }

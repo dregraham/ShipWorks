@@ -11,9 +11,10 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
     /// <summary>
     /// Handle the store changing
     /// </summary>
-    public class RateSelectedPipeline : IShippingPanelObservableRegistration
+    public class RateSelectedPipeline : IShippingPanelTransientPipeline
     {
         readonly IObservable<IShipWorksMessage> messages;
+        private IDisposable subscription;
 
         /// <summary>
         /// Constructor
@@ -27,9 +28,9 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
         /// <summary>
         /// Register the pipeline on the view model
         /// </summary>
-        public IDisposable Register(ShippingPanelViewModel viewModel)
+        public void Register(ShippingPanelViewModel viewModel)
         {
-            return messages.OfType<SelectedRateChangedMessage>()
+            subscription = messages.OfType<SelectedRateChangedMessage>()
                 .Where(x => IsSenderOutsideShippingPanel(x.Sender, viewModel) &&
                        viewModel.LoadedShipmentResult == ShippingPanelLoadedShipmentResult.Success &&
                        IsValidShipmentType(x.RateResult.ShipmentType))
@@ -51,13 +52,21 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
         {
             return shipmentTypeCode != ShipmentTypeCode.Amazon && shipmentTypeCode != ShipmentTypeCode.BestRate;
         }
-
+		
         /// <summary>
         /// Select the specified rate
         /// </summary>
         private void SelectRate(ShippingPanelViewModel viewModel, RateResult selectedRate)
         {
             viewModel.ShipmentViewModel.SelectRate(selectedRate);
+        }
+
+        /// <summary>
+        /// Dispose the subscription
+        /// </summary>
+        public void Dispose()
+        {
+            subscription?.Dispose();
         }
     }
 }

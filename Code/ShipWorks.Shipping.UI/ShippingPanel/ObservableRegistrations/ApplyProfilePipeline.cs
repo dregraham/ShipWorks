@@ -11,11 +11,12 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
     /// <summary>
     /// Handle when a label should be created
     /// </summary>
-    public class ApplyProfilePipeline : IShippingPanelObservableRegistration
+    public class ApplyProfilePipeline : IShippingPanelTransientPipeline
     {
         private readonly IObservable<IShipWorksMessage> messageStream;
         private readonly IShipmentTypeManager shipmentTypeManager;
         private readonly ILog log;
+        private IDisposable subscription;
 
         /// <summary>
         /// Constructor
@@ -32,9 +33,9 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
         /// <summary>
         /// Register the pipeline on the view model
         /// </summary>
-        public IDisposable Register(ShippingPanelViewModel viewModel)
+        public void Register(ShippingPanelViewModel viewModel)
         {
-            return messageStream.OfType<ApplyProfileMessage>()
+            subscription = messageStream.OfType<ApplyProfileMessage>()
                 .Where(x => x.ShipmentID == viewModel.Shipment?.ShipmentID)
                 .Select(x =>
                 {
@@ -44,6 +45,14 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
                 })
                 .CatchAndContinue((Exception ex) => log.Error("An error occurred while applying profile to shipment", ex))
                 .Subscribe(x => viewModel.LoadShipment(x));
+        }
+
+        /// <summary>
+        /// Dispose the subscription
+        /// </summary>
+        public void Dispose()
+        {
+            subscription?.Dispose();
         }
     }
 }

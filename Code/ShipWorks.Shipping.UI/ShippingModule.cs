@@ -80,14 +80,14 @@ namespace ShipWorks.Shipping.UI
 
             builder.RegisterType<OtherShipmentViewModel>();
 
+            builder.RegisterType<PipelineRegistrationContainer>()
+                .As<IPipelineRegistrationContainer>();
+
             builder.RegisterType<RateSelectionFactory>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
 
             builder.RegisterType<RatesRetriever>()
-                .AsImplementedInterfaces();
-
-            builder.RegisterType<RatesRetrieverService>()
                 .AsImplementedInterfaces();
 
             builder.RegisterType<RatingPanel.RatingPanel>();

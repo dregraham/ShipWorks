@@ -1,10 +1,10 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using Interapptive.Shared.Utility;
-using System.Collections.ObjectModel;
-using System.Collections;
 
 namespace Interapptive.Shared.Collections
 {
@@ -228,30 +228,30 @@ namespace Interapptive.Shared.Collections
         /// <summary>
         /// Returns whether the collection has more, less, or equal to the specified count
         /// </summary>
-        public static int HasMoreOrLessThanCount<T>(this IEnumerable<T> source, int count)
+        public static ComparisonResult CompareCountTo<T>(this IEnumerable<T> source, int count)
         {
             MethodConditions.EnsureArgumentIsNotNull(source, nameof(source));
 
             ICollection<T> collection = source as ICollection<T>;
             if (collection != null)
             {
-                return collection.Count.CompareTo(count);
+                return ConvertIntToComparisonResult(collection.Count.CompareTo(count));
             }
 
-            return HasMoreOrLessThanCount(source as IEnumerable, count);
+            return CompareCountTo(source as IEnumerable, count);
         }
 
         /// <summary>
         /// Returns whether the collection has more, less, or equal to the specified count
         /// </summary>
-        public static int HasMoreOrLessThanCount(this IEnumerable source, int count)
+        public static ComparisonResult CompareCountTo(this IEnumerable source, int count)
         {
             MethodConditions.EnsureArgumentIsNotNull(source, nameof(source));
 
             ICollection collection = source as ICollection;
             if (collection != null)
             {
-                return collection.Count.CompareTo(count);
+                return ConvertIntToComparisonResult(collection.Count.CompareTo(count));
             }
 
             // It's not a collection, so enumerate only as long as necessary
@@ -269,7 +269,7 @@ namespace Interapptive.Shared.Collections
                         num++;
                         if (num > count)
                         {
-                            return 1;
+                            return ComparisonResult.More;
                         }
                     }
                 }
@@ -279,7 +279,17 @@ namespace Interapptive.Shared.Collections
                 }
             }
 
-            return num == count ? 0 : -1;
+            return num == count ? ComparisonResult.Equal : ComparisonResult.Less;
+        }
+
+        /// <summary>
+        /// Convert an int to a comparison result
+        /// </summary>
+        private static ComparisonResult ConvertIntToComparisonResult(int result)
+        {
+            return result < 0 ? ComparisonResult.Less :
+                result > 0 ? ComparisonResult.More :
+                ComparisonResult.Equal;
         }
     }
 }

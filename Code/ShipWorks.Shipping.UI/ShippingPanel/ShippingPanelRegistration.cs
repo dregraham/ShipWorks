@@ -1,5 +1,4 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Windows.Forms;
 using Divelements.SandRibbon;
@@ -36,7 +35,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             new DockableWindow(dockManager, panelShipment, "Quick Ship")
             {
                 BorderStyle = TD.SandDock.Rendering.BorderStyle.Flat,
-                Guid = new Guid("574C96CC-5D02-4689-9463-4FB4DBCE22AD"),
+                Guid = DockPanelIdentifiers.ShippingPanelGuid,
                 Location = new Point(0, 25),
                 Name = "dockableWindowShipment",
                 ShowOptions = false,

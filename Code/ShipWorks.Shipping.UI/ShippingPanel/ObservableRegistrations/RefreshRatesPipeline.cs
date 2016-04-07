@@ -12,13 +12,14 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
     /// <summary>
     /// Handle rate refresh requests
     /// </summary>
-    public class RefreshRatesPipeline : IShippingPanelObservableRegistration
+    public class RefreshRatesPipeline : IShippingPanelTransientPipeline
     {
         private readonly IObservable<IShipWorksMessage> messages;
         private readonly ILog log;
         private readonly IShippingManager shippingManager;
         private readonly ISchedulerProvider schedulerProvider;
         private readonly IMessenger messenger;
+        private IDisposable subscription;
 
         /// <summary>
         /// Constructor
@@ -37,9 +38,9 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
         /// <summary>
         /// Register the pipeline on the view model
         /// </summary>
-        public IDisposable Register(ShippingPanelViewModel viewModel)
+        public void Register(ShippingPanelViewModel viewModel)
         {
-            return messages.OfType<ShippingSettingsChangedMessage>()
+            subscription = messages.OfType<ShippingSettingsChangedMessage>()
                 .Where(_ => viewModel.AllowEditing)
                 .ObserveOn(schedulerProvider.TaskPool)
                 .Select(_ => shippingManager.GetShipment(viewModel.Shipment.ShipmentID))
@@ -47,6 +48,14 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
                 .Where(x => viewModel.Shipment.ShipmentID == x.Shipment.ShipmentID)
                 .CatchAndContinue((Exception ex) => log.Error("An error occurred while refreshing rates.", ex))
                 .Subscribe(x => messenger.Send(new ShipmentChangedMessage(this, x)));
+        }
+
+        /// <summary>
+        /// Dispose the subscription
+        /// </summary>
+        public void Dispose()
+        {
+            subscription?.Dispose();
         }
     }
 }

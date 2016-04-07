@@ -9,9 +9,10 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
     /// <summary>
     /// Handle the window unloading message
     /// </summary>
-    public class WindowUnloadingPipeline : IShippingPanelObservableRegistration
+    public class WindowUnloadingPipeline : IShippingPanelTransientPipeline
     {
         private readonly IObservable<IShipWorksMessage> messageStream;
+        private IDisposable subscription;
 
         /// <summary>
         /// Constructor
@@ -24,14 +25,22 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
         /// <summary>
         /// Register the pipeline
         /// </summary>
-        public IDisposable Register(ShippingPanelViewModel viewModel)
+        public void Register(ShippingPanelViewModel viewModel)
         {
-            return messageStream.OfType<WindowResettingMessage>()
+            subscription = messageStream.OfType<WindowResettingMessage>()
                 .Subscribe(x =>
                 {
                     viewModel?.SaveToDatabase();
                     viewModel?.UnloadShipment();
                 });
+        }
+
+        /// <summary>
+        /// Dispose the subscription
+        /// </summary>
+        public void Dispose()
+        {
+            subscription?.Dispose();
         }
     }
 }

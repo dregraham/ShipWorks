@@ -11,7 +11,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
     /// <summary>
     /// Load order on selection changed pipeline
     /// </summary>
-    public class LoadOrderOnSelectionChangedPipeline : IShippingPanelObservableRegistration
+    public class LoadOrderOnSelectionChangedPipeline : IShippingPanelGlobalPipeline
     {
         readonly IOrderSelectionChangedHandler changeHandler;
         readonly ILog log;
@@ -52,12 +52,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
                         viewModel.UnloadShipment();
                     })
                     .CatchAndContinue((Exception ex) => log.Error("An error occurred while selecting an order", ex))
-                    .Subscribe(message =>
-                    {
-
-
-
-                    }),
+                    .Subscribe(_ => { }),
                 changeHandler.ShipmentLoadedStream()
                     .ObserveOn(schedulerProvider.Dispatcher)
                     .Do(_ => viewModel.AllowEditing = true)

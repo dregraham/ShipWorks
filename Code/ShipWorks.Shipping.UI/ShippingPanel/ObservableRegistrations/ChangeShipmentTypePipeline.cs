@@ -10,10 +10,11 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
     /// <summary>
     /// Pipeline for changing shipment type
     /// </summary>
-    public class ChangeShipmentTypePipeline : IShippingPanelObservableRegistration
+    public class ChangeShipmentTypePipeline : IShippingPanelTransientPipeline
     {
         private readonly ILog log;
         private readonly IShippingManager shippingManager;
+        private IDisposable subscription;
 
         /// <summary>
         /// Constructor
@@ -27,9 +28,9 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
         /// <summary>
         /// Register the pipeline on the view model
         /// </summary>
-        public IDisposable Register(ShippingPanelViewModel viewModel)
+        public void Register(ShippingPanelViewModel viewModel)
         {
-            return viewModel.PropertyChangeStream
+            subscription = viewModel.PropertyChangeStream
                 .Where(x => x == nameof(viewModel.ShipmentType))
                 .Where(x => viewModel.Shipment != null && viewModel.ShipmentStatus == ShipmentStatus.Unprocessed)
                 .Select(_ => ChangeShipmentType(viewModel))
@@ -43,5 +44,13 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
         /// </summary>
         private ICarrierShipmentAdapter ChangeShipmentType(ShippingPanelViewModel viewModel) =>
             shippingManager.ChangeShipmentType(viewModel.ShipmentType, viewModel.Shipment);
+
+        /// <summary>
+        /// Dispose the subscription
+        /// </summary>
+        public void Dispose()
+        {
+            subscription?.Dispose();
+        }
     }
 }

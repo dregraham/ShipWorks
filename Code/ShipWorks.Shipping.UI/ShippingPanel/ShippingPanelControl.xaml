@@ -47,7 +47,7 @@
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <Grid>
+    <Grid Margin="0,0,0,-6">
         <ScrollViewer VerticalScrollBarVisibility="Visible"
                       ui:LimitScrollSize.Mode="{x:Static ui:LimitScrollSizeMode.Width}">
             <ScrollViewer.Resources>
@@ -82,7 +82,7 @@
                                        <Run Text="{Binding TrackingNumber}" />
                                    </Hyperlink>
                             </TextBlock>
-                            <Button Command="{Binding CopyTrackingNumberToClipboardCommand}" 
+                            <Button Command="{Binding CopyTrackingNumberToClipboardCommand}"
                                     Visibility="{Binding TrackingNumber, Converter={StaticResource VisibleWhenNotEqualToParameter}, ConverterParameter={x:Static sys:String.Empty}}"
                                     Style="{StaticResource Button.Copy}" />
                         </WrapPanel>
@@ -322,27 +322,18 @@
                             </Expander>
                         </Border>
 
-                        <Button Command="{Binding CreateLabelCommand}"
+                        <Button Style="{StaticResource Button.CreateLabel}"
+                                Command="{Binding CreateLabelCommand}"
                                 IsEnabled="{Binding AllowEditing}"
-                                Visibility="{Binding ShipmentStatus, Converter={StaticResource VisibleWhenEqualToParameter}, ConverterParameter={x:Static sw:ShipmentStatus.Unprocessed}}"
-                                HorizontalAlignment="Stretch"
-                                Padding="8">
-                            <StackPanel Orientation="Horizontal">
-                                <Image Height="32"
-                                       Width="32"
-                                       Source="/ShipWorks.Core;component/Resources/box_next_32_32.png"
-                                       VerticalAlignment="Center"/>
-                                <TextBlock Margin="6, 0, 0, 0"
-                                           FontSize="16"
-                                           VerticalAlignment="Center">Create Label</TextBlock>
-                            </StackPanel>
-                        </Button>
+                                Visibility="{Binding ShipmentStatus, Converter={StaticResource VisibleWhenEqualToParameter}, ConverterParameter={x:Static sw:ShipmentStatus.Unprocessed}}"/>
+
                     </StackPanel>
 
                     <StackPanel Margin="5,5"
                             Visibility="{Binding ShipmentType,Converter={StaticResource VisibleWhenEqualToParameter},ConverterParameter={x:Static sw:ShipmentTypeCode.None}}">
                         <TextBlock Style="{StaticResource TextBlock.Empty}">Select a shipping carrier from the list above.</TextBlock>
                     </StackPanel>
+
                     <StackPanel Margin="5,5">
                         <TextBlock Style="{StaticResource TextBlock.Empty}"
                                TextWrapping="WrapWithOverflow"
@@ -359,28 +350,34 @@
                             <Setter Property="Margin" Value="12,10" />
                         </Style>
                     </StackPanel.Style>
+
                     <StackPanel Visibility="{Binding LoadedShipmentResult,
                                 Converter={StaticResource VisibleWhenEqualToParameter},
                                 ConverterParameter={x:Static sw:ShippingPanelLoadedShipmentResult.UnsupportedShipmentType}}">
                         <TextBlock Style="{StaticResource TextBlock.Empty}"
                                TextWrapping="WrapWithOverflow"
                                Margin="0, 0, 0, 5">
-                            <Hyperlink Command="{Binding OpenShippingDialogCommand}">Click here </Hyperlink>
-                            to use the Ship Orders dialog for this carrier.
+                            Please use the Ship Orders dialog for this carrier.
                         </TextBlock>
+
+                        <Button Command="{Binding OpenShippingDialogCommand}"
+                                Style="{StaticResource Button.ShipOrders}"/>
                     </StackPanel>
+
                     <StackPanel Visibility="{Binding LoadedShipmentResult,Converter={StaticResource VisibleWhenEqualToParameter},ConverterParameter={x:Static sw:ShippingPanelLoadedShipmentResult.Multiple}}">
                         <TextBlock Style="{StaticResource TextBlock.Empty}"
                                TextWrapping="WrapWithOverflow"
                                Margin="0, 0, 0, 5">
-                        Need to create labels for multiple shipments?
-                        <Hyperlink Command="{Binding OpenShippingDialogCommand}">Click here </Hyperlink>
-                        to use the Ship Orders dialog.
+                        Need to create labels for multiple shipments?  Please use the Ship Orders dialog.
                         </TextBlock>
+                        <Button Command="{Binding OpenShippingDialogCommand}"
+                                Style="{StaticResource Button.ShipOrders}"/>
                     </StackPanel>
+
                     <StackPanel Visibility="{Binding LoadedShipmentResult,Converter={StaticResource VisibleWhenEqualToParameter},ConverterParameter={x:Static sw:ShippingPanelLoadedShipmentResult.Deleted}}">
                         <TextBlock Style="{StaticResource TextBlock.Empty}">Shipment has been deleted.</TextBlock>
                     </StackPanel>
+
                     <StackPanel Visibility="{Binding LoadedShipmentResult,Converter={StaticResource VisibleWhenEqualToParameter},ConverterParameter={x:Static sw:ShippingPanelLoadedShipmentResult.NotCreated}}">
                         <TextBlock Style="{StaticResource TextBlock.Empty}">No shipments were found for this order.  Shipment auto creation is probably turned off.</TextBlock>
                     </StackPanel>

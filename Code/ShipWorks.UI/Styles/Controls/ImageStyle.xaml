@@ -24,4 +24,12 @@
     <Style x:Key="Image.Copy" BasedOn="{StaticResource Image.Icon}" TargetType="Image">
         <Setter Property="Source" Value="/ShipWorks.Core;component/Resources/copy.png" />
     </Style>
+
+    <Style x:Key="Image.CreateLabel" BasedOn="{StaticResource Image.Icon}" TargetType="Image">
+        <Setter Property="Source" Value="/ShipWorks.Core;component/Resources/box_next_32_32.png" />
+    </Style>
+
+    <Style x:Key="Image.ShipOrders" BasedOn="{StaticResource Image.Icon}" TargetType="Image">
+        <Setter Property="Source" Value="/ShipWorks.Core;component/Resources/box_closed3.png" />
+    </Style>
 </ResourceDictionary>

@@ -10,6 +10,16 @@ namespace Interapptive.Shared.Collections
     public static class ObservableExtensions
     {
         /// <summary>
+        /// Throttle the stream, returning the first message in the time period instead of the last
+        /// </summary>
+        public static IObservable<T> IntervalCountThrottle<T>(this IObservable<T> source, TimeSpan interval, ISchedulerProvider scheduler)
+        {
+            IObservable<T> closeWindow = source.Delay(interval, scheduler.Default);
+
+            return source.Window(() => closeWindow).Select(x => x.Take(1)).Merge();
+        }
+
+        /// <summary>
         /// Catch a specified exception, log it, and continue
         /// </summary>
         public static IObservable<T> CatchAndContinue<T, TException>(this IObservable<T> source,

@@ -635,6 +635,7 @@
     <Compile Include="ApplicationCore\Dashboard\Content\DashboardSchedulerServiceStoppedItem.cs" />
     <Compile Include="ApplicationCore\Dashboard\Content\DashboardStoreItem.cs" />
     <Compile Include="ApplicationCore\Dashboard\Content\ShipWorksOnlineVersion.cs" />
+    <Compile Include="ApplicationCore\DockPanelIdentifiers.cs" />
     <Compile Include="ApplicationCore\Enums\HeartbeatOptions.cs" />
     <Compile Include="ApplicationCore\ExecutionModeScope.cs" />
     <Compile Include="ApplicationCore\ExecutionMode\CommandLineExecutionMode.cs" />
@@ -878,6 +879,8 @@
     <Compile Include="Messaging\Messages\Dialogs\OpenProfileManagerDialogMessage.cs" />
     <Compile Include="Messaging\Messages\IEntityDeleted.cs" />
     <Compile Include="Messaging\Messages\Dialogs\OpenShippingDialogWithOrdersMessage.cs" />
+    <Compile Include="Messaging\Messages\Panels\PanelHiddenMessage.cs" />
+    <Compile Include="Messaging\Messages\Panels\PanelShownMessage.cs" />
     <Compile Include="Messaging\Messages\Shipping\BasicOrderSelection.cs" />
     <Compile Include="Messaging\Messages\Shipping\ApplyProfileMessage.cs" />
     <Compile Include="Messaging\Messages\Shipping\CreateReturnShipmentMessage.cs" />
@@ -10460,7 +10463,7 @@
     <None Include="Resources\currency_dollar_green16.png" />
     <None Include="Resources\logo_sdc.png" />
     <None Include="Resources\glo_ups_brandmark_pfv.gif" />
-    <None Include="Resources\box_closed3.png" />
+    <Resource Include="Resources\box_closed3.png" />
     <None Include="Resources\barcode.png" />
     <None Include="Resources\box_preferences1.png" />
     <CodeAnalysisDictionary Include="..\..\Build\AnalysisDictionary.xml">

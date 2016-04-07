@@ -14,11 +14,12 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
     /// <summary>
     /// Handle a deleted shipment
     /// </summary>
-    public class ShipmentDeletedPipeline : IShippingPanelObservableRegistration
+    public class ShipmentDeletedPipeline : IShippingPanelTransientPipeline
     {
         readonly IObservable<IShipWorksMessage> messages;
         private readonly IStoreManager storeManager;
         private readonly IOrderManager orderManager;
+        private IDisposable subscription;
 
         /// <summary>
         /// Constructor
@@ -33,9 +34,9 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
         /// <summary>
         /// Register the pipeline on the view model
         /// </summary>
-        public IDisposable Register(ShippingPanelViewModel viewModel)
+        public void Register(ShippingPanelViewModel viewModel)
         {
-            return messages.OfType<IEntityDeletedMessage>()
+            subscription = messages.OfType<IEntityDeletedMessage>()
                 .Where(x => ShouldUnloadShipment(x, viewModel.Shipment))
                 .Subscribe(x =>
                 {
@@ -110,6 +111,14 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
 
             OrderEntity order = orderManager.FetchOrder(shipment.OrderID);
             return order == null || associationId == getAssociationIdFromOrder(order);
+        }
+
+        /// <summary>
+        /// Dispose the subscription
+        /// </summary>
+        public void Dispose()
+        {
+            subscription?.Dispose();
         }
     }
 }

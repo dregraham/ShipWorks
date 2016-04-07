@@ -58,8 +58,6 @@ namespace ShipWorks.UI.Controls.AddressControl
             this.validatedAddressScope = validatedAddressScope;
             this.addressSelector = addressSelector;
 
-            SetupAddressValidationMessagePropertyHandlers();
-
             AddressSuggestions = Enumerable.Empty<KeyValuePair<string, ValidatedAddressEntity>>();
             ValidateCommand = new RelayCommand(ValidateAddress);
             ShowValidationMessageCommand = new RelayCommand(ShowValidationMessage);
@@ -94,6 +92,8 @@ namespace ShipWorks.UI.Controls.AddressControl
         /// </summary>
         public virtual void Load(PersonAdapter person)
         {
+            addressValidationSubscriptions?.Dispose();
+
             Populate(person);
 
             if (person.Entity != null)
@@ -111,6 +111,8 @@ namespace ShipWorks.UI.Controls.AddressControl
                 entityId = null;
                 prefix = null;
             }
+
+            SetupAddressValidationMessagePropertyHandlers();
         }
 
         /// <summary>
@@ -142,6 +144,8 @@ namespace ShipWorks.UI.Controls.AddressControl
             lastValidatedAddress = new AddressAdapter();
             person.CopyTo(lastValidatedAddress);
             person.ConvertTo<AddressAdapter>().CopyValidationDataTo(lastValidatedAddress);
+
+            ResetValidationProperties();
         }
 
         /// <summary>
@@ -198,29 +202,32 @@ namespace ShipWorks.UI.Controls.AddressControl
                 return;
             }
 
-            long currentEntityId = entityId.Value;
-
-            PersonAdapter personAdapter = new PersonAdapter();
-            AddressAdapter addressAdapter = new AddressAdapter();
-
-            SaveToEntity(personAdapter);
-            personAdapter.CopyTo(addressAdapter);
-
-            ValidatedAddressData validationData = await validator.ValidateAsync(addressAdapter, true);
-
-            // See if the loaded address has changed since we started validating
-            if (currentEntityId != entityId)
+            using (messageHelper.ShowProgressDialog("Validating Addresses", "ShipWorks is validating the addresses."))
             {
-                return;
+                long currentEntityId = entityId.Value;
+
+                PersonAdapter personAdapter = new PersonAdapter();
+                AddressAdapter addressAdapter = new AddressAdapter();
+
+                SaveToEntity(personAdapter);
+                personAdapter.CopyTo(addressAdapter);
+
+                ValidatedAddressData validationData = await validator.ValidateAsync(addressAdapter, true);
+
+                // See if the loaded address has changed since we started validating
+                if (currentEntityId != entityId)
+                {
+                    return;
+                }
+
+                addressAdapter.CopyTo(personAdapter);
+
+                validatedAddressScope.StoreAddresses(entityId.Value, validationData.AllAddresses, prefix);
+                AddressSuggestions = BuildDictionary(validationData.AllAddresses);
+
+                PopulateAddress(personAdapter);
+                PopulateValidationDetails(personAdapter);
             }
-
-            addressAdapter.CopyTo(personAdapter);
-
-            validatedAddressScope.StoreAddresses(entityId.Value, validationData.AllAddresses, prefix);
-            AddressSuggestions = BuildDictionary(validationData.AllAddresses);
-
-            PopulateAddress(personAdapter);
-            PopulateValidationDetails(personAdapter);
         }
 
         /// <summary>
@@ -298,7 +305,7 @@ namespace ShipWorks.UI.Controls.AddressControl
         /// </summary>
         public void Dispose()
         {
-            addressValidationSubscriptions.Dispose();
+            addressValidationSubscriptions?.Dispose();
         }
     }
 }

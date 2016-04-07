@@ -12,9 +12,10 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
     /// <summary>
     /// Handle the store changing
     /// </summary>
-    public class StoreChangedPipeline : IShippingPanelObservableRegistration
+    public class StoreChangedPipeline : IShippingPanelTransientPipeline
     {
         readonly IObservable<IShipWorksMessage> messages;
+        IDisposable subscription;
 
         /// <summary>
         /// Constructor
@@ -28,9 +29,9 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
         /// <summary>
         /// Register the pipeline on the view model
         /// </summary>
-        public IDisposable Register(ShippingPanelViewModel viewModel)
+        public void Register(ShippingPanelViewModel viewModel)
         {
-            return messages.OfType<StoreChangedMessage>()
+            subscription = messages.OfType<StoreChangedMessage>()
                 .Subscribe(m => OnStoreChanged(viewModel, m));
         }
 
@@ -73,6 +74,14 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
                 viewModel.OrderID ?? 0,
                 viewModel.AccountId,
                 viewModel.ShipmentType);
+        }
+
+        /// <summary>
+        /// Dispose the subscription
+        /// </summary>
+        public void Dispose()
+        {
+            subscription?.Dispose();
         }
     }
 }

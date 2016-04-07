@@ -1,5 +1,4 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Windows.Forms;
 using Divelements.SandRibbon;
@@ -36,7 +35,7 @@ namespace ShipWorks.Shipping.UI.RatingPanel
             new DockableWindow(dockManager, panelRating, "Rates")
             {
                 BorderStyle = TD.SandDock.Rendering.BorderStyle.Flat,
-                Guid = new Guid("B82A3A5F-931A-40E7-AB35-9189D564C187"),
+                Guid = DockPanelIdentifiers.RatingPanelGuid,
                 Location = new Point(0, 25),
                 Name = "dockableWindowRating",
                 ShowOptions = false,

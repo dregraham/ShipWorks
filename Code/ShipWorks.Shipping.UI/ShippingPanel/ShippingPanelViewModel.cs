@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reflection;
 using System.Windows.Forms;
@@ -10,7 +9,6 @@ using System.Windows.Input;
 using Autofac;
 using GalaSoft.MvvmLight.Command;
 using Interapptive.Shared;
-using Interapptive.Shared.Business;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Win32;
@@ -26,8 +24,6 @@ using ShipWorks.Messaging.Messages.Dialogs;
 using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Shipping.Loading;
 using ShipWorks.Shipping.Services;
-using ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations;
-using ShipWorks.UI.Controls.AddressControl;
 
 namespace ShipWorks.Shipping.UI.ShippingPanel
 {
@@ -43,12 +39,11 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
 
         private readonly IShippingManager shippingManager;
         private readonly IMessenger messenger;
-        private readonly IDisposable subscriptions;
+        private readonly IPipelineRegistrationContainer pipelines;
         private readonly IMessageHelper messageHelper;
         private readonly IShippingViewModelFactory shippingViewModelFactory;
         private readonly ILog log;
 
-        private bool isLoadingShipment;
         private IDisposable shipmentChangedSubscription;
         private long[] selectedOrderIds;
 
@@ -69,13 +64,14 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// <remarks>We need the logger, so the amount of dependencies is ok for now</remarks>
         [NDependIgnoreTooManyParams]
         public ShippingPanelViewModel(
-            IEnumerable<IShippingPanelObservableRegistration> registrations,
+            IPipelineRegistrationContainer pipelines,
             IMessenger messenger,
             IShippingManager shippingManager,
             IMessageHelper messageHelper,
             IShippingViewModelFactory shippingViewModelFactory,
             Func<Type, ILog> logFactory) : this()
         {
+            this.pipelines = pipelines;
             this.shippingManager = shippingManager;
             this.messenger = messenger;
             this.messageHelper = messageHelper;
@@ -89,11 +85,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             Destination.IsAddressValidationEnabled = true;
 
             // Wiring up observables needs objects to not be null, so do this last.
-            subscriptions = new CompositeDisposable(registrations.Select(x => x.Register(this))
-                .Concat(new[] {
-                    LoadCustomsWhenAddressChanges(Origin, x => ShipmentAdapter?.Shipment?.OriginPerson),
-                    LoadCustomsWhenAddressChanges(Destination, x => ShipmentAdapter?.Shipment?.ShipPerson)
-                }));
+            pipelines.RegisterGlobal(this);
 
             PropertyChanging += OnPropertyChanging;
 
@@ -101,6 +93,11 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             TrackShipmentCommand = new RelayCommand(TrackShipment);
             CopyTrackingNumberToClipboardCommand = new RelayCommand(CopyTrackingNumberToClipboard);
         }
+
+        /// <summary>
+        /// Is the shipment currently being loaded
+        /// </summary>
+        public bool IsLoadingShipment { get; set; }
 
         /// <summary>
         /// Command that triggers processing of the current shipment
@@ -146,22 +143,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         public virtual long? OrderID => ShipmentAdapter?.Shipment?.OrderID;
 
         /// <summary>
-        /// Load customs when address properties change
-        /// </summary>
-        private IDisposable LoadCustomsWhenAddressChanges(AddressViewModel model, Func<string, PersonAdapter> getAdapter)
-        {
-            return model.PropertyChangeStream
-                .Where(_ => !isLoadingShipment)
-                .Select(getAdapter)
-                .Where(person => person != null)
-                .Subscribe(person =>
-                {
-                    model.SaveToEntity(person);
-                    shipmentViewModel.LoadCustoms();
-                });
-        }
-
-        /// <summary>
         /// Save the current shipment to the database
         /// </summary>
         public virtual void SaveToDatabase()
@@ -198,8 +179,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         {
             ShipmentStatus = ShipmentStatus.None;
             selectedOrderIds = orderMessage.LoadedOrderSelection.Select(x => x.OrderID).ToArray();
-            int orders = orderMessage.LoadedOrderSelection.OfType<LoadedOrderSelection>().HasMoreOrLessThanCount(1);
-            if (orders != 0)
+            ComparisonResult orders = orderMessage.LoadedOrderSelection.OfType<LoadedOrderSelection>().CompareCountTo(1);
+            if (orders != ComparisonResult.Equal)
             {
                 UnloadShipment();
 
@@ -245,14 +226,14 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
                 return ShippingPanelLoadedShipmentResult.Error;
             }
 
-            int moreOrLessThanOne = loadedSelection.ShipmentAdapters.HasMoreOrLessThanCount(1);
+            ComparisonResult moreOrLessThanOne = loadedSelection.ShipmentAdapters.CompareCountTo(1);
 
-            if (moreOrLessThanOne > 0)
+            if (moreOrLessThanOne == ComparisonResult.More)
             {
                 return ShippingPanelLoadedShipmentResult.Multiple;
             }
 
-            if (moreOrLessThanOne < 0)
+            if (moreOrLessThanOne == ComparisonResult.Less)
             {
                 return ShippingPanelLoadedShipmentResult.NotCreated;
             }
@@ -284,7 +265,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         public virtual void LoadShipment(ICarrierShipmentAdapter fromShipmentAdapter, string changedField)
         {
             shipmentChangedSubscription?.Dispose();
-            isLoadingShipment = true;
+            IsLoadingShipment = true;
 
             fromShipmentAdapter.UpdateDynamicData();
             ShipmentAdapter = fromShipmentAdapter;
@@ -306,13 +287,15 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
                 ShipmentAdapter.Shipment.ShipmentTypeCode == ShipmentTypeCode.BestRate)
             {
                 LoadedShipmentResult = ShippingPanelLoadedShipmentResult.UnsupportedShipmentType;
-                isLoadingShipment = false;
+                IsLoadingShipment = false;
                 return;
             }
 
+            pipelines.RegisterTransient(this);
+
             Populate(ShipmentAdapter);
 
-            isLoadingShipment = false;
+            IsLoadingShipment = false;
 
             shipmentChangedSubscription = PropertyChangeStream
                 .Merge(ShipmentViewModel.PropertyChangeStream)
@@ -434,6 +417,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// </summary>
         public virtual void UnloadShipment()
         {
+            pipelines.DiscardTransient();
+
             shipmentChangedSubscription?.Dispose();
             ShipmentAdapter = null;
             ShipmentStatus = ShipmentStatus.None;
@@ -568,7 +553,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// </summary>
         public void Dispose()
         {
-            subscriptions.Dispose();
+            pipelines?.Dispose();
             shipmentChangedSubscription?.Dispose();
         }
     }
