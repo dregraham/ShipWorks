@@ -16,7 +16,7 @@ namespace ShipWorks.UI.Controls.ChannelLimit
     public class ChannelLimitDlgFactory : IChannelLimitDlgFactory
     {
         private readonly ILicenseService licenseService;
-        private readonly IChannelLimitViewModel viewModel;
+        private readonly Func<IChannelLimitViewModel> viewModelFactory;
         private readonly IIndex<EditionFeature, IChannelLimitBehavior> behaviorFactory;
         private readonly Func<string, IDialog> dialogFactory;
 
@@ -24,12 +24,12 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         /// Initializes a new instance of the <see cref="ChannelLimitDlgFactory"/> class.
         /// </summary>
         public ChannelLimitDlgFactory(ILicenseService licenseService,
-            IChannelLimitViewModel viewModel,
+            Func<IChannelLimitViewModel> viewModelFactory,
             IIndex<EditionFeature, IChannelLimitBehavior> behaviorFactory,
             Func<string, IDialog> dialogFactory)
         {
             this.licenseService = licenseService;
-            this.viewModel = viewModel;
+            this.viewModelFactory = viewModelFactory;
             this.behaviorFactory = behaviorFactory;
             this.dialogFactory = dialogFactory;
         }
@@ -45,6 +45,8 @@ namespace ShipWorks.UI.Controls.ChannelLimit
             {
                 throw new InvalidCastException("Expected a ICustomerLicense from the LicenseService");
             }
+
+            IChannelLimitViewModel viewModel = viewModelFactory();
 
             viewModel.EnforcementContext = context;
             // load the customer license into the view model
