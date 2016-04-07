@@ -126,7 +126,7 @@ namespace ShipWorks.ApplicationCore
             builder.RegisterType<TangoWebClientWrapper>()
                 .As<ITangoWebClient>();
 
-            builder.Register(c => UserSession.Security)
+            builder.Register(c => UserSession.Security ?? SecurityContext.EmptySecurityContext)
                 .As<ISecurityContext>()
                 .ExternallyOwned();
 

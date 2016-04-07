@@ -21,6 +21,7 @@ namespace ShipWorks.Users.Security
     {
         PermissionSet permissionSet;
         bool isAdmin;
+        private static Lazy<SecurityContext> emptySecurityContext = new Lazy<SecurityContext>(() => new SecurityContext(null, false));
 
         Dictionary<PermissionIdentifier, bool> permissionCache = new Dictionary<PermissionIdentifier, bool>();
         Dictionary<PermissionType, StorePermissionCoverage> storePermissionCountCache = new Dictionary<PermissionType, StorePermissionCoverage>();
@@ -109,6 +110,11 @@ namespace ShipWorks.Users.Security
             this.isAdmin = isAdmin;
             this.permissionSet = permissionSet;
         }
+
+        /// <summary>
+        /// Empty security context
+        /// </summary>
+        public static SecurityContext EmptySecurityContext => emptySecurityContext.Value;
 
         /// <summary>
         /// Determines if the current user has the specified permission, and if not, throws a PermissionException.
