@@ -49,7 +49,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         {
             get
             {
-                return true;
+                return !Shipment.Postal.Usps.RateShop;
             }
         }
 
