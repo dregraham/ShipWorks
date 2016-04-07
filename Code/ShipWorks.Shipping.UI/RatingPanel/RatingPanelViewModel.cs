@@ -9,6 +9,7 @@ using Interapptive.Shared.Threading;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Core.UI;
 using ShipWorks.Messaging.Messages;
+using ShipWorks.Messaging.Messages.Dialogs;
 using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Services;
@@ -74,6 +75,8 @@ namespace ShipWorks.Shipping.UI.RatingPanel
                 messenger.OfType<ShipmentChangedMessage>()
                     .Where(x => x.ChangedField == "ServiceType")
                     .Subscribe(x => SelectRate(x.ShipmentAdapter)),
+                messenger.OfType<OpenShippingDialogMessage>()
+                    .Subscribe(x => Rates = Enumerable.Empty<RateResult>()),
                 messenger.OfType<RatesNotSupportedMessage>()
                     .Subscribe(HandleRatesNotSupportedMessage),
                 handler.Where(x => nameof(SelectedRate).Equals(x, StringComparison.Ordinal))
