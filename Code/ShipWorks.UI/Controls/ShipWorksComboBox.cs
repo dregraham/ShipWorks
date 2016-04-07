@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
-using SD.LLBLGen.Pro.ORMSupportClasses;
 
 namespace ShipWorks.UI.Controls
 {
@@ -83,9 +80,16 @@ namespace ShipWorks.UI.Controls
             // coercion complete before changing the value to something valid
             combo.Dispatcher.BeginInvoke((Action) (() =>
             {
-                combo.SelectedItem = relativeIndex == RelativeIndex.Last ?
-                    combo.Items.OfType<object>().Last() :
-                    combo.Items.OfType<object>().First();
+                // If someone else has successfully changed the selected item before we had a chance to update it
+                // (because we delayed execution by dispatching), don't change the value. We got into a situation
+                // where the value would be null first, then set correctly. The null would schedule this action,
+                // then the correct value would be set. Then this action would be run and wipe out the correct value.
+                if (combo.SelectedItem == null)
+                {
+                    combo.SelectedItem = relativeIndex == RelativeIndex.Last ?
+                        combo.Items.OfType<object>().Last() :
+                        combo.Items.OfType<object>().First();
+                }
             }), null);
         }
 

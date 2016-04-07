@@ -41,6 +41,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
                     viewModel.Origin.PropertyChangeStream,
                     viewModel.Destination.PropertyChangeStream)
                 .Where(domesticAffectingProperties.Contains)
+                .Where(_ => !viewModel.IsLoadingShipment)
                 .Select(_ => viewModel.ShipmentAdapter)
                 .Throttle(TimeSpan.FromMilliseconds(250), schedulerProvider.Default)
                 .ObserveOn(schedulerProvider.Dispatcher)
