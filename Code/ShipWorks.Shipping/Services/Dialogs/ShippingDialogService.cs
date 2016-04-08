@@ -57,6 +57,11 @@ namespace ShipWorks.Shipping.Services.Dialogs
         /// </summary>
         public void InitializeForCurrentSession()
         {
+            // When restoring a database, the db wizard calls InitializeForCurrentSession, then when the user
+            // logs on, it calls InitializeForCurrentSession again.  So the subscriptions get added multiple times
+            // causing lots of extra subscribes to get ran.
+            subscriptions?.Dispose();
+
             subscriptions = new CompositeDisposable(
                 messenger.OfType<OpenShippingDialogMessage>()
                     .IntervalCountThrottle(TimeSpan.FromSeconds(2), schedulerProvider)
