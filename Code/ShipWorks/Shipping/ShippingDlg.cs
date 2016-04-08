@@ -2212,10 +2212,6 @@ namespace ShipWorks.Shipping
             }
 
             ErrorManager.Clear();
-
-            // If shipments have been removed from the dlg before closing, this may not be an accurate representation of what has changed.
-            ICarrierShipmentAdapterFactory adapterFactory = lifetimeScope.Resolve<ICarrierShipmentAdapterFactory>();
-            loadedShipmentEntities.ForEach(shipment => messenger.Send(new ShipmentChangedMessage(this, adapterFactory.Get(shipment))));
         }
 
         /// <summary>

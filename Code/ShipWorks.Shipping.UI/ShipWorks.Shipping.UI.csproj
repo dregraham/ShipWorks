@@ -183,6 +183,12 @@
     <Compile Include="Carriers\Amazon\AmazonNotLinkedFootnoteViewModel.cs" />
     <Compile Include="MessageHandlers\IOrderSelectionChangedHandler.cs" />
     <Compile Include="MessageHandlers\OrderSelectionChangedHandler.cs" />
+    <Compile Include="RatingPanel\ObservableRegistrations\IRatingPanelGlobalPipeline.cs" />
+    <Compile Include="RatingPanel\ObservableRegistrations\ObservableRegistrationsModule.cs" />
+    <Compile Include="RatingPanel\ObservableRegistrations\OpenShippingDialogPipeline.cs" />
+    <Compile Include="RatingPanel\ObservableRegistrations\RatesNotSupportedPipeline.cs" />
+    <Compile Include="RatingPanel\ObservableRegistrations\RatesRetrievedPipeline.cs" />
+    <Compile Include="RatingPanel\ObservableRegistrations\ShipmentChangedPipeline.cs" />
     <Compile Include="RatingPanel\RatingPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>

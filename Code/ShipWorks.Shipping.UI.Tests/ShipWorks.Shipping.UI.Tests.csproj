@@ -177,6 +177,10 @@
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="OrderSelectionChangedHandlerTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RatingPanel\ObservableRegistrations\RatesRetrievedPipelineTest.cs" />
+    <Compile Include="RatingPanel\ObservableRegistrations\ShipmentChangedPipelineTest.cs" />
+    <Compile Include="RatingPanel\ObservableRegistrations\RatesNotSupportedPipelineTest.cs" />
+    <Compile Include="RatingPanel\ObservableRegistrations\OpenShippingDialogPipelineTest.cs" />
     <Compile Include="RatingPanel\RatingPanelViewModelTest.cs" />
     <Compile Include="ShippingPanel\ObservableRegistrations\ApplyProfilePipelineTest.cs" />
     <Compile Include="ShippingPanel\ObservableRegistrations\CarrierConfiguredPipelineTest.cs" />

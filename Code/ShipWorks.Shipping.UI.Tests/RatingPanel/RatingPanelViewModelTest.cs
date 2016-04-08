@@ -37,15 +37,6 @@ namespace ShipWorks.Shipping.UI.Tests.RatingPanel
         }
 
         [Fact]
-        public void IsLoading_SetToTrue_WhenRatesRetrievingMessageIsReceived()
-        {
-            var testObject = mock.Create<RatingPanelViewModel>();
-            messenger.Send(new RatesRetrievingMessage(this, string.Empty));
-
-            Assert.True(testObject.IsLoading);
-        }
-
-        [Fact]
         public void IsLoading_SetToFalse_WhenCorrespondingRatesRetrievedMessagesIsReceived()
         {
             var testObject = mock.Create<RatingPanelViewModel>();
@@ -53,52 +44,6 @@ namespace ShipWorks.Shipping.UI.Tests.RatingPanel
             messenger.Send(new RatesRetrievedMessage(this, string.Empty, testResult, null));
 
             Assert.False(testObject.IsLoading);
-        }
-
-        [Fact]
-        public void IsLoading_DoesNotSetIsLoadingToFalse_WhenNonCorrespondingRatesRetrievedMessagesIsReceived()
-        {
-            var testObject = mock.Create<RatingPanelViewModel>();
-            messenger.Send(new RatesRetrievingMessage(this, string.Empty));
-            messenger.Send(new RatesRetrievedMessage(this, "Foo", testResult, null));
-
-            Assert.True(testObject.IsLoading);
-        }
-
-        [Fact]
-        public void IsLoading_SetsIsLoadingToFalse_WhenNonCorrespondingRatesRetrievedMessagesIsReceived()
-        {
-            var testObject = mock.Create<RatingPanelViewModel>();
-            messenger.Send(new RatesRetrievingMessage(this, "Foo"));
-            messenger.Send(new RatesRetrievingMessage(this, "Bar"));
-            messenger.Send(new RatesRetrievedMessage(this, "Foo", testResult, null));
-
-            Assert.True(testObject.IsLoading);
-
-            messenger.Send(new RatesRetrievedMessage(this, "Bar", testResult, null));
-
-            Assert.False(testObject.IsLoading);
-        }
-
-        [Fact]
-        public void DoesNotLoadIntermediateRates_WhenTheSameHashComesBeforeAndAfterAnother()
-        {
-            var testObject = mock.Create<RatingPanelViewModel>();
-            messenger.Send(new RatesRetrievingMessage(this, "Foo"));
-            messenger.Send(new RatesRetrievingMessage(this, "Bar"));
-            messenger.Send(new RatesRetrievingMessage(this, "Foo"));
-            messenger.Send(new RatesRetrievedMessage(this, "Foo", testResult, null));
-
-            Assert.Empty(testObject.Rates);
-
-            messenger.Send(new RatesRetrievedMessage(this, "Bar",
-                GenericResult.FromSuccess(new RateGroup(new List<RateResult> { new RateResult("x", "y") })), null));
-
-            Assert.Empty(testObject.Rates);
-
-            messenger.Send(new RatesRetrievedMessage(this, "Foo", testResult, null));
-
-            Assert.Empty(testObject.Rates);
         }
 
         [Fact]
@@ -112,8 +57,7 @@ namespace ShipWorks.Shipping.UI.Tests.RatingPanel
             });
 
             var testObject = mock.Create<RatingPanelViewModel>();
-            messenger.Send(new RatesRetrievingMessage(this, string.Empty));
-            messenger.Send(new RatesRetrievedMessage(this, string.Empty, GenericResult.FromSuccess(rateGroup), null));
+            testObject.LoadRates(new RatesRetrievedMessage(this, string.Empty, GenericResult.FromSuccess(rateGroup), null));
 
             Assert.Equal(3, testObject.Rates.Count());
             Assert.Contains("Foo", testObject.Rates.Select(x => x.Description));
@@ -149,8 +93,7 @@ namespace ShipWorks.Shipping.UI.Tests.RatingPanel
             });
 
             var testObject = mock.Create<RatingPanelViewModel>();
-            messenger.Send(new RatesRetrievingMessage(this, string.Empty));
-            messenger.Send(new RatesRetrievedMessage(this, string.Empty, GenericResult.FromSuccess(rateGroup), null));
+            testObject.LoadRates(new RatesRetrievedMessage(this, string.Empty, GenericResult.FromSuccess(rateGroup), null));
 
             Assert.True(testObject.ShowDuties);
         }
@@ -165,8 +108,7 @@ namespace ShipWorks.Shipping.UI.Tests.RatingPanel
             });
 
             var testObject = mock.Create<RatingPanelViewModel>();
-            messenger.Send(new RatesRetrievingMessage(this, string.Empty));
-            messenger.Send(new RatesRetrievedMessage(this, string.Empty, GenericResult.FromSuccess(rateGroup), null));
+            testObject.LoadRates(new RatesRetrievedMessage(this, string.Empty, GenericResult.FromSuccess(rateGroup), null));
 
             Assert.True(testObject.ShowTaxes);
         }
@@ -181,8 +123,7 @@ namespace ShipWorks.Shipping.UI.Tests.RatingPanel
             });
 
             var testObject = mock.Create<RatingPanelViewModel>();
-            messenger.Send(new RatesRetrievingMessage(this, string.Empty));
-            messenger.Send(new RatesRetrievedMessage(this, string.Empty, GenericResult.FromSuccess(rateGroup), null));
+            testObject.LoadRates(new RatesRetrievedMessage(this, string.Empty, GenericResult.FromSuccess(rateGroup), null));
 
             Assert.True(testObject.ShowShipping);
         }
@@ -204,8 +145,7 @@ namespace ShipWorks.Shipping.UI.Tests.RatingPanel
         public void SetsMessaging_WhenResultsAreNotSuccessful()
         {
             var testObject = mock.Create<RatingPanelViewModel>();
-            messenger.Send(new RatesRetrievingMessage(this, string.Empty));
-            messenger.Send(new RatesRetrievedMessage(this, string.Empty, GenericResult.FromError<RateGroup>("Foo"), null));
+            testObject.LoadRates(new RatesRetrievedMessage(this, string.Empty, GenericResult.FromError<RateGroup>("Foo"), null));
 
             Assert.True(testObject.ShowEmptyMessage);
             Assert.Equal("Foo", testObject.EmptyMessage);
@@ -215,8 +155,8 @@ namespace ShipWorks.Shipping.UI.Tests.RatingPanel
         public void ClearsRates_WhenResultsAreNotSuccessful()
         {
             var testObject = mock.Create<RatingPanelViewModel>();
-            messenger.Send(new RatesRetrievingMessage(this, string.Empty));
-            messenger.Send(new RatesRetrievedMessage(this, string.Empty, GenericResult.FromError<RateGroup>("Foo"), null));
+
+            testObject.LoadRates(new RatesRetrievedMessage(this, string.Empty, GenericResult.FromError<RateGroup>("Foo"), null));
 
             Assert.Empty(testObject.Rates);
         }
@@ -235,8 +175,7 @@ namespace ShipWorks.Shipping.UI.Tests.RatingPanel
             testRateGroup.AddFootnoteFactory(footnote2.Object);
 
             var testObject = mock.Create<RatingPanelViewModel>();
-            messenger.Send(new RatesRetrievingMessage(this, string.Empty));
-            messenger.Send(new RatesRetrievedMessage(this, string.Empty, testResult, null));
+            testObject.LoadRates(new RatesRetrievedMessage(this, string.Empty, testResult, null));
 
             Assert.Contains(viewModel1, testObject.Footnotes);
             Assert.Contains(viewModel2, testObject.Footnotes);
@@ -257,30 +196,11 @@ namespace ShipWorks.Shipping.UI.Tests.RatingPanel
             });
 
             var testObject = mock.Create<RatingPanelViewModel>();
-            messenger.Send(new RatesRetrievingMessage(this, string.Empty));
-            messenger.Send(new RatesRetrievedMessage(this, string.Empty,
+            testObject.LoadRates(new RatesRetrievedMessage(this, string.Empty,
                 GenericResult.FromSuccess(rateGroup), carrierAdapter.Object));
 
             Assert.Equal(3, testObject.Rates.Count());
             Assert.Equal("Bar", testObject.SelectedRate.Description);
-        }
-        
-        [Fact]
-        public void ShowEmptyMessage_SetToTrue_WhenRatesNotSupportedMessageIsReceived()
-        {
-            var testObject = mock.Create<RatingPanelViewModel>();
-            messenger.Send(new RatesNotSupportedMessage(this, string.Empty));
-
-            Assert.True(testObject.ShowEmptyMessage);
-        }
-
-        [Fact]
-        public void EmptyMessage_Set_WhenRatesNotSupportedMessageIsReceived()
-        {
-            var testObject = mock.Create<RatingPanelViewModel>();
-            messenger.Send(new RatesNotSupportedMessage(this, "Bad rates!"));
-
-            Assert.Equal("Bad rates!", testObject.EmptyMessage);
         }
 
         [Fact]
@@ -296,8 +216,7 @@ namespace ShipWorks.Shipping.UI.Tests.RatingPanel
             shipmentAdapter.Setup(sa => sa.Shipment).Returns(shipment);
 
             var testObject = mock.Create<RatingPanelViewModel>();
-            messenger.Send(new RatesRetrievingMessage(this, string.Empty));
-            messenger.Send(new RatesRetrievedMessage(this, string.Empty, GenericResult.FromSuccess(successRateGroup), shipmentAdapter.Object));
+            testObject.LoadRates(new RatesRetrievedMessage(this, string.Empty, GenericResult.FromSuccess(successRateGroup), shipmentAdapter.Object));
 
             Assert.True(testObject.ShowEmptyMessage);
             Assert.NotNull(testObject.EmptyMessage);
@@ -322,7 +241,7 @@ namespace ShipWorks.Shipping.UI.Tests.RatingPanel
             Assert.False(testObject.ShowEmptyMessage);
             Assert.True(string.IsNullOrWhiteSpace(testObject.EmptyMessage));
         }
-        
+
         public void Dispose()
         {
             mock?.Dispose();

@@ -1,18 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reflection;
-using Autofac.Features.Indexed;
-using Interapptive.Shared.Threading;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Core.UI;
 using ShipWorks.Messaging.Messages;
-using ShipWorks.Messaging.Messages.Dialogs;
 using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Services;
+using ShipWorks.Shipping.UI.RatingPanel.ObservableRegistrations;
 
 namespace ShipWorks.Shipping.UI.RatingPanel
 {
@@ -27,7 +26,6 @@ namespace ShipWorks.Shipping.UI.RatingPanel
         private readonly IDisposable subscriptions;
         private readonly IMessenger messenger;
         private RateResult selectedRate;
-        private readonly IIndex<ShipmentTypeCode, IRatingService> ratingServiceLookup;
 
         /// <summary>
         /// Constructor just for tests
@@ -35,6 +33,23 @@ namespace ShipWorks.Shipping.UI.RatingPanel
         protected RatingPanelViewModel()
         {
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="messenger"></param>
+        public RatingPanelViewModel(IMessenger messenger, IEnumerable<IRatingPanelGlobalPipeline> globalPipelines) : this()
+        {
+            this.messenger = messenger;
+
+            subscriptions = new CompositeDisposable(
+                globalPipelines.Select(x => x.Register(this)).Concat(new[] {
+                handler.Where(x => nameof(SelectedRate).Equals(x, StringComparison.Ordinal))
+                    .Where(_ => SelectedRate != null)
+                    .Subscribe(_ => messenger.Send(new SelectedRateChangedMessage(this, SelectedRate)))
+                })
+            );
         }
 
         /// <summary>
@@ -48,56 +63,9 @@ namespace ShipWorks.Shipping.UI.RatingPanel
         }
 
         /// <summary>
-        /// Constructor
-        /// </summary>
-        /// <param name="messenger"></param>
-        public RatingPanelViewModel(IMessenger messenger, ISchedulerProvider schedulerProvider,
-            IIndex<ShipmentTypeCode, IRatingService> ratingServiceLookup) : this()
-        {
-            this.messenger = messenger;
-            this.ratingServiceLookup = ratingServiceLookup;
-
-            // When a RatesRetrievingMessage comes in, we want to wait for it's completed
-            // RatesRetrievedMessage before calling LoadRates.  The following code allows us to do that.
-            // See the Switch example at http://download.microsoft.com/download/C/5/D/C5D669F9-01DF-4FAF-BBA9-29C096C462DB/Rx%20HOL%20.NET.pdf
-            // for more info.
-            subscriptions = new CompositeDisposable(
-                messenger.OfType<RatesRetrievingMessage>()
-                    .ObserveOn(schedulerProvider.Dispatcher)
-                    .Subscribe(_ => ShowSpinner()),
-                messenger.OfType<RatesRetrievingMessage>()
-                    .Select(GetMatchingRatesRetrievedMessage)
-                    .Switch()
-                    .Throttle(TimeSpan.FromMilliseconds(250), schedulerProvider.Default)
-                    .Select(x => x)
-                    .ObserveOn(schedulerProvider.Dispatcher)
-                    .Subscribe(LoadRates),
-                messenger.OfType<ShipmentChangedMessage>()
-                    .Where(x => x.ChangedField == "ServiceType")
-                    .Subscribe(x => SelectRate(x.ShipmentAdapter)),
-                messenger.OfType<OpenShippingDialogMessage>()
-                    .Subscribe(x => Rates = Enumerable.Empty<RateResult>()),
-                messenger.OfType<RatesNotSupportedMessage>()
-                    .Subscribe(HandleRatesNotSupportedMessage),
-                handler.Where(x => nameof(SelectedRate).Equals(x, StringComparison.Ordinal))
-                    .Where(_ => SelectedRate != null)
-                    .Subscribe(_ => messenger.Send(new SelectedRateChangedMessage(this, SelectedRate)))
-            );
-        }
-
-        /// <summary>
-        /// Get rates retrieved messages that match the rates retrieving message
-        /// </summary>
-        private IObservable<RatesRetrievedMessage> GetMatchingRatesRetrievedMessage(RatesRetrievingMessage rateRetrievingMsg)
-        {
-            return messenger.OfType<RatesRetrievedMessage>()
-               .Where(rateRetrivedMsg => rateRetrievingMsg.RatingHash == rateRetrivedMsg.RatingHash);
-        }
-
-        /// <summary>
         /// Handle a rates not supported message.
         /// </summary>
-        private void HandleRatesNotSupportedMessage(RatesNotSupportedMessage message)
+        public virtual void HandleRatesNotSupportedMessage(RatesNotSupportedMessage message)
         {
             Footnotes = Enumerable.Empty<object>();
             Rates = Enumerable.Empty<RateResult>();
@@ -109,57 +77,42 @@ namespace ShipWorks.Shipping.UI.RatingPanel
         /// Blank out items that can show so that the user can't see them
         /// while rates are being retrieved, and show the spinner.
         /// </summary>
-        private void ShowSpinner()
+        public virtual void ShowSpinner()
         {
-            Rates = Enumerable.Empty<RateResult>();
-            Footnotes = Enumerable.Empty<object>();
-            ShowEmptyMessage = false;
+            SetRateResults(Enumerable.Empty<RateResult>(), string.Empty, Enumerable.Empty<object>());
             IsLoading = true;
         }
 
         /// <summary>
         /// Load the rates contained in the given message
         /// </summary>
-        public void LoadRates(RatesRetrievedMessage message)
+        public virtual void LoadRates(RatesRetrievedMessage message)
         {
             if (message.Success)
             {
                 // Do not show rates if the order has more than 1 shipment
                 if (message?.ShipmentAdapter?.Shipment?.Order?.Shipments?.Count > 1)
                 {
-                    Footnotes = Enumerable.Empty<object>();
-                    Rates = Enumerable.Empty<RateResult>();
-                    EmptyMessage = "Unable to get rates for orders with multiple shipments.";
+                    SetRateResults(Enumerable.Empty<RateResult>(),
+                        "Unable to get rates for orders with multiple shipments.", Enumerable.Empty<object>());
                 }
                 else if (message?.ShipmentAdapter?.ShipmentTypeCode == ShipmentTypeCode.Amazon ||
                          message?.ShipmentAdapter?.ShipmentTypeCode == ShipmentTypeCode.BestRate)
                 {
-                    Footnotes = Enumerable.Empty<object>();
-                    Rates = Enumerable.Empty<RateResult>();
-                    EmptyMessage = "Please use Ship Orders to get rates for this carrier.";
+                    SetRateResults(Enumerable.Empty<RateResult>(),
+                        "Please use Ship Orders to get rates for this carrier.", Enumerable.Empty<object>());
                 }
                 else
                 {
-                    Rates = message.RateGroup.Rates.ToArray();
-                    EmptyMessage = string.Empty;
-
-                    Footnotes = message.RateGroup.FootnoteFactories
-                        .Select(x => x.CreateViewModel(message.ShipmentAdapter))
-                        .ToList() ?? Enumerable.Empty<object>();
+                    SetRateResults(message.RateGroup.Rates, string.Empty,
+                        message.RateGroup.FootnoteFactories.Select(x => x.CreateViewModel(message.ShipmentAdapter)));
                 }
             }
             else
             {
-                Rates = Enumerable.Empty<RateResult>();
-                EmptyMessage = message.ErrorMessage;
-
-                Footnotes = message.RateGroup.FootnoteFactories
-                        .Select(x => x.CreateViewModel(message.ShipmentAdapter))
-                        .ToList() ?? Enumerable.Empty<object>();
+                SetRateResults(Enumerable.Empty<RateResult>(), message.ErrorMessage,
+                    message.RateGroup.FootnoteFactories.Select(x => x.CreateViewModel(message.ShipmentAdapter)));
             }
-
-            ShowFootnotes = Footnotes.Any();
-            ShowEmptyMessage = !string.IsNullOrEmpty(EmptyMessage);
 
             // If we didn't get any footnotes, and no error message, and not rates,
             // show the no rates message.
@@ -179,9 +132,24 @@ namespace ShipWorks.Shipping.UI.RatingPanel
         }
 
         /// <summary>
+        /// Sets the rate result fields that will be displayed
+        /// </summary>
+        public virtual void SetRateResults(IEnumerable<RateResult> rateResults, string message,
+            IEnumerable<object> footnoteViewModels)
+        {
+            Rates = rateResults;
+            EmptyMessage = message;
+
+            Footnotes = footnoteViewModels.ToList() ?? Enumerable.Empty<object>();
+
+            ShowFootnotes = Footnotes.Any();
+            ShowEmptyMessage = !string.IsNullOrEmpty(EmptyMessage);
+        }
+
+        /// <summary>
         /// Set the selected rate for the shipment
         /// </summary>
-        private void SelectRate(ICarrierShipmentAdapter shipmentAdapter)
+        public virtual void SelectRate(ICarrierShipmentAdapter shipmentAdapter)
         {
             if (shipmentAdapter == null || Rates == null)
             {
