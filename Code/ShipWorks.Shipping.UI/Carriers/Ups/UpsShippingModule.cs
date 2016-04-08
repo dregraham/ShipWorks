@@ -49,6 +49,9 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups
             builder.RegisterType<UpsRatingService>()
                 .Keyed<IRatingService>(ShipmentTypeCode.UpsOnLineTools)
                 .Keyed<IRatingService>(ShipmentTypeCode.UpsWorldShip);
+
+            builder.RegisterType<UpsClerk>()
+                .AsImplementedInterfaces();
         }
     }
 }

@@ -489,8 +489,13 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
             try
             {
-                UpsClerk clerk = new UpsClerk(upsAccount);
-                UpsRegistrationStatus registrationStatus = clerk.RegisterAccount(upsAccount);
+                UpsRegistrationStatus registrationStatus;
+
+                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+                {
+                    IUpsClerk clerk = lifetimeScope.Resolve<IUpsClerk>(new TypedParameter(typeof(UpsAccountEntity), upsAccount));
+                    registrationStatus = clerk.RegisterAccount(upsAccount);
+                }
 
                 switch (registrationStatus)
                 {
@@ -534,9 +539,11 @@ namespace ShipWorks.Shipping.Carriers.UPS
         {
             try
             {
-                UpsClerk clerk = new UpsClerk(upsAccount);
-
-                clerk.RegisterAccount(upsAccount, upsInvoiceAuthorizationControl.InvoiceAuthorizationData);
+                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+                {
+                    IUpsClerk clerk = lifetimeScope.Resolve<IUpsClerk>(new TypedParameter(typeof(UpsAccountEntity), upsAccount));
+                    clerk.RegisterAccount(upsAccount, upsInvoiceAuthorizationControl.InvoiceAuthorizationData);
+                }
             }
             catch (UpsWebServiceException ex)
             {
@@ -862,7 +869,14 @@ namespace ShipWorks.Shipping.Carriers.UPS
             try
             {
                 RegisterNewAccount();
-                UpsOpenAccountResponseDTO upsOpenAccountResponse = OpenUpsAccount(new UpsClerk(upsAccount));
+
+                UpsOpenAccountResponseDTO upsOpenAccountResponse;
+
+                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+                {
+                    IUpsClerk clerk = lifetimeScope.Resolve<IUpsClerk>(new TypedParameter(typeof(UpsAccountEntity), upsAccount));
+                    upsOpenAccountResponse = OpenUpsAccount(new UpsClerk(upsAccount));
+                }
 
                 notifyTime = upsOpenAccountResponse.NotifyTime;
             }
@@ -879,8 +893,13 @@ namespace ShipWorks.Shipping.Carriers.UPS
         {
             try
             {
-                UpsClerk upsClerk = new UpsClerk(upsAccount);
-                UpsRegistrationStatus registrationStatus = upsClerk.RegisterAccount(upsAccount);
+                UpsRegistrationStatus registrationStatus;
+
+                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+                {
+                    IUpsClerk clerk = lifetimeScope.Resolve<IUpsClerk>(new TypedParameter(typeof(UpsAccountEntity), upsAccount));
+                    registrationStatus = clerk.RegisterAccount(upsAccount);
+                }
 
                 if (registrationStatus != UpsRegistrationStatus.Success)
                 {

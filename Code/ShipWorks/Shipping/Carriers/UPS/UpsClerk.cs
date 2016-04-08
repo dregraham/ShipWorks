@@ -10,6 +10,9 @@ using System.Linq;
 
 namespace ShipWorks.Shipping.Carriers.UPS
 {
+    /// <summary>
+    /// UpsClerk used to communicate with the UpsWebService to OpenAccount and Register
+    /// </summary>
     public class UpsClerk : IUpsClerk
     {
         private readonly IUpsOpenAccountRequestFactory openAccountRequestFactory;
@@ -21,7 +24,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
         public UpsClerk(UpsAccountEntity upsAccount)
             : this(new UpsOpenAccountRequestFactory(upsAccount), new UpsInvoiceRegistrationRequestFactory())
         { }
-
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UpsClerk" /> class.
@@ -112,7 +114,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
             // We should never get this far unless for some reason the three attempts from above
             // failed each time with error code "9570100"
-            throw new UpsException("A unique User ID could not be generated.  Please try again.", lastUniqueException);
+            return UpsRegistrationStatus.Failed;
         }
     }
 }

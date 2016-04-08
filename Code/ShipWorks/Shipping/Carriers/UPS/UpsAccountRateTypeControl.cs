@@ -5,6 +5,8 @@ using ShipWorks.Shipping.Carriers.UPS.Enums;
 using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api;
 using Interapptive.Shared.UI;
+using Autofac;
+using ShipWorks.ApplicationCore;
 
 namespace ShipWorks.Shipping.Carriers.UPS
 {
@@ -40,10 +42,9 @@ namespace ShipWorks.Shipping.Carriers.UPS
             }
 
             EnumHelper.BindComboBox<UpsRateType>(rateType);
-
             rateType.SelectedValue = (UpsRateType) account.RateType;
 
-            HideOrShowNegotiatedRates();
+            HideOrShowNegotiatedRatesControl();
         }
 
         /// <summary>
@@ -53,13 +54,18 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void OnRateTypeChanged(object sender, EventArgs e)
         {
-            HideOrShowNegotiatedRates();
+            HideOrShowNegotiatedRatesControl();
         }
 
         /// <summary>
-        /// Hides the or show negotiated rates.
+        /// Hides the or show negotiated rates control based on the accounts status
         /// </summary>
-        private void HideOrShowNegotiatedRates()
+        /// <remarks>
+        /// negotiated rates are hidden when invoice auth is true. If invoice auth
+        /// is false and the user picks negotiated rates in the drop down
+        /// then the negotiated rates control is visible
+        /// </remarks>
+        private void HideOrShowNegotiatedRatesControl()
         {
             bool showNegotiatedRatesDependentControls = (!account.InvoiceAuth && (UpsRateType)rateType.SelectedValue == UpsRateType.Negotiated);
 
@@ -70,6 +76,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <summary>
         /// Register the account and save
         /// </summary>
+        /// <returns>true when successful or false when register fails</returns>
         public bool RegisterAndSaveToEntity()
         {
             // If the account has not done invoice auth and they have selected negotiated rates
@@ -77,9 +84,13 @@ namespace ShipWorks.Shipping.Carriers.UPS
             {
                 try
                 {
-                    // Register the account using invoice auth
-                    UpsClerk clerk = new UpsClerk(account);
-                    clerk.RegisterAccount(account, authorizationControl.InvoiceAuthorizationData);
+                    using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+                    {
+                        IUpsClerk clerk = lifetimeScope.Resolve<IUpsClerk>(new TypedParameter(typeof(UpsAccountEntity), account));
+                        clerk.RegisterAccount(account, authorizationControl.InvoiceAuthorizationData);
+                    }
+
+                    account.RateType = (int)rateType.SelectedValue;
                 }
                 catch (UpsWebServiceException ex)
                 {
@@ -89,7 +100,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
                     return false;
                 }
             }
-            account.RateType = (int)rateType.SelectedValue;
             return true;
         }
     }
