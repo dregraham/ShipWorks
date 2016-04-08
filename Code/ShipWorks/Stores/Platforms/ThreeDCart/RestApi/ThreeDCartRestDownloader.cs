@@ -207,7 +207,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
                         $"Checking order {orderIdentifier} for modifications..." :
                         $"Processing new order {++newOrderCount}";
 
-                    ThreeDCartOrderEntity order = (ThreeDCartOrderEntity) InstantiateOrder(orderIdentifier);
+                    OrderEntity order = InstantiateOrder(orderIdentifier);
 
                     order = LoadOrder(order, threeDCartOrder, shipment, invoiceNumberPostFix);
 
@@ -228,7 +228,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
         /// <summary>
         /// Loads the order.
         /// </summary>
-        public ThreeDCartOrderEntity LoadOrder(ThreeDCartOrderEntity order, ThreeDCartOrder threeDCartOrder, ThreeDCartShipment threeDCartShipment, string invoiceNumberPostFix)
+        public OrderEntity LoadOrder(OrderEntity order, ThreeDCartOrder threeDCartOrder, ThreeDCartShipment threeDCartShipment, string invoiceNumberPostFix)
         {
             MethodConditions.EnsureArgumentIsNotNull(threeDCartOrder, "order");
 
@@ -259,7 +259,13 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
                     order.OnlineCustomerID = threeDCartOrder.CustomerID;
                 }
 
-                order.ThreeDCartOrderID = threeDCartOrder.OrderID;
+                // If user has upgraded from SOAP API, a previously downloaded order won't be ThreeDCartOrderEntity,
+                // just a OrderEntity, so don't try and set the ThreeDCartOrderID.
+                if (order is ThreeDCartOrderEntity)
+                {
+                    ((ThreeDCartOrderEntity) order).ThreeDCartOrderID = threeDCartOrder.OrderID;
+                }
+
                 order.RequestedShipping = threeDCartShipment.ShipmentMethodName;
                 order.OrderDate = DateTimeUtility.ConvertTimeToUtcForTimeZone(threeDCartOrder.OrderDate, threeDCartStore.StoreTimeZone);
 
@@ -381,6 +387,17 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
 
             LoadProductImagesAndLocation(item, threeDCartItem.CatalogID);
             LoadItemNameAndAttributes(item, threeDCartItem);
+
+            // There are some cases where discounts don't show in order discount field and actually appear as a seperate item.
+            // When this happens, it has no item price, but an item option price, which we usually ignore since we
+            // extract item attribute costs from the item description. So if an item matches that criteria, set the
+            // item's price to the attribute price.
+            if (threeDCartItem.ItemUnitPrice == 0 && threeDCartItem.ItemOptionPrice != 0 &&
+                !item.OrderItemAttributes.Any() && threeDCartItem.ItemDescription.Contains("Discount"))
+            {
+                // Discount can come as percentage which has come down with more that 2 decimal places, so round it.
+                item.UnitPrice = Math.Round(threeDCartItem.ItemOptionPrice, 2);
+            }
         }
 
         /// <summary>

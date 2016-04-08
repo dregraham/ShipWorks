@@ -75,10 +75,15 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
 
                 ThreeDCartOrderEntity threeDCartOrder = order as ThreeDCartOrderEntity;
 
+                // will be null if the order was downloaded using the SOAP API
                 if (threeDCartOrder == null)
                 {
-                    log.WarnFormat($"Unable to update online status for order {order.OrderNumberComplete}: cannot find order");
-                    return;
+                    log.WarnFormat($"Unable to update online status for order {order.OrderNumberComplete}: cannot find order." +
+                                   "This is most likely because the order was downloaded using the SOAP API and it is trying to" +
+                                   "update using the REST API.");
+
+                    throw new ThreeDCartException("3dCart orders downloaded using their SOAP API can not be updated online through ShipWorks after " +
+                                                  "your store has been upgraded to use their REST API");
                 }
 
                 string status = EnumHelper.GetDescription((Enums.ThreeDCartOrderStatus) statusID);
@@ -184,8 +189,12 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
 
             if (threeDCartOrder == null)
             {
-                log.WarnFormat($"Unable to update shipment details for order {order.OrderNumberComplete}: Unable to find order");
-                return;
+                log.WarnFormat($"Unable to update online status for order {order.OrderNumberComplete}: cannot find order." +
+                                   "This is most likely because the order was downloaded using the SOAP API and it is trying to" +
+                                   "update using the REST API.");
+
+                throw new ThreeDCartException("3dCart orders downloaded using their SOAP API can not be updated online through ShipWorks after " +
+                                                  "your store has been upgraded to use their REST API");
             }
 
             // Fetch the order items
