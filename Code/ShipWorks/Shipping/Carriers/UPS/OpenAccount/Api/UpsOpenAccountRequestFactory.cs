@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using Autofac.Features.Indexed;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.UPS.OpenAccount.Api.Request;
@@ -15,25 +17,17 @@ namespace ShipWorks.Shipping.Carriers.UPS.OpenAccount.Api
         private readonly ICarrierResponseFactory responseFactory;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="UpsOpenAccountRequestFactory" /> class.
-        /// </summary>
-        public UpsOpenAccountRequestFactory(UpsAccountEntity upsAccount)
-            : this(new UpsServiceGateway(new UpsSettingsRepository()), new UpsResponseFactory(), upsAccount)
-        {
-        }
-
-        /// <summary>
         /// Initializes a new instance of the 
         /// <see cref="UpsOpenAccountRequestFactory" /> class. This
         /// constructor is primarily for testing purposes.
         /// </summary>
         /// <param name="upsOpenAccountService">The UpsOpenAccount service.</param>
-        /// <param name="responseFactory">The response factory.</param>
+        /// <param name="responseFactoryIndex">The response factory.</param>
         /// <param name="upsAccount">The ups account.</param>
-        public UpsOpenAccountRequestFactory(IUpsServiceGateway upsOpenAccountService, ICarrierResponseFactory responseFactory, UpsAccountEntity upsAccount)
+        public UpsOpenAccountRequestFactory(IUpsServiceGateway upsOpenAccountService, IIndex<ShipmentTypeCode, ICarrierResponseFactory> responseFactoryIndex, UpsAccountEntity upsAccount)
         {
             this.upsOpenAccountService = upsOpenAccountService;
-            this.responseFactory = responseFactory;
+            this.responseFactory = responseFactoryIndex[ShipmentTypeCode.UpsOnLineTools];
             this.upsAccount = upsAccount;
         }
 

@@ -1,4 +1,7 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+using Autofac;
+using Autofac.Extras.Moq;
 using Xunit;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
@@ -9,13 +12,16 @@ using ShipWorks.Shipping.Carriers.UPS.WebServices.OpenAccount;
 
 namespace ShipWorks.Tests.Shipping.Carriers.UPS.OpenAccount.Api
 {
-    public class UpsOpenAccountRequestFactoryTest
+    public class UpsOpenAccountRequestFactoryTest : IDisposable
     {
+        private AutoMock mock;
         private UpsOpenAccountRequestFactory testObject;
 
         public UpsOpenAccountRequestFactoryTest()
         {
-            testObject = new UpsOpenAccountRequestFactory(new UpsAccountEntity());
+            mock = AutoMock.GetLoose();
+            testObject = mock.Create<UpsOpenAccountRequestFactory>(
+                new TypedParameter(typeof(UpsAccountEntity), new UpsAccountEntity()));
         }
 
         [Fact]
@@ -42,6 +48,11 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OpenAccount.Api
             CarrierRequest request = testObject.CreateOpenAccountRequest(new OpenAccountRequest()) as UpsOpenAccountRequest;
 
             Assert.True(request.Manipulators.Count(m => m.GetType() == typeof(UpsOpenAccountAddEndUserInformation)) == 1);
+        }
+
+        public void Dispose()
+        {
+            mock.Dispose();
         }
     }
 }

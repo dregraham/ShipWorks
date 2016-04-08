@@ -25,7 +25,6 @@ using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Editions;
-using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.UPS.InvoiceRegistration;
 
 namespace ShipWorks.Shipping.Carriers.UPS
@@ -36,14 +35,14 @@ namespace ShipWorks.Shipping.Carriers.UPS
     [NDependIgnoreLongTypes]
     public partial class UpsSetupWizard : ShipmentTypeSetupWizardForm
     {
-        ShipmentType shipmentType;
-        bool forceAccountOnly;
-        DateTime? notifyTime;
+        private readonly ShipmentType shipmentType;
+        private readonly bool forceAccountOnly;
+        private DateTime? notifyTime;
 
-        string upsLicense;
+        private string upsLicense;
 
         // The ups shipper we are creating
-        UpsAccountEntity upsAccount = new UpsAccountEntity();
+        private readonly UpsAccountEntity upsAccount = new UpsAccountEntity();
 
         private OpenAccountRequest openAccountRequest;
 
@@ -463,25 +462,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             upsAccount.AccountNumber = EnteredAccountNumber();
 
             // Edition check
-            if (!AccountAllowed(upsAccount.AccountNumber))
-            {
-                e.NextPage = CurrentPage;
-                return;
-            }
-
-            RequiredFieldChecker checker = new RequiredFieldChecker();
-            checker.Check("UPS Account", upsAccount.AccountNumber);
-            checker.Check("Full Name", upsAccount.FirstName);
-            checker.Check("Company", upsAccount.Company);
-            checker.Check("Street Address", upsAccount.Street1);
-            checker.Check("City", upsAccount.City);
-            checker.Check("State", upsAccount.StateProvCode);
-            checker.Check("Postal Code", upsAccount.PostalCode);
-            checker.Check("Phone", upsAccount.Phone);
-            checker.Check("Website", upsAccount.Website);
-            checker.Check("Email", upsAccount.Email);
-
-            if (!checker.Validate(this))
+            if (!AccountAllowed(upsAccount.AccountNumber) || !ValidateEnterredAccountInformation())
             {
                 e.NextPage = CurrentPage;
                 return;
@@ -493,7 +474,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
                 using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
                 {
-                    IUpsClerk clerk = lifetimeScope.Resolve<IUpsClerk>(new TypedParameter(typeof(UpsAccountEntity), upsAccount));
+                    IUpsClerk clerk =
+                        lifetimeScope.Resolve<IUpsClerk>(new TypedParameter(typeof(UpsAccountEntity), upsAccount));
                     registrationStatus = clerk.RegisterAccount(upsAccount);
                 }
 
@@ -509,27 +491,42 @@ namespace ShipWorks.Shipping.Carriers.UPS
                         e.NextPage = wizardPageInvoiceAuthentication;
                         break;
                 }
+
+                GetUpsAccessKey();
+
+                using (SqlAdapter adapter = new SqlAdapter(true))
+                {
+                    upsAccount.Description = UpsAccountManager.GetDefaultDescription(upsAccount);
+                    UpsAccountManager.SaveAccount(upsAccount);
+
+                    adapter.Commit();
+                }
             }
             catch (UpsException ex)
             {
                 MessageHelper.ShowError(this, ex.Message);
                 e.NextPage = CurrentPage;
-                return;
             }
+        }
 
-            if (!GetUpsAccessKey())
-            {
-                e.NextPage = CurrentPage;
-                return;
-            }
+        /// <summary>
+        /// Validates the enterred account information.
+        /// </summary>
+        private bool ValidateEnterredAccountInformation()
+        {
+            RequiredFieldChecker checker = new RequiredFieldChecker();
+            checker.Check("UPS Account", upsAccount.AccountNumber);
+            checker.Check("Full Name", upsAccount.FirstName);
+            checker.Check("Company", upsAccount.Company);
+            checker.Check("Street Address", upsAccount.Street1);
+            checker.Check("City", upsAccount.City);
+            checker.Check("State", upsAccount.StateProvCode);
+            checker.Check("Postal Code", upsAccount.PostalCode);
+            checker.Check("Phone", upsAccount.Phone);
+            checker.Check("Website", upsAccount.Website);
+            checker.Check("Email", upsAccount.Email);
 
-            using (SqlAdapter adapter = new SqlAdapter(true))
-            {
-                upsAccount.Description = UpsAccountManager.GetDefaultDescription(upsAccount);
-                UpsAccountManager.SaveAccount(upsAccount);
-
-                adapter.Commit();
-            }
+            return checker.Validate(this);
         }
 
         /// <summary>
@@ -551,19 +548,23 @@ namespace ShipWorks.Shipping.Carriers.UPS
                     "Note: UPS will lock out accounts for a 24 hour period if your invoice information cannot be authenticated after two attempts.";
                 MessageHelper.ShowError(this, errorMessage);
                 e.NextPage = CurrentPage;
-                return;
             }
         }
 
         /// <summary>
-        /// Get the global instanced UPS access key
+        /// Set UpsAccessKey in ShippingSettings - Used for UPS Authentication
         /// </summary>
+        /// <exception cref="UpsException"></exception>
+        /// <remarks>
+        /// If UpsAccessKey is already set in ShippingSettings return
+        /// If UpsAccessKey is not set, it is retrieved from UPS and set in ShippingSettings
+        /// </remarks>
         [NDependIgnoreLongMethod]
-        private bool GetUpsAccessKey()
+        private void GetUpsAccessKey()
         {
             if (ShippingSettings.Fetch().UpsAccessKey != null)
             {
-                return true;
+                return;
             }
 
             // Create the client for connecting to the UPS server
@@ -602,36 +603,22 @@ namespace ShipWorks.Shipping.Carriers.UPS
             xmlWriter.WriteElementString("SoftwareInstaller", "User");
             xmlWriter.WriteElementString("SoftwareProductName", "ShipWorks");
             xmlWriter.WriteElementString("SoftwareProvider", "Interapptive, Inc.");
-            xmlWriter.WriteElementString("SoftwareVersionNumber", Assembly.GetExecutingAssembly().GetName().Version.ToString(2));
+            xmlWriter.WriteElementString("SoftwareVersionNumber",
+                Assembly.GetExecutingAssembly().GetName().Version.ToString(2));
             xmlWriter.WriteEndElement();
 
-            try
-            {
-                Cursor.Current = Cursors.WaitCursor;
+            Cursor.Current = Cursors.WaitCursor;
 
-                // Process the XML request
-                XmlDocument upsResponse = UpsWebClient.ProcessRequest(xmlWriter);
+            // Process the XML request
+            XmlDocument upsResponse = UpsWebClient.ProcessRequest(xmlWriter);
 
-                // Now we can get the Access License number
-                string accessKey = (string) upsResponse.CreateNavigator().Evaluate("string(//AccessLicenseNumber)");
+            // Now we can get the Access License number
+            string accessKey = (string) upsResponse.CreateNavigator().Evaluate("string(//AccessLicenseNumber)");
 
-                ShippingSettingsEntity settings = ShippingSettings.Fetch();
-                settings.UpsAccessKey = SecureText.Encrypt(accessKey, "UPS");
+            ShippingSettingsEntity settings = ShippingSettings.Fetch();
+            settings.UpsAccessKey = SecureText.Encrypt(accessKey, "UPS");
 
-                ShippingSettings.Save(settings);
-
-                return true;
-            }
-            catch (UpsException ex)
-            {
-                MessageBox.Show(this,
-                    "An error occurred: " + ex.Message,
-                    "ShipWorks",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-
-                return false;
-            }
+            ShippingSettings.Save(settings);
         }
 
         /// <summary>
@@ -875,7 +862,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
                 {
                     IUpsClerk clerk = lifetimeScope.Resolve<IUpsClerk>(new TypedParameter(typeof(UpsAccountEntity), upsAccount));
-                    upsOpenAccountResponse = OpenUpsAccount(new UpsClerk(upsAccount));
+                    upsOpenAccountResponse = OpenUpsAccount(clerk);
                 }
 
                 notifyTime = upsOpenAccountResponse.NotifyTime;
@@ -906,10 +893,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
                     throw new UpsException("Could not register your new account in ShipWorks.");
                 }
 
-                if (!GetUpsAccessKey())
-                {
-                    throw new UpsException("Could not obtain access key from UPS.");
-                }
+                GetUpsAccessKey();
 
                 NextEnabled = true;
 

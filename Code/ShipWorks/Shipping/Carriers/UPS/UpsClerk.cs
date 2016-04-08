@@ -1,3 +1,4 @@
+using System;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.UPS.InvoiceRegistration;
@@ -21,19 +22,12 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <summary>
         /// Initializes a new instance of the <see cref="UpsClerk" /> class.
         /// </summary>
-        public UpsClerk(UpsAccountEntity upsAccount)
-            : this(new UpsOpenAccountRequestFactory(upsAccount), new UpsInvoiceRegistrationRequestFactory())
-        { }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="UpsClerk" /> class.
-        /// </summary>
-        /// <param name="openAccountRequestFactory">The open account request factory.</param>
-        /// <param name="invoiceRegistrationRequestFactory">The invoice registration request factory.</param>
-        public UpsClerk(IUpsOpenAccountRequestFactory openAccountRequestFactory,
+        public UpsClerk(
+            UpsAccountEntity upsAccount,
+            Func<UpsAccountEntity, IUpsOpenAccountRequestFactory> openAccountRequestFactory,
             IUpsInvoiceRegistrationRequestFactory invoiceRegistrationRequestFactory)
         {
-            this.openAccountRequestFactory = openAccountRequestFactory;
+            this.openAccountRequestFactory = openAccountRequestFactory(upsAccount);
             this.invoiceRegistrationRequestFactory = invoiceRegistrationRequestFactory;
         }
 

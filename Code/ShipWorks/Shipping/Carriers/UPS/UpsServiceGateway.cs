@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Web.Services.Protocols;
 using System.Xml.Linq;
+using Autofac.Features.Indexed;
 using Interapptive.Shared.Net;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Shipping.Api;
@@ -31,13 +32,12 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <summary>
         /// Initializes a new instance of the <see cref="UpsServiceGateway" /> class.
         /// </summary>
-        /// <param name="settingsRepository">The settings repository.</param>
-        public UpsServiceGateway(ICarrierSettingsRepository settingsRepository)
+        /// <param name="settingsRepositoryIndex">The settings repository.</param>
+        public UpsServiceGateway(IIndex<ShipmentTypeCode, ICarrierSettingsRepository> settingsRepositoryIndex)
         {
             // Tell the UpsOpenAccount settings which data source to use 
-            settings = new UpsSettings(settingsRepository);
+            settings = new UpsSettings(settingsRepositoryIndex[ShipmentTypeCode.UpsOnLineTools]);
         }
-
 
         /// <summary>
         /// Intended to interact with the UPS OpenAccount API for opening a new account with UPS.
@@ -49,7 +49,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         {
             try
             {
-                OpenAccountAPI.OpenAccountResponse openAccountResponse = new OpenAccountAPI.OpenAccountResponse();
+                OpenAccountAPI.OpenAccountResponse openAccountResponse;
 
                 // This is where we actually communicate with UpsOpenAccount, so it's okay to explicitly create the 
                 // OpenAccountService object here (i.e. no more abstractions can be made)

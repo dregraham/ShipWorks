@@ -1,35 +1,28 @@
 ﻿using System.Collections.Generic;
+using Autofac.Features.Indexed;
 using Interapptive.Shared.Net;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.UPS.InvoiceRegistration.Api.Request;
 using ShipWorks.Shipping.Carriers.UPS.InvoiceRegistration.Api.Request.Manipulators;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
-using ShipWorks.Shipping.Carriers.UPS.UpsEnvironment;
 
 namespace ShipWorks.Shipping.Carriers.UPS.InvoiceRegistration
 {
     public class UpsInvoiceRegistrationRequestFactory : IUpsInvoiceRegistrationRequestFactory
     {
-        private readonly UpsResponseFactory upsResponseFactory;
+        private readonly ICarrierResponseFactory upsResponseFactory;
         private readonly IUpsServiceGateway upsServiceGateway;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="UpsInvoiceRegistrationRequestFactory" /> class.
-        /// </summary>
-        public UpsInvoiceRegistrationRequestFactory()
-            : this(new UpsServiceGateway(new UpsSettingsRepository()), new UpsResponseFactory())
-        { }
 
         /// <summary>
         /// Prevents a default instance of the <see cref="UpsInvoiceRegistrationRequestFactory"/> class from being created.
         /// </summary>
         /// <param name="upsServiceGateway">The ups service gateway.</param>
-        /// <param name="upsResponseFactory">The ups response factory.</param>
-        private UpsInvoiceRegistrationRequestFactory(IUpsServiceGateway upsServiceGateway, UpsResponseFactory upsResponseFactory)
+        /// <param name="responseFactoryIndex">The ups response factory.</param>
+        public UpsInvoiceRegistrationRequestFactory(IUpsServiceGateway upsServiceGateway, IIndex<ShipmentTypeCode, ICarrierResponseFactory> responseFactoryIndex)
         {
             this.upsServiceGateway = upsServiceGateway;
-            this.upsResponseFactory = upsResponseFactory;
+            upsResponseFactory = responseFactoryIndex[ShipmentTypeCode.UpsOnLineTools];
         }
 
         /// <summary>

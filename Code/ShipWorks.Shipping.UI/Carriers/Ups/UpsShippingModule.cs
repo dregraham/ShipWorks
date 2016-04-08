@@ -1,10 +1,15 @@
 ﻿using Autofac;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers;
+using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.Ups;
 using ShipWorks.Shipping.Carriers.UPS;
+using ShipWorks.Shipping.Carriers.UPS.InvoiceRegistration;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api;
+using ShipWorks.Shipping.Carriers.UPS.OpenAccount.Api;
+using ShipWorks.Shipping.Carriers.UPS.UpsEnvironment;
 
 namespace ShipWorks.Shipping.UI.Carriers.Ups
 {
@@ -51,6 +56,22 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups
                 .Keyed<IRatingService>(ShipmentTypeCode.UpsWorldShip);
 
             builder.RegisterType<UpsClerk>()
+                .AsImplementedInterfaces();
+
+            builder.RegisterType<UpsResponseFactory>()
+                .Keyed<ICarrierResponseFactory>(ShipmentTypeCode.UpsOnLineTools)
+                .Keyed<ICarrierResponseFactory>(ShipmentTypeCode.UpsWorldShip);
+
+            builder.RegisterType<UpsSettingsRepository>()
+                .Keyed<ICarrierSettingsRepository>(ShipmentTypeCode.UpsOnLineTools);
+
+            builder.RegisterType<UpsServiceGateway>()
+                .AsImplementedInterfaces();
+
+            builder.RegisterType<UpsOpenAccountRequestFactory>()
+                .AsImplementedInterfaces();
+
+            builder.RegisterType<UpsInvoiceRegistrationRequestFactory>()
                 .AsImplementedInterfaces();
         }
     }
