@@ -39,6 +39,7 @@ namespace ShipWorks.Shipping.UI.Tests.RatingPanel.ObservableRegistrations
             var testObject = mock.Create<RatesRetrievedPipeline>();
             testObject.Register(viewModel.Object);
 
+            subject.OnNext(new OrderSelectionChangingMessage(this, Enumerable.Empty<long>()));
             subject.OnNext(new RatesRetrievingMessage(this, "Foo"));
 
             viewModel.Verify(x => x.ShowSpinner());
@@ -53,6 +54,7 @@ namespace ShipWorks.Shipping.UI.Tests.RatingPanel.ObservableRegistrations
             var testObject = mock.Create<RatesRetrievedPipeline>();
             testObject.Register(viewModel.Object);
 
+            subject.OnNext(new OrderSelectionChangingMessage(this, Enumerable.Empty<long>()));
             subject.OnNext(new RatesRetrievingMessage(this, "Foo"));
 
             viewModel.Verify(x => x.ShowSpinner(), Times.Never);
@@ -60,6 +62,32 @@ namespace ShipWorks.Shipping.UI.Tests.RatingPanel.ObservableRegistrations
             scheduler.Dispatcher.Start();
 
             viewModel.Verify(x => x.ShowSpinner());
+        }
+
+        [Fact]
+        public void Register_ShowSpinnerIsNotCalled_WhenWindowIsNotOpen()
+        {
+            var viewModel = mock.CreateMock<RatingPanelViewModel>();
+            var testObject = mock.Create<RatesRetrievedPipeline>();
+            testObject.Register(viewModel.Object);
+
+            subject.OnNext(new RatesRetrievingMessage(this, "Foo"));
+
+            viewModel.Verify(x => x.ShowSpinner(), Times.Never);
+        }
+
+        [Fact]
+        public void Register_ShowSpinnerIsNotCalled_WhenWindowIsClosed()
+        {
+            var viewModel = mock.CreateMock<RatingPanelViewModel>();
+            var testObject = mock.Create<RatesRetrievedPipeline>();
+            testObject.Register(viewModel.Object);
+
+            subject.OnNext(new OrderSelectionChangingMessage(this, Enumerable.Empty<long>()));
+            subject.OnNext(new OpenShippingDialogMessage(this, Enumerable.Empty<ShipmentEntity>()));
+            subject.OnNext(new RatesRetrievingMessage(this, "Foo"));
+
+            viewModel.Verify(x => x.ShowSpinner(), Times.Never);
         }
 
         [Fact]
