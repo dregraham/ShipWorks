@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
@@ -19,6 +20,7 @@ namespace ShipWorks.UI.Tests.Controls.ChannelLimit
 {
     public class ChannelLimitViewModelTest
     {
+
         [Fact]
         public void Load_ThrowsShipWorksLicenseException_WhenLicenseServiceReturnsStoreLicense()
         {
@@ -170,7 +172,7 @@ namespace ShipWorks.UI.Tests.Controls.ChannelLimit
         }
 
         [Fact]
-        public void DeleteChannel_DeletesChannel_WhenConfirmDeleteTrue()
+        public async Task DeleteChannel_DeletesChannel_WhenConfirmDeleteTrue()
         {
             using (var mock = AutoMock.GetLoose())
             {
@@ -187,8 +189,8 @@ namespace ShipWorks.UI.Tests.Controls.ChannelLimit
                 confirmDelete.Setup(d => d.DialogResult)
                     .Returns(true);
 
-                Mock<IChannelConfirmDeleteFactory> confirmDeleteFactgory = mock.Mock<IChannelConfirmDeleteFactory>();
-                confirmDeleteFactgory.Setup(c => c.GetConfirmDeleteDlg(It.IsAny<StoreTypeCode>(), It.IsAny<IWin32Window>()))
+                Mock<IChannelConfirmDeleteFactory> confirmDeleteFactory = mock.Mock<IChannelConfirmDeleteFactory>();
+                confirmDeleteFactory.Setup(c => c.GetConfirmDeleteDlg(It.IsAny<StoreTypeCode>(), It.IsAny<IWin32Window>()))
                     .Returns(confirmDelete.Object);
 
                 Mock<ICustomerLicense> license = mock.Mock<ICustomerLicense>();
@@ -196,11 +198,11 @@ namespace ShipWorks.UI.Tests.Controls.ChannelLimit
 
                 // Test
                 var testObject = mock.Create<ChannelLimitViewModel>();
+
                 testObject.Load(license.Object, behavior.Object);
                 testObject.SelectedStoreType = StoreTypeCode.Ebay;
 
-                ICommand deleteCommand = testObject.DeleteStoreClickCommand;
-                deleteCommand.Execute(null);
+                await testObject.DeleteChannel(null);
 
                 // Verify
                 license.Verify(l => l.DeleteChannel(StoreTypeCode.Ebay, It.IsAny<ISecurityContext>()), Times.Once);

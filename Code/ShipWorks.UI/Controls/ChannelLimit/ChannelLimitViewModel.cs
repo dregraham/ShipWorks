@@ -72,7 +72,7 @@ namespace ShipWorks.UI.Controls.ChannelLimit
 
             log = logFactory(typeof(ChannelLimitViewModel));
 
-            DeleteStoreClickCommand = new RelayCommand<ChannelLimitControl>(DeleteChannel, CanExecuteDeleteStore);
+            DeleteStoreClickCommand = new RelayCommand<ChannelLimitControl>(async control => await DeleteChannel(control), CanExecuteDeleteStore);
             UpgradeClickCommand = new RelayCommand<ChannelLimitControl>(UpgradeAccount);
         }
 
@@ -271,7 +271,7 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         /// <summary>
         /// Delete the selected store
         /// </summary>
-        private async void DeleteChannel(ChannelLimitControl control)
+        public async Task DeleteChannel(ChannelLimitControl control)
         {
             List<StoreTypeCode> localStoreTypeCodes =
                 storeManager.GetAllStores().Select(s => (StoreTypeCode) s.TypeCode).Distinct().ToList();
