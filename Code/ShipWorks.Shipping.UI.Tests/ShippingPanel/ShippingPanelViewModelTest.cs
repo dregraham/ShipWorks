@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Autofac.Extras.Moq;
+using Interapptive.Shared.Business;
 using Interapptive.Shared.UI;
 using Moq;
 using ShipWorks.Core.Messaging;
@@ -205,6 +206,52 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
             testObject.Save();
 
             mock.Mock<IMessenger>().Verify(s => s.Send(It.IsAny<IShipWorksMessage>()), Times.Never);
+        }
+
+        [Theory]
+        [InlineData(ShippingPanelLoadedShipmentResult.Deleted)]
+        [InlineData(ShippingPanelLoadedShipmentResult.Error)]
+        [InlineData(ShippingPanelLoadedShipmentResult.Multiple)]
+        [InlineData(ShippingPanelLoadedShipmentResult.NotCreated)]
+        [InlineData(ShippingPanelLoadedShipmentResult.UnsupportedShipmentType)]
+        public void Save_DoesNotDelegate_WhenLoadedShipmentResult_IsNotSuccess_Test(ShippingPanelLoadedShipmentResult shippingPanelLoadedShipmentResult)
+        {
+            Mock<ShipmentViewModel> shipmentViewModel = mock.CreateMock<ShipmentViewModel>();
+
+            mock.Mock<IShippingViewModelFactory>()
+                .SetupSequence(s => s.GetShipmentViewModel(It.IsAny<ShipmentTypeCode>()))
+                .Returns(shipmentViewModel.Object)
+                .Returns(new Mock<ShipmentViewModel>().Object);
+
+            ShippingPanelViewModel testObject = GetViewModelWithLoadedShipment(mock);
+            testObject.LoadedShipmentResult = shippingPanelLoadedShipmentResult;
+
+            mock.Mock<IMessenger>().ResetCalls();
+
+            testObject.Save();
+
+            shipmentViewModel.Verify(x => x.Save(), Times.Never);
+        }
+
+        [Theory]
+        [InlineData(ShippingPanelLoadedShipmentResult.Success)]
+        public void Save_DoesDelegate_WhenLoadedShipmentResult_IsSuccess_Test(ShippingPanelLoadedShipmentResult shippingPanelLoadedShipmentResult)
+        {
+            Mock<ShipmentViewModel> shipmentViewModel = mock.CreateMock<ShipmentViewModel>();
+
+            mock.Mock<IShippingViewModelFactory>()
+                .SetupSequence(s => s.GetShipmentViewModel(It.IsAny<ShipmentTypeCode>()))
+                .Returns(shipmentViewModel.Object)
+                .Returns(new Mock<ShipmentViewModel>().Object);
+
+            ShippingPanelViewModel testObject = GetViewModelWithLoadedShipment(mock);
+            testObject.LoadedShipmentResult = shippingPanelLoadedShipmentResult;
+
+            mock.Mock<IMessenger>().ResetCalls();
+
+            testObject.Save();
+
+            shipmentViewModel.Verify(x => x.Save(), Times.Once);
         }
 
         [Fact]

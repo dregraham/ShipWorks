@@ -358,7 +358,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// </summary>
         public void Save()
         {
-            if (ShipmentAdapter?.Shipment == null || ShipmentAdapter.Shipment.Processed)
+            if (ShipmentAdapter?.Shipment == null || ShipmentAdapter.Shipment.Processed || LoadedShipmentResult != ShippingPanelLoadedShipmentResult.Success)
             {
                 return;
             }
