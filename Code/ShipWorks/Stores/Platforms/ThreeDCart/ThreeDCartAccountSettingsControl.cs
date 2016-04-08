@@ -12,7 +12,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
     public partial class ThreeDCartAccountSettingsControl : AccountSettingsControlBase
     {
         static readonly ILog log = LogManager.GetLogger(typeof(ThreeDCartAccountSettingsControl));
-
+        private ThreeDCartStoreEntity threeDCartStoreEntity;
         /// <summary>
         /// Constructor
         /// </summary>
@@ -36,6 +36,13 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
 
             ThreeDCartStoreType storeType = new ThreeDCartStoreType(threeDCartStore);
             helpLink.Url = storeType.AccountSettingsHelpUrl;
+
+            threeDCartStoreEntity = threeDCartStore;
+
+            if (threeDCartStore.RestUser)
+            {
+                buttonUpgradeToRest.Enabled = false;
+            }
         }
 
         /// <summary>
@@ -164,6 +171,16 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
             }
 
             return threeDCartStore;
+        }
+
+        private void OnClickUpgradeToRest(object sender, EventArgs e)
+        {
+            threeDCartStoreEntity.RestUser = true;
+            SaveToEntity(threeDCartStoreEntity);
+            MessageHelper.ShowInformation(this, "To complete the upgrade to 3dCart's REST API, please enter your REST API access token."
+                + Environment.NewLine + Environment.NewLine + "Note: 3dCart's REST API does not support retrieving custom order status names. " +
+                "If any of your 3dCart order statuses have a custom name, you will have to edit any filters that are checking for those custom " +
+                "status names to check for the corresponding defualt 3dCart order status instead.");
         }
     }
 }

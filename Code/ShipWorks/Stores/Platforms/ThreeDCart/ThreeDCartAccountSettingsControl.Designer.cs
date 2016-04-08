@@ -36,6 +36,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.helpLink = new ShipWorks.ApplicationCore.Interaction.HelpLink();
+            this.buttonUpgradeToRest = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // apiUserKey
@@ -123,10 +124,21 @@
             this.helpLink.Url = "http://support.shipworks.com/support/solutions/articles/167787-adding-a-3dcart-st" +
     "ore-";
             // 
+            // buttonUpgradeToRest
+            // 
+            this.buttonUpgradeToRest.Location = new System.Drawing.Point(97, 126);
+            this.buttonUpgradeToRest.Name = "buttonUpgradeToRest";
+            this.buttonUpgradeToRest.Size = new System.Drawing.Size(117, 23);
+            this.buttonUpgradeToRest.TabIndex = 25;
+            this.buttonUpgradeToRest.Text = "Upgrade to REST API";
+            this.buttonUpgradeToRest.UseVisualStyleBackColor = true;
+            this.buttonUpgradeToRest.Click += new System.EventHandler(this.OnClickUpgradeToRest);
+            // 
             // ThreeDCartAccountSettingsControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.buttonUpgradeToRest);
             this.Controls.Add(this.helpLink);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
@@ -152,5 +164,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private ApplicationCore.Interaction.HelpLink helpLink;
+        private System.Windows.Forms.Button buttonUpgradeToRest;
     }
 }
