@@ -1,7 +1,10 @@
 ﻿using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Data;
 using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.FactoryClasses;
 
 namespace ShipWorks.Stores.Content
 {
@@ -33,11 +36,18 @@ namespace ShipWorks.Stores.Content
         {
             MethodConditions.EnsureArgumentIsNotNull(prefetchPath, nameof(prefetchPath));
 
-            OrderEntity order = new OrderEntity(orderId);
+            OrderEntity order = null; 
+
+            EntityType entityType = EntityUtility.GetEntityType(orderId);
+            IEntityField2 pkField = EntityUtility.GetPrimaryKeyField(entityType);
 
             using (SqlAdapter sqlAdapter = SqlAdapter.Create(true))
             {
-                sqlAdapter.FetchEntity(order, prefetchPath);
+                EntityBase2 entity = (EntityBase2)sqlAdapter.FetchNewEntity(
+                    GeneralEntityFactory.Create(entityType).GetEntityFactory(),
+                    new RelationPredicateBucket(new FieldCompareValuePredicate(pkField, null, ComparisonOperator.Equal, orderId)),
+                     prefetchPath);
+                order = entity as OrderEntity;
             }
 
             return order;
