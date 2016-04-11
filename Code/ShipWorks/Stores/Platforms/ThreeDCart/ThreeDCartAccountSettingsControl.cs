@@ -40,11 +40,15 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
             threeDCartStoreEntity = threeDCartStore;
 
             // Don't need the add store help link in settings page, they've clearly already added the store
-            HideAddStoreHelpLink();
+            labelHelpText.Visible = false;
+            helpLink.Visible = false;
+
+            labelApiMessage.Visible = true;
+            labelApiType.Visible = true;
 
             if (!threeDCartStore.RestUser)
             {
-                ShowUpgradeUI();
+                panelUpgrade.Visible = true;
             }
         }
 
@@ -182,29 +186,20 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         private void OnClickUpgradeToRest(object sender, EventArgs e)
         {
             threeDCartStoreEntity.RestUser = true;
+            threeDCartStoreEntity.ApiUserKey = textBoxUpgradeToken.Text;
             SaveToEntity(threeDCartStoreEntity);
-            HideUpgradeUI();
+
+            apiUserKey.Text = textBoxUpgradeToken.Text;
+            panelUpgrade.Visible = false;
+            labelApiType.Text = "REST API";
+
             MessageHelper.ShowInformation(this, "Note: 3dCart's REST API does not support retrieving custom order status names. " +
                 "If any of your 3dCart order statuses have a custom name, you will have to edit any filters that are checking for those custom " +
                 "status names to check for the corresponding defualt 3dCart order status instead.");
-        }
 
-        private void ShowUpgradeUI()
-        {
-            labelApiMessage.Visible = true;
-            labelApiType.Visible = true;
-        }
-
-        private void HideUpgradeUI()
-        {
-            panelUpgrade.Visible = false;
-            labelApiType.Text = "REST API";
-        }
-
-        private void HideAddStoreHelpLink()
-        {
-            labelHelpText.Visible = false;
-            helpLink.Visible = false;
+            ThreeDCartStoreType storeType = new ThreeDCartStoreType(threeDCartStoreEntity);
+            storeType.CreateInitialFilters();
+            
         }
     }
 }
