@@ -102,7 +102,7 @@ namespace ShipWorks.Stores.Management
         {
             UserSession.Security.DemandPermission(PermissionType.ManageStores);
 
-            // Download policy 
+            // Download policy
             downloadPolicy = ComputerDownloadPolicy.Load(store);
 
             // Load the download policy choices and start listening for changes
@@ -313,7 +313,7 @@ namespace ShipWorks.Stores.Management
                                        currentSetting == AddressValidationStoreSettingType.ValidateAndNotify)
                                       && (newSetting == AddressValidationStoreSettingType.ManualValidationOnly ||
                                           newSetting == AddressValidationStoreSettingType.ValidationDisabled);
-            
+
             store.AddressValidationSetting = (int)addressValidationSetting.SelectedValue;
 
             return result;
@@ -514,7 +514,7 @@ namespace ShipWorks.Stores.Management
                     }
                 }
 
-                // Have to make sure our in-memory list of presets stays current.  The in-memory Stores list does not get updated at this point - 
+                // Have to make sure our in-memory list of presets stays current.  The in-memory Stores list does not get updated at this point -
                 // that happens only in the MainForm
                 StatusPresetManager.CheckForChanges();
 
@@ -546,43 +546,7 @@ namespace ShipWorks.Stores.Management
         /// </summary>
         private void OnCreateFiltersClick(object sender, EventArgs e)
         {
-            // Make sure we have a fresh up-to-date layout context in case we need to create store-specific filters
-            FilterLayoutContext.PushScope();
-
-            StoreFilterRepository storeFilterRepository = new StoreFilterRepository(store);
-            StoreFilterRepositorySaveResult result = storeFilterRepository.Save(false);
-            FilterLayoutContext.PopScope();
-
-            if (!result.FolderCreated)
-            {
-                MessageHelper.ShowWarning(this, string.Format("Could not create folder {0}. The folder already exists, and its criteria does not match this store.", result.StoreFolderName));
-                return;
-            }
-
-            StringBuilder sb = new StringBuilder();
-            if (result.CreatedFilters.Any())
-            {
-                sb.AppendFormat("The following filters were created in filter folder '{0}.'", result.StoreFolderName)
-                    .AppendLine();
-
-                result.CreatedFilters.ForEach(newFilter=>sb.AppendFormat(" - {0}", newFilter.Name).AppendLine());
-            }
-            if (result.CollisionFilters.Any())
-            {
-                if (sb.Length>0)
-                {
-                    sb.AppendLine();
-                }
-
-                sb.AppendFormat("Filters already existed in '{0}.'", result.StoreFolderName)
-                    .AppendLine()
-                    .AppendLine("These filters remained unchanged:");
-
-                result.CollisionFilters
-                    .ForEach(collisionFilter => sb.AppendFormat(" - {0}",collisionFilter.Name).AppendLine());
-            }
-
-            MessageHelper.ShowWarning(this, sb.ToString());
+           new StoreManagerWrapper().CreateStoreStatusFilters(this, store);
         }
     }
 }

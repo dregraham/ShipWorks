@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Windows.Forms;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Stores
@@ -32,5 +33,10 @@ namespace ShipWorks.Stores
         /// Saves the store.
         /// </summary>
         void SaveStore(StoreEntity store);
+
+        /// <summary>
+        /// Creates the online status filters for the given store.
+        /// </summary>
+        void CreateStoreStatusFilters(IWin32Window owner, StoreEntity store);
     }
 }

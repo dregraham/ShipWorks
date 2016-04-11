@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ThreeDCartAccountSettingsControl));
             this.apiUserKey = new System.Windows.Forms.TextBox();
             this.lblSecretKey = new System.Windows.Forms.Label();
             this.storeUrl = new System.Windows.Forms.TextBox();
@@ -45,6 +46,8 @@
             this.labelUpgradeText = new System.Windows.Forms.Label();
             this.labelApiType = new System.Windows.Forms.Label();
             this.panelUpgrade = new System.Windows.Forms.Panel();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
             this.panelUpgrade.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -135,7 +138,7 @@
             // 
             // buttonUpgradeToRest
             // 
-            this.buttonUpgradeToRest.Location = new System.Drawing.Point(331, 65);
+            this.buttonUpgradeToRest.Location = new System.Drawing.Point(331, 171);
             this.buttonUpgradeToRest.Name = "buttonUpgradeToRest";
             this.buttonUpgradeToRest.Size = new System.Drawing.Size(100, 23);
             this.buttonUpgradeToRest.TabIndex = 25;
@@ -147,7 +150,7 @@
             // 
             this.textBoxUpgradeToken.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxUpgradeToken.Location = new System.Drawing.Point(97, 38);
+            this.textBoxUpgradeToken.Location = new System.Drawing.Point(97, 144);
             this.textBoxUpgradeToken.Name = "textBoxUpgradeToken";
             this.textBoxUpgradeToken.Size = new System.Drawing.Size(334, 21);
             this.textBoxUpgradeToken.TabIndex = 26;
@@ -160,8 +163,8 @@
             this.labelUpgrade.Name = "labelUpgrade";
             this.labelUpgrade.Size = new System.Drawing.Size(428, 26);
             this.labelUpgrade.TabIndex = 27;
-            this.labelUpgrade.Text = "3dCart will be discontinuing their SOAP API soon, so we recommend that you upgrad" +
-    "e to use their REST API at your earliest convenience.";
+            this.labelUpgrade.Text = "Soon, the way that ShipWorks connects to 3dCart will be discontinued. We recommen" +
+    "d that you upgrade to the new way of connecting at your earliest convenience.";
             // 
             // helpLinkUpgrade
             // 
@@ -169,7 +172,7 @@
             this.helpLinkUpgrade.Cursor = System.Windows.Forms.Cursors.Hand;
             this.helpLinkUpgrade.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline);
             this.helpLinkUpgrade.ForeColor = System.Drawing.Color.Blue;
-            this.helpLinkUpgrade.Location = new System.Drawing.Point(253, 62);
+            this.helpLinkUpgrade.Location = new System.Drawing.Point(253, 168);
             this.helpLinkUpgrade.Name = "helpLinkUpgrade";
             this.helpLinkUpgrade.Size = new System.Drawing.Size(55, 13);
             this.helpLinkUpgrade.TabIndex = 28;
@@ -180,7 +183,7 @@
             // labelUpgradeToken
             // 
             this.labelUpgradeToken.AutoSize = true;
-            this.labelUpgradeToken.Location = new System.Drawing.Point(3, 41);
+            this.labelUpgradeToken.Location = new System.Drawing.Point(3, 147);
             this.labelUpgradeToken.Name = "labelUpgradeToken";
             this.labelUpgradeToken.Size = new System.Drawing.Size(88, 13);
             this.labelUpgradeToken.TabIndex = 29;
@@ -203,7 +206,7 @@
             // 
             this.labelUpgradeText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.labelUpgradeText.Location = new System.Drawing.Point(94, 62);
+            this.labelUpgradeText.Location = new System.Drawing.Point(94, 168);
             this.labelUpgradeText.Name = "labelUpgradeText";
             this.labelUpgradeText.Size = new System.Drawing.Size(162, 13);
             this.labelUpgradeText.TabIndex = 31;
@@ -223,6 +226,8 @@
             // 
             // panelUpgrade
             // 
+            this.panelUpgrade.Controls.Add(this.label3);
+            this.panelUpgrade.Controls.Add(this.label2);
             this.panelUpgrade.Controls.Add(this.textBoxUpgradeToken);
             this.panelUpgrade.Controls.Add(this.buttonUpgradeToRest);
             this.panelUpgrade.Controls.Add(this.labelUpgradeText);
@@ -231,9 +236,30 @@
             this.panelUpgrade.Controls.Add(this.labelUpgradeToken);
             this.panelUpgrade.Location = new System.Drawing.Point(0, 150);
             this.panelUpgrade.Name = "panelUpgrade";
-            this.panelUpgrade.Size = new System.Drawing.Size(440, 100);
+            this.panelUpgrade.Size = new System.Drawing.Size(440, 202);
             this.panelUpgrade.TabIndex = 33;
             this.panelUpgrade.Visible = false;
+            // 
+            // label2
+            // 
+            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.label2.Location = new System.Drawing.Point(3, 82);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(428, 52);
+            this.label2.TabIndex = 32;
+            this.label2.Text = resources.GetString("label2.Text");
+            // 
+            // label3
+            // 
+            this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.label3.Location = new System.Drawing.Point(3, 46);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(428, 26);
+            this.label3.TabIndex = 33;
+            this.label3.Text = "Once you upgrade, you will no longer be able to update orders in ShipWorks that w" +
+    "ere downloaded using the old way of connecting.";
             // 
             // ThreeDCartAccountSettingsControl
             // 
@@ -251,7 +277,7 @@
             this.Controls.Add(this.lblStoreUrl);
             this.Controls.Add(this.lblEnterCredentials);
             this.Name = "ThreeDCartAccountSettingsControl";
-            this.Size = new System.Drawing.Size(440, 250);
+            this.Size = new System.Drawing.Size(440, 355);
             this.panelUpgrade.ResumeLayout(false);
             this.panelUpgrade.PerformLayout();
             this.ResumeLayout(false);
@@ -278,5 +304,7 @@
         private System.Windows.Forms.Label labelUpgradeText;
         private System.Windows.Forms.Label labelApiType;
         private System.Windows.Forms.Panel panelUpgrade;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label3;
     }
 }

@@ -187,9 +187,10 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         {
             threeDCartStoreEntity.RestUser = true;
             threeDCartStoreEntity.ApiUserKey = textBoxUpgradeToken.Text;
+            apiUserKey.Text = textBoxUpgradeToken.Text;
+
             SaveToEntity(threeDCartStoreEntity);
 
-            apiUserKey.Text = textBoxUpgradeToken.Text;
             panelUpgrade.Visible = false;
             labelApiType.Text = "REST API";
 
@@ -197,9 +198,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
                 "If any of your 3dCart order statuses have a custom name, you will have to edit any filters that are checking for those custom " +
                 "status names to check for the corresponding defualt 3dCart order status instead.");
 
-            ThreeDCartStoreType storeType = new ThreeDCartStoreType(threeDCartStoreEntity);
-            storeType.CreateInitialFilters();
-            
+            new StoreManagerWrapper().CreateStoreStatusFilters(this, threeDCartStoreEntity);
         }
     }
 }

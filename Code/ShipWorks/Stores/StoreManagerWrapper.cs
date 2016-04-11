@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Windows.Forms;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Stores
@@ -42,6 +43,14 @@ namespace ShipWorks.Stores
             StoreManager.SaveStore(store);
             StatusPresetManager.CheckForChanges();
             StoreManager.CheckForChanges();
+        }
+
+        /// <summary>
+        /// Creates the online status filters for the given store.
+        /// </summary>
+        public void CreateStoreStatusFilters(IWin32Window owner, StoreEntity store)
+        {
+            StoreManager.CreateStoreStatusFilters(owner, store);
         }
 
         /// <summary>
