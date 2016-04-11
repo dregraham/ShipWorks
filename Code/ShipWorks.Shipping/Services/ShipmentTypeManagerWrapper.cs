@@ -6,6 +6,7 @@ using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Filters;
 using ShipWorks.Shipping.Settings;
+using ShipWorks.Stores.Platforms.Amazon;
 
 namespace ShipWorks.Shipping.Services
 {
@@ -76,6 +77,13 @@ namespace ShipWorks.Shipping.Services
         {
             ShipmentTypeCode initialShipmentType = GetLastApplicableRule(shipment)?.ShipmentTypeCode ??
                 shippingSettings.Fetch().DefaultShipmentTypeCode;
+
+            // Amazon prime orders are currently only allowed to be shipped via Amazon Shipment Type
+            IAmazonOrder order = shipment.Order as IAmazonOrder;
+            if (order != null && order.IsPrime)
+            {
+                initialShipmentType = ShipmentTypeCode.Amazon;
+            }
 
             ShipmentType shipmentType = shipmentTypeLookup[initialShipmentType];
             return shipmentType.IsAllowedFor(shipment) ? shipmentType : shipmentTypeLookup[ShipmentTypeCode.None];
