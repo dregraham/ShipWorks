@@ -5,6 +5,7 @@ using Autofac.Features.Indexed;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Filters;
+using ShipWorks.Shipping.Carriers.Amazon;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Tests.Shared;
@@ -116,6 +117,52 @@ namespace ShipWorks.Shipping.Tests.Services
             testObject.InitialShipmentType(new ShipmentEntity { OrderID = 6 });
 
             mock.Mock<IIndex<ShipmentTypeCode, ShipmentType>>().Verify(x => x[ShipmentTypeCode.Amazon]);
+        }
+
+        [Fact]
+        public void InitialShipmentType_ReturnsAmazonShipmentType_WhenOrderIsAmazonPrime()
+        {
+            shippingSettings.DefaultType = (int)ShipmentTypeCode.Usps;
+            var shipment = new ShipmentEntity();
+            shipment.Order = new AmazonOrderEntity(3) {IsPrime = 1};
+
+            var amazonShipmentType = mock.CreateMock<ShipmentType>();
+            amazonShipmentType.Setup(x => x.IsAllowedFor(shipment)).Returns(true);
+            amazonShipmentType.Setup(x => x.ShipmentTypeCode).Returns(ShipmentTypeCode.Amazon);
+
+            var defaultShipmentType = mock.CreateMock<ShipmentType>();
+            defaultShipmentType.Setup(x => x.IsAllowedFor(shipment)).Returns(true);
+            defaultShipmentType.Setup(x => x.ShipmentTypeCode).Returns((ShipmentTypeCode)shippingSettings.DefaultType);
+
+            mock.Mock<IIndex<ShipmentTypeCode, ShipmentType>>().Setup(x => x[ShipmentTypeCode.Amazon]).Returns(amazonShipmentType.Object);
+            mock.Mock<IIndex<ShipmentTypeCode, ShipmentType>>().Setup(x => x[defaultShipmentType.Object.ShipmentTypeCode]).Returns(defaultShipmentType.Object);
+
+            ShipmentType result = testObject.InitialShipmentType(shipment);
+
+            Assert.Equal(ShipmentTypeCode.Amazon, result.ShipmentTypeCode);
+        }
+
+        [Fact]
+        public void InitialShipmentType_ReturnsNone_WhenOrderIsNotAmazonPrime()
+        {
+            shippingSettings.DefaultType = (int)ShipmentTypeCode.Usps;
+            var shipment = new ShipmentEntity();
+            shipment.Order = new AmazonOrderEntity(3) { IsPrime = 0 };
+
+            var amazonShipmentType = mock.CreateMock<ShipmentType>();
+            amazonShipmentType.Setup(x => x.IsAllowedFor(shipment)).Returns(true);
+            amazonShipmentType.Setup(x => x.ShipmentTypeCode).Returns(ShipmentTypeCode.Amazon);
+
+            var defaultShipmentType = mock.CreateMock<ShipmentType>();
+            defaultShipmentType.Setup(x => x.IsAllowedFor(shipment)).Returns(true);
+            defaultShipmentType.Setup(x => x.ShipmentTypeCode).Returns((ShipmentTypeCode)shippingSettings.DefaultType);
+
+            mock.Mock<IIndex<ShipmentTypeCode, ShipmentType>>().Setup(x => x[ShipmentTypeCode.Amazon]).Returns(amazonShipmentType.Object);
+            mock.Mock<IIndex<ShipmentTypeCode, ShipmentType>>().Setup(x => x[defaultShipmentType.Object.ShipmentTypeCode]).Returns(defaultShipmentType.Object);
+
+            ShipmentType result = testObject.InitialShipmentType(shipment);
+
+            Assert.Equal(defaultShipmentType.Object.ShipmentTypeCode, result.ShipmentTypeCode);
         }
 
         public void Dispose() => mock.Dispose();
