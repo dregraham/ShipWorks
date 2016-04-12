@@ -2,12 +2,12 @@
 {
     partial class ThreeDCartTimeZoneControl
     {
-        /// <summary> 
+        /// <summary>
         /// Required designer variable.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
 
-        /// <summary> 
+        /// <summary>
         /// Clean up any resources being used.
         /// </summary>
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
@@ -22,8 +22,8 @@
 
         #region Component Designer generated code
 
-        /// <summary> 
-        /// Required method for Designer support - do not modify 
+        /// <summary>
+        /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent()
@@ -31,35 +31,35 @@
             this.labelInfo2 = new System.Windows.Forms.Label();
             this.labelInfo1 = new System.Windows.Forms.Label();
             this.SuspendLayout();
-            // 
+            //
             // timeZone
-            // 
+            //
             this.timeZone.Location = new System.Drawing.Point(24, 40);
-            // 
+            //
             // labelInfo2
-            // 
-            this.labelInfo2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            //
+            this.labelInfo2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.labelInfo2.ForeColor = System.Drawing.SystemColors.GrayText;
             this.labelInfo2.Location = new System.Drawing.Point(23, 73);
             this.labelInfo2.Name = "labelInfo2";
             this.labelInfo2.Size = new System.Drawing.Size(444, 27);
             this.labelInfo2.TabIndex = 27;
-            this.labelInfo2.Text = "This setting can be found in the Store Settings of your 3DCart Admin Area.";
-            // 
+            this.labelInfo2.Text = "This setting can be found in the Store Settings of your 3dcart Admin Area.";
+            //
             // labelInfo1
-            // 
-            this.labelInfo1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            //
+            this.labelInfo1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.labelInfo1.Location = new System.Drawing.Point(5, 6);
             this.labelInfo1.Name = "labelInfo1";
             this.labelInfo1.Size = new System.Drawing.Size(461, 27);
             this.labelInfo1.TabIndex = 28;
             this.labelInfo1.Text = "To accurately download orders and display order dates, ShipWorks needs to know th" +
-    "e timezone that your 3DCart store is configured to use:";
-            // 
+    "e timezone that your 3dcart store is configured to use:";
+            //
             // ThreeDCartTimeZoneControl
-            // 
+            //
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.labelInfo1);

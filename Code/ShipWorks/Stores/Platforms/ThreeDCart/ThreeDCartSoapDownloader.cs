@@ -21,7 +21,7 @@ using log4net;
 namespace ShipWorks.Stores.Platforms.ThreeDCart
 {
     /// <summary>
-    /// Downloader for 3d Cart stores
+    /// Downloader for 3dcart stores
     /// </summary>
     public class ThreeDCartSoapDownloader : StoreDownloader
     {
@@ -64,7 +64,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         }
 
         /// <summary>
-        /// Download orders and statuses for the 3D Cart store
+        /// Download orders and statuses for the 3dcart store
         /// </summary>
         protected override void Download()
         {
@@ -137,7 +137,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         {
             Progress.Detail = "Updating status codes...";
 
-            // refresh the status codes from 3D Cart
+            // refresh the status codes from 3dcart
             statusProvider = new ThreeDCartStatusCodeProvider((ThreeDCartStoreEntity)Store);
             statusProvider.UpdateFromOnlineStore();
         }
@@ -310,7 +310,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
             // Get the order total from the xml
             decimal xmlOrderTotal = XPathUtility.Evaluate(xmlOrderXPath, "./Total", 0.0m);
 
-            // If this order does not have sub orders, set the order total to that which we received from 3D Cart
+            // If this order does not have sub orders, set the order total to that which we received from 3dcart
             // If it does have sub orders, we'll calculate the order total after we add items for this shipment/charges/payment
             if (order.IsNew && !hasSubOrders)
             {
@@ -421,38 +421,38 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         }
 
         /// <summary>
-        /// Creates a 3D Cart order identifier for the current order
+        /// Creates a 3dcart order identifier for the current order
         /// </summary>
         /// <param name="xpath">Order XPathNavigator</param>
         /// <param name="invoiceNumberPostFix">For multi shipment orders, add this as the order number post fix</param>
-        /// <returns>3D Cart order identifier for the current order</returns>
+        /// <returns>3dcart order identifier for the current order</returns>
         private ThreeDCartOrderIdentifier CreateOrderIdentifier(XPathNavigator xpath, string invoiceNumberPostFix)
         {
             // Now extract the Invoice number and ThreeDCart Order Id
             long orderId = XPathUtility.Evaluate(xpath, "./OrderID", 0L);
 
-            // Invoice number is defined as an integer in the 3D Cart schema
+            // Invoice number is defined as an integer in the 3dcart schema
             // So we can safely remove the prefix to get to a long
             long invoiceNum = 0;
             string invoiceNumber = XPathUtility.Evaluate(xpath, "./InvoiceNumber", string.Empty);
             string invoiceNumberPrefix = XPathUtility.Evaluate(xpath, "./InvoiceNumberPrefix", string.Empty);
 
-            // I've seen invoice number as blank in one of the 3D Cart test stores...  so instead of blank, we'll put the 3D Cart Order ID
+            // I've seen invoice number as blank in one of the 3dcart test stores...  so instead of blank, we'll put the 3dcart Order ID
             if (string.IsNullOrWhiteSpace(invoiceNumber))
             {
                 invoiceNumber = orderId.ToString();
             }
             else if (!string.IsNullOrWhiteSpace(invoiceNumberPrefix))
             {
-                // 3d Cart allows you to add a prefix to the invoice number.
+                // 3dcart allows you to add a prefix to the invoice number.
                 // The legacy order importer stripped the prefix, so we'll do that here too.
                 invoiceNumber = invoiceNumber.Replace(invoiceNumberPrefix, string.Empty);
             }
 
             if (!long.TryParse(invoiceNumber, out invoiceNum))
             {
-                log.ErrorFormat("3D Cart returned an invalid invoice number: {0}.", invoiceNumber);
-                throw new ThreeDCartException("3D Cart returned an invalid response while downloading orders");
+                log.ErrorFormat("3dcart returned an invalid invoice number: {0}.", invoiceNumber);
+                throw new ThreeDCartException("3dcart returned an invalid response while downloading orders");
             }
 
             // Create an order identifier without a prefix.  If we find an order, it must have been downloaded prior to
@@ -496,15 +496,15 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
             item.UnitCost = XPathUtility.Evaluate(xpath, "./UnitCost", 0.0m);
             item.Weight = XPathUtility.Evaluate(xpath, "./Weight", 0.0d);
 
-            // Save the 3D Cart ShipmentID with which this item is associated
+            // Save the 3dcart ShipmentID with which this item is associated
             item.ThreeDCartShipmentID = XPathUtility.Evaluate(xpath, "./ShipmentID", 0);
 
             //Now load all the item options
             LoadProductAndRelatedObjects(item, xpath);
 
-            // Sometimes 3D Cart doesn't send a unit price, but does send option price.
+            // Sometimes 3dcart doesn't send a unit price, but does send option price.
             // So, we'll get the unitPrice, optionPrice, and sum the amount of order item attributes loaded and
-            // set the optionPrice equal to the amount we received from 3D Cart less order item attributes sum.
+            // set the optionPrice equal to the amount we received from 3dcart less order item attributes sum.
             // From this we'll set the item's unit price equal to the new calculated option price.
             decimal unitPrice = XPathUtility.Evaluate(xpath, "./UnitPrice", 0.0m);
             decimal orderItemAttributeTotalUnitPrice = item.OrderItemAttributes.Sum(a => a.UnitPrice);
@@ -748,7 +748,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
             // Charge - Discount
             decimal discountAmount = -XPathUtility.Evaluate(orderXPath, "./Discount", 0.0m);
 
-            // 3D Cart sends us a Discount field which is the amount subtracted from the Order Total
+            // 3dcart sends us a Discount field which is the amount subtracted from the Order Total
             // This Discount is the original sum of any Promotions, however an admin can make this amount anything
             // they want.  So we'll decrement each promotion from the discount total, and if anything is left,
             // add a Discount charge with the remainder.

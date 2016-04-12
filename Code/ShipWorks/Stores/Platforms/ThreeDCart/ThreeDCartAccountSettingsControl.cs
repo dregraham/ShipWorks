@@ -43,9 +43,6 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
             labelHelpText.Visible = false;
             helpLink.Visible = false;
 
-            labelApiMessage.Visible = true;
-            labelApiType.Visible = true;
-
             if (!threeDCartStore.RestUser)
             {
                 panelUpgrade.Visible = true;
@@ -60,7 +57,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         public override bool SaveToEntity(StoreEntity store)
         {
             string storeUrlToSave = CheckStoreUrlForErrors();
-            string apiUserKeyToSave = CheckTokenForErrors();
+            string apiUserKeyToSave = CheckTokenForErrors(apiUserKey.Text);
             if (storeUrlToSave == string.Empty || apiUserKeyToSave == string.Empty)
             {
                 return false;
@@ -93,8 +90,8 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
                 }
                 catch (ThreeDCartException ex)
                 {
-                    log.Error("ShipWorks encountered an error while attempting to contact 3D Cart.", ex);
-                    MessageHelper.ShowError(this, ex.Message);
+                    log.Error("ShipWorks encountered an error while attempting to contact 3dcart.", ex);
+                    MessageHelper.ShowError(this, "Error connecting to 3dcart. Please check that the store URL and API token are correct.");
 
                     return false;
                 }
@@ -114,7 +111,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
             string storeUrlToCheck = storeUrl.Text.Trim();
             if (string.IsNullOrWhiteSpace(storeUrlToCheck))
             {
-                MessageHelper.ShowError(this, "Please enter the URL of your 3D Cart store.");
+                MessageHelper.ShowError(this, "Please enter the URL of your 3dcart store.");
                 return string.Empty;
             }
 
@@ -137,20 +134,20 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         /// <summary>
         /// Checks the token for errors.
         /// </summary>
-        private string CheckTokenForErrors()
+        private string CheckTokenForErrors(string token)
         {
             // To make a call to the store, we need a valid api user key, so check that next.
-            string apiUserKeyToCheck = apiUserKey.Text.Trim();
+            string apiUserKeyToCheck = token.Trim();
             if (string.IsNullOrWhiteSpace(apiUserKeyToCheck))
             {
-                MessageHelper.ShowError(this, "Please enter the Api User Key for your 3D Cart store.");
+                MessageHelper.ShowError(this, "Please enter the API token for your 3dcart store.");
                 return string.Empty;
             }
 
             // As per the api documentation, the api user key must be 32 characters
             if (apiUserKeyToCheck.Length != 32)
             {
-                MessageHelper.ShowError(this, "The specified Api User Key is not valid, it must be 32 characters in length.");
+                MessageHelper.ShowError(this, "The API token is not valid, it must be 32 characters in length.");
                 return string.Empty;
             }
             return apiUserKeyToCheck;
@@ -177,28 +174,59 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
             ThreeDCartStoreEntity threeDCartStore = store as ThreeDCartStoreEntity;
             if (threeDCartStore == null)
             {
-                throw new ArgumentException("A non ThreeDCart store was passed to 3D Cart account settings.");
+                throw new ArgumentException("A non 3dcart store was passed to 3dcart account settings.");
             }
 
             return threeDCartStore;
         }
 
+        /// <summary>
+        /// Called when [click upgrade to rest].
+        /// </summary>
         private void OnClickUpgradeToRest(object sender, EventArgs e)
         {
-            threeDCartStoreEntity.RestUser = true;
-            threeDCartStoreEntity.ApiUserKey = textBoxUpgradeToken.Text;
-            apiUserKey.Text = textBoxUpgradeToken.Text;
+            string token = CheckTokenForErrors(textBoxUpgradeToken.Text);
 
-            SaveToEntity(threeDCartStoreEntity);
+            if (token == string.Empty)
+            {
+                return;
+            }
 
-            panelUpgrade.Visible = false;
-            labelApiType.Text = "REST API";
+            string message = "Before you upgrade..." + Environment.NewLine + Environment.NewLine +
+                             "You will no longer be able to update orders in ShipWorks that were downloaded using 3dcart's legacy API." +
+                             Environment.NewLine + Environment.NewLine +
+                             "3dcart's new API does not support retrieving the names of customized order statuses. " +
+                             "You will need to update any filters in ShipWorks that are checking for custom status names to " +
+                             "check for the corresponding default 3dcart order status instead." +
+                             Environment.NewLine + Environment.NewLine +
+                             "Would you like to proceed with the upgrade?";
 
-            MessageHelper.ShowInformation(this, "Note: 3dCart's REST API does not support retrieving custom order status names. " +
-                "If any of your 3dCart order statuses have a custom name, you will have to edit any filters that are checking for those custom " +
-                "status names to check for the corresponding defualt 3dCart order status instead.");
+            DialogResult answer = MessageHelper.ShowQuestion(this,MessageBoxIcon.Warning, MessageBoxButtons.YesNo, message);
 
-            new StoreManagerWrapper().CreateStoreStatusFilters(this, threeDCartStoreEntity);
+            if (answer == DialogResult.Yes)
+            {
+                threeDCartStoreEntity.RestUser = true;
+                threeDCartStoreEntity.ApiUserKey = token;
+
+                try
+                {
+                    ThreeDCartRestWebClient client = new ThreeDCartRestWebClient(threeDCartStoreEntity);
+                    client.TestConnection();
+                }
+                catch (Exception ex)
+                {
+                    log.Error("ShipWorks encountered an error while attempting to contact 3dcart.", ex);
+                    MessageHelper.ShowError(this, "Error connecting to 3dcart. Please check that the store URL and new API token are correct.");
+
+                    return;
+                }
+
+                apiUserKey.Text = textBoxUpgradeToken.Text;
+                SaveToEntity(threeDCartStoreEntity);
+
+                panelUpgrade.Visible = false;
+                new StoreManagerWrapper().CreateStoreStatusFilters(this, threeDCartStoreEntity);
+            }
         }
     }
 }

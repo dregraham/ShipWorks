@@ -7,7 +7,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
     /// <summary>
     /// Uniquely identifies an ThreeDCart order in the database
     ///
-    /// Since 3D Cart orders can have an invoice prefix, when using the regular OrderNumberIdentifier, orders would not be found
+    /// Since 3dcart orders can have an invoice prefix, when using the regular OrderNumberIdentifier, orders would not be found
     /// What was happening:
     /// - Download order 1100, with prefix AB- for the first time
     /// - OrderNumberIdentifier builds a bucket looking for order number and order number complete
@@ -27,7 +27,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="invoiceNumber">The 3D Cart invoice number (without prefix), which will be stored as OrderNumber</param>
+        /// <param name="invoiceNumber">The 3dcart invoice number (without prefix), which will be stored as OrderNumber</param>
         /// <param name="prefix">The prefix for the invoice number.</param>
         /// <param name="postfix">The postfix for the invoice number.</param>
         public ThreeDCartOrderIdentifier(long invoiceNumber, string prefix, string postfix)

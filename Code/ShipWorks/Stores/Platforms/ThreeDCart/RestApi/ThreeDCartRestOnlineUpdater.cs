@@ -82,7 +82,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
                                    "This is most likely because the order was downloaded using the SOAP API and it is trying to" +
                                    "update using the REST API.");
 
-                    throw new ThreeDCartException("3dCart orders downloaded using their SOAP API can not be updated online through ShipWorks after " +
+                    throw new ThreeDCartException("3dcart orders downloaded using their SOAP API can not be updated online through ShipWorks after " +
                                                   "your store has been upgraded to use their REST API");
                 }
 
@@ -101,7 +101,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
 
                 if (item == null)
                 {
-                    throw new ThreeDCartException("No items were found on the order. ShipWorks cannot upload order status information without items from 3D Cart.");
+                    throw new ThreeDCartException("No items were found on the order. ShipWorks cannot upload order status information without items from 3dcart.");
                 }
 
                 ThreeDCartShipment shipment = new ThreeDCartShipment()
@@ -193,7 +193,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
                                    "This is most likely because the order was downloaded using the SOAP API and it is trying to" +
                                    "update using the REST API.");
 
-                throw new ThreeDCartException("3dCart orders downloaded using their SOAP API can not be updated online through ShipWorks after " +
+                throw new ThreeDCartException("3dcart orders downloaded using their SOAP API can not be updated online through ShipWorks after " +
                                                   "your store has been upgraded to use their REST API");
             }
 
@@ -205,10 +205,10 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
 
             ThreeDCartOrderItemEntity threeDCartOrderItem = threeDCartOrder.OrderItems?.FirstOrDefault(oi => oi is ThreeDCartOrderItemEntity) as ThreeDCartOrderItemEntity;
 
-            // Get the 3D Cart shipment id from the first 3D Cart order item
+            // Get the 3dcart shipment id from the first 3dcart order item
             if (threeDCartOrderItem == null)
             {
-                throw new ThreeDCartException("No items were found on the order. ShipWorks cannot upload tracking information without items from 3D Cart.");
+                throw new ThreeDCartException("No items were found on the order. ShipWorks cannot upload tracking information without items from 3dcart.");
             }
 
             ThreeDCartShipment shipment = new ThreeDCartShipment

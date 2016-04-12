@@ -117,7 +117,4 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="label2.Text" xml:space="preserve">
-    <value>3dCart's new way of connecting does not support retrieving custom order status names. If any of your 3dCart order statuses have a custom name, you will have to edit any filters that are checking for those custom status names, to check for the corresponding default 3dCart order status instead.</value>
-  </data>
 </root>

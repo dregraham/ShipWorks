@@ -62,7 +62,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ThreeDCart
             ThreeDCartStoreEntity storeEntity = testObject.CreateStoreInstance() as ThreeDCartStoreEntity;
 
             Assert.NotNull(storeEntity);
-            Assert.Equal("3D Cart Store", storeEntity.StoreName);
+            Assert.Equal("3dcart Store", storeEntity.StoreName);
         }
 
         [Fact]

@@ -5,15 +5,15 @@ using Interapptive.Shared.Utility;
 namespace ShipWorks.Stores.Platforms.ThreeDCart.Enums
 {
     /// <summary>
-    /// Hard coded 3DCart order statuses as of 3/21/16.
+    /// Hard coded 3dcart order statuses as of 3/21/16.
     /// </summary>
     /// <remarks>
-    /// The 3DCart REST API does not currently support
+    /// The 3dcart REST API does not currently support
     /// getting a list of order statuses. They also have no documentation confirming these statuses
     /// and their codes, I had to change an order to each status manually and confirm them.
-    /// 3DCart users also have the ability to change the label that gets displayed with these
+    /// 3dcart users also have the ability to change the label that gets displayed with these
     /// statuses, but not the actual status. So the status name may not match what the user sees
-    /// on the 3DCart backend.
+    /// on the 3dcart backend.
     /// </remarks>
     [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
     public enum ThreeDCartOrderStatus

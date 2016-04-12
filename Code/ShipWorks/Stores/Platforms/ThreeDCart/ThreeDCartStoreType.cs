@@ -21,7 +21,7 @@ using ShipWorks.Stores.Platforms.ThreeDCart.RestApi;
 namespace ShipWorks.Stores.Platforms.ThreeDCart
 {
     /// <summary>
-    /// 3DCart Store Type implementation
+    /// 3dcart Store Type implementation
     /// </summary>
     public class ThreeDCartStoreType : StoreType
     {
@@ -46,7 +46,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         private bool RestUser => ((ThreeDCartStoreEntity)Store).RestUser;
 
         /// <summary>
-        /// Link to article on adding a 3dCart store
+        /// Link to article on adding a 3dcart store
         /// </summary>
         public string AccountSettingsHelpUrl
         {
@@ -60,7 +60,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
 
         /// <summary>
         /// This is a string that uniquely identifies the store.
-        /// Since current customers can have the legacy implementation of 3D Cart, we need to support
+        /// Since current customers can have the legacy implementation of 3dcart, we need to support
         /// the old identifier as well, so use the same algorithm as before.
         /// </summary>
         protected override string InternalLicenseIdentifier
@@ -107,10 +107,10 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
             // Set the threeD cart store specific defaults
             threeDCartStore.StoreUrl = string.Empty;
             threeDCartStore.ApiUserKey = string.Empty;
-            threeDCartStore.StoreName = "3D Cart Store";
+            threeDCartStore.StoreName = "3dcart Store";
             threeDCartStore.DownloadModifiedNumberOfDaysBack = 7;
 
-            // Default to the Eastern time zone, as that is the default when creating a new store on 3D Cart
+            // Default to the Eastern time zone, as that is the default when creating a new store on 3dcart
             threeDCartStore.TimeZoneID = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time").Id;
 
             // For any newly created stores, we want to use the REST API, so this is defaulted to true
@@ -139,7 +139,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         }
 
         /// <summary>
-        /// Creates a 3D Cart store-specific instance of an ThreeDCartOrderItemEntity
+        /// Creates a 3dcart store-specific instance of an ThreeDCartOrderItemEntity
         /// </summary>
         public override OrderItemEntity CreateOrderItemInstance()
         {
@@ -176,7 +176,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         /// will be tested using OR.  If customer identifiers are unique per store instance,
         /// set instanceLookup to true.  If they are unique per store type, set instanceLookup to false;
         ///
-        /// As per 3D Cart tech support chat, each store has a unique set of IDs, all starting at 1
+        /// As per 3dcart tech support chat, each store has a unique set of IDs, all starting at 1
         /// </summary>
         public override IEntityField2[] CreateCustomerIdentifierFields(out bool instanceLookup)
         {

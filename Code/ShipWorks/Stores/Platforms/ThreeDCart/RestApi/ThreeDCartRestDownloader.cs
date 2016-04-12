@@ -19,7 +19,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
 {
 
     /// <summary>
-    /// Downloader for 3dCart that uses their REST API
+    /// Downloader for 3dcart that uses their REST API
     /// </summary>
     public class ThreeDCartRestDownloader : StoreDownloader
     {
@@ -58,7 +58,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
         }
 
         /// <summary>
-        /// Download orders for the 3D Cart store
+        /// Download orders for the 3dcart store
         /// </summary>
         protected override void Download()
         {
@@ -143,28 +143,28 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
             // Now extract the Invoice number and ThreeDCart Order Id
             long orderId = order.OrderID;
 
-            // Invoice number is defined as an integer in the 3D Cart schema
+            // Invoice number is defined as an integer in the 3dcart schema
             // So we can safely remove the prefix to get to a long
             long invoiceNum;
             string invoiceNumber = order.InvoiceNumber.ToString();
             string invoiceNumberPrefix = order.InvoiceNumberPrefix;
 
-            // I've seen invoice number as blank in one of the 3D Cart test stores...  so instead of blank, we'll put the 3D Cart Order ID
+            // I've seen invoice number as blank in one of the 3dcart test stores...  so instead of blank, we'll put the 3dcart Order ID
             if (string.IsNullOrWhiteSpace(invoiceNumber))
             {
                 invoiceNumber = orderId.ToString();
             }
             else if (!string.IsNullOrWhiteSpace(invoiceNumberPrefix))
             {
-                // 3d Cart allows you to add a prefix to the invoice number.
+                // 3dcart allows you to add a prefix to the invoice number.
                 // The legacy order importer stripped the prefix, so we'll do that here too.
                 invoiceNumber = invoiceNumber.Replace(invoiceNumberPrefix, string.Empty);
             }
 
             if (!long.TryParse(invoiceNumber, out invoiceNum))
             {
-                log.ErrorFormat($"3D Cart returned an invalid invoice number: {invoiceNumber}.");
-                throw new ThreeDCartException("3D Cart returned an invalid response while downloading orders");
+                log.ErrorFormat($"3dcart returned an invalid invoice number: {invoiceNumber}.");
+                throw new ThreeDCartException("3dcart returned an invalid response while downloading orders");
             }
 
             // Create an order identifier without a prefix.  If we find an order, it must have been downloaded prior to
@@ -232,7 +232,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
         {
             MethodConditions.EnsureArgumentIsNotNull(threeDCartOrder, "order");
 
-            // If this order does not have sub orders, set the order total to that which we received from 3D Cart
+            // If this order does not have sub orders, set the order total to that which we received from 3dcart
             // If it does have sub orders, we'll calculate the order total after we add items for this shipment/charges/payment
             if (order.IsNew && !threeDCartOrder.hasSubOrders)
             {
@@ -443,7 +443,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
         /// <summary>
         /// Loads the product images and location.
         /// </summary>
-        /// <remarks>Attempts to load from cache before reaching out to 3DCart</remarks>
+        /// <remarks>Attempts to load from cache before reaching out to 3dcart</remarks>
         private void LoadProductImagesAndLocation(ThreeDCartOrderItemEntity item, int catalogID)
         {
             ThreeDCartProduct product = restWebClient.GetProduct(catalogID);
