@@ -46,8 +46,8 @@
             this.labelUpgradeText = new System.Windows.Forms.Label();
             this.labelApiType = new System.Windows.Forms.Label();
             this.panelUpgrade = new System.Windows.Forms.Panel();
-            this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
             this.panelUpgrade.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -240,16 +240,6 @@
             this.panelUpgrade.TabIndex = 33;
             this.panelUpgrade.Visible = false;
             // 
-            // label2
-            // 
-            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.label2.Location = new System.Drawing.Point(3, 82);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(428, 52);
-            this.label2.TabIndex = 32;
-            this.label2.Text = resources.GetString("label2.Text");
-            // 
             // label3
             // 
             this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -259,7 +249,17 @@
             this.label3.Size = new System.Drawing.Size(428, 26);
             this.label3.TabIndex = 33;
             this.label3.Text = "Once you upgrade, you will no longer be able to update orders in ShipWorks that w" +
-    "ere downloaded using the old way of connecting.";
+    "ere downloaded using the old connection.";
+            // 
+            // label2
+            // 
+            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.label2.Location = new System.Drawing.Point(3, 82);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(428, 52);
+            this.label2.TabIndex = 32;
+            this.label2.Text = resources.GetString("label2.Text");
             // 
             // ThreeDCartAccountSettingsControl
             // 
