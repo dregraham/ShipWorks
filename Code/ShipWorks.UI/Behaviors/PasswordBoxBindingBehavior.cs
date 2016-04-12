@@ -43,7 +43,7 @@ namespace ShipWorks.UI.Behaviors
         {
             BindingExpression binding = BindingOperations.GetBindingExpression(this, PasswordProperty);
 
-            PropertyInfo property = binding?.DataItem.GetType().GetProperty(binding.ParentBinding.Path.Path);
+            PropertyInfo property = binding?.DataItem?.GetType().GetProperty(binding.ParentBinding.Path.Path);
 
             property?.SetValue(binding.DataItem, AssociatedObject.SecurePassword, null);
         }
