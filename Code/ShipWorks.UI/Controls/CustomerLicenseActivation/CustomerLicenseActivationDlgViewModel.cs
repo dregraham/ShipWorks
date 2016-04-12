@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Reflection;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.Command;
 using Interapptive.Shared.UI;
@@ -35,6 +36,7 @@ namespace ShipWorks.UI.Controls.CustomerLicenseActivation
         /// <summary>
         /// The Licenses Activation View Model
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public ICustomerLicenseActivationViewModel LicenseActivationViewModel
         {
             get { return licenseActivationViewModel; }
@@ -44,6 +46,7 @@ namespace ShipWorks.UI.Controls.CustomerLicenseActivation
         /// <summary>
         /// Command for clicking OK
         /// </summary>        
+        [Obfuscation(Exclude = true)]
         public ICommand OkClickCommand { get; }
 
         /// <summary>
@@ -51,6 +54,7 @@ namespace ShipWorks.UI.Controls.CustomerLicenseActivation
         /// </summary>
         public void ActivateShipWorks(CustomerLicenseActivationDlg window)
         {
+            Cursor.Current = Cursors.WaitCursor;
             GenericResult<ICustomerLicense> result = licenseActivationViewModel.Save(false);
 
             if (!result.Success)
