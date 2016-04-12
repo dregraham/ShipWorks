@@ -53,6 +53,7 @@ namespace ShipWorks.UI.Controls.CustomerLicenseActivation
         /// </summary>
         public void ActivateShipWorks(CustomerLicenseActivationDlg window)
         {
+            Cursor.Current = Cursors.WaitCursor;
             GenericResult<ICustomerLicense> result = licenseActivationViewModel.Save(false);
 
             if (!result.Success)
