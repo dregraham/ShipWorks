@@ -27,7 +27,6 @@ namespace ShipWorks.UI.Behaviors
         /// <summary>
         /// The password
         /// </summary>
-        [Obfuscation(Exclude = true)]
         public SecureString Password
         {
             get { return (SecureString) GetValue(PasswordProperty); }
@@ -38,14 +37,17 @@ namespace ShipWorks.UI.Behaviors
         /// Called when [password box value changed].
         /// </summary>
         /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="System.Windows.RoutedEventArgs" /> instance containing the event data.</param>
+        /// <param name="e">The <see cref="RoutedEventArgs" /> instance containing the event data.</param>
         private void OnPasswordBoxValueChanged(object sender, RoutedEventArgs e)
         {
             BindingExpression binding = BindingOperations.GetBindingExpression(this, PasswordProperty);
 
-            PropertyInfo property = binding?.DataItem?.GetType().GetProperty(binding.ParentBinding.Path.Path);
+            if (binding != null)
+            {
+                PropertyInfo property = binding.DataItem.GetType().GetProperty(binding.ParentBinding.Path.Path);
 
-            property?.SetValue(binding.DataItem, AssociatedObject.SecurePassword, null);
+                property?.SetValue(binding.DataItem, AssociatedObject.SecurePassword, null);
+            }
         }
     }
 }

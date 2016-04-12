@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Forms;
 using GalaSoft.MvvmLight.Command;
@@ -22,7 +23,8 @@ namespace ShipWorks.UI.Controls.CustomerLicenseActivation
         /// <summary>
         /// Constructor
         /// </summary>
-        public CustomerLicenseActivationDlgViewModel(ICustomerLicenseActivationViewModel customerLicenseActivationViewModel, IMessageHelper messageHelper)
+        public CustomerLicenseActivationDlgViewModel(
+            ICustomerLicenseActivationViewModel customerLicenseActivationViewModel, IMessageHelper messageHelper)
         {
             this.licenseActivationViewModel = customerLicenseActivationViewModel;
             this.messageHelper = messageHelper;
@@ -32,6 +34,7 @@ namespace ShipWorks.UI.Controls.CustomerLicenseActivation
         /// <summary>
         /// The Licenses Activation View Model
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public ICustomerLicenseActivationViewModel LicenseActivationViewModel
         {
             get { return licenseActivationViewModel; }
@@ -41,13 +44,9 @@ namespace ShipWorks.UI.Controls.CustomerLicenseActivation
         /// <summary>
         /// Command for clicking OK
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public RelayCommand<CustomerLicenseActivationDlg> OkClickCommand
-        {
-            get
-            {
-                return new RelayCommand<CustomerLicenseActivationDlg>(ActivateShipWorks);
-            }
-        }
+            => new RelayCommand<CustomerLicenseActivationDlg>(ActivateShipWorks);
 
         /// <summary>
         /// Activates ShipWorks using the LicenseActivationViewModel
