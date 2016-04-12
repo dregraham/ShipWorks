@@ -65,7 +65,7 @@ namespace ShipWorks.Stores.Management
         private bool showActivationError = false;
 
         private readonly ILicenseService licenseService = IoC.UnsafeGlobalLifetimeScope.Resolve<ILicenseService>();
-        
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -125,7 +125,7 @@ namespace ShipWorks.Stores.Management
         /// Returns true if license is in compliance.
         /// </summary>
         /// <remarks>
-        /// Prompts user to get in compliance if needed. 
+        /// Prompts user to get in compliance if needed.
         /// Then it checks to see if they are now in compliance and returns the result.
         /// </remarks>
         private static bool IsLicenseCompliant(IWin32Window owner)
@@ -140,7 +140,7 @@ namespace ShipWorks.Stores.Management
                     return true; // must be legacy and no store set up...
                 }
 
-                // We need to force the refresh at this point to make sure we have the most 
+                // We need to force the refresh at this point to make sure we have the most
                 // recent store/channel information prior to enforcing capabilities
                 license.ForceRefresh();
                 license.EnforceCapabilities(EnforcementContext.OnAddingStore, owner);
@@ -565,7 +565,7 @@ namespace ShipWorks.Stores.Management
         {
             // The generic file store type has no controls to put in the settings page
             // which results in a blank wizard page, so skip it.
-            if (store.StoreTypeCode == StoreTypeCode.GenericFile)
+            if (store.TypeCode == (int) StoreTypeCode.GenericFile)
             {
                 e.Skip = true;
                 e.RaiseStepEventWhenSkipping = true;
@@ -1022,7 +1022,7 @@ namespace ShipWorks.Stores.Management
                     e.SkipToPage = wizardPageActivationError;
                 }
             }
-            
+
             return !e.Skip;
         }
 
