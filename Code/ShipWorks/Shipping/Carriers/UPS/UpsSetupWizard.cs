@@ -25,6 +25,7 @@ using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Editions;
+using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.UPS.InvoiceRegistration;
 
 namespace ShipWorks.Shipping.Carriers.UPS
@@ -853,24 +854,18 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <exception cref="System.NotImplementedException"></exception>
         private void CreateAccount()
         {
-            try
+            RegisterNewAccount();
+
+            UpsOpenAccountResponseDTO upsOpenAccountResponse;
+
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                RegisterNewAccount();
-
-                UpsOpenAccountResponseDTO upsOpenAccountResponse;
-
-                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
-                {
-                    IUpsClerk clerk = lifetimeScope.Resolve<IUpsClerk>(new TypedParameter(typeof(UpsAccountEntity), upsAccount));
-                    upsOpenAccountResponse = OpenUpsAccount(clerk);
-                }
-
-                notifyTime = upsOpenAccountResponse.NotifyTime;
+                IUpsClerk clerk =
+                    lifetimeScope.Resolve<IUpsClerk>(new TypedParameter(typeof(UpsAccountEntity), upsAccount));
+                upsOpenAccountResponse = OpenUpsAccount(clerk);
             }
-            catch (UpsException ex)
-            {
-                throw new UpsOpenAccountException(ex.Message, UpsOpenAccountErrorCode.MissingRequiredFields);
-            }
+
+            notifyTime = upsOpenAccountResponse.NotifyTime;
         }
 
         /// <summary>
@@ -878,36 +873,30 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// </summary>
         private void RegisterNewAccount()
         {
-            try
+            UpsRegistrationStatus registrationStatus;
+
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                UpsRegistrationStatus registrationStatus;
-
-                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
-                {
-                    IUpsClerk clerk = lifetimeScope.Resolve<IUpsClerk>(new TypedParameter(typeof(UpsAccountEntity), upsAccount));
-                    registrationStatus = clerk.RegisterAccount(upsAccount);
-                }
-
-                if (registrationStatus != UpsRegistrationStatus.Success)
-                {
-                    throw new UpsException("Could not register your new account in ShipWorks.");
-                }
-
-                GetUpsAccessKey();
-
-                NextEnabled = true;
-
-                using (SqlAdapter adapter = new SqlAdapter(true))
-                {
-                    upsAccount.Description = UpsAccountManager.GetDefaultDescription(upsAccount);
-                    UpsAccountManager.SaveAccount(upsAccount);
-
-                    adapter.Commit();
-                }
+                IUpsClerk clerk =
+                    lifetimeScope.Resolve<IUpsClerk>(new TypedParameter(typeof(UpsAccountEntity), upsAccount));
+                registrationStatus = clerk.RegisterAccount(upsAccount);
             }
-            catch (UpsException ex)
+
+            if (registrationStatus != UpsRegistrationStatus.Success)
             {
-                throw new UpsOpenAccountException(ex.Message, UpsOpenAccountErrorCode.NotRegistered, ex);
+                throw new UpsException("Could not register your new account in ShipWorks.");
+            }
+
+            GetUpsAccessKey();
+
+            NextEnabled = true;
+
+            using (SqlAdapter adapter = new SqlAdapter(true))
+            {
+                upsAccount.Description = UpsAccountManager.GetDefaultDescription(upsAccount);
+                UpsAccountManager.SaveAccount(upsAccount);
+
+                adapter.Commit();
             }
         }
 
@@ -955,7 +944,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             }
             catch (UpsOpenAccountSoapException ex)
             {
-                throw new UpsOpenAccountException(string.Format("Ups returned the following error: {0}", ex.Message), ex);
+                throw new UpsOpenAccountException($"Ups returned the following error: {ex.Message}", ex);
             }
             catch (UpsOpenAccountException ex)
             {

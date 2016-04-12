@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Autofac.Features.Indexed;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
+using ShipWorks.Shipping.Carriers.UPS.LinkNewAccount.Request;
+using ShipWorks.Shipping.Carriers.UPS.LinkNewAccount.Request.Manipulators;
 using ShipWorks.Shipping.Carriers.UPS.OpenAccount.Api.Request;
 using ShipWorks.Shipping.Carriers.UPS.OpenAccount.Api.Request.Manipulators;
-using ShipWorks.Shipping.Carriers.UPS.UpsEnvironment;
 using ShipWorks.Shipping.Carriers.UPS.WebServices.OpenAccount;
 
 namespace ShipWorks.Shipping.Carriers.UPS.OpenAccount.Api
@@ -27,7 +27,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OpenAccount.Api
         public UpsOpenAccountRequestFactory(IUpsServiceGateway upsOpenAccountService, IIndex<ShipmentTypeCode, ICarrierResponseFactory> responseFactoryIndex, UpsAccountEntity upsAccount)
         {
             this.upsOpenAccountService = upsOpenAccountService;
-            this.responseFactory = responseFactoryIndex[ShipmentTypeCode.UpsOnLineTools];
+            responseFactory = responseFactoryIndex[ShipmentTypeCode.UpsOnLineTools];
             this.upsAccount = upsAccount;
         }
 
@@ -39,12 +39,27 @@ namespace ShipWorks.Shipping.Carriers.UPS.OpenAccount.Api
         /// to open a new UPS account via the UpsOpenAccount API.</returns>
         public CarrierRequest CreateOpenAccountRequest(OpenAccountRequest request)
         {
+            // Most of the request is populated by the wizard itself...
             List<ICarrierRequestManipulator> requestManipulators = new List<ICarrierRequestManipulator>()
             {
                 new UpsOpenAccountAddEndUserInformation()
             };
 
             return new UpsOpenAccountRequest(requestManipulators, upsOpenAccountService, responseFactory, request, upsAccount);
+        }
+
+        /// <summary>
+        /// Creates the link new account request factory.
+        /// </summary>
+        public CarrierRequest CreateLinkNewAccountRequestFactory()
+        {
+            // Most of the request is populated by the wizard itself...
+            List<ICarrierRequestManipulator> requestManipulators = new List<ICarrierRequestManipulator>()
+            {
+                new UpsLinkNewAccountInfoManipulator(upsAccount)
+            };
+
+            return new UpsLinkNewAccountToProfileRequest(requestManipulators, upsOpenAccountService, upsAccount);
         }
     }
 }

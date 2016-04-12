@@ -36,21 +36,37 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS
 
         UpsWebServiceException upsWebService9570100Exception = new UpsWebServiceException("9570100");
         UpsWebServiceException upsWebService100Exception = new UpsWebServiceException("100");
-        private AutoMock mock;
+        private readonly AutoMock mock1;
+        private readonly AutoMock mock2;
+        private AutoMock mock3;
 
         public UpsClerkTest()
         {
-            mock = AutoMock.GetLoose();
+            mock1 = AutoMock.GetLoose();
+            mock2 = AutoMock.GetLoose();
+            mock3 = AutoMock.GetLoose();
 
-            openAccountCarrierResponse = mock.Mock<ICarrierResponse>();
+            openAccountRequestFactory = mock1.Mock<IUpsOpenAccountRequestFactory>();
+
+            openAccountCarrierResponse = mock1.Mock<ICarrierResponse>();
             openAccountCarrierResponse.Setup(r => r.NativeResponse).Returns(nativeOpenAccountResponse);
             openAccountCarrierResponse.Setup(r => r.Process());
 
-            openAccountRequest = mock.Mock<CarrierRequest>();
+            openAccountRequest = mock1.Mock<CarrierRequest>();
             openAccountRequest.Setup(c => c.Submit()).Returns(openAccountCarrierResponse.Object);
 
-            openAccountRequestFactory = mock.Mock<IUpsOpenAccountRequestFactory>();
-            openAccountRequestFactory.Setup(f => f.CreateOpenAccountRequest(It.IsAny<OpenAccountRequest>())).Returns(openAccountRequest.Object);
+            openAccountRequestFactory
+                .Setup(f => f.CreateOpenAccountRequest(It.IsAny<OpenAccountRequest>()))
+                .Returns(openAccountRequest.Object);
+
+            var linkAccountResponse = mock2.Mock<ICarrierResponse>();
+            
+            var linkAccountRequest = mock2.Mock<CarrierRequest>();
+            linkAccountRequest.Setup(r => r.Submit()).Returns(linkAccountResponse.Object);
+
+            openAccountRequestFactory
+                .Setup(f => f.CreateLinkNewAccountRequestFactory())
+                .Returns(linkAccountRequest.Object);
 
             upsAccount = new UpsAccountEntity();
 
@@ -62,17 +78,17 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS
                 InvoiceNumber = "000111233"
             };
 
-            invoiceRegistrationCarrierResponse = mock.Mock<ICarrierResponse>();
+            invoiceRegistrationCarrierResponse = mock3.Mock<ICarrierResponse>();
             invoiceRegistrationCarrierResponse.Setup(r => r.Process());
 
-            invoiceRegistrationCarrierRequest = mock.Mock<CarrierRequest>();
+            invoiceRegistrationCarrierRequest = mock3.Mock<CarrierRequest>();
             invoiceRegistrationCarrierRequest.Setup(r => r.Submit()).Returns(invoiceRegistrationCarrierResponse.Object);
 
-            invoiceRegistrationRequestFactory = mock.Mock<IUpsInvoiceRegistrationRequestFactory>();
+            invoiceRegistrationRequestFactory = mock1.Mock<IUpsInvoiceRegistrationRequestFactory>();
             invoiceRegistrationRequestFactory.Setup(f => f.CreateInvoiceRegistrationRequest(It.IsAny<UpsAccountEntity>(), It.IsAny<UpsOltInvoiceAuthorizationData>()))
                                              .Returns(invoiceRegistrationCarrierRequest.Object);
 
-            testObject = mock.Create<UpsClerk>(new TypedParameter(typeof(UpsAccountEntity), upsAccount));
+            testObject = mock1.Create<UpsClerk>(new TypedParameter(typeof(UpsAccountEntity), upsAccount));
         }
 
         #region "Open Account Tests"
@@ -126,7 +142,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS
             {
                 testObject.RegisterAccount(account, authorizationData);
             }
-            catch (UpsException)
+            catch (UpsWebServiceException)
             {
                 // Eat the exception, so we can check that three attempts to the gateway were made
                 invoiceRegistrationCarrierRequest.Verify(c => c.Submit(), Times.Exactly(3));
@@ -237,7 +253,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS
 
                 UpsClerk clerk = mock.Create<UpsClerk>(new TypedParameter(typeof(UpsAccountEntity), upsAccount));
 
-                Assert.Equal(UpsRegistrationStatus.Failed, clerk.RegisterAccount(new UpsAccountEntity()));
+                Assert.Throws<UpsWebServiceException>(() => clerk.RegisterAccount(new UpsAccountEntity()));
             }
         }
 
@@ -271,7 +287,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS
         /// </summary>
         public void Dispose()
         {
-            mock.Dispose();
+            mock1.Dispose();
+            mock2.Dispose();
+            mock3.Dispose();
         }
     }
 }

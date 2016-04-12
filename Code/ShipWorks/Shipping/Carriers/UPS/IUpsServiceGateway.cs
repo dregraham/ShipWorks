@@ -1,5 +1,6 @@
 ﻿using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
+using ShipWorks.Shipping.Carriers.UPS.OnLineTools.WebServices.Registration;
 using ShipWorks.Shipping.Carriers.UPS.WebServices.OpenAccount;
 
 namespace ShipWorks.Shipping.Carriers.UPS
@@ -17,8 +18,13 @@ namespace ShipWorks.Shipping.Carriers.UPS
         OpenAccountResponse OpenAccount(OpenAccountRequest openAccountRequest);
 
         /// <summary>
-        /// Intended to iteract with the UPS registration API when adding an account to ShipWorks.
+        /// Intended to interact with the UPS registration API when adding an account to ShipWorks.
         /// </summary>
-        OnLineTools.WebServices.Registration.RegisterResponse RegisterAccount(OnLineTools.WebServices.Registration.RegisterRequest registerRequest);
+        RegisterResponse RegisterAccount(RegisterRequest registerRequest);
+
+        /// <summary>
+        /// Associates account number with profile.
+        /// </summary>
+        ManageAccountResponse ManageAccount(ManageAccountRequest request);
     }
 }

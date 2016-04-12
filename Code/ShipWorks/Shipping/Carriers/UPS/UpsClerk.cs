@@ -46,6 +46,10 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
             OpenAccountResponse nativeResponse = (OpenAccountResponse)carrierResponse.NativeResponse;
 
+            CarrierRequest linkAccountRequest = openAccountRequestFactory.CreateLinkNewAccountRequestFactory();
+            ICarrierResponse linkAccountResponse = linkAccountRequest.Submit();
+            linkAccountResponse.Process();
+
             return nativeResponse;
         }
 
@@ -67,8 +71,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <exception cref="UpsException">A unique UserID could not be generated.  Please try again.</exception>
         public UpsRegistrationStatus RegisterAccount(UpsAccountEntity accountEntity, UpsOltInvoiceAuthorizationData invoiceAuthorizationData)
         {
-            UpsWebServiceException lastUniqueException = null;
-
             // Three attempts are made to create the account in case there are user ID collisions
             for (int i = 0; i < 3; i++)
             {
@@ -92,23 +94,17 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 }
                 catch (UpsWebServiceException upsEx)
                 {
-                    if (upsEx.Code == "9570100")
-                    {
-                        // The user ID provided is already taken; make a note of it so it can
-                        // be used if the account was not created after three attempts
-                        lastUniqueException = upsEx;
-                    }
-                    else
+                    if (upsEx.Code != "9570100" || i == 2)
                     {
                         // An exception occurred not related to the uniqueness of the User ID
+                        // or we have done this 3 times...
                         throw;
                     }
                 }
             }
 
-            // We should never get this far unless for some reason the three attempts from above
-            // failed each time with error code "9570100"
-            return UpsRegistrationStatus.Failed;
+            // This should never be able to happen. Either we returned above or threw above.
+            throw new InvalidOperationException();
         }
     }
 }
