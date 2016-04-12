@@ -3,6 +3,8 @@ using System.Linq;
 using System.Reactive.Linq;
 using Interapptive.Shared.Collections;
 using log4net;
+using ShipWorks.Core.Messaging;
+using ShipWorks.Messaging.Messages;
 using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
@@ -14,15 +16,17 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
     {
         private readonly ILog log;
         private readonly IShippingManager shippingManager;
+        private readonly IMessenger messenger;
         private IDisposable subscription;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ChangeShipmentTypePipeline(IShippingManager shippingManager, Func<Type, ILog> logFactory)
+        public ChangeShipmentTypePipeline(IShippingManager shippingManager, IMessenger messenger, Func<Type, ILog> logFactory)
         {
             log = logFactory(typeof(ChangeShipmentTypePipeline));
             this.shippingManager = shippingManager;
+            this.messenger = messenger;
         }
 
         /// <summary>
@@ -35,8 +39,12 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
                 .Where(x => viewModel.Shipment != null && viewModel.ShipmentStatus == ShipmentStatus.Unprocessed)
                 .Select(_ => ChangeShipmentType(viewModel))
                 .CatchAndContinue((Exception ex) => log.Error("An error occurred while changing shipment types", ex))
-                .Do(x => viewModel.LoadShipment(x, nameof(viewModel.ShipmentType)))
-                .Subscribe(_ => viewModel.SaveToDatabase());
+                .Subscribe(x =>
+                {
+                    viewModel.LoadShipment(x, nameof(viewModel.ShipmentType));
+                    viewModel.SaveToDatabase();
+                    messenger.Send(new ShipmentChangedMessage(this, x, nameof(viewModel.ShipmentType)));
+                });
         }
 
         /// <summary>
