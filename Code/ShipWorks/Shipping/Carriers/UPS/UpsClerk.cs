@@ -1,12 +1,12 @@
-using System;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.UPS.InvoiceRegistration;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api;
+using ShipWorks.Shipping.Carriers.UPS.OnLineTools.WebServices.Registration;
 using ShipWorks.Shipping.Carriers.UPS.OpenAccount.Api;
 using ShipWorks.Shipping.Carriers.UPS.WebServices.OpenAccount;
-using ShipWorks.Shipping.Carriers.UPS.OnLineTools.WebServices.Registration;
+using System;
 using System.Linq;
 
 namespace ShipWorks.Shipping.Carriers.UPS
@@ -16,6 +16,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
     /// </summary>
     public class UpsClerk : IUpsClerk
     {
+        private const string NeedsInvoiceAuthStatusCode = "045";
+        private const string DuplicateUserIDErrorCode = "9570100";
         private readonly IUpsOpenAccountRequestFactory openAccountRequestFactory;
         private readonly IUpsInvoiceRegistrationRequestFactory invoiceRegistrationRequestFactory;
 
@@ -33,10 +35,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
         /// <summary>
         /// Opens a new account with UPS. This will attempt to create a new account
-        /// on the UPS system.
+        /// on the UPS system and link that account with the customer's profile
         /// </summary>
-        /// <param name="request">The request.</param>
-        /// <returns>The response from UPS.</returns>
         public OpenAccountResponse OpenAccount(OpenAccountRequest request)
         {
             CarrierRequest openAccountRequest = openAccountRequestFactory.CreateOpenAccountRequest(request);
@@ -46,6 +46,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
             OpenAccountResponse nativeResponse = (OpenAccountResponse)carrierResponse.NativeResponse;
 
+            // This links the newly created account to the customer's profile
             CarrierRequest linkAccountRequest = openAccountRequestFactory.CreateLinkNewAccountRequestFactory();
             ICarrierResponse linkAccountResponse = linkAccountRequest.Submit();
             linkAccountResponse.Process();
@@ -83,7 +84,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
                     RegisterResponse nativeResponse = response.NativeResponse as RegisterResponse;
 
-                    if (nativeResponse != null && nativeResponse.ShipperAccountStatus.Any(s => s.Code == "045"))
+                    if (nativeResponse != null && nativeResponse.ShipperAccountStatus.Any(s => s.Code == NeedsInvoiceAuthStatusCode))
                     {
                         // The shipper code is 045 which means that we did not send
                         // invoice info but the account requires invoice info
@@ -94,7 +95,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 }
                 catch (UpsWebServiceException upsEx)
                 {
-                    if (upsEx.Code != "9570100" || i == 2)
+                    if (upsEx.Code != DuplicateUserIDErrorCode || i == 2)
                     {
                         // An exception occurred not related to the uniqueness of the User ID
                         // or we have done this 3 times...

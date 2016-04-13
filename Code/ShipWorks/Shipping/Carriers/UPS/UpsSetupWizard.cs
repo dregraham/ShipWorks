@@ -1,32 +1,31 @@
-﻿using System;
-using System.Linq;
-using System.Windows.Forms;
-using ShipWorks.Shipping.Carriers.UPS.OpenAccount;
-using ShipWorks.Shipping.Carriers.UPS.WebServices.OpenAccount;
-using ShipWorks.Shipping.Editing.Rating;
-using ShipWorks.Shipping.Profiles;
-using ShipWorks.UI.Wizard;
-using System.Xml;
-using Interapptive.Shared.Net;
-using ShipWorks.Data.Model.EntityClasses;
-using System.Reflection;
-using Autofac;
+﻿using Autofac;
 using Interapptive.Shared;
-using Interapptive.Shared.Utility;
-using ShipWorks.Data.Connection;
-using ShipWorks.Shipping.Settings;
-using ShipWorks.Shipping.Settings.WizardPages;
-using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api;
-using ShipWorks.Shipping.Carriers.UPS.Enums;
-using ShipWorks.Shipping.Carriers.UPS.WorldShip;
-using ShipWorks.Common.IO.Hardware.Printers;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Net;
 using Interapptive.Shared.UI;
+using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing;
+using ShipWorks.Common.IO.Hardware.Printers;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Editions;
-using ShipWorks.Shipping.Carriers.Api;
+using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.InvoiceRegistration;
+using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api;
+using ShipWorks.Shipping.Carriers.UPS.OpenAccount;
+using ShipWorks.Shipping.Carriers.UPS.WebServices.OpenAccount;
+using ShipWorks.Shipping.Carriers.UPS.WorldShip;
+using ShipWorks.Shipping.Editing.Rating;
+using ShipWorks.Shipping.Profiles;
+using ShipWorks.Shipping.Settings;
+using ShipWorks.Shipping.Settings.WizardPages;
+using ShipWorks.UI.Wizard;
+using System;
+using System.Linq;
+using System.Reflection;
+using System.Windows.Forms;
+using System.Xml;
 
 namespace ShipWorks.Shipping.Carriers.UPS
 {
@@ -463,7 +462,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             upsAccount.AccountNumber = EnteredAccountNumber();
 
             // Edition check
-            if (!AccountAllowed(upsAccount.AccountNumber) || !ValidateEnterredAccountInformation())
+            if (!AccountAllowed(upsAccount.AccountNumber) || !ValidateEnteredAccountInformation())
             {
                 e.NextPage = CurrentPage;
                 return;
@@ -475,8 +474,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
                 using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
                 {
-                    IUpsClerk clerk =
-                        lifetimeScope.Resolve<IUpsClerk>(new TypedParameter(typeof(UpsAccountEntity), upsAccount));
+                    IUpsClerk clerk = lifetimeScope.Resolve<IUpsClerk>(new TypedParameter(typeof(UpsAccountEntity), upsAccount));
                     registrationStatus = clerk.RegisterAccount(upsAccount);
                 }
 
@@ -513,7 +511,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <summary>
         /// Validates the enterred account information.
         /// </summary>
-        private bool ValidateEnterredAccountInformation()
+        private bool ValidateEnteredAccountInformation()
         {
             RequiredFieldChecker checker = new RequiredFieldChecker();
             checker.Check("UPS Account", upsAccount.AccountNumber);
@@ -860,8 +858,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                IUpsClerk clerk =
-                    lifetimeScope.Resolve<IUpsClerk>(new TypedParameter(typeof(UpsAccountEntity), upsAccount));
+                IUpsClerk clerk = lifetimeScope.Resolve<IUpsClerk>(new TypedParameter(typeof(UpsAccountEntity), upsAccount));
                 upsOpenAccountResponse = OpenUpsAccount(clerk);
             }
 
@@ -877,8 +874,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                IUpsClerk clerk =
-                    lifetimeScope.Resolve<IUpsClerk>(new TypedParameter(typeof(UpsAccountEntity), upsAccount));
+                IUpsClerk clerk = lifetimeScope.Resolve<IUpsClerk>(new TypedParameter(typeof(UpsAccountEntity), upsAccount));
                 registrationStatus = clerk.RegisterAccount(upsAccount);
             }
 
@@ -924,7 +920,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
             try
             {
                 OpenAccountResponse response = clerk.OpenAccount(openAccountRequest);
-
                 upsOpenAccountResponse = new UpsOpenAccountResponseDTO(response.ShipperNumber, response.NotifyTime);
 
             }
@@ -955,7 +950,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
                     if (!string.IsNullOrEmpty(correctedAddress))
                     {
                         openAccountRequest.PickupAddress.City = correctedAddress;
-
                         upsOpenAccountResponse = OpenUpsAccount(clerk, true);
                     }
                     else

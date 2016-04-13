@@ -99,7 +99,16 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS
         }
         #endregion
 
-       [Fact]
+        [Fact]
+        public void RegisterAccount_PassesNullIntoRegisterAccountForInvoiceAuthorizationData()
+        {
+            UpsAccountEntity account = new UpsAccountEntity();
+            testObject.RegisterAccount(account);
+
+            invoiceRegistrationRequestFactory.Verify(f=>f.CreateInvoiceRegistrationRequest(account, null));
+        }
+
+        [Fact]
         public void RegisterAccount_DelegatesToInvoiceRegistrationRequest()
         {
             UpsAccountEntity account = new UpsAccountEntity();

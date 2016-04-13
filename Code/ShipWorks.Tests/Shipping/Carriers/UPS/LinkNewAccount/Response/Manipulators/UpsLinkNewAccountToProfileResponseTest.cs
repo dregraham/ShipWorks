@@ -13,7 +13,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.LinkNewAccount.Response.Manipula
         [Fact]
         public void Process_UpsApiExceptionIsThrown_WhenResponseStatusNotSuccess()
         {
-            ManageAccountResponse response = new ManageAccountResponse
+            LinkNewAccountResponse response = new LinkNewAccountResponse
             {
                 Response = new ResponseType()
                 {
@@ -39,7 +39,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.LinkNewAccount.Response.Manipula
         [Fact]
         public void Process_UpsApiExceptionIsThrown_WhenShipperAccountStatusNot010()
         {
-            ManageAccountResponse response = new ManageAccountResponse
+            LinkNewAccountResponse response = new LinkNewAccountResponse
             {
                 Response = new ResponseType()
                 {
@@ -65,7 +65,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.LinkNewAccount.Response.Manipula
         [Fact]
         public void Process_NoExceptionIsThrown_WhenShipperAccountStatus010_AndResponseCodeIsSuccess()
         {
-            ManageAccountResponse response = new ManageAccountResponse
+            LinkNewAccountResponse response = new LinkNewAccountResponse
             {
                 Response = new ResponseType()
                 {

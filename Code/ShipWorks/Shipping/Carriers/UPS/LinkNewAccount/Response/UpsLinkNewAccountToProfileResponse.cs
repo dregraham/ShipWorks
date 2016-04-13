@@ -1,33 +1,34 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Interapptive.Shared.Utility;
+﻿using Interapptive.Shared.Utility;
+using log4net;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools.WebServices.Registration;
-using ShipWorks.Shipping.Carriers.UPS.OpenAccount.Api.Response;
-using ShipWorks.Shipping.Carriers.UPS.WebServices.OpenAccount;
-using CodeDescriptionType = ShipWorks.Shipping.Carriers.UPS.OnLineTools.WebServices.Registration.CodeDescriptionType;
+using System;
+using System.Linq;
 
 namespace ShipWorks.Shipping.Carriers.UPS.LinkNewAccount.Response
 {
     public class UpsLinkNewAccountToProfileResponse : ICarrierResponse
     {
-        private readonly ManageAccountResponse nativeResponse;
+        private readonly LinkNewAccountResponse nativeResponse;
+        private readonly ILog log;
         public const string GoodShipperAccountStatus = "010";
+        
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public UpsLinkNewAccountToProfileResponse(LinkNewAccountResponse nativeResponse, CarrierRequest request) :
+            this(nativeResponse, request, LogManager.GetLogger(typeof(UpsLinkNewAccountToProfileResponse)))
+        { }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="UpsOpenAccountResponse" /> class.
+        /// Constructor
         /// </summary>
-        /// <param name="nativeResponse">The native response.</param>
-        /// <param name="request">The request.</param>
-        public UpsLinkNewAccountToProfileResponse(
-            ManageAccountResponse nativeResponse,
-            CarrierRequest request)
+        public UpsLinkNewAccountToProfileResponse(LinkNewAccountResponse nativeResponse, CarrierRequest request, ILog log)
         {
             this.nativeResponse = nativeResponse;
+            this.log = log;
             Request = request;
         }
 
@@ -49,12 +50,18 @@ namespace ShipWorks.Shipping.Carriers.UPS.LinkNewAccount.Response
             CodeDescriptionType responseStatus = nativeResponse.Response.ResponseStatus;
             if (responseStatus.Code != EnumHelper.GetApiValue(UpsInvoiceRegistrationResponseStatusCode.Success))
             {
+                log.Error($"In linking new account to profile, UPS returned a status code of {responseStatus.Code}." +
+                          $"{Environment.NewLine}Status Description = {responseStatus.Description}");
+                
                 throw new UpsApiException(UpsApiResponseStatus.Hard, responseStatus.Code, responseStatus.Description);
             }
 
             RegCodeDescriptionType accountStatus = nativeResponse.ShipperAccountStatus.FirstOrDefault(s => s.Code != GoodShipperAccountStatus);
             if (accountStatus != null)
             {
+                log.Error($"In linking new account to profile, UPS returned an account status code of {accountStatus.Code}." +
+                          $"{Environment.NewLine}Status Description = {accountStatus.Description}");
+
                 throw new UpsApiException(UpsApiResponseStatus.Hard, accountStatus.Code, accountStatus.Description);
             }
         }

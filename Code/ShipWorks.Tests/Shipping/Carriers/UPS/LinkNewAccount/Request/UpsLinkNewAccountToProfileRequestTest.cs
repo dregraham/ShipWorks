@@ -39,7 +39,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.LinkNewAccount.Request
                 new UpsAccountEntity());
 
             testObject.Submit();
-            serviceGateway.Verify(g=>g.ManageAccount(It.IsAny<ManageAccountRequest>()));
+            serviceGateway.Verify(g=>g.LinkNewAccount(It.IsAny<ManageAccountRequest>()));
         }
 
         [Fact]
@@ -48,7 +48,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.LinkNewAccount.Request
             var manipulator = new Mock<ICarrierRequestManipulator>();
             Mock<IUpsServiceGateway> serviceGateway = new Mock<IUpsServiceGateway>();
 
-            serviceGateway.Setup(g => g.ManageAccount(It.IsAny<ManageAccountRequest>()))
+            serviceGateway.Setup(g => g.LinkNewAccount(It.IsAny<ManageAccountRequest>()))
                 .Throws(new UpsWebServiceException("blah"));
 
             List<ICarrierRequestManipulator> manipulators = new List<ICarrierRequestManipulator> { manipulator.Object };
@@ -65,7 +65,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.LinkNewAccount.Request
             var manipulator = new Mock<ICarrierRequestManipulator>();
             Mock<IUpsServiceGateway> serviceGateway = new Mock<IUpsServiceGateway>();
 
-            serviceGateway.Setup(g => g.ManageAccount(It.IsAny<ManageAccountRequest>()))
+            serviceGateway.Setup(g => g.LinkNewAccount(It.IsAny<ManageAccountRequest>()))
                 .Throws(new UpsWebServiceException("blah"));
 
             List<ICarrierRequestManipulator> manipulators = new List<ICarrierRequestManipulator> { manipulator.Object };

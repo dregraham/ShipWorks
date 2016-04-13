@@ -1,15 +1,14 @@
-﻿using System;
-using System.Web.Services.Protocols;
-using Autofac.Features.Indexed;
+﻿using Autofac.Features.Indexed;
 using Interapptive.Shared.Net;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Shipping.Api;
-using ShipWorks.Shipping.Carriers.UPS.UpsEnvironment;
-using RegistrationAPI = ShipWorks.Shipping.Carriers.UPS.OnLineTools.WebServices.Registration;
-using ShipWorks.Shipping.Carriers.UPS.OpenAccount;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api;
+using ShipWorks.Shipping.Carriers.UPS.OpenAccount;
+using ShipWorks.Shipping.Carriers.UPS.UpsEnvironment;
+using System;
+using System.Web.Services.Protocols;
 using OpenAccountAPI = ShipWorks.Shipping.Carriers.UPS.WebServices.OpenAccount;
-using ShipWorks.Shipping.Carriers.Api;
+using RegistrationAPI = ShipWorks.Shipping.Carriers.UPS.OnLineTools.WebServices.Registration;
 
 namespace ShipWorks.Shipping.Carriers.UPS
 {
@@ -84,47 +83,14 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <summary>
         /// Intended to interact with the UPS registration API when adding an account to ShipWorks.
         /// </summary>
-        public RegistrationAPI.RegisterResponse RegisterAccount(RegistrationAPI.RegisterRequest request) =>
-           RegisterManageHelper(request, "RegisterAccount", (accountRequest, service) => service.ProcessRegister(accountRequest));
-
-        /// <summary>
-        /// Intended to interact with the UPS registration API when associating a UPS account with a profile.
-        /// </summary>
-        public RegistrationAPI.ManageAccountResponse ManageAccount(RegistrationAPI.ManageAccountRequest request) => 
-            RegisterManageHelper(request, "ManageAccount", (accountRequest, service) => service.ProcessManageAccount(accountRequest));
-
-
-        /// <summary>
-        /// Registers the manage helper.
-        /// </summary>
-        private TResponseType RegisterManageHelper<TRequestType, TResponseType>(
-            TRequestType request,
-            string logName,
-            Func<TRequestType, RegistrationAPI.RegisterMgrAcctService, TResponseType> serviceCall)
+        public RegistrationAPI.RegisterResponse RegisterAccount(RegistrationAPI.RegisterRequest request)
         {
             try
             {
                 // Explicit call to Ups. 
-                using (RegistrationAPI.RegisterMgrAcctService service = new RegistrationAPI.RegisterMgrAcctService(new ApiLogEntry(ApiLogSource.UPS, logName)))
+                using (RegistrationAPI.RegisterMgrAcctService service = CreateUpsRequest("RegisterAccount"))
                 {
-                    service.Url = $"{settings.EndpointUrl}/webservices/Registration";
-
-                    service.UPSSecurityValue = new RegistrationAPI.UPSSecurity()
-                    {
-                        ServiceAccessToken = new RegistrationAPI.UPSSecurityServiceAccessToken()
-                        {
-                            AccessLicenseNumber = AccessLicenseNumber
-                        },
-                        UsernameToken = new RegistrationAPI.UPSSecurityUsernameToken()
-                        {
-                            Username = UserName,
-                            Password = Password
-                        }
-                    };
-
-                    // The request should already be configured at this point, so we just need to send
-                    // it across the wire to UpsOpenAccount
-                    return serviceCall(request, service);
+                    return service.ProcessRegister(request);
                 }
             }
             catch (SoapException ex)
@@ -133,8 +99,55 @@ namespace ShipWorks.Shipping.Carriers.UPS
             }
             catch (Exception ex)
             {
-                throw WebHelper.TranslateWebException(ex, typeof(CarrierException));
+                throw WebHelper.TranslateWebException(ex, typeof(UpsWebServiceException));
             }
+        }
+
+        /// <summary>
+        /// Intended to interact with the UPS registration API when associating a UPS account with a profile.
+        /// </summary>
+        public RegistrationAPI.LinkNewAccountResponse LinkNewAccount(RegistrationAPI.ManageAccountRequest request)
+        {
+            try
+            {
+                // Explicit call to Ups. 
+                using (RegistrationAPI.RegisterMgrAcctService service = CreateUpsRequest("ManageAccount"))
+                {
+                    return service.ProcessManageAccount(request);
+                }
+            }
+            catch (SoapException ex)
+            {
+                throw new UpsWebServiceException(ex);
+            }
+            catch (Exception ex)
+            {
+                throw WebHelper.TranslateWebException(ex, typeof(UpsWebServiceException));
+            }
+        }
+
+        /// <summary>
+        /// Create the UpsRequest
+        /// </summary>
+        private RegistrationAPI.RegisterMgrAcctService CreateUpsRequest(string logName)
+        {
+            return new RegistrationAPI.RegisterMgrAcctService(new ApiLogEntry(ApiLogSource.UPS, logName))
+            {
+                Url = $"{settings.EndpointUrl}/webservices/Registration",
+                UPSSecurityValue = new RegistrationAPI.UPSSecurity()
+                {
+                    ServiceAccessToken = new RegistrationAPI.UPSSecurityServiceAccessToken()
+                    {
+                        AccessLicenseNumber = AccessLicenseNumber
+                    },
+                    UsernameToken = new RegistrationAPI.UPSSecurityUsernameToken()
+                    {
+                        Username = UserName,
+                        Password = Password
+                    }
+                }
+            };
+
         }
     }
 }

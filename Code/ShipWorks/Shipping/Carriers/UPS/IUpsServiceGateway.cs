@@ -25,6 +25,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <summary>
         /// Associates account number with profile.
         /// </summary>
-        ManageAccountResponse ManageAccount(ManageAccountRequest request);
+        LinkNewAccountResponse LinkNewAccount(ManageAccountRequest request);
     }
 }

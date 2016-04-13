@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using SD.LLBLGen.Pro.ORMSupportClasses;
+﻿using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
@@ -7,6 +6,7 @@ using ShipWorks.Shipping.Carriers.UPS.LinkNewAccount.Response;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools.WebServices.Registration;
 using ShipWorks.Shipping.Carriers.UPS.OpenAccount;
+using System.Collections.Generic;
 
 namespace ShipWorks.Shipping.Carriers.UPS.LinkNewAccount.Request
 {
@@ -50,10 +50,9 @@ namespace ShipWorks.Shipping.Carriers.UPS.LinkNewAccount.Request
 
             try
             {
-                ManageAccountResponse manageAccountResponse =
-                    serviceGateway.ManageAccount(NativeRequest as ManageAccountRequest);
+                LinkNewAccountResponse linkNewAccountResponse = serviceGateway.LinkNewAccount(NativeRequest as ManageAccountRequest);
 
-                return new UpsLinkNewAccountToProfileResponse(manageAccountResponse, this);
+                return new UpsLinkNewAccountToProfileResponse(linkNewAccountResponse, this);
             }
             catch (UpsWebServiceException ex)
             {

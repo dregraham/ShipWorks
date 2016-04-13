@@ -1,26 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Autofac;
-using Autofac.Extras.Moq;
+﻿using Autofac.Extras.Moq;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.UPS.LinkNewAccount.Request.Manipulators;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools.WebServices.Registration;
+using System;
+using System.Collections.Generic;
 using Xunit;
 
 namespace ShipWorks.Tests.Shipping.Carriers.UPS.LinkNewAccount.Request.Manipulators
 {
     public class UpsLinkNewAccountInfoManipulatorTest : IDisposable
     {
-        AutoMock mock;
-        private ManageAccountRequest manageAccountRequest;
-        private UpsAccountEntity upsAccount;
-        private UpsLinkNewAccountInfoManipulator testObject;
-        private Mock<CarrierRequest> carrierRequest;
+        private readonly AutoMock mock;
+        private readonly ManageAccountRequest manageAccountRequest;
+        private readonly UpsAccountEntity upsAccount;
+        private readonly UpsLinkNewAccountInfoManipulator testObject;
+        private readonly Mock<CarrierRequest> carrierRequest;
         
         public UpsLinkNewAccountInfoManipulatorTest()
         {
