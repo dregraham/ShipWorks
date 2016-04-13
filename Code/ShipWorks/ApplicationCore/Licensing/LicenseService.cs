@@ -7,6 +7,7 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Editions;
 using ShipWorks.Stores;
+using ShipWorks.Users;
 
 namespace ShipWorks.ApplicationCore.Licensing
 {
@@ -19,6 +20,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         private readonly Func<string, ICustomerLicense> customerLicenseFactory;
         private readonly Func<StoreEntity, StoreLicense> storeLicenseFactory;
         private readonly IStoreManager storeManager;
+        private readonly IUserSession userSession;
 
         private ICustomerLicense cachedCustomerLicense;
 
@@ -26,12 +28,14 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Constructor
         /// </summary>
-        public LicenseService(ICustomerLicenseReader reader, Func<string, ICustomerLicense> customerLicenseFactory, Func<StoreEntity, StoreLicense> storeLicenseFactory,  IStoreManager storeManager)
+        public LicenseService(ICustomerLicenseReader reader, Func<string, ICustomerLicense> customerLicenseFactory,
+            Func<StoreEntity, StoreLicense> storeLicenseFactory, IStoreManager storeManager, IUserSession userSession)
         {
             this.reader = reader;
             this.customerLicenseFactory = customerLicenseFactory;
             this.storeLicenseFactory = storeLicenseFactory;
             this.storeManager = storeManager;
+            this.userSession = userSession;
         }
 
         /// <summary>
@@ -72,7 +76,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public EditionRestrictionLevel CheckRestriction(EditionFeature feature, object data)
         {
-            return SqlSession.Current == null || IsLegacy
+            return SqlSession.Current == null || !userSession.IsLoggedOn || IsLegacy
                 ? EditionManager.ActiveRestrictions.CheckRestriction(feature, data).Level
                 : GetCustomerLicense().CheckRestriction(feature, data);
         }
@@ -82,7 +86,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public bool HandleRestriction(EditionFeature feature, object data, IWin32Window owner)
         {
-            return SqlSession.Current == null || IsLegacy
+            return SqlSession.Current == null || !userSession.IsLoggedOn || IsLegacy
                 ? EditionManager.HandleRestrictionIssue(owner, EditionManager.ActiveRestrictions.CheckRestriction(feature, data))
                 : GetCustomerLicense().HandleRestriction(feature, data, owner);
         }

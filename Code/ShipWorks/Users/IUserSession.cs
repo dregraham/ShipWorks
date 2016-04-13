@@ -16,5 +16,10 @@ namespace ShipWorks.Users
         /// Logs in using the last logged in user
         /// </summary>
         bool LogonLastUser();
+
+        /// <summary>
+        /// Is a user logged on
+        /// </summary>
+        bool IsLoggedOn { get; }
     }
 }

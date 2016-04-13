@@ -23,5 +23,10 @@ namespace ShipWorks.Users
         {
             return UserSession.LogonLastUser();
         }
+
+        /// <summary>
+        /// Is a user logged on
+        /// </summary>
+        public bool IsLoggedOn => UserSession.IsLoggedOn;
     }
 }
