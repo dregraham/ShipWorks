@@ -108,6 +108,10 @@ namespace ShipWorks.ApplicationCore
             RegisterLicensingDependencies(builder);
             RegisterLicenseEnforcers(builder);
 
+			builder.RegisterType<UserSessionWrapper>()
+                .AsImplementedInterfaces();
+                .UsingConstructor();
+
             current = builder.Build();
         }
 
@@ -204,9 +208,6 @@ namespace ShipWorks.ApplicationCore
                 .SingleInstance();
 
             builder.RegisterType<EditionManagerWrapper>()
-                .AsImplementedInterfaces();
-
-            builder.RegisterType<UserSessionWrapper>()
                 .AsImplementedInterfaces();
 
             builder.RegisterType<BrownEditionUtility>()
