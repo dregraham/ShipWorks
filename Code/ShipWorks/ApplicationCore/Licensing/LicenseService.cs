@@ -24,7 +24,6 @@ namespace ShipWorks.ApplicationCore.Licensing
 
         private ICustomerLicense cachedCustomerLicense;
 
-
         /// <summary>
         /// Constructor
         /// </summary>
@@ -76,7 +75,12 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public EditionRestrictionLevel CheckRestriction(EditionFeature feature, object data)
         {
-            return SqlSession.Current == null || !userSession.IsLoggedOn || IsLegacy
+            if (SqlSession.Current == null || !userSession.IsLoggedOn)
+            {
+                return EditionRestrictionLevel.Hidden;
+            }
+
+            return IsLegacy
                 ? EditionManager.ActiveRestrictions.CheckRestriction(feature, data).Level
                 : GetCustomerLicense().CheckRestriction(feature, data);
         }
@@ -86,7 +90,12 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public bool HandleRestriction(EditionFeature feature, object data, IWin32Window owner)
         {
-            return SqlSession.Current == null || !userSession.IsLoggedOn || IsLegacy
+            if (SqlSession.Current == null || !userSession.IsLoggedOn)
+            {
+                return false;
+            }
+
+            return  IsLegacy
                 ? EditionManager.HandleRestrictionIssue(owner, EditionManager.ActiveRestrictions.CheckRestriction(feature, data))
                 : GetCustomerLicense().HandleRestriction(feature, data, owner);
         }
