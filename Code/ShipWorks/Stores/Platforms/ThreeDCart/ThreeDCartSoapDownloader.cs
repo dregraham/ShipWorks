@@ -307,6 +307,11 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
             // Get the order instance.
             OrderEntity order = InstantiateOrder(threeDCartOrderIdentifier);
 
+            if (order is ThreeDCartOrderEntity)
+            {
+                ((ThreeDCartOrderEntity) order).ThreeDCartOrderID = -1;
+            }
+
             // Get the order total from the xml
             decimal xmlOrderTotal = XPathUtility.Evaluate(xmlOrderXPath, "./Total", 0.0m);
 
