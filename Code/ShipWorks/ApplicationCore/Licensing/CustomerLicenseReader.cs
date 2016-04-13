@@ -1,7 +1,5 @@
 ﻿using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
-using System;
-using System.Data.SqlClient;
 using System.Security.Cryptography;
 using Interapptive.Shared.Utility;
 
@@ -35,7 +33,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             }
             catch (EncryptionException ex) when(ex.InnerException is CryptographicException)
             {
-                // Crashed because the config data is old, we just have restored  
+                // Crashed because the config data is old, we just have restored
                 // databases, refresh the config data and try again.
                 ConfigurationData.CheckForChangesNeeded();
                 config = ConfigurationData.Fetch();
