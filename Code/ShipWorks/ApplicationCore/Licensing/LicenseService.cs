@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using Autofac.Features.OwnedInstances;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Editions;
 using ShipWorks.Stores;
+using ShipWorks.Users;
 
 namespace ShipWorks.ApplicationCore.Licensing
 {
@@ -19,19 +21,21 @@ namespace ShipWorks.ApplicationCore.Licensing
         private readonly Func<string, ICustomerLicense> customerLicenseFactory;
         private readonly Func<StoreEntity, StoreLicense> storeLicenseFactory;
         private readonly IStoreManager storeManager;
+        private readonly Func<Owned<IUserSession>> getUserSession;
 
         private ICustomerLicense cachedCustomerLicense;
-
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public LicenseService(ICustomerLicenseReader reader, Func<string, ICustomerLicense> customerLicenseFactory, Func<StoreEntity, StoreLicense> storeLicenseFactory,  IStoreManager storeManager)
+        public LicenseService(ICustomerLicenseReader reader, Func<string, ICustomerLicense> customerLicenseFactory,
+            Func<StoreEntity, StoreLicense> storeLicenseFactory, IStoreManager storeManager, Func<Owned<IUserSession>> getUserSession)
         {
             this.reader = reader;
             this.customerLicenseFactory = customerLicenseFactory;
             this.storeLicenseFactory = storeLicenseFactory;
             this.storeManager = storeManager;
+            this.getUserSession = getUserSession;
         }
 
         /// <summary>
@@ -72,9 +76,14 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public EditionRestrictionLevel CheckRestriction(EditionFeature feature, object data)
         {
-            return SqlSession.Current == null || IsLegacy
-                ? EditionManager.ActiveRestrictions.CheckRestriction(feature, data).Level
-                : GetCustomerLicense().CheckRestriction(feature, data);
+            if (SqlSession.Current == null || !getUserSession().Value.IsLoggedOn)
+            {
+                return EditionRestrictionLevel.Forbidden;
+            }
+
+            return IsLegacy ?
+                EditionManager.ActiveRestrictions.CheckRestriction(feature, data).Level :
+                GetCustomerLicense().CheckRestriction(feature, data);
         }
 
         /// <summary>
@@ -82,7 +91,12 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public bool HandleRestriction(EditionFeature feature, object data, IWin32Window owner)
         {
-            return SqlSession.Current == null || IsLegacy
+            if (SqlSession.Current == null || !getUserSession().Value.IsLoggedOn)
+            {
+                return false;
+            }
+
+            return  IsLegacy
                 ? EditionManager.HandleRestrictionIssue(owner, EditionManager.ActiveRestrictions.CheckRestriction(feature, data))
                 : GetCustomerLicense().HandleRestriction(feature, data, owner);
         }

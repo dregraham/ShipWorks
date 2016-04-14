@@ -153,8 +153,10 @@ namespace ShipWorks.ApplicationCore
             RegisterWrappers(builder);
             RegisterLicenseTypes(builder);
             RegisterLicenseEnforcers(builder);
+
             builder.RegisterType<UserSessionWrapper>()
-                .AsImplementedInterfaces();
+                .AsImplementedInterfaces()
+                .UsingConstructor();
 
             builder.RegisterType<WeightConverter>()
                 .AsImplementedInterfaces();
@@ -266,9 +268,6 @@ namespace ShipWorks.ApplicationCore
                 .SingleInstance();
 
             builder.RegisterType<EditionManagerWrapper>()
-                .AsImplementedInterfaces();
-
-            builder.RegisterType<UserSessionWrapper>()
                 .AsImplementedInterfaces();
 
             builder.RegisterType<BrownEditionUtility>()
