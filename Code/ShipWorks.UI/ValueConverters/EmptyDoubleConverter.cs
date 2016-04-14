@@ -38,16 +38,8 @@ namespace ShipWorks.UI.ValueConverters
         /// </summary>
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            double result = 0D;
-
-            if (string.IsNullOrEmpty(value?.ToString()))
-            {
-                return result; 
-            }
-
-            double.TryParse(value.ToString(), out result);
-
-            return result;
+            // ConvertBack should use the same logic as Convert
+            return Convert(value, targetType, parameter, culture);
         }
     }
 }
