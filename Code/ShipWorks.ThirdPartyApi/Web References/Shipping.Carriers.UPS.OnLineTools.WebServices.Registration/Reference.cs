@@ -123,10 +123,10 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.WebServices.Registration {
         [System.Web.Services.Protocols.SoapHeaderAttribute("UPSSecurityValue")]
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://onlinetools.ups.com/webservices/RegistrationBinding/v1.0", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
         [return: System.Xml.Serialization.XmlElementAttribute("ManageAccountResponse", Namespace="http://www.ups.com/XMLSchema/XOLTWS/Registration/v2.0")]
-        public LinkNewAccountResponse ProcessManageAccount([System.Xml.Serialization.XmlElementAttribute(Namespace="http://www.ups.com/XMLSchema/XOLTWS/Registration/v2.0")] ManageAccountRequest ManageAccountRequest) {
+        public ManageAccountResponse ProcessManageAccount([System.Xml.Serialization.XmlElementAttribute(Namespace="http://www.ups.com/XMLSchema/XOLTWS/Registration/v2.0")] ManageAccountRequest ManageAccountRequest) {
             object[] results = this.Invoke("ProcessManageAccount", new object[] {
                         ManageAccountRequest});
-            return ((LinkNewAccountResponse)(results[0]));
+            return ((ManageAccountResponse)(results[0]));
         }
         
         /// <remarks/>
@@ -994,7 +994,8 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.WebServices.Registration {
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.ups.com/XMLSchema/XOLTWS/Registration/v2.0")]
-    public partial class LinkNewAccountResponse {
+    public partial class ManageAccountResponse
+    {
         
         private ResponseType responseField;
         
@@ -1080,10 +1081,10 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.WebServices.Registration {
         }
         
         /// <remarks/>
-        public LinkNewAccountResponse Result {
+        public ManageAccountResponse Result {
             get {
                 this.RaiseExceptionIfNecessary();
-                return ((LinkNewAccountResponse)(this.results[0]));
+                return ((ManageAccountResponse)(this.results[0]));
             }
         }
     }

@@ -106,7 +106,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <summary>
         /// Intended to interact with the UPS registration API when associating a UPS account with a profile.
         /// </summary>
-        public RegistrationAPI.LinkNewAccountResponse LinkNewAccount(RegistrationAPI.ManageAccountRequest request)
+        public RegistrationAPI.ManageAccountResponse LinkNewAccount(RegistrationAPI.ManageAccountRequest request)
         {
             try
             {

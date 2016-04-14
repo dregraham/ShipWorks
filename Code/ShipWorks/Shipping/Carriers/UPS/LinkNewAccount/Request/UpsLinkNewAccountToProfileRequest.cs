@@ -50,7 +50,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.LinkNewAccount.Request
 
             try
             {
-                LinkNewAccountResponse linkNewAccountResponse = serviceGateway.LinkNewAccount(NativeRequest as ManageAccountRequest);
+                ManageAccountResponse linkNewAccountResponse = serviceGateway.LinkNewAccount(NativeRequest as ManageAccountRequest);
 
                 return new UpsLinkNewAccountToProfileResponse(linkNewAccountResponse, this);
             }

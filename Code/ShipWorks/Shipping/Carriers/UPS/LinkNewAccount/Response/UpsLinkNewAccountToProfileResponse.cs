@@ -11,21 +11,21 @@ namespace ShipWorks.Shipping.Carriers.UPS.LinkNewAccount.Response
 {
     public class UpsLinkNewAccountToProfileResponse : ICarrierResponse
     {
-        private readonly LinkNewAccountResponse nativeResponse;
+        private readonly ManageAccountResponse nativeResponse;
         private readonly ILog log;
         public const string GoodShipperAccountStatus = "010";
         
         /// <summary>
         /// Constructor
         /// </summary>
-        public UpsLinkNewAccountToProfileResponse(LinkNewAccountResponse nativeResponse, CarrierRequest request) :
+        public UpsLinkNewAccountToProfileResponse(ManageAccountResponse nativeResponse, CarrierRequest request) :
             this(nativeResponse, request, LogManager.GetLogger(typeof(UpsLinkNewAccountToProfileResponse)))
         { }
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public UpsLinkNewAccountToProfileResponse(LinkNewAccountResponse nativeResponse, CarrierRequest request, ILog log)
+        public UpsLinkNewAccountToProfileResponse(ManageAccountResponse nativeResponse, CarrierRequest request, ILog log)
         {
             this.nativeResponse = nativeResponse;
             this.log = log;
