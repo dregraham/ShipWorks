@@ -37,7 +37,6 @@ namespace ShipWorks.ApplicationCore.Licensing
             // Check the response for errors and throw a ShipWorksLicenseException
             CheckResponseForErrors(xmlResponse);
 
-
             // Determine the capabilities node to use and extract the current user levels
             userLevelsNode = xmlResponse.SelectSingleNode("//UserLevels");
             capabilitiesNode = GetPricingCapabilitiesNode(xmlResponse);
@@ -184,6 +183,12 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// The number of processed shipments in tango
         /// </summary>
         public int ProcessedShipments { get; private set; }
+
+        /// <summary>
+        /// Gets a value indicating whether best rate allowed given for this instance.
+        /// </summary>
+        /// <value><c>true</c> if this the capabilities allows best rate; otherwise, <c>false</c>.</value>
+        public bool IsBestRateAllowed { get; private set; }
 
         #endregion Properties
 
@@ -435,6 +440,8 @@ namespace ShipWorks.ApplicationCore.Licensing
             XmlNode userLevels = response.SelectSingleNode("//UserLevels");
             ActiveChannels = GetIntValueFromNameValuePair("NumberOfChannels", userLevels);
             ProcessedShipments = GetIntValueFromNameValuePair("NumberOfShipments", userLevels);
+
+            IsBestRateAllowed = GetBoolValueFromNameValuePair("RateCompare", capabilitiesNode);
 
             // Grab the billing date
             string date = XPathUtility.Evaluate(xpath, "//BillingEndDate", DateTime.MinValue.ToString(CultureInfo.InvariantCulture));

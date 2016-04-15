@@ -12,6 +12,14 @@ namespace ShipWorks.Shipping.Profiles
         private static object syncLock = new object();
 
         /// <summary>
+        /// Initialize ShippingProfileManager
+        /// </summary>
+        public void InitializeForCurrentSession()
+        {
+            ShippingProfileManager.InitializeForCurrentSession();
+        }
+
+        /// <summary>
         /// Get the default profile for the given shipment type
         /// </summary>
         public ShippingProfileEntity GetDefaultProfile(ShipmentTypeCode shipmentTypeCode)
@@ -62,6 +70,14 @@ namespace ShipWorks.Shipping.Profiles
         public IEnumerable<ShippingProfileEntity> GetProfilesFor(ShipmentTypeCode value)
         {
             return ShippingProfileManager.Profiles.Where(x => x.ShipmentTypeCode == value);
+        }
+
+        /// <summary>
+        /// Saves the given profile
+        /// </summary>
+        public void SaveProfile(ShippingProfileEntity profile)
+        {
+            ShippingProfileManager.SaveProfile(profile);
         }
     }
 }

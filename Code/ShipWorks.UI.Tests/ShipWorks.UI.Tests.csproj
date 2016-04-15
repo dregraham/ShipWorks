@@ -160,6 +160,7 @@
   <ItemGroup>
     <Compile Include="Controls\CannelConfirmDelete\ChannelConfirmDeleteFactoryTest.cs" />
     <Compile Include="Controls\CannelConfirmDelete\ChannelConfirmDeleteViewModelTest.cs" />
+    <Compile Include="Controls\ChannelLimit\ChannelLimitBehavior\ChannelsOutOfSyncBehaviorTest.cs" />
     <Compile Include="Controls\ChannelLimit\ChannelLimitBehavior\GenericFileBehaviorTest.cs" />
     <Compile Include="Controls\ChannelLimit\ChannelLimitBehavior\GenericModuleBehaviorTest.cs" />
     <Compile Include="Controls\ChannelLimit\ChannelLimitBehavior\OverChannelLimitBehaviorTest.cs" />

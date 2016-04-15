@@ -647,7 +647,9 @@
     <Compile Include="ApplicationCore\Licensing\Activation\CustomerLicenseActivationService.cs" />
     <Compile Include="ApplicationCore\Licensing\Activation\ICustomerLicenseActivationActivity.cs" />
     <Compile Include="ApplicationCore\Licensing\Activation\IUspsAccountSetupActivity.cs" />
+    <Compile Include="ApplicationCore\Licensing\Activation\IShipmentTypeSetupActivity.cs" />
     <Compile Include="ApplicationCore\Licensing\Activation\UspsAccountSetupActivity.cs" />
+    <Compile Include="ApplicationCore\Licensing\Activation\ShipmentTypeSetupActivity.cs" />
     <Compile Include="ApplicationCore\Licensing\AssociateShipworksWithItselfRequest.cs" />
     <Compile Include="ApplicationCore\Licensing\AssociateShipWorksWithItselfResponse.cs" />
     <Compile Include="ApplicationCore\Licensing\AssociateShipWorksWithItselfResponseType.cs" />
@@ -1037,6 +1039,14 @@
     <Compile Include="Shipping\Carriers\BestRate\BestRateConsolidatePostalRates.cs" />
     <Compile Include="Shipping\Carriers\BestRate\Footnote\IBrokerExceptionsRateFootnoteViewModel.cs" />
     <Compile Include="Shipping\Carriers\BestRate\Footnote\ICounterRatesInvalidStoreAddressFootnoteViewModel.cs" />
+    <Compile Include="Shipping\Carriers\BestRate\Footnote\IShippingAccountRequiredForRatingFootnoteViewModel.cs" />
+    <Compile Include="Shipping\Carriers\BestRate\Footnote\ShippingAccountRequiredForRatingFootnoteFactory.cs" />
+    <Compile Include="Shipping\Carriers\BestRate\Footnote\ShippingAccountRequiredForRatingFootnoteControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Shipping\Carriers\BestRate\Footnote\ShippingAccountRequiredForRatingFootnoteControl.Designer.cs">
+      <DependentUpon>ShippingAccountRequiredForRatingFootnoteControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Shipping\Carriers\BestRate\IBestRateBrokerRatingService.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\FedExLabelRepositoryFactory.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\IFedExLabelRepositoryFactory.cs" />
@@ -1479,6 +1489,8 @@
     <Compile Include="Stores\Platforms\Choxi\ChoxiTemplate.cs" />
     <Compile Include="Stores\Platforms\Groupon\CoreExtensions\Filters\GrouponOrderIdCondition.cs" />
     <Compile Include="Stores\Platforms\InstanteStore\InstanteStoreStoreType.cs" />
+    <Compile Include="Stores\Platforms\Magento\Enums\MagentoVersion.cs" />
+    <Compile Include="Stores\Platforms\Magento\MagentoTwoWebClient.cs" />
     <Compile Include="Stores\Platforms\Newegg\Enums\NeweggChannelType.cs" />
     <Compile Include="Stores\Platforms\OpenSky\OpenSkyStoreType.cs" />
     <Compile Include="Stores\Platforms\OrderBot\OrderBotStoreType.cs" />
@@ -7827,6 +7839,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\BestRate\BestRateSettingsControl.resx">
       <DependentUpon>BestRateSettingsControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\Carriers\BestRate\Footnote\ShippingAccountRequiredForRatingFootnoteControl.resx">
+      <DependentUpon>ShippingAccountRequiredForRatingFootnoteControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\BestRate\Setup\CounterRateProcessingSetupWizard.resx">
       <DependentUpon>CounterRateProcessingSetupWizard.cs</DependentUpon>

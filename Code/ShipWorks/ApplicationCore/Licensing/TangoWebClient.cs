@@ -1106,6 +1106,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public static void ValidateSecureConnection(Uri uri)
         {
+#if !DEBUG
             HttpWebRequest request = (HttpWebRequest) WebRequest.Create(uri);
             request.KeepAlive = false;
             request.UserAgent = "shipworks";
@@ -1114,6 +1115,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             {
                 ValidateInterapptiveCertificate(request);
             }
+#endif
         }
 
         /// <summary>

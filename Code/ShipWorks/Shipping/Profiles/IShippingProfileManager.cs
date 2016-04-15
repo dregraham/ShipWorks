@@ -22,5 +22,15 @@ namespace ShipWorks.Shipping.Profiles
         /// Get profiles for the given shipment type
         /// </summary>
         IEnumerable<ShippingProfileEntity> GetProfilesFor(ShipmentTypeCode value);
+
+        /// <summary>
+        /// Saves the given profile
+        /// </summary>
+        void SaveProfile(ShippingProfileEntity profile);
+
+        /// <summary>
+        /// Initialize ShippingProfileManager
+        /// </summary>
+        void InitializeForCurrentSession();
     }
 }

@@ -153,6 +153,8 @@
                                  DataTemplate="{StaticResource Express1RatePromotionFootnoteViewModelTemplate}" />
                     <ui:Template Value="{x:Type sw:InformationFootnoteViewModel}"
                                  DataTemplate="{StaticResource InformationFootnoteViewModelTemplate}" />
+                    <ui:Template Value="{x:Type sw:ShippingAccountRequiredForRatingFootnoteViewModel}"
+                                 DataTemplate="{StaticResource ShippingAccountRequiredForRatingFootnoteViewModelTemplate}" />
                     <ui:Template Value="{x:Type sw:UspsRateDiscountedFootnoteViewModel}"
                                  DataTemplate="{StaticResource UspsRateDiscountedFootnoteViewModelTemplate}" />
                     <ui:Template Value="{x:Type sw:UspsRateNotQualifiedFootnoteViewModel}"

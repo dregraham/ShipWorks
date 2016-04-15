@@ -82,7 +82,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
             mock.Mock<IBestRateShippingBroker>().Setup(b => b.GetInsuranceProvider(It.IsAny<ShippingSettingsEntity>())).Returns(InsuranceProvider.ShipWorks);
             IBestRateShippingBroker broker = mock.Create<IBestRateShippingBroker>();
             
-            mock.Mock<IBestRateShippingBrokerFactory>().Setup(f => f.CreateBrokers(It.IsAny<ShipmentEntity>(), false)).Returns(new List<IBestRateShippingBroker> { broker, broker });
+            mock.Mock<IBestRateShippingBrokerFactory>().Setup(f => f.CreateBrokers(It.IsAny<ShipmentEntity>())).Returns(new List<IBestRateShippingBroker> { broker, broker });
             
             var bestRateShipmentType = mock.Create<BestRateShipmentType>();
 
@@ -96,7 +96,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
             mock.Mock<IBestRateShippingBroker>().Setup(b => b.GetInsuranceProvider(It.IsAny<ShippingSettingsEntity>())).Returns(InsuranceProvider.Carrier);
             IBestRateShippingBroker broker = mock.Create<IBestRateShippingBroker>();
             
-            mock.Mock<IBestRateShippingBrokerFactory>().Setup(f => f.CreateBrokers(It.IsAny<ShipmentEntity>(), false)).Returns(new List<IBestRateShippingBroker> { broker, broker });
+            mock.Mock<IBestRateShippingBrokerFactory>().Setup(f => f.CreateBrokers(It.IsAny<ShipmentEntity>())).Returns(new List<IBestRateShippingBroker> { broker, broker });
 
             var bestRateShipmentType = mock.Create<BestRateShipmentType>();
 
@@ -110,7 +110,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
             mock.Mock<IBestRateShippingBroker>().Setup(b => b.GetInsuranceProvider(It.IsAny<ShippingSettingsEntity>())).Returns(InsuranceProvider.Carrier);
             IBestRateShippingBroker broker = mock.Create<IBestRateShippingBroker>();
 
-            mock.Mock<IBestRateShippingBrokerFactory>().Setup(f => f.CreateBrokers(It.IsAny<ShipmentEntity>(), false)).Returns(new List<IBestRateShippingBroker> { broker });
+            mock.Mock<IBestRateShippingBrokerFactory>().Setup(f => f.CreateBrokers(It.IsAny<ShipmentEntity>())).Returns(new List<IBestRateShippingBroker> { broker });
 
             var bestRateShipmentType = mock.Create<BestRateShipmentType>();
 

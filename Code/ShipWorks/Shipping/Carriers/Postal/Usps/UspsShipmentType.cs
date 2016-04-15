@@ -321,22 +321,23 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         }
 
         /// <summary>
-        /// Gets an instance to the best rate shipping broker for the USPS         /// shipment type based on the shipment configuration.
+        /// Gets an instance to the best rate shipping broker for the USPS shipment type based on 
+        /// the shipment configuration.
         /// </summary>
         /// <param name="shipment">The shipment.</param>
         /// <returns>An instance of a UspsBestRateBroker.</returns>
         public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment)
         {
-            if (AccountRepository.Accounts.Any())
+            if (AccountRepository.Accounts.Any(a => a.PendingInitialAccount == (int)UspsPendingAccountType.None))
             {
-                // We have an account, so use the normal broker
+                // We have an account that is completely setup, so use the normal broker
                 return new UspsBestRateBroker(this, AccountRepository);
             }
 
-            // No accounts, so use the counter rates broker to allow the user to
-            // sign up for the account. We can use the UspsCounterRateAccountRepository
-            // here because the underlying accounts being used are the same.
-            return new UspsCounterRatesBroker(new UspsCounterRateAccountRepository(TangoCredentialStore.Instance));
+            // Use the null broker for Best Rate. No accounts are in ShipWorks
+            // or accounts are still in the pending state (i.e. a USPS account 
+            // has been added during activation, but not completely setup) 
+            return new NullShippingBroker();
         }
 
         /// <summary>

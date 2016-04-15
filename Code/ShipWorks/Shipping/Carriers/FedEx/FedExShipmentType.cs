@@ -1075,12 +1075,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             {
                 return new FedExBestRateBroker();
             }
-            else
-            {
-                // We want to be able to show counter rates to users that don't have
-                // their own account in ShipWorks
-                return new FedExCounterRatesBroker();
-            }
+
+                // We want to be able to show counter rates to users that don't have 
+            return new NullShippingBroker();
         }
 
         /// <summary>

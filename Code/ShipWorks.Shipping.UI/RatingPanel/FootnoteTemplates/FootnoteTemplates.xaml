@@ -10,6 +10,7 @@
         <ResourceDictionary Source="Express1RateNotQualifiedFootnoteViewModelTemplate.xaml" />
         <ResourceDictionary Source="Express1RatePromotionFootnoteViewModelTemplate.xaml" />
         <ResourceDictionary Source="InformationFootnoteViewModelTemplate.xaml" />
+        <ResourceDictionary Source="ShippingAccountRequiredForRatingFootnoteViewModelTemplate.xaml" />
         <ResourceDictionary Source="UspsRateDiscountedFootnoteViewModelTemplate.xaml" />
         <ResourceDictionary Source="UspsRateNotQualifiedFootnoteViewModelTemplate.xaml" />
         <ResourceDictionary Source="UspsRatePromotionFootnoteViewModelTemplate.xaml" />

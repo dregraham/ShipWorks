@@ -173,7 +173,6 @@
       <DependentUpon>LemonStandAccountPage.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="StoresManager.cs" />
     <Compile Include="Platforms\Yahoo\ApiIntegration\WizardPages\YahooApiAccountPage.xaml.cs">
       <DependentUpon>YahooApiAccountPage.xaml</DependentUpon>
     </Compile>

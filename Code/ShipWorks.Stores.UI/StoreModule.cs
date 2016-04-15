@@ -16,6 +16,10 @@ namespace ShipWorks.Stores.UI
         {
             base.Load(builder);
 
+            builder.RegisterType<StoreManagerWrapper>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+
             builder.RegisterType<StoreTypeManagerWrapper>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
