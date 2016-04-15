@@ -230,8 +230,7 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
             {
                 // No action is allowed for None, Amazon, and Best rate shipment type
                 if (currentShipment.ShipmentTypeCode == ShipmentTypeCode.None ||
-                    currentShipment.ShipmentTypeCode == ShipmentTypeCode.Amazon ||
-                    currentShipment.ShipmentTypeCode == ShipmentTypeCode.BestRate)
+                    currentShipment.ShipmentTypeCode == ShipmentTypeCode.Amazon)
                 {
                     shippingRibbonActions.CreateLabel.Enabled = false;
                     shippingRibbonActions.Void.Enabled = false;

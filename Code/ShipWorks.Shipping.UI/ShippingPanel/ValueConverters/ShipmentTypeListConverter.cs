@@ -80,8 +80,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ValueConverters
         /// </summary>
         private bool IsIncludedShipmentType(ShipmentTypeCode shipmentTypeCode)
         {
-            return shipmentTypeCode != ShipmentTypeCode.Amazon &&
-                shipmentTypeCode != ShipmentTypeCode.BestRate;
+            return shipmentTypeCode != ShipmentTypeCode.Amazon;
         }
     }
 }

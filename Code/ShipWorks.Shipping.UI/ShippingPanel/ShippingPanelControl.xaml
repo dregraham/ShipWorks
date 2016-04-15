@@ -312,15 +312,17 @@
                                                 </Style>
                                             </ContentControl.Style>
                                         </ContentControl>
-
                                         <ui:TypeBasedTemplateSelector.Templates>
                                             
                                             <ui:Template Value="{x:Type shipmentControl:OtherShipmentViewModel}"
                                                  DataTemplate="{StaticResource OtherShipmentViewModelTemplate}" />
+
+                                            <ui:Template Value="{x:Type shipmentControl:BestRateShipmentViewModel}"
+                                                 DataTemplate="{StaticResource BestRateShipmentViewModelTemplate}" />
                                             
                                             <ui:Template Value="{x:Type shipmentControl:ShipmentViewModel}"
                                                  DataTemplate="{StaticResource ShipmentViewModelTemplate}" />
-                                        </ui:TypeBasedTemplateSelector.Templates>
+                                    </ui:TypeBasedTemplateSelector.Templates>
                                     </StackPanel>
                             </Expander>
                         </Border>

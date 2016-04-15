@@ -50,7 +50,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
         /// </summary>
         private bool IsValidShipmentType(ShipmentTypeCode shipmentTypeCode)
         {
-            return shipmentTypeCode != ShipmentTypeCode.Amazon && shipmentTypeCode != ShipmentTypeCode.BestRate;
+            return shipmentTypeCode != ShipmentTypeCode.Amazon;
         }
 		
         /// <summary>

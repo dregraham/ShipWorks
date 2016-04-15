@@ -96,8 +96,7 @@ namespace ShipWorks.Shipping.UI.RatingPanel
                     SetRateResults(Enumerable.Empty<RateResult>(),
                         "Unable to get rates for orders with multiple shipments.", Enumerable.Empty<object>());
                 }
-                else if (message?.ShipmentAdapter?.ShipmentTypeCode == ShipmentTypeCode.Amazon ||
-                         message?.ShipmentAdapter?.ShipmentTypeCode == ShipmentTypeCode.BestRate)
+                else if (message?.ShipmentAdapter?.ShipmentTypeCode == ShipmentTypeCode.Amazon)
                 {
                     SetRateResults(Enumerable.Empty<RateResult>(),
                         "Please use Ship Orders to get rates for this carrier.", Enumerable.Empty<object>());

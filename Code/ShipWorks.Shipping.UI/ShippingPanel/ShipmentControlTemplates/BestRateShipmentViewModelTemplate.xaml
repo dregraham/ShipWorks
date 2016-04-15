@@ -10,7 +10,9 @@
     <ui:VisibleWhenEqualToParameterConverter x:Key="VisibleWhenEqualToParameter" />
     <ui:VisibleWhenEqualToParameterConverter x:Key="VisibleWhenNotEqualToParameter" Invert="true" />
 
-    <DataTemplate x:Key="ShipmentViewModelTemplate">
-        <shipmentControl:ShipmentControl Margin="0, 6, 0, 0" />
+    <DataTemplate x:Key="BestRateShipmentViewModelTemplate">
+        <StackPanel>
+            <shipmentControl:BestRateShipmentControl Margin="0, 6, 0, 0" Visibility="Visible" />
+        </StackPanel>
     </DataTemplate>
 </ResourceDictionary>

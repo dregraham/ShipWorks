@@ -11,11 +11,6 @@
     <ui:VisibleWhenEqualToParameterConverter x:Key="VisibleWhenNotEqualToParameter" Invert="true" />
 
     <DataTemplate x:Key="OtherShipmentViewModelTemplate">
-        <shipmentControl:OtherShipmentControl Margin="0, 6, 0, 0"
-            Visibility="{
-            Binding DataContext.ShipmentType,
-            RelativeSource={RelativeSource AncestorType=UserControl},
-            Converter={StaticResource VisibleWhenEqualToParameter},
-            ConverterParameter={x:Static sw:ShipmentTypeCode.Other}}" />
+        <shipmentControl:OtherShipmentControl Margin="0, 6, 0, 0" />
     </DataTemplate>
 </ResourceDictionary>

@@ -1,4 +1,5 @@
-﻿using Autofac;
+﻿using System;
+using Autofac;
 using Interapptive.Shared;
 using Interapptive.Shared.Net;
 using ShipWorks.AddressValidation;
@@ -97,6 +98,9 @@ namespace ShipWorks.Shipping.UI
             builder.RegisterType<ShipmentViewModel>()
                 .FindConstructorsWith(new NonDefaultConstructorFinder());
 
+            builder.RegisterType<BestRateShipmentViewModel>()
+                .FindConstructorsWith(new NonDefaultConstructorFinder());
+
             builder.RegisterType<ShipmentAddressValidator>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
@@ -163,45 +167,46 @@ namespace ShipWorks.Shipping.UI
             builder.RegisterType<StampsAddressValidationWebClient>()
                 .AsImplementedInterfaces();
 
-            builder.Register((container, parameters) =>
-            {
-                return parameters.TypedAs<ShipmentTypeCode>() == ShipmentTypeCode.Other ?
-                    (IShipmentViewModel) container.Resolve<OtherShipmentViewModel>() :
-                    container.Resolve<ShipmentViewModel>();
-            });
+            builder.Register(
+                (container, parameters) =>
+                {
+                    ShipmentTypeCode shipmentTypeCode = parameters.TypedAs<ShipmentTypeCode>();
+                    switch (shipmentTypeCode)
+                    {
+                        case ShipmentTypeCode.Other:
+                            return (IShipmentViewModel) container.Resolve<OtherShipmentViewModel>();
+                        case ShipmentTypeCode.BestRate:
+                            return (IShipmentViewModel)container.Resolve<BestRateShipmentViewModel>();
+                        default:
+                            return container.Resolve<ShipmentViewModel>();
+                    }
+                });
 
             builder.RegisterType<ShippingProfileEditorDlg>();
 
-            builder.RegisterType<CachedRatesService>()
-                .AsImplementedInterfaces();
+            builder.RegisterType<CachedRatesService>().AsImplementedInterfaces();
 
             builder.RegisterType<RateHashingService>();
 
             // Return a ICertificateInspector
             // if no string is passed it will return a
             // certificate inspector that always returns trusted
-            builder.Register<ICertificateInspector>(
-                (contaner, parameters) =>
+            builder.Register<ICertificateInspector>((contaner, parameters) =>
+            {
+                string certVerificationData = parameters.TypedAs<string>();
+
+                if (string.IsNullOrWhiteSpace(certVerificationData))
                 {
-                    string certVerificationData = parameters.TypedAs<string>();
+                    return new TrustingCertificateInspector();
+                }
+                return new CertificateInspector(certVerificationData);
+            });
 
-                    if (string.IsNullOrWhiteSpace(certVerificationData))
-                    {
-                        return new TrustingCertificateInspector();
-                    }
-                    return new CertificateInspector(certVerificationData);
-                });
+            builder.Register((container, parameters) => container.ResolveKeyed<IRateHashingService>(parameters.TypedAs<ShipmentTypeCode>()));
 
-            builder.Register(
-                (container, parameters) =>
-                    container.ResolveKeyed<IRateHashingService>(parameters.TypedAs<ShipmentTypeCode>()));
+            builder.Register((container, parameters) => container.ResolveKeyed<ShipmentType>(parameters.TypedAs<ShipmentTypeCode>()));
 
-            builder.Register(
-                (container, parameters) =>
-                    container.ResolveKeyed<ShipmentType>(parameters.TypedAs<ShipmentTypeCode>()));
-
-            builder.RegisterType<ExcludedServiceTypeRepository>()
-                .AsImplementedInterfaces();
+            builder.RegisterType<ExcludedServiceTypeRepository>().AsImplementedInterfaces();
         }
     }
 }
