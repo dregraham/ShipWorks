@@ -57,6 +57,11 @@ namespace ShipWorks.UI.Controls.TypeBasedTemplateSelector
                 return base.SelectTemplate(item, container);
             }
 
+            if (item == null)
+            {
+                return base.SelectTemplate(item, container);
+            }
+
             //First, we gather all the templates associated with the current control through our dependency property
             TemplateCollection templates = GetTemplates(container as UIElement);
             if (templates == null || templates.Count == 0)

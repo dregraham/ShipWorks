@@ -26,6 +26,7 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/ShipWorks.UI;component/Styles/GlobalStyle.xaml" />
+                <ResourceDictionary Source="ShipmentControlTemplates/ShipmentControlTemplates.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
             <Style TargetType="Expander" BasedOn="{StaticResource Expander.Style}" />
@@ -44,6 +45,7 @@
             <ui:InvertBooleanConverter x:Key="InvertBoolean" />
             <ui:DefaultWhenNullOrEmptyConverter x:Key="DefaultWhenNullOrEmpty" />
             <ui:FriendlyDateConverter x:Key="FriendlyDate" />
+            <ui:TypeBasedTemplateSelector x:Key="TypeBasedTemplateSelector" />
         </ResourceDictionary>
     </UserControl.Resources>
 
@@ -290,18 +292,37 @@
 
                                 <StackPanel IsEnabled="{Binding DataContext.AllowEditing,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:ShippingPanelControl}}}"
                                             Style="{StaticResource Expander.Content}">
-                                    <shipmentControl:ShipmentControl Margin="0, 6, 0, 0"
-                                                                     Visibility="{
-                                        Binding DataContext.ShipmentType,
-                                        RelativeSource={RelativeSource AncestorType=UserControl},
-                                        Converter={StaticResource VisibleWhenNotEqualToParameter},
-                                        ConverterParameter={x:Static sw:ShipmentTypeCode.Other}}" />
-                                    <shipmentControl:OtherShipmentControl Margin="0, 6, 0, 0"
-                                                                     Visibility="{
-                                        Binding DataContext.ShipmentType,
-                                        RelativeSource={RelativeSource AncestorType=UserControl},
-                                        Converter={StaticResource VisibleWhenEqualToParameter},
-                                        ConverterParameter={x:Static sw:ShipmentTypeCode.Other}}" />
+                                    <StackPanel>
+                                        <ContentControl 
+                                            Content="{Binding DataContext.ShipmentViewModel, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:ShippingPanelControl}}}"
+                                            ContentTemplateSelector="{StaticResource TypeBasedTemplateSelector}">
+                                            <ContentControl.Style>
+                                                <Style TargetType="ContentControl">
+                                                    <!-- Don't let the row be selected -->
+                                                    <Setter Property="Focusable" Value="false"/>
+
+                                                    <!-- Hide hover color change -->
+                                                    <Setter Property="Background" Value="Transparent" />
+                                                    <Setter Property="Template">
+                                                        <Setter.Value>
+                                                            <ControlTemplate TargetType="{x:Type ContentControl}">
+                                                                <ContentPresenter />
+                                                            </ControlTemplate>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </Style>
+                                            </ContentControl.Style>
+                                        </ContentControl>
+
+                                        <ui:TypeBasedTemplateSelector.Templates>
+                                            
+                                            <ui:Template Value="{x:Type shipmentControl:OtherShipmentViewModel}"
+                                                 DataTemplate="{StaticResource OtherShipmentViewModelTemplate}" />
+                                            
+                                            <ui:Template Value="{x:Type shipmentControl:ShipmentViewModel}"
+                                                 DataTemplate="{StaticResource ShipmentViewModelTemplate}" />
+                                        </ui:TypeBasedTemplateSelector.Templates>
+                                    </StackPanel>
                                 </StackPanel>
                             </Expander>
                         </Border>
