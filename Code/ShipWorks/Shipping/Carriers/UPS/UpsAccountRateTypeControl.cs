@@ -89,8 +89,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
                         IUpsClerk clerk = lifetimeScope.Resolve<IUpsClerk>(new TypedParameter(typeof(UpsAccountEntity), account));
                         clerk.RegisterAccount(account, authorizationControl.InvoiceAuthorizationData);
                     }
-
-                    account.RateType = (int)rateType.SelectedValue;
                 }
                 catch (UpsWebServiceException ex)
                 {
@@ -100,6 +98,9 @@ namespace ShipWorks.Shipping.Carriers.UPS
                     return false;
                 }
             }
+
+            // update the accounts rate type to match what the user selected
+            account.RateType = (int)rateType.SelectedValue;
             return true;
         }
     }

@@ -481,6 +481,10 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 switch (registrationStatus)
                 {
                     case UpsRegistrationStatus.Success:
+                        // Force invoice auth to be false at this point because
+                        // registration was successful without the need for
+                        // invoice auth
+                        upsAccount.InvoiceAuth = false;
                         e.NextPage = wizardPageRates;
                         break;
                     case UpsRegistrationStatus.Failed:
@@ -821,6 +825,17 @@ namespace ShipWorks.Shipping.Carriers.UPS
         }
 
         /// <summary>
+        /// Called when [step next wizard page rates].
+        /// </summary>
+        private void OnStepNextWizardPageRates(object sender, WizardStepEventArgs e)
+        {
+            if (!upsRateTypeControl.RegisterAndSaveToEntity())
+            {
+                e.NextPage = CurrentPage;
+            }
+        }
+
+        /// <summary>
         /// Called when [account option check changed].
         /// </summary>
         /// <param name="sender">The sender.</param>
@@ -886,6 +901,9 @@ namespace ShipWorks.Shipping.Carriers.UPS
             GetUpsAccessKey();
 
             NextEnabled = true;
+
+            // Set invoice auth to false because the new account has no invoice
+            upsAccount.InvoiceAuth = false;
 
             using (SqlAdapter adapter = new SqlAdapter(true))
             {
