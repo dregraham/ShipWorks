@@ -274,7 +274,8 @@ namespace ShipWorks.ApplicationCore
                 .AsImplementedInterfaces();
 
             builder.RegisterType<UserSessionWrapper>()
-                .AsImplementedInterfaces();
+                .AsImplementedInterfaces()
+                .UsingConstructor();
 
             builder.RegisterType<ValidatedAddressManagerWrapper>()
                 .AsImplementedInterfaces()
