@@ -127,7 +127,7 @@
             this.labelNegotiated7.Size = new System.Drawing.Size(302, 31);
             this.labelNegotiated7.TabIndex = 20;
             this.labelNegotiated7.Text = "You must validate your account by providing information from and invoice received" +
-    " within the last 45 days.";
+    " within the last 90 days.";
             // 
             // labelNegotiated6
             // 
