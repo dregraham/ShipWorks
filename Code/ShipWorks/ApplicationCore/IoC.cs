@@ -2,7 +2,6 @@
 using System.Reflection;
 using Autofac;
 using System.Windows.Forms;
-using Interapptive.Shared;
 using Interapptive.Shared.Messaging;
 using Interapptive.Shared.Pdf;
 using log4net;
@@ -58,7 +57,7 @@ namespace ShipWorks.ApplicationCore
         public static void Initialize(params Assembly[] assemblies)
         {
             var builder = new ContainerBuilder();
-            
+
             builder.RegisterType<OrderManager>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
@@ -80,11 +79,11 @@ namespace ShipWorks.ApplicationCore
                 .SingleInstance();
 
             builder.RegisterAssemblyModules(assemblies);
-            
+
             builder.RegisterType<LogEntryFactory>()
                 .AsImplementedInterfaces()
                 .AsSelf();
-            
+
             builder.RegisterType<UserService>()
                 .AsImplementedInterfaces();
 
@@ -108,10 +107,6 @@ namespace ShipWorks.ApplicationCore
             RegisterLicensingDependencies(builder);
             RegisterLicenseEnforcers(builder);
 
-			builder.RegisterType<UserSessionWrapper>()
-                .AsImplementedInterfaces();
-                .UsingConstructor();
-
             current = builder.Build();
         }
 
@@ -132,7 +127,7 @@ namespace ShipWorks.ApplicationCore
             builder.RegisterType<CustomerLicenseActivationActivity>()
                 .AsImplementedInterfaces()
                 .AsSelf();
-            
+
             builder.RegisterType<UspsAccountSetupActivity>()
                 .AsImplementedInterfaces()
                 .AsSelf();
@@ -218,6 +213,10 @@ namespace ShipWorks.ApplicationCore
 
             builder.RegisterType<ShippingProfileManagerWrapper>()
                 .AsImplementedInterfaces();
+
+            builder.RegisterType<UserSessionWrapper>()
+                .AsImplementedInterfaces()
+                .UsingConstructor();
         }
     }
 }
