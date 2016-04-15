@@ -563,12 +563,21 @@ namespace ShipWorks.Stores.Management
         /// </summary>
         private void OnSteppingIntoSettings(object sender, WizardSteppingIntoEventArgs e)
         {
-            bool downloadSettings = PrepareSettingsInitialDownloadUI(e);
-            bool uploadSettings = PrepareSettingsActionUI(e);
-
-            // We can't skip this screen anymore since all stores will have the option of auto validating addresses
-            e.Skip = false;
-            e.RaiseStepEventWhenSkipping = false;
+            // The generic file store type has no controls to put in the settings page
+            // which results in a blank wizard page, so skip it.
+            if (store.TypeCode == (int) StoreTypeCode.GenericFile)
+            {
+                e.Skip = true;
+                e.RaiseStepEventWhenSkipping = true;
+            }
+            else
+            {
+                // We can't skip this screen anymore since all stores will have the option of auto validating addresses
+                e.Skip = false;
+                e.RaiseStepEventWhenSkipping = false;
+                PrepareSettingsInitialDownloadUI(e);
+                PrepareSettingsActionUI(e);
+            }
         }
 
         /// <summary>

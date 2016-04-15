@@ -2307,7 +2307,7 @@ CREATE TABLE [dbo].[MagentoStore]
 (
 [StoreID] [bigint] NOT NULL,
 [MagentoTrackingEmails] [bit] NOT NULL,
-[MagentoConnect] [bit] NOT NULL
+[MagentoVersion] [int] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_MagentoStore] on [dbo].[MagentoStore]'

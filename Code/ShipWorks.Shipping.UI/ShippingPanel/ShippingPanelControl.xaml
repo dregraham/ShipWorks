@@ -292,7 +292,6 @@
 
                                 <StackPanel IsEnabled="{Binding DataContext.AllowEditing,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:ShippingPanelControl}}}"
                                             Style="{StaticResource Expander.Content}">
-                                    <StackPanel>
                                         <ContentControl 
                                             Content="{Binding DataContext.ShipmentViewModel, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:ShippingPanelControl}}}"
                                             ContentTemplateSelector="{StaticResource TypeBasedTemplateSelector}">
@@ -323,7 +322,6 @@
                                                  DataTemplate="{StaticResource ShipmentViewModelTemplate}" />
                                         </ui:TypeBasedTemplateSelector.Templates>
                                     </StackPanel>
-                                </StackPanel>
                             </Expander>
                         </Border>
                         <Border DataContext="{Binding ShipmentViewModel}"

@@ -499,6 +499,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Data\Administration\Scripts\Update\5.0\5.0.0.7.sql" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\5.0\5.0.0.8.sql" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -139,5 +139,11 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// Determines whether [is channel allowed] [the specified store type].
         /// </summary>
         bool IsChannelAllowed(StoreTypeCode storeType);
+
+        /// <summary>
+        /// Gets a value indicating whether best rate allowed given for this instance.
+        /// </summary>
+        /// <value><c>true</c> if the capabilities allows best rate; otherwise, <c>false</c>.</value>
+        bool IsBestRateAllowed { get; }
     }
 }

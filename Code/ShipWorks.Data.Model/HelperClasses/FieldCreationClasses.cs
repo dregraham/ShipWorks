@@ -11422,10 +11422,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(MagentoStoreFieldIndex.MagentoTrackingEmails);}
 		}
-		/// <summary>Creates a new MagentoStoreEntity.MagentoConnect field instance</summary>
-		public static EntityField2 MagentoConnect
+		/// <summary>Creates a new MagentoStoreEntity.MagentoVersion field instance</summary>
+		public static EntityField2 MagentoVersion
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(MagentoStoreFieldIndex.MagentoConnect);}
+			get { return (EntityField2)EntityFieldFactory.Create(MagentoStoreFieldIndex.MagentoVersion);}
 		}
 	}
 

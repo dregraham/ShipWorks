@@ -62,6 +62,10 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             builder.RegisterType<BestRateFilterFactory>()
                 .As<IRateGroupFilterFactory>()
                 .AsSelf();
+
+            builder.RegisterType<ShippingAccountRequiredForRatingFootnoteViewModel>()
+                .AsImplementedInterfaces()
+                .ExternallyOwned();
         }
 
         /// <summary>

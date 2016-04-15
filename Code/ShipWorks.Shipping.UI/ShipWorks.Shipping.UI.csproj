@@ -477,6 +477,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="RatingPanel\FootnoteTemplates\ShippingAccountRequiredForRatingFootnoteViewModelTemplate.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="RatingPanel\FootnoteTemplates\UspsRateDiscountedFootnoteViewModelTemplate.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

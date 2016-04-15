@@ -449,30 +449,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// <returns>An instance of a WebToolsBestRateBroker.</returns>
         public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment)
         {
-            // We want to return the null broker if there is already an Endicia or USPS
-            // account setup, so postal rates for Web Tools aren't used as well (i.e. just use
-            // the provider that has an account instead of rates from web tools).
-            IBestRateShippingBroker broker = new NullShippingBroker();
-
-            bool uspsExpeditedAccountsExist = UspsAccountManager.UspsAccounts.Any();
-            bool uspsAccountsExist = UspsAccountManager.GetAccounts(UspsResellerType.None).Any();
-
-            if (!uspsAccountsExist && !uspsExpeditedAccountsExist)
-            {
-                // There aren't any postal based accounts setup, so we want to see if we should
-                // show counter rates (depending whether USPS has been excluded)
-
-                ShippingSettingsEntity shippingSettings = ShippingSettings.Fetch();
-
-                if (!shippingSettings.BestRateExcludedTypes.Contains((int) ShipmentTypeCode.Usps))
-                {
-                    // USPS has not been excluded from Best Rate, and there aren't any
-                    // USPS accounts, so use the counter rates broker for USPS
-                    broker = new UspsCounterRatesBroker(new UspsCounterRateAccountRepository(TangoCredentialStore.Instance));
-                }
-            }
-
-            return broker;
+            return new NullShippingBroker();
         }
 
         /// <summary>

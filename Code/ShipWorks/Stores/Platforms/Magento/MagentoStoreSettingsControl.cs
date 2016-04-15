@@ -1,13 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Management;
+using ShipWorks.Stores.Platforms.Magento.Enums;
 
 namespace ShipWorks.Stores.Platforms.Magento
 {
@@ -33,6 +27,13 @@ namespace ShipWorks.Stores.Platforms.Magento
             if (magentoStore == null)
             {
                 throw new InvalidOperationException("A non-Magento store was passed to the Magento store settings control.");
+            }
+
+            if (magentoStore.MagentoVersion == (int) MagentoVersion.MagentoTwo)
+            {
+                sectionHeader.Hide();
+                sendMailCheckBox.Hide();
+                Height = 0;
             }
 
             sendMailCheckBox.Checked = magentoStore.MagentoTrackingEmails;

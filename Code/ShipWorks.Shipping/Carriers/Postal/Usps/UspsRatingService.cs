@@ -46,9 +46,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         public UspsRatingService(IDateTimeProvider dateTimeProvider,
             ICachedRatesService cachedRatesService,
             IIndex<ShipmentTypeCode, IRatingService> ratingServiceFactory,
-            IIndex<ShipmentTypeCode, ShipmentType> shipmentTypeManager,
+            IIndex<ShipmentTypeCode, ShipmentType> shipmentTypeFactory,
             ICarrierAccountRepository<UspsAccountEntity> accountRepository)
-            : base(ratingServiceFactory, shipmentTypeManager)
+            : base(ratingServiceFactory, shipmentTypeFactory)
         {
             this.dateTimeProvider = dateTimeProvider;
             this.cachedRatesService = cachedRatesService;

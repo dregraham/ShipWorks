@@ -49,7 +49,7 @@ namespace ShipWorks.UI.Tests.Controls.ChannelLimit.ChannelLimitBehavior
         }
 
         [Fact]
-        public void PopulateChannels_ChannelsIncludeInstalledStores()
+        public void PopulateChannels_ChannelsDoNotIncludeInstalledStores()
         {
             using (var mock = AutoMock.GetLoose())
             {
@@ -77,7 +77,7 @@ namespace ShipWorks.UI.Tests.Controls.ChannelLimit.ChannelLimitBehavior
 
                 testObject.PopulateChannels(channels, null);
 
-                Assert.Equal(StoreTypeCode.BuyDotCom, channels.Single());
+                Assert.Empty(channels);
             }
         }
 

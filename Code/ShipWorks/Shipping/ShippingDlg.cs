@@ -1490,8 +1490,11 @@ namespace ShipWorks.Shipping
                         }
                     }
                 }
-                catch (Exception ex)
+                catch (ArgumentNullException ex)
                 {
+                    // The shipment/order/store was removed during processing
+                    // this could happen if the user had shipments in the ShippingDlg
+                    // but then deleted the store due to a license issue
                     log.Error(ex.Message);
                 }
             }

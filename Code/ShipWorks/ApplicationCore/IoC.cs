@@ -86,17 +86,10 @@ namespace ShipWorks.ApplicationCore
                 .AsSelf()
                 .SingleInstance();
 
+
             builder.RegisterInstance(Messenger.Current)
                 .AsImplementedInterfaces()
                 .ExternallyOwned();
-
-            builder.RegisterType<FilterHelperWrapper>()
-                .AsImplementedInterfaces()
-                .SingleInstance();
-
-            builder.RegisterType<ValidatedAddressManagerWrapper>()
-                .AsImplementedInterfaces()
-                .SingleInstance();
 
             builder.RegisterType<StampsAddressValidationWebClient>()
                 .AsImplementedInterfaces()
@@ -123,9 +116,6 @@ namespace ShipWorks.ApplicationCore
                 .AsImplementedInterfaces()
                 .ExternallyOwned();
 
-            builder.RegisterType<TangoWebClientWrapper>()
-                .As<ITangoWebClient>();
-
             builder.Register(c => UserSession.Security ?? SecurityContext.EmptySecurityContext)
                 .As<ISecurityContext>()
                 .ExternallyOwned();
@@ -151,7 +141,7 @@ namespace ShipWorks.ApplicationCore
                 .AsImplementedInterfaces();
 
             RegisterWrappers(builder);
-            RegisterLicenseTypes(builder);
+            RegisterLicensingDependencies(builder);
             RegisterLicenseEnforcers(builder);
 
             builder.RegisterType<UserSessionWrapper>()
@@ -185,7 +175,7 @@ namespace ShipWorks.ApplicationCore
         /// <summary>
         /// Registers the license types.
         /// </summary>
-        private static void RegisterLicenseTypes(ContainerBuilder builder)
+        private static void RegisterLicensingDependencies(ContainerBuilder builder)
         {
             builder.RegisterType<CustomerLicense>()
                 .AsImplementedInterfaces()
@@ -225,6 +215,9 @@ namespace ShipWorks.ApplicationCore
 
             builder.RegisterType<SqlSchemaVersion>()
                 .AsImplementedInterfaces();
+
+            builder.RegisterType<ShipmentTypeSetupActivity>()
+                .AsImplementedInterfaces();
         }
 
         /// <summary>
@@ -250,31 +243,42 @@ namespace ShipWorks.ApplicationCore
         /// </summary>
         private static void RegisterWrappers(ContainerBuilder builder)
         {
+            builder.RegisterType<BrownEditionUtility>()
+                .AsImplementedInterfaces();
+
+            builder.RegisterType<DataResourceManagerWrapper>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+
             builder.RegisterType<DeletionServiceWrapper>()
                 .AsImplementedInterfaces();
+
+            builder.RegisterType<EditionManagerWrapper>()
+                .AsImplementedInterfaces();
+
+            builder.RegisterType<FilterHelperWrapper>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
 
             builder.RegisterType<ObjectReferenceManagerWrapper>()
                 .AsImplementedInterfaces();
 
-            builder.RegisterType<TangoWebClientWrapper>()
+            builder.RegisterType<PostalUtilityWrapper>()
                 .AsImplementedInterfaces();
 
             builder.RegisterType<ShippingSettingsWrapper>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
 
-            builder.RegisterType<DataResourceManagerWrapper>()
+            builder.RegisterType<TangoWebClientWrapper>()
+                .AsImplementedInterfaces();
+
+            builder.RegisterType<UserSessionWrapper>()
+                .AsImplementedInterfaces();
+
+            builder.RegisterType<ValidatedAddressManagerWrapper>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
-
-            builder.RegisterType<EditionManagerWrapper>()
-                .AsImplementedInterfaces();
-
-            builder.RegisterType<BrownEditionUtility>()
-                .AsImplementedInterfaces();
-
-            builder.RegisterType<PostalUtilityWrapper>()
-                .AsImplementedInterfaces();
         }
     }
 }

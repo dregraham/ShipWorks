@@ -21,21 +21,21 @@ namespace ShipWorks.Shipping.Editing.Rating
     /// </summary>
     public partial class RateControl : UserControl
     {
-        FootnoteParameters footnoteParameters;
+        private FootnoteParameters footnoteParameters;
 
         readonly object syncLock = new object();
 
         // Indicates if the spinner for showing that rates are currently being checked is visible
-        bool showSpinner = false;
+        private bool showSpinner = false;
 
         // Indicates if the control will automatically resize it's height to be just enough to fit
-        bool autoHeight = false;
+        private bool autoHeight = false;
 
         // If autoHeight is true, controls the maximum height the control will resize itself to be
-        int autoHeightMaximum = 250;
+        private int autoHeightMaximum = 250;
 
         // The text to display for the action link, if its visible
-        string actionLinkText = "Select";
+        private string actionLinkText = "Select";
         private bool hasMoreLinkBeenClicked;
 
         /// <summary>

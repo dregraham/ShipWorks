@@ -8,10 +8,12 @@ using ShipWorks.Stores;
 
 namespace ShipWorks.UI.Controls.ChannelLimit.ChannelLimitBehavior
 {
+    /// <summary>
+    /// Over Channel Limit Behavior 
+    /// </summary>
     public class OverChannelLimitBehavior : IChannelLimitBehavior
     {
         private readonly ICustomerLicense license;
-        private readonly IStoreManager storeManager;
         private readonly Func<string, IShipWorksLicense> shipWorksLicenseFactory;
 
         /// <summary>
@@ -22,7 +24,6 @@ namespace ShipWorks.UI.Controls.ChannelLimit.ChannelLimitBehavior
             Func<string, IShipWorksLicense> shipWorksLicenseFactory)
         {
             license = licenseService.GetLicenses().First() as ICustomerLicense;
-            this.storeManager = storeManager;
             this.shipWorksLicenseFactory = shipWorksLicenseFactory;
         }
 
@@ -40,11 +41,7 @@ namespace ShipWorks.UI.Controls.ChannelLimit.ChannelLimitBehavior
                 license.GetActiveStores()
                     .Select(s => shipWorksLicenseFactory(s.StoreLicenseKey).StoreTypeCode);
 
-            IEnumerable<StoreTypeCode> activeStoresInShipWorks =
-                storeManager.GetAllStores()
-                    .Select(s => (StoreTypeCode) s.TypeCode);
-
-            activeTangoChannels.Union(activeStoresInShipWorks)
+            activeTangoChannels
                 .Distinct()
                 .Where(s => !channelToAdd.HasValue || s != channelToAdd.Value) // exclude channelToAdd if it is set
                 .ToList()

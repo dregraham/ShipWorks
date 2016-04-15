@@ -22,6 +22,7 @@ using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Origin;
+using ShipWorks.ApplicationCore.Licensing;
 
 namespace ShipWorks.Shipping.Carriers.BestRate
 {
@@ -461,7 +462,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             // coming from somewhere other than the shipping screen)
             LoadShipmentData(shipment, false);
 
-            IEnumerable<IBestRateShippingBroker> brokers = brokerFactory.CreateBrokers(shipment, false);
+            IEnumerable<IBestRateShippingBroker> brokers = brokerFactory.CreateBrokers(shipment);
             return brokers.Any(b => b.IsCustomsRequired(shipment));
         }
 
@@ -516,7 +517,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         public InsuranceProvider GetShipmentInsuranceProvider(ShipmentEntity shipment)
         {
             ShippingSettingsEntity settings = ShippingSettings.Fetch();
-            IEnumerable<IBestRateShippingBroker> brokersWithAccounts = brokerFactory.CreateBrokers(shipment, false).Where(b => b.HasAccounts).ToList();
+            IEnumerable<IBestRateShippingBroker> brokersWithAccounts = brokerFactory.CreateBrokers(shipment).Where(b => b.HasAccounts).ToList();
 
             // Default shipmentInsuranceProvider is ShipWorks
             InsuranceProvider shipmentInsuranceProvider;

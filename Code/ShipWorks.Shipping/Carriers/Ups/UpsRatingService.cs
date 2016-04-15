@@ -83,20 +83,19 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 ValidatePackageDimensions(shipment);
 
                 List<RateResult> rates = AddRateForEachService(allNegotiated, serviceRates, transitTimes);
-
                 AddMessageResult(shipment, wantedNegotiated, anyNegotiated, allNegotiated, rates);
 
                 // Filter out any excluded services, but always include the service that the shipment is configured with
                 List<RateResult> finalRatesFilteredByAvailableServices = FilterRatesByExcludedServices(shipment, rates);
 
                 RateGroup finalGroup = new RateGroup(finalRatesFilteredByAvailableServices);
-
                 return finalGroup;
             }
             catch (CounterRatesOriginAddressException)
             {
                 RateGroup errorRates = new RateGroup(new List<RateResult>());
                 errorRates.AddFootnoteFactory(new CounterRatesInvalidStoreAddressFootnoteFactory(shipmentType.ShipmentTypeCode));
+
                 return errorRates;
             }
             catch (Exception ex) when (ex is UpsException || ex is InvalidPackageDimensionsException)
