@@ -1,36 +1,39 @@
 ﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using Interapptive.Shared.Collections;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Editing.Rating;
 
 namespace ShipWorks.Messaging.Messages.Shipping
 {
     /// <summary>
     /// Message that requests processing of shipments
     /// </summary>
-    public class ProcessShipmentsMessage : IShipWorksMessage
+    public struct ProcessShipmentsMessage : IShipWorksMessage
     {
-        private object sender;
-        private ReadOnlyCollection<ShipmentEntity> shipments;
-
         /// <summary>
         /// Constructor
         /// </summary>
-        public ProcessShipmentsMessage(object sender, IEnumerable<ShipmentEntity> shipments)
+        public ProcessShipmentsMessage(object sender, IEnumerable<ShipmentEntity> shipments, RateResult selectedRate)
         {
-            this.sender = sender;
-            this.shipments = shipments.ToReadOnly();
+            Sender = sender;
+            Shipments = shipments.ToReadOnly();
+            SelectedRate = selectedRate;
         }
 
         /// <summary>
         /// Sender of the message
         /// </summary>
-        public object Sender => sender;
+        public object Sender { get; }
 
         /// <summary>
         /// Read only collection of shipments that should be processed
         /// </summary>
-        public IEnumerable<ShipmentEntity> Shipments => shipments;
+        public IEnumerable<ShipmentEntity> Shipments { get; }
+
+        /// <summary>
+        /// Selected rate that should be used if processing requires it
+        /// </summary>
+        public RateResult SelectedRate { get; }
     }
 }

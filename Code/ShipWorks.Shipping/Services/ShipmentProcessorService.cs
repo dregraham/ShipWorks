@@ -56,7 +56,7 @@ namespace ShipWorks.Shipping.Services
 
             using (ICarrierConfigurationShipmentRefresher refresher = shipmentRefresherFactory())
             {
-                shipments = await shipmentProcessor.Process(message.Shipments, refresher, null, null);
+                shipments = await shipmentProcessor.Process(message.Shipments, refresher, message.SelectedRate, null);
             }
 
             return new ShipmentsProcessedMessage(message.Sender, shipments);

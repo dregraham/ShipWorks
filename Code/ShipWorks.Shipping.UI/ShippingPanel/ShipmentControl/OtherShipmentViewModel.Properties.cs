@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 using Shared.System.ComponentModel.DataAnnotations;
+using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
@@ -97,5 +98,11 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
             get { return trackingNumber; }
             set { handler.Set(nameof(TrackingNumber), ref trackingNumber, value); }
         }
+
+        /// <summary>
+        /// Gets the currently selected rate
+        /// </summary>
+        /// <remarks>We don't care about the selected rate for Other</remarks>
+        public RateResult SelectedRate => null;
     }
 }

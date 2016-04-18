@@ -56,5 +56,10 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         /// The insurance view model of the shipment
         /// </summary>
         IInsuranceViewModel InsuranceViewModel { get; }
+
+        /// <summary>
+        /// Gets the currently selected rate
+        /// </summary>
+        RateResult SelectedRate { get; }
     }
 }

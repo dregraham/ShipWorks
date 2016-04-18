@@ -2,12 +2,10 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using System.Reflection;
-using Interapptive.Shared.Utility;
 using Shared.System.ComponentModel.DataAnnotations;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Editing.Enums;
+using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
@@ -263,5 +261,10 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
             get { return dimsAddWeight; }
             set { handler.Set(nameof(DimsAddWeight), ref dimsAddWeight, value, true); }
         }
+
+        /// <summary>
+        /// Gets the currently selected rate
+        /// </summary>
+        public RateResult SelectedRate { get; private set; }
     }
 }

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Reflection;
 using Shared.System.ComponentModel.DataAnnotations;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
@@ -266,5 +267,11 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
             get { return packagingType; }
             set { handler.Set(nameof(PackagingType), ref packagingType, value, true); }
         }
+
+        /// <summary>
+        /// Gets the currently selected rate
+        /// </summary>
+        /// <remarks>We don't care about the selected rate for Other</remarks>
+        public RateResult SelectedRate => null;
     }
 }

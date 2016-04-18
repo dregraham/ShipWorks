@@ -328,7 +328,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
 
                 AllowEditing = false;
 
-                messenger.Send(new ProcessShipmentsMessage(this, new[] { ShipmentAdapter.Shipment }));
+                messenger.Send(new ProcessShipmentsMessage(this, new[] { ShipmentAdapter.Shipment }, ShipmentViewModel?.SelectedRate));
             }
         }
 

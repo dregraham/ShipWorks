@@ -2,14 +2,12 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reflection;
 using System.Windows.Input;
-using GalaSoft.MvvmLight.Command;
 using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.Core.Messaging;
@@ -58,7 +56,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
             this.dimensionsManager = dimensionsManager;
 
             serviceLevels.Clear();
-            EnumHelper.GetEnumList<ServiceLevelType>().Select(x => x.Value).ToList().ForEach(slt => serviceLevels.Add((int)slt, EnumHelper.GetDescription(slt)));
+            EnumHelper.GetEnumList<ServiceLevelType>().Select(x => x.Value).ToList().ForEach(slt => serviceLevels.Add((int) slt, EnumHelper.GetDescription(slt)));
 
             this.customsManager = customsManager;
             this.messenger = messenger;
@@ -218,8 +216,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         /// </summary>
         public void SelectRate(RateResult rateResult)
         {
-            shipmentAdapter.SelectServiceFromRate(rateResult);
-//            ServiceType = shipmentAdapter.ServiceType;
+            SelectedRate = rateResult;
         }
 
         /// <summary>
