@@ -34,6 +34,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         private double dimsWeight;
         private bool dimsAddWeight;
         private int packagingType;
+        private bool ratesLoaded;
+        private RateResult selectedRate;
 
         static SortedList<int, string> serviceLevels = new SortedList<int, string>();
 
@@ -265,6 +267,21 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         /// <summary>
         /// Gets the currently selected rate
         /// </summary>
-        public RateResult SelectedRate { get; private set; }
+        [Obfuscation(Exclude = true)]
+        public RateResult SelectedRate
+        {
+            get { return selectedRate; }
+            set { handler.Set(nameof(SelectedRate), ref selectedRate, value, true); }
+        }
+
+        /// <summary>
+        /// Are rates still retrieving?
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public bool RatesLoaded
+        {
+            get { return ratesLoaded; }
+            set { handler.Set(nameof(RatesLoaded), ref ratesLoaded, value, true); }
+        }
     }
 }

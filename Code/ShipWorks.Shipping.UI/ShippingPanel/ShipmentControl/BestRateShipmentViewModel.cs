@@ -14,6 +14,7 @@ using ShipWorks.Core.Messaging;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages;
+using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Shipping.Editing.Enums;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Services;
@@ -64,6 +65,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
             InsuranceViewModel = shippingViewModelFactory.GetInsuranceViewModel();
 
             subscriptions = new CompositeDisposable(
+                messenger.OfType<RatesRetrievingMessage>().Subscribe(x => RatesLoaded = false),
+                messenger.OfType<RatesRetrievedMessage>().Subscribe(x => RatesLoaded = true),
                 messenger.OfType<DimensionsProfilesChangedMessage>().Subscribe(ManageDimensionsProfiles),
                 messenger.OfType<ShippingSettingsChangedMessage>().Subscribe(HandleShippingSettingsChangedMessage),
                 handler.PropertyChangingStream

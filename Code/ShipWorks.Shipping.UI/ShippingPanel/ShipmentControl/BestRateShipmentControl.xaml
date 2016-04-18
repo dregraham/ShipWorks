@@ -162,6 +162,35 @@
                       SelectedValuePath="Key"
                       DisplayMemberPath="Value" />
 
+            <TextBlock Grid.Row="4" Grid.Column="0"
+                       Style="{StaticResource Grid.TextBlock.Label}">Rate:</TextBlock>
+            <TextBlock Grid.Row="4" Grid.Column="1" >
+                <TextBlock.Style>
+                    <Style BasedOn="{StaticResource Grid.TextBlock.Label}" TargetType="{x:Type TextBlock}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding RatesLoaded}" Value="False">
+                                <DataTrigger.EnterActions>
+                                    <BeginStoryboard Name="pickIn">
+                                        <Storyboard Duration="0:0:1" RepeatBehavior="Forever">
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Text">
+                                                <DiscreteObjectKeyFrame KeyTime="0:0:00" Value="Retrieving Rates."/>
+                                                <DiscreteObjectKeyFrame KeyTime="0:0:00.33" Value="Retrieving Rates.."/>
+                                                <DiscreteObjectKeyFrame KeyTime="0:0:00.66" Value="Retrieving Rates..."/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </DataTrigger.EnterActions>
+                                <DataTrigger.ExitActions>
+                                    <StopStoryboard BeginStoryboardName="pickIn" />
+                                </DataTrigger.ExitActions>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding RatesLoaded}" Value="True">
+                                <Setter Property="Text" Value="{Binding Path=SelectedRate.Description}"></Setter>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+           </TextBlock>
         </Grid>
 
         <ins:InsuranceControl DataContext="{Binding InsuranceViewModel}" />

@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Stores;
 
@@ -77,5 +78,15 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// </summary>
         /// <returns></returns>
         public override ICarrierShipmentAdapter Clone() => new BestRateShipmentAdapter(this);
+
+        /// <summary>
+        /// Does the given rate match the service selected for the shipment
+        /// </summary>
+        public override bool DoesRateMatchSelectedService(RateResult rate)
+        {
+            // We are only getting rates that match criteria, and want the cheapest (first in the list), 
+            // so return true.
+            return true;
+        }
     }
 }
