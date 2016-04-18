@@ -420,6 +420,10 @@ namespace ShipWorks.Stores.Platforms.Ebay
                     carrierType = ShippingCarrierCodeType.FedEx;
                     break;
 
+                case ShipmentTypeCode.OnTrac:
+                    carrierType = ShippingCarrierCodeType.ONTRACK;
+                    break;
+
                 case ShipmentTypeCode.Other:
                     CarrierDescription description = ShippingManager.GetOtherCarrierDescription(shipment);
 
