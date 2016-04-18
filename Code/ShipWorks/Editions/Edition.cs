@@ -275,7 +275,22 @@ namespace ShipWorks.Editions
         /// </summary>
         public virtual ShipmentTypeCode? DefaultShipmentType
         {
-            get { return ShipmentTypeCode.None; }
+            get
+            {
+                try
+                {
+                    // Just use the defer to the shipping settings. This will be USPS in the case that 
+                    // the USPS account was added during activation otherwise it will be None.
+                    ShippingSettingsEntity shippingSettings = ShippingSettings.Fetch();
+                    ShipmentTypeCode defaultShipmentType = (ShipmentTypeCode) shippingSettings.DefaultType;
+
+                    return defaultShipmentType;
+                }
+                catch (Exception)
+                {
+                    return ShipmentTypeCode.None;
+                }
+            }
         }
     }
 }

@@ -76,8 +76,14 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         {
             OrderEntity order = DataProvider.GetEntity(orderID) as OrderEntity;
 
-            if (order != null && !order.IsManual)
+            if (order != null)
             {
+                if (order.IsManual)
+                {
+                    log.Warn($"Not uploading order status since order {orderID} is manual");
+                    return;
+                }
+
                 LemonStandOrderEntity lemonStandOrder = (LemonStandOrderEntity)order;
 
                 client.UpdateOrderStatus(lemonStandOrder.LemonStandOrderID, StatusCodeProvider.GetCodeName(statusCode));

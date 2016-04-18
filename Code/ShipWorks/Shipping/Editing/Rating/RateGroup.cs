@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using ShipWorks.Shipping.Carriers.BestRate.Footnote;
 
 namespace ShipWorks.Shipping.Editing.Rating
 {
@@ -45,6 +46,12 @@ namespace ShipWorks.Shipping.Editing.Rating
             get { return footnoteFactories; }
         }
 
+
+        /// <summary>
+        /// Gets or sets the carrier.
+        /// </summary>
+        public virtual ShipmentTypeCode Carrier { get; set; }
+
         /// <summary>
         /// Adds a footnote factory to the FootnoteFactories collection.
         /// </summary>
@@ -53,11 +60,6 @@ namespace ShipWorks.Shipping.Editing.Rating
         {
             footnoteFactories.Add(factory);
         }
-
-        /// <summary>
-        /// Gets or sets the carrier.
-        /// </summary>
-        public virtual ShipmentTypeCode Carrier { get; set; }
 
         /// <summary>
         /// Creates a new rate group by copying the current group settings and replacing the rates with the passed in rates
@@ -76,6 +78,18 @@ namespace ShipWorks.Shipping.Editing.Rating
             }
 
             return newRateGroup;
+        }
+
+        /// <summary>
+        /// A factory method to create a rate group indicating that a shipping account is required.
+        /// </summary>
+        /// <returns>A RateGroup without any rate results and an informational footnote.</returns>
+        public static RateGroup ShippingAccountRequiredRateGroup(ShipmentTypeCode shipmentTypeCode)
+        {
+            RateGroup group = new RateGroup(new List<RateResult>());
+            group.AddFootnoteFactory(new ShippingAccountRequiredForRatingFootnoteFactory(shipmentTypeCode));
+
+            return group;
         }
     }
 }

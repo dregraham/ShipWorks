@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Collections.Generic;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Nudges;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
@@ -67,6 +68,14 @@ namespace ShipWorks.ApplicationCore.Licensing
         }
 
         /// <summary>
+        /// Activates shipworks for the given user
+        /// </summary>
+        public GenericResult<IActivationResponse> ActivateLicense(string email, string password)
+        {
+            return TangoWebClient.ActivateLicense(email, password);
+        }
+
+        /// <summary>
         /// Send the user their username using the specified email address
         /// </summary>
         public virtual void SendAccountUsername(string email, string username)
@@ -79,7 +88,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public virtual void LogPostageEvent(decimal balance, decimal purchaseAmount, ShipmentTypeCode shipmentTypeCode, string accountIdentifier)
         {
-            // Send licenses for each distinct customer ID of the enabled stores. This could take a couple of seconds 
+            // Send licenses for each distinct customer ID of the enabled stores. This could take a couple of seconds
             // depending on the number of stores. May want to look into caching this information, but that could result
             // in stale license data. Since customers aren't buying postage all the time, the additonal overhead to ensure
             // accuracy may not be that big of a deal.
@@ -181,7 +190,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         public virtual IEnumerable<Nudge> GetNudges(IEnumerable<StoreEntity> stores)
         {
             List<Nudge> nudges = new List<Nudge>();
-            
+
             foreach (StoreEntity store in stores)
             {
                 nudges.AddRange(TangoWebClient.GetNudges(store));
@@ -204,7 +213,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <param name="account">The account.</param>
         public virtual void LogUspsAccount(UspsAccountEntity account)
         {
-            // Send licenses for each distinct customer ID of the enabled stores. This could take a couple of seconds 
+            // Send licenses for each distinct customer ID of the enabled stores. This could take a couple of seconds
             // depending on the number of stores. May want to look into caching this information, but that could result
             // in stale license data. Since customers aren't buying postage all the time, the additonal overhead to ensure
             // accuracy may not be that big of a deal.
@@ -220,6 +229,62 @@ namespace ShipWorks.ApplicationCore.Licensing
                                                 account.Username,
                                                 (UspsAccountContractType)account.ContractType);
             }
+        }
+
+        /// <summary>
+        /// Gets the license capabilities.
+        /// </summary>
+        public ILicenseCapabilities GetLicenseCapabilities(ICustomerLicense license)
+        {
+            return TangoWebClient.GetLicenseCapabilities(license);
+        }
+
+        /// <summary>
+        /// Gets the active stores from Tango.
+        /// </summary>
+        public IEnumerable<ActiveStore> GetActiveStores(ICustomerLicense license)
+        {
+            return TangoWebClient.GetActiveStores(license);
+        }
+
+        /// <summary>
+        /// Deletes a store from Tango.
+        /// </summary>
+        public void DeleteStore(ICustomerLicense customerLicense, string storeLicenseKey)
+        {
+            TangoWebClient.DeleteStore(customerLicense, storeLicenseKey);
+        }
+
+        /// <summary>
+        /// Deletes multiple stores from Tango.
+        /// </summary>
+        public void DeleteStores(ICustomerLicense customerLicense, IEnumerable<string> storeLicenseKeys)
+        {
+            TangoWebClient.DeleteStores(customerLicense, storeLicenseKeys);
+        }
+
+        /// <summary>
+        /// Makes a request to Tango to add a store
+        /// </summary>
+        public IAddStoreResponse AddStore(ICustomerLicense license, StoreEntity store)
+        {
+            return TangoWebClient.AddStore(license, store);
+        }
+
+        /// <summary>
+        /// Associates a free Stamps.com account with a customer license.
+        /// </summary>
+        public void AssociateStampsUsernameWithLicense(string licenseKey, string stampsUsername, string stampsPassword)
+        {
+            TangoWebClient.AssociateStampsUsernameWithLicense(licenseKey, stampsUsername, stampsPassword);
+        }
+
+        /// <summary>
+        /// Associates a Usps account created in ShipWorks as the users free Stamps.com account
+        /// </summary>
+        public AssociateShipWorksWithItselfResponse AssociateShipworksWithItself(AssociateShipworksWithItselfRequest associateShipworksWithItselfRequest)
+        {
+            return TangoWebClient.AssociateShipworksWithItself(associateShipworksWithItselfRequest);
         }
     }
 }

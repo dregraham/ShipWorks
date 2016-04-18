@@ -16,7 +16,7 @@ namespace ShipWorks.AddressValidation
     /// <summary>
     /// Validates and updates addresses
     /// </summary>
-    public class AddressValidator
+    public class AddressValidator : IAddressValidator
     {
         private readonly IAddressValidationWebClient webClient;
         static readonly ILog log = LogManager.GetLogger(typeof(AddressValidator));

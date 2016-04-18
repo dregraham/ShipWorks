@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace ShipWorks.Editions
+﻿namespace ShipWorks.Editions
 {
     /// <summary>
     /// Represents how the edition restricts use of the relevant item
@@ -21,7 +16,7 @@ namespace ShipWorks.Editions
         Hidden,
 
         /// <summary>
-        /// Can see it - but can't upgrade from it. 
+        /// Can see it - but can't upgrade from it.
         /// </summary>
         Forbidden,
 

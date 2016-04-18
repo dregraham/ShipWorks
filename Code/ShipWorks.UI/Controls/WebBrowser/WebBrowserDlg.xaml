@@ -1,0 +1,33 @@
+﻿<Window x:Class="ShipWorks.UI.Controls.WebBrowser.WebBrowserDlg"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:local="clr-namespace:ShipWorks.UI.Controls.WebBrowser"
+        xmlns:attachedProperties="clr-namespace:ShipWorks.UI.AttachedProperties"
+        d:DataContext="{d:DesignInstance local:WebBrowserDlgViewModel}"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterOwner"
+        ShowInTaskbar="False"
+        d:DesignHeight="305.989" d:DesignWidth="329.946" WindowStyle="ToolWindow" Title="{Binding Title, Mode=OneTime}">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <WebBrowser
+            Grid.Row="0"
+            Grid.Column="0"
+            attachedProperties:WebBrowserUtility.BindableSource="{Binding Url, Mode=OneTime}" />
+        <Button Grid.Row="1" Grid.Column="0"
+                Padding="5 0 5 0" Margin="0 5 5 5"
+                IsCancel="True"
+                HorizontalAlignment="Right"
+                Click="OnClickClose">
+            Close
+        </Button>
+    </Grid>
+</Window>

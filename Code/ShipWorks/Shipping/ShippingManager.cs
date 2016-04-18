@@ -45,6 +45,7 @@ using Autofac;
 using ShipWorks.AddressValidation.Enums;
 using Interapptive.Shared;
 using Interapptive.Shared.Messaging;
+using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
 
 namespace ShipWorks.Shipping
 {
@@ -88,7 +89,7 @@ namespace ShipWorks.Shipping
             }
             else
             {
-                // Get the order 
+                // Get the order
                 OrderEntity order = (OrderEntity)DataProvider.GetEntity(orderID);
 
                 if (order == null)
@@ -117,6 +118,8 @@ namespace ShipWorks.Shipping
         /// </summary>
         public static ShipmentEntity CreateShipment(long orderID)
         {
+
+
             // First let's see if there are any shipments already for the order
             List<ShipmentEntity> shipments = GetShipments(orderID, false);
 
@@ -145,7 +148,7 @@ namespace ShipWorks.Shipping
         /// </summary>
         private static ShipmentEntity InternalCreateFirstShipment(long orderID)
         {
-            // Get the order 
+            // Get the order
             OrderEntity order = (OrderEntity)DataProvider.GetEntity(orderID);
 
             if (order == null)
@@ -226,7 +229,7 @@ namespace ShipWorks.Shipping
             shipment.OriginFirstName = store.StoreName;
 
             ShipmentType shipmentType = DetermineInitialShipmentType(shipment);
-            
+
             // Save the record
             using (SqlAdapter adapter = new SqlAdapter(true))
             {
@@ -235,7 +238,7 @@ namespace ShipWorks.Shipping
 
                 // Save the shipment
                 adapter.SaveAndRefetch(shipment);
-                
+
                 // Apply the default values to the shipment
                 shipmentType.LoadShipmentData(shipment, false);
                 shipmentType.UpdateDynamicShipmentData(shipment);
@@ -257,8 +260,8 @@ namespace ShipWorks.Shipping
                 shipment.ShipSenseStatus = entry.Matches(shipment) ? (int)ShipSenseStatus.Applied : (int)ShipSenseStatus.Overwritten;
             }
 
-            // Explicitly save the shipment here to delete any entities in the Removed buckets of the 
-            // entity collections; after applying ShipSense (where customs items are first loaded in 
+            // Explicitly save the shipment here to delete any entities in the Removed buckets of the
+            // entity collections; after applying ShipSense (where customs items are first loaded in
             // this path), and entities were removed, they were still being persisted to the database.
             SaveShipment(shipment);
 
@@ -653,7 +656,7 @@ namespace ShipWorks.Shipping
             else if (shipmentTypeCode == ShipmentTypeCode.iParcel)
             {
                 return "i-parcel";
-            } 
+            }
             else if (shipmentTypeCode == ShipmentTypeCode.BestRate)
             {
                 return "Best Rate";
@@ -678,7 +681,7 @@ namespace ShipWorks.Shipping
 
         /// <summary>
         /// Ensure the carrier-specific data for the shipment exists, like the associated FedEx table row.  Also ensures
-        /// that the custom's data is loaded.  Can throw a SqlForeignKeyException  if the shipment's order has been deleted, 
+        /// that the custom's data is loaded.  Can throw a SqlForeignKeyException  if the shipment's order has been deleted,
         /// or ObjectDeletedException if the shipment itself has been deleted.
         /// </summary>
         public static void EnsureShipmentLoaded(ShipmentEntity shipment)
@@ -742,12 +745,12 @@ namespace ShipWorks.Shipping
             // Ensure data is valid and up-to-date
             shipmentType.UpdateDynamicShipmentData(shipment);
 
-            // We're going to confirm the shipping address with the store as some stores may change 
-            // the shipping address depending on the shipping program being used (such as eBay's 
-            // Global Shipping Program), so we want to get rates for the location the package will be shipped                
+            // We're going to confirm the shipping address with the store as some stores may change
+            // the shipping address depending on the shipping program being used (such as eBay's
+            // Global Shipping Program), so we want to get rates for the location the package will be shipped
 
-            // We want to retain the buyer's address on the original shipment object, so we're going to use 
-            // a cloned shipment to confirm the shipping address with the store. This way the original 
+            // We want to retain the buyer's address on the original shipment object, so we're going to use
+            // a cloned shipment to confirm the shipping address with the store. This way the original
             // shipment is not altered and persisted to the database if the store alters the address
             ShipmentEntity clonedShipment = EntityUtility.CloneEntity(shipment);
             OrderHeader orderHeader = DataProvider.GetOrderHeader(clonedShipment.OrderID);
@@ -895,11 +898,11 @@ namespace ShipWorks.Shipping
                             }
                             catch (InsureShipException ex)
                             {
-                                // If there was an error voiding the insurance policy, save the exception so we can rethrow at the 
+                                // If there was an error voiding the insurance policy, save the exception so we can rethrow at the
                                 // very end of the voiding process to ensure that any other code for voiding can run
                                 voidInsuranceException = ex;
                             }
-                            
+
                             log.InfoFormat("Shipment {0}  - Void Shipment Complete", shipment.ShipmentID);
                         }
 
@@ -915,7 +918,7 @@ namespace ShipWorks.Shipping
                     // Rethrow the insurance exception if there was one
                     if (voidInsuranceException != null)
                     {
-                        string message = string.Format("ShipWorks was not able to void the insurance policy with this shipment. Contact InsureShip at {0} to void the policy.\r\n\r\n{1}", 
+                        string message = string.Format("ShipWorks was not able to void the insurance policy with this shipment. Contact InsureShip at {0} to void the policy.\r\n\r\n{1}",
                             new InsureShipSettings().InsureShipPhoneNumber,
                             voidInsuranceException.Message);
 
@@ -994,8 +997,11 @@ namespace ShipWorks.Shipping
                     {
                         throw new ShipmentAlreadyProcessedException("The shipment has already been processed.");
                     }
-                    
-                    if (EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.ProcessShipment, (ShipmentTypeCode)shipment.ShipmentType).Level == EditionRestrictionLevel.Forbidden)
+
+                    ILicenseService licenseService = lifetimeScope.Resolve<ILicenseService>();
+                    EditionRestrictionLevel restrictionLevel = licenseService.CheckRestriction(EditionFeature.ProcessShipment, (ShipmentTypeCode) shipment.ShipmentType);
+
+                    if (restrictionLevel == EditionRestrictionLevel.Forbidden)
                     {
                         throw new ShippingException(string.Format("ShipWorks can no longer process {0} shipments. Please try using USPS.", EnumHelper.GetDescription((ShipmentTypeCode)shipment.ShipmentType)));
                     }
@@ -1006,11 +1012,15 @@ namespace ShipWorks.Shipping
                         throw new ShippingException("The store the shipment was in has been deleted.");
                     }
 
+                    // Check the license to see if the user is allowed to process this shipment.
+                    // Will throw ShippingException if they are not.
+                    CheckLicense(storeEntity);
+
                     // Get the ShipmentType instance
                     ShipmentType shipmentType = ShipmentTypeManager.GetType(shipment);
                     List<ShipmentEntity> shipmentsToTryToProcess = shipmentType.PreProcess(shipment, counterRatesProcessing, selectedRate, lifetimeScope);
 
-                    // A null value returned from the pre-process method means the user has opted to not continue 
+                    // A null value returned from the pre-process method means the user has opted to not continue
                     // processing after a counter rate was selected as the best rate, so the processing of the shipment should be aborted
                     if (shipmentsToTryToProcess == null)
                     {
@@ -1050,7 +1060,7 @@ namespace ShipWorks.Shipping
 
                         throw new ShippingException(lastException.Message,lastException);
                     }
-                    
+
                     // Log to the knowledge base after everything else has been successful, so an error logging
                     // to the knowledge base does not prevent the shipment from being actually processed.
                     LogToShipSenseKnowledgebase(ShipmentTypeManager.GetType(processedShipment), processedShipment);
@@ -1064,193 +1074,225 @@ namespace ShipWorks.Shipping
         }
 
         /// <summary>
+        /// Checks the license before processing a shipment
+        /// </summary>
+        /// <param name="storeEntity">The store entity.</param>
+        private static void CheckLicense(StoreEntity storeEntity)
+        {
+            ILicenseService licenseService = IoC.UnsafeGlobalLifetimeScope.Resolve<ILicenseService>();
+            ILicense license = licenseService.GetLicense(storeEntity);
+
+            license.Refresh();
+            if (license.IsDisabled)
+            {
+                throw new ShippingException(license.DisabledReason);
+            }
+
+            try
+            {
+                license.EnforceCapabilities(EnforcementContext.CreateLabel);
+            }
+            catch (ShipWorksLicenseException ex)
+            {
+                throw new ShippingException(ex.Message);
+            }
+        }
+
+        /// <summary>
         /// Process the given shipment.  If the shipment is already processed, then no action is taken or error reported.  Licensing
         /// is validated, and processing results are logged to tango.
         /// </summary>
         [NDependIgnoreLongMethod]
         private static void ProcessShipmentHelper(ShipmentEntity shipment, StoreEntity storeEntity, Dictionary<long, Exception> licenseCheckCache)
         {
-            ShippingSettingsEntity settings = ShippingSettings.Fetch();
-
-            try
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                // Get the ShipmentType instance
-                ShipmentType shipmentType = ShipmentTypeManager.GetType(shipment);
+                ShippingSettingsEntity settings = ShippingSettings.Fetch();
 
-                // A null value returned from the pre-process method means the user has opted to not continue 
-                // processing after a counter rate was selected as the best rate, so the processing of the shipment should be aborted
-                if (shipmentType == null)
+                try
                 {
-                    return;
-                }
+                    // Get the ShipmentType instance
+                    ShipmentType shipmentType = ShipmentTypeManager.GetType(shipment);
 
-                // Make sure the type is setup - its possible it's not in the case of upgrading from V2
-                if (!IsShipmentTypeConfigured(shipmentType.ShipmentTypeCode))
-                {
-                    throw new ShippingException(String.Format("The '{0}' shipping provider was migrated from ShipWorks 2, and has not yet been configured for ShipWorks 3.", shipmentType.ShipmentTypeName));
-                }
-
-                // Validate that the license is valid
-                ValidateLicense(storeEntity, licenseCheckCache);
-
-                // Ensure the carrier specific data has been loaded
-                log.InfoFormat("Shipment {0}  - Ensuring loaded", shipment.ShipmentID);
-                EnsureShipmentLoaded(shipment);
-
-                // Update the dyamic data of the shipment
-                shipmentType.UpdateDynamicShipmentData(shipment);
-
-                // Apply the blank recipient phone# option.  We apply it right to the entity so that
-                // its transparent to all the shipping carrier processing.  But we reset it back 
-                // after processing, so it doesn't look like that's the phone the customer entered for the shipment.
-                if (shipment.ShipPhone.Trim().Length == 0)
-                {
-                    if (settings.BlankPhoneOption == (int) ShipmentBlankPhoneOption.SpecifiedPhone)
+                    // A null value returned from the pre-process method means the user has opted to not continue
+                    // processing after a counter rate was selected as the best rate, so the processing of the shipment should be aborted
+                    if (shipmentType == null)
                     {
-                        shipment.ShipPhone = settings.BlankPhoneNumber;
-                    }
-                    else
-                    {
-                        shipment.ShipPhone = shipment.OriginPhone;
+                        return;
                     }
 
-                    log.InfoFormat("Shipment {1} - Using phone '{0}' for  in place of blank phone.", shipment.ShipPhone, shipment.ShipmentID);
-                }
-
-                // Determine residential status
-                if (shipmentType.IsResidentialStatusRequired(shipment))
-                {
-                    shipment.ResidentialResult = ResidentialDeterminationService.DetermineResidentialAddress(shipment);
-                }
-
-                InsuranceUtility.ValidateShipment(shipment);
-
-                // Check against the postal restriction for APO/FPO only
-                var postalRestriction = EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.PostalApoFpoPoboxOnly, shipment);
-                if (postalRestriction.Level != EditionRestrictionLevel.None)
-                {
-                    throw new ShippingException(postalRestriction.GetDescription());
-                }
-
-                var typeRestriction = EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.ShipmentType, shipmentType.ShipmentTypeCode);
-                if (typeRestriction.Level != EditionRestrictionLevel.None)
-                {
-                    throw new ShippingException(String.Format("Your edition of ShipWorks does not support shipping with '{0}'.", shipmentType.ShipmentTypeName));
-                }
-
-                // If they had set this shipment to be a return - we want to make sure it's not processed as one if they switched to something that doesnt support it
-                if (!shipmentType.SupportsReturns)
-                {
-                    shipment.ReturnShipment = false;
-                }
-
-                // We're going to allow the store to confirm the shipping address for the shipping label, but we want to 
-                // make a note of the original shipping address first, so we can reset the address back after the label 
-                // has been generated. This will result in the customer still being able to see where the package went 
-                // according to the original cart order
-                ShipmentEntity clone = EntityUtility.CloneEntity(shipment);
-
-                // Instantiate the store class to allow it a chance to confirm the shipping address before 
-                // the shipping label is created. We don't use the method on the ShippingManager to do this
-                // since we want to track the fields that changed.
-                StoreType storeType = StoreTypeManager.GetType(storeEntity);
-                List<ShipmentFieldIndex> fieldsToRestore = storeType.OverrideShipmentDetails(shipment);
-
-                if (shipment.ShipSenseStatus == (int) ShipSenseStatus.Applied)
-                {
-                    Knowledgebase knowledgebase = new Knowledgebase();
-                    if (knowledgebase.IsOverwritten(shipment))
+                    // Make sure the type is setup - its possible it's not in the case of upgrading from V2
+                    if (!IsShipmentTypeConfigured(shipmentType.ShipmentTypeCode))
                     {
-                        shipment.ShipSenseStatus = (int) ShipSenseStatus.Overwritten;
+                        throw new ShippingException(
+                            $"The '{shipmentType.ShipmentTypeName}' shipping provider was migrated from ShipWorks 2, and has not yet been configured for ShipWorks 3.");
                     }
-                }
 
-                // Transacted
-                using (SqlAdapter adapter = new SqlAdapter(true))
-                {
-                    log.InfoFormat("Shipment {0}  - ShipmentType.Process Start", shipment.ShipmentID);
-                    
-                    using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+                    // Validate that the license is valid
+                    ValidateLicense(storeEntity, licenseCheckCache);
+
+                    // Ensure the carrier specific data has been loaded
+                    log.InfoFormat("Shipment {0}  - Ensuring loaded", shipment.ShipmentID);
+                    EnsureShipmentLoaded(shipment);
+
+                    // Update the dynamic data of the shipment
+                    shipmentType.UpdateDynamicShipmentData(shipment);
+
+                    // Apply the blank recipient phone# option.  We apply it right to the entity so that
+                    // its transparent to all the shipping carrier processing.  But we reset it back
+                    // after processing, so it doesn't look like that's the phone the customer entered for the shipment.
+                    if (shipment.ShipPhone.Trim().Length == 0)
                     {
+                        if (settings.BlankPhoneOption == (int) ShipmentBlankPhoneOption.SpecifiedPhone)
+                        {
+                            shipment.ShipPhone = settings.BlankPhoneNumber;
+                        }
+                        else
+                        {
+                            shipment.ShipPhone = shipment.OriginPhone;
+                        }
+
+                        log.InfoFormat("Shipment {1} - Using phone '{0}' for  in place of blank phone.",
+                            shipment.ShipPhone, shipment.ShipmentID);
+                    }
+
+                    // Determine residential status
+                    if (shipmentType.IsResidentialStatusRequired(shipment))
+                    {
+                        shipment.ResidentialResult = ResidentialDeterminationService.DetermineResidentialAddress(shipment);
+                    }
+
+                    InsuranceUtility.ValidateShipment(shipment);
+
+                    ILicenseService licenseService = lifetimeScope.Resolve<ILicenseService>();
+
+                    // Check against the postal restriction for APO/FPO only
+                    if (licenseService.CheckRestriction(EditionFeature.PostalApoFpoPoboxOnly, shipment) != EditionRestrictionLevel.None)
+                    {
+                        throw new ShippingException(
+                            "Your ShipWorks account is only enabled for using APO, FPO, and P.O. " +
+                            "Box postal services.  Please contact Interapptive to enable use of all postal services.");
+                    }
+
+                    if (licenseService.CheckRestriction(EditionFeature.ShipmentType, shipmentType.ShipmentTypeCode) != EditionRestrictionLevel.None)
+                    {
+                        throw new ShippingException(
+                            $"Your edition of ShipWorks does not support shipping with '{shipmentType.ShipmentTypeName}'.");
+                    }
+
+                    // If they had set this shipment to be a return - we want to make sure it's not processed as one if they switched to something that doesnt support it
+                    if (!shipmentType.SupportsReturns)
+                    {
+                        shipment.ReturnShipment = false;
+                    }
+
+                    // We're going to allow the store to confirm the shipping address for the shipping label, but we want to
+                    // make a note of the original shipping address first, so we can reset the address back after the label
+                    // has been generated. This will result in the customer still being able to see where the package went
+                    // according to the original cart order
+                    ShipmentEntity clone = EntityUtility.CloneEntity(shipment);
+
+                    // Instantiate the store class to allow it a chance to confirm the shipping address before
+                    // the shipping label is created. We don't use the method on the ShippingManager to do this
+                    // since we want to track the fields that changed.
+                    StoreType storeType = StoreTypeManager.GetType(storeEntity);
+                    List<ShipmentFieldIndex> fieldsToRestore = storeType.OverrideShipmentDetails(shipment);
+
+                    if (shipment.ShipSenseStatus == (int) ShipSenseStatus.Applied)
+                    {
+                        Knowledgebase knowledgebase = new Knowledgebase();
+                        if (knowledgebase.IsOverwritten(shipment))
+                        {
+                            shipment.ShipSenseStatus = (int) ShipSenseStatus.Overwritten;
+                        }
+                    }
+
+                    // Transacted
+                    using (SqlAdapter adapter = new SqlAdapter(true))
+                    {
+                        log.InfoFormat("Shipment {0}  - ShipmentType.Process Start", shipment.ShipmentID);
+
                         ILabelService labelService =
                             lifetimeScope.ResolveKeyed<ILabelService>((ShipmentTypeCode) shipment.ShipmentType);
 
                         labelService.Create(shipment);
-                    }
 
-                    log.InfoFormat("Shipment {0}  - ShipmentType.Process Complete", shipment.ShipmentID);
 
-                    if (IsInsuredByInsureShip(shipmentType, shipment))
-                    {
-                        log.InfoFormat("Shipment {0}  - Insure Shipment Start", shipment.ShipmentID);
-                        InsureShipPolicy insureShipPolicy = new InsureShipPolicy(TangoWebClient.GetInsureShipAffiliate(storeEntity));
-                        insureShipPolicy.Insure(shipment);
-                        log.InfoFormat("Shipment {0}  - Insure Shipment Complete", shipment.ShipmentID);
-                    }
-                    
-                    // Now that the label is generated, we can reset the shipping fields the store changed back to their 
-                    // original values before saving to the database
-                    foreach (ShipmentFieldIndex fieldIndex in fieldsToRestore)
-                    {
-                        // Make sure the field is not seen as dirty since we're setting the shipment back to its original value
-                        shipment.SetNewFieldValue((int) fieldIndex, clone.GetCurrentFieldValue((int) fieldIndex));
-                        shipment.Fields[(int) fieldIndex].IsChanged = false;
-                    }
+                        log.InfoFormat("Shipment {0}  - ShipmentType.Process Complete", shipment.ShipmentID);
 
-                    shipment.Processed = true;
-                    shipment.ProcessedDate = DateTime.UtcNow;
-                    shipment.ProcessedUserID = UserSession.User.UserID;
-                    shipment.ProcessedComputerID = UserSession.Computer.ComputerID;
+                        if (IsInsuredByInsureShip(shipmentType, shipment))
+                        {
+                            log.InfoFormat("Shipment {0}  - Insure Shipment Start", shipment.ShipmentID);
+                            InsureShipPolicy insureShipPolicy =
+                                new InsureShipPolicy(TangoWebClient.GetInsureShipAffiliate(storeEntity));
+                            insureShipPolicy.Insure(shipment);
+                            log.InfoFormat("Shipment {0}  - Insure Shipment Complete", shipment.ShipmentID);
+                        }
 
-                    // Remove any shipment data that is not necessary for this shipment type
-                    // BN: Actually we can't do this here.  Auditing follows some rules, and one of which is that if there are any deletes of 1:1 mapped entities (such as FedEx:Shipment)
-                    //     then the whole activity is considered a delete.  So deleting "non active shipment data" actually makes processing show up as a Delete in the audit.
-                    // ClearNonActiveShipmentData(shipment, adapter);
+                        // Now that the label is generated, we can reset the shipping fields the store changed back to their
+                        // original values before saving to the database
+                        foreach (ShipmentFieldIndex fieldIndex in fieldsToRestore)
+                        {
+                            // Make sure the field is not seen as dirty since we're setting the shipment back to its original value
+                            shipment.SetNewFieldValue((int) fieldIndex, clone.GetCurrentFieldValue((int) fieldIndex));
+                            shipment.Fields[(int) fieldIndex].IsChanged = false;
+                        }
 
-                    adapter.SaveAndRefetch(shipment);
+                        shipment.Processed = true;
+                        shipment.ProcessedDate = DateTime.UtcNow;
+                        shipment.ProcessedUserID = UserSession.User.UserID;
+                        shipment.ProcessedComputerID = UserSession.Computer.ComputerID;
 
-                    // For WorldShip actions don't happen until the shipment comes back in after being processed in WorldShip
-                    if (!shipmentType.ProcessingCompletesExternally)
-                    {
-                        // Dispatch the shipment processed event
-                        ActionDispatcher.DispatchShipmentProcessed(shipment, adapter);
-                        log.InfoFormat("Shipment {0}  - Dispatched", shipment.ShipmentID);
-                    }
+                        // Remove any shipment data that is not necessary for this shipment type
+                        // BN: Actually we can't do this here.  Auditing follows some rules, and one of which is that if there are any deletes of 1:1 mapped entities (such as FedEx:Shipment)
+                        //     then the whole activity is considered a delete.  So deleting "non active shipment data" actually makes processing show up as a Delete in the audit.
+                        // ClearNonActiveShipmentData(shipment, adapter);
 
-                    adapter.Commit();
-                }
-
-                log.InfoFormat("Shipment {0}  - Committed", shipment.ShipmentID);
-
-                // Now log the result to tango.  For WorldShip we can't do this until the shipment comes back in to ShipWorks
-                if (!shipmentType.ProcessingCompletesExternally)
-                {
-                    shipment.OnlineShipmentID = TangoWebClient.LogShipment(storeEntity, shipment);
-
-                    log.InfoFormat("Shipment {0}  - Accounted", shipment.ShipmentID);
-                    
-                    using (SqlAdapter adapter = new SqlAdapter())
-                    {
                         adapter.SaveAndRefetch(shipment);
+
+                        // For WorldShip actions don't happen until the shipment comes back in after being processed in WorldShip
+                        if (!shipmentType.ProcessingCompletesExternally)
+                        {
+                            // Dispatch the shipment processed event
+                            ActionDispatcher.DispatchShipmentProcessed(shipment, adapter);
+                            log.InfoFormat("Shipment {0}  - Dispatched", shipment.ShipmentID);
+                        }
+
                         adapter.Commit();
                     }
+
+                    log.InfoFormat("Shipment {0}  - Committed", shipment.ShipmentID);
+
+                    // Now log the result to tango.  For WorldShip we can't do this until the shipment comes back in to ShipWorks
+                    if (!shipmentType.ProcessingCompletesExternally)
+                    {
+                        shipment.OnlineShipmentID = TangoWebClient.LogShipment(storeEntity, shipment);
+
+                        log.InfoFormat("Shipment {0}  - Accounted", shipment.ShipmentID);
+
+                        using (SqlAdapter adapter = new SqlAdapter())
+                        {
+                            adapter.SaveAndRefetch(shipment);
+                            adapter.Commit();
+                        }
+                    }
                 }
-            }
-            catch (InsureShipException ex)
-            {
-                throw new ShippingException(ex.Message, ex);
-            }
-            catch (ShipWorksLicenseException ex)
-            {
-                throw new ShippingException(ex.Message, ex);
-            }
-            catch (TangoException ex)
-            {
-                throw new ShippingException(ex.Message, ex);
-            }
-            catch (TemplateTokenException ex)
-            {
-                throw new ShippingException(ex.Message, ex);
+                catch (InsureShipException ex)
+                {
+                    throw new ShippingException(ex.Message, ex);
+                }
+                catch (ShipWorksLicenseException ex)
+                {
+                    throw new ShippingException(ex.Message, ex);
+                }
+                catch (TangoException ex)
+                {
+                    throw new ShippingException(ex.Message, ex);
+                }
+                catch (TemplateTokenException ex)
+                {
+                    throw new ShippingException(ex.Message, ex);
+                }
             }
         }
 
@@ -1271,7 +1313,7 @@ namespace ShipWorks.Shipping
                     adapter.FetchEntityCollection(order.OrderItems, new RelationPredicateBucket(OrderItemFields.OrderID == order.OrderID));
                 }
 
-                // Apply the data from the package adapters and the customs items to the knowledge base 
+                // Apply the data from the package adapters and the customs items to the knowledge base
                 // entry, so the shipment data will get saved to the knowledge base; the knowledge base
                 // is smart enough to know when to save the customs items associated with an entry.
                 KnowledgebaseEntry entry = new KnowledgebaseEntry();
@@ -1282,7 +1324,7 @@ namespace ShipWorks.Shipping
             }
             catch (Exception ex)
             {
-                // We may want to eat this exception entirely, so the user isn't impacted 
+                // We may want to eat this exception entirely, so the user isn't impacted
                 log.ErrorFormat("An error occurred writing shipment ID {0} to the knowledge base: {1}", shipment.ShipmentID, ex.Message);
                 throw new ShippingException("The shipment was processed successfully, but the data was not logged to ShipSense.", ex);
             }
@@ -1465,7 +1507,7 @@ namespace ShipWorks.Shipping
         {
             ShippingProfileEntity defaultProfile = ShippingProfileManager.GetDefaultProfile(shipmentTypeCode);
 
-            if (!defaultProfile.RequestedLabelFormat.HasValue)
+            if (defaultProfile?.RequestedLabelFormat == null)
             {
                 // We don't need to do anything if the default profile is somehow null
                 return;

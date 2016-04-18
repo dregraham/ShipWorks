@@ -5,6 +5,7 @@ using System.Text;
 using Interapptive.Shared.Utility;
 using Xunit;
 using Moq;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.BestRate;
@@ -37,25 +38,71 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
         }
 
         [Fact]
-        public void GetShippingBroker_ReturnsUspsCounterRateBroker_WhenNoUspsAccountsExist()
+        public void GetShippingBroker_ReturnsNullShippingBroker_WhenNoUspsAccountsExist()
         {
             accountRepository.Setup(r => r.Accounts).Returns(new List<UspsAccountEntity>());
             testObject.AccountRepository = accountRepository.Object;
 
             IBestRateShippingBroker broker = testObject.GetShippingBroker(new ShipmentEntity());
 
-            Assert.IsAssignableFrom<UspsCounterRatesBroker>(broker);
+            Assert.IsAssignableFrom<NullShippingBroker>(broker);
         }
 
         [Fact]
-        public void GetShippingBroker_ReturnsUspsRateBroker_WhenUspsAccountExists()
+        public void GetShippingBroker_ReturnsUspsRateBroker_WhenUspsAccountExists_AndPendingStatusIsNone()
         {
-            accountRepository.Setup(r => r.Accounts).Returns(new List<UspsAccountEntity> { new UspsAccountEntity() });
+            accountRepository.Setup(r => r.Accounts)
+                .Returns
+                (
+                    new List<UspsAccountEntity>
+                    {
+                        new UspsAccountEntity() { PendingInitialAccount = (int) UspsPendingAccountType.None }
+                    }
+                );
+
             testObject.AccountRepository = accountRepository.Object;
 
             IBestRateShippingBroker broker = testObject.GetShippingBroker(new ShipmentEntity());
 
             Assert.IsAssignableFrom<UspsBestRateBroker>(broker);
+        }
+
+        [Fact]
+        public void GetShippingBroker_ReturnsNullShippingBroker_WhenUspsAccountExists_AndPendingStatusIsCreate()
+        {
+            accountRepository.Setup(r => r.Accounts)
+                .Returns
+                (
+                    new List<UspsAccountEntity>
+                    {
+                        new UspsAccountEntity() { PendingInitialAccount = (int) UspsPendingAccountType.Create }
+                    }
+                );
+
+            testObject.AccountRepository = accountRepository.Object;
+
+            IBestRateShippingBroker broker = testObject.GetShippingBroker(new ShipmentEntity());
+
+            Assert.IsAssignableFrom<NullShippingBroker>(broker);
+        }
+
+        [Fact]
+        public void GetShippingBroker_ReturnsNullShippingBroker_WhenUspsAccountExists_AndPendingStatusIsExisting()
+        {
+            accountRepository.Setup(r => r.Accounts)
+                .Returns
+                (
+                    new List<UspsAccountEntity>
+                    {
+                        new UspsAccountEntity() { PendingInitialAccount = (int) UspsPendingAccountType.Existing }
+                    }
+                );
+
+            testObject.AccountRepository = accountRepository.Object;
+
+            IBestRateShippingBroker broker = testObject.GetShippingBroker(new ShipmentEntity());
+
+            Assert.IsAssignableFrom<NullShippingBroker>(broker);
         }
 
         [Fact]

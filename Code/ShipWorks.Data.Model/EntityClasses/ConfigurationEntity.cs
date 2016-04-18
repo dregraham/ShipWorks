@@ -467,6 +467,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("AuditDeletedOrders", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("CustomerKey", fieldHashtable);
 		}
 		#endregion
 
@@ -662,6 +665,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Boolean)GetValue((int)ConfigurationFieldIndex.AuditDeletedOrders, true); }
 			set	{ SetValue((int)ConfigurationFieldIndex.AuditDeletedOrders, value); }
+		}
+
+		/// <summary> The CustomerKey property of the Entity Configuration<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "Configuration"."CustomerKey"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 2147483647<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String CustomerKey
+		{
+			get { return (System.String)GetValue((int)ConfigurationFieldIndex.CustomerKey, true); }
+			set	{ SetValue((int)ConfigurationFieldIndex.CustomerKey, value); }
 		}
 
 
