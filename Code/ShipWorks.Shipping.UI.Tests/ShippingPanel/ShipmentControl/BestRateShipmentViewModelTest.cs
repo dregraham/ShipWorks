@@ -7,6 +7,7 @@ using Moq;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages;
+using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Editing.Enums;
 using ShipWorks.Shipping.Editing.Rating;
@@ -725,14 +726,6 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
             shipmentAdapter.Verify(x => x.DeletePackage(It.IsAny<PackageAdapterWrapper>()), Times.Never);
         }
 
-
-
-
-
-
-
-
-
         [Fact]
         public void ServiceLevelTypes_Returns_SameValuesAsEnum()
         {
@@ -748,19 +741,49 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
             Assert.Equal(expectedEnumList.Count, testObject.ServiceLevelTypes.Count);
         }
 
+        [Fact]
+        public void RatesLoaded_IsFalse_WhenRatingHashDoesntMatch()
+        {
+            using (TestMessenger messenger = new TestMessenger())
+            {
+                mock.Provide<IMessenger>(messenger);
 
+                shipment.Processed = false;
+                CreateDefaultShipmentAdapter(mock);
+                shipmentAdapter.Setup(sa => sa.Shipment).Returns(shipment);
 
+                BestRateShipmentViewModel testObject = mock.Create<BestRateShipmentViewModel>();
 
+                testObject.Load(shipmentAdapter.Object);
 
+                messenger.Send(new RatesRetrievingMessage(this, "ignore_me_rating_hash"));
+                messenger.Send(new RatesRetrievedMessage(this, "retrieved_rating_hash", new GenericResult<RateGroup>(), shipmentAdapter.Object));
 
+                Assert.False(testObject.RatesLoaded);
+            }
+        }
 
+        [Fact]
+        public void RatesLoaded_IsTrue_WhenRatingHashDoesMatch()
+        {
+            using (TestMessenger messenger = new TestMessenger())
+            {
+                mock.Provide<IMessenger>(messenger);
 
+                shipment.Processed = false;
+                CreateDefaultShipmentAdapter(mock);
+                shipmentAdapter.Setup(sa => sa.Shipment).Returns(shipment);
 
+                BestRateShipmentViewModel testObject = mock.Create<BestRateShipmentViewModel>();
 
+                testObject.Load(shipmentAdapter.Object);
 
+                messenger.Send(new RatesRetrievingMessage(this, "honor_me_rating_hash"));
+                messenger.Send(new RatesRetrievedMessage(this, "honor_me_rating_hash", new GenericResult<RateGroup>(), shipmentAdapter.Object));
 
-
-
+                Assert.True(testObject.RatesLoaded);
+            }
+        }
 
         private void CreateDefaultShipmentAdapter(AutoMock autoMock)
         {

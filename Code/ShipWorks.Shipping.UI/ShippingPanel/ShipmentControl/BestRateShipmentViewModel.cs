@@ -65,8 +65,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
             InsuranceViewModel = shippingViewModelFactory.GetInsuranceViewModel();
 
             subscriptions = new CompositeDisposable(
-                messenger.OfType<RatesRetrievingMessage>().Subscribe(x => RatesLoaded = false),
-                messenger.OfType<RatesRetrievedMessage>().Subscribe(x => RatesLoaded = true),
+                SubscribeToRatesRetrieval(),
                 messenger.OfType<DimensionsProfilesChangedMessage>().Subscribe(ManageDimensionsProfiles),
                 messenger.OfType<ShippingSettingsChangedMessage>().Subscribe(HandleShippingSettingsChangedMessage),
                 handler.PropertyChangingStream
@@ -74,6 +73,30 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
                     .Subscribe(_ => SaveDimensionsToSelectedPackageAdapter()),
                 handler.Where(x => nameof(SelectedPackageAdapter).Equals(x, StringComparison.Ordinal))
                     .Subscribe(_ => LoadDimensionsFromSelectedPackageAdapter()));
+        }
+
+        /// <summary>
+        /// Subscribe to rates retrieving and retrieved messages so we can update the 
+        /// rate text.
+        /// </summary>
+        public IDisposable SubscribeToRatesRetrieval()
+        {
+            return new CompositeDisposable(
+                messenger.OfType<RatesRetrievingMessage>()
+                    .Subscribe(_ => RatesLoaded = false),
+                messenger.OfType<RatesRetrievingMessage>()
+                    .Select(GetMatchingRatesRetrievedMessage)
+                    .Switch()
+                    .Subscribe(_ => RatesLoaded = true));
+        }
+
+        /// <summary>
+        /// Get rates retrieved messages that match the rates retrieving message
+        /// </summary>
+        private IObservable<RatesRetrievedMessage> GetMatchingRatesRetrievedMessage(RatesRetrievingMessage rateRetrievingMsg)
+        {
+            return messenger.OfType<RatesRetrievedMessage>()
+               .Where(rateRetrivedMsg => rateRetrievingMsg.RatingHash == rateRetrivedMsg.RatingHash);
         }
 
         /// <summary>
