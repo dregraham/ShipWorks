@@ -195,6 +195,7 @@
     <Compile Include="ShippingPanel\ObservableRegistrations\ShipmentDeletedPipelineTest.cs" />
     <Compile Include="ShippingPanel\ObservableRegistrations\ShipmentsProcessedPipelineTest.cs" />
     <Compile Include="ShippingPanel\ObservableRegistrations\StoreChangedPipelineTest.cs" />
+    <Compile Include="ShippingPanel\ShipmentControl\BestRateShipmentViewModelTest.cs" />
     <Compile Include="ShippingPanel\ShipmentControl\OtherShipmentViewModelTest.cs" />
     <Compile Include="ShippingPanel\ShipmentControl\ShipmentViewModelTest.cs" />
     <Compile Include="ShippingPanel\ShippingConfigurationTest.cs" />
