@@ -1,25 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using ShipWorks.Data.Administration;
-using ShipWorks.Data.Administration.Retry;
-using ShipWorks.Data.Model.EntityClasses;
-using System.Threading;
 using Interapptive.Shared;
-using ShipWorks.Data.Connection;
-using ShipWorks.Data.Model.HelperClasses;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Model.Linq;
-using ShipWorks.Stores.Platforms.Ebay.WebServices;
-using ShipWorks.Data.Model;
 using log4net;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data;
+using ShipWorks.Data.Administration.Retry;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Content;
-using ShipWorks.Shipping;
 using ShipWorks.Stores.Platforms.Ebay.Enums;
-using Interapptive.Shared.Business;
 using ShipWorks.Stores.Platforms.Ebay.Tokens;
+using ShipWorks.Stores.Platforms.Ebay.WebServices;
 
 namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
 {
@@ -28,7 +22,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
     /// </summary>
     public class EbayCombinedOrderCandidate
     {
-        // Logger 
+        // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(EbayCombinedOrderCandidate));
 
         List<EbayCombinedOrderComponent> components = new List<EbayCombinedOrderComponent>();
@@ -179,7 +173,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
         }
 
         /// <summary>
-        /// Searches the database for orders from this buyer.  Any orders found that aren't already Components are 
+        /// Searches the database for orders from this buyer.  Any orders found that aren't already Components are
         /// added; meaning that any non-selected qualifying orders are added.
         /// </summary>
         public void DiscoverRelatedOrders()
@@ -243,7 +237,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
                 // build the collection of transactions to be combined
                 List<TransactionType> transactions = new List<TransactionType>();
 
-                // Go throughy each order that is going to be combined, and build a list of all eBay transactions from it
+                // Go through each order that is going to be combined, and build a list of all eBay transactions from it
                 foreach (EbayOrderEntity order in toCombine.Select(c => c.Order))
                 {
                     // Ensure the items are loaded for this order
@@ -357,6 +351,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
             newOrder.RollupItemCount = 0;
             newOrder.RollupEbayItemCount = 0;
             newOrder.RollupNoteCount = 0;
+            newOrder.RollupItemTotalWeight = 0;
 
             // Generate a new order number
             newOrder.OrderNumber = OrderUtility.GetNextOrderNumber(store.StoreID);
@@ -628,7 +623,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
         {
             foreach (IEntityField2 field in oldOrder.Fields)
             {
-                if (!(field.IsPrimaryKey || field.IsReadOnly || field.FieldIndex == (int)OrderFieldIndex.OrderNumberComplete))
+                if (!(field.IsPrimaryKey || field.IsReadOnly || field.FieldIndex == (int) OrderFieldIndex.OrderNumberComplete))
                 {
                     // copy its value to the neworder
                     newOrder.SetNewFieldValue(field.FieldIndex, field.CurrentValue);
@@ -648,7 +643,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
 
             if (ex.Parameters.Count > 0)
             {
-                // Use the value in the order ID parameter to look up the order number being deleted so we can 
+                // Use the value in the order ID parameter to look up the order number being deleted so we can
                 // indicate which order the error occurred on
                 System.Data.SqlClient.SqlParameter parameter = ex.Parameters[0] as System.Data.SqlClient.SqlParameter;
                 if (parameter != null && parameter.ParameterName == orderParameterName)

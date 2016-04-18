@@ -33,7 +33,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         private long dimsProfileID;
         private double dimsWeight;
         private bool dimsAddWeight;
-        private int packagingType;
         private bool ratesLoaded;
         private RateResult selectedRate;
 
