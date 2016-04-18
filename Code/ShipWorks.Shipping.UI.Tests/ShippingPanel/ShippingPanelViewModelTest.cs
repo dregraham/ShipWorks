@@ -463,7 +463,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
         }
 
         [Fact]
-        public void Load_LoadedShipmentResult_IsUnsupportedShipmentType_WhenBestRateShipmentType()
+        public void Load_LoadedShipmentResult_IsSuccessShipmentType_WhenBestRateShipmentType()
         {
             shipmentEntity.ShipmentTypeCode = ShipmentTypeCode.BestRate;
             orderSelectionLoaded = new LoadedOrderSelection(orderEntity,
@@ -473,7 +473,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
 
             ShippingPanelViewModel testObject = GetViewModelWithLoadedShipment(mock);
 
-            Assert.Equal(ShippingPanelLoadedShipmentResult.UnsupportedShipmentType, testObject.LoadedShipmentResult);
+            Assert.Equal(ShippingPanelLoadedShipmentResult.Success, testObject.LoadedShipmentResult);
         }
 
         [Fact]
