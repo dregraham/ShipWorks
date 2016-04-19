@@ -24,6 +24,7 @@ using ShipWorks.Messaging.Messages.Dialogs;
 using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Shipping.Loading;
 using ShipWorks.Shipping.Services;
+using ShipWorks.Users.Security;
 
 namespace ShipWorks.Shipping.UI.ShippingPanel
 {
@@ -43,6 +44,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         private readonly IMessageHelper messageHelper;
         private readonly IShippingViewModelFactory shippingViewModelFactory;
         private readonly ILog log;
+        private readonly Func<ISecurityContext> securityContextRetriever;
 
         private IDisposable shipmentChangedSubscription;
         private long[] selectedOrderIds;
@@ -69,7 +71,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             IShippingManager shippingManager,
             IMessageHelper messageHelper,
             IShippingViewModelFactory shippingViewModelFactory,
-            Func<Type, ILog> logFactory) : this()
+            Func<Type, ILog> logFactory,
+            Func<ISecurityContext> securityContextRetriever) : this()
         {
             this.pipelines = pipelines;
             this.shippingManager = shippingManager;
@@ -77,6 +80,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             this.messageHelper = messageHelper;
             this.shippingViewModelFactory = shippingViewModelFactory;
             log = logFactory(typeof(ShippingPanelViewModel));
+            this.securityContextRetriever = securityContextRetriever;
 
             OpenShippingDialogCommand = new RelayCommand(SendShowShippingDlgMessage);
 
@@ -292,6 +296,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             pipelines.RegisterTransient(this);
 
             Populate(ShipmentAdapter);
+
+            AllowEditing = AllowEditing && securityContextRetriever().HasPermission(PermissionType.ShipmentsCreateEditProcess, OrderID);
 
             IsLoadingShipment = false;
 

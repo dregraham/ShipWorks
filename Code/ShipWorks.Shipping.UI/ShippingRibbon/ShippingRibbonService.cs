@@ -10,6 +10,8 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Messaging.Messages.Dialogs;
 using ShipWorks.Messaging.Messages.Shipping;
+using ShipWorks.Users;
+using ShipWorks.Users.Security;
 
 namespace ShipWorks.Shipping.UI.ShippingRibbon
 {
@@ -23,13 +25,15 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
         IDisposable subscription;
         private ShipmentEntity currentShipment;
         private IEnumerable<long> currentOrderIDs;
+        private readonly Func<ISecurityContext> securityContextRetriever;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShippingRibbonService(IMessenger messages)
+        public ShippingRibbonService(IMessenger messages, Func<ISecurityContext> securityContextRetriever)
         {
             this.messages = messages;
+            this.securityContextRetriever = securityContextRetriever;
         }
 
         /// <summary>
@@ -241,12 +245,16 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
                 }
                 else
                 {
-                    shippingRibbonActions.CreateLabel.Enabled = !currentShipment.Processed;
-                    shippingRibbonActions.Void.Enabled = currentShipment.Processed && !currentShipment.Voided;
-                    shippingRibbonActions.Return.Enabled = currentShipment.Processed && !currentShipment.Voided;
+                    ISecurityContext securityContext = securityContextRetriever();
+                    
+                    bool shipmentsCreateEditProcessAllowed = securityContext.HasPermission(PermissionType.ShipmentsCreateEditProcess, currentShipment.OrderID);
+
+                    shippingRibbonActions.CreateLabel.Enabled = !currentShipment.Processed && shipmentsCreateEditProcessAllowed;
+                    shippingRibbonActions.Void.Enabled = currentShipment.Processed && !currentShipment.Voided && securityContext.HasPermission(PermissionType.ShipmentsVoidDelete, currentShipment.OrderID);
+                    shippingRibbonActions.Return.Enabled = currentShipment.Processed && !currentShipment.Voided && shipmentsCreateEditProcessAllowed;
                     shippingRibbonActions.Reprint.Enabled = currentShipment.Processed && !currentShipment.Voided;
-                    shippingRibbonActions.ShipAgain.Enabled = currentShipment.Processed;
-                    shippingRibbonActions.ApplyProfile.Enabled = !currentShipment.Processed;
+                    shippingRibbonActions.ShipAgain.Enabled = currentShipment.Processed && shipmentsCreateEditProcessAllowed;
+                    shippingRibbonActions.ApplyProfile.Enabled = !currentShipment.Processed && shipmentsCreateEditProcessAllowed;
                 }
 
                 shippingRibbonActions.SetCurrentShipmentType(currentShipment.ShipmentTypeCode);

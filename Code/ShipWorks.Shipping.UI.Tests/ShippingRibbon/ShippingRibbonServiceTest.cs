@@ -14,6 +14,7 @@ using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.UI.ShippingRibbon;
 using ShipWorks.Tests.Shared;
+using ShipWorks.Users.Security;
 using Xunit;
 
 namespace ShipWorks.Shipping.UI.Tests.ShippingRibbon
@@ -23,12 +24,22 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingRibbon
         readonly AutoMock mock;
         readonly TestMessenger messenger;
         Mock<IShippingRibbonActions> actions;
+        Mock<Func<ISecurityContext>> getSecurityContext;
+        Mock<ISecurityContext> securityContext;
 
         public ShippingRibbonServiceTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
             messenger = new TestMessenger();
             mock.Provide<IMessenger>(messenger);
+
+            securityContext = mock.Mock<ISecurityContext>();
+            securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>())).Returns(true);
+            securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>(), It.IsAny<long?>())).Returns(true);
+            
+            getSecurityContext = mock.MockRepository.Create<Func<ISecurityContext>>();
+            getSecurityContext.Setup(sc => sc()).Returns(securityContext.Object);
+            mock.Provide<Func<ISecurityContext>>(getSecurityContext.Object);
 
             actions = mock.CreateMock<IShippingRibbonActions>();
             actions.SetupAllProperties();
@@ -50,10 +61,15 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingRibbon
 
         #region Create Label
         [Theory]
-        [InlineData(true, false)]
-        [InlineData(false, true)]
-        public void HandleOrderSelectionChanged_DisablesCreateLabel_WhenLoadedShipmentIsProcessed(bool isProcessed, bool expected)
+        [InlineData(true, false, true)]
+        [InlineData(false, true, true)]
+        [InlineData(true, false, false)]
+        [InlineData(false, false, false)]
+        public void HandleOrderSelectionChanged_DisablesCreateLabel_WhenLoadedShipmentIsProcessed(bool isProcessed, bool expected, bool hasPermission)
         {
+            securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>())).Returns(hasPermission);
+            securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>(), It.IsAny<long?>())).Returns(hasPermission);
+
             actions.Object.CreateLabel.Enabled = !expected;
             var testObject = mock.Create<ShippingRibbonService>();
             testObject.Register(actions.Object);
@@ -63,24 +79,35 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingRibbon
             Assert.Equal(expected, actions.Object.CreateLabel.Enabled);
         }
 
-        [Fact]
-        public void HandleOrderSelectionChanged_DisablesCreateLabel_WhenLoadedOrderHasNoShipments()
+        [Theory]
+        [InlineData(true, false)]
+        [InlineData(false, false)]
+        public void HandleOrderSelectionChanged_DisablesCreateLabel_WhenLoadedOrderHasNoShipments(bool hasPermission, bool expected)
         {
+            securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>())).Returns(hasPermission);
+            securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>(), It.IsAny<long?>())).Returns(hasPermission);
+
             actions.Object.CreateLabel.Enabled = true;
             var testObject = mock.Create<ShippingRibbonService>();
             testObject.Register(actions.Object);
 
             SendOrderSelectionChangedMessageWithLoadedOrderSelection();
 
-            Assert.False(actions.Object.CreateLabel.Enabled);
+            Assert.Equal(expected, actions.Object.CreateLabel.Enabled);
         }
 
         [Theory]
-        [InlineData(0, false)]
-        [InlineData(1, false)]
-        [InlineData(2, false)]
-        public void HandleOrderSelectionChanged_SetsEnabledOnCreateLabel_WhenMessageHasNoLoadedOrders(int selectionCount, bool expected)
+        [InlineData(0, false, true)]
+        [InlineData(1, false, true)]
+        [InlineData(2, false, true)]
+        [InlineData(0, false, false)]
+        [InlineData(1, false, false)]
+        [InlineData(2, false, false)]
+        public void HandleOrderSelectionChanged_SetsEnabledOnCreateLabel_WhenMessageHasNoLoadedOrders(int selectionCount, bool expected, bool hasPermission)
         {
+            securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>())).Returns(hasPermission);
+            securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>(), It.IsAny<long?>())).Returns(hasPermission);
+
             actions.Object.CreateLabel.Enabled = !expected;
             var testObject = mock.Create<ShippingRibbonService>();
             testObject.Register(actions.Object);
@@ -93,10 +120,15 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingRibbon
         }
 
         [Theory]
-        [InlineData(true, false)]
-        [InlineData(false, true)]
-        public void HandleShipmentsProcessedMessage_SetsEnabledOnCreateLabel_WhenSingleUnprocessedShipmentIsLoaded(bool isProcessed, bool expected)
+        [InlineData(true, false, true)]
+        [InlineData(false, true, true)]
+        [InlineData(true, false, false)]
+        [InlineData(false, false, false)]
+        public void HandleShipmentsProcessedMessage_SetsEnabledOnCreateLabel_WhenSingleUnprocessedShipmentIsLoaded(bool isProcessed, bool expected, bool hasPermission)
         {
+            securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>())).Returns(hasPermission);
+            securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>(), It.IsAny<long?>())).Returns(hasPermission);
+
             actions.Object.CreateLabel.Enabled = !expected;
             var testObject = mock.Create<ShippingRibbonService>();
             testObject.Register(actions.Object);
@@ -189,12 +221,19 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingRibbon
 
         #region Void Label
         [Theory]
-        [InlineData(true, true, false)]
-        [InlineData(true, false, true)]
-        [InlineData(false, true, false)]
-        [InlineData(false, false, false)]
-        public void HandleOrderSelectionChanged_DisablesVoid_WhenLoadedShipmentIsProcessed(bool isProcessed, bool isVoided, bool expected)
+        [InlineData(true, true, false, true)]
+        [InlineData(true, false, true, true)]
+        [InlineData(false, true, false, true)]
+        [InlineData(false, false, false, true)]
+        [InlineData(true, true, false, false)]
+        [InlineData(true, false, false, false)]
+        [InlineData(false, true, false, false)]
+        [InlineData(false, false, false, false)]
+        public void HandleOrderSelectionChanged_DisablesVoid_WhenLoadedShipmentIsProcessed(bool isProcessed, bool isVoided, bool expected, bool hasPermission)
         {
+            securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>())).Returns(hasPermission);
+            securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>(), It.IsAny<long?>())).Returns(hasPermission);
+
             actions.Object.Void.Enabled = !expected;
             var testObject = mock.Create<ShippingRibbonService>();
             testObject.Register(actions.Object);
@@ -208,24 +247,35 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingRibbon
             Assert.Equal(expected, actions.Object.Void.Enabled);
         }
 
-        [Fact]
-        public void HandleOrderSelectionChanged_DisablesVoid_WhenLoadedOrderHasNoShipments()
+        [Theory]
+        [InlineData(false, true)]
+        [InlineData(false, false)]
+        public void HandleOrderSelectionChanged_DisablesVoid_WhenLoadedOrderHasNoShipments(bool expected, bool hasPermission)
         {
+            securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>())).Returns(hasPermission);
+            securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>(), It.IsAny<long?>())).Returns(hasPermission);
+
             actions.Object.Void.Enabled = true;
             var testObject = mock.Create<ShippingRibbonService>();
             testObject.Register(actions.Object);
 
             SendOrderSelectionChangedMessageWithLoadedOrderSelection();
 
-            Assert.False(actions.Object.Void.Enabled);
+            Assert.Equal(expected, actions.Object.Void.Enabled);
         }
 
         [Theory]
-        [InlineData(0, false)]
-        [InlineData(1, false)]
-        [InlineData(2, false)]
-        public void HandleOrderSelectionChanged_SetsEnabledOnVoid_WhenMessageHasNoLoadedOrders(int selectionCount, bool expected)
+        [InlineData(0, false, true)]
+        [InlineData(1, false, true)]
+        [InlineData(2, false, true)]
+        [InlineData(0, false, false)]
+        [InlineData(1, false, false)]
+        [InlineData(2, false, false)]
+        public void HandleOrderSelectionChanged_SetsEnabledOnVoid_WhenMessageHasNoLoadedOrders(int selectionCount, bool expected, bool hasPermission)
         {
+            securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>())).Returns(hasPermission);
+            securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>(), It.IsAny<long?>())).Returns(hasPermission);
+
             actions.Object.Void.Enabled = !expected;
             var testObject = mock.Create<ShippingRibbonService>();
             testObject.Register(actions.Object);
@@ -313,12 +363,19 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingRibbon
         }
 
         [Theory]
-        [InlineData(true, true, false)]
-        [InlineData(true, false, true)]
-        [InlineData(false, true, false)]
-        [InlineData(false, false, false)]
-        public void HandleLabelVoidedMessage_SetsEnabledOnVoid_WhenSingleProcessedShipmentIsLoaded(bool isProcessed, bool voided, bool expected)
+        [InlineData(true, true, false, true)]
+        [InlineData(true, false, true, true)]
+        [InlineData(false, true, false, true)]
+        [InlineData(false, false, false, true)]
+        [InlineData(true, true, false, false)]
+        [InlineData(true, false, false, false)]
+        [InlineData(false, true, false, false)]
+        [InlineData(false, false, false, false)]
+        public void HandleLabelVoidedMessage_SetsEnabledOnVoid_WhenSingleProcessedShipmentIsLoaded(bool isProcessed, bool voided, bool expected, bool hasPermission)
         {
+            securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>())).Returns(hasPermission);
+            securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>(), It.IsAny<long?>())).Returns(hasPermission);
+
             actions.Object.Void.Enabled = !expected;
             var testObject = mock.Create<ShippingRibbonService>();
             testObject.Register(actions.Object);
@@ -341,12 +398,19 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingRibbon
 
         #region Create return
         [Theory]
-        [InlineData(true, true, false)]
-        [InlineData(true, false, true)]
-        [InlineData(false, true, false)]
-        [InlineData(false, false, false)]
-        public void HandleOrderSelectionChanged_DisablesReturn_WhenLoadedShipmentIsProcessed(bool isProcessed, bool isReturned, bool expected)
+        [InlineData(true, true, false, true)]
+        [InlineData(true, false, true, true)]
+        [InlineData(false, true, false, true)]
+        [InlineData(false, false, false, true)]
+        [InlineData(true, true, false, false)]
+        [InlineData(true, false, false, false)]
+        [InlineData(false, true, false, false)]
+        [InlineData(false, false, false, false)]
+        public void HandleOrderSelectionChanged_DisablesReturn_WhenLoadedShipmentIsProcessed(bool isProcessed, bool isReturned, bool expected, bool hasPermission)
         {
+            securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>())).Returns(hasPermission);
+            securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>(), It.IsAny<long?>())).Returns(hasPermission);
+
             actions.Object.Return.Enabled = !expected;
             var testObject = mock.Create<ShippingRibbonService>();
             testObject.Register(actions.Object);
@@ -360,24 +424,35 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingRibbon
             Assert.Equal(expected, actions.Object.Return.Enabled);
         }
 
-        [Fact]
-        public void HandleOrderSelectionChanged_DisablesReturn_WhenLoadedOrderHasNoShipments()
+        [Theory]
+        [InlineData(false, true)]
+        [InlineData(false, false)]
+        public void HandleOrderSelectionChanged_DisablesReturn_WhenLoadedOrderHasNoShipments(bool expected, bool hasPermission)
         {
+            securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>())).Returns(hasPermission);
+            securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>(), It.IsAny<long?>())).Returns(hasPermission);
+
             actions.Object.Return.Enabled = true;
             var testObject = mock.Create<ShippingRibbonService>();
             testObject.Register(actions.Object);
 
             SendOrderSelectionChangedMessageWithLoadedOrderSelection();
 
-            Assert.False(actions.Object.Return.Enabled);
+            Assert.Equal(expected, actions.Object.Return.Enabled);
         }
 
         [Theory]
-        [InlineData(0, false)]
-        [InlineData(1, false)]
-        [InlineData(2, false)]
-        public void HandleOrderSelectionChanged_SetsEnabledOnReturn_WhenMessageHasNoLoadedOrders(int selectionCount, bool expected)
+        [InlineData(0, false, true)]
+        [InlineData(1, false, true)]
+        [InlineData(2, false, true)]
+        [InlineData(0, false, false)]
+        [InlineData(1, false, false)]
+        [InlineData(2, false, false)]
+        public void HandleOrderSelectionChanged_SetsEnabledOnReturn_WhenMessageHasNoLoadedOrders(int selectionCount, bool expected, bool hasPermission)
         {
+            securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>())).Returns(hasPermission);
+            securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>(), It.IsAny<long?>())).Returns(hasPermission);
+
             actions.Object.Return.Enabled = !expected;
             var testObject = mock.Create<ShippingRibbonService>();
             testObject.Register(actions.Object);
@@ -452,12 +527,19 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingRibbon
 
         #region Reprint label
         [Theory]
-        [InlineData(true, true, false)]
-        [InlineData(true, false, true)]
-        [InlineData(false, true, false)]
-        [InlineData(false, false, false)]
-        public void HandleOrderSelectionChanged_DisablesReprint_WhenLoadedShipmentIsProcessed(bool isProcessed, bool isReprinted, bool expected)
+        [InlineData(true, true, false, true)]
+        [InlineData(true, false, true, true)]
+        [InlineData(false, true, false, true)]
+        [InlineData(false, false, false, true)]
+        [InlineData(true, true, false, false)]
+        [InlineData(true, false, true, false)]
+        [InlineData(false, true, false, false)]
+        [InlineData(false, false, false, false)]
+        public void HandleOrderSelectionChanged_DisablesReprint_WhenLoadedShipmentIsProcessed(bool isProcessed, bool isReprinted, bool expected, bool hasPermission)
         {
+            securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>())).Returns(hasPermission);
+            securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>(), It.IsAny<long?>())).Returns(hasPermission);
+
             actions.Object.Reprint.Enabled = !expected;
             var testObject = mock.Create<ShippingRibbonService>();
             testObject.Register(actions.Object);
@@ -471,24 +553,35 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingRibbon
             Assert.Equal(expected, actions.Object.Reprint.Enabled);
         }
 
-        [Fact]
-        public void HandleOrderSelectionChanged_DisablesReprint_WhenLoadedOrderHasNoShipments()
+        [Theory]
+        [InlineData(false, true)]
+        [InlineData(false, false)]
+        public void HandleOrderSelectionChanged_DisablesReprint_WhenLoadedOrderHasNoShipments(bool expected, bool hasPermission)
         {
+            securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>())).Returns(hasPermission);
+            securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>(), It.IsAny<long?>())).Returns(hasPermission);
+
             actions.Object.Reprint.Enabled = true;
             var testObject = mock.Create<ShippingRibbonService>();
             testObject.Register(actions.Object);
 
             SendOrderSelectionChangedMessageWithLoadedOrderSelection();
 
-            Assert.False(actions.Object.Reprint.Enabled);
+            Assert.Equal(expected, actions.Object.Reprint.Enabled);
         }
 
         [Theory]
-        [InlineData(0, false)]
-        [InlineData(1, false)]
-        [InlineData(2, false)]
-        public void HandleOrderSelectionChanged_SetsEnabledOnReprint_WhenMessageHasNoLoadedOrders(int selectionCount, bool expected)
+        [InlineData(0, false, true)]
+        [InlineData(1, false, true)]
+        [InlineData(2, false, true)]
+        [InlineData(0, false, false)]
+        [InlineData(1, false, false)]
+        [InlineData(2, false, false)]
+        public void HandleOrderSelectionChanged_SetsEnabledOnReprint_WhenMessageHasNoLoadedOrders(int selectionCount, bool expected, bool hasPermission)
         {
+            securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>())).Returns(hasPermission);
+            securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>(), It.IsAny<long?>())).Returns(hasPermission);
+
             actions.Object.Reprint.Enabled = !expected;
             var testObject = mock.Create<ShippingRibbonService>();
             testObject.Register(actions.Object);
@@ -562,12 +655,19 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingRibbon
 
         #region Ship again
         [Theory]
-        [InlineData(true, true, true)]
-        [InlineData(true, false, true)]
-        [InlineData(false, true, false)]
-        [InlineData(false, false, false)]
-        public void HandleOrderSelectionChanged_DisablesShipAgain_WhenLoadedShipmentIsProcessed(bool isProcessed, bool isVoided, bool expected)
+        [InlineData(true, true, true, true)]
+        [InlineData(true, false, true, true)]
+        [InlineData(false, true, false, true)]
+        [InlineData(false, false, false, true)]
+        [InlineData(true, true, false, false)]
+        [InlineData(true, false, false, false)]
+        [InlineData(false, true, false, false)]
+        [InlineData(false, false, false, false)]
+        public void HandleOrderSelectionChanged_DisablesShipAgain_WhenLoadedShipmentIsProcessed(bool isProcessed, bool isVoided, bool expected, bool hasPermission)
         {
+            securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>())).Returns(hasPermission);
+            securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>(), It.IsAny<long?>())).Returns(hasPermission);
+
             actions.Object.ShipAgain.Enabled = !expected;
             var testObject = mock.Create<ShippingRibbonService>();
             testObject.Register(actions.Object);
@@ -581,24 +681,35 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingRibbon
             Assert.Equal(expected, actions.Object.ShipAgain.Enabled);
         }
 
-        [Fact]
-        public void HandleOrderSelectionChanged_DisablesShipAgain_WhenLoadedOrderHasNoShipments()
+        [Theory]
+        [InlineData(false, true)]
+        [InlineData(false, false)]
+        public void HandleOrderSelectionChanged_DisablesShipAgain_WhenLoadedOrderHasNoShipments(bool expected, bool hasPermission)
         {
+            securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>())).Returns(hasPermission);
+            securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>(), It.IsAny<long?>())).Returns(hasPermission);
+
             actions.Object.ShipAgain.Enabled = true;
             var testObject = mock.Create<ShippingRibbonService>();
             testObject.Register(actions.Object);
 
             SendOrderSelectionChangedMessageWithLoadedOrderSelection();
 
-            Assert.False(actions.Object.ShipAgain.Enabled);
+            Assert.Equal(expected, actions.Object.ShipAgain.Enabled);
         }
 
         [Theory]
-        [InlineData(0, false)]
-        [InlineData(1, false)]
-        [InlineData(2, false)]
-        public void HandleOrderSelectionChanged_SetsEnabledOnShipAgain_WhenMessageHasNoLoadedOrders(int selectionCount, bool expected)
+        [InlineData(0, false, true)]
+        [InlineData(1, false, true)]
+        [InlineData(2, false, true)]
+        [InlineData(0, false, false)]
+        [InlineData(1, false, false)]
+        [InlineData(2, false, false)]
+        public void HandleOrderSelectionChanged_SetsEnabledOnShipAgain_WhenMessageHasNoLoadedOrders(int selectionCount, bool expected, bool hasPermission)
         {
+            securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>())).Returns(hasPermission);
+            securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>(), It.IsAny<long?>())).Returns(hasPermission);
+
             actions.Object.ShipAgain.Enabled = !expected;
             var testObject = mock.Create<ShippingRibbonService>();
             testObject.Register(actions.Object);
@@ -682,10 +793,15 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingRibbon
 
         #region Create Label
         [Theory]
-        [InlineData(true, false)]
-        [InlineData(false, true)]
-        public void HandleOrderSelectionChanged_DisablesApplyProfile_WhenLoadedShipmentIsProcessed(bool isProcessed, bool expected)
+        [InlineData(true, false, true)]
+        [InlineData(false, true, true)]
+        [InlineData(true, false, false)]
+        [InlineData(false, false, false)]
+        public void HandleOrderSelectionChanged_DisablesApplyProfile_WhenLoadedShipmentIsProcessed(bool isProcessed, bool expected, bool hasPermission)
         {
+            securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>())).Returns(hasPermission);
+            securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>(), It.IsAny<long?>())).Returns(hasPermission);
+
             actions.Object.ApplyProfile.Enabled = !expected;
             var testObject = mock.Create<ShippingRibbonService>();
             testObject.Register(actions.Object);
@@ -695,24 +811,35 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingRibbon
             Assert.Equal(expected, actions.Object.ApplyProfile.Enabled);
         }
 
-        [Fact]
-        public void HandleOrderSelectionChanged_DisablesApplyProfile_WhenLoadedOrderHasNoShipments()
+        [Theory]
+        [InlineData(false, true)]
+        [InlineData(false, false)]
+        public void HandleOrderSelectionChanged_DisablesApplyProfile_WhenLoadedOrderHasNoShipments(bool expected, bool hasPermission)
         {
+            securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>())).Returns(hasPermission);
+            securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>(), It.IsAny<long?>())).Returns(hasPermission);
+
             actions.Object.ApplyProfile.Enabled = true;
             var testObject = mock.Create<ShippingRibbonService>();
             testObject.Register(actions.Object);
 
             SendOrderSelectionChangedMessageWithLoadedOrderSelection();
 
-            Assert.False(actions.Object.ApplyProfile.Enabled);
+            Assert.Equal(expected, actions.Object.ApplyProfile.Enabled);
         }
 
         [Theory]
-        [InlineData(0, false)]
-        [InlineData(1, false)]
-        [InlineData(2, false)]
-        public void HandleOrderSelectionChanged_SetsEnabledOnApplyProfile_WhenMessageHasNoLoadedOrders(int selectionCount, bool expected)
+        [InlineData(0, false, true)]
+        [InlineData(1, false, true)]
+        [InlineData(2, false, true)]
+        [InlineData(0, false, false)]
+        [InlineData(1, false, false)]
+        [InlineData(2, false, false)]
+        public void HandleOrderSelectionChanged_SetsEnabledOnApplyProfile_WhenMessageHasNoLoadedOrders(int selectionCount, bool expected, bool hasPermission)
         {
+            securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>())).Returns(hasPermission);
+            securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>(), It.IsAny<long?>())).Returns(hasPermission);
+
             actions.Object.ApplyProfile.Enabled = !expected;
             var testObject = mock.Create<ShippingRibbonService>();
             testObject.Register(actions.Object);
@@ -725,10 +852,15 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingRibbon
         }
 
         [Theory]
-        [InlineData(true, false)]
-        [InlineData(false, true)]
-        public void HandleShipmentsProcessedMessage_SetsEnabledOnApplyProfile_WhenSingleUnprocessedShipmentIsLoaded(bool isProcessed, bool expected)
+        [InlineData(true, false, true)]
+        [InlineData(false, true, true)]
+        [InlineData(true, false, false)]
+        [InlineData(false, false, false)]
+        public void HandleShipmentsProcessedMessage_SetsEnabledOnApplyProfile_WhenSingleUnprocessedShipmentIsLoaded(bool isProcessed, bool expected, bool hasPermission)
         {
+            securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>())).Returns(hasPermission);
+            securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>(), It.IsAny<long?>())).Returns(hasPermission);
+
             actions.Object.ApplyProfile.Enabled = !expected;
             var testObject = mock.Create<ShippingRibbonService>();
             testObject.Register(actions.Object);
