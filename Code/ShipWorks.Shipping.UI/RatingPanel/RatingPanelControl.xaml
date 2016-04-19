@@ -32,6 +32,7 @@
             <ui:InvertBooleanConverter x:Key="InvertBoolean" />
             <ui:HalfCentCurrencyConverter x:Key="HalfCentCurrency" />
             <ui:TypeBasedTemplateSelector x:Key="TypeBasedTemplateSelector" />
+            <ui:BooleanComparisonConverter x:Key="BooleanAnd" BooleanOperator="{x:Static ui:BooleanOperator.And}" />
 
             <FrameworkElement x:Key="ProxyElement"
                           DataContext="{Binding}"/>
@@ -56,7 +57,16 @@
                       BorderThickness="0">
                 <DataGrid.RowStyle>
                     <Style TargetType="DataGridRow">
-                        <Setter Property="IsEnabled" Value="{Binding Selectable}" />
+                        <Setter Property="IsEnabled">
+                            <Setter.Value >
+                                <MultiBinding Converter="{StaticResource BooleanAnd}">
+                                    <Binding Path="DataContext.AllowSelection"
+                                                     Mode="OneWay"
+                                                     RelativeSource="{RelativeSource AncestorType=UserControl}" />
+                                    <Binding Path="Selectable" />
+                                </MultiBinding>
+                            </Setter.Value>
+                        </Setter>
                         <Setter Property="Height" Value="20" />
                     </Style>
                 </DataGrid.RowStyle>

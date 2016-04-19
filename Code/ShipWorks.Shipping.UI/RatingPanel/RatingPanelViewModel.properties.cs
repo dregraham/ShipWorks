@@ -16,6 +16,7 @@ namespace ShipWorks.Shipping.UI.RatingPanel
         private bool isLoading;
         private bool showEmptyMessage;
         private string emptyMessage;
+        private bool allowSelection;
 
         private IEnumerable<RateResult> rates;
         private IEnumerable<object> footnotes;
@@ -88,6 +89,16 @@ namespace ShipWorks.Shipping.UI.RatingPanel
         {
             get { return isLoading; }
             set { handler.Set(nameof(IsLoading), ref isLoading, value); }
+        }
+
+        /// <summary>
+        /// Are rates allowed to be selected
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public bool AllowSelection
+        {
+            get { return allowSelection; }
+            set { handler.Set(nameof(AllowSelection), ref allowSelection, value); }
         }
 
         /// <summary>

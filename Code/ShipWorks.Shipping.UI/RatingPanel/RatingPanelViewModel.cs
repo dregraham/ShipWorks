@@ -12,6 +12,7 @@ using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.UI.RatingPanel.ObservableRegistrations;
+using ShipWorks.Users.Security;
 
 namespace ShipWorks.Shipping.UI.RatingPanel
 {
@@ -26,6 +27,8 @@ namespace ShipWorks.Shipping.UI.RatingPanel
         private readonly IDisposable subscriptions;
         private readonly IMessenger messenger;
         private RateResult selectedRate;
+        private readonly Func<ISecurityContext> securityContextRetriever;
+        private long? orderID;
 
         /// <summary>
         /// Constructor just for tests
@@ -39,9 +42,10 @@ namespace ShipWorks.Shipping.UI.RatingPanel
         /// Constructor
         /// </summary>
         /// <param name="messenger"></param>
-        public RatingPanelViewModel(IMessenger messenger, IEnumerable<IRatingPanelGlobalPipeline> globalPipelines) : this()
+        public RatingPanelViewModel(IMessenger messenger, IEnumerable<IRatingPanelGlobalPipeline> globalPipelines, Func<ISecurityContext> securityContextRetriever) : this()
         {
             this.messenger = messenger;
+            this.securityContextRetriever = securityContextRetriever;
 
             subscriptions = new CompositeDisposable(
                 globalPipelines.Select(x => x.Register(this)).Concat(new[] {
@@ -63,6 +67,12 @@ namespace ShipWorks.Shipping.UI.RatingPanel
         }
 
         /// <summary>
+        /// Check to see if the user has permission to select a rate (selecting a 
+        /// rate will update the shipment, which some users may not be allowed to do).
+        /// </summary>
+        private bool UserHasPermissionToSelectRate => orderID.HasValue && securityContextRetriever().HasPermission(PermissionType.ShipmentsCreateEditProcess, orderID);
+
+        /// <summary>
         /// Handle a rates not supported message.
         /// </summary>
         public virtual void HandleRatesNotSupportedMessage(RatesNotSupportedMessage message)
@@ -81,6 +91,7 @@ namespace ShipWorks.Shipping.UI.RatingPanel
         {
             SetRateResults(Enumerable.Empty<RateResult>(), string.Empty, Enumerable.Empty<object>());
             IsLoading = true;
+            AllowSelection = false;
         }
 
         /// <summary>
@@ -128,6 +139,7 @@ namespace ShipWorks.Shipping.UI.RatingPanel
             SelectRate(message.ShipmentAdapter);
 
             IsLoading = false;
+            AllowSelection = UserHasPermissionToSelectRate;
         }
 
         /// <summary>
@@ -164,6 +176,7 @@ namespace ShipWorks.Shipping.UI.RatingPanel
                 rate = shipmentAdapter.GetChildRateForRate(rate, Rates);
             }
 
+            orderID = shipmentAdapter.Shipment.OrderID;
             SelectedRate = rate;
         }
 
