@@ -504,8 +504,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         {
             get
             {
-                // If the shipment is processed, don't validate anything.
-                if (shipmentAdapter?.Shipment?.Processed == true)
+                // If the shipment is null or processed, don't validate anything.
+                if (shipmentAdapter?.Shipment == null || shipmentAdapter.Shipment.Processed)
                 {
                     return string.Empty;
                 }

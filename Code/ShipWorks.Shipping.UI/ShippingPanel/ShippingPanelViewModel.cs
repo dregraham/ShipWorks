@@ -532,6 +532,12 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         {
             get
             {
+                // If the shipment is null or processed, don't validate anything.
+                if (ShipmentAdapter?.Shipment == null || ShipmentAdapter.Shipment.Processed)
+                {
+                    return string.Empty;
+                }
+
                 return InputValidation<ShippingPanelViewModel>.Validate(this, columnName);
             }
         }
