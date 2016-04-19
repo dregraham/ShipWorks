@@ -34,7 +34,6 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingRibbon
             mock.Provide<IMessenger>(messenger);
 
             securityContext = mock.Mock<ISecurityContext>();
-            securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>())).Returns(true);
             securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>(), It.IsAny<long?>())).Returns(true);
             
             getSecurityContext = mock.MockRepository.Create<Func<ISecurityContext>>();
@@ -67,7 +66,6 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingRibbon
         [InlineData(false, false, false)]
         public void HandleOrderSelectionChanged_DisablesCreateLabel_WhenLoadedShipmentIsProcessed(bool isProcessed, bool expected, bool hasPermission)
         {
-            securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>())).Returns(hasPermission);
             securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>(), It.IsAny<long?>())).Returns(hasPermission);
 
             actions.Object.CreateLabel.Enabled = !expected;
@@ -84,7 +82,6 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingRibbon
         [InlineData(false, false)]
         public void HandleOrderSelectionChanged_DisablesCreateLabel_WhenLoadedOrderHasNoShipments(bool hasPermission, bool expected)
         {
-            securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>())).Returns(hasPermission);
             securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>(), It.IsAny<long?>())).Returns(hasPermission);
 
             actions.Object.CreateLabel.Enabled = true;
@@ -105,7 +102,6 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingRibbon
         [InlineData(2, false, false)]
         public void HandleOrderSelectionChanged_SetsEnabledOnCreateLabel_WhenMessageHasNoLoadedOrders(int selectionCount, bool expected, bool hasPermission)
         {
-            securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>())).Returns(hasPermission);
             securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>(), It.IsAny<long?>())).Returns(hasPermission);
 
             actions.Object.CreateLabel.Enabled = !expected;
@@ -126,7 +122,6 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingRibbon
         [InlineData(false, false, false)]
         public void HandleShipmentsProcessedMessage_SetsEnabledOnCreateLabel_WhenSingleUnprocessedShipmentIsLoaded(bool isProcessed, bool expected, bool hasPermission)
         {
-            securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>())).Returns(hasPermission);
             securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>(), It.IsAny<long?>())).Returns(hasPermission);
 
             actions.Object.CreateLabel.Enabled = !expected;
@@ -231,7 +226,6 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingRibbon
         [InlineData(false, false, false, false)]
         public void HandleOrderSelectionChanged_DisablesVoid_WhenLoadedShipmentIsProcessed(bool isProcessed, bool isVoided, bool expected, bool hasPermission)
         {
-            securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>())).Returns(hasPermission);
             securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>(), It.IsAny<long?>())).Returns(hasPermission);
 
             actions.Object.Void.Enabled = !expected;
@@ -252,7 +246,6 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingRibbon
         [InlineData(false, false)]
         public void HandleOrderSelectionChanged_DisablesVoid_WhenLoadedOrderHasNoShipments(bool expected, bool hasPermission)
         {
-            securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>())).Returns(hasPermission);
             securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>(), It.IsAny<long?>())).Returns(hasPermission);
 
             actions.Object.Void.Enabled = true;
@@ -273,7 +266,6 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingRibbon
         [InlineData(2, false, false)]
         public void HandleOrderSelectionChanged_SetsEnabledOnVoid_WhenMessageHasNoLoadedOrders(int selectionCount, bool expected, bool hasPermission)
         {
-            securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>())).Returns(hasPermission);
             securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>(), It.IsAny<long?>())).Returns(hasPermission);
 
             actions.Object.Void.Enabled = !expected;
@@ -373,7 +365,6 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingRibbon
         [InlineData(false, false, false, false)]
         public void HandleLabelVoidedMessage_SetsEnabledOnVoid_WhenSingleProcessedShipmentIsLoaded(bool isProcessed, bool voided, bool expected, bool hasPermission)
         {
-            securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>())).Returns(hasPermission);
             securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>(), It.IsAny<long?>())).Returns(hasPermission);
 
             actions.Object.Void.Enabled = !expected;
@@ -408,7 +399,6 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingRibbon
         [InlineData(false, false, false, false)]
         public void HandleOrderSelectionChanged_DisablesReturn_WhenLoadedShipmentIsProcessed(bool isProcessed, bool isReturned, bool expected, bool hasPermission)
         {
-            securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>())).Returns(hasPermission);
             securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>(), It.IsAny<long?>())).Returns(hasPermission);
 
             actions.Object.Return.Enabled = !expected;
@@ -429,7 +419,6 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingRibbon
         [InlineData(false, false)]
         public void HandleOrderSelectionChanged_DisablesReturn_WhenLoadedOrderHasNoShipments(bool expected, bool hasPermission)
         {
-            securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>())).Returns(hasPermission);
             securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>(), It.IsAny<long?>())).Returns(hasPermission);
 
             actions.Object.Return.Enabled = true;
@@ -450,7 +439,6 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingRibbon
         [InlineData(2, false, false)]
         public void HandleOrderSelectionChanged_SetsEnabledOnReturn_WhenMessageHasNoLoadedOrders(int selectionCount, bool expected, bool hasPermission)
         {
-            securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>())).Returns(hasPermission);
             securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>(), It.IsAny<long?>())).Returns(hasPermission);
 
             actions.Object.Return.Enabled = !expected;
@@ -537,7 +525,6 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingRibbon
         [InlineData(false, false, false, false)]
         public void HandleOrderSelectionChanged_DisablesReprint_WhenLoadedShipmentIsProcessed(bool isProcessed, bool isReprinted, bool expected, bool hasPermission)
         {
-            securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>())).Returns(hasPermission);
             securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>(), It.IsAny<long?>())).Returns(hasPermission);
 
             actions.Object.Reprint.Enabled = !expected;
@@ -558,7 +545,6 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingRibbon
         [InlineData(false, false)]
         public void HandleOrderSelectionChanged_DisablesReprint_WhenLoadedOrderHasNoShipments(bool expected, bool hasPermission)
         {
-            securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>())).Returns(hasPermission);
             securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>(), It.IsAny<long?>())).Returns(hasPermission);
 
             actions.Object.Reprint.Enabled = true;
@@ -579,7 +565,6 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingRibbon
         [InlineData(2, false, false)]
         public void HandleOrderSelectionChanged_SetsEnabledOnReprint_WhenMessageHasNoLoadedOrders(int selectionCount, bool expected, bool hasPermission)
         {
-            securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>())).Returns(hasPermission);
             securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>(), It.IsAny<long?>())).Returns(hasPermission);
 
             actions.Object.Reprint.Enabled = !expected;
@@ -665,7 +650,6 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingRibbon
         [InlineData(false, false, false, false)]
         public void HandleOrderSelectionChanged_DisablesShipAgain_WhenLoadedShipmentIsProcessed(bool isProcessed, bool isVoided, bool expected, bool hasPermission)
         {
-            securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>())).Returns(hasPermission);
             securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>(), It.IsAny<long?>())).Returns(hasPermission);
 
             actions.Object.ShipAgain.Enabled = !expected;
@@ -686,7 +670,6 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingRibbon
         [InlineData(false, false)]
         public void HandleOrderSelectionChanged_DisablesShipAgain_WhenLoadedOrderHasNoShipments(bool expected, bool hasPermission)
         {
-            securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>())).Returns(hasPermission);
             securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>(), It.IsAny<long?>())).Returns(hasPermission);
 
             actions.Object.ShipAgain.Enabled = true;
@@ -707,7 +690,6 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingRibbon
         [InlineData(2, false, false)]
         public void HandleOrderSelectionChanged_SetsEnabledOnShipAgain_WhenMessageHasNoLoadedOrders(int selectionCount, bool expected, bool hasPermission)
         {
-            securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>())).Returns(hasPermission);
             securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>(), It.IsAny<long?>())).Returns(hasPermission);
 
             actions.Object.ShipAgain.Enabled = !expected;
@@ -799,7 +781,6 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingRibbon
         [InlineData(false, false, false)]
         public void HandleOrderSelectionChanged_DisablesApplyProfile_WhenLoadedShipmentIsProcessed(bool isProcessed, bool expected, bool hasPermission)
         {
-            securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>())).Returns(hasPermission);
             securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>(), It.IsAny<long?>())).Returns(hasPermission);
 
             actions.Object.ApplyProfile.Enabled = !expected;
@@ -816,7 +797,6 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingRibbon
         [InlineData(false, false)]
         public void HandleOrderSelectionChanged_DisablesApplyProfile_WhenLoadedOrderHasNoShipments(bool expected, bool hasPermission)
         {
-            securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>())).Returns(hasPermission);
             securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>(), It.IsAny<long?>())).Returns(hasPermission);
 
             actions.Object.ApplyProfile.Enabled = true;
@@ -837,7 +817,6 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingRibbon
         [InlineData(2, false, false)]
         public void HandleOrderSelectionChanged_SetsEnabledOnApplyProfile_WhenMessageHasNoLoadedOrders(int selectionCount, bool expected, bool hasPermission)
         {
-            securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>())).Returns(hasPermission);
             securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>(), It.IsAny<long?>())).Returns(hasPermission);
 
             actions.Object.ApplyProfile.Enabled = !expected;
@@ -858,7 +837,6 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingRibbon
         [InlineData(false, false, false)]
         public void HandleShipmentsProcessedMessage_SetsEnabledOnApplyProfile_WhenSingleUnprocessedShipmentIsLoaded(bool isProcessed, bool expected, bool hasPermission)
         {
-            securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>())).Returns(hasPermission);
             securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>(), It.IsAny<long?>())).Returns(hasPermission);
 
             actions.Object.ApplyProfile.Enabled = !expected;

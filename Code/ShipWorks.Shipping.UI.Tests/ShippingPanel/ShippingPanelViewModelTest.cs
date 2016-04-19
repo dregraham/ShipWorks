@@ -41,7 +41,6 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
 
             securityContext = mock.Mock<ISecurityContext>();
-            securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>())).Returns(false);
             securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>(), It.IsAny<long?>())).Returns(false);
 
             getSecurityContext = mock.MockRepository.Create<Func<ISecurityContext>>();
@@ -168,7 +167,6 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
         [InlineData(false, false)]
         public void Save_DelegatesToDestination_Test(bool expected, bool hasPermission)
         {
-            securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>())).Returns(hasPermission);
             securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>(), It.IsAny<long?>())).Returns(hasPermission);
 
             Mock<AddressViewModel> destinationAddress = new Mock<AddressViewModel>();
@@ -190,7 +188,6 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
         [InlineData(false, false)]
         public void Save_DelegatesToOrigin_Test(bool expected, bool hasPermission)
         {
-            securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>())).Returns(hasPermission);
             securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>(), It.IsAny<long?>())).Returns(hasPermission);
 
             Mock<AddressViewModel> originAddress = new Mock<AddressViewModel>();
@@ -259,7 +256,6 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
         [InlineData(ShippingPanelLoadedShipmentResult.Success, false, false)]
         public void Save_DoesDelegate_WhenLoadedShipmentResult_IsSuccess_Test(ShippingPanelLoadedShipmentResult shippingPanelLoadedShipmentResult, bool expected, bool hasPermission)
         {
-            securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>())).Returns(hasPermission);
             securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>(), It.IsAny<long?>())).Returns(hasPermission);
 
             Mock<ShipmentViewModel> shipmentViewModel = mock.CreateMock<ShipmentViewModel>();
@@ -557,7 +553,6 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
         [InlineData(false, false)]
         public void Save_CallsSaveToDatabase_WhenShipmentIsNotProcessed(bool expected, bool hasPermission)
         {
-            securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>())).Returns(hasPermission);
             securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>(), It.IsAny<long?>())).Returns(hasPermission);
 
             ShippingPanelViewModel testObject = GetViewModelWithLoadedShipment(mock);
@@ -638,7 +633,6 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
         [InlineData(false, false)]
         public void Save_DelegatesToShipmentViewModelFactory_Test(bool expected, bool hasPermission)
         {
-            securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>())).Returns(hasPermission);
             securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>(), It.IsAny<long?>())).Returns(hasPermission);
 
             Mock<ShipmentViewModel> shipmentViewModel = mock.CreateMock<ShipmentViewModel>();
@@ -708,7 +702,6 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
         [InlineData(false, false)]
         public void SaveToDatabase_CallsCommitBindings_WhenViewModelCanSave(bool expected, bool hasPermission)
         {
-            securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>())).Returns(hasPermission);
             securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>(), It.IsAny<long?>())).Returns(hasPermission);
 
             var called = false;
@@ -726,7 +719,6 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
         [InlineData(false, false)]
         public void SaveToDatabase_DelegatesToShippingManager_WhenViewModelCanSave(bool expected, bool hasPermission)
         {
-            securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>())).Returns(hasPermission);
             securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>(), It.IsAny<long?>())).Returns(hasPermission);
 
             var testObject = GetShippingPanelViewModelWithLoadedOrder();
@@ -797,7 +789,6 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
         [InlineData(false, false)]
         public void SaveToDatabase_DelegatesToMessageHelper_WhenShippingManagerReturnsErrors(bool expected, bool hasPermission)
         {
-            securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>())).Returns(hasPermission);
             securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>(), It.IsAny<long?>())).Returns(hasPermission);
 
             var testObject = GetShippingPanelViewModelWithLoadedOrder();
@@ -817,7 +808,6 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
         [InlineData(false, false)]
         public void SaveToDatabase_SendOrderSelectionChangedMessage_WhenShippingManagerReturnsErrors(bool expected, bool hasPermission)
         {
-            securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>())).Returns(hasPermission);
             securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>(), It.IsAny<long?>())).Returns(hasPermission);
 
             var testObject = GetShippingPanelViewModelWithLoadedOrder();
