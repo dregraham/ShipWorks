@@ -245,16 +245,7 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
                 }
                 else
                 {
-                    ISecurityContext securityContext = securityContextRetriever();
-                    
-                    bool shipmentsCreateEditProcessAllowed = securityContext.HasPermission(PermissionType.ShipmentsCreateEditProcess, currentShipment.OrderID);
-
-                    shippingRibbonActions.CreateLabel.Enabled = !currentShipment.Processed && shipmentsCreateEditProcessAllowed;
-                    shippingRibbonActions.Void.Enabled = currentShipment.Processed && !currentShipment.Voided && securityContext.HasPermission(PermissionType.ShipmentsVoidDelete, currentShipment.OrderID);
-                    shippingRibbonActions.Return.Enabled = currentShipment.Processed && !currentShipment.Voided && shipmentsCreateEditProcessAllowed;
-                    shippingRibbonActions.Reprint.Enabled = currentShipment.Processed && !currentShipment.Voided;
-                    shippingRibbonActions.ShipAgain.Enabled = currentShipment.Processed && shipmentsCreateEditProcessAllowed;
-                    shippingRibbonActions.ApplyProfile.Enabled = !currentShipment.Processed && shipmentsCreateEditProcessAllowed;
+                    SetEnabledOnButtonsWithSecurity();
                 }
 
                 shippingRibbonActions.SetCurrentShipmentType(currentShipment.ShipmentTypeCode);
@@ -270,6 +261,24 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
 
                 shippingRibbonActions.SetCurrentShipmentType(null);
             }
+        }
+
+        /// <summary>
+        /// Set button enabled state for shipment that needs to check security
+        /// </summary>
+        private void SetEnabledOnButtonsWithSecurity()
+        {
+            ISecurityContext securityContext = securityContextRetriever();
+
+            bool shipmentsCreateEditProcessAllowed = securityContext.HasPermission(PermissionType.ShipmentsCreateEditProcess, currentShipment.OrderID);
+            bool shipmentsVoidDelete = securityContext.HasPermission(PermissionType.ShipmentsVoidDelete, currentShipment.OrderID);
+
+            shippingRibbonActions.CreateLabel.Enabled = !currentShipment.Processed && shipmentsCreateEditProcessAllowed;
+            shippingRibbonActions.Void.Enabled = currentShipment.Processed && !currentShipment.Voided && shipmentsVoidDelete;
+            shippingRibbonActions.Return.Enabled = currentShipment.Processed && !currentShipment.Voided && shipmentsCreateEditProcessAllowed;
+            shippingRibbonActions.Reprint.Enabled = currentShipment.Processed && !currentShipment.Voided;
+            shippingRibbonActions.ShipAgain.Enabled = currentShipment.Processed && shipmentsCreateEditProcessAllowed;
+            shippingRibbonActions.ApplyProfile.Enabled = !currentShipment.Processed && shipmentsCreateEditProcessAllowed;
         }
 
         /// <summary>
