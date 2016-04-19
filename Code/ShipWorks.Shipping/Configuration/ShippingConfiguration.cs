@@ -3,6 +3,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Configuration;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Users.Security;
+using System;
 
 namespace ShipWorks.Shipping.UI.ShippingPanel
 {
@@ -12,14 +13,14 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
     public class ShippingConfiguration : IShippingConfiguration
     {
         private readonly IShippingSettings shippingSettings;
-        private readonly ISecurityContext securityContext;
+        private readonly Func<ISecurityContext> securityContextRetriever;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShippingConfiguration(ISecurityContext securityContext, IShippingSettings shippingSettings)
+        public ShippingConfiguration(Func<ISecurityContext> securityContextRetriever, IShippingSettings shippingSettings)
         {
-            this.securityContext = securityContext;
+            this.securityContextRetriever = securityContextRetriever;
             this.shippingSettings = shippingSettings;
         }
 
@@ -29,6 +30,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         public bool ShouldAutoCreateShipment(OrderEntity order) =>
             !order.Shipments.Any() &&
                 shippingSettings.AutoCreateShipments &&
-                securityContext.HasPermission(PermissionType.ShipmentsCreateEditProcess, order.OrderID);
+                securityContextRetriever().HasPermission(PermissionType.ShipmentsCreateEditProcess, order.OrderID);
     }
 }
