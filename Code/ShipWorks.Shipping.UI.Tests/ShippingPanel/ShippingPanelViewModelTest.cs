@@ -461,10 +461,10 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
         [Fact]
         public void Load_LoadedShipmentResult_IsError_WhenNullList()
         {
-            orderSelectionLoaded = new LoadedOrderSelection(new Exception());
+            orderSelectionLoaded = new LoadedOrderSelection(new Exception(), null, null, ShippingAddressEditStateType.Editable);
 
             ShippingPanelViewModel testObject = mock.Create<ShippingPanelViewModel>();
-            testObject.LoadOrder(new OrderSelectionChangedMessage(this, new IOrderSelection[] { new LoadedOrderSelection(new Exception()) }));
+            testObject.LoadOrder(new OrderSelectionChangedMessage(this, new IOrderSelection[] { new LoadedOrderSelection(new Exception(), null, null, ShippingAddressEditStateType.Editable) }));
 
             Assert.Equal(ShippingPanelLoadedShipmentResult.Error, testObject.LoadedShipmentResult);
         }

@@ -357,7 +357,6 @@
 
                     <StackPanel Margin="5,5">
                         <TextBlock Style="{StaticResource TextBlock.Empty}"
-                               TextWrapping="WrapWithOverflow"
                                Margin="0, 0, 0, 5">
                         Need to configure specific shipment options?
                         <Hyperlink Command="{Binding OpenShippingDialogCommand}">Click here </Hyperlink>
@@ -376,7 +375,6 @@
                                 Converter={StaticResource VisibleWhenEqualToParameter},
                                 ConverterParameter={x:Static sw:ShippingPanelLoadedShipmentResult.UnsupportedShipmentType}}">
                         <TextBlock Style="{StaticResource TextBlock.Empty}"
-                               TextWrapping="WrapWithOverflow"
                                Margin="0, 0, 0, 5">
                             Please use the Ship Orders dialog for this carrier.
                         </TextBlock>
@@ -387,7 +385,6 @@
 
                     <StackPanel Visibility="{Binding LoadedShipmentResult,Converter={StaticResource VisibleWhenEqualToParameter},ConverterParameter={x:Static sw:ShippingPanelLoadedShipmentResult.Multiple}}">
                         <TextBlock Style="{StaticResource TextBlock.Empty}"
-                               TextWrapping="WrapWithOverflow"
                                Margin="0, 0, 0, 5">
                         Need to create labels for multiple shipments?  Please use the Ship Orders dialog.
                         </TextBlock>
@@ -401,6 +398,12 @@
 
                     <StackPanel Visibility="{Binding LoadedShipmentResult,Converter={StaticResource VisibleWhenEqualToParameter},ConverterParameter={x:Static sw:ShippingPanelLoadedShipmentResult.NotCreated}}">
                         <TextBlock Style="{StaticResource TextBlock.Empty}">No shipments were found for this order.  Shipment auto creation is probably turned off.</TextBlock>
+                    </StackPanel>
+
+                    <StackPanel Visibility="{Binding LoadedShipmentResult, Converter={StaticResource VisibleWhenEqualToParameter}, 
+                                ConverterParameter={x:Static sw:ShippingPanelLoadedShipmentResult.Error}}">
+                        <TextBlock Style="{StaticResource TextBlock.Empty}"
+                                   Text="{Binding ErrorMessage}" />
                     </StackPanel>
                 </StackPanel>
             </StackPanel>

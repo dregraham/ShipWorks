@@ -181,6 +181,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// </summary>
         public virtual void LoadOrder(OrderSelectionChangedMessage orderMessage)
         {
+            ErrorMessage = string.Empty;
             ShipmentStatus = ShipmentStatus.None;
             selectedOrderIds = orderMessage.LoadedOrderSelection.Select(x => x.OrderID).ToArray();
             ComparisonResult orders = orderMessage.LoadedOrderSelection.OfType<LoadedOrderSelection>().CompareCountTo(1);
@@ -214,6 +215,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             }
             else
             {
+                ErrorMessage = loadedOrderSelection.Exception?.Message ?? "An error occurred while loading the shipment.";
+
                 ShipmentAdapter = null;
             }
 

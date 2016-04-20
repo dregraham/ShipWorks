@@ -51,10 +51,13 @@ namespace ShipWorks.Shipping.Loading
         /// </summary>
         public async Task<LoadedOrderSelection> Load(long orderID)
         {
+            OrderEntity order = null;
+            IEnumerable<ICarrierShipmentAdapter> adapters = Enumerable.Empty<ICarrierShipmentAdapter>();
+
             // Execute the work
             try
             {
-                OrderEntity order = orderManager.LoadOrder(orderID, orderPrefetchPath.Value);
+                order = orderManager.LoadOrder(orderID, orderPrefetchPath.Value);
 
                 // If we don't mark customs as loaded here, any changes to customs items will be lost when
                 // EnsureCustomsLoaded is true.  Since this is called all over the place, this is the simpler solution
@@ -66,13 +69,13 @@ namespace ShipWorks.Shipping.Loading
                 shipmentFactory.AutoCreateIfNecessary(order);
 
                 await ValidateShipments(order.Shipments).ConfigureAwait(false);
-                IEnumerable<ICarrierShipmentAdapter> adapters = CreateUpdatedShipmentAdapters(order);
+                adapters = CreateUpdatedShipmentAdapters(order);
 
                 return new LoadedOrderSelection(order, adapters, GetDestinationAddressEditable(order));
             }
             catch (Exception ex)
             {
-                return new LoadedOrderSelection(ex);
+                return new LoadedOrderSelection(ex, order, adapters, ShippingAddressEditStateType.Editable);
             }
         }
 

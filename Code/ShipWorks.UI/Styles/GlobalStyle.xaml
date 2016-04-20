@@ -13,6 +13,7 @@
 
     <Style x:Key="TextBlock.Empty" TargetType="TextBlock">
         <Setter Property="Foreground" Value="#FF696969" />
+        <Setter Property="TextWrapping" Value="WrapWithOverflow" />
     </Style>
 
     <Style x:Key="TextBlock.SectionHeader" TargetType="TextBlock">

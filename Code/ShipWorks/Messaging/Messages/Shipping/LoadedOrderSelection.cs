@@ -27,12 +27,12 @@ namespace ShipWorks.Core.Messaging.Messages.Shipping
         /// <summary>
         /// Constructor for errors
         /// </summary>
-        public LoadedOrderSelection(Exception ex)
+        public LoadedOrderSelection(Exception ex, OrderEntity order, IEnumerable<ICarrierShipmentAdapter> shipmentAdapters, ShippingAddressEditStateType destinationAddressEditable)
         {
-            Order = null;
-            ShipmentAdapters = Enumerable.Empty<ICarrierShipmentAdapter>();
+            Order = order;
+            ShipmentAdapters = shipmentAdapters;
             Exception = ex;
-            DestinationAddressEditable = ShippingAddressEditStateType.Editable;
+            DestinationAddressEditable = destinationAddressEditable;
         }
 
         /// <summary>

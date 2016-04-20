@@ -26,6 +26,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         private string trackingNumber;
         private DateTime statusDate;
         private ShipmentStatus shipmentStatus;
+        private string errorMessage;
 
         /// <summary>
         /// Command to open the shipping dialog
@@ -213,6 +214,16 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         {
             get { return shipmentStatus; }
             set { handler.Set(nameof(ShipmentStatus), ref shipmentStatus, value); }
+        }
+
+        /// <summary>
+        /// Error message
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public virtual string ErrorMessage
+        {
+            get { return errorMessage; }
+            set { handler.Set(nameof(ErrorMessage), ref errorMessage, value); }
         }
     }
 }
