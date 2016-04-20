@@ -41,8 +41,10 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 panelAuthorizationInstructions.Visible = true;
             }
 
+            rateType.SelectedIndexChanged -= OnRateTypeChanged;
             EnumHelper.BindComboBox<UpsRateType>(rateType);
             rateType.SelectedValue = (UpsRateType) account.RateType;
+            rateType.SelectedIndexChanged += OnRateTypeChanged;
 
             HideOrShowNegotiatedRatesControl();
         }
@@ -79,6 +81,9 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <returns>true when successful or false when register fails</returns>
         public bool RegisterAndSaveToEntity()
         {
+            // update the accounts rate type to match what the user selected
+            account.RateType = (int)rateType.SelectedValue;
+
             // If the account has not done invoice auth and they have selected negotiated rates
             if (!account.InvoiceAuth && (UpsRateType)rateType.SelectedValue == UpsRateType.Negotiated)
             {
@@ -100,8 +105,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 }
             }
 
-            // update the accounts rate type to match what the user selected
-            account.RateType = (int)rateType.SelectedValue;
             return true;
         }
     }
