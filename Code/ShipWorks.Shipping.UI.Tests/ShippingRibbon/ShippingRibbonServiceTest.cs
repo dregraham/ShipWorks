@@ -56,6 +56,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingRibbon
             Assert.False(actions.Object.Return.Enabled);
             Assert.False(actions.Object.Reprint.Enabled);
             Assert.False(actions.Object.ShipAgain.Enabled);
+            Assert.False(actions.Object.ManageProfiles.Enabled);
         }
 
         #region Create Label
@@ -773,7 +774,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingRibbon
         }
         #endregion
 
-        #region Create Label
+        #region Apply Profile
         [Theory]
         [InlineData(true, false, true)]
         [InlineData(false, true, true)]
@@ -928,6 +929,100 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingRibbon
             Mock.Get(actions.Object.ApplyProfile).Raise(x => x.Activate += null, EventArgs.Empty);
 
             Assert.Null(message);
+        }
+        #endregion
+
+        #region Manage Profiles
+        [Fact]
+        public void ManageProfilesClick_SendsManageProfilesMessage_WhenSingleUnprocessedShipmentIsLoaded()
+        {
+            long shipmentID = 0;
+            var testObject = mock.Create<ShippingRibbonService>();
+            testObject.Register(actions.Object);
+            SendOrderSelectionChangedMessageWithLoadedOrderSelection(CreateShipmentAdapter(x =>
+            {
+                x.Processed = false;
+                x.ShipmentID = 1234;
+            }));
+
+            bool messageHandled = false;
+            messenger.OfType<OpenProfileManagerDialogMessage>().Subscribe(x => messageHandled = true);
+
+            Mock.Get(actions.Object.ManageProfiles).Raise(x => x.Activate += null, EventArgs.Empty);
+
+            Assert.True(messageHandled);
+        }
+
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void ManageProfiles_IsEnabled_WhenEitherProcessedOrNotSingleShipmentIsLoaded(bool processed)
+        {
+            securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>(), It.IsAny<long?>())).Returns(true);
+
+            IShipWorksMessage message = null;
+            var testObject = mock.Create<ShippingRibbonService>();
+            testObject.Register(actions.Object);
+
+            SendOrderSelectionChangedMessageWithLoadedOrderSelection(CreateShipmentAdapter(x =>
+                {
+                    x.Processed = processed;
+                    x.ShipmentID = 1234;
+                }));
+
+            messenger.Subscribe(x => message = x);
+
+            Assert.True(actions.Object.ManageProfiles.Enabled);
+        }
+
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void ManageProfiles_IsDisabled_WhenUserDoesntHavePermission_AndEitherProcessedOrNotSingleShipmentIsLoaded(bool processed)
+        {
+            securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>(), It.IsAny<long?>())).Returns(false);
+
+            IShipWorksMessage message = null;
+            var testObject = mock.Create<ShippingRibbonService>();
+            testObject.Register(actions.Object);
+
+            SendOrderSelectionChangedMessageWithLoadedOrderSelection(CreateShipmentAdapter(x =>
+            {
+                x.Processed = processed;
+                x.ShipmentID = 1234;
+            }));
+
+            messenger.Subscribe(x => message = x);
+
+            Assert.False(actions.Object.ManageProfiles.Enabled);
+        }
+
+        [Fact]
+        public void ManageProfiles_IsDisabled_WhenMultipleShipmentsAreLoaded()
+        {
+            IEnumerable<long> orderIDs = null;
+            var testObject = mock.Create<ShippingRibbonService>();
+            testObject.Register(actions.Object);
+
+            var orderSelections = Enumerable.Range(0, 3)
+                .Select(x => new BasicOrderSelection(x)).OfType<IOrderSelection>();
+
+            messenger.Send(new OrderSelectionChangedMessage(this, orderSelections));
+
+            Assert.False(actions.Object.ManageProfiles.Enabled);
+        }
+
+        [Fact]
+        public void ManageProfiles_IsDisabled_WhenCurrentSelectionHasNotBeenSet()
+        {
+            var testObject = mock.Create<ShippingRibbonService>();
+            testObject.Register(actions.Object);
+
+            var orderSelections = Enumerable.Empty<IOrderSelection>();
+
+            messenger.Send(new OrderSelectionChangedMessage(this, orderSelections));
+
+            Assert.False(actions.Object.ManageProfiles.Enabled);
         }
         #endregion
 

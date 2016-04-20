@@ -242,6 +242,7 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
                     shippingRibbonActions.Reprint.Enabled = false;
                     shippingRibbonActions.ShipAgain.Enabled = false;
                     shippingRibbonActions.ApplyProfile.Enabled = false;
+                    shippingRibbonActions.ManageProfiles.Enabled = false;
                 }
                 else
                 {
@@ -258,6 +259,7 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
                 shippingRibbonActions.Reprint.Enabled = false;
                 shippingRibbonActions.ShipAgain.Enabled = false;
                 shippingRibbonActions.ApplyProfile.Enabled = false;
+                shippingRibbonActions.ManageProfiles.Enabled = false;
 
                 shippingRibbonActions.SetCurrentShipmentType(null);
             }
@@ -279,6 +281,8 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
             shippingRibbonActions.Reprint.Enabled = currentShipment.Processed && !currentShipment.Voided;
             shippingRibbonActions.ShipAgain.Enabled = currentShipment.Processed && shipmentsCreateEditProcessAllowed;
             shippingRibbonActions.ApplyProfile.Enabled = !currentShipment.Processed && shipmentsCreateEditProcessAllowed;
+
+            shippingRibbonActions.ManageProfiles.Enabled = shipmentsCreateEditProcessAllowed;
         }
 
         /// <summary>
