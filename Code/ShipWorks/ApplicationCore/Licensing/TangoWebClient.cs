@@ -40,7 +40,7 @@ namespace ShipWorks.ApplicationCore.Licensing
     [NDependIgnoreLongTypesAttribute]
     public static class TangoWebClient
     {
-        private const string ActivationUrl = "https://shipworks.stamps.com/ShipWorksNet/ActivationV1.svc";
+        private const string ActivationUrl = "https://interapptive.com/ShipWorksNet/ActivationV1.svc";
 
         // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(TangoWebClient));
