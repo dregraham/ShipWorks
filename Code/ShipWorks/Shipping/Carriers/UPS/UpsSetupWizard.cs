@@ -533,6 +533,23 @@ namespace ShipWorks.Shipping.Carriers.UPS
         }
 
         /// <summary>
+        /// Step into Invoice Authentication page
+        /// </summary>
+
+        private void OnStepIntoInvoiceAuthentication(object sender, WizardSteppingIntoEventArgs e)
+        {
+            string days = "45";
+            if (upsAccount.CountryCode == "US" || upsAccount.CountryCode == "CA")
+            {
+                days = "90";
+            }
+
+            invoiceAuthenticationInstructions.Text = @"You must validate your account by providing information from " +
+                                                     $"a valid invoice. {Environment.NewLine}{Environment.NewLine}" +
+                                                     $"You must use any invoice issued within the past {days} days.";
+        }
+
+        /// <summary>
         /// Step next from invoice authentication page
         /// </summary>
         private void OnStepNextInvoiceAuthentication(object sender, WizardStepEventArgs e)
