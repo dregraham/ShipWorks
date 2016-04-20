@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.Threading;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Messaging.Messages;
@@ -35,16 +36,18 @@ namespace ShipWorks.Shipping.UI.RatingPanel.ObservableRegistrations
             return new CompositeDisposable(
                 messenger.OfType<RatesRetrievingMessage>()
                     .ObserveOn(schedulerProvider.Dispatcher)
-                    .Window(messenger.OfType<OrderSelectionChangingMessage>(), x => messenger.OfType<OpenShippingDialogMessage>())
-                    .Merge()
+                    .IgnoreBetweenMessages(
+                        messenger.OfType<OpenShippingDialogMessage>(),
+                        messenger.OfType<OrderSelectionChangingMessage>())
                     .Subscribe(_ => viewModel.ShowSpinner()),
                 messenger.OfType<RatesRetrievingMessage>()
                     .Select(GetMatchingRatesRetrievedMessage)
                     .Switch()
                     .Throttle(TimeSpan.FromMilliseconds(250), schedulerProvider.Default)
                     .ObserveOn(schedulerProvider.Dispatcher)
-                    .Window(messenger.OfType<OrderSelectionChangingMessage>(), x => messenger.OfType<OpenShippingDialogMessage>())
-                    .Merge()
+                    .IgnoreBetweenMessages(
+                        messenger.OfType<OpenShippingDialogMessage>().Select(x => (object) x).Merge(messenger.OfType<RatesNotSupportedMessage>()),
+                        messenger.OfType<OrderSelectionChangingMessage>())
                     .Subscribe(viewModel.LoadRates));
         }
 

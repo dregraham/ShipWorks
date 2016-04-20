@@ -28,6 +28,7 @@ namespace ShipWorks.Shipping.UI.RatingPanel.ObservableRegistrations
         public IDisposable Register(RatingPanelViewModel viewModel)
         {
             return messages.OfType<RatesNotSupportedMessage>()
+                .Do(_ => viewModel.IsLoading = false)
                 .Subscribe(x => viewModel.SetRateResults(Enumerable.Empty<RateResult>(), x.Message, Enumerable.Empty<object>()));
         }
     }

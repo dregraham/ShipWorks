@@ -80,7 +80,8 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
 
             testObject.CreateLabelCommand.Execute(null);
 
-            var message = await source.Task;
+            ShipmentChangedMessage message = null;
+            await Task.WhenAny(source.Task.ContinueWith(x => message = x.Result), Task.Delay(5000));
 
             Assert.Equal(testObject.ShipmentAdapter.Shipment.RowVersion,
                 message.ShipmentAdapter.Shipment.RowVersion);

@@ -215,6 +215,11 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             }
             else
             {
+                if (LoadedShipmentResult == ShippingPanelLoadedShipmentResult.NotCreated)
+                {
+                    messenger.Send(new RatesNotSupportedMessage(this, "Unable to get rates for orders with no shipments."));
+                }
+
                 ErrorMessage = loadedOrderSelection.Exception?.Message ?? "An error occurred while loading the shipment.";
 
                 ShipmentAdapter = null;
@@ -305,6 +310,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             IsLoadingShipment = false;
 
             shipmentChangedSubscription = PropertyChangeStream
+                .Where(x => x != nameof(IsLoading))
                 .Merge(ShipmentViewModel.PropertyChangeStream)
                 .Merge(Origin.PropertyChangeStream.Select(x => $"Origin{x}"))
                 .Merge(Destination.PropertyChangeStream.Select(x => $"Ship{x}"))

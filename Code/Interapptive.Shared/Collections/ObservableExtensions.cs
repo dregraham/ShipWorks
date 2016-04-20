@@ -57,5 +57,23 @@ namespace Interapptive.Shared.Collections
             .Do(x => x.WaitDialog.Dispose())
             .Select(x => x.Message);
         }
+
+        /// <summary>
+        /// Ignore messages between when a close message is received and an open message is received
+        /// </summary>
+        /// <param name="messageStream">Primary stream of messages</param>
+        /// <param name="closeStream">Stream that contains messages used to start ignoring</param>
+        /// <param name="openStream">Stream that contains messages used to stop ignoring</param>
+        public static IObservable<TMessage> IgnoreBetweenMessages<TMessage, TCloseWindow, TOpenWindow>(
+            this IObservable<TMessage> messageStream,
+            IObservable<TCloseWindow> closeStream, IObservable<TOpenWindow> openStream)
+        {
+            IObservable<TOpenWindow> openWindow = Observable.Return(default(TCloseWindow))
+                .Merge(closeStream)
+                .Select(_ => openStream.Take(1))
+                .Switch();
+
+            return messageStream.Window(openWindow, _ => closeStream).Merge();
+        }
     }
 }

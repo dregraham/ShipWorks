@@ -46,6 +46,39 @@ namespace ShipWorks.Shipping.UI.Tests.RatingPanel.ObservableRegistrations
         }
 
         [Fact]
+        public void Register_CallsShowSpinnerOnce_WhenMultipleOrderSelectionChangingMessageReceived()
+        {
+            var viewModel = mock.CreateMock<RatingPanelViewModel>();
+            var testObject = mock.Create<RatesRetrievedPipeline>();
+            testObject.Register(viewModel.Object);
+
+            subject.OnNext(new OrderSelectionChangingMessage(this, Enumerable.Empty<long>()));
+            subject.OnNext(new OrderSelectionChangingMessage(this, Enumerable.Empty<long>()));
+            subject.OnNext(new OrderSelectionChangingMessage(this, Enumerable.Empty<long>()));
+            subject.OnNext(new RatesRetrievingMessage(this, "Foo"));
+
+            viewModel.Verify(x => x.ShowSpinner(), Times.Once);
+        }
+
+        [Fact]
+        public void Register_CallsShowSpinnerTwice_AfterShippingDialogWasOpenedAndClosed()
+        {
+            var viewModel = mock.CreateMock<RatingPanelViewModel>();
+            var testObject = mock.Create<RatesRetrievedPipeline>();
+            testObject.Register(viewModel.Object);
+
+            subject.OnNext(new OrderSelectionChangingMessage(this, Enumerable.Empty<long>()));
+            subject.OnNext(new RatesRetrievingMessage(this, "Foo"));
+            subject.OnNext(new OpenShippingDialogMessage(this, Enumerable.Empty<ShipmentEntity>()));
+            subject.OnNext(new OpenShippingDialogMessage(this, Enumerable.Empty<ShipmentEntity>()));
+            subject.OnNext(new OpenShippingDialogMessage(this, Enumerable.Empty<ShipmentEntity>()));
+            subject.OnNext(new OrderSelectionChangingMessage(this, Enumerable.Empty<long>()));
+            subject.OnNext(new RatesRetrievingMessage(this, "Foo"));
+
+            viewModel.Verify(x => x.ShowSpinner(), Times.Exactly(2));
+        }
+
+        [Fact]
         public void Register_ObservesOnDispatcher_WhenRatesRetrievingMessageReceived()
         {
             var scheduler = new TestSchedulerProvider();

@@ -128,9 +128,11 @@ DROP PROCEDURE [dbo].[GetDatabaseGuid]";
 
             var context = SetupFreshData();
 
-            // Unless the test calls for something different, we're going to ignore security checks
-            mock.Override<ISecurityContext>()
-                .Setup(x => x.DemandPermission(It.IsAny<PermissionType>(), It.IsAny<long>()));
+            var securityContext = mock.Override<ISecurityContext>();
+            securityContext.Setup(x => x.DemandPermission(It.IsAny<PermissionType>(), null));
+            securityContext.Setup(x => x.DemandPermission(It.IsAny<PermissionType>(), It.IsAny<long>()));
+            securityContext.Setup(x => x.HasPermission(It.IsAny<PermissionType>())).Returns(true);
+            securityContext.Setup(x => x.HasPermission(It.IsAny<PermissionType>(), It.IsAny<long>())).Returns(true);
 
             foreach (IInitializeForCurrentDatabase service in mock.Container.Resolve<IEnumerable<IInitializeForCurrentDatabase>>())
             {
