@@ -548,7 +548,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
             catch (UpsWebServiceException ex)
             {
                 string errorMessage = ex.Message + Environment.NewLine + Environment.NewLine +
-                    "Note: UPS will lock out accounts for a 24 hour period if your invoice information cannot be authenticated after two attempts.";
+                    "Note: UPS will lock out accounts for a 24 hour period if your invoice information cannot be " +
+                                      "authenticated after three attempts.";
                 MessageHelper.ShowError(this, errorMessage);
                 e.NextPage = CurrentPage;
             }
