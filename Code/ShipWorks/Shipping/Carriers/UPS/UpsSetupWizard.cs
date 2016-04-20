@@ -886,32 +886,40 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// </summary>
         private void RegisterNewAccount()
         {
-            UpsRegistrationStatus registrationStatus;
-
-            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            try
             {
-                IUpsClerk clerk = lifetimeScope.Resolve<IUpsClerk>(new TypedParameter(typeof(UpsAccountEntity), upsAccount));
-                registrationStatus = clerk.RegisterAccount(upsAccount);
+                UpsRegistrationStatus registrationStatus;
+
+                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+                {
+                    IUpsClerk clerk =
+                        lifetimeScope.Resolve<IUpsClerk>(new TypedParameter(typeof(UpsAccountEntity), upsAccount));
+                    registrationStatus = clerk.RegisterAccount(upsAccount);
+                }
+
+                if (registrationStatus != UpsRegistrationStatus.Success)
+                {
+                    throw new UpsException("Could not register your new account in ShipWorks.");
+                }
+
+                GetUpsAccessKey();
+
+                NextEnabled = true;
+
+                // Set invoice auth to false because the new account has no invoice
+                upsAccount.InvoiceAuth = false;
+
+                using (SqlAdapter adapter = new SqlAdapter(true))
+                {
+                    upsAccount.Description = UpsAccountManager.GetDefaultDescription(upsAccount);
+                    UpsAccountManager.SaveAccount(upsAccount);
+
+                    adapter.Commit();
+                }
             }
-
-            if (registrationStatus != UpsRegistrationStatus.Success)
+            catch (UpsWebServiceException ex)
             {
-                throw new UpsException("Could not register your new account in ShipWorks.");
-            }
-
-            GetUpsAccessKey();
-
-            NextEnabled = true;
-
-            // Set invoice auth to false because the new account has no invoice
-            upsAccount.InvoiceAuth = false;
-
-            using (SqlAdapter adapter = new SqlAdapter(true))
-            {
-                upsAccount.Description = UpsAccountManager.GetDefaultDescription(upsAccount);
-                UpsAccountManager.SaveAccount(upsAccount);
-
-                adapter.Commit();
+                throw new UpsOpenAccountException(ex.Message, ex);
             }
         }
 
