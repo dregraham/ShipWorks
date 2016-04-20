@@ -470,6 +470,20 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
         }
 
         [Fact]
+        public void LoadOrder_ErrorMessageIsNotPopulated_OrderSelectionChangedMessageHasNoException()
+        {
+            orderSelectionLoaded = new LoadedOrderSelection(orderEntity,
+               new List<ICarrierShipmentAdapter>() { shipmentAdapterFactory.Object.Get(shipmentEntity) },
+               ShippingAddressEditStateType.Editable
+               );
+
+            ShippingPanelViewModel testObject = mock.Create<ShippingPanelViewModel>();
+            testObject.LoadOrder(new OrderSelectionChangedMessage(this, new IOrderSelection[] { orderSelectionLoaded }));
+
+            Assert.Equal(string.Empty, testObject.ErrorMessage);
+        }
+
+        [Fact]
         public void Load_LoadedShipmentResult_IsUnsupportedShipmentType_WhenAmazonShipmentType()
         {
             shipmentEntity.ShipmentTypeCode = ShipmentTypeCode.Amazon;

@@ -75,6 +75,8 @@ namespace ShipWorks.Shipping.Loading
             }
             catch (Exception ex)
             {
+                // In order to get the OrderSelectionChangedHandler to match orders and allow loading to complete
+                // we need the order id to be passed along in the LoadedOrderSelection
                 return new LoadedOrderSelection(ex, order, adapters, ShippingAddressEditStateType.Editable);
             }
         }

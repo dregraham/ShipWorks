@@ -26,6 +26,9 @@ namespace ShipWorks.Core.Messaging.Messages.Shipping
 
         /// <summary>
         /// Constructor for errors
+        /// 
+        /// In order to get the OrderSelectionChangedHandler to match orders and allow loading to complete
+        /// we need the order id to be passed along in the LoadedOrderSelection
         /// </summary>
         public LoadedOrderSelection(Exception ex, OrderEntity order, IEnumerable<ICarrierShipmentAdapter> shipmentAdapters, ShippingAddressEditStateType destinationAddressEditable)
         {
