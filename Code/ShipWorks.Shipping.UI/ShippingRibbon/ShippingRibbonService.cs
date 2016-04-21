@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Disposables;
@@ -230,39 +231,57 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
         /// </summary>
         private void SetEnabledOnButtons()
         {
-            if (currentShipment != null)
+            // If the shipment is null or it's a non-supported shipping panel carrier, disable buttons
+            if (currentShipment == null ||   
+                currentShipment.ShipmentTypeCode == ShipmentTypeCode.None ||
+                currentShipment.ShipmentTypeCode == ShipmentTypeCode.Amazon)
             {
-                // No action is allowed for None, Amazon, and Best rate shipment type
-                if (currentShipment.ShipmentTypeCode == ShipmentTypeCode.None ||
-                    currentShipment.ShipmentTypeCode == ShipmentTypeCode.Amazon)
-                {
                     shippingRibbonActions.CreateLabel.Enabled = false;
                     shippingRibbonActions.Void.Enabled = false;
                     shippingRibbonActions.Return.Enabled = false;
                     shippingRibbonActions.Reprint.Enabled = false;
                     shippingRibbonActions.ShipAgain.Enabled = false;
                     shippingRibbonActions.ApplyProfile.Enabled = false;
-                    shippingRibbonActions.ManageProfiles.Enabled = false;
-                }
-                else
-                {
-                    SetEnabledOnButtonsWithSecurity();
-                }
-
-                shippingRibbonActions.SetCurrentShipmentType(currentShipment.ShipmentTypeCode);
             }
             else
             {
-                shippingRibbonActions.CreateLabel.Enabled = false;
-                shippingRibbonActions.Void.Enabled = false;
-                shippingRibbonActions.Return.Enabled = false;
-                shippingRibbonActions.Reprint.Enabled = false;
-                shippingRibbonActions.ShipAgain.Enabled = false;
-                shippingRibbonActions.ApplyProfile.Enabled = false;
-                shippingRibbonActions.ManageProfiles.Enabled = false;
-
-                shippingRibbonActions.SetCurrentShipmentType(null);
+                // We have a shipment, set the buttons as needed
+                SetEnabledOnButtonsWithSecurity();
             }
+
+            // Update the current shipment type
+            shippingRibbonActions.SetCurrentShipmentType(currentShipment?.ShipmentTypeCode);
+
+            // Update manage profiles button state
+            SetManageProfilesEnabled();
+        }
+
+        /// <summary>
+        /// Set the enabled state for the manage profiles button.
+        /// 
+        /// If order with no shipment is selected, disable the button.
+        /// If a single order is selected for which the user has shipment create/edit/process rights, enable the button.
+        /// If a single order is selected for which the user does NOT shipment create/edit/process rights, disable the button.
+        /// If multiple orders are selected and the user has permission for each, enable the button.
+        /// If multiple orders are selected and the user does NOT have permission for at least one, disable the button.
+        /// </summary>
+        private void SetManageProfilesEnabled()
+        {
+            ISecurityContext securityContext = securityContextRetriever();
+
+            // Get the list of current order ids.  If a single order is selected, this will be empty.
+            List<long> orderIDs = currentOrderIDs.ToList();
+
+            // Add the current order id to the list.
+            if (currentShipment != null)
+            {
+                orderIDs.Add(currentShipment.OrderID);
+            }
+
+            // If no orders selected or the user does not have permission for at least one order, return false.  Otherwise, true.
+            bool manageProfilesAllowed = orderIDs.Any() && !orderIDs.Any(orderID => !securityContext.HasPermission(PermissionType.ShipmentsCreateEditProcess, orderID));
+
+            shippingRibbonActions.ManageProfiles.Enabled = manageProfilesAllowed;
         }
 
         /// <summary>
@@ -282,7 +301,7 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
             shippingRibbonActions.ShipAgain.Enabled = currentShipment.Processed && shipmentsCreateEditProcessAllowed;
             shippingRibbonActions.ApplyProfile.Enabled = !currentShipment.Processed && shipmentsCreateEditProcessAllowed;
 
-            shippingRibbonActions.ManageProfiles.Enabled = shipmentsCreateEditProcessAllowed;
+            //SetManageProfilesAllowed();
         }
 
         /// <summary>

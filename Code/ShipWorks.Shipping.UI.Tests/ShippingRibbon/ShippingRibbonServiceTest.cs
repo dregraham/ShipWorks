@@ -997,7 +997,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingRibbon
         }
 
         [Fact]
-        public void ManageProfiles_IsDisabled_WhenMultipleShipmentsAreLoaded()
+        public void ManageProfiles_IsEnabled_WhenMultipleShipmentsAreLoaded()
         {
             var testObject = mock.Create<ShippingRibbonService>();
             testObject.Register(actions.Object);
@@ -1007,7 +1007,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingRibbon
 
             messenger.Send(new OrderSelectionChangedMessage(this, orderSelections));
 
-            Assert.False(actions.Object.ManageProfiles.Enabled);
+            Assert.True(actions.Object.ManageProfiles.Enabled);
         }
 
         [Fact]
