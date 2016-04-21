@@ -264,7 +264,9 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
                 PackageTypes.Add(entry);
             }
 
-            PackagingType = SelectedPackageAdapter?.PackagingType ?? 0;
+            PackagingType = PackageTypes.Any(pt => pt.Key == SelectedPackageAdapter?.PackagingType) ? 
+                SelectedPackageAdapter.PackagingType : 
+                PackageTypes.First().Key;
         }
 
         /// <summary>

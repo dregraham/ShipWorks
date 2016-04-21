@@ -300,8 +300,6 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
             shippingRibbonActions.Reprint.Enabled = currentShipment.Processed && !currentShipment.Voided;
             shippingRibbonActions.ShipAgain.Enabled = currentShipment.Processed && shipmentsCreateEditProcessAllowed;
             shippingRibbonActions.ApplyProfile.Enabled = !currentShipment.Processed && shipmentsCreateEditProcessAllowed;
-
-            //SetManageProfilesAllowed();
         }
 
         /// <summary>

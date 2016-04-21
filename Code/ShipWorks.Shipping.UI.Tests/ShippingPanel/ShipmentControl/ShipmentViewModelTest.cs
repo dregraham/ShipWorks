@@ -50,6 +50,26 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
 
             dimensionsManager = mock.CreateMock<IDimensionsManager>();
             dimensionsManager.Setup(dm => dm.Profiles(It.IsAny<IPackageAdapter>())).Returns(dimensionsProfileEntities);
+
+            expectedPackageTypes = new Dictionary<int, string>();
+            expectedPackageTypes.Add(0, "Package Type 0");
+            expectedPackageTypes.Add(1, "Package Type 1");
+
+            expectedServices = new Dictionary<int, string>();
+            expectedServices.Add(0, "Service 0");
+            expectedServices.Add(1, "Service 1");
+
+            shipmentServicesBuilder = mock.Mock<IShipmentServicesBuilder>();
+            shipmentServicesBuilder.Setup(sb => sb.BuildServiceTypeDictionary(It.IsAny<IEnumerable<ShipmentEntity>>())).Returns(expectedServices);
+
+            shipmentServicesBuilderFactory = mock.Mock<IShipmentServicesBuilderFactory>();
+            shipmentServicesBuilderFactory.Setup(sbf => sbf.Get(It.IsAny<ShipmentTypeCode>())).Returns(shipmentServicesBuilder.Object);
+
+            shipmentPackageTypesBuilder = mock.Mock<IShipmentPackageTypesBuilder>();
+            shipmentPackageTypesBuilder.Setup(sb => sb.BuildPackageTypeDictionary(It.IsAny<IEnumerable<ShipmentEntity>>())).Returns(expectedPackageTypes);
+
+            shipmentPackageTypesBuilderFactory = mock.Mock<IShipmentPackageTypesBuilderFactory>();
+            shipmentPackageTypesBuilderFactory.Setup(sbf => sbf.Get(It.IsAny<ShipmentTypeCode>())).Returns(shipmentPackageTypesBuilder.Object);
         }
 
         [Fact]
@@ -132,10 +152,6 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
         [Fact]
         public void Load_GetsServices()
         {
-            expectedServices = new Dictionary<int, string>();
-            expectedServices.Add(0, "Service 0");
-            expectedServices.Add(1, "Service 1");
-
             CreateDefaultShipmentAdapter(mock, 2);
 
             ShipmentViewModel testObject = mock.Create<ShipmentViewModel>();
@@ -146,10 +162,6 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
         [Fact]
         public void RefreshServiceTypes_UpdatesServices()
         {
-            expectedServices = new Dictionary<int, string>();
-            expectedServices.Add(0, "Service 0");
-            expectedServices.Add(1, "Service 1");
-
             CreateDefaultShipmentAdapter(mock, 2);
 
             ShipmentViewModel testObject = mock.Create<ShipmentViewModel>();
@@ -192,10 +204,6 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
         [Fact]
         public void Load_GetsPackageTypes()
         {
-            expectedPackageTypes = new Dictionary<int, string>();
-            expectedPackageTypes.Add(0, "Package Type 0");
-            expectedPackageTypes.Add(1, "Package Type 1");
-
             CreateDefaultShipmentAdapter(mock, 2);
 
             ShipmentViewModel testObject = mock.Create<ShipmentViewModel>();
@@ -504,10 +512,6 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
         [Fact]
         public void RefreshPackageTypes_UpdatesPackageTypes()
         {
-            expectedPackageTypes = new Dictionary<int, string>();
-            expectedPackageTypes.Add(0, "Package Type 0");
-            expectedPackageTypes.Add(1, "Package Type 1");
-
             CreateDefaultShipmentAdapter(mock, 2);
 
             ShipmentViewModel testObject = mock.Create<ShipmentViewModel>();
@@ -517,6 +521,31 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
             expectedServices.Add(3, "Package Type 3");
             testObject.RefreshServiceTypes();
             Assert.Equal(expectedPackageTypes.Count, testObject.PackageTypes.Count);
+        }
+
+        [Fact]
+        public void RefreshServiceTypes_UpdatesPackageTypes_WhenSelectedServiceChanges()
+        {
+            CreateDefaultShipmentAdapter(mock, 2);
+
+            ShipmentViewModel testObject = mock.Create<ShipmentViewModel>();
+
+            shipmentPackageTypesBuilder.Setup(sb => sb.BuildPackageTypeDictionary(It.IsAny<IEnumerable<ShipmentEntity>>())).Returns(
+            () => {
+                Dictionary<int, string> packageTypeSubSet = new Dictionary<int, string>();
+                KeyValuePair<int, string> packageType = expectedPackageTypes.First(pt => pt.Key == testObject.ServiceType);
+
+                packageTypeSubSet.Add(packageType.Key, packageType.Value);
+
+                return packageTypeSubSet;
+            });
+
+            testObject.Load(shipmentAdapter.Object);
+
+            KeyValuePair<int, string> expectedPackageType = expectedServices.Skip(1).Take(1).First();
+            testObject.ServiceType = expectedPackageType.Key;
+
+            Assert.Equal(expectedPackageType.Key, testObject.PackagingType);
         }
 
         [Fact]
@@ -963,18 +992,6 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
 
         private Dictionary<int, string> CreateDefaultShipmentAdapter(AutoMock autoMock, int numberOfPackages)
         {
-            shipmentServicesBuilder = autoMock.Mock<IShipmentServicesBuilder>();
-            shipmentServicesBuilder.Setup(sb => sb.BuildServiceTypeDictionary(It.IsAny<IEnumerable<ShipmentEntity>>())).Returns(expectedServices);
-
-            shipmentServicesBuilderFactory = autoMock.Mock<IShipmentServicesBuilderFactory>();
-            shipmentServicesBuilderFactory.Setup(sbf => sbf.Get(It.IsAny<ShipmentTypeCode>())).Returns(shipmentServicesBuilder.Object);
-
-            shipmentPackageTypesBuilder = autoMock.Mock<IShipmentPackageTypesBuilder>();
-            shipmentPackageTypesBuilder.Setup(sb => sb.BuildPackageTypeDictionary(It.IsAny<IEnumerable<ShipmentEntity>>())).Returns(expectedPackageTypes);
-
-            shipmentPackageTypesBuilderFactory = autoMock.Mock<IShipmentPackageTypesBuilderFactory>();
-            shipmentPackageTypesBuilderFactory.Setup(sbf => sbf.Get(It.IsAny<ShipmentTypeCode>())).Returns(shipmentPackageTypesBuilder.Object);
-
             CreatePackageAdapters(numberOfPackages);
 
             shipmentAdapter = autoMock.Mock<ICarrierShipmentAdapter>();

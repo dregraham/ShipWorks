@@ -98,7 +98,11 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         public int ServiceType
         {
             get { return serviceType; }
-            set { handler.Set(nameof(ServiceType), ref serviceType, value, true); }
+            set
+            {
+                handler.Set(nameof(ServiceType), ref serviceType, value, true);  
+                RefreshPackageTypes();
+            }
         }
 
         /// <summary>
