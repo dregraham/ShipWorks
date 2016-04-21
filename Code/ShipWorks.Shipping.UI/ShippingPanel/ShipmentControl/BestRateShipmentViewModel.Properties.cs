@@ -35,6 +35,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         private bool dimsAddWeight;
         private bool ratesLoaded;
         private RateResult selectedRate;
+        private string weightErrorMessage;
 
         static SortedList<int, string> serviceLevels = new SortedList<int, string>();
 
@@ -79,7 +80,17 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         public double TotalWeight
         {
             get { return totalWeight; }
-            set { handler.Set(nameof(TotalWeight), ref totalWeight, value); }
+            set { handler.Set(nameof(TotalWeight), ref totalWeight, value, true); }
+        }
+
+        /// <summary>
+        /// Current error message
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public string WeightErrorMessage
+        {
+            get { return weightErrorMessage; }
+            set { handler.Set(nameof(WeightErrorMessage), ref weightErrorMessage, value, true); }
         }
 
         /// <summary>

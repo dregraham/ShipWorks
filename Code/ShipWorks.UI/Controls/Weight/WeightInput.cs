@@ -126,7 +126,7 @@ namespace ShipWorks.UI.Controls.Weight
         /// </summary>
         private static object CoerceTextPropertyChanges(DependencyObject d, object baseValue)
         {
-            d.SetValue(WeightControl.ErrorMessagePropertyKey, string.Empty);
+            d.SetValue(WeightControl.ErrorMessageProperty, string.Empty);
 
             double? weight = WeightConverter.Current.ParseWeight(baseValue as string);
 
@@ -139,7 +139,7 @@ namespace ShipWorks.UI.Controls.Weight
             }
             else
             {
-                d.SetValue(WeightControl.ErrorMessagePropertyKey, "The input was not valid.");
+                d.SetValue(WeightControl.ErrorMessageProperty, "The input was not valid.");
                 return WeightConverter.Current.FormatWeight((double) d.GetValue(WeightProperty));
             }
         }

@@ -61,5 +61,11 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         /// Gets the currently selected rate
         /// </summary>
         RateResult SelectedRate { get; }
+
+        /// <summary>
+        /// Error message displayed by the weight
+        /// </summary>
+        /// <remarks>Intended mainly to clear the error message after changing shipments</remarks>
+        string WeightErrorMessage { get; set; }
     }
 }

@@ -133,6 +133,7 @@
 
                     <TextBlock Grid.Row="2" Grid.Column="0">Weight:</TextBlock>
                     <ui:WeightControl Grid.Row="2" Grid.Column="1"
+                                      ErrorMessage="{Binding WeightErrorMessage, Mode=OneWay}"
                         Weight="{Binding SelectedCustomsItem.Weight, Mode=TwoWay, UpdateSourceTrigger=LostFocus,
                         ValidatesOnDataErrors=true, NotifyOnValidationError=true}"/>
 

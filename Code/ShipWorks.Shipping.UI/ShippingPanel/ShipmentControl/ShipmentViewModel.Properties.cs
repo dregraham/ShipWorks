@@ -35,6 +35,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         private double dimsWeight;
         private bool dimsAddWeight;
         private int packagingType;
+        private string weightErrorMessage;
 
         /// <summary>
         /// The insurance view model to use.
@@ -78,6 +79,16 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         {
             get { return totalWeight; }
             set { handler.Set(nameof(TotalWeight), ref totalWeight, value); }
+        }
+
+        /// <summary>
+        /// Current error message
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public string WeightErrorMessage
+        {
+            get { return weightErrorMessage; }
+            set { handler.Set(nameof(WeightErrorMessage), ref weightErrorMessage, value, true); }
         }
 
         /// <summary>

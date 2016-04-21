@@ -304,6 +304,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             pipelines.RegisterTransient(this);
 
             Populate(ShipmentAdapter);
+            ShipmentViewModel.WeightErrorMessage = string.Empty;
 
             AllowEditing = AllowEditing && securityContextRetriever().HasPermission(PermissionType.ShipmentsCreateEditProcess, OrderID);
 

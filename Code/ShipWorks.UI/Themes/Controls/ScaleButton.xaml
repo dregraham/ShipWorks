@@ -83,10 +83,9 @@
                                    Source="/ShipWorks.Core;component/Resources/weigh.png"/>
                         </Button>
                         <TextBlock Name="PART_Display"
+                                   Margin="4,0,0,0"
                                    Foreground="Gray"
-                                   VerticalAlignment="Center">
-                            (12 lb 2 oz)
-                        </TextBlock>
+                                   VerticalAlignment="Center" />
                     </StackPanel>
                 </ControlTemplate>
             </Setter.Value>

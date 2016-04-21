@@ -48,10 +48,11 @@
             <TextBlock Grid.Row="1" Grid.Column="0"
                    Style="{StaticResource Grid.TextBlock.Label}">Weight:</TextBlock>
             <ui:WeightControl Grid.Row="1" Grid.Column="1"
+                ErrorMessage="{Binding WeightErrorMessage}"
                 Weight="{Binding TotalWeight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,
                         ValidatesOnDataErrors=true, NotifyOnValidationError=true}"/>
 
-            <Grid Grid.Row="2" Grid.ColumnSpan="2" 
+            <Grid Grid.Row="2" Grid.ColumnSpan="2"
               Visibility="{Binding SupportsDimensions,Converter={StaticResource BooleanToVisibility}}">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="85" />

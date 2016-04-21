@@ -19,19 +19,20 @@ namespace ShipWorks.UI.Controls.Weight
         public static readonly DependencyProperty WeightProperty =
             DependencyProperty.Register("Weight", typeof(double), typeof(WeightControl),
                 new FrameworkPropertyMetadata(0.0,
-                    FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
+                    FrameworkPropertyMetadataOptions.BindsTwoWayByDefault,
+                    new PropertyChangedCallback(OnWeightChanged)));
 
         public static readonly DependencyProperty MaxWeightProperty =
             DependencyProperty.Register("MaxWeight", typeof(double), typeof(WeightControl),
                 new FrameworkPropertyMetadata(WeightInput.MaxWeightDefault));
 
-        public static readonly DependencyPropertyKey ErrorMessagePropertyKey =
-            DependencyProperty.RegisterReadOnly("ErrorMessage",
+        public static readonly DependencyProperty ErrorMessageProperty =
+            DependencyProperty.Register("ErrorMessage",
                 typeof(string),
                 typeof(WeightControl),
                 new PropertyMetadata(string.Empty));
 
-        public static readonly DependencyProperty ErrorMessageProperty = ErrorMessagePropertyKey.DependencyProperty;
+        //public static readonly DependencyProperty ErrorMessageProperty = ErrorMessagePropertyKey.DependencyProperty;
         private ScaleButton scaleButton;
 
         /// <summary>
@@ -70,6 +71,7 @@ namespace ShipWorks.UI.Controls.Weight
         public string ErrorMessage
         {
             get { return (string) GetValue(ErrorMessageProperty); }
+            set { SetValue(ErrorMessageProperty, value); }
         }
 
         /// <summary>
@@ -124,7 +126,15 @@ namespace ShipWorks.UI.Controls.Weight
             }
 
             string message = d.GetValue(ErrorMessageProperty) as string;
-            SetValue(ErrorMessagePropertyKey, message);
+            SetCurrentValue(ErrorMessageProperty, message);
+        }
+
+        /// <summary>
+        /// Handle the weight changing
+        /// </summary>
+        private static void OnWeightChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            d.SetCurrentValue(ErrorMessageProperty, string.Empty);
         }
     }
 }

@@ -76,7 +76,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         }
 
         /// <summary>
-        /// Subscribe to rates retrieving and retrieved messages so we can update the 
+        /// Subscribe to rates retrieving and retrieved messages so we can update the
         /// rate text.
         /// </summary>
         public IDisposable SubscribeToRatesRetrieval()

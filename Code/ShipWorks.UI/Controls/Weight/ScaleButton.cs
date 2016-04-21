@@ -136,7 +136,7 @@ namespace ShipWorks.UI.Controls.Weight
 
             if (readResult.Status == ScaleReadStatus.Success && readResult.Weight >= 0)
             {
-                SetValue(WeightControl.ErrorMessagePropertyKey, string.Empty);
+                SetValue(WeightControl.ErrorMessageProperty, string.Empty);
                 display.Visibility = Visibility.Visible;
                 display.Text = FormatWeight(readResult.Weight);
             }
@@ -151,7 +151,7 @@ namespace ShipWorks.UI.Controls.Weight
         /// </summary>
         private async void OnScaleButtonClick(object sender, RoutedEventArgs e)
         {
-            SetValue(WeightControl.ErrorMessagePropertyKey, string.Empty);
+            SetValue(WeightControl.ErrorMessageProperty, string.Empty);
             scaleButton.IsEnabled = false;
 
             ScaleReadResult result = await ScaleReader.ReadScale();
@@ -160,7 +160,7 @@ namespace ShipWorks.UI.Controls.Weight
 
             if (result.Status != ScaleReadStatus.Success)
             {
-                SetValue(WeightControl.ErrorMessagePropertyKey, result.Message);
+                SetValue(WeightControl.ErrorMessageProperty, result.Message);
                 return;
             }
 
