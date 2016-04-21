@@ -32,7 +32,6 @@ namespace ShipWorks.UI.Controls.Weight
                 typeof(WeightControl),
                 new PropertyMetadata(string.Empty));
 
-        //public static readonly DependencyProperty ErrorMessageProperty = ErrorMessagePropertyKey.DependencyProperty;
         private ScaleButton scaleButton;
 
         /// <summary>
@@ -130,7 +129,7 @@ namespace ShipWorks.UI.Controls.Weight
         }
 
         /// <summary>
-        /// Handle the weight changing
+        /// Handle the weight changed
         /// </summary>
         private static void OnWeightChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
