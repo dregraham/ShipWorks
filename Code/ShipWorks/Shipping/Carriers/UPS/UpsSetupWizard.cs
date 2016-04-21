@@ -546,7 +546,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
             invoiceAuthenticationInstructions.Text = @"You must validate your account by providing information from " +
                                                      $"a valid invoice. {Environment.NewLine}{Environment.NewLine}" +
-                                                     $"You must use any invoice issued within the past {days} days.";
+                                                     $"You must use any of the last 3 invoices issued within the past {days} days.";
         }
 
         /// <summary>

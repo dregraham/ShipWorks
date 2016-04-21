@@ -95,8 +95,8 @@
             this.labelCreateAccountRegistrationFailed3 = new System.Windows.Forms.Label();
             this.labelCreateAccountRegistrationFailed1 = new System.Windows.Forms.Label();
             this.wizardPageInvoiceAuthentication = new ShipWorks.UI.Wizard.WizardPage();
-            this.invoiceAuthenticationInstructions = new System.Windows.Forms.Label();
             this.upsInvoiceAuthorizationControl = new ShipWorks.Shipping.Carriers.UPS.UpsInvoiceAuthorizationControl();
+            this.invoiceAuthenticationInstructions = new System.Windows.Forms.Label();
             this.mainPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             this.topPanel.SuspendLayout();
@@ -863,22 +863,22 @@
             this.wizardPageInvoiceAuthentication.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextInvoiceAuthentication);
             this.wizardPageInvoiceAuthentication.SteppingInto += new System.EventHandler<ShipWorks.UI.Wizard.WizardSteppingIntoEventArgs>(this.OnStepIntoInvoiceAuthentication);
             // 
-            // invoiceAuthenticationInstructions
-            // 
-            this.invoiceAuthenticationInstructions.ForeColor = System.Drawing.Color.Black;
-            this.invoiceAuthenticationInstructions.Location = new System.Drawing.Point(20, 5);
-            this.invoiceAuthenticationInstructions.Name = "invoiceAuthenticationInstructions";
-            this.invoiceAuthenticationInstructions.Size = new System.Drawing.Size(402, 59);
-            this.invoiceAuthenticationInstructions.TabIndex = 21;
-            this.invoiceAuthenticationInstructions.Text = "You must validate your account by providing information from a valid invoice.\r\n\r\n" +
-    "You must use any invoice issued within the past {days} days.";
-            // 
             // upsInvoiceAuthorizationControl
             // 
             this.upsInvoiceAuthorizationControl.Location = new System.Drawing.Point(23, 54);
             this.upsInvoiceAuthorizationControl.Name = "upsInvoiceAuthorizationControl";
             this.upsInvoiceAuthorizationControl.Size = new System.Drawing.Size(357, 135);
             this.upsInvoiceAuthorizationControl.TabIndex = 0;
+            // 
+            // invoiceAuthenticationInstructions
+            // 
+            this.invoiceAuthenticationInstructions.ForeColor = System.Drawing.Color.Black;
+            this.invoiceAuthenticationInstructions.Location = new System.Drawing.Point(20, 5);
+            this.invoiceAuthenticationInstructions.Name = "invoiceAuthenticationInstructions";
+            this.invoiceAuthenticationInstructions.Size = new System.Drawing.Size(402, 49);
+            this.invoiceAuthenticationInstructions.TabIndex = 21;
+            this.invoiceAuthenticationInstructions.Text = "You must validate your account by providing information from a valid invoice.\r\n\r\n" +
+    "You must use any of the last 3 invoices issued within the past {days} days.";
             // 
             // UpsSetupWizard
             // 
