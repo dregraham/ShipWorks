@@ -113,6 +113,7 @@
             <TextBlock Grid.Column="0"
                        Style="{StaticResource Grid.TextBlock.Label}">Weight:</TextBlock>
             <ui:WeightControl Grid.Column="1"
+                ErrorMessage="{Binding WeightErrorMessage}"
                 Weight="{Binding TotalWeight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,
                         ValidatesOnDataErrors=true, NotifyOnValidationError=true}"/>
         </Grid>
