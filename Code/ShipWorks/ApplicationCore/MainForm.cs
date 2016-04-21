@@ -8,7 +8,6 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Linq;
@@ -35,6 +34,7 @@ using ShipWorks.ApplicationCore.Enums;
 using ShipWorks.ApplicationCore.Help;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.ApplicationCore.Licensing;
+using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
 using ShipWorks.ApplicationCore.MessageBoxes;
 using ShipWorks.ApplicationCore.Nudges;
 using ShipWorks.ApplicationCore.Options;
@@ -95,12 +95,11 @@ using ShipWorks.Users.Audit;
 using ShipWorks.Users.Logon;
 using ShipWorks.Users.Security;
 using TD.SandDock;
+using Application = System.Windows.Forms.Application;
 using SandButton = Divelements.SandRibbon.Button;
 using SandComboBox = Divelements.SandRibbon.ComboBox;
 using SandLabel = Divelements.SandRibbon.Label;
 using SandMenuItem = Divelements.SandRibbon.MenuItem;
-using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
-using Application = System.Windows.Forms.Application;
 
 namespace ShipWorks
 {
@@ -302,21 +301,21 @@ namespace ShipWorks
                 if (!SqlSession.IsConfigured)
                 {
 
-                        // If we aren't configured and 2012 is supported, open the fast track setup wizard
-                        if (SqlServerInstaller.IsSqlServer2012Supported)
+                    // If we aren't configured and 2012 is supported, open the fast track setup wizard
+                    if (SqlServerInstaller.IsSqlServer2012Supported)
+                    {
+                        using (SimpleDatabaseSetupWizard wizard = new SimpleDatabaseSetupWizard(lifetimeScope))
                         {
-                            using (SimpleDatabaseSetupWizard wizard = new SimpleDatabaseSetupWizard(lifetimeScope))
-                            {
-                                return wizard.ShowDialog(this) == DialogResult.OK;
-                            }
+                            return wizard.ShowDialog(this) == DialogResult.OK;
                         }
-                        else
+                    }
+                    else
+                    {
+                        using (DetailedDatabaseSetupWizard wizard = new DetailedDatabaseSetupWizard(lifetimeScope))
                         {
-                            using (DetailedDatabaseSetupWizard wizard = new DetailedDatabaseSetupWizard(lifetimeScope))
-                            {
-                                return wizard.ShowDialog(this) == DialogResult.OK;
-                            }
+                            return wizard.ShowDialog(this) == DialogResult.OK;
                         }
+                    }
                 }
                 // Otherwise, we use our normal database setup wizard
                 else
@@ -838,7 +837,7 @@ namespace ShipWorks
             ILicenseService licenseService = IoC.UnsafeGlobalLifetimeScope.Resolve<ILicenseService>();
             List<ILicense> licenses = licenseService.GetLicenses().ToList();
 
-           // refresh the license if it is older than 10 mins
+            // refresh the license if it is older than 10 mins
             licenses.ForEach(license => license.Refresh());
             ForceHeartbeat();
         }
@@ -1670,7 +1669,7 @@ namespace ShipWorks
         #region App Menu
 
         /// <summary>
-        /// The applicatino menu is about to be shown
+        /// The application menu is about to be shown
         /// </summary>
         private void OnBeforePopupApplicationMenu(object sender, BeforePopupEventArgs e)
         {
@@ -1724,7 +1723,7 @@ namespace ShipWorks
         /// </summary>
         private void OnDatabaseConfiguration(object sender, EventArgs e)
         {
-            // Indicates the user made it 100% succesfully through the database and setup wizards
+            // Indicates the user made it 100% successfully through the database and setup wizards
             bool configurationComplete = false;
 
             // Indicates if the database changed in any way (which database, restored database, whatever)
@@ -3502,7 +3501,7 @@ namespace ShipWorks
         private void OnSubmitClaim(object sender, EventArgs e)
         {
             Messenger.Current.Send(new OpenShippingDialogWithOrdersMessage(this, gridControl.Selection.OrderedKeys, InitialShippingTabDisplay.Insurance));
-                // Show the shipping window.  
+            // Show the shipping window.
         }
 
         /// <summary>

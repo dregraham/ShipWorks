@@ -35,9 +35,19 @@ namespace ShipWorks.Shipping.Services.Dialogs
         /// </summary>
         public void InitializeForCurrentSession()
         {
+            EndSession();
+
             subscription = messenger.OfType<OpenProfileManagerDialogMessage>()
                 .ObserveOn(schedulerProvider.WindowsFormsEventLoop)
                 .Subscribe(OpenProfileManagerDialog);
+        }
+
+        /// <summary>
+        /// End the current session
+        /// </summary>
+        public void EndSession()
+        {
+            subscription?.Dispose();
         }
 
         /// <summary>

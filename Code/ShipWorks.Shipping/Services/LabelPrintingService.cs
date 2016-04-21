@@ -50,9 +50,19 @@ namespace ShipWorks.Shipping.Services
         /// </summary>
         public void InitializeForCurrentSession()
         {
+            EndSession();
+
             subscription = messages.OfType<ReprintLabelsMessage>()
                 .CatchAndContinue((Exception ex) => log.Error("Unable to print the requested labels", ex))
                 .Subscribe(async x => await ReprintLabel(x).ConfigureAwait(false));
+        }
+
+        /// <summary>
+        /// End the current session
+        /// </summary>
+        public void EndSession()
+        {
+            subscription?.Dispose();
         }
 
         /// <summary>

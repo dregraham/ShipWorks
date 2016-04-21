@@ -481,6 +481,14 @@ namespace ShipWorks.Users
 
             loggedInUser = null;
             securityContext = null;
+
+            if (Program.ExecutionMode.IsUISupported)
+            {
+                foreach (IInitializeForCurrentUISession service in lifetimeScope.Resolve<IEnumerable<IInitializeForCurrentUISession>>())
+                {
+                    service.EndSession();
+                }
+            }
         }
 
         /// <summary>

@@ -9,5 +9,10 @@
         /// Initialize for the current session
         /// </summary>
         void InitializeForCurrentSession();
+
+        /// <summary>
+        /// End the current session
+        /// </summary>
+        void EndSession();
     }
 }

@@ -44,6 +44,8 @@ namespace ShipWorks.Shipping.Services
         /// </summary>
         public void InitializeForCurrentSession()
         {
+            EndSession();
+
             subscription = messenger.OfType<ShipmentChangedMessage>()
                 .Where(x => x.ShipmentAdapter != null)
                 .Select(x => new
@@ -68,6 +70,14 @@ namespace ShipWorks.Shipping.Services
                 })
                 .CatchAndContinue((Exception ex) => log.Error("Error occurred while getting rates", ex))
                 .Subscribe(x => messenger.Send(new RatesRetrievedMessage(this, x.RatingHash, x.Rates, x.ShipmentAdapter)));
+        }
+
+        /// <summary>
+        /// End the current session
+        /// </summary>
+        public void EndSession()
+        {
+            subscription?.Dispose();
         }
 
         /// <summary>

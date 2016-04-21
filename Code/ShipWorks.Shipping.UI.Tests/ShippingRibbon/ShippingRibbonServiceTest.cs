@@ -35,7 +35,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingRibbon
 
             securityContext = mock.Mock<ISecurityContext>();
             securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>(), It.IsAny<long?>())).Returns(true);
-            
+
             getSecurityContext = mock.MockRepository.Create<Func<ISecurityContext>>();
             getSecurityContext.Setup(sc => sc()).Returns(securityContext.Object);
             mock.Provide<Func<ISecurityContext>>(getSecurityContext.Object);
@@ -936,7 +936,6 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingRibbon
         [Fact]
         public void ManageProfilesClick_SendsManageProfilesMessage_WhenSingleUnprocessedShipmentIsLoaded()
         {
-            long shipmentID = 0;
             var testObject = mock.Create<ShippingRibbonService>();
             testObject.Register(actions.Object);
             SendOrderSelectionChangedMessageWithLoadedOrderSelection(CreateShipmentAdapter(x =>
@@ -1000,7 +999,6 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingRibbon
         [Fact]
         public void ManageProfiles_IsDisabled_WhenMultipleShipmentsAreLoaded()
         {
-            IEnumerable<long> orderIDs = null;
             var testObject = mock.Create<ShippingRibbonService>();
             testObject.Register(actions.Object);
 
