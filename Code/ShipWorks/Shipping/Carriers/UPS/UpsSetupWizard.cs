@@ -973,12 +973,20 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 {
                     upsOpenAccountResponse = OpenUpsAccount(clerk);
                 }
+                else
+                {
+                    throw new UpsOpenAccountException("Please enter a valid pickup address.");
+                }
             }
             catch (UpsOpenAccountBusinessAddressException ex)
             {
                 if (CorrectBillingAddress(ex.SuggestedAddress, openAccountRequest.BillingAddress))
                 {
                     upsOpenAccountResponse = OpenUpsAccount(clerk);
+                }
+                else
+                {
+                    throw new UpsOpenAccountException("Please enter a valid billing address.");
                 }
             }
             catch (UpsOpenAccountSoapException ex)
@@ -1028,7 +1036,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
                 if (result == DialogResult.OK)
                 {
-                    pickupAddressType.StreetAddress = addressCandidate.StreetAddress;
+                    pickupAddressType.StreetAddress = addressCandidate.StreetAddress ?? pickupAddressType.StreetAddress;
                     pickupAddressType.City = addressCandidate.City;
                     pickupAddressType.StateProvinceCode = addressCandidate.State;
                     pickupAddressType.PostalCode = addressCandidate.PostalCode;
@@ -1060,7 +1068,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
                 if (result == DialogResult.OK)
                 {
-                    billingAddressType.StreetAddress = addressCandidate.StreetAddress;
+                    billingAddressType.StreetAddress = addressCandidate.StreetAddress ?? billingAddressType.StreetAddress;
                     billingAddressType.City = addressCandidate.City;
                     billingAddressType.StateProvinceCode = addressCandidate.State;
                     billingAddressType.PostalCode = addressCandidate.PostalCode;
