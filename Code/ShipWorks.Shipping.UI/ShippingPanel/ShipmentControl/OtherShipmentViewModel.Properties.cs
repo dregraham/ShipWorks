@@ -12,56 +12,10 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
     /// </summary>
     public partial class OtherShipmentViewModel
     {
-        private DateTime shipDate;
-        private double totalWeight;
         private string carrierName;
         private string service;
         private decimal cost;
         private string trackingNumber;
-
-        private ICarrierShipmentAdapter shipmentAdapter;
-        private IInsuranceViewModel insuranceViewModel;
-        private string weightErrorMessage;
-
-        /// <summary>
-        /// The insurance view model to use.
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public IInsuranceViewModel InsuranceViewModel
-        {
-            get { return insuranceViewModel; }
-            set { handler.Set(nameof(InsuranceViewModel), ref insuranceViewModel, value); }
-        }
-
-        /// <summary>
-        /// Shipment ship date
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public DateTime ShipDate
-        {
-            get { return shipDate; }
-            set { handler.Set(nameof(ShipDate), ref shipDate, value); }
-        }
-
-        /// <summary>
-        /// Shipment total weight
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public double TotalWeight
-        {
-            get { return totalWeight; }
-            set { handler.Set(nameof(TotalWeight), ref totalWeight, value); }
-        }
-
-        /// <summary>
-        /// Current error message
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public string WeightErrorMessage
-        {
-            get { return weightErrorMessage; }
-            set { handler.Set(nameof(WeightErrorMessage), ref weightErrorMessage, value, true); }
-        }
 
         /// <summary>
         /// Name of the carrier used
@@ -109,11 +63,5 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
             get { return trackingNumber; }
             set { handler.Set(nameof(TrackingNumber), ref trackingNumber, value); }
         }
-
-        /// <summary>
-        /// Gets the currently selected rate
-        /// </summary>
-        /// <remarks>We don't care about the selected rate for Other</remarks>
-        public RateResult SelectedRate => null;
     }
 }

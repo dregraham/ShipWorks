@@ -8,9 +8,9 @@ using ShipWorks.Shipping.Services;
 namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
 {
     /// <summary>
-    /// View model for use by ShipmentControl
+    /// View model customs properties for use by ShipmentControl
     /// </summary>
-    public partial class BestRateShipmentViewModel
+    public abstract partial class ShipmentViewModelBase
     {
         private IShipmentCustomsItemAdapter selectedCustomsItem;
         private ObservableCollection<IShipmentCustomsItemAdapter> customsItems;

@@ -14,7 +14,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
     /// <summary>
     /// View model for use by ShipmentControl
     /// </summary>
-    public partial class ShipmentViewModel
+    public abstract partial class ShipmentViewModelBase
     {
         private DateTime shipDate;
         private double totalWeight;
@@ -24,7 +24,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         private bool supportsMultiplePackages;
         private bool supportsPackageTypes;
         private bool supportsDimensions;
-        private ICarrierShipmentAdapter shipmentAdapter;
+        protected ICarrierShipmentAdapter shipmentAdapter;
         private ObservableCollection<DimensionsProfileEntity> dimensionsProfiles;
         private DimensionsProfileEntity selectedDimensionsProfile;
         private IInsuranceViewModel insuranceViewModel;
@@ -100,7 +100,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
             get { return serviceType; }
             set
             {
-                handler.Set(nameof(ServiceType), ref serviceType, value, true);  
+                handler.Set(nameof(ServiceType), ref serviceType, value, true);
                 RefreshPackageTypes();
             }
         }
@@ -287,6 +287,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         /// Gets the currently selected rate
         /// </summary>
         /// <remarks>We don't care about the selected rate for Other</remarks>
-        public RateResult SelectedRate => null;
+        public virtual RateResult SelectedRate { get; set; } = null;
     }
 }
