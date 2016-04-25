@@ -104,6 +104,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddEntityInfo("NeweggOrderEntity", "OrderEntity", new NeweggOrderRelations(), new NeweggOrderEntityFactory(),  (74-74));
 			base.AddEntityInfo("NeweggOrderItemEntity", "OrderItemEntity", new NeweggOrderItemRelations(), new NeweggOrderItemEntityFactory(),  (18-18));
 			base.AddEntityInfo("NeweggStoreEntity", "StoreEntity", new NeweggStoreRelations(), new NeweggStoreEntityFactory(),  (30-30));
+			base.AddEntityInfo("OdbcStoreEntity", "StoreEntity", new OdbcStoreRelations(), new OdbcStoreEntityFactory(),  (30-30));
 			base.AddEntityInfo("OrderEntity", string.Empty, new OrderRelations(), new OrderEntityFactory());
 			base.AddEntityInfo("OrderItemEntity", string.Empty, new OrderItemRelations(), new OrderItemEntityFactory());
 			base.AddEntityInfo("OrderItemAttributeEntity", string.Empty, new OrderItemAttributeRelations(), new OrderItemAttributeEntityFactory());

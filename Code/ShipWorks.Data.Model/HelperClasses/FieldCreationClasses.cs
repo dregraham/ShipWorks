@@ -13734,6 +13734,171 @@ namespace ShipWorks.Data.Model.HelperClasses
 		}
 	}
 
+	/// <summary>Field Creation Class for entity OdbcStoreEntity</summary>
+	public partial class OdbcStoreFields
+	{
+		/// <summary>Creates a new OdbcStoreEntity.StoreID_Store field instance</summary>
+		public static EntityField2 StoreID_Store
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OdbcStoreFieldIndex.StoreID_Store);}
+		}
+		/// <summary>Creates a new OdbcStoreEntity.RowVersion field instance</summary>
+		public static EntityField2 RowVersion
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OdbcStoreFieldIndex.RowVersion);}
+		}
+		/// <summary>Creates a new OdbcStoreEntity.License field instance</summary>
+		public static EntityField2 License
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OdbcStoreFieldIndex.License);}
+		}
+		/// <summary>Creates a new OdbcStoreEntity.Edition field instance</summary>
+		public static EntityField2 Edition
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OdbcStoreFieldIndex.Edition);}
+		}
+		/// <summary>Creates a new OdbcStoreEntity.TypeCode field instance</summary>
+		public static EntityField2 TypeCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OdbcStoreFieldIndex.TypeCode);}
+		}
+		/// <summary>Creates a new OdbcStoreEntity.Enabled field instance</summary>
+		public static EntityField2 Enabled
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OdbcStoreFieldIndex.Enabled);}
+		}
+		/// <summary>Creates a new OdbcStoreEntity.SetupComplete field instance</summary>
+		public static EntityField2 SetupComplete
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OdbcStoreFieldIndex.SetupComplete);}
+		}
+		/// <summary>Creates a new OdbcStoreEntity.StoreName field instance</summary>
+		public static EntityField2 StoreName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OdbcStoreFieldIndex.StoreName);}
+		}
+		/// <summary>Creates a new OdbcStoreEntity.Company field instance</summary>
+		public static EntityField2 Company
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OdbcStoreFieldIndex.Company);}
+		}
+		/// <summary>Creates a new OdbcStoreEntity.Street1 field instance</summary>
+		public static EntityField2 Street1
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OdbcStoreFieldIndex.Street1);}
+		}
+		/// <summary>Creates a new OdbcStoreEntity.Street2 field instance</summary>
+		public static EntityField2 Street2
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OdbcStoreFieldIndex.Street2);}
+		}
+		/// <summary>Creates a new OdbcStoreEntity.Street3 field instance</summary>
+		public static EntityField2 Street3
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OdbcStoreFieldIndex.Street3);}
+		}
+		/// <summary>Creates a new OdbcStoreEntity.City field instance</summary>
+		public static EntityField2 City
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OdbcStoreFieldIndex.City);}
+		}
+		/// <summary>Creates a new OdbcStoreEntity.StateProvCode field instance</summary>
+		public static EntityField2 StateProvCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OdbcStoreFieldIndex.StateProvCode);}
+		}
+		/// <summary>Creates a new OdbcStoreEntity.PostalCode field instance</summary>
+		public static EntityField2 PostalCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OdbcStoreFieldIndex.PostalCode);}
+		}
+		/// <summary>Creates a new OdbcStoreEntity.CountryCode field instance</summary>
+		public static EntityField2 CountryCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OdbcStoreFieldIndex.CountryCode);}
+		}
+		/// <summary>Creates a new OdbcStoreEntity.Phone field instance</summary>
+		public static EntityField2 Phone
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OdbcStoreFieldIndex.Phone);}
+		}
+		/// <summary>Creates a new OdbcStoreEntity.Fax field instance</summary>
+		public static EntityField2 Fax
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OdbcStoreFieldIndex.Fax);}
+		}
+		/// <summary>Creates a new OdbcStoreEntity.Email field instance</summary>
+		public static EntityField2 Email
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OdbcStoreFieldIndex.Email);}
+		}
+		/// <summary>Creates a new OdbcStoreEntity.Website field instance</summary>
+		public static EntityField2 Website
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OdbcStoreFieldIndex.Website);}
+		}
+		/// <summary>Creates a new OdbcStoreEntity.AutoDownload field instance</summary>
+		public static EntityField2 AutoDownload
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OdbcStoreFieldIndex.AutoDownload);}
+		}
+		/// <summary>Creates a new OdbcStoreEntity.AutoDownloadMinutes field instance</summary>
+		public static EntityField2 AutoDownloadMinutes
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OdbcStoreFieldIndex.AutoDownloadMinutes);}
+		}
+		/// <summary>Creates a new OdbcStoreEntity.AutoDownloadOnlyAway field instance</summary>
+		public static EntityField2 AutoDownloadOnlyAway
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OdbcStoreFieldIndex.AutoDownloadOnlyAway);}
+		}
+		/// <summary>Creates a new OdbcStoreEntity.AddressValidationSetting field instance</summary>
+		public static EntityField2 AddressValidationSetting
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OdbcStoreFieldIndex.AddressValidationSetting);}
+		}
+		/// <summary>Creates a new OdbcStoreEntity.ComputerDownloadPolicy field instance</summary>
+		public static EntityField2 ComputerDownloadPolicy
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OdbcStoreFieldIndex.ComputerDownloadPolicy);}
+		}
+		/// <summary>Creates a new OdbcStoreEntity.DefaultEmailAccountID field instance</summary>
+		public static EntityField2 DefaultEmailAccountID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OdbcStoreFieldIndex.DefaultEmailAccountID);}
+		}
+		/// <summary>Creates a new OdbcStoreEntity.ManualOrderPrefix field instance</summary>
+		public static EntityField2 ManualOrderPrefix
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OdbcStoreFieldIndex.ManualOrderPrefix);}
+		}
+		/// <summary>Creates a new OdbcStoreEntity.ManualOrderPostfix field instance</summary>
+		public static EntityField2 ManualOrderPostfix
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OdbcStoreFieldIndex.ManualOrderPostfix);}
+		}
+		/// <summary>Creates a new OdbcStoreEntity.InitialDownloadDays field instance</summary>
+		public static EntityField2 InitialDownloadDays
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OdbcStoreFieldIndex.InitialDownloadDays);}
+		}
+		/// <summary>Creates a new OdbcStoreEntity.InitialDownloadOrder field instance</summary>
+		public static EntityField2 InitialDownloadOrder
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OdbcStoreFieldIndex.InitialDownloadOrder);}
+		}
+		/// <summary>Creates a new OdbcStoreEntity.StoreID field instance</summary>
+		public static EntityField2 StoreID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OdbcStoreFieldIndex.StoreID);}
+		}
+		/// <summary>Creates a new OdbcStoreEntity.ConnectionString field instance</summary>
+		public static EntityField2 ConnectionString
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OdbcStoreFieldIndex.ConnectionString);}
+		}
+	}
+
 	/// <summary>Field Creation Class for entity OnTracAccountEntity</summary>
 	public partial class OnTracAccountFields
 	{

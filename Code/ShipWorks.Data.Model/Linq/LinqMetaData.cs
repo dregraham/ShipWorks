@@ -349,6 +349,9 @@ namespace ShipWorks.Data.Model.Linq
 				case ShipWorks.Data.Model.EntityType.ObjectReferenceEntity:
 					toReturn = this.ObjectReference;
 					break;
+				case ShipWorks.Data.Model.EntityType.OdbcStoreEntity:
+					toReturn = this.OdbcStore;
+					break;
 				case ShipWorks.Data.Model.EntityType.OnTracAccountEntity:
 					toReturn = this.OnTracAccount;
 					break;
@@ -1158,6 +1161,12 @@ namespace ShipWorks.Data.Model.Linq
 		public DataSource2<ObjectReferenceEntity> ObjectReference
 		{
 			get { return new DataSource2<ObjectReferenceEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting OdbcStoreEntity instances in the database.</summary>
+		public DataSource2<OdbcStoreEntity> OdbcStore
+		{
+			get { return new DataSource2<OdbcStoreEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
 		}
 		
 		/// <summary>returns the datasource to use in a Linq query when targeting OnTracAccountEntity instances in the database.</summary>

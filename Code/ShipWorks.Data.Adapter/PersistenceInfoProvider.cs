@@ -55,7 +55,7 @@ namespace ShipWorks.Data.Adapter
 		/// <summary>Method which initializes the internal datastores with the structure of hierarchical types.</summary>
 		private void Init()
 		{
-			base.InitClass((172 + 0));
+			base.InitClass((173 + 0));
 			InitActionEntityMappings();
 			InitActionFilterTriggerEntityMappings();
 			InitActionQueueEntityMappings();
@@ -152,6 +152,7 @@ namespace ShipWorks.Data.Adapter
 			InitNoteEntityMappings();
 			InitObjectLabelEntityMappings();
 			InitObjectReferenceEntityMappings();
+			InitOdbcStoreEntityMappings();
 			InitOnTracAccountEntityMappings();
 			InitOnTracProfileEntityMappings();
 			InitOnTracShipmentEntityMappings();
@@ -1752,6 +1753,13 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementFieldMapping( "ObjectReferenceEntity", "ReferenceKey", "ReferenceKey", false, (int)SqlDbType.VarChar, 250, 0, 0, false, "", null, typeof(System.String), 2 );
 			base.AddElementFieldMapping( "ObjectReferenceEntity", "ObjectID", "ObjectID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 3 );
 			base.AddElementFieldMapping( "ObjectReferenceEntity", "Reason", "Reason", true, (int)SqlDbType.NVarChar, 250, 0, 0, false, "", null, typeof(System.String), 4 );
+		}
+		/// <summary>Inits OdbcStoreEntity's mappings</summary>
+		private void InitOdbcStoreEntityMappings()
+		{
+			base.AddElementMapping( "OdbcStoreEntity", "ShipWorksLocal", @"dbo", "OdbcStore", 2 );
+			base.AddElementFieldMapping( "OdbcStoreEntity", "StoreID", "StoreID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 0 );
+			base.AddElementFieldMapping( "OdbcStoreEntity", "ConnectionString", "ConnectionString", false, (int)SqlDbType.NVarChar, 2048, 0, 0, false, "", null, typeof(System.String), 1 );
 		}
 		/// <summary>Inits OnTracAccountEntity's mappings</summary>
 		private void InitOnTracAccountEntityMappings()

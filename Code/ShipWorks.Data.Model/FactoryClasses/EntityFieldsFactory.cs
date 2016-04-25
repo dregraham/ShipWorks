@@ -320,6 +320,9 @@ namespace ShipWorks.Data.Model.FactoryClasses
 				case ShipWorks.Data.Model.EntityType.ObjectReferenceEntity:
 					fieldsToReturn = fieldProvider.GetEntityFields(inheritanceProvider, "ObjectReferenceEntity");
 					break;
+				case ShipWorks.Data.Model.EntityType.OdbcStoreEntity:
+					fieldsToReturn = fieldProvider.GetEntityFields(inheritanceProvider, "OdbcStoreEntity");
+					break;
 				case ShipWorks.Data.Model.EntityType.OnTracAccountEntity:
 					fieldsToReturn = fieldProvider.GetEntityFields(inheritanceProvider, "OnTracAccountEntity");
 					break;
