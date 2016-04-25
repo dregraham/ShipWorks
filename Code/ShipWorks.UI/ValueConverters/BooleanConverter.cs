@@ -19,6 +19,7 @@ namespace ShipWorks.UI.ValueConverters
         {
             True = trueValue;
             False = falseValue;
+            Invert = false;
         }
 
         /// <summary>
@@ -32,15 +33,24 @@ namespace ShipWorks.UI.ValueConverters
         public T False { get; set; }
 
         /// <summary>
+        /// Return the opposite value based on criteria.  
+        /// </summary>
+        public bool Invert { get; set; }
+
+        /// <summary>
         /// Convert a boolean into the requested values
         /// </summary>
-        public virtual object Convert(object value, Type targetType, object parameter, CultureInfo culture) =>
-            value is bool && ((bool) value) ? True : False;
+        public virtual object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return (value is bool && ((bool) value)) ^ Invert ? True : False;
+        }
 
         /// <summary>
         /// Convert a value back to boolean
         /// </summary>
-        public virtual object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) =>
-            value is T && EqualityComparer<T>.Default.Equals((T) value, True);
+        public virtual object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return (value is T && EqualityComparer<T>.Default.Equals((T) value, True)) ^ Invert;
+        }
     }
 }

@@ -89,8 +89,9 @@ namespace ShipWorks.Shipping.UI.RatingPanel
         /// </summary>
         public virtual void ShowSpinner()
         {
-            SetRateResults(Enumerable.Empty<RateResult>(), string.Empty, Enumerable.Empty<object>());
             IsLoading = true;
+            ShowEmptyMessage = false;
+            ShowFootnotes = false;
             AllowSelection = false;
         }
 
