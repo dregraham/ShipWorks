@@ -50,7 +50,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         {
             handler = new PropertyChangedHandler(this, () => PropertyChanged, () => PropertyChanging);
             Services = new ObservableCollection<KeyValuePair<int, string>>();
-            PackageTypes = new ObservableCollection<KeyValuePair<int, string>>();
+            PackageTypes = new IEnumerable<KeyValuePair<int, string>>();
         }
 
         /// <summary>
@@ -265,7 +265,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
             // so just return.
             if (!packagingTypes.Any())
             {
-                PackageTypes = new ObservableCollection<KeyValuePair<int, string>>();
+                PackageTypes = new IEnumerable<KeyValuePair<int, string>>();
             }
 
             // If the values are all the same, just return.
@@ -276,7 +276,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
             }
 
             // Get the new list
-            PackageTypes = new ObservableCollection<KeyValuePair<int, string>>(packagingTypes);
+            PackageTypes = new IEnumerable<KeyValuePair<int, string>>(packagingTypes);
             
             // Update the selected packaging type.  If the currently selected value isn't in the list
             // just use the first one in the list.

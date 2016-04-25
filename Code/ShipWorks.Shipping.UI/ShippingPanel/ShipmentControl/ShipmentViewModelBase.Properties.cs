@@ -36,7 +36,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         private bool dimsAddWeight;
         private int packagingType;
         private string weightErrorMessage;
-        private ObservableCollection<KeyValuePair<int, string>> packageTypes;
+        private IEnumerable<KeyValuePair<int, string>> packageTypes;
 
         /// <summary>
         /// The insurance view model to use.
@@ -58,7 +58,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         /// Observable collection of carrier package types
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public ObservableCollection<KeyValuePair<int, string>> PackageTypes
+        public IEnumerable<KeyValuePair<int, string>> PackageTypes
         {
             get { return packageTypes; }
             set { handler.Set(nameof(PackageTypes), ref packageTypes, value); }
