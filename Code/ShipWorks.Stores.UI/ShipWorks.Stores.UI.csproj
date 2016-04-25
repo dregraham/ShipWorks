@@ -155,6 +155,12 @@
     <Compile Include="Platforms\LemonStand\WizardPages\LemonStandAccountPage.Designer.cs">
       <DependentUpon>LemonStandAccountPage.cs</DependentUpon>
     </Compile>
+    <Compile Include="Platforms\Odbc\OdbcDataSourceControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Platforms\Odbc\OdbcDataSourceControl.Designer.cs">
+      <DependentUpon>OdbcDataSourceControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Platforms\Odbc\OdbcStoreModule.cs" />
     <Compile Include="Platforms\Odbc\WizardPages\OdbcDataSourcePage.cs">
       <SubType>UserControl</SubType>
@@ -203,6 +209,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Platforms\Odbc\WizardPages\OdbcDataSourcePage.resx">
       <DependentUpon>OdbcDataSourcePage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Platforms\Odbc\OdbcDataSourceControl.resx">
+      <DependentUpon>OdbcDataSourceControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Platforms\Yahoo\ApiIntegration\WizardPages\YahooApiAccountPageHost.resx">
       <DependentUpon>YahooApiAccountPageHost.cs</DependentUpon>
