@@ -106,6 +106,47 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
         }
 
         [Fact]
+        public void SelectRate_UpdatesServiceTypeOnlyOnce_WhenServiceTypeIsTheSameButUpdatedMultipleTimes()
+        {
+            CreateDefaultShipmentAdapter(mock, 2);
+
+            int serviceType = 3;
+            shipmentAdapter.Setup(sa => sa.ServiceType).Returns(serviceType);
+
+            ShipmentViewModel testObject = mock.Create<ShipmentViewModel>();
+            testObject.Load(shipmentAdapter.Object);
+
+            testObject.SelectRate(new RateResult("desc", "3 days"));
+
+            shipmentAdapter.ResetCalls();
+            shipmentAdapter.VerifySet(sa => sa.ServiceType = serviceType, Times.Never());
+
+            testObject.SelectRate(new RateResult("desc", "3 days"));
+            testObject.SelectRate(new RateResult("desc", "3 days"));
+            testObject.SelectRate(new RateResult("desc", "3 days"));
+
+            shipmentAdapter.ResetCalls();
+            shipmentAdapter.VerifySet(sa => sa.ServiceType = serviceType, Times.Never());
+        }
+
+        [Fact]
+        public void PackagingType_DefaultsToFirstInPackageTypesList_WhenNewPackagingTypeIsNotInTheList()
+        {
+            CreateDefaultShipmentAdapter(mock, 2);
+
+            expectedPackageTypes.Clear();
+            expectedPackageTypes.Add(0, "First");
+            expectedPackageTypes.Add(1, "Second");
+
+            ShipmentViewModel testObject = mock.Create<ShipmentViewModel>();
+            testObject.Load(shipmentAdapter.Object);
+
+            testObject.PackagingType = 99999;
+
+            Assert.Equal(expectedPackageTypes.First().Key, testObject.PackagingType);
+        }
+
+        [Fact]
         public void SupportsMultiplePackages_MatchesShipmentAdapterValue()
         {
             CreateDefaultShipmentAdapter(mock, 2);

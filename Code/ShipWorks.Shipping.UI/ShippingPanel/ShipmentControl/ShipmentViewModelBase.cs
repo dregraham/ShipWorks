@@ -313,7 +313,15 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         public virtual void SelectRate(RateResult rateResult)
         {
             shipmentAdapter.SelectServiceFromRate(rateResult);
-            ServiceType = shipmentAdapter.ServiceType;
+
+            // If the currently selected service type matches the specified rateResult service,
+            // don't set it again.  ServiceType uses the force set value so that combo boxes
+            // update correctly.  But in this case we don't want to force an update because it 
+            // fires off a rate update which isn't needed.
+            if (ServiceType != shipmentAdapter.ServiceType)
+            {
+                ServiceType = shipmentAdapter.ServiceType;
+            }
         }
 
         /// <summary>

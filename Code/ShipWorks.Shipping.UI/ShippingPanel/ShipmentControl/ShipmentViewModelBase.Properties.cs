@@ -280,7 +280,18 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         public int PackagingType
         {
             get { return packagingType; }
-            set { handler.Set(nameof(PackagingType), ref packagingType, value, true); }
+            set
+            {
+                // Verify that the currently selected package type is in the list allowed
+                // If not, just select the first one in the list.
+                int updatedPackagingType = value;
+                if (PackageTypes.All(x => x.Key != value))
+                {
+                    updatedPackagingType = PackageTypes.FirstOrDefault().Key;
+                }
+
+                handler.Set(nameof(PackagingType), ref packagingType, updatedPackagingType, true);
+            }
         }
 
         /// <summary>
