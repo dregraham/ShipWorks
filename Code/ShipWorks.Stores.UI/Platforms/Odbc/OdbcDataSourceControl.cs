@@ -33,6 +33,8 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// </summary>
         public GenericResult<OdbcDataSource> TestConnection()
         {
+            CheckForCredentials();
+
             return SelectedDataSource.TestConnection();
         }
 
@@ -46,8 +48,27 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
                 MessageHelper.ShowError(this, "Please select a data source.");
                 return false;
             }
+
+            CheckForCredentials();
+
             store.ConnectionString = SelectedDataSource.ConnectionString;
             return true;
+        }
+
+        /// <summary>
+        /// Checks if the username and password textboxes have values and saves them to the data source.
+        /// </summary>
+        private void CheckForCredentials()
+        {
+            if (!string.IsNullOrWhiteSpace(usernameTextBox.Text))
+            {
+                SelectedDataSource.Username = usernameTextBox.Text;
+            }
+
+            if (!string.IsNullOrWhiteSpace(passwordTextBox.Text))
+            {
+                SelectedDataSource.Password = passwordTextBox.Text;
+            }
         }
 
         /// <summary>
