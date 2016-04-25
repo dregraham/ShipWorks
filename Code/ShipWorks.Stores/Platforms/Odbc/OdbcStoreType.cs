@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
+using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Stores.Platforms.Odbc
 {
@@ -52,15 +54,27 @@ namespace ShipWorks.Stores.Platforms.Odbc
         }
 
         /// <summary>
+        /// Returns the wizard pages to setup an Odbc Store
+        /// </summary>
+        public override List<WizardPage> CreateAddStoreWizardPages()
+        {
+            return new List<WizardPage>();
+        }
+
+        /// <summary>
         /// Returns an empty OdbcStoreType
         /// </summary>
         /// <returns></returns>
         public override StoreEntity CreateStoreInstance()
         {
-            return new OdbcStoreEntity
+            OdbcStoreEntity store = new OdbcStoreEntity
             {
-                ConnectionString = ""
+                ConnectionString = string.Empty
             };
+
+            InitializeStoreDefaults(store);
+
+            return store;
         }
     }
 }
