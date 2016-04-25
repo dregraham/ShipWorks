@@ -258,26 +258,31 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         /// </summary>
         public virtual void RefreshPackageTypes()
         {
-            Dictionary<int, string> packageTypes = shipmentPackageTypesBuilderFactory.Get(shipmentAdapter.ShipmentTypeCode)
+            Dictionary<int, string> packagingTypes = shipmentPackageTypesBuilderFactory.Get(shipmentAdapter.ShipmentTypeCode)
                 .BuildPackageTypeDictionary(new[] { shipmentAdapter.Shipment });
-
-            PackageTypes.Clear();
 
             // If no package types are returned, the carrier doesn't support package types,
             // so just return.
-            if (!packageTypes.Any())
+            if (!packagingTypes.Any())
+            {
+                PackageTypes = new ObservableCollection<KeyValuePair<int, string>>();
+            }
+
+            // If the values are all the same, just return.
+            if (packagingTypes.OrderBy(kvp => kvp.Key)
+                .SequenceEqual(PackageTypes.OrderBy(kvp => kvp.Key)))
             {
                 return;
             }
 
-            foreach (KeyValuePair<int, string> entry in packageTypes)
-            {
-                PackageTypes.Add(entry);
-            }
-
-            PackagingType = PackageTypes.Any(pt => pt.Key == SelectedPackageAdapter?.PackagingType) ? 
-                SelectedPackageAdapter.PackagingType : 
-                PackageTypes.First().Key;
+            // Get the new list
+            PackageTypes = new ObservableCollection<KeyValuePair<int, string>>(packagingTypes);
+            
+            // Update the selected packaging type.  If the currently selected value isn't in the list
+            // just use the first one in the list.
+            PackagingType = PackageTypes.Any(pt => pt.Key == SelectedPackageAdapter?.PackagingType) ?
+                SelectedPackageAdapter.PackagingType :
+                PackageTypes.First().Key; 
         }
 
         /// <summary>

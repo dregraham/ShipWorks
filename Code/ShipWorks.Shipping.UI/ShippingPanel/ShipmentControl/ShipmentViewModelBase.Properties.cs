@@ -36,6 +36,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         private bool dimsAddWeight;
         private int packagingType;
         private string weightErrorMessage;
+        private ObservableCollection<KeyValuePair<int, string>> packageTypes;
 
         /// <summary>
         /// The insurance view model to use.
@@ -57,7 +58,11 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         /// Observable collection of carrier package types
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public ObservableCollection<KeyValuePair<int, string>> PackageTypes { get; }
+        public ObservableCollection<KeyValuePair<int, string>> PackageTypes
+        {
+            get { return packageTypes; }
+            set { handler.Set(nameof(PackageTypes), ref packageTypes, value); }
+        }
 
         /// <summary>
         /// Shipment ship date
@@ -290,7 +295,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
                     updatedPackagingType = PackageTypes.FirstOrDefault().Key;
                 }
 
-                handler.Set(nameof(PackagingType), ref packagingType, updatedPackagingType, true);
+                handler.Set(nameof(PackagingType), ref packagingType, updatedPackagingType, false);
             }
         }
 
