@@ -57,7 +57,10 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// <returns></returns>
         public override StoreEntity CreateStoreInstance()
         {
-            throw new NotImplementedException();
+            return new OdbcStoreEntity
+            {
+                ConnectionString = ""
+            };
         }
     }
 }

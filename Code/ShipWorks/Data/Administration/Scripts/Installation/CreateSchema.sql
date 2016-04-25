@@ -5555,7 +5555,22 @@ CREATE NONCLUSTERED INDEX [IX_Auto_LemonStandOrderID] ON [dbo].[LemonStandOrder]
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 GO
 
-
+PRINT N'Creating [dbo].[OdbcStore]'
+GO
+CREATE TABLE [dbo].[OdbcStore]
+(
+	[StoreID] [bigint] NOT NULL,
+	[ConnectionString] [nvarchar](2048) NOT NULL
+)
+GO
+PRINT N'Creating primary key [PK_OdbcStore] on [dbo].[OdbcStore]'
+GO
+ALTER TABLE [dbo].[OdbcStore] ADD CONSTRAINT [PK_OdbcStore] PRIMARY KEY CLUSTERED  ([StoreID])
+GO
+PRINT N'Adding foreign keys to [dbo].[OdbcStore]'
+GO
+ALTER TABLE [dbo].[OdbcStore] ADD CONSTRAINT [FK_OdbcStore_Store] FOREIGN KEY ([StoreID]) REFERENCES [dbo].[Store] ([StoreID])
+GO
 
 PRINT N'Creating extended properties'
 GO
