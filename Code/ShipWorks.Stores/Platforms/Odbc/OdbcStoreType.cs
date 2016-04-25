@@ -4,6 +4,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
 using ShipWorks.UI.Wizard;
+using ShipWorks.Data;
 
 namespace ShipWorks.Stores.Platforms.Odbc
 {
@@ -29,13 +30,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// <summary>
         /// Creates the license identifier for the OdbcStoreType
         /// </summary>
-        protected override string InternalLicenseIdentifier
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+        protected override string InternalLicenseIdentifier => $"{Store.StoreID} {SystemData.Fetch().DatabaseID.ToString("D")}";
 
         /// <summary>
         /// Create a downloader for the OdbcStoreType
