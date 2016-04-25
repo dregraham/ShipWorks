@@ -10,6 +10,9 @@ namespace ShipWorks.Stores.UI.Odbc
             builder.RegisterType<OdbcStoreType>()
                 .Keyed<StoreType>(StoreTypeCode.Odbc)
                 .ExternallyOwned();
+
+            builder.RegisterType<ShipWorksOdbcProvider>()
+                .AsImplementedInterfaces();
         }
     }
 }
