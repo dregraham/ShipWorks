@@ -354,8 +354,11 @@ namespace ShipWorks.Stores
         [Description("LemonStand")]
         [StoreTypeIdentity("LEMONSTAND", "LEM")]
         [StoreTypeIcon("lemonstand")]
-        LemonStand = 68
+        LemonStand = 68,
 
-        
+        [Description("ODBC")]
+        [StoreTypeIdentity("ODBC", "ODB")]
+        [StoreTypeIcon("odbc")]
+        Odbc = 70
     }
 }

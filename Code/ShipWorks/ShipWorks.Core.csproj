@@ -10845,6 +10845,7 @@
     <None Include="Resources\revolutionparts.png" />
     <None Include="Resources\orderbot.png" />
     <None Include="Resources\opensky.png" />
+    <None Include="Resources\odbc.png" />
     <Content Include="Resources\shape_circle.png" />
     <None Include="Resources\shield_ok.png" />
     <None Include="Resources\shield_ok1.png" />
