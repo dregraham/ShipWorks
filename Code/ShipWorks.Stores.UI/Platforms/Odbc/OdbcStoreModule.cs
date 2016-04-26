@@ -1,5 +1,7 @@
 ﻿using Autofac;
 using ShipWorks.Stores.Platforms.Odbc;
+using ShipWorks.Stores.UI.Platforms.Odbc.WizardPages;
+using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Stores.UI.Odbc
 {
@@ -13,6 +15,10 @@ namespace ShipWorks.Stores.UI.Odbc
 
             builder.RegisterType<ShipWorksOdbcProvider>()
                 .AsImplementedInterfaces();
+
+            builder.RegisterType<OdbcDataSourcePage>()
+                .Keyed<WizardPage>(StoreTypeCode.Odbc)
+                .ExternallyOwned();
         }
     }
 }

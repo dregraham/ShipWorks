@@ -49,14 +49,6 @@ namespace ShipWorks.Stores.Platforms.Odbc
         }
 
         /// <summary>
-        /// Returns the wizard pages to setup an Odbc Store
-        /// </summary>
-        public override List<WizardPage> CreateAddStoreWizardPages()
-        {
-            return new List<WizardPage>();
-        }
-
-        /// <summary>
         /// Returns an empty OdbcStoreType
         /// </summary>
         /// <returns></returns>
