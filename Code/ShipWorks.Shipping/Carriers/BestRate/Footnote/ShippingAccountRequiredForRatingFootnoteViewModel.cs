@@ -1,8 +1,9 @@
-﻿using System;
+﻿using System.Reflection;
 using System.Windows.Forms;
 using System.Windows.Input;
-using Autofac.Features.OwnedInstances;
+using Autofac;
 using GalaSoft.MvvmLight.Command;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Shipping.Settings;
 
 namespace ShipWorks.Shipping.Carriers.BestRate.Footnote
@@ -12,15 +13,13 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Footnote
     /// </summary>
     public class ShippingAccountRequiredForRatingFootnoteViewModel : IShippingAccountRequiredForRatingFootnoteViewModel
     {
-        private readonly Func<Owned<ShippingSettingsDlg>> createSettingsDialog;
         private readonly IWin32Window owner;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShippingAccountRequiredForRatingFootnoteViewModel(IWin32Window owner, Func<Owned<ShippingSettingsDlg>> createSettingsDialog)
+        public ShippingAccountRequiredForRatingFootnoteViewModel(IWin32Window owner) 
         {
-            this.createSettingsDialog = createSettingsDialog;
             this.owner = owner;
             ViewShippingSettings = new RelayCommand(ViewShippingSettingsAction);
         }
@@ -28,6 +27,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Footnote
         /// <summary>
         /// Command to show the shipping settings
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public ICommand ViewShippingSettings { get; }
 
         /// <summary>
@@ -35,9 +35,12 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Footnote
         /// </summary>
         private void ViewShippingSettingsAction()
         {
-            using (ShippingSettingsDlg settingsDialog = createSettingsDialog().Value)
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                settingsDialog.ShowDialog(owner);
+                using (ShippingSettingsDlg shippingSettingsDlg = new ShippingSettingsDlg(lifetimeScope))
+                {
+                    shippingSettingsDlg.ShowDialog(owner);
+                }
             }
         }
     }
