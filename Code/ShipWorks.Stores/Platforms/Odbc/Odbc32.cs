@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Interapptive.Shared;
+using System;
 using System.Runtime.InteropServices;
 using System.Text;
 
@@ -43,6 +44,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
         public extern static short SQLAllocHandle(HandleType handleType, int inputHandle, out IntPtr outputHandle);
 
         [DllImport("odbc32.dll", CharSet = CharSet.Auto)]
+        [NDependIgnoreTooManyParams]
         public static extern short SQLDataSources(
            IntPtr environmentHandle,
            Direction direction,
