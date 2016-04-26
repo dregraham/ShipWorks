@@ -23,7 +23,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             builder.RegisterType<OdbcDataSourceRepository>()
                 .AsImplementedInterfaces();
 
-            builder.RegisterType<DnsProvider>()
+            builder.RegisterType<DsnProvider>()
                 .AsImplementedInterfaces();
         }
     }

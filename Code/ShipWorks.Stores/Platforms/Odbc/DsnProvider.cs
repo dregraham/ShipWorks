@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Text;
 
@@ -9,12 +10,12 @@ namespace ShipWorks.Stores.Platforms.Odbc
     /// Retrieves the list of Dsns.
     /// </summary>
     /// <seealso cref="System.IDisposable" />
-    public class DnsProvider : IDnsProvider
+    public class DsnProvider : IDsnProvider
     {
         private short dsnNameLength;
         private short dsnDescLength;
-        private readonly StringBuilder dsnName;
-        private readonly StringBuilder dsnDesc;
+        private StringBuilder dsnName;
+        private StringBuilder dsnDesc;
         private IntPtr sqlEnvHandle;
 
         private const int SqlAttrOdbcVersion = 200;
@@ -23,27 +24,53 @@ namespace ShipWorks.Stores.Platforms.Odbc
         private Odbc32.Direction direction = Odbc32.Direction.SQL_FETCH_FIRST;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DnsProvider"/> class.
+        /// Gets the available data sources.
         /// </summary>
-        public DnsProvider()
+        /// <exception cref="System.Data.DataException">
+        /// Thrown when there is an issue retrieving information from the Datasources.
+        /// </exception>
+        public IEnumerable<string> GetDataSourceNames()
         {
-            dsnName = new StringBuilder(MaxDsnLength);
-            dsnDesc = new StringBuilder(128);
+            try
+            {
+                InitializeSqlEnvHandle();
 
-            dsnNameLength = 0;
-            dsnDescLength = 0;
+                List<string> odbcDataSources = new List<string>();
 
-            sqlEnvHandle = IntPtr.Zero;
+                string nextOdbcDataSource = GetNextDsnName();
+
+                while (nextOdbcDataSource != null)
+                {
+                    odbcDataSources.Add(nextOdbcDataSource);
+
+                    nextOdbcDataSource = GetNextDsnName();
+                }
+
+                return odbcDataSources;
+            }
+            finally
+            {
+                if (sqlEnvHandle != IntPtr.Zero)
+                {
+                    short rc = Odbc32.SQLFreeHandle(Odbc32.HandleType.SQL_HANDLE_ENV, sqlEnvHandle);
+                    if (rc != Odbc32.SQL_SUCCESS)
+                    {
+                        throw new DataException("Could not free ODBC Environment handle");
+                    }
+
+                    sqlEnvHandle = IntPtr.Zero;
+                }
+            }
         }
 
         /// <summary>
         /// Gets the name of the next DSN.
         /// </summary>
         /// <returns>
-        /// Returns Next DSN Name. False if none.
+        /// Returns Next DSN Name; null if none.
         /// </returns>
         /// <exception cref="DataException">Error getting ODBC Data Sources</exception>
-        public string GetNextDsnName()
+        private string GetNextDsnName()
         {
 
             if (sqlEnvHandle == IntPtr.Zero)
@@ -81,6 +108,14 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// </exception>
         private void InitializeSqlEnvHandle()
         {
+            dsnName = new StringBuilder(MaxDsnLength);
+            dsnDesc = new StringBuilder(128);
+
+            dsnNameLength = 0;
+            dsnDescLength = 0;
+
+            sqlEnvHandle = IntPtr.Zero;
+
             short rc = Odbc32.SQLAllocHandle(Odbc32.HandleType.SQL_HANDLE_ENV, 0, out sqlEnvHandle);
             if (rc != Odbc32.SQL_SUCCESS)
             {
@@ -91,24 +126,6 @@ namespace ShipWorks.Stores.Platforms.Odbc
             if (rc != Odbc32.SQL_SUCCESS)
             {
                 throw new DataException("Could not setup ODBC Environment handle");
-            }
-        }
-
-        /// <summary>
-        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
-        /// </summary>
-        /// <exception cref="DataException">Could not free ODBC Environment handle</exception>
-        public void Dispose()
-        {
-            if (sqlEnvHandle != IntPtr.Zero)
-            {
-                short rc = Odbc32.SQLFreeHandle(Odbc32.HandleType.SQL_HANDLE_ENV, sqlEnvHandle);
-                if (rc != Odbc32.SQL_SUCCESS)
-                {
-                    throw new DataException("Could not free ODBC Environment handle");
-                }
-
-                sqlEnvHandle = IntPtr.Zero;
             }
         }
     }

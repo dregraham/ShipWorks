@@ -3,6 +3,7 @@ using log4net;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 
 namespace ShipWorks.Stores.Platforms.Odbc
 {
@@ -11,7 +12,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
     /// </summary>
     public class OdbcDataSourceRepository : IOdbcDataSourceRepository
     {
-        private readonly IDnsProvider dnsProvider;
+        private readonly IDsnProvider dsnProvider;
         private readonly IShipWorksOdbcProvider odbcProvider;
         private readonly IEncryptionProvider encryptionProvider;
         private readonly ILog log;
@@ -20,14 +21,14 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// Initializes a new instance of the <see cref="OdbcDataSourceRepository"/> class.
         /// </summary>
         public OdbcDataSourceRepository(
-            IDnsProvider dnsProvider,
+            IDsnProvider dsnProvider,
             IShipWorksOdbcProvider odbcProvider,
             IEncryptionProvider encryptionProvider,
             Func<Type, ILog> logFactory)
         {
             log = logFactory(typeof(OdbcDataSourceRepository));
 
-            this.dnsProvider = dnsProvider;
+            this.dsnProvider = dsnProvider;
             this.odbcProvider = odbcProvider;
             this.encryptionProvider = encryptionProvider;
         }
@@ -42,37 +43,17 @@ namespace ShipWorks.Stores.Platforms.Odbc
         {
             try
             {
-                List<OdbcDataSource> odbcDataSources = new List<OdbcDataSource>();
-
-                string nextOdbcDataSource = dnsProvider.GetNextDsnName();
-
-                while (nextOdbcDataSource != null)
+                return dsnProvider.GetDataSourceNames()
+                    .Select(name => new OdbcDataSource(odbcProvider, encryptionProvider)
                 {
-                    OdbcDataSource odbcDataSource = new OdbcDataSource(odbcProvider, encryptionProvider)
-                    {
-                        Name = nextOdbcDataSource
-                    };
-
-                    odbcDataSources.Add(odbcDataSource);
-
-                    nextOdbcDataSource = dnsProvider.GetNextDsnName();
-                }
-
-                return odbcDataSources;
+                    Name = name
+                });
             }
             catch (DataException ex)
             {
                 log.Error("Error in GetNextDsnName", ex);
                 throw;
             }
-        }
-
-        /// <summary>
-        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
-        /// </summary>
-        public void Dispose()
-        {
-            dnsProvider.Dispose();
         }
     }
 }

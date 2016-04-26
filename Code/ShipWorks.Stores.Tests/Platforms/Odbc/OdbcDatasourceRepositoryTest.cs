@@ -12,14 +12,13 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
     public class OdbcDatasourceRepositoryTest
     {
         [Fact]
-        public void GetDataSources_GetsDatasourceFromD()
+        public void GetDataSources_ReturnsDataSourceProviders_WithNamesFromDsnProvider()
         {
             using (var mock = AutoMock.GetLoose())
             {
-                Mock<IDnsProvider> dsnRetriever = mock.Mock<IDnsProvider>();
-                dsnRetriever.SetupSequence(retriever => retriever.GetNextDsnName())
-                    .Returns("blah")
-                    .Returns(null);
+                Mock<IDsnProvider> dsnProvider = mock.Mock<IDsnProvider>();
+                dsnProvider.Setup(p => p.GetDataSourceNames())
+                    .Returns(new[] {"blah"});
 
                 var testObject = mock.Create<OdbcDataSourceRepository>();
                 var odbcDataSources = testObject.GetDataSources();
@@ -28,18 +27,13 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         }
 
         [Fact]
-        public void GetDataSources_CollectionCountFive_WhenGetNextDsnNameReturnsFiveDsns()
+        public void GetDataSources_ReturnsCollectionOfFiveDataSources_WhenGetNextDsnNameReturnsFiveDsns()
         {
             using (var mock = AutoMock.GetLoose())
             {
-                Mock<IDnsProvider> dsnRetriever = mock.Mock<IDnsProvider>();
-                dsnRetriever.SetupSequence(retriever => retriever.GetNextDsnName())
-                    .Returns("1")
-                    .Returns("2")
-                    .Returns("3")
-                    .Returns("4")
-                    .Returns("5")
-                    .Returns(null);
+                Mock<IDsnProvider> dsnProvider = mock.Mock<IDsnProvider>();
+                dsnProvider.Setup(p => p.GetDataSourceNames())
+                    .Returns(new[] {"1", "2", "3", "4", "5"});
 
                 var testObject = mock.Create<OdbcDataSourceRepository>();
                 var odbcDataSources = testObject.GetDataSources();
@@ -52,8 +46,8 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         {
             using (var mock = AutoMock.GetLoose())
             {
-                Mock<IDnsProvider> dsnRetriever = mock.Mock<IDnsProvider>();
-                dsnRetriever.Setup(retriever => retriever.GetNextDsnName())
+                Mock<IDsnProvider> dsnProvider = mock.Mock<IDsnProvider>();
+                dsnProvider.Setup(provider => provider.GetDataSourceNames())
                     .Throws(new DataException());
 
                 var testObject = mock.Create<OdbcDataSourceRepository>();
@@ -73,8 +67,8 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
                     .Returns(log.Object);
                 mock.Provide(repo.Object);
 
-                Mock<IDnsProvider> dsnRetriever = mock.Mock<IDnsProvider>();
-                dsnRetriever.Setup(retriever => retriever.GetNextDsnName())
+                Mock<IDsnProvider> dsnRetriever = mock.Mock<IDsnProvider>();
+                dsnRetriever.Setup(retriever => retriever.GetDataSourceNames())
                     .Throws(new DataException());
 
                 var testObject = mock.Create<OdbcDataSourceRepository>();
@@ -88,23 +82,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
                     // suppress
                 }
 
-                //log.Verify(l => l.Error(It.Is<string>(s => s == "Error in GetNextDsnName"), It.IsAny<DataException>()));
                 log.Verify(l => l.Error(It.IsAny<string>(), It.IsAny<Exception>()));
-            }
-        }
-
-        [Fact]
-        public void Dispose_DelegatesToRetrieverDispose()
-        {
-            using (var mock = AutoMock.GetLoose())
-            {
-                var dsnRetriever = mock.Mock<IDnsProvider>();
-                using (mock.Create<OdbcDataSourceRepository>())
-                {
-                    
-                }
-
-                dsnRetriever.Verify(d=>d.Dispose(), Times.Once);
             }
         }
     }
