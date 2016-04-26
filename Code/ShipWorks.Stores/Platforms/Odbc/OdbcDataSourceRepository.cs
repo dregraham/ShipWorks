@@ -14,7 +14,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
         private readonly IDsnRetriever dsnRetriever;
         private readonly IShipWorksOdbcProvider odbcProvider;
         private readonly IEncryptionProvider encryptionProvider;
-        private ILog log;
+        private readonly ILog log;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcDataSourceRepository"/> class.

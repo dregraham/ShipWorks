@@ -42,6 +42,13 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         {
             log.Debug("Testing data source");
 
+            if (SelectedDataSource == null)
+            {
+                MessageHelper.ShowWarning(this, $"ShipWorks was unable to retrieve any DSN sources. {Environment.NewLine} " +
+                                                "Please add one to continue.");
+                return false;
+            }
+
             GenericResult<OdbcDataSource> connectionResult = SelectedDataSource.TestConnection();
 
             if (connectionResult.Success)
