@@ -11,7 +11,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
     /// </summary>
     public class OdbcDataSourceRepository : IOdbcDataSourceRepository
     {
-        private readonly IDsnRetriever dsnRetriever;
+        private readonly IDnsProvider dnsProvider;
         private readonly IShipWorksOdbcProvider odbcProvider;
         private readonly IEncryptionProvider encryptionProvider;
         private readonly ILog log;
@@ -20,14 +20,14 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// Initializes a new instance of the <see cref="OdbcDataSourceRepository"/> class.
         /// </summary>
         public OdbcDataSourceRepository(
-            IDsnRetriever dsnRetriever,
+            IDnsProvider dnsProvider,
             IShipWorksOdbcProvider odbcProvider,
             IEncryptionProvider encryptionProvider,
             Func<Type, ILog> logFactory)
         {
             log = logFactory(typeof(OdbcDataSourceRepository));
 
-            this.dsnRetriever = dsnRetriever;
+            this.dnsProvider = dnsProvider;
             this.odbcProvider = odbcProvider;
             this.encryptionProvider = encryptionProvider;
         }
@@ -44,7 +44,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
             {
                 List<OdbcDataSource> odbcDataSources = new List<OdbcDataSource>();
 
-                string nextOdbcDataSource = dsnRetriever.GetNextDsnName();
+                string nextOdbcDataSource = dnsProvider.GetNextDsnName();
 
                 while (nextOdbcDataSource != null)
                 {
@@ -55,7 +55,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
 
                     odbcDataSources.Add(odbcDataSource);
 
-                    nextOdbcDataSource = dsnRetriever.GetNextDsnName();
+                    nextOdbcDataSource = dnsProvider.GetNextDsnName();
                 }
 
                 return odbcDataSources;
@@ -72,7 +72,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// </summary>
         public void Dispose()
         {
-            dsnRetriever.Dispose();
+            dnsProvider.Dispose();
         }
     }
 }

@@ -9,7 +9,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
     /// Retrieves the list of Dsns.
     /// </summary>
     /// <seealso cref="System.IDisposable" />
-    public class DsnRetriever : IDsnRetriever
+    public class DnsProvider : IDnsProvider
     {
         private short dsnNameLength;
         private short dsnDescLength;
@@ -23,9 +23,9 @@ namespace ShipWorks.Stores.Platforms.Odbc
         private Odbc32.Direction direction = Odbc32.Direction.SQL_FETCH_FIRST;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DsnRetriever"/> class.
+        /// Initializes a new instance of the <see cref="DnsProvider"/> class.
         /// </summary>
-        public DsnRetriever()
+        public DnsProvider()
         {
             dsnName = new StringBuilder(MaxDsnLength);
             dsnDesc = new StringBuilder(128);

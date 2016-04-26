@@ -16,7 +16,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         {
             using (var mock = AutoMock.GetLoose())
             {
-                Mock<IDsnRetriever> dsnRetriever = mock.Mock<IDsnRetriever>();
+                Mock<IDnsProvider> dsnRetriever = mock.Mock<IDnsProvider>();
                 dsnRetriever.SetupSequence(retriever => retriever.GetNextDsnName())
                     .Returns("blah")
                     .Returns(null);
@@ -32,7 +32,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         {
             using (var mock = AutoMock.GetLoose())
             {
-                Mock<IDsnRetriever> dsnRetriever = mock.Mock<IDsnRetriever>();
+                Mock<IDnsProvider> dsnRetriever = mock.Mock<IDnsProvider>();
                 dsnRetriever.SetupSequence(retriever => retriever.GetNextDsnName())
                     .Returns("1")
                     .Returns("2")
@@ -52,7 +52,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         {
             using (var mock = AutoMock.GetLoose())
             {
-                Mock<IDsnRetriever> dsnRetriever = mock.Mock<IDsnRetriever>();
+                Mock<IDnsProvider> dsnRetriever = mock.Mock<IDnsProvider>();
                 dsnRetriever.Setup(retriever => retriever.GetNextDsnName())
                     .Throws(new DataException());
 
@@ -73,7 +73,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
                     .Returns(log.Object);
                 mock.Provide(repo.Object);
 
-                Mock<IDsnRetriever> dsnRetriever = mock.Mock<IDsnRetriever>();
+                Mock<IDnsProvider> dsnRetriever = mock.Mock<IDnsProvider>();
                 dsnRetriever.Setup(retriever => retriever.GetNextDsnName())
                     .Throws(new DataException());
 
@@ -98,7 +98,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         {
             using (var mock = AutoMock.GetLoose())
             {
-                var dsnRetriever = mock.Mock<IDsnRetriever>();
+                var dsnRetriever = mock.Mock<IDnsProvider>();
                 using (mock.Create<OdbcDataSourceRepository>())
                 {
                     
