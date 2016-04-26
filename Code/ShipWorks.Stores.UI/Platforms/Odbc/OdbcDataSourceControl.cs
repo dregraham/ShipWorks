@@ -35,24 +35,39 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         {
             CheckForCredentials();
 
+            if (SelectedDataSource == null)
+            {
+                return new GenericResult<OdbcDataSource>(null)
+                {
+                    Message = "Please select a data source.", Success = false
+                };
+            }
+
             return SelectedDataSource.TestConnection();
         }
 
         /// <summary>
         /// Saves the connection string to the OdbcStoreEntity
         /// </summary>
-        public bool SaveToEntity(OdbcStoreEntity store)
+        public GenericResult<StoreEntity> SaveToEntity(OdbcStoreEntity store)
         {
             if (SelectedDataSource == null)
             {
-                MessageHelper.ShowError(this, "Please select a data source.");
-                return false;
+                return new GenericResult<StoreEntity>(store)
+                {
+                    Message = "Please select a data source.",
+                    Success = false
+                };
             }
 
             CheckForCredentials();
 
             store.ConnectionString = SelectedDataSource.ConnectionString;
-            return true;
+            return new GenericResult<StoreEntity>(store)
+            {
+                Message = string.Empty,
+                Success = true
+            };
         }
 
         /// <summary>
@@ -95,6 +110,11 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
                 {
                     dataSourceComboBox.DataSource = repo.GetDataSources();
                     dataSourceComboBox.DisplayMember = "Name";
+
+                    if (dataSourceComboBox.SelectedItem != null)
+                    {
+                        SelectedDataSource = (OdbcDataSource)dataSourceComboBox.SelectedItem;
+                    }
                 }
                 catch (DataException)
                 {

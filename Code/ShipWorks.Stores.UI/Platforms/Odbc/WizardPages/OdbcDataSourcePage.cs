@@ -51,16 +51,18 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
             {
                 log.Error($"Odbc data source connected successfully.");
 
+                GenericResult<StoreEntity> saveResult = odbcDataSourceControl.SaveToEntity(store);
                 // Save the entity, if it fails stay on this page
-                if (!odbcDataSourceControl.SaveToEntity(store))
+                if (!saveResult.Success)
                 {
+                    MessageHelper.ShowError(this, saveResult.Message);
                     e.NextPage = this;
                 }
             }
             else
             {
                 // display error if the connection fails
-                MessageHelper.ShowError(this, $"ShipWorks was unable to connect to the ODBC data source. {Environment.NewLine} {result.Message}");
+                MessageHelper.ShowError(this, $"ShipWorks was unable to connect to the ODBC data source. {Environment.NewLine}{result.Message}");
                 log.Error($"Odbc data source connection failed: {result.Message}");
 
                 e.NextPage = this;
