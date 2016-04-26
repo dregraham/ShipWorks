@@ -70,6 +70,9 @@
       <HintPath>..\..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Moq, Version=4.2.1510.2205, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Moq.4.2.1510.2205\lib\net40\Moq.dll</HintPath>
       <Private>True</Private>
@@ -138,6 +141,7 @@
     <Compile Include="Platforms\LemonStand\LemonStandStoreTypeTest.cs" />
     <Compile Include="Platforms\Odbc\OdbcDatasourceRepositoryTest.cs" />
     <Compile Include="Platforms\Odbc\OdbcDataSourceTest.cs" />
+    <Compile Include="Platforms\Odbc\OdbcShipWorksDbProviderFactoryTest.cs" />
     <Compile Include="Platforms\Yahoo\EmbeddedResourceHelper.cs" />
     <Compile Include="Platforms\Yahoo\YahooApiDownloaderTest.cs" />
     <Compile Include="Platforms\Yahoo\YahooApiOnlineUpdaterTest.cs" />

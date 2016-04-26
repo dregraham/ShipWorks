@@ -32,7 +32,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// <summary>
         /// Gets the selected data source.
         /// </summary>
-        private OdbcDataSource SelectedDataSource => 
+        private OdbcDataSource SelectedDataSource =>
             dataSource.SelectedItem as OdbcDataSource;
 
         /// <summary>
@@ -44,7 +44,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
 
             if (SelectedDataSource == null)
             {
-                MessageHelper.ShowWarning(this, $"ShipWorks was unable to retrieve any DSN sources. {Environment.NewLine} " +
+                MessageHelper.ShowWarning(this, $"ShipWorks could not find any ODBC data sources. {Environment.NewLine} " +
                                                 "Please add one to continue.");
                 return false;
             }
@@ -68,7 +68,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// <summary>
         /// Saves the connection string to the OdbcStoreEntity
         /// </summary>
-        public void SaveToEntity(OdbcStoreEntity store) => 
+        public void SaveToEntity(OdbcStoreEntity store) =>
             store.ConnectionString = SelectedDataSource.ConnectionString;
 
         /// <summary>
@@ -110,7 +110,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
                 {
                     log.Error("Error thrown by repo.GetDataSources", ex);
                     dataSource.DataSource = null;
-                    MessageHelper.ShowError(this, "ShipWorks encounterred an error retrieving DSN sources. " +
+                    MessageHelper.ShowError(this, "ShipWorks encountered an error retrieving DSN sources. " +
                                                   $"{Environment.NewLine}{Environment.NewLine}{ex.Message}");
                 }
             }
@@ -125,7 +125,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// <summary>
         /// Called when leaving password
         /// </summary>
-        private void OnLeavePassword(object sender, EventArgs e) => 
+        private void OnLeavePassword(object sender, EventArgs e) =>
             SelectedDataSource.Password = password.Text;
     }
 }

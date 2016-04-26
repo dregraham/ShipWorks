@@ -6,7 +6,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
     /// <summary>
     /// Class for obtaining odbc resources with interface that can be mocked up for testing purposes
     /// </summary>
-    public class ShipWorksOdbcProvider : IShipWorksOdbcProvider
+    public class OdbcShipWorksDbProviderFactory : IShipWorksDbProviderFactory
     {
         /// <summary>
         /// Returns an OdbcConnection

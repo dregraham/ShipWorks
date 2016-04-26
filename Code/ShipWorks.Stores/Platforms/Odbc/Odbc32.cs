@@ -5,44 +5,59 @@ using System.Text;
 
 namespace ShipWorks.Stores.Platforms.Odbc
 {
+    /// <summary>
+    /// Class for interacting with the odbc32.dll
+    /// </summary>
     public static class Odbc32
     {
         // API return values from functions (from sql.h)
-        public const int SQL_SUCCESS = 0;
-        public const int SQL_SUCCESS_WITH_INFO = 1;
-        public const int SQL_NO_DATA = 100;
-        public const int SQL_ERROR = -1;
-        public const int SQL_INVALID_HANDLE = -2;
-        public const int SQL_STILL_EXECUTING = 2;
-        public const int SQL_NEED_DATA = 99;
+        public const int SqlSuccess = 0;
+        public const int SqlSuccessWithInfo = 1;
+        public const int SqlNoData = 100;
+        public const int SqlError = -1;
+        public const int SqlInvalidHandle = -2;
+        public const int SqlStillExecuting = 2;
+        public const int SqlNeedData = 99;
 
-        // test for SQL_SUCCESS or SQL_SUCCESS_WITH_INFO
-        public static bool SQL_SUCCEEDED(int rc)
+        // test for SqlSuccess or SqlSuccessWithInfo
+        public static bool SqlSucceeded(int rc)
         {
             return (rc & (~1)) == 0;
         }
 
+        /// <summary>
+        /// Sql fetch direction
+        /// </summary>
         public enum Direction : short
         {
-            SQL_FETCH_NEXT = 1,
-            SQL_FETCH_FIRST = 2,
-            SQL_FETCH_LAST = 3,
-            SQL_FETCH_PRIOR = 4,
-            SQL_FETCH_ABSOLUTE = 5,
-            SQL_FETCH_RELATIVE = 6,
+            SqlFetchNext = 1,
+            SqlFetchFirst = 2,
+            SqlFetchLast = 3,
+            SqlFetchPrior = 4,
+            SqlFetchAbsolute = 5,
+            SqlFetchRelative = 6,
         }
 
+        /// <summary>
+        /// Sql handle type
+        /// </summary>
         public enum HandleType
         {
-            SQL_HANDLE_ENV = 1,
-            SQL_HANDLE_DBC = 2,
-            SQL_HANDLE_STMT = 3,
-            SQL_HANDLE_DESC = 4,
+            SqlHandleEnv = 1,
+            SqlHandleDbc = 2,
+            SqlHandleStmt = 3,
+            SqlHandleDesc = 4,
         }
 
+        /// <summary>
+        /// The Sql alloc handle.
+        /// </summary>
         [DllImport("odbc32.dll", CharSet = CharSet.Auto)]
         public extern static short SQLAllocHandle(HandleType handleType, int inputHandle, out IntPtr outputHandle);
 
+        /// <summary>
+        /// Sql data sources
+        /// </summary>
         [DllImport("odbc32.dll", CharSet = CharSet.Auto)]
         [NDependIgnoreTooManyParams]
         public static extern short SQLDataSources(
@@ -55,9 +70,15 @@ namespace ShipWorks.Stores.Platforms.Odbc
            short bufferLength2,
            ref short nameLength2Ptr);
 
+        /// <summary>
+        /// Free SQL handle
+        /// </summary>
         [DllImport("odbc32.dll", CharSet = CharSet.Unicode)]
         public static extern short SQLFreeHandle(HandleType handleType, IntPtr inputHandle);
 
+        /// <summary>
+        /// Sets SQL env attr
+        /// </summary>
         [DllImport("odbc32.dll", SetLastError = true)]
         public static extern short SQLSetEnvAttr(
             IntPtr envHandle,

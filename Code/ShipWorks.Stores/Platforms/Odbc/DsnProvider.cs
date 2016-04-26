@@ -21,7 +21,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
         private const int SqlAttrOdbcVersion = 200;
         private const int SqlOvOdbc3 = 3;
         private const int MaxDsnLength = 32;
-        private Odbc32.Direction direction = Odbc32.Direction.SQL_FETCH_FIRST;
+        private Odbc32.Direction direction = Odbc32.Direction.SqlFetchFirst;
 
         /// <summary>
         /// Gets the available data sources.
@@ -52,8 +52,8 @@ namespace ShipWorks.Stores.Platforms.Odbc
             {
                 if (sqlEnvHandle != IntPtr.Zero)
                 {
-                    short rc = Odbc32.SQLFreeHandle(Odbc32.HandleType.SQL_HANDLE_ENV, sqlEnvHandle);
-                    if (rc != Odbc32.SQL_SUCCESS)
+                    short rc = Odbc32.SQLFreeHandle(Odbc32.HandleType.SqlHandleEnv, sqlEnvHandle);
+                    if (rc != Odbc32.SqlSuccess)
                     {
                         throw new DataException("Could not free ODBC Environment handle");
                     }
@@ -82,18 +82,18 @@ namespace ShipWorks.Stores.Platforms.Odbc
                 dsnName, (short) dsnName.Capacity, ref dsnNameLength,
                 dsnDesc, (short) dsnDesc.Capacity, ref dsnDescLength);
             
-            if (resultCode != Odbc32.SQL_SUCCESS && resultCode != Odbc32.SQL_NO_DATA)
+            if (resultCode != Odbc32.SqlSuccess && resultCode != Odbc32.SqlNoData)
             {
                 throw new DataException("Error getting ODBC Data Sources");
             }
 
             string nextDsnName = null;
-            if (resultCode == Odbc32.SQL_SUCCESS)
+            if (resultCode == Odbc32.SqlSuccess)
             {
                 nextDsnName = dsnName.ToString();
             }
 
-            direction = Odbc32.Direction.SQL_FETCH_NEXT;
+            direction = Odbc32.Direction.SqlFetchNext;
 
             return nextDsnName;
         }
@@ -116,14 +116,14 @@ namespace ShipWorks.Stores.Platforms.Odbc
 
             sqlEnvHandle = IntPtr.Zero;
 
-            short rc = Odbc32.SQLAllocHandle(Odbc32.HandleType.SQL_HANDLE_ENV, 0, out sqlEnvHandle);
-            if (rc != Odbc32.SQL_SUCCESS)
+            short rc = Odbc32.SQLAllocHandle(Odbc32.HandleType.SqlHandleEnv, 0, out sqlEnvHandle);
+            if (rc != Odbc32.SqlSuccess)
             {
                 throw new DataException("Could not allocate ODBC Environment handle");
             }
 
             rc = Odbc32.SQLSetEnvAttr(sqlEnvHandle, SqlAttrOdbcVersion, (IntPtr)SqlOvOdbc3, 0);
-            if (rc != Odbc32.SQL_SUCCESS)
+            if (rc != Odbc32.SqlSuccess)
             {
                 throw new DataException("Could not setup ODBC Environment handle");
             }

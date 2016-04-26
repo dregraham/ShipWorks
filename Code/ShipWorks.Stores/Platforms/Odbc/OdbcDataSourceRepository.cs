@@ -13,7 +13,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
     public class OdbcDataSourceRepository : IOdbcDataSourceRepository
     {
         private readonly IDsnProvider dsnProvider;
-        private readonly IShipWorksOdbcProvider odbcProvider;
+        private readonly IShipWorksDbProviderFactory odbcProvider;
         private readonly IEncryptionProvider encryptionProvider;
         private readonly ILog log;
 
@@ -22,7 +22,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// </summary>
         public OdbcDataSourceRepository(
             IDsnProvider dsnProvider,
-            IShipWorksOdbcProvider odbcProvider,
+            IShipWorksDbProviderFactory odbcProvider,
             IEncryptionProvider encryptionProvider,
             Func<Type, ILog> logFactory)
         {

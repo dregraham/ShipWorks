@@ -115,7 +115,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             {
                 var connection = mock.Mock<IDbConnection>();
 
-                var odbcProvider = mock.Mock<IShipWorksOdbcProvider>();
+                var odbcProvider = mock.Mock<IShipWorksDbProviderFactory>();
                 odbcProvider.Setup(p => p.CreateOdbcConnection())
                     .Returns(connection.Object);
 
@@ -134,7 +134,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             {
                 var connection = mock.Mock<IDbConnection>();
 
-                var odbcProvider = mock.Mock<IShipWorksOdbcProvider>();
+                var odbcProvider = mock.Mock<IShipWorksDbProviderFactory>();
                 odbcProvider.Setup(p => p.CreateOdbcConnection())
                     .Returns(connection.Object);
 
@@ -154,7 +154,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             {
                 var connection = mock.Mock<IDbConnection>();
 
-                var odbcProvider = mock.Mock<IShipWorksOdbcProvider>();
+                var odbcProvider = mock.Mock<IShipWorksDbProviderFactory>();
                 odbcProvider.Setup(p => p.CreateOdbcConnection())
                     .Returns(connection.Object);
 
@@ -175,7 +175,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
                 connection.Setup(con => con.Open())
                     .Throws<Exception>();
 
-                var odbcProvider = mock.Mock<IShipWorksOdbcProvider>();
+                var odbcProvider = mock.Mock<IShipWorksDbProviderFactory>();
                 odbcProvider.Setup(p => p.CreateOdbcConnection())
                     .Returns(connection.Object);
 
@@ -196,7 +196,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
                 connection.Setup(con => con.Open())
                     .Throws(new Exception("bloop"));
 
-                var odbcProvider = mock.Mock<IShipWorksOdbcProvider>();
+                var odbcProvider = mock.Mock<IShipWorksDbProviderFactory>();
                 odbcProvider.Setup(p => p.CreateOdbcConnection())
                     .Returns(connection.Object);
 

@@ -9,20 +9,20 @@ namespace ShipWorks.Stores.Platforms.Odbc
     /// </summary>
     public class OdbcDataSource
     {
-        private readonly IShipWorksOdbcProvider odbcProvider;
+        private readonly IShipWorksDbProviderFactory odbcProvider;
         private readonly IEncryptionProvider encryptionProvider;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public OdbcDataSource(IShipWorksOdbcProvider odbcProvider, IEncryptionProvider encryptionProvider)
+        public OdbcDataSource(IShipWorksDbProviderFactory odbcProvider, IEncryptionProvider encryptionProvider)
         {
             this.odbcProvider = odbcProvider;
             this.encryptionProvider = encryptionProvider;
         }
 
         /// <summary>
-        /// Gets or sets the DSN name.
+        /// Name of the data source
         /// </summary>
         public string Name { get; set; }
 
@@ -39,33 +39,36 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// <summary>
         /// Gets the unencrypted connection string.
         /// </summary>
-        private string UnencryptedConnectionString
+        private string BuildConnectionString()
         {
-            get
-            {
-                string connectionString = string.Empty;
+            string connectionString = string.Empty;
 
-                if (!string.IsNullOrWhiteSpace(Name))
-                {
-                    connectionString = $"DSN={Name};";
-                }
-                if (!string.IsNullOrWhiteSpace(Username))
-                {
-                    connectionString += $"Uid={Username};";
-                }
-                if (!string.IsNullOrWhiteSpace(Password))
-                {
-                    connectionString += $"Pwd={Password};";
-                }
-                return connectionString;
+            if (!string.IsNullOrWhiteSpace(Name))
+            {
+                connectionString = $"DSN={Name};";
             }
+
+            if (!string.IsNullOrWhiteSpace(Username))
+            {
+                connectionString += $"Uid={Username};";
+            }
+
+            if (!string.IsNullOrWhiteSpace(Password))
+            {
+                connectionString += $"Pwd={Password};";
+            }
+
+            return connectionString;
         }
 
         /// <summary>
         /// Gets the encrypted connection string.
         /// </summary>
+        /// <remarks>
+        /// Connection string is encrypted due to the possibility of containing a password.
+        /// </remarks>
         public string ConnectionString =>
-            encryptionProvider.Encrypt(UnencryptedConnectionString);
+            encryptionProvider.Encrypt(BuildConnectionString());
 
         /// <summary>
         /// Tests the connection.
@@ -83,8 +86,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
             {
                 try
                 {
-                    connection.ConnectionString = UnencryptedConnectionString;
-
+                    connection.ConnectionString = BuildConnectionString();
                     connection.Open();
 
                     testResult.Success = true;
