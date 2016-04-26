@@ -61,6 +61,7 @@
             // 
             // dataSourceComboBox
             // 
+            this.dataSourceComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.dataSourceComboBox.FormattingEnabled = true;
             this.dataSourceComboBox.Location = new System.Drawing.Point(106, 38);
             this.dataSourceComboBox.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
@@ -76,6 +77,7 @@
             this.usernameTextBox.Name = "usernameTextBox";
             this.usernameTextBox.Size = new System.Drawing.Size(228, 21);
             this.usernameTextBox.TabIndex = 3;
+            this.usernameTextBox.TextChanged += new System.EventHandler(this.OnCredentialsTextChanged);
             // 
             // passwordTextBox
             // 
@@ -85,6 +87,7 @@
             this.passwordTextBox.Size = new System.Drawing.Size(228, 21);
             this.passwordTextBox.TabIndex = 4;
             this.passwordTextBox.UseSystemPasswordChar = true;
+            this.passwordTextBox.TextChanged += new System.EventHandler(this.OnCredentialsTextChanged);
             // 
             // passwordLabel
             // 

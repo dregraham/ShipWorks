@@ -33,8 +33,6 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// </summary>
         public GenericResult<OdbcDataSource> TestConnection()
         {
-            CheckForCredentials();
-
             if (SelectedDataSource == null)
             {
                 return new GenericResult<OdbcDataSource>(null)
@@ -60,30 +58,12 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
                 };
             }
 
-            CheckForCredentials();
-
             store.ConnectionString = SelectedDataSource.ConnectionString;
             return new GenericResult<StoreEntity>(store)
             {
                 Message = string.Empty,
                 Success = true
             };
-        }
-
-        /// <summary>
-        /// Checks if the username and password textboxes have values and saves them to the data source.
-        /// </summary>
-        private void CheckForCredentials()
-        {
-            if (!string.IsNullOrWhiteSpace(usernameTextBox.Text))
-            {
-                SelectedDataSource.Username = usernameTextBox.Text;
-            }
-
-            if (!string.IsNullOrWhiteSpace(passwordTextBox.Text))
-            {
-                SelectedDataSource.Password = passwordTextBox.Text;
-            }
         }
 
         /// <summary>
@@ -121,6 +101,15 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
                     // getting data sources failed.
                 }
             }
+        }
+
+        /// <summary>
+        /// Called when [credentials text changed].
+        /// </summary>
+        private void OnCredentialsTextChanged(object sender, System.EventArgs e)
+        {
+            SelectedDataSource.Username = usernameTextBox.Text;
+            SelectedDataSource.Password = passwordTextBox.Text;
         }
     }
 }
