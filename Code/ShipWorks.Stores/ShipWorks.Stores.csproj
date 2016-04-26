@@ -134,9 +134,13 @@
     <Compile Include="Platforms\LemonStand\LemonStandStatusCodeProvider.cs" />
     <Compile Include="Platforms\LemonStand\LemonStandStoreType.cs" />
     <Compile Include="Platforms\LemonStand\LemonStandWebClient.cs" />
+    <Compile Include="Platforms\Odbc\DsnRetriever.cs" />
+    <Compile Include="Platforms\Odbc\IDsnRetriever.cs" />
     <Compile Include="Platforms\Odbc\IOdbcDataSourceRepository.cs" />
     <Compile Include="Platforms\Odbc\IShipWorksOdbcProvider.cs" />
+    <Compile Include="Platforms\Odbc\Odbc32.cs" />
     <Compile Include="Platforms\Odbc\OdbcDataSource.cs" />
+    <Compile Include="Platforms\Odbc\OdbcDataSourceRepository.cs" />
     <Compile Include="Platforms\Odbc\OdbcStoreType.cs" />
     <Compile Include="Platforms\Odbc\ShipWorksOdbcProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
