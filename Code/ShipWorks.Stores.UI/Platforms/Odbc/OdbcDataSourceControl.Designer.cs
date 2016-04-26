@@ -134,7 +134,6 @@
             this.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.Name = "OdbcDataSourceControl";
             this.Size = new System.Drawing.Size(433, 209);
-            this.Load += new System.EventHandler(this.OnLoad);
             this.ResumeLayout(false);
             this.PerformLayout();
 

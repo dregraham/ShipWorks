@@ -5,6 +5,7 @@ using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Odbc;
+using System.Data;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc
 {
@@ -91,8 +92,15 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             {
                 IOdbcDataSourceRepository repo = scope.Resolve<IOdbcDataSourceRepository>();
 
-                dataSourceComboBox.DataSource = repo.GetDataSources();
-                dataSourceComboBox.DisplayMember = "Name";
+                try
+                {
+                    dataSourceComboBox.DataSource = repo.GetDataSources();
+                    dataSourceComboBox.DisplayMember = "Name";
+                }
+                catch (DataException)
+                {
+                    // getting data sources failed.
+                }
             }
         }
     }
