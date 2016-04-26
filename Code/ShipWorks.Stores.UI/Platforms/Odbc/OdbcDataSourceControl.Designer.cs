@@ -30,9 +30,9 @@
         {
             this.selectDataSourceLabel = new System.Windows.Forms.Label();
             this.dataSourceLabel = new System.Windows.Forms.Label();
-            this.dataSourceComboBox = new System.Windows.Forms.ComboBox();
-            this.usernameTextBox = new System.Windows.Forms.TextBox();
-            this.passwordTextBox = new System.Windows.Forms.TextBox();
+            this.dataSource = new System.Windows.Forms.ComboBox();
+            this.username = new System.Windows.Forms.TextBox();
+            this.password = new System.Windows.Forms.TextBox();
             this.passwordLabel = new System.Windows.Forms.Label();
             this.usernameLabel = new System.Windows.Forms.Label();
             this.credentialsOptionalLabel = new System.Windows.Forms.Label();
@@ -61,33 +61,33 @@
             // 
             // dataSourceComboBox
             // 
-            this.dataSourceComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.dataSourceComboBox.FormattingEnabled = true;
-            this.dataSourceComboBox.Location = new System.Drawing.Point(106, 38);
-            this.dataSourceComboBox.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this.dataSourceComboBox.Name = "dataSourceComboBox";
-            this.dataSourceComboBox.Size = new System.Drawing.Size(249, 21);
-            this.dataSourceComboBox.TabIndex = 2;
-            this.dataSourceComboBox.SelectionChangeCommitted += new System.EventHandler(this.SelectedDataSourceChanged);
+            this.dataSource.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.dataSource.FormattingEnabled = true;
+            this.dataSource.Location = new System.Drawing.Point(106, 38);
+            this.dataSource.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.dataSource.Name = "dataSource";
+            this.dataSource.Size = new System.Drawing.Size(249, 21);
+            this.dataSource.TabIndex = 2;
+            this.dataSource.SelectionChangeCommitted += new System.EventHandler(this.SelectedDataSourceChanged);
             // 
             // usernameTextBox
             // 
-            this.usernameTextBox.Location = new System.Drawing.Point(126, 103);
-            this.usernameTextBox.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this.usernameTextBox.Name = "usernameTextBox";
-            this.usernameTextBox.Size = new System.Drawing.Size(228, 21);
-            this.usernameTextBox.TabIndex = 3;
-            this.usernameTextBox.TextChanged += new System.EventHandler(this.OnCredentialsTextChanged);
+            this.username.Location = new System.Drawing.Point(126, 103);
+            this.username.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.username.Name = "username";
+            this.username.Size = new System.Drawing.Size(228, 21);
+            this.username.TabIndex = 3;
+            this.username.Leave += new System.EventHandler(this.OnLeaveUsername);
             // 
             // passwordTextBox
             // 
-            this.passwordTextBox.Location = new System.Drawing.Point(126, 129);
-            this.passwordTextBox.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this.passwordTextBox.Name = "passwordTextBox";
-            this.passwordTextBox.Size = new System.Drawing.Size(228, 21);
-            this.passwordTextBox.TabIndex = 4;
-            this.passwordTextBox.UseSystemPasswordChar = true;
-            this.passwordTextBox.TextChanged += new System.EventHandler(this.OnCredentialsTextChanged);
+            this.password.Location = new System.Drawing.Point(126, 129);
+            this.password.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.password.Name = "password";
+            this.password.Size = new System.Drawing.Size(228, 21);
+            this.password.TabIndex = 4;
+            this.password.UseSystemPasswordChar = true;
+            this.password.Leave += new System.EventHandler(this.OnLeavePassword);
             // 
             // passwordLabel
             // 
@@ -128,9 +128,9 @@
             this.Controls.Add(this.credentialsOptionalLabel);
             this.Controls.Add(this.usernameLabel);
             this.Controls.Add(this.passwordLabel);
-            this.Controls.Add(this.passwordTextBox);
-            this.Controls.Add(this.usernameTextBox);
-            this.Controls.Add(this.dataSourceComboBox);
+            this.Controls.Add(this.password);
+            this.Controls.Add(this.username);
+            this.Controls.Add(this.dataSource);
             this.Controls.Add(this.dataSourceLabel);
             this.Controls.Add(this.selectDataSourceLabel);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -146,9 +146,9 @@
 
         private System.Windows.Forms.Label selectDataSourceLabel;
         private System.Windows.Forms.Label dataSourceLabel;
-        private System.Windows.Forms.ComboBox dataSourceComboBox;
-        private System.Windows.Forms.TextBox usernameTextBox;
-        private System.Windows.Forms.TextBox passwordTextBox;
+        private System.Windows.Forms.ComboBox dataSource;
+        private System.Windows.Forms.TextBox username;
+        private System.Windows.Forms.TextBox password;
         private System.Windows.Forms.Label passwordLabel;
         private System.Windows.Forms.Label usernameLabel;
         private System.Windows.Forms.Label credentialsOptionalLabel;

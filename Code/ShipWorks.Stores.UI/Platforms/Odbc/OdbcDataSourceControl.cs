@@ -1,9 +1,13 @@
 ﻿using Autofac;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
+using log4net;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Odbc;
+using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Windows.Forms;
 
@@ -14,6 +18,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
     /// </summary>
     public partial class OdbcDataSourceControl : UserControl
     {
+        private ILog log;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcDataSourceControl"/> class.
@@ -21,60 +26,51 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         public OdbcDataSourceControl()
         {
             InitializeComponent();
+            log = LogManager.GetLogger(typeof(OdbcDataSourceControl));
         }
 
         /// <summary>
-        /// Gets or sets the selected data source.
+        /// Gets the selected data source.
         /// </summary>
-        private OdbcDataSource SelectedDataSource { get; set; }
+        private OdbcDataSource SelectedDataSource => 
+            dataSource.SelectedItem as OdbcDataSource;
 
         /// <summary>
         /// Tests the connection.
         /// </summary>
-        public GenericResult<OdbcDataSource> TestConnection()
+        public bool TestConnection()
         {
-            if (SelectedDataSource == null)
+            log.Debug("Testing data source");
+
+            GenericResult<OdbcDataSource> connectionResult = SelectedDataSource.TestConnection();
+
+            if (connectionResult.Success)
             {
-                return new GenericResult<OdbcDataSource>(null)
-                {
-                    Message = "Please select a data source.", Success = false
-                };
+                log.Error("Odbc data source connected successfully.");
+            }
+            else
+            {
+                log.Error($"Odbc data source connection failed: {connectionResult.Message}");
+                MessageHelper.ShowError(this, "ShipWorks was unable to connect to the ODBC data source. " +
+                                              $"{Environment.NewLine}{Environment.NewLine}{connectionResult.Message}");
             }
 
-            return SelectedDataSource.TestConnection();
+            return connectionResult.Success;
         }
 
         /// <summary>
         /// Saves the connection string to the OdbcStoreEntity
         /// </summary>
-        public GenericResult<StoreEntity> SaveToEntity(OdbcStoreEntity store)
-        {
-            if (SelectedDataSource == null)
-            {
-                return new GenericResult<StoreEntity>(store)
-                {
-                    Message = "Please select a data source.",
-                    Success = false
-                };
-            }
-
+        public void SaveToEntity(OdbcStoreEntity store) => 
             store.ConnectionString = SelectedDataSource.ConnectionString;
-            return new GenericResult<StoreEntity>(store)
-            {
-                Message = string.Empty,
-                Success = true
-            };
-        }
 
         /// <summary>
         /// Sets the selected data source
         /// </summary>
-        private void SelectedDataSourceChanged(object sender, System.EventArgs e)
+        private void SelectedDataSourceChanged(object sender, EventArgs e)
         {
-            if (dataSourceComboBox.SelectedItem != null)
-            {
-                SelectedDataSource = (OdbcDataSource) dataSourceComboBox.SelectedItem;
-            }
+            username.Text = SelectedDataSource?.Username ?? string.Empty;
+            password.Text = SelectedDataSource?.Password ?? string.Empty;
         }
 
         /// <summary>
@@ -88,28 +84,41 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
 
                 try
                 {
-                    dataSourceComboBox.DataSource = repo.GetDataSources();
-                    dataSourceComboBox.DisplayMember = "Name";
+                    IEnumerable<OdbcDataSource> dataSources = repo.GetDataSources();
 
-                    if (dataSourceComboBox.SelectedItem != null)
+                    if (dataSources.None())
                     {
-                        SelectedDataSource = (OdbcDataSource)dataSourceComboBox.SelectedItem;
+                        dataSource.DataSource = null;
+
+                        log.Warn("No datasources retrieved from IOdbcDataSourceRepository");
+                        MessageHelper.ShowWarning(this, "ShipWorks was unable to retrieve any DSN sources.");
+                    }
+                    else
+                    {
+                        dataSource.DataSource = dataSources;
+                        dataSource.DisplayMember = "Name";
                     }
                 }
-                catch (DataException)
+                catch (DataException ex)
                 {
-                    // getting data sources failed.
+                    log.Error("Error thrown by repo.GetDataSources", ex);
+                    dataSource.DataSource = null;
+                    MessageHelper.ShowError(this, "ShipWorks encounterred an error retrieving DSN sources. " +
+                                                  $"{Environment.NewLine}{Environment.NewLine}{ex.Message}");
                 }
             }
         }
 
         /// <summary>
-        /// Called when [credentials text changed].
+        /// Called when leaving the username
         /// </summary>
-        private void OnCredentialsTextChanged(object sender, System.EventArgs e)
-        {
-            SelectedDataSource.Username = usernameTextBox.Text;
-            SelectedDataSource.Password = passwordTextBox.Text;
-        }
+        private void OnLeaveUsername(object sender, EventArgs e) =>
+            SelectedDataSource.Username = username.Text;
+
+        /// <summary>
+        /// Called when leaving password
+        /// </summary>
+        private void OnLeavePassword(object sender, EventArgs e) => 
+            SelectedDataSource.Password = password.Text;
     }
 }

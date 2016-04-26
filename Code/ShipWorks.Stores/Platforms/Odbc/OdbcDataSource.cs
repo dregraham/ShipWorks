@@ -34,7 +34,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// <summary>
         /// Gets or sets the password.
         /// </summary>
-        public string Password { private get; set; }
+        public string Password { get; set; }
 
         /// <summary>
         /// Gets the unencrypted connection string.
