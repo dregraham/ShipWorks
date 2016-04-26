@@ -1,5 +1,4 @@
-﻿using System.Web.Services.Protocols;
-using Xunit;
+﻿using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
@@ -7,18 +6,16 @@ using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools.WebServices.Registration;
-using ShipWorks.Shipping.Carriers.UPS.OpenAccount;
 using ShipWorks.Shipping.Carriers.UPS.OpenAccount.Api;
 using ShipWorks.Shipping.Carriers.UPS.WebServices.OpenAccount;
 using System;
-using ShipWorks.Tests.Shipping.Carriers.UPS;
-using System.Xml;
-using System.Xml.Linq;
+using Autofac;
 using ShipWorks.Shipping.Carriers.UPS.InvoiceRegistration;
+using Autofac.Extras.Moq;
 
-namespace ShipWorks.Tests.Shipping.Carriers.UPS.OpenAccount
+namespace ShipWorks.Tests.Shipping.Carriers.UPS
 {
-    public class UpsClerkTest
+    public class UpsClerkTest : IDisposable
     {
         private UpsClerk testObject;
 
@@ -39,18 +36,37 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OpenAccount
 
         UpsWebServiceException upsWebService9570100Exception = new UpsWebServiceException("9570100");
         UpsWebServiceException upsWebService100Exception = new UpsWebServiceException("100");
+        private readonly AutoMock mock1;
+        private readonly AutoMock mock2;
+        private AutoMock mock3;
 
         public UpsClerkTest()
         {
-            openAccountCarrierResponse = new Mock<ICarrierResponse>();
+            mock1 = AutoMock.GetLoose();
+            mock2 = AutoMock.GetLoose();
+            mock3 = AutoMock.GetLoose();
+
+            openAccountRequestFactory = mock1.Mock<IUpsOpenAccountRequestFactory>();
+
+            openAccountCarrierResponse = mock1.Mock<ICarrierResponse>();
             openAccountCarrierResponse.Setup(r => r.NativeResponse).Returns(nativeOpenAccountResponse);
             openAccountCarrierResponse.Setup(r => r.Process());
 
-            openAccountRequest = new Mock<CarrierRequest>();
+            openAccountRequest = mock1.Mock<CarrierRequest>();
             openAccountRequest.Setup(c => c.Submit()).Returns(openAccountCarrierResponse.Object);
 
-            openAccountRequestFactory = new Mock<IUpsOpenAccountRequestFactory>();
-            openAccountRequestFactory.Setup(f => f.CreateOpenAccountRequest(It.IsAny<OpenAccountRequest>())).Returns(openAccountRequest.Object);
+            openAccountRequestFactory
+                .Setup(f => f.CreateOpenAccountRequest(It.IsAny<OpenAccountRequest>()))
+                .Returns(openAccountRequest.Object);
+
+            var linkAccountResponse = mock2.Mock<ICarrierResponse>();
+            
+            var linkAccountRequest = mock2.Mock<CarrierRequest>();
+            linkAccountRequest.Setup(r => r.Submit()).Returns(linkAccountResponse.Object);
+
+            openAccountRequestFactory
+                .Setup(f => f.CreateLinkNewAccountRequestFactory())
+                .Returns(linkAccountRequest.Object);
 
             upsAccount = new UpsAccountEntity();
 
@@ -62,17 +78,17 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OpenAccount
                 InvoiceNumber = "000111233"
             };
 
-            invoiceRegistrationCarrierResponse = new Mock<ICarrierResponse>();
+            invoiceRegistrationCarrierResponse = mock3.Mock<ICarrierResponse>();
             invoiceRegistrationCarrierResponse.Setup(r => r.Process());
 
-            invoiceRegistrationCarrierRequest = new Mock<CarrierRequest>();
+            invoiceRegistrationCarrierRequest = mock3.Mock<CarrierRequest>();
             invoiceRegistrationCarrierRequest.Setup(r => r.Submit()).Returns(invoiceRegistrationCarrierResponse.Object);
 
-            invoiceRegistrationRequestFactory = new Mock<IUpsInvoiceRegistrationRequestFactory>();
+            invoiceRegistrationRequestFactory = mock1.Mock<IUpsInvoiceRegistrationRequestFactory>();
             invoiceRegistrationRequestFactory.Setup(f => f.CreateInvoiceRegistrationRequest(It.IsAny<UpsAccountEntity>(), It.IsAny<UpsOltInvoiceAuthorizationData>()))
                                              .Returns(invoiceRegistrationCarrierRequest.Object);
 
-            testObject = new UpsClerk(openAccountRequestFactory.Object, invoiceRegistrationRequestFactory.Object);
+            testObject = mock1.Create<UpsClerk>(new TypedParameter(typeof(UpsAccountEntity), upsAccount));
         }
 
         #region "Open Account Tests"
@@ -84,16 +100,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OpenAccount
         #endregion
 
         [Fact]
-        public void RegisterAccount_ThrowsUpsException_WhenAuthorizatioInvoiceIsNull()
+        public void RegisterAccount_PassesNullIntoRegisterAccountForInvoiceAuthorizationData()
         {
-            Assert.Throws<UpsException>(() => testObject.RegisterAccount(new UpsAccountEntity(), null));
-        }
+            UpsAccountEntity account = new UpsAccountEntity();
+            testObject.RegisterAccount(account);
 
-        [Fact]
-        public void RegisterAccount_ThrowsUpsException_WhenInvoiceNumberNotProvided()
-        {
-            authorizationData.InvoiceNumber = string.Empty;
-            Assert.Throws<UpsException>(() => testObject.RegisterAccount(new UpsAccountEntity(), authorizationData));
+            invoiceRegistrationRequestFactory.Verify(f=>f.CreateInvoiceRegistrationRequest(account, null));
         }
 
         [Fact]
@@ -139,22 +151,11 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OpenAccount
             {
                 testObject.RegisterAccount(account, authorizationData);
             }
-            catch (UpsException)
+            catch (UpsWebServiceException)
             {
                 // Eat the exception, so we can check that three attempts to the gateway were made
                 invoiceRegistrationCarrierRequest.Verify(c => c.Submit(), Times.Exactly(3));
             }
-        }
-
-        [Fact]
-        public void RegisterAccount_ThrowsUpsException_WhenErrorCodeIs9570100()
-        {
-            invoiceRegistrationCarrierRequest.Setup(c => c.Submit())
-                                  .Throws(upsWebService9570100Exception);
-
-            UpsAccountEntity account = new UpsAccountEntity();
-
-            Assert.Throws<UpsException>(() => testObject.RegisterAccount(account, authorizationData));
         }
 
         [Fact]
@@ -188,6 +189,116 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OpenAccount
                 // Eat the exception, so we can check that only one attempt to the gateway was made
                 invoiceRegistrationCarrierRequest.Verify(c => c.Submit(), Times.Once());
             }
+        }
+
+        [Fact]
+        public void RegisterAccount_ReturnsSuccess_WhenRegistrationIsSuccessful()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                var nativeResponse = new RegisterResponse();
+                nativeResponse.ShipperAccountStatus = new RegCodeDescriptionType[] { new RegCodeDescriptionType() { Code = "foo", Description = "bar" } };
+
+                var response = mock.Mock<ICarrierResponse>();
+                response.SetupGet(r => r.NativeResponse).Returns(nativeResponse);
+
+                var requestFactory = mock.Mock<IUpsInvoiceRegistrationRequestFactory>();
+
+                var request = mock.Mock<CarrierRequest>();
+                request.Setup(r => r.Submit()).Returns(response.Object);
+
+                requestFactory.Setup(r => r.CreateInvoiceRegistrationRequest(It.IsAny<UpsAccountEntity>(), It.IsAny<UpsOltInvoiceAuthorizationData>()))
+                            .Returns(request.Object);
+
+                UpsClerk clerk = mock.Create<UpsClerk>(new TypedParameter(typeof(UpsAccountEntity), upsAccount));
+
+                Assert.Equal(UpsRegistrationStatus.Success, clerk.RegisterAccount(new UpsAccountEntity()));
+            }
+        }
+
+        [Fact]
+        public void RegisterAccount_ReturnsInvoiceAuthenticationRequired_WhenRegistrationInvoiceAuthenticationRequired()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                var nativeResponse = new RegisterResponse();
+                nativeResponse.ShipperAccountStatus = new[] { new RegCodeDescriptionType() { Code = "045", Description = "bar" } };
+
+                var response = mock.Mock<ICarrierResponse>();
+                response.SetupGet(r => r.NativeResponse).Returns(nativeResponse);
+
+                var requestFactory = mock.Mock<IUpsInvoiceRegistrationRequestFactory>();
+
+                var request = mock.Mock<CarrierRequest>();
+                request.Setup(r => r.Submit()).Returns(response.Object);
+
+                requestFactory.Setup(r => r.CreateInvoiceRegistrationRequest(It.IsAny<UpsAccountEntity>(), It.IsAny<UpsOltInvoiceAuthorizationData>()))
+                            .Returns(request.Object);
+
+                UpsClerk clerk = mock.Create<UpsClerk>(new TypedParameter(typeof(UpsAccountEntity), upsAccount));
+
+                Assert.Equal(UpsRegistrationStatus.InvoiceAuthenticationRequired, clerk.RegisterAccount(new UpsAccountEntity()));
+            }
+        }
+
+        [Fact]
+        public void RegisterAccount_ReturnsFailed_WhenRegistrationFailsDueToUsernameUniqueness()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                var nativeResponse = new RegisterResponse();
+                nativeResponse.ShipperAccountStatus = new RegCodeDescriptionType[] { new RegCodeDescriptionType() { Code = "045", Description = "bar" } };
+
+                var response = mock.Mock<ICarrierResponse>();
+                response.SetupGet(r => r.NativeResponse).Returns(nativeResponse);
+
+                var requestFactory = mock.Mock<IUpsInvoiceRegistrationRequestFactory>();
+
+                var request = mock.Mock<CarrierRequest>();
+                request.Setup(r => r.Submit()).Throws(new UpsWebServiceException("9570100"));
+
+                requestFactory.Setup(r => r.CreateInvoiceRegistrationRequest(It.IsAny<UpsAccountEntity>(), It.IsAny<UpsOltInvoiceAuthorizationData>()))
+                            .Returns(request.Object);
+
+                UpsClerk clerk = mock.Create<UpsClerk>(new TypedParameter(typeof(UpsAccountEntity), upsAccount));
+
+                Assert.Throws<UpsWebServiceException>(() => clerk.RegisterAccount(new UpsAccountEntity()));
+            }
+        }
+
+        [Fact]
+        public void RegisterAccount_ThrowsUpsWebServiceException_WhenExceptionCodeIsNotDueToUniqueness()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                var nativeResponse = new RegisterResponse();
+                nativeResponse.ShipperAccountStatus = new RegCodeDescriptionType[] { new RegCodeDescriptionType() { Code = "045", Description = "bar" } };
+
+                var response = mock.Mock<ICarrierResponse>();
+                response.SetupGet(r => r.NativeResponse).Returns(nativeResponse);
+
+                var requestFactory = mock.Mock<IUpsInvoiceRegistrationRequestFactory>();
+
+                var request = mock.Mock<CarrierRequest>();
+                request.Setup(r => r.Submit()).Throws(new UpsWebServiceException("888"));
+
+                requestFactory.Setup(r => r.CreateInvoiceRegistrationRequest(It.IsAny<UpsAccountEntity>(), It.IsAny<UpsOltInvoiceAuthorizationData>()))
+                            .Returns(request.Object);
+                UpsClerk clerk = mock.Create<UpsClerk>(new TypedParameter(typeof(UpsAccountEntity), upsAccount));
+
+
+                Assert.Throws<UpsWebServiceException>(() => clerk.RegisterAccount(new UpsAccountEntity()));
+            }
+        }
+
+        /// <summary>
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
+        public void Dispose()
+        {
+            mock1.Dispose();
+            mock2.Dispose();
+            mock3.Dispose();
         }
     }
 }
