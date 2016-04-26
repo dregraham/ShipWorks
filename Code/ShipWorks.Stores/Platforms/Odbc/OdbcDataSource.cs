@@ -64,7 +64,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// <summary>
         /// Gets the encrypted connection string.
         /// </summary>
-        public string ConnectionString => 
+        public string ConnectionString =>
             encryptionProvider.Encrypt(UnencryptedConnectionString);
 
         /// <summary>
@@ -78,7 +78,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
         public GenericResult<OdbcDataSource> TestConnection()
         {
             GenericResult<OdbcDataSource> testResult= new GenericResult<OdbcDataSource>(this);
-            
+
             using (IDbConnection connection = odbcProvider.CreateOdbcConnection())
             {
                 try

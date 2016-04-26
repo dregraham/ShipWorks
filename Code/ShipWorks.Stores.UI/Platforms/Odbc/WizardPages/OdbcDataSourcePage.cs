@@ -3,9 +3,16 @@ using log4net;
 using ShipWorks.Stores.Management;
 using ShipWorks.UI.Wizard;
 using ShipWorks.Data.Model.EntityClasses;
+using Interapptive.Shared.UI;
+using System;
+using Interapptive.Shared.Utility;
+using ShipWorks.Stores.Platforms.Odbc;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
 {
+    /// <summary>
+    /// Odbc Data Source wizard page
+    /// </summary>
     public partial class OdbcDataSourcePage : AddStoreWizardPage
     {
         private readonly ILog log;
@@ -24,6 +31,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
         {
             this.log = log;
             InitializeComponent();
+            odbcDataSourceControl.RefreshDataSources();
         }
 
         /// <summary>
@@ -32,12 +40,31 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
         private void OnStepNext(object sender, WizardStepEventArgs e)
         {
             Cursor.Current = Cursors.WaitCursor;
-
             OdbcStoreEntity store = GetStore<OdbcStoreEntity>();
 
+            log.Debug("Testing Odbc data source.");
+
             // Test the connection using the OdbcDataSourceControl
-            // display error if the connection fails
-            // set the connection string on the store entity if it passes
+            GenericResult<OdbcDataSource> result = odbcDataSourceControl.TestConnection();
+
+            if (result.Success)
+            {
+                log.Error($"Odbc data source connected successfully.");
+
+                // Save the entity, if it fails stay on this page
+                if (!odbcDataSourceControl.SaveToEntity(store))
+                {
+                    e.NextPage = this;
+                }
+            }
+            else
+            {
+                // display error if the connection fails
+                MessageHelper.ShowError(this, $"Unable to connect to data source:{Environment.NewLine} {result.Message}");
+                log.Error($"Odbc data source connection failed: {result.Message}");
+
+                e.NextPage = this;
+            }
         }
     }
 }

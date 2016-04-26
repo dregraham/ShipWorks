@@ -21,7 +21,6 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         public OdbcDataSourceControl()
         {
             InitializeComponent();
-            RefreshDataSources();
         }
 
         /// <summary>
@@ -86,7 +85,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// <summary>
         /// Load the existing data sources
         /// </summary>
-        private void RefreshDataSources()
+        public void RefreshDataSources()
         {
             using (ILifetimeScope scope = IoC.BeginLifetimeScope())
             {
