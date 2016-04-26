@@ -1,6 +1,8 @@
 ﻿using System.Windows.Forms;
+using Autofac;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Odbc;
 
@@ -11,7 +13,6 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
     /// </summary>
     public partial class OdbcDataSourceControl : UserControl
     {
-        private IOdbcDataSourceRepository repo;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcDataSourceControl"/> class.
@@ -19,8 +20,13 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         public OdbcDataSourceControl()
         {
             InitializeComponent();
-            dataSourceComboBox.DataSource = repo.GetDataSources();
-            dataSourceComboBox.DisplayMember = "Name";
+            using (ILifetimeScope scope = IoC.BeginLifetimeScope())
+            {
+                IOdbcDataSourceRepository repo = scope.Resolve<IOdbcDataSourceRepository>();
+
+                dataSourceComboBox.DataSource = repo.GetDataSources();
+                dataSourceComboBox.DisplayMember = "Name";
+            }
         }
 
         /// <summary>
