@@ -20,13 +20,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         public OdbcDataSourceControl()
         {
             InitializeComponent();
-            using (ILifetimeScope scope = IoC.BeginLifetimeScope())
-            {
-                IOdbcDataSourceRepository repo = scope.Resolve<IOdbcDataSourceRepository>();
-
-                dataSourceComboBox.DataSource = repo.GetDataSources();
-                dataSourceComboBox.DisplayMember = "Name";
-            }
+            RefreshDataSources();
         }
 
         /// <summary>
@@ -85,6 +79,20 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             if (dataSourceComboBox.SelectedItem != null)
             {
                 SelectedDataSource = (OdbcDataSource) dataSourceComboBox.SelectedItem;
+            }
+        }
+
+        /// <summary>
+        /// Load the existing data sources
+        /// </summary>
+        private void RefreshDataSources()
+        {
+            using (ILifetimeScope scope = IoC.BeginLifetimeScope())
+            {
+                IOdbcDataSourceRepository repo = scope.Resolve<IOdbcDataSourceRepository>();
+
+                dataSourceComboBox.DataSource = repo.GetDataSources();
+                dataSourceComboBox.DisplayMember = "Name";
             }
         }
     }
