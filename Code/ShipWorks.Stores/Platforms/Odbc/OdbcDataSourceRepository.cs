@@ -1,6 +1,8 @@
 ﻿using Interapptive.Shared.Utility;
+using log4net;
 using System;
 using System.Collections.Generic;
+using System.Data;
 
 namespace ShipWorks.Stores.Platforms.Odbc
 {
@@ -12,6 +14,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
         private readonly IDsnRetriever dsnRetriever;
         private readonly IShipWorksOdbcProvider odbcProvider;
         private readonly IEncryptionProvider encryptionProvider;
+        private ILog log;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcDataSourceRepository"/> class.
@@ -19,8 +22,11 @@ namespace ShipWorks.Stores.Platforms.Odbc
         public OdbcDataSourceRepository(
             IDsnRetriever dsnRetriever,
             IShipWorksOdbcProvider odbcProvider,
-            IEncryptionProvider encryptionProvider)
+            IEncryptionProvider encryptionProvider,
+            Func<Type, ILog> logFactory)
         {
+            log = logFactory(typeof(OdbcDataSourceRepository));
+
             this.dsnRetriever = dsnRetriever;
             this.odbcProvider = odbcProvider;
             this.encryptionProvider = encryptionProvider;
@@ -34,23 +40,31 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// </exception>
         public IEnumerable<OdbcDataSource> GetDataSources()
         {
-            List<OdbcDataSource> odbcDataSources = new List<OdbcDataSource>();
-
-            string nextOdbcDataSource = dsnRetriever.GetNextDsnName();
-
-            while (nextOdbcDataSource != null)
+            try
             {
-                OdbcDataSource odbcDataSource = new OdbcDataSource(odbcProvider, encryptionProvider)
+                List<OdbcDataSource> odbcDataSources = new List<OdbcDataSource>();
+
+                string nextOdbcDataSource = dsnRetriever.GetNextDsnName();
+
+                while (nextOdbcDataSource != null)
                 {
-                    Name = nextOdbcDataSource
-                };
+                    OdbcDataSource odbcDataSource = new OdbcDataSource(odbcProvider, encryptionProvider)
+                    {
+                        Name = nextOdbcDataSource
+                    };
 
-                odbcDataSources.Add(odbcDataSource);
+                    odbcDataSources.Add(odbcDataSource);
 
-                nextOdbcDataSource = dsnRetriever.GetNextDsnName();
+                    nextOdbcDataSource = dsnRetriever.GetNextDsnName();
+                }
+
+                return odbcDataSources;
             }
-
-            return odbcDataSources;
+            catch (DataException ex)
+            {
+                log.Error("Error in GetNextDsnName", ex);
+                throw;
+            }
         }
 
         /// <summary>

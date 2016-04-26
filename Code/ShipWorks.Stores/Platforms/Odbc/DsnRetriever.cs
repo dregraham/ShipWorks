@@ -9,13 +9,13 @@ namespace ShipWorks.Stores.Platforms.Odbc
     /// Retrieves the list of Dsns.
     /// </summary>
     /// <seealso cref="System.IDisposable" />
-    public class DsnRetriever : IDisposable, IDsnRetriever
+    public class DsnRetriever : IDsnRetriever
     {
         private short dsnNameLength;
         private short dsnDescLength;
         private readonly StringBuilder dsnName;
         private readonly StringBuilder dsnDesc;
-        private readonly Lazy<IntPtr> sqlEnvHandle;
+        private readonly IntPtr sqlEnvHandle;
 
         private const int SqlAttrOdbcVersion = 200;
         private const int SqlOvOdbc3 = 3;
@@ -32,7 +32,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
             dsnNameLength = 0;
             dsnDescLength = 0;
 
-            sqlEnvHandle = new Lazy<IntPtr>(InitializeSqlEnvHandle);
+            sqlEnvHandle = InitializeSqlEnvHandle();
         }
 
         /// <summary>
@@ -45,8 +45,8 @@ namespace ShipWorks.Stores.Platforms.Odbc
         public string GetNextDsnName()
         {
             short resultCode = Odbc32.SQLDataSources(sqlEnvHandle.Value, Odbc32.Direction.SQL_FETCH_FIRST,
-                dsnName, (short)dsnName.Capacity, ref dsnNameLength,
-                dsnDesc, (short)dsnDesc.Capacity, ref dsnDescLength);
+                dsnName, (short) dsnName.Capacity, ref dsnNameLength,
+                dsnDesc, (short) dsnDesc.Capacity, ref dsnDescLength);
 
             if (resultCode != Odbc32.SQL_SUCCESS && resultCode != Odbc32.SQL_NO_DATA)
             {

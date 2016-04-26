@@ -1,7 +1,9 @@
-﻿using System.Data;
-using Autofac.Extras.Moq;
+﻿using Autofac.Extras.Moq;
+using log4net;
 using Moq;
 using ShipWorks.Stores.Platforms.Odbc;
+using System;
+using System.Data;
 using System.Linq;
 using Xunit;
 
@@ -45,6 +47,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             }
         }
 
+        [Fact]
         public void GetDataSources_ThrowsDataException_WhenGetNextDsnNameThrowsDataException()
         {
             using (var mock = AutoMock.GetLoose())
@@ -55,6 +58,38 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
 
                 var testObject = mock.Create<OdbcDataSourceRepository>();
                 Assert.Throws<DataException>(() => testObject.GetDataSources());
+            }
+        }
+
+        [Fact]
+        public void GetDataSources_LogsException_WhenGetNextDsnNameThrowsDataException()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                var log = mock.Mock<ILog>();
+
+                Mock<Func<Type, ILog>> repo = mock.MockRepository.Create<Func<Type, ILog>>();
+                repo.Setup(x => x(It.IsAny<Type>()))
+                    .Returns(log.Object);
+                mock.Provide(repo.Object);
+
+                Mock<IDsnRetriever> dsnRetriever = mock.Mock<IDsnRetriever>();
+                dsnRetriever.Setup(retriever => retriever.GetNextDsnName())
+                    .Throws(new DataException());
+
+                var testObject = mock.Create<OdbcDataSourceRepository>();
+
+                try
+                {
+                    testObject.GetDataSources();
+                }
+                catch (DataException)
+                {
+                    // suppress
+                }
+
+                //log.Verify(l => l.Error(It.Is<string>(s => s == "Error in GetNextDsnName"), It.IsAny<DataException>()));
+                log.Verify(l => l.Error(It.IsAny<string>(), It.IsAny<Exception>()));
             }
         }
 
