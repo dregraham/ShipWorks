@@ -25,6 +25,7 @@ using ShipWorks.Email;
 using ShipWorks.ApplicationCore.Dashboard.Content;
 using ShipWorks.Users;
 using System.Collections;
+using Autofac;
 using ShipWorks.Actions;
 using ShipWorks.Actions.Tasks;
 using ShipWorks.Common.Threading;
@@ -161,9 +162,9 @@ namespace ShipWorks.ApplicationCore.Dashboard
                 return panel != null && panel.Visible;
             }
         }
-        
+
         /// <summary>
-        /// Add the given information message to the dashboard 
+        /// Add the given information message to the dashboard
         /// </summary>
         public static void ShowLocalMessage(string identifier, DashboardMessageImageType imageType, string primaryText, string secondaryText, params DashboardAction[] actions)
         {
@@ -211,7 +212,7 @@ namespace ShipWorks.ApplicationCore.Dashboard
                     {
                         // See if it already exists
                         DashboardStoreItem existing = dashboardItems.OfType<DashboardStoreItem>().SingleOrDefault(i => i.Identifier == storeItem.Identifier);
-                        
+
                         // If it exists, just update it in place
                         if (existing != null)
                         {
@@ -267,9 +268,9 @@ namespace ShipWorks.ApplicationCore.Dashboard
                 DashboardTrialItem trialItem = dashboardItems.OfType<DashboardTrialItem>().Where(i => i.TrialDetail.Store.StoreID == store.StoreID).SingleOrDefault();
                 if (trialItem == null)
                 {
-                    ThreadPool.QueueUserWorkItem(ExceptionMonitor.WrapWorkItem(AsyncLoadTrialDetail), 
-                        new object[] { 
-                            store, 
+                    ThreadPool.QueueUserWorkItem(ExceptionMonitor.WrapWorkItem(AsyncLoadTrialDetail),
+                        new object[] {
+                            store,
                             ApplicationBusyManager.OperationStarting(busyText) });
                 }
                 // Refresh the UI in case the days has changed or its now expired.
@@ -299,7 +300,7 @@ namespace ShipWorks.ApplicationCore.Dashboard
         }
 
         /// <summary>
-        /// Update the day count displayed next to each trial.  For users who leave ShipWorks open all the time this helps them still 
+        /// Update the day count displayed next to each trial.  For users who leave ShipWorks open all the time this helps them still
         /// see the days count down.
         /// </summary>
         private static void UpdateTrialDaysDisplay()
@@ -484,6 +485,49 @@ namespace ShipWorks.ApplicationCore.Dashboard
             CheckForEmailChanges();
             CheckForActionChanges();
             CheckForSchedulerServiceStoppedChanges();
+            CheckForLicenseDependentChanges();
+        }
+
+        /// <summary>
+        /// Update the dashboard with license issues
+        /// </summary>
+        private static void CheckForLicenseDependentChanges()
+        {
+            DashboardLicenseItem dashboardItem;
+
+            // Resolve the license and get its dashboard item
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                ILicenseService licenseService = lifetimeScope.Resolve<ILicenseService>();
+                dashboardItem = licenseService.GetLicenses().FirstOrDefault()?.CreateDashboardMessage();
+            }
+
+            if (dashboardItem == null)
+            {
+                // the license returned no dashboard license item so we remove any existing
+                // dashboard items of type DashboardLicenseItem
+                dashboardItems.OfType<DashboardLicenseItem>().ToList().ForEach(RemoveDashboardItem);
+            }
+            else
+            {
+                DashboardLicenseItem existingItem = dashboardItems.OfType<DashboardLicenseItem>().SingleOrDefault();
+
+                if (existingItem == null)
+                {
+                    // The license returned a valid DashboardLicenseItem, add it to the dashboard
+                    AddDashboardItem(dashboardItem);
+                }
+                else
+                {
+                    // There's already a dashboard item; confirm whether it needs to be swapped out based 
+                    // on the delta of the IsUnderShipmentLimit property, so we get the appropriate messaging
+                    if (existingItem.IsUnderShipmentLimit != dashboardItem.IsUnderShipmentLimit)
+                    {
+                        dashboardItems.OfType<DashboardLicenseItem>().ToList().ForEach(RemoveDashboardItem);
+                        AddDashboardItem(dashboardItem);
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -507,7 +551,7 @@ namespace ShipWorks.ApplicationCore.Dashboard
                 {
                     stoppedSchedulerNotificationTimer.Stop();
                 }
-                
+
                 // The stopped services are now running, so remove the stopped dashboard item.
                 if (existingDashboardItems.Any())
                 {
@@ -624,7 +668,7 @@ namespace ShipWorks.ApplicationCore.Dashboard
         public static void CheckForActionChanges()
         {
             int errors = 0;
-            
+
             SqlAdapterRetry<SqlException> sqlAdapterRetry = new SqlAdapterRetry<SqlException>(5, -5, "ActionQueueCollection.GetCount");
             sqlAdapterRetry.ExecuteWithRetry(() => errors = ActionQueueCollection.GetCount(SqlAdapter.Default, ActionQueueFields.Status == (int) ActionQueueStatus.Error));
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using Autofac;
 using Interapptive.Shared;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Profiles;
@@ -14,6 +15,7 @@ using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Account;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.UI;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Editions;
 using ShipWorks.Editions.Freemium;
@@ -100,7 +102,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 Pages.Remove(wizardPagePayment);
             }
 
-            // If its not already setup, load all the the settings\configuration pages
+            // If its not already setup, load all the settings\configuration pages
             if (!ShippingManager.IsShipmentTypeConfigured(ShipmentTypeCode.Endicia))
             {
                 optionsControl.LoadSettings(EndiciaReseller.None);
@@ -513,8 +515,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 }
             }
 
-            // If we aren't a freemium edition, we know we are creating a freemium account, b\c we wouldnt be here asking for credit card info in the case of DAZzle
-            // For freemium edition, we DO ask for credit card either way, so in that case we only create the ELS account if "new account" is chedked
+            // If we aren't a freemium edition, we know we are creating a freemium account, b\c we wouldn't be here asking for credit card info in the case of DAZzle
+            // For freemium edition, we DO ask for credit card either way, so in that case we only create the ELS account if "new account" is checked
             if (freemiumEdition == null || radioNewAccount.Checked)
             {
                 try
@@ -589,6 +591,18 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         }
 
         /// <summary>
+        /// Checks to see if the given account number is allowed based on the edition of ShipWorks
+        /// </summary>
+        private bool AccountAllowed(string endiciaAccountNumber)
+        {
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                return lifetimeScope.Resolve<ILicenseService>()
+                        .HandleRestriction(EditionFeature.EndiciaAccountNumber, endiciaAccountNumber, this);
+            }
+        }
+
+        /// <summary>
         /// Stepping next from the account page
         /// </summary>
         private void OnStepNextAccount(object sender, WizardStepEventArgs e)
@@ -605,8 +619,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 return;
             }
 
-            // Edition check
-            if (!EditionManager.HandleRestrictionIssue(this, EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.EndiciaAccountNumber, accountNumber.Text.Trim())))
+            if (!AccountAllowed(accountNumber.Text.Trim()))
             {
                 e.NextPage = CurrentPage;
                 return;
@@ -634,7 +647,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                     adapter.SaveAndRefetch(account);
                 }
 
-                // For freemium, we have to now permenantly associate this account with the store
+                // For freemium, we have to now permanently associate this account with the store
                 if (freemiumEdition != null)
                 {
                     try
@@ -707,35 +720,36 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 e.NextPage = CurrentPage;
                 return;
             }
-
+            
             // Edition check
-            if (!EditionManager.HandleRestrictionIssue(this, EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.EndiciaAccountNumber, accountExisting.Text.Trim())))
+            if (!AccountAllowed(accountExisting.Text.Trim()))
             {
                 e.NextPage = CurrentPage;
                 return;
             }
-
+            
             Cursor.Current = Cursors.WaitCursor;
 
             try
             {
-                account = new EndiciaAccountEntity();
+                account = new EndiciaAccountEntity()
+                {
+                    AccountNumber = accountExisting.Text.Trim(),
+                    ApiUserPassword = SecureText.Encrypt(passwordExisting.Text, "Endicia"),
+                    CreatedByShipWorks = false,
+                    EndiciaReseller = (int)EndiciaReseller.None,
 
-                account.AccountNumber = accountExisting.Text.Trim();
-                account.ApiUserPassword = SecureText.Encrypt(passwordExisting.Text, "Endicia");
-                account.CreatedByShipWorks = false;
-                account.EndiciaReseller = (int)EndiciaReseller.None;
+                    // Stuff that only applies when signing up
+                    SignupConfirmation = "",
+                    WebPassword = "",
+                    ApiInitialPassword = "",
 
-                // Stuff that only applies when signing up
-                account.SignupConfirmation = "";
-                account.WebPassword = "";
-                account.ApiInitialPassword = "";
+                    // Account type stuff
+                    AccountType = -1,
+                    TestAccount = false,
+                    ScanFormAddressSource = (int)EndiciaScanFormAddressSource.Provider
+                };
                 
-                // Account type stuff
-                account.AccountType = -1;
-                account.TestAccount = false;
-                account.ScanFormAddressSource = (int) EndiciaScanFormAddressSource.Provider;
-
                 // Address
                 personControl.SaveToEntity(new PersonAdapter(account, ""));
                 account.MailingPostalCode = account.PostalCode;

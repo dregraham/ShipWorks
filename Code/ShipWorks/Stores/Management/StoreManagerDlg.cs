@@ -1,22 +1,15 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Drawing;
-using System.Text;
 using System.Linq;
 using System.Windows.Forms;
 using ShipWorks.Data.Adapter.Custom;
-using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using Divelements.SandGrid;
 using Interapptive.Shared.Utility;
-using ShipWorks.UI;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Properties;
 using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Stores.Platforms;
-using ShipWorks.Stores.Communication;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
 using ShipWorks.Common.Threading;
@@ -25,6 +18,9 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Users.Audit;
 using ShipWorks.Data.Model.FactoryClasses;
 using Interapptive.Shared.UI;
+using ShipWorks.ApplicationCore;
+using Autofac;
+using ShipWorks.ApplicationCore.Licensing;
 
 namespace ShipWorks.Stores.Management
 {
@@ -93,8 +89,10 @@ namespace ShipWorks.Stores.Management
 
                 string storeType = StoreTypeManager.GetType(store).StoreTypeName;
 
-                GridRow row = new GridRow(new string[] { store.StoreName, storeType, GetLastDownloadDescription(store) });
-                row.Tag = store;
+                GridRow row = new GridRow(new[] {store.StoreName, storeType, GetLastDownloadDescription(store)})
+                {
+                    Tag = store
+                };
 
                 sandGrid.Rows.Add(row);
 
@@ -235,27 +233,30 @@ namespace ShipWorks.Stores.Management
             StoreEntity store = e.Row.Tag as StoreEntity;
             string proposed = e.Value.ToString().Trim();
 
-            if (proposed == store.StoreName || proposed.Length == 0)
+            if (store != null && (proposed == store.StoreName || proposed.Length == 0))
             {
                 e.Cancel = true;
                 return;
             }
 
-            IEntityFields2 fields = store.Fields.Clone();
-            store.StoreName = proposed;
-
-            try
+            if (store != null)
             {
-                StoreManager.SaveStore(store);
-            }
-            catch (DuplicateNameException ex)
-            {
-                MessageHelper.ShowInformation(this, ex.Message);
+                IEntityFields2 fields = store.Fields.Clone();
+                store.StoreName = proposed;
 
-                // Reload it to get its name back the way it was
-                store.Fields = fields;
+                try
+                {
+                    StoreManager.SaveStore(store);
+                }
+                catch (DuplicateNameException ex)
+                {
+                    MessageHelper.ShowInformation(this, ex.Message);
 
-                e.Cancel = true;
+                    // Reload it to get its name back the way it was
+                    store.Fields = fields;
+
+                    e.Cancel = true;
+                }
             }
         }
 
@@ -264,24 +265,29 @@ namespace ShipWorks.Stores.Management
         /// </summary>
         private void OnDelete(object sender, EventArgs e)
         {
-            using (StoreConfirmDeleteDlg dlg = new StoreConfirmDeleteDlg(SelectedStore.StoreName))
+            using (StoreConfirmDeleteDlg dlg = new StoreConfirmDeleteDlg(SelectedStore))
             {
                 if (dlg.ShowDialog(this) == DialogResult.OK)
                 {
-                    // Progress Provider
-                    ProgressProvider progressProvider = new ProgressProvider();
-
                     // Progress Item
-                    ProgressItem workProgress = new ProgressItem("Delete Store");
-                    workProgress.Detail = string.Format("Deleting store '{0}'...", SelectedStore.StoreName);
-                    workProgress.CanCancel = false;
-                    progressProvider.ProgressItems.Add(workProgress);
+                    ProgressItem workProgress = new ProgressItem("Delete Store")
+                    {
+                        Detail = $"Deleting store '{SelectedStore.StoreName}'...",
+                        CanCancel = false
+                    };
+                    
                     workProgress.Starting();
 
-                    // Proress Dialog
-                    ProgressDlg progressDlg = new ProgressDlg(progressProvider);
-                    progressDlg.Title = "Delete";
-                    progressDlg.Description = "ShipWorks is deleting the store.";
+                    // Progress Provider
+                    ProgressProvider progressProvider = new ProgressProvider();
+                    progressProvider.ProgressItems.Add(workProgress);
+
+                    // Prioress Dialog
+                    ProgressDlg progressDlg = new ProgressDlg(progressProvider)
+                    {
+                        Title = "Delete",
+                        Description = "ShipWorks is deleting the store."
+                    };
 
                     // Create the progress delayer - don't show the progress window if it happens too quickly
                     ProgressDisplayDelayer delayer = new ProgressDisplayDelayer(progressDlg);
@@ -298,7 +304,7 @@ namespace ShipWorks.Stores.Management
                     // Check to see if we are already downloading, and if so let the user know they can wait or cancel out of deleting.
                     // We can't wrap the whole dialog below in the ConnectionSensitiveScope because we can't start a background process
                     // inside ConnectionSensitiveScope.
-                    // Since we'er inside the dialog, the user could wait a while before clicking, allowing a download to start before 
+                    // Since we're inside the dialog, the user could wait a while before clicking, allowing a download to start before 
                     // getting to this code, so it's checked right before queuing the delete thread.
                     using (ConnectionSensitiveScope scope = new ConnectionSensitiveScope("delete a store", this))
                     {
@@ -319,7 +325,7 @@ namespace ShipWorks.Stores.Management
                         ExceptionMonitor.WrapWorkItem(AsyncMonitorDeletionProgress, "deleting"),
                         backgroundState);
 
-                    // Show the progrss window only after a certain amount of time goes by
+                    // Show the progress window only after a certain amount of time goes by
                     delayer.ShowAfter(this, TimeSpan.FromSeconds(.25));
                 }
             }
@@ -369,9 +375,14 @@ namespace ShipWorks.Stores.Management
             BackgroundDeleteState state = (BackgroundDeleteState) userData;
 
             // We don't audit anything for deleting a store
-            using (AuditBehaviorScope auditScope = new AuditBehaviorScope(AuditState.Disabled))
+            using (new AuditBehaviorScope(AuditState.Disabled))
             {
-                DeletionService.DeleteStore(state.Store);
+                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+                {
+                    // Delete the store using the license service
+                    ILicenseService licenseService = lifetimeScope.Resolve<ILicenseService>();
+                    licenseService.GetLicense(state.Store).DeleteStore(state.Store);
+                }
             }
 
             state.ProgressProvider.ProgressItems[0].Completed();
@@ -409,13 +420,11 @@ namespace ShipWorks.Stores.Management
         /// </summary>
         private void OnAddStore(object sender, EventArgs e)
         {
-            if (AddStoreWizard.RunWizard(this))
-            {
-                LoadStores();
+            AddStoreWizard.RunWizard(this);
+            LoadStores();
 
-                SelectedStore = StoreManager.GetEnabledStores().OrderByDescending(s => s.StoreID).FirstOrDefault();
-                ActiveControl = sandGrid;
-            }
+            SelectedStore = StoreManager.GetEnabledStores().OrderByDescending(s => s.StoreID).FirstOrDefault();
+            ActiveControl = sandGrid;
         }
 
         /// <summary>
@@ -443,12 +452,12 @@ namespace ShipWorks.Stores.Management
         /// </summary>
         private void UpdateDisabledStoresControls()
         {
-            int disabledCount = StoreManager.GetAllStores().Where(s => !s.Enabled).Count();
+            int disabledCount = StoreManager.GetAllStores().Count(s => !s.Enabled);
 
             showDisabledStores.Visible = disabledCount > 0;
             labelDisabledCount.Visible = disabledCount > 0;
 
-            labelDisabledCount.Text = string.Format("({0} disabled store{1})", disabledCount, disabledCount > 1 ? "s" : "");
+            labelDisabledCount.Text = $"({disabledCount} disabled store{(disabledCount > 1 ? "s" : "")})";
         }
 
         /// <summary>

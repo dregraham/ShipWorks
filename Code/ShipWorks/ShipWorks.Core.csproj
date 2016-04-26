@@ -559,6 +559,7 @@
     <Compile Include="AddressValidation\Enums\AddressValidationStatusType.cs" />
     <Compile Include="AddressValidation\Enums\AddressValidationStoreSettingType.cs" />
     <Compile Include="AddressValidation\Enums\ValidationDetailStatusType.cs" />
+    <Compile Include="AddressValidation\IAddressValidator.cs" />
     <Compile Include="AddressValidation\Predicates\AddressSuggestionsForConsumerPredicate.cs" />
     <Compile Include="AddressValidation\AddressValidationQueue.cs" />
     <Compile Include="AddressValidation\AddressValidationResult.cs" />
@@ -587,6 +588,7 @@
     <Compile Include="ApplicationCore\CommandLineOptions\UninstallShipWorksCommandLineOption.cs" />
     <Compile Include="ApplicationCore\Crashes\CrashResponse.cs" />
     <Compile Include="ApplicationCore\Crashes\ServiceCrash.cs" />
+    <Compile Include="ApplicationCore\Dashboard\Content\DashboardLicenseItem.cs" />
     <Compile Include="ApplicationCore\Dashboard\Content\DashboardSchedulerServiceStoppedItem.cs" />
     <Compile Include="ApplicationCore\Dashboard\Content\DashboardStoreItem.cs" />
     <Compile Include="ApplicationCore\Dashboard\Content\ShipWorksOnlineVersion.cs" />
@@ -595,12 +597,99 @@
     <Compile Include="ApplicationCore\ExecutionMode\ExecutionMode.cs" />
     <Compile Include="ApplicationCore\Heartbeat.cs" />
     <Compile Include="ApplicationCore\HeartbeatPace.cs" />
+    <Compile Include="ApplicationCore\Licensing\Activation\CustomerLicenseActivationActivity.cs" />
+    <Compile Include="ApplicationCore\Licensing\Activation\CustomerLicenseActivationService.cs" />
+    <Compile Include="ApplicationCore\Licensing\Activation\ICustomerLicenseActivationActivity.cs" />
+    <Compile Include="ApplicationCore\Licensing\Activation\IUspsAccountSetupActivity.cs" />
+    <Compile Include="ApplicationCore\Licensing\Activation\IShipmentTypeSetupActivity.cs" />
+    <Compile Include="ApplicationCore\Licensing\Activation\UspsAccountSetupActivity.cs" />
+    <Compile Include="ApplicationCore\Licensing\Activation\ShipmentTypeSetupActivity.cs" />
+    <Compile Include="ApplicationCore\Licensing\AssociateShipworksWithItselfRequest.cs" />
+    <Compile Include="ApplicationCore\Licensing\AssociateShipWorksWithItselfResponse.cs" />
+    <Compile Include="ApplicationCore\Licensing\AssociateShipWorksWithItselfResponseType.cs" />
+    <Compile Include="ApplicationCore\Licensing\ComplianceLevel.cs" />
+    <Compile Include="ApplicationCore\Licensing\CreditCardType.cs" />
+    <Compile Include="ApplicationCore\Licensing\UspsPendingAccountType.cs" />
+    <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\Endicia\EndiciaConsolidatorRestriction.cs" />
+    <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\Endicia\EndiciaDhlRestriction.cs" />
+    <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\Endicia\EndiciaInsuranceRestriction.cs" />
+    <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\Endicia\EndiciaScanBasedReturnsRestriction.cs" />
+    <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\FeatureRestriction.cs" />
+    <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\IFeatureRestriction.cs" />
+    <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\PostalApoFpoPoboxOnlyRestriction.cs" />
+    <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\ShipmentTypeFunctionality\AccountRegistrationRestriction.cs" />
+    <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\ShipmentTypeFunctionality\ProcessShipmentRestriction.cs" />
+    <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\ShipmentTypeFunctionality\PurchasePostageRestriction.cs" />
+    <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\ShipmentTypeFunctionality\RateDiscountMessagingRestriction.cs" />
+    <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\ShipmentTypeFunctionality\ShipmentTypeFunctionalityRestriction.cs" />
+    <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\ShipmentTypeFunctionality\ShippingAccountConversionRestriction.cs" />
+    <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\ShipmentTypeRestriction.cs" />
+    <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\Stamps\StampsAscendiaConsolidatorRestriction.cs" />
+    <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\Stamps\StampsDhlConsolidatorRestriction.cs" />
+    <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\Stamps\StampsDhlRestriction.cs" />
+    <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\Stamps\StampsGlobegisticsConsolidatorRestriction.cs" />
+    <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\Stamps\StampsIbcConsolidatorRestriction.cs" />
+    <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\Stamps\StampsInsuranceRestriction.cs" />
+    <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\Stamps\StampsRrDonnelleyConsolidatorRestriction.cs" />
+    <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\Ups\UpsAccountNumberRestriction.cs" />
+    <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\Ups\UpsSurePostRestriction.cs" />
+    <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\Ups\UpsAccountLimitRestriction.cs" />
+    <Compile Include="ApplicationCore\Licensing\GetActiveStoresResponse.cs" />
+    <Compile Include="ApplicationCore\Licensing\IActivationResponse.cs" />
+    <Compile Include="ApplicationCore\Licensing\IActiveStore.cs" />
+    <Compile Include="ApplicationCore\Licensing\IAddStoreResponse.cs" />
+    <Compile Include="ApplicationCore\Licensing\IChannelLimitBehavior.cs" />
+    <Compile Include="ApplicationCore\Licensing\IChannelLimitControl.cs" />
+    <Compile Include="ApplicationCore\Licensing\IChannelLimitDlgFactory.cs" />
+    <Compile Include="ApplicationCore\Licensing\IChannelLimitFactory.cs" />
+    <Compile Include="ApplicationCore\Licensing\IChannelLimitViewModel.cs" />
+    <Compile Include="ApplicationCore\Licensing\ICustomerLicenseActivartionDlgViewModel.cs" />
     <Compile Include="ApplicationCore\IInitializeForCurrentSession.cs" />
     <Compile Include="ApplicationCore\IoC.cs" />
+    <Compile Include="ApplicationCore\Licensing\ActivationResponse.cs" />
+    <Compile Include="ApplicationCore\Licensing\ActiveStore.cs" />
+    <Compile Include="ApplicationCore\Licensing\AddStoreResponse.cs" />
+    <Compile Include="ApplicationCore\Licensing\CustomerLicense.cs" />
+    <Compile Include="ApplicationCore\Licensing\CustomerLicenseReader.cs" />
+    <Compile Include="ApplicationCore\Licensing\DatabaseIdentifier.cs" />
+    <Compile Include="ApplicationCore\Licensing\DatabaseIdentifierException.cs" />
+    <Compile Include="ApplicationCore\Licensing\DisabledLicense.cs" />
+    <Compile Include="ApplicationCore\Licensing\EncryptionException.cs" />
     <Compile Include="ApplicationCore\Licensing\FakeTangoWebClient.cs" />
+    <Compile Include="ApplicationCore\Licensing\ICustomerLicenseActivationService.cs" />
+    <Compile Include="ApplicationCore\Licensing\IDialog.cs" />
+    <Compile Include="ApplicationCore\Licensing\ICustomerLicense.cs" />
+    <Compile Include="ApplicationCore\Licensing\ICustomerLicenseActivation.cs" />
+    <Compile Include="ApplicationCore\Licensing\ICustomerLicenseActivationViewModel.cs" />
+    <Compile Include="ApplicationCore\Licensing\ICustomerLicenseReader.cs" />
+    <Compile Include="ApplicationCore\Licensing\ICustomerLicenseWriter.cs" />
+    <Compile Include="ApplicationCore\Licensing\IDatabaseIdentifier.cs" />
+    <Compile Include="ApplicationCore\Licensing\ILicense.cs" />
+    <Compile Include="ApplicationCore\Licensing\ILicenseCapabilities.cs" />
+    <Compile Include="ApplicationCore\Licensing\ILicenseService.cs" />
+    <Compile Include="ApplicationCore\Licensing\IShipWorksLicense.cs" />
     <Compile Include="ApplicationCore\Licensing\ITangoWebClient.cs" />
+    <Compile Include="ApplicationCore\Licensing\CustomerLicenseWriter.cs" />
+    <Compile Include="ApplicationCore\Licensing\IUpgradePlanDlgFactory.cs" />
+    <Compile Include="ApplicationCore\Licensing\LicenseCapabilities.cs" />
+    <Compile Include="ApplicationCore\Licensing\LicenseEncryptionProvider.cs" />
+    <Compile Include="ApplicationCore\Licensing\LicenseEnforcement\ApproachingShipmentLimitEnforcer.cs" />
+    <Compile Include="ApplicationCore\Licensing\LicenseEnforcement\ChannelCountEnforcer.cs" />
+    <Compile Include="ApplicationCore\Licensing\LicenseEnforcement\ChannelSyncEnforcer.cs" />
+    <Compile Include="ApplicationCore\Licensing\LicenseEnforcement\ChannelTypeEnforcer.cs" />
+    <Compile Include="ApplicationCore\Licensing\LicenseEnforcement\EnforcementContext.cs" />
+    <Compile Include="ApplicationCore\Licensing\LicenseEnforcement\ExceedingChannelLimitEnforcer.cs" />
+    <Compile Include="ApplicationCore\Licensing\LicenseEnforcement\GenericModuleEnforcer.cs" />
+    <Compile Include="ApplicationCore\Licensing\LicenseEnforcement\EnforcementPriority.cs" />
+    <Compile Include="ApplicationCore\Licensing\LicenseEnforcement\GenericFileEnforcer.cs" />
+    <Compile Include="ApplicationCore\Licensing\LicenseEnforcement\ILicenseEnforcer.cs" />
+    <Compile Include="ApplicationCore\Licensing\LicenseEnforcement\ExceedingShipmentLimitEnforcer.cs" />
+    <Compile Include="ApplicationCore\Licensing\LicenseService.cs" />
+    <Compile Include="ApplicationCore\Licensing\LogOnRestrictionLevel.cs" />
+    <Compile Include="ApplicationCore\Licensing\StoreLicense.cs" />
     <Compile Include="ApplicationCore\Licensing\TangoWebClientFactory.cs" />
     <Compile Include="ApplicationCore\Licensing\TangoWebClientWrapper.cs" />
+    <Compile Include="ApplicationCore\Licensing\UpsStatus.cs" />
     <Compile Include="ApplicationCore\Logging\ILogEntryFactory.cs" />
     <Compile Include="ApplicationCore\Logging\LogActionType.cs" />
     <Compile Include="ApplicationCore\Logging\LogEntryFactory.cs" />
@@ -709,15 +798,20 @@
     <Compile Include="ApplicationCore\Services\ShipWorksServiceManager.cs" />
     <Compile Include="AddressValidation\AddressValidationDatabaseUpgrade.cs" />
     <Compile Include="Common\DateTimeProvider.cs" />
+    <Compile Include="Data\Administration\ISqlSchemaVersion.cs" />
     <Compile Include="Data\Administration\Retry\ISqlAdapterRetry.cs" />
     <Compile Include="Data\Administration\SqlChangeTracking.cs" />
+    <Compile Include="Data\Administration\SqlSchemaVersion.cs" />
     <Compile Include="Data\Connection\ISqlSession.cs" />
     <Compile Include="Data\Connection\ReconnectResult.cs" />
     <Compile Include="Data\DataResourceManagerWrapper.cs" />
+    <Compile Include="Data\DeletionServiceWrapper.cs" />
     <Compile Include="Data\IDataResourceManager.cs" />
+    <Compile Include="Data\IDeletionService.cs" />
     <Compile Include="Data\IObjectReferenceManager.cs" />
     <Compile Include="Data\ObjectReferenceManagerWrapper.cs" />
     <Compile Include="Data\Utility\SqlAdapterExtensions.cs" />
+    <Compile Include="Editions\Brown\IBrownEditionUtility.cs" />
     <Compile Include="Editions\EditionManagerWrapper.cs" />
     <Compile Include="Editions\IEditionManager.cs" />
     <Compile Include="Filters\Content\Conditions\AddressValidationStatusCondition.cs" />
@@ -831,17 +925,44 @@
     <Compile Include="Shipping\Carriers\Amazon\AmazonShippingToken.cs" />
     <Compile Include="Shipping\Carriers\Amazon\AmazonShippingTokenExtensions.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateConsolidatePostalRates.cs" />
+    <Compile Include="Shipping\Carriers\BestRate\Footnote\ShippingAccountRequiredForRatingFootnoteFactory.cs" />
+    <Compile Include="Shipping\Carriers\BestRate\Footnote\ShippingAccountRequiredForRatingFootnoteControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Shipping\Carriers\BestRate\Footnote\ShippingAccountRequiredForRatingFootnoteControl.Designer.cs">
+      <DependentUpon>ShippingAccountRequiredForRatingFootnoteControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Shipping\Carriers\BestRate\IBestRateBrokerRatingService.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\FedExLabelRepositoryFactory.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\IFedExLabelRepositoryFactory.cs" />
     <Compile Include="Shipping\Carriers\IRateHashingService.cs" />
+    <Compile Include="Shipping\Carriers\Postal\IPostalUtility.cs" />
+    <Compile Include="Shipping\Carriers\Postal\PostalUtilityWrapper.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\IUspsAccountManager.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\Registration\PaymentAndBillingAddressControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Shipping\Carriers\Postal\Usps\Registration\PaymentAndBillingAddressControl.Designer.cs">
+      <DependentUpon>PaymentAndBillingAddressControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Shipping\Carriers\Postal\Usps\UspsAccountManagerWrapper.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Registration\Promotion\Express1RegistrationPromotion.cs" />
+    <Compile Include="Shipping\Carriers\UPS\InvoiceRegistration\UpsRegistrationStatus.cs" />
+    <Compile Include="Shipping\Carriers\UPS\LinkNewAccount\Request\Manipulators\UpsLinkNewAccountInfoManipulator.cs" />
+    <Compile Include="Shipping\Carriers\UPS\LinkNewAccount\Request\UpsLinkNewAccountToProfileRequest.cs" />
+    <Compile Include="Shipping\Carriers\UPS\LinkNewAccount\Response\UpsLinkNewAccountToProfileResponse.cs" />
     <Compile Include="Shipping\Carriers\UPS\OnLineTools\IUpsOltShipmentValidator.cs" />
     <Compile Include="Shipping\ICachedRatesService.cs" />
     <Compile Include="Shipping\ILabelService.cs" />
     <Compile Include="Shipping\Insurance\IInsuranceChoice.cs" />
     <Compile Include="Shipping\IRatingService.cs" />
     <Compile Include="Shipping\ISupportExpress1Rates.cs" />
+    <Compile Include="Stores\Management\ActivationErrorWizardPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Stores\Management\ActivationErrorWizardPage.Designer.cs">
+      <DependentUpon>ActivationErrorWizardPage.cs</DependentUpon>
+    </Compile>
     <Compile Include="Stores\Platforms\Amazon\Mws\IAmazonAccountValidator.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateBrokerSettings.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateScope.cs" />
@@ -1236,6 +1357,8 @@
     <Compile Include="Stores\Platforms\Choxi\ChoxiTemplate.cs" />
     <Compile Include="Stores\Platforms\Groupon\CoreExtensions\Filters\GrouponOrderIdCondition.cs" />
     <Compile Include="Stores\Platforms\InstanteStore\InstanteStoreStoreType.cs" />
+    <Compile Include="Stores\Platforms\Magento\Enums\MagentoVersion.cs" />
+    <Compile Include="Stores\Platforms\Magento\MagentoTwoWebClient.cs" />
     <Compile Include="Stores\Platforms\Newegg\Enums\NeweggChannelType.cs" />
     <Compile Include="Stores\Platforms\OpenSky\OpenSkyStoreType.cs" />
     <Compile Include="Stores\Platforms\OrderBot\OrderBotStoreType.cs" />
@@ -3493,6 +3616,7 @@
     <Compile Include="Stores\Platforms\Newegg\WizardPages\NeweggAccountPage.Designer.cs">
       <DependentUpon>NeweggAccountPage.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\IWebBrowserFactory.cs" />
     <Compile Include="UI\PropertyChangedHandler.cs" />
     <Compile Include="UI\Utility\ActiveEnumerationBindingSource.cs">
       <SubType>Component</SubType>
@@ -7608,6 +7732,9 @@
     <EmbeddedResource Include="Shipping\Carriers\BestRate\BestRateSettingsControl.resx">
       <DependentUpon>BestRateSettingsControl.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\Carriers\BestRate\Footnote\ShippingAccountRequiredForRatingFootnoteControl.resx">
+      <DependentUpon>ShippingAccountRequiredForRatingFootnoteControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\BestRate\Setup\CounterRateProcessingSetupWizard.resx">
       <DependentUpon>CounterRateProcessingSetupWizard.cs</DependentUpon>
     </EmbeddedResource>
@@ -7727,6 +7854,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\Postal\Usps\Express1\Express1UspsProfileControl.resx">
       <DependentUpon>Express1UspsProfileControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\Carriers\Postal\Usps\Registration\PaymentAndBillingAddressControl.resx">
+      <DependentUpon>PaymentAndBillingAddressControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\Postal\Usps\Registration\UspsPaymentControl.resx">
       <DependentUpon>UspsPaymentControl.cs</DependentUpon>
@@ -7865,6 +7995,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Settings\EnumCheckboxControl.resx">
       <DependentUpon>EnumCheckboxControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Stores\Management\ActivationErrorWizardPage.resx">
+      <DependentUpon>ActivationErrorWizardPage.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorAmazonSettingsControl.resx">
       <DependentUpon>ChannelAdvisorAmazonSettingsControl.cs</DependentUpon>
@@ -8233,6 +8366,7 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.9\3.9.0.3.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.0.9.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.1.1.sql" />
+    <None Include="ApplicationCore\Licensing\WSDL\Activation_v1.wsdl" />
     <None Include="packages.config" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.4\4.4.1.2.sql" />
     <None Include="Properties\interapptive_public.snk" />
@@ -8302,6 +8436,9 @@
     </Compile>
     <Compile Include="Users\Audit\AuditReasonType.cs" />
     <Compile Include="Users\ComputerManager.cs" />
+    <Compile Include="Users\IUserService.cs" />
+    <Compile Include="Users\IUserSession.cs" />
+    <Compile Include="Users\Logon\LogonCredentials.cs" />
     <Compile Include="Users\Security\AddStorePermissionsDlg.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -8353,6 +8490,8 @@
     </Compile>
     <Compile Include="Users\Security\SuperUser.cs" />
     <Compile Include="Users\UserManager.cs" />
+    <Compile Include="Users\UserService.cs" />
+    <Compile Include="Users\UserServiceLogonResultType.cs" />
     <Compile Include="Users\UserSession.cs" />
     <Compile Include="Users\Logon\UserChangePasswordDlg.cs">
       <SubType>Form</SubType>
@@ -8360,6 +8499,7 @@
     <Compile Include="Users\Logon\UserChangePasswordDlg.Designer.cs">
       <DependentUpon>UserChangePasswordDlg.cs</DependentUpon>
     </Compile>
+    <Compile Include="Users\UserSessionWrapper.cs" />
     <Compile Include="Users\UserUtility.cs" />
     <Compile Include="ApplicationCore\SplashScreen.cs">
       <SubType>Form</SubType>
@@ -8991,7 +9131,7 @@
     <EmbeddedResource Include="Data\Administration\UpdateFrom2x\Database\Scripts\MigrateData_EmailAccounts.estimate.sql" />
     <EmbeddedResource Include="Data\Administration\UpdateFrom2x\Database\Scripts\MigrateData_EmailAccounts.sql" />
     <None Include="Resources\sw_cubes_32x32.png" />
-    <None Include="Resources\InfoTip.png" />
+    <Resource Include="Resources\InfoTip.png" />
     <Resource Include="Resources\check.png" />
     <None Include="Resources\information.png" />
     <EmbeddedResource Include="ApplicationCore\Options\OptionPageLogging.resx">
@@ -10053,9 +10193,9 @@
     <None Include="Resources\data_disk.png" />
     <None Include="Resources\data_into.png" />
     <EmbeddedResource Include="Data\Administration\Scripts\Installation\DropAssembly.sql" />
-    <None Include="Resources\delete2.png" />
+    <Resource Include="Resources\delete2.png" />
     <None Include="Resources\arrow_down_blue.png" />
-    <None Include="Resources\arrow_up_blue.png" />
+    <Resource Include="Resources\arrow_up_blue.png" />
     <None Include="Resources\funnel_add.png" />
     <None Include="Resources\folderclosed_add.png" />
     <None Include="Resources\edit.png" />
@@ -10310,7 +10450,7 @@
     <None Include="Resources\document_dirty1.png" />
     <None Include="Resources\branch1.png" />
     <None Include="Resources\nav_redo_yellow.png" />
-    <None Include="Resources\school_delete32.png" />
+    <Resource Include="Resources\school_delete32.png" />
     <None Include="Resources\hourglass_11.png" />
     <None Include="Resources\currency_dollar_green16.png" />
     <None Include="Resources\logo_sdc.png" />
@@ -10508,7 +10648,16 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.7\4.7.0.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.7\4.7.0.1.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.7\4.7.0.2.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\5.0\5.0.0.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.7\4.7.1.0.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\5.0\5.0.0.1.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\5.0\5.0.0.2.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\5.0\5.0.0.3.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\5.0\5.0.0.4.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\5.0\5.0.0.5.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\5.0\5.0.0.6.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\5.0\5.0.0.7.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\5.0\5.0.0.8.sql" />
     <Content Include="Resources\add.png" />
     <None Include="Resources\blank16.png" />
     <None Include="Resources\calendar_31.png" />
@@ -10550,7 +10699,6 @@
     <None Include="Resources\aprilfools-16x16.png" />
     <None Include="Resources\brightpearl.png" />
     <None Include="Resources\amazon_large.jpg" />
-    <None Include="Resources\building.png" />
     <Content Include="Resources\check2.png" />
     <None Include="Resources\colors32.png" />
     <None Include="Resources\component.png" />
@@ -10651,9 +10799,6 @@
     <None Include="Resources\choxi.png" />
     <None Include="Resources\instantestore.png" />
     <None Include="Resources\lemonstand.png" />
-    <None Include="Resources\house.png" />
-    <None Include="Resources\island.jpg" />
-    <None Include="Resources\island.png" />
     <Content Include="Resources\message32.png" />
     <Content Include="Resources\message_ok.png" />
     <None Include="Resources\note2_32.png" />
@@ -11035,8 +11180,8 @@
     <None Include="Resources\text_code_add.png" />
     <None Include="Resources\text_code.png" />
     <None Include="Resources\store_config_32.png" />
-    <None Include="Resources\user_lock_48.png" />
-    <None Include="Resources\user_lock_32.png" />
+    <Resource Include="Resources\user_lock_48.png" />
+    <Resource Include="Resources\user_lock_32.png" />
     <None Include="Resources\user_deleted_16.png" />
     <None Include="Resources\user_add_16.png" />
     <None Include="Resources\store_add_16.png" />

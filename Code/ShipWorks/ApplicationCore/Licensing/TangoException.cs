@@ -15,6 +15,12 @@ namespace ShipWorks.ApplicationCore.Licensing
 
         }
 
+        public TangoException(Exception ex) :
+            base(ex.Message, ex)
+        {
+
+        }
+
         public TangoException(string message)
             : base(message)
         {

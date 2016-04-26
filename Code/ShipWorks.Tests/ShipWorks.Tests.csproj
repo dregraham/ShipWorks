@@ -86,6 +86,9 @@
       <HintPath>..\..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Moq, Version=4.2.1510.2205, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Moq.4.2.1510.2205\lib\net40\Moq.dll</HintPath>
       <Private>True</Private>
@@ -94,6 +97,8 @@
       <HintPath>..\..\packages\Newtonsoft.Json.4.5.6\lib\net40\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="Quartz, Version=2.3.2.0, Culture=neutral, PublicKeyToken=f6b8c98a402cc8a4, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Quartz.2.3.2\lib\net40\Quartz.dll</HintPath>
       <Private>True</Private>
@@ -137,8 +142,10 @@
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Services" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xaml" />
     <Reference Include="System.XML" />
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="WindowsBase" />
     <Reference Include="xunit.abstractions, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
       <HintPath>..\..\packages\xunit.abstractions.2.0.0\lib\net35\xunit.abstractions.dll</HintPath>
       <Private>True</Private>
@@ -197,6 +204,48 @@
     <Compile Include="ApplicationCore\Crashes\CrashSubmitterTest.cs" />
     <Compile Include="ApplicationCore\Dashboard\Content\DashboardServiceStoppedItemTest.cs" />
     <Compile Include="ApplicationCore\ExecutionMode\ExecutionModeFactoryTest.cs" />
+    <Compile Include="ApplicationCore\Licensing\ActivationResponseTest.cs" />
+    <Compile Include="ApplicationCore\Licensing\Activation\CustomerLicenseActivationActivityTest.cs" />
+    <Compile Include="ApplicationCore\Licensing\Activation\UspsAccountSetupActivityTest.cs" />
+    <Compile Include="ApplicationCore\Licensing\AddStoreResponseTest.cs" />
+    <Compile Include="ApplicationCore\Licensing\Activation\CustomerLicenseActivationServiceTest.cs" />
+    <Compile Include="ApplicationCore\Licensing\AssociateShipworksWithItselfRequestTest.cs" />
+    <Compile Include="ApplicationCore\Licensing\AssociateShipworksWithItselfResponseTest.cs" />
+    <Compile Include="ApplicationCore\Licensing\CustomerLicenseTest.cs" />
+    <Compile Include="ApplicationCore\Licensing\DisabledLicenseTest.cs" />
+    <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\EndiciaConsolidatorRestrictionTest.cs" />
+    <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\EndiciaDhlRestrictionTest.cs" />
+    <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\EndiciaInsuranceRestrictionTest.cs" />
+    <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\EndiciaScanBasedReturnsRestrictionTest.cs" />
+    <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\FeatureRestrictionTest.cs" />
+    <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\PostalApoFpoPoboxOnlyRestrictionTest.cs" />
+    <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\ShipmentTypeFunctionality\AccountRegistrationRestrictionTest.cs" />
+    <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\ShipmentTypeFunctionality\ProcessShipmentRestrictionTest.cs" />
+    <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\ShipmentTypeFunctionality\PurchasePostageRestrictionTest.cs" />
+    <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\ShipmentTypeFunctionality\RateDiscountMessagingRestrictionTest.cs" />
+    <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\ShipmentTypeRestrictionTest.cs" />
+    <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\StampsAscendiaConsolidatorRestrictionTest.cs" />
+    <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\StampsDhlConsolidatorRestrictionTest.cs" />
+    <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\StampsDhlRestrictionTest.cs" />
+    <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\StampsGlobegisticsConsolidatorRestrictionTest.cs" />
+    <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\StampsIbcConsolidatorRestrictionTest.cs" />
+    <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\StampsInsuranceRestrictionTest.cs" />
+    <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\StampsRrDonnelleyConsolidatorRestrictionTest.cs" />
+    <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\ShipmentTypeFunctionality\ShippingAccountConversionRestrictionTest.cs" />
+    <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\Ups\UpsAccountLimitRestrictionTest.cs" />
+    <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\Ups\UpsAccountNumberRestrictionTest.cs" />
+    <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\Ups\UpsSurePostRestrictionTest.cs" />
+    <Compile Include="ApplicationCore\Licensing\GetActiveStoresResponseTest.cs" />
+    <Compile Include="ApplicationCore\Licensing\LicenseCapabilitiesTest.cs" />
+    <Compile Include="ApplicationCore\Licensing\LicenseEnforcement\ApproachingShipmentLimitEnforcerTest.cs" />
+    <Compile Include="ApplicationCore\Licensing\LicenseEnforcement\ChannelSyncEnforcerTest.cs" />
+    <Compile Include="ApplicationCore\Licensing\LicenseEnforcement\ChannelCountEnforcerTest.cs" />
+    <Compile Include="ApplicationCore\Licensing\LicenseEnforcement\ChannelTypeEnforcerTest.cs" />
+    <Compile Include="ApplicationCore\Licensing\LicenseEnforcement\ExceedingChannelLimitEnforcerTest.cs" />
+    <Compile Include="ApplicationCore\Licensing\LicenseEnforcement\ExceedingShipmentLimitEnforcerTest.cs" />
+    <Compile Include="ApplicationCore\Licensing\LicenseServiceTest.cs" />
+    <Compile Include="ApplicationCore\Licensing\LicenseEncryptionProviderTest.cs" />
+    <Compile Include="ApplicationCore\Licensing\StoreLicenseTest.cs" />
     <Compile Include="ApplicationCore\Nudges\NudgeDeserializerTest.cs" />
     <Compile Include="ApplicationCore\Nudges\NudgeOptionDeserializerTest.cs" />
     <Compile Include="ApplicationCore\Nudges\NudgeOptionTest.cs" />
@@ -447,6 +496,9 @@
     <Compile Include="Shipping\Carriers\UPS\InvoiceRegistration\Api\Request\Manipulators\UpsInvoiceRegistrationInvoiceInfoManipulatorTest.cs" />
     <Compile Include="Shipping\Carriers\UPS\InvoiceRegistration\Api\Response\Manipulators\UpsSaveCredentialsManipulatorTest.cs" />
     <Compile Include="Shipping\Carriers\UPS\InvoiceRegistration\Api\Response\UpsInvoiceRegistrationResponseTest.cs" />
+    <Compile Include="Shipping\Carriers\UPS\LinkNewAccount\Request\Manipulators\UpsLinkNewAccountInfoManipulatorTest.cs" />
+    <Compile Include="Shipping\Carriers\UPS\LinkNewAccount\Request\UpsLinkNewAccountToProfileRequestTest.cs" />
+    <Compile Include="Shipping\Carriers\UPS\LinkNewAccount\Response\Manipulators\UpsLinkNewAccountToProfileResponseTest.cs" />
     <Compile Include="Shipping\Carriers\UPS\OnLineTools\Api\ElementWriters\UpsRatePackageServiceOptionsElementWriterTests.cs" />
     <Compile Include="Shipping\Carriers\UPS\OnLineTools\Api\ElementWriters\UpsPackageServiceOptionsElementWriterTests.cs" />
     <Compile Include="Shipping\Carriers\UPS\OnLineTools\Api\UpsApiCoreTest.cs" />
@@ -554,9 +606,8 @@
     <Compile Include="ApplicationCore\Services\Fakes\FakeShipWorksSchedulerService.cs" />
     <Compile Include="ApplicationCore\Services\ShipWorksSchedulerServiceTests.cs" />
     <Compile Include="ApplicationCore\Services\ServiceStatusEntityExtensionsTests.cs" />
-    <Compile Include="UI\Controls\MultiValueBinders\CheckboxMultiValueBinderTest.cs" />
-    <Compile Include="UI\Controls\MultiValueBinders\GenericMultiValueBinderTest.cs" />
     <Compile Include="UI\PropertyChangedHandlerTest.cs" />
+    <Compile Include="Users\UserServiceTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Core\Certificates\cert_key_pem.txt" />

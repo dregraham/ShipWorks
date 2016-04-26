@@ -472,7 +472,7 @@ CREATE TABLE [dbo].[Order]
 [ShipUnparsedName] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [ShipSenseHashKey] [nvarchar] (64) COLLATE SQL_Latin1_General_CP1_CS_AS NOT NULL,
 [ShipSenseRecognitionStatus] int NOT NULL,
-[ShipAddressType] [int] NOT NULL 
+[ShipAddressType] [int] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_Order] on [dbo].[Order]'
@@ -731,7 +731,7 @@ ALTER TABLE [dbo].[OrderItem] ADD CONSTRAINT [PK_OrderItem] PRIMARY KEY CLUSTERE
 GO
 PRINT N'Creating index [IX_OrderItem_OrderID] on [dbo].[OrderItem]'
 GO
-CREATE NONCLUSTERED INDEX [IX_OrderItem_OrderID] ON [dbo].[OrderItem] ([OrderID])
+CREATE UNIQUE NONCLUSTERED INDEX [IX_OrderItem_OrderID] ON [dbo].[OrderItem] ([OrderID] ASC, [OrderItemID] ASC)
 GO
 ALTER TABLE [dbo].[OrderItem] ENABLE CHANGE_TRACKING
 GO
@@ -2306,7 +2306,7 @@ CREATE TABLE [dbo].[MagentoStore]
 (
 [StoreID] [bigint] NOT NULL,
 [MagentoTrackingEmails] [bit] NOT NULL,
-[MagentoConnect] [bit] NOT NULL
+[MagentoVersion] [int] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_MagentoStore] on [dbo].[MagentoStore]'
@@ -2362,7 +2362,7 @@ ALTER TABLE [dbo].[OrderItemAttribute] ADD CONSTRAINT [PK_OrderItemAttribute] PR
 GO
 PRINT N'Creating index [IX_OrderItemAttribute_OrderItemID] on [dbo].[OrderItemAttribute]'
 GO
-CREATE NONCLUSTERED INDEX [IX_OrderItemAttribute_OrderItemID] ON [dbo].[OrderItemAttribute] ([OrderItemID])
+CREATE UNIQUE NONCLUSTERED INDEX [IX_OrderItemAttribute_OrderItemID] ON [dbo].[OrderItemAttribute] ([OrderItemID] ASC,[OrderItemAttributeID] ASC)
 GO
 ALTER TABLE [dbo].[OrderItemAttribute] ENABLE CHANGE_TRACKING
 GO
@@ -2491,7 +2491,7 @@ ALTER TABLE [dbo].[Note] ADD CONSTRAINT [PK_Note] PRIMARY KEY CLUSTERED  ([NoteI
 GO
 PRINT N'Creating index [IX_OrderNote_ObjectID] on [dbo].[Note]'
 GO
-CREATE NONCLUSTERED INDEX [IX_OrderNote_ObjectID] ON [dbo].[Note] ([ObjectID]) INCLUDE ([Edited])
+CREATE UNIQUE NONCLUSTERED INDEX [IX_OrderNote_ObjectID] ON [dbo].[Note] ([ObjectID] ASC, [NoteID] ASC) INCLUDE ([Edited])
 GO
 ALTER TABLE [dbo].[Note] ENABLE CHANGE_TRACKING
 GO
@@ -2687,7 +2687,7 @@ ALTER TABLE [dbo].[OrderCharge] ADD CONSTRAINT [PK_OrderCharge] PRIMARY KEY CLUS
 GO
 PRINT N'Creating index [IX_OrderCharge_OrderID] on [dbo].[OrderCharge]'
 GO
-CREATE NONCLUSTERED INDEX [IX_OrderCharge_OrderID] ON [dbo].[OrderCharge] ([OrderID])
+CREATE UNIQUE NONCLUSTERED INDEX [IX_OrderCharge_OrderID] ON [dbo].[OrderCharge] ([OrderID] ASC, [OrderChargeID] ASC)
 GO
 ALTER TABLE [dbo].[OrderCharge] ENABLE CHANGE_TRACKING
 GO
@@ -2737,7 +2737,7 @@ ALTER TABLE [dbo].[OrderPaymentDetail] ADD CONSTRAINT [PK_OrderPaymentDetail] PR
 GO
 PRINT N'Creating index [IX_OrderPaymentDetail_OrderID] on [dbo].[OrderPaymentDetail]'
 GO
-CREATE NONCLUSTERED INDEX [IX_OrderPaymentDetail_OrderID] ON [dbo].[OrderPaymentDetail] ([OrderID])
+CREATE UNIQUE NONCLUSTERED INDEX [IX_OrderPaymentDetail_OrderID] ON [dbo].[OrderPaymentDetail] ([OrderID] ASC, [OrderPaymentDetailID] ASC)
 GO
 ALTER TABLE [dbo].[OrderPaymentDetail] ENABLE CHANGE_TRACKING
 GO
@@ -3975,7 +3975,8 @@ CREATE TABLE [dbo].[Configuration]
 [CustomerUpdateModifiedBilling] [int] NOT NULL,
 [CustomerUpdateModifiedShipping] [int] NOT NULL,
 [AuditNewOrders] [bit] NOT NULL,
-[AuditDeletedOrders] [bit] NOT NULL
+[AuditDeletedOrders] [bit] NOT NULL,
+[CustomerKey] [nvarchar] (max) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_Configuration] on [dbo].[Configuration]'
@@ -4728,7 +4729,8 @@ CREATE TABLE [dbo].[UspsAccount]
 [MailingPostalCode] [nvarchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [UspsReseller] [int] NOT NULL,
 [ContractType] [int] NOT NULL,
-[CreatedDate] [datetime] NOT NULL
+[CreatedDate] [datetime] NOT NULL,
+[PendingInitialAccount] [int] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_PostalUspsAccount] on [dbo].[UspsAccount]'

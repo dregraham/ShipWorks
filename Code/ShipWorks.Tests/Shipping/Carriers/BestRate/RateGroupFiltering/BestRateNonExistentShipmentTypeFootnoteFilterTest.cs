@@ -3,6 +3,7 @@ using System.Linq;
 using Xunit;
 using Moq;
 using ShipWorks.Shipping;
+using ShipWorks.Shipping.Carriers.BestRate.Footnote;
 using ShipWorks.Shipping.Carriers.BestRate.RateGroupFiltering;
 using ShipWorks.Shipping.Carriers.Postal.Endicia;
 using ShipWorks.Shipping.Carriers.Postal.Express1;
@@ -79,6 +80,20 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
             RateGroup filteredRateGroup = testObject.Filter(rateGroup);
 
             Assert.Equal(ShipmentTypeCode.Usps, filteredRateGroup.FootnoteFactories.First().ShipmentTypeCode);
+        }
+
+        [Fact]
+        public void Filter_RetainsShippingAccountRequiredFootnoteFactory_ForShipmentTypesNotInRates()
+        {
+            RateGroup rateGroup = RateGroup.ShippingAccountRequiredRateGroup(ShipmentTypeCode.BestRate);
+
+            rateGroup.AddFootnoteFactory(new Express1PromotionRateFootnoteFactory(new EndiciaShipmentType(), settings.Object));
+            rateGroup.AddFootnoteFactory(new Express1PromotionRateFootnoteFactory(new UspsShipmentType(), settings.Object));
+
+            RateGroup filteredRateGroup = testObject.Filter(rateGroup);
+
+            Assert.Equal(ShipmentTypeCode.BestRate, filteredRateGroup.FootnoteFactories.First().ShipmentTypeCode);
+            Assert.IsAssignableFrom<ShippingAccountRequiredForRatingFootnoteFactory>(filteredRateGroup.FootnoteFactories.First());
         }
     }
 }
