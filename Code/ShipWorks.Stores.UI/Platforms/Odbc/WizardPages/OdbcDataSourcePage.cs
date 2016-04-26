@@ -60,7 +60,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
             else
             {
                 // display error if the connection fails
-                MessageHelper.ShowError(this, $"Unable to connect to data source:{Environment.NewLine} {result.Message}");
+                MessageHelper.ShowError(this, $"ShipWorks was unable to connect to the ODBC data source. {Environment.NewLine} {result.Message}");
                 log.Error($"Odbc data source connection failed: {result.Message}");
 
                 e.NextPage = this;
