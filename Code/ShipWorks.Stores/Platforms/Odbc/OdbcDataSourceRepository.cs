@@ -9,7 +9,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
     /// <summary>
     /// Used to retrieve OdbcDataSources from system DSNs.
     /// </summary>
-    public class OdbcDataSourceRepository : IOdbcDataSourceRepository, IDisposable
+    public class OdbcDataSourceRepository : IOdbcDataSourceRepository
     {
         private readonly IDsnRetriever dsnRetriever;
         private readonly IShipWorksOdbcProvider odbcProvider;

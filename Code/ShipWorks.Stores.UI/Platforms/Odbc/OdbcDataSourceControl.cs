@@ -1,11 +1,11 @@
-﻿using System.Windows.Forms;
-using Autofac;
+﻿using Autofac;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Odbc;
 using System.Data;
+using System.Windows.Forms;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc
 {
