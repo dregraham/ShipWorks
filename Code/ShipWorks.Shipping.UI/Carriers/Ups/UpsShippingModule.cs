@@ -2,12 +2,17 @@
 using Autofac.Core;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers;
+using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.UPS;
+using ShipWorks.Shipping.Carriers.UPS.InvoiceRegistration;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api;
 using ShipWorks.Shipping.Carriers.UPS.ServiceManager;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
+using ShipWorks.Shipping.Carriers.UPS.OpenAccount.Api;
+using ShipWorks.Shipping.Carriers.UPS.UpsEnvironment;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Services.Builders;
 
@@ -82,6 +87,25 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups
 
             RegisterRatingServiceFor(ShipmentTypeCode.UpsOnLineTools, builder);
             RegisterRatingServiceFor(ShipmentTypeCode.UpsWorldShip, builder);
+			
+            builder.RegisterType<UpsClerk>()
+                .AsImplementedInterfaces();
+
+            builder.RegisterType<UpsResponseFactory>()
+                .Keyed<ICarrierResponseFactory>(ShipmentTypeCode.UpsOnLineTools)
+                .Keyed<ICarrierResponseFactory>(ShipmentTypeCode.UpsWorldShip);
+
+            builder.RegisterType<UpsSettingsRepository>()
+                .Keyed<ICarrierSettingsRepository>(ShipmentTypeCode.UpsOnLineTools);
+
+            builder.RegisterType<UpsServiceGateway>()
+                .AsImplementedInterfaces();
+
+            builder.RegisterType<UpsOpenAccountRequestFactory>()
+                .AsImplementedInterfaces();
+
+            builder.RegisterType<UpsInvoiceRegistrationRequestFactory>()
+                .AsImplementedInterfaces();
         }
 
         /// <summary>
@@ -95,5 +119,6 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups
                     (parameters, _) => parameters.ParameterType == typeof(UpsShipmentType),
                     (_, context) => context.ResolveKeyed<ShipmentType>(shipmentType)));
         }
+
     }
 }

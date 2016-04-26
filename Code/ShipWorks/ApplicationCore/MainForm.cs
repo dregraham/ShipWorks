@@ -839,6 +839,9 @@ namespace ShipWorks
 
             // refresh the license if it is older than 10 mins
             licenses.ForEach(license => license.Refresh());
+
+            // now that we updated license info we can refresh the UI to match
+            editionGuiHelper.UpdateUI();
             ForceHeartbeat();
         }
 

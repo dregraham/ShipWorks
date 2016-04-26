@@ -19,17 +19,6 @@ namespace ShipWorks.Shipping.Carriers.UPS.OpenAccount
         }
 
         /// <summary>
-        /// Shows the form as a modal dialog box with the specified owner.
-        /// </summary>
-        public new DialogResult ShowDialog(IWin32Window owner)
-        {
-            // Just stubbed out so hold at location control can be wired up
-            base.ShowDialog(owner);
-
-            return DialogResult.OK;
-        }
-
-        /// <summary>
         /// Formats the address result for display.
         /// </summary>
         public void SetAddress(AddressKeyCandidateType suggestedAddress, string addressName)
