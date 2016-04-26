@@ -110,7 +110,15 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
             get { return serviceType; }
             set
             {
-                handler.Set(nameof(ServiceType), ref serviceType, value, false);
+                // Verify that the currently selected service type is in the list allowed
+                // If not, just select the first one in the list.
+                int updatedServiceType = value;
+                if (Services.All(x => x.Key != value))
+                {
+                    updatedServiceType = Services.FirstOrDefault().Key;
+                }
+
+                handler.Set(nameof(ServiceType), ref serviceType, updatedServiceType, false);
                 RefreshPackageTypes();
             }
         }

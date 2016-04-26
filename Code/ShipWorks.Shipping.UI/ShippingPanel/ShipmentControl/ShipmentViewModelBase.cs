@@ -224,7 +224,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         public virtual void RefreshServiceTypes()
         {
             Dictionary<int, string> updatedServices = new Dictionary<int, string>();
-            Services = new List<KeyValuePair<int, string>>();
 
             try
             {
@@ -236,14 +235,26 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
                 updatedServices.Add(shipmentAdapter.ServiceType, "Error getting service types.");
             }
 
+            // If no service types are returned, the carrier doesn't support service types,
+            // so just return.
+            if (!updatedServices.Any())
+            {
+                Services = new List<KeyValuePair<int, string>>();
+                return;
+            }
+
+            // If the values are all the same, just return.
+            if (updatedServices.OrderBy(kvp => kvp.Key)
+                .SequenceEqual(Services.OrderBy(kvp => kvp.Key)))
+            {
+                return;
+            }
+
             // Get the new list
             Services = new List<KeyValuePair<int, string>>(updatedServices);
 
-            // Update the selected service type.  If the currently selected value isn't in the list
-            // just use the first one in the list.
-            ServiceType = Services.Any(pt => pt.Key == shipmentAdapter.ServiceType) ?
-                shipmentAdapter.ServiceType :
-                Services.First().Key;
+            // Update the selected service type.  
+            ServiceType = shipmentAdapter.ServiceType;
         }
 
         /// <summary>
