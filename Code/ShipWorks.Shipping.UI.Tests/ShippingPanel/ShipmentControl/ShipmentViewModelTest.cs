@@ -197,7 +197,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
 
             ShipmentViewModel testObject = mock.Create<ShipmentViewModel>();
             testObject.Load(shipmentAdapter.Object);
-            Assert.Equal(expectedServices.Count, testObject.Services.Count);
+            Assert.Equal(expectedServices.Count, testObject.Services.Count());
         }
 
         [Fact]
@@ -207,11 +207,11 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
 
             ShipmentViewModel testObject = mock.Create<ShipmentViewModel>();
             testObject.Load(shipmentAdapter.Object);
-            Assert.Equal(expectedServices.Count, testObject.Services.Count);
+            Assert.Equal(expectedServices.Count, testObject.Services.Count());
 
             expectedServices.Add(3, "Service 3");
             testObject.RefreshServiceTypes();
-            Assert.Equal(expectedServices.Count, testObject.Services.Count);
+            Assert.Equal(expectedServices.Count, testObject.Services.Count());
         }
 
         [Fact]
@@ -224,7 +224,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
             ShipmentViewModel testObject = mock.Create<ShipmentViewModel>();
             testObject.Load(shipmentAdapter.Object);
 
-            Assert.Equal(1, testObject.Services.Count);
+            Assert.Equal(1, testObject.Services.Count());
             Assert.Contains("error", testObject.Services.First().Value, StringComparison.OrdinalIgnoreCase);
         }
 
@@ -250,7 +250,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
             ShipmentViewModel testObject = mock.Create<ShipmentViewModel>();
             testObject.Load(shipmentAdapter.Object);
 
-            Assert.Equal(expectedPackageTypes.Count, testObject.PackageTypes.Count);
+            Assert.Equal(expectedPackageTypes.Count, testObject.PackageTypes.Count());
         }
 
         [Fact]
@@ -557,11 +557,11 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
 
             ShipmentViewModel testObject = mock.Create<ShipmentViewModel>();
             testObject.Load(shipmentAdapter.Object);
-            Assert.Equal(expectedPackageTypes.Count, testObject.PackageTypes.Count);
+            Assert.Equal(expectedPackageTypes.Count, testObject.PackageTypes.Count());
 
             expectedServices.Add(3, "Package Type 3");
             testObject.RefreshServiceTypes();
-            Assert.Equal(expectedPackageTypes.Count, testObject.PackageTypes.Count);
+            Assert.Equal(expectedPackageTypes.Count, testObject.PackageTypes.Count());
         }
 
         [Fact]
