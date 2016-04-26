@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Interapptive.Shared.Net;
 using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
@@ -17,6 +18,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.InvoiceRegistration.Api.Request.
         private UpsInvoiceRegistrationAddressManipulator testObject;
 
         private UpsAccountEntity upsAccount;
+
+        private string ipAddress = "192.168.1.101";
 
         public UpsInvoiceRegistrationAddressManipulatorTest()
         {
@@ -42,7 +45,11 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.InvoiceRegistration.Api.Request.
                 Email = "HSimpson@aol.com"
             };
 
-            testObject = new UpsInvoiceRegistrationAddressManipulator(upsAccount);
+            Mock<INetworkUtility> networkUtility = new Mock<INetworkUtility>();
+            networkUtility.Setup(u => u.GetIPAddress())
+                .Returns(ipAddress);
+
+            testObject = new UpsInvoiceRegistrationAddressManipulator(upsAccount, networkUtility.Object);
         }
 
         [Fact]
@@ -131,6 +138,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.InvoiceRegistration.Api.Request.
             testObject.Manipulate(request);
 
             Assert.Equal(upsAccount.Email, registerRequest.EmailAddress);
+        }
+
+        [Fact]
+        public void Manipulate_IPAddressIsSet()
+        {
+            testObject.Manipulate(request);
+
+            Assert.Equal(ipAddress, registerRequest.EndUserIPAddress);
         }
     }
 }
