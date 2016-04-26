@@ -30,7 +30,6 @@
         {
             this.authInvoiceAmount = new ShipWorks.UI.Controls.MoneyTextBox();
             this.authInvoiceDate = new System.Windows.Forms.DateTimePicker();
-            this.labelOptionalInstructions = new System.Windows.Forms.Label();
             this.authControlID = new System.Windows.Forms.TextBox();
             this.authInvoiceNumber = new System.Windows.Forms.TextBox();
             this.labelAuthControlID = new System.Windows.Forms.Label();
@@ -45,7 +44,8 @@
             0,
             0,
             0,
-            65536});
+            131072});
+            this.authInvoiceAmount.IgnoreSet = false;
             this.authInvoiceAmount.Location = new System.Drawing.Point(95, 57);
             this.authInvoiceAmount.Name = "authInvoiceAmount";
             this.authInvoiceAmount.Size = new System.Drawing.Size(96, 20);
@@ -59,16 +59,6 @@
             this.authInvoiceDate.Name = "authInvoiceDate";
             this.authInvoiceDate.Size = new System.Drawing.Size(96, 20);
             this.authInvoiceDate.TabIndex = 5;
-            // 
-            // labelOptionalInstructions
-            // 
-            this.labelOptionalInstructions.AutoSize = true;
-            this.labelOptionalInstructions.ForeColor = System.Drawing.Color.Gray;
-            this.labelOptionalInstructions.Location = new System.Drawing.Point(92, 109);
-            this.labelOptionalInstructions.Name = "labelOptionalInstructions";
-            this.labelOptionalInstructions.Size = new System.Drawing.Size(253, 13);
-            this.labelOptionalInstructions.TabIndex = 10;
-            this.labelOptionalInstructions.Text = "(Optional, but required if it is present on your invoice)";
             // 
             // authControlID
             // 
@@ -126,7 +116,6 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.authInvoiceAmount);
             this.Controls.Add(this.authInvoiceDate);
-            this.Controls.Add(this.labelOptionalInstructions);
             this.Controls.Add(this.authControlID);
             this.Controls.Add(this.authInvoiceNumber);
             this.Controls.Add(this.labelAuthControlID);
@@ -144,7 +133,6 @@
 
         private UI.Controls.MoneyTextBox authInvoiceAmount;
         private System.Windows.Forms.DateTimePicker authInvoiceDate;
-        private System.Windows.Forms.Label labelOptionalInstructions;
         private System.Windows.Forms.TextBox authControlID;
         private System.Windows.Forms.TextBox authInvoiceNumber;
         private System.Windows.Forms.Label labelAuthControlID;
