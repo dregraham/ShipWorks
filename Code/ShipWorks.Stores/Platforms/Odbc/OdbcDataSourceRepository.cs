@@ -51,7 +51,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
             }
             catch (DataException ex)
             {
-                log.Error("Error in GetNextDsnName", ex);
+                log.Error("Error getting data source names.", ex);
                 throw;
             }
         }
