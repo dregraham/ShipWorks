@@ -3,12 +3,12 @@
 namespace ShipWorks.Stores.Platforms.Odbc
 {
     /// <summary>
-    /// Interface of DsnProvider
+    /// An interface intended to provide data source name (DSN) related information
     /// </summary>
     public interface IDsnProvider
     {
         /// <summary>
-        /// Gets the names
+        /// Returns an IEnumerable of DSNs
         /// </summary>
         IEnumerable<string> GetDataSourceNames();
     }
