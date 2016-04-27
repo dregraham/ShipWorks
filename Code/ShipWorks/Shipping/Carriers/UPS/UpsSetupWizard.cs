@@ -148,13 +148,12 @@ namespace ShipWorks.Shipping.Carriers.UPS
             upsAccount.InitializeNullsToDefault();
 
             personControl.LoadEntity(new PersonAdapter(upsAccount, ""));
+            
+            Pages.Remove(wizardPageAccountList);
 
             // it will just be to setup to add a new account
             if (addAccountOnly)
             {
-                // In this case the user is explicity wanting to add a new account, so drop the list and just do the add-account flow
-                Pages.Remove(wizardPageAccountList);
-
                 // And remove the settings pages
                 Pages.Remove(wizardPageOptionsOlt);
                 Pages.Remove(wizardPageOptionsWorldShip);
@@ -168,7 +167,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 // remove the invoice auth page for now because the rates page will re add it if needed
                 if (UpsAccountManager.Accounts.Any())
                 {
-                    Pages.Remove(wizardPageAccountList);
                     Pages.Remove(wizardPageLicense);
                     Pages.Remove(wizardPageInvoiceAuthentication);
                 }
