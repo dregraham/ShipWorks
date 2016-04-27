@@ -190,6 +190,9 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
             currentShipment.Ups.Packages[0].DimsAddWeight = originalShipment.BestRate.DimsAddWeight;
             currentShipment.Ups.Packages[0].DimsWeight = originalShipment.BestRate.DimsWeight;
 
+            // Update total weight 
+            ShipmentType.UpdateTotalWeight(currentShipment);
+
             currentShipment.Ups.Packages[0].PackagingType = (int)UpsPackagingType.Custom;
             currentShipment.Ups.Service = (int)UpsServiceType.UpsGround;
             SetAccount(currentShipment, account);
