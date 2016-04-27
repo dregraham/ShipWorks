@@ -3,7 +3,7 @@
 namespace ShipWorks.Stores.Platforms.Odbc
 {
     /// <summary>
-    /// Retrieves DSN names
+    /// Interface of DsnProvider
     /// </summary>
     public interface IDsnProvider
     {
