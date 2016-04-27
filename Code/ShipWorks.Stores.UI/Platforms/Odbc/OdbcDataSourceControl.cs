@@ -9,6 +9,7 @@ using ShipWorks.Stores.Platforms.Odbc;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc
@@ -91,7 +92,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
 
                 try
                 {
-                    IEnumerable<OdbcDataSource> dataSources = repo.GetDataSources();
+                    List<OdbcDataSource> dataSources = repo.GetDataSources().ToList();
 
                     if (dataSources.None())
                     {
