@@ -26,6 +26,9 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
 
             builder.RegisterType<DsnProvider>()
                 .AsImplementedInterfaces();
+
+            builder.RegisterType<OdbcControlPanel>()
+                .AsImplementedInterfaces();
         }
     }
 }
