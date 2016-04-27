@@ -67,8 +67,8 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
                     .Returns(log.Object);
                 mock.Provide(repo.Object);
 
-                Mock<IDsnProvider> dsnRetriever = mock.Mock<IDsnProvider>();
-                dsnRetriever.Setup(retriever => retriever.GetDataSourceNames())
+                Mock<IDsnProvider> dsnProvider = mock.Mock<IDsnProvider>();
+                dsnProvider.Setup(dp => dp.GetDataSourceNames())
                     .Throws(new DataException());
 
                 var testObject = mock.Create<OdbcDataSourceRepository>();
