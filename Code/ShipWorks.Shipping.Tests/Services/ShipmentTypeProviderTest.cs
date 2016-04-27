@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using Autofac.Extras.Moq;
-using ShipWorks.Core.Messaging;
+using Interapptive.Shared.Messaging;
 using Moq;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Tests.Shared;
 using Xunit;
-using System.Reactive.Subjects;
-using System.Reactive.Linq;
 
 namespace ShipWorks.Shipping.Tests.Services
 {
@@ -62,7 +62,7 @@ namespace ShipWorks.Shipping.Tests.Services
 
             ShipmentTypeProvider testObject = mock.Create<ShipmentTypeProvider>();
 
-            subject.OnNext(new EnabledCarriersChangedMessage(null, new List<int>(), new List<int> { (int)ShipmentTypeCode.Other }));
+            subject.OnNext(new EnabledCarriersChangedMessage(null, new List<int>(), new List<int> { (int) ShipmentTypeCode.Other }));
 
             Assert.DoesNotContain(ShipmentTypeCode.Other, testObject.Available);
         }
@@ -75,7 +75,7 @@ namespace ShipWorks.Shipping.Tests.Services
 
             ShipmentTypeProvider testObject = mock.Create<ShipmentTypeProvider>();
 
-            subject.OnNext(new EnabledCarriersChangedMessage(null, new List<int> { (int)ShipmentTypeCode.FedEx }, new List<int>()));
+            subject.OnNext(new EnabledCarriersChangedMessage(null, new List<int> { (int) ShipmentTypeCode.FedEx }, new List<int>()));
 
             Assert.Contains(ShipmentTypeCode.FedEx, testObject.Available);
         }
@@ -88,7 +88,7 @@ namespace ShipWorks.Shipping.Tests.Services
 
             ShipmentTypeProvider testObject = mock.Create<ShipmentTypeProvider>();
 
-            subject.OnNext(new EnabledCarriersChangedMessage(null, new List<int> { (int)ShipmentTypeCode.Other }, new List<int>()));
+            subject.OnNext(new EnabledCarriersChangedMessage(null, new List<int> { (int) ShipmentTypeCode.Other }, new List<int>()));
 
             Assert.Equal(2, testObject.Available.Count());
         }

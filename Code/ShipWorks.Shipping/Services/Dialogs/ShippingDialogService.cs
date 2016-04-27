@@ -73,11 +73,13 @@ namespace ShipWorks.Shipping.Services.Dialogs
                 messenger.OfType<ShipAgainMessage>()
                     .SelectInBackgroundWithDialog(schedulerProvider, CreateProgressDialog, ShipAgain)
                     .Where(x => x != null)
+                    .Select(x => new OpenShippingDialogMessage(this, new[] { x }))
                     .Do(x => messenger.Send(new OrderSelectionChangingMessage(this, x.Shipments.Select(s => s.OrderID))))
                     .Subscribe(OpenShippingDialog),
                 messenger.OfType<CreateReturnShipmentMessage>()
                     .SelectInBackgroundWithDialog(schedulerProvider, CreateProgressDialog, CreateReturnShipment)
                     .Where(x => x != null)
+                    .Select(x => new OpenShippingDialogMessage(this, new[] { x }))
                     .Do(x => messenger.Send(new OrderSelectionChangingMessage(this, x.Shipments.Select(s => s.OrderID))))
                     .Subscribe(OpenShippingDialog)
             );
@@ -94,7 +96,7 @@ namespace ShipWorks.Shipping.Services.Dialogs
         /// <summary>
         /// Create a return shipment
         /// </summary>
-        private OpenShippingDialogMessage CreateReturnShipment(CreateReturnShipmentMessage message)
+        private ShipmentEntity CreateReturnShipment(CreateReturnShipmentMessage message)
         {
             return CreateShipmentCopy(message.Shipment, x => x.ReturnShipment = true);
         }
@@ -102,7 +104,7 @@ namespace ShipWorks.Shipping.Services.Dialogs
         /// <summary>
         /// Ship the order again
         /// </summary>
-        private OpenShippingDialogMessage ShipAgain(ShipAgainMessage message)
+        private ShipmentEntity ShipAgain(ShipAgainMessage message)
         {
             return CreateShipmentCopy(message.Shipment, null);
         }
@@ -175,12 +177,11 @@ namespace ShipWorks.Shipping.Services.Dialogs
         /// <summary>
         /// Create a copy of the shipment
         /// </summary>
-        private OpenShippingDialogMessage CreateShipmentCopy(ShipmentEntity shipment, Action<ShipmentEntity> configure)
+        private ShipmentEntity CreateShipmentCopy(ShipmentEntity shipment, Action<ShipmentEntity> configure)
         {
             try
             {
-                ShipmentEntity copy = shippingManager.CreateShipmentCopy(shipment, configure);
-                return new OpenShippingDialogMessage(this, new[] { copy });
+                return shippingManager.CreateShipmentCopy(shipment, configure);
             }
             catch (SqlForeignKeyException)
             {

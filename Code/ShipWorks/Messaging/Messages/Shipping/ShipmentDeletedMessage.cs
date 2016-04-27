@@ -1,4 +1,6 @@
-﻿namespace ShipWorks.Messaging.Messages.Shipping
+﻿using System;
+
+namespace ShipWorks.Messaging.Messages.Shipping
 {
     /// <summary>
     /// A shipment has been deleted
@@ -12,12 +14,18 @@
         {
             Sender = sender;
             DeletedEntityID = deletedShipmentId;
+            MessageId = Guid.NewGuid();
         }
 
         /// <summary>
         /// Sender of the message
         /// </summary>
         public object Sender { get; }
+
+        /// <summary>
+        /// Id of the message used for tracking purposes
+        /// </summary>
+        public Guid MessageId { get; }
 
         /// <summary>
         /// Id of the shipment that was deleted

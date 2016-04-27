@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Reactive.Subjects;
 using Autofac.Extras.Moq;
-using ShipWorks.Core.Messaging;
+using Interapptive.Shared.Messaging;
 using ShipWorks.Core.Messaging.Messages.Shipping;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Shipping.UI.MessageHandlers;
@@ -25,7 +25,7 @@ namespace ShipWorks.Shipping.UI.Tests
         [Fact]
         public void ShipmentLoadedStream_SendsChangedMessage_WhenChangingAndCorrespondingChangedReceived()
         {
-            OrderSelectionChangedMessage calledMessage;
+            OrderSelectionChangedMessage calledMessage = default(OrderSelectionChangedMessage);
             var testObject = mock.Create<OrderSelectionChangedHandler>();
             testObject.ShipmentLoadedStream().Subscribe(x => calledMessage = x);
             var sentMessage = new OrderSelectionChangedMessage(this, new[] { CreateOrderSelection(2) });

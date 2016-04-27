@@ -7,6 +7,7 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Media;
+using Interapptive.Shared.Messaging;
 using ShipWorks.Core.Messaging;
 
 namespace ShipWorks.UI.AttachedProperties

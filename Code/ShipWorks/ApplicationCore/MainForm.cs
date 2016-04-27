@@ -18,6 +18,7 @@ using ICSharpCode.SharpZipLib.Zip;
 using Interapptive.Shared;
 using Interapptive.Shared.Data;
 using Interapptive.Shared.IO.Zip;
+using Interapptive.Shared.Messaging;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;

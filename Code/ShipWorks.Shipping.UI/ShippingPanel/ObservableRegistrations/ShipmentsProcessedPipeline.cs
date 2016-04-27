@@ -2,9 +2,9 @@
 using System.Linq;
 using System.Reactive.Linq;
 using Interapptive.Shared.Collections;
+using Interapptive.Shared.Messaging;
 using Interapptive.Shared.Threading;
 using log4net;
-using ShipWorks.Core.Messaging;
 using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Shipping.Services;
 

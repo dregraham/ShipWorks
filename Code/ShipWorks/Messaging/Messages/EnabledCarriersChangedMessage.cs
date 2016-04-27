@@ -1,7 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Interapptive.Shared.Collections;
-using ShipWorks.Core.Messaging;
+using Interapptive.Shared.Messaging;
 using ShipWorks.Shipping;
 
 namespace ShipWorks.Messaging.Messages
@@ -19,12 +20,18 @@ namespace ShipWorks.Messaging.Messages
             Sender = sender;
             Added = typesAdded.Cast<ShipmentTypeCode>().ToReadOnly();
             Removed = typesRemoved.Cast<ShipmentTypeCode>().ToReadOnly();
+            MessageId = Guid.NewGuid();
         }
 
         /// <summary>
         /// Originator of the message
         /// </summary>
         public object Sender { get; private set; }
+
+        /// <summary>
+        /// Id of the message used for tracking purposes
+        /// </summary>
+        public Guid MessageId { get; }
 
         /// <summary>
         /// Shipment types that were added

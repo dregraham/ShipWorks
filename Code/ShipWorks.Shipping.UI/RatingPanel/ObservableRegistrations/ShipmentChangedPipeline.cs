@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Reactive.Linq;
-using ShipWorks.Core.Messaging;
+using Interapptive.Shared.Messaging;
 using ShipWorks.Messaging.Messages;
 
 namespace ShipWorks.Shipping.UI.RatingPanel.ObservableRegistrations

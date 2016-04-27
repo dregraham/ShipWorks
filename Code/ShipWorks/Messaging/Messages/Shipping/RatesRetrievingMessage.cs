@@ -1,11 +1,12 @@
-﻿using ShipWorks.Core.Messaging;
+﻿using System;
+using Interapptive.Shared.Messaging;
 
 namespace ShipWorks.Messaging.Messages.Shipping
 {
     /// <summary>
     /// Rate retrieval has begun
     /// </summary>
-    public class RatesRetrievingMessage : IShipWorksMessage
+    public struct RatesRetrievingMessage : IShipWorksMessage
     {
         /// <summary>
         /// Constructor
@@ -14,12 +15,18 @@ namespace ShipWorks.Messaging.Messages.Shipping
         {
             Sender = sender;
             RatingHash = ratingHash;
+            MessageId = Guid.NewGuid();
         }
 
         /// <summary>
         /// Object that sent the message
         /// </summary>
         public object Sender { get; }
+
+        /// <summary>
+        /// Id of the message used for tracking purposes
+        /// </summary>
+        public Guid MessageId { get; }
 
         /// <summary>
         /// Hash of the shipment for which rates are being retrieved

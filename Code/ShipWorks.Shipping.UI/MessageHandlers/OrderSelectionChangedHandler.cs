@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Reactive.Linq;
 using Interapptive.Shared.Collections;
-using ShipWorks.Core.Messaging;
+using Interapptive.Shared.Messaging;
 using ShipWorks.Messaging.Messages;
 
 namespace ShipWorks.Shipping.UI.MessageHandlers

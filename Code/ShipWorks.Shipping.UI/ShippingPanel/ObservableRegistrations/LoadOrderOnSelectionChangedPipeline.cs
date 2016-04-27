@@ -2,6 +2,7 @@
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using Interapptive.Shared.Collections;
+using Interapptive.Shared.Messaging.TrackedObservable;
 using Interapptive.Shared.Threading;
 using log4net;
 using ShipWorks.Shipping.UI.MessageHandlers;
@@ -36,8 +37,10 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
         public IDisposable Register(ShippingPanelViewModel viewModel)
         {
             return new CompositeDisposable(
-                changeHandler.OrderChangingStream()
-                    .Do(message =>
+                changeHandler
+                    .OrderChangingStream()
+                    .Trackable()
+                    .Do(this, message =>
                     {
                         viewModel.IsLoading = true;
 
@@ -52,12 +55,13 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
                         viewModel.UnloadShipment();
                     })
                     .CatchAndContinue((Exception ex) => log.Error("An error occurred while selecting an order", ex))
-                    .Subscribe(_ => { }),
+                    .Subscribe(this, _ => { }),
                 changeHandler.ShipmentLoadedStream()
+                    .Trackable()
                     .ObserveOn(schedulerProvider.Dispatcher)
                     .Do(_ => viewModel.AllowEditing = true)
                     .CatchAndContinue((Exception ex) => log.Error("An error occurred while loading order selection", ex))
-                    .Subscribe(viewModel.LoadOrder)
+                    .Subscribe(this, viewModel.LoadOrder)
             );
         }
     }

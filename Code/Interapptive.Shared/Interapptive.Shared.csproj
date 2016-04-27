@@ -144,6 +144,25 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Collections\ComparisonResult.cs" />
+    <Compile Include="Messaging\IShipWorksMessage.cs" />
+    <Compile Include="Messaging\Logging\DoOperation.cs" />
+    <Compile Include="Messaging\TrackedObservable\DoImpl.cs" />
+    <Compile Include="Messaging\Logging\ILogItem.cs" />
+    <Compile Include="Messaging\Logging\IOperation.cs" />
+    <Compile Include="Messaging\Logging\LogItem.cs" />
+    <Compile Include="Messaging\Logging\MessageLogger.cs" />
+    <Compile Include="Messaging\Logging\ReferenceConverter.cs" />
+    <Compile Include="Messaging\Logging\SelectOperation.cs" />
+    <Compile Include="Messaging\Logging\SendMessage.cs" />
+    <Compile Include="Messaging\Logging\SubscribeOperation.cs" />
+    <Compile Include="Messaging\Logging\TypeConverter.cs" />
+    <Compile Include="Messaging\Logging\WhereOperation.cs" />
+    <Compile Include="Messaging\TrackedObservable\IMessageTracker.cs" />
+    <Compile Include="Messaging\TrackedObservable\MessageTracker.cs" />
+    <Compile Include="Messaging\TrackedObservable\SelectImpl.cs" />
+    <Compile Include="Messaging\TrackedObservable\SubscribeImpl.cs" />
+    <Compile Include="Messaging\TrackedObservable\TrackableImpl.cs" />
+    <Compile Include="Messaging\TrackedObservable\WhereImpl.cs" />
     <Compile Include="NDependIgnoreAttribute.cs" />
     <Compile Include="NDependIgnoreComplexMethodAttribute.cs" />
     <Compile Include="NDependIgnoreTooManyParamsAttribute.cs" />

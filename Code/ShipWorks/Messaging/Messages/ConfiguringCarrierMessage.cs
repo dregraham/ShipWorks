@@ -1,4 +1,5 @@
-﻿using ShipWorks.Core.Messaging;
+﻿using System;
+using Interapptive.Shared.Messaging;
 using ShipWorks.Shipping;
 
 namespace ShipWorks.Messaging.Messages
@@ -6,7 +7,7 @@ namespace ShipWorks.Messaging.Messages
     /// <summary>
     /// A carrier is being configured for the first time
     /// </summary>
-    public class ConfiguringCarrierMessage : IShipWorksMessage
+    public struct ConfiguringCarrierMessage : IShipWorksMessage
     {
         /// <summary>
         /// Constructor
@@ -15,16 +16,22 @@ namespace ShipWorks.Messaging.Messages
         {
             Sender = sender;
             ShipmentTypeCode = shipmentTypeCode;
+            MessageId = Guid.NewGuid();
         }
 
         /// <summary>
         /// Source of the message
         /// </summary>
-        public object Sender { get; private set; }
+        public object Sender { get; }
+
+        /// <summary>
+        /// Id of the message used for tracking purposes
+        /// </summary>
+        public Guid MessageId { get; }
 
         /// <summary>
         /// Carrier that is being configured
         /// </summary>
-        public ShipmentTypeCode ShipmentTypeCode { get; private set; }
+        public ShipmentTypeCode ShipmentTypeCode { get; }
     }
 }

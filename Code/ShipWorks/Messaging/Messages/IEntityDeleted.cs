@@ -1,4 +1,4 @@
-﻿using ShipWorks.Core.Messaging;
+﻿using Interapptive.Shared.Messaging;
 
 namespace ShipWorks.Messaging.Messages
 {

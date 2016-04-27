@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Runtime.CompilerServices;
+using Interapptive.Shared.Messaging;
+using Interapptive.Shared.Messaging.Logging;
 
 namespace ShipWorks.Core.Messaging
 {
@@ -40,7 +43,11 @@ namespace ShipWorks.Core.Messaging
         /// <summary>
         /// Send a message to any listeners
         /// </summary>
-        public void Send<T>(T message) where T : IShipWorksMessage => observer?.OnNext(message);
+        public void Send<T>(T message, [CallerMemberName] string callerName = "") where T : IShipWorksMessage
+        {
+            MessageLogger.Current.LogSend(message, callerName);
+            observer?.OnNext(message);
+        }
 
         /// <summary>
         /// Subscribe to the message stream

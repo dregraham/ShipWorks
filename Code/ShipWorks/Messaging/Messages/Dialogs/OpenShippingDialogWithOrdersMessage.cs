@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Interapptive.Shared.Collections;
-using ShipWorks.Core.Messaging;
+using Interapptive.Shared.Messaging;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Editing.Rating;
 
@@ -28,6 +29,7 @@ namespace ShipWorks.Messaging.Messages.Dialogs
             Sender = sender;
             OrderIDs = orderIDs.ToReadOnly();
             InitialDisplay = initialDisplay;
+            MessageId = Guid.NewGuid();
         }
 
         /// <summary>
@@ -43,6 +45,11 @@ namespace ShipWorks.Messaging.Messages.Dialogs
         /// Originator of the message
         /// </summary>
         public object Sender { get; }
+
+        /// <summary>
+        /// Id of the message used for tracking purposes
+        /// </summary>
+        public Guid MessageId { get; }
 
         /// <summary>
         /// Shipments to load in the dialog

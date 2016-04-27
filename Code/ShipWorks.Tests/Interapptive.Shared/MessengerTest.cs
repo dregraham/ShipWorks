@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Interapptive.Shared.Messaging;
 using Moq;
 using ShipWorks.Core.Messaging;
 using Xunit;
@@ -138,6 +139,8 @@ namespace ShipWorks.Tests.Interapptive.Shared
         {
             public object Sender { get; private set; }
 
+            public Guid MessageId { get; set; }
+
             public int Payload { get; set; }
 
             public Action Update { get; set; }
@@ -146,6 +149,8 @@ namespace ShipWorks.Tests.Interapptive.Shared
         private class OtherMessage : IShipWorksMessage
         {
             public object Sender { get; private set; }
+
+            public Guid MessageId { get; set; }
         }
 
         private class DisposableHandler : IDisposable

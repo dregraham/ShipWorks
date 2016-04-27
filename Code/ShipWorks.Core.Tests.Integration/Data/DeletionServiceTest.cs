@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Reactive.Linq;
 using Autofac;
+using Interapptive.Shared.Messaging;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore;
-using ShipWorks.Core.Messaging;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;

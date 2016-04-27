@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Interapptive.Shared.Collections;
-using ShipWorks.Core.Messaging;
+using Interapptive.Shared.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Messaging.Messages.Shipping
@@ -17,12 +18,18 @@ namespace ShipWorks.Messaging.Messages.Shipping
         {
             Sender = sender;
             Shipments = shipments.ToReadOnly();
+            MessageId = Guid.NewGuid();
         }
 
         /// <summary>
         /// Sender of the message
         /// </summary>
         public object Sender { get; }
+
+        /// <summary>
+        /// Id of the message used for tracking purposes
+        /// </summary>
+        public Guid MessageId { get; }
 
         /// <summary>
         /// Id of the shipment to Reprint a label for

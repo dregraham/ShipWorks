@@ -993,7 +993,6 @@
     <Compile Include="Filters\Management\FilterNodeReferenceRepository.cs" />
     <Compile Include="InputValidation.cs" />
     <Compile Include="Messaging\IMessenger.cs" />
-    <Compile Include="Messaging\IShipWorksMessage.cs" />
     <Compile Include="Messaging\Messages\CarrierConfiguredMessage.cs" />
     <Compile Include="Messaging\Messages\ConfiguringCarrierMessage.cs" />
     <Compile Include="Messaging\Messages\EnabledCarriersChangedMessage.cs" />

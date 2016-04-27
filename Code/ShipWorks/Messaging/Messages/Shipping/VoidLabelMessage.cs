@@ -1,4 +1,5 @@
-﻿using ShipWorks.Core.Messaging;
+﻿using System;
+using Interapptive.Shared.Messaging;
 
 namespace ShipWorks.Messaging.Messages.Shipping
 {
@@ -14,12 +15,18 @@ namespace ShipWorks.Messaging.Messages.Shipping
         {
             Sender = sender;
             ShipmentID = shipmentID;
+            MessageId = Guid.NewGuid();
         }
 
         /// <summary>
         /// Sender of the message
         /// </summary>
         public object Sender { get; }
+
+        /// <summary>
+        /// Id of the message used for tracking purposes
+        /// </summary>
+        public Guid MessageId { get; }
 
         /// <summary>
         /// Id of the shipment to void a label for
