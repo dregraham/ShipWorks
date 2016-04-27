@@ -7,7 +7,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
 {
 
     /// <summary>
-    /// Retrieves the list of Dsns.
+    /// Retrieves the list of DSNs.
     /// </summary>
     /// <seealso cref="System.IDisposable" />
     public class DsnProvider : IDsnProvider
@@ -27,7 +27,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// Gets the available data sources.
         /// </summary>
         /// <exception cref="System.Data.DataException">
-        /// Thrown when there is an issue retrieving information from the Datasources.
+        /// Thrown when there is an issue retrieving information from the data sources.
         /// </exception>
         public IEnumerable<string> GetDataSourceNames()
         {
@@ -37,13 +37,13 @@ namespace ShipWorks.Stores.Platforms.Odbc
 
                 List<string> odbcDataSources = new List<string>();
 
-                string nextOdbcDataSource = GetNextDsnName();
+                string nextOdbcDataSource = GetNextDsn();
 
                 while (nextOdbcDataSource != null)
                 {
                     odbcDataSources.Add(nextOdbcDataSource);
 
-                    nextOdbcDataSource = GetNextDsnName();
+                    nextOdbcDataSource = GetNextDsn();
                 }
 
                 return odbcDataSources;
@@ -70,9 +70,8 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// Returns Next DSN Name; null if none.
         /// </returns>
         /// <exception cref="DataException">Error getting ODBC Data Sources</exception>
-        private string GetNextDsnName()
+        private string GetNextDsn()
         {
-
             if (sqlEnvHandle == IntPtr.Zero)
             {
                 InitializeSqlEnvHandle();
@@ -81,21 +80,21 @@ namespace ShipWorks.Stores.Platforms.Odbc
             short resultCode = Odbc32.SQLDataSources(sqlEnvHandle, direction,
                 dsnName, (short) dsnName.Capacity, ref dsnNameLength,
                 dsnDesc, (short) dsnDesc.Capacity, ref dsnDescLength);
-            
+
             if (resultCode != Odbc32.SqlSuccess && resultCode != Odbc32.SqlNoData)
             {
                 throw new DataException("Error getting ODBC Data Sources");
             }
 
-            string nextDsnName = null;
+            string nextDsn = null;
             if (resultCode == Odbc32.SqlSuccess)
             {
-                nextDsnName = dsnName.ToString();
+                nextDsn = dsnName.ToString();
             }
 
             direction = Odbc32.Direction.SqlFetchNext;
 
-            return nextDsnName;
+            return nextDsn;
         }
 
         /// <summary>

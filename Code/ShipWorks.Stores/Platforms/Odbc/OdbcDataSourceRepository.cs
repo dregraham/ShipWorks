@@ -37,7 +37,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// Gets the available data sources.
         /// </summary>
         /// <exception cref="System.Data.DataException">
-        /// Thrown when there is an issue retrieving information from the Datasources.
+        /// Thrown when there is an issue retrieving information from the data sources.
         /// </exception>
         public IEnumerable<OdbcDataSource> GetDataSources()
         {

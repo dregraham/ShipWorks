@@ -14,7 +14,8 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
                 .ExternallyOwned();
 
             builder.RegisterType<OdbcShipWorksDbProviderFactory>()
-                .AsImplementedInterfaces();
+                .AsImplementedInterfaces()
+                .SingleInstance();
 
             builder.RegisterType<OdbcDataSourcePage>()
                 .Keyed<WizardPage>(StoreTypeCode.Odbc)
