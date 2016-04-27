@@ -43,18 +43,28 @@ namespace Interapptive.Shared.Messaging.Logging
             })
             .ObserveOn(TaskPoolScheduler.Default)
             .Select(x => new { Data = JsonConvert.SerializeObject(x), Endpoint = x.Endpoint })
-            .Subscribe(x => client.UploadString(endpoint + "/" + x.Endpoint, "POST", x.Data));
+            .Subscribe(x =>
+            {
+                try
+                {
+                    client.UploadString(endpoint + "/" + x.Endpoint, "POST", x.Data);
+                }
+                catch (Exception)
+                {
+                    // Since this is just for debug logging, eat all errors
+                }
+            }, ex => { });
         }
 
         /// <summary>
         /// Log a send message call
         /// </summary>
         public void LogSend<T>(T message, string method) where T : IShipWorksMessage =>
-            observer.OnNext(new SendMessage(message, method));
+            observer?.OnNext(new SendMessage(message, method));
 
         /// <summary>
         /// Log an operation
         /// </summary>
-        public void Log(ILogItem logItem) => observer.OnNext(logItem);
+        public void Log(ILogItem logItem) => observer?.OnNext(logItem);
     }
 }

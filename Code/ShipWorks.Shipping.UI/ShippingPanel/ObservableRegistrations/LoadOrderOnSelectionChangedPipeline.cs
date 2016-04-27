@@ -39,7 +39,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
             return new CompositeDisposable(
                 changeHandler
                     .OrderChangingStream()
-                    .Trackable()
                     .Do(this, message =>
                     {
                         viewModel.IsLoading = true;
@@ -57,9 +56,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
                     .CatchAndContinue((Exception ex) => log.Error("An error occurred while selecting an order", ex))
                     .Subscribe(this, _ => { }),
                 changeHandler.ShipmentLoadedStream()
-                    .Trackable()
                     .ObserveOn(schedulerProvider.Dispatcher)
-                    .Do(_ => viewModel.AllowEditing = true)
+                    .Do(this, _ => viewModel.AllowEditing = true)
                     .CatchAndContinue((Exception ex) => log.Error("An error occurred while loading order selection", ex))
                     .Subscribe(this, viewModel.LoadOrder)
             );

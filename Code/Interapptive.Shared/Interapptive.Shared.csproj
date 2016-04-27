@@ -161,6 +161,7 @@
     <Compile Include="Messaging\TrackedObservable\MessageTracker.cs" />
     <Compile Include="Messaging\TrackedObservable\SelectImpl.cs" />
     <Compile Include="Messaging\TrackedObservable\SubscribeImpl.cs" />
+    <Compile Include="Messaging\TrackedObservable\SwitchImpl.cs" />
     <Compile Include="Messaging\TrackedObservable\TrackableImpl.cs" />
     <Compile Include="Messaging\TrackedObservable\WhereImpl.cs" />
     <Compile Include="NDependIgnoreAttribute.cs" />

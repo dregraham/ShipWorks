@@ -1,4 +1,5 @@
 ﻿using System;
+using Interapptive.Shared.Messaging.TrackedObservable;
 using ShipWorks.Messaging.Messages;
 
 namespace ShipWorks.Shipping.UI.MessageHandlers
@@ -11,11 +12,11 @@ namespace ShipWorks.Shipping.UI.MessageHandlers
         /// <summary>
         /// Gets a stream of order changing messages
         /// </summary>
-        IObservable<OrderSelectionChangingMessage> OrderChangingStream();
+        IObservable<IMessageTracker<OrderSelectionChangingMessage>> OrderChangingStream();
 
         /// <summary>
         /// Gets a stream of the most recent order changed messages
         /// </summary>
-        IObservable<OrderSelectionChangedMessage> ShipmentLoadedStream();
+        IObservable<IMessageTracker<OrderSelectionChangedMessage>> ShipmentLoadedStream();
     }
 }

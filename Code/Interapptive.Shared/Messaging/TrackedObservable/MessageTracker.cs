@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using Interapptive.Shared.Messaging.Logging;
 
 namespace Interapptive.Shared.Messaging.TrackedObservable
@@ -57,8 +58,9 @@ namespace Interapptive.Shared.Messaging.TrackedObservable
 
         public IMessageTracker<T> Do(Action<T> operation, object listener, string callerName)
         {
+            long startingTimestamp = Stopwatch.GetTimestamp();
             operation(Value);
-            MessageLogger.Current.Log(new DoOperation(this, Value, listener, callerName));
+            MessageLogger.Current.Log(new DoOperation(this, Value, listener, callerName, startingTimestamp));
             return this;
         }
 

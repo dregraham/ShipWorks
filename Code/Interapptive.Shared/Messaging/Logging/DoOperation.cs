@@ -11,13 +11,14 @@ namespace Interapptive.Shared.Messaging.Logging
         /// <summary>
         /// Constructor
         /// </summary>
-        public DoOperation(IMessageTracker tracker, object value, object listener, string callerName) :
+        public DoOperation(IMessageTracker tracker, object value, object listener, string callerName, long startingTimestamp) :
             base(tracker)
         {
             Value = value;
             Listener = listener;
             CallerName = callerName;
             Endpoint = "operation";
+            TimestampStart = startingTimestamp;
         }
 
         /// <summary>
@@ -40,5 +41,10 @@ namespace Interapptive.Shared.Messaging.Logging
         /// Name of the calling method in the listening object
         /// </summary>
         public string CallerName { get; }
+
+        /// <summary>
+        /// Timestamp at which the operation started
+        /// </summary>
+        public long TimestampStart { get; }
     }
 }
