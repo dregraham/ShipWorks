@@ -45,7 +45,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
 
             if (SelectedDataSource == null)
             {
-                MessageHelper.ShowWarning(this, $"ShipWorks could not find any ODBC data sources. {Environment.NewLine} " +
+                MessageHelper.ShowWarning(ParentForm, $"ShipWorks could not find any ODBC data sources. {Environment.NewLine} " +
                                                 "Please add one to continue.");
                 return false;
             }
@@ -59,7 +59,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             else
             {
                 log.Error($"Odbc data source connection failed: {connectionResult.Message}");
-                MessageHelper.ShowError(this, "ShipWorks was unable to connect to the ODBC data source. " +
+                MessageHelper.ShowError(ParentForm, "ShipWorks was unable to connect to the ODBC data source. " +
                                               $"{Environment.NewLine}{Environment.NewLine}{connectionResult.Message}");
             }
 
@@ -99,7 +99,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
                         dataSource.DataSource = null;
 
                         log.Warn("No datasources retrieved from IOdbcDataSourceRepository");
-                        MessageHelper.ShowWarning(this, "ShipWorks was unable to retrieve any DSN sources.");
+                        MessageHelper.ShowWarning(ParentForm, "ShipWorks was unable to retrieve any DSN sources.");
                     }
                     else
                     {
@@ -111,7 +111,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
                 {
                     log.Error("Error thrown by repo.GetDataSources", ex);
                     dataSource.DataSource = null;
-                    MessageHelper.ShowError(this, "ShipWorks encountered an error retrieving DSN sources. " +
+                    MessageHelper.ShowError(ParentForm, "ShipWorks encountered an error retrieving DSN sources. " +
                                                   $"{Environment.NewLine}{Environment.NewLine}{ex.Message}");
                 }
             }
