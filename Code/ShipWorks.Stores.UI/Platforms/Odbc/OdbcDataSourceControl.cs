@@ -20,6 +20,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
     public partial class OdbcDataSourceControl : UserControl
     {
         private ILog log;
+        Lazy<IOdbcControlPanel> odbcControlPanel;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcDataSourceControl"/> class.
@@ -28,6 +29,8 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         {
             InitializeComponent();
             log = LogManager.GetLogger(typeof(OdbcDataSourceControl));
+
+            odbcControlPanel = new Lazy<IOdbcControlPanel>(IoC.UnsafeGlobalLifetimeScope.Resolve<IOdbcControlPanel>);
         }
 
         /// <summary>
@@ -86,6 +89,14 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// </summary>
         public void RefreshDataSources()
         {
+            if (InvokeRequired)
+            {
+                BeginInvoke(new MethodInvoker(RefreshDataSources));
+                return;
+            }
+
+            OdbcDataSource currentDataSource = SelectedDataSource;
+
             using (ILifetimeScope scope = IoC.BeginLifetimeScope())
             {
                 IOdbcDataSourceRepository repo = scope.Resolve<IOdbcDataSourceRepository>();
@@ -105,6 +116,21 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
                     {
                         dataSource.DataSource = dataSources;
                         dataSource.DisplayMember = "Name";
+                        if (currentDataSource != null)
+                        {
+                            OdbcDataSource matchedDataSource = dataSources.FirstOrDefault(d => d.Name == currentDataSource.Name);
+                            if (matchedDataSource != null)
+                            {
+                                dataSource.SelectedItem = matchedDataSource;
+                                matchedDataSource.Username = username.Text;
+                                matchedDataSource.Password = password.Text;
+                            }
+                            else
+                            {
+                                username.Text = string.Empty;
+                                password.Text = string.Empty;
+                            }
+                        }
                     }
                 }
                 catch (DataException ex)
@@ -128,5 +154,13 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// </summary>
         private void OnLeavePassword(object sender, EventArgs e) =>
             SelectedDataSource.Password = password.Text;
+
+        /// <summary>
+        /// Called when [click add data source].
+        /// </summary>
+        private void OnClickAddDataSource(object sender, EventArgs e)
+        {
+            odbcControlPanel.Value.Launch(RefreshDataSources);
+        }
     }
 }

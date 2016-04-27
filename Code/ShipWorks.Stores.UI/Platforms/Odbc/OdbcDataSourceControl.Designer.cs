@@ -36,6 +36,7 @@
             this.passwordLabel = new System.Windows.Forms.Label();
             this.usernameLabel = new System.Windows.Forms.Label();
             this.credentialsOptionalLabel = new System.Windows.Forms.Label();
+            this.addDataSource = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // selectDataSourceLabel
@@ -59,7 +60,7 @@
             this.dataSourceLabel.TabIndex = 1;
             this.dataSourceLabel.Text = "Data Source:";
             // 
-            // dataSourceComboBox
+            // dataSource
             // 
             this.dataSource.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.dataSource.FormattingEnabled = true;
@@ -70,7 +71,7 @@
             this.dataSource.TabIndex = 2;
             this.dataSource.SelectionChangeCommitted += new System.EventHandler(this.SelectedDataSourceChanged);
             // 
-            // usernameTextBox
+            // username
             // 
             this.username.Location = new System.Drawing.Point(126, 103);
             this.username.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
@@ -79,7 +80,7 @@
             this.username.TabIndex = 3;
             this.username.Leave += new System.EventHandler(this.OnLeaveUsername);
             // 
-            // passwordTextBox
+            // password
             // 
             this.password.Location = new System.Drawing.Point(126, 129);
             this.password.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
@@ -121,10 +122,21 @@
             this.credentialsOptionalLabel.TabIndex = 7;
             this.credentialsOptionalLabel.Text = "Typically optional, but required by some databases.";
             // 
+            // addDataSource
+            // 
+            this.addDataSource.Location = new System.Drawing.Point(360, 37);
+            this.addDataSource.Name = "addDataSource";
+            this.addDataSource.Size = new System.Drawing.Size(99, 23);
+            this.addDataSource.TabIndex = 8;
+            this.addDataSource.Text = "Add Data Source";
+            this.addDataSource.UseVisualStyleBackColor = true;
+            this.addDataSource.Click += new System.EventHandler(this.OnClickAddDataSource);
+            // 
             // OdbcDataSourceControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.addDataSource);
             this.Controls.Add(this.credentialsOptionalLabel);
             this.Controls.Add(this.usernameLabel);
             this.Controls.Add(this.passwordLabel);
@@ -136,7 +148,7 @@
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.Name = "OdbcDataSourceControl";
-            this.Size = new System.Drawing.Size(433, 209);
+            this.Size = new System.Drawing.Size(474, 209);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -152,5 +164,6 @@
         private System.Windows.Forms.Label passwordLabel;
         private System.Windows.Forms.Label usernameLabel;
         private System.Windows.Forms.Label credentialsOptionalLabel;
+        private System.Windows.Forms.Button addDataSource;
     }
 }

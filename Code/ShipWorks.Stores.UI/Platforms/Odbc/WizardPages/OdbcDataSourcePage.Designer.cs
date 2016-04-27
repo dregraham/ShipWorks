@@ -37,7 +37,7 @@
             this.odbcDataSourceControl.Location = new System.Drawing.Point(10, 0);
             this.odbcDataSourceControl.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.odbcDataSourceControl.Name = "odbcDataSourceControl";
-            this.odbcDataSourceControl.Size = new System.Drawing.Size(433, 209);
+            this.odbcDataSourceControl.Size = new System.Drawing.Size(475, 209);
             this.odbcDataSourceControl.TabIndex = 0;
             // 
             // OdbcDataSourcePage
