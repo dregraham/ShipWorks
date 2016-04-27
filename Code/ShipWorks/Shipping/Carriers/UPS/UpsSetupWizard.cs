@@ -162,17 +162,15 @@ namespace ShipWorks.Shipping.Carriers.UPS
             // Otherwise setup to configure settings completely
             else
             {
-                // If there are no shippers yet (like from the other UPS shipment type), then remove the account page
-                if (UpsAccountManager.Accounts.Count == 0)
+                // There are ups accounts in ShipWorks, remove the account list
+                // because it makes no sense to show existing accounts here
+                // remove the license page because the user has already agreed with one of the previous accounts
+                // remove the invoice auth page for now because the rates page will re add it if needed
+                if (UpsAccountManager.Accounts.Any())
                 {
                     Pages.Remove(wizardPageAccountList);
-                }
-                // If there are other shippers (added from the other UPS shipment type), then just show the list
-                else
-                {
                     Pages.Remove(wizardPageLicense);
-                    Pages.Remove(wizardPageAccount);
-                    Pages.Remove(wizardPageRates);
+                    Pages.Remove(wizardPageInvoiceAuthentication);
                 }
 
                 // Add in the correct options page
@@ -255,6 +253,11 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
             if (shipmentType.ShipmentTypeCode == ShipmentTypeCode.UpsWorldShip)
             {
+                // we are using worldship so the new account option is never shown to the user
+                // set the newAccount to false
+                newAccount.Checked = false;
+                existingAccount.Checked = true;
+
                 if (!worldShipAgree1.Checked || !worldShipAgree2.Checked)
                 {
                     MessageHelper.ShowInformation(this, "You must read and agree to the WorldShip information statements.");

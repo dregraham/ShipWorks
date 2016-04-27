@@ -87,6 +87,12 @@ namespace ShipWorks.Shipping.Carriers.UPS
             // If the account has not done invoice auth and they have selected negotiated rates
             if (!account.InvoiceAuth && (UpsRateType)rateType.SelectedValue == UpsRateType.Negotiated)
             {
+                if (string.IsNullOrWhiteSpace(authorizationControl.InvoiceAuthorizationData.InvoiceNumber))
+                {
+                    MessageHelper.ShowError(this, "Please enter an Invoice Number.");
+                    return false;
+                }
+
                 try
                 {
                     using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())

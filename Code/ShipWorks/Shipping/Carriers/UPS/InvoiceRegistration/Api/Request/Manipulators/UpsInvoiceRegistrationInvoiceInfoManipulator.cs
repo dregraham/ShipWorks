@@ -41,9 +41,9 @@ namespace ShipWorks.Shipping.Carriers.UPS.InvoiceRegistration.Api.Request.Manipu
 
             // Ups allows for registration without the invoice info
             // if the account is new and has never been invoiced before
-            if (invoiceAuthorization != null)
+            if (invoiceAuthorization != null && !string.IsNullOrWhiteSpace(invoiceAuthorization.InvoiceNumber))
             {
-                registerRequest.ShipperAccount.InvoiceInfo = new InvoiceInfoType()
+                registerRequest.ShipperAccount.InvoiceInfo = new InvoiceInfoType
                 {
                     CurrencyCode = UpsUtility.GetCurrency((UpsAccountEntity)request.CarrierAccountEntity),
                     InvoiceNumber = invoiceAuthorization.InvoiceNumber,
