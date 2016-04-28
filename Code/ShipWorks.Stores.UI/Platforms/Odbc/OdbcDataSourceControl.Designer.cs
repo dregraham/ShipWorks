@@ -73,7 +73,7 @@
             // 
             // username
             // 
-            this.username.Location = new System.Drawing.Point(126, 103);
+            this.username.Location = new System.Drawing.Point(126, 98);
             this.username.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.username.Name = "username";
             this.username.Size = new System.Drawing.Size(228, 21);
@@ -82,7 +82,7 @@
             // 
             // password
             // 
-            this.password.Location = new System.Drawing.Point(126, 129);
+            this.password.Location = new System.Drawing.Point(126, 124);
             this.password.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.password.Name = "password";
             this.password.Size = new System.Drawing.Size(228, 21);
@@ -93,7 +93,7 @@
             // passwordLabel
             // 
             this.passwordLabel.AutoSize = true;
-            this.passwordLabel.Location = new System.Drawing.Point(50, 132);
+            this.passwordLabel.Location = new System.Drawing.Point(50, 127);
             this.passwordLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.passwordLabel.Name = "passwordLabel";
             this.passwordLabel.Size = new System.Drawing.Size(57, 13);
@@ -103,7 +103,7 @@
             // usernameLabel
             // 
             this.usernameLabel.AutoSize = true;
-            this.usernameLabel.Location = new System.Drawing.Point(50, 106);
+            this.usernameLabel.Location = new System.Drawing.Point(50, 101);
             this.usernameLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.usernameLabel.Name = "usernameLabel";
             this.usernameLabel.Size = new System.Drawing.Size(59, 13);
@@ -115,7 +115,7 @@
             this.credentialsOptionalLabel.AutoSize = true;
             this.credentialsOptionalLabel.Enabled = false;
             this.credentialsOptionalLabel.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.credentialsOptionalLabel.Location = new System.Drawing.Point(30, 75);
+            this.credentialsOptionalLabel.Location = new System.Drawing.Point(51, 76);
             this.credentialsOptionalLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.credentialsOptionalLabel.Name = "credentialsOptionalLabel";
             this.credentialsOptionalLabel.Size = new System.Drawing.Size(255, 13);
