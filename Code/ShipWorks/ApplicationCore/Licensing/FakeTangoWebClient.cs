@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
 using Interapptive.Shared.Utility;
@@ -21,39 +22,32 @@ namespace ShipWorks.ApplicationCore.Licensing
     /// </summary>
     public class FakeTangoWebClient : TangoWebClientWrapper, ITangoWebClient
     {
+        ILog log = LogManager.GetLogger(typeof(FakeTangoWebClient));
+
+        /// <summary>
+        /// Log the given processed shipment to Tango.  isRetry is only for internal interapptive purposes to handle rare cases where shipments a customer
+        /// insured did not make it up into tango, but the shipment did actually process.
+        /// </summary>
+        public override void LogShipment(StoreEntity store, ShipmentEntity shipment, bool isRetry = false)
+        {
+            log.Fatal($"Shipment logged to Tango for shipment id: {shipment.ShipmentID}");
+        }
+
+        /// <summary>
+        /// Void the given processed shipment to Tango
+        /// </summary>
+        public override void VoidShipment(StoreEntity store, ShipmentEntity shipment)
+        {
+            log.Fatal($"Shipment voided in Tango for shipment id: {shipment.ShipmentID}");
+        }
+
         /// <summary>
         /// Gets the nudges.
         /// </summary>
         /// <returns>A couple of fake nudges for testing purposes.</returns>
         public override IEnumerable<Nudge> GetNudges(IEnumerable<StoreEntity> stores)
         {
-            // Build up a couple of dummy nudges for testing purposes. Null is being configured as the INudgeAction 
-            // until the actual implementations are ready. Null is a good test to ensure that this is accounted 
-            // for, however.
-            List<Nudge> nudges = new List<Nudge>
-            {
-                new Nudge(1, "Nudge 1", NudgeType.ShipWorksUpgrade, new Uri("http://www.shipworks.com"), new Size(625, 575)),
-                new Nudge(2, "Nudge 2", NudgeType.ShipWorksUpgrade, new Uri("http://www.google.com"), new Size(300, 500)),
-                new Nudge(3, "Nudge 3", NudgeType.RegisterUspsAccount, new Uri("http://www.bing.com"), new Size(400, 600)),
-                new Nudge(4, "Nudge 4", NudgeType.ProcessEndicia, new Uri("http://www.endicia.com"), new Size(400, 600)),
-                new Nudge(5, "Nudge 5", NudgeType.PurchaseEndicia, new Uri("http://www.endicia.com"), new Size(400, 600)),
-            };
-
-            // Add a couple of options to the first nudge
-            nudges[0].AddNudgeOption(new NudgeOption(3, 0, "OK", nudges[0], NudgeOptionActionType.None));
-            nudges[0].AddNudgeOption(new NudgeOption(2, 1, "Close ShipWorks", nudges[0], NudgeOptionActionType.Shutdown));
-
-            // Add one option to the second nudge in the list
-            nudges[1].AddNudgeOption(new NudgeOption(3, 0, "Close", nudges[1], NudgeOptionActionType.None));
-
-            // Add one option to the third nudge in the list
-            nudges[2].AddNudgeOption(new NudgeOption(4, 0, "Close", nudges[1], NudgeOptionActionType.None));
-            nudges[2].AddNudgeOption(new NudgeOption(5, 1, "Register Stamps Account", nudges[1], NudgeOptionActionType.RegisterUspsAccount));
-
-            nudges[3].AddNudgeOption(new NudgeOption(4, 0, "OK", nudges[3], NudgeOptionActionType.None));
-            nudges[4].AddNudgeOption(new NudgeOption(5, 1, "OK", nudges[4], NudgeOptionActionType.None));
-
-            return nudges;
+            return Enumerable.Empty<Nudge>();
         }
 
         /// <summary>
