@@ -47,12 +47,9 @@ namespace ShipWorks.Shipping.UI.MessageHandlers
         {
             return messageStream.OfType<OrderSelectionChangedMessage>()
                 .Trackable()
-            //.Where(this, changedMessage => DoMessagesMatch(changingMessage, changedMessage));
-
-
-            .Select(this, x => new { Changed = x, Changing = changingMessage })
-            .Where(this, x => DoMessagesMatch(x.Changing, x.Changed))
-            .Select(this, x => x.Changed);
+                .Select(this, x => new { Changed = x, Changing = changingMessage })
+                .Where(this, x => DoMessagesMatch(x.Changing, x.Changed))
+                .Select(this, x => x.Changed);
         }
 
         /// <summary>
