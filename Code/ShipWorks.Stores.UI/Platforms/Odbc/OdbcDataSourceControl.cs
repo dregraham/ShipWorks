@@ -19,8 +19,8 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
     /// </summary>
     public partial class OdbcDataSourceControl : UserControl
     {
-        private ILog log;
-        Lazy<IExternalProcess> odbcControlPanel;
+        private readonly ILog log;
+        private readonly Lazy<IExternalProcess> odbcControlPanel;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcDataSourceControl"/> class.
@@ -95,7 +95,70 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
                 return;
             }
 
+            GenericResult<List<OdbcDataSource>> dataSourceResult = GetDataSources();
+
+            if (!dataSourceResult.Success)
+            {
+                dataSource.DataSource = null;
+                MessageHelper.ShowError(ParentForm, dataSourceResult.Message);
+            }
+            else if (dataSourceResult.Context.None())
+            {
+                dataSource.DataSource = null;
+
+                log.Warn("No datasources retrieved from IOdbcDataSourceRepository");
+                MessageHelper.ShowWarning(ParentForm, "ShipWorks was unable to retrieve any DSN sources.");
+            }
+            else
+            {
+                BindDataSources(dataSourceResult.Context);
+            }
+
+        }
+
+        /// <summary>
+        /// Binds dataSources to the dataSource combobox.
+        /// </summary>
+        /// <remarks>
+        /// If we can find the previously selected data source in the list of new data sources, 
+        /// we select it and populate any previous username and password.
+        /// </remarks>
+        private void BindDataSources(List<OdbcDataSource> dataSources)
+        {
             OdbcDataSource currentDataSource = SelectedDataSource;
+
+            dataSource.DataSource = dataSources;
+            dataSource.DisplayMember = "Name";
+
+            if (currentDataSource != null)
+            {
+                OdbcDataSource matchedDataSource =
+                    dataSources.FirstOrDefault(d => d.Name == currentDataSource.Name);
+                if (matchedDataSource != null)
+                {
+                    // Previously selected datasource found. Select it and set the datasources username and password
+                    dataSource.SelectedItem = matchedDataSource;
+                    matchedDataSource.Username = username.Text;
+                    matchedDataSource.Password = password.Text;
+                }
+                else
+                {
+                    // Previous datasource not found. Clear out username and password.
+                    username.Text = string.Empty;
+                    password.Text = string.Empty;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets a list of data sources from an IOdbcDataSourceRepository.
+        /// </summary>
+        /// <returns>
+        /// The context will be the list of datasources and success is true if no exceptions were thrown.
+        /// </returns>
+        private GenericResult<List<OdbcDataSource>> GetDataSources()
+        {
+            GenericResult<List<OdbcDataSource>> genericResult;
 
             using (ILifetimeScope scope = IoC.BeginLifetimeScope())
             {
@@ -103,45 +166,25 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
 
                 try
                 {
-                    List<OdbcDataSource> dataSources = repo.GetDataSources().ToList();
-
-                    if (dataSources.None())
+                    genericResult = new GenericResult<List<OdbcDataSource>>(repo.GetDataSources().ToList())
                     {
-                        dataSource.DataSource = null;
-
-                        log.Warn("No datasources retrieved from IOdbcDataSourceRepository");
-                        MessageHelper.ShowWarning(ParentForm, "ShipWorks was unable to retrieve any DSN sources.");
-                    }
-                    else
-                    {
-                        dataSource.DataSource = dataSources;
-                        dataSource.DisplayMember = "Name";
-                        if (currentDataSource != null)
-                        {
-                            OdbcDataSource matchedDataSource = dataSources.FirstOrDefault(d => d.Name == currentDataSource.Name);
-                            if (matchedDataSource != null)
-                            {
-                                dataSource.SelectedItem = matchedDataSource;
-                                matchedDataSource.Username = username.Text;
-                                matchedDataSource.Password = password.Text;
-                            }
-                            else
-                            {
-                                username.Text = string.Empty;
-                                password.Text = string.Empty;
-                            }
-                        }
-                    }
+                        Success = true
+                    };
                 }
                 catch (DataException ex)
                 {
                     log.Error("Error thrown by repo.GetDataSources", ex);
-                    dataSource.DataSource = null;
-                    MessageHelper.ShowError(ParentForm, "ShipWorks encountered an error retrieving DSN sources. " +
-                                                  $"{Environment.NewLine}{Environment.NewLine}{ex.Message}");
+                    genericResult = new GenericResult<List<OdbcDataSource>>(null)
+                    {
+                        Success = false,
+                        Message = "ShipWorks encountered an error retrieving data sources. " +
+                                  $"{Environment.NewLine}{Environment.NewLine}{ex.Message}"
+                    };
                 }
             }
+            return genericResult;
         }
+
 
         /// <summary>
         /// Called when leaving the username
@@ -158,9 +201,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// <summary>
         /// Called when [click add data source].
         /// </summary>
-        private void OnClickAddDataSource(object sender, EventArgs e)
-        {
+        private void OnClickAddDataSource(object sender, EventArgs e) => 
             odbcControlPanel.Value.Launch(RefreshDataSources);
-        }
     }
 }
