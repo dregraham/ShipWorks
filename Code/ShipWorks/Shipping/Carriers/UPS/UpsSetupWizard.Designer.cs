@@ -138,7 +138,7 @@
             // 
             // mainPanel
             // 
-            this.mainPanel.Controls.Add(this.wizardPageInvoiceAuthentication);
+            this.mainPanel.Controls.Add(this.wizardPageRates);
             this.mainPanel.Size = new System.Drawing.Size(579, 474);
             // 
             // etchBottom
@@ -416,7 +416,7 @@
             this.upsRateTypeControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.upsRateTypeControl.Location = new System.Drawing.Point(23, 10);
             this.upsRateTypeControl.Name = "upsRateTypeControl";
-            this.upsRateTypeControl.Size = new System.Drawing.Size(389, 390);
+            this.upsRateTypeControl.Size = new System.Drawing.Size(389, 461);
             this.upsRateTypeControl.TabIndex = 0;
             // 
             // wizardPageOptionsOlt
