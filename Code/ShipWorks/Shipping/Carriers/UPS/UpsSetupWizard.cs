@@ -161,14 +161,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
             // Otherwise setup to configure settings completely
             else
             {
-                // There are ups accounts in ShipWorks, remove the account list
-                // because it makes no sense to show existing accounts here
-                // remove the invoice auth page for now because the rates page will re add it if needed
-                if (UpsAccountManager.Accounts.Any())
-                {
-                    Pages.Remove(wizardPageInvoiceAuthentication);
-                }
-
                 // Add in the correct options page
                 if (shipmentType.ShipmentTypeCode == ShipmentTypeCode.UpsOnLineTools)
                 {
