@@ -133,8 +133,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
 
             if (currentDataSource != null)
             {
-                OdbcDataSource matchedDataSource =
-                    dataSources.FirstOrDefault(d => d.Name == currentDataSource.Name);
+                OdbcDataSource matchedDataSource = dataSources.FirstOrDefault(d => d.Name == currentDataSource.Name);
                 if (matchedDataSource != null)
                 {
                     // Previously selected datasource found. Select it and set the datasources username and password
