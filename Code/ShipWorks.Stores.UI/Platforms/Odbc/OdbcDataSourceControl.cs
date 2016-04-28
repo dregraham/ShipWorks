@@ -106,8 +106,9 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             {
                 dataSource.DataSource = null;
 
-                log.Warn("No datasources retrieved from IOdbcDataSourceRepository");
-                MessageHelper.ShowWarning(ParentForm, "ShipWorks was unable to retrieve any DSN sources.");
+                log.Warn("No datasources found in IOdbcDataSourceRepository");
+                MessageHelper.ShowWarning(ParentForm, $"ShipWorks could not find any ODBC data sources. {Environment.NewLine} " +
+                                                "Please add one to continue.");
             }
             else
             {
@@ -177,14 +178,13 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
                     genericResult = new GenericResult<List<OdbcDataSource>>(null)
                     {
                         Success = false,
-                        Message = "ShipWorks encountered an error retrieving data sources. " +
+                        Message = "ShipWorks encountered an error finding data sources. " +
                                   $"{Environment.NewLine}{Environment.NewLine}{ex.Message}"
                     };
                 }
             }
             return genericResult;
         }
-
 
         /// <summary>
         /// Called when leaving the username
