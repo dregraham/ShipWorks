@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ShipWorks.Stores.Platforms.Odbc
+namespace Interapptive.Shared.Threading
 {
     /// <summary>
     /// An interface intended to facilitate interaction with an external process

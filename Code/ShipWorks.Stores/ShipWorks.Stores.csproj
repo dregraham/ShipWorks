@@ -136,7 +136,6 @@
     <Compile Include="Platforms\LemonStand\LemonStandWebClient.cs" />
     <Compile Include="Platforms\Odbc\DsnProvider.cs" />
     <Compile Include="Platforms\Odbc\IDsnProvider.cs" />
-    <Compile Include="Platforms\Odbc\IExternalProcess.cs" />
     <Compile Include="Platforms\Odbc\IOdbcDataSourceRepository.cs" />
     <Compile Include="Platforms\Odbc\IShipWorksDbProviderFactory.cs" />
     <Compile Include="Platforms\Odbc\Odbc32.cs" />

@@ -144,6 +144,7 @@
     <Compile Include="Imaging\EdgeDetection.cs" />
     <Compile Include="InterapptiveOnly.cs" />
     <Compile Include="Pdf\IPdfDocument.cs" />
+    <Compile Include="Threading\IExternalProcess.cs" />
     <Compile Include="UI\IMessageHelper.cs" />
     <Compile Include="UI\MessageHelperWrapper.cs" />
     <Compile Include="Utility\ActionRetry.cs" />
