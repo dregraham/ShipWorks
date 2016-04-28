@@ -3,16 +3,16 @@
 namespace ShipWorks.Stores.Platforms.Odbc
 {
     /// <summary>
-    /// An interface intended to facilitate opening the Odbc control panel(odbcad32)
+    /// An interface intended to facilitate interaction with an external process
     /// </summary>
-    public interface IOdbcControlPanel
+    public interface IExternalProcess
     {
         /// <summary>
-        /// Launch the Odbc control panel
+        /// Launch the external process
         /// </summary>
         /// <param name="callbackAction">the action to invoice when the panel exits</param>
         /// <remarks>
-        /// Invokes the callbackAction when the control panel exits
+        /// Invokes the callbackAction when the external process exits
         /// </remarks>
         void Launch(Action callbackAction);
     }

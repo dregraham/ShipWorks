@@ -10,11 +10,12 @@ namespace ShipWorks.Stores.Platforms.Odbc
     /// <summary>
     /// Facilitates opening the Odbc control panel(odbcad32)
     /// </summary>
-    public class OdbcControlPanel : IOdbcControlPanel
+    public class OdbcControlPanel : IExternalProcess
     {
         private readonly ILog log;
         private readonly IMessageHelper messageHelper;
         private Action action;
+        private Process process;
 
         /// <summary>
         /// Constructor
@@ -28,7 +29,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// <summary>
         /// Launch the Odbc control panel
         /// </summary>
-        /// <param name="callbackAction">the action to invoice when the panel exits</param>
+        /// <param name="callbackAction">the action to invoke when the panel exits</param>
         /// <remarks>
         /// Invokes the callbackAction when the control panel exits
         /// </remarks>
@@ -39,11 +40,11 @@ namespace ShipWorks.Stores.Platforms.Odbc
             try
             {
                 log.Info("Starting ODBC control panel.");
-                Process odbcCtrl = Process.Start("odbcad32");
+                process = Process.Start("odbcad32");
 
                 // wire up the exited events
-                odbcCtrl.EnableRaisingEvents = true;
-                odbcCtrl.Exited += OnExited;
+                process.EnableRaisingEvents = true;
+                process.Exited += OnExited;
             }
             catch (Exception ex) when (ex.GetType() == typeof(FileNotFoundException) || ex.GetType() == typeof(Win32Exception))
             {
@@ -58,8 +59,12 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// </summary>
         private void OnExited(object sender, EventArgs e)
         {
+            // invoke the call back action
             log.Info("ODBC control panel exited.");
             action?.Invoke();
+
+            // dispose the process
+            process?.Dispose();
         }
     }
 }

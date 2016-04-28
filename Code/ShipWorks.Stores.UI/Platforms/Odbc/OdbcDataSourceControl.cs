@@ -20,7 +20,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
     public partial class OdbcDataSourceControl : UserControl
     {
         private ILog log;
-        Lazy<IOdbcControlPanel> odbcControlPanel;
+        Lazy<IExternalProcess> odbcControlPanel;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcDataSourceControl"/> class.
@@ -30,7 +30,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             InitializeComponent();
             log = LogManager.GetLogger(typeof(OdbcDataSourceControl));
 
-            odbcControlPanel = new Lazy<IOdbcControlPanel>(IoC.UnsafeGlobalLifetimeScope.Resolve<IOdbcControlPanel>);
+            odbcControlPanel = new Lazy<IExternalProcess>(IoC.UnsafeGlobalLifetimeScope.Resolve<IExternalProcess>);
         }
 
         /// <summary>
