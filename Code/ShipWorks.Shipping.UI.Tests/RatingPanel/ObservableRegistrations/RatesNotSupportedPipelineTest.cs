@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Reactive.Subjects;
 using Autofac.Extras.Moq;
-using ShipWorks.Core.Messaging;
+using Interapptive.Shared.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages.Dialogs;
 using ShipWorks.Shipping.Editing.Rating;

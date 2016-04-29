@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Reactive.Subjects;
 using Autofac.Extras.Moq;
+using Interapptive.Shared.Messaging.TrackedObservable;
 using Interapptive.Shared.Threading;
 using Moq;
 using ShipWorks.Core.Messaging.Messages.Shipping;
@@ -29,9 +30,9 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
             orderChangedSubject = new Subject<OrderSelectionChangedMessage>();
 
             mock.Mock<IOrderSelectionChangedHandler>()
-                .Setup(x => x.OrderChangingStream()).Returns(orderChangingSubject);
+                .Setup(x => x.OrderChangingStream()).Returns(orderChangingSubject.Trackable());
             mock.Mock<IOrderSelectionChangedHandler>()
-                .Setup(x => x.ShipmentLoadedStream()).Returns(orderChangedSubject);
+                .Setup(x => x.ShipmentLoadedStream()).Returns(orderChangedSubject.Trackable());
 
             schedulerProvider = new TestSchedulerProvider();
             mock.Provide<ISchedulerProvider>(schedulerProvider);

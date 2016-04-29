@@ -1,4 +1,5 @@
-﻿using ShipWorks.Core.Messaging;
+﻿using System;
+using Interapptive.Shared.Messaging;
 using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Messaging.Messages
@@ -15,6 +16,7 @@ namespace ShipWorks.Messaging.Messages
         {
             Sender = sender;
             ShipmentAdapter = shipment;
+            MessageId = Guid.NewGuid();
         }
 
         /// <summary>
@@ -25,12 +27,18 @@ namespace ShipWorks.Messaging.Messages
             Sender = sender;
             ShipmentAdapter = shipment;
             ChangedField = changedField;
+            MessageId = Guid.NewGuid();
         }
 
         /// <summary>
         /// Originator of the message
         /// </summary>
         public object Sender { get; }
+
+        /// <summary>
+        /// Id of the message used for tracking purposes
+        /// </summary>
+        public Guid MessageId { get; }
 
         /// <summary>
         /// Shipment that has changed

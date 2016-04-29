@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Reactive.Subjects;
 using Autofac.Extras.Moq;
+using Interapptive.Shared.Messaging;
 using Moq;
-using ShipWorks.Core.Messaging;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.UI.RatingPanel;

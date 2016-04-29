@@ -1,4 +1,5 @@
-﻿using ShipWorks.Core.Messaging;
+﻿using System;
+using Interapptive.Shared.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Messaging.Messages.Shipping
@@ -16,12 +17,18 @@ namespace ShipWorks.Messaging.Messages.Shipping
             Sender = sender;
             ShipmentID = shipmentID;
             Profile = profile;
+            MessageId = Guid.NewGuid();
         }
 
         /// <summary>
         /// Sender of the message
         /// </summary>
         public object Sender { get; }
+
+        /// <summary>
+        /// Id of the message used for tracking purposes
+        /// </summary>
+        public Guid MessageId { get; }
 
         /// <summary>
         /// Id of the shipment to apply the profile on

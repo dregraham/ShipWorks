@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Linq;
 using System.Reactive.Linq;
+using Interapptive.Shared.Messaging;
 using ShipWorks.AddressValidation.Enums;
-using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Shipping.Settings.Origin;

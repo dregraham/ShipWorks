@@ -1,15 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Reflection;
 using Autofac;
-using ShipWorks.Core.Messaging;
+using Interapptive.Shared.Messaging;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Core.UI;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.UI.Controls.Design;
-using System;
-using System.Reactive.Linq;
 
 namespace ShipWorks.Shipping.Services
 {
@@ -18,10 +18,10 @@ namespace ShipWorks.Shipping.Services
     /// </summary>
     public class ShipmentTypeProvider : INotifyPropertyChanged, IDisposable
     {
-        private static ShipmentTypeProvider current = DesignModeDetector.IsDesignerHosted() ? 
-            null : 
+        private static ShipmentTypeProvider current = DesignModeDetector.IsDesignerHosted() ?
+            null :
             IoC.UnsafeGlobalLifetimeScope.Resolve<ShipmentTypeProvider>();
-        
+
         private readonly IShipmentTypeManager shipmentTypeManager;
         private readonly PropertyChangedHandler handler;
         private IEnumerable<ShipmentTypeCode> available;
@@ -33,7 +33,7 @@ namespace ShipWorks.Shipping.Services
         /// Get the current instance of the shipment type provider
         /// </summary>
         public static ShipmentTypeProvider Current => current;
-        
+
         /// <summary>
         /// Constructor
         /// </summary>

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Reactive.Linq;
-using ShipWorks.Core.Messaging;
+using Interapptive.Shared.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Messaging.Messages.Shipping;

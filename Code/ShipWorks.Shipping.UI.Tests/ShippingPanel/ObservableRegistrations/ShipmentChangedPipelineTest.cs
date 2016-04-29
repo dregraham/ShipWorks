@@ -1,16 +1,14 @@
 ﻿using System;
 using System.Reactive.Subjects;
 using Autofac.Extras.Moq;
+using Interapptive.Shared.Messaging;
 using Moq;
-using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.UI.ShippingPanel;
 using ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations;
-using ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl;
 using ShipWorks.Tests.Shared;
-using ShipWorks.UI.Controls.AddressControl;
 using Xunit;
 
 namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations

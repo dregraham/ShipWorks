@@ -1,4 +1,5 @@
-﻿using ShipWorks.Core.Messaging;
+﻿using System;
+using Interapptive.Shared.Messaging;
 
 namespace ShipWorks.Messaging.Messages
 {
@@ -8,21 +9,25 @@ namespace ShipWorks.Messaging.Messages
     /// <remarks>
     /// This can happen when the main form closes, when the user logs off, or when restoring a database
     /// </remarks>
-    public class WindowResettingMessage : IShipWorksMessage
+    public struct WindowResettingMessage : IShipWorksMessage
     {
-        private readonly object sender;
-
         /// <summary>
         /// Constructor
         /// </summary>
         public WindowResettingMessage(object sender)
         {
-            this.sender = sender;
+            Sender = sender;
+            MessageId = Guid.NewGuid();
         }
 
         /// <summary>
         /// Sender of the message
         /// </summary>
-        public object Sender => sender;
+        public object Sender { get; }
+
+        /// <summary>
+        /// Id of the message used for tracking purposes
+        /// </summary>
+        public Guid MessageId { get; }
     }
 }

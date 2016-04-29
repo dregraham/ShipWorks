@@ -87,7 +87,7 @@ namespace ShipWorks.Shipping.Tests.Services
             {
                 testObject.InitializeForCurrentSession();
 
-                RatesRetrievingMessage message = null;
+                RatesRetrievingMessage message = default(RatesRetrievingMessage);
                 messenger.OfType<RatesRetrievingMessage>().Subscribe(x => message = x);
 
                 messenger.Send(new ShipmentChangedMessage(this, shipmentAdapter));

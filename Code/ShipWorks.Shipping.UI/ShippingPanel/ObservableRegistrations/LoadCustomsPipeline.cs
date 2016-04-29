@@ -2,7 +2,7 @@
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using Interapptive.Shared.Business;
-using ShipWorks.Core.Messaging;
+using Interapptive.Shared.Messaging;
 using ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl;
 using ShipWorks.UI.Controls.AddressControl;
 

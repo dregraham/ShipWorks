@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Autofac.Extras.Moq;
-using Interapptive.Shared.Business;
+using Interapptive.Shared.Messaging;
 using Interapptive.Shared.UI;
 using Moq;
 using ShipWorks.Core.Messaging;
@@ -212,7 +212,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
             ShippingPanelViewModel testObject = mock.Create<ShippingPanelViewModel>();
             testObject.LoadOrder(message);
 
-            mock.Mock<IMessenger>().Verify(s => s.Send(It.IsAny<IShipWorksMessage>()), Times.Once);
+            mock.Mock<IMessenger>().Verify(s => s.Send(It.IsAny<IShipWorksMessage>(), It.IsAny<string>()), Times.Once);
         }
 
         [Fact]
@@ -223,7 +223,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
 
             testObject.Save();
 
-            mock.Mock<IMessenger>().Verify(s => s.Send(It.IsAny<IShipWorksMessage>()), Times.Never);
+            mock.Mock<IMessenger>().Verify(s => s.Send(It.IsAny<IShipWorksMessage>(), It.IsAny<string>()), Times.Never);
         }
 
         [Theory]
@@ -765,7 +765,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
             testObject.SaveToDatabase();
 
             mock.Mock<IMessenger>()
-                .Verify(x => x.Send(It.IsAny<OrderSelectionChangingMessage>()), Times.Never);
+                .Verify(x => x.Send(It.IsAny<OrderSelectionChangingMessage>(), It.IsAny<string>()), Times.Never);
         }
 
         [Fact]
@@ -795,7 +795,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
             testObject.SaveToDatabase();
 
             mock.Mock<IMessenger>()
-                .Verify(x => x.Send(It.IsAny<OrderSelectionChangingMessage>()), Times.Never);
+                .Verify(x => x.Send(It.IsAny<OrderSelectionChangingMessage>(), It.IsAny<string>()), Times.Never);
         }
 
         [Theory]
@@ -833,7 +833,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
             testObject.SaveToDatabase();
 
             mock.Mock<IMessenger>()
-                .Verify(x => x.Send(It.IsAny<OrderSelectionChangingMessage>()), hasPermission ? Times.Once() : Times.Never());
+                .Verify(x => x.Send(It.IsAny<OrderSelectionChangingMessage>(), It.IsAny<string>()), hasPermission ? Times.Once() : Times.Never());
         }
 
         [Fact]
@@ -850,7 +850,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
             testObject.OpenShippingDialogCommand.Execute(null);
 
             mock.Mock<IMessenger>()
-                .Verify(x => x.Send(It.IsAny<OpenShippingDialogMessage>()));
+                .Verify(x => x.Send(It.IsAny<OpenShippingDialogMessage>(), It.IsAny<string>()));
         }
 
         [Fact]
@@ -867,7 +867,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
             testObject.OpenShippingDialogCommand.Execute(null);
 
             mock.Mock<IMessenger>()
-                .Verify(x => x.Send(It.IsAny<OpenShippingDialogWithOrdersMessage>()));
+                .Verify(x => x.Send(It.IsAny<OpenShippingDialogWithOrdersMessage>(), It.IsAny<string>()));
         }
 
         [Fact]
@@ -882,7 +882,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
             testObject.OpenShippingDialogCommand.Execute(null);
 
             mock.Mock<IMessenger>()
-                .Verify(x => x.Send(It.IsAny<OpenShippingDialogWithOrdersMessage>()));
+                .Verify(x => x.Send(It.IsAny<OpenShippingDialogWithOrdersMessage>(), It.IsAny<string>()));
         }
 
         [Fact]
@@ -944,7 +944,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
             ShippingPanelViewModel testObject = mock.Create<ShippingPanelViewModel>();
             testObject.LoadOrder(new OrderSelectionChangedMessage(this, new IOrderSelection[] { orderSelectionLoaded }));
 
-            mock.Mock<IMessenger>().Verify(s => s.Send(It.IsAny<RatesNotSupportedMessage>()), Times.Once);
+            mock.Mock<IMessenger>().Verify(s => s.Send(It.IsAny<RatesNotSupportedMessage>(), It.IsAny<string>()), Times.Once);
         }
 
         [Fact]
@@ -959,7 +959,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
             ShippingPanelViewModel testObject = mock.Create<ShippingPanelViewModel>();
             testObject.LoadOrder(new OrderSelectionChangedMessage(this, new IOrderSelection[] { orderSelectionLoaded }));
 
-            mock.Mock<IMessenger>().Verify(s => s.Send(It.IsAny<RatesNotSupportedMessage>()), Times.Once);
+            mock.Mock<IMessenger>().Verify(s => s.Send(It.IsAny<RatesNotSupportedMessage>(), It.IsAny<string>()), Times.Once);
         }
 
         private ShippingPanelViewModel GetShippingPanelViewModelWithLoadedOrder(List<ICarrierShipmentAdapter> shipmentAdapters)

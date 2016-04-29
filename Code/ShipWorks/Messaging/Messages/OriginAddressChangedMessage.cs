@@ -1,4 +1,5 @@
-﻿using ShipWorks.Core.Messaging;
+﻿using System;
+using Interapptive.Shared.Messaging;
 
 namespace ShipWorks.Messaging.Messages
 {
@@ -13,11 +14,17 @@ namespace ShipWorks.Messaging.Messages
         public OriginAddressChangedMessage(object sender)
         {
             Sender = sender;
+            MessageId = Guid.NewGuid();
         }
 
         /// <summary>
         /// Originator of the message
         /// </summary>
         public object Sender { get; private set; }
+
+        /// <summary>
+        /// Id of the message used for tracking purposes
+        /// </summary>
+        public Guid MessageId { get; }
     }
 }

@@ -1,36 +1,38 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.Generic;
 using Interapptive.Shared.Collections;
-using ShipWorks.Core.Messaging;
-using ShipWorks.Shipping.Services;
+using Interapptive.Shared.Messaging;
 
 namespace ShipWorks.Messaging.Messages.Shipping
 {
     /// <summary>
     /// Notify consumers that the shipments have been voided
     /// </summary>
-    public class ShipmentsVoidedMessage : IShipWorksMessage
+    public struct ShipmentsVoidedMessage : IShipWorksMessage
     {
-        private readonly object sender;
-        private ReadOnlyCollection<VoidShipmentResult> voidShipmentResults;
-
         /// <summary>
         /// Constructor
         /// </summary>
         public ShipmentsVoidedMessage(object sender, IEnumerable<VoidShipmentResult> voidShipmentResults)
         {
-            this.sender = sender;
-            this.voidShipmentResults = voidShipmentResults.ToReadOnly();
+            Sender = sender;
+            VoidShipmentResults = voidShipmentResults.ToReadOnly();
+            MessageId = Guid.NewGuid();
         }
 
         /// <summary>
         /// Sender of the message
         /// </summary>
-        public object Sender => sender;
+        public object Sender { get; }
+
+        /// <summary>
+        /// Id of the message used for tracking purposes
+        /// </summary>
+        public Guid MessageId { get; }
 
         /// <summary>
         /// Read only shipment adapters that were voided
         /// </summary>
-        public IEnumerable<VoidShipmentResult> VoidShipmentResults => voidShipmentResults;
+        public IEnumerable<VoidShipmentResult> VoidShipmentResults { get; }
     }
 }

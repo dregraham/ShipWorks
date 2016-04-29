@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Interapptive.Shared.Collections;
-using ShipWorks.Core.Messaging;
+using Interapptive.Shared.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Editing.Rating;
@@ -10,7 +11,7 @@ namespace ShipWorks.Messaging.Messages.Dialogs
     /// <summary>
     /// Request that the shipping dialog be opened
     /// </summary>
-    public class OpenShippingDialogMessage : IShipWorksMessage
+    public struct OpenShippingDialogMessage : IShipWorksMessage
     {
         /// <summary>
         /// Constructor
@@ -29,6 +30,8 @@ namespace ShipWorks.Messaging.Messages.Dialogs
             Sender = sender;
             Shipments = shipments.ToReadOnly();
             InitialDisplay = initialDisplay;
+            MessageId = Guid.NewGuid();
+            RateSelectedEventArgs = null;
         }
 
         /// <summary>
@@ -43,21 +46,26 @@ namespace ShipWorks.Messaging.Messages.Dialogs
         /// <summary>
         /// Originator of the message
         /// </summary>
-        public object Sender { get; private set; }
+        public object Sender { get; }
+
+        /// <summary>
+        /// Id of the message used for tracking purposes
+        /// </summary>
+        public Guid MessageId { get; }
 
         /// <summary>
         /// Shipments to load in the dialog
         /// </summary>
-        public IEnumerable<ShipmentEntity> Shipments { get; private set; }
+        public IEnumerable<ShipmentEntity> Shipments { get; }
 
         /// <summary>
         /// Tab that should be shown when the dialog opens
         /// </summary>
-        public InitialShippingTabDisplay InitialDisplay { get; private set; }
+        public InitialShippingTabDisplay InitialDisplay { get; }
 
         /// <summary>
         /// Rate selection event args
         /// </summary>
-        public RateSelectedEventArgs RateSelectedEventArgs { get; private set; }
+        public RateSelectedEventArgs RateSelectedEventArgs { get; }
     }
 }

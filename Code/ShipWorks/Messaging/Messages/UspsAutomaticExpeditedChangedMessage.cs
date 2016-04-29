@@ -1,4 +1,5 @@
-﻿using ShipWorks.Core.Messaging;
+﻿using System;
+using Interapptive.Shared.Messaging;
 using ShipWorks.Shipping;
 
 namespace ShipWorks.Messaging.Messages
@@ -6,7 +7,7 @@ namespace ShipWorks.Messaging.Messages
     /// <summary>
     /// Message that notifies consumers that a Usps account was just converted to discount
     /// </summary>
-    public class UspsAutomaticExpeditedChangedMessage : IShipWorksMessage
+    public struct UspsAutomaticExpeditedChangedMessage : IShipWorksMessage
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="UspsAccountCreatedMessage"/> class.
@@ -15,16 +16,22 @@ namespace ShipWorks.Messaging.Messages
         {
             Sender = sender;
             ShipmentTypeCode = shipmentTypeCode;
+            MessageId = Guid.NewGuid();
         }
 
         /// <summary>
         /// Gets the shipment type code that triggered the event.
         /// </summary>
-        public ShipmentTypeCode ShipmentTypeCode { get; private set; }
+        public ShipmentTypeCode ShipmentTypeCode { get; }
+
+        /// <summary>
+        /// Id of the message used for tracking purposes
+        /// </summary>
+        public Guid MessageId { get; }
 
         /// <summary>
         /// Source of the message
         /// </summary>
-        public object Sender { get; private set; }
+        public object Sender { get; }
     }
 }

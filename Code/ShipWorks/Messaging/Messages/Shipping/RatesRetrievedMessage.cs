@@ -1,6 +1,7 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+using Interapptive.Shared.Messaging;
 using Interapptive.Shared.Utility;
-using ShipWorks.Core.Messaging;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Services;
 
@@ -22,12 +23,18 @@ namespace ShipWorks.Messaging.Messages.Shipping
             Success = rates.Success;
             ErrorMessage = rates.Message;
             ShipmentAdapter = shipmentAdapter;
+            MessageId = Guid.NewGuid();
         }
 
         /// <summary>
         /// Object that sent the message
         /// </summary>
         public object Sender { get; }
+
+        /// <summary>
+        /// Id of the message used for tracking purposes
+        /// </summary>
+        public Guid MessageId { get; }
 
         /// <summary>
         /// Hash of the shipment for which rates are being retrieved

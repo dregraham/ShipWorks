@@ -2,7 +2,8 @@
 using System.Linq;
 using System.Reactive.Linq;
 using Interapptive.Shared.Collections;
-using ShipWorks.Core.Messaging;
+using Interapptive.Shared.Messaging;
+using Interapptive.Shared.Messaging.TrackedObservable;
 using ShipWorks.Messaging.Messages;
 
 namespace ShipWorks.Shipping.UI.MessageHandlers
@@ -25,26 +26,30 @@ namespace ShipWorks.Shipping.UI.MessageHandlers
         /// <summary>
         /// Gets a stream of order changing messages
         /// </summary>
-        public virtual IObservable<OrderSelectionChangingMessage> OrderChangingStream() =>
-            messageStream.OfType<OrderSelectionChangingMessage>();
+        public virtual IObservable<IMessageTracker<OrderSelectionChangingMessage>> OrderChangingStream() =>
+            messageStream.OfType<OrderSelectionChangingMessage>().Trackable();
 
         /// <summary>
         /// Gets a stream of the most recent order changed messages
         /// </summary>
-        public virtual IObservable<OrderSelectionChangedMessage> ShipmentLoadedStream()
+        public virtual IObservable<IMessageTracker<OrderSelectionChangedMessage>> ShipmentLoadedStream()
         {
             return messageStream.OfType<OrderSelectionChangingMessage>()
-                .Select(GetMatchingChangedMessages)
-                .Switch();
+                .Trackable()
+                .Select(this, GetMatchingChangedMessages)
+                .Switch(this);
         }
 
         /// <summary>
         /// Get an observable of selection changed messages that match the order ids of the changing message
         /// </summary>
-        private IObservable<OrderSelectionChangedMessage> GetMatchingChangedMessages(OrderSelectionChangingMessage changingMessage)
+        private IObservable<IMessageTracker<OrderSelectionChangedMessage>> GetMatchingChangedMessages(OrderSelectionChangingMessage changingMessage)
         {
             return messageStream.OfType<OrderSelectionChangedMessage>()
-                .Where(changedMessage => DoMessagesMatch(changingMessage, changedMessage));
+                .Trackable()
+                .Select(this, x => new { Changed = x, Changing = changingMessage })
+                .Where(this, x => DoMessagesMatch(x.Changing, x.Changed))
+                .Select(this, x => x.Changed);
         }
 
         /// <summary>

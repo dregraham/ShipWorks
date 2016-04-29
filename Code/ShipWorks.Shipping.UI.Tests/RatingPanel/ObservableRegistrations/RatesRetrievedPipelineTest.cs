@@ -2,10 +2,10 @@
 using System.Linq;
 using System.Reactive.Subjects;
 using Autofac.Extras.Moq;
+using Interapptive.Shared.Messaging;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
 using Moq;
-using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Messaging.Messages.Dialogs;

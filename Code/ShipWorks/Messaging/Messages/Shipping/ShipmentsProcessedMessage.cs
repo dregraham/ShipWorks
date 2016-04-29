@@ -1,35 +1,38 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.Generic;
 using Interapptive.Shared.Collections;
-using ShipWorks.Core.Messaging;
+using Interapptive.Shared.Messaging;
 
 namespace ShipWorks.Messaging.Messages.Shipping
 {
     /// <summary>
     /// Notify consumers that one or more shipments have been processed
     /// </summary>
-    public class ShipmentsProcessedMessage : IShipWorksMessage
+    public struct ShipmentsProcessedMessage : IShipWorksMessage
     {
-        private object sender;
-        private ReadOnlyCollection<ProcessShipmentResult> shipments;
-
         /// <summary>
         /// Constructor
         /// </summary>
         public ShipmentsProcessedMessage(object sender, IEnumerable<ProcessShipmentResult> shipments)
         {
-            this.sender = sender;
-            this.shipments = shipments.ToReadOnly();
+            Sender = sender;
+            Shipments = shipments.ToReadOnly();
+            MessageId = Guid.NewGuid();
         }
 
         /// <summary>
         /// Sender of the message
         /// </summary>
-        public object Sender => sender;
+        public object Sender { get; }
+
+        /// <summary>
+        /// Id of the message used for tracking purposes
+        /// </summary>
+        public Guid MessageId { get; }
 
         /// <summary>
         /// Read only collection of shipments that should be processed
         /// </summary>
-        public IEnumerable<ProcessShipmentResult> Shipments => shipments;
+        public IEnumerable<ProcessShipmentResult> Shipments { get; }
     }
 }

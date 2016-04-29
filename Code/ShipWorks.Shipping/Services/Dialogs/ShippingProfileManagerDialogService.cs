@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Reactive.Linq;
 using System.Windows.Forms;
+using Interapptive.Shared.Messaging;
 using Interapptive.Shared.Threading;
 using ShipWorks.ApplicationCore;
-using ShipWorks.Core.Messaging;
 using ShipWorks.Messaging.Messages.Dialogs;
 using ShipWorks.Shipping.Profiles;
 

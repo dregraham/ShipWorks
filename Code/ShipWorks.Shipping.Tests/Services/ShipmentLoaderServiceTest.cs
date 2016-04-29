@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
@@ -7,9 +6,9 @@ using Moq;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Core.Messaging.Messages.Shipping;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Messaging.Messages;
 using ShipWorks.Shipping.Loading;
 using ShipWorks.Shipping.Services;
+using ShipWorks.Tests.Shared;
 using Xunit;
 
 namespace ShipWorks.Shipping.Tests.Services
@@ -53,19 +52,13 @@ namespace ShipWorks.Shipping.Tests.Services
 
             messenger = new Messenger();
 
-            testObject = new ShipmentLoaderService(shipmentLoader.Object, messenger);
+            testObject = new ShipmentLoaderService(shipmentLoader.Object, messenger, new ImmediateSchedulerProvider());
         }
 
         [Fact]
         public async Task MessageCorrect_WhenOrderHasOneShipment_ReturnsThatShipment_Test()
         {
-            LoadedOrderSelection handlededOrderSelectionLoaded = new LoadedOrderSelection();
-
-            messenger.OfType<OrderSelectionChangedMessage>()
-                .Subscribe((OrderSelectionChangedMessage orderSelectionChangedMessage) =>
-                handlededOrderSelectionLoaded = orderSelectionChangedMessage.LoadedOrderSelection.OfType<LoadedOrderSelection>().Single());
-
-            await testObject.LoadAndNotify(new List<long> { orderEntity.OrderID });
+            LoadedOrderSelection handlededOrderSelectionLoaded = (await testObject.LoadAndNotify(new List<long> { orderEntity.OrderID })).OfType<LoadedOrderSelection>().Single();
 
             Assert.Equal(shipmentEntity.ShipmentID, handlededOrderSelectionLoaded.ShipmentAdapters.FirstOrDefault().Shipment.ShipmentID);
             Assert.Equal(1, handlededOrderSelectionLoaded.ShipmentAdapters.Count());

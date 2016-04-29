@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Reactive.Linq;
-using ShipWorks.Core.Messaging;
+using Interapptive.Shared.Messaging;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Loading;
@@ -52,7 +52,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
         {
             return shipmentTypeCode != ShipmentTypeCode.Amazon;
         }
-		
+
         /// <summary>
         /// Select the specified rate
         /// </summary>

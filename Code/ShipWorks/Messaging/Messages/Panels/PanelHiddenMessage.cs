@@ -1,4 +1,7 @@
-﻿using ShipWorks.Core.Messaging;
+﻿using System;
+using Interapptive.Shared.Messaging;
+using Interapptive.Shared.Messaging.Logging;
+using Newtonsoft.Json;
 using TD.SandDock;
 
 namespace ShipWorks.Messaging.Messages.Panels
@@ -15,6 +18,7 @@ namespace ShipWorks.Messaging.Messages.Panels
         {
             Sender = sender;
             Panel = panel;
+            MessageId = Guid.NewGuid();
         }
 
         /// <summary>
@@ -23,8 +27,14 @@ namespace ShipWorks.Messaging.Messages.Panels
         public object Sender { get; }
 
         /// <summary>
+        /// Id of the message used for tracking purposes
+        /// </summary>
+        public Guid MessageId { get; }
+
+        /// <summary>
         /// Panel that was hidden
         /// </summary>
+        [JsonConverter(typeof(TypeConverter))]
         public DockControl Panel { get; }
     }
 }

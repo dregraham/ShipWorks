@@ -1,5 +1,5 @@
 ﻿using System;
-using ShipWorks.Core.Messaging;
+using Interapptive.Shared.Messaging;
 using ShipWorks.Shipping;
 
 namespace ShipWorks.Messaging.Messages.Dialogs
@@ -17,6 +17,7 @@ namespace ShipWorks.Messaging.Messages.Dialogs
             Sender = sender;
             RestrictToShipmentType = null;
             OnComplete = null;
+            MessageId = Guid.NewGuid();
         }
 
         /// <summary>
@@ -27,12 +28,18 @@ namespace ShipWorks.Messaging.Messages.Dialogs
             Sender = sender;
             RestrictToShipmentType = restrictToShipmentType;
             OnComplete = onComplete;
+            MessageId = Guid.NewGuid();
         }
 
         /// <summary>
         /// Sender of the message
         /// </summary>
         public object Sender { get; }
+
+        /// <summary>
+        /// Id of the message used for tracking purposes
+        /// </summary>
+        public Guid MessageId { get; }
 
         /// <summary>
         /// Restrict the dialog to the specified shipment type

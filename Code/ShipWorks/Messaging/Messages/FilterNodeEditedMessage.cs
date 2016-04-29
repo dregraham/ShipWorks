@@ -1,4 +1,5 @@
-using ShipWorks.Core.Messaging;
+using System;
+using Interapptive.Shared.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Messaging.Messages
@@ -15,12 +16,18 @@ namespace ShipWorks.Messaging.Messages
         {
             Sender = sender;
             FilterNode = filterNode;
+            MessageId = Guid.NewGuid();
         }
 
         /// <summary>
         /// Filter that has been changed
         /// </summary>
         public FilterNodeEntity FilterNode { get; private set; }
+
+        /// <summary>
+        /// Id of the message used for tracking purposes
+        /// </summary>
+        public Guid MessageId { get; }
 
         /// <summary>
         /// Source of the message
