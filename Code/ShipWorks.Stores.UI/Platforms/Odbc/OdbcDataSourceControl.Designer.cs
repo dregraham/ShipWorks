@@ -36,6 +36,7 @@
             this.passwordLabel = new System.Windows.Forms.Label();
             this.usernameLabel = new System.Windows.Forms.Label();
             this.credentialsOptionalLabel = new System.Windows.Forms.Label();
+            this.addDataSource = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // selectDataSourceLabel
@@ -72,7 +73,7 @@
             // 
             // username
             // 
-            this.username.Location = new System.Drawing.Point(126, 103);
+            this.username.Location = new System.Drawing.Point(126, 98);
             this.username.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.username.MaxLength = 255;
             this.username.Name = "username";
@@ -82,7 +83,7 @@
             // 
             // password
             // 
-            this.password.Location = new System.Drawing.Point(126, 129);
+            this.password.Location = new System.Drawing.Point(126, 124);
             this.password.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.password.MaxLength = 255;
             this.password.Name = "password";
@@ -94,7 +95,7 @@
             // passwordLabel
             // 
             this.passwordLabel.AutoSize = true;
-            this.passwordLabel.Location = new System.Drawing.Point(50, 132);
+            this.passwordLabel.Location = new System.Drawing.Point(50, 127);
             this.passwordLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.passwordLabel.Name = "passwordLabel";
             this.passwordLabel.Size = new System.Drawing.Size(57, 13);
@@ -104,7 +105,7 @@
             // usernameLabel
             // 
             this.usernameLabel.AutoSize = true;
-            this.usernameLabel.Location = new System.Drawing.Point(50, 106);
+            this.usernameLabel.Location = new System.Drawing.Point(50, 101);
             this.usernameLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.usernameLabel.Name = "usernameLabel";
             this.usernameLabel.Size = new System.Drawing.Size(59, 13);
@@ -116,17 +117,28 @@
             this.credentialsOptionalLabel.AutoSize = true;
             this.credentialsOptionalLabel.Enabled = false;
             this.credentialsOptionalLabel.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.credentialsOptionalLabel.Location = new System.Drawing.Point(30, 75);
+            this.credentialsOptionalLabel.Location = new System.Drawing.Point(51, 76);
             this.credentialsOptionalLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.credentialsOptionalLabel.Name = "credentialsOptionalLabel";
             this.credentialsOptionalLabel.Size = new System.Drawing.Size(255, 13);
             this.credentialsOptionalLabel.TabIndex = 7;
             this.credentialsOptionalLabel.Text = "Typically optional, but required by some databases.";
             // 
+            // addDataSource
+            // 
+            this.addDataSource.Location = new System.Drawing.Point(360, 37);
+            this.addDataSource.Name = "addDataSource";
+            this.addDataSource.Size = new System.Drawing.Size(99, 23);
+            this.addDataSource.TabIndex = 8;
+            this.addDataSource.Text = "Add Data Source";
+            this.addDataSource.UseVisualStyleBackColor = true;
+            this.addDataSource.Click += new System.EventHandler(this.OnClickAddDataSource);
+            // 
             // OdbcDataSourceControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.addDataSource);
             this.Controls.Add(this.credentialsOptionalLabel);
             this.Controls.Add(this.usernameLabel);
             this.Controls.Add(this.passwordLabel);
@@ -138,7 +150,7 @@
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.Name = "OdbcDataSourceControl";
-            this.Size = new System.Drawing.Size(433, 209);
+            this.Size = new System.Drawing.Size(474, 209);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -154,5 +166,6 @@
         private System.Windows.Forms.Label passwordLabel;
         private System.Windows.Forms.Label usernameLabel;
         private System.Windows.Forms.Label credentialsOptionalLabel;
+        private System.Windows.Forms.Button addDataSource;
     }
 }

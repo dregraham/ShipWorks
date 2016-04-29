@@ -22,9 +22,13 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
                 .ExternallyOwned();
 
             builder.RegisterType<OdbcDataSourceRepository>()
-                .AsImplementedInterfaces();
+                .AsImplementedInterfaces()
+                .SingleInstance();
 
             builder.RegisterType<DsnProvider>()
+                .AsImplementedInterfaces();
+
+            builder.RegisterType<OdbcControlPanel>()
                 .AsImplementedInterfaces();
         }
     }

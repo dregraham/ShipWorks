@@ -139,6 +139,7 @@
     <Compile Include="Platforms\Odbc\IOdbcDataSourceRepository.cs" />
     <Compile Include="Platforms\Odbc\IShipWorksDbProviderFactory.cs" />
     <Compile Include="Platforms\Odbc\Odbc32.cs" />
+    <Compile Include="Platforms\Odbc\OdbcControlPanel.cs" />
     <Compile Include="Platforms\Odbc\OdbcDataSource.cs" />
     <Compile Include="Platforms\Odbc\OdbcDataSourceRepository.cs" />
     <Compile Include="Platforms\Odbc\OdbcStoreType.cs" />
