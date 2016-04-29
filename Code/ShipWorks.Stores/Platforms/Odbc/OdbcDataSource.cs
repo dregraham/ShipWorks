@@ -1,6 +1,7 @@
 ﻿using Interapptive.Shared.Utility;
 using System;
 using System.Data;
+using System.Reflection;
 
 namespace ShipWorks.Stores.Platforms.Odbc
 {
@@ -24,6 +25,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// <summary>
         /// Name of the data source
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public string Name { get; set; }
 
         /// <summary>
