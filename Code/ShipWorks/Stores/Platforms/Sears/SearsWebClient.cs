@@ -63,7 +63,7 @@ namespace ShipWorks.Stores.Platforms.Sears
         /// <summary>
         /// Gets the sears update URL.
         /// </summary>
-        private string SearsUpdateUrl => $"https://{HostName}/SellerPortal/api/oms/asn/v5";
+        private string SearsUpdateUrl => $"https://{HostName}/SellerPortal/api/oms/asn/v7";
 
 
         /// <summary>
@@ -162,7 +162,7 @@ namespace ShipWorks.Stores.Platforms.Sears
         {
             SearsOrderEntity order = (SearsOrderEntity) shipment.Order;
 
-            XNamespace nsDefault = XNamespace.Get("http://seller.marketplace.sears.com/oms/v5");
+            XNamespace nsDefault = XNamespace.Get("http://seller.marketplace.sears.com/oms/v7");
             XNamespace nsXsi = XNamespace.Get("http://www.w3.org/2001/XMLSchema-instance");
 
             XDocument xDoc = new XDocument(
