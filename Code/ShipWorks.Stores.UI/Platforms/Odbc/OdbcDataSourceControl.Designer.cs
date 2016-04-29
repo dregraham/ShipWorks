@@ -59,7 +59,7 @@
             this.dataSourceLabel.TabIndex = 1;
             this.dataSourceLabel.Text = "Data Source:";
             // 
-            // dataSourceComboBox
+            // dataSource
             // 
             this.dataSource.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.dataSource.FormattingEnabled = true;
@@ -70,19 +70,21 @@
             this.dataSource.TabIndex = 2;
             this.dataSource.SelectionChangeCommitted += new System.EventHandler(this.SelectedDataSourceChanged);
             // 
-            // usernameTextBox
+            // username
             // 
             this.username.Location = new System.Drawing.Point(126, 103);
             this.username.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.username.MaxLength = 255;
             this.username.Name = "username";
             this.username.Size = new System.Drawing.Size(228, 21);
             this.username.TabIndex = 3;
             this.username.Leave += new System.EventHandler(this.OnLeaveUsername);
             // 
-            // passwordTextBox
+            // password
             // 
             this.password.Location = new System.Drawing.Point(126, 129);
             this.password.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.password.MaxLength = 255;
             this.password.Name = "password";
             this.password.Size = new System.Drawing.Size(228, 21);
             this.password.TabIndex = 4;
