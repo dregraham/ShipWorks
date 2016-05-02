@@ -1305,7 +1305,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         {
             HttpVariableRequestSubmitter postRequest = new HttpVariableRequestSubmitter();
 
-            postRequest.Variables.Add("action", "associatestampsuser");
+            postRequest.Variables.Add("action", "associateexistingstampswithshipworks");
             postRequest.Variables.Add("customerlicense", licenseKey);
             postRequest.Variables.Add("version", Version);
             postRequest.Variables.Add("stampsusername", stampsUsername);
