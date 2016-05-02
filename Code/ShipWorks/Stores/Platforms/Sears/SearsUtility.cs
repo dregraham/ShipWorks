@@ -64,7 +64,7 @@ namespace ShipWorks.Stores.Platforms.Sears
             {
                 return "UPSI";
             }
-            
+
             return "OTH";
         }
 
@@ -84,35 +84,9 @@ namespace ShipWorks.Stores.Platforms.Sears
             // FedEx
             if (ShipmentTypeManager.IsFedEx(shipmentTypeCode))
             {
-                switch ((FedExServiceType) shipment.FedEx.Service)
-                {
-                    case FedExServiceType.PriorityOvernight:
-                    case FedExServiceType.StandardOvernight:
-                    case FedExServiceType.FirstOvernight:
-                    case FedExServiceType.OneRateFirstOvernight:
-                    case FedExServiceType.OneRatePriorityOvernight:
-                    case FedExServiceType.OneRateStandardOvernight:
-                        return "Next Day";
+                FedExServiceType fedExServiceType = (FedExServiceType)shipment.FedEx.Service;
 
-                    case FedExServiceType.FedEx2Day:
-                    case FedExServiceType.FedEx2DayAM:
-                    case FedExServiceType.OneRate2Day:
-                    case FedExServiceType.OneRate2DayAM:
-                        return "Second Day";
-
-                    case FedExServiceType.FedEx1DayFreight:
-                    case FedExServiceType.FedEx2DayFreight:
-                    case FedExServiceType.FedEx3DayFreight:
-                    case FedExServiceType.InternationalPriorityFreight:
-                    case FedExServiceType.InternationalEconomyFreight:
-                    case FedExServiceType.FirstFreight:
-                        return "LTL";
-
-                    case FedExServiceType.SmartPost:
-                        return "Smart Post";
-                }
-
-                return "Ground";
+                return GetFedExServiceName(fedExServiceType);
             }
 
             // UPS
@@ -120,54 +94,14 @@ namespace ShipWorks.Stores.Platforms.Sears
             {
                 UpsServiceType upsServiceType = (UpsServiceType)shipment.Ups.Service;
 
-                if (UpsUtility.IsUpsMiService(upsServiceType))
-                {
-                    return "Parcel";
-                }
-
-                if (UpsUtility.IsUpsSurePostService(upsServiceType))
-                {
-                    return "SurePost";
-                }
-
-                if (upsServiceType == UpsServiceType.UpsNextDayAirSaver)
-                {
-                    return "Next Day Saver";
-                }
-
-                if (upsServiceType == UpsServiceType.UpsNextDayAir || upsServiceType == UpsServiceType.UpsNextDayAirAM)
-                {
-                    return "Next Day";
-                }
-
-                if (upsServiceType == UpsServiceType.Ups2DayAir || upsServiceType == UpsServiceType.Ups2DayAirAM || upsServiceType == UpsServiceType.Ups2ndDayAirIntra)
-                {
-                    return "Second Day";
-                }
-
-                return "Ground";
+                return GetUpsServiceName(upsServiceType);
             }
 
             // Postal
             if (ShipmentTypeManager.IsPostal(shipmentTypeCode))
             {
                 PostalServiceType uspsServiceType = (PostalServiceType)shipment.Postal.Service;
-                if (uspsServiceType == PostalServiceType.ParcelSelect)
-                {
-                    return "Parcel Post";
-                }
-
-                if (uspsServiceType == PostalServiceType.FirstClass)
-                {
-                    return "First Class";
-                }
-
-                if (uspsServiceType == PostalServiceType.StandardPost)
-                {
-                    return "Standard Mail";
-                }
-
-                return "Priority";
+                return GetPostalServiceName(uspsServiceType);
             }
 
             // I-Parcel
@@ -177,6 +111,98 @@ namespace ShipWorks.Stores.Platforms.Sears
             }
 
             return "PRIORITY";
+        }
+
+        /// <summary>
+        /// Returns the Sears service name for the given fedex service type
+        /// </summary>
+        private static string GetFedExServiceName(FedExServiceType fedExServiceType)
+        {
+            switch (fedExServiceType)
+            {
+                case FedExServiceType.PriorityOvernight:
+                case FedExServiceType.StandardOvernight:
+                case FedExServiceType.FirstOvernight:
+                case FedExServiceType.OneRateFirstOvernight:
+                case FedExServiceType.OneRatePriorityOvernight:
+                case FedExServiceType.OneRateStandardOvernight:
+                    return "Next Day";
+
+                case FedExServiceType.FedEx2Day:
+                case FedExServiceType.FedEx2DayAM:
+                case FedExServiceType.OneRate2Day:
+                case FedExServiceType.OneRate2DayAM:
+                    return "Second Day";
+
+                case FedExServiceType.FedEx1DayFreight:
+                case FedExServiceType.FedEx2DayFreight:
+                case FedExServiceType.FedEx3DayFreight:
+                case FedExServiceType.InternationalPriorityFreight:
+                case FedExServiceType.InternationalEconomyFreight:
+                case FedExServiceType.FirstFreight:
+                    return "LTL";
+
+                case FedExServiceType.SmartPost:
+                    return "Smart Post";
+            }
+
+            return "Ground";
+        }
+
+        /// <summary>
+        /// Returns the Sears service name for the given ups service type
+        /// </summary>
+        private static string GetUpsServiceName(UpsServiceType upsServiceType)
+        {
+            if (UpsUtility.IsUpsMiService(upsServiceType))
+            {
+                return "Parcel";
+            }
+
+            if (UpsUtility.IsUpsSurePostService(upsServiceType))
+            {
+                return "SurePost";
+            }
+
+            if (upsServiceType == UpsServiceType.UpsNextDayAirSaver)
+            {
+                return "Next Day Saver";
+            }
+
+            if (upsServiceType == UpsServiceType.UpsNextDayAir || upsServiceType == UpsServiceType.UpsNextDayAirAM)
+            {
+                return "Next Day";
+            }
+
+            if (upsServiceType == UpsServiceType.Ups2DayAir || upsServiceType == UpsServiceType.Ups2DayAirAM || upsServiceType == UpsServiceType.Ups2ndDayAirIntra)
+            {
+                return "Second Day";
+            }
+
+            return "Ground";
+        }
+
+        /// <summary>
+        /// Returns the Sears service name for the given postal service type
+        /// </summary>
+        private static string GetPostalServiceName(PostalServiceType postalServiceType)
+        {
+            if (postalServiceType == PostalServiceType.ParcelSelect)
+            {
+                return "Parcel Post";
+            }
+
+            if (postalServiceType == PostalServiceType.FirstClass)
+            {
+                return "First Class";
+            }
+
+            if (postalServiceType == PostalServiceType.StandardPost)
+            {
+                return "Standard Mail";
+            }
+
+            return "Priority";
         }
 
         /// <summary>
