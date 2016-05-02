@@ -1,19 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Data.Model.EntityClasses;
-using System.Xml.Linq;
-using System.Xml.XPath;
-using Interapptive.Shared.Net;
+﻿using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
+using log4net;
+using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Logging;
-using System.Xml;
-using System.Text.RegularExpressions;
 using ShipWorks.Data;
 using ShipWorks.Data.Model;
-using ShipWorks.Shipping;
-using log4net;
+using ShipWorks.Data.Model.EntityClasses;
+using System;
+using System.Linq;
+using System.Text.RegularExpressions;
+using System.Xml;
+using System.Xml.Linq;
+using System.Xml.XPath;
 
 namespace ShipWorks.Stores.Platforms.Sears
 {
@@ -23,9 +21,6 @@ namespace ShipWorks.Stores.Platforms.Sears
     public class SearsWebClient
     {
         static readonly ILog log = LogManager.GetLogger(typeof(SearsWebClient));
-
-        const string searsOrdersUrl = "https://seller.marketplace.sears.com/SellerPortal/api/oms/purchaseorder/v11";
-        const string searsUpdateUrl = "https://seller.marketplace.sears.com/SellerPortal/api/oms/asn/v5";
 
         SearsStoreEntity searsStore;
 
@@ -43,6 +38,42 @@ namespace ShipWorks.Stores.Platforms.Sears
             }
 
             this.searsStore = searsStore;
+        }
+
+        /// <summary>
+        /// Determines if we should connect to the 
+        /// </summary>
+        public static bool UseLiveServer
+        {
+            get
+            {
+                return InterapptiveOnly.Registry.GetValue("SearsLiveServer", true);
+            }
+            set
+            {
+                InterapptiveOnly.Registry.SetValue("SearsLiveServer", value);
+            }
+        }
+
+        /// <summary>
+        /// Gets the sears orders URL.
+        /// </summary>
+        private string SearsOrdersUrl => $"https://{HostName}/SellerPortal/api/oms/purchaseorder/v11";
+
+        /// <summary>
+        /// Gets the sears update URL.
+        /// </summary>
+        private string SearsUpdateUrl => $"https://{HostName}/SellerPortal/api/oms/asn/v7";
+
+
+        /// <summary>
+        /// Gets the name of the host.
+        /// </summary>
+        private string HostName
+        {
+            get {
+                return UseLiveServer ? "seller.marketplace.sears.com" : "sellersandbox.sears.com";
+            }
         }
 
         /// <summary>
@@ -84,7 +115,7 @@ namespace ShipWorks.Stores.Platforms.Sears
             }
 
             HttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter();
-            request.Uri = new Uri(searsOrdersUrl);
+            request.Uri = new Uri(SearsOrdersUrl);
             request.Verb = HttpVerb.Get;
 
             GetCredentialsHttpVariables().ToList().ForEach(v => request.Variables.Add(v));
@@ -115,7 +146,7 @@ namespace ShipWorks.Stores.Platforms.Sears
             XDocument xDocument = GenerateShipmentFeedXml(shipment);
 
             HttpXmlVariableRequestSubmitter submitter = new HttpXmlVariableRequestSubmitter();
-            submitter.Uri = new Uri(searsUpdateUrl + "?" + QueryStringUtility.GetQueryString(GetCredentialsHttpVariables()));
+            submitter.Uri = new Uri(SearsUpdateUrl + "?" + QueryStringUtility.GetQueryString(GetCredentialsHttpVariables()));
             submitter.Verb = HttpVerb.Put;
             submitter.ContentType = "application/xml";
 
@@ -131,7 +162,7 @@ namespace ShipWorks.Stores.Platforms.Sears
         {
             SearsOrderEntity order = (SearsOrderEntity) shipment.Order;
 
-            XNamespace nsDefault = XNamespace.Get("http://seller.marketplace.sears.com/oms/v5");
+            XNamespace nsDefault = XNamespace.Get("http://seller.marketplace.sears.com/oms/v7");
             XNamespace nsXsi = XNamespace.Get("http://www.w3.org/2001/XMLSchema-instance");
 
             XDocument xDoc = new XDocument(
@@ -152,7 +183,7 @@ namespace ShipWorks.Stores.Platforms.Sears
                         new XElement(nsDefault + "tracking-number", shipment.TrackingNumber.Trim()),
                         new XElement(nsDefault + "ship-date", shipment.ShipDate.ToString("yyyy-MM-dd")),
                         new XElement(nsDefault + "shipping-carrier", SearsUtility.GetShipmentCarrierCode(shipment)),
-                        new XElement(nsDefault + "shipping-method", SearsUtility.GetShpmentServiceCode(shipment)),
+                        new XElement(nsDefault + "shipping-method", SearsUtility.GetShipmentServiceCode(shipment)),
                         new XElement(nsDefault + "package-detail",
                             new XElement(nsDefault + "line-number", orderItem.LineNumber),
                             new XElement(nsDefault + "item-id", orderItem.ItemID),
