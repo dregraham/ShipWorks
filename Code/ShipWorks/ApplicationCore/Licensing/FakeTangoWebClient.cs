@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Xml;
 using System.Xml.Linq;
 using Interapptive.Shared.Utility;
@@ -20,6 +21,7 @@ namespace ShipWorks.ApplicationCore.Licensing
     /// ShipWorks side without having to mess with Fiddler and all of the certificate inspection that
     /// goes along with it when trying to setup specific test cases.
     /// </summary>
+    [Obfuscation(Exclude = true)]
     public class FakeTangoWebClient : TangoWebClientWrapper, ITangoWebClient
     {
         ILog log = LogManager.GetLogger(typeof(FakeTangoWebClient));
