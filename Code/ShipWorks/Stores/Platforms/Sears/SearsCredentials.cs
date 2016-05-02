@@ -6,6 +6,7 @@ using System.Globalization;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using Interapptive.Shared.Security;
 
 namespace ShipWorks.Stores.Platforms.Sears
 {

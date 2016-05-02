@@ -16,6 +16,5 @@ namespace ShipWorks.Stores.UI.Platforms.Sears
             builder.RegisterType<SearsCredentials>()
                 .AsSelf();
         }
-
     }
 }

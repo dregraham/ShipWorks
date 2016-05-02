@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
+using Autofac;
+using Interapptive.Shared.Security;
 using ShipWorks.Stores.Management;
 using ShipWorks.Data.Model.EntityClasses;
-using Interapptive.Shared.Utility;
 using Interapptive.Shared.UI;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model;
 
 namespace ShipWorks.Stores.Platforms.Sears
@@ -19,12 +15,20 @@ namespace ShipWorks.Stores.Platforms.Sears
     /// </summary>
     public partial class SearsAccountSettingsControl : AccountSettingsControlBase
     {
+        private readonly IEncryptionProvider encryptionProvider;
+
         /// <summary>
         /// Constructor
         /// </summary>
         public SearsAccountSettingsControl()
         {
             InitializeComponent();
+
+            using (ILifetimeScope scope = IoC.BeginLifetimeScope())
+            {
+                encryptionProvider = scope.Resolve<IEncryptionProvider>(new TypedParameter(typeof(IInitializationVector),
+                    new SearsInitializationVector()));
+            }
         }
 
         /// <summary>
@@ -39,7 +43,8 @@ namespace ShipWorks.Stores.Platforms.Sears
             }
 
             email.Text = searsStore.Email;
-            password.Text = SecureText.Decrypt(searsStore.Password, searsStore.Email);
+            sellerID.Text = searsStore.SellerID;
+            secretKey.Text = encryptionProvider.Decrypt(searsStore.SecretKey);
         }
 
         /// <summary>
@@ -54,31 +59,29 @@ namespace ShipWorks.Stores.Platforms.Sears
             }
 
             searsStore.Email = email.Text;
-            searsStore.Password = SecureText.Encrypt(password.Text, email.Text);
+            searsStore.SellerID = sellerID.Text;
+            searsStore.SecretKey = encryptionProvider.Encrypt(secretKey.Text);
 
             // see if we need to test the settings because they changed in some way
-            if (ConnectionVerificationNeeded(searsStore))
+            if (!ConnectionVerificationNeeded(searsStore))
             {
-                Cursor.Current = Cursors.WaitCursor;
-
-                try
-                {
-                    SearsWebClient webClient = new SearsWebClient(searsStore);
-                    webClient.TestConnection();
-
-                    return true;
-                }
-                catch (SearsException ex)
-                {
-                    MessageHelper.ShowError(this, ex.Message);
-
-                    return false;
-                }
-            }
-            else
-            {
-                // Nothing changed
                 return true;
+            }
+
+            Cursor.Current = Cursors.WaitCursor;
+
+            try
+            {
+                SearsWebClient webClient = new SearsWebClient(searsStore);
+                webClient.TestConnection();
+
+                return true;
+            }
+            catch (SearsException ex)
+            {
+                MessageHelper.ShowError(this, ex.Message);
+
+                return false;
             }
         }
 
@@ -90,6 +93,5 @@ namespace ShipWorks.Stores.Platforms.Sears
             return (searsStore.Fields[(int) SearsStoreFieldIndex.Email].IsChanged ||
                     searsStore.Fields[(int) SearsStoreFieldIndex.Password].IsChanged);
         }
-
     }
 }

@@ -6,6 +6,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Sears;
 using System;
 using System.Linq;
+using Interapptive.Shared.Security;
 using Xunit;
 namespace ShipWorks.Stores.Tests.Platforms.Sears
 {

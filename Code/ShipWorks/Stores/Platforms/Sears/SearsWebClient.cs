@@ -90,7 +90,7 @@ namespace ShipWorks.Stores.Platforms.Sears
             }
             catch (SearsException ex)
             {
-                throw new SearsException("ShipWorks could not connect to your Sears account with the given email address and password.", ex);
+                throw new SearsException("ShipWorks could not connect to your Sears account with the given email, seller ID, and secret key.", ex);
             }
         }
 
