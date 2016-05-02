@@ -16,9 +16,12 @@ namespace ShipWorks.Shipping.Services
     /// <summary>
     /// Implementation for ShipmentLoaderService
     /// </summary>
-    public class ShipmentLoaderService : IInitializeForCurrentSession
+    public class ShipmentLoaderService : IInitializeForCurrentUISession
     {
         private readonly IShipmentLoader shipmentLoader;
+        private readonly IMessenger messenger;
+        private readonly ISchedulerProvider schedulerProvider;
+        private IDisposable subscription;
 
         /// <summary>
         /// Constructor
@@ -26,12 +29,8 @@ namespace ShipWorks.Shipping.Services
         public ShipmentLoaderService(IShipmentLoader shipmentLoader, IMessenger messenger, ISchedulerProvider schedulerProvider)
         {
             this.shipmentLoader = shipmentLoader;
-
-            messenger.OfType<OrderSelectionChangingMessage>()
-                .Throttle(TimeSpan.FromMilliseconds(100), schedulerProvider.Default)
-                .SelectMany(x => Observable.FromAsync(() => LoadAndNotify(x.OrderIdList)))
-                .ObserveOn(schedulerProvider.WindowsFormsEventLoop)
-                .Subscribe(x => messenger.Send(new OrderSelectionChangedMessage(this, x)));
+            this.messenger = messenger;
+            this.schedulerProvider = schedulerProvider;
         }
 
         /// <summary>
@@ -53,7 +52,19 @@ namespace ShipWorks.Shipping.Services
         /// </summary>
         public void InitializeForCurrentSession()
         {
-            // Do nothing, just needed this to get an instance in memory on ShipWorks load.
+            subscription = messenger.OfType<OrderSelectionChangingMessage>()
+                .Throttle(TimeSpan.FromMilliseconds(100), schedulerProvider.Default)
+                .SelectMany(x => Observable.FromAsync(() => LoadAndNotify(x.OrderIdList)))
+                .ObserveOn(schedulerProvider.WindowsFormsEventLoop)
+                .Subscribe(x => messenger.Send(new OrderSelectionChangedMessage(this, x)));
+        }
+
+        /// <summary>
+        /// Unload the shipment loader when the session ends
+        /// </summary>
+        public void EndSession()
+        {
+            subscription?.Dispose();
         }
     }
 }

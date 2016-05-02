@@ -96,7 +96,7 @@ namespace ShipWorks.Users.Audit
 
             if (enumMapping[format] != null)
             {
-                throw new InvalidOperationException($"{format} is already registered with {enumMapping[format].GetType().Name}");
+                throw new InvalidOperationException($"{format} is already registered with {enumMapping[format].Name}");
             }
 
             enumMapping[format] = enumType;

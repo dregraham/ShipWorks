@@ -200,4 +200,12 @@
     <Rule Id="S3216" Action="Info" />
     <Rule Id="S3236" Action="Info" />
   </Rules>
+  <Rules AnalyzerId="SonarAnalyzer.CSharp" RuleNamespace="SonarAnalyzer.CSharp">
+    <Rule Id="S1698" Action="Info" />
+    <Rule Id="S1944" Action="Info" />
+    <Rule Id="S2201" Action="Info" />
+    <Rule Id="S3241" Action="Info" />
+    <Rule Id="S3265" Action="Info" />
+    <Rule Id="S3453" Action="Info" />
+  </Rules>
 </RuleSet>
