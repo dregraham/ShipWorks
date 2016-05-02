@@ -96,7 +96,7 @@
             // sellerID
             // 
             this.sellerID.Location = new System.Drawing.Point(99, 56);
-            this.sellerID.MaxLength = 255;
+            this.sellerID.MaxLength = 15;
             this.sellerID.Name = "sellerID";
             this.sellerID.Size = new System.Drawing.Size(230, 21);
             this.sellerID.TabIndex = 12;
@@ -104,7 +104,7 @@
             // secretKey
             // 
             this.secretKey.Location = new System.Drawing.Point(99, 84);
-            this.secretKey.MaxLength = 15;
+            this.secretKey.MaxLength = 200;
             this.secretKey.Name = "secretKey";
             this.secretKey.Size = new System.Drawing.Size(230, 21);
             this.secretKey.TabIndex = 13;
