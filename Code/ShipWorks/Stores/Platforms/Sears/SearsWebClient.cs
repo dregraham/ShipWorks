@@ -1,4 +1,5 @@
-﻿using Interapptive.Shared.Net;
+﻿using Autofac;
+using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.ApplicationCore;
@@ -23,7 +24,6 @@ namespace ShipWorks.Stores.Platforms.Sears
         static readonly ILog log = LogManager.GetLogger(typeof(SearsWebClient));
 
         SearsStoreEntity searsStore;
-
         DateTime downloadPageStart = DateTime.MinValue;
         DateTime downloadPageCurrent = DateTime.MinValue;
 
@@ -41,7 +41,7 @@ namespace ShipWorks.Stores.Platforms.Sears
         }
 
         /// <summary>
-        /// Determines if we should connect to the 
+        /// Determines if we should connect to the
         /// </summary>
         public static bool UseLiveServer
         {
@@ -118,8 +118,6 @@ namespace ShipWorks.Stores.Platforms.Sears
             request.Uri = new Uri(SearsOrdersUrl);
             request.Verb = HttpVerb.Get;
 
-            GetCredentialsHttpVariables().ToList().ForEach(v => request.Variables.Add(v));
-
             request.Variables.Add("fromdate", downloadPageCurrent.ToString("yyyy-MM-dd"));
             request.Variables.Add("todate", downloadPageCurrent.ToString("yyyy-MM-dd"));
 
@@ -146,7 +144,7 @@ namespace ShipWorks.Stores.Platforms.Sears
             XDocument xDocument = GenerateShipmentFeedXml(shipment);
 
             HttpXmlVariableRequestSubmitter submitter = new HttpXmlVariableRequestSubmitter();
-            submitter.Uri = new Uri(SearsUpdateUrl + "?" + QueryStringUtility.GetQueryString(GetCredentialsHttpVariables()));
+            submitter.Uri = new Uri(SearsUpdateUrl);
             submitter.Verb = HttpVerb.Put;
             submitter.ContentType = "application/xml";
 
@@ -195,23 +193,21 @@ namespace ShipWorks.Stores.Platforms.Sears
             return xDoc;
         }
 
-        /// <summary>
-        /// Return the collection of HTTP variables for authenticating
-        /// </summary>
-        private HttpVariableCollection GetCredentialsHttpVariables()
-        {
-            HttpVariableCollection credentials = new HttpVariableCollection();
-            credentials.Add("email", searsStore.Email);
-            credentials.Add("password", SecureText.Decrypt(searsStore.Password, searsStore.Email));
 
-            return credentials;
-        }
 
         /// <summary>
         /// Process a given request, logged based on the specified action
         /// </summary>
         private XmlDocument ProcessRequest(HttpVariableRequestSubmitter request, string action)
         {
+            // Add the credentials
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                SearsCredentials credentials = lifetimeScope.Resolve<SearsCredentials>();
+
+                credentials.AddCredentials(searsStore, request);
+            }
+
             // log the request
             ApiLogEntry logger = new ApiLogEntry(ApiLogSource.Sears, action);
             logger.LogRequest(request);

@@ -22,6 +22,7 @@ using ShipWorks.Users;
 using ShipWorks.Stores;
 using ShipWorks.Stores.Content;
 using ShipWorks.Shipping.Profiles;
+using ShipWorks.Stores.Platforms.Sears;
 
 namespace ShipWorks.ApplicationCore
 {
@@ -106,6 +107,9 @@ namespace ShipWorks.ApplicationCore
             RegisterWrappers(builder);
             RegisterLicensingDependencies(builder);
             RegisterLicenseEnforcers(builder);
+
+            builder.RegisterType<SearsCredentials>()
+                .AsSelf();
 
             current = builder.Build();
         }
