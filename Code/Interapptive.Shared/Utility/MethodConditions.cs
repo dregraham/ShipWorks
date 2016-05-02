@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 
 namespace Interapptive.Shared.Utility
 {
@@ -23,9 +24,9 @@ namespace Interapptive.Shared.Utility
         /// <summary>
         /// Throw an ArgumentNullException if the specified object is null
         /// </summary>
-        public static T EnsureArgumentIsNotNull<T>(T testObject) where T : class
+        public static T EnsureArgumentIsNotNull<T>([Obfuscation(Exclude = true)] T testObject) where T : class
         {
-            return EnsureArgumentIsNotNull<T>(testObject, nameof(testObject));
+            return EnsureArgumentIsNotNull(testObject, nameof(testObject));
         }
     }
 }
