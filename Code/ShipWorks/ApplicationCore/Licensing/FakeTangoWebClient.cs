@@ -21,7 +21,7 @@ namespace ShipWorks.ApplicationCore.Licensing
     /// ShipWorks side without having to mess with Fiddler and all of the certificate inspection that
     /// goes along with it when trying to setup specific test cases.
     /// </summary>
-    [Obfuscation(Exclude = true)]
+    [Obfuscation(Exclude = true, ApplyToMembers = true, StripAfterObfuscation = false)]
     public class FakeTangoWebClient : TangoWebClientWrapper, ITangoWebClient
     {
         ILog log = LogManager.GetLogger(typeof(FakeTangoWebClient));
@@ -30,6 +30,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// Log the given processed shipment to Tango.  isRetry is only for internal interapptive purposes to handle rare cases where shipments a customer
         /// insured did not make it up into tango, but the shipment did actually process.
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public override void LogShipment(StoreEntity store, ShipmentEntity shipment, bool isRetry = false)
         {
             log.Fatal($"Shipment logged to Tango for shipment id: {shipment.ShipmentID}");
@@ -38,6 +39,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Void the given processed shipment to Tango
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public override void VoidShipment(StoreEntity store, ShipmentEntity shipment)
         {
             log.Fatal($"Shipment voided in Tango for shipment id: {shipment.ShipmentID}");
@@ -47,6 +49,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// Gets the nudges.
         /// </summary>
         /// <returns>A couple of fake nudges for testing purposes.</returns>
+        [Obfuscation(Exclude = true)]
         public override IEnumerable<Nudge> GetNudges(IEnumerable<StoreEntity> stores)
         {
             return Enumerable.Empty<Nudge>();
@@ -55,6 +58,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Logs the nudge option back to Tango. Intended to record which option was selected by the user.
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public override void LogNudgeOption(NudgeOption option)
         {
             // Just log the option that was selected to disk to simulate a call to Tango
@@ -65,6 +69,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// Sends USPS account info to Tango.
         /// </summary>
         /// <param name="account">The account.</param>
+        [Obfuscation(Exclude = true)]
         public override void LogUspsAccount(UspsAccountEntity account)
         {
             // Just log the account contract type to disk to simulate a call to Tango
