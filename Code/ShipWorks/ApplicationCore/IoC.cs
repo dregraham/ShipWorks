@@ -108,9 +108,6 @@ namespace ShipWorks.ApplicationCore
             RegisterLicensingDependencies(builder);
             RegisterLicenseEnforcers(builder);
 
-            builder.RegisterType<SearsCredentials>()
-                .AsSelf();
-
             current = builder.Build();
         }
 
