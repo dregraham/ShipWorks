@@ -244,12 +244,12 @@
     <Compile Include="ApplicationCore\Licensing\LicenseEnforcement\ExceedingChannelLimitEnforcerTest.cs" />
     <Compile Include="ApplicationCore\Licensing\LicenseEnforcement\ExceedingShipmentLimitEnforcerTest.cs" />
     <Compile Include="ApplicationCore\Licensing\LicenseServiceTest.cs" />
-    <Compile Include="ApplicationCore\Licensing\LicenseEncryptionProviderTest.cs" />
     <Compile Include="ApplicationCore\Licensing\StoreLicenseTest.cs" />
     <Compile Include="ApplicationCore\Nudges\NudgeDeserializerTest.cs" />
     <Compile Include="ApplicationCore\Nudges\NudgeOptionDeserializerTest.cs" />
     <Compile Include="ApplicationCore\Nudges\NudgeOptionTest.cs" />
     <Compile Include="ApplicationCore\Nudges\NudgeTest.cs" />
+    <Compile Include="ApplicationCore\Security\AesEncryptionProviderTest.cs" />
     <Compile Include="Core\AssemblyDateTests.cs" />
     <Compile Include="Core\Certificates\ClientCertificateTests.cs" />
     <Compile Include="Core\EnumTest.cs" />

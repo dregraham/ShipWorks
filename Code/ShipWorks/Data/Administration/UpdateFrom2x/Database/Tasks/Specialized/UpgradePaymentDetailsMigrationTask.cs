@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Data.SqlClient;
 using Interapptive.Shared.Data;
-using Interapptive.Shared.Utility;
 using System.Data;
 using System.Transactions;
 using Interapptive.Shared;
+using Interapptive.Shared.Security;
 
 namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.Specialized
 {
@@ -41,7 +39,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.Specialized
         /// <summary>
         /// Copy Constructor
         /// </summary>
-        public UpgradePaymentDetailsMigrationTask(UpgradePaymentDetailsMigrationTask toCopy) 
+        public UpgradePaymentDetailsMigrationTask(UpgradePaymentDetailsMigrationTask toCopy)
             : base (toCopy)
         {
 
@@ -50,7 +48,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.Specialized
         /// <summary>
         /// Constructor
         /// </summary>
-        public UpgradePaymentDetailsMigrationTask() 
+        public UpgradePaymentDetailsMigrationTask()
             : base(WellKnownMigrationTaskIds.UpgradePaymentDetails, MigrationTaskInstancing.MainDatabaseAndArchives, MigrationTaskRunPattern.Repeated)
         {
 
@@ -119,7 +117,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.Specialized
         {
             string masterDatabaseName = (string)MigrationContext.Current.PropertyBag["MasterDatabase"];
 
-            // Create a transaction for the insert, bookkeeping, and deletes 
+            // Create a transaction for the insert, bookkeeping, and deletes
             using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required, SqlCommandProvider.DefaultTimeout))
             {
                 using (SqlCommand insertCommand = SqlCommandProvider.Create(con))
@@ -200,8 +198,8 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.Specialized
                 {
                     // decrypt using the v2 method
                     string decryptedValue = SecureText.Decrypt(detail.Value, detail.Type);
-                    
-                    // re-encrypt with how v3 
+
+                    // re-encrypt with how v3
                     detail.Value = SecureText.Encrypt(decryptedValue, detail.Label);
                 }
                 else if (detail.Label.StartsWith("CCV", StringComparison.OrdinalIgnoreCase) ||

@@ -10,6 +10,7 @@ using ShipWorks.ApplicationCore.Licensing.Activation;
 using ShipWorks.ApplicationCore.Licensing.FeatureRestrictions;
 using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
 using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.ApplicationCore.Security;
 using ShipWorks.Common;
 using ShipWorks.Data;
 using ShipWorks.Data.Administration;
@@ -107,6 +108,7 @@ namespace ShipWorks.ApplicationCore
             RegisterWrappers(builder);
             RegisterLicensingDependencies(builder);
             RegisterLicenseEnforcers(builder);
+            RegisterInitializationVectors(builder);
 
             current = builder.Build();
         }
@@ -142,7 +144,7 @@ namespace ShipWorks.ApplicationCore
             builder.RegisterType<StoreLicense>()
                 .AsSelf();
 
-            builder.RegisterType<LicenseEncryptionProvider>()
+            builder.RegisterType<AesEncryptionProvider>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
 
@@ -218,6 +220,13 @@ namespace ShipWorks.ApplicationCore
             builder.RegisterType<UserSessionWrapper>()
                 .AsImplementedInterfaces()
                 .UsingConstructor();
+        }
+
+        private static void RegisterInitializationVectors(ContainerBuilder builder)
+        {
+            builder.RegisterType<LicenseInitializationVector>();
+
+            builder.RegisterType<SearsInitializationVector>();
         }
     }
 }

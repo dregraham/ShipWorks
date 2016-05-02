@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Web.Services.Protocols;
 using Autofac.Extras.Moq;
-using Interapptive.Shared.Utility;
+using Interapptive.Shared.Security;
 using log4net;
 using Moq;
 using ShipWorks.ApplicationCore.Licensing;

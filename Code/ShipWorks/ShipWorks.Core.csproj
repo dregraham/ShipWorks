@@ -592,6 +592,7 @@
     <Compile Include="ApplicationCore\Dashboard\Content\DashboardSchedulerServiceStoppedItem.cs" />
     <Compile Include="ApplicationCore\Dashboard\Content\DashboardStoreItem.cs" />
     <Compile Include="ApplicationCore\Dashboard\Content\ShipWorksOnlineVersion.cs" />
+    <Compile Include="ApplicationCore\Security\AesEncryptionProvider.cs" />
     <Compile Include="ApplicationCore\Enums\HeartbeatOptions.cs" />
     <Compile Include="ApplicationCore\ExecutionMode\CommandLineExecutionMode.cs" />
     <Compile Include="ApplicationCore\ExecutionMode\ExecutionMode.cs" />
@@ -609,6 +610,7 @@
     <Compile Include="ApplicationCore\Licensing\AssociateShipWorksWithItselfResponseType.cs" />
     <Compile Include="ApplicationCore\Licensing\ComplianceLevel.cs" />
     <Compile Include="ApplicationCore\Licensing\CreditCardType.cs" />
+    <Compile Include="ApplicationCore\Licensing\LicenseInitializationVector.cs" />
     <Compile Include="ApplicationCore\Licensing\UspsPendingAccountType.cs" />
     <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\Endicia\EndiciaConsolidatorRestriction.cs" />
     <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\Endicia\EndiciaDhlRestriction.cs" />
@@ -672,7 +674,6 @@
     <Compile Include="ApplicationCore\Licensing\CustomerLicenseWriter.cs" />
     <Compile Include="ApplicationCore\Licensing\IUpgradePlanDlgFactory.cs" />
     <Compile Include="ApplicationCore\Licensing\LicenseCapabilities.cs" />
-    <Compile Include="ApplicationCore\Licensing\LicenseEncryptionProvider.cs" />
     <Compile Include="ApplicationCore\Licensing\LicenseEnforcement\ApproachingShipmentLimitEnforcer.cs" />
     <Compile Include="ApplicationCore\Licensing\LicenseEnforcement\ChannelCountEnforcer.cs" />
     <Compile Include="ApplicationCore\Licensing\LicenseEnforcement\ChannelSyncEnforcer.cs" />
@@ -1364,6 +1365,7 @@
     <Compile Include="Stores\Platforms\OrderBot\OrderBotStoreType.cs" />
     <Compile Include="Stores\Platforms\RevolutionParts\RevolutionPartsStoreType.cs" />
     <Compile Include="Stores\Platforms\Sears\SearsCredentials.cs" />
+    <Compile Include="Stores\Platforms\Sears\SearsInitializationVector.cs" />
     <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooAddressInfo.cs" />
     <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooAppliedPromotion.cs" />
     <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooBillToInfo.cs" />

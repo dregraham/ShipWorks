@@ -1,37 +1,50 @@
-﻿using System;
+using System;
 using System.Data.SqlClient;
 using System.Security.Cryptography;
 using System.Text;
-using Interapptive.Shared.Utility;
+using Interapptive.Shared.Security;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Administration;
 
-namespace ShipWorks.ApplicationCore.Licensing
+namespace ShipWorks.ApplicationCore.Security
 {
-    /// <summary>
-    /// Class for encrypting and decrypting customer license keys. Not necessarily a secure
-    /// implementation of AES, because the IV is not random. We mostly wanted to use AES to
-    /// move away from the SecureText class.
-    /// </summary>
-    /// <remarks> We are encrypting the customer license key because for legacy customers,
-    /// this field will be empty in the database. Meaning a new customer could fake being
-    /// legacy by deleting the value. Since we are encrypting the key, even if it is empty,
-    /// it will appear to have a value.
-    /// </remarks>
-    public class LicenseEncryptionProvider : IEncryptionProvider
+    public class AesEncryptionProvider : IEncryptionProvider
     {
+        private const string LegacyUserLicense = "ShipWorks legacy user";
         private readonly IDatabaseIdentifier databaseId;
         private readonly ISqlSchemaVersion sqlSchemaVersion;
-        private const string LegacyUserLicense = "ShipWorks legacy user";
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="LicenseEncryptionProvider"/> class.
-        /// </summary>
-        /// <param name="databaseId">The database identifier.</param>
-        /// <param name="sqlSchemaVersion">Gives us the Sql schema version</param>
-        public LicenseEncryptionProvider(IDatabaseIdentifier databaseId, ISqlSchemaVersion sqlSchemaVersion)
+        public AesEncryptionProvider(IDatabaseIdentifier databaseId, ISqlSchemaVersion sqlSchemaVersion, IInitializationVector iv)
         {
             this.databaseId = databaseId;
             this.sqlSchemaVersion = sqlSchemaVersion;
+            InitializationVector = iv.Value;
+        }
+
+        protected byte[] InitializationVector { get; }
+
+        /// <summary>
+        /// Get DatabaseId value
+        /// </summary>
+        private AesManaged Aes
+        {
+            get
+            {
+                try
+                {
+                    byte[] key = databaseId.Get().ToByteArray();
+
+                    return new AesManaged()
+                    {
+                        IV = InitializationVector,
+                        Key = key
+                    };
+                }
+                catch (DatabaseIdentifierException ex)
+                {
+                    throw new EncryptionException(ex.Message, ex);
+                }
+            }
         }
 
         /// <summary>
@@ -119,32 +132,8 @@ namespace ShipWorks.ApplicationCore.Licensing
                 {
                     return string.Empty;
                 }
-                
+
                 throw new EncryptionException(ex.Message, ex);
-            }
-        }
-
-        /// <summary>
-        /// Get DatabaseId value
-        /// </summary>
-        private AesManaged Aes
-        {
-            get
-            {
-                try
-                {
-                    byte[] key = databaseId.Get().ToByteArray();
-
-                    return new AesManaged()
-                    {
-                        IV = new byte[] { 125, 42, 69, 178, 253, 78, 1, 17, 77, 56, 129, 11, 25, 225, 201, 14 },
-                        Key = key
-                    };
-                }
-                catch (DatabaseIdentifierException ex)
-                {
-                    throw new EncryptionException(ex.Message, ex);
-                }
             }
         }
     }

@@ -1,10 +1,6 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
 using Xunit;
-using Interapptive.Shared;
-using System.Security.Cryptography;
-using Interapptive.Shared.Utility;
+using Interapptive.Shared.Security;
 
 namespace ShipWorks.Tests.Core
 {

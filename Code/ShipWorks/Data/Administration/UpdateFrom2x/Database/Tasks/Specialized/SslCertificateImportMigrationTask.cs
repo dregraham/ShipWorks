@@ -11,9 +11,9 @@ using System.Security.Cryptography.X509Certificates;
 using System.Security.Cryptography;
 using System.Diagnostics;
 using Interapptive.Shared;
+using Interapptive.Shared.Security;
 using ShipWorks.Stores.Platforms.PayPal;
 using log4net;
-using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.Specialized
 {

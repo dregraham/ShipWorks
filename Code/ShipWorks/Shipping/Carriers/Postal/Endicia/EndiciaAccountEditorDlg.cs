@@ -1,17 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data;
-using ShipWorks.UI;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Security;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 

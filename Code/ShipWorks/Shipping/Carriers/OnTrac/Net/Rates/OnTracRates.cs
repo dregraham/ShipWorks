@@ -8,11 +8,11 @@ using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.OnTrac.Enums;
 using ShipWorks.Shipping.Carriers.OnTrac.Schemas.Rate;
-using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Enums;
 using ShipWorks.Shipping.Editing.Rating;
 using log4net;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Security;
 
 namespace ShipWorks.Shipping.Carriers.OnTrac.Net.Rates
 {

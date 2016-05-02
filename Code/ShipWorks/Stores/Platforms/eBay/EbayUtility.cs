@@ -1,16 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using ShipWorks.Stores.Platforms.Ebay.WebServices;
 using System.Text.RegularExpressions;
 using Interapptive.Shared;
+using Interapptive.Shared.Security;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Ebay.Enums;
-using Interapptive.Shared.Utility;
-using ShipWorks.Data.Connection;
-using ShipWorks.Data.Model.HelperClasses;
-using SD.LLBLGen.Pro.ORMSupportClasses;
 
 namespace ShipWorks.Stores.Platforms.Ebay
 {

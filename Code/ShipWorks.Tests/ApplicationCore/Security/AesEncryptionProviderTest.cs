@@ -2,19 +2,20 @@
 using Autofac.Extras.Moq;
 using Moq;
 using ShipWorks.ApplicationCore.Licensing;
+using ShipWorks.ApplicationCore.Security;
 using ShipWorks.Data.Administration;
 using Xunit;
 
-namespace ShipWorks.Tests.ApplicationCore.Licensing
+namespace ShipWorks.Tests.ApplicationCore.Security
 {
-    public class LicenseEncryptionProviderTest
+    public class AesEncryptionProviderTest
     {
-        private readonly LicenseEncryptionProvider testObject;
+        private readonly AesEncryptionProvider testObject;
         private readonly string encryptedString;
         private readonly string encryptedEmptyString;
         private readonly string decryptedString;
 
-        public LicenseEncryptionProviderTest()
+        public AesEncryptionProviderTest()
         {
             Guid guid = new Guid("CF136821-5D3C-4237-ABFB-F5560C65A3D0");
             encryptedEmptyString = "Jy6fKoaDX5/Lk3/4NEBY8dePXyOrJvW5D3sBY3ibdCA=";
@@ -26,7 +27,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
                 Mock<ISqlSchemaVersion> sqlVersion = mock.Mock<ISqlSchemaVersion>();
                 sqlVersion.Setup(s => s.GetInstalledSchemaVersion()).Returns(Version.Parse("4.9.0.0"));
 
-                testObject = new LicenseEncryptionProvider(mock.Mock<IDatabaseIdentifier>().Object, sqlVersion.Object);
+                testObject = new AesEncryptionProvider(mock.Mock<IDatabaseIdentifier>().Object, sqlVersion.Object, new LicenseInitializationVector());
             }
         }
 
@@ -78,7 +79,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
                 Mock<ISqlSchemaVersion> sqlVersion = mock.Mock<ISqlSchemaVersion>();
                 sqlVersion.Setup(s => s.GetInstalledSchemaVersion()).Returns(Version.Parse("4.9.0.0"));
 
-                var testObject = new LicenseEncryptionProvider(mock.Mock<IDatabaseIdentifier>().Object, sqlVersion.Object);
+                var testObject = new AesEncryptionProvider(mock.Mock<IDatabaseIdentifier>().Object, sqlVersion.Object, new LicenseInitializationVector());
 
                 Assert.Throws<EncryptionException>(() => testObject.Encrypt("test"));
             }
@@ -94,7 +95,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
                 Mock<ISqlSchemaVersion> sqlVersion = mock.Mock<ISqlSchemaVersion>();
                 sqlVersion.Setup(s => s.GetInstalledSchemaVersion()).Returns(Version.Parse("4.9.0.0"));
 
-                var testObject = new LicenseEncryptionProvider(mock.Mock<IDatabaseIdentifier>().Object, sqlVersion.Object);
+                var testObject = new AesEncryptionProvider(mock.Mock<IDatabaseIdentifier>().Object, sqlVersion.Object, new LicenseInitializationVector());
 
                 Assert.Throws<EncryptionException>(() => testObject.Decrypt("test"));
             }

@@ -1,7 +1,7 @@
-﻿using Interapptive.Shared.Utility;
-using ShipWorks.Data;
+﻿using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using System;
+using Interapptive.Shared.Security;
 
 namespace ShipWorks.ApplicationCore.Licensing
 {
@@ -15,9 +15,9 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Constructor
         /// </summary>
-        public CustomerLicenseWriter(IEncryptionProvider encryptionProvider)
+        public CustomerLicenseWriter(Func<IInitializationVector, IEncryptionProvider> encryptionProviderFactory, LicenseInitializationVector iv)
         {
-            this.encryptionProvider = encryptionProvider;
+            encryptionProvider = encryptionProviderFactory(iv);
         }
 
         /// <summary>
@@ -25,14 +25,14 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public void Write(ICustomerLicense customerLicense)
         {
-            // Initialize Configuration data as it does not exist 
+            // Initialize Configuration data as it does not exist
             // when we need to write the key to the database
             ConfigurationData.InitializeForCurrentDatabase();
             ConfigurationEntity config = ConfigurationData.Fetch();
 
             config.CustomerKey = encryptionProvider.Encrypt(customerLicense.Key);
 
-            // Save the key to the ConfigurationEntity 
+            // Save the key to the ConfigurationEntity
             ConfigurationData.Save(config);
         }
     }

@@ -1,18 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using ShipWorks.Data.Model.EntityClasses;
 using Interapptive.Shared.UI;
 using System.IO;
-using Interapptive.Shared.Utility;
 using System.Xml.Linq;
 using System.Xml;
 using Interapptive.Shared;
+using Interapptive.Shared.Security;
 
 namespace ShipWorks.Stores.Platforms.ProStores
 {
