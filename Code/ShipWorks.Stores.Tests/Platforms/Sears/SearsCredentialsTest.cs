@@ -2,6 +2,7 @@
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using Moq;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Sears;
 using System;
@@ -315,6 +316,29 @@ namespace ShipWorks.Stores.Tests.Platforms.Sears
                 testObject.AddCredentials(store, request);
 
                 encryptionProvider.Verify(p => p.Decrypt(It.Is<string>(s => s == secretKey)));
+            }
+        }
+
+        [Fact]
+        public void AddCredentials_ThrowsSearsException_WhenEncryptionProviderThrowsEncryptionException()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                mock.Mock<IEncryptionProvider>()
+                    .Setup(e => e.Decrypt(It.IsAny<string>()))
+                    .Throws<EncryptionException>();
+
+                var testObject = mock.Create<SearsCredentials>();
+
+                string sellerId = "mySellerId";
+
+                var store = new SearsStoreEntity
+                {
+                    SellerID = sellerId
+                };
+
+                var request = new HttpVariableRequestSubmitter();
+                Assert.Throws<SearsException>(() => testObject.AddCredentials(store, request));
             }
         }
 

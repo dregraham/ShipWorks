@@ -1,5 +1,6 @@
 ﻿using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Model.EntityClasses;
 using System;
 using System.Globalization;
@@ -49,7 +50,18 @@ namespace ShipWorks.Stores.Platforms.Sears
                 string timeStamp = dateTimeProvider.UtcNow.ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'",
                     CultureInfo.InvariantCulture);
                 string toHash = $"{store.SellerID}:{store.Email}:{timeStamp}";
-                string signature = HashSignature(toHash, encryptionProvider.Decrypt(store.SecretKey));
+
+                string signature;
+
+                try
+                {
+                    signature = HashSignature(toHash, encryptionProvider.Decrypt(store.SecretKey));
+                }
+                catch (EncryptionException ex)
+                {
+                    throw new SearsException("An error occurred accessing your secret key. " +
+                                             "Enter a new key in your store settings.", ex);
+                }
                 string headerValue =
                     $"HMAC-SHA256 emailaddress={store.Email},timestamp={timeStamp},signature={signature}";
 
