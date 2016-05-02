@@ -2075,6 +2075,8 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("SearsStoreEntity", "StoreID", typeof(System.Int64), true, false, false, false,  (int)SearsStoreFieldIndex.StoreID, 0, 0, 19);
 			base.AddElementFieldInfo("SearsStoreEntity", "Email", typeof(System.String), false, false, false, false,  (int)SearsStoreFieldIndex.Email, 75, 0, 0);
 			base.AddElementFieldInfo("SearsStoreEntity", "Password", typeof(System.String), false, false, false, false,  (int)SearsStoreFieldIndex.Password, 75, 0, 0);
+			base.AddElementFieldInfo("SearsStoreEntity", "SecretKey", typeof(System.String), false, false, false, false,  (int)SearsStoreFieldIndex.SecretKey, 255, 0, 0);
+			base.AddElementFieldInfo("SearsStoreEntity", "SellerID", typeof(System.String), false, false, false, false,  (int)SearsStoreFieldIndex.SellerID, 15, 0, 0);
 		}
 		/// <summary>Inits ServerMessageEntity's FieldInfo objects</summary>
 		private void InitServerMessageEntityInfos()
