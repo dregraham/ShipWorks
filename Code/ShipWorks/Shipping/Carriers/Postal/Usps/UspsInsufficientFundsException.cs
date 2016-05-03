@@ -56,7 +56,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         public Form CreatePostageDialog(ILifetimeScope lifetimeScope)
         {
-            return new UspsPurchasePostageDlg(account);
+            UspsPurchasePostageDlg dialog = lifetimeScope.Resolve<UspsPurchasePostageDlg>();
+            dialog.LoadAccount(account);
+            return dialog;
         }
     }
 }

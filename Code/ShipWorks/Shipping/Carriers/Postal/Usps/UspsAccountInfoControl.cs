@@ -97,9 +97,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         {
             try
             {
-                using (UspsPurchasePostageDlg dlg = balance.HasValue ? new UspsPurchasePostageDlg(account, balance.Value) : new UspsPurchasePostageDlg(account))
+                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
                 {
-                    if (dlg.ShowDialog(this) == DialogResult.OK)
+                    UspsPurchasePostageDlg dialog = lifetimeScope.Resolve<UspsPurchasePostageDlg>();
+                    dialog.LoadAccount(account);
+
+                    if (dialog.ShowDialog(this) == DialogResult.OK)
                     {
                         Initialize(account);
 
