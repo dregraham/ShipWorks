@@ -91,7 +91,8 @@ namespace ShipWorks.Stores.Platforms.Sears
         protected virtual bool ConnectionVerificationNeeded(SearsStoreEntity searsStore)
         {
             return (searsStore.Fields[(int) SearsStoreFieldIndex.Email].IsChanged ||
-                    searsStore.Fields[(int) SearsStoreFieldIndex.Password].IsChanged);
+                    searsStore.Fields[(int) SearsStoreFieldIndex.SellerID].IsChanged ||
+                    searsStore.Fields[(int)SearsStoreFieldIndex.SecretKey].IsChanged);
         }
     }
 }
