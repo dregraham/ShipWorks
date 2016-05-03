@@ -1,5 +1,6 @@
 ﻿using Autofac.Extras.Moq;
 using Interapptive.Shared.Net;
+using Interapptive.Shared.Security;
 using Interapptive.Shared.Utility;
 using Moq;
 using ShipWorks.ApplicationCore.Licensing;
@@ -7,7 +8,6 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Sears;
 using System;
 using System.Linq;
-using Interapptive.Shared.Security;
 using Xunit;
 namespace ShipWorks.Stores.Tests.Platforms.Sears
 {
@@ -345,7 +345,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Sears
         [Fact]
         public void SearsCredentials_WithNullDateTimeProvider_ThrowsArgumentNullException()
         {
-            Assert.Throws<ArgumentNullException>(() => new SearsCredentials(null, null));
+            Assert.Throws<ArgumentNullException>(() => new SearsCredentials(null, null, null));
         }
     }
 }

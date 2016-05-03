@@ -1,4 +1,5 @@
 ﻿using Interapptive.Shared.Net;
+using Interapptive.Shared.Security;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Model.EntityClasses;
@@ -7,7 +8,6 @@ using System.Globalization;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
-using Interapptive.Shared.Security;
 
 namespace ShipWorks.Stores.Platforms.Sears
 {
@@ -17,17 +17,21 @@ namespace ShipWorks.Stores.Platforms.Sears
     public class SearsCredentials
     {
         private readonly IDateTimeProvider dateTimeProvider;
-        private readonly IEncryptionProvider encryptionProvider;
+        private readonly IEncryptionProvider aesEncryptionProvider;
+        private readonly Func<string, IEncryptionProvider> secureTextProviderFactory;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public SearsCredentials(IDateTimeProvider dateTimeProvider, IEncryptionProvider encryptionProvider)
+        public SearsCredentials(IDateTimeProvider dateTimeProvider, 
+            IEncryptionProvider aesEncryptionProvider, 
+            Func<string, IEncryptionProvider> secureTextProviderFactory)
         {
             MethodConditions.EnsureArgumentIsNotNull(dateTimeProvider);
 
             this.dateTimeProvider = dateTimeProvider;
-            this.encryptionProvider = encryptionProvider;
+            this.aesEncryptionProvider = aesEncryptionProvider;
+            this.secureTextProviderFactory = secureTextProviderFactory;
         }
 
         /// <summary>
@@ -69,7 +73,7 @@ namespace ShipWorks.Stores.Platforms.Sears
 
                 try
                 {
-                    signature = HashSignature(toHash, encryptionProvider.Decrypt(store.SecretKey));
+                    signature = HashSignature(toHash, aesEncryptionProvider.Decrypt(store.SecretKey));
                 }
                 catch (EncryptionException ex)
                 {
@@ -103,7 +107,7 @@ namespace ShipWorks.Stores.Platforms.Sears
         /// <summary>
         /// Return the collection of HTTP variables for authenticating
         /// </summary>
-        private static HttpVariableCollection GetCredentialsHttpVariables(SearsStoreEntity store)
+        private HttpVariableCollection GetCredentialsHttpVariables(SearsStoreEntity store)
         {
             HttpVariableCollection credentials = new HttpVariableCollection();
 
@@ -111,7 +115,8 @@ namespace ShipWorks.Stores.Platforms.Sears
             {
                 // They are using the "old" authentication method
                 credentials.Add("email", store.Email);
-                credentials.Add("password", SecureText.Decrypt(store.Password, store.Email));
+                IEncryptionProvider secureTextEncryptionProvider = secureTextProviderFactory(store.Email);
+                credentials.Add("password", secureTextEncryptionProvider.Decrypt(store.Password));
             }
             else
             {

@@ -4,7 +4,7 @@
     {
         Aes,
         License,
-        Secure
+        AesForSears
     }
 
     public enum AesParamType
