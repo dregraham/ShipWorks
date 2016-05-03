@@ -1,6 +1,7 @@
-﻿using Interapptive.Shared.Security;
-using ShipWorks.Data;
+﻿using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
+using System;
+using Interapptive.Shared.Security;
 
 namespace ShipWorks.ApplicationCore.Licensing
 {

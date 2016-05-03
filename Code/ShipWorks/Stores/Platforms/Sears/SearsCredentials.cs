@@ -76,8 +76,8 @@ namespace ShipWorks.Stores.Platforms.Sears
                     throw new SearsException("An error occurred accessing your secret key. " +
                                              "Enter a new key in your store settings.", ex);
                 }
-                string headerValue =
-                    $"HMAC-SHA256 emailaddress={store.Email},timestamp={timeStamp},signature={signature}";
+
+                string headerValue = $"HMAC-SHA256 emailaddress={store.Email},timestamp={timeStamp},signature={signature}";
 
                 request.Headers.Add("authorization", headerValue);
             }
@@ -91,6 +91,7 @@ namespace ShipWorks.Stores.Platforms.Sears
             ASCIIEncoding encoding = new ASCIIEncoding();
             byte[] keyByte = encoding.GetBytes(secretKey);
             byte[] messageBytes = encoding.GetBytes(toHash);
+
             using (HMACSHA256 hmacSha256 = new HMACSHA256(keyByte))
             {
                 byte[] hash = hmacSha256.ComputeHash(messageBytes);

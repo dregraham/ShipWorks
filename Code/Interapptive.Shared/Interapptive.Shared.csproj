@@ -121,7 +121,7 @@
   <ItemGroup>
     <Compile Include="Security\EncryptionProviderType.cs" />
     <Compile Include="Security\IEncryptionProvider.cs" />
-    <Compile Include="Security\IInitializationVector.cs" />
+    <Compile Include="Security\IAesParams.cs" />
     <Compile Include="NDependIgnoreAttribute.cs" />
     <Compile Include="NDependIgnoreComplexMethodAttribute.cs" />
     <Compile Include="NDependIgnoreTooManyParamsAttribute.cs" />

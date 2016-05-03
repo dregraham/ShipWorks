@@ -23,9 +23,9 @@ namespace ShipWorks.Stores.Platforms.Sears
     {
         static readonly ILog log = LogManager.GetLogger(typeof(SearsWebClient));
 
-        SearsStoreEntity searsStore;
-        DateTime downloadPageStart = DateTime.MinValue;
-        DateTime downloadPageCurrent = DateTime.MinValue;
+        private readonly SearsStoreEntity searsStore;
+        private DateTime downloadPageStart = DateTime.MinValue;
+        private DateTime downloadPageCurrent = DateTime.MinValue;
 
         /// <summary>
         /// Constructor
@@ -41,7 +41,7 @@ namespace ShipWorks.Stores.Platforms.Sears
         }
 
         /// <summary>
-        /// Determines if we should connect to the
+        /// Determines if we should connect to the live server
         /// </summary>
         public static bool UseLiveServer
         {

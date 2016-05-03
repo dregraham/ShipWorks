@@ -27,7 +27,7 @@ namespace ShipWorks.Tests.ApplicationCore.Security
                 Mock<ISqlSchemaVersion> sqlVersion = mock.Mock<ISqlSchemaVersion>();
                 sqlVersion.Setup(s => s.GetInstalledSchemaVersion()).Returns(Version.Parse("4.9.0.0"));
 
-                testObject = new AesEncryptionProvider(mock.Mock<IDatabaseIdentifier>().Object, sqlVersion.Object, new LicenseInitializationVector());
+                testObject = new AesEncryptionProvider(mock.Mock<IDatabaseIdentifier>().Object, sqlVersion.Object, new LicenseAesParams());
             }
         }
 
@@ -79,7 +79,7 @@ namespace ShipWorks.Tests.ApplicationCore.Security
                 Mock<ISqlSchemaVersion> sqlVersion = mock.Mock<ISqlSchemaVersion>();
                 sqlVersion.Setup(s => s.GetInstalledSchemaVersion()).Returns(Version.Parse("4.9.0.0"));
 
-                var testObject = new AesEncryptionProvider(mock.Mock<IDatabaseIdentifier>().Object, sqlVersion.Object, new LicenseInitializationVector());
+                var testObject = new AesEncryptionProvider(mock.Mock<IDatabaseIdentifier>().Object, sqlVersion.Object, new LicenseAesParams());
 
                 Assert.Throws<EncryptionException>(() => testObject.Encrypt("test"));
             }
@@ -95,7 +95,7 @@ namespace ShipWorks.Tests.ApplicationCore.Security
                 Mock<ISqlSchemaVersion> sqlVersion = mock.Mock<ISqlSchemaVersion>();
                 sqlVersion.Setup(s => s.GetInstalledSchemaVersion()).Returns(Version.Parse("4.9.0.0"));
 
-                var testObject = new AesEncryptionProvider(mock.Mock<IDatabaseIdentifier>().Object, sqlVersion.Object, new LicenseInitializationVector());
+                var testObject = new AesEncryptionProvider(mock.Mock<IDatabaseIdentifier>().Object, sqlVersion.Object, new LicenseAesParams());
 
                 Assert.Throws<EncryptionException>(() => testObject.Decrypt("test"));
             }

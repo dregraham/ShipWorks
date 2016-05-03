@@ -26,8 +26,8 @@ namespace ShipWorks.Stores.Platforms.Sears
 
             using (ILifetimeScope scope = IoC.BeginLifetimeScope())
             {
-                encryptionProvider = scope.Resolve<IEncryptionProvider>(new TypedParameter(typeof(IInitializationVector),
-                    new SearsInitializationVector()));
+                encryptionProvider = scope.Resolve<IEncryptionProvider>(new TypedParameter(typeof(IAesParams),
+                    new SearsAesParams()));
             }
         }
 

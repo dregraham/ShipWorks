@@ -2,11 +2,12 @@
 {
     public enum EncryptionProviderType
     {
-        AesForLicense,
+        Aes,
+        License,
         Secure
     }
 
-    public enum InitializationVectorType
+    public enum AesParamType
     {
         License,
         Sears
