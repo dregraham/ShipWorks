@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Threading;
 using System.Windows.Forms;
+using Autofac;
 using Divelements.SandGrid;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Common.Threading;
 using ShipWorks.Data.Model.EntityClasses;
@@ -19,7 +21,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
     /// </summary>
     public partial class UspsAccountManagerControl : PostalAccountManagerControlBase
     {
-        private static readonly ILog log = LogManager.GetLogger(typeof (UspsAccountManagerControl));
+        private static readonly ILog log = LogManager.GetLogger(typeof(UspsAccountManagerControl));
 
         private const long InitialAccountID = -1;
 
@@ -90,19 +92,23 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         {
             string result = "";
 
-            GridRow row = (GridRow) state;
+            GridRow row = (GridRow)state;
 
-            // Grab the account from the row and make a note of username for 
+            // Grab the account from the row and make a note of username for
             // exception handling purposes
-            UspsAccountEntity account = (UspsAccountEntity) row.Tag;
+            UspsAccountEntity account = (UspsAccountEntity)row.Tag;
             string username = account.Username;
 
             if (account.Fields.State == EntityState.Fetched)
             {
                 try
                 {
-                    PostageBalance postageBalance = new PostageBalance(new UspsPostageWebClient(account), new TangoWebClientWrapper());
-                    result = StringUtility.FormatFriendlyCurrency(postageBalance.Value);
+                    using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+                    {
+                        ITangoWebClient tangoWebClient = lifetimeScope.Resolve<ITangoWebClient>();
+                        PostageBalance postageBalance = new PostageBalance(new UspsPostageWebClient(account), tangoWebClient);
+                        result = StringUtility.FormatFriendlyCurrency(postageBalance.Value);
+                    }
                 }
                 catch (UspsException ex)
                 {
@@ -111,37 +117,37 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 }
                 catch (ORMEntityIsDeletedException ex)
                 {
-                    // The call to obtain account info from the Stmaps.com API has been known to 
+                    // The call to obtain account info from the Stmaps.com API has been known to
                     // take a few seconds, so a user could have deleted the account by the time
                     // the call from USPS completes.
 
                     // We don't have the account info anymore, so we can only use the username value
-                    // that was cached above. 
+                    // that was cached above.
                     string logMessage = string.Format("The USPS account ({0}) was deleted from ShipWorks while trying to obtain its account balance.", username);
                     log.Warn(logMessage, ex);
                 }
             }
 
-            Program.MainForm.BeginInvoke((MethodInvoker) delegate
-                {
-                    if (IsDisposed || !IsHandleCreated)
-                    {
-                        return;
-                    }
+            Program.MainForm.BeginInvoke((MethodInvoker)delegate
+               {
+                   if (IsDisposed || !IsHandleCreated)
+                   {
+                       return;
+                   }
 
-                    InnerGrid innerGrid = row.Grid;
-                    if (innerGrid != null)
-                    {
-                        SandGridBase sandGridInnerGrid = innerGrid.SandGrid;
-                        if (sandGridInnerGrid != null)
-                        {
-                            if (row.Cells.Count > 1)
-                            {
-                                row.Cells[2].Text = result;
-                            }
-                        }
-                    }
-                });
+                   InnerGrid innerGrid = row.Grid;
+                   if (innerGrid != null)
+                   {
+                       SandGridBase sandGridInnerGrid = innerGrid.SandGrid;
+                       if (sandGridInnerGrid != null)
+                       {
+                           if (row.Cells.Count > 1)
+                           {
+                               row.Cells[2].Text = result;
+                           }
+                       }
+                   }
+               });
         }
 
         /// <summary>
@@ -155,13 +161,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             remove.Enabled = enabled;
 
             bool allowAccountRegistration = ShipmentTypeManager.GetType(IsExpress1 ? ShipmentTypeCode.Express1Usps : ShipmentTypeCode.Usps).IsAccountRegistrationAllowed;
-            
+
             if (!allowAccountRegistration)
             {
                 add.Hide();
 
                 // Adjust the location of the remove button based on the visiblity of the add button and
-                // make sure it's on top of the add button. 
+                // make sure it's on top of the add button.
                 remove.Top = add.Top;
                 remove.BringToFront();
             }
@@ -214,7 +220,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         private void OnRemove(object sender, EventArgs e)
         {
-            UspsAccountEntity account = (UspsAccountEntity) sandGrid.SelectedElements[0].Tag;
+            UspsAccountEntity account = (UspsAccountEntity)sandGrid.SelectedElements[0].Tag;
 
             DialogResult result = MessageHelper.ShowQuestion(this, MessageBoxIcon.Warning,
                 string.Format("Remove the account '{0}' from ShipWorks?\n\n" +

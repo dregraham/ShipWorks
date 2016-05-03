@@ -1,14 +1,16 @@
 ﻿using System;
 using System.Threading;
 using System.Windows.Forms;
+using Autofac;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
+using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
+using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {
@@ -18,7 +20,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
     public partial class UspsAccountInfoControl : UserControl
     {
         UspsAccountEntity account;
-        private PostageBalance postageBalance;
         private decimal? balance;
         bool postagePurchased;
 
@@ -39,7 +40,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
             account = uspsAccount;
             accountName.Text = uspsAccount.Description;
-            postageBalance = new PostageBalance(new UspsPostageWebClient(uspsAccount), new TangoWebClientWrapper());
 
             contractType.Text = EnumHelper.GetDescription((UspsAccountContractType)uspsAccount.ContractType);
 
@@ -124,7 +124,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             {
                 try
                 {
-                    balance = postageBalance.Value;
+                    using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+                    {
+                        ITangoWebClient tangoWebClient = lifetimeScope.Resolve<ITangoWebClient>();
+                        balance = new PostageBalance(new UspsPostageWebClient(uspsAccount), tangoWebClient).Value;
+                    }
                     postage.Text = StringUtility.FormatFriendlyCurrency(balance.Value);
 
                     purchase.Left = postage.Right;
@@ -176,7 +180,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             accountSettingsLink.Visible = false;
             onlineReportsLink.Visible = false;
 
-            // Adjust the size of the control, so the control hosting this control doesn't have 
+            // Adjust the size of the control, so the control hosting this control doesn't have
             // a ton of empty space
             panelInfo.Height = purchase.Bottom + 4;
             Height = panelInfo.Bottom + 4;
