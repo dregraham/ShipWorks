@@ -1266,7 +1266,8 @@ namespace ShipWorks.Shipping
                     // Now log the result to tango.  For WorldShip we can't do this until the shipment comes back in to ShipWorks
                     if (!shipmentType.ProcessingCompletesExternally)
                     {
-                        shipment.OnlineShipmentID = TangoWebClient.LogShipment(storeEntity, shipment);
+                        ITangoWebClient tangoWebClient = new TangoWebClientFactory().CreateWebClient();
+                        shipment.OnlineShipmentID = tangoWebClient.LogShipment(storeEntity, shipment);
 
                         log.InfoFormat("Shipment {0}  - Accounted", shipment.ShipmentID);
 

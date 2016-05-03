@@ -31,9 +31,10 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// insured did not make it up into tango, but the shipment did actually process.
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public override void LogShipment(StoreEntity store, ShipmentEntity shipment, bool isRetry = false)
+        public override string LogShipment(StoreEntity store, ShipmentEntity shipment, bool isRetry = false)
         {
             log.Fatal($"Shipment logged to Tango for shipment id: {shipment.ShipmentID}");
+            return Guid.NewGuid().ToString("D");
         }
 
         /// <summary>
