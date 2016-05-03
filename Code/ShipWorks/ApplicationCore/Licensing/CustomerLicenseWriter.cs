@@ -1,7 +1,6 @@
-﻿using ShipWorks.Data;
+﻿using Interapptive.Shared.Security;
+using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
-using System;
-using Interapptive.Shared.Security;
 
 namespace ShipWorks.ApplicationCore.Licensing
 {
@@ -15,9 +14,9 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Constructor
         /// </summary>
-        public CustomerLicenseWriter(Func<IInitializationVector, IEncryptionProvider> encryptionProviderFactory, LicenseInitializationVector iv)
+        public CustomerLicenseWriter(IEncryptionProvider encryptionProvider)
         {
-            encryptionProvider = encryptionProviderFactory(iv);
+            this.encryptionProvider = encryptionProvider;
         }
 
         /// <summary>

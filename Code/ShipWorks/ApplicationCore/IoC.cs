@@ -1,9 +1,8 @@
-﻿using System;
-using System.Reflection;
-using Autofac;
-using System.Windows.Forms;
+﻿using Autofac;
+using Autofac.Core;
 using Interapptive.Shared.Messaging;
 using Interapptive.Shared.Pdf;
+using Interapptive.Shared.Security;
 using log4net;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Licensing.Activation;
@@ -18,12 +17,15 @@ using ShipWorks.Editions;
 using ShipWorks.Editions.Brown;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.Postal;
+using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
-using ShipWorks.Users;
 using ShipWorks.Stores;
 using ShipWorks.Stores.Content;
-using ShipWorks.Shipping.Profiles;
 using ShipWorks.Stores.Platforms.Sears;
+using ShipWorks.Users;
+using System;
+using System.Reflection;
+using System.Windows.Forms;
 
 namespace ShipWorks.ApplicationCore
 {
@@ -139,14 +141,26 @@ namespace ShipWorks.ApplicationCore
                 .AsImplementedInterfaces();
 
             builder.RegisterType<CustomerLicenseReader>()
-                .AsImplementedInterfaces();
+                .AsImplementedInterfaces()
+                .WithParameter(
+                    new ResolvedParameter(
+                        (pi, ctx) => pi.ParameterType == typeof(IEncryptionProvider),
+                        (pi, ctx) => ctx.ResolveKeyed<IEncryptionProvider>(EncryptionProviderType.AesForLicense)));
 
             builder.RegisterType<StoreLicense>()
                 .AsSelf();
 
             builder.RegisterType<AesEncryptionProvider>()
-                .AsImplementedInterfaces()
-                .SingleInstance();
+                .SingleInstance()
+                .Keyed<IEncryptionProvider>(EncryptionProviderType.AesForLicense)
+                .WithParameter(
+                    new ResolvedParameter(
+                        (pi, ctx) => pi.ParameterType == typeof(IInitializationVector),
+                        (pi, ctx) => ctx.ResolveKeyed<IInitializationVector>(InitializationVectorType.License)));
+
+            builder.RegisterType<SecureTextEncryptionProvider>()
+                .SingleInstance()
+                .Keyed<IEncryptionProvider>(EncryptionProviderType.Secure);
 
             builder.RegisterType<CustomerLicenseActivationService>()
                 .AsImplementedInterfaces();
@@ -224,9 +238,13 @@ namespace ShipWorks.ApplicationCore
 
         private static void RegisterInitializationVectors(ContainerBuilder builder)
         {
-            builder.RegisterType<LicenseInitializationVector>();
+            builder.RegisterType<LicenseInitializationVector>()
+                .SingleInstance()
+                .Keyed<IInitializationVector>(InitializationVectorType.License);
 
-            builder.RegisterType<SearsInitializationVector>();
+            builder.RegisterType<SearsInitializationVector>()
+                .SingleInstance()
+                .Keyed<IInitializationVector>(InitializationVectorType.Sears);
         }
     }
 }
