@@ -35,7 +35,21 @@ namespace ShipWorks.Stores.Platforms.Sears
         /// </summary>
         public void AddCredentials(SearsStoreEntity store, HttpVariableRequestSubmitter request)
         {
-            GetCredentialsHttpVariables(store).ToList().ForEach(v => request.Variables.Add(v));
+            HttpVariableCollection credentials = GetCredentialsHttpVariables(store);
+            if (credentials.Any())
+            {
+                if (request.Verb == HttpVerb.Put)
+                {
+                    // we send the tracking xml as the body of the put message
+                    // the uri needs to be modified to add the credentials
+                    request.Uri = new Uri($"{request.Uri.ToString()}?{QueryStringUtility.GetQueryString(credentials)}");
+                }
+                else
+                {
+                    credentials.ToList().ForEach(request.Variables.Add);
+                }
+            }
+
             AddCredentialsHeader(store, request);
         }
 
