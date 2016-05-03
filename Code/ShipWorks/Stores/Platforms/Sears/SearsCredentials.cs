@@ -61,7 +61,7 @@ namespace ShipWorks.Stores.Platforms.Sears
             if (!string.IsNullOrEmpty(store.SellerID))
             {
                 // They are using the current authentication method
-                string timeStamp = dateTimeProvider.UtcNow.ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'",
+                string timeStamp = dateTimeProvider.UtcNow.AddMinutes(-15).ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'",
                     CultureInfo.InvariantCulture);
                 string toHash = $"{store.SellerID}:{store.Email}:{timeStamp}";
 
