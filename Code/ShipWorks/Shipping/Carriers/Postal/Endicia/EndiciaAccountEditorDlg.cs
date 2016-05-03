@@ -22,8 +22,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
     /// </summary>
     public partial class EndiciaAccountEditorDlg : Form
     {
+        private ITangoWebClient tangoWebClient;
         EndiciaAccountEntity account;
-        private readonly EndiciaApiClient endiciaApiClient;
+        private EndiciaApiClient endiciaApiClient;
 
         // Indicates if postage was purchased while the window was open
         bool postagePurchased = false;
@@ -34,7 +35,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <summary>
         /// Constructor
         /// </summary>
-        public EndiciaAccountEditorDlg(EndiciaAccountEntity account)
+        public EndiciaAccountEditorDlg(ITangoWebClient tangoWebClient)
+        {
+            this.tangoWebClient = tangoWebClient;
+        }
+
+        /// <summary>
+        /// Load the account into this control
+        /// </summary>
+        public void LoadAccount(EndiciaAccountEntity account)
         {
             if (account == null)
             {
@@ -46,7 +55,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             endiciaApiClient = new EndiciaApiClient();
             this.account = account;
 
-            EndiciaReseller reseller = (EndiciaReseller)account.EndiciaReseller;
+            EndiciaReseller reseller = (EndiciaReseller) account.EndiciaReseller;
 
             string resellerName = EndiciaAccountManager.GetResellerName(reseller);
             labelEndicia.Text = resellerName;
@@ -57,6 +66,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 infotipPassword.Caption = "Please contact Express1 at 1-800-399-3971 to retrieve your account password.";
                 labelNote.Text = String.Format("Note: {0}", infotipPassword.Caption);
             }
+
+            SetUIValues();
         }
 
         /// <summary>
@@ -68,9 +79,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         }
 
         /// <summary>
-        /// Initialization
+        /// Update UI values based on data
         /// </summary>
-        private void OnLoad(object sender, EventArgs e)
+        private void SetUIValues()
         {
             EnumHelper.BindComboBox<EndiciaScanFormAddressSource>(comboScanAddress);
 
@@ -112,7 +123,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
             try
             {
-                balance.Text = (new PostageBalance(new EndiciaPostageWebClient(account), new TangoWebClientWrapper())).Value.ToString("c");
+                balance.Text = (new PostageBalance(new EndiciaPostageWebClient(account), tangoWebClient)).Value.ToString("c");
             }
             catch (EndiciaException ex)
             {

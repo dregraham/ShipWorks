@@ -20,7 +20,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         UspsAccountEntity account;
         private PostageBalance postageBalance;
         private decimal? balance;
-
         bool postagePurchased;
 
         /// <summary>

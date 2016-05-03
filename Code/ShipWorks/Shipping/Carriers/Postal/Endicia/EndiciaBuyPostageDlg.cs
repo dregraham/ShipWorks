@@ -32,7 +32,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         public EndiciaBuyPostageDlg()
             : this(null)
         { }
-
+        
         /// <summary>
         /// Initializes a new instance of the <see cref="EndiciaBuyPostageDlg"/> class.
         /// </summary>

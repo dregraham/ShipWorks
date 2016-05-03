@@ -17,6 +17,8 @@ using ShipWorks.Editions;
 using ShipWorks.Editions.Brown;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.Postal;
+using ShipWorks.Shipping.Carriers.Postal.Endicia;
+using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Users;
 using ShipWorks.Stores;
@@ -106,8 +108,19 @@ namespace ShipWorks.ApplicationCore
             RegisterWrappers(builder);
             RegisterLicensingDependencies(builder);
             RegisterLicenseEnforcers(builder);
+            RegisterDialogs(builder);
 
             current = builder.Build();
+        }
+
+        private static void RegisterDialogs(ContainerBuilder builder)
+        {
+            builder.RegisterType<EndiciaAccountEditorDlg>();
+            builder.RegisterType<EndiciaAccountManagerControl>();
+            builder.RegisterType<EndiciaBuyPostageDlg>();
+            builder.RegisterType<UspsAccountInfoControl>();
+            builder.RegisterType<UspsAccountManagerControl>();
+            builder.RegisterType<UspsPurchasePostageDlg>();
         }
 
         /// <summary>
@@ -187,8 +200,10 @@ namespace ShipWorks.ApplicationCore
             builder.RegisterType<ObjectReferenceManagerWrapper>()
                 .AsImplementedInterfaces();
 
-            builder.RegisterType<TangoWebClientWrapper>()
+            builder.RegisterType<TangoWebClientFactory>()
                 .AsImplementedInterfaces();
+
+            builder.Register<ITangoWebClient>((x) =>  x.Resolve<ITangoWebClientFactory>().CreateWebClient());
 
             builder.RegisterType<StoreManagerWrapper>()
                 .AsImplementedInterfaces()

@@ -12,11 +12,14 @@ using Divelements.SandGrid;
 using ShipWorks.UI;
 using ShipWorks.Data.Connection;
 using System.Threading;
+using Autofac;
+using Autofac.Core.Lifetime;
 using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Common.Threading;
 using Interapptive.Shared.UI;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Shipping.Carriers.Postal.Express1;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Endicia
@@ -220,8 +223,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             }
             else
             {
-                using (EndiciaAccountEditorDlg dlg = new EndiciaAccountEditorDlg(account))
+                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
                 {
+                    EndiciaAccountEditorDlg dlg = lifetimeScope.Resolve<EndiciaAccountEditorDlg>();
                     var result = dlg.ShowDialog(this);
 
                     if (result == DialogResult.OK || dlg.PostagePurchased)

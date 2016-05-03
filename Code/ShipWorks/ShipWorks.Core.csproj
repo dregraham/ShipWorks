@@ -609,6 +609,7 @@
     <Compile Include="ApplicationCore\Licensing\AssociateShipWorksWithItselfResponseType.cs" />
     <Compile Include="ApplicationCore\Licensing\ComplianceLevel.cs" />
     <Compile Include="ApplicationCore\Licensing\CreditCardType.cs" />
+    <Compile Include="ApplicationCore\Licensing\ITangoWebClientFactory.cs" />
     <Compile Include="ApplicationCore\Licensing\UspsPendingAccountType.cs" />
     <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\Endicia\EndiciaConsolidatorRestriction.cs" />
     <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\Endicia\EndiciaDhlRestriction.cs" />
