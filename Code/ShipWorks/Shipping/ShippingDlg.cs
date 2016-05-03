@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Windows.Forms;
 using Autofac;
 using Interapptive.Shared;
@@ -10,9 +11,12 @@ using Interapptive.Shared.Collections;
 using Interapptive.Shared.Messaging;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
+using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.AddressValidation;
 using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Licensing;
+using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
 using ShipWorks.ApplicationCore.Nudges;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Common.Threading;
@@ -30,6 +34,7 @@ using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
+using ShipWorks.Shipping.Policies;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.ShipSense;
@@ -41,12 +46,7 @@ using ShipWorks.Templates.Printing;
 using ShipWorks.Templates.Processing;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
-using log4net;
-using ShipWorks.Shipping.Policies;
 using Timer = System.Windows.Forms.Timer;
-using System.Reactive.Linq;
-using ShipWorks.ApplicationCore.Licensing;
-using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
 
 namespace ShipWorks.Shipping
 {
@@ -2593,10 +2593,7 @@ namespace ShipWorks.Shipping
 
                 if (answer == DialogResult.OK)
                 {
-                    using (Form dlg = outOfFundsException.CreatePostageDialog())
-                    {
-                        dlg.ShowDialog(this);
-                    }
+                    outOfFundsException.CreatePostageDialog(lifetimeScope).ShowDialog(this);
                 }
             }
             else

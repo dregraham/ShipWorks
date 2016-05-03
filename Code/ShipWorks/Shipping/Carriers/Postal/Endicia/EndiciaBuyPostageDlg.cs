@@ -1,16 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Windows.Forms;
-using Autofac;
+using Interapptive.Shared.UI;
+using log4net;
+using ShipWorks.ApplicationCore.Licensing;
+using ShipWorks.ApplicationCore.Nudges;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Editions;
 using ShipWorks.Shipping.Carriers.Postal.Express1.Registration;
-using log4net;
-using Interapptive.Shared.UI;
-using ShipWorks.ApplicationCore;
-using ShipWorks.ApplicationCore.Nudges;
-using ShipWorks.ApplicationCore.Licensing;
 
 
 namespace ShipWorks.Shipping.Carriers.Postal.Endicia
@@ -25,36 +21,33 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         EndiciaAccountEntity account;
 
         private readonly bool purchaseRestricted;
+        private readonly ITangoWebClient tangoWebClient;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="EndiciaBuyPostageDlg"/> class.
-        /// </summary>
-        public EndiciaBuyPostageDlg()
-            : this(null)
-        { }
-        
         /// <summary>
         /// Initializes a new instance of the <see cref="EndiciaBuyPostageDlg"/> class.
         /// </summary>
         /// <param name="account">The account.</param>
-        public EndiciaBuyPostageDlg(EndiciaAccountEntity account)
+        public EndiciaBuyPostageDlg(ILicenseService licenseService, ITangoWebClient tangoWebClient)
         {
-            // Set the local account so we can use it
-            this.account = account;
+            this.tangoWebClient = tangoWebClient;
 
-            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            EditionRestrictionLevel restrictionLevel = licenseService.CheckRestriction(EditionFeature.PurchasePostage, ShipmentTypeCode.Endicia);
+
+            // If purchasing is restricted for Endicia, set the variable
+            if (!IsExpress1() && restrictionLevel == EditionRestrictionLevel.Forbidden)
             {
-                ILicenseService licenseService = lifetimeScope.Resolve<ILicenseService>();
-                EditionRestrictionLevel restrictionLevel = licenseService.CheckRestriction(EditionFeature.PurchasePostage, ShipmentTypeCode.Endicia);
-
-                // If purchasing is restricted for Endicia, set the variable
-                if (!IsExpress1() && restrictionLevel == EditionRestrictionLevel.Forbidden)
-                {
-                    purchaseRestricted = true;
-                }
+                purchaseRestricted = true;
             }
 
             InitializeComponent();
+        }
+
+        /// <summary>
+        /// Load the account
+        /// </summary>
+        public void LoadAccount(EndiciaAccountEntity account)
+        {
+            this.account = account;
         }
 
         /// <summary>
@@ -88,7 +81,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
             try
             {
-                current.Text = (new PostageBalance(new EndiciaPostageWebClient(account), new TangoWebClientWrapper())).Value.ToString("c");
+                current.Text = (new PostageBalance(new EndiciaPostageWebClient(account), tangoWebClient)).Value.ToString("c");
             }
             catch (EndiciaException ex)
             {
@@ -109,7 +102,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
             try
             {
-                (new PostageBalance(new EndiciaPostageWebClient(account), new TangoWebClientWrapper())).Purchase(postage.Amount);
+                (new PostageBalance(new EndiciaPostageWebClient(account), tangoWebClient)).Purchase(postage.Amount);
 
                 MessageHelper.ShowInformation(this,
                     String.Format("The purchase request has been submitted to {0}.", EndiciaAccountManager.GetResellerName((EndiciaReseller)account.EndiciaReseller)));
@@ -137,10 +130,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 throw new EndiciaException("ShipWorks could not find information for this account.");
             }
 
-            // We have a valid endicia account, so we can use it to initialize the account info
-            // and show the dialog
-            // InitializeAccountInfo(endiciaAccountEntity);
-            this.account = endiciaAccountEntity;
+            // We have a valid endicia account, so we can use it to initialize the account info and show the dialog
+            return ShowDialog(owner, endiciaAccountEntity);
+        }
+
+        /// <summary>
+        /// This will show the dialog using the information for the given Endicia account entity provided.
+        /// </summary>
+        public DialogResult ShowDialog(IWin32Window owner, EndiciaAccountEntity account)
+        {
+            this.account = account;
             return ShowDialog(owner);
         }
 

@@ -20,13 +20,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
         // The password when we opened, so we know if it changed
         string entryPassword;
+        readonly Func<EndiciaBuyPostageDlg> createBuyPostageDialog;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public EndiciaAccountEditorDlg(ITangoWebClient tangoWebClient)
+        public EndiciaAccountEditorDlg(ITangoWebClient tangoWebClient, Func<EndiciaBuyPostageDlg> createBuyPostageDialog)
         {
             this.tangoWebClient = tangoWebClient;
+            this.createBuyPostageDialog = createBuyPostageDialog;
         }
 
         /// <summary>
@@ -136,14 +138,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// </summary>
         private void OnBuyPostage(object sender, EventArgs e)
         {
-            using (EndiciaBuyPostageDlg dlg = new EndiciaBuyPostageDlg(account))
-            {
-                if (dlg.ShowDialog(this) == DialogResult.OK)
-                {
-                    PostagePurchased = true;
+            EndiciaBuyPostageDlg buyPostageDialog = createBuyPostageDialog();
+            buyPostageDialog.LoadAccount(account);
 
-                    LoadAccountBalance();
-                }
+            if (buyPostageDialog.ShowDialog(this) == DialogResult.OK)
+            {
+                PostagePurchased = true;
+
+                LoadAccountBalance();
             }
         }
 
