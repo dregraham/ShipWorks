@@ -1,19 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
-using ShipWorks.ApplicationCore.Licensing;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data;
-using ShipWorks.UI;
-using SD.LLBLGen.Pro.ORMSupportClasses;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.ApplicationCore.Licensing;
+using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 {
@@ -25,9 +17,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         private ITangoWebClient tangoWebClient;
         EndiciaAccountEntity account;
         private EndiciaApiClient endiciaApiClient;
-
-        // Indicates if postage was purchased while the window was open
-        bool postagePurchased = false;
 
         // The password when we opened, so we know if it changed
         string entryPassword;
@@ -55,16 +44,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             endiciaApiClient = new EndiciaApiClient();
             this.account = account;
 
-            EndiciaReseller reseller = (EndiciaReseller) account.EndiciaReseller;
+            EndiciaReseller reseller = (EndiciaReseller)account.EndiciaReseller;
 
             string resellerName = EndiciaAccountManager.GetResellerName(reseller);
             labelEndicia.Text = resellerName;
-            Text = String.Format("{0} Account", resellerName);
+            Text = string.Format("{0} Account", resellerName);
 
             if (reseller == EndiciaReseller.Express1)
             {
                 infotipPassword.Caption = "Please contact Express1 at 1-800-399-3971 to retrieve your account password.";
-                labelNote.Text = String.Format("Note: {0}", infotipPassword.Caption);
+                labelNote.Text = string.Format("Note: {0}", infotipPassword.Caption);
             }
 
             SetUIValues();
@@ -73,10 +62,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <summary>
         /// Indicates if postage was purchased while the window was open
         /// </summary>
-        public bool PostagePurchased
-        {
-            get { return postagePurchased; }
-        }
+        public bool PostagePurchased { get; private set; }
 
         /// <summary>
         /// Update UI values based on data
@@ -101,7 +87,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
             mailingPostalCode.Text = account.MailingPostalCode;
 
-            comboScanAddress.SelectedValue = (EndiciaScanFormAddressSource) account.ScanFormAddressSource;
+            comboScanAddress.SelectedValue = (EndiciaScanFormAddressSource)account.ScanFormAddressSource;
         }
 
         /// <summary>
@@ -154,7 +140,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             {
                 if (dlg.ShowDialog(this) == DialogResult.OK)
                 {
-                    postagePurchased = true;
+                    PostagePurchased = true;
 
                     LoadAccountBalance();
                 }
@@ -204,7 +190,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             }
 
             account.MailingPostalCode = mailingPostalCode.Text.Trim();
-            account.ScanFormAddressSource = (int) comboScanAddress.SelectedValue;
+            account.ScanFormAddressSource = (int)comboScanAddress.SelectedValue;
 
             Cursor.Current = Cursors.WaitCursor;
 
