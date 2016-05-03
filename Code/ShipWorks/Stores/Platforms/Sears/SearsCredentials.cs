@@ -16,16 +16,22 @@ namespace ShipWorks.Stores.Platforms.Sears
     /// </summary>
     public class SearsCredentials
     {
+        private readonly SearsStoreEntity store;
+        private readonly HttpVariableRequestSubmitter request;
         private readonly IDateTimeProvider dateTimeProvider;
         private readonly IEncryptionProvider encryptionProvider;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public SearsCredentials(IDateTimeProvider dateTimeProvider, IEncryptionProvider encryptionProvider)
+        public SearsCredentials(SearsStoreEntity store, HttpVariableRequestSubmitter request, IDateTimeProvider dateTimeProvider, IEncryptionProvider encryptionProvider)
         {
+            MethodConditions.EnsureArgumentIsNotNull(store);
+            MethodConditions.EnsureArgumentIsNotNull(request);
             MethodConditions.EnsureArgumentIsNotNull(dateTimeProvider);
 
+            this.store = store;
+            this.request = request;
             this.dateTimeProvider = dateTimeProvider;
             this.encryptionProvider = encryptionProvider;
         }
@@ -33,9 +39,9 @@ namespace ShipWorks.Stores.Platforms.Sears
         /// <summary>
         /// Adds credentials to the request based on the store
         /// </summary>
-        public void AddCredentials(SearsStoreEntity store, HttpVariableRequestSubmitter request)
+        public void AddCredentials()
         {
-            HttpVariableCollection credentials = GetCredentialsHttpVariables(store);
+            HttpVariableCollection credentials = GetCredentialsHttpVariables();
             if (credentials.Any())
             {
                 if (request.Verb == HttpVerb.Put)
@@ -50,13 +56,13 @@ namespace ShipWorks.Stores.Platforms.Sears
                 }
             }
 
-            AddCredentialsHeader(store, request);
+            AddCredentialsHeader();
         }
 
         /// <summary>
         /// Adds the credentials header to the request for authenticating
         /// </summary>
-        private void AddCredentialsHeader(SearsStoreEntity store, HttpVariableRequestSubmitter request)
+        private void AddCredentialsHeader()
         {
             if (!string.IsNullOrEmpty(store.SellerID))
             {
@@ -86,7 +92,7 @@ namespace ShipWorks.Stores.Platforms.Sears
         /// <summary>
         /// Hashes toHash using HMACSHA256 and secretKey
         /// </summary>
-        private string HashSignature(string toHash, string secretKey)
+        private static string HashSignature(string toHash, string secretKey)
         {
             ASCIIEncoding encoding = new ASCIIEncoding();
             byte[] keyByte = encoding.GetBytes(secretKey);
@@ -102,7 +108,7 @@ namespace ShipWorks.Stores.Platforms.Sears
         /// <summary>
         /// Return the collection of HTTP variables for authenticating
         /// </summary>
-        private static HttpVariableCollection GetCredentialsHttpVariables(SearsStoreEntity store)
+        private HttpVariableCollection GetCredentialsHttpVariables()
         {
             HttpVariableCollection credentials = new HttpVariableCollection();
 
