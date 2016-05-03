@@ -113,6 +113,9 @@ namespace ShipWorks.ApplicationCore
             current = builder.Build();
         }
 
+        /// <summary>
+        /// Registers the dialog/control types.
+        /// </summary>
         private static void RegisterDialogs(ContainerBuilder builder)
         {
             builder.RegisterType<EndiciaAccountEditorDlg>();

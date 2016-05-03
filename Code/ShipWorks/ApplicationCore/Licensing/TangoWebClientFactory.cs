@@ -1,5 +1,4 @@
 ﻿using System;
-using log4net;
 
 namespace ShipWorks.ApplicationCore.Licensing
 {
@@ -12,7 +11,6 @@ namespace ShipWorks.ApplicationCore.Licensing
     /// </summary>
     public class TangoWebClientFactory : ITangoWebClientFactory
     {
-        ILog log = LogManager.GetLogger(typeof(TangoWebClientFactory));
         private const string CustomizedTangoRegistryKeyName = "TangoWebClient";
 
         /// <summary>
@@ -26,13 +24,9 @@ namespace ShipWorks.ApplicationCore.Licensing
 
             if (InterapptiveOnly.IsInterapptiveUser)
             {
-                log.Fatal($"IsInterapptiveUser is true.");
-
                 // Check to see if the TangoWebClient key exists and try to use the 
                 // web client indicated by the key
                 string webClientTypeName = InterapptiveOnly.Registry.GetValue(CustomizedTangoRegistryKeyName, string.Empty);
-                log.Fatal($"webClientTypeName:{webClientTypeName}");
-
                 if (!string.IsNullOrWhiteSpace(webClientTypeName))
                 {
                     // We have an entry for the custom tango client
@@ -40,7 +34,6 @@ namespace ShipWorks.ApplicationCore.Licensing
 
                     if (type != null)
                     {
-                        log.Fatal("type is not null");
                         webClient = Activator.CreateInstance(type) as ITangoWebClient;
                     }
                 }
