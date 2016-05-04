@@ -21,7 +21,6 @@ using ShipWorks.Shipping.Settings;
 using ShipWorks.Users;
 using ShipWorks.Stores;
 using ShipWorks.Stores.Content;
-using System.Windows.Forms;
 using ShipWorks.Shipping.Profiles;
 
 namespace ShipWorks.ApplicationCore

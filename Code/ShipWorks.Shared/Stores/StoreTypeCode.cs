@@ -357,7 +357,7 @@ namespace ShipWorks.Stores
         LemonStand = 68,
 
         [Description("SparkPay")]
-        [StoreTypeIdentity("WISH", "WSH")]
+        [StoreTypeIdentity("SPARKPAY", "SPK")]
         [StoreTypeIcon("sparkpay")]
         SparkPay = 69
     }
