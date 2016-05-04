@@ -75,7 +75,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
                 contentPanel.Controls.Add(combinedOrderControl);
             }
 
-            // update the arrangment of payment controls
+            // update the arrangement of payment controls
             UpdateCombinedOrderControlLayout();
 
             // resize the form if needed

@@ -9,10 +9,13 @@ using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.HelperClasses;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using System.Diagnostics;
+using Autofac;
 using Interapptive.Shared;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
+using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Settings;
 
@@ -73,7 +76,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             base.LoadProfile(profile);
 
             UpsProfileEntity ups = profile.Ups;
-            
+
             if (ShippingSettings.Fetch().UpsInsuranceProvider == (int) InsuranceProvider.Carrier)
             {
                 insuranceControl.UseInsuranceBoxLabel = "UPS Declared Value";
@@ -84,8 +87,16 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
             bool isMIAvailable = shipmentType.IsMailInnovationsEnabled();
 
-            bool isSurePostAvailable = EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.UpsSurePost).Level == EditionRestrictionLevel.None;
-            
+            bool isSurePostAvailable;
+
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                ILicenseService licenseService = lifetimeScope.Resolve<ILicenseService>();
+                EditionRestrictionLevel restrictionLevel = licenseService.CheckRestriction(EditionFeature.UpsSurePost, null);
+
+                isSurePostAvailable = restrictionLevel == EditionRestrictionLevel.None;
+            }
+
             if (isSurePostAvailable || isMIAvailable)
             {
                 surePostGroup.Visible = true;
@@ -161,7 +172,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
             // Labels
             AddValueMapping(profile, ShippingProfileFields.RequestedLabelFormat, requestedLabelFormatState, requestedLabelFormat);
-            
+
             // Insurance
             AddValueMapping(profile, ShippingProfileFields.Insurance, insuranceState, insuranceControl);
 

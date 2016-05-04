@@ -1,10 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 14.0.23107.0
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{750D94CC-9D79-42D4-961C-06CE52A837E4}"
 	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
 		Build\AnalysisDictionary.xml = Build\AnalysisDictionary.xml
 		rakefile.rb = rakefile.rb
 		SeedData.sql = SeedData.sql
@@ -49,6 +50,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShipWorks.Stores.Tests", "Code\ShipWorks.Stores.Tests\ShipWorks.Stores.Tests.csproj", "{671844E9-8696-4979-B050-F46C7FB672A4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShipWorks.UI", "Code\ShipWorks.UI\ShipWorks.UI.csproj", "{1F6A1DC6-DD72-4279-8747-6789F83711FF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShipWorks.UI.Tests", "Code\ShipWorks.UI.Tests\ShipWorks.UI.Tests.csproj", "{B47887B0-CDC4-4C7F-88FF-974C5C0228D6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -557,6 +560,38 @@ Global
 		{1F6A1DC6-DD72-4279-8747-6789F83711FF}.Release|Win32.Build.0 = Release|Any CPU
 		{1F6A1DC6-DD72-4279-8747-6789F83711FF}.Release|x86.ActiveCfg = Release|Any CPU
 		{1F6A1DC6-DD72-4279-8747-6789F83711FF}.Release|x86.Build.0 = Release|Any CPU
+		{B47887B0-CDC4-4C7F-88FF-974C5C0228D6}.Debug (x86)|Any CPU.ActiveCfg = Release|Any CPU
+		{B47887B0-CDC4-4C7F-88FF-974C5C0228D6}.Debug (x86)|Any CPU.Build.0 = Release|Any CPU
+		{B47887B0-CDC4-4C7F-88FF-974C5C0228D6}.Debug (x86)|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{B47887B0-CDC4-4C7F-88FF-974C5C0228D6}.Debug (x86)|Mixed Platforms.Build.0 = Release|Any CPU
+		{B47887B0-CDC4-4C7F-88FF-974C5C0228D6}.Debug (x86)|Win32.ActiveCfg = Release|Any CPU
+		{B47887B0-CDC4-4C7F-88FF-974C5C0228D6}.Debug (x86)|Win32.Build.0 = Release|Any CPU
+		{B47887B0-CDC4-4C7F-88FF-974C5C0228D6}.Debug (x86)|x86.ActiveCfg = Release|Any CPU
+		{B47887B0-CDC4-4C7F-88FF-974C5C0228D6}.Debug (x86)|x86.Build.0 = Release|Any CPU
+		{B47887B0-CDC4-4C7F-88FF-974C5C0228D6}.Debug|Any CPU.ActiveCfg = Release|Any CPU
+		{B47887B0-CDC4-4C7F-88FF-974C5C0228D6}.Debug|Any CPU.Build.0 = Release|Any CPU
+		{B47887B0-CDC4-4C7F-88FF-974C5C0228D6}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{B47887B0-CDC4-4C7F-88FF-974C5C0228D6}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{B47887B0-CDC4-4C7F-88FF-974C5C0228D6}.Debug|Win32.ActiveCfg = Release|Any CPU
+		{B47887B0-CDC4-4C7F-88FF-974C5C0228D6}.Debug|Win32.Build.0 = Release|Any CPU
+		{B47887B0-CDC4-4C7F-88FF-974C5C0228D6}.Debug|x86.ActiveCfg = Release|Any CPU
+		{B47887B0-CDC4-4C7F-88FF-974C5C0228D6}.Debug|x86.Build.0 = Release|Any CPU
+		{B47887B0-CDC4-4C7F-88FF-974C5C0228D6}.Release (x86)|Any CPU.ActiveCfg = Release|Any CPU
+		{B47887B0-CDC4-4C7F-88FF-974C5C0228D6}.Release (x86)|Any CPU.Build.0 = Release|Any CPU
+		{B47887B0-CDC4-4C7F-88FF-974C5C0228D6}.Release (x86)|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{B47887B0-CDC4-4C7F-88FF-974C5C0228D6}.Release (x86)|Mixed Platforms.Build.0 = Release|Any CPU
+		{B47887B0-CDC4-4C7F-88FF-974C5C0228D6}.Release (x86)|Win32.ActiveCfg = Release|Any CPU
+		{B47887B0-CDC4-4C7F-88FF-974C5C0228D6}.Release (x86)|Win32.Build.0 = Release|Any CPU
+		{B47887B0-CDC4-4C7F-88FF-974C5C0228D6}.Release (x86)|x86.ActiveCfg = Release|Any CPU
+		{B47887B0-CDC4-4C7F-88FF-974C5C0228D6}.Release (x86)|x86.Build.0 = Release|Any CPU
+		{B47887B0-CDC4-4C7F-88FF-974C5C0228D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B47887B0-CDC4-4C7F-88FF-974C5C0228D6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B47887B0-CDC4-4C7F-88FF-974C5C0228D6}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{B47887B0-CDC4-4C7F-88FF-974C5C0228D6}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{B47887B0-CDC4-4C7F-88FF-974C5C0228D6}.Release|Win32.ActiveCfg = Release|Any CPU
+		{B47887B0-CDC4-4C7F-88FF-974C5C0228D6}.Release|Win32.Build.0 = Release|Any CPU
+		{B47887B0-CDC4-4C7F-88FF-974C5C0228D6}.Release|x86.ActiveCfg = Release|Any CPU
+		{B47887B0-CDC4-4C7F-88FF-974C5C0228D6}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

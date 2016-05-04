@@ -4,10 +4,8 @@ using System.Drawing.Imaging;
 using System.Linq;
 using System.Threading.Tasks;
 using Interapptive.Shared.Business;
-using Interapptive.Shared.Net;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Common.IO.Hardware.Printers;
@@ -15,15 +13,11 @@ using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Editions;
 using ShipWorks.Shipping.Carriers.BestRate;
-using ShipWorks.Shipping.Carriers.BestRate.Footnote;
 using ShipWorks.Shipping.Carriers.Postal.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 using ShipWorks.Shipping.Carriers.Postal.Usps.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
-using ShipWorks.Shipping.Carriers.Postal.Usps.Express1;
-using ShipWorks.Shipping.Carriers.Postal.Usps.RateFootnotes.Promotion;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Insurance;
@@ -35,7 +29,7 @@ using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {
     /// <summary>
-    /// A shipment type for the USPS shipment type in ShipWorks. 
+    /// A shipment type for the USPS shipment type in ShipWorks.
     /// </summary>
     public class UspsShipmentType : PostalShipmentType
     {
@@ -101,8 +95,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <returns>An instance of IUspsWebClient. </returns>
         public virtual IUspsWebClient CreateWebClient()
         {
-            // This needs to be created each time rather than just being an instance property, 
-            // because of counter rates where the account repository is swapped out out prior 
+            // This needs to be created each time rather than just being an instance property,
+            // because of counter rates where the account repository is swapped out out prior
             // to creating the web client.
             return new UspsWebClient(AccountRepository, LogEntryFactory, CertificateInspector, ResellerType);
         }
@@ -134,9 +128,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         public override ShipmentTypeSetupWizardForm CreateSetupWizard()
         {
             EnsureAccountsHaveCurrentContractData();
-
+            UspsAccountEntity pendingAccount = GetPendingAccount();
             IRegistrationPromotion promotion = new RegistrationPromotionFactory().CreateRegistrationPromotion();
-            return new UspsSetupWizard(promotion, true);
+
+            return new UspsSetupWizard(promotion, true, pendingAccount);
         }
 
         /// <summary>
@@ -146,7 +141,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         {
             return new UspsProfileControl();
         }
-        
+
         /// <summary>
         /// Update the origin address based on the given originID value.  If the shipment has already been processed, nothing is done.  If
         /// the originID is no longer valid and the address could not be updated, false is returned.
@@ -187,6 +182,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         private void EnsureAccountsHaveCurrentContractData()
         {
             Task[] tasks = AccountRepository.Accounts
+                .Where(account => account.PendingInitialAccount != (int)UspsPendingAccountType.Create)
                 .Select(account => Task.Factory.StartNew(() => UpdateContractType(account)))
                 .ToArray();
 
@@ -213,13 +209,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         {
             return new UspsShipmentProcessingSynchronizer(AccountRepository);
         }
-        
+
         /// <summary>
         /// Should we rate shop before processing
         /// </summary>
         public bool ShouldRateShop(ShipmentEntity shipment)
         {
-            return shipment.Postal.Usps.RateShop && 
+            return shipment.Postal.Usps.RateShop &&
                 AccountRepository.Accounts.Count() > 1;
         }
 
@@ -232,7 +228,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             return Express1Utilities.IsPostageSavingService((PostalServiceType)shipment.Postal.Service) &&
                 GetExpress1AutoRouteAccount((PostalPackagingType)shipment.Postal.PackagingType) != null;
         }
-        
+
         /// <summary>
         /// Validate the shipment before processing or rating
         /// </summary>
@@ -243,7 +239,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 throw new ShippingException("The shipment weight cannot be zero.");
             }
 
-            if (shipment.Postal.Service == (int)PostalServiceType.ExpressMail && 
+            if (shipment.Postal.Service == (int)PostalServiceType.ExpressMail &&
                 shipment.Postal.Confirmation != (int)PostalConfirmationType.None &&
                 shipment.Postal.Confirmation != (int)PostalConfirmationType.AdultSignatureRestricted &&
                 shipment.Postal.Confirmation != (int)PostalConfirmationType.AdultSignatureRequired)
@@ -325,22 +321,23 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         }
 
         /// <summary>
-        /// Gets an instance to the best rate shipping broker for the USPS         /// shipment type based on the shipment configuration.
+        /// Gets an instance to the best rate shipping broker for the USPS shipment type based on 
+        /// the shipment configuration.
         /// </summary>
         /// <param name="shipment">The shipment.</param>
         /// <returns>An instance of a UspsBestRateBroker.</returns>
         public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment)
         {
-            if (AccountRepository.Accounts.Any())
+            if (AccountRepository.Accounts.Any(a => a.PendingInitialAccount == (int)UspsPendingAccountType.None))
             {
-                // We have an account, so use the normal broker
+                // We have an account that is completely setup, so use the normal broker
                 return new UspsBestRateBroker(this, AccountRepository);
             }
-            
-            // No accounts, so use the counter rates broker to allow the user to
-            // sign up for the account. We can use the UspsCounterRateAccountRepository 
-            // here because the underlying accounts being used are the same.
-            return new UspsCounterRatesBroker(new UspsCounterRateAccountRepository(TangoCredentialStore.Instance));
+
+            // Use the null broker for Best Rate. No accounts are in ShipWorks
+            // or accounts are still in the pending state (i.e. a USPS account 
+            // has been added during activation, but not completely setup) 
+            return new NullShippingBroker();
         }
 
         /// <summary>
@@ -482,7 +479,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 {
                     try
                     {
-                        // Grab contract type from the USPS API 
+                        // Grab contract type from the USPS API
                         IUspsWebClient webClient = CreateWebClient();
                         UspsAccountContractType contractType = webClient.GetContractType(account);
 
@@ -541,6 +538,17 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         protected override List<string> CountriesEligibleForFreeInternationalDeliveryConfirmation()
         {
             return base.CountriesEligibleForFreeInternationalDeliveryConfirmation().Union(new[] { "MX", "PL" }).ToList();
+        }
+
+        /// <summary>
+        /// Gets the first pending Usps account
+        /// </summary>
+        /// <returns></returns>
+        private UspsAccountEntity GetPendingAccount()
+        {
+            return AccountRepository.Accounts
+                .FirstOrDefault(a => a.PendingInitialAccount == (int)UspsPendingAccountType.Existing ||
+                a.PendingInitialAccount == (int)UspsPendingAccountType.Create);
         }
     }
 }

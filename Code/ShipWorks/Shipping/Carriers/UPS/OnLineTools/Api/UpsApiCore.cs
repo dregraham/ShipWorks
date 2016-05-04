@@ -7,11 +7,14 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using System.Xml;
+using Autofac;
 using Interapptive.Shared;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api.ElementWriters;
 using ShipWorks.Shipping.Carriers.UPS.ServiceManager;
 using ShipWorks.Templates.Tokens;
 using Interapptive.Shared.Business;
+using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Editions;
 using ShipWorks.Shipping.Api;
 
@@ -73,6 +76,19 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         }
 
         /// <summary>
+        /// Checks to see if the given account number is allowed based on the edition of ShipWorks
+        /// </summary>
+        private static bool AccountAllowed(string upsAccountNumber)
+        {
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                return lifetimeScope.Resolve<ILicenseService>()
+                    .CheckRestriction(EditionFeature.UpsAccountNumbers, upsAccountNumber) ==
+                       EditionRestrictionLevel.None;
+            }
+        }
+
+        /// <summary>
         /// Get the UPS account associated with the given shipment.  Throws an exception if it does not exist.
         /// </summary>
         public static UpsAccountEntity GetUpsAccount(ShipmentEntity shipment, ICarrierAccountRepository<UpsAccountEntity> accountRepository)
@@ -82,17 +98,19 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             {
                 throw new UpsException("No UPS account is selected for the shipment.");
             }
-
-            var accountRestriction = EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.UpsAccountNumbers, account.AccountNumber);
-            if (accountRestriction.Level != EditionRestrictionLevel.None)
+            
+            if (!AccountAllowed(account.AccountNumber))
             {
-                throw new UpsException(accountRestriction.GetDescription());
+                throw new UpsException(
+                    $"You must contact Interapptive to enable use of UPS account '{account.AccountNumber}'.");
             }
 
-            var quantityRestriction = EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.UpsAccountLimit, UpsAccountManager.Accounts.Count);
-            if (quantityRestriction.Level != EditionRestrictionLevel.None)
+            using (ILifetimeScope scope = IoC.BeginLifetimeScope())
             {
-                throw new UpsException(quantityRestriction.GetDescription());
+                // The window handler is null because A: we are in a static method and B: the 
+                // UpsAccountLimitFeatureRestriction doesn't use it at all.
+                ILicenseService licenseService = scope.Resolve<ILicenseService>();
+                licenseService.HandleRestriction(EditionFeature.UpsAccountLimit, UpsAccountManager.Accounts.Count, null);
             }
 
             return account;

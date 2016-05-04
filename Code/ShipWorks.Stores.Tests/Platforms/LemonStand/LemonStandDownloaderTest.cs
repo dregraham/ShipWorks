@@ -72,7 +72,7 @@ namespace ShipWorks.Stores.Tests.Platforms.LemonStand
 
         private FakeLemonStandDownloader SetupPrepareOrderTests()
         {
-            testObject = new FakeLemonStandDownloader(store, webClient.Object, adapter.Object);
+            testObject = new FakeLemonStandDownloader(store, webClient.Object, adapter.Object, new LemonStandStoreType(store));
             JObject jsonOrder = JObject.Parse(singleOrder);
             testObject.Order = testObject.PrepareOrder(jsonOrder);
             
@@ -81,7 +81,7 @@ namespace ShipWorks.Stores.Tests.Platforms.LemonStand
 
         private FakeLemonStandDownloader SetupLoadOrderTests()
         {
-            testObject = new FakeLemonStandDownloader(store, webClient.Object, adapter.Object);
+            testObject = new FakeLemonStandDownloader(store, webClient.Object, adapter.Object, new LemonStandStoreType(store));
             JObject jsonOrder = JObject.Parse(singleOrder);
             testObject.LoadOrder(jsonOrder);
 
@@ -166,7 +166,7 @@ namespace ShipWorks.Stores.Tests.Platforms.LemonStand
         [Fact]
         public void LoadOrder_ThrowsLemonStandException_WhenItemQuantityIsEmptyInResponse()
         {
-            testObject = new FakeLemonStandDownloader(store, webClient.Object, adapter.Object);
+            testObject = new FakeLemonStandDownloader(store, webClient.Object, adapter.Object, new LemonStandStoreType(store));
             JObject jsonOrder = JObject.Parse(badDataOrder);
 
             Assert.Throws<LemonStandException>(() => testObject.PrepareOrder(jsonOrder));
@@ -175,7 +175,7 @@ namespace ShipWorks.Stores.Tests.Platforms.LemonStand
         [Fact]
         public void LoadOrder_ThrowsLemonStandException_WhenOrderIsMissingOrderNumber()
         {
-            testObject = new FakeLemonStandDownloader(store, webClient.Object, adapter.Object);
+            testObject = new FakeLemonStandDownloader(store, webClient.Object, adapter.Object, new LemonStandStoreType(store));
             JObject jsonOrder = JObject.Parse(missingDataOrder);
 
             Assert.Throws<LemonStandException>(() => testObject.PrepareOrder(jsonOrder));
@@ -184,7 +184,7 @@ namespace ShipWorks.Stores.Tests.Platforms.LemonStand
         [Fact]
         public void LoadItem_ThrowsLemonStandException_WhenItemsAreMissingFromOrderResponse()
         {
-            testObject = new FakeLemonStandDownloader(store, webClient.Object, adapter.Object);
+            testObject = new FakeLemonStandDownloader(store, webClient.Object, adapter.Object, new LemonStandStoreType(store));
             JObject jsonOrder = JObject.Parse(missingItems);
 
             Assert.Throws<LemonStandException>(() => testObject.PrepareOrder(jsonOrder));

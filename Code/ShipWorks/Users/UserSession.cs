@@ -194,10 +194,7 @@ namespace ShipWorks.Users
         /// <summary>
         /// The computer on which the user is currently running.
         /// </summary>
-        public static ComputerEntity Computer
-        {
-            get { return thisComputer; }
-        }
+        public static ComputerEntity Computer => thisComputer;
 
         /// <summary>
         /// Get the currently logged in user.  Null if no user is logged in.
@@ -293,7 +290,7 @@ namespace ShipWorks.Users
                                                       AuditReason.ReasonDetail);
 
                     // SQL Server limits this to a max of 128.  The "- 2" is to make room for our terminator
-                    workStationID += StringUtility.Truncate(additional, 128 - workStationID.Length - 2) + "@;";
+                    workStationID += additional.Truncate(128 - workStationID.Length - 2) + "@;";
                 }
 
                 return workStationID;
@@ -303,18 +300,12 @@ namespace ShipWorks.Users
         /// <summary>
         /// An identifier that uniquely identifies the database to which the current session is connected.
         /// </summary>
-        public static string DatabaseID
-        {
-            get { return databaseID; }
-        }
+        public static string DatabaseID => databaseID;
 
         /// <summary>
         /// Indiciates if a user is currently logged on to ShipWorks
         /// </summary>
-        public static bool IsLoggedOn
-        {
-            get { return User != null; }
-        }
+        public static bool IsLoggedOn => User != null;
 
         /// <summary>
         /// Attempt to automatically logon to the system as the last user to use ShipWorks.
@@ -418,10 +409,7 @@ namespace ShipWorks.Users
 
                 return true;
             }
-            else
-            {
-                return false;
-            }
+            return false;
         }
 
         /// <summary>
@@ -462,10 +450,7 @@ namespace ShipWorks.Users
         /// <summary>
         /// The last successful username to logon to the system.
         /// </summary>
-        public static string LastSuccessfulUsername
-        {
-            get { return lastUsername; }
-        }
+        public static string LastSuccessfulUsername => lastUsername;
 
         /// <summary>
         /// Save the given user information as the last user to use the system.
@@ -538,9 +523,6 @@ namespace ShipWorks.Users
         /// <summary>
         /// Full path to the file where we store our data
         /// </summary>
-        public static string SettingsFilename
-        {
-            get { return Path.Combine(DataPath.WindowsUserSettings, "user.xml"); }
-        }
+        public static string SettingsFilename => Path.Combine(DataPath.WindowsUserSettings, "user.xml");
     }
 }
