@@ -449,6 +449,9 @@ namespace ShipWorks.Data.Model.FactoryClasses
 				case ShipWorks.Data.Model.EntityType.ShopSiteStoreEntity:
 					fieldsToReturn = fieldProvider.GetEntityFields(inheritanceProvider, "ShopSiteStoreEntity");
 					break;
+				case ShipWorks.Data.Model.EntityType.SparkPayStoreEntity:
+					fieldsToReturn = fieldProvider.GetEntityFields(inheritanceProvider, "SparkPayStoreEntity");
+					break;
 				case ShipWorks.Data.Model.EntityType.StatusPresetEntity:
 					fieldsToReturn = fieldProvider.GetEntityFields(inheritanceProvider, "StatusPresetEntity");
 					break;

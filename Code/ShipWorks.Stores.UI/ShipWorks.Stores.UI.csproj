@@ -155,6 +155,36 @@
     <Compile Include="Platforms\LemonStand\WizardPages\LemonStandAccountPage.Designer.cs">
       <DependentUpon>LemonStandAccountPage.cs</DependentUpon>
     </Compile>
+    <Compile Include="Platforms\SparkPay\SparkPaySettingsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Platforms\SparkPay\SparkPaySettingsControl.Designer.cs">
+      <DependentUpon>SparkPaySettingsControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Platforms\SparkPay\SparkPayOrderUpdateTaskEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Platforms\SparkPay\SparkPayOrderUpdateTaskEditor.Designer.cs">
+      <DependentUpon>SparkPayOrderUpdateTaskEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Platforms\SparkPay\SparkPayOnlineUpdateActionControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Platforms\SparkPay\SparkPayOnlineUpdateActionControl.Designer.cs">
+      <DependentUpon>SparkPayOnlineUpdateActionControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Platforms\SparkPay\SparkPayStoreModule.cs" />
+    <Compile Include="Platforms\SparkPay\WizardPages\ISparkPayAccountViewModel.cs" />
+    <Compile Include="Platforms\SparkPay\WizardPages\SparkPayAccountHost.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Platforms\SparkPay\WizardPages\SparkPayAccountHost.Designer.cs">
+      <DependentUpon>SparkPayAccountHost.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Platforms\SparkPay\WizardPages\SparkPayAccountControl.xaml.cs">
+      <DependentUpon>SparkPayAccountControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Platforms\SparkPay\WizardPages\SparkPayAccountViewModel.cs" />
     <Compile Include="Platforms\Yahoo\ApiIntegration\WizardPages\YahooApiAccountPage.xaml.cs">
       <DependentUpon>YahooApiAccountPage.xaml</DependentUpon>
     </Compile>
@@ -193,6 +223,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Platforms\LemonStand\WizardPages\LemonStandAccountPage.resx">
       <DependentUpon>LemonStandAccountPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Platforms\SparkPay\SparkPaySettingsControl.resx">
+      <DependentUpon>SparkPaySettingsControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Platforms\SparkPay\SparkPayOrderUpdateTaskEditor.resx">
+      <DependentUpon>SparkPayOrderUpdateTaskEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Platforms\SparkPay\SparkPayOnlineUpdateActionControl.resx">
+      <DependentUpon>SparkPayOnlineUpdateActionControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Platforms\SparkPay\WizardPages\SparkPayAccountHost.resx">
+      <DependentUpon>SparkPayAccountHost.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Platforms\Yahoo\ApiIntegration\WizardPages\YahooApiAccountPageHost.resx">
       <DependentUpon>YahooApiAccountPageHost.cs</DependentUpon>
@@ -238,6 +280,10 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Page Include="Platforms\SparkPay\WizardPages\SparkPayAccountControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Platforms\Yahoo\ApiIntegration\WizardPages\YahooApiAccountPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
