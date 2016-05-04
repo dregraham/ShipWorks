@@ -137,13 +137,10 @@ namespace ShipWorks.ApplicationCore
             builder.RegisterType<UspsAccountSetupActivity>()
                 .AsImplementedInterfaces()
                 .AsSelf();
-  builder.RegisterType<UspsAccountSetupActivity>()
+
+            builder.RegisterType<UspsAccountSetupActivity>()
                 .AsImplementedInterfaces()
                 .AsSelf();
-
-            builder.RegisterType<AesEncryptionProvider>()
-                .SingleInstance()
-                .Keyed<IEncryptionProvider>(EncryptionProviderType.Aes);
 
             builder.RegisterType<LicenseEncryptionProvider>()
                 .SingleInstance()
