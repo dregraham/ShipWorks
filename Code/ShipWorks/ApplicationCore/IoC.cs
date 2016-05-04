@@ -1,9 +1,8 @@
-﻿using System;
-using System.Reflection;
-using Autofac;
-using System.Windows.Forms;
+﻿using Autofac;
+using Autofac.Core;
 using Interapptive.Shared.Messaging;
 using Interapptive.Shared.Pdf;
+using Interapptive.Shared.Security;
 using log4net;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Licensing.Activation;
@@ -18,12 +17,15 @@ using ShipWorks.Editions;
 using ShipWorks.Editions.Brown;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.Postal;
+using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
-using ShipWorks.Users;
 using ShipWorks.Stores;
 using ShipWorks.Stores.Content;
-using ShipWorks.Shipping.Profiles;
 using ShipWorks.Stores.Platforms.Sears;
+using ShipWorks.Users;
+using System;
+using System.Reflection;
+using System.Windows.Forms;
 
 namespace ShipWorks.ApplicationCore
 {
@@ -56,6 +58,7 @@ namespace ShipWorks.ApplicationCore
         /// <summary>
         /// Initialize the IoC container
         /// </summary>
+        /// <param name="assemblies">The assemblies.</param>
         public static void Initialize(params Assembly[] assemblies)
         {
             var builder = new ContainerBuilder();
@@ -135,18 +138,53 @@ namespace ShipWorks.ApplicationCore
                 .AsImplementedInterfaces()
                 .AsSelf();
 
+            builder.RegisterType<UspsAccountSetupActivity>()
+                .AsImplementedInterfaces()
+                .AsSelf();
+
+            builder.RegisterType<LicenseEncryptionProvider>()
+                .SingleInstance()
+                .Keyed<IEncryptionProvider>(EncryptionProviderType.License)
+                .WithParameter(
+                    new ResolvedParameter(
+                        (pi, ctx) => pi.ParameterType == typeof(IAesParams),
+                        (pi, ctx) => ctx.ResolveKeyed<IAesParams>(AesParamType.License)));
+
+            //builder.RegisterType<SecureTextEncryptionProvider>()
+            //    .SingleInstance()
+            //    .Keyed<IEncryptionProvider>(EncryptionProviderType.Secure);
+  
+            builder.Register((_, parameters) => new SecureTextEncryptionProvider(parameters.TypedAs<string>()))
+                .As<IEncryptionProvider>();
+		
             builder.RegisterType<CustomerLicenseWriter>()
-                .AsImplementedInterfaces();
+                .AsImplementedInterfaces()
+                .WithParameter(
+                    new ResolvedParameter(
+                        (pi, ctx) => pi.ParameterType == typeof(IEncryptionProvider),
+                        (pi, ctx) => ctx.ResolveKeyed<IEncryptionProvider>(EncryptionProviderType.License)));
 
             builder.RegisterType<CustomerLicenseReader>()
-                .AsImplementedInterfaces();
+                .AsImplementedInterfaces()
+                .WithParameter(
+                    new ResolvedParameter(
+                        (pi, ctx) => pi.ParameterType == typeof(IEncryptionProvider),
+                        (pi, ctx) => ctx.ResolveKeyed<IEncryptionProvider>(EncryptionProviderType.License)));
 
             builder.RegisterType<StoreLicense>()
                 .AsSelf();
 
+          
+
             builder.RegisterType<AesEncryptionProvider>()
-                .AsImplementedInterfaces()
-                .SingleInstance();
+                .SingleInstance()
+                .Keyed<IEncryptionProvider>(EncryptionProviderType.AesForSears)
+                .WithParameter(
+                    new ResolvedParameter(
+                        (pi, ctx) => pi.ParameterType == typeof(IAesParams),
+                        (pi, ctx) => ctx.ResolveKeyed<IAesParams>(AesParamType.Sears)));
+
+
 
             builder.RegisterType<CustomerLicenseActivationService>()
                 .AsImplementedInterfaces();
@@ -224,9 +262,14 @@ namespace ShipWorks.ApplicationCore
 
         private static void RegisterInitializationVectors(ContainerBuilder builder)
         {
-            builder.RegisterType<LicenseInitializationVector>();
 
-            builder.RegisterType<SearsInitializationVector>();
+            builder.RegisterType<LicenseAesParams>()
+                .SingleInstance()
+                .Keyed<IAesParams>(AesParamType.License);
+
+            builder.RegisterType<SearsAesParams>()
+                .SingleInstance()
+                .Keyed<IAesParams>(AesParamType.Sears);
         }
     }
 }

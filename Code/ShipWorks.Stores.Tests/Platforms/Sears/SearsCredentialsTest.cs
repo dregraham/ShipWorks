@@ -1,16 +1,16 @@
-﻿using Autofac.Extras.Moq;
+﻿using Autofac;
+using Autofac.Extras.Moq;
 using Interapptive.Shared.Net;
+using Interapptive.Shared.Security;
 using Interapptive.Shared.Utility;
 using Moq;
 using ShipWorks.ApplicationCore.Licensing;
+using ShipWorks.Common;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Sears;
 using System;
 using System.Linq;
-using Interapptive.Shared.Security;
 using Xunit;
-using Autofac;
-using ShipWorks.Common;
 
 namespace ShipWorks.Stores.Tests.Platforms.Sears
 {
@@ -46,7 +46,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Sears
         }
 
         [Fact]
-        public void AddCredentials_WithLegacyStore_AddsPasswordRequestVariable()
+        public void AddCredentials_AddsPasswordRequestVariable_WhenLegacyStore()
         {
             using (var mock = AutoMock.GetLoose())
             {
@@ -58,14 +58,21 @@ namespace ShipWorks.Stores.Tests.Platforms.Sears
                     Email = email,
                     Password = SecureText.Encrypt(password, email)
                 };
+                
+
+                var secureTextEncryptionProvider = mock.Mock<IEncryptionProvider>();
+                secureTextEncryptionProvider
+                    .Setup(p => p.Decrypt(It.Is<string>(s => s == store.Password)))
+                    .Returns(password);
+                Func<string, IEncryptionProvider> provideFunc = s => secureTextEncryptionProvider.Object;
 
                 HttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter();
                 TypedParameter storeParameter = new TypedParameter(typeof(SearsStoreEntity), store);
                 TypedParameter requestParameter = new TypedParameter(typeof(HttpVariableRequestSubmitter), request);
+                TypedParameter secureTextEncryptionProviderParameter = new TypedParameter(typeof(Func<string, IEncryptionProvider>), provideFunc);
 
-                SearsCredentials testObject = mock.Create<SearsCredentials>(new[] { storeParameter, requestParameter });
-
-
+                SearsCredentials testObject = mock.Create<SearsCredentials>(new[] { storeParameter, requestParameter, secureTextEncryptionProviderParameter });
+                
                 testObject.AddCredentials();
                 HttpVariable passwordVariable = request.Variables.First(v => v.Name == "password");
 
@@ -392,7 +399,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Sears
         [Fact]
         public void SearsCredentials_WithNullDateTimeProvider_ThrowsArgumentNullException()
         {
-            Assert.Throws<ArgumentNullException>(() => new SearsCredentials(null, null, null, null));
+            Assert.Throws<ArgumentNullException>(() => new SearsCredentials(null, null, null, null, null));
         }
     }
 }

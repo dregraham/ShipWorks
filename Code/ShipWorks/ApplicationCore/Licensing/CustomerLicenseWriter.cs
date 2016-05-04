@@ -15,9 +15,9 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Constructor
         /// </summary>
-        public CustomerLicenseWriter(Func<IInitializationVector, IEncryptionProvider> encryptionProviderFactory, LicenseInitializationVector iv)
+        public CustomerLicenseWriter(IEncryptionProvider encryptionProvider)
         {
-            encryptionProvider = encryptionProviderFactory(iv);
+            this.encryptionProvider = encryptionProvider;
         }
 
         /// <summary>

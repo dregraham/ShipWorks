@@ -1,12 +1,12 @@
-﻿using System;
-using System.Windows.Forms;
-using Autofac;
+﻿using Autofac;
 using Interapptive.Shared.Security;
-using ShipWorks.Stores.Management;
-using ShipWorks.Data.Model.EntityClasses;
 using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Management;
+using System;
+using System.Windows.Forms;
 
 namespace ShipWorks.Stores.Platforms.Sears
 {
@@ -26,8 +26,7 @@ namespace ShipWorks.Stores.Platforms.Sears
 
             using (ILifetimeScope scope = IoC.BeginLifetimeScope())
             {
-                encryptionProvider = scope.Resolve<IEncryptionProvider>(new TypedParameter(typeof(IInitializationVector),
-                    new SearsInitializationVector()));
+                encryptionProvider = scope.ResolveKeyed<IEncryptionProvider>(EncryptionProviderType.AesForSears);
             }
         }
 
@@ -44,7 +43,10 @@ namespace ShipWorks.Stores.Platforms.Sears
 
             email.Text = searsStore.Email;
             sellerID.Text = searsStore.SellerID;
-            secretKey.Text = encryptionProvider.Decrypt(searsStore.SecretKey);
+
+            secretKey.Text = string.IsNullOrWhiteSpace(searsStore.SecretKey)
+                ? string.Empty
+                : encryptionProvider.Decrypt(searsStore.SecretKey);
         }
 
         /// <summary>

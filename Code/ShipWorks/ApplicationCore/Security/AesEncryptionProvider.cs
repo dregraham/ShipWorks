@@ -1,64 +1,48 @@
 using System;
-using System.Data.SqlClient;
 using System.Security.Cryptography;
 using System.Text;
 using Interapptive.Shared.Security;
 using ShipWorks.ApplicationCore.Licensing;
-using ShipWorks.Data.Administration;
 
 namespace ShipWorks.ApplicationCore.Security
 {
+    /// <summary>
+    /// Class for encrypting and decrypting using AES
+    /// </summary>
     public class AesEncryptionProvider : IEncryptionProvider
     {
-        private const string LegacyUserLicense = "ShipWorks legacy user";
-        private readonly IDatabaseIdentifier databaseId;
-        private readonly ISqlSchemaVersion sqlSchemaVersion;
-
-        public AesEncryptionProvider(IDatabaseIdentifier databaseId, ISqlSchemaVersion sqlSchemaVersion, IInitializationVector iv)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AesEncryptionProvider"/> class.
+        /// </summary>
+        public AesEncryptionProvider(IAesParams aesParams)
         {
-            this.databaseId = databaseId;
-            this.sqlSchemaVersion = sqlSchemaVersion;
-            InitializationVector = iv.Value;
+            AesParams = aesParams;
         }
-
-        protected byte[] InitializationVector { get; }
 
         /// <summary>
-        /// Get DatabaseId value
+        /// The AES parameters.
         /// </summary>
-        private AesManaged Aes
-        {
-            get
-            {
-                try
-                {
-                    byte[] key = databaseId.Get().ToByteArray();
+        protected IAesParams AesParams { get; }
 
-                    return new AesManaged()
-                    {
-                        IV = InitializationVector,
-                        Key = key
-                    };
-                }
-                catch (DatabaseIdentifierException ex)
-                {
-                    throw new EncryptionException(ex.Message, ex);
-                }
-            }
-        }
+        /// <summary>
+        /// AES encryption algorithm to use
+        /// </summary>
+        protected AesManaged Aes => new AesManaged()
+        {
+            IV = AesParams.InitializationVector,
+            Key = AesParams.Key
+        };
 
         /// <summary>
         /// Encrypts the given plain text.
         /// </summary>
         public string Encrypt(string plainText)
         {
-            // AES can not encrypt empty strings. So when we get
-            // a legacy customer license, set the key to a fixed string,
-            // so that when we decrypt later, we know it is actually
-            // supposed to be an empty string.
+            // AES can not encrypt empty strings. So when we get an empty string, set it to a fixed string,
+            // so that when we decrypt later, we know it is actually supposed to be an empty string.
             if (string.IsNullOrWhiteSpace(plainText))
             {
-                plainText = LegacyUserLicense;
+                plainText = AesParams.EmptyValue;
             }
 
             return GetEncryptedString(plainText);
@@ -76,9 +60,8 @@ namespace ShipWorks.ApplicationCore.Security
 
             string decryptedText = GetDecryptedString(encryptedText);
 
-            // If we get the fixed legacy user string, we know it is
-            // a legacy customer. So return a blank license key.
-            if (decryptedText.Equals(LegacyUserLicense))
+            // If we get our fixed empty string value, we need to return an empty string.
+            if (decryptedText.Equals(AesParams.EmptyValue))
             {
                 decryptedText = "";
             }
@@ -110,7 +93,7 @@ namespace ShipWorks.ApplicationCore.Security
         /// Gets the decrypted string.
         /// </summary>
         /// <param name="encryptedText">The encrypted text.</param>
-        private string GetDecryptedString(string encryptedText)
+        protected virtual string GetDecryptedString(string encryptedText)
         {
             try
             {
@@ -122,17 +105,6 @@ namespace ShipWorks.ApplicationCore.Security
             }
             catch (Exception ex)
             {
-                SqlException sqlEx = (SqlException)ex.InnerException?.InnerException;
-
-                Version installedSqlSchemaVersion = sqlSchemaVersion.GetInstalledSchemaVersion();
-
-                // Could not find stored procedure GetDataGuid, we must be in the process
-                // of upgrading, or pre 4.8.0.0 schema version
-                if (sqlEx?.Number == 2812 && installedSqlSchemaVersion < Version.Parse("4.8.0.0"))
-                {
-                    return string.Empty;
-                }
-
                 throw new EncryptionException(ex.Message, ex);
             }
         }
