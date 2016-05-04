@@ -33,7 +33,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
 
             testScheduler.Default.AdvanceBy(TimeSpan.FromMilliseconds(250).Ticks - 1);
 
-            viewModel.Verify(x => x.IsDomestic, Times.Never);
+            viewModel.Verify(x => x.UpdateServices(), Times.Never);
         }
 
         [Fact]
@@ -94,7 +94,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
 
             testScheduler.Default.AdvanceBy(TimeSpan.FromMilliseconds(250).Ticks);
 
-            viewModel.Verify(x => x.IsDomestic, Times.Never);
+            viewModel.Verify(x => x.UpdateServices(), Times.Never);
         }
 
         private void VerifyGetsDomesticStatusFromAdapterForPropertyChange(Action<ShippingPanelViewModel> changeProperty)

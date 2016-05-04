@@ -401,7 +401,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// <summary>
         /// Updates the service types.
         /// </summary>
-        public void UpdateServices() => ShipmentViewModel?.RefreshServiceTypes();
+        public virtual void UpdateServices() => ShipmentViewModel?.RefreshServiceTypes();
 
         /// <summary>
         /// Updates the package types.
@@ -510,7 +510,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
 
             Origin.Load(fromShipmentAdapter.Shipment.OriginPerson);
             Destination.Load(fromShipmentAdapter.Shipment.ShipPerson);
-            Destination.IsAddressValidationEnabled = fromShipmentAdapter.Store.AddressValidationSetting != (int) AddressValidationStoreSettingType.ValidationDisabled;
+            Destination.IsAddressValidationEnabled = fromShipmentAdapter.Store.AddressValidationSetting != (int)AddressValidationStoreSettingType.ValidationDisabled;
 
             AllowEditing = !fromShipmentAdapter.Shipment.Processed;
 
