@@ -60,7 +60,7 @@ namespace ShipWorks.ApplicationCore.Security
             try
             {
                 ICryptoTransform decryptor = Aes.CreateDecryptor();
-
+                
                 byte[] buffer = Convert.FromBase64String(encryptedText);
 
                 return Encoding.ASCII.GetString(decryptor.TransformFinalBlock(buffer, 0, buffer.Length));

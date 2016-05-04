@@ -46,9 +46,8 @@ namespace ShipWorks.ApplicationCore.Security
                     throw new EncryptionException(ex.Message, ex);
                 }
             }
-
-
-            return new LicenseEncryptionProvider(iv, key, isLegacy);
+            
+            return new LicenseEncryptionProvider(key, iv, isLegacy);
         }
 
         public IEncryptionProvider CreateSearsEncryptionProvider()

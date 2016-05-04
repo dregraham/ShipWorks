@@ -1,8 +1,7 @@
-﻿using System;
+﻿using Interapptive.Shared.Security;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using System.Security.Cryptography;
-using Interapptive.Shared.Security;
 
 namespace ShipWorks.ApplicationCore.Licensing
 {
@@ -11,14 +10,14 @@ namespace ShipWorks.ApplicationCore.Licensing
     /// </summary>
     public class CustomerLicenseReader : ICustomerLicenseReader
     {
-        private readonly IEncryptionProvider encryptionProvider;
+        private readonly IEncryptionProviderFactory encryptionProviderFactory;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public CustomerLicenseReader(IEncryptionProviderFactory encryptionProviderFactory)
         {
-            encryptionProvider = encryptionProviderFactory.CreateLicenseEncryptionProvider();
+            this.encryptionProviderFactory = encryptionProviderFactory;
         }
 
         /// <summary>
@@ -26,6 +25,8 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public string Read()
         {
+            IEncryptionProvider encryptionProvider = encryptionProviderFactory.CreateLicenseEncryptionProvider();
+
             ConfigurationEntity config = ConfigurationData.Fetch();
 
             try
