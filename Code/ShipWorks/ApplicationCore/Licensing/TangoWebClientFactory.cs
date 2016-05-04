@@ -4,13 +4,14 @@ using Autofac.Features.OwnedInstances;
 
 namespace ShipWorks.ApplicationCore.Licensing
 {
+
     /// <summary>
     /// A factory for creating ITangoWebClient instances. This is useful for testing/simulating responses
     /// from Tango before they have been implemented on the Tango side. To safeguard against a custom Tango
     /// web client from being introduced in the wild, a user must be an Interapptive user and also have a
     /// registry value that contains the resolves to a valid type that implements the ITangoWebClient interface.
     /// </summary>
-    public class TangoWebClientFactory
+    public class TangoWebClientFactory : ITangoWebClientFactory
     {
         private const string CustomizedTangoRegistryKeyName = "TangoWebClient";
 

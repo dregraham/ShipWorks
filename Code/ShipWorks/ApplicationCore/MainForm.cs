@@ -2923,7 +2923,8 @@ namespace ShipWorks
 
                         ShippingManager.EnsureShipmentLoaded(shipment);
 
-                        shipment.OnlineShipmentID = TangoWebClient.LogShipment(storeEntity, shipment, true);
+                        ITangoWebClient tangoWebClient = new TangoWebClientFactory().CreateWebClient();
+                        shipment.OnlineShipmentID = tangoWebClient.LogShipment(storeEntity, shipment, true);
 
                         using (SqlAdapter adapter = new SqlAdapter())
                         {

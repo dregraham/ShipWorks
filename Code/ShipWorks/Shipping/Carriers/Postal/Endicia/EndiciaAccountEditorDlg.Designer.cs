@@ -400,7 +400,6 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Endicia Account";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.OnFormClosing);
-            this.Load += new System.EventHandler(this.OnLoad);
             this.Shown += new System.EventHandler(this.OnShown);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.fieldLengthProvider)).EndInit();

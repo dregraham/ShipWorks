@@ -119,8 +119,6 @@ namespace ShipWorks.Shipping
         /// </summary>
         public static ShipmentEntity CreateShipment(long orderID)
         {
-
-
             // First let's see if there are any shipments already for the order
             IEnumerable<ShipmentEntity> shipments = GetShipments(orderID, false);
             ShipmentEntity firstShipment = shipments.FirstOrDefault();
@@ -1258,8 +1256,8 @@ namespace ShipWorks.Shipping
                     // Now log the result to tango.  For WorldShip we can't do this until the shipment comes back in to ShipWorks
                     if (!shipmentType.ProcessingCompletesExternally)
                     {
-                    shipment.OnlineShipmentID = new TangoWebClientFactory().CreateWebClient()
-                        .LogShipment(storeEntity, shipment);
+                        shipment.OnlineShipmentID = new TangoWebClientFactory().CreateWebClient()
+                            .LogShipment(storeEntity, shipment);
 
                         log.InfoFormat("Shipment {0}  - Accounted", shipment.ShipmentID);
 
