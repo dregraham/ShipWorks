@@ -249,7 +249,7 @@
     <Compile Include="ApplicationCore\Nudges\NudgeOptionDeserializerTest.cs" />
     <Compile Include="ApplicationCore\Nudges\NudgeOptionTest.cs" />
     <Compile Include="ApplicationCore\Nudges\NudgeTest.cs" />
-    <Compile Include="ApplicationCore\Security\AesEncryptionProviderTest.cs" />
+    <Compile Include="ApplicationCore\Security\LicenseEncryptionProviderTest.cs" />
     <Compile Include="Core\AssemblyDateTests.cs" />
     <Compile Include="Core\Certificates\ClientCertificateTests.cs" />
     <Compile Include="Core\EnumTest.cs" />

@@ -1,17 +1,17 @@
-﻿using System;
+﻿using Interapptive.Shared.Security;
+using ShipWorks.ApplicationCore.Licensing;
+using ShipWorks.Data.Administration;
+using System;
 using System.Data.SqlClient;
 using System.Security.Cryptography;
 using System.Text;
-using Interapptive.Shared.Security;
-using ShipWorks.ApplicationCore.Licensing;
-using ShipWorks.Data.Administration;
 
 namespace ShipWorks.ApplicationCore.Security
 {
     /// <summary>
-    /// 
+    /// Encryption Provider for Customer License
     /// </summary>
-    class LicenseEncryptionProvider : AesEncryptionProvider
+    public class LicenseEncryptionProvider : AesEncryptionProvider
     {
         private readonly ISqlSchemaVersion sqlSchemaVersion;
 
