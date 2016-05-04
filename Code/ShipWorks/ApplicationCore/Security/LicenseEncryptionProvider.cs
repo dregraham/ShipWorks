@@ -1,60 +1,54 @@
-﻿using Interapptive.Shared.Security;
-using ShipWorks.ApplicationCore.Licensing;
-using ShipWorks.Data.Administration;
-using System;
-using System.Data.SqlClient;
-using System.Security.Cryptography;
-using System.Text;
-
-namespace ShipWorks.ApplicationCore.Security
+﻿namespace ShipWorks.ApplicationCore.Security
 {
     /// <summary>
     /// Encryption Provider for Customer License
     /// </summary>
     public class LicenseEncryptionProvider : AesEncryptionProvider
     {
-        private readonly ISqlSchemaVersion sqlSchemaVersion;
+        private const string EmptyValue = "ShipWorks legacy user";
+        private readonly bool isLegacy;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LicenseEncryptionProvider"/> class.
         /// </summary>
-        /// <param name="aesParams">The aes parameters.</param>
-        /// <param name="sqlSchemaVersion">The SQL schema version.</param>
-        public LicenseEncryptionProvider(IAesParams aesParams, ISqlSchemaVersion sqlSchemaVersion) : base(aesParams)
+        public LicenseEncryptionProvider(byte[] key, byte[] initializationVector, bool isLegacy) : base(key, initializationVector)
         {
-            this.sqlSchemaVersion = sqlSchemaVersion;
+            this.isLegacy = isLegacy;
         }
 
         /// <summary>
-        /// Gets the decrypted string.
+        /// Gets the decrypted string
         /// </summary>
-        /// <param name="encryptedText">The encrypted text.</param>
-        /// <returns></returns>
-        protected override string GetDecryptedString(string encryptedText)
+        /// <remarks>
+        /// If legacy or decrypted value is "Shipworks legacy user" empty string is returned.
+        /// </remarks>
+        public override string Decrypt(string encryptedText)
         {
-            try
+            if (isLegacy)
             {
-                ICryptoTransform decryptor = Aes.CreateDecryptor();
-
-                byte[] buffer = Convert.FromBase64String(encryptedText);
-
-                return Encoding.ASCII.GetString(decryptor.TransformFinalBlock(buffer, 0, buffer.Length));
+                return string.Empty;
             }
-            catch (Exception ex)
+
+            string decryptedResult = base.Decrypt(encryptedText);
+            return decryptedResult == EmptyValue ? string.Empty : decryptedResult;
+        }
+
+        /// <summary>
+        /// Encrypts the given plain text.
+        /// </summary>
+        /// <remarks>
+        /// If plainTest is empty, we encrypt "ShipWorks legacy user"
+        /// </remarks>
+        public override string Encrypt(string plainText)
+        {
+            // AES can not encrypt empty strings. So when we get an empty string, set it to a fixed string,
+            // so that when we decrypt later, we know it is actually supposed to be an empty string.
+            if (string.IsNullOrWhiteSpace(plainText))
             {
-                SqlException sqlEx = (SqlException)ex.InnerException?.InnerException;
-
-                Version installedSqlSchemaVersion = sqlSchemaVersion.GetInstalledSchemaVersion();
-
-                // Could not find stored procedure GetDataGuid, we must be in the process
-                // of upgrading, or pre 4.8.0.0 schema version
-                if (sqlEx?.Number == 2812 && installedSqlSchemaVersion < Version.Parse("4.8.0.0"))
-                {
-                    return string.Empty;
-                }
-
-                throw new EncryptionException(ex.Message, ex);
+                plainText = EmptyValue;
             }
+
+            return base.Encrypt(plainText);
         }
     }
 }

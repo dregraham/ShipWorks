@@ -1,5 +1,4 @@
 ﻿using Autofac;
-using Autofac.Core;
 using Interapptive.Shared.Messaging;
 using Interapptive.Shared.Pdf;
 using Interapptive.Shared.Security;
@@ -21,7 +20,6 @@ using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Stores;
 using ShipWorks.Stores.Content;
-using ShipWorks.Stores.Platforms.Sears;
 using ShipWorks.Users;
 using System;
 using System.Reflection;
@@ -111,7 +109,6 @@ namespace ShipWorks.ApplicationCore
             RegisterWrappers(builder);
             RegisterLicensingDependencies(builder);
             RegisterLicenseEnforcers(builder);
-            RegisterInitializationVectors(builder);
 
             current = builder.Build();
         }
@@ -142,49 +139,17 @@ namespace ShipWorks.ApplicationCore
                 .AsImplementedInterfaces()
                 .AsSelf();
 
-            builder.RegisterType<LicenseEncryptionProvider>()
-                .SingleInstance()
-                .Keyed<IEncryptionProvider>(EncryptionProviderType.License)
-                .WithParameter(
-                    new ResolvedParameter(
-                        (pi, ctx) => pi.ParameterType == typeof(IAesParams),
-                        (pi, ctx) => ctx.ResolveKeyed<IAesParams>(AesParamType.License)));
-
-            //builder.RegisterType<SecureTextEncryptionProvider>()
-            //    .SingleInstance()
-            //    .Keyed<IEncryptionProvider>(EncryptionProviderType.Secure);
-  
             builder.Register((_, parameters) => new SecureTextEncryptionProvider(parameters.TypedAs<string>()))
                 .As<IEncryptionProvider>();
-		
+
             builder.RegisterType<CustomerLicenseWriter>()
-                .AsImplementedInterfaces()
-                .WithParameter(
-                    new ResolvedParameter(
-                        (pi, ctx) => pi.ParameterType == typeof(IEncryptionProvider),
-                        (pi, ctx) => ctx.ResolveKeyed<IEncryptionProvider>(EncryptionProviderType.License)));
+                .AsImplementedInterfaces();
 
             builder.RegisterType<CustomerLicenseReader>()
-                .AsImplementedInterfaces()
-                .WithParameter(
-                    new ResolvedParameter(
-                        (pi, ctx) => pi.ParameterType == typeof(IEncryptionProvider),
-                        (pi, ctx) => ctx.ResolveKeyed<IEncryptionProvider>(EncryptionProviderType.License)));
-
+                .AsImplementedInterfaces();
+                
             builder.RegisterType<StoreLicense>()
                 .AsSelf();
-
-          
-
-            builder.RegisterType<AesEncryptionProvider>()
-                .SingleInstance()
-                .Keyed<IEncryptionProvider>(EncryptionProviderType.AesForSears)
-                .WithParameter(
-                    new ResolvedParameter(
-                        (pi, ctx) => pi.ParameterType == typeof(IAesParams),
-                        (pi, ctx) => ctx.ResolveKeyed<IAesParams>(AesParamType.Sears)));
-
-
 
             builder.RegisterType<CustomerLicenseActivationService>()
                 .AsImplementedInterfaces();
@@ -196,6 +161,9 @@ namespace ShipWorks.ApplicationCore
                 .AsImplementedInterfaces();
 
             builder.RegisterType<ShipmentTypeSetupActivity>()
+                .AsImplementedInterfaces();
+
+            builder.RegisterType<EncryptionProviderFactory>()
                 .AsImplementedInterfaces();
         }
 
@@ -258,18 +226,6 @@ namespace ShipWorks.ApplicationCore
             builder.RegisterType<UserSessionWrapper>()
                 .AsImplementedInterfaces()
                 .UsingConstructor();
-        }
-
-        private static void RegisterInitializationVectors(ContainerBuilder builder)
-        {
-
-            builder.RegisterType<LicenseAesParams>()
-                .SingleInstance()
-                .Keyed<IAesParams>(AesParamType.License);
-
-            builder.RegisterType<SearsAesParams>()
-                .SingleInstance()
-                .Keyed<IAesParams>(AesParamType.Sears);
         }
     }
 }

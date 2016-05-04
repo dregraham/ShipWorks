@@ -1,5 +1,4 @@
 ﻿using Autofac;
-using Autofac.Core;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using log4net;
@@ -207,8 +206,8 @@ namespace ShipWorks.Stores.Platforms.Sears
                 // Resolve the SearsCredentials using our store entity and request parameters
                 TypedParameter storeParameter = new TypedParameter(typeof(SearsStoreEntity), searsStore);
                 TypedParameter requestParameter = new TypedParameter(typeof(HttpVariableRequestSubmitter), request);
-                SearsCredentials credentials = lifetimeScope.Resolve<SearsCredentials>(new[] { storeParameter, requestParameter });
 
+                SearsCredentials credentials = lifetimeScope.Resolve<SearsCredentials>(storeParameter, requestParameter);
                 credentials.AddCredentials();
             }
 

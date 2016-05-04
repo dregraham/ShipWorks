@@ -10,14 +10,14 @@ namespace ShipWorks.ApplicationCore.Licensing
     /// </summary>
     public class CustomerLicenseWriter : ICustomerLicenseWriter
     {
-        private readonly IEncryptionProvider encryptionProvider;
+        private readonly IEncryptionProviderFactory encryptionProviderFactory;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public CustomerLicenseWriter(IEncryptionProvider encryptionProvider)
+        public CustomerLicenseWriter(IEncryptionProviderFactory encryptionProviderFactory)
         {
-            this.encryptionProvider = encryptionProvider;
+            this.encryptionProviderFactory = encryptionProviderFactory;
         }
 
         /// <summary>
@@ -30,7 +30,8 @@ namespace ShipWorks.ApplicationCore.Licensing
             ConfigurationData.InitializeForCurrentDatabase();
             ConfigurationEntity config = ConfigurationData.Fetch();
 
-            config.CustomerKey = encryptionProvider.Encrypt(customerLicense.Key);
+            config.CustomerKey = encryptionProviderFactory.CreateLicenseEncryptionProvider()
+                .Encrypt(customerLicense.Key);
 
             // Save the key to the ConfigurationEntity
             ConfigurationData.Save(config);

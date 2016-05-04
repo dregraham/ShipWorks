@@ -16,8 +16,10 @@ namespace ShipWorks.Stores.Tests.Platforms.Sears
 {
     public class SearsCredentialsTest
     {
+        DateTime testDateTime = new DateTime(2016, 5, 4, 16, 20, 32, DateTimeKind.Utc);
+
         [Fact]
-        public void AddCredentials_WithLegacyStore_AddsEmailRequestVariable()
+        public void AddCredentials_AddsEmailRequestVariable_WhenLegacyStore()
         {
             using (var mock = AutoMock.GetLoose())
             {
@@ -30,13 +32,15 @@ namespace ShipWorks.Stores.Tests.Platforms.Sears
                     Password = SecureText.Encrypt(password, email)
                 };
 
+                mock.Mock<IDateTimeProvider>().SetupGet(d => d.UtcNow).Returns(testDateTime);
+
+                SetupSecureTextProvider(mock, email, password, store);
+
                 HttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter();
-                TypedParameter dateTimeProvider = new TypedParameter(typeof(IDateTimeProvider), new DateTimeProvider());
                 TypedParameter storeParameter = new TypedParameter(typeof(SearsStoreEntity), store);
                 TypedParameter requestParameter = new TypedParameter(typeof(HttpVariableRequestSubmitter), request);
 
-                Mock<IDateTimeProvider> dateTime = mock.Mock<IDateTimeProvider>();
-                var testObject = mock.Create<SearsCredentials>(new[] { storeParameter, requestParameter, dateTimeProvider});
+                var testObject = mock.Create<SearsCredentials>(storeParameter, requestParameter);
 
                 testObject.AddCredentials();
                 HttpVariable emailVariable = request.Variables.First(v => v.Name == "email");
@@ -58,20 +62,14 @@ namespace ShipWorks.Stores.Tests.Platforms.Sears
                     Email = email,
                     Password = SecureText.Encrypt(password, email)
                 };
-                
 
-                var secureTextEncryptionProvider = mock.Mock<IEncryptionProvider>();
-                secureTextEncryptionProvider
-                    .Setup(p => p.Decrypt(It.Is<string>(s => s == store.Password)))
-                    .Returns(password);
-                Func<string, IEncryptionProvider> provideFunc = s => secureTextEncryptionProvider.Object;
+                SetupSecureTextProvider(mock, email, password, store);
 
                 HttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter();
                 TypedParameter storeParameter = new TypedParameter(typeof(SearsStoreEntity), store);
                 TypedParameter requestParameter = new TypedParameter(typeof(HttpVariableRequestSubmitter), request);
-                TypedParameter secureTextEncryptionProviderParameter = new TypedParameter(typeof(Func<string, IEncryptionProvider>), provideFunc);
 
-                SearsCredentials testObject = mock.Create<SearsCredentials>(new[] { storeParameter, requestParameter, secureTextEncryptionProviderParameter });
+                SearsCredentials testObject = mock.Create<SearsCredentials>(storeParameter, requestParameter);
                 
                 testObject.AddCredentials();
                 HttpVariable passwordVariable = request.Variables.First(v => v.Name == "password");
@@ -94,11 +92,13 @@ namespace ShipWorks.Stores.Tests.Platforms.Sears
                     Password = SecureText.Encrypt(password, email)
                 };
 
+                SetupSecureTextProvider(mock, email, password, store);
+
                 HttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter();
                 TypedParameter storeParameter = new TypedParameter(typeof(SearsStoreEntity), store);
                 TypedParameter requestParameter = new TypedParameter(typeof(HttpVariableRequestSubmitter), request);
 
-                SearsCredentials testObject = mock.Create<SearsCredentials>(new[] { storeParameter, requestParameter });
+                SearsCredentials testObject = mock.Create<SearsCredentials>(storeParameter, requestParameter);
 
                 testObject.AddCredentials();
                 HttpVariable sellerIdVariable = request.Variables.FirstOrDefault(v => v.Name == "sellerId");
@@ -112,22 +112,23 @@ namespace ShipWorks.Stores.Tests.Platforms.Sears
         {
             using (var mock = AutoMock.GetLoose())
             {
-                mock.Mock<IEncryptionProvider>()
-                    .Setup(e => e.Decrypt(It.IsAny<string>())).Returns("blah");
 
                 string sellerId = "mySellerId";
 
                 var store = new SearsStoreEntity
                 {
-                    SellerID = sellerId
+                    SellerID = sellerId, 
+                    SecretKey = "encrypted secret key"
                 };
 
+                SetupSearsEncryptionProvider(mock, store.SecretKey);
+                SetupDateTime(mock);
+
                 HttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter();
-                TypedParameter dateTimeProvider = new TypedParameter(typeof(IDateTimeProvider), new DateTimeProvider());
                 TypedParameter storeParameter = new TypedParameter(typeof(SearsStoreEntity), store);
                 TypedParameter requestParameter = new TypedParameter(typeof(HttpVariableRequestSubmitter), request);
 
-                SearsCredentials testObject = mock.Create<SearsCredentials>(new[] { storeParameter, requestParameter, dateTimeProvider });
+                SearsCredentials testObject = mock.Create<SearsCredentials>(storeParameter, requestParameter);
 
                 testObject.AddCredentials();
                 HttpVariable sellerIdVariable = request.Variables.Single(v => v.Name == "sellerId");
@@ -141,22 +142,22 @@ namespace ShipWorks.Stores.Tests.Platforms.Sears
         {
             using (var mock = AutoMock.GetLoose())
             {
-                mock.Mock<IEncryptionProvider>()
-                    .Setup(e => e.Decrypt(It.IsAny<string>())).Returns("blah");
-
                 string sellerId = "mySellerId";
 
                 var store = new SearsStoreEntity
                 {
-                    SellerID = sellerId
+                    SellerID = sellerId,
+                    SecretKey = "encrypted key"
                 };
 
+                SetupSearsEncryptionProvider(mock, store.SecretKey);
+                SetupDateTime(mock);
+
                 HttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter();
-                TypedParameter dateTimeProvider = new TypedParameter(typeof(IDateTimeProvider), new DateTimeProvider());
                 TypedParameter storeParameter = new TypedParameter(typeof(SearsStoreEntity), store);
                 TypedParameter requestParameter = new TypedParameter(typeof(HttpVariableRequestSubmitter), request);
 
-                SearsCredentials testObject = mock.Create<SearsCredentials>(new[] { storeParameter, requestParameter, dateTimeProvider });
+                SearsCredentials testObject = mock.Create<SearsCredentials>(storeParameter, requestParameter);
 
                 testObject.AddCredentials();
                 HttpVariable emailVariable = request.Variables.SingleOrDefault(v => v.Name == "email");
@@ -171,26 +172,36 @@ namespace ShipWorks.Stores.Tests.Platforms.Sears
             using (var mock = AutoMock.GetLoose())
             {
                 string sellerId = "mySellerId";
+                string encryptedSecretKey = "encrypted secret key";
 
                 var store = new SearsStoreEntity
                 {
-                    SellerID = sellerId
+                    SellerID = sellerId,
+                    SecretKey = encryptedSecretKey
                 };
 
-                mock.Mock<IEncryptionProvider>()
-                    .Setup(e => e.Decrypt(It.IsAny<string>())).Returns("blah");
+                SetupSearsEncryptionProvider(mock, encryptedSecretKey);
+                SetupDateTime(mock);
 
                 HttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter();
-                TypedParameter dateTimeProvider = new TypedParameter(typeof(IDateTimeProvider), new DateTimeProvider());
+
                 TypedParameter storeParameter = new TypedParameter(typeof(SearsStoreEntity), store);
                 TypedParameter requestParameter = new TypedParameter(typeof(HttpVariableRequestSubmitter), request);
-
-                SearsCredentials testObject = mock.Create<SearsCredentials>(new[] { storeParameter, requestParameter, dateTimeProvider });
+                SearsCredentials testObject = mock.Create<SearsCredentials>(storeParameter, requestParameter);
 
                 testObject.AddCredentials();
 
                 Assert.NotNull(request.Headers["authorization"]);
             }
+        }
+
+        private static void SetupSearsEncryptionProvider(AutoMock mock, string encryptedSecretKey)
+        {
+            var encryptor = mock.Mock<IEncryptionProvider>();
+            encryptor.Setup(e => e.Decrypt(It.Is<string>(s => s == encryptedSecretKey))).Returns("blah");
+            mock.Mock<IEncryptionProviderFactory>()
+                .Setup(f => f.CreateSearsEncryptionProvider())
+                .Returns(encryptor.Object);
         }
 
         [Fact]
@@ -201,15 +212,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Sears
                 string secretKey = "syZJ+ak2Qhta3HvYig+3vCjg1Al0b8cqdVqaZr9EbFU=";
                 string sellerId = "10173601";
                 string emailAddress = "wes@shipworks.com";
-                string expectedHash = "c3e49bac14d3a39819aa9eae7f72f66d0438e0d539989415bf9db7e6933b7de1";
-                var now = new DateTime(2016, 5, 2, 16, 20, 00, DateTimeKind.Utc);
-
-                mock.Mock<IDateTimeProvider>()
-                    .Setup(d => d.UtcNow)
-                    .Returns(now);
-
-                mock.Mock<IEncryptionProvider>()
-                    .Setup(e => e.Decrypt(It.IsAny<string>())).Returns(secretKey);
+                string expectedHash = "1b2a4a430940b1c425f200812dfc6d42d5ace5fd533920565a7eac533761c8ac";
 
                 var store = new SearsStoreEntity
                 {
@@ -218,11 +221,14 @@ namespace ShipWorks.Stores.Tests.Platforms.Sears
                     Email = emailAddress
                 };
 
+                SetupSearsEncryptionProvider(mock, store.SecretKey);
+                SetupDateTime(mock);
+
                 HttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter();
                 TypedParameter storeParameter = new TypedParameter(typeof(SearsStoreEntity), store);
                 TypedParameter requestParameter = new TypedParameter(typeof(HttpVariableRequestSubmitter), request);
 
-                SearsCredentials testObject = mock.Create<SearsCredentials>(new[] { storeParameter, requestParameter });
+                SearsCredentials testObject = mock.Create<SearsCredentials>(storeParameter, requestParameter);
 
                 testObject.AddCredentials();
 
@@ -238,22 +244,22 @@ namespace ShipWorks.Stores.Tests.Platforms.Sears
         {
             using (var mock = AutoMock.GetLoose())
             {
-                mock.Mock<IEncryptionProvider>()
-                    .Setup(e => e.Decrypt(It.IsAny<string>())).Returns("blah");
-
                 string sellerId = "mySellerId";
 
                 var store = new SearsStoreEntity
                 {
-                    SellerID = sellerId
+                    SellerID = sellerId,
+                    SecretKey = "its a secret"
                 };
 
+                SetupSearsEncryptionProvider(mock, store.SecretKey);
+                SetupDateTime(mock);
+
                 HttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter();
-                TypedParameter dateTimeProvider = new TypedParameter(typeof(IDateTimeProvider), new DateTimeProvider());
                 TypedParameter storeParameter = new TypedParameter(typeof(SearsStoreEntity), store);
                 TypedParameter requestParameter = new TypedParameter(typeof(HttpVariableRequestSubmitter), request);
 
-                SearsCredentials testObject = mock.Create<SearsCredentials>(new[] { storeParameter, requestParameter, dateTimeProvider });
+                SearsCredentials testObject = mock.Create<SearsCredentials>(storeParameter, requestParameter);
 
                 testObject.AddCredentials();
 
@@ -266,25 +272,21 @@ namespace ShipWorks.Stores.Tests.Platforms.Sears
         {
             using (var mock = AutoMock.GetLoose())
             {
-                string storeEmail = "blah@shipworks.com";
-
-                mock.Mock<IEncryptionProvider>()
-                    .Setup(e => e.Decrypt(It.IsAny<string>())).Returns("blah");
-
-                string sellerId = "mySellerId";
-
                 var store = new SearsStoreEntity
                 {
-                    SellerID = sellerId,
-                    Email = storeEmail
+                    SellerID = "mySellerId",
+                    Email = "blah@shipworks.com",
+                    SecretKey = "funky encrypted key"
                 };
 
+                SetupSearsEncryptionProvider(mock, store.SecretKey);
+                SetupDateTime(mock);
+
                 HttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter();
-                TypedParameter dateTimeProvider = new TypedParameter(typeof(IDateTimeProvider), new DateTimeProvider());
                 TypedParameter storeParameter = new TypedParameter(typeof(SearsStoreEntity), store);
                 TypedParameter requestParameter = new TypedParameter(typeof(HttpVariableRequestSubmitter), request);
 
-                SearsCredentials testObject = mock.Create<SearsCredentials>(new[] { storeParameter, requestParameter, dateTimeProvider });
+                SearsCredentials testObject = mock.Create<SearsCredentials>(storeParameter, requestParameter);
 
                 testObject.AddCredentials();
 
@@ -294,7 +296,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Sears
                     .Split(',')[0] // everything before the comma
                     .Split('=')[1]; // the email address
 
-                Assert.Equal(storeEmail, headerEmail);
+                Assert.Equal(store.Email, headerEmail);
             }
         }
 
@@ -303,34 +305,29 @@ namespace ShipWorks.Stores.Tests.Platforms.Sears
         {
             using (var mock = AutoMock.GetLoose())
             {
-                var now = new DateTime(2016, 5, 2, 16, 20, 00, DateTimeKind.Utc);
-
-                mock.Mock<IDateTimeProvider>()
-                    .Setup(d => d.UtcNow)
-                    .Returns(now);
-
-                mock.Mock<IEncryptionProvider>()
-                    .Setup(e => e.Decrypt(It.IsAny<string>())).Returns("blah");
-
                 string sellerId = "mySellerId";
 
                 var store = new SearsStoreEntity
                 {
-                    SellerID = sellerId
+                    SellerID = sellerId,
+                    SecretKey = "blahblah"
                 };
+
+                SetupSearsEncryptionProvider(mock, store.SecretKey);
+                SetupDateTime(mock);
 
                 HttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter();
                 TypedParameter storeParameter = new TypedParameter(typeof(SearsStoreEntity), store);
                 TypedParameter requestParameter = new TypedParameter(typeof(HttpVariableRequestSubmitter), request);
 
-                SearsCredentials testObject = mock.Create<SearsCredentials>(new[] { storeParameter, requestParameter });
+                SearsCredentials testObject = mock.Create<SearsCredentials>(storeParameter, requestParameter);
 
                 testObject.AddCredentials();
 
                 string headerValue = request.Headers["authorization"];
                 string timeStamp = headerValue.Split(',')[1].Split('=')[1];
 
-                Assert.Equal(now.AddMinutes(-15), DateTime.Parse(timeStamp).ToUniversalTime());
+                Assert.Equal(testDateTime.AddMinutes(-15), DateTime.Parse(timeStamp).ToUniversalTime());
             }
         }
 
@@ -340,15 +337,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Sears
         {
             using (var mock = AutoMock.GetLoose())
             {
-                var now = new DateTime(2016, 5, 2, 16, 20, 00, DateTimeKind.Utc);
-
-                mock.Mock<IDateTimeProvider>()
-                    .Setup(d => d.UtcNow)
-                    .Returns(now);
-
-                var encryptionProvider = mock.Mock<IEncryptionProvider>();
-                encryptionProvider.Setup(e => e.Decrypt(It.IsAny<string>())).Returns("blah");
-
                 string sellerId = "mySellerId";
                 string secretKey = "mySecretKey";
                 var store = new SearsStoreEntity
@@ -357,11 +345,20 @@ namespace ShipWorks.Stores.Tests.Platforms.Sears
                     SecretKey = secretKey
                 };
 
+                var encryptionProvider = mock.Mock<IEncryptionProvider>();
+                encryptionProvider.Setup(e => e.Decrypt(It.Is<string>(s => s == secretKey))).Returns("blah");
+
+                mock.Mock<IEncryptionProviderFactory>()
+                    .Setup(f => f.CreateSearsEncryptionProvider())
+                    .Returns(encryptionProvider.Object);
+
+                SetupDateTime(mock);
+
                 HttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter();
                 TypedParameter storeParameter = new TypedParameter(typeof(SearsStoreEntity), store);
                 TypedParameter requestParameter = new TypedParameter(typeof(HttpVariableRequestSubmitter), request);
 
-                SearsCredentials testObject = mock.Create<SearsCredentials>(new[] { storeParameter, requestParameter });
+                SearsCredentials testObject = mock.Create<SearsCredentials>(storeParameter, requestParameter);
 
                 testObject.AddCredentials();
 
@@ -374,23 +371,25 @@ namespace ShipWorks.Stores.Tests.Platforms.Sears
         {
             using (var mock = AutoMock.GetLoose())
             {
-                mock.Mock<IEncryptionProvider>()
-                    .Setup(e => e.Decrypt(It.IsAny<string>()))
-                    .Throws<EncryptionException>();
-
-                string sellerId = "mySellerId";
-
                 var store = new SearsStoreEntity
                 {
-                    SellerID = sellerId
+                    SellerID = "mySellerId", 
+                    SecretKey = "encrypted"
                 };
+
+                var encryptor = mock.Mock<IEncryptionProvider>();
+                encryptor.Setup(e => e.Decrypt(It.Is<string>(s => s == store.SecretKey))).Throws<EncryptionException>();
+
+                mock.Mock<IEncryptionProviderFactory>()
+                    .Setup(f => f.CreateSearsEncryptionProvider())
+                    .Returns(encryptor.Object);
 
                 HttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter();
                 TypedParameter dateTimeProvider = new TypedParameter(typeof(IDateTimeProvider), new DateTimeProvider());
                 TypedParameter storeParameter = new TypedParameter(typeof(SearsStoreEntity), store);
                 TypedParameter requestParameter = new TypedParameter(typeof(HttpVariableRequestSubmitter), request);
 
-                SearsCredentials testObject = mock.Create<SearsCredentials>(new[] { storeParameter, requestParameter, dateTimeProvider });
+                SearsCredentials testObject = mock.Create<SearsCredentials>(storeParameter, requestParameter, dateTimeProvider);
 
                 Assert.Throws<SearsException>(() => testObject.AddCredentials());
             }
@@ -399,7 +398,23 @@ namespace ShipWorks.Stores.Tests.Platforms.Sears
         [Fact]
         public void SearsCredentials_WithNullDateTimeProvider_ThrowsArgumentNullException()
         {
-            Assert.Throws<ArgumentNullException>(() => new SearsCredentials(null, null, null, null, null));
+            Assert.Throws<ArgumentNullException>(() => new SearsCredentials(null, null, null, null));
+        }
+        
+        private static void SetupSecureTextProvider(AutoMock mock, string email, string password, SearsStoreEntity store)
+        {
+            var secureTextEncryptionProvider = mock.Mock<IEncryptionProvider>();
+            secureTextEncryptionProvider
+                .Setup(p => p.Decrypt(It.Is<string>(s => s == store.Password)))
+                .Returns(password);
+            mock.Mock<IEncryptionProviderFactory>()
+                .Setup(f => f.CreateSecureTextEncryptionProvider(It.Is<string>(s => s == email)))
+                .Returns(secureTextEncryptionProvider.Object);
+        }
+
+        private void SetupDateTime(AutoMock mock)
+        {
+            mock.Mock<IDateTimeProvider>().SetupGet(d => d.UtcNow).Returns(testDateTime);
         }
     }
 }

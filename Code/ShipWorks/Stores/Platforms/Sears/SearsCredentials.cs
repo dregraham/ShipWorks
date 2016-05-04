@@ -19,8 +19,7 @@ namespace ShipWorks.Stores.Platforms.Sears
         private readonly SearsStoreEntity store;
         private readonly HttpVariableRequestSubmitter request;
         private readonly IDateTimeProvider dateTimeProvider;
-        private readonly IEncryptionProvider aesEncryptionProvider;
-        private readonly Func<string, IEncryptionProvider> secureTextProviderFactory;
+        private readonly IEncryptionProviderFactory encryptionProviderFactory;
 
         /// <summary>
         /// Constructor
@@ -28,8 +27,7 @@ namespace ShipWorks.Stores.Platforms.Sears
         public SearsCredentials(SearsStoreEntity store, 
 			HttpVariableRequestSubmitter request, 
 			IDateTimeProvider dateTimeProvider,
-            IEncryptionProvider aesEncryptionProvider, 
-            Func<string, IEncryptionProvider> secureTextProviderFactory)
+            IEncryptionProviderFactory encryptionProviderFactory)
         {
             MethodConditions.EnsureArgumentIsNotNull(store);
             MethodConditions.EnsureArgumentIsNotNull(request);
@@ -38,8 +36,7 @@ namespace ShipWorks.Stores.Platforms.Sears
             this.store = store;
             this.request = request;
             this.dateTimeProvider = dateTimeProvider;
-            this.aesEncryptionProvider = aesEncryptionProvider;
-            this.secureTextProviderFactory = secureTextProviderFactory;
+            this.encryptionProviderFactory = encryptionProviderFactory;
         }
 
         /// <summary>
@@ -54,7 +51,7 @@ namespace ShipWorks.Stores.Platforms.Sears
                 {
                     // we send the tracking xml as the body of the put message
                     // the uri needs to be modified to add the credentials
-                    request.Uri = new Uri($"{request.Uri.ToString()}?{QueryStringUtility.GetQueryString(credentials)}");
+                    request.Uri = new Uri($"{request.Uri}?{QueryStringUtility.GetQueryString(credentials)}");
                 }
                 else
                 {
@@ -81,7 +78,9 @@ namespace ShipWorks.Stores.Platforms.Sears
 
                 try
                 {
-                    signature = HashSignature(toHash, aesEncryptionProvider.Decrypt(store.SecretKey));
+                    IEncryptionProvider encryptionProvider = encryptionProviderFactory.CreateSearsEncryptionProvider();
+                    string secretKey = encryptionProvider.Decrypt(store.SecretKey);
+                    signature = HashSignature(toHash, secretKey);
                 }
                 catch (EncryptionException ex)
                 {
@@ -123,7 +122,7 @@ namespace ShipWorks.Stores.Platforms.Sears
             {
                 // They are using the "old" authentication method
                 credentials.Add("email", store.Email);
-                IEncryptionProvider secureTextEncryptionProvider = secureTextProviderFactory(store.Email);
+                IEncryptionProvider secureTextEncryptionProvider = encryptionProviderFactory.CreateSecureTextEncryptionProvider(store.Email);
                 credentials.Add("password", secureTextEncryptionProvider.Decrypt(store.Password));
             }
             else

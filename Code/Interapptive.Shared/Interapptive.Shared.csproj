@@ -119,9 +119,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Security\EncryptionProviderType.cs" />
     <Compile Include="Security\IEncryptionProvider.cs" />
-    <Compile Include="Security\IAesParams.cs" />
     <Compile Include="NDependIgnoreAttribute.cs" />
     <Compile Include="NDependIgnoreComplexMethodAttribute.cs" />
     <Compile Include="NDependIgnoreTooManyParamsAttribute.cs" />
@@ -147,6 +145,7 @@
     <Compile Include="Imaging\EdgeDetection.cs" />
     <Compile Include="InterapptiveOnly.cs" />
     <Compile Include="Pdf\IPdfDocument.cs" />
+    <Compile Include="Security\IEncryptionProviderFactory.cs" />
     <Compile Include="Security\SecureText.cs" />
     <Compile Include="Security\SecureTextEncryptionProvider.cs" />
     <Compile Include="UI\IMessageHelper.cs" />
