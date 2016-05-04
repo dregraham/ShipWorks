@@ -21,7 +21,7 @@ namespace ShipWorks.Shipping.Tests.Services
 {
     [Collection("Database collection")]
     [Trait("Category", "ContinuousIntegration")]
-    public class ShipmentProcessorTest
+    public class ShipmentProcessorTest : IDisposable
     {
         private ShipmentProcessor testObject;
         private readonly DataContext context;
@@ -46,8 +46,8 @@ namespace ShipWorks.Shipping.Tests.Services
             Create.Profile().AsPrimary().AsOther().Save();
 
             var settings = ShippingSettings.Fetch();
-            settings.ConfiguredTypes = new[] { (int) ShipmentTypeCode.Other };
-            settings.ActivatedTypes = new[] { (int) ShipmentTypeCode.Other };
+            settings.ConfiguredTypes = new[] { (int)ShipmentTypeCode.Other };
+            settings.ActivatedTypes = new[] { (int)ShipmentTypeCode.Other };
             ShippingSettings.Save(settings);
 
             ShippingSettings.MarkAsConfigured(ShipmentTypeCode.Other);
@@ -170,6 +170,11 @@ namespace ShipWorks.Shipping.Tests.Services
                 null, null);
 
             Assert.False(shipment.Processed);
+        }
+
+        public void Dispose()
+        {
+            context?.Dispose();
         }
     }
 }

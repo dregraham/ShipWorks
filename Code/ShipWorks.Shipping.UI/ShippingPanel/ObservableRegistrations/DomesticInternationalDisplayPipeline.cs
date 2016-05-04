@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
@@ -37,15 +38,23 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
         /// </summary>
         public void Register(ShippingPanelViewModel viewModel)
         {
-            subscription = Observable.Merge(
+            IObservable<string> propertyChangeStreams = Observable.Merge(
                     viewModel.Origin.PropertyChangeStream,
-                    viewModel.Destination.PropertyChangeStream)
+                    viewModel.Destination.PropertyChangeStream);
+
+            IDisposable updateViewModel = propertyChangeStreams
                 .Where(domesticAffectingProperties.Contains)
                 .Where(_ => !viewModel.IsLoadingShipment)
                 .Select(_ => viewModel.ShipmentAdapter)
                 .Throttle(TimeSpan.FromMilliseconds(250), schedulerProvider.Default)
                 .ObserveOn(schedulerProvider.Dispatcher)
                 .Subscribe(shipmentAdapter => Update(viewModel, shipmentAdapter));
+
+            IDisposable updateText = propertyChangeStreams
+                .Where(domesticAffectingProperties.Contains)
+                .Subscribe(_ => viewModel.DomesticInternationalText = viewModel.IsDomestic ? "Domestic" : "International");
+
+            subscription = new CompositeDisposable(updateViewModel, updateText);
         }
 
         /// <summary>
@@ -70,18 +79,17 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
             }
 
             viewModel.UpdateServices();
-            viewModel.DomesticInternationalText = viewModel.IsDomestic ? "Domestic" : "International";
             viewModel.RefreshInsurance();
         }
 
         /// <summary>
         /// Update a person adapter based on the address view model
         /// </summary>
-        private void UpdatePersonalAdapterValues(PersonAdapter shipmentPersonalAdapter, AddressViewModel addressViewModel)
+        private void UpdatePersonalAdapterValues(PersonAdapter shipmentPersonAdapter, AddressViewModel addressViewModel)
         {
-            shipmentPersonalAdapter.StateProvCode = Geography.GetStateProvCode(addressViewModel.StateProvCode);
-            shipmentPersonalAdapter.PostalCode = addressViewModel.PostalCode;
-            shipmentPersonalAdapter.CountryCode = addressViewModel.CountryCode;
+            shipmentPersonAdapter.StateProvCode = Geography.GetStateProvCode(addressViewModel.StateProvCode);
+            shipmentPersonAdapter.PostalCode = addressViewModel.PostalCode;
+            shipmentPersonAdapter.CountryCode = addressViewModel.CountryCode;
         }
 
         /// <summary>

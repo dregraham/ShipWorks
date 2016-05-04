@@ -4,6 +4,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Tests.Shared.EntityBuilders;
+using ShipWorks.Users;
 
 namespace ShipWorks.Tests.Shared.Database
 {
@@ -85,6 +86,10 @@ namespace ShipWorks.Tests.Shared.Database
         /// <summary>
         /// Dispose the context
         /// </summary>
-        public void Dispose() => Mock.Dispose();
+        public void Dispose()
+        {
+            UserSession.Reset();
+            Mock.Dispose();
+        }
     }
 }

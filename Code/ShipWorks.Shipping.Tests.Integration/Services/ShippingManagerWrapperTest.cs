@@ -141,6 +141,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         public void Dispose()
         {
             mock.Dispose();
+            context.Dispose();
         }
     }
 }

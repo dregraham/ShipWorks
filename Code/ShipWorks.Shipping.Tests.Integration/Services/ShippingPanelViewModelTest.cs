@@ -57,8 +57,8 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
             Create.Profile().AsPrimary().AsOther().Save();
 
             var settings = ShippingSettings.Fetch();
-            settings.ConfiguredTypes = new[] { (int) ShipmentTypeCode.Other };
-            settings.ActivatedTypes = new[] { (int) ShipmentTypeCode.Other };
+            settings.ConfiguredTypes = new[] { (int)ShipmentTypeCode.Other };
+            settings.ActivatedTypes = new[] { (int)ShipmentTypeCode.Other };
             ShippingSettings.Save(settings);
 
             ShippingSettings.MarkAsConfigured(ShipmentTypeCode.Other);
@@ -83,6 +83,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
             ShipmentChangedMessage message = null;
             await Task.WhenAny(source.Task.ContinueWith(x => message = x.Result), Task.Delay(5000));
 
+            Assert.NotNull(message?.ShipmentAdapter?.Shipment);
             Assert.Equal(testObject.ShipmentAdapter.Shipment.RowVersion,
                 message.ShipmentAdapter.Shipment.RowVersion);
         }
@@ -161,6 +162,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         public void Dispose()
         {
             subscription?.Dispose();
+            context?.Dispose();
         }
     }
 }
