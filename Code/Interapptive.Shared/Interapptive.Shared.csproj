@@ -119,6 +119,8 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Security\AesEncryptionProvider.cs" />
+    <Compile Include="Security\EncryptionException.cs" />
     <Compile Include="Security\IEncryptionProvider.cs" />
     <Compile Include="NDependIgnoreAttribute.cs" />
     <Compile Include="NDependIgnoreComplexMethodAttribute.cs" />

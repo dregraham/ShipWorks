@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace ShipWorks.ApplicationCore.Licensing
+namespace Interapptive.Shared.Security
 {
     [Serializable]
     public class EncryptionException : Exception

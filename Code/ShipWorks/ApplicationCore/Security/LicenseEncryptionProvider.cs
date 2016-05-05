@@ -1,4 +1,6 @@
-﻿namespace ShipWorks.ApplicationCore.Security
+﻿using Interapptive.Shared.Security;
+
+namespace ShipWorks.ApplicationCore.Security
 {
     /// <summary>
     /// Encryption Provider for Customer License

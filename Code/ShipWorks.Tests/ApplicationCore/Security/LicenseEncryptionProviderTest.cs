@@ -3,6 +3,7 @@ using Autofac.Extras.Moq;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Security;
 using System;
+using Interapptive.Shared.Security;
 using Xunit;
 
 namespace ShipWorks.Tests.ApplicationCore.Security

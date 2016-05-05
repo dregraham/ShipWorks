@@ -1,10 +1,8 @@
-using Interapptive.Shared.Security;
-using ShipWorks.ApplicationCore.Licensing;
 using System;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace ShipWorks.ApplicationCore.Security
+namespace Interapptive.Shared.Security
 {
     /// <summary>
     /// Class for encrypting and decrypting using AES

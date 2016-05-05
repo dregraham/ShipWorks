@@ -592,7 +592,6 @@
     <Compile Include="ApplicationCore\Dashboard\Content\DashboardSchedulerServiceStoppedItem.cs" />
     <Compile Include="ApplicationCore\Dashboard\Content\DashboardStoreItem.cs" />
     <Compile Include="ApplicationCore\Dashboard\Content\ShipWorksOnlineVersion.cs" />
-    <Compile Include="ApplicationCore\Security\AesEncryptionProvider.cs" />
     <Compile Include="ApplicationCore\Enums\HeartbeatOptions.cs" />
     <Compile Include="ApplicationCore\ExecutionMode\CommandLineExecutionMode.cs" />
     <Compile Include="ApplicationCore\ExecutionMode\ExecutionMode.cs" />
@@ -655,7 +654,6 @@
     <Compile Include="ApplicationCore\Licensing\DatabaseIdentifier.cs" />
     <Compile Include="ApplicationCore\Licensing\DatabaseIdentifierException.cs" />
     <Compile Include="ApplicationCore\Licensing\DisabledLicense.cs" />
-    <Compile Include="ApplicationCore\Licensing\EncryptionException.cs" />
     <Compile Include="ApplicationCore\Licensing\FakeTangoWebClient.cs" />
     <Compile Include="ApplicationCore\Licensing\ICustomerLicenseActivationService.cs" />
     <Compile Include="ApplicationCore\Licensing\IDialog.cs" />
