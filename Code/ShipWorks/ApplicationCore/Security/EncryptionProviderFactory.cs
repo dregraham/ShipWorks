@@ -1,7 +1,6 @@
 ﻿using Autofac.Features.Indexed;
 using Interapptive.Shared.Security;
 using ShipWorks.Data.Administration;
-using System;
 
 namespace ShipWorks.ApplicationCore.Security
 {
@@ -27,16 +26,8 @@ namespace ShipWorks.ApplicationCore.Security
         /// <returns>An instance of LicenseEncryptionProvider.</returns>
         public IEncryptionProvider CreateLicenseEncryptionProvider()
         {
-            bool isLegacy = false;
-            
-            Version installedSqlSchemaVersion = sqlSchemaVersion.GetInstalledSchemaVersion();
-            if (installedSqlSchemaVersion < Version.Parse("4.8.0.0"))
-            {
-                isLegacy = true;
-            }
-
             ICipherKey cipherKey = cipherKeyFactory[CipherContext.License];
-            return new LicenseEncryptionProvider(cipherKey, isLegacy);
+            return new LicenseEncryptionProvider(cipherKey, sqlSchemaVersion.IsCustomerLicenseSupported());
         }
 
         /// <summary>
