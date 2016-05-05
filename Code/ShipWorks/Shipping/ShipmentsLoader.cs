@@ -218,6 +218,8 @@ namespace ShipWorks.Shipping
             {
                 if (shipment == null)
                 {
+                    // If we didn't delay in the background, we'd hang the UI thread until the laoding was finished
+                    await TaskEx.Delay(250);
                     continue;
                 }
 
