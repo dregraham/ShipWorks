@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.ComponentModel;
+using System.Reflection;
 
 namespace ShipWorks.ApplicationCore.Security
 {
@@ -8,7 +9,10 @@ namespace ShipWorks.ApplicationCore.Security
     [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
     public enum CipherContext
     {
+        [Description("Sears Context")]
         Sears,
+
+        [Description("License Context")]
         License 
     }
 }
