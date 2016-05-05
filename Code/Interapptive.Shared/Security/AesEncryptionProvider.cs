@@ -39,7 +39,7 @@ namespace Interapptive.Shared.Security
 
                 return Convert.ToBase64String(encryptor.TransformFinalBlock(buffer, 0, buffer.Length));
             }
-            catch (Exception ex) when (ex.GetType() != typeof(EncryptionException))
+            catch (Exception ex)
             {
                 throw new EncryptionException(ex.Message, ex);
             }
