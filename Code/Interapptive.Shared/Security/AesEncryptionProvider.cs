@@ -23,7 +23,7 @@ namespace Interapptive.Shared.Security
         /// <summary>
         /// AES encryption algorithm to use
         /// </summary>
-        protected AesManaged Aes
+        private AesManaged Aes
         {
             get
             {
