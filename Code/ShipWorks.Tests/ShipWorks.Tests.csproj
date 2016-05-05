@@ -237,6 +237,7 @@
     <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\Ups\UpsSurePostRestrictionTest.cs" />
     <Compile Include="ApplicationCore\Licensing\GetActiveStoresResponseTest.cs" />
     <Compile Include="ApplicationCore\Licensing\LicenseCapabilitiesTest.cs" />
+    <Compile Include="ApplicationCore\Licensing\LicenseCipherKeyTest.cs" />
     <Compile Include="ApplicationCore\Licensing\LicenseEnforcement\ApproachingShipmentLimitEnforcerTest.cs" />
     <Compile Include="ApplicationCore\Licensing\LicenseEnforcement\ChannelSyncEnforcerTest.cs" />
     <Compile Include="ApplicationCore\Licensing\LicenseEnforcement\ChannelCountEnforcerTest.cs" />
@@ -250,6 +251,7 @@
     <Compile Include="ApplicationCore\Nudges\NudgeOptionTest.cs" />
     <Compile Include="ApplicationCore\Nudges\NudgeTest.cs" />
     <Compile Include="ApplicationCore\Security\EncryptionProviderFactoryTest.cs" />
+    <Compile Include="ApplicationCore\Security\AesEncryptionProviderTest.cs" />
     <Compile Include="ApplicationCore\Security\LicenseEncryptionProviderTest.cs" />
     <Compile Include="Core\AssemblyDateTests.cs" />
     <Compile Include="Core\Certificates\ClientCertificateTests.cs" />

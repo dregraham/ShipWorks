@@ -22,6 +22,7 @@ namespace ShipWorks.Tests.ApplicationCore.Security
         [Fact]
         public void Encrypt_ReturnsEncryptedString_WhenGivenDecryptedString()
         {
+            
             using (var mock = AutoMock.GetLoose())
             {
                 var testObject = GetLicenseEncryptionProvider(mock, true);

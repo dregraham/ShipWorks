@@ -19,12 +19,17 @@ namespace Interapptive.Shared.Security
             aesManaged =
                 new Lazy<AesManaged>(() => new AesManaged {IV = cipherKey.InitializationVector, Key = cipherKey.Key});
         }
- 
+
         /// <summary>
         /// Encrypts the given plain text.
         /// </summary>
         public virtual string Encrypt(string plainText)
         {
+            if (string.IsNullOrWhiteSpace(plainText))
+            {
+                throw new EncryptionException("Cannot encrypt an empty string");
+            }
+
             try
             {
                 byte[] buffer = Encoding.ASCII.GetBytes(plainText);
