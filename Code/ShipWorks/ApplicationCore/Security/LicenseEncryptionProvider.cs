@@ -8,15 +8,15 @@ namespace ShipWorks.ApplicationCore.Security
     public class LicenseEncryptionProvider : AesEncryptionProvider
     {
         private const string EmptyValue = "ShipWorks legacy user";
-        private readonly bool isLegacy;
+        private readonly bool isCustomerLicenseSupported;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LicenseEncryptionProvider"/> class.
         /// </summary>
-        public LicenseEncryptionProvider(ICipherKey cipherKey, bool isLegacy) 
+        public LicenseEncryptionProvider(ICipherKey cipherKey, bool isCustomerLicenseSupported) 
             : base(cipherKey)
         {
-            this.isLegacy = isLegacy;
+            this.isCustomerLicenseSupported = isCustomerLicenseSupported;
         }
         
         /// <summary>
@@ -27,7 +27,7 @@ namespace ShipWorks.ApplicationCore.Security
         /// </remarks>
         public override string Decrypt(string encryptedText)
         {
-            if (isLegacy)
+            if (!isCustomerLicenseSupported)
             {
                 return string.Empty;
             }
@@ -44,6 +44,11 @@ namespace ShipWorks.ApplicationCore.Security
         /// </remarks>
         public override string Encrypt(string plainText)
         {
+            if (!isCustomerLicenseSupported)
+            {
+                throw new EncryptionException("Can't encrypt a license when isLegacy.");
+            }
+
             // AES can not encrypt empty strings. So when we get an empty string, set it to a fixed string,
             // so that when we decrypt later, we know it is actually supposed to be an empty string.
             if (string.IsNullOrWhiteSpace(plainText))

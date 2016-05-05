@@ -27,7 +27,7 @@ namespace ShipWorks.ApplicationCore.Security
         public IEncryptionProvider CreateLicenseEncryptionProvider()
         {
             ICipherKey cipherKey = cipherKeyFactory[CipherContext.License];
-            return new LicenseEncryptionProvider(cipherKey, !sqlSchemaVersion.IsCustomerLicenseSupported());
+            return new LicenseEncryptionProvider(cipherKey, sqlSchemaVersion.IsCustomerLicenseSupported());
         }
 
         /// <summary>
