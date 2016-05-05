@@ -22,7 +22,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
 
                 var testObject = mock.Create<OdbcDataSourceRepository>();
                 var odbcDataSources = testObject.GetDataSources();
-                Assert.Equal("blah", odbcDataSources.Single().Name);
+                Assert.Equal("blah", odbcDataSources.Single().Dsn);
             }
         }
 

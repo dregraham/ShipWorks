@@ -74,15 +74,35 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// Saves the connection string to the OdbcStoreEntity
         /// </summary>
         public void SaveToEntity(OdbcStoreEntity store) =>
-            store.ConnectionString = SelectedDataSource.ConnectionString;
+            store.ConnectionString = SelectedDataSource.Seralize();
 
         /// <summary>
         /// Sets the selected data source
         /// </summary>
         private void SelectedDataSourceChanged(object sender, EventArgs e)
         {
+            UpdatePanelVisibility();
+
             username.Text = SelectedDataSource?.Username ?? string.Empty;
             password.Text = SelectedDataSource?.Password ?? string.Empty;
+            customConnectionString.Text = SelectedDataSource?.CustomConnectionString ?? string.Empty;
+        }
+
+        /// <summary>
+        /// Updates which panels are visible based on the selected data source
+        /// </summary>
+        private void UpdatePanelVisibility()
+        {
+            if (SelectedDataSource != null && SelectedDataSource.IsCustom)
+            {
+                customPanel.Show();
+                credentialsPanel.Hide();
+            }
+            else
+            {
+                customPanel.Hide();
+                credentialsPanel.Show();
+            }
         }
 
         /// <summary>
@@ -122,7 +142,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// Binds dataSources to the dataSource combobox.
         /// </summary>
         /// <remarks>
-        /// If we can find the previously selected data source in the list of new data sources, 
+        /// If we can find the previously selected data source in the list of new data sources,
         /// we select it and populate any previous username and password.
         /// </remarks>
         private void BindDataSources(List<OdbcDataSource> dataSources)
@@ -130,25 +150,36 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             OdbcDataSource currentDataSource = SelectedDataSource;
 
             dataSource.DataSource = dataSources;
-            dataSource.DisplayMember = "Name";
+            dataSource.DisplayMember = "DisplayName";
 
             if (currentDataSource != null)
             {
-                OdbcDataSource matchedDataSource = dataSources.FirstOrDefault(d => d.Name == currentDataSource.Name);
+                OdbcDataSource matchedDataSource = dataSources.FirstOrDefault(d => d.DisplayName == currentDataSource.DisplayName);
                 if (matchedDataSource != null)
                 {
-                    // Previously selected datasource found. Select it and set the datasources username and password
+                    // Previously selected datasource found.
                     dataSource.SelectedItem = matchedDataSource;
-                    matchedDataSource.Username = username.Text;
-                    matchedDataSource.Password = password.Text;
+
+                    if (matchedDataSource.IsCustom)
+                    {
+                        matchedDataSource.ChangeConnection(customConnectionString.Text);
+                    }
+                    else
+                    {
+
+                        matchedDataSource.ChangeConnection(matchedDataSource.Dsn, username.Text, password.Text);
+                    }
                 }
                 else
                 {
                     // Previous datasource not found. Clear out username and password.
                     username.Text = string.Empty;
                     password.Text = string.Empty;
+                    customConnectionString.Text = string.Empty;
                 }
             }
+
+            UpdatePanelVisibility();
         }
 
         /// <summary>
@@ -190,18 +221,29 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// Called when leaving the username
         /// </summary>
         private void OnLeaveUsername(object sender, EventArgs e) =>
-            SelectedDataSource.Username = username.Text;
+            SelectedDataSource.ChangeConnection(SelectedDataSource.Dsn, username.Text, SelectedDataSource.Password);
 
         /// <summary>
         /// Called when leaving password
         /// </summary>
         private void OnLeavePassword(object sender, EventArgs e) =>
-            SelectedDataSource.Password = password.Text;
+            SelectedDataSource.ChangeConnection(SelectedDataSource.Dsn, SelectedDataSource.Username, password.Text);
+
+        /// <summary>
+        /// Called when leaving customConnectionString
+        /// </summary>
+        private void OnCustomConnectionString(object sender, EventArgs e) =>
+            SelectedDataSource.ChangeConnection(customConnectionString.Text);
 
         /// <summary>
         /// Called when [click add data source].
         /// </summary>
-        private void OnClickAddDataSource(object sender, EventArgs e) => 
+        private void OnClickAddDataSource(object sender, EventArgs e) =>
             odbcControlPanel.Value.Launch(RefreshDataSources);
+
+        private void OnTestConnection(object sender, EventArgs e)
+        {
+            TestConnection();
+        }
     }
 }

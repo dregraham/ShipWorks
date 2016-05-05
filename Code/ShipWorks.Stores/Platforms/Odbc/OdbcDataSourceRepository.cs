@@ -1,9 +1,7 @@
-﻿using Interapptive.Shared.Utility;
-using log4net;
+﻿using log4net;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
 
 namespace ShipWorks.Stores.Platforms.Odbc
 {
@@ -13,8 +11,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
     public class OdbcDataSourceRepository : IOdbcDataSourceRepository
     {
         private readonly IDsnProvider dsnProvider;
-        private readonly IShipWorksDbProviderFactory odbcProvider;
-        private readonly IEncryptionProvider encryptionProvider;
+        private readonly Func<OdbcDataSource> odbcDataSourceFactory;
         private readonly ILog log;
 
         /// <summary>
@@ -22,15 +19,13 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// </summary>
         public OdbcDataSourceRepository(
             IDsnProvider dsnProvider,
-            IShipWorksDbProviderFactory odbcProvider,
-            IEncryptionProvider encryptionProvider,
+            Func<OdbcDataSource> odbcDataSourceFactory,
             Func<Type, ILog> logFactory)
         {
             log = logFactory(typeof(OdbcDataSourceRepository));
 
             this.dsnProvider = dsnProvider;
-            this.odbcProvider = odbcProvider;
-            this.encryptionProvider = encryptionProvider;
+            this.odbcDataSourceFactory = odbcDataSourceFactory;
         }
 
         /// <summary>
@@ -43,17 +38,34 @@ namespace ShipWorks.Stores.Platforms.Odbc
         {
             try
             {
-                return dsnProvider.GetDataSourceNames()
-                    .Select(name => new OdbcDataSource(odbcProvider, encryptionProvider)
+                List<OdbcDataSource> dataSources = new List<OdbcDataSource>();
+
+                foreach (string dataSourceName in dsnProvider.GetDataSourceNames())
                 {
-                    Name = name
-                });
+                    OdbcDataSource dataSource = odbcDataSourceFactory();
+                    dataSource.ChangeConnection(dataSourceName, string.Empty, string.Empty);
+                    dataSources.Add(dataSource);
+                }
+
+                dataSources.Add(EmptyCustomDataSource());
+
+                return dataSources;
             }
             catch (DataException ex)
             {
                 log.Error("Error getting data source names.", ex);
                 throw;
             }
+        }
+
+        /// <summary>
+        /// Returns an empty custom data source
+        /// </summary>
+        private OdbcDataSource EmptyCustomDataSource()
+        {
+            OdbcDataSource dataSource = odbcDataSourceFactory();
+            dataSource.ChangeConnection(string.Empty);
+            return dataSource;
         }
     }
 }

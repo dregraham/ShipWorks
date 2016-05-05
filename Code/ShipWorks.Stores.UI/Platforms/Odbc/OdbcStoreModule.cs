@@ -30,6 +30,8 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
 
             builder.RegisterType<OdbcControlPanel>()
                 .AsImplementedInterfaces();
+
+            builder.RegisterType<OdbcDataSource>();
         }
     }
 }

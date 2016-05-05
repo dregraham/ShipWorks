@@ -1,7 +1,9 @@
 ﻿using Interapptive.Shared.Utility;
 using System;
 using System.Data;
-using System.Reflection;
+using System.Text;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace ShipWorks.Stores.Platforms.Odbc
 {
@@ -23,54 +25,101 @@ namespace ShipWorks.Stores.Platforms.Odbc
         }
 
         /// <summary>
+        /// Name to display to users
+        /// </summary>
+        public string DisplayName
+        {
+            get
+            {
+                if (IsCustom)
+                {
+                    return "Custom...";
+                }
+
+                return Dsn;
+            }
+        }
+
+        /// <summary>
         /// Name of the data source
         /// </summary>
-        [Obfuscation(Exclude = true)]
-        public string Name { get; set; }
+        public string Dsn { get; private set; }
 
         /// <summary>
         /// Gets or sets the username.
         /// </summary>
-        public string Username { get; set; }
+        public string Username { get; private set; }
 
         /// <summary>
         /// Gets or sets the password.
         /// </summary>
-        public string Password { get; set; }
+        public string Password { get; private set; }
+
+        /// <summary>
+        /// Gets or sets whether or not the data
+        /// source is using a custom connection string.
+        /// </summary>
+        public bool IsCustom { get; private set; }
+
+        /// <summary>
+        /// Gets or sets the custom connection string.
+        /// </summary>
+        public string CustomConnectionString { get; private set; }
+
+        /// <summary>
+        /// Changes the connection to use a custom connection string.
+        /// </summary>
+        /// <param name="connectionString">The custom connection string to use</param>
+        public void ChangeConnection(string connectionString)
+        {
+            IsCustom = true;
+            CustomConnectionString = connectionString;
+        }
+
+        /// <summary>
+        /// Changes the connection to use a new dsn, username and password
+        /// </summary>
+        public void ChangeConnection(string dsn, string username, string password)
+        {
+            IsCustom = false;
+            Dsn = dsn;
+            Username = username;
+            Password = password;
+        }
 
         /// <summary>
         /// Gets the unencrypted connection string.
         /// </summary>
         private string BuildConnectionString()
         {
-            string connectionString = string.Empty;
-
-            if (!string.IsNullOrWhiteSpace(Name))
+            // if we are using a custom connection string
+            // then return the custom connection string
+            if (IsCustom)
             {
-                connectionString = $"DSN={Name};";
+                return CustomConnectionString;
+            }
+
+            // Build the connection string based on
+            // the username password and dsn properties
+            StringBuilder result = new StringBuilder();
+
+            if (!string.IsNullOrWhiteSpace(Dsn))
+            {
+                result.Append($"DSN={Dsn};");
             }
 
             if (!string.IsNullOrWhiteSpace(Username))
             {
-                connectionString += $"Uid={Username};";
+                result.Append($"Uid={Username};");
             }
 
             if (!string.IsNullOrWhiteSpace(Password))
             {
-                connectionString += $"Pwd={Password};";
+                result.Append($"Pwd={Password};");
             }
 
-            return connectionString;
+            return result.ToString();
         }
-
-        /// <summary>
-        /// Gets the encrypted connection string.
-        /// </summary>
-        /// <remarks>
-        /// Connection string is encrypted due to the possibility of containing a password.
-        /// </remarks>
-        public string ConnectionString =>
-            encryptionProvider.Encrypt(BuildConnectionString());
 
         /// <summary>
         /// Tests the connection.
@@ -101,6 +150,27 @@ namespace ShipWorks.Stores.Platforms.Odbc
             }
 
             return testResult;
+        }
+
+        /// <summary>
+        /// Serialize the OdbcDataSource
+        /// </summary>
+        public string Seralize()
+        {
+            return encryptionProvider.Encrypt(JsonConvert.SerializeObject(this));
+        }
+
+        /// <summary>
+        /// Populate the OdbcDataSource using the given json string
+        /// </summary>
+        public void Populate(string json)
+        {
+            JObject dataSource = JObject.Parse(json);
+
+            Dsn = dataSource["Name"].ToString();
+            Username = dataSource["Username"].ToString();
+            Password = dataSource["Password"].ToString();
+            CustomConnectionString = dataSource["CustomConnectionString"].ToString();
         }
     }
 }
