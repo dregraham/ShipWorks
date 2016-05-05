@@ -4,7 +4,7 @@ using ShipWorks.Data.Administration;
 
 namespace ShipWorks.ApplicationCore.Security
 {
-    class EncryptionProviderFactory : IEncryptionProviderFactory
+    public class EncryptionProviderFactory : IEncryptionProviderFactory
     {
         private readonly IIndex<CipherContext, ICipherKey> cipherKeyFactory;
         private readonly ISqlSchemaVersion sqlSchemaVersion;
