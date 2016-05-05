@@ -740,6 +740,7 @@
     <Compile Include="ApplicationCore\Nudges\NudgeOptionDeserializer.cs" />
     <Compile Include="ApplicationCore\Nudges\NudgeType.cs" />
     <Compile Include="ApplicationCore\Options\ModifiedOrderCustomerUpdateBehavior.cs" />
+    <Compile Include="ApplicationCore\Security\CipherContext.cs" />
     <Compile Include="ApplicationCore\Security\EncryptionProviderFactory.cs" />
     <Compile Include="ApplicationCore\Security\LicenseEncryptionProvider.cs" />
     <Compile Include="ApplicationCore\Services\Hosting\Background\BackgroundServiceController.cs" />

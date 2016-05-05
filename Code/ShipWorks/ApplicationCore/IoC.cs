@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Interapptive.Shared.Messaging;
 using Interapptive.Shared.Pdf;
+using Interapptive.Shared.Security;
 using log4net;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Licensing.Activation;
@@ -161,6 +162,9 @@ namespace ShipWorks.ApplicationCore
 
             builder.RegisterType<EncryptionProviderFactory>()
                 .AsImplementedInterfaces();
+
+            builder.RegisterType<LicenseCipherKey>()
+                .Keyed<ICipherKey>(CipherContext.License);
         }
 
         /// <summary>

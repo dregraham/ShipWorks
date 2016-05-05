@@ -23,10 +23,8 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Gets the initialization vector.
         /// </summary>
-        public byte[] InitializationVector
-        {
-            get {return new byte[] { 125, 42, 69, 178, 253, 78, 1, 17, 77, 56, 129, 11, 25, 225, 201, 14 }; }
-        }
+        public byte[] InitializationVector => 
+            new byte[] { 125, 42, 69, 178, 253, 78, 1, 17, 77, 56, 129, 11, 25, 225, 201, 14 };
 
         /// <summary>
         /// Gets the key.

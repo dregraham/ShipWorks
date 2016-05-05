@@ -1,25 +1,23 @@
-﻿using Interapptive.Shared.Security;
-using ShipWorks.ApplicationCore.Licensing;
-using ShipWorks.Data;
+﻿using Autofac.Features.Indexed;
+using Interapptive.Shared.Security;
 using ShipWorks.Data.Administration;
 using System;
-using ShipWorks.Stores.Platforms.Sears;
 
 namespace ShipWorks.ApplicationCore.Security
 {
     class EncryptionProviderFactory : IEncryptionProviderFactory
     {
-        private readonly IDatabaseIdentifier databaseIdentifier;
+        private readonly IIndex<CipherContext, ICipherKey> cipherKeyFactory;
         private readonly ISqlSchemaVersion sqlSchemaVersion;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EncryptionProviderFactory" /> class.
         /// </summary>
-        /// <param name="databaseIdentifier">The database identifier.</param>
+        /// <param name="cipherKeyFactory">The cipher key factory.</param>
         /// <param name="sqlSchemaVersion">The SQL schema version.</param>
-        public EncryptionProviderFactory(IDatabaseIdentifier databaseIdentifier, ISqlSchemaVersion sqlSchemaVersion)
+        public EncryptionProviderFactory(IIndex<CipherContext, ICipherKey> cipherKeyFactory, ISqlSchemaVersion sqlSchemaVersion)
         {
-            this.databaseIdentifier = databaseIdentifier;
+            this.cipherKeyFactory = cipherKeyFactory;
             this.sqlSchemaVersion = sqlSchemaVersion;
         }
 
@@ -36,8 +34,8 @@ namespace ShipWorks.ApplicationCore.Security
             {
                 isLegacy = true;
             }
-            
-            LicenseCipherKey cipherKey = new LicenseCipherKey(databaseIdentifier);
+
+            ICipherKey cipherKey = cipherKeyFactory[CipherContext.License];
             return new LicenseEncryptionProvider(cipherKey, isLegacy);
         }
 
@@ -47,7 +45,8 @@ namespace ShipWorks.ApplicationCore.Security
         /// <returns>An instance of AesEncryptionProvider.</returns>
         public IEncryptionProvider CreateSearsEncryptionProvider()
         {
-            return new AesEncryptionProvider(new SearsCipherKey());
+            ICipherKey cipherKey = cipherKeyFactory[CipherContext.Sears];
+            return new AesEncryptionProvider(cipherKey);
         }
 
         /// <summary>

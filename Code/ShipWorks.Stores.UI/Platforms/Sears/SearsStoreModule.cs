@@ -1,4 +1,6 @@
 ﻿using Autofac;
+using Interapptive.Shared.Security;
+using ShipWorks.ApplicationCore.Security;
 using ShipWorks.Stores.Platforms.Sears;
 
 namespace ShipWorks.Stores.UI.Platforms.Sears
@@ -15,6 +17,9 @@ namespace ShipWorks.Stores.UI.Platforms.Sears
         {
             builder.RegisterType<SearsCredentials>()
                 .AsSelf();
+
+            builder.RegisterType<SearsCipherKey>()
+                .Keyed<ICipherKey>(CipherContext.Sears);
         }
     }
 }
