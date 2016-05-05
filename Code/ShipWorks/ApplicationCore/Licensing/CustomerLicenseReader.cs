@@ -10,14 +10,14 @@ namespace ShipWorks.ApplicationCore.Licensing
     /// </summary>
     public class CustomerLicenseReader : ICustomerLicenseReader
     {
-        private readonly IEncryptionProviderFactory encryptionProviderFactory;
+        private readonly IEncryptionProvider encryptionProvider;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public CustomerLicenseReader(IEncryptionProviderFactory encryptionProviderFactory)
         {
-            this.encryptionProviderFactory = encryptionProviderFactory;
+            this.encryptionProvider = encryptionProviderFactory.CreateLicenseEncryptionProvider();            
         }
 
         /// <summary>
@@ -25,8 +25,6 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public string Read()
         {
-            IEncryptionProvider encryptionProvider = encryptionProviderFactory.CreateLicenseEncryptionProvider();
-
             ConfigurationEntity config = ConfigurationData.Fetch();
 
             try

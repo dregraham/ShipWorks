@@ -1,7 +1,6 @@
 ﻿using Interapptive.Shared.Net;
 using Interapptive.Shared.Security;
 using Interapptive.Shared.Utility;
-using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Model.EntityClasses;
 using System;
 using System.Globalization;
@@ -70,16 +69,17 @@ namespace ShipWorks.Stores.Platforms.Sears
             if (!string.IsNullOrEmpty(store.SellerID))
             {
                 // They are using the current authentication method
-                string timeStamp = dateTimeProvider.UtcNow.AddMinutes(-15).ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'",
-                    CultureInfo.InvariantCulture);
-                string toHash = $"{store.SellerID}:{store.Email}:{timeStamp}";
+                string timeStamp = dateTimeProvider.UtcNow.AddMinutes(-15)
+                                        .ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'", CultureInfo.InvariantCulture);
 
+                string toHash = $"{store.SellerID}:{store.Email}:{timeStamp}";
                 string signature;
 
                 try
                 {
                     IEncryptionProvider encryptionProvider = encryptionProviderFactory.CreateSearsEncryptionProvider();
                     string secretKey = encryptionProvider.Decrypt(store.SecretKey);
+
                     signature = HashSignature(toHash, secretKey);
                 }
                 catch (EncryptionException ex)
@@ -89,7 +89,6 @@ namespace ShipWorks.Stores.Platforms.Sears
                 }
 
                 string headerValue = $"HMAC-SHA256 emailaddress={store.Email},timestamp={timeStamp},signature={signature}";
-
                 request.Headers.Add("authorization", headerValue);
             }
         }
@@ -121,8 +120,9 @@ namespace ShipWorks.Stores.Platforms.Sears
             if (string.IsNullOrEmpty(store.SellerID))
             {
                 // They are using the "old" authentication method
-                credentials.Add("email", store.Email);
                 IEncryptionProvider secureTextEncryptionProvider = encryptionProviderFactory.CreateSecureTextEncryptionProvider(store.Email);
+
+                credentials.Add("email", store.Email);
                 credentials.Add("password", secureTextEncryptionProvider.Decrypt(store.Password));
             }
             else

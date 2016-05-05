@@ -94,6 +94,7 @@ using SandLabel = Divelements.SandRibbon.Label;
 using SandMenuItem = Divelements.SandRibbon.MenuItem;
 using Autofac;
 using Interapptive.Shared;
+using Interapptive.Shared.Security;
 using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
 using Application = System.Windows.Forms.Application;
 

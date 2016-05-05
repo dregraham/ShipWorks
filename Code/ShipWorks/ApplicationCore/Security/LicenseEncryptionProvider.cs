@@ -1,4 +1,6 @@
-﻿namespace ShipWorks.ApplicationCore.Security
+﻿using Interapptive.Shared.Security;
+
+namespace ShipWorks.ApplicationCore.Security
 {
     /// <summary>
     /// Encryption Provider for Customer License
@@ -11,11 +13,12 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="LicenseEncryptionProvider"/> class.
         /// </summary>
-        public LicenseEncryptionProvider(byte[] key, byte[] initializationVector, bool isLegacy) : base(key, initializationVector)
+        public LicenseEncryptionProvider(ICipherKey cipherKey, bool isLegacy) 
+            : base(cipherKey)
         {
             this.isLegacy = isLegacy;
         }
-
+        
         /// <summary>
         /// Gets the decrypted string
         /// </summary>
