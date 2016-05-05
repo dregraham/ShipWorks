@@ -9,37 +9,17 @@ namespace Interapptive.Shared.Security
     /// </summary>
     public class AesEncryptionProvider : IEncryptionProvider
     {
-        private readonly ICipherKey cipherKey;
-        private AesManaged aesManaged;
+        private readonly Lazy<AesManaged> aesManaged;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AesEncryptionProvider"/> class.
         /// </summary>
         public AesEncryptionProvider(ICipherKey cipherKey)
         {
-            this.cipherKey = cipherKey;
+            aesManaged =
+                new Lazy<AesManaged>(() => new AesManaged {IV = cipherKey.InitializationVector, Key = cipherKey.Key});
         }
-
-        /// <summary>
-        /// AES encryption algorithm to use
-        /// </summary>
-        private AesManaged Aes
-        {
-            get
-            {
-                if (aesManaged == null)
-                {
-                    aesManaged = new AesManaged()
-                    {
-                        IV = cipherKey.InitializationVector,
-                        Key = cipherKey.Key
-                    };
-                }
-
-                return aesManaged;
-            }
-        }
-        
+ 
         /// <summary>
         /// Encrypts the given plain text.
         /// </summary>
@@ -49,7 +29,7 @@ namespace Interapptive.Shared.Security
             {
                 byte[] buffer = Encoding.ASCII.GetBytes(plainText);
 
-                ICryptoTransform encryptor = Aes.CreateEncryptor();
+                ICryptoTransform encryptor = aesManaged.Value.CreateEncryptor();
                 return Convert.ToBase64String(encryptor.TransformFinalBlock(buffer, 0, buffer.Length));
             }
             catch (Exception ex)
@@ -72,7 +52,7 @@ namespace Interapptive.Shared.Security
             {
                 byte[] buffer = Convert.FromBase64String(encryptedText);
 
-                ICryptoTransform decryptor = Aes.CreateDecryptor();
+                ICryptoTransform decryptor = aesManaged.Value.CreateDecryptor();
                 return Encoding.ASCII.GetString(decryptor.TransformFinalBlock(buffer, 0, buffer.Length));
             }
             catch (Exception ex)
