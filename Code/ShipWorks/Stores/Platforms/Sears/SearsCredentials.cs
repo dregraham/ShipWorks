@@ -1,7 +1,6 @@
 ﻿using Interapptive.Shared.Net;
 using Interapptive.Shared.Security;
 using Interapptive.Shared.Utility;
-using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Model.EntityClasses;
 using System;
 using System.Globalization;
@@ -32,6 +31,7 @@ namespace ShipWorks.Stores.Platforms.Sears
             MethodConditions.EnsureArgumentIsNotNull(store);
             MethodConditions.EnsureArgumentIsNotNull(request);
             MethodConditions.EnsureArgumentIsNotNull(dateTimeProvider);
+            MethodConditions.EnsureArgumentIsNotNull(encryptionProviderFactory);
 
             this.store = store;
             this.request = request;
