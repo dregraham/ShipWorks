@@ -31,6 +31,7 @@ namespace ShipWorks.Stores.Platforms.Sears
             MethodConditions.EnsureArgumentIsNotNull(store);
             MethodConditions.EnsureArgumentIsNotNull(request);
             MethodConditions.EnsureArgumentIsNotNull(dateTimeProvider);
+            MethodConditions.EnsureArgumentIsNotNull(encryptionProviderFactory);
 
             this.store = store;
             this.request = request;

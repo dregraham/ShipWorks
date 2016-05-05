@@ -1,8 +1,8 @@
 ﻿using Autofac;
 using Autofac.Extras.Moq;
-using System;
 using Interapptive.Shared.Security;
 using ShipWorks.ApplicationCore.Security;
+using System;
 using Xunit;
 
 namespace ShipWorks.Tests.ApplicationCore.Security

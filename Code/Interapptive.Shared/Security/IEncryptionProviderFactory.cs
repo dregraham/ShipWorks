@@ -1,5 +1,8 @@
 ﻿namespace Interapptive.Shared.Security
 {
+    /// <summary>
+    /// Interface for a factory that creates Encryption Providers
+    /// </summary>
     public interface IEncryptionProviderFactory
     {
         /// <summary>
