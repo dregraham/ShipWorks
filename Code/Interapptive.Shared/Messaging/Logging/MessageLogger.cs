@@ -10,30 +10,35 @@ namespace Interapptive.Shared.Messaging.Logging
     /// <summary>
     /// Log messages as they travel through the system
     /// </summary>
-    public class MessageLogger
+    public class MessageLogger : IMessageLogger
     {
         /// <summary>
         /// Static constructor
         /// </summary>
         static MessageLogger()
         {
+#if DEBUG
             Current = new MessageLogger();
+#else
+            Current = new ReleaseMessageLogger();
+#endif
         }
 
         /// <summary>
         /// Current instance of the message logger
         /// </summary>
-        public static MessageLogger Current { get; }
+        public static IMessageLogger Current { get; }
 
-        WebClient client;
+        readonly WebClient client;
+        readonly string endpoint;
         IObserver<ILogItem> observer;
-        string endpoint = $"http://localhost:9809/Interapptive.Shared.Messaging/abc123";
 
         /// <summary>
         /// Constructor
         /// </summary>
         private MessageLogger()
         {
+            endpoint = $"http://localhost:9809/ShipWorks/{Guid.NewGuid()}";
             client = new WebClient();
 
             Observable.Create<ILogItem>(x =>

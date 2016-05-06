@@ -146,6 +146,8 @@
     <Compile Include="Collections\ComparisonResult.cs" />
     <Compile Include="Messaging\IShipWorksMessage.cs" />
     <Compile Include="Messaging\Logging\DoOperation.cs" />
+    <Compile Include="Messaging\Logging\IMessageLogger.cs" />
+    <Compile Include="Messaging\Logging\ReleaseMessageLogger.cs" />
     <Compile Include="Messaging\TrackedObservable\DoImpl.cs" />
     <Compile Include="Messaging\Logging\ILogItem.cs" />
     <Compile Include="Messaging\Logging\IOperation.cs" />
