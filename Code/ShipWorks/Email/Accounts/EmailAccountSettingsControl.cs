@@ -1,16 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using ShipWorks.Data.Model.EntityClasses;
 using Interapptive.Shared.Utility;
-using ShipWorks.UI;
 using Rebex.Net;
 using System.Threading;
+using Interapptive.Shared.Security;
 using ShipWorks.Common.Threading;
 using log4net;
 using Interapptive.Shared.UI;

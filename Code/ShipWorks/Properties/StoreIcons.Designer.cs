@@ -633,6 +633,16 @@ namespace ShipWorks.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap sparkpay {
+            get {
+                object obj = ResourceManager.GetObject("sparkpay", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap stagebloc {
             get {
                 object obj = ResourceManager.GetObject("stagebloc", resourceCulture);

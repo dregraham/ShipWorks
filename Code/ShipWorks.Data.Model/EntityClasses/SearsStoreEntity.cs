@@ -479,6 +479,12 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("Password", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("SecretKey", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("SellerID", fieldHashtable);
 		}
 		#endregion
 
@@ -572,6 +578,28 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)SearsStoreFieldIndex.Password, true); }
 			set	{ SetValue((int)SearsStoreFieldIndex.Password, value); }
+		}
+
+		/// <summary> The SecretKey property of the Entity SearsStore<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "SearsStore"."SecretKey"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 255<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String SecretKey
+		{
+			get { return (System.String)GetValue((int)SearsStoreFieldIndex.SecretKey, true); }
+			set	{ SetValue((int)SearsStoreFieldIndex.SecretKey, value); }
+		}
+
+		/// <summary> The SellerID property of the Entity SearsStore<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "SearsStore"."SellerID"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 15<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String SellerID
+		{
+			get { return (System.String)GetValue((int)SearsStoreFieldIndex.SellerID, true); }
+			set	{ SetValue((int)SearsStoreFieldIndex.SellerID, value); }
 		}
 
 

@@ -1,15 +1,7 @@
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Text;
 using System.Windows.Forms;
 using ShipWorks.Data.Model.EntityClasses;
-using Interapptive.Shared.Utility;
-using ShipWorks.UI;
-using Interapptive.Shared.Net;
-using ShipWorks.Data;
+using Interapptive.Shared.Security;
 using ShipWorks.Data.Model;
 using Interapptive.Shared.UI;
 using ShipWorks.Stores.Management;

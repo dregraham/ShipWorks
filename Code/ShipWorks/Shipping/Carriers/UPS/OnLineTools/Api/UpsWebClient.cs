@@ -1,22 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using System.IO;
 using System.Xml;
 using ShipWorks.ApplicationCore.Logging;
 using Interapptive.Shared.Net;
-using System.Net;
 using System.Xml.XPath;
 using System.Text.RegularExpressions;
 using Interapptive.Shared;
+using Interapptive.Shared.Security;
 using ShipWorks.Shipping.Api;
 using log4net;
-using ShipWorks.Data;
-using ShipWorks.Shipping.Settings;
-using Interapptive.Shared.Win32;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Shipping.Carriers.UPS.UpsEnvironment;
 
@@ -187,7 +182,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             {
                 AppendAccessRequest(xmlWriter, account, settingsRepository);
             }
-            
+
             // Open
             xmlWriter.WriteStartDocument();
             xmlWriter.WriteStartElement(tooInfo.XmlRootNode);
@@ -312,7 +307,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                         // Extract the error code
                         int errorCode = XPathUtility.Evaluate(xpath, "//Response/Error/ErrorCode", 0);
 
-                        // Extract the offending request XML element that may be the cause 
+                        // Extract the offending request XML element that may be the cause
                         string errorLocation = XPathUtility.Evaluate(xpath,
                             "//Response/Error/ErrorLocation/ErrorLocationElementName", "");
 
@@ -350,7 +345,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                 throw WebHelper.TranslateWebException(ex, typeof(UpsException));
             }
         }
-        
+
         /// <summary>
         /// Determine the online tool based on the request data
         /// </summary>

@@ -355,6 +355,11 @@ namespace ShipWorks.Stores
         [StoreTypeIdentity("LEMONSTAND", "LEM")]
         [StoreTypeIcon("lemonstand")]
         LemonStand = 68,
+		
+		[Description("SparkPay")]
+        [StoreTypeIdentity("SPARKPAY", "SPK")]
+        [StoreTypeIcon("sparkpay")]
+        SparkPay = 69,
 
         [Description("ODBC")]
         [StoreTypeIdentity("WISH", "WSH")]

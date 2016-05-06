@@ -9,6 +9,7 @@ using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
 using Interapptive.Shared;
+using Interapptive.Shared.Security;
 
 namespace ShipWorks.Shipping.Carriers.OnTrac.Net
 {

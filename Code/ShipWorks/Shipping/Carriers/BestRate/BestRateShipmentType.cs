@@ -571,5 +571,18 @@ namespace ShipWorks.Shipping.Carriers.BestRate
 
             adapter.UpdateEntitiesDirectly(new BestRateShipmentEntity { RequestedLabelFormat = newLabelFormat }, bucket);
         }
+
+        /// <summary>
+        /// Update the total weight of the shipment
+        /// </summary>
+        public override void UpdateTotalWeight(ShipmentEntity shipment)
+        {
+            shipment.TotalWeight = shipment.ContentWeight;
+
+            if (shipment.BestRate.DimsAddWeight)
+            {
+                shipment.TotalWeight += shipment.BestRate.DimsWeight;
+            }
+        }
     }
 }

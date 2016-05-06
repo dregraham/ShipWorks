@@ -196,6 +196,7 @@ namespace ShipWorks.Data.Adapter
 			InitShopifyOrderItemEntityMappings();
 			InitShopifyStoreEntityMappings();
 			InitShopSiteStoreEntityMappings();
+			InitSparkPayStoreEntityMappings();
 			InitStatusPresetEntityMappings();
 			InitStoreEntityMappings();
 			InitSystemDataEntityMappings();
@@ -2200,10 +2201,12 @@ namespace ShipWorks.Data.Adapter
 		/// <summary>Inits SearsStoreEntity's mappings</summary>
 		private void InitSearsStoreEntityMappings()
 		{
-			base.AddElementMapping( "SearsStoreEntity", "ShipWorksLocal", @"dbo", "SearsStore", 3 );
+			base.AddElementMapping( "SearsStoreEntity", "ShipWorksLocal", @"dbo", "SearsStore", 5 );
 			base.AddElementFieldMapping( "SearsStoreEntity", "StoreID", "StoreID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 0 );
 			base.AddElementFieldMapping( "SearsStoreEntity", "Email", "Email", false, (int)SqlDbType.NVarChar, 75, 0, 0, false, "", null, typeof(System.String), 1 );
 			base.AddElementFieldMapping( "SearsStoreEntity", "Password", "Password", false, (int)SqlDbType.NVarChar, 75, 0, 0, false, "", null, typeof(System.String), 2 );
+			base.AddElementFieldMapping( "SearsStoreEntity", "SecretKey", "SecretKey", false, (int)SqlDbType.NVarChar, 255, 0, 0, false, "", null, typeof(System.String), 3 );
+			base.AddElementFieldMapping( "SearsStoreEntity", "SellerID", "SellerID", false, (int)SqlDbType.NVarChar, 15, 0, 0, false, "", null, typeof(System.String), 4 );
 		}
 		/// <summary>Inits ServerMessageEntity's mappings</summary>
 		private void InitServerMessageEntityMappings()
@@ -2523,6 +2526,15 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementFieldMapping( "ShopSiteStoreEntity", "RequireSSL", "RequireSSL", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 4 );
 			base.AddElementFieldMapping( "ShopSiteStoreEntity", "DownloadPageSize", "DownloadPageSize", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 5 );
 			base.AddElementFieldMapping( "ShopSiteStoreEntity", "RequestTimeout", "RequestTimeout", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 6 );
+		}
+		/// <summary>Inits SparkPayStoreEntity's mappings</summary>
+		private void InitSparkPayStoreEntityMappings()
+		{
+			base.AddElementMapping( "SparkPayStoreEntity", "ShipWorksLocal", @"dbo", "SparkPayStore", 4 );
+			base.AddElementFieldMapping( "SparkPayStoreEntity", "StoreID", "StoreID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 0 );
+			base.AddElementFieldMapping( "SparkPayStoreEntity", "Token", "Token", false, (int)SqlDbType.NVarChar, 70, 0, 0, false, "", null, typeof(System.String), 1 );
+			base.AddElementFieldMapping( "SparkPayStoreEntity", "StoreUrl", "StoreUrl", false, (int)SqlDbType.NVarChar, 350, 0, 0, false, "", null, typeof(System.String), 2 );
+			base.AddElementFieldMapping( "SparkPayStoreEntity", "StatusCodes", "StatusCodes", true, (int)SqlDbType.Xml, 2147483647, 0, 0, false, "", null, typeof(System.String), 3 );
 		}
 		/// <summary>Inits StatusPresetEntity's mappings</summary>
 		private void InitStatusPresetEntityMappings()

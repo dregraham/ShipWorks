@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using ShipWorks.Stores.Platforms.MarketplaceAdvisor.AppDomainHelpers;
 using ShipWorks.Stores.Platforms.MarketplaceAdvisor.WebServices.Oms;
-using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.ApplicationCore;
 using System.Diagnostics;
 using Interapptive.Shared.Net;
+using Interapptive.Shared.Security;
 
 namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
 {
@@ -39,7 +39,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
         /// </summary>
         public static MarketplaceAdvisorOmsClient Create(MarketplaceAdvisorStoreEntity store)
         {
-            return TlsAppDomain.Create<MarketplaceAdvisorOmsClient>(store.Username, store.Password, store.DownloadFlags, 
+            return TlsAppDomain.Create<MarketplaceAdvisorOmsClient>(store.Username, store.Password, store.DownloadFlags,
                 new MarketplaceAdvisorLog(typeof(MarketplaceAdvisorOmsClient)));
         }
 
@@ -82,9 +82,9 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
         {
             Credentials mwCredentials = new Credentials
             {
-                SellerUserName = username, 
-                SellerPassword = SecureText.Decrypt(password, username), 
-                APIUserName = "Interapptive", 
+                SellerUserName = username,
+                SellerPassword = SecureText.Decrypt(password, username),
+                APIUserName = "Interapptive",
                 APIPassword = SecureText.Decrypt("GLWw3ReI0rJ9mP0LKD8SiQ==", "interapptive")
             };
 

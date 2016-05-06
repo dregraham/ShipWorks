@@ -1,16 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using Interapptive.Shared;
+using Interapptive.Shared.Security;
 using ShipWorks.Stores.Management;
 using ShipWorks.Data.Model.EntityClasses;
 using Interapptive.Shared.UI;
-using Interapptive.Shared.Utility;
 using log4net;
 
 namespace ShipWorks.Stores.Platforms.Volusion

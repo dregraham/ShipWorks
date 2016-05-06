@@ -609,6 +609,7 @@
     <Compile Include="ApplicationCore\Licensing\AssociateShipWorksWithItselfResponseType.cs" />
     <Compile Include="ApplicationCore\Licensing\ComplianceLevel.cs" />
     <Compile Include="ApplicationCore\Licensing\CreditCardType.cs" />
+    <Compile Include="ApplicationCore\Licensing\LicenseCipherKey.cs" />
     <Compile Include="ApplicationCore\Licensing\UspsPendingAccountType.cs" />
     <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\Endicia\EndiciaConsolidatorRestriction.cs" />
     <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\Endicia\EndiciaDhlRestriction.cs" />
@@ -654,7 +655,6 @@
     <Compile Include="ApplicationCore\Licensing\DatabaseIdentifier.cs" />
     <Compile Include="ApplicationCore\Licensing\DatabaseIdentifierException.cs" />
     <Compile Include="ApplicationCore\Licensing\DisabledLicense.cs" />
-    <Compile Include="ApplicationCore\Licensing\EncryptionException.cs" />
     <Compile Include="ApplicationCore\Licensing\FakeTangoWebClient.cs" />
     <Compile Include="ApplicationCore\Licensing\ICustomerLicenseActivationService.cs" />
     <Compile Include="ApplicationCore\Licensing\IDialog.cs" />
@@ -663,7 +663,6 @@
     <Compile Include="ApplicationCore\Licensing\ICustomerLicenseActivationViewModel.cs" />
     <Compile Include="ApplicationCore\Licensing\ICustomerLicenseReader.cs" />
     <Compile Include="ApplicationCore\Licensing\ICustomerLicenseWriter.cs" />
-    <Compile Include="ApplicationCore\Licensing\IDatabaseIdentifier.cs" />
     <Compile Include="ApplicationCore\Licensing\ILicense.cs" />
     <Compile Include="ApplicationCore\Licensing\ILicenseCapabilities.cs" />
     <Compile Include="ApplicationCore\Licensing\ILicenseService.cs" />
@@ -672,7 +671,6 @@
     <Compile Include="ApplicationCore\Licensing\CustomerLicenseWriter.cs" />
     <Compile Include="ApplicationCore\Licensing\IUpgradePlanDlgFactory.cs" />
     <Compile Include="ApplicationCore\Licensing\LicenseCapabilities.cs" />
-    <Compile Include="ApplicationCore\Licensing\LicenseEncryptionProvider.cs" />
     <Compile Include="ApplicationCore\Licensing\LicenseEnforcement\ApproachingShipmentLimitEnforcer.cs" />
     <Compile Include="ApplicationCore\Licensing\LicenseEnforcement\ChannelCountEnforcer.cs" />
     <Compile Include="ApplicationCore\Licensing\LicenseEnforcement\ChannelSyncEnforcer.cs" />
@@ -742,6 +740,9 @@
     <Compile Include="ApplicationCore\Nudges\NudgeOptionDeserializer.cs" />
     <Compile Include="ApplicationCore\Nudges\NudgeType.cs" />
     <Compile Include="ApplicationCore\Options\ModifiedOrderCustomerUpdateBehavior.cs" />
+    <Compile Include="ApplicationCore\Security\CipherContext.cs" />
+    <Compile Include="ApplicationCore\Security\EncryptionProviderFactory.cs" />
+    <Compile Include="ApplicationCore\Security\LicenseEncryptionProvider.cs" />
     <Compile Include="ApplicationCore\Services\Hosting\Background\BackgroundServiceController.cs" />
     <Compile Include="ApplicationCore\Services\Hosting\Background\BackgroundServiceHost.cs" />
     <Compile Include="ApplicationCore\Services\Hosting\Background\BackgroundServiceRegistrar.cs" />
@@ -806,6 +807,7 @@
     <Compile Include="Data\Connection\ReconnectResult.cs" />
     <Compile Include="Data\DataResourceManagerWrapper.cs" />
     <Compile Include="Data\DeletionServiceWrapper.cs" />
+    <Compile Include="Data\IDatabaseIdentifier.cs" />
     <Compile Include="Data\IDataResourceManager.cs" />
     <Compile Include="Data\IDeletionService.cs" />
     <Compile Include="Data\IObjectReferenceManager.cs" />
@@ -947,6 +949,10 @@
     </Compile>
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsAccountManagerWrapper.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Registration\Promotion\Express1RegistrationPromotion.cs" />
+    <Compile Include="Shipping\Carriers\UPS\InvoiceRegistration\UpsRegistrationStatus.cs" />
+    <Compile Include="Shipping\Carriers\UPS\LinkNewAccount\Request\Manipulators\UpsLinkNewAccountInfoManipulator.cs" />
+    <Compile Include="Shipping\Carriers\UPS\LinkNewAccount\Request\UpsLinkNewAccountToProfileRequest.cs" />
+    <Compile Include="Shipping\Carriers\UPS\LinkNewAccount\Response\UpsLinkNewAccountToProfileResponse.cs" />
     <Compile Include="Shipping\Carriers\UPS\OnLineTools\IUpsOltShipmentValidator.cs" />
     <Compile Include="Shipping\ICachedRatesService.cs" />
     <Compile Include="Shipping\ILabelService.cs" />
@@ -1359,6 +1365,8 @@
     <Compile Include="Stores\Platforms\OpenSky\OpenSkyStoreType.cs" />
     <Compile Include="Stores\Platforms\OrderBot\OrderBotStoreType.cs" />
     <Compile Include="Stores\Platforms\RevolutionParts\RevolutionPartsStoreType.cs" />
+    <Compile Include="Stores\Platforms\Sears\SearsCipherKey.cs" />
+    <Compile Include="Stores\Platforms\Sears\SearsCredentials.cs" />
     <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooAddressInfo.cs" />
     <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooAppliedPromotion.cs" />
     <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooBillToInfo.cs" />
@@ -10654,6 +10662,8 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\5.0\5.0.0.6.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\5.0\5.0.0.7.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\5.0\5.0.0.8.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\5.1\5.1.0.0.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\5.1\5.1.0.1.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\5.2\5.2.0.0.sql" />
     <Content Include="Resources\add.png" />
     <None Include="Resources\blank16.png" />
@@ -10958,6 +10968,7 @@
     <None Include="Resources\splash.png" />
     <None Include="Resources\solidcommerce.png" />
     <None Include="Resources\stagebloc.png" />
+    <None Include="Resources\sparkpay.png" />
     <Content Include="Resources\Stores\Icons\cart66.png" />
     <Content Include="Resources\Stores\Icons\channelsale.png" />
     <Content Include="Resources\Stores\Icons\jigoshop.png" />

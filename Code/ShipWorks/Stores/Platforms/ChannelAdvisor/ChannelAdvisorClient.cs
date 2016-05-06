@@ -2,26 +2,21 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Text;
 using ShipWorks.Data.Model.EntityClasses;
 using caOrderService = ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Order;
 using caShippingService = ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Shipping;
 using caInventoryService = ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Inventory;
 using caAdminService = ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Admin;
 using ShipWorks.ApplicationCore.Logging;
-using System.Net;
-using Interapptive.Shared.Utility;
 using log4net;
-using System.Web.Services.Protocols;
 using Interapptive.Shared.Net;
-using System.Xml;
 using Interapptive.Shared;
-using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Adapter.Custom;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.Constants;
 using Interapptive.Shared.Collections;
+using Interapptive.Shared.Security;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Inventory;
 
 namespace ShipWorks.Stores.Platforms.ChannelAdvisor
@@ -31,15 +26,15 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
     /// </summary>
     public class ChannelAdvisorClient
     {
-        // Logger 
+        // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(ChannelAdvisorClient));
 
         // Cache of inventory items we've already looked up
         static LruCache<string, caInventoryService.InventoryItemResponse> inventoryItemCache = new LruCache<string, caInventoryService.InventoryItemResponse>(1000);
         static LruCache<string, caInventoryService.ImageInfoResponse[]> inventoryImageCache = new LruCache<string, caInventoryService.ImageInfoResponse[]>(1000);
         static LruCache<string, List<AttributeInfo>> inventoryItemAttributeCache = new LruCache<string, List<AttributeInfo>>(1000);
-						  
-        // store this client is interacting on behalf of 
+
+        // store this client is interacting on behalf of
         ChannelAdvisorStoreEntity store = null;
 
         /// <summary>
@@ -213,9 +208,9 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 // select which orders to retrieve
                 caOrderService.OrderCriteria criteria = new caOrderService.OrderCriteria();
                 criteria.DetailLevel = OrderCriteriaDetailLevels.Complete;
-                
+
                 // CA docs say you can only get 20 per when using DetailLevelType.Complete
-                criteria.PageSize = 20;  
+                criteria.PageSize = 20;
                 criteria.PageNumberFilter = 1;
                 criteria.StatusUpdateFilterEndTimeGMT = DateTime.UtcNow;
 
@@ -228,7 +223,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
                 try
                 {
-                    // execute the web service call for orders 
+                    // execute the web service call for orders
                     caOrderService.APIResultOfArrayOfOrderResponseItem result = service.GetOrderList(store.AccountKey, criteria);
 
                     // check for success
@@ -362,7 +357,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                                 foundItems.Add(result);
                             }
                         }
-                        
+
                         if (response.Status == caInventoryService.ResultStatus.Failure || !string.IsNullOrEmpty(response.Message) || response.ResultData == null)
                         {
                             log.WarnFormat("Issue getting inventory results. '{0}', '{1}', '{2}'", response.Status, response.Message, (response.ResultData == null) ? "null" : response.ResultData.Length.ToString());
@@ -395,8 +390,8 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
             if (!inventoryItemAttributeCache.Contains(lookupKey))
             {
-                // We don't have this SKU/key in the cache; grab the item attributes from the 
-                // ChannelAdvisor API and add them to the cache (even if the list is empty) 
+                // We don't have this SKU/key in the cache; grab the item attributes from the
+                // ChannelAdvisor API and add them to the cache (even if the list is empty)
                 // for any future requests for the same SKU
                 List<AttributeInfo> attributes = FetchItemAttributes(sku);
                 inventoryItemAttributeCache[lookupKey] = attributes;
@@ -535,7 +530,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                                         OrderFields.OnlineLastModified == (order.LastUpdateDate ?? order.OrderTimeGMT) &
                                         OrderFields.IsManual == false);
         }
-        
+
         /// <summary>
         /// Sets the orders as exported on Channel Advisor.
         /// </summary>
@@ -567,19 +562,19 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
                 try
                 {
-                    caShippingService.OrderShipment[] shipments = new caShippingService.OrderShipment[] 
+                    caShippingService.OrderShipment[] shipments = new caShippingService.OrderShipment[]
                     {
-                        new caShippingService.OrderShipment 
-                        { 
-                            OrderId = caOrderID, 
-                            ShipmentType = "Full", 
-                            FullShipment = new caShippingService.FullShipmentContents 
-                            { 
-                                carrierCode = carrierCode, 
-                                classCode = classCode, 
-                                trackingNumber = trackingNumber, 
-                                dateShippedGMT = dateShipped 
-                            } 
+                        new caShippingService.OrderShipment
+                        {
+                            OrderId = caOrderID,
+                            ShipmentType = "Full",
+                            FullShipment = new caShippingService.FullShipmentContents
+                            {
+                                carrierCode = carrierCode,
+                                classCode = classCode,
+                                trackingNumber = trackingNumber,
+                                dateShippedGMT = dateShipped
+                            }
                         }
                     };
 
@@ -588,7 +583,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                     {
                         throw new ChannelAdvisorException(results.MessageCode, results.Message);
                     }
-                    
+
                 }
                 catch (Exception ex)
                 {

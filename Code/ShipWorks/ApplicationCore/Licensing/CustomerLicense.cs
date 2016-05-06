@@ -8,6 +8,7 @@ using ShipWorks.Data;
 using System.Linq;
 using System.Windows.Forms;
 using Interapptive.Shared;
+using Interapptive.Shared.Security;
 using ShipWorks.ApplicationCore.Dashboard.Content;
 using ShipWorks.ApplicationCore.Licensing.FeatureRestrictions;
 using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;

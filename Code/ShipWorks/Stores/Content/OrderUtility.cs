@@ -354,6 +354,19 @@ namespace ShipWorks.Stores.Content
         }
 
         /// <summary>
+        /// Populates the order, order items, and order item attribute for the given shipment.
+        /// </summary>
+        public static OrderEntity FetchOrder(long orderID)
+        {
+            OrderEntity order = DataProvider.GetEntity(orderID) as OrderEntity;
+            if (order != null)
+            {
+                PopulateOrderDetails(order);
+            }
+            return order;
+        }
+
+        /// <summary>
         /// Populates the order, order items, and order item attribute for the given order.
         /// </summary>
         /// <param name="order">The order.</param>

@@ -2,6 +2,7 @@
 using System;
 using System.Data;
 using System.Text;
+using Interapptive.Shared.Security;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 

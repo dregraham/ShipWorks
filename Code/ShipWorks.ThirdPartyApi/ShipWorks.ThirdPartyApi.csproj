@@ -1989,10 +1989,10 @@
       <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
       <CachedSettingsPropName>ShipWorks_Shipping_Carriers_FedEx_WebServices_v2013_Ship_ShipService</CachedSettingsPropName>
     </WebReferenceUrl>
-    <WebReferenceUrl Include="D:\Development\Applications\ShipWorks3x\Trunk\Code\ShipWorks\Shipping\Carriers\UPS\OnLineTools\Wsdl\RegistrationWebService.wsdl">
+    <WebReferenceUrl Include="C:\work\ShipWorks\Code\ShipWorks\Shipping\Carriers\UPS\OnLineTools\Wsdl\RegistrationWebService.wsdl">
       <UrlBehavior>Static</UrlBehavior>
       <RelPath>Web References\Shipping.Carriers.UPS.OnLineTools.WebServices.Registration\</RelPath>
-      <UpdateFromURL>D:\Development\Applications\ShipWorks3x\Trunk\Code\ShipWorks\Shipping\Carriers\UPS\OnLineTools\Wsdl\RegistrationWebService.wsdl</UpdateFromURL>
+      <UpdateFromURL>C:\work\ShipWorks\Code\ShipWorks\Shipping\Carriers\UPS\OnLineTools\Wsdl\RegistrationWebService.wsdl</UpdateFromURL>
       <ServiceLocationURL>
       </ServiceLocationURL>
       <CachedDynamicPropName>

@@ -95,7 +95,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
                 case UpsServiceType.Ups3DaySelect:
                     return "Three Day";
 
-                case UpsServiceType.Ups2nDayAirIntra:
+                case UpsServiceType.Ups2ndDayAirIntra:
                 case UpsServiceType.Ups2DayAir:
                     return "Two Day";
 
@@ -189,6 +189,9 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
             currentShipment.Ups.Packages[0].Weight = originalShipment.ContentWeight;
             currentShipment.Ups.Packages[0].DimsAddWeight = originalShipment.BestRate.DimsAddWeight;
             currentShipment.Ups.Packages[0].DimsWeight = originalShipment.BestRate.DimsWeight;
+
+            // Update total weight 
+            ShipmentType.UpdateTotalWeight(currentShipment);
 
             currentShipment.Ups.Packages[0].PackagingType = (int)UpsPackagingType.Custom;
             currentShipment.Ups.Service = (int)UpsServiceType.UpsGround;

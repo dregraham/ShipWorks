@@ -1,15 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text;
 using System.IO;
-using Interapptive.Shared.Utility;
+using Interapptive.Shared.Security;
 using log4net;
 
 namespace ShipWorks.Stores.Platforms.Ebay.Tokens.Readers
 {
     /// <summary>
-    /// An ITokenReader that can read the contents of an XML file that was secured/encrypted with the 
-    /// Interapptive.Shared.Utility.SecureText class. 
+    /// An ITokenReader that can read the contents of an XML file that was secured/encrypted with the
+    /// Interapptive.Shared.Utility.SecureText class.
     /// </summary>
     public class SecureXmlFileTokenReader : XmlFileTokenReader, ITokenReader
     {
@@ -52,12 +51,12 @@ namespace ShipWorks.Stores.Platforms.Ebay.Tokens.Readers
                     byte[] bytes = ASCIIEncoding.UTF8.GetBytes(decryptedFileContent);
                     memoryStream.Write(bytes, 0, bytes.Length);
 
-                    // We're going to swap out the original file stream with this memory stream 
-                    // containing the decrypted content. The call to the base class is inside the 
+                    // We're going to swap out the original file stream with this memory stream
+                    // containing the decrypted content. The call to the base class is inside the
                     // using statement so the stream is remains open and can be read from.
                     this.FileStream = memoryStream;
 
-                    // Now that our file stream contains the decrypted contents of the token file, 
+                    // Now that our file stream contains the decrypted contents of the token file,
                     // we can just rely on the base class to do the rest of the work.
                     return base.Read();
                 }
