@@ -159,16 +159,6 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
                 {
                     // Previously selected datasource found.
                     dataSource.SelectedItem = matchedDataSource;
-
-                    if (matchedDataSource.IsCustom)
-                    {
-                        matchedDataSource.ChangeConnection(customConnectionString.Text);
-                    }
-                    else
-                    {
-
-                        matchedDataSource.ChangeConnection(matchedDataSource.Dsn, username.Text, password.Text);
-                    }
                 }
                 else
                 {
@@ -241,9 +231,15 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         private void OnClickAddDataSource(object sender, EventArgs e) =>
             odbcControlPanel.Value.Launch(RefreshDataSources);
 
+        /// <summary>
+        /// Called when [click test data source]
+        /// </summary>
         private void OnTestConnection(object sender, EventArgs e)
         {
-            TestConnection();
+            if (TestConnection())
+            {
+                MessageHelper.ShowMessage(this, "Connection to the ODBC data source was successful!");
+            }
         }
     }
 }

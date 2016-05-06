@@ -38,7 +38,7 @@
             this.credentialsOptionalLabel = new System.Windows.Forms.Label();
             this.addDataSource = new System.Windows.Forms.Button();
             this.credentialsPanel = new System.Windows.Forms.Panel();
-            this.button1 = new System.Windows.Forms.Button();
+            this.btnTestConnection2 = new System.Windows.Forms.Button();
             this.customPanel = new System.Windows.Forms.Panel();
             this.btnTestConnection = new System.Windows.Forms.Button();
             this.customLabel = new System.Windows.Forms.Label();
@@ -145,7 +145,7 @@
             // 
             // credentialsPanel
             // 
-            this.credentialsPanel.Controls.Add(this.button1);
+            this.credentialsPanel.Controls.Add(this.btnTestConnection2);
             this.credentialsPanel.Controls.Add(this.passwordLabel);
             this.credentialsPanel.Controls.Add(this.username);
             this.credentialsPanel.Controls.Add(this.credentialsOptionalLabel);
@@ -156,14 +156,15 @@
             this.credentialsPanel.Size = new System.Drawing.Size(456, 105);
             this.credentialsPanel.TabIndex = 9;
             // 
-            // button1
+            // btnTestConnection2
             // 
-            this.button1.Location = new System.Drawing.Point(346, 56);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(99, 23);
-            this.button1.TabIndex = 11;
-            this.button1.Text = "Test Connection";
-            this.button1.UseVisualStyleBackColor = true;
+            this.btnTestConnection2.Location = new System.Drawing.Point(346, 56);
+            this.btnTestConnection2.Name = "btnTestConnection2";
+            this.btnTestConnection2.Size = new System.Drawing.Size(99, 23);
+            this.btnTestConnection2.TabIndex = 11;
+            this.btnTestConnection2.Text = "Test Connection";
+            this.btnTestConnection2.UseVisualStyleBackColor = true;
+            this.btnTestConnection2.Click += new System.EventHandler(this.OnTestConnection);
             // 
             // customPanel
             // 
@@ -183,6 +184,7 @@
             this.btnTestConnection.TabIndex = 11;
             this.btnTestConnection.Text = "Test Connection";
             this.btnTestConnection.UseVisualStyleBackColor = true;
+            this.btnTestConnection.Click += new System.EventHandler(this.OnTestConnection);
             // 
             // customLabel
             // 
@@ -242,7 +244,7 @@
         private System.Windows.Forms.Panel customPanel;
         private System.Windows.Forms.Label customLabel;
         private System.Windows.Forms.TextBox customConnectionString;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button btnTestConnection2;
         private System.Windows.Forms.Button btnTestConnection;
     }
 }
