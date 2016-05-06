@@ -18,6 +18,12 @@
         IEncryptionProvider CreateSearsEncryptionProvider();
 
         /// <summary>
+        /// Creates the odbc encryption provider.
+        /// </summary>
+        /// <returns>IEncryptionProvider.</returns>
+        IEncryptionProvider CreateOdbcEncryptionProvider();
+
+        /// <summary>
         /// Creates the secure text encryption provider.
         /// </summary>
         /// <param name="salt">The salt.</param>

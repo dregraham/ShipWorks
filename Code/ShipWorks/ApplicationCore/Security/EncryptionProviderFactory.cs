@@ -41,6 +41,16 @@ namespace ShipWorks.ApplicationCore.Security
         }
 
         /// <summary>
+        /// Creates the Odbc encryption provider.
+        /// </summary>
+        /// <returns>An instance of AesEncryptionProvider.</returns>
+        public IEncryptionProvider CreateOdbcEncryptionProvider()
+        {
+            ICipherKey cipherKey = cipherKeyFactory[CipherContext.Odbc];
+            return new AesEncryptionProvider(cipherKey);
+        }
+
+        /// <summary>
         /// Creates the secure text encryption provider.
         /// </summary>
         /// <param name="salt">The salt.</param>

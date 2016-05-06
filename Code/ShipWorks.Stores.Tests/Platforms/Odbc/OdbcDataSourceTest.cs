@@ -16,7 +16,9 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         {
             using (var mock = AutoMock.GetLoose())
             {
-                var encryptionProvider = mock.Mock<IEncryptionProvider>();
+                Mock<IEncryptionProvider> encryptionProvider = mock.Mock<IEncryptionProvider>();
+                Mock<IEncryptionProviderFactory> encryptionProviderFactory = mock.Mock<IEncryptionProviderFactory>();
+                encryptionProviderFactory.Setup(e => e.CreateOdbcEncryptionProvider()).Returns(encryptionProvider.Object);
 
                 OdbcDataSource testObject = mock.Create<OdbcDataSource>();
 
@@ -31,7 +33,9 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         {
             using (var mock = AutoMock.GetLoose())
             {
-                var encryptionProvider = mock.Mock<IEncryptionProvider>();
+                Mock<IEncryptionProvider> encryptionProvider = mock.Mock<IEncryptionProvider>();
+                Mock<IEncryptionProviderFactory> encryptionProviderFactory = mock.Mock<IEncryptionProviderFactory>();
+                encryptionProviderFactory.Setup(e => e.CreateOdbcEncryptionProvider()).Returns(encryptionProvider.Object);
 
                 OdbcDataSource testObject = mock.Create<OdbcDataSource>();
                 testObject.ChangeConnection("blah", string.Empty, string.Empty);
@@ -48,7 +52,9 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         {
             using (var mock = AutoMock.GetLoose())
             {
-                var encryptionProvider = mock.Mock<IEncryptionProvider>();
+                Mock<IEncryptionProvider> encryptionProvider = mock.Mock<IEncryptionProvider>();
+                Mock<IEncryptionProviderFactory> encryptionProviderFactory = mock.Mock<IEncryptionProviderFactory>();
+                encryptionProviderFactory.Setup(e => e.CreateOdbcEncryptionProvider()).Returns(encryptionProvider.Object);
 
                 OdbcDataSource testObject = mock.Create<OdbcDataSource>();
                 testObject.ChangeConnection(string.Empty, "blah", string.Empty);
@@ -65,7 +71,9 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         {
             using (var mock = AutoMock.GetLoose())
             {
-                var encryptionProvider = mock.Mock<IEncryptionProvider>();
+                Mock<IEncryptionProvider> encryptionProvider = mock.Mock<IEncryptionProvider>();
+                Mock<IEncryptionProviderFactory> encryptionProviderFactory = mock.Mock<IEncryptionProviderFactory>();
+                encryptionProviderFactory.Setup(e => e.CreateOdbcEncryptionProvider()).Returns(encryptionProvider.Object);
 
                 OdbcDataSource testObject = mock.Create<OdbcDataSource>();
                 testObject.ChangeConnection(string.Empty, string.Empty, "blah");
@@ -82,7 +90,9 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         {
             using (var mock = AutoMock.GetLoose())
             {
-                var encryptionProvider = mock.Mock<IEncryptionProvider>();
+                Mock<IEncryptionProvider> encryptionProvider = mock.Mock<IEncryptionProvider>();
+                Mock<IEncryptionProviderFactory> encryptionProviderFactory = mock.Mock<IEncryptionProviderFactory>();
+                encryptionProviderFactory.Setup(e => e.CreateOdbcEncryptionProvider()).Returns(encryptionProvider.Object);
 
                 OdbcDataSource testObject = mock.Create<OdbcDataSource>();
 
@@ -98,7 +108,9 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         {
             using (var mock = AutoMock.GetLoose())
             {
-                var encryptionProvider = mock.Mock<IEncryptionProvider>();
+                Mock<IEncryptionProvider> encryptionProvider = mock.Mock<IEncryptionProvider>();
+                Mock<IEncryptionProviderFactory> encryptionProviderFactory = mock.Mock<IEncryptionProviderFactory>();
+                encryptionProviderFactory.Setup(e => e.CreateOdbcEncryptionProvider()).Returns(encryptionProvider.Object);
 
                 OdbcDataSource testObject = mock.Create<OdbcDataSource>();
 

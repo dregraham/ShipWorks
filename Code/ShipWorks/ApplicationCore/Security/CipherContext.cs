@@ -13,6 +13,9 @@ namespace ShipWorks.ApplicationCore.Security
         Sears,
 
         [Description("License Context")]
-        License 
+        License,
+
+        [Description("Odbc Store Type Context")]
+        Odbc
     }
 }

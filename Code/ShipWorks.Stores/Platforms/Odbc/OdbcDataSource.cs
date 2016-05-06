@@ -19,10 +19,10 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// <summary>
         /// Constructor
         /// </summary>
-        public OdbcDataSource(IShipWorksDbProviderFactory odbcProvider, IEncryptionProvider encryptionProvider)
+        public OdbcDataSource(IShipWorksDbProviderFactory odbcProvider, IEncryptionProviderFactory encryptionProviderFactory)
         {
             this.odbcProvider = odbcProvider;
-            this.encryptionProvider = encryptionProvider;
+            encryptionProvider = encryptionProviderFactory.CreateOdbcEncryptionProvider();
         }
 
         /// <summary>
@@ -154,7 +154,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
         }
 
         /// <summary>
-        /// Serialize the OdbcDataSource
+        /// Serialize and encrypt the OdbcDataSource
         /// </summary>
         public string Seralize()
         {
@@ -166,7 +166,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// </summary>
         public void Populate(string json)
         {
-            JObject dataSource = JObject.Parse(json);
+            JObject dataSource = JObject.Parse(encryptionProvider.Decrypt(json));
 
             Dsn = dataSource["Name"].ToString();
             Username = dataSource["Username"].ToString();

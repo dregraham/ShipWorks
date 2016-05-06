@@ -22,12 +22,14 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
 
                 var testObject = mock.Create<OdbcDataSourceRepository>();
                 var odbcDataSources = testObject.GetDataSources();
-                Assert.Equal("blah", odbcDataSources.Single().Dsn);
+                OdbcDataSource dataSource = odbcDataSources.First(d => d.Dsn == "blah");
+
+                Assert.Equal("blah", dataSource.Dsn);
             }
         }
 
         [Fact]
-        public void GetDataSources_ReturnsCollectionOfFiveDataSources_WhenGetNextDsnNameReturnsFiveDsns()
+        public void GetDataSources_ReturnsCollectionOfFiveDataSourcesPlusCustom_WhenGetNextDsnNameReturnsFiveDsns()
         {
             using (var mock = AutoMock.GetLoose())
             {
@@ -37,7 +39,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
 
                 var testObject = mock.Create<OdbcDataSourceRepository>();
                 var odbcDataSources = testObject.GetDataSources();
-                Assert.Equal(5, odbcDataSources.Count());
+                Assert.Equal(6, odbcDataSources.Count());
             }
         }
 
