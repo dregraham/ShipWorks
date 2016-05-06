@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Windows.Forms;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.UI;
+using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.AddressValidation;
-using ShipWorks.Data.Connection;
-using log4net;
-using Interapptive.Shared.UI;
 using ShipWorks.Data;
+using ShipWorks.Data.Connection;
 
 namespace ShipWorks.Stores.Content
 {
@@ -25,7 +25,7 @@ namespace ShipWorks.Stores.Content
         /// Constructor
         /// </summary>
         public ShipBillAddressEditorDlg(EntityBase2 entity) : this(entity, false, null)
-        {}
+        { }
 
         /// <summary>
         /// Constructor
@@ -69,11 +69,14 @@ namespace ShipWorks.Stores.Content
                 {
                     adapter.SaveAndRefetch(entity);
 
-                    validatedAddressScope.FlushAddressesToDatabase(adapter, EntityUtility.GetEntityId(entity), "Ship");
-                    validatedAddressScope.FlushAddressesToDatabase(adapter, EntityUtility.GetEntityId(entity), "Bill");
-                    
-                    // Propagate address changes to shipments after we've saved all the order details
-                    ValidatedAddressManager.PropagateAddressChangesToShipments(adapter, EntityUtility.GetEntityId(entity), previousShippingAddress, new AddressAdapter(entity, "Ship"));
+                    if (enableAddressValidation)
+                    {
+                        validatedAddressScope.FlushAddressesToDatabase(adapter, EntityUtility.GetEntityId(entity), "Ship");
+                        validatedAddressScope.FlushAddressesToDatabase(adapter, EntityUtility.GetEntityId(entity), "Bill");
+
+                        // Propagate address changes to shipments after we've saved all the order details
+                        ValidatedAddressManager.PropagateAddressChangesToShipments(adapter, EntityUtility.GetEntityId(entity), previousShippingAddress, new AddressAdapter(entity, "Ship"));
+                    }
                 }
             }
             catch (ORMConcurrencyException ex)
@@ -82,7 +85,7 @@ namespace ShipWorks.Stores.Content
 
                 MessageHelper.ShowError(this,
                     string.Format("{0} has been deleted by another user and could not be saved.",
-                        ObjectLabelManager.GetLabel((long) entity.Fields.PrimaryKeyFields[0].CurrentValue).GetCustomText(true, false, false)));
+                        ObjectLabelManager.GetLabel((long)entity.Fields.PrimaryKeyFields[0].CurrentValue).GetCustomText(true, false, false)));
             }
 
             DialogResult = DialogResult.OK;
