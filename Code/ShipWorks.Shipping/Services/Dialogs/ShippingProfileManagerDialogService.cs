@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Reactive.Linq;
 using System.Windows.Forms;
 using Interapptive.Shared.Messaging;
@@ -12,7 +13,7 @@ namespace ShipWorks.Shipping.Services.Dialogs
     /// <summary>
     /// Service for handling and opening the profile manager dialog
     /// </summary>
-    public class ShippingProfileManagerDialogService : IInitializeForCurrentUISession, IDisposable
+    public class ShippingProfileManagerDialogService : IInitializeForCurrentUISession
     {
         readonly IObservable<IShipWorksMessage> messenger;
         readonly IWin32Window mainWindow;
@@ -35,6 +36,9 @@ namespace ShipWorks.Shipping.Services.Dialogs
         /// </summary>
         public void InitializeForCurrentSession()
         {
+            // We should never initialize an already initialized session. We'll re-subscribe in release but when
+            // debugging, we should get alerted that this is happening
+            Debug.Assert(subscription == null, "Subscription is already initialized");
             EndSession();
 
             subscription = messenger.OfType<OpenProfileManagerDialogMessage>()
@@ -66,9 +70,6 @@ namespace ShipWorks.Shipping.Services.Dialogs
         /// <summary>
         /// Dispose of resources
         /// </summary>
-        public void Dispose()
-        {
-            subscription?.Dispose();
-        }
+        public void Dispose() => EndSession();
     }
 }

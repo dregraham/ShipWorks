@@ -156,12 +156,15 @@ namespace ShipWorks.ApplicationCore
 
             builder.RegisterAssemblyTypes(allAssemblies)
                 .Where(x => x.IsAssignableTo<IInitializeForCurrentSession>() ||
-                    x.IsAssignableTo<IInitializeForCurrentUISession>() ||
                     x.IsAssignableTo<ICheckForChangesNeeded>() ||
                     x.IsAssignableTo<IInitializeForCurrentDatabase>() ||
                     x.IsAssignableTo<IMainFormElementRegistration>())
                 .AsImplementedInterfaces()
                 .SingleInstance();
+
+            builder.RegisterAssemblyTypes(allAssemblies)
+                .Where(x => x.IsAssignableTo<IInitializeForCurrentUISession>())
+                .AsImplementedInterfaces();
 
             builder.Register((_, parameters) => LogManager.GetLogger(parameters.TypedAs<Type>()));
 
@@ -265,7 +268,7 @@ namespace ShipWorks.ApplicationCore
             builder.RegisterType<TangoWebClientFactory>()
                 .AsImplementedInterfaces();
 
-            builder.Register<ITangoWebClient>((x) =>  x.Resolve<ITangoWebClientFactory>().CreateWebClient());
+            builder.Register<ITangoWebClient>((x) => x.Resolve<ITangoWebClientFactory>().CreateWebClient());
 
             builder.RegisterType<DataResourceManagerWrapper>()
                 .AsImplementedInterfaces()

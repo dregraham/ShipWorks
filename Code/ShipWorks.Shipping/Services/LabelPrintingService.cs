@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
@@ -50,6 +51,9 @@ namespace ShipWorks.Shipping.Services
         /// </summary>
         public void InitializeForCurrentSession()
         {
+            // We should never initialize an already initialized session. We'll re-subscribe in release but when
+            // debugging, we should get alerted that this is happening
+            Debug.Assert(subscription == null, "Subscription is already initialized");
             EndSession();
 
             subscription = messages.OfType<ReprintLabelsMessage>()
@@ -144,7 +148,7 @@ namespace ShipWorks.Shipping.Services
             Dictionary<TemplateEntity, List<long>> delayedPrints)
         {
             // If it's standard or thermal we can print it right away
-            if (template.Type == (int) TemplateType.Standard || template.Type == (int) TemplateType.Thermal)
+            if (template.Type == (int)TemplateType.Standard || template.Type == (int)TemplateType.Thermal)
             {
                 PrintJob printJob = PrintJob.Create(template, new List<long> { shipment.ShipmentID });
                 printJob.Print();
@@ -173,7 +177,7 @@ namespace ShipWorks.Shipping.Services
             IDictionary<TemplateEntity, List<long>> delayedPrints)
         {
             // It must be a label template
-            if (template.Type != (int) TemplateType.Label)
+            if (template.Type != (int)TemplateType.Label)
             {
                 return;
             }
@@ -201,5 +205,10 @@ namespace ShipWorks.Shipping.Services
                 delayedPrints.Remove(template);
             }
         }
+
+        /// <summary>
+        /// Dispose the object
+        /// </summary>
+        public void Dispose() => EndSession();
     }
 }

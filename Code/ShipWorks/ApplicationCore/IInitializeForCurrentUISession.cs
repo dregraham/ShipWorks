@@ -1,9 +1,11 @@
-﻿namespace ShipWorks.ApplicationCore
+﻿using System;
+
+namespace ShipWorks.ApplicationCore
 {
     /// <summary>
     /// Service initialization for UI sessions
     /// </summary>
-    public interface IInitializeForCurrentUISession
+    public interface IInitializeForCurrentUISession : IDisposable
     {
         /// <summary>
         /// Initialize for the current session

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
@@ -23,7 +24,7 @@ namespace ShipWorks.Shipping.Services.Dialogs
     /// <summary>
     /// Service for handling and opening the shipping dialog
     /// </summary>
-    public class ShippingDialogService : IInitializeForCurrentUISession, IDisposable
+    public class ShippingDialogService : IInitializeForCurrentUISession
     {
         private readonly IDictionary<InitialShippingTabDisplay, string> shippingPanelTabNames =
             new Dictionary<InitialShippingTabDisplay, string>
@@ -57,9 +58,9 @@ namespace ShipWorks.Shipping.Services.Dialogs
         /// </summary>
         public void InitializeForCurrentSession()
         {
-            // When restoring a database, the db wizard calls InitializeForCurrentSession, then when the user
-            // logs on, it calls InitializeForCurrentSession again.  So the subscriptions get added multiple times
-            // causing lots of extra subscribes to get ran.
+            // We should never initialize an already initialized session. We'll re-subscribe in release but when
+            // debugging, we should get alerted that this is happening
+            Debug.Assert(subscriptions == null, "Subscription is already initialized");
             EndSession();
 
             subscriptions = new CompositeDisposable(
@@ -193,9 +194,6 @@ namespace ShipWorks.Shipping.Services.Dialogs
         /// <summary>
         /// Dispose resources
         /// </summary>
-        public void Dispose()
-        {
-            subscriptions?.Dispose();
-        }
+        public void Dispose() => EndSession();
     }
 }

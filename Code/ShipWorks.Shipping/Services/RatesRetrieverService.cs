@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Reactive.Linq;
 using Autofac.Features.Indexed;
@@ -15,7 +16,7 @@ namespace ShipWorks.Shipping.Services
     /// <summary>
     /// Service that retrieves rates when shipments change
     /// </summary>
-    public class RatesRetrieverService : IInitializeForCurrentUISession, IDisposable
+    public class RatesRetrieverService : IInitializeForCurrentUISession
     {
         const double ThrottleTime = 250;
         private readonly IMessenger messenger;
@@ -44,6 +45,9 @@ namespace ShipWorks.Shipping.Services
         /// </summary>
         public void InitializeForCurrentSession()
         {
+            // We should never initialize an already initialized session. We'll re-subscribe in release but when
+            // debugging, we should get alerted that this is happening
+            Debug.Assert(subscription == null, "Subscription is already initialized");
             EndSession();
 
             subscription = messenger.OfType<ShipmentChangedMessage>()
@@ -83,6 +87,6 @@ namespace ShipWorks.Shipping.Services
         /// <summary>
         /// Dispose of any resources
         /// </summary>
-        public void Dispose() => subscription?.Dispose();
+        public void Dispose() => EndSession();
     }
 }

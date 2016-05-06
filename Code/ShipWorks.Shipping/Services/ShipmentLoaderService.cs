@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
@@ -52,6 +53,11 @@ namespace ShipWorks.Shipping.Services
         /// </summary>
         public void InitializeForCurrentSession()
         {
+            // We should never initialize an already initialized session. We'll re-subscribe in release but when
+            // debugging, we should get alerted that this is happening
+            Debug.Assert(subscription == null, "Subscription is already initialized");
+            EndSession();
+
             subscription = messenger.OfType<OrderSelectionChangingMessage>()
                 .Throttle(TimeSpan.FromMilliseconds(100), schedulerProvider.Default)
                 .SelectMany(x => Observable.FromAsync(() => LoadAndNotify(x.OrderIdList)))
@@ -66,5 +72,10 @@ namespace ShipWorks.Shipping.Services
         {
             subscription?.Dispose();
         }
+
+        /// <summary>
+        /// Dispose the object
+        /// </summary>
+        public void Dispose() => EndSession();
     }
 }
