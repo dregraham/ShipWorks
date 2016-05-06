@@ -81,6 +81,11 @@ namespace ShipWorks.ApplicationCore
                 .AsImplementedInterfaces()
                 .SingleInstance();
 
+            builder.Register(c => Program.MainForm)
+                .As<Control>()
+                .As<IWin32Window>()
+                .ExternallyOwned();
+
             builder.RegisterAssemblyModules(assemblies);
 
             builder.RegisterType<LogEntryFactory>()
