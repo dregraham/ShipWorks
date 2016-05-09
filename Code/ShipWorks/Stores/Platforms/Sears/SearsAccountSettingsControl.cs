@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Interapptive.Shared.Security;
 using Interapptive.Shared.UI;
+using log4net;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
@@ -44,9 +45,18 @@ namespace ShipWorks.Stores.Platforms.Sears
             email.Text = searsStore.Email;
             sellerID.Text = searsStore.SellerID;
 
-            secretKey.Text = string.IsNullOrWhiteSpace(searsStore.SecretKey)
-                ? string.Empty
-                : encryptionProvider.Decrypt(searsStore.SecretKey);
+            try
+            {
+                secretKey.Text = string.IsNullOrWhiteSpace(searsStore.SecretKey)
+                    ? string.Empty
+                    : encryptionProvider.Decrypt(searsStore.SecretKey);
+            }
+            catch (Exception ex)
+            {
+                LogManager.GetLogger(typeof(SearsAccountSettingsControl)).Error("Couldn't decrypt Secret Key", ex);
+
+                secretKey.Text = string.Empty;
+            }
         }
 
         /// <summary>
@@ -58,6 +68,12 @@ namespace ShipWorks.Stores.Platforms.Sears
             if (searsStore == null)
             {
                 throw new ArgumentException("A non SearsStore store was passed to SearsStore account settings.");
+            }
+
+            if (string.IsNullOrWhiteSpace(secretKey.Text))
+            {
+                MessageHelper.ShowError(this, "Please enter a Secret Key.");
+                return false;
             }
 
             searsStore.Email = email.Text;
@@ -94,7 +110,7 @@ namespace ShipWorks.Stores.Platforms.Sears
         {
             return (searsStore.Fields[(int) SearsStoreFieldIndex.Email].IsChanged ||
                     searsStore.Fields[(int) SearsStoreFieldIndex.SellerID].IsChanged ||
-                    searsStore.Fields[(int)SearsStoreFieldIndex.SecretKey].IsChanged);
+                    searsStore.Fields[(int) SearsStoreFieldIndex.SecretKey].IsChanged);
         }
     }
 }
