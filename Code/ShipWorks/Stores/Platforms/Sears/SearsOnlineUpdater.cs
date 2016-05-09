@@ -24,8 +24,6 @@ namespace ShipWorks.Stores.Platforms.Sears
                 return;
             }
 
-            ShippingManager.EnsureShipmentLoaded(shipment);
-
             UploadShipmentDetails(shipment);
         }
 
