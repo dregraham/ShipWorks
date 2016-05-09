@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Data.Model.EntityClasses;
+﻿using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
-using ShipWorks.Shipping.Carriers.UPS;
-using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.FedEx;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.Postal;
+using ShipWorks.Shipping.Carriers.UPS;
+using ShipWorks.Shipping.Carriers.UPS.Enums;
+using System;
+using System.Linq;
 
 namespace ShipWorks.Stores.Platforms.Sears
 {
@@ -110,7 +108,16 @@ namespace ShipWorks.Stores.Platforms.Sears
                 return "Parcel";
             }
 
-            return "PRIORITY";
+            if (shipmentTypeCode == ShipmentTypeCode.Other)
+            {
+                string[] validOtherServices = {"Expedited", "Pickup", "Standard", "Premium"};
+
+                return validOtherServices.Contains(shipment.Other.Service.Trim())
+                    ? shipment.Other.Service.Trim()
+                    : "Standard";
+            }
+
+            return "Standard";
         }
 
         /// <summary>

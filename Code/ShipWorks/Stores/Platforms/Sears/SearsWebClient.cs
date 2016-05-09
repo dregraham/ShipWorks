@@ -7,6 +7,7 @@ using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping;
 using System;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -158,6 +159,8 @@ namespace ShipWorks.Stores.Platforms.Sears
         /// </summary>
         private XDocument GenerateShipmentFeedXml(ShipmentEntity shipment)
         {
+            ShippingManager.EnsureShipmentLoaded(shipment);
+
             SearsOrderEntity order = (SearsOrderEntity) shipment.Order;
 
             XNamespace nsDefault = XNamespace.Get("http://seller.marketplace.sears.com/oms/v7");
@@ -176,9 +179,14 @@ namespace ShipWorks.Stores.Platforms.Sears
 
             foreach (SearsOrderItemEntity orderItem in DataProvider.GetRelatedEntities(order.OrderID, EntityType.OrderItemEntity).OfType<SearsOrderItemEntity>())
             {
+                string trackingNumber = shipment.TrackingNumber.Trim();
+                if (string.IsNullOrEmpty(trackingNumber))
+                {
+                    trackingNumber = "Tracking unavailable";
+                }
                 xShipment.Add(
                     new XElement(nsDefault + "detail",
-                        new XElement(nsDefault + "tracking-number", shipment.TrackingNumber.Trim()),
+                        new XElement(nsDefault + "tracking-number", trackingNumber),
                         new XElement(nsDefault + "ship-date", shipment.ShipDate.ToString("yyyy-MM-dd")),
                         new XElement(nsDefault + "shipping-carrier", SearsUtility.GetShipmentCarrierCode(shipment)),
                         new XElement(nsDefault + "shipping-method", SearsUtility.GetShipmentServiceCode(shipment)),
