@@ -15,6 +15,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
     {
         private readonly IShipWorksDbProviderFactory odbcProvider;
         private readonly IEncryptionProvider encryptionProvider;
+        private string customConnectionString;
 
         /// <summary>
         /// Constructor
@@ -26,25 +27,9 @@ namespace ShipWorks.Stores.Platforms.Odbc
         }
 
         /// <summary>
-        /// Name to display to users
-        /// </summary>
-        public string DisplayName
-        {
-            get
-            {
-                if (IsCustom)
-                {
-                    return "Custom...";
-                }
-
-                return Dsn;
-            }
-        }
-
-        /// <summary>
         /// Name of the data source
         /// </summary>
-        public string Dsn { get; private set; }
+        public string Name { get; private set; }
 
         /// <summary>
         /// Gets or sets the username.
@@ -65,7 +50,15 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// <summary>
         /// Gets or sets the custom connection string.
         /// </summary>
-        public string CustomConnectionString { get; private set; }
+        public string ConnectionString
+        {
+            get
+            {
+                return BuildConnectionString();
+            }
+
+            private set { customConnectionString = value; }
+        }
 
         /// <summary>
         /// Changes the connection to use a custom connection string.
@@ -74,7 +67,8 @@ namespace ShipWorks.Stores.Platforms.Odbc
         public void ChangeConnection(string connectionString)
         {
             IsCustom = true;
-            CustomConnectionString = connectionString;
+            Name = "Custom...";
+            ConnectionString = connectionString;
         }
 
         /// <summary>
@@ -83,7 +77,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
         public void ChangeConnection(string dsn, string username, string password)
         {
             IsCustom = false;
-            Dsn = dsn;
+            Name = dsn;
             Username = username;
             Password = password;
         }
@@ -97,16 +91,16 @@ namespace ShipWorks.Stores.Platforms.Odbc
             // then return the custom connection string
             if (IsCustom)
             {
-                return CustomConnectionString;
+                return customConnectionString;
             }
 
             // Build the connection string based on
             // the username password and dsn properties
             StringBuilder result = new StringBuilder();
 
-            if (!string.IsNullOrWhiteSpace(Dsn))
+            if (!string.IsNullOrWhiteSpace(Name))
             {
-                result.Append($"DSN={Dsn};");
+                result.Append($"DSN={Name};");
             }
 
             if (!string.IsNullOrWhiteSpace(Username))
@@ -164,14 +158,16 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// <summary>
         /// Populate the OdbcDataSource using the given json string
         /// </summary>
-        public void Populate(string json)
+        public void Restore(string json)
         {
             JObject dataSource = JObject.Parse(encryptionProvider.Decrypt(json));
 
-            Dsn = dataSource["Name"].ToString();
+            Name = dataSource["Name"].ToString();
+            bool custom;
+            IsCustom = bool.TryParse(dataSource["IsCustom"].ToString(), out custom) && custom;
             Username = dataSource["Username"].ToString();
             Password = dataSource["Password"].ToString();
-            CustomConnectionString = dataSource["CustomConnectionString"].ToString();
+            ConnectionString = dataSource["ConnectionString"].ToString();
         }
     }
 }

@@ -41,7 +41,7 @@ namespace ShipWorks.ApplicationCore.Security
         }
 
         /// <summary>
-        /// Creates the Odbc encryption provider.
+        /// Creates the ODBC encryption provider.
         /// </summary>
         /// <returns>An instance of AesEncryptionProvider.</returns>
         public IEncryptionProvider CreateOdbcEncryptionProvider()

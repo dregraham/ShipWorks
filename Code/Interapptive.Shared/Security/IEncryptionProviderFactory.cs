@@ -18,7 +18,7 @@
         IEncryptionProvider CreateSearsEncryptionProvider();
 
         /// <summary>
-        /// Creates the odbc encryption provider.
+        /// Creates the ODBC encryption provider.
         /// </summary>
         /// <returns>IEncryptionProvider.</returns>
         IEncryptionProvider CreateOdbcEncryptionProvider();

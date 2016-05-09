@@ -40,14 +40,20 @@ namespace ShipWorks.Stores.Platforms.Odbc
             {
                 List<OdbcDataSource> dataSources = new List<OdbcDataSource>();
 
+                // Build a collection of OdbcDataSources available on the machine
                 foreach (string dataSourceName in dsnProvider.GetDataSourceNames())
                 {
+                    // Create a new data source and call change connection to
+                    // initialize the data source to the data source name
                     OdbcDataSource dataSource = odbcDataSourceFactory();
                     dataSource.ChangeConnection(dataSourceName, string.Empty, string.Empty);
+
+                    // Add the data source to the collection
                     dataSources.Add(dataSource);
                 }
 
-                dataSources.Add(EmptyCustomDataSource());
+                // Add an custom data source to the collection
+                dataSources.Add(GetEmptyCustomDataSource());
 
                 return dataSources;
             }
@@ -61,7 +67,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// <summary>
         /// Returns an empty custom data source
         /// </summary>
-        private OdbcDataSource EmptyCustomDataSource()
+        private OdbcDataSource GetEmptyCustomDataSource()
         {
             OdbcDataSource dataSource = odbcDataSourceFactory();
             dataSource.ChangeConnection(string.Empty);
