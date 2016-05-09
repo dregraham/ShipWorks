@@ -250,7 +250,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
 
                 OdbcDataSource testObject = mock.Create<OdbcDataSource>();
 
-                string connectionString = testObject.Seralize();
+                string connectionString = testObject.Serialize();
 
                 encryptionProvider.Verify(ep=>ep.Encrypt(It.IsAny<string>()), Times.Once);
             }
@@ -268,7 +268,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
                 OdbcDataSource testObject = mock.Create<OdbcDataSource>();
                 testObject.ChangeConnection("blah", string.Empty, string.Empty);
 
-                string connectionString = testObject.Seralize();
+                string connectionString = testObject.Serialize();
 
                 encryptionProvider.Verify(ep => ep.Encrypt(
                     It.Is<string>(str=>str.Contains("\"Name\":\"blah\""))), Times.Once);
@@ -287,7 +287,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
                 OdbcDataSource testObject = mock.Create<OdbcDataSource>();
                 testObject.ChangeConnection(string.Empty, "blah", string.Empty);
 
-                string connectionString = testObject.Seralize();
+                string connectionString = testObject.Serialize();
 
                 encryptionProvider.Verify(ep => ep.Encrypt(
                     It.Is<string>(str => str.Contains("\"Username\":\"blah\""))), Times.Once);
@@ -306,7 +306,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
                 OdbcDataSource testObject = mock.Create<OdbcDataSource>();
                 testObject.ChangeConnection(string.Empty, string.Empty, "blah");
 
-                string connectionString = testObject.Seralize();
+                string connectionString = testObject.Serialize();
 
                 encryptionProvider.Verify(ep => ep.Encrypt(
                     It.Is<string>(str => str.Contains("\"Password\":\"blah\""))), Times.Once);
@@ -324,7 +324,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
 
                 OdbcDataSource testObject = mock.Create<OdbcDataSource>();
 
-                string connectionString = testObject.Seralize();
+                string connectionString = testObject.Serialize();
 
                 encryptionProvider.Verify(ep => ep.Encrypt(
                     It.Is<string>(str => !str.Contains("Pwd="))), Times.Once);
@@ -342,7 +342,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
 
                 OdbcDataSource testObject = mock.Create<OdbcDataSource>();
 
-                string connectionString = testObject.Seralize();
+                string connectionString = testObject.Serialize();
 
                 encryptionProvider.Verify(ep => ep.Encrypt(
                     It.Is<string>(str => !str.Contains("Uid="))), Times.Once);
