@@ -541,6 +541,22 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.AddressControl
             Assert.Equal(expected, adapter.StateProvCode);
         }
 
+        [Fact]
+        public void Save_SavesValidationDetails()
+        {
+            AddressViewModel testObject = mock.Create<AddressViewModel>();
+            PersonAdapter person = new PersonAdapter();
+            testObject.ValidationMessage = "Foo message";
+            testObject.ValidationStatus = AddressValidationStatusType.BadAddress;
+            testObject.SuggestionCount = 6;
+
+            testObject.SaveToEntity(person);
+
+            Assert.Equal("Foo message", person.AddressValidationError);
+            Assert.Equal((int) AddressValidationStatusType.BadAddress, person.AddressValidationStatus);
+            Assert.Equal(6, person.AddressValidationSuggestionCount);
+        }
+
         public void VerifyPropertySetterResetsValidationStatus(Action<AddressViewModel> setAction)
         {
             entityBasedAdapter.AddressValidationStatus = (int) AddressValidationStatusType.Fixed;
