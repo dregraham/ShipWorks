@@ -53,7 +53,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
                 }
 
                 // Add an custom data source to the collection
-                dataSources.Add(GetEmptyCustomDataSource());
+                dataSources.Add(CreateEmptyCustomDataSource());
 
                 return dataSources;
             }
@@ -67,7 +67,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// <summary>
         /// Returns an empty custom data source
         /// </summary>
-        private OdbcDataSource GetEmptyCustomDataSource()
+        private OdbcDataSource CreateEmptyCustomDataSource()
         {
             OdbcDataSource dataSource = odbcDataSourceFactory();
             dataSource.ChangeConnection(string.Empty);

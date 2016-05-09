@@ -150,7 +150,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// <summary>
         /// Serialize and encrypt the OdbcDataSource
         /// </summary>
-        public string Seralize()
+        public string Serialize()
         {
             return encryptionProvider.Encrypt(JsonConvert.SerializeObject(this));
         }

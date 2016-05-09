@@ -88,7 +88,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         {
             try
             {
-                store.ConnectionString = SelectedDataSource.Seralize();
+                store.ConnectionString = SelectedDataSource.Serialize();
             }
             catch (Exception ex)
             {
@@ -249,8 +249,18 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// <summary>
         /// Called when [click add data source].
         /// </summary>
-        private void OnClickAddDataSource(object sender, EventArgs e) =>
-            odbcControlPanel.Value.Launch(RefreshDataSources);
+        private void OnClickAddDataSource(object sender, EventArgs e)
+        {
+            try
+            {
+                odbcControlPanel.Value.Launch(RefreshDataSources);
+            }
+            catch (Exception ex)
+            {
+                log.Error(ex);
+                MessageHelper.ShowError(this, "An error occurred while trying to open ODBC control panel.");
+            }
+        }
 
         /// <summary>
         /// Called when [click test data source]
