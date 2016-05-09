@@ -7,7 +7,6 @@ using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping;
 using System;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -159,8 +158,6 @@ namespace ShipWorks.Stores.Platforms.Sears
         /// </summary>
         private XDocument GenerateShipmentFeedXml(ShipmentEntity shipment)
         {
-            ShippingManager.EnsureShipmentLoaded(shipment);
-
             SearsOrderEntity order = (SearsOrderEntity) shipment.Order;
 
             XNamespace nsDefault = XNamespace.Get("http://seller.marketplace.sears.com/oms/v7");

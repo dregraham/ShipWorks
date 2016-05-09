@@ -52,6 +52,8 @@ namespace ShipWorks.Stores.Platforms.Sears
                 return;
             }
 
+            ShippingManager.EnsureShipmentLoaded(shipment);
+			
             SearsWebClient webClient = new SearsWebClient(storeEntity);
             webClient.UploadShipmentDetails(shipment);
         }
