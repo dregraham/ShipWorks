@@ -1,6 +1,7 @@
 ﻿using Interapptive.Shared.Utility;
 using System;
 using System.Data;
+using System.Reflection;
 using System.Text;
 using Interapptive.Shared.Security;
 using Newtonsoft.Json;
@@ -29,6 +30,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// <summary>
         /// Name of the data source
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public string Name { get; private set; }
 
         /// <summary>
