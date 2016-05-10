@@ -135,6 +135,7 @@
     <Compile Include="Platforms\LemonStand\LemonStandStoreType.cs" />
     <Compile Include="Platforms\LemonStand\LemonStandWebClient.cs" />
     <Compile Include="Platforms\Odbc\IOdbcDataSource.cs" />
+    <Compile Include="Platforms\Odbc\IOdbcSchema.cs" />
     <Compile Include="Platforms\Odbc\Mapping\ExternalOdbcMappableField.cs" />
     <Compile Include="Platforms\Odbc\Mapping\IOdbcFieldMapFactory.cs" />
     <Compile Include="Platforms\Odbc\Mapping\IOdbcFieldMapIOFactory.cs" />
@@ -153,6 +154,7 @@
     <Compile Include="Platforms\Odbc\OdbcSchema.cs" />
     <Compile Include="Platforms\Odbc\OdbcTable.cs" />
     <Compile Include="Platforms\Odbc\OdbcTableFactory.cs" />
+    <Compile Include="Platforms\Odbc\ShipWorksOdbcException.cs" />
     <Compile Include="Platforms\SparkPay\CoreExtensions\Actions\SparkPayOrderUpdateTask.cs" />
     <Compile Include="Platforms\SparkPay\CoreExtensions\Actions\SparkPayShipmentUploadTask.cs" />
     <Compile Include="Platforms\SparkPay\DTO\Address.cs" />

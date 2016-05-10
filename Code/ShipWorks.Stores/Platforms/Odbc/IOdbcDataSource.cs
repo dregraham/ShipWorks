@@ -17,5 +17,10 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// Creates an ODBC connection to the Data Source
         /// </summary>
         DbConnection CreateConnection();
+
+        /// <summary>
+        /// Name of the data source
+        /// </summary>
+        string Name { get; }
     }
 }

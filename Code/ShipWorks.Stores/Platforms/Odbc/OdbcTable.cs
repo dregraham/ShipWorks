@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
-using System.Data.Odbc;
 using log4net;
 
 namespace ShipWorks.Stores.Platforms.Odbc
@@ -12,14 +11,14 @@ namespace ShipWorks.Stores.Platforms.Odbc
     /// </summary>
 	public class OdbcTable
 	{
-	    private readonly OdbcSchema schema;
-        private List<OdbcColumn> columns;
+	    private readonly IOdbcSchema schema;
+        private IEnumerable<OdbcColumn> columns;
         private readonly ILog log;
 
         /// <summary>
         /// Constructor
         /// </summary>
-		public OdbcTable(OdbcSchema schema, string tableName, ILog log)
+		public OdbcTable(IOdbcSchema schema, string tableName, ILog log)
 	    {
 	        this.schema = schema;
             Name = tableName;
@@ -34,7 +33,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// <summary>
         /// The columns in the table
         /// </summary>
-        public List<OdbcColumn> Columns
+        public IEnumerable<OdbcColumn> Columns
         {
             get
             {
@@ -54,41 +53,43 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// </summary>
         private void Load()
 		{
-            IOdbcDataSource dataSource = schema.DataSource;
-
-            Columns = new List<OdbcColumn>();
-
-            using (DbConnection connection = dataSource.CreateConnection())
+            using (DbConnection connection = schema.DataSource.CreateConnection())
             {
-                connection.Open();
+                try
+                {
+                    connection.Open();
+                }
+                catch (DbException ex)
+                {
+                    log.Error(ex.Message);
+                    throw new ShipWorksOdbcException($"An error occurred while attempting to open a connection to {schema.DataSource.Name}", ex);
+                }
+
+                string[] restriction =
+                {
+                    null, // table_catalog
+                    null, // table_schema
+                    Name, // table_name
+                    null // table_type
+                };
 
                 try
                 {
-                    string[] restriction =
-                    {
-                        null, // table_catalog
-                        null, // table_schema
-                        Name, // table_name
-                        null // table_type
-                    };
-
                     DataTable columnData = connection.GetSchema("Columns", restriction);
+                    List<OdbcColumn> localColumns = new List<OdbcColumn>();
 
                     for (int j = 0; j < columnData.Rows.Count; j++)
                     {
                         string columnName = columnData.Rows[j].ItemArray[3].ToString();
-                        string type = columnData.Rows[j].ItemArray[13].ToString();
-                        int typeCode;
-                        int.TryParse(type, out typeCode);
-
-                        Columns.Add(new OdbcColumn(columnName));
+                        localColumns.Add(new OdbcColumn(columnName));
                     }
+
+                    Columns = localColumns;
                 }
                 catch (Exception ex)
                 {
-                    // TODO consider creating a new exception for odbc
                     log.Error(ex);
-                    throw;
+                    throw new ShipWorksOdbcException($"An error occurred while attempting to retrieve columns from information from the {Name} table.", ex);
                 }
             }
         }

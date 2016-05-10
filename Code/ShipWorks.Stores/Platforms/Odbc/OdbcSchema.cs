@@ -2,17 +2,16 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
-using System.Data.Odbc;
 using System.Linq;
 using log4net;
 
 namespace ShipWorks.Stores.Platforms.Odbc
 {
     /// <summary>
-    /// Represents an ODBC Schema
+    /// Represents an ODBC Schema which contains ODBC Tables and Data Source
     /// </summary>
-	public class OdbcSchema
-	{
+	public class OdbcSchema : IOdbcSchema
+    {
 	    private readonly OdbcTableFactory tableFactory;
         private readonly ILog log;
 
@@ -28,7 +27,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// <summary>
         /// List of ODBC tables in the schema
         /// </summary>
-	    public List<OdbcTable> Tables { get; private set; }
+	    public IEnumerable<OdbcTable> Tables { get; private set; }
 
         /// <summary>
         /// The data source where this schema comes from
@@ -43,8 +42,6 @@ namespace ShipWorks.Stores.Platforms.Odbc
         {
             DataSource = dataSource;
 
-            Tables = new List<OdbcTable>();
-
             using (DbConnection connection = DataSource.CreateConnection())
             {
                 try
@@ -54,19 +51,32 @@ namespace ShipWorks.Stores.Platforms.Odbc
                 catch (DbException ex)
                 {
                     log.Error(ex.Message);
-                    return;
+                    throw new ShipWorksOdbcException($"An error occurred while attempting to open a connection to {dataSource.Name}.", ex);
                 }
 
-                DataTable tableData = connection.GetSchema("Tables");
-
-                int position = tableData.Columns.Cast<DataColumn>().ToList()
-                    .FindIndex(c => c.ColumnName.Equals("TABLE_NAME", StringComparison.OrdinalIgnoreCase));
-
-                for (int i = 0; i < tableData.Rows.Count; i++)
+                try
                 {
-                    OdbcTable table = tableFactory.CreateTable(this, tableData.Rows[i].ItemArray[position].ToString());
-                    Tables.Add(table);
+                    DataTable tableData = connection.GetSchema("Tables");
+
+                    int position = tableData.Columns.Cast<DataColumn>().ToList()
+                        .FindIndex(c => c.ColumnName.Equals("TABLE_NAME", StringComparison.OrdinalIgnoreCase));
+
+                    List<OdbcTable> tables = new List<OdbcTable>();
+
+                    for (int i = 0; i < tableData.Rows.Count; i++)
+                    {
+                        OdbcTable table = tableFactory.CreateTable(this, tableData.Rows[i].ItemArray[position].ToString());
+                        tables.Add(table);
+                    }
+
+                    Tables = tables;
                 }
+                catch (Exception ex)
+                {
+                    log.Error(ex);
+                    throw new ShipWorksOdbcException($"An error occurred while attempting to retrieve a list of tables from the {dataSource.Name} data source.", ex);
+                }
+
             }
         }
 	}
