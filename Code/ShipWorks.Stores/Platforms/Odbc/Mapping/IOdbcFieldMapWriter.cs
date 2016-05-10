@@ -2,8 +2,14 @@ using System.IO;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 {
-	public interface IOdbcFieldMapWriter
+    /// <summary>
+    /// Writes field map entries
+    /// </summary>
+    public interface IOdbcFieldMapWriter
 	{
-		void Write(Stream stream);
+        /// <summary>
+        /// Write the field map
+        /// </summary>
+        void Write(Stream stream);
 	}
 }

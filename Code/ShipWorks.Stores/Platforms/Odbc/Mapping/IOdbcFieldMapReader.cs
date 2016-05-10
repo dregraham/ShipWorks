@@ -1,7 +1,13 @@
 namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 {
-	public interface IOdbcFieldMapReader
+    /// <summary>
+    /// Reader for field map entries
+    /// </summary>
+    public interface IOdbcFieldMapReader
 	{
-		OdbcFieldMapEntry ReadEntry();
+        /// <summary>
+        /// Reads the field map entry.
+        /// </summary>
+        OdbcFieldMapEntry ReadEntry();
 	}
 }

@@ -2,14 +2,34 @@ using System.Collections.Generic;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 {
-	public interface IOdbcFieldMapFactory
+    /// <summary>
+    /// Factory for creating Odbc field maps
+    /// </summary>
+    public interface IOdbcFieldMapFactory
 	{
-		OdbcFieldMap CreateOrderFieldMap();
+        /// <summary>
+        /// Creates the order field map.
+        /// </summary>
+        /// <returns></returns>
+        OdbcFieldMap CreateOrderFieldMap();
 
-		OdbcFieldMap CreateOrderItemFieldMap();
+        /// <summary>
+        /// Creates the order item field map.
+        /// </summary>
+        /// <returns></returns>
+        OdbcFieldMap CreateOrderItemFieldMap();
 
-		OdbcFieldMap CreateAddressFieldMap();
+        /// <summary>
+        /// Creates the address field map.
+        /// </summary>
+        /// <returns></returns>
+        OdbcFieldMap CreateAddressFieldMap();
 
-		OdbcFieldMap CreateFieldMapFrom(IEnumerable<OdbcFieldMap> maps);
+        /// <summary>
+        /// Creates the field map from.
+        /// </summary>
+        /// <param name="maps">The maps.</param>
+        /// <returns></returns>
+        OdbcFieldMap CreateFieldMapFrom(IEnumerable<OdbcFieldMap> maps);
 	}
 }
