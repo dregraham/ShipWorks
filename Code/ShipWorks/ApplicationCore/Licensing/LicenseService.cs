@@ -17,7 +17,7 @@ namespace ShipWorks.ApplicationCore.Licensing
     /// </summary>
     public class LicenseService : ILicenseService
     {
-        private readonly Lazy<ICustomerLicenseReader> reader;
+        private readonly Func<ICustomerLicenseReader> reader;
         private readonly Func<string, ICustomerLicense> customerLicenseFactory;
         private readonly Func<StoreEntity, StoreLicense> storeLicenseFactory;
         private readonly IStoreManager storeManager;
@@ -28,7 +28,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Constructor
         /// </summary>
-        public LicenseService(Lazy<ICustomerLicenseReader> reader, Func<string, ICustomerLicense> customerLicenseFactory,
+        public LicenseService(Func<ICustomerLicenseReader> reader, Func<string, ICustomerLicense> customerLicenseFactory,
             Func<StoreEntity, StoreLicense> storeLicenseFactory, IStoreManager storeManager, Func<Owned<IUserSession>> getUserSession)
         {
             this.reader = reader;
@@ -42,7 +42,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// Customer Key read from the reader.
         /// </summary>
         /// <exception cref="EncryptionException"></exception>
-        private string CustomerKey => reader.Value.Read();
+        private string CustomerKey => reader().Read();
 
         /// <summary>
         /// True if Legacy Customer
