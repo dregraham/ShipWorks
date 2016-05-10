@@ -1,29 +1,21 @@
-using System;
-using System.Data.Odbc;
-
 namespace ShipWorks.Stores.Platforms.Odbc
 {
+    /// <summary>
+    /// Represents a column from an ODBC table
+    /// </summary>
 	public class OdbcColumn
 	{
-		public OdbcColumn(string name)
-		{
-			throw new NotImplementedException();
-		}
+        /// <summary>
+        /// Constructor
+        /// </summary>
+	    public OdbcColumn(string name)
+	    {
+	        Name = name;
+	    }
 
-		public string Name
-		{
-			get
-			{
-				throw new NotImplementedException();
-			}
-		}
-
-		public OdbcType Type
-		{
-			get
-			{
-				throw new NotImplementedException();
-			}
-		}
+        /// <summary>
+        /// The column name
+        /// </summary>
+	    public string Name { get; }
 	}
 }

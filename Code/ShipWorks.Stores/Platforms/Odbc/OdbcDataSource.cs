@@ -1,6 +1,7 @@
 ﻿using Interapptive.Shared.Utility;
 using System;
 using System.Data;
+using System.Data.Odbc;
 using System.Text;
 using Interapptive.Shared.Security;
 using Newtonsoft.Json;
@@ -168,6 +169,14 @@ namespace ShipWorks.Stores.Platforms.Odbc
             Username = dataSource["Username"].ToString();
             Password = dataSource["Password"].ToString();
             ConnectionString = dataSource["ConnectionString"].ToString();
+        }
+
+        /// <summary>
+        /// Creates a new ODBC Connection
+        /// </summary>
+        public OdbcConnection CreateConnection()
+        {
+            return new OdbcConnection(ConnectionString);
         }
     }
 }
