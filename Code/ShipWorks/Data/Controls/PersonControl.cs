@@ -1050,6 +1050,11 @@ namespace ShipWorks.Data.Controls
                 return validatedAddresses;
             }
 
+            if (ValidatedAddressScope == null)
+            {
+                return new List<ValidatedAddressEntity>();
+            }
+
             return ValidatedAddressScope.LoadValidatedAddresses(EntityUtility.GetEntityId(loadedPeople.Single().Entity), AddressPrefix)
                 .ToList();
         }
