@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.AddressValidation;
-using ShipWorks.ApplicationCore;
-using ShipWorks.ApplicationCore.ExecutionMode;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
@@ -16,7 +14,7 @@ namespace ShipWorks.Shipping
     /// <summary>
     /// Wraps the ShippingManager
     /// </summary>
-    public class ShippingManagerWrapper : IShippingManager, IInitializeForCurrentDatabase
+    public class ShippingManagerWrapper : IShippingManager
     {
         private readonly ICarrierShipmentAdapterFactory shipmentAdapterFactory;
         private readonly IValidatedAddressScope validatedAddressScope;
@@ -229,11 +227,5 @@ namespace ShipWorks.Shipping
         /// </summary>
         public string GetCarrierName(ShipmentTypeCode shipmentTypeCode) =>
             ShippingManager.GetCarrierName(shipmentTypeCode);
-
-        /// <summary>
-        /// Initialize service for the given database
-        /// </summary>
-        public void InitializeForCurrentDatabase(ExecutionMode executionMode) =>
-            ShippingManager.InitializeForCurrentDatabase();
     }
 }

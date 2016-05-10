@@ -15,6 +15,7 @@ using ShipWorks.Data;
 using ShipWorks.Data.Administration;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping;
 using ShipWorks.Tests.Shared.EntityBuilders;
 using ShipWorks.Users;
 using ShipWorks.Users.Audit;
@@ -133,6 +134,8 @@ DROP PROCEDURE [dbo].[GetDatabaseGuid]";
             securityContext.Setup(x => x.DemandPermission(It.IsAny<PermissionType>(), It.IsAny<long>()));
             securityContext.Setup(x => x.HasPermission(It.IsAny<PermissionType>())).Returns(true);
             securityContext.Setup(x => x.HasPermission(It.IsAny<PermissionType>(), It.IsAny<long>())).Returns(true);
+
+            ShippingManager.InitializeForCurrentDatabase();
 
             foreach (IInitializeForCurrentDatabase service in mock.Container.Resolve<IEnumerable<IInitializeForCurrentDatabase>>())
             {

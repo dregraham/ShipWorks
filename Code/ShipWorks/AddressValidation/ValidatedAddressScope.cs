@@ -42,7 +42,7 @@ namespace ShipWorks.AddressValidation
             }
             else
             {
-                valueMap.Add(entityId, new Dictionary<string, List<ValidatedAddressEntity>>{ { fieldPrefix, addressList } });
+                valueMap.Add(entityId, new Dictionary<string, List<ValidatedAddressEntity>> { { fieldPrefix, addressList } });
             }
         }
 
@@ -51,6 +51,11 @@ namespace ShipWorks.AddressValidation
         /// </summary>
         public IEnumerable<ValidatedAddressEntity> LoadValidatedAddresses(long entityId, string addressPrefix)
         {
+            if (HasValidatedAddresses(entityId, addressPrefix))
+            {
+                return valueMap[entityId][addressPrefix];
+            }
+
             using (SqlAdapter sqlAdapter = new SqlAdapter())
             {
                 return ValidatedAddressManager.GetSuggestedAddresses(sqlAdapter, entityId, addressPrefix);
@@ -70,7 +75,7 @@ namespace ShipWorks.AddressValidation
         /// </summary>
         public void FlushAddressesToDatabase(IAddressValidationDataAccess dataAccess, long entityId, string prefix)
         {
-            if (!valueMap.ContainsKey(entityId) || !valueMap[entityId].ContainsKey(prefix))
+            if (!HasValidatedAddresses(entityId, prefix))
             {
                 return;
             }
@@ -88,6 +93,14 @@ namespace ShipWorks.AddressValidation
             {
                 valueMap.Remove(entityId);
             }
+        }
+
+        /// <summary>
+        /// Are there validated addresses loaded for the current entityId or prefix?
+        /// </summary>
+        private bool HasValidatedAddresses(long entityId, string prefix)
+        {
+            return valueMap.ContainsKey(entityId) && valueMap[entityId].ContainsKey(prefix);
         }
     }
 }

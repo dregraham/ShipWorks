@@ -17,6 +17,7 @@ using ShipWorks.AddressValidation;
 using ShipWorks.AddressValidation.Enums;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing;
+using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Core.Messaging;
@@ -46,7 +47,6 @@ using ShipWorks.Stores.Content;
 using ShipWorks.Templates.Tokens;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
-using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
 
 namespace ShipWorks.Shipping
 {
@@ -755,11 +755,11 @@ namespace ShipWorks.Shipping
         /// </summary>
         public static RateGroup GetRates(ShipmentEntity shipment, ShipmentType shipmentType)
         {
-            // We're going to confirm the shipping address with the store as some stores may change 
-            // the shipping address depending on the shipping program being used (such as eBay's 
-            // Global Shipping Program), so we want to get rates for the location the package will be shipped                
-            // We want to retain the buyer's address on the original shipment object, so we're going to use 
-            // a cloned shipment to confirm the shipping address with the store. This way the original 
+            // We're going to confirm the shipping address with the store as some stores may change
+            // the shipping address depending on the shipping program being used (such as eBay's
+            // Global Shipping Program), so we want to get rates for the location the package will be shipped
+            // We want to retain the buyer's address on the original shipment object, so we're going to use
+            // a cloned shipment to confirm the shipping address with the store. This way the original
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
                 return lifetimeScope.Resolve<IRatesRetriever>().GetRates(shipment, shipmentType).Value;
@@ -881,7 +881,7 @@ namespace ShipWorks.Shipping
                             }
                             catch (InsureShipException ex)
                             {
-                                // If there was an error voiding the insurance policy, save the exception so we can rethrow at the 
+                                // If there was an error voiding the insurance policy, save the exception so we can rethrow at the
                                 // very end of the voiding process to ensure that any other code for voiding can run
                                 voidInsuranceException = ex;
                             }
@@ -1102,7 +1102,7 @@ namespace ShipWorks.Shipping
                     // Get the ShipmentType instance
                     ShipmentType shipmentType = ShipmentTypeManager.GetType(shipment);
 
-                // A null value returned from the pre-process method means the user has opted to not continue 
+                    // A null value returned from the pre-process method means the user has opted to not continue
                     // processing after a counter rate was selected as the best rate, so the processing of the shipment should be aborted
                     if (shipmentType == null)
                     {
@@ -1123,11 +1123,11 @@ namespace ShipWorks.Shipping
                     log.InfoFormat("Shipment {0}  - Ensuring loaded", shipment.ShipmentID);
                     EnsureShipmentLoaded(shipment);
 
-                	// Update the dyamic data of the shipment
+                    // Update the dyamic data of the shipment
                     shipmentType.UpdateDynamicShipmentData(shipment);
 
                     // Apply the blank recipient phone# option.  We apply it right to the entity so that
-                	// its transparent to all the shipping carrier processing.  But we reset it back 
+                    // its transparent to all the shipping carrier processing.  But we reset it back
                     // after processing, so it doesn't look like that's the phone the customer entered for the shipment.
                     if (shipment.ShipPhone.Trim().Length == 0)
                     {
@@ -1168,19 +1168,19 @@ namespace ShipWorks.Shipping
                             $"Your edition of ShipWorks does not support shipping with '{shipmentType.ShipmentTypeName}'.");
                     }
 
-                	// If they had set this shipment to be a return - we want to make sure it's not processed as one if they switched to something that doesnt support it
+                    // If they had set this shipment to be a return - we want to make sure it's not processed as one if they switched to something that doesnt support it
                     if (!shipmentType.SupportsReturns)
                     {
                         shipment.ReturnShipment = false;
                     }
 
-	                // We're going to allow the store to confirm the shipping address for the shipping label, but we want to 
-	                // make a note of the original shipping address first, so we can reset the address back after the label 
-	                // has been generated. This will result in the customer still being able to see where the package went 
+                    // We're going to allow the store to confirm the shipping address for the shipping label, but we want to
+                    // make a note of the original shipping address first, so we can reset the address back after the label
+                    // has been generated. This will result in the customer still being able to see where the package went
                     // according to the original cart order
                     ShipmentEntity clone = EntityUtility.CloneEntity(shipment);
 
-                	// Instantiate the store class to allow it a chance to confirm the shipping address before 
+                    // Instantiate the store class to allow it a chance to confirm the shipping address before
                     // the shipping label is created. We don't use the method on the ShippingManager to do this
                     // since we want to track the fields that changed.
                     StoreType storeType = StoreTypeManager.GetType(storeEntity);
@@ -1199,7 +1199,7 @@ namespace ShipWorks.Shipping
                     using (SqlAdapter adapter = new SqlAdapter(true))
                     {
                         log.InfoFormat("Shipment {0}  - ShipmentType.Process Start", shipment.ShipmentID);
-                    DateTime shipmentDate;
+                        DateTime shipmentDate;
 
                         ILabelService labelService =
                             lifetimeScope.ResolveKeyed<ILabelService>((ShipmentTypeCode) shipment.ShipmentType);
@@ -1219,7 +1219,7 @@ namespace ShipWorks.Shipping
                             log.InfoFormat("Shipment {0}  - Insure Shipment Complete", shipment.ShipmentID);
                         }
 
-                    // Now that the label is generated, we can reset the shipping fields the store changed back to their 
+                        // Now that the label is generated, we can reset the shipping fields the store changed back to their
                         // original values before saving to the database
                         foreach (ShipmentFieldIndex fieldIndex in fieldsToRestore)
                         {
@@ -1229,7 +1229,7 @@ namespace ShipWorks.Shipping
                         }
 
                         shipment.Processed = true;
-                    	shipment.ProcessedDate = shipmentDate;
+                        shipment.ProcessedDate = shipmentDate;
                         shipment.ProcessedUserID = UserSession.User.UserID;
                         shipment.ProcessedComputerID = UserSession.Computer.ComputerID;
 

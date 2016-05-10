@@ -129,7 +129,7 @@ namespace ShipWorks.UI.Controls.AddressControl
             person.CountryCode = CountryCode;
             person.Email = Email;
             person.Phone = Phone;
-            person.AddressValidationStatus = (int)ValidationStatus;
+            person.AddressValidationStatus = (int) ValidationStatus;
             person.AddressValidationError = ValidationMessage;
             person.AddressValidationSuggestionCount = suggestionCount;
         }
@@ -141,7 +141,7 @@ namespace ShipWorks.UI.Controls.AddressControl
         {
             ValidationMessage = person.AddressValidationError;
             SuggestionCount = person.AddressValidationSuggestionCount;
-            ValidationStatus = (AddressValidationStatusType)person.AddressValidationStatus;
+            ValidationStatus = (AddressValidationStatusType) person.AddressValidationStatus;
 
             lastValidatedAddress = new AddressAdapter();
             person.CopyTo(lastValidatedAddress);
@@ -206,6 +206,8 @@ namespace ShipWorks.UI.Controls.AddressControl
 
             using (messageHelper.ShowProgressDialog("Validating Addresses", "ShipWorks is validating the addresses."))
             {
+                addressValidationSubscriptions?.Dispose();
+
                 long currentEntityId = entityId.Value;
 
                 PersonAdapter personAdapter = new PersonAdapter();
@@ -229,6 +231,8 @@ namespace ShipWorks.UI.Controls.AddressControl
 
                 PopulateAddress(personAdapter);
                 PopulateValidationDetails(personAdapter);
+
+                SetupAddressValidationMessagePropertyHandlers();
             }
         }
 
@@ -246,7 +250,7 @@ namespace ShipWorks.UI.Controls.AddressControl
             PersonAdapter changedPerson = changedAddress.ConvertTo<PersonAdapter>();
 
             PopulateAddress(changedPerson);
-            ValidationStatus = (AddressValidationStatusType)changedPerson.AddressValidationStatus;
+            ValidationStatus = (AddressValidationStatusType) changedPerson.AddressValidationStatus;
 
             SetupAddressValidationMessagePropertyHandlers();
         }
