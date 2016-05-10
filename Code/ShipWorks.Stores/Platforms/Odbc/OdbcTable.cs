@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Common;
 using System.Data.Odbc;
 using log4net;
 
@@ -53,11 +54,11 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// </summary>
         private void Load()
 		{
-            OdbcDataSource dataSource = schema.DataSource;
+            IOdbcDataSource dataSource = schema.DataSource;
 
             Columns = new List<OdbcColumn>();
 
-            using (OdbcConnection connection = dataSource.CreateConnection())
+            using (DbConnection connection = dataSource.CreateConnection())
             {
                 connection.Open();
 

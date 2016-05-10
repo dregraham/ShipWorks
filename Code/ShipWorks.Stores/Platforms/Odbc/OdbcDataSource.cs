@@ -1,6 +1,7 @@
 ﻿using Interapptive.Shared.Utility;
 using System;
 using System.Data;
+using System.Data.Common;
 using System.Data.Odbc;
 using System.Text;
 using Interapptive.Shared.Security;
@@ -12,7 +13,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
     /// <summary>
     /// OdbcDataSource
     /// </summary>
-    public class OdbcDataSource
+    public class OdbcDataSource : IOdbcDataSource
     {
         private readonly IShipWorksDbProviderFactory odbcProvider;
         private readonly IEncryptionProvider encryptionProvider;
@@ -174,7 +175,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// <summary>
         /// Creates a new ODBC Connection
         /// </summary>
-        public OdbcConnection CreateConnection()
+        public DbConnection CreateConnection()
         {
             return new OdbcConnection(ConnectionString);
         }

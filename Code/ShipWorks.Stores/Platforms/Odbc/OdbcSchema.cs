@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Common;
 using System.Data.Odbc;
 using System.Linq;
+using log4net;
 
 namespace ShipWorks.Stores.Platforms.Odbc
 {
@@ -12,12 +14,14 @@ namespace ShipWorks.Stores.Platforms.Odbc
 	public class OdbcSchema
 	{
 	    private readonly OdbcTableFactory tableFactory;
+        private readonly ILog log;
 
         /// <summary>
         /// Constructor
         /// </summary>
-	    public OdbcSchema(OdbcTableFactory tableFactory)
-	    {
+	    public OdbcSchema(Func<Type, ILog> logFactory, OdbcTableFactory tableFactory)
+        {
+            log = logFactory(typeof(OdbcSchema));
 	        this.tableFactory = tableFactory;
 	    }
 
@@ -29,27 +33,27 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// <summary>
         /// The data source where this schema comes from
         /// </summary>
-        public OdbcDataSource DataSource { get; private set; }
+        public IOdbcDataSource DataSource { get; private set; }
 
         /// <summary>
         /// Loads the given Data Source's Schema
         /// </summary>
         /// <param name="dataSource"></param>
-        public void Load(OdbcDataSource dataSource)
+        public void Load(IOdbcDataSource dataSource)
         {
             DataSource = dataSource;
 
             Tables = new List<OdbcTable>();
 
-            using (OdbcConnection connection = DataSource.CreateConnection())
+            using (DbConnection connection = DataSource.CreateConnection())
             {
                 try
                 {
                     connection.Open();
                 }
-                catch (OdbcException ex)
+                catch (DbException ex)
                 {
-                    Console.WriteLine(ex.Message);
+                    log.Error(ex.Message);
                     return;
                 }
 
