@@ -1,4 +1,5 @@
 using System;
+using System.Reflection;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 {
@@ -45,6 +46,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <summary>
         /// The fields display name
         /// </summary>
+        [Obfuscation(Exclude = true)]
 	    public string DisplayName => $"{table.Name} {column.Name}";
     }
 }

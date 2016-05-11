@@ -1,3 +1,4 @@
+using System.Reflection;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Mapping
@@ -36,6 +37,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <summary>
         /// The fields display name
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public string DisplayName { get; }
 	}
 }

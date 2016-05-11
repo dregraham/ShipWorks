@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 {
@@ -15,6 +16,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 
         public List<OdbcFieldMapEntry> Entries { get; }
 
+        [Obfuscation(Exclude = true)]
         public string DisplayName { get; set; }
 
         public string ExternalTableName { get; set; }

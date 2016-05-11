@@ -60,8 +60,6 @@
                       ItemsSource="{Binding Tables}"
                       DisplayMemberPath="Name"
                       SelectedValue="{Binding SelectedTable}" />
-            <Button Grid.Row="1" Grid.Column="2"
-                    Command="{Binding LoadMapCommand}" Content="Load Map" />
         </Grid>
 
         <Grid Grid.Row="1">
@@ -95,7 +93,7 @@
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="100" />
+                        <ColumnDefinition Width="140" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
                     <Border Grid.Row="0" Grid.Column="0"
@@ -108,26 +106,28 @@
                         <Label Content="Source Column"
                        Padding="0" Margin="5"/>
                     </Border>
-                    <ItemsControl Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
-                      ItemsSource="{Binding SelectedFieldMap.Entries, UpdateSourceTrigger=PropertyChanged}">
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate DataType="{x:Type fieldMap:OdbcFieldMapEntry}">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="100" />
-                                        <ColumnDefinition Width="*" />
-                                    </Grid.ColumnDefinitions>
-                                    <Label Grid.Column="0" Content="{Binding ShipWorksField.DisplayName}" />
-                                    <ComboBox Grid.Column="1"
-                                              ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window},
-                                              Path=DataContext.Columns}"
-                                              DisplayMemberPath="Name" HorizontalAlignment="Stretch"
-                                              Margin="0 10 5 0"
-                                              SelectedItem="{Binding ExternalField.Column, UpdateSourceTrigger=PropertyChanged}"/>
-                                </Grid>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
+                    <ScrollViewer Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+                                  VerticalScrollBarVisibility="Auto">
+                        <ItemsControl ItemsSource="{Binding SelectedFieldMap.Entries, UpdateSourceTrigger=PropertyChanged}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate DataType="{x:Type fieldMap:OdbcFieldMapEntry}">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="140" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                        <Label Grid.Column="0" Content="{Binding ShipWorksField.DisplayName}" />
+                                        <ComboBox Grid.Column="1"
+                                                    ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window},
+                                                    Path=DataContext.Columns}"
+                                                    DisplayMemberPath="Name" HorizontalAlignment="Stretch"
+                                                    Margin="0 10 5 0"
+                                                    SelectedItem="{Binding ExternalField.Column, UpdateSourceTrigger=PropertyChanged}"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
                 </Grid>
             </Border>
         </Grid>
