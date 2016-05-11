@@ -139,7 +139,7 @@
                         </ui:ShipWorksComboBox>
 
                         <TextBlock Grid.Column="1" Grid.Row="1" TextWrapping="Wrap">
-                            <Run>Requested shipping:</Run>
+                            <Run>Requested Shipping:</Run>
                             <Run Text="{Binding RequestedShippingMethod}" />
                         </TextBlock>
                     </Grid>
