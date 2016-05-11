@@ -1369,16 +1369,10 @@ namespace ShipWorks.Shipping
             {
                 try
                 {
-                    LicenseActivationHelper.EnsureActive(store);
-
+                    CheckLicense(store);
                     licenseCheckCache[storeID] = null;
                 }
-                catch (ShipWorksLicenseException ex)
-                {
-                    licenseCheckCache[storeID] = ex;
-                    throw;
-                }
-                catch (TangoException ex)
+                catch (ShippingException ex)
                 {
                     licenseCheckCache[storeID] = ex;
                     throw;
