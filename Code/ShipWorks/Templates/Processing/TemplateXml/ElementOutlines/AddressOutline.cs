@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Interapptive.Shared;
+﻿using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Utility;
-using ShipWorks.AddressValidation;
 using ShipWorks.AddressValidation.Enums;
 
 namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
@@ -63,11 +58,21 @@ namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
             AddElement("Email", () => person.Email);
             AddElement("Website", () => person.Website);
 
-            AddElement("AddressValidationStatus", () => ((AddressValidationStatusType)person.AddressValidationStatus).ToString());
-            AddElement("ResidentialStatus", () => ((ValidationDetailStatusType)person.ResidentialStatus).ToString());
-            AddElement("POBox", () => ((ValidationDetailStatusType)person.POBox).ToString());
-            AddElement("USTerritory", () => ((ValidationDetailStatusType)person.USTerritory).ToString());
-            AddElement("MilitaryAddress", () => ((ValidationDetailStatusType)person.MilitaryAddress).ToString());
+            AddElement("AddressValidationStatus",
+                () => EnumHelper.GetDescription((AddressValidationStatusType) person.AddressValidationStatus));
+
+            AddElement("ResidentialStatus", () => GetValidationDetailStatusDesc(person.ResidentialStatus));
+            AddElement("POBox", () => GetValidationDetailStatusDesc(person.POBox));
+            AddElement("USTerritory", () => GetValidationDetailStatusDesc(person.USTerritory));
+            AddElement("MilitaryAddress", () => GetValidationDetailStatusDesc(person.MilitaryAddress));
+        }
+
+        /// <summary>
+        /// Helper function to get address validation status description from an int which correspondes to 
+        /// </summary>
+        private string GetValidationDetailStatusDesc(int statusType)
+        {
+            return EnumHelper.GetDescription((ValidationDetailStatusType) statusType);
         }
 
         /// <summary>
