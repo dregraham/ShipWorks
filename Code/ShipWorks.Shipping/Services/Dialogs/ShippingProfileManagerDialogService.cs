@@ -59,7 +59,7 @@ namespace ShipWorks.Shipping.Services.Dialogs
         /// </summary>
         private void OpenProfileManagerDialog(OpenProfileManagerDialogMessage message)
         {
-            using (ShippingProfileManagerDlg dlg = new ShippingProfileManagerDlg(null))
+            using (ShippingProfileManagerDlg dlg = new ShippingProfileManagerDlg(message.RestrictToShipmentType))
             {
                 dlg.ShowDialog(message.Sender as IWin32Window ?? mainWindow);
             }
