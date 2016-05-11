@@ -496,6 +496,10 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ShipmentType)));
 
             RequestedShippingMethod = loadedOrderSelection.Order?.RequestedShipping;
+            if (string.IsNullOrWhiteSpace(RequestedShippingMethod))
+            {
+                RequestedShippingMethod = "N/A";
+            }
 
             SupportsAccounts = fromShipmentAdapter.SupportsAccounts;
 
