@@ -962,6 +962,64 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
             mock.Mock<IMessenger>().Verify(s => s.Send(It.IsAny<RatesNotSupportedMessage>(), It.IsAny<string>()), Times.Once);
         }
 
+        [Theory]
+        [InlineData(ShipmentTypeCode.Amazon)]
+        [InlineData(ShipmentTypeCode.None)]
+        public void Save_DoesNotDelegateToShipmentViewModelSave_WhenNoneShipmentType_Test(ShipmentTypeCode shipmentTypeCode)
+        {
+            securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>(), It.IsAny<long?>())).Returns(true);
+
+            shipmentEntity.ShipmentTypeCode = shipmentTypeCode;
+            shipmentAdapter.Setup(sa => sa.Shipment).Returns(shipmentEntity);
+
+            Mock<ShipmentViewModel> shipmentViewModel = mock.CreateMock<ShipmentViewModel>();
+
+            mock.Mock<IShippingViewModelFactory>()
+                .SetupSequence(s => s.GetShipmentViewModel(It.IsAny<ShipmentTypeCode>()))
+                .Returns(shipmentViewModel.Object)
+                .Returns(new Mock<ShipmentViewModel>().Object);
+
+            ShippingPanelViewModel testObject = GetViewModelWithLoadedShipment(mock);
+
+            testObject.Save();
+
+            shipmentViewModel.Verify(x => x.Save(), Times.Never());
+        }
+
+        [Theory]
+        [InlineData(ShipmentTypeCode.BestRate)]
+        [InlineData(ShipmentTypeCode.Endicia)]
+        [InlineData(ShipmentTypeCode.Express1Endicia)]
+        [InlineData(ShipmentTypeCode.Express1Usps)]
+        [InlineData(ShipmentTypeCode.FedEx)]
+        [InlineData(ShipmentTypeCode.OnTrac)]
+        [InlineData(ShipmentTypeCode.Other)]
+        [InlineData(ShipmentTypeCode.PostalWebTools)]
+        [InlineData(ShipmentTypeCode.UpsOnLineTools)]
+        [InlineData(ShipmentTypeCode.UpsWorldShip)]
+        [InlineData(ShipmentTypeCode.Usps)]
+        [InlineData(ShipmentTypeCode.iParcel)]
+        public void Save_DoesDelegateToShipmentViewModelSave_WhenShipmentTypeIsNotNone_Test(ShipmentTypeCode shipmentTypeCode)
+        {
+            securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>(), It.IsAny<long?>())).Returns(true);
+
+            shipmentEntity.ShipmentTypeCode = shipmentTypeCode;
+            shipmentAdapter.Setup(sa => sa.Shipment).Returns(shipmentEntity);
+
+            Mock<ShipmentViewModel> shipmentViewModel = mock.CreateMock<ShipmentViewModel>();
+
+            mock.Mock<IShippingViewModelFactory>()
+                .SetupSequence(s => s.GetShipmentViewModel(It.IsAny<ShipmentTypeCode>()))
+                .Returns(shipmentViewModel.Object)
+                .Returns(new Mock<ShipmentViewModel>().Object);
+
+            ShippingPanelViewModel testObject = GetViewModelWithLoadedShipment(mock);
+
+            testObject.Save();
+
+            shipmentViewModel.Verify(x => x.Save(), Times.Once);
+        }
+        
         private ShippingPanelViewModel GetShippingPanelViewModelWithLoadedOrder(List<ICarrierShipmentAdapter> shipmentAdapters)
         {
             ShippingPanelViewModel shippingPanelViewModel = mock.Create<ShippingPanelViewModel>();

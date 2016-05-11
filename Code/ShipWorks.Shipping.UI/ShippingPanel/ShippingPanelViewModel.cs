@@ -372,7 +372,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// </summary>
         public void Save()
         {
-            if (ShipmentAdapter?.Shipment == null || ShipmentAdapter.Shipment.Processed || LoadedShipmentResult != ShippingPanelLoadedShipmentResult.Success)
+            if (ShipmentAdapter?.Shipment == null || ShipmentAdapter.Shipment.Processed || LoadedShipmentResult != ShippingPanelLoadedShipmentResult.Success ||
+                ShipmentAdapter.Shipment.ShipmentTypeCode == ShipmentTypeCode.None)
             {
                 return;
             }
