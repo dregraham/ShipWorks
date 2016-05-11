@@ -45,9 +45,15 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.OnTrac
 
             var testObject = context.Mock.Create<OnTracShipmentType>();
 
+            // Check both values so that we catch incorrect carrier setting 
+            //(i.e. the shipment type is using UPSInsuranceProvider instead of iParcel.  Yes, this happened.)
+            context.UpdateShippingSetting(x => x.OnTracInsuranceProvider = (int)InsuranceProvider.Carrier);
             testObject.UpdateDynamicShipmentData(shipment);
+            Assert.Equal((int)InsuranceProvider.Carrier, shipment.InsuranceProvider);
 
-            Assert.Equal((int) InsuranceProvider.ShipWorks, shipment.InsuranceProvider);
+            context.UpdateShippingSetting(x => x.OnTracInsuranceProvider = (int)InsuranceProvider.ShipWorks);
+            testObject.UpdateDynamicShipmentData(shipment);
+            Assert.Equal((int)InsuranceProvider.ShipWorks, shipment.InsuranceProvider);
         }
 
         [Fact]

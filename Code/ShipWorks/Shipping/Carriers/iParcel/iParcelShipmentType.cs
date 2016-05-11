@@ -380,7 +380,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             // We're setting this once to avoid marking the entity as dirty
             shipment.InsuranceProvider = shipment.IParcel.Packages.Count > 1 ?
                 (int) InsuranceProvider.Carrier :
-                settings.UpsInsuranceProvider;
+                settings.IParcelInsuranceProvider;
 
             // Check the IParcel wide PennyOne settings and get them updated
             foreach (var package in shipment.IParcel.Packages)

@@ -46,9 +46,15 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Usps
 
             var testObject = context.Mock.Create<UspsShipmentType>();
 
+            // Check both values so that we catch incorrect carrier setting 
+            //(i.e. the shipment type is using UPSInsuranceProvider instead of iParcel.  Yes, this happened.)
+            context.UpdateShippingSetting(x => x.UspsInsuranceProvider = (int)InsuranceProvider.Carrier);
             testObject.UpdateDynamicShipmentData(shipment);
+            Assert.Equal((int)InsuranceProvider.Carrier, shipment.InsuranceProvider);
 
-            Assert.Equal((int) InsuranceProvider.Carrier, shipment.InsuranceProvider);
+            context.UpdateShippingSetting(x => x.UspsInsuranceProvider = (int)InsuranceProvider.ShipWorks);
+            testObject.UpdateDynamicShipmentData(shipment);
+            Assert.Equal((int)InsuranceProvider.ShipWorks, shipment.InsuranceProvider);
         }
 
         [Fact]

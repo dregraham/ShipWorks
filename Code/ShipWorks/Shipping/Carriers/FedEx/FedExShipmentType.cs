@@ -809,7 +809,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // We're setting this once to avoid marking the entity as dirty
             shipment.InsuranceProvider = shipment.FedEx.Packages.Count > 1 ?
                 (int) InsuranceProvider.Carrier :
-                settings.UpsInsuranceProvider;
+                settings.FedExInsuranceProvider;
 
             shipment.RequestedLabelFormat = shipment.FedEx.RequestedLabelFormat;
 
