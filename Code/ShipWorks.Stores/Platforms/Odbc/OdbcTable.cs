@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
+using Interapptive.Shared.Utility;
 using log4net;
 
 namespace ShipWorks.Stores.Platforms.Odbc
@@ -19,7 +20,10 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// Constructor
         /// </summary>
 		public OdbcTable(IOdbcSchema schema, string tableName, ILog log)
-	    {
+        {
+            MethodConditions.EnsureArgumentIsNotNull(schema);
+            MethodConditions.EnsureArgumentIsNotNull(log);
+
 	        this.schema = schema;
             Name = tableName;
             this.log = log;
@@ -62,7 +66,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
                 catch (DbException ex)
                 {
                     log.Error(ex.Message);
-                    throw new ShipWorksOdbcException($"An error occurred while attempting to open a connection to {schema.DataSource.Name}", ex);
+                    throw new ShipWorksOdbcException($"An error occurred while attempting to open a connection to {schema.DataSource.Name}.", ex);
                 }
 
                 string[] restriction =
