@@ -25,7 +25,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
 
             ExternalOdbcMappableField testObject = new ExternalOdbcMappableField(table.Object, column);
 
-            Assert.Equal("TableName.ColumnName", testObject.QualifiedName);
+            Assert.Equal("TableName.ColumnName", testObject.GetQualifiedName());
         }
 
         [Fact]
