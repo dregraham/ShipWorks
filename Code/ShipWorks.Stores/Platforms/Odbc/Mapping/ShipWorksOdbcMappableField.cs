@@ -12,10 +12,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 			throw new NotImplementedException();
 		}
 
-		public string GetQualifiedName()
-		{
-			throw new NotImplementedException();
-		}
+		public string QualifiedName { get; }
 
 		public string Value
 		{

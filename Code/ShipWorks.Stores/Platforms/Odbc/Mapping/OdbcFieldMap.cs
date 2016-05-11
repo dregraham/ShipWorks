@@ -7,16 +7,19 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 	public class OdbcFieldMap
 	{
 		private IOdbcFieldMapIOFactory ioFactory;
-		List<OdbcFieldMapEntry> entries;
 
 		public OdbcFieldMap(IOdbcFieldMapIOFactory ioFactory)
 		{
-			throw new NotImplementedException();
+
 		}
 
-		public void AddEntry(OdbcFieldMapEntry entry)
+        public List<OdbcFieldMapEntry> Entries { get; }
+
+        public string DisplayName { get; set; }
+
+        public void AddEntry(OdbcFieldMapEntry entry)
 		{
-			throw new NotImplementedException();
+			Entries.Add(entry);
 		}
 
 		public void Load(Stream stream)

@@ -193,6 +193,10 @@
     <Compile Include="Platforms\Odbc\OdbcDataSourceControl.Designer.cs">
       <DependentUpon>OdbcDataSourceControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Platforms\Odbc\OdbcImportFieldMappingDlg.xaml.cs">
+      <DependentUpon>OdbcImportFieldMappingDlg.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Platforms\Odbc\OdbcImportFieldMappingDlgViewModel.cs" />
     <Compile Include="Platforms\Odbc\OdbcStoreModule.cs" />
     <Compile Include="Platforms\Odbc\WizardPages\OdbcDataSourcePage.cs">
       <SubType>UserControl</SubType>
@@ -301,6 +305,10 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Page Include="Platforms\Odbc\OdbcImportFieldMappingDlg.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>  
     <Page Include="Platforms\SparkPay\WizardPages\SparkPayAccountControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

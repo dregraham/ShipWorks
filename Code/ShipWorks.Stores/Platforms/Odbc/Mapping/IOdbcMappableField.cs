@@ -8,7 +8,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <summary>
         /// Gets the qualified name for the field - [table].[column]
         /// </summary>
-        string GetQualifiedName();
+        string QualifiedName { get; }
 
         /// <summary>
         /// The fields value
