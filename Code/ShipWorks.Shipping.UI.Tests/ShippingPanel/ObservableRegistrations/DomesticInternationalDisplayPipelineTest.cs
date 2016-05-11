@@ -36,45 +36,18 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
             viewModel.Verify(x => x.UpdateServices(), Times.Never);
         }
 
-        [Fact]
-        public void Register_GetsDomesticStatusFromAdapter_WhenOriginCountryChanges() =>
-            VerifyGetsDomesticStatusFromAdapterForPropertyChange(x => x.Origin.CountryCode = "UK");
-
-        [Fact]
-        public void Register_GetsDomesticStatusFromAdapter_WhenOriginPostalCodeChanges() =>
-            VerifyGetsDomesticStatusFromAdapterForPropertyChange(x => x.Origin.PostalCode = "12345");
-
-        [Fact]
-        public void Register_GetsDomesticStatusFromAdapter_WhenOriginStateProvCodeChanges() =>
-            VerifyGetsDomesticStatusFromAdapterForPropertyChange(x => x.Origin.StateProvCode = "IL");
-
-        [Fact]
-        public void Register_GetsDomesticStatusFromAdapter_WhenDestinationCountryChanges() =>
-            VerifyGetsDomesticStatusFromAdapterForPropertyChange(x => x.Destination.CountryCode = "UK");
-
-        [Fact]
-        public void Register_GetsDomesticStatusFromAdapter_WhenDestinationPostalCodeChanges() =>
-            VerifyGetsDomesticStatusFromAdapterForPropertyChange(x => x.Destination.PostalCode = "12345");
-
-        [Fact]
-        public void Register_GetsDomesticStatusFromAdapter_WhenDestinationStateProvCodeChanges() =>
-            VerifyGetsDomesticStatusFromAdapterForPropertyChange(x => x.Destination.StateProvCode = "IL");
-
         [Theory]
         [InlineData(false, "International")]
         [InlineData(true, "Domestic")]
-        public void Register_SetsTextCorrectly_DependingOnIsDomestic(bool isDomestic, string text)
+        public void Register_SetsTextCorrectly_DependingOnIsDomestic(bool isDomestic, string expectedText)
         {
-            var viewModel = mock.CreateMock<ShippingPanelViewModel>(s => s.Setup(x => x.IsDomestic).Returns(isDomestic)).Object;
+            var viewModel = mock.Create<ShippingPanelViewModel>();
             var testObject = mock.Create<DomesticInternationalDisplayPipeline>();
             testObject.Register(viewModel);
 
-            viewModel.Origin.CountryCode = "UK";
+            viewModel.IsDomestic = isDomestic;
 
-            testScheduler.Default.AdvanceBy(TimeSpan.FromMilliseconds(250).Ticks);
-            testScheduler.Dispatcher.Start();
-
-            Assert.Equal(text, viewModel.DomesticInternationalText);
+            Assert.Equal(expectedText, viewModel.DomesticInternationalText);
         }
 
         [Fact]
@@ -95,20 +68,6 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
             testScheduler.Default.AdvanceBy(TimeSpan.FromMilliseconds(250).Ticks);
 
             viewModel.Verify(x => x.UpdateServices(), Times.Never);
-        }
-
-        private void VerifyGetsDomesticStatusFromAdapterForPropertyChange(Action<ShippingPanelViewModel> changeProperty)
-        {
-            var viewModel = mock.CreateMock<ShippingPanelViewModel>(s => s.Setup(x => x.IsDomestic).Verifiable()).Object;
-            var testObject = mock.Create<DomesticInternationalDisplayPipeline>();
-            testObject.Register(viewModel);
-
-            changeProperty(viewModel);
-
-            testScheduler.Default.AdvanceBy(TimeSpan.FromMilliseconds(250).Ticks);
-            testScheduler.Dispatcher.Start();
-
-            mock.VerifyAll = true;
         }
 
         public void Dispose()
