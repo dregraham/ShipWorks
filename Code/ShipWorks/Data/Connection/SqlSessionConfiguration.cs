@@ -9,6 +9,7 @@ using System.IO;
 using System.Text;
 using System.Xml;
 using System.Xml.XPath;
+using Interapptive.Shared.Security;
 using ShipWorks.ApplicationCore.ExecutionMode;
 
 

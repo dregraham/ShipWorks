@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using System.IO;
 using log4net;
@@ -12,13 +11,12 @@ using Interapptive.Shared.Utility;
 using ShipWorks.Users;
 using System.Xml.Linq;
 using Microsoft.Win32;
-using ShipWorks.ApplicationCore;
-using System.Reflection;
 using System.Diagnostics;
 using System.ComponentModel;
 using ShipWorks.ApplicationCore.Interaction;
 using NDesk.Options;
 using Interapptive.Shared;
+using Interapptive.Shared.Security;
 
 namespace ShipWorks.Data.Administration.UpdateFrom2x.Configuration
 {
@@ -33,7 +31,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Configuration
         static string shipworks2xUninstallID = "ShipWorks_is1";
 
         /// <summary>
-        /// Migrate 2x configuration to the new proper location and format if present.  If the application needs to terminate b\c 
+        /// Migrate 2x configuration to the new proper location and format if present.  If the application needs to terminate b\c
         /// migration could not complete, false is returned
         /// </summary>
         public static bool MigrateIfRequired(IWin32Window owner)
@@ -49,12 +47,12 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Configuration
             // b\c we know we were installed on top.  If the pre24 one exists we only do it if we havnt done it already, since it's in a common location.  So if you had another 2.3 installed
             // and ran it, that sqlsession file would come right back.
             if (
-                   File.Exists(dataPaths.Post24SqlSessionFile) 
+                   File.Exists(dataPaths.Post24SqlSessionFile)
 
                    ||
 
                    (
-                        File.Exists(dataPaths.Pre24SqlSessionFile) && 
+                        File.Exists(dataPaths.Pre24SqlSessionFile) &&
                         startupPathIsLastInstall &&
                         ConfigurationMigrationState.Action == ConfigurationMigrationAction.None
                     )
@@ -136,8 +134,8 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Configuration
             try
             {
                 Process process = new Process();
-                process.StartInfo = new ProcessStartInfo(Application.ExecutablePath, string.Format("/command:migrateconfig2x -path:\"{0}\" {1} {2}", 
-                    installPath.TrimEnd('\\'), 
+                process.StartInfo = new ProcessStartInfo(Application.ExecutablePath, string.Format("/command:migrateconfig2x -path:\"{0}\" {1} {2}",
+                    installPath.TrimEnd('\\'),
                     cleanupInstance ? "-cleaninstance" : "",
                     cleanupCommon ? "-cleancommon" : ""));
 
@@ -258,7 +256,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Configuration
                     // If the path we are migrating from is not the one we are installed in, get rid of the old ShipWorks
                     if (!PathUtility.IsSamePath(dataPaths.InstallPath, Application.StartupPath))
                     {
-                        log.InfoFormat("Deleting old ShipWorks installation path"); 
+                        log.InfoFormat("Deleting old ShipWorks installation path");
 
                         DeleteOldInstallPath(dataPaths.InstallPath, dataPaths.ApplicationData);
                     }
@@ -266,7 +264,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Configuration
 
                 if (cleanupCommon)
                 {
-                    // For 2.3 - 
+                    // For 2.3 -
                     //   sqlsession.xml
                     //   preferences.xml
                     // For 2.4
@@ -323,7 +321,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Configuration
                 log.Info("Copying pre 3.0 sql session to new location.");
                 File.Copy(dataPaths.Post24SqlSessionFile, SqlSessionConfiguration.SettingsFile);
 
-                // See if the config file is there to pull app-data out of 
+                // See if the config file is there to pull app-data out of
                 string oldConfiguration = Path.Combine(dataPaths.Configuration, "configuration.xml");
                 if (File.Exists(oldConfiguration))
                 {

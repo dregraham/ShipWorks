@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using Interapptive.Shared.Collections;
+using Interapptive.Shared.Threading;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using log4net;
@@ -11,7 +12,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Windows.Forms;
-using Interapptive.Shared.Threading;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc
 {
@@ -37,8 +37,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// <summary>
         /// Gets the selected data source.
         /// </summary>
-        private OdbcDataSource SelectedDataSource =>
-            dataSource.SelectedItem as OdbcDataSource;
+        private OdbcDataSource SelectedDataSource => dataSource.SelectedItem as OdbcDataSource;
 
         /// <summary>
         /// Tests the connection.
@@ -73,16 +72,53 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// <summary>
         /// Saves the connection string to the OdbcStoreEntity
         /// </summary>
-        public void SaveToEntity(OdbcStoreEntity store) =>
-            store.ConnectionString = SelectedDataSource.ConnectionString;
+        public void SaveToEntity(OdbcStoreEntity store)
+        {
+            if (SelectedDataSource == null)
+            {
+                MessageHelper.ShowError(this, "You must add a datasource to continue.");
+                return;
+            }
+
+            try
+            {
+                store.ConnectionString = SelectedDataSource.Serialize();
+            }
+            catch (Exception ex)
+            {
+                log.Error(ex);
+                MessageHelper.ShowError(this, "An error occurred while trying to save the data source.");
+            }
+        }
+
 
         /// <summary>
         /// Sets the selected data source
         /// </summary>
         private void SelectedDataSourceChanged(object sender, EventArgs e)
         {
+            UpdatePanelVisibility();
+
             username.Text = SelectedDataSource?.Username ?? string.Empty;
             password.Text = SelectedDataSource?.Password ?? string.Empty;
+            customConnectionString.Text = SelectedDataSource?.ConnectionString ?? string.Empty;
+        }
+
+        /// <summary>
+        /// Updates which panels are visible based on the selected data source
+        /// </summary>
+        private void UpdatePanelVisibility()
+        {
+            if (SelectedDataSource.IsCustom)
+            {
+                customPanel.Show();
+                credentialsPanel.Hide();
+            }
+            else
+            {
+                customPanel.Hide();
+                credentialsPanel.Show();
+            }
         }
 
         /// <summary>
@@ -107,7 +143,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             {
                 dataSource.DataSource = null;
 
-                log.Warn("No datasources found in IOdbcDataSourceRepository");
+                log.Warn("No data sources found in IOdbcDataSourceRepository");
                 MessageHelper.ShowWarning(ParentForm, $"ShipWorks could not find any ODBC data sources. {Environment.NewLine} " +
                                                 "Please add one to continue.");
             }
@@ -115,14 +151,13 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             {
                 BindDataSources(dataSourceResult.Context);
             }
-
         }
 
         /// <summary>
         /// Binds dataSources to the dataSource combobox.
         /// </summary>
         /// <remarks>
-        /// If we can find the previously selected data source in the list of new data sources, 
+        /// If we can find the previously selected data source in the list of new data sources,
         /// we select it and populate any previous username and password.
         /// </remarks>
         private void BindDataSources(List<OdbcDataSource> dataSources)
@@ -137,18 +172,19 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
                 OdbcDataSource matchedDataSource = dataSources.FirstOrDefault(d => d.Name == currentDataSource.Name);
                 if (matchedDataSource != null)
                 {
-                    // Previously selected datasource found. Select it and set the datasources username and password
+                    // Previously selected datasource found.
                     dataSource.SelectedItem = matchedDataSource;
-                    matchedDataSource.Username = username.Text;
-                    matchedDataSource.Password = password.Text;
                 }
                 else
                 {
                     // Previous datasource not found. Clear out username and password.
                     username.Text = string.Empty;
                     password.Text = string.Empty;
+                    customConnectionString.Text = string.Empty;
                 }
             }
+
+            UpdatePanelVisibility();
         }
 
         /// <summary>
@@ -163,10 +199,9 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
 
             using (ILifetimeScope scope = IoC.BeginLifetimeScope())
             {
-                IOdbcDataSourceRepository repo = scope.Resolve<IOdbcDataSourceRepository>();
-
                 try
                 {
+                    IOdbcDataSourceRepository repo = scope.Resolve<IOdbcDataSourceRepository>();
                     genericResult = new GenericResult<List<OdbcDataSource>>(repo.GetDataSources().ToList())
                     {
                         Success = true
@@ -190,18 +225,45 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// Called when leaving the username
         /// </summary>
         private void OnLeaveUsername(object sender, EventArgs e) =>
-            SelectedDataSource.Username = username.Text;
+            SelectedDataSource.ChangeConnection(SelectedDataSource.Name, username.Text, SelectedDataSource.Password);
 
         /// <summary>
         /// Called when leaving password
         /// </summary>
         private void OnLeavePassword(object sender, EventArgs e) =>
-            SelectedDataSource.Password = password.Text;
+            SelectedDataSource.ChangeConnection(SelectedDataSource.Name, SelectedDataSource.Username, password.Text);
+
+        /// <summary>
+        /// Called when leaving customConnectionString
+        /// </summary>
+        private void OnCustomConnectionString(object sender, EventArgs e) =>
+            SelectedDataSource.ChangeConnection(customConnectionString.Text);
 
         /// <summary>
         /// Called when [click add data source].
         /// </summary>
-        private void OnClickAddDataSource(object sender, EventArgs e) => 
-            odbcControlPanel.Value.Launch(RefreshDataSources);
+        private void OnClickAddDataSource(object sender, EventArgs e)
+        {
+            try
+            {
+                odbcControlPanel.Value.Launch(RefreshDataSources);
+            }
+            catch (Exception ex)
+            {
+                log.Error(ex);
+                MessageHelper.ShowError(this, "An error occurred while trying to open ODBC control panel.");
+            }
+        }
+
+        /// <summary>
+        /// Called when [click test data source]
+        /// </summary>
+        private void OnTestConnection(object sender, EventArgs e)
+        {
+            if (TestConnection())
+            {
+                MessageHelper.ShowMessage(this, "Connection to the ODBC data source was successful!");
+            }
+        }
     }
 }

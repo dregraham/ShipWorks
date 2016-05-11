@@ -12,6 +12,38 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
     public class OdbcDatasourceRepositoryTest
     {
         [Fact]
+        public void GetDataSources_DelegatesToDsnProviderForDataSourceNames()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                Mock<IDsnProvider> dsnProvider = mock.Mock<IDsnProvider>();
+                dsnProvider.Setup(p => p.GetDataSourceNames())
+                    .Returns(new[] { "blah" });
+
+                OdbcDataSourceRepository repo = mock.Create<OdbcDataSourceRepository>();
+                repo.GetDataSources();
+
+                dsnProvider.Verify(d => d.GetDataSourceNames(), Times.Once);
+            }
+        }
+
+        [Fact]
+        public void GetDataSources_ReturnsDataSourceProviders_WithOnlyOneCustomDataSource()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                Mock<IDsnProvider> dsnProvider = mock.Mock<IDsnProvider>();
+                dsnProvider.Setup(p => p.GetDataSourceNames())
+                    .Returns(new[] { "blah" });
+
+                var testObject = mock.Create<OdbcDataSourceRepository>();
+                var odbcDataSources = testObject.GetDataSources();
+
+                Assert.Equal(1, odbcDataSources.Count(d => d.IsCustom));
+            }
+        }
+
+        [Fact]
         public void GetDataSources_ReturnsDataSourceProviders_WithNamesFromDsnProvider()
         {
             using (var mock = AutoMock.GetLoose())
@@ -22,12 +54,14 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
 
                 var testObject = mock.Create<OdbcDataSourceRepository>();
                 var odbcDataSources = testObject.GetDataSources();
-                Assert.Equal("blah", odbcDataSources.Single().Name);
+                OdbcDataSource dataSource = odbcDataSources.First(d => d.Name == "blah");
+
+                Assert.Equal("blah", dataSource.Name);
             }
         }
 
         [Fact]
-        public void GetDataSources_ReturnsCollectionOfFiveDataSources_WhenGetNextDsnNameReturnsFiveDsns()
+        public void GetDataSources_ReturnsCollectionOfFiveDataSourcesPlusCustom_WhenGetNextDsnNameReturnsFiveDsns()
         {
             using (var mock = AutoMock.GetLoose())
             {
@@ -37,7 +71,8 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
 
                 var testObject = mock.Create<OdbcDataSourceRepository>();
                 var odbcDataSources = testObject.GetDataSources();
-                Assert.Equal(5, odbcDataSources.Count());
+
+                Assert.Equal(6, odbcDataSources.Count());
             }
         }
 
@@ -51,6 +86,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
                     .Throws(new DataException());
 
                 var testObject = mock.Create<OdbcDataSourceRepository>();
+
                 Assert.Throws<DataException>(() => testObject.GetDataSources());
             }
         }

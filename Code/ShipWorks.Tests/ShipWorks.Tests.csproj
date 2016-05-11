@@ -237,6 +237,7 @@
     <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\Ups\UpsSurePostRestrictionTest.cs" />
     <Compile Include="ApplicationCore\Licensing\GetActiveStoresResponseTest.cs" />
     <Compile Include="ApplicationCore\Licensing\LicenseCapabilitiesTest.cs" />
+    <Compile Include="ApplicationCore\Licensing\LicenseCipherKeyTest.cs" />
     <Compile Include="ApplicationCore\Licensing\LicenseEnforcement\ApproachingShipmentLimitEnforcerTest.cs" />
     <Compile Include="ApplicationCore\Licensing\LicenseEnforcement\ChannelSyncEnforcerTest.cs" />
     <Compile Include="ApplicationCore\Licensing\LicenseEnforcement\ChannelCountEnforcerTest.cs" />
@@ -244,12 +245,14 @@
     <Compile Include="ApplicationCore\Licensing\LicenseEnforcement\ExceedingChannelLimitEnforcerTest.cs" />
     <Compile Include="ApplicationCore\Licensing\LicenseEnforcement\ExceedingShipmentLimitEnforcerTest.cs" />
     <Compile Include="ApplicationCore\Licensing\LicenseServiceTest.cs" />
-    <Compile Include="ApplicationCore\Licensing\LicenseEncryptionProviderTest.cs" />
     <Compile Include="ApplicationCore\Licensing\StoreLicenseTest.cs" />
     <Compile Include="ApplicationCore\Nudges\NudgeDeserializerTest.cs" />
     <Compile Include="ApplicationCore\Nudges\NudgeOptionDeserializerTest.cs" />
     <Compile Include="ApplicationCore\Nudges\NudgeOptionTest.cs" />
     <Compile Include="ApplicationCore\Nudges\NudgeTest.cs" />
+    <Compile Include="ApplicationCore\Security\EncryptionProviderFactoryTest.cs" />
+    <Compile Include="ApplicationCore\Security\AesEncryptionProviderTest.cs" />
+    <Compile Include="ApplicationCore\Security\LicenseEncryptionProviderTest.cs" />
     <Compile Include="Core\AssemblyDateTests.cs" />
     <Compile Include="Core\Certificates\ClientCertificateTests.cs" />
     <Compile Include="Core\EnumTest.cs" />
@@ -496,6 +499,9 @@
     <Compile Include="Shipping\Carriers\UPS\InvoiceRegistration\Api\Request\Manipulators\UpsInvoiceRegistrationInvoiceInfoManipulatorTest.cs" />
     <Compile Include="Shipping\Carriers\UPS\InvoiceRegistration\Api\Response\Manipulators\UpsSaveCredentialsManipulatorTest.cs" />
     <Compile Include="Shipping\Carriers\UPS\InvoiceRegistration\Api\Response\UpsInvoiceRegistrationResponseTest.cs" />
+    <Compile Include="Shipping\Carriers\UPS\LinkNewAccount\Request\Manipulators\UpsLinkNewAccountInfoManipulatorTest.cs" />
+    <Compile Include="Shipping\Carriers\UPS\LinkNewAccount\Request\UpsLinkNewAccountToProfileRequestTest.cs" />
+    <Compile Include="Shipping\Carriers\UPS\LinkNewAccount\Response\Manipulators\UpsLinkNewAccountToProfileResponseTest.cs" />
     <Compile Include="Shipping\Carriers\UPS\OnLineTools\Api\ElementWriters\UpsRatePackageServiceOptionsElementWriterTests.cs" />
     <Compile Include="Shipping\Carriers\UPS\OnLineTools\Api\ElementWriters\UpsPackageServiceOptionsElementWriterTests.cs" />
     <Compile Include="Shipping\Carriers\UPS\OnLineTools\Api\UpsApiCoreTest.cs" />
@@ -594,6 +600,7 @@
     <Compile Include="Stores\NoMoreRack\IdentifierTests.cs" />
     <Compile Include="Stores\PayPal\ExceptionSerializationTests.cs" />
     <Compile Include="Stores\Platforms\GenericModule\GenericStoreStatusCodeProviderTest.cs" />
+    <Compile Include="Stores\Sears\SearsUtilityTest.cs" />
     <Compile Include="Stores\Shopify\IdentifierTests.cs" />
     <Compile Include="Stores\Volusion\VolusionWebClientTest.cs" />
     <Compile Include="Stores\Yahoo\YahooEmailOnlineUpdaterTest.cs" />

@@ -26,6 +26,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                 ratingField.ShipmentFields.Add(BestRateShipmentFields.DimsLength);
                 ratingField.ShipmentFields.Add(BestRateShipmentFields.DimsWidth);
                 ratingField.ShipmentFields.Add(BestRateShipmentFields.DimsWeight);
+                ratingField.ShipmentFields.Add(BestRateShipmentFields.ServiceLevel);
 
                 return ratingField;
             }

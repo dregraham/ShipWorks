@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Windows.Forms;
-using Autofac.Features.OwnedInstances;
+﻿using Autofac.Features.OwnedInstances;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Editions;
 using ShipWorks.Stores;
 using ShipWorks.Users;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows.Forms;
 
 namespace ShipWorks.ApplicationCore.Licensing
 {
@@ -17,7 +17,7 @@ namespace ShipWorks.ApplicationCore.Licensing
     /// </summary>
     public class LicenseService : ILicenseService
     {
-        private readonly ICustomerLicenseReader reader;
+        private readonly Func<ICustomerLicenseReader> reader;
         private readonly Func<string, ICustomerLicense> customerLicenseFactory;
         private readonly Func<StoreEntity, StoreLicense> storeLicenseFactory;
         private readonly IStoreManager storeManager;
@@ -28,7 +28,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Constructor
         /// </summary>
-        public LicenseService(ICustomerLicenseReader reader, Func<string, ICustomerLicense> customerLicenseFactory,
+        public LicenseService(Func<ICustomerLicenseReader> reader, Func<string, ICustomerLicense> customerLicenseFactory,
             Func<StoreEntity, StoreLicense> storeLicenseFactory, IStoreManager storeManager, Func<Owned<IUserSession>> getUserSession)
         {
             this.reader = reader;
@@ -42,10 +42,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// Customer Key read from the reader.
         /// </summary>
         /// <exception cref="EncryptionException"></exception>
-        private string CustomerKey
-        {
-            get { return reader.Read(); }
-        }
+        private string CustomerKey => reader().Read();
 
         /// <summary>
         /// True if Legacy Customer

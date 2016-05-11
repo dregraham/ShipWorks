@@ -1,4 +1,6 @@
 ﻿using Autofac;
+using Interapptive.Shared.Security;
+using ShipWorks.ApplicationCore.Security;
 using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Stores.UI.Platforms.Odbc.WizardPages;
 using ShipWorks.UI.Wizard;
@@ -30,6 +32,11 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
 
             builder.RegisterType<OdbcControlPanel>()
                 .AsImplementedInterfaces();
+
+            builder.RegisterType<OdbcDataSource>();
+
+            builder.RegisterType<OdbcCipherKey>()
+                .Keyed<ICipherKey>(CipherContext.Odbc);
         }
     }
 }

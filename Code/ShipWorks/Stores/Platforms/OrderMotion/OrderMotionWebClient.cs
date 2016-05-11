@@ -1,22 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.OrderMotion.Udi;
 using System.IO;
 using System.Xml;
 using Interapptive.Shared.Net;
-using System.Net;
 using System.Xml.XPath;
 using ShipWorks.ApplicationCore.Logging;
 using System.Globalization;
-using ShipWorks.Shipping;
+using Interapptive.Shared.Security;
 using log4net;
 using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
-using ShipWorks.Shipping.Carriers.UPS;
-using ShipWorks.Shipping.Carriers.UPS.Enums;
 
 namespace ShipWorks.Stores.Platforms.OrderMotion
 {

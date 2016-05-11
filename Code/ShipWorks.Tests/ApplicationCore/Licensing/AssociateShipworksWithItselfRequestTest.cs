@@ -1,7 +1,6 @@
 ﻿using Autofac.Extras.Moq;
 using Interapptive.Shared.Business;
 using Moq;
-using ShipWorks.AddressValidation;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
@@ -13,7 +12,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
 {
     public class AssociateShipworksWithItselfRequestTest : IDisposable
     {
-        AutoMock mock; 
+        AutoMock mock;
 
         public AssociateShipworksWithItselfRequestTest()
         {
@@ -29,9 +28,9 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
                 {
                     IsSuccessfulMatch = true
                 });
-            
+
             var testObject = mock.Create<AssociateShipworksWithItselfRequest>();
-         
+
             testObject.PhysicalAddress = new PersonAdapter();
 
             testObject.Execute();
@@ -43,7 +42,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
         public void Execute_DontDelegateToValidateAddress_NoPhysicalAddress()
         {
             var webClient = mock.Mock<IUspsWebClient>();
- 
+
             var testObject = mock.Create<AssociateShipworksWithItselfRequest>();
 
             testObject.Execute();

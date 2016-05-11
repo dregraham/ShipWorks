@@ -44,8 +44,11 @@ namespace ShipWorks.Stores.Platforms.Odbc
                 process = Process.Start("odbcad32");
 
                 // wire up the exited events
-                process.EnableRaisingEvents = true;
-                process.Exited += OnExited;
+                if (process != null)
+                {
+                    process.EnableRaisingEvents = true;
+                    process.Exited += OnExited;
+                }
             }
             catch (Exception ex) when (ex.GetType() == typeof(FileNotFoundException) || ex.GetType() == typeof(Win32Exception))
             {

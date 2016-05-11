@@ -1,11 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
 using ShipWorks.Data.Model.EntityClasses;
-using Interapptive.Shared.Utility;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
 using System.Linq;
+using Interapptive.Shared.Security;
 
 namespace ShipWorks.Stores.Content
 {

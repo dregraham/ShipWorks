@@ -1,4 +1,4 @@
-using Interapptive.Shared.Utility;
+using Interapptive.Shared.Security;
 using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;

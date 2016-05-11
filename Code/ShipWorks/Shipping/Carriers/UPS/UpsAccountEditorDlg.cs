@@ -1,17 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data;
 using ShipWorks.Shipping.Carriers.Api;
-using ShipWorks.UI;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Shipping.Carriers.UPS.Enums;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.UI;
 
@@ -22,7 +13,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
     /// </summary>
     public partial class UpsAccountEditorDlg : Form
     {
-        UpsAccountEntity account;
+        private UpsAccountEntity account;
 
         /// <summary>
         /// Constructor
@@ -39,7 +30,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
         private void OnLoad(object sender, EventArgs e)
         {
             accountNumber.Text = account.AccountNumber;
-
             personControl.LoadEntity(new PersonAdapter(account, ""));
 
             if (account.Description != UpsAccountManager.GetDefaultDescription(account))
@@ -66,47 +56,63 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// </summary>
         private void OnOK(object sender, EventArgs e)
         {
+            if (!ValidateFields())
+            {
+                return;
+            }
+
+            UpdateAccountDescription();
             personControl.SaveToEntity();
 
-            if (account.FirstName.Length == 0 || account.LastName.Length == 0)
-            {
-                MessageHelper.ShowError(this, "Enter a first and last name for the shipper.");
-                return;
-            }
-
-            if (account.Street1.Length == 0)
-            {
-                MessageHelper.ShowError(this, "Enter a street address for the shipper.");
-                return;
-            }
-
-            if (description.Text.Trim().Length > 0)
-            {
-                account.Description = description.Text.Trim();
-            }
-            else
-            {
-                account.Description = UpsAccountManager.GetDefaultDescription(account);
-            }
             try
             {
-                upsRateTypeControl.RegisterAndSaveToEntity();
+                if (!upsRateTypeControl.RegisterAndSaveToEntity())
+                {
+                    return;
+                }
 
                 UpsAccountManager.SaveAccount(account);
-
                 DialogResult = DialogResult.OK;
             }
             catch (CarrierException ex)
             {
                 MessageHelper.ShowError(this, ex.Message);
-                return;
             }
             catch (ORMConcurrencyException)
             {
                 MessageHelper.ShowError(this, "Your changes cannot be saved because another use has deleted the shipper.");
-
                 DialogResult = DialogResult.Abort;
             }
+        }
+
+        /// <summary>
+        /// Updates the account description
+        /// </summary>
+        private void UpdateAccountDescription()
+        {
+            account.Description = string.IsNullOrEmpty(description.Text.Trim()) ?
+                                        UpsAccountManager.GetDefaultDescription(account) :
+                                        description.Text.Trim();
+        }
+
+        /// <summary>
+        /// Validates the required fields
+        /// </summary>
+        private bool ValidateFields()
+        {
+            if (account.FirstName.Length == 0 || account.LastName.Length == 0)
+            {
+                MessageHelper.ShowError(this, "Enter a first and last name for the shipper.");
+                return false;
+            }
+
+            if (account.Street1.Length == 0)
+            {
+                MessageHelper.ShowError(this, "Enter a street address for the shipper.");
+                return false;
+            }
+
+            return true;
         }
 
         /// <summary>

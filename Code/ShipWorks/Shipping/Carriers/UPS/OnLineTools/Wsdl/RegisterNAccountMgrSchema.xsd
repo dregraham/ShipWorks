@@ -1,5 +1,5 @@
 <!-- Last Update: 01/26/2010 -->
-<xsd:schema targetNamespace="http://www.ups.com/XMLSchema/XOLTWS/Registration/v1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:common="http://www.ups.com/XMLSchema/XOLTWS/Common/v1.0" xmlns="http://www.ups.com/XMLSchema/XOLTWS/Registration/v1.0" xmlns:reg="http://www.ups.com/XMLSchema/XOLTWS/Registration/v1.0" xmlns:ups="http://www.ups.com/XMLSchema" elementFormDefault="qualified">
+<xsd:schema targetNamespace="http://www.ups.com/XMLSchema/XOLTWS/Registration/v2.0" xmlns:ups="http://www.ups.com/XMLSchema" xmlns:reg="http://www.ups.com/XMLSchema/XOLTWS/Registration/v2.0" xmlns="http://www.ups.com/XMLSchema/XOLTWS/Registration/v2.0" xmlns:common="http://www.ups.com/XMLSchema/XOLTWS/Common/v1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" version="201601">
 	<xsd:import namespace="http://www.ups.com/XMLSchema/XOLTWS/Common/v1.0" schemaLocation="common.xsd"/>
 	<!-- 1 For new Customer only: registration -->
 	<xsd:element name="RegisterRequest">
@@ -15,7 +15,9 @@
 				<xsd:element name="PhoneNumber" type="xsd:string"/>
 				<xsd:element name="PhoneExtension" type="xsd:string" minOccurs="0"/>
 				<xsd:element name="EmailAddress" type="xsd:string"/>
+				<xsd:element name="EndUserIPAddress" type="xsd:string" />
 				<xsd:element name="NotificationCode" type="xsd:string"/>
+				<xsd:element name="AccountStatusCheckRequired" type="xsd:string" minOccurs="0"/>
 				<xsd:element name="ShipperAccount" type="ShipperAccountType" minOccurs="0"/>
 				<xsd:element name="DeviceIdentity" type="xsd:string" minOccurs="0"/>
 				<xsd:element name="SuggestUsernameIndicator" type="xsd:string"/>
@@ -29,6 +31,7 @@
 				<xsd:element ref="common:Request"/>
 				<xsd:element name="Username" type="xsd:string" minOccurs="0"/>
 				<xsd:element name="Password" type="xsd:string" minOccurs="0"/>
+				<xsd:element name="AccountStatusCheckRequired" type="xsd:string" minOccurs="0"/>
 				<xsd:element name="ShipperAccount" type="ShipperAccountType"/>
 			</xsd:sequence>
 		</xsd:complexType>

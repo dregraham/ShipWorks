@@ -13,6 +13,7 @@ using System.Xml.XPath;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Net;
+using Interapptive.Shared.Security;
 using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.ApplicationCore.Licensing.Activation;
@@ -1320,7 +1321,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         {
             HttpVariableRequestSubmitter postRequest = new HttpVariableRequestSubmitter();
 
-            postRequest.Variables.Add("action", "associatestampsuser");
+            postRequest.Variables.Add("action", "associateexistingstampswithshipworks");
             postRequest.Variables.Add("customerlicense", licenseKey);
             postRequest.Variables.Add("version", Version);
             postRequest.Variables.Add("stampsusername", stampsUsername);

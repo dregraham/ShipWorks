@@ -1,18 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using Interapptive.Shared;
-using ShipWorks.Stores.Management;
+using Interapptive.Shared.Security;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.UI.Wizard;
 using Interapptive.Shared.UI;
 using log4net;
-using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Stores.Platforms.Volusion.WizardPages
 {
@@ -21,7 +14,7 @@ namespace ShipWorks.Stores.Platforms.Volusion.WizardPages
     /// </summary>
     public partial class VolusionAccountPage : VolusionAddStoreWizardPage
     {
-        // Logger 
+        // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(VolusionAccountPage));
 
         /// <summary>
@@ -77,7 +70,7 @@ namespace ShipWorks.Stores.Platforms.Volusion.WizardPages
                 manualConfigPanel.Top = autoConfigPanel.Top;
                 manualConfigPanel.Left = autoConfigPanel.Left;
             }
-            
+
             autoConfigPanel.Visible = isAutomatic;
             manualConfigPanel.Visible = !isAutomatic;
         }
@@ -94,7 +87,7 @@ namespace ShipWorks.Stores.Platforms.Volusion.WizardPages
                 e.NextPage = this;
                 return;
             }
-            
+
             if (emailTextBox.Text.Length == 0)
             {
                 MessageHelper.ShowError(this, "Please enter your Volusion login email address.");
@@ -183,7 +176,7 @@ namespace ShipWorks.Stores.Platforms.Volusion.WizardPages
             {
                 log.Info("Starting Volusion AutoConfiguration");
                 string webPassword = SecureText.Decrypt(store.WebPassword, store.WebUserName);
-                
+
                 VolusionWebSession session = new VolusionWebSession(store.StoreUrl);
 
                 if (session.LogOn(store.WebUserName, webPassword))
