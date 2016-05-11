@@ -27,6 +27,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         private DateTime statusDate;
         private ShipmentStatus shipmentStatus;
         private string errorMessage;
+        private bool? isDomestic;
 
         /// <summary>
         /// Command to open the shipping dialog
@@ -224,6 +225,16 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         {
             get { return errorMessage; }
             set { handler.Set(nameof(ErrorMessage), ref errorMessage, value); }
+        }
+
+        /// <summary>
+        /// Is the current shipment domestic
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public virtual bool? IsDomestic
+        {
+            get { return isDomestic; }
+            set { handler.Set(nameof(IsDomestic), ref isDomestic, value); }
         }
     }
 }

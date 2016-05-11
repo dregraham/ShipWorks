@@ -122,11 +122,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         public ICommand CopyTrackingNumberToClipboardCommand { get; }
 
         /// <summary>
-        /// Is the current shipment domestic
-        /// </summary>
-        public virtual bool IsDomestic => ShipmentAdapter?.IsDomestic ?? true;
-
-        /// <summary>
         /// Current shipment adapter
         /// </summary>
         public virtual ICarrierShipmentAdapter ShipmentAdapter { get; private set; }
@@ -396,6 +391,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             ShipmentViewModel.Save();
 
             IDictionary<ShipmentEntity, Exception> errors = ShipmentAdapter.UpdateDynamicData();
+            IsDomestic = ShipmentAdapter.IsDomestic;
+
             DisplayError(errors);
         }
 
@@ -515,7 +512,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
 
             Origin.Load(fromShipmentAdapter.Shipment.OriginPerson);
             Destination.Load(fromShipmentAdapter.Shipment.ShipPerson);
-            Destination.IsAddressValidationEnabled = fromShipmentAdapter.Store.AddressValidationSetting != (int)AddressValidationStoreSettingType.ValidationDisabled;
+            Destination.IsAddressValidationEnabled = fromShipmentAdapter.Store.AddressValidationSetting != (int) AddressValidationStoreSettingType.ValidationDisabled;
 
             AllowEditing = !fromShipmentAdapter.Shipment.Processed;
 
@@ -536,6 +533,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             {
                 StatusDate = fromShipmentAdapter.Shipment.ProcessedDate.GetValueOrDefault();
             }
+
+            IsDomestic = fromShipmentAdapter.IsDomestic;
         }
 
         #region IDataErrorInfo

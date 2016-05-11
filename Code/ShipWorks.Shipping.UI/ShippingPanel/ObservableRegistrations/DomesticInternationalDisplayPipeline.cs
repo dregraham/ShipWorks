@@ -50,9 +50,9 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
                 .ObserveOn(schedulerProvider.Dispatcher)
                 .Subscribe(shipmentAdapter => Update(viewModel, shipmentAdapter));
 
-            IDisposable updateText = propertyChangeStreams
-                .Where(domesticAffectingProperties.Contains)
-                .Subscribe(_ => viewModel.DomesticInternationalText = viewModel.IsDomestic ? "Domestic" : "International");
+            IDisposable updateText = viewModel.PropertyChangeStream
+                .Where(x => x == nameof(viewModel.IsDomestic))
+                .Subscribe(_ => viewModel.DomesticInternationalText = (viewModel.IsDomestic ?? true) ? "Domestic" : "International");
 
             subscription = new CompositeDisposable(updateViewModel, updateText);
         }
