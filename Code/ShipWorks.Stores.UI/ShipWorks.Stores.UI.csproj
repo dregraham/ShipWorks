@@ -155,6 +155,14 @@
     <Compile Include="Platforms\LemonStand\WizardPages\LemonStandAccountPage.Designer.cs">
       <DependentUpon>LemonStandAccountPage.cs</DependentUpon>
     </Compile>
+    <Compile Include="Platforms\Odbc\IOdbcImportFieldMappingDlgViewModel.cs" />
+    <Compile Include="Platforms\Odbc\OdbcImportFieldMappingDlgFactory.cs" />
+    <Compile Include="Platforms\Odbc\OdbcImportFieldMappingPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Platforms\Odbc\OdbcImportFieldMappingPage.Designer.cs">
+      <DependentUpon>OdbcImportFieldMappingPage.cs</DependentUpon>
+    </Compile>
     <Compile Include="Platforms\Sears\SearsStoreModule.cs" />
     <Compile Include="Platforms\SparkPay\SparkPaySettingsControl.cs">
       <SubType>UserControl</SubType>
@@ -186,7 +194,6 @@
       <DependentUpon>SparkPayAccountControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Platforms\SparkPay\WizardPages\SparkPayAccountViewModel.cs" />
-    
     <Compile Include="Platforms\Odbc\OdbcDataSourceControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -242,6 +249,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Platforms\LemonStand\WizardPages\LemonStandAccountPage.resx">
       <DependentUpon>LemonStandAccountPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Platforms\Odbc\OdbcImportFieldMappingPage.resx">
+      <DependentUpon>OdbcImportFieldMappingPage.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Platforms\SparkPay\SparkPaySettingsControl.resx">
       <DependentUpon>SparkPaySettingsControl.cs</DependentUpon>
@@ -308,7 +318,7 @@
     <Page Include="Platforms\Odbc\OdbcImportFieldMappingDlg.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>  
+    </Page>
     <Page Include="Platforms\SparkPay\WizardPages\SparkPayAccountControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

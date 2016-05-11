@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using Autofac;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
@@ -62,6 +64,14 @@ namespace ShipWorks.Stores.Platforms.Odbc
             InitializeStoreDefaults(store);
 
             return store;
+        }
+
+        public override List<WizardPage> CreateAddStoreWizardPages()
+        {
+            return new List<WizardPage>
+                {
+                    IoC.UnsafeGlobalLifetimeScope.ResolveKeyed<WizardPage>(StoreTypeCode.Odbc)
+                };
         }
     }
 }
