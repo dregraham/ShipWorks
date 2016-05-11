@@ -17,7 +17,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         private readonly ICustomsManager customsManager;
         private bool customsAllowed;
         private decimal totalCustomsValue;
-        private double shipmentContentWeight;
+        private double contentWeight;
 
         /// <summary>
         /// The list of customs items
@@ -88,12 +88,12 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         [Required(AllowEmptyStrings = false, ErrorMessage = @"Weight value is required.")]
         [Range(0.0001, 999999999, ErrorMessage = @"Please enter a valid weight.")]
         [DoubleCompare(0, ValueCompareOperatorType.GreaterThanOrEqualTo, ErrorMessage = @"Weight must be greater than or equal $0.00.")]
-        public double ShipmentContentWeight
+        public double ContentWeight
         {
-            get { return shipmentContentWeight; }
+            get { return contentWeight; }
             set
             {
-                handler.Set(nameof(ShipmentContentWeight), ref shipmentContentWeight, value, true);
+                handler.Set(nameof(ContentWeight), ref contentWeight, value, true);
             }
         }
 

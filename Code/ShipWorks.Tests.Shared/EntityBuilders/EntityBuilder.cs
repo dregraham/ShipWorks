@@ -5,6 +5,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using Interapptive.Shared.Business;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
 
 namespace ShipWorks.Tests.Shared.EntityBuilders
@@ -130,10 +131,18 @@ namespace ShipWorks.Tests.Shared.EntityBuilders
         /// <returns></returns>
         public virtual T Save()
         {
-            using (SqlAdapter sqlAdapter = SqlAdapter.Create(false))
+            T retVal = null;
+            SqlAdapterRetry<Exception> sqlAdapterRetry = new SqlAdapterRetry<Exception>(5, -6, "Integration Test EntityBuilder.Save()");
+
+            sqlAdapterRetry.ExecuteWithRetry(() =>
             {
-                return Save(sqlAdapter);
-            }
+                using (SqlAdapter sqlAdapter = SqlAdapter.Create(false))
+                {
+                    retVal = Save(sqlAdapter);
+                }
+            });
+
+            return retVal;
         }
 
         /// <summary>
@@ -146,15 +155,20 @@ namespace ShipWorks.Tests.Shared.EntityBuilders
             entity.Fields.IsDirty = true;
             entity.IsDirty = true;
 
-            // We can't refetch if the entity doesn't have a PK
-            if (entity.Fields.OfType<IEntityField2>().Any(x => x.IsPrimaryKey))
+            SqlAdapterRetry<Exception> sqlAdapterRetry = new SqlAdapterRetry<Exception>(5, -6, "Integration Test EntityBuilder.Save(SqlAdapter)");
+
+            sqlAdapterRetry.ExecuteWithRetry(() =>
             {
-                adapter.SaveAndRefetch(entity);
-            }
-            else
-            {
-                adapter.SaveEntity(entity);
-            }
+                // We can't refetch if the entity doesn't have a PK
+                if (entity.Fields.OfType<IEntityField2>().Any(x => x.IsPrimaryKey))
+                {
+                    adapter.SaveAndRefetch(entity);
+                }
+                else
+                {
+                    adapter.SaveEntity(entity);
+                }
+            });
 
             return entity;
         }

@@ -42,8 +42,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         public override void Load(ICarrierShipmentAdapter newShipmentAdapter)
         {
             base.Load(newShipmentAdapter);
-            TotalWeight = shipmentAdapter.TotalWeight;
-            ShipmentContentWeight = shipmentAdapter.ContentWeight;
+            ContentWeight = shipmentAdapter.ContentWeight;
 
             OtherShipmentEntity otherShipment = shipmentAdapter.Shipment.Other;
 
@@ -64,8 +63,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
 
             shipmentAdapter.Shipment.ShipmentCost = Cost;
             shipmentAdapter.Shipment.TrackingNumber = TrackingNumber;
-            shipmentAdapter.Shipment.TotalWeight = TotalWeight;
-            shipmentAdapter.ContentWeight = ShipmentContentWeight;
+            shipmentAdapter.ContentWeight = ContentWeight;
 
             OtherShipmentEntity otherShipment = shipmentAdapter.Shipment.Other;
             Debug.Assert(otherShipment != null);

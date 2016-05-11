@@ -17,7 +17,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
     public abstract partial class ShipmentViewModelBase
     {
         private DateTime shipDate;
-        private double totalWeight;
         private int serviceType;
         private ObservableCollection<PackageAdapterWrapper> packageAdapters;
         private PackageAdapterWrapper selectedPackageAdapter;
@@ -79,16 +78,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         {
             get { return shipDate; }
             set { handler.Set(nameof(ShipDate), ref shipDate, value); }
-        }
-
-        /// <summary>
-        /// Shipment total weight
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public double TotalWeight
-        {
-            get { return totalWeight; }
-            set { handler.Set(nameof(TotalWeight), ref totalWeight, value); }
         }
 
         /// <summary>

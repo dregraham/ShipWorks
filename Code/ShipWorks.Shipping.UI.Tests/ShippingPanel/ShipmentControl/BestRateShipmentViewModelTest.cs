@@ -66,14 +66,14 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
         }
 
         [Fact]
-        public void TotalWeight_MatchesShipmentAdapterValue()
+        public void ContentWeight_MatchesShipmentAdapterValue()
         {
             CreateDefaultShipmentAdapter(mock);
 
             BestRateShipmentViewModel testObject = mock.Create<BestRateShipmentViewModel>();
             testObject.Load(shipmentAdapter.Object);
 
-            Assert.Equal(shipmentAdapter.Object.TotalWeight, testObject.TotalWeight);
+            Assert.Equal(shipmentAdapter.Object.ContentWeight, testObject.ContentWeight);
         }
 
         [Fact]
@@ -391,7 +391,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
 
             double expectedValue = testObject.SelectedCustomsItem.Weight * testObject.SelectedCustomsItem.Quantity;
 
-            Assert.Equal(expectedValue, testObject.ShipmentContentWeight);
+            Assert.Equal(expectedValue, testObject.ContentWeight);
         }
 
         [Fact]
@@ -461,7 +461,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
             testObject.Load(shipmentAdapter.Object);
 
             testObject.SelectedPackageAdapter = testObject.PackageAdapters.First();
-            testObject.TotalWeight = 2;
+            testObject.ContentWeight = 2;
 
             testObject.Save();
 
@@ -793,7 +793,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
             shipmentAdapter.Setup(sa => sa.ShipmentTypeCode).Returns(ShipmentTypeCode.BestRate);
             shipmentAdapter.Setup(sa => sa.ServiceType).Returns((int)UpsServiceType.UpsGround);
             shipmentAdapter.Setup(sa => sa.ShipDate).Returns(new DateTime(2015, 1, 1, 1, 1, 1));
-            shipmentAdapter.Setup(sa => sa.TotalWeight).Returns(0.5);
+            shipmentAdapter.Setup(sa => sa.ContentWeight).Returns(0.5);
             shipmentAdapter.Setup(sa => sa.SupportsPackageTypes).Returns(false);
             shipmentAdapter.Setup(sa => sa.SupportsAccounts).Returns(false);
             shipmentAdapter.Setup(sa => sa.SupportsMultiplePackages).Returns(false);

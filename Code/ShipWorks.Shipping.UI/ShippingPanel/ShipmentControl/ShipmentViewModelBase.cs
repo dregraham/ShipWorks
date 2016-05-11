@@ -105,7 +105,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
                 DimsWidth = SelectedPackageAdapter.DimsWidth;
                 DimsHeight = SelectedPackageAdapter.DimsHeight;
                 DimsProfileID = SelectedPackageAdapter.DimsProfileID;
-                TotalWeight = SelectedPackageAdapter.Weight;
+                ContentWeight = SelectedPackageAdapter.Weight;
 
                 UpdateSelectedDimensionsProfile();
 
@@ -130,7 +130,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
             SelectedPackageAdapter.DimsWidth = DimsWidth;
             SelectedPackageAdapter.DimsHeight = DimsHeight;
             SelectedPackageAdapter.DimsProfileID = DimsProfileID;
-            SelectedPackageAdapter.Weight = TotalWeight;
+            SelectedPackageAdapter.Weight = ContentWeight;
         }
 
         /// <summary>
@@ -199,7 +199,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
             shipmentAdapter = newShipmentAdapter;
 
             ShipDate = shipmentAdapter.ShipDate;
-            TotalWeight = shipmentAdapter.TotalWeight;
+            ContentWeight = shipmentAdapter.ContentWeight;
             SupportsPackageTypes = shipmentAdapter.SupportsPackageTypes;
             SupportsMultiplePackages = shipmentAdapter.SupportsMultiplePackages;
             SupportsDimensions = shipmentAdapter.ShipmentTypeCode != ShipmentTypeCode.Other;
@@ -467,8 +467,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         /// </summary>
         protected void DeleteCustomsItem()
         {
-            double originalShipmentcontentWeight = ShipmentContentWeight;
-            ShipmentContentWeight = CustomsItems.Sum(ci => ci.Weight * ci.Quantity);
+            double originalShipmentcontentWeight = ContentWeight;
+            ContentWeight = CustomsItems.Sum(ci => ci.Weight * ci.Quantity);
             RedistributeContentWeight(originalShipmentcontentWeight);
             TotalCustomsValue = CustomsItems.Sum(ci => ci.UnitValue * (decimal) ci.Quantity);
 
@@ -500,8 +500,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
             if (e.PropertyName.Equals(nameof(IShipmentCustomsItemAdapter.Weight), StringComparison.OrdinalIgnoreCase) ||
                 e.PropertyName.Equals(nameof(IShipmentCustomsItemAdapter.Quantity), StringComparison.OrdinalIgnoreCase))
             {
-                double originalShipmentcontentWeight = ShipmentContentWeight;
-                ShipmentContentWeight = CustomsItems.Sum(ci => ci.Weight * ci.Quantity);
+                double originalShipmentcontentWeight = ContentWeight;
+                ContentWeight = CustomsItems.Sum(ci => ci.Weight * ci.Quantity);
                 RedistributeContentWeight(originalShipmentcontentWeight);
             }
         }
@@ -513,11 +513,11 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         public void RedistributeContentWeight(double originalShipmentcontentWeight)
         {
             // If the content weight changed outside of us, redistribute what the new weight among the packages
-            if (Math.Abs(originalShipmentcontentWeight - ShipmentContentWeight) > 0.001)
+            if (Math.Abs(originalShipmentcontentWeight - ContentWeight) > 0.001)
             {
                 foreach (IPackageAdapter packageAdapter in PackageAdapters)
                 {
-                    packageAdapter.Weight = ShipmentContentWeight / PackageAdapters.Count();
+                    packageAdapter.Weight = ContentWeight / PackageAdapters.Count();
                 }
 
                 LoadDimensionsFromSelectedPackageAdapter();

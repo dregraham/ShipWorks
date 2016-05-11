@@ -40,14 +40,14 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
         }
 
         [Fact]
-        public void TotalWeight_MatchesShipmentAdapterValue_Test()
+        public void ContentWeight_MatchesShipmentAdapterValue_Test()
         {
             CreateDefaultShipmentAdapter(mock);
 
             OtherShipmentViewModel testObject = mock.Create<OtherShipmentViewModel>();
             testObject.Load(shipmentAdapter.Object);
 
-            Assert.Equal(shipmentAdapter.Object.TotalWeight, testObject.TotalWeight);
+            Assert.Equal(shipmentAdapter.Object.ContentWeight, testObject.ContentWeight);
         }
 
         [Fact]
@@ -207,7 +207,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
 
             double expectedValue = testObject.SelectedCustomsItem.Weight * testObject.SelectedCustomsItem.Quantity;
 
-            Assert.Equal(expectedValue, testObject.ShipmentContentWeight);
+            Assert.Equal(expectedValue, testObject.ContentWeight);
         }
 
         [Fact]
@@ -416,7 +416,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
             shipmentAdapter.Setup(sa => sa.Shipment).Returns(shipment);
             shipmentAdapter.Setup(sa => sa.ShipmentTypeCode).Returns(ShipmentTypeCode.Other);
             shipmentAdapter.Setup(sa => sa.ShipDate).Returns(new DateTime(2015, 1, 1, 1, 1, 1));
-            shipmentAdapter.Setup(sa => sa.TotalWeight).Returns(0.5);
+            shipmentAdapter.Setup(sa => sa.ContentWeight).Returns(0.5);
             shipmentAdapter.Setup(sa => sa.SupportsPackageTypes).Returns(false);
             shipmentAdapter.Setup(sa => sa.SupportsAccounts).Returns(false);
             shipmentAdapter.Setup(sa => sa.SupportsMultiplePackages).Returns(false);

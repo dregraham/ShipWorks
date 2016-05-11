@@ -60,7 +60,7 @@
             <ui:WeightControl Grid.Row="3" Grid.Column="1"
                 HorizontalAlignment="Left"
                 ErrorMessage="{Binding WeightErrorMessage}"
-                Weight="{Binding ShipmentContentWeight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,
+                Weight="{Binding ContentWeight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,
                     ValidatesOnDataErrors=true, NotifyOnValidationError=true}"/>
 
             <TextBlock Grid.Row="4" Grid.Column="0"
