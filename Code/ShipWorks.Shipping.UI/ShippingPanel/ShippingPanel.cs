@@ -57,6 +57,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             shipmentPanelelementHost.Child = shippingPanelControl;
 
             shippingPanelControl.IsKeyboardFocusWithinChanged += OnIsKeyboardFocusWithinChanged;
+            shippingPanelControl.LostFocus += OnShippingPanelControlLostFocus;
         }
 
         /// <summary>
@@ -122,12 +123,32 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         }
 
         /// <summary>
+        /// The shipping panel has lost focus
+        /// </summary>
+        private void OnShippingPanelControlLostFocus(object sender, RoutedEventArgs e)
+        {
+            if (IsNonKeyboardInputElement(e.OriginalSource))
+            {
+                viewModel.SaveToDatabase();
+            }
+        }
+
+        /// <summary>
+        /// Is the object an input element that does not hold keyboard focus
+        /// </summary>
+        private bool IsNonKeyboardInputElement(object element) =>
+            element is System.Windows.Controls.Button;
+
+        /// <summary>
         /// Commit any LostFocus bindings on the currently focused control
         /// </summary>
         private void CommitBindingsOnFocusedControl()
         {
             IInputElement focusedElement = FindFocusedInputElement(shippingPanelControl);
-            CommitBindings(focusedElement);
+            if (!IsNonKeyboardInputElement(focusedElement))
+            {
+                CommitBindings(focusedElement);
+            }
         }
 
         /// <summary>
