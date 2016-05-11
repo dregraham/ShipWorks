@@ -1,28 +1,30 @@
-using System;
-
 namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 {
-	public class OdbcFieldMapEntry
+    /// <summary>
+    /// Entry in the OdbcFieldMap.
+    /// Maps a ShipWorks database column to an external Odbc column
+    /// </summary>
+    public class OdbcFieldMapEntry
 	{
-		public OdbcFieldMapEntry(IOdbcMappableField source, IOdbcMappableField target)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="OdbcFieldMapEntry"/> class.
+        /// </summary>
+        /// <param name="shipWorksField">The ship works field.</param>
+        /// <param name="externalField">The external field.</param>
+        public OdbcFieldMapEntry(ShipWorksOdbcMappableField shipWorksField, ExternalOdbcMappableField externalField)
 		{
-			throw new NotImplementedException();
+		    ShipWorksField = shipWorksField;
+		    ExternalField = externalField;
 		}
 
-		public IOdbcMappableField ShipWorksField
-		{
-			get
-			{
-				throw new NotImplementedException();
-			}
-		}
+        /// <summary>
+        /// Gets the ShipWorks field.
+        /// </summary>
+        public ShipWorksOdbcMappableField ShipWorksField { get; }
 
-		public IOdbcMappableField ExternalField
-		{
-			get
-			{
-				throw new NotImplementedException();
-			}
-		}
+        /// <summary>
+        /// Gets the external field.
+        /// </summary>
+        public ExternalOdbcMappableField ExternalField { get; }
 	}
 }
