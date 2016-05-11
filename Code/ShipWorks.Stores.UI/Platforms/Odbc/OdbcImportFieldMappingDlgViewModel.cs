@@ -54,7 +54,6 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             get { return selectedTable; }
             set
             {
-                selectedTable.Load();
                 Columns = selectedTable.Columns;
                 Handler.Set(nameof(SelectedTable), ref selectedTable, value);
             }

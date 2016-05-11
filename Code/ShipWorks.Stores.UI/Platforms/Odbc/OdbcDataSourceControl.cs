@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using Interapptive.Shared.Collections;
+using Interapptive.Shared.Threading;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using log4net;
@@ -11,7 +12,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Windows.Forms;
-using Interapptive.Shared.Threading;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc
 {
@@ -37,19 +37,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// <summary>
         /// Gets the selected data source.
         /// </summary>
-        private OdbcDataSource SelectedDataSource
-        {
-            get
-            {
-                OdbcDataSource source = dataSource.SelectedItem as OdbcDataSource;
-                if (source == null)
-                {
-                    throw new ArgumentNullException($"Selected data source cannot be null.");
-                }
-
-                return source;
-            }
-        }
+        private OdbcDataSource SelectedDataSource => dataSource.SelectedItem as OdbcDataSource;
 
         /// <summary>
         /// Tests the connection.
@@ -86,6 +74,12 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// </summary>
         public void SaveToEntity(OdbcStoreEntity store)
         {
+            if (SelectedDataSource == null)
+            {
+                MessageHelper.ShowError(this, "You must add a datasource to continue.");
+                return;
+            }
+
             try
             {
                 store.ConnectionString = SelectedDataSource.Serialize();
@@ -157,7 +151,6 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             {
                 BindDataSources(dataSourceResult.Context);
             }
-
         }
 
         /// <summary>
@@ -172,7 +165,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             OdbcDataSource currentDataSource = SelectedDataSource;
 
             dataSource.DataSource = dataSources;
-            dataSource.DisplayMember = "DisplayName";
+            dataSource.DisplayMember = "Name";
 
             if (currentDataSource != null)
             {
