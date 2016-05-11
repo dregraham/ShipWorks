@@ -2,17 +2,31 @@ using System;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 {
+    /// <summary>
+    /// Provides a mechanism for interacting with an external ODBC field
+    /// </summary>
 	public class ExternalOdbcMappableField : IOdbcMappableField
 	{
-	    private string displayName;
+	    private readonly OdbcTable table;
+	    private readonly OdbcColumn column;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
 	    public ExternalOdbcMappableField(OdbcTable table, OdbcColumn column)
-		{
-			throw new NotImplementedException();
-		}
+	    {
+	        this.table = table;
+	        this.column = column;
+	    }
 
-	    public string QualifiedName { get; }
+        /// <summary>
+        /// The fields Qualified Name in the format Table.Column
+        /// </summary>
+	    public string QualifiedName => $"{table.Name}.{column.Name}";
 
+        /// <summary>
+        /// value from the field
+        /// </summary>
 	    public string Value
 		{
 			get
@@ -21,9 +35,9 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 			}
 		}
 
-	    public string DisplayName
-	    {
-	        get { return displayName; }
-	    }
+        /// <summary>
+        /// The fields display name
+        /// </summary>
+	    public string DisplayName => table.Name;
 	}
 }
