@@ -10,12 +10,14 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 
 		public OdbcFieldMap(IOdbcFieldMapIOFactory ioFactory)
 		{
-
+            Entries = new List<OdbcFieldMapEntry>();
 		}
 
         public List<OdbcFieldMapEntry> Entries { get; }
 
         public string DisplayName { get; set; }
+
+        public string ExternalTableName { get; set; }
 
         public void AddEntry(OdbcFieldMapEntry entry)
 		{
