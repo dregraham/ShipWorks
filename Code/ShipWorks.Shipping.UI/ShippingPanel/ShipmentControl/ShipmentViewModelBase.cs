@@ -8,15 +8,13 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reflection;
 using System.Windows.Input;
-using Interapptive.Shared.Utility;
 using GalaSoft.MvvmLight.Command;
+using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages;
-using ShipWorks.Messaging.Messages.Shipping;
-using ShipWorks.Shipping.Editing.Enums;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Services.Builders;
@@ -253,7 +251,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
             // Get the new list
             Services = new List<KeyValuePair<int, string>>(updatedServices);
 
-            // Update the selected service type.  
+            // Update the selected service type.
             ServiceType = shipmentAdapter.ServiceType;
         }
 
@@ -289,12 +287,12 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
 
             // Get the new list
             PackageTypes = new List<KeyValuePair<int, string>>(packagingTypes);
-            
+
             // Update the selected packaging type.  If the currently selected value isn't in the list
             // just use the first one in the list.
             PackagingType = PackageTypes.Any(pt => pt.Key == SelectedPackageAdapter?.PackagingType) ?
                 SelectedPackageAdapter.PackagingType :
-                PackageTypes.First().Key; 
+                PackageTypes.First().Key;
         }
 
         /// <summary>
@@ -502,7 +500,15 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
             {
                 double originalShipmentcontentWeight = ShipmentContentWeight;
                 ShipmentContentWeight = CustomsItems.Sum(ci => ci.Weight * ci.Quantity);
+
+                double originalTotalWeight = TotalWeight;
                 RedistributeContentWeight(originalShipmentcontentWeight);
+
+                if (!originalTotalWeight.IsEquivalentTo(TotalWeight))
+                {
+                    // Notify any interested consumers that the total weight may have changed
+                    handler.RaisePropertyChanged(nameof(TotalWeight));
+                }
             }
         }
 
