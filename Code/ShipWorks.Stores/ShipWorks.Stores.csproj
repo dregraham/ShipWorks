@@ -136,6 +136,7 @@
     <Compile Include="Platforms\LemonStand\LemonStandWebClient.cs" />
     <Compile Include="Platforms\Odbc\IOdbcDataSource.cs" />
     <Compile Include="Platforms\Odbc\IOdbcSchema.cs" />
+    <Compile Include="Platforms\Odbc\IOdbcTable.cs" />
     <Compile Include="Platforms\Odbc\Mapping\ExternalOdbcMappableField.cs" />
     <Compile Include="Platforms\Odbc\Mapping\IOdbcFieldMapFactory.cs" />
     <Compile Include="Platforms\Odbc\Mapping\IOdbcFieldMapIOFactory.cs" />

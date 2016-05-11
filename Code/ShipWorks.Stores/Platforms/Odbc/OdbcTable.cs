@@ -10,8 +10,8 @@ namespace ShipWorks.Stores.Platforms.Odbc
     /// <summary>
     /// Represents a table from an ODBC schema
     /// </summary>
-	public class OdbcTable
-	{
+	public class OdbcTable : IOdbcTable
+    {
 	    private readonly IOdbcSchema schema;
         private IEnumerable<OdbcColumn> columns;
         private readonly ILog log;

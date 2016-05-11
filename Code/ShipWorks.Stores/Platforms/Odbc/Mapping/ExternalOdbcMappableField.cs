@@ -7,13 +7,13 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
     /// </summary>
 	public class ExternalOdbcMappableField : IOdbcMappableField
 	{
-	    private readonly OdbcTable table;
+	    private readonly IOdbcTable table;
 	    private readonly OdbcColumn column;
 
         /// <summary>
         /// Constructor
         /// </summary>
-	    public ExternalOdbcMappableField(OdbcTable table, OdbcColumn column)
+	    public ExternalOdbcMappableField(IOdbcTable table, OdbcColumn column)
 	    {
 	        this.table = table;
 	        this.column = column;
@@ -38,6 +38,6 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <summary>
         /// The fields display name
         /// </summary>
-	    public string DisplayName => table.Name;
-	}
+	    public string DisplayName => $"{table.Name} {column.Name}";
+    }
 }
