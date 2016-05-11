@@ -59,6 +59,9 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             builder.RegisterType<OdbcImportFieldMappingPage>()
                 .Keyed<WizardPage>(StoreTypeCode.Odbc)
                 .ExternallyOwned();
+
+            builder.RegisterType<OdbcImportFieldMappingDlgFactory>()
+                .AsSelf();
         }
     }
 }

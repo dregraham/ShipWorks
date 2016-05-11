@@ -23,7 +23,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             AddressFieldMap = fieldMapFactory.CreateAddressFieldMap();
             ItemFieldMap = fieldMapFactory.CreateOrderItemFieldMap();
             FieldMaps = new List<OdbcFieldMap>() { OrderFieldMap, AddressFieldMap, ItemFieldMap };
-            SelectedFieldMap = OrderFieldMap;
+            selectedFieldMap = OrderFieldMap;
 
             LoadMapCommand = new RelayCommand(LoadMap);
             SaveMapCommand = new RelayCommand(SaveMap);
