@@ -11,8 +11,12 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 	    private readonly OdbcColumn column;
 
         /// <summary>
-        /// Constructor
-        /// </summary>
+	    public ExternalOdbcMappableField()
+	    {
+	    }
+        public OdbcTable Table { get; set; }
+        public OdbcColumn Column { get; set; }
+
 	    public ExternalOdbcMappableField(IOdbcTable table, OdbcColumn column)
 	    {
 	        this.table = table;
@@ -22,7 +26,10 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <summary>
         /// The fields Qualified Name in the format Table.Column
         /// </summary>
-	    public string QualifiedName => $"{table.Name}.{column.Name}";
+	    public string GetQualifiedName()
+	    {
+	        return $"{Table.Name}.{Column.Name}";
+	    }
 
         /// <summary>
         /// value from the field

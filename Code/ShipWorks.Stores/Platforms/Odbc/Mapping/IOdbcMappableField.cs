@@ -4,11 +4,11 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
     /// Interface for a mappable field, which will be part of a field map entry
     /// </summary>
     public interface IOdbcMappableField
-	{
+    {
         /// <summary>
-        /// Gets the qualified name for the field - [table].[column]
+        /// Gets the qualified name for the field - table.column
         /// </summary>
-        string QualifiedName { get; }
+        string GetQualifiedName();
 
         /// <summary>
         /// The fields value
