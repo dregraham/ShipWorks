@@ -1,18 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.Command;
-using Interapptive.Shared.Collections;
-using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Core.UI;
-using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc
 {
-    public class OdbcImportFieldMappingDlgViewModel
+    public class OdbcImportFieldMappingDlgViewModel : IOdbcImportFieldMappingDlgViewModel
     {
         private OdbcTable selectedTable;
         private IEnumerable<OdbcColumn> columns;
@@ -20,9 +16,6 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         protected readonly PropertyChangedHandler Handler;
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public OdbcImportFieldMappingDlgViewModel() : this(new OdbcFieldMapFactory())
-        {
-        }
 
         public OdbcImportFieldMappingDlgViewModel(IOdbcFieldMapFactory fieldMapFactory)
         {
