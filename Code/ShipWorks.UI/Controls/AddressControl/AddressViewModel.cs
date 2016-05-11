@@ -13,6 +13,7 @@ using ShipWorks.AddressValidation;
 using ShipWorks.AddressValidation.Enums;
 using ShipWorks.Core.UI;
 using ShipWorks.Data;
+using ShipWorks.Data.Model.Custom.EntityClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
 
@@ -96,7 +97,7 @@ namespace ShipWorks.UI.Controls.AddressControl
 
             Populate(person);
 
-            if (person.Entity != null)
+            if (person.Entity != null && !(person.Entity is NullCarrierAccount))
             {
                 entityId = EntityUtility.GetEntityId(person.Entity);
                 prefix = person.FieldPrefix;

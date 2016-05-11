@@ -6,6 +6,7 @@ using Interapptive.Shared.UI;
 using Moq;
 using ShipWorks.AddressValidation;
 using ShipWorks.AddressValidation.Enums;
+using ShipWorks.Data.Model.Custom.EntityClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Tests.Shared;
 using ShipWorks.UI.Controls.AddressControl;
@@ -287,6 +288,19 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.AddressControl
         {
             var testObject = mock.Create<AddressViewModel>();
             testObject.Load(new PersonAdapter());
+
+            testObject.ValidateCommand.Execute(null);
+
+            mock.Mock<IAddressValidator>()
+                .Verify(x => x.ValidateAsync(It.IsAny<AddressAdapter>(), It.IsAny<bool>()), Times.Never);
+        }
+
+        [Fact]
+        public void ValidateCommand_DoesNotCallValidator_WhenLoadedWithNullCarrierAccountEntityAddress()
+        {
+            var testObject = mock.Create<AddressViewModel>();
+
+            testObject.Load(new PersonAdapter(new NullCarrierAccount(), ""));
 
             testObject.ValidateCommand.Execute(null);
 
