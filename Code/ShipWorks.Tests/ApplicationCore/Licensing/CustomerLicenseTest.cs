@@ -11,8 +11,11 @@ using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Dashboard.Content;
 using ShipWorks.ApplicationCore.Licensing.FeatureRestrictions;
 using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
+using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Editions;
+using ShipWorks.Messaging.Messages;
+using ShipWorks.Tests.Shared;
 
 namespace ShipWorks.Tests.ApplicationCore.Licensing
 {
@@ -905,6 +908,28 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
                         l.Error("Error when associating stamps account with license.",
                             It.Is<ShipWorksLicenseException>(ex => ex.Message == "Cannot associate empty Usps account.")),
                     Times.Once);
+            }
+        }
+
+        [Fact]
+        public void ForceRefresh_SendsEnabledCarriersChangedMessage()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                Mock<IMessenger> messenger = mock.Mock<IMessenger>();
+                var licenseCapabilities = mock.Mock<ILicenseCapabilities>();
+
+                var tangoWebClient =
+                    mock.Mock<ITangoWebClient>();
+
+                tangoWebClient.Setup(w => w.GetLicenseCapabilities(It.IsAny<ICustomerLicense>()))
+                    .Returns(licenseCapabilities.Object);
+
+                CustomerLicense customerLicense = mock.Create<CustomerLicense>(new NamedParameter("key", "SomeKey"));
+
+                customerLicense.ForceRefresh();
+
+                messenger.Verify(m => m.Send(It.IsAny<EnabledCarriersChangedMessage>(), It.IsAny<string>()), Times.Once);
             }
         }
     }

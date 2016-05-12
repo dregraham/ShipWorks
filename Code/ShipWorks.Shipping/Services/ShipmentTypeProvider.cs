@@ -26,7 +26,6 @@ namespace ShipWorks.Shipping.Services
         private readonly PropertyChangedHandler handler;
         private IEnumerable<ShipmentTypeCode> available;
         private readonly IDisposable subscription;
-        private readonly IShippingManager shippingManager;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -38,18 +37,13 @@ namespace ShipWorks.Shipping.Services
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShipmentTypeProvider(IObservable<IShipWorksMessage> messenger, IShipmentTypeManager shipmentTypeManager, IShippingManager shippingManager)
+        public ShipmentTypeProvider(IObservable<IShipWorksMessage> messenger, IShipmentTypeManager shipmentTypeManager)
         {
             this.shipmentTypeManager = shipmentTypeManager;
-            this.shippingManager = shippingManager;
-
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
 
             subscription = messenger.OfType<EnabledCarriersChangedMessage>().Subscribe(UpdateAvailableCarriers);
-            Available = shipmentTypeManager
-                .ShipmentTypeCodes
-                .Where(shippingManager.IsShipmentTypeEnabled)
-                .ToList();
+            Available = shipmentTypeManager.EnabledShipmentTypeCodes.ToList();
         }
 
         /// <summary>
