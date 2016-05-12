@@ -59,6 +59,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
         private void SelectRate(ShippingPanelViewModel viewModel, RateResult selectedRate)
         {
             viewModel.ShipmentViewModel.SelectRate(selectedRate);
+            viewModel.SaveToDatabase();
         }
 
         /// <summary>

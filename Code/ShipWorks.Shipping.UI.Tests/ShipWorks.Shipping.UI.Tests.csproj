@@ -186,6 +186,7 @@
     <Compile Include="ShippingPanel\ObservableRegistrations\CarrierConfiguredPipelineTest.cs" />
     <Compile Include="ShippingPanel\ObservableRegistrations\ChangeOriginAddressFromTypePipelineTest.cs" />
     <Compile Include="ShippingPanel\ObservableRegistrations\ChangeShipmentTypePipelineTest.cs" />
+    <Compile Include="ShippingPanel\ObservableRegistrations\SaveAfterAddressValidationPipelineTest.cs" />
     <Compile Include="ShippingPanel\ObservableRegistrations\ShipmentsVoidedPipelineTest.cs" />
     <Compile Include="ShippingPanel\ObservableRegistrations\VoidLabelPipelineTest.cs" />
     <Compile Include="ShippingPanel\ObservableRegistrations\CreateLabelPipelineTest.cs" />
