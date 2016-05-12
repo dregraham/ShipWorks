@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Input;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
 
@@ -23,5 +24,6 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         event PropertyChangedEventHandler PropertyChanged;
 
         void Load(List<OdbcTable> tables);
+        void LoadStore(OdbcStoreEntity store);
     }
 }

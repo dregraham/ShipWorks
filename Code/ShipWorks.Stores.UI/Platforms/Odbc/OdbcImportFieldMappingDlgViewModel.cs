@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.Command;
 using ShipWorks.Core.UI;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
 
@@ -14,6 +15,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         private IEnumerable<OdbcColumn> columns;
         private OdbcFieldMap selectedFieldMap;
         protected readonly PropertyChangedHandler Handler;
+        private OdbcStoreEntity store;
         public event PropertyChangedEventHandler PropertyChanged;
 
 
@@ -79,6 +81,11 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         public void Load(List<OdbcTable> tables)
         {
             Tables = tables;
+        }
+
+        public void LoadStore(OdbcStoreEntity store)
+        {
+            this.store = store;
         }
     }
 }

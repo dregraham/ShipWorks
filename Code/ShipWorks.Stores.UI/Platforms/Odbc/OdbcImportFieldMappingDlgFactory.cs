@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 using ShipWorks.ApplicationCore.Licensing;
+using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc
 {
@@ -26,11 +27,12 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// <summary>
         /// Gets the odbc import field mapping dialog.
         /// </summary>
-        public IDialog CreateOdbcImportFieldMappingDlg(IWin32Window owner)
+        public IDialog CreateOdbcImportFieldMappingDlg(IWin32Window owner, OdbcStoreEntity store)
         {
             // Get the dialog
             IDialog dialog = dialogFactory("OdbcImportFieldMappingDlg");
             dialog.LoadOwner(owner);
+            viewModel.LoadStore(store);
             dialog.DataContext = viewModel;
 
             return dialog;

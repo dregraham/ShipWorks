@@ -66,11 +66,15 @@ namespace ShipWorks.Stores.Platforms.Odbc
             return store;
         }
 
+        /// <summary>
+        /// Creates the add store wizard pages.
+        /// </summary>
         public override List<WizardPage> CreateAddStoreWizardPages()
         {
             return new List<WizardPage>
                 {
-                    IoC.UnsafeGlobalLifetimeScope.ResolveKeyed<WizardPage>(StoreTypeCode.Odbc)
+                    IoC.UnsafeGlobalLifetimeScope.ResolveNamed<WizardPage>("OdbcDataSourcePage"),
+                    IoC.UnsafeGlobalLifetimeScope.ResolveNamed<WizardPage>("OdbcImportFieldMappingPage")
                 };
         }
     }

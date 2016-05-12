@@ -2,6 +2,7 @@
 using Autofac;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Management;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc
@@ -29,7 +30,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             using (var scope = IoC.BeginLifetimeScope())
             {
                 OdbcImportFieldMappingDlgFactory factory = scope.Resolve<OdbcImportFieldMappingDlgFactory>();
-                IDialog dlg = factory.GetOdbcImportFieldMappingDlg(this);
+                IDialog dlg = factory.CreateOdbcImportFieldMappingDlg(this, GetStore<OdbcStoreEntity>());
                 dlg.ShowDialog();
             }
         }
