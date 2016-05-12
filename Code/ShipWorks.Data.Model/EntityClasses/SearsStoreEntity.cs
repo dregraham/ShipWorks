@@ -475,7 +475,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("StoreID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
-			_fieldsCustomProperties.Add("Email", fieldHashtable);
+			_fieldsCustomProperties.Add("SearsEmail", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("Password", fieldHashtable);
@@ -558,15 +558,15 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)SearsStoreFieldIndex.StoreID, value); }
 		}
 
-		/// <summary> The Email property of the Entity SearsStore<br/><br/>
+		/// <summary> The SearsEmail property of the Entity SearsStore<br/><br/>
 		/// </summary>
 		/// <remarks>Mapped on  table field: "SearsStore"."SearsEmail"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 75<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public override System.String Email
+		public virtual System.String SearsEmail
 		{
-			get { return (System.String)GetValue((int)SearsStoreFieldIndex.Email, true); }
-			set	{ SetValue((int)SearsStoreFieldIndex.Email, value); }
+			get { return (System.String)GetValue((int)SearsStoreFieldIndex.SearsEmail, true); }
+			set	{ SetValue((int)SearsStoreFieldIndex.SearsEmail, value); }
 		}
 
 		/// <summary> The Password property of the Entity SearsStore<br/><br/>

@@ -23,8 +23,8 @@ namespace ShipWorks.Stores.Platforms.Sears
         /// <summary>
         /// Constructor
         /// </summary>
-        public SearsCredentials(SearsStoreEntity store, 
-			HttpVariableRequestSubmitter request, 
+        public SearsCredentials(SearsStoreEntity store,
+			HttpVariableRequestSubmitter request,
 			IDateTimeProvider dateTimeProvider,
             IEncryptionProviderFactory encryptionProviderFactory)
         {
@@ -73,7 +73,7 @@ namespace ShipWorks.Stores.Platforms.Sears
                 string timeStamp = dateTimeProvider.UtcNow.AddMinutes(-15)
                                         .ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'", CultureInfo.InvariantCulture);
 
-                string toHash = $"{store.SellerID}:{store.Email}:{timeStamp}";
+                string toHash = $"{store.SellerID}:{store.SearsEmail}:{timeStamp}";
                 string signature;
 
                 try
@@ -89,7 +89,7 @@ namespace ShipWorks.Stores.Platforms.Sears
                                              "Enter a new key in your store settings.", ex);
                 }
 
-                string headerValue = $"HMAC-SHA256 emailaddress={store.Email},timestamp={timeStamp},signature={signature}";
+                string headerValue = $"HMAC-SHA256 emailaddress={store.SearsEmail},timestamp={timeStamp},signature={signature}";
                 request.Headers.Add("authorization", headerValue);
             }
         }
@@ -121,9 +121,9 @@ namespace ShipWorks.Stores.Platforms.Sears
             if (string.IsNullOrEmpty(store.SellerID))
             {
                 // They are using the "old" authentication method
-                IEncryptionProvider secureTextEncryptionProvider = encryptionProviderFactory.CreateSecureTextEncryptionProvider(store.Email);
+                IEncryptionProvider secureTextEncryptionProvider = encryptionProviderFactory.CreateSecureTextEncryptionProvider(store.SearsEmail);
 
-                credentials.Add("email", store.Email);
+                credentials.Add("email", store.SearsEmail);
                 credentials.Add("password", secureTextEncryptionProvider.Decrypt(store.Password));
             }
             else
