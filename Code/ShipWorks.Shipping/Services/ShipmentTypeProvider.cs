@@ -41,6 +41,8 @@ namespace ShipWorks.Shipping.Services
         public ShipmentTypeProvider(IObservable<IShipWorksMessage> messenger, IShipmentTypeManager shipmentTypeManager, IShippingManager shippingManager)
         {
             this.shipmentTypeManager = shipmentTypeManager;
+            this.shippingManager = shippingManager;
+
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
 
             subscription = messenger.OfType<EnabledCarriersChangedMessage>().Subscribe(UpdateAvailableCarriers);

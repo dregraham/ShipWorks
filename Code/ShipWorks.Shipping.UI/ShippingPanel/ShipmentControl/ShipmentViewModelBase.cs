@@ -159,6 +159,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
                 PackageAdapters[i].Index = i + 1;
             }
 
+            RefreshInsurance();
+
             messenger.Send(new ShipmentChangedMessage(this, shipmentAdapter));
         }
 
