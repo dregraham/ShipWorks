@@ -33,6 +33,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             IDialog dialog = dialogFactory("OdbcImportFieldMappingDlg");
             dialog.LoadOwner(owner);
             viewModel.LoadStore(store);
+            viewModel.LoadTables();
             dialog.DataContext = viewModel;
 
             return dialog;

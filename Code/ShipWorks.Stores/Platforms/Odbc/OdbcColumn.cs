@@ -1,3 +1,5 @@
+using System.Reflection;
+
 namespace ShipWorks.Stores.Platforms.Odbc
 {
     /// <summary>
@@ -16,6 +18,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// <summary>
         /// The column name
         /// </summary>
+        [Obfuscation(Exclude = true)]
 	    public string Name { get; }
 	}
 }

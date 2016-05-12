@@ -36,7 +36,8 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
             using (var scope = IoC.BeginLifetimeScope())
             {
                 OdbcImportFieldMappingDlgFactory factory = scope.Resolve<OdbcImportFieldMappingDlgFactory>();
-                IDialog dlg = factory.CreateOdbcImportFieldMappingDlg(this, GetStore<OdbcStoreEntity>());
+                OdbcStoreEntity store = GetStore<OdbcStoreEntity>();
+                IDialog dlg = factory.CreateOdbcImportFieldMappingDlg(this, store);
                 dlg.ShowDialog();
             }
         }

@@ -62,6 +62,9 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
 
             builder.RegisterType<OdbcImportFieldMappingDlgFactory>()
                 .AsSelf();
+
+            builder.RegisterType<OdbcSchema>()
+                .AsImplementedInterfaces();
         }
     }
 }

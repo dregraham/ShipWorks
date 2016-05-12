@@ -25,5 +25,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
 
         void Load(List<OdbcTable> tables);
         void LoadStore(OdbcStoreEntity store);
+
+        void LoadTables();
     }
 }

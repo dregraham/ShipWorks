@@ -1,7 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Input;
+using Autofac;
 using GalaSoft.MvvmLight.Command;
+using Interapptive.Shared.Security;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Odbc;
@@ -9,7 +12,7 @@ using ShipWorks.Stores.Platforms.Odbc.Mapping;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc
 {
-    public class OdbcImportFieldMappingDlgViewModel : IOdbcImportFieldMappingDlgViewModel
+    public class OdbcImportFieldMappingDlgViewModel : IOdbcImportFieldMappingDlgViewModel, INotifyPropertyChanged
     {
         private OdbcTable selectedTable;
         private IEnumerable<OdbcColumn> columns;
@@ -26,10 +29,8 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             ItemFieldMap = fieldMapFactory.CreateOrderItemFieldMap();
             FieldMaps = new List<OdbcFieldMap>() { OrderFieldMap, AddressFieldMap, ItemFieldMap };
             selectedFieldMap = OrderFieldMap;
-
             LoadMapCommand = new RelayCommand(LoadMap);
             SaveMapCommand = new RelayCommand(SaveMap);
-
             Handler = new PropertyChangedHandler(this, () => PropertyChanged);
         }
         private void SaveMap()
@@ -49,8 +50,8 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             get { return selectedTable; }
             set
             {
-                Columns = selectedTable.Columns;
                 Handler.Set(nameof(SelectedTable), ref selectedTable, value);
+                Columns = selectedTable.Columns;
             }
         }
 
@@ -86,6 +87,21 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         public void LoadStore(OdbcStoreEntity store)
         {
             this.store = store;
+        }
+
+        public void LoadTables()
+        {
+            using (var scope = IoC.BeginLifetimeScope())
+            {
+                OdbcDataSource dataSource = scope.Resolve<OdbcDataSource>();
+                dataSource.Restore(store.ConnectionString);
+
+                IOdbcSchema schema = scope.Resolve<IOdbcSchema>();
+
+                schema.Load(dataSource);
+
+                Tables = schema.Tables;
+            }
         }
     }
 }
