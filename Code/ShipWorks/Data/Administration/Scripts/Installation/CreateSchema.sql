@@ -3094,7 +3094,7 @@ GO
 CREATE TABLE [dbo].[SearsStore]
 (
 [StoreID] [bigint] NOT NULL,
-[Email] [nvarchar] (75) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[SearsEmail] [nvarchar] (75) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [Password] [nvarchar] (75) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [SecretKey] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [SellerID] [nvarchar] (15) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL

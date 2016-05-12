@@ -12,3 +12,8 @@ PRINT N'Dropping constraints from [dbo].[SearsStore]'
 GO
 ALTER TABLE [dbo].[SearsStore] DROP CONSTRAINT [DF_SearsStore_SecretKey]
 GO
+PRINT N'Altering [dbo].[SearsStore]'
+GO
+IF (COL_LENGTH(N'[dbo].[SearsStore]', N'Email') IS NOT NULL) AND (COL_LENGTH(N'[dbo].[SearsStore]', N'SearsEmail') IS NULL)
+EXEC sp_rename N'[dbo].[SearsStore].[Email]', N'SearsEmail', 'COLUMN'
+GO
