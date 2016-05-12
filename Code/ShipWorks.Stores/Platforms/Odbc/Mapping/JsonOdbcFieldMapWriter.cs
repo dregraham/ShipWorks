@@ -7,7 +7,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 	{
 		public JsonOdbcFieldMapWriter(OdbcFieldMap map)
 		{
-			throw new NotImplementedException();
+
 		}
 
 		public void Write(Stream stream)

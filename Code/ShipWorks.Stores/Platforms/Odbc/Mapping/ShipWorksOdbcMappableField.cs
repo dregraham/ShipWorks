@@ -1,4 +1,5 @@
 using System.Reflection;
+using System.Text;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Mapping
@@ -26,8 +27,10 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// </summary>
         public string GetQualifiedName()
 	    {
-            return field.Alias.Replace("_", ".");
-        }
+            string table = field.ContainingObjectName.Replace("Entity", string.Empty);
+
+            return $"{table}.{field.Name}";
+	    }
 
         /// <summary>
         /// The fields value

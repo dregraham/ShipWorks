@@ -11,7 +11,6 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 	    private readonly IOdbcTable table;
 	    private readonly OdbcColumn column;
 
-        /// <summary>
 	    public ExternalOdbcMappableField()
 	    {
 	    }

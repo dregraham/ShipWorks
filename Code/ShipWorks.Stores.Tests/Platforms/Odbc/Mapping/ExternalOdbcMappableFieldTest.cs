@@ -17,7 +17,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
         }
 
         [Fact]
-        public void QuanifiedName_ReturnsQualifiedName()
+        public void GetQualifiedName_ReturnsQualifiedName()
         {
             Mock<IOdbcTable> table = mock.Mock<IOdbcTable>();
             table.SetupGet(t => t.Name).Returns("TableName");
