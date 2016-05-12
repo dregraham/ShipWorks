@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Autofac;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
@@ -15,13 +16,15 @@ namespace ShipWorks.Stores.Platforms.Odbc
     /// </summary>
     public class OdbcStoreType : StoreType
     {
+        private readonly IEnumerable<IOdbcWizardPage> wizardPages;
+
         /// <summary>
         /// Constructor
         /// </summary>
-        public OdbcStoreType(StoreEntity store)
+        public OdbcStoreType(StoreEntity store, IEnumerable<IOdbcWizardPage> wizardPages)
             : base(store)
         {
-
+            this.wizardPages = wizardPages;
         }
 
         /// <summary>
@@ -71,11 +74,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// </summary>
         public override List<WizardPage> CreateAddStoreWizardPages()
         {
-            return new List<WizardPage>
-                {
-                    IoC.UnsafeGlobalLifetimeScope.ResolveNamed<WizardPage>("OdbcDataSourcePage"),
-                    IoC.UnsafeGlobalLifetimeScope.ResolveNamed<WizardPage>("OdbcImportFieldMappingPage")
-                };
+            return wizardPages.OrderBy(w => w.Position).Cast<WizardPage>().ToList();
         }
     }
 }

@@ -22,8 +22,6 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
                 .AsImplementedInterfaces()
                 .SingleInstance();
 
-
-
             builder.RegisterType<OdbcDataSourceRepository>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
@@ -55,11 +53,11 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
                 .AsImplementedInterfaces();
 
             builder.RegisterType<OdbcDataSourcePage>()
-                .Named<WizardPage>("OdbcDataSourcePage")
+                .AsImplementedInterfaces()
                 .ExternallyOwned();
 
             builder.RegisterType<OdbcImportFieldMappingPage>()
-                .Named<WizardPage>("OdbcImportFieldMappingPage")
+                .AsImplementedInterfaces()
                 .ExternallyOwned();
 
             builder.RegisterType<OdbcImportFieldMappingDlgFactory>()

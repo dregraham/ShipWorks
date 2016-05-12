@@ -157,10 +157,10 @@
     </Compile>
     <Compile Include="Platforms\Odbc\IOdbcImportFieldMappingDlgViewModel.cs" />
     <Compile Include="Platforms\Odbc\OdbcImportFieldMappingDlgFactory.cs" />
-    <Compile Include="Platforms\Odbc\OdbcImportFieldMappingPage.cs">
+    <Compile Include="Platforms\Odbc\WizardPages\OdbcImportFieldMappingPage.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Platforms\Odbc\OdbcImportFieldMappingPage.Designer.cs">
+    <Compile Include="Platforms\Odbc\WizardPages\OdbcImportFieldMappingPage.Designer.cs">
       <DependentUpon>OdbcImportFieldMappingPage.cs</DependentUpon>
     </Compile>
     <Compile Include="Platforms\Sears\SearsStoreModule.cs" />
@@ -250,7 +250,7 @@
     <EmbeddedResource Include="Platforms\LemonStand\WizardPages\LemonStandAccountPage.resx">
       <DependentUpon>LemonStandAccountPage.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Platforms\Odbc\OdbcImportFieldMappingPage.resx">
+    <EmbeddedResource Include="Platforms\Odbc\WizardPages\OdbcImportFieldMappingPage.resx">
       <DependentUpon>OdbcImportFieldMappingPage.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Platforms\SparkPay\SparkPaySettingsControl.resx">
