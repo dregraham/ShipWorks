@@ -189,7 +189,7 @@
             // customLabel
             // 
             this.customLabel.AutoSize = true;
-            this.customLabel.Location = new System.Drawing.Point(10, 7);
+            this.customLabel.Location = new System.Drawing.Point(4, 7);
             this.customLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.customLabel.Name = "customLabel";
             this.customLabel.Size = new System.Drawing.Size(96, 13);
