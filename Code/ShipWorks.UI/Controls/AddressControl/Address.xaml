@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
              xmlns:local="clr-namespace:ShipWorks.UI.Controls.AddressControl"
              xmlns:props="clr-namespace:ShipWorks.UI.AttachedProperties"
              xmlns:geography="clr-namespace:Interapptive.Shared.Business.Geography;assembly=Interapptive.Shared"
@@ -29,10 +30,14 @@
             <Style TargetType="TextBlock" BasedOn="{StaticResource Grid.TextBlock.Label}" />
             <Style TargetType="TextBox" BasedOn="{StaticResource Grid.TextBox.Default}" />
 
+            <sys:Int32 x:Key="One">1</sys:Int32>
+
             <valueConverters:StateProvinceConverter x:Key="StateProvinceConverter" />
             <valueConverters:EnumDescriptionConverter x:Key="EnumDescription" />
             <valueConverters:EnumImageConverter x:Key="EnumImage" />
             <valueConverters:BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
+            <valueConverters:VisibleWhenEqualToParameterConverter x:Key="VisibleWhenEqualToParameter" />
+            <valueConverters:VisibleWhenEqualToParameterConverter x:Key="VisibleWhenNotEqualToParameter" Invert="true" />
         </ResourceDictionary>
     </UserControl.Resources>
     <StackPanel>
@@ -98,7 +103,12 @@
                     </Button>
                     <Button Visibility="{Binding CanShowSuggestions, Converter={StaticResource BooleanToVisibility}}"
                             props:PopupClickManager.OpenPopup="{Binding ElementName=AddressPopup}">
-                        Suggestions
+                        <StackPanel Margin="0" Orientation="Horizontal">
+                            <TextBlock Margin="0"><Run Text="{Binding SuggestionCount}" /> Suggestion</TextBlock>
+                            <TextBlock Margin="0"
+                                       Visibility="{Binding SuggestionCount, Converter={StaticResource VisibleWhenNotEqualToParameter}, ConverterParameter={StaticResource One}}"
+                                       Text="s" />
+                        </StackPanel>
                     </Button>
                     <Button Visibility="{Binding CanShowValidationMessage, Converter={StaticResource BooleanToVisibility}}"
                             Command="{Binding ShowValidationMessageCommand}">
