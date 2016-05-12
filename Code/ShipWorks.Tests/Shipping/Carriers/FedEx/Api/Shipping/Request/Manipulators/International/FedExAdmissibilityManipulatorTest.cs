@@ -1,12 +1,13 @@
-using System;
-using System.Collections.Generic;
-using Xunit;
+using Interapptive.Shared.Utility;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators.International;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
+using System;
+using System.Collections.Generic;
+using Xunit;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators.International
 {
@@ -364,6 +365,39 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             testObject.Manipulate(carrierRequest.Object);
 
             Assert.Equal(PhysicalPackagingType.TUBE, nativeRequest.RequestedShipment.RequestedPackageLineItems[0].PhysicalPackaging);
+        }
+
+        [Fact]
+        public void Manipulate_PhysicalPackagingTypeIsHamper_WhenShipCountryCodeIsCA_AndFedExTypeIsHamper()
+        {
+            shipmentEntity.ShipCountryCode = "CA";
+            shipmentEntity.FedEx.CustomsAdmissibilityPackaging = (int)FedExPhysicalPackagingType.Hamper;
+
+            testObject.Manipulate(carrierRequest.Object);
+
+            Assert.Equal(PhysicalPackagingType.HAMPER, nativeRequest.RequestedShipment.RequestedPackageLineItems[0].PhysicalPackaging);
+        }
+
+        [Fact]
+        public void Manipulate_PhysicalPackagingTypeIsOther_WhenShipCountryCodeIsCA_AndFedExTypeIsOther()
+        {
+            shipmentEntity.ShipCountryCode = "CA";
+            shipmentEntity.FedEx.CustomsAdmissibilityPackaging = (int)FedExPhysicalPackagingType.Other;
+
+            testObject.Manipulate(carrierRequest.Object);
+
+            Assert.Equal(PhysicalPackagingType.OTHER, nativeRequest.RequestedShipment.RequestedPackageLineItems[0].PhysicalPackaging);
+        }
+
+        [Fact]
+        public void Manipulate_NoPhysicalPackagingTypeThrows_WhenShipCountryCodeIsCA_AndAnyFedExPackageTypeIsUsed()
+        {
+            shipmentEntity.ShipCountryCode = "CA";
+            foreach (var fedExPhysicalPackagingType in EnumHelper.GetEnumList<FedExPhysicalPackagingType>())
+            {
+                shipmentEntity.FedEx.CustomsAdmissibilityPackaging = (int) fedExPhysicalPackagingType.Value;
+                testObject.Manipulate(carrierRequest.Object);
+            }
         }
 
         [Fact]
