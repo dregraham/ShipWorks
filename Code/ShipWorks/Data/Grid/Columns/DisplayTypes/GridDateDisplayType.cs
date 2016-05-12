@@ -114,7 +114,7 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes
 
             if (UseDescriptiveDates)
             {
-                return dateTime.FormatFriendlyDate();
+                return dateTime.FormatFriendlyDate(dateFormat);
             }
 
             return dateTime.ToString(dateFormat);

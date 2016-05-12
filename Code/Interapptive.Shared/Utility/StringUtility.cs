@@ -51,7 +51,13 @@ namespace Interapptive.Shared.Utility
         /// <summary>
         /// Return a friendly formatted date
         /// </summary>
-        public static string FormatFriendlyDate(this DateTime dateTime)
+        public static string FormatFriendlyDate(this DateTime dateTime) =>
+            FormatFriendlyDate(dateTime, "d");
+
+        /// <summary>
+        /// Return a friendly formatted date
+        /// </summary>
+        public static string FormatFriendlyDate(this DateTime dateTime, string defaultFormat)
         {
             if (dateTime.Date == DateTime.Now.Date)
             {
@@ -68,7 +74,7 @@ namespace Interapptive.Shared.Utility
                 return "Tomorrow";
             }
 
-            return dateTime.ToShortDateString();
+            return dateTime.ToString(defaultFormat);
         }
 
         /// <summary>
