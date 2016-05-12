@@ -650,6 +650,8 @@ namespace ShipWorks.Stores.Platforms.Ebay
             executor.ExecuteCompleted += (o, e) =>
             {
                 context.Complete(e.Issues, MenuCommandResult.Error);
+
+                SendOrderSelectionChangingMessage(context.SelectedKeys);
             };
 
             executor.ExecuteAsync(ShipToGspFacilityCallback, context.SelectedKeys);
@@ -682,8 +684,6 @@ namespace ShipWorks.Stores.Platforms.Ebay
                         {
                             adapter.SaveAndRefetch(ebayOrder);
                         }
-
-                        SendOrderSelectionChangedMessage(ebayOrder);
                     }
                 }
                 else
@@ -702,9 +702,9 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// <summary>
         /// Sends an OrderSelectionChangedMessage so that other panels can update appropriately.
         /// </summary>
-        private static void SendOrderSelectionChangedMessage(EbayOrderEntity ebayOrder)
+        private static void SendOrderSelectionChangingMessage(IEnumerable<long> orderIds)
         {
-            OrderSelectionChangingMessage orderSelectionChangingMessage = new OrderSelectionChangingMessage(null, new List<long>() { ebayOrder.OrderID });
+            OrderSelectionChangingMessage orderSelectionChangingMessage = new OrderSelectionChangingMessage(new object(), orderIds.ToList());
             Messenger.Current.Send(orderSelectionChangingMessage);
         }
 
@@ -722,6 +722,8 @@ namespace ShipWorks.Stores.Platforms.Ebay
             executor.ExecuteCompleted += (o, e) =>
             {
                 context.Complete(e.Issues, MenuCommandResult.Error);
+
+                SendOrderSelectionChangingMessage(context.SelectedKeys);
             };
 
             executor.ExecuteAsync(ShipToBuyerCallback, context.SelectedKeys);
@@ -751,8 +753,6 @@ namespace ShipWorks.Stores.Platforms.Ebay
                     {
                         adapter.SaveAndRefetch(ebayOrder);
                     }
-
-                    SendOrderSelectionChangedMessage(ebayOrder);
                 }
             }
             catch (EbayException ex)
