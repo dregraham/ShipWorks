@@ -4,7 +4,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 {
 	public class JsonOdbcFieldMapReader : IOdbcFieldMapReader
 	{
-		public JsonOdbcFieldMapReader()
+		public JsonOdbcFieldMapReader(OdbcFieldMap map)
 		{
 			throw new NotImplementedException();
 		}

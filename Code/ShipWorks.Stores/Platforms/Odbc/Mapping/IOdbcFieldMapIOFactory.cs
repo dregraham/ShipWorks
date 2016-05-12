@@ -1,9 +1,20 @@
 namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 {
-	public interface IOdbcFieldMapIOFactory
-	{
-		IOdbcFieldMapReader CreateReader(OdbcFieldMap map);
+    /// <summary>
+    /// Factory for creating Odbc field map readers and writers
+    /// </summary>
+    public interface IOdbcFieldMapIOFactory
+    {
+        /// <summary>
+        /// Creates a field map reader.
+        /// </summary>
+        /// <param name="map">The map.</param>
+        /// <returns></returns>
+        IOdbcFieldMapReader CreateReader(OdbcFieldMap map);
 
-		IOdbcFieldMapWriter CreateWriter(OdbcFieldMap map);
-	}
+        /// <summary>
+        /// Creates a field map writer.
+        /// </summary>
+        IOdbcFieldMapWriter CreateWriter(OdbcFieldMap map);
+    }
 }

@@ -2,16 +2,25 @@ using System;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 {
-	public class JsonOdbcFieldMapIOFactory : IOdbcFieldMapIOFactory
+    /// <summary>
+    /// Factory for creating Odbc field map readers and writers
+    /// </summary>
+    public class JsonOdbcFieldMapIOFactory : IOdbcFieldMapIOFactory
 	{
-		public IOdbcFieldMapReader CreateReader(OdbcFieldMap map)
+        /// <summary>
+        /// Creates a field map reader.
+        /// </summary>
+        public IOdbcFieldMapReader CreateReader(OdbcFieldMap map)
 		{
-			throw new NotImplementedException();
-		}
+            return new JsonOdbcFieldMapReader(map);
+        }
 
-		public IOdbcFieldMapWriter CreateWriter(OdbcFieldMap map)
+        /// <summary>
+        /// Creates a field map writer.
+        /// </summary>
+        public IOdbcFieldMapWriter CreateWriter(OdbcFieldMap map)
 		{
-			throw new NotImplementedException();
-		}
-	}
+            return new JsonOdbcFieldMapWriter(map);
+        }
+    }
 }
