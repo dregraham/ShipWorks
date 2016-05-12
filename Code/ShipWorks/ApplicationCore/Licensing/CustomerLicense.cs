@@ -8,9 +8,11 @@ using log4net;
 using ShipWorks.ApplicationCore.Dashboard.Content;
 using ShipWorks.ApplicationCore.Licensing.FeatureRestrictions;
 using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
+using ShipWorks.Core.Messaging;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Editions;
+using ShipWorks.Messaging.Messages;
 using ShipWorks.Stores;
 using ShipWorks.Users.Security;
 
@@ -30,6 +32,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         private readonly IDeletionService deletionService;
         private readonly IEnumerable<IFeatureRestriction> featureRestrictions;
         private readonly IEnumerable<ILicenseEnforcer> licenseEnforcers;
+        private readonly IMessenger messenger;
 
         private readonly TimeSpan capabilitiesTimeToLive;
         private DateTime lastRefreshTimeInUtc;
@@ -45,8 +48,10 @@ namespace ShipWorks.ApplicationCore.Licensing
             Func<Type, ILog> logFactory,
             IDeletionService deletionService,
             IEnumerable<ILicenseEnforcer> licenseEnforcers,
-            IEnumerable<IFeatureRestriction> featureRestrictions)
+            IEnumerable<IFeatureRestriction> featureRestrictions, 
+            IMessenger messenger)
         {
+            this.messenger = messenger;
             Key = key;
             this.tangoWebClient = tangoWebClient;
             this.licenseWriter = licenseWriter;
@@ -148,6 +153,9 @@ namespace ShipWorks.ApplicationCore.Licensing
                 // Refresh the license capabilities and note the time they were refreshed
                 LicenseCapabilities = tangoWebClient.GetLicenseCapabilities(this);
                 lastRefreshTimeInUtc = DateTime.UtcNow;
+
+                // Let anyone who cares know that enabled carriers may have changed.
+                messenger.Send(new EnabledCarriersChangedMessage(this, new List<int>(), new List<int>()));
             }
             catch (TangoException ex)
             {

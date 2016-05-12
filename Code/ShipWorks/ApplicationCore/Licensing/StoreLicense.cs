@@ -5,9 +5,12 @@ using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.ApplicationCore.Dashboard.Content;
 using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
+using ShipWorks.Core.Messaging;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Editions;
+using ShipWorks.Messaging.Messages;
+using ShipWorks.Stores.Platforms.AmeriCommerce.WebServices;
 using ShipWorks.Users.Security;
 
 namespace ShipWorks.ApplicationCore.Licensing
@@ -16,12 +19,14 @@ namespace ShipWorks.ApplicationCore.Licensing
     {
         private readonly StoreEntity store;
         private readonly ILog log;
+        private readonly IMessenger messenger;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public StoreLicense(StoreEntity store, Func<Type, ILog> logFactory)
+        public StoreLicense(StoreEntity store, Func<Type, ILog> logFactory, IMessenger messenger)
         {
+            this.messenger = messenger;
             this.store = store;
             log = logFactory(GetType());
             Key = store.License;
@@ -110,6 +115,9 @@ namespace ShipWorks.ApplicationCore.Licensing
             {
                 LicenseActivationHelper.EnsureActive(store);
                 DisabledReason = string.Empty;
+
+                // Let anyone who cares know that enabled carriers may have changed.
+                messenger.Send(new EnabledCarriersChangedMessage(this, new List<int>(), new List<int>()));
             }
             catch (Exception ex)
                 when (ex is ShipWorksLicenseException || ex is TangoException)

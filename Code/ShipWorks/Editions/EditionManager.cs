@@ -7,8 +7,10 @@ using System.Windows.Forms;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using log4net;
+using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Messaging.Messages;
 using ShipWorks.Shipping;
 using ShipWorks.Stores;
 
@@ -107,6 +109,9 @@ namespace ShipWorks.Editions
             restrictions = RemoveRestrictionIfNeeded(EditionFeature.StampsRrDonnelleyConsolidator, null, restrictions, storeEntities);
 
             ActiveRestrictions = new EditionRestrictionSet(restrictions);
+
+            // Let anyone who cares know that enabled carriers may have changed.
+            Messenger.Current.Send(new EnabledCarriersChangedMessage(new object(), new List<int>(), new List<int>()));
         }
 
         /// <summary>

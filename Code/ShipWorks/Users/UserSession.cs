@@ -19,6 +19,7 @@ using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Grid.Columns;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Editions;
 using ShipWorks.Email.Accounts;
 using ShipWorks.FileTransfer;
 using ShipWorks.Filters;
@@ -189,6 +190,9 @@ namespace ShipWorks.Users
                     service.InitializeForCurrentSession();
                 }
             }
+
+            // Update restrictions so that they are ready for any code that needs them early
+            EditionManager.UpdateRestrictions();
         }
 
         /// <summary>
