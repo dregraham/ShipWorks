@@ -42,7 +42,7 @@ namespace ShipWorks.Stores.Platforms.Sears
                 throw new ArgumentException("A non SearsStore store was passed to SearsStore account settings.");
             }
 
-            email.Text = searsStore.Email;
+            email.Text = searsStore.SearsEmail;
             sellerID.Text = searsStore.SellerID;
 
             try
@@ -77,6 +77,7 @@ namespace ShipWorks.Stores.Platforms.Sears
             }
 
             searsStore.Email = email.Text;
+            searsStore.SearsEmail = email.Text;
             searsStore.SellerID = sellerID.Text;
             searsStore.SecretKey = encryptionProvider.Encrypt(secretKey.Text);
 
@@ -108,7 +109,7 @@ namespace ShipWorks.Stores.Platforms.Sears
         /// </summary>
         protected virtual bool ConnectionVerificationNeeded(SearsStoreEntity searsStore)
         {
-            return (searsStore.Fields[(int) SearsStoreFieldIndex.Email].IsChanged ||
+            return (searsStore.Fields[(int) SearsStoreFieldIndex.SearsEmail].IsChanged ||
                     searsStore.Fields[(int) SearsStoreFieldIndex.SellerID].IsChanged ||
                     searsStore.Fields[(int) SearsStoreFieldIndex.SecretKey].IsChanged);
         }

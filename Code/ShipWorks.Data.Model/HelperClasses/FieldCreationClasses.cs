@@ -17527,10 +17527,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(SearsStoreFieldIndex.Fax);}
 		}
-		/// <summary>Creates a new SearsStoreEntity.Email_Store field instance</summary>
-		public static EntityField2 Email_Store
+		/// <summary>Creates a new SearsStoreEntity.Email field instance</summary>
+		public static EntityField2 Email
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(SearsStoreFieldIndex.Email_Store);}
+			get { return (EntityField2)EntityFieldFactory.Create(SearsStoreFieldIndex.Email);}
 		}
 		/// <summary>Creates a new SearsStoreEntity.Website field instance</summary>
 		public static EntityField2 Website
@@ -17592,10 +17592,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(SearsStoreFieldIndex.StoreID);}
 		}
-		/// <summary>Creates a new SearsStoreEntity.Email field instance</summary>
-		public static EntityField2 Email
+		/// <summary>Creates a new SearsStoreEntity.SearsEmail field instance</summary>
+		public static EntityField2 SearsEmail
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(SearsStoreFieldIndex.Email);}
+			get { return (EntityField2)EntityFieldFactory.Create(SearsStoreFieldIndex.SearsEmail);}
 		}
 		/// <summary>Creates a new SearsStoreEntity.Password field instance</summary>
 		public static EntityField2 Password
