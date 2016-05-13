@@ -1,7 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
+using Autofac;
+using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Platforms.Odbc;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc
 {
@@ -27,13 +31,12 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// <summary>
         /// Gets the odbc import field mapping dialog.
         /// </summary>
-        public IDialog CreateOdbcImportFieldMappingDlg(IWin32Window owner, OdbcStoreEntity store)
+        public IDialog CreateOdbcImportFieldMappingDlg(IWin32Window owner, IEnumerable<OdbcTable> tables)
         {
             // Get the dialog
             IDialog dialog = dialogFactory("OdbcImportFieldMappingDlg");
             dialog.LoadOwner(owner);
-            viewModel.LoadStore(store);
-            viewModel.LoadTables();
+            viewModel.Load(tables);
             dialog.DataContext = viewModel;
 
             return dialog;

@@ -37,7 +37,13 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
             {
                 OdbcImportFieldMappingDlgFactory factory = scope.Resolve<OdbcImportFieldMappingDlgFactory>();
                 OdbcStoreEntity store = GetStore<OdbcStoreEntity>();
-                IDialog dlg = factory.CreateOdbcImportFieldMappingDlg(this, store);
+                OdbcDataSource dataSource = scope.Resolve<OdbcDataSource>();
+                dataSource.Restore(store.ConnectionString);
+
+                IOdbcSchema schema = scope.Resolve<IOdbcSchema>();
+
+                schema.Load(dataSource);
+                IDialog dlg = factory.CreateOdbcImportFieldMappingDlg(Parent.Parent, schema.Tables);
                 dlg.ShowDialog();
             }
         }

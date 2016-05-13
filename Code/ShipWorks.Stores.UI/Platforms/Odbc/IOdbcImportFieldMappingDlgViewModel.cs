@@ -1,31 +1,69 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel;
 using System.Windows.Input;
-using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc
 {
+    /// <summary>
+    /// View Model for the <see cref="OdbcImportFieldMappingDlg"/>
+    /// </summary>
     public interface IOdbcImportFieldMappingDlgViewModel
     {
-        OdbcFieldMap AddressFieldMap { get; set; }
-        IEnumerable<OdbcColumn> Columns { get; set; }
-        IEnumerable<OdbcFieldMap> FieldMaps { get; set; }
-        OdbcFieldMap ItemFieldMap { get; set; }
-        ICommand LoadMapCommand { get; set; }
+        /// <summary>
+        /// The name the map will be saved as.
+        /// </summary>
         string MapName { get; set; }
-        OdbcFieldMap OrderFieldMap { get; set; }
-        ICommand SaveMapCommand { get; set; }
-        OdbcFieldMap SelectedFieldMap { get; set; }
-        OdbcTable SelectedTable { get; set; }
+
+        /// <summary>
+        /// The external odbc tables.
+        /// </summary>
         IEnumerable<OdbcTable> Tables { get; set; }
 
-        event PropertyChangedEventHandler PropertyChanged;
+        /// <summary>
+        /// The selected external odbc table.
+        /// </summary>
+        OdbcTable SelectedTable { get; set; }
 
-        void Load(List<OdbcTable> tables);
-        void LoadStore(OdbcStoreEntity store);
+        /// <summary>
+        /// The columns from the selected external odbc table.
+        /// </summary>
+        IEnumerable<OdbcColumn> Columns { get; set; }
 
-        void LoadTables();
+        /// <summary>
+        /// List of field maps to be mapped.
+        /// </summary>
+        IEnumerable<OdbcFieldMap> FieldMaps { get; set; }
+
+        /// <summary>
+        /// The selected field map.
+        /// </summary>
+        OdbcFieldMap SelectedFieldMap { get; set; }
+
+        /// <summary>
+        /// The order field map.
+        /// </summary>
+        OdbcFieldMap OrderFieldMap { get; set; }
+
+        /// <summary>
+        /// The address field map.
+        /// </summary>
+        OdbcFieldMap AddressFieldMap { get; set; }
+
+        /// <summary>
+        /// The item field map.
+        /// </summary>
+        OdbcFieldMap ItemFieldMap { get; set; }
+
+        /// <summary>
+        /// The save map command.
+        /// </summary>
+        ICommand SaveMapCommand { get; set; }
+
+        /// <summary>
+        /// Loads the external odbc tables.
+        /// </summary>
+        void Load(IEnumerable<OdbcTable> tables);
+
     }
 }
