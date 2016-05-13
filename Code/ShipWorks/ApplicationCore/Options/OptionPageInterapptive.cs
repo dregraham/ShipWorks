@@ -26,6 +26,7 @@ using ShipWorks.Stores.Platforms.MarketplaceAdvisor;
 using ShipWorks.Stores.Platforms.Newegg.Net;
 using ShipWorks.Stores.Platforms.PayPal;
 using ShipWorks.Stores.Platforms.SearchFit;
+using ShipWorks.Stores.Platforms.Sears;
 using ShipWorks.Stores.Platforms.Yahoo;
 using ShipWorks.Stores.Platforms.Yahoo.EmailIntegration;
 
@@ -68,6 +69,7 @@ namespace ShipWorks.ApplicationCore.Options
             marketplaceAdvisor.Checked = !MarketplaceAdvisorOmsClient.UseLiveServer;
             payPal.Checked = !PayPalWebClient.UseLiveServer;
             newegg.Checked = !Credentials.UseLiveServerKey;
+            sears.Checked = !SearsWebClient.UseLiveServer;
 
             marketplaceAdvisorMarkProcessed.Checked = MarketplaceAdvisorUtility.MarkProcessedAfterDownload;
             yahooDeleteMessages.Checked = YahooEmailUtility.DeleteMessagesAfterDownload;
@@ -108,6 +110,7 @@ namespace ShipWorks.ApplicationCore.Options
             MarketplaceAdvisorOmsClient.UseLiveServer = !marketplaceAdvisor.Checked;
             PayPalWebClient.UseLiveServer = !payPal.Checked;
             Credentials.UseLiveServerKey = !newegg.Checked;
+            SearsWebClient.UseLiveServer = !sears.Checked;
 
             MarketplaceAdvisorUtility.MarkProcessedAfterDownload = marketplaceAdvisorMarkProcessed.Checked;
             YahooEmailUtility.DeleteMessagesAfterDownload = yahooDeleteMessages.Checked;

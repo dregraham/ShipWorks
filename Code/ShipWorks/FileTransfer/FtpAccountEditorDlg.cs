@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Globalization;
 using System.Windows.Forms;
+using Interapptive.Shared.Security;
 using ShipWorks.Data.Model.EntityClasses;
-using Interapptive.Shared.Utility;
 using Interapptive.Shared.UI;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data;

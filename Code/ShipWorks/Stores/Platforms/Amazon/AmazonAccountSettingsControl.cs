@@ -1,25 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using ShipWorks.Data.Model.EntityClasses;
-using Interapptive.Shared.Utility;
-using ShipWorks.UI;
-using ShipWorks.Data.Connection;
-using System.Data.SqlTypes;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Model.HelperClasses;
 using Interapptive.Shared.Net;
 using System.Security.Cryptography;
+using Interapptive.Shared.Security;
 using Interapptive.Shared.UI;
 using ShipWorks.Stores.Management;
 using log4net;
-using System.Net;
-using ShipWorks.Stores.Platforms.Amazon.Mws;
 
 namespace ShipWorks.Stores.Platforms.Amazon
 {
@@ -47,7 +35,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
         }
 
         /// <summary>
-        /// Whether or not the certificate button is displayed 
+        /// Whether or not the certificate button is displayed
         /// </summary>
         [Browsable(true)]
         [DefaultValue(true)]
@@ -174,7 +162,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// </summary>
         private void OnLoad(object sender, EventArgs e)
         {
-            UpdateUI(); 
+            UpdateUI();
         }
 
         /// <summary>
@@ -215,7 +203,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
         }
 
         /// <summary>
-        /// Open the seller central 
+        /// Open the seller central
         /// </summary>
         private void OnLinkSellerSentral(object sender, EventArgs e)
         {

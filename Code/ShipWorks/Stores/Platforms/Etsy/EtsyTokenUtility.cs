@@ -1,17 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Interapptive.Shared.UI;
 using System.Windows.Forms;
 using System.IO;
-using Newtonsoft.Json;
-using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using log4net;
 using System.Xml.Linq;
 using System.Xml;
 using Interapptive.Shared;
+using Interapptive.Shared.Security;
 
 namespace ShipWorks.Stores.Platforms.Etsy
 {
@@ -101,7 +97,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
                         // device failure most likely
                         string message = String.Format("Failure reading token file '{0}'", dlg.FileName);
                         log.Error(message, ex);
-                        
+
                         //show the error
                         MessageHelper.ShowError(parentWindow, String.Format("ShipWorks was unable to read the token file: {0}", ex.Message));
                     }

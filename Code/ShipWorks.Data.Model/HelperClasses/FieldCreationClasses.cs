@@ -17602,6 +17602,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(SearsStoreFieldIndex.Password);}
 		}
+		/// <summary>Creates a new SearsStoreEntity.SecretKey field instance</summary>
+		public static EntityField2 SecretKey
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SearsStoreFieldIndex.SecretKey);}
+		}
+		/// <summary>Creates a new SearsStoreEntity.SellerID field instance</summary>
+		public static EntityField2 SellerID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SearsStoreFieldIndex.SellerID);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity ServerMessageEntity</summary>

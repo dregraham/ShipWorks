@@ -8142,6 +8142,10 @@ namespace ShipWorks.Data.Model
 		Email,
 		///<summary>Password. </summary>
 		Password,
+		///<summary>SecretKey. </summary>
+		SecretKey,
+		///<summary>SellerID. </summary>
+		SellerID,
 		/// <summary></summary>
 		AmountOfFields
 	}

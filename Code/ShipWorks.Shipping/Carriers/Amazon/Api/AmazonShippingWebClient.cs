@@ -8,6 +8,7 @@ using System.Net;
 using System.Reflection;
 using System.Xml;
 using System.Xml.Linq;
+using Interapptive.Shared.Security;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Logging;
 

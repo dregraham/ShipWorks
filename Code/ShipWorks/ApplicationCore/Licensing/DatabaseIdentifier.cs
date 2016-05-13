@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data.SqlClient;
 using Interapptive.Shared.Data;
+using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 
 namespace ShipWorks.ApplicationCore.Licensing

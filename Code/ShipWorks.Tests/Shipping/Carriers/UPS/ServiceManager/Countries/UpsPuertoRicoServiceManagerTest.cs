@@ -284,7 +284,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager.Countries
         {
             UpsServiceMapping mapping = testObject.GetServiceByTransitCode("01", "PR");
 
-            Assert.Equal(UpsServiceType.Ups2nDayAirIntra, mapping.UpsServiceType);
+            Assert.Equal(UpsServiceType.Ups2ndDayAirIntra, mapping.UpsServiceType);
         }
 
         [Fact]

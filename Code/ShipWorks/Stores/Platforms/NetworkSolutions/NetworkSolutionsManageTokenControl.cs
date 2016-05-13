@@ -1,15 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using ShipWorks.Data.Model.EntityClasses;
-using Interapptive.Shared.Utility;
 using Interapptive.Shared.UI;
 using System.IO;
+using Interapptive.Shared.Security;
 
 namespace ShipWorks.Stores.Platforms.NetworkSolutions
 {
@@ -34,7 +28,7 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="store"></param>
         public void InitializeForStore(NetworkSolutionsStoreEntity store)

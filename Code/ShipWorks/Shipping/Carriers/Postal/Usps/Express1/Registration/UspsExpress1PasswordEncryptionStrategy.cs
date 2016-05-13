@@ -1,5 +1,5 @@
 ﻿using System;
-using Interapptive.Shared.Utility;
+using Interapptive.Shared.Security;
 using ShipWorks.Shipping.Carriers.Postal.Express1.Registration;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Registration
