@@ -148,6 +148,7 @@
     <Compile Include="AttachedProperties\LimitScrollSize.cs" />
     <Compile Include="AttachedProperties\LimitScrollSizeMode.cs" />
     <Compile Include="AttachedProperties\PopupClickManager.cs" />
+    <Compile Include="AttachedProperties\TextRestriction.cs" />
     <Compile Include="AttachedProperties\UpdateWhenMessageReceived.cs" />
     <Compile Include="AttachedProperties\Link.cs" />
     <Compile Include="AttachedProperties\WebBrowserUtility.cs" />

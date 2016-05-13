@@ -140,6 +140,7 @@
                      MaxLines="3"
                      MinLines="3"
                      AcceptsReturn="True"
+                     props:TextRestriction.MaxLines="3"
                      props:EntityFieldLength.FieldName="PersonStreetFull"
                      Text="{Binding Street, UpdateSourceTrigger=PropertyChanged}" />
 
