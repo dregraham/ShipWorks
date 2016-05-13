@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
@@ -8,7 +7,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 {
 	public class OdbcFieldMap
 	{
-		private IOdbcFieldMapIOFactory ioFactory;
+		private readonly IOdbcFieldMapIOFactory ioFactory;
 
 		public OdbcFieldMap(IOdbcFieldMapIOFactory ioFactory)
 		{
@@ -30,16 +29,32 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 			Entries.Add(entry);
 		}
 
+        /// <summary>
+        /// Loads the ODBC Field Map from the given stream
+        /// </summary>
+        /// <param name="stream"></param>
 		public void Load(Stream stream)
 		{
-		    IOdbcFieldMapReader reader = ioFactory.CreateReader(this);
-		    reader.ReadEntry();
+		    IOdbcFieldMapReader reader = ioFactory.CreateReader(stream);
+
+            OdbcFieldMapEntry entry;
+            while ((entry = reader.ReadEntry()) != null)
+            {
+                AddEntry(entry);
+            }
+
+            DisplayName = reader.ReadDisplayName();
+            ExternalTableName = reader.ReadExternalTableName();
 		}
 
+        /// <summary>
+        /// Writes the ODBC Field Map to the given stream
+        /// </summary>
+        /// <param name="stream"></param>
 		public void Save(Stream stream)
 		{
-		    IOdbcFieldMapWriter writer = ioFactory.CreateWriter(this);
-            writer.Write(stream);
+		    IOdbcFieldMapWriter writer = ioFactory.CreateWriter();
+            writer.Write(this, stream);
 		}
 	}
 }

@@ -1,4 +1,5 @@
-﻿using Autofac.Extras.Moq;
+﻿using System.IO;
+using Autofac.Extras.Moq;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
 using Xunit;
 
@@ -11,11 +12,9 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         {
             using (var mock = AutoMock.GetLoose())
             {
-                var map = mock.Create<OdbcFieldMap>();
+                JsonOdbcFieldMapIOFactory testObject = mock.Create<JsonOdbcFieldMapIOFactory>();
 
-                JsonOdbcFieldMapIOFactory testObject = new JsonOdbcFieldMapIOFactory();
-
-                Assert.IsAssignableFrom<JsonOdbcFieldMapReader>(testObject.CreateReader(map));
+                Assert.IsAssignableFrom<JsonOdbcFieldMapReader>(testObject.CreateReader(new MemoryStream()));
             }
         }
 
@@ -24,11 +23,9 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         {
             using (var mock = AutoMock.GetLoose())
             {
-                var map = mock.Create<OdbcFieldMap>();
+                JsonOdbcFieldMapIOFactory testObject = mock.Create<JsonOdbcFieldMapIOFactory>();
 
-                JsonOdbcFieldMapIOFactory testObject = new JsonOdbcFieldMapIOFactory();
-
-                Assert.IsAssignableFrom<JsonOdbcFieldMapWriter>(testObject.CreateWriter(map));
+                Assert.IsAssignableFrom<JsonOdbcFieldMapWriter>(testObject.CreateWriter());
             }
         }
     }

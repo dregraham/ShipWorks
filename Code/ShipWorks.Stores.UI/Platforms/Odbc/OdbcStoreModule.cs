@@ -5,8 +5,6 @@ using ShipWorks.ApplicationCore.Security;
 using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
 using ShipWorks.Stores.UI.Platforms.Odbc.WizardPages;
-using ShipWorks.UI.Controls.WebBrowser;
-using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc
 {

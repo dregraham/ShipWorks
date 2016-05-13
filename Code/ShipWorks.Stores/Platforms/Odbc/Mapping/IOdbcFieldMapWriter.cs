@@ -10,6 +10,6 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <summary>
         /// Write the field map
         /// </summary>
-        void Write(Stream stream);
+        void Write(OdbcFieldMap map, Stream stream);
 	}
 }
