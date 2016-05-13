@@ -16,7 +16,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Sears
 {
     public class SearsCredentialsTest
     {
-        DateTime testDateTime = new DateTime(2016, 5, 4, 16, 20, 32, DateTimeKind.Utc);
+        readonly DateTime testDateTime = new DateTime(2016, 5, 4, 16, 20, 32, DateTimeKind.Utc);
 
         [Fact]
         public void AddCredentials_AddsEmailRequestVariable_WhenLegacyStore()
@@ -70,7 +70,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Sears
                 TypedParameter requestParameter = new TypedParameter(typeof(HttpVariableRequestSubmitter), request);
 
                 SearsCredentials testObject = mock.Create<SearsCredentials>(storeParameter, requestParameter);
-                
+
                 testObject.AddCredentials();
                 HttpVariable passwordVariable = request.Variables.First(v => v.Name == "password");
 
@@ -117,7 +117,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Sears
 
                 var store = new SearsStoreEntity
                 {
-                    SellerID = sellerId, 
+                    SellerID = sellerId,
                     SecretKey = "encrypted secret key"
                 };
 
@@ -373,7 +373,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Sears
             {
                 var store = new SearsStoreEntity
                 {
-                    SellerID = "mySellerId", 
+                    SellerID = "mySellerId",
                     SecretKey = "encrypted"
                 };
 
@@ -400,7 +400,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Sears
         {
             Assert.Throws<ArgumentNullException>(() => new SearsCredentials(null, null, null, null));
         }
-        
+
         private static void SetupSecureTextProvider(AutoMock mock, string email, string password, SearsStoreEntity store)
         {
             var secureTextEncryptionProvider = mock.Mock<IEncryptionProvider>();
