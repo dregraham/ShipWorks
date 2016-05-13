@@ -5,7 +5,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
-using Interapptive.Shared;
+using System.Text;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
@@ -16,8 +16,8 @@ using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Editions;
-using ShipWorks.Editions.Freemium;
-using ShipWorks.Shipping.Carriers.BestRate;
+using ShipWorks.Data.Connection;
+using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Account;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.WebServices.LabelService;
@@ -29,7 +29,11 @@ using ShipWorks.Shipping.Settings;
 using ShipWorks.Templates.Tokens;
 using ShipWorks.UI;
 using Autofac;
+using Interapptive.Shared;
+using Interapptive.Shared.Security;
 using ShipWorks.ApplicationCore.Licensing;
+using ShipWorks.Editions.Freemium;
+using ShipWorks.Shipping.Carriers.BestRate;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 {

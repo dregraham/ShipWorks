@@ -6,6 +6,7 @@ using Autofac;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Net;
+using Interapptive.Shared.Security;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore;
@@ -20,6 +21,7 @@ using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.WizardPages;
 using ShipWorks.Stores;
+using ShipWorks.Shipping.Editing;
 using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Endicia
@@ -850,7 +852,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
                 EndiciaBuyPostageDlg dlg = lifetimeScope.Resolve<EndiciaBuyPostageDlg>();
-                //dlg.LoadAccount(account);
                 dlg.ShowDialog(this, account);
             }
         }

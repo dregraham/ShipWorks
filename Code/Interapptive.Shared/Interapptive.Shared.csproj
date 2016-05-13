@@ -143,6 +143,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Security\AesEncryptionProvider.cs" />
+    <Compile Include="Security\EncryptionException.cs" />
+    <Compile Include="Security\ICipherKey.cs" />
+    <Compile Include="Security\IEncryptionProvider.cs" />
     <Compile Include="Collections\ComparisonResult.cs" />
     <Compile Include="Messaging\IShipWorksMessage.cs" />
     <Compile Include="Messaging\Logging\DoOperation.cs" />
@@ -200,6 +204,9 @@
     <Compile Include="System.ComponentModel.DataAnnotations\MinLengthAttribute.cs" />
     <Compile Include="System.ComponentModel.DataAnnotations\PhoneAttribute.cs" />
     <Compile Include="Threading\ISchedulerProvider.cs" />
+    <Compile Include="Security\IEncryptionProviderFactory.cs" />
+    <Compile Include="Security\SecureText.cs" />
+    <Compile Include="Security\SecureTextEncryptionProvider.cs" />
     <Compile Include="UI\IMessageHelper.cs" />
     <Compile Include="Pdf\IPdfDocument.cs" />
     <Compile Include="Utility\DetailsAttribute.cs" />
@@ -435,14 +442,12 @@
     <Compile Include="Utility\GuidHelper.cs" />
     <Compile Include="Utility\HiddenAttribute.cs" />
     <Compile Include="Utility\IDateTimeProvider.cs" />
-    <Compile Include="Utility\IEncryptionProvider.cs" />
     <Compile Include="Utility\NDesk.Options.cs" />
     <Compile Include="Utility\NDesk.Options.Extensions.cs" />
     <Compile Include="Utility\MethodConditions.cs" />
     <Compile Include="Utility\PathUtility.cs" />
     <Compile Include="Utility\ResourceUtility.cs" />
     <Compile Include="Utility\ResourceUtilityException.cs" />
-    <Compile Include="Utility\SecureText.cs" />
     <Compile Include="Utility\SerializableObject.cs" />
     <Compile Include="Utility\SerializationUtility.cs" />
     <Compile Include="Utility\SortOrderAttribute.cs" />

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Security;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;

@@ -101,6 +101,7 @@ using SandButton = Divelements.SandRibbon.Button;
 using SandComboBox = Divelements.SandRibbon.ComboBox;
 using SandLabel = Divelements.SandRibbon.Label;
 using SandMenuItem = Divelements.SandRibbon.MenuItem;
+using Interapptive.Shared.Security;
 
 namespace ShipWorks
 {

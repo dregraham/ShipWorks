@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using Interapptive.Shared;
+using Interapptive.Shared.Security;
 using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.ApplicationCore.Dashboard.Content;

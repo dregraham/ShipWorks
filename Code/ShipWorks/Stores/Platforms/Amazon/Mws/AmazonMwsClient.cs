@@ -12,6 +12,7 @@ using System.Xml.XPath;
 using Interapptive.Shared;
 using Interapptive.Shared.IO.Text;
 using Interapptive.Shared.Net;
+using Interapptive.Shared.Security;
 using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.ApplicationCore.Logging;

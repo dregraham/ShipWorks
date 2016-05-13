@@ -5,7 +5,7 @@ using System.Security.Cryptography;
 using System.Text;
 using log4net;
 
-namespace Interapptive.Shared.Utility
+namespace Interapptive.Shared.Security
 {
     /// <summary>
     /// Small utility to for decrypting \ encrypting passwords that are going to be

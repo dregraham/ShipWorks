@@ -8142,6 +8142,10 @@ namespace ShipWorks.Data.Model
 		Email,
 		///<summary>Password. </summary>
 		Password,
+		///<summary>SecretKey. </summary>
+		SecretKey,
+		///<summary>SellerID. </summary>
+		SellerID,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -9101,6 +9105,85 @@ namespace ShipWorks.Data.Model
 		DownloadPageSize,
 		///<summary>RequestTimeout. </summary>
 		RequestTimeout,
+		/// <summary></summary>
+		AmountOfFields
+	}
+
+
+	/// <summary>
+	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: SparkPayStore.
+	/// </summary>
+    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
+	public enum SparkPayStoreFieldIndex:int
+	{
+		///<summary>StoreID. Inherited from Store</summary>
+		StoreID_Store,
+		///<summary>RowVersion. </summary>
+		RowVersion,
+		///<summary>License. </summary>
+		License,
+		///<summary>Edition. </summary>
+		Edition,
+		///<summary>TypeCode. </summary>
+		TypeCode,
+		///<summary>Enabled. </summary>
+		Enabled,
+		///<summary>SetupComplete. </summary>
+		SetupComplete,
+		///<summary>StoreName. </summary>
+		StoreName,
+		///<summary>Company. </summary>
+		Company,
+		///<summary>Street1. </summary>
+		Street1,
+		///<summary>Street2. </summary>
+		Street2,
+		///<summary>Street3. </summary>
+		Street3,
+		///<summary>City. </summary>
+		City,
+		///<summary>StateProvCode. </summary>
+		StateProvCode,
+		///<summary>PostalCode. </summary>
+		PostalCode,
+		///<summary>CountryCode. </summary>
+		CountryCode,
+		///<summary>Phone. </summary>
+		Phone,
+		///<summary>Fax. </summary>
+		Fax,
+		///<summary>Email. </summary>
+		Email,
+		///<summary>Website. </summary>
+		Website,
+		///<summary>AutoDownload. </summary>
+		AutoDownload,
+		///<summary>AutoDownloadMinutes. </summary>
+		AutoDownloadMinutes,
+		///<summary>AutoDownloadOnlyAway. </summary>
+		AutoDownloadOnlyAway,
+		///<summary>AddressValidationSetting. </summary>
+		AddressValidationSetting,
+		///<summary>ComputerDownloadPolicy. </summary>
+		ComputerDownloadPolicy,
+		///<summary>DefaultEmailAccountID. </summary>
+		DefaultEmailAccountID,
+		///<summary>ManualOrderPrefix. </summary>
+		ManualOrderPrefix,
+		///<summary>ManualOrderPostfix. </summary>
+		ManualOrderPostfix,
+		///<summary>InitialDownloadDays. </summary>
+		InitialDownloadDays,
+		///<summary>InitialDownloadOrder. </summary>
+		InitialDownloadOrder,
+		///<summary>StoreID. </summary>
+		StoreID,
+		///<summary>Token. </summary>
+		Token,
+		///<summary>StoreUrl. </summary>
+		StoreUrl,
+		///<summary>StatusCodes. </summary>
+		StatusCodes,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -11164,6 +11247,8 @@ namespace ShipWorks.Data.Model
 		ShopifyStoreEntity,
 		///<summary>ShopSiteStore</summary>
 		ShopSiteStoreEntity,
+		///<summary>SparkPayStore</summary>
+		SparkPayStoreEntity,
 		///<summary>StatusPreset</summary>
 		StatusPresetEntity,
 		///<summary>Store</summary>

@@ -7,6 +7,7 @@ using log4net;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using Interapptive.Shared.Security;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Dashboard.Content;
 using ShipWorks.ApplicationCore.Licensing.FeatureRestrictions;

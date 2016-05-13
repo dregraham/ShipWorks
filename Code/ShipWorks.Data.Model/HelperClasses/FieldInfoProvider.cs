@@ -56,7 +56,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 		/// <summary>Method which initializes the internal datastores.</summary>
 		private void Init()
 		{
-			base.InitClass( (172 + 0));
+			base.InitClass( (173 + 0));
 			InitActionEntityInfos();
 			InitActionFilterTriggerEntityInfos();
 			InitActionQueueEntityInfos();
@@ -196,6 +196,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			InitShopifyOrderItemEntityInfos();
 			InitShopifyStoreEntityInfos();
 			InitShopSiteStoreEntityInfos();
+			InitSparkPayStoreEntityInfos();
 			InitStatusPresetEntityInfos();
 			InitStoreEntityInfos();
 			InitSystemDataEntityInfos();
@@ -2075,6 +2076,8 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("SearsStoreEntity", "StoreID", typeof(System.Int64), true, false, false, false,  (int)SearsStoreFieldIndex.StoreID, 0, 0, 19);
 			base.AddElementFieldInfo("SearsStoreEntity", "Email", typeof(System.String), false, false, false, false,  (int)SearsStoreFieldIndex.Email, 75, 0, 0);
 			base.AddElementFieldInfo("SearsStoreEntity", "Password", typeof(System.String), false, false, false, false,  (int)SearsStoreFieldIndex.Password, 75, 0, 0);
+			base.AddElementFieldInfo("SearsStoreEntity", "SecretKey", typeof(System.String), false, false, false, false,  (int)SearsStoreFieldIndex.SecretKey, 255, 0, 0);
+			base.AddElementFieldInfo("SearsStoreEntity", "SellerID", typeof(System.String), false, false, false, false,  (int)SearsStoreFieldIndex.SellerID, 15, 0, 0);
 		}
 		/// <summary>Inits ServerMessageEntity's FieldInfo objects</summary>
 		private void InitServerMessageEntityInfos()
@@ -2377,6 +2380,14 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("ShopSiteStoreEntity", "RequireSSL", typeof(System.Boolean), false, false, false, false,  (int)ShopSiteStoreFieldIndex.RequireSSL, 0, 0, 0);
 			base.AddElementFieldInfo("ShopSiteStoreEntity", "DownloadPageSize", typeof(System.Int32), false, false, false, false,  (int)ShopSiteStoreFieldIndex.DownloadPageSize, 0, 0, 10);
 			base.AddElementFieldInfo("ShopSiteStoreEntity", "RequestTimeout", typeof(System.Int32), false, false, false, false,  (int)ShopSiteStoreFieldIndex.RequestTimeout, 0, 0, 10);
+		}
+		/// <summary>Inits SparkPayStoreEntity's FieldInfo objects</summary>
+		private void InitSparkPayStoreEntityInfos()
+		{
+			base.AddElementFieldInfo("SparkPayStoreEntity", "StoreID", typeof(System.Int64), true, false, false, false,  (int)SparkPayStoreFieldIndex.StoreID, 0, 0, 19);
+			base.AddElementFieldInfo("SparkPayStoreEntity", "Token", typeof(System.String), false, false, false, false,  (int)SparkPayStoreFieldIndex.Token, 70, 0, 0);
+			base.AddElementFieldInfo("SparkPayStoreEntity", "StoreUrl", typeof(System.String), false, false, false, false,  (int)SparkPayStoreFieldIndex.StoreUrl, 350, 0, 0);
+			base.AddElementFieldInfo("SparkPayStoreEntity", "StatusCodes", typeof(System.String), false, false, false, true,  (int)SparkPayStoreFieldIndex.StatusCodes, 2147483647, 0, 0);
 		}
 		/// <summary>Inits StatusPresetEntity's FieldInfo objects</summary>
 		private void InitStatusPresetEntityInfos()

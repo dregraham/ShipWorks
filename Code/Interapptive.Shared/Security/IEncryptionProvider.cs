@@ -1,4 +1,4 @@
-﻿namespace Interapptive.Shared.Utility
+﻿namespace Interapptive.Shared.Security
 {
     /// <summary>
     /// Interface for encrypting and decrypting text

@@ -14,10 +14,12 @@ using Interapptive.Shared;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using log4net;
-using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Shipping;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
+using Interapptive.Shared.Security;
+using ShipWorks.ApplicationCore.Logging;
 
 namespace ShipWorks.Stores.Platforms.ProStores
 {
@@ -373,7 +375,7 @@ namespace ShipWorks.Stores.Platforms.ProStores
 
             if (proVersion)
             {
-                selectXml +=
+                    selectXml += 
                     "<Cost />";
             }
 

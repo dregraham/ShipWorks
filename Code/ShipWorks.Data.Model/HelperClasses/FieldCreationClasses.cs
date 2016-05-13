@@ -17602,6 +17602,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(SearsStoreFieldIndex.Password);}
 		}
+		/// <summary>Creates a new SearsStoreEntity.SecretKey field instance</summary>
+		public static EntityField2 SecretKey
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SearsStoreFieldIndex.SecretKey);}
+		}
+		/// <summary>Creates a new SearsStoreEntity.SellerID field instance</summary>
+		public static EntityField2 SellerID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SearsStoreFieldIndex.SellerID);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity ServerMessageEntity</summary>
@@ -19616,6 +19626,181 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 RequestTimeout
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShopSiteStoreFieldIndex.RequestTimeout);}
+		}
+	}
+
+	/// <summary>Field Creation Class for entity SparkPayStoreEntity</summary>
+	public partial class SparkPayStoreFields
+	{
+		/// <summary>Creates a new SparkPayStoreEntity.StoreID_Store field instance</summary>
+		public static EntityField2 StoreID_Store
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SparkPayStoreFieldIndex.StoreID_Store);}
+		}
+		/// <summary>Creates a new SparkPayStoreEntity.RowVersion field instance</summary>
+		public static EntityField2 RowVersion
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SparkPayStoreFieldIndex.RowVersion);}
+		}
+		/// <summary>Creates a new SparkPayStoreEntity.License field instance</summary>
+		public static EntityField2 License
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SparkPayStoreFieldIndex.License);}
+		}
+		/// <summary>Creates a new SparkPayStoreEntity.Edition field instance</summary>
+		public static EntityField2 Edition
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SparkPayStoreFieldIndex.Edition);}
+		}
+		/// <summary>Creates a new SparkPayStoreEntity.TypeCode field instance</summary>
+		public static EntityField2 TypeCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SparkPayStoreFieldIndex.TypeCode);}
+		}
+		/// <summary>Creates a new SparkPayStoreEntity.Enabled field instance</summary>
+		public static EntityField2 Enabled
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SparkPayStoreFieldIndex.Enabled);}
+		}
+		/// <summary>Creates a new SparkPayStoreEntity.SetupComplete field instance</summary>
+		public static EntityField2 SetupComplete
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SparkPayStoreFieldIndex.SetupComplete);}
+		}
+		/// <summary>Creates a new SparkPayStoreEntity.StoreName field instance</summary>
+		public static EntityField2 StoreName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SparkPayStoreFieldIndex.StoreName);}
+		}
+		/// <summary>Creates a new SparkPayStoreEntity.Company field instance</summary>
+		public static EntityField2 Company
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SparkPayStoreFieldIndex.Company);}
+		}
+		/// <summary>Creates a new SparkPayStoreEntity.Street1 field instance</summary>
+		public static EntityField2 Street1
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SparkPayStoreFieldIndex.Street1);}
+		}
+		/// <summary>Creates a new SparkPayStoreEntity.Street2 field instance</summary>
+		public static EntityField2 Street2
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SparkPayStoreFieldIndex.Street2);}
+		}
+		/// <summary>Creates a new SparkPayStoreEntity.Street3 field instance</summary>
+		public static EntityField2 Street3
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SparkPayStoreFieldIndex.Street3);}
+		}
+		/// <summary>Creates a new SparkPayStoreEntity.City field instance</summary>
+		public static EntityField2 City
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SparkPayStoreFieldIndex.City);}
+		}
+		/// <summary>Creates a new SparkPayStoreEntity.StateProvCode field instance</summary>
+		public static EntityField2 StateProvCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SparkPayStoreFieldIndex.StateProvCode);}
+		}
+		/// <summary>Creates a new SparkPayStoreEntity.PostalCode field instance</summary>
+		public static EntityField2 PostalCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SparkPayStoreFieldIndex.PostalCode);}
+		}
+		/// <summary>Creates a new SparkPayStoreEntity.CountryCode field instance</summary>
+		public static EntityField2 CountryCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SparkPayStoreFieldIndex.CountryCode);}
+		}
+		/// <summary>Creates a new SparkPayStoreEntity.Phone field instance</summary>
+		public static EntityField2 Phone
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SparkPayStoreFieldIndex.Phone);}
+		}
+		/// <summary>Creates a new SparkPayStoreEntity.Fax field instance</summary>
+		public static EntityField2 Fax
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SparkPayStoreFieldIndex.Fax);}
+		}
+		/// <summary>Creates a new SparkPayStoreEntity.Email field instance</summary>
+		public static EntityField2 Email
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SparkPayStoreFieldIndex.Email);}
+		}
+		/// <summary>Creates a new SparkPayStoreEntity.Website field instance</summary>
+		public static EntityField2 Website
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SparkPayStoreFieldIndex.Website);}
+		}
+		/// <summary>Creates a new SparkPayStoreEntity.AutoDownload field instance</summary>
+		public static EntityField2 AutoDownload
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SparkPayStoreFieldIndex.AutoDownload);}
+		}
+		/// <summary>Creates a new SparkPayStoreEntity.AutoDownloadMinutes field instance</summary>
+		public static EntityField2 AutoDownloadMinutes
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SparkPayStoreFieldIndex.AutoDownloadMinutes);}
+		}
+		/// <summary>Creates a new SparkPayStoreEntity.AutoDownloadOnlyAway field instance</summary>
+		public static EntityField2 AutoDownloadOnlyAway
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SparkPayStoreFieldIndex.AutoDownloadOnlyAway);}
+		}
+		/// <summary>Creates a new SparkPayStoreEntity.AddressValidationSetting field instance</summary>
+		public static EntityField2 AddressValidationSetting
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SparkPayStoreFieldIndex.AddressValidationSetting);}
+		}
+		/// <summary>Creates a new SparkPayStoreEntity.ComputerDownloadPolicy field instance</summary>
+		public static EntityField2 ComputerDownloadPolicy
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SparkPayStoreFieldIndex.ComputerDownloadPolicy);}
+		}
+		/// <summary>Creates a new SparkPayStoreEntity.DefaultEmailAccountID field instance</summary>
+		public static EntityField2 DefaultEmailAccountID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SparkPayStoreFieldIndex.DefaultEmailAccountID);}
+		}
+		/// <summary>Creates a new SparkPayStoreEntity.ManualOrderPrefix field instance</summary>
+		public static EntityField2 ManualOrderPrefix
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SparkPayStoreFieldIndex.ManualOrderPrefix);}
+		}
+		/// <summary>Creates a new SparkPayStoreEntity.ManualOrderPostfix field instance</summary>
+		public static EntityField2 ManualOrderPostfix
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SparkPayStoreFieldIndex.ManualOrderPostfix);}
+		}
+		/// <summary>Creates a new SparkPayStoreEntity.InitialDownloadDays field instance</summary>
+		public static EntityField2 InitialDownloadDays
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SparkPayStoreFieldIndex.InitialDownloadDays);}
+		}
+		/// <summary>Creates a new SparkPayStoreEntity.InitialDownloadOrder field instance</summary>
+		public static EntityField2 InitialDownloadOrder
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SparkPayStoreFieldIndex.InitialDownloadOrder);}
+		}
+		/// <summary>Creates a new SparkPayStoreEntity.StoreID field instance</summary>
+		public static EntityField2 StoreID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SparkPayStoreFieldIndex.StoreID);}
+		}
+		/// <summary>Creates a new SparkPayStoreEntity.Token field instance</summary>
+		public static EntityField2 Token
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SparkPayStoreFieldIndex.Token);}
+		}
+		/// <summary>Creates a new SparkPayStoreEntity.StoreUrl field instance</summary>
+		public static EntityField2 StoreUrl
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SparkPayStoreFieldIndex.StoreUrl);}
+		}
+		/// <summary>Creates a new SparkPayStoreEntity.StatusCodes field instance</summary>
+		public static EntityField2 StatusCodes
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SparkPayStoreFieldIndex.StatusCodes);}
 		}
 	}
 

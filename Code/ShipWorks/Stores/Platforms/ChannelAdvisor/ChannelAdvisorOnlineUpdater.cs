@@ -320,7 +320,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                             return "UPSCaWorldWideExpressPlus";
                         case UpsServiceType.UpsCaWorldWideExpress:
                             return "UPSCaWorldWideExpress";
-                        case UpsServiceType.Ups2nDayAirIntra:
+                        case UpsServiceType.Ups2ndDayAirIntra:
                             return "UPS2nDayAirIntra";
                     }
 

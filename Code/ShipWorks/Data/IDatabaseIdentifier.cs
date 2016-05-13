@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ShipWorks.ApplicationCore.Licensing
+namespace ShipWorks.Data
 {
     /// <summary>
     /// Interface for identifying a database

@@ -1,7 +1,7 @@
-﻿using ShipWorks.Data;
+﻿using Interapptive.Shared.Security;
+using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using System.Security.Cryptography;
-using Interapptive.Shared.Utility;
 
 namespace ShipWorks.ApplicationCore.Licensing
 {
@@ -11,13 +11,14 @@ namespace ShipWorks.ApplicationCore.Licensing
     public class CustomerLicenseReader : ICustomerLicenseReader
     {
         private readonly IEncryptionProvider encryptionProvider;
+        
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public CustomerLicenseReader(IEncryptionProvider encryptionProvider)
+        public CustomerLicenseReader(IEncryptionProviderFactory encryptionProviderFactory)
         {
-            this.encryptionProvider = encryptionProvider;
+            this.encryptionProvider = encryptionProviderFactory.CreateLicenseEncryptionProvider();            
         }
 
         /// <summary>
