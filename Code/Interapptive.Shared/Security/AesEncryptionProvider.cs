@@ -7,17 +7,18 @@ namespace Interapptive.Shared.Security
     /// <summary>
     /// Class for encrypting and decrypting using AES
     /// </summary>
-    public class AesEncryptionProvider : IEncryptionProvider
+    public class AesEncryptionProvider : IEncryptionProvider, IDisposable
     {
-        private readonly Lazy<AesManaged> aesManaged;
+        private readonly ICipherKey cipherKey;
+
+        private AesManaged AesManaged => new AesManaged { IV = cipherKey.InitializationVector, Key = cipherKey.Key };
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AesEncryptionProvider"/> class.
         /// </summary>
         public AesEncryptionProvider(ICipherKey cipherKey)
         {
-            aesManaged =
-                new Lazy<AesManaged>(() => new AesManaged {IV = cipherKey.InitializationVector, Key = cipherKey.Key});
+            this.cipherKey = cipherKey;
         }
 
         /// <summary>
@@ -33,8 +34,7 @@ namespace Interapptive.Shared.Security
             try
             {
                 byte[] buffer = Encoding.ASCII.GetBytes(plainText);
-
-                ICryptoTransform encryptor = aesManaged.Value.CreateEncryptor();
+                ICryptoTransform encryptor = AesManaged.CreateEncryptor();
                 return Convert.ToBase64String(encryptor.TransformFinalBlock(buffer, 0, buffer.Length));
             }
             catch (Exception ex)
@@ -56,14 +56,21 @@ namespace Interapptive.Shared.Security
             try
             {
                 byte[] buffer = Convert.FromBase64String(encryptedText);
-
-                ICryptoTransform decryptor = aesManaged.Value.CreateDecryptor();
+                ICryptoTransform decryptor = AesManaged.CreateDecryptor();
                 return Encoding.ASCII.GetString(decryptor.TransformFinalBlock(buffer, 0, buffer.Length));
             }
             catch (Exception ex)
             {
                 throw new EncryptionException(ex.Message, ex);
             }
+        }
+
+        /// <summary>
+        /// Releases unmanaged and - optionally - managed resources.
+        /// </summary>
+        public void Dispose()
+        {
+            AesManaged.Dispose();
         }
     }
 }
