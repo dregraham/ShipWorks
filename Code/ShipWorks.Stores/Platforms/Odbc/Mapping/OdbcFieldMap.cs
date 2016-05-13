@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 {
@@ -11,10 +12,13 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 
 		public OdbcFieldMap(IOdbcFieldMapIOFactory ioFactory)
 		{
-            Entries = new List<OdbcFieldMapEntry>();
+		    MethodConditions.EnsureArgumentIsNotNull(ioFactory);
+
+		    this.ioFactory = ioFactory;
+		    Entries = new List<OdbcFieldMapEntry>();
 		}
 
-        public List<OdbcFieldMapEntry> Entries { get; }
+	    public List<OdbcFieldMapEntry> Entries { get; }
 
         [Obfuscation(Exclude = true)]
         public string DisplayName { get; set; }
@@ -28,12 +32,14 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 
 		public void Load(Stream stream)
 		{
-			throw new NotImplementedException();
+		    IOdbcFieldMapReader reader = ioFactory.CreateReader(this);
+		    reader.ReadEntry();
 		}
 
 		public void Save(Stream stream)
 		{
-			throw new NotImplementedException();
+		    IOdbcFieldMapWriter writer = ioFactory.CreateWriter(this);
+            writer.Write(stream);
 		}
 	}
 }
