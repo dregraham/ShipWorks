@@ -1,5 +1,4 @@
 ﻿using Autofac;
-using Interapptive.Shared.UI;
 using ShipWorks.Actions.Tasks;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Management;

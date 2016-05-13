@@ -19,14 +19,14 @@ namespace ShipWorks.Stores.Platforms.SparkPay
     /// <summary>
     /// The SparkPay web client
     /// </summary>
-    public class SparkPayWebClient
+    public class SparkPayWebClient : IDisposable
     {
-        private int OverApiLimitStatusCode = 429;
-        private SparkPayWebClientRequestThrottle throttler;
+        private readonly int OverApiLimitStatusCode = 429;
+        private readonly SparkPayWebClientRequestThrottle throttler;
 
-        // Logger 
+        // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(SparkPayWebClient));
-        
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -34,7 +34,7 @@ namespace ShipWorks.Stores.Platforms.SparkPay
         {
             throttler = new SparkPayWebClientRequestThrottle();
         }
-        
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -144,7 +144,7 @@ namespace ShipWorks.Stores.Platforms.SparkPay
         }
 
         /// <summary>
-        /// Setup a get request 
+        /// Setup a get request
         /// </summary>
         private void ConfigureRequest(HttpVariableRequestSubmitter submitter, SparkPayStoreEntity store, string operationName, IEnumerable<HttpVariable> variables, HttpVerb verb)
         {
@@ -153,12 +153,12 @@ namespace ShipWorks.Stores.Platforms.SparkPay
             // add the store url and auth token
             submitter.Uri = new Uri($"{store.StoreUrl}/{operationName}");
             submitter.Headers.Add("X-AC-Auth-Token", store.Token);
-            
+
             variables?.ToList().ForEach(submitter.Variables.Add);
-            
+
             submitter.AllowHttpStatusCodes(new[] { HttpStatusCode.Created });
         }
-        
+
         /// <summary>
         /// Executes a request
         /// </summary>
@@ -181,7 +181,7 @@ namespace ShipWorks.Stores.Platforms.SparkPay
                 throw WebHelper.TranslateWebException(ex, typeof(SparkPayException));
             }
         }
-        
+
         /// <summary>
         /// Executes a request
         /// </summary>
@@ -265,9 +265,9 @@ namespace ShipWorks.Stores.Platforms.SparkPay
                 NullValueHandling = NullValueHandling.Ignore
             };
         }
-        
+
         /// <summary>
-        /// Deserializes the response 
+        /// Deserializes the response
         /// </summary>
         private T DeserializeResponse<T>(string response)
         {
@@ -279,6 +279,14 @@ namespace ShipWorks.Stores.Platforms.SparkPay
             {
                 throw new SparkPayException($"Failed to deserializes {typeof(T)}", ex);
             }
+        }
+
+        /// <summary>
+        /// Disposes resources used by the web client
+        /// </summary>
+        public void Dispose()
+        {
+            throttler.Dispose();
         }
     }
 }
