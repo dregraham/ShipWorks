@@ -11,6 +11,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Messaging.Messages.Dialogs;
 using ShipWorks.Messaging.Messages.Shipping;
+using ShipWorks.Shipping.Services;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
 
@@ -25,7 +26,7 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
         IShippingRibbonActions shippingRibbonActions;
         IDisposable subscription;
         private ShipmentEntity currentShipment;
-        private IEnumerable<long> currentOrderIDs;
+        private IEnumerable<long> currentOrderIDs = Enumerable.Empty<long>();
         private readonly Func<ISecurityContext> securityContextRetriever;
 
         /// <summary>
@@ -135,7 +136,7 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
             {
                 messages.Send(new VoidLabelMessage(this, currentShipment.ShipmentID));
             }
-            else if (currentOrderIDs?.Any() == true)
+            else if (currentOrderIDs.Count() > 1)
             {
                 messages.Send(new OpenShippingDialogWithOrdersMessage(this, currentOrderIDs));
             }
@@ -150,7 +151,7 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
             {
                 messages.Send(new CreateLabelMessage(this, currentShipment.ShipmentID));
             }
-            else if (currentOrderIDs?.Any() == true)
+            else if (currentOrderIDs.Count() > 1)
             {
                 messages.Send(new OpenShippingDialogWithOrdersMessage(this, currentOrderIDs));
             }
@@ -195,17 +196,14 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
             List<IOrderSelection> orderSelections = message.LoadedOrderSelection.ToList();
             List<LoadedOrderSelection> loadedOrders = orderSelections.OfType<LoadedOrderSelection>().ToList();
 
+            currentShipment = null;
+            currentOrderIDs = orderSelections.Select(x => x.OrderID).ToList();
+
             if (loadedOrders.Count == 1)
             {
                 currentShipment = loadedOrders[0].ShipmentAdapters.Count() == 1 ?
                     loadedOrders[0].ShipmentAdapters.Single().Shipment :
                     null;
-                currentOrderIDs = Enumerable.Empty<long>();
-            }
-            else
-            {
-                currentShipment = null;
-                currentOrderIDs = orderSelections.Select(x => x.OrderID).ToList();
             }
 
             SetEnabledOnButtons();
@@ -271,13 +269,7 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
 
             // Get the list of current order ids.  If a single order is selected, this will be empty.
             List<long> orderIDs = currentOrderIDs.ToList();
-
-            // Add the current order id to the list.
-            if (currentShipment != null)
-            {
-                orderIDs.Add(currentShipment.OrderID);
-            }
-
+            
             // If no orders selected or the user does not have permission for at least one order, return false.  Otherwise, true.
             bool manageProfilesAllowed = orderIDs.Any() && !orderIDs.Any(orderID => !securityContext.HasPermission(PermissionType.ShipmentsCreateEditProcess, orderID));
 
