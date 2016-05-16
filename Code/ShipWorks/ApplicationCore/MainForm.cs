@@ -1,22 +1,12 @@
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data.SqlClient;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Windows;
-using System.Windows.Forms;
-using System.Xml;
-using System.Xml.Linq;
+using Autofac;
 using Divelements.SandGrid;
 using Divelements.SandRibbon;
 using ICSharpCode.SharpZipLib.Zip;
+using Interapptive.Shared;
 using Interapptive.Shared.Data;
 using Interapptive.Shared.IO.Zip;
 using Interapptive.Shared.Net;
+using Interapptive.Shared.Security;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using Interapptive.Shared.Win32;
@@ -32,6 +22,7 @@ using ShipWorks.ApplicationCore.Enums;
 using ShipWorks.ApplicationCore.Help;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.ApplicationCore.Licensing;
+using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
 using ShipWorks.ApplicationCore.MessageBoxes;
 using ShipWorks.ApplicationCore.Nudges;
 using ShipWorks.ApplicationCore.Options;
@@ -61,7 +52,6 @@ using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.FedEx;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response;
 using ShipWorks.Shipping.Carriers.Postal.Endicia;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
@@ -87,16 +77,24 @@ using ShipWorks.Users;
 using ShipWorks.Users.Audit;
 using ShipWorks.Users.Logon;
 using ShipWorks.Users.Security;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data.SqlClient;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading;
+using System.Windows.Forms;
+using System.Xml;
+using System.Xml.Linq;
 using TD.SandDock;
+using Application = System.Windows.Forms.Application;
 using SandButton = Divelements.SandRibbon.Button;
 using SandComboBox = Divelements.SandRibbon.ComboBox;
 using SandLabel = Divelements.SandRibbon.Label;
 using SandMenuItem = Divelements.SandRibbon.MenuItem;
-using Autofac;
-using Interapptive.Shared;
-using Interapptive.Shared.Security;
-using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
-using Application = System.Windows.Forms.Application;
 
 namespace ShipWorks
 {
@@ -801,7 +799,15 @@ namespace ShipWorks
             licenses.ForEach(license => license.Refresh());
 
             // now that we updated license info we can refresh the UI to match
-            editionGuiHelper.UpdateUI();
+            if (InvokeRequired)
+            {
+                BeginInvoke(new MethodInvoker(editionGuiHelper.UpdateUI));
+            }
+            else
+            {
+                editionGuiHelper.UpdateUI();
+            }
+
             ForceHeartbeat();
         }
 
