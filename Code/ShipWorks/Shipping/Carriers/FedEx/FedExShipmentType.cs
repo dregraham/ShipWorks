@@ -537,7 +537,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             profile.FedEx.FedExAccountID = shipperID;
             profile.OriginID = (int) ShipmentOriginSource.Account;
 
-            profile.FedEx.ResidentialDetermination = (int) ResidentialDeterminationType.FromAddressValidation;
+            profile.FedEx.ResidentialDetermination = (int) ResidentialDeterminationType.FedExAddressLookup;
 
             profile.FedEx.Service = (int) FedExServiceType.FedExGround;
             profile.FedEx.Signature = (int) FedExSignatureType.ServiceDefault;
@@ -1076,7 +1076,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 return new FedExBestRateBroker();
             }
 
-                // We want to be able to show counter rates to users that don't have 
+            // We want to be able to show counter rates to users that don't have
             return new NullShippingBroker();
         }
 
