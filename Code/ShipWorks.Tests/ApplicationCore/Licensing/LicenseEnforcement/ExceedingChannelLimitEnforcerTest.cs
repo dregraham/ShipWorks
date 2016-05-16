@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Autofac.Extras.Moq;
+﻿using Autofac.Extras.Moq;
 using Interapptive.Shared.Utility;
 using Moq;
 using ShipWorks.ApplicationCore.Licensing;
@@ -14,6 +9,17 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.LicenseEnforcement
 {
     public class ExceedingChannelLimitEnforcerTest
     {
+        [Fact]
+        public void AppliesToTrial_ReturnsFalse()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                var testObject = mock.Create<ExceedingChannelLimitEnforcer>();
+
+                Assert.False(testObject.AppliesToTrial);
+            }
+        }
+
         [Fact]
         public void Enforce_ErrorReferencesWillExceedChannelLimit_WhenContextIsExceedingChannelLimitAndActiveChannelsEqualsChannelLimits()
         {

@@ -1,6 +1,6 @@
-﻿using System.Windows.Forms;
-using Interapptive.Shared.Utility;
+﻿using Interapptive.Shared.Utility;
 using ShipWorks.Editions;
+using System.Windows.Forms;
 
 namespace ShipWorks.ApplicationCore.Licensing.LicenseEnforcement
 {
@@ -18,6 +18,11 @@ namespace ShipWorks.ApplicationCore.Licensing.LicenseEnforcement
         /// The edition feature enforced
         /// </summary>
         EditionFeature EditionFeature { get; }
+
+        /// <summary>
+        /// True if Enforcer applies to a trial.
+        /// </summary>
+        bool AppliesToTrial { get; }
 
         /// <summary>
         /// Enforces license capabilities

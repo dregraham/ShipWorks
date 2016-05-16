@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Windows.Forms;
-using Interapptive.Shared.Utility;
+﻿using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Editions;
 using ShipWorks.Stores;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows.Forms;
 
 namespace ShipWorks.ApplicationCore.Licensing.LicenseEnforcement
 {
@@ -39,6 +39,11 @@ namespace ShipWorks.ApplicationCore.Licensing.LicenseEnforcement
         /// Works on ChannelCount
         /// </summary>
         public EditionFeature EditionFeature => EditionFeature.ClientChannelsAccountedFor;
+
+        /// <summary>
+        /// Need to make sure Tango is in sync with trail stores
+        /// </summary>
+        public bool AppliesToTrial => true;
 
         /// <summary>
         /// Checks to see if we are in compliant, if not display a dlg showing the channels to delete

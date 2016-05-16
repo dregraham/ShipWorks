@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using Interapptive.Shared.Utility;
+﻿using Interapptive.Shared.Utility;
 using ShipWorks.Editions;
+using System.Windows.Forms;
 
 namespace ShipWorks.ApplicationCore.Licensing.LicenseEnforcement
 {
@@ -16,6 +12,11 @@ namespace ShipWorks.ApplicationCore.Licensing.LicenseEnforcement
         public EnforcementPriority Priority => EnforcementPriority.Medium;
 
         public EditionFeature EditionFeature => EditionFeature.ChannelCount;
+
+        /// <summary>
+        /// Channel Limit doesn't apply to trails.
+        /// </summary>
+        public bool AppliesToTrial => false;
 
         /// <remarks>
         /// Adding a store will get an error from tango. We don't need to call enforce here.

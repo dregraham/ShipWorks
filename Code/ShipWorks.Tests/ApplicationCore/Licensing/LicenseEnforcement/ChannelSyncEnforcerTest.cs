@@ -35,6 +35,17 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.LicenseEnforcement
         }
 
         [Fact]
+        public void AppliesToTrial_ReturnsTrue()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                var testObject = mock.Create<ChannelSyncEnforcer>();
+
+                Assert.True(testObject.AppliesToTrial);
+            }
+        }
+
+        [Fact]
         public void Enforce_GetsListOfActiveStoresFromLicense_WhenEnforcementContextIsLogin()
         {
             using (AutoMock mock = AutoMock.GetLoose())

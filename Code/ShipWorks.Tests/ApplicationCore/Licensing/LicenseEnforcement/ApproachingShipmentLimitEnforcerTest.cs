@@ -1,13 +1,13 @@
-﻿using System;
-using System.Windows;
-using System.Windows.Forms;
-using Autofac.Extras.Moq;
+﻿using Autofac.Extras.Moq;
 using Interapptive.Shared.Utility;
 using Moq;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
 using ShipWorks.Editions;
 using ShipWorks.UI;
+using System;
+using System.Windows;
+using System.Windows.Forms;
 using Xunit;
 
 namespace ShipWorks.Tests.ApplicationCore.Licensing.LicenseEnforcement
@@ -33,6 +33,17 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.LicenseEnforcement
                 ApproachingShipmentLimitEnforcer testObject = mock.Create<ApproachingShipmentLimitEnforcer>();
 
                 Assert.Equal(EditionFeature.ShipmentCount, testObject.EditionFeature);
+            }
+        }
+
+        [Fact]
+        public void AppliesToTrial_ReturnsFalse()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                var testObject = mock.Create<ApproachingShipmentLimitEnforcer>();
+
+                Assert.False(testObject.AppliesToTrial);
             }
         }
 
