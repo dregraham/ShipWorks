@@ -48,7 +48,8 @@ namespace Interapptive.Shared.Messaging.Logging
             })
             .ObserveOn(TaskPoolScheduler.Default)
             .Select(x => new { Data = JsonConvert.SerializeObject(x), Endpoint = x.Endpoint })
-            .Subscribe(x => client.UploadString(endpoint + "/" + x.Endpoint, "POST", x.Data), ex => { });
+            .Do(x => client.UploadString(endpoint + "/" + x.Endpoint, "POST", x.Data))
+            .Subscribe(_ => { }, ex => { });
         }
 
         /// <summary>
