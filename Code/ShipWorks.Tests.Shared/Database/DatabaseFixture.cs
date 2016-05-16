@@ -13,6 +13,7 @@ using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data;
 using ShipWorks.Data.Administration;
+using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
@@ -108,6 +109,22 @@ namespace ShipWorks.Tests.Shared.Database
         /// in an exception, the context may not be disposed properly in the test itself.</remarks>
         public DataContext CreateDataContext(Action<IContainer> initializeContainer, Action<AutoMock> configureMock)
         {
+            DataContext dataContext = null;
+            SqlAdapterRetry<Exception> retry = new SqlAdapterRetry<Exception>(5, -6, "");
+
+            retry.ExecuteWithRetry(() => dataContext = CreateDataContextInternal(initializeContainer, configureMock));
+
+            return dataContext;
+        }
+
+        /// <summary>
+        /// Create a data context for use in a test
+        /// </summary>
+        /// <remarks>When this context is disposed, everything created inside it is rolled back.  Further,
+        /// calling this method again will dispose the previous context.  This is because when a test results
+        /// in an exception, the context may not be disposed properly in the test itself.</remarks>
+        private DataContext CreateDataContextInternal(Action<IContainer> initializeContainer, Action<AutoMock> configureMock)
+        {
             AutoMock mock = AutoMockExtensions.GetLooseThatReturnsMocks();
 
             initializeContainer(mock.Container);
@@ -147,7 +164,7 @@ DROP PROCEDURE [dbo].[GetDatabaseGuid]";
 
             return new DataContext(mock, context.Item1, context.Item2);
         }
-
+        
         /// <summary>
         /// Override registration for Control, which is usually MainForm
         /// </summary>
