@@ -36,14 +36,19 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.LicenseEnforcement
             }
         }
 
-        [Fact]
-        public void AppliesToTrial_ReturnsFalse()
+        [Theory]
+        [InlineData(false, true)]
+        [InlineData(true, false)]
+        public void AppliesTo_ReturnsFalse_WhenInTrial(bool expectedResult, bool isInTrial)
         {
             using (var mock = AutoMock.GetLoose())
             {
+                var capabilities = mock.Mock<ILicenseCapabilities>();
+                capabilities.SetupGet(l => l.IsInTrial).Returns(isInTrial);
+
                 var testObject = mock.Create<ExceedingShipmentLimitEnforcer>();
 
-                Assert.False(testObject.AppliesToTrial);
+                Assert.Equal(expectedResult, testObject.AppliesTo(capabilities.Object));
             }
         }
 

@@ -20,9 +20,9 @@ namespace ShipWorks.ApplicationCore.Licensing.LicenseEnforcement
         EditionFeature EditionFeature { get; }
 
         /// <summary>
-        /// True if Enforcer applies to a trial.
+        /// True if Enforcer applies to LicenseCapabilities
         /// </summary>
-        bool AppliesToTrial { get; }
+        bool AppliesTo(ILicenseCapabilities capabilities);
 
         /// <summary>
         /// Enforces license capabilities

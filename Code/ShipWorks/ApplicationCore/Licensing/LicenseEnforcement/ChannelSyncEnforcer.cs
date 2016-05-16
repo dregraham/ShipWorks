@@ -43,7 +43,7 @@ namespace ShipWorks.ApplicationCore.Licensing.LicenseEnforcement
         /// <summary>
         /// Need to make sure Tango is in sync with trail stores
         /// </summary>
-        public bool AppliesToTrial => true;
+        public bool AppliesTo(ILicenseCapabilities capabilities) => true;
 
         /// <summary>
         /// Checks to see if we are in compliant, if not display a dlg showing the channels to delete

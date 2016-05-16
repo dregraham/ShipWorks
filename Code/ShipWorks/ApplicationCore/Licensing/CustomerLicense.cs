@@ -241,7 +241,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             // Enforce restrictions when not in the trial period
             EnumResult<ComplianceLevel> enforcerNotInCompliance =
                 licenseEnforcers
-                    .Where(ShouldEnforce)
+                    .Where(enforcer => enforcer.AppliesTo(LicenseCapabilities))
                     .Select(enforcer => enforcer.Enforce(LicenseCapabilities, context))
                     .FirstOrDefault(result => result.Value == ComplianceLevel.NotCompliant);
 
@@ -259,7 +259,9 @@ namespace ShipWorks.ApplicationCore.Licensing
             Refresh();
 
             // Enforce restrictions when not in the trial period
-            licenseEnforcers.Where(ShouldEnforce).ToList().ForEach(e => e.Enforce(LicenseCapabilities, context, owner));
+            licenseEnforcers
+                .Where(enforcer => enforcer.AppliesTo(LicenseCapabilities)).ToList()
+                .ForEach(e => e.Enforce(LicenseCapabilities, context, owner));
         }
 
         /// <summary>
@@ -272,19 +274,11 @@ namespace ShipWorks.ApplicationCore.Licensing
 
             Refresh();
             // Enforce restrictions when not in the trial period
-            licenseEnforcers.Where(enforcer => ShouldEnforce(enforcer) && enforcer.EditionFeature == feature)
+            licenseEnforcers.Where(enforcer => enforcer.AppliesTo(LicenseCapabilities) && enforcer.EditionFeature == feature)
                 .ToList()
                 .ForEach(e => result.Add(e.Enforce(LicenseCapabilities, context)));
 
             return result;
-        }
-
-        /// <summary>
-        /// This is always true unless we are in a trial and the enforcer doesn't apply
-        /// </summary>
-        private bool ShouldEnforce(ILicenseEnforcer enforcer)
-        {
-            return !LicenseCapabilities.IsInTrial || enforcer.AppliesToTrial;
         }
 
         /// <summary>

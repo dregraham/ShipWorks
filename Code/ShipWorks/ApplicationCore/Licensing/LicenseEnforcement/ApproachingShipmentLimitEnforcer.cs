@@ -44,7 +44,7 @@ namespace ShipWorks.ApplicationCore.Licensing.LicenseEnforcement
         /// <summary>
         /// Simpment Limit doesn't apply to trials.
         /// </summary>
-        public bool AppliesToTrial => false;
+        public bool AppliesTo(ILicenseCapabilities capabilities) => !capabilities.IsInTrial;
 
         /// <summary>
         /// Displays upgrade dialog if the customer license is within 80% of its shipment limit

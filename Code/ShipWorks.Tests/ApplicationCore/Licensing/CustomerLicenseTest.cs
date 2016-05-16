@@ -212,27 +212,21 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
         }
 
         [Fact]
-        public void EnforceCapabilitiesWithEditionFeature_CallsEnforceOnEnforcerWithMatchingEditionFeature_WhenNotInTrialPeriod()
+        public void EnforceCapabilitiesWithEditionFeature_CallsEnforceOnEnforcerWithMatchingEditionFeature_WhenEnforcerApplies()
         {
             using (var mock1 = AutoMock.GetLoose())
             using (var mock2 = AutoMock.GetLoose())
             {
-                Mock<ILicenseCapabilities> capabilities = mock1.Mock<ILicenseCapabilities>();
-                capabilities.SetupGet(c => c.IsInTrial)
-                    .Returns(false);
-
-                Mock<ITangoWebClient> tangoWebClient = mock1.Mock<ITangoWebClient>();
-                tangoWebClient.Setup(c => c.GetLicenseCapabilities(It.IsAny<ICustomerLicense>()))
-                    .Returns(capabilities.Object);
-
                 Mock<ILicenseEnforcer> enforcerTwo = mock2.Mock<ILicenseEnforcer>();
                 enforcerTwo.SetupGet(e => e.EditionFeature).Returns(EditionFeature.EndiciaAccountLimit);
+                enforcerTwo.Setup(e => e.AppliesTo(It.IsAny<ILicenseCapabilities>())).Returns(true);
                 enforcerTwo.Setup(e => e.Enforce(It.IsAny<ILicenseCapabilities>(), It.IsAny<EnforcementContext>()))
                     .Returns(new EnumResult<ComplianceLevel>(ComplianceLevel.NotCompliant,
                         "enforcerTwo is not compliant."));
 
                 Mock<ILicenseEnforcer> enforcerOne = mock1.Mock<ILicenseEnforcer>();
                 enforcerOne.SetupGet(e => e.EditionFeature).Returns(EditionFeature.ChannelCount);
+                enforcerOne.Setup(e => e.AppliesTo(It.IsAny<ILicenseCapabilities>())).Returns(true);
                 enforcerOne.Setup(e => e.Enforce(It.IsAny<ILicenseCapabilities>(), It.IsAny<EnforcementContext>()))
                     .Returns(new EnumResult<ComplianceLevel>(ComplianceLevel.NotCompliant,
                         "enforcerOne is not compliant."));
@@ -282,7 +276,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
         }
 
         [Fact]
-        public void EnforceCapabilitiesWithEditionFeature_CallsEnforcerWithMatchingEditionFeature_WhenInTrialPeriod_AndEnforcerAppliesToTrial()
+        public void EnforceCapabilitiesWithEditionFeature_CallsEnforcerWithMatchingEditionFeature_WhenInTrialPeriod_AndEnforcerApplies()
         {
             using (var mock = AutoMock.GetLoose())
             {
@@ -297,7 +291,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
 
                 Mock<ILicenseEnforcer> enforcer = mock.Mock<ILicenseEnforcer>();
                 enforcer.SetupGet(e => e.EditionFeature).Returns(EditionFeature.ChannelCount);
-                enforcer.SetupGet(e => e.AppliesToTrial).Returns(true);
+                enforcer.Setup(e => e.AppliesTo(It.IsAny<ILicenseCapabilities>())).Returns(true);
 
                 CustomerLicense testObject = mock.Create<CustomerLicense>(new NamedParameter("key", "SomeKey"),
                     new TypedParameter(typeof(IEnumerable<ILicenseEnforcer>),
@@ -315,19 +309,12 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
         {
             using (var mock = AutoMock.GetLoose())
             {
-                Mock<ILicenseCapabilities> capabilities = mock.Mock<ILicenseCapabilities>();
-                capabilities.SetupGet(c => c.IsInTrial)
-                    .Returns(false);
-
-                Mock<ITangoWebClient> tangoWebClient = mock.Mock<ITangoWebClient>();
-                tangoWebClient.Setup(c => c.GetLicenseCapabilities(It.IsAny<ICustomerLicense>()))
-                    .Returns(capabilities.Object);
-
-                var enforcerResult = new EnumResult<ComplianceLevel>(ComplianceLevel.NotCompliant,
+               var enforcerResult = new EnumResult<ComplianceLevel>(ComplianceLevel.NotCompliant,
                         "enforcerOne is not compliant.");
 
                 Mock<ILicenseEnforcer> enforcer = mock.Mock<ILicenseEnforcer>();
                 enforcer.SetupGet(e => e.EditionFeature).Returns(EditionFeature.ChannelCount);
+                enforcer.Setup(e => e.AppliesTo(It.IsAny<ILicenseCapabilities>())).Returns(true);
                 enforcer.Setup(e => e.Enforce(It.IsAny<ILicenseCapabilities>(), It.IsAny<EnforcementContext>()))
                     .Returns(enforcerResult);
 
@@ -342,27 +329,20 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
         }
 
         [Fact]
-        public void EnforceCapabilitiesWithEditionFeature_ReturnsEmptyList_WhenInTrialPeriod()
+        public void EnforceCapabilitiesWithEditionFeature_ReturnsEmptyList_WhenEnforcerDoesNotApply()
         {
-            using (var mock1 = AutoMock.GetLoose())
+            using (var mock = AutoMock.GetLoose())
             {
-                Mock<ILicenseCapabilities> capabilities = mock1.Mock<ILicenseCapabilities>();
-                capabilities.SetupGet(c => c.IsInTrial)
-                    .Returns(true);
-
-                Mock<ITangoWebClient> tangoWebClient = mock1.Mock<ITangoWebClient>();
-                tangoWebClient.Setup(c => c.GetLicenseCapabilities(It.IsAny<ICustomerLicense>()))
-                    .Returns(capabilities.Object);
-
                 var enforcerResult = new EnumResult<ComplianceLevel>(ComplianceLevel.NotCompliant,
                         "enforcerOne is not compliant.");
 
-                Mock<ILicenseEnforcer> enforcer = mock1.Mock<ILicenseEnforcer>();
+                Mock<ILicenseEnforcer> enforcer = mock.Mock<ILicenseEnforcer>();
                 enforcer.SetupGet(e => e.EditionFeature).Returns(EditionFeature.ChannelCount);
+                enforcer.Setup(e => e.AppliesTo(It.IsAny<ILicenseCapabilities>())).Returns(false);
                 enforcer.Setup(e => e.Enforce(It.IsAny<ILicenseCapabilities>(), It.IsAny<EnforcementContext>()))
                     .Returns(enforcerResult);
 
-                CustomerLicense testObject = mock1.Create<CustomerLicense>(new NamedParameter("key", "SomeKey"),
+                CustomerLicense testObject = mock.Create<CustomerLicense>(new NamedParameter("key", "SomeKey"),
                     new TypedParameter(typeof(IEnumerable<ILicenseEnforcer>),
                         new[] { enforcer.Object }));
 
@@ -373,7 +353,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
         }
 
         [Fact]
-        public void EnforceCapabilitiesWithEditionFeature_ReturnsEnforcementResult_WhenInTrialPeriod_AndEnforceContextAppliesToTrial()
+        public void EnforceCapabilitiesWithEditionFeature_ReturnsEnforcementResult_WhenInTrialPeriod_AndEnforceContextApplies()
         {
             using (var mock1 = AutoMock.GetLoose())
             {
@@ -390,7 +370,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
 
                 Mock<ILicenseEnforcer> enforcer = mock1.Mock<ILicenseEnforcer>();
                 enforcer.SetupGet(e => e.EditionFeature).Returns(EditionFeature.ChannelCount);
-                enforcer.Setup(e => e.AppliesToTrial).Returns(true);
+                enforcer.Setup(e => e.AppliesTo(It.IsAny<ILicenseCapabilities>())).Returns(true);
                 enforcer.Setup(e => e.Enforce(It.IsAny<ILicenseCapabilities>(), It.IsAny<EnforcementContext>()))
                     .Returns(enforcerResult);
 
@@ -412,15 +392,10 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
             {
                 Mock<IWin32Window> owner = mock1.Mock<IWin32Window>();
                 Mock<ILicenseEnforcer> enforcerOne = mock1.Mock<ILicenseEnforcer>();
+                enforcerOne.Setup(e => e.AppliesTo(It.IsAny<ILicenseCapabilities>())).Returns(true);
+
                 Mock<ILicenseEnforcer> enforcerTwo = mock2.Mock<ILicenseEnforcer>();
-
-                Mock<ILicenseCapabilities> capabilities = mock1.Mock<ILicenseCapabilities>();
-                capabilities.SetupGet(c => c.IsInTrial)
-                    .Returns(false);
-
-                Mock<ITangoWebClient> tangoWebClient = mock1.Mock<ITangoWebClient>();
-                tangoWebClient.Setup(c => c.GetLicenseCapabilities(It.IsAny<ICustomerLicense>()))
-                    .Returns(capabilities.Object);
+                enforcerTwo.Setup(e => e.AppliesTo(It.IsAny<ILicenseCapabilities>())).Returns(true);
 
                 var enforcers = new List<ILicenseEnforcer> {enforcerOne.Object, enforcerTwo.Object};
                 CustomerLicense testObject = mock1.Create<CustomerLicense>(
@@ -439,22 +414,14 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
         }
 
         [Fact]
-        public void EnforceCapabilitiesWithOwner_CallsEnforceOnEnforcersWithOwner_WhenInTrialPeriod_AndEnforcerAppliesToTrial()
+        public void EnforceCapabilitiesWithOwner_CallsEnforceOnEnforcersWithOwner_WhenInTrialPeriod_AndEnforcerApplies()
         {
             using (var mock = AutoMock.GetLoose())
             {
                 Mock<IWin32Window> owner = mock.Mock<IWin32Window>();
                 Mock<ILicenseEnforcer> enforcer = mock.Mock<ILicenseEnforcer>();
-                enforcer.SetupGet(e => e.AppliesToTrial).Returns(true);
-
-                Mock<ILicenseCapabilities> capabilities = mock.Mock<ILicenseCapabilities>();
-                capabilities.SetupGet(c => c.IsInTrial)
-                    .Returns(false);
-
-                Mock<ITangoWebClient> tangoWebClient = mock.Mock<ITangoWebClient>();
-                tangoWebClient.Setup(c => c.GetLicenseCapabilities(It.IsAny<ICustomerLicense>()))
-                    .Returns(capabilities.Object);
-
+                enforcer.Setup(e => e.AppliesTo(It.IsAny<ILicenseCapabilities>())).Returns(true);
+                
                 var enforcers = new List<ILicenseEnforcer> { enforcer.Object };
                 CustomerLicense testObject = mock.Create<CustomerLicense>(
                     new NamedParameter("key", "SomeKey"),
@@ -518,27 +485,21 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
         }
 
         [Fact]
-        public void EnforceCapabilitiesWithContext_CallsEnforceOnAllEnforcers_WhenNotInTrialPeriod()
+        public void EnforceCapabilitiesWithContext_CallsEnforceOnAllEnforcers_WhenAppliesTo()
         {
             using (var mock2 = AutoMock.GetLoose())
             using (var mock1 = AutoMock.GetLoose())
             {
-                Mock<ILicenseCapabilities> capabilities = mock1.Mock<ILicenseCapabilities>();
-                capabilities.SetupGet(c => c.IsInTrial)
-                    .Returns(false);
-
-                Mock<ITangoWebClient> tangoWebClient = mock1.Mock<ITangoWebClient>();
-                tangoWebClient.Setup(c => c.GetLicenseCapabilities(It.IsAny<ICustomerLicense>()))
-                    .Returns(capabilities.Object);
-
                 Mock<ILicenseEnforcer> enforcerOne = mock1.Mock<ILicenseEnforcer>();
                 enforcerOne.Setup(e => e.Enforce(It.IsAny<ILicenseCapabilities>(), It.IsAny<EnforcementContext>()))
                     .Returns(new EnumResult<ComplianceLevel>(ComplianceLevel.Compliant, string.Empty));
+                enforcerOne.Setup(e => e.AppliesTo(It.IsAny<ILicenseCapabilities>())).Returns(true);
 
                 Mock<ILicenseEnforcer> enforcerTwo = mock2.Mock<ILicenseEnforcer>();
                 enforcerTwo.Setup(e => e.Enforce(It.IsAny<ILicenseCapabilities>(), It.IsAny<EnforcementContext>()))
                     .Returns(new EnumResult<ComplianceLevel>(ComplianceLevel.Compliant, string.Empty));
-
+                enforcerTwo.Setup(e => e.AppliesTo(It.IsAny<ILicenseCapabilities>())).Returns(true);
+                
                 CustomerLicense testObject = mock1.Create<CustomerLicense>(
                     new NamedParameter("key", "SomeKey"),
                     new TypedParameter(typeof(IEnumerable<ILicenseEnforcer>),
@@ -593,7 +554,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
                     .Returns(capabilities.Object);
 
                 Mock<ILicenseEnforcer> enforcer = mock.Mock<ILicenseEnforcer>();
-                enforcer.SetupGet(e => e.AppliesToTrial).Returns(true);
+                enforcer.Setup(e => e.AppliesTo(It.IsAny<ILicenseCapabilities>())).Returns(true);
                 enforcer.Setup(e => e.Enforce(It.IsAny<ILicenseCapabilities>(), It.IsAny<EnforcementContext>()))
                     .Returns(new EnumResult<ComplianceLevel>(ComplianceLevel.Compliant, string.Empty));
                 
@@ -612,21 +573,15 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
             using (var mock = AutoMock.GetLoose())
             {
                 Mock<ILicenseEnforcer> enforcerOne = mock.Mock<ILicenseEnforcer>();
+                enforcerOne.Setup(e => e.AppliesTo(It.IsAny<ILicenseCapabilities>())).Returns(true);
                 enforcerOne.Setup(e => e.Enforce(It.IsAny<ILicenseCapabilities>(), It.IsAny<EnforcementContext>()))
                     .Returns(new EnumResult<ComplianceLevel>(ComplianceLevel.Compliant, string.Empty));
 
                 Mock<ILicenseEnforcer> enforcerTwo = mock.Mock<ILicenseEnforcer>();
+                enforcerTwo.Setup(e => e.AppliesTo(It.IsAny<ILicenseCapabilities>())).Returns(true);
                 enforcerTwo.Setup(e => e.Enforce(It.IsAny<ILicenseCapabilities>(), It.IsAny<EnforcementContext>()))
                     .Returns(new EnumResult<ComplianceLevel>(ComplianceLevel.NotCompliant,
                         "Something about not being compliant"));
-
-                Mock<ILicenseCapabilities> capabilities = mock.Mock<ILicenseCapabilities>();
-                capabilities.SetupGet(c => c.IsInTrial)
-                    .Returns(false);
-
-                Mock<ITangoWebClient> tangoWebClient = mock.Mock<ITangoWebClient>();
-                tangoWebClient.Setup(c => c.GetLicenseCapabilities(It.IsAny<ICustomerLicense>()))
-                    .Returns(capabilities.Object);
 
                 CustomerLicense testObject = mock.Create<CustomerLicense>(
                     new NamedParameter("key", "SomeKey"),
