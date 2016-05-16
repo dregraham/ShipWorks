@@ -39,10 +39,10 @@ namespace ShipWorks.ApplicationCore.Licensing.LicenseEnforcement
         /// </summary>
         public void Enforce(ILicenseCapabilities capabilities, EnforcementContext context, IWin32Window owner)
         {
-            if (Enforce(capabilities,context).Value == ComplianceLevel.NotCompliant)
+            if (Enforce(capabilities, context).Value == ComplianceLevel.NotCompliant)
             {
-                    IDialog channelLimitDlg = channelLimitDlgFactory.GetChannelLimitDlg(owner, EditionFeature, context);
-                    channelLimitDlg.ShowDialog();
+                IDialog channelLimitDlg = channelLimitDlgFactory.GetChannelLimitDlg(owner, EditionFeature, context);
+                channelLimitDlg.ShowDialog();
             }
         }
 

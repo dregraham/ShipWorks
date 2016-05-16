@@ -1,51 +1,50 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Windows.Forms;
+﻿using Autofac;
+using Interapptive.Shared;
+using Interapptive.Shared.Business;
+using Interapptive.Shared.Collections;
+using Interapptive.Shared.Utility;
+using log4net;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Actions;
 using ShipWorks.AddressValidation;
+using ShipWorks.AddressValidation.Enums;
+using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Licensing;
+using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data;
-using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Adapter.Custom;
 using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Data.Utility;
+using ShipWorks.Editions;
+using ShipWorks.Filters;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Editing.Enums;
 using ShipWorks.Shipping.Editing.Rating;
+using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Insurance.InsureShip;
-using ShipWorks.Users;
-using System.Diagnostics;
-using log4net;
-using ShipWorks.Data.Model;
-using ShipWorks.Data.Adapter.Custom;
-using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Actions;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using Interapptive.Shared.Utility;
-using ShipWorks.Users.Security;
-using ShipWorks.Data.Utility;
-using ShipWorks.Stores;
-using ShipWorks.ApplicationCore;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
-using ShipWorks.Filters;
 using ShipWorks.Shipping.Settings.Origin;
-using ShipWorks.ApplicationCore.Licensing;
-using Interapptive.Shared.Collections;
-using Interapptive.Shared.Business;
-using ShipWorks.Shipping.Insurance;
-using ShipWorks.Shipping.Tracking;
-using ShipWorks.Templates.Tokens;
-using ShipWorks.Editions;
 using ShipWorks.Shipping.ShipSense;
 using ShipWorks.Shipping.ShipSense.Packaging;
-using System.Xml.Linq;
+using ShipWorks.Shipping.Tracking;
+using ShipWorks.Stores;
 using ShipWorks.Stores.Content;
-using Autofac;
-using ShipWorks.AddressValidation.Enums;
-using Interapptive.Shared;
-using Interapptive.Shared.Messaging;
-using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
+using ShipWorks.Templates.Tokens;
+using ShipWorks.Users;
+using ShipWorks.Users.Security;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Windows.Forms;
+using System.Xml.Linq;
 
 namespace ShipWorks.Shipping
 {
@@ -1079,22 +1078,26 @@ namespace ShipWorks.Shipping
         /// <param name="storeEntity">The store entity.</param>
         private static void CheckLicense(StoreEntity storeEntity)
         {
-            ILicenseService licenseService = IoC.UnsafeGlobalLifetimeScope.Resolve<ILicenseService>();
-            ILicense license = licenseService.GetLicense(storeEntity);
+            using (ILifetimeScope scope = IoC.BeginLifetimeScope())
+            {
+                ILicenseService licenseService = scope.Resolve<ILicenseService>();
 
-            license.Refresh();
-            if (license.IsDisabled)
-            {
-                throw new ShippingException(license.DisabledReason);
-            }
+                ILicense license = licenseService.GetLicense(storeEntity);
 
-            try
-            {
-                license.EnforceCapabilities(EnforcementContext.CreateLabel);
-            }
-            catch (ShipWorksLicenseException ex)
-            {
-                throw new ShippingException(ex.Message);
+                license.Refresh();
+                if (license.IsDisabled)
+                {
+                    throw new ShippingException(license.DisabledReason);
+                }
+
+                try
+                {
+                    license.EnforceCapabilities(EnforcementContext.CreateLabel);
+                }
+                catch (ShipWorksLicenseException ex)
+                {
+                    throw new ShippingException(ex.Message);
+                }
             }
         }
 
