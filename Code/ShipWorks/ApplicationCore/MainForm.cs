@@ -1,16 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data.SqlClient;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using System.Xml;
-using System.Xml.Linq;
 using Autofac;
 using Divelements.SandGrid;
 using Divelements.SandRibbon;
@@ -95,13 +82,26 @@ using ShipWorks.Users;
 using ShipWorks.Users.Audit;
 using ShipWorks.Users.Logon;
 using ShipWorks.Users.Security;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data.SqlClient;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using System.Xml;
+using System.Xml.Linq;
+using Interapptive.Shared.Security;
 using TD.SandDock;
 using Application = System.Windows.Forms.Application;
 using SandButton = Divelements.SandRibbon.Button;
 using SandComboBox = Divelements.SandRibbon.ComboBox;
 using SandLabel = Divelements.SandRibbon.Label;
 using SandMenuItem = Divelements.SandRibbon.MenuItem;
-using Interapptive.Shared.Security;
 
 namespace ShipWorks
 {
@@ -843,7 +843,15 @@ namespace ShipWorks
             licenses.ForEach(license => license.Refresh());
 
             // now that we updated license info we can refresh the UI to match
-            editionGuiHelper.UpdateUI();
+            if (InvokeRequired)
+            {
+                BeginInvoke(new MethodInvoker(editionGuiHelper.UpdateUI));
+            }
+            else
+            {
+                editionGuiHelper.UpdateUI();
+            }
+
             ForceHeartbeat();
         }
 

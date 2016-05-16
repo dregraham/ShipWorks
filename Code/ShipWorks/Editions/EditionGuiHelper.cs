@@ -115,13 +115,6 @@ namespace ShipWorks.Editions
         /// </summary>
         public void UpdateUI()
         {
-            // Switch over the the UI thread if needed.
-            if (Program.MainForm.InvokeRequired)
-            {
-                Program.MainForm.BeginInvoke(new MethodInvoker(UpdateUI));
-                return;
-            }
-
             // initial setup
             if (managedElements == null)
             {
