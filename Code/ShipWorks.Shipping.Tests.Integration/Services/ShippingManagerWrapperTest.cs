@@ -1,9 +1,13 @@
 ﻿using System;
+using Autofac;
 using Autofac.Extras.Moq;
+using Moq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Editions;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Startup;
 using ShipWorks.Tests.Shared.Database;
@@ -24,6 +28,23 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         {
             context = db.CreateDataContext(x => ContainerInitializer.Initialize(x));
             mock = context.Mock;
+
+            var customerLicense = mock.Create<CustomerLicense>(new TypedParameter(typeof(string), "someKey"));
+
+            // Mock up the CustomerLicense constructor parameter Func<string, ICustomerLicense>
+            var repo = mock.MockRepository.Create<Func<string, ICustomerLicense>>();
+            repo.Setup(x => x(It.IsAny<string>()))
+                .Returns(customerLicense);
+            mock.Provide(repo.Object);
+
+            var writer = mock.MockRepository.Create<ICustomerLicenseWriter>();
+            writer.Setup(w => w.Write(It.IsAny<ICustomerLicense>())).Callback(() => { });
+            mock.Provide(writer.Object);
+
+            var licenseService = mock.MockRepository.Create<ILicenseService>();
+            licenseService.Setup(ls => ls.CheckRestriction(It.IsAny<EditionFeature>(), It.IsAny<object>()))
+                .Returns(EditionRestrictionLevel.None);
+            mock.Provide(licenseService.Object);
 
             shipment = Create.Shipment(context.Order).Save();
         }
