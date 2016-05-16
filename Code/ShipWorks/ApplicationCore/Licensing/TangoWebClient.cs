@@ -530,7 +530,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             ProcessXmlRequest(postRequest, "SubmitInsuranceClaim");
         }
 
-		/// <summary>
+        /// <summary>
         /// Sends Postal balances for postal services.
         /// </summary>
         public static void LogPostageEvent(LicenseAccountDetail license, decimal balance, decimal purchaseAmount, ShipmentTypeCode shipmentTypeCode, string accountIdentifier)
