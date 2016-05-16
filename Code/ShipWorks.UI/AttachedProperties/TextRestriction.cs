@@ -93,7 +93,7 @@ namespace ShipWorks.UI.AttachedProperties
 
             int maxLines = GetMaxLines(textBox);
             string text = dataObject.GetData(DataFormats.UnicodeText) as string;
-            string[] lines = (text ?? string.Empty).Replace("\r", "").Split('\n');
+            string[] lines = (textBox.Text + text).Replace("\r", "").Split('\n');
 
             if (lines.Length > maxLines)
             {
