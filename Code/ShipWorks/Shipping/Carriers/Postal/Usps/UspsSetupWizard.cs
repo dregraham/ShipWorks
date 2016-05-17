@@ -849,18 +849,17 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         private void OnStepNextPostageMeterAddress(object sender, WizardStepEventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(postageMeterAddress.CompanyName) &&
-                string.IsNullOrWhiteSpace(postageMeterAddress.Name))
-            {
-                MessageHelper.ShowError(this, "Please enter a Name or Company Name.");
-                e.NextPage = CurrentPage;
-                return;
-            }
-
             using (ILifetimeScope ioc = IoC.BeginLifetimeScope())
             {
                 PersonAdapter meterAddressAdapter = new PersonAdapter();
                 postageMeterAddress.SaveToEntity(meterAddressAdapter);
+
+                if (string.IsNullOrWhiteSpace(meterAddressAdapter.Company) || string.IsNullOrWhiteSpace(meterAddressAdapter.UnparsedName) )
+                {
+                    MessageHelper.ShowError(this, "Please enter a Full Name or Company Name.");
+                    e.NextPage = CurrentPage;
+                    return;
+                }
 
                 AssociateShipworksWithItselfRequest request = PopulateAssociateWithSelfRequestWithBilling(ioc);
                 request.PhysicalAddress = meterAddressAdapter;
