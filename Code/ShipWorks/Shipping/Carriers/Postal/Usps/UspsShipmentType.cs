@@ -128,7 +128,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         public override ShipmentTypeSetupWizardForm CreateSetupWizard()
         {
             EnsureAccountsHaveCurrentContractData();
-            UspsAccountEntity pendingAccount = GetPendingAccount();
+            UspsAccountEntity pendingAccount = UspsAccountManager.GetPendingUspsAccount();
             IRegistrationPromotion promotion = new RegistrationPromotionFactory().CreateRegistrationPromotion();
 
             return new UspsSetupWizard(promotion, true, pendingAccount);
@@ -465,7 +465,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         }
 
         /// <summary>
-        /// Uses the USPS API to update the contract type of the account if it is unkown.
+        /// Uses the USPS API to update the contract type of the account if it is unknown.
         /// </summary>
         /// <param name="account">The account.</param>
         public virtual void UpdateContractType(UspsAccountEntity account)
@@ -538,16 +538,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         protected override List<string> CountriesEligibleForFreeInternationalDeliveryConfirmation()
         {
             return base.CountriesEligibleForFreeInternationalDeliveryConfirmation().Union(new[] { "MX", "PL" }).ToList();
-        }
-
-        /// <summary>
-        /// Gets the first pending Usps account
-        /// </summary>
-        private UspsAccountEntity GetPendingAccount()
-        {
-            return UspsAccountManager.UspsAccounts
-                .FirstOrDefault(a => a.PendingInitialAccount == (int)UspsPendingAccountType.Existing ||
-                a.PendingInitialAccount == (int)UspsPendingAccountType.Create);
         }
     }
 }
