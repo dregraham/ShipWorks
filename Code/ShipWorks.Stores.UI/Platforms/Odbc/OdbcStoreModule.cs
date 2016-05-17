@@ -40,8 +40,8 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             builder.RegisterType<OdbcTableFactory>()
                 .AsSelf();
 
-            builder.RegisterType<OdbcImportFieldMappingDlg>()
-                .Named<IDialog>("OdbcImportFieldMappingDlg");
+            builder.RegisterType<OdbcImportFieldMappingControl>()
+                .AsSelf();
 
             builder.RegisterType<OdbcImportFieldMappingDlgViewModel>()
                 .AsImplementedInterfaces();
@@ -59,9 +59,6 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             builder.RegisterType<OdbcImportFieldMappingPage>()
                 .AsImplementedInterfaces()
                 .ExternallyOwned();
-
-            builder.RegisterType<OdbcImportFieldMappingDlgFactory>()
-                .AsSelf();
 
             builder.RegisterType<JsonOdbcFieldMapReader>()
                 .AsImplementedInterfaces()

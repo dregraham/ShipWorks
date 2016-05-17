@@ -16,15 +16,12 @@ namespace ShipWorks.Stores.Platforms.Odbc
     /// </summary>
     public class OdbcStoreType : StoreType
     {
-        private readonly IEnumerable<IOdbcWizardPage> wizardPages;
-
         /// <summary>
         /// Constructor
         /// </summary>
-        public OdbcStoreType(StoreEntity store, IEnumerable<IOdbcWizardPage> wizardPages)
+        public OdbcStoreType(StoreEntity store)
             : base(store)
         {
-            this.wizardPages = wizardPages;
         }
 
         /// <summary>
@@ -74,7 +71,12 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// </summary>
         public override List<WizardPage> CreateAddStoreWizardPages()
         {
-            return wizardPages.OrderBy(w => w.Position).Cast<WizardPage>().ToList();
+            using (ILifetimeScope scope = IoC.BeginLifetimeScope())
+            {
+                IEnumerable<IOdbcWizardPage> wizardPages = scope.Resolve<IEnumerable<IOdbcWizardPage>>();
+
+                return wizardPages.OrderBy(w => w.Position).Cast<WizardPage>().ToList();
+            }
         }
     }
 }

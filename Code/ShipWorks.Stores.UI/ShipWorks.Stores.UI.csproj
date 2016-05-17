@@ -156,7 +156,6 @@
       <DependentUpon>LemonStandAccountPage.cs</DependentUpon>
     </Compile>
     <Compile Include="Platforms\Odbc\IOdbcImportFieldMappingDlgViewModel.cs" />
-    <Compile Include="Platforms\Odbc\OdbcImportFieldMappingDlgFactory.cs" />
     <Compile Include="Platforms\Odbc\WizardPages\OdbcImportFieldMappingPage.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -200,8 +199,8 @@
     <Compile Include="Platforms\Odbc\OdbcDataSourceControl.Designer.cs">
       <DependentUpon>OdbcDataSourceControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Platforms\Odbc\OdbcImportFieldMappingDlg.xaml.cs">
-      <DependentUpon>OdbcImportFieldMappingDlg.xaml</DependentUpon>
+    <Compile Include="Platforms\Odbc\OdbcImportFieldMappingControl.xaml.cs">
+      <DependentUpon>OdbcImportFieldMappingControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Platforms\Odbc\OdbcImportFieldMappingDlgViewModel.cs" />
     <Compile Include="Platforms\Odbc\OdbcStoreModule.cs" />
@@ -315,7 +314,7 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <Page Include="Platforms\Odbc\OdbcImportFieldMappingDlg.xaml">
+    <Page Include="Platforms\Odbc\OdbcImportFieldMappingControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -19,33 +19,29 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
         public OdbcImportFieldMappingPage()
         {
             InitializeComponent();
+            Load += OnLoad;
+        }
+
+        private void OnLoad(object sender, EventArgs eventArgs)
+        {
+            using (var scope = IoC.BeginLifetimeScope())
+            {
+                OdbcStoreEntity store = GetStore<OdbcStoreEntity>();
+                OdbcDataSource dataSource = scope.Resolve<OdbcDataSource>();
+                dataSource.Restore(store.ConnectionString);
+
+                IOdbcSchema schema = scope.Resolve<IOdbcSchema>();
+                schema.Load(dataSource);
+
+                IOdbcImportFieldMappingDlgViewModel viewModel = scope.Resolve<IOdbcImportFieldMappingDlgViewModel>();
+                viewModel.Load(schema.Tables);
+                odbcImportFieldMappingControl.DataContext = viewModel;
+            }
         }
 
         /// <summary>
         /// The position in which to show this wizard page
         /// </summary>
         public int Position => 1;
-
-        /// <summary>
-        /// Called when [click new map button].
-        /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
-        private void OnClickNewMapButton(object sender, EventArgs e)
-        {
-            using (var scope = IoC.BeginLifetimeScope())
-            {
-                OdbcImportFieldMappingDlgFactory factory = scope.Resolve<OdbcImportFieldMappingDlgFactory>();
-                OdbcStoreEntity store = GetStore<OdbcStoreEntity>();
-                OdbcDataSource dataSource = scope.Resolve<OdbcDataSource>();
-                dataSource.Restore(store.ConnectionString);
-
-                IOdbcSchema schema = scope.Resolve<IOdbcSchema>();
-
-                schema.Load(dataSource);
-                IDialog dlg = factory.CreateOdbcImportFieldMappingDlg(Parent.Parent, schema.Tables);
-                dlg.ShowDialog();
-            }
-        }
     }
 }

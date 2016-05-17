@@ -9,7 +9,7 @@ using ShipWorks.Stores.Platforms.Odbc.Mapping;
 namespace ShipWorks.Stores.UI.Platforms.Odbc
 {
     /// <summary>
-    /// View Model for the <see cref="OdbcImportFieldMappingDlg"/>
+    /// View Model for the <see cref="OdbcImportFieldMappingControl"/>
     /// </summary>
     public class OdbcImportFieldMappingDlgViewModel : IOdbcImportFieldMappingDlgViewModel, INotifyPropertyChanged
     {
