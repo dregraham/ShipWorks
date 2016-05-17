@@ -766,7 +766,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 case UspsPendingAccountType.Create:
                     if (radioNewAccount.Checked)
                     {
-                        // The user is wanting to create a new account. When they 
+                        // The user is wanting to create a new account. When they
                         // registered, this is the shell account stamps created
                         // and all we need is their payment and billing info.
                         e.NextPage = wizardPageNewAccountPaymentAndBilling;
@@ -806,7 +806,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                     case AssociateShipWorksWithItselfResponseType.Success:
                         registrationComplete = true;
                         PopulateAccountFromAssociateShipworksWithItselfRequest(request);
-                        break;                   
+                        break;
 
                     case AssociateShipWorksWithItselfResponseType.POBoxNotAllowed:
                         break;
@@ -849,6 +849,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         private void OnStepNextPostageMeterAddress(object sender, WizardStepEventArgs e)
         {
+            if (string.IsNullOrWhiteSpace(postageMeterAddress.CompanyName) &&
+                string.IsNullOrWhiteSpace(postageMeterAddress.Name))
+            {
+                MessageHelper.ShowError(this, "Please enter a Name or Company Name.");
+                e.NextPage = CurrentPage;
+                return;
+            }
+
             using (ILifetimeScope ioc = IoC.BeginLifetimeScope())
             {
                 PersonAdapter meterAddressAdapter = new PersonAdapter();
@@ -889,7 +897,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
             AssociateShipworksWithItselfRequest request =
                 ioc.Resolve<AssociateShipworksWithItselfRequest>(new TypedParameter(typeof (IUspsWebClient), uspsWebClient));
-                
+
             ICustomerLicense customerLicense = (ICustomerLicense) ioc.Resolve<ILicenseService>().GetLicenses().Single();
 
             request.CardNumber = paymentAndBillingAddress.CardNumber;
@@ -898,10 +906,18 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             request.CardExpirationMonth = paymentAndBillingAddress.CreditCardExpirationMonth;
             request.CardExpirationYear = paymentAndBillingAddress.CreditCardExpirationYear;
             request.CardBillingAddress = paymentAndBillingAddress.BillingAddress;
-            
+
             request.CustomerKey = customerLicense.Key;
 
             return request;
+        }
+
+        /// <summary>
+        /// Disable going back from this point
+        /// </summary>
+        private void OnSteppingIntoWizardPageOptions(object sender, WizardSteppingIntoEventArgs e)
+        {
+            BackEnabled = false;
         }
     }
 }
