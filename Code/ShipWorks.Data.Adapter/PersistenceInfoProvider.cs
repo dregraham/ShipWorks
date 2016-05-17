@@ -2195,7 +2195,7 @@ namespace ShipWorks.Data.Adapter
 		{
 			base.AddElementMapping( "SearsStoreEntity", "ShipWorksLocal", @"dbo", "SearsStore", 5 );
 			base.AddElementFieldMapping( "SearsStoreEntity", "StoreID", "StoreID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 0 );
-			base.AddElementFieldMapping( "SearsStoreEntity", "Email", "Email", false, (int)SqlDbType.NVarChar, 75, 0, 0, false, "", null, typeof(System.String), 1 );
+			base.AddElementFieldMapping( "SearsStoreEntity", "SearsEmail", "SearsEmail", false, (int)SqlDbType.NVarChar, 75, 0, 0, false, "", null, typeof(System.String), 1 );
 			base.AddElementFieldMapping( "SearsStoreEntity", "Password", "Password", false, (int)SqlDbType.NVarChar, 75, 0, 0, false, "", null, typeof(System.String), 2 );
 			base.AddElementFieldMapping( "SearsStoreEntity", "SecretKey", "SecretKey", false, (int)SqlDbType.NVarChar, 255, 0, 0, false, "", null, typeof(System.String), 3 );
 			base.AddElementFieldMapping( "SearsStoreEntity", "SellerID", "SellerID", false, (int)SqlDbType.NVarChar, 15, 0, 0, false, "", null, typeof(System.String), 4 );
