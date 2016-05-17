@@ -141,6 +141,9 @@
     <Compile Include="Platforms\LemonStand\LemonStandStoreTypeTest.cs" />
     <Compile Include="Platforms\Odbc\JsonOdbcFieldMapIOFactoryTest.cs" />
     <Compile Include="Platforms\Odbc\Mapping\ExternalOdbcMappableFieldTest.cs" />
+    <Compile Include="Platforms\Odbc\Mapping\JsonOdbcFieldMapReaderTest.cs" />
+    <Compile Include="Platforms\Odbc\Mapping\JsonOdbcFieldMapWriterTest.cs" />
+    <Compile Include="Platforms\Odbc\Mapping\OdbcFieldMapTest.cs" />
     <Compile Include="Platforms\Odbc\Mapping\ShipWorksOdbcMappableFieldTest.cs" />
     <Compile Include="Platforms\Odbc\OdbcColumnTest.cs" />
     <Compile Include="Platforms\Odbc\OdbcFieldMapFactoryTest.cs" />

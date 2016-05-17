@@ -5,10 +5,16 @@ using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 {
+    /// <summary>
+    /// Contains Field Mapping information for ODBC
+    /// </summary>
 	public class OdbcFieldMap
 	{
 		private readonly IOdbcFieldMapIOFactory ioFactory;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
 		public OdbcFieldMap(IOdbcFieldMapIOFactory ioFactory)
 		{
 		    MethodConditions.EnsureArgumentIsNotNull(ioFactory);
@@ -17,13 +23,25 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 		    Entries = new List<OdbcFieldMapEntry>();
 		}
 
+        /// <summary>
+        /// The ODBC Field Map Entries
+        /// </summary>
 	    public List<OdbcFieldMapEntry> Entries { get; }
 
+        /// <summary>
+        /// The Display Name
+        /// </summary>
         [Obfuscation(Exclude = true)]
         public string DisplayName { get; set; }
 
+        /// <summary>
+        /// The External Table Name
+        /// </summary>
         public string ExternalTableName { get; set; }
 
+        /// <summary>
+        /// Add the given ODBC Field Map Entry to the ODBC Field Map
+        /// </summary>
         public void AddEntry(OdbcFieldMapEntry entry)
 		{
 			Entries.Add(entry);
