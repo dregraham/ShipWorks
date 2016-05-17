@@ -32,7 +32,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 
 	        foreach (ShipWorksOdbcMappableField orderField in CreateShipWorksOrderFields())
 	        {
-	            orderMap.AddEntry(new OdbcFieldMapEntry(orderField, new ExternalOdbcMappableField()));
+	            orderMap.AddEntry(new OdbcFieldMapEntry(orderField, null));
 	        }
 
 	        return orderMap;
@@ -84,7 +84,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 
             foreach (ShipWorksOdbcMappableField entry in CreateShipWorksOrderItemFields())
             {
-                itemMap.AddEntry(new OdbcFieldMapEntry(entry, new ExternalOdbcMappableField()));
+                itemMap.AddEntry(new OdbcFieldMapEntry(entry, null));
             }
 
             return itemMap;
@@ -134,7 +134,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 
             foreach (ShipWorksOdbcMappableField entry in CreateShipWorksAddressFields())
             {
-                addressMap.AddEntry(new OdbcFieldMapEntry(entry, new ExternalOdbcMappableField()));
+                addressMap.AddEntry(new OdbcFieldMapEntry(entry, null));
             }
 
             return addressMap;

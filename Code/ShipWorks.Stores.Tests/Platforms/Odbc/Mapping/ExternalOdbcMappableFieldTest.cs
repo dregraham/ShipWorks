@@ -1,6 +1,5 @@
 ﻿using System;
 using Autofac.Extras.Moq;
-using Moq;
 using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
 using Xunit;
@@ -19,11 +18,10 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
         [Fact]
         public void GetQualifiedName_ReturnsQualifiedName()
         {
-            Mock<IOdbcTable> table = mock.Mock<IOdbcTable>();
-            table.SetupGet(t => t.Name).Returns("TableName");
+            OdbcTable table = new OdbcTable("TableName");
             OdbcColumn column = new OdbcColumn("ColumnName");
 
-            ExternalOdbcMappableField testObject = new ExternalOdbcMappableField(table.Object, column);
+            ExternalOdbcMappableField testObject = new ExternalOdbcMappableField(table, column);
 
             Assert.Equal("TableName.ColumnName", testObject.GetQualifiedName());
         }
@@ -31,11 +29,10 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
         [Fact]
         public void DisplayName_ReturnsTableAndColumnName()
         {
-            Mock<IOdbcTable> table = mock.Mock<IOdbcTable>();
-            table.SetupGet(t => t.Name).Returns("TableName");
+            OdbcTable table = new OdbcTable("TableName");
             OdbcColumn column = new OdbcColumn("ColumnName");
 
-            ExternalOdbcMappableField testObject = new ExternalOdbcMappableField(table.Object, column);
+            ExternalOdbcMappableField testObject = new ExternalOdbcMappableField(table, column);
 
             Assert.Equal("TableName ColumnName", testObject.DisplayName);
         }

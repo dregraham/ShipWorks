@@ -1,5 +1,4 @@
 using System.Reflection;
-using System.Text;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Mapping
@@ -19,6 +18,8 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         public ShipWorksOdbcMappableField(EntityField2 field, string displayName)
 	    {
 	        this.field = field;
+            ElementName = field?.ContainingObjectName;
+            ElementFieldValue = field?.Name;
 	        DisplayName = displayName;
 	    }
 
@@ -27,10 +28,12 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// </summary>
         public string GetQualifiedName()
 	    {
-            string table = field.ContainingObjectName.Replace("Entity", string.Empty);
-
-            return $"{table}.{field.Name}";
+            return $"{field.ContainingObjectName}.{field.Name}";
 	    }
+
+        public string ElementName { get; set; }
+
+        public string ElementFieldValue { get; set; }
 
         /// <summary>
         /// The fields value

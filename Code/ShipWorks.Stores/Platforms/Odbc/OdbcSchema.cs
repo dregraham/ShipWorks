@@ -65,7 +65,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
 
                     for (int i = 0; i < tableData.Rows.Count; i++)
                     {
-                        OdbcTable table = tableFactory.CreateTable(this, tableData.Rows[i].ItemArray[position].ToString());
+                        OdbcTable table = tableFactory.CreateTable(tableData.Rows[i].ItemArray[position].ToString());
                         tables.Add(table);
                     }
 

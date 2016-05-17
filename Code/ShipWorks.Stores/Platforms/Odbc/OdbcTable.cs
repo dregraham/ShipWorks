@@ -2,8 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
-using Interapptive.Shared.Utility;
+using Autofac;
 using log4net;
+using ShipWorks.ApplicationCore;
 
 namespace ShipWorks.Stores.Platforms.Odbc
 {
@@ -12,21 +13,12 @@ namespace ShipWorks.Stores.Platforms.Odbc
     /// </summary>
 	public class OdbcTable : IOdbcTable
     {
-	    private readonly IOdbcSchema schema;
-        private IEnumerable<OdbcColumn> columns;
-        private readonly ILog log;
-
         /// <summary>
         /// Constructor
         /// </summary>
-		public OdbcTable(IOdbcSchema schema, string tableName, ILog log)
+		public OdbcTable(string tableName)
         {
-            MethodConditions.EnsureArgumentIsNotNull(schema);
-            MethodConditions.EnsureArgumentIsNotNull(log);
-
-	        this.schema = schema;
             Name = tableName;
-            this.log = log;
         }
 
         /// <summary>
@@ -37,28 +29,19 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// <summary>
         /// The columns in the table
         /// </summary>
-        public IEnumerable<OdbcColumn> Columns
-        {
-            get
-            {
-                if (columns == null)
-                {
-                    Load();
-                }
-
-                return columns;
-            }
-
-            private set { columns = value; }
-        }
+        public IEnumerable<OdbcColumn> Columns { get; private set; }
 
         /// <summary>
         /// Loads the columns for this table
         /// </summary>
-        private void Load()
+        public void Load(IOdbcDataSource dataSource)
 		{
-            using (DbConnection connection = schema.DataSource.CreateConnection())
+            using (DbConnection connection = dataSource.CreateConnection())
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
+                Func<Type, ILog> logFactory = lifetimeScope.Resolve<Func<Type, ILog>>();
+                ILog log = logFactory(typeof(OdbcTable));
+
                 try
                 {
                     connection.Open();
@@ -66,7 +49,8 @@ namespace ShipWorks.Stores.Platforms.Odbc
                 catch (DbException ex)
                 {
                     log.Error(ex.Message);
-                    throw new ShipWorksOdbcException($"An error occurred while attempting to open a connection to {schema.DataSource.Name}.", ex);
+                    throw new ShipWorksOdbcException(
+                        $"An error occurred while attempting to open a connection to {dataSource.Name}.", ex);
                 }
 
                 string[] restriction =
@@ -93,9 +77,11 @@ namespace ShipWorks.Stores.Platforms.Odbc
                 catch (Exception ex)
                 {
                     log.Error(ex);
-                    throw new ShipWorksOdbcException($"An error occurred while attempting to retrieve columns from information from the {Name} table.", ex);
+                    throw new ShipWorksOdbcException(
+                        $"An error occurred while attempting to retrieve columns from information from the {Name} table.",
+                        ex);
                 }
             }
-        }
+		}
     }
 }

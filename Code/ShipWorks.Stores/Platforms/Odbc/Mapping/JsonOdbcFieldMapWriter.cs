@@ -17,8 +17,15 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
             MethodConditions.EnsureArgumentIsNotNull(map);
 
             StreamWriter streamWriter = new StreamWriter(stream);
-            streamWriter.Write(JsonConvert.SerializeObject(map));
+            string data = JsonConvert.SerializeObject(map, GetSerializerSettings());
+
+            streamWriter.Write(data);
             streamWriter.Flush();
 		}
+
+        private JsonSerializerSettings GetSerializerSettings()
+        {
+            return new JsonSerializerSettings {NullValueHandling = NullValueHandling.Ignore};
+        }
 	}
 }

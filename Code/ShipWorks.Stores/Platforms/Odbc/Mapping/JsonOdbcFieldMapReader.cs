@@ -15,7 +15,11 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         private readonly ILog log;
         private readonly JObject json;
         private readonly JToken mapEntries;
+        private int position = -1;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public JsonOdbcFieldMapReader(Stream stream, ILog log)
         {
             MethodConditions.EnsureArgumentIsNotNull(stream);
@@ -24,7 +28,8 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
             stream.Position = 0;
             using (StreamReader streamReader = new StreamReader(stream))
             {
-                json = JObject.Parse(streamReader.ReadToEnd());
+                string data = streamReader.ReadToEnd();
+                json = JObject.Parse(data);
 
                 mapEntries = json["Entries"];
 
@@ -66,12 +71,12 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <summary>
         /// Reads the ODBC Field Map Entry from the stream
         /// </summary>
-        /// <returns></returns>
         public OdbcFieldMapEntry ReadEntry()
         {
+            position++;
             try
             {
-                JToken current = mapEntries.Next.ToString();
+                JToken current = mapEntries[position];
 
                 if (current != null)
                 {

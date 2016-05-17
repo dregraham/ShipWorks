@@ -1,4 +1,3 @@
-using System;
 using System.Reflection;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Mapping
@@ -8,20 +7,35 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
     /// </summary>
 	public class ExternalOdbcMappableField : IOdbcMappableField
 	{
-	    private readonly IOdbcTable table;
-	    private readonly OdbcColumn column;
-
-	    public ExternalOdbcMappableField()
+        /// <summary>
+        /// Constructor
+        /// </summary>
+	    public ExternalOdbcMappableField(OdbcTable table, OdbcColumn column)
 	    {
+	        Table = table;
+	        Column = column;
 	    }
-        public OdbcTable Table { get; set; }
+
+        /// <summary>
+        /// The External Table
+        /// </summary>
+        public IOdbcTable Table { get; set; }
+
+        /// <summary>
+        /// The External Column
+        /// </summary>
         public OdbcColumn Column { get; set; }
 
-	    public ExternalOdbcMappableField(IOdbcTable table, OdbcColumn column)
-	    {
-	        this.table = table;
-	        this.column = column;
-	    }
+        /// <summary>
+        /// value from the field
+        /// </summary>
+        public string Value { get; }
+
+        /// <summary>
+        /// The fields display name
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public string DisplayName => $"{Table.Name} {Column.Name}";
 
         /// <summary>
         /// The fields Qualified Name in the format Table.Column
@@ -30,22 +44,5 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 	    {
 	        return $"{Table.Name}.{Column.Name}";
 	    }
-
-        /// <summary>
-        /// value from the field
-        /// </summary>
-	    public string Value
-		{
-			get
-			{
-				throw new NotImplementedException();
-			}
-		}
-
-        /// <summary>
-        /// The fields display name
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-	    public string DisplayName => $"{table.Name} {column.Name}";
     }
 }

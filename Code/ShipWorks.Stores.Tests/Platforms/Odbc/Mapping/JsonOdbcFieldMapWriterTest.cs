@@ -1,6 +1,8 @@
 ﻿using System;
 using System.IO;
+using Autofac;
 using Autofac.Extras.Moq;
+using log4net;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
@@ -29,13 +31,17 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
 
             OdbcFieldMap map = new OdbcFieldMap(ioFactory.Object);
 
-            Mock<IOdbcTable> table = mock.Mock<IOdbcTable>();
-            table.SetupGet(t => t.Name).Returns("OrdersTable");
+            
 
-            ExternalOdbcMappableField externalOdbcMappableField = new ExternalOdbcMappableField(table.Object, new OdbcColumn("OrderNumberColumn"));
+            OdbcTable table = new OdbcTable("some table");
+            OdbcColumn column = new OdbcColumn("OrderNumberColumn");
+
+            ExternalOdbcMappableField externalOdbcMappableField = new ExternalOdbcMappableField(table, column);
             ShipWorksOdbcMappableField shipworksOdbcMappableField = new ShipWorksOdbcMappableField(OrderFields.OrderNumber, "Order Number");
 
             OdbcFieldMapEntry entry = new OdbcFieldMapEntry(shipworksOdbcMappableField, externalOdbcMappableField);
+            map.ExternalTableName = "some external tablename";
+            map.DisplayName = "some display name";
 
             map.AddEntry(entry);
 

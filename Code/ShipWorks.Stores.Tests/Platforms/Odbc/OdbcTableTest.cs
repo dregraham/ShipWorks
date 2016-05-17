@@ -20,20 +20,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         }
 
         [Fact]
-        public void Ctor_ThrowsArgumentNullException_WhenSchemaIsNull()
-        {
-            Assert.Throws<ArgumentNullException>(() => new OdbcTable(null, "tableName", null));
-        }
-
-        [Fact]
-        public void Ctor_ThrowsArgumentNullException_WhenLogIsNull()
-        {
-            Mock<IOdbcSchema> schema = mock.Mock<IOdbcSchema>();
-
-            Assert.Throws<ArgumentNullException>(() => new OdbcTable(schema.Object, "tableName", null));
-        }
-
-        [Fact]
         public void Ctor_SetsName()
         {
             OdbcTable testObject = mock.Create<OdbcTable>(new TypedParameter(typeof(string), "SomeTableName"));
