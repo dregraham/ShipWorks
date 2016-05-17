@@ -854,7 +854,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 PersonAdapter meterAddressAdapter = new PersonAdapter();
                 postageMeterAddress.SaveToEntity(meterAddressAdapter);
 
-                if (string.IsNullOrWhiteSpace(meterAddressAdapter.Company) || string.IsNullOrWhiteSpace(meterAddressAdapter.UnparsedName) )
+                if (string.IsNullOrWhiteSpace(meterAddressAdapter.Company) && string.IsNullOrWhiteSpace(meterAddressAdapter.UnparsedName) )
                 {
                     MessageHelper.ShowError(this, "Please enter a Full Name or Company Name.");
                     e.NextPage = CurrentPage;
