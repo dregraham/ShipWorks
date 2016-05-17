@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Windows.Forms;
-using Autofac;
+﻿using Autofac;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
@@ -28,6 +24,10 @@ using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Defaults;
 using ShipWorks.Shipping.Settings.WizardPages;
 using ShipWorks.UI.Wizard;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows.Forms;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {
@@ -41,7 +41,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         private readonly ShipmentTypeCode shipmentTypeCode = ShipmentTypeCode.Usps;
         private readonly Dictionary<long, long> profileMap = new Dictionary<long, long>();
 
-        bool registrationComplete;
+        private bool registrationComplete;
         private readonly bool allowRegisteringExistingAccount;
         private readonly int initialPersonControlHeight;
 
@@ -133,7 +133,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             }
             else
             {
-                wizardPageOptions.StepNext += OnPageOptionsStepNext;
+                wizardPageOptions.StepNext += OnStepNextPageOptions;
             }
 
             if (UspsAccount == null)
@@ -377,7 +377,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
                     uspsRegistration.Submit();
 
-                    // Save the USPS account now that it has been succesfully created
+                    // Save the USPS account now that it has been successfully created
                     SaveUspsAccount(uspsRegistration.UserName, SecureText.Encrypt(uspsRegistration.Password, uspsRegistration.UserName));
 
                     registrationComplete = true;
@@ -410,17 +410,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             }
 
             return true;
-        }
-
-        /// <summary>
-        /// Stepping into the options page
-        /// </summary>
-        private void OnSteppingIntoOptions(object sender, WizardSteppingIntoEventArgs e)
-        {
-            if (registrationComplete)
-            {
-                BackEnabled = false;
-            }
         }
 
         /// <summary>
@@ -458,16 +447,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
                 new UspsWebClient(UspsResellerType.None).AuthenticateUser(userID, password.Text);
 
-                if (UspsAccount == null)
-                {
-                    UspsAccount = new UspsAccountEntity
-                    {
-                        ContractType = (int)UspsAccountContractType.Unknown,
-                        CreatedDate = DateTime.UtcNow
-                    };
-                }
-
                 SaveUspsAccount(userID, SecureText.Encrypt(password.Text, userID));
+                registrationComplete = true;
             }
             catch (UspsException ex)
             {
@@ -512,6 +493,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         private void OnSteppingIntoAccountInfo(object sender, WizardSteppingIntoEventArgs e)
         {
+            BackEnabled = false;
+
             uspsAccountInfo.Initialize(UspsAccount);
 
             // Try to associate the Stamps account with the license
@@ -526,7 +509,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <summary>
         /// Wizard has just stepped out of the options page
         /// </summary>
-        private void OnPageOptionsStepNext(object sender, WizardStepEventArgs e)
+        private void OnStepNextPageOptions(object sender, WizardStepEventArgs e)
         {
             var settings = ShippingSettings.Fetch();
             optionsControl.SaveSettings(settings);
@@ -780,19 +763,32 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             switch ((UspsPendingAccountType)UspsAccount.PendingInitialAccount)
             {
                 case UspsPendingAccountType.None:
-                    return;
+                    break;
 
                 case UspsPendingAccountType.Create:
-                    if (radioExistingAccount.Checked)
+                    if (radioNewAccount.Checked)
                     {
-                        return;
+                        // The user is wanting to create a new account. When they 
+                        // registered, this is the shell account stamps created
+                        // and all we need is their payment and billing info.
+                        e.NextPage = wizardPageNewAccountPaymentAndBilling;
                     }
-                    e.NextPage = wizardPageNewAccountPaymentAndBilling;
                     break;
 
                 case UspsPendingAccountType.Existing:
                     e.NextPage = wizardPageOptions;
                     break;
+            }
+        }
+
+        /// <summary>
+        /// Called when [step into new account payment and billing].
+        /// </summary>
+        private void OnSteppingIntoNewAccountPaymentAndBilling(object sender, WizardSteppingIntoEventArgs e)
+        {
+            if (UspsAccount.PendingInitialAccount != (int)UspsPendingAccountType.Create)
+            {
+                e.Skip = true;
             }
         }
 
@@ -810,7 +806,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 switch (response.ResponseType)
                 {
                     case AssociateShipWorksWithItselfResponseType.Success:
-                        e.NextPage = wizardPageOptions;
+                        registrationComplete = true;
                         PopulateAccountFromAssociateShipworksWithItselfRequest(request);
                         break;
 
@@ -840,6 +836,17 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         }
 
         /// <summary>
+        /// Called when [stepping into postage meter address].
+        /// </summary>
+        private void OnSteppingIntoPostageMeterAddress(object sender, WizardSteppingIntoEventArgs e)
+        {
+            if (registrationComplete)
+            {
+                e.Skip = true;
+            }
+        }
+
+        /// <summary>
         /// Called when [step next postage meter address].
         /// </summary>
         private void OnStepNextPostageMeterAddress(object sender, WizardStepEventArgs e)
@@ -857,6 +864,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 switch (response.ResponseType)
                 {
                     case AssociateShipWorksWithItselfResponseType.Success:
+                        registrationComplete = true;
                         PopulateAccountFromAssociateShipworksWithItselfRequest(request);
                         break;
 
@@ -883,8 +891,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
             AssociateShipworksWithItselfRequest request =
                 ioc.Resolve<AssociateShipworksWithItselfRequest>(new TypedParameter(typeof(IUspsWebClient), uspsWebClient));
-
-            ICustomerLicense customerLicense = (ICustomerLicense)ioc.Resolve<ILicenseService>().GetLicenses().Single();
+				
+  	        ICustomerLicense customerLicense = (ICustomerLicense) ioc.Resolve<ILicenseService>().GetLicenses().Single();
 
             request.CardNumber = paymentAndBillingAddress.CardNumber;
             request.CardType = paymentAndBillingAddress.CardType;
@@ -892,7 +900,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             request.CardExpirationMonth = paymentAndBillingAddress.CreditCardExpirationMonth;
             request.CardExpirationYear = paymentAndBillingAddress.CreditCardExpirationYear;
             request.CardBillingAddress = paymentAndBillingAddress.BillingAddress;
-
+			
             request.CustomerKey = customerLicense.Key;
 
             return request;

@@ -304,7 +304,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             this.wizardPageOptions.Size = new System.Drawing.Size(733, 540);
             this.wizardPageOptions.TabIndex = 0;
             this.wizardPageOptions.Title = "Stamps.com Settings";
-            this.wizardPageOptions.SteppingInto += new System.EventHandler<ShipWorks.UI.Wizard.WizardSteppingIntoEventArgs>(this.OnSteppingIntoOptions);
             //
             // optionsControl
             //
@@ -521,6 +520,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             this.wizardPageNewAccountPaymentAndBilling.TabIndex = 0;
             this.wizardPageNewAccountPaymentAndBilling.Title = "Account Registration";
             this.wizardPageNewAccountPaymentAndBilling.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextNewAccountPaymentAndBilling);
+            this.wizardPageNewAccountPaymentAndBilling.SteppingInto += new System.EventHandler<ShipWorks.UI.Wizard.WizardSteppingIntoEventArgs>(this.OnSteppingIntoNewAccountPaymentAndBilling);
             //
             // paymentAndBillingAddress
             //
@@ -544,6 +544,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             this.wizardPagePostageMeterAddress.TabIndex = 0;
             this.wizardPagePostageMeterAddress.Title = "Account Registration";
             this.wizardPagePostageMeterAddress.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextPostageMeterAddress);
+            this.wizardPagePostageMeterAddress.SteppingInto += new System.EventHandler<ShipWorks.UI.Wizard.WizardSteppingIntoEventArgs>(this.OnSteppingIntoPostageMeterAddress);
             //
             // postageMeterAddress
             //
