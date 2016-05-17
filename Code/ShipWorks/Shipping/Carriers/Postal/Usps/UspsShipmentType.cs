@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing.Imaging;
-using System.Linq;
-using System.Threading.Tasks;
-using Interapptive.Shared.Business;
+﻿using Interapptive.Shared.Business;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore.Licensing;
@@ -25,6 +20,11 @@ using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Origin;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
+using System;
+using System.Collections.Generic;
+using System.Drawing.Imaging;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {
@@ -543,10 +543,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <summary>
         /// Gets the first pending Usps account
         /// </summary>
-        /// <returns></returns>
         private UspsAccountEntity GetPendingAccount()
         {
-            return AccountRepository.Accounts
+            return UspsAccountManager.UspsAccounts
                 .FirstOrDefault(a => a.PendingInitialAccount == (int)UspsPendingAccountType.Existing ||
                 a.PendingInitialAccount == (int)UspsPendingAccountType.Create);
         }
