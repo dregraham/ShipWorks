@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Autofac;
 
 namespace ShipWorks.Shipping
 {
@@ -16,6 +15,6 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Returns the ShipmentType for the given type code
         /// </summary>
-        ShipmentType GetType(ShipmentTypeCode typeCode, ILifetimeScope lifetimeScope);
+        ShipmentType GetType(ShipmentTypeCode typeCode);
     }
 }

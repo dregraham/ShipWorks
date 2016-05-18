@@ -8,6 +8,16 @@ namespace ShipWorks.Shipping
     /// </summary>
     public class ShipmentTypeManagerWrapper : IShipmentTypeManager
     {
+        private readonly ILifetimeScope lifetimeScope;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public ShipmentTypeManagerWrapper(ILifetimeScope lifetimeScope)
+        {
+            this.lifetimeScope = lifetimeScope;
+        }
+
         /// <summary>
         /// Returns all shipment types in ShipWorks
         /// </summary>
@@ -16,6 +26,6 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Returns the ShipmentType for the given type code
         /// </summary>
-        public ShipmentType GetType(ShipmentTypeCode typeCode, ILifetimeScope lifetimeScope) => ShipmentTypeManager.GetType(typeCode, lifetimeScope);
+        public ShipmentType GetType(ShipmentTypeCode typeCode) => ShipmentTypeManager.GetType(typeCode, lifetimeScope);
     }
 }

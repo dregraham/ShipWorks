@@ -1,14 +1,9 @@
 ﻿using System.Linq;
-using Autofac;
-using Autofac.Features.Indexed;
 using Interapptive.Shared.UI;
-using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Editions;
 using ShipWorks.Editions.Brown;
 using ShipWorks.Shipping;
-using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.Postal;
-using ShipWorks.Shipping.Carriers.UPS;
 
 namespace ShipWorks.ApplicationCore.Licensing.FeatureRestrictions
 {
@@ -20,18 +15,16 @@ namespace ShipWorks.ApplicationCore.Licensing.FeatureRestrictions
         private readonly IShipmentTypeManager shipmentTypeManager;
         private readonly IBrownEditionUtility brownEditionUtility;
         private readonly IPostalUtility postalUtility;
-        private readonly ILifetimeScope scope;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShipmentTypeRestriction(IShipmentTypeManager shipmentTypeManager, IBrownEditionUtility brownEditionUtility, IPostalUtility postalUtility, IMessageHelper messageHelper, ILifetimeScope scope)
+        public ShipmentTypeRestriction(IShipmentTypeManager shipmentTypeManager, IBrownEditionUtility brownEditionUtility, IPostalUtility postalUtility, IMessageHelper messageHelper)
             : base(messageHelper)
         {
             this.shipmentTypeManager = shipmentTypeManager;
             this.brownEditionUtility = brownEditionUtility;
             this.postalUtility = postalUtility;
-            this.scope = scope;
         }
 
         /// <summary>
@@ -119,7 +112,7 @@ namespace ShipWorks.ApplicationCore.Licensing.FeatureRestrictions
             // Check and see if the given shipment type is in the capabilities shipment type restrictions
             if (capabilities.ShipmentTypeRestriction.ContainsKey(shipmentTypeCode))
             {
-                ShipmentType shipmentType = shipmentTypeManager.GetType(shipmentTypeCode, scope);
+                ShipmentType shipmentType = shipmentTypeManager.GetType(shipmentTypeCode);
 
                 // If the given shipmen type is disabled return true
                 if (capabilities.ShipmentTypeRestriction[shipmentTypeCode].Contains(ShipmentTypeRestrictionType.Disabled))
@@ -150,7 +143,7 @@ namespace ShipWorks.ApplicationCore.Licensing.FeatureRestrictions
         private bool IsBestRateDisabled(ILicenseCapabilities capabilities)
         {
             // Get the ups shipment type so we can see if there are any ups accounts in the application
-            ShipmentType uspShipmentType = shipmentTypeManager.GetType(ShipmentTypeCode.UpsOnLineTools, scope);
+            ShipmentType uspShipmentType = shipmentTypeManager.GetType(ShipmentTypeCode.UpsOnLineTools);
 
             if (capabilities.IsInTrial)
             {
