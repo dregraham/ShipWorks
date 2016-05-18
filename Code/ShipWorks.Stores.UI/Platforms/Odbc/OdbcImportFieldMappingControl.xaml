@@ -7,7 +7,7 @@
              xmlns:fieldMap="clr-namespace:ShipWorks.Stores.Platforms.Odbc.Mapping;assembly=ShipWorks.Stores"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance local:OdbcImportFieldMappingDlgViewModel}"
-             Height="600" Width="500"
+             Height="600" Width="550"
              FontFamily="Tahoma" FontSize="8.25pt"
              Background="{x:Static SystemColors.ControlBrush}">
     <Control.Resources>
@@ -20,6 +20,7 @@
         </Style>
         <Style TargetType="{x:Type TextBox}">
             <Setter Property="Margin" Value="8 5 0 5" />
+            <Setter Property="Padding" Value="3" />
         </Style>
         <Style TargetType="{x:Type Button}">
             <Setter Property="Margin" Value="5 5 0 5" />
@@ -29,18 +30,7 @@
         <Style TargetType="{x:Type ComboBox}">
             <Setter Property="Margin" Value="8 5 0 5" />
         </Style>
-        <Style TargetType="ListBoxItem">
-            <Style.Triggers>
-                <Trigger Property="IsSelected" Value="True">
-                    <Trigger.Setters>
-                        <Setter Property="Background" Value="DarkOrange" />
-                    </Trigger.Setters>
-                </Trigger>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="Orange"></Setter>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
+
     </Control.Resources>
     <Grid Margin="20 10 10 10">
         <Grid.RowDefinitions>
@@ -66,13 +56,16 @@
             <Label Grid.Row="1" Grid.Column="0"
                    HorizontalAlignment="Right" Content="Name:" />
             <Label Grid.Row="2" Grid.Column="0"
-                   HorizontalAlignment="Right" Content="Database Table:" />
+                   HorizontalAlignment="Right" Content="Table:" />
             <TextBox Grid.Row="1" Grid.Column="1"
                      Text="{Binding MapName}"/>
             <ComboBox Grid.Row="2" Grid.Column="1"
                       ItemsSource="{Binding Tables, UpdateSourceTrigger=PropertyChanged}"
                       DisplayMemberPath="Name"
                       SelectedValue="{Binding SelectedTable}" />
+            <Button Grid.Row="1" Grid.Column="2" Content="Load" Command="{Binding SaveMapCommand}"/>
+            <Button Grid.Row="2" Grid.Column="2" Content="Export" Command="{Binding SaveMapCommand}"/>
+
         </Grid>
 
         <Grid Grid.Row="1">
@@ -91,14 +84,72 @@
             <ListBox Grid.Row="2" Grid.Column="0"
                      ItemsSource="{Binding FieldMaps, UpdateSourceTrigger=PropertyChanged}"
                      SelectedItem="{Binding SelectedFieldMap}"
-                     DisplayMemberPath="DisplayName"
                      Margin="0 5 2 0"
-                     BorderBrush="Black"
+                     BorderBrush="Gray"
                      BorderThickness="1"
                      Background="White"
-                     SelectedIndex="0" />
+                     SelectedIndex="0">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                            <Label Content="{Binding DisplayName}"
+                                   Padding="3"/>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="{x:Type ListBoxItem}">
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                    <Border x:Name="Item"
+                                            Background="{TemplateBinding Background}"
+                                            BorderBrush="{TemplateBinding BorderBrush}"
+                                            BorderThickness="{TemplateBinding BorderThickness}"
+                                            Padding="{TemplateBinding Padding}"
+                                            SnapsToDevicePixels="True">
+                                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
+                                                          VerticalAlignment="{TemplateBinding VerticalAlignment}"
+                                                          Content="{TemplateBinding Content}"
+                                                          ContentStringFormat="{TemplateBinding ContentStringFormat}"
+                                                          ContentTemplate="{TemplateBinding ContentTemplate}"
+                                                          SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsSelected" Value="true" >
+                                            <Setter TargetName="Item" Property="Background">
+                                                <Setter.Value>
+                                                    <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1.5">
+                                                        <GradientStop Color="#FFD8A9" Offset="0" />
+                                                        <GradientStop Color="#ffc964" Offset=".5" />
+                                                    </LinearGradientBrush>
+                                                </Setter.Value>
+                                            </Setter>
+                                            <Setter TargetName="Item" Property="BorderBrush" Value="Gray" />
+                                            <Setter TargetName="Item" Property="BorderThickness" Value="1" />
+                                            <Setter TargetName="Item" Property="CornerRadius" Value="2" />
+                                        </Trigger>
+                                        <Trigger Property="IsMouseOver" Value="true" >
+                                            <Setter TargetName="Item" Property="Background">
+                                                <Setter.Value>
+                                                    <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1.5">
+                                                        <GradientStop Color="#fff4c9" Offset="0" />
+                                                        <GradientStop Color="#ffe685" Offset=".5" />
+                                                    </LinearGradientBrush>
+                                                </Setter.Value>
+                                            </Setter>
+                                            <Setter TargetName="Item" Property="BorderBrush" Value="Gray" />
+                                            <Setter TargetName="Item" Property="BorderThickness" Value="1" />
+                                            <Setter TargetName="Item" Property="CornerRadius" Value="2" />
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                        <Setter Property="Height" Value="35" />
+                    </Style>
+                </ListBox.ItemContainerStyle>
+            </ListBox>
             <Border Grid.Row="2" Grid.Column="1"
-                    BorderBrush="Black" BorderThickness="1"
+                    BorderBrush="Gray" BorderThickness="1"
                     Margin="2 5 0 0"
                     Background="White">
                 <Grid>
@@ -111,33 +162,38 @@
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
                     <Border Grid.Row="0" Grid.Column="0"
-                            BorderThickness="0 0 0 1" BorderBrush="Black">
+                            BorderThickness="0 0 0 1" BorderBrush="Gray">
                         <Label Content="ShipWorks Field"
+                               FontWeight="Bold"
                        Padding="0" Margin="5"/>
                     </Border>
                     <Border Grid.Row="0" Grid.Column="1"
-                            BorderThickness="0 0 0 1" BorderBrush="Black">
+                            BorderThickness="0 0 0 1" BorderBrush="Gray">
                         <Label Content="Source Column"
-                       Padding="0" Margin="5"/>
+                               FontWeight="Bold"
+                       Padding="0" Margin="0 5 5 5"/>
                     </Border>
                     <ScrollViewer Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
                                   VerticalScrollBarVisibility="Auto">
                         <ItemsControl ItemsSource="{Binding SelectedFieldMap.Entries, UpdateSourceTrigger=PropertyChanged}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate DataType="{x:Type fieldMap:OdbcFieldMapEntry}">
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="140" />
-                                            <ColumnDefinition Width="*" />
-                                        </Grid.ColumnDefinitions>
-                                        <Label Grid.Column="0" Content="{Binding ShipWorksField.DisplayName}" />
-                                        <ComboBox Grid.Column="1"
+                                    <Border BorderBrush="Gray" BorderThickness="0 0 0 1">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="140" />
+                                                <ColumnDefinition Width="*" />
+                                            </Grid.ColumnDefinitions>
+                                            <Label Grid.Column="0" Content="{Binding ShipWorksField.DisplayName}"
+                                               Margin="0 5 5 5"/>
+                                            <ComboBox Grid.Column="1"
                                                     ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window},
                                                     Path=DataContext.Columns, UpdateSourceTrigger=PropertyChanged}"
                                                     DisplayMemberPath="Name" HorizontalAlignment="Stretch"
-                                                    Margin="0 10 5 0"
+                                                    Margin="0 5 5 5"
                                                     SelectedItem="{Binding ExternalField.Column}"/>
-                                    </Grid>
+                                        </Grid>
+                                    </Border>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
@@ -145,9 +201,5 @@
                 </Grid>
             </Border>
         </Grid>
-        <StackPanel Grid.Row="2" Orientation="Horizontal"
-                    HorizontalAlignment="Right">
-            <Button Content="Save" Command="{Binding SaveMapCommand}"/>
-        </StackPanel>
     </Grid>
 </UserControl>
