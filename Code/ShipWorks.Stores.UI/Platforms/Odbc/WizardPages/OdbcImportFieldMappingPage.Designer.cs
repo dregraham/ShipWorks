@@ -37,7 +37,7 @@
             this.elementHost.Dock = System.Windows.Forms.DockStyle.Fill;
             this.elementHost.Location = new System.Drawing.Point(0, 0);
             this.elementHost.Name = "elementHost";
-            this.elementHost.Size = new System.Drawing.Size(500, 500);
+            this.elementHost.Size = new System.Drawing.Size(540, 500);
             this.elementHost.TabIndex = 0;
             this.elementHost.Text = "elementHost1";
             this.elementHost.Child = this.odbcImportFieldMappingControl;
@@ -49,7 +49,7 @@
             this.Controls.Add(this.elementHost);
             this.Description = "Setup the database table and mappings of your columns into ShipWorks";
             this.Name = "OdbcImportFieldMappingPage";
-            this.Size = new System.Drawing.Size(500, 500);
+            this.Size = new System.Drawing.Size(540, 500);
             this.Title = "Column Mappings";
             this.ResumeLayout(false);
 
