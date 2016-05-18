@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.Command;
 using ShipWorks.Core.UI;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
 
@@ -14,8 +16,10 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
     public class OdbcImportFieldMappingDlgViewModel : IOdbcImportFieldMappingDlgViewModel, INotifyPropertyChanged
     {
         private readonly IOdbcFieldMapFactory fieldMapFactory;
+        private readonly OdbcDataSource dataSource;
+        private readonly IOdbcSchema schema;
         private OdbcTable selectedTable;
-        private IEnumerable<OdbcColumn> columns;
+        private ObservableCollection<OdbcColumn> columns;
         private OdbcFieldMap selectedFieldMap;
         protected readonly PropertyChangedHandler Handler;
         public event PropertyChangedEventHandler PropertyChanged;
@@ -23,13 +27,15 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcImportFieldMappingDlgViewModel"/> class.
         /// </summary>
-        public OdbcImportFieldMappingDlgViewModel(IOdbcFieldMapFactory fieldMapFactory)
+        public OdbcImportFieldMappingDlgViewModel(IOdbcFieldMapFactory fieldMapFactory, OdbcDataSource dataSource, IOdbcSchema schema)
         {
             this.fieldMapFactory = fieldMapFactory;
+            this.dataSource = dataSource;
+            this.schema = schema;
             OrderFieldMap = fieldMapFactory.CreateOrderFieldMap();
             AddressFieldMap = fieldMapFactory.CreateAddressFieldMap();
             ItemFieldMap = fieldMapFactory.CreateOrderItemFieldMap();
-            FieldMaps = new List<OdbcFieldMap>() { OrderFieldMap, AddressFieldMap, ItemFieldMap };
+            FieldMaps = new List<OdbcFieldMap> { OrderFieldMap, AddressFieldMap, ItemFieldMap };
             selectedFieldMap = OrderFieldMap;
             SaveMapCommand = new RelayCommand(SaveMap);
             Handler = new PropertyChangedHandler(this, () => PropertyChanged);
@@ -54,14 +60,15 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             set
             {
                 Handler.Set(nameof(SelectedTable), ref selectedTable, value);
-                Columns = selectedTable.Columns;
+                selectedTable.Load(dataSource);
+                Columns = new ObservableCollection<OdbcColumn>(selectedTable.Columns);
             }
         }
 
         /// <summary>
         /// The columns from the selected external odbc table.
         /// </summary>
-        public IEnumerable<OdbcColumn> Columns
+        public ObservableCollection<OdbcColumn> Columns
         {
             get { return columns; }
             set { Handler.Set(nameof(Columns), ref columns, value); }
@@ -104,9 +111,12 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// <summary>
         /// Loads the external odbc tables.
         /// </summary>
-        public void Load(IEnumerable<OdbcTable> tables)
+        public void Load(OdbcStoreEntity store)
         {
-            Tables = tables;
+            dataSource.Restore(store.ConnectionString);
+            schema.Load(dataSource);
+
+            Tables = schema.Tables;
         }
 
         /// <summary>

@@ -27,14 +27,10 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
             using (var scope = IoC.BeginLifetimeScope())
             {
                 OdbcStoreEntity store = GetStore<OdbcStoreEntity>();
-                OdbcDataSource dataSource = scope.Resolve<OdbcDataSource>();
-                dataSource.Restore(store.ConnectionString);
-
-                IOdbcSchema schema = scope.Resolve<IOdbcSchema>();
-                schema.Load(dataSource);
 
                 IOdbcImportFieldMappingDlgViewModel viewModel = scope.Resolve<IOdbcImportFieldMappingDlgViewModel>();
-                viewModel.Load(schema.Tables);
+                viewModel.Load(store);
+
                 odbcImportFieldMappingControl.DataContext = viewModel;
             }
         }

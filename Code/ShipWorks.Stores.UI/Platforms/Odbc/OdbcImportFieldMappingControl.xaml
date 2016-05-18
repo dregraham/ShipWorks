@@ -189,7 +189,7 @@
                                             <Label Grid.Column="0" Content="{Binding ShipWorksField.DisplayName}"
                                                Margin="0 5 5 5"/>
                                             <ComboBox Grid.Column="1"
-                                                    ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window},
+                                                    ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Control},
                                                     Path=DataContext.Columns, UpdateSourceTrigger=PropertyChanged}"
                                                     DisplayMemberPath="Name" HorizontalAlignment="Stretch"
                                                     Margin="0 5 5 5"

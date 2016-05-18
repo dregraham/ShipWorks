@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Windows.Input;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
 
@@ -28,7 +30,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// <summary>
         /// The columns from the selected external odbc table.
         /// </summary>
-        IEnumerable<OdbcColumn> Columns { get; set; }
+        ObservableCollection<OdbcColumn> Columns { get; set; }
 
         /// <summary>
         /// List of field maps to be mapped.
@@ -63,7 +65,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// <summary>
         /// Loads the external odbc tables.
         /// </summary>
-        void Load(IEnumerable<OdbcTable> tables);
+        void Load(OdbcStoreEntity store);
 
     }
 }
