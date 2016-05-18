@@ -16,9 +16,9 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// <summary>
         /// Constructor
         /// </summary>
-		public OdbcTable(string tableName)
+		public OdbcTable(string name)
         {
-            Name = tableName;
+            Name = name;
         }
 
         /// <summary>
