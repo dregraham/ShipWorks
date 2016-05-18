@@ -1,7 +1,6 @@
 ﻿using System;
 using Autofac;
 using ShipWorks.ApplicationCore;
-using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.Odbc;
@@ -13,31 +12,37 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
     /// </summary>
     public partial class OdbcImportFieldMappingPage : AddStoreWizardPage, IOdbcWizardPage
     {
+        private readonly ILifetimeScope scope;
+        private readonly IOdbcImportFieldMappingDlgViewModel viewModel;
+        private readonly OdbcStoreEntity store;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcImportFieldMappingPage"/> class.
         /// </summary>
         public OdbcImportFieldMappingPage()
         {
             InitializeComponent();
+            store = GetStore<OdbcStoreEntity>();
+            scope = IoC.BeginLifetimeScope();
+            viewModel = scope.Resolve<IOdbcImportFieldMappingDlgViewModel>();
             Load += OnLoad;
-        }
-
-        private void OnLoad(object sender, EventArgs eventArgs)
-        {
-            using (var scope = IoC.BeginLifetimeScope())
-            {
-                OdbcStoreEntity store = GetStore<OdbcStoreEntity>();
-
-                IOdbcImportFieldMappingDlgViewModel viewModel = scope.Resolve<IOdbcImportFieldMappingDlgViewModel>();
-                viewModel.Load(store);
-
-                odbcImportFieldMappingControl.DataContext = viewModel;
-            }
+            StepNext += OnNext;
         }
 
         /// <summary>
         /// The position in which to show this wizard page
         /// </summary>
         public int Position => 1;
+
+        private void OnNext(object sender, ShipWorks.UI.Wizard.WizardStepEventArgs e)
+        {
+            viewModel.Save(store);
+        }
+
+        private void OnLoad(object sender, EventArgs eventArgs)
+        {
+            viewModel.Load(store);
+            odbcImportFieldMappingControl.DataContext = viewModel;
+        }
     }
 }

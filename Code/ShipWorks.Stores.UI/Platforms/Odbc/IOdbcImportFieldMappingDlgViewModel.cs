@@ -58,14 +58,13 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         OdbcFieldMap ItemFieldMap { get; set; }
 
         /// <summary>
-        /// The save map command.
-        /// </summary>
-        ICommand SaveMapCommand { get; set; }
-
-        /// <summary>
         /// Loads the external odbc tables.
         /// </summary>
         void Load(OdbcStoreEntity store);
 
+        /// <summary>
+        /// Save the Map to the given store.
+        /// </summary>
+        void Save(OdbcStoreEntity store);
     }
 }

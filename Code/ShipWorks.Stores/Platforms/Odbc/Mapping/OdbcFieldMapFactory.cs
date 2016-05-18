@@ -30,9 +30,9 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
                 DisplayName = "Order"
             };
 
-	        foreach (ShipWorksOdbcMappableField orderField in CreateShipWorksOrderFields())
+            foreach (ShipWorksOdbcMappableField orderField in CreateShipWorksOrderFields())
 	        {
-	            orderMap.AddEntry(new OdbcFieldMapEntry(orderField, null));
+	            orderMap.AddEntry(new OdbcFieldMapEntry(orderField, new ExternalOdbcMappableField(new OdbcTable(string.Empty), new OdbcColumn(string.Empty))));
 	        }
 
 	        return orderMap;

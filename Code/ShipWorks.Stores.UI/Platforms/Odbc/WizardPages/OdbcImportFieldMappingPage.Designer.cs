@@ -13,6 +13,8 @@
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
+            scope?.Dispose();
+
             if (disposing && (components != null))
             {
                 components.Dispose();
@@ -31,9 +33,9 @@
             this.elementHost = new System.Windows.Forms.Integration.ElementHost();
             this.odbcImportFieldMappingControl = new ShipWorks.Stores.UI.Platforms.Odbc.OdbcImportFieldMappingControl();
             this.SuspendLayout();
-            // 
+            //
             // elementHost
-            // 
+            //
             this.elementHost.Dock = System.Windows.Forms.DockStyle.Fill;
             this.elementHost.Location = new System.Drawing.Point(0, 0);
             this.elementHost.Name = "elementHost";
@@ -41,9 +43,9 @@
             this.elementHost.TabIndex = 0;
             this.elementHost.Text = "elementHost1";
             this.elementHost.Child = this.odbcImportFieldMappingControl;
-            // 
+            //
             // OdbcImportFieldMappingPage
-            // 
+            //
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.elementHost);

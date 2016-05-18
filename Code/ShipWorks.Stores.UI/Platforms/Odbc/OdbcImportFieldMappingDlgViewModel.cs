@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.Command;
 using ShipWorks.Core.UI;
@@ -37,7 +38,6 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             ItemFieldMap = fieldMapFactory.CreateOrderItemFieldMap();
             FieldMaps = new List<OdbcFieldMap> { OrderFieldMap, AddressFieldMap, ItemFieldMap };
             selectedFieldMap = OrderFieldMap;
-            SaveMapCommand = new RelayCommand(SaveMap);
             Handler = new PropertyChangedHandler(this, () => PropertyChanged);
         }
 
@@ -104,11 +104,6 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         public OdbcFieldMap ItemFieldMap { get; set; }
 
         /// <summary>
-        /// The save map command.
-        /// </summary>
-        public ICommand SaveMapCommand { get; set; }
-
-        /// <summary>
         /// Loads the external odbc tables.
         /// </summary>
         public void Load(OdbcStoreEntity store)
@@ -122,7 +117,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// <summary>
         /// Saves the map.
         /// </summary>
-        private void SaveMap()
+        public void Save(OdbcStoreEntity store)
         {
             OdbcFieldMap map = fieldMapFactory.CreateFieldMapFrom(new List<OdbcFieldMap>
             {
@@ -130,6 +125,14 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
                 AddressFieldMap,
                 ItemFieldMap
             });
+
+            Stream memoryStream = new MemoryStream();
+
+            map.Save(memoryStream);
+
+            StreamReader reader = new StreamReader(memoryStream);
+
+            string data = reader.ReadToEnd();
         }
     }
 }

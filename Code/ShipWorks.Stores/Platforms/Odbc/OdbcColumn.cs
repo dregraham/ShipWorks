@@ -19,6 +19,6 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// The column name
         /// </summary>
         [Obfuscation(Exclude = true)]
-	    public string Name { get; }
+	    public string Name { get; set; }
 	}
 }
