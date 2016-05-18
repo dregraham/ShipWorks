@@ -1,17 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Interapptive.Shared;
 using Interapptive.Shared.Utility;
 using log4net;
-using ShipWorks.Stores;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data;
-using System.Linq;
-using System.Windows.Forms;
-using Interapptive.Shared;
 using ShipWorks.ApplicationCore.Dashboard.Content;
 using ShipWorks.ApplicationCore.Licensing.FeatureRestrictions;
 using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
+using ShipWorks.Data;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Editions;
+using ShipWorks.Stores;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows.Forms;
 
 namespace ShipWorks.ApplicationCore.Licensing
 {
@@ -238,18 +238,16 @@ namespace ShipWorks.ApplicationCore.Licensing
         {
             Refresh();
 
-            if (!LicenseCapabilities.IsInTrial)
-            {
-                // Enforce restrictions when not in the trial period
-                EnumResult<ComplianceLevel> enforcerNotInCompliance =
-                    licenseEnforcers
-                        .Select(enforcer => enforcer.Enforce(LicenseCapabilities, context))
-                        .FirstOrDefault(result => result.Value == ComplianceLevel.NotCompliant);
+            // Enforce restrictions when not in the trial period
+            EnumResult<ComplianceLevel> enforcerNotInCompliance =
+                licenseEnforcers
+                    .Where(enforcer => enforcer.AppliesTo(LicenseCapabilities))
+                    .Select(enforcer => enforcer.Enforce(LicenseCapabilities, context))
+                    .FirstOrDefault(result => result.Value == ComplianceLevel.NotCompliant);
 
-                if (enforcerNotInCompliance != null)
-                {
-                    throw new ShipWorksLicenseException(enforcerNotInCompliance.Message);
-                }
+            if (enforcerNotInCompliance != null)
+            {
+                throw new ShipWorksLicenseException(enforcerNotInCompliance.Message);
             }
         }
 
@@ -260,28 +258,25 @@ namespace ShipWorks.ApplicationCore.Licensing
         {
             Refresh();
 
-            if (!LicenseCapabilities.IsInTrial)
-            {
-                // Enforce restrictions when not in the trial period
-                licenseEnforcers.ToList().ForEach(e => e.Enforce(LicenseCapabilities, context, owner));
-            }
+            // Enforce restrictions when not in the trial period
+            licenseEnforcers
+                .Where(enforcer => enforcer.AppliesTo(LicenseCapabilities)).ToList()
+                .ForEach(e => e.Enforce(LicenseCapabilities, context, owner));
         }
 
         /// <summary>
         /// Enforces capabilities based on the given feature
         /// </summary>
-        public IEnumerable<EnumResult<ComplianceLevel>> EnforceCapabilities(EditionFeature feature, EnforcementContext context)
+        public IEnumerable<EnumResult<ComplianceLevel>> EnforceCapabilities(EditionFeature feature,
+            EnforcementContext context)
         {
             List<EnumResult<ComplianceLevel>> result = new List<EnumResult<ComplianceLevel>>();
-            
+
             Refresh();
-            if (!LicenseCapabilities.IsInTrial)
-            {
-                // Enforce restrictions when not in the trial period
-                licenseEnforcers.Where(e => e.EditionFeature == feature)
-                    .ToList()
-                    .ForEach(e => result.Add(e.Enforce(LicenseCapabilities, context)));
-            }
+            // Enforce restrictions when not in the trial period
+            licenseEnforcers.Where(enforcer => enforcer.AppliesTo(LicenseCapabilities) && enforcer.EditionFeature == feature)
+                .ToList()
+                .ForEach(e => result.Add(e.Enforce(LicenseCapabilities, context)));
 
             return result;
         }

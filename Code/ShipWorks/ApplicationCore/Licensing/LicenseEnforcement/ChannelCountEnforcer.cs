@@ -1,9 +1,6 @@
-﻿using System;
-using System.Text;
-using System.Windows.Forms;
-using Interapptive.Shared.Utility;
-using log4net;
+﻿using Interapptive.Shared.Utility;
 using ShipWorks.Editions;
+using System.Windows.Forms;
 
 namespace ShipWorks.ApplicationCore.Licensing.LicenseEnforcement
 {
@@ -33,14 +30,19 @@ namespace ShipWorks.ApplicationCore.Licensing.LicenseEnforcement
         public EditionFeature EditionFeature => EditionFeature.ChannelCount;
 
         /// <summary>
+        /// ChannelCount doesn't apply to trials
+        /// </summary>
+        public bool AppliesTo(ILicenseCapabilities capabilities) => !capabilities.IsInTrial;
+
+        /// <summary>
         /// Enforces the ChannelCount and displays a dlg on the given owner
         /// </summary>
         public void Enforce(ILicenseCapabilities capabilities, EnforcementContext context, IWin32Window owner)
         {
-            if (Enforce(capabilities,context).Value == ComplianceLevel.NotCompliant)
+            if (Enforce(capabilities, context).Value == ComplianceLevel.NotCompliant)
             {
-                    IDialog channelLimitDlg = channelLimitDlgFactory.GetChannelLimitDlg(owner, EditionFeature, context);
-                    channelLimitDlg.ShowDialog();
+                IDialog channelLimitDlg = channelLimitDlgFactory.GetChannelLimitDlg(owner, EditionFeature, context);
+                channelLimitDlg.ShowDialog();
             }
         }
 

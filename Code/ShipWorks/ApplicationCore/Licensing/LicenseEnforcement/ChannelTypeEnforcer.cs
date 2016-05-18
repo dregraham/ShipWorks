@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using Interapptive.Shared.Utility;
+﻿using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Editions;
 using ShipWorks.Stores;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows.Forms;
 
 namespace ShipWorks.ApplicationCore.Licensing.LicenseEnforcement
 {
@@ -41,6 +39,11 @@ namespace ShipWorks.ApplicationCore.Licensing.LicenseEnforcement
         /// The edition feature being enforced
         /// </summary>
         public abstract EditionFeature EditionFeature { get; }
+
+        /// <summary>
+        /// All Channel Types are allowed for trials.
+        /// </summary>
+        public bool AppliesTo(ILicenseCapabilities capabilities) => !capabilities.IsInTrial;
 
         /// <summary>
         /// Gets the store type code.

@@ -1,10 +1,10 @@
-﻿using System;
-using System.Windows;
-using System.Windows.Forms;
-using Interapptive.Shared.Utility;
+﻿using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.Editions;
 using ShipWorks.UI;
+using System;
+using System.Windows;
+using System.Windows.Forms;
 
 namespace ShipWorks.ApplicationCore.Licensing.LicenseEnforcement
 {
@@ -40,6 +40,11 @@ namespace ShipWorks.ApplicationCore.Licensing.LicenseEnforcement
         /// The edition feature being enforced
         /// </summary>
         public EditionFeature EditionFeature => EditionFeature.ShipmentCount;
+
+        /// <summary>
+        /// Simpment Limit doesn't apply to trials.
+        /// </summary>
+        public bool AppliesTo(ILicenseCapabilities capabilities) => !capabilities.IsInTrial;
 
         /// <summary>
         /// Displays upgrade dialog if the customer license is within 80% of its shipment limit
