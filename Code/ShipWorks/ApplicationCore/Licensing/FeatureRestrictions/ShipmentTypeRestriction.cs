@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Autofac;
 using Autofac.Features.Indexed;
 using Interapptive.Shared.UI;
 using ShipWorks.Data.Model.EntityClasses;
@@ -15,23 +16,21 @@ namespace ShipWorks.ApplicationCore.Licensing.FeatureRestrictions
     /// </summary>
     public class ShipmentTypeRestriction : FeatureRestriction
     {
-        private readonly IIndex<ShipmentTypeCode, ICarrierAccountRepository<EndiciaAccountEntity>> endiciaAccountRepository;
-        private readonly IIndex<ShipmentTypeCode, ICarrierAccountRepository<UpsAccountEntity>> upsAccountRepository;
+        private readonly IShipmentTypeManager shipmentTypeManager;
         private readonly IBrownEditionUtility brownEditionUtility;
         private readonly IPostalUtility postalUtility;
+        private readonly ILifetimeScope scope;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShipmentTypeRestriction(IIndex<ShipmentTypeCode, ICarrierAccountRepository<EndiciaAccountEntity>> endiciaAccountRepository,
-                                        IIndex<ShipmentTypeCode, ICarrierAccountRepository<UpsAccountEntity>> upsAccountRepository,
-                                        IBrownEditionUtility brownEditionUtility, IPostalUtility postalUtility, IMessageHelper messageHelper) 
+        public ShipmentTypeRestriction(IShipmentTypeManager shipmentTypeManager, IBrownEditionUtility brownEditionUtility, IPostalUtility postalUtility, IMessageHelper messageHelper, ILifetimeScope scope)
             : base(messageHelper)
         {
-            this.endiciaAccountRepository = endiciaAccountRepository;
-            this.upsAccountRepository = upsAccountRepository;
+            this.shipmentTypeManager = shipmentTypeManager;
             this.brownEditionUtility = brownEditionUtility;
             this.postalUtility = postalUtility;
+            this.scope = scope;
         }
 
         /// <summary>
@@ -45,7 +44,7 @@ namespace ShipWorks.ApplicationCore.Licensing.FeatureRestrictions
         public override EditionRestrictionLevel Check(ILicenseCapabilities capabilities, object data)
         {
             ShipmentTypeCode shipmentType = data as ShipmentTypeCode? ?? ShipmentTypeCode.None;
-            if (IsShipmentTypeDisabled(capabilities, shipmentType) || CheckEndiciaRestriction(shipmentType))
+            if (IsShipmentTypeDisabled(capabilities, shipmentType))
             {
                 return EditionRestrictionLevel.Hidden;
             }
@@ -100,55 +99,52 @@ namespace ShipWorks.ApplicationCore.Licensing.FeatureRestrictions
         }
 
         /// <summary>
-        /// If the ShipmentTypeCode is Endicia and there are no accounts in ShipWorks
-        /// return hidden to hide the Endicia shipment type from the application
-        /// </summary>
-        private bool CheckEndiciaRestriction(ShipmentTypeCode shipmentType)
-        {
-            return shipmentType == ShipmentTypeCode.Endicia && !endiciaAccountRepository[shipmentType].Accounts.Any();
-        }
-
-        /// <summary>
         /// Determines whether the specified shipment type is disabled.
         /// </summary>
         private bool IsShipmentTypeDisabled(ILicenseCapabilities capabilities, ShipmentTypeCode shipmentTypeCode)
         {
+            ShipmentType shipmentType = shipmentTypeManager.GetType(ShipmentTypeCode.UpsOnLineTools, scope);
+
+            // we do not restrict the none shipment type
+            if (shipmentTypeCode == ShipmentTypeCode.None)
+            {
+                return false;
+            }
+
             if (shipmentTypeCode == ShipmentTypeCode.BestRate)
             {
                 if (capabilities.IsInTrial)
                 {
                     // All customers can use best rate when in trial as long as there
                     // aren't any UPS accounts in ShipWorks.
-                    return upsAccountRepository[ShipmentTypeCode.UpsOnLineTools].Accounts.Any();
+                    return shipmentType.HasAccounts;
                 }
 
-                // Special checks for best rate as it is part of plan capabilities along with a 
-                // check to see if there are any UPS accounts: Best rate is disabled if the 
+                // Special checks for best rate as it is part of plan capabilities along with a
+                // check to see if there are any UPS accounts: Best rate is disabled if the
                 // plan tells us it's not or if there are any UPS accounts
-                return !capabilities.IsBestRateAllowed || upsAccountRepository[ShipmentTypeCode.UpsOnLineTools].Accounts.Any();
+                return !capabilities.IsBestRateAllowed || shipmentType.HasAccounts;
             }
 
-            return shipmentTypeCode != ShipmentTypeCode.None &&
-                   capabilities.ShipmentTypeRestriction.ContainsKey(shipmentTypeCode) &&
-                   capabilities.ShipmentTypeRestriction[shipmentTypeCode].Contains(ShipmentTypeRestrictionType.Disabled);
+            // Check and see if the given shipment type is in the capabilities shipment type restrictions
+            if (capabilities.ShipmentTypeRestriction.ContainsKey(shipmentTypeCode))
+            {
+                // If the given shipmen type is disabled return true
+                if (capabilities.ShipmentTypeRestriction[shipmentTypeCode].Contains(ShipmentTypeRestrictionType.Disabled))
+                {
+                    return true;
+                }
 
+                // If the given shipment type has AccountRegistration disabled and has no accounts it is as good as disabled
+                if (capabilities.ShipmentTypeRestriction[shipmentTypeCode].Contains(ShipmentTypeRestrictionType.AccountRegistration) &&
+                    !shipmentType.HasAccounts)
+                {
+                    return true;
+                }
+            }
 
-            // The code below is applicable if it is desired to continue to enforce best rate restrictions at
-            // the server for the new pricing plans as well (i.e. Tango still needs to indicate best rate is 
-            // available AND no UPS accounts are in ShiPWorks.
-
-            //bool isDisabled = shipmentTypeCode != ShipmentTypeCode.None &&
-            //       capabilities.ShipmentTypeRestriction.ContainsKey(shipmentTypeCode) &&
-            //       capabilities.ShipmentTypeRestriction[shipmentTypeCode].Contains(ShipmentTypeRestrictionType.Disabled);
-
-            //if (shipmentTypeCode == ShipmentTypeCode.BestRate && !isDisabled)
-            //{
-            //    // Best rate is not disabled on the server, but we have one additional check to perform:
-            //    // best rate is disabled if there are any UPS accounts
-            //    isDisabled = upsAccountRepository[ShipmentTypeCode.UpsOnLineTools].Accounts.Any();
-            //}
-
-            //return isDisabled;
+            // The ShipmentTypeCode is not disabled nor is account registration disabled
+            return false;
         }
     }
 }
