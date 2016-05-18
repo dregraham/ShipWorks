@@ -8,6 +8,7 @@ using ShipWorks.Editions.Brown;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.Postal;
+using ShipWorks.Shipping.Carriers.UPS;
 
 namespace ShipWorks.ApplicationCore.Licensing.FeatureRestrictions
 {
@@ -103,32 +104,23 @@ namespace ShipWorks.ApplicationCore.Licensing.FeatureRestrictions
         /// </summary>
         private bool IsShipmentTypeDisabled(ILicenseCapabilities capabilities, ShipmentTypeCode shipmentTypeCode)
         {
-            ShipmentType shipmentType = shipmentTypeManager.GetType(ShipmentTypeCode.UpsOnLineTools, scope);
-
-            // we do not restrict the none shipment type
+            // We do not restrict the none shipment type
             if (shipmentTypeCode == ShipmentTypeCode.None)
             {
                 return false;
             }
 
+            // Check to see if best rate is disabled
             if (shipmentTypeCode == ShipmentTypeCode.BestRate)
             {
-                if (capabilities.IsInTrial)
-                {
-                    // All customers can use best rate when in trial as long as there
-                    // aren't any UPS accounts in ShipWorks.
-                    return shipmentType.HasAccounts;
-                }
-
-                // Special checks for best rate as it is part of plan capabilities along with a
-                // check to see if there are any UPS accounts: Best rate is disabled if the
-                // plan tells us it's not or if there are any UPS accounts
-                return !capabilities.IsBestRateAllowed || shipmentType.HasAccounts;
+                return IsBestRateDisabled(capabilities);
             }
 
             // Check and see if the given shipment type is in the capabilities shipment type restrictions
             if (capabilities.ShipmentTypeRestriction.ContainsKey(shipmentTypeCode))
             {
+                ShipmentType shipmentType = shipmentTypeManager.GetType(shipmentTypeCode, scope);
+
                 // If the given shipmen type is disabled return true
                 if (capabilities.ShipmentTypeRestriction[shipmentTypeCode].Contains(ShipmentTypeRestrictionType.Disabled))
                 {
@@ -145,6 +137,32 @@ namespace ShipWorks.ApplicationCore.Licensing.FeatureRestrictions
 
             // The ShipmentTypeCode is not disabled nor is account registration disabled
             return false;
+        }
+
+        /// <summary>
+        /// Check to see if best rate is disabled
+        /// </summary>
+        /// <remarks>
+        /// There are two conditions that will allow best rate to show in the application
+        /// 1. they are in trial and there is no ups account
+        /// 2. their account is enabled for best rate and there is no ups account
+        /// </remarks>
+        private bool IsBestRateDisabled(ILicenseCapabilities capabilities)
+        {
+            // Get the ups shipment type so we can see if there are any ups accounts in the application
+            ShipmentType uspShipmentType = shipmentTypeManager.GetType(ShipmentTypeCode.UpsOnLineTools, scope);
+
+            if (capabilities.IsInTrial)
+            {
+                // All customers can use best rate when in trial as long as there
+                // aren't any UPS accounts in ShipWorks.
+                return uspShipmentType.HasAccounts;
+            }
+
+            // Special checks for best rate as it is part of plan capabilities along with a
+            // check to see if there are any UPS accounts: Best rate is disabled if the
+            // plan tells us it's not or if there are any UPS accounts
+            return !capabilities.IsBestRateAllowed || uspShipmentType.HasAccounts;
         }
     }
 }
