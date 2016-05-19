@@ -87,6 +87,7 @@
             this.linkHelpShipping.Size = new System.Drawing.Size(53, 13);
             this.linkHelpShipping.TabIndex = 5;
             this.linkHelpShipping.Text = "Click here";
+            this.linkHelpShipping.Url = "http://support.shipworks.com/support/solutions/articles/129346-importing-shipping-methods-and-payment-methods-for-a-volusion-store";
             // 
             // labelShippingFile
             // 
@@ -133,6 +134,7 @@
             this.linkHelpPayments.Size = new System.Drawing.Size(53, 13);
             this.linkHelpPayments.TabIndex = 9;
             this.linkHelpPayments.Text = "Click here";
+            this.linkHelpPayments.Url = "http://support.shipworks.com/support/solutions/articles/129346-importing-shipping-methods-and-payment-methods-for-a-volusion-store";
             // 
             // labelHelpPayments
             // 
