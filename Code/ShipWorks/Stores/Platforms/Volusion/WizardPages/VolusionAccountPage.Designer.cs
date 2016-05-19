@@ -157,7 +157,7 @@
             this.label5.Size = new System.Drawing.Size(460, 28);
             this.label5.TabIndex = 0;
             this.label5.Text = "To allow ShipWorks to automatically configure communication with Volusion, the ad" +
-                "ministrator password for the Login Email entered above is required.";
+    "ministrator password for the Login Email entered above is required.";
             // 
             // manualConfigPanel
             // 
@@ -198,6 +198,8 @@
             this.linkHelpPassword.Size = new System.Drawing.Size(55, 13);
             this.linkHelpPassword.TabIndex = 1;
             this.linkHelpPassword.Text = "click here.";
+            this.linkHelpPassword.Url = "http://support.shipworks.com/support/solutions/articles/129345-adding-a-volusion-" +
+    "store-";
             // 
             // label8
             // 
@@ -206,7 +208,7 @@
             this.label8.Size = new System.Drawing.Size(470, 29);
             this.label8.TabIndex = 0;
             this.label8.Text = "Manual configuration requires your encrypted password, which is not the same as y" +
-                "our login password.  For help finding your encrypted password";
+    "our login password.  For help finding your encrypted password";
             // 
             // VolusionAccountPage
             // 

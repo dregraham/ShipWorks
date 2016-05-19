@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Amazon.WebServices.SellerCentral;
 using System.Net;
-using Interapptive.Shared.Utility;
 using System.Web.Services.Protocols;
-using ShipWorks.Data;
 using ShipWorks.Shipping;
 using log4net;
 using System.IO;
@@ -19,18 +16,17 @@ using System.Diagnostics;
 using Interapptive.Shared;
 using ShipWorks.ApplicationCore.Logging;
 using Interapptive.Shared.Net;
+using Interapptive.Shared.Security;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
-using ShipWorks.Shipping.Carriers.UPS;
-using ShipWorks.Shipping.Carriers.UPS.Enums;
 
 namespace ShipWorks.Stores.Platforms.Amazon
 {
     /// <summary>
     /// Web client for the Amazon Feed service
     /// </summary>
-    public class AmazonFeedClient 
+    public class AmazonFeedClient
     {
-        // Logger 
+        // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(AmazonFeedClient));
 
         // store this client is interacting on behalf of
@@ -56,7 +52,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
 
             UploadFulfillmentFeed(CreateFulfillmentFeed(shipments));
         }
-        
+
         /// <summary>
         /// Uploads the fulfillment feed located at filePath
         /// </summary>
@@ -77,7 +73,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
                 merchantInfo.merchantName = store.MerchantName;
 
                 string id = Guid.NewGuid().ToString();
-                
+
                 // add the file as an attachment
                 service.AddAttachment(id, filePath, "text/xml");
                 service.ApiLogEntry.LogRequestSupplement(new FileInfo(filePath), "DimeAttachment");
@@ -213,7 +209,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
 
             return path;
         }
-        
+
         /// <summary>
         /// Write the common header information for the fulfillment report.
         /// </summary>

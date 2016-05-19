@@ -14,17 +14,15 @@ using ShipWorks.Data.Model.EntityClasses;
 using System.IO;
 using ShipWorks.Data.Connection;
 using log4net;
-using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
-using ShipWorks.Shipping.Carriers.UPS;
-using ShipWorks.Shipping.Carriers.UPS.Enums;
 using System.Globalization;
 using Interapptive.Shared;
+using Interapptive.Shared.Security;
 
 namespace ShipWorks.Stores.Platforms.ProStores
 {
     /// <summary>
-    /// WebClient for connecting to ProStores 
+    /// WebClient for connecting to ProStores
     /// </summary>
     public static class ProStoresWebClient
     {
@@ -157,7 +155,7 @@ namespace ShipWorks.Stores.Platforms.ProStores
 
             ProcessXteRequest(xmlRequest, "TestConnection");
         }
-       
+
         /// <summary>
         /// Get the number of online orders for the store after the given date
         /// </summary>
@@ -372,7 +370,7 @@ namespace ShipWorks.Stores.Platforms.ProStores
 
                 if (proVersion)
                 {
-                    selectXml += 
+                    selectXml +=
                         "<Cost />";
                 }
 
@@ -471,7 +469,7 @@ namespace ShipWorks.Stores.Platforms.ProStores
             ApiLogEntry logEntry = new ApiLogEntry(ApiLogSource.ProStores, restAction);
             logEntry.LogRequest(request);
 
-            return ExecuteRequest(request, logEntry);        
+            return ExecuteRequest(request, logEntry);
         }
 
         /// <summary>
@@ -613,7 +611,7 @@ namespace ShipWorks.Stores.Platforms.ProStores
             catch (Exception ex)
             {
                 throw WebHelper.TranslateWebException(ex, typeof(ProStoresException));
-            }        
+            }
         }
 
         /// <summary>

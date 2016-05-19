@@ -118,6 +118,7 @@ namespace ShipWorks.ApplicationCore.Logging
         Choxi,
         InstanteStore,
         LemonStand,
+        SparkPay,
         [ApiPrivateLogSource]
         FedExFims
     }

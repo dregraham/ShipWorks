@@ -3093,8 +3093,10 @@ GO
 CREATE TABLE [dbo].[SearsStore]
 (
 [StoreID] [bigint] NOT NULL,
-[Email] [nvarchar] (75) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[Password] [nvarchar] (75) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+[SearsEmail] [nvarchar] (75) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Password] [nvarchar] (75) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[SecretKey] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[SellerID] [nvarchar] (15) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_SearsStore] on [dbo].[SearsStore]'
@@ -5576,7 +5578,25 @@ CREATE NONCLUSTERED INDEX [IX_Auto_LemonStandOrderID] ON [dbo].[LemonStandOrder]
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 GO
 
+PRINT N'Creating [dbo].[SparkPayStore]'
+GO
+CREATE TABLE [dbo].[SparkPayStore]
+(
+[StoreID] [bigint] NOT NULL,
+[Token] [nvarchar] (70) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[StoreUrl] [nvarchar] (350) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[StatusCodes] [xml] NULL
+)
+GO
+PRINT N'Creating primary key [PK_SparkPayStore] on [dbo].[SparkPayStore]'
+GO
+ALTER TABLE [dbo].[SparkPayStore] ADD CONSTRAINT [PK_SparkPayStore] PRIMARY KEY CLUSTERED  ([StoreID])
+GO
 
+PRINT N'Adding foreign keys to [dbo].[SparkPayStore]'
+GO
+ALTER TABLE [dbo].[SparkPayStore] ADD CONSTRAINT [FK_SparkPayStore_Store] FOREIGN KEY ([StoreID]) REFERENCES [dbo].[Store] ([StoreID])
+GO
 
 PRINT N'Creating extended properties'
 GO

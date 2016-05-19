@@ -1,6 +1,5 @@
-﻿using Interapptive.Shared.Utility;
+﻿using Interapptive.Shared.Security;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.iParcel.Net;
 
 namespace ShipWorks.Shipping.Carriers.iParcel
 {
@@ -94,7 +93,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// <summary>
         /// Validates this instance.
         /// </summary>
-        /// <exception cref="iParcelException">Thrown when the username or password is null/empty or when 
+        /// <exception cref="iParcelException">Thrown when the username or password is null/empty or when
         /// the credentials do not validate against the i-parcel service.</exception>
         public void Validate()
         {

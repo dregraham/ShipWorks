@@ -40,7 +40,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 case UpsServiceType.Ups3DaySelectFromCanada:
                     return ServiceLevelType.ThreeDays;
 
-                case UpsServiceType.Ups2nDayAirIntra:
+                case UpsServiceType.Ups2ndDayAirIntra:
                 case UpsServiceType.Ups2DayAirAM:
                 case UpsServiceType.Ups2DayAir:
                     return ServiceLevelType.TwoDays;

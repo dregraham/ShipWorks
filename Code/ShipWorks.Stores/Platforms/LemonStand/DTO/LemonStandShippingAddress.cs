@@ -15,6 +15,9 @@ namespace ShipWorks.Stores.Platforms.LemonStand.DTO
         [JsonProperty("street_address")]
         public string StreetAddress { get; set; }
 
+        [JsonProperty("street_address_line2")]
+        public string StreetAddress2 { get; set; }
+
         [JsonProperty("city")]
         public string City { get; set; }
 

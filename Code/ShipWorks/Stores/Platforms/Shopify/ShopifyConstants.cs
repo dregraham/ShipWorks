@@ -1,7 +1,5 @@
-﻿using System;
-using System.Linq;
-using Interapptive.Shared.Utility;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using Interapptive.Shared.Security;
 
 namespace ShipWorks.Stores.Platforms.Shopify
 {
@@ -15,7 +13,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
         public const string RequestTokenParamName = "code";
         public const string CallbackUrl = "http://www.shipworks.com/shopify/?r=sfy";
 
-        // 250 is the max that Shopify allows 
+        // 250 is the max that Shopify allows
         [Range(1, 250, ErrorMessage = "Value for OrdersPageSize must be between 1 and 250.")]
         public const int OrdersPageSize = 100;
 

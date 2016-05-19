@@ -1,9 +1,5 @@
-﻿using Interapptive.Shared.Utility;
+﻿using Interapptive.Shared.Security;
 using Newtonsoft.Json;
-using ShipWorks.Data.Administration.Retry;
-using ShipWorks.Data.Connection;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores;
 using ShipWorks.Stores.Platforms.Amazon;
 
 namespace ShipWorks.Shipping.Carriers.Amazon

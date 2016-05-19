@@ -10,6 +10,7 @@ using System.Xml.Linq;
 using System.Xml.XPath;
 using ShipWorks.ApplicationCore;
 using System.Diagnostics;
+using Interapptive.Shared.Security;
 using ShipWorks.Stores.Platforms.MarketplaceAdvisor.AppDomainHelpers;
 
 namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor

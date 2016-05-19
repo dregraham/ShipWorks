@@ -2,20 +2,17 @@ using System;
 using System.IO;
 using System.Net;
 using System.Xml;
-using System.Xml.XPath;
-using System.Web;
 using System.Text;
-using System.Text.RegularExpressions;
 using ShipWorks.Data.Model.EntityClasses;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Logging;
-using System.Reflection;
 using log4net;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Xml.Schema;
 using Interapptive.Shared;
+using Interapptive.Shared.Security;
 using ShipWorks.Shipping;
 using ShipWorks.Data.Import.Xml.Schema;
 
@@ -29,7 +26,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(GenericStoreWebClient));
 
-        // Store instance we're communicating on behalf of 
+        // Store instance we're communicating on behalf of
         GenericModuleStoreEntity store = null;
 
 		// Required module version
@@ -198,8 +195,8 @@ namespace ShipWorks.Stores.Platforms.GenericModule
 	        Version moduleVersion = new Version(store.ModuleVersion);
 	        if (moduleVersion.CompareTo(new Version("3.10.0")) >= 0)
 	        {
-	            // The version of the module is >= 3.10.0, so add the extended shipment 
-	            // information to the request. We wanted module providers to opt-in to 
+	            // The version of the module is >= 3.10.0, so add the extended shipment
+	            // information to the request. We wanted module providers to opt-in to
 	            // this functionality to avoid negatively impacting overly strict module
 	            // implementations that may refuse a request if the variables do not match
 	            // exactly what the server is expecting.
@@ -208,7 +205,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
 	            request.Variables.Add("voided", shipment.Voided.ToString(CultureInfo.InvariantCulture));
 	            request.Variables.Add("voideddate", shipment.VoidedDate.HasValue ? shipment.VoidedDate.Value.ToString("s") : string.Empty);
 	            request.Variables.Add("voideduser", shipment.VoidedUserID.HasValue ? shipment.VoidedUserID.Value.ToString(CultureInfo.InvariantCulture) : string.Empty);
-                
+
                 request.Variables.Add("serviceused", ShippingManager.GetServiceUsed(shipment));
                 request.Variables.Add("totalcharges", shipment.ShipmentCost.ToString());
                 request.Variables.Add("totalweight", shipment.TotalWeight.ToString(CultureInfo.InvariantCulture));
@@ -384,7 +381,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         }
 
         /// <summary>
-        /// The request construction is complete and ready to be executed.   
+        /// The request construction is complete and ready to be executed.
         /// For derived classes.
         /// </summary>
         protected virtual void TransformRequest(HttpVariableRequestSubmitter request, string action)
@@ -490,7 +487,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         private void ThrowSchemaValidationException(string validationError, XmlDocument xmlResponse)
         {
             // spot-check to see if the failed XML looks like it was a valid V2 response, indicating
-            // the module just needs to be updated 
+            // the module just needs to be updated
             if (validationError.Contains("The required attribute 'moduleVersion' is missing"))
             {
                 string statedVersion = XPathUtility.Evaluate(xmlResponse.CreateNavigator(), "//ShipWorks/ModuleVersion", "");

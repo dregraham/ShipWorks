@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using ShipWorks.Common.Threading;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -13,11 +10,10 @@ using ShipWorks.Data.Adapter.Custom;
 using ShipWorks.Stores.Platforms.Ebay;
 using System.Data.SqlClient;
 using Interapptive.Shared.Data;
-using System.Transactions;
 using Interapptive.Shared;
+using Interapptive.Shared.Security;
 using ShipWorks.Users.Audit;
 using ShipWorks.Shipping.Settings;
-using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.PostMigration
 {
@@ -110,7 +106,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.PostMigratio
                         }
                     }
                 }
-                
+
                 // This step is now complete
                 Post2xMigrationUtility.MarkStepComplete(Post2xMigrationStep.ConfigureInitialData);
 
@@ -314,7 +310,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.PostMigratio
                                             	FROM MivaOrderItemAttribute m inner join v2m_MivaItemAttribute a
                                             	ON m.OrderItemAttributeID = a.OrderItemAttributeID", batchSize);
                             cmd.ExecuteNonQuery();
-                            
+
                             // commmit the updates and deletes
                             transaction.Commit();
 
@@ -325,7 +321,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.PostMigratio
                     }
                 }
             }
-            
+
             Post2xMigrationUtility.MarkStepComplete(Post2xMigrationStep.MivaItemAttriteData);
         }
     }

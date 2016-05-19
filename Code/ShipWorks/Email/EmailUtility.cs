@@ -1,19 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using ShipWorks.Data.Model.EntityClasses;
 using Rebex.Net;
-using Interapptive.Shared.Utility;
 using System.Windows.Forms;
 using System.Collections;
 using ShipWorks.Email.Accounts;
-using ShipWorks.UI;
 using ShipWorks.Common.Threading;
 using ShipWorks.Data.Connection;
-using ShipWorks.Data;
-using System.ComponentModel;
-using System.Threading;
 using ShipWorks.Data.Model.HelperClasses;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using System.Data;
@@ -22,6 +16,7 @@ using Rebex.Mime.Headers;
 using Rebex.Mime;
 using log4net;
 using System.Data.SqlClient;
+using Interapptive.Shared.Security;
 
 namespace ShipWorks.Email
 {
@@ -363,7 +358,7 @@ namespace ShipWorks.Email
         /// </summary>
         public static void DeleteOutboundEmail(IEnumerable<long> keys, Control owner, BackgroundExecutorCompletedEventHandler<long> completedHandler)
         {
-            DialogResult result = MessageHelper.ShowQuestion(owner, 
+            DialogResult result = MessageHelper.ShowQuestion(owner,
                 keys.Take(2).Count() == 2 ? "Delete all selected email messages?" : "Delete the selected email message?");
 
             if (result != DialogResult.OK)
@@ -377,8 +372,8 @@ namespace ShipWorks.Email
                 "Deleting {0} of {1}");
 
             executor.ExecuteCompleted += completedHandler;
-            executor.ExecuteAsync((entityID, state, issueAdder) => 
-            { 
+            executor.ExecuteAsync((entityID, state, issueAdder) =>
+            {
                 using (SqlAdapter adapter = new SqlAdapter(true))
                 {
                     // Then delete the email record
@@ -386,12 +381,12 @@ namespace ShipWorks.Email
 
                     adapter.Commit();
                 }
-            
+
             }, keys);
         }
 
         /// <summary>
-        /// Get the set of keys related to the given email 
+        /// Get the set of keys related to the given email
         /// </summary>
         public static List<long> GetRelatedKeys(long emailID, EmailOutboundRelationType relationType)
         {
@@ -399,7 +394,7 @@ namespace ShipWorks.Email
             resultFields.DefineField(EmailOutboundRelationFields.ObjectID, 0, "ObjectID", "");
 
             RelationPredicateBucket bucket = new RelationPredicateBucket(
-                EmailOutboundRelationFields.EmailOutboundID == emailID & 
+                EmailOutboundRelationFields.EmailOutboundID == emailID &
                 EmailOutboundRelationFields.RelationType == (int) relationType);
 
             // Do the fetch

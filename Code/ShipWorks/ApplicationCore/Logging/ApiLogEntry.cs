@@ -4,13 +4,13 @@ using System.Threading;
 using System.IO;
 using System.Xml;
 using System.Xml.XPath;
-using Interapptive.Shared.Utility;
 using log4net;
 using Interapptive.Shared.Net;
 using Rebex.Mail;
 using System.Xml.Linq;
 using ShipWorks.ApplicationCore.Crashes;
 using System.Security.Cryptography;
+using Interapptive.Shared.Security;
 
 namespace ShipWorks.ApplicationCore.Logging
 {

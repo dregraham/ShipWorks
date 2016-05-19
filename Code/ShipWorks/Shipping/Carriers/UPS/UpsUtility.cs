@@ -1,16 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Data;
-using System.Data.SqlClient;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Windows.Forms;
 using System.Xml;
 using Autofac;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Security;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore;
@@ -21,12 +18,8 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api;
-using ShipWorks.Shipping.Carriers.UPS.WebServices.OpenAccount;
 using ShipWorks.Shipping.Settings;
-using ShipWorks.Shipping.Carriers.UPS.WorldShip;
 using ShipWorks.Editions;
-using ShipWorks.Shipping.Carriers.Postal;
-using ShipWorks.Stores.Platforms.Amazon.WebServices.Associates;
 
 namespace ShipWorks.Shipping.Carriers.UPS
 {
@@ -398,7 +391,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             {
                 ILicenseService licenseService = lifetimeScope.Resolve<ILicenseService>();
                 EditionRestrictionLevel restrictionLevel = licenseService.CheckRestriction(EditionFeature.UpsSurePost, null);
-                
+
                 return restrictionLevel == EditionRestrictionLevel.None;
             }
         }

@@ -22,5 +22,13 @@ namespace ShipWorks.Stores.Content
         {
             return OrderUtility.CalculateTotal(order);
         }
+		
+        /// <summary>
+        /// Get a populated order from a order ID
+        /// </summary>
+        public OrderEntity FetchOrder(long orderID)
+        {
+            return OrderUtility.FetchOrder(orderID);
+        }
     }
 }
