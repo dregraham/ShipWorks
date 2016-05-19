@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing.Imaging;
-using System.Linq;
-using System.Threading.Tasks;
-using Interapptive.Shared.Business;
+﻿using Interapptive.Shared.Business;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore.Licensing;
@@ -25,6 +20,11 @@ using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Origin;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
+using System;
+using System.Collections.Generic;
+using System.Drawing.Imaging;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {
@@ -128,7 +128,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         public override ShipmentTypeSetupWizardForm CreateSetupWizard()
         {
             EnsureAccountsHaveCurrentContractData();
-            UspsAccountEntity pendingAccount = GetPendingAccount();
+            UspsAccountEntity pendingAccount = UspsAccountManager.GetPendingUspsAccount();
             IRegistrationPromotion promotion = new RegistrationPromotionFactory().CreateRegistrationPromotion();
 
             return new UspsSetupWizard(promotion, true, pendingAccount);
@@ -465,7 +465,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         }
 
         /// <summary>
-        /// Uses the USPS API to update the contract type of the account if it is unkown.
+        /// Uses the USPS API to update the contract type of the account if it is unknown.
         /// </summary>
         /// <param name="account">The account.</param>
         public virtual void UpdateContractType(UspsAccountEntity account)
@@ -538,17 +538,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         protected override List<string> CountriesEligibleForFreeInternationalDeliveryConfirmation()
         {
             return base.CountriesEligibleForFreeInternationalDeliveryConfirmation().Union(new[] { "MX", "PL" }).ToList();
-        }
-
-        /// <summary>
-        /// Gets the first pending Usps account
-        /// </summary>
-        /// <returns></returns>
-        private UspsAccountEntity GetPendingAccount()
-        {
-            return AccountRepository.Accounts
-                .FirstOrDefault(a => a.PendingInitialAccount == (int)UspsPendingAccountType.Existing ||
-                a.PendingInitialAccount == (int)UspsPendingAccountType.Create);
         }
     }
 }
