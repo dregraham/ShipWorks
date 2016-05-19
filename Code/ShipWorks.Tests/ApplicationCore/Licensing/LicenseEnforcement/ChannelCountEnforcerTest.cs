@@ -1,10 +1,10 @@
-﻿using System.Windows.Forms;
-using Autofac.Extras.Moq;
+﻿using Autofac.Extras.Moq;
 using Interapptive.Shared.Utility;
 using Moq;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
 using ShipWorks.Editions;
+using System.Windows.Forms;
 using Xunit;
 
 namespace ShipWorks.Tests.ApplicationCore.Licensing.LicenseEnforcement
@@ -30,6 +30,22 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.LicenseEnforcement
                 ChannelCountEnforcer testObject = mock.Create<ChannelCountEnforcer>();
 
                 Assert.Equal(EditionFeature.ChannelCount, testObject.EditionFeature);
+            }
+        }
+
+        [Theory]
+        [InlineData(false, true)]
+        [InlineData(true, false)]
+        public void AppliesTo_ReturnsFalse_WhenInTrial(bool expectedResult, bool isInTrial)
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                var capabilities = mock.Mock<ILicenseCapabilities>();
+                capabilities.SetupGet(l => l.IsInTrial).Returns(isInTrial);
+
+                var testObject = mock.Create<ChannelCountEnforcer>();
+
+                Assert.Equal(expectedResult, testObject.AppliesTo(capabilities.Object));
             }
         }
 
