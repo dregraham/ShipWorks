@@ -5,6 +5,7 @@ using System.Drawing.Imaging;
 using System.Linq;
 using Interapptive.Shared;
 using Interapptive.Shared.Utility;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
@@ -31,16 +32,18 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         private readonly IOrderManager orderManager;
         private readonly IShippingManager shippingManager;
         private readonly IEditionManager editionManager;
-        
+        private readonly ILicenseService licenseService;
+
         /// <summary>
         /// Constructor
         /// </summary>
-        public AmazonShipmentType(IStoreManager storeManager, IOrderManager orderManager, IShippingManager shippingManager, IEditionManager editionManager)
+        public AmazonShipmentType(IStoreManager storeManager, IOrderManager orderManager, IShippingManager shippingManager, IEditionManager editionManager, ILicenseService licenseService)
         {
             this.storeManager = storeManager;
             this.orderManager = orderManager;
             this.shippingManager = shippingManager;
             this.editionManager = editionManager;
+            this.licenseService = licenseService;
         }
 
         /// <summary>
@@ -182,15 +185,12 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// <summary>
         /// Gets a value indicating whether this instance is shipment type restricted.
         /// </summary>
-        /// 
         /// Overridden to use dependency
-        /// </remarks>
         public override bool IsShipmentTypeRestricted
         {
             get
             {
-                EditionRestrictionIssue restriction = editionManager.ActiveRestrictions.CheckRestriction(EditionFeature.ShipmentType, ShipmentTypeCode);
-                return restriction.Level == EditionRestrictionLevel.Hidden;
+                return licenseService.CheckRestriction(EditionFeature.ShipmentType, ShipmentTypeCode) == EditionRestrictionLevel.Hidden;
             }
         }
 

@@ -1,35 +1,29 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
 using ShipWorks.Data.Model.EntityClasses;
 using System.Windows.Forms;
 using log4net;
 using System.Threading;
-using ShipWorks.UI;
 using System.Diagnostics;
 using ShipWorks.ApplicationCore.Licensing;
-using System.Data.SqlClient;
 using ShipWorks.Data;
 using ShipWorks.Common.Threading;
 using ShipWorks.Users;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Connection;
-using ShipWorks.Stores.Platforms;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Data.Model.HelperClasses;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using System.Data;
 using System.Linq;
+using Autofac;
 using Interapptive.Shared;
 using ShipWorks.Data.Adapter.Custom;
-using ShipWorks.Data.Grid.Columns;
-using ShipWorks.Data.Grid.Columns.Definitions;
 using ShipWorks.Actions;
-using Interapptive.Shared.Utility;
 using ShipWorks.Data.Utility;
 using ShipWorks.Users.Security;
 using ShipWorks.Users.Audit;
 using ShipWorks.ApplicationCore.ExecutionMode;
+using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
 
 namespace ShipWorks.Stores.Communication
 {
@@ -277,7 +271,7 @@ namespace ShipWorks.Stores.Communication
                 {
                     Debug.Assert(busyToken == null);
 
-                    // If we are in a context sensitive scope, we have to wait until next time.  If we are on the UI, we'll always get it. 
+                    // If we are in a context sensitive scope, we have to wait until next time.  If we are on the UI, we'll always get it.
                     // We only may not if we are running in the background.
                     if (!ApplicationBusyManager.TryOperationStarting("downloading", out busyToken))
                     {
@@ -405,11 +399,11 @@ namespace ShipWorks.Stores.Communication
 
                         // Verify the license
                         progressItem.Detail = "Connecting...";
-                        LicenseActivationHelper.EnsureActive(store);
+                        CheckLicense(store);
 
                         // Do the download.  Operates as the super user.
                         using (AuditBehaviorScope auditScope = new AuditBehaviorScope(
-                            AuditBehaviorUser.SuperUser, 
+                            AuditBehaviorUser.SuperUser,
                             new AuditReason(initiatedBy == DownloadInitiatedBy.ShipWorks ? AuditReasonType.AutomaticDownload : AuditReasonType.ManualDownload)))
                         {
                             downloader.Download(progressItem, downloadLog.DownloadID);
@@ -522,6 +516,27 @@ namespace ShipWorks.Stores.Communication
                         }
                     }
                 }
+            }
+        }
+
+        /// <summary>
+        /// Check the store's license.
+        /// </summary>
+        private static void CheckLicense(StoreEntity store)
+        {
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                ILicenseService licenseService = lifetimeScope.Resolve<ILicenseService>();
+                ILicense license = licenseService.GetLicense(store);
+                license.Refresh();
+
+                if (license.IsDisabled)
+                {
+                    throw new ShipWorksLicenseException(license.DisabledReason);
+                }
+
+                // Possible license exception is caught upstream
+                license.EnforceCapabilities(EnforcementContext.Download);
             }
         }
 

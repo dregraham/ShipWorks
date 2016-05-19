@@ -194,6 +194,5 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1
                 PostalConfirmationType.AdultSignatureRestricted
             };
         }
-
     }
 }

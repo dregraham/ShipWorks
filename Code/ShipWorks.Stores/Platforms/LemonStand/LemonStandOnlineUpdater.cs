@@ -80,7 +80,6 @@ namespace ShipWorks.Stores.Platforms.LemonStand
             {
                 if (order.IsManual)
                 {
-                    log.InfoFormat($"Not uploading order status since order {order.OrderID} is manual.");
                     return;
                 }
 

@@ -136,16 +136,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
         }
 
         /// <summary>
-        /// Gets an instance to the best rate shipping broker for the Express1 for Endicia shipment type based on the shipment configuration.
-        /// </summary>
-        /// <param name="shipment">The shipment.</param>
-        /// <returns>An instance of an Express1EndiciaBestRateBroker.</returns>
-        public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment)
-        {
-            return new NullShippingBroker();
-        }
-
-        /// <summary>
         /// Supports getting counter rates.
         /// </summary>
         public override bool SupportsCounterRates => false;

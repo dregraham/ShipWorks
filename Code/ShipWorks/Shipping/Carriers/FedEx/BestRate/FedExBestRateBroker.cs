@@ -66,6 +66,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
             currentShipment.FedEx.Packages[0].DimsAddWeight = originalShipment.BestRate.DimsAddWeight;
             currentShipment.FedEx.Packages[0].DimsWeight = originalShipment.BestRate.DimsWeight;
 
+            // Update total weight 
+            ShipmentType.UpdateTotalWeight(currentShipment);
+
             currentShipment.FedEx.PackagingType = (int)FedExPackagingType.Custom;
             currentShipment.FedEx.Service = (int)FedExServiceType.FedExGround;
             SetAccount(currentShipment, account);

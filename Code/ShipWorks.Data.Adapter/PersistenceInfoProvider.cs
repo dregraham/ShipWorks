@@ -608,7 +608,7 @@ namespace ShipWorks.Data.Adapter
 		/// <summary>Inits ConfigurationEntity's mappings</summary>
 		private void InitConfigurationEntityMappings()
 		{
-			base.AddElementMapping( "ConfigurationEntity", "ShipWorksLocal", @"dbo", "Configuration", 12 );
+			base.AddElementMapping( "ConfigurationEntity", "ShipWorksLocal", @"dbo", "Configuration", 13 );
 			base.AddElementFieldMapping( "ConfigurationEntity", "ConfigurationID", "ConfigurationID", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 0 );
 			base.AddElementFieldMapping( "ConfigurationEntity", "RowVersion", "RowVersion", false, (int)SqlDbType.Timestamp, 0, 0, 0, false, "", null, typeof(System.Byte[]), 1 );
 			base.AddElementFieldMapping( "ConfigurationEntity", "LogOnMethod", "LogOnMethod", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 2 );
@@ -621,6 +621,7 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementFieldMapping( "ConfigurationEntity", "CustomerUpdateModifiedShipping", "CustomerUpdateModifiedShipping", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 9 );
 			base.AddElementFieldMapping( "ConfigurationEntity", "AuditNewOrders", "AuditNewOrders", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 10 );
 			base.AddElementFieldMapping( "ConfigurationEntity", "AuditDeletedOrders", "AuditDeletedOrders", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 11 );
+			base.AddElementFieldMapping( "ConfigurationEntity", "CustomerKey", "CustomerKey", false, (int)SqlDbType.NVarChar, 2147483647, 0, 0, false, "", null, typeof(System.String), 12 );
 		}
 		/// <summary>Inits CustomerEntity's mappings</summary>
 		private void InitCustomerEntityMappings()
@@ -1629,7 +1630,7 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementMapping( "MagentoStoreEntity", "ShipWorksLocal", @"dbo", "MagentoStore", 3 );
 			base.AddElementFieldMapping( "MagentoStoreEntity", "StoreID", "StoreID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 0 );
 			base.AddElementFieldMapping( "MagentoStoreEntity", "MagentoTrackingEmails", "MagentoTrackingEmails", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 1 );
-			base.AddElementFieldMapping( "MagentoStoreEntity", "MagentoConnect", "MagentoConnect", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 2 );
+			base.AddElementFieldMapping( "MagentoStoreEntity", "MagentoVersion", "MagentoVersion", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 2 );
 		}
 		/// <summary>Inits MarketplaceAdvisorOrderEntity's mappings</summary>
 		private void InitMarketplaceAdvisorOrderEntityMappings()
@@ -2894,7 +2895,7 @@ namespace ShipWorks.Data.Adapter
 		/// <summary>Inits UspsAccountEntity's mappings</summary>
 		private void InitUspsAccountEntityMappings()
 		{
-			base.AddElementMapping( "UspsAccountEntity", "ShipWorksLocal", @"dbo", "UspsAccount", 23 );
+			base.AddElementMapping( "UspsAccountEntity", "ShipWorksLocal", @"dbo", "UspsAccount", 24 );
 			base.AddElementFieldMapping( "UspsAccountEntity", "UspsAccountID", "UspsAccountID", false, (int)SqlDbType.BigInt, 0, 0, 19, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0 );
 			base.AddElementFieldMapping( "UspsAccountEntity", "RowVersion", "RowVersion", false, (int)SqlDbType.Timestamp, 0, 0, 0, false, "", null, typeof(System.Byte[]), 1 );
 			base.AddElementFieldMapping( "UspsAccountEntity", "Description", "Description", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 2 );
@@ -2918,6 +2919,7 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementFieldMapping( "UspsAccountEntity", "UspsReseller", "UspsReseller", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 20 );
 			base.AddElementFieldMapping( "UspsAccountEntity", "ContractType", "ContractType", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 21 );
 			base.AddElementFieldMapping( "UspsAccountEntity", "CreatedDate", "CreatedDate", false, (int)SqlDbType.DateTime, 0, 0, 0, false, "", null, typeof(System.DateTime), 22 );
+			base.AddElementFieldMapping( "UspsAccountEntity", "PendingInitialAccount", "PendingInitialAccount", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 23 );
 		}
 		/// <summary>Inits UspsProfileEntity's mappings</summary>
 		private void InitUspsProfileEntityMappings()

@@ -30,7 +30,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
             logger = new Mock<ILog>();
             logger.Setup(l => l.Error(It.IsAny<object>(), It.IsAny<Exception>()));
 
-            testObject = new iParcelDatabaseRepository(logger.Object);
+            testObject = new iParcelDatabaseRepository(type => logger.Object);
         }
 
         

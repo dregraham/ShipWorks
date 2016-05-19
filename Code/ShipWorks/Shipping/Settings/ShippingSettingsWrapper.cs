@@ -23,11 +23,30 @@ namespace ShipWorks.Shipping.Settings
         }
 
         /// <summary>
+        /// Sets the default shipping provider to the given shipment type code.
+        /// </summary>
+        public void SetDefaultProvider(ShipmentTypeCode shipmentTypeCode)
+        {
+            ShippingSettingsEntity settings = ShippingSettings.Fetch();
+            settings.DefaultType = (int) shipmentTypeCode;
+
+            ShippingSettings.Save(settings);
+        }
+
+        /// <summary>
         /// Marks the given ShipmentTypeCode as completely configured
         /// </summary>
         public void MarkAsConfigured(ShipmentTypeCode shipmentTypeCode)
         {
             ShippingSettings.MarkAsConfigured(shipmentTypeCode);
+        }
+
+        /// <summary>
+        /// Initialize for the currently logged on user
+        /// </summary>
+        public void InitializeForCurrentDatabase()
+        {
+            ShippingSettings.InitializeForCurrentDatabase();
         }
     }
 }

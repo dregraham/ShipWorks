@@ -3967,6 +3967,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ConfigurationFieldIndex.AuditDeletedOrders);}
 		}
+		/// <summary>Creates a new ConfigurationEntity.CustomerKey field instance</summary>
+		public static EntityField2 CustomerKey
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ConfigurationFieldIndex.CustomerKey);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity CustomerEntity</summary>
@@ -11417,10 +11422,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(MagentoStoreFieldIndex.MagentoTrackingEmails);}
 		}
-		/// <summary>Creates a new MagentoStoreEntity.MagentoConnect field instance</summary>
-		public static EntityField2 MagentoConnect
+		/// <summary>Creates a new MagentoStoreEntity.MagentoVersion field instance</summary>
+		public static EntityField2 MagentoVersion
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(MagentoStoreFieldIndex.MagentoConnect);}
+			get { return (EntityField2)EntityFieldFactory.Create(MagentoStoreFieldIndex.MagentoVersion);}
 		}
 	}
 
@@ -21836,6 +21841,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 CreatedDate
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(UspsAccountFieldIndex.CreatedDate);}
+		}
+		/// <summary>Creates a new UspsAccountEntity.PendingInitialAccount field instance</summary>
+		public static EntityField2 PendingInitialAccount
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UspsAccountFieldIndex.PendingInitialAccount);}
 		}
 	}
 

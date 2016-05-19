@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Xml;
 using System.Xml.XPath;
 using Interapptive.Shared.Utility;
@@ -40,7 +38,7 @@ namespace ShipWorks.ApplicationCore.Licensing
 
 		// If its deactivated (disabled), this is the reason why (for metered only)
 		string disabledReason = "";
-        
+
         // State of the license
         LicenseActivationState licenseState = LicenseActivationState.Invalid;
 
@@ -72,7 +70,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             {
                 throw new ShipWorksLicenseException(error);
             }
-            
+
             // Key
             license = new ShipWorksLicense(XPathUtility.Evaluate(xpath, "//Key", ""));
 
@@ -89,7 +87,7 @@ namespace ShipWorks.ApplicationCore.Licensing
 			disabledReason = XPathUtility.Evaluate(xpath, "//DisabledReason", "");
 
             // Valid
-            valid = XPathUtility.Evaluate(xpath, "//Valid", false);            
+            valid = XPathUtility.Evaluate(xpath, "//Valid", false);
 
             // State
             DetermineState(StoreTypeManager.GetType(store).LicenseIdentifier);
@@ -121,7 +119,7 @@ namespace ShipWorks.ApplicationCore.Licensing
 
             bool endiciaInsurance = XPathUtility.Evaluate(xpath, "//EndiciaInsuranceEnabled/@status", 0) == 1;
             edition.SharedOptions.EndiciaInsuranceEnabled = endiciaInsurance;
-            
+
             // Check to see if SurePost is allowed
             bool upsSurePost = XPathUtility.Evaluate(xpath, "//UpsSurePostEnabled/@status", 0) == 1;
             edition.SharedOptions.UpsSurePostEnabled = upsSurePost;
@@ -129,7 +127,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             // Check if Endicia consolidation is allowed
             bool endiciaConsolidator = XPathUtility.Evaluate(xpath, "//EndiciaConsolidator/@status", 0) == 1;
             edition.SharedOptions.EndiciaConsolidatorEnabled = endiciaConsolidator;
-            
+
             // Check if Endicia scan based payment returns is allowed
             bool endiciaScanBasedReturns = XPathUtility.Evaluate(xpath, "//EndiciaScanBasedReturns/@status", 0) == 1;
             edition.SharedOptions.EndiciaScanBasedReturnEnabled = endiciaScanBasedReturns;
@@ -396,7 +394,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public string TangoStoreID
         {
-            get; 
+            get;
             private set;
         }
 

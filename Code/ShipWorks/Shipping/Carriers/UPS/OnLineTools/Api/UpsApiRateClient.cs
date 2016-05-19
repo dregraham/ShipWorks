@@ -13,6 +13,7 @@ using ShipWorks.Shipping.Carriers.UPS.BestRate;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Data;
 using System.Xml.XPath;
+using Autofac;
 using Interapptive.Shared;
 using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api.ElementWriters;
@@ -20,6 +21,8 @@ using ShipWorks.Shipping.Carriers.UPS.ServiceManager;
 using ShipWorks.Shipping.Carriers.UPS.UpsEnvironment;
 using log4net;
 using Interapptive.Shared.Business;
+using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Licensing;
 
 namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
 {
@@ -59,6 +62,18 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         }
 
         /// <summary>
+        /// Gets the sure post restriction level.
+        /// </summary>
+        private EditionRestrictionLevel GetSurePostRestrictionLevel()
+        {
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                ILicenseService licenseService = lifetimeScope.Resolve<ILicenseService>();
+                return licenseService.CheckRestriction(EditionFeature.UpsSurePost, null);
+            }
+        }
+
+        /// <summary>
         /// Get the rates for the given shipment
         /// </summary>
         /// <param name="shipment">The shipment.</param>
@@ -88,12 +103,14 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                 // from SurePost either
                 firstExceptionEncountered = e;
             }
-            
-            if (EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.UpsSurePost).Level == EditionRestrictionLevel.None)
+
+            if (GetSurePostRestrictionLevel() == EditionRestrictionLevel.None)
             {
+                // Get SurePost rates since SurePost is not restricted
                 UpsServiceManagerFactory serviceManagerFactory = new UpsServiceManagerFactory(shipment);
                 IUpsServiceManager upsServiceManager = serviceManagerFactory.Create(shipment);
-                IEnumerable<UpsServiceType> surePostServiceTypes = upsServiceManager.GetServices(shipment).Where(s => s.IsSurePost).Select(s => s.UpsServiceType);
+                IEnumerable<UpsServiceType> surePostServiceTypes =
+                    upsServiceManager.GetServices(shipment).Where(s => s.IsSurePost).Select(s => s.UpsServiceType);
 
                 foreach (UpsServiceType serviceType in surePostServiceTypes)
                 {
@@ -106,7 +123,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                         // Log and eat the exception, so that some rates are returned in the event there's an error obtaining SurePost rates
                         // for one or all of the SurePost service types
                         log.WarnFormat("An error was received trying to get the SurePost rates: {0}", e.Message);
-                        
+
                         if (firstExceptionEncountered == null)
                         {
                             firstExceptionEncountered = e;
@@ -117,7 +134,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
 
             if (!rates.Any() && firstExceptionEncountered != null)
             {
-                // There weren't any rates found for the given shipment, but there was an exception 
+                // There weren't any rates found for the given shipment, but there was an exception
                 // encountered. Throw the exception to give the user feedback as to why there aren't
                 // any rates
                 throw firstExceptionEncountered;
@@ -238,7 +255,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
 
             // Close element
             xmlWriter.WriteEndElement();
-           
+
             UpsApiCore.WritePackagesXml(ups, xmlWriter, false, weightElementWriter, serviceOptionsElementWriter);
 
             // Write the element containing any specific UPS service codes that may be needed
@@ -250,7 +267,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                 // Rate Information
                 xmlWriter.WriteStartElement("RateInformation");
 
-                // Requesting Negotiated Rates 
+                // Requesting Negotiated Rates
                 xmlWriter.WriteElementString("NegotiatedRatesIndicator", "");
 
                 // Close element
@@ -285,7 +302,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                 string warning = XPathUtility.Evaluate(shipmentNode, "RatedShipmentWarning", "");
                 decimal totalCharge = XPathUtility.Evaluate(shipmentNode, "TotalCharges/MonetaryValue", (decimal) 0.0);
                 decimal negotiatedTotal = XPathUtility.Evaluate(shipmentNode, "NegotiatedRates/NetSummaryCharges/GrandTotal/MonetaryValue", (decimal) -1.0);
-                
+
                 int? guaranteedDaysToDelivery = XPathUtility.Evaluate(shipmentNode, "GuaranteedDaysToDelivery", -1);
                 if (guaranteedDaysToDelivery == -1)
                 {
@@ -309,7 +326,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                     log.Error("UPSError in ProcessApiResponse", ex);
                 }
 
- 
+
                 // If an unknown service type is returned from GetRates, don't display that rate.
                 if (!serviceType.HasValue)
                 {

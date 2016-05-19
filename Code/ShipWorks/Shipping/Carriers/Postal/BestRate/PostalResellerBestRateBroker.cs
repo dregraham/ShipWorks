@@ -146,6 +146,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.BestRate
             currentShipment.Postal.Service = (int)PostalServiceType.PriorityMail;
             currentShipment.Postal.InsuranceValue = originalShipment.BestRate.InsuranceValue;            
 
+            // Update total weight 
+            ShipmentType.UpdateTotalWeight(currentShipment);
+
             UpdateChildAccountId(currentShipment.Postal, account);
         }
 

@@ -14,10 +14,16 @@ using Interapptive.Shared.Data;
 using Interapptive.Shared.UI;
 using ShipWorks.Data.Connection;
 using System.IO;
+using Autofac;
+using Autofac.Core;
+using Interapptive.Shared.Utility;
 using log4net;
+using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Email;
 using ShipWorks.Users;
 using ShipWorks.ApplicationCore.Setup;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Management;
 
 namespace ShipWorks.Data.Administration
@@ -41,6 +47,10 @@ namespace ShipWorks.Data.Administration
 
         // How we need to elevate
         ElevatedPreparationType preparationType = ElevatedPreparationType.None;
+
+        // The user setup wizard page
+        private readonly ICustomerLicenseActivation tangoUserControlHost;
+        private ILifetimeScope lifetimeScope;
 
         /// <summary>
         /// What we need to do from elevation
@@ -66,13 +76,22 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Constructor
         /// </summary>
-        public SimpleDatabaseSetupWizard()
+        public SimpleDatabaseSetupWizard(ILifetimeScope lifetimeScope)
         {
             InitializeComponent();
 
             sqlInstaller = new SqlServerInstaller();
             sqlInstaller.InitializeForCurrentSqlSession();
-            sqlInstaller.Exited += new EventHandler(OnPrepareAutomaticDatabaseExited);
+            sqlInstaller.Exited += OnPrepareAutomaticDatabaseExited;
+
+            this.lifetimeScope = lifetimeScope;
+
+            // Resolve the user control
+            tangoUserControlHost = lifetimeScope.Resolve<ICustomerLicenseActivation>();
+            tangoUserControlHost.StepNext += OnStepNextCreateUsername;
+
+            // Replace the user wizard page with the new tango user wizard page
+            Pages.Insert(Pages.Count - 1, (WizardPage)tangoUserControlHost);
         }
 
         /// <summary>
@@ -106,7 +125,7 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         private void OnOpenDetailedSetup(object sender, EventArgs e)
         {
-            using (DetailedDatabaseSetupWizard dlg = new DetailedDatabaseSetupWizard())
+            using (DetailedDatabaseSetupWizard dlg = new DetailedDatabaseSetupWizard(lifetimeScope))
             {
                 BeginInvoke(new MethodInvoker(Hide));
 
@@ -202,7 +221,7 @@ namespace ShipWorks.Data.Administration
         }
 
         /// <summary>
-        /// Simple UI timer we use to keep the progress of LocalDb install aproximated
+        /// Simple UI timer we use to keep the progress of LocalDb install approximated
         /// </summary>
         void OnLocalDbProgressTimer(object sender, EventArgs e)
         {
@@ -228,7 +247,7 @@ namespace ShipWorks.Data.Administration
         }
 
         /// <summary>
-        /// The elevated preparations are coplete
+        /// The elevated preparations are complete
         /// </summary>
         private void OnPrepareAutomaticDatabaseExited(object sender, EventArgs e)
         {
@@ -253,6 +272,33 @@ namespace ShipWorks.Data.Administration
 
                 MoveBack();
             }
+        }
+
+        /// <summary>
+        /// Stepping next from the create username page
+        /// </summary>
+        private void OnStepNextCreateUsername(object sender, WizardStepEventArgs e)
+        {
+            GenericResult<ICustomerLicense> result;
+
+            using (new SqlSessionScope(sqlSession))
+            {
+                result = tangoUserControlHost.Save();
+            }
+
+            if (result.Success == false)
+            {
+                MessageHelper.ShowMessage(this, result.Message);
+                e.NextPage = (WizardPage) tangoUserControlHost;
+                return;
+            }
+
+            // Save and commit the database creation
+            createdDatabase = false;
+            sqlSession.SaveAsCurrent();
+
+            // Now we propel them right into our add store wizard
+            AddStoreWizard.ContinueAfterCreateDatabase(this, tangoUserControlHost.ViewModel.Email, tangoUserControlHost.ViewModel.DecryptedPassword);
         }
 
         /// <summary>
@@ -350,60 +396,6 @@ namespace ShipWorks.Data.Administration
             {
                 throw new InvalidOperationException("We shouldn't be moving next from this page if we didn't create a database - we should have skipped it");
             }
-        }
-
-        /// <summary>
-        /// Stepping next from the create username page
-        /// </summary>
-        private void OnStepNextCreateUsername(object sender, WizardStepEventArgs e)
-        {
-            string username = swUsername.Text.Trim();
-
-            // Default to not moving on
-            e.NextPage = CurrentPage;
-
-            if (username.Length == 0)
-            {
-                MessageHelper.ShowMessage(this, "Please enter a username.");
-                return;
-            }
-
-            if (!EmailUtility.IsValidEmailAddress(swEmail.Text))
-            {
-                MessageHelper.ShowMessage(this, "Please enter a valid email address.");
-                return;
-            }
-
-            if (swPassword.Text != swPasswordAgain.Text)
-            {
-                MessageHelper.ShowMessage(this, "The passwords you typed do not match.");
-                return;
-            }
-
-            Cursor.Current = Cursors.WaitCursor;
-
-            try
-            {
-                using (SqlSessionScope scope = new SqlSessionScope(sqlSession))
-                {
-                    UserUtility.CreateUser(username, swEmail.Text, swPassword.Text, true);
-                }
-            }
-            catch (SqlException ex)
-            {
-                MessageHelper.ShowMessage(this, ex.Message);
-            }
-            catch (DuplicateNameException ex)
-            {
-                MessageHelper.ShowMessage(this, ex.Message);
-            }
-
-            // Save and commit the database creation
-            createdDatabase = false;
-            sqlSession.SaveAsCurrent();
-
-            // Now we propel them right into our add store wizard
-            AddStoreWizard.ContinueAfterCreateDatabase(this, username, swPassword.Text);
         }
 
         /// <summary>
