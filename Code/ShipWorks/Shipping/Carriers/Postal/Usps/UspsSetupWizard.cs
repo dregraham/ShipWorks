@@ -831,6 +831,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             PersonAdapter.Copy(accountAddress, accountAdapter);
 
             UspsAccount.Description = UspsAccountManager.GetDefaultDescription(UspsAccount);
+            UspsAccount.PendingInitialAccount = (int) UspsPendingAccountType.Existing;
+
+            UspsAccountManager.SaveAccount(UspsAccount);
         }
 
         /// <summary>
