@@ -168,8 +168,8 @@ namespace ShipWorks.ApplicationCore.Licensing
 
             string addressesSeparatedWithNewLine = string.Join(Environment.NewLine, formattedAddresses);
 
-            return $"{Environment.NewLine}{Environment.NewLine}Suggested Addresses:" +
-                   $"{Environment.NewLine}{addressesSeparatedWithNewLine}";
+            return $" A few examples are below.{Environment.NewLine}{Environment.NewLine}" +
+                   $"{addressesSeparatedWithNewLine}";
         }
     }
 }

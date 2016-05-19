@@ -41,7 +41,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
         }
 
         [Fact]
-        public void Execute_DontDelegateToValidateAddress_NoPhysicalAddress()
+        public void Execute_DoNotDelegateToValidateAddress_NoPhysicalAddress()
         {
             var webClient = mock.Mock<IUspsWebClient>();
  
@@ -72,7 +72,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
         }
 
         [Fact]
-        public void Execute_MessageIsExpected_WhenCannotValidateAddress_AndNullSuggestions()
+        public void Execute_MessageIsAddressValidationFailedDescription_WhenCannotValidateAddress_AndNullSuggestions()
         {
             var webClient = mock.Mock<IUspsWebClient>();
             webClient.Setup(c => c.ValidateAddress(It.IsAny<PersonAdapter>()))
@@ -92,7 +92,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
         }
 
         [Fact]
-        public void Execute_MessageIsExpected_WhenCannotValidateAddress_AndNoSuggestions()
+        public void Execute_MessageIsAddressValidationFailedDescription_WhenCannotValidateAddress_AndNoSuggestions()
         {
             var webClient = mock.Mock<IUspsWebClient>();
             webClient.Setup(c => c.ValidateAddress(It.IsAny<PersonAdapter>()))
@@ -113,7 +113,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
         }
 
         [Fact]
-        public void Execute_MessageIsExpected_WhenCannotValidateAddress_AndHasSuggestions()
+        public void Execute_MessageContainsSuggestedAddress_WhenCannotValidateAddress_AndHasSuggestions()
         {
             string includedInSuggestedAddress = "123 Elm St.";
 
@@ -132,6 +132,63 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
             var result = testObject.Execute();
 
             Assert.Contains(includedInSuggestedAddress, result.Message);
+        }
+
+        [Fact]
+        public void Execute_MessageContainsThirdSuggestedAddress_WhenCannotValidateAddress_AndHasSuggestions()
+        {
+            string includedInSuggestedAddress = "123 Elm St.";
+
+            var webClient = mock.Mock<IUspsWebClient>();
+            webClient.Setup(c => c.ValidateAddress(It.IsAny<PersonAdapter>()))
+                .Returns(new UspsAddressValidationResults()
+                {
+                    IsSuccessfulMatch = false,
+                    Candidates =
+                        new List<Address>
+                        {
+                            new Address(),
+                            new Address(),
+                            new Address {Address1 = includedInSuggestedAddress}
+                        }
+                });
+
+            var testObject = mock.Create<AssociateShipworksWithItselfRequest>();
+
+            testObject.PhysicalAddress = new PersonAdapter();
+
+            var result = testObject.Execute();
+
+            Assert.Contains(includedInSuggestedAddress, result.Message);
+        }
+
+        [Fact]
+        public void Execute_MessageDoesNotContainForthSuggestedAddress_WhenCannotValidateAddress_AndHasSuggestions()
+        {
+            string includedInSuggestedAddress = "123 Elm St.";
+
+            var webClient = mock.Mock<IUspsWebClient>();
+            webClient.Setup(c => c.ValidateAddress(It.IsAny<PersonAdapter>()))
+                .Returns(new UspsAddressValidationResults()
+                {
+                    IsSuccessfulMatch = false,
+                    Candidates =
+                        new List<Address>
+                        {
+                            new Address(),
+                            new Address(),
+                            new Address(),
+                            new Address {Address1 = includedInSuggestedAddress}
+                        }
+                });
+
+            var testObject = mock.Create<AssociateShipworksWithItselfRequest>();
+
+            testObject.PhysicalAddress = new PersonAdapter();
+
+            var result = testObject.Execute();
+
+            Assert.DoesNotContain(includedInSuggestedAddress, result.Message);
         }
 
         [Fact]
