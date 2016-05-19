@@ -176,9 +176,14 @@ namespace ShipWorks.Stores.Platforms.Sears
 
             foreach (SearsOrderItemEntity orderItem in DataProvider.GetRelatedEntities(order.OrderID, EntityType.OrderItemEntity).OfType<SearsOrderItemEntity>())
             {
+                string trackingNumber = shipment.TrackingNumber.Trim();
+                if (string.IsNullOrEmpty(trackingNumber))
+                {
+                    trackingNumber = "Tracking unavailable";
+                }
                 xShipment.Add(
                     new XElement(nsDefault + "detail",
-                        new XElement(nsDefault + "tracking-number", shipment.TrackingNumber.Trim()),
+                        new XElement(nsDefault + "tracking-number", trackingNumber),
                         new XElement(nsDefault + "ship-date", shipment.ShipDate.ToString("yyyy-MM-dd")),
                         new XElement(nsDefault + "shipping-carrier", SearsUtility.GetShipmentCarrierCode(shipment)),
                         new XElement(nsDefault + "shipping-method", SearsUtility.GetShipmentServiceCode(shipment)),

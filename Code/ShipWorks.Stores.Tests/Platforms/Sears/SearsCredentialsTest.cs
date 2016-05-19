@@ -28,7 +28,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Sears
 
                 SearsStoreEntity store = new SearsStoreEntity
                 {
-                    Email = email,
+                    SearsEmail = email,
                     Password = SecureText.Encrypt(password, email)
                 };
 
@@ -59,7 +59,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Sears
 
                 var store = new SearsStoreEntity
                 {
-                    Email = email,
+                    SearsEmail = email,
                     Password = SecureText.Encrypt(password, email)
                 };
 
@@ -70,7 +70,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Sears
                 TypedParameter requestParameter = new TypedParameter(typeof(HttpVariableRequestSubmitter), request);
 
                 SearsCredentials testObject = mock.Create<SearsCredentials>(storeParameter, requestParameter);
-                
+
                 testObject.AddCredentials();
                 HttpVariable passwordVariable = request.Variables.First(v => v.Name == "password");
 
@@ -88,7 +88,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Sears
 
                 var store = new SearsStoreEntity
                 {
-                    Email = email,
+                    SearsEmail = email,
                     Password = SecureText.Encrypt(password, email)
                 };
 
@@ -117,7 +117,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Sears
 
                 var store = new SearsStoreEntity
                 {
-                    SellerID = sellerId, 
+                    SellerID = sellerId,
                     SecretKey = "encrypted secret key"
                 };
 
@@ -218,7 +218,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Sears
                 {
                     SellerID = sellerId,
                     SecretKey = secretKey,
-                    Email = emailAddress
+                    SearsEmail = emailAddress
                 };
 
                 SetupSearsEncryptionProvider(mock, store.SecretKey);
@@ -275,7 +275,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Sears
                 var store = new SearsStoreEntity
                 {
                     SellerID = "mySellerId",
-                    Email = "blah@shipworks.com",
+                    SearsEmail = "blah@shipworks.com",
                     SecretKey = "funky encrypted key"
                 };
 
@@ -296,7 +296,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Sears
                     .Split(',')[0] // everything before the comma
                     .Split('=')[1]; // the email address
 
-                Assert.Equal(store.Email, headerEmail);
+                Assert.Equal(store.SearsEmail, headerEmail);
             }
         }
 
@@ -373,7 +373,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Sears
             {
                 var store = new SearsStoreEntity
                 {
-                    SellerID = "mySellerId", 
+                    SellerID = "mySellerId",
                     SecretKey = "encrypted"
                 };
 
@@ -400,7 +400,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Sears
         {
             Assert.Throws<ArgumentNullException>(() => new SearsCredentials(null, null, null, null));
         }
-        
+
         private static void SetupSecureTextProvider(AutoMock mock, string email, string password, SearsStoreEntity store)
         {
             var secureTextEncryptionProvider = mock.Mock<IEncryptionProvider>();

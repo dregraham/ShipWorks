@@ -8187,8 +8187,8 @@ namespace ShipWorks.Data.Model
 		Phone,
 		///<summary>Fax. </summary>
 		Fax,
-		///<summary>Email. Inherited from Store</summary>
-		Email_Store,
+		///<summary>Email. </summary>
+		Email,
 		///<summary>Website. </summary>
 		Website,
 		///<summary>AutoDownload. </summary>
@@ -8213,8 +8213,8 @@ namespace ShipWorks.Data.Model
 		InitialDownloadOrder,
 		///<summary>StoreID. </summary>
 		StoreID,
-		///<summary>Email. </summary>
-		Email,
+		///<summary>SearsEmail. </summary>
+		SearsEmail,
 		///<summary>Password. </summary>
 		Password,
 		///<summary>SecretKey. </summary>
