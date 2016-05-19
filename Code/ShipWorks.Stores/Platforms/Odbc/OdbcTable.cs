@@ -29,7 +29,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// <summary>
         /// The columns in the table
         /// </summary>
-        public IEnumerable<OdbcColumn> Columns { get; private set; }
+        public IEnumerable<OdbcColumn> Columns { get; set; }
 
         /// <summary>
         /// Loads the columns for this table

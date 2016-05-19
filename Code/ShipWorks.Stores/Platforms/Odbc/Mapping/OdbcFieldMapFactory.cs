@@ -32,7 +32,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 
             foreach (ShipWorksOdbcMappableField orderField in CreateShipWorksOrderFields())
 	        {
-	            orderMap.AddEntry(new OdbcFieldMapEntry(orderField, new ExternalOdbcMappableField(new OdbcTable(string.Empty), new OdbcColumn(string.Empty))));
+	            orderMap.AddEntry(new OdbcFieldMapEntry(orderField, new ExternalOdbcMappableField(null, null)));
 	        }
 
 	        return orderMap;
@@ -84,7 +84,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 
             foreach (ShipWorksOdbcMappableField entry in CreateShipWorksOrderItemFields())
             {
-                itemMap.AddEntry(new OdbcFieldMapEntry(entry, null));
+                itemMap.AddEntry(new OdbcFieldMapEntry(entry, new ExternalOdbcMappableField(null, null)));
             }
 
             return itemMap;
@@ -134,7 +134,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 
             foreach (ShipWorksOdbcMappableField entry in CreateShipWorksAddressFields())
             {
-                addressMap.AddEntry(new OdbcFieldMapEntry(entry, null));
+                addressMap.AddEntry(new OdbcFieldMapEntry(entry, new ExternalOdbcMappableField(null, null)));
             }
 
             return addressMap;
@@ -194,7 +194,10 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 
 	        foreach (OdbcFieldMapEntry entry in maps.SelectMany(map => map.Entries))
 	        {
-	            masterMap.AddEntry(entry);
+	            if (entry.ExternalField.Column != null)
+	            {
+                    masterMap.AddEntry(entry);
+                }
 	        }
 
 	        return masterMap;

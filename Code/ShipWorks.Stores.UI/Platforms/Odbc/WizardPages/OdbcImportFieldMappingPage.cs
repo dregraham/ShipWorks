@@ -12,9 +12,9 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
     /// </summary>
     public partial class OdbcImportFieldMappingPage : AddStoreWizardPage, IOdbcWizardPage
     {
-        private readonly ILifetimeScope scope;
-        private readonly IOdbcImportFieldMappingDlgViewModel viewModel;
-        private readonly OdbcStoreEntity store;
+        private ILifetimeScope scope;
+        private IOdbcImportFieldMappingDlgViewModel viewModel;
+        private OdbcStoreEntity store;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcImportFieldMappingPage"/> class.
@@ -22,9 +22,6 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
         public OdbcImportFieldMappingPage()
         {
             InitializeComponent();
-            store = GetStore<OdbcStoreEntity>();
-            scope = IoC.BeginLifetimeScope();
-            viewModel = scope.Resolve<IOdbcImportFieldMappingDlgViewModel>();
             Load += OnLoad;
             StepNext += OnNext;
         }
@@ -36,11 +33,20 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
 
         private void OnNext(object sender, ShipWorks.UI.Wizard.WizardStepEventArgs e)
         {
+            if (store == null)
+            {
+                store = GetStore<OdbcStoreEntity>();
+            }
+
             viewModel.Save(store);
         }
 
         private void OnLoad(object sender, EventArgs eventArgs)
         {
+            store = GetStore<OdbcStoreEntity>();
+            scope = IoC.BeginLifetimeScope();
+            viewModel = scope.Resolve<IOdbcImportFieldMappingDlgViewModel>();
+
             viewModel.Load(store);
             odbcImportFieldMappingControl.DataContext = viewModel;
         }

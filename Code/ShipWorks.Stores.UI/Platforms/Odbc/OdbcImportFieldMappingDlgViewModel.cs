@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.Command;
+using Microsoft.Win32;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Odbc;
@@ -33,6 +35,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             this.fieldMapFactory = fieldMapFactory;
             this.dataSource = dataSource;
             this.schema = schema;
+            SaveMapCommand = new RelayCommand(SaveMapToDisk,() => selectedTable != null);
             OrderFieldMap = fieldMapFactory.CreateOrderFieldMap();
             AddressFieldMap = fieldMapFactory.CreateAddressFieldMap();
             ItemFieldMap = fieldMapFactory.CreateOrderItemFieldMap();
@@ -50,6 +53,14 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// The external odbc tables.
         /// </summary>
         public IEnumerable<OdbcTable> Tables { get; set; }
+
+        /// <summary>
+        /// Save Map Command
+        /// </summary>
+        /// <remarks>
+        /// selected table must not be null for it to be enabled
+        /// </remarks>
+        public ICommand SaveMapCommand { get; set; }
 
         /// <summary>
         /// The selected external odbc table.
@@ -119,6 +130,22 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// </summary>
         public void Save(OdbcStoreEntity store)
         {
+            OdbcFieldMap map = GetSingleMap();
+            Stream memoryStream = new MemoryStream();
+
+            map.Save(memoryStream);
+            memoryStream.Position = 0;
+            StreamReader reader = new StreamReader(memoryStream);
+
+            string data = reader.ReadToEnd();
+        }
+
+        /// <summary>
+        /// Build a single ODBC Field Map from the Order Address and Item Field Maps
+        /// </summary>
+        /// <returns></returns>
+        private OdbcFieldMap GetSingleMap()
+        {
             OdbcFieldMap map = fieldMapFactory.CreateFieldMapFrom(new List<OdbcFieldMap>
             {
                 OrderFieldMap,
@@ -126,13 +153,32 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
                 ItemFieldMap
             });
 
-            Stream memoryStream = new MemoryStream();
+            map.ExternalTableName = selectedTable.Name;
+            map.Entries.ForEach(e => e.ExternalField.Table = selectedTable);
+            map.Entries.ForEach(e => e.ExternalField.Table.Columns = null);
 
-            map.Save(memoryStream);
+            return map;
+        }
 
-            StreamReader reader = new StreamReader(memoryStream);
+        /// <summary>
+        /// Prompt the user and save the map to disk
+        /// </summary>
+        private void SaveMapToDisk()
+        {
+            SaveFileDialog dlg = new SaveFileDialog
+            {
+                DefaultExt = "swm",
+                Filter = "ShipWorks Map Files|*.swm"
+            };
 
-            string data = reader.ReadToEnd();
+            dlg.ShowDialog();
+
+            if (!string.IsNullOrWhiteSpace(dlg.FileName))
+            {
+                FileStream fs = (FileStream)dlg.OpenFile();
+                OdbcFieldMap map = GetSingleMap();
+                map.Save(fs);
+            }
         }
     }
 }

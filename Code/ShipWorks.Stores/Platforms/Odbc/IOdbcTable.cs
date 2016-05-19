@@ -10,7 +10,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// <summary>
         /// Columns that belong to the table
         /// </summary>
-        IEnumerable<OdbcColumn> Columns { get; }
+        IEnumerable<OdbcColumn> Columns { get; set; }
 
         /// <summary>
         /// The tables name
