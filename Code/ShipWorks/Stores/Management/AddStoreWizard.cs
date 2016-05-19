@@ -899,7 +899,7 @@ namespace ShipWorks.Stores.Management
         /// </summary>
         private void OnLinkGettingStartedGuide(object sender, EventArgs e)
         {
-            WebHelper.OpenUrl("http://www.shipworks.com/shipworks/help/ShipWorks-GettingStarted.pdf", this);
+            WebHelper.OpenUrl("http://support.shipworks.com/support/solutions/articles/104800-getting-started-with-shipworks", this);
         }
 
         /// <summary>

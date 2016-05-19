@@ -49,7 +49,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             Func<Type, ILog> logFactory,
             IDeletionService deletionService,
             IEnumerable<ILicenseEnforcer> licenseEnforcers,
-            IEnumerable<IFeatureRestriction> featureRestrictions, 
+            IEnumerable<IFeatureRestriction> featureRestrictions,
             IMessenger messenger)
         {
             this.messenger = messenger;
@@ -247,18 +247,16 @@ namespace ShipWorks.ApplicationCore.Licensing
         {
             Refresh();
 
-            if (!LicenseCapabilities.IsInTrial)
-            {
-                // Enforce restrictions when not in the trial period
-                EnumResult<ComplianceLevel> enforcerNotInCompliance =
-                    licenseEnforcers
-                        .Select(enforcer => enforcer.Enforce(LicenseCapabilities, context))
-                        .FirstOrDefault(result => result.Value == ComplianceLevel.NotCompliant);
+            // Enforce restrictions when not in the trial period
+            EnumResult<ComplianceLevel> enforcerNotInCompliance =
+                licenseEnforcers
+                    .Where(enforcer => enforcer.AppliesTo(LicenseCapabilities))
+                    .Select(enforcer => enforcer.Enforce(LicenseCapabilities, context))
+                    .FirstOrDefault(result => result.Value == ComplianceLevel.NotCompliant);
 
-                if (enforcerNotInCompliance != null)
-                {
-                    throw new ShipWorksLicenseException(enforcerNotInCompliance.Message);
-                }
+            if (enforcerNotInCompliance != null)
+            {
+                throw new ShipWorksLicenseException(enforcerNotInCompliance.Message);
             }
         }
 
@@ -269,28 +267,25 @@ namespace ShipWorks.ApplicationCore.Licensing
         {
             Refresh();
 
-            if (!LicenseCapabilities.IsInTrial)
-            {
-                // Enforce restrictions when not in the trial period
-                licenseEnforcers.ToList().ForEach(e => e.Enforce(LicenseCapabilities, context, owner));
-            }
+            // Enforce restrictions when not in the trial period
+            licenseEnforcers
+                .Where(enforcer => enforcer.AppliesTo(LicenseCapabilities)).ToList()
+                .ForEach(e => e.Enforce(LicenseCapabilities, context, owner));
         }
 
         /// <summary>
         /// Enforces capabilities based on the given feature
         /// </summary>
-        public IEnumerable<EnumResult<ComplianceLevel>> EnforceCapabilities(EditionFeature feature, EnforcementContext context)
+        public IEnumerable<EnumResult<ComplianceLevel>> EnforceCapabilities(EditionFeature feature,
+            EnforcementContext context)
         {
             List<EnumResult<ComplianceLevel>> result = new List<EnumResult<ComplianceLevel>>();
 
             Refresh();
-            if (!LicenseCapabilities.IsInTrial)
-            {
-                // Enforce restrictions when not in the trial period
-                licenseEnforcers.Where(e => e.EditionFeature == feature)
-                    .ToList()
-                    .ForEach(e => result.Add(e.Enforce(LicenseCapabilities, context)));
-            }
+            // Enforce restrictions when not in the trial period
+            licenseEnforcers.Where(enforcer => enforcer.AppliesTo(LicenseCapabilities) && enforcer.EditionFeature == feature)
+                .ToList()
+                .ForEach(e => result.Add(e.Enforce(LicenseCapabilities, context)));
 
             return result;
         }

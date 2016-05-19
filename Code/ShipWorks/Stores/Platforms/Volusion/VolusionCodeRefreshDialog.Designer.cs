@@ -92,6 +92,7 @@
             this.linkHelp.Size = new System.Drawing.Size(53, 13);
             this.linkHelp.TabIndex = 11;
             this.linkHelp.Text = "Click here";
+            this.linkHelp.Url = "http://support.shipworks.com/support/solutions/articles/129346-importing-shipping-methods-and-payment-methods-for-a-volusion-store";
             // 
             // labelHelp
             // 

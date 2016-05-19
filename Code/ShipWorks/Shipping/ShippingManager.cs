@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows.Forms;
@@ -1067,22 +1066,26 @@ namespace ShipWorks.Shipping
         /// <param name="storeEntity">The store entity.</param>
         private static void CheckLicense(StoreEntity storeEntity)
         {
-            ILicenseService licenseService = IoC.UnsafeGlobalLifetimeScope.Resolve<ILicenseService>();
-            ILicense license = licenseService.GetLicense(storeEntity);
+            using (ILifetimeScope scope = IoC.BeginLifetimeScope())
+            {
+                ILicenseService licenseService = scope.Resolve<ILicenseService>();
 
-            license.Refresh();
-            if (license.IsDisabled)
-            {
-                throw new ShippingException(license.DisabledReason);
-            }
+                ILicense license = licenseService.GetLicense(storeEntity);
 
-            try
-            {
-                license.EnforceCapabilities(EnforcementContext.CreateLabel);
-            }
-            catch (ShipWorksLicenseException ex)
-            {
-                throw new ShippingException(ex.Message);
+                license.Refresh();
+                if (license.IsDisabled)
+                {
+                    throw new ShippingException(license.DisabledReason);
+                }
+
+                try
+                {
+                    license.EnforceCapabilities(EnforcementContext.CreateLabel);
+                }
+                catch (ShipWorksLicenseException ex)
+                {
+                    throw new ShippingException(ex.Message);
+                }
             }
         }
 
