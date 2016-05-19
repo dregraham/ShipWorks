@@ -14,6 +14,7 @@ using ShipWorks.Data;
 using ShipWorks.Data.Administration;
 using ShipWorks.Editions;
 using ShipWorks.Editions.Brown;
+using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Profiles;
@@ -160,6 +161,9 @@ namespace ShipWorks.ApplicationCore
                 .AsImplementedInterfaces();
 
             builder.RegisterType<SqlSchemaVersion>()
+                .AsImplementedInterfaces();
+
+            builder.RegisterType<ShipmentTypeManagerWrapper>()
                 .AsImplementedInterfaces();
 
             builder.RegisterType<ShipmentTypeSetupActivity>()

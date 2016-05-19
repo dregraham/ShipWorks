@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Autofac;
 using Autofac.Extras.Moq;
 using Autofac.Features.Indexed;
 using Moq;
@@ -9,7 +10,9 @@ using ShipWorks.Editions;
 using ShipWorks.Editions.Brown;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers;
+using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.Postal;
+using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
 using Xunit;
 
 namespace ShipWorks.Tests.ApplicationCore.Licensing.FeatureRestrictions
@@ -54,7 +57,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.FeatureRestrictions
         }
 
         [Fact]
-        public void Check_ReturnsHidden_WhenShipmentTypeCodeEndicia_AndNoEndiciaAccounts()
+        public void Check_ReturnsNone_WhenShipmentTypeCodeEndicia_AndNoEndiciaAccounts()
         {
             using (AutoMock mock = AutoMock.GetLoose())
             {
@@ -78,7 +81,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.FeatureRestrictions
 
                 EditionRestrictionLevel result = testObject.Check(licenseCapabilities.Object, ShipmentTypeCode.Endicia);
 
-                Assert.Equal(EditionRestrictionLevel.Hidden, result);
+                Assert.Equal(EditionRestrictionLevel.None, result);
             }
         }
 
@@ -341,14 +344,13 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.FeatureRestrictions
                         }
                     };
 
-                // Setup the UPS account repository to have an account
-                Mock<ICarrierAccountRepository<UpsAccountEntity>> upsAccountRepository = mock.Mock<ICarrierAccountRepository<UpsAccountEntity>>();
-                upsAccountRepository.SetupGet(r => r.Accounts).Returns(new List<UpsAccountEntity>());
+                Mock<ShipmentType> shipmentType = mock.Mock<ShipmentType>();
+                shipmentType.SetupGet(s => s.HasAccounts).Returns(false);
 
-                Mock<IIndex<ShipmentTypeCode, ICarrierAccountRepository<UpsAccountEntity>>> upsAccountRepoProvider = mock.MockRepository.Create<IIndex<ShipmentTypeCode, ICarrierAccountRepository<UpsAccountEntity>>>();
-
-                upsAccountRepoProvider.Setup(x => x[ShipmentTypeCode.UpsOnLineTools]).Returns(upsAccountRepository.Object);
-                mock.Provide(upsAccountRepoProvider.Object);
+                Mock<IShipmentTypeManager> shipmentTypeManager = mock.Mock<IShipmentTypeManager>();
+                shipmentTypeManager.Setup(
+                    m =>
+                        m.GetType(It.Is<ShipmentTypeCode>(s => s == ShipmentTypeCode.UpsOnLineTools))).Returns(shipmentType.Object);
 
                 Mock<ILicenseCapabilities> licenseCapabilities = mock.Mock<ILicenseCapabilities>();
                 licenseCapabilities.SetupGet(c => c.ShipmentTypeRestriction).Returns(shipmentTypeRestriction);
@@ -377,14 +379,13 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.FeatureRestrictions
                         }
                     };
 
-                // Setup the UPS account repository to have an account
-                Mock<ICarrierAccountRepository<UpsAccountEntity>> upsAccountRepository = mock.Mock<ICarrierAccountRepository<UpsAccountEntity>>();
-                upsAccountRepository.SetupGet(r => r.Accounts).Returns(new List<UpsAccountEntity> { new UpsAccountEntity() });
+                Mock<ShipmentType> shipmentType = mock.Mock<ShipmentType>();
+                shipmentType.SetupGet(s => s.HasAccounts).Returns(true);
 
-                Mock<IIndex<ShipmentTypeCode, ICarrierAccountRepository<UpsAccountEntity>>> upsAccountRepoProvider = mock.MockRepository.Create<IIndex<ShipmentTypeCode, ICarrierAccountRepository<UpsAccountEntity>>>();
-
-                upsAccountRepoProvider.Setup(x => x[ShipmentTypeCode.UpsOnLineTools]).Returns(upsAccountRepository.Object);
-                mock.Provide(upsAccountRepoProvider.Object);
+                Mock<IShipmentTypeManager> shipmentTypeManager = mock.Mock<IShipmentTypeManager>();
+                shipmentTypeManager.Setup(
+                    m =>
+                        m.GetType(It.Is<ShipmentTypeCode>(s => s == ShipmentTypeCode.UpsOnLineTools))).Returns(shipmentType.Object);
 
                 Mock<ILicenseCapabilities> licenseCapabilities = mock.Mock<ILicenseCapabilities>();
                 licenseCapabilities.SetupGet(c => c.ShipmentTypeRestriction).Returns(shipmentTypeRestriction);
@@ -451,15 +452,14 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.FeatureRestrictions
                         }
                     };
 
-                // Setup the UPS account repository to have an account
-                Mock<ICarrierAccountRepository<UpsAccountEntity>> upsAccountRepository = mock.Mock<ICarrierAccountRepository<UpsAccountEntity>>();
-                upsAccountRepository.SetupGet(r => r.Accounts).Returns(new List<UpsAccountEntity>() { new UpsAccountEntity() });
+                Mock<ShipmentType> shipmentType = mock.Mock<ShipmentType>();
+                shipmentType.SetupGet(s => s.HasAccounts).Returns(true);
 
-                Mock<IIndex<ShipmentTypeCode, ICarrierAccountRepository<UpsAccountEntity>>> upsAccountRepoProvider = mock.MockRepository.Create<IIndex<ShipmentTypeCode, ICarrierAccountRepository<UpsAccountEntity>>>();
+                Mock<IShipmentTypeManager> shipmentTypeManager = mock.Mock<IShipmentTypeManager>();
+                shipmentTypeManager.Setup(
+                    m =>
+                        m.GetType(It.Is<ShipmentTypeCode>(s => s == ShipmentTypeCode.UpsOnLineTools))).Returns(shipmentType.Object);
 
-                upsAccountRepoProvider.Setup(x => x[ShipmentTypeCode.UpsOnLineTools]).Returns(upsAccountRepository.Object);
-                mock.Provide(upsAccountRepoProvider.Object);
-                
                 Mock<ILicenseCapabilities> licenseCapabilities = mock.Mock<ILicenseCapabilities>();
                 licenseCapabilities.SetupGet(c => c.ShipmentTypeRestriction).Returns(shipmentTypeRestriction);
                 licenseCapabilities.SetupGet(c => c.IsBestRateAllowed).Returns(true);
@@ -475,8 +475,8 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.FeatureRestrictions
         [Fact]
         public void Check_ReturnsNone_WhenShipmentTypeIsBestRate_AndLegacyBestRateIsDisabled_AndCapabilitiesAllowsBestRate_AndUpsAccountsDoNotExist()
         {
-            // Test that best rate is available when there are not any UPS accounts in ShipWorks and ignores the 
-            // server setting for customers on the new pricing plan (since the ShipmentTypeRestriction only 
+            // Test that best rate is available when there are not any UPS accounts in ShipWorks and ignores the
+            // server setting for customers on the new pricing plan (since the ShipmentTypeRestriction only
             // applies to the CustomerLicense).
             using (AutoMock mock = AutoMock.GetLoose())
             {
@@ -489,14 +489,13 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.FeatureRestrictions
                         }
                     };
 
-                // Setup the UPS account repository to not have any accounts
-                Mock<ICarrierAccountRepository<UpsAccountEntity>> upsAccountRepository = mock.Mock<ICarrierAccountRepository<UpsAccountEntity>>();
-                upsAccountRepository.SetupGet(r => r.Accounts).Returns(new List<UpsAccountEntity>());
+                Mock<ShipmentType> shipmentType = mock.Mock<ShipmentType>();
+                shipmentType.SetupGet(s => s.HasAccounts).Returns(false);
 
-                Mock<IIndex<ShipmentTypeCode, ICarrierAccountRepository<UpsAccountEntity>>> upsAccountRepoProvider = mock.MockRepository.Create<IIndex<ShipmentTypeCode, ICarrierAccountRepository<UpsAccountEntity>>>();
-
-                upsAccountRepoProvider.Setup(x => x[ShipmentTypeCode.UpsOnLineTools]).Returns(upsAccountRepository.Object);
-                mock.Provide(upsAccountRepoProvider.Object);
+                Mock<IShipmentTypeManager> shipmentTypeManager = mock.Mock<IShipmentTypeManager>();
+                shipmentTypeManager.Setup(
+                    m =>
+                        m.GetType(It.Is<ShipmentTypeCode>(s => s == ShipmentTypeCode.UpsOnLineTools))).Returns(shipmentType.Object);
 
                 Mock<ILicenseCapabilities> licenseCapabilities = mock.Mock<ILicenseCapabilities>();
                 licenseCapabilities.SetupGet(c => c.ShipmentTypeRestriction).Returns(shipmentTypeRestriction);
@@ -559,14 +558,13 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.FeatureRestrictions
                         }
                     };
 
-                // Setup the UPS account repository to not have any accounts
-                Mock<ICarrierAccountRepository<UpsAccountEntity>> upsAccountRepository = mock.Mock<ICarrierAccountRepository<UpsAccountEntity>>();
-                upsAccountRepository.SetupGet(r => r.Accounts).Returns(new List<UpsAccountEntity>());
+                Mock<ShipmentType> shipmentType = mock.Mock<ShipmentType>();
+                shipmentType.SetupGet(s => s.HasAccounts).Returns(false);
 
-                Mock<IIndex<ShipmentTypeCode, ICarrierAccountRepository<UpsAccountEntity>>> upsAccountRepoProvider = mock.MockRepository.Create<IIndex<ShipmentTypeCode, ICarrierAccountRepository<UpsAccountEntity>>>();
-
-                upsAccountRepoProvider.Setup(x => x[ShipmentTypeCode.UpsOnLineTools]).Returns(upsAccountRepository.Object);
-                mock.Provide(upsAccountRepoProvider.Object);
+                Mock<IShipmentTypeManager> shipmentTypeManager = mock.Mock<IShipmentTypeManager>();
+                shipmentTypeManager.Setup(
+                    m =>
+                        m.GetType(It.Is<ShipmentTypeCode>(s => s == ShipmentTypeCode.UpsOnLineTools))).Returns(shipmentType.Object);
 
                 Mock<ILicenseCapabilities> licenseCapabilities = mock.Mock<ILicenseCapabilities>();
                 licenseCapabilities.SetupGet(c => c.ShipmentTypeRestriction).Returns(shipmentTypeRestriction);
@@ -600,14 +598,14 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.FeatureRestrictions
                         }
                     };
 
-                // Setup the UPS account repository to not have any accounts
-                Mock<ICarrierAccountRepository<UpsAccountEntity>> upsAccountRepository = mock.Mock<ICarrierAccountRepository<UpsAccountEntity>>();
-                upsAccountRepository.SetupGet(r => r.Accounts).Returns(new List<UpsAccountEntity>());
+                Mock<ShipmentType> shipmentType = mock.Mock<ShipmentType>();
+                shipmentType.SetupGet(s => s.HasAccounts).Returns(false);
 
-                Mock<IIndex<ShipmentTypeCode, ICarrierAccountRepository<UpsAccountEntity>>> upsAccountRepoProvider = mock.MockRepository.Create<IIndex<ShipmentTypeCode, ICarrierAccountRepository<UpsAccountEntity>>>();
-
-                upsAccountRepoProvider.Setup(x => x[ShipmentTypeCode.UpsOnLineTools]).Returns(upsAccountRepository.Object);
-                mock.Provide(upsAccountRepoProvider.Object);
+                Mock<IShipmentTypeManager> shipmentTypeManager = mock.Mock<IShipmentTypeManager>();
+                shipmentTypeManager.Setup(
+                    m =>
+                        m.GetType(It.Is<ShipmentTypeCode>(s => s == ShipmentTypeCode.UpsOnLineTools)))
+                    .Returns(shipmentType.Object);
 
                 Mock<ILicenseCapabilities> licenseCapabilities = mock.Mock<ILicenseCapabilities>();
                 licenseCapabilities.SetupGet(c => c.ShipmentTypeRestriction).Returns(shipmentTypeRestriction);
