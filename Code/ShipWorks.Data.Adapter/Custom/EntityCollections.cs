@@ -9865,6 +9865,7 @@ namespace ShipWorks.Data.Adapter.Custom
         }
 	}
 	
+	
 	/// <summary>
 	/// Strongly typed collection of ThreeDCartOrderEntity
 	/// </summary>

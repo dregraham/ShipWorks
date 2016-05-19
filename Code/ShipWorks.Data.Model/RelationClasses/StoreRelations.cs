@@ -444,6 +444,23 @@ namespace ShipWorks.Data.Model.RelationClasses
 				return relation;
 			}
 		}
+		/// <summary>Returns a new IEntityRelation object, between StoreEntity and SparkPayStoreEntity over the 1:1 relation they have, which is used to build a target per entity hierarchy, and is using the relation between the fields:
+		/// Store.StoreID - SparkPayStore.StoreID
+		/// </summary>
+		internal IEntityRelation RelationToSubTypeSparkPayStoreEntity
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne, true);
+
+				relation.AddEntityFieldPair(StoreFields.StoreID, SparkPayStoreFields.StoreID);
+	
+	
+	
+				relation.IsHierarchyRelation=true;
+				return relation;
+			}
+		}
 		/// <summary>Returns a new IEntityRelation object, between StoreEntity and ThreeDCartStoreEntity over the 1:1 relation they have, which is used to build a target per entity hierarchy, and is using the relation between the fields:
 		/// Store.StoreID - ThreeDCartStore.StoreID
 		/// </summary>
@@ -488,23 +505,6 @@ namespace ShipWorks.Data.Model.RelationClasses
 				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne, true);
 
 				relation.AddEntityFieldPair(StoreFields.StoreID, YahooStoreFields.StoreID);
-	
-	
-	
-				relation.IsHierarchyRelation=true;
-				return relation;
-			}
-		}
-		/// <summary>Returns a new IEntityRelation object, between StoreEntity and SparkPayStoreEntity over the 1:1 relation they have, which is used to build a target per entity hierarchy, and is using the relation between the fields:
-		/// Store.StoreID - SparkPayStore.StoreID
-		/// </summary>
-		internal IEntityRelation RelationToSubTypeSparkPayStoreEntity
-		{
-			get
-			{
-				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne, true);
-
-				relation.AddEntityFieldPair(StoreFields.StoreID, SparkPayStoreFields.StoreID);
 	
 	
 	
@@ -561,14 +561,14 @@ namespace ShipWorks.Data.Model.RelationClasses
 					return this.RelationToSubTypeShopifyStoreEntity;
 				case "ShopSiteStoreEntity":
 					return this.RelationToSubTypeShopSiteStoreEntity;
+				case "SparkPayStoreEntity":
+					return this.RelationToSubTypeSparkPayStoreEntity;
 				case "ThreeDCartStoreEntity":
 					return this.RelationToSubTypeThreeDCartStoreEntity;
 				case "VolusionStoreEntity":
 					return this.RelationToSubTypeVolusionStoreEntity;
 				case "YahooStoreEntity":
 					return this.RelationToSubTypeYahooStoreEntity;
-				case "SparkPayStoreEntity":
-					return this.RelationToSubTypeSparkPayStoreEntity;
 				default:
 					return null;
 			}
