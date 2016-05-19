@@ -105,7 +105,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             if(!IsPhysicalAddressValid())
             {
                 return new AssociateShipWorksWithItselfResponse(
-                    AssociateShipWorksWithItselfResponseType.AddressValidationFailed, 
+                    AssociateShipWorksWithItselfResponseType.AddressValidationFailed,
                     EnumHelper.GetDescription(AssociateShipWorksWithItselfResponseType.AddressValidationFailed));
             }
 
@@ -125,6 +125,11 @@ namespace ShipWorks.ApplicationCore.Licensing
             // Call AV server
             UspsAddressValidationResults uspsResult = uspsWebClient.ValidateAddress(PhysicalAddress);
             if (!uspsResult.IsSuccessfulMatch)
+            {
+                return false;
+            }
+
+            if (uspsResult.IsPoBox != null && uspsResult.IsPoBox.Value)
             {
                 return false;
             }
