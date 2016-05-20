@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using Autofac;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Filters.Content.SqlGeneration;
 using ShipWorks.Shipping;
@@ -11,30 +14,50 @@ namespace ShipWorks.Filters.Content.Conditions.Shipments
     {
         private readonly IShipmentTypeManager shipmentTypeManager;
         private readonly IShippingManager shippingManager;
+        private readonly ILifetimeScope scope;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public CarrierCondition() : this(new ShipmentTypeManagerWrapper(), new ShippingManagerWrapper())
+        public CarrierCondition()
         {
+            scope = IoC.BeginLifetimeScope();
+            shipmentTypeManager = scope.Resolve<IShipmentTypeManager>();
+            shippingManager = scope.Resolve<IShippingManager>();
             Value = ShipmentTypeCode.None;
         }
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public CarrierCondition(IShipmentTypeManager shipmentTypeManager, IShippingManager shippingManager)
         {
             this.shipmentTypeManager = shipmentTypeManager;
             this.shippingManager = shippingManager;
+            Value = ShipmentTypeCode.None;
         }
 
         /// <summary>
         /// Get the value choices the user will be provided with
         /// </summary>
-        public override ICollection<ValueChoice<ShipmentTypeCode>> ValueChoices =>
-            shipmentTypeManager.ShipmentTypes
-                .Where(t => t.ShipmentTypeCode != ShipmentTypeCode.BestRate)
-                .Where(t => t.ShipmentTypeCode != ShipmentTypeCode.Amazon || shippingManager.IsShipmentTypeConfigured(t.ShipmentTypeCode))
-                .Select(t => new ValueChoice<ShipmentTypeCode>(t.ShipmentTypeName, t.ShipmentTypeCode))
-                .ToArray();
+        public override ICollection<ValueChoice<ShipmentTypeCode>> ValueChoices
+        {
+            get
+            {
+                ValueChoice<ShipmentTypeCode>[] foo =  shipmentTypeManager.ShipmentTypes
+                    .Where(t => t.ShipmentTypeCode != ShipmentTypeCode.BestRate)
+                    .Where(
+                        t =>
+                            t.ShipmentTypeCode != ShipmentTypeCode.Amazon ||
+                            shippingManager.IsShipmentTypeConfigured(t.ShipmentTypeCode))
+                    .Select(t => new ValueChoice<ShipmentTypeCode>(t.ShipmentTypeName, t.ShipmentTypeCode))
+                    .ToArray();
+
+                scope?.Dispose();
+
+                return foo;
+            }
+        }
 
         /// <summary>
         /// Generate the sql
