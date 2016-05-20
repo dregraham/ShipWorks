@@ -44,7 +44,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
             }
             catch (ThreeDCartException ex)
             {
-                log.ErrorFormat("Failed to fetch online status codes from 3DCart: {0}", ex);
+                log.ErrorFormat("Failed to fetch online status codes from 3dcart: {0}", ex);
 
                 return null;
             }

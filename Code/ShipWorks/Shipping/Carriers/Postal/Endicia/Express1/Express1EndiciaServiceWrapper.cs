@@ -5,6 +5,7 @@ using System.Xml;
 using System.Web.Services.Protocols;
 using System.Reflection;
 using System.Net;
+using Interapptive.Shared.Net;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
 {

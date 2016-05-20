@@ -1239,6 +1239,12 @@
     <Compile Include=".\RelationClasses\SparkPayStoreRelations.cs">
       <GeneratedBy>LLBLGen Pro</GeneratedBy>
     </Compile>
+    <Compile Include=".\RelationClasses\ThreeDCartOrderRelations.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\EntityClasses\ThreeDCartOrderEntity.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

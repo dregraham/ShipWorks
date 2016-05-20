@@ -142,7 +142,13 @@
     <Compile Include="Platforms\Sears\SearsCredentialsTest.cs" />
     <Compile Include="Platforms\Sears\SearsCipherKeyTest.cs" />
     <Compile Include="Platforms\SparkPay\SparkPayShipmentFactoryTest.cs" />
-    <Compile Include="Platforms\Yahoo\EmbeddedResourceHelper.cs" />
+    <Compile Include="EmbeddedResourceHelper.cs" />
+    <EmbeddedResource Include="Platforms\ThreeDCart\Artifacts\GetProductResponse.json" />
+    <Compile Include="Platforms\ThreeDCart\ThreeDCartDownloaderTest.cs" />
+    <Compile Include="Platforms\ThreeDCart\ThreeDCartOnlineUpdaterTest.cs" />
+    <Compile Include="Platforms\ThreeDCart\ThreeDCartOrderIdentifierTest.cs" />
+    <Compile Include="Platforms\ThreeDCart\ThreeDCartProductCacheTest.cs" />
+    <Compile Include="Platforms\ThreeDCart\ThreeDCartStoreTypeTest.cs" />
     <Compile Include="Platforms\Yahoo\YahooApiDownloaderTest.cs" />
     <Compile Include="Platforms\Yahoo\YahooApiOnlineUpdaterTest.cs" />
     <Compile Include="Platforms\Yahoo\YahooApiWebClientTest.cs" />
@@ -180,6 +186,9 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+    <EmbeddedResource Include="Platforms\ThreeDCart\Artifacts\GetOrderResponseItemHasTwoAttributes.json" />
+    <EmbeddedResource Include="Platforms\ThreeDCart\Artifacts\GetOrderResponseItemHasNoAttributes.json" />
+    <EmbeddedResource Include="Platforms\ThreeDCart\Artifacts\GetOrderResponseItemHasOneAttribute.json" />
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\..\packages\InterapptiveAnalyzers.1.0.5714.23531\analyzers\dotnet\cs\InterapptiveAnalyzers.dll" />
@@ -204,7 +213,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Platforms\Yahoo\Artifacts\YahooGetOrderResponse.xml" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Platforms\ThreeDCart\Artifacts\GetOrderResponseWithKitItem.json" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

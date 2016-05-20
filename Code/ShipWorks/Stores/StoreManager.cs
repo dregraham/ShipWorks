@@ -22,6 +22,7 @@ using log4net;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Stores.Management;
 using ShipWorks.ApplicationCore.Setup;
+using ShipWorks.Filters;
 
 namespace ShipWorks.Stores
 {
@@ -421,6 +422,51 @@ namespace ShipWorks.Stores
             {
                 return StoreCollection.GetCount(adapter, StoreFields.SetupComplete == true);
             }
+        }
+
+        /// <summary>
+        /// Creates the online status filters for the given store.
+        /// </summary>
+        public static void CreateStoreStatusFilters(IWin32Window owner, StoreEntity store)
+        {
+            // Make sure we have a fresh up-to-date layout context in case we need to create store-specific filters
+            FilterLayoutContext.PushScope();
+
+            StoreFilterRepository storeFilterRepository = new StoreFilterRepository(store);
+            StoreFilterRepositorySaveResult result = storeFilterRepository.Save(false);
+            FilterLayoutContext.PopScope();
+
+            if (!result.FolderCreated)
+            {
+                MessageHelper.ShowWarning(owner,
+                    $"Could not create folder {result.StoreFolderName}. The folder already exists, and its criteria does not match this store.");
+                return;
+            }
+
+            StringBuilder sb = new StringBuilder();
+            if (result.CreatedFilters.Any())
+            {
+                sb.AppendFormat("The following filters were created in filter folder '{0}.'", result.StoreFolderName)
+                    .AppendLine();
+
+                result.CreatedFilters.ForEach(newFilter => sb.AppendFormat(" - {0}", newFilter.Name).AppendLine());
+            }
+            if (result.CollisionFilters.Any())
+            {
+                if (sb.Length > 0)
+                {
+                    sb.AppendLine();
+                }
+
+                sb.AppendFormat("Filters already existed in '{0}.'", result.StoreFolderName)
+                    .AppendLine()
+                    .AppendLine("These filters remained unchanged:");
+
+                result.CollisionFilters
+                    .ForEach(collisionFilter => sb.AppendFormat(" - {0}", collisionFilter.Name).AppendLine());
+            }
+
+            MessageHelper.ShowWarning(owner, sb.ToString());
         }
 
         /// <summary>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Interapptive.Shared.Utility;
 using ShipWorks.Actions.Tasks;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Management;
@@ -87,10 +88,17 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.WizardPages
             {
                 // Create the task instance
                 ThreeDCartOrderUpdateTask orderUpdateTask = (ThreeDCartOrderUpdateTask) new ActionTaskDescriptorBinding(typeof(ThreeDCartOrderUpdateTask), store).CreateInstance();
-           
-                // Apply the desired status code
-                ThreeDCartStatusCodeProvider statusProvider = new ThreeDCartStatusCodeProvider((ThreeDCartStoreEntity) store);
-                orderUpdateTask.StatusCode = statusProvider.GetCodeValue(status.Text);
+
+                if (((ThreeDCartStoreEntity) store).RestUser)
+                {
+                    orderUpdateTask.StatusCode = (int) EnumHelper.GetEnumByApiValue<Enums.ThreeDCartOrderStatus>(status.Text);
+                }
+                else
+                {
+                    // Apply the desired status code
+                    ThreeDCartStatusCodeProvider statusProvider = new ThreeDCartStatusCodeProvider((ThreeDCartStoreEntity)store);
+                    orderUpdateTask.StatusCode = statusProvider.GetCodeValue(status.Text);
+                }
 
                 tasks.Add(orderUpdateTask);
             }

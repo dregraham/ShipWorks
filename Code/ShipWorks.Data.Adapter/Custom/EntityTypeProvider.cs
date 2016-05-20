@@ -193,6 +193,7 @@ namespace ShipWorks.Data.Adapter.Custom
 				case "AmazonProfileEntity": return EntityType.AmazonProfileEntity;
 				case "SearsStoreEntity": return EntityType.SearsStoreEntity;
 				case "SparkPayStoreEntity": return EntityType.SparkPayStoreEntity;
+				case "ThreeDCartOrderEntity": return EntityType.ThreeDCartOrderEntity;
 				}
 			
 			throw new ArgumentException(string.Format("Entity type name '{0}' is not valid.", entityTypeName));
@@ -302,6 +303,7 @@ namespace ShipWorks.Data.Adapter.Custom
 				case EntityType.LemonStandOrderItemEntity: return new LemonStandOrderItemRelations();
 				case EntityType.SearsStoreEntity: return new SearsStoreRelations();
 				case EntityType.SparkPayStoreEntity: return new SparkPayStoreRelations();
+				case EntityType.ThreeDCartOrderEntity: return new ThreeDCartOrderRelations();
 				}
 			
 			throw new ArgumentException(string.Format("Entity type '{0}' is not valid or is not a part of a TargetPerEntity hierarchy.", entityType));

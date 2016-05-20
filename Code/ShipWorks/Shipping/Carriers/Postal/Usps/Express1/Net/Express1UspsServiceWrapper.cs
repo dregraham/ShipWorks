@@ -3,6 +3,7 @@ using System.Net;
 using System.Reflection;
 using System.Web.Services.Protocols;
 using System.Xml;
+using Interapptive.Shared.Net;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v36;
 

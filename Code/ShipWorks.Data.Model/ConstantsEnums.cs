@@ -9456,6 +9456,169 @@ namespace ShipWorks.Data.Model
 
 
 	/// <summary>
+	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ThreeDCartOrder.
+	/// </summary>
+    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
+	public enum ThreeDCartOrderFieldIndex:int
+	{
+		///<summary>OrderID. Inherited from Order</summary>
+		OrderID_Order,
+		///<summary>RowVersion. </summary>
+		RowVersion,
+		///<summary>StoreID. </summary>
+		StoreID,
+		///<summary>CustomerID. </summary>
+		CustomerID,
+		///<summary>OrderNumber. </summary>
+		OrderNumber,
+		///<summary>OrderNumberComplete. </summary>
+		OrderNumberComplete,
+		///<summary>OrderDate. </summary>
+		OrderDate,
+		///<summary>OrderTotal. </summary>
+		OrderTotal,
+		///<summary>LocalStatus. </summary>
+		LocalStatus,
+		///<summary>IsManual. </summary>
+		IsManual,
+		///<summary>OnlineLastModified. </summary>
+		OnlineLastModified,
+		///<summary>OnlineCustomerID. </summary>
+		OnlineCustomerID,
+		///<summary>OnlineStatus. </summary>
+		OnlineStatus,
+		///<summary>OnlineStatusCode. </summary>
+		OnlineStatusCode,
+		///<summary>RequestedShipping. </summary>
+		RequestedShipping,
+		///<summary>BillFirstName. </summary>
+		BillFirstName,
+		///<summary>BillMiddleName. </summary>
+		BillMiddleName,
+		///<summary>BillLastName. </summary>
+		BillLastName,
+		///<summary>BillCompany. </summary>
+		BillCompany,
+		///<summary>BillStreet1. </summary>
+		BillStreet1,
+		///<summary>BillStreet2. </summary>
+		BillStreet2,
+		///<summary>BillStreet3. </summary>
+		BillStreet3,
+		///<summary>BillCity. </summary>
+		BillCity,
+		///<summary>BillStateProvCode. </summary>
+		BillStateProvCode,
+		///<summary>BillPostalCode. </summary>
+		BillPostalCode,
+		///<summary>BillCountryCode. </summary>
+		BillCountryCode,
+		///<summary>BillPhone. </summary>
+		BillPhone,
+		///<summary>BillFax. </summary>
+		BillFax,
+		///<summary>BillEmail. </summary>
+		BillEmail,
+		///<summary>BillWebsite. </summary>
+		BillWebsite,
+		///<summary>BillAddressValidationSuggestionCount. </summary>
+		BillAddressValidationSuggestionCount,
+		///<summary>BillAddressValidationStatus. </summary>
+		BillAddressValidationStatus,
+		///<summary>BillAddressValidationError. </summary>
+		BillAddressValidationError,
+		///<summary>BillResidentialStatus. </summary>
+		BillResidentialStatus,
+		///<summary>BillPOBox. </summary>
+		BillPOBox,
+		///<summary>BillUSTerritory. </summary>
+		BillUSTerritory,
+		///<summary>BillMilitaryAddress. </summary>
+		BillMilitaryAddress,
+		///<summary>ShipFirstName. </summary>
+		ShipFirstName,
+		///<summary>ShipMiddleName. </summary>
+		ShipMiddleName,
+		///<summary>ShipLastName. </summary>
+		ShipLastName,
+		///<summary>ShipCompany. </summary>
+		ShipCompany,
+		///<summary>ShipStreet1. </summary>
+		ShipStreet1,
+		///<summary>ShipStreet2. </summary>
+		ShipStreet2,
+		///<summary>ShipStreet3. </summary>
+		ShipStreet3,
+		///<summary>ShipCity. </summary>
+		ShipCity,
+		///<summary>ShipStateProvCode. </summary>
+		ShipStateProvCode,
+		///<summary>ShipPostalCode. </summary>
+		ShipPostalCode,
+		///<summary>ShipCountryCode. </summary>
+		ShipCountryCode,
+		///<summary>ShipPhone. </summary>
+		ShipPhone,
+		///<summary>ShipFax. </summary>
+		ShipFax,
+		///<summary>ShipEmail. </summary>
+		ShipEmail,
+		///<summary>ShipWebsite. </summary>
+		ShipWebsite,
+		///<summary>ShipAddressValidationSuggestionCount. </summary>
+		ShipAddressValidationSuggestionCount,
+		///<summary>ShipAddressValidationStatus. </summary>
+		ShipAddressValidationStatus,
+		///<summary>ShipAddressValidationError. </summary>
+		ShipAddressValidationError,
+		///<summary>ShipResidentialStatus. </summary>
+		ShipResidentialStatus,
+		///<summary>ShipPOBox. </summary>
+		ShipPOBox,
+		///<summary>ShipUSTerritory. </summary>
+		ShipUSTerritory,
+		///<summary>ShipMilitaryAddress. </summary>
+		ShipMilitaryAddress,
+		///<summary>RollupItemCount. </summary>
+		RollupItemCount,
+		///<summary>RollupItemName. </summary>
+		RollupItemName,
+		///<summary>RollupItemCode. </summary>
+		RollupItemCode,
+		///<summary>RollupItemSKU. </summary>
+		RollupItemSKU,
+		///<summary>RollupItemLocation. </summary>
+		RollupItemLocation,
+		///<summary>RollupItemQuantity. </summary>
+		RollupItemQuantity,
+		///<summary>RollupItemTotalWeight. </summary>
+		RollupItemTotalWeight,
+		///<summary>RollupNoteCount. </summary>
+		RollupNoteCount,
+		///<summary>BillNameParseStatus. </summary>
+		BillNameParseStatus,
+		///<summary>BillUnparsedName. </summary>
+		BillUnparsedName,
+		///<summary>ShipNameParseStatus. </summary>
+		ShipNameParseStatus,
+		///<summary>ShipUnparsedName. </summary>
+		ShipUnparsedName,
+		///<summary>ShipSenseHashKey. </summary>
+		ShipSenseHashKey,
+		///<summary>ShipSenseRecognitionStatus. </summary>
+		ShipSenseRecognitionStatus,
+		///<summary>ShipAddressType. </summary>
+		ShipAddressType,
+		///<summary>OrderID. </summary>
+		OrderID,
+		///<summary>ThreeDCartOrderID. </summary>
+		ThreeDCartOrderID,
+		/// <summary></summary>
+		AmountOfFields
+	}
+
+
+	/// <summary>
 	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ThreeDCartOrderItem.
 	/// </summary>
     [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
@@ -9584,6 +9747,8 @@ namespace ShipWorks.Data.Model
 		StatusCodes,
 		///<summary>DownloadModifiedNumberOfDaysBack. </summary>
 		DownloadModifiedNumberOfDaysBack,
+		///<summary>RestUser. </summary>
+		RestUser,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -11265,6 +11430,8 @@ namespace ShipWorks.Data.Model
 		TemplateStoreSettingsEntity,
 		///<summary>TemplateUserSettings</summary>
 		TemplateUserSettingsEntity,
+		///<summary>ThreeDCartOrder</summary>
+		ThreeDCartOrderEntity,
 		///<summary>ThreeDCartOrderItem</summary>
 		ThreeDCartOrderItemEntity,
 		///<summary>ThreeDCartStore</summary>

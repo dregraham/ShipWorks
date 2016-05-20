@@ -1,4 +1,5 @@
-﻿using ShipWorks.ApplicationCore;
+﻿using Interapptive.Shared.Net;
+using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Shipping.Carriers.Postal.Express1;
 

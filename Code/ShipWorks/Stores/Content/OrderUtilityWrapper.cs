@@ -16,6 +16,14 @@ namespace ShipWorks.Stores.Content
         }
 
         /// <summary>
+        /// Calculates the order total.
+        /// </summary>
+        public decimal CalculateOrderTotal(OrderEntity order)
+        {
+            return OrderUtility.CalculateTotal(order);
+        }
+		
+        /// <summary>
         /// Get a populated order from a order ID
         /// </summary>
         public OrderEntity FetchOrder(long orderID)
