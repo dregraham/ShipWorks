@@ -27,6 +27,7 @@ using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Reflection;
+using System.Security.Cryptography.X509Certificates;
 using System.Web.Services.Protocols;
 using System.Xml;
 using System.Xml.Linq;
@@ -1122,13 +1123,17 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         private static void ValidateInterapptiveCertificate(HttpWebRequest httpWebRequest)
         {
+#pragma warning disable 168
+            X509Certificate certificate;
+#pragma warning restore 168
+
 #if !DEBUG
             if (httpWebRequest.ServicePoint == null)
             {
                 throw new TangoException("The SSL certificate on the server is invalid.");
             }
 
-            X509Certificate certificate = httpWebRequest.ServicePoint.Certificate;
+            certificate = httpWebRequest.ServicePoint.Certificate;
 
             if (certificate == null)
             {
