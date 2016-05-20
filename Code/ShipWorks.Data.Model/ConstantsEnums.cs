@@ -6435,6 +6435,8 @@ namespace ShipWorks.Data.Model
 		StoreID,
 		///<summary>ConnectionString. </summary>
 		ConnectionString,
+		///<summary>Map. </summary>
+		Map,
 		/// <summary></summary>
 		AmountOfFields
 	}

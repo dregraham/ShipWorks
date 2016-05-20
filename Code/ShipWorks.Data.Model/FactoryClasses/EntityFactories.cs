@@ -4041,7 +4041,6 @@ namespace ShipWorks.Data.Model.FactoryClasses
 			
 			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewOdbcStore
 			// __LLBLGENPRO_USER_CODE_REGION_END
-			
 			return toReturn;
 		}
 		
@@ -4053,7 +4052,6 @@ namespace ShipWorks.Data.Model.FactoryClasses
 			
 			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewOdbcStoreUsingFields
 			// __LLBLGENPRO_USER_CODE_REGION_END
-			
 			return toReturn;
 		}
 		

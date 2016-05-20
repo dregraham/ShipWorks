@@ -342,6 +342,23 @@ namespace ShipWorks.Data.Model.RelationClasses
 				return relation;
 			}
 		}
+		/// <summary>Returns a new IEntityRelation object, between StoreEntity and OdbcStoreEntity over the 1:1 relation they have, which is used to build a target per entity hierarchy, and is using the relation between the fields:
+		/// Store.StoreID - OdbcStore.StoreID
+		/// </summary>
+		internal IEntityRelation RelationToSubTypeOdbcStoreEntity
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne, true);
+
+				relation.AddEntityFieldPair(StoreFields.StoreID, OdbcStoreFields.StoreID);
+	
+	
+	
+				relation.IsHierarchyRelation=true;
+				return relation;
+			}
+		}
 		/// <summary>Returns a new IEntityRelation object, between StoreEntity and OrderMotionStoreEntity over the 1:1 relation they have, which is used to build a target per entity hierarchy, and is using the relation between the fields:
 		/// Store.StoreID - OrderMotionStore.StoreID
 		/// </summary>
@@ -444,6 +461,23 @@ namespace ShipWorks.Data.Model.RelationClasses
 				return relation;
 			}
 		}
+		/// <summary>Returns a new IEntityRelation object, between StoreEntity and SparkPayStoreEntity over the 1:1 relation they have, which is used to build a target per entity hierarchy, and is using the relation between the fields:
+		/// Store.StoreID - SparkPayStore.StoreID
+		/// </summary>
+		internal IEntityRelation RelationToSubTypeSparkPayStoreEntity
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne, true);
+
+				relation.AddEntityFieldPair(StoreFields.StoreID, SparkPayStoreFields.StoreID);
+	
+	
+	
+				relation.IsHierarchyRelation=true;
+				return relation;
+			}
+		}
 		/// <summary>Returns a new IEntityRelation object, between StoreEntity and ThreeDCartStoreEntity over the 1:1 relation they have, which is used to build a target per entity hierarchy, and is using the relation between the fields:
 		/// Store.StoreID - ThreeDCartStore.StoreID
 		/// </summary>
@@ -495,40 +529,6 @@ namespace ShipWorks.Data.Model.RelationClasses
 				return relation;
 			}
 		}
-		/// <summary>Returns a new IEntityRelation object, between StoreEntity and SparkPayStoreEntity over the 1:1 relation they have, which is used to build a target per entity hierarchy, and is using the relation between the fields:
-		/// Store.StoreID - SparkPayStore.StoreID
-		/// </summary>
-		internal IEntityRelation RelationToSubTypeSparkPayStoreEntity
-		{
-			get
-			{
-				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne, true);
-
-				relation.AddEntityFieldPair(StoreFields.StoreID, SparkPayStoreFields.StoreID);
-	
-	
-	
-				relation.IsHierarchyRelation=true;
-				return relation;
-			}
-		}
-		/// <summary>Returns a new IEntityRelation object, between StoreEntity and OdbcStoreEntity over the 1:1 relation they have, which is used to build a target per entity hierarchy, and is using the relation between the fields:
-		/// Store.StoreID - OdbcStore.StoreID
-		/// </summary>
-		internal IEntityRelation RelationToSubTypeOdbcStoreEntity
-		{
-			get
-			{
-				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne, true);
-
-				relation.AddEntityFieldPair(StoreFields.StoreID, OdbcStoreFields.StoreID);
-	
-	
-	
-				relation.IsHierarchyRelation=true;
-				return relation;
-			}
-		}
 		/// <summary>Returns the relation object the entity, to which this relation factory belongs, has with the subtype with the specified name</summary>
 		/// <param name="subTypeEntityName">name of direct subtype which is a subtype of the current entity through the relation to return.</param>
 		/// <returns>relation which makes the current entity a supertype of the subtype entity with the name specified, or null if not applicable/found</returns>
@@ -566,6 +566,8 @@ namespace ShipWorks.Data.Model.RelationClasses
 					return this.RelationToSubTypeNetworkSolutionsStoreEntity;
 				case "NeweggStoreEntity":
 					return this.RelationToSubTypeNeweggStoreEntity;
+				case "OdbcStoreEntity":
+					return this.RelationToSubTypeOdbcStoreEntity;
 				case "OrderMotionStoreEntity":
 					return this.RelationToSubTypeOrderMotionStoreEntity;
 				case "PayPalStoreEntity":
@@ -578,16 +580,14 @@ namespace ShipWorks.Data.Model.RelationClasses
 					return this.RelationToSubTypeShopifyStoreEntity;
 				case "ShopSiteStoreEntity":
 					return this.RelationToSubTypeShopSiteStoreEntity;
+				case "SparkPayStoreEntity":
+					return this.RelationToSubTypeSparkPayStoreEntity;
 				case "ThreeDCartStoreEntity":
 					return this.RelationToSubTypeThreeDCartStoreEntity;
 				case "VolusionStoreEntity":
 					return this.RelationToSubTypeVolusionStoreEntity;
 				case "YahooStoreEntity":
 					return this.RelationToSubTypeYahooStoreEntity;
-				case "SparkPayStoreEntity":
-					return this.RelationToSubTypeSparkPayStoreEntity;
-				case "OdbcStoreEntity":
-					return this.RelationToSubTypeOdbcStoreEntity;
 				default:
 					return null;
 			}

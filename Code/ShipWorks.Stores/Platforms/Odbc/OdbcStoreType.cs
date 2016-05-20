@@ -58,7 +58,8 @@ namespace ShipWorks.Stores.Platforms.Odbc
         {
             OdbcStoreEntity store = new OdbcStoreEntity
             {
-                ConnectionString = string.Empty
+                ConnectionString = string.Empty,
+                Map = string.Empty
             };
 
             InitializeStoreDefaults(store);
