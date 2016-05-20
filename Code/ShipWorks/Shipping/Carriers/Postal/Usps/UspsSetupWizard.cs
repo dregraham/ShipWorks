@@ -125,6 +125,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             Pages.Add(new ShippingWizardPageAutomation(shipmentType));
             Pages.Add(new ShippingWizardPageFinish(shipmentType));
 
+            Pages.Remove(wizardPageError);
+
             if (ShippingManager.IsShipmentTypeConfigured(ShipmentTypeCode.Usps))
             {
                 Pages.Remove(wizardPageOptions);
@@ -807,20 +809,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
                 AssociateShipWorksWithItselfResponse response = request.Execute();
 
-                switch (response.ResponseType)
+                if (response.ResponseType == AssociateShipWorksWithItselfResponseType.Success)
                 {
-                    case AssociateShipWorksWithItselfResponseType.Success:
-                        registrationComplete = true;
-                        PopulateAccountFromAssociateShipworksWithItselfRequest(request);
-                        break;
-
-                    case AssociateShipWorksWithItselfResponseType.POBoxNotAllowed:
-                        break;
-
-                    default:
-                        MessageHelper.ShowError(this, response.Message);
-                        e.NextPage = CurrentPage;
-                        break;
+                    registrationComplete = true;
+                    PopulateAccountFromAssociateShipworksWithItselfRequest(request);
                 }
             }
         }
@@ -882,9 +874,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                         PopulateAccountFromAssociateShipworksWithItselfRequest(request);
                         break;
 
-                    case AssociateShipWorksWithItselfResponseType.POBoxNotAllowed:
-                        MessageHelper.ShowError(this, response.Message);
-                        e.NextPage = CurrentPage;
+                    case AssociateShipWorksWithItselfResponseType.UnknownError:
+                        UspsAccountManager.DeleteAccount(UspsAccount);
+                        UspsAccount = null;
+
+                        Pages.Add(wizardPageError);
+                        e.NextPage = wizardPageError;
+
+                        FinishCancels = true;
+                        LastPageCancelable = false;
+                        BackEnabled = false;
                         break;
 
                     default:
