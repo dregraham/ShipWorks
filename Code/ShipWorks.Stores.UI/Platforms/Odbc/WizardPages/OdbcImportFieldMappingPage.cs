@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Windows.Forms;
 using Autofac;
+using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Management;
@@ -36,6 +38,14 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
             if (store == null)
             {
                 store = GetStore<OdbcStoreEntity>();
+            }
+
+            if (viewModel.SelectedTable == null)
+            {
+                MessageHelperWrapper messageHelper = new MessageHelperWrapper(() => this);
+                messageHelper.ShowError("Please setup your import map before continuing to the next page.");
+                e.NextPage = this;
+                return;
             }
 
             viewModel.Save(store);
