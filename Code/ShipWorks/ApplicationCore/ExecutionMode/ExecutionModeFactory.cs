@@ -33,13 +33,13 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
             {
                 return new ServiceExecutionMode(commandLine.ServiceName, commandLine.ServiceOptions);
             }
-            
+
             if (commandLine.IsCommandSpecified)
             {
                 return new CommandLineExecutionMode(commandLine.CommandName, commandLine.CommandOptions);
             }
 
-            return new UserInterfaceExecutionMode();
+            return new UserInterfaceExecutionMode(commandLine.ProgramOptions);
         }
     }
 }

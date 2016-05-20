@@ -1,21 +1,16 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows.Forms;
-using System.Data.SqlClient;
-using System.Threading;
-using System.Diagnostics;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.SqlServer.General;
-using ShipWorks.UI;
-using log4net;
-using ShipWorks.ApplicationCore.Appearance;
-using ShipWorks.ApplicationCore.Crashes;
-using ShipWorks.UI.Utility;
-using Interapptive.Shared.Data;
-using ShipWorks.Common.Threading;
 using System.Data;
+using System.Data.SqlClient;
+using System.Diagnostics;
+using System.Threading;
+using System.Windows.Forms;
 using Interapptive.Shared;
+using Interapptive.Shared.Data;
+using log4net;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.ApplicationCore.Crashes;
+using ShipWorks.Common.Threading;
+using ShipWorks.UI;
 
 namespace ShipWorks.Data.Connection
 {
@@ -55,10 +50,10 @@ namespace ShipWorks.Data.Connection
         /// <summary>
         /// Should only be used in a debug scenario to figure out whos creating connections and why
         /// </summary>
-        public static bool LogConnectionCallstacks 
-        { 
-            get; 
-            set; 
+        public static bool LogConnectionCallstacks
+        {
+            get;
+            set;
         }
 
         /// <summary>
@@ -109,7 +104,7 @@ namespace ShipWorks.Data.Connection
                 if (result == ReconnectResult.Canceled)
                 {
                     log.Warn("User has elected to exit ShipWorks");
-                    Program.MainForm.Close();                   
+                    Program.MainForm.Close();
                     return;
                 }
 
@@ -160,7 +155,7 @@ namespace ShipWorks.Data.Connection
                 con.Close();
             }
 
-            // now re-try 
+            // now re-try
             OpenConnection(con);
         }
 
@@ -175,7 +170,7 @@ namespace ShipWorks.Data.Connection
                 throw new ArgumentNullException("con");
             }
 
-            if (CrashWindow.IsApplicationCrashed)
+            if (CrashDialog.IsApplicationCrashed)
             {
                 throw new ConnectionLostException("The application is being shutdown due to a crash.");
             }
@@ -191,17 +186,17 @@ namespace ShipWorks.Data.Connection
                 {
                     throw new ConnectionLostException("The database connection has been permanently lost.");
                 }
-            
+
                 // Some other thread detected a disconnect so we must either wait (background thread) or show the reconnect window (foreground)
                 if (attemptingReconnect)
                 {
                     log.InfoFormat("Detected another thread is attempting or waiting for a reconnect.");
 
-                    // release the shared lock 
+                    // release the shared lock
                     Monitor.Exit(connectionLock);
                     releaseRequired = false;
 
-                    // Reconnect to the database 
+                    // Reconnect to the database
                     Reconnect(con);
 
                     // exit early because we reconnected OK
@@ -352,7 +347,7 @@ namespace ShipWorks.Data.Connection
         }
 
         /// <summary>
-        ///  
+        ///
         /// </summary>
         /// <returns></returns>
         private static bool IsUIThread()
@@ -363,10 +358,10 @@ namespace ShipWorks.Data.Connection
         /// <summary>
         /// Validates that an open connection is actually open.  With connection pooling, a connection in the Open state
         /// may not actually have a real connection to the database if the database has gone down or the network has dropped.
-        /// 
+        ///
         /// This also serves to reset the connection isolation level to READ COMMITTED for every connection, as the connection pool
         /// does not do this! http://support.microsoft.com/kb/309544
-        /// 
+        ///
         /// </summary>
         public static void ValidateOpenConnection(SqlConnection con)
         {
@@ -405,7 +400,7 @@ namespace ShipWorks.Data.Connection
 
                 if (Program.ExecutionMode.IsUIDisplayed)
                 {
-                    // We have to show the UI on the UI thread.  Otherwise behavior is a little undefined.  The only problem would be 
+                    // We have to show the UI on the UI thread.  Otherwise behavior is a little undefined.  The only problem would be
                     // if the UI thread is currently blocking waiting on a background operation that is waiting for the connection to come back.
                     // But as far as I know we don't do this anyhwere
                     Program.MainForm.Invoke(new MethodInvoker(() =>
@@ -462,10 +457,10 @@ namespace ShipWorks.Data.Connection
         /// </summary>
         private static bool IsSqlConnectionException(Exception ex)
         {
-            int[] connectionErrors = new int[] { 
-                232,   // Win32: The pipe is being closed. 
-                233,   // Win32: No process is on the other end of the pipe. 
-                10054, // Win32: An existing connection was forcibly closed by the remote host. 
+            int[] connectionErrors = new int[] {
+                232,   // Win32: The pipe is being closed.
+                233,   // Win32: No process is on the other end of the pipe.
+                10054, // Win32: An existing connection was forcibly closed by the remote host.
                 17142  // SQL: SQL Server service has been paused. No new connections will be allowed. To resume the service, use SQL Computer Manager or the Services application in Control Panel.
             };
 

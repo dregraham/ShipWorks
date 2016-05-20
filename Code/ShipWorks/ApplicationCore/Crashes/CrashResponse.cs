@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Xml.Linq;
+﻿using System.Text.RegularExpressions;
 using System.Windows.Forms;
-using System.Text.RegularExpressions;
+using System.Xml.Linq;
 using Interapptive.Shared.UI;
 
 namespace ShipWorks.ApplicationCore.Crashes
@@ -16,10 +12,6 @@ namespace ShipWorks.ApplicationCore.Crashes
     {
         const string defaultMessageForUser = "Thank you for helping us to improve ShipWorks.";
 
-        int fbCase;
-
-        string scoutMessage;
-        int occurrences;
         bool stopReporting;
 
         /// <summary>
@@ -46,9 +38,9 @@ namespace ShipWorks.ApplicationCore.Crashes
             XElement caseElement = root.Element("case");
             CrashResponse response = new CrashResponse();
 
-            response.fbCase = (int) caseElement.Element("ixBug");
-            response.scoutMessage = (string) caseElement.Element("sScoutMessage");
-            response.occurrences = (int) caseElement.Element("c");
+            response.FogBugzCase = (int) caseElement.Element("ixBug");
+            response.ScoutMessage = (string) caseElement.Element("sScoutMessage");
+            response.Occurrences = (int) caseElement.Element("c");
             response.stopReporting = (bool) caseElement.Element("fScoutStopReporting");
 
             return response;
@@ -61,20 +53,20 @@ namespace ShipWorks.ApplicationCore.Crashes
         {
             string message;
 
-            if (string.IsNullOrEmpty(scoutMessage))
+            if (string.IsNullOrEmpty(ScoutMessage))
             {
                 message = "Thank you for helping us to improve ShipWorks.";
             }
             else
             {
-                Match match = Regex.Match(scoutMessage, "FixedFor:(?<version>.*)", RegexOptions.IgnoreCase);
+                Match match = Regex.Match(ScoutMessage, "FixedFor:(?<version>.*)", RegexOptions.IgnoreCase);
                 if (match.Success)
                 {
                     message = string.Format("This crash has been fixed for ShipWorks {0}.", match.Groups["version"].Value);
                 }
                 else
                 {
-                    message = scoutMessage.Replace("\\n", "\n");
+                    message = ScoutMessage.Replace("\\n", "\n");
                 }
             }
 
@@ -84,8 +76,8 @@ namespace ShipWorks.ApplicationCore.Crashes
             }
 
             message += string.Format("\n\n[This crash has been logged as support case {0}{1}]",
-                fbCase,
-                (occurrences == 0) ? "" : string.Format("-{0}", occurrences + 1));
+                FogBugzCase,
+                (Occurrences == 0) ? "" : string.Format("-{0}", Occurrences + 1));
 
             MessageHelper.ShowInformation(owner, message);
         }
@@ -93,25 +85,16 @@ namespace ShipWorks.ApplicationCore.Crashes
         /// <summary>
         /// The case number in FogBugz
         /// </summary>
-        public int FogBugzCase
-        {
-            get { return fbCase; }
-        }
+        public int FogBugzCase { get; private set; }
 
         /// <summary>
         /// The number of times the unique identifier for this case has been submitted
         /// </summary>
-        public int Occurrences
-        {
-            get { return occurrences; }
-        }
+        public int Occurrences { get; private set; }
 
         /// <summary>
         /// The message specified by FogBugz to be displayed to the user.  Can be null if no message was indicated.
         /// </summary>
-        public string ScoutMessage
-        {
-            get { return scoutMessage; }
-        }
+        public string ScoutMessage { get; private set; }
     }
 }

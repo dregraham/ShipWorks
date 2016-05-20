@@ -1,41 +1,26 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
 using System.Data;
-using System.Text;
-using System.Windows.Forms;
-using Divelements.SandGrid;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data;
 using System.Diagnostics;
-using log4net;
-using ShipWorks.Data.Model.EntityClasses;
-using System.Threading;
-using Divelements.SandGrid.Specialized;
-using ShipWorks.Filters;
-using ShipWorks.Properties;
-using System.Reflection;
-using System.Collections;
-using Interapptive.Shared;
-using System.Data.SqlClient;
-using ShipWorks.Data.Grid.Columns;
-using ShipWorks.UI;
-using ShipWorks.Users;
-using ShipWorks.ApplicationCore;
-using ShipWorks.Data.Utility;
-using ShipWorks.Data.Connection;
-using ShipWorks.ApplicationCore.Interaction;
-using ShipWorks.UI.Controls.SandGrid;
-using ShipWorks.Data.Grid.Columns.ValueProviders;
+using System.Drawing;
 using System.Linq;
+using System.Reflection;
+using System.Threading;
+using System.Windows.Forms;
 using Autofac;
+using Divelements.SandGrid;
+using Interapptive.Shared;
+using log4net;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Crashes;
-using Interapptive.Shared.Utility;
-using ShipWorks.UI.Controls.Design;
-using ShipWorks.Common.Threading;
-using Interapptive.Shared.Win32;
+using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.ApplicationCore.Licensing;
+using ShipWorks.Common.Threading;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Utility;
 using ShipWorks.Editions;
 
 namespace ShipWorks.Data.Grid.Paging
@@ -99,7 +84,7 @@ namespace ShipWorks.Data.Grid.Paging
         //   9) ShipWorks needs to know when this is happening, so it can clear the virtual selection as well.
         //   10) This is made worse by the fact that when the grid calls “Clear” on the selection collection, it’s not virtual.  But I can inject my custom ArrayList.  However, the grid optimizes when there are few selected items, and calls ArrayList.RemoveAt on each one, instead of ArrayList.Clear.  So to know if SelectedElementCollection.Clear is really being called, you have to walk the stack from RemoveAt.
         //   11) Once you know that SelectedElementCollection.Clear is being called, it could be called for one of two reasons.  a) To actually do a full clear like I gave an example of.  b) Sometimes to add element X to the section, it caches the selection, clears it, then adds back in cache + X.
-        //   In case b) it WOULD have added back in the virtual selection had it known about it, so we have to detect whether its case a (and the virtual selection should be cleared) or b (and the virtual selection should stay)       
+        //   In case b) it WOULD have added back in the virtual selection had it known about it, so we have to detect whether its case a (and the virtual selection should be cleared) or b (and the virtual selection should stay)
         #endregion
 
         HashSet<long> virtualSelection = new HashSet<long>();
@@ -190,7 +175,7 @@ namespace ShipWorks.Data.Grid.Paging
             // All versions of Sort go through here.  Do nothing.
             public override void Sort(int index, int count, IComparer comparer)
             {
-                
+
             }
         }
 
@@ -245,22 +230,22 @@ namespace ShipWorks.Data.Grid.Paging
             /// <summary>
             /// Determine what type of clear action SandGrid is currently doing.  We have to detect:
             /// 1) That SelectedElementCollection.Clear has been called.  We can't simply rely on the fact
-            ///    that ArrayList.Clear is called or not, since SandGrid fucking optimizes the call to SEC.Clear by 
+            ///    that ArrayList.Clear is called or not, since SandGrid fucking optimizes the call to SEC.Clear by
             ///    doing an individual remove of elements when the count is less than 20.  So in the RemoveAt function
             ///    it has to walk the stack to determine if the item is being removed do to a SEC.Clear, or because
             ///    its just individually being removed.
-            /// 2) If SelectedElementCollection.Clear has been called, it could be for 2 reasons.  
-            ///    a) The first is that the grid is intending that the entire selection by cleared.  This would be like if you 
-            ///       clicked (without holding CTRL or SHIFT) on an unselected row.  All the other selection would 
+            /// 2) If SelectedElementCollection.Clear has been called, it could be for 2 reasons.
+            ///    a) The first is that the grid is intending that the entire selection by cleared.  This would be like if you
+            ///       clicked (without holding CTRL or SHIFT) on an unselected row.  All the other selection would
             ///       be first totally cleared.  In this case our entire virtual selection obviously needs cleared as well.
-            ///    b) The second is that the grid is adding a removing a single item from the selection, but does it by 
+            ///    b) The second is that the grid is adding a removing a single item from the selection, but does it by
             ///       clearing the selection, and then re-adding everything that needs to still be selected.  When doing a drag
-            ///       operation it basically caches the selection at the start, and as you drag keeps doing a clear followed by a 
+            ///       operation it basically caches the selection at the start, and as you drag keeps doing a clear followed by a
             ///       re-add of the cached selection.  In this case the cached selection does not know about our virtual selection
             ///       and wouldn't get re-added automatically by the grid.  So we need to preserver our virtual selection in this case.
-            ///       
+            ///
             /// Timing Note: On my machine, it took about 0.0001 to execute this method.  Not too bad.
-            /// 
+            ///
             /// </summary>
             private ClearAction GetClearAction()
             {
@@ -285,7 +270,7 @@ namespace ShipWorks.Data.Grid.Paging
                         {
                             MethodBase previousMethod = trace.GetFrame(i + 1).GetMethod();
 
-                            // As of the version of SandGrid this was written for, the only method within SelectedElementColleciton 
+                            // As of the version of SandGrid this was written for, the only method within SelectedElementColleciton
                             // that calls Clear, is the one that is doing the psuedo-clear (described in 2b above).  So checking that the
                             // next method up in the stack comes from SelectedElementCollection will tell us if that is what's going on.
                             if (previousMethod.DeclaringType == typeof(SelectedElementCollection))
@@ -385,7 +370,7 @@ namespace ShipWorks.Data.Grid.Paging
                         owner.ClearVirtualSelectionAll(true);
                         break;
 
-                    // A psuedo clear, which means the grid is just trying to clear, and then restore.  So what we'll do 
+                    // A psuedo clear, which means the grid is just trying to clear, and then restore.  So what we'll do
                     // is just clear from our virtual what we know to be selected now.  Then on our OnSelectionChanged handler
                     // what ends up being selected will all be handled back.
                     case ClearAction.PsuedoClear:
@@ -487,7 +472,7 @@ namespace ShipWorks.Data.Grid.Paging
 
         /// <summary>
         /// Replace the current gateway with the specified gateway, but leave the rows and selection in place.  The rows simply get reset, and so will display
-        /// the current data (ghosted) until the new data is loaded.  
+        /// the current data (ghosted) until the new data is loaded.
         /// </summary>
         protected void UpdateGateway(IEntityGateway newGateway)
         {
@@ -642,7 +627,7 @@ namespace ShipWorks.Data.Grid.Paging
         }
 
         /// <summary>
-        /// Reloads the contents of the grid by resetting the underlying gateway.  The virtual selection is preserved, but 
+        /// Reloads the contents of the grid by resetting the underlying gateway.  The virtual selection is preserved, but
         /// the removed tracker is checked.  So if you had changed the query of the gateway, all entities that matched the old gateway
         /// but not the new gateway will still be considered selected (unless they were deleted).
         /// </summary>
@@ -671,7 +656,7 @@ namespace ShipWorks.Data.Grid.Paging
             // Cap it to our max amount
             count = (int) Math.Min(MaxVirtualRowCount, count);
 
-            // We have to remove some rows.  
+            // We have to remove some rows.
             if (Rows.Count > count)
             {
                 // If there are less than threshold, then optimize by just removing each individual one that needs removed, without having to clear
@@ -793,7 +778,7 @@ namespace ShipWorks.Data.Grid.Paging
 
         #region Common
 
-        /// <summary> 
+        /// <summary>
         /// Clean up any resources being used.
         /// </summary>
         protected override void Dispose(bool disposing)
@@ -980,7 +965,7 @@ namespace ShipWorks.Data.Grid.Paging
         }
 
         /// <summary>
-        /// Add to the current virtual selection.  
+        /// Add to the current virtual selection.
         /// </summary>
         private void AddVirtualSelection(long entityID)
         {
@@ -1155,7 +1140,7 @@ namespace ShipWorks.Data.Grid.Paging
             // Clear what the grid thinks to be selected (virtual selection is preserved). No reason to maintain the selection, since after sorting
             // the selected row indexes will be different.
             suspendSelectionProcessing = true;
-           
+
             base.SelectedElements.Clear();
 
             suspendSelectionProcessing = false;
@@ -1242,7 +1227,7 @@ namespace ShipWorks.Data.Grid.Paging
             }
 
             // If our connection's trashed our we already crashed, no need to go get data
-            if (ConnectionMonitor.Status != ConnectionMonitorStatus.Normal || CrashWindow.IsApplicationCrashed)
+            if (ConnectionMonitor.Status != ConnectionMonitorStatus.Normal || CrashDialog.IsApplicationCrashed)
             {
                 gridRow.DataState = PagedDataState.LoadDeferred;
                 return;
@@ -1459,7 +1444,7 @@ namespace ShipWorks.Data.Grid.Paging
             suspendSelectionProcessing = true;
 
             gridRow.Selected = virtualSelection.Contains(entityID);
-            
+
             suspendSelectionProcessing = false;
         }
 

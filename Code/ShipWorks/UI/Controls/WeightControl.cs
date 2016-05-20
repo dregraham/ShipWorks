@@ -1,24 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using ShipWorks.UI.Utility;
-using System.Text.RegularExpressions;
-using Interapptive.Shared;
-using Interapptive.Shared.Utility;
-using ShipWorks.Users;
-using System.Threading;
-using ShipWorks.ApplicationCore.Crashes;
-using System.Diagnostics;
-using ShipWorks.UI.Controls.Design;
-using Interapptive.Shared.IO.Hardware.Scales;
-using ShipWorks.Common.Threading;
-using Interapptive.Shared.Business;
 using System.Reflection;
+using System.Text.RegularExpressions;
+using System.Threading;
+using System.Windows.Forms;
+using Interapptive.Shared.Business;
+using Interapptive.Shared.IO.Hardware.Scales;
+using ShipWorks.ApplicationCore.Crashes;
+using ShipWorks.Common.Threading;
+using ShipWorks.UI.Controls.Design;
+using ShipWorks.UI.Utility;
+using ShipWorks.Users;
 
 namespace ShipWorks.UI.Controls
 {
@@ -116,8 +108,8 @@ namespace ShipWorks.UI.Controls
         {
             get
             {
-                // Always return the currrent weight rather than the parsed weight since 
-                // the current weight will be the most precise (i.e. it is not impacted 
+                // Always return the currrent weight rather than the parsed weight since
+                // the current weight will be the most precise (i.e. it is not impacted
                 // by rounding for display purposes).
                 return currentWeight;
             }
@@ -134,7 +126,7 @@ namespace ShipWorks.UI.Controls
                         ClearError();
                     }
 
-                    FormatWeightText();   
+                    FormatWeightText();
                 }
             }
         }
@@ -216,7 +208,7 @@ namespace ShipWorks.UI.Controls
                 }
             }
         }
-        
+
         /// <summary>
         /// Controls if the weigh button and live weight display is visible
         /// </summary>
@@ -224,9 +216,9 @@ namespace ShipWorks.UI.Controls
         [DefaultValue(true)]
         public bool ShowWeighButton
         {
-            get 
-            { 
-                return showWeighButton; 
+            get
+            {
+                return showWeighButton;
             }
             set
             {
@@ -257,9 +249,9 @@ namespace ShipWorks.UI.Controls
         [DefaultValue(false)]
         public bool ReadOnly
         {
-            get 
-            { 
-                return textBox.ReadOnly; 
+            get
+            {
+                return textBox.ReadOnly;
             }
             set
             {
@@ -270,7 +262,7 @@ namespace ShipWorks.UI.Controls
         }
 
         /// <summary>
-        /// Clear the contents of the weight control.  The content will remained clear until 
+        /// Clear the contents of the weight control.  The content will remained clear until
         /// the user types something or the Weight propery is assigned.
         /// </summary>
         [DefaultValue(false)]
@@ -460,7 +452,7 @@ namespace ShipWorks.UI.Controls
         /// </summary>
         private void FormatWeightText(double weight)
         {
-            string result = FormatWeight(weight, UserSession.User == null ? displayFormat : (WeightDisplayFormat)UserSession.User.Settings.ShippingWeightFormat);
+            string result = FormatWeight(weight, UserSession.User == null ? displayFormat : (WeightDisplayFormat) UserSession.User.Settings.ShippingWeightFormat);
 
             lastDisplay = result;
 
@@ -474,7 +466,7 @@ namespace ShipWorks.UI.Controls
         public static string FormatWeight(double weight, WeightDisplayFormat displayFormat)
         {
             string result;
-            
+
             if (displayFormat == WeightDisplayFormat.FractionalPounds)
             {
                 result = string.Format("{0:0.0#} lbs", weight);
@@ -513,7 +505,7 @@ namespace ShipWorks.UI.Controls
                 }
                 else
                 {
-                    FormatWeightText();   
+                    FormatWeightText();
                 }
             }
             else
@@ -586,7 +578,7 @@ namespace ShipWorks.UI.Controls
                 SetParsedWeight();
             }
 
- 	        base.OnLeave(e);
+            base.OnLeave(e);
         }
 
         /// <summary>
@@ -601,11 +593,11 @@ namespace ShipWorks.UI.Controls
                 ScaleReadResult thisResult = ScaleReader.ReadScale(true);
 
                 // Quit when disposed or crashed
-                if (this.IsDisposed || this.Disposing || Program.MainForm.Disposing || Program.MainForm.IsDisposed || CrashWindow.IsApplicationCrashed)
+                if (this.IsDisposed || this.Disposing || Program.MainForm.Disposing || Program.MainForm.IsDisposed || CrashDialog.IsApplicationCrashed)
                 {
                     break;
                 }
-                
+
                 // Don't bother if nothing has changed or we arent visible
                 if (Visible && Program.MainForm.Visible && !object.Equals(lastResult, thisResult))
                 {
@@ -638,7 +630,7 @@ namespace ShipWorks.UI.Controls
             {
                 if (weight != null)
                 {
-                    liveWeight.Text = string.Format("({0})", FormatWeight(weight.Value, (WeightDisplayFormat)UserSession.User.Settings.ShippingWeightFormat));
+                    liveWeight.Text = string.Format("({0})", FormatWeight(weight.Value, (WeightDisplayFormat) UserSession.User.Settings.ShippingWeightFormat));
                     liveWeight.Visible = true;
 
                     // Make sure the error is clear

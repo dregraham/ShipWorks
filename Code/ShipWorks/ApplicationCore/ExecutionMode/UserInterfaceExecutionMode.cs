@@ -1,28 +1,27 @@
-﻿using System.Reflection;
-using Interapptive.Shared.Data;
-using ShipWorks.ApplicationCore.Logging;
-using ShipWorks.Data;
-using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
-using log4net;
-using ShipWorks.ApplicationCore.Crashes;
-using ShipWorks.ApplicationCore.Interaction;
-using ShipWorks.Data.Connection;
-using ShipWorks.UI;
-using ShipWorks.Users;
-using System;
-using System.Collections;
+﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
-using Interapptive.Shared.UI;
-using System.IO;
-using ShipWorks.UI.Controls;
 using ActiproSoftware.SyntaxEditor;
+using Interapptive.Shared.Data;
+using Interapptive.Shared.UI;
+using log4net;
+using NDesk.Options;
+using ShipWorks.ApplicationCore.Crashes;
+using ShipWorks.ApplicationCore.Interaction;
+using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.ApplicationCore.Nudges;
+using ShipWorks.Data;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.Postal.Usps.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net;
 using ShipWorks.Stores;
+using ShipWorks.UI;
+using ShipWorks.UI.Controls;
+using ShipWorks.Users;
 
 namespace ShipWorks.ApplicationCore.ExecutionMode
 {
@@ -36,13 +35,21 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
         // Mutex used to indicate the application is alive. The installer uses this to know the app needs
         // shutdown before the installation can continue.
         Mutex appMutex;
+        private int recoveryCount;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UserInterfaceExecutionMode" /> class.
         /// </summary>
-        public UserInterfaceExecutionMode()
+        public UserInterfaceExecutionMode(IEnumerable<string> options)
         {
+            options = options ?? new string[0];
 
+            // Need to extract the arguments
+            OptionSet optionSet = new OptionSet
+                {
+                    { "recovery=", v => int.TryParse(v, out recoveryCount) }
+                };
+            optionSet.Parse(options);
         }
 
         /// <summary>
@@ -67,10 +74,7 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
         /// <summary>
         /// Indicates if this execution mode supports displaying a UI, whether or not one is currently displayed or not
         /// </summary>
-        public override bool IsUISupported
-        {
-            get { return true; }
-        }
+        public override bool IsUISupported => true;
 
         /// <summary>
         /// Determines whether the execution mode supports interacting with the user.
@@ -86,10 +90,10 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
         /// <summary>
         /// Single instance of the running application
         /// </summary>
-        public MainForm MainForm 
-        { 
-            get; 
-            private set; 
+        public MainForm MainForm
+        {
+            get;
+            private set;
         }
 
         /// <summary>
@@ -132,7 +136,7 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
             SplashScreen.Status = "Loading ShipWorks...";
             Application.Run(MainForm);
         }
-        
+
         /// <summary>
         /// Overridden to provide custom UI initialization
         /// </summary>
@@ -198,6 +202,8 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
         /// <exception cref="System.NotImplementedException"></exception>
         public override void HandleException(Exception exception, bool guiThread, string userEmail)
         {
+            bool shouldReopen = false;
+
             if (ConnectionMonitor.HandleTerminatedConnection(exception))
             {
                 log.Info("Terminating due to unrecoverable connection.", exception);
@@ -211,17 +217,16 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
                     log.Fatal(SqlUtility.GetRunningSqlCommands(SqlSession.Current.Configuration.GetConnectionString()));
                 }
 
-                // If the splash is shown, the crash window will close it.
-                using (CrashWindow dlg = new CrashWindow(exception, guiThread, userEmail))
-                {
-                    // Need to not set a parent here, in case we are on another thread.  Causes
-                    // potential Invoke deadlock.
-                    dlg.ShowDialog();
-                }
+                shouldReopen = new CrashDialog(exception, guiThread, userEmail, recoveryCount).ShowDialog().GetValueOrDefault();
             }
 
             try
             {
+                if (shouldReopen)
+                {
+                    ReopenShipWorks();
+                }
+
                 // This forces windows to close.  If they try to save state or do other stupid things
                 // while closing then they will throw an exception.
                 Application.Exit();
@@ -234,6 +239,28 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
             // Application.Exit does not guaranteed that the windows close.  It only tries.  If an exception
             // gets thrown, or they set e.Cancel = true, they won't have closed.
             Application.ExitThread();
+        }
+
+        /// <summary>
+        /// Reopen ShipWorks
+        /// </summary>
+        private void ReopenShipWorks()
+        {
+            // We want to restart using the same arguments as before, except incrementing the value of the recovery attempts
+            // to let the new process know it is being started as an attempt to recover from a crash
+            List<string> commandArgs = Environment.GetCommandLineArgs().Where(s => !s.Contains("recovery")).ToList();
+            commandArgs.Add($"/recovery={recoveryCount + 1}");
+
+            ProcessStartInfo restartInfo = new ProcessStartInfo
+            {
+                FileName = commandArgs[0],
+                Arguments = string.Join(" ", commandArgs.Skip(1))
+            };
+
+            SingleInstance.Unregister();
+
+            Process.Start(restartInfo);
+            log.Info("Restart succeeded.");
         }
     }
 }

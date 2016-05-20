@@ -1,12 +1,9 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading;
-using Interapptive.Shared;
 using System.Runtime.InteropServices;
+using System.Threading;
 using System.Windows.Forms;
-using log4net;
 using Interapptive.Shared.Win32;
+using log4net;
 using ShipWorks.ApplicationCore;
 
 namespace ShipWorks.UI
@@ -59,15 +56,23 @@ namespace ShipWorks.UI
         }
 
         /// <summary>
+        /// Unregister the application from single instance mode
+        /// </summary>
+        public static void Unregister()
+        {
+            instanceMutex?.Dispose();
+        }
+
+        /// <summary>
         /// Indicates if the application is already running.
         /// </summary>
         public static bool IsAlreadyRunning
         {
-            get 
-            { 
+            get
+            {
                 if (instanceMutex != null)
                 {
-                    return isAlreadyRunning; 
+                    return isAlreadyRunning;
                 }
 
                 try
@@ -185,7 +190,7 @@ namespace ShipWorks.UI
                 return false;
             }
 
-            // Continue search 
+            // Continue search
             return true;
         }
 

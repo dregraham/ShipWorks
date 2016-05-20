@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Diagnostics;
 using Interapptive.Shared;
-using Interapptive.Shared.Utility;
+using log4net;
 using ShipWorks.Actions;
 using ShipWorks.ApplicationCore.Crashes;
 using ShipWorks.ApplicationCore.Dashboard;
 using ShipWorks.ApplicationCore.Enums;
+using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.ApplicationCore.Services;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
@@ -15,12 +16,12 @@ using ShipWorks.Email.Accounts;
 using ShipWorks.FileTransfer;
 using ShipWorks.Filters;
 using ShipWorks.Shipping.Carriers.FedEx;
+using ShipWorks.Shipping.Carriers.iParcel;
 using ShipWorks.Shipping.Carriers.OnTrac;
 using ShipWorks.Shipping.Carriers.Postal.Endicia;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
-using ShipWorks.Shipping.Carriers.iParcel;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
@@ -32,9 +33,6 @@ using ShipWorks.Stores.Communication;
 using ShipWorks.Templates;
 using ShipWorks.Templates.Media;
 using ShipWorks.Users;
-using log4net;
-using ShipWorks.ApplicationCore.Interaction;
-using ShipWorks.Shipping;
 
 namespace ShipWorks.ApplicationCore
 {
@@ -108,7 +106,7 @@ namespace ShipWorks.ApplicationCore
         }
 
         /// <summary>
-        /// Forces a heartbeat.  Not necessary to call, as the pacemaker will keep it pumping without this.  This just makes it happen instantly, 
+        /// Forces a heartbeat.  Not necessary to call, as the pacemaker will keep it pumping without this.  This just makes it happen instantly,
         /// and also speeds it up if its expecting changes.
         /// </summary>
         public void ForceHeartbeat(HeartbeatOptions options)
@@ -209,7 +207,7 @@ namespace ShipWorks.ApplicationCore
                 Stopwatch sw = Stopwatch.StartNew();
                 long connections = ConnectionMonitor.TotalConnectionCount;
 
-                // Check for any change in the database. 
+                // Check for any change in the database.
                 bool changesDetected = timestampTracker.CheckForChange();
                 log.InfoFormat("[Heartbeat] Starting (Changes: {0})", changesDetected);
 
@@ -222,8 +220,8 @@ namespace ShipWorks.ApplicationCore
                     // Changes and filters trigger actions to run, so any time there is a change, we need to check for actions.
                     ActionProcessor.StartProcessing();
 
-                    // This flag stays true until section below sees it and resets to false.  The section in question only 
-                    // runs when there are no modal windows or popups open.  This flag has to stay true until that section 
+                    // This flag stays true until section below sees it and resets to false.  The section in question only
+                    // runs when there are no modal windows or popups open.  This flag has to stay true until that section
                     // runs to ensure changes are not missed.
                     changeProcessingPending = true;
                 }
@@ -276,7 +274,7 @@ namespace ShipWorks.ApplicationCore
             ConnectionMonitor.VerifyConnected();
 
             // Make sure we are not in a failure state
-            if (ConnectionMonitor.Status != ConnectionMonitorStatus.Normal || CrashWindow.IsApplicationCrashed)
+            if (ConnectionMonitor.Status != ConnectionMonitorStatus.Normal || CrashDialog.IsApplicationCrashed)
             {
                 return false;
             }
@@ -388,7 +386,7 @@ namespace ShipWorks.ApplicationCore
         }
 
         /// <summary>
-        /// Runs the actual heartbeat. 
+        /// Runs the actual heartbeat.
         /// </summary>
         [NDependIgnoreLongMethod]
         protected virtual void ProcessHeartbeat(bool changesDetected, bool forceReload)
@@ -397,7 +395,7 @@ namespace ShipWorks.ApplicationCore
 
             // We only do all this checking if there was a dbts change.
             //
-            // IMPORTANT: 
+            // IMPORTANT:
             //
             // This means that all the stuff in this section must be dependant at some level on a timestamp column.
             // If some type of change checking is not 1. Then it probably should be 2. If it can't be, then it cant be excluded

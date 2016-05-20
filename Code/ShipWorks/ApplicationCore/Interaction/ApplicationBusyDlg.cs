@@ -1,8 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using ShipWorks.ApplicationCore.Crashes;
@@ -58,7 +55,7 @@ namespace ShipWorks.ApplicationCore.Interaction
                 return;
             }
 
-            if (CrashWindow.IsApplicationCrashed)
+            if (CrashDialog.IsApplicationCrashed)
             {
                 DialogResult = DialogResult.Cancel;
                 return;

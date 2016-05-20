@@ -1,3 +1,15 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data.SqlClient;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading;
+using System.Windows.Forms;
+using System.Xml;
+using System.Xml.Linq;
 using Autofac;
 using Divelements.SandGrid;
 using Divelements.SandRibbon;
@@ -76,18 +88,6 @@ using ShipWorks.Users;
 using ShipWorks.Users.Audit;
 using ShipWorks.Users.Logon;
 using ShipWorks.Users.Security;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data.SqlClient;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Windows.Forms;
-using System.Xml;
-using System.Xml.Linq;
 using TD.SandDock;
 using Application = System.Windows.Forms.Application;
 using SandButton = Divelements.SandRibbon.Button;
@@ -279,21 +279,21 @@ namespace ShipWorks
                 if (!SqlSession.IsConfigured)
                 {
 
-                        // If we aren't configured and 2012 is supported, open the fast track setup wizard
-                        if (SqlServerInstaller.IsSqlServer2012Supported)
+                    // If we aren't configured and 2012 is supported, open the fast track setup wizard
+                    if (SqlServerInstaller.IsSqlServer2012Supported)
+                    {
+                        using (SimpleDatabaseSetupWizard wizard = new SimpleDatabaseSetupWizard(lifetimeScope))
                         {
-                            using (SimpleDatabaseSetupWizard wizard = new SimpleDatabaseSetupWizard(lifetimeScope))
-                            {
-                                return wizard.ShowDialog(this) == DialogResult.OK;
-                            }
+                            return wizard.ShowDialog(this) == DialogResult.OK;
                         }
-                        else
+                    }
+                    else
+                    {
+                        using (DetailedDatabaseSetupWizard wizard = new DetailedDatabaseSetupWizard(lifetimeScope))
                         {
-                            using (DetailedDatabaseSetupWizard wizard = new DetailedDatabaseSetupWizard(lifetimeScope))
-                            {
-                                return wizard.ShowDialog(this) == DialogResult.OK;
-                            }
+                            return wizard.ShowDialog(this) == DialogResult.OK;
                         }
+                    }
                 }
                 // Otherwise, we use our normal database setup wizard
                 else
@@ -326,7 +326,7 @@ namespace ShipWorks
                 return;
             }
 
-            if (CrashWindow.IsApplicationCrashed)
+            if (CrashDialog.IsApplicationCrashed)
             {
                 return;
             }
@@ -1600,7 +1600,7 @@ namespace ShipWorks
             ActionDispatcher.DispatchUserInitiated(actionID, gridControl.Selection.OrderedKeys);
         }
 
-       #endregion
+        #endregion
 
         #region App Menu
 
@@ -1913,13 +1913,13 @@ namespace ShipWorks
             // even if the value could fit in 32-bits without any data loss because it's using the checked keyword.
             if (msg.Msg == NativeMethods.WM_NCHITTEST)
             {
-                msg.LParam = new IntPtr((int)msg.LParam.ToInt64());
+                msg.LParam = new IntPtr((int) msg.LParam.ToInt64());
             }
 
             // A similar bug as above requires that we ensure the WParam value is an Int32 for these messages
             if (msg.Msg == NativeMethods.WM_NCACTIVATE || msg.Msg == NativeMethods.WM_NCRBUTTONUP)
             {
-                msg.WParam = new IntPtr((int)msg.WParam.ToInt64());
+                msg.WParam = new IntPtr((int) msg.WParam.ToInt64());
             }
 
             base.WndProc(ref msg);
@@ -1967,7 +1967,7 @@ namespace ShipWorks
             if (InvokeRequired)
             {
                 // Put the heartbeat on the UI thread
-                BeginInvoke((MethodInvoker) delegate { ForceHeartbeat(options);});
+                BeginInvoke((MethodInvoker) delegate { ForceHeartbeat(options); });
                 return;
             }
 
@@ -2077,7 +2077,7 @@ namespace ShipWorks
         /// </summary>
         public void UpdateFilter(FilterEntity filter)
         {
-            if (filter.FilterTarget == (int)FilterTarget.Orders)
+            if (filter.FilterTarget == (int) FilterTarget.Orders)
             {
                 orderFilterTree.UpdateFilter(filter);
             }
@@ -2102,7 +2102,7 @@ namespace ShipWorks
         void OnFilterDockableWindowVisibleChanged(object sender, System.EventArgs e)
         {
             // Get the dockable window so that we can get the filter tree
-            DockControl dockableWindowFilters = (DockableWindow)sender;
+            DockControl dockableWindowFilters = (DockableWindow) sender;
             if (dockableWindowFilters == null)
             {
                 throw new InvalidOperationException("OnFilterDockableWindowVisibleChanged called by an object that is not a DockableWindow.");
@@ -2147,7 +2147,7 @@ namespace ShipWorks
             searchRestoreFilterNodeID = 0;
 
             // Update the grid to show the new node
-            gridControl.ActiveFilterNode = ((FilterTree)sender).SelectedFilterNode;
+            gridControl.ActiveFilterNode = ((FilterTree) sender).SelectedFilterNode;
 
             // Could be changing to a Null node selection due to logging off.  If that's the case, we don't have to
             // update UI, b\c its already blank.
