@@ -803,20 +803,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
                 AssociateShipWorksWithItselfResponse response = request.Execute();
 
-                switch (response.ResponseType)
+                if (response.ResponseType == AssociateShipWorksWithItselfResponseType.Success)
                 {
-                    case AssociateShipWorksWithItselfResponseType.Success:
-                        registrationComplete = true;
-                        PopulateAccountFromAssociateShipworksWithItselfRequest(request);
-                        break;
-
-                    case AssociateShipWorksWithItselfResponseType.POBoxNotAllowed:
-                        break;
-
-                    default:
-                        MessageHelper.ShowError(this, response.Message);
-                        e.NextPage = CurrentPage;
-                        break;
+                    registrationComplete = true;
+                    PopulateAccountFromAssociateShipworksWithItselfRequest(request);
                 }
             }
         }
@@ -871,22 +861,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
                 AssociateShipWorksWithItselfResponse response = request.Execute();
 
-                switch (response.ResponseType)
+                if (response.ResponseType == AssociateShipWorksWithItselfResponseType.Success)
                 {
-                    case AssociateShipWorksWithItselfResponseType.Success:
-                        registrationComplete = true;
-                        PopulateAccountFromAssociateShipworksWithItselfRequest(request);
-                        break;
-
-                    case AssociateShipWorksWithItselfResponseType.POBoxNotAllowed:
-                        MessageHelper.ShowError(this, response.Message);
-                        e.NextPage = CurrentPage;
-                        break;
-
-                    default:
-                        MessageHelper.ShowError(this, response.Message);
-                        e.NextPage = CurrentPage;
-                        break;
+                    registrationComplete = true;
+                    PopulateAccountFromAssociateShipworksWithItselfRequest(request);
+                }
+                else
+                {
+                    MessageHelper.ShowError(this, response.Message);
+                    e.NextPage = CurrentPage;
                 }
             }
         }
