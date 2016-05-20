@@ -125,6 +125,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             Pages.Add(new ShippingWizardPageAutomation(shipmentType));
             Pages.Add(new ShippingWizardPageFinish(shipmentType));
 
+            Pages.Remove(wizardPageError);
+
             if (ShippingManager.IsShipmentTypeConfigured(ShipmentTypeCode.Usps))
             {
                 Pages.Remove(wizardPageOptions);
