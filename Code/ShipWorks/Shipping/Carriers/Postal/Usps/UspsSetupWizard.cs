@@ -798,6 +798,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         private void OnStepNextNewAccountPaymentAndBilling(object sender, WizardStepEventArgs e)
         {
+            if (!paymentAndBillingAddress.ValidateData())
+            {
+                e.NextPage = CurrentPage;
+                return;
+            }
+
             using (ILifetimeScope ioc = IoC.BeginLifetimeScope())
             {
                 AssociateShipworksWithItselfRequest request = PopulateAssociateWithSelfRequestWithBilling(ioc);
