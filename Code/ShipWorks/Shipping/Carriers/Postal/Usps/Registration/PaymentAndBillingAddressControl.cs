@@ -37,7 +37,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Registration
         /// </summary>
         public int CreditCardExpirationYear
         {
-            get { return Convert.ToInt32(creditCardExpirationYear.Value); }
+            get
+            {
+                return string.IsNullOrWhiteSpace(creditCardExpirationYear.Text)
+                    ? 0
+                    : Convert.ToInt32(creditCardExpirationYear.Value);
+            }
         }
 
         /// <summary>
@@ -45,7 +50,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Registration
         /// </summary>
         public int CreditCardExpirationMonth
         {
-            get { return Convert.ToInt32(creditCardExpirationMonth.Value); }
+            get
+            {
+                return string.IsNullOrWhiteSpace(creditCardExpirationMonth.Text)
+                    ? 0
+                    : Convert.ToInt32(creditCardExpirationMonth.Value);
+            }
         }
 
         /// <summary>
