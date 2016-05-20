@@ -576,7 +576,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             this.labelDescription.TabIndex = 1;
             this.labelDescription.Text = "The mailing address you provided cannot be used as your USPS Postage Meter addres" +
     "s. Please provide a physical address (not a PO Box) where you will use your Stam" +
-    "ps.com account to print postage";
+    "ps.com account to print postage.";
             // 
             // lableTitle
             // 

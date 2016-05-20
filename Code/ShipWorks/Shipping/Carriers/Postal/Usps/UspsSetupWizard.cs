@@ -861,15 +861,23 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
                 AssociateShipWorksWithItselfResponse response = request.Execute();
 
-                if (response.ResponseType == AssociateShipWorksWithItselfResponseType.Success)
+                switch (response.ResponseType)
                 {
-                    registrationComplete = true;
-                    PopulateAccountFromAssociateShipworksWithItselfRequest(request);
-                }
-                else
-                {
-                    MessageHelper.ShowError(this, response.Message);
-                    e.NextPage = CurrentPage;
+                    case AssociateShipWorksWithItselfResponseType.Success:
+                        registrationComplete = true;
+                        PopulateAccountFromAssociateShipworksWithItselfRequest(request);
+                        break;
+                    case AssociateShipWorksWithItselfResponseType.UnknownError:
+                        UspsAccountManager.DeleteAccount(UspsAccount);
+                        Pages.Add(wizardPageError);
+                        e.NextPage = wizardPageError;
+                        DialogResult = DialogResult.Abort;
+                        BackEnabled = false;
+                        break;
+                    default:
+                        MessageHelper.ShowError(this, response.Message);
+                        e.NextPage = CurrentPage;
+                        break;
                 }
             }
         }
