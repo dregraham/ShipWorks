@@ -1,9 +1,11 @@
 ﻿using Interapptive.Shared.Business;
-using ShipWorks.AddressValidation;
+using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
-using Interapptive.Shared.Utility;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace ShipWorks.ApplicationCore.Licensing
 {
@@ -15,6 +17,8 @@ namespace ShipWorks.ApplicationCore.Licensing
     {
         private readonly IUspsWebClient uspsWebClient;
         private readonly ITangoWebClient tangoWebClient;
+
+        const int NumberOfSuggestionsToShow = 3;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AssociateShipworksWithItselfRequest"/> class.
@@ -102,35 +106,70 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public AssociateShipWorksWithItselfResponse Execute()
         {
-            if(!IsPhysicalAddressValid())
+            if (PhysicalAddress != null)
             {
-                return new AssociateShipWorksWithItselfResponse(
-                    AssociateShipWorksWithItselfResponseType.AddressValidationFailed, 
-                    EnumHelper.GetDescription(AssociateShipWorksWithItselfResponseType.AddressValidationFailed));
+                // Call AV server
+                UspsAddressValidationResults uspsResult = uspsWebClient.ValidateAddress(PhysicalAddress);
+
+                if (!uspsResult.IsSuccessfulMatch)
+                {
+                    string suggestionMessage = CreateSuggestionMessage(uspsResult.Candidates);
+                    string message = $"{EnumHelper.GetDescription(AssociateShipWorksWithItselfResponseType.AddressValidationFailed)}{suggestionMessage}";
+                    return new AssociateShipWorksWithItselfResponse(
+                       AssociateShipWorksWithItselfResponseType.AddressValidationFailed,
+                       message);
+                }
+
+                if (uspsResult.IsPoBox ?? false)
+                {
+                    return new AssociateShipWorksWithItselfResponse(
+                        AssociateShipWorksWithItselfResponseType.POBoxNotAllowed,
+                        EnumHelper.GetDescription(AssociateShipWorksWithItselfResponseType.POBoxNotAllowed));
+                }
+
+                MatchedPhysicalAddress = uspsResult.MatchedAddress;
             }
 
             return tangoWebClient.AssociateShipworksWithItself(this);
         }
 
         /// <summary>
-        /// If PhysicalAddress set, calls AddressValidation to populate MatchedAddress
+        /// Creates a message of the top 3 suggested addresses. Empty string if no addresses.
         /// </summary>
-        private bool IsPhysicalAddressValid()
+        private string CreateSuggestionMessage(IEnumerable<Address> candidates)
         {
-            if (PhysicalAddress == null)
+            IEnumerable<Address> addresses = candidates as IList<Address> ?? candidates?.ToList();
+
+            if (addresses == null || !addresses.Any())
             {
-                return true;
+                return string.Empty;
             }
 
-            // Call AV server
-            UspsAddressValidationResults uspsResult = uspsWebClient.ValidateAddress(PhysicalAddress);
-            if (!uspsResult.IsSuccessfulMatch)
+            List<string> formattedAddresses = new List<string>();
+
+            // Resharper says candidates might be null, but the check above should
+            // return an empty string if it is null. Resharper don't know Roslyn...
+            foreach (Address address in addresses.Take(NumberOfSuggestionsToShow))
             {
-                return false;
+                List<string> addressElements = new List<string>
+                {
+                    address.Address1,
+                    address.Address2,
+                    address.Address3,
+                    address.City,
+                    address.State,
+                    address.ZIPCode
+                };
+
+                string formattedAddress = string.Join(", ", addressElements.Where(s => !string.IsNullOrWhiteSpace(s)).ToList());
+
+                formattedAddresses.Add(formattedAddress);
             }
 
-            MatchedPhysicalAddress = uspsResult.MatchedAddress;
-            return true;
+            string addressesSeparatedWithNewLine = string.Join(Environment.NewLine, formattedAddresses);
+
+            return $" A few examples are below.{Environment.NewLine}{Environment.NewLine}" +
+                   $"{addressesSeparatedWithNewLine}";
         }
     }
 }

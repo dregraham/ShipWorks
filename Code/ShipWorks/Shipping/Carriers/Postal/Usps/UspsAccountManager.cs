@@ -1,18 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using Autofac;
+﻿using Autofac;
 using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Utility;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Express1;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using System.Text;
+using System.Windows.Forms;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {
@@ -64,7 +64,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// Get the USPS accounts in the system.  Optionally include those that have not yet totally completed signup where
         /// the user is yet to enter the account ID.
         /// </summary>
-        public static List<UspsAccountEntity> GetAccounts(UspsResellerType uspsResellerType, bool includeIncomplete)
+        private static List<UspsAccountEntity> GetAccounts(UspsResellerType uspsResellerType, bool includePending)
         {
             lock (synchronizer)
             {
@@ -73,8 +73,27 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                     InternalCheckForChanges();
                 }
 
-                return EntityUtility.CloneEntityCollection(synchronizer.EntityCollection.Where(a => ((includeIncomplete || a.Username != null) && a.UspsReseller == (int)uspsResellerType)));
+                IEnumerable<UspsAccountEntity> filterredAccounts =
+                    synchronizer.EntityCollection.Where(account => account.UspsReseller == (int) uspsResellerType);
+
+                if (!includePending)
+                {
+                    filterredAccounts =
+                        filterredAccounts.Where(account => account.PendingInitialAccount != (int) UspsPendingAccountType.Create);
+                }
+                
+                return EntityUtility.CloneEntityCollection(filterredAccounts);
             }
+        }
+
+        /// <summary>
+        /// Gets the Usps account where Account is pending (Create or Existing)
+        /// </summary>
+        public static UspsAccountEntity GetPendingUspsAccount()
+        {
+            List<UspsAccountEntity> uspsAccountEntities = GetAccounts(UspsResellerType.None, true);
+
+            return uspsAccountEntities.FirstOrDefault(account=>account.PendingInitialAccount != (int) UspsPendingAccountType.None);
         }
 
         /// <summary>
@@ -88,24 +107,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <summary>
         /// Return the active list of Express1 accounts
         /// </summary>
-        public static List<UspsAccountEntity> Express1Accounts
-        {
-            get
-            {
-                return GetAccounts(UspsResellerType.Express1, false);
-            }
-        }
+        public static List<UspsAccountEntity> Express1Accounts => GetAccounts(UspsResellerType.Express1);
 
         /// <summary>
         /// Return the active list of USPS accounts.
         /// </summary>
-        public static List<UspsAccountEntity> UspsAccounts
-        {
-            get
-            {
-                return GetAccounts(UspsResellerType.None, false);
-            }
-        }
+        public static List<UspsAccountEntity> UspsAccounts => GetAccounts(UspsResellerType.None);
 
         /// <summary>
         /// Get the account with the specified ID, or null if not found.
