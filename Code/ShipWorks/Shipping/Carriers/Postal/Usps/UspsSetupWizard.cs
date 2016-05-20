@@ -874,7 +874,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
                         Pages.Add(wizardPageError);
                         e.NextPage = wizardPageError;
-                        DialogResult = DialogResult.Abort;
+
+                        FinishCancels = true;
+                        LastPageCancelable = false;
                         BackEnabled = false;
                         break;
 
