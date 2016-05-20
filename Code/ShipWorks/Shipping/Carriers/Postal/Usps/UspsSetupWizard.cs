@@ -125,6 +125,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             Pages.Add(new ShippingWizardPageAutomation(shipmentType));
             Pages.Add(new ShippingWizardPageFinish(shipmentType));
 
+            Pages.Remove(wizardPageError);
+
             if (ShippingManager.IsShipmentTypeConfigured(ShipmentTypeCode.Usps))
             {
                 Pages.Remove(wizardPageOptions);
@@ -859,15 +861,29 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
                 AssociateShipWorksWithItselfResponse response = request.Execute();
 
-                if (response.ResponseType == AssociateShipWorksWithItselfResponseType.Success)
+                switch (response.ResponseType)
                 {
-                    registrationComplete = true;
-                    PopulateAccountFromAssociateShipworksWithItselfRequest(request);
-                }
-                else
-                {
-                    MessageHelper.ShowError(this, response.Message);
-                    e.NextPage = CurrentPage;
+                    case AssociateShipWorksWithItselfResponseType.Success:
+                        registrationComplete = true;
+                        PopulateAccountFromAssociateShipworksWithItselfRequest(request);
+                        break;
+
+                    case AssociateShipWorksWithItselfResponseType.UnknownError:
+                        UspsAccountManager.DeleteAccount(UspsAccount);
+                        UspsAccount = null;
+
+                        Pages.Add(wizardPageError);
+                        e.NextPage = wizardPageError;
+
+                        FinishCancels = true;
+                        LastPageCancelable = false;
+                        BackEnabled = false;
+                        break;
+
+                    default:
+                        MessageHelper.ShowError(this, response.Message);
+                        e.NextPage = CurrentPage;
+                        break;
                 }
             }
         }
