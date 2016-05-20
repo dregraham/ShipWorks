@@ -140,7 +140,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             memoryStream.Position = 0;
             StreamReader reader = new StreamReader(memoryStream);
 
-            string data = reader.ReadToEnd();
+            store.Map = reader.ReadToEnd();
         }
 
         /// <summary>
