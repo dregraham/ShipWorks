@@ -11,12 +11,12 @@ namespace ShipWorks.Stores.Platforms.Odbc
     /// <summary>
     /// Represents a table from an ODBC schema
     /// </summary>
-	public class OdbcTable : IOdbcTable
+    public class OdbcTable : IOdbcTable
     {
         /// <summary>
         /// Constructor
         /// </summary>
-		public OdbcTable(string name)
+        public OdbcTable(string name)
         {
             Name = name;
         }
@@ -34,14 +34,10 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// <summary>
         /// Loads the columns for this table
         /// </summary>
-        public void Load(IOdbcDataSource dataSource)
-		{
+        public void Load(IOdbcDataSource dataSource, ILog log)
+        {
             using (DbConnection connection = dataSource.CreateConnection())
-            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                Func<Type, ILog> logFactory = lifetimeScope.Resolve<Func<Type, ILog>>();
-                ILog log = logFactory(typeof(OdbcTable));
-
                 try
                 {
                     connection.Open();
@@ -82,6 +78,6 @@ namespace ShipWorks.Stores.Platforms.Odbc
                         ex);
                 }
             }
-		}
+        }
     }
 }

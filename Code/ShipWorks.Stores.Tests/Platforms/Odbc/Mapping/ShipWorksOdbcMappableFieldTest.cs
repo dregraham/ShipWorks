@@ -11,7 +11,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
         {
             ShipWorksOdbcMappableField testObject = new ShipWorksOdbcMappableField(OrderFields.OrderNumber, "Order Number");
 
-            Assert.Equal("Order.OrderNumber", testObject.GetQualifiedName());
+            Assert.Equal("OrderEntity.OrderNumber", testObject.GetQualifiedName());
         }
 
         [Fact]

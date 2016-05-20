@@ -4,6 +4,7 @@ using System.Data.Common;
 using System.Linq;
 using Autofac;
 using Autofac.Extras.Moq;
+using log4net;
 using Moq;
 using ShipWorks.Stores.Platforms.Odbc;
 using Xunit;
@@ -38,12 +39,15 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             Mock<IOdbcDataSource> dataSource = mock.Mock<IOdbcDataSource>();
             dataSource.Setup(d => d.CreateConnection()).Returns(conn.Object);
 
+            // mock the log
+            Mock<ILog> log = mock.Mock<ILog>();
+
             // mock the schema
             Mock<IOdbcSchema> schema = mock.Mock<IOdbcSchema>();
             schema.SetupGet(s => s.DataSource).Returns(dataSource.Object);
 
             OdbcTable testObject = mock.Create<OdbcTable>(new TypedParameter(typeof(string), "SomeTableName"));
-            var count = testObject.Columns.Count();
+            testObject.Load(dataSource.Object, log.Object);
 
             dataSource.Verify(d => d.CreateConnection());
         }
@@ -59,18 +63,17 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             Mock<DbConnection> conn = mock.Mock<DbConnection>();
             conn.Setup(c => c.Open()).Throws(ex.Object);
 
+            // mock the log
+            Mock<ILog> log = mock.Mock<ILog>();
+
             // mock the data source
             Mock<IOdbcDataSource> dataSource = mock.Mock<IOdbcDataSource>();
             dataSource.Setup(d => d.CreateConnection()).Returns(conn.Object);
             dataSource.SetupGet(d => d.Name).Returns("shipworksodbc");
 
-            // mock the schema
-            Mock<IOdbcSchema> schema = mock.Mock<IOdbcSchema>();
-            schema.SetupGet(s => s.DataSource).Returns(dataSource.Object);
-
             OdbcTable testObject = mock.Create<OdbcTable>(new TypedParameter(typeof(string), "SomeTableName"));
 
-            ShipWorksOdbcException thrownException = Assert.Throws<ShipWorksOdbcException>(() => testObject.Columns.Count());
+            ShipWorksOdbcException thrownException = Assert.Throws<ShipWorksOdbcException>(() => testObject.Load(dataSource.Object, log.Object));
             Assert.Equal("An error occurred while attempting to open a connection to shipworksodbc.", thrownException.Message);
         }
 
@@ -85,18 +88,17 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             Mock<DbConnection> conn = mock.Mock<DbConnection>();
             conn.Setup(c => c.GetSchema(It.IsAny<string>(), It.IsAny<string[]>())).Throws(ex.Object);
 
+            // mock the log
+            Mock<ILog> log = mock.Mock<ILog>();
+
             // mock the data source
             Mock<IOdbcDataSource> dataSource = mock.Mock<IOdbcDataSource>();
             dataSource.Setup(d => d.CreateConnection()).Returns(conn.Object);
             dataSource.SetupGet(d => d.Name).Returns("shipworksodbc");
 
-            // mock the schema
-            Mock<IOdbcSchema> schema = mock.Mock<IOdbcSchema>();
-            schema.SetupGet(s => s.DataSource).Returns(dataSource.Object);
-
             OdbcTable testObject = mock.Create<OdbcTable>(new TypedParameter(typeof(string), "SomeTableName"));
 
-            ShipWorksOdbcException thrownException = Assert.Throws<ShipWorksOdbcException>(() => testObject.Columns.Count());
+            ShipWorksOdbcException thrownException = Assert.Throws<ShipWorksOdbcException>(() => testObject.Load(dataSource.Object, log.Object));
             Assert.Equal("An error occurred while attempting to retrieve columns from information from the SomeTableName table.", thrownException.Message);
         }
 

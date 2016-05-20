@@ -1,5 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Autofac.Extras.Moq;
+using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
 using Xunit;
 
@@ -54,25 +57,36 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         }
 
         [Fact]
-        public void CreateFieldMapFrom_ReturnsMapContainingAllEntriesOfProvidedMap()
+        public void CreateFieldMapFrom_ReturnsMapContainingAllEntriesThatAreMappedOfProvidedMap()
         {
-            var orderMap = testObject.CreateOrderFieldMap();
+            OdbcFieldMap orderMap = testObject.CreateOrderFieldMap();
+            ShipWorksOdbcMappableField shipworksOrderMap = new ShipWorksOdbcMappableField(OrderFields.OrderNumber, "Order Number");
+            ExternalOdbcMappableField externalOrderMap = new ExternalOdbcMappableField(new OdbcTable("Order"), new OdbcColumn("Column"));
+            orderMap.AddEntry(new OdbcFieldMapEntry(shipworksOrderMap, externalOrderMap));
+
             var itemMap = testObject.CreateOrderItemFieldMap();
+            ShipWorksOdbcMappableField shipworksItemMap = new ShipWorksOdbcMappableField(OrderItemFields.ISBN, "ISBN");
+            ExternalOdbcMappableField externalItemMap = new ExternalOdbcMappableField(new OdbcTable("OrderItem"), new OdbcColumn("OrderItemColumn"));
+            itemMap.AddEntry(new OdbcFieldMapEntry(shipworksItemMap, externalItemMap));
+
             var addressMap = testObject.CreateAddressFieldMap();
+            ShipWorksOdbcMappableField shipworksAddressMap = new ShipWorksOdbcMappableField(OrderFields.BillAddressValidationError, "BillAddressValidationError");
+            ExternalOdbcMappableField externalAddressMap = new ExternalOdbcMappableField(new OdbcTable("BillAddressValidationError"), new OdbcColumn("BillAddressValidationError"));
+            itemMap.AddEntry(new OdbcFieldMapEntry(shipworksAddressMap, externalAddressMap));
 
             var combinedMap = testObject.CreateFieldMapFrom(new List<OdbcFieldMap>() {orderMap, itemMap, addressMap});
 
-            foreach (var entry in orderMap.Entries)
+            foreach (var entry in orderMap.Entries.Where(e => e.ExternalField.Column != null))
             {
                 Assert.Contains(entry, combinedMap.Entries);
             }
 
-            foreach (var entry in itemMap.Entries)
+            foreach (var entry in itemMap.Entries.Where(e => e.ExternalField.Column != null))
             {
                 Assert.Contains(entry, combinedMap.Entries);
             }
 
-            foreach (var entry in addressMap.Entries)
+            foreach (var entry in addressMap.Entries.Where(e => e.ExternalField.Column != null))
             {
                 Assert.Contains(entry, combinedMap.Entries);
             }

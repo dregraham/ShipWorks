@@ -29,10 +29,15 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
             using (StreamReader streamReader = new StreamReader(stream))
             {
                 string data = streamReader.ReadToEnd();
-                json = JObject.Parse(data);
-
-                mapEntries = json["Entries"];
-
+                try
+                {
+                    json = JObject.Parse(data);
+                    mapEntries = json["Entries"];
+                }
+                catch (JsonReaderException ex)
+                {
+                    throw new ShipWorksOdbcException("Stream does not contain a valid Odbc Map.", ex);
+                }
             }
         }
 

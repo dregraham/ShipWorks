@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.Command;
+using log4net;
 using Microsoft.Win32;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
@@ -21,6 +22,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         private readonly IOdbcFieldMapFactory fieldMapFactory;
         private readonly OdbcDataSource dataSource;
         private readonly IOdbcSchema schema;
+        private readonly Func<Type, ILog> logFactory;
         private OdbcTable selectedTable;
         private ObservableCollection<OdbcColumn> columns;
         private OdbcFieldMap selectedFieldMap;
@@ -30,11 +32,12 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcImportFieldMappingDlgViewModel"/> class.
         /// </summary>
-        public OdbcImportFieldMappingDlgViewModel(IOdbcFieldMapFactory fieldMapFactory, OdbcDataSource dataSource, IOdbcSchema schema)
+        public OdbcImportFieldMappingDlgViewModel(IOdbcFieldMapFactory fieldMapFactory, OdbcDataSource dataSource, IOdbcSchema schema, Func<Type, ILog> logFactory)
         {
             this.fieldMapFactory = fieldMapFactory;
             this.dataSource = dataSource;
             this.schema = schema;
+            this.logFactory = logFactory;
             SaveMapCommand = new RelayCommand(SaveMapToDisk,() => selectedTable != null);
             OrderFieldMap = fieldMapFactory.CreateOrderFieldMap();
             AddressFieldMap = fieldMapFactory.CreateAddressFieldMap();
@@ -71,7 +74,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             set
             {
                 Handler.Set(nameof(SelectedTable), ref selectedTable, value);
-                selectedTable.Load(dataSource);
+                selectedTable.Load(dataSource, logFactory(typeof(OdbcTable)));
                 Columns = new ObservableCollection<OdbcColumn>(selectedTable.Columns);
             }
         }
