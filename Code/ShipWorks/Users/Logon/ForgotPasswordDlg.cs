@@ -1,18 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
-using ShipWorks.UI;
+using Interapptive.Shared.Security;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Adapter.Custom;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.ApplicationCore.Licensing;
-using Interapptive.Shared.Utility;
 using Interapptive.Shared.UI;
 
 namespace ShipWorks.Users.Logon

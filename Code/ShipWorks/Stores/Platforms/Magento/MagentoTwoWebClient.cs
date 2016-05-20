@@ -3,11 +3,11 @@ using System.Net;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.GenericModule;
 using Interapptive.Shared.Net;
-using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Logging;
 using System.Xml.Linq;
 using System.Xml.XPath;
 using System.Xml;
+using Interapptive.Shared.Security;
 
 namespace ShipWorks.Stores.Platforms.Magento
 {
@@ -27,7 +27,7 @@ namespace ShipWorks.Stores.Platforms.Magento
         }
 
         /// <summary>
-        /// Intercept GenericStore requests and execute REST requests 
+        /// Intercept GenericStore requests and execute REST requests
         /// for our Magento 2 module
         /// </summary>
         protected override GenericModuleResponse ProcessRequest(HttpVariableRequestSubmitter request, string action)
@@ -102,7 +102,7 @@ namespace ShipWorks.Stores.Platforms.Magento
                 Uri = new Uri(Store.ModuleUrl + $"{path}"),
                 Verb = HttpVerb.Get
             };
-            
+
             AddVariablesToGetRequest(request, xmlRequest);
 
             return ProcessRequestInternal(xmlRequest, logName);

@@ -1,16 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.Data;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using Interapptive.Shared;
+using Interapptive.Shared.Security;
 using ShipWorks.Data.Model.EntityClasses;
-using Interapptive.Shared.Utility;
 using ShipWorks.Stores.Platforms.AmeriCommerce.WebServices;
-using ShipWorks.Common.Threading;
 using ShipWorks.Data;
 using ShipWorks.Properties;
 using Interapptive.Shared.UI;
@@ -45,7 +41,7 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
         }
 
         /// <summary>
-        /// Load the UI from the store entity 
+        /// Load the UI from the store entity
         /// </summary>
         public override void LoadStore(StoreEntity store)
         {
@@ -221,7 +217,7 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
                     // perform basic connectivity test
                     webClient.TestConnection();
 
-                    // check the selected store, if there is one 
+                    // check the selected store, if there is one
                     if (storeComboBox.SelectedIndex < 0)
                     {
                         MessageHelper.ShowError(this, "Please select the AmeriCommerce store for ShipWorks to connect to.");

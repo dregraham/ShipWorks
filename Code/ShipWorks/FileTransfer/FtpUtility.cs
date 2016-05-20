@@ -2,10 +2,10 @@
 
 using System;
 using System.Collections.Generic;
+using Interapptive.Shared.Security;
 using rebex2015::Rebex.Net;
 using ShipWorks.Data.Model.EntityClasses;
 using log4net;
-using Interapptive.Shared.Utility;
 
 namespace ShipWorks.FileTransfer
 {
@@ -17,7 +17,7 @@ namespace ShipWorks.FileTransfer
     {
         static readonly ILog log = LogManager.GetLogger(typeof(FtpUtility));
 
-        private static readonly Dictionary<FtpSecurityType, int> defaultPorts = 
+        private static readonly Dictionary<FtpSecurityType, int> defaultPorts =
             new Dictionary<FtpSecurityType, int>
             {
                 {FtpSecurityType.Unsecure, 21},
@@ -88,7 +88,7 @@ namespace ShipWorks.FileTransfer
             {
                 return account;
             }
-            
+
             // Implicit
             if (CheckFtpSecurityImplicit(portOverride, account))
             {
@@ -120,7 +120,7 @@ namespace ShipWorks.FileTransfer
             {
                 log.Warn(ex.Message);
             }
-            
+
             // We've tried everything we can, but couldn't connect.  Throw
             throw new FileTransferException("ShipWorks was unable to connect to the FTP site with the information provided.");
         }
@@ -258,12 +258,12 @@ namespace ShipWorks.FileTransfer
             try
             {
                 ftp.Login(account.Username, SecureText.Decrypt(account.Password, account.Username));
-                
+
                 // Apply settings
                 Ftp typedFtp = ftp as Ftp;
                 if (typedFtp != null)
                 {
-                    typedFtp.Passive = account.Passive;   
+                    typedFtp.Passive = account.Passive;
                 }
             }
             catch (NetworkSessionException ex)
@@ -279,8 +279,8 @@ namespace ShipWorks.FileTransfer
         {
             try
             {
-                return account.SecurityType == (int) FtpSecurityType.Sftp ? 
-                    OpenSftpConnection(account) : 
+                return account.SecurityType == (int) FtpSecurityType.Sftp ?
+                    OpenSftpConnection(account) :
                     OpenFtpConnection(account);
             }
             catch (NetworkSessionException ex)
@@ -319,10 +319,10 @@ namespace ShipWorks.FileTransfer
             ftp.Settings.ReuseControlConnectionSession = (bool)account.ReuseControlConnectionSession;
 
             ftp.Connect(account.Host, account.Port, tls, (FtpSecurity) account.SecurityType);
-            
+
             return ftp;
         }
-        
+
         /// <summary>
         /// Connect an login to the given FTP account
         /// </summary>

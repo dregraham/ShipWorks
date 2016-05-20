@@ -1,4 +1,5 @@
-﻿using ShipWorks.Stores.Platforms.GenericModule;
+﻿using Interapptive.Shared.Net;
+using ShipWorks.Stores.Platforms.GenericModule;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.ApplicationCore.Logging;
 

@@ -14,7 +14,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
 {
     public class AssociateShipworksWithItselfRequestTest : IDisposable
     {
-        AutoMock mock; 
+        AutoMock mock;
 
         public AssociateShipworksWithItselfRequestTest()
         {
@@ -30,9 +30,9 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
                 {
                     IsSuccessfulMatch = true
                 });
-            
+
             var testObject = mock.Create<AssociateShipworksWithItselfRequest>();
-         
+
             testObject.PhysicalAddress = new PersonAdapter();
 
             testObject.Execute();
@@ -44,7 +44,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
         public void Execute_DoNotDelegateToValidateAddress_NoPhysicalAddress()
         {
             var webClient = mock.Mock<IUspsWebClient>();
- 
+
             var testObject = mock.Create<AssociateShipworksWithItselfRequest>();
 
             testObject.Execute();

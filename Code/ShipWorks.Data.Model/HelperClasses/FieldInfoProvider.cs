@@ -56,7 +56,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 		/// <summary>Method which initializes the internal datastores.</summary>
 		private void Init()
 		{
-			base.InitClass( (172 + 0));
+			base.InitClass( (174 + 0));
 			InitActionEntityInfos();
 			InitActionFilterTriggerEntityInfos();
 			InitActionQueueEntityInfos();
@@ -196,6 +196,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			InitShopifyOrderItemEntityInfos();
 			InitShopifyStoreEntityInfos();
 			InitShopSiteStoreEntityInfos();
+			InitSparkPayStoreEntityInfos();
 			InitStatusPresetEntityInfos();
 			InitStoreEntityInfos();
 			InitSystemDataEntityInfos();
@@ -204,6 +205,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			InitTemplateFolderEntityInfos();
 			InitTemplateStoreSettingsEntityInfos();
 			InitTemplateUserSettingsEntityInfos();
+			InitThreeDCartOrderEntityInfos();
 			InitThreeDCartOrderItemEntityInfos();
 			InitThreeDCartStoreEntityInfos();
 			InitUpsAccountEntityInfos();
@@ -2073,8 +2075,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		private void InitSearsStoreEntityInfos()
 		{
 			base.AddElementFieldInfo("SearsStoreEntity", "StoreID", typeof(System.Int64), true, false, false, false,  (int)SearsStoreFieldIndex.StoreID, 0, 0, 19);
-			base.AddElementFieldInfo("SearsStoreEntity", "Email", typeof(System.String), false, false, false, false,  (int)SearsStoreFieldIndex.Email, 75, 0, 0);
+			base.AddElementFieldInfo("SearsStoreEntity", "SearsEmail", typeof(System.String), false, false, false, false,  (int)SearsStoreFieldIndex.SearsEmail, 75, 0, 0);
 			base.AddElementFieldInfo("SearsStoreEntity", "Password", typeof(System.String), false, false, false, false,  (int)SearsStoreFieldIndex.Password, 75, 0, 0);
+			base.AddElementFieldInfo("SearsStoreEntity", "SecretKey", typeof(System.String), false, false, false, false,  (int)SearsStoreFieldIndex.SecretKey, 255, 0, 0);
+			base.AddElementFieldInfo("SearsStoreEntity", "SellerID", typeof(System.String), false, false, false, false,  (int)SearsStoreFieldIndex.SellerID, 15, 0, 0);
 		}
 		/// <summary>Inits ServerMessageEntity's FieldInfo objects</summary>
 		private void InitServerMessageEntityInfos()
@@ -2378,6 +2382,14 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("ShopSiteStoreEntity", "DownloadPageSize", typeof(System.Int32), false, false, false, false,  (int)ShopSiteStoreFieldIndex.DownloadPageSize, 0, 0, 10);
 			base.AddElementFieldInfo("ShopSiteStoreEntity", "RequestTimeout", typeof(System.Int32), false, false, false, false,  (int)ShopSiteStoreFieldIndex.RequestTimeout, 0, 0, 10);
 		}
+		/// <summary>Inits SparkPayStoreEntity's FieldInfo objects</summary>
+		private void InitSparkPayStoreEntityInfos()
+		{
+			base.AddElementFieldInfo("SparkPayStoreEntity", "StoreID", typeof(System.Int64), true, false, false, false,  (int)SparkPayStoreFieldIndex.StoreID, 0, 0, 19);
+			base.AddElementFieldInfo("SparkPayStoreEntity", "Token", typeof(System.String), false, false, false, false,  (int)SparkPayStoreFieldIndex.Token, 70, 0, 0);
+			base.AddElementFieldInfo("SparkPayStoreEntity", "StoreUrl", typeof(System.String), false, false, false, false,  (int)SparkPayStoreFieldIndex.StoreUrl, 350, 0, 0);
+			base.AddElementFieldInfo("SparkPayStoreEntity", "StatusCodes", typeof(System.String), false, false, false, true,  (int)SparkPayStoreFieldIndex.StatusCodes, 2147483647, 0, 0);
+		}
 		/// <summary>Inits StatusPresetEntity's FieldInfo objects</summary>
 		private void InitStatusPresetEntityInfos()
 		{
@@ -2499,6 +2511,12 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("TemplateUserSettingsEntity", "PreviewFilterNodeID", typeof(Nullable<System.Int64>), false, false, false, true,  (int)TemplateUserSettingsFieldIndex.PreviewFilterNodeID, 0, 0, 19);
 			base.AddElementFieldInfo("TemplateUserSettingsEntity", "PreviewZoom", typeof(System.String), false, false, false, false,  (int)TemplateUserSettingsFieldIndex.PreviewZoom, 10, 0, 0);
 		}
+		/// <summary>Inits ThreeDCartOrderEntity's FieldInfo objects</summary>
+		private void InitThreeDCartOrderEntityInfos()
+		{
+			base.AddElementFieldInfo("ThreeDCartOrderEntity", "OrderID", typeof(System.Int64), true, false, false, false,  (int)ThreeDCartOrderFieldIndex.OrderID, 0, 0, 19);
+			base.AddElementFieldInfo("ThreeDCartOrderEntity", "ThreeDCartOrderID", typeof(System.Int64), false, false, false, false,  (int)ThreeDCartOrderFieldIndex.ThreeDCartOrderID, 0, 0, 19);
+		}
 		/// <summary>Inits ThreeDCartOrderItemEntity's FieldInfo objects</summary>
 		private void InitThreeDCartOrderItemEntityInfos()
 		{
@@ -2514,6 +2532,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("ThreeDCartStoreEntity", "TimeZoneID", typeof(System.String), false, false, false, true,  (int)ThreeDCartStoreFieldIndex.TimeZoneID, 100, 0, 0);
 			base.AddElementFieldInfo("ThreeDCartStoreEntity", "StatusCodes", typeof(System.String), false, false, false, true,  (int)ThreeDCartStoreFieldIndex.StatusCodes, 2147483647, 0, 0);
 			base.AddElementFieldInfo("ThreeDCartStoreEntity", "DownloadModifiedNumberOfDaysBack", typeof(System.Int32), false, false, false, false,  (int)ThreeDCartStoreFieldIndex.DownloadModifiedNumberOfDaysBack, 0, 0, 10);
+			base.AddElementFieldInfo("ThreeDCartStoreEntity", "RestUser", typeof(System.Boolean), false, false, false, false,  (int)ThreeDCartStoreFieldIndex.RestUser, 0, 0, 0);
 		}
 		/// <summary>Inits UpsAccountEntity's FieldInfo objects</summary>
 		private void InitUpsAccountEntityInfos()

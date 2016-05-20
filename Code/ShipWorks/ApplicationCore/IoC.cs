@@ -1,27 +1,30 @@
-﻿using System;
-using System.Reflection;
-using Autofac;
-using System.Windows.Forms;
+﻿using Autofac;
 using Interapptive.Shared.Messaging;
 using Interapptive.Shared.Pdf;
+using Interapptive.Shared.Security;
 using log4net;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Licensing.Activation;
 using ShipWorks.ApplicationCore.Licensing.FeatureRestrictions;
 using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
 using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.ApplicationCore.Security;
 using ShipWorks.Common;
 using ShipWorks.Data;
 using ShipWorks.Data.Administration;
 using ShipWorks.Editions;
 using ShipWorks.Editions.Brown;
+using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.Postal;
+using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
-using ShipWorks.Users;
 using ShipWorks.Stores;
 using ShipWorks.Stores.Content;
-using ShipWorks.Shipping.Profiles;
+using ShipWorks.Users;
+using System;
+using System.Reflection;
+using System.Windows.Forms;
 
 namespace ShipWorks.ApplicationCore
 {
@@ -54,6 +57,7 @@ namespace ShipWorks.ApplicationCore
         /// <summary>
         /// Initialize the IoC container
         /// </summary>
+        /// <param name="assemblies">The assemblies.</param>
         public static void Initialize(params Assembly[] assemblies)
         {
             var builder = new ContainerBuilder();
@@ -77,6 +81,11 @@ namespace ShipWorks.ApplicationCore
             builder.RegisterInstance(Messenger.Current)
                 .AsImplementedInterfaces()
                 .SingleInstance();
+
+            builder.Register(c => Program.MainForm)
+                .As<Control>()
+                .As<IWin32Window>()
+                .ExternallyOwned();
 
             builder.RegisterAssemblyModules(assemblies);
 
@@ -132,18 +141,18 @@ namespace ShipWorks.ApplicationCore
                 .AsImplementedInterfaces()
                 .AsSelf();
 
+            builder.RegisterType<UspsAccountSetupActivity>()
+                .AsImplementedInterfaces()
+                .AsSelf();
+
             builder.RegisterType<CustomerLicenseWriter>()
                 .AsImplementedInterfaces();
 
             builder.RegisterType<CustomerLicenseReader>()
                 .AsImplementedInterfaces();
-
+                
             builder.RegisterType<StoreLicense>()
                 .AsSelf();
-
-            builder.RegisterType<LicenseEncryptionProvider>()
-                .AsImplementedInterfaces()
-                .SingleInstance();
 
             builder.RegisterType<CustomerLicenseActivationService>()
                 .AsImplementedInterfaces();
@@ -154,8 +163,17 @@ namespace ShipWorks.ApplicationCore
             builder.RegisterType<SqlSchemaVersion>()
                 .AsImplementedInterfaces();
 
+            builder.RegisterType<ShipmentTypeManagerWrapper>()
+                .AsImplementedInterfaces();
+
             builder.RegisterType<ShipmentTypeSetupActivity>()
                 .AsImplementedInterfaces();
+
+            builder.RegisterType<EncryptionProviderFactory>()
+                .AsImplementedInterfaces();
+
+            builder.RegisterType<LicenseCipherKey>()
+                .Keyed<ICipherKey>(CipherContext.License);
         }
 
         /// <summary>

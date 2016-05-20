@@ -14,11 +14,14 @@ using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 using ShipWorks.UI.Wizard;
 using log4net;
 using System.Globalization;
+using System.Linq;
+using Interapptive.Shared.Utility;
+using ShipWorks.Stores.Platforms.ThreeDCart.RestApi;
 
 namespace ShipWorks.Stores.Platforms.ThreeDCart
 {
     /// <summary>
-    /// 3DCart Store Type implementation
+    /// 3dcart Store Type implementation
     /// </summary>
     public class ThreeDCartStoreType : StoreType
     {
@@ -30,23 +33,34 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         public ThreeDCartStoreType(StoreEntity store)
             : base(store)
         {
-
         }
 
         /// <summary>
         /// StoreTypeCode enum value for ThreeD Cart Store Types
         /// </summary>
-        public override StoreTypeCode TypeCode
+        public override StoreTypeCode TypeCode => StoreTypeCode.ThreeDCart;
+
+        /// <summary>
+        /// Whether or not the user is using the REST API
+        /// </summary>
+        private bool RestUser => ((ThreeDCartStoreEntity)Store).RestUser;
+
+        /// <summary>
+        /// Link to article on adding a 3dcart store
+        /// </summary>
+        public string AccountSettingsHelpUrl
         {
             get
             {
-                return StoreTypeCode.ThreeDCart;
+                return RestUser ?
+                    "http://support.shipworks.com/solution/articles/4000076906-adding-3dcart-using-rest-api" :
+                    "http://support.shipworks.com/support/solutions/articles/167787-adding-a-3dcart-store-";
             }
         }
 
         /// <summary>
-        /// This is a string that uniquely identifies the store.  
-        /// Since current customers can have the legacy implementation of 3D Cart, we need to support
+        /// This is a string that uniquely identifies the store.
+        /// Since current customers can have the legacy implementation of 3dcart, we need to support
         /// the old identifier as well, so use the same algorithm as before.
         /// </summary>
         protected override string InternalLicenseIdentifier
@@ -60,7 +74,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
                 identifier = Regex.Replace(identifier, "(admin/)?[^/]*(\\.)?[^/]+$", "", RegexOptions.IgnoreCase);
 
                 // The regex above will return just the scheme if there's no ending /, so check for that and
-                // reset to the StoreUrl 
+                // reset to the StoreUrl
                 if (identifier.EndsWith(Uri.SchemeDelimiter, StringComparison.OrdinalIgnoreCase))
                 {
                     identifier = store.StoreUrl.ToLowerInvariant();
@@ -78,13 +92,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         /// <summary>
         /// Initial download policy of the store
         /// </summary>
-        public override InitialDownloadPolicy InitialDownloadPolicy
-        {
-            get
-            {
-                return new InitialDownloadPolicy(InitialDownloadRestrictionType.DaysBack);
-            }
-        }
+        public override InitialDownloadPolicy InitialDownloadPolicy => new InitialDownloadPolicy(InitialDownloadRestrictionType.DaysBack);
 
         /// <summary>
         /// Creates a new instance of an ThreeDCart store entity
@@ -99,11 +107,14 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
             // Set the threeD cart store specific defaults
             threeDCartStore.StoreUrl = string.Empty;
             threeDCartStore.ApiUserKey = string.Empty;
-            threeDCartStore.StoreName = "3D Cart Store";
+            threeDCartStore.StoreName = "3dcart Store";
             threeDCartStore.DownloadModifiedNumberOfDaysBack = 7;
 
-            // Default to the Eastern time zone, as that is the default when creating a new store on 3D Cart
+            // Default to the Eastern time zone, as that is the default when creating a new store on 3dcart
             threeDCartStore.TimeZoneID = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time").Id;
+
+            // For any newly created stores, we want to use the REST API, so this is defaulted to true
+            threeDCartStore.RestUser = true;
 
             return threeDCartStore;
         }
@@ -128,7 +139,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         }
 
         /// <summary>
-        /// Creates a 3D Cart store-specific instance of an ThreeDCartOrderItemEntity
+        /// Creates a 3dcart store-specific instance of an ThreeDCartOrderItemEntity
         /// </summary>
         public override OrderItemEntity CreateOrderItemInstance()
         {
@@ -136,10 +147,24 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         }
 
         /// <summary>
+        /// Creates the order instance.
+        /// </summary>
+        protected override OrderEntity CreateOrderInstance()
+        {
+            return new ThreeDCartOrderEntity();
+        }
+
+        /// <summary>
         /// Get a list of supported online ThreeDCart statuses
         /// </summary>
         public override ICollection<string> GetOnlineStatusChoices()
         {
+            if (RestUser)
+            {
+                IEnumerable<EnumEntry<Enums.ThreeDCartOrderStatus>> statuses = EnumHelper.GetEnumList<Enums.ThreeDCartOrderStatus>();
+                return statuses.Select(s => s.Description).ToList();
+            }
+
             ThreeDCartStatusCodeProvider statusCodeProvider = new ThreeDCartStatusCodeProvider((ThreeDCartStoreEntity)Store);
             return statusCodeProvider.CodeNames;
         }
@@ -148,10 +173,10 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         /// Get the store-specific fields that are used to unqiuely identifiy an online cusotmer record.  Such
         /// as the eBay User ID or the osCommerce CustomerID.  If a particular store does not have any concept
         /// of a unique online customer, than this can return null.  If multiple fields are returned, they
-        /// will be tested using OR.  If customer identifiers are unique per store instance, 
+        /// will be tested using OR.  If customer identifiers are unique per store instance,
         /// set instanceLookup to true.  If they are unique per store type, set instanceLookup to false;
-        /// 
-        /// As per 3D Cart tech support chat, each store has a unique set of IDs, all starting at 1
+        ///
+        /// As per 3dcart tech support chat, each store has a unique set of IDs, all starting at 1
         /// </summary>
         public override IEntityField2[] CreateCustomerIdentifierFields(out bool instanceLookup)
         {
@@ -165,7 +190,12 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         /// </summary>
         public override StoreDownloader CreateDownloader()
         {
-            return new ThreeDCartDownloader((ThreeDCartStoreEntity)Store);
+            if (RestUser)
+            {
+                return new ThreeDCartRestDownloader((ThreeDCartStoreEntity)Store);
+            }
+
+            return new ThreeDCartSoapDownloader((ThreeDCartStoreEntity)Store);
         }
 
         /// <summary>
@@ -200,7 +230,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         }
 
         /// <summary>
-        /// Indicates if the StoreType supports the display of the given "Online" column.  
+        /// Indicates if the StoreType supports the display of the given "Online" column.
         /// </summary>
         public override bool GridOnlineColumnSupported(OnlineGridColumnSupport column)
         {
@@ -229,23 +259,37 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         public override List<MenuCommand> CreateOnlineUpdateInstanceCommands()
         {
             List<MenuCommand> commands = new List<MenuCommand>();
-
-            // get possible status codes from the provider
-            ThreeDCartStatusCodeProvider codeProvider = new ThreeDCartStatusCodeProvider((ThreeDCartStoreEntity)Store);
-
-            // create a menu item for each status 
             bool isOne = false;
-            foreach (int codeValue in codeProvider.CodeValues)
+            if (RestUser)
             {
-                isOne = true;
+                // create a menu item for each status
+                foreach (string codeValue in GetOnlineStatusChoices())
+                {
+                    isOne = true;
+                    MenuCommand command = new MenuCommand(codeValue, OnSetOnlineStatus);
+                    command.Tag = EnumHelper.GetEnumByApiValue<Enums.ThreeDCartOrderStatus>(codeValue);
+                    commands.Add(command);
+                }
+            }
+            else
+            {
+                // get possible status codes from the provider
+                ThreeDCartStatusCodeProvider codeProvider =
+                    new ThreeDCartStatusCodeProvider((ThreeDCartStoreEntity) Store);
 
-                MenuCommand command = new MenuCommand(codeProvider.GetCodeName(codeValue), new MenuCommandExecutor(OnSetOnlineStatus));
-                command.Tag = codeValue;
+                // create a menu item for each status
+                foreach (int codeValue in codeProvider.CodeValues)
+                {
+                    isOne = true;
 
-                commands.Add(command);
+                    MenuCommand command = new MenuCommand(codeProvider.GetCodeName(codeValue), OnSetOnlineStatus);
+                    command.Tag = codeValue;
+
+                    commands.Add(command);
+                }
             }
 
-            MenuCommand uploadCommand = new MenuCommand("Upload Shipment Details", new MenuCommandExecutor(OnUploadDetails));
+            MenuCommand uploadCommand = new MenuCommand("Upload Shipment Details", OnUploadDetails);
             uploadCommand.BreakBefore = isOne;
             commands.Add(uploadCommand);
 
@@ -286,13 +330,21 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
                     return;
                 }
 
-                ThreeDCartOnlineUpdater updater = new ThreeDCartOnlineUpdater((ThreeDCartStoreEntity)Store);
-                updater.UpdateShipmentDetails(order);
+                if (RestUser)
+                {
+                    ThreeDCartRestOnlineUpdater updater = new ThreeDCartRestOnlineUpdater((ThreeDCartStoreEntity) Store);
+                    updater.UpdateShipmentDetails(order);
+                }
+                else
+                {
+                    ThreeDCartSoapOnlineUpdater updater = new ThreeDCartSoapOnlineUpdater((ThreeDCartStoreEntity)Store);
+                    updater.UpdateShipmentDetails(order);
+                }
             }
             catch (ThreeDCartException ex)
             {
                 // log it
-                log.ErrorFormat("Error uploading shipment information for orders.  Error message: {0}", ex.Message);
+                log.ErrorFormat("Error uploading shipment information for orders. Error message: {0}", ex.Message);
 
                 // add the error to issues for the user
                 issueAdder.Add(orderID, ex);
@@ -326,11 +378,19 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         {
             log.Debug(Store.StoreName);
 
-            int statusCode = (int)userState;
+            int statusCode = (int) userState;
             try
             {
-                ThreeDCartOnlineUpdater updater = new ThreeDCartOnlineUpdater((ThreeDCartStoreEntity)Store);
-                updater.UpdateOrderStatus(orderID, statusCode);
+                if (RestUser)
+                {
+                    ThreeDCartRestOnlineUpdater updater = new ThreeDCartRestOnlineUpdater((ThreeDCartStoreEntity)Store);
+                    updater.UpdateOrderStatus(orderID, statusCode);
+                }
+                else
+                {
+                    ThreeDCartSoapOnlineUpdater updater = new ThreeDCartSoapOnlineUpdater((ThreeDCartStoreEntity)Store);
+                    updater.UpdateOrderStatus(orderID, statusCode);
+                }
             }
             catch (ThreeDCartException ex)
             {

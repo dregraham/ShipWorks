@@ -1,6 +1,7 @@
 ﻿using Interapptive.Shared;
 using Interapptive.Shared.Utility;
 using log4net;
+using Interapptive.Shared.Security;
 using ShipWorks.ApplicationCore.Dashboard.Content;
 using ShipWorks.ApplicationCore.Licensing.FeatureRestrictions;
 using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;

@@ -74,6 +74,9 @@
       <HintPath>..\..\packages\Newtonsoft.Json.4.5.6\lib\net40\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Rebex.Mail">
+      <HintPath>..\..\Components\Rebex.Mail.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="SD.LLBLGen.Pro.ORMSupportClasses.NET20, Version=2.6.0.0, Culture=neutral, PublicKeyToken=ca73b74ba4e3ff27, processorArchitecture=MSIL">
@@ -119,6 +122,10 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Security\AesEncryptionProvider.cs" />
+    <Compile Include="Security\EncryptionException.cs" />
+    <Compile Include="Security\ICipherKey.cs" />
+    <Compile Include="Security\IEncryptionProvider.cs" />
     <Compile Include="NDependIgnoreAttribute.cs" />
     <Compile Include="NDependIgnoreComplexMethodAttribute.cs" />
     <Compile Include="NDependIgnoreTooManyParamsAttribute.cs" />
@@ -143,7 +150,13 @@
     <Compile Include="Collections\EnumerableExtensions.cs" />
     <Compile Include="Imaging\EdgeDetection.cs" />
     <Compile Include="InterapptiveOnly.cs" />
+    <Compile Include="Net\ApiLogEncryption.cs" />
+    <Compile Include="Net\HttpJsonVariableRequestSubmitter.cs" />
+    <Compile Include="Net\IApiLogEntry.cs" />
     <Compile Include="Pdf\IPdfDocument.cs" />
+    <Compile Include="Security\IEncryptionProviderFactory.cs" />
+    <Compile Include="Security\SecureText.cs" />
+    <Compile Include="Security\SecureTextEncryptionProvider.cs" />
     <Compile Include="UI\IMessageHelper.cs" />
     <Compile Include="UI\MessageHelperWrapper.cs" />
     <Compile Include="Utility\ActionRetry.cs" />
@@ -382,14 +395,12 @@
     <Compile Include="Utility\GuidHelper.cs" />
     <Compile Include="Utility\HiddenAttribute.cs" />
     <Compile Include="Utility\IDateTimeProvider.cs" />
-    <Compile Include="Utility\IEncryptionProvider.cs" />
     <Compile Include="Utility\NDesk.Options.cs" />
     <Compile Include="Utility\NDesk.Options.Extensions.cs" />
     <Compile Include="Utility\MethodConditions.cs" />
     <Compile Include="Utility\PathUtility.cs" />
     <Compile Include="Utility\ResourceUtility.cs" />
     <Compile Include="Utility\ResourceUtilityException.cs" />
-    <Compile Include="Utility\SecureText.cs" />
     <Compile Include="Utility\SerializableObject.cs" />
     <Compile Include="Utility\SerializationUtility.cs" />
     <Compile Include="Utility\SortOrderAttribute.cs" />

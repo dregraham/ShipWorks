@@ -1,11 +1,10 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
 using ShipWorks.Data.Model.EntityClasses;
 using Interapptive.Shared.Net;
 using System.Net;
 using Interapptive.Shared.Utility;
 using System.Xml;
+using Interapptive.Shared.Security;
 using ShipWorks.ApplicationCore.Logging;
 
 namespace ShipWorks.Stores.Platforms.ShopSite

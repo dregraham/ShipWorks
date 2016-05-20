@@ -23,6 +23,7 @@ using Interapptive.Shared.Business;
 using System.Text.RegularExpressions;
 using Interapptive.Shared;
 using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared.Net;
 using Rebex.Mime.Headers;
 
 namespace ShipWorks.Stores.Platforms.OrderMotion

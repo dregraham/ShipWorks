@@ -13,7 +13,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         /// Constructor
         /// </summary>
         public ThreeDCartWebClientRequestThrottledException() :
-            base("3D Cart has been throttled due to too many API calls.")
+            base("3dcart has been throttled due to too many API calls.")
         {
 
         }

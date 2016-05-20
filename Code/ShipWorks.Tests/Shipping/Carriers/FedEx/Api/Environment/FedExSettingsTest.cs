@@ -1,4 +1,4 @@
-using Interapptive.Shared.Utility;
+using Interapptive.Shared.Security;
 using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
@@ -89,7 +89,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Environment
         [Fact]
         public void EndpointUrl_ReturnsTestingUrl_WhenUsingTestServer()
         {
-            // We've setup the repository in the initialize method to indicate we should use the 
+            // We've setup the repository in the initialize method to indicate we should use the
             // test server, so there's no additional setup needed
             Assert.Equal("https://wsbeta.fedex.com:443/web-services/", testObject.EndpointUrl);
         }

@@ -96,7 +96,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
                         return;
                     }
 
-                    // Get orders from LemonStand 
+                    // Get orders from LemonStand
                     JToken result = client.GetOrders(currentPage, start);
 
                     // Get JSON result objects into a list
@@ -133,7 +133,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
 
         private bool ProcessOrders(List<JToken> jsonOrders, int expectedCount)
         {
-// Load orders 
+            // Load orders
             foreach (JToken jsonOrder in jsonOrders)
             {
                 // check for cancellation
@@ -171,9 +171,9 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         {
             //                              order
             //                          /     |      \
-            //                    invoices  customer  items 
+            //                    invoices  customer  items
             //                      /         |          \
-            //                shipment  billing_address  product 
+            //                shipment  billing_address  product
             //                  /
             //          shipment_address
 
@@ -373,6 +373,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
             shipAdapter.FirstName = shipAddress.FirstName;
             shipAdapter.LastName = shipAddress.LastName;
             shipAdapter.Street1 = shipAddress.StreetAddress;
+            shipAdapter.Street2 = shipAddress.StreetAddress2;
             shipAdapter.City = shipAddress.City;
             shipAdapter.StateProvCode = Geography.GetStateProvCode(shipAddress.State);
             shipAdapter.PostalCode = shipAddress.PostalCode;
@@ -383,6 +384,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
             billAdapter.FirstName = billAddress.FirstName;
             billAdapter.LastName = billAddress.LastName;
             billAdapter.Street1 = billAddress.StreetAddress;
+            billAdapter.Street2 = billAddress.StreetAddress2;
             billAdapter.City = billAddress.City;
             billAdapter.StateProvCode = Geography.GetStateProvCode(billAddress.State);
             billAdapter.PostalCode = billAddress.PostalCode;
@@ -417,7 +419,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
                 {
                     // Item is not in the cache, so get the information from LemonStand
                     product = GetProductFromLemonStand(productID);
-                    
+
                     // Since it was not in the cache, let's add it
                     storeProductCache[int.Parse(productID)] = product;
                 }

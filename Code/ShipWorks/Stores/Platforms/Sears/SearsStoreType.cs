@@ -22,7 +22,7 @@ namespace ShipWorks.Stores.Platforms.Sears
     /// </summary>
     public class SearsStoreType : StoreType
     {
-        // Logger 
+        // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(SearsStoreType));
 
         /// <summary>
@@ -54,7 +54,7 @@ namespace ShipWorks.Stores.Platforms.Sears
             InitializeStoreDefaults(store);
 
             store.StoreName = "Sears";
-            store.Email = "";
+            store.SearsEmail = "";
             store.Password = "";
 
             return store;
@@ -160,7 +160,7 @@ namespace ShipWorks.Stores.Platforms.Sears
         {
             get
             {
-                return ((SearsStoreEntity) Store).Email;
+                return ((SearsStoreEntity) Store).SearsEmail;
             }
         }
 

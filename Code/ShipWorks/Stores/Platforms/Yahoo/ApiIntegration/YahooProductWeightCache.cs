@@ -33,7 +33,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
             string key = storeID;
 
             LruCache<string, YahooCatalogItem> productWeightCache;
-
+            
             // Try and get an existing cache based on the key.  If one is not found, create a new one and add it to the list of caches.
             if (!storeProductWeightCaches.TryGetValue(key, out productWeightCache))
             {
