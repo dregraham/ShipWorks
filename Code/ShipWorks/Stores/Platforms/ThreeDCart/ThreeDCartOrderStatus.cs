@@ -6,15 +6,15 @@ using System.Text;
 namespace ShipWorks.Stores.Platforms.ThreeDCart
 {
     /// <summary>
-    /// Helper class that represents an online 3D Cart order status
+    /// Helper class that represents an online 3dcart order status
     /// </summary>
     public class ThreeDCartOrderStatus
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="statusID">The 3D Cart order Status ID</param>
-        /// <param name="statusText">The 3D Cart order Status Text</param>
+        /// <param name="statusID">The 3dcart order Status ID</param>
+        /// <param name="statusText">The 3dcart order Status Text</param>
         public ThreeDCartOrderStatus(int statusID, string statusText)
         {
             StatusID = statusID;
@@ -22,7 +22,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         }
 
         /// <summary>
-        /// The 3D Cart order Status ID
+        /// The 3dcart order Status ID
         /// </summary>
         public int StatusID
         {
@@ -31,7 +31,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         }
 
         /// <summary>
-        /// The 3D Cart order Status Text
+        /// The 3dcart order Status Text
         /// </summary>
         public string StatusText
         {

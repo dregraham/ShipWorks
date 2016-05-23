@@ -81,7 +81,6 @@ namespace ShipWorks.Stores.Platforms.LemonStand
             {
                 if (order.IsManual)
                 {
-                    log.Warn($"Not uploading order status since order {orderID} is manual");
                     return;
                 }
 
@@ -101,7 +100,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
             }
             else
             {
-                log.WarnFormat("Unable to update online status for order {0}: cannot find order", orderID);
+                log.WarnFormat($"Unable to update online status for order {orderID}: cannot find order");
             }
         }
 

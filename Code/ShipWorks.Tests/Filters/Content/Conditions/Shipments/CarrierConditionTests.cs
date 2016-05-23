@@ -4,6 +4,8 @@ using Autofac.Extras.Moq;
 using Moq;
 using ShipWorks.Filters.Content.Conditions.Shipments;
 using ShipWorks.Shipping;
+using ShipWorks.Shipping.Carriers.Amazon;
+using ShipWorks.Shipping.Carriers.Other;
 using Xunit;
 
 namespace ShipWorks.Tests.Filters.Content.Conditions.Shipments
@@ -16,8 +18,8 @@ namespace ShipWorks.Tests.Filters.Content.Conditions.Shipments
             using (var mock = AutoMock.GetLoose())
             {
                 mock.Mock<IShipmentTypeManager>()
-                    .Setup(m => m.ShipmentTypeCodes)
-                    .Returns(new [] { ShipmentTypeCode.Amazon });
+                    .Setup(m => m.ShipmentTypes)
+                    .Returns(new List<ShipmentType> { mock.Create<AmazonShipmentType>() });
 
                 mock.Mock<IShippingManager>()
                     .Setup(m => m.IsShipmentTypeConfigured(It.IsAny<ShipmentTypeCode>()))
@@ -37,8 +39,8 @@ namespace ShipWorks.Tests.Filters.Content.Conditions.Shipments
             using (var mock = AutoMock.GetLoose())
             {
                 mock.Mock<IShipmentTypeManager>()
-                    .Setup(m => m.ShipmentTypeCodes)
-                    .Returns(new [] { ShipmentTypeCode.Amazon });
+                    .Setup(m => m.ShipmentTypes)
+                    .Returns(new List<ShipmentType> { mock.Create<AmazonShipmentType>() });
 
                 mock.Mock<IShippingManager>()
                     .Setup(m => m.IsShipmentTypeConfigured(It.IsAny<ShipmentTypeCode>()))
@@ -58,8 +60,8 @@ namespace ShipWorks.Tests.Filters.Content.Conditions.Shipments
             using (var mock = AutoMock.GetLoose())
             {
                 mock.Mock<IShipmentTypeManager>()
-                    .Setup(m => m.ShipmentTypeCodes)
-                    .Returns(new [] { ShipmentTypeCode.Amazon, ShipmentTypeCode.Other });
+                    .Setup(m => m.ShipmentTypes)
+                    .Returns(new List<ShipmentType> { mock.Create<AmazonShipmentType>(), mock.Create<OtherShipmentType>() });
 
                 mock.Mock<IShippingManager>()
                     .Setup(m => m.IsShipmentTypeConfigured(It.IsAny<ShipmentTypeCode>()))

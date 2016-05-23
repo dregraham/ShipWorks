@@ -1,12 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using Autofac;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Filters.Content.SqlGeneration;
 using ShipWorks.Shipping;
-using Interapptive.Shared.Utility;
-using ShipWorks.ApplicationCore;
-using Autofac.Features.OwnedInstances;
-using Autofac;
 
 namespace ShipWorks.Filters.Content.Conditions.Shipments
 {
@@ -15,33 +14,50 @@ namespace ShipWorks.Filters.Content.Conditions.Shipments
     {
         private readonly IShipmentTypeManager shipmentTypeManager;
         private readonly IShippingManager shippingManager;
+        private readonly ILifetimeScope scope;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <remarks>This constructor should be removed when we start using IoC more fully for filters</remarks>
-        public CarrierCondition() : 
-            this(IoC.UnsafeGlobalLifetimeScope.Resolve<Owned<IShipmentTypeManager>>().Value,
-                 IoC.UnsafeGlobalLifetimeScope.Resolve<Owned<IShippingManager>>().Value)
+        public CarrierCondition()
         {
+            scope = IoC.BeginLifetimeScope();
+            shipmentTypeManager = scope.Resolve<IShipmentTypeManager>();
+            shippingManager = scope.Resolve<IShippingManager>();
             Value = ShipmentTypeCode.None;
         }
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public CarrierCondition(IShipmentTypeManager shipmentTypeManager, IShippingManager shippingManager)
         {
             this.shipmentTypeManager = shipmentTypeManager;
             this.shippingManager = shippingManager;
+            Value = ShipmentTypeCode.None;
         }
 
         /// <summary>
         /// Get the value choices the user will be provided with
         /// </summary>
-        public override ICollection<ValueChoice<ShipmentTypeCode>> ValueChoices =>
-            shipmentTypeManager.ShipmentTypeCodes
-                .Where(t => t != ShipmentTypeCode.BestRate)
-                .Where(t => t != ShipmentTypeCode.Amazon || shippingManager.IsShipmentTypeConfigured(t))
-                .Select(t => new ValueChoice<ShipmentTypeCode>(EnumHelper.GetDescription(t), t))
-                .ToArray();
+        public override ICollection<ValueChoice<ShipmentTypeCode>> ValueChoices
+        {
+            get
+            {
+                ValueChoice<ShipmentTypeCode>[] result =  shipmentTypeManager.ShipmentTypes
+                    .Where(t => t.ShipmentTypeCode != ShipmentTypeCode.BestRate)
+                    .Where(
+                        t =>
+                            t.ShipmentTypeCode != ShipmentTypeCode.Amazon ||
+                            shippingManager.IsShipmentTypeConfigured(t.ShipmentTypeCode))
+                    .Select(t => new ValueChoice<ShipmentTypeCode>(t.ShipmentTypeName, t.ShipmentTypeCode))
+                    .ToArray();
+
+                scope?.Dispose();
+
+                return result;
+            }
+        }
 
         /// <summary>
         /// Generate the sql

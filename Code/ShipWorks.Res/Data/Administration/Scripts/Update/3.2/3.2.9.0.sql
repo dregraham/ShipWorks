@@ -1,4 +1,4 @@
-﻿-- Convert 3d cart GenericStoreOrderUpdate action tasks to ThreeDCartOrderUpdateTask
+﻿-- Convert 3dcart GenericStoreOrderUpdate action tasks to ThreeDCartOrderUpdateTask
 begin tran
 
 	declare @storeId nvarchar(20)

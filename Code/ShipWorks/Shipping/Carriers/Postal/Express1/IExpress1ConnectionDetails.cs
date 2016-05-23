@@ -1,4 +1,5 @@
-﻿using ShipWorks.ApplicationCore.Logging;
+﻿using Interapptive.Shared.Net;
+using ShipWorks.ApplicationCore.Logging;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Express1
 {

@@ -118,6 +118,6 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="label4.Text" xml:space="preserve">
-    <value>When this option is selected, ShipWorks will go back and check every order within the timeframe specified.  This takes time but, due to 3D Cart limitations, not doing so may lead to missed modifications or skipped orders.</value>
+    <value>When this option is selected, ShipWorks will go back and check every order within the timeframe specified.  This takes time but, due to 3dcart limitations, not doing so may lead to missed modifications or skipped orders.</value>
   </data>
 </root>

@@ -117,7 +117,4 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="label7.Text" xml:space="preserve">
-    <value>The user key can be found in the Settings -&gt; General -&gt; Store Modules -&gt; API XML Web Service Integration -&gt; Change Settings of the 3DCart admin.  Be sure to check the Enable API and Enable Advanced API check boxes on this admin page.</value>
-  </data>
 </root>

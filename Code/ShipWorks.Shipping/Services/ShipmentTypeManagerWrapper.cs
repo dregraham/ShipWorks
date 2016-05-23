@@ -50,6 +50,11 @@ namespace ShipWorks.Shipping.Services
         }
 
         /// <summary>
+        /// Returns all shipment types in ShipWorks
+        /// </summary>
+        public List<ShipmentType> ShipmentTypes => ShipmentTypeManager.ShipmentTypes;
+
+        /// <summary>
         /// Get a list of enabled shipment types
         /// </summary>
         public IEnumerable<ShipmentTypeCode> ShipmentTypeCodes => ShipmentTypeManager.ShipmentTypeCodes;

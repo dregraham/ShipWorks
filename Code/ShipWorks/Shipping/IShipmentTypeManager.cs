@@ -14,6 +14,11 @@ namespace ShipWorks.Shipping
         IEnumerable<ShipmentTypeCode> ShipmentTypeCodes { get; }
 
         /// <summary>
+        /// Returns all shipment types in ShipWorks
+        /// </summary>
+        List<ShipmentType> ShipmentTypes { get; }
+
+        /// <summary>
         /// Get a list of enabled shipment types
         /// </summary>
         IEnumerable<ShipmentTypeCode> EnabledShipmentTypeCodes { get; }

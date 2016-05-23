@@ -21,10 +21,10 @@ namespace ShipWorks.Stores.Tests.Platforms.Yahoo
 
         public YahooApiDownloaderTest()
         {
-            string orderXml = EmbeddedResourceHelper.GetEmbeddedResourceXml("ShipWorks.Stores.Tests.Platforms.Yahoo.Artifacts.YahooGetOrderResponse.xml");
+            string orderXml = EmbeddedResourceHelper.GetEmbeddedResourceString("ShipWorks.Stores.Tests.Platforms.Yahoo.Artifacts.YahooGetOrderResponse.xml");
             YahooResponse orderResponse = YahooApiWebClient.DeserializeResponse<YahooResponse>(orderXml);
 
-            string itemXml = EmbeddedResourceHelper.GetEmbeddedResourceXml("ShipWorks.Stores.Tests.Platforms.Yahoo.Artifacts.YahooGetItemResponse.xml");
+            string itemXml = EmbeddedResourceHelper.GetEmbeddedResourceString("ShipWorks.Stores.Tests.Platforms.Yahoo.Artifacts.YahooGetItemResponse.xml");
             YahooResponse itemResponse = YahooApiWebClient.DeserializeResponse<YahooResponse>(itemXml);
 
             webClient.Setup(x => x.GetOrder(1001)).Returns(orderResponse);

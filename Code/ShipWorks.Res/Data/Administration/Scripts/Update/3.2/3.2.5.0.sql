@@ -56,13 +56,13 @@ GO
 EXEC sp_addextendedproperty N'AuditName', N'Store URL', 'SCHEMA', N'dbo', 'TABLE', N'ThreeDCartStore', 'COLUMN', N'StoreUrl'
 GO
 
--- 3d Cart store/order conversion
+-- 3dcart store/order conversion
 begin tran
 
 declare @3dCartTypeCode as int;
 set @3dCartTypeCode = 29
 
--- Find the 3d cart generic module stores that do NOT already have a 3d cart store entry
+-- Find the 3dcart generic module stores that do NOT already have a 3dcart store entry
 ;with GSM3DCartStores as
 (
 	select gms.* 
@@ -72,20 +72,20 @@ set @3dCartTypeCode = 29
 	  and gms.StoreID not in (select StoreID from ThreeDCartStore)
 )
 
--- Insert a 3d cart store entry for each found
+-- Insert a 3dcart store entry for each found
 -- Default the user key to blank, so that upon first download the user will get an error
 -- letting them know they need to enter the api user key
 insert into ThreeDCartStore (StoreID, StoreUrl, ApiUserKey, TimeZoneId, StatusCodes)
 	select gsm.StoreID, gsm.ModuleUrl, '', null, ModuleStatusCodes
 	from GSM3DCartStores gsm
 	
--- Now delete the generid module stores that made it into the 3d cart store table
+-- Now delete the generid module stores that made it into the 3dcart store table
 delete from GenericModuleStore where StoreID in
 (
 	select StoreID from ThreeDCartStore
 )
 
--- Now create 3d cart order entries for existing 3d cart orders
+-- Now create 3dcart order entries for existing 3dcart orders
 ;with ThreeDCartOrderItems as
 (
 	select distinct oi.OrderItemID 

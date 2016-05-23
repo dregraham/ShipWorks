@@ -176,6 +176,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// </summary>
         private void CheckCertificate(string url)
         {
+#if !DEBUG
             CertificateRequest certificateRequest = new CertificateRequest(new Uri(url), certificateInspector);
             CertificateSecurityLevel certificateSecurityLevel = certificateRequest.Submit();
 
@@ -184,6 +185,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                 string description = EnumHelper.GetDescription(ShipmentTypeCode.Usps);
                 throw new UspsException(string.Format("ShipWorks is unable to make a secure connection to {0}.", description));
             }
+#endif
         }
 
         /// <summary>

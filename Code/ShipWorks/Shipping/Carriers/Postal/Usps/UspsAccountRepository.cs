@@ -1,7 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using ShipWorks.ApplicationCore.Licensing;
-using ShipWorks.Data.Model.EntityClasses;
+﻿using ShipWorks.Data.Model.EntityClasses;
+using System.Collections.Generic;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {
@@ -13,7 +11,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <summary>
         /// Returns a list of USPS accounts.
         /// </summary>
-        public override IEnumerable<UspsAccountEntity> Accounts => UspsAccountManager.UspsAccounts.Where(a => a.PendingInitialAccount != (int) UspsPendingAccountType.Create).ToList();
+        public override IEnumerable<UspsAccountEntity> Accounts => UspsAccountManager.UspsAccounts;
 
         /// <summary>
         /// Force a check for changes
@@ -25,10 +23,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         /// <param name="accountID">The account ID for which to return an account.</param>
         /// <returns>The matching account.</returns>
-        public override UspsAccountEntity GetAccount(long accountID)
-        {
-            return Accounts.ToList().FirstOrDefault(a => a.UspsAccountID == accountID);
-        }
+        public override UspsAccountEntity GetAccount(long accountID) => UspsAccountManager.GetAccount(accountID);
 
         /// <summary>
         /// Gets the default profile account.

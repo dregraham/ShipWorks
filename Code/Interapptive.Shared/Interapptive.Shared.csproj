@@ -88,6 +88,9 @@
       <HintPath>..\..\packages\Newtonsoft.Json.4.5.6\lib\net40\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Rebex.Mail">
+      <HintPath>..\..\Components\Rebex.Mail.dll</HintPath>
+    </Reference>
     <Reference Include="SD.LLBLGen.Pro.ORMSupportClasses.NET20, Version=2.6.0.0, Culture=neutral, PublicKeyToken=ca73b74ba4e3ff27, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Components\SD.LLBLGen.Pro.ORMSupportClasses.NET20.dll</HintPath>
@@ -204,6 +207,9 @@
     <Compile Include="System.ComponentModel.DataAnnotations\MinLengthAttribute.cs" />
     <Compile Include="System.ComponentModel.DataAnnotations\PhoneAttribute.cs" />
     <Compile Include="Threading\ISchedulerProvider.cs" />
+    <Compile Include="Net\ApiLogEncryption.cs" />
+    <Compile Include="Net\HttpJsonVariableRequestSubmitter.cs" />
+    <Compile Include="Net\IApiLogEntry.cs" />
     <Compile Include="Security\IEncryptionProviderFactory.cs" />
     <Compile Include="Security\SecureText.cs" />
     <Compile Include="Security\SecureTextEncryptionProvider.cs" />

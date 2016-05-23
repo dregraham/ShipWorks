@@ -2,11 +2,11 @@
 using System.IO;
 using System.Reflection;
 
-namespace ShipWorks.Stores.Tests.Platforms.Yahoo
+namespace ShipWorks.Stores.Tests
 {
     public static class EmbeddedResourceHelper
     {
-        public static string GetEmbeddedResourceXml(string embeddedResourceName)
+        public static string GetEmbeddedResourceString(string embeddedResourceName)
         {
             string txt = string.Empty;
             using (Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(embeddedResourceName))

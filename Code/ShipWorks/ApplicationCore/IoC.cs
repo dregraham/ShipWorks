@@ -21,7 +21,6 @@ using ShipWorks.Data.Administration;
 using ShipWorks.Data.Connection;
 using ShipWorks.Editions;
 using ShipWorks.Editions.Brown;
-using ShipWorks.Filters;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.Postal.Endicia;
@@ -33,6 +32,7 @@ using ShipWorks.Shipping.Profiles;
 using System;
 using System.Reflection;
 using Autofac.Core;
+using ShipWorks.Filters;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Users;
 

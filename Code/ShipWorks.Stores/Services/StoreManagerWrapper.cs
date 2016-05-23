@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Windows.Forms;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Users.Security;
@@ -20,6 +21,14 @@ namespace ShipWorks.Stores.Services
         public StoreManagerWrapper(Func<ISecurityContext> getSecurityContext)
         {
             this.getSecurityContext = getSecurityContext;
+        }
+
+        /// <summary>
+        /// Creates the online status filters for the given store.
+        /// </summary>
+        public void CreateStoreStatusFilters(IWin32Window owner, StoreEntity store)
+        {
+            StoreManager.CreateStoreStatusFilters(owner, store);
         }
 
         /// <summary>

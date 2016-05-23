@@ -8,11 +8,11 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication.Throttling;
 using ShipWorks.Stores.Platforms.SparkPay.DTO;
 using ShipWorks.Stores.Platforms.SparkPay.Enums;
-using ShipWorks.Stores.Platforms.SparkPay.Factories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using HttpJsonVariableRequestSubmitter = ShipWorks.Stores.Platforms.SparkPay.Factories.HttpJsonVariableRequestSubmitter;
 
 namespace ShipWorks.Stores.Platforms.SparkPay
 {
