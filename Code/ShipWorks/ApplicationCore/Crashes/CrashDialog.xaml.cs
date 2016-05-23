@@ -27,7 +27,6 @@ namespace ShipWorks.ApplicationCore.Crashes
         Exception exception;
         bool guiThread;
         string email;
-        private readonly Task createLogTask;
         readonly bool showSupportMessage;
         private const int showSupportMessageCutoff = 4;
         private const string reopenRegistryKey = "ReopenAfterCrash";
@@ -45,7 +44,7 @@ namespace ShipWorks.ApplicationCore.Crashes
                 throw new InvalidOperationException(message);
             }
 
-            createLogTask = TaskEx.Run(() => SubmitCrash());
+            CreateLogTask = TaskEx.Run(() => SendReport());
 
             InitializeComponent();
 
@@ -73,6 +72,11 @@ namespace ShipWorks.ApplicationCore.Crashes
 
             Loaded += OnLoaded;
         }
+
+        /// <summary>
+        /// Create log task
+        /// </summary>
+        public Task CreateLogTask { get; }
 
         /// <summary>
         /// Indicates if the Application has crashed.
@@ -131,15 +135,6 @@ namespace ShipWorks.ApplicationCore.Crashes
         }
 
         /// <summary>
-        /// Submit the crash
-        /// </summary>
-        private void SubmitCrash()
-        {
-            string logFileToSubmit = CrashSubmitter.CreateCrashLogZip();
-            CrashSubmitter.Submit(exception, email, string.Empty, logFileToSubmit);
-        }
-
-        /// <summary>
         /// Show the details of the crash report.
         /// </summary>
         private void OnMoreInformationLinkClick(object sender, RoutedEventArgs e)
@@ -152,11 +147,12 @@ namespace ShipWorks.ApplicationCore.Crashes
         /// <summary>
         /// Send the report to interapptive
         /// </summary>
-        private async Task SendReport()
+        private void SendReport()
         {
             try
             {
-                await createLogTask;
+                string logFileToSubmit = CrashSubmitter.CreateCrashLogZip();
+                CrashSubmitter.Submit(exception, email, string.Empty, logFileToSubmit);
             }
             catch (Exception ex)
             {
@@ -232,17 +228,40 @@ namespace ShipWorks.ApplicationCore.Crashes
         /// <summary>
         /// Close the crash report window
         /// </summary>
-        private async void OnOkClick(object sender, RoutedEventArgs e)
+        private void OnOkClick(object sender, RoutedEventArgs e)
         {
             Cursor = Cursors.Wait;
             IsEnabled = false;
 
-            await SendReport();
-
             DialogResult = ReopenShipWorks.IsChecked;
             registry.SetValue(reopenRegistryKey, ReopenShipWorks.IsChecked);
 
+            TaskEx.WhenAny(CreateLogTask, TaskEx.Delay(TimeSpan.FromMinutes(10)))
+                .ContinueWith(ExitApplication);
+
+            CloseForms();
             Close();
+        }
+
+        /// <summary>
+        /// Exit the application
+        /// </summary>
+        private void ExitApplication(Task<Task> task)
+        {
+            try
+            {
+                // Application.Exit does not guaranteed that the windows close.  It only tries.  If an exception
+                // gets thrown, or they set e.Cancel = true, they won't have closed.
+                FormsApplication.Exit();
+
+                // This forces windows to close.  If they try to save state or do other stupid things
+                // while closing then they will throw an exception.
+                FormsApplication.Exit();
+            }
+            catch (Exception termEx)
+            {
+                log.Error("Termination error", termEx);
+            }
         }
 
         /// <summary>

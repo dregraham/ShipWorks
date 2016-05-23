@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using ActiproSoftware.SyntaxEditor;
 using Interapptive.Shared.Data;
@@ -200,9 +201,10 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
         /// </summary>
         /// <param name="exception">The exception that has bubbled up the entire stack.</param>
         /// <exception cref="System.NotImplementedException"></exception>
-        public override void HandleException(Exception exception, bool guiThread, string userEmail)
+        public override async Task HandleException(Exception exception, bool guiThread, string userEmail)
         {
             bool shouldReopen = false;
+            Task sendReportTask = null;
 
             if (ConnectionMonitor.HandleTerminatedConnection(exception))
             {
@@ -217,28 +219,18 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
                     log.Fatal(SqlUtility.GetRunningSqlCommands(SqlSession.Current.Configuration.GetConnectionString()));
                 }
 
-                shouldReopen = new CrashDialog(exception, guiThread, userEmail, recoveryCount).ShowDialog().GetValueOrDefault();
+                CrashDialog crashDialog = new CrashDialog(exception, guiThread, userEmail, recoveryCount);
+
+                sendReportTask = crashDialog.CreateLogTask;
+                shouldReopen = crashDialog.ShowDialog().GetValueOrDefault();
             }
 
-            try
+            if (shouldReopen)
             {
-                if (shouldReopen)
-                {
-                    ReopenShipWorks();
-                }
-
-                // This forces windows to close.  If they try to save state or do other stupid things
-                // while closing then they will throw an exception.
-                Application.Exit();
-            }
-            catch (Exception termEx)
-            {
-                log.Error("Termination error", termEx);
+                ReopenShipWorks();
             }
 
-            // Application.Exit does not guaranteed that the windows close.  It only tries.  If an exception
-            // gets thrown, or they set e.Cancel = true, they won't have closed.
-            Application.ExitThread();
+            await sendReportTask;
         }
 
         /// <summary>

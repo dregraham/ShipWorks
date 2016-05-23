@@ -1,22 +1,19 @@
-﻿using System.Text;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Interapptive.Shared.Data;
 using log4net;
+using NDesk.Options;
 using ShipWorks.AddressValidation;
+using ShipWorks.ApplicationCore.Crashes;
+using ShipWorks.ApplicationCore.Interaction;
+using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.ApplicationCore.Services;
 using ShipWorks.ApplicationCore.Services.Hosting;
+using ShipWorks.Data;
 using ShipWorks.Data.Connection;
-using ShipWorks.Users;
-using System;
-using System.Collections.Generic;
-using ShipWorks.ApplicationCore.Crashes;
-using System.Windows.Forms;
-using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Filters;
 using ShipWorks.Filters.Management;
-using ShipWorks.Data;
-using ShipWorks.ApplicationCore.Logging;
-using NDesk.Options;
-
 
 namespace ShipWorks.ApplicationCore.ExecutionMode
 {
@@ -71,8 +68,8 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
             {
                 if (UpTime.TotalMinutes >= 5)
                 {
-                    // Reset the recovery attempts if the service has been up and running for at least five minutes the service 
-                    // has been running for at least five minutes in the event that it finally did recover for a while before 
+                    // Reset the recovery attempts if the service has been up and running for at least five minutes the service
+                    // has been running for at least five minutes in the event that it finally did recover for a while before
                     // crashing again (i.e. any subsequent crashes will be treated as a new sequence of crashes)
                     recoveryAttempts = 0;
                 }
@@ -97,7 +94,7 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
         {
             get
             {
-                return "ServiceExecutionMode"; 
+                return "ServiceExecutionMode";
             }
         }
 
@@ -195,8 +192,8 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
         /// just before the app terminates.
         /// </summary>
         /// <param name="exception">The exception that has bubbled up the entire stack.</param>
-        public override void HandleException(Exception exception, bool guiThread, string userEmail)
-        {            
+        public override Task HandleException(Exception exception, bool guiThread, string userEmail)
+        {
             if (ConnectionMonitor.HandleTerminatedConnection(exception))
             {
                 log.Info("Terminating due to unrecoverable connection.", exception);
@@ -218,6 +215,8 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
             }
 
             Host.HandleServiceCrash(RecoveryAttempts);
+
+            return TaskEx.FromResult(true);
         }
 
         /// <summary>
@@ -234,7 +233,7 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
             // reports when a service tries to continuously start itself)
             return RecoveryAttempts < MaximumCrashesForSubmittingReports;
         }
-        
+
         /// <summary>
         /// Gets the name of the service for.
         /// </summary>

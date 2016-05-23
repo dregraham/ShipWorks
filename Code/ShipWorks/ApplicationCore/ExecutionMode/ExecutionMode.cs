@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Common.Logging;
 using Interapptive.Shared;
@@ -64,7 +65,7 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
         /// just before the app terminates.
         /// </summary>
         /// <param name="exception">The exception that has bubbled up the entire stack.</param>
-        public abstract void HandleException(Exception exception, bool guiThread, string userEmail);
+        public abstract Task HandleException(Exception exception, bool guiThread, string userEmail);
 
         /// <summary>
         /// Provides common initialization and an extension point for additional initialization
