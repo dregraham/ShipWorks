@@ -23,6 +23,9 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
             streamWriter.Flush();
 		}
 
+        /// <summary>
+        /// Json serializer settings to be used when serializing
+        /// </summary>
         private JsonSerializerSettings GetSerializerSettings()
         {
             return new JsonSerializerSettings {NullValueHandling = NullValueHandling.Ignore};

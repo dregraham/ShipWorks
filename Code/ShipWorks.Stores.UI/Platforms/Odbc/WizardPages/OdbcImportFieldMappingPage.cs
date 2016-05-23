@@ -33,6 +33,9 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
         /// </summary>
         public int Position => 1;
 
+        /// <summary>
+        /// Save the map to the ODBC Store
+        /// </summary>
         private void OnNext(object sender, ShipWorks.UI.Wizard.WizardStepEventArgs e)
         {
             if (store == null)
@@ -51,6 +54,9 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
             viewModel.Save(store);
         }
 
+        /// <summary>
+        /// Load the store into the view model
+        /// </summary>
         private void OnLoad(object sender, EventArgs eventArgs)
         {
             store = GetStore<OdbcStoreEntity>();

@@ -18,22 +18,20 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         public ShipWorksOdbcMappableField(EntityField2 field, string displayName)
 	    {
 	        this.field = field;
-            ElementName = field?.ContainingObjectName;
-            ElementFieldValue = field?.Name;
+            ContainingObjectName = field?.ContainingObjectName;
+            Name = field?.Name;
 	        DisplayName = displayName;
 	    }
 
         /// <summary>
-        /// Gets the qualified name for the field - table.column
+        /// The name of the object that contains this field
         /// </summary>
-        public string GetQualifiedName()
-	    {
-            return $"{field.ContainingObjectName}.{field.Name}";
-	    }
+        public string ContainingObjectName { get; set; }
 
-        public string ElementName { get; set; }
-
-        public string ElementFieldValue { get; set; }
+        /// <summary>
+        /// The name of the field
+        /// </summary>
+        public string Name { get; set; }
 
         /// <summary>
         /// The fields value
@@ -45,5 +43,13 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// </summary>
         [Obfuscation(Exclude = true)]
         public string DisplayName { get; }
-	}
+
+        /// <summary>
+        /// Gets the qualified name for the field - table.column
+        /// </summary>
+        public string GetQualifiedName()
+        {
+            return $"{field.ContainingObjectName}.{field.Name}";
+        }
+    }
 }
