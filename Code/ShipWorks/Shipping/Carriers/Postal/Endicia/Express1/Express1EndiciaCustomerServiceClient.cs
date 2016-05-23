@@ -1,22 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-using System.IO;
-using ShipWorks.Shipping.Carriers.Postal.Express1.WebServices.CustomerService;
-using System.Web;
-using ShipWorks.Shipping.Carriers.Postal.Endicia.Account;
 using ShipWorks.Data.Model.EntityClasses;
 using Interapptive.Shared.Business;
-using System.Net;
-using Interapptive.Shared.Utility;
 using System.Xml.Linq;
 using Interapptive.Shared.Net;
 using log4net;
 using ShipWorks.ApplicationCore.Logging;
-using ShipWorks.ApplicationCore;
-using System.Text.RegularExpressions;
+using Interapptive.Shared.Security;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
 {
@@ -26,7 +17,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
     public static class Express1EndiciaCustomerServiceClient
     {
         static readonly ILog log = LogManager.GetLogger(typeof(Express1EndiciaCustomerServiceClient));
-        
+
         #region Refunds
 
         /// <summary>
@@ -47,16 +38,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
 
                 new XElement("Test", (Express1EndiciaUtility.UseTestServer || account.TestAccount) ? "Y" : "N"),
 
-                new XElement("RefundList", 
+                new XElement("RefundList",
                     new XElement("PICNumber", shipment.TrackingNumber)));
-            
+
             // return the generated request
             return xRoot.ToString();
         }
 
         /// <summary>
         /// Creates the Express1 Web Proxy that has the Refund method on it.
-        /// 
+        ///
         /// Express1 has the Refund functionality attached to the LabelService, unlike Endicia who
         /// has it as a part of the CustomerService.
         /// </summary>
@@ -108,7 +99,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
                         throw new EndiciaException((string)result.Element("ErrorMsg"));
                     }
 
-                    // Save the Refund Form ID.  
+                    // Save the Refund Form ID.
                     // Express1 says they currently aren't using this so it's expected to be blank.  Will save anyway if it's there.
                     XElement formNumberElement = xDocument.Descendants("FormNumber").FirstOrDefault();
                     if (formNumberElement != null)
@@ -171,11 +162,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
         }
 
         #endregion
-        
-        #region SCAN Forms        
+
+        #region SCAN Forms
         /// <summary>
         /// Create a SCAN form for the given shipments. All of the shipments should have been created using the same account.
-        /// 
+        ///
         /// Express1 SCAN Form functionality has been merged into their wrapper of Endicia's Label Service.  Whereas Endicia has this functionality
         /// as a part of their Account Service.
         /// </summary>
@@ -240,8 +231,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
                     object rawResponse = service.SCANRequest(xRoot.ToString());
                     XDocument xDocument = ExtractSuccessResponse(rawResponse,
                         message => message.Contains("102") ? "The shipments are already on another SCAN form, do not qualify for SCAN, or the postal code of your account in ShipWorks does not match the return address of all of the shipments." : message);
-                    
-                    return xDocument;                    
+
+                    return xDocument;
                 }
             }
             catch (Exception ex)
@@ -250,6 +241,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
             }
         }
 
-        #endregion 
+        #endregion
     }
 }

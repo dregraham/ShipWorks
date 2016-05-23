@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace ShipWorks.Shipping
 {
@@ -14,5 +11,10 @@ namespace ShipWorks.Shipping
         /// Returns all shipment types in ShipWorks
         /// </summary>
         List<ShipmentType> ShipmentTypes { get; }
+
+        /// <summary>
+        /// Returns the ShipmentType for the given type code
+        /// </summary>
+        ShipmentType GetType(ShipmentTypeCode typeCode);
     }
 }

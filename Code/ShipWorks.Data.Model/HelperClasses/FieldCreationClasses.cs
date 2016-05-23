@@ -17527,10 +17527,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(SearsStoreFieldIndex.Fax);}
 		}
-		/// <summary>Creates a new SearsStoreEntity.Email_Store field instance</summary>
-		public static EntityField2 Email_Store
+		/// <summary>Creates a new SearsStoreEntity.Email field instance</summary>
+		public static EntityField2 Email
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(SearsStoreFieldIndex.Email_Store);}
+			get { return (EntityField2)EntityFieldFactory.Create(SearsStoreFieldIndex.Email);}
 		}
 		/// <summary>Creates a new SearsStoreEntity.Website field instance</summary>
 		public static EntityField2 Website
@@ -17592,15 +17592,25 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(SearsStoreFieldIndex.StoreID);}
 		}
-		/// <summary>Creates a new SearsStoreEntity.Email field instance</summary>
-		public static EntityField2 Email
+		/// <summary>Creates a new SearsStoreEntity.SearsEmail field instance</summary>
+		public static EntityField2 SearsEmail
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(SearsStoreFieldIndex.Email);}
+			get { return (EntityField2)EntityFieldFactory.Create(SearsStoreFieldIndex.SearsEmail);}
 		}
 		/// <summary>Creates a new SearsStoreEntity.Password field instance</summary>
 		public static EntityField2 Password
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(SearsStoreFieldIndex.Password);}
+		}
+		/// <summary>Creates a new SearsStoreEntity.SecretKey field instance</summary>
+		public static EntityField2 SecretKey
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SearsStoreFieldIndex.SecretKey);}
+		}
+		/// <summary>Creates a new SearsStoreEntity.SellerID field instance</summary>
+		public static EntityField2 SellerID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SearsStoreFieldIndex.SellerID);}
 		}
 	}
 
@@ -19619,6 +19629,181 @@ namespace ShipWorks.Data.Model.HelperClasses
 		}
 	}
 
+	/// <summary>Field Creation Class for entity SparkPayStoreEntity</summary>
+	public partial class SparkPayStoreFields
+	{
+		/// <summary>Creates a new SparkPayStoreEntity.StoreID_Store field instance</summary>
+		public static EntityField2 StoreID_Store
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SparkPayStoreFieldIndex.StoreID_Store);}
+		}
+		/// <summary>Creates a new SparkPayStoreEntity.RowVersion field instance</summary>
+		public static EntityField2 RowVersion
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SparkPayStoreFieldIndex.RowVersion);}
+		}
+		/// <summary>Creates a new SparkPayStoreEntity.License field instance</summary>
+		public static EntityField2 License
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SparkPayStoreFieldIndex.License);}
+		}
+		/// <summary>Creates a new SparkPayStoreEntity.Edition field instance</summary>
+		public static EntityField2 Edition
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SparkPayStoreFieldIndex.Edition);}
+		}
+		/// <summary>Creates a new SparkPayStoreEntity.TypeCode field instance</summary>
+		public static EntityField2 TypeCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SparkPayStoreFieldIndex.TypeCode);}
+		}
+		/// <summary>Creates a new SparkPayStoreEntity.Enabled field instance</summary>
+		public static EntityField2 Enabled
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SparkPayStoreFieldIndex.Enabled);}
+		}
+		/// <summary>Creates a new SparkPayStoreEntity.SetupComplete field instance</summary>
+		public static EntityField2 SetupComplete
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SparkPayStoreFieldIndex.SetupComplete);}
+		}
+		/// <summary>Creates a new SparkPayStoreEntity.StoreName field instance</summary>
+		public static EntityField2 StoreName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SparkPayStoreFieldIndex.StoreName);}
+		}
+		/// <summary>Creates a new SparkPayStoreEntity.Company field instance</summary>
+		public static EntityField2 Company
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SparkPayStoreFieldIndex.Company);}
+		}
+		/// <summary>Creates a new SparkPayStoreEntity.Street1 field instance</summary>
+		public static EntityField2 Street1
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SparkPayStoreFieldIndex.Street1);}
+		}
+		/// <summary>Creates a new SparkPayStoreEntity.Street2 field instance</summary>
+		public static EntityField2 Street2
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SparkPayStoreFieldIndex.Street2);}
+		}
+		/// <summary>Creates a new SparkPayStoreEntity.Street3 field instance</summary>
+		public static EntityField2 Street3
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SparkPayStoreFieldIndex.Street3);}
+		}
+		/// <summary>Creates a new SparkPayStoreEntity.City field instance</summary>
+		public static EntityField2 City
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SparkPayStoreFieldIndex.City);}
+		}
+		/// <summary>Creates a new SparkPayStoreEntity.StateProvCode field instance</summary>
+		public static EntityField2 StateProvCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SparkPayStoreFieldIndex.StateProvCode);}
+		}
+		/// <summary>Creates a new SparkPayStoreEntity.PostalCode field instance</summary>
+		public static EntityField2 PostalCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SparkPayStoreFieldIndex.PostalCode);}
+		}
+		/// <summary>Creates a new SparkPayStoreEntity.CountryCode field instance</summary>
+		public static EntityField2 CountryCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SparkPayStoreFieldIndex.CountryCode);}
+		}
+		/// <summary>Creates a new SparkPayStoreEntity.Phone field instance</summary>
+		public static EntityField2 Phone
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SparkPayStoreFieldIndex.Phone);}
+		}
+		/// <summary>Creates a new SparkPayStoreEntity.Fax field instance</summary>
+		public static EntityField2 Fax
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SparkPayStoreFieldIndex.Fax);}
+		}
+		/// <summary>Creates a new SparkPayStoreEntity.Email field instance</summary>
+		public static EntityField2 Email
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SparkPayStoreFieldIndex.Email);}
+		}
+		/// <summary>Creates a new SparkPayStoreEntity.Website field instance</summary>
+		public static EntityField2 Website
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SparkPayStoreFieldIndex.Website);}
+		}
+		/// <summary>Creates a new SparkPayStoreEntity.AutoDownload field instance</summary>
+		public static EntityField2 AutoDownload
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SparkPayStoreFieldIndex.AutoDownload);}
+		}
+		/// <summary>Creates a new SparkPayStoreEntity.AutoDownloadMinutes field instance</summary>
+		public static EntityField2 AutoDownloadMinutes
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SparkPayStoreFieldIndex.AutoDownloadMinutes);}
+		}
+		/// <summary>Creates a new SparkPayStoreEntity.AutoDownloadOnlyAway field instance</summary>
+		public static EntityField2 AutoDownloadOnlyAway
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SparkPayStoreFieldIndex.AutoDownloadOnlyAway);}
+		}
+		/// <summary>Creates a new SparkPayStoreEntity.AddressValidationSetting field instance</summary>
+		public static EntityField2 AddressValidationSetting
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SparkPayStoreFieldIndex.AddressValidationSetting);}
+		}
+		/// <summary>Creates a new SparkPayStoreEntity.ComputerDownloadPolicy field instance</summary>
+		public static EntityField2 ComputerDownloadPolicy
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SparkPayStoreFieldIndex.ComputerDownloadPolicy);}
+		}
+		/// <summary>Creates a new SparkPayStoreEntity.DefaultEmailAccountID field instance</summary>
+		public static EntityField2 DefaultEmailAccountID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SparkPayStoreFieldIndex.DefaultEmailAccountID);}
+		}
+		/// <summary>Creates a new SparkPayStoreEntity.ManualOrderPrefix field instance</summary>
+		public static EntityField2 ManualOrderPrefix
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SparkPayStoreFieldIndex.ManualOrderPrefix);}
+		}
+		/// <summary>Creates a new SparkPayStoreEntity.ManualOrderPostfix field instance</summary>
+		public static EntityField2 ManualOrderPostfix
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SparkPayStoreFieldIndex.ManualOrderPostfix);}
+		}
+		/// <summary>Creates a new SparkPayStoreEntity.InitialDownloadDays field instance</summary>
+		public static EntityField2 InitialDownloadDays
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SparkPayStoreFieldIndex.InitialDownloadDays);}
+		}
+		/// <summary>Creates a new SparkPayStoreEntity.InitialDownloadOrder field instance</summary>
+		public static EntityField2 InitialDownloadOrder
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SparkPayStoreFieldIndex.InitialDownloadOrder);}
+		}
+		/// <summary>Creates a new SparkPayStoreEntity.StoreID field instance</summary>
+		public static EntityField2 StoreID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SparkPayStoreFieldIndex.StoreID);}
+		}
+		/// <summary>Creates a new SparkPayStoreEntity.Token field instance</summary>
+		public static EntityField2 Token
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SparkPayStoreFieldIndex.Token);}
+		}
+		/// <summary>Creates a new SparkPayStoreEntity.StoreUrl field instance</summary>
+		public static EntityField2 StoreUrl
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SparkPayStoreFieldIndex.StoreUrl);}
+		}
+		/// <summary>Creates a new SparkPayStoreEntity.StatusCodes field instance</summary>
+		public static EntityField2 StatusCodes
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SparkPayStoreFieldIndex.StatusCodes);}
+		}
+	}
+
 	/// <summary>Field Creation Class for entity StatusPresetEntity</summary>
 	public partial class StatusPresetFields
 	{
@@ -20104,6 +20289,391 @@ namespace ShipWorks.Data.Model.HelperClasses
 		}
 	}
 
+	/// <summary>Field Creation Class for entity ThreeDCartOrderEntity</summary>
+	public partial class ThreeDCartOrderFields
+	{
+		/// <summary>Creates a new ThreeDCartOrderEntity.OrderID_Order field instance</summary>
+		public static EntityField2 OrderID_Order
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartOrderFieldIndex.OrderID_Order);}
+		}
+		/// <summary>Creates a new ThreeDCartOrderEntity.RowVersion field instance</summary>
+		public static EntityField2 RowVersion
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartOrderFieldIndex.RowVersion);}
+		}
+		/// <summary>Creates a new ThreeDCartOrderEntity.StoreID field instance</summary>
+		public static EntityField2 StoreID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartOrderFieldIndex.StoreID);}
+		}
+		/// <summary>Creates a new ThreeDCartOrderEntity.CustomerID field instance</summary>
+		public static EntityField2 CustomerID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartOrderFieldIndex.CustomerID);}
+		}
+		/// <summary>Creates a new ThreeDCartOrderEntity.OrderNumber field instance</summary>
+		public static EntityField2 OrderNumber
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartOrderFieldIndex.OrderNumber);}
+		}
+		/// <summary>Creates a new ThreeDCartOrderEntity.OrderNumberComplete field instance</summary>
+		public static EntityField2 OrderNumberComplete
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartOrderFieldIndex.OrderNumberComplete);}
+		}
+		/// <summary>Creates a new ThreeDCartOrderEntity.OrderDate field instance</summary>
+		public static EntityField2 OrderDate
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartOrderFieldIndex.OrderDate);}
+		}
+		/// <summary>Creates a new ThreeDCartOrderEntity.OrderTotal field instance</summary>
+		public static EntityField2 OrderTotal
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartOrderFieldIndex.OrderTotal);}
+		}
+		/// <summary>Creates a new ThreeDCartOrderEntity.LocalStatus field instance</summary>
+		public static EntityField2 LocalStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartOrderFieldIndex.LocalStatus);}
+		}
+		/// <summary>Creates a new ThreeDCartOrderEntity.IsManual field instance</summary>
+		public static EntityField2 IsManual
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartOrderFieldIndex.IsManual);}
+		}
+		/// <summary>Creates a new ThreeDCartOrderEntity.OnlineLastModified field instance</summary>
+		public static EntityField2 OnlineLastModified
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartOrderFieldIndex.OnlineLastModified);}
+		}
+		/// <summary>Creates a new ThreeDCartOrderEntity.OnlineCustomerID field instance</summary>
+		public static EntityField2 OnlineCustomerID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartOrderFieldIndex.OnlineCustomerID);}
+		}
+		/// <summary>Creates a new ThreeDCartOrderEntity.OnlineStatus field instance</summary>
+		public static EntityField2 OnlineStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartOrderFieldIndex.OnlineStatus);}
+		}
+		/// <summary>Creates a new ThreeDCartOrderEntity.OnlineStatusCode field instance</summary>
+		public static EntityField2 OnlineStatusCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartOrderFieldIndex.OnlineStatusCode);}
+		}
+		/// <summary>Creates a new ThreeDCartOrderEntity.RequestedShipping field instance</summary>
+		public static EntityField2 RequestedShipping
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartOrderFieldIndex.RequestedShipping);}
+		}
+		/// <summary>Creates a new ThreeDCartOrderEntity.BillFirstName field instance</summary>
+		public static EntityField2 BillFirstName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartOrderFieldIndex.BillFirstName);}
+		}
+		/// <summary>Creates a new ThreeDCartOrderEntity.BillMiddleName field instance</summary>
+		public static EntityField2 BillMiddleName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartOrderFieldIndex.BillMiddleName);}
+		}
+		/// <summary>Creates a new ThreeDCartOrderEntity.BillLastName field instance</summary>
+		public static EntityField2 BillLastName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartOrderFieldIndex.BillLastName);}
+		}
+		/// <summary>Creates a new ThreeDCartOrderEntity.BillCompany field instance</summary>
+		public static EntityField2 BillCompany
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartOrderFieldIndex.BillCompany);}
+		}
+		/// <summary>Creates a new ThreeDCartOrderEntity.BillStreet1 field instance</summary>
+		public static EntityField2 BillStreet1
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartOrderFieldIndex.BillStreet1);}
+		}
+		/// <summary>Creates a new ThreeDCartOrderEntity.BillStreet2 field instance</summary>
+		public static EntityField2 BillStreet2
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartOrderFieldIndex.BillStreet2);}
+		}
+		/// <summary>Creates a new ThreeDCartOrderEntity.BillStreet3 field instance</summary>
+		public static EntityField2 BillStreet3
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartOrderFieldIndex.BillStreet3);}
+		}
+		/// <summary>Creates a new ThreeDCartOrderEntity.BillCity field instance</summary>
+		public static EntityField2 BillCity
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartOrderFieldIndex.BillCity);}
+		}
+		/// <summary>Creates a new ThreeDCartOrderEntity.BillStateProvCode field instance</summary>
+		public static EntityField2 BillStateProvCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartOrderFieldIndex.BillStateProvCode);}
+		}
+		/// <summary>Creates a new ThreeDCartOrderEntity.BillPostalCode field instance</summary>
+		public static EntityField2 BillPostalCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartOrderFieldIndex.BillPostalCode);}
+		}
+		/// <summary>Creates a new ThreeDCartOrderEntity.BillCountryCode field instance</summary>
+		public static EntityField2 BillCountryCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartOrderFieldIndex.BillCountryCode);}
+		}
+		/// <summary>Creates a new ThreeDCartOrderEntity.BillPhone field instance</summary>
+		public static EntityField2 BillPhone
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartOrderFieldIndex.BillPhone);}
+		}
+		/// <summary>Creates a new ThreeDCartOrderEntity.BillFax field instance</summary>
+		public static EntityField2 BillFax
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartOrderFieldIndex.BillFax);}
+		}
+		/// <summary>Creates a new ThreeDCartOrderEntity.BillEmail field instance</summary>
+		public static EntityField2 BillEmail
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartOrderFieldIndex.BillEmail);}
+		}
+		/// <summary>Creates a new ThreeDCartOrderEntity.BillWebsite field instance</summary>
+		public static EntityField2 BillWebsite
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartOrderFieldIndex.BillWebsite);}
+		}
+		/// <summary>Creates a new ThreeDCartOrderEntity.BillAddressValidationSuggestionCount field instance</summary>
+		public static EntityField2 BillAddressValidationSuggestionCount
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartOrderFieldIndex.BillAddressValidationSuggestionCount);}
+		}
+		/// <summary>Creates a new ThreeDCartOrderEntity.BillAddressValidationStatus field instance</summary>
+		public static EntityField2 BillAddressValidationStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartOrderFieldIndex.BillAddressValidationStatus);}
+		}
+		/// <summary>Creates a new ThreeDCartOrderEntity.BillAddressValidationError field instance</summary>
+		public static EntityField2 BillAddressValidationError
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartOrderFieldIndex.BillAddressValidationError);}
+		}
+		/// <summary>Creates a new ThreeDCartOrderEntity.BillResidentialStatus field instance</summary>
+		public static EntityField2 BillResidentialStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartOrderFieldIndex.BillResidentialStatus);}
+		}
+		/// <summary>Creates a new ThreeDCartOrderEntity.BillPOBox field instance</summary>
+		public static EntityField2 BillPOBox
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartOrderFieldIndex.BillPOBox);}
+		}
+		/// <summary>Creates a new ThreeDCartOrderEntity.BillUSTerritory field instance</summary>
+		public static EntityField2 BillUSTerritory
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartOrderFieldIndex.BillUSTerritory);}
+		}
+		/// <summary>Creates a new ThreeDCartOrderEntity.BillMilitaryAddress field instance</summary>
+		public static EntityField2 BillMilitaryAddress
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartOrderFieldIndex.BillMilitaryAddress);}
+		}
+		/// <summary>Creates a new ThreeDCartOrderEntity.ShipFirstName field instance</summary>
+		public static EntityField2 ShipFirstName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartOrderFieldIndex.ShipFirstName);}
+		}
+		/// <summary>Creates a new ThreeDCartOrderEntity.ShipMiddleName field instance</summary>
+		public static EntityField2 ShipMiddleName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartOrderFieldIndex.ShipMiddleName);}
+		}
+		/// <summary>Creates a new ThreeDCartOrderEntity.ShipLastName field instance</summary>
+		public static EntityField2 ShipLastName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartOrderFieldIndex.ShipLastName);}
+		}
+		/// <summary>Creates a new ThreeDCartOrderEntity.ShipCompany field instance</summary>
+		public static EntityField2 ShipCompany
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartOrderFieldIndex.ShipCompany);}
+		}
+		/// <summary>Creates a new ThreeDCartOrderEntity.ShipStreet1 field instance</summary>
+		public static EntityField2 ShipStreet1
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartOrderFieldIndex.ShipStreet1);}
+		}
+		/// <summary>Creates a new ThreeDCartOrderEntity.ShipStreet2 field instance</summary>
+		public static EntityField2 ShipStreet2
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartOrderFieldIndex.ShipStreet2);}
+		}
+		/// <summary>Creates a new ThreeDCartOrderEntity.ShipStreet3 field instance</summary>
+		public static EntityField2 ShipStreet3
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartOrderFieldIndex.ShipStreet3);}
+		}
+		/// <summary>Creates a new ThreeDCartOrderEntity.ShipCity field instance</summary>
+		public static EntityField2 ShipCity
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartOrderFieldIndex.ShipCity);}
+		}
+		/// <summary>Creates a new ThreeDCartOrderEntity.ShipStateProvCode field instance</summary>
+		public static EntityField2 ShipStateProvCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartOrderFieldIndex.ShipStateProvCode);}
+		}
+		/// <summary>Creates a new ThreeDCartOrderEntity.ShipPostalCode field instance</summary>
+		public static EntityField2 ShipPostalCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartOrderFieldIndex.ShipPostalCode);}
+		}
+		/// <summary>Creates a new ThreeDCartOrderEntity.ShipCountryCode field instance</summary>
+		public static EntityField2 ShipCountryCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartOrderFieldIndex.ShipCountryCode);}
+		}
+		/// <summary>Creates a new ThreeDCartOrderEntity.ShipPhone field instance</summary>
+		public static EntityField2 ShipPhone
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartOrderFieldIndex.ShipPhone);}
+		}
+		/// <summary>Creates a new ThreeDCartOrderEntity.ShipFax field instance</summary>
+		public static EntityField2 ShipFax
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartOrderFieldIndex.ShipFax);}
+		}
+		/// <summary>Creates a new ThreeDCartOrderEntity.ShipEmail field instance</summary>
+		public static EntityField2 ShipEmail
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartOrderFieldIndex.ShipEmail);}
+		}
+		/// <summary>Creates a new ThreeDCartOrderEntity.ShipWebsite field instance</summary>
+		public static EntityField2 ShipWebsite
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartOrderFieldIndex.ShipWebsite);}
+		}
+		/// <summary>Creates a new ThreeDCartOrderEntity.ShipAddressValidationSuggestionCount field instance</summary>
+		public static EntityField2 ShipAddressValidationSuggestionCount
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartOrderFieldIndex.ShipAddressValidationSuggestionCount);}
+		}
+		/// <summary>Creates a new ThreeDCartOrderEntity.ShipAddressValidationStatus field instance</summary>
+		public static EntityField2 ShipAddressValidationStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartOrderFieldIndex.ShipAddressValidationStatus);}
+		}
+		/// <summary>Creates a new ThreeDCartOrderEntity.ShipAddressValidationError field instance</summary>
+		public static EntityField2 ShipAddressValidationError
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartOrderFieldIndex.ShipAddressValidationError);}
+		}
+		/// <summary>Creates a new ThreeDCartOrderEntity.ShipResidentialStatus field instance</summary>
+		public static EntityField2 ShipResidentialStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartOrderFieldIndex.ShipResidentialStatus);}
+		}
+		/// <summary>Creates a new ThreeDCartOrderEntity.ShipPOBox field instance</summary>
+		public static EntityField2 ShipPOBox
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartOrderFieldIndex.ShipPOBox);}
+		}
+		/// <summary>Creates a new ThreeDCartOrderEntity.ShipUSTerritory field instance</summary>
+		public static EntityField2 ShipUSTerritory
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartOrderFieldIndex.ShipUSTerritory);}
+		}
+		/// <summary>Creates a new ThreeDCartOrderEntity.ShipMilitaryAddress field instance</summary>
+		public static EntityField2 ShipMilitaryAddress
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartOrderFieldIndex.ShipMilitaryAddress);}
+		}
+		/// <summary>Creates a new ThreeDCartOrderEntity.RollupItemCount field instance</summary>
+		public static EntityField2 RollupItemCount
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartOrderFieldIndex.RollupItemCount);}
+		}
+		/// <summary>Creates a new ThreeDCartOrderEntity.RollupItemName field instance</summary>
+		public static EntityField2 RollupItemName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartOrderFieldIndex.RollupItemName);}
+		}
+		/// <summary>Creates a new ThreeDCartOrderEntity.RollupItemCode field instance</summary>
+		public static EntityField2 RollupItemCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartOrderFieldIndex.RollupItemCode);}
+		}
+		/// <summary>Creates a new ThreeDCartOrderEntity.RollupItemSKU field instance</summary>
+		public static EntityField2 RollupItemSKU
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartOrderFieldIndex.RollupItemSKU);}
+		}
+		/// <summary>Creates a new ThreeDCartOrderEntity.RollupItemLocation field instance</summary>
+		public static EntityField2 RollupItemLocation
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartOrderFieldIndex.RollupItemLocation);}
+		}
+		/// <summary>Creates a new ThreeDCartOrderEntity.RollupItemQuantity field instance</summary>
+		public static EntityField2 RollupItemQuantity
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartOrderFieldIndex.RollupItemQuantity);}
+		}
+		/// <summary>Creates a new ThreeDCartOrderEntity.RollupItemTotalWeight field instance</summary>
+		public static EntityField2 RollupItemTotalWeight
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartOrderFieldIndex.RollupItemTotalWeight);}
+		}
+		/// <summary>Creates a new ThreeDCartOrderEntity.RollupNoteCount field instance</summary>
+		public static EntityField2 RollupNoteCount
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartOrderFieldIndex.RollupNoteCount);}
+		}
+		/// <summary>Creates a new ThreeDCartOrderEntity.BillNameParseStatus field instance</summary>
+		public static EntityField2 BillNameParseStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartOrderFieldIndex.BillNameParseStatus);}
+		}
+		/// <summary>Creates a new ThreeDCartOrderEntity.BillUnparsedName field instance</summary>
+		public static EntityField2 BillUnparsedName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartOrderFieldIndex.BillUnparsedName);}
+		}
+		/// <summary>Creates a new ThreeDCartOrderEntity.ShipNameParseStatus field instance</summary>
+		public static EntityField2 ShipNameParseStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartOrderFieldIndex.ShipNameParseStatus);}
+		}
+		/// <summary>Creates a new ThreeDCartOrderEntity.ShipUnparsedName field instance</summary>
+		public static EntityField2 ShipUnparsedName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartOrderFieldIndex.ShipUnparsedName);}
+		}
+		/// <summary>Creates a new ThreeDCartOrderEntity.ShipSenseHashKey field instance</summary>
+		public static EntityField2 ShipSenseHashKey
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartOrderFieldIndex.ShipSenseHashKey);}
+		}
+		/// <summary>Creates a new ThreeDCartOrderEntity.ShipSenseRecognitionStatus field instance</summary>
+		public static EntityField2 ShipSenseRecognitionStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartOrderFieldIndex.ShipSenseRecognitionStatus);}
+		}
+		/// <summary>Creates a new ThreeDCartOrderEntity.ShipAddressType field instance</summary>
+		public static EntityField2 ShipAddressType
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartOrderFieldIndex.ShipAddressType);}
+		}
+		/// <summary>Creates a new ThreeDCartOrderEntity.OrderID field instance</summary>
+		public static EntityField2 OrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartOrderFieldIndex.OrderID);}
+		}
+		/// <summary>Creates a new ThreeDCartOrderEntity.ThreeDCartOrderID field instance</summary>
+		public static EntityField2 ThreeDCartOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartOrderFieldIndex.ThreeDCartOrderID);}
+		}
+	}
+
 	/// <summary>Field Creation Class for entity ThreeDCartOrderItemEntity</summary>
 	public partial class ThreeDCartOrderItemFields
 	{
@@ -20391,6 +20961,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 DownloadModifiedNumberOfDaysBack
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartStoreFieldIndex.DownloadModifiedNumberOfDaysBack);}
+		}
+		/// <summary>Creates a new ThreeDCartStoreEntity.RestUser field instance</summary>
+		public static EntityField2 RestUser
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartStoreFieldIndex.RestUser);}
 		}
 	}
 

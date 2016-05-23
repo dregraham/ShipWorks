@@ -1,22 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.WebServices.AccountService;
 using ShipWorks.ApplicationCore.Logging;
 using log4net;
 using System.Xml;
 using System.Xml.Linq;
-using Interapptive.Shared.Utility;
-using ShipWorks.Data.Connection;
-using System.IO;
 using Interapptive.Shared.Business;
-using System.Net;
-using System.Web.Services.Protocols;
 using Interapptive.Shared;
 using Interapptive.Shared.Net;
+using Interapptive.Shared.Security;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Account
 {

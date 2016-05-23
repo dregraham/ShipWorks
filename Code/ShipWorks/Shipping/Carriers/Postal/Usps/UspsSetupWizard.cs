@@ -4,6 +4,7 @@ using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Messaging;
 using Interapptive.Shared.Net;
+using Interapptive.Shared.Security;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -124,6 +125,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             Pages.Add(new ShippingWizardPagePrinting(shipmentType));
             Pages.Add(new ShippingWizardPageAutomation(shipmentType));
             Pages.Add(new ShippingWizardPageFinish(shipmentType));
+
+            Pages.Remove(wizardPageError);
 
             if (ShippingManager.IsShipmentTypeConfigured(ShipmentTypeCode.Usps))
             {
@@ -795,26 +798,22 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         private void OnStepNextNewAccountPaymentAndBilling(object sender, WizardStepEventArgs e)
         {
+            if (!paymentAndBillingAddress.ValidateData())
+            {
+                e.NextPage = CurrentPage;
+                return;
+            }
+
             using (ILifetimeScope ioc = IoC.BeginLifetimeScope())
             {
                 AssociateShipworksWithItselfRequest request = PopulateAssociateWithSelfRequestWithBilling(ioc);
 
                 AssociateShipWorksWithItselfResponse response = request.Execute();
 
-                switch (response.ResponseType)
+                if (response.ResponseType == AssociateShipWorksWithItselfResponseType.Success)
                 {
-                    case AssociateShipWorksWithItselfResponseType.Success:
-                        registrationComplete = true;
-                        PopulateAccountFromAssociateShipworksWithItselfRequest(request);
-                        break;
-
-                    case AssociateShipWorksWithItselfResponseType.POBoxNotAllowed:
-                        break;
-
-                    default:
-                        MessageHelper.ShowError(this, response.Message);
-                        e.NextPage = CurrentPage;
-                        break;
+                    registrationComplete = true;
+                    PopulateAccountFromAssociateShipworksWithItselfRequest(request);
                 }
             }
         }
@@ -831,6 +830,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             PersonAdapter.Copy(accountAddress, accountAdapter);
 
             UspsAccount.Description = UspsAccountManager.GetDefaultDescription(UspsAccount);
+            UspsAccount.PendingInitialAccount = (int) UspsPendingAccountType.Existing;
+
+            UspsAccountManager.SaveAccount(UspsAccount);
         }
 
         /// <summary>
@@ -873,9 +875,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                         PopulateAccountFromAssociateShipworksWithItselfRequest(request);
                         break;
 
-                    case AssociateShipWorksWithItselfResponseType.POBoxNotAllowed:
-                        MessageHelper.ShowError(this, response.Message);
-                        e.NextPage = CurrentPage;
+                    case AssociateShipWorksWithItselfResponseType.UnknownError:
+                        UspsAccountManager.DeleteAccount(UspsAccount);
+                        UspsAccount = null;
+
+                        Pages.Add(wizardPageError);
+                        e.NextPage = wizardPageError;
+
+                        FinishCancels = true;
+                        LastPageCancelable = false;
+                        BackEnabled = false;
                         break;
 
                     default:

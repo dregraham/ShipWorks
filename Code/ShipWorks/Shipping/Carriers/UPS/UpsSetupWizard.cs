@@ -3,7 +3,6 @@ using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.UI;
-using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Common.IO.Hardware.Printers;
@@ -26,6 +25,7 @@ using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 using System.Xml;
+using Interapptive.Shared.Security;
 
 namespace ShipWorks.Shipping.Carriers.UPS
 {
@@ -149,12 +149,11 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
             personControl.LoadEntity(new PersonAdapter(upsAccount, ""));
 
+            Pages.Remove(wizardPageAccountList);
+
             // it will just be to setup to add a new account
             if (addAccountOnly)
             {
-                // In this case the user is explicity wanting to add a new account, so drop the list and just do the add-account flow
-                Pages.Remove(wizardPageAccountList);
-
                 // And remove the settings pages
                 Pages.Remove(wizardPageOptionsOlt);
                 Pages.Remove(wizardPageOptionsWorldShip);
@@ -162,19 +161,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
             // Otherwise setup to configure settings completely
             else
             {
-                // If there are no shippers yet (like from the other UPS shipment type), then remove the account page
-                if (UpsAccountManager.Accounts.Count == 0)
-                {
-                    Pages.Remove(wizardPageAccountList);
-                }
-                // If there are other shippers (added from the other UPS shipment type), then just show the list
-                else
-                {
-                    Pages.Remove(wizardPageLicense);
-                    Pages.Remove(wizardPageAccount);
-                    Pages.Remove(wizardPageRates);
-                }
-
                 // Add in the correct options page
                 if (shipmentType.ShipmentTypeCode == ShipmentTypeCode.UpsOnLineTools)
                 {
@@ -255,6 +241,11 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
             if (shipmentType.ShipmentTypeCode == ShipmentTypeCode.UpsWorldShip)
             {
+                // we are using worldship so the new account option is never shown to the user
+                // set the newAccount to false
+                newAccount.Checked = false;
+                existingAccount.Checked = true;
+
                 if (!worldShipAgree1.Checked || !worldShipAgree2.Checked)
                 {
                     MessageHelper.ShowInformation(this, "You must read and agree to the WorldShip information statements.");

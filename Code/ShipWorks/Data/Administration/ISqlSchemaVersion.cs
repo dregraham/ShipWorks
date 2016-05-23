@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Data.SqlClient;
 
 namespace ShipWorks.Data.Administration
 {
@@ -11,8 +10,9 @@ namespace ShipWorks.Data.Administration
         Version GetInstalledSchemaVersion();
 
         /// <summary>
-        /// Get the schema version of the ShipWorks database using the given connection
+        /// Determines if on a version where customer license is supported
         /// </summary>
-        Version GetInstalledSchemaVersion(SqlConnection con);
+        /// <returns></returns>
+        bool IsCustomerLicenseSupported();
     }
 }

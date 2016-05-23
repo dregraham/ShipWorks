@@ -95,7 +95,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
                 case UpsServiceType.Ups3DaySelect:
                     return "Three Day";
 
-                case UpsServiceType.Ups2nDayAirIntra:
+                case UpsServiceType.Ups2ndDayAirIntra:
                 case UpsServiceType.Ups2DayAir:
                     return "Two Day";
 

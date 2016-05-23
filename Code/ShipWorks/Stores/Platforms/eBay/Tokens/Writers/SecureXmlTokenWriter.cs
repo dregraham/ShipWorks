@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Text;
 using System.IO;
-using Interapptive.Shared.Utility;
+using Interapptive.Shared.Security;
 
 namespace ShipWorks.Stores.Platforms.Ebay.Tokens.Writers
 {

@@ -3,6 +3,7 @@ using System.Collections.Specialized;
 using System.Security.Cryptography;
 using System.Text;
 using System.Web;
+using Interapptive.Shared.Net;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.GenericModule;

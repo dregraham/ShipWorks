@@ -1,21 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Globalization;
-using System.Linq;
-using System.Net;
-using System.Reflection;
-using System.Security.Cryptography.X509Certificates;
-using System.Web.Services.Protocols;
-using System.Xml;
-using System.Xml.Linq;
-using System.Xml.XPath;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Net;
+using Interapptive.Shared.Security;
 using Interapptive.Shared.Utility;
 using log4net;
-using ShipWorks.ApplicationCore.Licensing.Activation;
 using ShipWorks.ApplicationCore.Licensing.Activation.WebServices;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.ApplicationCore.Nudges;
@@ -29,11 +17,21 @@ using ShipWorks.Shipping.Carriers.FedEx.Api;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Account;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
+using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Insurance.InsureShip;
 using ShipWorks.Stores;
 using ShipWorks.Stores.Content;
-using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.Net;
+using System.Reflection;
+using System.Security.Cryptography.X509Certificates;
+using System.Web.Services.Protocols;
+using System.Xml;
+using System.Xml.Linq;
 
 namespace ShipWorks.ApplicationCore.Licensing
 {
@@ -117,7 +115,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             postRequest.Variables.Add("cc_billing_street_1", request.CardBillingAddress.Street1);
             postRequest.Variables.Add("cc_billing_city", request.CardBillingAddress.City);
             postRequest.Variables.Add("cc_billing_state", request.CardBillingAddress.StateProvCode);
-            postRequest.Variables.Add("cc_billing_zipcode", request.CardBillingAddress.PostalCode);
+            postRequest.Variables.Add("cc_billing_zipcode", request.CardBillingAddress.PostalCode.Truncate(5));
             postRequest.Variables.Add("sendMarketingInfo", "false");
             postRequest.Variables.Add("version", Version);
 
@@ -1126,13 +1124,17 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         private static void ValidateInterapptiveCertificate(HttpWebRequest httpWebRequest)
         {
+#pragma warning disable 168
+            X509Certificate certificate;
+#pragma warning restore 168
+
 #if !DEBUG
             if (httpWebRequest.ServicePoint == null)
             {
                 throw new TangoException("The SSL certificate on the server is invalid.");
             }
 
-            X509Certificate certificate = httpWebRequest.ServicePoint.Certificate;
+            certificate = httpWebRequest.ServicePoint.Certificate;
 
             if (certificate == null)
             {

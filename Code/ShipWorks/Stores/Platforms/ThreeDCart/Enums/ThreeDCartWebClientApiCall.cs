@@ -4,7 +4,7 @@ using System.Reflection;
 namespace ShipWorks.Stores.Platforms.ThreeDCart.Enums
 {
     /// <summary>
-    /// 3D Cart API calls we use
+    /// 3dcart API calls we use
     /// </summary>
     [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
     public enum ThreeDCartWebClientApiCall

@@ -50,9 +50,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.creditCardExpirationYear)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.creditCardExpirationMonth)).BeginInit();
             this.SuspendLayout();
-            //
+            // 
             // creditCardPanel
-            //
+            // 
             this.creditCardPanel.Controls.Add(this.cardholderName);
             this.creditCardPanel.Controls.Add(this.labelCardholderName);
             this.creditCardPanel.Controls.Add(this.cardType);
@@ -68,17 +68,17 @@
             this.creditCardPanel.Name = "creditCardPanel";
             this.creditCardPanel.Size = new System.Drawing.Size(383, 123);
             this.creditCardPanel.TabIndex = 5;
-            //
+            // 
             // cardholderName
-            //
+            // 
             this.cardholderName.Font = new System.Drawing.Font("Tahoma", 8.25F);
             this.cardholderName.Location = new System.Drawing.Point(123, 31);
             this.cardholderName.Name = "cardholderName";
             this.cardholderName.Size = new System.Drawing.Size(148, 21);
             this.cardholderName.TabIndex = 4;
-            //
+            // 
             // labelCardholderName
-            //
+            // 
             this.labelCardholderName.Font = new System.Drawing.Font("Tahoma", 8.25F);
             this.labelCardholderName.Location = new System.Drawing.Point(5, 30);
             this.labelCardholderName.Name = "labelCardholderName";
@@ -86,9 +86,9 @@
             this.labelCardholderName.TabIndex = 3;
             this.labelCardholderName.Text = "Cardholder Name:";
             this.labelCardholderName.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            //
+            // 
             // cardType
-            //
+            // 
             this.cardType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cardType.Font = new System.Drawing.Font("Tahoma", 8.25F);
             this.cardType.FormattingEnabled = true;
@@ -96,9 +96,9 @@
             this.cardType.Name = "cardType";
             this.cardType.Size = new System.Drawing.Size(148, 21);
             this.cardType.TabIndex = 2;
-            //
+            // 
             // labelCardType
-            //
+            // 
             this.labelCardType.Font = new System.Drawing.Font("Tahoma", 8.25F);
             this.labelCardType.Location = new System.Drawing.Point(28, 5);
             this.labelCardType.Name = "labelCardType";
@@ -106,9 +106,9 @@
             this.labelCardType.TabIndex = 1;
             this.labelCardType.Text = "Card Type:";
             this.labelCardType.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            //
+            // 
             // creditCardExpirationYear
-            //
+            // 
             this.creditCardExpirationYear.Font = new System.Drawing.Font("Tahoma", 8.25F);
             this.creditCardExpirationYear.Location = new System.Drawing.Point(161, 85);
             this.creditCardExpirationYear.Name = "creditCardExpirationYear";
@@ -119,9 +119,9 @@
             0,
             0,
             0});
-            //
+            // 
             // creditCardExpirationMonth
-            //
+            // 
             this.creditCardExpirationMonth.Font = new System.Drawing.Font("Tahoma", 8.25F);
             this.creditCardExpirationMonth.Location = new System.Drawing.Point(123, 85);
             this.creditCardExpirationMonth.Maximum = new decimal(new int[] {
@@ -142,9 +142,9 @@
             0,
             0,
             0});
-            //
+            // 
             // labelYear
-            //
+            // 
             this.labelYear.AutoSize = true;
             this.labelYear.Font = new System.Drawing.Font("Tahoma", 8.25F);
             this.labelYear.Location = new System.Drawing.Point(163, 108);
@@ -153,9 +153,9 @@
             this.labelYear.TabIndex = 11;
             this.labelYear.Text = "Year";
             this.labelYear.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            //
+            // 
             // labelMonth
-            //
+            // 
             this.labelMonth.AutoSize = true;
             this.labelMonth.Font = new System.Drawing.Font("Tahoma", 8.25F);
             this.labelMonth.Location = new System.Drawing.Point(120, 108);
@@ -164,17 +164,17 @@
             this.labelMonth.TabIndex = 10;
             this.labelMonth.Text = "Month";
             this.labelMonth.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            //
+            // 
             // creditCardNumber
-            //
+            // 
             this.creditCardNumber.Font = new System.Drawing.Font("Tahoma", 8.25F);
             this.creditCardNumber.Location = new System.Drawing.Point(123, 58);
             this.creditCardNumber.Name = "creditCardNumber";
             this.creditCardNumber.Size = new System.Drawing.Size(148, 21);
             this.creditCardNumber.TabIndex = 6;
-            //
+            // 
             // labelExpirationDate
-            //
+            // 
             this.labelExpirationDate.Font = new System.Drawing.Font("Tahoma", 8.25F);
             this.labelExpirationDate.Location = new System.Drawing.Point(28, 85);
             this.labelExpirationDate.Name = "labelExpirationDate";
@@ -182,9 +182,9 @@
             this.labelExpirationDate.TabIndex = 7;
             this.labelExpirationDate.Text = "Expiration Date:";
             this.labelExpirationDate.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            //
+            // 
             // labelCreditCardNumber
-            //
+            // 
             this.labelCreditCardNumber.Font = new System.Drawing.Font("Tahoma", 8.25F);
             this.labelCreditCardNumber.Location = new System.Drawing.Point(4, 59);
             this.labelCreditCardNumber.Name = "labelCreditCardNumber";
@@ -192,9 +192,9 @@
             this.labelCreditCardNumber.TabIndex = 5;
             this.labelCreditCardNumber.Text = "Credit Card Number:";
             this.labelCreditCardNumber.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            //
+            // 
             // labelNote
-            //
+            // 
             this.labelNote.AutoSize = true;
             this.labelNote.Font = new System.Drawing.Font("Tahoma", 8.25F);
             this.labelNote.ForeColor = System.Drawing.SystemColors.GrayText;
@@ -203,9 +203,9 @@
             this.labelNote.Size = new System.Drawing.Size(34, 13);
             this.labelNote.TabIndex = 12;
             this.labelNote.Text = "Note:";
-            //
+            // 
             // labelAch
-            //
+            // 
             this.labelAch.Font = new System.Drawing.Font("Tahoma", 8.25F);
             this.labelAch.ForeColor = System.Drawing.SystemColors.GrayText;
             this.labelAch.Location = new System.Drawing.Point(61, 395);
@@ -213,20 +213,20 @@
             this.labelAch.Size = new System.Drawing.Size(380, 71);
             this.labelAch.TabIndex = 0;
             this.labelAch.Text = resources.GetString("labelAch.Text");
-            //
+            // 
             // labelPaymentInfo
-            //
+            // 
             this.labelPaymentInfo.Font = new System.Drawing.Font("Tahoma", 8.25F);
             this.labelPaymentInfo.Location = new System.Drawing.Point(3, 23);
             this.labelPaymentInfo.Name = "labelPaymentInfo";
             this.labelPaymentInfo.Size = new System.Drawing.Size(447, 28);
             this.labelPaymentInfo.TabIndex = 7;
             this.labelPaymentInfo.Text = "Stamps.com requires a payment method for buying postage. The payment information " +
-    "entered here will not be used by ShipWorks for billing of any ShipWorks relat" +
-    "ed services.";
-            //
+    "entered here will not be used by ShipWorks for billing of any ShipWorks related " +
+    "services.";
+            // 
             // labelPaymentHeading
-            //
+            // 
             this.labelPaymentHeading.AutoSize = true;
             this.labelPaymentHeading.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelPaymentHeading.Location = new System.Drawing.Point(3, 0);
@@ -234,20 +234,23 @@
             this.labelPaymentHeading.Size = new System.Drawing.Size(202, 13);
             this.labelPaymentHeading.TabIndex = 6;
             this.labelPaymentHeading.Text = "Stamps.com Payment Information";
-            //
+            // 
             // billingAddress
-            //
-            this.billingAddress.AvailableFields = ((ShipWorks.Data.Controls.PersonFields)((((ShipWorks.Data.Controls.PersonFields.Street | ShipWorks.Data.Controls.PersonFields.City)
-            | ShipWorks.Data.Controls.PersonFields.State)
+            // 
+            this.billingAddress.AvailableFields = ((ShipWorks.Data.Controls.PersonFields)((((ShipWorks.Data.Controls.PersonFields.Street | ShipWorks.Data.Controls.PersonFields.City) 
+            | ShipWorks.Data.Controls.PersonFields.State) 
             | ShipWorks.Data.Controls.PersonFields.Postal)));
             this.billingAddress.Location = new System.Drawing.Point(61, 215);
             this.billingAddress.MaxStreetLines = 1;
             this.billingAddress.Name = "billingAddress";
+            this.billingAddress.RequiredFields = ((ShipWorks.Data.Controls.PersonFields)((((ShipWorks.Data.Controls.PersonFields.Street | ShipWorks.Data.Controls.PersonFields.City) 
+            | ShipWorks.Data.Controls.PersonFields.State) 
+            | ShipWorks.Data.Controls.PersonFields.Postal)));
             this.billingAddress.Size = new System.Drawing.Size(346, 165);
             this.billingAddress.TabIndex = 46;
-            //
+            // 
             // PaymentAndBillingAddressControl
-            //
+            // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.billingAddress);

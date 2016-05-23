@@ -3,7 +3,7 @@
 namespace ShipWorks.Stores.Platforms.ThreeDCart
 {
     /// <summary>
-    /// 3D Cart web client throttle wait cancled exception
+    /// 3dcart web client throttle wait cancled exception
     /// </summary>
     [Serializable]
     public sealed class ThreeDCartWebClientThrottleWaitCancelException : ThreeDCartException
@@ -12,7 +12,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         /// Constructor
         /// </summary>
         public ThreeDCartWebClientThrottleWaitCancelException() : 
-            base("Waiting for 3D Cart to stop throttling was canceled.")
+            base("Waiting for 3dcart to stop throttling was canceled.")
         {
 
         }

@@ -40,7 +40,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.ServiceManager.Countries
 
             services = new List<UpsServiceMapping>
             {
-                new UpsServiceMapping(UpsServiceType.Ups2nDayAirIntra, puertoRicoCountryCode, "01", "01", "01", "2DA", WorldShipServiceDescriptions.Ups2DayAir, false, false),
+                new UpsServiceMapping(UpsServiceType.Ups2ndDayAirIntra, puertoRicoCountryCode, "01", "01", "01", "2DA", WorldShipServiceDescriptions.Ups2DayAir, false, false),
 
                 new UpsServiceMapping(UpsServiceType.UpsNextDayAirAM, usCountryCode, "14", "14", "21", "1DM", WorldShipServiceDescriptions.UpsNextDayAirAm, false, false),
                 new UpsServiceMapping(UpsServiceType.UpsNextDayAir, usCountryCode, "01", "01", "01", "1DA", WorldShipServiceDescriptions.UpsNextDayAir, false, false),

@@ -3,6 +3,7 @@ using Autofac.Extras.Moq;
 using Interapptive.Shared.Utility;
 using log4net;
 using Moq;
+using Interapptive.Shared.Security;
 using ShipWorks.ApplicationCore.Dashboard.Content;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Licensing.FeatureRestrictions;

@@ -11,6 +11,8 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using Interapptive.Shared;
+using Interapptive.Shared.Net;
+using Interapptive.Shared.Security;
 using ShipWorks.Email;
 using ShipWorks.Email.Accounts;
 using ShipWorks.Shipping;

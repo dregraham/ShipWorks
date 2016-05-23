@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.IO;
-using System.Xml;
-using Interapptive.Shared.Utility;
 using ShipWorks.Editions.Freemium;
 using ShipWorks.Editions.Brown;
 using System.Xml.Linq;
+using Interapptive.Shared.Security;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
 
@@ -22,7 +19,7 @@ namespace ShipWorks.Editions
         /// Serialize the given edition
         /// </summary>
         public static string Serialize(Edition edition)
-        {            
+        {
             XElement root = new XElement("Edition");
             root.Add(new XAttribute("identifier", GetIdentifier(edition)));
 
@@ -89,7 +86,7 @@ namespace ShipWorks.Editions
 
             throw new InvalidOperationException("Unhandled Edition identifier: " + identifier);
         }
-        
+
         /// <summary>
         /// Apply all the options that are shared accross editions
         /// </summary>
@@ -107,7 +104,7 @@ namespace ShipWorks.Editions
 
                 bool endiciaInsuranceEnabled = (bool) xOptions.Element("EndiciaInsurance");
                 edition.SharedOptions.EndiciaInsuranceEnabled = endiciaInsuranceEnabled;
-                
+
                 bool upsSurePostEnabled = xOptions.Descendants("UpsSurePost").Any() && (bool) xOptions.Element("UpsSurePost");
                 edition.SharedOptions.UpsSurePostEnabled = upsSurePostEnabled;
 

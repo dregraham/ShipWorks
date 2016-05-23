@@ -1,13 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
+using Interapptive.Shared.Security;
 using ShipWorks.Data.Model.EntityClasses;
-using Interapptive.Shared.Utility;
 using Interapptive.Shared.UI;
 using ShipWorks.Stores.Platforms.MarketplaceAdvisor.WebServices.Oms;
 using ShipWorks.Data.Model;
@@ -125,10 +119,10 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
 
                 try
                 {
-                    OMFlags customFlags = MarketplaceAdvisorOmsFlagManager.GetCustomFlags(new MarketplaceAdvisorStoreEntity 
-                        { 
+                    OMFlags customFlags = MarketplaceAdvisorOmsFlagManager.GetCustomFlags(new MarketplaceAdvisorStoreEntity
+                        {
                             Username = username.Text.Trim(),
-                            Password = SecureText.Encrypt(password.Text, username.Text.Trim()) 
+                            Password = SecureText.Encrypt(password.Text, username.Text.Trim())
                         });
 
                     using (MarketplaceAdvisorOmsUpgradeDlg dlg = new MarketplaceAdvisorOmsUpgradeDlg(customFlags))

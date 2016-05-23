@@ -1,8 +1,8 @@
-﻿using System;
+﻿using Interapptive.Shared.Data;
+using ShipWorks.Data.Connection;
+using System;
 using System.Data;
 using System.Data.SqlClient;
-using Interapptive.Shared.Data;
-using ShipWorks.Data.Connection;
 
 namespace ShipWorks.Data.Administration
 {
@@ -12,10 +12,11 @@ namespace ShipWorks.Data.Administration
     public class SqlSchemaVersion : ISqlSchemaVersion
     {
         /// <summary>
-        /// Get the schema version of the ShipWorks database on the given connection
+        /// Get the schema version of the ShipWorks database using the current open connection
         /// </summary>
-        public Version GetInstalledSchemaVersion(SqlConnection con)
+        public Version GetInstalledSchemaVersion()
         {
+            SqlConnection con = SqlSession.Current.OpenConnection();
             SqlCommand cmd = SqlCommandProvider.Create(con);
             cmd.CommandText = "GetSchemaVersion";
             cmd.CommandType = CommandType.StoredProcedure;
@@ -24,11 +25,12 @@ namespace ShipWorks.Data.Administration
         }
 
         /// <summary>
-        /// Get the schema version of the ShipWorks database using the current open connection
+        /// Determines if on a version where customer license is supported
         /// </summary>
-        public Version GetInstalledSchemaVersion()
+        /// <returns>true if version is 4.8.0.0 or better</returns>
+        public bool IsCustomerLicenseSupported()
         {
-            return GetInstalledSchemaVersion(SqlSession.Current.OpenConnection());
+            return (GetInstalledSchemaVersion() >= Version.Parse("4.8.0.0"));
         }
     }
 }

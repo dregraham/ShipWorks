@@ -641,6 +641,8 @@
     <Compile Include="ApplicationCore\Licensing\AssociateShipWorksWithItselfResponseType.cs" />
     <Compile Include="ApplicationCore\Licensing\ComplianceLevel.cs" />
     <Compile Include="ApplicationCore\Licensing\CreditCardType.cs" />
+    <Compile Include="ApplicationCore\Licensing\LicenseCipherKey.cs" />
+    <Compile Include="ApplicationCore\Licensing\UpsStatus.cs" />
     <Compile Include="ApplicationCore\Licensing\UspsPendingAccountType.cs" />
     <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\Endicia\EndiciaConsolidatorRestriction.cs" />
     <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\Endicia\EndiciaDhlRestriction.cs" />
@@ -686,7 +688,6 @@
     <Compile Include="ApplicationCore\Licensing\DatabaseIdentifier.cs" />
     <Compile Include="ApplicationCore\Licensing\DatabaseIdentifierException.cs" />
     <Compile Include="ApplicationCore\Licensing\DisabledLicense.cs" />
-    <Compile Include="ApplicationCore\Licensing\EncryptionException.cs" />
     <Compile Include="ApplicationCore\Licensing\FakeTangoWebClient.cs" />
     <Compile Include="ApplicationCore\Licensing\ICustomerLicenseActivationService.cs" />
     <Compile Include="ApplicationCore\Licensing\IDialog.cs" />
@@ -695,7 +696,6 @@
     <Compile Include="ApplicationCore\Licensing\ICustomerLicenseActivationViewModel.cs" />
     <Compile Include="ApplicationCore\Licensing\ICustomerLicenseReader.cs" />
     <Compile Include="ApplicationCore\Licensing\ICustomerLicenseWriter.cs" />
-    <Compile Include="ApplicationCore\Licensing\IDatabaseIdentifier.cs" />
     <Compile Include="ApplicationCore\Licensing\ILicense.cs" />
     <Compile Include="ApplicationCore\Licensing\ILicenseCapabilities.cs" />
     <Compile Include="ApplicationCore\Licensing\ILicenseService.cs" />
@@ -704,7 +704,6 @@
     <Compile Include="ApplicationCore\Licensing\CustomerLicenseWriter.cs" />
     <Compile Include="ApplicationCore\Licensing\IUpgradePlanDlgFactory.cs" />
     <Compile Include="ApplicationCore\Licensing\LicenseCapabilities.cs" />
-    <Compile Include="ApplicationCore\Licensing\LicenseEncryptionProvider.cs" />
     <Compile Include="ApplicationCore\Licensing\LicenseEnforcement\ApproachingShipmentLimitEnforcer.cs" />
     <Compile Include="ApplicationCore\Licensing\LicenseEnforcement\ChannelCountEnforcer.cs" />
     <Compile Include="ApplicationCore\Licensing\LicenseEnforcement\ChannelSyncEnforcer.cs" />
@@ -721,7 +720,7 @@
     <Compile Include="ApplicationCore\Licensing\StoreLicense.cs" />
     <Compile Include="ApplicationCore\Licensing\TangoWebClientFactory.cs" />
     <Compile Include="ApplicationCore\Licensing\TangoWebClientWrapper.cs" />
-    <Compile Include="ApplicationCore\Licensing\UpsStatus.cs" />
+    <Compile Include="ApplicationCore\Logging\ApiLogSource.cs" />
     <Compile Include="ApplicationCore\Logging\ILogEntryFactory.cs" />
     <Compile Include="ApplicationCore\Logging\LogActionType.cs" />
     <Compile Include="ApplicationCore\Logging\LogEntryFactory.cs" />
@@ -774,6 +773,9 @@
     <Compile Include="ApplicationCore\Nudges\NudgeOptionDeserializer.cs" />
     <Compile Include="ApplicationCore\Nudges\NudgeType.cs" />
     <Compile Include="ApplicationCore\Options\ModifiedOrderCustomerUpdateBehavior.cs" />
+    <Compile Include="ApplicationCore\Security\CipherContext.cs" />
+    <Compile Include="ApplicationCore\Security\EncryptionProviderFactory.cs" />
+    <Compile Include="ApplicationCore\Security\LicenseEncryptionProvider.cs" />
     <Compile Include="ApplicationCore\Services\Hosting\Background\BackgroundServiceController.cs" />
     <Compile Include="ApplicationCore\Services\Hosting\Background\BackgroundServiceHost.cs" />
     <Compile Include="ApplicationCore\Services\Hosting\Background\BackgroundServiceRegistrar.cs" />
@@ -838,6 +840,7 @@
     <Compile Include="Data\Connection\ReconnectResult.cs" />
     <Compile Include="Data\DataResourceManagerWrapper.cs" />
     <Compile Include="Data\DeletionServiceWrapper.cs" />
+    <Compile Include="Data\IDatabaseIdentifier.cs" />
     <Compile Include="Data\IDataResourceManager.cs" />
     <Compile Include="Data\IDeletionService.cs" />
     <Compile Include="Data\IObjectReferenceManager.cs" />
@@ -1395,6 +1398,22 @@
     <Compile Include="Stores\Platforms\OpenSky\OpenSkyStoreType.cs" />
     <Compile Include="Stores\Platforms\OrderBot\OrderBotStoreType.cs" />
     <Compile Include="Stores\Platforms\RevolutionParts\RevolutionPartsStoreType.cs" />
+    <Compile Include="Stores\Platforms\ThreeDCart\Enums\ThreeDCartOrderStatus.cs" />
+    <Compile Include="Stores\Platforms\ThreeDCart\RestApi\DTO\ThreeDCartOption.cs" />
+    <Compile Include="Stores\Platforms\ThreeDCart\RestApi\DTO\ThreeDCartOptionSet.cs" />
+    <Compile Include="Stores\Platforms\ThreeDCart\RestApi\DTO\ThreeDCartOrder.cs" />
+    <Compile Include="Stores\Platforms\ThreeDCart\RestApi\DTO\ThreeDCartOrderItem.cs" />
+    <Compile Include="Stores\Platforms\ThreeDCart\RestApi\DTO\ThreeDCartProduct.cs" />
+    <Compile Include="Stores\Platforms\ThreeDCart\RestApi\DTO\ThreeDCartQuestion.cs" />
+    <Compile Include="Stores\Platforms\ThreeDCart\RestApi\DTO\ThreeDCartShipment.cs" />
+    <Compile Include="Stores\Platforms\ThreeDCart\RestApi\DTO\ThreeDCartTransaction.cs" />
+    <Compile Include="Stores\Platforms\ThreeDCart\RestApi\IThreeDCartRestWebClient.cs" />
+    <Compile Include="Stores\Platforms\ThreeDCart\RestApi\ThreeDCartProductCache.cs" />
+    <Compile Include="Stores\Platforms\ThreeDCart\RestApi\ThreeDCartRestDownloader.cs" />
+    <Compile Include="Stores\Platforms\ThreeDCart\RestApi\ThreeDCartRestOnlineUpdater.cs" />
+    <Compile Include="Stores\Platforms\ThreeDCart\RestApi\ThreeDCartRestWebClient.cs" />
+    <Compile Include="Stores\Platforms\Sears\SearsCipherKey.cs" />
+    <Compile Include="Stores\Platforms\Sears\SearsCredentials.cs" />
     <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooAddressInfo.cs" />
     <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooAppliedPromotion.cs" />
     <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooBillToInfo.cs" />
@@ -3270,9 +3289,9 @@
     <Compile Include="Stores\Platforms\ThreeDCart\ThreeDCartDownloadCriteriaControl.Designer.cs">
       <DependentUpon>ThreeDCartDownloadCriteriaControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Stores\Platforms\ThreeDCart\ThreeDCartDownloader.cs" />
+    <Compile Include="Stores\Platforms\ThreeDCart\ThreeDCartSoapDownloader.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\ThreeDCartException.cs" />
-    <Compile Include="Stores\Platforms\ThreeDCart\ThreeDCartOnlineUpdater.cs" />
+    <Compile Include="Stores\Platforms\ThreeDCart\ThreeDCartSoapOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\ThreeDCartOrderIdentifier.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -6422,7 +6441,6 @@
     </Compile>
     <Compile Include="ApplicationCore\Licensing\TrialDetail.cs" />
     <Compile Include="ApplicationCore\Logging\ApiLogEntry.cs" />
-    <Compile Include="ApplicationCore\Logging\ApiLogSource.cs" />
     <Compile Include="ApplicationCore\Logging\ApiPrivateLogSourceAttribute.cs" />
     <Compile Include="Common\Threading\ProgressProvider.cs" />
     <Compile Include="Common\Threading\ProgressItemCollection.cs" />
@@ -10660,8 +10678,8 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.7\4.7.0.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.7\4.7.0.1.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.7\4.7.0.2.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\5.0\5.0.0.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.7\4.7.1.0.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\5.0\5.0.0.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\5.0\5.0.0.1.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\5.0\5.0.0.2.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\5.0\5.0.0.3.sql" />
@@ -10670,6 +10688,9 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\5.0\5.0.0.6.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\5.0\5.0.0.7.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\5.0\5.0.0.8.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\5.1\5.1.0.0.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\5.1\5.1.0.1.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\5.1\5.1.0.2.sql" />
     <Content Include="Resources\add.png" />
     <None Include="Resources\blank16.png" />
     <None Include="Resources\calendar_31.png" />
@@ -10973,6 +10994,7 @@
     <None Include="Resources\splash.png" />
     <None Include="Resources\solidcommerce.png" />
     <None Include="Resources\stagebloc.png" />
+    <None Include="Resources\sparkpay.png" />
     <Content Include="Resources\Stores\Icons\cart66.png" />
     <Content Include="Resources\Stores\Icons\channelsale.png" />
     <Content Include="Resources\Stores\Icons\jigoshop.png" />
