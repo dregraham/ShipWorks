@@ -82,8 +82,8 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
             OdbcFieldMapEntry entry = map.Entries.FirstOrDefault();
 
             Assert.Equal("Order Number", entry.ShipWorksField.DisplayName);
-            Assert.Equal(OrderFields.OrderNumber.Name, entry.ShipWorksField.ElementFieldValue);
-            Assert.Equal(OrderFields.OrderNumber.ContainingObjectName, entry.ShipWorksField.ElementName);
+            Assert.Equal(OrderFields.OrderNumber.Name, entry.ShipWorksField.Name);
+            Assert.Equal(OrderFields.OrderNumber.ContainingObjectName, entry.ShipWorksField.ContainingObjectName);
 
             Assert.Equal("SomeColumnName", entry.ExternalField.Column.Name);
             Assert.Equal("SomeTableName", entry.ExternalField.Table.Name);
@@ -102,15 +102,15 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
 
             OdbcFieldMapEntry entry1 = map.Entries.FirstOrDefault();
             Assert.Equal("Order Number", entry1.ShipWorksField.DisplayName);
-            Assert.Equal(OrderFields.OrderNumber.Name, entry1.ShipWorksField.ElementFieldValue);
-            Assert.Equal(OrderFields.OrderNumber.ContainingObjectName, entry1.ShipWorksField.ElementName);
+            Assert.Equal(OrderFields.OrderNumber.Name, entry1.ShipWorksField.Name);
+            Assert.Equal(OrderFields.OrderNumber.ContainingObjectName, entry1.ShipWorksField.ContainingObjectName);
             Assert.Equal("SomeColumnName", entry1.ExternalField.Column.Name);
             Assert.Equal("SomeTableName", entry1.ExternalField.Table.Name);
 
             OdbcFieldMapEntry entry2 = map.Entries[1];
             Assert.Equal("Bill First Name", entry2.ShipWorksField.DisplayName);
-            Assert.Equal(OrderFields.BillFirstName.Name, entry2.ShipWorksField.ElementFieldValue);
-            Assert.Equal(OrderFields.BillFirstName.ContainingObjectName, entry2.ShipWorksField.ElementName);
+            Assert.Equal(OrderFields.BillFirstName.Name, entry2.ShipWorksField.Name);
+            Assert.Equal(OrderFields.BillFirstName.ContainingObjectName, entry2.ShipWorksField.ContainingObjectName);
             Assert.Equal("SomeColumnName2", entry2.ExternalField.Column.Name);
             Assert.Equal("SomeTableName2", entry2.ExternalField.Table.Name);
 
