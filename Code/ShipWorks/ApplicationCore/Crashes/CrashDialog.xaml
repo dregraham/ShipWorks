@@ -13,7 +13,7 @@
         ResizeMode="NoResize"
         FontFamily="Tahoma"
         FontSize="11pt"
-        Width="432">
+        Width="442">
     <Window.Resources>
         <Style TargetType="TextBlock">
             <Setter Property="TextWrapping" Value="Wrap" />
@@ -22,56 +22,51 @@
     <Border BorderThickness="1"
             BorderBrush="Black">
         <Grid Margin="8,16,16,16">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
 
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-
-                <Image Grid.Column="0"
+            <Image Grid.Column="0"
                    Stretch="None"
-                   VerticalAlignment="Center"
+                   VerticalAlignment="Top"
                    HorizontalAlignment="Left"
-                   Margin="0,0,12,0"
+                   Margin="0,4,12,0"
                    Source="/Shipworks.Core;component/Resources/CrashImage.png" />
 
-                <StackPanel Grid.Column="1">
-                    <TextBlock FontWeight="Bold" LineHeight="20">
+            <StackPanel Grid.Column="1">
+                <TextBlock FontWeight="Bold" LineHeight="20">
                     ShipWorks has encountered a problem and must now close.
+                </TextBlock>
+                <StackPanel Grid.Row="1"
+                    Margin="0,12,0,0"
+                    TextBlock.FontSize="9pt">
+                    <TextBlock>
+                        To see more information about the problem,
+                        <Hyperlink Click="OnMoreInformationLinkClick">click here</Hyperlink>.
                     </TextBlock>
-                    <StackPanel Orientation="Horizontal"
+                    <TextBlock Margin="0,8,0,8"
+                               x:Name="ContactMessage">
+                        If this problem persists, please
+                        <Hyperlink Click="OnSupportClick">contact ShipWorks support</Hyperlink>.
+                    </TextBlock>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal"
                             Margin="0,16,0,0"
+                            HorizontalAlignment="Right"
                             VerticalAlignment="Center">
-                        <Button Click="OnOkClick"
-                            Padding="24,2,24,2"
-                            Margin="0,0,24,0"
-                            VerticalAlignment="Center">OK</Button>
-                        <CheckBox IsChecked="True"
+                    <CheckBox IsChecked="True"
                               x:Name="ReopenShipWorks"
                               VerticalAlignment="Center"
                               VerticalContentAlignment="Center">Reopen ShipWorks</CheckBox>
-                    </StackPanel>
+                    <Button Click="OnOkClick"
+                            Padding="24,2,24,2"
+                            Margin="24,0,0,0"
+                            VerticalAlignment="Center">OK</Button>
                 </StackPanel>
-            </Grid>
-
-            <StackPanel Grid.Row="1"
-                    Margin="32,20,0,0"
-                    TextBlock.FontSize="10pt">
-                <TextBlock>
-                To see more information about the problem,
-                <Hyperlink Click="OnMoreInformationLinkClick">click here</Hyperlink>.
-                </TextBlock>
-                <TextBlock Margin="0,8,0,8"
-                       x:Name="ContactMessage">
-                If this problem persists,
-                please <Hyperlink Click="OnSupportClick">contact ShipWorks support</Hyperlink>.
-                </TextBlock>
             </StackPanel>
+
+
         </Grid>
     </Border>
 </Window>

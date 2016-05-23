@@ -97,6 +97,7 @@ namespace ShipWorks.ApplicationCore.Crashes
             SplashScreen.CloseSplash();
 
             ContactMessage.Visibility = showSupportMessage ? Visibility.Visible : Visibility.Collapsed;
+            ContactMessage.IsEnabled = showSupportMessage;
 
             bool reopen = true;
             bool.TryParse(registry.GetValue(reopenRegistryKey, bool.TrueString), out reopen);
