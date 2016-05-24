@@ -54,7 +54,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
 
                 var testObject = mock.Create<OdbcDataSourceRepository>();
                 var odbcDataSources = testObject.GetDataSources();
-                OdbcDataSource dataSource = odbcDataSources.First(d => d.Name == "blah");
+                IOdbcDataSource dataSource = odbcDataSources.First(d => d.Name == "blah");
 
                 Assert.Equal("blah", dataSource.Name);
             }

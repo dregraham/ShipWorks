@@ -128,9 +128,9 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// If there is an error, message will return the error message returned
         /// from the ODBC Driver.
         /// </returns>
-        public GenericResult<OdbcDataSource> TestConnection()
+        public GenericResult<IOdbcDataSource> TestConnection()
         {
-            GenericResult<OdbcDataSource> testResult= new GenericResult<OdbcDataSource>(this);
+            GenericResult<IOdbcDataSource> testResult= new GenericResult<IOdbcDataSource>(this);
 
             using (IDbConnection connection = odbcProvider.CreateOdbcConnection())
             {

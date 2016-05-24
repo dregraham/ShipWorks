@@ -11,7 +11,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
     public class OdbcDataSourceRepository : IOdbcDataSourceRepository
     {
         private readonly IDsnProvider dsnProvider;
-        private readonly Func<OdbcDataSource> odbcDataSourceFactory;
+        private readonly Func<IOdbcDataSource> odbcDataSourceFactory;
         private readonly ILog log;
 
         /// <summary>
@@ -19,7 +19,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// </summary>
         public OdbcDataSourceRepository(
             IDsnProvider dsnProvider,
-            Func<OdbcDataSource> odbcDataSourceFactory,
+            Func<IOdbcDataSource> odbcDataSourceFactory,
             Func<Type, ILog> logFactory)
         {
             log = logFactory(typeof(OdbcDataSourceRepository));
@@ -34,18 +34,18 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// <exception cref="System.Data.DataException">
         /// Thrown when there is an issue retrieving information from the data sources.
         /// </exception>
-        public IEnumerable<OdbcDataSource> GetDataSources()
+        public IEnumerable<IOdbcDataSource> GetDataSources()
         {
             try
             {
-                List<OdbcDataSource> dataSources = new List<OdbcDataSource>();
+                List<IOdbcDataSource> dataSources = new List<IOdbcDataSource>();
 
                 // Build a collection of OdbcDataSources available on the machine
                 foreach (string dataSourceName in dsnProvider.GetDataSourceNames())
                 {
                     // Create a new data source and call change connection to
                     // initialize the data source to the data source name
-                    OdbcDataSource dataSource = odbcDataSourceFactory();
+                    IOdbcDataSource dataSource = odbcDataSourceFactory();
                     dataSource.ChangeConnection(dataSourceName, string.Empty, string.Empty);
 
                     // Add the data source to the collection
@@ -67,9 +67,9 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// <summary>
         /// Returns an empty custom data source
         /// </summary>
-        private OdbcDataSource CreateEmptyCustomDataSource()
+        private IOdbcDataSource CreateEmptyCustomDataSource()
         {
-            OdbcDataSource dataSource = odbcDataSourceFactory();
+            IOdbcDataSource dataSource = odbcDataSourceFactory();
             dataSource.ChangeConnection(string.Empty);
             return dataSource;
         }
