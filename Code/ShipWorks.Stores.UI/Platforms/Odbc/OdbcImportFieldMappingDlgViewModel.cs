@@ -174,9 +174,9 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
                 Filter = "ShipWorks Map Files|*.swm"
             };
 
-            dlg.ShowDialog();
+            bool? result = dlg.ShowDialog();
 
-            if (!string.IsNullOrWhiteSpace(dlg.FileName))
+            if (result != null && result.Value)
             {
                 FileStream fs = (FileStream)dlg.OpenFile();
                 OdbcFieldMap map = GetSingleMap();
