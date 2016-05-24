@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Diagnostics;
@@ -69,7 +70,7 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Try to validate any orders and shipments that are pending validation
         /// </summary>
-        private static void ValidatePendingOrdersAndShipments()
+        private static async Task ValidatePendingOrdersAndShipments()
         {
             if (SqlSession.Current == null)
             {
@@ -96,19 +97,19 @@ namespace ShipWorks.AddressValidation
                 try
                 {
                     // Validate any pending orders first
-                    ValidateAddresses<OrderEntity>(new OrdersWithPendingValidationStatusPredicate(), orders => orders.Any());
+                    await ValidateAddresses<OrderEntity>(new OrdersWithPendingValidationStatusPredicate(), orders => orders.Any());
 
                     // Validate any errors, but don't continue if any of the orders in the validated batch are still errors
                     // since that would suggest that there is still something wrong with the web service. This gets called after we attempt to validate a batch.
                     // If they are all errors, each address in the batch JUST failed.
-                    ValidateAddresses<OrderEntity>(new OrdersWithErrorValidationStatusPredicate(),
+                    await ValidateAddresses<OrderEntity>(new OrdersWithErrorValidationStatusPredicate(),
                         orders => orders.Any() && orders.Any(x => x.ShipAddressValidationStatus != (int) AddressValidationStatusType.Error));
 
                     // Validate any pending shipments next
-                    ValidatePendingShipmentAddresses();
+                    await ValidatePendingShipmentAddresses();
 
                     // Validate any errors. See above comment about validating order errors...
-                    ValidateErrorShipmentAddresses();
+                    await ValidateErrorShipmentAddresses();
                 }
                 catch (Exception ex)
                 {
@@ -124,28 +125,29 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Validate shipments with a given address validation status
         /// </summary>
-        private static void ValidatePendingShipmentAddresses()
+        private static Task ValidatePendingShipmentAddresses()
         {
             Func<ICollection<ShipmentEntity>, bool> shouldContinue = shipments => shipments.Any();
-            ValidateAddresses(new UnprocessedPendingShipmentsPredicate(), shouldContinue);
+            return ValidateAddresses(new UnprocessedPendingShipmentsPredicate(), shouldContinue);
         }
 
         /// <summary>
         /// Validate shipments with a given address validation status
         /// </summary>
-        private static void ValidateErrorShipmentAddresses()
+        private static Task ValidateErrorShipmentAddresses()
         {
             // shouldContinue evaluates the shipments after processing them through address validation.
             // If each order in the batch still has an error (or there are no shipments) this will bail.
             Func<ICollection<ShipmentEntity>, bool> shouldContinue = shipments => shipments.Any() && shipments.Any(x => x.ShipAddressValidationStatus != (int) AddressValidationStatusType.Error);
-            ValidateAddresses(new UnprocessedErrorShipmentsPredicate(), shouldContinue);
+            return ValidateAddresses(new UnprocessedErrorShipmentsPredicate(), shouldContinue);
         }
 
         /// <summary>
         /// Validate orders with a given address validation status
         /// </summary>
-        private static void ValidateAddresses<T>(IPredicateProvider predicate, Func<ICollection<T>, bool> shouldContinue) where T : EntityBase2
+        private static async Task ValidateAddresses<T>(IPredicateProvider predicate, Func<ICollection<T>, bool> shouldContinue) where T : EntityBase2
         {
+            int taskCount = 8;
             EntityCollection<T> pendingOrders;
             Stopwatch stopwatch = new Stopwatch();
 
@@ -159,15 +161,10 @@ namespace ShipWorks.AddressValidation
                     pendingOrders = adapter.GetCollectionFromPredicate<T>(predicate);
                 }
 
-                foreach (T order in pendingOrders)
-                {
-                    if (cancellationToken.IsCancellationRequested)
-                    {
-                        return;
-                    }
+                ConcurrentQueue<T> queue = new ConcurrentQueue<T>(pendingOrders);
 
-                    ValidateAddressEntities(order);
-                }
+                await TaskEx.WhenAll(Enumerable.Range(1, taskCount)
+                    .Select(x => TaskEx.Run(() => ValidateAddressesTask(queue), cancellationToken)));
 
                 stopwatch.Stop();
 
@@ -176,15 +173,33 @@ namespace ShipWorks.AddressValidation
                 if (itemCount > 0)
                 {
                     long timePerItem = stopwatch.ElapsedMilliseconds / itemCount;
-                    log.Info($"Validated {itemCount} items on 1 thread(s) in {stopwatch.ElapsedMilliseconds} ms ({timePerItem} ms/item)");
+                    log.Info($"Validated {itemCount} items on {taskCount} thread(s) in {stopwatch.ElapsedMilliseconds} ms ({timePerItem} ms/item)");
                 }
             } while (shouldContinue(pendingOrders));
         }
 
         /// <summary>
+        /// Validate addresses from the queue
+        /// </summary>
+        private static void ValidateAddressesTask<T>(ConcurrentQueue<T> queue) where T : EntityBase2
+        {
+            T entity = null;
+
+            while (queue.TryDequeue(out entity))
+            {
+                if (cancellationToken.IsCancellationRequested)
+                {
+                    return;
+                }
+
+                ValidateEntityAddress(entity);
+            }
+        }
+
+        /// <summary>
         /// Validates the specified shipment identifier.
         /// </summary>
-        private static void ValidateAddressEntities(IEntity2 entityToValidate)
+        private static void ValidateEntityAddress(IEntity2 entityToValidate)
         {
             try
             {
