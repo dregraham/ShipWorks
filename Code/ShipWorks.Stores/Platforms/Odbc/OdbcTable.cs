@@ -38,7 +38,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// </summary>
         public void Load(IOdbcDataSource dataSource, ILog log)
         {
-            using (OdbcConnection connection = dataSource.CreateConnection())
+            using (DbConnection connection = dataSource.CreateConnection())
             {
                 try
                 {

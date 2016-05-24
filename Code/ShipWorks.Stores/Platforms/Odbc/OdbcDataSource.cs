@@ -183,7 +183,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// <summary>
         /// Creates a new ODBC Connection
         /// </summary>
-        public OdbcConnection CreateConnection()
+        public DbConnection CreateConnection()
         {
             return odbcProvider.CreateOdbcConnection(ConnectionString);
         }

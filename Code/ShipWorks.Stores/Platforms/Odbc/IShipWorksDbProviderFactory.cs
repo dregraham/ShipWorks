@@ -1,5 +1,5 @@
 ﻿using System.Data;
-using System.Data.Odbc;
+using System.Data.Common;
 
 namespace ShipWorks.Stores.Platforms.Odbc
 {
@@ -16,6 +16,6 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// <summary>
         /// Creates an Odbc DbConnection with a given connection string
         /// </summary>
-        OdbcConnection CreateOdbcConnection(string connectionString);
+        DbConnection CreateOdbcConnection(string connectionString);
     }
 }

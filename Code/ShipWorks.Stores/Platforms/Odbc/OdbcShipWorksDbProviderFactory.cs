@@ -22,11 +22,11 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// </summary>
         /// <param name="connectionString"></param>
         /// <returns></returns>
-        public OdbcConnection CreateOdbcConnection(string connectionString)
+        public DbConnection CreateOdbcConnection(string connectionString)
         {
             var connection = CreateOdbcConnection();
             connection.ConnectionString = connectionString;
-            return connection as OdbcConnection;
+            return connection as DbConnection;
         }
     }
 }

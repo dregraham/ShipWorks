@@ -43,7 +43,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
         {
             DataSource = dataSource;
 
-            using (OdbcConnection connection = DataSource.CreateConnection())
+            using (DbConnection connection = DataSource.CreateConnection())
             {
                 try
                 {
