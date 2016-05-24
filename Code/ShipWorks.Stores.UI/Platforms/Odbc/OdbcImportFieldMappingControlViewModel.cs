@@ -186,7 +186,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
 
             map.ExternalTableName = selectedTable.Name;
             map.Entries.ForEach(e => e.ExternalField.Table = selectedTable);
-            map.Entries.ForEach(e => e.ExternalField.Table.Columns = null);
+            map.Entries.ForEach(e => e.ExternalField.Table.ResetColumns());
 
             return map;
         }

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
+using System.Data.Odbc;
 using System.Linq;
 using log4net;
 
@@ -42,7 +43,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
         {
             DataSource = dataSource;
 
-            using (DbConnection connection = DataSource.CreateConnection())
+            using (OdbcConnection connection = DataSource.CreateConnection())
             {
                 try
                 {

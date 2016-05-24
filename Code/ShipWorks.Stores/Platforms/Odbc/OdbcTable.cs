@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
+using System.Data.Odbc;
+using System.Linq;
 using Autofac;
 using log4net;
 using ShipWorks.ApplicationCore;
@@ -29,14 +31,14 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// <summary>
         /// The columns in the table
         /// </summary>
-        public IEnumerable<OdbcColumn> Columns { get; set; }
+        public IEnumerable<OdbcColumn> Columns { get; private set; }
 
         /// <summary>
         /// Loads the columns for this table
         /// </summary>
         public void Load(IOdbcDataSource dataSource, ILog log)
         {
-            using (DbConnection connection = dataSource.CreateConnection())
+            using (OdbcConnection connection = dataSource.CreateConnection())
             {
                 try
                 {
@@ -60,15 +62,13 @@ namespace ShipWorks.Stores.Platforms.Odbc
                 try
                 {
                     DataTable columnData = connection.GetSchema("Columns", restriction);
-                    List<OdbcColumn> localColumns = new List<OdbcColumn>();
+                    Columns = new List<OdbcColumn>();
 
                     for (int j = 0; j < columnData.Rows.Count; j++)
                     {
                         string columnName = columnData.Rows[j].ItemArray[3].ToString();
-                        localColumns.Add(new OdbcColumn(columnName));
+                        Columns = Columns.Concat(new[] {new OdbcColumn(columnName)});
                     }
-
-                    Columns = localColumns;
                 }
                 catch (Exception ex)
                 {
@@ -78,6 +78,15 @@ namespace ShipWorks.Stores.Platforms.Odbc
                         ex);
                 }
             }
+        }
+
+        /// <summary>
+        /// Resets the columns.
+        /// </summary>
+        /// <exception cref="System.NotImplementedException"></exception>
+        public void ResetColumns()
+        {
+            Columns = null;
         }
     }
 }

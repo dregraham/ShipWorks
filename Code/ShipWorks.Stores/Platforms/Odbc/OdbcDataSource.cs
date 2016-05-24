@@ -132,11 +132,10 @@ namespace ShipWorks.Stores.Platforms.Odbc
         {
             GenericResult<IOdbcDataSource> testResult= new GenericResult<IOdbcDataSource>(this);
 
-            using (IDbConnection connection = odbcProvider.CreateOdbcConnection())
+            using (IDbConnection connection = odbcProvider.CreateOdbcConnection(BuildConnectionString()))
             {
                 try
                 {
-                    connection.ConnectionString = BuildConnectionString();
                     connection.Open();
 
                     testResult.Success = true;
@@ -184,9 +183,9 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// <summary>
         /// Creates a new ODBC Connection
         /// </summary>
-        public DbConnection CreateConnection()
+        public OdbcConnection CreateConnection()
         {
-            return new OdbcConnection(ConnectionString);
+            return odbcProvider.CreateOdbcConnection(ConnectionString);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Data;
+using System.Data.Odbc;
 
 namespace ShipWorks.Stores.Platforms.Odbc
 {
@@ -8,8 +9,13 @@ namespace ShipWorks.Stores.Platforms.Odbc
     public interface IShipWorksDbProviderFactory
     {
         /// <summary>
-        /// Creates and Odbc DbConnection
+        /// Creates an Odbc DbConnection
         /// </summary>
         IDbConnection CreateOdbcConnection();
+
+        /// <summary>
+        /// Creates an Odbc DbConnection with a given connection string
+        /// </summary>
+        OdbcConnection CreateOdbcConnection(string connectionString);
     }
 }

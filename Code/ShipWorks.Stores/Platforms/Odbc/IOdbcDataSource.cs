@@ -1,4 +1,6 @@
-﻿using System.Data.Common;
+﻿using System.Data;
+using System.Data.Common;
+using System.Data.Odbc;
 using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Stores.Platforms.Odbc
@@ -16,7 +18,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// <summary>
         /// Creates an ODBC connection to the Data Source
         /// </summary>
-        DbConnection CreateConnection();
+        OdbcConnection CreateConnection();
 
         /// <summary>
         /// Name of the data source
