@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Utility;
+using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.AddressValidation.Enums;
 using ShipWorks.AddressValidation.Predicates;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -14,8 +17,6 @@ using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Data.Utility;
 using ShipWorks.SqlServer.Common.Data;
 using ShipWorks.Stores;
-using log4net;
-using ShipWorks.AddressValidation.Enums;
 
 namespace ShipWorks.AddressValidation
 {
@@ -134,7 +135,7 @@ namespace ShipWorks.AddressValidation
         /// </summary>
         private static void ValidateErrorShipmentAddresses()
         {
-            // shouldContinue evaluates the shipments after processing them through address validation. 
+            // shouldContinue evaluates the shipments after processing them through address validation.
             // If each order in the batch still has an error (or there are no shipments) this will bail.
             Func<ICollection<ShipmentEntity>, bool> shouldContinue = shipments => shipments.Any() && shipments.Any(x => x.ShipAddressValidationStatus != (int) AddressValidationStatusType.Error);
             ValidateAddresses(new UnprocessedErrorShipmentsPredicate(), shouldContinue);
@@ -146,10 +147,13 @@ namespace ShipWorks.AddressValidation
         private static void ValidateAddresses<T>(IPredicateProvider predicate, Func<ICollection<T>, bool> shouldContinue) where T : EntityBase2
         {
             EntityCollection<T> pendingOrders;
+            Stopwatch stopwatch = new Stopwatch();
 
             // The predicate gets orders in batches at a time (50 at the time of this comment).
             do
             {
+                stopwatch.Restart();
+
                 using (SqlAdapter adapter = new SqlAdapter())
                 {
                     pendingOrders = adapter.GetCollectionFromPredicate<T>(predicate);
@@ -165,6 +169,15 @@ namespace ShipWorks.AddressValidation
                     ValidateAddressEntities(order);
                 }
 
+                stopwatch.Stop();
+
+                int itemCount = pendingOrders.Count;
+
+                if (itemCount > 0)
+                {
+                    long timePerItem = stopwatch.ElapsedMilliseconds / itemCount;
+                    log.Info($"Validated {itemCount} items on 1 thread(s) in {stopwatch.ElapsedMilliseconds} ms ({timePerItem} ms/item)");
+                }
             } while (shouldContinue(pendingOrders));
         }
 
@@ -178,10 +191,10 @@ namespace ShipWorks.AddressValidation
                 AddressAdapter originalEntityAddress = new AddressAdapter();
                 AddressAdapter.Copy(entityToValidate, "Ship", originalEntityAddress);
 
-                if (entityToValidate != null && validatableStatuses.Contains((int)entityToValidate.Fields["ShipAddressValidationStatus"].CurrentValue))
+                if (entityToValidate != null && validatableStatuses.Contains((int) entityToValidate.Fields["ShipAddressValidationStatus"].CurrentValue))
                 {
-                    StoreEntity store = StoreManager.GetRelatedStore((long)entityToValidate.Fields["OrderID"].CurrentValue);
-                    bool shouldAutomaticallyAdjustAddress = store.AddressValidationSetting != (int)AddressValidationStoreSettingType.ValidateAndNotify;
+                    StoreEntity store = StoreManager.GetRelatedStore((long) entityToValidate.Fields["OrderID"].CurrentValue);
+                    bool shouldAutomaticallyAdjustAddress = store.AddressValidationSetting != (int) AddressValidationStoreSettingType.ValidateAndNotify;
 
                     addressValidator.Validate(entityToValidate, "Ship", shouldAutomaticallyAdjustAddress,
                         (originalAddress, suggestedAddresses) =>
@@ -209,7 +222,7 @@ namespace ShipWorks.AddressValidation
                 // Don't worry about this...  The next pass through will grab this order again
             }
         }
-        
+
         /// <summary>
         /// A factory method to instantiate the appropriate instance of ValidatedShipAddressBase.
         /// </summary>
