@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:ShipWorks.Stores.UI.Platforms.Odbc"
              xmlns:fieldMap="clr-namespace:ShipWorks.Stores.Platforms.Odbc.Mapping;assembly=ShipWorks.Stores"
              mc:Ignorable="d"
-             d:DataContext="{d:DesignInstance local:OdbcImportFieldMappingDlgViewModel}"
+             d:DataContext="{d:DesignInstance local:OdbcImportFieldMappingControlViewModel}"
              Height="500" Width="540"
              FontFamily="Tahoma" FontSize="8.25pt"
              Background="{x:Static SystemColors.ControlBrush}">
@@ -64,8 +64,8 @@
                       ItemsSource="{Binding Tables, UpdateSourceTrigger=PropertyChanged}"
                       DisplayMemberPath="Name"
                       SelectedValue="{Binding SelectedTable}" />
-            <Button Grid.Row="1" Grid.Column="2" Content="Load Map" Command="{Binding SaveMapCommand}"/>
-            <Button Grid.Row="2" Grid.Column="2" Content="Export Map" Command="{Binding SaveMapCommand}"/>
+            <Button Grid.Row="1" Grid.Column="2" Content="Load Map..." Command="{Binding SaveMapCommand}"/>
+            <Button Grid.Row="2" Grid.Column="2" Content="Export Map..." Command="{Binding SaveMapCommand}"/>
 
         </Grid>
 

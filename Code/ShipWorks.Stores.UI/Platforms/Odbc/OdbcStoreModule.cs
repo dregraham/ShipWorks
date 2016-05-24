@@ -30,7 +30,8 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             builder.RegisterType<OdbcControlPanel>()
                 .AsImplementedInterfaces();
 
-            builder.RegisterType<OdbcDataSource>();
+            builder.RegisterType<OdbcDataSource>()
+                .AsImplementedInterfaces();
 
             builder.RegisterType<OdbcCipherKey>()
                 .Keyed<ICipherKey>(CipherContext.Odbc);
@@ -41,7 +42,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             builder.RegisterType<OdbcImportFieldMappingControl>()
                 .AsSelf();
 
-            builder.RegisterType<OdbcImportFieldMappingDlgViewModel>()
+            builder.RegisterType<OdbcImportFieldMappingControlViewModel>()
                 .AsImplementedInterfaces();
 
             builder.RegisterType<OdbcFieldMapFactory>()

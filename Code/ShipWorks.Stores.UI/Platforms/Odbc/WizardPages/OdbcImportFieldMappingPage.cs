@@ -1,11 +1,11 @@
 ﻿using System;
-using System.Windows.Forms;
 using Autofac;
 using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.Odbc;
+using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
 {
@@ -15,7 +15,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
     public partial class OdbcImportFieldMappingPage : AddStoreWizardPage, IOdbcWizardPage
     {
         private ILifetimeScope scope;
-        private IOdbcImportFieldMappingDlgViewModel viewModel;
+        private IOdbcImportFieldMappingControlViewModel viewModel;
         private OdbcStoreEntity store;
 
         /// <summary>
@@ -36,7 +36,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
         /// <summary>
         /// Save the map to the ODBC Store
         /// </summary>
-        private void OnNext(object sender, ShipWorks.UI.Wizard.WizardStepEventArgs e)
+        private void OnNext(object sender, WizardStepEventArgs e)
         {
             if (store == null)
             {
@@ -55,16 +55,33 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
         }
 
         /// <summary>
-        /// Load the store into the view model
         /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="eventArgs">The <see cref="System.EventArgs" /> instance containing the event data.</param>
         private void OnLoad(object sender, EventArgs eventArgs)
         {
             store = GetStore<OdbcStoreEntity>();
             scope = IoC.BeginLifetimeScope();
-            viewModel = scope.Resolve<IOdbcImportFieldMappingDlgViewModel>();
+            viewModel = scope.Resolve<IOdbcImportFieldMappingControlViewModel>();
 
             viewModel.Load(store);
             odbcImportFieldMappingControl.DataContext = viewModel;
+        }
+
+
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            scope?.Dispose();
+
+            if (disposing)
+            {
+                components?.Dispose();
+            }
+            base.Dispose(disposing);
         }
     }
 }

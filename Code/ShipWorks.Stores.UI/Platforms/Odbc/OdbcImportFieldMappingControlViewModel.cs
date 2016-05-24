@@ -5,6 +5,8 @@ using System.ComponentModel;
 using System.IO;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.Command;
+using Interapptive.Shared.UI;
+using Interapptive.Shared.Utility;
 using log4net;
 using Microsoft.Win32;
 using ShipWorks.Core.UI;
@@ -17,12 +19,13 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
     /// <summary>
     /// View Model for the <see cref="OdbcImportFieldMappingControl"/>
     /// </summary>
-    public class OdbcImportFieldMappingDlgViewModel : IOdbcImportFieldMappingDlgViewModel, INotifyPropertyChanged
+    public class OdbcImportFieldMappingControlViewModel : IOdbcImportFieldMappingControlViewModel, INotifyPropertyChanged
     {
         private readonly IOdbcFieldMapFactory fieldMapFactory;
-        private readonly OdbcDataSource dataSource;
+        private readonly IOdbcDataSource dataSource;
         private readonly IOdbcSchema schema;
         private readonly Func<Type, ILog> logFactory;
+        private readonly IMessageHelper messageHelper;
         private OdbcTable selectedTable;
         private ObservableCollection<OdbcColumn> columns;
         private OdbcFieldMap selectedFieldMap;
@@ -30,20 +33,26 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         public event PropertyChangedEventHandler PropertyChanged;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="OdbcImportFieldMappingDlgViewModel"/> class.
+        /// Initializes a new instance of the <see cref="OdbcImportFieldMappingControlViewModel"/> class.
         /// </summary>
-        public OdbcImportFieldMappingDlgViewModel(IOdbcFieldMapFactory fieldMapFactory, OdbcDataSource dataSource, IOdbcSchema schema, Func<Type, ILog> logFactory)
+        public OdbcImportFieldMappingControlViewModel(IOdbcFieldMapFactory fieldMapFactory, IOdbcDataSource dataSource,
+            IOdbcSchema schema, Func<Type, ILog> logFactory, IMessageHelper messageHelper)
         {
             this.fieldMapFactory = fieldMapFactory;
             this.dataSource = dataSource;
             this.schema = schema;
             this.logFactory = logFactory;
+            this.messageHelper = messageHelper;
+
             SaveMapCommand = new RelayCommand(SaveMapToDisk,() => selectedTable != null);
+
             OrderFieldMap = fieldMapFactory.CreateOrderFieldMap();
             AddressFieldMap = fieldMapFactory.CreateAddressFieldMap();
             ItemFieldMap = fieldMapFactory.CreateOrderItemFieldMap();
             FieldMaps = new List<OdbcFieldMap> { OrderFieldMap, AddressFieldMap, ItemFieldMap };
+
             selectedFieldMap = OrderFieldMap;
+
             Handler = new PropertyChangedHandler(this, () => PropertyChanged);
         }
 
@@ -122,10 +131,19 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// </summary>
         public void Load(OdbcStoreEntity store)
         {
-            dataSource.Restore(store.ConnectionString);
-            schema.Load(dataSource);
+            MethodConditions.EnsureArgumentIsNotNull(store);
 
-            Tables = schema.Tables;
+            try
+            {
+                dataSource.Restore(store.ConnectionString);
+                schema.Load(dataSource);
+
+                Tables = schema.Tables;
+            }
+            catch (ShipWorksOdbcException ex)
+            {
+                messageHelper.ShowError(ex.Message);
+            }
         }
 
         /// <summary>
@@ -133,10 +151,20 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// </summary>
         public void Save(OdbcStoreEntity store)
         {
+            MethodConditions.EnsureArgumentIsNotNull(store);
+
             OdbcFieldMap map = GetSingleMap();
             Stream memoryStream = new MemoryStream();
 
-            map.Save(memoryStream);
+            try
+            {
+                map.Save(memoryStream);
+            }
+            catch (ShipWorksOdbcException ex)
+            {
+                messageHelper.ShowError(ex.Message);
+            }
+
             memoryStream.Position = 0;
             StreamReader reader = new StreamReader(memoryStream);
 
@@ -180,7 +208,15 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             {
                 FileStream fs = (FileStream)dlg.OpenFile();
                 OdbcFieldMap map = GetSingleMap();
-                map.Save(fs);
+
+                try
+                {
+                    map.Save(fs);
+                }
+                catch (ShipWorksOdbcException ex)
+                {
+                    messageHelper.ShowError(ex.Message);
+                }
             }
         }
     }

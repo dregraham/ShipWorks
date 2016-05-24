@@ -10,7 +10,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
     /// <summary>
     /// View Model for the <see cref="OdbcImportFieldMappingControl"/>
     /// </summary>
-    public interface IOdbcImportFieldMappingDlgViewModel
+    public interface IOdbcImportFieldMappingControlViewModel
     {
         /// <summary>
         /// The name the map will be saved as.

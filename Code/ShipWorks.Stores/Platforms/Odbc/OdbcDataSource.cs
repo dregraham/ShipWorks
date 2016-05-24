@@ -164,14 +164,21 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// </summary>
         public void Restore(string json)
         {
-            JObject dataSource = JObject.Parse(encryptionProvider.Decrypt(json));
+            try
+            {
+                JObject dataSource = JObject.Parse(encryptionProvider.Decrypt(json));
 
-            Name = dataSource["Name"].ToString();
-            bool custom;
-            IsCustom = bool.TryParse(dataSource["IsCustom"].ToString(), out custom) && custom;
-            Username = dataSource["Username"].ToString();
-            Password = dataSource["Password"].ToString();
-            ConnectionString = dataSource["ConnectionString"].ToString();
+                Name = dataSource["Name"].ToString();
+                bool custom;
+                IsCustom = bool.TryParse(dataSource["IsCustom"].ToString(), out custom) && custom;
+                Username = dataSource["Username"].ToString();
+                Password = dataSource["Password"].ToString();
+                ConnectionString = dataSource["ConnectionString"].ToString();
+            }
+            catch (JsonReaderException)
+            {
+                throw new ShipWorksOdbcException("Failed to restore data source");
+            }
         }
 
         /// <summary>

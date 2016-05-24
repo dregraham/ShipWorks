@@ -16,5 +16,9 @@ namespace ShipWorks.Stores.Platforms.Odbc
             : base(message)
         {
         }
+
+        public ShipWorksOdbcException()
+        {
+        }
     }
 }

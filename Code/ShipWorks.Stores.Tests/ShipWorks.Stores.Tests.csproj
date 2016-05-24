@@ -147,6 +147,7 @@
     <Compile Include="Platforms\Odbc\Mapping\ShipWorksOdbcMappableFieldTest.cs" />
     <Compile Include="Platforms\Odbc\OdbcColumnTest.cs" />
     <Compile Include="Platforms\Odbc\OdbcFieldMapFactoryTest.cs" />
+    <Compile Include="Platforms\Odbc\OdbcImportFieldMappingControlViewModelTest.cs" />
     <Compile Include="Platforms\Odbc\OdbcSchemaTest.cs" />
     <Compile Include="Platforms\Odbc\OdbcTableTest.cs" />
     <Compile Include="Platforms\Sears\SearsCredentialsTest.cs" />
@@ -180,6 +181,10 @@
     <ProjectReference Include="..\ShipWorks.Shipping\ShipWorks.Shipping.csproj">
       <Project>{a5eb7a6b-1600-4be2-aed6-3284c4e7987c}</Project>
       <Name>ShipWorks.Shipping</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ShipWorks.Stores.UI\ShipWorks.Stores.UI.csproj">
+      <Project>{BBF456B8-8182-4FC1-8E59-3AAFAE5BFA53}</Project>
+      <Name>ShipWorks.Stores.UI</Name>
     </ProjectReference>
     <ProjectReference Include="..\ShipWorks.Stores\ShipWorks.Stores.csproj">
       <Project>{c53624d5-5b3b-48a6-9729-52a573726de9}</Project>

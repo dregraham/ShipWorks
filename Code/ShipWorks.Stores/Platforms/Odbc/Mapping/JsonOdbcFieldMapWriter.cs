@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using Interapptive.Shared.Utility;
 using Newtonsoft.Json;
@@ -28,14 +29,21 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
             MethodConditions.EnsureArgumentIsNotNull(map);
 
             StreamWriter streamWriter = new StreamWriter(stream);
-            string data = JsonConvert.SerializeObject(map, GetSerializerSettings());
+            try
+            {
+                string data = JsonConvert.SerializeObject(map, GetSerializerSettings());
 
-            streamWriter.Write(data);
-            streamWriter.Flush();
+                streamWriter.Write(data);
+                streamWriter.Flush();
+            }
+            catch (Exception)
+            {
+                throw new ShipWorksOdbcException("Failed to save the Odbc import field map");
+            }
 		}
 
         /// <summary>
-        /// Json serializer settings to be used when serializing
+        /// Gets the serializer settings.
         /// </summary>
         private JsonSerializerSettings GetSerializerSettings()
         {

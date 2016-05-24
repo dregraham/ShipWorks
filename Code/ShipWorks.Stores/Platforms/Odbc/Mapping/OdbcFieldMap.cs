@@ -9,7 +9,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
     /// Contains Field Mapping information for ODBC
     /// </summary>
 	public class OdbcFieldMap
-	{
+    {
 		private readonly IOdbcFieldMapIOFactory ioFactory;
 
         /// <summary>

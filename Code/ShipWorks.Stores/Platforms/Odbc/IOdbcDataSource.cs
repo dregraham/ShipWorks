@@ -22,5 +22,11 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// Name of the data source
         /// </summary>
         string Name { get; }
+
+        /// <summary>
+        /// Set connection string from serialized json.
+        /// </summary>
+        /// <param name="json">The json.</param>
+        void Restore(string json);
     }
 }
