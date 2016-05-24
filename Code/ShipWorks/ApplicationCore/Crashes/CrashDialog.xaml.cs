@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -26,10 +25,10 @@ namespace ShipWorks.ApplicationCore.Crashes
 
         Exception exception;
         bool guiThread;
-        string email;
         readonly bool showSupportMessage;
         private const int showSupportMessageCutoff = 4;
         private const string reopenRegistryKey = "ReopenAfterCrash";
+        readonly string crashContent;
 
         /// <summary>
         /// Constructor
@@ -44,7 +43,7 @@ namespace ShipWorks.ApplicationCore.Crashes
                 throw new InvalidOperationException(message);
             }
 
-            CreateLogTask = TaskEx.Run(() => SendReport());
+            CreateLogTask = TaskEx.Run(() => SendReport(userEmail));
 
             InitializeComponent();
 
@@ -55,15 +54,16 @@ namespace ShipWorks.ApplicationCore.Crashes
 
             ShowInTaskbar = !guiThread || (FormsApplication.OpenForms.Count == 1 && FormsApplication.OpenForms[0] is SplashScreen);
 
-            email = userEmail;
             showSupportMessage = recoveryCount > showSupportMessageCutoff;
 
             // Dump the report to the log
             try
             {
+                crashContent = CrashSubmitter.GetContent(exception, "");
+
                 File.WriteAllText(
                     Path.Combine(LogSession.LogFolder, "crash.txt"),
-                    CrashSubmitter.GetContent(exception, ""));
+                    crashContent);
             }
             catch
             {
@@ -140,7 +140,7 @@ namespace ShipWorks.ApplicationCore.Crashes
         /// </summary>
         private void OnMoreInformationLinkClick(object sender, RoutedEventArgs e)
         {
-            CrashDetailsDialog details = new CrashDetailsDialog(CrashSubmitter.GetContent(exception, string.Empty));
+            CrashDetailsDialog details = new CrashDetailsDialog(crashContent);
             details.Owner = this;
             details.ShowDialog();
         }
@@ -148,81 +148,16 @@ namespace ShipWorks.ApplicationCore.Crashes
         /// <summary>
         /// Send the report to interapptive
         /// </summary>
-        private void SendReport()
+        private void SendReport(string email)
         {
             try
             {
                 string logFileToSubmit = CrashSubmitter.CreateCrashLogZip();
                 CrashSubmitter.Submit(exception, email, string.Empty, logFileToSubmit);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                bool fallback = true;
-
-#if DEBUG
-                fallback = false;
-#endif
-
-                if (InterapptiveOnly.IsInterapptiveUser)
-                {
-                    fallback = false;
-                }
-
-                // Fallback and submit to our script
-                if (fallback)
-                {
-                    SubmitFallbackReport(ex);
-                }
-                else
-                {
-                    MessageBox.Show(this,
-                        "An error occurred submitting the crash report:\n\n" + ex.Message,
-                        "ShipWorks",
-                        MessageBoxButton.OK,
-                        MessageBoxImage.Error);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Submit a fallback report to the interapptive php script due to the given exception submitting to FogBugz
-        /// </summary>
-        private void SubmitFallbackReport(Exception fallbackEx)
-        {
-            HttpVariableRequestSubmitter post = new HttpVariableRequestSubmitter();
-            post.Uri = new Uri("http://www.interapptive.com/shipworks/reports/bugzScoutFallback.php");
-            post.Credentials = new NetworkCredential("shipworks", "report");
-
-            post.Variables.Add(new HttpVariable("description", "Crash: " + CrashSubmitter.GetIdentifier(exception)));
-            post.Variables.Add(new HttpVariable("userEmail", email));
-            post.Variables.Add(new HttpVariable("fallbackReason", fallbackEx.GetType().Name + ": " + fallbackEx.Message));
-
-            try
-            {
-                using (IHttpResponseReader response = post.GetResponse())
-                {
-                    if (response.HttpWebResponse.StatusCode != HttpStatusCode.OK)
-                    {
-                        throw new WebException("Could not connect to server.");
-                    }
-                }
-
-                // Display the response
-                MessageBox.Show(this,
-                    "Thank you for helping us to improve ShipWorks.",
-                    "ShipWorks",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Information);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(this,
-                    "Unable to send error report. \n\n" +
-                    fallbackEx.Message + "\n" +
-                    ex.Message,
-                    "ShipWorks",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Warning);
+                // We've already crashed, so just eat the exception if we fail to submit the crash report
             }
         }
 
