@@ -24,14 +24,11 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
         [Fact]
         public void Write_WritesSerializedMapToStream()
         {
-            JsonOdbcFieldMapWriter testObject = new JsonOdbcFieldMapWriter();
-
             Mock<IOdbcFieldMapIOFactory> ioFactory = mock.Mock<IOdbcFieldMapIOFactory>();
-            ioFactory.Setup(f => f.CreateWriter()).Returns(testObject);
-
             OdbcFieldMap map = new OdbcFieldMap(ioFactory.Object);
 
-            
+            JsonOdbcFieldMapWriter testObject = new JsonOdbcFieldMapWriter(map);
+            ioFactory.Setup(f => f.CreateWriter(map)).Returns(testObject);
 
             OdbcTable table = new OdbcTable("some table");
             OdbcColumn column = new OdbcColumn("OrderNumberColumn");
@@ -47,7 +44,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
 
             MemoryStream stream = new MemoryStream();
 
-            testObject.Write(map, stream);
+            testObject.Write(stream);
 
             stream.Position = 0;
 

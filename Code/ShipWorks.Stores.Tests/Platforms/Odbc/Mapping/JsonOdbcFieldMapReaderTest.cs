@@ -102,7 +102,8 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
 
             var ioFactory = mock.Mock<IOdbcFieldMapIOFactory>();
 
-            ioFactory.Setup(f => f.CreateWriter()).Returns(new JsonOdbcFieldMapWriter());
+            ioFactory.Setup(f => f.CreateWriter(It.IsAny<OdbcFieldMap>()))
+                .Returns((OdbcFieldMap m) => new JsonOdbcFieldMapWriter(m));
             ioFactory.Setup(f => f.CreateReader(It.IsAny<Stream>())).Returns<Stream>(s => new JsonOdbcFieldMapReader(s, log.Object));
 
             return ioFactory.Object;

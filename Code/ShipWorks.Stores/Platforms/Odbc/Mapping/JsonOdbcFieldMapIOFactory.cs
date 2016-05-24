@@ -29,6 +29,6 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <summary>
         /// Creates a field map writer.
         /// </summary>
-        public IOdbcFieldMapWriter CreateWriter() => new JsonOdbcFieldMapWriter();
+        public IOdbcFieldMapWriter CreateWriter(OdbcFieldMap map) => new JsonOdbcFieldMapWriter(map);
     }
 }

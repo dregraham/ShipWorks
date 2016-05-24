@@ -26,12 +26,14 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
         {
             Mock<IOdbcFieldMapWriter> odbcWriter = mock.Mock<IOdbcFieldMapWriter>();
             Mock<IOdbcFieldMapIOFactory> ioFactory = mock.Mock<IOdbcFieldMapIOFactory>();
-            ioFactory.Setup(f => f.CreateWriter()).Returns(odbcWriter.Object);
+
             OdbcFieldMap testObject = mock.Create<OdbcFieldMap>();
+            ioFactory.Setup(f => f.CreateWriter(testObject)).Returns(odbcWriter.Object);
+
 
             testObject.Save(new MemoryStream());
 
-            ioFactory.Verify(f => f.CreateWriter());
+            ioFactory.Verify(f => f.CreateWriter(testObject));
         }
 
         [Fact]
@@ -39,14 +41,14 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
         {
             Mock<IOdbcFieldMapWriter> odbcWriter = mock.Mock<IOdbcFieldMapWriter>();
             Mock<IOdbcFieldMapIOFactory> ioFactory = mock.Mock<IOdbcFieldMapIOFactory>();
-            ioFactory.Setup(f => f.CreateWriter()).Returns(odbcWriter.Object);
             OdbcFieldMap testObject = mock.Create<OdbcFieldMap>();
+            ioFactory.Setup(f => f.CreateWriter(testObject)).Returns(odbcWriter.Object);
 
             MemoryStream memoryStream = new MemoryStream();
 
             testObject.Save(memoryStream);
 
-            odbcWriter.Verify(w => w.Write(testObject, memoryStream));
+            odbcWriter.Verify(w => w.Write(memoryStream));
         }
 
         [Fact]
@@ -155,7 +157,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
 
             var ioFactory = mock.Mock<IOdbcFieldMapIOFactory>();
 
-            ioFactory.Setup(f => f.CreateWriter()).Returns(new JsonOdbcFieldMapWriter());
+            ioFactory.Setup(f => f.CreateWriter(It.IsAny<OdbcFieldMap>())).Returns((OdbcFieldMap m) => new JsonOdbcFieldMapWriter(m));
             ioFactory.Setup(f => f.CreateReader(It.IsAny<Stream>())).Returns<Stream>(s => new JsonOdbcFieldMapReader(s, log.Object));
 
             return ioFactory.Object;

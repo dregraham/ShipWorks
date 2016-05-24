@@ -29,8 +29,9 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             using (var mock = AutoMock.GetLoose())
             {
                 JsonOdbcFieldMapIOFactory testObject = mock.Create<JsonOdbcFieldMapIOFactory>();
+                OdbcFieldMap map = mock.Create<OdbcFieldMap>();
 
-                Assert.IsAssignableFrom<JsonOdbcFieldMapWriter>(testObject.CreateWriter());
+                Assert.IsAssignableFrom<JsonOdbcFieldMapWriter>(testObject.CreateWriter(map));
             }
         }
     }

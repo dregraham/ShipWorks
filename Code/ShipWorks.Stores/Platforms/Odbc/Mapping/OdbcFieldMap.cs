@@ -71,8 +71,8 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <param name="stream"></param>
 		public void Save(Stream stream)
 		{
-		    IOdbcFieldMapWriter writer = ioFactory.CreateWriter();
-            writer.Write(this, stream);
+		    IOdbcFieldMapWriter writer = ioFactory.CreateWriter(this);
+            writer.Write(stream);
 		}
 	}
 }

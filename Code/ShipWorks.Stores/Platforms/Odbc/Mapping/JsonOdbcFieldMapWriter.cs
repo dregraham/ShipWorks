@@ -9,10 +9,21 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
     /// </summary>
 	public class JsonOdbcFieldMapWriter : IOdbcFieldMapWriter
 	{
+        private readonly OdbcFieldMap map;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="map"></param>
+        public JsonOdbcFieldMapWriter(OdbcFieldMap map)
+        {
+            this.map = map;
+        }
+
         /// <summary>
         /// Serializes and writes the ODBC Field Map to the given stream.
         /// </summary>
-	    public void Write(OdbcFieldMap map, Stream stream)
+	    public void Write(Stream stream)
 		{
             MethodConditions.EnsureArgumentIsNotNull(map);
 
