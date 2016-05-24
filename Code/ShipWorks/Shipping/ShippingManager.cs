@@ -1002,7 +1002,7 @@ namespace ShipWorks.Shipping
 
                     if (restrictionLevel == EditionRestrictionLevel.Forbidden)
                     {
-                        throw new ShippingException(string.Format("ShipWorks can no longer process {0} shipments. Please try using USPS.", EnumHelper.GetDescription((ShipmentTypeCode)shipment.ShipmentType)));
+                        throw new ShippingException($"ShipWorks can no longer process {EnumHelper.GetDescription((ShipmentTypeCode) shipment.ShipmentType)} shipments. Please try using USPS.");
                     }
 
                     StoreEntity storeEntity = StoreManager.GetStore(shipment.Order.StoreID);
@@ -1010,10 +1010,6 @@ namespace ShipWorks.Shipping
                     {
                         throw new ShippingException("The store the shipment was in has been deleted.");
                     }
-
-                    // Check the license to see if the user is allowed to process this shipment.
-                    // Will throw ShippingException if they are not.
-                    CheckLicense(storeEntity);
 
                     // Get the ShipmentType instance
                     ShipmentType shipmentType = ShipmentTypeManager.GetType(shipment);
