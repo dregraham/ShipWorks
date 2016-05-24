@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Linq;
 using Interapptive.Shared.Utility;
 using log4net;
 using Newtonsoft.Json;
@@ -15,7 +16,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         private readonly ILog log;
         private readonly JObject json;
         private readonly JToken mapEntries;
-        private int position = -1;
+        private int entryPosition;
 
         /// <summary>
         /// Constructor
@@ -36,9 +37,12 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
                 }
                 catch (JsonReaderException ex)
                 {
-                    throw new ShipWorksOdbcException("Stream does not contain a valid Odbc Map.", ex);
+                    throw new ShipWorksOdbcException("ShipWorks was unable to read the ODBC Map.", ex);
                 }
             }
+
+            // Sent the entry position used when reading the Odbc field map entries
+            entryPosition = 0;
         }
 
         /// <summary>
@@ -78,17 +82,16 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// </summary>
         public OdbcFieldMapEntry ReadEntry()
         {
-            position++;
+            OdbcFieldMapEntry result = null;
             try
             {
-                JToken current = mapEntries[position];
-
-                if (current != null)
+                if (mapEntries.ElementAtOrDefault(entryPosition) != null)
                 {
-                    return JsonConvert.DeserializeObject<OdbcFieldMapEntry>(current.ToString());
+                    result = JsonConvert.DeserializeObject<OdbcFieldMapEntry>(mapEntries[entryPosition].ToString());
                 }
 
-                return null;
+                entryPosition++;
+                return result;
             }
             catch (Exception ex)
             {
