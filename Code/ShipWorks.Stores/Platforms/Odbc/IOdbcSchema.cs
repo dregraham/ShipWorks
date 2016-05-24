@@ -8,11 +8,6 @@ namespace ShipWorks.Stores.Platforms.Odbc
     public interface IOdbcSchema
     {
         /// <summary>
-        /// The DataSource that this schema is for
-        /// </summary>
-        IOdbcDataSource DataSource { get; }
-
-        /// <summary>
         /// ODBC Tables in this schema
         /// </summary>
         IEnumerable<OdbcTable> Tables { get; }

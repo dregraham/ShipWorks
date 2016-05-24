@@ -31,32 +31,17 @@ namespace ShipWorks.Stores.Platforms.Odbc
 	    public IEnumerable<OdbcTable> Tables { get; private set; }
 
         /// <summary>
-        /// The data source where this schema comes from
-        /// </summary>
-        public IOdbcDataSource DataSource { get; private set; }
-
-        /// <summary>
         /// Loads the given Data Source's Schema
         /// </summary>
         /// <param name="dataSource"></param>
         public void Load(IOdbcDataSource dataSource)
         {
-            DataSource = dataSource;
-
-            using (DbConnection connection = DataSource.CreateConnection())
+            using (DbConnection connection = dataSource.CreateConnection())
             {
                 try
                 {
                     connection.Open();
-                }
-                catch (DbException ex)
-                {
-                    log.Error(ex.Message);
-                    throw new ShipWorksOdbcException($"An error occurred while attempting to open a connection to {dataSource.Name}.", ex);
-                }
 
-                try
-                {
                     DataTable tableData = connection.GetSchema("Tables");
 
                     int position = tableData.Columns.Cast<DataColumn>().ToList()
@@ -72,12 +57,21 @@ namespace ShipWorks.Stores.Platforms.Odbc
 
                     Tables = tables;
                 }
+                catch (DbException ex)
+                {
+                    log.Error(ex.Message);
+                    throw new ShipWorksOdbcException($"An error occurred while attempting to open a connection to {dataSource.Name}.", ex);
+                }
                 catch (Exception ex)
                 {
                     log.Error(ex);
-                    throw new ShipWorksOdbcException($"An error occurred while attempting to retrieve a list of tables from the {dataSource.Name} data source.", ex);
+                    throw new ShipWorksOdbcException(
+                        $"An error occurred while attempting to retrieve a list of tables from the {dataSource.Name} data source.", ex);
                 }
-
+                finally
+                {
+                    connection.Close();
+                }
             }
         }
 	}

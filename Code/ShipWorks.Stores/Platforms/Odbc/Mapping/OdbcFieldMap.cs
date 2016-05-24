@@ -29,12 +29,6 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 	    public List<OdbcFieldMapEntry> Entries { get; }
 
         /// <summary>
-        /// The Display Name
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public string DisplayName { get; set; }
-
-        /// <summary>
         /// The External Table Name
         /// </summary>
         public string ExternalTableName { get; set; }
@@ -61,7 +55,6 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
                 AddEntry(entry);
             }
 
-            DisplayName = reader.ReadDisplayName();
             ExternalTableName = reader.ReadExternalTableName();
 		}
 

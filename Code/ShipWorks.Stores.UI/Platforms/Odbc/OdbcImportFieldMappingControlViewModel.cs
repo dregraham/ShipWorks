@@ -26,9 +26,9 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         private readonly IOdbcSchema schema;
         private readonly Func<Type, ILog> logFactory;
         private readonly IMessageHelper messageHelper;
-        private OdbcTable selectedTable;
+        private IOdbcTable selectedTable;
         private ObservableCollection<OdbcColumn> columns;
-        private OdbcFieldMap selectedFieldMap;
+        private OdbcFieldMapDisplay selectedFieldMap;
         protected readonly PropertyChangedHandler Handler;
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -46,10 +46,11 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
 
             SaveMapCommand = new RelayCommand(SaveMapToDisk,() => selectedTable != null);
 
-            OrderFieldMap = fieldMapFactory.CreateOrderFieldMap();
-            AddressFieldMap = fieldMapFactory.CreateAddressFieldMap();
-            ItemFieldMap = fieldMapFactory.CreateOrderItemFieldMap();
-            FieldMaps = new List<OdbcFieldMap> { OrderFieldMap, AddressFieldMap, ItemFieldMap };
+            OrderFieldMap = new OdbcFieldMapDisplay("Order", fieldMapFactory.CreateOrderFieldMap());
+            AddressFieldMap = new OdbcFieldMapDisplay("Address", fieldMapFactory.CreateAddressFieldMap());
+            ItemFieldMap = new OdbcFieldMapDisplay("Item", fieldMapFactory.CreateOrderItemFieldMap());
+
+            FieldMaps = new List<OdbcFieldMapDisplay> { OrderFieldMap, AddressFieldMap, ItemFieldMap };
 
             selectedFieldMap = OrderFieldMap;
 
@@ -77,7 +78,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// <summary>
         /// The selected external odbc table.
         /// </summary>
-        public OdbcTable SelectedTable
+        public IOdbcTable SelectedTable
         {
             get { return selectedTable; }
             set
@@ -100,12 +101,12 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// <summary>
         /// List of field maps to be mapped.
         /// </summary>
-        public IEnumerable<OdbcFieldMap> FieldMaps { get; set; }
+        public IEnumerable<OdbcFieldMapDisplay> FieldMaps { get; set; }
 
         /// <summary>
         /// The selected field map.
         /// </summary>
-        public OdbcFieldMap SelectedFieldMap
+        public OdbcFieldMapDisplay SelectedFieldMap
         {
             get { return selectedFieldMap; }
             set { Handler.Set(nameof(SelectedFieldMap), ref selectedFieldMap, value); }
@@ -114,17 +115,17 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// <summary>
         /// The order field map.
         /// </summary>
-        public OdbcFieldMap OrderFieldMap { get; set; }
+        public OdbcFieldMapDisplay OrderFieldMap { get; set; }
 
         /// <summary>
         /// The address field map.
         /// </summary>
-        public OdbcFieldMap AddressFieldMap { get; set; }
+        public OdbcFieldMapDisplay AddressFieldMap { get; set; }
 
         /// <summary>
         /// The item field map.
         /// </summary>
-        public OdbcFieldMap ItemFieldMap { get; set; }
+        public OdbcFieldMapDisplay ItemFieldMap { get; set; }
 
         /// <summary>
         /// Loads the external odbc tables.
@@ -174,14 +175,13 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// <summary>
         /// Build a single ODBC Field Map from the Order Address and Item Field Maps
         /// </summary>
-        /// <returns></returns>
         private OdbcFieldMap GetSingleMap()
         {
             OdbcFieldMap map = fieldMapFactory.CreateFieldMapFrom(new List<OdbcFieldMap>
             {
-                OrderFieldMap,
-                AddressFieldMap,
-                ItemFieldMap
+                OrderFieldMap.Map,
+                AddressFieldMap.Map,
+                ItemFieldMap.Map
             });
 
             map.ExternalTableName = selectedTable.Name;

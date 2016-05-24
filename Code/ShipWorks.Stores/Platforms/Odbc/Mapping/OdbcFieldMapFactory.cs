@@ -25,10 +25,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// </summary>
         public OdbcFieldMap CreateOrderFieldMap()
         {
-            OdbcFieldMap orderMap = new OdbcFieldMap(ioFactory)
-            {
-                DisplayName = "Order"
-            };
+            OdbcFieldMap orderMap = new OdbcFieldMap(ioFactory);
 
             foreach (ShipWorksOdbcMappableField orderField in CreateShipWorksOrderFields())
 	        {
@@ -76,11 +73,8 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// Creates the order item field map.
         /// </summary>
         public OdbcFieldMap CreateOrderItemFieldMap()
-		{
-            OdbcFieldMap itemMap = new OdbcFieldMap(ioFactory)
-            {
-                DisplayName = "Item"
-            };
+        {
+            OdbcFieldMap itemMap = new OdbcFieldMap(ioFactory);
 
             foreach (ShipWorksOdbcMappableField entry in CreateShipWorksOrderItemFields())
             {
@@ -126,11 +120,8 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// Creates the address field map.
         /// </summary>
         public OdbcFieldMap CreateAddressFieldMap()
-		{
-            OdbcFieldMap addressMap = new OdbcFieldMap(ioFactory)
-            {
-                DisplayName = "Address"
-            };
+        {
+            OdbcFieldMap addressMap = new OdbcFieldMap(ioFactory);
 
             foreach (ShipWorksOdbcMappableField entry in CreateShipWorksAddressFields())
             {

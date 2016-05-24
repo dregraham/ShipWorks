@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using log4net;
 
 namespace ShipWorks.Stores.Platforms.Odbc
 {
@@ -21,5 +22,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// Resets the columns.
         /// </summary>
         void ResetColumns();
+
+        void Load(IOdbcDataSource dataSource, ILog logFactory);
     }
 }

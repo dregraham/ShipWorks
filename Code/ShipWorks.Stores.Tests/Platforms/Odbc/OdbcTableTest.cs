@@ -44,7 +44,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
 
             // mock the schema
             Mock<IOdbcSchema> schema = mock.Mock<IOdbcSchema>();
-            schema.SetupGet(s => s.DataSource).Returns(dataSource.Object);
+            schema.Object.Load(dataSource.Object);
 
             OdbcTable testObject = mock.Create<OdbcTable>(new TypedParameter(typeof(string), "SomeTableName"));
             testObject.Load(dataSource.Object, log.Object);

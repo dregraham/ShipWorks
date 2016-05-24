@@ -177,7 +177,7 @@
                     </Border>
                     <ScrollViewer Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
                                   VerticalScrollBarVisibility="Auto">
-                        <ItemsControl ItemsSource="{Binding SelectedFieldMap.Entries, UpdateSourceTrigger=PropertyChanged}">
+                        <ItemsControl ItemsSource="{Binding SelectedFieldMap.Map.Entries, UpdateSourceTrigger=PropertyChanged}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate DataType="{x:Type fieldMap:OdbcFieldMapEntry}">
                                     <Border BorderBrush="Gray" BorderThickness="0 0 0 1">

@@ -21,33 +21,15 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         }
 
         [Fact]
-        public void CreateOrderMap_ReturnsMapWithOrderAsDisplayName()
-        {
-            Assert.Equal("Order", testObject.CreateOrderFieldMap().DisplayName);
-        }
-
-        [Fact]
         public void CreateOrderMap_ReturnsMapWithCorrectNumberOfOrderMappingFields()
         {
             Assert.Equal(22, testObject.CreateOrderFieldMap().Entries.Count);
         }
 
         [Fact]
-        public void CreateItemMap_ReturnsMapWithOrderAsDisplayName()
-        {
-            Assert.Equal("Item", testObject.CreateOrderItemFieldMap().DisplayName);
-        }
-
-        [Fact]
         public void CreateItemMap_ReturnsMapWithCorrectNumberOfOrderMappingFields()
         {
             Assert.Equal(18, testObject.CreateOrderItemFieldMap().Entries.Count);
-        }
-
-        [Fact]
-        public void CreateAddressMap_ReturnsMapWithOrderAsDisplayName()
-        {
-            Assert.Equal("Address", testObject.CreateAddressFieldMap().DisplayName);
         }
 
         [Fact]

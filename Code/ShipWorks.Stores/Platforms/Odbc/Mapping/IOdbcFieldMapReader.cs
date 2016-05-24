@@ -8,12 +8,6 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
     public interface IOdbcFieldMapReader
     {
         /// <summary>
-        /// Reads the ODBC Field Map display name from the stream
-        /// </summary>
-        /// <returns></returns>
-        string ReadDisplayName();
-
-        /// <summary>
         /// Reads the ODBC Field Map external table name from the stream
         /// </summary>
         /// <returns></returns>

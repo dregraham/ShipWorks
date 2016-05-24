@@ -23,16 +23,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
         }
 
         [Fact]
-        public void ReadDisplayName_ReturnsDisplayName()
-        {
-            Stream stream = GetStreamWithFieldMap();
-            JsonOdbcFieldMapReader reader = new JsonOdbcFieldMapReader(stream, log.Object);
-
-            Assert.Equal("OdbcFieldMapDisplayName", reader.ReadDisplayName());
-        }
-
-        [Fact]
-        public void ReadExternalTableName_ReturnsDisplayName()
+        public void ReadExternalTableName_ReturnsExternalName()
         {
             Stream stream = GetStreamWithFieldMap();
             JsonOdbcFieldMapReader reader = new JsonOdbcFieldMapReader(stream, log.Object);
@@ -69,7 +60,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
 
             OdbcFieldMap map = new OdbcFieldMap(GetIoFactory())
             {
-                DisplayName = "OdbcFieldMapDisplayName",
                 ExternalTableName = "OdbcFieldMapExternalTableName"
             };
 

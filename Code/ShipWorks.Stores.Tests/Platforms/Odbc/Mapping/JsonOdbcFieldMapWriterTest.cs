@@ -38,7 +38,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
 
             OdbcFieldMapEntry entry = new OdbcFieldMapEntry(shipworksOdbcMappableField, externalOdbcMappableField);
             map.ExternalTableName = "some external tablename";
-            map.DisplayName = "some display name";
 
             map.AddEntry(entry);
 

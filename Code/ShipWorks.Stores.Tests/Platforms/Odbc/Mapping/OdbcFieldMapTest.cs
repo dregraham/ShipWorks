@@ -50,18 +50,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
 
             odbcWriter.Verify(w => w.Write(memoryStream));
         }
-
-        [Fact]
-        public void Load_SetsDisplayName()
-        {
-            Stream stream = GetStreamWithFieldMap();
-            OdbcFieldMap map = new OdbcFieldMap(GetIoFactory());
-
-            map.Load(stream);
-
-            Assert.Equal("OdbcFieldMapDisplayName", map.DisplayName);
-        }
-
+        
         [Fact]
         public void Load_SetsExternamTableName()
         {
@@ -124,7 +113,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
 
             OdbcFieldMap map = new OdbcFieldMap(GetIoFactory())
             {
-                DisplayName = "OdbcFieldMapDisplayName",
                 ExternalTableName = "OdbcFieldMapExternalTableName"
             };
 
