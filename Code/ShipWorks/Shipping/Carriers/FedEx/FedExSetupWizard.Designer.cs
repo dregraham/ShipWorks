@@ -31,6 +31,10 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FedExSetupWizard));
             this.wizardPageInitial = new ShipWorks.UI.Wizard.WizardPage();
+            this.linkGetAccount = new System.Windows.Forms.Label();
+            this.labelGetAcount = new System.Windows.Forms.Label();
+            this.accountNumber = new System.Windows.Forms.TextBox();
+            this.labelFedExAccount = new System.Windows.Forms.Label();
             this.labelInfo1 = new System.Windows.Forms.Label();
             this.wizardPageContactInfo = new ShipWorks.UI.Wizard.WizardPage();
             this.personControl = new ShipWorks.Data.Controls.AutofillPersonControl();
@@ -40,10 +44,11 @@
             this.label1 = new System.Windows.Forms.Label();
             this.fieldLengthProvider = new ShipWorks.Data.Utility.EntityFieldLengthProvider(this.components);
             this.wizardPage1 = new ShipWorks.UI.Wizard.WizardPage();
-            this.accountNumber = new System.Windows.Forms.TextBox();
-            this.labelFedExAccount = new System.Windows.Forms.Label();
-            this.linkGetAccount = new System.Windows.Forms.Label();
-            this.labelGetAcount = new System.Windows.Forms.Label();
+            this.wizardPageLicense = new ShipWorks.UI.Wizard.WizardPage();
+            this.printAgreement = new System.Windows.Forms.Button();
+            this.radioDeclineAgreement = new System.Windows.Forms.RadioButton();
+            this.radioAcceptAgreement = new System.Windows.Forms.RadioButton();
+            this.licenseAgreement = new System.Windows.Forms.RichTextBox();
             this.mainPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             this.topPanel.SuspendLayout();
@@ -51,6 +56,7 @@
             this.wizardPageContactInfo.SuspendLayout();
             this.wizardPageSettings.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fieldLengthProvider)).BeginInit();
+            this.wizardPageLicense.SuspendLayout();
             this.SuspendLayout();
             // 
             // next
@@ -67,7 +73,7 @@
             // 
             // mainPanel
             // 
-            this.mainPanel.Controls.Add(this.wizardPageContactInfo);
+            this.mainPanel.Controls.Add(this.wizardPageLicense);
             this.mainPanel.Size = new System.Drawing.Size(584, 474);
             // 
             // etchBottom
@@ -79,7 +85,7 @@
             // 
             this.pictureBox.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox.Image")));
             this.pictureBox.Location = new System.Drawing.Point(445, 3);
-            this.pictureBox.Size = new System.Drawing.Size(113, 40);
+            this.pictureBox.Size = new System.Drawing.Size(111, 40);
             this.pictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
             // 
             // topPanel
@@ -102,6 +108,47 @@
             this.wizardPageInitial.TabIndex = 0;
             this.wizardPageInitial.Title = "Set up FedEx® Shipping";
             this.wizardPageInitial.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextInitialPage);
+            // 
+            // linkGetAccount
+            // 
+            this.linkGetAccount.AutoSize = true;
+            this.linkGetAccount.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.linkGetAccount.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.linkGetAccount.ForeColor = System.Drawing.Color.RoyalBlue;
+            this.linkGetAccount.Location = new System.Drawing.Point(345, 80);
+            this.linkGetAccount.Name = "linkGetAccount";
+            this.linkGetAccount.Size = new System.Drawing.Size(55, 13);
+            this.linkGetAccount.TabIndex = 12;
+            this.linkGetAccount.Text = "click here.";
+            this.linkGetAccount.Click += new System.EventHandler(this.OnClickLinkFedEx);
+            // 
+            // labelGetAcount
+            // 
+            this.labelGetAcount.AutoSize = true;
+            this.labelGetAcount.ForeColor = System.Drawing.SystemColors.GrayText;
+            this.labelGetAcount.Location = new System.Drawing.Point(246, 80);
+            this.labelGetAcount.Name = "labelGetAcount";
+            this.labelGetAcount.Size = new System.Drawing.Size(108, 13);
+            this.labelGetAcount.TabIndex = 11;
+            this.labelGetAcount.Text = "To open an account  ";
+            // 
+            // accountNumber
+            // 
+            this.accountNumber.Location = new System.Drawing.Point(23, 77);
+            this.fieldLengthProvider.SetMaxLengthSource(this.accountNumber, ShipWorks.Data.Utility.EntityFieldLengthSource.FedExAccountNumber);
+            this.accountNumber.Name = "accountNumber";
+            this.accountNumber.Size = new System.Drawing.Size(217, 21);
+            this.accountNumber.TabIndex = 5;
+            // 
+            // labelFedExAccount
+            // 
+            this.labelFedExAccount.AutoSize = true;
+            this.labelFedExAccount.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelFedExAccount.Location = new System.Drawing.Point(20, 61);
+            this.labelFedExAccount.Name = "labelFedExAccount";
+            this.labelFedExAccount.Size = new System.Drawing.Size(197, 13);
+            this.labelFedExAccount.TabIndex = 3;
+            this.labelFedExAccount.Text = "Enter your FedEx account number";
             // 
             // labelInfo1
             // 
@@ -198,46 +245,69 @@
             this.wizardPage1.TabIndex = 0;
             this.wizardPage1.Title = "Wizard page 4.";
             // 
-            // accountNumber
+            // wizardPageLicense
             // 
-            this.accountNumber.Location = new System.Drawing.Point(23, 77);
-            this.fieldLengthProvider.SetMaxLengthSource(this.accountNumber, ShipWorks.Data.Utility.EntityFieldLengthSource.FedExAccountNumber);
-            this.accountNumber.Name = "accountNumber";
-            this.accountNumber.Size = new System.Drawing.Size(217, 21);
-            this.accountNumber.TabIndex = 5;
+            this.wizardPageLicense.Controls.Add(this.printAgreement);
+            this.wizardPageLicense.Controls.Add(this.radioDeclineAgreement);
+            this.wizardPageLicense.Controls.Add(this.radioAcceptAgreement);
+            this.wizardPageLicense.Controls.Add(this.licenseAgreement);
+            this.wizardPageLicense.Description = "Please read the following important information before continuing.";
+            this.wizardPageLicense.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.wizardPageLicense.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.wizardPageLicense.Location = new System.Drawing.Point(0, 0);
+            this.wizardPageLicense.Name = "wizardPageLicense";
+            this.wizardPageLicense.Size = new System.Drawing.Size(584, 474);
+            this.wizardPageLicense.TabIndex = 0;
+            this.wizardPageLicense.Title = "FedEx Account";
+            this.wizardPageLicense.SteppingInto += new System.EventHandler<ShipWorks.UI.Wizard.WizardSteppingIntoEventArgs>(this.OnSteppingIntoLicense);
             // 
-            // labelFedExAccount
+            // printAgreement
             // 
-            this.labelFedExAccount.AutoSize = true;
-            this.labelFedExAccount.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelFedExAccount.Location = new System.Drawing.Point(20, 61);
-            this.labelFedExAccount.Name = "labelFedExAccount";
-            this.labelFedExAccount.Size = new System.Drawing.Size(197, 13);
-            this.labelFedExAccount.TabIndex = 3;
-            this.labelFedExAccount.Text = "Enter your FedEx account number";
+            this.printAgreement.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.printAgreement.Location = new System.Drawing.Point(381, 415);
+            this.printAgreement.Name = "printAgreement";
+            this.printAgreement.Size = new System.Drawing.Size(113, 23);
+            this.printAgreement.TabIndex = 7;
+            this.printAgreement.Text = "Print Agreement...";
+            this.printAgreement.UseVisualStyleBackColor = true;
+            this.printAgreement.Click += new System.EventHandler(this.OnPrintAgreement);
             // 
-            // linkGetAccount
+            // radioDeclineAgreement
             // 
-            this.linkGetAccount.AutoSize = true;
-            this.linkGetAccount.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.linkGetAccount.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.linkGetAccount.ForeColor = System.Drawing.Color.RoyalBlue;
-            this.linkGetAccount.Location = new System.Drawing.Point(345, 80);
-            this.linkGetAccount.Name = "linkGetAccount";
-            this.linkGetAccount.Size = new System.Drawing.Size(55, 13);
-            this.linkGetAccount.TabIndex = 12;
-            this.linkGetAccount.Text = "click here.";
-            this.linkGetAccount.Click += new System.EventHandler(this.OnClickLinkFedEx);
+            this.radioDeclineAgreement.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.radioDeclineAgreement.AutoSize = true;
+            this.radioDeclineAgreement.Checked = true;
+            this.radioDeclineAgreement.Location = new System.Drawing.Point(24, 441);
+            this.radioDeclineAgreement.Name = "radioDeclineAgreement";
+            this.radioDeclineAgreement.Size = new System.Drawing.Size(196, 17);
+            this.radioDeclineAgreement.TabIndex = 6;
+            this.radioDeclineAgreement.TabStop = true;
+            this.radioDeclineAgreement.Text = "No, I do not accept the agreement.";
+            this.radioDeclineAgreement.UseVisualStyleBackColor = true;
+            this.radioDeclineAgreement.CheckedChanged += new System.EventHandler(this.OnChangeAcceptAgreement);
             // 
-            // labelGetAcount
+            // radioAcceptAgreement
             // 
-            this.labelGetAcount.AutoSize = true;
-            this.labelGetAcount.ForeColor = System.Drawing.SystemColors.GrayText;
-            this.labelGetAcount.Location = new System.Drawing.Point(246, 80);
-            this.labelGetAcount.Name = "labelGetAcount";
-            this.labelGetAcount.Size = new System.Drawing.Size(108, 13);
-            this.labelGetAcount.TabIndex = 11;
-            this.labelGetAcount.Text = "To open an account  ";
+            this.radioAcceptAgreement.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.radioAcceptAgreement.AutoSize = true;
+            this.radioAcceptAgreement.Location = new System.Drawing.Point(24, 418);
+            this.radioAcceptAgreement.Name = "radioAcceptAgreement";
+            this.radioAcceptAgreement.Size = new System.Drawing.Size(166, 17);
+            this.radioAcceptAgreement.TabIndex = 5;
+            this.radioAcceptAgreement.Text = "Yes, I accept the agreement.";
+            this.radioAcceptAgreement.UseVisualStyleBackColor = true;
+            this.radioAcceptAgreement.CheckedChanged += new System.EventHandler(this.OnChangeAcceptAgreement);
+            // 
+            // licenseAgreement
+            // 
+            this.licenseAgreement.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.licenseAgreement.Location = new System.Drawing.Point(24, 3);
+            this.licenseAgreement.Name = "licenseAgreement";
+            this.licenseAgreement.ReadOnly = true;
+            this.licenseAgreement.Size = new System.Drawing.Size(470, 409);
+            this.licenseAgreement.TabIndex = 4;
+            this.licenseAgreement.Text = "";
             // 
             // FedExSetupWizard
             // 
@@ -250,6 +320,7 @@
             this.NextVisible = true;
             this.Pages.AddRange(new ShipWorks.UI.Wizard.WizardPage[] {
             this.wizardPageInitial,
+            this.wizardPageLicense,
             this.wizardPageContactInfo,
             this.wizardPageSettings});
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
@@ -272,6 +343,8 @@
             this.wizardPageContactInfo.ResumeLayout(false);
             this.wizardPageSettings.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.fieldLengthProvider)).EndInit();
+            this.wizardPageLicense.ResumeLayout(false);
+            this.wizardPageLicense.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -292,5 +365,10 @@
         private System.Windows.Forms.Label labelFedExAccount;
         private System.Windows.Forms.Label linkGetAccount;
         private System.Windows.Forms.Label labelGetAcount;
+        private UI.Wizard.WizardPage wizardPageLicense;
+        private System.Windows.Forms.Button printAgreement;
+        private System.Windows.Forms.RadioButton radioDeclineAgreement;
+        private System.Windows.Forms.RadioButton radioAcceptAgreement;
+        private System.Windows.Forms.RichTextBox licenseAgreement;
     }
 }
