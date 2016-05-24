@@ -27,7 +27,7 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes
         /// <summary>
         /// Default constructor
         /// </summary>
-        public GridProviderDisplayType(EnumSortMethod sortMethod) 
+        public GridProviderDisplayType(EnumSortMethod sortMethod)
             : base(sortMethod)
         {
             GridHyperlinkDecorator gridHyperlinkDecorator = new GridHyperlinkDecorator();
@@ -83,7 +83,7 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes
             }
 
             ShippingSettingsEntity settings = ShippingSettings.Fetch();
-            
+
             ContextMenuStrip menu = new ContextMenuStrip();
 
             List<ShipmentType> enabledShipmentTypes = ShipmentTypeManager.EnabledShipmentTypes;
@@ -105,7 +105,6 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes
                 // over the others in this case)
                 enabledShipmentTypes.RemoveAll(s =>
                     s.ShipmentTypeCode == ShipmentTypeCode.Express1Usps ||
-                    s.ShipmentTypeCode == ShipmentTypeCode.PostalWebTools ||
                     s.ShipmentTypeCode == ShipmentTypeCode.Endicia ||
                     s.ShipmentTypeCode == ShipmentTypeCode.Express1Endicia);
             }
@@ -131,7 +130,7 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes
                 sqlAdapter.SaveAndRefetch(shipment);
             }
 
-            // Perform this after the save otherwise customs items will be duplicated on 
+            // Perform this after the save otherwise customs items will be duplicated on
             // international shipments
             ShippingManager.EnsureShipmentLoaded(shipment);
             CustomsManager.LoadCustomsItems(shipment, false);
