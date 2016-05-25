@@ -36,7 +36,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
         [Fact]
         public void Write_WritesSerializedMapToStream()
         {
-            string expectedResult = "{\"Entries\":[{\"ShipWorksField\":{\"ContainingObjectName\":\"OrderEntity\",\"Name\":\"OrderNumber\",\"DisplayName\":\"Order Number\"},\"ExternalField\":{\"Table\":{\"Name\":\"some table\"},\"Column\":{\"Name\":\"OrderNumberColumn\"},\"DisplayName\":\"some table OrderNumberColumn\"}}],\"DisplayName\":\"some display name\",\"ExternalTableName\":\"some external tablename\"}";
+            string expectedResult = "{\"Entries\":[{\"ShipWorksField\":{\"ContainingObjectName\":\"OrderEntity\",\"Name\":\"OrderNumber\",\"DisplayName\":\"Order Number\"},\"ExternalField\":{\"Table\":{\"Name\":\"some table\"},\"Column\":{\"Name\":\"OrderNumberColumn\"},\"DisplayName\":\"some table OrderNumberColumn\"}}],\"ExternalTableName\":\"some external tablename\"}";
 
             Mock<IOdbcFieldMapIOFactory> ioFactory = mock.Mock<IOdbcFieldMapIOFactory>();
             OdbcFieldMap map = new OdbcFieldMap(ioFactory.Object);
