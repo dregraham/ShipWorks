@@ -10,10 +10,6 @@ namespace ShipWorks.AddressValidation.Predicates
     /// </summary>
     public class UnprocessedErrorShipmentsPredicate : IPredicateProvider, ILimitResultRows
     {
-        private const int DefaultConcurrency = 50;
-        private const int MaximumConcurrency = 1000;
-        private const string ValidationConcurrencyRegistryKey = "errorShipments";
-
         /// <summary>
         /// Apply the logic to the predicate expression
         /// </summary>
@@ -30,7 +26,6 @@ namespace ShipWorks.AddressValidation.Predicates
         /// <summary>
         /// Maximum rows that this predicate should return; 0 returns all rows
         /// </summary>
-        public int MaximumRows => AddressValidationQueue.GetConcurrencyCount(ValidationConcurrencyRegistryKey,
-            DefaultConcurrency, MaximumConcurrency);
+        public int MaximumRows => AddressValidationQueue.GetBatchSize();
     }
 }

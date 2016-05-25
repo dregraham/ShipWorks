@@ -37,8 +37,11 @@ namespace ShipWorks.AddressValidation
             };
 
         public const string SqlAppLockName = "ValidateAddresses";
+        private const int DefaultBatchSize = 50;
+        private const int MaximumBatchSize = 1024;
         private const int DefaultConcurrency = 8;
-        private const int MaximumConcurrency = 20;
+        private const int MaximumConcurrency = 64;
+        private const string BatchSizeRegistryKey = "batchSize";
         private const string ValidationConcurrencyRegistryKey = "requests";
         public const string ValidationConcurrencyBasePath = @"Software\Interapptive\ShipWorks\Options\ValidationConcurrency";
         private static readonly AddressValidator addressValidator = new AddressValidator();
@@ -185,9 +188,17 @@ namespace ShipWorks.AddressValidation
         }
 
         /// <summary>
+        /// Get the batch size defined in the registry
+        /// </summary>
+        public static int GetBatchSize()
+        {
+            return GetConcurrencyCount(BatchSizeRegistryKey, DefaultBatchSize, MaximumBatchSize);
+        }
+
+        /// <summary>
         /// Get how many addresses should be validated concurrently
         /// </summary>
-        public static int GetConcurrencyCount(string key, int defaultValue, int maxValue)
+        private static int GetConcurrencyCount(string key, int defaultValue, int maxValue)
         {
             RegistryHelper registry = new RegistryHelper(ValidationConcurrencyBasePath);
             int taskCount = defaultValue;
