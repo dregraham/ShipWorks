@@ -32,9 +32,12 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
                 using (StreamReader streamReader = new StreamReader(stream))
                 {
                     string data = streamReader.ReadToEnd();
-
                     json = JObject.Parse(data);
+
                     mapEntries = json["Entries"];
+
+                    // Sent the entry position used when reading the Odbc field map entries
+                    entryPosition = 0;
                 }
             }
             catch (Exception ex)
@@ -54,8 +57,6 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
                 // this exception is unexpected so we throw.
                 throw;
             }
-            // Sent the entry position used when reading the Odbc field map entries
-            entryPosition = 0;
         }
 
         /// <summary>
