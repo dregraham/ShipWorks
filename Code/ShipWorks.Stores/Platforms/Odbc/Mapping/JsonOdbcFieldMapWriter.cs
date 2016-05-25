@@ -18,6 +18,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <param name="map"></param>
         public JsonOdbcFieldMapWriter(OdbcFieldMap map)
         {
+            MethodConditions.EnsureArgumentIsNotNull(map);
             this.map = map;
         }
 
@@ -26,7 +27,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// </summary>
 	    public void Write(Stream stream)
 		{
-            MethodConditions.EnsureArgumentIsNotNull(map);
+            MethodConditions.EnsureArgumentIsNotNull(stream);
 
             StreamWriter streamWriter = new StreamWriter(stream);
             try

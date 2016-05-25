@@ -1,10 +1,7 @@
 ﻿using System;
 using System.IO;
-using Autofac;
 using Autofac.Extras.Moq;
-using log4net;
 using Moq;
-using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
@@ -22,8 +19,25 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
         }
 
         [Fact]
+        public void Write_ThrowsArgumentNullException_WhenStreamIsNull()
+        {
+            OdbcFieldMap map = mock.Create<OdbcFieldMap>();
+            JsonOdbcFieldMapWriter testObject = new JsonOdbcFieldMapWriter(map);
+
+            Assert.Throws<ArgumentNullException>(() => testObject.Write(null));
+        }
+
+        [Fact]
+        public void JsonOdbcFieldMapWriter_ThrowsArgumentNullException_WhenMapIsNull()
+        {
+            Assert.Throws<ArgumentNullException>(() => new JsonOdbcFieldMapWriter(null));
+        }
+
+        [Fact]
         public void Write_WritesSerializedMapToStream()
         {
+            string expectedResult = "{\"Entries\":[{\"ShipWorksField\":{\"ContainingObjectName\":\"OrderEntity\",\"Name\":\"OrderNumber\",\"DisplayName\":\"Order Number\"},\"ExternalField\":{\"Table\":{\"Name\":\"some table\"},\"Column\":{\"Name\":\"OrderNumberColumn\"},\"DisplayName\":\"some table OrderNumberColumn\"}}],\"DisplayName\":\"some display name\",\"ExternalTableName\":\"some external tablename\"}";
+
             Mock<IOdbcFieldMapIOFactory> ioFactory = mock.Mock<IOdbcFieldMapIOFactory>();
             OdbcFieldMap map = new OdbcFieldMap(ioFactory.Object);
 
@@ -40,16 +54,12 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
             map.ExternalTableName = "some external tablename";
 
             map.AddEntry(entry);
-
             MemoryStream stream = new MemoryStream();
-
             testObject.Write(stream);
-
             stream.Position = 0;
+            var streamReader = new StreamReader(stream);
 
-            var streamreader = new StreamReader(stream);
-
-            string result = streamreader.ReadToEnd();
+            Assert.Equal(expectedResult, streamReader.ReadToEnd());
         }
 
         public void Dispose()

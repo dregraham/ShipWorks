@@ -27,20 +27,34 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
             this.log = log;
 
             stream.Position = 0;
-            using (StreamReader streamReader = new StreamReader(stream))
+            try
             {
-                string data = streamReader.ReadToEnd();
-                try
+                using (StreamReader streamReader = new StreamReader(stream))
                 {
+                    string data = streamReader.ReadToEnd();
+
                     json = JObject.Parse(data);
                     mapEntries = json["Entries"];
+
                 }
-                catch (JsonReaderException ex)
+            }
+            catch (Exception ex)
+            {
+                Type exType = ex.GetType();
+                log.Error("Error reading map", ex);
+
+                // If its an error throw while reading the stream or parsing the json
+                // rethrow as a ShipWorksOdbcException.
+                if (exType == typeof(JsonReaderException) ||
+                    exType == typeof(ArgumentException) ||
+                    exType == typeof(IOException))
                 {
                     throw new ShipWorksOdbcException("ShipWorks was unable to read the ODBC Map.", ex);
                 }
-            }
 
+                // this exception is unexpected so we throw.
+                throw;
+            }
             // Sent the entry position used when reading the Odbc field map entries
             entryPosition = 0;
         }

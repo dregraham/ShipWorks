@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using Autofac.Extras.Moq;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
 using Xunit;
@@ -7,6 +8,12 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
 {
     public class JsonOdbcFieldMapIOFactoryTest
     {
+        [Fact]
+        public void JsonOdbcFieldMapIOFactory_ThrowsArgumentNullException_WhenLogFactoryNull()
+        {
+            Assert.Throws<ArgumentNullException>(() => new JsonOdbcFieldMapIOFactory(null));
+        }
+
         [Fact]
         public void CreateReader_ReturnsJsonOdbcFieldMapReader()
         {
@@ -24,7 +31,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         }
 
         [Fact]
-        public void CreateReader_ReturnsJsonOdbcFieldMapWriter()
+        public void CreateWriter_ReturnsJsonOdbcFieldMapWriter()
         {
             using (var mock = AutoMock.GetLoose())
             {
