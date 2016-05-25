@@ -23,6 +23,9 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// </summary>
         void ResetColumns();
 
+        /// <summary>
+        /// Loads the columns for this table
+        /// </summary>
         void Load(IOdbcDataSource dataSource, ILog logFactory);
     }
 }

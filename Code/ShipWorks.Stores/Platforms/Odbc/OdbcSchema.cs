@@ -70,7 +70,10 @@ namespace ShipWorks.Stores.Platforms.Odbc
                 }
                 finally
                 {
-                    connection.Close();
+                    if (connection.State != ConnectionState.Closed)
+                    {
+                        connection.Close();
+                    }
                 }
             }
         }

@@ -7,8 +7,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
     /// </summary>
     public class ShipWorksOdbcException : Exception
     {
-        public ShipWorksOdbcException(string message, Exception innerException)
-            : base(message, innerException)
+        public ShipWorksOdbcException()
         {
         }
 
@@ -17,7 +16,8 @@ namespace ShipWorks.Stores.Platforms.Odbc
         {
         }
 
-        public ShipWorksOdbcException()
+        public ShipWorksOdbcException(string message, Exception innerException)
+            : base(message, innerException)
         {
         }
     }

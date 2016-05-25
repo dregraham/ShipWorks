@@ -40,17 +40,6 @@ namespace ShipWorks.Stores.Platforms.Odbc
         {
             using (DbConnection connection = dataSource.CreateConnection())
             {
-                try
-                {
-                    connection.Open();
-                }
-                catch (DbException ex)
-                {
-                    log.Error(ex.Message);
-                    throw new ShipWorksOdbcException(
-                        $"An error occurred while attempting to open a connection to {dataSource.Name}.", ex);
-                }
-
                 string[] restriction =
                 {
                     null, // table_catalog
@@ -61,6 +50,8 @@ namespace ShipWorks.Stores.Platforms.Odbc
 
                 try
                 {
+                    connection.Open();
+
                     DataTable columnData = connection.GetSchema("Columns", restriction);
                     Columns = new List<OdbcColumn>();
 
@@ -69,6 +60,12 @@ namespace ShipWorks.Stores.Platforms.Odbc
                         string columnName = columnData.Rows[j].ItemArray[3].ToString();
                         Columns = Columns.Concat(new[] {new OdbcColumn(columnName)});
                     }
+                }
+                catch (DbException ex)
+                {
+                    log.Error(ex.Message);
+                    throw new ShipWorksOdbcException(
+                        $"An error occurred while attempting to open a connection to {dataSource.Name}.", ex);
                 }
                 catch (Exception ex)
                 {

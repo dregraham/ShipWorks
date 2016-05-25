@@ -35,7 +35,6 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 
                     json = JObject.Parse(data);
                     mapEntries = json["Entries"];
-
                 }
             }
             catch (Exception ex)
