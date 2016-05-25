@@ -28,6 +28,7 @@ namespace ShipWorks.Tests.Stores.ChannelAdvisor
         private EndiciaShipmentEntity endiciaShipmentEntity;
         private UspsShipmentEntity uspsShipmentEntity;
         private OtherShipmentEntity otherShipmentEntity;
+        private AmazonShipmentEntity amazonShipmentEntity;
         private IParcelShipmentEntity iparcelShipmentEntity;
         private OnTracShipmentEntity ontracShipmentEntity;
 
@@ -45,6 +46,7 @@ namespace ShipWorks.Tests.Stores.ChannelAdvisor
             endiciaShipmentEntity = new EndiciaShipmentEntity();
             iparcelShipmentEntity = new IParcelShipmentEntity {Service = (int) iParcelServiceType.Saver };
             ontracShipmentEntity = new OnTracShipmentEntity {Service = (int) OnTracServiceType.Ground };
+            amazonShipmentEntity = new AmazonShipmentEntity { ShippingServiceName = "UPS Ground", CarrierName = "UPS" };
         }
 
         [Fact]
@@ -201,6 +203,75 @@ namespace ShipWorks.Tests.Stores.ChannelAdvisor
             Assert.Equal("USPS", code);
         }
 
+        [Theory]
+        [InlineData("FedEx", "FedEx Priority Overnight®", "PRIORITY")]
+        [InlineData("FedEx", "FedEx Standard Overnight®", "OVERNIGHT")]
+        [InlineData("FedEx", "FedEx 2Day®A.M.", "2DAY")]
+        [InlineData("FedEx", "FedEx 2Day®", "2DAY")]
+        [InlineData("FedEx", "FedEx Express Saver®", "EXPSAVER")]
+        [InlineData("FedEx", "FedEx Home Delivery®", "GROUND")]
+        [InlineData("USPS", "USPS First Class", "FIRSTCLASS")]
+        [InlineData("USPS", "USPS Priority Mail", "PRIORITY")]
+        [InlineData("USPS", "USPS Priority Mail Flat Rate Box", "PRIORITY")]
+        [InlineData("USPS", "USPS Priority Mail Small Flat Rate Box", "PRIORITY")]
+        [InlineData("USPS", "USPS Priority Mail Large Flat Rate Box", "PRIORITY")]
+        [InlineData("USPS", "USPS Priority Mail Flat Rate Envelope", "PRIORITY")]
+        [InlineData("USPS", "USPS Priority Mail Express", "EXPRESS")]
+        [InlineData("USPS", "USPS Priority Mail Express Flat Rate Envelope", "EXPRESS")]
+        [InlineData("USPS", "USPS Parcel Select", "PARCELSELECT")]
+        [InlineData("UPS", "UPS Ground", "GROUND")]
+        [InlineData("UPS", "UPS Next Day Air", "NEXTDAY")]
+        [InlineData("UPS", "UPS Next Day Air Saver", "NDAS")]
+        [InlineData("asdfasdfasdf", "asdfasdfasdf", "NONE")]
+        public void GetShipmentClassCode_ReturnsCorrectValue_WhenAmazonShipment(string carrierName, string shippingServiceName, string expectedValue)
+        {
+            amazonShipmentEntity.CarrierName = carrierName;
+            amazonShipmentEntity.ShippingServiceName = shippingServiceName;
+
+            SetupShipmentDefaults(ShipmentTypeCode.Amazon);
+
+            string code = ChannelAdvisorOnlineUpdater.GetShipmentClassCode(shipmentEntity, storeEntity);
+
+            Assert.Equal(expectedValue, code);
+        }
+
+        [Theory]
+        [InlineData("FedEx", "FEDEX")]
+        [InlineData("UPS", "UPS")]
+        [InlineData("USPS", "USPS")]
+        [InlineData("asdfasdfasdf", "None")]
+        public void GetCarrierCode_ReturnsCorrectValue_WhenAmazonShipment(string carrierName, string expectedValue)
+        {
+            amazonShipmentEntity.CarrierName = carrierName;
+
+            SetupShipmentDefaults(ShipmentTypeCode.Amazon);
+
+            string code = ChannelAdvisorOnlineUpdater.GetCarrierCode(shipmentEntity, storeEntity);
+
+            Assert.Equal(expectedValue, code);
+        }
+
+        [Fact]
+        public void GetCarrierCode_Throws_WhenAmazonShipmentIsnull()
+        {
+            amazonShipmentEntity = null;
+
+            SetupShipmentDefaults(ShipmentTypeCode.Amazon);
+
+            Assert.Throws<ArgumentNullException>(
+                () => ChannelAdvisorOnlineUpdater.GetCarrierCode(shipmentEntity, storeEntity));
+        }
+        [Fact]
+        public void GetShipmentClassCode_Throws_WhenAmazonShipmentIsnull()
+        {
+            amazonShipmentEntity = null;
+
+            SetupShipmentDefaults(ShipmentTypeCode.Amazon);
+
+            Assert.Throws<ArgumentNullException>(
+                () => ChannelAdvisorOnlineUpdater.GetCarrierCode(shipmentEntity, storeEntity));
+        }
+
         private void SetupShipmentDefaults(ShipmentTypeCode shipmentTypeCode)
         {
             postalShipmentEntity.Endicia = endiciaShipmentEntity;
@@ -216,7 +287,8 @@ namespace ShipWorks.Tests.Stores.ChannelAdvisor
                 Postal = postalShipmentEntity,
                 Other = otherShipmentEntity,
                 FedEx = fedExEntity,
-                Ups = upsEntity
+                Ups = upsEntity,
+                Amazon = amazonShipmentEntity
             };
         }
     }
