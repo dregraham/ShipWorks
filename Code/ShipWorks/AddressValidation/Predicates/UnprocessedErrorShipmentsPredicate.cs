@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.AddressValidation.Enums;
 using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Order;
 
 namespace ShipWorks.AddressValidation.Predicates
 {
@@ -14,6 +10,10 @@ namespace ShipWorks.AddressValidation.Predicates
     /// </summary>
     public class UnprocessedErrorShipmentsPredicate : IPredicateProvider, ILimitResultRows
     {
+        private const int DefaultConcurrency = 50;
+        private const int MaximumConcurrency = 1000;
+        private const string ValidationConcurrencyRegistryKey = "errorShipments";
+
         /// <summary>
         /// Apply the logic to the predicate expression
         /// </summary>
@@ -30,12 +30,7 @@ namespace ShipWorks.AddressValidation.Predicates
         /// <summary>
         /// Maximum rows that this predicate should return; 0 returns all rows
         /// </summary>
-        public int MaximumRows
-        {
-            get
-            {
-                return 50;
-            }
-        }
+        public int MaximumRows => AddressValidationQueue.GetConcurrencyCount(ValidationConcurrencyRegistryKey,
+            DefaultConcurrency, MaximumConcurrency);
     }
 }

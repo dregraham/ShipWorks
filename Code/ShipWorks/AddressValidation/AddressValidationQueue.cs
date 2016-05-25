@@ -8,6 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Utility;
+using Interapptive.Shared.Win32;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.AddressValidation.Enums;
@@ -36,6 +37,10 @@ namespace ShipWorks.AddressValidation
             };
 
         public const string SqlAppLockName = "ValidateAddresses";
+        private const int DefaultConcurrency = 8;
+        private const int MaximumConcurrency = 20;
+        private const string ValidationConcurrencyRegistryKey = "requests";
+        public const string ValidationConcurrencyBasePath = @"Software\Interapptive\ShipWorks\Options\ValidationConcurrency";
         private static readonly AddressValidator addressValidator = new AddressValidator();
         private static object lockObj = new object();
         private static Task validationThread;
@@ -147,7 +152,8 @@ namespace ShipWorks.AddressValidation
         /// </summary>
         private static async Task ValidateAddresses<T>(IPredicateProvider predicate, Func<ICollection<T>, bool> shouldContinue) where T : EntityBase2
         {
-            int taskCount = 8;
+            int taskCount = GetConcurrencyCount(ValidationConcurrencyRegistryKey, DefaultConcurrency, MaximumConcurrency);
+
             EntityCollection<T> pendingOrders;
             Stopwatch stopwatch = new Stopwatch();
 
@@ -176,6 +182,27 @@ namespace ShipWorks.AddressValidation
                     log.Info($"Validated {itemCount} items on {taskCount} thread(s) in {stopwatch.ElapsedMilliseconds} ms ({timePerItem} ms/item)");
                 }
             } while (shouldContinue(pendingOrders));
+        }
+
+        /// <summary>
+        /// Get how many addresses should be validated concurrently
+        /// </summary>
+        public static int GetConcurrencyCount(string key, int defaultValue, int maxValue)
+        {
+            RegistryHelper registry = new RegistryHelper(ValidationConcurrencyBasePath);
+            int taskCount = defaultValue;
+
+            if (!int.TryParse(registry.GetValue(key, defaultValue.ToString()), out taskCount))
+            {
+                return defaultValue;
+            }
+
+            if (taskCount < 1 || taskCount > maxValue)
+            {
+                return defaultValue;
+            }
+
+            return taskCount;
         }
 
         /// <summary>
