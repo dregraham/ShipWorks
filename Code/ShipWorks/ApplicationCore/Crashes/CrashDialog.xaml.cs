@@ -43,18 +43,8 @@ namespace ShipWorks.ApplicationCore.Crashes
                 throw new InvalidOperationException(message);
             }
 
-            CreateLogTask = TaskEx.Run(() => SendReport(userEmail));
-
-            InitializeComponent();
-
-            IsApplicationCrashed = true;
-
-            this.exception = ex;
+            exception = ex;
             this.guiThread = guiThread;
-
-            ShowInTaskbar = !guiThread || (FormsApplication.OpenForms.Count == 1 && FormsApplication.OpenForms[0] is SplashScreen);
-
-            showSupportMessage = recoveryCount > showSupportMessageCutoff;
 
             // Dump the report to the log
             try
@@ -69,6 +59,16 @@ namespace ShipWorks.ApplicationCore.Crashes
             {
                 // Nothing to do - we already crashed.
             }
+
+            CreateLogTask = TaskEx.Run(() => SendReport(userEmail));
+
+            InitializeComponent();
+
+            IsApplicationCrashed = true;
+
+            ShowInTaskbar = !guiThread || (FormsApplication.OpenForms.Count == 1 && FormsApplication.OpenForms[0] is SplashScreen);
+
+            showSupportMessage = recoveryCount > showSupportMessageCutoff;
 
             Loaded += OnLoaded;
         }

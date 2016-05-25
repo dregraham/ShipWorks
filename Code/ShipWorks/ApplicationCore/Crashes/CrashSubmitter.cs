@@ -18,6 +18,7 @@ using Interapptive.Shared;
 using System.Collections.Generic;
 using ShipWorks.Data.Connection;
 using Interapptive.Shared.IO.Zip;
+using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores;
 
@@ -230,24 +231,20 @@ namespace ShipWorks.ApplicationCore.Crashes
 
             DirectoryInfo logRoot = new DirectoryInfo(DataPath.LogRoot);
 
-            // Get the last X logs
-            foreach (string logEntry in logRoot.GetDirectories().OrderByDescending(s => s.Name).Take(4).Select(di => di.FullName))
+            // Zip up every file in the root (probably just crash.txt and shipworks.log - but could be rolled over logs)
+            foreach (string logFile in Directory.GetFiles(LogSession.LogFolder))
             {
-                // Zip up every file in the root (probably just crash.txt and shipworks.log - but could be rolled over logs)
-                foreach (string logFile in Directory.GetFiles(logEntry))
-                {
-                    writer.Items.Add(new ZipWriterFileItem(logFile, logRoot));
-                }
+                writer.Items.Add(new ZipWriterFileItem(logFile, logRoot));
+            }
 
-                // API calls get logged to subfolders.  But we don't need all the logs - that would be a ton of data.  For shipping services
-                // if you did lots of volume that basically includes every label in your log submission.  We'll just take at most the last Y calls from each,
-                // which should more than cover it.
-                foreach (string apiDirectory in Directory.GetDirectories(logEntry))
+            // API calls get logged to subfolders.  But we don't need all the logs - that would be a ton of data.  For shipping services
+            // if you did lots of volume that basically includes every label in your log submission.  We'll just take at most the last Y calls from each,
+            // which should more than cover it.
+            foreach (string apiDirectory in Directory.GetDirectories(LogSession.LogFolder))
+            {
+                foreach (var fileInfo in Directory.GetFileSystemEntries(apiDirectory).Select(f => new FileInfo(f)).OrderByDescending(fi => fi.CreationTime).Take(6))
                 {
-                    foreach (var fileInfo in Directory.GetFileSystemEntries(apiDirectory).Select(f => new FileInfo(f)).OrderByDescending(fi => fi.CreationTime).Take(6))
-                    {
-                        writer.Items.Add(new ZipWriterFileItem(fileInfo.FullName, logRoot));
-                    }
+                    writer.Items.Add(new ZipWriterFileItem(fileInfo.FullName, logRoot));
                 }
             }
 
