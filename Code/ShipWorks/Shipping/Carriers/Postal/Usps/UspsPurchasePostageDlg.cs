@@ -54,6 +54,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 {
                     BeginInvoke((Action)(() => current.Text = StringUtility.FormatFriendlyCurrency(x.Result)));
                 });
+
+                // We have a valid USPS account, so we can use it to initialize the account info
+                // and show the dialog
+                current.Text = StringUtility.FormatFriendlyCurrency(GetBalance(account));
             }
         }
 
@@ -92,9 +96,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 throw new UspsException("ShipWorks could not find information for this account.");
             }
 
-            // We have a valid USPS account, so we can use it to initialize the account info
-            // and show the dialog
-            current.Text = StringUtility.FormatFriendlyCurrency(GetBalance(account));
             return ShowDialog(owner);
         }
 
