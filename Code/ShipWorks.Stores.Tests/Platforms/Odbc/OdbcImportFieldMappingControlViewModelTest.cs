@@ -6,6 +6,9 @@ using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
 using ShipWorks.Stores.UI.Platforms.Odbc;
 using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
+using System.Windows.Forms;
 using Xunit;
 
 namespace ShipWorks.Stores.Tests.Platforms.Odbc
@@ -165,6 +168,211 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
                 OdbcImportFieldMappingControlViewModel testObject = mock.Create<OdbcImportFieldMappingControlViewModel>();
                 Assert.Throws<ArgumentNullException>(() => testObject.Save(null));
             }
+        }
+
+        [Fact]
+        public void SetSelectedTable_QuestionBoxNotDisplayed_WhenOrignalValueIsNull()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                var messageHelper = mock.Mock<IMessageHelper>();
+                messageHelper.Setup(GetShowMessageExpression());
+
+                OdbcImportFieldMappingControlViewModel testObject = mock.Create<OdbcImportFieldMappingControlViewModel>();
+
+                var table = mock.Mock<IOdbcTable>();
+
+                testObject.SelectedTable = table.Object;
+
+                messageHelper.Verify(GetShowMessageExpression(), Times.Never);
+            }
+        }
+
+        [Fact]
+        public void SetSelectedTable_QuestionBoxDisplayed_WhenOriginalValueIsNotNull_AndFieldsAreMapped()
+        {
+            using (var mock = AutoMock.GetLoose())
+            using (var mock2 = AutoMock.GetLoose())
+            {
+                var messageHelper = mock.Mock<IMessageHelper>();
+                messageHelper.Setup(GetShowMessageExpression());
+
+                OdbcImportFieldMappingControlViewModel testObject = mock.Create<OdbcImportFieldMappingControlViewModel>();
+
+                var table1 = mock.Mock<IOdbcTable>();
+                var table2 = mock2.Mock<IOdbcTable>();
+
+                Mock<IOdbcFieldMapIOFactory> mapIOFactory = mock.Mock<IOdbcFieldMapIOFactory>();
+                OdbcFieldMap odbcFieldMap = new OdbcFieldMap(mapIOFactory.Object);
+                var mapEntry = mock.Mock<IOdbcFieldMapEntry>();
+                mapEntry.SetupGet(e => e.ExternalField)
+                    .Returns(new ExternalOdbcMappableField(table1.Object, new OdbcColumn("test")));
+                odbcFieldMap.AddEntry(mapEntry.Object);
+
+                Mock<IOdbcFieldMapFactory> fieldMapFactory = mock.Mock<IOdbcFieldMapFactory>();
+                fieldMapFactory.Setup(f => f.CreateFieldMapFrom(It.IsAny<List<OdbcFieldMap>>()))
+                    .Returns(odbcFieldMap);
+
+                testObject.SelectedTable = table1.Object;
+                testObject.TableChangedCommand.Execute(null);
+                
+                testObject.SelectedTable = table2.Object;
+                testObject.TableChangedCommand.Execute(null);
+
+                messageHelper.Verify(GetShowMessageExpression(), Times.Once);
+            }
+        }
+
+        [Fact]
+        public void SetSelectedTable_TableDoesNotChange_WhenUserDeclinesToContinue()
+        {
+            using (var mock = AutoMock.GetLoose())
+            using (var mock2 = AutoMock.GetLoose())
+            {
+                var messageHelper = mock.Mock<IMessageHelper>();
+                messageHelper.Setup(GetShowMessageExpression()).Returns(DialogResult.No);
+
+                OdbcImportFieldMappingControlViewModel testObject = mock.Create<OdbcImportFieldMappingControlViewModel>();
+
+                var table1 = mock.Mock<IOdbcTable>();
+                var table2 = mock2.Mock<IOdbcTable>();
+
+                Mock<IOdbcFieldMapIOFactory> mapIOFactory = mock.Mock<IOdbcFieldMapIOFactory>();
+                OdbcFieldMap odbcFieldMap = new OdbcFieldMap(mapIOFactory.Object);
+                var mapEntry = mock.Mock<IOdbcFieldMapEntry>();
+                mapEntry.SetupGet(e => e.ExternalField)
+                    .Returns(new ExternalOdbcMappableField(table1.Object, new OdbcColumn("test")));
+                odbcFieldMap.AddEntry(mapEntry.Object);
+
+                Mock<IOdbcFieldMapFactory> fieldMapFactory = mock.Mock<IOdbcFieldMapFactory>();
+                fieldMapFactory.Setup(f => f.CreateFieldMapFrom(It.IsAny<List<OdbcFieldMap>>()))
+                    .Returns(odbcFieldMap);
+
+                testObject.SelectedTable = table1.Object;
+                testObject.TableChangedCommand.Execute(null);
+
+                testObject.SelectedTable = table2.Object;
+                testObject.TableChangedCommand.Execute(null);
+
+                Assert.Equal(table1.Object, testObject.SelectedTable);
+            }
+        }
+
+        [Fact]
+        public void SetSelectedTable_ColumnsNotUpdated_WhenUserDeclinesToContinue()
+        {
+            using (var mock = AutoMock.GetLoose())
+            using (var mock2 = AutoMock.GetLoose())
+            {
+                var messageHelper = mock.Mock<IMessageHelper>();
+                messageHelper.Setup(GetShowMessageExpression()).Returns(DialogResult.No);
+
+                OdbcImportFieldMappingControlViewModel testObject = mock.Create<OdbcImportFieldMappingControlViewModel>();
+
+                var table1 = mock.Mock<IOdbcTable>();
+                var table2 = mock2.Mock<IOdbcTable>();
+
+                Mock<IOdbcFieldMapIOFactory> mapIOFactory = mock.Mock<IOdbcFieldMapIOFactory>();
+                OdbcFieldMap odbcFieldMap = new OdbcFieldMap(mapIOFactory.Object);
+                var mapEntry = mock.Mock<IOdbcFieldMapEntry>();
+                mapEntry.SetupGet(e => e.ExternalField)
+                    .Returns(new ExternalOdbcMappableField(table1.Object, new OdbcColumn("test")));
+                odbcFieldMap.AddEntry(mapEntry.Object);
+
+                Mock<IOdbcFieldMapFactory> fieldMapFactory = mock.Mock<IOdbcFieldMapFactory>();
+                fieldMapFactory.Setup(f => f.CreateFieldMapFrom(It.IsAny<List<OdbcFieldMap>>()))
+                    .Returns(odbcFieldMap);
+
+                testObject.SelectedTable = table1.Object;
+                testObject.TableChangedCommand.Execute(null);
+
+                var columnsBeforeChange = testObject.Columns;
+
+                testObject.SelectedTable = table2.Object;
+                testObject.TableChangedCommand.Execute(null);
+
+                Assert.Equal(columnsBeforeChange, testObject.Columns);
+            }
+        }
+
+        [Fact]
+        public void SetSelectedTable_TableChanges_WhenUserContinues()
+        {
+            using (var mock = AutoMock.GetLoose())
+            using (var mock2 = AutoMock.GetLoose())
+            {
+                var messageHelper = mock.Mock<IMessageHelper>();
+                messageHelper.Setup(GetShowMessageExpression()).Returns(DialogResult.Yes);
+
+                OdbcImportFieldMappingControlViewModel testObject = mock.Create<OdbcImportFieldMappingControlViewModel>();
+
+                var table1 = mock.Mock<IOdbcTable>();
+                var table2 = mock2.Mock<IOdbcTable>();
+
+                Mock<IOdbcFieldMapIOFactory> mapIOFactory = mock.Mock<IOdbcFieldMapIOFactory>();
+                OdbcFieldMap odbcFieldMap = new OdbcFieldMap(mapIOFactory.Object);
+                var mapEntry = mock.Mock<IOdbcFieldMapEntry>();
+                mapEntry.SetupGet(e => e.ExternalField)
+                    .Returns(new ExternalOdbcMappableField(table1.Object, new OdbcColumn("test")));
+                odbcFieldMap.AddEntry(mapEntry.Object);
+
+                Mock<IOdbcFieldMapFactory> fieldMapFactory = mock.Mock<IOdbcFieldMapFactory>();
+                fieldMapFactory.Setup(f => f.CreateFieldMapFrom(It.IsAny<List<OdbcFieldMap>>()))
+                    .Returns(odbcFieldMap);
+
+                testObject.SelectedTable = table1.Object;
+                testObject.TableChangedCommand.Execute(null);
+
+                testObject.SelectedTable = table2.Object;
+                testObject.TableChangedCommand.Execute(null);
+
+                Assert.NotEqual(table1.Object, testObject.SelectedTable);
+                Assert.Equal(table2.Object, testObject.SelectedTable);
+            }
+        }
+
+        [Fact]
+        public void SetSelectedTable_ColumnsUpdated_WhenUserContinues()
+        {
+            using (var mock = AutoMock.GetLoose())
+            using (var mock2 = AutoMock.GetLoose())
+            {
+                var messageHelper = mock.Mock<IMessageHelper>();
+                messageHelper.Setup(GetShowMessageExpression()).Returns(DialogResult.Yes);
+
+                OdbcImportFieldMappingControlViewModel testObject = mock.Create<OdbcImportFieldMappingControlViewModel>();
+
+                var table1 = mock.Mock<IOdbcTable>();
+                var table2 = mock2.Mock<IOdbcTable>();
+
+                Mock<IOdbcFieldMapIOFactory> mapIOFactory = mock.Mock<IOdbcFieldMapIOFactory>();
+                OdbcFieldMap odbcFieldMap = new OdbcFieldMap(mapIOFactory.Object);
+                var mapEntry = mock.Mock<IOdbcFieldMapEntry>();
+                mapEntry.SetupGet(e => e.ExternalField)
+                    .Returns(new ExternalOdbcMappableField(table1.Object, new OdbcColumn("test")));
+                odbcFieldMap.AddEntry(mapEntry.Object);
+
+                Mock<IOdbcFieldMapFactory> fieldMapFactory = mock.Mock<IOdbcFieldMapFactory>();
+                fieldMapFactory.Setup(f => f.CreateFieldMapFrom(It.IsAny<List<OdbcFieldMap>>()))
+                    .Returns(odbcFieldMap);
+
+                testObject.SelectedTable = table1.Object;
+                testObject.TableChangedCommand.Execute(null);
+
+                var columnsBeforeChange = testObject.Columns;
+
+                testObject.SelectedTable = table2.Object;
+                testObject.TableChangedCommand.Execute(null);
+
+                Assert.NotEqual(columnsBeforeChange, testObject.Columns);
+            }
+        }
+
+
+        private static Expression<Func<IMessageHelper, DialogResult>> GetShowMessageExpression()
+        {
+            return messageHelper =>
+                messageHelper.ShowQuestion(It.IsAny<MessageBoxIcon>(), It.IsAny<MessageBoxButtons>(), It.IsAny<string>());
         }
     }
 }

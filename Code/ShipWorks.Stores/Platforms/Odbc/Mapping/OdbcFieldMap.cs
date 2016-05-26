@@ -20,13 +20,13 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 		    MethodConditions.EnsureArgumentIsNotNull(ioFactory);
 
 		    this.ioFactory = ioFactory;
-		    Entries = new List<OdbcFieldMapEntry>();
+		    Entries = new List<IOdbcFieldMapEntry>();
 		}
 
         /// <summary>
         /// The ODBC Field Map Entries
         /// </summary>
-	    public List<OdbcFieldMapEntry> Entries { get; }
+	    public List<IOdbcFieldMapEntry> Entries { get; }
 
         /// <summary>
         /// The External Table Name
@@ -36,7 +36,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <summary>
         /// Add the given ODBC Field Map Entry to the ODBC Field Map
         /// </summary>
-        public void AddEntry(OdbcFieldMapEntry entry)
+        public void AddEntry(IOdbcFieldMapEntry entry)
 		{
 			Entries.Add(entry);
 		}

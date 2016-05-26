@@ -4,8 +4,8 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
     /// Entry in the OdbcFieldMap.
     /// Maps a ShipWorks database column to an external Odbc column
     /// </summary>
-    public class OdbcFieldMapEntry
-	{
+    public class OdbcFieldMapEntry : IOdbcFieldMapEntry
+    {
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcFieldMapEntry"/> class.
         /// </summary>

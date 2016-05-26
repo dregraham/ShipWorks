@@ -6,6 +6,8 @@
              xmlns:local="clr-namespace:ShipWorks.Stores.UI.Platforms.Odbc"
              xmlns:fieldMap="clr-namespace:ShipWorks.Stores.Platforms.Odbc.Mapping;assembly=ShipWorks.Stores"
              mc:Ignorable="d"
+             xmlns:behaviors="clr-namespace:ShipWorks.UI.Behaviors;assembly=ShipWorks.UI"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              d:DataContext="{d:DesignInstance local:OdbcImportFieldMappingControlViewModel}"
              Height="500" Width="540"
              FontFamily="Tahoma" FontSize="8.25pt"
@@ -63,7 +65,11 @@
             <ComboBox Grid.Row="2" Grid.Column="1"
                       ItemsSource="{Binding Tables, UpdateSourceTrigger=PropertyChanged}"
                       DisplayMemberPath="Name"
-                      SelectedValue="{Binding SelectedTable}" />
+                      SelectedValue="{Binding SelectedTable,Mode=TwoWay}" >
+                <i:Interaction.Behaviors>
+                    <behaviors:ComboBoxSelectionChangedBehavior Command="{Binding TableChangedCommand}" />
+                </i:Interaction.Behaviors>
+            </ComboBox>
             <Button Grid.Row="1" Grid.Column="2" Content="Load Map..." Command="{Binding SaveMapCommand}"/>
             <Button Grid.Row="2" Grid.Column="2" Content="Export Map..." Command="{Binding SaveMapCommand}"/>
 

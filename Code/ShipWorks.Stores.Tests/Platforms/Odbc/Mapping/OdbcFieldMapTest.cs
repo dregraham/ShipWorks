@@ -1,13 +1,13 @@
-﻿using System;
-using System.IO;
-using System.Linq;
-using Autofac.Extras.Moq;
+﻿using Autofac.Extras.Moq;
 using log4net;
 using Moq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
+using System;
+using System.IO;
+using System.Linq;
 using Xunit;
 
 namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
@@ -70,7 +70,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
 
             map.Load(stream);
 
-            OdbcFieldMapEntry entry = map.Entries.FirstOrDefault();
+            IOdbcFieldMapEntry entry = map.Entries.FirstOrDefault();
 
             Assert.Equal("Order Number", entry.ShipWorksField.DisplayName);
             Assert.Equal(OrderFields.OrderNumber.Name, entry.ShipWorksField.Name);
@@ -91,14 +91,14 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
             map.AddEntry(GetFieldMapEntry(GetShipWorksField(OrderFields.BillFirstName, "Bill First Name"),
                 GetExternalField("SomeTableName2", "SomeColumnName2")));
 
-            OdbcFieldMapEntry entry1 = map.Entries.FirstOrDefault();
+            IOdbcFieldMapEntry entry1 = map.Entries.FirstOrDefault();
             Assert.Equal("Order Number", entry1.ShipWorksField.DisplayName);
             Assert.Equal(OrderFields.OrderNumber.Name, entry1.ShipWorksField.Name);
             Assert.Equal(OrderFields.OrderNumber.ContainingObjectName, entry1.ShipWorksField.ContainingObjectName);
             Assert.Equal("SomeColumnName", entry1.ExternalField.Column.Name);
             Assert.Equal("SomeTableName", entry1.ExternalField.Table.Name);
 
-            OdbcFieldMapEntry entry2 = map.Entries[1];
+            IOdbcFieldMapEntry entry2 = map.Entries[1];
             Assert.Equal("Bill First Name", entry2.ShipWorksField.DisplayName);
             Assert.Equal(OrderFields.BillFirstName.Name, entry2.ShipWorksField.Name);
             Assert.Equal(OrderFields.BillFirstName.ContainingObjectName, entry2.ShipWorksField.ContainingObjectName);

@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using System.Reflection;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Mapping
@@ -10,11 +11,21 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <summary>
         /// Constructor
         /// </summary>
-	    public ExternalOdbcMappableField(OdbcTable table, OdbcColumn column)
+	    public ExternalOdbcMappableField(IOdbcTable table, OdbcColumn column)
 	    {
 	        Table = table;
 	        Column = column;
 	    }
+
+        /// <summary>
+        /// Constructor - used by NewtonSoft deserialization
+        /// </summary>
+        [JsonConstructor]
+        public ExternalOdbcMappableField(OdbcTable table, OdbcColumn column)
+        {
+            Table = table;
+            Column = column;
+        }
 
         /// <summary>
         /// The External Table

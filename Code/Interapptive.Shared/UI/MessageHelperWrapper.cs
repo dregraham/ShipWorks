@@ -1,6 +1,5 @@
 ﻿using System;
-using System.Windows;
-using System.Windows.Interop;
+using System.Windows.Forms;
 using IWin32Window = System.Windows.Forms.IWin32Window;
 
 namespace Interapptive.Shared.UI
@@ -45,5 +44,11 @@ namespace Interapptive.Shared.UI
         {
             MessageHelper.ShowMessage(owner, message);
         }
+
+        /// <summary>
+        /// Show a question message box.  
+        /// </summary>
+        public DialogResult ShowQuestion(MessageBoxIcon icon, MessageBoxButtons buttons, string message)
+            => MessageHelper.ShowQuestion(ownerFactory(), icon, buttons, message);
     }
 }

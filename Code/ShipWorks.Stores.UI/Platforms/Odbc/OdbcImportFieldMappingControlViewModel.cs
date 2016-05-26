@@ -1,18 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.IO;
-using System.Windows.Input;
-using GalaSoft.MvvmLight.Command;
+﻿using GalaSoft.MvvmLight.Command;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using log4net;
-using Microsoft.Win32;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.IO;
+using System.Linq;
+using System.Windows.Forms;
+using System.Windows.Input;
+using SaveFileDialog = Microsoft.Win32.SaveFileDialog;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc
 {
@@ -28,8 +30,10 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         private IOdbcTable selectedTable;
         private ObservableCollection<OdbcColumn> columns;
         private OdbcFieldMapDisplay selectedFieldMap;
-        protected readonly PropertyChangedHandler Handler;
+        private readonly PropertyChangedHandler handler;
         public event PropertyChangedEventHandler PropertyChanged;
+
+        private IOdbcTable previousSelectedTable = null;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcImportFieldMappingControlViewModel"/> class.
@@ -44,6 +48,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             this.messageHelper = messageHelper;
 
             SaveMapCommand = new RelayCommand(SaveMapToDisk,() => selectedTable != null);
+            TableChangedCommand = new RelayCommand(TableChanged);
 
             OrderFieldMap = new OdbcFieldMapDisplay("Order", fieldMapFactory.CreateOrderFieldMap());
             AddressFieldMap = new OdbcFieldMapDisplay("Address", fieldMapFactory.CreateAddressFieldMap());
@@ -53,7 +58,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
 
             selectedFieldMap = OrderFieldMap;
 
-            Handler = new PropertyChangedHandler(this, () => PropertyChanged);
+            handler = new PropertyChangedHandler(this, () => PropertyChanged);
         }
 
         /// <summary>
@@ -85,22 +90,21 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         public IOdbcTable SelectedTable
         {
             get { return selectedTable; }
-            set
-            {
-                Handler.Set(nameof(SelectedTable), ref selectedTable, value);
-                selectedTable.Load(DataSource, logFactory(typeof(OdbcTable)));
-                Columns = new ObservableCollection<OdbcColumn>(selectedTable.Columns);
-                Columns.Insert(0, new OdbcColumn(string.Empty));
-            }
+            set { handler.Set(nameof(SelectedTable), ref selectedTable, value); }
         }
 
+        /// <summary>
+        /// Gets or sets the table changed command.
+        /// </summary>
+        public RelayCommand TableChangedCommand { get; private set; }
+       
         /// <summary>
         /// The columns from the selected external odbc table.
         /// </summary>
         public ObservableCollection<OdbcColumn> Columns
         {
             get { return columns; }
-            set { Handler.Set(nameof(Columns), ref columns, value); }
+            set { handler.Set(nameof(Columns), ref columns, value); }
         }
 
         /// <summary>
@@ -114,7 +118,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         public OdbcFieldMapDisplay SelectedFieldMap
         {
             get { return selectedFieldMap; }
-            set { Handler.Set(nameof(SelectedFieldMap), ref selectedFieldMap, value); }
+            set { handler.Set(nameof(SelectedFieldMap), ref selectedFieldMap, value); }
         }
 
         /// <summary>
@@ -194,6 +198,39 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             map.Entries.ForEach(e => e.ExternalField.Table.ResetColumns());
 
             return map;
+        }
+
+        /// <summary>
+        /// Fires when user changes table.
+        /// </summary>
+        private void TableChanged()
+        {
+            if (previousSelectedTable == selectedTable)
+            {
+                // We set the table back.
+                return;
+            }
+
+            // If the value has changed and there was a table previously selected, 
+            // see if any column has been mapped and allow user to cancel if it has been
+            if (previousSelectedTable != null && GetSingleMap().Entries.Any(e => e.ExternalField?.Column != null))
+            {
+                DialogResult questionResult = messageHelper.ShowQuestion(MessageBoxIcon.Warning,
+                    MessageBoxButtons.YesNo,
+                    "Changing the selected table will clear your current mapping selections. Do you want to continue?");
+
+                if (questionResult != DialogResult.Yes)
+                {
+                    SelectedTable = previousSelectedTable;
+                    return;
+                }
+            }
+
+            selectedTable.Load(DataSource, logFactory(typeof(OdbcTable)));
+            Columns = new ObservableCollection<OdbcColumn>(selectedTable.Columns);
+            Columns.Insert(0, new OdbcColumn(string.Empty));
+
+            previousSelectedTable = SelectedTable;
         }
 
         /// <summary>

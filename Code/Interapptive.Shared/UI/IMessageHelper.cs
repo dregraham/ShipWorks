@@ -1,6 +1,4 @@
-﻿using System;
-using System.Windows;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 
 namespace Interapptive.Shared.UI
 {
@@ -28,5 +26,10 @@ namespace Interapptive.Shared.UI
         /// Show an information message, takes an owner
         /// </summary>
         void ShowInformation(IWin32Window owner, string message);
+
+        /// <summary>
+        /// Show a question message box.  
+        /// </summary>
+        DialogResult ShowQuestion(MessageBoxIcon icon, MessageBoxButtons buttons, string message);
     }
 }

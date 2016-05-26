@@ -139,6 +139,7 @@
     <Compile Include="Platforms\Odbc\IOdbcTable.cs" />
     <Compile Include="Platforms\Odbc\IOdbcWizardPage.cs" />
     <Compile Include="Platforms\Odbc\Mapping\ExternalOdbcMappableField.cs" />
+    <Compile Include="Platforms\Odbc\Mapping\IOdbcFieldMapEntry.cs" />
     <Compile Include="Platforms\Odbc\Mapping\IOdbcFieldMapFactory.cs" />
     <Compile Include="Platforms\Odbc\Mapping\IOdbcFieldMapIOFactory.cs" />
     <Compile Include="Platforms\Odbc\Mapping\IOdbcFieldMapReader.cs" />
