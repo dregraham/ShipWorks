@@ -49,7 +49,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// </summary>
         public string GetQualifiedName()
         {
-            return $"{field.ContainingObjectName}.{field.Name}";
+            return $"{ContainingObjectName}.{Name}";
         }
     }
 }

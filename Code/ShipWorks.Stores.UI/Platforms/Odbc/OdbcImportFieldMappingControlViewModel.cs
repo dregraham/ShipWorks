@@ -86,6 +86,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
                 Handler.Set(nameof(SelectedTable), ref selectedTable, value);
                 selectedTable.Load(dataSource, logFactory(typeof(OdbcTable)));
                 Columns = new ObservableCollection<OdbcColumn>(selectedTable.Columns);
+                Columns.Insert(0, new OdbcColumn(string.Empty));
             }
         }
 
