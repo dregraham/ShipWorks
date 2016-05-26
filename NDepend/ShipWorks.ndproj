@@ -4303,6 +4303,28 @@ in JustMyCode.Methods
 orderby m.CyclomaticComplexity descending
 
 select new { m, m.NbLinesOfCode }]]></Query>
+      <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Jenkins Build Rules: Methods that can have NDependIgnoreLongTypes removed.</Name>
+from t 
+in JustMyCode.Types 
+ .Where(t => !t.ParentAssembly.Name.Contains("ShipWorks.SqlServer") 
+        && t.NbLinesOfCode < 500
+        && t.HasAttribute("*.NDependIgnoreLongTypes*"))
+
+orderby t.NbLinesOfCode descending
+
+select new { t, t.NbLinesOfCode }]]></Query>
+      <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Jenkins Build Rules: Methods that can have NDependIgnoreTooManyParams removed</Name>
+from  m 
+
+in JustMyCode.Methods
+ .Where(m => !m.ParentAssembly.Name.Contains("ShipWorks.SqlServer") 
+ && m.NbParameters <= 5  
+ && (m.HasAttribute("*.NDependIgnoreTooManyParamsAttribute")))
+
+orderby m.NbParameters
+
+select new { m, m.NbParameters }
+]]></Query>
     </Group>
   </Queries>
 </NDepend>

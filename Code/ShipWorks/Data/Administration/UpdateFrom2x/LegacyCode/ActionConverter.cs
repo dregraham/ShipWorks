@@ -125,7 +125,6 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
         /// <summary>
         /// Create a V3 action from the given v2 action properties
         /// </summary>
-        [NDependIgnoreTooManyParams]
         private static ActionEntity CreateAction(StoreEntity store, string name, bool enabled)
         {
             return new ActionEntity
