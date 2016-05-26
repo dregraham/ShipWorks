@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Autofac.Extras.Moq;
+﻿using Autofac.Extras.Moq;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
+using System.Collections.Generic;
+using System.Linq;
 using Xunit;
 
 namespace ShipWorks.Stores.Tests.Platforms.Odbc
@@ -23,19 +23,19 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         [Fact]
         public void CreateOrderMap_ReturnsMapWithCorrectNumberOfOrderMappingFields()
         {
-            Assert.Equal(22, testObject.CreateOrderFieldMap().Entries.Count);
+            Assert.Equal(22, testObject.CreateOrderFieldMap().Entries.Count());
         }
 
         [Fact]
         public void CreateItemMap_ReturnsMapWithCorrectNumberOfOrderMappingFields()
         {
-            Assert.Equal(18, testObject.CreateOrderItemFieldMap().Entries.Count);
+            Assert.Equal(18, testObject.CreateOrderItemFieldMap().Entries.Count());
         }
 
         [Fact]
         public void CreateAddressMap_ReturnsMapWithCorrectNumberOfOrderMappingFields()
         {
-            Assert.Equal(32, testObject.CreateAddressFieldMap().Entries.Count);
+            Assert.Equal(32, testObject.CreateAddressFieldMap().Entries.Count());
         }
 
         [Fact]

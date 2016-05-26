@@ -1,7 +1,6 @@
+using Interapptive.Shared.Utility;
 using System.Collections.Generic;
 using System.IO;
-using System.Reflection;
-using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 {
@@ -11,6 +10,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 	public class OdbcFieldMap
     {
 		private readonly IOdbcFieldMapIOFactory ioFactory;
+        private readonly List<IOdbcFieldMapEntry> entries;
 
         /// <summary>
         /// Constructor
@@ -20,13 +20,13 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 		    MethodConditions.EnsureArgumentIsNotNull(ioFactory);
 
 		    this.ioFactory = ioFactory;
-		    Entries = new List<IOdbcFieldMapEntry>();
+		    entries = new List<IOdbcFieldMapEntry>();
 		}
 
         /// <summary>
         /// The ODBC Field Map Entries
         /// </summary>
-	    public List<IOdbcFieldMapEntry> Entries { get; }
+        public IEnumerable<IOdbcFieldMapEntry> Entries => entries;
 
         /// <summary>
         /// The External Table Name
@@ -38,7 +38,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// </summary>
         public void AddEntry(IOdbcFieldMapEntry entry)
 		{
-			Entries.Add(entry);
+			entries.Add(entry);
 		}
 
         /// <summary>

@@ -98,7 +98,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
             Assert.Equal("SomeColumnName", entry1.ExternalField.Column.Name);
             Assert.Equal("SomeTableName", entry1.ExternalField.Table.Name);
 
-            IOdbcFieldMapEntry entry2 = map.Entries[1];
+            IOdbcFieldMapEntry entry2 = map.Entries.Skip(1).FirstOrDefault();
             Assert.Equal("Bill First Name", entry2.ShipWorksField.DisplayName);
             Assert.Equal(OrderFields.BillFirstName.Name, entry2.ShipWorksField.Name);
             Assert.Equal(OrderFields.BillFirstName.ContainingObjectName, entry2.ShipWorksField.ContainingObjectName);

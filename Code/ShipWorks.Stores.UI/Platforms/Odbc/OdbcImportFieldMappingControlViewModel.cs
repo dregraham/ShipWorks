@@ -194,9 +194,13 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             });
 
             map.ExternalTableName = selectedTable.Name;
-            map.Entries.ForEach(e => e.ExternalField.Table = selectedTable);
-            map.Entries.ForEach(e => e.ExternalField.Table.ResetColumns());
 
+            map.Entries.ToList().ForEach(e =>
+            {
+                e.ExternalField.Table = selectedTable;
+                e.ExternalField.Table.ResetColumns();
+            });
+            
             return map;
         }
 
