@@ -114,7 +114,7 @@ namespace ShipWorks.Stores.Platforms.Volusion
         /// <summary>
         /// Log into Volusion using the given credentials and url
         /// </summary>
-        /// <returns>bool if the login was successful</returns>
+        /// <returns>true if the login was successful</returns>
         private bool LogInToVolusion(string username, string password, string loginUrl)
         {
             NetworkUtility networkUtility = new NetworkUtility();
