@@ -16,7 +16,7 @@ namespace ShipWorks.Stores.Platforms.Volusion
     /// Mimics a web browser for screen-scraping information from
     /// Volusion's website since some functionality isn't available via
     /// any api.
-    /// 
+    ///
     /// Functionality provided:
     ///     Shipping Method downloads
     ///     Payment Method downloads
@@ -24,7 +24,7 @@ namespace ShipWorks.Stores.Platforms.Volusion
     /// </summary>
     public class VolusionWebSession
     {
-        // Logger 
+        // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(VolusionWebSession));
 
         // Types of reports/queries to define and run
@@ -62,7 +62,6 @@ namespace ShipWorks.Stores.Platforms.Volusion
         /// <summary>
         /// Performa  login on the Volusion website
         /// </summary>
-        [NDependIgnoreLongMethod]
         public bool LogOn(string username, string password)
         {
             if (loggedIn)
@@ -76,62 +75,27 @@ namespace ShipWorks.Stores.Platforms.Volusion
                 log.Info("Preparing to LogOn to the Volusion Store website");
 
                 // prepare the cookie container
-                cookieContainer = new CookieContainer();                
+                cookieContainer = new CookieContainer();
 
                 // setup the two urls to be hit
-                string loginUrl = String.Format("https://my.volusion.com/TransferLogin.aspx?HostName={0}&PageName=login.asp", GetStoreHostName().Replace(".", "%2E"));
+                string loginUrl = $"https://my.volusion.com/TransferLogin.aspx?HostName={GetStoreHostName().Replace(".", "%2E")}&PageName=login.asp";
                 string adminUrl = GetUrl("admin/");
 
                 HttpWebRequest request = CreateWebRequest(adminUrl, "GET");
 
-                // just access the login page to initiate any server-side session 
-                HttpWebResponse response = null;
+                // just access the login page to initiate any server-side session
+                HttpWebResponse response;
                 using (response = (HttpWebResponse) request.GetResponse())
                 {
-                    if (!(response.StatusCode == HttpStatusCode.OK))
+                    if (response.StatusCode != HttpStatusCode.OK)
                     {
                         throw new VolusionException("Unable to access store login page.");
                     }
                 }
 
-                // now post the user-supplied credentials to the login page to complete the login
-                string content = MakeParameter("CustomerNewOld", "old") + MakeParameter("email", username) + MakeParameter("password", password);
-                if (content.StartsWith("&", StringComparison.OrdinalIgnoreCase))
-                {
-                    content = content.Substring(1);
-                }
+                loggedIn = LogInToVolusion(username, password, loginUrl);
 
-                // Get the request as bytes to be posted to the server
-                byte[] contentBytes = System.Text.Encoding.ASCII.GetBytes(content);
-
-                // due to Volusion's use of HttpOnly (protected) cookies, we can't just set AllowAutoRedirect on a request
-                // and let .NET handle the numerous login redirects they do.  This results in a very important cookie being
-                // ommitted along the way and the login fails.
-                using (response = ExecuteLoginWithRedirects(loginUrl, contentBytes))
-                {
-                    log.Info("LogOn Request response code = " + response.StatusCode.ToString());
-                    if (response.StatusCode == HttpStatusCode.OK)
-                    {
-                        // if we were told to go back to the login page, we didn't get logged in
-                        if (Regex.IsMatch(response.ResponseUri.AbsolutePath, "login.asp", RegexOptions.IgnoreCase))
-                        {
-                            log.Info("Unable to locate text text login.asp in the response, assuming a failed logon.");
-                            loggedIn = false;
-                        }
-                        else
-                        {
-                            log.Info("Logon success.");
-                            loggedIn = true;
-                        }
-
-                        return loggedIn;
-                    }
-                    else
-                    {
-                        log.Error("Failed request");
-                        return false;
-                    }
-                }
+                return loggedIn;
             }
             catch (UriFormatException ex)
             {
@@ -147,6 +111,42 @@ namespace ShipWorks.Stores.Platforms.Volusion
                 }
 
                 throw;
+            }
+        }
+
+        private bool LogInToVolusion(string username, string password, string loginUrl)
+        {
+            NetworkUtility networkUtility = new NetworkUtility();
+
+            // now post the user-supplied credentials to the login page to complete the login
+            string content = MakeParameter("CustomerNewOld", "old") + MakeParameter("email", username) + MakeParameter("password", password) + MakeParameter("IP_ADDRESS", networkUtility.GetPublicIPAddress());
+            if (content.StartsWith("&", StringComparison.OrdinalIgnoreCase))
+            {
+                content = content.Substring(1);
+            }
+
+            // Get the request as bytes to be posted to the server
+            byte[] contentBytes = Encoding.ASCII.GetBytes(content);
+
+            // due to Volusion's use of HttpOnly (protected) cookies, we can't just set AllowAutoRedirect on a request
+            // and let .NET handle the numerous login redirects they do.  This results in a very important cookie being
+            // ommitted along the way and the login fails.
+            using (HttpWebResponse response = ExecuteLoginWithRedirects(loginUrl, contentBytes))
+            {
+                log.Info("LogOn Request response code = " + response.StatusCode);
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    // if we were told to go back to the login page, we didn't get logged in
+                    if (Regex.IsMatch(response.ResponseUri.AbsolutePath, "login.asp", RegexOptions.IgnoreCase))
+                    {
+                        log.Info("Unable to locate text text login.asp in the response, assuming a failed logon.");
+                        return false;
+                    }
+                    log.Info("Logon success.");
+                    return true;
+                }
+                log.Error("Failed request");
+                return false;
             }
         }
 
@@ -217,7 +217,7 @@ namespace ShipWorks.Stores.Platforms.Volusion
         }
 
         /// <summary>
-        /// Parses the headers for a cookie named "slt".  Volusion sets this has 
+        /// Parses the headers for a cookie named "slt".  Volusion sets this has
         /// an HTTPOnly cookie, which .NET doesn't include in the cookie collection.
         /// </summary>
         private Cookie ReadSltCookie(HttpWebResponse response)
@@ -323,7 +323,7 @@ namespace ShipWorks.Stores.Platforms.Volusion
             }
 
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
-            request.CookieContainer = cookieContainer;            
+            request.CookieContainer = cookieContainer;
             request.Method = method;
             request.UserAgent = "Mozilla/4.0 (compatible; MSIE 7.0;)";
 
@@ -401,7 +401,7 @@ namespace ShipWorks.Stores.Platforms.Volusion
             postValues += "&RowsPerPage=500";
             postValues += "&submit.export=" + HttpUtility.UrlEncode("Export these results");
 
-            log.Info("Creating QueryBankQuery by POSTing " + postValues); 
+            log.Info("Creating QueryBankQuery by POSTing " + postValues);
 
             HttpWebRequest request = CreateWebRequest(tableViewerUrl, "POST");
             request.ContentType = "application/x-www-form-urlencoded";
@@ -410,7 +410,7 @@ namespace ShipWorks.Stores.Platforms.Volusion
             byte[] requestBytes = System.Text.Encoding.ASCII.GetBytes(postValues);
             request.ContentLength = requestBytes.Length;
 
-            // write the request 
+            // write the request
             using (Stream requestStream = request.GetRequestStream())
             {
                 requestStream.Write(requestBytes, 0, requestBytes.Length);
@@ -432,7 +432,7 @@ namespace ShipWorks.Stores.Platforms.Volusion
         }
 
         /// <summary>
-        /// Returns the report id (QB_ID) and submission token for the 
+        /// Returns the report id (QB_ID) and submission token for the
         /// provided saved query name
         /// </summary>
         private string[] GetReportDetail(string queryName)
@@ -462,7 +462,7 @@ namespace ShipWorks.Stores.Platforms.Volusion
                         reportID = Regex.Match(page, @"name=""QB_ID"".*value=""(?<value>[0-9]+)"".*" + queryName + @".*\<", RegexOptions.Singleline).Groups["value"].Value;
 
                         // log data
-                        log.InfoFormat("Found report detail: reportID = {0}, postToken = {1}", reportID, postToken); 
+                        log.InfoFormat("Found report detail: reportID = {0}, postToken = {1}", reportID, postToken);
 
                         return new string[] { reportID, postToken };
                     }
@@ -617,7 +617,7 @@ namespace ShipWorks.Stores.Platforms.Volusion
         }
 
         /// <summary>
-        /// Retrieve the "Help" page to see if we can locate the EncryptedPassword without requiring users to go through 
+        /// Retrieve the "Help" page to see if we can locate the EncryptedPassword without requiring users to go through
         /// the many steps to find it themselves
         /// </summary>
         public string RetrieveEncryptedPassword()
