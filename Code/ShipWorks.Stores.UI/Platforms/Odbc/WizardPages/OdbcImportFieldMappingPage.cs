@@ -69,7 +69,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
             // Create new ViewModel when one does not exist, or a new data source is selected. This means clicking
             // back on the mapping page and not changing the data source will keep any mappings made, but selecting
             // a new data source and clicking next, will reset all mappings.
-            if (viewModel == null || !viewModel.DataSource.Name.Equals(selectedDataSource.Name, StringComparison.Ordinal))
+            if (viewModel == null || !viewModel.DataSource.ConnectionString.Equals(selectedDataSource.ConnectionString, StringComparison.Ordinal))
             {
                 viewModel = scope.Resolve<IOdbcImportFieldMappingControlViewModel>();
 
