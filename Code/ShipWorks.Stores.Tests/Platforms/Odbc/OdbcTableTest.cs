@@ -99,7 +99,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             OdbcTable testObject = mock.Create<OdbcTable>(new TypedParameter(typeof(string), "SomeTableName"));
 
             ShipWorksOdbcException thrownException = Assert.Throws<ShipWorksOdbcException>(() => testObject.Load(dataSource.Object, log.Object));
-            Assert.Equal("An error occurred while attempting to retrieve columns from information from the SomeTableName table.", thrownException.Message);
+            Assert.Equal("An error occurred while attempting to open a connection to shipworksodbc.", thrownException.Message);
         }
 
         public void Dispose()
