@@ -12,6 +12,11 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
     public interface IOdbcImportFieldMappingControlViewModel
     {
         /// <summary>
+        /// Gets the data source.
+        /// </summary>
+        IOdbcDataSource DataSource { get; }
+
+        /// <summary>
         /// The name the map will be saved as.
         /// </summary>
         string MapName { get; set; }

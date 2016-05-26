@@ -24,7 +24,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
         public OdbcImportFieldMappingPage()
         {
             InitializeComponent();
-            Load += OnLoad;
+            SteppingInto += OnSteppingInto;
             StepNext += OnNext;
         }
 
@@ -58,14 +58,24 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="eventArgs">The <see cref="System.EventArgs" /> instance containing the event data.</param>
-        private void OnLoad(object sender, EventArgs eventArgs)
+        private void OnSteppingInto(object sender, EventArgs eventArgs)
         {
             store = GetStore<OdbcStoreEntity>();
             scope = IoC.BeginLifetimeScope();
-            viewModel = scope.Resolve<IOdbcImportFieldMappingControlViewModel>();
 
-            viewModel.Load(store);
-            odbcImportFieldMappingControl.DataContext = viewModel;
+            IOdbcDataSource selectedDataSource = scope.Resolve<IOdbcDataSource>();
+            selectedDataSource.Restore(store.ConnectionString);
+
+            // Create new ViewModel when one does not exist, or a new data source is selected. This means clicking
+            // back on the mapping page and not changing the data source will keep any mappings made, but selecting
+            // a new data source and clicking next, will reset all mappings.
+            if (viewModel == null || !viewModel.DataSource.Name.Equals(selectedDataSource.Name, StringComparison.Ordinal))
+            {
+                viewModel = scope.Resolve<IOdbcImportFieldMappingControlViewModel>();
+
+                viewModel.Load(store);
+                odbcImportFieldMappingControl.DataContext = viewModel;
+            }
         }
 
 

@@ -22,7 +22,6 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
     public class OdbcImportFieldMappingControlViewModel : IOdbcImportFieldMappingControlViewModel, INotifyPropertyChanged
     {
         private readonly IOdbcFieldMapFactory fieldMapFactory;
-        private readonly IOdbcDataSource dataSource;
         private readonly IOdbcSchema schema;
         private readonly Func<Type, ILog> logFactory;
         private readonly IMessageHelper messageHelper;
@@ -39,7 +38,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             IOdbcSchema schema, Func<Type, ILog> logFactory, IMessageHelper messageHelper)
         {
             this.fieldMapFactory = fieldMapFactory;
-            this.dataSource = dataSource;
+            this.DataSource = dataSource;
             this.schema = schema;
             this.logFactory = logFactory;
             this.messageHelper = messageHelper;
@@ -56,6 +55,11 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
 
             Handler = new PropertyChangedHandler(this, () => PropertyChanged);
         }
+
+        /// <summary>
+        /// Gets the data source.
+        /// </summary>
+        public IOdbcDataSource DataSource { get; }
 
         /// <summary>
         /// The name the map will be saved as.
@@ -84,7 +88,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             set
             {
                 Handler.Set(nameof(SelectedTable), ref selectedTable, value);
-                selectedTable.Load(dataSource, logFactory(typeof(OdbcTable)));
+                selectedTable.Load(DataSource, logFactory(typeof(OdbcTable)));
                 Columns = new ObservableCollection<OdbcColumn>(selectedTable.Columns);
                 Columns.Insert(0, new OdbcColumn(string.Empty));
             }
@@ -134,11 +138,11 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         public void Load(OdbcStoreEntity store)
         {
             MethodConditions.EnsureArgumentIsNotNull(store);
-
+            
             try
             {
-                dataSource.Restore(store.ConnectionString);
-                schema.Load(dataSource);
+                DataSource.Restore(store.ConnectionString);
+                schema.Load(DataSource);
 
                 Tables = schema.Tables;
             }
