@@ -80,7 +80,6 @@ namespace ShipWorks.Shipping.Editing
         /// <summary>
         /// Constructor
         /// </summary>
-        [NDependIgnoreComplexMethodAttribute]
         public ShipmentGridControl()
         {
             InitializeComponent();

@@ -76,10 +76,11 @@
     <Name>System.Reactive.PlatformServices</Name>
     <Name>System.Reactive.Windows.Threading</Name>
     <Name>ShipWorks.SqlServer</Name>
+    <Name>WindowsBase</Name>
   </FrameworkAssemblies>
   <Dirs>
-    <Dir>C:\WINDOWS\Microsoft.NET\Framework\v4.0.30319</Dir>
-    <Dir>C:\WINDOWS\Microsoft.NET\Framework\v4.0.30319\WPF</Dir>
+    <Dir>C:\Windows\Microsoft.NET\Framework\v4.0.30319</Dir>
+    <Dir>C:\Windows\Microsoft.NET\Framework\v4.0.30319\WPF</Dir>
     <Dir>..\Artifacts\Application</Dir>
     <Dir>..\Code\ShipWorks\bin\Debug</Dir>
     <Dir>..\Code\ShipWorks.Data.Adapter\bin\Debug</Dir>
@@ -4124,6 +4125,16 @@ warnif count > 0 from n in Application.Namespaces
   && !n.NameLike (@"^MyNamespace.Sync")
 select n
 ]]></Query>
+      <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Jenkins Build Rules: Methods that can have NDependIgnoreComplexMethod removed.</Name>
+warnif count > 0 
+from m 
+in JustMyCode.Methods
+ .Where(m => !m.ParentAssembly.Name.Contains("ShipWorks.SqlServer") 
+        && m.CyclomaticComplexity < 20 
+        && m.HasAttribute("*.NDependIgnoreComplexMethod*")) 
+orderby m.CyclomaticComplexity descending
+
+select new { m, m.CyclomaticComplexity }]]></Query>
       <Group Name="Check Coverage on particular Code Elements" Active="False" ShownInReport="False">
         <Query Active="False" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Check that the assembly Asm is 100% covered by tests</Name>
 warnif count > 0 from a in Application.Assemblies where 
@@ -4284,6 +4295,15 @@ from m in JustMyCode.Methods.Where(m=>
 )
 orderby m.FullName
 select new { m }]]></Query>
+      <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Jenkins Build Rules: Methods that can have NDependIgnoreComplexMethod removed.</Name>
+from m 
+in JustMyCode.Methods
+ .Where(m => !m.ParentAssembly.Name.Contains("ShipWorks.SqlServer") 
+        && m.CyclomaticComplexity < 20 
+        && m.HasAttribute("*.NDependIgnoreComplexMethod*")) 
+orderby m.CyclomaticComplexity descending
+
+select new { m, m.CyclomaticComplexity }]]></Query>
     </Group>
   </Queries>
 </NDepend>
