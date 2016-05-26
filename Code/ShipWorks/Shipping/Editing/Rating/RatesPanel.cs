@@ -24,10 +24,10 @@ using System.Reactive.Linq;
 namespace ShipWorks.Shipping.Editing.Rating
 {
     /// <summary>
-    /// User control that will fetch and 
-    /// show rates for an order that has been selected. If an order doesn't have 
-    /// any shipments, a shipment will be created; for orders that have multiple 
-    /// shipments, the first unprocessed shipment is used for rating. Rates are 
+    /// User control that will fetch and
+    /// show rates for an order that has been selected. If an order doesn't have
+    /// any shipments, a shipment will be created; for orders that have multiple
+    /// shipments, the first unprocessed shipment is used for rating. Rates are
     /// not retrieved for orders that only have processed shipments.
     /// </summary>
     public partial class RatesPanel : UserControl
@@ -41,7 +41,6 @@ namespace ShipWorks.Shipping.Editing.Rating
         /// </summary>
         public RatesPanel()
         {
-            ConsolidatePostalRates = false;
             InitializeComponent();
 
             resetCollapsibleStateRequired = true;
@@ -75,17 +74,8 @@ namespace ShipWorks.Shipping.Editing.Rating
             // Refresh the shipment data and then the rates
             ShipmentEntity shipment = ShippingManager.GetShipment(selectedShipmentID.Value);
             ShippingManager.RefreshShipment(shipment);
-                
-            FetchRates(shipment, false);
-        }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether [in shipments panel].
-        /// </summary>
-        public bool ConsolidatePostalRates
-        {
-            get;
-            set;
+            FetchRates(shipment, false);
         }
 
         /// <summary>
@@ -111,18 +101,18 @@ namespace ShipWorks.Shipping.Editing.Rating
         /// </summary>
         public void ChangeShipment(long? shipmentID)
         {
-            // This method can get triggered when the shipment dialog closes but the 
-            // shipment ID did not actually chagne. We only want to reset the collapsible 
+            // This method can get triggered when the shipment dialog closes but the
+            // shipment ID did not actually chagne. We only want to reset the collapsible
             // state when the shipment ID actually changes.
             resetCollapsibleStateRequired = selectedShipmentID != shipmentID;
             selectedShipmentID = shipmentID;
 
-            
+
             // Refresh the rates in the panel; using cached rates is fine here since nothing
             // about the shipment has changed, so don't force a re-fetch
             RefreshRates(false);
         }
-        
+
         /// <summary>
         /// When the size of the rate control changes, we have to update our size to match. This is what makes the auto-scrolling in the containing panel work
         /// </summary>
@@ -173,7 +163,7 @@ namespace ShipWorks.Shipping.Editing.Rating
         }
 
         /// <summary>
-        /// Fetches the rates from the shipment type and 
+        /// Fetches the rates from the shipment type and
         /// </summary>
         /// <param name="shipment">The shipment.</param>
         /// <param name="ignoreCache">Should the cached rates be ignored?</param>
@@ -212,7 +202,7 @@ namespace ShipWorks.Shipping.Editing.Rating
                         }
 
                         // Fetch the rates and add them to the cache
-                        shipmentType = PrepareShipmentAndGetShipmentType(shipment);
+                        shipmentType = ShipmentTypeManager.GetType(shipment);
 
                         rates = ShippingManager.GetRates(shipment, shipmentType);
                         panelRateGroup = new ShipmentRateGroup(rates, shipment);
@@ -276,7 +266,7 @@ namespace ShipWorks.Shipping.Editing.Rating
                         {
                             if (ShipmentTypeManager.GetType(shipment).SupportsGetRates)
                             {
-                                // Only update the rate control if the shipment is for the currently selected 
+                                // Only update the rate control if the shipment is for the currently selected
                                 // order to avoid the appearance of lag when a user is quickly clicking around
                                 // the rate grid
                                 LoadRates(panelRateGroup);
@@ -297,65 +287,12 @@ namespace ShipWorks.Shipping.Editing.Rating
         }
 
         /// <summary>
-        /// Prepares the shipment for get rates and gets shipment type.
-        /// This handles consolidating of postal rates if required.
-        /// </summary>
-        private ShipmentType PrepareShipmentAndGetShipmentType(ShipmentEntity shipment)
-        {
-            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
-            {
-                ShipmentType shipmentType;
-                ShipmentTypeCode shipmentTypeCode = (ShipmentTypeCode) shipment.ShipmentType;
-
-                // Only change this to best rate for non-USPS postal types
-                if (ConsolidatePostalRates &&
-                    PostalUtility.IsPostalShipmentType(shipmentTypeCode) &&
-                    !PostalUtility.IsPostalSetup() &&
-                    shipmentTypeCode != ShipmentTypeCode.Usps &&
-                    shipmentTypeCode != ShipmentTypeCode.Express1Endicia &&
-                    shipmentTypeCode != ShipmentTypeCode.Express1Usps)
-                {
-                    // Func to create a BestRateShippingBroker factory that takes BestRateConsolidatePostalRates
-                    // and returns a BestRateShippingBrokerFactory with the correct BrokerFilters
-                    Func<BestRateConsolidatePostalRates, IBestRateShippingBrokerFactory> brokerFactoryFactory =
-                        lifetimeScope.Resolve<Func<BestRateConsolidatePostalRates, IBestRateShippingBrokerFactory>>();
-
-                    // Resolve the BestRateShipmentType and pass in IBestRateShippingBrokerFactory with 
-                    // BrokerFilters needed to BestRateConsolidatePostalRates
-                    shipmentType =
-                        lifetimeScope.Resolve<BestRateShipmentType>(
-                            new TypedParameter(typeof (IBestRateShippingBrokerFactory),
-                                brokerFactoryFactory(BestRateConsolidatePostalRates.Yes)));
-
-
-                    shipment.ShipmentType = (int) ShipmentTypeCode.BestRate;
-                    ShippingManager.EnsureShipmentLoaded(shipment);
-
-                    shipment.BestRate.DimsProfileID = shipment.Postal.DimsProfileID;
-                    shipment.BestRate.DimsLength = shipment.Postal.DimsLength;
-                    shipment.BestRate.DimsWidth = shipment.Postal.DimsWidth;
-                    shipment.BestRate.DimsHeight = shipment.Postal.DimsHeight;
-                    shipment.BestRate.DimsWeight = shipment.Postal.DimsWeight;
-                    shipment.BestRate.DimsAddWeight = shipment.Postal.DimsAddWeight;
-                    shipment.BestRate.ServiceLevel = (int) ServiceLevelType.Anytime;
-                    shipment.BestRate.InsuranceValue = shipment.Postal.InsuranceValue;
-                }
-                else
-                {
-                    shipmentType = ShipmentTypeManager.GetType(shipment);
-                }
-
-                return shipmentType;
-            }
-        }
-
-        /// <summary>
         /// A helper method for loading the rates in the rate control.
         /// </summary>
         /// <param name="rateGroup">The rate group.</param>
         private void LoadRates(ShipmentRateGroup rateGroup)
         {
-            // Reset the rate control to show all rates and let the policy change the 
+            // Reset the rate control to show all rates and let the policy change the
             // behavior if it's necessary
             rateControl.ShowAllRates = true;
             rateControl.ShowSingleRate = false;

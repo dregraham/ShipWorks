@@ -137,7 +137,6 @@
             // 
             this.ratesControl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.ratesControl.ConsolidatePostalRates = true;
             this.ratesControl.Location = new System.Drawing.Point(0, 64);
             this.ratesControl.Name = "ratesControl";
             this.ratesControl.Size = new System.Drawing.Size(659, 184);
