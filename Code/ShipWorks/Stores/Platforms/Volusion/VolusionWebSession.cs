@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Net;
 using System.IO;
@@ -20,7 +18,7 @@ namespace ShipWorks.Stores.Platforms.Volusion
     /// Functionality provided:
     ///     Shipping Method downloads
     ///     Payment Method downloads
-    ///     Retreiving the user's EncryptedPassword
+    ///     Retrieving the user's EncryptedPassword
     /// </summary>
     public class VolusionWebSession
     {
@@ -60,7 +58,7 @@ namespace ShipWorks.Stores.Platforms.Volusion
         }
 
         /// <summary>
-        /// Performa  login on the Volusion website
+        /// Performs login on the Volusion website
         /// </summary>
         public bool LogOn(string username, string password)
         {
@@ -84,8 +82,7 @@ namespace ShipWorks.Stores.Platforms.Volusion
                 HttpWebRequest request = CreateWebRequest(adminUrl, "GET");
 
                 // just access the login page to initiate any server-side session
-                HttpWebResponse response;
-                using (response = (HttpWebResponse) request.GetResponse())
+                using (HttpWebResponse response = (HttpWebResponse) request.GetResponse())
                 {
                     if (response.StatusCode != HttpStatusCode.OK)
                     {
@@ -114,6 +111,10 @@ namespace ShipWorks.Stores.Platforms.Volusion
             }
         }
 
+        /// <summary>
+        /// Log into Volusion using the given credentials and url
+        /// </summary>
+        /// <returns>bool if the login was successful</returns>
         private bool LogInToVolusion(string username, string password, string loginUrl)
         {
             NetworkUtility networkUtility = new NetworkUtility();
@@ -130,7 +131,7 @@ namespace ShipWorks.Stores.Platforms.Volusion
 
             // due to Volusion's use of HttpOnly (protected) cookies, we can't just set AllowAutoRedirect on a request
             // and let .NET handle the numerous login redirects they do.  This results in a very important cookie being
-            // ommitted along the way and the login fails.
+            // omitted along the way and the login fails.
             using (HttpWebResponse response = ExecuteLoginWithRedirects(loginUrl, contentBytes))
             {
                 log.Info("LogOn Request response code = " + response.StatusCode);
@@ -199,7 +200,7 @@ namespace ShipWorks.Stores.Platforms.Volusion
                 request = CreateWebRequest(location, "GET");
                 request.AllowAutoRedirect = false;
 
-                // add the myserious "slt" cookie
+                // add the mysterious "slt" cookie
                 if (sltCookie != null)
                 {
                     cookieContainer.Add(sltCookie);
@@ -337,7 +338,7 @@ namespace ShipWorks.Stores.Platforms.Volusion
         /// </summary>
         private string GetFormSubmissionToken(string url)
         {
-            log.Info("Retreiving form submission token");
+            log.Info("Retrieving form submission token");
             HttpWebRequest request = CreateWebRequest(url, "GET");
             using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
             {
@@ -545,10 +546,7 @@ namespace ShipWorks.Stores.Platforms.Volusion
                         return data;
                     }
                 }
-                else
-                {
-                    throw new VolusionException("Unable to download export file from " + url);
-                }
+                throw new VolusionException("Unable to download export file from " + url);
             }
         }
 
@@ -585,7 +583,7 @@ namespace ShipWorks.Stores.Platforms.Volusion
         }
 
         /// <summary>
-        /// Retrieve the shipping methed export
+        /// Retrieve the shipping method export
         /// </summary>
         public string RetrieveShippingMethods()
         {
@@ -649,7 +647,7 @@ namespace ShipWorks.Stores.Platforms.Volusion
                     }
                     else if (response.StatusCode == HttpStatusCode.OK)
                     {
-                        // start the screen scraping (this never happened during testing, but just incase we get OK , start parsing)
+                        // start the screen scraping (this never happened during testing, but just in case we get OK , start parsing)
                         return ParseHelpPageForPassword(responseStream);
                     }
                 }
