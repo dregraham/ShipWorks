@@ -4125,16 +4125,6 @@ warnif count > 0 from n in Application.Namespaces
   && !n.NameLike (@"^MyNamespace.Sync")
 select n
 ]]></Query>
-      <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Jenkins Build Rules: Methods that can have NDependIgnoreComplexMethod removed.</Name>
-warnif count > 0 
-from m 
-in JustMyCode.Methods
- .Where(m => !m.ParentAssembly.Name.Contains("ShipWorks.SqlServer") 
-        && m.CyclomaticComplexity < 20 
-        && m.HasAttribute("*.NDependIgnoreComplexMethod*")) 
-orderby m.CyclomaticComplexity descending
-
-select new { m, m.CyclomaticComplexity }]]></Query>
       <Group Name="Check Coverage on particular Code Elements" Active="False" ShownInReport="False">
         <Query Active="False" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Check that the assembly Asm is 100% covered by tests</Name>
 warnif count > 0 from a in Application.Assemblies where 
@@ -4304,6 +4294,15 @@ in JustMyCode.Methods
 orderby m.CyclomaticComplexity descending
 
 select new { m, m.CyclomaticComplexity }]]></Query>
+      <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Jenkins Build Rules: Methods that can have NDependIgnoreLongMethod removed.</Name>
+from m 
+in JustMyCode.Methods
+ .Where(m => !m.ParentAssembly.Name.Contains("ShipWorks.SqlServer") 
+        && m.NbLinesOfCode < 30 
+        && m.HasAttribute("*.NDependIgnoreLongMethod*")) 
+orderby m.CyclomaticComplexity descending
+
+select new { m, m.NbLinesOfCode }]]></Query>
     </Group>
   </Queries>
 </NDepend>

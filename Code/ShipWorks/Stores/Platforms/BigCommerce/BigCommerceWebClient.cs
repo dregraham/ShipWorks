@@ -436,7 +436,6 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         /// </summary>
         /// <param name="orderSearchCriteria">Filter by BigCommerceWebClientOrderSearchCriteria.</param>
         /// <returns>List of orders matching criteria, sorted by LastUpdate ascending </returns>
-        [NDependIgnoreLongMethod]
         public List<BigCommerceOrder> GetOrders(BigCommerceWebClientOrderSearchCriteria orderSearchCriteria)
         {
             List<BigCommerceOrder> ordersToReturn = new List<BigCommerceOrder>();

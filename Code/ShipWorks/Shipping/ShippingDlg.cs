@@ -205,7 +205,6 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Gets all the shipments currently listed in the shipment control
         /// </summary>
-        [NDependIgnoreLongMethod]
         public IEnumerable<ShipmentEntity> FetchShipmentsFromShipmentControl()
         {
             return shipmentControl.AllRows.Select(x => x.Shipment);
