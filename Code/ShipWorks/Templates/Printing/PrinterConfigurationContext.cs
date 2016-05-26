@@ -428,7 +428,6 @@ namespace ShipWorks.Templates.Printing
         /// <summary>
         /// Changes to the specified PaperSource
         /// </summary>
-        [NDependIgnoreTooManyParams]
         private static NativePaperSettings SetPaperSettings(
             string printer,
             int paperSource,

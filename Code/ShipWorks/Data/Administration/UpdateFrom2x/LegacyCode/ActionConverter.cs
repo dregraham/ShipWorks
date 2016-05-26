@@ -125,7 +125,6 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
         /// <summary>
         /// Create a V3 action from the given v2 action properties
         /// </summary>
-        [NDependIgnoreTooManyParams]
         private static ActionEntity CreateAction(StoreEntity store, string name, bool enabled)
         {
             return new ActionEntity
@@ -205,7 +204,6 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
         /// <summary>
         /// Load the v2 trigger data into the given v3 action entity
         /// </summary>
-        [NDependIgnoreLongMethod]
         private static void LoadTrigger(ActionEntity action, int v2TriggerType, string v2TriggerSettings)
         {
             ActionTriggerType triggerType;

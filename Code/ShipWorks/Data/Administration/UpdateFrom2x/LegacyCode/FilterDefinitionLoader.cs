@@ -723,7 +723,6 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
         /// <summary>
         /// Create condition to match v2 status condition
         /// </summary>
-        [NDependIgnoreLongMethod]
         private static Condition CreateShipmentStatusCondition(XElement v2Condition)
         {
             ShipmentStatusType statusType = ShipmentStatusType.Processed;
