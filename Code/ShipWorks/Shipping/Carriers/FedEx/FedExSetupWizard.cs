@@ -110,6 +110,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             Pages[Pages.Count - 1].SteppingInto += new EventHandler<WizardSteppingIntoEventArgs>(OnSteppingIntoFinish);
 
             licenseAgreement.Rtf = ResourceUtility.ReadString("ShipWorks.Shipping.Carriers.FedEx.FedExEULA.rtf");
+
+            // The RichTextBox doesn't have padding, and margin doesn't seem to push it over, so this does...
+            licenseAgreement.SelectAll();
+            licenseAgreement.SelectionIndent += 3;
+            licenseAgreement.SelectionLength = 0;
         }
 
         /// <summary>
