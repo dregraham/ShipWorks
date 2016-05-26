@@ -170,7 +170,6 @@ namespace ShipWorks.Shipping.Editing
         /// Load the data for the list of shipments into the control
         /// </summary>
         [NDependIgnoreLongMethod]
-        [NDependIgnoreComplexMethodAttribute]
         public virtual void LoadShipments(IEnumerable<ShipmentEntity> shipments, bool enableEditing, bool enableShippingAddress)
         {
             if (shipments == null)

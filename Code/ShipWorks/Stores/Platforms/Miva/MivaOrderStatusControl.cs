@@ -83,7 +83,6 @@ namespace ShipWorks.Stores.Platforms.Miva
         /// <summary>
         /// Saves selected values to the store
         /// </summary>
-        [NDependIgnoreLongMethod]
         public bool SaveToEntity(MivaStoreEntity store)
         {
             if (store == null)

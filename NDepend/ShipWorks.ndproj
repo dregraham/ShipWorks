@@ -76,10 +76,11 @@
     <Name>System.Reactive.PlatformServices</Name>
     <Name>System.Reactive.Windows.Threading</Name>
     <Name>ShipWorks.SqlServer</Name>
+    <Name>WindowsBase</Name>
   </FrameworkAssemblies>
   <Dirs>
-    <Dir>C:\WINDOWS\Microsoft.NET\Framework\v4.0.30319</Dir>
-    <Dir>C:\WINDOWS\Microsoft.NET\Framework\v4.0.30319\WPF</Dir>
+    <Dir>C:\Windows\Microsoft.NET\Framework\v4.0.30319</Dir>
+    <Dir>C:\Windows\Microsoft.NET\Framework\v4.0.30319\WPF</Dir>
     <Dir>..\Artifacts\Application</Dir>
     <Dir>..\Code\ShipWorks\bin\Debug</Dir>
     <Dir>..\Code\ShipWorks.Data.Adapter\bin\Debug</Dir>
@@ -4284,6 +4285,46 @@ from m in JustMyCode.Methods.Where(m=>
 )
 orderby m.FullName
 select new { m }]]></Query>
+      <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Jenkins Build Rules: Methods that can have NDependIgnoreComplexMethod removed.</Name>
+from m 
+in JustMyCode.Methods
+ .Where(m => !m.ParentAssembly.Name.Contains("ShipWorks.SqlServer") 
+        && m.CyclomaticComplexity < 20 
+        && m.HasAttribute("*.NDependIgnoreComplexMethod*")) 
+orderby m.CyclomaticComplexity descending
+
+select new { m, m.CyclomaticComplexity }]]></Query>
+      <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Jenkins Build Rules: Methods that can have NDependIgnoreLongMethod removed.</Name>
+from m 
+in JustMyCode.Methods
+ .Where(m => !m.ParentAssembly.Name.Contains("ShipWorks.SqlServer") 
+        && m.NbLinesOfCode < 30 
+        && m.HasAttribute("*.NDependIgnoreLongMethod*")) 
+orderby m.CyclomaticComplexity descending
+
+select new { m, m.NbLinesOfCode }]]></Query>
+      <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Jenkins Build Rules: Methods that can have NDependIgnoreLongTypes removed.</Name>
+from t 
+in JustMyCode.Types 
+ .Where(t => !t.ParentAssembly.Name.Contains("ShipWorks.SqlServer") 
+        && t.NbLinesOfCode < 500
+        && t.HasAttribute("*.NDependIgnoreLongTypes*"))
+
+orderby t.NbLinesOfCode descending
+
+select new { t, t.NbLinesOfCode }]]></Query>
+      <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Jenkins Build Rules: Methods that can have NDependIgnoreTooManyParams removed</Name>
+from  m 
+
+in JustMyCode.Methods
+ .Where(m => !m.ParentAssembly.Name.Contains("ShipWorks.SqlServer") 
+ && m.NbParameters <= 5  
+ && (m.HasAttribute("*.NDependIgnoreTooManyParamsAttribute")))
+
+orderby m.NbParameters
+
+select new { m, m.NbParameters }
+]]></Query>
     </Group>
   </Queries>
 </NDepend>

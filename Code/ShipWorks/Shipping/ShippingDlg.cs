@@ -205,8 +205,6 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Gets all the shipments currently listed in the shipment control
         /// </summary>
-        [NDependIgnoreLongMethod]
-        [NDependIgnoreComplexMethodAttribute]
         public IEnumerable<ShipmentEntity> FetchShipmentsFromShipmentControl()
         {
             return shipmentControl.AllRows.Select(x => x.Shipment);
@@ -624,7 +622,6 @@ namespace ShipWorks.Shipping
         /// if there were concurrency or deleted errors detected.  Upon return of false, depending on when\where this is called, the grid should
         /// be reloaded following.
         /// </summary>
-        [NDependIgnoreLongMethod]
         private bool SaveUIDisplayedShipments()
         {
             // Save all changes from the UI to the entities loaded into the UI
