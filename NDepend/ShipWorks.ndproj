@@ -4252,7 +4252,7 @@ select new { m }
 
 ]]></Query>
       <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Jenkins Build Rules: # of NDependIgnoreComplexMethod attributes reached</Name>
-warnif count > 90
+warnif count > 73
 
 from m in JustMyCode.Methods.Where(m=> 
         m.HasAttribute("*.NDependIgnoreComplexMethod*") 
@@ -4261,7 +4261,7 @@ orderby m.FullName
 select new { m }
 ]]></Query>
       <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Jenkins Build Rules: # of NDependIgnoreTooManyParams attributes reached</Name>
-warnif count > 61 // Makes this 59 in the rating branch merge
+warnif count > 57
 
 from m in JustMyCode.Methods.Where(m=> 
         m.HasAttribute("*.NDependIgnoreTooManyParams*") 
@@ -4278,7 +4278,7 @@ from m in JustMyCode.Types.Where(m=>
 orderby m.FullName
 select new { m }]]></Query>
       <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Jenkins Build Rules: # of NDependIgnoreLongMethod attributes reached</Name>
-warnif count > 390
+warnif count > 370
 
 from m in JustMyCode.Methods.Where(m=> 
         m.HasAttribute("*.NDependIgnoreLongMethod*") 
