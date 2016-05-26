@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Windows.Forms;
-using IWin32Window = System.Windows.Forms.IWin32Window;
 
 namespace Interapptive.Shared.UI
 {
