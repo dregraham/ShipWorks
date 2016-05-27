@@ -62,10 +62,12 @@
             // next
             // 
             this.next.Location = new System.Drawing.Point(416, 546);
+            this.next.TabIndex = 1;
             // 
             // cancel
             // 
             this.cancel.Location = new System.Drawing.Point(497, 546);
+            this.cancel.TabIndex = 2;
             // 
             // back
             // 
@@ -138,7 +140,7 @@
             this.fieldLengthProvider.SetMaxLengthSource(this.accountNumber, ShipWorks.Data.Utility.EntityFieldLengthSource.FedExAccountNumber);
             this.accountNumber.Name = "accountNumber";
             this.accountNumber.Size = new System.Drawing.Size(217, 21);
-            this.accountNumber.TabIndex = 5;
+            this.accountNumber.TabIndex = 0;
             // 
             // labelFedExAccount
             // 
@@ -306,7 +308,8 @@
             this.licenseAgreement.Name = "licenseAgreement";
             this.licenseAgreement.ReadOnly = true;
             this.licenseAgreement.Size = new System.Drawing.Size(470, 409);
-            this.licenseAgreement.TabIndex = 4;
+            this.licenseAgreement.TabIndex = 999;
+            this.licenseAgreement.TabStop = false;
             this.licenseAgreement.Text = "";
             // 
             // FedExSetupWizard

@@ -357,7 +357,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 // The RichTextBox doesn't have padding, and margin doesn't seem to push it over, so this does...
                 licenseAgreement.SelectAll();
                 licenseAgreement.SelectionIndent += 3;
-                licenseAgreement.SelectionLength = 0;
+                licenseAgreement.DeselectAll();
 
                 radioDeclineAgreement.Checked = true;
                 NextEnabled = false;
