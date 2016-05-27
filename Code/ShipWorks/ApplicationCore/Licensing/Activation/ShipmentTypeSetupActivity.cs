@@ -16,14 +16,14 @@ namespace ShipWorks.ApplicationCore.Licensing.Activation
         /// <summary>
         /// Sets up the shipment type as the default
         /// </summary>
-        public ShipmentTypeSetupActivity(IIndex<ShipmentTypeCode, ShipmentType> shipmentTypeFactory, IShippingSettings shippingSettings,
-            IShippingProfileManager shippingProfileManager)
+        public ShipmentTypeSetupActivity(IIndex<ShipmentTypeCode, ShipmentType> shipmentTypeFactory,
+            IShippingSettings shippingSettings, IShippingProfileManager shippingProfileManager)
         {
             this.shippingProfileManager = shippingProfileManager;
             this.shippingSettings = shippingSettings;
             this.shipmentTypeFactory = shipmentTypeFactory;
         }
-        
+
         /// <summary>
         /// Sets usps as the default ShipmentType and sets up its origin address
         /// </summary>
@@ -31,8 +31,10 @@ namespace ShipWorks.ApplicationCore.Licensing.Activation
         {
             shippingSettings.SetDefaultProvider(shipmentTypeCode);
 
-            ShippingProfileEntity uspsProfile = shipmentTypeFactory[shipmentTypeCode].GetPrimaryProfile();
-            uspsProfile.OriginID = (int)origin;
+            ShipmentType shipmentType = shipmentTypeFactory[shipmentTypeCode];
+
+            ShippingProfileEntity uspsProfile = shippingProfileManager.GetOrCreatePrimaryProfile(shipmentType);
+            uspsProfile.OriginID = (int) origin;
 
             shippingProfileManager.SaveProfile(uspsProfile);
         }

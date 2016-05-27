@@ -3,9 +3,8 @@ using ShipWorks.Shipping.Carriers.FedEx.WebServices.Track;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Tracking
 {
-    public class FedExTrackingUtilities
+    public static class FedExTrackingUtilities
     {
-
         /// <summary>
         /// Build a successful track reply
         /// </summary>
@@ -17,7 +16,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Tracking
                 Notifications = new Notification[]
                 {
                     new Notification {
-                        Code = "0", 
+                        Code = "0",
                         Severity = NotificationSeverityType.SUCCESS
                     }
                 },
@@ -48,7 +47,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Tracking
                                                                     PostalCode = "60638",
                                                                     CountryCode = "US",
                                                                     Residential = false
-                                                                } 
+                                                                }
                                                         }
                                                 }
 

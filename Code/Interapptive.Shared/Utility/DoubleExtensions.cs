@@ -12,5 +12,23 @@ namespace Interapptive.Shared.Utility
         /// </summary>
         public static bool IsEquivalentTo(this double value, double number) =>
             Math.Abs(value - number) < .001;
+
+        /// <summary>
+        /// Clamp a value to an allowable range
+        /// </summary>
+        public static double Clamp(this double value, double min, double max)
+        {
+            if (min > max)
+            {
+                throw new ArgumentOutOfRangeException("Min must be less than max");
+            }
+
+            if (value < min)
+            {
+                return min;
+            }
+
+            return Math.Min(value, max);
+        }
     }
 }

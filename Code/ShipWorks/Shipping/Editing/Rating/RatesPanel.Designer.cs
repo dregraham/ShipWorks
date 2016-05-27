@@ -1,4 +1,4 @@
-﻿using Interapptive.Shared.Messaging;
+﻿using ShipWorks.Core.Messaging;
 
 namespace ShipWorks.Shipping.Editing.Rating
 {
@@ -19,10 +19,7 @@ namespace ShipWorks.Shipping.Editing.Rating
             {
                 uspsAccountConvertedToken?.Dispose();
 
-                if (components != null)
-                {
-                    components.Dispose();
-                }
+        		components?.Dispose();
             }
 
             base.Dispose(disposing);

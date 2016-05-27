@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
 using ShipWorks.Shipping.Carriers.UPS.OpenAccount;
 
 namespace ShipWorks.Shipping.Carriers.UPS
@@ -11,13 +10,12 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <summary>
         /// Returns a list of accounts for the carrier.
         /// </summary>
-        public override IEnumerable<UpsAccountEntity> Accounts
-        {
-            get
-            {
-                return UpsAccountManager.Accounts;
-            }
-        }
+        public override IEnumerable<UpsAccountEntity> Accounts => UpsAccountManager.Accounts;
+
+        /// <summary>
+        /// Force a check for changes
+        /// </summary>
+        public override void CheckForChangesNeeded() => UpsAccountManager.CheckForChangesNeeded();
 
         /// <summary>
         /// Returns a carrier account for the provided accountID.
@@ -36,7 +34,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         {
             get
             {
-                long? accountID = new UpsOltShipmentType().GetPrimaryProfile().Ups.UpsAccountID;
+                long? accountID = GetPrimaryProfile(ShipmentTypeCode.UpsOnLineTools).Ups.UpsAccountID;
                 return GetProfileAccount(ShipmentTypeCode.UpsOnLineTools, accountID);
             }
         }

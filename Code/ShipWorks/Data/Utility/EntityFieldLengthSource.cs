@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 
 namespace ShipWorks.Data.Utility
@@ -8,6 +9,7 @@ namespace ShipWorks.Data.Utility
     /// <summary>
     /// Defines the field sources for field length information
     /// </summary>
+    [Obfuscation(Exclude = true, ApplyToMembers = true, StripAfterObfuscation = false)]
     public enum EntityFieldLengthSource
     {
         None,

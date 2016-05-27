@@ -2,14 +2,17 @@
 using System.Collections.Generic;
 using System.Drawing;
 using Autofac.Extras.Moq;
-using ShipWorks.Shipping.Editing.Rating;
-using ShipWorks.Tests.Shipping.Carriers.BestRate.Fake;
-using Xunit;
+using log4net;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.BestRate;
-using ShipWorks.Shipping.Insurance;
+using ShipWorks.Shipping.Carriers.BestRate.Footnote;
 using ShipWorks.Shipping.Carriers.BestRate.RateGroupFiltering;
+using ShipWorks.Shipping.Editing.Rating;
+using ShipWorks.Shipping.Insurance;
+using ShipWorks.Tests.Shipping.Carriers.BestRate.Fake;
+using Xunit;
 
 namespace ShipWorks.Tests.Shipping.Carriers.BestRate
 {
@@ -56,6 +59,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         }
 
         [Fact]
+            // Setup the factory to return two brokers - the one already defined at the class level 
         public void GetShipmentInsuranceProvider_ReturnsInvalid_OneBrokersWithNoAccounts()
         {
             var bestRateShipmentType = mock.Create<BestRateShipmentType>();
@@ -126,17 +130,17 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
             RateResult rate = new RateResult("foo", "3") { Tag = new BestRateResultTag { RateSelectionDelegate = entity => { } } };
             BestRateShipmentType.ApplySelectedShipmentRate(shipment, rate);
 
-            Assert.Equal((int)BestRateEventTypes.RateSelected, shipment.BestRateEvents);
+            Assert.Equal((int) BestRateEventTypes.RateSelected, shipment.BestRateEvents);
         }
 
         [Fact]
         public void ApplySelectedShipmentRate_DoesNotRemoveOtherBestRateEvents()
         {
-            shipment.BestRateEvents = (int)BestRateEventTypes.RatesCompared;
+            shipment.BestRateEvents = (int) BestRateEventTypes.RatesCompared;
             RateResult rate = new RateResult("foo", "3") { Tag = new BestRateResultTag { RateSelectionDelegate = entity => { } } };
             BestRateShipmentType.ApplySelectedShipmentRate(shipment, rate);
 
-            Assert.Equal(BestRateEventTypes.RatesCompared, (BestRateEventTypes)shipment.BestRateEvents & BestRateEventTypes.RatesCompared);
+            Assert.Equal(BestRateEventTypes.RatesCompared, (BestRateEventTypes) shipment.BestRateEvents & BestRateEventTypes.RatesCompared);
         }
 
         [Fact]
@@ -184,6 +188,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
             });
             rateGroupWithFooterNotAssociatedWithAmount.AddFootnoteFactory(notAssociatedWithAmountFooterFootnoteFactory.Object);
         }
+        // IsCustomsRequierd has a hard dependency to the database, so these are no longer testable 
         
         // Helper methods for creating rate results
         private RateResult CreateRateResult(string description, string days, decimal amount, string tagResultKey)

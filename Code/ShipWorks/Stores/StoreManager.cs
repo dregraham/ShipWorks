@@ -1,27 +1,26 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
-using ShipWorks.AddressValidation;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using System.Data;
-using ShipWorks.Data.Adapter.Custom;
-using ShipWorks.Data.Model.HelperClasses;
 using System.ComponentModel;
-using System.Windows.Forms;
-using ShipWorks.UI;
+using System.Data;
 using System.Linq;
-using ShipWorks.Data.Utility;
-using ShipWorks.Data.Connection;
-using ShipWorks.Stores.Platforms;
-using ShipWorks.ApplicationCore.Interaction;
-using ShipWorks.Data.Model;
+using System.Text;
+using System.Windows.Forms;
+using Autofac;
 using Interapptive.Shared.UI;
 using log4net;
-using ShipWorks.Data.Model.Custom;
-using ShipWorks.Stores.Management;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.AddressValidation;
 using ShipWorks.ApplicationCore.Setup;
+using ShipWorks.Data;
+using ShipWorks.Data.Adapter.Custom;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.Custom;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Data.Utility;
+using ShipWorks.Users.Security;
+using ShipWorks.Filters;
 
 namespace ShipWorks.Stores
 {
@@ -39,7 +38,7 @@ namespace ShipWorks.Stores
         static List<StoreType> uniqueStoreTypes;
         static List<StoreType> instanceStoreTypes;
 
-        // Same as above, but restriced to store types that have stores that are enabled
+        // Same as above, but restricted to store types that have stores that are enabled
         static List<StoreType> uniqueStoreTypesEnabled;
 
         // Increments every time there is a change
@@ -48,7 +47,7 @@ namespace ShipWorks.Stores
         /// <summary>
         /// Initialize StoreManager
         /// </summary>
-        public static void InitializeForCurrentSession()
+        public static void InitializeForCurrentSession(ISecurityContext securityContext)
         {
             // These are basically a dependence of stores
             StatusPresetManager.InitializeForCurrentSession();
@@ -59,7 +58,7 @@ namespace ShipWorks.Stores
 
             UpdateInheritanceActiveTables();
             CheckForChanges();
-            CleanupIncompleteStores();
+            CleanupIncompleteStores(securityContext);
         }
 
         /// <summary>
@@ -67,7 +66,7 @@ namespace ShipWorks.Stores
         /// </summary>
         public static bool CheckForChanges()
         {
-            // These are basically a dependence of stoers
+            // These are basically a dependence of stores
             bool changes = StatusPresetManager.CheckForChanges();
 
             lock (storeSynchronizer)
@@ -91,11 +90,11 @@ namespace ShipWorks.Stores
                         .Distinct()
                         .Select(t => StoreTypeManager.GetType(t)).ToList();
 
-                    // If there are now any store types present that we didnt used to have, we need to deal with some things.  This only detects new..
+                    // If there are now any store types present that we didn't used to have, we need to deal with some things.  This only detects new..
                     // doesn't detect if one went away.  That's ok.
                     if (uniqueStoreTypes.Any(current => !previousTypes.Contains(current.TypeCode)))
                     {
-                        // First we need to clear the cache.  Due to our ActiveTableInheritance stuff, we only query for derived order specifc
+                        // First we need to clear the cache.  Due to our ActiveTableInheritance stuff, we only query for derived order specific
                         // tables of storetypes that are active.  If the orders had been pulled in before the store type was found here, it would
                         // not be appropriately types as its derived type.  So we clear the cache to force it to be repulled.
                         DataProvider.ClearEntityCache();
@@ -233,7 +232,7 @@ namespace ShipWorks.Stores
         }
 
         /// <summary>
-        /// A little more effecient way to get the store by checking to see if the order is in cache first.  Will return zero if not found.
+        /// A little more efficient way to get the store by checking to see if the order is in cache first.  Will return zero if not found.
         /// </summary>
         public static StoreEntity GetRelatedStore(long entityID)
         {
@@ -321,7 +320,7 @@ namespace ShipWorks.Stores
                 foreach (DataRow row in result.Rows)
                 {
                     // This is a RARE case... This would only happen if there is a single log entry with a null ended time for the store.  This could
-                    // happen if the first download for the store is in progress, or if sw totally crashed during a download.
+                    // happen if the first download for the store is in progress, or if ShipWorks totally crashed during a download.
                     if (row["Ended"] is DBNull)
                     {
                         continue;
@@ -365,7 +364,7 @@ namespace ShipWorks.Stores
         }
 
         /// <summary>
-        /// Does an initial check on the validity of the store name.  Does not garuntee that it will be OK
+        /// Does an initial check on the validity of the store name.  Does not guarantee that it will be OK
         /// once it gets to the database. If there is a problem, the message will be displayed with owner as the message box parent.
         /// </summary>
         public static bool CheckStoreName(string name, IWin32Window owner)
@@ -374,7 +373,7 @@ namespace ShipWorks.Stores
         }
 
         /// <summary>
-        /// Does an initial check on the validity of the store name.  Does not garuntee that it will be OK
+        /// Does an initial check on the validity of the store name.  Does not guarantee that it will be OK
         /// once it gets to the database. If there is a problem, the message will be displayed with owner as the message box parent.
         /// </summary>
         public static bool CheckStoreName(string name, StoreEntity ignoredStore, IWin32Window owner)
@@ -424,10 +423,55 @@ namespace ShipWorks.Stores
         }
 
         /// <summary>
-        /// Cleanup any stores that did not make it all the way throught he AddStoreWizard.  This doesn't do
+        /// Creates the online status filters for the given store.
+        /// </summary>
+        public static void CreateStoreStatusFilters(IWin32Window owner, StoreEntity store)
+        {
+            // Make sure we have a fresh up-to-date layout context in case we need to create store-specific filters
+            FilterLayoutContext.PushScope();
+
+            StoreFilterRepository storeFilterRepository = new StoreFilterRepository(store);
+            StoreFilterRepositorySaveResult result = storeFilterRepository.Save(false);
+            FilterLayoutContext.PopScope();
+
+            if (!result.FolderCreated)
+            {
+                MessageHelper.ShowWarning(owner,
+                    $"Could not create folder {result.StoreFolderName}. The folder already exists, and its criteria does not match this store.");
+                return;
+            }
+
+            StringBuilder sb = new StringBuilder();
+            if (result.CreatedFilters.Any())
+            {
+                sb.AppendFormat("The following filters were created in filter folder '{0}.'", result.StoreFolderName)
+                    .AppendLine();
+
+                result.CreatedFilters.ForEach(newFilter => sb.AppendFormat(" - {0}", newFilter.Name).AppendLine());
+            }
+            if (result.CollisionFilters.Any())
+            {
+                if (sb.Length > 0)
+                {
+                    sb.AppendLine();
+                }
+
+                sb.AppendFormat("Filters already existed in '{0}.'", result.StoreFolderName)
+                    .AppendLine()
+                    .AppendLine("These filters remained unchanged:");
+
+                result.CollisionFilters
+                    .ForEach(collisionFilter => sb.AppendFormat(" - {0}", collisionFilter.Name).AppendLine());
+            }
+
+            MessageHelper.ShowWarning(owner, sb.ToString());
+        }
+
+        /// <summary>
+        /// Cleanup any stores that did not make it all the way through the AddStoreWizard.  This doesn't do
         /// anything if someone somewhere has an AddStoreWizard open.
         /// </summary>
-        private static void CleanupIncompleteStores()
+        private static void CleanupIncompleteStores(ISecurityContext securityContext)
         {
             // If the add store wizard is not open and there is a non complete store, that basically
             // means sw crashed during the add store wizard and we need to clean it up.
@@ -442,7 +486,7 @@ namespace ShipWorks.Stores
                         foreach (StoreEntity store in StoreCollection.Fetch(SqlAdapter.Default, StoreFields.SetupComplete == false))
                         {
                             log.InfoFormat("Deleting incomplete store {0} '{1}'", store.StoreID, store.StoreName);
-                            DeletionService.DeleteStore(store);
+                            DeletionService.DeleteStore(store, securityContext);
                         }
                     }
                 }

@@ -23,7 +23,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// </summary>
         /// <param name="rateControl">A handle to the rate control so the selected rate can be updated when
         /// a change to the shipment, such as changing the service type, matches a rate in the control</param>
-        public iParcelServiceControl(RateControl rateControl) 
+        public iParcelServiceControl(RateControl rateControl)
             : base(ShipmentTypeCode.iParcel, rateControl)
         {
             InitializeComponent();
@@ -32,16 +32,16 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// <summary>
         /// Initialize the combo boxes
         /// </summary>
-        public override void Initialize()
+        protected override void Initialize()
         {
             base.Initialize();
-			
+
             originControl.Initialize(ShipmentTypeCode.iParcel);
 
             LoadAccounts();
 
             packageControl.Initialize();
-		}
+        }
 
         /// <summary>
         /// Load the list of IParcel accounts
@@ -146,15 +146,15 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// </summary>
         private void BindServiceDropdown()
         {
-            iParcelShipmentType shipmentType = (iParcelShipmentType)ShipmentTypeManager.GetType(ShipmentTypeCode.iParcel);
+            service.DisplayMember = "Key";
+            service.ValueMember = "Value";
+
+            iParcelShipmentType shipmentType = (iParcelShipmentType) ShipmentTypeManager.GetType(ShipmentTypeCode.iParcel);
             List<iParcelServiceType> availableServiceTypes = shipmentType.GetAvailableServiceTypes().Select(s => (iParcelServiceType) s).ToList();
 
             // Always include the service that the shipments are currently configured with
             IEnumerable<iParcelServiceType> loadedServices = LoadedShipments.Select(s => (iParcelServiceType) s.IParcel.Service).Distinct();
             availableServiceTypes = availableServiceTypes.Union(loadedServices).ToList();
-
-            service.DisplayMember = "Key";
-            service.ValueMember = "Value";
 
             service.DataSource = ActiveEnumerationBindingSource.Create<iParcelServiceType>
                 (
@@ -197,7 +197,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             {
                 shipment.ContentWeight = shipment.IParcel.Packages.Sum(p => p.Weight);
                 iParcelAccount.ReadMultiValue(v => shipment.IParcel.IParcelAccountID = (long) v);
-                
+
                 service.ReadMultiValue(v =>
                 {
                     if (v != null)
@@ -214,8 +214,8 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             ResumeRateCriteriaChangeEvent();
             ResumeShipSenseFieldChangeEvent();
         }
-        
-		/// <summary>
+
+        /// <summary>
         /// Refresh the weight box with the latest weight information from the loaded shipments
         /// </summary>
         public override void RefreshContentWeight()
@@ -236,7 +236,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
                 packageControl.LoadShipments(LoadedShipments, base.EnableEditing);
             }
         }
-		
+
         /// <summary>
         /// Selected origin has changed
         /// </summary>
@@ -250,7 +250,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             }
             else
             {
-                IParcelAccountEntity account = iParcelAccount.SelectedIndex >= 0 ? iParcelAccountManager.GetAccount((long)iParcelAccount.SelectedValue) : null;
+                IParcelAccountEntity account = iParcelAccount.SelectedIndex >= 0 ? iParcelAccountManager.GetAccount((long) iParcelAccount.SelectedValue) : null;
                 if (account != null)
                 {
                     text += account.Description;
@@ -272,7 +272,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         {
             RaiseRateCriteriaChanged();
         }
-        
+
         /// <summary>
         /// A rate has been selected
         /// </summary>
@@ -321,7 +321,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         {
             if (!service.MultiValued)
             {
-                iParcelServiceType serviceType = (iParcelServiceType)service.SelectedValue;
+                iParcelServiceType serviceType = (iParcelServiceType) service.SelectedValue;
 
                 // Update the selected rate in the rate control to coincide with the service change
                 RateResult matchingRate = RateControl.RateGroup.Rates.FirstOrDefault(r =>
@@ -331,7 +331,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
                         return false;
                     }
 
-                    return ((iParcelRateSelection)r.OriginalTag).ServiceType == serviceType;
+                    return ((iParcelRateSelection) r.OriginalTag).ServiceType == serviceType;
                 });
 
                 RateControl.SelectRate(matchingRate);
@@ -340,6 +340,17 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             {
                 RateControl.ClearSelection();
             }
+        }
+
+        /// <summary>
+        /// Flush any in-progress changes before saving
+        /// </summary>
+        /// <remarks>This should cause weight controls to finish, etc.</remarks>
+        public override void FlushChanges()
+        {
+            base.FlushChanges();
+
+            packageControl?.FlushChanges();
         }
     }
 }

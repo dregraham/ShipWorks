@@ -1,6 +1,6 @@
 ﻿using System.Drawing;
 using System.Windows.Forms;
-using Interapptive.Shared.Messaging;
+using ShipWorks.Core.Messaging;
 using ShipWorks.UI.Controls;
 
 namespace ShipWorks.Shipping.Carriers.FedEx

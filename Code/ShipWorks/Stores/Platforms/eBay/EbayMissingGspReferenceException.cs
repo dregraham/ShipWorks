@@ -19,7 +19,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// </summary>
         /// <param name="info"></param>
         /// <param name="context"></param>
-        public EbayMissingGspReferenceException(SerializationInfo info, StreamingContext context)
+        protected EbayMissingGspReferenceException(SerializationInfo info, StreamingContext context)
             : base(info, context)
         { }
 

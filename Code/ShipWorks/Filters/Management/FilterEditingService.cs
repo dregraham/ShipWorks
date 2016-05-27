@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Interapptive.Shared.Messaging;
+using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
 using System.Windows.Forms;
 using System.ComponentModel;
@@ -15,6 +15,7 @@ using ShipWorks.Data.Connection;
 using ShipWorks.ApplicationCore.Appearance;
 using Interapptive.Shared.UI;
 using ShipWorks.Filters.Grid;
+using ShipWorks.Messaging.Messages;
 
 namespace ShipWorks.Filters.Management
 {

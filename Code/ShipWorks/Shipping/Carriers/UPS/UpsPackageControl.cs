@@ -1,24 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
 using System.Data;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
-using ShipWorks.Data.Model.EntityClasses;
 using Divelements.SandGrid;
 using Interapptive.Shared;
-using ShipWorks.Shipping.Settings;
-using ShipWorks.UI.Controls;
 using ShipWorks.Data.Grid.DetailView;
-using ShipWorks.Data.Connection;
-using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing;
-using Interapptive.Shared.Utility;
-using ShipWorks.Shipping.Carriers.UPS.Enums;
-using ShipWorks.UI.Utility;
 using ShipWorks.Shipping.Insurance;
+using ShipWorks.UI.Controls;
 
 namespace ShipWorks.Shipping.Carriers.UPS
 {
@@ -98,25 +89,13 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// </summary>
         private void LoadPackagingTypes()
         {
-            packagingType.DisplayMember = "Key";
-            packagingType.ValueMember = "Value";
+            packagingType.DisplayMember = "Value";
+            packagingType.ValueMember = "Key";
 
-            // Get valid packaging types
-            List<int> validPackageTypes = UpsUtility.GetValidPackagingTypes(shipmentTypeCode).Select(x => (int) x).ToList();
-            IEnumerable<int> excludedPackageTypes = ShipmentTypeManager.GetType(shipmentTypeCode).GetExcludedPackageTypes();
-
-            // If there's an existing shipment with a package type that has been excluded, we need to re-add it here
-            if (loadedShipments != null && loadedShipments.Any())
-            {
-                IEnumerable<int> neededPackageTypes = loadedShipments.SelectMany(s => s.Ups.Packages.Select(p => p.PackagingType)).Distinct();
-                excludedPackageTypes = excludedPackageTypes.Except(neededPackageTypes);
-                validPackageTypes.AddRange(neededPackageTypes);
-            }
-
-            List<UpsPackagingType> packagingTypes = validPackageTypes.Except(excludedPackageTypes).Cast<UpsPackagingType>().ToList();
-
-            List<KeyValuePair<string, UpsPackagingType>> packaging = packagingTypes.Select(type => new KeyValuePair<string, UpsPackagingType>(EnumHelper.GetDescription(type), type)).ToList();
-            packagingType.DataSource = packaging;
+            //TODO: This is a temporary crash fix that should be removed when we implement the package builder classes
+            packagingType.DataSource = ShipmentTypeManager.GetType(shipmentTypeCode)
+                .BuildPackageTypeDictionary(new List<ShipmentEntity>())
+                .ToList();
         }
 
         /// <summary>
@@ -316,7 +295,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
                     // Load the data from each selected package
                     foreach (UpsPackageEntity package in packages)
                     {
-                        packagingType.ApplyMultiValue((UpsPackagingType) package.PackagingType);
+                        packagingType.ApplyMultiValue(package.PackagingType);
                         weight.ApplyMultiWeight(package.Weight);
 
                         dimensionsToLoad.Add(new DimensionsAdapter(package));
@@ -382,7 +361,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         }
 
         /// <summary>
-        /// Something affecting rate critiera has changed
+        /// Something affecting rate criteria has changed
         /// </summary>
         private void OnRateCriteriaChanged(object sender, EventArgs e)
         {
@@ -427,6 +406,16 @@ namespace ShipWorks.Shipping.Carriers.UPS
             {
                 ShipSenseFieldChanged(this, EventArgs.Empty);
             }
+        }
+
+        /// <summary>
+        /// Flush any in-progress changes before saving
+        /// </summary>
+        /// <remarks>This should cause weight controls to finish, etc.</remarks>
+        internal void FlushChanges()
+        {
+            dimensionsControl.FlushChanges();
+            weight.FlushChanges();
         }
     }
 }

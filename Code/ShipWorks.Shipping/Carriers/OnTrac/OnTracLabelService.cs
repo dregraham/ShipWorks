@@ -1,5 +1,4 @@
-﻿using System;
-using Interapptive.Shared.Utility;
+﻿using Interapptive.Shared.Utility;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.OnTrac.Enums;
@@ -39,12 +38,12 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
                 DatabaseOnTracShipmentRepository onTracShipmentRepository = new DatabaseOnTracShipmentRepository();
 
                 // None is only an option if an invalid country is selected.
-                if (shipment.OnTrac.Service == (int)OnTracServiceType.None)
+                if (shipment.OnTrac.Service == (int) OnTracServiceType.None)
                 {
                     throw new OnTracException("OnTrac does not provide service outside of the United States.", true);
                 }
 
-                shipment.ActualLabelFormat = shipment.RequestedLabelFormat != (int) ThermalLanguage.None ? 
+                shipment.ActualLabelFormat = shipment.RequestedLabelFormat != (int) ThermalLanguage.None ?
                     shipment.RequestedLabelFormat
                     : (int?) null;
 
@@ -70,7 +69,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         /// <param name="shipment"></param>
         public void Void(ShipmentEntity shipment)
         {
-
+            // We don't void with OnTrac
         }
 
         /// <summary>

@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Linq;
 using System.Windows.Forms;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using ShipWorks.Editions;
-using ShipWorks.Shipping.Carriers.UPS;
 
 namespace ShipWorks.ApplicationCore.Licensing.FeatureRestrictions.Ups
 {

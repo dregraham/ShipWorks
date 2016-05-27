@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Drawing;
+using Interapptive.Shared.Utility;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Grid.Columns;
 using ShipWorks.Data.Grid.Columns.DisplayTypes.Editors;
-using System.Drawing;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Properties;
-using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Shipping.ShipSense;
-using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Shipping.CoreExtensions.Grid
 {
@@ -18,8 +14,6 @@ namespace ShipWorks.Shipping.CoreExtensions.Grid
     /// </summary>
     public class ShipmentStatusDisplayType : GridColumnDisplayType
     {
-        bool showIcon = true;
-
         /// <summary>
         /// Create the editor to use
         /// </summary>
@@ -31,26 +25,19 @@ namespace ShipWorks.Shipping.CoreExtensions.Grid
         /// <summary>
         /// Indicates whether the icon should be drawn for the control
         /// </summary>
-        public bool ShowIcon
-        {
-            get { return showIcon; }
-            set { showIcon = value; }
-        }
+        public bool ShowIcon { get; set; } = true;
 
         /// <summary>
         /// Get the value to use for the given entity
         /// </summary>
-        protected override object GetEntityValue(EntityBase2 entity)
-        {
-            return entity;
-        }
+        protected override object GetEntityValue(EntityBase2 entity) => entity;
 
         /// <summary>
         /// Get the image to use for the given display value
         /// </summary>
         protected override Image GetDisplayImage(object value)
         {
-            if (!showIcon)
+            if (!ShowIcon)
             {
                 return null;
             }
@@ -76,7 +63,7 @@ namespace ShipWorks.Shipping.CoreExtensions.Grid
                 return EnumHelper.GetImage(ShipSenseStatus.Applied);
             }
 
-            if (ShippingDlg.ProcessingErrors.ContainsKey(shipment.ShipmentID))
+            if (ShippingDlg.ErrorManager?.ShipmentHasError(shipment.ShipmentID) ?? false)
             {
                 return Resources.error16;
             }
@@ -105,7 +92,7 @@ namespace ShipWorks.Shipping.CoreExtensions.Grid
                 return "Processed";
             }
 
-            if (ShippingDlg.ProcessingErrors.ContainsKey(shipment.ShipmentID))
+            if (ShippingDlg.ErrorManager?.ShipmentHasError(shipment.ShipmentID) ?? false)
             {
                 return "Error";
             }

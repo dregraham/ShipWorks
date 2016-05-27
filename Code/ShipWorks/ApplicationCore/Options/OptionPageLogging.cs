@@ -95,7 +95,7 @@ namespace ShipWorks.ApplicationCore.Options
         /// </summary>
         public override void Save()
         {
-            LogOptions options = new LogOptions();
+            LogOptions options = LogSession.Options;
             options.LogShipWorks = logShipWorks.Checked;
             options.LogServices = logApiCalls.Checked;
             options.LogRateCalls = logRateCalls.Checked;

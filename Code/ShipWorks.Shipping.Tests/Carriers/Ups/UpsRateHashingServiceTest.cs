@@ -1,15 +1,15 @@
 ﻿using System.Linq;
 using System.Reflection;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.Ups;
+using ShipWorks.Shipping.Carriers.UPS;
 using Xunit;
 
-namespace ShipWorks.Shipping.Tests.Carriers.Ups
+namespace ShipWorks.Shipping.Tests.Carriers.UPS
 {
     public class UpsRateHashingServiceTest
     {
         private readonly UpsRateHashingService testObject;
-        private ShipmentEntity shipment;
+        private readonly ShipmentEntity shipment;
 
         public UpsRateHashingServiceTest()
         {
@@ -73,12 +73,12 @@ namespace ShipWorks.Shipping.Tests.Carriers.Ups
         public void GetRatingHash_ReturnsDifferentHash_WhenUpsShipmentRatingFieldChanges(string field, object value)
         {
             string before = testObject.GetRatingHash(shipment);
-            
+
             PropertyInfo property = typeof(UpsShipmentEntity).GetProperty(field);
             property.SetValue(shipment.Ups, value, null);
 
             string after = testObject.GetRatingHash(shipment);
-            
+
             Assert.NotEqual(before, after);
         }
 

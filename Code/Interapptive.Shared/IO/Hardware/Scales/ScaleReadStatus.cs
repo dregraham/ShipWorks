@@ -1,15 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace Interapptive.Shared.IO.Hardware.Scales
+﻿namespace Interapptive.Shared.IO.Hardware.Scales
 {
     /// <summary>
     /// The status of reading a scale
     /// </summary>
     public enum ScaleReadStatus
     {
+        /// <summary>
+        /// No status was retrieved from the scale.
+        /// </summary>
+        /// <remarks>
+        /// If this status is returned, assume that none of the properties are valid.
+        /// </remarks>
+        NoStatus,
+
         /// <summary>
         /// The scale was successfully read
         /// </summary>

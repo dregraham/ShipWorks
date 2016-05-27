@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Windows.Forms;
 using Autofac;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Shipping.Editing.Rating;
@@ -29,7 +28,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Footnote
                     // Show the shipping settings dialog to guide/nudge the user on to the
                     // account creation process
                     shippingSettingsDlg.ShowDialog(this);
-                        
+
                     // Trigger the rates to refresh
                     RaiseRateCriteriaChanged();
                 }

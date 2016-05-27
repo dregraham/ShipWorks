@@ -508,6 +508,9 @@ namespace ShipWorks.Data.Model.Linq
 				case ShipWorks.Data.Model.EntityType.TemplateUserSettingsEntity:
 					toReturn = this.TemplateUserSettings;
 					break;
+				case ShipWorks.Data.Model.EntityType.ThreeDCartOrderEntity:
+					toReturn = this.ThreeDCartOrder;
+					break;
 				case ShipWorks.Data.Model.EntityType.ThreeDCartOrderItemEntity:
 					toReturn = this.ThreeDCartOrderItem;
 					break;
@@ -1482,6 +1485,12 @@ namespace ShipWorks.Data.Model.Linq
 		public DataSource2<TemplateUserSettingsEntity> TemplateUserSettings
 		{
 			get { return new DataSource2<TemplateUserSettingsEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting ThreeDCartOrderEntity instances in the database.</summary>
+		public DataSource2<ThreeDCartOrderEntity> ThreeDCartOrder
+		{
+			get { return new DataSource2<ThreeDCartOrderEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
 		}
 		
 		/// <summary>returns the datasource to use in a Linq query when targeting ThreeDCartOrderItemEntity instances in the database.</summary>

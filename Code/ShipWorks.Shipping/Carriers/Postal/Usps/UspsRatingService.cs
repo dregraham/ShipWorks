@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
 using Autofac;
@@ -60,7 +61,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// Should we retrieve Express1 rates when getting rates
         /// </summary>
         private bool ShouldRetrieveExpress1Rates { get; set; }
-        
+
         /// <summary>
         /// Gets rates for the given shipment
         /// </summary>
@@ -74,22 +75,22 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             // since it should be using a different cache key
             try
             {
-                return accountRepository.Accounts.Any(a => a.PendingInitialAccount != (int) UspsPendingAccountType.Create)
-                        ? GetRatesInternal(shipment)
-                        : GetCounterRates(shipment);
+                return accountRepository.Accounts.Any(a => a.PendingInitialAccount != (int) UspsPendingAccountType.Create) ? 
+                    GetRatesInternal(shipment) : 
+                    GetCounterRates(shipment);
             }
             catch (UspsException ex)
             {
                 throw new ShippingException(ex.Message, ex);
             }
         }
-        
+
         /// <summary>
         /// Gets counter rates for a postal shipment
         /// </summary>
         protected override RateGroup GetCounterRates(ShipmentEntity shipment)
         {
-            // We're going to be temporarily swapping these out to get counter rates, so 
+            // We're going to be temporarily swapping these out to get counter rates, so
             // make a note of the original values
             ICarrierAccountRepository<UspsAccountEntity> originalAccountRepository = accountRepository;
 
@@ -104,7 +105,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             catch (CounterRatesOriginAddressException)
             {
                 RateGroup errorRates = new RateGroup(Enumerable.Empty<RateResult>());
-                errorRates.AddFootnoteFactory(new CounterRatesInvalidStoreAddressFootnoteFactory(shipmentTypeFactory[ShipmentTypeCode.Usps]));
+                errorRates.AddFootnoteFactory(new CounterRatesInvalidStoreAddressFootnoteFactory(ShipmentTypeCode.Usps));
 
                 return errorRates;
             }
@@ -114,7 +115,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 accountRepository = originalAccountRepository;
             }
         }
-        
+
         /// <summary>
         /// Get postal rates for the given shipment
         /// </summary>
@@ -136,7 +137,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         private Task<RateGroup> GetExpress1RatesIfNecessary(ShipmentEntity shipment)
         {
-            UspsAccountEntity express1AutoRouteAccount = GetExpress1AutoRouteAccount((PostalPackagingType)shipment.Postal.PackagingType);
+            UspsAccountEntity express1AutoRouteAccount = GetExpress1AutoRouteAccount((PostalPackagingType) shipment.Postal.PackagingType);
 
             return ShouldRetrieveExpress1Rates && express1AutoRouteAccount != null && !shipment.Postal.NoPostage ?
                 BeginRetrievingExpress1Rates(shipment, express1AutoRouteAccount) :
@@ -259,10 +260,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <param name="rateGroup">The rate group.</param>
         private void AddUspsRatePromotionFootnote(ShipmentEntity shipment, RateGroup rateGroup)
         {
-            UspsAccountContractType contractType = (UspsAccountContractType)accountRepository.GetAccount(shipment.Postal.Usps.UspsAccountID).ContractType;
+            UspsAccountContractType contractType = (UspsAccountContractType) accountRepository.GetAccount(shipment.Postal.Usps.UspsAccountID).ContractType;
             UspsAccountEntity uspsAccount = accountRepository.GetAccount(shipment.Postal.Usps.UspsAccountID);
 
-            // We may not want to show the conversion promotion for multi-user USPS accounts due 
+            // We may not want to show the conversion promotion for multi-user USPS accounts due
             // to a limitation on USPS' side. (Tango will send these to ShipWorks via data contained
             // in ShipmentTypeFunctionality
             bool accountConversionRestricted = IsAccountConversionRestricted();
@@ -272,8 +273,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 (InterapptiveOnly.MagicKeysDown || accountCreatedTimespan.TotalDays >= MinNumberOfDaysBeforeShowingUspsPromo) &&
                 !accountConversionRestricted)
             {
-                // Show the promotional footer for discounted rates 
-                rateGroup.AddFootnoteFactory(new UspsRatePromotionFootnoteFactory(shipmentTypeFactory[ShipmentTypeCode.Usps], shipment, false));
+                // Show the promotional footer for discounted rates
+                rateGroup.AddFootnoteFactory(new UspsRatePromotionFootnoteFactory(shipmentTypeManager[ShipmentTypeCode.Usps], shipment, false));
             }
         }
 
@@ -313,7 +314,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         {
             shipment.Postal.Usps.UspsAccountID = account.UspsAccountID;
 
-            if (shipment.OriginOriginID == (int)ShipmentOriginSource.Account)
+            if (shipment.OriginOriginID == (int) ShipmentOriginSource.Account)
             {
                 PersonAdapter.Copy(account, string.Empty, shipment, "Origin");
             }
@@ -329,7 +330,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             {
                 return;
             }
-                
+
             // We want to update the contract if it's not in the cache (or dropped out) or if the contract type is unknown; the cache is used
             // so we don't have to perform this everytime, but does allow ShipWorks to handle cases where the contract type may have been
             // updated outside of ShipWorks.
@@ -337,15 +338,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             {
                 try
                 {
-                    // Grab contract type from the USPS API 
+                    // Grab contract type from the USPS API
                     UspsAccountContractType contractType = CreateWebClient().GetContractType(account);
 
-                    bool hasContractChanged = account.ContractType != (int)contractType;
-                    account.ContractType = (int)contractType;
+                    bool hasContractChanged = account.ContractType != (int) contractType;
+                    account.ContractType = (int) contractType;
 
                     // Save the contract to the DB and update the cache
                     accountRepository.Save(account);
-                    UspsContractTypeCache.Set(account.UspsAccountID, (UspsAccountContractType)account.ContractType);
+                    UspsContractTypeCache.Set(account.UspsAccountID, (UspsAccountContractType) account.ContractType);
 
                     if (hasContractChanged)
                     {
@@ -377,17 +378,19 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <summary>
         /// Returns the correct certificate inspector
         /// </summary>
+        [SuppressMessage("SonarQube", "S3215: \"interface\" instances should not be cast to concrete types",
+            Justification = "The cast is to detect whether we need to verify the SSL certificate")]
         protected ICertificateInspector CertificateInspector()
         {
             UspsCounterRateAccountRepository counterRateRepo = accountRepository as UspsCounterRateAccountRepository;
 
             if (counterRateRepo != null)
             {
-                // The account repository is a CounterRate repo use a certificate insepctor
+                // The account repository is a CounterRate repo use a certificate inspector
                 return new CertificateInspector(TangoCredentialStore.Instance.UspsCertificateVerificationData);
             }
 
-            // we are not using the couter rate repo so 
+            // we are not using the counter rate repo so
             // we can send back a trusting certificate inspector
             return new TrustingCertificateInspector();
         }

@@ -12,7 +12,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Yahoo
 
         public YahooApiWebClientTest()
         {
-            validXml = EmbeddedResourceHelper.GetEmbeddedResourceXml("ShipWorks.Stores.Tests.Platforms.Yahoo.Artifacts.YahooGetOrderResponse.xml");
+            validXml = EmbeddedResourceHelper.GetEmbeddedResourceString("ShipWorks.Stores.Tests.Platforms.Yahoo.Artifacts.YahooGetOrderResponse.xml");
             invalidXml = "This sure isn't valid xml";
         }
 

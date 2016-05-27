@@ -4,6 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <ProjectGuid>{A93F195E-44BC-4C73-8F70-7714A040EA0E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -11,6 +12,8 @@
     <AssemblyName>ShipWorks.Shipping.UI</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -20,7 +23,7 @@
     <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <CodeAnalysisRuleSet>..\..\Build\Interapptive.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>..\..\Build\Interapptive.Strict.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -41,6 +44,10 @@
     <AssemblyOriginatorKeyFile>Properties\interapptive_public.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Apitron.PDF.Rasterizer, Version=3.0.66.0, Culture=neutral, PublicKeyToken=6e759dbb0039406e, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Apitron.PDF.Rasterizer.3.0.66.0\lib\net40\Apitron.PDF.Rasterizer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Autofac, Version=3.5.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Autofac.3.5.2\lib\net40\Autofac.dll</HintPath>
       <Private>True</Private>
@@ -51,6 +58,14 @@
     </Reference>
     <Reference Include="Autofac.Integration.Mef, Version=3.0.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Autofac.Mef.3.0.3\lib\net40\Autofac.Integration.Mef.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Common.Logging, Version=3.0.0.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Common.Logging.3.0.0\lib\net40\Common.Logging.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Common.Logging.Core, Version=3.0.0.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Common.Logging.Core.3.0.0\lib\net40\Common.Logging.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="ComponentFactory.Krypton.Toolkit, Version=4.4.0.0, Culture=neutral, PublicKeyToken=a87e673e9ecb6e8e, processorArchitecture=MSIL">
@@ -65,6 +80,40 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Components\Divelements.SandRibbon.dll</HintPath>
     </Reference>
+    <Reference Include="GalaSoft.MvvmLight, Version=5.2.0.37223, Culture=neutral, PublicKeyToken=0e453835af4ee6ce, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\MvvmLightLibs.5.2.0.0\lib\net40\GalaSoft.MvvmLight.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="GalaSoft.MvvmLight.Extras, Version=5.2.0.37224, Culture=neutral, PublicKeyToken=f46ff315b1088208, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\MvvmLightLibs.5.2.0.0\lib\net40\GalaSoft.MvvmLight.Extras.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="log4net, Version=1.2.13.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Threading.Tasks, Version=1.0.12.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Threading.Tasks.Extensions, Version=1.0.12.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.Extensions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Threading.Tasks.Extensions.Desktop, Version=1.0.168.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.Extensions.Desktop.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="SandDock, Version=3.0.4.1, Culture=neutral, PublicKeyToken=75b7ec17dd7c14c3, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Components\SandDock.dll</HintPath>
+    </Reference>
     <Reference Include="SD.LLBLGen.Pro.DQE.SqlServer.NET20, Version=2.6.0.0, Culture=neutral, PublicKeyToken=ca73b74ba4e3ff27, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Components\SD.LLBLGen.Pro.DQE.SqlServer.NET20.dll</HintPath>
@@ -78,8 +127,14 @@
       <HintPath>..\..\Components\SD.LLBLGen.Pro.ORMSupportClasses.NET20.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.IO, Version=2.6.10.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.Bcl.1.1.10\lib\net40\System.IO.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Net" />
     <Reference Include="System.Reactive.Core, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Rx-Core.2.2.5\lib\net40\System.Reactive.Core.dll</HintPath>
       <Private>True</Private>
@@ -96,14 +151,156 @@
       <HintPath>..\..\packages\Rx-PlatformServices.2.2.5\lib\net40\System.Reactive.PlatformServices.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Reactive.Windows.Threading, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Rx-XAML.2.2.5\lib\net40\System.Reactive.Windows.Threading.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Runtime, Version=2.6.10.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.Bcl.1.1.10\lib\net40\System.Runtime.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Threading.Tasks, Version=2.6.10.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.Bcl.1.1.10\lib\net40\System.Threading.Tasks.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Windows.Interactivity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\MvvmLightLibs.5.2.0.0\lib\net40\System.Windows.Interactivity.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Windows.Presentation" />
+    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
+    <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Carriers\Amazon\AmazonCarrierTermsAndConditionsNotAcceptedFootnoteViewModel.cs" />
+    <Compile Include="Carriers\Amazon\AmazonNotLinkedFootnoteViewModel.cs" />
+    <Compile Include="MessageHandlers\IOrderSelectionChangedHandler.cs" />
+    <Compile Include="MessageHandlers\OrderSelectionChangedHandler.cs" />
+    <Compile Include="RatingPanel\ObservableRegistrations\IRatingPanelGlobalPipeline.cs" />
+    <Compile Include="RatingPanel\ObservableRegistrations\ObservableRegistrationsModule.cs" />
+    <Compile Include="RatingPanel\ObservableRegistrations\OpenShippingDialogPipeline.cs" />
+    <Compile Include="RatingPanel\ObservableRegistrations\RatesNotSupportedPipeline.cs" />
+    <Compile Include="RatingPanel\ObservableRegistrations\RatesRetrievedPipeline.cs" />
+    <Compile Include="RatingPanel\ObservableRegistrations\ShipmentChangedPipeline.cs" />
+    <Compile Include="RatingPanel\RatingPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="RatingPanel\RatingPanel.Designer.cs">
+      <DependentUpon>RatingPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="RatingPanel\RatingPanelControl.xaml.cs">
+      <DependentUpon>RatingPanelControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="RatingPanel\RatingPanelRegistration.cs" />
+    <Compile Include="RatingPanel\RatingPanelViewModel.cs" />
+    <Compile Include="RatingPanel\RatingPanelViewModel.Properties.cs" />
+    <Compile Include="RatingPanel\TestRatingPanelViewModel.cs" />
+    <Compile Include="ShippingPanel\CustomsControl\CustomsControl.xaml.cs">
+      <DependentUpon>CustomsControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ShippingPanel\IInsuranceViewModel.cs" />
+    <Compile Include="ShippingPanel\Insurance\InsuranceControl.xaml.cs">
+      <DependentUpon>InsuranceControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ShippingPanel\InsuranceViewModel.Properties.cs" />
+    <Compile Include="ShippingPanel\InsuranceViewModel.cs" />
+    <Compile Include="ShippingPanel\IPipelineRegistrationContainer.cs" />
+    <Compile Include="ShippingPanel\IShippingViewModelFactory.cs" />
+    <Compile Include="ShippingPanel\ObservableRegistrations\ApplyProfilePipeline.cs" />
+    <Compile Include="ShippingPanel\ObservableRegistrations\IShippingPanelTransientPipeline.cs" />
+    <Compile Include="ShippingPanel\ObservableRegistrations\LoadCustomsPipeline.cs" />
+    <Compile Include="ShippingPanel\ObservableRegistrations\RefreshRatesPipeline.cs" />
+    <Compile Include="ShippingPanel\ObservableRegistrations\CarrierConfiguredPipeline.cs" />
+    <Compile Include="ShippingPanel\ObservableRegistrations\ChangeOriginAddressFromTypePipeline.cs" />
+    <Compile Include="ShippingPanel\ObservableRegistrations\ChangeShipmentTypePipeline.cs" />
+    <Compile Include="ShippingPanel\ObservableRegistrations\SaveAfterAddressValidationPipeline.cs" />
+    <Compile Include="ShippingPanel\ObservableRegistrations\VoidLabelPipeline.cs" />
+    <Compile Include="ShippingPanel\ObservableRegistrations\CreateLabelPipeline.cs" />
+    <Compile Include="ShippingPanel\ObservableRegistrations\DomesticInternationalDisplayPipeline.cs" />
+    <Compile Include="ShippingPanel\ObservableRegistrations\IShippingPanelGlobalPipeline.cs" />
+    <Compile Include="ShippingPanel\ObservableRegistrations\LoadOrderOnSelectionChangedPipeline.cs" />
+    <Compile Include="ShippingPanel\ObservableRegistrations\ObservableRegistrationsModule.cs" />
+    <Compile Include="ShippingPanel\ObservableRegistrations\ShipmentChangedPipeline.cs" />
+    <Compile Include="ShippingPanel\ObservableRegistrations\ShipmentDeletedPipeline.cs" />
+    <Compile Include="ShippingPanel\ObservableRegistrations\ShipmentsVoidedPipeline.cs" />
+    <Compile Include="ShippingPanel\ObservableRegistrations\ShipmentsProcessedPipeline.cs" />
+    <Compile Include="ShippingPanel\ObservableRegistrations\RateSelectedPipeline.cs" />
+    <Compile Include="ShippingPanel\ObservableRegistrations\StoreChangedPipeline.cs" />
+    <Compile Include="ShippingPanel\ObservableRegistrations\WindowUnloadingPipeline.cs" />
+    <Compile Include="ShippingPanel\PipelineRegistrationContainer.cs" />
+    <Compile Include="ShippingPanel\ShipmentControl\BestRateShipmentControl.xaml.cs">
+      <DependentUpon>BestRateShipmentControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ShippingPanel\ShipmentControl\BestRateShipmentViewModel.cs" />
+    <Compile Include="ShippingPanel\ShipmentControl\BestRateShipmentViewModel.Properties.cs" />
+    <Compile Include="ShippingPanel\ShipmentControl\PackageAdapterWrapper.cs" />
+    <Compile Include="ShippingPanel\ShipmentControl\IShipmentViewModel.cs" />
+    <Compile Include="ShippingPanel\ShipmentControl\OtherShipmentControl.xaml.cs">
+      <DependentUpon>OtherShipmentControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ShippingPanel\ShipmentControl\ShipmentControl.xaml.cs">
+      <DependentUpon>ShipmentControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ShippingPanel\ShipmentControl\OtherShipmentViewModel.cs" />
+    <Compile Include="ShippingPanel\ShipmentControl\ShipmentViewModel.cs" />
+    <Compile Include="ShippingPanel\ShipmentControl\OtherShipmentViewModel.Properties.cs" />
+    <Compile Include="ShippingPanel\ShipmentControl\ShipmentViewModelBase.cs" />
+    <Compile Include="ShippingPanel\ShipmentControl\ShipmentViewModelBase.Properties.cs" />
+    <Compile Include="ShippingPanel\ShipmentControl\ShipmentViewModelBase.Properties.Customs.cs" />
+    <Compile Include="ShippingPanel\ShippingPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ShippingPanel\ShippingPanel.Designer.cs">
+      <DependentUpon>ShippingPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ShippingPanel\ShippingPanelControl.xaml.cs">
+      <DependentUpon>ShippingPanelControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ShippingPanel\ShippingPanelRegistration.cs" />
+    <Compile Include="ShippingPanel\ShippingPanelViewModel.cs" />
+    <Compile Include="ShippingPanel\ShippingPanelViewModel.Properties.cs" />
+    <Compile Include="ShippingRibbon\ApplyProfileButtonWrapper.cs" />
+    <Compile Include="ShippingRibbon\IShippingRibbonActions.cs" />
+    <Compile Include="ShippingRibbon\IShippingRibbonService.cs" />
+    <Compile Include="ShippingRibbon\ShippingRibbonRegistration.cs" />
+    <Compile Include="ShippingPanel\ShippingViewModelFactory.cs" />
+    <Compile Include="ShippingPanel\ValueConverters\OriginAddressListConverter.cs" />
+    <Compile Include="ShippingPanel\ValueConverters\ShipmentTypeListConverter.cs" />
+    <Compile Include="ShippingPanel\ValueConverters\ShipmentTypeListItem.cs" />
+    <Compile Include="ShippingPanel\ValueConverters\ShipmentTypeToAccountsConverter.cs" />
+    <Compile Include="ShippingPanel\ValueConverters\ShipmentTypeToOriginAddressesConverter.cs" />
+    <Compile Include="Carriers\None\NoneServiceControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Carriers\None\NoneServiceControl.Designer.cs">
+      <DependentUpon>NoneServiceControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Carriers\Other\OtherProfileControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Carriers\Other\OtherProfileControl.Designer.cs">
+      <DependentUpon>OtherProfileControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Carriers\Other\OtherServiceControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Carriers\Other\OtherServiceControl.Designer.cs">
+      <DependentUpon>OtherServiceControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Carriers\Other\OtherSetupWizard.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Carriers\Other\OtherSetupWizard.Designer.cs">
+      <DependentUpon>OtherSetupWizard.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ControlExtensions.cs" />
     <Compile Include="..\ShipWorks\Properties\AssemblyInfoCommon.cs">
       <Link>Properties\AssemblyInfoCommon.cs</Link>
     </Compile>
@@ -164,6 +361,7 @@
     <Compile Include="Carriers\Ups\UpsShippingModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ShippingModule.cs" />
+    <Compile Include="ShippingRibbon\ShippingRibbonService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Interapptive.Shared\Interapptive.Shared.csproj">
@@ -178,6 +376,10 @@
       <Project>{6f05267c-1883-4526-8d83-e46b7b2d2faf}</Project>
       <Name>ShipWorks.Data.Model</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ShipWorks.Res\ShipWorks.Res.csproj">
+      <Project>{3451502d-c78c-44ec-86ac-8f50a6531f5c}</Project>
+      <Name>ShipWorks.Res</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ShipWorks.Shared\ShipWorks.Shared.csproj">
       <Project>{dfcf14ea-6596-4b9c-b743-d7ce9e5f4348}</Project>
       <Name>ShipWorks.Shared</Name>
@@ -189,6 +391,10 @@
     <ProjectReference Include="..\ShipWorks.SqlServer\ShipWorks.SqlServer.sqlproj">
       <Project>{d9fba556-68e0-4961-a400-636a9a6bc7bc}</Project>
       <Name>ShipWorks.SqlServer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ShipWorks.UI\ShipWorks.UI.csproj">
+      <Project>{1f6a1dc6-dd72-4279-8747-6789f83711ff}</Project>
+      <Name>ShipWorks.UI</Name>
     </ProjectReference>
     <ProjectReference Include="..\ShipWorks\ShipWorks.Core.csproj">
       <Project>{02653371-c0dc-4d70-949d-60d37c69f781}</Project>
@@ -225,11 +431,152 @@
     <None Include="Properties\interapptive_public.snk" />
   </ItemGroup>
   <ItemGroup>
+    <Analyzer Include="..\..\packages\Desktop.Analyzers.1.1.0\analyzers\dotnet\cs\Desktop.Analyzers.dll" />
+    <Analyzer Include="..\..\packages\Desktop.Analyzers.1.1.0\analyzers\dotnet\cs\Desktop.CSharp.Analyzers.dll" />
     <Analyzer Include="..\..\packages\InterapptiveAnalyzers.1.0.5714.23531\analyzers\dotnet\cs\InterapptiveAnalyzers.dll" />
-    <Analyzer Include="..\..\packages\SonarLint.1.1.1\tools\analyzers\C#\SonarLint.dll" />
+    <Analyzer Include="..\..\packages\Microsoft.AnalyzerPowerPack.1.1.0\analyzers\dotnet\cs\Microsoft.AnalyzerPowerPack.Common.dll" />
+    <Analyzer Include="..\..\packages\Microsoft.AnalyzerPowerPack.1.1.0\analyzers\dotnet\cs\Microsoft.AnalyzerPowerPack.CSharp.dll" />
+    <Analyzer Include="..\..\packages\SonarLint.1.6.0\analyzers\SonarLint.CSharp.dll" />
+    <Analyzer Include="..\..\packages\SonarLint.1.6.0\analyzers\SonarLint.dll" />
+    <Analyzer Include="..\..\packages\System.Runtime.Analyzers.1.1.0\analyzers\dotnet\cs\System.Runtime.Analyzers.dll" />
+    <Analyzer Include="..\..\packages\System.Runtime.Analyzers.1.1.0\analyzers\dotnet\cs\System.Runtime.CSharp.Analyzers.dll" />
+    <Analyzer Include="..\..\packages\System.Runtime.InteropServices.Analyzers.1.1.0\analyzers\dotnet\cs\System.Runtime.InteropServices.Analyzers.dll" />
+    <Analyzer Include="..\..\packages\System.Runtime.InteropServices.Analyzers.1.1.0\analyzers\dotnet\cs\System.Runtime.InteropServices.CSharp.Analyzers.dll" />
+    <Analyzer Include="..\..\packages\System.Security.Cryptography.Hashing.Algorithms.Analyzers.1.1.0\analyzers\dotnet\cs\System.Security.Cryptography.Hashing.Algorithms.Analyzers.dll" />
+    <Analyzer Include="..\..\packages\System.Security.Cryptography.Hashing.Algorithms.Analyzers.1.1.0\analyzers\dotnet\cs\System.Security.Cryptography.Hashing.Algorithms.CSharp.Analyzers.dll" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Carriers\None\NoneServiceControl.resx">
+      <DependentUpon>NoneServiceControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Carriers\Other\OtherProfileControl.resx">
+      <DependentUpon>OtherProfileControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Carriers\Other\OtherServiceControl.resx">
+      <DependentUpon>OtherServiceControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Carriers\Other\OtherSetupWizard.resx">
+      <DependentUpon>OtherSetupWizard.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="RatingPanel\RatingPanel.resx">
+      <DependentUpon>RatingPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ShippingPanel\ShippingPanel.resx">
+      <DependentUpon>ShippingPanel.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="RatingPanel\FootnoteTemplates\BrokerExceptionsRateFootnoteViewModelTemplate.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="RatingPanel\FootnoteTemplates\Express1RateNotQualifiedFootnoteViewModelTemplate.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="RatingPanel\FootnoteTemplates\Express1DiscountedRateFootnoteViewModelTemplate.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="RatingPanel\FootnoteTemplates\CounterRatesInvalidStoreAddressFootnoteViewModelTemplate.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="RatingPanel\FootnoteTemplates\ShippingAccountRequiredForRatingFootnoteViewModelTemplate.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="RatingPanel\FootnoteTemplates\UspsRateDiscountedFootnoteViewModelTemplate.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="RatingPanel\FootnoteTemplates\UspsRateNotQualifiedFootnoteViewModelTemplate.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="RatingPanel\FootnoteTemplates\Express1RatePromotionFootnoteViewModelTemplate.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="RatingPanel\FootnoteTemplates\UspsRatePromotionFootnoteViewModelTemplate.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="RatingPanel\FootnoteTemplates\ExceptionsRateFootnoteViewModelTemplate.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="RatingPanel\FootnoteTemplates\InformationFootnoteViewModelTemplate.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="RatingPanel\FootnoteTemplates\AmazonCarrierTermsAndConditionsNotAcceptedFootnoteViewModelTemplate.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="RatingPanel\FootnoteTemplates\AmazonNotLinkedFootnoteViewModelTemplate.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="RatingPanel\FootnoteTemplates\FootnoteTemplates.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="RatingPanel\RatingPanelControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ShippingPanel\CustomsControl\CustomsControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ShippingPanel\Insurance\InsuranceControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ShippingPanel\ShipmentControlTemplates\ShipmentControlTemplates.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="ShippingPanel\ShipmentControlTemplates\OtherShipmentViewModelTemplate.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="ShippingPanel\ShipmentControlTemplates\BestRateShipmentViewModelTemplate.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="ShippingPanel\ShipmentControlTemplates\ShipmentViewModelTemplate.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="ShippingPanel\ShipmentControl\BestRateShipmentControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ShippingPanel\ShipmentControl\OtherShipmentControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ShippingPanel\ShipmentControl\ShipmentControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="ShippingPanel\ShippingPanelControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets'))" />
+  </Target>
+  <Import Project="..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>

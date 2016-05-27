@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Collections;
-using Interapptive.Shared.Net;
+using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Data;
@@ -18,8 +18,8 @@ using ShipWorks.Data.Grid;
 using ShipWorks.Data.Model;
 using ShipWorks.Filters;
 using ShipWorks.Shipping.ShipSense.Hashing;
-using ShipWorks.Stores.Platforms.Amazon.WebServices.Associates;
 using Image = System.Drawing.Image;
+using ShipWorks.Core.Common.Threading;
 
 namespace ShipWorks.Stores.Content.Panels
 {
@@ -61,30 +61,27 @@ namespace ShipWorks.Stores.Content.Panels
         /// <summary>
         /// Indicates if the panel can handle multiple selected items at one time.
         /// </summary>
-        public bool SupportsMultiSelect
-        {
-            get { return false; }
-        }
+        public bool SupportsMultiSelect => false;
 
         /// <summary>
         /// Change the content of the panel based on the given keys.
         /// </summary>
         /// <param name="selection"></param>
-        public void ChangeContent(IGridSelection selection)
+        public Task ChangeContent(IGridSelection selection)
         {
             requestQueue.Enqueue(selection.Keys.FirstOrDefault());
 
-            LoadSelection();
+            return LoadSelection();
         }
 
-        private void LoadSelection()
+        private Task LoadSelection()
         {
             if (!googleImage.IsHandleCreated)
             {
-                return;
+                return TaskUtility.CompletedTask;
             }
 
-            Task.Factory.StartNew(() =>
+            return Task.Factory.StartNew(async () =>
             {
                 // If we can't get the lock, don't worry
                 if (!Monitor.TryEnter(lockObj, 0))
@@ -114,8 +111,7 @@ namespace ShipWorks.Stores.Content.Panels
                         }
 
                         selectedEntity = selectionID == 0 ? null : DataProvider.GetEntity(selectionID);
-                        googleResponse = GetImage();
-
+                        googleResponse = await GetImage();
                     }
 
                     googleImage.Invoke(new MethodInvoker(delegate
@@ -153,7 +149,7 @@ namespace ShipWorks.Stores.Content.Panels
         /// <summary>
         /// Gets the image from Google.
         /// </summary>
-        private GoogleResponse GetImage()
+        private async Task<GoogleResponse> GetImage()
         {
             AddressAdapter addressAdapter = SelectedAddress();
             if (addressAdapter == null)
@@ -175,7 +171,7 @@ namespace ShipWorks.Stores.Content.Panels
             }
             else
             {
-                response = LoadImageFromGoogle(addressAdapter, size);
+                response = await LoadImageFromGoogle(addressAdapter, size);
 
                 if (!response.IsThrottled)
                 {
@@ -203,7 +199,7 @@ namespace ShipWorks.Stores.Content.Panels
             return addressAdapter;
         }
 
-        private GoogleResponse LoadImageFromGoogle(AddressAdapter addressAdapter, Size size)
+        private async Task<GoogleResponse> LoadImageFromGoogle(AddressAdapter addressAdapter, Size size)
         {
             try
             {
@@ -211,8 +207,7 @@ namespace ShipWorks.Stores.Content.Panels
 
                 using (WebClient imageDownloader = new WebClient())
                 {
-
-                    image = imageDownloader.DownloadData(string.Format(GetImageUrl(),
+                    image = await imageDownloader.DownloadDataTaskAsync(string.Format(GetImageUrl(),
                         addressAdapter.Street1,
                         addressAdapter.City,
                         addressAdapter.StateProvCode,
@@ -304,15 +299,19 @@ namespace ShipWorks.Stores.Content.Panels
         /// Refresh the existing selected content by requerying for the relevant keys to ensure an up-to-date related row 
         /// list with up-to-date displayed entity content.
         /// </summary>
-        public void ReloadContent()
-        {}
+        public Task ReloadContent()
+        {
+            return TaskUtility.CompletedTask;
+        }
 
         /// <summary>
         /// Refresh the existing displayed content.  Does not try to reset or look for new\deleted rows - just refreshes
         /// the known existing rows and their known corresponding entities.
         /// </summary>
-        public void UpdateContent()
-        {}
+        public Task UpdateContent()
+        {
+            return TaskUtility.CompletedTask;
+        }
 
         /// <summary>
         /// Called when [size changed].

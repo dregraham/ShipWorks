@@ -10,6 +10,7 @@ namespace ShipWorks.Shipping
     /// </summary>
     public abstract class RateHashingService : IRateHashingService
     {
+        protected const string genericAccountIdFieldName = "AccountId";
         protected RatingFields ratingField;
 
         /// <summary>
@@ -26,37 +27,37 @@ namespace ShipWorks.Shipping
                 }
 
                 ratingField = new RatingFields();
-                ratingField.ShipmentFields.Add(ShipmentFields.ShipmentType);
-                ratingField.ShipmentFields.Add(ShipmentFields.ContentWeight);
-                ratingField.ShipmentFields.Add(ShipmentFields.TotalWeight);
-                ratingField.ShipmentFields.Add(ShipmentFields.ShipmentCost);
-                ratingField.ShipmentFields.Add(ShipmentFields.CustomsValue);
+                ratingField.AddShipmentField(ShipmentFields.ShipmentType);
+                ratingField.AddShipmentField(ShipmentFields.ContentWeight);
+                ratingField.AddShipmentField(ShipmentFields.TotalWeight);
+                ratingField.AddShipmentField(ShipmentFields.ShipmentCost);
+                ratingField.AddShipmentField(ShipmentFields.CustomsValue);
 
-                ratingField.ShipmentFields.Add(ShipmentFields.ShipDate);
-                ratingField.ShipmentFields.Add(ShipmentFields.ShipCompany);
-                ratingField.ShipmentFields.Add(ShipmentFields.ShipStreet1);
-                ratingField.ShipmentFields.Add(ShipmentFields.ShipStreet2);
-                ratingField.ShipmentFields.Add(ShipmentFields.ShipStreet3);
-                ratingField.ShipmentFields.Add(ShipmentFields.ShipCity);
-                ratingField.ShipmentFields.Add(ShipmentFields.ShipStateProvCode);
-                ratingField.ShipmentFields.Add(ShipmentFields.ShipPostalCode);
-                ratingField.ShipmentFields.Add(ShipmentFields.ShipCountryCode);
-                ratingField.ShipmentFields.Add(ShipmentFields.ResidentialDetermination);
-                ratingField.ShipmentFields.Add(ShipmentFields.ResidentialResult);
+                ratingField.AddShipmentField(ShipmentFields.ShipDate);
+                ratingField.AddShipmentField(ShipmentFields.ShipCompany);
+                ratingField.AddShipmentField(ShipmentFields.ShipStreet1);
+                ratingField.AddShipmentField(ShipmentFields.ShipStreet2);
+                ratingField.AddShipmentField(ShipmentFields.ShipStreet3);
+                ratingField.AddShipmentField(ShipmentFields.ShipCity);
+                ratingField.AddShipmentField(ShipmentFields.ShipStateProvCode);
+                ratingField.AddShipmentField(ShipmentFields.ShipPostalCode);
+                ratingField.AddShipmentField(ShipmentFields.ShipCountryCode);
+                ratingField.AddShipmentField(ShipmentFields.ResidentialDetermination);
+                ratingField.AddShipmentField(ShipmentFields.ResidentialResult);
 
-                ratingField.ShipmentFields.Add(ShipmentFields.OriginOriginID);
-                ratingField.ShipmentFields.Add(ShipmentFields.OriginCompany);
-                ratingField.ShipmentFields.Add(ShipmentFields.OriginStreet1);
-                ratingField.ShipmentFields.Add(ShipmentFields.OriginStreet2);
-                ratingField.ShipmentFields.Add(ShipmentFields.OriginStreet3);
-                ratingField.ShipmentFields.Add(ShipmentFields.OriginCity);
-                ratingField.ShipmentFields.Add(ShipmentFields.OriginStateProvCode);
-                ratingField.ShipmentFields.Add(ShipmentFields.OriginPostalCode);
-                ratingField.ShipmentFields.Add(ShipmentFields.OriginCountryCode);
+                ratingField.AddShipmentField(ShipmentFields.OriginOriginID);
+                ratingField.AddShipmentField(ShipmentFields.OriginCompany);
+                ratingField.AddShipmentField(ShipmentFields.OriginStreet1);
+                ratingField.AddShipmentField(ShipmentFields.OriginStreet2);
+                ratingField.AddShipmentField(ShipmentFields.OriginStreet3);
+                ratingField.AddShipmentField(ShipmentFields.OriginCity);
+                ratingField.AddShipmentField(ShipmentFields.OriginStateProvCode);
+                ratingField.AddShipmentField(ShipmentFields.OriginPostalCode);
+                ratingField.AddShipmentField(ShipmentFields.OriginCountryCode);
 
-                ratingField.ShipmentFields.Add(ShipmentFields.ReturnShipment);
-                ratingField.ShipmentFields.Add(ShipmentFields.Insurance);
-                ratingField.ShipmentFields.Add(ShipmentFields.InsuranceProvider);
+                ratingField.AddShipmentField(ShipmentFields.ReturnShipment);
+                ratingField.AddShipmentField(ShipmentFields.Insurance);
+                ratingField.AddShipmentField(ShipmentFields.InsuranceProvider);
 
                 return ratingField;
             }
@@ -69,5 +70,10 @@ namespace ShipWorks.Shipping
         {
             return RatingFields.GetRatingHash(shipment);
         }
+
+        /// <summary>
+        /// Is the given field a rating field
+        /// </summary>
+        public bool IsRatingField(string changedField) => RatingFields.FieldsContainName(changedField);
     }
 }

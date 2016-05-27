@@ -1,11 +1,11 @@
-﻿﻿using System;
+﻿using System;
 using System.Collections.Generic;
-﻿using System.Data.SqlClient;
-﻿using Interapptive.Shared.Data;
-﻿using ShipWorks.ApplicationCore.Interaction;
-using ShipWorks.Data;
-﻿using ShipWorks.Data.Connection;
+using System.Data.SqlClient;
+using Interapptive.Shared.Data;
 using log4net;
+using ShipWorks.ApplicationCore.Interaction;
+using ShipWorks.Data;
+using ShipWorks.Data.Connection;
 using ShipWorks.Filters;
 using ShipWorks.Users;
 
@@ -44,7 +44,7 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
                     UserSession.InitializeForCurrentDatabase();
 
                     UserManager.InitializeForCurrentUser();
-                    UserSession.InitializeForCurrentSession();
+                    UserSession.InitializeForCurrentSession(Program.ExecutionMode);
 
                     FilterLayoutContext.InitializeForCurrentSession();
 

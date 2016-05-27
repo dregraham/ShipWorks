@@ -9,7 +9,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.ServiceManager
     /// <summary>
     /// An implementation of the ICarrierServiceManagerFactory interface that is specific to UPS.
     /// </summary>
-    public class UpsServiceManagerFactory : ICarrierServiceManagerFactory
+    public class UpsServiceManagerFactory : IUpsServiceManagerFactory
     {
         private readonly List<IUpsServiceManager> serviceManagers;
 
@@ -32,7 +32,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.ServiceManager
         /// version of the constructor is primarily for testing purposes.
         /// </summary>
         /// <param name="serviceManagers">The service managers.</param>
-        public UpsServiceManagerFactory(IEnumerable<IUpsServiceManager> serviceManagers)
+        private UpsServiceManagerFactory(IEnumerable<IUpsServiceManager> serviceManagers)
         {
             this.serviceManagers = new List<IUpsServiceManager>(serviceManagers);
         }
@@ -53,6 +53,14 @@ namespace ShipWorks.Shipping.Carriers.UPS.ServiceManager
             }
 
             return serviceManager;
+        }
+
+        /// <summary>
+        /// Create a factory for testing
+        /// </summary>
+        public static UpsServiceManagerFactory CreateForTesting(IEnumerable<IUpsServiceManager> serviceManagers)
+        {
+            return new UpsServiceManagerFactory(serviceManagers);
         }
     }
 }

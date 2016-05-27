@@ -71,7 +71,6 @@ namespace ShipWorks.Stores
         /// match the store type supported by the command.
         /// </summary>
         [NDependIgnoreLongMethod]
-        [NDependIgnoreComplexMethodAttribute]
         public void ExecuteCommandAsync(MenuCommand command, Control owner, IEnumerable<long> selectedKeys, MenuCommandCompleteEventHandler callback)
         {
             OnlineUpdateCommandSet commandSet = FindCommandSet(command);

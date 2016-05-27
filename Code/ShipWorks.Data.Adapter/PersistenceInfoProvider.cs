@@ -205,6 +205,7 @@ namespace ShipWorks.Data.Adapter
 			InitTemplateFolderEntityMappings();
 			InitTemplateStoreSettingsEntityMappings();
 			InitTemplateUserSettingsEntityMappings();
+			InitThreeDCartOrderEntityMappings();
 			InitThreeDCartOrderItemEntityMappings();
 			InitThreeDCartStoreEntityMappings();
 			InitUpsAccountEntityMappings();
@@ -2666,6 +2667,13 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementFieldMapping( "TemplateUserSettingsEntity", "PreviewFilterNodeID", "PreviewFilterNodeID", true, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 5 );
 			base.AddElementFieldMapping( "TemplateUserSettingsEntity", "PreviewZoom", "PreviewZoom", false, (int)SqlDbType.NVarChar, 10, 0, 0, false, "", null, typeof(System.String), 6 );
 		}
+		/// <summary>Inits ThreeDCartOrderEntity's mappings</summary>
+		private void InitThreeDCartOrderEntityMappings()
+		{
+			base.AddElementMapping( "ThreeDCartOrderEntity", "ShipWorksLocal", @"dbo", "ThreeDCartOrder", 2 );
+			base.AddElementFieldMapping( "ThreeDCartOrderEntity", "OrderID", "OrderID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 0 );
+			base.AddElementFieldMapping( "ThreeDCartOrderEntity", "ThreeDCartOrderID", "ThreeDCartOrderID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 1 );
+		}
 		/// <summary>Inits ThreeDCartOrderItemEntity's mappings</summary>
 		private void InitThreeDCartOrderItemEntityMappings()
 		{
@@ -2676,13 +2684,14 @@ namespace ShipWorks.Data.Adapter
 		/// <summary>Inits ThreeDCartStoreEntity's mappings</summary>
 		private void InitThreeDCartStoreEntityMappings()
 		{
-			base.AddElementMapping( "ThreeDCartStoreEntity", "ShipWorksLocal", @"dbo", "ThreeDCartStore", 6 );
+			base.AddElementMapping( "ThreeDCartStoreEntity", "ShipWorksLocal", @"dbo", "ThreeDCartStore", 7 );
 			base.AddElementFieldMapping( "ThreeDCartStoreEntity", "StoreID", "StoreID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 0 );
 			base.AddElementFieldMapping( "ThreeDCartStoreEntity", "StoreUrl", "StoreUrl", false, (int)SqlDbType.NVarChar, 110, 0, 0, false, "", null, typeof(System.String), 1 );
 			base.AddElementFieldMapping( "ThreeDCartStoreEntity", "ApiUserKey", "ApiUserKey", false, (int)SqlDbType.NVarChar, 65, 0, 0, false, "", null, typeof(System.String), 2 );
 			base.AddElementFieldMapping( "ThreeDCartStoreEntity", "TimeZoneID", "TimeZoneID", true, (int)SqlDbType.NVarChar, 100, 0, 0, false, "", null, typeof(System.String), 3 );
 			base.AddElementFieldMapping( "ThreeDCartStoreEntity", "StatusCodes", "StatusCodes", true, (int)SqlDbType.Xml, 2147483647, 0, 0, false, "", null, typeof(System.String), 4 );
 			base.AddElementFieldMapping( "ThreeDCartStoreEntity", "DownloadModifiedNumberOfDaysBack", "DownloadModifiedNumberOfDaysBack", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 5 );
+			base.AddElementFieldMapping( "ThreeDCartStoreEntity", "RestUser", "RestUser", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 6 );
 		}
 		/// <summary>Inits UpsAccountEntity's mappings</summary>
 		private void InitUpsAccountEntityMappings()

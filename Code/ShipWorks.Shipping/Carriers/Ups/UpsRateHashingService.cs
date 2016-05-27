@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Data.Model.EntityClasses;
+﻿using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 
-namespace ShipWorks.Shipping.Carriers.Ups
+namespace ShipWorks.Shipping.Carriers.UPS
 {
     /// <summary>
     /// Ups RateHashingService
@@ -25,17 +21,17 @@ namespace ShipWorks.Shipping.Carriers.Ups
                 }
 
                 ratingField = base.RatingFields;
-                ratingField.ShipmentFields.Add(UpsShipmentFields.UpsAccountID);
-                ratingField.ShipmentFields.Add(UpsShipmentFields.SaturdayDelivery);
-                ratingField.ShipmentFields.Add(UpsShipmentFields.SaturdayDelivery);
-                ratingField.ShipmentFields.Add(UpsShipmentFields.CodAmount);
-                ratingField.ShipmentFields.Add(UpsShipmentFields.CodEnabled);
-                ratingField.ShipmentFields.Add(UpsShipmentFields.CodPaymentType);
-                ratingField.ShipmentFields.Add(UpsShipmentFields.Service);
-                ratingField.ShipmentFields.Add(UpsShipmentFields.DeliveryConfirmation);
+                ratingField.AddShipmentField(UpsShipmentFields.UpsAccountID, genericAccountIdFieldName);
+                ratingField.AddShipmentField(UpsShipmentFields.SaturdayDelivery);
+                ratingField.AddShipmentField(UpsShipmentFields.CodAmount);
+                ratingField.AddShipmentField(UpsShipmentFields.CodEnabled);
+                ratingField.AddShipmentField(UpsShipmentFields.CodPaymentType);
+                ratingField.AddShipmentField(UpsShipmentFields.Service);
+                ratingField.AddShipmentField(UpsShipmentFields.DeliveryConfirmation);
                 ratingField.PackageFields.Add(UpsPackageFields.PackagingType);
                 ratingField.PackageFields.Add(UpsPackageFields.DeclaredValue);
                 ratingField.PackageFields.Add(UpsPackageFields.VerbalConfirmationEnabled);
+                ratingField.PackageFields.Add(UpsPackageFields.DimsAddWeight);
                 ratingField.PackageFields.Add(UpsPackageFields.DimsWeight);
                 ratingField.PackageFields.Add(UpsPackageFields.DimsLength);
                 ratingField.PackageFields.Add(UpsPackageFields.DimsHeight);

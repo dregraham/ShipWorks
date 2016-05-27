@@ -1,11 +1,11 @@
-﻿using ShipWorks.Data.Model.EntityClasses;
-using System;
-using Interapptive.Shared.Utility;
+﻿using System;
+using Autofac.Extras.Moq;
 using Moq;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Amazon;
 using ShipWorks.Stores;
 using Xunit;
-using Autofac.Extras.Moq;
 
 namespace ShipWorks.Shipping.Tests.Carriers.Amazon
 {
@@ -25,8 +25,8 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
                 .Setup(x => x.GetRelatedStore(It.IsAny<ShipmentEntity>()))
                 .Returns(store);
 
-            mock.Mock<IDateTimeProvider>()
-                .Setup(x => x.CurrentSqlServerDateTime)
+            mock.Mock<ISqlDateTimeProvider>()
+                .Setup(x => x.GetLocalDate())
                 .Returns(new DateTime(2015, 1, 1));
 
             shipment = new ShipmentEntity

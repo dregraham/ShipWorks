@@ -103,6 +103,16 @@ namespace ShipWorks.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap add2 {
+            get {
+                object obj = ResourceManager.GetObject("add2", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap align_center {
             get {
                 object obj = ResourceManager.GetObject("align_center", resourceCulture);
@@ -353,6 +363,16 @@ namespace ShipWorks.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap box_closed_redo_16_16 {
+            get {
+                object obj = ResourceManager.GetObject("box_closed_redo_16_16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap box_closed_with_label {
             get {
                 object obj = ResourceManager.GetObject("box_closed_with_label", resourceCulture);
@@ -413,6 +433,16 @@ namespace ShipWorks.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap box_next_32_32 {
+            get {
+                object obj = ResourceManager.GetObject("box_next_32_32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap box_preferences {
             get {
                 object obj = ResourceManager.GetObject("box_preferences", resourceCulture);
@@ -426,6 +456,16 @@ namespace ShipWorks.Properties {
         public static System.Drawing.Bitmap box_preferences32 {
             get {
                 object obj = ResourceManager.GetObject("box_preferences32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap box_previous_32_32 {
+            get {
+                object obj = ResourceManager.GetObject("box_previous_32_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -466,6 +506,16 @@ namespace ShipWorks.Properties {
         public static System.Drawing.Bitmap box_view32 {
             get {
                 object obj = ResourceManager.GetObject("box_view32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap box_void_32_32 {
+            get {
+                object obj = ResourceManager.GetObject("box_void_32_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -1286,6 +1336,16 @@ namespace ShipWorks.Properties {
         public static System.Drawing.Bitmap document_delete {
             get {
                 object obj = ResourceManager.GetObject("document_delete", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap document_gear_32_32 {
+            get {
+                object obj = ResourceManager.GetObject("document_gear_32_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -2223,6 +2283,16 @@ namespace ShipWorks.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap index_32_32 {
+            get {
+                object obj = ResourceManager.GetObject("index_32_32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap index16 {
             get {
                 object obj = ResourceManager.GetObject("index16", resourceCulture);
@@ -2286,6 +2356,16 @@ namespace ShipWorks.Properties {
         public static System.Drawing.Bitmap indiciator_green {
             get {
                 object obj = ResourceManager.GetObject("indiciator_green", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap info_20x20 {
+            get {
+                object obj = ResourceManager.GetObject("info_20x20", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -3263,6 +3343,16 @@ namespace ShipWorks.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap printer_redo_16_16 {
+            get {
+                object obj = ResourceManager.GetObject("printer_redo_16_16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap printer_view16 {
             get {
                 object obj = ResourceManager.GetObject("printer_view16", resourceCulture);
@@ -4036,6 +4126,16 @@ namespace ShipWorks.Properties {
         public static System.Drawing.Bitmap sw_logo_notransparent_16 {
             get {
                 object obj = ResourceManager.GetObject("sw_logo_notransparent_16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap table_dollar_sign_16_16 {
+            get {
+                object obj = ResourceManager.GetObject("table_dollar_sign_16_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

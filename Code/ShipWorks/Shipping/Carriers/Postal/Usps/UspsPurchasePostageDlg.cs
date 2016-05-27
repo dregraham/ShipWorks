@@ -19,40 +19,46 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
         private UspsAccountEntity account;
         private PostageBalance postageBalance;
+        private readonly ITangoWebClient tangoWebClient;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UspsPurchasePostageDlg"/> class.
         /// </summary>
-        public UspsPurchasePostageDlg()
+        public UspsPurchasePostageDlg(ITangoWebClient tangoWebClient)
         {
             InitializeComponent();
+
+            this.tangoWebClient = tangoWebClient;
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="UspsPurchasePostageDlg"/> class.
+        /// Load the account into the dialog
         /// </summary>
-        public UspsPurchasePostageDlg(UspsAccountEntity account)
+        public void LoadAccount(UspsAccountEntity account)
         {
-            InitializeComponent();
-
-            postageBalance = new PostageBalance(new UspsPostageWebClient(account), new TangoWebClientWrapper());
-            
-            current.Text = StringUtility.FormatFriendlyCurrency(postageBalance.Value);
             this.account = account;
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="UspsPurchasePostageDlg"/> class.
+        /// Handle Shown event
         /// </summary>
-        public UspsPurchasePostageDlg(UspsAccountEntity account, decimal balance)
+        protected override void OnShown(EventArgs e)
         {
-            InitializeComponent();
+            base.OnShown(e);
 
-            postageBalance = new PostageBalance(new UspsPostageWebClient(account), new TangoWebClientWrapper());
+            if (account != null)
+            {
+                postageBalance = new PostageBalance(new UspsPostageWebClient(account), tangoWebClient);
 
-            current.Text = StringUtility.FormatFriendlyCurrency(balance);
+                postageBalance.GetValueAsync().ContinueWith(x =>
+                {
+                    BeginInvoke((Action)(() => current.Text = StringUtility.FormatFriendlyCurrency(x.Result)));
+                });
 
-            this.account = account;
+                // We have a valid USPS account, so we can use it to initialize the account info
+                // and show the dialog
+                current.Text = StringUtility.FormatFriendlyCurrency(GetBalance(account));
+            }
         }
 
         /// <summary>
@@ -62,13 +68,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         private decimal GetBalance(UspsAccountEntity uspsAccount)
         {
             // Define these here since they could be used in either inside or outside the try statement
-            string carrierName = UspsAccountManager.GetResellerName((UspsResellerType)uspsAccount.UspsReseller); 
+            string carrierName = UspsAccountManager.GetResellerName((UspsResellerType)uspsAccount.UspsReseller);
             string exceptionMessage = string.Format("ShipWorks could not retrieve your account information from {0} at this time. Please try again later.", carrierName);
-
-            if (postageBalance == null)
-            {
-                postageBalance = new PostageBalance(new UspsPostageWebClient(uspsAccount), new TangoWebClientWrapper());
-            }
 
             try
             {
@@ -95,9 +96,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 throw new UspsException("ShipWorks could not find information for this account.");
             }
 
-            // We have a valid USPS account, so we can use it to initialize the account info
-            // and show the dialog
-            current.Text = StringUtility.FormatFriendlyCurrency(GetBalance(account));
             return ShowDialog(owner);
         }
 

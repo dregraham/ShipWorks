@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Services.Protocols;
 using System.Xml.Linq;
 using Interapptive.Shared;
@@ -273,7 +274,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
         /// Get the rates for the given shipment based on its settings
         /// </summary>
         [NDependIgnoreLongMethod]
-        [NDependIgnoreComplexMethodAttribute]
         public List<RateResult> GetRates(ShipmentEntity shipment)
         {
             UspsAccountEntity account = accountRepository.GetAccount(shipment.Postal.Usps.UspsAccountID);
@@ -306,6 +306,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
                             uspsRate.DeliverDays.Replace("Days", ""))
                         {
                             Tag = new PostalRateSelection(serviceType, PostalConfirmationType.None),
+                            ShipmentType = ShipmentTypeCode.Express1Usps,
                             ProviderLogo = EnumHelper.GetImage(ShipmentTypeCode.Express1Usps)
                         };
                     }
@@ -317,6 +318,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
                             uspsRate.Amount,
                             new PostalRateSelection(serviceType, PostalConfirmationType.None))
                         {
+                            ShipmentType = ShipmentTypeCode.Express1Usps,
                             ProviderLogo = EnumHelper.GetImage(ShipmentTypeCode.Express1Usps)
                         };
                     }
@@ -360,7 +362,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
                                 name,
                                 string.Empty,
                                 uspsRate.Amount + addOn.Amount,
-                                new PostalRateSelection(serviceType, confirmationType));
+                                new PostalRateSelection(serviceType, confirmationType))
+                            {
+                                ShipmentType = ShipmentTypeCode.Express1Usps
+                            };
 
                             PostalUtility.SetServiceDetails(addOnRate, serviceType, uspsRate.DeliverDays);
 
@@ -414,7 +419,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
             List<RateV14> noConfirmationServiceRates = new List<RateV14>();
 
             // If its a "Flat" then FirstClass and Priority can't have a confirmation
-            PostalPackagingType packagingType = (PostalPackagingType)shipment.Postal.PackagingType;
+            PostalPackagingType packagingType = (PostalPackagingType) shipment.Postal.PackagingType;
             if (packagingType == PostalPackagingType.Envelope || packagingType == PostalPackagingType.LargeEnvelope)
             {
                 noConfirmationServiceRates.AddRange(rateResults.Where(r => r.ServiceType == ServiceType.USFC || r.ServiceType == ServiceType.USPM));
@@ -658,11 +663,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
             // Otherwise, use the USPS settings if it is a USPS shipment being auto-switched to an Express1 shipment
             if (shipment.ShipmentType == (int) ShipmentTypeCode.Usps)
             {
-                thermalType = shipment.RequestedLabelFormat == (int)ThermalLanguage.None ? null : (ThermalLanguage?)shipment.RequestedLabelFormat;
+                thermalType = shipment.RequestedLabelFormat == (int) ThermalLanguage.None ? null : (ThermalLanguage?) shipment.RequestedLabelFormat;
             }
-            else if (shipment.ShipmentType == (int)ShipmentTypeCode.Express1Usps)
+            else if (shipment.ShipmentType == (int) ShipmentTypeCode.Express1Usps)
             {
-                thermalType = shipment.RequestedLabelFormat == (int)ThermalLanguage.None ? null : (ThermalLanguage?)shipment.RequestedLabelFormat;
+                thermalType = shipment.RequestedLabelFormat == (int) ThermalLanguage.None ? null : (ThermalLanguage?) shipment.RequestedLabelFormat;
             }
             else
             {
@@ -690,9 +695,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
 
             // If we're using Express1, we don't want to use the SampleOnly flag since this will not
             // create shipments and cause subsequent calls (like SCAN form creation) to fail
-            bool isSampleOnly = UseTestServer && account.UspsReseller != (int)UspsResellerType.Express1;
+            bool isSampleOnly = UseTestServer && account.UspsReseller != (int) UspsResellerType.Express1;
 
-            if (shipment.Postal.PackagingType == (int)PostalPackagingType.Envelope && shipment.Postal.Service != (int)PostalServiceType.InternationalFirst)
+            if (shipment.Postal.PackagingType == (int) PostalPackagingType.Envelope && shipment.Postal.Service != (int) PostalServiceType.InternationalFirst)
             {
                 // Envelopes don't support thermal
                 thermalType = null;
@@ -771,7 +776,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
             shipment.Postal.Usps.UspsTransactionID = uspsGuid;
 
             // Set the thermal type for the shipment
-            shipment.ActualLabelFormat = (int?)thermalType;
+            shipment.ActualLabelFormat = (int?) thermalType;
 
             // Interapptive users have an unprocess button.  If we are reprocessing we need to clear the old images
             ObjectReferenceManager.ClearReferences(shipment.ShipmentID);
@@ -941,7 +946,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
             rate.WeightLb = weightValue.PoundsOnly;
             rate.WeightOz = weightValue.OuncesOnly;
 
-            Usps.WebServices.PackageTypeV6 packageTypeV6 = UspsUtility.GetApiPackageType((PostalPackagingType)shipment.Postal.PackagingType, new DimensionsAdapter(shipment.Postal));
+            Usps.WebServices.PackageTypeV6 packageTypeV6 = UspsUtility.GetApiPackageType((PostalPackagingType) shipment.Postal.PackagingType, new DimensionsAdapter(shipment.Postal));
             rate.PackageType = ConvertPackageType(packageTypeV6);
             rate.NonMachinable = shipment.Postal.NonMachinable;
 
@@ -960,13 +965,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
         /// </summary>
         private static RateV14 CreateRateForProcessing(ShipmentEntity shipment, UspsAccountEntity account)
         {
-            PostalServiceType serviceType = (PostalServiceType)shipment.Postal.Service;
+            PostalServiceType serviceType = (PostalServiceType) shipment.Postal.Service;
 
             RateV14 rate = CreateRateForRating(shipment, account);
             rate.ServiceType = ConvertServiceType(UspsUtility.GetApiServiceType(serviceType));
             rate.PrintLayout = "Normal4x6";
 
-            PostalShipmentType shipmentType = (PostalShipmentType)ShipmentTypeManager.GetType(shipment);
+            PostalShipmentType shipmentType = (PostalShipmentType) ShipmentTypeManager.GetType(shipment);
 
             List<AddOnV6> addOns = GetAddons(shipmentType, shipment);
             if (addOns.Count > 0)
@@ -994,15 +999,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
         /// </summary>
         private static List<AddOnV6> GetAddons(PostalShipmentType shipmentType, ShipmentEntity shipment)
         {
-            PostalServiceType serviceType = (PostalServiceType)shipment.Postal.Service;
-            PostalPackagingType packagingType = (PostalPackagingType)shipment.Postal.PackagingType;
+            PostalServiceType serviceType = (PostalServiceType) shipment.Postal.Service;
+            PostalPackagingType packagingType = (PostalPackagingType) shipment.Postal.PackagingType;
 
             List<AddOnV6> addOns = new List<AddOnV6>();
 
             // For domestic, add in Delivery\Signature confirmation
             if (shipment.ShipPerson.IsDomesticCountry())
             {
-                PostalConfirmationType confirmation = (PostalConfirmationType)shipment.Postal.Confirmation;
+                PostalConfirmationType confirmation = (PostalConfirmationType) shipment.Postal.Confirmation;
 
                 // If the service type is Parcel Select, Force DC, otherwise USPS throws an error
                 if (confirmation == PostalConfirmationType.Delivery)
@@ -1042,7 +1047,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
             }
 
             // Add in the hidden postage option (but not supported for envelopes)
-            if (shipment.Postal.Usps.HidePostage && shipment.Postal.PackagingType != (int)PostalPackagingType.Envelope)
+            if (shipment.Postal.Usps.HidePostage && shipment.Postal.PackagingType != (int) PostalPackagingType.Envelope)
             {
                 addOns.Add(new AddOnV6 { AddOnType = AddOnTypeV6.SCAHP });
             }
@@ -1063,10 +1068,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
             CustomsV2 customs = new CustomsV2();
 
             // Content type
-            customs.ContentType = ConvertContentType(UspsUtility.GetApiContentType((PostalCustomsContentType)shipment.Postal.CustomsContentType));
+            customs.ContentType = ConvertContentType(UspsUtility.GetApiContentType((PostalCustomsContentType) shipment.Postal.CustomsContentType));
             if (customs.ContentType == ContentTypeV2.Other)
             {
-                if (shipment.Postal.CustomsContentType == (int)PostalCustomsContentType.Merchandise)
+                if (shipment.Postal.CustomsContentType == (int) PostalCustomsContentType.Merchandise)
                 {
                     customs.OtherDescribe = "Merchandise";
                 }
@@ -1335,7 +1340,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
         /// <summary>
         /// Not implemented in Express1
         /// </summary>
-        public UspsAddressValidationResults ValidateAddress(PersonAdapter address)
+        public Task<UspsAddressValidationResults> ValidateAddressAsync(PersonAdapter address)
         {
             throw new NotImplementedException();
         }

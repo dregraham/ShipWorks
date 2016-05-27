@@ -39,7 +39,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
                 return rateRequest.GetRates(shipment,
                     onTracShipmentType.GetAvailableServiceTypes()
                         .Cast<OnTracServiceType>()
-                        .Union(new List<OnTracServiceType> {(OnTracServiceType) shipment.OnTrac.Service}));
+                        .Union(new List<OnTracServiceType> { (OnTracServiceType) shipment.OnTrac.Service }));
             }
             catch (OnTracException ex)
             {

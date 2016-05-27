@@ -128,7 +128,6 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
         /// </summary>
         public decimal ShippingCost
         {
-            [NDependIgnoreComplexMethodAttribute]
             get
             {
                 if (shippingOverridden)

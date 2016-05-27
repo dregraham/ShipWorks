@@ -2,18 +2,18 @@
 using Autofac.Extras.Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
-using ShipWorks.Shipping.Carriers.Ups;
+using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Insurance;
 using Xunit;
 
-namespace ShipWorks.Shipping.Tests.Carriers.Ups
+namespace ShipWorks.Shipping.Tests.Carriers.UPS
 {
     public class UpsLabelServiceTest
     {
         readonly AutoMock mock;
-        private ShipmentEntity shipment;
-        private UpsLabelService testObject;
+        private readonly ShipmentEntity shipment;
+        private readonly UpsLabelService testObject;
 
         public UpsLabelServiceTest()
         {
@@ -21,10 +21,10 @@ namespace ShipWorks.Shipping.Tests.Carriers.Ups
             testObject = mock.Create<UpsLabelService>();
             shipment = new ShipmentEntity()
             {
-                InsuranceProvider = (int)InsuranceProvider.Carrier,
+                InsuranceProvider = (int) InsuranceProvider.Carrier,
                 Ups = new UpsShipmentEntity()
                 {
-                    Service = (int)UpsServiceType.UpsSurePost1LbOrGreater,
+                    Service = (int) UpsServiceType.UpsSurePost1LbOrGreater,
                     Packages =
                     {
                         new UpsPackageEntity()

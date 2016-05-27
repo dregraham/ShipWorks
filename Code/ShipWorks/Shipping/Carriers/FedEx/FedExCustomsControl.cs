@@ -3,15 +3,16 @@ using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
 using System.Linq;
-using Interapptive.Shared;
-using Interapptive.Shared.Messaging;
-using ShipWorks.Shipping.Editing;
-using Interapptive.Shared.Utility;
-using ShipWorks.Shipping.Carriers.FedEx.Enums;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.UI.Controls;
-using Interapptive.Shared.Business;
 using System.Reactive.Linq;
+using Interapptive.Shared;
+using Interapptive.Shared.Business;
+using Interapptive.Shared.Utility;
+using ShipWorks.Core.Messaging;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Messaging.Messages;
+using ShipWorks.Shipping.Carriers.FedEx.Enums;
+using ShipWorks.Shipping.Editing;
+using ShipWorks.UI.Controls;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
 {
@@ -104,8 +105,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
                     naftaEnabled.ApplyMultiCheck(shipment.FedEx.CustomsNaftaEnabled);
                     naftaPreference.ApplyMultiValue((FedExNaftaPreferenceCriteria) shipment.FedEx.CustomsNaftaPreferenceType);
-                    naftaProducerDetermination.ApplyMultiValue((FedExNaftaDeterminationCode)shipment.FedEx.CustomsNaftaDeterminationCode);
-                    naftaNetCostMethod.ApplyMultiValue((FedExNaftaNetCostMethod)shipment.FedEx.CustomsNaftaNetCostMethod);
+                    naftaProducerDetermination.ApplyMultiValue((FedExNaftaDeterminationCode) shipment.FedEx.CustomsNaftaDeterminationCode);
+                    naftaNetCostMethod.ApplyMultiValue((FedExNaftaNetCostMethod) shipment.FedEx.CustomsNaftaNetCostMethod);
                     naftaProducerId.ApplyMultiText(shipment.FedEx.CustomsNaftaProducerId);
                 }
             }

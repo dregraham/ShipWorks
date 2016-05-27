@@ -4,21 +4,13 @@ using System.Data.SqlClient;
 using System.IO;
 using System.Windows.Forms;
 using Interapptive.Shared.Win32;
+using log4net;
 using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data;
-using ShipWorks.Templates;
-using ShipWorks.Tests.Integration.MSTest.Utilities;
-using ShipWorks.Users;
-using ShipWorks.Shipping.Settings;
-using ShipWorks.Shipping.Profiles;
-using ShipWorks.Stores;
-using ShipWorks.Shipping.Settings.Defaults;
-using ShipWorks.Users.Audit;
 using ShipWorks.Shipping;
-using log4net;
-using ShipWorks.Common.IO.Hardware.Printers;
+using ShipWorks.Tests.Integration.MSTest.Utilities;
 
 namespace ShipWorks.Tests.Integration.MSTest.Fixtures
 {
@@ -30,44 +22,11 @@ namespace ShipWorks.Tests.Integration.MSTest.Fixtures
         {
             // Need to comment out Debug.Assert statements in ShipWorks.Data.Caching.EntityCacheChangeMonitor
             // to avoid errors resulting from an assertion that the MainForm is running
-
-            Guid swInstance = ShipWorksInitializer.GetShipWorksInstance();
+            var initializer = new ShipWorksInitializer(null, null);
 
             if (ApplicationCore.ShipWorksSession.ComputerID == Guid.Empty)
             {
-
-                ApplicationCore.ShipWorksSession.Initialize(swInstance);
-                SqlSession.Initialize();
-
-                Console.WriteLine(SqlSession.Current.Configuration.DatabaseName);
-                Console.WriteLine(SqlSession.Current.Configuration.ServerInstance);
-
-                DataProvider.InitializeForApplication();
-                AuditProcessor.InitializeForApplication();
-
                 AccountManagerInitializeForCurrentUser();
-
-                ShippingSettings.InitializeForCurrentDatabase();
-                ShippingProfileManager.InitializeForCurrentSession();
-                ShippingDefaultsRuleManager.InitializeForCurrentSession();
-                ShippingProviderRuleManager.InitializeForCurrentSession();
-
-                StoreManager.InitializeForCurrentSession();
-
-                UserManager.InitializeForCurrentUser();
-
-                UserSession.InitializeForCurrentDatabase();
-
-                if (!UserSession.Logon("shipworks", "shipworks", true))
-                {
-                    throw new Exception("A 'shipworks' account with password 'shipworks' needs to be created.");
-                }
-                ;
-
-                ShippingManager.InitializeForCurrentDatabase();
-                LogSession.Initialize();
-
-                TemplateManager.InitializeForCurrentSession();
             }
         }
 
@@ -179,7 +138,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Fixtures
         public virtual decimal GetRates()
         {
             decimal totalRates = -2;
-            
+
             InterapptiveOnlyUtilities.UseListRates = RateRequestTypes == "LIST";
 
             ShipmentEntity shipment = CreateShipment();
@@ -281,7 +240,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Fixtures
                     command.Connection = connection;
                     command.Connection.Open();
                     command.CommandText = string.Format("select top 1 OrderId from [Order] where ShipCountryCode = '{0}'", countryCode);
-                    orderId = (long)command.ExecuteScalar();
+                    orderId = (long) command.ExecuteScalar();
                     command.Connection.Close();
                 }
             }
@@ -294,7 +253,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Fixtures
         /// <returns></returns>
         public virtual ShipmentEntity CreateShipment()
         {
-            OrderEntity orderEntity = (OrderEntity)ShipWorksDataMethods.GetEntity(GetOrderId("US"));
+            OrderEntity orderEntity = (OrderEntity) ShipWorksDataMethods.GetEntity(GetOrderId("US"));
             ShipmentEntity shipment =
                 ShipWorksDataMethods.InternalCreateShipment(orderEntity, ShipmentTypeCode, PackageCount, ShipmentTotalWeight / PackageCount, PackageLineItemWeightUnits);
 
@@ -306,11 +265,11 @@ namespace ShipWorks.Tests.Integration.MSTest.Fixtures
             }
             else if (LabelType.ToUpperInvariant() == "ZPL")
             {
-                shipment.ActualLabelFormat = (int)ThermalLanguage.ZPL;
+                shipment.ActualLabelFormat = (int) ThermalLanguage.ZPL;
             }
             else if (LabelType.ToUpperInvariant() == "EPL")
             {
-                shipment.ActualLabelFormat = (int)ThermalLanguage.EPL;
+                shipment.ActualLabelFormat = (int) ThermalLanguage.EPL;
             }
 
             // Set the ship date to now if the timestamp is not specified otherwise find the date of the day specified by the timestamp
@@ -319,7 +278,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Fixtures
             shipment.TotalWeight = ShipmentTotalWeight;
 
             shipment.BilledWeight = shipment.TotalWeight;
-            shipment.BilledType = (int)BilledType.Unknown;
+            shipment.BilledType = (int) BilledType.Unknown;
 
             shipment.OriginFirstName = OriginFirstName;
             shipment.OriginMiddleName = string.Empty;
@@ -432,7 +391,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Fixtures
 
             if (!DateTime.TryParse(ShipOnDay, out shipTimestamp))
             {
-                shipTimestamp = string.IsNullOrEmpty(ShipOnDay) ? DateTime.Now : GetNext(DateTime.Now, (DayOfWeek)Enum.Parse(typeof(DayOfWeek), ShipOnDay));
+                shipTimestamp = string.IsNullOrEmpty(ShipOnDay) ? DateTime.Now : GetNext(DateTime.Now, (DayOfWeek) Enum.Parse(typeof(DayOfWeek), ShipOnDay));
             }
 
             return shipTimestamp;

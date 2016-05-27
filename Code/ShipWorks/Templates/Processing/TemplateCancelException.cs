@@ -1,12 +1,12 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Runtime.Serialization;
 
 namespace ShipWorks.Templates.Processing
 {
     /// <summary>
-    /// Thrown when tempalte processing is canceled by the user
+    /// Thrown when template processing is canceled by the user
     /// </summary>
+    [Serializable]
     public class TemplateCancelException : TemplateException
     {
         /// <summary>
@@ -18,14 +18,17 @@ namespace ShipWorks.Templates.Processing
         }
 
         /// <summary>
+        /// Constructor
+        /// </summary>
+        protected TemplateCancelException(SerializationInfo serializationInfo, StreamingContext streamingContext) :
+            base(serializationInfo, streamingContext)
+        {
+
+        }
+
+        /// <summary>
         /// Exception message.
         /// </summary>
-        public override string Message
-        {
-            get
-            {
-                return "Template processing was canceled.";
-            }
-        }
+        public override string Message => "Template processing was canceled.";
     }
 }

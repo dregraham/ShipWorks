@@ -1,0 +1,82 @@
+﻿<UserControl x:Class="ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl.OtherShipmentControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl"
+             xmlns:ui="http://schemas.shipworks.com/ui"
+             xmlns:ins="clr-namespace:ShipWorks.Shipping.UI.ShippingPanel.Insurance"
+             mc:Ignorable="d" d:DataContext="{d:DesignInstance Type=local:OtherShipmentViewModel}"
+             Grid.IsSharedSizeScope="False"
+             d:DesignHeight="220" d:DesignWidth="400">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/ShipWorks.UI;component/Styles/GlobalStyle.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+            <ui:EmptyMoneyConverter x:Key="EmptyMoney" />
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <StackPanel>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="85" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <TextBlock Grid.Row="0" Grid.Column="0"
+                   Style="{StaticResource Grid.TextBlock.Label}">Carrier Name:</TextBlock>
+            <TextBox Grid.Row="0" Grid.Column="1"
+                     Style="{StaticResource Grid.TextBox.Default}"
+                     ui:EntityFieldLength.FieldName="ShipmentOtherCarrier"
+                     Text="{Binding CarrierName, ValidatesOnDataErrors=true, NotifyOnValidationError=true}"/>
+
+            <TextBlock Grid.Row="1" Grid.Column="0"
+                   Style="{StaticResource Grid.TextBlock.Label}">Service:</TextBlock>
+            <TextBox Grid.Row="1" Grid.Column="1"
+                     Style="{StaticResource Grid.TextBox.Default}"
+                     ui:EntityFieldLength.FieldName="ShipmentOtherService"
+                     Text="{Binding Service, ValidatesOnDataErrors=true, NotifyOnValidationError=true}" />
+
+            <TextBlock Grid.Row="2" Grid.Column="0"
+                   Style="{StaticResource Grid.TextBlock.Label}">Ship date:</TextBlock>
+            <DatePicker Grid.Row="2" Grid.Column="1"
+                        Style="{StaticResource Grid.DatePicker.Default}"
+                        SelectedDate="{Binding ShipDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=true, NotifyOnValidationError=true}" >
+            </DatePicker>
+
+            <TextBlock Grid.Row="3" Grid.Column="0"
+                   Style="{StaticResource Grid.TextBlock.Label}">Weight:</TextBlock>
+            <ui:WeightControl Grid.Row="3" Grid.Column="1"
+                HorizontalAlignment="Left"
+                ErrorMessage="{Binding WeightErrorMessage}"
+                Weight="{Binding ContentWeight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,
+                    ValidatesOnDataErrors=true, NotifyOnValidationError=true}"/>
+
+            <TextBlock Grid.Row="4" Grid.Column="0"
+                   Style="{StaticResource Grid.TextBlock.Label}">Cost:</TextBlock>
+            <TextBox Grid.Row="4" Grid.Column="1"
+                     Style="{StaticResource Grid.TextBox.Number}"
+                 Text="{Binding Cost, StringFormat=C, Converter={StaticResource EmptyMoney}, ValidatesOnDataErrors=true, NotifyOnValidationError=true}" />
+
+            <TextBlock Grid.Row="5" Grid.Column="0"
+                   Style="{StaticResource Grid.TextBlock.Label}">Tracking #:</TextBlock>
+            <TextBox Grid.Row="5" Grid.Column="1"
+                     Style="{StaticResource Grid.TextBox.Default}"
+                 ui:EntityFieldLength.FieldName="ShipmentTracking"
+                 Text="{Binding TrackingNumber, ValidatesOnDataErrors=true, NotifyOnValidationError=true}"  />
+        </Grid>
+
+        <ins:InsuranceControl DataContext="{Binding InsuranceViewModel}" />
+    </StackPanel>
+</UserControl>

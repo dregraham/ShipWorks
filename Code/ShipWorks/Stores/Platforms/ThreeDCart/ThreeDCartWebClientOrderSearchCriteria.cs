@@ -9,7 +9,7 @@ using ShipWorks.Stores.Platforms.ThreeDCart.Enums;
 namespace ShipWorks.Stores.Platforms.ThreeDCart
 {
     /// <summary>
-    /// Helper class with properties for criteria used when searching the 3D Cart api for orders
+    /// Helper class with properties for criteria used when searching the 3dcart api for orders
     /// </summary>
     public class ThreeDCartWebClientOrderSearchCriteria
     {
@@ -23,7 +23,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         /// <param name="lastModifiedToDateTimeUtc">The UTC date for the end of the order modified date range</param>
         /// <param name="lastCreatedFromDateTimeUtc">The UTC date for the start of the order create date range</param>
         /// <param name="lastCreatedToDateTimeUtc">The UTC date for the end of the order create date range</param>
-        /// <param name="threeDCartStore">The 3D Cart store</param>
+        /// <param name="threeDCartStore">The 3dcart store</param>
         /// <param name="pageSize">The size of the page of results to return.</param>
         /// <param name="page">The page of results to return.</param>
         [NDependIgnoreTooManyParams]
@@ -43,7 +43,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
             PageSize = pageSize;
             Page = page;
 
-            // 3D Cart currently has a bug where the last modified date is in eastern time zone on order creation, but is correct on subsequent updates to the order
+            // 3dcart currently has a bug where the last modified date is in eastern time zone on order creation, but is correct on subsequent updates to the order
             // So find the eastern time and if it is older than the passed in value, use it
             DateTime easternTimeZoneDateTimeUtc = TimeZoneInfo.ConvertTime(lastModifiedToDateTimeUtc, TimeZoneInfo.Utc, TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time")).ToUniversalTime();
             if (easternTimeZoneDateTimeUtc > lastModifiedToDateTimeUtc)

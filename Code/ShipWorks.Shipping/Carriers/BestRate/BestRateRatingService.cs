@@ -9,6 +9,7 @@ using ShipWorks.Editions;
 using ShipWorks.Shipping.Carriers.BestRate.Footnote;
 using ShipWorks.Shipping.Carriers.BestRate.RateGroupFiltering;
 using ShipWorks.Shipping.Editing.Rating;
+using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Shipping.Carriers.BestRate
 {
@@ -25,7 +26,8 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// <summary>
         /// Constructor
         /// </summary>
-        public BestRateRatingService(IIndex<ShipmentTypeCode, ShipmentType> shipmentTypeFactory, IBestRateShippingBrokerFactory brokerFactory, IRateGroupFilterFactory filterFactory, ILicenseService licenseService)
+        public BestRateRatingService(IIndex<ShipmentTypeCode, ShipmentType> shipmentTypeFactory, IBestRateShippingBrokerFactory brokerFactory,
+			IRateGroupFilterFactory filterFactory, ILicenseService licenseService)
         {
             this.shipmentTypeFactory = shipmentTypeFactory;
             this.brokerFactory = brokerFactory;
@@ -70,7 +72,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
 
                 if (distinctExceptions.Any())
                 {
-                    rateGroup.AddFootnoteFactory(new BrokerExceptionsRateFootnoteFactory(shipmentTypeFactory[ShipmentTypeCode.BestRate], distinctExceptions));
+                    rateGroup.AddFootnoteFactory(new BrokerExceptionsRateFootnoteFactory(ShipmentTypeCode.BestRate, distinctExceptions));
                 }
 
                 return rateGroup;
@@ -113,6 +115,14 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         }
 
         /// <summary>
+        /// Is the rate for the specified shipment
+        /// </summary>
+        public bool IsRateSelectedByShipment(RateResult rateResult, ICarrierShipmentAdapter shipmentAdapter)
+        {
+            throw new NotImplementedException("Best Rates is not yet supported");
+        }
+
+        /// <summary>
         /// Create a single, filtered rate group from a collection of rate groups
         /// </summary>
         public RateGroup CompileBestRates(ShipmentEntity shipment, IEnumerable<RateGroup> rateGroups)
@@ -137,7 +147,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
 
             return compiledRateGroup;
         }
-        
+
         /// <summary>
         /// Starts getting rates for a broker
         /// </summary>

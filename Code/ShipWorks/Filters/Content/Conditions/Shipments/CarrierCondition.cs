@@ -44,7 +44,7 @@ namespace ShipWorks.Filters.Content.Conditions.Shipments
         {
             get
             {
-                ValueChoice<ShipmentTypeCode>[] foo =  shipmentTypeManager.ShipmentTypes
+                ValueChoice<ShipmentTypeCode>[] result =  shipmentTypeManager.ShipmentTypes
                     .Where(t => t.ShipmentTypeCode != ShipmentTypeCode.BestRate)
                     .Where(
                         t =>
@@ -55,7 +55,7 @@ namespace ShipWorks.Filters.Content.Conditions.Shipments
 
                 scope?.Dispose();
 
-                return foo;
+                return result;
             }
         }
 

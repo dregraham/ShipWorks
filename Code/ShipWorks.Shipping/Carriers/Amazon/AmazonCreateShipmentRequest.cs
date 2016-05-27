@@ -1,6 +1,5 @@
 ﻿using System;
 using Interapptive.Shared.Utility;
-using log4net;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Amazon.Api;
 using ShipWorks.Shipping.Carriers.Amazon.Api.DTOs;
@@ -23,9 +22,9 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// <summary>
         /// Constructor
         /// </summary>
-        public AmazonCreateShipmentRequest(IOrderManager orderManager, 
-            IAmazonShippingWebClient webClient, 
-            IAmazonShipmentRequestDetailsFactory requestFactory, 
+        public AmazonCreateShipmentRequest(IOrderManager orderManager,
+            IAmazonShippingWebClient webClient,
+            IAmazonShipmentRequestDetailsFactory requestFactory,
             IAmazonMwsWebClientSettingsFactory settingsFactory)
         {
             this.orderManager = orderManager;
@@ -36,7 +35,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
 
         /// <summary>
         /// Submits a request to the Amazon shipping web client
-        /// with the resources needed. 
+        /// with the resources needed.
         /// </summary>
         /// <returns></returns>
         public AmazonShipment Submit(ShipmentEntity shipment)
@@ -45,7 +44,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
 
             orderManager.PopulateOrderDetails(shipment);
             IAmazonOrder order = shipment.Order as IAmazonOrder;
-            
+
             ShipmentRequestDetails requestDetails = requestFactory.Create(shipment, order);
             IAmazonMwsWebClientSettings amazonSettings = settingsFactory.Create(shipment.Amazon);
 
@@ -53,11 +52,11 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             {
                 throw new ShippingException("Amazon shipping can only be used for Amazon orders");
             }
-       
+
             // Send a max of $100 in insured value for carriers who aren't Stamps.  Send $0 for Stamps
             requestDetails.ShippingServiceOptions.DeclaredValue.Amount =
-                !shipment.Amazon.CarrierName.Equals("STAMPS_DOT_COM", StringComparison.OrdinalIgnoreCase) ? 
-                Math.Min(shipment.Amazon.InsuranceValue, 100m) : 
+                !shipment.Amazon.CarrierName.Equals("STAMPS_DOT_COM", StringComparison.OrdinalIgnoreCase) ?
+                Math.Min(shipment.Amazon.InsuranceValue, 100M) :
                 0;
 
             CreateShipmentResponse createShipmentRresponse = webClient.CreateShipment(requestDetails, amazonSettings, shipment.Amazon.ShippingServiceID);

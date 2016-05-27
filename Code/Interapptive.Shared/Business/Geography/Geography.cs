@@ -29,7 +29,7 @@ namespace Interapptive.Shared.Business.Geography
         /// </summary>
         public static IList<string> Countries
         {
-            get { return CountryList.Countries; }
+            get { return CountryList.CountryNames; }
         }
 
         /// <summary>
@@ -47,6 +47,7 @@ namespace Interapptive.Shared.Business.Geography
         {
             return CountryList.GetCountryName(name);
         }
+
 
         /// <summary>
         /// Get the icon image of the country flag. Null if one is not present for the country.

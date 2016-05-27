@@ -1,13 +1,12 @@
-﻿using Interapptive.Shared.Utility;
-using System;
-using System.Data;
-using System.Reflection;
-using System.Data.Common;
-using System.Data.Odbc;
-using System.Text;
-using Interapptive.Shared.Security;
+﻿using Interapptive.Shared.Security;
+using Interapptive.Shared.Utility;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System;
+using System.Data;
+using System.Data.Common;
+using System.Reflection;
+using System.Text;
 
 namespace ShipWorks.Stores.Platforms.Odbc
 {

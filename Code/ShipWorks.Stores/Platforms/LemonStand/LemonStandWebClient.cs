@@ -6,7 +6,6 @@ using Newtonsoft.Json.Linq;
 using Quartz.Util;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores.Content;
 
 namespace ShipWorks.Stores.Platforms.LemonStand
 {
@@ -155,11 +154,11 @@ namespace ShipWorks.Stores.Platforms.LemonStand
             }
             catch (Exception ex)
             {
-                if (ex.Message.Equals("The remote server returned an error: (400) Bad Request."))
+                if (ex.Message.Equals("The remote server returned an error: (400) Bad Request.", StringComparison.InvariantCulture))
                 {
                     throw new LemonStandException("The status is not a possible option.", ex);
                 }
-                if (ex.Message.Equals("The remote server returned an error: (500) Internal Server Error."))
+                if (ex.Message.Equals("The remote server returned an error: (500) Internal Server Error.", StringComparison.InvariantCulture))
                 {
                     throw new LemonStandException("This order's status can't transition to \"" + onlineStatus + "\" from it's current order status", ex);
                 }
@@ -242,7 +241,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
             }
             catch (Exception ex)
             {
-                throw WebHelper.TranslateWebException(ex, typeof (LemonStandException));
+                throw WebHelper.TranslateWebException(ex, typeof(LemonStandException));
             }
         }
     }

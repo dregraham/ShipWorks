@@ -1,11 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Globalization;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Drawing;
-using Interapptive.Shared.Properties;
-using System.Collections;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.Utility;
 
 namespace Interapptive.Shared.Business.Geography
@@ -28,10 +23,15 @@ namespace Interapptive.Shared.Business.Geography
         /// <summary>
         /// Returns a readonly list of Country names
         /// </summary>
-        public static IList<string> Countries
+        public static IList<string> CountryNames
         {
             get { return new List<string>(countries.Keys); }
         }
+
+        /// <summary>
+        /// Returns a readonly list of countries
+        /// </summary>
+        public static IEnumerable<KeyValuePair<string, string>> Countries => countries.ToReadOnly();
 
         /// <summary>
         /// Get the code of the country with the given name.  If not found, the original name is returned.
@@ -51,7 +51,9 @@ namespace Interapptive.Shared.Business.Geography
             }
 
             // Some carts send down variations of the US country name
-            if (String.Compare("united states", name, StringComparison.OrdinalIgnoreCase) == 0 || String.Compare("usa", name, StringComparison.OrdinalIgnoreCase) == 0 || String.Compare("united states of america", name, StringComparison.OrdinalIgnoreCase) == 0)
+            if (String.Compare("united states", name, StringComparison.OrdinalIgnoreCase) == 0 ||
+                String.Compare("usa", name, StringComparison.OrdinalIgnoreCase) == 0 ||
+                String.Compare("united states of america", name, StringComparison.OrdinalIgnoreCase) == 0)
             {
                 return "US";
             }
@@ -97,7 +99,7 @@ namespace Interapptive.Shared.Business.Geography
         {
             MethodConditions.EnsureArgumentIsNotNull(address, "address");
 
-            return IsUSInternationalTerritory(address.CountryCode) || 
+            return IsUSInternationalTerritory(address.CountryCode) ||
                 (string.Equals(address.CountryCode, "US", StringComparison.OrdinalIgnoreCase) && IsUSInternationalTerritory(address.StateProvCode));
         }
 

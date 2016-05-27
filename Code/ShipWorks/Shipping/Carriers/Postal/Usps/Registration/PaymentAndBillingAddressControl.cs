@@ -1,10 +1,10 @@
-﻿using System;
-using System.Text;
-using System.Windows.Forms;
+﻿using Interapptive.Shared.Business;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
-using ShipWorks.ApplicationCore.Licensing;
-using Interapptive.Shared.Business;
+using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
+using System;
+using System.Text;
+using System.Windows.Forms;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps.Registration
 {
@@ -37,7 +37,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Registration
         /// </summary>
         public int CreditCardExpirationYear
         {
-            get { return Convert.ToInt32(creditCardExpirationYear.Value); }
+            get
+            {
+                return string.IsNullOrWhiteSpace(creditCardExpirationYear.Text)
+                    ? 0
+                    : Convert.ToInt32(creditCardExpirationYear.Value);
+            }
         }
 
         /// <summary>
@@ -45,7 +50,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Registration
         /// </summary>
         public int CreditCardExpirationMonth
         {
-            get { return Convert.ToInt32(creditCardExpirationMonth.Value); }
+            get
+            {
+                return string.IsNullOrWhiteSpace(creditCardExpirationMonth.Text)
+                    ? 0
+                    : Convert.ToInt32(creditCardExpirationMonth.Value);
+            }
         }
 
         /// <summary>
@@ -80,11 +90,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Registration
         /// <summary>
         /// Validates the payment data.
         /// </summary>
-        /// <returns><code>true</code>if the validation was successful; otherwise <code>false</code>.</returns>
         public bool ValidateData()
         {
             bool isValid = true;
-            if(!billingAddress.ValidateRequiredFields())
+            if (!billingAddress.ValidateRequiredFields())
             {
                 return false;
             }

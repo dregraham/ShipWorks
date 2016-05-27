@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Interapptive.Shared;
-using Interapptive.Shared.Business;
+﻿using Interapptive.Shared;
 using Interapptive.Shared.Business.Geography;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Express1.Registration;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
 using ShipWorks.Shipping.Profiles;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Registration
 {
@@ -74,7 +73,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Registration
             UspsAccountManager.SaveAccount(uspsAccount);
 
             // If this is the only account, update this shipment type profiles with this account
-            List<UspsAccountEntity> accounts = UspsAccountManager.GetAccounts(UspsResellerType.Express1, false);
+            List<UspsAccountEntity> accounts = UspsAccountManager.GetAccounts(UspsResellerType.Express1);
             if (accounts.Count == 1)
             {
                 UspsAccountEntity accountEntity = accounts.First();
