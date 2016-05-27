@@ -1,6 +1,5 @@
-﻿using System.Linq;
-using System.Windows.Forms;
-using Autofac;
+﻿using Autofac;
+using Autofac.Core;
 using Interapptive.Shared;
 using Interapptive.Shared.Pdf;
 using Interapptive.Shared.Security;
@@ -21,20 +20,20 @@ using ShipWorks.Data.Administration;
 using ShipWorks.Data.Connection;
 using ShipWorks.Editions;
 using ShipWorks.Editions.Brown;
+using ShipWorks.Filters;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.Postal.Endicia;
+using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Stores.Content;
 using ShipWorks.UI.Controls;
-using ShipWorks.Users.Security;
-using ShipWorks.Shipping.Profiles;
-using System;
-using System.Reflection;
-using Autofac.Core;
-using ShipWorks.Filters;
-using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Users;
+using ShipWorks.Users.Security;
+using System;
+using System.Linq;
+using System.Reflection;
+using System.Windows.Forms;
 
 namespace ShipWorks.ApplicationCore
 {
@@ -99,11 +98,6 @@ namespace ShipWorks.ApplicationCore
             builder.RegisterType<StampsAddressValidationWebClient>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
-
-            builder.Register(c => Program.MainForm)
-                .As<Control>()
-                .As<IWin32Window>()
-                .ExternallyOwned();
 
             builder.RegisterType<ValidatedAddressScope>()
                 .AsImplementedInterfaces()

@@ -1,6 +1,5 @@
 ﻿using Autofac;
 using Interapptive.Shared.Security;
-using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Security;
 using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
@@ -52,11 +51,11 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
                 .AsImplementedInterfaces();
 
             builder.RegisterType<OdbcDataSourcePage>()
-                .AsImplementedInterfaces()
+                .As<IOdbcWizardPage>()
                 .ExternallyOwned();
 
             builder.RegisterType<OdbcImportFieldMappingPage>()
-                .AsImplementedInterfaces()
+                .As<IOdbcWizardPage>()
                 .ExternallyOwned();
 
             builder.RegisterType<JsonOdbcFieldMapReader>()

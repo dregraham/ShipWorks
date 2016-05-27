@@ -643,6 +643,7 @@
     <Compile Include="ApplicationCore\Heartbeat.cs" />
     <Compile Include="ApplicationCore\HeartbeatPace.cs" />
     <Compile Include="ApplicationCore\ICheckForChangesNeeded.cs" />
+    <Compile Include="ApplicationCore\IoCLogRequestModule.cs" />
     <Compile Include="ApplicationCore\Licensing\Activation\CustomerLicenseActivationActivity.cs" />
     <Compile Include="ApplicationCore\Licensing\Activation\CustomerLicenseActivationService.cs" />
     <Compile Include="ApplicationCore\Licensing\Activation\ICustomerLicenseActivationActivity.cs" />
