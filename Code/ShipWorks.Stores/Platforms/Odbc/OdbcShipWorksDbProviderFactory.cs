@@ -1,5 +1,6 @@
 ﻿using System.Data;
 using System.Data.Common;
+using System.Data.Odbc;
 
 namespace ShipWorks.Stores.Platforms.Odbc
 {
@@ -21,11 +22,11 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// </summary>
         /// <param name="connectionString"></param>
         /// <returns></returns>
-        public IDbConnection CreateOdbcConnection(string connectionString)
+        public DbConnection CreateOdbcConnection(string connectionString)
         {
             var connection = CreateOdbcConnection();
             connection.ConnectionString = connectionString;
-            return connection;
+            return connection as DbConnection;
         }
     }
 }

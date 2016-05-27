@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Data;
+using System.Data.Common;
 using System.Reflection;
 using System.Text;
 
@@ -179,7 +180,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// <summary>
         /// Creates a new ODBC Connection
         /// </summary>
-        public IDbConnection CreateConnection()
+        public DbConnection CreateConnection()
         {
             return odbcProvider.CreateOdbcConnection(ConnectionString);
         }

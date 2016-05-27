@@ -1,5 +1,5 @@
 ﻿using Interapptive.Shared.Utility;
-using System.Data;
+using System.Data.Common;
 
 namespace ShipWorks.Stores.Platforms.Odbc
 {
@@ -16,7 +16,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// <summary>
         /// Creates an ODBC connection to the Data Source
         /// </summary>
-        IDbConnection CreateConnection();
+        DbConnection CreateConnection();
 
         /// <summary>
         /// Name of the data source
