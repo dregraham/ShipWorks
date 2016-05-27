@@ -9,6 +9,7 @@ using System.Windows.Interop;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Win32;
 using log4net;
+using log4net.Appender;
 using ShipWorks.ApplicationCore.Logging;
 using Form = System.Windows.Forms.Form;
 using FormsApplication = System.Windows.Forms.Application;
@@ -29,6 +30,7 @@ namespace ShipWorks.ApplicationCore.Crashes
         private const int showSupportMessageCutoff = 4;
         private const string reopenRegistryKey = "ReopenAfterCrash";
         readonly string crashContent;
+        private readonly TaskCompletionSource<bool> waitForOkButton;
 
         /// <summary>
         /// Constructor
@@ -60,7 +62,9 @@ namespace ShipWorks.ApplicationCore.Crashes
                 // Nothing to do - we already crashed.
             }
 
-            CreateLogTask = TaskEx.Run(() => SendReport(userEmail));
+            waitForOkButton = new TaskCompletionSource<bool>();
+            CreateLogTask = TaskEx.WhenAll(StartSubmissionTask(userEmail), waitForOkButton.Task)
+                .ContinueWith(ExitApplication);
 
             InitializeComponent();
 
@@ -71,6 +75,14 @@ namespace ShipWorks.ApplicationCore.Crashes
             showSupportMessage = recoveryCount > showSupportMessageCutoff;
 
             Loaded += OnLoaded;
+        }
+
+        /// <summary>
+        /// Start the crash submission task
+        /// </summary>
+        private Task<Task> StartSubmissionTask(string userEmail)
+        {
+            return TaskEx.WhenAny(TaskEx.Run(() => SendReport(userEmail)), TaskEx.Delay(TimeSpan.FromMinutes(10)));
         }
 
         /// <summary>
@@ -152,6 +164,8 @@ namespace ShipWorks.ApplicationCore.Crashes
         {
             try
             {
+                StopLogging();
+
                 string logFileToSubmit = CrashSubmitter.CreateCrashLogZip();
                 CrashSubmitter.Submit(exception, email, string.Empty, logFileToSubmit);
             }
@@ -159,6 +173,19 @@ namespace ShipWorks.ApplicationCore.Crashes
             {
                 // We've already crashed, so just eat the exception if we fail to submit the crash report
             }
+        }
+
+        /// <summary>
+        /// Stop the logging service so that we avoid trying to zip files that are changing
+        /// </summary>
+        private static void StopLogging()
+        {
+            log.Info($"Shutting down logger");
+            foreach (IAppender appender in LogManager.GetAllRepositories().SelectMany(x => x.GetAppenders()))
+            {
+                appender.Close();
+            }
+            LogManager.Shutdown();
         }
 
         /// <summary>
@@ -172,8 +199,7 @@ namespace ShipWorks.ApplicationCore.Crashes
             DialogResult = ReopenShipWorks.IsChecked;
             registry.SetValue(reopenRegistryKey, ReopenShipWorks.IsChecked);
 
-            TaskEx.WhenAny(CreateLogTask, TaskEx.Delay(TimeSpan.FromMinutes(10)))
-                .ContinueWith(ExitApplication);
+            waitForOkButton.SetResult(true);
 
             CloseForms();
             Close();
@@ -182,8 +208,10 @@ namespace ShipWorks.ApplicationCore.Crashes
         /// <summary>
         /// Exit the application
         /// </summary>
-        private void ExitApplication(Task<Task> task)
+        private void ExitApplication(Task task)
         {
+            log.Info("Exiting application...");
+
             try
             {
                 // Application.Exit does not guaranteed that the windows close.  It only tries.  If an exception
