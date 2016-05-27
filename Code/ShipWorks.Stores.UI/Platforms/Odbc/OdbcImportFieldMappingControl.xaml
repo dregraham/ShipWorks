@@ -185,7 +185,6 @@
                                                     Path=DataContext.Columns, UpdateSourceTrigger=PropertyChanged}"
                                                   DisplayMemberPath="Name" HorizontalAlignment="Stretch"
                                                   Margin="0 5 5 5"
-                                                  SelectedIndex="0"
                                                   SelectedItem="{Binding ExternalField.Column}"/>
                                     </Grid>
                                 </Border>
