@@ -116,15 +116,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
 
                 var testObject = mock.Create<OdbcDataSourceRepository>();
 
-                try
-                {
-                    testObject.GetDataSources();
-                }
-                catch (DataException)
-                {
-                    // suppress
-                }
-
+                Assert.Throws<DataException>(() => testObject.GetDataSources());
                 log.Verify(l => l.Error(It.IsAny<string>(), It.IsAny<Exception>()));
             }
         }

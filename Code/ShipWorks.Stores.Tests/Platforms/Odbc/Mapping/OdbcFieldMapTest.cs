@@ -44,11 +44,12 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
             OdbcFieldMap testObject = mock.Create<OdbcFieldMap>();
             ioFactory.Setup(f => f.CreateWriter(testObject)).Returns(odbcWriter.Object);
 
-            MemoryStream memoryStream = new MemoryStream();
+            using (MemoryStream memoryStream = new MemoryStream())
+            {
+                testObject.Save(memoryStream);
 
-            testObject.Save(memoryStream);
-
-            odbcWriter.Verify(w => w.Write(memoryStream));
+                odbcWriter.Verify(w => w.Write(memoryStream));
+            }
         }
         
         [Fact]

@@ -1,12 +1,12 @@
-﻿using System;
-using System.IO;
-using Autofac.Extras.Moq;
+﻿using Autofac.Extras.Moq;
 using log4net;
 using Moq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
+using System;
+using System.IO;
 using Xunit;
 
 namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
@@ -88,8 +88,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
 
         private IOdbcFieldMapIOFactory GetIoFactory()
         {
-            var log = mock.Mock<ILog>();
-
             var ioFactory = mock.Mock<IOdbcFieldMapIOFactory>();
 
             ioFactory.Setup(f => f.CreateWriter(It.IsAny<OdbcFieldMap>()))

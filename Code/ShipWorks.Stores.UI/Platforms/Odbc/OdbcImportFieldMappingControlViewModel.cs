@@ -12,6 +12,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Windows.Forms;
 using System.Windows.Input;
 using SaveFileDialog = Microsoft.Win32.SaveFileDialog;
@@ -64,16 +65,19 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// <summary>
         /// Gets the data source.
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public IOdbcDataSource DataSource { get; }
 
         /// <summary>
         /// The name the map will be saved as.
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public string MapName { get; set; }
 
         /// <summary>
         /// The external odbc tables.
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public IEnumerable<OdbcTable> Tables { get; set; }
 
         /// <summary>
@@ -82,11 +86,13 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// <remarks>
         /// selected table must not be null for it to be enabled
         /// </remarks>
+        [Obfuscation(Exclude = true)]
         public ICommand SaveMapCommand { get; set; }
 
         /// <summary>
         /// The selected external odbc table.
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public IOdbcTable SelectedTable
         {
             get { return selectedTable; }
@@ -96,11 +102,13 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// <summary>
         /// Gets or sets the table changed command.
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public RelayCommand TableChangedCommand { get; private set; }
 
         /// <summary>
         /// The columns from the selected external odbc table.
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public ObservableCollection<OdbcColumn> Columns
         {
             get { return columns; }
@@ -110,11 +118,13 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// <summary>
         /// List of field maps to be mapped.
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public IEnumerable<OdbcFieldMapDisplay> FieldMaps { get; set; }
 
         /// <summary>
         /// The selected field map.
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public OdbcFieldMapDisplay SelectedFieldMap
         {
             get { return selectedFieldMap; }
@@ -124,16 +134,19 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// <summary>
         /// The order field map.
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public OdbcFieldMapDisplay OrderFieldMap { get; set; }
 
         /// <summary>
         /// The address field map.
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public OdbcFieldMapDisplay AddressFieldMap { get; set; }
 
         /// <summary>
         /// The item field map.
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public OdbcFieldMapDisplay ItemFieldMap { get; set; }
 
         /// <summary>
@@ -164,21 +177,23 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             MethodConditions.EnsureArgumentIsNotNull(store);
 
             OdbcFieldMap map = GetSingleMap();
-            Stream memoryStream = new MemoryStream();
-
-            try
+            using (Stream memoryStream = new MemoryStream())
             {
-                map.Save(memoryStream);
-            }
-            catch (ShipWorksOdbcException ex)
-            {
-                messageHelper.ShowError(ex.Message);
-            }
+                try
+                {
+                    map.Save(memoryStream);
+                }
+                catch (ShipWorksOdbcException ex)
+                {
+                    messageHelper.ShowError(ex.Message);
+                }
 
-            memoryStream.Position = 0;
-            StreamReader reader = new StreamReader(memoryStream);
-
-            store.Map = reader.ReadToEnd();
+                memoryStream.Position = 0;
+                using (StreamReader reader = new StreamReader(memoryStream))
+                {
+                    store.Map = reader.ReadToEnd();
+                }
+            }
         }
 
         /// <summary>

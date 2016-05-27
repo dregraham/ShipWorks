@@ -1,10 +1,10 @@
-﻿using System;
-using System.IO;
-using Autofac.Extras.Moq;
+﻿using Autofac.Extras.Moq;
 using Moq;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
+using System;
+using System.IO;
 using Xunit;
 
 namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
@@ -36,7 +36,8 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
         [Fact]
         public void Write_WritesSerializedMapToStream()
         {
-            string expectedResult = "{\"Entries\":[{\"ShipWorksField\":{\"ContainingObjectName\":\"OrderEntity\",\"Name\":\"OrderNumber\",\"DisplayName\":\"Order Number\"},\"ExternalField\":{\"Table\":{\"Name\":\"some table\"},\"Column\":{\"Name\":\"OrderNumberColumn\"},\"DisplayName\":\"some table OrderNumberColumn\"}}],\"ExternalTableName\":\"some external tablename\"}";
+            string expectedResult =
+                "{\"Entries\":[{\"ShipWorksField\":{\"ContainingObjectName\":\"OrderEntity\",\"Name\":\"OrderNumber\",\"DisplayName\":\"Order Number\"},\"ExternalField\":{\"Table\":{\"Name\":\"some table\"},\"Column\":{\"Name\":\"OrderNumberColumn\"},\"DisplayName\":\"some table OrderNumberColumn\"}}],\"ExternalTableName\":\"some external tablename\"}";
 
             Mock<IOdbcFieldMapIOFactory> ioFactory = mock.Mock<IOdbcFieldMapIOFactory>();
             OdbcFieldMap map = new OdbcFieldMap(ioFactory.Object);
@@ -48,18 +49,23 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
             OdbcColumn column = new OdbcColumn("OrderNumberColumn");
 
             ExternalOdbcMappableField externalOdbcMappableField = new ExternalOdbcMappableField(table, column);
-            ShipWorksOdbcMappableField shipworksOdbcMappableField = new ShipWorksOdbcMappableField(OrderFields.OrderNumber, "Order Number");
+            ShipWorksOdbcMappableField shipworksOdbcMappableField =
+                new ShipWorksOdbcMappableField(OrderFields.OrderNumber, "Order Number");
 
             OdbcFieldMapEntry entry = new OdbcFieldMapEntry(shipworksOdbcMappableField, externalOdbcMappableField);
             map.ExternalTableName = "some external tablename";
 
             map.AddEntry(entry);
-            MemoryStream stream = new MemoryStream();
-            testObject.Write(stream);
-            stream.Position = 0;
-            var streamReader = new StreamReader(stream);
-
-            Assert.Equal(expectedResult, streamReader.ReadToEnd());
+            
+            using (MemoryStream stream = new MemoryStream())
+            {
+                testObject.Write(stream);
+                stream.Position = 0;
+                using (var streamReader = new StreamReader(stream))
+                {
+                    Assert.Equal(expectedResult, streamReader.ReadToEnd());
+                }
+            }
         }
 
         public void Dispose()
