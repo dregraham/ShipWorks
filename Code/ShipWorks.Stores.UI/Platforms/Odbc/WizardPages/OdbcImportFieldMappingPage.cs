@@ -1,11 +1,11 @@
-﻿using System;
-using Autofac;
+﻿using Autofac;
 using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.UI.Wizard;
+using System;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
 {
@@ -45,8 +45,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
 
             if (viewModel.SelectedTable == null)
             {
-                MessageHelperWrapper messageHelper = new MessageHelperWrapper(() => this);
-                messageHelper.ShowError("Please setup your import map before continuing to the next page.");
+                scope.Resolve<IMessageHelper>().ShowError("Please setup your import map before continuing to the next page.");
                 e.NextPage = this;
                 return;
             }

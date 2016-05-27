@@ -139,7 +139,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
                 dataSource.DataSource = null;
                 MessageHelper.ShowError(ParentForm, dataSourceResult.Message);
             }
-            else if (dataSourceResult.Context.None())
+            else if (dataSourceResult.Value.None())
             {
                 dataSource.DataSource = null;
 
@@ -149,7 +149,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             }
             else
             {
-                BindDataSources(dataSourceResult.Context);
+                BindDataSources(dataSourceResult.Value);
             }
         }
 
@@ -202,20 +202,15 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
                 try
                 {
                     IOdbcDataSourceRepository repo = scope.Resolve<IOdbcDataSourceRepository>();
-                    genericResult = new GenericResult<List<IOdbcDataSource>>(repo.GetDataSources().ToList())
-                    {
-                        Success = true
-                    };
+                    genericResult = GenericResult.FromSuccess(repo.GetDataSources().ToList());
                 }
                 catch (DataException ex)
                 {
                     log.Error("Error thrown by repo.GetDataSources", ex);
-                    genericResult = new GenericResult<List<IOdbcDataSource>>(null)
-                    {
-                        Success = false,
-                        Message = "ShipWorks encountered an error finding data sources. " +
-                                  $"{Environment.NewLine}{Environment.NewLine}{ex.Message}"
-                    };
+                    genericResult =
+                        GenericResult.FromError<List<IOdbcDataSource>>(
+                            "ShipWorks encountered an error finding data sources. " +
+                            $"{Environment.NewLine}{Environment.NewLine}{ex.Message}");
                 }
             }
             return genericResult;

@@ -60,6 +60,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// </summary>
         [DllImport("odbc32.dll", CharSet = CharSet.Auto)]
         [NDependIgnoreTooManyParams]
+#pragma warning disable S107 // Methods should not have too many parameters
         public static extern short SQLDataSources(
            IntPtr environmentHandle,
            Direction direction,
@@ -69,6 +70,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
            StringBuilder description,
            short bufferLength2,
            ref short nameLength2Ptr);
+#pragma warning restore S107 // Methods should not have too many parameters
 
         /// <summary>
         /// Free SQL handle

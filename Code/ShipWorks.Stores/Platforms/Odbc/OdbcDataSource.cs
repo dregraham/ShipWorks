@@ -4,7 +4,6 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Data;
-using System.Data.Common;
 using System.Reflection;
 using System.Text;
 
@@ -129,20 +128,18 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// </returns>
         public GenericResult<IOdbcDataSource> TestConnection()
         {
-            GenericResult<IOdbcDataSource> testResult= new GenericResult<IOdbcDataSource>(this);
+            GenericResult<IOdbcDataSource> testResult;
 
             using (IDbConnection connection = odbcProvider.CreateOdbcConnection(BuildConnectionString()))
             {
                 try
                 {
                     connection.Open();
-
-                    testResult.Success = true;
+                    testResult = GenericResult.FromSuccess((IOdbcDataSource) this);
                 }
                 catch (Exception ex)
                 {
-                    testResult.Success = false;
-                    testResult.Message = ex.Message;
+                    testResult = GenericResult.FromError(ex.Message, (IOdbcDataSource) this);
                 }
             }
 
@@ -182,7 +179,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// <summary>
         /// Creates a new ODBC Connection
         /// </summary>
-        public DbConnection CreateConnection()
+        public IDbConnection CreateConnection()
         {
             return odbcProvider.CreateOdbcConnection(ConnectionString);
         }

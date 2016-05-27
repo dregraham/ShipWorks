@@ -1,9 +1,9 @@
-﻿using System;
-using System.Reactive.Disposables;
-using System.Windows.Forms;
-using Interapptive.Shared.Threading;
+﻿using Interapptive.Shared.Threading;
 using Interapptive.Shared.UI;
 using ShipWorks.Common.Threading;
+using System;
+using System.Reactive.Disposables;
+using System.Windows.Forms;
 
 namespace ShipWorks.UI.Services
 {
@@ -27,10 +27,7 @@ namespace ShipWorks.UI.Services
         /// <summary>
         /// Show an error message box with the given error text.
         /// </summary>
-        public void ShowError(string message)
-        {
-            ShowError(ownerFactory(), message);
-        }
+        public void ShowError(string message) => MessageHelper.ShowError(ownerFactory(), message);
 
         /// <summary>
         /// Show an error message box with the given error text.
@@ -105,5 +102,19 @@ namespace ShipWorks.UI.Services
                 return dlg.ShowDialog(ownerFactory());
             }
         }
+
+        /// <summary>
+        /// Show an information message, takes an owner
+        /// </summary>
+        public void ShowInformation(IWin32Window owner, string message)
+        {
+            MessageHelper.ShowMessage(owner, message);
+        }
+
+        /// <summary>
+        /// Show a question message box.  
+        /// </summary>
+        public DialogResult ShowQuestion(MessageBoxIcon icon, MessageBoxButtons buttons, string message)
+            => MessageHelper.ShowQuestion(ownerFactory(), icon, buttons, message);
     }
 }

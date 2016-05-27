@@ -34,14 +34,18 @@ namespace ShipWorks.Stores.Platforms.Odbc
             try
             {
                 List<string> odbcDataSources = new List<string>();
-                string nextOdbcDataSource;
+                string odbcDataSource;
 
                 InitializeSqlEnvHandle();
 
+                odbcDataSource = GetNextDsn();
+
                 // Continue adding DSNs to the list of data source names until there aren't any more
-                while (!string.IsNullOrWhiteSpace(nextOdbcDataSource = GetNextDsn()))
+                while (!string.IsNullOrWhiteSpace(odbcDataSource))
                 {
-                    odbcDataSources.Add(nextOdbcDataSource);
+                    odbcDataSources.Add(odbcDataSource);
+
+                    odbcDataSource = GetNextDsn();
                 }
 
                 return odbcDataSources;

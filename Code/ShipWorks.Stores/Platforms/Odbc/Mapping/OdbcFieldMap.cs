@@ -49,10 +49,12 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 		{
 		    IOdbcFieldMapReader reader = ioFactory.CreateReader(stream);
 
-            OdbcFieldMapEntry entry;
-            while ((entry = reader.ReadEntry()) != null)
+            OdbcFieldMapEntry entry = reader.ReadEntry();
+            while (entry != null)
             {
                 AddEntry(entry);
+
+                entry = reader.ReadEntry();
             }
 
             ExternalTableName = reader.ReadExternalTableName();
