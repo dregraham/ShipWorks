@@ -50,37 +50,41 @@
             <ColumnDefinition Width="Auto"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <Label Grid.Row="0" Grid.Column="0"
-                   Style="{StaticResource Header}"
-                    FontWeight="Bold" Content="Map Settings"/>
+               Style="{StaticResource Header}"
+               FontWeight="Bold" Content="Map Settings"/>
         <Label Grid.Row="1" Grid.Column="0"
-                   HorizontalAlignment="Right" Content="Name:" />
+               HorizontalAlignment="Right" Content="Name:" />
         <Label Grid.Row="2" Grid.Column="0"
-                   HorizontalAlignment="Right" Content="Table:" />
+               HorizontalAlignment="Right" Content="Table:" />
         <TextBox Grid.Row="1" Grid.Column="1"
-                     Text="{Binding MapName}"/>
+                 Text="{Binding MapName}"/>
         <ComboBox Grid.Row="2" Grid.Column="1"
-                      ItemsSource="{Binding Tables, UpdateSourceTrigger=PropertyChanged}"
-                      DisplayMemberPath="Name"
-                      SelectedValue="{Binding SelectedTable,Mode=TwoWay}" >
+                  ItemsSource="{Binding Tables, UpdateSourceTrigger=PropertyChanged}"
+                  DisplayMemberPath="Name"
+                  SelectedValue="{Binding SelectedTable,Mode=TwoWay}" >
             <i:Interaction.Behaviors>
                 <behaviors:ComboBoxSelectionChangedBehavior Command="{Binding TableChangedCommand}" />
             </i:Interaction.Behaviors>
         </ComboBox>
-        <Button Grid.Row="1" Grid.Column="2" Content="Load Map..." Command="{Binding SaveMapCommand}"/>
-        <Button Grid.Row="2" Grid.Column="2" Content="Export Map..." Command="{Binding SaveMapCommand}"/>
+        <Button Grid.Row="1" Grid.Column="2"
+                Content="Load Map..."
+                Command="{Binding SaveMapCommand}"/>
+        <Button Grid.Row="2" Grid.Column="2"
+                Content="Export Map..."
+                Command="{Binding SaveMapCommand}"/>
 
         <Label Style="{StaticResource Header}"
                Grid.Row="4" Grid.Column="0"
                Grid.ColumnSpan="2"
                FontWeight="Bold" Content="Column Mappings" />
         <ListBox Grid.Row="5" Grid.Column="0"
-                     ItemsSource="{Binding FieldMaps, UpdateSourceTrigger=PropertyChanged}"
-                     SelectedItem="{Binding SelectedFieldMap}"
-                     Margin="0 5 2 0"
-                     BorderBrush="Gray"
-                     BorderThickness="1"
-                     Background="White"
-                     SelectedIndex="0">
+                 ItemsSource="{Binding FieldMaps, UpdateSourceTrigger=PropertyChanged}"
+                 SelectedItem="{Binding SelectedFieldMap}"
+                 Margin="0 5 2 0"
+                 BorderBrush="Gray"
+                 BorderThickness="1"
+                 Background="White"
+                 SelectedIndex="0">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Label Content="{Binding DisplayName}" Padding="3"/>
@@ -92,17 +96,17 @@
                         <Setter.Value>
                             <ControlTemplate TargetType="{x:Type ListBoxItem}">
                                 <Border x:Name="Item"
-                                            Background="{TemplateBinding Background}"
-                                            BorderBrush="{TemplateBinding BorderBrush}"
-                                            BorderThickness="{TemplateBinding BorderThickness}"
-                                            Padding="{TemplateBinding Padding}"
-                                            SnapsToDevicePixels="True">
+                                        Background="{TemplateBinding Background}"
+                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                        BorderThickness="{TemplateBinding BorderThickness}"
+                                        Padding="{TemplateBinding Padding}"
+                                        SnapsToDevicePixels="True">
                                     <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
-                                                          VerticalAlignment="{TemplateBinding VerticalAlignment}"
-                                                          Content="{TemplateBinding Content}"
-                                                          ContentStringFormat="{TemplateBinding ContentStringFormat}"
-                                                          ContentTemplate="{TemplateBinding ContentTemplate}"
-                                                          SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                                                      VerticalAlignment="{TemplateBinding VerticalAlignment}"
+                                                      Content="{TemplateBinding Content}"
+                                                      ContentStringFormat="{TemplateBinding ContentStringFormat}"
+                                                      ContentTemplate="{TemplateBinding ContentTemplate}"
+                                                      SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
                                 </Border>
                                 <ControlTemplate.Triggers>
                                     <Trigger Property="IsSelected" Value="true" >
@@ -154,16 +158,14 @@
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <Border Grid.Row="0" Grid.Column="0"
-                            BorderThickness="0 0 0 1" BorderBrush="Gray">
-                    <Label Content="ShipWorks Field"
-                               FontWeight="Bold"
-                       Padding="0" Margin="5"/>
+                        BorderThickness="0 0 0 1" BorderBrush="Gray">
+                    <Label Content="ShipWorks Field" FontWeight="Bold"
+                           Padding="0" Margin="5"/>
                 </Border>
                 <Border Grid.Row="0" Grid.Column="1"
-                            BorderThickness="0 0 0 1" BorderBrush="Gray">
-                    <Label Content="Source Column"
-                               FontWeight="Bold"
-                       Padding="0" Margin="0 5 5 5"/>
+                        BorderThickness="0 0 0 1" BorderBrush="Gray">
+                    <Label Content="Source Column" FontWeight="Bold"
+                           Padding="0" Margin="0 5 5 5"/>
                 </Border>
                 <ScrollViewer Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
                                   VerticalScrollBarVisibility="Auto">
@@ -179,11 +181,12 @@
                                         <Label Grid.Column="0" Content="{Binding ShipWorksField.DisplayName}"
                                                Margin="0 5 5 5"/>
                                         <ComboBox Grid.Column="1"
-                                                    ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Control},
+                                                  ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Control},
                                                     Path=DataContext.Columns, UpdateSourceTrigger=PropertyChanged}"
-                                                    DisplayMemberPath="Name" HorizontalAlignment="Stretch"
-                                                    Margin="0 5 5 5"
-                                                    SelectedItem="{Binding ExternalField.Column}"/>
+                                                  DisplayMemberPath="Name" HorizontalAlignment="Stretch"
+                                                  Margin="0 5 5 5"
+                                                  SelectedIndex="0"
+                                                  SelectedItem="{Binding ExternalField.Column}"/>
                                     </Grid>
                                 </Border>
                             </DataTemplate>

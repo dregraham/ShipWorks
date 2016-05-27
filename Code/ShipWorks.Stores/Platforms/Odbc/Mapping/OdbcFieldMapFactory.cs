@@ -183,7 +183,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 		{
             OdbcFieldMap masterMap = new OdbcFieldMap(ioFactory);
 
-            foreach (OdbcFieldMapEntry entry in maps.SelectMany(map => map.Entries))
+            foreach (IOdbcFieldMapEntry entry in maps.SelectMany(map => map.Entries))
             {
                 if (!string.IsNullOrWhiteSpace(entry.ExternalField.Column?.Name))
                 {

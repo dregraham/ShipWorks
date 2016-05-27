@@ -97,7 +97,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// Gets or sets the table changed command.
         /// </summary>
         public RelayCommand TableChangedCommand { get; private set; }
-       
+
         /// <summary>
         /// The columns from the selected external odbc table.
         /// </summary>
@@ -142,7 +142,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         public void Load(OdbcStoreEntity store)
         {
             MethodConditions.EnsureArgumentIsNotNull(store);
-            
+
             try
             {
                 DataSource.Restore(store.ConnectionString);
@@ -200,7 +200,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
                 e.ExternalField.Table = selectedTable;
                 e.ExternalField.Table.ResetColumns();
             });
-            
+
             return map;
         }
 
@@ -215,7 +215,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
                 return;
             }
 
-            // If the value has changed and there was a table previously selected, 
+            // If the value has changed and there was a table previously selected,
             // see if any column has been mapped and allow user to cancel if it has been
             if (previousSelectedTable != null && GetSingleMap().Entries.Any(e => e.ExternalField?.Column != null))
             {
