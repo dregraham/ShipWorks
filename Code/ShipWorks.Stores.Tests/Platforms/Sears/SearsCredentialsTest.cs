@@ -16,7 +16,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Sears
 {
     public class SearsCredentialsTest
     {
-        DateTime testDateTime = new DateTime(2016, 5, 4, 16, 20, 32, DateTimeKind.Utc);
+        readonly DateTime testDateTime = new DateTime(2016, 5, 4, 16, 20, 32, DateTimeKind.Utc);
 
         [Fact]
         public void AddCredentials_AddsEmailRequestVariable_WhenLegacyStore()

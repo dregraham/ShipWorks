@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using Autofac;
+using ShipWorks.ApplicationCore;
+using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Shipping.Editing.Rating
 {
@@ -41,6 +40,16 @@ namespace ShipWorks.Shipping.Editing.Rating
         public RateFootnoteControl CreateFootnote(FootnoteParameters parameters)
         {
             return new InformationFootnoteControl(informationText);
+        }
+
+        /// <summary>
+        /// Get a view model that represents this footnote
+        /// </summary>
+        public object CreateViewModel(ICarrierShipmentAdapter shipmentAdapter)
+        {
+            IInformationFootnoteViewModel viewModel = IoC.UnsafeGlobalLifetimeScope.Resolve<IInformationFootnoteViewModel>();
+            viewModel.InformationText = informationText;
+            return viewModel;
         }
     }
 }

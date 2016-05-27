@@ -1,7 +1,10 @@
-using ShipWorks.Data.Model.EntityClasses;
-using System;
 using System.Collections.Generic;
 using System.Linq;
+using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.ExecutionMode;
+using ShipWorks.Core.Messaging;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Messaging.Messages;
 
 namespace ShipWorks.Shipping.Settings
 {
@@ -11,8 +14,23 @@ namespace ShipWorks.Shipping.Settings
     /// <remarks>
     /// Wraps the static ShippingSettings so that static dependencies can be broken
     /// </remarks>
-    public class ShippingSettingsWrapper : IShippingSettings
+    public class ShippingSettingsWrapper : IShippingSettings, IInitializeForCurrentDatabase, ICheckForChangesNeeded
     {
+        private readonly IMessenger messenger;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public ShippingSettingsWrapper(IMessenger messenger)
+        {
+            this.messenger = messenger;
+        }
+
+        /// <summary>
+        /// Should shipments be auto created
+        /// </summary>
+        public bool AutoCreateShipments => Fetch().AutoCreateShipments;
+
         /// <summary>
         /// The list of shipment types that have been fully configured for use within ShipWorks
         /// </summary>
@@ -36,9 +54,38 @@ namespace ShipWorks.Shipping.Settings
         /// <summary>
         /// Marks the given ShipmentTypeCode as completely configured
         /// </summary>
-        public void MarkAsConfigured(ShipmentTypeCode shipmentTypeCode)
-        {
+        public void MarkAsConfigured(ShipmentTypeCode shipmentTypeCode) =>
             ShippingSettings.MarkAsConfigured(shipmentTypeCode);
+
+        /// <summary>
+        /// Fetch the current shipping settings
+        /// </summary>
+        public ShippingSettingsEntity Fetch() => ShippingSettings.Fetch();
+
+        /// <summary>
+        /// Check the database for the latest SystemData
+        /// </summary>
+        public void CheckForChangesNeeded() => ShippingSettings.CheckForChangesNeeded();
+
+        /// <summary>
+        /// Initialize for the currently logged on user
+        /// </summary>
+        public void InitializeForCurrentDatabase(ExecutionMode executionMode) =>
+            ShippingSettings.InitializeForCurrentDatabase();
+
+        /// <summary>
+        /// Save the current shipping settings
+        /// </summary>
+        public void Save(ShippingSettingsEntity shippingSettings)
+        {
+            bool wasDirty = shippingSettings.IsDirty;
+
+            ShippingSettings.Save(shippingSettings);
+
+            if (wasDirty)
+            {
+                messenger.Send(new ShippingSettingsChangedMessage(this, shippingSettings));
+            }
         }
 
         /// <summary>

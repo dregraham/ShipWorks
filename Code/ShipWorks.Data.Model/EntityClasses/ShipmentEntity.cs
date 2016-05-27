@@ -387,15 +387,14 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override bool CheckOneWayRelations(string propertyName)
 		{
 			// use template trick to calculate the # of single-sided / oneway relations
-			int numberOfOneWayRelations = 0+1;
+			int numberOfOneWayRelations = 0;
 			switch(propertyName)
 			{
 				case null:
 					return ((numberOfOneWayRelations > 0) || base.CheckOneWayRelations(null));
 
 
-				case "Order":
-					return true;
+
 
 
 
@@ -1239,7 +1238,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <param name="resetFKFields">if set to true it will also reset the FK fields pointing to the related entity</param>
 		private void DesetupSyncOrder(bool signalRelatedEntity, bool resetFKFields)
 		{
-			base.PerformDesetupSyncRelatedEntity( _order, new PropertyChangedEventHandler( OnOrderPropertyChanged ), "Order", ShipmentEntity.Relations.OrderEntityUsingOrderID, true, signalRelatedEntity, "", resetFKFields, new int[] { (int)ShipmentFieldIndex.OrderID } );		
+			base.PerformDesetupSyncRelatedEntity( _order, new PropertyChangedEventHandler( OnOrderPropertyChanged ), "Order", ShipmentEntity.Relations.OrderEntityUsingOrderID, true, signalRelatedEntity, "Shipments", resetFKFields, new int[] { (int)ShipmentFieldIndex.OrderID } );		
 			_order = null;
 		}
 
@@ -2657,14 +2656,14 @@ namespace ShipWorks.Data.Model.EntityClasses
 					{
 						if(_order != null)
 						{
-							UnsetRelatedEntity(_order, "Order");
+							_order.UnsetRelatedEntity(this, "Shipments");
 						}
 					}
 					else
 					{
 						if(_order!=value)
 						{
-							SetRelatedEntity((IEntity2)value, "Order");
+							((IEntity2)value).SetRelatedEntity(this, "Shipments");
 						}
 					}
 				}

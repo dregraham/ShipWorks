@@ -340,7 +340,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
         private void AdjustAndSetOrderTotal(OrderEntity order, ThreeDCartOrder threeDCartOrder)
         {
             decimal total = new OrderManager().CalculateOrderTotal(order);
-
+             
             var items = order.OrderItems;
 
             bool hasKitItems = items.Any(x => x.Name.StartsWith("KIT ITEM:", StringComparison.OrdinalIgnoreCase));

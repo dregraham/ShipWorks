@@ -47,6 +47,22 @@ namespace :build do
 		msb.targets :Clean
 	end
 
+	desc "Zip the layout files"
+	zip :layout do |zip|
+		zip.dirs = ["./Code/ShipWorks/ApplicationCore/Appearance/WindowLayoutDefault"]
+		zip.output_path = "./Code/ShipWorks/ApplicationCore/Appearance/WindowLayoutDefault.swl"
+	end
+
+	desc "Zip the layout into an importable environment file"
+	zip :environment, [:environment_path] => "build:layout" do |zip, args|
+		dir = Dir.mktmpdir
+		window_path = dir + "/windows.swl"
+		FileUtils.cp "./Code/ShipWorks/ApplicationCore/Appearance/WindowLayoutDefault.swl", window_path
+
+		zip.files = [window_path]
+		zip.output_path = args.environment_path
+	end
+
 	desc "Build ShipWorks in the Debug configuration"
 	msbuild :debug, [:forCI] => "build:restore" do |msb, args|
 		if args != nil and args.forCI != nil and args.forCI == 'true'
@@ -174,6 +190,7 @@ namespace :test do
 		print "Executing ShipWorks unit tests...\r\n\r\n"
 		Dir.mkdir("TestResults") if !Dir.exist?("TestResults")
 
+		msbuild.parameters = "/m:4"
 		msbuild.solution = "tests.msbuild"		# Assumes rake will be executed from the directory containing the rakefile and solution file
 		msbuild.properties :configuration => :Debug
 		msbuild.targets :Units
@@ -184,12 +201,15 @@ namespace :test do
 		# Delete results from any previous test runs
 		DeleteOldTestRuns("integration")
 
+		# We need the integration tests to run in parallel so that the correct synchronization context gets set.
+		# If they are not run in parallel, some async tests will deadlock
+		msbuild.parameters = "/m:4"
+
 		unless args.categoryFilter.nil? or args.categoryFilter.empty?
 			# We need to filter the tests based on the categories provided
-			#categoryParameter = "/category:" + args.categoryFilter
-			msbuild.parameters = "/p:IncludeTraits=\"Category=#{args.categoryFilter}\""
+			msbuild.parameters += " /p:IncludeTraits=\"Category=#{args.categoryFilter}\""
 			print "Category Parameter #{args.categoryFilter}"
-
+		
 		end
 
 		print "Executing ShipWorks integrations tests...\r\n\r\n"

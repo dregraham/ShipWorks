@@ -2,7 +2,6 @@
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using ShipWorks.Editions;
-using ShipWorks.Shipping;
 
 namespace ShipWorks.ApplicationCore.Licensing.FeatureRestrictions
 {

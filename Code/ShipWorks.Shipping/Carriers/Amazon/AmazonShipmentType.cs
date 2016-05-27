@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing.Imaging;
 using System.Linq;
-using Interapptive.Shared;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data;
@@ -14,6 +14,7 @@ using ShipWorks.Shipping.Carriers.Amazon.Enums;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Profiles;
+using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.ShipSense.Packaging;
 using ShipWorks.Shipping.Tracking;
 using ShipWorks.Stores;
@@ -33,6 +34,13 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         private readonly IShippingManager shippingManager;
         private readonly IEditionManager editionManager;
         private readonly ILicenseService licenseService;
+
+        /// <summary>
+        /// Constructor for tests
+        /// </summary>
+        public AmazonShipmentType()
+        {
+        }
 
         /// <summary>
         /// Constructor
@@ -83,7 +91,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             shipment.Amazon.ShippingServiceName;
 
         /// <summary>
-        /// Get detailed information about the parcel in a generic way that can be used accross shipment types
+        /// Get detailed information about the parcel in a generic way that can be used across shipment types
         /// </summary>
         public override ShipmentParcel GetParcelDetail(ShipmentEntity shipment, int parcelIndex)
         {
@@ -96,7 +104,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
                 TotalWeight = shipment.TotalWeight
             };
         }
-          
+
         /// <summary>
         /// Create the XML input to the XSL engine
         /// </summary>
@@ -161,7 +169,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// Amazon supports rates
         /// </summary>
         public override bool SupportsGetRates => true;
-                
+
 
         /// <summary>
         /// Checks whether this shipment type is allowed for the given shipment
@@ -185,6 +193,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// <summary>
         /// Gets a value indicating whether this instance is shipment type restricted.
         /// </summary>
+        /// 
         /// Overridden to use dependency
         public override bool IsShipmentTypeRestricted
         {
@@ -206,7 +215,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// <summary>
         /// Get the default profile for the shipment type
         /// </summary>
-        protected override void ConfigurePrimaryProfile(ShippingProfileEntity profile)
+        public override void ConfigurePrimaryProfile(ShippingProfileEntity profile)
         {
             base.ConfigurePrimaryProfile(profile);
 
@@ -240,7 +249,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
 
             ShippingProfileUtility.ApplyProfileValue(amazonProfile.DeliveryExperience, amazonShipment, AmazonShipmentFields.DeliveryExperience);
 
-            if (amazonProfile.Weight != null && amazonProfile.Weight.Value != 0)
+            if (amazonProfile.Weight.GetValueOrDefault() > 0)
             {
                 ShippingProfileUtility.ApplyProfileValue(amazonProfile.Weight, shipment, ShipmentFields.ContentWeight);
             }
@@ -269,11 +278,11 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             }
         }
 
-
         /// <summary>
         /// Tracks the shipment.
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("SonarQube", "S1871:Two branches in the same conditional structure should not have exactly the same implementation", Justification = "Easier to understand broken out this way.")]
+        [SuppressMessage("SonarQube", "S1871:Two branches in the same conditional structure should not have exactly the same implementation",
+            Justification = "Easier to understand broken out this way.")]
         public override TrackingResult TrackShipment(ShipmentEntity shipment)
         {
             if (string.IsNullOrWhiteSpace(shipment?.TrackingNumber))
@@ -286,7 +295,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             string serviceUsed = shippingManager.GetServiceUsed(shipment);
             if (serviceUsed.IndexOf("ups", StringComparison.OrdinalIgnoreCase) >= 0)
             {
-                trackingLink = $"http://wwwapps.ups.com/WebTracking/processInputRequest?HTMLVersion=5.0&amp;loc=en_US&amp;Requester=UPSHome&amp;tracknum={shipment.TrackingNumber}&amp;AgreeToTermsAndConditions=yes&amp;track.x=46&amp;track.y=9";
+                trackingLink = $"http://wwwapps.ups.com/WebTracking/processInputRequest?HTMLVersion=5.0&amp;loc=en_US&" +
+                    $"amp;Requester=UPSHome&amp;tracknum={shipment.TrackingNumber}&amp;AgreeToTermsAndConditions=yes&amp;track.x=46&amp;track.y=9";
             }
             else if (serviceUsed.IndexOf("DHL SM", StringComparison.OrdinalIgnoreCase) >= 0)
             {

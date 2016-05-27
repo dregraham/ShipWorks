@@ -350,7 +350,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.FeatureRestrictions
                 Mock<IShipmentTypeManager> shipmentTypeManager = mock.Mock<IShipmentTypeManager>();
                 shipmentTypeManager.Setup(
                     m =>
-                        m.GetType(It.Is<ShipmentTypeCode>(s => s == ShipmentTypeCode.UpsOnLineTools))).Returns(shipmentType.Object);
+                        m.Get(It.Is<ShipmentTypeCode>(s => s == ShipmentTypeCode.UpsOnLineTools))).Returns(shipmentType.Object);
 
                 Mock<ILicenseCapabilities> licenseCapabilities = mock.Mock<ILicenseCapabilities>();
                 licenseCapabilities.SetupGet(c => c.ShipmentTypeRestriction).Returns(shipmentTypeRestriction);
@@ -385,7 +385,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.FeatureRestrictions
                 Mock<IShipmentTypeManager> shipmentTypeManager = mock.Mock<IShipmentTypeManager>();
                 shipmentTypeManager.Setup(
                     m =>
-                        m.GetType(It.Is<ShipmentTypeCode>(s => s == ShipmentTypeCode.UpsOnLineTools))).Returns(shipmentType.Object);
+                        m.Get(It.Is<ShipmentTypeCode>(s => s == ShipmentTypeCode.UpsOnLineTools))).Returns(shipmentType.Object);
 
                 Mock<ILicenseCapabilities> licenseCapabilities = mock.Mock<ILicenseCapabilities>();
                 licenseCapabilities.SetupGet(c => c.ShipmentTypeRestriction).Returns(shipmentTypeRestriction);
@@ -458,8 +458,9 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.FeatureRestrictions
                 Mock<IShipmentTypeManager> shipmentTypeManager = mock.Mock<IShipmentTypeManager>();
                 shipmentTypeManager.Setup(
                     m =>
-                        m.GetType(It.Is<ShipmentTypeCode>(s => s == ShipmentTypeCode.UpsOnLineTools))).Returns(shipmentType.Object);
+                        m.Get(It.Is<ShipmentTypeCode>(s => s == ShipmentTypeCode.UpsOnLineTools))).Returns(shipmentType.Object);
 
+                
                 Mock<ILicenseCapabilities> licenseCapabilities = mock.Mock<ILicenseCapabilities>();
                 licenseCapabilities.SetupGet(c => c.ShipmentTypeRestriction).Returns(shipmentTypeRestriction);
                 licenseCapabilities.SetupGet(c => c.IsBestRateAllowed).Returns(true);
@@ -495,7 +496,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.FeatureRestrictions
                 Mock<IShipmentTypeManager> shipmentTypeManager = mock.Mock<IShipmentTypeManager>();
                 shipmentTypeManager.Setup(
                     m =>
-                        m.GetType(It.Is<ShipmentTypeCode>(s => s == ShipmentTypeCode.UpsOnLineTools))).Returns(shipmentType.Object);
+                        m.Get(It.Is<ShipmentTypeCode>(s => s == ShipmentTypeCode.UpsOnLineTools))).Returns(shipmentType.Object);
 
                 Mock<ILicenseCapabilities> licenseCapabilities = mock.Mock<ILicenseCapabilities>();
                 licenseCapabilities.SetupGet(c => c.ShipmentTypeRestriction).Returns(shipmentTypeRestriction);
@@ -564,7 +565,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.FeatureRestrictions
                 Mock<IShipmentTypeManager> shipmentTypeManager = mock.Mock<IShipmentTypeManager>();
                 shipmentTypeManager.Setup(
                     m =>
-                        m.GetType(It.Is<ShipmentTypeCode>(s => s == ShipmentTypeCode.UpsOnLineTools))).Returns(shipmentType.Object);
+                        m.Get(It.Is<ShipmentTypeCode>(s => s == ShipmentTypeCode.UpsOnLineTools))).Returns(shipmentType.Object);
 
                 Mock<ILicenseCapabilities> licenseCapabilities = mock.Mock<ILicenseCapabilities>();
                 licenseCapabilities.SetupGet(c => c.ShipmentTypeRestriction).Returns(shipmentTypeRestriction);
@@ -604,7 +605,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.FeatureRestrictions
                 Mock<IShipmentTypeManager> shipmentTypeManager = mock.Mock<IShipmentTypeManager>();
                 shipmentTypeManager.Setup(
                     m =>
-                        m.GetType(It.Is<ShipmentTypeCode>(s => s == ShipmentTypeCode.UpsOnLineTools)))
+                        m.Get(It.Is<ShipmentTypeCode>(s => s == ShipmentTypeCode.UpsOnLineTools)))
                     .Returns(shipmentType.Object);
 
                 Mock<ILicenseCapabilities> licenseCapabilities = mock.Mock<ILicenseCapabilities>();

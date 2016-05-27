@@ -1,19 +1,13 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Linq;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.HelperClasses;
-using log4net;
-using System.Diagnostics;
-using ShipWorks.Data.Connection;
-using ShipWorks.Data.Adapter.Custom;
-using System.Data.SqlClient;
 using Interapptive.Shared;
-using Interapptive.Shared.Data;
-using ShipWorks.Data.Model;
+using log4net;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Caching;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.HelperClasses;
 
 namespace ShipWorks.Data.Utility
 {
@@ -27,14 +21,14 @@ namespace ShipWorks.Data.Utility
 
         // The collection we maintain
         EntityCollection<TEntity> collection = new EntityCollection<TEntity>();
-    
+
         // The synchronizer
         EntityChangeTrackingMonitor changeMonitor = null;
 
-        // Properties of our talbe
+        // Properties of our table
         EntityField2 primaryKeyField;
 
-        // Allow overwriting of edited entitues
+        // Allow overwriting of edited entities
         bool allowOverwriteOfEdited = false;
 
         /// <summary>
@@ -46,7 +40,7 @@ namespace ShipWorks.Data.Utility
         }
 
         /// <summary>
-        /// The entity collection that is kept synchronized with the datbase
+        /// The entity collection that is kept synchronized with the database
         /// </summary>
         public EntityCollection<TEntity> EntityCollection
         {
@@ -54,7 +48,7 @@ namespace ShipWorks.Data.Utility
         }
 
         /// <summary>
-        /// If false, entities that have IsDirty set to true will not be able to be overwritten with 
+        /// If false, entities that have IsDirty set to true will not be able to be overwritten with
         /// changes from the database.  Instead an exception will be thrown.
         /// </summary>
         public bool AllowOverwriteOfEdited
@@ -82,7 +76,7 @@ namespace ShipWorks.Data.Utility
                 changeMonitor = new EntityChangeTrackingMonitor();
                 changeMonitor.Initialize(new List<EntityType> { EntityUtility.GetEntityType(typeof(TEntity)) });
 
-                using (SqlAdapter adapter = new SqlAdapter())
+                using (SqlAdapter adapter = SqlAdapter.Create(false))
                 {
                     adapter.FetchEntityCollection(collection, null);
 
@@ -101,7 +95,7 @@ namespace ShipWorks.Data.Utility
                 if (!changeset.IsValid)
                 {
                     // If the changeset is invalid - we have to start over from scratch
-                    using (SqlAdapter adapter = new SqlAdapter())
+                    using (SqlAdapter adapter = SqlAdapter.Create(false))
                     {
                         collection.Clear();
 
@@ -128,7 +122,7 @@ namespace ShipWorks.Data.Utility
 
                     // Get all the changed entities and new entities
                     EntityCollection<TEntity> changeCollection = new EntityCollection<TEntity>();
-                    using (SqlAdapter adapter = new SqlAdapter())
+                    using (SqlAdapter adapter = SqlAdapter.Create(false))
                     {
                         adapter.FetchEntityCollection(changeCollection, bucket);
                     }
@@ -188,7 +182,7 @@ namespace ShipWorks.Data.Utility
 
                         if (!field.IsReadOnly)
                         {
-                            // First, we use this to ensure proper eventing and propogation
+                            // First, we use this to ensure proper eventing and propagation
                             existing.SetNewFieldValue(field.FieldIndex, newValue);
                         }
 
@@ -211,7 +205,7 @@ namespace ShipWorks.Data.Utility
         }
 
         /// <summary>
-        /// Check for any delections, and update the given entity list to reflect them.
+        /// Check for any deletions, and update the given entity list to reflect them.
         /// </summary>
         private bool RemoveDeletions(IEnumerable<long> deleted)
         {

@@ -1,31 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Autofac;
+using Autofac.Features.OwnedInstances;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Express1.Registration;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
-using ShipWorks.Shipping.Editing;
-using ShipWorks.Shipping.Editing.Rating;
-using ShipWorks.Shipping.Profiles;
-using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Registration;
-using ShipWorks.Shipping.Carriers.Postal.Usps.RateFootnotes.Promotion;
+using ShipWorks.Shipping.Editing;
+using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Insurance;
+using ShipWorks.Shipping.Profiles;
+using ShipWorks.Shipping.Settings;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1
 {
     /// <summary>
     /// Shipment type for Express 1 for USPS shipments.
     /// </summary>
-    [Obfuscation(Exclude = true, ApplyToMembers = false)]    
+    [Obfuscation(Exclude = true, ApplyToMembers = false)]
     public class Express1UspsShipmentType : UspsShipmentType
     {
         /// <summary>
@@ -110,13 +110,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1
         /// </summary>
         public override ShipmentTypeSetupWizardForm CreateSetupWizard()
         {
-            Express1Registration registration = new Express1Registration(ShipmentTypeCode, new UspsExpress1RegistrationGateway(), new UspsExpress1RegistrationRepository(), new UspsExpress1PasswordEncryptionStrategy(), new Express1RegistrationValidator());
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                Express1Registration registration = new Express1Registration(ShipmentTypeCode, new UspsExpress1RegistrationGateway(), new UspsExpress1RegistrationRepository(), new UspsExpress1PasswordEncryptionStrategy(), new Express1RegistrationValidator());
 
-            UspsAccountManagerControl accountManagerControl = new UspsAccountManagerControl { UspsResellerType = UspsResellerType.Express1 };
-            UspsOptionsControl optionsControl = new UspsOptionsControl { ShipmentTypeCode = ShipmentTypeCode.Express1Usps };
-            UspsPurchasePostageDlg postageDialog = new UspsPurchasePostageDlg();
+                UspsAccountManagerControl accountManagerControl = new UspsAccountManagerControl { UspsResellerType = UspsResellerType.Express1 };
+                UspsOptionsControl optionsControl = new UspsOptionsControl { ShipmentTypeCode = ShipmentTypeCode.Express1Usps };
+                UspsPurchasePostageDlg postageDialog = lifetimeScope.Resolve<Owned<UspsPurchasePostageDlg>>().Value;
 
-            return new Express1SetupWizard(postageDialog, accountManagerControl, optionsControl, registration, UspsAccountManager.Express1Accounts);
+                return new Express1SetupWizard(postageDialog, accountManagerControl, optionsControl, registration, UspsAccountManager.Express1Accounts);
+            }
         }
 
         /// <summary>
@@ -134,9 +137,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1
         public override void UpdateDynamicShipmentData(ShipmentEntity shipment)
         {
             base.UpdateDynamicShipmentData(shipment);
-            shipment.InsuranceProvider = (int) InsuranceProvider.ShipWorks;
+            shipment.InsuranceProvider = (int)InsuranceProvider.ShipWorks;
         }
-        
+
         /// <summary>
         /// Gets the processing synchronizer to be used during the PreProcessing of a shipment.
         /// </summary>

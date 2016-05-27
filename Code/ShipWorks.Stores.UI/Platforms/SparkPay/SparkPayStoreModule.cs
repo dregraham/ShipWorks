@@ -1,5 +1,4 @@
 ﻿using Autofac;
-using Interapptive.Shared.UI;
 using ShipWorks.Actions.Tasks;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Management;
@@ -7,6 +6,7 @@ using ShipWorks.Stores.Platforms.SparkPay;
 using ShipWorks.Stores.Platforms.SparkPay.CoreExtensions.Actions;
 using ShipWorks.Stores.Platforms.SparkPay.Factories;
 using ShipWorks.Stores.UI.Platforms.SparkPay.WizardPages;
+using ShipWorks.UI.Services;
 using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Stores.UI.Platforms.SparkPay

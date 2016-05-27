@@ -6,7 +6,7 @@ using System.Data;
 using System.Text;
 using System.Windows.Forms;
 using Divelements.SandGrid;
-using Interapptive.Shared.Messaging;
+using ShipWorks.Core.Messaging;
 using ShipWorks.Properties;
 using ShipWorks.Data.Model.EntityClasses;
 using log4net;
@@ -31,6 +31,7 @@ using Interapptive.Shared.UI;
 using ShipWorks.Data;
 using ShipWorks.Editions;
 using ShipWorks.Filters.Search;
+using ShipWorks.Messaging.Messages;
 using System.Reactive.Linq;
 
 namespace ShipWorks.Filters.Controls

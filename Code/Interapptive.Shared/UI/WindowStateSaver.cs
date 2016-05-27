@@ -1,17 +1,13 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Windows.Forms;
-using Microsoft.Win32;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
-using Interapptive.Shared;
-using System.ComponentModel;
-using Interapptive.Shared.Win32;
-using System.Xml.Linq;
-using System.Diagnostics;
-using log4net;
+using System.Windows.Forms;
 using System.Xml;
+using System.Xml.Linq;
+using log4net;
 
 namespace Interapptive.Shared.UI
 {
@@ -24,7 +20,7 @@ namespace Interapptive.Shared.UI
 
         // Controls where the window state information is saved.  null until initialized
         static string statefile;
-        
+
         // The dictionary of window state, keyed from window name
         static Dictionary<string, WindowState> windowStateMap;
 
@@ -95,25 +91,25 @@ namespace Interapptive.Shared.UI
                 XElement root = XElement.Load(statefile);
                 foreach (var node in root.Elements("WindowState"))
                 {
-                    WindowState state = new WindowState { Name = (string)node.Attribute("name") };
+                    WindowState state = new WindowState { Name = (string) node.Attribute("name") };
 
                     var bounds = node.Element("Bounds");
                     var formState = node.Element("FormState");
                     var splitters = node.Element("Splitters");
 
                     state.Bounds = new Rectangle(
-                        (int)bounds.Attribute("x"),
-                        (int)bounds.Attribute("y"),
-                        (int)bounds.Attribute("width"),
-                        (int)bounds.Attribute("height"));
+                        (int) bounds.Attribute("x"),
+                        (int) bounds.Attribute("y"),
+                        (int) bounds.Attribute("width"),
+                        (int) bounds.Attribute("height"));
 
-                    state.FormState = (FormWindowState)(int)formState;
+                    state.FormState = (FormWindowState) (int) formState;
 
                     if (splitters != null)
                     {
                         foreach (var splitter in splitters.Elements("Splitter"))
                         {
-                            state.SplitterDistances[(string)splitter.Attribute("name")] = (int)splitter.Attribute("distance");
+                            state.SplitterDistances[(string) splitter.Attribute("name")] = (int) splitter.Attribute("distance");
                         }
                     }
 
@@ -279,11 +275,11 @@ namespace Interapptive.Shared.UI
                 }
 
                 windowStateMap[windowName] = new WindowState()
-                    {
-                        Name = windowName,
-                        Bounds = bounds,
-                        FormState = FormWindowState.Normal
-                    };
+                {
+                    Name = windowName,
+                    Bounds = bounds,
+                    FormState = FormWindowState.Normal
+                };
             }
 
             // See if we have a previous entry for this window
@@ -331,11 +327,11 @@ namespace Interapptive.Shared.UI
             else
             {
                 state = new WindowState
-                    {
-                        Name = windowName,
-                        Bounds = form.DesktopBounds,
-                        FormState = form.WindowState
-                    };
+                {
+                    Name = windowName,
+                    Bounds = form.DesktopBounds,
+                    FormState = form.WindowState
+                };
 
                 windowStateMap[windowName] = state;
             }
@@ -372,7 +368,7 @@ namespace Interapptive.Shared.UI
                 splitContainer.SplitterDistance = distance;
             }
         }
-                
+
         /// <summary>
         /// Saves the Form size
         /// </summary>

@@ -6,16 +6,21 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using Divelements.SandGrid;
+using ShipWorks.Core.Messaging;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Grid.Columns.DisplayTypes.Decorators;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Messaging.Messages;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Settings;
+using ShipWorks.ApplicationCore;
+using Autofac;
+using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Data.Grid.Columns.DisplayTypes
 {
@@ -24,12 +29,22 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes
     /// </summary>
     internal class GridProviderDisplayType : GridEnumDisplayType<ShipmentTypeCode>
     {
+        private readonly IMessenger messenger;
+
         /// <summary>
         /// Default constructor
         /// </summary>
         public GridProviderDisplayType(EnumSortMethod sortMethod)
+            : this(sortMethod, Messenger.Current)
+        {}
+
+        /// <summary>
+        /// Default constructor
+        /// </summary>
+        public GridProviderDisplayType(EnumSortMethod sortMethod, IMessenger messenger) 
             : base(sortMethod)
         {
+            this.messenger = messenger;
             GridHyperlinkDecorator gridHyperlinkDecorator = new GridHyperlinkDecorator();
             gridHyperlinkDecorator.QueryEnabled += (sender, args) => args.Enabled = LinkEnabled(args.Entity);
             gridHyperlinkDecorator.LinkClicked += OnHyperlinkDecoratorLinkClicked;
@@ -75,7 +90,7 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes
         /// <summary>
         /// Shows the provider option menu.
         /// </summary>
-        public static void ShowProviderOptionMenu(GridRow row, ShipmentEntity shipment, Point displayPosition)
+        public void ShowProviderOptionMenu(GridRow row, ShipmentEntity shipment, Point displayPosition)
         {
             if (shipment.Processed)
             {
@@ -120,7 +135,7 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes
         /// <summary>
         /// Selects the provider.
         /// </summary>
-        private static void SelectProvider(ShipmentEntity shipment, ShipmentType type)
+        private void SelectProvider(ShipmentEntity shipment, ShipmentType type)
         {
             shipment.ShipmentType = (int)type.ShipmentTypeCode;
             shipment.Order = (OrderEntity)DataProvider.GetEntity(shipment.OrderID);
@@ -136,6 +151,11 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes
             CustomsManager.LoadCustomsItems(shipment, false);
 
             Program.MainForm.ForceHeartbeat();
+
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                messenger.Send(new ShipmentChangedMessage(this, lifetimeScope.Resolve<ICarrierShipmentAdapterFactory>().Get(shipment)));
+            }
         }
     }
 }

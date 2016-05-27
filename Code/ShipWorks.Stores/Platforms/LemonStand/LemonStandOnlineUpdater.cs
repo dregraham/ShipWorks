@@ -8,6 +8,7 @@ using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Content;
+using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Stores.Platforms.LemonStand
 {
@@ -133,10 +134,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         /// </summary>
         public void UpdateShipmentDetails(ShipmentEntity shipment)
         {
-            if (shipment == null)
-            {
-                throw new ArgumentNullException(nameof(shipment));
-            }
+            MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
 
             if (!shipment.Order.IsManual)
             {

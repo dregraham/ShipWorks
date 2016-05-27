@@ -1,16 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using Interapptive.Shared.Utility;
 using System.Drawing;
+using System.Windows.Forms;
 using ShipWorks.Templates.Tokens;
 
 namespace ShipWorks.UI.Controls
 {
     /// <summary>
-    /// Utility class for working with controls that can have mutliple values due to multiple selection.
+    /// Utility class for working with controls that can have multiple values due to multiple selection.
     /// </summary>
     public static class MultiValueExtensions
     {
@@ -69,7 +65,7 @@ namespace ShipWorks.UI.Controls
         }
 
         /// <summary>
-        /// Read a value from the gien DateTimePicker.  If its multiValued, the assigner is not called.
+        /// Read a value from the given DateTimePicker.  If its multiValued, the assigner is not called.
         /// </summary>
         public static void ReadMultiDate(this MultiValueDateTimePicker datePicker, Action<DateTime> assigner)
         {
@@ -80,7 +76,7 @@ namespace ShipWorks.UI.Controls
         }
 
         /// <summary>
-        /// Read a value from the gien WeightControl.  If its multiValued, the assigner is not called.
+        /// Read a value from the given WeightControl.  If its multiValued, the assigner is not called.
         /// </summary>
         public static void ReadMultiWeight(this WeightControl weight, Action<double> assigner)
         {
@@ -191,7 +187,7 @@ namespace ShipWorks.UI.Controls
         }
 
         /// <summary>
-        /// Check to see if assiging the given value would make the MoneyTextBox in multivalue mode
+        /// Check to see if assigning the given value would make the MoneyTextBox in multivalue mode
         /// </summary>
         public static void ApplyMultiAmount(this MoneyTextBox moneyTextBox, decimal amount)
         {
@@ -204,7 +200,7 @@ namespace ShipWorks.UI.Controls
         }
 
         /// <summary>
-        /// Check to see if assiging the given value would make the TemplateTokenTextBox in multivalue mode
+        /// Check to see if assigning the given value would make the TemplateTokenTextBox in multivalue mode
         /// </summary>
         public static void ApplyMultiText(this TemplateTokenTextBox tokenBox, string text)
         {

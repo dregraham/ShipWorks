@@ -1,14 +1,25 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Runtime.Serialization;
 
 namespace ShipWorks.Stores.Platforms.Amazon.Mws
 {
+    [Serializable]
     public class AmazonMwsThrottleWaitCancelException : AmazonException
     {
-        public AmazonMwsThrottleWaitCancelException() : 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public AmazonMwsThrottleWaitCancelException() :
             base("Waiting for Amazon to stop throttling was canceled.", null)
+        {
+
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        protected AmazonMwsThrottleWaitCancelException(SerializationInfo serializationInfo, StreamingContext streamingContext) :
+            base(serializationInfo, streamingContext)
         {
 
         }

@@ -1,18 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
-using ShipWorks.Data.Model.EntityClasses;
 using Divelements.SandGrid;
-using ShipWorks.UI.Controls;
-using ShipWorks.Users;
-using ShipWorks.UI;
-using ShipWorks.Data.Connection;
 using Interapptive.Shared.UI;
+using ShipWorks.Core.Messaging;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Messaging.Messages;
+using ShipWorks.UI.Controls;
 
 namespace ShipWorks.Shipping.Editing
 {
@@ -29,6 +23,17 @@ namespace ShipWorks.Shipping.Editing
         public DimensionsManagerDlg()
         {
             InitializeComponent();
+
+            this.Closing += OnClosing;
+        }
+
+        /// <summary>
+        /// Handles the closing event.
+        /// </summary>
+        private void OnClosing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            // Send a message that dimensions profiles have changed.
+            Messenger.Current.Send(new DimensionsProfilesChangedMessage(null));
         }
 
         /// <summary>
@@ -49,11 +54,11 @@ namespace ShipWorks.Shipping.Editing
 
             foreach (DimensionsProfileEntity profile in DimensionsManager.Profiles)
             {
-                GridRow row = new GridRow(new string[] 
-                    { 
+                GridRow row = new GridRow(new string[]
+                    {
                         profile.Name,
                         string.Format("{0} x {1} x {2} in", profile.Length, profile.Width, profile.Height),
-                        WeightControl.FormatWeight(profile.Weight, (WeightDisplayFormat) UserSession.User.Settings.ShippingWeightFormat)
+                        WeightConverter.Current.FormatWeight(profile.Weight)
                     });
 
                 sandGrid.Rows.Add(row);

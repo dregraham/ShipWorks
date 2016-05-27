@@ -1,17 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using ShipWorks.Editions.Freemium;
-using ShipWorks.Editions.Brown;
+using System.Xml;
 using System.Xml.Linq;
 using Interapptive.Shared.Security;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Editions.Brown;
+using ShipWorks.Editions.Freemium;
 
 namespace ShipWorks.Editions
 {
     /// <summary>
-    /// Responsibile for saving and restoring the state of Editions
+    /// Responsible for saving and restoring the state of Editions
     /// </summary>
     public static class EditionSerializer
     {
@@ -69,7 +70,7 @@ namespace ShipWorks.Editions
 
 
         /// <summary>
-        /// Insantiate an edition based on the given identifier and memento data
+        /// Instantiate an edition based on the given identifier and memento data
         /// </summary>
         private static Edition InstantiateEdition(StoreEntity store, string identifier, IEnumerable<XElement> xMemento)
         {
@@ -96,7 +97,7 @@ namespace ShipWorks.Editions
 
             if (xOptions != null)
             {
-                bool stampsDhlEnabled = xOptions.Descendants("StampsDhl").Any() && (bool)xOptions.Element("StampsDhl");
+                bool stampsDhlEnabled = xOptions.Descendants("StampsDhl").Any() && (bool) xOptions.Element("StampsDhl");
                 edition.SharedOptions.StampsDhlEnabled = stampsDhlEnabled;
 
                 bool endiciaDhlEnabled = (bool) xOptions.Element("EndiciaDhl");
@@ -111,12 +112,12 @@ namespace ShipWorks.Editions
                 bool endiciaConsolidator = xOptions.Descendants("EndiciaConsolidator").Any() && (bool) xOptions.Element("EndiciaConsolidator");
                 edition.SharedOptions.EndiciaConsolidatorEnabled = endiciaConsolidator;
 
-                bool endiciaScanBasedReturns = xOptions.Descendants("EndiciaScanBasedReturns").Any() && (bool)xOptions.Element("EndiciaScanBasedReturns");
+                bool endiciaScanBasedReturns = xOptions.Descendants("EndiciaScanBasedReturns").Any() && (bool) xOptions.Element("EndiciaScanBasedReturns");
                 edition.SharedOptions.EndiciaScanBasedReturnEnabled = endiciaScanBasedReturns;
 
                 ApplyStampsConsolidatorSharedOptions(edition, xOptions);
 
-                bool stampsInsuranceEnabled = xOptions.Descendants("StampsInsurance").Any() && (bool)xOptions.Element("StampsInsurance");
+                bool stampsInsuranceEnabled = xOptions.Descendants("StampsInsurance").Any() && (bool) xOptions.Element("StampsInsurance");
                 edition.SharedOptions.StampsInsuranceEnabled = stampsInsuranceEnabled;
             }
         }
@@ -128,19 +129,19 @@ namespace ShipWorks.Editions
         /// <param name="xOptions"></param>
         private static void ApplyStampsConsolidatorSharedOptions(Edition edition, XElement xOptions)
         {
-            bool consolidator = xOptions.Descendants("StampsAscendiaEnabled").Any() && (bool)xOptions.Element("StampsAscendiaEnabled");
+            bool consolidator = xOptions.Descendants("StampsAscendiaEnabled").Any() && (bool) xOptions.Element("StampsAscendiaEnabled");
             edition.SharedOptions.StampsAscendiaEnabled = consolidator;
 
-            consolidator = xOptions.Descendants("StampsDhlConsolidatorEnabled").Any() && (bool)xOptions.Element("StampsDhlConsolidatorEnabled");
+            consolidator = xOptions.Descendants("StampsDhlConsolidatorEnabled").Any() && (bool) xOptions.Element("StampsDhlConsolidatorEnabled");
             edition.SharedOptions.StampsDhlConsolidatorEnabled = consolidator;
 
-            consolidator = xOptions.Descendants("StampsGlobegisticsEnabled").Any() && (bool)xOptions.Element("StampsGlobegisticsEnabled");
+            consolidator = xOptions.Descendants("StampsGlobegisticsEnabled").Any() && (bool) xOptions.Element("StampsGlobegisticsEnabled");
             edition.SharedOptions.StampsGlobegisticsEnabled = consolidator;
 
-            consolidator = xOptions.Descendants("StampsIbcEnabled").Any() && (bool)xOptions.Element("StampsIbcEnabled");
+            consolidator = xOptions.Descendants("StampsIbcEnabled").Any() && (bool) xOptions.Element("StampsIbcEnabled");
             edition.SharedOptions.StampsIbcEnabled = consolidator;
 
-            consolidator = xOptions.Descendants("StampsRrDonnelleyEnabled").Any() && (bool)xOptions.Element("StampsRrDonnelleyEnabled");
+            consolidator = xOptions.Descendants("StampsRrDonnelleyEnabled").Any() && (bool) xOptions.Element("StampsRrDonnelleyEnabled");
             edition.SharedOptions.StampsRrDonnelleyEnabled = consolidator;
         }
 
@@ -151,12 +152,12 @@ namespace ShipWorks.Editions
         {
             Type type = edition.GetType();
 
-            if (type == typeof(Edition))                return "standard";
-            if (type == typeof(FreemiumFreeEdition))    return "freemiumFree";
-            if (type == typeof(FreemiumPaidEdition))    return "freemiumPaid";
+            if (type == typeof(Edition)) return "standard";
+            if (type == typeof(FreemiumFreeEdition)) return "freemiumFree";
+            if (type == typeof(FreemiumPaidEdition)) return "freemiumPaid";
             if (type == typeof(BrownDiscountedEdition)) return "upsDiscounted";
             if (type == typeof(BrownSubsidizedEdition)) return "upsSubsidized";
-            if (type == typeof(BrownCtp2014Edition))    return "upsCtp2014";
+            if (type == typeof(BrownCtp2014Edition)) return "upsCtp2014";
             if (type == typeof(ShipRushEndiciaEdition)) return "srendicia";
 
             throw new InvalidOperationException("Unhandled Edition type: " + type);

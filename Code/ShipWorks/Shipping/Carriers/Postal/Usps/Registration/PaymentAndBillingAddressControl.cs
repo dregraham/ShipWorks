@@ -1,7 +1,7 @@
 ﻿using Interapptive.Shared.Business;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
-using ShipWorks.ApplicationCore.Licensing;
+using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
 using System;
 using System.Text;
 using System.Windows.Forms;
@@ -93,7 +93,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Registration
         public bool ValidateData()
         {
             bool isValid = true;
-            if(!billingAddress.ValidateRequiredFields())
+            if (!billingAddress.ValidateRequiredFields())
             {
                 return false;
             }

@@ -47,6 +47,8 @@
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -163,6 +165,18 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Threading.Tasks, Version=1.0.12.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Threading.Tasks.Extensions, Version=1.0.12.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.Extensions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Threading.Tasks.Extensions.Desktop, Version=1.0.168.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.Extensions.Desktop.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.Web.Services3, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Components\Microsoft.Web.Services3.dll</HintPath>
@@ -269,7 +283,12 @@
     <Reference Include="System.IdentityModel">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.IO, Version=2.6.10.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.Bcl.1.1.10\lib\net40\System.IO.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Management" />
+    <Reference Include="System.Net" />
     <Reference Include="System.Reactive.Core, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Rx-Core.2.2.5\lib\net40\System.Reactive.Core.dll</HintPath>
       <Private>True</Private>
@@ -286,6 +305,18 @@
       <HintPath>..\..\packages\Rx-PlatformServices.2.2.5\lib\net40\System.Reactive.PlatformServices.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Reactive.Windows.Forms, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Rx-WinForms.2.2.5\lib\net40\System.Reactive.Windows.Forms.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Reactive.Windows.Threading, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Rx-XAML.2.2.5\lib\net40\System.Reactive.Windows.Threading.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Runtime, Version=2.6.10.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.Bcl.1.1.10\lib\net40\System.Runtime.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Runtime.Caching" />
     <Reference Include="System.Runtime.Serialization">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
@@ -294,6 +325,10 @@
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
     </Reference>
     <Reference Include="System.ServiceProcess" />
+    <Reference Include="System.Threading.Tasks, Version=2.6.10.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.Bcl.1.1.10\lib\net40\System.Threading.Tasks.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Transactions" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Extensions" />
@@ -304,6 +339,7 @@
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="UIAutomationProvider" />
     <Reference Include="WindowsBase">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
     </Reference>
@@ -325,6 +361,7 @@
     </Compile>
     <Compile Include="Actions\ActionErrorGridRow.cs" />
     <Compile Include="Actions\ActionException.cs" />
+    <Compile Include="Actions\ActionManagerWrapper.cs" />
     <Compile Include="Actions\ActionPostponement.cs" />
     <Compile Include="Actions\ActionProcessedEvent.cs" />
     <Compile Include="Actions\ActionQueueGateway.cs" />
@@ -339,6 +376,7 @@
     <Compile Include="Actions\ActionStepPostponementActivity.cs" />
     <Compile Include="Actions\ComputerLimitedType.cs" />
     <Compile Include="Actions\ComputerActionPolicy.cs" />
+    <Compile Include="Actions\IActionManager.cs" />
     <Compile Include="Actions\Scheduling\ActionSchedules\ActionSchedule.cs" />
     <Compile Include="Actions\Scheduling\ActionSchedules\ActionScheduleException.cs" />
     <Compile Include="Actions\Scheduling\ActionSchedules\ActionScheduleFactory.cs" />
@@ -555,11 +593,15 @@
     <Compile Include="AddressValidation\AddressSelectedEventArgs.cs" />
     <Compile Include="AddressValidation\AddressSelector.cs" />
     <Compile Include="AddressValidation\AddressValidationException.cs" />
+    <Compile Include="AddressValidation\IAddressSelector.cs" />
+    <Compile Include="AddressValidation\IAddressValidator.cs" />
+    <Compile Include="AddressValidation\IValidatedAddressManager.cs" />
+    <Compile Include="AddressValidation\IValidatedAddressScope.cs" />
+    <Compile Include="AddressValidation\PersonAdapterExtensions.cs" />
     <Compile Include="AddressValidation\Enums\AddressType.cs" />
     <Compile Include="AddressValidation\Enums\AddressValidationStatusType.cs" />
     <Compile Include="AddressValidation\Enums\AddressValidationStoreSettingType.cs" />
     <Compile Include="AddressValidation\Enums\ValidationDetailStatusType.cs" />
-    <Compile Include="AddressValidation\IAddressValidator.cs" />
     <Compile Include="AddressValidation\Predicates\AddressSuggestionsForConsumerPredicate.cs" />
     <Compile Include="AddressValidation\AddressValidationQueue.cs" />
     <Compile Include="AddressValidation\AddressValidationResult.cs" />
@@ -577,12 +619,13 @@
     <Compile Include="AddressValidation\Predicates\UnprocessedShipmentsForOrderPredicate.cs" />
     <Compile Include="AddressValidation\Predicates\UnprocessedPendingShipmentsPredicate.cs" />
     <Compile Include="AddressValidation\StampsAddressValidationWebClient.cs" />
+    <Compile Include="AddressValidation\ValidatedAddressData.cs" />
+    <Compile Include="AddressValidation\ValidatedAddressManagerWrapper.cs" />
     <Compile Include="AddressValidation\ValidatedOrderShipAddress.cs" />
     <Compile Include="AddressValidation\ValidatedShipmentShipAddress.cs" />
     <Compile Include="AddressValidation\ValidatedShipAddressBase.cs" />
     <Compile Include="AddressValidation\ValidatedAddressManager.cs" />
     <Compile Include="AddressValidation\ValidatedAddressScope.cs" />
-    <Compile Include="AnalysisSuppressions.cs" />
     <Compile Include="ApplicationCore\CommandLineOptions\RedeployAssembliesCommandLineOption.cs" />
     <Compile Include="ApplicationCore\CommandLineOptions\RegenerateAllFiltersCommandLineOption.cs" />
     <Compile Include="ApplicationCore\CommandLineOptions\UninstallShipWorksCommandLineOption.cs" />
@@ -592,11 +635,14 @@
     <Compile Include="ApplicationCore\Dashboard\Content\DashboardSchedulerServiceStoppedItem.cs" />
     <Compile Include="ApplicationCore\Dashboard\Content\DashboardStoreItem.cs" />
     <Compile Include="ApplicationCore\Dashboard\Content\ShipWorksOnlineVersion.cs" />
+    <Compile Include="ApplicationCore\DockPanelIdentifiers.cs" />
     <Compile Include="ApplicationCore\Enums\HeartbeatOptions.cs" />
+    <Compile Include="ApplicationCore\ExecutionModeScope.cs" />
     <Compile Include="ApplicationCore\ExecutionMode\CommandLineExecutionMode.cs" />
     <Compile Include="ApplicationCore\ExecutionMode\ExecutionMode.cs" />
     <Compile Include="ApplicationCore\Heartbeat.cs" />
     <Compile Include="ApplicationCore\HeartbeatPace.cs" />
+    <Compile Include="ApplicationCore\ICheckForChangesNeeded.cs" />
     <Compile Include="ApplicationCore\Licensing\Activation\CustomerLicenseActivationActivity.cs" />
     <Compile Include="ApplicationCore\Licensing\Activation\CustomerLicenseActivationService.cs" />
     <Compile Include="ApplicationCore\Licensing\Activation\ICustomerLicenseActivationActivity.cs" />
@@ -611,6 +657,7 @@
     <Compile Include="ApplicationCore\Licensing\CreditCardType.cs" />
     <Compile Include="ApplicationCore\Licensing\LicenseCipherKey.cs" />
     <Compile Include="ApplicationCore\Licensing\UpsStatus.cs" />
+    <Compile Include="ApplicationCore\Licensing\ITangoWebClientFactory.cs" />
     <Compile Include="ApplicationCore\Licensing\UspsPendingAccountType.cs" />
     <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\Endicia\EndiciaConsolidatorRestriction.cs" />
     <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\Endicia\EndiciaDhlRestriction.cs" />
@@ -646,8 +693,11 @@
     <Compile Include="ApplicationCore\Licensing\IChannelLimitFactory.cs" />
     <Compile Include="ApplicationCore\Licensing\IChannelLimitViewModel.cs" />
     <Compile Include="ApplicationCore\Licensing\ICustomerLicenseActivartionDlgViewModel.cs" />
+    <Compile Include="ApplicationCore\IInitializeForCurrentDatabase.cs" />
     <Compile Include="ApplicationCore\IInitializeForCurrentSession.cs" />
+    <Compile Include="ApplicationCore\IInitializeForCurrentUISession.cs" />
     <Compile Include="ApplicationCore\IoC.cs" />
+    <Compile Include="ApplicationCore\IRegisterDockableWindow.cs" />
     <Compile Include="ApplicationCore\Licensing\ActivationResponse.cs" />
     <Compile Include="ApplicationCore\Licensing\ActiveStore.cs" />
     <Compile Include="ApplicationCore\Licensing\AddStoreResponse.cs" />
@@ -657,6 +707,7 @@
     <Compile Include="ApplicationCore\Licensing\DatabaseIdentifierException.cs" />
     <Compile Include="ApplicationCore\Licensing\DisabledLicense.cs" />
     <Compile Include="ApplicationCore\Licensing\FakeTangoWebClient.cs" />
+    <Compile Include="ApplicationCore\Licensing\ILicenseAccountDetail.cs" />
     <Compile Include="ApplicationCore\Licensing\ICustomerLicenseActivationService.cs" />
     <Compile Include="ApplicationCore\Licensing\IDialog.cs" />
     <Compile Include="ApplicationCore\Licensing\ICustomerLicense.cs" />
@@ -714,6 +765,7 @@
     <Compile Include="ApplicationCore\MessageBoxes\NeedUpgradeShipWorks.Designer.cs">
       <DependentUpon>NeedUpgradeShipWorks.cs</DependentUpon>
     </Compile>
+    <Compile Include="ApplicationCore\NonDefaultConstructorFinder.cs" />
     <Compile Include="ApplicationCore\Nudges\Buttons\AcknowledgeNudgeOptionButton.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -799,16 +851,22 @@
     <Compile Include="ApplicationCore\Services\ServiceStatusEntityGridRow.cs" />
     <Compile Include="ApplicationCore\Services\ShipWorksServiceManager.cs" />
     <Compile Include="AddressValidation\AddressValidationDatabaseUpgrade.cs" />
+    <Compile Include="Common\Threading\ActionRetry.cs" />
+    <Compile Include="Common\Threading\TaskUtility.cs" />
     <Compile Include="Common\DateTimeProvider.cs" />
     <Compile Include="Data\Administration\ISqlSchemaVersion.cs" />
     <Compile Include="Data\Administration\Retry\ISqlAdapterRetry.cs" />
     <Compile Include="Data\Administration\SqlChangeTracking.cs" />
+    <Compile Include="Data\ConfigurationDataWrapper.cs" />
+    <Compile Include="Data\Connection\ISqlDateTimeProvider.cs" />
     <Compile Include="Data\Administration\SqlSchemaVersion.cs" />
-    <Compile Include="Data\Connection\ISqlSession.cs" />
     <Compile Include="Data\Connection\ReconnectResult.cs" />
+    <Compile Include="Data\Connection\SqlDateTimeProvider.cs" />
+    <Compile Include="Data\DataProviderWrapper.cs" />
     <Compile Include="Data\DataResourceManagerWrapper.cs" />
     <Compile Include="Data\DeletionServiceWrapper.cs" />
     <Compile Include="Data\IDatabaseIdentifier.cs" />
+    <Compile Include="Data\IDataProvider.cs" />
     <Compile Include="Data\IDataResourceManager.cs" />
     <Compile Include="Data\IDeletionService.cs" />
     <Compile Include="Data\IObjectReferenceManager.cs" />
@@ -816,12 +874,42 @@
     <Compile Include="Data\Utility\SqlAdapterExtensions.cs" />
     <Compile Include="Editions\Brown\IBrownEditionUtility.cs" />
     <Compile Include="Editions\EditionManagerWrapper.cs" />
+    <Compile Include="Editions\IEdition.cs" />
     <Compile Include="Editions\IEditionManager.cs" />
     <Compile Include="Filters\Content\Conditions\AddressValidationStatusCondition.cs" />
     <Compile Include="Data\Administration\Indexing\IIndexMonitor.cs" />
     <Compile Include="Data\Administration\Indexing\IndexMonitor.cs" />
     <Compile Include="Data\Administration\Indexing\TableIndex.cs" />
     <Compile Include="Data\Administration\Retry\SqlAdapterRetry.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="Messaging\Messages\CustomerDeletedMessage.cs" />
+    <Compile Include="Messaging\Messages\Dialogs\OpenProfileManagerDialogMessage.cs" />
+    <Compile Include="Messaging\Messages\IEntityDeleted.cs" />
+    <Compile Include="Messaging\Messages\Dialogs\OpenShippingDialogWithOrdersMessage.cs" />
+    <Compile Include="Messaging\Messages\Panels\PanelHiddenMessage.cs" />
+    <Compile Include="Messaging\Messages\Panels\PanelShownMessage.cs" />
+    <Compile Include="Messaging\Messages\Shipping\BasicOrderSelection.cs" />
+    <Compile Include="Messaging\Messages\Shipping\ApplyProfileMessage.cs" />
+    <Compile Include="Messaging\Messages\Shipping\CreateReturnShipmentMessage.cs" />
+    <Compile Include="Messaging\Messages\Shipping\RatesNotSupportedMessage.cs" />
+    <Compile Include="Messaging\Messages\Shipping\VoidShipmentResult.cs" />
+    <Compile Include="Messaging\Messages\Shipping\ReprintLabelMessage.cs" />
+    <Compile Include="Messaging\Messages\Shipping\ShipAgainMessage.cs" />
+    <Compile Include="Messaging\Messages\Shipping\ShipmentsVoidedMessage.cs" />
+    <Compile Include="Messaging\Messages\Shipping\VoidLabelMessage.cs" />
+    <Compile Include="Messaging\Messages\Shipping\CreateLabelMessage.cs" />
+    <Compile Include="Messaging\Messages\Shipping\IOrderSelection.cs" />
+    <Compile Include="Messaging\Messages\StoreDeletedMessage.cs" />
+    <Compile Include="Messaging\Messages\OrderDeletedMessage.cs" />
+    <Compile Include="Messaging\Messages\ShippingSettingsChangedMessage.cs" />
+    <Compile Include="Messaging\Messages\Shipping\RatesRetrievedMessage.cs" />
+    <Compile Include="Messaging\Messages\Shipping\RatesRetrievingMessage.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\XamlNamespaces.cs" />
     <EmbeddedResource Include="ApplicationCore\MessageBoxes\ListSeparatorFormatRequiredDlg.resx">
       <DependentUpon>ListSeparatorFormatRequiredDlg.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -898,20 +986,45 @@
     </Compile>
     <Compile Include="Filters\Controls\FilterControlDisplayManager.cs" />
     <Compile Include="Filters\Controls\DisabledFilterFont.cs" />
+    <Compile Include="Filters\FilterHelperWrapper.cs" />
     <Compile Include="Filters\FilterState.cs" />
+    <Compile Include="Filters\IFilterHelper.cs" />
     <Compile Include="Filters\Management\DisableLinkedFilterDlg.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Filters\Management\DisableLinkedFilterDlg.Designer.cs">
       <DependentUpon>DisableLinkedFilterDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="Filters\Management\FilterNodeEditedMessage.cs" />
     <Compile Include="Filters\Management\FilterNodeReferenceRepository.cs" />
-    <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="InputValidation.cs" />
+    <Compile Include="Messaging\IMessenger.cs" />
+    <Compile Include="Messaging\Messages\CarrierConfiguredMessage.cs" />
+    <Compile Include="Messaging\Messages\ConfiguringCarrierMessage.cs" />
+    <Compile Include="Messaging\Messages\EnabledCarriersChangedMessage.cs" />
+    <Compile Include="Messaging\Messages\FedExServiceTypeChangedMessage.cs" />
+    <Compile Include="Messaging\Messages\FilterNodeEditedMessage.cs" />
+    <Compile Include="Messaging\Messages\Dialogs\OpenShippingDialogMessage.cs" />
+    <Compile Include="Messaging\Messages\OrderSelectionChangedMessage.cs" />
+    <Compile Include="Messaging\Messages\OrderSelectionChangingMessage.cs" />
+    <Compile Include="Messaging\Messages\OriginAddressChangedMessage.cs" />
+    <Compile Include="Messaging\Messages\SelectedRateChangedMessage.cs" />
+    <Compile Include="Messaging\Messages\ShipmentChangedMessage.cs" />
+    <Compile Include="Messaging\Messages\DimensionsProfilesChangedMessage.cs" />
+    <Compile Include="Messaging\Messages\ShippingAccountsChangedMessage.cs" />
+    <Compile Include="Messaging\Messages\Shipping\LoadedOrderSelection.cs" />
+    <Compile Include="Messaging\Messages\Shipping\ProcessShipmentResult.cs" />
+    <Compile Include="Messaging\Messages\Shipping\ProcessShipmentsMessage.cs" />
+    <Compile Include="Messaging\Messages\Shipping\ShipmentDeletedMessage.cs" />
+    <Compile Include="Messaging\Messages\Shipping\ShipmentsProcessedMessage.cs" />
+    <Compile Include="Messaging\Messages\StoreChangedMessage.cs" />
+    <Compile Include="Messaging\Messages\UspsAccountCreatedMessage.cs" />
+    <Compile Include="Messaging\Messages\UspsAutomaticExpeditedChangedMessage.cs" />
+    <Compile Include="Messaging\Messages\WindowResettingMessage.cs" />
+    <Compile Include="Messaging\Messenger.cs" />
+    <Compile Include="Messaging\SchedulerProvider.cs" />
     <Compile Include="Shipping\AddressConversions.cs" />
     <Compile Include="Shipping\BilledType.cs" />
     <Compile Include="Shipping\CarrierConfigurationShipmentRefresher.cs" />
-    <Compile Include="Shipping\CarrierConfiguredMessage.cs" />
     <Compile Include="Shipping\Carriers\AccountManagerBase.cs" />
     <Compile Include="Shipping\Carriers\Amazon\AmazonCarrierTermsAndConditionsNotAcceptedFootnoteControl.cs">
       <SubType>UserControl</SubType>
@@ -928,6 +1041,9 @@
     <Compile Include="Shipping\Carriers\Amazon\AmazonShippingToken.cs" />
     <Compile Include="Shipping\Carriers\Amazon\AmazonShippingTokenExtensions.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateConsolidatePostalRates.cs" />
+    <Compile Include="Shipping\Carriers\BestRate\Footnote\IBrokerExceptionsRateFootnoteViewModel.cs" />
+    <Compile Include="Shipping\Carriers\BestRate\Footnote\ICounterRatesInvalidStoreAddressFootnoteViewModel.cs" />
+    <Compile Include="Shipping\Carriers\BestRate\Footnote\IShippingAccountRequiredForRatingFootnoteViewModel.cs" />
     <Compile Include="Shipping\Carriers\BestRate\Footnote\ShippingAccountRequiredForRatingFootnoteFactory.cs" />
     <Compile Include="Shipping\Carriers\BestRate\Footnote\ShippingAccountRequiredForRatingFootnoteControl.cs">
       <SubType>UserControl</SubType>
@@ -939,6 +1055,12 @@
     <Compile Include="Shipping\Carriers\FedEx\Api\FedExLabelRepositoryFactory.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\IFedExLabelRepositoryFactory.cs" />
     <Compile Include="Shipping\Carriers\IRateHashingService.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Express1\Express1RateNotQualifiedFootnoteViewModel.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Express1\IExpress1DiscountedRateFootnoteViewModel.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Express1\IExpress1RatePromotionFootnoteViewModel.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\RateFootnotes\Discounted\IUspsRateDiscountedFootnoteViewModel.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\RateFootnotes\NotQualified\UspsRateNotQualifiedFootnoteViewModel.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\RateFootnotes\Promotion\IUspsRatePromotionFootnoteViewModel.cs" />
     <Compile Include="Shipping\Carriers\Postal\IPostalUtility.cs" />
     <Compile Include="Shipping\Carriers\Postal\PostalUtilityWrapper.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\IUspsAccountManager.cs" />
@@ -955,9 +1077,20 @@
     <Compile Include="Shipping\Carriers\UPS\LinkNewAccount\Request\UpsLinkNewAccountToProfileRequest.cs" />
     <Compile Include="Shipping\Carriers\UPS\LinkNewAccount\Response\UpsLinkNewAccountToProfileResponse.cs" />
     <Compile Include="Shipping\Carriers\UPS\OnLineTools\IUpsOltShipmentValidator.cs" />
+    <Compile Include="Shipping\Editing\Rating\IExceptionsRateFootnoteViewModel.cs" />
+    <Compile Include="Shipping\Editing\Rating\IInformationFootnoteViewModel.cs" />
     <Compile Include="Shipping\ICachedRatesService.cs" />
     <Compile Include="Shipping\ILabelService.cs" />
     <Compile Include="Shipping\Insurance\IInsuranceChoice.cs" />
+    <Compile Include="Shipping\Insurance\IInsuranceUtility.cs" />
+    <Compile Include="Shipping\Insurance\InsuranceUtilityWrapper.cs" />
+    <Compile Include="Shipping\IRatesRetriever.cs" />
+    <Compile Include="Shipping\IShipmentFactory.cs" />
+    <Compile Include="Shipping\Services\CarrierShipmentAdapterBase.cs" />
+    <Compile Include="Shipping\IShippingOriginManager.cs" />
+    <Compile Include="Shipping\Services\IShipmentCustomsItemAdapter.cs" />
+    <Compile Include="Shipping\Services\ShipmentCustomsItemAdapter.cs" />
+    <Compile Include="Shipping\Settings\IShippingProviderRuleManager.cs" />
     <Compile Include="Shipping\IRatingService.cs" />
     <Compile Include="Shipping\ISupportExpress1Rates.cs" />
     <Compile Include="Stores\Management\ActivationErrorWizardPage.cs">
@@ -1042,9 +1175,9 @@
     <Compile Include="Shipping\Carriers\FedEx\FedExServicePickerControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Shipping\Carriers\FedEx\FedExServiceTypeChangedMessage.cs" />
     <Compile Include="Shipping\Carriers\FedEx\FedExShipmentProcessingSynchronizer.cs" />
     <Compile Include="Shipping\Carriers\FedEx\FedExTemplateElementGenerator.cs" />
+    <Compile Include="Shipping\Carriers\ICarrierAccountRetriever.cs" />
     <Compile Include="Shipping\Carriers\FedEx\FimsOptionsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -1052,6 +1185,7 @@
       <DependentUpon>FimsOptionsControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Shipping\Carriers\FedEx\ICustomsRequired.cs" />
+    <Compile Include="Shipping\Carriers\ICarrierAccountRetrieverFactory.cs" />
     <Compile Include="Shipping\Carriers\ICredentialStore.cs" />
     <Compile Include="Shipping\Carriers\iParcel\iParcelPackageAdapter.cs" />
     <Compile Include="Shipping\Carriers\iParcel\iParcelServiceTypeServicePickerControl.cs">
@@ -1059,6 +1193,7 @@
     </Compile>
     <Compile Include="Shipping\Carriers\iParcel\iParcelShipmentProcessingSynchronizer.cs" />
     <Compile Include="Shipping\Carriers\MissingCounterRatesCredentialException.cs" />
+    <Compile Include="Shipping\Carriers\NullAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\OnTrac\OnTracPackageAdapter.cs" />
     <Compile Include="Shipping\Carriers\OnTrac\OnTracPackagePickerControl.cs">
       <SubType>UserControl</SubType>
@@ -1067,8 +1202,6 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Shipping\Carriers\OnTrac\OnTracShipmentProcessingSynchronizer.cs" />
-    <Compile Include="Shipping\Carriers\Other\OtherPackageAdapter.cs" />
-    <Compile Include="Shipping\Carriers\Other\OtherShipmentProcessingSynchronizer.cs" />
     <Compile Include="Shipping\Carriers\Postal\PostalPackagePickerControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -1227,7 +1360,7 @@
     <Compile Include="Shipping\Carriers\UPS\WorldShip\WorldShipProfileControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Shipping\ConfiguringCarrierMessage.cs" />
+    <Compile Include="Shipping\CustomsManagerWrapper.cs" />
     <Compile Include="Shipping\Editing\Rating\ExceptionsRateFootnoteControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -1275,6 +1408,8 @@
       <DependentUpon>RequestedLabelFormatProfileControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Shipping\Editing\ShipmentGridShipmentsChangedEventArgs.cs" />
+    <Compile Include="Shipping\ICarrierConfigurationShipmentRefresher.cs" />
+    <Compile Include="Shipping\ICustomsManager.cs" />
     <Compile Include="Shipping\Insurance\InsuranceSubmitClaimControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -1296,12 +1431,16 @@
     <Compile Include="Shipping\Insurance\InsureShipQuestionsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="Shipping\IShipmentProcessor.cs" />
+    <Compile Include="Shipping\IShipmentServicesBuilder.cs" />
+    <Compile Include="Shipping\IShipmentServicesBuilderFactory.cs" />
     <Compile Include="Shipping\IShipmentTypeManager.cs" />
-    <Compile Include="Shipping\IShippingDialogInteraction.cs" />
+    <Compile Include="Shipping\IShippingErrorManager.cs" />
     <Compile Include="Shipping\IShippingManager.cs" />
     <Compile Include="Shipping\Profiles\IShippingProfileManager.cs" />
-    <Compile Include="Shipping\Profiles\ShippingProfileManagerWrapper.cs" />
     <Compile Include="Shipping\Carriers\RatingFields.cs" />
+    <Compile Include="Shipping\Services\ICarrierShipmentAdapter.cs" />
+    <Compile Include="Shipping\Services\ICarrierShipmentAdapterFactory.cs" />
     <Compile Include="Shipping\Settings\EnumCheckboxDataSource.cs" />
     <Compile Include="Shipping\Settings\EnumCheckboxControl.cs">
       <SubType>UserControl</SubType>
@@ -1321,12 +1460,10 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Shipping\Settings\ShippingSettingsWrapper.cs" />
-    <Compile Include="Shipping\Settings\UspsAutomaticExpeditedChangedMessage.cs" />
     <Compile Include="Shipping\AdjustedAddressExtensions.cs" />
-    <Compile Include="Shipping\ShipmentTypeManagerWrapper.cs" />
-    <Compile Include="Shipping\ShippingManagerWrapper.cs" />
-    <Compile Include="Stores\Content\IOrderUtility.cs" />
-    <Compile Include="Stores\Content\OrderUtilityWrapper.cs" />
+    <Compile Include="Shipping\ShippingAddressEditStateType.cs" />
+    <Compile Include="Stores\Content\IOrderManager.cs" />
+    <Compile Include="Stores\Content\OrderManager.cs" />
     <Compile Include="Stores\IStoreTypeManager.cs" />
     <Compile Include="Stores\Platforms\Amazon\CoreExtensions\Filters\AmazonLatestExpectedDeliveryDateCondition.cs" />
     <Compile Include="Stores\Platforms\Amazon\CoreExtensions\Filters\AmazonEarliestExpectedDeliveryDateCondition.cs" />
@@ -1446,7 +1583,7 @@
     </Compile>
     <Compile Include="Stores\StoreFilterRepository.cs" />
     <Compile Include="Stores\StoreFilterRepositorySaveResult.cs" />
-    <Compile Include="Stores\StoreManagerWrapper.cs" />
+    <Compile Include="UI\Controls\IWeightConverter.cs" />
     <Compile Include="UI\Controls\MultiValueBinders\CheckboxMultiValueBinder.cs" />
     <Compile Include="UI\Controls\MultiValueBinders\GenericMultiValueBinder.cs" />
     <Compile Include="UI\Controls\ResizingRichTextBox.cs">
@@ -1499,7 +1636,6 @@
     <Compile Include="Shipping\Settings\ShipmentTypeSetupWizardForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Shipping\Settings\UspsAccountCreatedMessage.cs" />
     <Compile Include="Shipping\Settings\ShippingSetupWizard.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1850,7 +1986,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>StoreIcons.resx</DependentUpon>
     </Compile>
-    <Compile Include="Shipping\Api\ICarrierServiceManagerFactory.cs" />
+    <Compile Include="Shipping\Carriers\UPS\IUpsServiceManagerFactory.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateBroker.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateEventsDescription.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateEventTypesExtension.cs" />
@@ -1899,7 +2035,6 @@
     <Compile Include="Shipping\Carriers\Postal\Usps\BestRate\UspsBestRateBroker.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Express1\Express1UspsAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Express1\Express1UspsBestRateBroker.cs" />
-    <Compile Include="Shipping\Carriers\Postal\WebTools\WebToolsAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\UPS\WorldShip\BestRate\WorldShipAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\UPS\WorldShip\BestRate\WorldShipBestRateBroker.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateEventTypes.cs" />
@@ -2731,17 +2866,16 @@
     <Compile Include="Shipping\ShipSense\Hashing\KnowledgebaseHash.cs" />
     <Compile Include="Shipping\ShipSense\Hashing\ShipSenseOrderItemKey.cs" />
     <Compile Include="Shipping\ShipSense\Hashing\ShipSenseOrderItemKeyFactory.cs" />
-    <Compile Include="Shipping\ShipSense\Hashing\StringHash.cs" />
     <Compile Include="Shipping\ShipSense\IChangeSetXmlWriter.cs" />
     <Compile Include="Shipping\ShipSense\IKnowledgebase.cs" />
     <Compile Include="Shipping\ShipSense\Knowledgebase.cs" />
     <Compile Include="Shipping\ShipSense\Customs\KnowledgebaseCustomsItem.cs" />
     <Compile Include="Shipping\ShipSense\KnowledgebaseEntry.cs" />
     <Compile Include="Shipping\ShipSense\KnowledgebaseEntryChangeSetXmlWriter.cs" />
-    <Compile Include="Shipping\ShipSense\Packaging\IPackageAdapter.cs" />
+    <Compile Include="Shipping\Services\IPackageAdapter.cs" />
     <Compile Include="Shipping\ShipSense\Packaging\KnowledgebasePackage.cs" />
     <Compile Include="Shipping\ShipSense\Packaging\KnowledgebasePackageChangeSetXmlWriter.cs" />
-    <Compile Include="Shipping\ShipSense\Packaging\NullPackageAdapter.cs" />
+    <Compile Include="Shipping\Services\NullPackageAdapter.cs" />
     <Compile Include="Shipping\ShipSense\Population\IShipSenseLoaderGateway.cs" />
     <Compile Include="Shipping\ShipSense\Population\ShipSenseLoader.cs" />
     <Compile Include="Shipping\ShipSense\Population\ShipSenseLoaderGateway.cs" />
@@ -3598,6 +3732,10 @@
     <Compile Include="UI\Controls\NameValueGrid.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="UI\Controls\SandRibbon\IRibbonButton.cs" />
+    <Compile Include="UI\Controls\SandRibbon\RibbonButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="UI\Controls\TextBoxWithDeleteButtonControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -3616,6 +3754,7 @@
     <Compile Include="UI\Controls\TimeZoneSelection.Designer.cs">
       <DependentUpon>TimeZoneSelection.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\Controls\WeightConverter.cs" />
     <Compile Include="UI\Controls\WeightDisplayFormat.cs" />
     <Compile Include="Stores\Platforms\Newegg\NeweggDownloader.cs" />
     <Compile Include="Stores\Platforms\Newegg\NeweggException.cs" />
@@ -4979,18 +5118,6 @@
     <Compile Include="Shipping\Settings\ShipmentAutomationControl.Designer.cs">
       <DependentUpon>ShipmentAutomationControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Shipping\Carriers\Other\OtherProfileControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Shipping\Carriers\Other\OtherProfileControl.Designer.cs">
-      <DependentUpon>OtherProfileControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Shipping\Carriers\Other\OtherSetupWizard.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Shipping\Carriers\Other\OtherSetupWizard.Designer.cs">
-      <DependentUpon>OtherSetupWizard.cs</DependentUpon>
-    </Compile>
     <Compile Include="Shipping\Carriers\Postal\PostalConfirmationType.cs" />
     <Compile Include="Shipping\Carriers\Postal\PostalCustomsContentType.cs" />
     <Compile Include="Shipping\Settings\Origin\ShipmentOriginControl.cs">
@@ -5280,20 +5407,6 @@
     <Compile Include="Shipping\Carriers\MultiSelectServiceControl.Designer.cs">
       <DependentUpon>MultiSelectServiceControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Shipping\Carriers\None\NoneServiceControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Shipping\Carriers\None\NoneServiceControl.Designer.cs">
-      <DependentUpon>NoneServiceControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Shipping\Carriers\None\NoneShipmentType.cs" />
-    <Compile Include="Shipping\Carriers\Other\OtherServiceControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Shipping\Carriers\Other\OtherServiceControl.Designer.cs">
-      <DependentUpon>OtherServiceControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Shipping\Carriers\Other\OtherShipmentType.cs" />
     <Compile Include="Shipping\Profiles\ShippingProfileManager.cs" />
     <Compile Include="Shipping\Settings\ShipmentBlankPhoneOption.cs" />
     <Compile Include="Shipping\Editing\Rating\RateResult.cs" />
@@ -7719,8 +7832,8 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="ApplicationCore\SplashScreen.resx">
       <SubType>Designer</SubType>
@@ -8366,11 +8479,6 @@
       <SubType>Designer</SubType>
       <DependentUpon>WizardForm.cs</DependentUpon>
     </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
@@ -8380,13 +8488,8 @@
     <None Include="App.Ups.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.4\3.4.0.1.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.9\3.9.0.3.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.0.9.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.1.1.sql" />
     <None Include="ApplicationCore\Licensing\WSDL\Activation_v1.wsdl" />
     <None Include="packages.config" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\4.4\4.4.1.2.sql" />
     <None Include="Properties\interapptive_public.snk" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -8463,6 +8566,7 @@
     <Compile Include="Users\Security\AddStorePermissionsDlg.Designer.cs">
       <DependentUpon>AddStorePermissionsDlg.cs</DependentUpon>
     </Compile>
+    <Compile Include="Users\Security\ISecurityContext.cs" />
     <Compile Include="Users\Security\PermissionAwareDeleter.cs" />
     <Compile Include="Users\Security\PermissionBinding.cs" />
     <Compile Include="Users\Security\PermissionBindingController.cs" />
@@ -9089,65 +9193,6 @@
       <SubType>Designer</SubType>
       <DependentUpon>GridStateDisplayEditor.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Data\Administration\UpdateFrom2x\Database\Scripts\ShipWorks2x.zip" />
-    <EmbeddedResource Include="Data\Administration\UpdateFrom2x\Database\Scripts\Migrate2xDataTo3x.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.0\3.0.0.2.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.0\3.0.0.3.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.0\3.0.0.4.sql" />
-    <EmbeddedResource Include="Data\Administration\UpdateFrom2x\Database\Scripts\CreateMigrationTables.sql" />
-    <EmbeddedResource Include="Data\Administration\UpdateFrom2x\Database\Scripts\Prepare2xDatabase.sql" />
-    <EmbeddedResource Include="Data\Administration\UpdateFrom2x\Database\Scripts\TransferArchiveLog.sql" />
-    <EmbeddedResource Include="Data\Administration\UpdateFrom2x\Database\Scripts\CreateMigrationUtilities.estimate.sql" />
-    <EmbeddedResource Include="Data\Administration\UpdateFrom2x\Database\Scripts\CreateMigrationUtilities.sql" />
-    <EmbeddedResource Include="Data\Administration\UpdateFrom2x\Database\Scripts\TransferArchiveLog.estimate.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.0\3.0.0.5.sql" />
-    <EmbeddedResource Include="Data\Administration\UpdateFrom2x\Database\Scripts\Check2xConstraints.sql" />
-    <EmbeddedResource Include="Data\Administration\UpdateFrom2x\Database\Scripts\ClearArchiveLog.sql" />
-    <None Include="Data\Administration\UpdateFrom2x\Database\Scripts\CodeSmith Templates\Common.cst" />
-    <None Include="Data\Administration\UpdateFrom2x\Database\Scripts\CodeSmith Templates\DataMigrationBoilerplate.cst" />
-    <None Include="Data\Administration\UpdateFrom2x\Database\Scripts\CodeSmith Templates\DataMigrationEstimate.cst" />
-    <None Include="Data\Administration\UpdateFrom2x\Database\Scripts\CodeSmith Templates\DataMigrationExecution.cst" />
-    <None Include="Data\Administration\UpdateFrom2x\Database\Scripts\CodeSmith Templates\TableFieldGenerator.cst" />
-    <EmbeddedResource Include="Data\Administration\UpdateFrom2x\Database\Scripts\Drop2xTriggers.sql" />
-    <EmbeddedResource Include="Data\Administration\UpdateFrom2x\Database\Scripts\MigrateData_Stores.estimate.sql" />
-    <EmbeddedResource Include="Data\Administration\UpdateFrom2x\Database\Scripts\MigrateData_Stores.sql" />
-    <EmbeddedResource Include="Data\Administration\UpdateFrom2x\Database\Scripts\MigrateData_Orders.estimate.sql" />
-    <EmbeddedResource Include="Data\Administration\UpdateFrom2x\Database\Scripts\MigrateData_Orders.sql" />
-    <EmbeddedResource Include="Data\Administration\UpdateFrom2x\Database\Scripts\MigrateData_Customers.estimate.sql" />
-    <EmbeddedResource Include="Data\Administration\UpdateFrom2x\Database\Scripts\MigrateData_Customers.sql" />
-    <EmbeddedResource Include="Data\Administration\UpdateFrom2x\Database\Scripts\Drop2xIndexes.sql" />
-    <EmbeddedResource Include="Data\Administration\UpdateFrom2x\Database\Scripts\CreateIntermediateTables.sql" />
-    <EmbeddedResource Include="Data\Administration\UpdateFrom2x\Database\Scripts\MigrateData_OrderItems.estimate.sql" />
-    <EmbeddedResource Include="Data\Administration\UpdateFrom2x\Database\Scripts\MigrateData_OrderItems.sql" />
-    <EmbeddedResource Include="Data\Administration\UpdateFrom2x\Database\Scripts\Drop3xIndexes.sql" />
-    <EmbeddedResource Include="Data\Administration\UpdateFrom2x\Database\Scripts\MigrateData_OrderItemAttributes.estimate.sql" />
-    <EmbeddedResource Include="Data\Administration\UpdateFrom2x\Database\Scripts\MigrateData_OrderItemAttributes.sql" />
-    <EmbeddedResource Include="Data\Administration\UpdateFrom2x\Database\Scripts\MigrateData_OrderCharges.estimate.sql" />
-    <EmbeddedResource Include="Data\Administration\UpdateFrom2x\Database\Scripts\MigrateData_OrderCharges.sql" />
-    <EmbeddedResource Include="Data\Administration\UpdateFrom2x\Database\Scripts\MigrateData_PaymentDetails.estimate.sql" />
-    <EmbeddedResource Include="Data\Administration\UpdateFrom2x\Database\Scripts\MigrateData_PaymentDetails.sql" />
-    <EmbeddedResource Include="Data\Administration\UpdateFrom2x\Database\Scripts\MigrateData_YahooInventory.estimate.sql" />
-    <EmbeddedResource Include="Data\Administration\UpdateFrom2x\Database\Scripts\MigrateData_YahooInventory.sql" />
-    <EmbeddedResource Include="Data\Administration\UpdateFrom2x\Database\Scripts\MigrateData_AmazonInventory.estimate.sql" />
-    <EmbeddedResource Include="Data\Administration\UpdateFrom2x\Database\Scripts\MigrateData_AmazonInventory.sql" />
-    <EmbeddedResource Include="Data\Administration\UpdateFrom2x\Database\Scripts\Create3xIndexes.sql" />
-    <EmbeddedResource Include="Data\Administration\UpdateFrom2x\Database\Scripts\MigrateData_EndiciaShippers.estimate.sql" />
-    <EmbeddedResource Include="Data\Administration\UpdateFrom2x\Database\Scripts\MigrateData_EndiciaShippers.sql" />
-    <EmbeddedResource Include="Data\Administration\UpdateFrom2x\Database\Scripts\MigrateData_UpsShippers.estimate.sql" />
-    <EmbeddedResource Include="Data\Administration\UpdateFrom2x\Database\Scripts\MigrateData_UpsShippers.sql" />
-    <EmbeddedResource Include="Data\Administration\UpdateFrom2x\Database\Scripts\MigrateData_Shipments.estimate.sql" />
-    <EmbeddedResource Include="Data\Administration\UpdateFrom2x\Database\Scripts\MigrateData_Shipments.sql" />
-    <EmbeddedResource Include="Data\Administration\UpdateFrom2x\Database\Scripts\Disable3xConstraints.sql" />
-    <EmbeddedResource Include="Data\Administration\UpdateFrom2x\Database\Scripts\Enable3xConstraints.sql" />
-    <EmbeddedResource Include="Data\Administration\UpdateFrom2x\Database\Scripts\CreateMigrationIndexes.sql" />
-    <EmbeddedResource Include="Data\Administration\UpdateFrom2x\Database\Scripts\MigrateData_ShipmentCommodities.estimate.sql" />
-    <EmbeddedResource Include="Data\Administration\UpdateFrom2x\Database\Scripts\MigrateData_ShipmentCommodities.sql" />
-    <EmbeddedResource Include="Data\Administration\UpdateFrom2x\Database\Scripts\MigrateData_FedexClosings.estimate.sql" />
-    <EmbeddedResource Include="Data\Administration\UpdateFrom2x\Database\Scripts\MigrateData_FedexClosings.sql" />
-    <EmbeddedResource Include="Data\Administration\UpdateFrom2x\Database\Scripts\MigrateData_MivaSebenzaMsgs.estimate.sql" />
-    <EmbeddedResource Include="Data\Administration\UpdateFrom2x\Database\Scripts\MigrateData_MivaSebenzaMsgs.sql" />
-    <EmbeddedResource Include="Data\Administration\UpdateFrom2x\Database\Scripts\MigrateData_EmailAccounts.estimate.sql" />
-    <EmbeddedResource Include="Data\Administration\UpdateFrom2x\Database\Scripts\MigrateData_EmailAccounts.sql" />
     <None Include="Resources\sw_cubes_32x32.png" />
     <Resource Include="Resources\InfoTip.png" />
     <Resource Include="Resources\check.png" />
@@ -9335,9 +9380,6 @@
     <EmbeddedResource Include="Shipping\Carriers\MultiSelectServiceControl.resx">
       <DependentUpon>MultiSelectServiceControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Shipping\Carriers\None\NoneServiceControl.resx">
-      <DependentUpon>NoneServiceControl.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\Postal\Endicia\EndiciaAccountEditorDlg.resx">
       <DependentUpon>EndiciaAccountEditorDlg.cs</DependentUpon>
     </EmbeddedResource>
@@ -9417,15 +9459,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Settings\ShipmentAutomationControl.resx">
       <DependentUpon>ShipmentAutomationControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Shipping\Carriers\Other\OtherProfileControl.resx">
-      <DependentUpon>OtherProfileControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Shipping\Carriers\Other\OtherServiceControl.resx">
-      <DependentUpon>OtherServiceControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Shipping\Carriers\Other\OtherSetupWizard.resx">
-      <DependentUpon>OtherSetupWizard.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Settings\Origin\ShipmentOriginControl.resx">
       <DependentUpon>ShipmentOriginControl.cs</DependentUpon>
@@ -10198,14 +10231,9 @@
     <None Include="Resources\cancelled.png" />
     <None Include="Resources\cancelled1.png" />
     <None Include="Resources\cancelled2.png" />
-    <None Include="Resources\information2.png" />
+    <Resource Include="Resources\information2.png" />
     <None Include="Resources\Progress\indiciator_green.gif" />
     <None Include="Resources\Progress\indicator_lite.gif" />
-    <EmbeddedResource Include="Data\Administration\UpdateFrom2x\Database\Scripts\Rename2xTables.sql" />
-    <EmbeddedResource Include="Data\Administration\UpdateFrom2x\Database\Scripts\Create30Schema.sql" />
-    <EmbeddedResource Include="Data\Administration\UpdateFrom2x\Database\Scripts\Drop2xTables.sql" />
-    <EmbeddedResource Include="Data\Administration\UpdateFrom2x\Database\Scripts\Drop2xForeignKeys.sql" />
-    <EmbeddedResource Include="Data\Administration\UpdateFrom2x\Database\Scripts\Drop2xProcs.sql" />
     <None Include="Resources\data_information.png" />
     <None Include="Resources\firewall.png" />
     <None Include="Resources\data_disk.png" />
@@ -10253,7 +10281,7 @@
     <None Include="Resources\folderclosed_linked_infinity.png" />
     <None Include="Resources\arrow_right_blue.png" />
     <None Include="Resources\funnel_copy2.png" />
-    <None Include="Resources\delete.png" />
+    <Resource Include="Resources\delete.png" />
     <None Include="Resources\branch_element_top.png" />
     <None Include="Resources\branch_element_bottom.png" />
     <EmbeddedResource Include="Filters\Content\ConditionTree.xml" />
@@ -10330,10 +10358,10 @@
     <None Include="Resources\elements1.png" />
     <None Include="Resources\chart.png" />
     <None Include="Resources\preferences.png" />
-    <None Include="Resources\add2.png" />
+    <Resource Include="Resources\add2.png" />
     <None Include="Resources\disk_blue1.png" />
     <None Include="Resources\cut.png" />
-    <None Include="Resources\copy.png" />
+    <Resource Include="Resources\copy.png" />
     <None Include="Resources\paste.png" />
     <None Include="Resources\redo.png" />
     <None Include="Resources\find.png" />
@@ -10426,7 +10454,7 @@
     <None Include="Resources\gear_run_disabled_16.png" />
     <None Include="Resources\gear_stop.png" />
     <None Include="Resources\media_play.png" />
-    <None Include="Resources\arrows_white.gif" />
+    <Resource Include="Resources\arrows_white.gif" />
     <None Include="Resources\folder_closed.png" />
     <None Include="Resources\funnel2.png" />
     <None Include="Resources\school4.png" />
@@ -10473,212 +10501,22 @@
     <None Include="Resources\currency_dollar_green16.png" />
     <None Include="Resources\logo_sdc.png" />
     <None Include="Resources\glo_ups_brandmark_pfv.gif" />
-    <None Include="Resources\box_closed3.png" />
+    <Resource Include="Resources\box_closed3.png" />
     <None Include="Resources\barcode.png" />
     <None Include="Resources\box_preferences1.png" />
-    <EmbeddedResource Include="Data\Administration\UpdateFrom2x\Database\Scripts\UpdateOrderRollups.sql" />
     <CodeAnalysisDictionary Include="..\..\Build\AnalysisDictionary.xml">
       <Link>Properties\AnalysisDictionary.xml</Link>
       <SubType>Designer</SubType>
     </CodeAnalysisDictionary>
-    <EmbeddedResource Include="Data\Administration\UpdateFrom2x\Database\Scripts\UpdateCustomerRollups.sql" />
-    <EmbeddedResource Include="Data\Administration\UpdateFrom2x\Database\Scripts\MigrateData_Users.estimate.sql" />
-    <EmbeddedResource Include="Data\Administration\UpdateFrom2x\Database\Scripts\MigrateData_Users.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.0\3.0.0.6.sql" />
-    <EmbeddedResource Include="Data\Administration\UpdateFrom2x\Database\Scripts\CreateShippingProfiles.sql" />
-    <EmbeddedResource Include="Data\Administration\UpdateFrom2x\Database\Scripts\MigrateData_FedexShippers.estimate.sql" />
-    <EmbeddedResource Include="Data\Administration\UpdateFrom2x\Database\Scripts\MigrateData_FedexShippers.sql" />
-    <EmbeddedResource Include="Data\Administration\UpdateFrom2x\Database\Scripts\UpdateeBayOrderRollups.sql" />
-    <EmbeddedResource Include="Data\Administration\UpdateFrom2x\Database\Scripts\UpdateUnsupportedCarts.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.0\3.0.0.7.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.0\3.0.0.8.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.0\3.0.0.9.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.0\3.0.1.0.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.0\3.0.1.1.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.0\3.0.1.2.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.0\3.0.1.3.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.0\3.0.1.4.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.0\3.0.1.5.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.0\3.0.5.0.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.0\3.0.7.0.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.0\3.0.8.0.sql" />
     <EmbeddedResource Include="ApplicationCore\Options\ResourceCleanup\Estimate.sql" />
     <EmbeddedResource Include="ApplicationCore\Options\ResourceCleanup\ResourceCleanup.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.0\3.0.9.0.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.1\3.1.2.0.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.1\3.1.4.0.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.1\3.1.5.0.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.1\3.1.6.0.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.1\3.1.7.0.sql" />
     <EmbeddedResource Include="ApplicationCore\Options\PrintResultCleanup\Estimate.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.1\3.1.9.0.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.1\3.1.10.0.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.1\3.1.11.0.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.1\3.1.11.1.sql" />
     <None Include="Resources\about.png" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.1\3.1.13.0.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.1\3.1.16.0.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.1\3.1.18.0.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.1\3.1.20.0.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.1\3.1.21.0.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.1\3.1.22.0.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.1\3.1.23.0.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.2\3.2.0.0.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.2\3.2.0.1.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.2\3.2.0.2.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.2\3.2.0.3.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.2\3.2.1.0.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.2\3.2.3.0.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.2\3.2.5.0.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.2\3.2.7.0.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.2\3.2.8.0.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.2\3.2.9.0.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.2\3.2.10.0.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.2\3.2.11.0.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.2\3.2.11.1.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.2\3.2.11.2.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.3\3.3.4.0.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.3\3.3.5.0.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.3\3.3.7.0.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.3\3.3.8.0.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.3\3.3.8.1.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.3\3.3.8.2.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.3\3.3.8.3.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.4\3.4.0.0.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.4\3.4.1.0.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.4\3.4.3.0.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.4\3.4.4.0.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.4\3.4.5.0.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.5\3.5.0.1.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.5\3.5.0.2.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.5\3.5.0.3.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Maintenance\ShrinkDatabase.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.5\3.5.0.5.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.5\3.5.0.4.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.5\3.5.0.6.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Installation\InitialData.sql" />
     <None Include="Resources\add - Copy.png" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.5\3.5.0.7.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.4\3.4.9.0.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.5\3.5.0.8.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.5\3.5.0.9.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.5\3.5.1.0.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.5\3.5.1.1.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.5\3.5.1.2.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.5\3.5.1.3.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.5\3.5.1.4.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.5\3.5.3.0.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.5\3.5.3.1.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.5\3.5.3.2.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.5\3.5.4.0.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.5\3.5.4.1.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.5\3.5.4.2.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.6\3.6.1.0.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.6\3.6.2.1.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.7\3.7.0.0.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.7\3.7.0.1.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.7\3.7.0.2.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.7\3.7.0.3.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.7\3.7.1.0.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.7\3.7.1.1.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.7\3.7.4.1.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.9\3.9.0.1.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.9\3.9.0.2.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.8\3.8.0.0.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.8\3.8.0.1.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.9\3.9.0.0.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.0.1.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.9\3.9.0.4.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.3.1.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.9\3.9.3.0.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.0.0.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.0.5.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.0.3.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.0.2.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.0.4.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.0.7.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.0.6.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.1.0.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.1.4.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.2.0.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.2.1.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.2.2.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.2.3.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.2.4.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.3.0.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.3.2.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.3.3.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.3.4.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.3.5.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.3.6.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.3.7.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.4.0.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\4.0\4.0.0.0.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\4.0\4.0.0.1.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.4.1.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.4.2.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.4.3.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.4.4.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.4.5.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.11\3.11.0.0.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.11\3.11.1.0.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.11\3.11.1.1.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.11\3.11.1.2.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.11\3.11.1.3.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.11\3.11.1.4.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.11\3.11.2.0.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.11\3.11.2.1.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.11\3.11.3.0.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\4.0\4.0.0.3.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\4.0\4.0.0.2.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\4.0\4.0.1.0.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\4.0\4.0.1.1.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\4.0\4.0.3.0.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\4.0\4.0.3.1.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\4.0\4.0.3.2.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\4.0\4.0.3.3.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\4.1\4.1.0.0.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\4.1\4.1.0.1.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\4.1\4.1.1.2.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\4.1\4.1.1.0.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\4.1\4.1.1.1.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\4.2\4.2.0.0.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\4.2\4.2.0.1.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\4.2\4.2.0.2.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\4.2\4.2.0.3.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\4.2\4.2.0.4.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\4.2\4.2.0.5.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\4.4\4.4.1.1.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\4.3\4.3.0.0.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\4.3\4.3.0.1.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\4.3\4.3.0.2.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\4.3\4.3.0.3.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\4.4\4.4.1.0.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\4.6\4.6.0.0.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\4.3\4.3.2.0.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\4.4\4.4.1.3.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\4.4\4.4.0.0.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\4.5\4.5.0.0.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\4.4\4.4.1.4.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\4.4\4.4.1.5.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\4.5\4.5.0.1.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\4.6\4.6.1.0.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\4.7\4.7.0.0.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\4.7\4.7.0.1.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\4.7\4.7.0.2.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\4.7\4.7.1.0.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\5.0\5.0.0.0.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\5.0\5.0.0.1.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\5.0\5.0.0.2.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\5.0\5.0.0.3.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\5.0\5.0.0.4.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\5.0\5.0.0.5.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\5.0\5.0.0.6.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\5.0\5.0.0.7.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\5.0\5.0.0.8.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\5.1\5.1.0.0.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\5.1\5.1.0.1.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\5.1\5.1.0.2.sql" />
+    <None Include="ApplicationCore\Appearance\WindowLayoutDefault\panels.xml" />
+    <None Include="ApplicationCore\Appearance\WindowLayoutDefault\ribbon.xml" />
     <Content Include="Resources\add.png" />
     <None Include="Resources\blank16.png" />
     <None Include="Resources\calendar_31.png" />
@@ -10720,7 +10558,8 @@
     <None Include="Resources\aprilfools-16x16.png" />
     <None Include="Resources\brightpearl.png" />
     <None Include="Resources\amazon_large.jpg" />
-    <Content Include="Resources\check2.png" />
+    <None Include="Resources\building.png" />
+    <Resource Include="Resources\check2.png" />
     <None Include="Resources\colors32.png" />
     <None Include="Resources\component.png" />
     <None Include="Resources\headset.png" />
@@ -10744,7 +10583,7 @@
     <None Include="Resources\EquashipLogo.png" />
     <None Include="Resources\flag_blue.png" />
     <None Include="Resources\flag_green.png" />
-    <None Include="Resources\flag_red.png" />
+    <Resource Include="Resources\flag_red.png" />
     <None Include="Resources\flag_yellow.png" />
     <None Include="Resources\help2_16.png" />
     <None Include="Resources\iparcelLogo.jpg" />
@@ -10813,13 +10652,21 @@
     <None Include="Resources\loadedcommerce.png" />
     <None Include="Resources\groupon.png" />
     <None Include="Resources\globe16.png" />
-    <None Include="Resources\information2_16.png" />
+    <Resource Include="Resources\information2_16.png" />
     <None Include="Resources\help16.png" />
     <None Include="Resources\earth16.png" />
     <None Include="Resources\instastore.png" />
     <None Include="Resources\choxi.png" />
     <None Include="Resources\instantestore.png" />
     <None Include="Resources\lemonstand.png" />
+    <Resource Include="Resources\box_next_32_32.png" />
+    <Resource Include="Resources\box_previous_32_32.png" />
+    <Resource Include="Resources\index_32_32.png" />
+    <Resource Include="Resources\box_closed_redo_16_16.png" />
+    <Resource Include="Resources\box_void_32_32.png" />
+    <Resource Include="Resources\document_gear_32_32.png" />
+    <Content Include="Resources\info.png" />
+    <Resource Include="Resources\info_20x20.png" />
     <Content Include="Resources\message32.png" />
     <Content Include="Resources\message_ok.png" />
     <None Include="Resources\note2_32.png" />
@@ -10844,7 +10691,7 @@
     <None Include="Resources\nav_down_green2.png" />
     <None Include="Resources\nav_up_blue.png" />
     <None Include="Resources\nomorerack.png" />
-    <Content Include="Resources\not_available.gif" />
+    <Resource Include="Resources\not_available.gif" />
     <None Include="Resources\OnTracLogo48.jpg" />
     <None Include="Resources\plug.png" />
     <None Include="Resources\satellite_dish_add.png" />
@@ -10870,6 +10717,7 @@
     <None Include="Resources\revolutionparts.png" />
     <None Include="Resources\orderbot.png" />
     <None Include="Resources\opensky.png" />
+    <Resource Include="Resources\printer_redo_16_16.png" />
     <Content Include="Resources\shape_circle.png" />
     <None Include="Resources\shield_ok.png" />
     <None Include="Resources\shield_ok1.png" />
@@ -10914,7 +10762,7 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="Resources\shoppingcart_full.png" />
-    <None Include="Resources\star_green.png" />
+    <Resource Include="Resources\star_green.png" />
     <None Include="Resources\start_shipworks_service.png" />
     <None Include="Resources\workstation_network.png" />
     <None Include="Resources\workplace_add.png" />
@@ -11000,6 +10848,7 @@
     <None Include="Resources\streetLight.png" />
     <EmbeddedResource Include="Stores\Platforms\Groupon\Template\GrouponPackingSlip.xsl" />
     <None Include="Resources\viewofstreet.png" />
+    <Resource Include="Resources\table_dollar_sign_16_16.png" />
     <Content Include="Stores\Platforms\Magento\MagentoConnectExtension\app\code\local\Interapptive\ShipWorks\etc\api.xml" />
     <Content Include="Stores\Platforms\Magento\MagentoConnectExtension\app\code\local\Interapptive\ShipWorks\etc\config.xml" />
     <Content Include="Stores\Platforms\Magento\MagentoConnectExtension\app\etc\modules\Interapptive_ShipWorks.xml" />
@@ -11162,7 +11011,7 @@
     <None Include="Resources\user1_view2.png" />
     <None Include="Resources\user1_view.png" />
     <None Include="Resources\user1_edit.png" />
-    <None Include="Resources\weigh.png" />
+    <Resource Include="Resources\weigh.png" />
     <None Include="Resources\shoppingcart1.png" />
     <None Include="Resources\user12.png" />
     <None Include="Resources\shoppingcart.png" />
@@ -11220,7 +11069,7 @@
     <None Include="Resources\user1_lock1.png" />
     <None Include="Resources\user1_lock.png" />
     <None Include="Resources\sw_cubes_big.png" />
-    <None Include="Resources\warning.png" />
+    <Resource Include="Resources\warning.png" />
     <None Include="Stores\Platforms\Magento\shipworks3.php" />
     <None Include="Stores\Platforms\Miva\shipworks3.mv" />
     <None Include="Stores\Platforms\Miva\shipworks3Miva5.mv">
@@ -11264,6 +11113,10 @@
     <ProjectReference Include="..\ShipWorks.Data.Model\ShipWorks.Data.Model.csproj">
       <Project>{6F05267C-1883-4526-8D83-E46B7B2D2FAF}</Project>
       <Name>ShipWorks.Data.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ShipWorks.Res\ShipWorks.Res.csproj">
+      <Project>{3451502d-c78c-44ec-86ac-8f50a6531f5c}</Project>
+      <Name>ShipWorks.Res</Name>
     </ProjectReference>
     <ProjectReference Include="..\ShipWorks.Shared\ShipWorks.Shared.csproj">
       <Project>{DFCF14EA-6596-4B9C-B743-D7CE9E5F4348}</Project>
@@ -11315,11 +11168,29 @@
     <Folder Include="UI\Editors\" />
   </ItemGroup>
   <ItemGroup>
+    <Analyzer Include="..\..\packages\Desktop.Analyzers.1.1.0\analyzers\dotnet\cs\Desktop.Analyzers.dll" />
+    <Analyzer Include="..\..\packages\Desktop.Analyzers.1.1.0\analyzers\dotnet\cs\Desktop.CSharp.Analyzers.dll" />
     <Analyzer Include="..\..\packages\InterapptiveAnalyzers.1.0.5714.23531\analyzers\dotnet\cs\InterapptiveAnalyzers.dll" />
-    <Analyzer Include="..\..\packages\SonarLint.1.1.1\tools\analyzers\C#\SonarLint.dll" />
+    <Analyzer Include="..\..\packages\Microsoft.AnalyzerPowerPack.1.1.0\analyzers\dotnet\cs\Microsoft.AnalyzerPowerPack.Common.dll" />
+    <Analyzer Include="..\..\packages\Microsoft.AnalyzerPowerPack.1.1.0\analyzers\dotnet\cs\Microsoft.AnalyzerPowerPack.CSharp.dll" />
+    <Analyzer Include="..\..\packages\SonarLint.1.6.0\analyzers\SonarLint.CSharp.dll" />
+    <Analyzer Include="..\..\packages\SonarLint.1.6.0\analyzers\SonarLint.dll" />
+    <Analyzer Include="..\..\packages\System.Runtime.Analyzers.1.1.0\analyzers\dotnet\cs\System.Runtime.Analyzers.dll" />
+    <Analyzer Include="..\..\packages\System.Runtime.Analyzers.1.1.0\analyzers\dotnet\cs\System.Runtime.CSharp.Analyzers.dll" />
+    <Analyzer Include="..\..\packages\System.Runtime.InteropServices.Analyzers.1.1.0\analyzers\dotnet\cs\System.Runtime.InteropServices.Analyzers.dll" />
+    <Analyzer Include="..\..\packages\System.Runtime.InteropServices.Analyzers.1.1.0\analyzers\dotnet\cs\System.Runtime.InteropServices.CSharp.Analyzers.dll" />
+    <Analyzer Include="..\..\packages\System.Security.Cryptography.Hashing.Algorithms.Analyzers.1.1.0\analyzers\dotnet\cs\System.Security.Cryptography.Hashing.Algorithms.Analyzers.dll" />
+    <Analyzer Include="..\..\packages\System.Security.Cryptography.Hashing.Algorithms.Analyzers.1.1.0\analyzers\dotnet\cs\System.Security.Cryptography.Hashing.Algorithms.CSharp.Analyzers.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets'))" />
+  </Target>
+  <Import Project="..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>  -->

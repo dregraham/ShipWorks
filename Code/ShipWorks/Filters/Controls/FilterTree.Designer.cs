@@ -1,4 +1,4 @@
-using Interapptive.Shared.Messaging;
+using ShipWorks.Core.Messaging;
 
 namespace ShipWorks.Filters.Controls
 {

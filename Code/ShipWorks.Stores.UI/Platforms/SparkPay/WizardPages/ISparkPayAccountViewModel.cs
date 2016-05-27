@@ -22,12 +22,12 @@ namespace ShipWorks.Stores.UI.Platforms.SparkPay.WizardPages
         /// Property changed handler
         /// </summary>
         event PropertyChangedEventHandler PropertyChanged;
-        
+
         /// <summary>
         /// Saves the store with the url and token
         /// </summary>
         bool Save(SparkPayStoreEntity store);
-        
+
         /// <summary>
         /// Loads the store url and token
         /// </summary>

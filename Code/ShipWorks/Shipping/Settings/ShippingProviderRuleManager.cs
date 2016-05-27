@@ -1,28 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Data.Utility;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
-using ShipWorks.Data.Connection;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Utility;
 
 namespace ShipWorks.Shipping.Settings
 {
     /// <summary>
     /// Manages and provides database access to the shipping provider rules.
     /// </summary>
-    public static class ShippingProviderRuleManager
+    public class ShippingProviderRuleManager : IShippingProviderRuleManager, IInitializeForCurrentSession
     {
-        static TableSynchronizer<ShippingProviderRuleEntity> synchronizer;
-        static bool needCheckForChanges = false;
+        TableSynchronizer<ShippingProviderRuleEntity> synchronizer;
+        bool needCheckForChanges = false;
 
         /// <summary>
         /// Initialize ShippingProviderRuleManager
         /// </summary>
-        public static void InitializeForCurrentSession()
+        public void InitializeForCurrentSession()
         {
             synchronizer = new TableSynchronizer<ShippingProviderRuleEntity>();
             InternalCheckForChanges();
@@ -31,7 +29,7 @@ namespace ShipWorks.Shipping.Settings
         /// <summary>
         /// Check for any changes made in the database since initialization or the last check
         /// </summary>
-        public static void CheckForChangesNeeded()
+        public void CheckForChangesNeeded()
         {
             lock (synchronizer)
             {
@@ -42,7 +40,7 @@ namespace ShipWorks.Shipping.Settings
         /// <summary>
         /// Do the actual trip to the database to check for changes
         /// </summary>
-        private static void InternalCheckForChanges()
+        private void InternalCheckForChanges()
         {
             lock (synchronizer)
             {
@@ -58,7 +56,7 @@ namespace ShipWorks.Shipping.Settings
         /// <summary>
         /// Return the active list of all rules for the given shipment type
         /// </summary>
-        public static List<ShippingProviderRuleEntity> GetRules()
+        public IEnumerable<ShippingProviderRuleEntity> GetRules()
         {
             lock (synchronizer)
             {
@@ -72,9 +70,9 @@ namespace ShipWorks.Shipping.Settings
         }
 
         /// <summary>
-        /// Apply the given privder rule
+        /// Apply the given provider rule
         /// </summary>
-        public static void SaveRule(ShippingProviderRuleEntity rule)
+        public void SaveRule(ShippingProviderRuleEntity rule)
         {
             using (SqlAdapter adapter = new SqlAdapter(true))
             {
@@ -87,7 +85,7 @@ namespace ShipWorks.Shipping.Settings
         /// <summary>
         /// Apply the given profile to the given shipment
         /// </summary>
-        public static void SaveRule(ShippingProviderRuleEntity rule, SqlAdapter adapter)
+        public void SaveRule(ShippingProviderRuleEntity rule, SqlAdapter adapter)
         {
             // If there were changes, make sure that the object references are up-to-date
             if (adapter.SaveAndRefetch(rule))
@@ -106,7 +104,7 @@ namespace ShipWorks.Shipping.Settings
         /// <summary>
         /// Delete the specified rule
         /// </summary>
-        public static void DeleteRule(ShippingProviderRuleEntity rule)
+        public void DeleteRule(ShippingProviderRuleEntity rule)
         {
             using (SqlAdapter adapter = new SqlAdapter(true))
             {

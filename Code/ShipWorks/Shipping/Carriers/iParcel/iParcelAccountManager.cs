@@ -5,7 +5,9 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Utility;
 using System.Collections.Generic;
+using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model;
+using ShipWorks.Messaging.Messages;
 
 namespace ShipWorks.Shipping.Carriers.iParcel
 {
@@ -50,12 +52,19 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// </summary>
         public static void SaveAccount(IParcelAccountEntity account)
         {
+            bool wasDirty = account.IsDirty;
+
             using (var adapter = new SqlAdapter())
             {
                 adapter.SaveAndRefetch(account);
             }
 
             CheckForChangesNeeded();
+
+            if (wasDirty)
+            {
+                Messenger.Current.Send(new ShippingAccountsChangedMessage(null, account.ShipmentType));
+            }
         }
 
         /// <summary>
@@ -104,6 +113,8 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             }
 
             CheckForChangesNeeded();
+
+            Messenger.Current.Send(new ShippingAccountsChangedMessage(null, ShipmentTypeCode.iParcel));
         }
 
         /// <summary>

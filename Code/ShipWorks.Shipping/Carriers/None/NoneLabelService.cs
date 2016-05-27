@@ -20,6 +20,7 @@ namespace ShipWorks.Shipping.Carriers.None
         /// </summary>
         public void Void(ShipmentEntity shipment)
         {
+            // None does not support voiding
         }
     }
 }

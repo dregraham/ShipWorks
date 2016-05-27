@@ -1,13 +1,13 @@
-using ShipWorks.ApplicationCore.Options;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Connection;
-using ShipWorks.Users.Logon;
 using System.Threading;
+using ShipWorks.ApplicationCore.Options;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Users.Logon;
 
 namespace ShipWorks.Data
 {
     /// <summary>
-    /// Provices access to the global configuration object
+    /// Provides access to the global configuration object
     /// </summary>
     public static class ConfigurationData
     {

@@ -14,18 +14,18 @@ namespace ShipWorks.UI.Controls.ChannelLimit
     public class ChannelLimitFactory : IChannelLimitFactory
     {
         private readonly Func<IChannelLimitControl> channelLimitControlFactory;
-        private readonly IChannelLimitViewModel viewModel;
+        private readonly Func<IChannelLimitViewModel> viewModelFactory;
         private readonly IIndex<EditionFeature, IChannelLimitBehavior> behaviorFactory;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ChannelLimitFactory"/> class.
         /// </summary>
         public ChannelLimitFactory(Func<IChannelLimitControl> channelLimitControlFactory,
-            IChannelLimitViewModel viewModel,
+            Func<IChannelLimitViewModel> viewModelFactory,
             IIndex<EditionFeature, IChannelLimitBehavior> behaviorFactory)
         {
             this.channelLimitControlFactory = channelLimitControlFactory;
-            this.viewModel = viewModel;
+            this.viewModelFactory = viewModelFactory;
             this.behaviorFactory = behaviorFactory;
         }
 
@@ -38,6 +38,8 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         /// </remarks>
         public IChannelLimitControl CreateControl(ICustomerLicense customerLicense, StoreTypeCode channelToAdd, EditionFeature feature, IWin32Window owner)
         {
+            IChannelLimitViewModel viewModel = viewModelFactory();
+
             viewModel.ChannelToAdd = channelToAdd;
             viewModel.EnforcementContext = EnforcementContext.ExceedingChannelLimit;
 

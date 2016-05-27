@@ -1,11 +1,10 @@
 ﻿using System;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
-using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api;
 
-namespace ShipWorks.Shipping.Carriers.Ups
+namespace ShipWorks.Shipping.Carriers.UPS
 {
     /// <summary>
     /// LabelService for Ups Online Tools
@@ -32,7 +31,7 @@ namespace ShipWorks.Shipping.Carriers.Ups
             {
                 // Call the base class for setting default values as needed based on the service/package type of the shipment
                 base.Create(shipment);
-                
+
                 upsOltShipmentValidator.ValidateShipment(shipment);
 
                 UpsServicePackageTypeSetting.Validate(shipment);
@@ -43,12 +42,12 @@ namespace ShipWorks.Shipping.Carriers.Ups
                 string message = ex.Message;
 
                 // find the "XML document is well formed but not valid" error
-                if (ex.ErrorCode == "10002" && shipment.ReturnShipment && !String.IsNullOrEmpty(ex.ErrorLocation))
+                if (ex.ErrorCode == "10002" &&
+                    shipment.ReturnShipment &&
+                    !string.IsNullOrEmpty(ex.ErrorLocation) &&
+                    string.Equals(ex.ErrorLocation, "ShipmentConfirmRequest/Shipment/Package/Description", StringComparison.OrdinalIgnoreCase))
                 {
-                    if (String.Compare(ex.ErrorLocation, "ShipmentConfirmRequest/Shipment/Package/Description", StringComparison.OrdinalIgnoreCase) == 0)
-                    {
-                        message = "The return shipment's Contents is required.";
-                    }
+                    message = "The return shipment's Contents is required.";
                 }
 
                 throw new ShippingException(message, ex);

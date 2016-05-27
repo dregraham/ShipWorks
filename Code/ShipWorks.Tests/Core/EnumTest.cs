@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using Xunit;
-using ShipWorks.Shipping;
 using Xunit.Abstractions;
 
 namespace ShipWorks.Tests.Core
@@ -49,7 +47,7 @@ namespace ShipWorks.Tests.Core
                         var memberInfos = type.GetMember(enumValueName);
 
                         var descriptionAttributes = memberInfos[0].GetCustomAttributes(typeof(System.ComponentModel.DescriptionAttribute), false);
-                        
+
                         if (!descriptionAttributes.Any())
                         {
                             missingObfuscationAttribute += string.Format("{0}.{1} is missing the DescriptionAttribute.{2}", type.FullName, enumValueName, Environment.NewLine);
@@ -274,6 +272,7 @@ namespace ShipWorks.Tests.Core
                 "ShipWorks.UI.PopupSizerLocation".ToUpperInvariant(),
                 "ShipWorks.UI.PopupSizerStyle".ToUpperInvariant(),
                 "ShipWorks.UI.Wizard.WizardStepReason".ToUpperInvariant(),
+                "ShipWorks.Shipping.ShipmentStatus".ToUpperInvariant(),
                 "ShipWorks.Users.Audit.AuditBehaviorUser".ToUpperInvariant(),
                 "ShipWorks.Users.Audit.AuditChangeGroup".ToUpperInvariant(),
                 "ShipWorks.Users.Security.PermissionScope".ToUpperInvariant(),

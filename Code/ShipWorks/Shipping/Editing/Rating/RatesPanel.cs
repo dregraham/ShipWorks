@@ -2,24 +2,22 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Windows.Forms;
-using Interapptive.Shared.Messaging;
-using ShipWorks.Data.Model.EntityClasses;
+using Autofac;
+using Interapptive.Shared;
 using Interapptive.Shared.Utility;
+using ShipWorks.ApplicationCore;
+using ShipWorks.Core.Messaging;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Messaging.Messages;
+using ShipWorks.Messaging.Messages.Dialogs;
 using ShipWorks.Shipping.Carriers.BestRate;
-using ShipWorks.Shipping.Carriers.FedEx;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
-using ShipWorks.Shipping.Carriers.None;
 using ShipWorks.Shipping.Carriers.Postal;
-using ShipWorks.Shipping.Carriers.Postal.BestRate;
 using ShipWorks.Shipping.Editing.Enums;
 using ShipWorks.Shipping.Policies;
 using ShipWorks.Stores;
-using ShipWorks.Shipping.Settings;
-using Autofac;
-using Interapptive.Shared;
-using ShipWorks.ApplicationCore;
-using System.Reactive.Linq;
 
 namespace ShipWorks.Shipping.Editing.Rating
 {
@@ -102,7 +100,7 @@ namespace ShipWorks.Shipping.Editing.Rating
         public void ChangeShipment(long? shipmentID)
         {
             // This method can get triggered when the shipment dialog closes but the
-            // shipment ID did not actually chagne. We only want to reset the collapsible
+            // shipment ID did not actually chagne. We only want to reset the collapsible 
             // state when the shipment ID actually changes.
             resetCollapsibleStateRequired = selectedShipmentID != shipmentID;
             selectedShipmentID = shipmentID;
@@ -234,7 +232,11 @@ namespace ShipWorks.Shipping.Editing.Rating
                         if (rates == null)
                         {
                             rates = new RateGroup(new List<RateResult>());
-                            rates.AddFootnoteFactory(new ExceptionsRateFootnoteFactory(shipmentType?.ShipmentTypeCode ?? ShipmentTypeCode.None, ex));
+                            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+                            {
+                                ShipmentTypeCode code = shipmentType?.ShipmentTypeCode ?? ShipmentTypeCode.None;
+                                rates.AddFootnoteFactory(new ExceptionsRateFootnoteFactory(code, ex));
+                            }
                         }
 
                         panelRateGroup = new ShipmentRateGroup(rates, shipment);
@@ -261,7 +263,7 @@ namespace ShipWorks.Shipping.Editing.Rating
                     }
                     else
                     {
-                        ShipmentEntity ratedShipment = (ShipmentEntity)args.Result;
+                        ShipmentEntity ratedShipment = (ShipmentEntity) args.Result;
                         if (ratedShipment != null && ratedShipment.ShipmentID == selectedShipmentID)
                         {
                             if (ShipmentTypeManager.GetType(shipment).SupportsGetRates)
@@ -274,7 +276,7 @@ namespace ShipWorks.Shipping.Editing.Rating
                             else
                             {
                                 // The carrier does not support get rates so we display a message to the user
-                                rateControl.ClearRates($"The provider \"{EnumHelper.GetDescription(panelRateGroup.Carrier)}\" does not support retrieving rates.", panelRateGroup);
+                                rateControl.ClearRates($"The carrier \"{EnumHelper.GetDescription(panelRateGroup.Carrier)}\" does not support retrieving rates.", panelRateGroup);
                             }
                         }
                     }
@@ -287,6 +289,7 @@ namespace ShipWorks.Shipping.Editing.Rating
         }
 
         /// <summary>
+                    // Resolve the BestRateShipmentType and pass in IBestRateShippingBrokerFactory with 
         /// A helper method for loading the rates in the rate control.
         /// </summary>
         /// <param name="rateGroup">The rate group.</param>
@@ -303,7 +306,7 @@ namespace ShipWorks.Shipping.Editing.Rating
             }
 
             // Apply any applicable policies to the rate control prior to loading the rates
-            ShippingPolicies.Current.Apply((ShipmentTypeCode)rateGroup.Shipment.ShipmentType, rateControl);
+            ShippingPolicies.Current.Apply((ShipmentTypeCode) rateGroup.Shipment.ShipmentType, rateControl);
             rateControl.LoadRates(rateGroup);
         }
 
@@ -314,7 +317,7 @@ namespace ShipWorks.Shipping.Editing.Rating
         /// <param name="rateSelectedEventArgs">The <see cref="RateSelectedEventArgs"/> instance containing the event data.</param>
         private void OnConfigureRateClicked(object sender, RateSelectedEventArgs rateSelectedEventArgs)
         {
-            ShipmentRateGroup rateGroup = (ShipmentRateGroup)rateControl.RateGroup;
+            ShipmentRateGroup rateGroup = (ShipmentRateGroup) rateControl.RateGroup;
             ShipmentEntity shipment = rateGroup.Shipment;
 
             BestRateResultTag resultTag = rateSelectedEventArgs.Rate.Tag as BestRateResultTag;
@@ -324,13 +327,7 @@ namespace ShipWorks.Shipping.Editing.Rating
             }
             else
             {
-                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
-                {
-                    using (ShippingDlg dialog = new ShippingDlg(shipment, rateSelectedEventArgs, lifetimeScope))
-                    {
-                        dialog.ShowDialog(this);
-                    }
-                }
+                Messenger.Current.Send(new OpenShippingDialogMessage(this, new[] { shipment }, rateSelectedEventArgs));
             }
         }
     }

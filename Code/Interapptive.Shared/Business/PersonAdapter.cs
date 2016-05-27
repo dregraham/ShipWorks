@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Text;
-using SD.LLBLGen.Pro.ORMSupportClasses;
 using Interapptive.Shared.Data;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 
 namespace Interapptive.Shared.Business
 {
@@ -61,10 +61,11 @@ namespace Interapptive.Shared.Business
 
             adapter.AddressValidationStatus = 0;
             adapter.AddressValidationSuggestionCount = 0;
+            adapter.AddressValidationError = string.Empty;
         }
 
         /// <summary>
-        /// Copy the person\address values from the fromEntity to the corresponding fields of the toEntity.
+        /// Copy the person/address values from the fromEntity to the corresponding fields of the toEntity.
         /// </summary>
         public static void Copy(IEntity2 fromEntity, IEntity2 toEntity, string fieldPrefix)
         {
@@ -72,7 +73,7 @@ namespace Interapptive.Shared.Business
         }
 
         /// <summary>
-        /// Copy the person\address values from the fromEntity to the given PersonAdapter
+        /// Copy the person/address values from the fromEntity to the given PersonAdapter
         /// </summary>
         public static void Copy(IEntity2 fromEntity, string fromPrefix, PersonAdapter toAdapter)
         {
@@ -82,7 +83,7 @@ namespace Interapptive.Shared.Business
         }
 
         /// <summary>
-        /// Copy the person\address values from the fromEntity to the corresponding fields of the toEntity.
+        /// Copy the person/address values from the fromEntity to the corresponding fields of the toEntity.
         /// </summary>
         public static void Copy(IEntity2 fromEntity, string fromPrefix, IEntity2 toEntity, string toPrefix)
         {
@@ -93,12 +94,15 @@ namespace Interapptive.Shared.Business
         }
 
         /// <summary>
-        /// Copy the person\address values from the from adapter to the corresponding fields of the to adapter
+        /// Copy the person/address values from the from adapter to the corresponding fields of the to adapter
         /// </summary>
         public static void Copy(PersonAdapter fromAdapter, PersonAdapter toAdapter)
         {
             // Only copy the origin of there is one to copy from
-            if (fromAdapter.HasField("OriginID")) toAdapter.OriginID = fromAdapter.OriginID;
+            if (fromAdapter.HasField("OriginID"))
+            {
+                toAdapter.OriginID = fromAdapter.OriginID;
+            }
 
             toAdapter.NameParseStatus = fromAdapter.NameParseStatus;
             toAdapter.UnparsedName = fromAdapter.UnparsedName;
@@ -123,10 +127,11 @@ namespace Interapptive.Shared.Business
             toAdapter.Website = fromAdapter.Website;
 
             toAdapter.AddressValidationStatus = fromAdapter.AddressValidationStatus;
+            toAdapter.AddressValidationError = fromAdapter.AddressValidationError;
         }
 
         /// <summary>
-        /// Copy the person\address values from this adapter to another entity
+        /// Copy the person/address values from this adapter to another entity
         /// </summary>
         public void CopyTo(IEntity2 entity, string prefix)
         {
@@ -134,7 +139,7 @@ namespace Interapptive.Shared.Business
         }
 
         /// <summary>
-        /// Copy the person\address values from this adapter to another
+        /// Copy the person/address values from this adapter to another
         /// </summary>
         /// <param name="destinationAddress"></param>
         public void CopyTo(PersonAdapter destinationAddress)
@@ -143,7 +148,7 @@ namespace Interapptive.Shared.Business
         }
 
         /// <summary>
-        /// Copy the person\address values from this adapter to another
+        /// Copy the person/address values from this adapter to another
         /// </summary>
         /// <param name="destinationAddress"></param>
         public void CopyTo(AddressAdapter destinationAddress)
@@ -158,6 +163,8 @@ namespace Interapptive.Shared.Business
             destinationAddress.CountryCode = CountryCode;
 
             destinationAddress.AddressValidationStatus = AddressValidationStatus;
+            destinationAddress.AddressValidationError = AddressValidationError;
+            destinationAddress.AddressValidationSuggestionCount = AddressValidationSuggestionCount;
         }
 
         /// <summary>
@@ -246,18 +253,18 @@ namespace Interapptive.Shared.Business
             {
                 if (HasField("NameParseStatus"))
                 {
-                    return (PersonNameParseStatus)GetField<int>("NameParseStatus");
+                    return (PersonNameParseStatus) GetField<int>("NameParseStatus");
                 }
                 else
                 {
                     return PersonNameParseStatus.Unknown;
                 }
             }
-            set { SetField("NameParseStatus", (int)value); }
+            set { SetField("NameParseStatus", (int) value); }
         }
 
         /// <summary>
-        /// Original, unparsed nanme
+        /// Original, unparsed name
         /// </summary>
         public string UnparsedName
         {
@@ -271,7 +278,8 @@ namespace Interapptive.Shared.Business
         public PersonName ParsedName
         {
             get { return new PersonName(this); }
-            set {
+            set
+            {
                 PersonName name = value ?? new PersonName();
                 FirstName = name.First;
                 MiddleName = name.Middle;
@@ -286,7 +294,7 @@ namespace Interapptive.Shared.Business
         /// </summary>
         public string FirstName
         {
-            get { return GetField<string>("FirstName");  }
+            get { return GetField<string>("FirstName"); }
             set { SetField("FirstName", value); }
         }
 
@@ -345,7 +353,7 @@ namespace Interapptive.Shared.Business
         }
 
         /// <summary>
-        /// All 3 streets combined, seperated by new lines, but only non-blank ones
+        /// All 3 streets combined, separated by new lines, but only non-blank ones
         /// </summary>
         public string StreetAll
         {
@@ -530,6 +538,15 @@ namespace Interapptive.Shared.Business
         {
             get { return GetField<int>("AddressValidationSuggestionCount"); }
             set { SetField("AddressValidationSuggestionCount", value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the address validation error.
+        /// </summary>
+        public string AddressValidationError
+        {
+            get { return GetField<string>("AddressValidationError"); }
+            set { SetField("AddressValidationError", value); }
         }
 
         /// <summary>

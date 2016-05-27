@@ -85,7 +85,7 @@ namespace ShipWorks.Shipping.Editing.Rating
             get
             {
                 // Account for the rate being a previously cached rate where the tag is already a best rate tag
-                return Tag is BestRateResultTag ? ((BestRateResultTag)Tag).OriginalTag : Tag;
+                return Tag is BestRateResultTag ? ((BestRateResultTag) Tag).OriginalTag : Tag;
             }
         }
 
@@ -97,12 +97,17 @@ namespace ShipWorks.Shipping.Editing.Rating
         /// <summary>
         /// The amount the rate will cost the shipper. Only valid if Selectable is true.
         /// </summary>
-        public decimal Amount { get; }
+        public decimal AmountOrDefault => Amount.GetValueOrDefault();
+
+        /// <summary>
+        /// The amount the rate will cost the shipper. Only valid if Selectable is true.
+        /// </summary>
+        public decimal? Amount { get; }
 
         /// <summary>
         /// Returns the amount formatted as currency. If there is a half cent, 1/2 is added to the end.
         /// </summary>
-        public string FormattedAmount => StringUtility.FormatFriendlyCurrency(Amount);
+        public string FormattedAmount => StringUtility.FormatFriendlyCurrency(AmountOrDefault);
 
         /// <summary>
         /// The amount of taxes included in the rate
@@ -184,7 +189,7 @@ namespace ShipWorks.Shipping.Editing.Rating
         public RateResult Copy()
         {
             //Description,days,amount, tag
-            RateResult copiedRate = new RateResult(Description, Days, Amount, rateAmountComponents, Tag)
+            RateResult copiedRate = new RateResult(Description, Days, AmountOrDefault, rateAmountComponents, Tag)
             {
                 AmountFootnote = AmountFootnote,
                 CarrierDescription = CarrierDescription,

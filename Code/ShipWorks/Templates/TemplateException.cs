@@ -1,6 +1,5 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Runtime.Serialization;
 
 namespace ShipWorks.Templates
 {
@@ -35,5 +34,12 @@ namespace ShipWorks.Templates
         {
 
         }
+
+        /// <summary>
+        /// Serialization constructor
+        /// </summary>
+        protected TemplateException(SerializationInfo serializationInfo, StreamingContext streamingContext) : 
+            base(serializationInfo, streamingContext)
+        { }
     }
 }

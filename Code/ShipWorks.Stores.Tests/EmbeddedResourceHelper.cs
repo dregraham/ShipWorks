@@ -4,7 +4,7 @@ using System.Reflection;
 
 namespace ShipWorks.Stores.Tests
 {
-    public class EmbeddedResourceHelper
+    public static class EmbeddedResourceHelper
     {
         public static string GetEmbeddedResourceString(string embeddedResourceName)
         {

@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
-using Interapptive.Shared.Utility;
-using ShipWorks.Data.Model.EntityClasses;
 using System.Windows.Forms;
+using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Dashboard.Content;
 using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Editions;
+using ShipWorks.Users.Security;
 
 namespace ShipWorks.ApplicationCore.Licensing
 {
@@ -51,7 +52,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Deletes a store
         /// </summary>
-        void DeleteStore(StoreEntity store);
+        void DeleteStore(StoreEntity store, ISecurityContext securityContext);
 
         /// <summary>
         /// Enforces the capabilities for this license.

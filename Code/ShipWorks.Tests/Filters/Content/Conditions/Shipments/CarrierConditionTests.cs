@@ -2,7 +2,6 @@
 using System.Linq;
 using Autofac.Extras.Moq;
 using Moq;
-using ShipWorks.Filters.Content.Conditions;
 using ShipWorks.Filters.Content.Conditions.Shipments;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.Amazon;

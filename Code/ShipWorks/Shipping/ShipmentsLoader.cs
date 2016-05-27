@@ -1,26 +1,23 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.ComponentModel;
 using Interapptive.Shared;
-using ShipWorks.AddressValidation;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.ApplicationCore.Interaction;
-using ShipWorks.Common.Threading;
-using ShipWorks.Data.Connection;
+using Interapptive.Shared.Utility;
 using log4net;
-using ShipWorks.Data.Model;
+using ShipWorks.AddressValidation;
+using ShipWorks.Common.Threading;
+using ShipWorks.Core.Common.Threading;
 using ShipWorks.Data;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Filters;
 using ShipWorks.Stores;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
-using ShipWorks.Shipping.Editing;
-using ShipWorks.Filters;
 
 namespace ShipWorks.Shipping
 {
@@ -31,29 +28,18 @@ namespace ShipWorks.Shipping
     {
         static readonly ILog log = LogManager.GetLogger(typeof(ShipmentsLoader));
 
-        ConcurrentQueue<ShipmentEntity> shipmentsToValidate; 
+        ConcurrentQueue<ShipmentEntity> shipmentsToValidate;
         List<ShipmentEntity> globalShipments;
         bool wasCanceled;
         bool finishedLoadingShipments;
-        Control owner;
-        object tag;
-
-        /// <summary>
-        /// Raised when an asyn load as completed
-        /// </summary>
-        public event ShipmentsLoadedEventHandler LoadCompleted;
+        IWin32Window owner;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShipmentsLoader(Control owner)
+        public ShipmentsLoader(IWin32Window owner)
         {
-            if (owner == null)
-            {
-                throw new ArgumentNullException("owner");
-            }
-
-            this.owner = owner;
+            this.owner = MethodConditions.EnsureArgumentIsNotNull(owner, nameof(owner));
             globalShipments = new List<ShipmentEntity>();
             shipmentsToValidate = new ConcurrentQueue<ShipmentEntity>();
         }
@@ -61,29 +47,19 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// The maximum number of orders that we support loading at a time.
         /// </summary>
-        public static int MaxAllowedOrders
-        {
-            get { return 1000; }
-        }
+        public static int MaxAllowedOrders => 1000;
 
         /// <summary>
         /// User defined data that can be associated with the loader
         /// </summary>
-        public object Tag
-        {
-            get { return tag; }
-            set { tag = value; }
-        }
+        public object Tag { get; set; }
 
         /// <summary>
         /// Load the shipments for the given collection of orders or shipments
         /// </summary>
-        public void LoadAsync(IEnumerable<long> keys)
+        public async Task<ShipmentsLoadedEventArgs> LoadAsync(IEnumerable<long> keys)
         {
-            if (keys == null)
-            {
-                throw new ArgumentNullException("keys");
-            }
+            MethodConditions.EnsureArgumentIsNotNull(keys, nameof(keys));
 
             int count = keys.Count();
 
@@ -105,40 +81,50 @@ namespace ShipWorks.Shipping
             progressDlg.Description = "ShipWorks is loading shipments for the selected orders.";
             progressDlg.Show(owner);
 
-            MethodInvoker<ProgressItem, int> validationInvoker = ValidateShipmentsInternal;
-            MethodInvoker<ProgressItem, IList<long>> invoker = LoadShipmentsInternal;
-
-            bool shouldValidate = StoreManager.DoAnyStoresHaveAutomaticValidationEnabled();
-
-            invoker.BeginInvoke(workProgress, keys.ToList(), ar =>
+            Task loadShipmentsTask = TaskEx.Run(() =>
             {
+                LoadShipmentsInternal(workProgress, keys.ToList());
                 finishedLoadingShipments = true;
+            });
 
-                if (!shouldValidate)
-                {
-                    FinishLoadingShipments(progressDlg);
-                }
-            }, null);
+            Task validateTask;
 
-            if (shouldValidate)
+            if (ShouldValidate)
             {
                 // Validate Shipment Progress Item
                 ProgressItem validationProgress = new ProgressItem("Validate Shipment Addresses");
                 progressProvider.ProgressItems.Add(validationProgress);
 
-                validationInvoker.BeginInvoke(validationProgress, count, ar2 => FinishLoadingShipments(progressDlg), null);   
+                validateTask = ValidateShipmentsInternal(validationProgress, count);
             }
+            else
+            {
+                validateTask = TaskUtility.CompletedTask;
+            }
+
+            try
+            {
+                await TaskEx.WhenAll(loadShipmentsTask, validateTask);
+            }
+            catch (Exception ex)
+            {
+                log.Error(ex);
+            }
+
+            progressDlg.CloseForced();
+
+            if (wasCanceled)
+            {
+                globalShipments.Clear();
+            }
+
+            return new ShipmentsLoadedEventArgs(null, wasCanceled, null, globalShipments);
         }
 
         /// <summary>
-        /// Finish the loading process
+        /// Should the loader validate addresses?
         /// </summary>
-        private void FinishLoadingShipments(ProgressDlg progressDlg)
-        {
-            owner.Invoke((Action)(progressDlg.CloseForced));
-
-            OnLoadShipmentsCompleted();
-        }
+        private bool ShouldValidate => StoreManager.DoAnyStoresHaveAutomaticValidationEnabled();
 
         /// <summary>
         /// Load all the shipments on a background thread
@@ -195,8 +181,8 @@ namespace ShipWorks.Shipping
                     // Queue the shipments to be validated
                     foreach (ShipmentEntity shipment in iterationShipments)
                     {
-                        shipmentsToValidate.Enqueue(shipment);    
-                    }   
+                        shipmentsToValidate.Enqueue(shipment);
+                    }
                 }
                 catch (SqlForeignKeyException)
                 {
@@ -215,7 +201,7 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Validate all the shipments on a background thread
         /// </summary>
-        private void ValidateShipmentsInternal(ProgressItem workProgress, int initialCount)
+        private async Task ValidateShipmentsInternal(ProgressItem workProgress, int initialCount)
         {
             // We need to make sure filters are up to date so profiles being applied can be as accurate as possible.
             FilterHelper.EnsureFiltersUpToDate(TimeSpan.FromSeconds(15));
@@ -232,6 +218,8 @@ namespace ShipWorks.Shipping
             {
                 if (shipment == null)
                 {
+                    // If we didn't delay in the background, we'd hang the UI thread until the laoding was finished
+                    await TaskEx.Delay(250);
                     continue;
                 }
 
@@ -247,7 +235,7 @@ namespace ShipWorks.Shipping
 
                 workProgress.Detail = string.Format("Validating {0} of {1}", count + 1, total);
 
-                ValidatedAddressManager.ValidateShipment(shipment, addressValidator);
+                await ValidatedAddressManager.ValidateShipmentAsync(shipment, addressValidator);
 
                 count++;
 
@@ -255,31 +243,6 @@ namespace ShipWorks.Shipping
             }
 
             workProgress.Completed();
-        }
-
-        /// <summary>
-        /// The async loading of shipments for shipping has completed
-        /// </summary>
-        void OnLoadShipmentsCompleted()
-        {
-            if (wasCanceled)
-            {
-                globalShipments.Clear();
-            }
-
-            ShipmentsLoadedEventHandler handler = LoadCompleted;
-            if (handler != null)
-            {
-                ShipmentsLoadedEventArgs args = new ShipmentsLoadedEventArgs(null, wasCanceled, null, globalShipments);
-                if (owner.InvokeRequired)
-                {
-                    owner.Invoke((Action)(() => handler(this, args)));
-                }
-                else
-                {
-                    handler(this, args);   
-                }
-            }
         }
     }
 }

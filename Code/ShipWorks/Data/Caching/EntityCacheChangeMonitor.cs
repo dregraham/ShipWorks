@@ -1,21 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ThreadTimer = System.Threading.Timer;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Model.FactoryClasses;
-using ShipWorks.Data.Connection;
-using ShipWorks.Data.Model;
-using ShipWorks.Data.Model.HelperClasses;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading;
-using ShipWorks.Users;
-using ShipWorks.Common.Threading;
-using ShipWorks.ApplicationCore.Interaction;
-using System.Timers;
 using Interapptive.Shared;
 using ShipWorks.ApplicationCore.ExecutionMode;
+using ShipWorks.ApplicationCore.Interaction;
+using ShipWorks.Common.Threading;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model;
+using ShipWorks.Users;
+using ThreadTimer = System.Threading.Timer;
 
 namespace ShipWorks.Data.Caching
 {
@@ -98,7 +93,7 @@ namespace ShipWorks.Data.Caching
         /// </summary>
         public void Dispose()
         {
-            Debug.Assert(!Program.ExecutionMode.IsUISupported || !Program.MainForm.InvokeRequired);
+            Debug.Assert(!executionMode.IsUISupported || !Program.MainForm.InvokeRequired);
 
             lock (disposedLock)
             {
@@ -133,7 +128,7 @@ namespace ShipWorks.Data.Caching
                     operationToken);
             }
         }
-        
+
         /// <summary>
         /// Kickoff the next timer interval, as long as we haven't been disposed
         /// </summary>

@@ -16,7 +16,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1
         /// </summary>
         public Express1UspsBestRateBroker() : this(new Express1UspsShipmentType(), new Express1UspsAccountRepository())
         {
-            
+
         }
 
         /// <summary>

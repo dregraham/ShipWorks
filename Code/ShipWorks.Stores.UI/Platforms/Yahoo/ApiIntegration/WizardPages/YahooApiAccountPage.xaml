@@ -1,22 +1,21 @@
 ﻿<UserControl x:Class="ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration.WizardPages.YahooApiAccountPage"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:behaviors="clr-namespace:ShipWorks.UI.Behaviors;assembly=ShipWorks.UI"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
-             xmlns:valueConverters="clr-namespace:ShipWorks.UI.ValueConverters;assembly=ShipWorks.UI"
-             xmlns:wizardPages="clr-namespace:ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration.WizardPages"
-             xmlns:yahooValidation="clr-namespace:ShipWorks.Stores.UI.Platforms.Yahoo"
+             xmlns:ui="http://schemas.shipworks.com/ui"
+             xmlns:local="clr-namespace:ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration.WizardPages"
+             xmlns:yahoo="clr-namespace:ShipWorks.Stores.UI.Platforms.Yahoo"
              FontFamily="Tahoma"
              FontSize="11"
-             d:DataContext="{d:DesignInstance wizardPages:YahooApiAccountPageViewModel}"
+             d:DataContext="{d:DesignInstance local:YahooApiAccountPageViewModel}"
              d:DesignHeight="200"
              d:DesignWidth="400"
              mc:Ignorable="d">
     <UserControl.Resources>
-        <valueConverters:VisibleWhenEqualToParameterConverter x:Key="VisibleWhenEqualToParameter" />
+        <ui:VisibleWhenEqualToParameterConverter x:Key="VisibleWhenEqualToParameter" />
     </UserControl.Resources>
     <StackPanel Margin="24,8,24,8">
         <StackPanel.Resources>
@@ -93,7 +92,7 @@
                                     TargetNullValue={x:Static sys:String.Empty},
                                     UpdateSourceTrigger=PropertyChanged}">
                 <i:Interaction.Behaviors>
-                    <behaviors:TextBoxInputRegExBehavior EmptyValue=""
+                    <ui:TextBoxInputRegExBehavior EmptyValue=""
                                                          MaxLength="19"
                                                          RegularExpression="^-?\d+(,\d+)*(\.\d+(e\d+)?)?(\.)?$" />
                 </i:Interaction.Behaviors>
@@ -102,18 +101,18 @@
                    Source="/Shipworks.Core;component/Resources/check.png"
                    Visibility="{Binding IsValid,
                                         Converter={StaticResource VisibleWhenEqualToParameter},
-                                        ConverterParameter={x:Static yahooValidation:YahooOrderNumberValidation.Valid}}" />
+                                        ConverterParameter={x:Static yahoo:YahooOrderNumberValidation.Valid}}" />
             <Image Grid.Column="2"
                    Source="/Shipworks.Core;component/Resources/error.png"
                    Visibility="{Binding IsValid,
                                         Converter={StaticResource VisibleWhenEqualToParameter},
-                                        ConverterParameter={x:Static yahooValidation:YahooOrderNumberValidation.Invalid}}" />
+                                        ConverterParameter={x:Static yahoo:YahooOrderNumberValidation.Invalid}}" />
             <Image Grid.Column="2"
                    RenderTransformOrigin=".5,.5"
                    Source="/Shipworks.Core;component/Resources/Progress/circle_ball_blue.gif"
                    Visibility="{Binding IsValid,
                                         Converter={StaticResource VisibleWhenEqualToParameter},
-                                        ConverterParameter={x:Static yahooValidation:YahooOrderNumberValidation.Validating}}">
+                                        ConverterParameter={x:Static yahoo:YahooOrderNumberValidation.Validating}}">
                 <Image.RenderTransform>
                     <RotateTransform x:Name="AnimatedRotateTransform" Angle="0" />
                 </Image.RenderTransform>
@@ -140,7 +139,7 @@
                        Text="{Binding ValidationErrorMessage}"
                        Visibility="{Binding IsValid,
                                             Converter={StaticResource VisibleWhenEqualToParameter},
-                                            ConverterParameter={x:Static yahooValidation:YahooOrderNumberValidation.Invalid}}" />
+                                            ConverterParameter={x:Static yahoo:YahooOrderNumberValidation.Invalid}}" />
         </Grid>
         <TextBlock Margin="0,8,0,0" Style="{StaticResource Section}">
             <Run>For help adding your Yahoo store,</Run>

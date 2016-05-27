@@ -1,8 +1,6 @@
-using System;
-using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Linq;
 
 namespace Interapptive.Shared.Business
 {
@@ -188,7 +186,7 @@ namespace Interapptive.Shared.Business
                     }
                 }
 
-                if (personName.parseStatus == PersonNameParseStatus.Unparsed)
+                if (personName.parseStatus == PersonNameParseStatus.Unknown)
                 {
                     personName.parseStatus = PersonNameParseStatus.Simple;
                 }

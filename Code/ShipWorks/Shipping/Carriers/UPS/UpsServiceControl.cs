@@ -1,34 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
 using System.Data;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
-using ShipWorks.Shipping.Api;
-using ShipWorks.Shipping.Carriers.UPS.ServiceManager;
-using ShipWorks.Shipping.Editing;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Editing.Rating;
-using ShipWorks.UI.Controls;
-using ShipWorks.Shipping.Carriers.UPS.Enums;
-using Interapptive.Shared.Utility;
-using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
-using Interapptive.Shared.Business;
-using ShipWorks.Shipping.Insurance;
-using ShipWorks.Data;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Connection;
-using Interapptive.Shared.UI;
-using ShipWorks.UI.Utility;
-using System.Collections;
+using Autofac;
 using Interapptive.Shared;
 using Interapptive.Shared.Business.Geography;
-using ShipWorks.Editions;
-using ShipWorks.Stores;
-using ShipWorks.Editions.Brown;
-using ShipWorks.Shipping.Carriers.UPS.WorldShip;
+using Interapptive.Shared.UI;
+using Interapptive.Shared.Utility;
+using ShipWorks.ApplicationCore;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.UPS.Enums;
+using ShipWorks.Shipping.Editing;
+using ShipWorks.Shipping.Editing.Rating;
+using ShipWorks.UI.Controls;
 
 namespace ShipWorks.Shipping.Carriers.UPS
 {
@@ -45,7 +30,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <param name="rateControl">A handle to the rate control so the selected rate can be updated when
         /// a change to the shipment, such as changing the service type, matches a rate in the control</param>        
         public UpsServiceControl(ShipmentTypeCode shipmentTypeCode, RateControl rateControl)
-            : base (shipmentTypeCode, rateControl)
+            : base(shipmentTypeCode, rateControl)
         {
             InitializeComponent();
 
@@ -82,7 +67,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             }
         }
 
-        public override void Initialize()
+        protected override void Initialize()
         {
             packageControl.PackageCountChanged += packageDetailsControl.PackageCountChanged;
         }
@@ -173,16 +158,15 @@ namespace ShipWorks.Shipping.Carriers.UPS
             // Grab a list of overridden shipments to work with because we
             // need to check with the store  to see if anything about the shipment was overridden in case
             // it may have effected the shipping services available (i.e. the eBay GSP program)
-            List<ShipmentEntity> overriddenShipments = new List<ShipmentEntity>();
-            LoadedShipments.ForEach(s => overriddenShipments.Add(ShippingManager.GetOverriddenStoreShipment(s)));
+            List<ShipmentEntity> overriddenShipments = LoadedShipments.Select(ShippingManager.GetOverriddenStoreShipment).ToList();
 
             // Determine if all shipments will have the same destination service types
             foreach (ShipmentEntity overriddenShipment in overriddenShipments)
             {
-                UpsServiceType thisService = (UpsServiceType)overriddenShipment.Ups.Service;
+                UpsServiceType thisService = (UpsServiceType) overriddenShipment.Ups.Service;
                 serviceTypes.Add(thisService);
 
-                if (!UpsUtility.IsCodAvailable((UpsServiceType)overriddenShipment.Ups.Service, overriddenShipment.AdjustedShipCountryCode()))
+                if (!UpsUtility.IsCodAvailable((UpsServiceType) overriddenShipment.Ups.Service, overriddenShipment.AdjustedShipCountryCode()))
                 {
                     allCodAvailable = false;
                 }
@@ -205,46 +189,11 @@ namespace ShipWorks.Shipping.Carriers.UPS
             // Unhook events
             service.SelectedIndexChanged -= new EventHandler(OnChangeService);
 
-            List<UpsServiceType> availableServices = ShipmentTypeManager.GetType(ShipmentTypeCode).GetAvailableServiceTypes().Select(s => (UpsServiceType)s).ToList();
-
-            // If a distinct on country code only returns a count of 1, all countries are the same
-            bool allSameCountry = overriddenShipments.Select(s => string.Format("{0} {1}", s.AdjustedShipCountryCode(), s.AdjustedOriginCountryCode())).Distinct().Count() == 1;
-
-            // If they are all of the same service class, we can load the service classes
-            if (allSameCountry)
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                ShipmentEntity overriddenShipment = overriddenShipments.First();
-
-                var upsServiceManagerFactory = new UpsServiceManagerFactory(overriddenShipment);
-                IUpsServiceManager carrierServiceManager = upsServiceManagerFactory.Create(overriddenShipment);
-
-                // Get a list of service types that are valid for the overriddenShipments
-                List<UpsServiceType> validServiceTypes = carrierServiceManager.GetServices(overriddenShipment)
-                    .Select(s => s.UpsServiceType).ToList();
-
-                // only include service types that are valid and enabled (availalbeServices)
-                List<UpsServiceType> upsServiceTypesToLoad = validServiceTypes.Intersect(availableServices).ToList();
-
-                if (LoadedShipments.Any())
-                {
-                    // Always include the service type that the shipment is currently configured in the 
-                    // event the shipment was configured prior to a service being excluded
-                    // Always include the service that the shipments are currently configured with
-                    // Only if the ServiceType is valid for the shipment type
-                    IEnumerable<UpsServiceType> loadedServices = LoadedShipments.Select(s => (UpsServiceType)s.Ups.Service)
-                        .Intersect(validServiceTypes).Distinct();
-                    upsServiceTypesToLoad = upsServiceTypesToLoad.Union(loadedServices).ToList();
-                }
-
-                List<KeyValuePair<string, UpsServiceType>> services = upsServiceTypesToLoad
-                    .Select(type => new KeyValuePair<string, UpsServiceType>(EnumHelper.GetDescription(type), (UpsServiceType) type))
-                    .ToList();
-
-                service.DataSource = services;
-            }
-            else
-            {
-                service.DataSource = new KeyValuePair<string, UpsServiceType>[0];
+                service.DataSource = lifetimeScope.ResolveKeyed<IShipmentServicesBuilder>(ShipmentTypeCode.UpsOnLineTools)
+                    .BuildServiceTypeDictionary(LoadedShipments)
+                    .Select(entry => new KeyValuePair<string, UpsServiceType>(entry.Value, (UpsServiceType) entry.Key)).ToList();
             }
 
             // Make it visible if any of them have saturday dates
@@ -271,7 +220,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
                     reference2Number.ApplyMultiText(shipment.Ups.ReferenceNumber2);
                     shipperRelease.ApplyMultiCheck(shipment.Ups.ShipperRelease);
                     carbonNeutral.ApplyMultiCheck(shipment.Ups.CarbonNeutral);
-                    
+
                     payorTransport.ApplyMultiValue((UpsPayorType) shipment.Ups.PayorType);
                     payorAccount.ApplyMultiText(shipment.Ups.PayorAccount);
                     payorPostalCode.ApplyMultiText(shipment.Ups.PayorPostalCode);
@@ -288,12 +237,12 @@ namespace ShipWorks.Shipping.Carriers.UPS
                     codAmount.ApplyMultiAmount(shipment.Ups.CodAmount);
                     codPaymentType.ApplyMultiValue((UpsCodPaymentType) shipment.Ups.CodPaymentType);
 
-                    surePostClassification.ApplyMultiValue((UpsPostalSubclassificationType)shipment.Ups.Subclassification);
+                    surePostClassification.ApplyMultiValue((UpsPostalSubclassificationType) shipment.Ups.Subclassification);
                     costCenter.ApplyMultiText(shipment.Ups.CostCenter);
                     packageID.ApplyMultiText(shipment.Ups.UspsPackageID);
-                    irregularIndicator.ApplyMultiValue((UpsIrregularIndicatorType)shipment.Ups.IrregularIndicator);
+                    irregularIndicator.ApplyMultiValue((UpsIrregularIndicatorType) shipment.Ups.IrregularIndicator);
 
-                    uspsEndorsement.ApplyMultiValue((UspsEndorsementType)shipment.Ups.Endorsement);
+                    uspsEndorsement.ApplyMultiValue((UspsEndorsementType) shipment.Ups.Endorsement);
                 }
             }
 
@@ -310,7 +259,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <returns></returns>
         public List<UpsServiceType> GetLoadedServiceTypes()
         {
-            return LoadedShipments.Select(s => (UpsServiceType)s.Ups.Service).ToList();
+            return LoadedShipments.Select(s => (UpsServiceType) s.Ups.Service).ToList();
         }
 
         /// <summary>
@@ -332,7 +281,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             packageControl.SaveToEntities();
             packageDetailsControl.SaveToEntities();
 
-            // Save the 
+            // Save the
             foreach (ShipmentEntity shipment in LoadedShipments)
             {
                 shipment.ContentWeight = shipment.Ups.Packages.Sum(p => p.Weight);
@@ -341,9 +290,9 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 service.ReadMultiValue(v => { if (v != null) shipment.Ups.Service = (int) v; });
                 shipDate.ReadMultiDate(d => shipment.ShipDate = d.Date.AddHours(12));
                 saturdayDelivery.ReadMultiCheck(c => shipment.Ups.SaturdayDelivery = c);
-               
+
                 confirmation.ReadMultiValue(v => shipment.Ups.DeliveryConfirmation = (int) v);
-                shipperRelease.ReadMultiCheck(c=> shipment.Ups.ShipperRelease = c);
+                shipperRelease.ReadMultiCheck(c => shipment.Ups.ShipperRelease = c);
                 carbonNeutral.ReadMultiCheck(c => shipment.Ups.CarbonNeutral = c);
 
 
@@ -366,10 +315,10 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 codAmount.ReadMultiAmount(a => shipment.Ups.CodAmount = a);
                 codPaymentType.ReadMultiValue(v => shipment.Ups.CodPaymentType = (int) v);
 
-                surePostClassification.ReadMultiValue(v => shipment.Ups.Subclassification = (int)v);
+                surePostClassification.ReadMultiValue(v => shipment.Ups.Subclassification = (int) v);
                 costCenter.ReadMultiText(t => shipment.Ups.CostCenter = t);
                 packageID.ReadMultiText(t => shipment.Ups.UspsPackageID = t);
-                irregularIndicator.ReadMultiValue(v => shipment.Ups.IrregularIndicator = (int)v);
+                irregularIndicator.ReadMultiValue(v => shipment.Ups.IrregularIndicator = (int) v);
 
                 uspsEndorsement.ReadMultiValue(v => shipment.Ups.Endorsement = (int) v);
             }
@@ -433,7 +382,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             UpdateSectionDescription();
             UpdateSaturdayAvailability();
             UpdateCodVisibility();
-            UpdateMiAndSurePostSpecificVisibility(new List<UpsServiceType>() {(UpsServiceType)service.SelectedValue});
+            UpdateMiAndSurePostSpecificVisibility(new List<UpsServiceType>() { (UpsServiceType) service.SelectedValue });
 
             RaiseShipmentServiceChanged();
             RaiseRateCriteriaChanged();
@@ -454,7 +403,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             if (!service.MultiValued && service.SelectedValue != null)
             {
                 // Update the selected rate in the rate control to coincide with the service change
-                UpsServiceType selectedServiceType = (UpsServiceType)service.SelectedValue;
+                UpsServiceType selectedServiceType = (UpsServiceType) service.SelectedValue;
 
                 RateResult matchingRate = RateControl.RateGroup.Rates.FirstOrDefault(r =>
                 {
@@ -470,7 +419,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
                         return false;
                     }
 
-                    return (UpsServiceType)r.OriginalTag == selectedServiceType;
+                    return (UpsServiceType) r.OriginalTag == selectedServiceType;
                 });
 
                 RateControl.SelectRate(matchingRate);
@@ -486,8 +435,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// </summary>
         /// <param name="serviceType">Type of the service.</param>
         private void UpdateMiAndSurePostSpecificVisibility(List<UpsServiceType> serviceType)
-        {            
-			bool isSurePost = false;
+        {
+            bool isSurePost = false;
             bool isMi = false;
             bool showEndorsement = false;
 
@@ -504,12 +453,12 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 }
             }
 
-            endorsementPanel.Visible = showEndorsement; 
+            endorsementPanel.Visible = showEndorsement;
 
             confirmationPanel.Visible = !isSurePost;
             sectionCod.Visible = !isSurePost && !isMi;
 
-            sectionReturns.Visible = ShipmentTypeManager.GetType(ShipmentTypeCode).SupportsReturns && !isSurePost && !isMi;    
+            sectionReturns.Visible = ShipmentTypeManager.GetType(ShipmentTypeCode).SupportsReturns && !isSurePost && !isMi;
 
             sectionSurePost.Visible = isSurePost || isMi;
 
@@ -541,7 +490,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             irregularIndicator.Visible = isOlt;
 
             sectionSurePost.Height = (isOlt ?
-                                          irregularIndicator.Bottom : packageID.Bottom) 
+                                          irregularIndicator.Bottom : packageID.Bottom)
                                           + (sectionSurePost.Height - sectionSurePost.ContentPanel.Height) + 8;
         }
 
@@ -753,7 +702,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             bool hasCustoms = LoadedShipments != null ? LoadedShipments.Any(s => CustomsManager.IsCustomsRequired(s)) : false;
 
             // We don't want to show duties/payor for MI or SurePost, so see if we have any shipments that AREN'T either of those two.
-            bool hasNonMiOrSurePost = LoadedShipments != null ? LoadedShipments.Any(s => !UpsUtility.IsUpsMiOrSurePostService((UpsServiceType)s.Ups.Service)) : false;
+            bool hasNonMiOrSurePost = LoadedShipments != null ? LoadedShipments.Any(s => !UpsUtility.IsUpsMiOrSurePostService((UpsServiceType) s.Ups.Service)) : false;
 
             if (hasCustoms && hasNonMiOrSurePost)
             {
@@ -765,7 +714,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 else if (payorDuties.SelectedValue != null)
                 {
                     sectionBilling.ExtraText += "     Bill duties/Fees to: ";
-                    sectionBilling.ExtraText += EnumHelper.GetDescription((UpsShipmentChargeType)payorDuties.SelectedValue);
+                    sectionBilling.ExtraText += EnumHelper.GetDescription((UpsShipmentChargeType) payorDuties.SelectedValue);
                 }
 
                 if (panelTransportAccount.Visible)
@@ -774,7 +723,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 }
                 else
                 {
-                    panelPayorDuties.Top = panelPayorTransport.Bottom + 4; 
+                    panelPayorDuties.Top = panelPayorTransport.Bottom + 4;
                 }
             }
             else
@@ -878,7 +827,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
             if (e.Rate.OriginalTag is UpsServiceType)
             {
-                UpsServiceType serviceType = (UpsServiceType)e.Rate.OriginalTag;
+                UpsServiceType serviceType = (UpsServiceType) e.Rate.OriginalTag;
 
                 service.SelectedValue = serviceType;
                 if (service.SelectedIndex == -1 && oldIndex != -1)
@@ -911,7 +860,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             }
             else
             {
-                UpsShipmentChargeType selectedShipmentChargeType = (UpsShipmentChargeType)payorDuties.SelectedValue;
+                UpsShipmentChargeType selectedShipmentChargeType = (UpsShipmentChargeType) payorDuties.SelectedValue;
 
                 switch (selectedShipmentChargeType)
                 {
@@ -957,7 +906,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             }
             else
             {
-                UpsPayorType selectedPayorType = (UpsPayorType)payorTransport.SelectedValue;
+                UpsPayorType selectedPayorType = (UpsPayorType) payorTransport.SelectedValue;
 
                 switch (selectedPayorType)
                 {
@@ -982,6 +931,17 @@ namespace ShipWorks.Shipping.Carriers.UPS
             }
 
             UpdateBillingSectionDisplay();
+        }
+
+        /// <summary>
+        /// Flush any in-progress changes before saving
+        /// </summary>
+        /// <remarks>This should cause weight controls to finish, etc.</remarks>
+        public override void FlushChanges()
+        {
+            base.FlushChanges();
+
+            packageControl?.FlushChanges();
         }
     }
 }

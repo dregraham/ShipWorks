@@ -1,14 +1,13 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Collections;
 using System.Threading;
 
 namespace Interapptive.Shared.Threading
 {
     /// <summary>
-    /// Collection that can be used accross multiple threads, including access to the enumerator.
+    /// Collection that can be used across multiple threads, including access to the enumerator.
     /// </summary>
     public class ThreadSafeCollection<T> : IList<T>, ICollection<T>, IEnumerable<T>, IList, ICollection, IEnumerable
     {
@@ -91,7 +90,7 @@ namespace Interapptive.Shared.Threading
         }
 
         /// <summary>
-        /// Returns true of the specified item is conteained in the colleciton
+        /// Returns true of the specified item is contained in the collection
         /// </summary>
         public bool Contains(T item)
         {
@@ -100,9 +99,9 @@ namespace Interapptive.Shared.Threading
                 return items.Contains(item);
             }
         }
-        
+
         /// <summary>
-        /// Copy the items in the colleciton to the specified array starting at the given index.
+        /// Copy the items in the collection to the specified array starting at the given index.
         /// </summary>
         public void CopyTo(T[] array, int index)
         {
@@ -146,7 +145,7 @@ namespace Interapptive.Shared.Threading
         }
 
         /// <summary>
-        /// Get the index of the first mathcing item in the collection, or -1 if not found
+        /// Get the index of the first matching item in the collection, or -1 if not found
         /// </summary>
         public int IndexOf(T item)
         {
@@ -258,7 +257,7 @@ namespace Interapptive.Shared.Threading
         }
 
         /// <summary>
-        /// ICollection.IsSynchronized explicit impementation
+        /// ICollection.IsSynchronized explicit implementation
         /// </summary>
         bool ICollection.IsSynchronized
         {
@@ -322,7 +321,7 @@ namespace Interapptive.Shared.Threading
         }
 
         /// <summary>
-        /// IList.Insert explicit impelmentation
+        /// IList.Insert explicit implementation
         /// </summary>
         void IList.Insert(int index, object value)
         {
@@ -399,5 +398,5 @@ namespace Interapptive.Shared.Threading
             return true;
         }
 
-    } 
+    }
 }

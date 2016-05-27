@@ -6,7 +6,6 @@ using Moq;
 using Newtonsoft.Json;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores.Platforms.ThreeDCart;
 using ShipWorks.Stores.Platforms.ThreeDCart.RestApi;
 using ShipWorks.Stores.Platforms.ThreeDCart.RestApi.DTO;
 using Xunit;
@@ -20,17 +19,14 @@ namespace ShipWorks.Stores.Tests.Platforms.ThreeDCart
         private readonly Mock<ISqlAdapterRetry> sqlAdapter = new Mock<ISqlAdapterRetry>();
         private readonly Mock<ILog> log = new Mock<ILog>();
         readonly OrderEntity orderEntity;
-        private readonly string orderJsonNoAttributes;
         private readonly string orderJsonOneAttribute;
         private readonly string orderJsonTwoAttributes;
         private readonly string orderJsonWithKitItem;
-        private List<ThreeDCartOrder> orders;
 
         public ThreeDCartDownloaderTest()
         {
-            orderJsonNoAttributes =
-                EmbeddedResourceHelper.GetEmbeddedResourceString(
-                    "ShipWorks.Stores.Tests.Platforms.ThreeDCart.Artifacts.GetOrderResponseItemHasNoAttributes.json");
+            var orderJsonNoAttributes = EmbeddedResourceHelper.GetEmbeddedResourceString(
+                "ShipWorks.Stores.Tests.Platforms.ThreeDCart.Artifacts.GetOrderResponseItemHasNoAttributes.json");
 
             orderJsonOneAttribute =
                 EmbeddedResourceHelper.GetEmbeddedResourceString(
@@ -44,7 +40,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ThreeDCart
                 EmbeddedResourceHelper.GetEmbeddedResourceString(
                     "ShipWorks.Stores.Tests.Platforms.ThreeDCart.Artifacts.GetOrderResponseWithKitItem.json");
 
-            orders = JsonConvert.DeserializeObject<List<ThreeDCartOrder>>(orderJsonNoAttributes);
+            var orders = JsonConvert.DeserializeObject<List<ThreeDCartOrder>>(orderJsonNoAttributes);
 
             string productJson =
                 EmbeddedResourceHelper.GetEmbeddedResourceString(
@@ -173,7 +169,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ThreeDCart
         [Fact]
         public void LoadOrder_LoadsOrderCharges()
         {
-            Assert.True(orderEntity.OrderCharges.Any(c => c.Description == "Tax" && c.Amount == 1.54m));
+            Assert.True(orderEntity.OrderCharges.Any(c => c.Description == "Tax" && c.Amount == 1.54M));
         }
 
         [Fact]
@@ -195,7 +191,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ThreeDCart
 
             Assert.Equal("KIT ADJUSTMENT", actualCharge.Type);
             Assert.Equal("Kit Adjustment", actualCharge.Description);
-            Assert.Equal(11m, actualCharge.Amount);
+            Assert.Equal(11M, actualCharge.Amount);
         }
     }
 }

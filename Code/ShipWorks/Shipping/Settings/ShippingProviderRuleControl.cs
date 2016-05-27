@@ -1,17 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
 using System.Data;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
-using ShipWorks.UI.Utility;
+using Autofac;
+using log4net;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.ApplicationCore;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Filters;
-using ShipWorks.Data.Connection;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using log4net;
+using ShipWorks.UI.Utility;
 
 namespace ShipWorks.Shipping.Settings
 {
@@ -24,6 +23,7 @@ namespace ShipWorks.Shipping.Settings
 
         ShippingProviderRuleEntity rule;
         private long originalFilterNodeID;
+        private readonly IShippingProviderRuleManager shippingProviderRuleManager;
 
         /// <summary>
         /// User has clicked the delete button on the rule line
@@ -38,6 +38,7 @@ namespace ShipWorks.Shipping.Settings
             InitializeComponent();
 
             toolStipDelete.Renderer = new NoBorderToolStripRenderer();
+            shippingProviderRuleManager = IoC.UnsafeGlobalLifetimeScope.Resolve<IShippingProviderRuleManager>();
         }
 
         /// <summary>
@@ -151,7 +152,7 @@ namespace ShipWorks.Shipping.Settings
             {
                 try
                 {
-                    ShippingProviderRuleManager.SaveRule(rule, adapter);
+                    shippingProviderRuleManager.SaveRule(rule, adapter);
                     originalFilterNodeID = rule.FilterNodeID;
                 }
                 catch (ORMConcurrencyException ex)
@@ -160,7 +161,7 @@ namespace ShipWorks.Shipping.Settings
 
                     // Skip this error.  It means that a group we are trying to save couldn't be saved b\c it was
                     // deleted somewhere else.  If that happens, for these settings, we just let it go.
-                    ShippingProviderRuleManager.CheckForChangesNeeded();
+                    shippingProviderRuleManager.CheckForChangesNeeded();
                 }
 
                 adapter.Commit();
