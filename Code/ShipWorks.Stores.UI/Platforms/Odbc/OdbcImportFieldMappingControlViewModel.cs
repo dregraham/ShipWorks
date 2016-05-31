@@ -247,7 +247,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
 
             selectedTable.Load(DataSource, logFactory(typeof(OdbcTable)));
             Columns = new ObservableCollection<OdbcColumn>(selectedTable.Columns);
-            Columns.Insert(0, new OdbcColumn(string.Empty));
+            Columns.Insert(0, new OdbcColumn("(None)"));
 
             previousSelectedTable = SelectedTable;
         }
