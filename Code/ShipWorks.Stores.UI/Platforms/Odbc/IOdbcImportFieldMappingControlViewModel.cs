@@ -70,5 +70,10 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// Save the Map to the given store.
         /// </summary>
         void Save(OdbcStoreEntity store);
+
+        /// <summary>
+        /// Checks the required fields have value.
+        /// </summary>
+        bool EnsureRequiredFieldsHaveValue();
     }
 }

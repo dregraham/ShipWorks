@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using ShipWorks.Data.Model.HelperClasses;
@@ -42,7 +43,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 	    {
 	        List<ShipWorksOdbcMappableField> fields = new List<ShipWorksOdbcMappableField>
 	        {
-	            new ShipWorksOdbcMappableField(OrderFields.OrderNumber, "Order Number"),
+	            new ShipWorksOdbcMappableField(OrderFields.OrderNumber, "Order Number", true),
 	            new ShipWorksOdbcMappableField(OrderFields.OrderDate, "Order Date & Time"),
 	            new ShipWorksOdbcMappableField(OrderFields.OrderDate, "Order Date"),
 	            new ShipWorksOdbcMappableField(OrderFields.OrderDate, "Order Time"),
@@ -185,7 +186,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 
             foreach (IOdbcFieldMapEntry entry in maps.SelectMany(map => map.Entries)
                 .Where(entry => !string.IsNullOrWhiteSpace(entry.ExternalField.Column?.Name) &&
-                !entry.ExternalField.Column.Name.Equals("(None)")))
+                !entry.ExternalField.Column.Name.Equals("(None)", StringComparison.InvariantCulture)))
             {
                 masterMap.AddEntry(entry);
             }

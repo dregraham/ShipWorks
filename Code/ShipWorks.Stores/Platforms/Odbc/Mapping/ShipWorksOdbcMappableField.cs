@@ -15,12 +15,23 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// </summary>
         /// <param name="field">The field.</param>
         /// <param name="displayName">The display name.</param>
-        public ShipWorksOdbcMappableField(EntityField2 field, string displayName)
+        public ShipWorksOdbcMappableField(EntityField2 field, string displayName) : this(field, displayName, false)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ShipWorksOdbcMappableField"/> class.
+        /// </summary>
+        /// <param name="field">The field.</param>
+        /// <param name="displayName">The display name.</param>
+        /// <param name="isRequired"></param>
+        public ShipWorksOdbcMappableField(EntityField2 field, string displayName, bool isRequired)
 	    {
 	        this.field = field;
             ContainingObjectName = field?.ContainingObjectName;
             Name = field?.Name;
 	        DisplayName = displayName;
+            IsRequired = isRequired;
 	    }
 
         /// <summary>
@@ -51,5 +62,10 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         {
             return $"{ContainingObjectName}.{Name}";
         }
+
+        /// <summary>
+        /// Is the field required to be mapped.
+        /// </summary>
+        public bool IsRequired { get; set; }
     }
 }

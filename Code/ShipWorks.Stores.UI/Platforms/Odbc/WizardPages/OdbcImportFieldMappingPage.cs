@@ -50,6 +50,12 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
                 return;
             }
 
+            if (!viewModel.EnsureRequiredFieldsHaveValue())
+            {
+                e.NextPage = this;
+                return;
+            }
+
             viewModel.Save(store);
         }
 

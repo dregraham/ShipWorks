@@ -177,6 +177,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             MethodConditions.EnsureArgumentIsNotNull(store);
 
             OdbcFieldMap map = GetSingleMap();
+
             using (Stream memoryStream = new MemoryStream())
             {
                 try
@@ -194,6 +195,23 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
                     store.Map = reader.ReadToEnd();
                 }
             }
+        }
+
+        /// <summary>
+        /// Checks the required fields.
+        /// </summary>
+        public bool EnsureRequiredFieldsHaveValue()
+        {
+            IEnumerable<IOdbcFieldMapEntry> entries = OrderFieldMap.Map.Entries.Where(e => e.ShipWorksField.IsRequired);
+
+            foreach (IOdbcFieldMapEntry entry in entries.Where(entry => entry.ExternalField.Column == null ||
+            entry.ExternalField.Column.Name.Equals("(None)", StringComparison.InvariantCulture)))
+            {
+                messageHelper.ShowError($"{entry.ShipWorksField.DisplayName} is a required field. Please select a column to map to {entry.ShipWorksField.DisplayName}.");
+                return false;
+            }
+
+            return true;
         }
 
         /// <summary>
