@@ -13,6 +13,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
     /// <summary>
     /// OdbcDataSource
     /// </summary>
+    [Obfuscation(Exclude=true)]
     public class OdbcDataSource : IOdbcDataSource
     {
         private readonly IShipWorksDbProviderFactory odbcProvider;
@@ -31,7 +32,6 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// <summary>
         /// Name of the data source
         /// </summary>
-        [Obfuscation(Exclude = true)]
         public string Name { get; private set; }
 
         /// <summary>
