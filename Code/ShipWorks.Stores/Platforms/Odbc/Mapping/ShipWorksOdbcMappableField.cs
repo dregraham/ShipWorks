@@ -1,5 +1,6 @@
-using System.Reflection;
+using Newtonsoft.Json;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using System.Reflection;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 {
@@ -15,6 +16,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// </summary>
         /// <param name="field">The field.</param>
         /// <param name="displayName">The display name.</param>
+        [JsonConstructor]
         public ShipWorksOdbcMappableField(EntityField2 field, string displayName) : this(field, displayName, false)
         {
         }
@@ -66,6 +68,8 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <summary>
         /// Is the field required to be mapped.
         /// </summary>
+        [JsonIgnore]
+        [Obfuscation(Exclude = true)]
         public bool IsRequired { get; set; }
     }
 }
