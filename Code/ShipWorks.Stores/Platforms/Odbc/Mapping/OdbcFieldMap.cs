@@ -1,6 +1,7 @@
 using Interapptive.Shared.Utility;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 {
@@ -26,6 +27,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <summary>
         /// The ODBC Field Map Entries
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public IEnumerable<IOdbcFieldMapEntry> Entries => entries;
 
         /// <summary>

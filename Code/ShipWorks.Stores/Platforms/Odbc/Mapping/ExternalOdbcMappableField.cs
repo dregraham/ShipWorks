@@ -35,6 +35,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <summary>
         /// The External Column
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public OdbcColumn Column { get; set; }
 
         /// <summary>

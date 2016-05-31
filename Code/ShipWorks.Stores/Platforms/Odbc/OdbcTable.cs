@@ -1,12 +1,10 @@
+using log4net;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
-using System.Data.Odbc;
 using System.Linq;
-using Autofac;
-using log4net;
-using ShipWorks.ApplicationCore;
+using System.Reflection;
 
 namespace ShipWorks.Stores.Platforms.Odbc
 {
@@ -26,6 +24,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// <summary>
         /// The table name
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public string Name { get; }
 
         /// <summary>
