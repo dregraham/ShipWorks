@@ -1,3 +1,5 @@
+using System.Reflection;
+
 namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 {
     /// <summary>
@@ -20,11 +22,13 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <summary>
         /// Gets the ShipWorks field.
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public ShipWorksOdbcMappableField ShipWorksField { get; }
 
         /// <summary>
         /// Gets the external field.
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public ExternalOdbcMappableField ExternalField { get; }
 	}
 }
