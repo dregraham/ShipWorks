@@ -170,14 +170,15 @@ namespace ShipWorks.AddressValidation
                     pendingOrders = adapter.GetCollectionFromPredicate<T>(predicate);
                 }
 
+                int itemCount = pendingOrders.Count;
+                log.Info($"Validating {itemCount} items on {taskCount} thread(s)...");
+
                 ConcurrentQueue<T> queue = new ConcurrentQueue<T>(pendingOrders);
 
                 await TaskEx.WhenAll(Enumerable.Range(1, taskCount)
                     .Select(x => TaskEx.Run(() => ValidateAddressesTask(queue), cancellationToken)));
 
                 stopwatch.Stop();
-
-                int itemCount = pendingOrders.Count;
 
                 if (itemCount > 0)
                 {
