@@ -108,7 +108,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database
         [NDependIgnoreLongMethod]
         public static MigrationController CreateV2ToV3Controller(Version installedDBVersion)
         {
-            MigrationController controller = new MigrationController(installedDBVersion, "ShipWorks.Data.Administration.UpdateFrom2x.Database.Scripts");
+            MigrationController controller = new MigrationController(installedDBVersion, "ShipWorks.Res.Data.Administration.UpdateFrom2x.Database.Scripts");
 
             // populate the engine with the various steps
 

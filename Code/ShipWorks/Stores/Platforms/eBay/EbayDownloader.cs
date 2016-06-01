@@ -185,8 +185,6 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// <summary>
         /// Process the given eBay order
         /// </summary>
-        [NDependIgnoreLongMethod]
-        [NDependIgnoreComplexMethodAttribute]
         private void ProcessOrder(OrderType orderType)
         {
             // Get the ShipWorks order.  This ends up calling our overriden FindOrder implementation

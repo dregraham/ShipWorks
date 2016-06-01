@@ -40,7 +40,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         public override ShipmentTypeCode ShipmentTypeCode => ShipmentTypeCode.Endicia;
 
         /// <summary>
-        /// Reller of Endicia services.
+        /// Reseller of Endicia services.
         /// </summary>
         public virtual EndiciaReseller EndiciaReseller => EndiciaReseller.None;
 
@@ -188,7 +188,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <summary>
         /// Get the default profile for the shipment type
         /// </summary>
-        protected override void ConfigurePrimaryProfile(ShippingProfileEntity profile)
+        public override void ConfigurePrimaryProfile(ShippingProfileEntity profile)
         {
             base.ConfigurePrimaryProfile(profile);
 
@@ -273,7 +273,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         public override bool UpdatePersonAddress(ShipmentEntity shipment, PersonAdapter person, long originID)
         {
 
-            // A null reference error was being thrown.  Discoverred by Crash Reports.
+            // A null reference error was being thrown.  Discovered by Crash Reports.
             // Let's figure out what is null....
             if (shipment == null)
             {
@@ -521,7 +521,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 ILicenseService licenseService = lifetimeScope.Resolve<ILicenseService>();
                 EditionRestrictionLevel restrictionLevel = licenseService.CheckRestriction(EditionFeature.EndiciaScanBasedReturns, null);
 
-                // If scan based returns is not allowed, show the the default returns control
+            // If scan based returns is not allowed, show the the default returns control
                 if (restrictionLevel != EditionRestrictionLevel.None)
                 {
                     return base.CreateReturnsControl();

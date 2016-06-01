@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Globalization;
-using ShipWorks.Shipping.Carriers.Amazon.Api.DTOs;
-using ShipWorks.Stores.Platforms.Amazon.Mws;
-using Interapptive.Shared.Net;
 using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Xml;
 using System.Xml.Linq;
 using Interapptive.Shared.Security;
+using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Shipping.Carriers.Amazon.Api.DTOs;
+using ShipWorks.Stores.Platforms.Amazon.Mws;
 
 namespace ShipWorks.Shipping.Carriers.Amazon.Api
 {
@@ -127,7 +127,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
                     ErrorResponse errorResponse = SerializationUtility.DeserializeFromXml<ErrorResponse>(xml);
                     throw new AmazonShippingException(errorResponse.Error.Message, ex);
                 }
-                
+
                 throw new AmazonShippingException($"Error Deserializing {typeof(T).Name}", ex);
             }
         }
@@ -159,7 +159,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
             // Order ID
             request.Variables.Add("ShipmentRequestDetails.AmazonOrderId", requestDetails.AmazonOrderId);
 
-            AddItemInfo(request,requestDetails);
+            AddItemInfo(request, requestDetails);
             AddFromAddressInfo(request, requestDetails);
             AddPackageInfo(request, requestDetails);
             AddShippingServiceOptions(request, requestDetails);
@@ -171,11 +171,15 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         private static void AddShippingServiceOptions(HttpVariableRequestSubmitter request, ShipmentRequestDetails requestDetails)
         {
             // ShippingServiceOptions
-            request.Variables.Add("ShipmentRequestDetails.ShippingServiceOptions.CarrierWillPickUp", requestDetails.ShippingServiceOptions.CarrierWillPickUp.ToString().ToLower());
-            request.Variables.Add("ShipmentRequestDetails.ShippingServiceOptions.DeliveryExperience", requestDetails.ShippingServiceOptions.DeliveryExperience);
+            request.Variables.Add("ShipmentRequestDetails.ShippingServiceOptions.CarrierWillPickUp",
+                requestDetails.ShippingServiceOptions.CarrierWillPickUp.ToString().ToLowerInvariant());
+            request.Variables.Add("ShipmentRequestDetails.ShippingServiceOptions.DeliveryExperience",
+                requestDetails.ShippingServiceOptions.DeliveryExperience);
 
-            request.Variables.Add("ShipmentRequestDetails.ShippingServiceOptions.DeclaredValue.Amount", requestDetails.ShippingServiceOptions.DeclaredValue.Amount.ToString(CultureInfo.InvariantCulture));
-            request.Variables.Add("ShipmentRequestDetails.ShippingServiceOptions.DeclaredValue.CurrencyCode", requestDetails.ShippingServiceOptions.DeclaredValue.CurrencyCode);
+            request.Variables.Add("ShipmentRequestDetails.ShippingServiceOptions.DeclaredValue.Amount",
+                requestDetails.ShippingServiceOptions.DeclaredValue.Amount.ToString(CultureInfo.InvariantCulture));
+            request.Variables.Add("ShipmentRequestDetails.ShippingServiceOptions.DeclaredValue.CurrencyCode",
+                requestDetails.ShippingServiceOptions.DeclaredValue.CurrencyCode);
         }
 
         /// <summary>
@@ -272,7 +276,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
             string queryString = request.Variables
                 .OrderBy(v => v.Name, StringComparer.Ordinal)
                 .Select(v => v.Name + "=" + AmazonMwsSignature.Encode(v.Value, false))
-                .Aggregate((x,y) => x + "&" + y);
+                .Aggregate((x, y) => x + "&" + y);
 
             string parameterString = $"{verbString}\n{request.Uri.Host}\n{endpointPath}\n{queryString}";
 
@@ -360,8 +364,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
                 var error = (from e in xdoc.Descendants(ns + "Error")
                              select new
                              {
-                                 Code = (string)e.Element(ns + "Code"),
-                                 Message = (string)e.Element(ns + "Message")
+                                 Code = (string) e.Element(ns + "Code"),
+                                 Message = (string) e.Element(ns + "Message")
                              }).FirstOrDefault();
 
                 if (error != null)

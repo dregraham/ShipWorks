@@ -2,8 +2,8 @@
 using Interapptive.Shared.Security;
 using ShipWorks.ApplicationCore.Security;
 using ShipWorks.Stores.Platforms.Odbc;
+using ShipWorks.Stores.Platforms.Odbc.Mapping;
 using ShipWorks.Stores.UI.Platforms.Odbc.WizardPages;
-using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc
 {
@@ -19,10 +19,6 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
                 .AsImplementedInterfaces()
                 .SingleInstance();
 
-            builder.RegisterType<OdbcDataSourcePage>()
-                .Keyed<WizardPage>(StoreTypeCode.Odbc)
-                .ExternallyOwned();
-
             builder.RegisterType<OdbcDataSourceRepository>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
@@ -33,10 +29,45 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             builder.RegisterType<OdbcControlPanel>()
                 .AsImplementedInterfaces();
 
-            builder.RegisterType<OdbcDataSource>();
+            builder.RegisterType<OdbcDataSource>()
+                .AsImplementedInterfaces();
 
             builder.RegisterType<OdbcCipherKey>()
                 .Keyed<ICipherKey>(CipherContext.Odbc);
+
+            builder.RegisterType<OdbcTableFactory>()
+                .AsSelf();
+
+            builder.RegisterType<OdbcImportFieldMappingControl>()
+                .AsSelf();
+
+            builder.RegisterType<OdbcImportFieldMappingControlViewModel>()
+                .AsImplementedInterfaces();
+
+            builder.RegisterType<OdbcFieldMapFactory>()
+                .AsImplementedInterfaces();
+
+            builder.RegisterType<JsonOdbcFieldMapIOFactory>()
+                .AsImplementedInterfaces();
+
+            builder.RegisterType<OdbcDataSourcePage>()
+                .As<IOdbcWizardPage>()
+                .ExternallyOwned();
+
+            builder.RegisterType<OdbcImportFieldMappingPage>()
+                .As<IOdbcWizardPage>()
+                .ExternallyOwned();
+
+            builder.RegisterType<JsonOdbcFieldMapReader>()
+                .AsImplementedInterfaces()
+                .AsSelf();
+
+            builder.RegisterType<JsonOdbcFieldMapWriter>()
+                .AsImplementedInterfaces()
+                .AsSelf();
+
+            builder.RegisterType<OdbcSchema>()
+                .AsImplementedInterfaces();
         }
     }
 }

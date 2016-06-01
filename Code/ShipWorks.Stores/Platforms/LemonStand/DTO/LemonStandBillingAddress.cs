@@ -1,11 +1,15 @@
 ﻿using System.Reflection;
 using Newtonsoft.Json;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ShipWorks.Stores.Platforms.LemonStand.DTO
 {
     [Obfuscation(Feature = "PreserveLiteralValues", Exclude = true, StripAfterObfuscation = false)]
+    [SuppressMessage("SonarQube", "S125:Sections of code should not be \"commented out\"", 
+        Justification = "Commented out code shows an example of the json that is returned from the api")]
     public class LemonStandBillingAddress
     {
+//}
         [JsonProperty("first_name")]
         public string FirstName { get; set; }
 

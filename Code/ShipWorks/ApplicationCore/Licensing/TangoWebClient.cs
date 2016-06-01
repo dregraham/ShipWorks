@@ -1,22 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Globalization;
-using System.Linq;
-using System.Net;
-using System.Reflection;
-using System.Security.Cryptography.X509Certificates;
-using System.Web.Services.Protocols;
-using System.Xml;
-using System.Xml.Linq;
-using System.Xml.XPath;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Security;
 using Interapptive.Shared.Utility;
 using log4net;
-using ShipWorks.ApplicationCore.Licensing.Activation;
 using ShipWorks.ApplicationCore.Licensing.Activation.WebServices;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.ApplicationCore.Nudges;
@@ -30,11 +17,21 @@ using ShipWorks.Shipping.Carriers.FedEx.Api;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Account;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
+using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Insurance.InsureShip;
 using ShipWorks.Stores;
 using ShipWorks.Stores.Content;
-using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.Net;
+using System.Reflection;
+using System.Security.Cryptography.X509Certificates;
+using System.Web.Services.Protocols;
+using System.Xml;
+using System.Xml.Linq;
 
 namespace ShipWorks.ApplicationCore.Licensing
 {
@@ -69,7 +66,7 @@ namespace ShipWorks.ApplicationCore.Licensing
                     Version assemblyVersion = Assembly.GetExecutingAssembly().GetName().Version;
                     Version minimumVersion = new Version(5, 0, 0, 0);
 
-                    version = assemblyVersion.Major == 0 ? minimumVersion: assemblyVersion;
+                    version = assemblyVersion.Major == 0 ? minimumVersion : assemblyVersion;
                 }
 
                 return version.ToString(4);
@@ -118,11 +115,11 @@ namespace ShipWorks.ApplicationCore.Licensing
             postRequest.Variables.Add("cc_billing_street_1", request.CardBillingAddress.Street1);
             postRequest.Variables.Add("cc_billing_city", request.CardBillingAddress.City);
             postRequest.Variables.Add("cc_billing_state", request.CardBillingAddress.StateProvCode);
-            postRequest.Variables.Add("cc_billing_zipcode", request.CardBillingAddress.PostalCode);
+            postRequest.Variables.Add("cc_billing_zipcode", request.CardBillingAddress.PostalCode.Truncate(5));
             postRequest.Variables.Add("sendMarketingInfo", "false");
             postRequest.Variables.Add("version", Version);
 
-            if(request.MatchedPhysicalAddress != null)
+            if (request.MatchedPhysicalAddress != null)
             {
                 Address matchedAddress = request.MatchedPhysicalAddress;
                 postRequest.Variables.Add("pStreet", matchedAddress.Address1);
@@ -148,7 +145,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Get the status of the specified license
         /// </summary>
-        public static LicenseAccountDetail GetLicenseStatus(string licenseKey, StoreEntity store)
+        public static ILicenseAccountDetail GetLicenseStatus(string licenseKey, StoreEntity store)
         {
             ShipWorksLicense license = new ShipWorksLicense(licenseKey);
 
@@ -530,10 +527,10 @@ namespace ShipWorks.ApplicationCore.Licensing
             ProcessXmlRequest(postRequest, "SubmitInsuranceClaim");
         }
 
-		/// <summary>
+        /// <summary>
         /// Sends Postal balances for postal services.
         /// </summary>
-        public static void LogPostageEvent(LicenseAccountDetail license, decimal balance, decimal purchaseAmount, ShipmentTypeCode shipmentTypeCode, string accountIdentifier)
+        public static void LogPostageEvent(ILicenseAccountDetail license, decimal balance, decimal purchaseAmount, ShipmentTypeCode shipmentTypeCode, string accountIdentifier)
         {
             HttpVariableRequestSubmitter postRequest = new HttpVariableRequestSubmitter();
 
@@ -541,7 +538,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             postRequest.Variables.Add("license", license.Key);
             postRequest.Variables.Add("balance", balance.ToString(CultureInfo.InvariantCulture));
             postRequest.Variables.Add("purchaseamount", purchaseAmount.ToString(CultureInfo.InvariantCulture));
-            postRequest.Variables.Add("swtype", ((int)shipmentTypeCode).ToString(CultureInfo.InvariantCulture));
+            postRequest.Variables.Add("swtype", ((int) shipmentTypeCode).ToString(CultureInfo.InvariantCulture));
             postRequest.Variables.Add("accountidentifier", accountIdentifier);
 
             XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "CarrierBalance");
@@ -557,15 +554,15 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Sends USPS contract type to Tango.
         /// </summary>
-        public static void LogStampsAccount(LicenseAccountDetail license, ShipmentTypeCode shipmentTypeCode, string accountIdentifier, UspsAccountContractType uspsAccountContractType)
+        public static void LogStampsAccount(ILicenseAccountDetail license, ShipmentTypeCode shipmentTypeCode, string accountIdentifier, UspsAccountContractType uspsAccountContractType)
         {
             HttpVariableRequestSubmitter postRequest = new HttpVariableRequestSubmitter();
 
             postRequest.Variables.Add("action", "logstampsaccount");
             postRequest.Variables.Add("license", license.Key);
             postRequest.Variables.Add("accountidentifier", accountIdentifier);
-            postRequest.Variables.Add("swtype", ((int)shipmentTypeCode).ToString(CultureInfo.InvariantCulture));
-            postRequest.Variables.Add("stampscontracttype", ((int)uspsAccountContractType).ToString(CultureInfo.InvariantCulture));
+            postRequest.Variables.Add("swtype", ((int) shipmentTypeCode).ToString(CultureInfo.InvariantCulture));
+            postRequest.Variables.Add("stampscontracttype", ((int) uspsAccountContractType).ToString(CultureInfo.InvariantCulture));
 
             XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "LogStampsAccount");
 
@@ -585,7 +582,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <exception cref="System.ArgumentNullException">store</exception>
         /// <exception cref="TangoException"></exception>
         [NDependIgnoreLongMethod]
-        [NDependIgnoreComplexMethodAttribute]
+        [NDependIgnoreComplexMethod]
         public static string LogShipment(StoreEntity store, ShipmentEntity shipment, bool isRetry = false)
         {
             if (store == null)
@@ -692,7 +689,7 @@ namespace ShipWorks.ApplicationCore.Licensing
                 postRequest.Variables.Add("email", shipment.ShipEmail);
 
                 // Send best rate usage data to Tango
-                BestRateEventsDescription bestRateEventsDescription = new BestRateEventsDescription((BestRateEventTypes)shipment.BestRateEvents);
+                BestRateEventsDescription bestRateEventsDescription = new BestRateEventsDescription((BestRateEventTypes) shipment.BestRateEvents);
                 postRequest.Variables.Add("bestrateevents", bestRateEventsDescription.ToString());
 
                 ShipmentCommonDetail shipmentDetail = shipmentType.GetShipmentCommonDetail(shipment);
@@ -923,12 +920,12 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Update the license for the store to be what it is in the given account detail
         /// </summary>
-        private static void UpdateLicense(StoreEntity store, LicenseAccountDetail accountDetail)
+        private static void UpdateLicense(StoreEntity store, ILicenseAccountDetail accountDetail)
         {
             bool wasDirty = store.IsDirty;
 
-            store.License = accountDetail.License.Key;
-            store.Edition = EditionSerializer.Serialize(accountDetail.Edition);
+            store.License = accountDetail.Key;
+            store.Edition = accountDetail.Edition.Serialize();
 
             if (!wasDirty)
             {
@@ -1065,7 +1062,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             logEntry.LogRequest(postRequest);
 
             // Setup parameters
-            postRequest.RequestSubmitting += delegate(object sender, HttpRequestSubmittingEventArgs e)
+            postRequest.RequestSubmitting += delegate (object sender, HttpRequestSubmittingEventArgs e)
             {
                 e.HttpWebRequest.KeepAlive = false;
 
@@ -1127,13 +1124,17 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         private static void ValidateInterapptiveCertificate(HttpWebRequest httpWebRequest)
         {
+#pragma warning disable 168
+            X509Certificate certificate;
+#pragma warning restore 168
+
 #if !DEBUG
             if (httpWebRequest.ServicePoint == null)
             {
                 throw new TangoException("The SSL certificate on the server is invalid.");
             }
 
-            X509Certificate certificate = httpWebRequest.ServicePoint.Certificate;
+            certificate = httpWebRequest.ServicePoint.Certificate;
 
             if (certificate == null)
             {
@@ -1168,23 +1169,11 @@ namespace ShipWorks.ApplicationCore.Licensing
                 Activation.WebServices.Activation activationService = new Activation.WebServices.Activation(new ApiLogEntry(ApiLogSource.ShipWorks, "Activation")) { Url = ActivationUrl };
                 CustomerLicenseInfoV1 customerLicenseInfo = activationService.GetCustomerLicenseInfo(email, password);
 
-                GenericResult<IActivationResponse> result = new GenericResult<IActivationResponse>(null)
-                {
-                    Context = new ActivationResponse(customerLicenseInfo),
-                    Success = true
-                };
-
-                return result;
+                return GenericResult.FromSuccess<IActivationResponse>(new ActivationResponse(customerLicenseInfo));
             }
             catch (SoapException ex)
             {
-                GenericResult<IActivationResponse> errorResult = new GenericResult<IActivationResponse>(null)
-                {
-                    Success = false,
-                    Message = ex.Message
-                };
-
-                return errorResult;
+                return GenericResult.FromError<IActivationResponse>(ex.Message);
             }
         }
 

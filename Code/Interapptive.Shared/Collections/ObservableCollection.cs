@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using System.Collections.ObjectModel;
@@ -108,6 +109,17 @@ namespace Interapptive.Shared.Collections
             while (Count > 0)
             {
                 RemoveItem(0);
+            }
+        }
+
+        /// <summary>
+        /// Adds the items to the collection
+        /// </summary>
+        public void AddRange(IEnumerable<T> newItems)
+        {
+            foreach (T newItem in newItems)
+            {
+                Add(newItem);
             }
         }
     }

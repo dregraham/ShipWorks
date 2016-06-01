@@ -2,13 +2,14 @@
 using ShipWorks.Stores.Management;
 using ShipWorks.UI.Wizard;
 using System.Windows.Forms;
+using ShipWorks.Stores.Platforms.Odbc;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
 {
     /// <summary>
     /// Odbc Data Source wizard page
     /// </summary>
-    public partial class OdbcDataSourcePage : AddStoreWizardPage
+    public partial class OdbcDataSourcePage : AddStoreWizardPage, IOdbcWizardPage
     {
         /// <summary>
         /// Constructor
@@ -18,6 +19,11 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
             InitializeComponent();
             odbcDataSourceControl.RefreshDataSources();
         }
+
+        /// <summary>
+        /// The position in which to show this wizard page
+        /// </summary>
+        public int Position => 0;
 
         /// <summary>
         ///     User is moving to the next wizard page, perform any autoconfiguration or credentials saving

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Xml.Linq;
 using Interapptive.Shared.Business;
 using ShipWorks.Data.Model.EntityClasses;
@@ -32,7 +33,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <summary>
         /// Validates the address.
         /// </summary>
-        UspsAddressValidationResults ValidateAddress(PersonAdapter physicalAddress);
+        Task<UspsAddressValidationResults> ValidateAddressAsync(PersonAdapter physicalAddress);
 
         /// <summary>
         /// Purchase postage for the given account for the specified amount.  ControlTotal is the ControlTotal value last retrieved from GetAccountInfo.

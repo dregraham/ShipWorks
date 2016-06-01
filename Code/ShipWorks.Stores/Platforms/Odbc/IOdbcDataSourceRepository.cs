@@ -10,6 +10,6 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// <summary>
         /// Gets the available data sources.
         /// </summary>
-        IEnumerable<OdbcDataSource> GetDataSources();
+        IEnumerable<IOdbcDataSource> GetDataSources();
     }
 }

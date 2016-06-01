@@ -7929,63 +7929,6 @@ namespace ShipWorks.Data.Adapter.Custom
 	
 	
 	/// <summary>
-	/// Strongly typed collection of SearsStoreEntity
-	/// </summary>
-	public class SearsStoreCollection : EntityCollection<SearsStoreEntity>
-	{
-        /// <summary>
-        /// Gets the count of all SearsStoreEntity rows
-        /// </summary>
-        public static int GetCount(DataAccessAdapterBase adapter)
-        {
-            return GetCount(adapter, null);
-        }
-
-        /// <summary>
-        /// Gets the count of all SearsStoreEntity rows filtered by the given predicate
-        /// </summary>
-        public static int GetCount(DataAccessAdapterBase adapter, IPredicate filter)
-        {
-            RelationPredicateBucket bucket = null;
-            
-            if (filter != null)
-            {
-                bucket = new RelationPredicateBucket(filter);
-            }
-
-            return adapter.GetDbCount(new SearsStoreEntityFactory().CreateFields(), bucket);
-        }
-		
-        /// <summary>
-        /// Fetch a new collection object that matches the specified filter.
-        /// </summary>
-        public static SearsStoreCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter)
-        {
-			return Fetch(adapter, filter, null);
-        }
-        
-		/// <summary>
-        /// Fetch a new collection object that matches the specified filter and uses the given prefetch.
-        /// </summary>
-        public static SearsStoreCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter, IPrefetchPath2 prefetchPath)
-        {
-            SearsStoreCollection collection = new SearsStoreCollection();
-
-            RelationPredicateBucket bucket = null;
-
-            if (filter != null)
-            {
-                bucket = new RelationPredicateBucket(filter);
-            }
-
-            adapter.FetchEntityCollection(collection, bucket, prefetchPath);
-
-            return collection;
-        }
-	}
-	
-	
-	/// <summary>
 	/// Strongly typed collection of SearsOrderItemEntity
 	/// </summary>
 	public class SearsOrderItemCollection : EntityCollection<SearsOrderItemEntity>
@@ -9810,6 +9753,120 @@ namespace ShipWorks.Data.Adapter.Custom
 	
 	
 	/// <summary>
+	/// Strongly typed collection of OdbcStoreEntity
+	/// </summary>
+	public class OdbcStoreCollection : EntityCollection<OdbcStoreEntity>
+	{
+        /// <summary>
+        /// Gets the count of all OdbcStoreEntity rows
+        /// </summary>
+        public static int GetCount(DataAccessAdapterBase adapter)
+        {
+            return GetCount(adapter, null);
+        }
+
+        /// <summary>
+        /// Gets the count of all OdbcStoreEntity rows filtered by the given predicate
+        /// </summary>
+        public static int GetCount(DataAccessAdapterBase adapter, IPredicate filter)
+        {
+            RelationPredicateBucket bucket = null;
+            
+            if (filter != null)
+            {
+                bucket = new RelationPredicateBucket(filter);
+            }
+
+            return adapter.GetDbCount(new OdbcStoreEntityFactory().CreateFields(), bucket);
+        }
+		
+        /// <summary>
+        /// Fetch a new collection object that matches the specified filter.
+        /// </summary>
+        public static OdbcStoreCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter)
+        {
+			return Fetch(adapter, filter, null);
+        }
+        
+		/// <summary>
+        /// Fetch a new collection object that matches the specified filter and uses the given prefetch.
+        /// </summary>
+        public static OdbcStoreCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter, IPrefetchPath2 prefetchPath)
+        {
+            OdbcStoreCollection collection = new OdbcStoreCollection();
+
+            RelationPredicateBucket bucket = null;
+
+            if (filter != null)
+            {
+                bucket = new RelationPredicateBucket(filter);
+            }
+
+            adapter.FetchEntityCollection(collection, bucket, prefetchPath);
+
+            return collection;
+        }
+	}
+	
+	
+	/// <summary>
+	/// Strongly typed collection of SearsStoreEntity
+	/// </summary>
+	public class SearsStoreCollection : EntityCollection<SearsStoreEntity>
+	{
+        /// <summary>
+        /// Gets the count of all SearsStoreEntity rows
+        /// </summary>
+        public static int GetCount(DataAccessAdapterBase adapter)
+        {
+            return GetCount(adapter, null);
+        }
+
+        /// <summary>
+        /// Gets the count of all SearsStoreEntity rows filtered by the given predicate
+        /// </summary>
+        public static int GetCount(DataAccessAdapterBase adapter, IPredicate filter)
+        {
+            RelationPredicateBucket bucket = null;
+            
+            if (filter != null)
+            {
+                bucket = new RelationPredicateBucket(filter);
+            }
+
+            return adapter.GetDbCount(new SearsStoreEntityFactory().CreateFields(), bucket);
+        }
+		
+        /// <summary>
+        /// Fetch a new collection object that matches the specified filter.
+        /// </summary>
+        public static SearsStoreCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter)
+        {
+			return Fetch(adapter, filter, null);
+        }
+        
+		/// <summary>
+        /// Fetch a new collection object that matches the specified filter and uses the given prefetch.
+        /// </summary>
+        public static SearsStoreCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter, IPrefetchPath2 prefetchPath)
+        {
+            SearsStoreCollection collection = new SearsStoreCollection();
+
+            RelationPredicateBucket bucket = null;
+
+            if (filter != null)
+            {
+                bucket = new RelationPredicateBucket(filter);
+            }
+
+            adapter.FetchEntityCollection(collection, bucket, prefetchPath);
+
+            return collection;
+        }
+	}
+	
+	
+	/// <summary>
 	/// Strongly typed collection of SparkPayStoreEntity
 	/// </summary>
 	public class SparkPayStoreCollection : EntityCollection<SparkPayStoreEntity>
@@ -9867,12 +9924,12 @@ namespace ShipWorks.Data.Adapter.Custom
 	
 	
 	/// <summary>
-	/// Strongly typed collection of OdbcStoreEntity
+	/// Strongly typed collection of ThreeDCartOrderEntity
 	/// </summary>
-	public class OdbcStoreCollection : EntityCollection<OdbcStoreEntity>
+	public class ThreeDCartOrderCollection : EntityCollection<ThreeDCartOrderEntity>
 	{
         /// <summary>
-        /// Gets the count of all OdbcStoreEntity rows
+        /// Gets the count of all ThreeDCartOrderEntity rows
         /// </summary>
         public static int GetCount(DataAccessAdapterBase adapter)
         {
@@ -9880,7 +9937,7 @@ namespace ShipWorks.Data.Adapter.Custom
         }
 
         /// <summary>
-        /// Gets the count of all OdbcStoreEntity rows filtered by the given predicate
+        /// Gets the count of all ThreeDCartOrderEntity rows filtered by the given predicate
         /// </summary>
         public static int GetCount(DataAccessAdapterBase adapter, IPredicate filter)
         {
@@ -9891,13 +9948,13 @@ namespace ShipWorks.Data.Adapter.Custom
                 bucket = new RelationPredicateBucket(filter);
             }
 
-            return adapter.GetDbCount(new OdbcStoreEntityFactory().CreateFields(), bucket);
+            return adapter.GetDbCount(new ThreeDCartOrderEntityFactory().CreateFields(), bucket);
         }
 		
         /// <summary>
         /// Fetch a new collection object that matches the specified filter.
         /// </summary>
-        public static OdbcStoreCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter)
+        public static ThreeDCartOrderCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter)
         {
 			return Fetch(adapter, filter, null);
         }
@@ -9905,9 +9962,9 @@ namespace ShipWorks.Data.Adapter.Custom
 		/// <summary>
         /// Fetch a new collection object that matches the specified filter and uses the given prefetch.
         /// </summary>
-        public static OdbcStoreCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter, IPrefetchPath2 prefetchPath)
+        public static ThreeDCartOrderCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter, IPrefetchPath2 prefetchPath)
         {
-            OdbcStoreCollection collection = new OdbcStoreCollection();
+            ThreeDCartOrderCollection collection = new ThreeDCartOrderCollection();
 
             RelationPredicateBucket bucket = null;
 

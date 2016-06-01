@@ -1,8 +1,8 @@
-﻿using System;
+﻿using Interapptive.Shared.UI;
+using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
+using System;
 using System.Text;
 using System.Windows.Forms;
-using Interapptive.Shared.UI;
-using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps.Registration
 {
@@ -64,7 +64,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Registration
         /// </summary>
         private int CreditCardExpirationYear
         {
-            get { return Convert.ToInt32(creditCardExpirationYear.Value); }
+            get
+            {
+                return string.IsNullOrWhiteSpace(creditCardExpirationYear.Text)
+                    ? 0
+                    : Convert.ToInt32(creditCardExpirationYear.Value);
+            }
         }
 
         /// <summary>
@@ -72,7 +77,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Registration
         /// </summary>
         private int CreditCardExpirationMonth
         {
-            get { return Convert.ToInt32(creditCardExpirationMonth.Value); }
+            get
+            {
+                return string.IsNullOrWhiteSpace(creditCardExpirationMonth.Text)
+                    ? 0
+                    : Convert.ToInt32(creditCardExpirationMonth.Value);
+            }
         }
 
         /// <summary>

@@ -8,13 +8,12 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// <summary>
         /// Gets the accounts for the carrier.
         /// </summary>
-        public override IEnumerable<IParcelAccountEntity> Accounts
-        {
-            get
-            {
-                return iParcelAccountManager.Accounts;
-            }
-        }
+        public override IEnumerable<IParcelAccountEntity> Accounts => iParcelAccountManager.Accounts;
+
+        /// <summary>
+        /// Force a check for changes
+        /// </summary>
+        public override void CheckForChangesNeeded() => iParcelAccountManager.CheckForChangesNeeded();
 
         /// <summary>
         /// Returns a carrier account for the provided accountID.
@@ -37,8 +36,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         {
             get
             {
-                long? accountID = ShipmentTypeManager.GetType(ShipmentTypeCode.iParcel).GetPrimaryProfile().IParcel.IParcelAccountID;
-
+                long? accountID = GetPrimaryProfile(ShipmentTypeCode.iParcel).IParcel.IParcelAccountID;
                 return GetProfileAccount(ShipmentTypeCode.iParcel, accountID);
             }
         }

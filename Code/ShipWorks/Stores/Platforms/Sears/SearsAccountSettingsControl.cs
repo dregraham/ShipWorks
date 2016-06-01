@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Interapptive.Shared.Security;
 using Interapptive.Shared.UI;
+using log4net;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
@@ -41,12 +42,21 @@ namespace ShipWorks.Stores.Platforms.Sears
                 throw new ArgumentException("A non SearsStore store was passed to SearsStore account settings.");
             }
 
-            email.Text = searsStore.Email;
+            email.Text = searsStore.SearsEmail;
             sellerID.Text = searsStore.SellerID;
 
-            secretKey.Text = string.IsNullOrWhiteSpace(searsStore.SecretKey)
-                ? string.Empty
-                : encryptionProvider.Decrypt(searsStore.SecretKey);
+            try
+            {
+                secretKey.Text = string.IsNullOrWhiteSpace(searsStore.SecretKey)
+                    ? string.Empty
+                    : encryptionProvider.Decrypt(searsStore.SecretKey);
+            }
+            catch (Exception ex)
+            {
+                LogManager.GetLogger(typeof(SearsAccountSettingsControl)).Error("Couldn't decrypt Secret Key", ex);
+
+                secretKey.Text = string.Empty;
+            }
         }
 
         /// <summary>
@@ -60,7 +70,14 @@ namespace ShipWorks.Stores.Platforms.Sears
                 throw new ArgumentException("A non SearsStore store was passed to SearsStore account settings.");
             }
 
+            if (string.IsNullOrWhiteSpace(secretKey.Text))
+            {
+                MessageHelper.ShowError(this, "Please enter a Secret Key.");
+                return false;
+            }
+
             searsStore.Email = email.Text;
+            searsStore.SearsEmail = email.Text;
             searsStore.SellerID = sellerID.Text;
             searsStore.SecretKey = encryptionProvider.Encrypt(secretKey.Text);
 
@@ -92,9 +109,9 @@ namespace ShipWorks.Stores.Platforms.Sears
         /// </summary>
         protected virtual bool ConnectionVerificationNeeded(SearsStoreEntity searsStore)
         {
-            return (searsStore.Fields[(int) SearsStoreFieldIndex.Email].IsChanged ||
+            return (searsStore.Fields[(int) SearsStoreFieldIndex.SearsEmail].IsChanged ||
                     searsStore.Fields[(int) SearsStoreFieldIndex.SellerID].IsChanged ||
-                    searsStore.Fields[(int)SearsStoreFieldIndex.SecretKey].IsChanged);
+                    searsStore.Fields[(int) SearsStoreFieldIndex.SecretKey].IsChanged);
         }
     }
 }

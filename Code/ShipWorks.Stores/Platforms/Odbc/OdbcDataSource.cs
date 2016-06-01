@@ -1,18 +1,20 @@
-﻿using Interapptive.Shared.Utility;
-using System;
-using System.Data;
-using System.Reflection;
-using System.Text;
-using Interapptive.Shared.Security;
+﻿using Interapptive.Shared.Security;
+using Interapptive.Shared.Utility;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System;
+using System.Data;
+using System.Data.Common;
+using System.Reflection;
+using System.Text;
 
 namespace ShipWorks.Stores.Platforms.Odbc
 {
     /// <summary>
     /// OdbcDataSource
     /// </summary>
-    public class OdbcDataSource
+    [Obfuscation(Exclude=true)]
+    public class OdbcDataSource : IOdbcDataSource
     {
         private readonly IShipWorksDbProviderFactory odbcProvider;
         private readonly IEncryptionProvider encryptionProvider;
@@ -30,7 +32,6 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// <summary>
         /// Name of the data source
         /// </summary>
-        [Obfuscation(Exclude = true)]
         public string Name { get; private set; }
 
         /// <summary>
@@ -126,23 +127,20 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// If there is an error, message will return the error message returned
         /// from the ODBC Driver.
         /// </returns>
-        public GenericResult<OdbcDataSource> TestConnection()
+        public GenericResult<IOdbcDataSource> TestConnection()
         {
-            GenericResult<OdbcDataSource> testResult= new GenericResult<OdbcDataSource>(this);
+            GenericResult<IOdbcDataSource> testResult;
 
-            using (IDbConnection connection = odbcProvider.CreateOdbcConnection())
+            using (IDbConnection connection = odbcProvider.CreateOdbcConnection(BuildConnectionString()))
             {
                 try
                 {
-                    connection.ConnectionString = BuildConnectionString();
                     connection.Open();
-
-                    testResult.Success = true;
+                    testResult = GenericResult.FromSuccess((IOdbcDataSource) this);
                 }
                 catch (Exception ex)
                 {
-                    testResult.Success = false;
-                    testResult.Message = ex.Message;
+                    testResult = GenericResult.FromError(ex.Message, (IOdbcDataSource) this);
                 }
             }
 
@@ -162,14 +160,29 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// </summary>
         public void Restore(string json)
         {
-            JObject dataSource = JObject.Parse(encryptionProvider.Decrypt(json));
+            try
+            {
+                JObject dataSource = JObject.Parse(encryptionProvider.Decrypt(json));
 
-            Name = dataSource["Name"].ToString();
-            bool custom;
-            IsCustom = bool.TryParse(dataSource["IsCustom"].ToString(), out custom) && custom;
-            Username = dataSource["Username"].ToString();
-            Password = dataSource["Password"].ToString();
-            ConnectionString = dataSource["ConnectionString"].ToString();
+                Name = dataSource["Name"].ToString();
+                bool custom;
+                IsCustom = bool.TryParse(dataSource["IsCustom"].ToString(), out custom) && custom;
+                Username = dataSource["Username"].ToString();
+                Password = dataSource["Password"].ToString();
+                ConnectionString = dataSource["ConnectionString"].ToString();
+            }
+            catch (JsonReaderException)
+            {
+                throw new ShipWorksOdbcException("Failed to restore data source");
+            }
+        }
+
+        /// <summary>
+        /// Creates a new ODBC Connection
+        /// </summary>
+        public DbConnection CreateConnection()
+        {
+            return odbcProvider.CreateOdbcConnection(ConnectionString);
         }
     }
 }

@@ -2,21 +2,19 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Web.UI.WebControls;
-using log4net;
-using ShipWorks.Data.Administration;
-using ShipWorks.Data.Administration.Retry;
-using ShipWorks.Data.Model;
-using ShipWorks.Data.Connection;
-using System.Data.SqlClient;
+using Autofac;
 using Interapptive.Shared.Data;
+using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.ApplicationCore;
+using ShipWorks.Data.Administration;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.FactoryClasses;
-using ShipWorks.SqlServer.Common.Data;
-using ShipWorks.Stores.Platforms.Ebay.WebServices;
 
 namespace ShipWorks.Data.Caching
 {
@@ -34,7 +32,7 @@ namespace ShipWorks.Data.Caching
         string syncQuery;
 
         static readonly ILog log = LogManager.GetLogger(typeof(EntityChangeTrackingMonitor));
-        
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -84,7 +82,7 @@ namespace ShipWorks.Data.Caching
                 if (result is DBNull)
                 {
                     new SqlChangeTracking().Enable();
-                    
+
                     result = SqlCommandProvider.ExecuteScalar(con, "SELECT CHANGE_TRACKING_CURRENT_VERSION()");
 
                     if (result is DBNull)
@@ -234,6 +232,7 @@ namespace ShipWorks.Data.Caching
                     }
                 }
             }
+
             return dataSet;
         }
     }

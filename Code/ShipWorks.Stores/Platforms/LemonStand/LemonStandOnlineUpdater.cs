@@ -8,6 +8,7 @@ using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Content;
+using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Stores.Platforms.LemonStand
 {
@@ -80,7 +81,6 @@ namespace ShipWorks.Stores.Platforms.LemonStand
             {
                 if (order.IsManual)
                 {
-                    log.Warn($"Not uploading order status since order {orderID} is manual");
                     return;
                 }
 
@@ -100,7 +100,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
             }
             else
             {
-                log.WarnFormat("Unable to update online status for order {0}: cannot find order", orderID);
+                log.WarnFormat($"Unable to update online status for order {orderID}: cannot find order");
             }
         }
 
@@ -134,10 +134,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         /// </summary>
         public void UpdateShipmentDetails(ShipmentEntity shipment)
         {
-            if (shipment == null)
-            {
-                throw new ArgumentNullException(nameof(shipment));
-            }
+            MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
 
             if (!shipment.Order.IsManual)
             {

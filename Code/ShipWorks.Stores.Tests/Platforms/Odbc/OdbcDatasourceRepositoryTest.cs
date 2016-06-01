@@ -5,6 +5,8 @@ using ShipWorks.Stores.Platforms.Odbc;
 using System;
 using System.Data;
 using System.Linq;
+using Autofac;
+using Interapptive.Shared.Security;
 using Xunit;
 
 namespace ShipWorks.Stores.Tests.Platforms.Odbc
@@ -36,7 +38,10 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
                 dsnProvider.Setup(p => p.GetDataSourceNames())
                     .Returns(new[] { "blah" });
 
-                var testObject = mock.Create<OdbcDataSourceRepository>();
+                Mock<IShipWorksDbProviderFactory> providerFactory = mock.Mock<IShipWorksDbProviderFactory>();
+                Mock<IEncryptionProviderFactory> encryptionFactory = mock.Mock<IEncryptionProviderFactory>();
+                Func<IOdbcDataSource> odbcDataSourceFactory = () => new OdbcDataSource(providerFactory.Object, encryptionFactory.Object);
+                var testObject = mock.Create<OdbcDataSourceRepository>(new TypedParameter(typeof(Func<IOdbcDataSource>), odbcDataSourceFactory));
                 var odbcDataSources = testObject.GetDataSources();
 
                 Assert.Equal(1, odbcDataSources.Count(d => d.IsCustom));
@@ -51,10 +56,12 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
                 Mock<IDsnProvider> dsnProvider = mock.Mock<IDsnProvider>();
                 dsnProvider.Setup(p => p.GetDataSourceNames())
                     .Returns(new[] {"blah"});
-
-                var testObject = mock.Create<OdbcDataSourceRepository>();
+                Mock<IShipWorksDbProviderFactory> providerFactory = mock.Mock<IShipWorksDbProviderFactory>();
+                Mock<IEncryptionProviderFactory> encryptionFactory = mock.Mock<IEncryptionProviderFactory>();
+                Func<IOdbcDataSource> odbcDataSourceFactory = () => new OdbcDataSource(providerFactory.Object, encryptionFactory.Object);
+                var testObject = mock.Create<OdbcDataSourceRepository>(new TypedParameter(typeof(Func<IOdbcDataSource>), odbcDataSourceFactory));
                 var odbcDataSources = testObject.GetDataSources();
-                OdbcDataSource dataSource = odbcDataSources.First(d => d.Name == "blah");
+                IOdbcDataSource dataSource = odbcDataSources.First(d => d.Name == "blah");
 
                 Assert.Equal("blah", dataSource.Name);
             }
@@ -109,15 +116,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
 
                 var testObject = mock.Create<OdbcDataSourceRepository>();
 
-                try
-                {
-                    testObject.GetDataSources();
-                }
-                catch (DataException)
-                {
-                    // suppress
-                }
-
+                Assert.Throws<DataException>(() => testObject.GetDataSources());
                 log.Verify(l => l.Error(It.IsAny<string>(), It.IsAny<Exception>()));
             }
         }

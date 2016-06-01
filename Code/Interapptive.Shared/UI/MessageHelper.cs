@@ -1,9 +1,5 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows.Forms.Design;
 using System.Windows.Forms;
-using System.Drawing;
 using log4net;
 
 namespace Interapptive.Shared.UI
@@ -108,7 +104,7 @@ namespace Interapptive.Shared.UI
         /// </summary>
         public static DialogResult ShowQuestion(IWin32Window owner, string text)
         {
-            return MessageHelper.ShowQuestion(owner, MessageBoxIcon.Question, text);
+            return ShowQuestion(owner, MessageBoxIcon.Question, text);
         }
 
         /// <summary>
@@ -131,7 +127,7 @@ namespace Interapptive.Shared.UI
         }
 
         /// <summary>
-        /// Show a question message box.  
+        /// Show a question message box.
         /// </summary>
         public static DialogResult ShowQuestion(IWin32Window owner, MessageBoxIcon icon, MessageBoxButtons buttons, string text)
         {

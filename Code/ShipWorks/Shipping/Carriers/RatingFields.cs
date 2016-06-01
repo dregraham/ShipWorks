@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data;
-using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 
 namespace ShipWorks.Shipping.Carriers
@@ -16,19 +15,16 @@ namespace ShipWorks.Shipping.Carriers
     /// </summary>
     public class RatingFields
     {
+        private Dictionary<string, EntityField2> shipmentFields;
+
         /// <summary>
         /// Constructor
         /// </summary>
         public RatingFields()
         {
-            ShipmentFields = new List<EntityField2>();
+            shipmentFields = new Dictionary<string, EntityField2>();
             PackageFields = new List<EntityField2>();
         }
-
-        /// <summary>
-        /// List of fields based on Shipment entities.  You can include ShipmentFields and any derived shipment fields like FedExFields.
-        /// </summary>
-        public List<EntityField2> ShipmentFields { get; }
 
         /// <summary>
         /// List of fields based on package entities like FedExPackageFields.
@@ -39,8 +35,10 @@ namespace ShipWorks.Shipping.Carriers
         /// Returns true if specified field name is in the shipment fields or package fields.
         /// </summary>
         public bool FieldsContainName(string fieldName)
-            => ShipmentFields.Any(f => f.Name.Contains(fieldName)) || PackageFields.Any(f => f.Name.Contains(fieldName));
-        
+        {
+            return shipmentFields.ContainsKey(fieldName) || PackageFields.Any(f => f.Name.Contains(fieldName));
+        }
+
         /// <summary>
         /// Gets the rating hash based on the shipment's configuration.  Package fields will NOT be used.  If package fields are needed, use the overloaded constructor.
         /// </summary>
@@ -57,9 +55,11 @@ namespace ShipWorks.Shipping.Carriers
             where TPackageEntity : EntityBase2
         {
             StringBuilder valueToBeHashed = new StringBuilder();
-            
+            IEqualityComparer<EntityField2> fieldComparer =
+                new GenericPropertyEqualityComparer<EntityField2, string>(x => x.Name);
+
             // Get the field values for shipment fields.
-            foreach (EntityField2 field in ShipmentFields)
+            foreach (EntityField2 field in shipmentFields.Values.Distinct(fieldComparer))
             {
                 object currentValue = EntityUtility.GetFieldValue(shipment, field, true);
                 valueToBeHashed.Append(currentValue ?? string.Empty);
@@ -78,11 +78,41 @@ namespace ShipWorks.Shipping.Carriers
                 }
             }
 
-            // Hash the value 
+            // Hash the value
             using (SHA256Managed sha256 = new SHA256Managed())
             {
                 byte[] bytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(valueToBeHashed.ToString()));
                 return Convert.ToBase64String(bytes);
+            }
+        }
+
+        /// <summary>
+        /// Add a shipment field for rating
+        /// </summary>
+        public void AddShipmentField(EntityField2 field) =>
+            AddShipmentField(field, field.Name);
+
+        /// <summary>
+        /// Add shipment field that does not correspond exactly to LLBLgen entity fields
+        /// </summary>
+        public void AddShipmentField(EntityField2 field, params string[] customFieldNames)
+        {
+            AddShipmentFieldToDictionary(field, field.Name);
+
+            foreach (string fieldName in customFieldNames)
+            {
+                AddShipmentFieldToDictionary(field, fieldName);
+            }
+        }
+
+        /// <summary>
+        /// Add the field to the dictionary if it doesn't already exist
+        /// </summary>
+        private void AddShipmentFieldToDictionary(EntityField2 field, string fieldName)
+        {
+            if (!shipmentFields.ContainsKey(fieldName))
+            {
+                shipmentFields.Add(fieldName, field);
             }
         }
     }

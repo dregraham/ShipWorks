@@ -6,7 +6,7 @@ namespace ShipWorks.Shipping.Carriers.Other
     /// Label Service for the Other carrier
     /// </summary>
     public class OtherLabelService : ILabelService
-    { 
+    {
         /// <summary>
         /// Creates an Other label
         /// </summary>
@@ -30,6 +30,7 @@ namespace ShipWorks.Shipping.Carriers.Other
         /// <param name="shipment"></param>
         public void Void(ShipmentEntity shipment)
         {
+            // Other does not support voiding
         }
     }
 }

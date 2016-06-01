@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 
 namespace ShipWorks.UI.Controls.WebBrowser
 {
@@ -10,11 +11,13 @@ namespace ShipWorks.UI.Controls.WebBrowser
         /// <summary>
         /// Gets the URL.
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public Uri Url { get; private set; }
 
         /// <summary>
         /// Gets the title.
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public string Title { get; private set; }
 
         /// <summary>

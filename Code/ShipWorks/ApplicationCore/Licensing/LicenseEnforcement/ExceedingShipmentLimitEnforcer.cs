@@ -1,10 +1,10 @@
-﻿using System;
-using System.Windows;
-using System.Windows.Forms;
-using Interapptive.Shared.Utility;
+﻿using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.Editions;
 using ShipWorks.UI;
+using System;
+using System.Windows;
+using System.Windows.Forms;
 
 namespace ShipWorks.ApplicationCore.Licensing.LicenseEnforcement
 {
@@ -38,6 +38,11 @@ namespace ShipWorks.ApplicationCore.Licensing.LicenseEnforcement
         /// Enforces the Shipment Count feature
         /// </summary>
         public EditionFeature EditionFeature => EditionFeature.ShipmentCount;
+
+        /// <summary>
+        /// Shipment Limit doesn't apply to trails.
+        /// </summary>
+        public bool AppliesTo(ILicenseCapabilities capabilities) => !capabilities.IsInTrial;
 
         /// <summary>
         /// Displays a dlg on the given owner to enforce the shipment limit

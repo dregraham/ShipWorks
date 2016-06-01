@@ -334,11 +334,27 @@ namespace ShipWorks.Tests.Stores.Sears
         }
 
         [Fact]
-        public void GetShipmentServiceCode_ReturnsPRIORITY_WhenOther()
+        public void GetShipmentServiceCode_ReturnsStandard_WhenOther()
         {
             var shipment = GetSearsShipment(false, ShipmentTypeCode.Other);
+            shipment.Other = new OtherShipmentEntity()
+            {
+                Service = "blah"
+            };
 
-            Assert.Equal("PRIORITY", SearsUtility.GetShipmentServiceCode(shipment));
+            Assert.Equal("Standard", SearsUtility.GetShipmentServiceCode(shipment));
+        }
+
+        [Fact]
+        public void GetShipmentServiceCode_ReturnsExpedited_WhenOtherExpedited()
+        {
+            var shipment = GetSearsShipment(false, ShipmentTypeCode.Other);
+            shipment.Other = new OtherShipmentEntity()
+            {
+                Service = "Expedited"
+            };
+
+            Assert.Equal("Expedited", SearsUtility.GetShipmentServiceCode(shipment));
         }
 
         private static ShipmentEntity GetSearsShipment(bool customerPickup, ShipmentTypeCode shipmentTypeCode)

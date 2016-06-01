@@ -88,5 +88,32 @@ namespace ShipWorks.Tests.UI
 
             Assert.False(result);
         }
+
+        [Fact]
+        public void Set_SendsSourceObject_AsSender()
+        {
+            object source = new object();
+            object sender = null;
+            var handler = new PropertyChangedHandler(source, () => TestEventHandler);
+
+            TestEventHandler += (s, e) => sender = s;
+
+            handler.Set("Foo", ref testField, "Value");
+
+            Assert.Equal(source, sender);
+        }
+
+        [Fact]
+        public void Set_SendsPropertyName_InEventArgs()
+        {
+            string propertyName = null;
+            var handler = new PropertyChangedHandler(this, () => TestEventHandler);
+
+            TestEventHandler += (s, e) => propertyName = e.PropertyName;
+
+            handler.Set("Foo", ref testField, "Value");
+
+            Assert.Equal("Foo", propertyName);
+        }
     }
 }

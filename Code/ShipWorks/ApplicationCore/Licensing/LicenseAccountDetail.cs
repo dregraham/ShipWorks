@@ -2,10 +2,10 @@ using System;
 using System.Xml;
 using System.Xml.XPath;
 using Interapptive.Shared.Utility;
-using ShipWorks.Editions;
-using ShipWorks.Editions.Freemium;
-using ShipWorks.Editions.Brown;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Editions;
+using ShipWorks.Editions.Brown;
+using ShipWorks.Editions.Freemium;
 using ShipWorks.Stores;
 
 namespace ShipWorks.ApplicationCore.Licensing
@@ -13,7 +13,7 @@ namespace ShipWorks.ApplicationCore.Licensing
     /// <summary>
     /// Detailed information about a license retrieved from a customer's interapptive account
     /// </summary>
-    public class LicenseAccountDetail
+    public class LicenseAccountDetail : ILicenseAccountDetail
     {
         // The store
         StoreEntity store;
@@ -30,14 +30,14 @@ namespace ShipWorks.ApplicationCore.Licensing
         // Is the license active or not
         bool active = false;
 
-		// If the license is cancelled
-		bool canceled = false;
+        // If the license is canceled
+        bool canceled = false;
 
         // Is the license even in the db
         bool valid = false;
 
-		// If its deactivated (disabled), this is the reason why (for metered only)
-		string disabledReason = "";
+        // If its deactivated (disabled), this is the reason why (for metered only)
+        string disabledReason = "";
 
         // State of the license
         LicenseActivationState licenseState = LicenseActivationState.Invalid;
@@ -46,7 +46,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// Instantiate based on the interapptive XML response
         /// </summary>
         public LicenseAccountDetail(XmlDocument xmlResponse, StoreEntity store)
-		{
+        {
             if (xmlResponse == null)
             {
                 throw new ArgumentNullException("xmlResponse");
@@ -80,11 +80,11 @@ namespace ShipWorks.ApplicationCore.Licensing
             // Active
             active = XPathUtility.Evaluate(xpath, "//Active", false);
 
-			// Cancelled (metered only)
-			canceled = XPathUtility.Evaluate(xpath, "//Cancelled", false);
+            // Cancelled (metered only)
+            canceled = XPathUtility.Evaluate(xpath, "//Cancelled", false);
 
-			// Disabled Reason (metered only)
-			disabledReason = XPathUtility.Evaluate(xpath, "//DisabledReason", "");
+            // Disabled Reason (metered only)
+            disabledReason = XPathUtility.Evaluate(xpath, "//DisabledReason", "");
 
             // Valid
             valid = XPathUtility.Evaluate(xpath, "//Valid", false);
@@ -100,7 +100,7 @@ namespace ShipWorks.ApplicationCore.Licensing
 
             // Get the Tango CustomerID
             TangoCustomerID = XPathUtility.Evaluate(xpath, "//CustomerID", "");
-		}
+        }
 
         /// <summary>
         /// Determine the edition this license represents
@@ -109,11 +109,11 @@ namespace ShipWorks.ApplicationCore.Licensing
         {
             Edition edition = InstantiateEdition(xpath);
 
-            // Now see if there are Stamps special stuff set. We do this at the end, basically ignorning them if any other editions are active.
+            // Now see if there are Stamps special stuff set. We do this at the end, basically ignoring them if any other editions are active.
             bool stampsDhl = XPathUtility.Evaluate(xpath, "//StampsDhlEnabled/@status", 0) == 1;
             edition.SharedOptions.StampsDhlEnabled = stampsDhl;
 
-            // Now see if there are endicia special stuff set. We do this at the end, basically ignorning them if any other editions are active.
+            // Now see if there are endicia special stuff set. We do this at the end, basically ignoring them if any other editions are active.
             bool endiciaDhl = XPathUtility.Evaluate(xpath, "//EndiciaDhlEnabled/@status", 0) == 1;
             edition.SharedOptions.EndiciaDhlEnabled = endiciaDhl;
 
@@ -228,49 +228,49 @@ namespace ShipWorks.ApplicationCore.Licensing
                 // Deactivated
                 if (!active)
                 {
-					// If cancelled is true, then its cancelled.
-					if (canceled)
-					{
-						licenseState = LicenseActivationState.Canceled;
-					}
-					// Otherwise its disabled\deactivated
-					else
-					{
-						licenseState = LicenseActivationState.Deactivated;
-					}
+                    // If canceled is true, then its canceled.
+                    if (canceled)
+                    {
+                        licenseState = LicenseActivationState.Canceled;
+                    }
+                    // Otherwise its disabled\deactivated
+                    else
+                    {
+                        licenseState = LicenseActivationState.Deactivated;
+                    }
                 }
 
                 // Active
                 else
                 {
-					// Not activated
-					if (identifier.Length == 0)
-					{
-						licenseState = LicenseActivationState.ActiveNowhere;
-					}
-					// Active on this identifier
-					else
-					{
-						if (identifier == desiredIdentifier)
-						{
-							licenseState = LicenseActivationState.Active;
-						}
-						else
-						{
-							licenseState = LicenseActivationState.ActiveElsewhere;
-						}
-					}
+                    // Not activated
+                    if (identifier.Length == 0)
+                    {
+                        licenseState = LicenseActivationState.ActiveNowhere;
+                    }
+                    // Active on this identifier
+                    else
+                    {
+                        if (identifier == desiredIdentifier)
+                        {
+                            licenseState = LicenseActivationState.Active;
+                        }
+                        else
+                        {
+                            licenseState = LicenseActivationState.ActiveElsewhere;
+                        }
+                    }
                 }
             }
         }
 
-		/// <summary>
-		/// Readable description of the license status
-		/// </summary>
-		public string Description
-		{
-			get
-			{
+        /// <summary>
+        /// Readable description of the license status
+        /// </summary>
+        public string Description
+        {
+            get
+            {
                 if (!license.IsValid)
                 {
                     return "Invalid license key.";
@@ -281,31 +281,31 @@ namespace ShipWorks.ApplicationCore.Licensing
                     return "Not valid for this version of ShipWorks.";
                 }
 
-				switch (ActivationState)
-				{
-					case LicenseActivationState.Active:
-						return "Active";
+                switch (ActivationState)
+                {
+                    case LicenseActivationState.Active:
+                        return "Active";
 
-					case LicenseActivationState.ActiveNowhere:
-						return "Not Activated";
+                    case LicenseActivationState.ActiveNowhere:
+                        return "Not Activated";
 
-					case LicenseActivationState.ActiveElsewhere:
-							return "Activated to another store.";
+                    case LicenseActivationState.ActiveElsewhere:
+                        return "Activated to another store.";
 
-					case LicenseActivationState.Deactivated:
-							return "Disabled: " + DisabledReason;
+                    case LicenseActivationState.Deactivated:
+                        return "Disabled: " + DisabledReason;
 
-					case LicenseActivationState.Canceled:
-						return "Cancelled";
+                    case LicenseActivationState.Canceled:
+                        return "Cancelled";
 
-					case LicenseActivationState.Invalid:
-						return "Invalid License";
+                    case LicenseActivationState.Invalid:
+                        return "Invalid License";
 
-					default:
-						return "Unknown";
-				}
-			}
-		}
+                    default:
+                        return "Unknown";
+                }
+            }
+        }
 
         /// <summary>
         /// Get the current state of the license
@@ -329,7 +329,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// The current edition of the license as it is in Tango
         /// </summary>
-        public Edition Edition
+        public IEdition Edition
         {
             get { return edition; }
         }
@@ -378,16 +378,16 @@ namespace ShipWorks.ApplicationCore.Licensing
             }
         }
 
-		/// <summary>
-		/// If its deactivated (disabled), this is the reason why (for metered only)
-		/// </summary>
-		public string DisabledReason
-		{
-			get
-			{
-				return disabledReason;
-			}
-		}
+        /// <summary>
+        /// If its deactivated (disabled), this is the reason why (for metered only)
+        /// </summary>
+        public string DisabledReason
+        {
+            get
+            {
+                return disabledReason;
+            }
+        }
 
         /// <summary>
         /// The Tango StoreID associated with this license

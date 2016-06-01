@@ -36,6 +36,8 @@
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -70,22 +72,45 @@
       <HintPath>..\..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.Threading.Tasks, Version=1.0.12.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Threading.Tasks.Extensions, Version=1.0.12.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.Extensions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Threading.Tasks.Extensions.Desktop, Version=1.0.168.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.Extensions.Desktop.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Newtonsoft.Json.4.5.6\lib\net40\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
+    <Reference Include="Rebex.Mail">
+      <HintPath>..\..\Components\Rebex.Mail.dll</HintPath>
+    </Reference>
     <Reference Include="SD.LLBLGen.Pro.ORMSupportClasses.NET20, Version=2.6.0.0, Culture=neutral, PublicKeyToken=ca73b74ba4e3ff27, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Components\SD.LLBLGen.Pro.ORMSupportClasses.NET20.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="System.Drawing" />
+    <Reference Include="System.IO, Version=2.6.10.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.Bcl.1.1.10\lib\net40\System.IO.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Management" />
+    <Reference Include="System.Net" />
+    <Reference Include="System.Runtime, Version=2.6.10.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.Bcl.1.1.10\lib\net40\System.Runtime.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Reactive.Core, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Rx-Core.2.2.5\lib\net40\System.Reactive.Core.dll</HintPath>
       <Private>True</Private>
@@ -102,12 +127,18 @@
       <HintPath>..\..\packages\Rx-PlatformServices.2.2.5\lib\net40\System.Reactive.PlatformServices.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Runtime">
+      <HintPath>..\..\packages\Microsoft.Bcl.1.1.10\lib\net40\System.Runtime.dll</HintPath>
+    </Reference>
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Threading.Tasks, Version=2.6.10.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.Bcl.1.1.10\lib\net40\System.Threading.Tasks.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Transactions" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Services" />
     <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -116,13 +147,35 @@
     </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Security\AesEncryptionProvider.cs" />
     <Compile Include="Security\EncryptionException.cs" />
     <Compile Include="Security\ICipherKey.cs" />
     <Compile Include="Security\IEncryptionProvider.cs" />
+    <Compile Include="Collections\ComparisonResult.cs" />
+    <Compile Include="Messaging\IShipWorksMessage.cs" />
+    <Compile Include="Messaging\Logging\DoOperation.cs" />
+    <Compile Include="Messaging\Logging\IMessageLogger.cs" />
+    <Compile Include="Messaging\Logging\ReleaseMessageLogger.cs" />
+    <Compile Include="Messaging\TrackedObservable\DoImpl.cs" />
+    <Compile Include="Messaging\Logging\ILogItem.cs" />
+    <Compile Include="Messaging\Logging\IOperation.cs" />
+    <Compile Include="Messaging\Logging\LogItem.cs" />
+    <Compile Include="Messaging\Logging\MessageLogger.cs" />
+    <Compile Include="Messaging\Logging\ReferenceConverter.cs" />
+    <Compile Include="Messaging\Logging\SelectOperation.cs" />
+    <Compile Include="Messaging\Logging\SendMessage.cs" />
+    <Compile Include="Messaging\Logging\SubscribeOperation.cs" />
+    <Compile Include="Messaging\Logging\TypeConverter.cs" />
+    <Compile Include="Messaging\Logging\WhereOperation.cs" />
+    <Compile Include="Messaging\TrackedObservable\IMessageTracker.cs" />
+    <Compile Include="Messaging\TrackedObservable\MessageTracker.cs" />
+    <Compile Include="Messaging\TrackedObservable\SelectImpl.cs" />
+    <Compile Include="Messaging\TrackedObservable\SubscribeImpl.cs" />
+    <Compile Include="Messaging\TrackedObservable\SwitchImpl.cs" />
+    <Compile Include="Messaging\TrackedObservable\TrackableImpl.cs" />
+    <Compile Include="Messaging\TrackedObservable\WhereImpl.cs" />
     <Compile Include="NDependIgnoreAttribute.cs" />
     <Compile Include="NDependIgnoreComplexMethodAttribute.cs" />
     <Compile Include="NDependIgnoreTooManyParamsAttribute.cs" />
@@ -141,20 +194,31 @@
     <Compile Include="Business\PersonUtility.cs" />
     <Compile Include="Business\RequiredFieldChecker.cs" />
     <Compile Include="Business\WeightValue.cs" />
-    <Compile Include="AnalysisSuppressions.cs" />
     <Compile Include="Collections\ArrayUtility.cs" />
     <Compile Include="Collections\CollectionChangedEvent.cs" />
     <Compile Include="Collections\EnumerableExtensions.cs" />
+    <Compile Include="Collections\ObservableExtensions.cs" />
     <Compile Include="Imaging\EdgeDetection.cs" />
     <Compile Include="InterapptiveOnly.cs" />
-    <Compile Include="Pdf\IPdfDocument.cs" />
+    <Compile Include="System.ComponentModel.DataAnnotations\DoubleCompareAttribute.cs" />
+    <Compile Include="System.ComponentModel.DataAnnotations\DecimalCompareAttribute.cs" />
+    <Compile Include="System.ComponentModel.DataAnnotations\DateCompareAttribute.cs" />
+    <Compile Include="System.ComponentModel.DataAnnotations\ValueCompareOperatorType.cs" />
+    <Compile Include="System.ComponentModel.DataAnnotations\DateCompareType.cs" />
+    <Compile Include="System.ComponentModel.DataAnnotations\EmailAddressAttribute.cs" />
+    <Compile Include="System.ComponentModel.DataAnnotations\MaxLengthAttribute.cs" />
+    <Compile Include="System.ComponentModel.DataAnnotations\MinLengthAttribute.cs" />
+    <Compile Include="System.ComponentModel.DataAnnotations\PhoneAttribute.cs" />
+    <Compile Include="Threading\ISchedulerProvider.cs" />
+    <Compile Include="Net\ApiLogEncryption.cs" />
+    <Compile Include="Net\HttpJsonVariableRequestSubmitter.cs" />
+    <Compile Include="Net\IApiLogEntry.cs" />
     <Compile Include="Security\IEncryptionProviderFactory.cs" />
     <Compile Include="Security\SecureText.cs" />
     <Compile Include="Security\SecureTextEncryptionProvider.cs" />
     <Compile Include="Threading\IExternalProcess.cs" />
     <Compile Include="UI\IMessageHelper.cs" />
-    <Compile Include="UI\MessageHelperWrapper.cs" />
-    <Compile Include="Utility\ActionRetry.cs" />
+    <Compile Include="Pdf\IPdfDocument.cs" />
     <Compile Include="Utility\DetailsAttribute.cs" />
     <Compile Include="Utility\EnumResult.cs" />
     <Compile Include="Utility\DoubleExtensions.cs" />
@@ -185,6 +249,7 @@
     <Compile Include="IO\Hardware\Usb\HidDeviceManager.cs" />
     <Compile Include="IO\Hardware\Usb\HidException.cs" />
     <Compile Include="IO\Hardware\Usb\NativeUsb.cs" />
+    <Compile Include="IO\Hardware\Usb\DeviceListener.cs" />
     <Compile Include="IO\Text\Csv\CachedCsvReader.cs" />
     <Compile Include="IO\Text\Csv\CsvReader.cs" />
     <Compile Include="IO\Text\Csv\DuplicateFieldAction.cs" />
@@ -317,9 +382,6 @@
     <Compile Include="IO\Zip\ZipWriterItem.cs" />
     <Compile Include="IO\Zip\ZipWriterProgressEventArgs.cs" />
     <Compile Include="IO\Zip\ZipWriterStringItem.cs" />
-    <Compile Include="Messaging\IMessenger.cs" />
-    <Compile Include="Messaging\IShipWorksMessage.cs" />
-    <Compile Include="Messaging\Messenger.cs" />
     <Compile Include="MyComputer.cs" />
     <Compile Include="Net\CertificateRequest.cs" />
     <Compile Include="Net\CertificateSecurityLevel.cs" />
@@ -400,6 +462,7 @@
     <Compile Include="Utility\SerializationUtility.cs" />
     <Compile Include="Utility\SortOrderAttribute.cs" />
     <Compile Include="Utility\StreamUtility.cs" />
+    <Compile Include="Utility\StringHash.cs" />
     <Compile Include="Utility\StringUtility.cs" />
     <Compile Include="Utility\CaseInsensitiveEqualityComparer.cs" />
     <Compile Include="Utility\VersionUtility.cs" />
@@ -424,6 +487,7 @@
     <Compile Include="Win32\WindowsUtility.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
     <None Include="Properties\interapptive_public.snk" />
   </ItemGroup>
@@ -696,8 +760,25 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <Analyzer Include="..\..\packages\Desktop.Analyzers.1.1.0\analyzers\dotnet\cs\Desktop.Analyzers.dll" />
+    <Analyzer Include="..\..\packages\Desktop.Analyzers.1.1.0\analyzers\dotnet\cs\Desktop.CSharp.Analyzers.dll" />
     <Analyzer Include="..\..\packages\InterapptiveAnalyzers.1.0.5714.23531\analyzers\dotnet\cs\InterapptiveAnalyzers.dll" />
-    <Analyzer Include="..\..\packages\SonarLint.1.1.1\tools\analyzers\C#\SonarLint.dll" />
+    <Analyzer Include="..\..\packages\Microsoft.AnalyzerPowerPack.1.1.0\analyzers\dotnet\cs\Microsoft.AnalyzerPowerPack.Common.dll" />
+    <Analyzer Include="..\..\packages\Microsoft.AnalyzerPowerPack.1.1.0\analyzers\dotnet\cs\Microsoft.AnalyzerPowerPack.CSharp.dll" />
+    <Analyzer Include="..\..\packages\SonarLint.1.6.0\analyzers\SonarLint.CSharp.dll" />
+    <Analyzer Include="..\..\packages\SonarLint.1.6.0\analyzers\SonarLint.dll" />
+    <Analyzer Include="..\..\packages\System.Runtime.Analyzers.1.1.0\analyzers\dotnet\cs\System.Runtime.Analyzers.dll" />
+    <Analyzer Include="..\..\packages\System.Runtime.Analyzers.1.1.0\analyzers\dotnet\cs\System.Runtime.CSharp.Analyzers.dll" />
+    <Analyzer Include="..\..\packages\System.Runtime.InteropServices.Analyzers.1.1.0\analyzers\dotnet\cs\System.Runtime.InteropServices.Analyzers.dll" />
+    <Analyzer Include="..\..\packages\System.Runtime.InteropServices.Analyzers.1.1.0\analyzers\dotnet\cs\System.Runtime.InteropServices.CSharp.Analyzers.dll" />
+    <Analyzer Include="..\..\packages\System.Security.Cryptography.Hashing.Algorithms.Analyzers.1.1.0\analyzers\dotnet\cs\System.Security.Cryptography.Hashing.Algorithms.Analyzers.dll" />
+    <Analyzer Include="..\..\packages\System.Security.Cryptography.Hashing.Algorithms.Analyzers.1.1.0\analyzers\dotnet\cs\System.Security.Cryptography.Hashing.Algorithms.CSharp.Analyzers.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ShipWorks.Res\ShipWorks.Res.csproj">
+      <Project>{3451502d-c78c-44ec-86ac-8f50a6531f5c}</Project>
+      <Name>ShipWorks.Res</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
@@ -716,4 +797,11 @@
     <Message Text="     %(BuildOutputs.Filename)%(BuildOutputs.Extension)" Importance="high" />
     <Copy SourceFiles="@(BuildOutputs)" DestinationFolder="$(MSBuildProjectPath)..\..\Artifacts\Libraries\" />
   </Target>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets'))" />
+  </Target>
+  <Import Project="..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
 </Project>

@@ -46,7 +46,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// <summary>
         /// Initialize the comboboxes
         /// </summary>
-        public override void Initialize()
+        protected override void Initialize()
         {
             base.Initialize();
 
@@ -109,8 +109,12 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             weight.WeightChanged += OnShipSenseFieldChanged;
 
             deliveryConfirmation.DataBindings.Clear();
-            deliveryConfirmation.DataBindings.Add(nameof(deliveryConfirmation.SelectedValue), viewModel.DeliveryExperience, nameof(viewModel.DeliveryExperience.PropertyValue), true, DataSourceUpdateMode.OnPropertyChanged);
-            deliveryConfirmation.DataBindings.Add(nameof(deliveryConfirmation.MultiValued), viewModel.DeliveryExperience, nameof(viewModel.DeliveryExperience.IsMultiValued), false, DataSourceUpdateMode.OnPropertyChanged);
+            deliveryConfirmation.DataBindings.Add(nameof(deliveryConfirmation.SelectedValue),
+                viewModel.DeliveryExperience, nameof(viewModel.DeliveryExperience.PropertyValue),
+                true, DataSourceUpdateMode.OnPropertyChanged);
+            deliveryConfirmation.DataBindings.Add(nameof(deliveryConfirmation.MultiValued),
+                viewModel.DeliveryExperience, nameof(viewModel.DeliveryExperience.IsMultiValued),
+                false, DataSourceUpdateMode.OnPropertyChanged);
 
             weight.DataBindings.Clear();
             weight.DataBindings.Add(nameof(weight.Weight), viewModel, nameof(viewModel.ContentWeight), false, DataSourceUpdateMode.OnPropertyChanged);

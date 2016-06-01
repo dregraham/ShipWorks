@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.Amazon;
 using Xunit;
+using ShipWorks.Tests.Shared;
 
 namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
 {
@@ -41,7 +42,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
 
             AmazonRatingService testObject = mock.Create<AmazonRatingService>();
 
-            RateGroup result = testObject.GetRates(SampleShipmentAmazonOrer(AmazonMwsIsPrime.Yes));
+            RateGroup result = testObject.GetRates(SampleShipmentAmazonOrder(AmazonMwsIsPrime.Yes));
 
             Assert.Equal(0, result.Rates.Count);
         }
@@ -53,7 +54,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
         {
             AmazonRatingService testObject = mock.Create<AmazonRatingService>();
 
-            Assert.Throws<AmazonShippingException>(() => testObject.GetRates(SampleShipmentAmazonOrer(isPrime)));
+            Assert.Throws<AmazonShippingException>(() => testObject.GetRates(SampleShipmentAmazonOrder(isPrime)));
         }
 
         [Fact]
@@ -62,6 +63,34 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
             AmazonRatingService testObject = mock.Create<AmazonRatingService>();
 
             Assert.Throws<AmazonShippingException>(() => testObject.GetRates(SampleShipmentNotIAmazonOrder));
+        }
+
+        [Fact]
+        public void GetRates_RatesArePassedToFilters()
+        {
+            RateGroup filteredRate = mock.CreateMock<RateGroup>().Object;
+
+            GetEligibleShippingServicesResponse response = ResponseWithService(new ShippingService
+            {
+                Rate = new Rate { Amount = 2.34M },
+                ShippingServiceName = "UPS",
+                ShippingServiceId = "Foo",
+                ShippingServiceOfferId = "Bar"
+            });
+
+            mock.Mock<IAmazonRateGroupFactory>()
+                .Setup(x => x.GetRateGroupFromResponse(response))
+                .Returns(filteredRate);
+
+            mock.Mock<IAmazonShippingWebClient>()
+                .Setup(w => w.GetRates(It.IsAny<ShipmentRequestDetails>(), It.IsAny<IAmazonMwsWebClientSettings>()))
+                .Returns(response);
+
+            AmazonRatingService testObject = mock.Create<AmazonRatingService>();
+
+            RateGroup rates = testObject.GetRates(SampleShipmentAmazonOrder(AmazonMwsIsPrime.Yes));
+
+            Assert.Equal(filteredRate, rates);
         }
 
         private static GetEligibleShippingServicesResponse GetEligibleShippingServicesResponse(List<string> tAndC, List<string> tAndC2)
@@ -87,7 +116,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
 
         private void VerifyApiRequest(Action<ShipmentEntity, AmazonOrderEntity> configureInput, Expression<Func<ShipmentRequestDetails, bool>> verifyCall)
         {
-            ShipmentEntity shipment = SampleShipmentAmazonOrer(AmazonMwsIsPrime.Yes);
+            ShipmentEntity shipment = SampleShipmentAmazonOrder(AmazonMwsIsPrime.Yes);
             configureInput(shipment, shipment.Order as AmazonOrderEntity);
 
             using (var mock = AutoMock.GetLoose())
@@ -128,11 +157,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
         {
             get
             {
-                return SerializationUtility.DeserializeFromXml<GetEligibleShippingServicesResponse>(GetEmbeddedResourceXml("ShipWorks.Tests.Shipping.Carriers.Amazon.Api.Artifacts.GetEligibleShippingServicesResponse.xml"));
+                string resource = GetEmbeddedResourceXml("ShipWorks.Tests.Shipping.Carriers.Amazon.Api.Artifacts.GetEligibleShippingServicesResponse.xml");
+                return SerializationUtility.DeserializeFromXml<GetEligibleShippingServicesResponse>(resource);
             }
         }
 
-        public ShipmentEntity SampleShipmentAmazonOrer(AmazonMwsIsPrime isPrime)
+        public ShipmentEntity SampleShipmentAmazonOrder(AmazonMwsIsPrime isPrime)
         {
             return new ShipmentEntity()
             {

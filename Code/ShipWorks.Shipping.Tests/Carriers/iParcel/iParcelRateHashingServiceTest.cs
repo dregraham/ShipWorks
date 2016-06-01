@@ -9,7 +9,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Ups
     public class iParcelRateHashingServiceTest
     {
         private readonly iParcelRateHashingService testObject;
-        private ShipmentEntity shipment;
+        private readonly ShipmentEntity shipment;
 
         public iParcelRateHashingServiceTest()
         {

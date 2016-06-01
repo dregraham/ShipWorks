@@ -36,8 +36,8 @@ namespace ShipWorks.ApplicationCore.Licensing.FeatureRestrictions.Ups
             // Check to see that the account is not blank or null
             // the capabilities has a collection of UpsAccountNumbers
             // the given account is not in the capabilities UpsAccountNumbers collection
-            if (!string.IsNullOrWhiteSpace(account) && 
-                capabilities.UpsAccountNumbers.Any() && 
+            if (!string.IsNullOrWhiteSpace(account) &&
+                capabilities.UpsAccountNumbers.Any() &&
                 !capabilities.UpsAccountNumbers.Contains(account.ToLower()))
             {
                 return EditionRestrictionLevel.Forbidden;
@@ -52,7 +52,7 @@ namespace ShipWorks.ApplicationCore.Licensing.FeatureRestrictions.Ups
         public override bool Handle(IWin32Window owner, ILicenseCapabilities capabilities, object data)
         {
             EditionRestrictionLevel level = Check(capabilities, data);
-            
+
             if (level != EditionRestrictionLevel.None)
             {
                 string account = data as string;

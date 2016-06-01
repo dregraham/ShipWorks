@@ -1,5 +1,4 @@
-﻿using Interapptive.Shared.Messaging;
-using ShipWorks.Data.Model.EntityClasses;
+﻿using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 
 namespace ShipWorks.Shipping.Carriers.Amazon
@@ -23,12 +22,13 @@ namespace ShipWorks.Shipping.Carriers.Amazon
 
                 ratingField = base.RatingFields;
 
-                ratingField.ShipmentFields.Add(AmazonShipmentFields.DeclaredValue);
-                ratingField.ShipmentFields.Add(AmazonShipmentFields.DeliveryExperience);
-                ratingField.ShipmentFields.Add(AmazonShipmentFields.DimsAddWeight);
-                ratingField.ShipmentFields.Add(AmazonShipmentFields.DimsHeight);
-                ratingField.ShipmentFields.Add(AmazonShipmentFields.DimsLength);
-                ratingField.ShipmentFields.Add(AmazonShipmentFields.DimsWeight);
+                ratingField.AddShipmentField(AmazonShipmentFields.DeclaredValue);
+                ratingField.AddShipmentField(AmazonShipmentFields.DeliveryExperience);
+                ratingField.AddShipmentField(AmazonShipmentFields.DimsAddWeight);
+                ratingField.AddShipmentField(AmazonShipmentFields.DimsHeight);
+                ratingField.AddShipmentField(AmazonShipmentFields.DimsLength);
+                ratingField.AddShipmentField(AmazonShipmentFields.DimsWeight);
+                ratingField.AddShipmentField(AmazonShipmentFields.DimsAddWeight);
 
                 return ratingField;
             }

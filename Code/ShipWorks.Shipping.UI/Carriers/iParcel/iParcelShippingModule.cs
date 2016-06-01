@@ -1,6 +1,9 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using Autofac;
+using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Services;
+using ShipWorks.Shipping.Services.Builders;
 
 namespace ShipWorks.Shipping.Carriers.iParcel
 {
@@ -16,14 +19,12 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// </summary>
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterType<iParcelShipmentType>()
-                .AsSelf()
-                .Keyed<ShipmentType>(ShipmentTypeCode.iParcel);
-            
-            builder.RegisterType<iParcelDatabaseRepository>()
+            builder.RegisterType<iParcelAccountRepository>()
+                .Keyed<CarrierAccountRepositoryBase<IParcelAccountEntity>>(ShipmentTypeCode.iParcel)
+                .Keyed<ICarrierAccountRetriever<ICarrierAccount>>(ShipmentTypeCode.iParcel)
                 .AsImplementedInterfaces();
-        
-            builder.RegisterType<iParcelServiceGateway>()
+
+            builder.RegisterType<iParcelDatabaseRepository>()
                 .AsImplementedInterfaces();
 
             builder.RegisterType<iParcelLabelService>()
@@ -36,9 +37,27 @@ namespace ShipWorks.Shipping.Carriers.iParcel
                 .Keyed<IRatingService>(ShipmentTypeCode.iParcel)
                 .AsImplementedInterfaces();
 
-            builder.RegisterType<iParcelAccountRepository>()
-                .Keyed<CarrierAccountRepositoryBase<IParcelAccountEntity>>(ShipmentTypeCode.iParcel)
+            builder.RegisterType<iParcelServiceGateway>()
                 .AsImplementedInterfaces();
-        }   
+
+            builder.RegisterType<iParcelShipmentAdapter>()
+                .Keyed<ICarrierShipmentAdapter>(ShipmentTypeCode.iParcel)
+                .ExternallyOwned();
+
+            builder.RegisterType<iParcelShipmentProcessingSynchronizer>()
+                .Keyed<IShipmentProcessingSynchronizer>(ShipmentTypeCode.iParcel);
+
+            builder.RegisterType<iParcelShipmentServicesBuilder>()
+                .Keyed<IShipmentServicesBuilder>(ShipmentTypeCode.iParcel)
+                .SingleInstance();
+
+            builder.RegisterType<iParcelShipmentType>()
+                .AsSelf()
+                .Keyed<ShipmentType>(ShipmentTypeCode.iParcel);
+
+            builder.RegisterType<NullShipmentPackageTypesBuilder>()
+                .Keyed<IShipmentPackageTypesBuilder>(ShipmentTypeCode.iParcel)
+                .SingleInstance();
+        }
     }
 }

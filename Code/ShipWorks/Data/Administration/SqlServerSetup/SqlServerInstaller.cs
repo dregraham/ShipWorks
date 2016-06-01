@@ -1,40 +1,39 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Runtime.InteropServices;
-using Microsoft.Win32;
-using System.IO;
-using Interapptive.Shared;
-using System.Diagnostics;
 using System.ComponentModel;
-using log4net;
-using System.Data.SqlClient;
-using System.Windows.Forms;
-using ShipWorks.Filters;
-using ShipWorks.Data.Model.EntityClasses;
-using Interapptive.Shared.Utility;
-using ShipWorks.ApplicationCore;
-using ShipWorks.Data.Connection;
-using System.Security.Cryptography;
-using System.Threading;
 using System.Data;
+using System.Data.SqlClient;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using System.Linq;
-using Interapptive.Shared.Data;
-using System.Security.Principal;
 using System.Management;
-using System.ServiceProcess;
-using ShipWorks.ApplicationCore.Interaction;
-using NDesk.Options;
-using System.Xml.Linq;
-using System.Xml;
-using Interapptive.Shared.Win32;
 using System.Net;
+using System.Security.Cryptography;
+using System.Security.Principal;
+using System.ServiceProcess;
+using System.Text;
+using System.Threading;
+using System.Windows.Forms;
+using System.Xml.Linq;
+using Interapptive.Shared;
+using Interapptive.Shared.Data;
+using Interapptive.Shared.Win32;
+using log4net;
+using Microsoft.Win32;
+using NDesk.Options;
+using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Interaction;
+using ShipWorks.Data.Connection;
 
 namespace ShipWorks.Data.Administration.SqlServerSetup
 {
     /// <summary>
     /// Use to control the installation process of SQL Server
     /// </summary>
+    [SuppressMessage("CSharp.Analyzers",
+        "CA5350: Do not use insecure cryptographic algorithm SHA1",
+        Justification = "This is what ShipWorks currently uses")]
     public class SqlServerInstaller
     {
         // Logger
@@ -43,23 +42,23 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
         const string sqlx64FileName = "SQLEXPR_x64_ENU.exe";
         const string sqlx86FileName = "SQLEXPR_x86_ENU.exe";
 
-        // Custom isntall error codes
-        const int msdeUpgrade08Failed = -200; 
+        // Custom install error codes
+        const int msdeUpgrade08Failed = -200;
         const int unknownException = -201;
 
         // A value of exactly OxBC2 means installation was successful, but a reboot is now required.
         // Anything else (such as 0x0XXX0BC2) means a reboot is required before install.
         const int successRebootRequired = 0xBC2;
-        
+
         /// <summary>
-        /// For SQL 2012 this sometimes seems to indicate a failure to install b\c of the presense of MSDE
+        /// For SQL 2012 this sometimes seems to indicate a failure to install b\c of the presence of MSDE
         /// </summary>
         const int failedDueToMsdeExists = -2068774911;
 
         // The exit code from the last attempt at installation
         int lastExitCode = 0;
 
-        // The names of the files for the install and upgrade packages.  
+        // The names of the files for the install and upgrade packages.
         string installPackageExe = null;
         string upgradePackageExe = null;
 
@@ -117,8 +116,8 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
         {
             get
             {
-                // This is how to detect for .NET 4.5 - if this key exists, and if "Release" exists within it.  SQL 2012 doesn't necessarily need .NET 4.5, 
-                // but it has the same OS requirements.  Our installer installs .NET 4.5 if the OS supports it - so the presense of .NET 4.5 in the 
+                // This is how to detect for .NET 4.5 - if this key exists, and if "Release" exists within it.  SQL 2012 doesn't necessarily need .NET 4.5,
+                // but it has the same OS requirements.  Our installer installs .NET 4.5 if the OS supports it - so the presense of .NET 4.5 in the
                 // case of ShipWorks is identicial to checking for 2012 compatibility
                 using (RegistryKey key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full"))
                 {
@@ -341,7 +340,7 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
 
                 log.InfoFormat("Using WebClient to download {0}", remoteUri);
 
-                // We can do this synchronously becauase we are already running as a secondary background elevated process, and won't be blocking any UI
+                // We can do this synchronously because we are already running as a secondary background elevated process, and won't be blocking any UI
                 WebClient webClient = new WebClient();
                 webClient.DownloadFile(remoteUri, localFile);
             }
@@ -644,10 +643,10 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
                 using (SqlConnection con = newSession.OpenConnection())
                 {
                     SqlCommandProvider.ExecuteNonQuery(con, string.Format(
-                                    @"CREATE DATABASE {0} 
-	                                ON (FILENAME = '{1}'),
-	                                   (FILENAME = '{2}')
-	                                FOR ATTACH", databaseName, targetMdf, targetLdf));
+                                    @"CREATE DATABASE {0}
+                                    ON (FILENAME = '{1}'),
+                                       (FILENAME = '{2}')
+                                    FOR ATTACH", databaseName, targetMdf, targetLdf));
                 }
             }
             catch (Win32Exception ex)
@@ -981,7 +980,7 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
         }
 
         /// <summary>
-        /// Upgrade from an installation of MSDE.  We were installing MSDE SP3... to upgrade directly you need MSDE SP4...whose 
+        /// Upgrade from an installation of MSDE.  We were installing MSDE SP3... to upgrade directly you need MSDE SP4...whose
         /// installer kind of sucked on Vista, so we are doing some trickery to make this work.
         /// </summary>
         [NDependIgnoreLongMethod]
@@ -1006,7 +1005,7 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
 
             if (firstTimeThrough)
             {
-                // If we don't know their sa password what we will do is one to install 08, 
+                // If we don't know their sa password what we will do is one to install 08,
                 // and then override it with the HASH from the current install.
                 needOverrideSa = sqlSession.Configuration.WindowsAuth || sqlSession.Configuration.Username != "sa";
                 saPasswordHash = null;
@@ -1031,8 +1030,8 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
                     con.ChangeDatabase("master");
 
                     SqlDataAdapter loginsAdapter = new SqlDataAdapter(@"
-                        SELECT l.name, x.password, l.sysadmin 
-                        FROM syslogins l INNER JOIN sysxlogins x ON l.name = x.name 
+                        SELECT l.name, x.password, l.sysadmin
+                        FROM syslogins l INNER JOIN sysxlogins x ON l.name = x.name
                         WHERE l.isntname = 0 AND l.name != 'sa' ", con);
                     loginsAdapter.Fill(logins);
 
@@ -1041,11 +1040,11 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
                         log.InfoFormat("Found login {0}: sysadmin:{1}", row["name"], row["sysadmin"]);
 
                         databaseLogins.Add(new DatabaseLoginInfo
-                            {
-                                Name = (string) row["name"],
-                                Password = (byte[]) row["password"],
-                                SysAdmin = (int) row["sysadmin"] != 0
-                            });
+                        {
+                            Name = (string) row["name"],
+                            Password = (byte[]) row["password"],
+                            SysAdmin = (int) row["sysadmin"] != 0
+                        });
                     }
                 }
 
@@ -1080,18 +1079,18 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
                 saPasswordHash = msdeInfo.Element("SaPasswordHash") != null ? Convert.FromBase64String((string) msdeInfo.Element("SaPasswordHash")) : null;
 
                 databaseLogins = msdeInfo.Descendants("Login").Select(x => new DatabaseLoginInfo
-                    {
-                        Name = (string) x.Element("Name"),
-                        Password = Convert.FromBase64String((string) x.Element("Password")),
-                        SysAdmin = (bool) x.Element("SysAdmin")
-                    }).ToList();
+                {
+                    Name = (string) x.Element("Name"),
+                    Password = Convert.FromBase64String((string) x.Element("Password")),
+                    SysAdmin = (bool) x.Element("SysAdmin")
+                }).ToList();
 
                 databaseFiles = msdeInfo.Descendants("File").Select(x => new DatabaseFileInfo
-                    {
-                        Database = (string) x.Element("Database"),
-                        DataFile = (string) x.Element("DataFile"),
-                        LogFile = (string) x.Element("LogFile")
-                    }).ToList();
+                {
+                    Database = (string) x.Element("Database"),
+                    DataFile = (string) x.Element("DataFile"),
+                    LogFile = (string) x.Element("LogFile")
+                }).ToList();
             }
 
             // Install SQL 08 now that MSDE has been uninstalled
@@ -1110,15 +1109,15 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
         }
 
         /// <summary>
-        /// Install SQL Server 08 and restore the data from the previously uinstalled MSDE 
+        /// Install SQL Server 08 and restore the data from the previously uinstalled MSDE
         /// </summary>
         [NDependIgnoreLongMethod]
         [NDependIgnoreTooManyParams]
-        private static bool InstallSqlServerAfterMsdeUninstall(string installerPath, SqlSession sqlSession, 
-            string instance, 
-            bool needOverrideSa, 
+        private static bool InstallSqlServerAfterMsdeUninstall(string installerPath, SqlSession sqlSession,
+            string instance,
+            bool needOverrideSa,
             byte[] saPasswordHash,
-            List<DatabaseLoginInfo> databaseLogins, 
+            List<DatabaseLoginInfo> databaseLogins,
             List<DatabaseFileInfo> databaseFiles)
         {
             // We need a new SQL Session that uses windows auth - which we know we can login as.  If the session
@@ -1208,10 +1207,10 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
 
                         // Now we attach the db files into the new 08 instance
                         SqlCommandProvider.ExecuteNonQuery(con, string.Format(
-                            @"CREATE DATABASE {0} 
-	                            ON (FILENAME = '{1}'),
-	                               (FILENAME = '{2}')
-	                            FOR ATTACH", databaseInfo.Database, targetMdf, targetLdf));
+                            @"CREATE DATABASE {0}
+                                ON (FILENAME = '{1}'),
+                                   (FILENAME = '{2}')
+                                FOR ATTACH", databaseInfo.Database, targetMdf, targetLdf));
                     }
 
                     // Restore all the previous logins.  If we can tell they were created by ShipWorks (pre 2.4), then we drop the associated
@@ -1292,7 +1291,7 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
 
             // First we have to find where the old database files are
             using (SqlConnection con = sqlSession.OpenConnection())
-            {                
+            {
                 DataTable databaseNames = new DataTable();
                 SqlDataAdapter sqlAdapter = new SqlDataAdapter("select name from master..sysdatabases where name not in ('master', 'model', 'msdb', 'tempdb')", con);
                 sqlAdapter.Fill(databaseNames);
@@ -1402,7 +1401,7 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
 
             if (code == unknownException)
             {
-                return 
+                return
                     "An error occurred that ShipWorks could not handle.  The error has been logged.\n\n" +
                     "Please contact Interapptive for further assistance with this issue.";
             }
@@ -1501,7 +1500,7 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
                                 // Can't specific instance or password for upgrade - we use SqlSession
                                 if (instance != null || sapassword != null)
                                 {
-                                    throw new CommandLineCommandArgumentException(CommandName, "instance\\password", "Invalid arguments passed to command."); 
+                                    throw new CommandLineCommandArgumentException(CommandName, "instance\\password", "Invalid arguments passed to command.");
                                 }
 
                                 log.InfoFormat("Processing request to upgrade SQL Sever");
@@ -1512,7 +1511,7 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
                                 installer.InitializeForCurrentSqlSession();
 
                                 UpgradeSqlServerInternal(
-                                    installer.GetInstallerLocalFilePath(SqlServerInstallerPurpose.Upgrade), 
+                                    installer.GetInstallerLocalFilePath(SqlServerInstallerPurpose.Upgrade),
                                     SqlSession.Current);
 
                                 break;

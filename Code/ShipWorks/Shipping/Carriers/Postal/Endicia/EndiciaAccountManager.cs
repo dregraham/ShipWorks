@@ -11,6 +11,8 @@ using ShipWorks.Data.Connection;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data;
 using System.Windows.Forms;
+using ShipWorks.Core.Messaging;
+using ShipWorks.Messaging.Messages;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Express1;
 
@@ -127,12 +129,19 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// </summary>
         public static void SaveAccount(EndiciaAccountEntity account)
         {
+            bool wasDirty = account.IsDirty;
+
             using (SqlAdapter adapter = new SqlAdapter())
             {
                 adapter.SaveAndRefetch(account);
             }
 
             CheckForChangesNeeded();
+
+            if (wasDirty)
+            {
+                Messenger.Current.Send(new ShippingAccountsChangedMessage(null, account.ShipmentType));
+            }
         }
 
         /// <summary>
@@ -140,12 +149,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// </summary>
         public static void DeleteAccount(EndiciaAccountEntity account)
         {
+            ShipmentTypeCode shipmentTypeCode = account.ShipmentType;
+            
             using (SqlAdapter adapter = new SqlAdapter())
             {
                 adapter.DeleteEntity(account);
             }
 
             CheckForChangesNeeded();
+
+            Messenger.Current.Send(new ShippingAccountsChangedMessage(null, shipmentTypeCode));
         }
 
         /// <summary>

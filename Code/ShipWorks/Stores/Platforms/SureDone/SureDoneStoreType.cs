@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Specialized;
+using System.Diagnostics.CodeAnalysis;
 using System.Security.Cryptography;
 using System.Text;
 using System.Web;
+using Interapptive.Shared.Net;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.GenericModule;
@@ -12,6 +14,9 @@ namespace ShipWorks.Stores.Platforms.SureDone
     /// <summary>
     /// Store specific integration into ShipWorks
     /// </summary>
+    [SuppressMessage("CSharp.Analyzers",
+        "CA5351: Do not use insecure cryptographic algorithm MD5",
+        Justification = "This is what SureDone currently uses")]
     public class SureDoneStoreType : GenericModuleStoreType
     {
         /// <summary>
@@ -34,7 +39,7 @@ namespace ShipWorks.Stores.Platforms.SureDone
 
         /// <summary>
         /// Return value that uniquely identifies this store instance
-        /// 
+        ///
         /// The only unique thing in the module url is the value of the token param.
         /// So we will get that value, hash it, and return a Base64 string of it.
         /// </summary>
@@ -42,7 +47,7 @@ namespace ShipWorks.Stores.Platforms.SureDone
         {
             get
             {
-                GenericModuleStoreEntity genericStore = (GenericModuleStoreEntity)Store;
+                GenericModuleStoreEntity genericStore = (GenericModuleStoreEntity) Store;
 
                 string moduleUrl = genericStore.ModuleUrl;
                 Uri moduleUri = new Uri(moduleUrl);

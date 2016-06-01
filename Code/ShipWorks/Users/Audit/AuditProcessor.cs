@@ -71,7 +71,6 @@ namespace ShipWorks.Users.Audit
         /// Process audits in a background thread
         /// </summary>
         [NDependIgnoreLongMethod]
-        [NDependIgnoreComplexMethodAttribute]
         private static void AsyncProcessAudits()
         {
             log.Info("Starting AsyncProcessAudits at " + DateTime.Now);

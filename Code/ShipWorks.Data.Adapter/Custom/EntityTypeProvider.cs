@@ -159,7 +159,6 @@ namespace ShipWorks.Data.Adapter.Custom
 				case "ThreeDCartStoreEntity": return EntityType.ThreeDCartStoreEntity;
 				case "ThreeDCartOrderItemEntity": return EntityType.ThreeDCartOrderItemEntity;
 				case "SearsOrderEntity": return EntityType.SearsOrderEntity;
-				case "SearsStoreEntity": return EntityType.SearsStoreEntity;
 				case "SearsOrderItemEntity": return EntityType.SearsOrderItemEntity;
 				case "OnTracAccountEntity": return EntityType.OnTracAccountEntity;
 				case "BigCommerceStoreEntity": return EntityType.BigCommerceStoreEntity;
@@ -192,8 +191,10 @@ namespace ShipWorks.Data.Adapter.Custom
 				case "LemonStandOrderItemEntity": return EntityType.LemonStandOrderItemEntity;
 				case "AmazonShipmentEntity": return EntityType.AmazonShipmentEntity;
 				case "AmazonProfileEntity": return EntityType.AmazonProfileEntity;
-				case "SparkPayStoreEntity": return EntityType.SparkPayStoreEntity;
 				case "OdbcStoreEntity": return EntityType.OdbcStoreEntity;
+				case "SearsStoreEntity": return EntityType.SearsStoreEntity;
+				case "SparkPayStoreEntity": return EntityType.SparkPayStoreEntity;
+				case "ThreeDCartOrderEntity": return EntityType.ThreeDCartOrderEntity;
 				}
 			
 			throw new ArgumentException(string.Format("Entity type name '{0}' is not valid.", entityTypeName));
@@ -292,7 +293,6 @@ namespace ShipWorks.Data.Adapter.Custom
 				case EntityType.ThreeDCartStoreEntity: return new ThreeDCartStoreRelations();
 				case EntityType.ThreeDCartOrderItemEntity: return new ThreeDCartOrderItemRelations();
 				case EntityType.SearsOrderEntity: return new SearsOrderRelations();
-				case EntityType.SearsStoreEntity: return new SearsStoreRelations();
 				case EntityType.SearsOrderItemEntity: return new SearsOrderItemRelations();
 				case EntityType.BigCommerceStoreEntity: return new BigCommerceStoreRelations();
 				case EntityType.BigCommerceOrderItemEntity: return new BigCommerceOrderItemRelations();
@@ -302,8 +302,10 @@ namespace ShipWorks.Data.Adapter.Custom
 				case EntityType.LemonStandStoreEntity: return new LemonStandStoreRelations();
 				case EntityType.LemonStandOrderEntity: return new LemonStandOrderRelations();
 				case EntityType.LemonStandOrderItemEntity: return new LemonStandOrderItemRelations();
-				case EntityType.SparkPayStoreEntity: return new SparkPayStoreRelations();
 				case EntityType.OdbcStoreEntity: return new OdbcStoreRelations();
+				case EntityType.SearsStoreEntity: return new SearsStoreRelations();
+				case EntityType.SparkPayStoreEntity: return new SparkPayStoreRelations();
+				case EntityType.ThreeDCartOrderEntity: return new ThreeDCartOrderRelations();
 				}
 			
 			throw new ArgumentException(string.Format("Entity type '{0}' is not valid or is not a part of a TargetPerEntity hierarchy.", entityType));

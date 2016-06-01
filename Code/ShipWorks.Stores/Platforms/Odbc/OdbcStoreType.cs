@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using Autofac;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
@@ -19,7 +22,6 @@ namespace ShipWorks.Stores.Platforms.Odbc
         public OdbcStoreType(StoreEntity store)
             : base(store)
         {
-
         }
 
         /// <summary>
@@ -56,12 +58,26 @@ namespace ShipWorks.Stores.Platforms.Odbc
         {
             OdbcStoreEntity store = new OdbcStoreEntity
             {
-                ConnectionString = string.Empty
+                ConnectionString = string.Empty,
+                Map = string.Empty
             };
 
             InitializeStoreDefaults(store);
 
             return store;
+        }
+
+        /// <summary>
+        /// Creates the add store wizard pages.
+        /// </summary>
+        public override List<WizardPage> CreateAddStoreWizardPages()
+        {
+            using (ILifetimeScope scope = IoC.BeginLifetimeScope())
+            {
+                IEnumerable<IOdbcWizardPage> wizardPages = scope.Resolve<IEnumerable<IOdbcWizardPage>>();
+
+                return wizardPages.OrderBy(w => w.Position).Cast<WizardPage>().ToList();
+            }
         }
     }
 }

@@ -53,7 +53,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
                 return false;
             }
 
-            GenericResult<OdbcDataSource> connectionResult = SelectedDataSource.TestConnection();
+            GenericResult<IOdbcDataSource> connectionResult = SelectedDataSource.TestConnection();
 
             if (connectionResult.Success)
             {
@@ -132,14 +132,14 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
                 return;
             }
 
-            GenericResult<List<OdbcDataSource>> dataSourceResult = GetDataSources();
+            GenericResult<List<IOdbcDataSource>> dataSourceResult = GetDataSources();
 
             if (!dataSourceResult.Success)
             {
                 dataSource.DataSource = null;
                 MessageHelper.ShowError(ParentForm, dataSourceResult.Message);
             }
-            else if (dataSourceResult.Context.None())
+            else if (dataSourceResult.Value.None())
             {
                 dataSource.DataSource = null;
 
@@ -149,7 +149,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             }
             else
             {
-                BindDataSources(dataSourceResult.Context);
+                BindDataSources(dataSourceResult.Value);
             }
         }
 
@@ -160,7 +160,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// If we can find the previously selected data source in the list of new data sources,
         /// we select it and populate any previous username and password.
         /// </remarks>
-        private void BindDataSources(List<OdbcDataSource> dataSources)
+        private void BindDataSources(List<IOdbcDataSource> dataSources)
         {
             OdbcDataSource currentDataSource = SelectedDataSource;
 
@@ -169,7 +169,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
 
             if (currentDataSource != null)
             {
-                OdbcDataSource matchedDataSource = dataSources.FirstOrDefault(d => d.Name == currentDataSource.Name);
+                IOdbcDataSource matchedDataSource = dataSources.FirstOrDefault(d => d.Name == currentDataSource.Name);
                 if (matchedDataSource != null)
                 {
                     // Previously selected datasource found.
@@ -193,29 +193,24 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// <returns>
         /// The context will be the list of datasources and success is true if no exceptions were thrown.
         /// </returns>
-        private GenericResult<List<OdbcDataSource>> GetDataSources()
+        private GenericResult<List<IOdbcDataSource>> GetDataSources()
         {
-            GenericResult<List<OdbcDataSource>> genericResult;
+            GenericResult<List<IOdbcDataSource>> genericResult;
 
             using (ILifetimeScope scope = IoC.BeginLifetimeScope())
             {
                 try
                 {
                     IOdbcDataSourceRepository repo = scope.Resolve<IOdbcDataSourceRepository>();
-                    genericResult = new GenericResult<List<OdbcDataSource>>(repo.GetDataSources().ToList())
-                    {
-                        Success = true
-                    };
+                    genericResult = GenericResult.FromSuccess(repo.GetDataSources().ToList());
                 }
                 catch (DataException ex)
                 {
                     log.Error("Error thrown by repo.GetDataSources", ex);
-                    genericResult = new GenericResult<List<OdbcDataSource>>(null)
-                    {
-                        Success = false,
-                        Message = "ShipWorks encountered an error finding data sources. " +
-                                  $"{Environment.NewLine}{Environment.NewLine}{ex.Message}"
-                    };
+                    genericResult =
+                        GenericResult.FromError<List<IOdbcDataSource>>(
+                            "ShipWorks encountered an error finding data sources. " +
+                            $"{Environment.NewLine}{Environment.NewLine}{ex.Message}");
                 }
             }
             return genericResult;

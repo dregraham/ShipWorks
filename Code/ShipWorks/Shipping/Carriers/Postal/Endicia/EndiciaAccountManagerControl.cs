@@ -1,23 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using ShipWorks.ApplicationCore.Licensing;
-using ShipWorks.Data.Model.EntityClasses;
-using Divelements.SandGrid;
-using ShipWorks.UI;
-using ShipWorks.Data.Connection;
 using System.Threading;
-using Interapptive.Shared.Utility;
+using System.Windows.Forms;
+using Autofac;
+using Divelements.SandGrid;
+using Interapptive.Shared.UI;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Common.Threading;
-using Interapptive.Shared.UI;
-using ShipWorks.Shipping.Carriers.Postal.Express1;
+using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 {
@@ -102,41 +94,46 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         {
             string result = "";
 
-            GridRow row = (GridRow) state;
-            EndiciaAccountEntity account = (EndiciaAccountEntity) row.Tag;
+            GridRow row = (GridRow)state;
+            EndiciaAccountEntity account = (EndiciaAccountEntity)row.Tag;
 
             if (account.Fields.State == EntityState.Fetched)
             {
-                try
+                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
                 {
-                    result = (new PostageBalance(new EndiciaPostageWebClient(account), new TangoWebClientWrapper())).Value.ToString("c");
-                }
-                catch (EndiciaException ex)
-                {
-                    log.Error("Error updating grid with endicia account balance.", ex);
+                    ITangoWebClient tangoWebClient = lifetimeScope.Resolve<ITangoWebClient>();
+
+                    try
+                    {
+                        result = (new PostageBalance(new EndiciaPostageWebClient(account), tangoWebClient)).Value.ToString("c");
+                    }
+                    catch (EndiciaException ex)
+                    {
+                        log.Error("Error updating grid with endicia account balance.", ex);
+                    }
                 }
             }
 
-            Program.MainForm.BeginInvoke((MethodInvoker) delegate
-                {
-                    if (IsDisposed || !IsHandleCreated)
-                    {
-                        return;
-                    }
+            Program.MainForm.BeginInvoke((MethodInvoker)delegate
+               {
+                   if (IsDisposed || !IsHandleCreated)
+                   {
+                       return;
+                   }
 
-                    InnerGrid innerGrid = row.Grid;
-                    if (innerGrid != null)
-                    {
-                        SandGridBase sandGrid = innerGrid.SandGrid;
-                        if (sandGrid != null)
-                        {
-                            if (row.Cells.Count > 1)
-                            {
-                                row.Cells[1].Text = result;
-                            }
-                        }
-                    }
-                });
+                   InnerGrid innerGrid = row.Grid;
+                   if (innerGrid != null)
+                   {
+                       SandGridBase sandGrid = innerGrid.SandGrid;
+                       if (sandGrid != null)
+                       {
+                           if (row.Cells.Count > 1)
+                           {
+                               row.Cells[1].Text = result;
+                           }
+                       }
+                   }
+               });
         }
 
         /// <summary>
@@ -156,7 +153,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 add.Hide();
 
                 // Adjust the location of the remove button based on the visiblity of the add button and
-                // make sure it's on top of the add button. 
+                // make sure it's on top of the add button.
                 remove.Top = add.Top;
                 remove.BringToFront();
             }
@@ -201,7 +198,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// </summary>
         private void OnEdit(object sender, EventArgs e)
         {
-            EndiciaAccountEntity account = (EndiciaAccountEntity) sandGrid.SelectedElements[0].Tag;
+            EndiciaAccountEntity account = (EndiciaAccountEntity)sandGrid.SelectedElements[0].Tag;
 
             if (endiciaReseller == EndiciaReseller.None && (account.IsDazzleMigrationPending || !ShippingManager.IsShipmentTypeConfigured(ShipmentTypeCode.Endicia)))
             {
@@ -220,8 +217,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             }
             else
             {
-                using (EndiciaAccountEditorDlg dlg = new EndiciaAccountEditorDlg(account))
+                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
                 {
+                    EndiciaAccountEditorDlg dlg = lifetimeScope.Resolve<EndiciaAccountEditorDlg>();
+                    dlg.LoadAccount(account);
+
                     var result = dlg.ShowDialog(this);
 
                     if (result == DialogResult.OK || dlg.PostagePurchased)
@@ -237,13 +237,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// </summary>
         private void OnRemove(object sender, EventArgs e)
         {
-            EndiciaAccountEntity account = (EndiciaAccountEntity) sandGrid.SelectedElements[0].Tag;
+            EndiciaAccountEntity account = (EndiciaAccountEntity)sandGrid.SelectedElements[0].Tag;
 
             DialogResult result = MessageHelper.ShowQuestion(this, MessageBoxIcon.Warning,
                 string.Format("Remove the account '{0}' from ShipWorks?\n\n" +
                 "Important: This does not close your account with {1}.  After removing the account from ShipWorks " +
                 "you need to log on to www.endicia.com to close your account.",
-                account.Description, (endiciaReseller == EndiciaReseller.Express1) ? "Express1" : "Endicia" ));
+                account.Description, (endiciaReseller == EndiciaReseller.Express1) ? "Express1" : "Endicia"));
 
             if (result == DialogResult.OK)
             {

@@ -13,6 +13,7 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Platforms.LemonStand.DTO;
+using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Stores.Platforms.LemonStand
 {
@@ -179,10 +180,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
 
             try
             {
-                if (jsonOrder == null)
-                {
-                    throw new ArgumentNullException(nameof(jsonOrder));
-                }
+                MethodConditions.EnsureArgumentIsNotNull(jsonOrder, nameof(jsonOrder));
 
                 //Deserialize Json Order into order DTO
                 LemonStandOrder lsOrder = JsonConvert.DeserializeObject<LemonStandOrder>(jsonOrder.ToString());

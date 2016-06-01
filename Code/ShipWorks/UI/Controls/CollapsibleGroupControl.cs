@@ -114,7 +114,7 @@ namespace ShipWorks.UI.Controls
         /// <summary>
         /// Get the collapsed state of the given group, using the default if no state is found
         /// </summary>
-        private static bool GetCollapsedState(string groupKey, bool defaultValue)
+        public static bool GetCollapsedState(string groupKey, bool defaultValue)
         {
             if (collapsedState == null)
             {
@@ -135,7 +135,7 @@ namespace ShipWorks.UI.Controls
         /// <summary>
         /// Save the collapsed state of the given group
         /// </summary>
-        private static void SaveCollapsedState(string groupKey, bool value)
+        public static void SaveCollapsedState(string groupKey, bool value)
         {
             if (collapsedState == null)
             {

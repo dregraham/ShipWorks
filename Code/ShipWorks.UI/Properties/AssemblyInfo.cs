@@ -1,5 +1,8 @@
 ﻿using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Windows;
+
+[assembly: ThemeInfo(ResourceDictionaryLocation.None, ResourceDictionaryLocation.SourceAssembly)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 [assembly: Guid("1f6a1dc6-dd72-4279-8747-6789f83711ff")]

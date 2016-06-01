@@ -5,6 +5,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.UI.Wizard;
 using System.Net;
+using Interapptive.Shared.Net;
 using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.GenericModule.LegacyAdapter;
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using ShipWorks.Data.Model.EntityClasses;
 using System.Runtime.Serialization;
+using System.Security.Permissions;
 
 namespace ShipWorks.Users.Security
 {
@@ -52,6 +53,16 @@ namespace ShipWorks.Users.Security
         }
 
         /// <summary>
+        /// Serialization constructor
+        /// </summary>
+        protected PermissionException(SerializationInfo serializationInfo, StreamingContext streamingContext) : 
+            base(serializationInfo, streamingContext)
+        {
+            user = (UserEntity)serializationInfo.GetValue(nameof(user), typeof(UserEntity));
+            permissionType = (PermissionType)serializationInfo.GetValue(nameof(permissionType), typeof(PermissionType));
+        }
+
+        /// <summary>
         /// Generate the message text for the given user and event.
         /// </summary>
         private static string GetMessage(UserEntity user, PermissionType permissionType)
@@ -78,6 +89,15 @@ namespace ShipWorks.Users.Security
         public PermissionType SecuredEvent
         {
             get { return permissionType; }
+        }
+
+        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
+        public override void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            base.GetObjectData(info, context);
+
+            info.AddValue(nameof(user), user);
+            info.AddValue(nameof(permissionType), permissionType);
         }
     }
 }

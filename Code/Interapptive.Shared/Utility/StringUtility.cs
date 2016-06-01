@@ -2,14 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
-using System.Runtime.InteropServices;
-using System.Drawing;
-using System.Linq;
 using log4net;
-using System.Windows.Forms;
-using System.Diagnostics;
-using Interapptive.Shared;
-using Interapptive.Shared.Win32;
 
 namespace Interapptive.Shared.Utility
 {
@@ -56,6 +49,35 @@ namespace Interapptive.Shared.Utility
         }
 
         /// <summary>
+        /// Return a friendly formatted date
+        /// </summary>
+        public static string FormatFriendlyDate(this DateTime dateTime) =>
+            FormatFriendlyDate(dateTime, "d");
+
+        /// <summary>
+        /// Return a friendly formatted date
+        /// </summary>
+        public static string FormatFriendlyDate(this DateTime dateTime, string defaultFormat)
+        {
+            if (dateTime.Date == DateTime.Now.Date)
+            {
+                return "Today";
+            }
+
+            if (dateTime.Date == DateTime.Now.AddDays(-1).Date)
+            {
+                return "Yesterday";
+            }
+
+            if (dateTime.Date == DateTime.Now.AddDays(1).Date)
+            {
+                return "Tomorrow";
+            }
+
+            return dateTime.ToString(defaultFormat);
+        }
+
+        /// <summary>
         /// Format a friendly date time (i.e. 'Today') using the system local for the time (or date if its not a describable date)
         /// </summary>
         public static string FormatFriendlyDateTime(DateTime utcTime)
@@ -84,7 +106,7 @@ namespace Interapptive.Shared.Utility
         /// <summary>
         /// Formats amount to a currency amount with support for a half penny.
         /// </summary>
-        public static string FormatFriendlyCurrency(decimal amount)
+        public static string FormatFriendlyCurrency(this decimal amount)
         {
             string formattedAmount = amount.ToString("c");
             decimal truncatedAmount = decimal.Parse(formattedAmount, NumberStyles.Currency);

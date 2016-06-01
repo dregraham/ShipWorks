@@ -1,0 +1,17 @@
+<?xml version="1.0" standalone="yes" ?>
+<ShipWorks moduleVersion="3.0.0" schemaVersion="1.0.0">
+  <StatusCodes>
+    <StatusCode>
+      <Code>1</Code>
+      <Name>Pending</Name>
+    </StatusCode>
+    <StatusCode>
+      <Code>2</Code>
+      <Name>Processing</Name>
+    </StatusCode>
+    <StatusCode>
+      <Code>3</Code>
+      <Name>Delivered</Name>
+    </StatusCode>
+  </StatusCodes>
+</ShipWorks>

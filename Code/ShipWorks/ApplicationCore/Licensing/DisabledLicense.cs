@@ -5,6 +5,7 @@ using ShipWorks.ApplicationCore.Dashboard.Content;
 using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Editions;
+using ShipWorks.Users.Security;
 
 namespace ShipWorks.ApplicationCore.Licensing
 {
@@ -93,7 +94,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// Throws we should not try to delete a disabled license
         /// </summary>
         /// <param name="store"></param>
-        public void DeleteStore(StoreEntity store)
+        public void DeleteStore(StoreEntity store, ISecurityContext securityContext)
         {
             throw new ShipWorksLicenseException("Cannot delete a store using a disabled store license");
         }

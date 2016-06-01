@@ -12,6 +12,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal
     public class PostageBalanceTests
     {
         private PostageBalance testObject;
+        private Mock<ITangoWebClientFactory> tangoWebClientFactory;
         private Mock<IPostageWebClient> postageWebClient;
         private Mock<ITangoWebClient> tangoWebClient;
         private const string accountIdentifier = "blahblahblah";
@@ -27,6 +28,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal
 
             tangoWebClient = new Mock<ITangoWebClient>();
             tangoWebClient.Setup(t => t.LogPostageEvent(It.IsAny<decimal>(), It.IsAny<decimal>(), It.IsAny<ShipmentTypeCode>(), It.IsAny<string>()));
+
+            tangoWebClientFactory = new Mock<ITangoWebClientFactory>();
+            tangoWebClientFactory.Setup(f => f.CreateWebClient()).Returns(tangoWebClient.Object);
 
             testObject = new PostageBalance(postageWebClient.Object, tangoWebClient.Object);
         }

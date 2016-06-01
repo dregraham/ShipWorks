@@ -1,12 +1,11 @@
 using System;
 using System.Windows.Forms;
-using Autofac;
 using Interapptive.Shared;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Editions;
+using ShipWorks.Stores;
 
 namespace ShipWorks.ApplicationCore.Licensing
 {
@@ -16,8 +15,8 @@ namespace ShipWorks.ApplicationCore.Licensing
     public static class LicenseActivationHelper
     {
         /// <summary>
-        /// Attempt to activate the given license key.  Any problems or failues with activation will be displayed
-        /// as a message with owner as the window parent.  If the license is succesfully activated, then it is set to the in-memory StoreEntity.
+        /// Attempt to activate the given license key.  Any problems or failures with activation will be displayed
+        /// as a message with owner as the window parent.  If the license is successfully activated, then it is set to the in-memory StoreEntity.
         /// </summary>
         public static LicenseActivationState ActivateAndSetLicense(StoreEntity store, string licenseKey, IWin32Window owner)
         {
@@ -31,8 +30,8 @@ namespace ShipWorks.ApplicationCore.Licensing
         }
 
         /// <summary>
-        /// Attempt to activate the given license key.  Any problems or failues with activation will be returned
-        /// in the message.  If the license is succesfully activated, then it is set to the in-memory StoreEntity.
+        /// Attempt to activate the given license key.  Any problems or failures with activation will be returned
+        /// in the message.  If the license is successfully activated, then it is set to the in-memory StoreEntity.
         /// </summary>
         public static EnumResult<LicenseActivationState> ActivateAndSetLicense(StoreEntity store, string licenseKey)
         {
@@ -42,7 +41,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             }
 
             EnumResult<LicenseActivationState> licenseValidity = CheckLicenseValidity(store, licenseKey);
-            
+
             // Before connecting to the web client, make sure its valid
             if (licenseValidity.Value == LicenseActivationState.Invalid)
             {
@@ -59,7 +58,7 @@ namespace ShipWorks.ApplicationCore.Licensing
                 if (accountDetail.ActivationState == LicenseActivationState.Active)
                 {
                     store.License = licenseKey;
-                    store.Edition = EditionSerializer.Serialize(accountDetail.Edition);
+                    store.Edition = accountDetail.Edition.Serialize();
                 }
 
                 return new EnumResult<LicenseActivationState>(
@@ -105,7 +104,7 @@ namespace ShipWorks.ApplicationCore.Licensing
                 throw new ShipWorksLicenseException("The license is not a valid ShipWorks license.");
             }
 
-            if ((StoreTypeCode) store.TypeCode != license.StoreTypeCode)
+            if (store.StoreTypeCode != license.StoreTypeCode)
             {
                 throw new ShipWorksLicenseException(
                     string.Format(
@@ -146,7 +145,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             }
             else
             {
-                LicenseAccountDetail accountDetail = new TangoWebClientFactory().CreateWebClient().GetLicenseStatus(store.License, store);
+                ILicenseAccountDetail accountDetail = new TangoWebClientFactory().CreateWebClient().GetLicenseStatus(store.License, store);
 
                 if (accountDetail.ActivationState == LicenseActivationState.Active ||
                     accountDetail.ActivationState == LicenseActivationState.ActiveElsewhere ||
@@ -210,51 +209,51 @@ namespace ShipWorks.ApplicationCore.Licensing
             {
                 // Everything is ok
                 case LicenseActivationState.Active:
-                {
-                    return string.Empty;
-                }
-                // This shouldnt happen - if it was active nowhere,
+                    {
+                        return string.Empty;
+                    }
+                // This shouldn't happen - if it was active nowhere,
                 // then it should have been activated to us
                 case LicenseActivationState.ActiveNowhere:
-                {
-                    return "An unknown problem occurred activating the license.\n\n" +
-                           "Please contact Interapptive for support.";
-                }
+                    {
+                        return "An unknown problem occurred activating the license.\n\n" +
+                               "Please contact Interapptive for support.";
+                    }
                 case LicenseActivationState.ActiveElsewhere:
-                {
-                    return "The ShipWorks license you entered is already being used by another store. \n\n" +
-                           "You can reset the license and make it available for use by logging in to your \n" +
-                           "Interapptive account using the following link.\n\n" +
-                           "https://www.interapptive.com/account";
-                }
+                    {
+                        return "The ShipWorks license you entered is already being used by another store. \n\n" +
+                               "You can reset the license and make it available for use by logging in to your \n" +
+                               "Interapptive account using the following link.\n\n" +
+                               "https://www.interapptive.com/account";
+                    }
                 case LicenseActivationState.Deactivated:
-                {
-                    return "Your ShipWorks license has been disabled.\n\n" +
-                           $"Reason: {accountDetail.DisabledReason}";
+                    {
+                        return "Your ShipWorks license has been disabled.\n\n" +
+                               $"Reason: {accountDetail.DisabledReason}";
 
-                }
+                    }
                 case LicenseActivationState.Canceled:
-                {
-                    return "The ShipWorks license you entered has been canceled. \n\n" +
-                           "You can activate the license and by logging in to your\n" +
-                           " Interapptive account using the following link. \n\n" +
-                           "https://www.interapptive.com/account";
-                }
+                    {
+                        return "The ShipWorks license you entered has been canceled. \n\n" +
+                               "You can activate the license and by logging in to your\n" +
+                               " Interapptive account using the following link. \n\n" +
+                               "https://www.interapptive.com/account";
+                    }
                 case LicenseActivationState.Invalid:
-                {
-                    return "The license entered is a valid ShipWorks license, but was\n" +
-                           "not found in the Interapptive database.\n\n" +
-                           "Please contact Interapptive for support.";
-                }
+                    {
+                        return "The license entered is a valid ShipWorks license, but was\n" +
+                               "not found in the Interapptive database.\n\n" +
+                               "Please contact Interapptive for support.";
+                    }
                 default:
-                {
-                    return string.Empty;
-                }
+                    {
+                        return string.Empty;
+                    }
             }
         }
 
         /// <summary>
-        /// Check that the given license and store combination represents a potentiall valid ShipWorks license.
+        /// Check that the given license and store combination represents a potentially valid ShipWorks license.
         /// </summary>
         private static EnumResult<LicenseActivationState> CheckLicenseValidity(StoreEntity store, string licenseKey)
         {

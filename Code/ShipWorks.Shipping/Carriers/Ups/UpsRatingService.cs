@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using Interapptive.Shared.Collections;
@@ -7,13 +8,11 @@ using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.BestRate.Footnote;
-using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
-using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api;
 using ShipWorks.Shipping.Editing.Rating;
 
-namespace ShipWorks.Shipping.Carriers.Ups
+namespace ShipWorks.Shipping.Carriers.UPS
 {
     /// <summary>
     /// Rating service for Ups carrier
@@ -23,7 +22,7 @@ namespace ShipWorks.Shipping.Carriers.Ups
         private readonly ICarrierAccountRepository<UpsAccountEntity> accountRepository;
         private readonly UpsApiTransitTimeClient transitTimeClient;
         private readonly UpsApiRateClient upsApiRateClient;
-        private readonly UpsOltShipmentType shipmentType;
+        private readonly UpsShipmentType shipmentType;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UpsRatingService"/> class.
@@ -32,7 +31,7 @@ namespace ShipWorks.Shipping.Carriers.Ups
             ICarrierAccountRepository<UpsAccountEntity> accountRepository,
             UpsApiTransitTimeClient transitTimeClient,
             UpsApiRateClient upsApiRateClient,
-            UpsOltShipmentType shipmentType)
+            UpsShipmentType shipmentType)
         {
             this.accountRepository = accountRepository;
             this.transitTimeClient = transitTimeClient;
@@ -73,7 +72,7 @@ namespace ShipWorks.Shipping.Carriers.Ups
                     serviceRates = upsApiRateClient.GetRates(shipment, false);
 
                     // Determine if the user is hoping to get negotiated rates back
-                    wantedNegotiated = UpsApiCore.GetUpsAccount(shipment, accountRepository).RateType == (int)UpsRateType.Negotiated;
+                    wantedNegotiated = UpsApiCore.GetUpsAccount(shipment, accountRepository).RateType == (int) UpsRateType.Negotiated;
 
                     // Indicates if any of the rates returned were negotiated.
                     anyNegotiated = serviceRates.Any(s => s.Negotiated);
@@ -95,7 +94,7 @@ namespace ShipWorks.Shipping.Carriers.Ups
             catch (CounterRatesOriginAddressException)
             {
                 RateGroup errorRates = new RateGroup(new List<RateResult>());
-                errorRates.AddFootnoteFactory(new CounterRatesInvalidStoreAddressFootnoteFactory(shipmentType));
+                errorRates.AddFootnoteFactory(new CounterRatesInvalidStoreAddressFootnoteFactory(shipmentType.ShipmentTypeCode));
 
                 return errorRates;
             }
@@ -127,7 +126,7 @@ namespace ShipWorks.Shipping.Carriers.Ups
                 {
                     ServiceLevel = UpsServiceLevelConverter.GetServiceLevel(serviceRate, transitTime),
                     ExpectedDeliveryDate = transitTime?.ArrivalDate ?? ShippingManager.CalculateExpectedDeliveryDate(serviceRate.GuaranteedDaysToDelivery, DayOfWeek.Saturday, DayOfWeek.Sunday),
-                    ShipmentType = ShipmentTypeCode.UpsOnLineTools,
+                    ShipmentType = shipmentType.ShipmentTypeCode,
                     ProviderLogo = EnumHelper.GetImage(ShipmentTypeCode.UpsOnLineTools)
                 };
 
@@ -172,7 +171,7 @@ namespace ShipWorks.Shipping.Carriers.Ups
         }
 
         /// <summary>
-        /// Get the number of days of transit it takes for the given service.  The transit time can be looked up in the given list.  If not present, then 
+        /// Get the number of days of transit it takes for the given service.  The transit time can be looked up in the given list.  If not present, then
         /// empty string is returned.
         /// </summary>
         private string GetServiceTransitDays(UpsTransitTime transitTime)
@@ -208,15 +207,17 @@ namespace ShipWorks.Shipping.Carriers.Ups
         private List<RateResult> FilterRatesByExcludedServices(ShipmentEntity shipment, List<RateResult> rates)
         {
             IEnumerable<UpsServiceType> availableServices = shipmentType.GetAvailableServiceTypes()
-                .Select(s => (UpsServiceType)s).Union(new List<UpsServiceType> { (UpsServiceType)shipment.Ups.Service });
+                .Select(s => (UpsServiceType) s).Union(new List<UpsServiceType> { (UpsServiceType) shipment.Ups.Service });
 
-            return rates.Where(r => !(r.Tag is UpsServiceType) || availableServices.Contains(((UpsServiceType)r.Tag))).ToList();
+            return rates.Where(r => !(r.Tag is UpsServiceType) || availableServices.Contains(((UpsServiceType) r.Tag))).ToList();
         }
 
         /// <summary>
-        /// Checks each packages dimensions, making sure that each is valid.  If one or more packages have invalid dimensions, 
+        /// Checks each packages dimensions, making sure that each is valid.  If one or more packages have invalid dimensions,
         /// a ShippingException is thrown informing the user.
         /// </summary>
+        [SuppressMessage("SonarQube", "S1643: Strings should not be concatenated using \" + \" in a loop",
+            Justification = "Since most customers will have less than 5 packages, the overhead of a string builder isn't worth it")]
         private void ValidatePackageDimensions(ShipmentEntity shipment)
         {
             string exceptionMessage = string.Empty;
@@ -224,7 +225,7 @@ namespace ShipWorks.Shipping.Carriers.Ups
 
             foreach (UpsPackageEntity upsPackage in shipment.Ups.Packages)
             {
-                if (upsPackage.PackagingType == (int)UpsPackagingType.Custom && !DimensionsAreValid(upsPackage))
+                if (upsPackage.PackagingType == (int) UpsPackagingType.Custom && !DimensionsAreValid(upsPackage))
                 {
                     exceptionMessage += $"Package {packageIndex} has invalid dimensions.{Environment.NewLine}";
                 }
@@ -245,12 +246,12 @@ namespace ShipWorks.Shipping.Carriers.Ups
         /// <returns>True if the dimensions are valid.  False otherwise.</returns>
         private static bool DimensionsAreValid(UpsPackageEntity package)
         {
-            // Only check the dimensions if the package type is custom 
+            // Only check the dimensions if the package type is custom
             if (package.PackagingType != (int) UpsPackagingType.Custom)
             {
                 return true;
             }
-                
+
             if (package.DimsLength <= 0 || package.DimsWidth <= 0 || package.DimsHeight <= 0)
             {
                 return false;

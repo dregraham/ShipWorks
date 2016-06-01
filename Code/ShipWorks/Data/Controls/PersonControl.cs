@@ -1,26 +1,25 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
-using System.Drawing;
-using System.Data;
-using System.Windows.Forms;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.AddressValidation;
-using ShipWorks.Common.Threading;
-using ShipWorks.Data.Connection;
-using ShipWorks.Data.Model.EntityClasses;
-using Interapptive.Shared.Utility;
-using System.Linq;
-using ShipWorks.Stores;
-using ShipWorks.UI.Controls;
-using ShipWorks.Data.Utility;
-using Interapptive.Shared.Business;
 using System.ComponentModel.DataAnnotations;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 using Interapptive.Shared;
+using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.UI;
+using Interapptive.Shared.Utility;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.AddressValidation;
 using ShipWorks.AddressValidation.Enums;
+using ShipWorks.Common.Threading;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Utility;
+using ShipWorks.Stores;
+using ShipWorks.UI.Controls;
 
 namespace ShipWorks.Data.Controls
 {
@@ -152,9 +151,15 @@ namespace ShipWorks.Data.Controls
         }
 
         /// <summary>
+        /// Gets and sets the validated address scope used by this control
+        /// </summary>
+        public IValidatedAddressScope ValidatedAddressScope { get; set; }
+
+        /// <summary>
         /// Address selector used by the validator
         /// </summary>
-        public AddressSelector AddressSelector {
+        public AddressSelector AddressSelector
+        {
             get
             {
                 return addressSelector;
@@ -654,7 +659,7 @@ namespace ShipWorks.Data.Controls
                 {
                     if (ValidatedAddressManager.EnsureAddressCanBeValidated(newAddress))
                     {
-                        newAddress.AddressValidationStatus = (int)AddressValidationStatusType.NotChecked;
+                        newAddress.AddressValidationStatus = (int) AddressValidationStatusType.NotChecked;
                         newAddress.AddressType = (int) AddressType.NotChecked;
                     }
 
@@ -1011,10 +1016,7 @@ namespace ShipWorks.Data.Controls
 
             UpdateValidationUI();
 
-            if (ContentChanged != null)
-            {
-                ContentChanged(this, EventArgs.Empty);
-            }
+            ContentChanged?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -1022,10 +1024,7 @@ namespace ShipWorks.Data.Controls
         /// </summary>
         private void OnDestinationChanged(object sender, EventArgs e)
         {
-            if (DestinationChanged != null)
-            {
-                DestinationChanged(this, EventArgs.Empty);
-            }
+            DestinationChanged?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -1051,10 +1050,13 @@ namespace ShipWorks.Data.Controls
                 return validatedAddresses;
             }
 
-            using (SqlAdapter sqlAdapter = new SqlAdapter())
+            if (ValidatedAddressScope == null)
             {
-                return ValidatedAddressManager.GetSuggestedAddresses(sqlAdapter, EntityUtility.GetEntityId(loadedPeople.Single().Entity), AddressPrefix);
+                return new List<ValidatedAddressEntity>();
             }
+
+            return ValidatedAddressScope.LoadValidatedAddresses(EntityUtility.GetEntityId(loadedPeople.Single().Entity), AddressPrefix)
+                .ToList();
         }
 
         /// <summary>
@@ -1119,7 +1121,7 @@ namespace ShipWorks.Data.Controls
             dummyAddress.StateProvCode = state.MultiValued ? null : Geography.GetStateProvCode(state.Text);
 
             addressValidationStatusIcon.Image = EnumHelper.GetImage((AddressValidationStatusType) dummyAddress.AddressValidationStatus);
-            addressValidationStatusText.Text = EnumHelper.GetDescription((AddressValidationStatusType)dummyAddress.AddressValidationStatus);
+            addressValidationStatusText.Text = EnumHelper.GetDescription((AddressValidationStatusType) dummyAddress.AddressValidationStatus);
 
             addressValidationSuggestionLink.Text = AddressSelector.DisplayValidationSuggestionLabel(dummyAddress);
             addressValidationSuggestionLink.Enabled = AddressSelector.IsValidationSuggestionLinkEnabled(dummyAddress);
@@ -1155,7 +1157,7 @@ namespace ShipWorks.Data.Controls
         private void ValidateAddress(AddressAdapter address, object executorState, BackgroundIssueAdder<AddressAdapter> issueAdder)
         {
             AddressValidator validator = new AddressValidator();
-            validator.Validate(address, true, (addressEntity, entities) =>
+            Task task = validator.ValidateAsync(address, true, (addressEntity, entities) =>
             {
                 shouldSaveAddressSuggestions = true;
 
@@ -1171,6 +1173,8 @@ namespace ShipWorks.Data.Controls
                     validatedAddresses.AddRange(entities);
                 }
             });
+
+            task.Wait();
         }
 
         /// <summary>

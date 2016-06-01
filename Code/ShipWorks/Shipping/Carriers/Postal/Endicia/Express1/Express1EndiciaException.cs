@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.Serialization;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
 {
@@ -15,6 +16,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
         public Express1EndiciaException(string message)
             : base(message)
         { }
-        
+
+        /// <summary>
+        /// Serialization constructor
+        /// </summary>
+        protected Express1EndiciaException(SerializationInfo serializationInfo, StreamingContext streamingContext) : 
+            base(serializationInfo, streamingContext)
+        {
+
+        }
     }
 }

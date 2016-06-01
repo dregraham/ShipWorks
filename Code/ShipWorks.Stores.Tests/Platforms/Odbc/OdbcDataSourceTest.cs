@@ -3,6 +3,7 @@ using Moq;
 using ShipWorks.Stores.Platforms.Odbc;
 using System;
 using System.Data;
+using System.Data.Common;
 using Interapptive.Shared.Security;
 using Xunit;
 
@@ -250,7 +251,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
 
                 OdbcDataSource testObject = mock.Create<OdbcDataSource>();
 
-                string connectionString = testObject.Serialize();
+                testObject.Serialize();
 
                 encryptionProvider.Verify(ep=>ep.Encrypt(It.IsAny<string>()), Times.Once);
             }
@@ -268,7 +269,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
                 OdbcDataSource testObject = mock.Create<OdbcDataSource>();
                 testObject.ChangeConnection("blah", string.Empty, string.Empty);
 
-                string connectionString = testObject.Serialize();
+                testObject.Serialize();
 
                 encryptionProvider.Verify(ep => ep.Encrypt(
                     It.Is<string>(str=>str.Contains("\"Name\":\"blah\""))), Times.Once);
@@ -287,7 +288,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
                 OdbcDataSource testObject = mock.Create<OdbcDataSource>();
                 testObject.ChangeConnection(string.Empty, "blah", string.Empty);
 
-                string connectionString = testObject.Serialize();
+                testObject.Serialize();
 
                 encryptionProvider.Verify(ep => ep.Encrypt(
                     It.Is<string>(str => str.Contains("\"Username\":\"blah\""))), Times.Once);
@@ -306,7 +307,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
                 OdbcDataSource testObject = mock.Create<OdbcDataSource>();
                 testObject.ChangeConnection(string.Empty, string.Empty, "blah");
 
-                string connectionString = testObject.Serialize();
+                testObject.Serialize();
 
                 encryptionProvider.Verify(ep => ep.Encrypt(
                     It.Is<string>(str => str.Contains("\"Password\":\"blah\""))), Times.Once);
@@ -324,7 +325,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
 
                 OdbcDataSource testObject = mock.Create<OdbcDataSource>();
 
-                string connectionString = testObject.Serialize();
+                testObject.Serialize();
 
                 encryptionProvider.Verify(ep => ep.Encrypt(
                     It.Is<string>(str => !str.Contains("Pwd="))), Times.Once);
@@ -342,7 +343,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
 
                 OdbcDataSource testObject = mock.Create<OdbcDataSource>();
 
-                string connectionString = testObject.Serialize();
+                testObject.Serialize();
 
                 encryptionProvider.Verify(ep => ep.Encrypt(
                     It.Is<string>(str => !str.Contains("Uid="))), Times.Once);
@@ -354,37 +355,17 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         {
             using (var mock = AutoMock.GetLoose())
             {
-                var connection = mock.Mock<IDbConnection>();
+                var connection = mock.Mock<DbConnection>();
 
                 var odbcProvider = mock.Mock<IShipWorksDbProviderFactory>();
-                odbcProvider.Setup(p => p.CreateOdbcConnection())
+                odbcProvider.Setup(p => p.CreateOdbcConnection(It.IsAny<string>()))
                     .Returns(connection.Object);
 
                 var testObject = mock.Create<OdbcDataSource>();
 
-                var testResult = testObject.TestConnection();
+                testObject.TestConnection();
 
                 connection.Verify(con => con.Open(), Times.Once);
-            }
-        }
-
-        [Fact]
-        public void TestConnection_ConnectionStringHasDsnName()
-        {
-            using (var mock = AutoMock.GetLoose())
-            {
-                var connection = mock.Mock<IDbConnection>();
-
-                var odbcProvider = mock.Mock<IShipWorksDbProviderFactory>();
-                odbcProvider.Setup(p => p.CreateOdbcConnection())
-                    .Returns(connection.Object);
-
-                var testObject = mock.Create<OdbcDataSource>();
-                testObject.ChangeConnection("blip", string.Empty, string.Empty);
-
-                var testResult = testObject.TestConnection();
-
-                connection.VerifySet(con => con.ConnectionString = "DSN=blip;", Times.Once());
             }
         }
 
@@ -393,10 +374,10 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         {
             using (var mock = AutoMock.GetLoose())
             {
-                var connection = mock.Mock<IDbConnection>();
+                var connection = mock.Mock<DbConnection>();
 
                 var odbcProvider = mock.Mock<IShipWorksDbProviderFactory>();
-                odbcProvider.Setup(p => p.CreateOdbcConnection())
+                odbcProvider.Setup(p => p.CreateOdbcConnection(It.IsAny<string>()))
                     .Returns(connection.Object);
 
                 var testObject = mock.Create<OdbcDataSource>();
@@ -412,12 +393,12 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         {
             using (var mock = AutoMock.GetLoose())
             {
-                var connection = mock.Mock<IDbConnection>();
+                var connection = mock.Mock<DbConnection>();
                 connection.Setup(con => con.Open())
                     .Throws<Exception>();
 
                 var odbcProvider = mock.Mock<IShipWorksDbProviderFactory>();
-                odbcProvider.Setup(p => p.CreateOdbcConnection())
+                odbcProvider.Setup(p => p.CreateOdbcConnection(It.IsAny<string>()))
                     .Returns(connection.Object);
 
                 var testObject = mock.Create<OdbcDataSource>();
@@ -433,12 +414,12 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         {
             using (var mock = AutoMock.GetLoose())
             {
-                var connection = mock.Mock<IDbConnection>();
+                var connection = mock.Mock<DbConnection>();
                 connection.Setup(con => con.Open())
                     .Throws(new Exception("bloop"));
 
                 var odbcProvider = mock.Mock<IShipWorksDbProviderFactory>();
-                odbcProvider.Setup(p => p.CreateOdbcConnection())
+                odbcProvider.Setup(p => p.CreateOdbcConnection(It.IsAny<string>()))
                     .Returns(connection.Object);
 
                 var testObject = mock.Create<OdbcDataSource>();

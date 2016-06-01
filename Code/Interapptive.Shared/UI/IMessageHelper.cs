@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Windows;
 using System.Windows.Forms;
 
 namespace Interapptive.Shared.UI
@@ -15,18 +14,39 @@ namespace Interapptive.Shared.UI
         void ShowError(string message);
 
         /// <summary>
+        /// Show an error
+        /// </summary>
+        void ShowError(IWin32Window owner, string message);
+
+        /// <summary>
         /// Show an information message
         /// </summary>
         void ShowInformation(string message);
 
         /// <summary>
-        /// Show an error, takes an owner
+        /// Show a new progress dialog
         /// </summary>
-        void ShowError(IWin32Window owner, string message);
+        IDisposable ShowProgressDialog(string title, string description);
 
+        /// <summary>
+        /// Show a yes/no question with the given text
+        /// </summary>
+        DialogResult ShowQuestion(string text);
+
+        /// <summary>
+        /// Show a dialog and get the results
+        /// </summary>
+        /// <returns></returns>
+        DialogResult ShowDialog(Func<Form> createDialog);
+		
         /// <summary>
         /// Show an information message, takes an owner
         /// </summary>
         void ShowInformation(IWin32Window owner, string message);
+
+        /// <summary>
+        /// Show a question message box.  
+        /// </summary>
+        DialogResult ShowQuestion(MessageBoxIcon icon, MessageBoxButtons buttons, string message);
     }
 }

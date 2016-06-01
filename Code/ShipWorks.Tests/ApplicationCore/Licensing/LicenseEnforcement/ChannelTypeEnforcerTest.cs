@@ -1,21 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Autofac.Extras.Moq;
+﻿using Autofac.Extras.Moq;
 using Interapptive.Shared.Utility;
-using Moq;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores;
+using System.Collections.Generic;
 using Xunit;
 
 namespace ShipWorks.Tests.ApplicationCore.Licensing.LicenseEnforcement
 {
     public class ChannelTypeEnforcerTest
     {
+
         // We can't use autofac to create an abstract class. Online suggestions suggest creating a test class
         // since the inheriting classes are so light as is, I decided to use the GenericFileEnforcer for testing
 

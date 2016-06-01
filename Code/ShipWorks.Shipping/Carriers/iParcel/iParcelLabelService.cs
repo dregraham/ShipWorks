@@ -1,5 +1,4 @@
-﻿using System;
-using System.Data;
+﻿using System.Data;
 using Interapptive.Shared.Utility;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Model.EntityClasses;
@@ -35,7 +34,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         {
             ProcessShipmentAndReturnResponse(shipment);
         }
-        
+
         /// <summary>
         /// Process the shipment this is used for integration tests
         /// </summary>
@@ -45,7 +44,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             {
                 MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
 
-                shipment.ActualLabelFormat = shipment.RequestedLabelFormat != (int) ThermalLanguage.None ? 
+                shipment.ActualLabelFormat = shipment.RequestedLabelFormat != (int) ThermalLanguage.None ?
                     shipment.RequestedLabelFormat
                     : (int?) null;
 
@@ -70,12 +69,11 @@ namespace ShipWorks.Shipping.Carriers.iParcel
 
         /// <summary>
         /// Voids the shipment for iParcel
-        /// Currently does nothing
         /// </summary>
         /// <param name="shipment"></param>
         public void Void(ShipmentEntity shipment)
         {
-           
+            // Currently does nothing
         }
     }
 }

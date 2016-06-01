@@ -6,6 +6,7 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 using Interapptive.Shared.Utility;
 using Interapptive.Shared.UI;
 using Autofac;
+using ShipWorks.ApplicationCore;
 
 namespace ShipWorks.Shipping.Profiles
 {

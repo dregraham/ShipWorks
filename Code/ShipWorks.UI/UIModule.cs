@@ -1,13 +1,15 @@
-﻿using System;
+using System;
 using Autofac;
-using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore.Licensing;
+using ShipWorks.Core.ApplicationCode;
 using ShipWorks.Editions;
+using ShipWorks.UI.Controls.AddressControl;
 using ShipWorks.UI.Controls.ChannelConfirmDelete;
 using ShipWorks.UI.Controls.ChannelLimit;
 using ShipWorks.UI.Controls.ChannelLimit.ChannelLimitBehavior;
 using ShipWorks.UI.Controls.CustomerLicenseActivation;
 using ShipWorks.UI.Controls.WebBrowser;
+using ShipWorks.UI.Services;
 
 namespace ShipWorks.UI
 {
@@ -18,6 +20,9 @@ namespace ShipWorks.UI
         /// </summary>
         protected override void Load(ContainerBuilder builder)
         {
+            builder.RegisterType<AddressViewModel>()
+                .FindConstructorsWith(new NonDefaultConstructorFinder());
+
             builder.RegisterType<CustomerLicenseActivationControlHost>()
                 .As<ICustomerLicenseActivation>();
 

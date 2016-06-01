@@ -15,6 +15,7 @@ using System.Security;
 using Common.Logging.Log4Net;
 using Common.Logging;
 using Interapptive.Shared;
+using Interapptive.Shared.Net;
 using NameValueCollection = Common.Logging.Configuration.NameValueCollection;
 
 namespace ShipWorks.ApplicationCore.Logging
@@ -190,20 +191,9 @@ namespace ShipWorks.ApplicationCore.Logging
             // We only want info and above in the file
             LevelRangeFilter levelFilter = new LevelRangeFilter();
 
-#if DEBUG
-            levelFilter.LevelMin = Level.Debug;
-#else
-            if (InterapptiveOnly.IsInterapptiveUser)
-            {
-                levelFilter.LevelMin = Level.Debug;
-            }
-            else
-            {
-                levelFilter.LevelMin = Level.Info;
-            }
-#endif
+            levelFilter.LevelMin = logOptions.MinLevel;
+            levelFilter.LevelMax = logOptions.MaxLevel;
 
-            levelFilter.LevelMax = Level.Fatal;
             levelFilter.ActivateOptions();
 
             appender.AddFilter(levelFilter);

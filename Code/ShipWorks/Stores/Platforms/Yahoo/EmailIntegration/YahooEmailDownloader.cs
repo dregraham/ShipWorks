@@ -19,6 +19,7 @@ using ShipWorks.Email.Accounts;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
 using Interapptive.Shared;
+using Interapptive.Shared.Net;
 
 namespace ShipWorks.Stores.Platforms.Yahoo.EmailIntegration
 {

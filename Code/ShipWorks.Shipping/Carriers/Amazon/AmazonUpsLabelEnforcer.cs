@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Interapptive.Shared.Utility;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores;
 using ShipWorks.Stores.Platforms.Amazon;
@@ -14,7 +15,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
     {
         private readonly ICarrierAccountRepository<UpsAccountEntity> accountRepository;
         private readonly IStoreManager storeManager;
-        private readonly IDateTimeProvider dateTimeProvider;
+        private readonly ISqlDateTimeProvider dateTimeProvider;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AmazonUpsLabelEnforcer"/> class.
@@ -22,7 +23,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// <param name="accountRepository">The account repository.</param>
         /// <param name="storeManager">The store manager.</param>
         /// <param name="dateTimeProvider">The date time provider.</param>
-        public AmazonUpsLabelEnforcer(ICarrierAccountRepository<UpsAccountEntity> accountRepository, IStoreManager storeManager, IDateTimeProvider dateTimeProvider)
+        public AmazonUpsLabelEnforcer(ICarrierAccountRepository<UpsAccountEntity> accountRepository, IStoreManager storeManager, ISqlDateTimeProvider dateTimeProvider)
         {
             this.accountRepository = accountRepository;
             this.storeManager = storeManager;
@@ -39,7 +40,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             IAmazonCredentials store = GetStore(shipment);
             AmazonShippingToken shippingToken = store.GetShippingToken();
 
-            if (shippingToken.ErrorDate.Date >= dateTimeProvider.CurrentSqlServerDateTime.Date)
+            if (shippingToken.ErrorDate.Date >= dateTimeProvider.GetLocalDate().Date)
             {
                 return new EnforcementResult(shippingToken.ErrorReason);
             }
@@ -71,9 +72,11 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             IAmazonCredentials store = GetStore(shipment);
             AmazonShippingToken shippingToken = new AmazonShippingToken
             {
-                ErrorDate = dateTimeProvider.CurrentSqlServerDateTime.Date,
+                ErrorDate = dateTimeProvider.GetLocalDate().Date,
                 ErrorReason =
-                    "ShipWorks experienced an error while trying to create your shipping label using the Amazon Shipping service. Please confirm your UPS account is linked correctly in Amazon Seller Central. If you have confirmed your account is linked properly, please call ShipWorks customer support at 1-800-952-7784."
+                    "ShipWorks experienced an error while trying to create your shipping label using the Amazon Shipping service. " +
+                    "Please confirm your UPS account is linked correctly in Amazon Seller Central. " +
+                    "If you have confirmed your account is linked properly, please call ShipWorks customer support at 1-800-952-7784."
             };
 
             store.SetShippingToken(shippingToken);
