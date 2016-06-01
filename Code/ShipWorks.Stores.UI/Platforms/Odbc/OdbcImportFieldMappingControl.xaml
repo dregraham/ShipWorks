@@ -218,7 +218,9 @@
                                                   HorizontalAlignment="Stretch"
                                                   Margin="0 5 5 5"
                                                   SelectedItem="{Binding ExternalField.Column}"
-                                                  ItemTemplate="{StaticResource SourceColumnComboBoxTemplate}"/>
+                                                  ItemTemplate="{StaticResource SourceColumnComboBoxTemplate}"
+                                                  TextSearch.TextPath="Name">
+                                        </ComboBox>
                                         <Label Grid.Column="0" Foreground="Red"
                                                Content="Required"
                                                Visibility="{Binding ShipWorksField.IsRequired, Converter={StaticResource BooleanToVisibility}}"
