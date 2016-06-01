@@ -18,45 +18,24 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         private readonly JToken mapEntries;
         private int entryPosition;
 
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        public JsonOdbcFieldMapReader(Stream stream, ILog log)
+        public JsonOdbcFieldMapReader(string serializedMap, ILog log)
         {
-            MethodConditions.EnsureArgumentIsNotNull(stream);
+            MethodConditions.EnsureArgumentIsNotNull(serializedMap);
+
             this.log = log;
 
-            stream.Position = 0;
             try
             {
-                using (StreamReader streamReader = new StreamReader(stream))
-                {
-                    string data = streamReader.ReadToEnd();
-                    json = JObject.Parse(data);
-
-                    mapEntries = json["Entries"];
-
-                    // Sent the entry position used when reading the Odbc field map entries
-                    entryPosition = 0;
-                }
+                json = JObject.Parse(serializedMap);
+                mapEntries = json["Entries"];
             }
-            catch (Exception ex)
+            catch (Exception ex) when (ex is JsonReaderException || ex is ArgumentException)
             {
-                Type exType = ex.GetType();
-                log.Error("Error reading map", ex);
-
-                // If its an error throw while reading the stream or parsing the json
-                // rethrow as a ShipWorksOdbcException.
-                if (exType == typeof(JsonReaderException) ||
-                    exType == typeof(ArgumentException) ||
-                    exType == typeof(IOException))
-                {
-                    throw new ShipWorksOdbcException("ShipWorks was unable to read the ODBC Map.", ex);
-                }
-
-                // this exception is unexpected so we throw.
-                throw;
+                throw new ShipWorksOdbcException("ShipWorks was unable to read the ODBC Map.", ex);
             }
+
+            // Sent the entry position used when reading the Odbc field map entries
+            entryPosition = 0;
         }
 
         /// <summary>

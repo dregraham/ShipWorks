@@ -8,9 +8,9 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 {
     /// <summary>
-    /// Contains Field Mapping information for ODBC
+    /// Contains Field Mapping information for ODBC.
     /// </summary>
-	public class OdbcFieldMap
+	public class OdbcFieldMap : IOdbcFieldMap
     {
 		private readonly IOdbcFieldMapIOFactory ioFactory;
         private readonly List<IOdbcFieldMapEntry> entries;
@@ -84,11 +84,28 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <summary>
         /// Loads the ODBC Field Map from the given stream
         /// </summary>
-        /// <param name="stream"></param>
 		public void Load(Stream stream)
-		{
-		    IOdbcFieldMapReader reader = ioFactory.CreateReader(stream);
+        {
+            IOdbcFieldMapReader reader = ioFactory.CreateReader(stream);
 
+            Load(reader);
+        }
+
+        /// <summary>
+        /// Loads the ODBC Field Map from the given string
+        /// </summary>
+        public void Load(string serializedMap)
+        {
+            IOdbcFieldMapReader reader = ioFactory.CreateReader(serializedMap);
+
+            Load(reader);
+        }
+
+        /// <summary>
+        /// Loads the ODBC Field Map from the given IOdbcFieldMapReader
+        /// </summary>
+        private void Load(IOdbcFieldMapReader reader)
+        {
             OdbcFieldMapEntry entry = reader.ReadEntry();
             while (entry != null)
             {
@@ -98,16 +115,15 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
             }
 
             ExternalTableName = reader.ReadExternalTableName();
-		}
+        }
 
         /// <summary>
         /// Writes the ODBC Field Map to the given stream
         /// </summary>
-        /// <param name="stream"></param>
 		public void Save(Stream stream)
 		{
 		    IOdbcFieldMapWriter writer = ioFactory.CreateWriter(this);
             writer.Write(stream);
 		}
-	}
+    }
 }

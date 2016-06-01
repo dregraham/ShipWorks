@@ -169,6 +169,7 @@
     <Compile Include="Platforms\Odbc\IOdbcTable.cs" />
     <Compile Include="Platforms\Odbc\IOdbcWizardPage.cs" />
     <Compile Include="Platforms\Odbc\Mapping\ExternalOdbcMappableField.cs" />
+    <Compile Include="Platforms\Odbc\Mapping\IOdbcFieldMap.cs" />
     <Compile Include="Platforms\Odbc\Mapping\IOdbcFieldMapEntry.cs" />
     <Compile Include="Platforms\Odbc\Mapping\IOdbcFieldMapFactory.cs" />
     <Compile Include="Platforms\Odbc\Mapping\IOdbcFieldMapIOFactory.cs" />
@@ -184,6 +185,7 @@
     <Compile Include="Platforms\Odbc\Mapping\ShipWorksOdbcMappableField.cs" />
     <Compile Include="Platforms\Odbc\OdbcCipherKey.cs" />
     <Compile Include="Platforms\Odbc\OdbcColumn.cs" />
+    <Compile Include="Platforms\Odbc\OdbcCommandFactory.cs" />
     <Compile Include="Platforms\Odbc\OdbcDownloadCommand.cs" />
     <Compile Include="Platforms\Odbc\OdbcRecord.cs" />
     <Compile Include="Platforms\Odbc\OdbcSchema.cs" />

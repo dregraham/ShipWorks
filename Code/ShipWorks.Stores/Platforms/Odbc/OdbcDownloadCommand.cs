@@ -11,13 +11,13 @@ namespace ShipWorks.Stores.Platforms.Odbc
     /// </summary>
     public class OdbcDownloadCommand : IOdbcCommand
     {
-        private readonly OdbcFieldMap fieldMap;
-        private readonly OdbcDataSource dataSource;
+        private readonly IOdbcFieldMap fieldMap;
+        private readonly IOdbcDataSource dataSource;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcDownloadCommand"/> class.
         /// </summary>
-        public OdbcDownloadCommand(OdbcFieldMap fieldMap, OdbcDataSource dataSource)
+        public OdbcDownloadCommand(IOdbcFieldMap fieldMap, IOdbcDataSource dataSource)
         {
             this.fieldMap = fieldMap;
             this.dataSource = dataSource;

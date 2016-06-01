@@ -13,6 +13,11 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         IOdbcFieldMapReader CreateReader(Stream stream);
 
         /// <summary>
+        /// Creates a field map reader.
+        /// </summary>
+        IOdbcFieldMapReader CreateReader(string stream);
+
+        /// <summary>
         /// Creates a field map writer.
         /// </summary>
         IOdbcFieldMapWriter CreateWriter(OdbcFieldMap map);

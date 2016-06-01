@@ -47,6 +47,9 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             builder.RegisterType<OdbcFieldMapFactory>()
                 .AsImplementedInterfaces();
 
+            builder.RegisterType<OdbcFieldMap>()
+                .As<IOdbcFieldMap>();
+
             builder.RegisterType<JsonOdbcFieldMapIOFactory>()
                 .AsImplementedInterfaces();
 
