@@ -49,7 +49,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <summary>
         /// The fields value
         /// </summary>
-        public string Value { get; }
+        public object Value { get; }
 
         /// <summary>
         /// The fields display name

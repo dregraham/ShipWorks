@@ -1,5 +1,6 @@
 using Newtonsoft.Json;
 using System.Reflection;
+using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 {
@@ -41,7 +42,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <summary>
         /// value from the field
         /// </summary>
-        public string Value { get; }
+        public object Value { get; private set; }
 
         /// <summary>
         /// The fields display name
@@ -56,5 +57,14 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 	    {
 	        return $"{Table.Name}.{Column.Name}";
 	    }
+
+        /// <summary>
+        /// Loads the given record
+        /// </summary>
+        public void LoadValue(OdbcRecord record)
+        {
+            MethodConditions.EnsureArgumentIsNotNull(record);
+            Value = record.GetValue(Column.Name);
+        }
     }
 }

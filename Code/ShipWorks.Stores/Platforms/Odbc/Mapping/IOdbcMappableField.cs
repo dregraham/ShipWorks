@@ -13,7 +13,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <summary>
         /// The fields value
         /// </summary>
-        string Value { get; }
+        object Value { get; }
 
         /// <summary>
         /// The fields display name
