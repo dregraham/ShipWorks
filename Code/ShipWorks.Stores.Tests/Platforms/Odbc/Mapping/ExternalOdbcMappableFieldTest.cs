@@ -78,6 +78,25 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
             Assert.Equal("bar", testObject.Value);
         }
 
+        [Fact]
+        public void ResetValue_SetsValueToNull()
+        {
+            OdbcTable table = new OdbcTable("TableName");
+            OdbcColumn column = new OdbcColumn("ColumnName");
+            OdbcRecord record = new OdbcRecord();
+            record.AddField("ColumnName", "bar");
+
+            ExternalOdbcMappableField testObject = new ExternalOdbcMappableField(table, column);
+
+            testObject.LoadValue(record);
+
+            Assert.Equal("bar", testObject.Value);
+
+            testObject.ResetValue();
+
+            Assert.Null(testObject.Value);
+        }
+
         public void Dispose()
         {
             mock.Dispose();

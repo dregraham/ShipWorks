@@ -9,6 +9,7 @@ using ShipWorks.Stores.Platforms.Odbc.Mapping;
 using System;
 using System.IO;
 using System.Linq;
+using ShipWorks.Data.Model.EntityClasses;
 using Xunit;
 
 namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
@@ -52,7 +53,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
                 odbcWriter.Verify(w => w.Write(memoryStream));
             }
         }
-        
+
         [Fact]
         public void Load_SetsExternamTableName()
         {
@@ -106,7 +107,103 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
             Assert.Equal(OrderFields.BillFirstName.ContainingObjectName, entry2.ShipWorksField.ContainingObjectName);
             Assert.Equal("SomeColumnName2", entry2.ExternalField.Column.Name);
             Assert.Equal("SomeTableName2", entry2.ExternalField.Table.Name);
+        }
 
+        [Fact]
+        public void CopyToEntity_WithNullExternalFieldValue_DoesNotCopyToEntity()
+        {
+            Stream stream = GetStreamWithFieldMap();
+            OdbcFieldMap map = new OdbcFieldMap(GetIoFactory());
+
+            // Load a stream with the order number mapped to a field whos value is null
+            map.Load(stream);
+            map.AddEntry(GetFieldMapEntry(GetShipWorksField(OrderFields.BillFirstName, "Bill First Name"),
+                GetExternalField("SomeTableName2", "SomeColumnName2")));
+
+            var record = new OdbcRecord();
+            record.AddField("SomeColumnName2", "Mirza");
+
+            // Load some values into the map
+            map.ApplyValues(record);
+
+            OrderEntity order = new OrderEntity {OrderNumber = 123};
+            map.CopyToEntity(order);
+
+            // assert that we did not overwrite the order number with null
+            Assert.Equal(123, order.OrderNumber);
+        }
+
+        [Fact]
+        public void CopyToEntity_CopiesValuesToEntity()
+        {
+            Stream stream = GetStreamWithFieldMap();
+            OdbcFieldMap map = new OdbcFieldMap(GetIoFactory());
+
+            map.Load(stream);
+
+            map.AddEntry(GetFieldMapEntry(GetShipWorksField(OrderFields.BillFirstName, "Bill First Name"),
+                GetExternalField("SomeTableName2", "SomeColumnName2")));
+
+            var record = new OdbcRecord();
+            record.AddField("SomeColumnName2", "Mirza");
+
+            // Load some values into the map
+            map.ApplyValues(record);
+
+            OrderEntity order = new OrderEntity();
+
+            map.CopyToEntity(order);
+
+            Assert.Equal("Mirza", order.BillFirstName);
+        }
+
+        [Fact]
+        public void ApplyValues_AppliesValuesToEntries()
+        {
+            Stream stream = GetStreamWithFieldMap();
+            OdbcFieldMap map = new OdbcFieldMap(GetIoFactory());
+
+            map.Load(stream);
+
+            map.AddEntry(GetFieldMapEntry(GetShipWorksField(OrderFields.BillFirstName, "Bill First Name"),
+                GetExternalField("SomeTableName2", "SomeColumnName2")));
+
+            var record = new OdbcRecord();
+            record.AddField("SomeColumnName2", "Mirza");
+
+            map.ApplyValues(record);
+
+            IOdbcFieldMapEntry testObject = map.Entries.FirstOrDefault(e => e.ExternalField?.Value?.ToString() == "Mirza");
+
+            Assert.NotNull(testObject);
+        }
+
+        [Fact]
+        public void ResetValues_ResetsEntryValues()
+        {
+            Stream stream = GetStreamWithFieldMap();
+            OdbcFieldMap map = new OdbcFieldMap(GetIoFactory());
+
+            map.Load(stream);
+
+            map.AddEntry(GetFieldMapEntry(GetShipWorksField(OrderFields.BillFirstName, "Bill First Name"),
+                GetExternalField("SomeTableName2", "SomeColumnName2")));
+
+            var record = new OdbcRecord();
+            record.AddField("SomeColumnName2", "Mirza");
+
+            map.ApplyValues(record);
+
+            // Assert that the map has values
+            IOdbcFieldMapEntry testObject = map.Entries.FirstOrDefault(e => e.ExternalField?.Value?.ToString() == "Mirza");
+            Assert.NotNull(testObject);
+
+            // reset the values
+            map.ResetValues();
+
+            // Assert that the map no longer has values
+            IOdbcFieldMapEntry testObject2 = map.Entries.FirstOrDefault(e => e.ExternalField?.Value?.ToString() == "Mirza");
+            Assert.Null(testObject2);
         }
 
         private Stream GetStreamWithFieldMap()
