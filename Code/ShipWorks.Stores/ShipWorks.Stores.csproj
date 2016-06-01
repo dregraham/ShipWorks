@@ -184,6 +184,7 @@
     <Compile Include="Platforms\Odbc\Mapping\ShipWorksOdbcMappableField.cs" />
     <Compile Include="Platforms\Odbc\OdbcCipherKey.cs" />
     <Compile Include="Platforms\Odbc\OdbcColumn.cs" />
+    <Compile Include="Platforms\Odbc\OdbcDownloadCommand.cs" />
     <Compile Include="Platforms\Odbc\OdbcRecord.cs" />
     <Compile Include="Platforms\Odbc\OdbcSchema.cs" />
     <Compile Include="Platforms\Odbc\OdbcTable.cs" />
