@@ -1,4 +1,5 @@
 using System.Reflection;
+using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 {
@@ -30,5 +31,22 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// </summary>
         [Obfuscation(Exclude = true)]
         public ExternalOdbcMappableField ExternalField { get; }
-	}
+
+        /// <summary>
+        /// Loads the given ODBC Record into the External Field
+        /// </summary>
+        public void LoadExternalField(OdbcRecord record)
+        {
+            MethodConditions.EnsureArgumentIsNotNull(record);
+            ExternalField.LoadValue(record);
+        }
+
+        /// <summary>
+        /// Copy the value from the External Field into the ShipWorks Field
+        /// </summary>
+        public void CopyValueToShipWorksField()
+        {
+            ShipWorksField?.LoadValue(ExternalField?.Value);
+        }
+    }
 }

@@ -61,10 +61,25 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <summary>
         /// Loads the given record
         /// </summary>
+        /// <remarks>
+        /// sets Value by getting it from the record using the external column name
+        /// </remarks>
         public void LoadValue(OdbcRecord record)
         {
             MethodConditions.EnsureArgumentIsNotNull(record);
             Value = record.GetValue(Column.Name);
+        }
+
+        /// <summary>
+        /// Resets the value
+        /// </summary>
+        /// <remarks>
+        /// resetting via a method lets us keep the setter of Value private
+        /// this ensures that when we deserializes it does not get set
+        /// </remarks>
+        public void ResetValue()
+        {
+            Value = null;
         }
     }
 }

@@ -49,13 +49,20 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <summary>
         /// The fields value
         /// </summary>
-        public object Value { get; }
+        public object Value { get; private set; }
 
         /// <summary>
         /// The fields display name
         /// </summary>
         [Obfuscation(Exclude = true)]
         public string DisplayName { get; }
+
+        /// <summary>
+        /// Is the field required to be mapped.
+        /// </summary>
+        [JsonIgnore]
+        [Obfuscation(Exclude = true)]
+        public bool IsRequired { get; set; }
 
         /// <summary>
         /// Gets the qualified name for the field - table.column
@@ -66,10 +73,11 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         }
 
         /// <summary>
-        /// Is the field required to be mapped.
+        /// Set the Value to the given value
         /// </summary>
-        [JsonIgnore]
-        [Obfuscation(Exclude = true)]
-        public bool IsRequired { get; set; }
+        public void LoadValue(object value)
+        {
+            Value = value;
+        }
     }
 }

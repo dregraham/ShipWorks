@@ -1,7 +1,9 @@
+using System;
 using Interapptive.Shared.Utility;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 {
@@ -42,6 +44,42 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 		{
 			entries.Add(entry);
 		}
+
+        /// <summary>
+        /// Reset all of the entries external fields
+        /// </summary>
+        public void ResetValues()
+        {
+            entries.ForEach(e => e.ExternalField.ResetValue());
+        }
+
+        /// <summary>
+        /// Copies the values from the entries to corresponding fields on the entity
+        /// </summary>
+        public void CopyToEntity(IEntity2 entity)
+        {
+            foreach (IOdbcFieldMapEntry entry in entries)
+            {
+                // Copy the External fields to the ShipWorks fields
+                entry.CopyValueToShipWorksField();
+
+                string destinationName = entry.ShipWorksField.Name;
+                Type destinationType = entity.Fields[entry.ShipWorksField.Name].DataType;
+                object destinationValue = entry.ShipWorksField.Value;
+
+                // Set the CurrentValue of the entity field who's name matches the entry field
+                entity.Fields[destinationName].CurrentValue = Convert.ChangeType(destinationValue, destinationType);
+            }
+        }
+
+        /// <summary>
+        /// Apply the given record values to the entries external fields
+        /// </summary>
+        /// <param name="record"></param>
+        public void ApplyValues(OdbcRecord record)
+        {
+            entries.ForEach(e => e.LoadExternalField(record));
+        }
 
         /// <summary>
         /// Loads the ODBC Field Map from the given stream

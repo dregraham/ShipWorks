@@ -18,5 +18,15 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// </summary>
         [Obfuscation(Exclude = true)]
         ShipWorksOdbcMappableField ShipWorksField { get; }
+
+        /// <summary>
+        /// Loads the given ODBC Record into the External Field
+        /// </summary>
+        void LoadExternalField(OdbcRecord record);
+
+        /// <summary>
+        /// Copies the Value from the external field to the ShipWorks field
+        /// </summary>
+        void CopyValueToShipWorksField();
     }
 }
