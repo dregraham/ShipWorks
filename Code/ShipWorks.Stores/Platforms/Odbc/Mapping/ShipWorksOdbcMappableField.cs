@@ -2,6 +2,8 @@ using Newtonsoft.Json;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using System;
 using System.Reflection;
+using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.FactoryClasses;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 {
@@ -10,8 +12,6 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
     /// </summary>
     public class ShipWorksOdbcMappableField : IShipWorksOdbcMappableField
     {
-	    private readonly EntityField2 field;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="ShipWorksOdbcMappableField"/> class.
         /// </summary>
@@ -30,12 +30,17 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <param name="isRequired"></param>
         public ShipWorksOdbcMappableField(EntityField2 field, string displayName, bool isRequired)
 	    {
-	        this.field = field;
             ContainingObjectName = field?.ContainingObjectName;
             Name = field?.Name;
-	        DisplayName = displayName;
+            Type = field?.DataType;
+            DisplayName = displayName;
             IsRequired = isRequired;
 	    }
+
+        /// <summary>
+        /// The type of the ShipWorks field
+        /// </summary>
+        public Type Type { get; set; }
 
         /// <summary>
         /// The name of the object that contains this field
@@ -86,13 +91,18 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// </summary>
         private object ChangeType(object value)
         {
+            if (value == null)
+            {
+                return Value;
+            }
+
             try
             {
-                return Convert.ChangeType(value, field.DataType);
+                return Convert.ChangeType(value, Type);
             }
             catch (Exception ex)
             {
-                throw new ShipWorksOdbcException($"Unable to convert {value} to {field.DataType} for {GetQualifiedName()}.", ex);
+                throw new ShipWorksOdbcException($"Unable to convert {value} to {Type} for {GetQualifiedName()}.", ex);
             }
         }
     }

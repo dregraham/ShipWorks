@@ -73,7 +73,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// </summary>
         public void ApplyValues(OdbcRecord record)
         {
-            foreach (IOdbcFieldMapEntry entry in entries.Where(e => e.ExternalField.Value != null))
+            foreach (IOdbcFieldMapEntry entry in entries)
             {
                 // Load data from OdbcRecord
                 entry.LoadExternalField(record);
