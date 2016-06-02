@@ -34,37 +34,6 @@
             <Setter Property="Padding" Value="4 4 0 4" />
         </Style>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
-        <ControlTemplate x:Key="SourceColumnListItemTemplate">
-            <StackPanel Orientation="Horizontal" Height="15">
-                <Image Margin="0 0 3 0">
-                    <Image.Style>
-                        <Style TargetType="Image">
-                            <Setter Property="Source" Value="/Shipworks.Core;component/Resources/table_selection_column.png" />
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding Path=Name}" Value="(None)">
-                                    <Setter Property="Source" Value="/Shipworks.Core;component/Resources/forbidden.png" />
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Image.Style>
-                </Image>
-                <TextBlock Text="{Binding Path=Name}" VerticalAlignment="Center"/>
-            </StackPanel>
-        </ControlTemplate>
-        <ControlTemplate x:Key="SelectedColumnTemplate">
-        </ControlTemplate>
-        <DataTemplate x:Key="SourceColumnComboBoxTemplate">
-            <Control x:Name="SourceColumns" Focusable="False" Template="{StaticResource SourceColumnListItemTemplate}" />
-            <DataTemplate.Triggers>
-                <MultiDataTrigger>
-                    <MultiDataTrigger.Conditions>
-                        <Condition Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ComboBoxItem}}, Path=IsSelected}" Value="{x:Null}"/>
-                        <Condition Binding="{Binding Path=Name}" Value="(None)" />
-                    </MultiDataTrigger.Conditions>
-                    <Setter TargetName="SourceColumns" Property="Template" Value="{StaticResource SelectedColumnTemplate}" />
-                </MultiDataTrigger>
-            </DataTemplate.Triggers>
-        </DataTemplate>
     </Control.Resources>
     <Grid Margin="20 10 10 10">
         <Grid.RowDefinitions>
@@ -218,8 +187,46 @@
                                                   HorizontalAlignment="Stretch"
                                                   Margin="0 5 5 5"
                                                   SelectedItem="{Binding ExternalField.Column}"
-                                                  ItemTemplate="{StaticResource SourceColumnComboBoxTemplate}"
                                                   TextSearch.TextPath="Name">
+                                            <ComboBox.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Control x:Name="SourceColumns" Focusable="False">
+                                                        <Control.Template>
+                                                            <ControlTemplate>
+                                                                <StackPanel Orientation="Horizontal" Height="15">
+                                                                    <Image Margin="0 0 3 0">
+                                                                        <Image.Style>
+                                                                            <Style TargetType="Image">
+                                                                                <Setter Property="Source" Value="/Shipworks.Core;component/Resources/table_selection_column.png" />
+                                                                                <Style.Triggers>
+                                                                                    <DataTrigger Binding="{Binding Path=Name}" Value="(None)">
+                                                                                        <Setter Property="Source" Value="/Shipworks.Core;component/Resources/forbidden.png" />
+                                                                                    </DataTrigger>
+                                                                                </Style.Triggers>
+                                                                            </Style>
+                                                                        </Image.Style>
+                                                                    </Image>
+                                                                    <TextBlock Text="{Binding Path=Name}" VerticalAlignment="Center"/>
+                                                                </StackPanel>
+                                                            </ControlTemplate>
+                                                        </Control.Template>
+                                                    </Control>
+                                                    <DataTemplate.Triggers>
+                                                        <MultiDataTrigger>
+                                                            <MultiDataTrigger.Conditions>
+                                                                <Condition Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ComboBoxItem}}, Path=IsSelected}" Value="{x:Null}"/>
+                                                                <Condition Binding="{Binding Path=Name}" Value="(None)" />
+                                                            </MultiDataTrigger.Conditions>
+                                                            <Setter TargetName="SourceColumns" Property="Template">
+                                                                <Setter.Value>
+                                                                    <ControlTemplate>
+                                                                    </ControlTemplate>
+                                                                </Setter.Value>
+                                                            </Setter>
+                                                        </MultiDataTrigger>
+                                                    </DataTemplate.Triggers>
+                                                </DataTemplate>
+                                            </ComboBox.ItemTemplate>
                                         </ComboBox>
                                         <Label Grid.Column="0" Foreground="Red"
                                                Content="Required"
