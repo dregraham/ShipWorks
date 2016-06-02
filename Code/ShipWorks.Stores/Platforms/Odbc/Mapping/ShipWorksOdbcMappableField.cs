@@ -8,8 +8,8 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
     /// <summary>
     /// The ShipWorks half of an OdbcFieldMapEntry
     /// </summary>
-    public class ShipWorksOdbcMappableField : IOdbcMappableField
-	{
+    public class ShipWorksOdbcMappableField : IShipWorksOdbcMappableField
+    {
 	    private readonly EntityField2 field;
 
         /// <summary>

@@ -1,14 +1,14 @@
+using Interapptive.Shared.Utility;
 using Newtonsoft.Json;
 using System.Reflection;
-using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 {
     /// <summary>
     /// Provides a mechanism for interacting with an external ODBC field
     /// </summary>
-	public class ExternalOdbcMappableField : IOdbcMappableField
-	{
+	public class ExternalOdbcMappableField : IExternalOdbcMappableField
+    {
         /// <summary>
         /// Constructor
         /// </summary>

@@ -59,11 +59,8 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// </summary>
         public void CopyToEntity(IEntity2 entity)
         {
-            foreach (IOdbcFieldMapEntry entry in entries.Where(e => e.ExternalField.Value != null))
+            foreach (IOdbcFieldMapEntry entry in entries.Where(e => e.ShipWorksField.Value != null))
             {
-                // Copy the External fields to the ShipWorks fields
-                entry.CopyValueToShipWorksField();
-
                 string destinationName = entry.ShipWorksField.Name;
 
                 // Set the CurrentValue of the entity field who's name matches the entry field
@@ -76,7 +73,14 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// </summary>
         public void ApplyValues(OdbcRecord record)
         {
-            entries.ForEach(e => e.LoadExternalField(record));
+            foreach (IOdbcFieldMapEntry entry in entries.Where(e => e.ExternalField.Value != null))
+            {
+                // Load data from OdbcRecord
+                entry.LoadExternalField(record);
+
+                // Copy the External fields to the ShipWorks fields
+                entry.CopyValueToShipWorksField();
+            }
         }
 
         /// <summary>
