@@ -51,5 +51,9 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 
 
         void CopyToEntity(IEntity2 entity);
+        /// <summary>
+        /// Finds the OdbcFieldMapEntry corresponding to the given field
+        /// </summary>
+        IOdbcFieldMapEntry FindEntryBy(EntityField2 field);
     }
 }

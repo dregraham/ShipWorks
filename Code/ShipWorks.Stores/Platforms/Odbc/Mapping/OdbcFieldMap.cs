@@ -122,5 +122,15 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 		    IOdbcFieldMapWriter writer = ioFactory.CreateWriter(this);
             writer.Write(stream);
 		}
+
+        /// <summary>
+        /// Finds the OdbcFieldMapEntry corresponding to the given field
+        /// </summary>
+        public IOdbcFieldMapEntry FindEntryBy(EntityField2 field)
+        {
+            return Entries.FirstOrDefault(entry =>
+            entry.ShipWorksField.GetQualifiedName().Equals($"{field.ContainingObjectName}.{field.Name}",
+            StringComparison.InvariantCulture));
+        }
     }
 }

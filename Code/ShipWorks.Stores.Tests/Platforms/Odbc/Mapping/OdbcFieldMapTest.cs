@@ -206,6 +206,30 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
             Assert.Null(testObject2);
         }
 
+        [Fact]
+        public void FindEntryBy_ReturnsCorrectEntry_WhenMapContainsGivenField()
+        {
+            OdbcFieldMap testObject = mock.Create<OdbcFieldMap>();
+            IOdbcFieldMapEntry expectedEntry = GetFieldMapEntry(GetShipWorksField(OrderFields.BillFirstName, "Bill First Name"), GetExternalField("SomeTableName2", "SomeColumnName2"));
+            testObject.AddEntry(expectedEntry);
+
+            IOdbcFieldMapEntry returnedEntry = testObject.FindEntryBy(OrderFields.BillFirstName);
+
+            Assert.Equal(expectedEntry, returnedEntry);
+        }
+
+        [Fact]
+        public void FindEntryBy_ReturnsNull_WhenMapDoesNotContainGivenField()
+        {
+            OdbcFieldMap testObject = mock.Create<OdbcFieldMap>();
+            IOdbcFieldMapEntry mapEntry = GetFieldMapEntry(GetShipWorksField(OrderFields.BillFirstName, "Bill First Name"), GetExternalField("SomeTableName2", "SomeColumnName2"));
+            testObject.AddEntry(mapEntry);
+
+            IOdbcFieldMapEntry returnedEntry = testObject.FindEntryBy(OrderItemAttributeFields.IsManual);
+
+            Assert.Null(returnedEntry);
+        }
+
         private Stream GetStreamWithFieldMap()
         {
             MemoryStream stream = new MemoryStream();
