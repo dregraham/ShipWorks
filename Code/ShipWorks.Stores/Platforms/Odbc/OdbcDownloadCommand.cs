@@ -42,7 +42,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
                     {
                         OdbcRecord odbcRecord = new OdbcRecord();
                         records.Add(odbcRecord);
-                        
+
                         for (int i = 0; i < reader.FieldCount; i++)
                         {
                             odbcRecord.AddField(reader.GetName(i), reader[i]);

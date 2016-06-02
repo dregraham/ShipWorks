@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Autofac;
+using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication;
@@ -16,12 +17,15 @@ namespace ShipWorks.Stores.Platforms.Odbc
     /// </summary>
     public class OdbcStoreType : StoreType
     {
+        private readonly Func<StoreEntity, OdbcStoreDownloader> downloadFactory;
+
         /// <summary>
         /// Constructor
         /// </summary>
-        public OdbcStoreType(StoreEntity store)
+        public OdbcStoreType(StoreEntity store, Func<StoreEntity, OdbcStoreDownloader> downloadFactory)
             : base(store)
         {
+            this.downloadFactory = downloadFactory;
         }
 
         /// <summary>
@@ -39,7 +43,10 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// </summary>
         public override StoreDownloader CreateDownloader()
         {
-            throw new NotImplementedException();
+            OdbcStoreEntity odbcStore = Store as OdbcStoreEntity;
+            MethodConditions.EnsureArgumentIsNotNull(odbcStore);
+
+            return downloadFactory(odbcStore);
         }
 
         /// <summary>

@@ -158,11 +158,11 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// <summary>
         /// Populate the OdbcDataSource using the given json string
         /// </summary>
-        public void Restore(string json)
+        public void Restore(string encryptedConnectionString)
         {
             try
             {
-                JObject dataSource = JObject.Parse(encryptionProvider.Decrypt(json));
+                JObject dataSource = JObject.Parse(encryptionProvider.Decrypt(encryptedConnectionString));
 
                 Name = dataSource["Name"].ToString();
                 bool custom;

@@ -11,24 +11,25 @@ namespace ShipWorks.Stores.Platforms.Odbc
 {
     public class OdbcStoreDownloader : StoreDownloader
     {
+        private readonly OdbcCommandFactory commandFactory;
         private readonly IOdbcFieldMap fieldMap;
-        private readonly IOdbcCommand downloadCommand;
         private readonly OdbcStoreEntity store;
 
         public OdbcStoreDownloader(StoreEntity store,
-            Func<OdbcStoreEntity, IOdbcCommand> downloadCommandFactory,
+            OdbcCommandFactory commandFactory,
             IOdbcFieldMap fieldMap) : base(store)
         {
+            this.commandFactory = commandFactory;
             this.fieldMap = fieldMap;
             this.store = (OdbcStoreEntity) store;
-            downloadCommand = downloadCommandFactory(this.store);
 
             fieldMap.Load(this.store.Map);
         }
 
-
         protected override void Download()
         {
+            IOdbcCommand downloadCommand = commandFactory.CreateDownloadCommand(store);
+
             IEnumerable<OdbcRecord> odbcOrders = downloadCommand.Execute();
 
             foreach (OdbcRecord odbcOrder in odbcOrders)
