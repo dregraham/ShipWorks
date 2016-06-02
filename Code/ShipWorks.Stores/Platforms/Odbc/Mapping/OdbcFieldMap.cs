@@ -1,3 +1,4 @@
+using System;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using System.Collections.Generic;
@@ -64,7 +65,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
                 entry.CopyValueToShipWorksField();
 
                 string destinationName = entry.ShipWorksField.Name;
-                
+
                 // Set the CurrentValue of the entity field who's name matches the entry field
                 entity.Fields[destinationName].CurrentValue = entry.ShipWorksField.Value;
             }
