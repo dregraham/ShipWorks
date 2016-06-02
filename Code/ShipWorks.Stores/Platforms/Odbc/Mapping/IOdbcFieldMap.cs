@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using SD.LLBLGen.Pro.ORMSupportClasses;
+using System.Collections.Generic;
 using System.IO;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Mapping
@@ -37,5 +38,18 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// Writes the ODBC Field Map to the given stream
         /// </summary>
         void Save(Stream stream);
+
+        /// <summary>
+        /// Reset all of the entries external fields
+        /// </summary>
+        void ResetValues();
+
+        /// <summary>
+        /// Apply the given record values to the entries external fields
+        /// </summary>
+        void ApplyValues(OdbcRecord record);
+
+
+        void CopyToEntity(IEntity2 entity);
     }
 }

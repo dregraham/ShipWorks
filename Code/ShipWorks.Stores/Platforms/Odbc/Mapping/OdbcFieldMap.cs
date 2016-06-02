@@ -1,11 +1,9 @@
-using System;
 using Interapptive.Shared.Utility;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using System.Collections.Generic;
-using System.Data.Odbc;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using SD.LLBLGen.Pro.ORMSupportClasses;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 {
@@ -66,33 +64,15 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
                 entry.CopyValueToShipWorksField();
 
                 string destinationName = entry.ShipWorksField.Name;
-                Type destinationType = entity.Fields[entry.ShipWorksField.Name].DataType;
-                object destinationValue = entry.ShipWorksField.Value;
-
+                
                 // Set the CurrentValue of the entity field who's name matches the entry field
-                entity.Fields[destinationName].CurrentValue = ChangeType(destinationValue, destinationType);
-            }
-        }
-
-        /// <summary>
-        /// Convert the given object to the supplied type
-        /// </summary>
-        private static object ChangeType(object value, Type type)
-        {
-            try
-            {
-                return Convert.ChangeType(value, type);
-            }
-            catch (Exception ex)
-            {
-                throw new ShipWorksOdbcException($"Unable to convert {value} to {type}", ex);
+                entity.Fields[destinationName].CurrentValue = entry.ShipWorksField.Value;
             }
         }
 
         /// <summary>
         /// Apply the given record values to the entries external fields
         /// </summary>
-        /// <param name="record"></param>
         public void ApplyValues(OdbcRecord record)
         {
             entries.ForEach(e => e.LoadExternalField(record));

@@ -44,7 +44,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
             entry.LoadExternalField(record);
             entry.CopyValueToShipWorksField();
 
-            Assert.Equal(123, entry.ShipWorksField.Value);
+            Assert.Equal(123L, entry.ShipWorksField.Value);
         }
 
         public void Dispose()

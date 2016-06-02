@@ -1,5 +1,6 @@
 using Newtonsoft.Json;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using System;
 using System.Reflection;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Mapping
@@ -77,7 +78,22 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// </summary>
         public void LoadValue(object value)
         {
-            Value = value;
+            Value = ChangeType(value);
+        }
+
+        /// <summary>
+        /// Convert the given object to the supplied type
+        /// </summary>
+        private object ChangeType(object value)
+        {
+            try
+            {
+                return Convert.ChangeType(value, field.DataType);
+            }
+            catch (Exception ex)
+            {
+                throw new ShipWorksOdbcException($"Unable to convert {value} to {field.DataType} for {GetQualifiedName()}.", ex);
+            }
         }
     }
 }
