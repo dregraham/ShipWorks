@@ -33,7 +33,7 @@
             <Setter Property="Margin" Value="2 5 0 5" />
             <Setter Property="Padding" Value="4 4 0 4" />
         </Style>
-        <BooleanToVisibilityConverter x:Key="BooleanToVisibility"></BooleanToVisibilityConverter>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
     </Control.Resources>
     <Grid Margin="20 10 10 10">
         <Grid.RowDefinitions>
@@ -57,7 +57,7 @@
         <Label Grid.Row="2" Grid.Column="0"
                HorizontalAlignment="Right" Content="Table:" />
         <TextBox Grid.Row="1" Grid.Column="1"
-                 Text="{Binding MapName}"/>
+                 Text="{Binding MapName, UpdateSourceTrigger=PropertyChanged}"/>
         <ComboBox Grid.Row="2" Grid.Column="1"
                   ItemsSource="{Binding Tables, UpdateSourceTrigger=PropertyChanged}"
                   DisplayMemberPath="Name"
@@ -182,11 +182,52 @@
                                                Margin="0 5 5 5"
                                                HorizontalAlignment="Left"/>
                                         <ComboBox Grid.Column="1"
-                                                  ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Control},
+                                                  ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl},
                                                     Path=DataContext.Columns, UpdateSourceTrigger=PropertyChanged}"
-                                                  DisplayMemberPath="Name" HorizontalAlignment="Stretch"
+                                                  HorizontalAlignment="Stretch"
                                                   Margin="0 5 5 5"
-                                                  SelectedItem="{Binding ExternalField.Column}"/>
+                                                  SelectedItem="{Binding ExternalField.Column}"
+                                                  TextSearch.TextPath="Name">
+                                            <ComboBox.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Control x:Name="SourceColumns" Focusable="False">
+                                                        <Control.Template>
+                                                            <ControlTemplate>
+                                                                <StackPanel Orientation="Horizontal" Height="15">
+                                                                    <Image Margin="0 0 3 0">
+                                                                        <Image.Style>
+                                                                            <Style TargetType="Image">
+                                                                                <Setter Property="Source" Value="/Shipworks.Core;component/Resources/table_selection_column.png" />
+                                                                                <Style.Triggers>
+                                                                                    <DataTrigger Binding="{Binding Path=Name}" Value="(None)">
+                                                                                        <Setter Property="Source" Value="/Shipworks.Core;component/Resources/forbidden.png" />
+                                                                                    </DataTrigger>
+                                                                                </Style.Triggers>
+                                                                            </Style>
+                                                                        </Image.Style>
+                                                                    </Image>
+                                                                    <TextBlock Text="{Binding Path=Name}" VerticalAlignment="Center"/>
+                                                                </StackPanel>
+                                                            </ControlTemplate>
+                                                        </Control.Template>
+                                                    </Control>
+                                                    <DataTemplate.Triggers>
+                                                        <MultiDataTrigger>
+                                                            <MultiDataTrigger.Conditions>
+                                                                <Condition Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ComboBoxItem}}, Path=IsSelected}" Value="{x:Null}"/>
+                                                                <Condition Binding="{Binding Path=Name}" Value="(None)" />
+                                                            </MultiDataTrigger.Conditions>
+                                                            <Setter TargetName="SourceColumns" Property="Template">
+                                                                <Setter.Value>
+                                                                    <ControlTemplate>
+                                                                    </ControlTemplate>
+                                                                </Setter.Value>
+                                                            </Setter>
+                                                        </MultiDataTrigger>
+                                                    </DataTemplate.Triggers>
+                                                </DataTemplate>
+                                            </ComboBox.ItemTemplate>
+                                        </ComboBox>
                                         <Label Grid.Column="0" Foreground="Red"
                                                Content="Required"
                                                Visibility="{Binding ShipWorksField.IsRequired, Converter={StaticResource BooleanToVisibility}}"

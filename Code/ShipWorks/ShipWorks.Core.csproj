@@ -10396,7 +10396,7 @@
     <None Include="Resources\message.png" />
     <None Include="Resources\scroll.png" />
     <None Include="Resources\index2.png" />
-    <None Include="Resources\forbidden.png" />
+    <Resource Include="Resources\forbidden.png" />
     <None Include="Resources\navigate_plus.png" />
     <None Include="Resources\navigate_minus.png" />
     <None Include="Resources\printer_warning.png" />
@@ -10756,7 +10756,7 @@
     <None Include="Resources\table_selection_row.png" />
     <None Include="Resources\workstation1.png" />
     <None Include="Resources\table_sql_add.png" />
-    <None Include="Resources\table_selection_column.png" />
+    <Resource Include="Resources\table_selection_column.png" />
     <None Include="Resources\table_sql_ok.png" />
     <None Include="Resources\table_sql1.png" />
     <None Include="Resources\user_headset.png" />
