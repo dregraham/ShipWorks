@@ -110,10 +110,13 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             get { return selectedTable; }
             set
             {
-                if (MapName.Equals(DataSource.Name, StringComparison.InvariantCulture) ||
-                    MapName.Equals($"{DataSource.Name} - {SelectedTable.Name}", StringComparison.InvariantCulture))
+                if (MapName != null && DataSource.Name != null
+                    && MapName.Equals(DataSource.Name, StringComparison.InvariantCulture))
                 {
-                    MapName = $"{DataSource.Name} - {value.Name}";
+                    MapName = SelectedTable != null && MapName.Equals($"{DataSource.Name} - {SelectedTable.Name}",
+                        StringComparison.InvariantCulture) ?
+                        $"{DataSource.Name} - {value.Name}" :
+                        DataSource.Name;
                 }
 
                 handler.Set(nameof(SelectedTable), ref selectedTable, value);
