@@ -35,6 +35,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         public event PropertyChangedEventHandler PropertyChanged;
 
         private IOdbcTable previousSelectedTable = null;
+        private string mapName;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcImportFieldMappingControlViewModel"/> class.
@@ -72,7 +73,18 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// The name the map will be saved as.
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public string MapName { get; set; }
+        public string MapName
+        {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(mapName))
+                {
+                    mapName = SelectedTable == null ? DataSource.Name : $"{DataSource.Name} - {SelectedTable.Name}";
+                }
+                return mapName;
+            }
+            set { handler.Set(nameof(MapName), ref mapName, value); }
+        }
 
         /// <summary>
         /// The external odbc tables.
@@ -96,7 +108,16 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         public IOdbcTable SelectedTable
         {
             get { return selectedTable; }
-            set { handler.Set(nameof(SelectedTable), ref selectedTable, value); }
+            set
+            {
+                if (MapName.Equals(DataSource.Name, StringComparison.InvariantCulture) ||
+                    MapName.Equals($"{DataSource.Name} - {SelectedTable.Name}", StringComparison.InvariantCulture))
+                {
+                    MapName = $"{DataSource.Name} - {value.Name}";
+                }
+
+                handler.Set(nameof(SelectedTable), ref selectedTable, value);
+            }
         }
 
         /// <summary>
@@ -277,8 +298,8 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         {
             SaveFileDialog dlg = new SaveFileDialog
             {
-                DefaultExt = "swm",
-                Filter = "ShipWorks Map Files|*.swm"
+                DefaultExt = "swdbm",
+                Filter = "ShipWorks Database Map|*.swdbm"
             };
 
             bool? result = dlg.ShowDialog();

@@ -57,7 +57,7 @@
         <Label Grid.Row="2" Grid.Column="0"
                HorizontalAlignment="Right" Content="Table:" />
         <TextBox Grid.Row="1" Grid.Column="1"
-                 Text="{Binding MapName}"/>
+                 Text="{Binding MapName, UpdateSourceTrigger=PropertyChanged}"/>
         <ComboBox Grid.Row="2" Grid.Column="1"
                   ItemsSource="{Binding Tables, UpdateSourceTrigger=PropertyChanged}"
                   DisplayMemberPath="Name"
