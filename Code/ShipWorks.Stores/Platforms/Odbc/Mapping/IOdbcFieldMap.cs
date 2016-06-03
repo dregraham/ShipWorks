@@ -15,6 +15,11 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         IEnumerable<IOdbcFieldMapEntry> Entries { get; }
 
         /// <summary>
+        /// Gets or sets the name of the record identifier column.
+        /// </summary>
+        string RecordIdentifierSource { get; set; }
+
+        /// <summary>
         /// The External Table Name.
         /// </summary>
         string ExternalTableName { get; set; }

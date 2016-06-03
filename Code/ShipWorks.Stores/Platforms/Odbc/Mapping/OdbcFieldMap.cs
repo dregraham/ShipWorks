@@ -41,7 +41,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <summary>
         /// Gets or sets the name of the record identifier column.
         /// </summary>
-        public string RecordIdentifierColumnName { get; set; }
+        public string RecordIdentifierSource { get; set; }
 
         /// <summary>
         /// Add the given ODBC Field Map Entry to the ODBC Field Map

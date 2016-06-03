@@ -45,7 +45,14 @@ namespace ShipWorks.Stores.Platforms.Odbc
 
                         for (int i = 0; i < reader.FieldCount; i++)
                         {
-                            odbcRecord.AddField(reader.GetName(i), reader[i]);
+                            string columnName = reader.GetName(i);
+                            object value = reader[i];
+                            
+                            odbcRecord.AddField(columnName, value);
+                            if (columnName == fieldMap.RecordIdentifierSource)
+                            {
+                                odbcRecord.RecordIdentifier = value.ToString();
+                            }
                         }
                     }
                 }
