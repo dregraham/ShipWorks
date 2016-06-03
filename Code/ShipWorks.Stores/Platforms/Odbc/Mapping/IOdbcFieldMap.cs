@@ -54,11 +54,11 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// </summary>
         void ApplyValues(OdbcRecord record);
 
-
         void CopyToEntity(IEntity2 entity);
+
         /// <summary>
-        /// Finds the OdbcFieldMapEntry corresponding to the given field
+        /// Finds the OdbcFieldMapEntries corresponding to the given field
         /// </summary>
-        IOdbcFieldMapEntry FindEntryBy(EntityField2 field);
+        IEnumerable<IOdbcFieldMapEntry> FindEntriesBy(EntityField2 field);
     }
 }

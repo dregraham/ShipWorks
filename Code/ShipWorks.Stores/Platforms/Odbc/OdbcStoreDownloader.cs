@@ -38,7 +38,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
                 fieldMap.ApplyValues(odbcOrder);
 
                 // Find the OrderNumber Entry
-                IOdbcFieldMapEntry odbcFieldMapEntry = fieldMap.FindEntryBy(OrderFields.OrderNumber);
+                IOdbcFieldMapEntry odbcFieldMapEntry = fieldMap.FindEntriesBy(OrderFields.OrderNumber).FirstOrDefault();
 
                 if (odbcFieldMapEntry == null)
                 {

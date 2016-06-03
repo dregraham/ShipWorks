@@ -137,11 +137,11 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 		}
 
         /// <summary>
-        /// Finds the OdbcFieldMapEntry corresponding to the given field
+        /// Finds the OdbcFieldMapEntries corresponding to the given field
         /// </summary>
-        public IOdbcFieldMapEntry FindEntryBy(EntityField2 field)
+        public IEnumerable<IOdbcFieldMapEntry> FindEntriesBy(EntityField2 field)
         {
-            return Entries.FirstOrDefault(entry =>
+            return Entries.Where(entry =>
             entry.ShipWorksField.GetQualifiedName().Equals($"{field.ContainingObjectName}.{field.Name}",
             StringComparison.InvariantCulture));
         }

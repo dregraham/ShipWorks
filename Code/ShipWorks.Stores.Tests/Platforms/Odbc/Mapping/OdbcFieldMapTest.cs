@@ -120,11 +120,11 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
                 shipworksField.Setup(e => e.Value).Returns(null);
                 shipworksField.Setup(e => e.Name).Returns("BillFirstName");
                 shipworksField.Setup(e => e.ContainingObjectName).Returns("OrderEntity");
-                
+
                 var entry = mock.Mock<IOdbcFieldMapEntry>();
                 entry.Setup(e => e.ShipWorksField).Returns(shipworksField.Object);
-                
-                
+
+
                 testObject.AddEntry(entry.Object);
 
                 OrderEntity order = new OrderEntity {BillFirstName = "bob"};
@@ -146,7 +146,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
                 shipworksField.Setup(e => e.Value).Returns("bill");
                 shipworksField.Setup(e => e.Name).Returns("BillFirstName");
                 shipworksField.Setup(e => e.ContainingObjectName).Returns("OrderItemEntity");
-                
+
                 var entry = mock.Mock<IOdbcFieldMapEntry>();
                 entry.Setup(e => e.ShipWorksField).Returns(shipworksField.Object);
 
@@ -198,7 +198,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
 
                 var mapEntry = mock.Mock<IOdbcFieldMapEntry>();
                 mapEntry.Setup(e => e.ExternalField).Returns(externalOdbcMappableField.Object);
-                
+
                 testObject.AddEntry(mapEntry.Object);
 
                 OdbcRecord odbcRecord = new OdbcRecord();
@@ -218,7 +218,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
 
                 var externalOdbcMappableField = mock.Mock<IExternalOdbcMappableField>();
                 externalOdbcMappableField.Setup(e => e.Value).Returns("blah");
-                
+
                 var mapEntry = mock.Mock<IOdbcFieldMapEntry>();
                 mapEntry.Setup(e => e.ExternalField).Returns(externalOdbcMappableField.Object);
 
@@ -259,7 +259,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
             IOdbcFieldMapEntry expectedEntry = GetFieldMapEntry(GetShipWorksField(OrderFields.BillFirstName, "Bill First Name"), GetExternalField("SomeTableName2", "SomeColumnName2"));
             testObject.AddEntry(expectedEntry);
 
-            IOdbcFieldMapEntry returnedEntry = testObject.FindEntryBy(OrderFields.BillFirstName);
+            IOdbcFieldMapEntry returnedEntry = testObject.FindEntriesBy(OrderFields.BillFirstName).FirstOrDefault();
 
             Assert.Equal(expectedEntry, returnedEntry);
         }
@@ -271,7 +271,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
             IOdbcFieldMapEntry mapEntry = GetFieldMapEntry(GetShipWorksField(OrderFields.BillFirstName, "Bill First Name"), GetExternalField("SomeTableName2", "SomeColumnName2"));
             testObject.AddEntry(mapEntry);
 
-            IOdbcFieldMapEntry returnedEntry = testObject.FindEntryBy(OrderItemAttributeFields.IsManual);
+            IOdbcFieldMapEntry returnedEntry = testObject.FindEntriesBy(OrderItemAttributeFields.IsManual).FirstOrDefault();
 
             Assert.Null(returnedEntry);
         }
