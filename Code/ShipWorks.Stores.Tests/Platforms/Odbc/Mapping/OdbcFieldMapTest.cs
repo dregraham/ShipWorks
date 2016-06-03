@@ -110,7 +110,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
         }
 
         [Fact]
-        public void CopyToEntity_WithNullExternalFieldValue_DoesNotCopyToEntity()
+        public void CopyToEntity_DoesNotCopyToEntity_WhenExternalFieldValueIsNull()
         {
             using (var mock = AutoMock.GetLoose())
             {
@@ -119,7 +119,8 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
                 var shipworksField = mock.Mock<IShipWorksOdbcMappableField>();
                 shipworksField.Setup(e => e.Value).Returns(null);
                 shipworksField.Setup(e => e.Name).Returns("BillFirstName");
-
+                shipworksField.Setup(e => e.ContainingObjectName).Returns("OrderEntity");
+                
                 var entry = mock.Mock<IOdbcFieldMapEntry>();
                 entry.Setup(e => e.ShipWorksField).Returns(shipworksField.Object);
                 
@@ -127,6 +128,32 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
                 testObject.AddEntry(entry.Object);
 
                 OrderEntity order = new OrderEntity {BillFirstName = "bob"};
+
+                testObject.CopyToEntity(order);
+
+                Assert.Equal("bob", order.BillFirstName);
+            }
+        }
+
+        [Fact]
+        public void CopyToEntity_DoesNotCopyToEntity_WhenContainingObjectNameNotEntityName()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                var testObject = mock.Create<OdbcFieldMap>();
+
+                var shipworksField = mock.Mock<IShipWorksOdbcMappableField>();
+                shipworksField.Setup(e => e.Value).Returns("bill");
+                shipworksField.Setup(e => e.Name).Returns("BillFirstName");
+                shipworksField.Setup(e => e.ContainingObjectName).Returns("OrderItemEntity");
+                
+                var entry = mock.Mock<IOdbcFieldMapEntry>();
+                entry.Setup(e => e.ShipWorksField).Returns(shipworksField.Object);
+
+
+                testObject.AddEntry(entry.Object);
+
+                OrderEntity order = new OrderEntity { BillFirstName = "bob" };
 
                 testObject.CopyToEntity(order);
 
@@ -144,10 +171,10 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
                 var shipworksField = mock.Mock<IShipWorksOdbcMappableField>();
                 shipworksField.Setup(e => e.Value).Returns("joe");
                 shipworksField.Setup(e => e.Name).Returns("BillFirstName");
+                shipworksField.Setup(e => e.ContainingObjectName).Returns("OrderEntity");
 
                 var entry = mock.Mock<IOdbcFieldMapEntry>();
                 entry.Setup(e => e.ShipWorksField).Returns(shipworksField.Object);
-
 
                 testObject.AddEntry(entry.Object);
 
@@ -202,29 +229,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
                 testObject.ApplyValues(odbcRecord);
 
                 mapEntry.Verify(m => m.CopyValueToShipWorksField(), Times.Once);
-            }
-        }
-
-        [Fact]
-        public void ApplyValues_CopyValueToShipWorksFieldNotCalled_WhenExternalFieldValueIsNull()
-        {
-            using (var mock = AutoMock.GetLoose())
-            {
-                OdbcFieldMap testObject = mock.Create<OdbcFieldMap>();
-
-                var externalOdbcMappableField = mock.Mock<IExternalOdbcMappableField>();
-                externalOdbcMappableField.Setup(e => e.Value).Returns(null);
-
-                var mapEntry = mock.Mock<IOdbcFieldMapEntry>();
-                mapEntry.Setup(e => e.ExternalField).Returns(externalOdbcMappableField.Object);
-
-                testObject.AddEntry(mapEntry.Object);
-
-                OdbcRecord odbcRecord = new OdbcRecord();
-
-                testObject.ApplyValues(odbcRecord);
-
-                mapEntry.Verify(m => m.CopyValueToShipWorksField(), Times.Never);
             }
         }
 

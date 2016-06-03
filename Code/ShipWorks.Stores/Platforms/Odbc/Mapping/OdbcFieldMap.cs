@@ -1,6 +1,6 @@
-using System;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -59,7 +59,10 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// </summary>
         public void CopyToEntity(IEntity2 entity)
         {
-            foreach (IOdbcFieldMapEntry entry in entries.Where(e => e.ShipWorksField.Value != null))
+            IEnumerable<IOdbcFieldMapEntry> applicableEntries = entries
+                .Where(e => e.ShipWorksField.Value != null && e.ShipWorksField.ContainingObjectName == entity.LLBLGenProEntityName);
+
+            foreach (IOdbcFieldMapEntry entry in applicableEntries)
             {
                 string destinationName = entry.ShipWorksField.Name;
 
