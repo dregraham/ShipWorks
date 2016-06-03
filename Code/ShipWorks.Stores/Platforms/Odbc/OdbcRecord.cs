@@ -10,6 +10,11 @@ namespace ShipWorks.Stores.Platforms.Odbc
         private readonly Dictionary<string, object> fields = new Dictionary<string, object>();
 
         /// <summary>
+        /// Gets or sets the record identifier
+        /// </summary>
+        public string RecordIdentifier { get; set; }
+
+        /// <summary>
         /// Gets the value of the field - null if not set
         /// </summary>
         public object GetValue(string fieldName)
