@@ -23,6 +23,10 @@ namespace ShipWorks.Stores.UI
             builder.RegisterType<StoreTypeManagerWrapper>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
+
+            builder.RegisterType<OrderRepository>()
+                .As<IOrderRepository>()
+                .SingleInstance();
         }
     }
 }

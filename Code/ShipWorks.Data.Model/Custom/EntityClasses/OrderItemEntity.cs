@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-
-namespace ShipWorks.Data.Model.EntityClasses
+﻿namespace ShipWorks.Data.Model.EntityClasses
 {
     /// <summary>
     /// Custom processing of LLBLgen OrderItemEntity
@@ -13,6 +7,17 @@ namespace ShipWorks.Data.Model.EntityClasses
     {
         // We cache this so we only have to look it up once
         static string baseObjectName = new OrderItemEntity().LLBLGenProEntityName;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="OrderItemEntity"/> class.
+        /// </summary>
+        /// <remarks>Sets the order and initializes nulls to default.</remarks>
+        public OrderItemEntity(OrderEntity order) : this()
+        {
+            _order = order;
+
+            InitializeNullsToDefault();
+        }
 
         /// <summary>
         /// Speciality property used by the 2x upgrader when updating ebay order items.  Without this set, every time an EbayOrderItem is updated

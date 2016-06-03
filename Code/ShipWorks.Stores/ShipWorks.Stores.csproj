@@ -140,6 +140,9 @@
     <Compile Include="..\ShipWorks\Properties\AssemblyInfoCommon.cs">
       <Link>Properties\AssemblyInfoCommon.cs</Link>
     </Compile>
+    <Compile Include="IOrderRepository.cs" />
+    <Compile Include="Note.cs" />
+    <Compile Include="OrderRepository.cs" />
     <Compile Include="Platforms\LemonStand\CoreExtensions\Actions\LemonStandOrderUpdateTask.cs" />
     <Compile Include="Platforms\LemonStand\CoreExtensions\Actions\LemonStandShipmentUploadTask.cs" />
     <Compile Include="Platforms\LemonStand\CoreExtensions\Filters\LemonStandOrderIdCondition.cs" />
@@ -194,7 +197,6 @@
     <Compile Include="Platforms\Odbc\OdbcColumn.cs" />
     <Compile Include="Platforms\Odbc\OdbcCommandFactory.cs" />
     <Compile Include="Platforms\Odbc\OdbcDownloadCommand.cs" />
-    <Compile Include="Platforms\Odbc\OdbcOrderElementFactory.cs" />
     <Compile Include="Platforms\Odbc\OdbcRecord.cs" />
     <Compile Include="Platforms\Odbc\OdbcSchema.cs" />
     <Compile Include="Platforms\Odbc\OdbcStoreDownloader.cs" />
