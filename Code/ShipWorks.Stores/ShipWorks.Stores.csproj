@@ -165,6 +165,7 @@
     <Compile Include="Platforms\LemonStand\LemonStandWebClient.cs" />
     <Compile Include="Platforms\Odbc\IOdbcCommand.cs" />
     <Compile Include="Platforms\Odbc\IOdbcDataSource.cs" />
+    <Compile Include="Platforms\Odbc\IOdbcOrderLoader.cs" />
     <Compile Include="Platforms\Odbc\IOdbcSchema.cs" />
     <Compile Include="Platforms\Odbc\IOdbcTable.cs" />
     <Compile Include="Platforms\Odbc\IOdbcWizardPage.cs" />
