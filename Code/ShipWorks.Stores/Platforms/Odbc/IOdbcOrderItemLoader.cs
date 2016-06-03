@@ -5,12 +5,12 @@ using ShipWorks.Stores.Platforms.Odbc.Mapping;
 namespace ShipWorks.Stores.Platforms.Odbc
 {
     /// <summary>
-    /// Loads order information into an order
+    /// Loads order items into order
     /// </summary>
-    public interface IOdbcOrderLoader
+    public interface IOdbcOrderItemLoader
     {
         /// <summary>
-        /// Loads the order information from the given Odbc records into the given order entity.
+        /// Loads items from odbcRecords into the order
         /// </summary>
         void Load(IOdbcFieldMap map, OrderEntity order, IEnumerable<OdbcRecord> odbcRecords);
     }
