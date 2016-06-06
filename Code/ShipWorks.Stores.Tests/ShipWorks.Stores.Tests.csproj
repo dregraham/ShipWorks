@@ -182,6 +182,7 @@
     <Compile Include="Platforms\Odbc\OdbcItemAttributeLoaderTest.cs" />
     <Compile Include="Platforms\Odbc\OdbcOrderPaymentLoaderTest.cs" />
     <Compile Include="Platforms\Odbc\OdbcOrderNoteLoaderTest.cs" />
+    <Compile Include="Platforms\Odbc\OdbcOrderChargeLoaderTest.cs" />
     <Compile Include="Platforms\Odbc\OdbcRecordTests.cs" />
     <Compile Include="Platforms\Odbc\OdbcSchemaTest.cs" />
     <Compile Include="Platforms\Odbc\OdbcTableTest.cs" />

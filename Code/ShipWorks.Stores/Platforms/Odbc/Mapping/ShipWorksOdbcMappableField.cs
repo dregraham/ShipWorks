@@ -92,7 +92,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         {
             Type destinationType = Type.GetType(TypeName);
 
-            if (value == null || destinationType == null)
+            if (value == null || destinationType == null || value.GetType() == destinationType.GetType())
             {
                 return Value;
             }

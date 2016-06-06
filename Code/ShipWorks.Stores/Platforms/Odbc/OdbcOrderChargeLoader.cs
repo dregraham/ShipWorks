@@ -1,4 +1,5 @@
-﻿using ShipWorks.Data.Model.EntityClasses;
+﻿using Interapptive.Shared.Utility;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
 using System.Collections.Generic;
@@ -15,6 +16,8 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// </summary>
         public void Load(IOdbcFieldMap map, OrderEntity order)
         {
+            MethodConditions.EnsureArgumentIsNotNull(map, "map");
+
             if (order != null)
             {
                 IEnumerable<IOdbcFieldMapEntry> chargeEntries = map.FindEntriesBy(OrderChargeFields.Amount);
@@ -34,8 +37,32 @@ namespace ShipWorks.Stores.Platforms.Odbc
             OrderChargeEntity charge = new OrderChargeEntity();
             charge.Order = order;
 
-            charge.Type = chargeEntry.ShipWorksField.DisplayName;
+            charge.Type = GetChargeType(chargeEntry.ShipWorksField.DisplayName);
+            charge.Description = chargeEntry.ExternalField.Column.Name;
             charge.Amount = (decimal)chargeEntry.ShipWorksField.Value;
+        }
+
+        /// <summary>
+        /// Gets the Charge Type from the display name
+        /// </summary>
+        private string GetChargeType(string displayName)
+        {
+            if (displayName == "Shipping Amount")
+            {
+                return "SHIPPING";
+            }
+
+            if (displayName == "Tax Amount")
+            {
+                return "TAX";
+            }
+
+            if (displayName == "Insurance Amount")
+            {
+                return "INSURANCE";
+            }
+
+            return "ADJUST";
         }
     }
 }
