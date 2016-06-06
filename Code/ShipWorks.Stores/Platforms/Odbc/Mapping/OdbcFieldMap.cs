@@ -84,6 +84,12 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
             // Reset all the values first
             ResetValues();
 
+            // If the record is null return after resetting values
+            if (record == null)
+            {
+                return;
+            }
+
             foreach (IOdbcFieldMapEntry entry in entries)
             {
                 // Load data from OdbcRecord
