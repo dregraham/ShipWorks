@@ -1,6 +1,5 @@
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -11,6 +10,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
     /// <summary>
     /// Contains Field Mapping information for ODBC.
     /// </summary>
+    /// <seealso cref="ShipWorks.Stores.Platforms.Odbc.Mapping.IOdbcFieldMap" />
 	public class OdbcFieldMap : IOdbcFieldMap
     {
 		private readonly IOdbcFieldMapIOFactory ioFactory;
@@ -142,8 +142,16 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         public IEnumerable<IOdbcFieldMapEntry> FindEntriesBy(EntityField2 field)
         {
             return Entries.Where(entry =>
-            entry.ShipWorksField.GetQualifiedName().Equals($"{field.ContainingObjectName}.{field.Name}",
-            StringComparison.InvariantCulture));
+                entry.ShipWorksField.Name == field.Name &&
+                entry.ShipWorksField.ContainingObjectName == field.ContainingObjectName);
+        }
+
+        /// <summary>
+        /// Finds the OdbcFieldMapEntries corresponding to the given field
+        /// </summary>
+        public IEnumerable<IOdbcFieldMapEntry> FindEntriesBy(EntityField2 field, bool includeWhenShipworksFieldIsNull)
+        {
+            return FindEntriesBy(field).Where(e => includeWhenShipworksFieldIsNull || e.ShipWorksField.Value != null);
         }
     }
 }

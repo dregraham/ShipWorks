@@ -27,6 +27,9 @@ namespace ShipWorks.Stores.UI
             builder.RegisterType<OrderRepository>()
                 .As<IOrderRepository>()
                 .SingleInstance();
+
+            builder.RegisterType<Note>()
+                .As<INote>();
         }
     }
 }

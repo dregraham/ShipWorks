@@ -60,5 +60,10 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// Finds the OdbcFieldMapEntries corresponding to the given field
         /// </summary>
         IEnumerable<IOdbcFieldMapEntry> FindEntriesBy(EntityField2 field);
+
+        /// <summary>
+        /// Finds the entries by.
+        /// </summary>
+        IEnumerable<IOdbcFieldMapEntry> FindEntriesBy(EntityField2 field, bool includeEntriesWhereShipworksFieldIsNull);
     }
 }

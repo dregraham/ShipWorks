@@ -8,7 +8,7 @@ namespace ShipWorks.Stores
     /// <summary>
     /// Handles Note related tasks
     /// </summary>
-    public class Note
+    public class Note : INote
     {
         private readonly IOrderRepository orderRepository;
 
