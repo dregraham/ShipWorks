@@ -49,6 +49,9 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// </summary>
         void ApplyValues(OdbcRecord record);
 
+        /// <summary>
+        /// Copies the values from the entries to corresponding fields on the entity
+        /// </summary>
         void CopyToEntity(IEntity2 entity);
 
         /// <summary>
@@ -60,5 +63,10 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// Finds the entries by.
         /// </summary>
         IEnumerable<IOdbcFieldMapEntry> FindEntriesBy(EntityField2 field, bool includeEntriesWhereShipworksFieldIsNull);
+
+        /// <summary>
+        /// Make a copy of the IOdbcFieldMap
+        /// </summary>
+        IOdbcFieldMap Clone();
     }
 }

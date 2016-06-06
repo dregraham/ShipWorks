@@ -156,5 +156,20 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         {
             return FindEntriesBy(field).Where(e => includeWhenShipworksFieldIsNull || e.ShipWorksField.Value != null);
         }
+
+        /// <summary>
+        /// Make a copy of the OdbcFieldMap
+        /// </summary>
+        public IOdbcFieldMap Clone()
+        {
+            using (MemoryStream stream = new MemoryStream())
+            {
+                Save(stream);
+                OdbcFieldMap clonedFieldMap = new OdbcFieldMap(ioFactory);
+                clonedFieldMap.Load(stream);
+                
+                return clonedFieldMap;
+            }
+        }
     }
 }

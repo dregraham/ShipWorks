@@ -36,5 +36,14 @@ namespace ShipWorks.Data.Modal.Tests.Custom
 
             Assert.False(testObject.IsManual);
         }
+
+        [Fact]
+        public void Constructor_OrderContainsOrderItem()
+        {
+            OrderEntity order = new OrderEntity();
+            OrderItemEntity testObject = new OrderItemEntity(order);
+
+            Assert.Contains(testObject, order.OrderItems);
+        }
     }
 }

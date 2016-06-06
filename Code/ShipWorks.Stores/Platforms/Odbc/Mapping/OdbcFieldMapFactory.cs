@@ -1,7 +1,7 @@
+using ShipWorks.Data.Model.HelperClasses;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using ShipWorks.Data.Model.HelperClasses;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 {
@@ -10,7 +10,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
     /// </summary>
     public class OdbcFieldMapFactory : IOdbcFieldMapFactory
 	{
-	    private readonly IOdbcFieldMapIOFactory ioFactory;
+        private readonly IOdbcFieldMapIOFactory ioFactory;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcFieldMapFactory"/> class.
@@ -96,16 +96,16 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
                 new ShipWorksOdbcMappableField(OrderItemFields.Name, "Name"),
                 new ShipWorksOdbcMappableField(OrderItemFields.Code, "Code"),
                 new ShipWorksOdbcMappableField(OrderItemFields.SKU, "SKU"),
-                new ShipWorksOdbcMappableField(OrderItemFields.Quantity, "Quantity"),
-                new ShipWorksOdbcMappableField(OrderItemFields.UnitPrice, "Unit Price"),
-                new ShipWorksOdbcMappableField(OrderItemFields.UnitPrice, "Total Price"),
-                new ShipWorksOdbcMappableField(OrderItemFields.Weight, "Unit Weight"),
-                new ShipWorksOdbcMappableField(OrderItemFields.Weight, "Total Weight"),
+                new ShipWorksOdbcMappableField(OrderItemFields.Quantity, ShipWorksOdbcMappableField.QuantityDisplayName),
+                new ShipWorksOdbcMappableField(OrderItemFields.UnitPrice, ShipWorksOdbcMappableField.UnitPriceDisplayName),
+                new ShipWorksOdbcMappableField(OrderItemFields.UnitPrice, ShipWorksOdbcMappableField.TotalPriceDisplayName),
+                new ShipWorksOdbcMappableField(OrderItemFields.Weight, ShipWorksOdbcMappableField.UnitWeightDisplayName),
+                new ShipWorksOdbcMappableField(OrderItemFields.Weight, ShipWorksOdbcMappableField.TotalWeightDisplayName),
                 new ShipWorksOdbcMappableField(OrderItemFields.LocalStatus, "Status"),
                 new ShipWorksOdbcMappableField(OrderItemFields.Description, "Description"),
                 new ShipWorksOdbcMappableField(OrderItemFields.Location, "Location"),
-                new ShipWorksOdbcMappableField(OrderItemFields.UnitCost, "Unit Cost"),
-                new ShipWorksOdbcMappableField(OrderItemFields.UnitCost, "Total Cost"),
+                new ShipWorksOdbcMappableField(OrderItemFields.UnitCost, ShipWorksOdbcMappableField.UnitCostDisplayName),
+                new ShipWorksOdbcMappableField(OrderItemFields.UnitCost, ShipWorksOdbcMappableField.TotalCostDisplayName),
                 new ShipWorksOdbcMappableField(OrderItemFields.Image, "Image URL"),
                 new ShipWorksOdbcMappableField(OrderItemFields.Thumbnail, "Thumbnail URL"),
                 new ShipWorksOdbcMappableField(OrderItemFields.UPC, "UPC"),

@@ -11,6 +11,14 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
     /// </summary>
     public class ShipWorksOdbcMappableField : IShipWorksOdbcMappableField
     {
+        public const string UnitCostDisplayName = "Unit Cost";
+        public const string TotalCostDisplayName = "Total Cost";
+        public const string UnitWeightDisplayName = "Unit Weight";
+        public const string TotalWeightDisplayName = "Total Weight";
+        public const string UnitPriceDisplayName = "Unit Price";
+        public const string TotalPriceDisplayName = "Total Price";
+        public const string QuantityDisplayName = "Quantity";
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ShipWorksOdbcMappableField"/> class.
         /// </summary>

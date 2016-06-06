@@ -312,6 +312,40 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
             Assert.Empty(returnedEntries);
         }
 
+        [Fact]
+        public void Clone_SavesToASteam()
+        {
+            var fieldMapWriter = mock.Mock<IOdbcFieldMapWriter>();
+            var fieldMapReader = mock.Mock<IOdbcFieldMapReader>();
+
+            var ioFactory = mock.Mock<IOdbcFieldMapIOFactory>();
+            ioFactory.Setup(f => f.CreateWriter(It.IsAny<OdbcFieldMap>())).Returns(fieldMapWriter.Object);
+            ioFactory.Setup(f => f.CreateReader(It.IsAny<Stream>())).Returns(fieldMapReader.Object);
+
+            var testObject = mock.Create<OdbcFieldMap>();
+
+            testObject.Clone();
+
+            fieldMapWriter.Verify(f=>f.Write(It.IsAny<Stream>()), Times.Once);
+        }
+
+        [Fact]
+        public void Clone_LoadsFromSteam()
+        {
+            var fieldMapWriter = mock.Mock<IOdbcFieldMapWriter>();
+            var fieldMapReader = mock.Mock<IOdbcFieldMapReader>();
+
+            var ioFactory = mock.Mock<IOdbcFieldMapIOFactory>();
+            ioFactory.Setup(f => f.CreateWriter(It.IsAny<OdbcFieldMap>())).Returns(fieldMapWriter.Object);
+            ioFactory.Setup(f => f.CreateReader(It.IsAny<Stream>())).Returns(fieldMapReader.Object);
+
+            var testObject = mock.Create<OdbcFieldMap>();
+
+            testObject.Clone();
+
+            fieldMapReader.Verify(f => f.ReadEntry(), Times.Once);
+        }
+
         private Stream GetStreamWithFieldMap()
         {
             MemoryStream stream = new MemoryStream();
