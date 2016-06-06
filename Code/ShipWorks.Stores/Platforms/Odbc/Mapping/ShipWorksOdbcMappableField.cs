@@ -1,6 +1,7 @@
 using Newtonsoft.Json;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using System;
+using System.Globalization;
 using System.Reflection;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Mapping
@@ -98,12 +99,33 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 
             try
             {
+                // parse decimal info with number styles to ensure we can handle currency and thousands
+                if (destinationType == typeof(decimal))
+                {
+                    return ConvertDecimal(value);
+                }
+
                 return Convert.ChangeType(value, destinationType);
             }
             catch (Exception ex)
             {
                 throw new ShipWorksOdbcException($"Unable to convert {value} to {destinationType} for {GetQualifiedName()}.", ex);
             }
+        }
+
+        /// <summary>
+        /// Converts the given object to a decimal
+        /// </summary>
+        private decimal ConvertDecimal(object value)
+        {
+            return decimal.Parse(value.ToString(),
+                NumberStyles.AllowLeadingSign |
+                NumberStyles.AllowLeadingWhite |
+                NumberStyles.AllowTrailingWhite |
+                NumberStyles.AllowCurrencySymbol |
+                NumberStyles.AllowDecimalPoint |
+                NumberStyles.AllowThousands,
+                new CultureInfo("en-US"));
         }
     }
 }
