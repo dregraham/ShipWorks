@@ -13,7 +13,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
 {
     public class OdbcOrderChargeLoaderTest : IDisposable
     {
-        AutoMock mock;
+        private readonly AutoMock mock;
 
         public OdbcOrderChargeLoaderTest()
         {
