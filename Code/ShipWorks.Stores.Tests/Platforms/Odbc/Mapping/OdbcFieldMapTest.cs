@@ -233,26 +233,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
         }
 
         [Fact]
-        public void ResetValues_ResetsEntryValues()
-        {
-            using (var mock = AutoMock.GetLoose())
-            {
-                OdbcFieldMap testObject = mock.Create<OdbcFieldMap>();
-
-                var externalOdbcMappableField = mock.Mock<IExternalOdbcMappableField>();
-
-                var mapEntry = mock.Mock<IOdbcFieldMapEntry>();
-                mapEntry.Setup(e => e.ExternalField).Returns(externalOdbcMappableField.Object);
-
-                testObject.AddEntry(mapEntry.Object);
-
-                testObject.ResetValues();
-
-                externalOdbcMappableField.Verify(f=>f.ResetValue(), Times.Once);
-            }
-        }
-
-        [Fact]
         public void FindEntryBy_ReturnsCorrectEntry_WhenMapContainsGivenField()
         {
             OdbcFieldMap testObject = mock.Create<OdbcFieldMap>();
