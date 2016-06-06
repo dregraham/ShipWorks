@@ -11,7 +11,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
     public class OdbcOrderPaymentLoader : IOdbcOrderDetailLoader
     {
         /// <summary>
-        /// Load the order payment details from the given map into the given entity
+        /// Load the order payment details from the given map into the given order entity
         /// </summary>
         public void Load(IOdbcFieldMap map, OrderEntity order)
         {
@@ -33,7 +33,6 @@ namespace ShipWorks.Stores.Platforms.Odbc
         {
             OrderPaymentDetailEntity paymentDetail = new OrderPaymentDetailEntity();
             paymentDetail.Order = order;
-
             paymentDetail.Label = chargeEntry.ShipWorksField.DisplayName;
             paymentDetail.Value = chargeEntry.ShipWorksField.Value.ToString();
         }

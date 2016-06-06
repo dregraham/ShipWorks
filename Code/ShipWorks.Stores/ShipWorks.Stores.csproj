@@ -192,6 +192,7 @@
     <Compile Include="Platforms\Odbc\Mapping\OdbcFieldMap.cs" />
     <Compile Include="Platforms\Odbc\Mapping\OdbcFieldMapEntry.cs" />
     <Compile Include="Platforms\Odbc\Mapping\OdbcFieldMapFactory.cs" />
+    <Compile Include="Platforms\Odbc\OdbcItemAttributeLoader.cs" />
     <Compile Include="Platforms\Odbc\OdbcOrderChargeLoader.cs" />
     <Compile Include="Platforms\Odbc\Mapping\ShipWorksOdbcMappableField.cs" />
     <Compile Include="Platforms\Odbc\OdbcCipherKey.cs" />

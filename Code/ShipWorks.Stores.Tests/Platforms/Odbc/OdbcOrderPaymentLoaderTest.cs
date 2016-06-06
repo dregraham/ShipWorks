@@ -19,13 +19,13 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             {
                 var map = mock.Mock<IOdbcFieldMap>();
 
-                var shipworksfield = mock.Mock<IShipWorksOdbcMappableField>();
-                shipworksfield.Setup(e => e.GetQualifiedName()).Returns("OrderPaymentDetail.Value");
-                shipworksfield.Setup(e => e.DisplayName).Returns("Payment Method");
-                shipworksfield.Setup(e => e.Value).Returns("Credit Card");
+                var shipworksField = mock.Mock<IShipWorksOdbcMappableField>();
+                shipworksField.Setup(e => e.GetQualifiedName()).Returns("OrderPaymentDetail.Value");
+                shipworksField.Setup(e => e.DisplayName).Returns("Payment Method");
+                shipworksField.Setup(e => e.Value).Returns("Credit Card");
 
                 var mapEntry = mock.Mock<IOdbcFieldMapEntry>();
-                mapEntry.Setup(e => e.ShipWorksField).Returns(shipworksfield.Object);
+                mapEntry.Setup(e => e.ShipWorksField).Returns(shipworksField.Object);
 
                 map.Object.AddEntry(mapEntry.Object);
                 map.Setup(m => m.FindEntriesBy(It.IsAny<EntityField2>())).
@@ -48,13 +48,13 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             {
                 var map = mock.Mock<IOdbcFieldMap>();
 
-                var shipworksfield = mock.Mock<IShipWorksOdbcMappableField>();
-                shipworksfield.Setup(e => e.GetQualifiedName()).Returns("OrderPaymentDetail.Value");
-                shipworksfield.Setup(e => e.DisplayName).Returns("Payment Method");
-                shipworksfield.Setup(e => e.Value).Returns("Credit Card");
+                var shipworksField = mock.Mock<IShipWorksOdbcMappableField>();
+                shipworksField.Setup(e => e.GetQualifiedName()).Returns("OrderPaymentDetail.Value");
+                shipworksField.Setup(e => e.DisplayName).Returns("Payment Method");
+                shipworksField.Setup(e => e.Value).Returns("Credit Card");
 
                 var mapEntry = mock.Mock<IOdbcFieldMapEntry>();
-                mapEntry.Setup(e => e.ShipWorksField).Returns(shipworksfield.Object);
+                mapEntry.Setup(e => e.ShipWorksField).Returns(shipworksField.Object);
 
                 var shipworksfield2 = mock.Mock<IShipWorksOdbcMappableField>();
                 shipworksfield2.Setup(e => e.GetQualifiedName()).Returns("OrderPaymentDetail.Value");
@@ -88,11 +88,11 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             {
                 var map = mock.Mock<IOdbcFieldMap>();
 
-                var shipworksfield = mock.Mock<IShipWorksOdbcMappableField>();
-                shipworksfield.Setup(e => e.GetQualifiedName()).Returns("Blah");
+                var shipworksField = mock.Mock<IShipWorksOdbcMappableField>();
+                shipworksField.Setup(e => e.GetQualifiedName()).Returns("Blah");
 
                 var mapEntry = mock.Mock<IOdbcFieldMapEntry>();
-                mapEntry.Setup(e => e.ShipWorksField).Returns(shipworksfield.Object);
+                mapEntry.Setup(e => e.ShipWorksField).Returns(shipworksField.Object);
 
                 map.Object.AddEntry(mapEntry.Object);
 
@@ -101,7 +101,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
 
                 testObject.Load(map.Object, order);
 
-                Assert.Equal(0, order.OrderPaymentDetails.Count);
+                Assert.Empty(order.OrderPaymentDetails);
             }
         }
     }
