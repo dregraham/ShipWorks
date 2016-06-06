@@ -39,7 +39,7 @@ namespace ShipWorks.AddressValidation
         public const string SqlAppLockName = "ValidateAddresses";
         private const int DefaultBatchSize = 50;
         private const int MaximumBatchSize = 1024;
-        private const int DefaultConcurrency = 8;
+        private const int DefaultConcurrency = 4;
         private const int MaximumConcurrency = 64;
         private const string BatchSizeRegistryKey = "batchSize";
         private const string ValidationConcurrencyRegistryKey = "requests";
