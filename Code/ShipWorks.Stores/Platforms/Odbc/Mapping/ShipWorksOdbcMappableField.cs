@@ -2,8 +2,6 @@ using Newtonsoft.Json;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using System;
 using System.Reflection;
-using ShipWorks.Data.Model;
-using ShipWorks.Data.Model.FactoryClasses;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 {
@@ -32,7 +30,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 	    {
             ContainingObjectName = field?.ContainingObjectName;
             Name = field?.Name;
-            Type = field?.DataType;
+            TypeName = field?.DataType.FullName;
             DisplayName = displayName;
             IsRequired = isRequired;
 	    }
@@ -40,7 +38,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <summary>
         /// The type of the ShipWorks field
         /// </summary>
-        public Type Type { get; set; }
+        public string TypeName { get; set; }
 
         /// <summary>
         /// The name of the object that contains this field
@@ -91,18 +89,20 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// </summary>
         private object ChangeType(object value)
         {
-            if (value == null)
+            Type destinationType = Type.GetType(TypeName);
+
+            if (value == null || destinationType == null)
             {
                 return Value;
             }
 
             try
             {
-                return Convert.ChangeType(value, Type);
+                return Convert.ChangeType(value, destinationType);
             }
             catch (Exception ex)
             {
-                throw new ShipWorksOdbcException($"Unable to convert {value} to {Type} for {GetQualifiedName()}.", ex);
+                throw new ShipWorksOdbcException($"Unable to convert {value} to {destinationType} for {GetQualifiedName()}.", ex);
             }
         }
     }
