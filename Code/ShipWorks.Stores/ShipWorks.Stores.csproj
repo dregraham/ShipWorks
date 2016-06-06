@@ -199,6 +199,7 @@
     <Compile Include="Platforms\Odbc\OdbcColumn.cs" />
     <Compile Include="Platforms\Odbc\OdbcCommandFactory.cs" />
     <Compile Include="Platforms\Odbc\OdbcDownloadCommand.cs" />
+    <Compile Include="Platforms\Odbc\OdbcOrderLoader.cs" />
     <Compile Include="Platforms\Odbc\OdbcOrderPaymentLoader.cs" />
     <Compile Include="Platforms\Odbc\OdbcOrderNoteLoader.cs" />
     <Compile Include="Platforms\Odbc\OdbcRecord.cs" />

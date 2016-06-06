@@ -45,11 +45,6 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         void Save(Stream stream);
 
         /// <summary>
-        /// Reset all of the entries external fields
-        /// </summary>
-        void ResetValues();
-
-        /// <summary>
         /// Apply the given record values to the entries external fields
         /// </summary>
         void ApplyValues(OdbcRecord record);

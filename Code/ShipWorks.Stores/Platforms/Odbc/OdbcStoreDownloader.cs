@@ -34,7 +34,6 @@ namespace ShipWorks.Stores.Platforms.Odbc
 
             foreach (OdbcRecord odbcOrder in odbcOrders)
             {
-                fieldMap.ResetValues();
                 fieldMap.ApplyValues(odbcOrder);
 
                 // Find the OrderNumber Entry

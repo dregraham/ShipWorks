@@ -54,7 +54,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <summary>
         /// Reset all of the entries external fields
         /// </summary>
-        public void ResetValues()
+        private void ResetValues()
         {
             entries.ForEach(e => e.ExternalField.ResetValue());
         }
@@ -81,6 +81,9 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// </summary>
         public void ApplyValues(OdbcRecord record)
         {
+            // Reset all the values first
+            ResetValues();
+
             foreach (IOdbcFieldMapEntry entry in entries)
             {
                 // Load data from OdbcRecord
