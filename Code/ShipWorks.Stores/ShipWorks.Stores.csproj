@@ -201,6 +201,7 @@
     <Compile Include="Platforms\Odbc\OdbcColumn.cs" />
     <Compile Include="Platforms\Odbc\OdbcCommandFactory.cs" />
     <Compile Include="Platforms\Odbc\OdbcDownloadCommand.cs" />
+    <Compile Include="Platforms\Odbc\OdbcOrderDateLoader.cs" />
     <Compile Include="Platforms\Odbc\OdbcOrderLoader.cs" />
     <Compile Include="Platforms\Odbc\OdbcOrderItemLoader.cs" />
     <Compile Include="Platforms\Odbc\OdbcOrderPaymentLoader.cs" />

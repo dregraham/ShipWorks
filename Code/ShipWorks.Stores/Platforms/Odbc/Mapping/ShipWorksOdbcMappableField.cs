@@ -18,6 +18,9 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         public const string UnitPriceDisplayName = "Unit Price";
         public const string TotalPriceDisplayName = "Total Price";
         public const string QuantityDisplayName = "Quantity";
+        public const string OrderDateAndTimeDisplayName = "Order Date & Time";
+        public const string OrderDateDisplayName = "Order Date";
+        public const string OrderTimeDisplayName = "Order Time";
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ShipWorksOdbcMappableField"/> class.

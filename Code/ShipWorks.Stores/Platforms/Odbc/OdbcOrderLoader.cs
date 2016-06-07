@@ -1,7 +1,6 @@
 ﻿using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
-using System;
 using System.Collections.Generic;
 
 namespace ShipWorks.Stores.Platforms.Odbc
@@ -43,8 +42,6 @@ namespace ShipWorks.Stores.Platforms.Odbc
 
             // Load the first record into the map
             map.CopyToEntity(order);
-            order.OrderDate = GetSqlCompliantDate(order.OrderDate);
-            order.OnlineLastModified = GetSqlCompliantDate(order.OnlineLastModified);
 
             foreach (IOdbcOrderDetailLoader loader in orderDetailLoaders)
             {
@@ -59,15 +56,6 @@ namespace ShipWorks.Stores.Platforms.Odbc
                 orderItemLoader.Load(map, order, records);
                 order.OrderTotal = orderUtility.CalculateTotal(order);
             }
-        }
-
-
-        /// <summary>
-        /// Sql can't handle dates prior to 1/1/1753
-        /// </summary>
-        private DateTime GetSqlCompliantDate(DateTime date)
-        {
-            return date < DateTime.Parse("1/1/1753 12:00:00 AM") ? dateTimeProvider.UtcNow : date;
         }
     }
 }

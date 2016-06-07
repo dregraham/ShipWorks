@@ -44,9 +44,9 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 	        List<ShipWorksOdbcMappableField> fields = new List<ShipWorksOdbcMappableField>
 	        {
 	            new ShipWorksOdbcMappableField(OrderFields.OrderNumber, "Order Number", true),
-	            new ShipWorksOdbcMappableField(OrderFields.OrderDate, "Order Date & Time"),
-	            new ShipWorksOdbcMappableField(OrderFields.OrderDate, "Order Date"),
-	            new ShipWorksOdbcMappableField(OrderFields.OrderDate, "Order Time"),
+	            new ShipWorksOdbcMappableField(OrderFields.OrderDate, ShipWorksOdbcMappableField.OrderDateAndTimeDisplayName),
+	            new ShipWorksOdbcMappableField(OrderFields.OrderDate, ShipWorksOdbcMappableField.OrderDateDisplayName),
+	            new ShipWorksOdbcMappableField(OrderFields.OrderDate, ShipWorksOdbcMappableField.OrderTimeDisplayName),
 	            new ShipWorksOdbcMappableField(OrderFields.LocalStatus, "Local Status"),
 	            new ShipWorksOdbcMappableField(OrderFields.OnlineStatus, "Store Status"),
 	            new ShipWorksOdbcMappableField(OrderFields.RequestedShipping, "Requested Shipping"),

@@ -180,6 +180,7 @@
     <Compile Include="Platforms\Odbc\OdbcFieldMapFactoryTest.cs" />
     <Compile Include="Platforms\Odbc\OdbcImportFieldMappingControlViewModelTest.cs" />
     <Compile Include="Platforms\Odbc\OdbcItemAttributeLoaderTest.cs" />
+    <Compile Include="Platforms\Odbc\OdbcOrderDateLoaderTest.cs" />
     <Compile Include="Platforms\Odbc\OdbcOrderItemLoaderTest.cs" />
     <Compile Include="Platforms\Odbc\OdbcOrderLoaderTest.cs" />
     <Compile Include="Platforms\Odbc\OdbcOrderPaymentLoaderTest.cs" />
