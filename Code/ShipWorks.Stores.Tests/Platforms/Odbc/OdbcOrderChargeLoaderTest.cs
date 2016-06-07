@@ -52,7 +52,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
 
             testObject.Load(map.Object, order);
 
-            map.Verify(m => m.FindEntriesBy(It.IsAny<EntityField2>()));
+            map.Verify(m => m.FindEntriesBy(It.IsAny<EntityField2>(), false));
         }
 
         [Fact]
@@ -64,7 +64,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             OdbcFieldMapEntry entry1 = new OdbcFieldMapEntry(shipworksField, externalField);
 
             Mock<IOdbcFieldMap> map = mock.Mock<IOdbcFieldMap>();
-            map.Setup(m => m.FindEntriesBy(It.IsAny<EntityField2>())).Returns(new[] { entry1 });
+            map.Setup(m => m.FindEntriesBy(It.IsAny<EntityField2>(), false)).Returns(new[] { entry1 });
 
             OdbcOrderChargeLoader testObject = new OdbcOrderChargeLoader();
 
@@ -86,7 +86,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             OdbcFieldMapEntry entry1 = new OdbcFieldMapEntry(shipworksField, externalField);
 
             Mock<IOdbcFieldMap> map = mock.Mock<IOdbcFieldMap>();
-            map.Setup(m => m.FindEntriesBy(It.IsAny<EntityField2>())).Returns(new[] { entry1 });
+            map.Setup(m => m.FindEntriesBy(It.IsAny<EntityField2>(), false)).Returns(new[] { entry1 });
 
             OdbcOrderChargeLoader testObject = new OdbcOrderChargeLoader();
 
@@ -108,7 +108,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             OdbcFieldMapEntry entry1 = new OdbcFieldMapEntry(shipworksField, externalField);
 
             Mock<IOdbcFieldMap> map = mock.Mock<IOdbcFieldMap>();
-            map.Setup(m => m.FindEntriesBy(It.IsAny<EntityField2>())).Returns(new[] { entry1 });
+            map.Setup(m => m.FindEntriesBy(It.IsAny<EntityField2>(), false)).Returns(new[] { entry1 });
 
             OdbcOrderChargeLoader testObject = new OdbcOrderChargeLoader();
 
@@ -130,7 +130,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             OdbcFieldMapEntry entry1 = new OdbcFieldMapEntry(shipworksField, externalField);
 
             Mock<IOdbcFieldMap> map = mock.Mock<IOdbcFieldMap>();
-            map.Setup(m => m.FindEntriesBy(It.IsAny<EntityField2>())).Returns(new[] { entry1 });
+            map.Setup(m => m.FindEntriesBy(It.IsAny<EntityField2>(), false)).Returns(new[] { entry1 });
 
             OdbcOrderChargeLoader testObject = new OdbcOrderChargeLoader();
 
@@ -152,7 +152,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             OdbcFieldMapEntry entry1 = new OdbcFieldMapEntry(shipworksField, externalField);
 
             Mock<IOdbcFieldMap> map = mock.Mock<IOdbcFieldMap>();
-            map.Setup(m => m.FindEntriesBy(It.IsAny<EntityField2>())).Returns(new[] { entry1 });
+            map.Setup(m => m.FindEntriesBy(It.IsAny<EntityField2>(), false)).Returns(new[] { entry1 });
 
             OdbcOrderChargeLoader testObject = new OdbcOrderChargeLoader();
 
