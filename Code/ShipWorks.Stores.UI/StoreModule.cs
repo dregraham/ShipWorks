@@ -30,6 +30,9 @@ namespace ShipWorks.Stores.UI
 
             builder.RegisterType<Note>()
                 .As<INote>();
+
+            builder.RegisterType<OrderUtilityWrapper>()
+                .As<IOrderUtility>();
         }
     }
 }

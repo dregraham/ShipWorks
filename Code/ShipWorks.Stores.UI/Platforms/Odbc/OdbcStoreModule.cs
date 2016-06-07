@@ -4,6 +4,8 @@ using ShipWorks.ApplicationCore.Security;
 using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
 using ShipWorks.Stores.UI.Platforms.Odbc.WizardPages;
+using System.Reflection;
+using Module = Autofac.Module;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc
 {
@@ -78,8 +80,26 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
 
             builder.RegisterType<OdbcCommandFactory>();
 
+            RegisterOrderLoadingTypes(builder);
+        }
+
+        /// <summary>
+        /// Registers the order loading types.
+        /// </summary>
+        private static void RegisterOrderLoadingTypes(ContainerBuilder builder)
+        {
             builder.RegisterType<OdbcOrderLoader>()
                 .As<IOdbcOrderLoader>();
+
+            builder.RegisterType<OdbcOrderItemLoader>()
+                .As<IOdbcOrderItemLoader>();
+
+            builder.RegisterType<OdbcItemAttributeLoader>()
+                .As<IOdbcItemAttributeLoader>();
+
+            builder
+                .RegisterAssemblyTypes(Assembly.GetAssembly(typeof(IOdbcOrderDetailLoader)))
+                .Where(t => typeof(IOdbcOrderDetailLoader).IsAssignableFrom(t));
         }
     }
 }

@@ -142,8 +142,10 @@
     </Compile>
     <Compile Include="INote.cs" />
     <Compile Include="IOrderRepository.cs" />
+    <Compile Include="IOrderUtility.cs" />
     <Compile Include="Note.cs" />
     <Compile Include="OrderRepository.cs" />
+    <Compile Include="OrderUtilityWrapper.cs" />
     <Compile Include="Platforms\LemonStand\CoreExtensions\Actions\LemonStandOrderUpdateTask.cs" />
     <Compile Include="Platforms\LemonStand\CoreExtensions\Actions\LemonStandShipmentUploadTask.cs" />
     <Compile Include="Platforms\LemonStand\CoreExtensions\Filters\LemonStandOrderIdCondition.cs" />
