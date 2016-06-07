@@ -39,18 +39,35 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// </summary>
         protected override void Download()
         {
+            Progress.Detail = "Querying data source...";
             IOdbcCommand downloadCommand = commandFactory.CreateDownloadCommand(store);
+            List<IGrouping<string, OdbcRecord>> orderGroups =
+                downloadCommand.Execute().GroupBy(o => o.RecordIdentifier).ToList();
 
-            IEnumerable<IGrouping<string, OdbcRecord>> odbcOrders = downloadCommand.Execute().GroupBy(o => o.RecordIdentifier);
+            int totalCount = orderGroups.Count;
 
-            if (odbcOrders.Any(groups=>string.IsNullOrWhiteSpace(groups.Key)))
+            if (totalCount == 0)
+            {
+                Progress.Detail = "No orders to download.";
+                return;
+            }
+
+            Progress.Detail = $"{totalCount} orders found.";
+
+            if (orderGroups.Any(groups=>string.IsNullOrWhiteSpace(groups.Key)))
             {
                 throw new DownloadException(
                     $"At least one order is missing a value in {fieldMap.RecordIdentifierSource}");
             }
 
-            foreach (IGrouping<string, OdbcRecord> odbcRecordsForOrder in odbcOrders)
+            foreach (IGrouping<string, OdbcRecord> odbcRecordsForOrder in orderGroups)
             {
+                if (Progress.IsCancelRequested)
+                {
+                    return;
+                }
+
+                Progress.Detail = $"Processing order {QuantitySaved + 1}";
                 OdbcRecord firstRecord = odbcRecordsForOrder.First();
 
                 fieldMap.ApplyValues(firstRecord);
@@ -69,6 +86,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
                 orderLoader.Load(fieldMap, orderEntity, odbcRecordsForOrder);
 
                 SaveDownloadedOrder(orderEntity);
+                Progress.PercentComplete = 100 * QuantitySaved / totalCount;
             }
         }
     }
