@@ -43,6 +43,12 @@ namespace ShipWorks.Stores.Platforms.Odbc
 
             IEnumerable<IGrouping<string, OdbcRecord>> odbcOrders = downloadCommand.Execute().GroupBy(o => o.RecordIdentifier);
 
+            if (odbcOrders.Any(groups=>string.IsNullOrWhiteSpace(groups.Key)))
+            {
+                throw new DownloadException(
+                    $"At least one order is missing a value in {fieldMap.RecordIdentifierSource}");
+            }
+
             foreach (IGrouping<string, OdbcRecord> odbcRecordsForOrder in odbcOrders)
             {
                 OdbcRecord firstRecord = odbcRecordsForOrder.First();

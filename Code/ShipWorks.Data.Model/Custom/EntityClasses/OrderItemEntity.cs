@@ -19,9 +19,7 @@ namespace ShipWorks.Data.Model.EntityClasses
         {
             MethodConditions.EnsureArgumentIsNotNull(order);
 
-            _order = order;
-
-            ((IEntity2)_order).SetRelatedEntity(this, "OrderItems");
+            ((IEntity2)order).SetRelatedEntity(this, "OrderItems");
 
             InitializeNullsToDefault();
         }

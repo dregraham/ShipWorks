@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-using ShipWorks.Data.Model.EntityClasses;
+﻿using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
+using System.Collections.Generic;
 
 namespace ShipWorks.Stores.Platforms.Odbc
 {
@@ -17,7 +17,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
         {
             if (item != null)
             {
-                IEnumerable<IOdbcFieldMapEntry> itemEntries = map.FindEntriesBy(OrderItemAttributeFields.Name);
+                IEnumerable<IOdbcFieldMapEntry> itemEntries = map.FindEntriesBy(OrderItemAttributeFields.Name, false);
 
                 foreach (IOdbcFieldMapEntry entry in itemEntries)
                 {
