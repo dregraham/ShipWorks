@@ -165,7 +165,7 @@ namespace ShipWorks.Shipping
 
             workProgress.Starting();
 
-            var orderByDescending = entityIDsOriginalSort.OrderByDescending(id => id);
+            IOrderedEnumerable<long> orderByDescending = entityIDsOriginalSort.OrderByDescending(id => id);
 
             foreach (long entityID in orderByDescending)
             {
@@ -207,7 +207,7 @@ namespace ShipWorks.Shipping
                         // Add them to the global list
                         globalShipments.Add(shipment.ShipmentID, shipment);
 
-                        // try for 10 ms to add an item
+                        // try for a few ms to add an item
                         while (!shipmentsToValidate.TryAdd(shipment, TimeSpan.FromMilliseconds(50)) && !workProgress.IsCancelRequested)
                         {
                         }    
@@ -234,9 +234,6 @@ namespace ShipWorks.Shipping
         /// </summary>
         private async Task ValidateShipmentsInternal(ProgressItem workProgress, int initialCount)
         {
-            // We need to make sure filters are up to date so profiles being applied can be as accurate as possible.
-            FilterHelper.EnsureFiltersUpToDate(TimeSpan.FromSeconds(15));
-
             int count = 0;
             int total = initialCount;
             workProgress.Starting();
@@ -346,7 +343,7 @@ namespace ShipWorks.Shipping
                 // Sort the list of shipments in the original keys order.  
                 // During loading, we reverse the keys order so that we validate addresses in reverse order
                 // from what the background process does...it validates in sequential primary key ascending order.
-                var orderedByIDList = from i in entityIDsOriginalSort
+                IEnumerable<ShipmentEntity> orderedByIDList = from i in entityIDsOriginalSort
                                       join o in globalShipments
                                       on i equals (keyType == EntityType.OrderEntity ? o.Value.OrderID : o.Value.ShipmentID)
                                       select o.Value;
