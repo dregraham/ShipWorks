@@ -99,7 +99,8 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
 
             builder
                 .RegisterAssemblyTypes(Assembly.GetAssembly(typeof(IOdbcOrderDetailLoader)))
-                .Where(t => typeof(IOdbcOrderDetailLoader).IsAssignableFrom(t));
+                .Where(t => typeof(IOdbcOrderDetailLoader).IsAssignableFrom(t))
+                .As<IOdbcOrderDetailLoader>();
         }
     }
 }
