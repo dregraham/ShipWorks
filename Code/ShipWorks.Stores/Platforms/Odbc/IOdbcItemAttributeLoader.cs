@@ -4,7 +4,7 @@ using ShipWorks.Stores.Platforms.Odbc.Mapping;
 namespace ShipWorks.Stores.Platforms.Odbc
 {
     /// <summary>
-    /// Loads item attribtues into an item
+    /// Loads item attributes into an item
     /// </summary>
     public interface IOdbcItemAttributeLoader
     {

@@ -3,38 +3,51 @@ using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace ShipWorks.Stores.Platforms.Odbc
 {
+    /// <summary>
+    /// Downloader for an OdbcStoreDownloader
+    /// </summary>
     public class OdbcStoreDownloader : StoreDownloader
     {
         private readonly OdbcCommandFactory commandFactory;
         private readonly IOdbcFieldMap fieldMap;
+        private readonly IOdbcOrderLoader orderLoader;
         private readonly OdbcStoreEntity store;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="OdbcStoreDownloader"/> class.
+        /// </summary>
         public OdbcStoreDownloader(StoreEntity store,
             OdbcCommandFactory commandFactory,
-            IOdbcFieldMap fieldMap) : base(store)
+            IOdbcFieldMap fieldMap,
+            IOdbcOrderLoader orderLoader) : base(store)
         {
             this.commandFactory = commandFactory;
             this.fieldMap = fieldMap;
+            this.orderLoader = orderLoader;
             this.store = (OdbcStoreEntity) store;
 
             fieldMap.Load(this.store.Map);
         }
 
+        /// <summary>
+        /// Import ODBC Orders from external datasource.
+        /// </summary>
         protected override void Download()
         {
             IOdbcCommand downloadCommand = commandFactory.CreateDownloadCommand(store);
 
-            IEnumerable<OdbcRecord> odbcOrders = downloadCommand.Execute();
+            IEnumerable<IGrouping<string, OdbcRecord>> odbcOrders = downloadCommand.Execute().GroupBy(o => o.RecordIdentifier);
 
-            foreach (OdbcRecord odbcOrder in odbcOrders)
+            foreach (IGrouping<string, OdbcRecord> odbcRecordsForOrder in odbcOrders)
             {
-                fieldMap.ApplyValues(odbcOrder);
+                OdbcRecord firstRecord = odbcRecordsForOrder.First();
+
+                fieldMap.ApplyValues(firstRecord);
 
                 // Find the OrderNumber Entry
                 IOdbcFieldMapEntry odbcFieldMapEntry = fieldMap.FindEntriesBy(OrderFields.OrderNumber).FirstOrDefault();
@@ -46,29 +59,8 @@ namespace ShipWorks.Stores.Platforms.Odbc
 
                 // Create an order using the order number
                 OrderEntity orderEntity = InstantiateOrder(new OrderNumberIdentifier((long) odbcFieldMapEntry.ShipWorksField.Value));
-
-
-
-
-                fieldMap.CopyToEntity(orderEntity);
-
-
-
-                // This stuff is just to ensure that ShipWorks does not crash, it might need to change in the future
-                if (orderEntity.OrderDate < DateTime.Parse("1/1/1753 12:00:00 AM"))
-                {
-                    orderEntity.OrderDate = DateTime.UtcNow;
-                }
-
-                if (orderEntity.OnlineLastModified < DateTime.Parse("1/1/1753 12:00:00 AM"))
-                {
-                    orderEntity.OnlineLastModified = DateTime.UtcNow;
-                }
-
-                if (orderEntity.IsNew)
-                {
-                    orderEntity.OrderTotal = OrderUtility.CalculateTotal(orderEntity);
-                }
+               
+                orderLoader.Load(fieldMap, orderEntity, odbcRecordsForOrder);
 
                 SaveDownloadedOrder(orderEntity);
             }

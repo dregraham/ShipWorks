@@ -77,6 +77,9 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             builder.RegisterType<OdbcStoreDownloader>();
 
             builder.RegisterType<OdbcCommandFactory>();
+
+            builder.RegisterType<OdbcOrderLoader>()
+                .As<IOdbcOrderLoader>();
         }
     }
 }
