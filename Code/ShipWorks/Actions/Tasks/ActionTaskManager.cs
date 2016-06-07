@@ -96,7 +96,6 @@ namespace ShipWorks.Actions.Tasks
         /// Create a menu that can be used to select task types
         /// </summary>
         [NDependIgnoreLongMethod]
-        [NDependIgnoreComplexMethodAttribute]
         public static SandContextPopup CreateTasksMenu()
         {
             List<ActionTaskDescriptorBinding> commonBindings = new List<ActionTaskDescriptorBinding>();
