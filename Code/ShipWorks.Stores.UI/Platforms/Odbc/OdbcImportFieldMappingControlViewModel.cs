@@ -110,13 +110,15 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             get { return selectedTable; }
             set
             {
-                if (MapName != null && DataSource.Name != null
-                    && MapName.Equals(DataSource.Name, StringComparison.InvariantCulture))
+                // Set map name for the user, if they have not altered it.
+                // Starts by setting map name to selected data source name.
+                // When a table is selected, if map name is untouched by user,
+                // the map name is changed to "DataSourceName - SelectedColumnName"
+                if (MapName != null && DataSource.Name != null &&
+                    (MapName.Equals(DataSource.Name, StringComparison.InvariantCulture) ||
+                    MapName.Equals($"{DataSource.Name} - {SelectedTable.Name}", StringComparison.InvariantCulture)))
                 {
-                    MapName = SelectedTable != null && MapName.Equals($"{DataSource.Name} - {SelectedTable.Name}",
-                        StringComparison.InvariantCulture) ?
-                        $"{DataSource.Name} - {value.Name}" :
-                        DataSource.Name;
+                    MapName = $"{DataSource.Name} - {value.Name}";
                 }
 
                 handler.Set(nameof(SelectedTable), ref selectedTable, value);
