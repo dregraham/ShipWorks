@@ -174,6 +174,11 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         public OdbcFieldMapDisplay ItemFieldMap { get; set; }
 
         /// <summary>
+        /// Gets or sets the record identifier for multiline order items
+        /// </summary>
+        public OdbcColumn RecordIdentifier { get; set; }
+
+        /// <summary>
         /// Loads the external odbc tables.
         /// </summary>
         public void Load(OdbcStoreEntity store)

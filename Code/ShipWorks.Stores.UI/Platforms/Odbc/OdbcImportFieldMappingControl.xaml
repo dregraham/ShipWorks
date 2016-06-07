@@ -8,6 +8,7 @@
              mc:Ignorable="d"
              xmlns:behaviors="clr-namespace:ShipWorks.UI.Behaviors;assembly=ShipWorks.UI"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:ui="http://schemas.shipworks.com/ui"
              d:DataContext="{d:DesignInstance local:OdbcImportFieldMappingControlViewModel}"
              Height="500" Width="540"
              FontFamily="Tahoma" FontSize="8.25pt"
@@ -34,6 +35,7 @@
             <Setter Property="Padding" Value="4 4 0 4" />
         </Style>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
+        <ui:VisibleWhenEqualToParameterConverter x:Key="VisibleWhenEqualToParameterConverter" />
     </Control.Resources>
     <Grid Margin="20 10 10 10">
         <Grid.RowDefinitions>
@@ -169,74 +171,113 @@
                 </Border>
                 <ScrollViewer Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
                                   VerticalScrollBarVisibility="Auto">
-                    <ItemsControl ItemsSource="{Binding SelectedFieldMap.Map.Entries, UpdateSourceTrigger=PropertyChanged}">
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate DataType="{x:Type fieldMap:OdbcFieldMapEntry}">
-                                <Border BorderBrush="Gray" BorderThickness="0 0 0 1">
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="140" />
-                                            <ColumnDefinition Width="*" />
-                                        </Grid.ColumnDefinitions>
-                                        <Label Grid.Column="0" Content="{Binding ShipWorksField.DisplayName}"
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"></RowDefinition>
+                            <RowDefinition Height="*"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Grid Visibility="{Binding SelectedFieldMap.DisplayName,
+                            Converter={StaticResource VisibleWhenEqualToParameterConverter},
+                            ConverterParameter='Item'}" >
+                            <!--<Grid.Style>
+                                <Style TargetType="Grid">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding SelectedFieldMap.DisplayName}"
+
+                                                     Value="Item">
+                                            <Setter Property="Visibility" Value="Visible"></Setter>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Grid.Style>-->
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <Label Grid.Column="0" Content="Column that uniquely identifies each order:" />
+                            <ComboBox Grid.Column="1" ItemsSource="{Binding Columns, UpdateSourceTrigger=PropertyChanged}"
+                                      SelectedItem="{Binding RecordIdentifier}"
+                                      DisplayMemberPath="Name"/>
+                            <Image Grid.Column="2" Source="/Shipworks.Core;component/Resources/InfoTip.png"
+                                   Margin="5">
+                                <Image.ToolTip>
+                                    <ToolTip>
+                                        <Label Content="Each repeating line that represents an item of the same order must have the same value in this column."></Label>
+                                    </ToolTip>
+                                </Image.ToolTip>
+                            </Image>
+                        </Grid>
+                        <ItemsControl Grid.Row="1"
+                            ItemsSource="{Binding SelectedFieldMap.Map.Entries, UpdateSourceTrigger=PropertyChanged}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate DataType="{x:Type fieldMap:OdbcFieldMapEntry}">
+                                    <Border BorderBrush="Gray" BorderThickness="0 0 0 1">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="140" />
+                                                <ColumnDefinition Width="*" />
+                                            </Grid.ColumnDefinitions>
+                                            <Label Grid.Column="0" Content="{Binding ShipWorksField.DisplayName}"
                                                Margin="0 5 5 5"
                                                HorizontalAlignment="Left"/>
-                                        <ComboBox Grid.Column="1"
+                                            <ComboBox Grid.Column="1"
                                                   ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl},
                                                     Path=DataContext.Columns, UpdateSourceTrigger=PropertyChanged}"
                                                   HorizontalAlignment="Stretch"
                                                   Margin="0 5 5 5"
                                                   SelectedItem="{Binding ExternalField.Column}"
                                                   TextSearch.TextPath="Name">
-                                            <ComboBox.ItemTemplate>
-                                                <DataTemplate>
-                                                    <Control x:Name="SourceColumns" Focusable="False">
-                                                        <Control.Template>
-                                                            <ControlTemplate>
-                                                                <StackPanel Orientation="Horizontal" Height="15">
-                                                                    <Image Margin="0 0 3 0">
-                                                                        <Image.Style>
-                                                                            <Style TargetType="Image">
-                                                                                <Setter Property="Source" Value="/Shipworks.Core;component/Resources/table_selection_column.png" />
-                                                                                <Style.Triggers>
-                                                                                    <DataTrigger Binding="{Binding Path=Name}" Value="(None)">
-                                                                                        <Setter Property="Source" Value="/Shipworks.Core;component/Resources/forbidden.png" />
-                                                                                    </DataTrigger>
-                                                                                </Style.Triggers>
-                                                                            </Style>
-                                                                        </Image.Style>
-                                                                    </Image>
-                                                                    <TextBlock Text="{Binding Path=Name}" VerticalAlignment="Center"/>
-                                                                </StackPanel>
-                                                            </ControlTemplate>
-                                                        </Control.Template>
-                                                    </Control>
-                                                    <DataTemplate.Triggers>
-                                                        <MultiDataTrigger>
-                                                            <MultiDataTrigger.Conditions>
-                                                                <Condition Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ComboBoxItem}}, Path=IsSelected}" Value="{x:Null}"/>
-                                                                <Condition Binding="{Binding Path=Name}" Value="(None)" />
-                                                            </MultiDataTrigger.Conditions>
-                                                            <Setter TargetName="SourceColumns" Property="Template">
-                                                                <Setter.Value>
-                                                                    <ControlTemplate>
-                                                                    </ControlTemplate>
-                                                                </Setter.Value>
-                                                            </Setter>
-                                                        </MultiDataTrigger>
-                                                    </DataTemplate.Triggers>
-                                                </DataTemplate>
-                                            </ComboBox.ItemTemplate>
-                                        </ComboBox>
-                                        <Label Grid.Column="0" Foreground="Red"
+                                                <ComboBox.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <Control x:Name="SourceColumns" Focusable="False">
+                                                            <Control.Template>
+                                                                <ControlTemplate>
+                                                                    <StackPanel Orientation="Horizontal" Height="15">
+                                                                        <Image Margin="0 0 3 0">
+                                                                            <Image.Style>
+                                                                                <Style TargetType="Image">
+                                                                                    <Setter Property="Source" Value="/Shipworks.Core;component/Resources/table_selection_column.png" />
+                                                                                    <Style.Triggers>
+                                                                                        <DataTrigger Binding="{Binding Path=Name}" Value="(None)">
+                                                                                            <Setter Property="Source" Value="/Shipworks.Core;component/Resources/forbidden.png" />
+                                                                                        </DataTrigger>
+                                                                                    </Style.Triggers>
+                                                                                </Style>
+                                                                            </Image.Style>
+                                                                        </Image>
+                                                                        <TextBlock Text="{Binding Path=Name}" VerticalAlignment="Center"/>
+                                                                    </StackPanel>
+                                                                </ControlTemplate>
+                                                            </Control.Template>
+                                                        </Control>
+                                                        <DataTemplate.Triggers>
+                                                            <MultiDataTrigger>
+                                                                <MultiDataTrigger.Conditions>
+                                                                    <Condition Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ComboBoxItem}}, Path=IsSelected}" Value="{x:Null}"/>
+                                                                    <Condition Binding="{Binding Path=Name}" Value="(None)" />
+                                                                </MultiDataTrigger.Conditions>
+                                                                <Setter TargetName="SourceColumns" Property="Template">
+                                                                    <Setter.Value>
+                                                                        <ControlTemplate>
+                                                                        </ControlTemplate>
+                                                                    </Setter.Value>
+                                                                </Setter>
+                                                            </MultiDataTrigger>
+                                                        </DataTemplate.Triggers>
+                                                    </DataTemplate>
+                                                </ComboBox.ItemTemplate>
+                                            </ComboBox>
+                                            <Label Grid.Column="0" Foreground="Red"
                                                Content="Required"
                                                Visibility="{Binding ShipWorksField.IsRequired, Converter={StaticResource BooleanToVisibility}}"
                                                HorizontalAlignment="Right"/>
-                                    </Grid>
-                                </Border>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </Grid>
                 </ScrollViewer>
             </Grid>
         </Border>
