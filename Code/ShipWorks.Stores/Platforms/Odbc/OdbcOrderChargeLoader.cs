@@ -20,7 +20,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
 
             if (order != null)
             {
-                IEnumerable<IOdbcFieldMapEntry> chargeEntries = map.FindEntriesBy(OrderChargeFields.Amount);
+                IEnumerable<IOdbcFieldMapEntry> chargeEntries = map.FindEntriesBy(OrderChargeFields.Amount, false);
 
                 foreach (IOdbcFieldMapEntry chargeEntry in chargeEntries)
                 {

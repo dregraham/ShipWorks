@@ -1,3 +1,4 @@
+using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
 using System.Collections.Generic;
 using System.Data;
@@ -28,37 +29,47 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// </summary>
         public IEnumerable<OdbcRecord> Execute()
         {
-            List<OdbcRecord> records = new List<OdbcRecord>();
-
-            using (OdbcConnection connection = (OdbcConnection) dataSource.CreateConnection())
+            try
             {
-                string query = GetQuery(connection);
+                List<OdbcRecord> records = new List<OdbcRecord>();
 
-                using (OdbcCommand command = new OdbcCommand(query, connection))
+                using (OdbcConnection connection = (OdbcConnection) dataSource.CreateConnection())
                 {
-                    OdbcDataReader reader = command.ExecuteReader();
+                    string query = GetQuery(connection);
 
-                    while (reader.Read())
+                    using (OdbcCommand command = new OdbcCommand(query, connection))
                     {
-                        OdbcRecord odbcRecord = new OdbcRecord();
-                        records.Add(odbcRecord);
+                        OdbcDataReader reader = command.ExecuteReader();
 
-                        for (int i = 0; i < reader.FieldCount; i++)
+                        while (reader.Read())
                         {
-                            string columnName = reader.GetName(i);
-                            object value = reader[i];
-                            
-                            odbcRecord.AddField(columnName, value);
-                            if (columnName == fieldMap.RecordIdentifierSource)
+                            OdbcRecord odbcRecord = new OdbcRecord();
+                            records.Add(odbcRecord);
+
+                            for (int i = 0; i < reader.FieldCount; i++)
                             {
-                                odbcRecord.RecordIdentifier = value.ToString();
+                                if (!reader.IsDBNull(i))
+                                {
+                                    string columnName = reader.GetName(i);
+                                    object value = reader[i];
+
+                                    odbcRecord.AddField(columnName, value);
+                                    if (columnName == fieldMap.RecordIdentifierSource)
+                                    {
+                                        odbcRecord.RecordIdentifier = value.ToString();
+                                    }
+                                }
                             }
                         }
                     }
                 }
-            }
 
-            return records;
+                return records;
+            }
+            catch (OdbcException ex)
+            {
+                throw new DownloadException(ex.Message, ex);
+            }
         }
 
         /// <summary>
