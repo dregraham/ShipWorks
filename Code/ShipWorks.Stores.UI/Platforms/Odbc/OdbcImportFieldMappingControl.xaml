@@ -213,28 +213,31 @@
                             <RowDefinition Height="Auto"></RowDefinition>
                             <RowDefinition Height="*"></RowDefinition>
                         </Grid.RowDefinitions>
-                        <Grid Visibility="{Binding SelectedFieldMap.DisplayName,
+                        <Border Grid.Row="0" BorderThickness="0 0 0 1" BorderBrush="Gray"
+                                Visibility="{Binding SelectedFieldMap.DisplayName,
                             Converter={StaticResource VisibleWhenEqualToParameterConverter},
-                            ConverterParameter='Item'}" >
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="Auto" />
-                            </Grid.ColumnDefinitions>
-                            <Label Grid.Column="0" Content="Column that uniquely identifies each order:" />
-                            <ComboBox Grid.Column="1" ItemsSource="{Binding Columns, UpdateSourceTrigger=PropertyChanged}"
+                            ConverterParameter='Item'}">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <Label Grid.Column="0" Content="Column that uniquely identifies each order:" />
+                                <ComboBox Grid.Column="1" ItemsSource="{Binding Columns, UpdateSourceTrigger=PropertyChanged}"
                                       SelectedItem="{Binding RecordIdentifier}"
                                       TextSearch.TextPath="Name"
                                       ItemTemplate="{StaticResource SourceColumnComboBoxItemTemplate}"/>
-                            <Image Grid.Column="2" Source="/Shipworks.Core;component/Resources/InfoTip.png"
+                                <Image Grid.Column="2" Source="/Shipworks.Core;component/Resources/InfoTip.png"
                                    Margin="5">
-                                <Image.ToolTip>
-                                    <ToolTip>
-                                        <Label Content="Each repeating line that represents an item of the same order must have the same value in this column."></Label>
-                                    </ToolTip>
-                                </Image.ToolTip>
-                            </Image>
-                        </Grid>
+                                    <Image.ToolTip>
+                                        <ToolTip>
+                                            <Label Content="Each repeating line that represents an item of the same order must have the same value in this column."></Label>
+                                        </ToolTip>
+                                    </Image.ToolTip>
+                                </Image>
+                            </Grid>
+                        </Border>
                         <ItemsControl Grid.Row="1"
                             ItemsSource="{Binding SelectedFieldMap.Map.Entries, UpdateSourceTrigger=PropertyChanged}">
                             <ItemsControl.ItemTemplate>
