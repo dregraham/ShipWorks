@@ -265,6 +265,8 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
                 e.ExternalField.Table.ResetColumns();
             });
 
+            map.RecordIdentifierSource = RecordIdentifier.Name;
+
             return map;
         }
 

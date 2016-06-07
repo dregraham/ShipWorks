@@ -134,6 +134,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
             }
 
             ExternalTableName = reader.ReadExternalTableName();
+            RecordIdentifierSource = reader.ReadRecordIdentifierSource();
         }
 
         /// <summary>

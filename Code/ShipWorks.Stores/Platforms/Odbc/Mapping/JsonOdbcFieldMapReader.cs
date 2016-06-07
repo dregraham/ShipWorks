@@ -92,5 +92,22 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
                 return null;
             }
         }
+
+        /// <summary>
+        /// Reads the record identifier source from the stream
+        /// </summary>
+        /// <returns></returns>
+        public string ReadRecordIdentifierSource()
+        {
+            try
+            {
+                return json["RecordIdentifierSource"].ToString();
+            }
+            catch (Exception ex)
+            {
+                log.Error("Error parsing Record Identifier Source from map.", ex);
+                return string.Empty;
+            }
+        }
     }
 }

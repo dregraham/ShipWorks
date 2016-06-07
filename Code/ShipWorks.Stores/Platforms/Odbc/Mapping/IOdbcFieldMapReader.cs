@@ -17,5 +17,11 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// Reads the ODBC Field Map entry from the stream
         /// </summary>
         OdbcFieldMapEntry ReadEntry();
-	}
+
+        /// <summary>
+        /// Reads the record identifier source from the stream
+        /// </summary>
+        /// <returns></returns>
+        string ReadRecordIdentifierSource();
+    }
 }
