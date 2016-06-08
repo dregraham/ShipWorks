@@ -1,5 +1,6 @@
 ﻿using log4net;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace ShipWorks.Stores.Platforms.Odbc
 {
@@ -16,6 +17,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// <summary>
         /// The tables name
         /// </summary>
+        [Obfuscation(Exclude = true)]
         string Name { get; }
 
         /// <summary>
