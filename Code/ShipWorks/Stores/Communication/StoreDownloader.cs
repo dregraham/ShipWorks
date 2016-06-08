@@ -22,6 +22,10 @@ using ShipWorks.Users.Audit;
 using System.Reflection;
 using Interapptive.Shared;
 using ShipWorks.AddressValidation.Enums;
+using ShipWorks.ApplicationCore.Crashes;
+using ShipWorks.Data.Utility;
+using ShipWorks.SqlServer.Common.Data;
+using System.Data.SqlClient;
 
 namespace ShipWorks.Stores.Communication
 {
@@ -486,6 +490,18 @@ namespace ShipWorks.Stores.Communication
         [NDependIgnoreComplexMethodAttribute]
         protected virtual void SaveDownloadedOrder(OrderEntity order)
         {
+            // at this point there should be an app lock, this keeps client machines or the background
+            // process from downloading. If there is no app lock we throw a download exception
+            // this will ensure that two machines cannot save an order for the same store at the same time
+            using (SqlConnection con = SqlSession.Current.OpenConnection())
+            {
+                if (!SqlAppLockUtility.IsLocked(con, $"EntityLock_{store.StoreID}"))
+                {
+                    // throw download exception
+                    throw new DownloadException("ShipWorks was unable to maintain a connection to the database, please try downloading again.");
+                }
+            }
+
             Stopwatch sw = Stopwatch.StartNew();
 
             if (order == null)
