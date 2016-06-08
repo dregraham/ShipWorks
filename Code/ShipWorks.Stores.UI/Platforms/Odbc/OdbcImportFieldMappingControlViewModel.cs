@@ -242,6 +242,12 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
                 return false;
             }
 
+            if (string.IsNullOrWhiteSpace(RecordIdentifier?.Name))
+            {
+                messageHelper.ShowError("When orders contain items on multiple lines, an order identifier is required to be mapped.");
+                return false;
+            }
+
             return true;
         }
 
@@ -265,7 +271,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
                 e.ExternalField.Table.ResetColumns();
             });
 
-            map.RecordIdentifierSource = RecordIdentifier.Name;
+            map.RecordIdentifierSource = RecordIdentifier?.Name;
 
             return map;
         }
