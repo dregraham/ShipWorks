@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 {
     /// <summary>
@@ -10,7 +8,6 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <summary>
         /// Reads the ODBC Field Map external table name from the stream
         /// </summary>
-        /// <returns></returns>
         string ReadExternalTableName();
 
         /// <summary>
@@ -21,7 +18,6 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <summary>
         /// Reads the record identifier source from the stream
         /// </summary>
-        /// <returns></returns>
         string ReadRecordIdentifierSource();
     }
 }

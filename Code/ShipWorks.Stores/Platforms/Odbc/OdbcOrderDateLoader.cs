@@ -8,15 +8,25 @@ using System.Linq;
 
 namespace ShipWorks.Stores.Platforms.Odbc
 {
+    /// <summary>
+    /// Loads OrderDate and LastModified date
+    /// </summary>
     public class OdbcOrderDateLoader : IOdbcOrderDetailLoader
     {
         private readonly IDateTimeProvider dateTimeProvider;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="OdbcOrderDateLoader"/> class.
+        /// </summary>
+        /// <param name="dateTimeProvider">The date time provider.</param>
         public OdbcOrderDateLoader(IDateTimeProvider dateTimeProvider)
         {
             this.dateTimeProvider = dateTimeProvider;
         }
 
+        /// <summary>
+        /// Loads the order dates into the order
+        /// </summary>
         public void Load(IOdbcFieldMap map, OrderEntity order)
         {
             order.OnlineLastModified = GetSqlCompliantDate(order.OnlineLastModified);
@@ -45,6 +55,9 @@ namespace ShipWorks.Stores.Platforms.Odbc
             order.OrderDate = GetSqlCompliantDate(order.OrderDate);
         }
 
+        /// <summary>
+        /// Gets the date.
+        /// </summary>
         private DateTime? GetDate(List<IShipWorksOdbcMappableField> orderDateFields, string displayName)
         {
             IShipWorksOdbcMappableField dateField = orderDateFields.FirstOrDefault(f => f.DisplayName == displayName);

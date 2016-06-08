@@ -22,7 +22,14 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <summary>
         /// The name of the field
         /// </summary>
+        [Obfuscation(Exclude = true)]
         string Name { get; set; }
+
+        /// <summary>
+        /// Gets or sets the name of the type.
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        string TypeName { get; set; }
 
         /// <summary>
         /// Set the Value to the given value
