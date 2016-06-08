@@ -269,7 +269,6 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             map.Entries.ToList().ForEach(e =>
             {
                 e.ExternalField.Table = selectedTable;
-                e.ExternalField.Table.ResetColumns();
             });
 
             map.RecordIdentifierSource = RecordIdentifier?.Name;

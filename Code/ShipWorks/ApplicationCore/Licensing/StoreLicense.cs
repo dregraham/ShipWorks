@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Windows.Forms;
-using Interapptive.Shared.Utility;
+﻿using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.ApplicationCore.Dashboard.Content;
 using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
@@ -10,11 +7,16 @@ using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Editions;
 using ShipWorks.Messaging.Messages;
-using ShipWorks.Stores.Platforms.AmeriCommerce.WebServices;
 using ShipWorks.Users.Security;
+using System;
+using System.Collections.Generic;
+using System.Windows.Forms;
 
 namespace ShipWorks.ApplicationCore.Licensing
 {
+    /// <summary>
+    /// StoreLicense class - handles legacy licenses
+    /// </summary>
     public class StoreLicense : ILicense
     {
         private readonly StoreEntity store;

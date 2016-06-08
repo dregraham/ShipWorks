@@ -9,7 +9,7 @@ namespace ShipWorks.Data.Model.EntityClasses
         /// Initializes a new instance of the <see cref="OrderItemAttributeEntity"/> class.
         /// </summary>
         /// <remarks>
-        ///     Sets the order item and initializes nulls to default.
+        /// Sets the order item and initializes nulls to default.
         /// </remarks>
         public OrderItemAttributeEntity(OrderItemEntity orderItem) : this()
         {

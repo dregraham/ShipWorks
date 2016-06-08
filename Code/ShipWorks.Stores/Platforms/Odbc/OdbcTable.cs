@@ -1,4 +1,5 @@
 using log4net;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -30,6 +31,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// <summary>
         /// The columns in the table
         /// </summary>
+        [JsonIgnore]
         public IEnumerable<OdbcColumn> Columns { get; private set; }
 
         /// <summary>
@@ -74,15 +76,6 @@ namespace ShipWorks.Stores.Platforms.Odbc
                         ex);
                 }
             }
-        }
-
-        /// <summary>
-        /// Resets the columns.
-        /// </summary>
-        /// <exception cref="System.NotImplementedException"></exception>
-        public void ResetColumns()
-        {
-            Columns = null;
         }
     }
 }

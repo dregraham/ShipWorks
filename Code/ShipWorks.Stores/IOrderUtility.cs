@@ -3,7 +3,7 @@
 namespace ShipWorks.Stores
 {
     /// <summary>
-    /// Utility class for working with orders.
+    /// Utility for working with orders.
     /// </summary>
     public interface IOrderUtility
     {

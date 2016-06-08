@@ -36,7 +36,6 @@ namespace ShipWorks.Stores.Platforms.Odbc
         {
             OrderChargeEntity charge = new OrderChargeEntity();
             charge.Order = order;
-
             charge.Type = GetChargeType(chargeEntry.ShipWorksField.DisplayName);
             charge.Description = chargeEntry.ExternalField.Column.Name;
             charge.Amount = (decimal)chargeEntry.ShipWorksField.Value;
@@ -45,24 +44,19 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// <summary>
         /// Gets the Charge Type from the display name
         /// </summary>
-        private string GetChargeType(string displayName)
+        private static string GetChargeType(string displayName)
         {
-            if (displayName == "Shipping Amount")
+            switch (displayName)
             {
-                return "SHIPPING";
+                case "Shipping Amount":
+                    return "SHIPPING";
+                case "Tax Amount":
+                    return "TAX";
+                case "Insurance Amount":
+                    return "INSURANCE";
+                default:
+                    return "ADJUST";
             }
-
-            if (displayName == "Tax Amount")
-            {
-                return "TAX";
-            }
-
-            if (displayName == "Insurance Amount")
-            {
-                return "INSURANCE";
-            }
-
-            return "ADJUST";
         }
     }
 }

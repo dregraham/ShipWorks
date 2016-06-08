@@ -1,10 +1,9 @@
-using System;
-using System.IO;
-using System.Linq;
 using Interapptive.Shared.Utility;
 using log4net;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System;
+using System.Linq;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 {
@@ -18,6 +17,10 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         private readonly JToken mapEntries;
         private int entryPosition;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="JsonOdbcFieldMapReader"/> class.
+        /// </summary>
+        /// <exception cref="ShipWorksOdbcException">ShipWorks was unable to read the ODBC Map.</exception>
         public JsonOdbcFieldMapReader(string serializedMap, ILog log)
         {
             MethodConditions.EnsureArgumentIsNotNull(serializedMap);
@@ -89,7 +92,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
             catch (Exception ex)
             {
                 log.Error("Error Deserializing Field Map Entry.", ex);
-                return null;
+                throw new ShipWorksOdbcException("Error Deserializing Field Map Entry.", ex);
             }
         }
 

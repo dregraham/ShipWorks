@@ -22,12 +22,17 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         public const string OrderDateDisplayName = "Order Date";
         public const string OrderTimeDisplayName = "Order Time";
 
+        [JsonConstructor]
+        public ShipWorksOdbcMappableField(string displayName)
+        {
+            DisplayName = displayName;
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ShipWorksOdbcMappableField"/> class.
         /// </summary>
         /// <param name="field">The field.</param>
         /// <param name="displayName">The display name.</param>
-        [JsonConstructor]
         public ShipWorksOdbcMappableField(EntityField2 field, string displayName) : this(field, displayName, false)
         {
         }
@@ -40,9 +45,9 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <param name="isRequired"></param>
         public ShipWorksOdbcMappableField(EntityField2 field, string displayName, bool isRequired)
 	    {
-            ContainingObjectName = field?.ContainingObjectName;
-            Name = field?.Name;
-            TypeName = field?.DataType.FullName;
+            ContainingObjectName = field.ContainingObjectName;
+            Name = field.Name;
+            TypeName = field.DataType.FullName;
             DisplayName = displayName;
             IsRequired = isRequired;
 	    }
@@ -50,21 +55,25 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <summary>
         /// The type of the ShipWorks field
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public string TypeName { get; set; }
 
         /// <summary>
         /// The name of the object that contains this field
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public string ContainingObjectName { get; set; }
 
         /// <summary>
         /// The name of the field
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public string Name { get; set; }
 
         /// <summary>
         /// The fields value
         /// </summary>
+        [JsonIgnore]
         public object Value { get; private set; }
 
         /// <summary>
