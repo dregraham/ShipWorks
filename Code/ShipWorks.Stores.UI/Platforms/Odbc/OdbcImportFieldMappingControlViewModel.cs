@@ -178,6 +178,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// <summary>
         /// Gets or sets the record identifier for multiline order items
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public OdbcColumn RecordIdentifier { get; set; }
 
         /// <summary>
