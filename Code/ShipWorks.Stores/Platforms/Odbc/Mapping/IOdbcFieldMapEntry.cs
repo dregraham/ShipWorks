@@ -26,6 +26,6 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <summary>
         /// Copies the Value from the external field to the ShipWorks field
         /// </summary>
-        void CopyValueToShipWorksField();
+        void CopyExternalValueToShipWorksField();
     }
 }

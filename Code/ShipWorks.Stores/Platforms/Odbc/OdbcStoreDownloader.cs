@@ -42,8 +42,9 @@ namespace ShipWorks.Stores.Platforms.Odbc
             Progress.Detail = "Querying data source...";
 
             IOdbcCommand downloadCommand = commandFactory.CreateDownloadCommand(store);
-            List<IGrouping<string, OdbcRecord>> orderGroups =
-                downloadCommand.Execute().GroupBy(o => o.RecordIdentifier).ToList();
+
+            IEnumerable<OdbcRecord> downloadedOrders = downloadCommand.Execute();
+            List<IGrouping<string, OdbcRecord>> orderGroups = downloadedOrders.GroupBy(o => o.RecordIdentifier).ToList();
 
             int totalCount = orderGroups.Count;
 

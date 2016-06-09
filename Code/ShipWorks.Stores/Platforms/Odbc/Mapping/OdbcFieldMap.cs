@@ -96,7 +96,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
                 entry.LoadExternalField(record);
 
                 // Copy the External fields to the ShipWorks fields
-                entry.CopyValueToShipWorksField();
+                entry.CopyExternalValueToShipWorksField();
             }
         }
 

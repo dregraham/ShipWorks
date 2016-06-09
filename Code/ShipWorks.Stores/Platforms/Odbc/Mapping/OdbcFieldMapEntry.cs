@@ -45,7 +45,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// Copy the value from the External Field into the ShipWorks Field
         /// </summary>
         [Obfuscation(Exclude = false)]
-        public void CopyValueToShipWorksField()
+        public void CopyExternalValueToShipWorksField()
         {
             ShipWorksField?.LoadValue(ExternalField?.Value);
         }

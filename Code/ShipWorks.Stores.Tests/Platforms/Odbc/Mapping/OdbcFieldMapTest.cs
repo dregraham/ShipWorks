@@ -228,7 +228,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
 
                 testObject.ApplyValues(odbcRecord);
 
-                mapEntry.Verify(m => m.CopyValueToShipWorksField(), Times.Once);
+                mapEntry.Verify(m => m.CopyExternalValueToShipWorksField(), Times.Once);
             }
         }
 
