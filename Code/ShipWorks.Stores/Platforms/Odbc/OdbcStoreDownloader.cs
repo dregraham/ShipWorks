@@ -40,6 +40,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
         protected override void Download()
         {
             Progress.Detail = "Querying data source...";
+
             IOdbcCommand downloadCommand = commandFactory.CreateDownloadCommand(store);
             List<IGrouping<string, OdbcRecord>> orderGroups =
                 downloadCommand.Execute().GroupBy(o => o.RecordIdentifier).ToList();
@@ -68,26 +69,34 @@ namespace ShipWorks.Stores.Platforms.Odbc
                 }
 
                 Progress.Detail = $"Processing order {QuantitySaved + 1}";
-                OdbcRecord firstRecord = odbcRecordsForOrder.First();
-
-                fieldMap.ApplyValues(firstRecord);
-
-                // Find the OrderNumber Entry
-                IOdbcFieldMapEntry odbcFieldMapEntry = fieldMap.FindEntriesBy(OrderFields.OrderNumber).FirstOrDefault();
-
-                if (odbcFieldMapEntry == null)
-                {
-                    throw new DownloadException("Order number not found in map.");
-                }
-
-                // Create an order using the order number
-                OrderEntity orderEntity = InstantiateOrder(new OrderNumberIdentifier((long) odbcFieldMapEntry.ShipWorksField.Value));
-               
-                orderLoader.Load(fieldMap, orderEntity, odbcRecordsForOrder);
-
-                SaveDownloadedOrder(orderEntity);
+                SaveDownloadedOrder(DownloadOrder(odbcRecordsForOrder));
                 Progress.PercentComplete = 100 * QuantitySaved / totalCount;
             }
+        }
+
+        /// <summary>
+        /// Downloads the order.
+        /// </summary>
+        /// <exception cref="DownloadException">Order number not found in map.</exception>
+        private OrderEntity DownloadOrder(IGrouping<string, OdbcRecord> odbcRecordsForOrder)
+        {
+            OdbcRecord firstRecord = odbcRecordsForOrder.First();
+
+            fieldMap.ApplyValues(firstRecord);
+
+            // Find the OrderNumber Entry
+            IOdbcFieldMapEntry odbcFieldMapEntry = fieldMap.FindEntriesBy(OrderFields.OrderNumber).FirstOrDefault();
+
+            if (odbcFieldMapEntry == null)
+            {
+                throw new DownloadException("Order number not found in map.");
+            }
+
+            // Create an order using the order number
+            OrderEntity orderEntity = InstantiateOrder(new OrderNumberIdentifier((long)odbcFieldMapEntry.ShipWorksField.Value));
+
+            orderLoader.Load(fieldMap, orderEntity, odbcRecordsForOrder);
+            return orderEntity;
         }
     }
 }

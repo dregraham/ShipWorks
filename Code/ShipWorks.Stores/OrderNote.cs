@@ -8,15 +8,15 @@ namespace ShipWorks.Stores
     /// <summary>
     /// Handles Note related tasks
     /// </summary>
-    public class Note : INote
+    public class OrderNote : IOrderNote
     {
         private readonly IOrderRepository orderRepository;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Note"/> class.
+        /// Initializes a new instance of the <see cref="OrderNote"/> class.
         /// </summary>
         /// <param name="orderRepository">The order repository.</param>
-        public Note(IOrderRepository orderRepository)
+        public OrderNote(IOrderRepository orderRepository)
         {
             this.orderRepository = orderRepository;
         }

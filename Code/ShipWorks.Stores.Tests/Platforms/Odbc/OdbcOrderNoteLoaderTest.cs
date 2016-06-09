@@ -41,7 +41,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         {
             using (var mock = AutoMock.GetLoose())
             {
-                Mock<INote> note = mock.Mock<INote>();
+                Mock<IOrderNote> note = mock.Mock<IOrderNote>();
 
                 var shipworksField = mock.Mock<IShipWorksOdbcMappableField>();
                 shipworksField.SetupGet(f => f.DisplayName).Returns("this is a public note");
@@ -71,7 +71,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         {
             using (var mock = AutoMock.GetLoose())
             {
-                Mock<INote> note = mock.Mock<INote>();
+                Mock<IOrderNote> note = mock.Mock<IOrderNote>();
 
                 var shipworksField = mock.Mock<IShipWorksOdbcMappableField>();
                 shipworksField.SetupGet(f => f.DisplayName).Returns("this is a private note");

@@ -42,7 +42,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
             record.AddField("Number", 123);
 
             entry.LoadExternalField(record);
-            entry.CopyValueToShipWorksField();
+            entry.CopyExternalValueToShipWorksField();
 
             Assert.Equal(123L, entry.ShipWorksField.Value);
         }

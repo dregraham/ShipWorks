@@ -7,7 +7,7 @@ namespace ShipWorks.Stores
     /// <summary>
     /// Handles Note related tasks
     /// </summary>
-    public interface INote
+    public interface IOrderNote
     {
         /// <summary>
         /// Adds the note to the order if it doesn't already exist

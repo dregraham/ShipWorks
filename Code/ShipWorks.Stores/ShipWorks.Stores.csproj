@@ -140,10 +140,10 @@
     <Compile Include="..\ShipWorks\Properties\AssemblyInfoCommon.cs">
       <Link>Properties\AssemblyInfoCommon.cs</Link>
     </Compile>
-    <Compile Include="INote.cs" />
+    <Compile Include="IOrderNote.cs" />
     <Compile Include="IOrderRepository.cs" />
     <Compile Include="IOrderUtility.cs" />
-    <Compile Include="Note.cs" />
+    <Compile Include="OrderNote.cs" />
     <Compile Include="OrderRepository.cs" />
     <Compile Include="OrderUtilityWrapper.cs" />
     <Compile Include="Platforms\LemonStand\CoreExtensions\Actions\LemonStandOrderUpdateTask.cs" />

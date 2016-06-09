@@ -163,7 +163,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="NoteTest.cs" />
+    <Compile Include="OrderNoteTest.cs" />
     <Compile Include="Platforms\LemonStand\FakeLemonStandDownloader.cs" />
     <Compile Include="Platforms\LemonStand\LemonStandDownloaderTest.cs" />
     <Compile Include="Platforms\LemonStand\LemonStandOrderIdentifierTest.cs" />
