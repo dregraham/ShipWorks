@@ -1,8 +1,9 @@
-﻿using System;
-using System.Data.SqlClient;
-using Interapptive.Shared.Data;
+﻿using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
+using System;
+using System.Data.SqlClient;
+using System.Transactions;
 
 namespace ShipWorks.ApplicationCore.Licensing
 {
@@ -18,9 +19,11 @@ namespace ShipWorks.ApplicationCore.Licensing
         {
             try
             {
-                using (SqlConnection con = SqlSession.Current.OpenConnection())
+                using (new TransactionScope(TransactionScopeOption.Suppress))
+                using (SqlAdapter sqlAdapter = new SqlAdapter())
                 {
-                    return SqlCommandProvider.ExecuteScalar<Guid>(con, "exec GetDatabaseGuid");
+                    RetrievalQuery getDatabaseGuidQuery = new RetrievalQuery(new SqlCommand("exec GetDatabaseGuid"));
+                    return (Guid) sqlAdapter.ExecuteScalarQuery(getDatabaseGuidQuery);
                 }
             }
             catch (Exception ex)
