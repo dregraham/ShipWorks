@@ -89,7 +89,7 @@
             this.username.Name = "username";
             this.username.Size = new System.Drawing.Size(374, 21);
             this.username.TabIndex = 3;
-            this.username.Leave += new System.EventHandler(this.OnLeaveUsername);
+            this.username.TextChanged += new System.EventHandler(this.OnChangedUsername);
             // 
             // password
             // 
@@ -100,7 +100,7 @@
             this.password.Size = new System.Drawing.Size(374, 21);
             this.password.TabIndex = 4;
             this.password.UseSystemPasswordChar = true;
-            this.password.Leave += new System.EventHandler(this.OnLeavePassword);
+            this.password.TextChanged += new System.EventHandler(this.OnChangedPassword);
             // 
             // passwordLabel
             // 
@@ -209,7 +209,7 @@
             this.customConnectionString.Size = new System.Drawing.Size(372, 50);
             this.customConnectionString.TabIndex = 12;
             this.customConnectionString.Text = "";
-            this.customConnectionString.Leave += new System.EventHandler(this.OnCustomConnectionString);
+            this.customConnectionString.TextChanged += new System.EventHandler(this.OnChangedCustomConnectionString);
             // 
             // panel1
             // 

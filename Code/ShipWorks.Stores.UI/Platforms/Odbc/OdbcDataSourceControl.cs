@@ -219,19 +219,19 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// <summary>
         /// Called when leaving the username
         /// </summary>
-        private void OnLeaveUsername(object sender, EventArgs e) =>
+        private void OnChangedUsername(object sender, EventArgs e) =>
             SelectedDataSource.ChangeConnection(SelectedDataSource.Name, username.Text, SelectedDataSource.Password);
 
         /// <summary>
         /// Called when leaving password
         /// </summary>
-        private void OnLeavePassword(object sender, EventArgs e) =>
+        private void OnChangedPassword(object sender, EventArgs e) =>
             SelectedDataSource.ChangeConnection(SelectedDataSource.Name, SelectedDataSource.Username, password.Text);
 
         /// <summary>
         /// Called when leaving customConnectionString
         /// </summary>
-        private void OnCustomConnectionString(object sender, EventArgs e) =>
+        private void OnChangedCustomConnectionString(object sender, EventArgs e) =>
             SelectedDataSource.ChangeConnection(customConnectionString.Text);
 
         /// <summary>
