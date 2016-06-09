@@ -9,6 +9,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
     /// <summary>
     /// The ShipWorks half of an OdbcFieldMapEntry
     /// </summary>
+    [Obfuscation(Exclude = true)]
     public class ShipWorksOdbcMappableField : IShipWorksOdbcMappableField
     {
         public const string UnitCostDisplayName = "Unit Cost";
@@ -55,19 +56,16 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <summary>
         /// The type of the ShipWorks field
         /// </summary>
-        [Obfuscation(Exclude = true)]
         public string TypeName { get; set; }
 
         /// <summary>
         /// The name of the object that contains this field
         /// </summary>
-        [Obfuscation(Exclude = true)]
         public string ContainingObjectName { get; set; }
 
         /// <summary>
         /// The name of the field
         /// </summary>
-        [Obfuscation(Exclude = true)]
         public string Name { get; set; }
 
         /// <summary>
@@ -79,19 +77,18 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <summary>
         /// The fields display name
         /// </summary>
-        [Obfuscation(Exclude = true)]
         public string DisplayName { get; }
 
         /// <summary>
         /// Is the field required to be mapped.
         /// </summary>
         [JsonIgnore]
-        [Obfuscation(Exclude = true)]
         public bool IsRequired { get; set; }
 
         /// <summary>
         /// Gets the qualified name for the field - table.column
         /// </summary>
+        [Obfuscation(Exclude = false)]
         public string GetQualifiedName()
         {
             return $"{ContainingObjectName}.{Name}";
@@ -100,6 +97,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <summary>
         /// Set the Value to the given value
         /// </summary>
+        [Obfuscation(Exclude = false)]
         public void LoadValue(object value)
         {
             Value = ChangeType(value);
@@ -108,6 +106,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <summary>
         /// Convert the given object to the supplied type
         /// </summary>
+        [Obfuscation(Exclude = true)]
         private object ChangeType(object value)
         {
             Type destinationType = Type.GetType(TypeName);
@@ -136,6 +135,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <summary>
         /// Converts the given object to a decimal
         /// </summary>
+        [Obfuscation(Exclude = true)]
         private decimal ConvertDecimal(object value)
         {
             return decimal.Parse(value.ToString(),

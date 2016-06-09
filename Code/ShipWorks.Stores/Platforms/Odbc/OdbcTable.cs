@@ -12,6 +12,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
     /// <summary>
     /// Represents a table from an ODBC schema
     /// </summary>
+    [Obfuscation(Exclude = true)]
     public class OdbcTable : IOdbcTable
     {
         /// <summary>
@@ -25,7 +26,6 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// <summary>
         /// The table name
         /// </summary>
-        [Obfuscation(Exclude = true)]
         public string Name { get; }
 
         /// <summary>
@@ -37,6 +37,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// <summary>
         /// Loads the columns for this table
         /// </summary>
+        [Obfuscation(Exclude = false)]
         public void Load(IOdbcDataSource dataSource, ILog log)
         {
             using (DbConnection connection = dataSource.CreateConnection())

@@ -7,6 +7,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
     /// <summary>
     /// Provides a mechanism for interacting with an external ODBC field
     /// </summary>
+    [Obfuscation(Exclude = true)]
 	public class ExternalOdbcMappableField : IExternalOdbcMappableField
     {
         /// <summary>

@@ -13,6 +13,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <summary>
         /// The External Table
         /// </summary>
+        [Obfuscation(Exclude = true)]
         IOdbcTable Table { get; set; }
 
         /// <summary>
