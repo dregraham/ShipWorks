@@ -54,8 +54,11 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// <summary>
         /// The action to GetRates.
         /// </summary>
-        public Func<ShipmentEntity, ShipmentType, RateGroup>GetRatesAction { get; set; }
+        public Func<ShipmentEntity, ShipmentType, RateGroup> GetRatesAction { get; set; }
 
+        /// <summary>
+        /// Get the insurance provider for the broker to use.
+        /// </summary>
         public abstract InsuranceProvider GetInsuranceProvider(ShippingSettingsEntity settings);
 
         /// <summary>

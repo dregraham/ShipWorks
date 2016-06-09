@@ -54,6 +54,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             this.cachedRatesService = cachedRatesService;
             this.ratingServiceFactory = ratingServiceFactory;
             this.accountRepository = accountRepository;
+
+            // Default to true so that non-Best Rate calls will get Express1 rates if auto-route is enabled.
             ShouldRetrieveExpress1Rates = true;
         }
 

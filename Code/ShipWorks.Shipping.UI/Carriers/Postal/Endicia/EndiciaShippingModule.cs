@@ -48,7 +48,7 @@ namespace ShipWorks.Shipping.Carriers.Endicia
 
             builder.RegisterType<EndiciaRatingService>()
                 .Keyed<IRatingService>(ShipmentTypeCode.Endicia)
-                .Keyed<IRatingService>(ShipmentTypeCode.Express1Endicia)
+                .Keyed<ISupportExpress1Rates>(ShipmentTypeCode.Endicia)
                 .AsSelf();
 
             builder.RegisterType<EndiciaRateHashingService>()

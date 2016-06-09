@@ -17,7 +17,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
     /// <summary>
     /// Rating service for the Endicia carrier
     /// </summary>
-    public class EndiciaRatingService : PostalRatingService
+    public class EndiciaRatingService : PostalRatingService, ISupportExpress1Rates
     {
         private readonly IIndex<ShipmentTypeCode, ICarrierAccountRepository<EndiciaAccountEntity>> accountRepository;
         private readonly ILogEntryFactory logEntryFactory;
@@ -34,7 +34,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             this.accountRepository = accountRepository;
             this.logEntryFactory = logEntryFactory;
             this.certificateInspectorFactory = certificateInspectorFactory;
+
+            // Default to true so that non-Best Rate calls will get Express1 rates if auto-route is enabled.
+            ShouldRetrieveExpress1Rates = true;
         }
+
+        /// <summary>
+        /// Should we retrieve Express1 rates when getting rates
+        /// </summary>
+        private bool ShouldRetrieveExpress1Rates { get; set; }
 
         /// <summary>
         /// Get postal rates for the given shipment
@@ -268,10 +276,24 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// </summary>
         private bool UseExpressOne(ShipmentEntity shipment, ShippingSettingsEntity settings)
         {
-            return shipment.ShipmentType == (int) ShipmentTypeCode.Endicia
+            bool allowExpress1Raates = ShouldRetrieveExpress1Rates && settings.EndiciaAutomaticExpress1;
+
+            return allowExpress1Raates
+                   && shipment.ShipmentType == (int)ShipmentTypeCode.Endicia
                    && !shipmentTypeManager[ShipmentTypeCode.Endicia].IsRateDiscountMessagingRestricted
-                   && Express1Utilities.IsValidPackagingType(null, (PostalPackagingType) shipment.Postal.PackagingType)
-                   && settings.EndiciaAutomaticExpress1;
+                   && Express1Utilities.IsValidPackagingType(null, (PostalPackagingType) shipment.Postal.PackagingType);
+        }
+
+        /// <summary>
+        /// Get rates includes Express1 rates if specified
+        /// </summary>
+        /// <param name="shipment">The shipment to get rates for</param>
+        /// <param name="shouldRetrieveExpress1Rates">should we retrieve express1 rates</param>
+        public RateGroup GetRates(ShipmentEntity shipment, bool shouldRetrieveExpress1Rates)
+        {
+            ShouldRetrieveExpress1Rates = shouldRetrieveExpress1Rates;
+
+            return GetRates(shipment);
         }
     }
 }
