@@ -41,8 +41,9 @@ namespace ShipWorks.Stores.Platforms.Odbc
                     string query = GetQuery(connection);
 
                     using (OdbcCommand command = new OdbcCommand(query, connection))
+                    using (OdbcDataReader reader = command.ExecuteReader())
                     {
-                        OdbcDataReader reader = command.ExecuteReader();
+
 
                         while (reader.Read())
                         {
