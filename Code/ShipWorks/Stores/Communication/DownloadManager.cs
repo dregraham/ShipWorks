@@ -406,7 +406,7 @@ namespace ShipWorks.Stores.Communication
                             AuditBehaviorUser.SuperUser,
                             new AuditReason(initiatedBy == DownloadInitiatedBy.ShipWorks ? AuditReasonType.AutomaticDownload : AuditReasonType.ManualDownload)))
                         {
-                            downloader.Download(progressItem, downloadLog.DownloadID);
+                            downloader.Download(progressItem, downloadLog.DownloadID, storeLock.Connection);
                         }
 
                         // Item is complete
@@ -464,6 +464,12 @@ namespace ShipWorks.Stores.Communication
                         // Don't know what to do with it otherwise
                         throw;
                     }
+                }
+                catch (InvalidOperationException ex) when (ex.Message == "ExecuteNonQuery requires an open and available Connection. The connection's current state is closed.")
+                {
+                    log.Error("Download error", ex);
+
+                    progressItem.Failed(new DownloadException("ShipWorks was unable to maintain a connection to the database. Please try downloading again."));
                 }
 
                 // This would only be null if the store had been deleted before we tried to log the download

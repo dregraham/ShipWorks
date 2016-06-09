@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Data.SqlClient;
 using ShipWorks.Data.Connection;
 using ShipWorks.SqlServer.Common.Data;
@@ -27,6 +24,11 @@ namespace ShipWorks.Data.Utility
 
             AcquireLock();
         }
+
+        /// <summary>
+        /// Connection used to obtain the lock
+        /// </summary>
+        public SqlConnection Connection => con;
 
         /// <summary>
         /// Acquire the lock.  If the lock cannot be acquired, a SqlAppResourceLockException is thrown.
