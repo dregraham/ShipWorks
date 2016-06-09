@@ -214,8 +214,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.BestRate
             // Get rates from ISupportExpress1Rates if it is registered for the shipmenttypecode
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                //EndiciaShipmentType shipmentType = lifetimeScope.Resolve<EndiciaShipmentType>();
-
                 ShipmentType.UpdateDynamicShipmentData(shipment);
 
                 OrderHeader orderHeader = DataProvider.GetOrderHeader(shipment.OrderID);
