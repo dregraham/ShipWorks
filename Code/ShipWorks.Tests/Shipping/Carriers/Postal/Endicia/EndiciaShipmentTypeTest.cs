@@ -17,12 +17,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia
 {
     public class EndiciaShipmentTypeTest
     {
-        private EndiciaShipmentType testObject;
-        private Mock<ICarrierAccountRepository<EndiciaAccountEntity>> accountRepository;
-
-        private List<PostalServicePackagingCombination> allCombinations = new List<PostalServicePackagingCombination>();
-        private List<PostalServicePackagingCombination> adultSignatureCombinationsNotAllowed = new List<PostalServicePackagingCombination>();
-        private List<PostalServicePackagingCombination> adultSignatureCombinationsAllowed = new List<PostalServicePackagingCombination>();
+        private readonly EndiciaShipmentType testObject;
+        private readonly Mock<ICarrierAccountRepository<EndiciaAccountEntity>> accountRepository;
+        private readonly List<PostalServicePackagingCombination> allCombinations = new List<PostalServicePackagingCombination>();
+        private readonly List<PostalServicePackagingCombination> adultSignatureCombinationsAllowed = new List<PostalServicePackagingCombination>();
 
         public EndiciaShipmentTypeTest()
         {
@@ -33,8 +31,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia
             LoadAdultSignatureServiceAndPackagingCombinations();
 
             LoadAllPostalServicePackageTypes();
-
-            adultSignatureCombinationsNotAllowed = allCombinations.Except(adultSignatureCombinationsAllowed).ToList();
         }
 
         [Fact]
@@ -45,7 +41,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia
 
             IBestRateShippingBroker broker = testObject.GetShippingBroker(new ShipmentEntity());
 
-            Assert.IsAssignableFrom<NullShippingBroker>(broker);
+            Assert.IsType<NullShippingBroker>(broker);
         }
 
         [Fact]
@@ -56,7 +52,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia
 
             IBestRateShippingBroker broker = testObject.GetShippingBroker(new ShipmentEntity());
 
-            Assert.IsAssignableFrom<EndiciaBestRateBroker>(broker);
+            Assert.IsType<EndiciaBestRateBroker>(broker);
         }
 
         [Fact]
@@ -67,7 +63,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia
             foreach (PostalServicePackagingCombination combo in adultSignatureCombinationsAllowed)
             {
                 Assert.Contains(PostalConfirmationType.AdultSignatureRequired, EndiciaShipmentType.GetAvailableConfirmationTypes("US", combo.ServiceType, combo.PackagingType));
-                //Assert.True(EndiciaShipmentType.GetAvailableConfirmationTypes("US", combo.ServiceType, combo.PackagingType).Any(ct => ct == PostalConfirmationType.AdultSignatureRequired), "{0}, {1} should be included in the allowed confirmation types", combo.ServiceType, combo.PackagingType);
             }
         }
 
@@ -79,7 +74,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia
             foreach (PostalServicePackagingCombination combo in adultSignatureCombinationsAllowed)
             {
                 Assert.Contains(PostalConfirmationType.AdultSignatureRestricted, EndiciaShipmentType.GetAvailableConfirmationTypes("US", combo.ServiceType, combo.PackagingType));
-                //Assert.True(EndiciaShipmentType.GetAvailableConfirmationTypes("US", combo.ServiceType, combo.PackagingType).Any(ct => ct == PostalConfirmationType.AdultSignatureRestricted), "{0}, {1} should be included in the allowed confirmation types", combo.ServiceType, combo.PackagingType);
             }
         }
 
@@ -93,7 +87,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia
                 List<PostalConfirmationType> returnedConfirmationTypes = EndiciaShipmentType.GetAvailableConfirmationTypes("US", combo.ServiceType, combo.PackagingType);
 
                 Assert.DoesNotContain(PostalConfirmationType.AdultSignatureRequired, returnedConfirmationTypes);
-                //Assert.True(returnedConfirmationTypes.All(ct => ct != PostalConfirmationType.AdultSignatureRequired), "AdultSignatureRequired should not have been returned for {0}, {1}.", combo.ServiceType, combo.PackagingType);
             }
         }
 
