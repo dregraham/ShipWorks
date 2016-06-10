@@ -39,6 +39,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         private readonly ICachedRatesService cachedRatesService;
         private readonly IIndex<ShipmentTypeCode, IRatingService> ratingServiceFactory;
         protected ICarrierAccountRepository<UspsAccountEntity> accountRepository;
+        private bool shouldRetrieveExpress1Rates;
 
         /// <summary>
         /// Constructor
@@ -56,13 +57,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             this.accountRepository = accountRepository;
 
             // Default to true so that non-Best Rate calls will get Express1 rates if auto-route is enabled.
-            ShouldRetrieveExpress1Rates = true;
+            shouldRetrieveExpress1Rates = true;
         }
-
-        /// <summary>
-        /// Should we retrieve Express1 rates when getting rates
-        /// </summary>
-        private bool ShouldRetrieveExpress1Rates { get; set; }
 
         /// <summary>
         /// Gets rates for the given shipment
@@ -85,6 +81,19 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             {
                 throw new ShippingException(ex.Message, ex);
             }
+        }
+
+        /// <summary>
+        /// Get rates includes Express1 rates if specified
+        /// </summary>
+        /// <param name="shipment">The shipment to get rates for</param>
+        /// <param name="retrieveExpress1Rates">should we retrieve express1 rates</param>
+        public RateGroup GetRates(ShipmentEntity shipment, bool retrieveExpress1Rates)
+        {
+            shouldRetrieveExpress1Rates = retrieveExpress1Rates;
+
+            // Check to see if the rate is cached, if not call the rating service
+            return cachedRatesService.GetCachedRates<ShippingException>(shipment, GetRates);
         }
 
         /// <summary>
@@ -141,7 +150,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         {
             UspsAccountEntity express1AutoRouteAccount = GetExpress1AutoRouteAccount((PostalPackagingType) shipment.Postal.PackagingType);
 
-            return ShouldRetrieveExpress1Rates && express1AutoRouteAccount != null && !shipment.Postal.NoPostage ?
+            return shouldRetrieveExpress1Rates && express1AutoRouteAccount != null && !shipment.Postal.NoPostage ?
                 BeginRetrievingExpress1Rates(shipment, express1AutoRouteAccount) :
                 CreateEmptyExpress1RatesTask();
         }
@@ -199,7 +208,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         private RateGroup GetRatesForAllAccounts(ShipmentEntity shipment)
         {
             List<UspsAccountEntity> uspsAccounts = accountRepository.Accounts.ToList();
-            ShouldRetrieveExpress1Rates = false;
+            shouldRetrieveExpress1Rates = false;
 
             try
             {
@@ -236,7 +245,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             }
             finally
             {
-                ShouldRetrieveExpress1Rates = true;
+                shouldRetrieveExpress1Rates = true;
             }
         }
 
@@ -395,20 +404,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             // we are not using the counter rate repo so
             // we can send back a trusting certificate inspector
             return new TrustingCertificateInspector();
-        }
-
-        /// <summary>
-        /// Get rates includes Express1 rates if specified
-        /// </summary>
-        /// <param name="shipment">The shipment to get rates for</param>
-        /// <param name="shouldRetrieveExpress1Rates">should we retrieve express1 rates</param>
-        /// <returns></returns>
-        public RateGroup GetRates(ShipmentEntity shipment, bool shouldRetrieveExpress1Rates)
-        {
-            ShouldRetrieveExpress1Rates = shouldRetrieveExpress1Rates;
-
-            // Check to see if the rate is cached, if not call the rating service
-            return cachedRatesService.GetCachedRates<ShippingException>(shipment, GetRates);
         }
     }
 }

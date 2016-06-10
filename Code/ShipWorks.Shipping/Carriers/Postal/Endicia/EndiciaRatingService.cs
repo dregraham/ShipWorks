@@ -22,6 +22,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         private readonly IIndex<ShipmentTypeCode, ICarrierAccountRepository<EndiciaAccountEntity>> accountRepository;
         private readonly ILogEntryFactory logEntryFactory;
         private readonly Func<string, ICertificateInspector> certificateInspectorFactory;
+        private bool shouldRetrieveExpress1Rates;
 
         public EndiciaRatingService(
             IIndex<ShipmentTypeCode, IRatingService> ratingServiceFactory,
@@ -36,13 +37,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             this.certificateInspectorFactory = certificateInspectorFactory;
 
             // Default to true so that non-Best Rate calls will get Express1 rates if auto-route is enabled.
-            ShouldRetrieveExpress1Rates = true;
+            shouldRetrieveExpress1Rates = true;
         }
-
-        /// <summary>
-        /// Should we retrieve Express1 rates when getting rates
-        /// </summary>
-        private bool ShouldRetrieveExpress1Rates { get; set; }
 
         /// <summary>
         /// Get postal rates for the given shipment
@@ -60,6 +56,18 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 // Re-throw endicia exceptions as shipping exceptions
                 throw new ShippingException(ex.Message, ex);
             }
+        }
+
+        /// <summary>
+        /// Get rates includes Express1 rates if specified
+        /// </summary>
+        /// <param name="shipment">The shipment to get rates for</param>
+        /// <param name="retrieveExpress1Rates">should we retrieve express1 rates</param>
+        public RateGroup GetRates(ShipmentEntity shipment, bool retrieveExpress1Rates)
+        {
+            shouldRetrieveExpress1Rates = retrieveExpress1Rates;
+
+            return GetRates(shipment);
         }
 
         /// <summary>
@@ -276,24 +284,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// </summary>
         private bool UseExpressOne(ShipmentEntity shipment, ShippingSettingsEntity settings)
         {
-            bool allowExpress1Raates = ShouldRetrieveExpress1Rates && settings.EndiciaAutomaticExpress1;
+            bool allowExpress1Rates = shouldRetrieveExpress1Rates && settings.EndiciaAutomaticExpress1;
 
-            return allowExpress1Raates
+            return allowExpress1Rates
                    && shipment.ShipmentType == (int)ShipmentTypeCode.Endicia
                    && !shipmentTypeManager[ShipmentTypeCode.Endicia].IsRateDiscountMessagingRestricted
                    && Express1Utilities.IsValidPackagingType(null, (PostalPackagingType) shipment.Postal.PackagingType);
-        }
-
-        /// <summary>
-        /// Get rates includes Express1 rates if specified
-        /// </summary>
-        /// <param name="shipment">The shipment to get rates for</param>
-        /// <param name="shouldRetrieveExpress1Rates">should we retrieve express1 rates</param>
-        public RateGroup GetRates(ShipmentEntity shipment, bool shouldRetrieveExpress1Rates)
-        {
-            ShouldRetrieveExpress1Rates = shouldRetrieveExpress1Rates;
-
-            return GetRates(shipment);
         }
     }
 }
