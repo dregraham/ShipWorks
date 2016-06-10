@@ -430,9 +430,12 @@ namespace ShipWorks.Shipping.Carriers.UPS
         {
             if (shipmentType.ShipmentTypeCode == ShipmentTypeCode.UpsWorldShip)
             {
-                return wsUpsAccountNumber.Text.Trim();
+                // UPS wants account numbers to be upper case, so do it.
+                return wsUpsAccountNumber.Text.Trim().ToUpperInvariant();
             }
-            return account.Text.Trim();
+
+            // UPS wants account numbers to be upper case, so do it.
+            return account.Text.Trim().ToUpperInvariant();
         }
 
         /// <summary>
