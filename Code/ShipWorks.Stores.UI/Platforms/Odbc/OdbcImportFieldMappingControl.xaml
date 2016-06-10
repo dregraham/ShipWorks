@@ -34,6 +34,7 @@
         <Style TargetType="{x:Type ComboBox}">
             <Setter Property="Margin" Value="2 5 0 5" />
             <Setter Property="Padding" Value="4 4 0 4" />
+            <Setter Property="Height" Value="24"/>
         </Style>
         <Style TargetType="{x:Type RadioButton}">
             <Setter Property="HorizontalAlignment" Value="Center"/>
@@ -82,6 +83,7 @@
             </DataTemplate.Triggers>
         </DataTemplate>
     </Control.Resources>
+
     <Grid Margin="20 10 10 10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"></RowDefinition>
@@ -110,12 +112,15 @@
                    HorizontalAlignment="Right" Content="Table:" Margin="0"/>
             <TextBox Grid.Row="1" Grid.Column="1"
                      Margin="2 2.5 0 2.5"
-                 Text="{Binding MapName, UpdateSourceTrigger=PropertyChanged}"/>
+                 Text="{Binding MapName, UpdateSourceTrigger=PropertyChanged}"
+                     VerticalAlignment="Center"
+                     Height="24"/>
             <ComboBox Grid.Row="2" Grid.Column="1"
                       Margin="2 2.5 0 2.5"
                   ItemsSource="{Binding Tables, UpdateSourceTrigger=PropertyChanged}"
                   DisplayMemberPath="Name"
-                  SelectedValue="{Binding SelectedTable,Mode=TwoWay}" >
+                  SelectedValue="{Binding SelectedTable,Mode=TwoWay}"
+                      VerticalAlignment="Center">
                 <i:Interaction.Behaviors>
                     <behaviors:ComboBoxSelectionChangedBehavior Command="{Binding TableChangedCommand}" />
                 </i:Interaction.Behaviors>
@@ -156,8 +161,8 @@
 
 
                 <StackPanel Grid.Row="2" Orientation="Horizontal"
-                            Margin="0"
-                            d:IsHidden="true">
+                            Margin="0 2.5 0 2.5"
+                            d:IsHidden="false">
                     <StackPanel.Visibility>
                         <Binding Path="OrderHasSingleLineItem"
                                  Converter="{StaticResource VisibleWhenEqualToParameterConverter}">
@@ -172,7 +177,7 @@
                            Width="220" />
                     <ComboBox ItemsSource="{Binding NumbersUpTo25, UpdateSourceTrigger=PropertyChanged}"
                               SelectedItem="{Binding NumberOfItemsPerOrder}"
-                              Width="50" Margin="0 2.5 0 2.5"
+                              Width="50" Margin="0"
                               VerticalAlignment="Center"/>
                     <Label Content="items" Padding="0"
                            VerticalAlignment="Center"
@@ -181,7 +186,7 @@
 
 
                 <StackPanel Grid.Row="3" Grid.Column="0" Orientation="Horizontal"
-                            Margin="0">
+                            Margin="0 2.5 0 2.5">
                     <Label VerticalAlignment="Center" HorizontalContentAlignment="Right"
                            Width="220"
                            Content="Each item contains up to:"
@@ -189,14 +194,15 @@
                     <ComboBox ItemsSource="{Binding NumbersUpTo25, UpdateSourceTrigger=PropertyChanged}"
                               SelectedItem="{Binding NumberOfAttributesPerItem, UpdateSourceTrigger=PropertyChanged}"
                               Width="50" VerticalAlignment="Center"
-                              Margin="0 2.5 0 2.5"/>
+                              Margin="0"/>
                     <Label Content="attributes" Padding="0"
                            VerticalAlignment="Center"
                            Margin="5 0 0 0"/>
                 </StackPanel>
 
                 <Grid Row="2" Column="0"
-                      d:IsHidden="false">
+                      d:IsHidden="true"
+                      Margin="0 2.5 0 2.5">
                     <Grid.Visibility>
                         <Binding Path="OrderHasSingleLineItem"
                                  Converter="{StaticResource VisibleWhenEqualToParameterConverter}">
@@ -219,7 +225,8 @@
                               TextSearch.TextPath="Name"
                               ItemTemplate="{StaticResource SourceColumnComboBoxItemTemplate}"
                               VerticalAlignment="Center"
-                              Margin="0 2.5 0 2.5"/>
+                              MinHeight="21"
+                              Margin="0"/>
                     <Image Grid.Column="2" Source="/Shipworks.Core;component/Resources/InfoTip.png"
                                    Margin="5 0 0 0"
                            VerticalAlignment="Center">
@@ -368,8 +375,7 @@
                                                       Margin="0 5 5 5"
                                                       SelectedItem="{Binding ExternalField.Column}"
                                                       TextSearch.TextPath="Name"
-                                                      ItemTemplate="{StaticResource SourceColumnComboBoxItemTemplate}">
-                                                </ComboBox>
+                                                      ItemTemplate="{StaticResource SourceColumnComboBoxItemTemplate}" />
                                                 <Label Grid.Column="0" Foreground="Red"
                                                Content="Required"
                                                Visibility="{Binding ShipWorksField.IsRequired, Converter={StaticResource BooleanToVisibility}}"

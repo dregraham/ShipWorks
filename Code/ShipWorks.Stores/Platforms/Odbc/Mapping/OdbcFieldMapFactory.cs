@@ -110,7 +110,6 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
                 new ShipWorksOdbcMappableField(OrderItemFields.Thumbnail, "Thumbnail URL"),
                 new ShipWorksOdbcMappableField(OrderItemFields.UPC, "UPC"),
                 new ShipWorksOdbcMappableField(OrderItemFields.ISBN, "ISBN"),
-                new ShipWorksOdbcMappableField(OrderItemAttributeFields.Name, "Attribute Name")
             };
 
 	        return fields;

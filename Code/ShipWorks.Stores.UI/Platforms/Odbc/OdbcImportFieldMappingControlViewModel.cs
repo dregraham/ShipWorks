@@ -69,9 +69,9 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
 
             NumbersUpTo25 = new List<int>();
-            for (int i = 0; i < 25; i++)
+            for (int i = 0; i <= 25; i++)
             {
-                NumbersUpTo25.Add(i+1);
+                NumbersUpTo25.Add(i);
             }
         }
 
@@ -204,7 +204,20 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         public bool OrderHasSingleLineItem
         {
             get { return orderHasSingleLineItem; }
-            set { handler.Set(nameof(OrderHasSingleLineItem), ref orderHasSingleLineItem, value); }
+            set
+            {
+
+                if (value)
+                {
+                    SwitchToSingleLineItems();
+                }
+                else
+                {
+                    SwitchToMultiLineItems();
+                }
+
+                handler.Set(nameof(OrderHasSingleLineItem), ref orderHasSingleLineItem, value);
+            }
         }
 
         /// <summary>
@@ -349,7 +362,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
                 return false;
             }
 
-            if (string.IsNullOrWhiteSpace(RecordIdentifier?.Name))
+            if (!OrderHasSingleLineItem && string.IsNullOrWhiteSpace(RecordIdentifier?.Name))
             {
                 messageHelper.ShowError("When orders contain items on multiple lines, an order identifier is required to be mapped.");
                 return false;
@@ -375,7 +388,10 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
                 e.ExternalField.Table.ResetColumns();
             });
 
-            map.RecordIdentifierSource = RecordIdentifier?.Name;
+            if (!OrderHasSingleLineItem)
+            {
+                map.RecordIdentifierSource = RecordIdentifier?.Name;
+            }
 
             return map;
         }
@@ -442,17 +458,62 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             }
         }
 
-        ///// <summary>
-        ///// Updates the item maps.
-        ///// </summary>
-        //private void UpdateItemMaps()
-        //{
-        //    DisplayFieldMaps = new ObservableCollection<OdbcFieldMapDisplay>() { OrderFieldMap, AddressFieldMap };
+        /// <summary>
+        /// Switches to single line items.
+        /// </summary>
+        private void SwitchToSingleLineItems()
+        {
+            List<OdbcFieldMapDisplay> maps = new List<OdbcFieldMapDisplay>()
+            {
+                DisplayFieldMaps[0], DisplayFieldMaps[1]
+            };
 
-        //    foreach (OdbcFieldMapDisplay map in ItemFieldMaps)
-        //    {
-        //        DisplayFieldMaps.Add(map);
-        //    }
-        //}
+            // If no items, dont show items in map list
+            if (NumberOfItemsPerOrder == 0)
+            {
+                DisplayFieldMaps = new ObservableCollection<OdbcFieldMapDisplay>(maps);
+                return;
+            }
+
+            // If we only have order and address maps, add an Item 1, otherwise, change Item to Item 1
+            if (DisplayFieldMaps.Count == 2)
+            {
+                maps.Add(new OdbcFieldMapDisplay("Item 1", fieldMapFactory.CreateOrderItemFieldMap()));
+            }
+            else
+            {
+                maps.Add(DisplayFieldMaps[2]);
+                maps[2].DisplayName = "Item 1";
+            }
+
+            // add new item entries
+            for (int i = 1; i < NumberOfItemsPerOrder; i++)
+            {
+                maps.Add(new OdbcFieldMapDisplay($"Item {i + 1}", fieldMapFactory.CreateOrderItemFieldMap()));
+            }
+
+            DisplayFieldMaps = new ObservableCollection<OdbcFieldMapDisplay>(maps);
+        }
+
+        /// <summary>
+        /// Switches to multi line items.
+        /// </summary>
+        private void SwitchToMultiLineItems()
+        {
+            if (DisplayFieldMaps.Count == 2)
+            {
+                DisplayFieldMaps.Add(new OdbcFieldMapDisplay("Item", fieldMapFactory.CreateOrderItemFieldMap()));
+                return;
+            }
+
+            List<OdbcFieldMapDisplay> maps = new List<OdbcFieldMapDisplay>()
+            {
+                DisplayFieldMaps[0], DisplayFieldMaps[1], DisplayFieldMaps[2]
+            };
+
+            maps[2].DisplayName = "Item";
+
+            DisplayFieldMaps = new ObservableCollection<OdbcFieldMapDisplay>(maps);
+        }
     }
 }
