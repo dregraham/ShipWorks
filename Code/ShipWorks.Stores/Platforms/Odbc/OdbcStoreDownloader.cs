@@ -40,38 +40,46 @@ namespace ShipWorks.Stores.Platforms.Odbc
         protected override void Download()
         {
             Progress.Detail = "Querying data source...";
-
-            IOdbcCommand downloadCommand = commandFactory.CreateDownloadCommand(store);
-
-            IEnumerable<OdbcRecord> downloadedOrders = downloadCommand.Execute();
-            List<IGrouping<string, OdbcRecord>> orderGroups = downloadedOrders.GroupBy(o => o.RecordIdentifier).ToList();
-
-            int totalCount = orderGroups.Count;
-
-            if (totalCount == 0)
+            try
             {
-                Progress.Detail = "No orders to download.";
-                return;
-            }
 
-            Progress.Detail = $"{totalCount} orders found.";
+                IOdbcCommand downloadCommand = commandFactory.CreateDownloadCommand(store);
 
-            if (orderGroups.Any(groups=>string.IsNullOrWhiteSpace(groups.Key)))
-            {
-                throw new DownloadException(
-                    $"At least one order is missing a value in {fieldMap.RecordIdentifierSource}");
-            }
+                IEnumerable<OdbcRecord> downloadedOrders = downloadCommand.Execute();
+                List<IGrouping<string, OdbcRecord>> orderGroups =
+                    downloadedOrders.GroupBy(o => o.RecordIdentifier).ToList();
 
-            foreach (IGrouping<string, OdbcRecord> odbcRecordsForOrder in orderGroups)
-            {
-                if (Progress.IsCancelRequested)
+                int totalCount = orderGroups.Count;
+
+                if (totalCount == 0)
                 {
+                    Progress.Detail = "No orders to download.";
                     return;
                 }
 
-                Progress.Detail = $"Processing order {QuantitySaved + 1}";
-                SaveDownloadedOrder(DownloadOrder(odbcRecordsForOrder));
-                Progress.PercentComplete = 100 * QuantitySaved / totalCount;
+                Progress.Detail = $"{totalCount} orders found.";
+
+                if (orderGroups.Any(groups => string.IsNullOrWhiteSpace(groups.Key)))
+                {
+                    throw new DownloadException(
+                        $"At least one order is missing a value in {fieldMap.RecordIdentifierSource}");
+                }
+
+                foreach (IGrouping<string, OdbcRecord> odbcRecordsForOrder in orderGroups)
+                {
+                    if (Progress.IsCancelRequested)
+                    {
+                        return;
+                    }
+
+                    Progress.Detail = $"Processing order {QuantitySaved + 1}";
+                    SaveDownloadedOrder(DownloadOrder(odbcRecordsForOrder));
+                    Progress.PercentComplete = 100*QuantitySaved/totalCount;
+                }
+            }
+            catch (ShipWorksOdbcException ex)
+            {
+                throw new DownloadException(ex.Message, ex);
             }
         }
 

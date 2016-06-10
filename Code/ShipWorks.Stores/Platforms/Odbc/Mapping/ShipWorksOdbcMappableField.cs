@@ -111,9 +111,9 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         {
             Type destinationType = Type.GetType(TypeName);
 
-            if (value == null || destinationType == null || value.GetType() == destinationType.GetType())
+            if (value == null || destinationType == null || value.GetType() == destinationType)
             {
-                return Value;
+                return value;
             }
 
             try
@@ -128,7 +128,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
             }
             catch (Exception ex)
             {
-                throw new ShipWorksOdbcException($"Unable to convert {value} to {destinationType} for {GetQualifiedName()}.", ex);
+                throw new ShipWorksOdbcException($"Unable to convert '{value}' to {destinationType} for {GetQualifiedName()}.", ex);
             }
         }
 
