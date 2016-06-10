@@ -12,7 +12,7 @@ namespace ShipWorks.Data.Utility
     public class SqlAppResourceLock : IDisposable
     {
         private SqlConnection con;
-        private readonly bool disposeConnection;
+        private readonly bool ownedConnection;
         private readonly string lockName;
 
         /// <summary>
@@ -21,10 +21,9 @@ namespace ShipWorks.Data.Utility
         /// </summary>
         public SqlAppResourceLock(string resourceName)
         {
+            con = SqlSession.Current.OpenConnection();
+            ownedConnection = true;
             lockName = resourceName;
-
-            // Dispose the SqlConnection when releasing the lock
-            disposeConnection = true;
             AcquireLock();
         }
 
@@ -36,12 +35,9 @@ namespace ShipWorks.Data.Utility
         public SqlAppResourceLock(SqlConnection con, string resourceName)
         {
             this.con = con;
-
-            // Do not dispose the connection when the lock is released
-            // because we do not own the connection
-            disposeConnection = false;
+            ownedConnection = false;
             lockName = resourceName;
-            AcquireLock(con);
+            AcquireLock();
         }
 
         /// <summary>
@@ -49,23 +45,14 @@ namespace ShipWorks.Data.Utility
         /// </summary>
         private void AcquireLock()
         {
-            con = SqlSession.Current.OpenConnection();
             if (!SqlAppLockUtility.AcquireLock(con, lockName))
             {
-                con.Dispose();
+                if (ownedConnection)
+                {
+                    con.Dispose();
+                }
+
                 con = null;
-
-                throw new SqlAppResourceLockException(lockName);
-            }
-        }
-
-        /// <summary>
-        /// Acquire the lock.  If the lock cannot be acquired, a SqlAppResourceLockException is thrown.
-        /// </summary>
-        private void AcquireLock(SqlConnection con)
-        {
-            if (!SqlAppLockUtility.AcquireLock(con, lockName))
-            {
                 throw new SqlAppResourceLockException(lockName);
             }
         }
@@ -79,12 +66,12 @@ namespace ShipWorks.Data.Utility
             {
                 SqlAppLockUtility.ReleaseLock(con, lockName);
 
-                // dispose the connection if needed
-                if (disposeConnection)
+                // dispose the connection if we own it
+                if (ownedConnection)
                 {
                     con.Dispose();
-                    con = null;
                 }
+                con = null;
             }
         }
 
