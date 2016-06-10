@@ -43,8 +43,6 @@ namespace ShipWorks.Stores.Platforms.Odbc
                     using (OdbcCommand command = new OdbcCommand(query, connection))
                     using (OdbcDataReader reader = command.ExecuteReader())
                     {
-
-
                         while (reader.Read())
                         {
                             OdbcRecord odbcRecord = new OdbcRecord();
@@ -88,8 +86,9 @@ namespace ShipWorks.Stores.Platforms.Odbc
 
                 string tableNameInQuotes = cmdBuilder.QuoteIdentifier(fieldMap.ExternalTableName);
 
-                IEnumerable<string> columnNamesInQuotes = fieldMap.Entries.Select(e => cmdBuilder.QuoteIdentifier(e.ExternalField.Column.Name));
-                string columnsToProject = string.Join(",", columnNamesInQuotes);
+                List<string> columnNamesInQuotes = fieldMap.Entries.Select(e => cmdBuilder.QuoteIdentifier(e.ExternalField.Column.Name)).ToList();
+                columnNamesInQuotes.Add(cmdBuilder.QuoteIdentifier(fieldMap.RecordIdentifierSource));
+                string columnsToProject = string.Join(",", columnNamesInQuotes.Distinct());
 
                 string query = $"SELECT {columnsToProject} FROM {tableNameInQuotes}";
                 log.Info($"Query creted by OdbcDownloadCommand is \"{query}\"");
