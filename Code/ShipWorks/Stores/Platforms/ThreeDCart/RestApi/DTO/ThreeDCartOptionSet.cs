@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 
 namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi.DTO
 {
-    [Obfuscation(Feature = "PreserveLiteralValues", Exclude = true, StripAfterObfuscation = false)]
+    [Obfuscation(Exclude = true, ApplyToMembers = true)]
     public class ThreeDCartOptionSet
     {
         [JsonProperty("OptionSetID")]
