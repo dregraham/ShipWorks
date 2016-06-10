@@ -228,7 +228,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
 
                 testObject.ApplyValues(odbcRecord);
 
-                mapEntry.Verify(m => m.CopyValueToShipWorksField(), Times.Once);
+                mapEntry.Verify(m => m.CopyExternalValueToShipWorksField(), Times.Once);
             }
         }
 
@@ -370,7 +370,11 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
 
         private ShipWorksOdbcMappableField GetShipWorksField(EntityField2 field, string displayName)
         {
-            return new ShipWorksOdbcMappableField(field, displayName);
+            return new ShipWorksOdbcMappableField(field, displayName)
+            {
+                TypeName = "System.Int32",
+                ContainingObjectName = field.ContainingObjectName
+            };
         }
 
         private Mock<IShipWorksOdbcMappableField> GetMockedShipWorksField(EntityField2 field, object shipWorksValue)

@@ -3,6 +3,9 @@ using ShipWorks.Stores.Content;
 
 namespace ShipWorks.Stores
 {
+    /// <summary>
+    /// Repository for saving order related content
+    /// </summary>
     public interface IOrderRepository
     {
         /// <summary>

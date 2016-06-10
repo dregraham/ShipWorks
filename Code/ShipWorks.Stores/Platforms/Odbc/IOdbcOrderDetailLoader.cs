@@ -9,7 +9,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
     public interface IOdbcOrderDetailLoader
     {
         /// <summary>
-        /// Loads the order details into the given entity
+        /// Loads the order details into the given order
         /// </summary>
         void Load(IOdbcFieldMap map, OrderEntity order);
     }

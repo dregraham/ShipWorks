@@ -1,4 +1,5 @@
 using log4net;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -11,6 +12,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
     /// <summary>
     /// Represents a table from an ODBC schema
     /// </summary>
+    [Obfuscation(Exclude = true)]
     public class OdbcTable : IOdbcTable
     {
         /// <summary>
@@ -24,17 +26,18 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// <summary>
         /// The table name
         /// </summary>
-        [Obfuscation(Exclude = true)]
         public string Name { get; }
 
         /// <summary>
         /// The columns in the table
         /// </summary>
+        [JsonIgnore]
         public IEnumerable<OdbcColumn> Columns { get; private set; }
 
         /// <summary>
         /// Loads the columns for this table
         /// </summary>
+        [Obfuscation(Exclude = false)]
         public void Load(IOdbcDataSource dataSource, ILog log)
         {
             using (DbConnection connection = dataSource.CreateConnection())
@@ -74,15 +77,6 @@ namespace ShipWorks.Stores.Platforms.Odbc
                         ex);
                 }
             }
-        }
-
-        /// <summary>
-        /// Resets the columns.
-        /// </summary>
-        /// <exception cref="System.NotImplementedException"></exception>
-        public void ResetColumns()
-        {
-            Columns = null;
         }
     }
 }

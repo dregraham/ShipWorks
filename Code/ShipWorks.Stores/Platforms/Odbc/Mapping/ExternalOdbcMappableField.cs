@@ -7,6 +7,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
     /// <summary>
     /// Provides a mechanism for interacting with an external ODBC field
     /// </summary>
+    [Obfuscation(Exclude = true)]
 	public class ExternalOdbcMappableField : IExternalOdbcMappableField
     {
         /// <summary>
@@ -31,6 +32,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <summary>
         /// The External Table
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public IOdbcTable Table { get; set; }
 
         /// <summary>
@@ -42,6 +44,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <summary>
         /// value from the field
         /// </summary>
+        [JsonIgnore]
         public object Value { get; private set; }
 
         /// <summary>

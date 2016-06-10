@@ -9,6 +9,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
     /// <summary>
     /// The ShipWorks half of an OdbcFieldMapEntry
     /// </summary>
+    [Obfuscation(Exclude = true)]
     public class ShipWorksOdbcMappableField : IShipWorksOdbcMappableField
     {
         public const string UnitCostDisplayName = "Unit Cost";
@@ -22,12 +23,17 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         public const string OrderDateDisplayName = "Order Date";
         public const string OrderTimeDisplayName = "Order Time";
 
+        [JsonConstructor]
+        public ShipWorksOdbcMappableField(string displayName)
+        {
+            DisplayName = displayName;
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ShipWorksOdbcMappableField"/> class.
         /// </summary>
         /// <param name="field">The field.</param>
         /// <param name="displayName">The display name.</param>
-        [JsonConstructor]
         public ShipWorksOdbcMappableField(EntityField2 field, string displayName) : this(field, displayName, false)
         {
         }
@@ -40,9 +46,9 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <param name="isRequired"></param>
         public ShipWorksOdbcMappableField(EntityField2 field, string displayName, bool isRequired)
 	    {
-            ContainingObjectName = field?.ContainingObjectName;
-            Name = field?.Name;
-            TypeName = field?.DataType.FullName;
+            ContainingObjectName = field.ContainingObjectName;
+            Name = field.Name;
+            TypeName = field.DataType.FullName;
             DisplayName = displayName;
             IsRequired = isRequired;
 	    }
@@ -65,24 +71,24 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <summary>
         /// The fields value
         /// </summary>
+        [JsonIgnore]
         public object Value { get; private set; }
 
         /// <summary>
         /// The fields display name
         /// </summary>
-        [Obfuscation(Exclude = true)]
         public string DisplayName { get; }
 
         /// <summary>
         /// Is the field required to be mapped.
         /// </summary>
         [JsonIgnore]
-        [Obfuscation(Exclude = true)]
         public bool IsRequired { get; set; }
 
         /// <summary>
         /// Gets the qualified name for the field - table.column
         /// </summary>
+        [Obfuscation(Exclude = false)]
         public string GetQualifiedName()
         {
             return $"{ContainingObjectName}.{Name}";
@@ -91,6 +97,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <summary>
         /// Set the Value to the given value
         /// </summary>
+        [Obfuscation(Exclude = false)]
         public void LoadValue(object value)
         {
             Value = ChangeType(value);
@@ -99,13 +106,14 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <summary>
         /// Convert the given object to the supplied type
         /// </summary>
+        [Obfuscation(Exclude = true)]
         private object ChangeType(object value)
         {
             Type destinationType = Type.GetType(TypeName);
 
-            if (value == null || destinationType == null || value.GetType() == destinationType.GetType())
+            if (value == null || destinationType == null || value.GetType() == destinationType)
             {
-                return Value;
+                return value;
             }
 
             try
@@ -120,13 +128,14 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
             }
             catch (Exception ex)
             {
-                throw new ShipWorksOdbcException($"Unable to convert {value} to {destinationType} for {GetQualifiedName()}.", ex);
+                throw new ShipWorksOdbcException($"Unable to convert '{value}' to {destinationType} for {GetQualifiedName()}.", ex);
             }
         }
 
         /// <summary>
         /// Converts the given object to a decimal
         /// </summary>
+        [Obfuscation(Exclude = true)]
         private decimal ConvertDecimal(object value)
         {
             return decimal.Parse(value.ToString(),

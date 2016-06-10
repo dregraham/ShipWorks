@@ -12,12 +12,12 @@ namespace ShipWorks.Stores.Platforms.Odbc
     /// </summary>
     public class OdbcOrderNoteLoader : IOdbcOrderDetailLoader
     {
-        private readonly INote note;
+        private readonly IOrderNote note;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcOrderNoteLoader"/> class.
         /// </summary>
-        public OdbcOrderNoteLoader(INote note)
+        public OdbcOrderNoteLoader(IOrderNote note)
         {
             this.note = note;
         }

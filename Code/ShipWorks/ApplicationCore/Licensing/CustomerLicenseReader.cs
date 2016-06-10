@@ -10,15 +10,14 @@ namespace ShipWorks.ApplicationCore.Licensing
     /// </summary>
     public class CustomerLicenseReader : ICustomerLicenseReader
     {
-        private readonly IEncryptionProvider encryptionProvider;
-        
+        private readonly IEncryptionProviderFactory encryptionProviderFactory;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public CustomerLicenseReader(IEncryptionProviderFactory encryptionProviderFactory)
         {
-            this.encryptionProvider = encryptionProviderFactory.CreateLicenseEncryptionProvider();            
+            this.encryptionProviderFactory = encryptionProviderFactory;
         }
 
         /// <summary>
@@ -26,13 +25,15 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public string Read()
         {
+            IEncryptionProvider encryptionProvider = encryptionProviderFactory.CreateLicenseEncryptionProvider();
             ConfigurationEntity config = ConfigurationData.Fetch();
 
             try
             {
-                return encryptionProvider.Decrypt(config.CustomerKey);
+                string customerKey = encryptionProvider.Decrypt(config.CustomerKey);
+                return customerKey;
             }
-            catch (EncryptionException ex) when(ex.InnerException is CryptographicException)
+            catch (EncryptionException ex) when (ex.InnerException is CryptographicException)
             {
                 // Crashed because the config data is old, we just have restored
                 // databases, refresh the config data and try again.

@@ -6,6 +6,9 @@ using ShipWorks.Stores.Content;
 
 namespace ShipWorks.Stores
 {
+    /// <summary>
+    /// Repository for saving order related content
+    /// </summary>
     public class OrderRepository : IOrderRepository
     {
         /// <summary>
@@ -13,23 +16,19 @@ namespace ShipWorks.Stores
         /// </summary>
         public bool ContainsNote(OrderEntity order, string noteText, NoteSource source)
         {
-            // If the order isn't new, check the ones in the database too
-            if (!order.IsNew)
+            IRelationPredicateBucket relationPredicateBucket = order.GetRelationInfoNotes();
+            relationPredicateBucket.PredicateExpression.AddWithAnd(new FieldCompareValuePredicate(NoteFields.Text,
+                null, ComparisonOperator.Equal, noteText));
+            relationPredicateBucket.PredicateExpression.AddWithAnd(new FieldCompareValuePredicate(
+                NoteFields.Source, null, ComparisonOperator.Equal, (int) source));
+
+            using (EntityCollection<NoteEntity> notes = new EntityCollection<NoteEntity>())
             {
-                IRelationPredicateBucket relationPredicateBucket = order.GetRelationInfoNotes();
-                relationPredicateBucket.PredicateExpression.AddWithAnd(new FieldCompareValuePredicate(NoteFields.Text,
-                    null, ComparisonOperator.Equal, noteText));
-                relationPredicateBucket.PredicateExpression.AddWithAnd(new FieldCompareValuePredicate(
-                    NoteFields.Source, null, ComparisonOperator.Equal, (int)source));
+                int matchingNotes = SqlAdapter.Default.GetDbCount(notes, relationPredicateBucket);
 
-                using (EntityCollection<NoteEntity> notes = new EntityCollection<NoteEntity>())
+                if (matchingNotes > 0)
                 {
-                    int matchingNotes = SqlAdapter.Default.GetDbCount(notes, relationPredicateBucket);
-
-                    if (matchingNotes > 0)
-                    {
-                        return true;
-                    }
+                    return true;
                 }
             }
             return false;

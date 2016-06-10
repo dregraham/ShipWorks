@@ -8,7 +8,7 @@ using Xunit;
 
 namespace ShipWorks.Stores.Tests
 {
-    public class NoteTest
+    public class OrderNoteTest
     {
         [Fact]
         public void Add_NoteNotAdded_WhenNoteIsEmpty()
@@ -17,7 +17,7 @@ namespace ShipWorks.Stores.Tests
 
             using (var mock = AutoMock.GetLoose())
             {
-                Note note = mock.Create<Note>();
+                OrderNote note = mock.Create<OrderNote>();
                 note.Add(order, string.Empty, DateTime.Now, NoteVisibility.Internal);
 
                 Assert.Empty(order.Notes);
@@ -35,7 +35,7 @@ namespace ShipWorks.Stores.Tests
                 var noteWithSameText = new NoteEntity { Text = sameText, Source = (int)NoteSource.Downloaded };
                 order.Notes.Add(noteWithSameText);
 
-                Note note = mock.Create<Note>();
+                OrderNote note = mock.Create<OrderNote>();
                 note.Add(order, sameText, DateTime.Now, NoteVisibility.Internal);
                 
                 // The only note that is there is the one that was added before.
@@ -54,7 +54,7 @@ namespace ShipWorks.Stores.Tests
                 var noteWithSameText = new NoteEntity { Text = sameText, Source = (int)NoteSource.ShipWorksUser };
                 order.Notes.Add(noteWithSameText);
 
-                Note note = mock.Create<Note>();
+                OrderNote note = mock.Create<OrderNote>();
                 note.Add(order, sameText, DateTime.Now, NoteVisibility.Internal);
 
                 // The only note that is there is the one that was added before.
@@ -73,7 +73,7 @@ namespace ShipWorks.Stores.Tests
                 orderRepo.Setup(r => r.ContainsNote(It.IsAny<OrderEntity>(), It.IsAny<string>(), It.IsAny<NoteSource>()))
                     .Returns(true);
 
-                Note note = mock.Create<Note>();
+                OrderNote note = mock.Create<OrderNote>();
                 note.Add(order, "blah", DateTime.Now, NoteVisibility.Internal);
 
                 Assert.Empty(order.Notes);
@@ -91,7 +91,7 @@ namespace ShipWorks.Stores.Tests
                 orderRepo.Setup(r => r.ContainsNote(It.IsAny<OrderEntity>(), It.IsAny<string>(), It.IsAny<NoteSource>()))
                     .Returns(false);
 
-                Note note = mock.Create<Note>();
+                OrderNote note = mock.Create<OrderNote>();
                 note.Add(order, "blah", DateTime.Now, NoteVisibility.Internal);
 
                 Assert.Equal(1, order.Notes.Count);
@@ -107,7 +107,7 @@ namespace ShipWorks.Stores.Tests
             {
                 Mock<IOrderRepository> orderRepo = mock.Mock<IOrderRepository>();
 
-                Note note = mock.Create<Note>();
+                OrderNote note = mock.Create<OrderNote>();
                 note.Add(order, "blah", DateTime.Now, NoteVisibility.Internal);
 
                 orderRepo.Verify(r=>r.ContainsNote(It.IsAny<OrderEntity>(), It.IsAny<string>(), It.IsAny<NoteSource>()), Times.Never);
@@ -123,7 +123,7 @@ namespace ShipWorks.Stores.Tests
             {
                 Mock<IOrderRepository> orderRepo = mock.Mock<IOrderRepository>();
 
-                Note note = mock.Create<Note>();
+                OrderNote note = mock.Create<OrderNote>();
                 note.Add(order, "blah", DateTime.Now, NoteVisibility.Internal);
 
                 orderRepo.Verify(r => r.ContainsNote(It.IsAny<OrderEntity>(), It.IsAny<string>(), It.IsAny<NoteSource>()), Times.Once);
@@ -137,7 +137,7 @@ namespace ShipWorks.Stores.Tests
 
             using (var mock = AutoMock.GetLoose())
             {
-                Note note = mock.Create<Note>();
+                OrderNote note = mock.Create<OrderNote>();
                 note.Add(order, "blah", DateTime.Now, NoteVisibility.Internal);
 
                 Assert.Equal(order, order.Notes.Single().Order);
@@ -152,7 +152,7 @@ namespace ShipWorks.Stores.Tests
 
             using (var mock = AutoMock.GetLoose())
             {
-                Note note = mock.Create<Note>();
+                OrderNote note = mock.Create<OrderNote>();
                 note.Add(order, "blah", now, NoteVisibility.Internal);
 
                 Assert.Equal(now, order.Notes.Single().Edited);
@@ -166,7 +166,7 @@ namespace ShipWorks.Stores.Tests
 
             using (var mock = AutoMock.GetLoose())
             {
-                Note note = mock.Create<Note>();
+                OrderNote note = mock.Create<OrderNote>();
                 note.Add(order, "blah", DateTime.Now, NoteVisibility.Internal);
 
                 Assert.Null(order.Notes.Single().UserID);
@@ -180,7 +180,7 @@ namespace ShipWorks.Stores.Tests
 
             using (var mock = AutoMock.GetLoose())
             {
-                Note note = mock.Create<Note>();
+                OrderNote note = mock.Create<OrderNote>();
                 note.Add(order, "blah", DateTime.Now, NoteVisibility.Internal);
 
                 Assert.Equal((int) NoteSource.Downloaded, order.Notes.Single().Source);
@@ -196,7 +196,7 @@ namespace ShipWorks.Stores.Tests
 
             using (var mock = AutoMock.GetLoose())
             {
-                Note note = mock.Create<Note>();
+                OrderNote note = mock.Create<OrderNote>();
                 note.Add(order, "blah", DateTime.Now, visibility);
 
                 Assert.Equal((int)visibility, order.Notes.Single().Visibility);
@@ -210,7 +210,7 @@ namespace ShipWorks.Stores.Tests
 
             using (var mock = AutoMock.GetLoose())
             {
-                Note note = mock.Create<Note>();
+                OrderNote note = mock.Create<OrderNote>();
                 note.Add(order, "blah", DateTime.Now, NoteVisibility.Internal);
 
                 Assert.Equal("blah", order.Notes.Single().Text);

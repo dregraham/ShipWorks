@@ -1,3 +1,4 @@
+using log4net;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
 using System.Collections.Generic;
@@ -14,14 +15,16 @@ namespace ShipWorks.Stores.Platforms.Odbc
     {
         private readonly IOdbcFieldMap fieldMap;
         private readonly IOdbcDataSource dataSource;
+        private readonly ILog log;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcDownloadCommand"/> class.
         /// </summary>
-        public OdbcDownloadCommand(IOdbcFieldMap fieldMap, IOdbcDataSource dataSource)
+        public OdbcDownloadCommand(IOdbcFieldMap fieldMap, IOdbcDataSource dataSource, ILog log)
         {
             this.fieldMap = fieldMap;
             this.dataSource = dataSource;
+            this.log = log;
         }
 
         /// <summary>
@@ -38,9 +41,8 @@ namespace ShipWorks.Stores.Platforms.Odbc
                     string query = GetQuery(connection);
 
                     using (OdbcCommand command = new OdbcCommand(query, connection))
+                    using (OdbcDataReader reader = command.ExecuteReader())
                     {
-                        OdbcDataReader reader = command.ExecuteReader();
-
                         while (reader.Read())
                         {
                             OdbcRecord odbcRecord = new OdbcRecord();
@@ -84,10 +86,14 @@ namespace ShipWorks.Stores.Platforms.Odbc
 
                 string tableNameInQuotes = cmdBuilder.QuoteIdentifier(fieldMap.ExternalTableName);
 
-                IEnumerable<string> columnNamesInQuotes = fieldMap.Entries.Select(e => cmdBuilder.QuoteIdentifier(e.ExternalField.Column.Name));
-                string columnsToProject = string.Join(",", columnNamesInQuotes);
+                List<string> columnNamesInQuotes = fieldMap.Entries.Select(e => cmdBuilder.QuoteIdentifier(e.ExternalField.Column.Name)).ToList();
+                columnNamesInQuotes.Add(cmdBuilder.QuoteIdentifier(fieldMap.RecordIdentifierSource));
+                string columnsToProject = string.Join(",", columnNamesInQuotes.Distinct());
 
-                return $"SELECT {columnsToProject} FROM {tableNameInQuotes}";
+                string query = $"SELECT {columnsToProject} FROM {tableNameInQuotes}";
+                log.Info($"Query creted by OdbcDownloadCommand is \"{query}\"");
+
+                return query;
             }
         }
     }
