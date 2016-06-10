@@ -39,7 +39,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// <summary>
         /// List of field maps to be mapped.
         /// </summary>
-        IEnumerable<OdbcFieldMapDisplay> FieldMaps { get; set; }
+        ObservableCollection<OdbcFieldMapDisplay> DisplayFieldMaps { get; set; }
 
         /// <summary>
         /// The selected field map.
@@ -59,7 +59,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// <summary>
         /// The item field map.
         /// </summary>
-        OdbcFieldMapDisplay ItemFieldMap { get; set; }
+        ObservableCollection<OdbcFieldMapDisplay> ItemFieldMaps { get; set; }
 
         /// <summary>
         /// Loads the external odbc tables.

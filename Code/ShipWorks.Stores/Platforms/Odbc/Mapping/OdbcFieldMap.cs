@@ -1,6 +1,7 @@
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -14,7 +15,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 	public class OdbcFieldMap : IOdbcFieldMap
     {
 		private readonly IOdbcFieldMapIOFactory ioFactory;
-        private readonly List<IOdbcFieldMapEntry> entries;
+        private readonly ObservableCollection<IOdbcFieldMapEntry> entries;
 
         /// <summary>
         /// Constructor
@@ -24,14 +25,14 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 		    MethodConditions.EnsureArgumentIsNotNull(ioFactory);
 
 		    this.ioFactory = ioFactory;
-		    entries = new List<IOdbcFieldMapEntry>();
+		    entries = new ObservableCollection<IOdbcFieldMapEntry>();
 		}
 
         /// <summary>
         /// The ODBC Field Map Entries
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public IEnumerable<IOdbcFieldMapEntry> Entries => entries;
+        public ObservableCollection<IOdbcFieldMapEntry> Entries => entries;
 
         /// <summary>
         /// The External Table Name
@@ -56,7 +57,10 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// </summary>
         private void ResetValues()
         {
-            entries.ForEach(e => e.ExternalField.ResetValue());
+            foreach (var entry in entries)
+            {
+                entry.ExternalField.ResetValue();
+            }
         }
 
         /// <summary>
@@ -174,9 +178,18 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
                 Save(stream);
                 OdbcFieldMap clonedFieldMap = new OdbcFieldMap(ioFactory);
                 clonedFieldMap.Load(stream);
-                
+
                 return clonedFieldMap;
             }
+        }
+
+        /// <summary>
+        /// Removes the entry at the given index
+        /// </summary>
+        /// <param name="index">The index.</param>
+        public void RemoveEntryAt(int index)
+        {
+            entries.RemoveAt(index);
         }
     }
 }

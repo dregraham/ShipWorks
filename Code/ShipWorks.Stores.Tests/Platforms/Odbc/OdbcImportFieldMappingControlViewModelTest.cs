@@ -59,7 +59,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
 
                 var testObject = mock.Create<OdbcImportFieldMappingControlViewModel>();
 
-                Assert.Equal(odbcFieldMap, testObject.ItemFieldMap.Map);
+                Assert.Equal(odbcFieldMap, testObject.ItemFieldMaps.Map);
             }
         }
 
@@ -81,8 +81,8 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             {
                 var testObject = mock.Create<OdbcImportFieldMappingControlViewModel>();
 
-                Assert.Equal(new[] {testObject.OrderFieldMap, testObject.AddressFieldMap, testObject.ItemFieldMap},
-                    testObject.FieldMaps);
+                Assert.Equal(new[] {testObject.OrderFieldMap, testObject.AddressFieldMap, testObject.ItemFieldMaps},
+                    testObject.DisplayFieldMaps);
             }
         }
 
@@ -115,7 +115,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             {
                 var testObject = mock.Create<OdbcImportFieldMappingControlViewModel>();
 
-                Assert.Equal("Item", testObject.ItemFieldMap.DisplayName);
+                Assert.Equal("Item", testObject.ItemFieldMaps.DisplayName);
             }
         }
 
