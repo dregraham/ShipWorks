@@ -21,14 +21,20 @@ namespace ShipWorks.Data.Utility
         public SqlAppResourceLock(string resourceName)
         {
             lockName = resourceName;
-
             AcquireLock();
         }
 
         /// <summary>
-        /// Connection used to obtain the lock
+        /// A lock is taken on the given resource name using the given connection, preventing any other
+        /// connection also requesting a lock from working with the resource name.
+        /// Throws a SqlAppResourceLockException if the lock cannot be taken.
         /// </summary>
-        public SqlConnection Connection => con;
+        public SqlAppResourceLock(SqlConnection con, string resourceName)
+        {
+            this.con = con;
+            lockName = resourceName;
+            AcquireLock(con);
+        }
 
         /// <summary>
         /// Acquire the lock.  If the lock cannot be acquired, a SqlAppResourceLockException is thrown.
@@ -36,7 +42,14 @@ namespace ShipWorks.Data.Utility
         private void AcquireLock()
         {
             con = SqlSession.Current.OpenConnection();
+            AcquireLock(con);
+        }
 
+        /// <summary>
+        /// Acquire the lock.  If the lock cannot be acquired, a SqlAppResourceLockException is thrown.
+        /// </summary>
+        private void AcquireLock(SqlConnection con)
+        {
             if (!SqlAppLockUtility.AcquireLock(con, lockName))
             {
                 con.Dispose();

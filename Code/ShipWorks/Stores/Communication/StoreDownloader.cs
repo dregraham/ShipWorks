@@ -538,6 +538,7 @@ namespace ShipWorks.Stores.Communication
             // Only audit new orders if new order auditing is turned on.  This also turns off auditing of creating of new customers if the order is not new.
             using (AuditBehaviorScope auditScope = CreateOrderAuditScope(order))
             {
+                // when using an existing connection we need to begin a transaction to pass to the adapter
                 using (SqlTransaction transaction = connection.BeginTransaction())
                 {
                     using (SqlAdapter adapter = new SqlAdapter(connection, transaction))
