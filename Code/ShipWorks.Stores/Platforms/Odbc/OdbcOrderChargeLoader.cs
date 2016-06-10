@@ -3,6 +3,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ShipWorks.Stores.Platforms.Odbc
 {
@@ -17,11 +18,11 @@ namespace ShipWorks.Stores.Platforms.Odbc
         public void Load(IOdbcFieldMap map, OrderEntity order)
         {
             MethodConditions.EnsureArgumentIsNotNull(map, "map");
+            MethodConditions.EnsureArgumentIsNotNull(order, "order");
 
-            if (order != null)
+            if (order.IsNew)
             {
                 IEnumerable<IOdbcFieldMapEntry> chargeEntries = map.FindEntriesBy(OrderChargeFields.Amount, false);
-
                 foreach (IOdbcFieldMapEntry chargeEntry in chargeEntries)
                 {
                     AddChargeToOrder(order, chargeEntry);
@@ -34,29 +35,14 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// </summary>
         private void AddChargeToOrder(OrderEntity order, IOdbcFieldMapEntry chargeEntry)
         {
+            string desc = chargeEntry.ShipWorksField.DisplayName.Split(' ').First();
+
+            // Don't let resharper make you an object initializer here. SonarLint will complain...
             OrderChargeEntity charge = new OrderChargeEntity();
             charge.Order = order;
-            charge.Type = GetChargeType(chargeEntry.ShipWorksField.DisplayName);
-            charge.Description = chargeEntry.ExternalField.Column.Name;
+            charge.Type = desc.ToUpperInvariant();
+            charge.Description = desc;
             charge.Amount = (decimal)chargeEntry.ShipWorksField.Value;
-        }
-
-        /// <summary>
-        /// Gets the Charge Type from the display name
-        /// </summary>
-        private static string GetChargeType(string displayName)
-        {
-            switch (displayName)
-            {
-                case "Shipping Amount":
-                    return "SHIPPING";
-                case "Tax Amount":
-                    return "TAX";
-                case "Insurance Amount":
-                    return "INSURANCE";
-                default:
-                    return "ADJUST";
-            }
         }
     }
 }

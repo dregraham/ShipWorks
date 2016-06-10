@@ -24,15 +24,15 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         public void Load_WithNullMap_ThrowsArgumentNullException()
         {
             OdbcOrderChargeLoader testObject = new OdbcOrderChargeLoader();
-            Assert.Throws<ArgumentNullException>(() => testObject.Load(null, null));
+            Assert.Throws<ArgumentNullException>(() => testObject.Load(null, new OrderEntity()));
         }
 
         [Fact]
-        public void Load_WithNullOrderEntity_DoesNotThrowsArgumentNullException()
+        public void Load_ThrowsArgumentNullException_WhenNullOrderEntity()
         {
             Mock<IOdbcFieldMap> map = mock.Mock<IOdbcFieldMap>();
             OdbcOrderChargeLoader testObject = new OdbcOrderChargeLoader();
-            testObject.Load(map.Object, null);
+            Assert.Throws<ArgumentNullException>(() => testObject.Load(map.Object, null));
         }
 
         [Fact]
@@ -58,7 +58,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         [Fact]
         public void Load_SetsChargeAmountFromShipWorksFieldValue()
         {
-            ShipWorksOdbcMappableField shipworksField = new ShipWorksOdbcMappableField(OrderChargeFields.Amount, "Tax");
+            ShipWorksOdbcMappableField shipworksField = new ShipWorksOdbcMappableField(OrderChargeFields.Amount, "Tax Amount");
             shipworksField.LoadValue(123);
             ExternalOdbcMappableField externalField = new ExternalOdbcMappableField(new OdbcTable("Order"), new OdbcColumn("Tax Column"));
             OdbcFieldMapEntry entry1 = new OdbcFieldMapEntry(shipworksField, externalField);
@@ -100,9 +100,9 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         }
 
         [Fact]
-        public void Load_WhenChargeDisplayNameIsShippingAmount_SetsChargeTypeToShipping()
+        public void Load_SetsDescriptionToTax_WhenChargeDisplayNameIsTaxAmount()
         {
-            ShipWorksOdbcMappableField shipworksField = new ShipWorksOdbcMappableField(OrderChargeFields.Amount, "Shipping Amount");
+            ShipWorksOdbcMappableField shipworksField = new ShipWorksOdbcMappableField(OrderChargeFields.Amount, "Tax Amount");
             shipworksField.LoadValue(123);
             ExternalOdbcMappableField externalField = new ExternalOdbcMappableField(new OdbcTable("Order"), new OdbcColumn("Tax Column"));
             OdbcFieldMapEntry entry1 = new OdbcFieldMapEntry(shipworksField, externalField);
@@ -118,56 +118,12 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
 
             var orderCharge = order.OrderCharges.FirstOrDefault();
 
-            Assert.Equal("SHIPPING", orderCharge.Type);
-        }
-
-        [Fact]
-        public void Load_WhenChargeDisplayNameIsInsuranceAmount_SetsChargeTypeToInsurance()
-        {
-            ShipWorksOdbcMappableField shipworksField = new ShipWorksOdbcMappableField(OrderChargeFields.Amount, "Insurance Amount");
-            shipworksField.LoadValue(123);
-            ExternalOdbcMappableField externalField = new ExternalOdbcMappableField(new OdbcTable("Order"), new OdbcColumn("Tax Column"));
-            OdbcFieldMapEntry entry1 = new OdbcFieldMapEntry(shipworksField, externalField);
-
-            Mock<IOdbcFieldMap> map = mock.Mock<IOdbcFieldMap>();
-            map.Setup(m => m.FindEntriesBy(It.IsAny<EntityField2>(), false)).Returns(new[] { entry1 });
-
-            OdbcOrderChargeLoader testObject = new OdbcOrderChargeLoader();
-
-            OrderEntity order = new OrderEntity();
-
-            testObject.Load(map.Object, order);
-
-            var orderCharge = order.OrderCharges.FirstOrDefault();
-
-            Assert.Equal("INSURANCE", orderCharge.Type);
-        }
-
-        [Fact]
-        public void Load_WhenChargeDisplayNameIsUnknown_SetsChargeTypeToAdjust()
-        {
-            ShipWorksOdbcMappableField shipworksField = new ShipWorksOdbcMappableField(OrderChargeFields.Amount, "Foo");
-            shipworksField.LoadValue(123);
-            ExternalOdbcMappableField externalField = new ExternalOdbcMappableField(new OdbcTable("Order"), new OdbcColumn("Tax Column"));
-            OdbcFieldMapEntry entry1 = new OdbcFieldMapEntry(shipworksField, externalField);
-
-            Mock<IOdbcFieldMap> map = mock.Mock<IOdbcFieldMap>();
-            map.Setup(m => m.FindEntriesBy(It.IsAny<EntityField2>(), false)).Returns(new[] { entry1 });
-
-            OdbcOrderChargeLoader testObject = new OdbcOrderChargeLoader();
-
-            OrderEntity order = new OrderEntity();
-
-            testObject.Load(map.Object, order);
-
-            var orderCharge = order.OrderCharges.FirstOrDefault();
-
-            Assert.Equal("ADJUST", orderCharge.Type);
+            Assert.Equal("Tax", orderCharge.Description);
         }
 
         public void Dispose()
         {
-            mock?.Dispose();
+            mock.Dispose();
         }
     }
 }
