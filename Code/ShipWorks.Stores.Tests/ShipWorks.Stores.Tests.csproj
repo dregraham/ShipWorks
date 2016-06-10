@@ -170,6 +170,7 @@
     <Compile Include="Platforms\LemonStand\LemonStandStoreTypeTest.cs" />
     <Compile Include="Platforms\Odbc\JsonOdbcFieldMapIOFactoryTest.cs" />
     <Compile Include="Platforms\Odbc\Loader\OdbcItemAttributeLoaderTest.cs" />
+    <Compile Include="Platforms\Odbc\Loader\OdbcOrderAddressLoaderTest.cs" />
     <Compile Include="Platforms\Odbc\Loader\OdbcOrderChargeLoaderTest.cs" />
     <Compile Include="Platforms\Odbc\Loader\OdbcOrderDateLoaderTest.cs" />
     <Compile Include="Platforms\Odbc\Loader\OdbcOrderItemLoaderTest.cs" />
