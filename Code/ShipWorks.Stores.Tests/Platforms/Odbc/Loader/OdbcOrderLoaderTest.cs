@@ -6,7 +6,7 @@ using ShipWorks.Stores.Platforms.Odbc.Loaders;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
 using Xunit;
 
-namespace ShipWorks.Stores.Tests.Platforms.Odbc
+namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
 {
     public class OdbcOrderLoaderTest
     {
