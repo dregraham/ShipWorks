@@ -1,56 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Autofac.Extras.Moq;
+﻿using Autofac.Extras.Moq;
 using Interapptive.Shared.Utility;
 using Moq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
+using System;
+using System.Collections.Generic;
+using ShipWorks.Stores.Platforms.Odbc.Loaders;
 using Xunit;
 
 namespace ShipWorks.Stores.Tests.Platforms.Odbc
 {
     public class OdbcOrderDateLoaderTest
     {
-        [Fact]
-        public void Load_LastModifiedDateSetToNow_WhenLastModifiedNotInitialized()
-        {
-            DateTime utcNow = DateTime.Parse("1/1/2016 4:55:04 PM");
-            using (var mock = AutoMock.GetLoose())
-            {
-                mock.Mock<IDateTimeProvider>().Setup(d => d.UtcNow).Returns(utcNow);
-                var order = new OrderEntity() {IsNew = false};
-                var map = mock.Mock<IOdbcFieldMap>();
-
-                var testObject = mock.Create<OdbcOrderDateLoader>();
-                testObject.Load(map.Object, order);
-
-                Assert.Equal(utcNow, order.OnlineLastModified);
-            }
-        }
-
-        [Fact]
-        public void Load_LastModifiedDateStaysTheSame_WhenLastModifiedDateInitialized()
-        {
-            DateTime initialLastModifiedDate = DateTime.Parse("1/1/2016 4:55:04 PM");
-            DateTime utcNow = DateTime.Parse("1/1/2017 4:55:04 PM");
-            using (var mock = AutoMock.GetLoose())
-            {
-                mock.Mock<IDateTimeProvider>().Setup(d => d.UtcNow).Returns(utcNow);
-                var order = new OrderEntity() {OnlineLastModified = initialLastModifiedDate};
-                var map = mock.Mock<IOdbcFieldMap>();
-
-                var testObject = mock.Create<OdbcOrderDateLoader>();
-                testObject.Load(map.Object, order);
-
-                Assert.Equal(initialLastModifiedDate, order.OnlineLastModified);
-            }
-        }
-
         [Fact]
         public void Load_OrderDateSetToNow_WhenNotInitialized_AndDateFieldsNotMapped()
         {

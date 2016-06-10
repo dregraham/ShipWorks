@@ -7,6 +7,7 @@ using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
 using System;
+using ShipWorks.Stores.Platforms.Odbc.Loaders;
 using Xunit;
 
 namespace ShipWorks.Stores.Tests.Platforms.Odbc

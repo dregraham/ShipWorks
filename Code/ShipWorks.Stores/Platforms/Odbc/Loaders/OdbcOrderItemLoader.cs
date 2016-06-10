@@ -1,12 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
-namespace ShipWorks.Stores.Platforms.Odbc
+namespace ShipWorks.Stores.Platforms.Odbc.Loaders
 {
     /// <summary>
     /// Loads order item information

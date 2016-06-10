@@ -1,9 +1,9 @@
-﻿using ShipWorks.Data.Model.EntityClasses;
+﻿using System.Collections.Generic;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
-using System.Collections.Generic;
 
-namespace ShipWorks.Stores.Platforms.Odbc
+namespace ShipWorks.Stores.Platforms.Odbc.Loaders
 {
     /// <summary>
     /// Loads attributes into an item

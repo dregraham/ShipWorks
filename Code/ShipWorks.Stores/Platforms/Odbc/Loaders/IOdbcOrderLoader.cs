@@ -2,7 +2,7 @@
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
 
-namespace ShipWorks.Stores.Platforms.Odbc
+namespace ShipWorks.Stores.Platforms.Odbc.Loaders
 {
     /// <summary>
     /// Loads order information into an order

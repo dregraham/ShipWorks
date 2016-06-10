@@ -5,6 +5,7 @@ using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
 using System.Collections.Generic;
 using System.Linq;
+using ShipWorks.Stores.Platforms.Odbc.Loaders;
 
 namespace ShipWorks.Stores.Platforms.Odbc
 {

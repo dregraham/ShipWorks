@@ -1,11 +1,11 @@
-﻿using ShipWorks.Data.Model.EntityClasses;
+﻿using System.Collections.Generic;
+using System.Linq;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
-using System.Collections.Generic;
-using System.Linq;
 
-namespace ShipWorks.Stores.Platforms.Odbc
+namespace ShipWorks.Stores.Platforms.Odbc.Loaders
 {
     /// <summary>
     /// Loads note into OdbcOrder

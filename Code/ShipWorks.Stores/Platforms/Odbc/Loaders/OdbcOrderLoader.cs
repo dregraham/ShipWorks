@@ -1,9 +1,9 @@
-﻿using Interapptive.Shared.Utility;
+﻿using System.Collections.Generic;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
-using System.Collections.Generic;
 
-namespace ShipWorks.Stores.Platforms.Odbc
+namespace ShipWorks.Stores.Platforms.Odbc.Loaders
 {
     /// <summary>
     /// Responsible for loading data into the OrderEntity

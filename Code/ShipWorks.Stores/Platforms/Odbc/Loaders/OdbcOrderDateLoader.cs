@@ -1,12 +1,12 @@
-﻿using Interapptive.Shared.Utility;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
-namespace ShipWorks.Stores.Platforms.Odbc
+namespace ShipWorks.Stores.Platforms.Odbc.Loaders
 {
     /// <summary>
     /// Loads OrderDate and LastModified date
@@ -29,8 +29,6 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// </summary>
         public void Load(IOdbcFieldMap map, OrderEntity order)
         {
-            order.OnlineLastModified = GetSqlCompliantDate(order.OnlineLastModified);
-
             List<IShipWorksOdbcMappableField> orderDateFields =
                 map.FindEntriesBy(OrderFields.OrderDate, false).Select(e => e.ShipWorksField).ToList();
 
