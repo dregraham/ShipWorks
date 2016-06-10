@@ -11,8 +11,9 @@ namespace ShipWorks.Data.Utility
     /// </summary>
     public class SqlAppResourceLock : IDisposable
     {
-        SqlConnection con;
-        string lockName;
+        private SqlConnection con;
+        private readonly bool disposeConnection;
+        private readonly string lockName;
 
         /// <summary>
         /// A lock is taken on the given resource name, preventing any other connection also requesting a lock from working
@@ -21,6 +22,9 @@ namespace ShipWorks.Data.Utility
         public SqlAppResourceLock(string resourceName)
         {
             lockName = resourceName;
+
+            // Dispose the SqlConnection when releasing the lock
+            disposeConnection = true;
             AcquireLock();
         }
 
@@ -32,6 +36,10 @@ namespace ShipWorks.Data.Utility
         public SqlAppResourceLock(SqlConnection con, string resourceName)
         {
             this.con = con;
+
+            // Do not dispose the connection when the lock is released
+            // because we do not own the connection
+            disposeConnection = false;
             lockName = resourceName;
             AcquireLock(con);
         }
@@ -42,7 +50,13 @@ namespace ShipWorks.Data.Utility
         private void AcquireLock()
         {
             con = SqlSession.Current.OpenConnection();
-            AcquireLock(con);
+            if (!SqlAppLockUtility.AcquireLock(con, lockName))
+            {
+                con.Dispose();
+                con = null;
+
+                throw new SqlAppResourceLockException(lockName);
+            }
         }
 
         /// <summary>
@@ -52,9 +66,6 @@ namespace ShipWorks.Data.Utility
         {
             if (!SqlAppLockUtility.AcquireLock(con, lockName))
             {
-                con.Dispose();
-                con = null;
-
                 throw new SqlAppResourceLockException(lockName);
             }
         }
@@ -68,8 +79,12 @@ namespace ShipWorks.Data.Utility
             {
                 SqlAppLockUtility.ReleaseLock(con, lockName);
 
-                con.Dispose();
-                con = null;
+                // dispose the connection if needed
+                if (disposeConnection)
+                {
+                    con.Dispose();
+                    con = null;
+                }
             }
         }
 
