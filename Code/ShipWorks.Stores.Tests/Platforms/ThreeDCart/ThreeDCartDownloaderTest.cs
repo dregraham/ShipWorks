@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using log4net;
+﻿using log4net;
 using Moq;
 using Newtonsoft.Json;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.ThreeDCart.RestApi;
 using ShipWorks.Stores.Platforms.ThreeDCart.RestApi.DTO;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Xunit;
 
 namespace ShipWorks.Stores.Tests.Platforms.ThreeDCart
@@ -22,6 +22,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ThreeDCart
         private readonly string orderJsonOneAttribute;
         private readonly string orderJsonTwoAttributes;
         private readonly string orderJsonWithKitItem;
+        private readonly string orderJsonOneAttributeWithoutPrice;
 
         public ThreeDCartDownloaderTest()
         {
@@ -31,6 +32,10 @@ namespace ShipWorks.Stores.Tests.Platforms.ThreeDCart
             orderJsonOneAttribute =
                 EmbeddedResourceHelper.GetEmbeddedResourceString(
                     "ShipWorks.Stores.Tests.Platforms.ThreeDCart.Artifacts.GetOrderResponseItemHasOneAttribute.json");
+
+            orderJsonOneAttributeWithoutPrice =
+                EmbeddedResourceHelper.GetEmbeddedResourceString(
+                    "ShipWorks.Stores.Tests.Platforms.ThreeDCart.Artifacts.GetOrderResponseItemHasOneAttributeWithoutPrice.json");
 
             orderJsonTwoAttributes =
                 EmbeddedResourceHelper.GetEmbeddedResourceString(
@@ -140,6 +145,23 @@ namespace ShipWorks.Stores.Tests.Platforms.ThreeDCart
             Assert.Equal("CustCap: Size", actualAttribute.Name);
             Assert.Equal("Extra: Small", actualAttribute.Description);
             Assert.Equal(2, actualAttribute.UnitPrice);
+        }
+
+        [Fact]
+        public void LoadOrder_LoadsItemNameAndAttribute_WhenDescriptionIsNameAndOneAttributeWithoutPrice()
+        {
+            List<ThreeDCartOrder> orders = JsonConvert.DeserializeObject<List<ThreeDCartOrder>>(orderJsonOneAttributeWithoutPrice);
+
+            OrderEntity order = testObject.LoadOrder(new ThreeDCartOrderEntity(), orders.FirstOrDefault(),
+                orders.FirstOrDefault()?.ShipmentList.FirstOrDefault(), string.Empty);
+
+            OrderItemAttributeEntity actualAttribute = order.OrderItems.FirstOrDefault()?.OrderItemAttributes?.FirstOrDefault();
+
+            Assert.Equal("Custom Cap 2", order.OrderItems.FirstOrDefault()?.Name);
+
+            Assert.Equal("CustCap: Size", actualAttribute.Name);
+            Assert.Equal("Extra: Small", actualAttribute.Description);
+            Assert.Equal(0, actualAttribute.UnitPrice);
         }
 
         [Fact]
