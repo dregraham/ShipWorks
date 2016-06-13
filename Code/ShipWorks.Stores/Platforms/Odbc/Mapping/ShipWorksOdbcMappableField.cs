@@ -13,27 +13,19 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
     [Obfuscation(Exclude = true)]
     public class ShipWorksOdbcMappableField : IShipWorksOdbcMappableField
     {
-        [JsonConstructor]
-        public ShipWorksOdbcMappableField(string displayName)
-        {
-            DisplayName = displayName;
-        }
-
         /// <summary>
         /// Initializes a new instance of the <see cref="ShipWorksOdbcMappableField"/> class.
         /// </summary>
-        /// <param name="field">The field.</param>
-        /// <param name="displayName">The display name.</param>
-        public ShipWorksOdbcMappableField(EntityField2 field, OdbcOrderFieldDescription fieldDescription) : this(field, EnumHelper.GetDescription(fieldDescription), false)
+        public ShipWorksOdbcMappableField(EntityField2 field, OdbcOrderFieldDescription fieldDescription)
+            : this(field, EnumHelper.GetDescription(fieldDescription), false)
         {
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ShipWorksOdbcMappableField"/> class.
         /// </summary>
-        /// <param name="field">The field.</param>
-        /// <param name="displayName">The display name.</param>
-        public ShipWorksOdbcMappableField(EntityField2 field, OdbcOrderFieldDescription fieldDescription, bool isRequired) : this(field, EnumHelper.GetDescription(fieldDescription), isRequired)
+        public ShipWorksOdbcMappableField(EntityField2 field, OdbcOrderFieldDescription fieldDescription, bool isRequired)
+            : this(field, EnumHelper.GetDescription(fieldDescription), isRequired)
         {
         }
 
@@ -64,7 +56,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <summary>
         /// The type of the ShipWorks field
         /// </summary>
-        public string TypeName { get; set; }
+        public string TypeName { get; }
 
         /// <summary>
         /// The name of the object that contains this field

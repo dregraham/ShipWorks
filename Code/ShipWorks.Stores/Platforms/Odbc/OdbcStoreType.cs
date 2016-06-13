@@ -18,15 +18,15 @@ namespace ShipWorks.Stores.Platforms.Odbc
     /// </summary>
     public class OdbcStoreType : StoreType
     {
-        private readonly Func<StoreEntity, OdbcStoreDownloader> downloadFactory;
+        private readonly Func<StoreEntity, OdbcStoreDownloader> downloaderFactory;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public OdbcStoreType(StoreEntity store, Func<StoreEntity, OdbcStoreDownloader> downloadFactory)
+        public OdbcStoreType(StoreEntity store, Func<StoreEntity, OdbcStoreDownloader> downloaderFactory)
             : base(store)
         {
-            this.downloadFactory = downloadFactory;
+            this.downloaderFactory = downloaderFactory;
         }
 
         /// <summary>
@@ -47,7 +47,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
             OdbcStoreEntity odbcStore = Store as OdbcStoreEntity;
             MethodConditions.EnsureArgumentIsNotNull(odbcStore);
 
-            return downloadFactory(odbcStore);
+            return downloaderFactory(odbcStore);
         }
 
         /// <summary>

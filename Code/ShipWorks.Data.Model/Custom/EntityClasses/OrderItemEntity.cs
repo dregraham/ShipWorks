@@ -15,7 +15,8 @@ namespace ShipWorks.Data.Model.EntityClasses
         /// Initializes a new instance of the <see cref="OrderItemEntity"/> class.
         /// </summary>
         /// <remarks>Sets the order and initializes nulls to default.</remarks>
-        public OrderItemEntity(OrderEntity order) : this()
+        public OrderItemEntity(OrderEntity order)
+            : this()
         {
             MethodConditions.EnsureArgumentIsNotNull(order);
 
