@@ -1,3 +1,4 @@
+using Interapptive.Shared.Utility;
 using Newtonsoft.Json;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using System;
@@ -12,21 +13,28 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
     [Obfuscation(Exclude = true)]
     public class ShipWorksOdbcMappableField : IShipWorksOdbcMappableField
     {
-        public const string UnitCostDisplayName = "Unit Cost";
-        public const string TotalCostDisplayName = "Total Cost";
-        public const string UnitWeightDisplayName = "Unit Weight";
-        public const string TotalWeightDisplayName = "Total Weight";
-        public const string UnitPriceDisplayName = "Unit Price";
-        public const string TotalPriceDisplayName = "Total Price";
-        public const string QuantityDisplayName = "Quantity";
-        public const string OrderDateAndTimeDisplayName = "Order Date & Time";
-        public const string OrderDateDisplayName = "Order Date";
-        public const string OrderTimeDisplayName = "Order Time";
-
         [JsonConstructor]
         public ShipWorksOdbcMappableField(string displayName)
         {
             DisplayName = displayName;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ShipWorksOdbcMappableField"/> class.
+        /// </summary>
+        /// <param name="field">The field.</param>
+        /// <param name="displayName">The display name.</param>
+        public ShipWorksOdbcMappableField(EntityField2 field, OdbcOrderFieldDescription fieldDescription) : this(field, EnumHelper.GetDescription(fieldDescription), false)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ShipWorksOdbcMappableField"/> class.
+        /// </summary>
+        /// <param name="field">The field.</param>
+        /// <param name="displayName">The display name.</param>
+        public ShipWorksOdbcMappableField(EntityField2 field, OdbcOrderFieldDescription fieldDescription, bool isRequired) : this(field, EnumHelper.GetDescription(fieldDescription), isRequired)
+        {
         }
 
         /// <summary>

@@ -5,6 +5,7 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
+using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Loaders
 {
@@ -37,9 +38,9 @@ namespace ShipWorks.Stores.Platforms.Odbc.Loaders
                 OrderItemEntity item = new OrderItemEntity(order);
                 clonedMap.CopyToEntity(item);
 
-                item.UnitPrice = GetUnitAmount(clonedMap, item, OrderItemFields.UnitPrice, ShipWorksOdbcMappableField.UnitPriceDisplayName, ShipWorksOdbcMappableField.TotalPriceDisplayName);
-                item.UnitCost = GetUnitAmount(clonedMap, item, OrderItemFields.UnitCost, ShipWorksOdbcMappableField.UnitCostDisplayName, ShipWorksOdbcMappableField.TotalCostDisplayName);
-                item.Weight = (double) GetUnitAmount(clonedMap, item, OrderItemFields.Weight, ShipWorksOdbcMappableField.UnitWeightDisplayName, ShipWorksOdbcMappableField.TotalWeightDisplayName);
+                item.UnitPrice = GetUnitAmount(clonedMap, item, OrderItemFields.UnitPrice, OdbcOrderFieldDescription.ItemUnitPrice, OdbcOrderFieldDescription.ItemTotalPrice);
+                item.UnitCost = GetUnitAmount(clonedMap, item, OrderItemFields.UnitCost, OdbcOrderFieldDescription.ItemUnitCost, OdbcOrderFieldDescription.ItemTotalCost);
+                item.Weight = (double) GetUnitAmount(clonedMap, item, OrderItemFields.Weight, OdbcOrderFieldDescription.ItemUnitWeight, OdbcOrderFieldDescription.ItemTotalWeight);
 
                 attributeLoader.Load(clonedMap, item);
             }
@@ -53,29 +54,26 @@ namespace ShipWorks.Stores.Platforms.Odbc.Loaders
         /// </remarks>
         private decimal GetUnitAmount(IOdbcFieldMap map,
             OrderItemEntity item,
-            EntityField2 amountField,
-            string unitDisplayName,
-            string totalDisplayName)
+            EntityField2 entityField,
+            OdbcOrderFieldDescription unitDescription,
+            OdbcOrderFieldDescription totalDescription)
         {
-            IEnumerable<IShipWorksOdbcMappableField> priceFields = map.FindEntriesBy(amountField, false)
-                .Select(f => f.ShipWorksField).ToList();
+            IEnumerable<IShipWorksOdbcMappableField> shipworksFields = map.FindEntriesBy(entityField, false).Select(f => f.ShipWorksField);
 
-            IShipWorksOdbcMappableField unitPriceField =
-                priceFields.SingleOrDefault(f => f.DisplayName == unitDisplayName);
+            IShipWorksOdbcMappableField singleShipworksField = shipworksFields.SingleOrDefault(f => f.DisplayName == EnumHelper.GetDescription(unitDescription));
 
-            if (unitPriceField != null)
+            if (singleShipworksField != null)
             {
-                return Convert.ToDecimal(unitPriceField.Value);
+                return Convert.ToDecimal(singleShipworksField.Value);
             }
 
-            IShipWorksOdbcMappableField totalPriceField =
-                priceFields.SingleOrDefault(f => f.DisplayName == totalDisplayName);
-            if (totalPriceField == null || Math.Abs(item.Quantity) < .01)
+            IShipWorksOdbcMappableField totalShipWorksField = shipworksFields.SingleOrDefault(f => f.DisplayName == EnumHelper.GetDescription(totalDescription));
+            if (totalShipWorksField == null || Math.Abs(item.Quantity) < .01)
             {
                 return 0;
             }
 
-            return (Convert.ToDecimal(totalPriceField.Value))/Convert.ToDecimal(item.Quantity);
+            return (Convert.ToDecimal(totalShipWorksField.Value))/Convert.ToDecimal(item.Quantity);
         }
     }
 }

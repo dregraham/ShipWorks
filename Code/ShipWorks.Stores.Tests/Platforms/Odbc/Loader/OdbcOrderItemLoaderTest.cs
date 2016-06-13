@@ -7,6 +7,7 @@ using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Stores.Platforms.Odbc.Loaders;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
 using Xunit;
+using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
 {
@@ -168,7 +169,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
                 clonedMap.Setup(m => m.FindEntriesBy(It.Is<EntityField2>(f => f.Name == "UnitPrice"), false))
                     .Returns(new[]
                     {
-                        GetOdbcFieldMapEntry(mock1, ShipWorksOdbcMappableField.UnitPriceDisplayName, 42M)
+                        GetOdbcFieldMapEntry(mock1, EnumHelper.GetDescription(OdbcOrderFieldDescription.ItemUnitPrice), 42M)
                     });
 
                 var originalMap = mock1.Mock<IOdbcFieldMap>();
@@ -193,7 +194,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
                 clonedMap.Setup(m => m.FindEntriesBy(It.Is<EntityField2>(f => f.Name == "UnitPrice"), false))
                     .Returns(new[]
                     {
-                        GetOdbcFieldMapEntry(mock1, ShipWorksOdbcMappableField.TotalPriceDisplayName, 42M)
+                        GetOdbcFieldMapEntry(mock1, EnumHelper.GetDescription(OdbcOrderFieldDescription.ItemTotalPrice), 42M)
                     });
 
                 SetOrderItemQuantity(clonedMap, 2D);
@@ -220,7 +221,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
                 clonedMap.Setup(m => m.FindEntriesBy(It.Is<EntityField2>(f => f.Name == "UnitPrice"), false))
                     .Returns(new[]
                     {
-                        GetOdbcFieldMapEntry(mock1, ShipWorksOdbcMappableField.TotalPriceDisplayName, 0M)
+                        GetOdbcFieldMapEntry(mock1, EnumHelper.GetDescription(OdbcOrderFieldDescription.ItemTotalPrice), 0M)
                     });
 
                 SetOrderItemQuantity(clonedMap, 2D);
@@ -270,7 +271,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
                 clonedMap.Setup(m => m.FindEntriesBy(It.Is<EntityField2>(f => f.Name == "UnitCost"), false))
                     .Returns(new[]
                     {
-                        GetOdbcFieldMapEntry(mock1, ShipWorksOdbcMappableField.UnitCostDisplayName, 42M)
+                        GetOdbcFieldMapEntry(mock1, EnumHelper.GetDescription(OdbcOrderFieldDescription.ItemUnitCost), 42M)
                     });
 
                 var originalMap = mock1.Mock<IOdbcFieldMap>();
@@ -295,7 +296,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
                 clonedMap.Setup(m => m.FindEntriesBy(It.Is<EntityField2>(f => f.Name == "UnitCost"), false))
                     .Returns(new[]
                     {
-                        GetOdbcFieldMapEntry(mock1, ShipWorksOdbcMappableField.TotalCostDisplayName, 42M)
+                        GetOdbcFieldMapEntry(mock1, "Total Cost", 42M)
                     });
 
                 SetOrderItemQuantity(clonedMap, 2D);
@@ -322,7 +323,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
                 clonedMap.Setup(m => m.FindEntriesBy(It.Is<EntityField2>(f => f.Name == "UnitCost"), false))
                     .Returns(new[]
                     {
-                        GetOdbcFieldMapEntry(mock1, ShipWorksOdbcMappableField.TotalCostDisplayName, 0M)
+                        GetOdbcFieldMapEntry(mock1, EnumHelper.GetDescription(OdbcOrderFieldDescription.ItemTotalCost), 0M)
                     });
 
                 SetOrderItemQuantity(clonedMap, 2D);
@@ -372,7 +373,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
                 clonedMap.Setup(m => m.FindEntriesBy(It.Is<EntityField2>(f => f.Name == "Weight"), false))
                     .Returns(new[]
                     {
-                        GetOdbcFieldMapEntry(mock1, ShipWorksOdbcMappableField.UnitWeightDisplayName, 42D)
+                        GetOdbcFieldMapEntry(mock1, EnumHelper.GetDescription(OdbcOrderFieldDescription.ItemUnitWeight), 42D)
                     });
 
                 var originalMap = mock1.Mock<IOdbcFieldMap>();
@@ -397,7 +398,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
                 clonedMap.Setup(m => m.FindEntriesBy(It.Is<EntityField2>(f => f.Name == "Weight"), false))
                     .Returns(new[]
                     {
-                        GetOdbcFieldMapEntry(mock1, ShipWorksOdbcMappableField.TotalWeightDisplayName, 42D)
+                        GetOdbcFieldMapEntry(mock1, EnumHelper.GetDescription(OdbcOrderFieldDescription.ItemTotalWeight), 42D)
                     });
 
                 SetOrderItemQuantity(clonedMap, 2D);
@@ -424,7 +425,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
                 clonedMap.Setup(m => m.FindEntriesBy(It.Is<EntityField2>(f => f.Name == "Weight"), false))
                     .Returns(new[]
                     {
-                        GetOdbcFieldMapEntry(mock1, ShipWorksOdbcMappableField.TotalWeightDisplayName, 0D)
+                        GetOdbcFieldMapEntry(mock1, EnumHelper.GetDescription(OdbcOrderFieldDescription.ItemTotalWeight), 0D)
                     });
 
                 SetOrderItemQuantity(clonedMap, 2D);
