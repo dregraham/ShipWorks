@@ -494,7 +494,6 @@ namespace ShipWorks.Stores.Communication
             {
                 SaveDownloadedOrder(order, transaction);
             }
-
         }
 
         /// <summary>
