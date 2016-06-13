@@ -455,9 +455,10 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// <returns></returns>
         private static string GetAmazonCarrierName(ShipmentEntity shipment)
         {
-            AmazonShipmentEntity amazonShipment = new AmazonShipmentEntity(shipment.ShipmentID);
-            
-            switch (amazonShipment.CarrierName)
+            MethodConditions.EnsureArgumentIsNotNull(shipment);
+            MethodConditions.EnsureArgumentIsNotNull(shipment.Amazon);
+
+            switch (shipment.Amazon.CarrierName)
             {
                 case "FedEx":
                     return "FEDEX";
@@ -477,10 +478,10 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// <returns></returns>
         private static string GetAmazonShipmentClassCode(ShipmentEntity shipment)
         {
-            AmazonShipmentEntity amazonShipment = new AmazonShipmentEntity(shipment.ShipmentID);
-            string service = amazonShipment.ShippingServiceName;
+            MethodConditions.EnsureArgumentIsNotNull(shipment);
+            MethodConditions.EnsureArgumentIsNotNull(shipment.Amazon);
 
-            switch (service)
+            switch (shipment.Amazon.ShippingServiceName)
             {
                 case "FedEx Priority Overnight®":
                     return "PRIORITY";
