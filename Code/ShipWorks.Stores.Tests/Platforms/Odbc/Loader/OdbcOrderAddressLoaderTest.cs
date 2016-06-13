@@ -7,8 +7,8 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
 {
     public class OdbcOrderAddressLoaderTest
     {
-        OrderEntity order = new OrderEntity();
-        OdbcOrderAddressLoader testObject = new OdbcOrderAddressLoader();
+        private readonly OrderEntity order = new OrderEntity();
+        private readonly OdbcOrderAddressLoader testObject = new OdbcOrderAddressLoader();
 
         private readonly string firstName = "Homer";
         private readonly string middleName = "J.";
