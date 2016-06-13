@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Windows.Forms;
+using ShipWorks.Data.Model.HelperClasses;
 using Xunit;
 
 namespace ShipWorks.Stores.Tests.Platforms.Odbc
@@ -27,7 +28,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
 
                 var testObject = mock.Create<OdbcImportFieldMappingControlViewModel>();
 
-                Assert.Equal(odbcFieldMap, testObject.OrderFieldMap.Map);
+                Assert.Equal(odbcFieldMap, testObject.DisplayFieldMaps[0].Map);
             }
         }
 
@@ -43,7 +44,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
 
                 var testObject = mock.Create<OdbcImportFieldMappingControlViewModel>();
 
-                Assert.Equal(odbcFieldMap, testObject.AddressFieldMap.Map);
+                Assert.Equal(odbcFieldMap, testObject.DisplayFieldMaps[1].Map);
             }
         }
 
@@ -58,8 +59,10 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
                     .Returns(odbcFieldMap);
 
                 var testObject = mock.Create<OdbcImportFieldMappingControlViewModel>();
+                testObject.NumberOfItemsPerOrder = 1;
+                testObject.OrderHasSingleLineItem = true;
 
-                Assert.Equal(odbcFieldMap, testObject.ItemFieldMaps.Map);
+                Assert.Equal(odbcFieldMap, testObject.DisplayFieldMaps[2].Map);
             }
         }
 
@@ -70,52 +73,41 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             {
                 var testObject = mock.Create<OdbcImportFieldMappingControlViewModel>();
 
-                Assert.Equal(testObject.OrderFieldMap, testObject.SelectedFieldMap);
+                Assert.Equal(testObject.DisplayFieldMaps[0], testObject.SelectedFieldMap);
             }
         }
 
         [Fact]
-        public void Constructor_FieldMaps_ContainsOrderFieldMap()
+        public void Constructor_FieldMaps_ContainsTwoFieldMaps()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+
+                var testObject = mock.Create<OdbcImportFieldMappingControlViewModel>();
+
+                Assert.Equal(2, testObject.DisplayFieldMaps.Count);
+            }
+        }
+
+        [Fact]
+        public void Constructor_FirstFieldMapDisplayName_IsOrder()
         {
             using (var mock = AutoMock.GetLoose())
             {
                 var testObject = mock.Create<OdbcImportFieldMappingControlViewModel>();
 
-                Assert.Equal(new[] {testObject.OrderFieldMap, testObject.AddressFieldMap, testObject.ItemFieldMaps},
-                    testObject.DisplayFieldMaps);
+                Assert.Equal("Order", testObject.DisplayFieldMaps[0].DisplayName);
             }
         }
 
         [Fact]
-        public void Constructor_OrderFieldMapDisplayName_IsOrder()
+        public void Constructor_SecondFieldMapDisplayName_IsOrder()
         {
             using (var mock = AutoMock.GetLoose())
             {
                 var testObject = mock.Create<OdbcImportFieldMappingControlViewModel>();
 
-                Assert.Equal("Order", testObject.OrderFieldMap.DisplayName);
-            }
-        }
-
-        [Fact]
-        public void Constructor_AddressFieldMapDisplayName_IsOrder()
-        {
-            using (var mock = AutoMock.GetLoose())
-            {
-                var testObject = mock.Create<OdbcImportFieldMappingControlViewModel>();
-
-                Assert.Equal("Address", testObject.AddressFieldMap.DisplayName);
-            }
-        }
-
-        [Fact]
-        public void Constructor_ItemFieldMapDisplayName_IsOrder()
-        {
-            using (var mock = AutoMock.GetLoose())
-            {
-                var testObject = mock.Create<OdbcImportFieldMappingControlViewModel>();
-
-                Assert.Equal("Item", testObject.ItemFieldMaps.DisplayName);
+                Assert.Equal("Address", testObject.DisplayFieldMaps[1].DisplayName);
             }
         }
 
@@ -207,15 +199,17 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
                 var mapEntry = mock.Mock<IOdbcFieldMapEntry>();
                 mapEntry.SetupGet(e => e.ExternalField)
                     .Returns(new ExternalOdbcMappableField(table1.Object, new OdbcColumn("test")));
+                mapEntry.SetupGet(f => f.ShipWorksField)
+                    .Returns(new ShipWorksOdbcMappableField(OrderFields.OrderNumber, "Order Number"));
                 odbcFieldMap.AddEntry(mapEntry.Object);
 
                 Mock<IOdbcFieldMapFactory> fieldMapFactory = mock.Mock<IOdbcFieldMapFactory>();
-                fieldMapFactory.Setup(f => f.CreateFieldMapFrom(It.IsAny<List<OdbcFieldMap>>()))
+                fieldMapFactory.Setup(f => f.CreateFieldMapFrom(It.IsAny<IEnumerable<OdbcFieldMap>>()))
                     .Returns(odbcFieldMap);
 
                 testObject.SelectedTable = table1.Object;
                 testObject.TableChangedCommand.Execute(null);
-                
+
                 testObject.SelectedTable = table2.Object;
                 testObject.TableChangedCommand.Execute(null);
 
@@ -242,10 +236,12 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
                 var mapEntry = mock.Mock<IOdbcFieldMapEntry>();
                 mapEntry.SetupGet(e => e.ExternalField)
                     .Returns(new ExternalOdbcMappableField(table1.Object, new OdbcColumn("test")));
+                mapEntry.SetupGet(f => f.ShipWorksField)
+                    .Returns(new ShipWorksOdbcMappableField(OrderFields.OrderNumber, "Order Number"));
                 odbcFieldMap.AddEntry(mapEntry.Object);
 
                 Mock<IOdbcFieldMapFactory> fieldMapFactory = mock.Mock<IOdbcFieldMapFactory>();
-                fieldMapFactory.Setup(f => f.CreateFieldMapFrom(It.IsAny<List<OdbcFieldMap>>()))
+                fieldMapFactory.Setup(f => f.CreateFieldMapFrom(It.IsAny<IEnumerable<OdbcFieldMap>>()))
                     .Returns(odbcFieldMap);
 
                 testObject.SelectedTable = table1.Object;
@@ -277,10 +273,12 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
                 var mapEntry = mock.Mock<IOdbcFieldMapEntry>();
                 mapEntry.SetupGet(e => e.ExternalField)
                     .Returns(new ExternalOdbcMappableField(table1.Object, new OdbcColumn("test")));
+                mapEntry.SetupGet(f => f.ShipWorksField)
+                    .Returns(new ShipWorksOdbcMappableField(OrderFields.OrderNumber, "Order Number"));
                 odbcFieldMap.AddEntry(mapEntry.Object);
 
                 Mock<IOdbcFieldMapFactory> fieldMapFactory = mock.Mock<IOdbcFieldMapFactory>();
-                fieldMapFactory.Setup(f => f.CreateFieldMapFrom(It.IsAny<List<OdbcFieldMap>>()))
+                fieldMapFactory.Setup(f => f.CreateFieldMapFrom(It.IsAny<IEnumerable<OdbcFieldMap>>()))
                     .Returns(odbcFieldMap);
 
                 testObject.SelectedTable = table1.Object;
@@ -314,10 +312,12 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
                 var mapEntry = mock.Mock<IOdbcFieldMapEntry>();
                 mapEntry.SetupGet(e => e.ExternalField)
                     .Returns(new ExternalOdbcMappableField(table1.Object, new OdbcColumn("test")));
+                mapEntry.SetupGet(f => f.ShipWorksField)
+                    .Returns(new ShipWorksOdbcMappableField(OrderFields.OrderNumber, "Order Number"));
                 odbcFieldMap.AddEntry(mapEntry.Object);
 
                 Mock<IOdbcFieldMapFactory> fieldMapFactory = mock.Mock<IOdbcFieldMapFactory>();
-                fieldMapFactory.Setup(f => f.CreateFieldMapFrom(It.IsAny<List<OdbcFieldMap>>()))
+                fieldMapFactory.Setup(f => f.CreateFieldMapFrom(It.IsAny<IEnumerable<OdbcFieldMap>>()))
                     .Returns(odbcFieldMap);
 
                 testObject.SelectedTable = table1.Object;
@@ -350,10 +350,12 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
                 var mapEntry = mock.Mock<IOdbcFieldMapEntry>();
                 mapEntry.SetupGet(e => e.ExternalField)
                     .Returns(new ExternalOdbcMappableField(table1.Object, new OdbcColumn("test")));
+                mapEntry.SetupGet(f => f.ShipWorksField)
+                    .Returns(new ShipWorksOdbcMappableField(OrderFields.OrderNumber, "Order Number"));
                 odbcFieldMap.AddEntry(mapEntry.Object);
 
                 Mock<IOdbcFieldMapFactory> fieldMapFactory = mock.Mock<IOdbcFieldMapFactory>();
-                fieldMapFactory.Setup(f => f.CreateFieldMapFrom(It.IsAny<List<OdbcFieldMap>>()))
+                fieldMapFactory.Setup(f => f.CreateFieldMapFrom(It.IsAny<IEnumerable<OdbcFieldMap>>()))
                     .Returns(odbcFieldMap);
 
                 testObject.SelectedTable = table1.Object;

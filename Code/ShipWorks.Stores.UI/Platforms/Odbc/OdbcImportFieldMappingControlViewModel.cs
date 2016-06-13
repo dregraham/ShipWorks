@@ -57,14 +57,12 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             SaveMapCommand = new RelayCommand(SaveMapToDisk,() => selectedTable != null);
             TableChangedCommand = new RelayCommand(TableChanged);
 
-            OrderFieldMap = new OdbcFieldMapDisplay("Order", fieldMapFactory.CreateOrderFieldMap());
-            AddressFieldMap = new OdbcFieldMapDisplay("Address", fieldMapFactory.CreateAddressFieldMap());
-            ItemFieldMaps = new ObservableCollection<OdbcFieldMapDisplay>();
+            OdbcFieldMapDisplay orderMap = new OdbcFieldMapDisplay("Order", fieldMapFactory.CreateOrderFieldMap());
+            OdbcFieldMapDisplay addressMap = new OdbcFieldMapDisplay("Address", fieldMapFactory.CreateAddressFieldMap());
 
-            displayFieldMaps = new ObservableCollection<OdbcFieldMapDisplay>(){ OrderFieldMap, AddressFieldMap};
+            displayFieldMaps = new ObservableCollection<OdbcFieldMapDisplay>(){ orderMap, addressMap };
 
-
-            selectedFieldMap = OrderFieldMap;
+            selectedFieldMap = displayFieldMaps[0];
 
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
 
@@ -174,24 +172,6 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         }
 
         /// <summary>
-        /// The order field map.
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public OdbcFieldMapDisplay OrderFieldMap { get; set; }
-
-        /// <summary>
-        /// The address field map.
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public OdbcFieldMapDisplay AddressFieldMap { get; set; }
-
-        /// <summary>
-        /// The item field map.
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public ObservableCollection<OdbcFieldMapDisplay> ItemFieldMaps { get; set; }
-
-        /// <summary>
         /// Gets or sets the record identifier for multiline order items
         /// </summary>
         [Obfuscation(Exclude = true)]
@@ -206,7 +186,6 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             get { return orderHasSingleLineItem; }
             set
             {
-
                 if (value)
                 {
                     SwitchToSingleLineItems();
@@ -239,6 +218,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
                         {
                             OdbcFieldMap map = fieldMapFactory.CreateOrderItemFieldMap();
 
+                            // Give the new item the correct number of attributes
                             for (int j = 0; j < numberOfAttributesPerItem; j++)
                             {
                                 ShipWorksOdbcMappableField shipWorksField =
@@ -309,6 +289,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// <summary>
         /// List of numbers 1-25 for binding to number of items and number of attributes lists
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public List<int> NumbersUpTo25 { get; }
 
         /// <summary>
@@ -364,7 +345,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// </summary>
         public bool EnsureRequiredFieldsHaveValue()
         {
-            IEnumerable<IOdbcFieldMapEntry> entries = OrderFieldMap.Map.Entries.Where(e => e.ShipWorksField.IsRequired);
+            IEnumerable<IOdbcFieldMapEntry> entries = DisplayFieldMaps[0].Map.Entries.Where(e => e.ShipWorksField.IsRequired);
 
             foreach (IOdbcFieldMapEntry entry in entries.Where(entry => entry.ExternalField.Column == null ||
             entry.ExternalField.Column.Name.Equals("(None)", StringComparison.InvariantCulture)))

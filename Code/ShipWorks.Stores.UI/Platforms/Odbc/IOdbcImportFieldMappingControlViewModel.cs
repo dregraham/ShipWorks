@@ -47,21 +47,6 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         OdbcFieldMapDisplay SelectedFieldMap { get; set; }
 
         /// <summary>
-        /// The order field map.
-        /// </summary>
-        OdbcFieldMapDisplay OrderFieldMap { get; set; }
-
-        /// <summary>
-        /// The address field map.
-        /// </summary>
-        OdbcFieldMapDisplay AddressFieldMap { get; set; }
-
-        /// <summary>
-        /// The item field map.
-        /// </summary>
-        ObservableCollection<OdbcFieldMapDisplay> ItemFieldMaps { get; set; }
-
-        /// <summary>
         /// Loads the external odbc tables.
         /// </summary>
         void Load(OdbcStoreEntity store);
