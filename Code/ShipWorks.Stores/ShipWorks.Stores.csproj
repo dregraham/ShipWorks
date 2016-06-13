@@ -179,7 +179,7 @@
     <Compile Include="Platforms\Odbc\Loaders\IOdbcOrderItemLoader.cs" />
     <Compile Include="Platforms\Odbc\Loaders\IOdbcOrderLoader.cs" />
     <Compile Include="Platforms\Odbc\Loaders\OdbcItemAttributeLoader.cs" />
-    <Compile Include="Platforms\Odbc\Loaders\OdbcOrderAddressLoader.cs" />
+    <Compile Include="Platforms\Odbc\Loaders\OdbcOrderNameAndAddressLoader.cs" />
     <Compile Include="Platforms\Odbc\Loaders\OdbcOrderChargeLoader.cs" />
     <Compile Include="Platforms\Odbc\Loaders\OdbcOrderItemLoader.cs" />
     <Compile Include="Platforms\Odbc\Loaders\OdbcOrderLoader.cs" />

@@ -5,10 +5,10 @@ using Xunit;
 
 namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
 {
-    public class OdbcOrderAddressLoaderTest
+    public class OdbcOrderNameAndAddressLoaderTest
     {
         private readonly OrderEntity order = new OrderEntity();
-        private readonly OdbcOrderAddressLoader testObject = new OdbcOrderAddressLoader();
+        private readonly OdbcOrderNameAndAddressLoader testObject = new OdbcOrderNameAndAddressLoader();
 
         private readonly string firstName = "Homer";
         private readonly string middleName = "J.";

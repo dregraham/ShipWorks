@@ -5,15 +5,24 @@ using ShipWorks.Stores.Platforms.Odbc.Mapping;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Loaders
 {
-    public class OdbcOrderAddressLoader : IOdbcOrderDetailLoader
+    /// <summary>
+    /// Updates name and address details of an order after it is downloaded
+    /// </summary>
+    public class OdbcOrderNameAndAddressLoader : IOdbcOrderDetailLoader
     {
+        /// <summary>
+        /// Updates name and address details for the given order
+        /// </summary>
         public void Load(IOdbcFieldMap map, OrderEntity order)
         {
-            FixName(order, "Ship");
-            FixName(order, "Bill");
+            FixNameAndAddress(order, "Ship");
+            FixNameAndAddress(order, "Bill");
         }
 
-        private void FixName(OrderEntity order, string prefix)
+        /// <summary>
+        /// Fixes the name and address
+        /// </summary>
+        private void FixNameAndAddress(OrderEntity order, string prefix)
         {
             PersonAdapter personAdapter = new PersonAdapter(order, prefix);
 
