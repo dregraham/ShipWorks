@@ -172,7 +172,6 @@
     <Compile Include="Platforms\Odbc\Loader\OdbcItemAttributeLoaderTest.cs" />
     <Compile Include="Platforms\Odbc\Loader\OdbcOrderAddressLoaderTest.cs" />
     <Compile Include="Platforms\Odbc\Loader\OdbcOrderChargeLoaderTest.cs" />
-    <Compile Include="Platforms\Odbc\Loader\OdbcOrderDateLoaderTest.cs" />
     <Compile Include="Platforms\Odbc\Loader\OdbcOrderItemLoaderTest.cs" />
     <Compile Include="Platforms\Odbc\Loader\OdbcOrderLoaderTest.cs" />
     <Compile Include="Platforms\Odbc\Loader\OdbcOrderNoteLoaderTest.cs" />
