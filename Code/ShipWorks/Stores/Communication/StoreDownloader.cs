@@ -41,8 +41,6 @@ namespace ShipWorks.Stores.Communication
 
         int quantitySaved = 0;
         int quantityNew = 0;
-        private AddressAdapter originalShippingAddress;
-        private AddressAdapter originalBillingAddress;
 
         /// <summary>
         /// Constructor
@@ -61,6 +59,16 @@ namespace ShipWorks.Stores.Communication
             this.store = store;
             this.storeType = storeType;
         }
+
+        /// <summary>
+        /// Gets the address of order from InstantiateOrder
+        /// </summary>
+        protected AddressAdapter OriginalShippingAddress { get; private set; }
+
+        /// <summary>
+        /// Gets the address of order from InstantiateOrder
+        /// </summary>
+        protected AddressAdapter OriginalBillingAddress { get; private set; }
 
         /// <summary>
         /// The store the downloader downloads from
@@ -295,11 +303,11 @@ namespace ShipWorks.Stores.Communication
             {
                 log.InfoFormat("Found existing {0}", orderIdentifier);
 
-                originalShippingAddress = new AddressAdapter();
-                AddressAdapter.Copy(order, "Ship", originalShippingAddress);
+                OriginalShippingAddress = new AddressAdapter();
+                AddressAdapter.Copy(order, "Ship", OriginalShippingAddress);
 
-                originalBillingAddress = new AddressAdapter();
-                AddressAdapter.Copy(order, "Bill", originalBillingAddress);
+                OriginalBillingAddress = new AddressAdapter();
+                AddressAdapter.Copy(order, "Bill", OriginalBillingAddress);
 
                 return order;
             }
@@ -621,18 +629,18 @@ namespace ShipWorks.Stores.Communication
                     if (!order.IsNew)
                     {
                         AddressAdapter newShippingAddress = new AddressAdapter(order, "Ship");
-                        bool shippingAddressChanged = originalShippingAddress != newShippingAddress;
+                        bool shippingAddressChanged = OriginalShippingAddress != newShippingAddress;
                         if (shippingAddressChanged)
                         {
                             SetAddressValidationStatus(order, "Ship", adapter);
                             adapter.SaveAndRefetch(order);
 
-                            ValidatedAddressManager.PropagateAddressChangesToShipments(adapter, order.OrderID, originalShippingAddress, newShippingAddress);
+                            ValidatedAddressManager.PropagateAddressChangesToShipments(adapter, order.OrderID, OriginalShippingAddress, newShippingAddress);
                         }
 
                         // Update the customer's addresses if necessary
                         AddressAdapter newBillingAddress = new AddressAdapter(order, "Bill");
-                        bool billingAddressChanged = originalBillingAddress != newBillingAddress;
+                        bool billingAddressChanged = OriginalBillingAddress != newBillingAddress;
 
                         if (billingAddressChanged)
                         {
@@ -647,8 +655,8 @@ namespace ShipWorks.Stores.Communication
                             CustomerEntity existingCustomer = DataProvider.GetEntity(order.CustomerID) as CustomerEntity;
                             if (existingCustomer != null)
                             {
-                                UpdateCustomerAddressIfNecessary(billingAddressChanged, (ModifiedOrderCustomerUpdateBehavior)config.CustomerUpdateModifiedBilling, order, existingCustomer, originalBillingAddress, "Bill");
-                                UpdateCustomerAddressIfNecessary(shippingAddressChanged, (ModifiedOrderCustomerUpdateBehavior)config.CustomerUpdateModifiedShipping, order, existingCustomer, originalShippingAddress, "Ship");
+                                UpdateCustomerAddressIfNecessary(billingAddressChanged, (ModifiedOrderCustomerUpdateBehavior)config.CustomerUpdateModifiedBilling, order, existingCustomer, OriginalBillingAddress, "Bill");
+                                UpdateCustomerAddressIfNecessary(shippingAddressChanged, (ModifiedOrderCustomerUpdateBehavior)config.CustomerUpdateModifiedShipping, order, existingCustomer, OriginalShippingAddress, "Ship");
 
                                 adapter.SaveEntity(existingCustomer);
                             }
