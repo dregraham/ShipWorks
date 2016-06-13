@@ -46,7 +46,6 @@ namespace ShipWorks.Stores.Platforms.Odbc
                         while (reader.Read())
                         {
                             OdbcRecord odbcRecord = new OdbcRecord();
-                            records.Add(odbcRecord);
 
                             for (int i = 0; i < reader.FieldCount; i++)
                             {
@@ -61,6 +60,13 @@ namespace ShipWorks.Stores.Platforms.Odbc
                                         odbcRecord.RecordIdentifier = value.ToString();
                                     }
                                 }
+                            }
+
+                            // Only add the record if it contains values. Was causing an issue with
+                            // excel where it was trying to download emtpy rows.
+                            if (odbcRecord.HasValues)
+                            {
+                                records.Add(odbcRecord);
                             }
                         }
                     }
@@ -87,7 +93,9 @@ namespace ShipWorks.Stores.Platforms.Odbc
                 string tableNameInQuotes = cmdBuilder.QuoteIdentifier(fieldMap.ExternalTableName);
 
                 List<string> columnNamesInQuotes = fieldMap.Entries.Select(e => cmdBuilder.QuoteIdentifier(e.ExternalField.Column.Name)).ToList();
+
                 columnNamesInQuotes.Add(cmdBuilder.QuoteIdentifier(fieldMap.RecordIdentifierSource));
+
                 string columnsToProject = string.Join(",", columnNamesInQuotes.Distinct());
 
                 string query = $"SELECT {columnsToProject} FROM {tableNameInQuotes}";

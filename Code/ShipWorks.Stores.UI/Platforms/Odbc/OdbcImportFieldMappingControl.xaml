@@ -144,10 +144,6 @@
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
 
-
-
-
-
                 <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal">
                     <Label Content="Orders contain items on:"
                        Margin="0"
@@ -158,11 +154,9 @@
                     <RadioButton GroupName="OrderItemStrategy" Content="Multiple lines" />
                 </StackPanel>
 
-
-
                 <StackPanel Grid.Row="2" Orientation="Horizontal"
                             Margin="0 2.5 0 2.5"
-                            d:IsHidden="false">
+                            d:IsHidden="true">
                     <StackPanel.Visibility>
                         <Binding Path="OrderHasSingleLineItem"
                                  Converter="{StaticResource VisibleWhenEqualToParameterConverter}">
@@ -184,24 +178,8 @@
                            Margin="5 0 0 0"/>
                 </StackPanel>
 
-
-                <StackPanel Grid.Row="3" Grid.Column="0" Orientation="Horizontal"
-                            Margin="0 2.5 0 2.5">
-                    <Label VerticalAlignment="Center" HorizontalContentAlignment="Right"
-                           Width="220"
-                           Content="Each item contains up to:"
-                           Margin="0 0 5 0"/>
-                    <ComboBox ItemsSource="{Binding NumbersUpTo25, UpdateSourceTrigger=PropertyChanged}"
-                              SelectedItem="{Binding NumberOfAttributesPerItem, UpdateSourceTrigger=PropertyChanged}"
-                              Width="50" VerticalAlignment="Center"
-                              Margin="0"/>
-                    <Label Content="attributes" Padding="0"
-                           VerticalAlignment="Center"
-                           Margin="5 0 0 0"/>
-                </StackPanel>
-
                 <Grid Row="2" Column="0"
-                      d:IsHidden="true"
+                      d:IsHidden="false"
                       Margin="0 2.5 0 2.5">
                     <Grid.Visibility>
                         <Binding Path="OrderHasSingleLineItem"
@@ -217,7 +195,7 @@
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
                     <Label Grid.Column="0" Content="Column that uniquely identifies each order:"
-                           Width="300" HorizontalContentAlignment="Right"
+                           Width="220" HorizontalContentAlignment="Right"
                            VerticalAlignment="Center"
                            Margin="0 0 5 0"/>
                     <ComboBox Grid.Column="1" ItemsSource="{Binding Columns, UpdateSourceTrigger=PropertyChanged}"
@@ -237,6 +215,21 @@
                         </Image.ToolTip>
                     </Image>
                 </Grid>
+
+                <StackPanel Grid.Row="3" Grid.Column="0" Orientation="Horizontal"
+                            Margin="0 2.5 0 2.5">
+                    <Label VerticalAlignment="Center" HorizontalContentAlignment="Right"
+                           Width="220"
+                           Content="Each item contains up to:"
+                           Margin="0 0 5 0"/>
+                    <ComboBox ItemsSource="{Binding NumbersUpTo25, UpdateSourceTrigger=PropertyChanged}"
+                              SelectedItem="{Binding NumberOfAttributesPerItem, UpdateSourceTrigger=PropertyChanged}"
+                              Width="50" VerticalAlignment="Center"
+                              Margin="0"/>
+                    <Label Content="attributes" Padding="0"
+                           VerticalAlignment="Center"
+                           Margin="5 0 0 0"/>
+                </StackPanel>
             </Grid>
         </Border>
 
@@ -261,7 +254,7 @@
                  BorderThickness="1"
                  Background="White"
                  SelectedIndex="0"
-                     HorizontalContentAlignment="Left">
+                     HorizontalContentAlignment="Left" SelectionChanged="SelectedFieldMapChanged">
 
                 <ListBox.ItemTemplate>
                     <DataTemplate>
@@ -348,7 +341,7 @@
                         <Label Content="Source Column" FontWeight="Bold"
                            Padding="0" Margin="0 5 5 5"/>
                     </Border>
-                    <ScrollViewer Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+                    <ScrollViewer x:Name="MappingGridScrollbar" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
                                   VerticalScrollBarVisibility="Auto">
                         <Grid>
                             <Grid.RowDefinitions>

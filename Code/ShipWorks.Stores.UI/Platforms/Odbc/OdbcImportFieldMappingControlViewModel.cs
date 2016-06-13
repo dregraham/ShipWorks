@@ -237,7 +237,18 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
                     {
                         for (int i = numberOfItemsPerOrder; i < value; i++)
                         {
-                            DisplayFieldMaps.Add(new OdbcFieldMapDisplay($"Item {i + 1}", fieldMapFactory.CreateOrderItemFieldMap()));
+                            OdbcFieldMap map = fieldMapFactory.CreateOrderItemFieldMap();
+
+                            for (int j = 0; j < numberOfAttributesPerItem; j++)
+                            {
+                                ShipWorksOdbcMappableField shipWorksField =
+                                    new ShipWorksOdbcMappableField(OrderItemAttributeFields.Name, $"Attribute Name {j + 1}");
+                                ExternalOdbcMappableField externalField = new ExternalOdbcMappableField(null, null);
+
+                                map.AddEntry(new OdbcFieldMapEntry(shipWorksField, externalField));
+                            }
+
+                            DisplayFieldMaps.Add(new OdbcFieldMapDisplay($"Item {i + 1}", map));
                         }
                     }
                     else if (delta < 0)
@@ -390,6 +401,11 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             if (!OrderHasSingleLineItem)
             {
                 map.RecordIdentifierSource = RecordIdentifier?.Name;
+            }
+            else
+            {
+                IEnumerable<IOdbcFieldMapEntry> entries = map.FindEntriesBy(OrderFields.OrderNumber);
+                map.RecordIdentifierSource = entries.FirstOrDefault()?.ExternalField.Column.Name;
             }
 
             return map;
