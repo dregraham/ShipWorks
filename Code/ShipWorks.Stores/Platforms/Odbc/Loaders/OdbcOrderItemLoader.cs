@@ -1,11 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
-using Interapptive.Shared.Utility;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Loaders
 {
@@ -58,22 +58,28 @@ namespace ShipWorks.Stores.Platforms.Odbc.Loaders
             OdbcOrderFieldDescription unitDescription,
             OdbcOrderFieldDescription totalDescription)
         {
-            IEnumerable<IShipWorksOdbcMappableField> shipworksFields = map.FindEntriesBy(entityField, false).Select(f => f.ShipWorksField);
+            IEnumerable<IShipWorksOdbcMappableField> shipworksFields =
+                map.FindEntriesBy(entityField, false).Select(f => f.ShipWorksField).ToList();
 
-            IShipWorksOdbcMappableField singleShipworksField = shipworksFields.SingleOrDefault(f => f.DisplayName == EnumHelper.GetDescription(unitDescription));
+            IShipWorksOdbcMappableField unitAmountField =
+                shipworksFields.SingleOrDefault(f => f.DisplayName == EnumHelper.GetDescription(unitDescription));
 
-            if (singleShipworksField != null)
+            // If we have the field for the unit amount, we should use its value.
+            if (unitAmountField != null)
             {
-                return Convert.ToDecimal(singleShipworksField.Value);
+                return Convert.ToDecimal(unitAmountField.Value);
             }
 
-            IShipWorksOdbcMappableField totalShipWorksField = shipworksFields.SingleOrDefault(f => f.DisplayName == EnumHelper.GetDescription(totalDescription));
-            if (totalShipWorksField == null || Math.Abs(item.Quantity) < .01)
+            // If we don't have a total amount or the quantity is 0, we can't determine the unit amount, so return 0.
+            IShipWorksOdbcMappableField totalAmountField =
+                shipworksFields.SingleOrDefault(f => f.DisplayName == EnumHelper.GetDescription(totalDescription));
+            if (totalAmountField == null || Math.Abs(item.Quantity) < .01)
             {
                 return 0;
             }
 
-            return (Convert.ToDecimal(totalShipWorksField.Value))/Convert.ToDecimal(item.Quantity);
+            // Return total amount / quantity orderred.
+            return (Convert.ToDecimal(totalAmountField.Value))/Convert.ToDecimal(item.Quantity);
         }
     }
 }
