@@ -354,6 +354,11 @@ namespace ShipWorks.Shipping.Carriers.UPS
             {
                 licenseAgreement.Text = upsLicense;
 
+                // The RichTextBox doesn't have padding, and margin doesn't seem to push it over, so this does...
+                licenseAgreement.SelectAll();
+                licenseAgreement.SelectionIndent += 3;
+                licenseAgreement.DeselectAll();
+
                 radioDeclineAgreement.Checked = true;
                 NextEnabled = false;
             }
@@ -425,9 +430,12 @@ namespace ShipWorks.Shipping.Carriers.UPS
         {
             if (shipmentType.ShipmentTypeCode == ShipmentTypeCode.UpsWorldShip)
             {
-                return wsUpsAccountNumber.Text.Trim();
+                // UPS wants account numbers to be upper case, so do it.
+                return wsUpsAccountNumber.Text.Trim().ToUpperInvariant();
             }
-            return account.Text.Trim();
+
+            // UPS wants account numbers to be upper case, so do it.
+            return account.Text.Trim().ToUpperInvariant();
         }
 
         /// <summary>
