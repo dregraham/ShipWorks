@@ -11,7 +11,6 @@ using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Utility;
-using Microsoft.Web.Services3.Referral;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.AddressValidation;
 using ShipWorks.Data;
@@ -318,13 +317,13 @@ namespace ShipWorks.Stores.Platforms.Ebay
             // We have to use the exact scope that SaveDownloadedOrder will, or a MSDTC exception will be thrown since the connection would be slightly different
             using (CreateOrderAuditScope(order))
             {
-                using (SqlTransaction transaction = connection.BeginTransaction())
-                {
-                    using (SqlAdapter adapter = new SqlAdapter(connection, transaction))
-                    {
-                        SqlAdapterRetry<SqlDeadlockException> sqlDeadlockRetry = new SqlAdapterRetry<SqlDeadlockException>(5, -5, string.Format("EbayDownloader.ProcessOrder for entity {0}", order.OrderID));
+                SqlAdapterRetry<SqlDeadlockException> sqlDeadlockRetry = new SqlAdapterRetry<SqlDeadlockException>(5, -5, string.Format("EbayDownloader.ProcessOrder for entity {0}", order.OrderID));
 
-                        sqlDeadlockRetry.ExecuteWithRetry(() =>
+                sqlDeadlockRetry.ExecuteWithRetry(() =>
+                {
+                    using (SqlTransaction transaction = connection.BeginTransaction())
+                    {
+                        using (SqlAdapter adapter = new SqlAdapter(connection, transaction))
                         {
                             // Save the new order
                             SaveDownloadedOrder(order, transaction);
@@ -335,9 +334,9 @@ namespace ShipWorks.Stores.Platforms.Ebay
                             // Copy Notes, Shipments from affected orders into the combined order
                             // delete the affected orders
                             ConsolidateOrderResources(order, affectedOrders, adapter);
-                        });
+                        }
                     }
-                }
+                });
             }
         }
 
