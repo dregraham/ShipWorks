@@ -40,5 +40,68 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
 
             Assert.Equal(new DateTime(2016, 6, 2, 9, 39, 00, DateTimeKind.Local), testObject.Value);
         }
+
+        [Fact]
+        public void LoadValue_ConvertsStringToDecimal()
+        {
+            ShipWorksOdbcMappableField testObject = new ShipWorksOdbcMappableField(OrderFields.OrderTotal, "Order Total");
+            testObject.LoadValue("2.51");
+
+            Assert.Equal(2.51M, testObject.Value);
+        }
+
+        [Fact]
+        public void LoadValue_ConvertsStringToDecimal_WhenStringHasCurrencySymbol()
+        {
+            ShipWorksOdbcMappableField testObject = new ShipWorksOdbcMappableField(OrderFields.OrderTotal, "Order Total");
+            testObject.LoadValue("$2.51");
+
+            Assert.Equal(2.51M, testObject.Value);
+        }
+
+        [Fact]
+        public void LoadValue_ConvertsStringToDecimal_WhenStringHasCurrencySymbolWithWhiteSpace()
+        {
+            ShipWorksOdbcMappableField testObject = new ShipWorksOdbcMappableField(OrderFields.OrderTotal, "Order Total");
+            testObject.LoadValue("$ 2.51");
+
+            Assert.Equal(2.51M, testObject.Value);
+        }
+
+        [Fact]
+        public void LoadValue_ConvertsStringToDecimal_WhenStringHasWhiteSpace()
+        {
+            ShipWorksOdbcMappableField testObject = new ShipWorksOdbcMappableField(OrderFields.OrderTotal, "Order Total");
+            testObject.LoadValue(" 2.51  ");
+
+            Assert.Equal(2.51M, testObject.Value);
+        }
+
+        [Fact]
+        public void LoadValue_ConvertsStringToDecimal_WhenStringHasLeadingSign()
+        {
+            ShipWorksOdbcMappableField testObject = new ShipWorksOdbcMappableField(OrderFields.OrderTotal, "Order Total");
+            testObject.LoadValue("-2.51");
+
+            Assert.Equal(-2.51M, testObject.Value);
+        }
+
+        [Fact]
+        public void LoadValue_ConvertsDoubleToDecimal()
+        {
+            ShipWorksOdbcMappableField testObject = new ShipWorksOdbcMappableField(OrderFields.OrderTotal, "Order Total");
+            testObject.LoadValue(2.51D);
+
+            Assert.Equal(2.51M, testObject.Value);
+        }
+
+        [Fact]
+        public void LoadValue_ConvertsFloatToDecimal()
+        {
+            ShipWorksOdbcMappableField testObject = new ShipWorksOdbcMappableField(OrderFields.OrderTotal, "Order Total");
+            testObject.LoadValue(2.51F);
+
+            Assert.Equal(2.51M, testObject.Value);
+        }
     }
 }
