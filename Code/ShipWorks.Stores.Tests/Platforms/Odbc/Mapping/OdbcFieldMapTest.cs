@@ -1,5 +1,4 @@
 ﻿using Autofac.Extras.Moq;
-using Interapptive.Shared.Utility;
 using log4net;
 using Moq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -10,6 +9,7 @@ using ShipWorks.Stores.Platforms.Odbc.Mapping;
 using System;
 using System.IO;
 using System.Linq;
+using Interapptive.Shared.Extensions;
 using Xunit;
 
 namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
