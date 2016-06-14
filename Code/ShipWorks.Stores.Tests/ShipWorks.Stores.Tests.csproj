@@ -157,6 +157,8 @@
     <Compile Include="Platforms\LemonStand\LemonStandStoreTypeTest.cs" />
     <Compile Include="Platforms\Sears\SearsCredentialsTest.cs" />
     <Compile Include="Platforms\Sears\SearsCipherKeyTest.cs" />
+    <Compile Include="Platforms\SparkPay\DTO\OrderStatusResponseTest.cs" />
+    <Compile Include="Platforms\SparkPay\DTO\StoresResponseTest.cs" />
     <Compile Include="Platforms\SparkPay\SparkPayShipmentFactoryTest.cs" />
     <Compile Include="EmbeddedResourceHelper.cs" />
     <EmbeddedResource Include="Platforms\ThreeDCart\Artifacts\GetProductResponse.json" />
