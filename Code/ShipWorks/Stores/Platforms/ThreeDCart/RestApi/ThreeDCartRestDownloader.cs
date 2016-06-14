@@ -69,9 +69,6 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
                 // Need to give the web client the progress bar because if
                 // we get throttled, we want to display it in the progress
                 restWebClient.LoadProgressReporter(Progress);
-
-                bool ordersToDownload = true;
-                int offset = 1;
                 ordersProcessed = 0;
 
                 DateTime? startDate = GetOrderDateStartingPoint();
@@ -93,45 +90,51 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
                 }
 
                 totalCount = restWebClient.GetOrderCount(startDate.Value, 0);
-                if (totalCount==0)
+                if (totalCount == 0)
                 {
                     Progress.Detail = "Done - No new orders to download.";
                     Progress.PercentComplete = 100;
                     return;
                 }
-                
-                while (ordersToDownload)
-                {
-                    IEnumerable<ThreeDCartOrder> orders = restWebClient.GetOrders(startDate.Value, offset).ToList();
-                    if (!orders.Any())
-                    {
-                        Progress.Detail = "Done.";
-                        Progress.PercentComplete = 100;
-                        ordersToDownload = false;
-                    }
-                    else
-                    {
-                        LoadOrders(orders);
-                        offset += orders.Count();
-                    }
-                }
-            }
-            catch (ThreeDCartException ex)
-            {
-                log.Error(ex);
-                throw new DownloadException(ex.Message, ex);
-            }
-            catch (SqlForeignKeyException ex)
-            {
-                log.Error(ex);
-                throw new DownloadException(ex.Message, ex);
+
+                DownloadOrders(startDate.Value);
             }
             catch (Exception ex)
             {
                 log.Error(ex);
-                throw WebHelper.TranslateWebException(ex, typeof (DownloadException));
+                if (ex.GetType() == typeof(ThreeDCartException) || ex.GetType() == typeof(SqlForeignKeyException))
+                {
+                    throw new DownloadException(ex.Message, ex);
+                }
+                throw WebHelper.TranslateWebException(ex, typeof(DownloadException));
             }
         }
+
+        /// <summary>
+        /// Downloads orders on or after the startDate
+        /// </summary>
+        private void DownloadOrders(DateTime startDate)
+        {
+            int offset = 1;
+            bool ordersToDownload = true;
+
+            while (ordersToDownload)
+            {
+                IEnumerable<ThreeDCartOrder> orders = restWebClient.GetOrders(startDate, offset).ToList();
+                if (!orders.Any())
+                {
+                    Progress.Detail = "Done.";
+                    Progress.PercentComplete = 100;
+                    ordersToDownload = false;
+                }
+                else
+                {
+                    LoadOrders(orders);
+                    offset += orders.Count();
+                }
+            }
+        }
+
         /// <summary>
         /// Creates the order identifier.
         /// </summary>
@@ -418,7 +421,6 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
 
                 HtmlAgilityDocument htmlDoc = new HtmlAgilityDocument();
                 htmlDoc.LoadHtml(optionHtml);
-                htmlDoc.DocumentNode.SelectSingleNode(@"//b");
 
                 // get optionName
                 HtmlNode optionNameNode = htmlDoc.DocumentNode.SelectSingleNode(@"/b");
