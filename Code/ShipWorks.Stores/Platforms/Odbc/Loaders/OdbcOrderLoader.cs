@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-using Interapptive.Shared.Utility;
+﻿using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
+using System.Collections.Generic;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Loaders
 {
@@ -13,7 +13,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Loaders
         private readonly IEnumerable<IOdbcOrderDetailLoader> orderDetailLoaders;
         private readonly IOdbcOrderItemLoader orderItemLoader;
         private readonly IDateTimeProvider dateTimeProvider;
-        private readonly IOrderUtility orderUtility;
+        private readonly IOrderChargeCalculator orderChargeCalculator;
 
         /// <summary>
         /// Constructor
@@ -21,12 +21,12 @@ namespace ShipWorks.Stores.Platforms.Odbc.Loaders
         public OdbcOrderLoader(IEnumerable<IOdbcOrderDetailLoader> orderDetailLoaders,
             IOdbcOrderItemLoader orderItemLoader,
             IDateTimeProvider dateTimeProvider,
-            IOrderUtility orderUtility)
+            IOrderChargeCalculator orderChargeCalculator)
         {
             this.orderDetailLoaders = orderDetailLoaders;
             this.orderItemLoader = orderItemLoader;
             this.dateTimeProvider = dateTimeProvider;
-            this.orderUtility = orderUtility;
+            this.orderChargeCalculator = orderChargeCalculator;
         }
 
         /// <summary>
@@ -54,7 +54,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Loaders
             {
                 // load the items into the order
                 orderItemLoader.Load(map, order, records);
-                order.OrderTotal = orderUtility.CalculateTotal(order);
+                order.OrderTotal = orderChargeCalculator.CalculateTotal(order);
             }
         }
     }

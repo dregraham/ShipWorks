@@ -15,7 +15,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
         {
             using (var mock = AutoMock.GetLoose())
             {
-                var orderUtility = mock.Mock<IOrderUtility>();
+                var orderUtility = mock.Mock<IOrderChargeCalculator>();
                 var fieldMap = mock.Mock<IOdbcFieldMap>();
                 var orderEntity = new OrderEntity() {IsNew = true};
                 var odbcRecords = new[] {new OdbcRecord()};
@@ -32,7 +32,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
         {
             using (var mock = AutoMock.GetLoose())
             {
-                var orderUtility = mock.Mock<IOrderUtility>();
+                var orderUtility = mock.Mock<IOrderChargeCalculator>();
                 var fieldMap = mock.Mock<IOdbcFieldMap>();
                 var orderEntity = new OrderEntity() {IsNew = false};
                 var odbcRecords = new[] {new OdbcRecord()};

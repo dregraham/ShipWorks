@@ -4,9 +4,9 @@ using ShipWorks.Stores.Content;
 namespace ShipWorks.Stores
 {
     /// <summary>
-    /// Wraps the OrderUtility
+    /// Calculates order charges
     /// </summary>
-    public class OrderUtilityWrapper : IOrderUtility
+    public class OrderChargeCalculator : IOrderChargeCalculator
     {
         /// <summary>
         /// Calculate the order total of the order.
