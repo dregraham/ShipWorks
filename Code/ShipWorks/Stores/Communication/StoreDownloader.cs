@@ -22,6 +22,10 @@ using ShipWorks.Users.Audit;
 using System.Reflection;
 using Interapptive.Shared;
 using ShipWorks.AddressValidation.Enums;
+using ShipWorks.ApplicationCore.Crashes;
+using ShipWorks.Data.Utility;
+using ShipWorks.SqlServer.Common.Data;
+using System.Data.SqlClient;
 
 namespace ShipWorks.Stores.Communication
 {
@@ -36,6 +40,7 @@ namespace ShipWorks.Stores.Communication
         StoreEntity store;
         IProgressReporter progress;
         long downloadLogID;
+        protected SqlConnection connection;
 
         StoreType storeType;
 
@@ -132,7 +137,7 @@ namespace ShipWorks.Stores.Communication
         /// <summary>
         /// Download data from the configured store.
         /// </summary>
-        public void Download(IProgressReporter progress, long downloadLogID)
+        public void Download(IProgressReporter progress, long downloadLogID, SqlConnection connection)
         {
             if (progress == null)
             {
@@ -146,6 +151,7 @@ namespace ShipWorks.Stores.Communication
 
             this.progress = progress;
             this.downloadLogID = downloadLogID;
+            this.connection = connection;
 
             Download();
         }
@@ -192,7 +198,7 @@ namespace ShipWorks.Stores.Communication
 
         /// <summary>
         /// Obtains the most recent order date.  If there is none, and the store has an InitialDaysBack policy, it
-        /// will be used to calculate the initial number of days back to to.
+        /// will be used to calculate the initial number of days back to.
         /// </summary>
         protected DateTime? GetOrderDateStartingPoint()
         {
@@ -482,9 +488,20 @@ namespace ShipWorks.Stores.Communication
         /// <summary>
         /// Save the given order that has been downloaded.
         /// </summary>
+        protected virtual void SaveDownloadedOrder(OrderEntity order)
+        {
+            using (SqlTransaction transaction = connection.BeginTransaction())
+            {
+                SaveDownloadedOrder(order, transaction);
+            }
+        }
+
+        /// <summary>
+        /// Save the given order that has been downloaded.
+        /// </summary>
         [NDependIgnoreLongMethod]
         [NDependIgnoreComplexMethodAttribute]
-        protected virtual void SaveDownloadedOrder(OrderEntity order)
+        protected virtual void SaveDownloadedOrder(OrderEntity order, SqlTransaction transaction)
         {
             Stopwatch sw = Stopwatch.StartNew();
 
@@ -532,7 +549,7 @@ namespace ShipWorks.Stores.Communication
             // Only audit new orders if new order auditing is turned on.  This also turns off auditing of creating of new customers if the order is not new.
             using (AuditBehaviorScope auditScope = CreateOrderAuditScope(order))
             {
-                using (SqlAdapter adapter = new SqlAdapter(true))
+                using (SqlAdapter adapter = new SqlAdapter(connection, transaction))
                 {
                     // Get the customer
                     if (order.IsNew)
@@ -617,7 +634,7 @@ namespace ShipWorks.Stores.Communication
                     OrderUtility.UpdateShipSenseHashKey(order);
                     adapter.SaveAndRefetch(order);
 
-					// Update unprocessed shipment addresses if the order address has changed
+                    // Update unprocessed shipment addresses if the order address has changed
                     if (!order.IsNew)
                     {
                         AddressAdapter newShippingAddress = new AddressAdapter(order, "Ship");
@@ -641,8 +658,8 @@ namespace ShipWorks.Stores.Communication
                         }
 
                         // Don't even bother loading the customer if the addresses haven't changed, or if we shouldn't copy
-                        if ((billingAddressChanged && config.CustomerUpdateModifiedBilling != (int) ModifiedOrderCustomerUpdateBehavior.NeverCopy)
-                            || (shippingAddressChanged && config.CustomerUpdateModifiedShipping != (int) ModifiedOrderCustomerUpdateBehavior.NeverCopy))
+                        if ((billingAddressChanged && config.CustomerUpdateModifiedBilling != (int)ModifiedOrderCustomerUpdateBehavior.NeverCopy)
+                            || (shippingAddressChanged && config.CustomerUpdateModifiedShipping != (int)ModifiedOrderCustomerUpdateBehavior.NeverCopy))
                         {
                             CustomerEntity existingCustomer = DataProvider.GetEntity(order.CustomerID) as CustomerEntity;
                             if (existingCustomer != null)
