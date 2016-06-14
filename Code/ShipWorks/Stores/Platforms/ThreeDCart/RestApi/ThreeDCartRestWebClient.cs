@@ -115,9 +115,9 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
                     return new List<ThreeDCartOrder>();
                 }
 
-                throw new ThreeDCartException(string.IsNullOrEmpty(message)
-                    ? "An error occured while downloading orders"
-                    : response.Message);
+                throw new ThreeDCartException(string.IsNullOrEmpty(message) ?
+                    "An error occured while downloading orders" :
+                    response.Message);
             }
 
             IEnumerable<ThreeDCartOrder> orders = JsonConvert.DeserializeObject<IEnumerable<ThreeDCartOrder>>(response.Message);
