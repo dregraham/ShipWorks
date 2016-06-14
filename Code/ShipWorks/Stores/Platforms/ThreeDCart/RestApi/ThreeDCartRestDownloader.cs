@@ -426,7 +426,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
                 {
                     continue;
                 }
-                string optionName = optionNameNode.InnerHtml;
+                string optionName = optionNameNode.InnerHtml.Trim().TrimEnd(':');
                 string optionNameAndPrice = optionNameNode.SelectSingleNode("./following-sibling::text()").InnerText.Trim();
 
                 // Get unit price
@@ -441,7 +441,8 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
 
                 // Get description
                 Regex removePricePattern = new Regex(@"\-\ \$\d+(?:\.\d+)?");
-                string description = removePricePattern.Replace(optionNameAndPrice, string.Empty);
+                string description =
+                    removePricePattern.Replace(optionNameAndPrice, string.Empty).Trim().Replace(@"&nbsp;", string.Empty);
 
 
                 OrderItemAttributeEntity attribute = InstantiateOrderItemAttribute(item);
