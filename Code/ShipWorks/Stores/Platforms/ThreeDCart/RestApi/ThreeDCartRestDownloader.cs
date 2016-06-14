@@ -1,5 +1,6 @@
 ﻿using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared.IO.Text.HtmlAgilityPack;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using log4net;
@@ -12,6 +13,7 @@ using ShipWorks.Stores.Platforms.ThreeDCart.RestApi.DTO;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 
@@ -405,38 +407,47 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
         /// </summary>
         private void LoadItemNameAndAttributes(ThreeDCartOrderItemEntity item, ThreeDCartOrderItem threeDCartItem)
         {
-            string description = threeDCartItem.ItemDescription;
-
-            string[] splitDescription = description.Split(new[] { "<br><b>" }, StringSplitOptions.RemoveEmptyEntries);
+            string itemDescription = threeDCartItem.ItemDescription;
+            string[] splitDescription = itemDescription.Split(new[] { "<br>" }, StringSplitOptions.RemoveEmptyEntries);
 
             item.Name = splitDescription[0];
 
-            if (splitDescription.Count() > 1)
+            for (int i = 1; i < splitDescription.Length; i++)
             {
-                for (int i = 1; i < splitDescription.Count(); i++)
+                string optionHtml = splitDescription[i];
+
+                HtmlAgilityDocument htmlDoc = new HtmlAgilityDocument();
+                htmlDoc.LoadHtml(optionHtml);
+                htmlDoc.DocumentNode.SelectSingleNode(@"//b");
+
+                // get optionName
+                HtmlNode optionNameNode = htmlDoc.DocumentNode.SelectSingleNode(@"/b");
+                if (optionNameNode == null)
                 {
-                    string[] option = splitDescription[i].Split(new[] { "</b>&nbsp;" }, StringSplitOptions.RemoveEmptyEntries);
-
-                    if (option[0].EndsWith(":"))
-                    {
-                       option[0] = option[0].Remove(option[0].Length - 1);
-                    }
-                    string optionName = option[0].Trim();
-
-                    var optionNameAndPrice = option[1].Split('-');
-                    
-                    string optionValue = optionNameAndPrice[0].Trim();
-
-                    string optionPriceString = optionNameAndPrice.Length > 1 ? optionNameAndPrice[1].Trim() : string.Empty;
-                    optionPriceString = Regex.Replace(optionPriceString, "[^.0-9]", string.Empty);
-                    decimal optionPrice;
-                    decimal.TryParse(optionPriceString, out optionPrice);
-
-                    OrderItemAttributeEntity attribute = InstantiateOrderItemAttribute(item);
-                    attribute.Name = optionName;
-                    attribute.Description = optionValue;
-                    attribute.UnitPrice = optionPrice;
+                    continue;
                 }
+                string optionName = optionNameNode.InnerHtml;
+                string optionNameAndPrice = optionNameNode.SelectSingleNode("./following-sibling::text()").InnerText.Trim();
+
+                // Get unit price
+                Regex pricePattern = new Regex(@"\$\d+(?:\.\d+)?");
+                Match match = pricePattern.Match(optionNameAndPrice);
+                decimal unitPrice = 0;
+                if (match.Groups.Count == 1)
+                {
+                    string amount = match.Groups[0].Value;
+                    decimal.TryParse(amount, NumberStyles.Currency, null, out unitPrice);
+                }
+
+                // Get description
+                Regex removePricePattern = new Regex(@"\-\ \$\d+(?:\.\d+)?");
+                string description = removePricePattern.Replace(optionNameAndPrice, string.Empty);
+
+
+                OrderItemAttributeEntity attribute = InstantiateOrderItemAttribute(item);
+                attribute.Name = optionName;
+                attribute.Description = description;
+                attribute.UnitPrice = unitPrice;
             }
         }
 
