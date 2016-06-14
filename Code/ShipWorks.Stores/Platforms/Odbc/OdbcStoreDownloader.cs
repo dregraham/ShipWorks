@@ -46,51 +46,75 @@ namespace ShipWorks.Stores.Platforms.Odbc
             Progress.Detail = "Querying data source...";
             try
             {
-
                 IOdbcCommand downloadCommand = commandFactory.CreateDownloadCommand(store);
 
                 IEnumerable<OdbcRecord> downloadedOrders = downloadCommand.Execute();
                 List<IGrouping<string, OdbcRecord>> orderGroups =
                     downloadedOrders.GroupBy(o => o.RecordIdentifier).ToList();
 
-                int totalCount = orderGroups.Count;
+                int orderCount = GetOrderCount(orderGroups);
 
-                if (totalCount == 0)
+                if (orderCount > 0)
                 {
-                    Progress.Detail = "No orders to download.";
-                    return;
-                }
+                    EnsureRecordIdentifiersAreNotNull(orderGroups);
 
-                Progress.Detail = $"{totalCount} orders found.";
-
-                if (orderGroups.Any(groups => string.IsNullOrWhiteSpace(groups.Key)))
-                {
-                    throw new DownloadException(
-                        $"At least one order is missing a value in {fieldMap.RecordIdentifierSource}");
-                }
-
-                foreach (IGrouping<string, OdbcRecord> odbcRecordsForOrder in orderGroups)
-                {
-                    if (Progress.IsCancelRequested)
-                    {
-                        return;
-                    }
-
-                    Progress.Detail = $"Processing order {QuantitySaved + 1}";
-
-                    OrderEntity downloadedOrder = DownloadOrder(odbcRecordsForOrder);
-
-                    ResetAddressIfRequired(downloadedOrder, "Ship", OriginalShippingAddress);
-                    ResetAddressIfRequired(downloadedOrder, "Bill", OriginalBillingAddress);
-
-                    SaveDownloadedOrder(downloadedOrder);
-                    
-                    Progress.PercentComplete = 100*QuantitySaved/totalCount;
+                    LoadOrders(orderGroups, orderCount);
                 }
             }
             catch (ShipWorksOdbcException ex)
             {
                 throw new DownloadException(ex.Message, ex);
+            }
+        }
+
+        /// <summary>
+        /// Ensures the orders contain record identifier.
+        /// </summary>
+        /// <param name="orderGroups">The order groups.</param>
+        /// <exception cref="DownloadException">$At least one order is missing a value in {fieldMap.RecordIdentifierSource}</exception>
+        private void EnsureRecordIdentifiersAreNotNull(List<IGrouping<string, OdbcRecord>> orderGroups)
+        {
+            if (orderGroups.Any(groups => string.IsNullOrWhiteSpace(groups.Key)))
+            {
+                throw new DownloadException(
+                    $"At least one order is missing a value in {fieldMap.RecordIdentifierSource}");
+            }
+        }
+
+        /// <summary>
+        /// Gets the order count.
+        /// </summary>
+        private int GetOrderCount(List<IGrouping<string, OdbcRecord>> orderGroups)
+        {
+            int orderCount = orderGroups.Count;
+
+            Progress.Detail = orderCount == 0 ? "No orders to download." : $"{orderCount} orders found.";
+
+            return orderCount;
+        }
+
+        /// <summary>
+        /// Loads the order information into order entities
+        /// </summary>
+        private void LoadOrders(List<IGrouping<string, OdbcRecord>> orderGroups, int totalCount)
+        {
+            foreach (IGrouping<string, OdbcRecord> odbcRecordsForOrder in orderGroups)
+            {
+                if (Progress.IsCancelRequested)
+                {
+                    return;
+                }
+
+                Progress.Detail = $"Processing order {QuantitySaved + 1}";
+
+                OrderEntity downloadedOrder = LoadOrder(odbcRecordsForOrder);
+
+                ResetAddressIfRequired(downloadedOrder, "Ship", OriginalShippingAddress);
+                ResetAddressIfRequired(downloadedOrder, "Bill", OriginalBillingAddress);
+
+                SaveDownloadedOrder(downloadedOrder);
+
+                Progress.PercentComplete = 100 * QuantitySaved / totalCount;
             }
         }
 
@@ -131,7 +155,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// Downloads the order.
         /// </summary>
         /// <exception cref="DownloadException">Order number not found in map.</exception>
-        private OrderEntity DownloadOrder(IGrouping<string, OdbcRecord> odbcRecordsForOrder)
+        private OrderEntity LoadOrder(IGrouping<string, OdbcRecord> odbcRecordsForOrder)
         {
             OdbcRecord firstRecord = odbcRecordsForOrder.First();
 
@@ -149,7 +173,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
             OrderEntity orderEntity = InstantiateOrder(new OrderNumberIdentifier((long)odbcFieldMapEntry.ShipWorksField.Value));
 
             orderLoader.Load(fieldMap, orderEntity, odbcRecordsForOrder);
-            
+
             return orderEntity;
         }
     }
