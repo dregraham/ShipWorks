@@ -38,7 +38,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
         }
 
         [Fact]
-        public void Value_WhenRecordDoesNotContainColumn_IsNull()
+        public void Value_IsNull_WhenRecordDoesNotContainColumn()
         {
             OdbcTable table = new OdbcTable("TableName");
             OdbcColumn column = new OdbcColumn("ColumnName");
@@ -53,7 +53,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
         }
 
         [Fact]
-        public void LoadValue_WithNullRecord_ThrowsArgumentNullException()
+        public void LoadValue_ThrowsArgumentNullException_WithNullRecord()
         {
             OdbcTable table = new OdbcTable("TableName");
             OdbcColumn column = new OdbcColumn("ColumnName");
