@@ -43,8 +43,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// </summary>
         /// <param name="shipmentTypeCode"></param>
         /// <param name="rateControl">A handle to the rate control so the selected rate can be updated when
-        /// a change to the shipment, such as changing the service type, matches a rate in the control</param>
-        [NDependIgnoreLongMethod]
+        /// a change to the shipment, such as changing the service type, matches a rate in the control</param>        
         public UpsServiceControl(ShipmentTypeCode shipmentTypeCode, RateControl rateControl)
             : base (shipmentTypeCode, rateControl)
         {

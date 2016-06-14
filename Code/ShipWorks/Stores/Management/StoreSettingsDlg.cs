@@ -348,7 +348,6 @@ namespace ShipWorks.Stores.Management
         /// <summary>
         /// Load the data to display in the license tab
         /// </summary>
-        [NDependIgnoreLongMethod]
         private void LoadLicenseTab()
         {
             Refresh();

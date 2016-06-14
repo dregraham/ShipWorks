@@ -143,7 +143,6 @@ namespace ShipWorks
         /// Form is loading, this is before its visible
         /// </summary>
         [NDependIgnoreLongMethod]
-        [NDependIgnoreComplexMethodAttribute]
         private void OnLoad(object sender, EventArgs e)
         {
             log.Info("Loading main application window.");

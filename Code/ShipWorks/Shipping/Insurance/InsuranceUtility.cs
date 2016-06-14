@@ -288,7 +288,6 @@ namespace ShipWorks.Shipping.Insurance
         /// <summary>
         /// Get the shipworks cost for the given shipment with the specified declared value
         /// </summary>
-        [NDependIgnoreLongMethod]
         private static void FillInShipWorksCost(InsuranceCost cost, ShipmentEntity shipment, decimal declaredValue)
         {
             decimal adjustedValue = declaredValue;
