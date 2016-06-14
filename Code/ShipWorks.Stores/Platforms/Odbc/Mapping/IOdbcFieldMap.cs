@@ -20,11 +20,6 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         string RecordIdentifierSource { get; set; }
 
         /// <summary>
-        /// The External Table Name.
-        /// </summary>
-        string ExternalTableName { get; set; }
-
-        /// <summary>
         /// Add the given ODBC Field Map Entry to the ODBC Field Map.
         /// </summary>
         void AddEntry(IOdbcFieldMapEntry entry);
@@ -68,5 +63,10 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// Make a copy of the IOdbcFieldMap
         /// </summary>
         IOdbcFieldMap Clone();
+
+        /// <summary>
+        /// Gets the name of the external table.
+        /// </summary>
+        string GetExternalTableName();
     }
 }

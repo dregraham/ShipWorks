@@ -14,6 +14,16 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
     public class ShipWorksOdbcMappableField : IShipWorksOdbcMappableField
     {
         /// <summary>
+        /// Used for deserialization
+        /// </summary>
+        [JsonConstructor]
+        public ShipWorksOdbcMappableField(string typeName, string displayName)
+        {
+            TypeName = typeName;
+            DisplayName = displayName;
+        }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="ShipWorksOdbcMappableField"/> class.
         /// </summary>
         public ShipWorksOdbcMappableField(EntityField2 field, OdbcOrderFieldDescription fieldDescription)

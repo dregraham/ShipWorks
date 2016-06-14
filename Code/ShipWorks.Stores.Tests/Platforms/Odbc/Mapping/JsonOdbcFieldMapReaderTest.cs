@@ -22,15 +22,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
             mock = AutoMock.GetLoose();
             log = mock.Mock<ILog>();
         }
-
-        [Fact]
-        public void ReadExternalTableName_ReturnsExternalName()
-        {
-            var map = GetSerializedFieldMap();
-            JsonOdbcFieldMapReader reader = new JsonOdbcFieldMapReader(map, log.Object);
-
-            Assert.Equal("OdbcFieldMapExternalTableName", reader.ReadExternalTableName());
-        }
+        
 
         [Fact]
         public void ReadyEntry_ReturnsOdbcFieldMapEntry()
@@ -59,10 +51,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
         {
             using (MemoryStream stream = new MemoryStream())
             {
-                OdbcFieldMap map = new OdbcFieldMap(GetIoFactory())
-                {
-                    ExternalTableName = "OdbcFieldMapExternalTableName"
-                };
+                OdbcFieldMap map = new OdbcFieldMap(GetIoFactory());
 
                 map.AddEntry(GetFieldMapEntry(GetShipWorksField(OrderFields.OrderNumber, "Order Number"),
                     GetExternalField("SomeTableName", "SomeColumnName")));

@@ -55,17 +55,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
         }
 
         [Fact]
-        public void Load_SetsExternalTableName()
-        {
-            Stream stream = GetStreamWithFieldMap();
-            OdbcFieldMap map = new OdbcFieldMap(GetIoFactory());
-
-            map.Load(stream);
-
-            Assert.Equal("OdbcFieldMapExternalTableName", map.ExternalTableName);
-        }
-
-        [Fact]
         public void Load_SetsEntries()
         {
             Stream stream = GetStreamWithFieldMap();
@@ -350,10 +339,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
         {
             MemoryStream stream = new MemoryStream();
 
-            OdbcFieldMap map = new OdbcFieldMap(GetIoFactory())
-            {
-                ExternalTableName = "OdbcFieldMapExternalTableName"
-            };
+            OdbcFieldMap map = new OdbcFieldMap(GetIoFactory());
 
             map.AddEntry(GetFieldMapEntry(GetShipWorksField(OrderFields.OrderNumber, "Order Number"),
                 GetExternalField("SomeTableName", "SomeColumnName")));
@@ -372,7 +358,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
         {
             return new ShipWorksOdbcMappableField(field, displayName)
             {
-                TypeName = "System.Int32",
                 ContainingObjectName = field.ContainingObjectName
             };
         }

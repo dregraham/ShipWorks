@@ -34,11 +34,6 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         public IEnumerable<IOdbcFieldMapEntry> Entries => entries;
 
         /// <summary>
-        /// The External Table Name
-        /// </summary>
-        public string ExternalTableName { get; set; }
-
-        /// <summary>
         /// Gets or sets the name of the record identifier column.
         /// </summary>
         public string RecordIdentifierSource { get; set; }
@@ -133,7 +128,6 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
                 entry = reader.ReadEntry();
             }
 
-            ExternalTableName = reader.ReadExternalTableName();
             RecordIdentifierSource = reader.ReadRecordIdentifierSource();
         }
 
@@ -174,9 +168,17 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
                 Save(stream);
                 OdbcFieldMap clonedFieldMap = new OdbcFieldMap(ioFactory);
                 clonedFieldMap.Load(stream);
-                
+
                 return clonedFieldMap;
             }
+        }
+
+        /// <summary>
+        /// Gets the name of the external table.
+        /// </summary>
+        public string GetExternalTableName()
+        {
+            return Entries.FirstOrDefault()?.ExternalField.Table.Name ?? string.Empty;
         }
     }
 }

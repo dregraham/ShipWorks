@@ -45,23 +45,9 @@ namespace ShipWorks.Stores.Platforms.Odbc
                     {
                         while (reader.Read())
                         {
-                            OdbcRecord odbcRecord = new OdbcRecord();
+                            OdbcRecord odbcRecord = CreateOdbcRecord(reader);
+
                             records.Add(odbcRecord);
-
-                            for (int i = 0; i < reader.FieldCount; i++)
-                            {
-                                if (!reader.IsDBNull(i))
-                                {
-                                    string columnName = reader.GetName(i);
-                                    object value = reader[i];
-
-                                    odbcRecord.AddField(columnName, value);
-                                    if (columnName == fieldMap.RecordIdentifierSource)
-                                    {
-                                        odbcRecord.RecordIdentifier = value.ToString();
-                                    }
-                                }
-                            }
                         }
                     }
                 }
@@ -75,6 +61,31 @@ namespace ShipWorks.Stores.Platforms.Odbc
         }
 
         /// <summary>
+        /// Creates an ODBC record.
+        /// </summary>
+        private OdbcRecord CreateOdbcRecord(OdbcDataReader reader)
+        {
+            OdbcRecord odbcRecord = new OdbcRecord();
+
+            for (int i = 0; i < reader.FieldCount; i++)
+            {
+                if (!reader.IsDBNull(i))
+                {
+                    string columnName = reader.GetName(i);
+                    object value = reader[i];
+
+                    odbcRecord.AddField(columnName, value);
+                    if (columnName == fieldMap.RecordIdentifierSource)
+                    {
+                        odbcRecord.RecordIdentifier = value.ToString();
+                    }
+                }
+            }
+
+            return odbcRecord;
+        }
+
+        /// <summary>
         /// Gets the query text
         /// </summary>
         private string GetQuery(OdbcConnection connection)
@@ -84,7 +95,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
             {
                 connection.Open();
 
-                string tableNameInQuotes = cmdBuilder.QuoteIdentifier(fieldMap.ExternalTableName);
+                string tableNameInQuotes = cmdBuilder.QuoteIdentifier(fieldMap.GetExternalTableName());
 
                 List<string> columnNamesInQuotes = fieldMap.Entries.Select(e => cmdBuilder.QuoteIdentifier(e.ExternalField.Column.Name)).ToList();
                 columnNamesInQuotes.Add(cmdBuilder.QuoteIdentifier(fieldMap.RecordIdentifierSource));

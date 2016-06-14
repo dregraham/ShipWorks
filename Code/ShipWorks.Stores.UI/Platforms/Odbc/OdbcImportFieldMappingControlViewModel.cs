@@ -264,8 +264,6 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
                 ItemFieldMap.Map
             });
 
-            map.ExternalTableName = selectedTable.Name;
-
             map.Entries.ToList().ForEach(e =>
             {
                 e.ExternalField.Table = selectedTable;

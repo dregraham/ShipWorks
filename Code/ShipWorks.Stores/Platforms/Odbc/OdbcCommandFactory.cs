@@ -17,10 +17,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcCommandFactory"/> class.
         /// </summary>
-        public OdbcCommandFactory(
-            IOdbcFieldMap odbcFieldMap,
-            IOdbcDataSource dataSource,
-            Func<Type, ILog> logFactory)
+        public OdbcCommandFactory(IOdbcFieldMap odbcFieldMap, IOdbcDataSource dataSource, Func<Type, ILog> logFactory)
         {
             this.odbcFieldMap = odbcFieldMap;
             this.dataSource = dataSource;
