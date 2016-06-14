@@ -222,6 +222,8 @@ namespace ShipWorks.Tests.Stores.ChannelAdvisor
         [InlineData("UPS", "UPS Ground", "GROUND")]
         [InlineData("UPS", "UPS Next Day Air", "NEXTDAY")]
         [InlineData("UPS", "UPS Next Day Air Saver", "NDAS")]
+        [InlineData("UPS", "UPS 2nd Day Air", "2DAY")]
+        [InlineData("UPS", "UPS 3 Day Select", "3DS")]
         [InlineData("asdfasdfasdf", "asdfasdfasdf", "NONE")]
         public void GetShipmentClassCode_ReturnsCorrectValue_WhenAmazonShipment(string carrierName, string shippingServiceName, string expectedValue)
         {

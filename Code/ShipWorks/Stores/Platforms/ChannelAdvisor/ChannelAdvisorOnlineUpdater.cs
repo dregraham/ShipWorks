@@ -483,6 +483,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
             switch (shipment.Amazon.ShippingServiceName)
             {
+                /* FedEx */
                 case "FedEx Priority Overnight®":
                     return "PRIORITY";
                 case "FedEx Standard Overnight®":
@@ -495,6 +496,8 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                     return "EXPSAVER";
                 case "FedEx Home Delivery®":
                     return "GROUND";
+
+                /* USPS */
                 case "USPS First Class":
                     return "FIRSTCLASS";
                 case "USPS Priority Mail":
@@ -513,12 +516,18 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                     return "EXPRESS";
                 case "USPS Parcel Select":
                     return "PARCELSELECT";
+
+                /* UPS */
                 case "UPS Ground":
                     return "GROUND";
                 case "UPS Next Day Air":
                     return "NEXTDAY";
                 case "UPS Next Day Air Saver":
                     return "NDAS";
+                case "UPS 2nd Day Air":
+                    return "2DAY";
+                case "UPS 3 Day Select":
+                    return "3DS";
             }
 
             return "NONE";
