@@ -478,6 +478,12 @@ namespace ShipWorks.Stores.Communication
 
                     progressItem.Failed(new DownloadException("ShipWorks was unable to maintain a connection to the database. Please try downloading again."));
                 }
+                catch (SqlException ex)
+                {
+                    log.Error("Download error", ex);
+
+                    progressItem.Failed(new DownloadException("ShipWorks was unable to maintain a connection to the database. Please try downloading again."));
+                }
 
                 // This would only be null if the store had been deleted before we tried to log the download
                 if (downloadLog != null)
