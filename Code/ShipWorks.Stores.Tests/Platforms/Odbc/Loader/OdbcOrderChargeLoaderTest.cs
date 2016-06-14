@@ -22,7 +22,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
         }
 
         [Fact]
-        public void Load_WithNullMap_ThrowsArgumentNullException()
+        public void Load_ThrowsArgumentNullException_WithNullMap()
         {
             OdbcOrderChargeLoader testObject = new OdbcOrderChargeLoader();
             Assert.Throws<ArgumentNullException>(() => testObject.Load(null, new OrderEntity()));
@@ -79,7 +79,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
         }
 
         [Fact]
-        public void Load_WhenChargeDisplayNameIsTaxAmount_SetsChargeTypeToTax()
+        public void Load_SetsChargeTypeToTax_WhenChargeDisplayNameIsTaxAmount()
         {
             ShipWorksOdbcMappableField shipworksField = new ShipWorksOdbcMappableField(OrderChargeFields.Amount, "Tax Amount");
             shipworksField.LoadValue(123);
