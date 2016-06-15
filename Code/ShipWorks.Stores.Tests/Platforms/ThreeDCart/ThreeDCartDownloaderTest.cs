@@ -61,7 +61,8 @@ namespace ShipWorks.Stores.Tests.Platforms.ThreeDCart
             ThreeDCartStoreEntity store = new ThreeDCartStoreEntity
             {
                 TypeCode = (int) StoreTypeCode.ThreeDCart,
-                StoreTimeZone = TimeZoneInfo.Utc
+                StoreTimeZone = TimeZoneInfo.Utc,
+                StoreUrl = "http://www.shipworks.com"
             };
 
             testObject = new ThreeDCartRestDownloader(store, webClient.Object, sqlAdapter.Object, log.Object);
@@ -121,7 +122,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ThreeDCart
         [Fact]
         public void LoadOrder_LoadsItemImages()
         {
-            Assert.Equal("assets/images/default/cap_3dcart_2.jpg", orderEntity.OrderItems.FirstOrDefault()?.Image);
+            Assert.Equal("http://www.shipworks.com/assets/images/default/cap_3dcart_2.jpg", orderEntity.OrderItems.FirstOrDefault()?.Image);
         }
 
         [Fact]
