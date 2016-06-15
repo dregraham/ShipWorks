@@ -69,7 +69,7 @@ namespace ShipWorks.Stores.Management
         /// <summary>
         /// Constructor
         /// </summary>
-        private AddStoreWizard()
+        private AddStoreWizard(ILifetimeScope scope)
         {
             InitializeComponent();
         }
@@ -96,9 +96,10 @@ namespace ShipWorks.Stores.Management
                     return false;
                 }
 
+                using (ILifetimeScope scope = IoC.BeginLifetimeScope())
                 using (ShipWorksSetupLock wizardLock = new ShipWorksSetupLock())
                 {
-                    using (AddStoreWizard wizard = new AddStoreWizard())
+                    using (AddStoreWizard wizard = new AddStoreWizard(scope))
                     {
                         // If it was successful, make sure our local list of stores is refreshed
                         if (wizard.ShowDialog(owner) == DialogResult.OK)
