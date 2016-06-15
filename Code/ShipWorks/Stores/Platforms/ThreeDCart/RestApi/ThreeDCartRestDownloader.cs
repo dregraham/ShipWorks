@@ -471,7 +471,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
 
                 if (!string.IsNullOrEmpty(product.MainImageFile))
                 {
-                    item.Image = $"{threeDCartStore.StoreUrl}\\{product.MainImageFile}";
+                    item.Image = $"{threeDCartStore.StoreUrl}/{product.MainImageFile}";
                 }
 
                 item.Location = product.WarehouseBin;
