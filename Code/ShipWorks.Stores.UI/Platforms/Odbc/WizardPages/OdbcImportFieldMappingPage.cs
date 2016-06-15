@@ -1,5 +1,4 @@
-﻿using Interapptive.Shared.Security;
-using Interapptive.Shared.UI;
+﻿using Interapptive.Shared.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.Odbc;
@@ -15,7 +14,6 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
     {
         private readonly IMessageHelper messageHelper;
         private readonly Func<IOdbcDataSource> dataSourceFactory;
-        private readonly IEncryptionProvider encryptionProvider;
         private readonly Func<IOdbcImportFieldMappingControlViewModel> viewModelFactory;
         private IOdbcImportFieldMappingControlViewModel viewModel;
         private OdbcStoreEntity store;
@@ -25,12 +23,10 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
         /// </summary>
         public OdbcImportFieldMappingPage(IMessageHelper messageHelper,
             Func<IOdbcDataSource> dataSourceFactory,
-            IEncryptionProviderFactory encryptionProviderFactory,
             Func<IOdbcImportFieldMappingControlViewModel> viewModelFactory)
         {
             this.messageHelper = messageHelper;
             this.dataSourceFactory = dataSourceFactory;
-            encryptionProvider = encryptionProviderFactory.CreateOdbcEncryptionProvider();
             this.viewModelFactory = viewModelFactory;
             InitializeComponent();
             SteppingInto += OnSteppingInto;
@@ -78,7 +74,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
 
             IOdbcDataSource selectedDataSource = dataSourceFactory();
             
-            selectedDataSource.Restore(encryptionProvider.Decrypt(store.ConnectionString));
+            selectedDataSource.Restore(store.ConnectionString);
 
             // Create new ViewModel when one does not exist, or a new data source is selected. This means clicking
             // back on the mapping page and not changing the data source will keep any mappings made, but selecting

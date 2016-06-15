@@ -1,5 +1,4 @@
-﻿using Interapptive.Shared.Security;
-using Interapptive.Shared.Threading;
+﻿using Interapptive.Shared.Threading;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.Odbc;
@@ -16,10 +15,10 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
         /// <summary>
         /// Constructor
         /// </summary>
-        public OdbcDataSourcePage(IEncryptionProviderFactory encryptionProviderFactory, IExternalProcess odbcControlPanel)
+        public OdbcDataSourcePage(IExternalProcess odbcControlPanel)
         {
             InitializeComponent();
-            odbcDataSourceControl.LoadDependencies(encryptionProviderFactory, odbcControlPanel);
+            odbcDataSourceControl.LoadDependencies(odbcControlPanel);
             odbcDataSourceControl.RefreshDataSources();
         }
 

@@ -1,12 +1,12 @@
-﻿using Autofac.Extras.Moq;
+﻿using Autofac;
+using Autofac.Extras.Moq;
+using Interapptive.Shared.Security;
 using log4net;
 using Moq;
 using ShipWorks.Stores.Platforms.Odbc;
 using System;
 using System.Data;
 using System.Linq;
-using Autofac;
-using Interapptive.Shared.Security;
 using Xunit;
 
 namespace ShipWorks.Stores.Tests.Platforms.Odbc
@@ -40,7 +40,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
 
                 Mock<IShipWorksDbProviderFactory> providerFactory = mock.Mock<IShipWorksDbProviderFactory>();
                 Mock<IEncryptionProviderFactory> encryptionFactory = mock.Mock<IEncryptionProviderFactory>();
-                Func<IOdbcDataSource> odbcDataSourceFactory = () => new OdbcDataSource(providerFactory.Object, encryptionFactory.Object);
+                Func<IOdbcDataSource> odbcDataSourceFactory = () => new EncryptedOdbcDataSource(providerFactory.Object, encryptionFactory.Object);
                 var testObject = mock.Create<OdbcDataSourceRepository>(new TypedParameter(typeof(Func<IOdbcDataSource>), odbcDataSourceFactory));
                 var odbcDataSources = testObject.GetDataSources();
 
@@ -58,7 +58,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
                     .Returns(new[] {"blah"});
                 Mock<IShipWorksDbProviderFactory> providerFactory = mock.Mock<IShipWorksDbProviderFactory>();
                 Mock<IEncryptionProviderFactory> encryptionFactory = mock.Mock<IEncryptionProviderFactory>();
-                Func<IOdbcDataSource> odbcDataSourceFactory = () => new OdbcDataSource(providerFactory.Object, encryptionFactory.Object);
+                Func<IOdbcDataSource> odbcDataSourceFactory = () => new EncryptedOdbcDataSource(providerFactory.Object, encryptionFactory.Object);
                 var testObject = mock.Create<OdbcDataSourceRepository>(new TypedParameter(typeof(Func<IOdbcDataSource>), odbcDataSourceFactory));
                 var odbcDataSources = testObject.GetDataSources();
                 IOdbcDataSource dataSource = odbcDataSources.First(d => d.Name == "blah");

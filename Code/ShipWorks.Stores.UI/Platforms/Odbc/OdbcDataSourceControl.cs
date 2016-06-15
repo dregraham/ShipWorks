@@ -1,6 +1,5 @@
 ﻿using Autofac;
 using Interapptive.Shared.Collections;
-using Interapptive.Shared.Security;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
@@ -23,7 +22,6 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
     {
         private readonly ILog log;
         private IExternalProcess odbcControlPanel;
-        private IEncryptionProvider encryptionProvider;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcDataSourceControl"/> class.
@@ -37,14 +35,13 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// <summary>
         /// Gets the selected data source.
         /// </summary>
-        private OdbcDataSource SelectedDataSource => dataSource.SelectedItem as OdbcDataSource;
+        private EncryptedOdbcDataSource SelectedDataSource => dataSource.SelectedItem as EncryptedOdbcDataSource;
 
         /// <summary>
         /// Loads the dependencies.
         /// </summary>
-        public void LoadDependencies(IEncryptionProviderFactory encryptionProviderFactory, IExternalProcess odbcControlPanelProcess)
+        public void LoadDependencies(IExternalProcess odbcControlPanelProcess)
         {
-            encryptionProvider = encryptionProviderFactory.CreateOdbcEncryptionProvider();
             odbcControlPanel = odbcControlPanelProcess;
         }
 
@@ -91,7 +88,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
 
             try
             {
-                store.ConnectionString = encryptionProvider.Encrypt(SelectedDataSource.Serialize());
+                store.ConnectionString = SelectedDataSource.Serialize();
             }
             catch (Exception ex)
             {
@@ -171,7 +168,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// </remarks>
         private void BindDataSources(List<IOdbcDataSource> dataSources)
         {
-            OdbcDataSource currentDataSource = SelectedDataSource;
+            EncryptedOdbcDataSource currentDataSource = SelectedDataSource;
 
             dataSource.DataSource = dataSources;
             dataSource.DisplayMember = "Name";

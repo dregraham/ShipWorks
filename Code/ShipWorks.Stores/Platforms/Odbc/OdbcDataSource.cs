@@ -147,7 +147,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// <summary>
         /// Serialize the OdbcDataSource
         /// </summary>
-        public string Serialize()
+        public virtual string Serialize()
         {
             return JsonConvert.SerializeObject(this);
         }
@@ -155,7 +155,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// <summary>
         /// Populate the OdbcDataSource using the given json string
         /// </summary>
-        public void Restore(string json)
+        public virtual void Restore(string json)
         {
             try
             {

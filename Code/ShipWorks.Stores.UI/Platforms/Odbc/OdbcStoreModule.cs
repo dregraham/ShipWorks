@@ -2,10 +2,10 @@
 using Interapptive.Shared.Security;
 using ShipWorks.ApplicationCore.Security;
 using ShipWorks.Stores.Platforms.Odbc;
+using ShipWorks.Stores.Platforms.Odbc.Loaders;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
 using ShipWorks.Stores.UI.Platforms.Odbc.WizardPages;
 using System.Reflection;
-using ShipWorks.Stores.Platforms.Odbc.Loaders;
 using Module = Autofac.Module;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc
@@ -32,8 +32,8 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             builder.RegisterType<OdbcControlPanel>()
                 .AsImplementedInterfaces();
 
-            builder.RegisterType<OdbcDataSource>()
-                .AsImplementedInterfaces();
+            builder.RegisterType<EncryptedOdbcDataSource>()
+                .As<IOdbcDataSource>();
 
             builder.RegisterType<OdbcCipherKey>()
                 .Keyed<ICipherKey>(CipherContext.Odbc);
