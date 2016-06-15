@@ -1,5 +1,4 @@
-﻿using Interapptive.Shared.Security;
-using Interapptive.Shared.Utility;
+﻿using Interapptive.Shared.Utility;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -17,16 +16,14 @@ namespace ShipWorks.Stores.Platforms.Odbc
     public class OdbcDataSource : IOdbcDataSource
     {
         private readonly IShipWorksDbProviderFactory odbcProvider;
-        private readonly IEncryptionProvider encryptionProvider;
         private string customConnectionString;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public OdbcDataSource(IShipWorksDbProviderFactory odbcProvider, IEncryptionProviderFactory encryptionProviderFactory)
+        public OdbcDataSource(IShipWorksDbProviderFactory odbcProvider)
         {
             this.odbcProvider = odbcProvider;
-            encryptionProvider = encryptionProviderFactory.CreateOdbcEncryptionProvider();
         }
 
         /// <summary>
@@ -148,7 +145,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
         }
 
         /// <summary>
-        /// Serialize and encrypt the OdbcDataSource
+        /// Serialize the OdbcDataSource
         /// </summary>
         public string Serialize()
         {
