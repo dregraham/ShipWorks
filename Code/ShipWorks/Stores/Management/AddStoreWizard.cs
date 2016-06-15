@@ -102,21 +102,17 @@ namespace ShipWorks.Stores.Management
 
                 using (ShipWorksSetupLock wizardLock = new ShipWorksSetupLock())
                 using (ILifetimeScope scope = IoC.BeginLifetimeScope())
+                using (AddStoreWizard wizard = new AddStoreWizard(scope))
                 {
-                    using (AddStoreWizard wizard = new AddStoreWizard(scope))
+                    // If it was successful, make sure our local list of stores is refreshed
+                    if (wizard.ShowDialog(owner) == DialogResult.OK)
                     {
-                        // If it was successful, make sure our local list of stores is refreshed
-                        if (wizard.ShowDialog(owner) == DialogResult.OK)
-                        {
-                            StoreManager.CheckForChanges();
+                        StoreManager.CheckForChanges();
 
-                            return true;
-                        }
-                        else
-                        {
-                            return false;
-                        }
+                        return true;
                     }
+
+                    return false;
                 }
             }
             catch (SqlAppResourceLockException)
