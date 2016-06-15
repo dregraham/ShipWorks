@@ -464,8 +464,16 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
 
             if (product != null)
             {
-                item.Thumbnail = product.ThumbnailFile;
-                item.Image = product.MainImageFile ?? string.Empty;
+                if (!string.IsNullOrEmpty(product.ThumbnailFile))
+                {
+                    item.Thumbnail = $"{threeDCartStore.StoreUrl}/{product.ThumbnailFile}";
+                }
+
+                if (!string.IsNullOrEmpty(product.MainImageFile))
+                {
+                    item.Image = $"{threeDCartStore.StoreUrl}\\{product.MainImageFile}";
+                }
+
                 item.Location = product.WarehouseBin;
             }
         }
