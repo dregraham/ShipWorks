@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using Interapptive.Shared.Collections;
+using Interapptive.Shared.Security;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
@@ -21,7 +22,8 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
     public partial class OdbcDataSourceControl : UserControl
     {
         private readonly ILog log;
-        private readonly Lazy<IExternalProcess> odbcControlPanel;
+        private IExternalProcess odbcControlPanel;
+        private IEncryptionProvider encryptionProvider;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcDataSourceControl"/> class.
@@ -30,14 +32,21 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         {
             InitializeComponent();
             log = LogManager.GetLogger(typeof(OdbcDataSourceControl));
-
-            odbcControlPanel = new Lazy<IExternalProcess>(IoC.UnsafeGlobalLifetimeScope.Resolve<IExternalProcess>);
         }
 
         /// <summary>
         /// Gets the selected data source.
         /// </summary>
         private OdbcDataSource SelectedDataSource => dataSource.SelectedItem as OdbcDataSource;
+
+        /// <summary>
+        /// Loads the dependencies.
+        /// </summary>
+        public void LoadDependencies(IEncryptionProviderFactory encryptionProviderFactory, IExternalProcess odbcControlPanelProcess)
+        {
+            encryptionProvider = encryptionProviderFactory.CreateOdbcEncryptionProvider();
+            odbcControlPanel = odbcControlPanelProcess;
+        }
 
         /// <summary>
         /// Tests the connection.
@@ -82,7 +91,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
 
             try
             {
-                store.ConnectionString = SelectedDataSource.Serialize();
+                store.ConnectionString = encryptionProvider.Encrypt(SelectedDataSource.Serialize());
             }
             catch (Exception ex)
             {
@@ -241,7 +250,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         {
             try
             {
-                odbcControlPanel.Value.Launch(RefreshDataSources);
+                odbcControlPanel.Launch(RefreshDataSources);
             }
             catch (Exception ex)
             {

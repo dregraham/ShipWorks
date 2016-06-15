@@ -21,7 +21,15 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
                 };
 
                 Mock<IOdbcFieldMap> odbcFieldMap = mock.Mock<IOdbcFieldMap>();
+
+                var encryptionProvider = mock.Mock<IEncryptionProvider>();
+
+                mock.Mock<IEncryptionProviderFactory>()
+                    .Setup(f => f.CreateOdbcEncryptionProvider())
+                    .Returns(encryptionProvider.Object);
+
                 OdbcCommandFactory testObject = mock.Create<OdbcCommandFactory>();
+
                 testObject.CreateDownloadCommand(odbcStore);
 
                 odbcFieldMap.Verify(p => p.Load(It.Is<string>(s => s == odbcStore.Map)), Times.Once());
@@ -29,23 +37,25 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         }
 
         [Fact]
-        public void CreateDownloadCommand_DatasourceRestoreCalledWithStoreConnectionString()
+        public void CreateDownloadCommand_DatasourceRestoreCalledWithUnencryptedStoreConnectionString()
         {
             using (var mock = AutoMock.GetLoose())
             {
+                var encryptedString = "encrypted";
                 var connectionString = "connect with this";
-
-                Mock<IEncryptionProvider> encryptionProvider = mock.Mock<IEncryptionProvider>();
-
-                var encryptionProviderFactory = mock.Mock<IEncryptionProviderFactory>();
-                encryptionProviderFactory.Setup(f => f.CreateOdbcEncryptionProvider())
-                    .Returns(encryptionProvider.Object);
 
                 var dataSource = mock.Mock<IOdbcDataSource>();
 
+                var encryptionProvider = mock.Mock<IEncryptionProvider>();
+                encryptionProvider.Setup(p => p.Decrypt(encryptedString)).Returns(connectionString);
+
+                mock.Mock<IEncryptionProviderFactory>()
+                    .Setup(f => f.CreateOdbcEncryptionProvider())
+                    .Returns(encryptionProvider.Object);
+
                 var testObject = mock.Create<OdbcCommandFactory>();
 
-                testObject.CreateDownloadCommand(new OdbcStoreEntity {ConnectionString = connectionString});
+                testObject.CreateDownloadCommand(new OdbcStoreEntity {ConnectionString = encryptedString});
 
                 dataSource.Verify(p => p.Restore(It.Is<string>(s => s == connectionString)), Times.Once());
             }

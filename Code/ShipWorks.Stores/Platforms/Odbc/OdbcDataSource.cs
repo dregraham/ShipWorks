@@ -152,17 +152,17 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// </summary>
         public string Serialize()
         {
-            return encryptionProvider.Encrypt(JsonConvert.SerializeObject(this));
+            return JsonConvert.SerializeObject(this);
         }
 
         /// <summary>
         /// Populate the OdbcDataSource using the given json string
         /// </summary>
-        public void Restore(string encryptedConnectionString)
+        public void Restore(string json)
         {
             try
             {
-                JObject dataSource = JObject.Parse(encryptionProvider.Decrypt(encryptedConnectionString));
+                JObject dataSource = JObject.Parse(json);
 
                 Name = dataSource["Name"].ToString();
                 bool custom;
