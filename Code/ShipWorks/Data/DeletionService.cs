@@ -137,10 +137,10 @@ namespace ShipWorks.Data
                 throw;
             }
 
-    // Refresh the nudges, just in case there were any that shouldn't be displayed now due to the deletion of this store.
-    // Ask the store manager to check for changes so that it doesn't return the store we just deleted.  The heart beat may
-    // not have run to force the check yet.
-    StoreManager.CheckForChanges();
+            // Refresh the nudges, just in case there were any that shouldn't be displayed now due to the deletion of this store.
+            // Ask the store manager to check for changes so that it doesn't return the store we just deleted.  The heart beat may
+            // not have run to force the check yet.
+            StoreManager.CheckForChanges();
             NudgeManager.Refresh(StoreManager.GetAllStores());
         }
 

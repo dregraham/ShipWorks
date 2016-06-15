@@ -543,12 +543,24 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 case "USPS Priority Mail Small Flat Rate Box":
                 case "USPS Priority Mail Large Flat Rate Box":
                 case "USPS Priority Mail Flat Rate Envelope":
+                case "USPS Priority Mail Legal Flat Rate Envelope":
+                case "USPS Priority Mail Padded Flat Rate Envelope":
+                case "USPS Priority Mail Regional Rate Box A":
+                case "USPS Priority Mail Regional Rate Box B":
+                case "USPS Priority Mail Regional Rate Box C":
                     return "PRIORITY";
                 case "USPS Priority Mail Express":
                 case "USPS Priority Mail Express Flat Rate Envelope":
+                case "USPS Express Mail":
+                case "USPS Express Mail Flat Rate Envelope":
+                case "USPS Express Mail Legal Flat Rate Envelope":
                     return "EXPRESS";
                 case "USPS Parcel Select":
                     return "PARCELSELECT";
+                case "USPS Bound Printed Matter":
+                    return "BOUNDPRINTEDMATTER";
+                case "USPS Media Mail":
+                    return "MEDIA";
             }
 
             return string.Empty;
@@ -572,6 +584,9 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 case "FedEx Express Saver®":
                     return "EXPSAVER";
                 case "FedEx Home Delivery®":
+                // The spreadsheet from Amazon has the double space between FedEx and Home, so adding it here just in case.
+                case "FedEx  Home Delivery®":
+                case "FedEx Ground®":
                     return "GROUND";
             }
 
