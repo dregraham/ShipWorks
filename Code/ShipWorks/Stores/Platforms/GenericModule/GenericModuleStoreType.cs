@@ -24,6 +24,7 @@ using ShipWorks.ApplicationCore.Logging;
 using Interapptive.Shared.Utility;
 using Interapptive.Shared.Business;
 using System.Xml.XPath;
+using Autofac;
 using Interapptive.Shared;
 using Interapptive.Shared.Business.Geography;
 using ShipWorks.Stores.Management;
@@ -360,7 +361,8 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         /// <summary>
         /// Create the Wizard pages used in the setup wizard to configure the store.
         /// </summary>
-        public override List<WizardPage> CreateAddStoreWizardPages()
+        /// <param name="scope"></param>
+        public override List<WizardPage> CreateAddStoreWizardPages(ILifetimeScope scope)
         {
             List<WizardPage> pages = new List<WizardPage>();
 

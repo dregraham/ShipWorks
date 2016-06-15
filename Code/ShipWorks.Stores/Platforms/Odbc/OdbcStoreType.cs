@@ -1,15 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Autofac;
+﻿using Autofac;
 using Interapptive.Shared.Utility;
-using ShipWorks.ApplicationCore;
+using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
-using ShipWorks.UI.Wizard;
-using ShipWorks.Data;
 using ShipWorks.Stores.Platforms.GenericFile;
+using ShipWorks.UI.Wizard;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace ShipWorks.Stores.Platforms.Odbc
 {
@@ -79,14 +78,10 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// <summary>
         /// Creates the add store wizard pages.
         /// </summary>
-        public override List<WizardPage> CreateAddStoreWizardPages()
+        public override List<WizardPage> CreateAddStoreWizardPages(ILifetimeScope scope)
         {
-            using (ILifetimeScope scope = IoC.BeginLifetimeScope())
-            {
                 IEnumerable<IOdbcWizardPage> wizardPages = scope.Resolve<IEnumerable<IOdbcWizardPage>>();
-
                 return wizardPages.OrderBy(w => w.Position).Cast<WizardPage>().ToList();
-            }
         }
     }
 }

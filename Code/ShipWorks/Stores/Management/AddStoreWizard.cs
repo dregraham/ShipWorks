@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Windows.Forms;
 using Autofac;
 using Interapptive.Shared;
 using Interapptive.Shared.Net;
@@ -30,6 +25,11 @@ using ShipWorks.UI.Wizard;
 using ShipWorks.Users;
 using ShipWorks.Users.Logon;
 using ShipWorks.Users.Security;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Windows.Forms;
 using Control = System.Windows.Controls.Control;
 
 namespace ShipWorks.Stores.Management
@@ -40,6 +40,7 @@ namespace ShipWorks.Stores.Management
     [NDependIgnoreLongTypes]
     partial class AddStoreWizard : WizardForm
     {
+        private readonly ILifetimeScope scope;
         // State container for use by wizard pages
         Dictionary<string, object> stateBag = new Dictionary<string, object>(StringComparer.InvariantCultureIgnoreCase);
 
@@ -64,13 +65,16 @@ namespace ShipWorks.Stores.Management
         /// </summary>
         private bool showActivationError = false;
 
-        private readonly ILicenseService licenseService = IoC.UnsafeGlobalLifetimeScope.Resolve<ILicenseService>();
+        private readonly ILicenseService licenseService;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        private AddStoreWizard()
+        private AddStoreWizard(ILifetimeScope scope)
         {
+            this.scope = scope;
+            licenseService = scope.Resolve<ILicenseService>();
+
             InitializeComponent();
         }
 
@@ -97,8 +101,9 @@ namespace ShipWorks.Stores.Management
                 }
 
                 using (ShipWorksSetupLock wizardLock = new ShipWorksSetupLock())
+                using (ILifetimeScope scope = IoC.BeginLifetimeScope())
                 {
-                    using (AddStoreWizard wizard = new AddStoreWizard())
+                    using (AddStoreWizard wizard = new AddStoreWizard(scope))
                     {
                         // If it was successful, make sure our local list of stores is refreshed
                         if (wizard.ShowDialog(owner) == DialogResult.OK)
@@ -172,9 +177,13 @@ namespace ShipWorks.Stores.Management
 
             bool complete = false;
 
-            IUserService userService = IoC.UnsafeGlobalLifetimeScope.Resolve<IUserService>();
+            EnumResult<UserServiceLogonResultType> logonResult;
 
-            EnumResult<UserServiceLogonResultType> logonResult = userService.Logon(new LogonCredentials(username, password, true));
+            using (ILifetimeScope scope = IoC.BeginLifetimeScope())
+            {
+                IUserService userService = scope.Resolve<IUserService>();
+                logonResult = userService.Logon(new LogonCredentials(username, password, true));
+            }
 
             if (logonResult.Value == UserServiceLogonResultType.Success)
             {
@@ -407,7 +416,7 @@ namespace ShipWorks.Stores.Management
                 StoreManager.SaveStore(store);
 
                 // Load the store specific pages
-                storePages = storeType.CreateAddStoreWizardPages();
+                storePages = storeType.CreateAddStoreWizardPages(scope);
 
                 // Add all the pages
                 for (int i = storePages.Count - 1; i >= 0; i--)
@@ -1010,7 +1019,7 @@ namespace ShipWorks.Stores.Management
                 {
                     if (activateResult.Value == LicenseActivationState.MaxChannelsExceeded)
                     {
-                        IChannelLimitFactory factory = IoC.UnsafeGlobalLifetimeScope.Resolve<IChannelLimitFactory>();
+                        IChannelLimitFactory factory = scope.Resolve<IChannelLimitFactory>();
                         Control channelLimitControl =
                             (Control) factory.CreateControl((ICustomerLicense) license, (StoreTypeCode) Store.TypeCode, EditionFeature.ChannelCount, this);
 

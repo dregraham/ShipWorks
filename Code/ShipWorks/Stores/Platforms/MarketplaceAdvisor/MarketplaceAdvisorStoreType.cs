@@ -20,6 +20,7 @@ using ShipWorks.Data.Connection;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore;
 using System.Windows.Forms;
+using Autofac;
 using ShipWorks.Stores.Platforms.MarketplaceAdvisor.CoreExtensions.Filters;
 using ShipWorks.Stores.Management;
 using ShipWorks.Templates.Processing;
@@ -81,7 +82,8 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
         /// <summary>
         /// Create the wizard pages that are used to create the store
         /// </summary>
-        public override List<WizardPage> CreateAddStoreWizardPages()
+        /// <param name="scope"></param>
+        public override List<WizardPage> CreateAddStoreWizardPages(ILifetimeScope scope)
         {
             return new List<WizardPage>
                 {
