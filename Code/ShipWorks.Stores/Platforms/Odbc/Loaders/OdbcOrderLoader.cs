@@ -1,4 +1,5 @@
 ﻿using Interapptive.Shared.Utility;
+using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
 using System.Collections.Generic;
@@ -55,6 +56,11 @@ namespace ShipWorks.Stores.Platforms.Odbc.Loaders
                 // load the items into the order
                 orderItemLoader.Load(map, order, records);
                 order.OrderTotal = orderChargeCalculator.CalculateTotal(order);
+
+                if (!order.Fields[(int)OrderFieldIndex.OrderDate].IsChanged)
+                {
+                    order.OrderDate = dateTimeProvider.UtcNow;
+                }
             }
         }
     }

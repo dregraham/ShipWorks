@@ -1,9 +1,13 @@
 ﻿using Autofac.Extras.Moq;
+using Interapptive.Shared.Utility;
 using Moq;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Stores.Platforms.Odbc.Loaders;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
+using System;
 using Xunit;
 
 namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
@@ -57,6 +61,71 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
                 testObject.Load(map.Object, order, odbcRecords);
 
                 map.Verify(m => m.CopyToEntity(order));
+            }
+        }
+
+        [Fact]
+        public void Load_OrderDateIsSetToNow_WhenOrderIsNew_AndDateNotMapped()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                var now = new DateTime(2016, 4, 20, 16, 20, 1, DateTimeKind.Utc);
+
+                var fieldMap = mock.Mock<IOdbcFieldMap>();
+                var orderEntity = new OrderEntity() { IsNew = true };
+                var odbcRecords = new[] { new OdbcRecord() };
+                var testObject = mock.Create<OdbcOrderLoader>();
+
+                mock.Mock<IDateTimeProvider>().Setup(d => d.UtcNow).Returns(now);
+
+                testObject.Load(fieldMap.Object, orderEntity, odbcRecords);
+
+                Assert.Equal(now, orderEntity.OrderDate);
+            }
+        }
+
+        [Fact]
+        public void Load_OrderDateIsSetToMappedValue_WhenOrderIsNew_AndDateMapped()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                var now = new DateTime(2016, 4, 20, 16, 20, 1, DateTimeKind.Utc);
+                var mappedDate = new DateTime(1999, 4, 20, 16, 20, 1, DateTimeKind.Utc);
+
+
+                var fieldMap = mock.Mock<IOdbcFieldMap>();
+                var orderEntity = new OrderEntity() { IsNew = true };
+                fieldMap.Setup(m => m.CopyToEntity(orderEntity))
+#pragma warning disable S3215 // "interface" instances should not be cast to concrete types
+                    .Callback<IEntity2>(entity2 => ((OrderEntity) entity2).OrderDate = mappedDate);
+#pragma warning restore S3215 // "interface" instances should not be cast to concrete types
+
+                var odbcRecords = new[] { new OdbcRecord() };
+                var testObject = mock.Create<OdbcOrderLoader>();
+
+                mock.Mock<IDateTimeProvider>().Setup(d => d.UtcNow).Returns(now);
+
+                testObject.Load(fieldMap.Object, orderEntity, odbcRecords);
+
+                Assert.Equal(mappedDate, orderEntity.OrderDate);
+            }
+        }
+
+        [Fact]
+        public void Load_OrderDateNotSet_WhenOrderIsNotNew_AndDateNotMapped()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                var fieldMap = mock.Mock<IOdbcFieldMap>();
+                var orderEntity = new OrderEntity() {IsNew = false};
+                var odbcRecords = new[] {new OdbcRecord()};
+                var testObject = mock.Create<OdbcOrderLoader>();
+
+                mock.Mock<IDateTimeProvider>().Setup(d => d.UtcNow).Returns(DateTime.Now);
+
+                testObject.Load(fieldMap.Object, orderEntity, odbcRecords);
+                
+                Assert.False(orderEntity.Fields[(int) OrderFieldIndex.OrderDate].IsChanged);
             }
         }
 
