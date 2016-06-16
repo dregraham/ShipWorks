@@ -14,6 +14,7 @@ using Interapptive.Shared.Net;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
 using Microsoft.WindowsAzure.Storage.Queue;
+using Newtonsoft.Json;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Common.Threading;
 using ShipWorks.Data.Connection;
@@ -40,22 +41,21 @@ namespace ShipWorks.ApplicationCore.Crashes
         /// </summary>
         public static CrashResponse Submit(Exception ex, string email, string logName, string logPath)
         {
-            HttpFilePostRequestSubmitter postRequest = new HttpFilePostRequestSubmitter();
-            postRequest.Uri = new Uri(url);
-
             Version version = Assembly.GetExecutingAssembly().GetName().Version;
-
-            postRequest.Variables.Add("identifier", GetIdentifier(ex));
-            postRequest.Variables.Add("version", version.ToString());
-            postRequest.Variables.Add("email", email);
-            postRequest.Variables.Add("background", Program.ExecutionMode.IsUISupported ? "No" : "Yes");
-            postRequest.Variables.Add("exceptionTitle", GetExceptionTitle(ex));
-            postRequest.Variables.Add("exceptionSummary", GetExceptionSummary(ex));
-            postRequest.Variables.Add("exception", GetExceptionDetail(ex));
-            postRequest.Variables.Add("environment", GetEnvironmentInfo());
-            postRequest.Variables.Add("assemblies", GetLoadedAssemblyList());
-
             CloudStorageAccount storageAccount = CloudStorageAccount.Parse(GetConnectionString(version));
+
+            WriteToBlobStorage(storageAccount, logName, logPath, version);
+            LogCrashToQueue(storageAccount, ex, email, logName, version);
+
+            return null;
+        }
+
+        /// <summary>
+        /// Write the crash log to blob storage
+        /// </summary>
+        private static CloudStorageAccount WriteToBlobStorage(CloudStorageAccount storageAccount, string logName,
+            string logPath, Version version)
+        {
             CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
             CloudBlobContainer container = blobClient.GetContainerReference("crashes");
 
@@ -65,12 +65,33 @@ namespace ShipWorks.ApplicationCore.Crashes
                 blockBlob.UploadFromStream(fileStream);
             }
 
+            return storageAccount;
+        }
+
+        /// <summary>
+        /// Log the crash to the storage queue
+        /// </summary>
+        private static void LogCrashToQueue(CloudStorageAccount storageAccount, Exception ex, string email,
+            string logName, Version version)
+        {
+            SubmissionDetails details = new SubmissionDetails
+            {
+                Identifier = GetIdentifier(ex),
+                Version = version.ToString(),
+                Email = email,
+                Background = Program.ExecutionMode.IsUISupported ? "No" : "Yes",
+                ExceptionTitle = GetExceptionTitle(ex),
+                ExceptionSummary = GetExceptionSummary(ex),
+                Exception = GetExceptionDetail(ex),
+                Environment = GetEnvironmentInfo(),
+                Assemblies = GetLoadedAssemblyList(),
+                LogName = logName
+            };
+
             CloudQueueClient queueClient = storageAccount.CreateCloudQueueClient();
             CloudQueue queue = queueClient.GetQueueReference("crashes");
             queue.CreateIfNotExists();
-            queue.AddMessage(new CloudQueueMessage(logName));
-
-            return null;
+            queue.AddMessage(new CloudQueueMessage(JsonConvert.SerializeObject(details)));
         }
 
         /// <summary>
@@ -109,7 +130,7 @@ namespace ShipWorks.ApplicationCore.Crashes
 
             // Add the version number
             Version assemblyVersion = Assembly.GetExecutingAssembly().GetName().Version;
-            string version = String.Format(versionFormat,
+            string version = string.Format(versionFormat,
                 assemblyVersion.Major,
                 assemblyVersion.Minor,
                 assemblyVersion.Build,

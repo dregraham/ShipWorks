@@ -670,6 +670,7 @@
     </Compile>
     <Compile Include="ApplicationCore\Crashes\CrashResponse.cs" />
     <Compile Include="ApplicationCore\Crashes\ServiceCrash.cs" />
+    <Compile Include="ApplicationCore\Crashes\SubmissionDetails.cs" />
     <Compile Include="ApplicationCore\Dashboard\Content\DashboardLicenseItem.cs" />
     <Compile Include="ApplicationCore\Dashboard\Content\DashboardSchedulerServiceStoppedItem.cs" />
     <Compile Include="ApplicationCore\Dashboard\Content\DashboardStoreItem.cs" />
