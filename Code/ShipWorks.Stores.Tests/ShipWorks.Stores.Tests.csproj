@@ -184,6 +184,7 @@
     <Compile Include="Platforms\Odbc\Mapping\ShipWorksOdbcMappableFieldTest.cs" />
     <Compile Include="Platforms\Odbc\OdbcColumnTest.cs" />
     <Compile Include="Platforms\Odbc\OdbcCommandFactoryTest.cs" />
+    <Compile Include="Platforms\Odbc\OdbcDownloadCommandTest.cs" />
     <Compile Include="Platforms\Odbc\OdbcFieldMapFactoryTest.cs" />
     <Compile Include="Platforms\Odbc\OdbcImportFieldMappingControlViewModelTest.cs" />
     <Compile Include="Platforms\Odbc\OdbcRecordTests.cs" />

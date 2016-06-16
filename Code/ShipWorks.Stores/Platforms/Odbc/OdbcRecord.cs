@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace ShipWorks.Stores.Platforms.Odbc
 {
@@ -13,6 +14,11 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// Gets or sets the name of the record identifier column.
         /// </summary>
         public string RecordIdentifier { get; set; }
+
+        /// <summary>
+        /// Gets a value indicating whether this record has any values.
+        /// </summary>
+        public bool HasValues => fields.Any();
 
         /// <summary>
         /// Gets the value of the field - null if not set

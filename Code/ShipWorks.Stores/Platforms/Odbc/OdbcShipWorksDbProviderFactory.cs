@@ -1,4 +1,5 @@
 ﻿using System.Data.Common;
+using System.Data.Odbc;
 
 namespace ShipWorks.Stores.Platforms.Odbc
 {
@@ -25,6 +26,30 @@ namespace ShipWorks.Stores.Platforms.Odbc
             DbConnection connection = CreateOdbcConnection();
             connection.ConnectionString = connectionString;
             return connection;
+        }
+
+        /// <summary>
+        /// Creates an ODBC command from the given query and connection
+        /// </summary>
+        public IShipWorksOdbcCommand CreateOdbcCommand(string query, DbConnection connection)
+        {
+            return new ShipWorksOdbcCommand(query, (OdbcConnection) connection);
+        }
+
+        /// <summary>
+        /// Creates a ShipWorks ODBC command builder.
+        /// </summary>
+        public IShipWorksOdbcCommandBuilder CreateShipWorksOdbcCommandBuilder(IShipWorksOdbcDataAdapter shipWorksAdapter)
+        {
+            return new ShipWorksOdbcCommandBuilder(shipWorksAdapter.Adapter);
+        }
+
+        /// <summary>
+        /// Creates a ShipWorks ODBC data adapter.
+        /// </summary>
+        public IShipWorksOdbcDataAdapter CreateShipWorksOdbcDataAdapter(string selectCommandText, DbConnection selectConnection)
+        {
+            return new ShipWorksOdbcDataAdapter(selectCommandText,selectConnection);
         }
     }
 }

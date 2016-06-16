@@ -175,6 +175,9 @@
     <Compile Include="Platforms\Odbc\IOdbcSchema.cs" />
     <Compile Include="Platforms\Odbc\IOdbcTable.cs" />
     <Compile Include="Platforms\Odbc\IOdbcWizardPage.cs" />
+    <Compile Include="Platforms\Odbc\IShipWorksOdbcCommand.cs" />
+    <Compile Include="Platforms\Odbc\IShipWorksOdbcCommandBuilder.cs" />
+    <Compile Include="Platforms\Odbc\IShipWorksOdbcDataAdapter.cs" />
     <Compile Include="Platforms\Odbc\Loaders\IOdbcItemAttributeLoader.cs" />
     <Compile Include="Platforms\Odbc\Loaders\IOdbcOrderDetailLoader.cs" />
     <Compile Include="Platforms\Odbc\Loaders\IOdbcOrderItemLoader.cs" />
@@ -213,6 +216,9 @@
     <Compile Include="Platforms\Odbc\OdbcStoreDownloader.cs" />
     <Compile Include="Platforms\Odbc\OdbcTable.cs" />
     <Compile Include="Platforms\Odbc\OdbcTableFactory.cs" />
+    <Compile Include="Platforms\Odbc\ShipWorksOdbcCommand.cs" />
+    <Compile Include="Platforms\Odbc\ShipWorksOdbcCommandBuilder.cs" />
+    <Compile Include="Platforms\Odbc\ShipWorksOdbcDataAdapter.cs" />
     <Compile Include="Platforms\Odbc\ShipWorksOdbcException.cs" />
     <Compile Include="Platforms\SparkPay\CoreExtensions\Actions\SparkPayOrderUpdateTask.cs" />
     <Compile Include="Platforms\SparkPay\CoreExtensions\Actions\SparkPayShipmentUploadTask.cs" />
