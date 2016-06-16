@@ -83,10 +83,5 @@ namespace ShipWorks.Stores.Platforms.Odbc
                 IEnumerable<IOdbcWizardPage> wizardPages = scope.Resolve<IEnumerable<IOdbcWizardPage>>();
                 return wizardPages.OrderBy(w => w.Position).Cast<WizardPage>().ToList();
         }
-
-        protected override OrderEntity CreateOrderInstance()
-        {
-            return base.CreateOrderInstance();
-        }
     }
 }
