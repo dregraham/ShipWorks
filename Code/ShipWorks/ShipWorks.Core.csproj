@@ -8761,6 +8761,7 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Shipping\Fakes\FakeFIMSLabel.pdf" />
+    <EmbeddedResource Include="Shipping\Carriers\FedEx\FedExEULA.rtf" />
     <None Include="Shipping\Carriers\FedEx\Api\Wsdl\AddressValidationService_v4.wsdl" />
     <None Include="Shipping\Carriers\FedEx\Api\Wsdl\ASYNCService_v2.wsdl" />
     <None Include="Shipping\Carriers\FedEx\Api\Wsdl\CloseService_v4.wsdl" />

@@ -456,21 +456,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <summary>
         /// The internal GetRates implementation intended to be wrapped by the exception wrapper
         /// </summary>
-        private List<RateV18> GetRatesInternal(ShipmentEntity shipment, UspsAccountEntity account)
+        private IEnumerable<RateV18> GetRatesInternal(ShipmentEntity shipment, UspsAccountEntity account)
         {
             RateV18 rate = CreateRateForRating(shipment, account);
 
-            List<RateV18> rateResults;
+            RateV18[] rateResults;
 
             using (SwsimV49 webService = CreateWebService("GetRates", LogActionType.GetRates))
             {
                 CheckCertificate(webService.Url);
-
-                RateV18[] ratesArray;
-
-                webService.GetRates(GetCredentials(account), rate, out ratesArray);
-
-                rateResults = ratesArray.ToList();
+                webService.GetRates(GetCredentials(account), rate, out rateResults);
             }
 
             List<RateV18> noConfirmationServiceRates = new List<RateV18>();
@@ -491,7 +486,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                 }
             }
 
-            return rateResults;
+            // remove services that are unknown
+            return rateResults.Where(r => r.ServiceType != ServiceType.Unknown);
         }
 
         /// <summary>
