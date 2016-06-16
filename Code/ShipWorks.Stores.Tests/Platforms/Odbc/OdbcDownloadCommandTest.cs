@@ -126,7 +126,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
                 dbProviderFactory.Setup(f => f.CreateShipWorksOdbcCommandBuilder(It.IsAny<ShipWorksOdbcDataAdapter>()))
                     .Returns(commandBuilder.Object);
 
-
                 var testObject = mock.Create<OdbcDownloadCommand>();
                 var records = testObject.Execute();
 
