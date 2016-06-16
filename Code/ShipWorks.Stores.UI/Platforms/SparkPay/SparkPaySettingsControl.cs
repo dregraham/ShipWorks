@@ -16,7 +16,7 @@ namespace ShipWorks.Stores.UI.Platforms.SparkPay
         /// <summary>
         /// Constructor
         /// </summary>
-        private SparkPaySettingsControl(ISparkPayAccountViewModel viewModel)
+        public SparkPaySettingsControl(ISparkPayAccountViewModel viewModel)
         {
             InitializeComponent();
             this.viewModel = viewModel;
