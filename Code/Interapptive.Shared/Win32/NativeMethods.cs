@@ -1,10 +1,8 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Runtime.InteropServices;
 using System.Drawing;
+using System.Runtime.InteropServices;
+using System.Text;
 using System.Windows.Forms;
-using System.Runtime.InteropServices.ComTypes;
 using Microsoft.Win32.SafeHandles;
 
 namespace Interapptive.Shared.Win32
@@ -55,7 +53,7 @@ namespace Interapptive.Shared.Win32
         [DllImport("user32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool BlockInput(bool fBlockIt);
-        
+
         [DllImport("user32.dll")]
         public static extern IntPtr DispatchMessage(ref MSG msg);
 
@@ -66,7 +64,7 @@ namespace Interapptive.Shared.Win32
         [DllImport("user32.dll", SetLastError = true)]
         public static extern int EnumChildWindows(IntPtr hWndParent, EnumWindowsCallback pCallback, ref object lParam);
 
-        [DllImport("user32.dll", SetLastError=true)]
+        [DllImport("user32.dll", SetLastError = true)]
         public static extern int EnumWindows(EnumWindowsCallback pCallback, ref object lParam);
 
         public delegate bool EnumWindowsCallback(IntPtr hWnd, ref object lParam);
@@ -139,7 +137,7 @@ namespace Interapptive.Shared.Win32
 
         [DllImport("user32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
-        public static extern bool RedrawWindow(IntPtr hWnd, IntPtr lprcUpdate, IntPtr hrgnUpdate, int flags); 
+        public static extern bool RedrawWindow(IntPtr hWnd, IntPtr lprcUpdate, IntPtr hrgnUpdate, int flags);
 
         [DllImport("user32.dll")]
         public static extern int RegisterWindowMessage(string sString);
@@ -164,7 +162,7 @@ namespace Interapptive.Shared.Win32
         public static extern IntPtr SendMessage(IntPtr hWnd, int msg, IntPtr wParam, ref RECT lpRect);
 
         [DllImport("user32.dll")]
-        public static extern IntPtr SendMessage(IntPtr hWnd, int msg, IntPtr wParam, ref POINT lpPoint);  
+        public static extern IntPtr SendMessage(IntPtr hWnd, int msg, IntPtr wParam, ref POINT lpPoint);
 
         [DllImport("user32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
@@ -191,7 +189,7 @@ namespace Interapptive.Shared.Win32
         [DllImport("user32.dll")]
         public static extern IntPtr WindowFromPoint(POINT pt);
 
-        [DllImport("kernel32", CharSet = CharSet.Unicode, SetLastError=true)]
+        [DllImport("kernel32", CharSet = CharSet.Unicode, SetLastError = true)]
         public static extern int WritePrivateProfileString(string section, string key, string value, string filePath);
 
         [DllImport("kernel32", CharSet = CharSet.Unicode, SetLastError = true)]
@@ -258,6 +256,10 @@ namespace Interapptive.Shared.Win32
         [DllImport("advapi32.dll")]
         public static extern Int32 LsaNtStatusToWinError(Int32 status);
 
+        [DllImport("kernel32.dll", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool GetPhysicallyInstalledSystemMemory(out long MemoryInKilobytes);
+
         #endregion
 
         #region Constants
@@ -288,24 +290,24 @@ namespace Interapptive.Shared.Win32
         public const int CDDS_ITEMPOSTERASE = (CDDS_ITEM | CDDS_POSTERASE);
         public const int CDDS_SUBITEM = 0x00020000;
 
-        public const int CDRF_DODEFAULT         = 0x00000000;
-        public const int CDRF_NEWFONT           = 0x00000002;
-        public const int CDRF_SKIPDEFAULT       = 0x00000004;
-        public const int CDRF_DOERASE           = 0x00000008;
-        public const int CDRF_NOTIFYPOSTPAINT   = 0x00000010;
-        public const int CDRF_NOTIFYITEMDRAW    = 0x00000020;
+        public const int CDRF_DODEFAULT = 0x00000000;
+        public const int CDRF_NEWFONT = 0x00000002;
+        public const int CDRF_SKIPDEFAULT = 0x00000004;
+        public const int CDRF_DOERASE = 0x00000008;
+        public const int CDRF_NOTIFYPOSTPAINT = 0x00000010;
+        public const int CDRF_NOTIFYITEMDRAW = 0x00000020;
         public const int CDRF_NOTIFYSUBITEMDRAW = 0x00000020;
-        public const int CDRF_NOTIFYPOSTERASE   = 0x00000040;
+        public const int CDRF_NOTIFYPOSTERASE = 0x00000040;
 
         public const int DLGC_WANTARROWS = 0x0001;
         public const int DLGC_WANTTAB = 0x0002;
         public const int DLGC_WANTALLKEYS = 0x0004;
         public const int DLGC_WANTMESSAGE = 0x0004;
         public const int DLGC_HASSETSEL = 0x0008;
-        public const int DLGC_DEFPUSHBUTTON = 0x0010; 
+        public const int DLGC_DEFPUSHBUTTON = 0x0010;
         public const int DLGC_UNDEFPUSHBUTTON = 0x0020;
         public const int DLGC_RADIOBUTTON = 0x0040;
-        public const int DLGC_WANTCHARS = 0x0080; 
+        public const int DLGC_WANTCHARS = 0x0080;
         public const int DLGC_STATIC = 0x0100;
         public const int DLGC_BUTTON = 0x2000;
 
@@ -315,13 +317,13 @@ namespace Interapptive.Shared.Win32
         public const int GR_GDIOBJECTS = 0;
         public const int GR_USEROBJECTS = 1;
 
-        public const int GWL_WNDPROC         = (-4);
-        public const int GWL_HINSTANCE       = (-6);
-        public const int GWL_HWNDPARENT      = (-8);
-        public const int GWL_STYLE           = (-16);
-        public const int GWL_EXSTYLE         = (-20);
-        public const int GWL_USERDATA        = (-21);
-        public const int GWL_ID              = (-12);
+        public const int GWL_WNDPROC = (-4);
+        public const int GWL_HINSTANCE = (-6);
+        public const int GWL_HWNDPARENT = (-8);
+        public const int GWL_STYLE = (-16);
+        public const int GWL_EXSTYLE = (-20);
+        public const int GWL_USERDATA = (-21);
+        public const int GWL_ID = (-12);
 
         public const int HTTRANSPARENT = (-1);
         public const int HTNOWHERE = 0;
@@ -384,18 +386,18 @@ namespace Interapptive.Shared.Win32
         public const int PM_REMOVE = 0x0001;
         public const int PM_NOYIELD = 0x0002;
 
-		public const int PRF_CHECKVISIBLE = 1;
-		public const int PRF_NONCLIENT = 2;
-		public const int PRF_CLIENT = 4;
-		public const int PRF_ERASEBKGND = 8;
-		public const int PRF_CHILDREN = 16;
+        public const int PRF_CHECKVISIBLE = 1;
+        public const int PRF_NONCLIENT = 2;
+        public const int PRF_CLIENT = 4;
+        public const int PRF_ERASEBKGND = 8;
+        public const int PRF_CHILDREN = 16;
         public const int PRF_OWNED = 32;
 
-        public const int RGN_AND         = 1;
-        public const int RGN_OR          = 2;
-        public const int RGN_XOR         = 3;
-        public const int RGN_DIFF        = 4;
-        public const int RGN_COPY        = 5;
+        public const int RGN_AND = 1;
+        public const int RGN_OR = 2;
+        public const int RGN_XOR = 3;
+        public const int RGN_DIFF = 4;
+        public const int RGN_COPY = 5;
 
         public const int SC_MANAGER_ALL_ACCESS = 0x000F003F;
         public const int SERVICE_NO_CHANGE = unchecked((int) 0xffffffff); //this value is found in winsvc.h
@@ -444,38 +446,38 @@ namespace Interapptive.Shared.Win32
         public const int E_NOINTERFACE = unchecked((int) 0x80004002);
         public const int E_POINTER = unchecked((int) 0x80004003);
 
-        public const int TBCD_TICS    = 0x0001;
-        public const int TBCD_THUMB   = 0x0002;
+        public const int TBCD_TICS = 0x0001;
+        public const int TBCD_THUMB = 0x0002;
         public const int TBCD_CHANNEL = 0x0003;
 
-        public const int  TBM_GETPOS              = (WM_USER);
-        public const int  TBM_GETRANGEMIN         = (WM_USER+1);
-        public const int  TBM_GETRANGEMAX         = (WM_USER+2);
-        public const int  TBM_GETTIC              = (WM_USER+3);
-        public const int  TBM_SETTIC              = (WM_USER+4);
-        public const int  TBM_SETPOS              = (WM_USER+5);
-        public const int  TBM_SETRANGE            = (WM_USER+6);
-        public const int  TBM_SETRANGEMIN         = (WM_USER+7);
-        public const int  TBM_SETRANGEMAX         = (WM_USER+8);
-        public const int  TBM_CLEARTICS           = (WM_USER+9);
-        public const int  TBM_SETSEL              = (WM_USER+10);
-        public const int  TBM_SETSELSTART         = (WM_USER+11);
-        public const int  TBM_SETSELEND           = (WM_USER+12);
-        public const int  TBM_GETPTICS            = (WM_USER+14);
-        public const int  TBM_GETTICPOS           = (WM_USER+15);
-        public const int  TBM_GETNUMTICS          = (WM_USER+16);
-        public const int  TBM_GETSELSTART         = (WM_USER+17);
-        public const int  TBM_GETSELEND           = (WM_USER+18);
-        public const int  TBM_CLEARSEL            = (WM_USER+19);
-        public const int  TBM_SETTICFREQ          = (WM_USER+20);
-        public const int  TBM_SETPAGESIZE         = (WM_USER+21);
-        public const int  TBM_GETPAGESIZE         = (WM_USER+22);
-        public const int  TBM_SETLINESIZE         = (WM_USER+23);
-        public const int  TBM_GETLINESIZE         = (WM_USER+24);
-        public const int  TBM_GETTHUMBRECT        = (WM_USER+25);
-        public const int  TBM_GETCHANNELRECT      = (WM_USER+26);
-        public const int  TBM_SETTHUMBLENGTH      = (WM_USER+27);
-        public const int  TBM_GETTHUMBLENGTH      = (WM_USER+28);
+        public const int TBM_GETPOS = (WM_USER);
+        public const int TBM_GETRANGEMIN = (WM_USER + 1);
+        public const int TBM_GETRANGEMAX = (WM_USER + 2);
+        public const int TBM_GETTIC = (WM_USER + 3);
+        public const int TBM_SETTIC = (WM_USER + 4);
+        public const int TBM_SETPOS = (WM_USER + 5);
+        public const int TBM_SETRANGE = (WM_USER + 6);
+        public const int TBM_SETRANGEMIN = (WM_USER + 7);
+        public const int TBM_SETRANGEMAX = (WM_USER + 8);
+        public const int TBM_CLEARTICS = (WM_USER + 9);
+        public const int TBM_SETSEL = (WM_USER + 10);
+        public const int TBM_SETSELSTART = (WM_USER + 11);
+        public const int TBM_SETSELEND = (WM_USER + 12);
+        public const int TBM_GETPTICS = (WM_USER + 14);
+        public const int TBM_GETTICPOS = (WM_USER + 15);
+        public const int TBM_GETNUMTICS = (WM_USER + 16);
+        public const int TBM_GETSELSTART = (WM_USER + 17);
+        public const int TBM_GETSELEND = (WM_USER + 18);
+        public const int TBM_CLEARSEL = (WM_USER + 19);
+        public const int TBM_SETTICFREQ = (WM_USER + 20);
+        public const int TBM_SETPAGESIZE = (WM_USER + 21);
+        public const int TBM_GETPAGESIZE = (WM_USER + 22);
+        public const int TBM_SETLINESIZE = (WM_USER + 23);
+        public const int TBM_GETLINESIZE = (WM_USER + 24);
+        public const int TBM_GETTHUMBRECT = (WM_USER + 25);
+        public const int TBM_GETCHANNELRECT = (WM_USER + 26);
+        public const int TBM_SETTHUMBLENGTH = (WM_USER + 27);
+        public const int TBM_GETTHUMBLENGTH = (WM_USER + 28);
 
         public const int WM_NULL = 0x0000;
         public const int WM_CREATE = 0x0001;
@@ -883,7 +885,7 @@ namespace Interapptive.Shared.Win32
         }
 
         /// <summary>
-        /// Passed to LsaOpenPolicy. 
+        /// Passed to LsaOpenPolicy.
         /// </summary>
         [StructLayout(LayoutKind.Sequential)]
         public struct LsaObjectAttributes

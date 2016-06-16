@@ -1,28 +1,25 @@
 using System;
-using System.ComponentModel;
+using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
 using System.IO;
-using System.Text;
-using System.Text.RegularExpressions;
 using System.Linq;
 using System.Reflection;
-using Interapptive.Shared.Data;
-using Interapptive.Shared.Net;
+using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
-using Interapptive.Shared.Utility;
-using ShipWorks.ApplicationCore.ExecutionMode;
-using ShipWorks.ApplicationCore.Licensing;
-using ShipWorks.Common.Threading;
 using Interapptive.Shared;
-using System.Collections.Generic;
-using ShipWorks.Data.Connection;
+using Interapptive.Shared.Data;
 using Interapptive.Shared.IO.Zip;
+using Interapptive.Shared.Net;
+using Microsoft.WindowsAzure.Storage;
+using Microsoft.WindowsAzure.Storage.Blob;
+using Microsoft.WindowsAzure.Storage.Queue;
 using ShipWorks.ApplicationCore.Logging;
-using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Common.Threading;
+using ShipWorks.Data.Connection;
 using ShipWorks.Stores;
 
-namespace ShipWorks.ApplicationCore.Crashes 
+namespace ShipWorks.ApplicationCore.Crashes
 {
     /// <summary>
     /// Used to submit crash reports to interapptive
@@ -41,38 +38,53 @@ namespace ShipWorks.ApplicationCore.Crashes
         /// Submits a crash report to interapptive.  The response to show the user is returned.  If logFileName is null no logs are submitted, otherwise it must be
         /// a full path a log content file.
         /// </summary>
-        public static CrashResponse Submit(Exception ex, string email, string comments, string logFileName)
+        public static CrashResponse Submit(Exception ex, string email, string logName, string logPath)
         {
             HttpFilePostRequestSubmitter postRequest = new HttpFilePostRequestSubmitter();
             postRequest.Uri = new Uri(url);
 
+            Version version = Assembly.GetExecutingAssembly().GetName().Version;
+
             postRequest.Variables.Add("identifier", GetIdentifier(ex));
-            postRequest.Variables.Add("version", Assembly.GetExecutingAssembly().GetName().Version.ToString());
+            postRequest.Variables.Add("version", version.ToString());
             postRequest.Variables.Add("email", email);
-            postRequest.Variables.Add("comments", comments);
+            postRequest.Variables.Add("background", Program.ExecutionMode.IsUISupported ? "No" : "Yes");
             postRequest.Variables.Add("exceptionTitle", GetExceptionTitle(ex));
             postRequest.Variables.Add("exceptionSummary", GetExceptionSummary(ex));
             postRequest.Variables.Add("exception", GetExceptionDetail(ex));
             postRequest.Variables.Add("environment", GetEnvironmentInfo());
             postRequest.Variables.Add("assemblies", GetLoadedAssemblyList());
 
-            if (!string.IsNullOrWhiteSpace(logFileName))
+            CloudStorageAccount storageAccount = CloudStorageAccount.Parse(GetConnectionString(version));
+            CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
+            CloudBlobContainer container = blobClient.GetContainerReference("crashes");
+
+            CloudBlockBlob blockBlob = container.GetBlockBlobReference(logName);
+            using (var fileStream = File.OpenRead(logPath))
             {
-                // Post the file
-                postRequest.Files.Add(new HttpFile("crashlog", logFileName));
+                blockBlob.UploadFromStream(fileStream);
             }
 
-            // Download and parse request
-            using (IHttpResponseReader response = postRequest.GetResponse())
-            {
-                string responseText = response.ReadResult();
+            CloudQueueClient queueClient = storageAccount.CreateCloudQueueClient();
+            CloudQueue queue = queueClient.GetQueueReference("crashes");
+            queue.CreateIfNotExists();
+            queue.AddMessage(new CloudQueueMessage(logName));
 
-                return CrashResponse.Read(responseText);
-            }
+            return null;
         }
 
         /// <summary>
-        /// Formats the description of the exception into a unique identifiable string. The reason for 
+        /// Get the storage connection string
+        /// </summary>
+        private static string GetConnectionString(Version version)
+        {
+            return version.Major > 0 ?
+                "TODO: Add real endpoint" :
+                "DefaultEndpointsProtocol=https;AccountName=sw201606crash;AccountKey=J3aKx7pIpm2yian0B3YufolSx/f/rAkdTmF/VhRi22X6k7BIR37qUWrLgFlJKAThUjSsFOSLccKiIxQzKFHmNQ==";
+        }
+
+        /// <summary>
+        /// Formats the description of the exception into a unique identifiable string. The reason for
         /// this method and not just a simpler way of producing the description is that this
         /// string will be used to find existing bugs in the database to add occurances to, instead of adding
         /// new bugs for each occurance.
@@ -133,7 +145,7 @@ namespace ShipWorks.ApplicationCore.Crashes
                     {
                         string method = ma.Groups["methodname"].Value;
 
-                        List<string> ignoreNamespaces = new List<string> 
+                        List<string> ignoreNamespaces = new List<string>
                             {
                                 "System",
                                 "Microsoft",
@@ -180,7 +192,7 @@ namespace ShipWorks.ApplicationCore.Crashes
 
             // User Comments
             sb.AppendLine("User Comments:");
-            if (string.IsNullOrEmpty(comments)) 
+            if (string.IsNullOrEmpty(comments))
             {
                 sb.AppendLine("   [None]");
             }
@@ -419,7 +431,7 @@ namespace ShipWorks.ApplicationCore.Crashes
             AppendLineIgnoreException(() => sb.AppendFormat("Execution Mode: {0}\r\n", Program.ExecutionMode.Name));
             AppendLineIgnoreException(() => sb.AppendFormat("Execution Mode IsUIDisplayed: {0}\r\n", Program.ExecutionMode.IsUIDisplayed));
             AppendLineIgnoreException(() => sb.AppendFormat("Execution Mode IsUISupported: {0}\r\n", Program.ExecutionMode.IsUISupported));
-            
+
             AppendLineIgnoreException(() => sb.AppendFormat("Local IP Address: {0}\r\n", new NetworkUtility().GetIPAddress()));
 
             if (SqlSession.IsConfigured)
@@ -457,7 +469,7 @@ namespace ShipWorks.ApplicationCore.Crashes
             {
                 method();
             }
-            catch 
+            catch
             {
             }
         }

@@ -5,8 +5,10 @@ using System.Data.SqlClient;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Linq;
@@ -20,6 +22,7 @@ using Interapptive.Shared.IO.Zip;
 using Interapptive.Shared.Messaging;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Security;
+using Interapptive.Shared.Telemetry;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using Interapptive.Shared.Win32;
@@ -95,7 +98,6 @@ using ShipWorks.Users;
 using ShipWorks.Users.Audit;
 using ShipWorks.Users.Logon;
 using ShipWorks.Users.Security;
-using System.Threading.Tasks;
 using TD.SandDock;
 using Application = System.Windows.Forms.Application;
 using SandButton = Divelements.SandRibbon.Button;
@@ -841,6 +843,8 @@ namespace ShipWorks
             // refresh the license if it is older than 10 mins
             licenses.ForEach(license => license.Refresh());
 
+            Telemetry.TrackStartShipworks(GetCustomerIdForTelemetry(licenses), ShipWorksSession.InstanceID.ToString("D"));
+
             // now that we updated license info we can refresh the UI to match
             if (InvokeRequired)
             {
@@ -852,6 +856,17 @@ namespace ShipWorks
             }
 
             ForceHeartbeat();
+        }
+
+        /// <summary>
+        /// Get a customer id that can be used for telemetry
+        /// </summary>
+        private string GetCustomerIdForTelemetry(List<ILicense> licenses)
+        {
+            string key = licenses.OfType<CustomerLicense>().FirstOrDefault()?.Key ??
+                TangoWebClient.GetLicenseStatus(licenses.FirstOrDefault().Key, StoreManager.GetEnabledStores().FirstOrDefault()).TangoCustomerID;
+
+            return SHA256.Create().ComputeHash(Encoding.UTF8.GetBytes(key)).ToHexString();
         }
 
         /// <summary>
@@ -3497,7 +3512,11 @@ namespace ShipWorks
         /// </summary>
         private void OnShipOrders(object sender, EventArgs e)
         {
-            Messenger.Current.Send(new OpenShippingDialogWithOrdersMessage(this, gridControl.Selection.OrderedKeys, InitialShippingTabDisplay.Shipping));
+            throw new InvalidOperationException("Error");
+
+
+
+            //Messenger.Current.Send(new OpenShippingDialogWithOrdersMessage(this, gridControl.Selection.OrderedKeys, InitialShippingTabDisplay.Shipping))
         }
 
         /// <summary>

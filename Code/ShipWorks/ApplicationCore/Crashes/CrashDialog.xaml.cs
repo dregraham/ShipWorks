@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Interop;
 using Interapptive.Shared.Net;
+using Interapptive.Shared.Telemetry;
 using Interapptive.Shared.Win32;
 using log4net;
 using log4net.Appender;
@@ -47,10 +48,13 @@ namespace ShipWorks.ApplicationCore.Crashes
 
             exception = ex;
             this.guiThread = guiThread;
+            string logName = Guid.NewGuid().ToString() + ".zip";
 
             // Dump the report to the log
             try
             {
+                Telemetry.TrackException(exception, new Dictionary<string, string> { { "Crash Log", logName } });
+
                 crashContent = CrashSubmitter.GetContent(exception, "");
 
                 File.WriteAllText(
@@ -63,7 +67,7 @@ namespace ShipWorks.ApplicationCore.Crashes
             }
 
             waitForOkButton = new TaskCompletionSource<bool>();
-            CreateLogTask = TaskEx.WhenAll(StartSubmissionTask(userEmail), waitForOkButton.Task)
+            CreateLogTask = TaskEx.WhenAll(StartSubmissionTask(userEmail, logName), waitForOkButton.Task)
                 .ContinueWith(ExitApplication);
 
             InitializeComponent();
@@ -80,9 +84,9 @@ namespace ShipWorks.ApplicationCore.Crashes
         /// <summary>
         /// Start the crash submission task
         /// </summary>
-        private Task<Task> StartSubmissionTask(string userEmail)
+        private Task<Task> StartSubmissionTask(string userEmail, string logName)
         {
-            return TaskEx.WhenAny(TaskEx.Run(() => SendReport(userEmail)), TaskEx.Delay(TimeSpan.FromMinutes(10)));
+            return TaskEx.WhenAny(TaskEx.Run(() => SendReport(userEmail, logName)), TaskEx.Delay(TimeSpan.FromMinutes(10)));
         }
 
         /// <summary>
@@ -160,14 +164,14 @@ namespace ShipWorks.ApplicationCore.Crashes
         /// <summary>
         /// Send the report to interapptive
         /// </summary>
-        private void SendReport(string email)
+        private void SendReport(string email, string logName)
         {
             try
             {
                 StopLogging();
 
                 string logFileToSubmit = CrashSubmitter.CreateCrashLogZip();
-                CrashSubmitter.Submit(exception, email, string.Empty, logFileToSubmit);
+                CrashSubmitter.Submit(exception, email, logName, logFileToSubmit);
             }
             catch (Exception)
             {
