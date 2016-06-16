@@ -12,17 +12,15 @@ namespace ShipWorks.Stores.Platforms.SparkPay.Factories
     /// </summary>
     public class SparkPayOnlineUpdateInstanceCommandsFactory
     {
-        private readonly SparkPayStoreEntity store;
         private readonly StatusCodeProvider<int> statusCodeProvider;
         private readonly SparkPayOnlineUpdater onlineUpdater;
 
         public SparkPayOnlineUpdateInstanceCommandsFactory(
-            SparkPayStoreEntity store, 
+            SparkPayStoreEntity store,
             Func<SparkPayStoreEntity, SparkPayStatusCodeProvider> statusCodeProviderFactory,
             Func<SparkPayStoreEntity, SparkPayOnlineUpdater> onlineUpdaterFactory
             )
         {
-            this.store = store;
             statusCodeProvider = statusCodeProviderFactory(store);
             onlineUpdater = onlineUpdaterFactory(store);
         }
@@ -34,21 +32,25 @@ namespace ShipWorks.Stores.Platforms.SparkPay.Factories
         public List<MenuCommand> Create()
         {
             List<MenuCommand> commands = new List<MenuCommand>();
-            
+
             bool isOne = false;
             foreach (string codeName in statusCodeProvider.CodeNames)
             {
                 isOne = true;
 
-                MenuCommand command = new MenuCommand(codeName, new MenuCommandExecutor(OnSetOnlineStatus));
-                command.Tag = statusCodeProvider.GetCodeValue(codeName);
+                MenuCommand command = new MenuCommand(codeName, OnSetOnlineStatus)
+                {
+                    Tag = statusCodeProvider.GetCodeValue(codeName)
+                };
 
                 commands.Add(command);
             }
 
             // shipment details
-            MenuCommand uploadCommand = new MenuCommand("Upload Shipment Details", new MenuCommandExecutor(OnUploadDetails));
-            uploadCommand.BreakBefore = isOne;
+            MenuCommand uploadCommand = new MenuCommand("Upload Shipment Details", OnUploadDetails)
+            {
+                BreakBefore = isOne
+            };
             commands.Add(uploadCommand);
 
             return commands;
@@ -83,7 +85,7 @@ namespace ShipWorks.Stores.Platforms.SparkPay.Factories
             {
                 return;
             }
-    
+
             try
             {
                 onlineUpdater.UpdateShipmentDetails(shipment);
@@ -93,7 +95,7 @@ namespace ShipWorks.Stores.Platforms.SparkPay.Factories
                 // add the error to issues so we can react later
                 issueAdder.Add(orderID, ex);
             }
-     
+
         }
 
         /// <summary>

@@ -16,7 +16,6 @@ namespace ShipWorks.Shipping.ShipSense.Hashing
         /// will be configured with the names/values of the properties and attributes provided.
         /// </summary>
         [NDependIgnoreLongMethod]
-        [NDependIgnoreComplexMethodAttribute]
         public IEnumerable<ShipSenseOrderItemKey> GetKeys(IEnumerable<OrderItemEntity> orderItems, List<string> propertyNames, List<string> attributeNames)
         {
             List<ShipSenseOrderItemKey> keys = new List<ShipSenseOrderItemKey>();

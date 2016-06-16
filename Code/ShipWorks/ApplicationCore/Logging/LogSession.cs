@@ -191,20 +191,9 @@ namespace ShipWorks.ApplicationCore.Logging
             // We only want info and above in the file
             LevelRangeFilter levelFilter = new LevelRangeFilter();
 
-#if DEBUG
-            levelFilter.LevelMin = Level.Debug;
-#else
-            if (InterapptiveOnly.IsInterapptiveUser)
-            {
-                levelFilter.LevelMin = Level.Debug;
-            }
-            else
-            {
-                levelFilter.LevelMin = Level.Info;
-            }
-#endif
+            levelFilter.LevelMin = logOptions.MinLevel;
+            levelFilter.LevelMax = logOptions.MaxLevel;
 
-            levelFilter.LevelMax = Level.Fatal;
             levelFilter.ActivateOptions();
 
             appender.AddFilter(levelFilter);

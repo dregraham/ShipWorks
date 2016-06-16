@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
+using Autofac;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Endicia
@@ -30,7 +27,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         {
             get
             {
-                return account.EndiciaReseller == (int) EndiciaReseller.None ? "Endicia" : "Express1";
+                return account.EndiciaReseller == (int)EndiciaReseller.None ? "Endicia" : "Express1";
             }
         }
 
@@ -48,9 +45,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <summary>
         /// Create a dialog that will allow a customer to purchase more postage
         /// </summary>
-        public Form CreatePostageDialog()
+        public Form CreatePostageDialog(ILifetimeScope lifetimeScope)
         {
-            return new EndiciaBuyPostageDlg(account);
+            EndiciaBuyPostageDlg dialog = lifetimeScope.Resolve<EndiciaBuyPostageDlg>();
+            dialog.LoadAccount(account);
+            return dialog;
         }
     }
 }

@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Interapptive.Shared.Messaging;
+using ShipWorks.Core.Messaging;
 using ShipWorks.Filters.Management;
 using ShipWorks.UI.Controls;
 using System.Windows.Forms;

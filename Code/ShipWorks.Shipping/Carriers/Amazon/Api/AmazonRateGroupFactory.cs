@@ -2,8 +2,8 @@
 using System.Drawing;
 using System.Linq;
 using Interapptive.Shared.Collections;
-using Interapptive.Shared.Messaging;
 using Interapptive.Shared.Utility;
+using ShipWorks.Core.Messaging;
 using ShipWorks.Shipping.Carriers.Amazon.Api.DTOs;
 using ShipWorks.Shipping.Editing.Rating;
 
@@ -80,7 +80,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         /// </summary>
         private static Image GetProviderLogo(string carrier)
         {
-            switch (carrier.ToLower())
+            switch (carrier.ToLowerInvariant())
             {
                 case "ups":
                     return EnumHelper.GetImage(ShipmentTypeCode.UpsOnLineTools);

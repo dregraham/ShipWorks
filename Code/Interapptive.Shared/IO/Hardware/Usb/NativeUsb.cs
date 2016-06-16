@@ -239,24 +239,6 @@ namespace Interapptive.Shared.Usb
             IntPtr lpDeviceInfoData);
 
         /// <summary>
-        /// Registers a window for device insert/remove messages
-        /// </summary>
-        /// <param name="hwnd">Handle to the window that will receive the messages</param>
-        /// <param name="oInterface">DeviceBroadcastInterrface structure</param>
-        /// <param name="nFlags">set to DEVICE_NOTIFY_WINDOW_HANDLE</param>
-        /// <returns>A handle used when unregistering</returns>
-        [DllImport("user32.dll", SetLastError = true)]
-        public static extern IntPtr RegisterDeviceNotification(IntPtr hwnd, DeviceBroadcastInterface oInterface, int nFlags);
-
-        /// <summary>
-        /// Unregister from above.
-        /// </summary>
-        /// <param name="hHandle">Handle returned in call to RegisterDeviceNotification</param>
-        /// <returns>True if success</returns>
-        [DllImport("user32.dll", SetLastError = true)]
-        public static extern bool UnregisterDeviceNotification(IntPtr hHandle);
-
-        /// <summary>
         /// Gets details from an open device. Reserves a block of memory which must be freed.
         /// </summary>
         /// <param name="hFile">Device file handle</param>

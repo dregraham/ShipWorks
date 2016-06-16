@@ -1,5 +1,5 @@
 ﻿using System;
-using Interapptive.Shared.Messaging;
+using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Amazon;
 using ShipWorks.Shipping.Editing.Rating;
@@ -12,12 +12,14 @@ namespace ShipWorks.Shipping
     public class CachedRatesService : ICachedRatesService
     {
         private readonly Func<ShipmentTypeCode, IRateHashingService> rateHashingServiceFactory;
+        private readonly IMessenger messenger;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CachedRatesService"/> class.
         /// </summary>
-        public CachedRatesService(Func<ShipmentTypeCode, IRateHashingService> rateHashingServiceFactory)
+        public CachedRatesService(IMessenger messenger, Func<ShipmentTypeCode, IRateHashingService> rateHashingServiceFactory)
         {
+            this.messenger = messenger;
             this.rateHashingServiceFactory = rateHashingServiceFactory;
         }
 
@@ -30,7 +32,7 @@ namespace ShipWorks.Shipping
         /// <returns></returns>
         public RateGroup GetCachedRates<T>(ShipmentEntity shipment, Func<ShipmentEntity, RateGroup> getRatesFunction) where T : Exception
         {
-            string rateHash = rateHashingServiceFactory((ShipmentTypeCode)shipment.ShipmentType).GetRatingHash(shipment);
+            string rateHash = rateHashingServiceFactory((ShipmentTypeCode) shipment.ShipmentType).GetRatingHash(shipment);
 
             if (RateCache.Instance.Contains(rateHash))
             {
@@ -38,9 +40,9 @@ namespace ShipWorks.Shipping
 
                 // If we are getting a cached amazon rate send the AmazonRatesRetrievedMessage
                 // to update the Amazon shipping service control
-                if ((ShipmentTypeCode)shipment.ShipmentType == ShipmentTypeCode.Amazon)
+                if ((ShipmentTypeCode) shipment.ShipmentType == ShipmentTypeCode.Amazon)
                 {
-                    Messenger.Current.Send(new AmazonRatesRetrievedMessage(this, rateGroup));
+                    messenger.Send(new AmazonRatesRetrievedMessage(this, rateGroup));
                 }
 
                 return rateGroup;
@@ -56,7 +58,7 @@ namespace ShipWorks.Shipping
             catch (T ex)
             {
                 // This is a bad configuration on some level, so cache an empty rate group
-                // before throwing throwing the exceptions
+                // before throwing the exceptions
                 RateGroup invalidRateGroup = CacheInvalidRateGroup(shipment, ex);
                 throw new InvalidRateGroupShippingException(invalidRateGroup, ex.Message, ex);
             }
@@ -73,7 +75,7 @@ namespace ShipWorks.Shipping
         {
             RateGroup rateGroup = new InvalidRateGroup((ShipmentTypeCode) shipment.ShipmentType, exception);
 
-            RateCache.Instance.Save(rateHashingServiceFactory((ShipmentTypeCode)shipment.ShipmentType).GetRatingHash(shipment), rateGroup);
+            RateCache.Instance.Save(rateHashingServiceFactory((ShipmentTypeCode) shipment.ShipmentType).GetRatingHash(shipment), rateGroup);
 
             return rateGroup;
         }

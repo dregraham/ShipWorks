@@ -40,7 +40,7 @@ namespace ShipWorks.UI.Tests.Controls.CustomerLicenseActivation
                     GenericResult<ICustomerLicense> result = testObject.Save(true);
 
                     Assert.Equal(isValid, result.Success);
-                    Assert.Equal(isValid ? string.Empty : "Please enter a valid email for the username.", result.Message);
+                    Assert.Equal(isValid ? null : "Please enter a valid email for the username.", result.Message);
                 }
             }
         }
@@ -66,7 +66,7 @@ namespace ShipWorks.UI.Tests.Controls.CustomerLicenseActivation
                     testObject.Password = securePassword;
                     GenericResult<ICustomerLicense> result = testObject.Save(true);
                     Assert.Equal(isValid, result.Success);
-                    Assert.Equal(isValid ? string.Empty : "Please enter a password.", result.Message);
+                    Assert.Equal(isValid ? null : "Please enter a password.", result.Message);
                 }
             }
         }
@@ -116,7 +116,7 @@ namespace ShipWorks.UI.Tests.Controls.CustomerLicenseActivation
                     viewModel.Save(true);
                 }
                 testObject.Verify(l => l.CreateUser(username, password, true), Times.Once);
-                
+
             }
         }
 
@@ -172,7 +172,7 @@ namespace ShipWorks.UI.Tests.Controls.CustomerLicenseActivation
         [Fact]
         public void CreateAccountLink_ReturnsCorrectUrl()
         {
-            using(var mock = AutoMock.GetLoose())
+            using (var mock = AutoMock.GetLoose())
             {
                 var testObject = mock.Create<CustomerLicenseActivationViewModel>();
 

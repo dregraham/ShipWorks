@@ -1,12 +1,16 @@
 ﻿using System;
 using Autofac;
 using Interapptive.Shared.Net;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
-using ShipWorks.Shipping.Carriers.Ups;
-using ShipWorks.ApplicationCore.Licensing;
+using ShipWorks.Shipping.Carriers.Postal.Usps.RateFootnotes.Discounted;
+using ShipWorks.Shipping.Carriers.Postal.Usps.RateFootnotes.Promotion;
+using ShipWorks.Shipping.Services;
+using ShipWorks.Shipping.Services.Builders;
 
 namespace ShipWorks.Shipping.Carriers.Usps
 {
@@ -17,9 +21,33 @@ namespace ShipWorks.Shipping.Carriers.Usps
         /// </summary>
         protected override void Load(ContainerBuilder builder)
         {
+            builder.RegisterType<UspsRateDiscountedFootnoteViewModel>()
+                .AsImplementedInterfaces()
+                .ExternallyOwned();
+
+            builder.RegisterType<UspsRatePromotionFootnoteViewModel>()
+                .AsImplementedInterfaces()
+                .ExternallyOwned();
+
             builder.RegisterType<UspsShipmentType>()
                 .AsSelf()
                 .Keyed<ShipmentType>(ShipmentTypeCode.Usps);
+
+            builder.RegisterType<UspsShipmentServicesBuilder>()
+                .Keyed<IShipmentServicesBuilder>(ShipmentTypeCode.Usps)
+                .SingleInstance();
+
+            builder.RegisterType<UspsAccountRepository>()
+                .Keyed<ICarrierAccountRetriever<ICarrierAccount>>(ShipmentTypeCode.Usps)
+                .SingleInstance();
+
+            builder.RegisterType<UspsShipmentAdapter>()
+                .Keyed<ICarrierShipmentAdapter>(ShipmentTypeCode.Usps)
+                .ExternallyOwned();
+
+            builder.RegisterType<UspsShipmentPackageTypesBuilder>()
+                .Keyed<IShipmentPackageTypesBuilder>(ShipmentTypeCode.Usps)
+                .SingleInstance();
 
             builder.RegisterType<UspsLabelService>()
                 .Keyed<ILabelService>(ShipmentTypeCode.Usps);
@@ -37,10 +65,10 @@ namespace ShipWorks.Shipping.Carriers.Usps
 
             builder.RegisterType<UspsWebClient>()
                 .AsImplementedInterfaces()
-                .UsingConstructor(typeof (ICarrierAccountRepository<UspsAccountEntity>),
-                    typeof (ILogEntryFactory),
-                    typeof (Func<string, ICertificateInspector>),
-                    typeof (UspsResellerType));
+                .UsingConstructor(typeof(ICarrierAccountRepository<UspsAccountEntity>),
+                    typeof(ILogEntryFactory),
+                    typeof(Func<string, ICertificateInspector>),
+                    typeof(UspsResellerType));
 
             builder.RegisterType<UspsResellerType>()
                 .AsImplementedInterfaces();
@@ -48,7 +76,7 @@ namespace ShipWorks.Shipping.Carriers.Usps
             builder.RegisterType<UspsAccountManagerWrapper>()
                 .AsImplementedInterfaces();
 
-            builder.RegisterType<AssociateShipworksWithItselfRequest>();    
+            builder.RegisterType<AssociateShipworksWithItselfRequest>();
         }
     }
 }

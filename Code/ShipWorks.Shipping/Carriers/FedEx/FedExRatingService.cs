@@ -9,6 +9,9 @@ using ShipWorks.Shipping.Editing.Rating;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
 {
+    /// <summary>
+    /// Rating service for FedEx
+    /// </summary>
     public class FedExRatingService : IRatingService
     {
         static readonly ILog log = LogManager.GetLogger(typeof(FedExRatingService));
@@ -16,7 +19,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         private readonly FedExAccountRepository fedExAccountRepository;
         private readonly FedExShipmentType fedExShipmentType;
         private readonly FedExShippingClerkFactory shippingClerkFactory;
-        
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public FedExRatingService(FedExAccountRepository fedExAccountRepository,
             FedExShipmentType fedExShipmentType,
             FedExShippingClerkFactory shippingClerkFactory)
@@ -53,7 +59,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             catch (CounterRatesOriginAddressException)
             {
                 RateGroup errorRates = new RateGroup(new List<RateResult>());
-                errorRates.AddFootnoteFactory(new CounterRatesInvalidStoreAddressFootnoteFactory(fedExShipmentType));
+                errorRates.AddFootnoteFactory(new CounterRatesInvalidStoreAddressFootnoteFactory(ShipmentTypeCode.FedEx));
                 return errorRates;
             }
             finally

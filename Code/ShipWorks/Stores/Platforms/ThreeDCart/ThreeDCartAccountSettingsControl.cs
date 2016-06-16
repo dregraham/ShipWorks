@@ -225,7 +225,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
                 SaveToEntity(threeDCartStoreEntity);
 
                 panelUpgrade.Visible = false;
-                new StoreManagerWrapper().CreateStoreStatusFilters(this, threeDCartStoreEntity);
+                StoreManager.CreateStoreStatusFilters(this, threeDCartStoreEntity);
             }
         }
     }

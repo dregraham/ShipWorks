@@ -1,4 +1,7 @@
-﻿using ShipWorks.Shipping.Editing.Rating;
+﻿using Autofac;
+using ShipWorks.ApplicationCore;
+using ShipWorks.Shipping.Editing.Rating;
+using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Shipping.Carriers.BestRate.Footnote
 {
@@ -31,6 +34,17 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Footnote
         public RateFootnoteControl CreateFootnote(FootnoteParameters parameters)
         {
             return new ShippingAccountRequiredForRatingFootnoteControl();
+        }
+
+        /// <summary>
+        /// Get a view model that represents this footnote
+        /// </summary>
+        public object CreateViewModel(ICarrierShipmentAdapter shipmentAdapter)
+        {
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                return lifetimeScope.Resolve<IShippingAccountRequiredForRatingFootnoteViewModel>();
+            }
         }
 
         /// <summary>

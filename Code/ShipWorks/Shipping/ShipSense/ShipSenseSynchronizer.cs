@@ -2,6 +2,7 @@
 using System.Linq;
 using Quartz.Util;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.ShipSense.Hashing;
 using ShipWorks.Shipping.ShipSense.Packaging;

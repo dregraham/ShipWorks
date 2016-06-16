@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
@@ -12,12 +13,14 @@ using ShipWorks.Editions;
 using ShipWorks.Stores;
 using ShipWorks.UI.Controls.ChannelConfirmDelete;
 using ShipWorks.UI.Controls.ChannelLimit;
+using ShipWorks.Users.Security;
 using Xunit;
 
 namespace ShipWorks.UI.Tests.Controls.ChannelLimit
 {
     public class ChannelLimitViewModelTest
     {
+
         [Fact]
         public void Load_ThrowsShipWorksLicenseException_WhenLicenseServiceReturnsStoreLicense()
         {
@@ -46,7 +49,7 @@ namespace ShipWorks.UI.Tests.Controls.ChannelLimit
             {
                 Mock<ICustomerLicense> customerLicense = mock.Mock<ICustomerLicense>();
                 Mock<ILicenseService> licenseService = mock.Mock<ILicenseService>();
-                licenseService.Setup(l => l.GetLicenses()).Returns(new List<ILicense> { customerLicense.Object});
+                licenseService.Setup(l => l.GetLicenses()).Returns(new List<ILicense> { customerLicense.Object });
 
                 var behavior = MockChannelLimitBehavior(mock);
 
@@ -100,7 +103,7 @@ namespace ShipWorks.UI.Tests.Controls.ChannelLimit
                 ICommand upgradeClickCommand = testObject.UpgradeClickCommand;
                 upgradeClickCommand.Execute(null);
 
-                dialog.Verify(d=>d.ShowDialog(), Times.Once);
+                dialog.Verify(d => d.ShowDialog(), Times.Once);
             }
         }
 
@@ -109,9 +112,9 @@ namespace ShipWorks.UI.Tests.Controls.ChannelLimit
         {
             using (var mock = AutoMock.GetLoose())
             {
-                StoreEntity store = new StoreEntity {TypeCode = (int) StoreTypeCode.Amazon};
+                StoreEntity store = new StoreEntity { TypeCode = (int) StoreTypeCode.Amazon };
 
-                IEnumerable<StoreEntity> stores = new List<StoreEntity> {store};
+                IEnumerable<StoreEntity> stores = new List<StoreEntity> { store };
 
                 Mock<IMessageHelper> messageHelper = mock.Mock<IMessageHelper>();
 
@@ -135,9 +138,9 @@ namespace ShipWorks.UI.Tests.Controls.ChannelLimit
             using (var mock = AutoMock.GetLoose())
             {
                 // Setup
-                StoreEntity store = new StoreEntity {TypeCode = (int) StoreTypeCode.Amazon};
+                StoreEntity store = new StoreEntity { TypeCode = (int) StoreTypeCode.Amazon };
 
-                IEnumerable<StoreEntity> stores = new List<StoreEntity> {store};
+                IEnumerable<StoreEntity> stores = new List<StoreEntity> { store };
 
                 Mock<ICustomerLicense> license = mock.Mock<ICustomerLicense>();
 
@@ -169,7 +172,7 @@ namespace ShipWorks.UI.Tests.Controls.ChannelLimit
         }
 
         [Fact]
-        public void DeleteChannel_DeletesChannel_WhenConfirmDeleteTrue()
+        public async Task DeleteChannel_DeletesChannel_WhenConfirmDeleteTrue()
         {
             using (var mock = AutoMock.GetLoose())
             {
@@ -186,8 +189,8 @@ namespace ShipWorks.UI.Tests.Controls.ChannelLimit
                 confirmDelete.Setup(d => d.DialogResult)
                     .Returns(true);
 
-                Mock<IChannelConfirmDeleteFactory> confirmDeleteFactgory = mock.Mock<IChannelConfirmDeleteFactory>();
-                confirmDeleteFactgory.Setup(c => c.GetConfirmDeleteDlg(It.IsAny<StoreTypeCode>(), It.IsAny<IWin32Window>()))
+                Mock<IChannelConfirmDeleteFactory> confirmDeleteFactory = mock.Mock<IChannelConfirmDeleteFactory>();
+                confirmDeleteFactory.Setup(c => c.GetConfirmDeleteDlg(It.IsAny<StoreTypeCode>(), It.IsAny<IWin32Window>()))
                     .Returns(confirmDelete.Object);
 
                 Mock<ICustomerLicense> license = mock.Mock<ICustomerLicense>();
@@ -195,14 +198,14 @@ namespace ShipWorks.UI.Tests.Controls.ChannelLimit
 
                 // Test
                 var testObject = mock.Create<ChannelLimitViewModel>();
+
                 testObject.Load(license.Object, behavior.Object);
                 testObject.SelectedStoreType = StoreTypeCode.Ebay;
 
-                ICommand deleteCommand = testObject.DeleteStoreClickCommand;
-                deleteCommand.Execute(null);
+                await testObject.DeleteChannel(null);
 
                 // Verify
-                license.Verify(l => l.DeleteChannel(StoreTypeCode.Ebay), Times.Once);
+                license.Verify(l => l.DeleteChannel(StoreTypeCode.Ebay, It.IsAny<ISecurityContext>()), Times.Once);
             }
         }
 
@@ -212,7 +215,7 @@ namespace ShipWorks.UI.Tests.Controls.ChannelLimit
             using (var mock = AutoMock.GetLoose())
             {
                 // Setup
-                StoreEntity store = new StoreEntity { TypeCode = (int)StoreTypeCode.Amazon };
+                StoreEntity store = new StoreEntity { TypeCode = (int) StoreTypeCode.Amazon };
 
                 IEnumerable<StoreEntity> stores = new List<StoreEntity> { store };
 
@@ -242,7 +245,7 @@ namespace ShipWorks.UI.Tests.Controls.ChannelLimit
                 deleteCommand.Execute(control.Object);
 
                 // Verify
-                license.Verify(l => l.DeleteChannel(StoreTypeCode.Ebay), Times.Never);
+                license.Verify(l => l.DeleteChannel(StoreTypeCode.Ebay, It.IsAny<ISecurityContext>()), Times.Never);
             }
         }
 

@@ -1,13 +1,10 @@
 ﻿using System;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data;
-using ShipWorks.Data.Connection;
-using ShipWorks.Data.Model.EntityClasses;
 using System.Data;
-using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Shipping.Settings;
-using log4net;
 using System.Text;
+using log4net;
+using ShipWorks.Data;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Settings;
 
 namespace ShipWorks.Shipping.Carriers.iParcel
 {
@@ -27,15 +24,10 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         private const string PackageTotalCurrencyColumnName = "PackageTotalCurrency";
 
         private readonly ILog log = LogManager.GetLogger(typeof(iParcelDatabaseRepository));
-        
-        /// <summary>
-        /// Initializes a new instance of the <see cref="iParcelDatabaseRepository" /> class.
-        /// </summary>
-        public iParcelDatabaseRepository(Func<Type, ILog> logFactory)
+        public iParcelDatabaseRepository(Func<Type, ILog> logger)
         {
-            log = logFactory(GetType());
+            log = logger(typeof(iParcelDatabaseRepository));
         }
-
 
         /// <summary>
         /// Saves the tracking info contained in the data set to the shipment entity.

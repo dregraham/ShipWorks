@@ -10,6 +10,7 @@ using ShipWorks.Data;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores;
+using System.Threading.Tasks;
 
 namespace ShipWorks.Actions.Tasks.Common
 {
@@ -71,8 +72,9 @@ namespace ShipWorks.Actions.Tasks.Common
 
                 try
                 {
-                    validator.Validate(order, "Ship", true, (originalAddress, suggestedAddresses) =>
+                    Task task = validator.ValidateAsync(order, "Ship", true, (originalAddress, suggestedAddresses) =>
                         ValidatedAddressManager.SaveValidatedOrder(context, new ValidatedOrderShipAddress(order, originalAddress, suggestedAddresses, originalShippingAddress)));
+                    task.Wait();
                 }
                 catch (AddressValidationException ex)
                 {

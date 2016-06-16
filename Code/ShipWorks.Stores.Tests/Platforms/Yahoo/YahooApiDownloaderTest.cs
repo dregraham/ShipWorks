@@ -69,7 +69,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Yahoo
         [Fact]
         public void LoadOrder_LoadsItems_WhenGivenYahooResponse()
         {
-            Assert.Equal("hubbabubbagum", ((YahooOrderItemEntity)orderEntity.OrderItems.FirstOrDefault()).YahooProductID);
+            Assert.Equal("hubbabubbagum", ((YahooOrderItemEntity) orderEntity.OrderItems.FirstOrDefault()).YahooProductID);
         }
 
         [Fact]
@@ -81,7 +81,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Yahoo
         [Fact]
         public void LoadOrder_LoadsOrderTotals_WhenGivenYahooResponse()
         {
-            Assert.Equal(.2m, orderEntity.OrderTotal);
+            Assert.Equal(.2M, orderEntity.OrderTotal);
         }
 
         [Fact]
@@ -102,7 +102,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Yahoo
         public void LoadOrder_LoadsPrivateNotes_WhenGivenYahooResponse()
         {
             EntityCollection<NoteEntity> notes = orderEntity.Notes;
-            string note = notes.Where(x => x.Visibility == (int)NoteVisibility.Internal).Select(x => x.Text).FirstOrDefault();
+            string note = notes.Where(x => x.Visibility == (int) NoteVisibility.Internal).Select(x => x.Text).FirstOrDefault();
 
             Assert.Equal("> 2007 Aug 22 03:16: This will be a private note", note);
         }
@@ -111,7 +111,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Yahoo
         public void LoadOrder_LoadsPublicNotes_WhenGivenYahooResponse()
         {
             EntityCollection<NoteEntity> notes = orderEntity.Notes;
-            string note = notes.Where(x => x.Visibility == (int)NoteVisibility.Public).Select(x => x.Text).FirstOrDefault();
+            string note = notes.Where(x => x.Visibility == (int) NoteVisibility.Public).Select(x => x.Text).FirstOrDefault();
 
             Assert.Equal("This will be a public note", note);
         }

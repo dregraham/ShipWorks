@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Autofac;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Utility;
@@ -21,12 +17,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.Activation
             using (var mock = AutoMock.GetLoose())
             {
                 mock.Mock<ITangoWebClient>().Setup(w => w.ActivateLicense(It.IsAny<string>(), It.IsAny<string>()))
-                    .Returns(new GenericResult<IActivationResponse>(null)
-                    {
-                        Success = false,
-                        Message = "something went wrong",
-                        Context = null
-                    });
+                    .Returns(GenericResult.FromError<IActivationResponse>("something went wrong"));
 
                 var testObject = mock.Create<CustomerLicenseActivationActivity>();
 
@@ -45,11 +36,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.Activation
                 var tangoWebClient = mock.Mock<ITangoWebClient>();
 
                 tangoWebClient.Setup(w => w.ActivateLicense(It.IsAny<string>(), It.IsAny<string>()))
-                    .Returns(new GenericResult<IActivationResponse>(null)
-                    {
-                        Context = MockActivateLicense(mock, "originalKey", "bob"),
-                        Success = true
-                    });
+                    .Returns(GenericResult.FromSuccess(MockActivateLicense(mock, "originalKey", "bob")));
 
                 var customerLicense = mock.Mock<ICustomerLicense>();
 
@@ -60,7 +47,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.Activation
                 customerLicense.Verify(c => c.Save(), Times.Once);
             }
         }
-        
+
         [Fact]
         public void Execute_SetsCustomerLicenseKey_FromActivationResponse()
         {
@@ -68,11 +55,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.Activation
             {
                 mock.Mock<ITangoWebClient>()
                     .Setup(w => w.ActivateLicense(It.IsAny<string>(), It.IsAny<string>()))
-                    .Returns(new GenericResult<IActivationResponse>(null)
-                    {
-                        Success = true,
-                        Context = MockActivateLicense(mock, "TheKey", "bob")
-                    });
+                    .Returns(GenericResult.FromSuccess(MockActivateLicense(mock, "TheKey", "bob")));
 
                 var customerLicense = mock.Create<CustomerLicense>(new NamedParameter("key", "someKey"));
 
@@ -100,11 +83,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.Activation
 
                 mock.Mock<ITangoWebClient>()
                     .Setup(w => w.ActivateLicense(It.IsAny<string>(), It.IsAny<string>()))
-                    .Returns(new GenericResult<IActivationResponse>(null)
-                    {
-                        Success = true,
-                        Context = activationResponse
-                    });
+                    .Returns(GenericResult.FromSuccess(activationResponse));
 
                 string setStampsUsername = string.Empty;
 
@@ -128,11 +107,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.Activation
                 var tangoWebClient = mock.Mock<ITangoWebClient>();
 
                 tangoWebClient.Setup(w => w.ActivateLicense(It.IsAny<string>(), It.IsAny<string>()))
-                    .Returns(new GenericResult<IActivationResponse>(null)
-                    {
-                        Context = MockActivateLicense(mock, "key", "user"),
-                        Success = true
-                    });
+                    .Returns(GenericResult.FromSuccess(MockActivateLicense(mock, "key", "user")));
 
                 var testObject = mock.Create<CustomerLicenseActivationActivity>();
                 testObject.Execute("some@email.com", "randompassword");

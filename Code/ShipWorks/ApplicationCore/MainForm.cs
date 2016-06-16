@@ -17,6 +17,7 @@ using ICSharpCode.SharpZipLib.Zip;
 using Interapptive.Shared;
 using Interapptive.Shared.Data;
 using Interapptive.Shared.IO.Zip;
+using Interapptive.Shared.Messaging;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Security;
 using Interapptive.Shared.UI;
@@ -40,6 +41,8 @@ using ShipWorks.ApplicationCore.Nudges;
 using ShipWorks.ApplicationCore.Options;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Common.Threading;
+using ShipWorks.Core.Common.Threading;
+using ShipWorks.Core.Messaging;
 using ShipWorks.Data;
 using ShipWorks.Data.Administration;
 using ShipWorks.Data.Administration.SqlServerSetup;
@@ -59,6 +62,9 @@ using ShipWorks.Filters.Controls;
 using ShipWorks.Filters.Grid;
 using ShipWorks.Filters.Management;
 using ShipWorks.Filters.Search;
+using ShipWorks.Messaging.Messages;
+using ShipWorks.Messaging.Messages.Dialogs;
+using ShipWorks.Messaging.Messages.Panels;
 using ShipWorks.Properties;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.FedEx;
@@ -89,6 +95,7 @@ using ShipWorks.Users;
 using ShipWorks.Users.Audit;
 using ShipWorks.Users.Logon;
 using ShipWorks.Users.Security;
+using System.Threading.Tasks;
 using TD.SandDock;
 using Application = System.Windows.Forms.Application;
 using SandButton = Divelements.SandRibbon.Button;
@@ -123,6 +130,8 @@ namespace ShipWorks
         // The FilterNode to restore if search is canceled
         long searchRestoreFilterNodeID = 0;
 
+        Lazy<DockControl> shipmentDock;
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -130,20 +139,31 @@ namespace ShipWorks
         {
             InitializeComponent();
 
+            foreach (IMainFormElementRegistration registration in IoC.UnsafeGlobalLifetimeScope.Resolve<IEnumerable<IMainFormElementRegistration>>())
+            {
+                registration.Register(sandDockManager, ribbon);
+            }
+
             // Create the heartbeat
             heartBeat = new UIHeartbeat(this);
 
             // Persist size\position of the window
             WindowStateSaver wss = new WindowStateSaver(this, WindowStateSaverOptions.FullState | WindowStateSaverOptions.InitialMaximize, "MainForm");
+            shipmentDock = new Lazy<DockControl>(GetShipmentDockControl);
         }
 
+        /// <summary>
+        /// Collection of panels on the main form
+        /// </summary>
+        public IEnumerable<DockControl> Panels => sandDockManager.GetDockControls();
+
         #region Initialization \ Shutdown
+
 
         /// <summary>
         /// Form is loading, this is before its visible
         /// </summary>
         [NDependIgnoreLongMethod]
-        [NDependIgnoreComplexMethodAttribute]
         private void OnLoad(object sender, EventArgs e)
         {
             log.Info("Loading main application window.");
@@ -173,7 +193,7 @@ namespace ShipWorks
 
             // Load the options for what panels can be shown
             menuShowPanels.Items.Clear();
-            foreach (DockControl dockControl in sandDockManager.GetDockControls().OrderBy(d => d.Text))
+            foreach (DockControl dockControl in Panels.OrderBy(d => d.Text))
             {
                 SandMenuItem menuItem = new SandMenuItem(dockControl.Text);
                 menuItem.Image = dockControl.TabImage;
@@ -214,6 +234,8 @@ namespace ShipWorks
             ShipWorksDisplay.LoadDefault();
 
             ApplyDisplaySettings();
+
+            ApplyEditingContext();
         }
 
         /// <summary>
@@ -259,7 +281,7 @@ namespace ShipWorks
                 }
             }
 
-            // If its still not setup, dont go on
+            // If its still not setup, don't go on
             if (!SqlSession.IsConfigured)
             {
                 return;
@@ -312,8 +334,12 @@ namespace ShipWorks
         /// <summary>
         /// The window is about to close
         /// </summary>
-        private void OnFormClosing(object sender, FormClosingEventArgs e)
+        /// <remarks>This is an override instead of an event handler to ensure that any other event handlers run before
+        /// this code.  That's because this clears the user session which is needed by other components on shutdown.</remarks>
+        protected override void OnFormClosing(FormClosingEventArgs e)
         {
+            base.OnFormClosing(e);
+
             // Make sure we are not in a failure state
             if (ConnectionMonitor.Status != ConnectionMonitorStatus.Normal)
             {
@@ -411,12 +437,12 @@ namespace ShipWorks
         [NDependIgnoreLongMethod]
         private bool LogonToSqlServer()
         {
-            // If we are here b\c MSDE was uinstalled, but SQL 08 isn't ready yet, we need to force the user back into the Database Upgrade window when they come back.
-            // If we didn't do that, then they wouldnt be able to get back in b\c normally it requires a successfully connection (which they can't have now, b\c MSDE is
-            // uinstalled).
+            // If we are here b\c MSDE was uninstalled, but SQL 08 isn't ready yet, we need to force the user back into the Database Upgrade window when they come back.
+            // If we didn't do that, then they wouldn't be able to get back in b\c normally it requires a successfully connection (which they can't have now, b\c MSDE is
+            // uninstalled).
             if (SqlServerInstaller.IsMsdeMigrationInProgress)
             {
-                log.InfoFormat("Forcing Database Upgrade window open to to MSDE migration file existing.");
+                log.InfoFormat("Forcing Database Upgrade window open to MSDE migration file existing.");
 
                 using (ConnectionSensitiveScope scope = new ConnectionSensitiveScope("update the database", this))
                 {
@@ -714,10 +740,27 @@ namespace ShipWorks
             // Start auto downloading immediately
             DownloadManager.StartAutoDownloadIfNeeded(true);
 
-            // Then, if we are downloading any stores for the very very first time, auto-show the progress
+            // Then, if we are downloading any stores for the very first time, auto-show the progress
             if (StoreManager.GetLastDownloadTimes().Any(pair => pair.Value == null && DownloadManager.IsDownloading(pair.Key)))
             {
                 ShowDownloadProgress();
+            }
+
+            SendPanelStateMessages();
+        }
+
+        /// <summary>
+        /// Send the state of each panel as a message
+        /// </summary>
+        private void SendPanelStateMessages()
+        {
+            foreach (DockControl panel in Panels)
+            {
+                IShipWorksMessage message = panel.IsOpen ?
+                    (IShipWorksMessage) new PanelShownMessage(this, panel) :
+                    (IShipWorksMessage) new PanelHiddenMessage(this, panel);
+
+                Messenger.Current.Send(message);
             }
         }
 
@@ -761,7 +804,7 @@ namespace ShipWorks
         }
 
         /// <summary>
-        /// Load initial data when logging in in a background thread.  Its not perfect, but it does keep it a bit more responsive
+        /// Load initial data when logging in a background thread.  Its not perfect, but it does keep it a bit more responsive
         /// </summary>
         private void LogonToShipWorksAsyncLoad(object state)
         {
@@ -770,7 +813,7 @@ namespace ShipWorks
 
             try
             {
-                UserSession.InitializeForCurrentSession();
+                UserSession.InitializeForCurrentSession(Program.ExecutionMode);
 
                 logonAsyncLoadSuccess = true;
             }
@@ -791,7 +834,7 @@ namespace ShipWorks
         /// </summary>
         private void LogonToShipWorksAsyncGetLicenseStatus(object state)
         {
-            // Update our edition for each store.  Eventually this will also be where we log with tango the sw version being used and maybe other things
+            // Update our edition for each store.  Eventually this will also be where we log with tango the ShipWorks version being used and maybe other things
             ILicenseService licenseService = IoC.UnsafeGlobalLifetimeScope.Resolve<ILicenseService>();
             List<ILicense> licenses = licenseService.GetLicenses().ToList();
 
@@ -844,7 +887,7 @@ namespace ShipWorks
 
                     if (DatabaseUpdateWizard.Run(this))
                     {
-                        // If the upgrade went OK, we still need to check that the current user has adequate permissions to work in the restored datbase
+                        // If the upgrade went OK, we still need to check that the current user has adequate permissions to work in the restored database
                         if (!SqlSession.Current.CheckPermissions(SqlSessionPermissionSet.Standard, this))
                         {
                             return false;
@@ -889,7 +932,7 @@ namespace ShipWorks
             ApplicationText = "";
 
             // Hide all dock windows.  Hide them first so they don't attempt to save when the filter changes (due to the tree being cleared)
-            foreach (DockControl control in sandDockManager.GetDockControls())
+            foreach (DockControl control in Panels)
             {
                 control.Close();
             }
@@ -1015,7 +1058,7 @@ namespace ShipWorks
             {
                 // There wasn't an item in the user settings for the rate panel, meaning the user just
                 // upgraded from a previous version without the rate panel
-                DockControl dockControl = sandDockManager.GetDockControls().FirstOrDefault(c => c.Guid == Guid.Parse(RatePanelID));
+                DockControl dockControl = Panels.FirstOrDefault(c => c.Guid == Guid.Parse(RatePanelID));
                 if (dockControl != null)
                 {
                     // We want to display the rate panel for everyone after an upgrade by default
@@ -1145,7 +1188,7 @@ namespace ShipWorks
             panelDockingArea.BackColor = ribbonManager.Renderer.ColorTable.RibbonTabStripBackground;
             this.BackColor = panelDockingArea.BackColor;
 
-            // Apply themne to grids
+            // Apply theme to grids
             gridControl.ApplyDisplaySettings();
 
             // Apply krypton scheme
@@ -1191,7 +1234,7 @@ namespace ShipWorks
         }
 
         /// <summary>
-        /// Apply the properites that need to be set for hiding in the system tray based on our current state
+        /// Apply the properties that need to be set for hiding in the system tray based on our current state
         /// </summary>
         private void ApplySystemTrayProperties()
         {
@@ -1235,12 +1278,12 @@ namespace ShipWorks
                 holder.UpdateStoreDependentUI();
             }
 
-            // Update the availabilty of ribbon items based on security
+            // Update the availability of ribbon items based on security
             ribbonSecurityProvider.UpdateSecurityUI();
         }
 
         /// <summary>
-        /// Apply the given set of MenuCommands to the given menuitem and ribbon poup
+        /// Apply the given set of MenuCommands to the given menuitem and ribbon popup
         /// </summary>
         private void ApplyMenuCommands(List<MenuCommand> commands, ToolStripMenuItem menuItem, Popup ribbonPopup, EventHandler actionHandler)
         {
@@ -1275,7 +1318,7 @@ namespace ShipWorks
             }
 
             UpdateStatusBar();
-            UpdateComandState();
+            UpdateCommandState();
             UpdatePanelState();
 
             ribbonSecurityProvider.UpdateSecurityUI();
@@ -1291,11 +1334,43 @@ namespace ShipWorks
         }
 
         /// <summary>
+        /// Get the shipment dock control
+        /// </summary>
+        private DockControl GetShipmentDockControl()
+        {
+            return Panels.FirstOrDefault(d => d.Name == "dockableWindowShipment");
+        }
+
+        /// <summary>
         /// Update the state of the ribbon buttons based on the current selection
         /// </summary>
-        private void UpdateComandState()
+        private void UpdateCommandState()
         {
-            selectionDependentEnabler.UpdateCommandState(gridControl.Selection.Count, gridControl.ActiveFilterTarget);
+            int selectionCount = gridControl.Selection.Count;
+            selectionDependentEnabler.UpdateCommandState(selectionCount, gridControl.ActiveFilterTarget);
+
+            if (selectionCount == 0 || gridControl.ActiveFilterTarget != FilterTarget.Orders)
+            {
+                ribbon.SetEditingContext(null);
+                return;
+            }
+
+            // Don't show the shipping context menu if the shipping panel doesn't exist or isn't open
+            if (shipmentDock.Value?.IsOpen != true)
+            {
+                ribbon.SetEditingContext(null);
+                return;
+            }
+
+            ribbon.SetEditingContext("SHIPPINGMENU");
+        }
+
+        /// <summary>
+        /// Adds Editing Contexts to the ribbon
+        /// </summary>
+        private void ApplyEditingContext()
+        {
+            ribbon.EditingContexts.Add(new EditingContext("Shipping Tools", "SHIPPINGMENU", System.Drawing.Color.LightBlue));
         }
 
         /// <summary>
@@ -1303,22 +1378,20 @@ namespace ShipWorks
         /// </summary>
         private void UpdatePanelState()
         {
-            foreach (DockControl dockControl in sandDockManager.GetDockControls().Where(d => d.Controls.Count == 1))
-            {
-                UpdatePanelState(dockControl);
-            }
+            IEnumerable<DockControl> controls = Panels.Where(d => d.Controls.Count == 1).ToList();
+            IEnumerable<Task> updateTasks = controls.Select(x => UpdatePanelState(x)).ToList();
         }
 
         /// <summary>
         /// Update the state of the panel content for the given dock control, only if it contains a panel, and only if it's open.
         /// </summary>
-        private void UpdatePanelState(DockControl dockControl)
+        private Task UpdatePanelState(DockControl dockControl)
         {
             // This function can get called as panels are activating.  Activation can be changing as we are closing them during logoff,
             // so we have to make sure we're logged on or updating would crash.
             if (!UserSession.IsLoggedOn)
             {
-                return;
+                return TaskUtility.CompletedTask;
             }
 
             DockingPanelContentHolder holder = dockControl.Controls[0] as DockingPanelContentHolder;
@@ -1326,8 +1399,10 @@ namespace ShipWorks
             {
                 // This happens to often to use GetOrderedSelectdKeys. If ordering becomes important, we'll need to improve
                 // the performance of that somehow for massive selections where there is virtual selection.
-                holder.UpdateContent(gridControl.ActiveFilterTarget, gridControl.Selection);
+                return holder.UpdateContent(gridControl.ActiveFilterTarget, gridControl.Selection);
             }
+
+            return TaskUtility.CompletedTask;
         }
 
         /// <summary>
@@ -1340,8 +1415,8 @@ namespace ShipWorks
                 DockControl dockControl = (DockControl) menuItem.Tag;
 
                 // Change this to IsOpen if the behavior requirement changes so that it would be
-                // checked only if its actually visible... So like if it was a non ative tab, or minimized,
-                // it wouldnt get a check.  This way, it gets a check if its on the screen at all.
+                // checked only if its actually visible... So like if it was a non active tab, or minimized,
+                // it wouldn't get a check.  This way, it gets a check if its on the screen at all.
                 menuItem.Checked = dockControl.DockSituation != DockSituation.None;
             }
         }
@@ -1606,7 +1681,7 @@ namespace ShipWorks
         #region App Menu
 
         /// <summary>
-        /// The applicatino menu is about to be shown
+        /// The application menu is about to be shown
         /// </summary>
         private void OnBeforePopupApplicationMenu(object sender, BeforePopupEventArgs e)
         {
@@ -1660,7 +1735,7 @@ namespace ShipWorks
         /// </summary>
         private void OnDatabaseConfiguration(object sender, EventArgs e)
         {
-            // Indicates the user made it 100% succesfully through the database and setup wizards
+            // Indicates the user made it 100% successfully through the database and setup wizards
             bool configurationComplete = false;
 
             // Indicates if the database changed in any way (which database, restored database, whatever)
@@ -1949,7 +2024,7 @@ namespace ShipWorks
         }
 
         /// <summary>
-        /// Force a heartbeat to occur before its next scheduled time.  If the paramter changesExpected is true,
+        /// Force a heartbeat to occur before its next scheduled time.  If the parameter changesExpected is true,
         /// this method will increase the heart rate until changes are found, or until the forced heart rate
         /// time period expires.  This is allowed to be called from any thread.
         /// </summary>
@@ -1959,7 +2034,7 @@ namespace ShipWorks
         }
 
         /// <summary>
-        /// Force a heartbeat to occur before its next scheduled time.  If the paramter changesExpected is true,
+        /// Force a heartbeat to occur before its next scheduled time.  If the parameter changesExpected is true,
         /// this method will increase the heart rate until changes are found, or until the forced heart rate
         /// time period expires.  This is allowed to be called from any thread.
         /// </summary>
@@ -2021,11 +2096,11 @@ namespace ShipWorks
         }
 
         /// <summary>
-        /// A connection senstive scope is about to be acquired
+        /// A connection sensitive scope is about to be acquired
         /// </summary>
         void OnAcquiringConnectionSensitiveScope(object sender, EventArgs e)
         {
-            // Search has to be canceled before potentialy changing databases, otherwise it wouldnt have a chance to cleanup in the current database.
+            // Search has to be canceled before potential changing databases, otherwise it wouldn't have a chance to cleanup in the current database.
             gridControl.CancelSearch();
         }
 
@@ -2042,7 +2117,7 @@ namespace ShipWorks
         #region Filtering
 
         /// <summary>
-        ///  Update filter tree fitler counts
+        ///  Update filter tree filter counts
         /// </summary>
         public void UpdateFilterCounts()
         {
@@ -2133,7 +2208,7 @@ namespace ShipWorks
                 }
                 else
                 {
-                    // There is a selcted node, force a refresh of the UI
+                    // There is a selected node, force a refresh of the UI
                     OnSelectedFilterNodeChanged(currentFilterTree, null);
                 }
             }
@@ -2167,6 +2242,11 @@ namespace ShipWorks
         /// </summary>
         private void OnGridSelectionChanged(object sender, EventArgs e)
         {
+            if (gridControl.ActiveFilterTarget == FilterTarget.Orders)
+            {
+                Messenger.Current.Send(new OrderSelectionChangingMessage(this, gridControl.Selection.Keys));
+            }
+
             UpdateSelectionDependentUI();
         }
 
@@ -2851,7 +2931,8 @@ namespace ShipWorks
 
                         ShippingManager.EnsureShipmentLoaded(shipment);
 
-                        shipment.OnlineShipmentID = TangoWebClient.LogShipment(storeEntity, shipment, true);
+                        ITangoWebClient tangoWebClient = new TangoWebClientFactory().CreateWebClient();
+                        shipment.OnlineShipmentID = tangoWebClient.LogShipment(storeEntity, shipment, true);
 
                         using (SqlAdapter adapter = new SqlAdapter())
                         {
@@ -2888,10 +2969,12 @@ namespace ShipWorks
             dockControl.Open(WindowOpenMethod.OnScreenActivate);
         }
 
-        // A dock control that didnt used to be open now is
+        // A dock control that didn't used to be open now is
         private void OnDockControlActivated(object sender, DockControlEventArgs e)
         {
             UpdateSelectionDependentUI();
+
+            Messenger.Current.Send(new PanelShownMessage(this, e.DockControl));
         }
 
         /// <summary>
@@ -2910,7 +2993,10 @@ namespace ShipWorks
                     gridControl.ActiveFilterNode = orderFilterTree.SelectedFilterNode;
                 }
             }
+
+            Messenger.Current.Send(new PanelHiddenMessage(this, e.DockControl));
         }
+
         /// <summary>
         /// Open the editor for the context menu of the active grid
         /// </summary>
@@ -3159,11 +3245,11 @@ namespace ShipWorks
         /// <summary>
         /// Initialize the panels for the current user
         /// </summary>
-        [NDependIgnoreLongMethodAttribute]
+        [NDependIgnoreLongMethod]
         private void InitializePanels()
         {
             // First go through each panel and wrap it in a Panel control that will allow us to show messages to the user like "No orders are selected.";
-            foreach (DockControl dockControl in sandDockManager.GetDockControls())
+            foreach (DockControl dockControl in Panels)
             {
                 // See if this is one that needs wrapped
                 if (dockControl.Controls.Count == 1 && dockControl.Controls[0] is IDockingPanelContent)
@@ -3265,7 +3351,7 @@ namespace ShipWorks
         {
             List<DockingPanelContentHolder> holders = new List<DockingPanelContentHolder>();
 
-            foreach (DockControl dockControl in sandDockManager.GetDockControls().Where(d => d.Controls.Count == 1))
+            foreach (DockControl dockControl in Panels.Where(d => d.Controls.Count == 1))
             {
                 DockingPanelContentHolder holder = dockControl.Controls[0] as DockingPanelContentHolder;
                 if (holder != null)
@@ -3411,17 +3497,7 @@ namespace ShipWorks
         /// </summary>
         private void OnShipOrders(object sender, EventArgs e)
         {
-            if (gridControl.Selection.Count > ShipmentsLoader.MaxAllowedOrders)
-            {
-                MessageHelper.ShowInformation(this, string.Format("You can only ship up to {0} orders at a time.", ShipmentsLoader.MaxAllowedOrders));
-                return;
-            }
-
-            ShipmentsLoader loader = new ShipmentsLoader(this);
-            loader.Tag = InitialShippingTabDisplay.Shipping;
-
-            loader.LoadCompleted += OnShipOrdersLoadShipmentsCompleted;
-            loader.LoadAsync(gridControl.Selection.OrderedKeys);
+            Messenger.Current.Send(new OpenShippingDialogWithOrdersMessage(this, gridControl.Selection.OrderedKeys, InitialShippingTabDisplay.Shipping));
         }
 
         /// <summary>
@@ -3429,17 +3505,7 @@ namespace ShipWorks
         /// </summary>
         private void OnTrackShipments(object sender, EventArgs e)
         {
-            if (gridControl.Selection.Count > ShipmentsLoader.MaxAllowedOrders)
-            {
-                MessageHelper.ShowInformation(this, string.Format("You can only track up to {0} orders at a time.", ShipmentsLoader.MaxAllowedOrders));
-                return;
-            }
-
-            ShipmentsLoader loader = new ShipmentsLoader(this);
-            loader.Tag = InitialShippingTabDisplay.Tracking;
-
-            loader.LoadCompleted += OnShipOrdersLoadShipmentsCompleted;
-            loader.LoadAsync(gridControl.Selection.OrderedKeys);
+            Messenger.Current.Send(new OpenShippingDialogWithOrdersMessage(this, gridControl.Selection.OrderedKeys, InitialShippingTabDisplay.Tracking));
         }
 
         /// <summary>
@@ -3447,49 +3513,8 @@ namespace ShipWorks
         /// </summary>
         private void OnSubmitClaim(object sender, EventArgs e)
         {
-            if (gridControl.Selection.Count > ShipmentsLoader.MaxAllowedOrders)
-            {
-                MessageHelper.ShowInformation(this, string.Format("You can only submit claims on up to {0} orders at a time.", ShipmentsLoader.MaxAllowedOrders));
-                return;
-            }
-
-            ShipmentsLoader loader = new ShipmentsLoader(this);
-            loader.Tag = InitialShippingTabDisplay.Insurance;
-
-            loader.LoadCompleted += OnShipOrdersLoadShipmentsCompleted;
-            loader.LoadAsync(gridControl.Selection.OrderedKeys);
-        }
-
-        /// <summary>
-        /// The async loading of shipments for shipping has completed
-        /// </summary>
-        void OnShipOrdersLoadShipmentsCompleted(object sender, ShipmentsLoadedEventArgs e)
-        {
-            if (this.IsDisposed)
-            {
-                return;
-            }
-
-            if (e.Cancelled)
-            {
-                return;
-            }
-
-            // The Tag property hold the value of whether to show shipping, tracking, or insurance
-            InitialShippingTabDisplay initialDisplay = (InitialShippingTabDisplay) ((ShipmentsLoader) sender).Tag;
-
-            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
-            {
-                // Show the shipping window.
-                using (ShippingDlg dlg = new ShippingDlg(e.Shipments, initialDisplay, lifetimeScope))
-                {
-                    dlg.ShowDialog(this);
-
-                    // We always check for new server messages after shipping, since if there was a shipping problem
-                    // it could be we put out a server message related to it.
-                    DashboardManager.DownloadLatestServerMessages();
-                }
-            }
+            Messenger.Current.Send(new OpenShippingDialogWithOrdersMessage(this, gridControl.Selection.OrderedKeys, InitialShippingTabDisplay.Insurance));
+            // Show the shipping window.
         }
 
         /// <summary>
@@ -4226,6 +4251,5 @@ namespace ShipWorks
         #endregion
 
         #endregion
-
     }
 }

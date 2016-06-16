@@ -1,31 +1,33 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace ShipWorks.Stores.Platforms.Amazon.Mws
 {
     /// <summary>
     /// Class for generating an Amazon-compatible HMAC-* request signature
     /// </summary>
+    [SuppressMessage("CSharp.Analyzers",
+        "CA5350: Do not use insecure cryptographic algorithm SHA1",
+        Justification = "This is what ShipWorks currently uses")]
     public static class RequestSignature
     {
         /// <summary>
-        /// Creates a signature for the provided string using the specified hashing algorihtm
+        /// Creates a signature for the provided string using the specified hashing algorithm
         /// </summary>
         public static string CreateRequestSignature(string valueToSign, string secretKey, SigningAlgorithm hashingAlgorithm)
         {
-            if (String.IsNullOrEmpty(secretKey))
+            if (string.IsNullOrEmpty(secretKey))
             {
                 throw new ArgumentException("secretKey cannot be null or empty", "secretKey");
             }
 
-            if (String.IsNullOrEmpty(valueToSign))
+            if (string.IsNullOrEmpty(valueToSign))
             {
                 throw new ArgumentException("stringToSign cannot be null or empty", "valueToSign");
-            }            
+            }
 
             byte[] key = Encoding.UTF8.GetBytes(secretKey);
 
@@ -56,9 +58,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
                 }
 
                 // base 64 encode it
-                string base64 = Convert.ToBase64String(hash);
-
-                return base64;
+                return Convert.ToBase64String(hash);
             }
         }
     }

@@ -1,30 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
 using System.Data;
+using System.Drawing;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
+using Autofac;
+using Interapptive.Shared;
+using Interapptive.Shared.Business;
+using Interapptive.Shared.Net;
+using Interapptive.Shared.Utility;
+using ShipWorks.AddressValidation;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Model.EntityClasses;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.AddressValidation;
-using ShipWorks.Data.Adapter.Custom;
-using ShipWorks.Data.Connection;
-using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Data.Model.RelationClasses;
+using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.UI.Controls;
-using ShipWorks.Data;
-using Divelements.SandGrid;
-using Interapptive.Shared;
-using ShipWorks.Data.Grid.DetailView;
-using Interapptive.Shared.Utility;
-using Interapptive.Shared.Net;
-using Interapptive.Shared.Business;
-using ShipWorks.Shipping.Insurance;
-using ShipWorks.Shipping.Carriers;
 
 namespace ShipWorks.Shipping.Editing
 {
@@ -152,7 +142,16 @@ namespace ShipWorks.Shipping.Editing
         /// <summary>
         /// Initialization
         /// </summary>
-        public virtual void Initialize()
+        public virtual void Initialize(ILifetimeScope lifetimeScope)
+        {
+            personControl.ValidatedAddressScope = lifetimeScope.Resolve<IValidatedAddressScope>();
+            Initialize();
+        }
+
+        /// <summary>
+        /// Initialization
+        /// </summary>
+        protected virtual void Initialize()
         {
 
         }
@@ -170,7 +169,6 @@ namespace ShipWorks.Shipping.Editing
         /// Load the data for the list of shipments into the control
         /// </summary>
         [NDependIgnoreLongMethod]
-        [NDependIgnoreComplexMethodAttribute]
         public virtual void LoadShipments(IEnumerable<ShipmentEntity> shipments, bool enableEditing, bool enableShippingAddress)
         {
             if (shipments == null)
@@ -231,7 +229,7 @@ namespace ShipWorks.Shipping.Editing
                 // Go through and load the data from each shipment
                 foreach (ShipmentEntity shipment in shipments)
                 {
-                    labelFormat.ApplyMultiValue((ThermalLanguage)shipment.RequestedLabelFormat);
+                    labelFormat.ApplyMultiValue((ThermalLanguage) shipment.RequestedLabelFormat);
 
                     // Residential status info
                     if (ShipmentTypeManager.GetType(shipment).IsResidentialStatusRequired(shipment))
@@ -432,7 +430,7 @@ namespace ShipWorks.Shipping.Editing
             {
                 ShipmentType shipmentType = ShipmentTypeManager.GetType(shipment);
 
-                labelFormat.ReadMultiValue(v => shipmentType.SaveRequestedLabelFormat((ThermalLanguage)v, shipment));
+                labelFormat.ReadMultiValue(v => shipmentType.SaveRequestedLabelFormat((ThermalLanguage) v, shipment));
 
                 // Residential
                 if (shipmentType.IsResidentialStatusRequired(shipment))
@@ -440,7 +438,7 @@ namespace ShipWorks.Shipping.Editing
                     ResidentialDeterminationType? type = null;
 
                     // Read the selected type
-                    residentialDetermination.ReadMultiValue(v => { if (v != null) type = (ResidentialDeterminationType) v; } );
+                    residentialDetermination.ReadMultiValue(v => { if (v != null) type = (ResidentialDeterminationType) v; });
 
                     if (type != null)
                     {
@@ -608,9 +606,9 @@ namespace ShipWorks.Shipping.Editing
         /// </summary>
         protected void RaiseShipmentTypeChanged() => ShipmentTypeChanged?.Invoke(this, EventArgs.Empty);
 
-		/// <summary>
-		/// Show the knowledge base article for thermal settings
-		/// </summary>
+        /// <summary>
+        /// Show the knowledge base article for thermal settings
+        /// </summary>
         private void OnHelpClick(object sender, EventArgs e)
         {
             WebHelper.OpenUrl("http://support.shipworks.com/solution/articles/140916-what-printer-should-i", this);
@@ -620,5 +618,14 @@ namespace ShipWorks.Shipping.Editing
         /// Pre select a rate
         /// </summary>
         public virtual void PreSelectRate(RateSelectedEventArgs args) => OnConfigureRateClick(this, args);
+
+        /// <summary>
+        /// Flush any in-progress changes before saving
+        /// </summary>
+        /// <remarks>This should cause weight controls to finish, etc.</remarks>
+        public virtual void FlushChanges()
+        {
+
+        }
     }
 }

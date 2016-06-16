@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.Serialization;
 
 namespace ShipWorks.AddressValidation
 {
@@ -30,6 +31,15 @@ namespace ShipWorks.AddressValidation
         /// </summary>
         public AddressValidationException(string message, Exception inner)
             : base(message, inner)
+        {
+
+        }
+
+        /// <summary>
+        /// Serialization constructor
+        /// </summary>
+        protected AddressValidationException(SerializationInfo serializationInfo, StreamingContext streamingContext) : 
+            base(serializationInfo, streamingContext)
         {
 
         }

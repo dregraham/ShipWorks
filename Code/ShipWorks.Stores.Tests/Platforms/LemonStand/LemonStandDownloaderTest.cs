@@ -21,7 +21,7 @@ namespace ShipWorks.Stores.Tests.Platforms.LemonStand
         readonly Mock<ILemonStandWebClient> webClient = new Mock<ILemonStandWebClient>();
         readonly Mock<ISqlAdapterRetry> adapter = new Mock<ISqlAdapterRetry>();
         readonly LemonStandStoreEntity store = new LemonStandStoreEntity();
-        
+
         private FakeLemonStandDownloader testObject;
         private readonly string lemonStandOrders;
         private readonly string singleOrder;
@@ -32,9 +32,9 @@ namespace ShipWorks.Stores.Tests.Platforms.LemonStand
         private readonly string badDataOrder;
         private readonly string missingDataOrder;
         private readonly string missingItems;
-        
+
         public LemonStandDownloaderTest()
-        { 
+        {
             lemonStandOrders = GetEmbeddedResourceJson("ShipWorks.Stores.Tests.Platforms.LemonStand.Artifacts.LemonStandJsonOrderResponse.js");
             singleOrder = GetEmbeddedResourceJson("ShipWorks.Stores.Tests.Platforms.LemonStand.Artifacts.LemonStandSingleOrderJson.js");
             invoice = GetEmbeddedResourceJson("ShipWorks.Stores.Tests.Platforms.LemonStand.Artifacts.LemonStandInvoiceJson.js");
@@ -61,10 +61,12 @@ namespace ShipWorks.Stores.Tests.Platforms.LemonStand
             using (Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(embeddedResourceName))
             {
                 if (stream != null)
+                {
                     using (StreamReader reader = new StreamReader(stream))
                     {
                         txt = reader.ReadToEnd();
                     }
+                }
             }
 
             return txt;
@@ -75,7 +77,7 @@ namespace ShipWorks.Stores.Tests.Platforms.LemonStand
             testObject = new FakeLemonStandDownloader(store, webClient.Object, adapter.Object, new LemonStandStoreType(store));
             JObject jsonOrder = JObject.Parse(singleOrder);
             testObject.Order = testObject.PrepareOrder(jsonOrder);
-            
+
             return testObject;
         }
 

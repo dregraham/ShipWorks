@@ -1,22 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
 using System.Data;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.UI.Controls;
 using Divelements.SandGrid;
 using Interapptive.Shared;
-using ShipWorks.Data.Model;
-using ShipWorks.Data.Connection;
 using ShipWorks.Data.Grid.DetailView;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing;
-using ShipWorks.Shipping.Carriers.FedEx.Enums;
-using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Insurance;
+using ShipWorks.UI.Controls;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
 {
@@ -111,7 +104,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // Clear previous rows
             packagesGrid.Rows.Clear();
             selectedRows.Clear();
-            
+
             List<List<FedExPackageEntity>> packageBuckets = new List<List<FedExPackageEntity>>();
 
             // Load the shipment data
@@ -168,7 +161,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             suspendShipSenseFieldEvent--;
         }
 
-        
+
         /// <summary>
         /// Update the layout and size of the control based on the package count
         /// </summary>
@@ -194,7 +187,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // Be just tall enough to hold the package content
             this.Height = panelPackage.Bottom;
         }
-    
+
         /// <summary>
         /// Update the display t ext of the given GridRow, which is dependant on how many packages it has
         /// </summary>
@@ -396,6 +389,16 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             {
                 ShipSenseFieldChanged(this, EventArgs.Empty);
             }
+        }
+
+        /// <summary>
+        /// Flush any in-progress changes before saving
+        /// </summary>
+        /// <remarks>This should cause weight controls to finish, etc.</remarks>
+        internal void FlushChanges()
+        {
+            dimensionsControl.FlushChanges();
+            weight.FlushChanges();
         }
     }
 }

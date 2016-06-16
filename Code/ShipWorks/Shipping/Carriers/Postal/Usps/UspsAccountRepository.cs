@@ -13,6 +13,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         public override IEnumerable<UspsAccountEntity> Accounts => UspsAccountManager.UspsAccounts;
 
+        /// <summary>
+        /// Force a check for changes
+        /// </summary>
+        public override void CheckForChangesNeeded() => UspsAccountManager.CheckForChangesNeeded();
 
         /// <summary>
         /// Returns a USPS account for the provided accountID.
@@ -31,7 +35,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         {
             get
             {
-                long? accountID = new UspsShipmentType().GetPrimaryProfile().Postal.Usps.UspsAccountID;
+                long? accountID = GetPrimaryProfile(ShipmentTypeCode.Usps).Postal.Usps.UspsAccountID;
                 return GetProfileAccount(ShipmentTypeCode.Usps, accountID);
             }
         }

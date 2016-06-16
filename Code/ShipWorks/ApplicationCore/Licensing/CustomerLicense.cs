@@ -1,18 +1,21 @@
-﻿using Interapptive.Shared;
-using Interapptive.Shared.Utility;
-using log4net;
-using Interapptive.Shared.Security;
-using ShipWorks.ApplicationCore.Dashboard.Content;
-using ShipWorks.ApplicationCore.Licensing.FeatureRestrictions;
-using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
-using ShipWorks.Data;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Editions;
-using ShipWorks.Stores;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using Interapptive.Shared;
+using Interapptive.Shared.Security;
+using Interapptive.Shared.Utility;
+using log4net;
+using ShipWorks.ApplicationCore.Dashboard.Content;
+using ShipWorks.ApplicationCore.Licensing.FeatureRestrictions;
+using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
+using ShipWorks.Core.Messaging;
+using ShipWorks.Data;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Editions;
+using ShipWorks.Messaging.Messages;
+using ShipWorks.Stores;
+using ShipWorks.Users.Security;
 
 namespace ShipWorks.ApplicationCore.Licensing
 {
@@ -30,6 +33,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         private readonly IDeletionService deletionService;
         private readonly IEnumerable<IFeatureRestriction> featureRestrictions;
         private readonly IEnumerable<ILicenseEnforcer> licenseEnforcers;
+        private readonly IMessenger messenger;
 
         private readonly TimeSpan capabilitiesTimeToLive;
         private DateTime lastRefreshTimeInUtc;
@@ -45,12 +49,14 @@ namespace ShipWorks.ApplicationCore.Licensing
             Func<Type, ILog> logFactory,
             IDeletionService deletionService,
             IEnumerable<ILicenseEnforcer> licenseEnforcers,
-            IEnumerable<IFeatureRestriction> featureRestrictions)
+            IEnumerable<IFeatureRestriction> featureRestrictions,
+            IMessenger messenger)
         {
+            this.messenger = messenger;
             Key = key;
             this.tangoWebClient = tangoWebClient;
             this.licenseWriter = licenseWriter;
-            log = logFactory(typeof (CustomerLicense));
+            log = logFactory(typeof(CustomerLicense));
             this.deletionService = deletionService;
             this.featureRestrictions = featureRestrictions;
             this.licenseEnforcers = licenseEnforcers.OrderByDescending(e => (int) e.Priority);
@@ -81,7 +87,6 @@ namespace ShipWorks.ApplicationCore.Licensing
                     "The following EditionFeatures have more than one associated Feature Restriction:" +
                     $"{Environment.NewLine}{featureNames}");
             }
-            
         }
 
         /// <summary>
@@ -149,6 +154,9 @@ namespace ShipWorks.ApplicationCore.Licensing
                 // Refresh the license capabilities and note the time they were refreshed
                 LicenseCapabilities = tangoWebClient.GetLicenseCapabilities(this);
                 lastRefreshTimeInUtc = DateTime.UtcNow;
+
+                // Let anyone who cares know that enabled carriers may have changed.
+                messenger.Send(new EnabledCarriersChangedMessage(this, new List<int>(), new List<int>()));
             }
             catch (TangoException ex)
             {
@@ -190,7 +198,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// Deletes the given store
         /// </summary>
         /// <param name="store"></param>
-        public void DeleteStore(StoreEntity store)
+        public void DeleteStore(StoreEntity store, ISecurityContext securityContext)
         {
             if (store == null)
             {
@@ -202,7 +210,7 @@ namespace ShipWorks.ApplicationCore.Licensing
 
             // Remove the store from the database
             log.Warn($"Deleting store: {store.StoreName}");
-            deletionService.DeleteStore(store);
+            deletionService.DeleteStore(store, securityContext);
 
             // Tell tango to delete the licenseKey
             tangoWebClient.DeleteStore(this, licenseKey);
@@ -211,7 +219,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Delete the given channel
         /// </summary>
-        public void DeleteChannel(StoreTypeCode storeType)
+        public void DeleteChannel(StoreTypeCode storeType, ISecurityContext securityContext)
         {
             if (storeType == StoreTypeCode.Invalid)
             {
@@ -220,7 +228,7 @@ namespace ShipWorks.ApplicationCore.Licensing
 
             // Delete all of the local stores for the given StoreTypeCode
             log.Warn($"Deleting channel: {EnumHelper.GetDescription(storeType)}");
-            deletionService.DeleteChannel(storeType);
+            deletionService.DeleteChannel(storeType, securityContext);
 
             // Get a list of licenses that are active in tango and match the channel we are deleting
             // but are not in ShipWorks and tell tango to delete them
@@ -287,7 +295,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// value is returned when there is nothing to display.
         /// </summary>
         /// <remarks>
-        /// A dashboard item is returned when the customer has exceeded 80% of the 
+        /// A dashboard item is returned when the customer has exceeded 80% of the
         /// shipping volume allowed by the license during the current billing cycle.
         /// </remarks>
         public DashboardLicenseItem CreateDashboardMessage()
@@ -298,7 +306,7 @@ namespace ShipWorks.ApplicationCore.Licensing
 
             if (!LicenseCapabilities.IsInTrial)
             {
-                // The dashboard item should not be created when in the trial period since 
+                // The dashboard item should not be created when in the trial period since
                 // the shipment count is unlimited.
                 float currentShipmentPercentage = (float) LicenseCapabilities.ProcessedShipments / LicenseCapabilities.ShipmentLimit;
                 if (currentShipmentPercentage >= ShipmentLimitWarningThreshold)
@@ -341,7 +349,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         public EditionRestrictionLevel CheckRestriction(EditionFeature feature, object data)
         {
             Refresh();
-            
+
             IFeatureRestriction restriction = featureRestrictions.SingleOrDefault(r => r.EditionFeature == feature);
             return restriction?.Check(LicenseCapabilities, data) ?? EditionRestrictionLevel.None;
         }

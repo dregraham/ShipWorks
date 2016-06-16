@@ -54,7 +54,6 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.Specialized
         /// </summary>
         /// <returns></returns>
         [NDependIgnoreLongMethod]
-        [NDependIgnoreComplexMethodAttribute]
         protected override int Run()
         {
             Progress.Detail = "Configuring Order Status Presets...";

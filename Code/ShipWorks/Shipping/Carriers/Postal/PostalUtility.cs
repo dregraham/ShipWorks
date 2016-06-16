@@ -135,7 +135,6 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// <summary>
         /// Get the domestic services valid for the given shipment type
         /// </summary>
-        [NDependIgnoreComplexMethod]
         public static List<PostalServiceType> GetDomesticServices(ShipmentTypeCode shipmentType)
         {
             ShippingSettingsEntity settings = ShippingSettings.Fetch();

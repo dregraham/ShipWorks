@@ -45,7 +45,7 @@ namespace ShipWorks.Stores.UI.Platforms.LemonStand
         }
 
         /// <summary>
-        ///     Saves the user selected settings back to the store entity;
+        ///     Saves the user selected settings back to the store entity
         /// </summary>
         public override bool SaveToEntity(StoreEntity store)
         {
@@ -80,14 +80,10 @@ namespace ShipWorks.Stores.UI.Platforms.LemonStand
                     {
                         log.Error("Error validating access token", ex);
 
-                        if (ex.Message.Equals("The remote server returned an error: (401) Unauthorized."))
-                        {
-                            MessageHelper.ShowError(this, "Invalid access token");
-                        }
-                        else
-                        {
-                            MessageHelper.ShowError(this, "Invalid store URL");
-                        }
+                        string message = ex.Message.Equals("The remote server returned an error: (401) Unauthorized.",
+                            StringComparison.InvariantCultureIgnoreCase) ?
+                            "Invalid access token" : "Invalid store URL";
+                        MessageHelper.ShowError(this, message);
 
                         return false;
                     }
@@ -101,6 +97,7 @@ namespace ShipWorks.Stores.UI.Platforms.LemonStand
                     return false;
                 }
             }
+
             // Nothing changed
             return true;
         }

@@ -1,12 +1,11 @@
 ﻿using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
-using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
 using ShipWorks.Templates.Tokens;
 
-namespace ShipWorks.Shipping.Carriers.Ups
+namespace ShipWorks.Shipping.Carriers.UPS
 {
     /// <summary>
     /// LabelService for Ups World Ship
@@ -25,7 +24,7 @@ namespace ShipWorks.Shipping.Carriers.Ups
                 WorldShipUtility.ExportToWorldShip(shipment);
 
                 // Mark shipment as exported
-                shipment.Ups.WorldShipStatus = (int)WorldShipStatusType.Exported;
+                shipment.Ups.WorldShipStatus = (int) WorldShipStatusType.Exported;
             }
             catch (CarrierException ex)
             {
@@ -44,7 +43,7 @@ namespace ShipWorks.Shipping.Carriers.Ups
         {
             // If it's been exported but not yet processed in WorldShip, then don't actually void the underlying shipment, but
             // we do have to remove the entry from the table
-            if (shipment.Ups.WorldShipStatus == (int)WorldShipStatusType.Exported)
+            if (shipment.Ups.WorldShipStatus == (int) WorldShipStatusType.Exported)
             {
                 using (SqlAdapter adapter = new SqlAdapter())
                 {
@@ -53,11 +52,11 @@ namespace ShipWorks.Shipping.Carriers.Ups
             }
             else
             {
-                UpsServiceType serviceType = (UpsServiceType)shipment.Ups.Service;
+                UpsServiceType serviceType = (UpsServiceType) shipment.Ups.Service;
 
                 // If we are WolrdShip AND the WorldShipStatus is already set to Voided
                 // then this void request MUST have come from WorldShipImportMonitor, so just return
-                if (shipment.Ups.WorldShipStatus == (int)WorldShipStatusType.Voided)
+                if (shipment.Ups.WorldShipStatus == (int) WorldShipStatusType.Voided)
                 {
                     return;
                 }

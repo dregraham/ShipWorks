@@ -111,7 +111,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.Specialized
             string zipFile = Path.Combine(basePath, "scripts.zip");
 
             // First thing we have to do is write out the zip with the scripts
-            using (Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(@"ShipWorks.Data.Administration.UpdateFrom2x.Database.Scripts.ShipWorks2x.zip"))
+            using (Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(@"ShipWorks.Res.Data.Administration.UpdateFrom2x.Database.Scripts.ShipWorks2x.zip"))
             {
                 StreamUtility.WriteToFile(stream, zipFile);
             }

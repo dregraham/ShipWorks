@@ -15,7 +15,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
 {
     public class iParcelLabelServiceTest
     {
-        private ShipmentEntity shipment;
+        private readonly ShipmentEntity shipment;
 
         public iParcelLabelServiceTest()
         {
@@ -44,12 +44,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
 
                 Order = new OrderEntity { OrderTotal = 100.43M },
 
-                RequestedLabelFormat = (int)ThermalLanguage.None,
+                RequestedLabelFormat = (int) ThermalLanguage.None,
 
                 IParcel = new IParcelShipmentEntity
                 {
                     Reference = "reference-value",
-                    Service = (int)iParcelServiceType.Preferred,
+                    Service = (int) iParcelServiceType.Preferred,
                     TrackByEmail = true,
                     TrackBySMS = true
                 }
@@ -79,11 +79,11 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
 
                 var labelService = mock.Create<iParcelLabelService>();
 
-                shipment.RequestedLabelFormat = (int)ThermalLanguage.ZPL;
+                shipment.RequestedLabelFormat = (int) ThermalLanguage.ZPL;
 
                 labelService.Create(shipment);
 
-                Assert.Equal((int)ThermalLanguage.ZPL, shipment.ActualLabelFormat);
+                Assert.Equal((int) ThermalLanguage.ZPL, shipment.ActualLabelFormat);
             }
         }
 
@@ -98,10 +98,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
                 var labelService = mock.Create<iParcelLabelService>();
 
                 shipment.RequestedLabelFormat = (int) ThermalLanguage.EPL;
-            
+
                 labelService.Create(shipment);
 
-                Assert.Equal((int)ThermalLanguage.EPL, shipment.ActualLabelFormat);
+                Assert.Equal((int) ThermalLanguage.EPL, shipment.ActualLabelFormat);
             }
         }
 
@@ -126,15 +126,13 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
         {
             using (var mock = AutoMock.GetLoose())
             {
-                //shipment.IParcel.IParcelAccountID = 4;
-
                 mock.Mock<ICarrierAccountRepository<IParcelAccountEntity>>()
                     .Setup(r => r.GetAccount(It.IsAny<long>())).Returns(new IParcelAccountEntity());
-                
+
                 var labelService = mock.Create<iParcelLabelService>();
 
                 labelService.Create(shipment);
-                
+
                 mock.Mock<ICarrierAccountRepository<IParcelAccountEntity>>().Verify(x => x.GetAccount(shipment.IParcel.IParcelAccountID), Times.Once);
             }
         }
@@ -205,15 +203,13 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
 
         private DataSet GetDeliveredPackageTrackingInfo()
         {
-            using (DataSet trackingDataSet = new DataSet())
+            DataSet trackingDataSet = new DataSet();
+            using (StringReader stringReader = new StringReader(GetDeliveredPackageTrackingXml()))
             {
-                using (StringReader stringReader = new StringReader(GetDeliveredPackageTrackingXml()))
-                {
-                    trackingDataSet.ReadXml(stringReader, XmlReadMode.Auto);
-                }
-
-                return trackingDataSet;
+                trackingDataSet.ReadXml(stringReader, XmlReadMode.Auto);
             }
+
+            return trackingDataSet;
         }
 
         private string GetDeliveredPackageTrackingXml()
@@ -221,102 +217,102 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
             return @"<?xml version=""1.0"" encoding=""utf-8""?>
 <iparcelTrackingResponse xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"">
   <PackageTrackingInfo>
-	<TrackingNumber>123456789</TrackingNumber>
-	<PackageDestinationLocation>
-	  <City>Tokyo</City>
-	  <PostalCode>120-0001</PostalCode>
-	  <CountryCode>JP</CountryCode>
-	</PackageDestinationLocation>
-	<EstimatedArrivalDate>2004-08-24T00:00:00+09:00</EstimatedArrivalDate>
-	<TrackingEventHistory>
-	  <TrackingEventDetail>
-		<EventCode>EVENT_301</EventCode>
-		<EventCodeDesc>DELIVERED</EventCodeDesc>
-		<EventDateTime>2004-08-24T11:00:00+09:00</EventDateTime>
-		<EventLocation>
-		  <City>TOKYO</City>
-		  <PostalCode>121-0001</PostalCode>
-		  <CountryCode>JP</CountryCode>
-		</EventLocation>
-		<AdditionalLocationInfo>PATIO</AdditionalLocationInfo>
-		<SignedForByName>ISHIRO</SignedForByName>
-	  </TrackingEventDetail>
-	  <TrackingEventDetail>
-		<EventCode>EVENT_302</EventCode>
-		<EventCodeDesc>OUT FOR DELIVERY</EventCodeDesc>
-		<EventDateTime>2001-08-24T07:00:11+09:00</EventDateTime>
-		<EventLocation>
-		  <City>TOKYO</City>
-		  <PostalCode>121-0001</PostalCode>
-		  <CountryCode>JP</CountryCode>
-		</EventLocation>
-	  </TrackingEventDetail>
-	  <TrackingEventDetail>
-		<EventCode>EVENT_201</EventCode>
-		<EventCodeDesc>ARRIVAL SCAN</EventCodeDesc>
-		<EventDateTime>2004-08-24T05:05:00+09:00</EventDateTime>
-		<EventLocation>
-		  <City>TOKYO</City>
-		  <PostalCode>121-0001</PostalCode>
-		  <CountryCode>JP</CountryCode>
-		</EventLocation>
-	  </TrackingEventDetail>
-	  <TrackingEventDetail>
-		<EventCode>EVENT_205</EventCode>
-		<EventCodeDesc>COMPLETED CUSTOMS CLEARANCE
+    <TrackingNumber>123456789</TrackingNumber>
+    <PackageDestinationLocation>
+      <City>Tokyo</City>
+      <PostalCode>120-0001</PostalCode>
+      <CountryCode>JP</CountryCode>
+    </PackageDestinationLocation>
+    <EstimatedArrivalDate>2004-08-24T00:00:00+09:00</EstimatedArrivalDate>
+    <TrackingEventHistory>
+      <TrackingEventDetail>
+        <EventCode>EVENT_301</EventCode>
+        <EventCodeDesc>DELIVERED</EventCodeDesc>
+        <EventDateTime>2004-08-24T11:00:00+09:00</EventDateTime>
+        <EventLocation>
+          <City>TOKYO</City>
+          <PostalCode>121-0001</PostalCode>
+          <CountryCode>JP</CountryCode>
+        </EventLocation>
+        <AdditionalLocationInfo>PATIO</AdditionalLocationInfo>
+        <SignedForByName>ISHIRO</SignedForByName>
+      </TrackingEventDetail>
+      <TrackingEventDetail>
+        <EventCode>EVENT_302</EventCode>
+        <EventCodeDesc>OUT FOR DELIVERY</EventCodeDesc>
+        <EventDateTime>2001-08-24T07:00:11+09:00</EventDateTime>
+        <EventLocation>
+          <City>TOKYO</City>
+          <PostalCode>121-0001</PostalCode>
+          <CountryCode>JP</CountryCode>
+        </EventLocation>
+      </TrackingEventDetail>
+      <TrackingEventDetail>
+        <EventCode>EVENT_201</EventCode>
+        <EventCodeDesc>ARRIVAL SCAN</EventCodeDesc>
+        <EventDateTime>2004-08-24T05:05:00+09:00</EventDateTime>
+        <EventLocation>
+          <City>TOKYO</City>
+          <PostalCode>121-0001</PostalCode>
+          <CountryCode>JP</CountryCode>
+        </EventLocation>
+      </TrackingEventDetail>
+      <TrackingEventDetail>
+        <EventCode>EVENT_205</EventCode>
+        <EventCodeDesc>COMPLETED CUSTOMS CLEARANCE
 PROCESS</EventCodeDesc>
-		<EventDateTime>2004-08-23T13:30:03+09:00</EventDateTime>
-		<EventLocation>
-		  <City>NARITA</City>
-		  <PostalCode>282-8600</PostalCode>
-		  <CountryCode>JP</CountryCode>
-		</EventLocation>
-	  </TrackingEventDetail>
-	  <TrackingEventDetail>
-		<EventCode>EVENT_204</EventCode>
-		<EventCodeDesc>INITIATED CUSTOMS CLEARANCE
+        <EventDateTime>2004-08-23T13:30:03+09:00</EventDateTime>
+        <EventLocation>
+          <City>NARITA</City>
+          <PostalCode>282-8600</PostalCode>
+          <CountryCode>JP</CountryCode>
+        </EventLocation>
+      </TrackingEventDetail>
+      <TrackingEventDetail>
+        <EventCode>EVENT_204</EventCode>
+        <EventCodeDesc>INITIATED CUSTOMS CLEARANCE
 PROCESS</EventCodeDesc>
-		<EventDateTime>2004-08-22T19:30:15+09:00</EventDateTime>
-		<EventLocation>
-		  <City>NARITA</City>
-		  <PostalCode>282-8600</PostalCode>
-		  <CountryCode>JP</CountryCode>
-		</EventLocation>
-	  </TrackingEventDetail>
-	  <TrackingEventDetail>
-		<EventCode>EVENT_202</EventCode>
-		<EventCodeDesc>DEPARTURE SCAN</EventCodeDesc>
-		<EventDateTime>2004-08-21T05:30:08-08:00</EventDateTime>
-		<EventLocation>
-		  <City>LOS ANGELES</City>
-		  <StateProvince>CA</StateProvince>
-		  <PostalCode>90029</PostalCode>
-		  <CountryCode>US</CountryCode>
-		</EventLocation>
-	  </TrackingEventDetail>
-	  <TrackingEventDetail>
-		<EventCode>EVENT_201</EventCode>
-		<EventCodeDesc>ARRIVAL SCAN</EventCodeDesc>
-		<EventDateTime>2004-08-20T23:30:45-08:00</EventDateTime>
-		<EventLocation>
-		  <City>LOS ANGELES</City>
-		  <StateProvince>CA</StateProvince>
-		  <PostalCode>90029</PostalCode>
-		  <CountryCode>US</CountryCode>
-		</EventLocation>
-	  </TrackingEventDetail>
-	  <TrackingEventDetail>
-		<EventCode>EVENT_102</EventCode>
-		<EventCodeDesc>ORIGIN SCAN</EventCodeDesc>
-		<EventDateTime>2004-08-20T17:30:03-08:00</EventDateTime>
-		<EventLocation>
-		  <City>FERNLEY</City>
-		  <StateProvince>NV</StateProvince>
-		  <PostalCode>89498</PostalCode>
-		  <CountryCode>US</CountryCode>
-		</EventLocation>
-	  </TrackingEventDetail>
-	</TrackingEventHistory>
+        <EventDateTime>2004-08-22T19:30:15+09:00</EventDateTime>
+        <EventLocation>
+          <City>NARITA</City>
+          <PostalCode>282-8600</PostalCode>
+          <CountryCode>JP</CountryCode>
+        </EventLocation>
+      </TrackingEventDetail>
+      <TrackingEventDetail>
+        <EventCode>EVENT_202</EventCode>
+        <EventCodeDesc>DEPARTURE SCAN</EventCodeDesc>
+        <EventDateTime>2004-08-21T05:30:08-08:00</EventDateTime>
+        <EventLocation>
+          <City>LOS ANGELES</City>
+          <StateProvince>CA</StateProvince>
+          <PostalCode>90029</PostalCode>
+          <CountryCode>US</CountryCode>
+        </EventLocation>
+      </TrackingEventDetail>
+      <TrackingEventDetail>
+        <EventCode>EVENT_201</EventCode>
+        <EventCodeDesc>ARRIVAL SCAN</EventCodeDesc>
+        <EventDateTime>2004-08-20T23:30:45-08:00</EventDateTime>
+        <EventLocation>
+          <City>LOS ANGELES</City>
+          <StateProvince>CA</StateProvince>
+          <PostalCode>90029</PostalCode>
+          <CountryCode>US</CountryCode>
+        </EventLocation>
+      </TrackingEventDetail>
+      <TrackingEventDetail>
+        <EventCode>EVENT_102</EventCode>
+        <EventCodeDesc>ORIGIN SCAN</EventCodeDesc>
+        <EventDateTime>2004-08-20T17:30:03-08:00</EventDateTime>
+        <EventLocation>
+          <City>FERNLEY</City>
+          <StateProvince>NV</StateProvince>
+          <PostalCode>89498</PostalCode>
+          <CountryCode>US</CountryCode>
+        </EventLocation>
+      </TrackingEventDetail>
+    </TrackingEventHistory>
   </PackageTrackingInfo>
 </iparcelTrackingResponse>";
         }

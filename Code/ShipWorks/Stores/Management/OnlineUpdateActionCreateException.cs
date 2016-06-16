@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.Serialization;
-using System.Text;
 
 namespace ShipWorks.Stores.Management
 {
@@ -27,5 +24,12 @@ namespace ShipWorks.Stores.Management
             : base(message, inner)
         {
         }
+
+        /// <summary>
+        /// Serialization constructor
+        /// </summary>
+        protected OnlineUpdateActionCreateException(SerializationInfo serializationInfo, StreamingContext streamingContext) : 
+            base(serializationInfo, streamingContext)
+        { }
     }
 }

@@ -8,7 +8,7 @@ namespace ShipWorks.Stores.Tests.Platforms.LemonStand
 {
     public class LemonStandOrderIdentifierTest
     {
-        Mock<OrderEntity> order = new Mock<OrderEntity>();
+        readonly Mock<OrderEntity> order = new Mock<OrderEntity>();
         private LemonStandOrderIdentifier testObject;
 
         [Fact]
@@ -25,21 +25,21 @@ namespace ShipWorks.Stores.Tests.Platforms.LemonStand
             testObject = new LemonStandOrderIdentifier(null);
             testObject.ToString();
         }
-        
+
         [Fact]
         public void ApplyTo_ThrowsInvalidOperationException_WhenGivenNonLemonStandOrderEntity()
         {
             testObject = new LemonStandOrderIdentifier("1");
             Assert.Throws<InvalidOperationException>(() => testObject.ApplyTo(order.Object));
         }
-        
+
         [Fact]
         public void ApplyTo_ThrowsInvalidOperationException_WhenPassedNullOrderEntity()
         {
             testObject = new LemonStandOrderIdentifier("1");
             Assert.Throws<InvalidOperationException>(() => testObject.ApplyTo((LemonStandOrderEntity) null));
         }
-        
+
         [Fact]
         public void ApplyTo_ThrowsArgumentNullException_WhenPassedNullDownloadDetailEntity()
         {

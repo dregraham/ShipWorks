@@ -16,15 +16,14 @@ namespace ShipWorks.Shipping.Editing.Rating
         /// </summary>
         protected RateGroup()
         {
-
         }
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public RateGroup(IEnumerable<RateResult> rates)
+        public RateGroup(IEnumerable<RateResult> rates) : this()
         {
-            this.Rates = rates.ToList();
+            Rates = rates.ToList();
             footnoteFactories = new List<IRateFootnoteFactory>();
         }
 

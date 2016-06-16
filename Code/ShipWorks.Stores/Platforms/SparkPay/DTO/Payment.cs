@@ -1,11 +1,10 @@
 ﻿using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.Reflection;
 
 namespace ShipWorks.Stores.Platforms.SparkPay.DTO
 {
-    [Obfuscation(Feature = "PreserveLiteralValues", Exclude = true, StripAfterObfuscation = false)]
+    [Obfuscation(Exclude = true, ApplyToMembers = true)]
     public class Payment
     {
         [JsonProperty("id")]

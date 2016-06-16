@@ -1224,7 +1224,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             RateGroup rates = testObject.GetRates(shipmentEntity);
 
             // We should get rates back (priority overnight for basic, smart post, and One Rate)
-            Assert.Equal(42.42M, rates.Rates.First().Amount);
+            Assert.Equal(42.42M, rates.Rates.First().AmountOrDefault);
         }
 
         [Fact]
@@ -1369,7 +1369,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
 
             RateGroup rates = testObject.GetRates(shipmentEntity);
 
-            Assert.Equal(43.85M, rates.Rates.First().Amount);
+            Assert.Equal(43.85M, rates.Rates.First().AmountOrDefault);
         }
 
         [Fact]

@@ -123,16 +123,11 @@ namespace ShipWorks.UI.Controls.CustomerLicenseActivation
                         userManager.CreateUser(Email, DecryptedPassword, true);
                     }
 
-                    result = new GenericResult<ICustomerLicense>(customerLicense)
-                    {
-                        Message = string.Empty,
-                        Success = true
-                    };
+                    result = GenericResult.FromSuccess(customerLicense);
                 }
                 catch (Exception ex)
                 {
-                    result.Message = ex.Message;
-                    result.Success = false;
+                    result = GenericResult.FromError<ICustomerLicense>(ex.Message);
                 }
             }
 
@@ -149,29 +144,20 @@ namespace ShipWorks.UI.Controls.CustomerLicenseActivation
         /// </remarks>
         private GenericResult<ICustomerLicense> ValidateCredentials()
         {
-            // we don't have a license yet...
-            GenericResult<ICustomerLicense> result = new GenericResult<ICustomerLicense>(null)
-            {
-                Success = true,
-                Message = string.Empty
-            };
-
             // Validate the username
             if (!EmailUtility.IsValidEmailAddress(Email))
             {
-                result.Message = "Please enter a valid email for the username.";
-                result.Success = false;
-                return result;
+                return GenericResult.FromError<ICustomerLicense>("Please enter a valid email for the username.");
             }
 
             // Validate the password
             if (string.IsNullOrWhiteSpace(DecryptedPassword))
             {
-                result.Message = "Please enter a password.";
-                result.Success = false;
+                return GenericResult.FromError<ICustomerLicense>("Please enter a password.");
             }
 
-            return result;
+            // we don't have a license yet...
+            return GenericResult.FromSuccess<ICustomerLicense>(null);
         }
     }
 }

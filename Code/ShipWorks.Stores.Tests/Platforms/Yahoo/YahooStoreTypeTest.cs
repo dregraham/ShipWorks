@@ -22,8 +22,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Yahoo
         readonly Mock<YahooStoreEntity> yahooApiStore = new Mock<YahooStoreEntity>();
         private readonly Mock<YahooStoreEntity> yahooEmailStore = new Mock<YahooStoreEntity>();
         private readonly List<EnumEntry<YahooApiOrderStatus>> orderStatuses = EnumHelper.GetEnumList<YahooApiOrderStatus>();
-        private YahooOrderItemEntity item;
-
+        private readonly YahooOrderItemEntity item;
 
         public YahooStoreTypeTest()
         {
@@ -74,7 +73,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Yahoo
         [Fact]
         public void CreateOrderIdentifier_ReturnsYahooOrderIdentifier_FromYahooOrder()
         {
-            YahooOrderEntity order = new YahooOrderEntity() {YahooOrderID = "1"};
+            YahooOrderEntity order = new YahooOrderEntity() { YahooOrderID = "1" };
 
             Assert.IsAssignableFrom<YahooOrderIdentifier>(apiTestObject.CreateOrderIdentifier(order));
         }

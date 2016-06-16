@@ -31,6 +31,8 @@ namespace ShipWorks
         // Require at least 100 MB of free space to run ShipWorks successfully
         const long minDriveSpace = 1024 * 1024 * 100;
 
+        private static ExecutionMode executionMode;
+
         /// <summary>
         /// Single instance of the running application
         /// </summary>
@@ -51,11 +53,7 @@ namespace ShipWorks
         /// <summary>
         /// Gets the execution mode for this instance.  (with UI, command line, etc.)
         /// </summary>
-        public static ExecutionMode ExecutionMode
-        {
-            get;
-            private set;
-        }
+        public static ExecutionMode ExecutionMode => ExecutionModeScope.Current ?? executionMode;
 
         /// <summary>
         /// Indicates if the application is in the middle of crashing
@@ -85,7 +83,7 @@ namespace ShipWorks
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
-        public static async void Main()
+        public static async Task Main()
         {
             // These come first regardless of ExecutionMode. Even the ServiceExecutionMode uses UI to prompt for credentials.
             Application.SetCompatibleTextRenderingDefault(false);
@@ -115,8 +113,8 @@ namespace ShipWorks
                     ShipWorksSession.Initialize(commandLine);
                 }
 
-                // Load the execution mode, which is command-line dependant
-                ExecutionMode = new ExecutionModeFactory(commandLine).Create();
+                // Load the execution mode, which is command-line dependent
+                executionMode = new ExecutionModeFactory(commandLine).Create();
 
                 TrySetUsEnglish();
 
@@ -332,7 +330,7 @@ namespace ShipWorks
         private static void SetupUnhandledExceptionHandling()
         {
             // Handle non-gui thread exceptions.  These should never happen if we do things right.
-            AppDomain.CurrentDomain.UnhandledException += new System.UnhandledExceptionEventHandler(OnAppDomainException);
+            AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(OnAppDomainException);
 
             // Handle exceptions from GUI threads.
             Application.ThreadException += new ThreadExceptionEventHandler(OnApplicationException);
@@ -344,7 +342,7 @@ namespace ShipWorks
         /// <summary>
         /// An unhandled exception occurred in the AppDomain, outside of a GUI thread.
         /// </summary>
-        private static async void OnAppDomainException(object sender, System.UnhandledExceptionEventArgs e)
+        private static async void OnAppDomainException(object sender, UnhandledExceptionEventArgs e)
         {
             await HandleUnhandledException((Exception) e.ExceptionObject, false);
         }

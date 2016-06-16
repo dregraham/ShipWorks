@@ -41,7 +41,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet.ActionScheduleAdapters
                 .Zip(fireTimes, (x, x0) => x - x0)
                 .ToArray();
 
-            Assert.True(intervals.All(x => x.TotalDays == schedule.FrequencyInDays));
+            Assert.True(intervals.All(x => x.Days == schedule.FrequencyInDays));
         }
 
         [Fact]

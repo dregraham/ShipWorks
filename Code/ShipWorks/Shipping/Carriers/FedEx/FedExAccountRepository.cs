@@ -3,12 +3,20 @@ using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
 {
+    /// <summary>
+    /// FedEx account repository
+    /// </summary>
     public class FedExAccountRepository : CarrierAccountRepositoryBase<FedExAccountEntity>, ICarrierAccountRepository<FedExAccountEntity>
     {
         /// <summary>
         /// Gets the accounts for the carrier.
         /// </summary>
         public override IEnumerable<FedExAccountEntity> Accounts => FedExAccountManager.Accounts;
+
+        /// <summary>
+        /// Force a check for changes
+        /// </summary>
+        public override void CheckForChangesNeeded() => FedExAccountManager.CheckForChangesNeeded();
 
         /// <summary>
         /// Returns a carrier account for the provided accountID.
@@ -25,11 +33,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// if there is not an account associated with the default profile.
         /// </summary>
         /// <exception cref="ShippingException">An account that no longer exists is associated with the default FedEx profile.</exception>
-        public override FedExAccountEntity DefaultProfileAccount 
+        public override FedExAccountEntity DefaultProfileAccount
         {
             get
             {
-                long? accountID = new FedExShipmentType().GetPrimaryProfile().FedEx.FedExAccountID;
+                long? accountID = GetPrimaryProfile(ShipmentTypeCode.FedEx).FedEx.FedExAccountID;
                 return GetProfileAccount(ShipmentTypeCode.FedEx, accountID);
             }
         }

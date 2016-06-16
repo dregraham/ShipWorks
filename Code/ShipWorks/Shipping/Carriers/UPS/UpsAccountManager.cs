@@ -6,8 +6,10 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Utility;
 using ShipWorks.Data.Model;
 using System.ComponentModel;
+using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data;
+using ShipWorks.Messaging.Messages;
 
 namespace ShipWorks.Shipping.Carriers.UPS
 {
@@ -87,12 +89,19 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// </summary>
         public static void SaveAccount(UpsAccountEntity account)
         {
+            bool wasDirty = account.IsDirty;
+
             using (SqlAdapter adapter = new SqlAdapter())
             {
                 adapter.SaveAndRefetch(account);
             }
 
             CheckForChangesNeeded();
+
+            if (wasDirty)
+            {
+                Messenger.Current.Send(new ShippingAccountsChangedMessage(null, account.ShipmentType));
+            }
         }
 
         /// <summary>
@@ -100,12 +109,16 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// </summary>
         public static void DeleteAccount(UpsAccountEntity account)
         {
+            ShipmentTypeCode shipmentTypeCode = account.ShipmentType;
+
             using (SqlAdapter adapter = new SqlAdapter())
             {
                 adapter.DeleteEntity(account);
             }
 
             CheckForChangesNeeded();
+
+            Messenger.Current.Send(new ShippingAccountsChangedMessage(null, shipmentTypeCode));
         }
 
         /// <summary>

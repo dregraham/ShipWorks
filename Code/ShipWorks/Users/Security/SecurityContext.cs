@@ -1,28 +1,27 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Linq;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Adapter.Custom;
-using ShipWorks.Data;
-using ShipWorks.Data.Model.HelperClasses;
 using System.Diagnostics;
+using System.Linq;
 using Interapptive.Shared;
-using ShipWorks.Stores;
+using ShipWorks.Data;
+using ShipWorks.Data.Adapter.Custom;
 using ShipWorks.Data.Connection;
-using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Email;
+using ShipWorks.Stores;
 
 namespace ShipWorks.Users.Security
 {
     /// <summary>
     /// Encapsulates user permission settings and their modifications.
     /// </summary>
-    public class SecurityContext
+    public class SecurityContext : ISecurityContext
     {
         PermissionSet permissionSet;
         bool isAdmin;
+        private static Lazy<SecurityContext> emptySecurityContext = new Lazy<SecurityContext>(() => new SecurityContext(null, false));
 
         Dictionary<PermissionIdentifier, bool> permissionCache = new Dictionary<PermissionIdentifier, bool>();
         Dictionary<PermissionType, StorePermissionCoverage> storePermissionCountCache = new Dictionary<PermissionType, StorePermissionCoverage>();
@@ -30,7 +29,7 @@ namespace ShipWorks.Users.Security
         #region class PermissionIdentifier
 
         /// <summary>
-        /// Used internall for the caching lookup
+        /// Used internal for the caching lookup
         /// </summary>
         class PermissionIdentifier
         {
@@ -63,7 +62,7 @@ namespace ShipWorks.Users.Security
             /// <summary>
             /// Operator==
             /// </summary>
-             public static bool operator ==(PermissionIdentifier left, PermissionIdentifier right)
+            public static bool operator ==(PermissionIdentifier left, PermissionIdentifier right)
             {
                 return left.Equals(right);
             }
@@ -113,6 +112,11 @@ namespace ShipWorks.Users.Security
         }
 
         /// <summary>
+        /// Empty security context
+        /// </summary>
+        public static SecurityContext EmptySecurityContext => emptySecurityContext.Value;
+
+        /// <summary>
         /// Determines if the current user has the specified permission, and if not, throws a PermissionException.
         /// </summary>
         public void DemandPermission(PermissionType type)
@@ -121,7 +125,7 @@ namespace ShipWorks.Users.Security
         }
 
         /// <summary>
-        /// Determines if the current user has the specified permission, and if not, throws a PermissionException. If the PermissionType is 
+        /// Determines if the current user has the specified permission, and if not, throws a PermissionException. If the PermissionType is
         /// related to orders, then the ObjectID will be automatically translated to a StoreID, such as an OrderItemID would
         /// be translated to its order's StoreID.
         /// </summary>
@@ -144,7 +148,7 @@ namespace ShipWorks.Users.Security
 
         /// <summary>
         /// Determines if the user has the specified permission for the given object.   This takes into consideration
-        /// permissions that imply other permissions (such as Edit Orders implies Edit Notes).  If the PermissionType is 
+        /// permissions that imply other permissions (such as Edit Orders implies Edit Notes).  If the PermissionType is
         /// related to orders, then the ObjectID will be automatically translated to a StoreID, such as an OrderItemID would
         /// be translated to its order's StoreID.
         /// </summary>
@@ -164,7 +168,7 @@ namespace ShipWorks.Users.Security
                 throw new ArgumentException("Cannot pass a null entity to a non-global permission.");
             }
 
-            // First see if the permission depends on the actual entity that was passed, and translate as necesary
+            // First see if the permission depends on the actual entity that was passed, and translate as necessary
             if (scope == PermissionScope.IndirectEntityType)
             {
                 type = PermissionHelper.GetIndirectEntityActualPermission(type, EntityUtility.GetEntityType(objectID.Value));
@@ -180,12 +184,12 @@ namespace ShipWorks.Users.Security
             // For store permissions we have an early-out if they can do the permission for all stores or no stores
             if (scope != PermissionScope.Global)
             {
-                // "Some" is the default for "dont early out"
+                // "Some" is the default for "don't early out"
                 StorePermissionCoverage coverage = StorePermissionCoverage.Some;
 
                 if (scope == PermissionScope.Store)
                 {
-                    // Only need to do the shortcut to avoid translating from child entities up to the StoreID... so we don't need to do 
+                    // Only need to do the shortcut to avoid translating from child entities up to the StoreID... so we don't need to do
                     // it (and can't, or it would recurse) for StoreEntity
                     if (EntityUtility.GetEntityType(objectID.Value) != EntityType.StoreEntity)
                     {
@@ -219,8 +223,8 @@ namespace ShipWorks.Users.Security
             {
                 return hasPermission;
             }
-            
-            // See if the security depends not on the passed in object - but on the object's that is is related to
+
+            // See if the security depends not on the passed in object - but on the object's that it is related to
             if (PermissionHelper.GetScope(type) == PermissionScope.IndirectRelatedObject)
             {
                 hasPermission = HasIndirectRelatedObjectPermission(type, objectID.Value);
@@ -235,7 +239,7 @@ namespace ShipWorks.Users.Security
                     scopeID = TranslateStoreScope(objectID);
                 }
 
-                // If its a store scope, but we weren't able to nail down a StoreID (for example, a customer with multiple orders in multiple stores), then 
+                // If its a store scope, but we weren't able to nail down a StoreID (for example, a customer with multiple orders in multiple stores), then
                 // we have to say no.  If they had access to all stores - we'd have already said yes.
                 if (PermissionHelper.GetScope(type) == PermissionScope.Store && scopeID == null)
                 {
@@ -414,7 +418,7 @@ namespace ShipWorks.Users.Security
         {
             if (PermissionHelper.GetScope(type) != PermissionScope.IndirectRelatedObject)
             {
-                throw new InvalidOperationException("Only intended to be calld for related object scoped permissions.");
+                throw new InvalidOperationException("Only intended to be called for related object scoped permissions.");
             }
 
             switch (type)
@@ -467,7 +471,7 @@ namespace ShipWorks.Users.Security
         {
             if (PermissionHelper.GetScope(permissionType) != PermissionScope.Store)
             {
-                throw new InvalidOperationException("Only intended to be calld for Store scoped permissions.");
+                throw new InvalidOperationException("Only intended to be called for Store scoped permissions.");
             }
 
             lock (storePermissionCountCache)

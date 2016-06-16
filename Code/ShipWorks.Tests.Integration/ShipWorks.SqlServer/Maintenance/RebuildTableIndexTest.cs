@@ -1,124 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using Moq;
-using ShipWorks.ApplicationCore.ExecutionMode;
-using ShipWorks.ApplicationCore.Logging;
-using ShipWorks.Common.Threading;
-using ShipWorks.Data;
 using ShipWorks.Data.Connection;
-using ShipWorks.Shipping;
-using ShipWorks.Shipping.Profiles;
-using ShipWorks.Shipping.Settings;
-using ShipWorks.Shipping.Settings.Defaults;
 using ShipWorks.Startup;
-using ShipWorks.Stores;
-using ShipWorks.Templates;
-using ShipWorks.Users;
-using ShipWorks.Users.Audit;
+using ShipWorks.Tests.Shared.Database;
 using Xunit;
 
 namespace ShipWorks.Tests.Integration.MSTest.ShipWorks.SqlServer.Maintenance
 {
-    public class RebuildTableIndexTest
+    [Collection("Database collection")]
+    [Trait("Category", "ContinuousIntegration")]
+    public class RebuildTableIndexTest : IDisposable
     {
-        private readonly Mock<ExecutionMode> executionMode;
-        private Mock<IProgressReporter> progressReporter;
+        private readonly DataContext context;
 
-        public RebuildTableIndexTest()
+        public RebuildTableIndexTest(DatabaseFixture db)
         {
-            executionMode = new Mock<ExecutionMode>();
-            executionMode.Setup(m => m.IsUISupported).Returns(true);
-
-            progressReporter = new Mock<IProgressReporter>();
-
-            Guid swInstance = GetShipWorksInstance();
-
-            if (ApplicationCore.ShipWorksSession.ComputerID == Guid.Empty)
-            {
-                ContainerInitializer.Initialize();
-
-                ApplicationCore.ShipWorksSession.Initialize(swInstance);
-                SqlSession.Initialize();
-
-                Console.WriteLine(SqlSession.Current.Configuration.DatabaseName);
-                Console.WriteLine(SqlSession.Current.Configuration.ServerInstance);
-
-                DataProvider.InitializeForApplication(executionMode.Object);
-                AuditProcessor.InitializeForApplication();
-
-                ShippingSettings.InitializeForCurrentDatabase();
-                ShippingProfileManager.InitializeForCurrentSession();
-                ShippingDefaultsRuleManager.InitializeForCurrentSession();
-                ShippingProviderRuleManager.InitializeForCurrentSession();
-
-                StoreManager.InitializeForCurrentSession();
-
-                UserManager.InitializeForCurrentUser();
-
-                UserSession.InitializeForCurrentDatabase(executionMode.Object);
-
-                if (!UserSession.Logon("shipworks", "shipworks", true))
-                {
-                    throw new Exception("A 'shipworks' account with password 'shipworks' needs to be created.");
-                }
-
-                ShippingManager.InitializeForCurrentDatabase();
-                LogSession.Initialize();
-
-                TemplateManager.InitializeForCurrentSession();
-
-                CreateTestTable();
-            }
-        }
-
-        private Guid GetShipWorksInstance()
-        {
-            Guid instance;
-
-            string instanceFromConfig = System.Configuration.ConfigurationManager.AppSettings["ShipWorksInstanceGuid"];
-            if (!string.IsNullOrWhiteSpace(instanceFromConfig))
-            {
-                instance = Guid.Parse(instanceFromConfig);
-            }
-            else
-            {
-                // Fall back to the hard-coded values in the case where the instance value is not found in the
-                // configuration file
-                switch (Environment.MachineName.ToLower())
-                {
-                    case "tim-pc":
-                        instance = Guid.Parse("{2D64FF9F-527F-47EF-BA24-ECBF526431EE}");
-                        break;
-                    case "john3610-pc":
-                        instance = Guid.Parse("{a721d9e4-fb3b-4a64-a612-8579b1251c95}");
-                        break;
-                    case "kevin-pc":
-                        instance = Guid.Parse("{6db3aa02-32bb-430e-95d2-0c59b3b7417a}");
-                        break;
-                    case "MSTest-vm":
-                        instance = Guid.Parse("{3BAE47D1-6903-428B-BD9D-31864E614709}");
-                        break;
-                    case "benz-pc3":
-                        instance = Guid.Parse("{A74AED9C-0AB8-4649-B233-8DFBE774D9F8}");
-                        break;
-                    case "berger-pc":
-                        instance = Guid.Parse("{AABB7285-a889-46af-87b8-69c10cdbAABB}");
-                        break;
-                    case "mirza-pc2":
-                        instance = Guid.Parse("{1231F4A9-640C-4E08-A52A-AE3B2C2FB864}");
-                        break;
-                    default:
-                        throw new ApplicationException("Enter your machine and ShipWorks instance guid in ShipSenseLoaderTest()");
-                }
-            }
-
-            return instance;
+            context = db.CreateDataContext(x => ContainerInitializer.Initialize(x));
+            CreateTestTable();
         }
 
         [Fact]
         [Trait("Category", "SqlServer.Maintenance")]
-        [Trait("Category", "ContinuousIntegration")]
         public void RebuildTableIndex_RebuildAllIndexes_Succeeds()
         {
             // This assumes it is being run against the "seeded" database (see SeedDatabase.sql script
@@ -194,30 +97,32 @@ namespace ShipWorks.Tests.Integration.MSTest.ShipWorks.SqlServer.Maintenance
             return tablesAndIndexes;
         }
 
+        public void Dispose() => context.Dispose();
+
         // Script to create the test table, add indexes for testing.
         private const string CreateTestTableCommandText = @"
             IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[TestRebuildingIndexes]') AND type in (N'U'))
-	            DROP TABLE [dbo].[TestRebuildingIndexes]
+                DROP TABLE [dbo].[TestRebuildingIndexes]
 
             CREATE TABLE [dbo].[TestRebuildingIndexes](
-	            [TestRebuildingIndexesID] [bigint] IDENTITY(1,1) NOT NULL,
-	            [SmallNvarchar] nvarchar(500) NOT NULL,
-	            [LargeNvarchar] nvarchar(500) NOT NULL,
+                [TestRebuildingIndexesID] [bigint] IDENTITY(1,1) NOT NULL,
+                [SmallNvarchar] nvarchar(500) NOT NULL,
+                [LargeNvarchar] nvarchar(500) NOT NULL,
              CONSTRAINT [PK_TestRebuildingIndexes] PRIMARY KEY CLUSTERED
             (
-	            [TestRebuildingIndexesID] ASC
+                [TestRebuildingIndexesID] ASC
             )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
             ) ON [PRIMARY]
 
 
             CREATE NONCLUSTERED INDEX [IX_TestRebuildingIndexes_SmallNvarchar] ON [dbo].[TestRebuildingIndexes]
             (
-	            [SmallNvarchar] ASC
+                [SmallNvarchar] ASC
             )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 
             CREATE NONCLUSTERED INDEX [IX_TestRebuildingIndexes_LargeNvarchar] ON [dbo].[TestRebuildingIndexes]
             (
-	            [LargeNvarchar] ASC
+                [LargeNvarchar] ASC
             )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 
             DECLARE @RowCount INT
@@ -232,14 +137,14 @@ namespace ShipWorks.Tests.Integration.MSTest.ShipWorks.SqlServer.Maintenance
 
             WHILE @RowCount < 1000
             BEGIN
-	            SET @RowString = CAST(@RowCount AS VARCHAR(10))
-	            SELECT @Random = ROUND(((@Upper - @Lower -1) * RAND() + @Lower), 0)
-	            SET @InsertDate = DATEADD(dd, @Random, GETDATE())
+                SET @RowString = CAST(@RowCount AS VARCHAR(10))
+                SELECT @Random = ROUND(((@Upper - @Lower -1) * RAND() + @Lower), 0)
+                SET @InsertDate = DATEADD(dd, @Random, GETDATE())
 
-	            INSERT INTO [TestRebuildingIndexes] ([SmallNvarchar], [LargeNvarchar])
-	            VALUES (REPLICATE('0', 10 - DATALENGTH(@RowString)) + @RowString , @InsertDate )
+                INSERT INTO [TestRebuildingIndexes] ([SmallNvarchar], [LargeNvarchar])
+                VALUES (REPLICATE('0', 10 - DATALENGTH(@RowString)) + @RowString , @InsertDate )
 
-	            SET @RowCount = @RowCount + 1
+                SET @RowCount = @RowCount + 1
             END
 
             update [TestRebuildingIndexes] set SmallNvarchar = cast(TestRebuildingIndexesID as nvarchar(50)) + SmallNvarchar

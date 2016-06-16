@@ -415,7 +415,6 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// <summary>
         /// Populates the Shipping Address
         /// </summary>
-        [NDependIgnoreLongMethod]
         private static void LoadAddresses(AmazonOrderEntity order, XPathNamespaceNavigator xpath)
         {
             bool addressExists = xpath.SelectSingleNode("amz:ShippingAddress") != null;

@@ -1,4 +1,5 @@
-﻿using Autofac.Extras.Moq;
+﻿using System;
+using Autofac.Extras.Moq;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Utility;
 using Moq;
@@ -6,7 +7,6 @@ using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
-using System;
 using System.Collections.Generic;
 using Xunit;
 
@@ -25,8 +25,8 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
         public void Execute_DelegateValidateAddress_HasPhysicalAddress()
         {
             var webClient = mock.Mock<IUspsWebClient>();
-            webClient.Setup(c => c.ValidateAddress(It.IsAny<PersonAdapter>()))
-                .Returns(new UspsAddressValidationResults()
+            webClient.Setup(c => c.ValidateAddressAsync(It.IsAny<PersonAdapter>()))
+                .ReturnsAsync(new UspsAddressValidationResults()
                 {
                     IsSuccessfulMatch = true
                 });
@@ -37,7 +37,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
 
             testObject.Execute();
 
-            webClient.Verify(c => c.ValidateAddress(testObject.PhysicalAddress), Times.Once);
+            webClient.Verify(c => c.ValidateAddressAsync(testObject.PhysicalAddress), Times.Once);
         }
 
         [Fact]
@@ -49,15 +49,15 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
 
             testObject.Execute();
 
-            webClient.Verify(c => c.ValidateAddress(It.IsAny<PersonAdapter>()), Times.Never);
+            webClient.Verify(c => c.ValidateAddressAsync(It.IsAny<PersonAdapter>()), Times.Never);
         }
 
         [Fact]
         public void Execute_ResponseTypeIsAddressValidationFailed_CannotValidateAddress()
         {
             var webClient = mock.Mock<IUspsWebClient>();
-            webClient.Setup(c => c.ValidateAddress(It.IsAny<PersonAdapter>()))
-                .Returns(new UspsAddressValidationResults()
+            webClient.Setup(c => c.ValidateAddressAsync(It.IsAny<PersonAdapter>()))
+                .ReturnsAsync(new UspsAddressValidationResults()
                 {
                     IsSuccessfulMatch = false
                 });
@@ -75,8 +75,8 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
         public void Execute_MessageIsAddressValidationFailedDescription_WhenCannotValidateAddress_AndNullSuggestions()
         {
             var webClient = mock.Mock<IUspsWebClient>();
-            webClient.Setup(c => c.ValidateAddress(It.IsAny<PersonAdapter>()))
-                .Returns(new UspsAddressValidationResults()
+            webClient.Setup(c => c.ValidateAddressAsync(It.IsAny<PersonAdapter>()))
+                .ReturnsAsync(new UspsAddressValidationResults()
                 {
                     IsSuccessfulMatch = false
                 });
@@ -95,8 +95,8 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
         public void Execute_MessageIsAddressValidationFailedDescription_WhenCannotValidateAddress_AndNoSuggestions()
         {
             var webClient = mock.Mock<IUspsWebClient>();
-            webClient.Setup(c => c.ValidateAddress(It.IsAny<PersonAdapter>()))
-                .Returns(new UspsAddressValidationResults()
+            webClient.Setup(c => c.ValidateAddressAsync(It.IsAny<PersonAdapter>()))
+                .ReturnsAsync(new UspsAddressValidationResults()
                 {
                     IsSuccessfulMatch = false,
                     Candidates = new List<Address>()
@@ -118,8 +118,8 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
             string includedInSuggestedAddress = "123 Elm St.";
 
             var webClient = mock.Mock<IUspsWebClient>();
-            webClient.Setup(c => c.ValidateAddress(It.IsAny<PersonAdapter>()))
-                .Returns(new UspsAddressValidationResults()
+            webClient.Setup(c => c.ValidateAddressAsync(It.IsAny<PersonAdapter>()))
+                .ReturnsAsync(new UspsAddressValidationResults()
                 {
                     IsSuccessfulMatch = false,
                     Candidates = new List<Address>() {new Address() {Address1 = includedInSuggestedAddress}}
@@ -140,8 +140,8 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
             string includedInSuggestedAddress = "123 Elm St.";
 
             var webClient = mock.Mock<IUspsWebClient>();
-            webClient.Setup(c => c.ValidateAddress(It.IsAny<PersonAdapter>()))
-                .Returns(new UspsAddressValidationResults()
+            webClient.Setup(c => c.ValidateAddressAsync(It.IsAny<PersonAdapter>()))
+                .ReturnsAsync(new UspsAddressValidationResults()
                 {
                     IsSuccessfulMatch = false,
                     Candidates =
@@ -168,8 +168,8 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
             string includedInSuggestedAddress = "123 Elm St.";
 
             var webClient = mock.Mock<IUspsWebClient>();
-            webClient.Setup(c => c.ValidateAddress(It.IsAny<PersonAdapter>()))
-                .Returns(new UspsAddressValidationResults()
+            webClient.Setup(c => c.ValidateAddressAsync(It.IsAny<PersonAdapter>()))
+                .ReturnsAsync(new UspsAddressValidationResults()
                 {
                     IsSuccessfulMatch = false,
                     Candidates =
@@ -197,8 +197,8 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
             var matchedAddress = new Address();
 
             var webClient = mock.Mock<IUspsWebClient>();
-            webClient.Setup(c => c.ValidateAddress(It.IsAny<PersonAdapter>()))
-                .Returns(new UspsAddressValidationResults()
+            webClient.Setup(c => c.ValidateAddressAsync(It.IsAny<PersonAdapter>()))
+                .ReturnsAsync(new UspsAddressValidationResults()
                 {
                     IsSuccessfulMatch = true,
                     MatchedAddress = matchedAddress
@@ -217,8 +217,8 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
         public void Execute_ResultIsPoBoxNotAllowed_WhenValidationSetsIsPoBoxToTrue()
         {
             var webClient = mock.Mock<IUspsWebClient>();
-            webClient.Setup(c => c.ValidateAddress(It.IsAny<PersonAdapter>()))
-                .Returns(new UspsAddressValidationResults()
+            webClient.Setup(c => c.ValidateAddressAsync(It.IsAny<PersonAdapter>()))
+                .ReturnsAsync(new UspsAddressValidationResults()
                 {
                     IsSuccessfulMatch = true,
                     IsPoBox = true

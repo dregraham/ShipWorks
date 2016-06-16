@@ -14,6 +14,7 @@ using Interapptive.Shared.IO.Text;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Security;
 using Interapptive.Shared.Utility;
+using log4net;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Common.Threading;
 using ShipWorks.Data.Connection;
@@ -22,7 +23,6 @@ using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
 using ShipWorks.Stores.Communication.Throttling;
-using log4net;
 
 namespace ShipWorks.Stores.Platforms.Amazon.Mws
 {
@@ -165,7 +165,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
             {
                 string id = (string) xElement.Element(amz + "MarketplaceId");
                 string name = (string) xElement.Element(amz + "Name");
-                string domain = (string)xElement.Element(amz + "DomainName");
+                string domain = (string) xElement.Element(amz + "DomainName");
 
                 marketplaces.Add(new AmazonMwsMarketplace { MarketplaceID = id, Name = name, DomainName = domain });
             }
@@ -317,7 +317,9 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
 
             // Add the additional namespace so weight, image URL, and other data about the
             // product can be extracted
-            xpath.Namespaces.AddNamespace("details", string.Format("http://mws.amazonservices.com/schema/Products/{0}/default.xsd", mwsSettings.GetApiVersion(AmazonMwsApiCall.GetMatchingProductForId)));
+            xpath.Namespaces.AddNamespace("details",
+                string.Format("http://mws.amazonservices.com/schema/Products/{0}/default.xsd",
+                mwsSettings.GetApiVersion(AmazonMwsApiCall.GetMatchingProductForId)));
 
             // done
             return xpath;
@@ -524,7 +526,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
             {
                 carrier = ShippingManager.GetOtherCarrierDescription(shipment).Name;
             }
-            else if (ShipmentTypeManager.ShipmentTypeCodeSupportsDhl((ShipmentTypeCode)shipment.ShipmentType))
+            else if (ShipmentTypeManager.ShipmentTypeCodeSupportsDhl((ShipmentTypeCode) shipment.ShipmentType))
             {
                 PostalServiceType service = (PostalServiceType) shipment.Postal.Service;
 
@@ -576,7 +578,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
                         XElement timestampElement = root.Element("Timestamp");
                         if (timestampElement != null)
                         {
-                            string timeString = (string)timestampElement.Attribute("timestamp");
+                            string timeString = (string) timestampElement.Attribute("timestamp");
                             DateTime serverTime;
 
                             if (!string.IsNullOrEmpty(timeString) && DateTime.TryParse(timeString, out serverTime))
