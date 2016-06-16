@@ -10,8 +10,9 @@ using Interapptive.Shared.Win32;
 using Microsoft.ApplicationInsights;
 using Microsoft.ApplicationInsights.DataContracts;
 using Microsoft.ApplicationInsights.Extensibility;
+using Microsoft.ApplicationInsights.Extensibility.Implementation;
 
-namespace Interapptive.Shared.Telemetry
+namespace Interapptive.Shared.Metrics
 {
     /// <summary>
     /// Telemetry client
@@ -31,6 +32,10 @@ namespace Interapptive.Shared.Telemetry
         /// </summary>
         static Telemetry()
         {
+            TelemetryProcessorChainBuilder builder = TelemetryConfiguration.Active.TelemetryProcessorChainBuilder;
+            builder.Use((next) => new DeobfuscationProcessor(next));
+            builder.Build();
+
             TelemetryConfiguration.Active.InstrumentationKey = InstrumentationKey;
 
             telemetryClient = new TelemetryClient();
