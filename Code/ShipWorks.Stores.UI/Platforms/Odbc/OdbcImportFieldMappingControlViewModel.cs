@@ -4,6 +4,7 @@ using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
 using System;
@@ -15,7 +16,6 @@ using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 using System.Windows.Input;
-using ShipWorks.Data.Model.HelperClasses;
 using SaveFileDialog = Microsoft.Win32.SaveFileDialog;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc
@@ -65,11 +65,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
 
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
 
-            NumbersUpTo25 = new List<int>();
-            for (int i = 0; i <= 25; i++)
-            {
-                NumbersUpTo25.Add(i);
-            }
+            NumbersUpTo25 = Enumerable.Range(0, 26).ToList();
         }
 
         /// <summary>
@@ -187,11 +183,11 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             {
                 if (value)
                 {
-                    SwitchToSingleLineItems();
+                    SwitchToSingleLineOrders();
                 }
                 else
                 {
-                    SwitchToMultiLineItems();
+                    SwitchToMultiLineOrders();
                 }
 
                 handler.Set(nameof(OrderHasSingleLineItem), ref orderHasSingleLineItem, value);
@@ -213,29 +209,21 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
 
                     if (delta > 0)
                     {
-                        for (int i = numberOfItemsPerOrder; i < value; i++)
+                        for (int i = numberOfItemsPerOrder + 1; i <= value; i++)
                         {
                             OdbcFieldMap map = fieldMapFactory.CreateOrderItemFieldMap();
+                            DisplayFieldMaps.Add(new OdbcFieldMapDisplay($"Item {i}", map));
 
                             // Give the new item the correct number of attributes
-                            for (int j = 0; j < numberOfAttributesPerItem; j++)
-                            {
-                                ShipWorksOdbcMappableField shipWorksField =
-                                    new ShipWorksOdbcMappableField(OrderItemAttributeFields.Name, $"Attribute Name {j + 1}");
-                                ExternalOdbcMappableField externalField = new ExternalOdbcMappableField(null, null);
-
-                                map.AddEntry(new OdbcFieldMapEntry(shipWorksField, externalField));
-                            }
-
-                            DisplayFieldMaps.Add(new OdbcFieldMapDisplay($"Item {i + 1}", map));
+                            GetRangeOfAttributes(1, numberOfAttributesPerItem).ToList().ForEach(map.AddEntry);
                         }
                     }
                     else if (delta < 0)
                     {
-                        for (int i = numberOfItemsPerOrder; i > value; i--)
-                        {
-                            DisplayFieldMaps.RemoveAt(DisplayFieldMaps.Count-1);
-                        }
+                        DisplayFieldMaps.Where(m => m.DisplayName.Contains("Item"))
+                            .Skip(numberOfItemsPerOrder)
+                            .ToList()
+                            .ForEach(map => DisplayFieldMaps.Remove(map));
                     }
                 }
 
@@ -254,36 +242,41 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             {
                 int delta = value - numberOfAttributesPerItem;
 
+                IEnumerable<OdbcFieldMapDisplay> itemMaps = DisplayFieldMaps.Where(m => m.DisplayName.Contains("Item"));
                 if (delta > 0)
                 {
-                    foreach (OdbcFieldMapDisplay displayMap in DisplayFieldMaps.
-                        Where(displayMap => displayMap.DisplayName.Contains("Item")))
+                    foreach (OdbcFieldMapDisplay displayMap in itemMaps)
                     {
-                        for (int i = numberOfAttributesPerItem; i < value; i++)
-                        {
-                            ShipWorksOdbcMappableField shipWorksField =
-                                new ShipWorksOdbcMappableField(OrderItemAttributeFields.Name,
-                                    $"Attribute Name {i + 1}");
-                            ExternalOdbcMappableField externalField = new ExternalOdbcMappableField(null, null);
-
-                            displayMap.Map.AddEntry(new OdbcFieldMapEntry(shipWorksField, externalField));
-                        }
+                        GetRangeOfAttributes(numberOfAttributesPerItem + 1, delta)
+                            .ToList()
+                            .ForEach(displayMap.Map.AddEntry);
                     }
                 }
                 else if (delta < 0)
                 {
-                    foreach (OdbcFieldMapDisplay displayMap in DisplayFieldMaps.Where(m => m.DisplayName.Contains("Item")))
+                    foreach (OdbcFieldMapDisplay displayMap in itemMaps)
                     {
-                        for (int i = numberOfAttributesPerItem; i > value; i--)
-                        {
-                            displayMap.Map.RemoveEntryAt(displayMap.Map.Entries.Count - 1);
-                        }
+                        int entryCount = displayMap.Map.Entries.Count;
+
+                        // delta is negative, so this is entryCount - amount we want to remove
+                        displayMap.Map.Entries.Skip(entryCount + delta).ToList().ForEach(m=>displayMap.Map.RemoveEntry(m));
                     }
                 }
 
                 handler.Set(nameof(NumberOfAttributesPerItem), ref numberOfAttributesPerItem, value);
             }
         }
+
+        private IEnumerable<OdbcFieldMapEntry> GetRangeOfAttributes(int startAttributeNumber, int numberOfAttributes)
+        {
+            // Generate attribute numbers for new attributes to add and add them.
+            return Enumerable.Range(startAttributeNumber, numberOfAttributes)
+                .Select(
+                    attributeNumber =>
+                        new OdbcFieldMapEntry(
+                            new ShipWorksOdbcMappableField(OrderItemAttributeFields.Name,
+                                $"Attribute {attributeNumber}"), new ExternalOdbcMappableField(null, null)));
+        } 
 
         /// <summary>
         /// List of numbers 1-25 for binding to number of items and number of attributes lists
@@ -344,15 +337,20 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// </summary>
         public bool EnsureRequiredFieldsHaveValue()
         {
-            IEnumerable<IOdbcFieldMapEntry> entries = DisplayFieldMaps[0].Map.Entries.Where(e => e.ShipWorksField.IsRequired);
+            // Finds an entry that is required and the external column has not been set
+            IOdbcFieldMapEntry unsetRequiredFieldMap =
+                DisplayFieldMaps[0].Map.Entries.FirstOrDefault(
+                    entry =>
+                        entry.ShipWorksField.IsRequired &&
+                        (entry.ExternalField.Column?.Name.Equals("(None)", StringComparison.InvariantCulture) ?? true));
 
-            foreach (IOdbcFieldMapEntry entry in entries.Where(entry => entry.ExternalField.Column == null ||
-            entry.ExternalField.Column.Name.Equals("(None)", StringComparison.InvariantCulture)))
+            if (unsetRequiredFieldMap != null)
             {
-                messageHelper.ShowError($"{entry.ShipWorksField.DisplayName} is a required field. Please select a column to map to {entry.ShipWorksField.DisplayName}.");
+                string displayName = unsetRequiredFieldMap.ShipWorksField.DisplayName;
+                messageHelper.ShowError($"{displayName} is a required field. Please select a column to map to {displayName}.");
                 return false;
             }
-
+            
             if (!OrderHasSingleLineItem && string.IsNullOrWhiteSpace(RecordIdentifier?.Name))
             {
                 messageHelper.ShowError("When orders contain items on multiple lines, an order identifier is required to be mapped.");
@@ -384,6 +382,12 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             {
                 IEnumerable<IOdbcFieldMapEntry> entries = map.FindEntriesBy(OrderFields.OrderNumber);
                 map.RecordIdentifierSource = entries.FirstOrDefault()?.ExternalField.Column.Name;
+            }
+
+            if (string.IsNullOrEmpty(map.RecordIdentifierSource))
+            {
+                // This should never happen. We check for validated fields before calling this...
+                throw new ShipWorksOdbcException("Cannot save a map without a record identifier.");
             }
 
             return map;
@@ -427,6 +431,11 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// </summary>
         private void SaveMapToDisk()
         {
+            if (!EnsureRequiredFieldsHaveValue())
+            {
+                return;
+            }
+
             SaveFileDialog dlg = new SaveFileDialog
             {
                 DefaultExt = "swdbm",
@@ -437,76 +446,38 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
 
             if (result != null && result.Value)
             {
-                FileStream fs = (FileStream)dlg.OpenFile();
-                OdbcFieldMap map = GetSingleMap();
-
-                try
+                using (FileStream fs = (FileStream) dlg.OpenFile())
                 {
-                    map.Save(fs);
-                }
-                catch (ShipWorksOdbcException ex)
-                {
-                    messageHelper.ShowError(ex.Message);
+                    try
+                    {
+                        OdbcFieldMap map = GetSingleMap();
+                        map.Save(fs);
+                    }
+                    catch (ShipWorksOdbcException ex)
+                    {
+                        messageHelper.ShowError(ex.Message);
+                    }
                 }
             }
         }
 
         /// <summary>
-        /// Switches to single line items.
+        /// Switches to single line orders.
         /// </summary>
-        private void SwitchToSingleLineItems()
+        private void SwitchToSingleLineOrders()
         {
-            List<OdbcFieldMapDisplay> maps = new List<OdbcFieldMapDisplay>()
-            {
-                DisplayFieldMaps[0], DisplayFieldMaps[1]
-            };
-
-            // If no items, dont show items in map list
-            if (NumberOfItemsPerOrder == 0)
-            {
-                DisplayFieldMaps = new ObservableCollection<OdbcFieldMapDisplay>(maps);
-                return;
-            }
-
-            // If we only have order and address maps, add an Item 1, otherwise, change Item to Item 1
-            if (DisplayFieldMaps.Count == 2)
-            {
-                maps.Add(new OdbcFieldMapDisplay("Item 1", fieldMapFactory.CreateOrderItemFieldMap()));
-            }
-            else
-            {
-                maps.Add(DisplayFieldMaps[2]);
-                maps[2].DisplayName = "Item 1";
-            }
-
-            // add new item entries
-            for (int i = 1; i < NumberOfItemsPerOrder; i++)
-            {
-                maps.Add(new OdbcFieldMapDisplay($"Item {i + 1}", fieldMapFactory.CreateOrderItemFieldMap()));
-            }
-
-            DisplayFieldMaps = new ObservableCollection<OdbcFieldMapDisplay>(maps);
+            NumberOfItemsPerOrder = 1;
+            DisplayFieldMaps[2].DisplayName = "Item 1";
         }
 
         /// <summary>
         /// Switches to multi line items.
         /// </summary>
-        private void SwitchToMultiLineItems()
+        private void SwitchToMultiLineOrders()
         {
-            if (DisplayFieldMaps.Count == 2)
-            {
-                DisplayFieldMaps.Add(new OdbcFieldMapDisplay("Item", fieldMapFactory.CreateOrderItemFieldMap()));
-                return;
-            }
+            NumberOfItemsPerOrder = 1;
 
-            List<OdbcFieldMapDisplay> maps = new List<OdbcFieldMapDisplay>()
-            {
-                DisplayFieldMaps[0], DisplayFieldMaps[1], DisplayFieldMaps[2]
-            };
-
-            maps[2].DisplayName = "Item";
-
-            DisplayFieldMaps = new ObservableCollection<OdbcFieldMapDisplay>(maps);
+            DisplayFieldMaps[2].DisplayName = "Item";
         }
     }
 }

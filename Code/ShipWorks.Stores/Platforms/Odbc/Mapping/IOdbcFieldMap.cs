@@ -26,6 +26,11 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         void AddEntry(IOdbcFieldMapEntry entry);
 
         /// <summary>
+        /// Removes the entry
+        /// </summary>
+        void RemoveEntry(IOdbcFieldMapEntry entry);
+
+        /// <summary>
         /// Loads the ODBC Field Map from the given string.
         /// </summary>
         void Load(string serializedMap);
@@ -65,11 +70,6 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// </summary>
         IOdbcFieldMap Clone();
 
-        /// <summary>
-        /// Removes the entry at the given index
-        /// </summary>
-        void RemoveEntryAt(int index);
-		
         /// <summary>
         /// Gets the name of the external table.
         /// </summary>

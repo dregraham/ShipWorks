@@ -48,6 +48,14 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 		}
 
         /// <summary>
+        /// Removes the entry
+        /// </summary>
+        public void RemoveEntry(IOdbcFieldMapEntry entry)
+        {
+            entries.Remove(entry);
+        }
+
+        /// <summary>
         /// Reset all of the entries external fields
         /// </summary>
         private void ResetValues()
@@ -176,16 +184,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
                 return clonedFieldMap;
             }
         }
-
-        /// <summary>
-        /// Removes the entry at the given index
-        /// </summary>
-        /// <param name="index">The index.</param>
-        public void RemoveEntryAt(int index)
-        {
-            entries.RemoveAt(index);
-        }
-		
+	
         /// <summary>
         /// Gets the name of the external table.
         /// </summary>
