@@ -1,4 +1,5 @@
 ﻿using Interapptive.Shared.Business;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.AddressValidation;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -112,7 +113,16 @@ namespace ShipWorks.Stores.Platforms.Odbc
                 ResetAddressIfRequired(downloadedOrder, "Ship", OriginalShippingAddress);
                 ResetAddressIfRequired(downloadedOrder, "Bill", OriginalBillingAddress);
 
-                SaveDownloadedOrder(downloadedOrder);
+                try
+                {
+                    SaveDownloadedOrder(downloadedOrder);
+                }
+                catch (ORMQueryExecutionException ex)
+                {
+                    
+                    throw new DownloadException(ex.Message, ex);
+                }
+
 
                 Progress.PercentComplete = 100 * QuantitySaved / totalCount;
             }
