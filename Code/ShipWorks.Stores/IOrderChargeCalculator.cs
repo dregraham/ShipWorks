@@ -3,9 +3,9 @@
 namespace ShipWorks.Stores
 {
     /// <summary>
-    /// Utility for working with orders.
+    /// Calculates order charges
     /// </summary>
-    public interface IOrderUtility
+    public interface IOrderChargeCalculator
     {
         /// <summary>
         /// Calculate the order total of the order. 

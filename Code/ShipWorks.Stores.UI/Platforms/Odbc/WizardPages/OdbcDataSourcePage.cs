@@ -1,8 +1,9 @@
-﻿using ShipWorks.Data.Model.EntityClasses;
+﻿using Interapptive.Shared.Threading;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Management;
+using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.UI.Wizard;
 using System.Windows.Forms;
-using ShipWorks.Stores.Platforms.Odbc;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
 {
@@ -14,9 +15,10 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
         /// <summary>
         /// Constructor
         /// </summary>
-        public OdbcDataSourcePage()
+        public OdbcDataSourcePage(IExternalProcess odbcControlPanel)
         {
             InitializeComponent();
+            odbcDataSourceControl.LoadDependencies(odbcControlPanel);
             odbcDataSourceControl.RefreshDataSources();
         }
 

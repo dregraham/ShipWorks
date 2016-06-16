@@ -65,6 +65,21 @@
       <HintPath>..\..\packages\Autofac.Mef.3.0.3\lib\net40\Autofac.Integration.Mef.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="GalaSoft.MvvmLight, Version=5.2.0.37223, Culture=neutral, PublicKeyToken=0e453835af4ee6ce, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\MvvmLightLibs.5.2.0.0\lib\net40\GalaSoft.MvvmLight.dll</HintPath>
+    </Reference>
+    <Reference Include="GalaSoft.MvvmLight.Extras">
+      <HintPath>..\..\packages\MvvmLightLibs.5.2.0.0\lib\net40\GalaSoft.MvvmLight.Extras.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net, Version=1.2.13.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.Threading.Tasks, Version=1.0.12.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.dll</HintPath>
       <Private>True</Private>
@@ -75,21 +90,6 @@
     </Reference>
     <Reference Include="Microsoft.Threading.Tasks.Extensions.Desktop, Version=1.0.168.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.Extensions.Desktop.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="GalaSoft.MvvmLight, Version=5.2.0.37223, Culture=neutral, PublicKeyToken=0e453835af4ee6ce, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\MvvmLightLibs.5.2.0.0\lib\net40\GalaSoft.MvvmLight.dll</HintPath>
-    </Reference>
-    <Reference Include="GalaSoft.MvvmLight.Extras">
-      <HintPath>..\..\packages\MvvmLightLibs.5.2.0.0\lib\net40\GalaSoft.MvvmLight.Extras.dll</HintPath>
-    </Reference>
-    <Reference Include="log4net, Version=1.2.13.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
@@ -169,6 +169,13 @@
     <Compile Include="Platforms\LemonStand\LemonStandOrderIdentifierTest.cs" />
     <Compile Include="Platforms\LemonStand\LemonStandStoreTypeTest.cs" />
     <Compile Include="Platforms\Odbc\JsonOdbcFieldMapIOFactoryTest.cs" />
+    <Compile Include="Platforms\Odbc\Loader\OdbcItemAttributeLoaderTest.cs" />
+    <Compile Include="Platforms\Odbc\Loader\OdbcOrderNameAndAddressLoaderTest.cs" />
+    <Compile Include="Platforms\Odbc\Loader\OdbcOrderChargeLoaderTest.cs" />
+    <Compile Include="Platforms\Odbc\Loader\OdbcOrderItemLoaderTest.cs" />
+    <Compile Include="Platforms\Odbc\Loader\OdbcOrderLoaderTest.cs" />
+    <Compile Include="Platforms\Odbc\Loader\OdbcOrderNoteLoaderTest.cs" />
+    <Compile Include="Platforms\Odbc\Loader\OdbcOrderPaymentLoaderTest.cs" />
     <Compile Include="Platforms\Odbc\Mapping\ExternalOdbcMappableFieldTest.cs" />
     <Compile Include="Platforms\Odbc\Mapping\JsonOdbcFieldMapReaderTest.cs" />
     <Compile Include="Platforms\Odbc\Mapping\JsonOdbcFieldMapWriterTest.cs" />
@@ -177,20 +184,16 @@
     <Compile Include="Platforms\Odbc\Mapping\ShipWorksOdbcMappableFieldTest.cs" />
     <Compile Include="Platforms\Odbc\OdbcColumnTest.cs" />
     <Compile Include="Platforms\Odbc\OdbcCommandFactoryTest.cs" />
+    <Compile Include="Platforms\Odbc\OdbcDownloadCommandTest.cs" />
     <Compile Include="Platforms\Odbc\OdbcFieldMapFactoryTest.cs" />
     <Compile Include="Platforms\Odbc\OdbcImportFieldMappingControlViewModelTest.cs" />
-    <Compile Include="Platforms\Odbc\OdbcItemAttributeLoaderTest.cs" />
-    <Compile Include="Platforms\Odbc\OdbcOrderDateLoaderTest.cs" />
-    <Compile Include="Platforms\Odbc\OdbcOrderItemLoaderTest.cs" />
-    <Compile Include="Platforms\Odbc\OdbcOrderLoaderTest.cs" />
-    <Compile Include="Platforms\Odbc\OdbcOrderPaymentLoaderTest.cs" />
-    <Compile Include="Platforms\Odbc\OdbcOrderNoteLoaderTest.cs" />
-    <Compile Include="Platforms\Odbc\OdbcOrderChargeLoaderTest.cs" />
     <Compile Include="Platforms\Odbc\OdbcRecordTests.cs" />
     <Compile Include="Platforms\Odbc\OdbcSchemaTest.cs" />
     <Compile Include="Platforms\Odbc\OdbcTableTest.cs" />
     <Compile Include="Platforms\Sears\SearsCredentialsTest.cs" />
     <Compile Include="Platforms\Sears\SearsCipherKeyTest.cs" />
+    <Compile Include="Platforms\SparkPay\DTO\OrderStatusResponseTest.cs" />
+    <Compile Include="Platforms\SparkPay\DTO\StoresResponseTest.cs" />
     <Compile Include="Platforms\SparkPay\SparkPayShipmentFactoryTest.cs" />
     <Compile Include="Platforms\Odbc\OdbcDatasourceRepositoryTest.cs" />
     <Compile Include="Platforms\Odbc\OdbcDataSourceTest.cs" />
@@ -246,6 +249,7 @@
     <EmbeddedResource Include="Platforms\ThreeDCart\Artifacts\GetOrderResponseItemHasTwoAttributes.json" />
     <EmbeddedResource Include="Platforms\ThreeDCart\Artifacts\GetOrderResponseItemHasNoAttributes.json" />
     <EmbeddedResource Include="Platforms\ThreeDCart\Artifacts\GetOrderResponseItemHasOneAttribute.json" />
+    <EmbeddedResource Include="Platforms\ThreeDCart\Artifacts\GetOrderResponseItemHasOneAttributeWithoutPrice.json" />
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\..\packages\InterapptiveAnalyzers.1.0.5714.23531\analyzers\dotnet\cs\InterapptiveAnalyzers.dll" />

@@ -343,6 +343,23 @@ namespace :db do
 		command = ".\\Artifacts\\Application\\ShipWorks.exe \/cmd:regenerateallfilters"
 		sh command
 	end
+
+	desc "Show database information"
+	task :show do |t, args|
+		guid = shipworks_instance_guid
+
+		if guid != ""
+			puts "Found an instance GUID: #{guid}"
+			fileName = "C:\\ProgramData\\Interapptive\\ShipWorks\\Instances\\#{guid}\\Settings\\sqlsession.xml"
+
+			puts "Updating SQL session file..."
+			modify_xml fileName do |xml|
+				# Get the connection string we'll be using from the test config file
+				puts "server:   " + xml.xpath("//SqlSession/Server/Instance")[0].content
+				puts "database: " + xml.xpath("//SqlSession/Server/Database")[0].content
+			end
+		end
+	end
 end
 
 namespace :setup do

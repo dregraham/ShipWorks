@@ -142,10 +142,10 @@
     </Compile>
     <Compile Include="IOrderNote.cs" />
     <Compile Include="IOrderRepository.cs" />
-    <Compile Include="IOrderUtility.cs" />
+    <Compile Include="IOrderChargeCalculator.cs" />
     <Compile Include="OrderNote.cs" />
     <Compile Include="OrderRepository.cs" />
-    <Compile Include="OrderUtilityWrapper.cs" />
+    <Compile Include="OrderChargeCalculator.cs" />
     <Compile Include="Platforms\LemonStand\CoreExtensions\Actions\LemonStandOrderUpdateTask.cs" />
     <Compile Include="Platforms\LemonStand\CoreExtensions\Actions\LemonStandShipmentUploadTask.cs" />
     <Compile Include="Platforms\LemonStand\CoreExtensions\Filters\LemonStandOrderIdCondition.cs" />
@@ -169,15 +169,26 @@
     <Compile Include="Platforms\LemonStand\LemonStandStatusCodeProvider.cs" />
     <Compile Include="Platforms\LemonStand\LemonStandStoreType.cs" />
     <Compile Include="Platforms\LemonStand\LemonStandWebClient.cs" />
+    <Compile Include="Platforms\Odbc\EncryptedOdbcDataSource.cs" />
     <Compile Include="Platforms\Odbc\IOdbcCommand.cs" />
     <Compile Include="Platforms\Odbc\IOdbcDataSource.cs" />
-    <Compile Include="Platforms\Odbc\IOdbcItemAttributeLoader.cs" />
-    <Compile Include="Platforms\Odbc\IOdbcOrderDetailLoader.cs" />
-    <Compile Include="Platforms\Odbc\IOdbcOrderItemLoader.cs" />
-    <Compile Include="Platforms\Odbc\IOdbcOrderLoader.cs" />
     <Compile Include="Platforms\Odbc\IOdbcSchema.cs" />
     <Compile Include="Platforms\Odbc\IOdbcTable.cs" />
     <Compile Include="Platforms\Odbc\IOdbcWizardPage.cs" />
+    <Compile Include="Platforms\Odbc\IShipWorksOdbcCommand.cs" />
+    <Compile Include="Platforms\Odbc\IShipWorksOdbcCommandBuilder.cs" />
+    <Compile Include="Platforms\Odbc\IShipWorksOdbcDataAdapter.cs" />
+    <Compile Include="Platforms\Odbc\Loaders\IOdbcItemAttributeLoader.cs" />
+    <Compile Include="Platforms\Odbc\Loaders\IOdbcOrderDetailLoader.cs" />
+    <Compile Include="Platforms\Odbc\Loaders\IOdbcOrderItemLoader.cs" />
+    <Compile Include="Platforms\Odbc\Loaders\IOdbcOrderLoader.cs" />
+    <Compile Include="Platforms\Odbc\Loaders\OdbcItemAttributeLoader.cs" />
+    <Compile Include="Platforms\Odbc\Loaders\OdbcOrderNameAndAddressLoader.cs" />
+    <Compile Include="Platforms\Odbc\Loaders\OdbcOrderChargeLoader.cs" />
+    <Compile Include="Platforms\Odbc\Loaders\OdbcOrderItemLoader.cs" />
+    <Compile Include="Platforms\Odbc\Loaders\OdbcOrderLoader.cs" />
+    <Compile Include="Platforms\Odbc\Loaders\OdbcOrderNoteLoader.cs" />
+    <Compile Include="Platforms\Odbc\Loaders\OdbcOrderPaymentLoader.cs" />
     <Compile Include="Platforms\Odbc\Mapping\ExternalOdbcMappableField.cs" />
     <Compile Include="Platforms\Odbc\Mapping\IExternalOdbcMappableField.cs" />
     <Compile Include="Platforms\Odbc\Mapping\IOdbcFieldMap.cs" />
@@ -194,23 +205,20 @@
     <Compile Include="Platforms\Odbc\Mapping\OdbcFieldMap.cs" />
     <Compile Include="Platforms\Odbc\Mapping\OdbcFieldMapEntry.cs" />
     <Compile Include="Platforms\Odbc\Mapping\OdbcFieldMapFactory.cs" />
-    <Compile Include="Platforms\Odbc\OdbcItemAttributeLoader.cs" />
-    <Compile Include="Platforms\Odbc\OdbcOrderChargeLoader.cs" />
+    <Compile Include="Platforms\Odbc\Mapping\OdbcOrderFieldDescription.cs" />
     <Compile Include="Platforms\Odbc\Mapping\ShipWorksOdbcMappableField.cs" />
     <Compile Include="Platforms\Odbc\OdbcCipherKey.cs" />
     <Compile Include="Platforms\Odbc\OdbcColumn.cs" />
     <Compile Include="Platforms\Odbc\OdbcCommandFactory.cs" />
     <Compile Include="Platforms\Odbc\OdbcDownloadCommand.cs" />
-    <Compile Include="Platforms\Odbc\OdbcOrderDateLoader.cs" />
-    <Compile Include="Platforms\Odbc\OdbcOrderLoader.cs" />
-    <Compile Include="Platforms\Odbc\OdbcOrderItemLoader.cs" />
-    <Compile Include="Platforms\Odbc\OdbcOrderPaymentLoader.cs" />
-    <Compile Include="Platforms\Odbc\OdbcOrderNoteLoader.cs" />
     <Compile Include="Platforms\Odbc\OdbcRecord.cs" />
     <Compile Include="Platforms\Odbc\OdbcSchema.cs" />
     <Compile Include="Platforms\Odbc\OdbcStoreDownloader.cs" />
     <Compile Include="Platforms\Odbc\OdbcTable.cs" />
     <Compile Include="Platforms\Odbc\OdbcTableFactory.cs" />
+    <Compile Include="Platforms\Odbc\ShipWorksOdbcCommand.cs" />
+    <Compile Include="Platforms\Odbc\ShipWorksOdbcCommandBuilder.cs" />
+    <Compile Include="Platforms\Odbc\ShipWorksOdbcDataAdapter.cs" />
     <Compile Include="Platforms\Odbc\ShipWorksOdbcException.cs" />
     <Compile Include="Platforms\SparkPay\CoreExtensions\Actions\SparkPayOrderUpdateTask.cs" />
     <Compile Include="Platforms\SparkPay\CoreExtensions\Actions\SparkPayShipmentUploadTask.cs" />
@@ -296,6 +304,7 @@
     <Analyzer Include="..\..\packages\System.Security.Cryptography.Hashing.Algorithms.Analyzers.1.1.0\analyzers\dotnet\cs\System.Security.Cryptography.Hashing.Algorithms.Analyzers.dll" />
     <Analyzer Include="..\..\packages\System.Security.Cryptography.Hashing.Algorithms.Analyzers.1.1.0\analyzers\dotnet\cs\System.Security.Cryptography.Hashing.Algorithms.CSharp.Analyzers.dll" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

@@ -1,3 +1,4 @@
+using Interapptive.Shared.Utility;
 using Newtonsoft.Json;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using System;
@@ -12,21 +13,30 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
     [Obfuscation(Exclude = true)]
     public class ShipWorksOdbcMappableField : IShipWorksOdbcMappableField
     {
-        public const string UnitCostDisplayName = "Unit Cost";
-        public const string TotalCostDisplayName = "Total Cost";
-        public const string UnitWeightDisplayName = "Unit Weight";
-        public const string TotalWeightDisplayName = "Total Weight";
-        public const string UnitPriceDisplayName = "Unit Price";
-        public const string TotalPriceDisplayName = "Total Price";
-        public const string QuantityDisplayName = "Quantity";
-        public const string OrderDateAndTimeDisplayName = "Order Date & Time";
-        public const string OrderDateDisplayName = "Order Date";
-        public const string OrderTimeDisplayName = "Order Time";
-
+        /// <summary>
+        /// Used for deserialization
+        /// </summary>
         [JsonConstructor]
-        public ShipWorksOdbcMappableField(string displayName)
+        public ShipWorksOdbcMappableField(string typeName, string displayName)
         {
+            TypeName = typeName;
             DisplayName = displayName;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ShipWorksOdbcMappableField"/> class.
+        /// </summary>
+        public ShipWorksOdbcMappableField(EntityField2 field, OdbcOrderFieldDescription fieldDescription)
+            : this(field, EnumHelper.GetDescription(fieldDescription), false)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ShipWorksOdbcMappableField"/> class.
+        /// </summary>
+        public ShipWorksOdbcMappableField(EntityField2 field, OdbcOrderFieldDescription fieldDescription, bool isRequired)
+            : this(field, EnumHelper.GetDescription(fieldDescription), isRequired)
+        {
         }
 
         /// <summary>
@@ -56,7 +66,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <summary>
         /// The type of the ShipWorks field
         /// </summary>
-        public string TypeName { get; set; }
+        public string TypeName { get; }
 
         /// <summary>
         /// The name of the object that contains this field

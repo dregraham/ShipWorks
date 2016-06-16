@@ -2,10 +2,11 @@
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Odbc;
+using ShipWorks.Stores.Platforms.Odbc.Loaders;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
 using Xunit;
 
-namespace ShipWorks.Stores.Tests.Platforms.Odbc
+namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
 {
     public class OdbcOrderLoaderTest
     {
@@ -14,7 +15,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         {
             using (var mock = AutoMock.GetLoose())
             {
-                var orderUtility = mock.Mock<IOrderUtility>();
+                var orderUtility = mock.Mock<IOrderChargeCalculator>();
                 var fieldMap = mock.Mock<IOdbcFieldMap>();
                 var orderEntity = new OrderEntity() {IsNew = true};
                 var odbcRecords = new[] {new OdbcRecord()};
@@ -31,7 +32,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         {
             using (var mock = AutoMock.GetLoose())
             {
-                var orderUtility = mock.Mock<IOrderUtility>();
+                var orderUtility = mock.Mock<IOrderChargeCalculator>();
                 var fieldMap = mock.Mock<IOdbcFieldMap>();
                 var orderEntity = new OrderEntity() {IsNew = false};
                 var odbcRecords = new[] {new OdbcRecord()};

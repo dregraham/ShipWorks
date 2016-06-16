@@ -1,28 +1,22 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using Interapptive.Shared;
-using ShipWorks.Shipping.Carriers.Api;
-using ShipWorks.Shipping.Editing.Rating;
-using ShipWorks.UI.Wizard;
+using Interapptive.Shared.Business;
 using Interapptive.Shared.Net;
+using Interapptive.Shared.UI;
+using Interapptive.Shared.Utility;
+using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data;
-using ShipWorks.UI;
+using ShipWorks.Shipping.Carriers.Api;
+using ShipWorks.Shipping.Carriers.FedEx.Api;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
+using ShipWorks.Shipping.Editing.Rating;
+using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.WizardPages;
-using ShipWorks.Shipping.Carriers.FedEx.Api;
-using Interapptive.Shared.Business;
-using Interapptive.Shared.UI;
-using ShipWorks.Data.Connection;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
-using ShipWorks.Shipping.Editing;
-using ShipWorks.Shipping.Profiles;
+using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
 {
@@ -49,7 +43,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <summary>
         /// Constructor for specifying the account to be configured
         /// </summary>
-        public FedExSetupWizard(FedExAccountEntity account) 
+        public FedExSetupWizard(FedExAccountEntity account)
         {
             InitializeComponent();
 
@@ -114,6 +108,13 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             Pages.Add(new ShippingWizardPageFinish(shipmentType));
             Pages[Pages.Count - 1].SteppingInto += new EventHandler<WizardSteppingIntoEventArgs>(OnSteppingIntoFinish);
+
+            licenseAgreement.Rtf = ResourceUtility.ReadString("ShipWorks.Shipping.Carriers.FedEx.FedExEULA.rtf");
+
+            // The RichTextBox doesn't have padding, and margin doesn't seem to push it over, so this does...
+            licenseAgreement.SelectAll();
+            licenseAgreement.SelectionIndent += 3;
+            licenseAgreement.DeselectAll();
         }
 
         /// <summary>
@@ -123,7 +124,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         {
             WebHelper.OpenUrl("http://www.fedex.com/us/oadr/en/discounts/index.html", this);
         }
-
 
         /// <summary>
         /// Stepping next from the initial page.
@@ -208,7 +208,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 optionsControl.SaveSettings(settings);
                 ShippingSettings.Save(settings);
             }
-            
+
             try
             {
                 accountSettingsControl.SaveToAccount(account);
@@ -259,8 +259,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                     // Update any profiles to use this FedEx account if this is the only account
                     // in the system. This is to account for the situation where there a multiple
                     // profiles that may be associated with a previous FedEx account that has since
-                    // been deleted. 
-                    foreach (ShippingProfileEntity shippingProfileEntity in ShippingProfileManager.Profiles.Where(p => p.ShipmentType == (int)ShipmentTypeCode.FedEx))
+                    // been deleted.
+                    foreach (ShippingProfileEntity shippingProfileEntity in ShippingProfileManager.Profiles.Where(p => p.ShipmentType == (int) ShipmentTypeCode.FedEx))
                     {
                         if (shippingProfileEntity.FedEx.FedExAccountID.HasValue)
                         {
@@ -274,6 +274,31 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 ShippingSettings.MarkAsActivated(ShipmentTypeCode.FedEx);
                 ShippingSettings.MarkAsConfigured(ShipmentTypeCode.FedEx);
             }
+        }
+
+        /// <summary>
+        /// Changing if they accept the license agreement
+        /// </summary>
+        private void OnChangeAcceptAgreement(object sender, EventArgs e)
+        {
+            NextEnabled = radioAcceptAgreement.Checked;
+        }
+
+        /// <summary>
+        /// Stepping into the license page
+        /// </summary>
+        private void OnSteppingIntoLicense(object sender, WizardSteppingIntoEventArgs e)
+        {
+            radioDeclineAgreement.Checked = !radioAcceptAgreement.Checked;
+            NextEnabled = radioAcceptAgreement.Checked;
+        }
+
+        /// <summary>
+        /// Begin the printing process
+        /// </summary>
+        private void OnPrintAgreement(object sender, EventArgs e)
+        {
+            PrintUtility.PrintText(this, "ShipWorks - FedEx License Agreement", licenseAgreement.Text, true);
         }
     }
 }

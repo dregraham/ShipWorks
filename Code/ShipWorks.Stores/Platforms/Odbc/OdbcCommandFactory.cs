@@ -13,18 +13,17 @@ namespace ShipWorks.Stores.Platforms.Odbc
         private readonly IOdbcFieldMap odbcFieldMap;
         private readonly IOdbcDataSource dataSource;
         private readonly Func<Type, ILog> logFactory;
+        private readonly IShipWorksDbProviderFactory dbProviderFactory;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcCommandFactory"/> class.
         /// </summary>
-        public OdbcCommandFactory(
-            IOdbcFieldMap odbcFieldMap,
-            IOdbcDataSource dataSource,
-            Func<Type, ILog> logFactory)
+        public OdbcCommandFactory(IOdbcFieldMap odbcFieldMap, IOdbcDataSource dataSource, Func<Type, ILog> logFactory, IShipWorksDbProviderFactory dbProviderFactory)
         {
             this.odbcFieldMap = odbcFieldMap;
             this.dataSource = dataSource;
             this.logFactory = logFactory;
+            this.dbProviderFactory = dbProviderFactory;
         }
 
         /// <summary>
@@ -35,7 +34,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
             odbcFieldMap.Load(store.Map);
             dataSource.Restore(store.ConnectionString);
 
-            return new OdbcDownloadCommand(odbcFieldMap, dataSource, logFactory(typeof(OdbcDownloadCommand)));
+            return new OdbcDownloadCommand(odbcFieldMap, dataSource, dbProviderFactory, logFactory(typeof(OdbcDownloadCommand)));
         }
     }
 }

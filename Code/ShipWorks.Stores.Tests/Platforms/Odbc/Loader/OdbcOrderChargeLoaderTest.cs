@@ -1,15 +1,16 @@
-﻿using Autofac.Extras.Moq;
+﻿using System;
+using System.Linq;
+using Autofac.Extras.Moq;
 using Moq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Platforms.Odbc;
+using ShipWorks.Stores.Platforms.Odbc.Loaders;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
-using System;
-using System.Linq;
 using Xunit;
 
-namespace ShipWorks.Stores.Tests.Platforms.Odbc
+namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
 {
     public class OdbcOrderChargeLoaderTest : IDisposable
     {
@@ -21,7 +22,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         }
 
         [Fact]
-        public void Load_WithNullMap_ThrowsArgumentNullException()
+        public void Load_ThrowsArgumentNullException_WithNullMap()
         {
             OdbcOrderChargeLoader testObject = new OdbcOrderChargeLoader();
             Assert.Throws<ArgumentNullException>(() => testObject.Load(null, new OrderEntity()));
@@ -78,7 +79,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         }
 
         [Fact]
-        public void Load_WhenChargeDisplayNameIsTaxAmount_SetsChargeTypeToTax()
+        public void Load_SetsChargeTypeToTax_WhenChargeDisplayNameIsTaxAmount()
         {
             ShipWorksOdbcMappableField shipworksField = new ShipWorksOdbcMappableField(OrderChargeFields.Amount, "Tax Amount");
             shipworksField.LoadValue(123);

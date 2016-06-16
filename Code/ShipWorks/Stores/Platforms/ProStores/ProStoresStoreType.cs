@@ -21,6 +21,7 @@ using ShipWorks.ApplicationCore.Dashboard.Content;
 using ShipWorks.Properties;
 using ShipWorks.ApplicationCore.Dashboard;
 using System.Windows.Forms;
+using Autofac;
 using ShipWorks.Data.Connection;
 using ShipWorks.Stores.Management;
 using ShipWorks.Templates.Processing;
@@ -87,7 +88,8 @@ namespace ShipWorks.Stores.Platforms.ProStores
         /// <summary>
         /// Create the ProStores specific add store wizard pages
         /// </summary>
-        public override List<WizardPage> CreateAddStoreWizardPages()
+        /// <param name="scope"></param>
+        public override List<WizardPage> CreateAddStoreWizardPages(ILifetimeScope scope)
         {
             return new List<WizardPage> 
             {

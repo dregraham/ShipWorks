@@ -45,11 +45,10 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcImportFieldMappingControlViewModel"/> class.
         /// </summary>
-        public OdbcImportFieldMappingControlViewModel(IOdbcFieldMapFactory fieldMapFactory, IOdbcDataSource dataSource,
+        public OdbcImportFieldMappingControlViewModel(IOdbcFieldMapFactory fieldMapFactory, 
             IOdbcSchema schema, Func<Type, ILog> logFactory, IMessageHelper messageHelper)
         {
             this.fieldMapFactory = fieldMapFactory;
-            this.DataSource = dataSource;
             this.schema = schema;
             this.logFactory = logFactory;
             this.messageHelper = messageHelper;
@@ -77,7 +76,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// Gets the data source.
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public IOdbcDataSource DataSource { get; }
+        public IOdbcDataSource DataSource { get; private set; }
 
         /// <summary>
         /// The name the map will be saved as.
@@ -295,15 +294,15 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// <summary>
         /// Loads the external odbc tables.
         /// </summary>
-        public void Load(OdbcStoreEntity store)
+        public void Load(IOdbcDataSource dataSource)
         {
-            MethodConditions.EnsureArgumentIsNotNull(store);
+            MethodConditions.EnsureArgumentIsNotNull(dataSource);
 
             try
             {
-                DataSource.Restore(store.ConnectionString);
-                schema.Load(DataSource);
+                DataSource = dataSource;
 
+                schema.Load(DataSource);
                 Tables = schema.Tables;
             }
             catch (ShipWorksOdbcException ex)
@@ -371,8 +370,6 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             IEnumerable<OdbcFieldMap> maps = DisplayFieldMaps.Select(m => m.Map);
 
             OdbcFieldMap map = fieldMapFactory.CreateFieldMapFrom(maps);
-
-            map.ExternalTableName = selectedTable.Name;
 
             map.Entries.ToList().ForEach(e =>
             {

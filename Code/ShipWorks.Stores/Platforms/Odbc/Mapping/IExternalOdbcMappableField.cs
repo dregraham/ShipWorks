@@ -1,6 +1,4 @@
-﻿using System.Reflection;
-
-namespace ShipWorks.Stores.Platforms.Odbc.Mapping
+﻿namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 {
     /// <summary>
     /// Provides a mechanism for interacting with an external ODBC field
@@ -10,13 +8,11 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <summary>
         /// The External Column
         /// </summary>
-        [Obfuscation(Exclude = true)]
         OdbcColumn Column { get; set; }
 
         /// <summary>
         /// The External Table
         /// </summary>
-        [Obfuscation(Exclude = true)]
         IOdbcTable Table { get; set; }
 
         /// <summary>

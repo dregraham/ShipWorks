@@ -112,7 +112,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         }
 
         [Fact]
-        public void Load_ThrowsArgumentNullException_WhenStoreIsNull()
+        public void Load_ThrowsArgumentNullException_WhenDataSourceIsNull()
         {
             using (var mock = AutoMock.GetLoose())
             {
@@ -126,9 +126,9 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         {
             using (var mock = AutoMock.GetLoose())
             {
-                Mock<OdbcStoreEntity> store = new Mock<OdbcStoreEntity>();
+                Mock<IOdbcDataSource> odbcDataSource = new Mock<IOdbcDataSource>();
                 OdbcImportFieldMappingControlViewModel testObject = mock.Create<OdbcImportFieldMappingControlViewModel>();
-                testObject.Load(store.Object);
+                testObject.Load(odbcDataSource.Object);
                 Assert.NotNull(testObject.Tables);
             }
         }
@@ -138,7 +138,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         {
             using (var mock = AutoMock.GetLoose())
             {
-                Mock<OdbcStoreEntity> store = new Mock<OdbcStoreEntity>();
                 Mock<IOdbcSchema> shema = mock.Mock<IOdbcSchema>();
                 Mock<IOdbcDataSource> dataSource = mock.Mock<IOdbcDataSource>();
                 Mock<IMessageHelper> messageHelper = mock.Mock<IMessageHelper>();
@@ -146,7 +145,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
                 OdbcImportFieldMappingControlViewModel testObject =
                     mock.Create<OdbcImportFieldMappingControlViewModel>();
 
-                testObject.Load(store.Object);
+                testObject.Load(dataSource.Object);
 
                 messageHelper.Verify(m => m.ShowError(It.IsAny<string>()), Times.Once);
             }
@@ -171,6 +170,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
                 messageHelper.Setup(GetShowMessageExpression());
 
                 OdbcImportFieldMappingControlViewModel testObject = mock.Create<OdbcImportFieldMappingControlViewModel>();
+                testObject.Load(mock.Mock<IOdbcDataSource>().Object);
 
                 var table = mock.Mock<IOdbcTable>();
 
@@ -190,7 +190,8 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
                 messageHelper.Setup(GetShowMessageExpression());
 
                 OdbcImportFieldMappingControlViewModel testObject = mock.Create<OdbcImportFieldMappingControlViewModel>();
-
+                testObject.Load(mock.Mock<IOdbcDataSource>().Object);
+                
                 var table1 = mock.Mock<IOdbcTable>();
                 var table2 = mock2.Mock<IOdbcTable>();
 
@@ -227,6 +228,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
                 messageHelper.Setup(GetShowMessageExpression()).Returns(DialogResult.No);
 
                 OdbcImportFieldMappingControlViewModel testObject = mock.Create<OdbcImportFieldMappingControlViewModel>();
+                testObject.Load(mock.Mock<IOdbcDataSource>().Object);
 
                 var table1 = mock.Mock<IOdbcTable>();
                 var table2 = mock2.Mock<IOdbcTable>();
@@ -264,6 +266,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
                 messageHelper.Setup(GetShowMessageExpression()).Returns(DialogResult.No);
 
                 OdbcImportFieldMappingControlViewModel testObject = mock.Create<OdbcImportFieldMappingControlViewModel>();
+                testObject.Load(mock.Mock<IOdbcDataSource>().Object);
 
                 var table1 = mock.Mock<IOdbcTable>();
                 var table2 = mock2.Mock<IOdbcTable>();
@@ -303,6 +306,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
                 messageHelper.Setup(GetShowMessageExpression()).Returns(DialogResult.Yes);
 
                 OdbcImportFieldMappingControlViewModel testObject = mock.Create<OdbcImportFieldMappingControlViewModel>();
+                testObject.Load(mock.Mock<IOdbcDataSource>().Object);
 
                 var table1 = mock.Mock<IOdbcTable>();
                 var table2 = mock2.Mock<IOdbcTable>();
@@ -341,6 +345,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
                 messageHelper.Setup(GetShowMessageExpression()).Returns(DialogResult.Yes);
 
                 OdbcImportFieldMappingControlViewModel testObject = mock.Create<OdbcImportFieldMappingControlViewModel>();
+                testObject.Load(mock.Mock<IOdbcDataSource>().Object);
 
                 var table1 = mock.Mock<IOdbcTable>();
                 var table2 = mock2.Mock<IOdbcTable>();

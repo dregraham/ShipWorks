@@ -1,5 +1,4 @@
 ﻿using Autofac.Extras.Moq;
-using Interapptive.Shared.Security;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Odbc;
@@ -21,7 +20,9 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
                 };
 
                 Mock<IOdbcFieldMap> odbcFieldMap = mock.Mock<IOdbcFieldMap>();
+
                 OdbcCommandFactory testObject = mock.Create<OdbcCommandFactory>();
+
                 testObject.CreateDownloadCommand(odbcStore);
 
                 odbcFieldMap.Verify(p => p.Load(It.Is<string>(s => s == odbcStore.Map)), Times.Once());
@@ -29,17 +30,11 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         }
 
         [Fact]
-        public void CreateDownloadCommand_DatasourceRestoreCalledWithStoreConnectionString()
+        public void CreateDownloadCommand_DatasourceRestoreCalledWithEncryptedStoreConnectionString()
         {
             using (var mock = AutoMock.GetLoose())
             {
-                var connectionString = "connect with this";
-
-                Mock<IEncryptionProvider> encryptionProvider = mock.Mock<IEncryptionProvider>();
-
-                var encryptionProviderFactory = mock.Mock<IEncryptionProviderFactory>();
-                encryptionProviderFactory.Setup(f => f.CreateOdbcEncryptionProvider())
-                    .Returns(encryptionProvider.Object);
+                var connectionString = "encrypted connection string";
 
                 var dataSource = mock.Mock<IOdbcDataSource>();
 
@@ -56,13 +51,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         {
             using (var mock = AutoMock.GetLoose())
             {
-                Mock<IEncryptionProvider> encryptionProvider = mock.Mock<IEncryptionProvider>();
-
-                var encryptionProviderFactory = mock.Mock<IEncryptionProviderFactory>();
-                encryptionProviderFactory.Setup(f => f.CreateOdbcEncryptionProvider())
-                    .Returns(encryptionProvider.Object);
-
-
                 var testObject = mock.Create<OdbcCommandFactory>();
 
                 IOdbcCommand downloadCommand = testObject.CreateDownloadCommand(new OdbcStoreEntity());

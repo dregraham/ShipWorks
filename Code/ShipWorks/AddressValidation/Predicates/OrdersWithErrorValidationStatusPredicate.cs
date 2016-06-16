@@ -18,7 +18,7 @@ namespace ShipWorks.AddressValidation.Predicates
             DateTime validationThreshold = DateTime.UtcNow.AddDays(-7);
 
             // For order address validation status and OrderDate
-            predicate.Add(OrderFields.ShipAddressValidationStatus == (int)AddressValidationStatusType.Error &
+            predicate.Add(OrderFields.ShipAddressValidationStatus == (int) AddressValidationStatusType.Error &
                           OrderFields.OrderDate > validationThreshold);
 
             // We only want orders that don't have any processod or voided shipments, even if there ARE still unprocessed shipments
@@ -30,12 +30,6 @@ namespace ShipWorks.AddressValidation.Predicates
         /// <summary>
         /// Maximum rows that this predicate should return; 0 returns all rows
         /// </summary>
-        public int MaximumRows
-        {
-            get
-            {
-                return 50;
-            }
-        }
+        public int MaximumRows => AddressValidationQueue.GetBatchSize();
     }
 }

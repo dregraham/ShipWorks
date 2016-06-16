@@ -2,9 +2,7 @@
 using Moq;
 using ShipWorks.Stores.Platforms.Odbc;
 using System;
-using System.Data;
 using System.Data.Common;
-using Interapptive.Shared.Security;
 using Xunit;
 
 namespace ShipWorks.Stores.Tests.Platforms.Odbc
@@ -17,13 +15,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             using (var mock = AutoMock.GetLoose())
             {
                 string prviousState = "{\"Name\":\"Custom...\",\"Username\":\"Foo\",\"Password\":\"Bar\",\"IsCustom\":true,\"ConnectionString\":\"CustomConnectionString\"}";
-
-                Mock<IEncryptionProvider> encryptionProvider = mock.Mock<IEncryptionProvider>();
-                encryptionProvider.Setup(e => e.Encrypt(It.IsAny<string>())).Returns<string>(x => x);
-                encryptionProvider.Setup(e => e.Decrypt(It.IsAny<string>())).Returns<string>(x => x);
-
-                Mock<IEncryptionProviderFactory> encryptionProviderFactory = mock.Mock<IEncryptionProviderFactory>();
-                encryptionProviderFactory.Setup(e => e.CreateOdbcEncryptionProvider()).Returns(encryptionProvider.Object);
 
                 OdbcDataSource dataSource = mock.Create<OdbcDataSource>();
 
@@ -40,13 +31,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             {
                 string prviousState = "{\"Name\":\"Custom...\",\"Username\":\"Foo\",\"Password\":\"Bar\",\"IsCustom\":true,\"ConnectionString\":\"CustomConnectionString\"}";
 
-                Mock<IEncryptionProvider> encryptionProvider = mock.Mock<IEncryptionProvider>();
-                encryptionProvider.Setup(e => e.Encrypt(It.IsAny<string>())).Returns<string>(x => x);
-                encryptionProvider.Setup(e => e.Decrypt(It.IsAny<string>())).Returns<string>(x => x);
-
-                Mock<IEncryptionProviderFactory> encryptionProviderFactory = mock.Mock<IEncryptionProviderFactory>();
-                encryptionProviderFactory.Setup(e => e.CreateOdbcEncryptionProvider()).Returns(encryptionProvider.Object);
-
                 OdbcDataSource dataSource = mock.Create<OdbcDataSource>();
 
                 dataSource.Restore(prviousState);
@@ -61,13 +45,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             using (var mock = AutoMock.GetLoose())
             {
                 string prviousState = "{\"Name\":\"Custom...\",\"Username\":null,\"Password\":null,\"IsCustom\":true,\"ConnectionString\":\"CustomConnectionString\"}";
-
-                Mock<IEncryptionProvider> encryptionProvider = mock.Mock<IEncryptionProvider>();
-                encryptionProvider.Setup(e => e.Encrypt(It.IsAny<string>())).Returns<string>(x => x);
-                encryptionProvider.Setup(e => e.Decrypt(It.IsAny<string>())).Returns<string>(x => x);
-
-                Mock<IEncryptionProviderFactory> encryptionProviderFactory = mock.Mock<IEncryptionProviderFactory>();
-                encryptionProviderFactory.Setup(e => e.CreateOdbcEncryptionProvider()).Returns(encryptionProvider.Object);
 
                 OdbcDataSource dataSource = mock.Create<OdbcDataSource>();
 
@@ -84,13 +61,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             {
                 string prviousState = "{\"Name\":\"Custom...\",\"Username\":null,\"Password\":null,\"IsCustom\":true,\"ConnectionString\":\"CustomConnectionString\"}";
 
-                Mock<IEncryptionProvider> encryptionProvider = mock.Mock<IEncryptionProvider>();
-                encryptionProvider.Setup(e => e.Encrypt(It.IsAny<string>())).Returns<string>(x => x);
-                encryptionProvider.Setup(e => e.Decrypt(It.IsAny<string>())).Returns<string>(x => x);
-
-                Mock<IEncryptionProviderFactory> encryptionProviderFactory = mock.Mock<IEncryptionProviderFactory>();
-                encryptionProviderFactory.Setup(e => e.CreateOdbcEncryptionProvider()).Returns(encryptionProvider.Object);
-
                 OdbcDataSource dataSource = mock.Create<OdbcDataSource>();
 
                 dataSource.Restore(prviousState);
@@ -106,13 +76,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             {
                 string prviousState = "{\"Name\":\"Custom...\",\"Username\":null,\"Password\":null,\"IsCustom\":true,\"ConnectionString\":\"CustomConnectionString\"}";
 
-                Mock<IEncryptionProvider> encryptionProvider = mock.Mock<IEncryptionProvider>();
-                encryptionProvider.Setup(e => e.Encrypt(It.IsAny<string>())).Returns<string>(x => x);
-                encryptionProvider.Setup(e => e.Decrypt(It.IsAny<string>())).Returns<string>(x => x);
-
-                Mock<IEncryptionProviderFactory> encryptionProviderFactory = mock.Mock<IEncryptionProviderFactory>();
-                encryptionProviderFactory.Setup(e => e.CreateOdbcEncryptionProvider()).Returns(encryptionProvider.Object);
-
                 OdbcDataSource dataSource = mock.Create<OdbcDataSource>();
 
                 dataSource.Restore(prviousState);
@@ -126,10 +89,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         {
             using (var mock = AutoMock.GetLoose())
             {
-                Mock<IEncryptionProvider> encryptionProvider = mock.Mock<IEncryptionProvider>();
-                Mock<IEncryptionProviderFactory> encryptionProviderFactory = mock.Mock<IEncryptionProviderFactory>();
-                encryptionProviderFactory.Setup(e => e.CreateOdbcEncryptionProvider()).Returns(encryptionProvider.Object);
-
                 OdbcDataSource testObject = mock.Create<OdbcDataSource>();
 
                 testObject.ChangeConnection("Some Dsn", string.Empty, string.Empty);
@@ -143,10 +102,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         {
             using (var mock = AutoMock.GetLoose())
             {
-                Mock<IEncryptionProvider> encryptionProvider = mock.Mock<IEncryptionProvider>();
-                Mock<IEncryptionProviderFactory> encryptionProviderFactory = mock.Mock<IEncryptionProviderFactory>();
-                encryptionProviderFactory.Setup(e => e.CreateOdbcEncryptionProvider()).Returns(encryptionProvider.Object);
-
                 OdbcDataSource testObject = mock.Create<OdbcDataSource>();
 
                 testObject.ChangeConnection("Custom connection string");
@@ -156,14 +111,10 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         }
 
         [Fact]
-        public void ConnectionString_DoesNotContainPasswordWhenUsernameIsBlank()
+        public void ConnectionString_DoesNotContainPassword_WhenUsernameIsBlank()
         {
             using (var mock = AutoMock.GetLoose())
             {
-                Mock<IEncryptionProvider> encryptionProvider = mock.Mock<IEncryptionProvider>();
-                Mock<IEncryptionProviderFactory> encryptionProviderFactory = mock.Mock<IEncryptionProviderFactory>();
-                encryptionProviderFactory.Setup(e => e.CreateOdbcEncryptionProvider()).Returns(encryptionProvider.Object);
-
                 OdbcDataSource testObject = mock.Create<OdbcDataSource>();
 
                 testObject.ChangeConnection("dsn", "username", string.Empty);
@@ -173,14 +124,10 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         }
 
         [Fact]
-        public void ConnectionString_DoesNotContainDsnWhenUsernameIsBlank()
+        public void ConnectionString_DoesNotContainDsn_WhenUsernameIsBlank()
         {
             using (var mock = AutoMock.GetLoose())
             {
-                Mock<IEncryptionProvider> encryptionProvider = mock.Mock<IEncryptionProvider>();
-                Mock<IEncryptionProviderFactory> encryptionProviderFactory = mock.Mock<IEncryptionProviderFactory>();
-                encryptionProviderFactory.Setup(e => e.CreateOdbcEncryptionProvider()).Returns(encryptionProvider.Object);
-
                 OdbcDataSource testObject = mock.Create<OdbcDataSource>();
 
                 testObject.ChangeConnection(string.Empty, "username", "password");
@@ -190,14 +137,10 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         }
 
         [Fact]
-        public void ConnectionString_DoesNotContainUsernameWhenUsernameIsBlank()
+        public void ConnectionString_DoesNotContainUsername_WhenUsernameIsBlank()
         {
             using (var mock = AutoMock.GetLoose())
             {
-                Mock<IEncryptionProvider> encryptionProvider = mock.Mock<IEncryptionProvider>();
-                Mock<IEncryptionProviderFactory> encryptionProviderFactory = mock.Mock<IEncryptionProviderFactory>();
-                encryptionProviderFactory.Setup(e => e.CreateOdbcEncryptionProvider()).Returns(encryptionProvider.Object);
-
                 OdbcDataSource testObject = mock.Create<OdbcDataSource>();
 
                 testObject.ChangeConnection("dsn", string.Empty, "password");
@@ -211,10 +154,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         {
             using (var mock = AutoMock.GetLoose())
             {
-                Mock<IEncryptionProvider> encryptionProvider = mock.Mock<IEncryptionProvider>();
-                Mock<IEncryptionProviderFactory> encryptionProviderFactory = mock.Mock<IEncryptionProviderFactory>();
-                encryptionProviderFactory.Setup(e => e.CreateOdbcEncryptionProvider()).Returns(encryptionProvider.Object);
-
                 OdbcDataSource testObject = mock.Create<OdbcDataSource>();
 
                 testObject.ChangeConnection("CustomConnectionString");
@@ -228,125 +167,11 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         {
             using (var mock = AutoMock.GetLoose())
             {
-                Mock<IEncryptionProvider> encryptionProvider = mock.Mock<IEncryptionProvider>();
-                Mock<IEncryptionProviderFactory> encryptionProviderFactory = mock.Mock<IEncryptionProviderFactory>();
-                encryptionProviderFactory.Setup(e => e.CreateOdbcEncryptionProvider()).Returns(encryptionProvider.Object);
-
                 OdbcDataSource testObject = mock.Create<OdbcDataSource>();
 
                 testObject.ChangeConnection("dsn","username","password");
 
                 Assert.False(testObject.IsCustom);
-            }
-        }
-
-        [Fact]
-        public void Seralize_DelegatesToEncrypt_AndCallsEncrypt()
-        {
-            using (var mock = AutoMock.GetLoose())
-            {
-                Mock<IEncryptionProvider> encryptionProvider = mock.Mock<IEncryptionProvider>();
-                Mock<IEncryptionProviderFactory> encryptionProviderFactory = mock.Mock<IEncryptionProviderFactory>();
-                encryptionProviderFactory.Setup(e => e.CreateOdbcEncryptionProvider()).Returns(encryptionProvider.Object);
-
-                OdbcDataSource testObject = mock.Create<OdbcDataSource>();
-
-                testObject.Serialize();
-
-                encryptionProvider.Verify(ep=>ep.Encrypt(It.IsAny<string>()), Times.Once);
-            }
-        }
-
-        [Fact]
-        public void Seralize_DelegatesToEncrypt_AndContainsDsn_WhenDsnProvided()
-        {
-            using (var mock = AutoMock.GetLoose())
-            {
-                Mock<IEncryptionProvider> encryptionProvider = mock.Mock<IEncryptionProvider>();
-                Mock<IEncryptionProviderFactory> encryptionProviderFactory = mock.Mock<IEncryptionProviderFactory>();
-                encryptionProviderFactory.Setup(e => e.CreateOdbcEncryptionProvider()).Returns(encryptionProvider.Object);
-
-                OdbcDataSource testObject = mock.Create<OdbcDataSource>();
-                testObject.ChangeConnection("blah", string.Empty, string.Empty);
-
-                testObject.Serialize();
-
-                encryptionProvider.Verify(ep => ep.Encrypt(
-                    It.Is<string>(str=>str.Contains("\"Name\":\"blah\""))), Times.Once);
-            }
-        }
-
-        [Fact]
-        public void Seralize_DelegatesToEncrypt_AndContainsUsername_WhenUsernameProvided()
-        {
-            using (var mock = AutoMock.GetLoose())
-            {
-                Mock<IEncryptionProvider> encryptionProvider = mock.Mock<IEncryptionProvider>();
-                Mock<IEncryptionProviderFactory> encryptionProviderFactory = mock.Mock<IEncryptionProviderFactory>();
-                encryptionProviderFactory.Setup(e => e.CreateOdbcEncryptionProvider()).Returns(encryptionProvider.Object);
-
-                OdbcDataSource testObject = mock.Create<OdbcDataSource>();
-                testObject.ChangeConnection(string.Empty, "blah", string.Empty);
-
-                testObject.Serialize();
-
-                encryptionProvider.Verify(ep => ep.Encrypt(
-                    It.Is<string>(str => str.Contains("\"Username\":\"blah\""))), Times.Once);
-            }
-        }
-
-        [Fact]
-        public void Seralize_DelegatesToEncrypt_AndContainsPassword_WhenPasswordProvided()
-        {
-            using (var mock = AutoMock.GetLoose())
-            {
-                Mock<IEncryptionProvider> encryptionProvider = mock.Mock<IEncryptionProvider>();
-                Mock<IEncryptionProviderFactory> encryptionProviderFactory = mock.Mock<IEncryptionProviderFactory>();
-                encryptionProviderFactory.Setup(e => e.CreateOdbcEncryptionProvider()).Returns(encryptionProvider.Object);
-
-                OdbcDataSource testObject = mock.Create<OdbcDataSource>();
-                testObject.ChangeConnection(string.Empty, string.Empty, "blah");
-
-                testObject.Serialize();
-
-                encryptionProvider.Verify(ep => ep.Encrypt(
-                    It.Is<string>(str => str.Contains("\"Password\":\"blah\""))), Times.Once);
-            }
-        }
-
-        [Fact]
-        public void Seralize_DelegatesToEncrypt_AndDoesNotContainPassword()
-        {
-            using (var mock = AutoMock.GetLoose())
-            {
-                Mock<IEncryptionProvider> encryptionProvider = mock.Mock<IEncryptionProvider>();
-                Mock<IEncryptionProviderFactory> encryptionProviderFactory = mock.Mock<IEncryptionProviderFactory>();
-                encryptionProviderFactory.Setup(e => e.CreateOdbcEncryptionProvider()).Returns(encryptionProvider.Object);
-
-                OdbcDataSource testObject = mock.Create<OdbcDataSource>();
-
-                testObject.Serialize();
-
-                encryptionProvider.Verify(ep => ep.Encrypt(
-                    It.Is<string>(str => !str.Contains("Pwd="))), Times.Once);
-            }
-        }
-
-        [Fact]
-        public void Seralize_DelegatesToEncrypt_AndDoesNotContainUsername()
-        {
-            using (var mock = AutoMock.GetLoose())
-            {
-                Mock<IEncryptionProvider> encryptionProvider = mock.Mock<IEncryptionProvider>();
-                Mock<IEncryptionProviderFactory> encryptionProviderFactory = mock.Mock<IEncryptionProviderFactory>();
-                encryptionProviderFactory.Setup(e => e.CreateOdbcEncryptionProvider()).Returns(encryptionProvider.Object);
-
-                OdbcDataSource testObject = mock.Create<OdbcDataSource>();
-
-                testObject.Serialize();
-
-                encryptionProvider.Verify(ep => ep.Encrypt(
-                    It.Is<string>(str => !str.Contains("Uid="))), Times.Once);
             }
         }
 

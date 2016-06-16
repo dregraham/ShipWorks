@@ -1,5 +1,4 @@
 ﻿using Autofac.Extras.Moq;
-using Interapptive.Shared.Utility;
 using log4net;
 using Moq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -8,6 +7,7 @@ using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
 using System;
 using System.IO;
+using Interapptive.Shared.Extensions;
 using Xunit;
 
 namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
@@ -23,14 +23,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
             log = mock.Mock<ILog>();
         }
 
-        [Fact]
-        public void ReadExternalTableName_ReturnsExternalName()
-        {
-            var map = GetSerializedFieldMap();
-            JsonOdbcFieldMapReader reader = new JsonOdbcFieldMapReader(map, log.Object);
-
-            Assert.Equal("OdbcFieldMapExternalTableName", reader.ReadExternalTableName());
-        }
 
         [Fact]
         public void ReadyEntry_ReturnsOdbcFieldMapEntry()
@@ -59,10 +51,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
         {
             using (MemoryStream stream = new MemoryStream())
             {
-                OdbcFieldMap map = new OdbcFieldMap(GetIoFactory())
-                {
-                    ExternalTableName = "OdbcFieldMapExternalTableName"
-                };
+                OdbcFieldMap map = new OdbcFieldMap(GetIoFactory());
 
                 map.AddEntry(GetFieldMapEntry(GetShipWorksField(OrderFields.OrderNumber, "Order Number"),
                     GetExternalField("SomeTableName", "SomeColumnName")));

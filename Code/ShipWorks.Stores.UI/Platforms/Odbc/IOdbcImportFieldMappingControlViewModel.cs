@@ -1,8 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using ShipWorks.Data.Model.EntityClasses;
+﻿using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Odbc;
-using ShipWorks.Stores.Platforms.Odbc.Mapping;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc
 {
@@ -49,7 +48,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// <summary>
         /// Loads the external odbc tables.
         /// </summary>
-        void Load(OdbcStoreEntity store);
+        void Load(IOdbcDataSource dataSource);
 
         /// <summary>
         /// Save the Map to the given store.

@@ -16,6 +16,7 @@ using ShipWorks.UI.Wizard;
 using log4net;
 using System.Globalization;
 using System.Linq;
+using Autofac;
 
 namespace ShipWorks.Stores.Platforms.BigCommerce
 {
@@ -174,7 +175,8 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         /// <summary>
         /// Create the pages, in order, that will be displayed in the Add Store Wizard
         /// </summary>
-        public override List<WizardPage> CreateAddStoreWizardPages()
+        /// <param name="scope"></param>
+        public override List<WizardPage> CreateAddStoreWizardPages(ILifetimeScope scope)
         {
             List<WizardPage> pages = new List<WizardPage>
                 {

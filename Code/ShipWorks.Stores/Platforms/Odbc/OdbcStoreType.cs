@@ -1,15 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Autofac;
+﻿using Autofac;
 using Interapptive.Shared.Utility;
-using ShipWorks.ApplicationCore;
+using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
-using ShipWorks.UI.Wizard;
-using ShipWorks.Data;
 using ShipWorks.Stores.Platforms.GenericFile;
+using ShipWorks.UI.Wizard;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace ShipWorks.Stores.Platforms.Odbc
 {
@@ -18,15 +17,15 @@ namespace ShipWorks.Stores.Platforms.Odbc
     /// </summary>
     public class OdbcStoreType : StoreType
     {
-        private readonly Func<StoreEntity, OdbcStoreDownloader> downloadFactory;
+        private readonly Func<StoreEntity, OdbcStoreDownloader> downloaderFactory;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public OdbcStoreType(StoreEntity store, Func<StoreEntity, OdbcStoreDownloader> downloadFactory)
+        public OdbcStoreType(StoreEntity store, Func<StoreEntity, OdbcStoreDownloader> downloaderFactory)
             : base(store)
         {
-            this.downloadFactory = downloadFactory;
+            this.downloaderFactory = downloaderFactory;
         }
 
         /// <summary>
@@ -47,7 +46,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
             OdbcStoreEntity odbcStore = Store as OdbcStoreEntity;
             MethodConditions.EnsureArgumentIsNotNull(odbcStore);
 
-            return downloadFactory(odbcStore);
+            return downloaderFactory(odbcStore);
         }
 
         /// <summary>
@@ -79,14 +78,10 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// <summary>
         /// Creates the add store wizard pages.
         /// </summary>
-        public override List<WizardPage> CreateAddStoreWizardPages()
+        public override List<WizardPage> CreateAddStoreWizardPages(ILifetimeScope scope)
         {
-            using (ILifetimeScope scope = IoC.BeginLifetimeScope())
-            {
                 IEnumerable<IOdbcWizardPage> wizardPages = scope.Resolve<IEnumerable<IOdbcWizardPage>>();
-
                 return wizardPages.OrderBy(w => w.Position).Cast<WizardPage>().ToList();
-            }
         }
     }
 }

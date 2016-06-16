@@ -26,34 +26,45 @@ namespace ShipWorks.Stores
         /// </summary>
         public void Add(OrderEntity order, string noteText, DateTime noteDate, NoteVisibility noteVisibility)
         {
-            if (string.IsNullOrWhiteSpace(noteText))
+            string trimmedNoteText = noteText.Trim();
+
+            if (ShouldNoteBeAdded(order, trimmedNoteText))
             {
-                return;
+                NoteEntity note = new NoteEntity();
+                note.Order = order;
+                note.UserID = null;
+                note.Edited = noteDate;
+                note.Source = (int) NoteSource.Downloaded;
+                note.Visibility = (int) noteVisibility;
+                note.Text = trimmedNoteText;
+            }
+        }
+
+        /// <summary>
+        /// Determines whether or not the note should be added
+        /// </summary>
+        private bool ShouldNoteBeAdded(OrderEntity order, string trimmedNoteText)
+        {
+            if (string.IsNullOrWhiteSpace(trimmedNoteText))
+            {
+                return false;
             }
 
-            string trimmedNoteText = noteText.Trim();
-            
             // First see if any of the current (newly downloaded) notes match this note
             if (order.Notes.Any(n =>
                 n.Text.Equals(trimmedNoteText, StringComparison.InvariantCultureIgnoreCase)
-                && n.Source == (int)NoteSource.Downloaded))
+                && n.Source == (int) NoteSource.Downloaded))
             {
-                return;
+                return false;
             }
 
             // If the order is not new, check the Repo. If the note is in the Repo, don't create note.
             if (!order.IsNew && orderRepository.ContainsNote(order, trimmedNoteText, NoteSource.Downloaded))
             {
-                return;
+                return false;
             }
-            
-            NoteEntity note = new NoteEntity();
-            note.Order = order;
-            note.UserID = null;
-            note.Edited = noteDate;
-            note.Source = (int)NoteSource.Downloaded;
-            note.Visibility = (int)noteVisibility;
-            note.Text = trimmedNoteText;
+
+            return true;
         }
     }
 }

@@ -1,6 +1,6 @@
-﻿using Interapptive.Shared.Utility;
-using System;
+﻿using System;
 using System.IO;
+using Interapptive.Shared.Extensions;
 using Xunit;
 
 namespace Interapptive.Shared.Tests.Utility

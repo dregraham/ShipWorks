@@ -2,6 +2,7 @@ using Interapptive.Shared.Utility;
 using log4net;
 using System;
 using System.IO;
+using Interapptive.Shared.Extensions;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 {

@@ -31,8 +31,8 @@ namespace ShipWorks.Stores.UI
             builder.RegisterType<OrderNote>()
                 .As<IOrderNote>();
 
-            builder.RegisterType<OrderUtilityWrapper>()
-                .As<IOrderUtility>();
+            builder.RegisterType<OrderChargeCalculator>()
+                .As<IOrderChargeCalculator>();
         }
     }
 }

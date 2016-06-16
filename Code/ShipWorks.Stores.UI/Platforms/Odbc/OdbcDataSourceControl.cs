@@ -21,7 +21,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
     public partial class OdbcDataSourceControl : UserControl
     {
         private readonly ILog log;
-        private readonly Lazy<IExternalProcess> odbcControlPanel;
+        private IExternalProcess odbcControlPanel;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcDataSourceControl"/> class.
@@ -30,14 +30,20 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         {
             InitializeComponent();
             log = LogManager.GetLogger(typeof(OdbcDataSourceControl));
-
-            odbcControlPanel = new Lazy<IExternalProcess>(IoC.UnsafeGlobalLifetimeScope.Resolve<IExternalProcess>);
         }
 
         /// <summary>
         /// Gets the selected data source.
         /// </summary>
-        private OdbcDataSource SelectedDataSource => dataSource.SelectedItem as OdbcDataSource;
+        private EncryptedOdbcDataSource SelectedDataSource => dataSource.SelectedItem as EncryptedOdbcDataSource;
+
+        /// <summary>
+        /// Loads the dependencies.
+        /// </summary>
+        public void LoadDependencies(IExternalProcess odbcControlPanelProcess)
+        {
+            odbcControlPanel = odbcControlPanelProcess;
+        }
 
         /// <summary>
         /// Tests the connection.
@@ -162,7 +168,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// </remarks>
         private void BindDataSources(List<IOdbcDataSource> dataSources)
         {
-            OdbcDataSource currentDataSource = SelectedDataSource;
+            EncryptedOdbcDataSource currentDataSource = SelectedDataSource;
 
             dataSource.DataSource = dataSources;
             dataSource.DisplayMember = "Name";
@@ -241,7 +247,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         {
             try
             {
-                odbcControlPanel.Value.Launch(RefreshDataSources);
+                odbcControlPanel.Launch(RefreshDataSources);
             }
             catch (Exception ex)
             {

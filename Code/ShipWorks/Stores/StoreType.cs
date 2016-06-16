@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Windows.Forms;
 using Autofac;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -25,6 +21,10 @@ using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 using ShipWorks.UI.Wizard;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows.Forms;
 
 namespace ShipWorks.Stores
 {
@@ -204,11 +204,12 @@ namespace ShipWorks.Stores
         /// <summary>
         /// Create the pages, in order, that will be displayed in the Add Store Wizard
         /// </summary>
-        public virtual List<WizardPage> CreateAddStoreWizardPages()
+        /// <param name="scope"></param>
+        public virtual List<WizardPage> CreateAddStoreWizardPages(ILifetimeScope scope)
         {
-            if (IoC.UnsafeGlobalLifetimeScope.IsRegisteredWithKey<WizardPage>(TypeCode))
+            if (scope.IsRegisteredWithKey<WizardPage>(TypeCode))
             {
-                return IoC.UnsafeGlobalLifetimeScope.ResolveKeyed<IEnumerable<WizardPage>>(TypeCode).ToList();
+                return scope.ResolveKeyed<IEnumerable<WizardPage>>(TypeCode).ToList();
             }
 
             throw new InvalidOperationException("Invalid store type. " + TypeCode);
