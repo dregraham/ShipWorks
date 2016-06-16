@@ -2,10 +2,16 @@
 
 namespace ShipWorks.Stores.Platforms.Odbc
 {
+    /// <summary>
+    /// OdbcDatasource that inputs and outputs encrypted json.
+    /// </summary>
     public class EncryptedOdbcDataSource : OdbcDataSource
     {
         private readonly IEncryptionProvider odbcEncryptionProvider;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="EncryptedOdbcDataSource"/> class.
+        /// </summary>
         public EncryptedOdbcDataSource(IShipWorksDbProviderFactory odbcProvider, IEncryptionProviderFactory encryptionProviderFactory) : base(odbcProvider)
         {
             odbcEncryptionProvider = encryptionProviderFactory.CreateOdbcEncryptionProvider();
@@ -16,7 +22,14 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// </summary>
         public override void Restore(string encryptedJson)
         {
-            base.Restore(odbcEncryptionProvider.Decrypt(encryptedJson));
+            try
+            {
+                base.Restore(odbcEncryptionProvider.Decrypt(encryptedJson));
+            }
+            catch (EncryptionException ex)
+            {
+                throw new ShipWorksOdbcException("Failed to restore data source", ex);
+            }
         }
 
         /// <summary>
@@ -24,7 +37,14 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// </summary>
         public override string Serialize()
         {
-            return odbcEncryptionProvider.Encrypt(base.Serialize());
+            try
+            {
+                return odbcEncryptionProvider.Encrypt(base.Serialize());
+            }
+            catch (EncryptionException ex)
+            {
+                throw new ShipWorksOdbcException("Failed to restore data source", ex);
+            }
         }
     }
 }
