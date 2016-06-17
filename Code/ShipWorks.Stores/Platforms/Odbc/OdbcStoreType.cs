@@ -83,5 +83,18 @@ namespace ShipWorks.Stores.Platforms.Odbc
                 IEnumerable<IOdbcWizardPage> wizardPages = scope.Resolve<IEnumerable<IOdbcWizardPage>>();
                 return wizardPages.OrderBy(w => w.Position).Cast<WizardPage>().ToList();
         }
+
+        /// <summary>
+        /// Support for online columns
+        /// </summary>
+        public override bool GridOnlineColumnSupported(OnlineGridColumnSupport column)
+        {
+            if (column == OnlineGridColumnSupport.OnlineStatus || column == OnlineGridColumnSupport.LastModified)
+            {
+                return true;
+            }
+
+            return base.GridOnlineColumnSupported(column);
+        }
     }
 }
