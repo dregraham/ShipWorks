@@ -460,31 +460,32 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         }
 
         [Fact]
-        public void SetSingleLineItemTrue_MakesDisplayMapsContainOnlyOrderAndAddress_WhenNumberOfItemsIsZero()
+        public void SetSingleLineItemTrue_MakesDisplayMapsContainOnlyOrderAddressAndSingleItem_WhenNumberOfItemsIsZero()
         {
             using (var mock = AutoMock.GetLoose())
             {
                 var testObject = mock.Create<OdbcImportFieldMappingControlViewModel>();
                 testObject.NumberOfItemsPerOrder = 0;
                 testObject.IsSingleLineOrder = true;
-                var expectedMapNames = new List<string>() {"Order", "Address"};
-                var actualMapNames = testObject.DisplayFieldMaps.Select(m => m.DisplayName);
+                var expectedMapNames = new List<string>() {"Order", "Address", "Item 1"};
+                var actualMapNames = testObject.DisplayFieldMaps.Select(m => m.DisplayName).ToList();
 
                 Assert.Equal(expectedMapNames, actualMapNames);
             }
         }
 
         [Fact]
-        public void SetSingleLineItemTrue_AddsCorrectNumberOfItemMapsToDisplayMaps()
+        public void SetSingleLineItemTrue_SetsNumberOfItemsBackToOne()
         {
             using (var mock = AutoMock.GetLoose())
             {
                 var testObject = mock.Create<OdbcImportFieldMappingControlViewModel>();
                 testObject.NumberOfItemsPerOrder = 5;
+
                 testObject.IsSingleLineOrder = true;
                 IEnumerable<OdbcFieldMapDisplay> itemMaps = testObject.DisplayFieldMaps.Where(m => m.DisplayName.Contains("Item"));
 
-                Assert.Equal(5, itemMaps.Count());
+                Assert.Equal(1, itemMaps.Count());
             }
         }
 
@@ -613,8 +614,8 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             using (var mock = AutoMock.GetLoose())
             {
                 var testObject = mock.Create<OdbcImportFieldMappingControlViewModel>();
-                testObject.NumberOfItemsPerOrder = 7;
                 testObject.IsSingleLineOrder = true;
+                testObject.NumberOfItemsPerOrder = 7;
 
                 var startingNumberOfItems = testObject.DisplayFieldMaps.Count(m => m.DisplayName.Contains("Item"));
 

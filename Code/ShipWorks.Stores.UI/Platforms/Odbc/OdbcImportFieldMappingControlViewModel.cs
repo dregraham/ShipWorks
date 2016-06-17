@@ -217,7 +217,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
                 else if (delta < 0)
                 {
                     DisplayFieldMaps.Where(m => m.DisplayName.Contains("Item"))
-                        .Skip(numberOfItemsPerOrder)
+                        .Skip(value)
                         .ToList()
                         .ForEach(map => DisplayFieldMaps.Remove(map));
                 }
@@ -239,25 +239,28 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             set
             {
                 int delta = value - numberOfAttributesPerItem;
-
                 IEnumerable<OdbcFieldMapDisplay> itemMaps = DisplayFieldMaps.Where(m => m.DisplayName.Contains("Item"));
-                if (delta > 0)
-                {
-                    foreach (OdbcFieldMapDisplay displayMap in itemMaps)
-                    {
-                        GetRangeOfAttributes(numberOfAttributesPerItem + 1, delta)
-                            .ToList()
-                            .ForEach(displayMap.Map.AddEntry);
-                    }
-                }
-                else if (delta < 0)
-                {
-                    foreach (OdbcFieldMapDisplay displayMap in itemMaps)
-                    {
-                        int entryCount = displayMap.Map.Entries.Count;
 
-                        // delta is negative, so this is entryCount - amount we want to remove
-                        displayMap.Map.Entries.Skip(entryCount + delta).ToList().ForEach(m=>displayMap.Map.RemoveEntry(m));
+                if (delta != 0)
+                {
+                    foreach (OdbcFieldMapDisplay displayMap in itemMaps)
+                    {
+                        if (delta > 0)
+                        {
+                            GetRangeOfAttributes(numberOfAttributesPerItem + 1, delta)
+                                .ToList()
+                                .ForEach(displayMap.Map.AddEntry);
+                        }
+                        else // delta < 0
+                        {
+                            displayMap.Map.FindEntriesBy(OrderItemAttributeFields.Name)
+                                .Skip(value)
+                                .ToList()
+                                .ForEach(m => displayMap.Map.RemoveEntry(m));
+                        }
+
+                        Debug.Assert(displayMap.Map.FindEntriesBy(OrderItemAttributeFields.Name).Count() == value,
+                            "Error setting number of attributes");
                     }
                 }
 
