@@ -23,8 +23,6 @@ namespace Interapptive.Shared.Metrics
 #pragma warning disable CS3024 // Constraint type is not CLS-compliant
     public static class Telemetry
     {
-        //private const string InstrumentationKey = "4c080696-d311-49f5-8785-73b815cc9f28";
-        private const string InstrumentationKey = "68bd8748-cd5d-4187-ba7f-8865ee128aae";
         private static readonly TelemetryClient telemetryClient;
 
         /// <summary>
@@ -36,7 +34,7 @@ namespace Interapptive.Shared.Metrics
             builder.Use((next) => new DeobfuscationProcessor(next));
             builder.Build();
 
-            TelemetryConfiguration.Active.InstrumentationKey = InstrumentationKey;
+            TelemetryConfiguration.Active.InstrumentationKey = GetInstrumentationKey(Assembly.GetExecutingAssembly().GetName().Version);
 
             telemetryClient = new TelemetryClient();
             telemetryClient.Context.Session.Id = Guid.NewGuid().ToString("D");
@@ -64,6 +62,16 @@ namespace Interapptive.Shared.Metrics
             telemetryClient.Context.Properties.Add("CurrentUICulture", Thread.CurrentThread.CurrentUICulture.ToString());
 
             telemetryClient.Context.Properties.Add("StartupPath", Application.StartupPath);
+        }
+
+        /// <summary>
+        /// Get the storage connection string
+        /// </summary>
+        private static string GetInstrumentationKey(Version version)
+        {
+            return version.Major > 0 ?
+                "TODO: Add real credentials" :
+                "68bd8748-cd5d-4187-ba7f-8865ee128aae";
         }
 
         /// <summary>

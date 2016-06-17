@@ -101,7 +101,7 @@ namespace ShipWorks.ApplicationCore.Crashes
         private static string GetConnectionString(Version version)
         {
             return version.Major > 0 ?
-                "TODO: Add real endpoint" :
+                "TODO: Add real credentials" :
                 "DefaultEndpointsProtocol=https;AccountName=sw201606crash;AccountKey=J3aKx7pIpm2yian0B3YufolSx/f/rAkdTmF/VhRi22X6k7BIR37qUWrLgFlJKAThUjSsFOSLccKiIxQzKFHmNQ==";
         }
 
@@ -285,7 +285,7 @@ namespace ShipWorks.ApplicationCore.Crashes
             string tempZipFile = Path.Combine(DataPath.CreateUniqueTempPath(), "log.zip");
             writer.Save(tempZipFile);
 
-            AES_Encrypt(tempZipFile, "ghagha9938h2H*(YH(@*H8so7aygo87ah3");
+            AESEncrypt(tempZipFile, "ghagha9938h2H*(YH(@*H8so7aygo87ah3");
 
             return tempZipFile + ".aes";
         }
@@ -293,7 +293,7 @@ namespace ShipWorks.ApplicationCore.Crashes
         /// <summary>
         /// Encrypt the given file with the specified password
         /// </summary>
-        private static void AES_Encrypt(string inputFile, string password)
+        private static void AESEncrypt(string inputFile, string password)
         {
             //http://stackoverflow.com/questions/27645527/aes-encryption-on-large-files
 
