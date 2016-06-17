@@ -61,6 +61,16 @@ namespace ShipWorks.Stores.Platforms.Odbc.Loaders
                 {
                     order.OrderDate = dateTimeProvider.UtcNow;
                 }
+
+                if (order.BillCountryCode == string.Empty)
+                {
+                    order.BillCountryCode = "US";
+                }
+
+                if (order.ShipCountryCode == string.Empty)
+                {
+                    order.ShipCountryCode = "US";
+                }
             }
         }
     }
