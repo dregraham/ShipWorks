@@ -168,9 +168,9 @@ namespace ShipWorks.Stores.Platforms.Odbc
                 Password = dataSource["Password"].ToString();
                 ConnectionString = dataSource["ConnectionString"].ToString();
             }
-            catch (JsonReaderException)
+            catch (JsonReaderException ex)
             {
-                throw new ShipWorksOdbcException("Failed to restore data source");
+                throw new ShipWorksOdbcException("Failed to restore data source", ex);
             }
         }
 
