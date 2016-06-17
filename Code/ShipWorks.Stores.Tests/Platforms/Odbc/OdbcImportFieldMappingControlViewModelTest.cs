@@ -1,6 +1,8 @@
-﻿using Autofac.Extras.Moq;
+﻿using Autofac;
+using Autofac.Extras.Moq;
 using Interapptive.Shared.UI;
 using Moq;
+using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
 using ShipWorks.Stores.UI.Platforms.Odbc;
@@ -9,8 +11,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Windows.Forms;
-using Autofac;
-using ShipWorks.Data.Model.HelperClasses;
 using Xunit;
 
 namespace ShipWorks.Stores.Tests.Platforms.Odbc
@@ -61,7 +61,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
 
                 var testObject = mock.Create<OdbcImportFieldMappingControlViewModel>();
                 testObject.NumberOfItemsPerOrder = 1;
-                testObject.OrderHasSingleLineItem = true;
+                testObject.IsSingleLineOrder = true;
 
                 Assert.Equal(odbcFieldMap, testObject.DisplayFieldMaps[2].Map);
             }
@@ -466,7 +466,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             {
                 var testObject = mock.Create<OdbcImportFieldMappingControlViewModel>();
                 testObject.NumberOfItemsPerOrder = 0;
-                testObject.OrderHasSingleLineItem = true;
+                testObject.IsSingleLineOrder = true;
                 var expectedMapNames = new List<string>() {"Order", "Address"};
                 var actualMapNames = testObject.DisplayFieldMaps.Select(m => m.DisplayName);
 
@@ -481,7 +481,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             {
                 var testObject = mock.Create<OdbcImportFieldMappingControlViewModel>();
                 testObject.NumberOfItemsPerOrder = 5;
-                testObject.OrderHasSingleLineItem = true;
+                testObject.IsSingleLineOrder = true;
                 IEnumerable<OdbcFieldMapDisplay> itemMaps = testObject.DisplayFieldMaps.Where(m => m.DisplayName.Contains("Item"));
 
                 Assert.Equal(5, itemMaps.Count());
@@ -495,12 +495,12 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             {
                 var testObject = mock.Create<OdbcImportFieldMappingControlViewModel>();
                 testObject.NumberOfItemsPerOrder = 1;
-                testObject.OrderHasSingleLineItem = false;
+                testObject.IsSingleLineOrder = false;
 
                 // So we can see that it was previously Item
                 Assert.Equal("Item", testObject.DisplayFieldMaps[2].DisplayName);
 
-                testObject.OrderHasSingleLineItem = true;
+                testObject.IsSingleLineOrder = true;
 
                 // Now it has changed to Item 1
                 Assert.Equal("Item 1", testObject.DisplayFieldMaps[2].DisplayName);
@@ -514,7 +514,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             {
                 var testObject = mock.Create<OdbcImportFieldMappingControlViewModel>();
                 testObject.NumberOfItemsPerOrder = 0;
-                testObject.OrderHasSingleLineItem = false;
+                testObject.IsSingleLineOrder = false;
 
                 Assert.Equal("Item", testObject.DisplayFieldMaps[2].DisplayName);
             }
@@ -527,12 +527,12 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             {
                 var testObject = mock.Create<OdbcImportFieldMappingControlViewModel>();
                 testObject.NumberOfItemsPerOrder = 1;
-                testObject.OrderHasSingleLineItem = true;
+                testObject.IsSingleLineOrder = true;
 
                 // So we can see that it was previously Item 1
                 Assert.Equal("Item 1", testObject.DisplayFieldMaps[2].DisplayName);
 
-                testObject.OrderHasSingleLineItem = false;
+                testObject.IsSingleLineOrder = false;
 
                 // Now it has changed to Item
                 Assert.Equal("Item", testObject.DisplayFieldMaps[2].DisplayName);
@@ -546,7 +546,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             {
                 var testObject = mock.Create<OdbcImportFieldMappingControlViewModel>();
                 testObject.NumberOfItemsPerOrder = 20;
-                testObject.OrderHasSingleLineItem = false;
+                testObject.IsSingleLineOrder = false;
 
                 IEnumerable<OdbcFieldMapDisplay> itemMaps = testObject.DisplayFieldMaps.Where(m => m.DisplayName.Contains("Item"));
 
@@ -555,13 +555,14 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         }
 
         [Fact]
-        public void SetNumberOfItemsPerOrder_DoesNotAddItemMaps_WhenSingleLineItemIsFalse()
+        public void SetNumberOfItemsPerOrder_DoesNotAddItemMaps_WhenSingleLineOrderIsFalse()
         {
             using (var mock = AutoMock.GetLoose())
             {
                 var testObject = mock.Create<OdbcImportFieldMappingControlViewModel>();
-                testObject.OrderHasSingleLineItem = false;
                 testObject.NumberOfItemsPerOrder = 2;
+
+                testObject.IsSingleLineOrder = false;
 
                 IEnumerable<OdbcFieldMapDisplay> itemMaps = testObject.DisplayFieldMaps.Where(m => m.DisplayName.Contains("Item"));
 
@@ -575,13 +576,12 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             using (var mock = AutoMock.GetLoose())
             {
                 var testObject = mock.Create<OdbcImportFieldMappingControlViewModel>();
-                testObject.NumberOfItemsPerOrder = 2;
-                testObject.OrderHasSingleLineItem = true;
+                testObject.IsSingleLineOrder = true;
 
+                testObject.NumberOfItemsPerOrder = 2;
                 var startingNumberOfItems = testObject.DisplayFieldMaps.Count(m => m.DisplayName.Contains("Item"));
 
                 testObject.NumberOfItemsPerOrder = 7;
-
                 var endNumberOfItems = testObject.DisplayFieldMaps.Count(m => m.DisplayName.Contains("Item"));
 
                 Assert.Equal(5, endNumberOfItems - startingNumberOfItems);
@@ -596,7 +596,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
                 var map = mock.Create<OdbcFieldMapFactory>();
 
                 var testObject = mock.Create<OdbcImportFieldMappingControlViewModel>(new TypedParameter(typeof(IOdbcFieldMapFactory), map));
-                testObject.OrderHasSingleLineItem = true;
+                testObject.IsSingleLineOrder = true;
                 testObject.NumberOfAttributesPerItem = 10;
                 testObject.NumberOfItemsPerOrder = 1;
 
@@ -614,7 +614,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             {
                 var testObject = mock.Create<OdbcImportFieldMappingControlViewModel>();
                 testObject.NumberOfItemsPerOrder = 7;
-                testObject.OrderHasSingleLineItem = true;
+                testObject.IsSingleLineOrder = true;
 
                 var startingNumberOfItems = testObject.DisplayFieldMaps.Count(m => m.DisplayName.Contains("Item"));
 
@@ -634,7 +634,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
                 var map = mock.Create<OdbcFieldMapFactory>();
 
                 var testObject = mock.Create<OdbcImportFieldMappingControlViewModel>(new TypedParameter(typeof(IOdbcFieldMapFactory), map));
-                testObject.OrderHasSingleLineItem = true;
+                testObject.IsSingleLineOrder = true;
                 testObject.NumberOfAttributesPerItem = 1;
                 testObject.NumberOfItemsPerOrder = 1;
 
@@ -658,7 +658,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
                 var map = mock.Create<OdbcFieldMapFactory>();
 
                 var testObject = mock.Create<OdbcImportFieldMappingControlViewModel>(new TypedParameter(typeof(IOdbcFieldMapFactory), map));
-                testObject.OrderHasSingleLineItem = true;
+                testObject.IsSingleLineOrder = true;
                 testObject.NumberOfAttributesPerItem = 11;
                 testObject.NumberOfItemsPerOrder = 1;
 

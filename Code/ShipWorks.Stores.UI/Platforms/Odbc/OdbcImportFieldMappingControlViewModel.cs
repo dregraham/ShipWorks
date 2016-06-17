@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -37,7 +38,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
 
         private IOdbcTable previousSelectedTable = null;
         private string mapName;
-        private bool orderHasSingleLineItem = true;
+        private bool isSingleLineOrder = true;
         private int numberOfAttributesPerItem;
         private int numberOfItemsPerOrder;
         private ObservableCollection<OdbcFieldMapDisplay> displayFieldMaps;
@@ -176,21 +177,15 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// Gets or sets a value indicating whether [order has a single line item].
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public bool OrderHasSingleLineItem
+        public bool IsSingleLineOrder
         {
-            get { return orderHasSingleLineItem; }
+            get { return isSingleLineOrder; }
             set
             {
-                if (value)
-                {
-                    SwitchToSingleLineOrders();
-                }
-                else
-                {
-                    SwitchToMultiLineOrders();
-                }
+                NumberOfItemsPerOrder = 1;
+                DisplayFieldMaps[2].DisplayName = value ? "Item 1" : "Item";
 
-                handler.Set(nameof(OrderHasSingleLineItem), ref orderHasSingleLineItem, value);
+                handler.Set(nameof(IsSingleLineOrder), ref isSingleLineOrder, value);
             }
         }
 
@@ -203,29 +198,32 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             get { return numberOfItemsPerOrder; }
             set
             {
-                if(OrderHasSingleLineItem)
+                Debug.Assert(IsSingleLineOrder || value == 1,
+                    "Should never set multi line order numberOfItemsPerORder to a value other than 1.");
+
+                int delta = value - numberOfItemsPerOrder;
+
+                if (delta > 0)
                 {
-                    int delta = value - numberOfItemsPerOrder;
-
-                    if (delta > 0)
+                    for (int i = numberOfItemsPerOrder + 1; i <= value; i++)
                     {
-                        for (int i = numberOfItemsPerOrder + 1; i <= value; i++)
-                        {
-                            OdbcFieldMap map = fieldMapFactory.CreateOrderItemFieldMap();
-                            DisplayFieldMaps.Add(new OdbcFieldMapDisplay($"Item {i}", map));
+                        OdbcFieldMap map = fieldMapFactory.CreateOrderItemFieldMap();
+                        DisplayFieldMaps.Add(new OdbcFieldMapDisplay($"Item {i}", map));
 
-                            // Give the new item the correct number of attributes
-                            GetRangeOfAttributes(1, numberOfAttributesPerItem).ToList().ForEach(map.AddEntry);
-                        }
-                    }
-                    else if (delta < 0)
-                    {
-                        DisplayFieldMaps.Where(m => m.DisplayName.Contains("Item"))
-                            .Skip(numberOfItemsPerOrder)
-                            .ToList()
-                            .ForEach(map => DisplayFieldMaps.Remove(map));
+                        // Give the new item the correct number of attributes
+                        GetRangeOfAttributes(1, numberOfAttributesPerItem).ToList().ForEach(m => map.AddEntry(m));
                     }
                 }
+                else if (delta < 0)
+                {
+                    DisplayFieldMaps.Where(m => m.DisplayName.Contains("Item"))
+                        .Skip(numberOfItemsPerOrder)
+                        .ToList()
+                        .ForEach(map => DisplayFieldMaps.Remove(map));
+                }
+
+                Debug.Assert(DisplayFieldMaps.Count(m => m.DisplayName.Contains("Item")) == value,
+                    $"Number of items not equal to value. Value = {value}, Number of items = {DisplayFieldMaps.Count(m => m.DisplayName.Contains("Item"))}");
 
                 handler.Set(nameof(NumberOfItemsPerOrder), ref numberOfItemsPerOrder, value);
             }
@@ -351,7 +349,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
                 return false;
             }
             
-            if (!OrderHasSingleLineItem && string.IsNullOrWhiteSpace(RecordIdentifier?.Name))
+            if (!IsSingleLineOrder && string.IsNullOrWhiteSpace(RecordIdentifier?.Name))
             {
                 messageHelper.ShowError("When orders contain items on multiple lines, an order identifier is required to be mapped.");
                 return false;
@@ -374,7 +372,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
                 e.ExternalField.Table = selectedTable;
             });
 
-            if (!OrderHasSingleLineItem)
+            if (!IsSingleLineOrder)
             {
                 map.RecordIdentifierSource = RecordIdentifier?.Name;
             }
@@ -459,25 +457,6 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
                     }
                 }
             }
-        }
-
-        /// <summary>
-        /// Switches to single line orders.
-        /// </summary>
-        private void SwitchToSingleLineOrders()
-        {
-            NumberOfItemsPerOrder = 1;
-            DisplayFieldMaps[2].DisplayName = "Item 1";
-        }
-
-        /// <summary>
-        /// Switches to multi line items.
-        /// </summary>
-        private void SwitchToMultiLineOrders()
-        {
-            NumberOfItemsPerOrder = 1;
-
-            DisplayFieldMaps[2].DisplayName = "Item";
         }
     }
 }
