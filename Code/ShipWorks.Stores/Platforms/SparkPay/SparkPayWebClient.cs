@@ -19,10 +19,10 @@ namespace ShipWorks.Stores.Platforms.SparkPay
     /// <summary>
     /// The SparkPay web client
     /// </summary>
-    public class SparkPayWebClient
+    public class SparkPayWebClient : IDisposable
     {
-        private int OverApiLimitStatusCode = 429;
-        private SparkPayWebClientRequestThrottle throttler;
+        private readonly int OverApiLimitStatusCode = 429;
+        private readonly SparkPayWebClientRequestThrottle throttler;
 
         // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(SparkPayWebClient));
@@ -279,6 +279,14 @@ namespace ShipWorks.Stores.Platforms.SparkPay
             {
                 throw new SparkPayException($"Failed to deserializes {typeof(T)}", ex);
             }
+        }
+
+        /// <summary>
+        /// Disposes resources used by the web client
+        /// </summary>
+        public void Dispose()
+        {
+            throttler.Dispose();
         }
     }
 }

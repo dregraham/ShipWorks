@@ -26,6 +26,16 @@ namespace ShipWorks.Filters.Content
         }
 
         /// <summary>
+        /// Constructor
+        /// </summary>
+        public ConditionElementAttribute(string displayName, string identifier, string applicableTest)
+        {
+            this.displayName = displayName;
+            this.identifier = identifier;
+            this.applicableTest = applicableTest;
+        }
+
+        /// <summary>
         /// The name of the condition.
         /// </summary>
         public string DisplayName
@@ -55,7 +65,6 @@ namespace ShipWorks.Filters.Content
         public string ApplicableTest
         {
             get { return applicableTest; }
-            set { applicableTest = value; }
         }
     }
 }

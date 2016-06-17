@@ -1,17 +1,16 @@
-﻿using Interapptive.Shared.Utility;
-using ShipWorks.Data.Administration.SqlServerSetup;
-using log4net;
-using ShipWorks.ApplicationCore;
-using ShipWorks.Users;
-using System;
+﻿using System;
 using System.Data.SqlClient;
 using System.IO;
 using System.Text;
 using System.Xml;
 using System.Xml.XPath;
 using Interapptive.Shared.Security;
+using Interapptive.Shared.Utility;
+using log4net;
+using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.ExecutionMode;
-
+using ShipWorks.Data.Administration.SqlServerSetup;
+using ShipWorks.Users;
 
 namespace ShipWorks.Data.Connection
 {
@@ -58,9 +57,9 @@ namespace ShipWorks.Data.Connection
         /// <summary>
         /// Default constructor
         /// </summary>
-        public SqlSessionConfiguration() 
-        { 
-        
+        public SqlSessionConfiguration()
+        {
+
         }
 
         /// <summary>
@@ -86,7 +85,7 @@ namespace ShipWorks.Data.Connection
                 throw new InvalidOperationException("Cannot modify the current SqlSessionConfiguration.");
             }
 
-            // Important to copy the raw values here, not the properties, as the properties do some processing on the data coming out 
+            // Important to copy the raw values here, not the properties, as the properties do some processing on the data coming out
             // (decrypting, forcing windows auth, etc)
             this.serverInstance = copy.serverInstance;
             this.databaseName = copy.databaseName;
@@ -119,7 +118,7 @@ namespace ShipWorks.Data.Connection
         void OnConnectionChanged()
         {
             var handlers = ConnectionChanged;
-            
+
             if (null != handlers)
             {
                 handlers(this, EventArgs.Empty);
@@ -158,7 +157,7 @@ namespace ShipWorks.Data.Connection
                     throw new InvalidOperationException("Cannot modify the current SqlSessionConfiguration.");
                 }
 
-                serverInstance = value;                
+                serverInstance = value;
 
                 OnConnectionChanged();
             }
@@ -293,7 +292,7 @@ namespace ShipWorks.Data.Connection
             csb.WorkstationID = UserSession.WorkstationID;
 
             // Timeout for connect
-            csb.ConnectTimeout = (int)defaultTimeout.TotalSeconds;
+            csb.ConnectTimeout = (int) defaultTimeout.TotalSeconds;
 
             // http://blogs.msdn.com/florinlazar/archive/2008/05/05/8460156.aspx
             csb.TransactionBinding = "Explicit Unbind";

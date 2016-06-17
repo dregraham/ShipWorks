@@ -23,7 +23,8 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// </summary>
         public void Void(ShipmentEntity shipment)
         {
-
+            // Best rate cannot void labels because when a shipment is processed, it is converted to the
+            // correct carrier
         }
     }
 }

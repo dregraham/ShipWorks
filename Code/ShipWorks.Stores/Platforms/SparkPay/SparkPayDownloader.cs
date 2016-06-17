@@ -9,7 +9,6 @@ using System.Data.SqlClient;
 using System.Linq;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
-using ShipWorks.Common.Threading;
 
 namespace ShipWorks.Stores.Platforms.SparkPay
 {
@@ -49,7 +48,7 @@ namespace ShipWorks.Stores.Platforms.SparkPay
                     {
                         return;
                     }
-                    
+
                     DateTime start = GetOnlineLastModifiedStartingPoint().GetValueOrDefault(DateTime.UtcNow.AddDays(-30));
                     OrdersResponse response = webClient.GetOrders(store, start, Progress);
 
@@ -116,7 +115,7 @@ namespace ShipWorks.Stores.Platforms.SparkPay
 
             LoadAddresses(order, sparkPayOrder);
             LoadOrderNotes(order, sparkPayOrder);
-            
+
             ISqlAdapterRetry retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "SparkPayDownloader.LoadOrder");
             retryAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(order));
         }
@@ -126,12 +125,11 @@ namespace ShipWorks.Stores.Platforms.SparkPay
         /// </summary>
         private static void LoadOrderPayments(OrderEntity order, Order sparkPayOrder)
         {
-            Payment payment = sparkPayOrder.Payments.ToList().FirstOrDefault();
+            Payment payment = sparkPayOrder.Payments.FirstOrDefault();
 
             if (payment != null)
             {
-                OrderPaymentDetailEntity detail = new OrderPaymentDetailEntity();
-                detail.Order = order;
+                OrderPaymentDetailEntity detail = new OrderPaymentDetailEntity {Order = order};
 
                 if (payment.PaymentType == "CreditCard")
                 {
@@ -145,7 +143,7 @@ namespace ShipWorks.Stores.Platforms.SparkPay
                 }
             }
         }
-    
+
         /// <summary>
         /// Loads the orders notes
         /// </summary>
@@ -186,12 +184,12 @@ namespace ShipWorks.Stores.Platforms.SparkPay
             LoadOrderCharge(order, "ADDITIONAL FEES", "Additional Fees", sparkPayOrder.AdditionalFees.GetValueOrDefault(0));
             LoadOrderCharge(order, "DISCOUNT", "Discount", -sparkPayOrder.DiscountTotal.GetValueOrDefault(0));
         }
-         
+
         private static void LoadOrderCharge(OrderEntity order, string type, string description, decimal amount)
         {
             OrderChargeEntity charge = new OrderChargeEntity();
             charge.Order = order;
-            
+
             charge.Type = type;
             charge.Description = description;
             charge.Amount = amount;
@@ -216,7 +214,7 @@ namespace ShipWorks.Stores.Platforms.SparkPay
 
                 // see if we need to add any attributes
                 string giftMessage = sparkPayItem.GiftMessage;
-               
+
                 if (!string.IsNullOrWhiteSpace(giftMessage))
                 {
                     OrderItemAttributeEntity attribute = InstantiateOrderItemAttribute(orderItem);
@@ -252,16 +250,17 @@ namespace ShipWorks.Stores.Platforms.SparkPay
                 SetStreetAddress(new PersonAdapter(order, "Ship"), shipAddress);
             }
 
-            if (sparkPayOrder.OrderBillingAddressId != null && sparkPayOrder.OrderBillingAddressId == sparkPayOrder.OrderShippingAddressId)
+            if (sparkPayOrder.OrderBillingAddressId == null)
             {
                 billAddress = shipAddress;
-            }
-            else
+            }else if (sparkPayOrder.OrderBillingAddressId != null)
             {
-                billAddress = webClient.GetAddress(store, sparkPayOrder.OrderBillingAddressId.Value, Progress).Addresses.FirstOrDefault();
+                billAddress = sparkPayOrder.OrderBillingAddressId == sparkPayOrder.OrderShippingAddressId ?
+                    shipAddress :
+                    webClient.GetAddress(store, sparkPayOrder.OrderBillingAddressId.Value, Progress).Addresses.FirstOrDefault();
             }
 
-            SetStreetAddress(new PersonAdapter(order, "Ship"), shipAddress);
+            SetStreetAddress(new PersonAdapter(order, "Bill"), billAddress);
         }
 
         /// <summary>

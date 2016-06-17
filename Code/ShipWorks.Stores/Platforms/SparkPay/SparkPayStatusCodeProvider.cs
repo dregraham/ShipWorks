@@ -10,9 +10,9 @@ namespace ShipWorks.Stores.Platforms.SparkPay
 {
     public class SparkPayStatusCodeProvider : OnlineStatusCodeProvider<int>
     {
-        SparkPayStoreEntity store;
+        private readonly SparkPayStoreEntity store;
 
-        // Logger 
+        // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(SparkPayStatusCodeProvider));
 
         /// <summary>
@@ -47,12 +47,12 @@ namespace ShipWorks.Stores.Platforms.SparkPay
                         codeMap.Add(orderStatus.Id, orderStatus.Name);
                     }
                 }
-                log.Debug($"Done with statuses");
+                log.Debug("Done with statuses");
                 return codeMap;
             }
             catch (SparkPayException ex)
             {
-                log.ErrorFormat("Failed to fetch online status codes from SparkPay: {0}", ex);
+                log.ErrorFormat($"Failed to fetch online status codes from SparkPay: {ex}");
                 return null;
             }
         }

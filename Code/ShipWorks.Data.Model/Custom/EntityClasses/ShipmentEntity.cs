@@ -1,28 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Runtime.Serialization;
+﻿using System.Runtime.Serialization;
 using Interapptive.Shared.Business;
+using ShipWorks.Shipping;
 
 namespace ShipWorks.Data.Model.EntityClasses
 {
     /// <summary>
-    /// Partial class extention of the LLBLGen ShipmentEntity
+    /// Partial class extension of the LLBLGen ShipmentEntity
     /// </summary>
     public partial class ShipmentEntity
     {
-        bool customsItemsLoaded = false;
-        bool deletedFromDatabase = false;
-
         /// <summary>
         /// Utility flag to help track if we've pulled customs items form the database
         /// </summary>
-        public bool CustomsItemsLoaded
+        public bool CustomsItemsLoaded { get; set; }
+
+        /// <summary>
+        /// Type of shipment
+        /// </summary>
+        public ShipmentTypeCode ShipmentTypeCode
         {
-            get { return customsItemsLoaded; }
-            set { customsItemsLoaded = value; }
+            get { return (ShipmentTypeCode) ShipmentType; }
+            set { ShipmentType = (int) value; }
         }
 
         /// <summary>
@@ -31,6 +29,7 @@ namespace ShipWorks.Data.Model.EntityClasses
         public PersonAdapter OriginPerson
         {
             get { return new PersonAdapter(this, "Origin"); }
+            set { PersonAdapter.Copy(value, OriginPerson); }
         }
 
         /// <summary>
@@ -38,19 +37,29 @@ namespace ShipWorks.Data.Model.EntityClasses
         /// </summary>
         public PersonAdapter ShipPerson
         {
-            get {return new PersonAdapter(this, "Ship"); }
+            get { return new PersonAdapter(this, "Ship"); }
+            set { PersonAdapter.Copy(value, ShipPerson); }
+        }
+
+        /// <summary>
+        /// Status of the shipment
+        /// </summary>
+        public ShipmentStatus Status
+        {
+            get
+            {
+                return Voided ? ShipmentStatus.Voided :
+                    Processed ? ShipmentStatus.Processed :
+                    ShipmentStatus.Unprocessed;
+            }
         }
 
         /// <summary>
         /// Indicates if the shipment is known to have been deleted from the database.  This flag is used instead of using Entity.Fields.State = EntityState.Deleted
-        /// because when that is set LLBLgen throws an exception if you try to do anyting with the entity - which due to threading we may still be showing and dealing
+        /// because when that is set LLBLgen throws an exception if you try to do anything with the entity - which due to threading we may still be showing and dealing
         /// with data from it shortly after its deleted.
         /// </summary>
-        public bool DeletedFromDatabase
-        {
-            get { return deletedFromDatabase; }
-            set { deletedFromDatabase = value; }
-        }
+        public bool DeletedFromDatabase { get; set; }
 
         /// <summary>
         /// Has to be overridden to serialize our extra data
@@ -59,8 +68,8 @@ namespace ShipWorks.Data.Model.EntityClasses
         {
             base.OnGetObjectData(info, context);
 
-            info.AddValue("customsItemsLoaded", customsItemsLoaded);
-            info.AddValue("deletedFromDatabase", deletedFromDatabase);
+            info.AddValue("customsItemsLoaded", CustomsItemsLoaded);
+            info.AddValue("deletedFromDatabase", DeletedFromDatabase);
         }
 
         /// <summary>
@@ -70,8 +79,8 @@ namespace ShipWorks.Data.Model.EntityClasses
         {
             base.OnDeserialized(info, context);
 
-            customsItemsLoaded = info.GetBoolean("customsItemsLoaded");
-            deletedFromDatabase = info.GetBoolean("deletedFromDatabase");
+            CustomsItemsLoaded = info.GetBoolean("customsItemsLoaded");
+            DeletedFromDatabase = info.GetBoolean("deletedFromDatabase");
         }
     }
 }

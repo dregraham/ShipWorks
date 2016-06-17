@@ -1,15 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Autofac;
+using Autofac.Features.OwnedInstances;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Connection;
-using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1.Registration;
 using ShipWorks.Shipping.Carriers.Postal.Express1.Registration;
 using ShipWorks.Shipping.Editing;
-using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Settings;
 
@@ -89,14 +89,18 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
         /// </summary>
         public override ShipmentTypeSetupWizardForm CreateSetupWizard()
         {
-            Express1Registration registration = new Express1Registration(ShipmentTypeCode, new EndiciaExpress1RegistrationGateway(), new EndiciaExpress1RegistrationRepository(), 
-                new EndiciaExpress1PasswordEncryptionStrategy(), new Express1RegistrationValidator());
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                Express1Registration registration = new Express1Registration(ShipmentTypeCode,
+                    new EndiciaExpress1RegistrationGateway(), new EndiciaExpress1RegistrationRepository(),
+                    new EndiciaExpress1PasswordEncryptionStrategy(), new Express1RegistrationValidator());
 
-            EndiciaAccountManagerControl accountManagerControl = new EndiciaAccountManagerControl();
-            EndiciaOptionsControl optionsControl = new EndiciaOptionsControl(EndiciaReseller.Express1);
-            EndiciaBuyPostageDlg postageDlg = new EndiciaBuyPostageDlg();
+                EndiciaAccountManagerControl accountManagerControl = new EndiciaAccountManagerControl();
+                EndiciaOptionsControl optionsControl = new EndiciaOptionsControl(EndiciaReseller.Express1);
+                EndiciaBuyPostageDlg postageDlg = lifetimeScope.Resolve<Owned<EndiciaBuyPostageDlg>>().Value;
 
-            return new Express1SetupWizard(postageDlg, accountManagerControl, optionsControl, registration, EndiciaAccountManager.Express1Accounts);
+                return new Express1SetupWizard(postageDlg, accountManagerControl, optionsControl, registration, EndiciaAccountManager.Express1Accounts);
+            }
         }
 
         /// <summary>

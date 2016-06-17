@@ -1,38 +1,28 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
-using ShipWorks.Data.Administration.Retry;
-using ShipWorks.Shipping.Policies;
-using ShipWorks.UI;
-using System.Threading;
-using ShipWorks.Data;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.HelperClasses;
-using Interapptive.Shared.Utility;
-using ShipWorks.Data.Model.FactoryClasses;
-using ShipWorks.Data.Adapter.Custom;
-using log4net;
-using System.Diagnostics;
-using ShipWorks.Data.Connection;
-using ShipWorks.Common.Threading;
-using ShipWorks.Data.Model;
-using System.Linq;
 using System.Data;
-using System.Windows.Forms;
-using ShipWorks.Templates.Printing;
-using ShipWorks.Users;
-using ShipWorks.Users.Security;
-using ShipWorks.Stores.Content;
-using ShipWorks.Data.Administration;
-using System.Data.SqlClient;
+using Autofac;
 using Interapptive.Shared;
-using ShipWorks.Stores;
+using log4net;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Actions;
+using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Nudges;
+using ShipWorks.Core.Messaging;
+using ShipWorks.Data.Adapter.Custom;
+using ShipWorks.Data.Administration.Retry;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.FactoryClasses;
+using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Messaging.Messages;
+using ShipWorks.Shipping.Policies;
+using ShipWorks.Stores;
+using ShipWorks.Stores.Content;
+using ShipWorks.Templates.Printing;
 using ShipWorks.Data.Utility;
 using ShipWorks.Users.Audit;
-using ShipWorks.SqlServer.Data.Auditing;
+using ShipWorks.Users.Security;
 
 namespace ShipWorks.Data
 {
@@ -92,14 +82,14 @@ namespace ShipWorks.Data
         /// <summary>
         /// Permanently delete the selected store from ShipWorks
         /// </summary>
-        public static void DeleteStore(StoreEntity store)
+        public static void DeleteStore(StoreEntity store, ISecurityContext securityContext)
         {
             if (store == null)
             {
                 throw new ArgumentNullException("store");
             }
 
-            UserSession.Security.DemandPermission(PermissionType.ManageStores, store.StoreID);
+            securityContext.DemandPermission(PermissionType.ManageStores, store.StoreID);
 
             deletingStore = true;
 
@@ -149,7 +139,10 @@ namespace ShipWorks.Data
         /// </summary>
         public static void DeleteOrder(long orderID)
         {
-            UserSession.Security.DemandPermission(PermissionType.OrdersModify, orderID);
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                lifetimeScope.Resolve<ISecurityContext>().DemandPermission(PermissionType.OrdersModify, orderID);
+            }
 
             using (AuditBehaviorScope scope = new AuditBehaviorScope(ConfigurationData.Fetch().AuditDeletedOrders ? AuditState.Enabled : AuditState.NoDetails))
             {
@@ -158,6 +151,7 @@ namespace ShipWorks.Data
             }
 
             DataProvider.RemoveEntity(orderID);
+            Messenger.Current.Send(new OrderDeletedMessage(null, orderID));
         }
 
         /// <summary>
@@ -165,11 +159,15 @@ namespace ShipWorks.Data
         /// </summary>
         public static void DeleteOrder(long orderID, SqlAdapter adapter)
         {
-            UserSession.Security.DemandPermission(PermissionType.OrdersModify, orderID);
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                lifetimeScope.Resolve<ISecurityContext>().DemandPermission(PermissionType.OrdersModify, orderID);
+            }
 
             DeleteWithCascade(EntityType.OrderEntity, orderID, adapter);
 
             DataProvider.RemoveEntity(orderID);
+            Messenger.Current.Send(new OrderDeletedMessage(null, orderID));
         }
 
         /// <summary>
@@ -177,7 +175,10 @@ namespace ShipWorks.Data
         /// </summary>
         public static void DeleteCustomer(long customerID)
         {
-            UserSession.Security.DemandPermission(PermissionType.CustomersDelete, customerID);
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                lifetimeScope.Resolve<ISecurityContext>().DemandPermission(PermissionType.CustomersDelete, customerID);
+            }
 
             using (AuditBehaviorScope scope = new AuditBehaviorScope(ConfigurationData.Fetch().AuditDeletedOrders ? AuditState.Enabled : AuditState.NoDetails))
             {
@@ -186,10 +187,11 @@ namespace ShipWorks.Data
             }
 
             DataProvider.RemoveEntity(customerID);
+            Messenger.Current.Send(new CustomerDeletedMessage(null, customerID));
         }
 
         /// <summary>
-        /// Delete the given store 
+        /// Delete the given store
         /// </summary>
         [NDependIgnoreLongMethod]
         private static void DeleteStore(StoreEntity store, SqlAdapter adapter)
@@ -230,7 +232,7 @@ namespace ShipWorks.Data
                 // Now, delete all the customers
                 DeleteChildRelations(customerBucket, EntityType.CustomerEntity, adapter);
 
-                // Now find all leftover orders.  These will be the ones who have a customer that has an order from another store.  There shouldnt
+                // Now find all leftover orders.  These will be the ones who have a customer that has an order from another store.  There shouldn't
                 // be too many of these, so we should be ok to do these one at a time.
                 ResultsetFields orderFields = new ResultsetFields(1);
                 orderFields.DefineField(OrderFields.OrderID, 0, "OrderID", "");
@@ -261,7 +263,7 @@ namespace ShipWorks.Data
             // Delete any actions that are specific only to the store
             ActionManager.DeleteStoreActions(store.StoreID);
 
-            // We delete the clone, so the original store doesnt get marked as Deleted until the StoreManager updates itself.
+            // We delete the clone, so the original store doesn't get marked as Deleted until the StoreManager updates itself.
             StoreEntity clone = (StoreEntity) GeneralEntityFactory.Create(EntityUtility.GetEntityType(store.GetType()));
             clone.Fields = store.Fields.Clone();
 
@@ -269,11 +271,13 @@ namespace ShipWorks.Data
 
             // Delete the store
             adapter.DeleteEntity(clone);
+
+            Messenger.Current.Send(new StoreDeletedMessage(null, store.StoreID));
         }
 
         /// <summary>
         /// Delete the specified EntityType, as found using the given starting predicate (that must be PK based), while
-        /// first deleting all child records. 
+        /// first deleting all child records.
         /// </summary>
         private static void DeleteWithCascade(EntityType entityType, long id, SqlAdapter adapter)
         {

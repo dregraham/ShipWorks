@@ -6,8 +6,8 @@ namespace ShipWorks.Shipping.Tests.Carriers
 {
     public class EmptyRateHashingServiceTest
     {
-        private EmptyRateHashingService emptyRatingHashingService;
-        private ShipmentEntity shipment;
+        private readonly EmptyRateHashingService emptyRatingHashingService;
+        private readonly ShipmentEntity shipment;
 
         public EmptyRateHashingServiceTest()
         {
@@ -30,7 +30,6 @@ namespace ShipWorks.Shipping.Tests.Carriers
             RatingFields testObject = emptyRatingHashingService.RatingFields;
 
             Assert.Equal(0, testObject.PackageFields.Count);
-            Assert.Equal(0, testObject.ShipmentFields.Count);
         }
     }
 }

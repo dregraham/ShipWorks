@@ -1,30 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using ShipWorks.UI.Wizard;
-using System.Diagnostics;
-using ShipWorks.Data.Administration.SqlServerSetup;
 using System.Data.SqlClient;
+using System.IO;
+using System.Windows.Forms;
+using Autofac;
 using Interapptive.Shared.Data;
 using Interapptive.Shared.UI;
-using ShipWorks.Data.Connection;
-using System.IO;
-using Autofac;
-using Autofac.Core;
 using Interapptive.Shared.Utility;
 using log4net;
-using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing;
-using ShipWorks.Email;
-using ShipWorks.Users;
-using ShipWorks.ApplicationCore.Setup;
-using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Administration.SqlServerSetup;
+using ShipWorks.Data.Connection;
 using ShipWorks.Stores.Management;
+using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Data.Administration
 {
@@ -91,7 +79,7 @@ namespace ShipWorks.Data.Administration
             tangoUserControlHost.StepNext += OnStepNextCreateUsername;
 
             // Replace the user wizard page with the new tango user wizard page
-            Pages.Insert(Pages.Count - 1, (WizardPage)tangoUserControlHost);
+            Pages.Insert(Pages.Count - 1, (WizardPage) tangoUserControlHost);
         }
 
         /// <summary>
@@ -454,7 +442,7 @@ namespace ShipWorks.Data.Administration
         }
 
         /// <summary>
-        /// Drop the database that we created due to the use going back or cancelling the wizard.
+        /// Drop the database that we created due to the use going back or canceling the wizard.
         /// </summary>
         private void DropPendingDatabase()
         {

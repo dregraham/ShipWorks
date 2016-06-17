@@ -23,13 +23,13 @@ namespace ShipWorks.ApplicationCore.Licensing.Activation
         }
 
         /// <summary>
-        /// Uses the credentials provided to activate a customer license with the Tango web 
+        /// Uses the credentials provided to activate a customer license with the Tango web
         /// client. Once verified with Tango, the license key is saved.
         /// </summary>
         /// <param name="email">The email.</param>
         /// <param name="password">The password.</param>
         /// <returns>An instance of an activated ICustomerLicense.</returns>
-        /// <exception cref="ShipWorksLicenseException">A ShipWorksLicenseException is thrown when 
+        /// <exception cref="ShipWorksLicenseException">A ShipWorksLicenseException is thrown when
         /// the license could not be activated with Tango.</exception>
         public ICustomerLicense Execute(string email, string password)
         {
@@ -40,10 +40,10 @@ namespace ShipWorks.ApplicationCore.Licensing.Activation
             {
                 throw new ShipWorksLicenseException(activateLicenseResponse.Message);
             }
-            
-            ICustomerLicense license = licenseFactory(activateLicenseResponse.Context.Key);
-            license.AssociatedStampsUsername = activateLicenseResponse.Context.AssociatedStampsUsername;
-            license.StampsUsername = activateLicenseResponse.Context.StampsUsername;
+
+            ICustomerLicense license = licenseFactory(activateLicenseResponse.Value.Key);
+            license.AssociatedStampsUsername = activateLicenseResponse.Value.AssociatedStampsUsername;
+            license.StampsUsername = activateLicenseResponse.Value.StampsUsername;
             license.Save();
 
             return license;

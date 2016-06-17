@@ -12,9 +12,6 @@ namespace ShipWorks.Stores.Platforms.SparkPay.CoreExtensions.Actions
     [ActionTask("Update store status", "SparkPayOrderUpdate", ActionTaskCategory.UpdateOnline)]
     public class SparkPayOrderUpdateTask : StoreInstanceTaskBase
     {
-        // Default the status code to an invalid code (so the drop down works correctly)
-        int statusCode = -1;
-
         /// <summary>
         /// Indicates if the task is supported for the specified store
         /// </summary>
@@ -26,11 +23,7 @@ namespace ShipWorks.Stores.Platforms.SparkPay.CoreExtensions.Actions
         /// <summary>
         /// The status code the task will be run with
         /// </summary>
-        public int StatusCode
-        {
-            get { return statusCode; }
-            set { statusCode = value; }
-        }
+        public int StatusCode { get; set; } = -1;
 
         public override ActionTaskEditor CreateEditor()
         {
@@ -70,7 +63,7 @@ namespace ShipWorks.Stores.Platforms.SparkPay.CoreExtensions.Actions
                     SparkPayOnlineUpdater updater = scope.Resolve<SparkPayOnlineUpdater>(new TypedParameter(typeof(SparkPayStoreEntity), store));
                     foreach (long orderID in inputKeys)
                     {
-                        updater.UpdateOrderStatus(orderID, statusCode, context.CommitWork);
+                        updater.UpdateOrderStatus(orderID, StatusCode, context.CommitWork);
                     }
                 }
             }

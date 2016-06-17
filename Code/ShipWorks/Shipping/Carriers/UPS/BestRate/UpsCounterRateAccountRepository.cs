@@ -30,12 +30,14 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
         /// <summary>
         /// Gets the accounts for the carrier.
         /// </summary>
-        public IEnumerable<UpsAccountEntity> Accounts
+        public IEnumerable<UpsAccountEntity> Accounts => lazyAccounts.Value;
+
+        /// <summary>
+        /// Force a check for changes
+        /// </summary>
+        public void CheckForChangesNeeded()
         {
-            get
-            {
-                return lazyAccounts.Value;
-            }
+            // We don't need to check for changes for counter rates
         }
 
         /// <summary>
@@ -48,7 +50,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
         }
 
         /// <summary>
-        /// Gets the default profile account. This will always return the same account that is 
+        /// Gets the default profile account. This will always return the same account that is
         /// used to get counter rates.
         /// </summary>
         public UpsAccountEntity DefaultProfileAccount
@@ -86,7 +88,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
                     Password = credentialStore.UpsPassword,
                     PostalCode = "63102",
                     CountryCode = "US",
-                    RateType = (int)UpsRateType.Retail,
+                    RateType = (int) UpsRateType.Retail,
                     UpsAccountID = -1056,
                     AccountNumber = string.Empty
                 };
@@ -100,7 +102,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
 
             return accounts;
         }
-        
+
         /// <summary>
         /// Saves the specified account.
         /// </summary>

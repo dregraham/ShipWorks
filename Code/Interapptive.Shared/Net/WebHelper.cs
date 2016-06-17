@@ -27,7 +27,7 @@ namespace Interapptive.Shared.Net
         static MethodInfo exceptionInternalPreserverStackTrace = null;
 
         /// <summary>
-        /// Static constuctor
+        /// Static Constructor
         /// </summary>
         static WebHelper()
         {

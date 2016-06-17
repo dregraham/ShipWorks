@@ -1,14 +1,15 @@
-﻿using Autofac.Extras.Moq;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using Autofac.Extras.Moq;
+using Autofac.Features.Indexed;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Amazon;
 using ShipWorks.Shipping.Carriers.Amazon.Api;
 using ShipWorks.Shipping.Carriers.Amazon.Api.DTOs;
-using ShipWorks.Stores.Platforms.Amazon.Mws;
-using System;
-using System.Collections.Generic;
-using Autofac.Features.Indexed;
 using ShipWorks.Stores.Platforms.Amazon;
+using ShipWorks.Stores.Platforms.Amazon.Mws;
 using Xunit;
 
 namespace ShipWorks.Shipping.Tests.Carriers.Amazon
@@ -21,6 +22,8 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
             Amazon = new AmazonShipmentEntity { ShippingServiceID = "something", CarrierName = "Foo" }
         };
 
+        [SuppressMessage("SonarLint", "S103:Lines should not be too long",
+            Justification = "The long line is binary data for tests")]
         readonly CreateShipmentResponse defaultResponse = new CreateShipmentResponse()
         {
             CreateShipmentResult = new CreateShipmentResult()
@@ -81,7 +84,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
                 .Returns(amazonShipmentRequest.Object);
 
             mock.Provide<IIndex<AmazonMwsApiCall, IAmazonShipmentRequest>>(repo.Object);
-            
+
             MockRequestDetailsFactory();
 
             var enforcer1 = mock.MockRepository.Create<IAmazonLabelEnforcer>();
@@ -97,7 +100,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
             mock.Mock<IAmazonShipmentRequest>()
                 .Setup(x => x.Submit(It.IsAny<ShipmentEntity>()))
                 .Returns(defaultResponse.CreateShipmentResult.AmazonShipment);
-            
+
             var testObject = mock.Create<AmazonLabelService>();
             testObject.Create(defaultShipment);
 
@@ -135,27 +138,26 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
             mock.Mock<IAmazonShippingWebClient>()
                 .Setup(x => x.CreateShipment(It.IsAny<ShipmentRequestDetails>(), It.IsAny<IAmazonMwsWebClientSettings>(), It.IsAny<string>()))
                 .Returns(defaultResponse);
-
             var testObject = mock.Create<AmazonLabelService>();
             Assert.Throws<AmazonShippingException>(() => testObject.Create(defaultShipment));
 
             enforcer2.Verify(x => x.CheckRestriction(It.IsAny<ShipmentEntity>()), Times.Never);
         }
-		
+
         [Fact]
         public void Void_Calls_IAmazonShipmentRequest()
         {
             Mock<IAmazonShipmentRequest> amazonShipmentRequest = mock.Mock<IAmazonShipmentRequest>();
 
             Mock<IIndex<AmazonMwsApiCall, IAmazonShipmentRequest>> repo = mock.MockRepository.Create<IIndex<AmazonMwsApiCall, IAmazonShipmentRequest>>();
-            
+
             repo.Setup(x => x[AmazonMwsApiCall.CancelShipment])
                 .Returns(amazonShipmentRequest.Object);
 
             mock.Provide<IIndex<AmazonMwsApiCall, IAmazonShipmentRequest>>(repo.Object);
-            
+
             AmazonLabelService testObject = mock.Create<AmazonLabelService>();
-            
+
             ShipmentEntity shipment = new ShipmentEntity();
 
             testObject.Void(shipment);

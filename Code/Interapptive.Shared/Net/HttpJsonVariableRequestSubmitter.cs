@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Interapptive.Shared.Utility;
+using System;
+using System.Net;
 using System.Text;
 
 namespace Interapptive.Shared.Net
@@ -49,7 +51,10 @@ namespace Interapptive.Shared.Net
         /// <summary>
         /// Processes the request.
         /// </summary>
-        public string ProcessRequest(IApiLogEntry logEntry, Type exceptionTypeToRethrow)
+        /// <remarks>
+        /// Result value is the HttpStatusCode. Message is the response from the server.
+        /// </remarks>
+        public EnumResult<HttpStatusCode> ProcessRequest(IApiLogEntry logEntry, Type exceptionTypeToRethrow)
         {
             try
             {
@@ -60,10 +65,7 @@ namespace Interapptive.Shared.Net
                     string responseData = reader.ReadResult();
                     logEntry.LogResponse(responseData, "txt");
 
-                    // Clear variables for next reqeust
-                    Variables.Clear();
-
-                    return responseData;
+                    return new EnumResult<HttpStatusCode>(reader.HttpWebResponse.StatusCode, responseData);
                 }
             }
             catch (Exception ex)

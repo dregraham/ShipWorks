@@ -2,46 +2,33 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
-using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
-using ShipWorks.UI.Wizard;
-using ShipWorks.Users;
-using log4net;
 using System.Data.SqlClient;
-using Interapptive.Shared;
-using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data;
-using ShipWorks.Data.Administration;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.UI;
-using ShipWorks.ApplicationCore;
-using ShipWorks.Data.Connection;
-using ShipWorks.Templates.Emailing;
-using ShipWorks.Email;
-using ShipWorks.Data.Administration.SqlServerSetup;
-using ShipWorks.ApplicationCore.Interaction;
+using System.Diagnostics;
+using System.Linq;
+using System.Reflection;
+using System.Windows.Forms;
 using System.Xml.Linq;
-using ShipWorks.Users.Security;
-using ShipWorks.Users.Audit;
+using Interapptive.Shared;
 using Interapptive.Shared.Data;
 using Interapptive.Shared.UI;
+using Interapptive.Shared.Win32;
+using log4net;
+using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Common.Threading;
+using ShipWorks.Data.Administration.SqlServerSetup;
 using ShipWorks.Data.Administration.UpdateFrom2x.Database;
-using System.Reflection;
-using ShipWorks.Data.Administration.UpdateFrom2x;
-using System.Linq;
-using ShipWorks.Data.Administration.UpdateFrom2x.Configuration;
-using ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode;
 using ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.PostMigration;
-using ShipWorks.Stores;
 using ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.PostMigration.ShippingPages;
 using ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.PostMigration.StorePages;
-using System.IO;
-using Interapptive.Shared.Win32;
-using System.Diagnostics;
+using ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode;
+using ShipWorks.Data.Connection;
+using ShipWorks.Email;
+using ShipWorks.UI.Wizard;
+using ShipWorks.Users;
+using ShipWorks.Users.Audit;
 using ShipWorks.Users.Logon;
+using ShipWorks.Users.Security;
 
 namespace ShipWorks.Data.Administration
 {
@@ -111,15 +98,15 @@ namespace ShipWorks.Data.Administration
         {
             InitializeComponent();
 
-            installed = SqlServerInstaller.IsMsdeMigrationInProgress ? new Version(0,0,0,0) : SqlSchemaUpdater.GetInstalledSchemaVersion();
+            installed = SqlServerInstaller.IsMsdeMigrationInProgress ? new Version(0, 0, 0, 0) : SqlSchemaUpdater.GetInstalledSchemaVersion();
             showFirewallPage = installed < new Version(3, 0);
 
             sqlInstaller = new SqlServerInstaller();
             sqlInstaller.InitializeForCurrentSqlSession();
             sqlInstaller.Exited += new EventHandler(OnUpgraderSqlServerExited);
 
-            sqlDownloader = new WizardDownloadHelper(this, 
-                sqlInstaller.GetInstallerLocalFilePath(SqlServerInstallerPurpose.Upgrade), 
+            sqlDownloader = new WizardDownloadHelper(this,
+                sqlInstaller.GetInstallerLocalFilePath(SqlServerInstallerPurpose.Upgrade),
                 sqlInstaller.GetInstallerDownloadUri(SqlServerInstallerPurpose.Upgrade));
 
             // Remove the placeholder...
@@ -930,7 +917,7 @@ namespace ShipWorks.Data.Administration
                 {
                     throw;
                 }
-            }         
+            }
         }
 
         /// <summary>
@@ -1061,7 +1048,7 @@ namespace ShipWorks.Data.Administration
             Cursor.Current = Cursors.WaitCursor;
 
             // Either way before leaving this page we need the environment setup
-            UserSession.InitializeForCurrentSession();
+            UserSession.InitializeForCurrentSession(Program.ExecutionMode);
         }
 
         #endregion

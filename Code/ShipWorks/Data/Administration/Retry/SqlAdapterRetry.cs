@@ -1,21 +1,21 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using log4net;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Connection;
-using System.Diagnostics.CodeAnalysis;
 
 namespace ShipWorks.Data.Administration.Retry
 {
     /// <summary>
-    /// Helper to retry sql adapter commands if an exception type occurrs.
+    /// Helper to retry sql adapter commands if an exception type occurs.
     /// TException will be compared to any exception and inner exception that is thrown.
     /// If either the exception or inner exception match TException, the command will be retried.
     /// </summary>
-    public class SqlAdapterRetry<TException> : ShipWorks.Data.Administration.Retry.ISqlAdapterRetry where TException : Exception
+    public class SqlAdapterRetry<TException> : ISqlAdapterRetry where TException : Exception
     {
         // Logger - Using the string parameter version so that we don't get the TException.ToString() in the log file
-        [SuppressMessage("SonarQube", "S2743:Static fields should not be used in generic types", 
+        [SuppressMessage("SonarQube", "S2743:Static fields should not be used in generic types",
             Justification = "It is not a problem if each closed class gets its own logger")]
         private static readonly ILog log = LogManager.GetLogger("SqlAdapterRetry<TException>");
 
@@ -45,8 +45,8 @@ namespace ShipWorks.Data.Administration.Retry
         /// <summary>
         /// Executes the given method with a new sql adapter that is setup with SqlDeadlockPriorityScope, and automatic retries the command
         /// if TException is detected.
-        /// 
-        /// This cannot be called within a current transaction.  This method will create a new transacted SqlAdapter for each retry.  If we didn't do this, 
+        ///
+        /// This cannot be called within a current transaction.  This method will create a new transacted SqlAdapter for each retry.  If we didn't do this,
         /// and an exception is thrown, everything would be rolled back.
         /// </summary>
         /// <param name="method">Method to execute.  </param>
@@ -66,14 +66,14 @@ namespace ShipWorks.Data.Administration.Retry
                         {
                             using (new SqlDeadlockPriorityScope(deadlockPriority))
                             {
-                                using (SqlAdapter adapter = new SqlAdapter(true))
+                                using (SqlAdapter adapter = SqlAdapter.Create(true))
                                 {
                                     adapter.CommandTimeOut = (int) TimeSpan.FromMinutes(10).TotalSeconds;
 
                                     method(adapter);
 
                                     adapter.Commit();
-                                    
+
                                     return;
                                 }
                             }
@@ -108,7 +108,7 @@ namespace ShipWorks.Data.Administration.Retry
 
         /// <summary>
         /// Executes the given method and automatically retries the command if TException is detected.
-        /// 
+        ///
         /// The SqlAdapter in method must be the top most transaction.  Do not use this method from within an existing transaction.
         /// </summary>
         /// <param name="method">Method to execute.  </param>

@@ -1,41 +1,36 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
+using System.Windows.Forms;
+using Autofac;
 using Interapptive.Shared.Utility;
-using ShipWorks.AddressValidation;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.AddressValidation.Enums;
+using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Dashboard.Content;
+using ShipWorks.ApplicationCore.Interaction;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Filters;
 using ShipWorks.Filters.Content;
-using ShipWorks.Filters.Content.Conditions.Orders;
-using ShipWorks.UI.Wizard;
-using ShipWorks.Stores.Communication;
-using ShipWorks.UI;
-using ShipWorks.Stores.Content;
-using ShipWorks.Data;
-using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Filters.Content.Conditions;
-using ShipWorks.ApplicationCore.Interaction;
-using ShipWorks.Templates.Processing.TemplateXml;
-using ShipWorks.Data.Connection;
-using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Stores.Platforms.Amazon;
-using log4net;
-using System.Windows.Forms;
-using ShipWorks.ApplicationCore.Dashboard.Content;
+using ShipWorks.Filters.Content.Conditions.Orders;
+using ShipWorks.Shipping;
+using ShipWorks.Stores.Communication;
+using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Management;
-using ShipWorks.Templates.Processing;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
-using ShipWorks.Data.Model;
-using ShipWorks.ApplicationCore;
-using Autofac;
-using System.Linq;
-using ShipWorks.AddressValidation.Enums;
+using ShipWorks.UI.Wizard;
+using ShipWorks.Users;
+using ShipWorks.Users.Security;
 
 namespace ShipWorks.Stores
 {
     /// <summary>
-	/// Base class for all store types.  All points of extension to shipworks via store types are here.
-	/// </summary>
+    /// Base class for all store types.  All points of extension to shipworks via store types are here.
+    /// </summary>
     public abstract class StoreType
     {
         // Store this instance is wrapping
@@ -53,7 +48,7 @@ namespace ShipWorks.Stores
                     throw new InvalidOperationException("Store type mismatch.");
                 }
             }
-            
+
             this.store = store;
         }
 
@@ -85,7 +80,7 @@ namespace ShipWorks.Stores
 
             store.DefaultEmailAccountID = -1;
 
-            store.AddressValidationSetting = (int)GetDefaultValidationSetting();
+            store.AddressValidationSetting = (int) GetDefaultValidationSetting();
         }
 
         /// <summary>
@@ -101,9 +96,9 @@ namespace ShipWorks.Stores
         /// </summary>
         public StoreEntity Store
         {
-            get 
+            get
             {
-                return store; 
+                return store;
             }
         }
 
@@ -138,18 +133,18 @@ namespace ShipWorks.Stores
             OrderEntity newOrder = CreateOrderInstance();
 
             newOrder.ShipAddressValidationError = string.Empty;
-            newOrder.ShipResidentialStatus = (int)ValidationDetailStatusType.Unknown;
-            newOrder.ShipPOBox = (int)ValidationDetailStatusType.Unknown;
-            newOrder.ShipUSTerritory = (int)ValidationDetailStatusType.Unknown;
-            newOrder.ShipMilitaryAddress = (int)ValidationDetailStatusType.Unknown;
-            newOrder.ShipAddressValidationStatus = (int)AddressValidationStatusType.NotChecked;
+            newOrder.ShipResidentialStatus = (int) ValidationDetailStatusType.Unknown;
+            newOrder.ShipPOBox = (int) ValidationDetailStatusType.Unknown;
+            newOrder.ShipUSTerritory = (int) ValidationDetailStatusType.Unknown;
+            newOrder.ShipMilitaryAddress = (int) ValidationDetailStatusType.Unknown;
+            newOrder.ShipAddressValidationStatus = (int) AddressValidationStatusType.NotChecked;
             newOrder.ShipAddressValidationSuggestionCount = 0;
             newOrder.BillAddressValidationError = string.Empty;
-            newOrder.BillResidentialStatus = (int)ValidationDetailStatusType.Unknown;
-            newOrder.BillPOBox = (int)ValidationDetailStatusType.Unknown;
-            newOrder.BillUSTerritory = (int)ValidationDetailStatusType.Unknown;
-            newOrder.BillMilitaryAddress = (int)ValidationDetailStatusType.Unknown;
-            newOrder.BillAddressValidationStatus = (int)AddressValidationStatusType.NotChecked;
+            newOrder.BillResidentialStatus = (int) ValidationDetailStatusType.Unknown;
+            newOrder.BillPOBox = (int) ValidationDetailStatusType.Unknown;
+            newOrder.BillUSTerritory = (int) ValidationDetailStatusType.Unknown;
+            newOrder.BillMilitaryAddress = (int) ValidationDetailStatusType.Unknown;
+            newOrder.BillAddressValidationStatus = (int) AddressValidationStatusType.NotChecked;
             newOrder.BillAddressValidationSuggestionCount = 0;
             newOrder.ShipAddressType = (int) AddressType.NotChecked;
 
@@ -262,7 +257,7 @@ namespace ShipWorks.Stores
                     Name = onlineStatus,
                     Definition = definition.GetXml(),
                     IsFolder = false,
-                    FilterTarget = (int)FilterTarget.Orders
+                    FilterTarget = (int) FilterTarget.Orders
                 });
             }
 
@@ -292,10 +287,10 @@ namespace ShipWorks.Stores
 
                 filters.Add(new FilterEntity
                 {
-                    Name = EnumHelper.GetDescription((Enum)(object)shippingStatus),
+                    Name = EnumHelper.GetDescription((Enum) (object) shippingStatus),
                     Definition = definition.GetXml(),
                     IsFolder = false,
-                    FilterTarget = (int)FilterTarget.Orders
+                    FilterTarget = (int) FilterTarget.Orders
                 });
             }
 
@@ -380,7 +375,7 @@ namespace ShipWorks.Stores
         /// </summary>
         public virtual void GenerateTemplateOrderElements(ElementOutline container, Func<OrderEntity> orderSource)
         {
-            
+
         }
 
         /// <summary>
@@ -400,7 +395,7 @@ namespace ShipWorks.Stores
         }
 
         /// <summary>
-        /// Generate a new manual order number and apply it to the given order.  Derived classes should throw 
+        /// Generate a new manual order number and apply it to the given order.  Derived classes should throw
         /// NotSupportedException if an error occurs during order number generation.
         /// </summary>
         public virtual void GenerateManualOrderNumber(OrderEntity order)
@@ -434,7 +429,7 @@ namespace ShipWorks.Stores
         /// </summary>
         public virtual void GridHyperlinkClick(EntityField2 field, EntityBase2 entity, IWin32Window owner)
         {
-            
+
         }
 
         /// <summary>
@@ -461,9 +456,9 @@ namespace ShipWorks.Stores
 
         }
 
-        
+
         /// <summary>
-        /// This is used as a safe and friendly internal code for storing information.  For instance, 
+        /// This is used as a safe and friendly internal code for storing information.  For instance,
         /// registry key values and template exclusion names.
         /// </summary>
         virtual public string StoreSafeName
@@ -497,7 +492,7 @@ namespace ShipWorks.Stores
                 return NormalizeIdentifier(InternalLicenseIdentifier);
             }
         }
-        
+
         /// <summary>
         /// The minimum minutes required to wait between automatic downloads.
         /// </summary>
@@ -566,20 +561,33 @@ namespace ShipWorks.Stores
             return new List<ShipmentFieldIndex>();
         }
 
-        public virtual bool IsShippingAddressEditable(ShipmentEntity shipment)
+        /// <summary>
+        /// Added ShippingAddressEditStateType enum to replace the IsShipmentAddressEditable code.  We needed to display a message in the shipping panel as to why an address is not editable.
+        /// Added EnumDescriptionConverter to display the description of an enum in XAML.
+        /// </summary>
+        public virtual ShippingAddressEditStateType ShippingAddressEditableState(OrderEntity order, ShipmentEntity shipment)
         {
             if (shipment == null)
             {
                 throw new ArgumentNullException("shipment");
             }
 
-            // Can't edit the address of a shipment that has been processed
-            return !shipment.Processed;
+            if (shipment.Processed)
+            {
+                return ShippingAddressEditStateType.Processed;
+            }
+
+            if (!UserSession.Security.HasPermission(PermissionType.ShipmentsCreateEditProcess, order.OrderID))
+            {
+                return ShippingAddressEditStateType.PermissionDenied;
+            }
+
+            return ShippingAddressEditStateType.Editable;
         }
 
         /// <summary>
-        /// Determines whether customs is required for the specified shipment. A pre-determined recommendation 
-        /// whether to require customs is provided to provide the store context for any precursory checks that 
+        /// Determines whether customs is required for the specified shipment. A pre-determined recommendation
+        /// whether to require customs is provided to provide the store context for any precursory checks that
         /// have already occurred.
         /// </summary>
         /// <param name="shipment">The shipment.</param>

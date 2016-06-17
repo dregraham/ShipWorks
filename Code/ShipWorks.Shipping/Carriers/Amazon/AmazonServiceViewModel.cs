@@ -2,18 +2,16 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Windows.Forms;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.Amazon.Enums;
-using ShipWorks.UI.Controls.MultiValueBinders;
+using System.Reactive.Linq;
 using System.Reflection;
+using System.Threading;
 using Interapptive.Shared.Messaging;
 using ShipWorks.Core.UI;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Amazon.Api.DTOs;
+using ShipWorks.Shipping.Carriers.Amazon.Enums;
 using ShipWorks.Shipping.Editing.Rating;
-using System.Reactive.Linq;
-using System.Reactive.Concurrency;
-using System.Threading;
+using ShipWorks.UI.Controls.MultiValueBinders;
 
 namespace ShipWorks.Shipping.Carriers.Amazon
 {
@@ -49,15 +47,21 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// </summary>
         private void OnAmazonRatesRetrieved(AmazonRatesRetrievedMessage amazonRatesRetrievedMessage)
         {
-            List<AmazonRateTag> services = new List<AmazonRateTag>(); 
+            List<AmazonRateTag> services = new List<AmazonRateTag>();
             foreach (RateResult rate in amazonRatesRetrievedMessage.RateGroup.Rates)
             {
-                services.Add((AmazonRateTag)rate.Tag);
+                services.Add((AmazonRateTag) rate.Tag);
             }
 
             if (!services.Any())
             {
-                AmazonRateTag selectedRateTag = new AmazonRateTag { Description = "No rates are available for the shipment.", ShippingServiceId = "-1", ShippingServiceOfferId = null, CarrierName = null };
+                AmazonRateTag selectedRateTag = new AmazonRateTag
+                {
+                    Description = "No rates are available for the shipment.",
+                    ShippingServiceId = "-1",
+                    ShippingServiceOfferId = null,
+                    CarrierName = null
+                };
                 services.Insert(0, selectedRateTag);
                 ShippingService = selectedRateTag;
             }
@@ -85,8 +89,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon
 
             deliveryExperienceBinder = new GenericMultiValueBinder<ShipmentEntity, AmazonDeliveryExperienceType?>(shipments,
                 nameof(DeliveryExperience),
-                entity => (AmazonDeliveryExperienceType?)entity.Amazon.DeliveryExperience,
-                (entity, value) => entity.Amazon.DeliveryExperience = (int)value.GetValueOrDefault(),
+                entity => (AmazonDeliveryExperienceType?) entity.Amazon.DeliveryExperience,
+                (entity, value) => entity.Amazon.DeliveryExperience = (int) value.GetValueOrDefault(),
                 (entity) => entity.Processed);
 
             SetupServices(shipments);
@@ -197,7 +201,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
                 ShippingServiceOfferId = shipment.Amazon.ShippingServiceOfferID,
                 CarrierName = shipment.Amazon.CarrierName
             };
-        
+
         /// <summary>
         /// Event for property changed handling
         /// </summary>

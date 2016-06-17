@@ -1,11 +1,9 @@
-﻿using System.Collections.Generic;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.UPS.BestRate;
+﻿using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping.Carriers.UPS.WorldShip.BestRate
 {
     /// <summary>
-    /// Implementation of ICarrierAccountRepository for WorldShip.  
+    /// Implementation of ICarrierAccountRepository for WorldShip.
     /// </summary>
     public class WorldShipAccountRepository : UpsAccountRepository
     {
@@ -16,7 +14,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip.BestRate
         {
             get
             {
-                long? accountID = new WorldShipShipmentType().GetPrimaryProfile().Ups.UpsAccountID;
+                long? accountID = GetPrimaryProfile(ShipmentTypeCode.UpsWorldShip).Ups.UpsAccountID;
                 return GetProfileAccount(ShipmentTypeCode.UpsWorldShip, accountID);
             }
         }

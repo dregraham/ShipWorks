@@ -31,24 +31,30 @@ namespace ShipWorks.Stores.Platforms.LemonStand
     /// </summary>
     public class LemonStandStoreType : StoreType
     {
-        // Logger 
-        private readonly ILog log = LogManager.GetLogger(typeof(LemonStandStoreType));
+        private readonly ILog log;
 
         /// <summary>
-        ///     Constructor
+        /// Constructor
         /// </summary>
-        public LemonStandStoreType(StoreEntity store)
-            : base(store)
+        public LemonStandStoreType(StoreEntity store) : base(store)
         {
+            log = LogManager.GetLogger(typeof(LemonStandStoreType));
+        }
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public LemonStandStoreType(StoreEntity store, Func<Type, ILog> logFactory) : base(store)
+        {
+            log = logFactory(typeof(LemonStandStoreType));
         }
 
         /// <summary>
-        ///     Indentifying type code
+        /// Identifying type code
         /// </summary>
         public override StoreTypeCode TypeCode => StoreTypeCode.LemonStand;
 
         /// <summary>
-        ///     Gets the license identifier for this store
+        /// Gets the license identifier for this store
         /// </summary>
         protected override string InternalLicenseIdentifier
         {
@@ -63,29 +69,29 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         }
 
         /// <summary>
-        ///     Gets the help URL to use in the account settings.
+        /// Gets the help URL to use in the account settings.
         /// </summary>
         public static Uri AccountSettingsHelpUrl => new Uri("http://support.shipworks.com/support/solutions/articles/4000062623");
 
         /// <summary>
-        ///     The initial download policy
+        /// The initial download policy
         /// </summary>
         public override InitialDownloadPolicy InitialDownloadPolicy =>
-            new InitialDownloadPolicy(InitialDownloadRestrictionType.DaysBack) {DefaultDaysBack = 7, MaxDaysBack = 30};
+            new InitialDownloadPolicy(InitialDownloadRestrictionType.DaysBack) { DefaultDaysBack = 7, MaxDaysBack = 30 };
 
         /// <summary>
         /// Create any MenuCommand's that are applied to this specific store instance
         /// </summary>
         public override List<MenuCommand> CreateOnlineUpdateInstanceCommands()
         {
-            List<MenuCommand> commands = new List<MenuCommand>(); 
+            List<MenuCommand> commands = new List<MenuCommand>();
 
             // get possible status codes from the provider
-            LemonStandStatusCodeProvider codeProvider = new LemonStandStatusCodeProvider((LemonStandStoreEntity)Store);
+            LemonStandStatusCodeProvider codeProvider = new LemonStandStatusCodeProvider((LemonStandStoreEntity) Store);
 
-            // create a menu item for each status 
+            // create a menu item for each status
             List<string> statusCodeNames = GetCurrentOrderStatuses().ToList();
-            
+
             bool isOne = false;
             foreach (string codeName in statusCodeNames)
             {
@@ -122,7 +128,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
             executor.ExecuteCompleted += (o, e) => { context.Complete(e.Issues, MenuCommandResult.Error); };
 
             // kick off the execution
-            executor.ExecuteAsync(ShipmentUploadCallback, new[] {context.SelectedKeys}, null);
+            executor.ExecuteAsync(ShipmentUploadCallback, new[] { context.SelectedKeys }, null);
         }
 
         /// <summary>
@@ -269,14 +275,16 @@ namespace ShipWorks.Stores.Platforms.LemonStand
 
         /// <summary>
         ///     Get any filters that should be created as an initial filter set when the store is first created.  If the list is
-        ///     non-empty they will be automatically put in a folder that is filtered on the store... so there is no need to test 
+        ///     non-empty they will be automatically put in a folder that is filtered on the store... so there is no need to test
         ///     for that in the generated filter conditions.
         /// </summary>
         public override List<FilterEntity> CreateInitialFilters()
         {
             List<string> statuses = GetOnlineStatusChoices().ToList();
 
-            return statuses.Select(status => status.ToLower().Equals("shipped") ? CreateFilterShipped() : (CreateOrderStatusFilter(status))).ToList();
+            return statuses.Select(status => string.Equals(status, "shipped", StringComparison.InvariantCultureIgnoreCase) ?
+                CreateFilterShipped() :
+                (CreateOrderStatusFilter(status))).ToList();
         }
 
         /// <summary>
@@ -302,7 +310,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
             definition.RootContainer.SecondGroup = shippedDefinition;
 
             //      [Any]
-            shippedDefinition.FirstGroup = new ConditionGroup {JoinType = ConditionJoinType.Any};
+            shippedDefinition.FirstGroup = new ConditionGroup { JoinType = ConditionJoinType.Any };
 
             // LemonStand Shipping Status == Shipped
             OnlineStatusCondition onlineStatus = new OnlineStatusCondition
@@ -347,7 +355,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
             definition.RootContainer.SecondGroup = shippedDefinition;
 
             //      [Any]
-            shippedDefinition.FirstGroup = new ConditionGroup {JoinType = ConditionJoinType.Any};
+            shippedDefinition.FirstGroup = new ConditionGroup { JoinType = ConditionJoinType.Any };
 
             OnlineStatusCondition onlineStatus = new OnlineStatusCondition
             {
@@ -361,7 +369,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
                 Name = orderStatus,
                 Definition = definition.GetXml(),
                 IsFolder = false,
-                FilterTarget = (int)FilterTarget.Orders
+                FilterTarget = (int) FilterTarget.Orders
             };
         }
 
@@ -384,12 +392,12 @@ namespace ShipWorks.Stores.Platforms.LemonStand
 
         public override ICollection<string> GetOnlineStatusChoices()
         {
-            LemonStandWebClient client = new LemonStandWebClient((LemonStandStoreEntity)Store);
+            LemonStandWebClient client = new LemonStandWebClient((LemonStandStoreEntity) Store);
 
             List<JToken> statuses = client.GetOrderStatuses().SelectToken("data").Children().ToList();
-            
+
             List<string> list = statuses.Select(status => status.SelectToken("name").ToString()).ToList();
-            
+
             list.Sort();
 
             return list;
@@ -406,7 +414,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
                "Updating order {0} of {1}...");
 
             MenuCommand command = context.MenuCommand;
-            int statusCode = (int)command.Tag;
+            int statusCode = (int) command.Tag;
 
             executor.ExecuteCompleted += (o, e) =>
             {
@@ -422,10 +430,10 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         {
             log.Debug(Store.StoreName);
 
-            int statusCode = (int)userState;
+            int statusCode = (int) userState;
             try
             {
-                LemonStandOnlineUpdater updater = new LemonStandOnlineUpdater((LemonStandStoreEntity)Store);
+                LemonStandOnlineUpdater updater = new LemonStandOnlineUpdater((LemonStandStoreEntity) Store);
                 updater.UpdateOrderStatus(orderID, statusCode);
             }
             catch (LemonStandException ex)
@@ -450,7 +458,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
             LemonStandStoreEntity store = (LemonStandStoreEntity) Store;
             using (TextReader reader = new StringReader(store.StatusCodes))
             {
-                LemonStandStatusCodes codes = (LemonStandStatusCodes)deserializer.Deserialize(reader);
+                LemonStandStatusCodes codes = (LemonStandStatusCodes) deserializer.Deserialize(reader);
 
                 statusList = codes.StatusCode.Select(code => code.Name).ToList();
 

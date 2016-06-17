@@ -1,14 +1,12 @@
 ﻿using System;
-using System.Text;
 using System.Collections.Generic;
-using System.Linq;
-using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.UPS.InvoiceRegistration.Api.Request.Manipulators;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
-using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools.WebServices.Registration;
+using Xunit;
 
 namespace ShipWorks.Tests.Shipping.Carriers.UPS.InvoiceRegistration.Api.Request.Manipulators
 {
@@ -34,9 +32,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.InvoiceRegistration.Api.Request.
                 InvoiceNumber = "invoiceNumber"
             };
 
-            registerRequest=new RegisterRequest();
+            registerRequest = new RegisterRequest();
 
-            mockRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(),null,registerRequest);
+            mockRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), null, registerRequest);
             mockRequest
                 .Setup(r => r.CarrierAccountEntity)
                 .Returns(new UpsAccountEntity()
@@ -46,7 +44,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.InvoiceRegistration.Api.Request.
 
             request = mockRequest.Object;
 
-            testObject = new UpsInvoiceRegistrationInvoiceInfoManipulator(invoiceAuthorization);           
+            testObject = new UpsInvoiceRegistrationInvoiceInfoManipulator(invoiceAuthorization);
         }
 
         [Fact]

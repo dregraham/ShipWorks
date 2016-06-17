@@ -106,7 +106,7 @@ namespace ShipWorks.Data.Administration
         #region Backup
 
         /// <summary>
-        /// Create a backup 
+        /// Create a backup
         /// </summary>
         [NDependIgnoreLongMethod]
         public void CreateBackup(string filename)
@@ -232,7 +232,7 @@ namespace ShipWorks.Data.Administration
         {
             List<BackupDatabase> databases = new List<BackupDatabase>();
 
-            BackupDatabase primary = new BackupDatabase 
+            BackupDatabase primary = new BackupDatabase
                 {
                     DatabaseName = SqlSession.Current.Configuration.DatabaseName,
                     BackupFile = Path.Combine(tempPath, "shipworks.dat"),
@@ -622,7 +622,7 @@ namespace ShipWorks.Data.Administration
 
                 // Change into the database we are restoring into
                 con.ChangeDatabase(database.DatabaseName);
-                
+
                 string targetPhysDb;
                 string targetPhysLog;
                 GetPhysicalFileLocations(con, out targetPhysDb, out targetPhysLog);
@@ -720,7 +720,7 @@ namespace ShipWorks.Data.Administration
                     {
                         targetPhysLog = file;
                     }
-                    
+
                     if (usage == "data only")
                     {
                         targetPhysDb = file;

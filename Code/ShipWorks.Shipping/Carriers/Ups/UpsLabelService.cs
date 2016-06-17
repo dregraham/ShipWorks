@@ -1,15 +1,13 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Text;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
-using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api;
 using ShipWorks.Shipping.Insurance;
 
-namespace ShipWorks.Shipping.Carriers.Ups
+namespace ShipWorks.Shipping.Carriers.UPS
 {
     /// <summary>
     /// Base Label service used by both Ups Online Tools and Ups Worldship
@@ -22,10 +20,10 @@ namespace ShipWorks.Shipping.Carriers.Ups
         public virtual void Create(ShipmentEntity shipment)
         {
             UpsShipmentEntity upsShipmentEntity = shipment.Ups;
-            UpsServiceType upsServiceType = (UpsServiceType)upsShipmentEntity.Service;
+            UpsServiceType upsServiceType = (UpsServiceType) upsShipmentEntity.Service;
 
             if (UpsUtility.IsUpsSurePostService(upsServiceType) &&
-                (shipment.InsuranceProvider == (int)InsuranceProvider.Carrier) &&
+                (shipment.InsuranceProvider == (int) InsuranceProvider.Carrier) &&
                 upsShipmentEntity.Packages.Any(p => p.Insurance && p.InsuranceValue > 0))
             {
                 throw new CarrierException("UPS declared value is not supported for SurePost shipments. For insurance coverage, go to Shipping Settings and enable ShipWorks Insurance for this carrier.");
@@ -38,7 +36,7 @@ namespace ShipWorks.Shipping.Carriers.Ups
         }
 
         /// <summary>
-        /// Clear out any values that aren't allowed for SurePost or MI 
+        /// Clear out any values that aren't allowed for SurePost or MI
         /// </summary>
         private static void ConfigureNewUpsPostalLabel(ShipmentEntity shipment, UpsShipmentEntity upsShipmentEntity, UpsServiceType upsServiceType)
         {
@@ -46,12 +44,12 @@ namespace ShipWorks.Shipping.Carriers.Ups
             {
                 shipment.ReturnShipment = false;
                 upsShipmentEntity.ReturnContents = string.Empty;
-                upsShipmentEntity.ReturnService = (int)UpsReturnServiceType.ElectronicReturnLabel;
+                upsShipmentEntity.ReturnService = (int) UpsReturnServiceType.ElectronicReturnLabel;
                 upsShipmentEntity.ReturnUndeliverableEmail = string.Empty;
 
                 upsShipmentEntity.CodEnabled = false;
                 upsShipmentEntity.CodAmount = 0;
-                upsShipmentEntity.CodPaymentType = (int)UpsCodPaymentType.Cash;
+                upsShipmentEntity.CodPaymentType = (int) UpsCodPaymentType.Cash;
 
                 upsShipmentEntity.ShipperRelease = false;
 
@@ -59,7 +57,7 @@ namespace ShipWorks.Shipping.Carriers.Ups
                 upsPackageEntity.AdditionalHandlingEnabled = false;
                 upsPackageEntity.DryIceEnabled = false;
                 upsPackageEntity.DryIceIsForMedicalUse = false;
-                upsPackageEntity.DryIceRegulationSet = (int)UpsDryIceRegulationSet.Cfr;
+                upsPackageEntity.DryIceRegulationSet = (int) UpsDryIceRegulationSet.Cfr;
                 upsPackageEntity.DryIceWeight = 0;
                 upsPackageEntity.VerbalConfirmationEnabled = false;
                 upsPackageEntity.VerbalConfirmationName = string.Empty;
@@ -77,11 +75,11 @@ namespace ShipWorks.Shipping.Carriers.Ups
                 // Clear out any specific to SurePost
                 if (UpsUtility.IsUpsSurePostService(upsServiceType))
                 {
-                    upsShipmentEntity.DeliveryConfirmation = (int)UpsDeliveryConfirmationType.None;
+                    upsShipmentEntity.DeliveryConfirmation = (int) UpsDeliveryConfirmationType.None;
                     upsShipmentEntity.PayorAccount = string.Empty;
                     upsShipmentEntity.PayorCountryCode = string.Empty;
                     upsShipmentEntity.PayorPostalCode = string.Empty;
-                    upsShipmentEntity.PayorType = (int)UpsPayorType.Sender;
+                    upsShipmentEntity.PayorType = (int) UpsPayorType.Sender;
                 }
             }
         }
@@ -93,7 +91,7 @@ namespace ShipWorks.Shipping.Carriers.Ups
         {
             try
             {
-                if (!UpsUtility.IsUpsMiService((UpsServiceType)shipment.Ups.Service))
+                if (!UpsUtility.IsUpsMiService((UpsServiceType) shipment.Ups.Service))
                 {
                     UpsApiVoidClient.VoidShipment(shipment);
                 }
@@ -105,7 +103,7 @@ namespace ShipWorks.Shipping.Carriers.Ups
         }
 
         /// <summary>
-        /// Checks each packages dimensions, making sure that each is valid.  If one or more packages have invalid dimensions, 
+        /// Checks each packages dimensions, making sure that each is valid.  If one or more packages have invalid dimensions,
         /// a ShippingException is thrown informing the user.
         /// </summary>
         private static void ValidatePackageDimensions(ShipmentEntity shipment)
@@ -129,15 +127,18 @@ namespace ShipWorks.Shipping.Carriers.Ups
                 throw new InvalidPackageDimensionsException(exceptionMessage.ToString());
             }
         }
-        
+
         /// <summary>
         /// Check to see if a package dimensions are valid for carriers that require dimensions.
         /// </summary>
         /// <returns>True if the dimensions are valid.  False otherwise.</returns>
         private static bool DimensionsAreValid(UpsPackageEntity package)
         {
-            // Only check the dimensions if the package type is custom 
-            if (package.PackagingType != (int) UpsPackagingType.Custom) return true;
+            // Only check the dimensions if the package type is custom
+            if (package.PackagingType != (int) UpsPackagingType.Custom)
+            {
+                return true;
+            }
 
             if (package.DimsLength <= 0 || package.DimsWidth <= 0 || package.DimsHeight <= 0)
             {

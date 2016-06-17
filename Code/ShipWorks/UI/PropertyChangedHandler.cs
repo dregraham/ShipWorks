@@ -16,6 +16,9 @@ namespace ShipWorks.Core.UI
         private readonly object lockObject = new object();
         private readonly IObservable<string> eventStream;
         private IObserver<string> observer;
+        private readonly IObservable<string> changingEventStream;
+        private IObserver<string> changingObserver;
+        private bool suppressChangeNotifications;
 
         /// <summary>
         /// Constructor
@@ -40,7 +43,18 @@ namespace ShipWorks.Core.UI
                 observer = x;
                 return Disposable.Create(() => observer = null);
             }).Publish().RefCount();
+
+            changingEventStream = Observable.Create<string>(x =>
+            {
+                changingObserver = x;
+                return Disposable.Create(() => observer = null);
+            }).Publish().RefCount();
         }
+
+        /// <summary>
+        /// Stream of property changing events
+        /// </summary>
+        public IObservable<string> PropertyChangingStream => changingEventStream;
 
         /// <summary>
         /// Set the value of a field for a property
@@ -72,11 +86,45 @@ namespace ShipWorks.Core.UI
         }
 
         /// <summary>
+        /// Set the value of a field for a property
+        /// </summary>
+        public bool Set<T>(string name, Action<T> assignmentMethod, T getCurrentValue, T newValue)
+        {
+            return Set(name, assignmentMethod, getCurrentValue, newValue, false);
+        }
+
+        /// <summary>
+        /// Set the value of a field for a property
+        /// </summary>
+        public bool Set<T>(string name, Action<T> assignmentMethod, T getCurrentValue, T newValue, bool forceRaisePropertyChanged)
+        {
+            lock (lockObject)
+            {
+                if (!forceRaisePropertyChanged && Equals(getCurrentValue, newValue))
+                {
+                    return false;
+                }
+
+                RaisePropertyChanging(name);
+                assignmentMethod(newValue);
+            }
+
+            RaisePropertyChanged(name);
+
+            return true;
+        }
+
+        /// <summary>
         /// Raise the changed event for the given property
         /// </summary>
         /// <remarks>This is public so that the event can be raised manually.</remarks>
         public virtual void RaisePropertyChanged(string propertyName)
         {
+            if (suppressChangeNotifications)
+            {
+                return;
+            }
+
             observer?.OnNext(propertyName);
             getPropertyChanged()?.Invoke(source, new PropertyChangedEventArgs(propertyName));
         }
@@ -84,12 +132,29 @@ namespace ShipWorks.Core.UI
         /// <summary>
         /// Raise the property changed event
         /// </summary>
-        protected virtual void RaisePropertyChanging(string propertyName) =>
+        protected virtual void RaisePropertyChanging(string propertyName)
+        {
+            if (suppressChangeNotifications)
+            {
+                return;
+            }
+
+            changingObserver?.OnNext(propertyName);
             getPropertyChanging()?.Invoke(source, new PropertyChangingEventArgs(propertyName));
+        }
 
         /// <summary>
         /// Subscribe to the property changed stream
         /// </summary>
         public IDisposable Subscribe(IObserver<string> observer) => eventStream.Subscribe(observer);
+
+        /// <summary>
+        /// Suppress change notifications until the returned value is disposed
+        /// </summary>
+        public IDisposable SuppressChangeNotifications()
+        {
+            suppressChangeNotifications = true;
+            return Disposable.Create(() => suppressChangeNotifications = false);
+        }
     }
 }

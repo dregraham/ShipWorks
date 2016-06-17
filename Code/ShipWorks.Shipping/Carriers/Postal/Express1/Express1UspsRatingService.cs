@@ -22,10 +22,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
         public Express1UspsRatingService(
             IDateTimeProvider dateTimeProvider,
             ICachedRatesService cachedRatesService,
-            IIndex<ShipmentTypeCode, ShipmentType> shipmentTypeFactory, 
+            IIndex<ShipmentTypeCode, ShipmentType> shipmentTypeManager,
             Express1UspsAccountRepository accountRepository,
-            IIndex<ShipmentTypeCode, IRatingService> ratingServiceFactory) : 
-            base(dateTimeProvider, cachedRatesService, ratingServiceFactory, shipmentTypeFactory, accountRepository)
+            IIndex<ShipmentTypeCode, IRatingService> ratingServiceFactory) :
+            base(dateTimeProvider, cachedRatesService, ratingServiceFactory, shipmentTypeManager, accountRepository)
         {
         }
 
@@ -51,9 +51,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
             List<RateResult> rateResults = CreateWebClient().GetRates(shipment);
             RateGroup rateGroup = new RateGroup(FilterRatesByExcludedServices(shipment, rateResults));
 
-            if (UspsAccountManager.UspsAccounts.All(a => a.ContractType != (int)UspsAccountContractType.Reseller))
+            if (UspsAccountManager.UspsAccounts.All(a => a.ContractType != (int) UspsAccountContractType.Reseller))
             {
-                rateGroup.AddFootnoteFactory(new UspsRatePromotionFootnoteFactory(shipmentTypeFactory[ShipmentTypeCode.Express1Usps], shipment, true));
+                rateGroup.AddFootnoteFactory(new UspsRatePromotionFootnoteFactory(shipmentTypeManager[ShipmentTypeCode.Express1Usps], shipment, true));
             }
 
             return rateGroup;

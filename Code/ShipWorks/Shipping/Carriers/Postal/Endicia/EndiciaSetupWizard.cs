@@ -4,24 +4,25 @@ using System.Linq;
 using System.Windows.Forms;
 using Autofac;
 using Interapptive.Shared;
-using ShipWorks.Shipping.Editing.Rating;
-using ShipWorks.Shipping.Profiles;
-using ShipWorks.UI.Wizard;
-using ShipWorks.Shipping.Settings.WizardPages;
-using ShipWorks.Data.Connection;
-using ShipWorks.Data.Model.EntityClasses;
-using Interapptive.Shared.Net;
-using Interapptive.Shared.Utility;
-using ShipWorks.Shipping.Carriers.Postal.Endicia.Account;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Net;
 using Interapptive.Shared.Security;
 using Interapptive.Shared.UI;
+using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore;
-using ShipWorks.Shipping.Settings;
+using ShipWorks.ApplicationCore.Licensing;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Editions;
 using ShipWorks.Editions.Freemium;
-using ShipWorks.ApplicationCore.Licensing;
+using ShipWorks.Shipping.Carriers.Postal.Endicia.Account;
+using ShipWorks.Shipping.Editing.Rating;
+using ShipWorks.Shipping.Profiles;
+using ShipWorks.Shipping.Settings;
+using ShipWorks.Shipping.Settings.WizardPages;
 using ShipWorks.Stores;
+using ShipWorks.Shipping.Editing;
+using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 {
@@ -47,7 +48,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <summary>
         /// Constructor
         /// </summary>
-        public EndiciaSetupWizard() 
+        public EndiciaSetupWizard()
         {
             InitializeComponent();
 
@@ -177,8 +178,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         {
             if (FreemiumFreeEdition.IsActive)
             {
-                EbayStoreEntity store = (EbayStoreEntity) StoreManager.GetAllStores().Single();
-                freemiumEdition = (FreemiumFreeEdition) EditionSerializer.Restore(store);
+                EbayStoreEntity store = (EbayStoreEntity)StoreManager.GetAllStores().Single();
+                freemiumEdition = (FreemiumFreeEdition)EditionSerializer.Restore(store);
 
                 if (freemiumEdition.AccountType != FreemiumAccountType.None)
                 {
@@ -433,7 +434,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
             if (freemiumEdition != null && !shipworksFeesAgree.Checked)
             {
-                MessageHelper.ShowInformation(this, 
+                MessageHelper.ShowInformation(this,
                     "You must agree that Interapptive can use your credit card to pay for insurance if you optionally choose to use ShipWorks Shipping Insurance.");
 
                 e.NextPage = CurrentPage;
@@ -569,7 +570,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
             EndiciaPaymentInfo paymentInfo = new EndiciaPaymentInfo();
             paymentInfo.CardBillingAddress = billingAddress;
-            paymentInfo.CardType = (EndiciaCreditCardType) cardType.SelectedValue;
+            paymentInfo.CardType = (EndiciaCreditCardType)cardType.SelectedValue;
             paymentInfo.CardNumber = cardNumber.Text.Trim();
             paymentInfo.CardExpirationMonth = cardExpireMonth.SelectedIndex + 1;
             paymentInfo.CardExpirationYear = cardExpireYear.SelectedIndex + 2009;
@@ -637,7 +638,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                     // This is required to activate the account
                     account.ApiUserPassword = endiciaApiClient.ChangeApiPassphrase(
                         account.AccountNumber,
-                        (EndiciaReseller) account.EndiciaReseller,
+                        (EndiciaReseller)account.EndiciaReseller,
                         SecureText.Decrypt(account.ApiInitialPassword, "Endicia"),
                         SecureText.Decrypt(account.ApiUserPassword, "Endicia"));
                 }
@@ -720,14 +721,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 e.NextPage = CurrentPage;
                 return;
             }
-            
+
             // Edition check
             if (!AccountAllowed(accountExisting.Text.Trim()))
             {
                 e.NextPage = CurrentPage;
                 return;
             }
-            
+
             Cursor.Current = Cursors.WaitCursor;
 
             try
@@ -749,7 +750,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                     TestAccount = false,
                     ScanFormAddressSource = (int)EndiciaScanFormAddressSource.Provider
                 };
-                
+
                 // Address
                 personControl.SaveToEntity(new PersonAdapter(account, ""));
                 account.MailingPostalCode = account.PostalCode;
@@ -758,7 +759,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 account.Description = EndiciaAccountManager.GetDefaultDescription(account);
 
                 // This is our first time knowing about the account - which means we still need to do the ChangePassword thing
-                if (freemiumEdition != null && freemiumEdition.AccountType == FreemiumAccountType.LabelServer && string.IsNullOrWhiteSpace(freemiumEdition.AccountNumber) )
+                if (freemiumEdition != null && freemiumEdition.AccountType == FreemiumAccountType.LabelServer && string.IsNullOrWhiteSpace(freemiumEdition.AccountNumber))
                 {
                     account.TestAccount = EndiciaApiClient.UseTestServer;
 
@@ -769,7 +770,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                         string oldPassword = passwordExisting.Text + "_initial";
                         string newPassword = passwordExisting.Text;
 
-                        account.ApiUserPassword = endiciaApiClient.ChangeApiPassphrase(account.AccountNumber, (EndiciaReseller) account.EndiciaReseller, oldPassword, newPassword);
+                        account.ApiUserPassword = endiciaApiClient.ChangeApiPassphrase(account.AccountNumber, (EndiciaReseller)account.EndiciaReseller, oldPassword, newPassword);
                     }
                 }
 
@@ -848,9 +849,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// </summary>
         private void OnBuyPostage(object sender, EventArgs e)
         {
-            using (EndiciaBuyPostageDlg dlg = new EndiciaBuyPostageDlg(account))
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                dlg.ShowDialog(this);
+                EndiciaBuyPostageDlg dlg = lifetimeScope.Resolve<EndiciaBuyPostageDlg>();
+                dlg.ShowDialog(this, account);
             }
         }
 
@@ -864,7 +866,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
             // Mark the new account as configured
             ShippingSettings.MarkAsConfigured(ShipmentTypeCode.Endicia);
-            
+
             // If this is the only account, update this shipment type profiles with this account
             List<EndiciaAccountEntity> accounts = EndiciaAccountManager.GetAccounts((EndiciaReseller)account.EndiciaReseller, false);
             if (accounts.Count == 1)
@@ -875,12 +877,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 // in the system. This is to account for the situation where there a multiple
                 // profiles that may be associated with a previous account that has since
                 // been deleted. 
-                foreach (ShippingProfileEntity shippingProfileEntity in ShippingProfileManager.Profiles.Where(p => p.ShipmentType  == (int)ShipmentTypeCode.Endicia))
+                foreach (ShippingProfileEntity shippingProfileEntity in ShippingProfileManager.Profiles.Where(p => p.ShipmentType == (int)ShipmentTypeCode.Endicia))
                 {
                     if (shippingProfileEntity.Postal.Endicia.EndiciaAccountID.HasValue)
                     {
                         shippingProfileEntity.Postal.Endicia.EndiciaAccountID = accountEntity.EndiciaAccountID;
-                        ShippingProfileManager.SaveProfile(shippingProfileEntity); 
+                        ShippingProfileManager.SaveProfile(shippingProfileEntity);
                     }
                 }
             }

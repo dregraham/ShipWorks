@@ -31,7 +31,7 @@ namespace ShipWorks.Stores.Platforms.SparkPay.CoreExtensions.Actions
         ///     Instantiates the editor for the action
         /// </summary>
         public override ActionTaskEditor CreateEditor() => new BasicShipmentUploadTaskEditor();
-        
+
         /// <summary>
         ///     Indicates if the task is supported for the specified store
         /// </summary>

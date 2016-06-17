@@ -1,0 +1,18 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:ui="http://schemas.shipworks.com/ui">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/ShipWorks.UI;component/Styles/GlobalStyle.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
+
+    <DataTemplate x:Key="ShippingAccountRequiredForRatingFootnoteViewModelTemplate">
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+            <Image Style="{StaticResource Image.Icon}"
+                   Source="/Shipworks.Core;component/Resources/information2.png" />
+            <TextBlock Margin="6,1,0,0">
+                A shipping account is required to view rates.
+                <Hyperlink Command="{Binding ViewShippingSettings}">Add a shipping account...</Hyperlink>
+            </TextBlock>
+        </StackPanel>
+    </DataTemplate>
+</ResourceDictionary>

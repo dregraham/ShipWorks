@@ -1,29 +1,34 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Xml;
-using Interapptive.Shared.Net;
-using System.Text.RegularExpressions;
-using ShipWorks.ApplicationCore.Logging;
-using System.Security.Cryptography;
-using System.Net;
-using System.Xml.XPath;
-using Interapptive.Shared.Utility;
-using ShipWorks.Data.Model.EntityClasses;
-using System.IO;
-using ShipWorks.Data.Connection;
-using log4net;
-using ShipWorks.Shipping.Carriers.UPS.WorldShip;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Net;
+using System.Security.Cryptography;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Xml;
+using System.Xml.XPath;
 using Interapptive.Shared;
+using Interapptive.Shared.Net;
+using Interapptive.Shared.Utility;
+using log4net;
+using ShipWorks.Shipping;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.UPS.WorldShip;
 using Interapptive.Shared.Security;
+using ShipWorks.ApplicationCore.Logging;
 
 namespace ShipWorks.Stores.Platforms.ProStores
 {
     /// <summary>
     /// WebClient for connecting to ProStores
     /// </summary>
+    [SuppressMessage("CSharp.Analyzers",
+        "CA5351: Do not use insecure cryptographic algorithm MD5",
+        Justification = "This is what ProStores currently uses")]
     public static class ProStoresWebClient
     {
         static readonly ILog log = LogManager.GetLogger(typeof(ProStoresWebClient));
@@ -356,9 +361,9 @@ namespace ShipWorks.Stores.Platforms.ProStores
                         <Attribute1Label />
                         <Attribute2Label />";
 
-                if (newerApi)
-                {
-                    selectXml += @"
+            if (newerApi)
+            {
+                selectXml += @"
                         <Attribute3Label />
                         <Attribute4Label />
                         <Attribute5Label />
@@ -366,15 +371,15 @@ namespace ShipWorks.Stores.Platforms.ProStores
                         <Attribute7Label />
                         <Attribute8Label />
                    ";
-                }
+            }
 
-                if (proVersion)
-                {
-                    selectXml +=
-                        "<Cost />";
-                }
+            if (proVersion)
+            {
+                    selectXml += 
+                    "<Cost />";
+            }
 
-                selectXml += @"
+            selectXml += @"
                     </Product>";
 
             if (proVersion)
@@ -778,7 +783,7 @@ namespace ShipWorks.Stores.Platforms.ProStores
         /// </summary>
         private static string GetRestTimestamp()
         {
-            return ((int) ((TimeSpan) (DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Unspecified))).TotalSeconds).ToString() ;
+            return ((int) ((TimeSpan) (DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Unspecified))).TotalSeconds).ToString();
         }
 
         /// <summary>

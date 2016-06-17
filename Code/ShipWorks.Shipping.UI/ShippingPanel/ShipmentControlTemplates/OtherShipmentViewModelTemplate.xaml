@@ -1,0 +1,16 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:ShipWorks.Shipping.UI.ShippingPanel.ShipmentControlTemplates"
+                    xmlns:shipmentControl="clr-namespace:ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl"
+                    xmlns:sw="http://schemas.shipworks.com/sw"
+                    xmlns:ui="http://schemas.shipworks.com/ui">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/ShipWorks.UI;component/Styles/GlobalStyle.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
+    <ui:VisibleWhenEqualToParameterConverter x:Key="VisibleWhenEqualToParameter" />
+    <ui:VisibleWhenEqualToParameterConverter x:Key="VisibleWhenNotEqualToParameter" Invert="true" />
+
+    <DataTemplate x:Key="OtherShipmentViewModelTemplate">
+        <shipmentControl:OtherShipmentControl Margin="0, 6, 0, 0" />
+    </DataTemplate>
+</ResourceDictionary>

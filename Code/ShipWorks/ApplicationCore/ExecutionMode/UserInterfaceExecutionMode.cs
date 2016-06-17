@@ -1,28 +1,24 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Threading;
+using System.Windows.Forms;
+using ActiproSoftware.SyntaxEditor;
 using Interapptive.Shared.Data;
-using ShipWorks.ApplicationCore.Logging;
-using ShipWorks.Data;
-using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
+using Interapptive.Shared.UI;
 using log4net;
 using ShipWorks.ApplicationCore.Crashes;
 using ShipWorks.ApplicationCore.Interaction;
-using ShipWorks.Data.Connection;
-using ShipWorks.UI;
-using ShipWorks.Users;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Threading;
-using System.Windows.Forms;
-using Interapptive.Shared.UI;
-using System.IO;
-using ShipWorks.UI.Controls;
-using ActiproSoftware.SyntaxEditor;
+using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.ApplicationCore.Nudges;
+using ShipWorks.Data;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.Postal.Usps.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net;
 using ShipWorks.Stores;
+using ShipWorks.UI;
+using ShipWorks.UI.Controls;
+using ShipWorks.Users;
 
 namespace ShipWorks.ApplicationCore.ExecutionMode
 {
@@ -86,10 +82,10 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
         /// <summary>
         /// Single instance of the running application
         /// </summary>
-        public MainForm MainForm 
-        { 
-            get; 
-            private set; 
+        public MainForm MainForm
+        {
+            get;
+            private set;
         }
 
         /// <summary>
@@ -132,7 +128,7 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
             SplashScreen.Status = "Loading ShipWorks...";
             Application.Run(MainForm);
         }
-        
+
         /// <summary>
         /// Overridden to provide custom UI initialization
         /// </summary>
@@ -145,7 +141,7 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
             WindowStateSaver.Initialize(Path.Combine(DataPath.WindowsUserSettings, "windows.xml"));
             CollapsibleGroupControl.Initialize(Path.Combine(DataPath.WindowsUserSettings, "collapsiblegroups.xml"));
 
-            // For Divilements licensing
+            // For Divelements licensing
             Divelements.SandGrid.SandGridBase.ActivateProduct("120|iTixOUJcBvFZeCMW0Zqf8dEUqM0=");
             Divelements.SandRibbon.Ribbon.ActivateProduct("120|wmbyvY12rhj+YHC5nTIyBO33bjE=");
             TD.SandDock.SandDockManager.ActivateProduct("120|cez0Ci0UI1owSCvXUNrMCcZQWik=");

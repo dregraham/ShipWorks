@@ -1,13 +1,8 @@
-﻿using ShipWorks.ApplicationCore.Licensing;
-using ShipWorks.Core.UI;
-using ShipWorks.Stores;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using ShipWorks.UI.Controls.ChannelConfirmDelete;
-using System.Collections.Generic;
-using System;
-using System.Diagnostics;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
@@ -19,8 +14,12 @@ using GalaSoft.MvvmLight.Command;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using log4net;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
+using ShipWorks.Core.UI;
 using ShipWorks.Data.Utility;
+using ShipWorks.Stores;
+using ShipWorks.UI.Controls.ChannelConfirmDelete;
 using ShipWorks.Users.Security;
 using IWin32Window = System.Windows.Forms.IWin32Window;
 
@@ -44,6 +43,7 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         private readonly ILog log;
         private bool isDeleting;
         private IChannelLimitBehavior channelLimitBehavior;
+        private readonly ISecurityContext securityContext;
 
         /// <summary>
         /// Constructor
@@ -53,12 +53,14 @@ namespace ShipWorks.UI.Controls.ChannelLimit
             IChannelConfirmDeleteFactory confirmDeleteFactory,
             Func<Type, ILog> logFactory,
             IWebBrowserFactory webBrowserFactory,
-            IMessageHelper messageHelper)
+            IMessageHelper messageHelper,
+            ISecurityContext securityContext)
         {
             this.storeManager = storeManager;
             this.confirmDeleteFactory = confirmDeleteFactory;
             this.webBrowserFactory = webBrowserFactory;
             this.messageHelper = messageHelper;
+            this.securityContext = securityContext;
 
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
 
@@ -68,9 +70,9 @@ namespace ShipWorks.UI.Controls.ChannelLimit
             // Set the default enforcement context
             EnforcementContext = EnforcementContext.NotSpecified;
 
-            log = logFactory(typeof (ChannelLimitViewModel));
+            log = logFactory(typeof(ChannelLimitViewModel));
 
-            DeleteStoreClickCommand = new RelayCommand<ChannelLimitControl>(DeleteChannel, CanExecuteDeleteStore);
+            DeleteStoreClickCommand = new RelayCommand<ChannelLimitControl>(async control => await DeleteChannel(control), CanExecuteDeleteStore);
             UpgradeClickCommand = new RelayCommand<ChannelLimitControl>(UpgradeAccount);
         }
 
@@ -240,7 +242,7 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         /// </summary>
         private IWin32Window GetOwner(ChannelLimitControl control)
         {
-            if(control == null)
+            if (control == null)
             {
                 return null;
             }
@@ -255,7 +257,7 @@ namespace ShipWorks.UI.Controls.ChannelLimit
 
                 if (host != null)
                 {
-                    // We go up the parent chain here becuase the dialogs opened with the wizard page
+                    // We go up the parent chain here because the dialogs opened with the wizard page
                     // as the owner were not appearing center screen. So we set the owner as the AddStoreWizard instead.
                     // ElementHost -> ActivationErrorWizardPage -> WizardPage -> AddStoreWizard
                     return host.Parent.Parent.Parent;
@@ -269,12 +271,12 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         /// <summary>
         /// Delete the selected store
         /// </summary>
-        private async void DeleteChannel(ChannelLimitControl control)
+        public async Task DeleteChannel(ChannelLimitControl control)
         {
             List<StoreTypeCode> localStoreTypeCodes =
                 storeManager.GetAllStores().Select(s => (StoreTypeCode) s.TypeCode).Distinct().ToList();
 
-             IWin32Window owner = GetOwner(control);
+            IWin32Window owner = GetOwner(control);
 
             // If we are trying to delete the only store type in ShipWorks and they are not trying to add another one
             // display an error and don't delete
@@ -346,7 +348,7 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         /// </summary>
         private Task DeleteChannelAsync()
         {
-            return TaskEx.Run(() => license.DeleteChannel(selectedStoreType));
+            return TaskEx.Run(() => license.DeleteChannel(selectedStoreType, securityContext));
         }
 
         /// <summary>

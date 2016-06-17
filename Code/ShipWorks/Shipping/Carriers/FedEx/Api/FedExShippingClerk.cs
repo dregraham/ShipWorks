@@ -5,33 +5,28 @@ using System.Web.Services.Protocols;
 using Interapptive.Shared;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
-using RestSharp.Validation;
+using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Close.Response;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 using ShipWorks.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request;
 using ShipWorks.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Response;
 using ShipWorks.Shipping.Carriers.FedEx.Api.PackageMovement.Response;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Tracking.Response;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.GlobalShipAddress;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate;
-using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
-using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Enums;
 using ShipWorks.Shipping.Editing.Rating;
+using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Tracking;
-using log4net;
 using ReturnedRateType = ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate.ReturnedRateType;
 using ServiceType = ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate.ServiceType;
 using SpecialRatingAppliedType = ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate.SpecialRatingAppliedType;
 using TransitTimeType = ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate.TransitTimeType;
-using ShipWorks.Shipping.Settings;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api
 {
@@ -98,7 +93,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 //Make sure the addresses only have two lines
                 ValidateTwoLineAddress(shipmentEntity);
 
-                // Clean the shipment for the specified shipment service type.  
+                // Clean the shipment for the specified shipment service type.
                 CleanShipmentForShipmentServiceType(shipmentEntity);
 
                 PerformVersionCapture(shipmentEntity);
@@ -133,14 +128,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// </summary>
         private static void ValidateShipment(ShipmentEntity shipmentEntity)
         {
-            if (shipmentEntity.FedEx.Service == (int)FedExServiceType.SmartPost && shipmentEntity.FedEx.Packages.Count > 1)
+            if (shipmentEntity.FedEx.Service == (int) FedExServiceType.SmartPost && shipmentEntity.FedEx.Packages.Count > 1)
             {
                 throw new FedExException("SmartPost only allows 1 package per shipment.");
             }
         }
 
         /// <summary>
-        /// Cleans a shipment for specified service type.  
+        /// Cleans a shipment for specified service type.
         /// For example, if the user makes a copy of a shipment that contains alcohol, then switches
         /// to SmartPost, the Alcohol check box will be hidden, but still checked and the shipment will
         /// be marked as containing Alcohol even though SmartPost does not allow this.
@@ -151,7 +146,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         private static void CleanShipmentForShipmentServiceType(ShipmentEntity shipmentEntity)
         {
             FedExShipmentEntity fedExShipmentEntity = shipmentEntity.FedEx;
-            FedExServiceType serviceType = (FedExServiceType)fedExShipmentEntity.Service;
+            FedExServiceType serviceType = (FedExServiceType) fedExShipmentEntity.Service;
 
             switch (serviceType)
             {
@@ -221,7 +216,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         [NDependIgnoreLongMethod]
         private static void CleanAndValidateShipmentForSmartPost(FedExShipmentEntity fedExShipmentEntity)
         {
-            if (fedExShipmentEntity.Shipment.Insurance && fedExShipmentEntity.Shipment.InsuranceProvider == (int)Insurance.InsuranceProvider.Carrier)
+            if (fedExShipmentEntity.Shipment.Insurance && fedExShipmentEntity.Shipment.InsuranceProvider == (int) Insurance.InsuranceProvider.Carrier)
             {
                 throw new FedExException("FedEx declared value is not supported for Smart Post shipments. For insurance coverage, go to Shipping Settings and enable ShipWorks Insurance for this carrier.");
             }
@@ -319,7 +314,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
             {
                 // Make sure the shipment has a valid account associated with it
                 ValidateFedExAccount(shipmentEntity);
-                FedExAccountEntity account = (FedExAccountEntity)settingsRepository.GetAccount(shipmentEntity);
+                FedExAccountEntity account = (FedExAccountEntity) settingsRepository.GetAccount(shipmentEntity);
 
                 PerformVersionCapture(shipmentEntity);
 
@@ -412,7 +407,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         }
 
         /// <summary>
-        /// Registers a FedEx account account for use with the FedEx API.
+        /// Registers a FedEx account for use with the FedEx API.
         /// </summary>
         /// <param name="account">The account.</param>
         public void RegisterAccount(EntityBase2 account)
@@ -463,9 +458,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 // Log the version capture and whether it was forced or not
                 log.Info(string.Format("Performing FedEx version capture{0}", forceVersionCapture ? " (forced)" : string.Empty));
 
-                // This is made up of two requests: perform the package movement and the next to perform the version capture 
+                // This is made up of two requests: perform the package movement and the next to perform the version capture
                 // based on the location ID received in the package movement request
-                foreach (FedExAccountEntity account in settingsRepository.GetAccounts().Where(a => !((FedExAccountEntity)a).Is2xMigrationPending))
+                foreach (FedExAccountEntity account in settingsRepository.GetAccounts().Where(a => !((FedExAccountEntity) a).Is2xMigrationPending))
                 {
                     CarrierRequest packageMovementRequest = requestFactory.CreatePackageMovementRequest(shipmentEntity, account);
                     FedExPackageMovementResponse packageMovementResponse = packageMovementRequest.Submit() as FedExPackageMovementResponse;
@@ -492,12 +487,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// </summary>
         public DistanceAndLocationDetail[] PerformHoldAtLocationSearch(ShipmentEntity shipment)
         {
-            FedExAccountEntity account = (FedExAccountEntity)settingsRepository.GetAccount(shipment);
+            FedExAccountEntity account = (FedExAccountEntity) settingsRepository.GetAccount(shipment);
 
             FedExRequestFactory fedExRequestFactory = new FedExRequestFactory(settingsRepository);
-            FedExGlobalShipAddressRequest searchLocationsRequest = (FedExGlobalShipAddressRequest)fedExRequestFactory.CreateSearchLocationsRequest(shipment, account);
+            FedExGlobalShipAddressRequest searchLocationsRequest = (FedExGlobalShipAddressRequest) fedExRequestFactory.CreateSearchLocationsRequest(shipment, account);
 
-            FedExGlobalShipAddressResponse carrierResponse = (FedExGlobalShipAddressResponse)searchLocationsRequest.Submit();
+            FedExGlobalShipAddressResponse carrierResponse = (FedExGlobalShipAddressResponse) searchLocationsRequest.Submit();
 
             carrierResponse.Process();
 
@@ -505,14 +500,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         }
 
         /// <summary>
-        /// Validates the FedEx account associated with the shipment entity to make sure it is not null 
+        /// Validates the FedEx account associated with the shipment entity to make sure it is not null
         /// and that it does not need to be configured as a result of a ShipWorks 2.x migration.
         /// </summary>
         /// <param name="shipmentEntity">The shipment entity.</param>
         /// <exception cref="FedExException">No FedEx account is selected for the shipment.</exception>
         private void ValidateFedExAccount(ShipmentEntity shipmentEntity)
         {
-            FedExAccountEntity account = (FedExAccountEntity)settingsRepository.GetAccount(shipmentEntity);
+            FedExAccountEntity account = (FedExAccountEntity) settingsRepository.GetAccount(shipmentEntity);
             if (account == null)
             {
                 log.Error(string.Format("Shipment ID {0} does not have a FedEx account selected. Select a valid FedEx account that is available in ShipWorks.", shipmentEntity.ShipmentID));
@@ -542,7 +537,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 throw new FedExException("The \"To\" Street Address cannot be longer than 2 lines.");
             }
         }
-
 
         /// <summary>
         /// Gets the shipping rates from FedEx for the given shipment.
@@ -597,9 +591,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         private List<RateResult> FilterRatesByExcludedServices(ShipmentEntity shipment, List<RateResult> rates)
         {
             List<FedExServiceType> availableServices = ShipmentTypeManager.GetType(ShipmentTypeCode.FedEx).GetAvailableServiceTypes(excludedServiceTypeRepository)
-                .Select(s => (FedExServiceType)s).Union(new List<FedExServiceType> { (FedExServiceType)shipment.FedEx.Service }).ToList();
+                .Select(s => (FedExServiceType) s).Union(new List<FedExServiceType> { (FedExServiceType) shipment.FedEx.Service }).ToList();
 
-            return rates.Where(r => r.Tag is FedExRateSelection && availableServices.Contains(((FedExRateSelection)r.Tag).ServiceType)).ToList();
+            return rates.Where(r => r.Tag is FedExRateSelection && availableServices.Contains(((FedExRateSelection) r.Tag).ServiceType)).ToList();
         }
 
         /// <summary>
@@ -997,7 +991,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         }
 
         /// <summary>
-        /// A helper method for inspecting and throwing a more specific exception for any exceptions 
+        /// A helper method for inspecting and throwing a more specific exception for any exceptions
         /// that are generated by the FedEx shipping clerk while communicating with the FedEx API.
         /// </summary>
         private Exception HandleException(Exception exception)
@@ -1006,7 +1000,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         }
 
         /// <summary>
-        /// A helper method for inspecting and throwing a more specific exception for any exceptions 
+        /// A helper method for inspecting and throwing a more specific exception for any exceptions
         /// that are generated by the FedEx shipping clerk while communicating with the FedEx API.
         /// </summary>
         /// <param name="exception">The exception.</param>
@@ -1020,7 +1014,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
             }
             else if (exception is CarrierException)
             {
-                CarrierException carrierException = (CarrierException)exception;
+                CarrierException carrierException = (CarrierException) exception;
 
                 // There was an exception communicating with the API - the request went through and a response
                 // was received, but the response most likely had an error result.
@@ -1041,7 +1035,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
 
                 if (errorMessage.Contains("RETURN_SHIPMENT is not allowed") &&
                     shipment != null &&
-                    FedExUtility.OneRateServiceTypes.Contains((FedExServiceType)shipment.FedEx.Service))
+                    FedExUtility.OneRateServiceTypes.Contains((FedExServiceType) shipment.FedEx.Service))
                 {
                     errorMessage = "Return Label not offered via FedEx One Rate service";
                 }
@@ -1065,7 +1059,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
             {
                 // Make sure the shipment has a valid account associated with it
                 ValidateFedExAccount(shipmentEntity);
-                FedExAccountEntity account = (FedExAccountEntity)settingsRepository.GetAccount(shipmentEntity);
+                FedExAccountEntity account = (FedExAccountEntity) settingsRepository.GetAccount(shipmentEntity);
 
                 PerformVersionCapture(shipmentEntity);
 
@@ -1098,7 +1092,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         }
 
         /// <summary>
-        /// Checks each packages dimensions, making sure that each is valid.  If one or more packages have invalid dimensions, 
+        /// Checks each packages dimensions, making sure that each is valid.  If one or more packages have invalid dimensions,
         /// a ShippingException is thrown informing the user.
         /// </summary>
         private void ValidatePackageDimensions(ShipmentEntity shipment)
@@ -1106,7 +1100,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
             string exceptionMessage = string.Empty;
             int packageIndex = 1;
 
-            if (shipment.FedEx.PackagingType == (int)FedExPackagingType.Custom)
+            if (shipment.FedEx.PackagingType == (int) FedExPackagingType.Custom)
             {
                 foreach (FedExPackageEntity fedexPackage in shipment.FedEx.Packages)
                 {

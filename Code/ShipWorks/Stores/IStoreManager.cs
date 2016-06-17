@@ -10,6 +10,16 @@ namespace ShipWorks.Stores
     public interface IStoreManager
     {
         /// <summary>
+        /// Get the store for the related entity
+        /// </summary>
+        StoreEntity GetRelatedStore(long entityID);
+
+        /// <summary>
+        /// Get the store from Id
+        /// </summary>
+        StoreEntity GetStore(long storeId);
+
+        /// <summary>
         /// Get the current list of stores.  All stores are returned, regardless of security.
         /// </summary>
         IEnumerable<StoreEntity> GetAllStores();
@@ -18,11 +28,6 @@ namespace ShipWorks.Stores
         /// Get all stores, regardless of security, that are currently enabled for downloading and shipping
         /// </summary>
         IEnumerable<StoreEntity> GetEnabledStores();
-
-        /// <summary>
-        /// Get the store with the given ID.  If it does not exist, null is returned
-        /// </summary>
-        StoreEntity GetStore(long storeID);
 
         /// <summary>
         /// Get the store for the related Shipment
@@ -38,5 +43,10 @@ namespace ShipWorks.Stores
         /// Creates the online status filters for the given store.
         /// </summary>
         void CreateStoreStatusFilters(IWin32Window owner, StoreEntity store);
+
+        /// <summary>
+        /// Notify the underlying data manager that there may have been changes
+        /// </summary>
+        void CheckForChanges();
     }
 }

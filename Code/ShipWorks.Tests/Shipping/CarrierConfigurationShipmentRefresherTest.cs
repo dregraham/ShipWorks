@@ -1,23 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
-using Interapptive.Shared.Messaging;
+using ShipWorks.Core.Messaging;
 using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Profiles;
-using System.Reactive.Subjects;
-using Autofac.Extras.Moq;
+using ShipWorks.AddressValidation;
+using System.Linq;
+using ShipWorks.Messaging.Messages;
+using ShipWorks.Tests.Shared;
 
 namespace ShipWorks.Tests.Shipping
 {
-    public class CarrierConfigurationShipmentRefresherTest : IDisposable
+    public class CarrierConfigurationShipmentRefresherTest
     {
-        AutoMock mock;
-
         MockRepository mockRepository;
         Mock<IMessenger> messengerMock;
-        Mock<IShippingDialogInteraction> shippingDialogMock;
+        Mock<IShippingErrorManager> errorManagerMock;
         Mock<IShippingManager> shippingManagerMock;
         Mock<IShippingProfileManager> shippingProfileManagerMock;
 
@@ -33,10 +33,8 @@ namespace ShipWorks.Tests.Shipping
         public CarrierConfigurationShipmentRefresherTest()
         {
             mockRepository = new MockRepository(MockBehavior.Loose) { DefaultValue = DefaultValue.Mock };
-            mock = AutoMock.GetFromRepository(mockRepository);
-            
             messengerMock = mockRepository.Create<IMessenger>();
-            shippingDialogMock = mockRepository.Create<IShippingDialogInteraction>();
+            errorManagerMock = mockRepository.Create<IShippingErrorManager>();
             shippingManagerMock = mockRepository.Create<IShippingManager>();
             shippingProfileManagerMock = mockRepository.Create<IShippingProfileManager>();
 
@@ -48,9 +46,7 @@ namespace ShipWorks.Tests.Shipping
             {
                 shipment1, shipment2, shipment3
             };
-
-            shippingDialogMock.Setup(x => x.FetchShipmentsFromShipmentControl()).Returns(shipments);
-
+            
             profile = new ShippingProfileEntity { RequestedLabelFormat = 1 };
 
             shippingProfileManagerMock.Setup(x => x.GetDefaultProfile(It.IsAny<ShipmentTypeCode>())).Returns(profile);
@@ -59,7 +55,7 @@ namespace ShipWorks.Tests.Shipping
         [Fact]
         public void Constructor_ThrowsArgumentNullException_WhenMessengerIsNull()
         {
-            Assert.Throws<ArgumentNullException>(() => new CarrierConfigurationShipmentRefresher(null, shippingDialogMock.Object, shippingProfileManagerMock.Object, shippingManagerMock.Object));
+            Assert.Throws<ArgumentNullException>(() => new CarrierConfigurationShipmentRefresher(null, errorManagerMock.Object, shippingProfileManagerMock.Object, shippingManagerMock.Object));
         }
 
         [Fact]
@@ -71,13 +67,13 @@ namespace ShipWorks.Tests.Shipping
         [Fact]
         public void Constructor_ThrowsArgumentNullException_WhenShippingProfileManagerIsNull()
         {
-            Assert.Throws<ArgumentNullException>(() => new CarrierConfigurationShipmentRefresher(messengerMock.Object, shippingDialogMock.Object, null, shippingManagerMock.Object));
+            Assert.Throws<ArgumentNullException>(() => new CarrierConfigurationShipmentRefresher(messengerMock.Object, errorManagerMock.Object, null, shippingManagerMock.Object));
         }
 
         [Fact]
         public void Constructor_ThrowsArgumentNullException_WhenShippingManagerIsNull()
         {
-            Assert.Throws<ArgumentNullException>(() => new CarrierConfigurationShipmentRefresher(messengerMock.Object, shippingDialogMock.Object, shippingProfileManagerMock.Object, null));
+            Assert.Throws<ArgumentNullException>(() => new CarrierConfigurationShipmentRefresher(messengerMock.Object, errorManagerMock.Object, shippingProfileManagerMock.Object, null));
         }
 
         //[Fact]
@@ -102,7 +98,7 @@ namespace ShipWorks.Tests.Shipping
 
             messenger.Send(new ConfiguringCarrierMessage(this, ShipmentTypeCode.Usps));
 
-            shippingDialogMock.Verify(x => x.SaveShipmentsToDatabase(shipments, true));
+            shippingManagerMock.Verify(x => x.SaveShipmentsToDatabase(shipments, true));
         }
 
         [Fact]
@@ -116,7 +112,7 @@ namespace ShipWorks.Tests.Shipping
             messenger.Send(new ConfiguringCarrierMessage(this, ShipmentTypeCode.Usps));
 
             List<ShipmentEntity> expectedShipments = new List<ShipmentEntity> { shipment1, shipment3 };
-            shippingDialogMock.Verify(x => x.SaveShipmentsToDatabase(expectedShipments, true));
+            shippingManagerMock.Verify(x => x.SaveShipmentsToDatabase(expectedShipments, true));
         }
 
         [Fact]
@@ -127,7 +123,7 @@ namespace ShipWorks.Tests.Shipping
 
             messenger.Send(new ConfiguringCarrierMessage(this, ShipmentTypeCode.Usps));
 
-            shippingDialogMock.Verify(x => x.SetShipmentErrorMessage(It.IsAny<long>(), It.IsAny<Exception>(), It.IsAny<string>()), Times.Never);
+            errorManagerMock.Verify(x => x.SetShipmentErrorMessage(It.IsAny<long>(), It.IsAny<Exception>(), It.IsAny<string>()), Times.Never);
         }
 
         [Fact]
@@ -136,7 +132,7 @@ namespace ShipWorks.Tests.Shipping
             Exception exception1 = new Exception();
             Exception exception2 = new Exception();
 
-            shippingDialogMock.Setup(x => x.SaveShipmentsToDatabase(It.IsAny<IEnumerable<ShipmentEntity>>(), It.IsAny<bool>()))
+            shippingManagerMock.Setup(x => x.SaveShipmentsToDatabase(It.IsAny<IEnumerable<ShipmentEntity>>(), It.IsAny<bool>()))
                 .Returns(new Dictionary<ShipmentEntity, Exception> {
                     { shipments[0], exception1 },
                     { shipments[2], exception2 },
@@ -147,9 +143,9 @@ namespace ShipWorks.Tests.Shipping
 
             messenger.Send(new ConfiguringCarrierMessage(this, ShipmentTypeCode.Usps));
 
-            shippingDialogMock.Verify(x => x.SetShipmentErrorMessage(1, exception1, "updated"));
-            shippingDialogMock.Verify(x => x.SetShipmentErrorMessage(3, exception2, "updated"));
-            shippingDialogMock.Verify(x => x.SetShipmentErrorMessage(2, It.IsAny<Exception>(), It.IsAny<string>()), Times.Never);
+            errorManagerMock.Verify(x => x.SetShipmentErrorMessage(1, exception1, "updated"));
+            errorManagerMock.Verify(x => x.SetShipmentErrorMessage(3, exception2, "updated"));
+            errorManagerMock.Verify(x => x.SetShipmentErrorMessage(2, It.IsAny<Exception>(), It.IsAny<string>()), Times.Never);
         }
 
         [Fact]
@@ -163,18 +159,24 @@ namespace ShipWorks.Tests.Shipping
             messenger.Send(new ConfiguringCarrierMessage(this, ShipmentTypeCode.Usps));
 
             List<ShipmentEntity> expectedShipments = new List<ShipmentEntity> { shipment1, shipment3 };
-            shippingDialogMock.Verify(x => x.SaveShipmentsToDatabase(expectedShipments, true));
+            shippingManagerMock.Verify(x => x.SaveShipmentsToDatabase(expectedShipments, true));
         }
 
         [Fact]
         public void HandleCarrierConfigured_GetShipmentsFromControl()
         {
+            bool wasCalled = false;
             TestMessenger messenger = new TestMessenger();
-            CreateRefresher(messenger);
+            var refresher = CreateRefresher(messenger);
+            refresher.RetrieveShipments = () =>
+            {
+                wasCalled = true;
+                return Enumerable.Empty<ShipmentEntity>();
+            };
 
             messenger.Send(new CarrierConfiguredMessage(this, ShipmentTypeCode.Usps));
 
-            shippingDialogMock.Verify(x => x.FetchShipmentsFromShipmentControl());
+            Assert.True(wasCalled);
         }
 
         [Fact]
@@ -245,7 +247,7 @@ namespace ShipWorks.Tests.Shipping
         [Fact]
         public void HandleCarrierConfigured_DoesNotModifyShipment_WhenShipmentHasErrors()
         {
-            shippingDialogMock.Setup(x => x.ShipmentHasError(shipment2.ShipmentID)).Returns(true);
+            errorManagerMock.Setup(x => x.ShipmentHasError(shipment2.ShipmentID)).Returns(true);
 
             TestMessenger messenger = new TestMessenger();
             CreateRefresher(messenger);
@@ -325,18 +327,26 @@ namespace ShipWorks.Tests.Shipping
 
             Assert.Equal(0, processingShipment.RequestedLabelFormat);
         }
-        
-        [Fact]
-        public void Dispose_UnregistersAllMessageHandlers()
-        {
-            var messenger = new TestMessenger();
-            mock.Provide(messenger);
-            
-            var refresher = mock.Create<CarrierConfigurationShipmentRefresher>();
-            refresher.Dispose();
 
-            Assert.False(messenger.Subject.HasObservers);
-        }
+        //[Fact]
+        //public void Dispose_UnregistersConfiguringCarrierMessageHandler()
+        //{
+        //    MessengerToken token = new MessengerToken();
+        //    messengerMock.Setup(x => x.Handle(It.IsAny<object>(), It.IsAny<Action<ConfiguringCarrierMessage>>())).Returns(token);
+        //    CarrierConfigurationShipmentRefresher refresher = CreateRefresher();
+        //    refresher.Dispose();
+        //    messengerMock.Verify(x => x.Remove(token));
+        //}
+
+        //[Fact]
+        //public void Dispose_UnregistersCarrierConfiguredMessageHandler()
+        //{
+        //    MessengerToken token = new MessengerToken();
+        //    messengerMock.Setup(x => x.Handle(It.IsAny<object>(), It.IsAny<Action<CarrierConfiguredMessage>>())).Returns(token);
+        //    CarrierConfigurationShipmentRefresher refresher = CreateRefresher();
+        //    refresher.Dispose();
+        //    messengerMock.Verify(x => x.Remove(token));
+        //}
 
         private CarrierConfigurationShipmentRefresher CreateRefresher()
         {
@@ -345,20 +355,10 @@ namespace ShipWorks.Tests.Shipping
 
         private CarrierConfigurationShipmentRefresher CreateRefresher(IMessenger messenger)
         {
-            return new CarrierConfigurationShipmentRefresher(messenger, shippingDialogMock.Object, shippingProfileManagerMock.Object, shippingManagerMock.Object);
-        }
-
-        public void Dispose() => mock?.Dispose();
-
-        private class TestMessenger : IMessenger
-        {
-            Subject<IShipWorksMessage> subject = new Subject<IShipWorksMessage>();
-
-            public Subject<IShipWorksMessage> Subject => subject;
-
-            public void Send<T>(T message) where T : IShipWorksMessage => subject.OnNext(message);
-
-            public IDisposable Subscribe(IObserver<IShipWorksMessage> observer) => subject.Subscribe(observer);
+            return new CarrierConfigurationShipmentRefresher(messenger, errorManagerMock.Object, shippingProfileManagerMock.Object, shippingManagerMock.Object)
+            {
+                RetrieveShipments = () => shipments
+            };
         }
     }
 }

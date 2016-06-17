@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Data.Grid.Columns.DisplayTypes.Editors;
-using ShipWorks.UI.Controls;
-using ShipWorks.Users;
+﻿using ShipWorks.UI.Controls;
 
 namespace ShipWorks.Data.Grid.Columns.DisplayTypes
 {
@@ -23,14 +17,7 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes
                 return string.Empty;
             }
 
-            WeightDisplayFormat format = WeightDisplayFormat.FractionalPounds;
-
-            if (UserSession.IsLoggedOn)
-            {
-                format = (WeightDisplayFormat) UserSession.User.Settings.ShippingWeightFormat;
-            }
-
-            return WeightControl.FormatWeight((double) value, format);
+            return WeightConverter.Current.FormatWeight((double) value);
         }
     }
 }

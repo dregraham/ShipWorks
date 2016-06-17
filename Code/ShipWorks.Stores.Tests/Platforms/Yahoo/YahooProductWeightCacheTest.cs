@@ -8,7 +8,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Yahoo
     public class YahooProductWeightCacheTest
     {
         readonly YahooProductWeightCache cache = new YahooProductWeightCache();
-        private string storeID = "yhst-12345";
+        private readonly string storeID = "yhst-12345";
 
         [Fact]
         public void GetStoreProductWeightCache_ReturnsNewLruCache_WhenGivenNewStoreID()

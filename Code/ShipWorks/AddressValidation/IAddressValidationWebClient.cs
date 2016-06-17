@@ -1,6 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using Interapptive.Shared.Business;
+﻿using Interapptive.Shared.Business;
+using System.Threading.Tasks;
 
 namespace ShipWorks.AddressValidation
 {
@@ -12,6 +11,6 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Validates the address.
         /// </summary>
-        AddressValidationWebClientValidateAddressResult ValidateAddress(AddressAdapter addressAdapter);
+        Task<AddressValidationWebClientValidateAddressResult> ValidateAddressAsync(AddressAdapter addressAdapter);
     }
 }

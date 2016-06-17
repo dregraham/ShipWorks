@@ -31,7 +31,13 @@ namespace ShipWorks.UI.ValueConverters
                 return Imaging.CreateBitmapSourceFromHBitmap(Resources.check16.GetHbitmap(), IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
             }
 
-            Image image = EnumHelper.GetImage((Enum) value);
+            Enum enumValue = (Enum) value;
+            if (enumValue == null)
+            {
+                return null;
+            }
+
+            Image image = EnumHelper.GetImage(enumValue);
             if (image == null)
             {
                 return BitmapSource.Create(2, 2, 96, 96,

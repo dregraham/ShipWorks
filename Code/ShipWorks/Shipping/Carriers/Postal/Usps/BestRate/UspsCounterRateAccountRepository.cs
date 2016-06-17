@@ -26,8 +26,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.BestRate
         /// </summary>
         public IEnumerable<UspsAccountEntity> Accounts
         {
-            get 
-            { 
+            get
+            {
                 List<UspsAccountEntity> accounts = new List<UspsAccountEntity>();
                 try
                 {
@@ -40,7 +40,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.BestRate
                         UspsAccountID = -1052,
                         CreatedDate = DateTime.Now.AddDays(-30)
                     };
-                    
+
                     accounts.Add(account);
                 }
                 catch (MissingCounterRatesCredentialException)
@@ -49,6 +49,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.BestRate
                 }
                 return accounts;
             }
+        }
+
+        /// <summary>
+        /// Force a check for changes
+        /// </summary>
+        public void CheckForChangesNeeded()
+        {
+            // Since this is for counter rates, we don't need to worry about this
         }
 
         /// <summary>

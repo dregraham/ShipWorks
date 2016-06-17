@@ -1,5 +1,7 @@
-﻿using ShipWorks.Shipping.Editing;
+﻿using Autofac;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Shipping.Editing.Rating;
+using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Express1
 {
@@ -15,9 +17,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
         /// </summary>
         /// <param name="shipmentType">Type of shipment that instantiated this factory</param>
         /// <param name="express1Settings">Settings that will be used when creating the footnote control</param>
-        public Express1PromotionRateFootnoteFactory(ShipmentType shipmentType, IExpress1SettingsFacade express1Settings)
+        public Express1PromotionRateFootnoteFactory(ShipmentTypeCode shipmentTypeCode, IExpress1SettingsFacade express1Settings)
         {
-            ShipmentTypeCode = shipmentType.ShipmentTypeCode;
+            ShipmentTypeCode = shipmentTypeCode;
             this.express1Settings = express1Settings;
         }
 
@@ -42,6 +44,20 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
         public RateFootnoteControl CreateFootnote(FootnoteParameters parameters)
         {
             return new Express1RatePromotionFootnote(express1Settings);
+        }
+
+        /// <summary>
+        /// Get a view model that represents this footnote
+        /// </summary>
+        public object CreateViewModel(ICarrierShipmentAdapter shipmentAdapter)
+        {
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                IExpress1RatePromotionFootnoteViewModel viewModel = lifetimeScope.Resolve<IExpress1RatePromotionFootnoteViewModel>();
+                viewModel.Settings = express1Settings;
+                viewModel.ShipmentAdapter = shipmentAdapter;
+                return viewModel;
+            }
         }
     }
 }

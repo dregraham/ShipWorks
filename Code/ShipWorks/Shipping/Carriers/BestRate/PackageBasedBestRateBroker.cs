@@ -2,6 +2,7 @@
 using System.Linq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping.Carriers.BestRate
@@ -12,7 +13,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
     /// <typeparam name="TAccount">Type of carrier account</typeparam>
     /// <typeparam name="TPackage">Type of package</typeparam>
     public abstract class PackageBasedBestRateBroker<TAccount, TPackage> : BestRateBroker<TAccount>
-        where TAccount : EntityBase2
+        where TAccount : ICarrierAccount
         where TPackage : EntityBase2
     {
         /// <summary>

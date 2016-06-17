@@ -6,6 +6,7 @@ using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace ShipWorks.ApplicationCore.Licensing
 {
@@ -109,7 +110,8 @@ namespace ShipWorks.ApplicationCore.Licensing
             if (PhysicalAddress != null)
             {
                 // Call AV server
-                UspsAddressValidationResults uspsResult = uspsWebClient.ValidateAddress(PhysicalAddress);
+	            Task<UspsAddressValidationResults> validationTask = uspsWebClient.ValidateAddressAsync(PhysicalAddress);
+	            UspsAddressValidationResults uspsResult = validationTask.Result;
 
                 if (!uspsResult.IsSuccessfulMatch)
                 {

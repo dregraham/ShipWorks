@@ -1,3 +1,6 @@
+using System.Collections.Generic;
+using ShipWorks.Data.Model.EntityClasses;
+
 namespace ShipWorks.Stores
 {
     /// <summary>
@@ -6,10 +9,28 @@ namespace ShipWorks.Stores
     public interface IStoreTypeManager
     {
         /// <summary>
-        /// Gets the StoreType from a StoreTypeCode
+        /// Returns all store types in ShipWorks
         /// </summary>
-        /// <param name="typeCode">The type code.</param>
-        /// <returns></returns>
+        IEnumerable<StoreType> StoreTypes { get; }
+
+        /// <summary>
+        /// Get the StoreType instance of the specified StoreEntity
+        /// </summary>
+        StoreType GetType(StoreEntity store);
+
+        /// <summary>
+        /// The indexer of the class based on store type
+        /// </summary>
         StoreType GetType(StoreTypeCode typeCode);
+
+        /// <summary>
+        /// Get the ShipmentType based on the given type code
+        /// </summary>
+        StoreType GetType(StoreTypeCode typeCode, StoreEntity store);
+
+        /// <summary>
+        /// Get the store type from the shipment
+        /// </summary>
+        StoreType GetType(ShipmentEntity shipment);
     }
 }

@@ -12,15 +12,15 @@ namespace ShipWorks.Stores.Platforms.SparkPay
 {
     public class SparkPayStoreType : StoreType
     {
-        readonly StoreEntity store;
-        readonly IIndex<StoreTypeCode, Func<StoreEntity, StoreDownloader>> downloaderFactory;
-        readonly Func<SparkPayStoreEntity, SparkPayOnlineUpdateInstanceCommandsFactory> onlineUpdateInstanceCommandsFactory;
-        readonly Func<SparkPayStoreEntity, SparkPayStatusCodeProvider> statusCodeProviderFactory;
+        private readonly StoreEntity store;
+        private readonly IIndex<StoreTypeCode, Func<StoreEntity, StoreDownloader>> downloaderFactory;
+        private readonly Func<SparkPayStoreEntity, SparkPayOnlineUpdateInstanceCommandsFactory> onlineUpdateInstanceCommandsFactory;
+        private readonly Func<SparkPayStoreEntity, SparkPayStatusCodeProvider> statusCodeProviderFactory;
+        private readonly SparkPayStoreEntity sparkPayStore;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="store"></param>
         public SparkPayStoreType(
             StoreEntity store,
             IIndex<StoreTypeCode, Func<StoreEntity, StoreDownloader>> downloaderFactory,
@@ -28,6 +28,9 @@ namespace ShipWorks.Stores.Platforms.SparkPay
             Func<SparkPayStoreEntity, SparkPayStatusCodeProvider> statusCodeProviderFactory
             ) : base(store)
         {
+
+            sparkPayStore = (SparkPayStoreEntity)store;
+
             this.downloaderFactory = downloaderFactory;
             this.onlineUpdateInstanceCommandsFactory = onlineUpdateInstanceCommandsFactory;
             this.statusCodeProviderFactory = statusCodeProviderFactory;
@@ -47,21 +50,7 @@ namespace ShipWorks.Stores.Platforms.SparkPay
         /// <summary>
         /// Creates the license identifier
         /// </summary>
-        protected override string InternalLicenseIdentifier
-        {
-            get
-            {
-                SparkPayStoreEntity sparkPayStore = (SparkPayStoreEntity)store;
-
-                if (sparkPayStore == null)
-                {
-                    throw new NullReferenceException("Non SparkPay store passed to SparkPay license identifier");
-                }
-
-                return sparkPayStore.StoreUrl;
-            }
-        }
-
+        protected override string InternalLicenseIdentifier => sparkPayStore.StoreUrl;
 
         /// <summary>
         /// Creates a downloader
@@ -111,13 +100,11 @@ namespace ShipWorks.Stores.Platforms.SparkPay
         /// </summary>
         public override List<MenuCommand> CreateOnlineUpdateInstanceCommands()
         {
-            SparkPayStoreEntity sparkPayStore = (SparkPayStoreEntity)store;
-
             if (sparkPayStore == null)
             {
                 throw new NullReferenceException("Non SparkPay store passed to SparkPay license identifier");
             }
-            
+
             return onlineUpdateInstanceCommandsFactory(sparkPayStore).Create();
         }
 
@@ -127,7 +114,7 @@ namespace ShipWorks.Stores.Platforms.SparkPay
         public override ICollection<string> GetOnlineStatusChoices() => statusCodeProviderFactory((SparkPayStoreEntity)store).CodeNames;
 
         /// <summary>
-        /// Indicates if the StoreType supports the display of the given "Online" column.  
+        /// Indicates if the StoreType supports the display of the given "Online" column.
         /// </summary>
         public override bool GridOnlineColumnSupported(OnlineGridColumnSupport column)
         {

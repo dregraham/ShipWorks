@@ -3,25 +3,25 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows.Forms;
+using Autofac;
+using Interapptive.Shared;
 using Interapptive.Shared.Business;
+using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Filters.Content.Conditions.Shipments;
 using ShipWorks.Shipping.Carriers.BestRate.RateGroupFiltering;
+using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Enums;
 using ShipWorks.Shipping.Editing.Rating;
-using ShipWorks.Shipping.Settings.Origin;
-using ShipWorks.Shipping.ShipSense.Packaging;
-using log4net;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Profiles;
+using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Settings;
-using Autofac;
-using Interapptive.Shared;
+using ShipWorks.Shipping.Settings.Origin;
 using ShipWorks.ApplicationCore.Licensing;
 
 namespace ShipWorks.Shipping.Carriers.BestRate
@@ -36,16 +36,25 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         private readonly IBestRateShippingBrokerFactory brokerFactory;
 
         /// <summary>
+        /// Constructor
+        /// </summary>
+        protected BestRateShipmentType()
+        {
+
+        }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="BestRateShipmentType" /> class. This version of
         /// the constructor is primarily for testing purposes.
         /// </summary>
         /// <param name="brokerFactory">The broker factory.</param>
         /// <param name="brokerRatingService"></param>
-        public BestRateShipmentType(IBestRateShippingBrokerFactory brokerFactory, IBestRateBrokerRatingService brokerRatingService)
+        /// <param name="log">The log.</param>
+        public BestRateShipmentType(IBestRateShippingBrokerFactory brokerFactory, IBestRateBrokerRatingService brokerRatingService, Func<Type, ILog> createLogger)
         {
             this.brokerFactory = brokerFactory;
-            log = LogManager.GetLogger(typeof(BestRateShipmentType));
             this.brokerRatingService = brokerRatingService;
+            this.log = createLogger(typeof(BestRateShipmentType));
         }
 
         /// <summary>
@@ -99,10 +108,10 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                 return true;
             }
 
-            if (originID == (int)ShipmentOriginSource.Account)
+            if (originID == (int) ShipmentOriginSource.Account)
             {
                 // Copy an empty person since the account address used will depend on each carrier
-                PersonAdapter.Copy(new PersonAdapter { OriginID = (int)ShipmentOriginSource.Account }, person);
+                PersonAdapter.Copy(new PersonAdapter { OriginID = (int) ShipmentOriginSource.Account }, person);
                 return true;
             }
 
@@ -146,7 +155,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// <summary>
         /// Allows bases classes to apply the default settings to the given profile
         /// </summary>
-        protected override void ConfigurePrimaryProfile(ShippingProfileEntity profile)
+        public override void ConfigurePrimaryProfile(ShippingProfileEntity profile)
         {
             log.Warn("ConfigurePrimaryProfile called for BestRateShipmentType.");
             Debug.Assert(false, "ConfigurePrimaryProfile maybe shouldn't be called for BestRateShipmentType.");
@@ -242,7 +251,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             ShippingManager.EnsureShipmentLoaded(shipment);
             IEnumerable<RateGroup> rateGroups = GetRatesForPreProcessing(shipment);
 
-            // We want all the rates here, so we can pass them back to the coutner rate processing if needed
+            // We want all the rates here, so we can pass them back to the counter rate processing if needed
             RateGroup filteredRates = brokerRatingService.CompileBestRates(shipment, rateGroups);
             if (!filteredRates.Rates.Any())
             {
@@ -286,7 +295,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                     // over mechanism in case the processing with the first rate fails
                     ratesToApplyToReturnedShipments = rateGroups
                         .SelectMany(x => x.Rates)
-                        .Where(r => !r.IsCounterRate && r.Amount == bestRate.Amount)
+                        .Where(r => !r.IsCounterRate && r.AmountOrDefault == bestRate.AmountOrDefault)
                         .ToList();
                 }
             }
@@ -351,9 +360,9 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             List<RateResult> ratesToApplyToReturnedShipments = rateGroups
                 .ToList()
                 .SelectMany(x => x.Rates)
-                .Where(r => r.Amount == selectedRate.Amount && r.OriginalTag != null && selectedRate.OriginalTag != null && r.OriginalTag.Equals(selectedRate.OriginalTag))
+                .Where(r => r.AmountOrDefault == selectedRate.AmountOrDefault && r.OriginalTag != null && selectedRate.OriginalTag != null && r.OriginalTag.Equals(selectedRate.OriginalTag))
                 .ToList();
-            
+
             if (selectedRate.IsCounterRate)
             {
                 ratesToApplyToReturnedShipments = HandleCounterRate(shipment, rateGroups.ToList(), filteredRates, counterRatesProcessing);
@@ -384,7 +393,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             List<RateResult> ratesToApplyToReturnedShipments = null;
 
             // Get all rates that meet the specified service level ordered by amount
-            BestRateServiceLevelFilter filter = new BestRateServiceLevelFilter((ServiceLevelType)shipment.BestRate.ServiceLevel);
+            BestRateServiceLevelFilter filter = new BestRateServiceLevelFilter((ServiceLevelType) shipment.BestRate.ServiceLevel);
             RateGroup allRates = filter.Filter(new RateGroup(originalRateGroups.SelectMany(x => x.Rates)));
 
             CounterRatesProcessingArgs eventArgs = new CounterRatesProcessingArgs(allRates, filteredRates, shipment);
@@ -464,15 +473,15 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         public static void ApplySelectedShipmentRate(ShipmentEntity shipment, RateResult bestRate)
         {
             AddBestRateEvent(shipment, BestRateEventTypes.RateSelected);
-            BestRateEventTypes originalEventTypes = (BestRateEventTypes)shipment.BestRateEvents;
+            BestRateEventTypes originalEventTypes = (BestRateEventTypes) shipment.BestRateEvents;
 
-            BestRateResultTag bestRateResultTag = ((BestRateResultTag)bestRate.Tag);
+            BestRateResultTag bestRateResultTag = ((BestRateResultTag) bestRate.Tag);
 
             bestRateResultTag.RateSelectionDelegate(shipment);
 
-            // Reset the event types after the the selected shipment has been applied to
+            // Reset the event types after the selected shipment has been applied to
             // avoid losing them during the transition to the targeted shipment type
-            shipment.BestRateEvents = (byte)originalEventTypes;
+            shipment.BestRateEvents = (byte) originalEventTypes;
         }
 
         /// <summary>
@@ -495,7 +504,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
 
             InsuranceProvider shipmentInsuranceProvider = GetShipmentInsuranceProvider(shipment);
 
-            shipment.InsuranceProvider = (int)shipmentInsuranceProvider;
+            shipment.InsuranceProvider = (int) shipmentInsuranceProvider;
 
             shipment.RequestedLabelFormat = shipment.BestRate.RequestedLabelFormat;
         }
@@ -546,7 +555,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             if ((shipment.BestRateEvents & (byte) BestRateEventTypes.RateAutoSelectedAndProcessed) != (byte) BestRateEventTypes.RateAutoSelectedAndProcessed)
             {
                 // User already processed it, don't give credit for getting rates which happens during process...
-                shipment.BestRateEvents |= (byte)eventType;
+                shipment.BestRateEvents |= (byte) eventType;
             }
         }
 
@@ -557,7 +566,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         {
             if (shipment.BestRate != null)
             {
-                shipment.BestRate.RequestedLabelFormat = (int)requestedLabelFormat;
+                shipment.BestRate.RequestedLabelFormat = (int) requestedLabelFormat;
             }
         }
 

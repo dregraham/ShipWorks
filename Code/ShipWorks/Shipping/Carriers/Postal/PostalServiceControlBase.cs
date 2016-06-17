@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Autofac;
 using Interapptive.Shared;
 using Interapptive.Shared.Utility;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
-using ShipWorks.Shipping.Settings;
 using ShipWorks.UI.Controls;
 using ShipWorks.UI.Controls.Design;
 using ShipWorks.UI.Utility;
@@ -37,7 +38,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// <param name="shipmentTypeCode"></param>
         /// <param name="rateControl">A handle to the rate control so the selected rate can be updated when
         /// a change to the shipment, such as changing the service type, matches a rate in the control</param>
-        protected PostalServiceControlBase(ShipmentTypeCode shipmentTypeCode, RateControl rateControl) 
+        protected PostalServiceControlBase(ShipmentTypeCode shipmentTypeCode, RateControl rateControl)
             : base(shipmentTypeCode, rateControl)
         {
             InitializeComponent();
@@ -46,7 +47,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// <summary>
         /// Initialize the comboboxes
         /// </summary>
-        public override void Initialize()
+        protected override void Initialize()
         {
             dimensionsControl.Initialize();
 
@@ -64,18 +65,10 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// </summary>
         private void UpdateAvailablePackageTypes(IEnumerable<ShipmentEntity> shipments)
         {
-            IEnumerable<PostalPackagingType> availablePackagingTypes = ShipmentTypeManager.GetType(ShipmentTypeCode)
-                .GetAvailablePackageTypes()
-                .Cast<PostalPackagingType>()
-                .Union(shipments.Select(x => x.Postal)
-                    .Where(x => x != null)
-                    .Select(x => (PostalPackagingType) x.PackagingType))
-                .ToList();
+            Dictionary<int, string> availablePackagingTypes = ShipmentTypeManager.GetType(ShipmentTypeCode).BuildPackageTypeDictionary(shipments.ToList());
 
-            // Only Express 1 Endicia should see the cubic packaging type
             packagingType.SelectedIndexChanged -= OnChangePackaging;
-            packagingType.BindToEnumAndPreserveSelection<PostalPackagingType>(p => availablePackagingTypes.Contains(p) && 
-                (p != PostalPackagingType.Cubic || ShipmentTypeCode == ShipmentTypeCode.Express1Endicia));
+            packagingType.BindToEnumAndPreserveSelection<PostalPackagingType>(p => availablePackagingTypes.ContainsKey((int) p));
             packagingType.SelectedIndexChanged += OnChangePackaging;
         }
 
@@ -118,9 +111,6 @@ namespace ShipWorks.Shipping.Carriers.Postal
         [NDependIgnoreLongMethod]
         private void LoadShipmentDetails()
         {
-            bool allDomestic = true;
-            bool allInternational = true;
-
             List<PostalConfirmationType> availableConfirmations = EnumHelper.GetEnumList<PostalConfirmationType>().Select(e => e.Value).ToList();
 
             bool allExpressMail = true;
@@ -130,18 +120,6 @@ namespace ShipWorks.Shipping.Carriers.Postal
             {
                 // Need to check with the store  to see if anything about the shipment was overridden in case
                 // it may have effected the shipping services available (i.e. the eBay GSP program)
-                ShipmentEntity overriddenShipment = ShippingManager.GetOverriddenStoreShipment(shipment);
-
-                // Check the overridden shipment to see if all are international or domestic
-                if (overriddenShipment.ShipPerson.IsDomesticCountry())
-                {
-                    allInternational = false;
-                }
-                else
-                {
-                    allDomestic = false;
-                }
-                
                 PostalServiceType postalServiceType = (PostalServiceType) shipment.Postal.Service;
 
                 PostalShipmentType postalShipmentType = ShipmentTypeManager.GetType(shipment) as PostalShipmentType;
@@ -152,7 +130,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
 
                 // See if all have confirmation as an option or not
                 availableConfirmations = availableConfirmations.Intersect(
-                    postalShipmentType.GetAvailableConfirmationTypes(shipment.ShipCountryCode, postalServiceType, (PostalPackagingType)shipment.Postal.PackagingType))
+                    postalShipmentType.GetAvailableConfirmationTypes(shipment.ShipCountryCode, postalServiceType, (PostalPackagingType) shipment.Postal.PackagingType))
                         .ToList();
 
                 if (postalServiceType != PostalServiceType.ExpressMail)
@@ -165,55 +143,17 @@ namespace ShipWorks.Shipping.Carriers.Postal
             service.SelectedIndexChanged -= new EventHandler(OnServiceChanged);
             confirmation.SelectedIndexChanged -= OnConfirmationChanged;
 
-            List<PostalServiceType> availableServices = ShipmentTypeManager.GetType(ShipmentTypeCode).GetAvailableServiceTypes().Select(s => (PostalServiceType)s).ToList();
-            
-            // If they are all international we can load up all the international services
-            if (allInternational)
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                // We need to build the list of international services to use as the data source taking into account only the available 
-                // service types as well as the service type that the shipment is already configured with
-                List<PostalServiceType> allInternationalServices = PostalUtility.GetInternationalServices(ShipmentTypeCode);
-                List<PostalServiceType> internationalServicesToLoad = allInternationalServices.Intersect(availableServices).ToList();
-                if (LoadedShipments.Any())
-                {
-                    // Always include the service type that the shipment is currently configured in the 
-                    // event the shipment was configured prior to a service being excluded
-                    internationalServicesToLoad = internationalServicesToLoad.Union(allInternationalServices.Intersect(new List<PostalServiceType> { (PostalServiceType) LoadedShipments.First().Postal.Service })).ToList();
-                }
+                Dictionary<int, string> services = lifetimeScope.Resolve<IShipmentServicesBuilderFactory>()
+                    .Get(ShipmentTypeCode)
+                    .BuildServiceTypeDictionary(LoadedShipments);
 
                 // Bind the drop down to the international services
                 service.DataSource = ActiveEnumerationBindingSource
-                    .Create<PostalServiceType>
-                        (
-                            internationalServicesToLoad.Select(type => new KeyValuePair<string, PostalServiceType>(PostalUtility.GetPostalServiceTypeDescription(type), type)
-                        ).ToList());
+                    .Create(services.Select(type => new KeyValuePair<string, PostalServiceType>(type.Value, (PostalServiceType) type.Key)).ToList());
             }
-            // If they are all domestic we can load up all the domestic services
-            else if (allDomestic)
-            {
-                // We need to build the list of domestic services to use as the data source taking into account only the available 
-                // service types as well as the service type that the shipment is already configured with
-                List<PostalServiceType> allDomesticServices = PostalUtility.GetDomesticServices(ShipmentTypeCode);
-                List<PostalServiceType> domesticServicesToLoad = allDomesticServices.Intersect(availableServices).ToList();
-                if (LoadedShipments.Any())
-                {
-                    // Always include the service type that the shipment is currently configured in the 
-                    // event the shipment was configured prior to a service being excluded
-                    domesticServicesToLoad = domesticServicesToLoad.Union(allDomesticServices.Intersect(new List<PostalServiceType> { (PostalServiceType)LoadedShipments.First().Postal.Service })).ToList();
-                }
-                
-                // Bind the drop down to the domestic services
-                service.DataSource = ActiveEnumerationBindingSource
-                    .Create<PostalServiceType>
-                        (
-                            domesticServicesToLoad.Select(type => new KeyValuePair<string, PostalServiceType>(PostalUtility.GetPostalServiceTypeDescription(type), type)
-                        ).ToList());
-            }
-            else
-            {
-                // Otherwise there is nothing to choose from
-                service.DataSource = new KeyValuePair<string, PostalServiceType>[0];
-            }
+
             service.DisplayMember = "Key";
             service.ValueMember = "Value";
 
@@ -407,10 +347,10 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// </summary>
         private void OnServiceChanged(object sender, EventArgs e)
         {
-            PostalServiceType serviceType = service.SelectedValue == null ? PostalServiceType.PriorityMail : (PostalServiceType)service.SelectedValue;
+            PostalServiceType serviceType = service.SelectedValue == null ? PostalServiceType.PriorityMail : (PostalServiceType) service.SelectedValue;
 
             // Update the available confirmation types based on the shipping provider
-            PostalShipmentType postalShipmentType = ShipmentTypeManager.GetType(this.ShipmentTypeCode) as PostalShipmentType;            
+            PostalShipmentType postalShipmentType = ShipmentTypeManager.GetType(this.ShipmentTypeCode) as PostalShipmentType;
             UpdateConfirmationTypes(postalShipmentType.GetAvailableConfirmationTypes(personControl.CountryCode, serviceType, (PostalPackagingType?) packagingType.SelectedValue));
 
             // Only show express options for express
@@ -423,14 +363,14 @@ namespace ShipWorks.Shipping.Carriers.Postal
 
             SyncSelectedRate();
         }
-        
+
         /// <summary>
         /// Synchronizes the selected rate in the rate control.
         /// </summary>
         public override void SyncSelectedRate()
         {
-            PostalServiceType serviceType = service.SelectedValue == null ? PostalServiceType.PriorityMail : (PostalServiceType)service.SelectedValue;
-            PostalConfirmationType confirmationType = confirmation.SelectedValue == null ? PostalConfirmationType.None : (PostalConfirmationType)confirmation.SelectedValue;
+            PostalServiceType serviceType = service.SelectedValue == null ? PostalServiceType.PriorityMail : (PostalServiceType) service.SelectedValue;
+            PostalConfirmationType confirmationType = confirmation.SelectedValue == null ? PostalConfirmationType.None : (PostalConfirmationType) confirmation.SelectedValue;
 
             if (!service.MultiValued && !confirmation.MultiValued)
             {
@@ -478,7 +418,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
                 PostalShipmentType postalShipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode) as PostalShipmentType;
                 UpdateConfirmationTypes(postalShipmentType.GetAvailableConfirmationTypes(personControl.CountryCode, serviceType, (PostalPackagingType) packagingType.SelectedValue));
 
-                UpdateAvailableShipmentOptions((PostalPackagingType)packagingType.SelectedValue);
+                UpdateAvailableShipmentOptions((PostalPackagingType) packagingType.SelectedValue);
             }
         }
 
@@ -547,6 +487,18 @@ namespace ShipWorks.Shipping.Carriers.Postal
             {
                 confirmation.SelectedIndex = 0;
             }
+        }
+
+        /// <summary>
+        /// Flush any in-progress changes before saving
+        /// </summary>
+        /// <remarks>This should cause weight controls to finish, etc.</remarks>
+        public override void FlushChanges()
+        {
+            base.FlushChanges();
+
+            dimensionsControl.FlushChanges();
+            weight.FlushChanges();
         }
     }
 }
