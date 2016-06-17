@@ -3512,11 +3512,7 @@ namespace ShipWorks
         /// </summary>
         private void OnShipOrders(object sender, EventArgs e)
         {
-            throw new InvalidOperationException("Error");
-
-
-
-            //Messenger.Current.Send(new OpenShippingDialogWithOrdersMessage(this, gridControl.Selection.OrderedKeys, InitialShippingTabDisplay.Shipping))
+            Messenger.Current.Send(new OpenShippingDialogWithOrdersMessage(this, gridControl.Selection.OrderedKeys, InitialShippingTabDisplay.Shipping))
         }
 
         /// <summary>
