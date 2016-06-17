@@ -22,6 +22,14 @@ namespace ShipWorks.Shipping.Carriers.BestRate.RateGroupFiltering
         }
 
         /// <summary>
+        /// Get the result key from a rate
+        /// </summary>
+        private string RateResultKey(RateResult rate)
+        {
+            return (rate.Tag as BestRateResultTag)?.ResultKey;
+        }
+
+        /// <summary>
         /// Get the preferred cheapest rate from a group of rates
         /// </summary>
         private RateResult PreferredCheapestRate(IGrouping<string, RateResult> ratesForKey)
@@ -32,16 +40,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate.RateGroupFiltering
         }
 
         /// <summary>
-        /// Get the result key from a rate
-        /// </summary>
-        private string RateResultKey(RateResult rate)
-        {
-            return (rate.Tag as BestRateResultTag)?.ResultKey;
-        }
-
-        /// <summary>
-        /// Helper method to be able to sort/filter shipment types.  If there is a tie in cost in a ResultKey group,
-        /// we currently want Express1 types to win over Endicia, and Endicia over all others.
+        /// Returns order of preference for the carrier of the rate result
         /// </summary>
         private static int PreferredCarrier(RateResult rateResult)
         {
