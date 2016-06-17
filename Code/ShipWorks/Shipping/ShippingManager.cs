@@ -983,14 +983,6 @@ namespace ShipWorks.Shipping
                         throw new ShipmentAlreadyProcessedException("The shipment has already been processed.");
                     }
 
-                    ILicenseService licenseService = lifetimeScope.Resolve<ILicenseService>();
-                    EditionRestrictionLevel restrictionLevel = licenseService.CheckRestriction(EditionFeature.ProcessShipment, (ShipmentTypeCode) shipment.ShipmentType);
-
-                    if (restrictionLevel == EditionRestrictionLevel.Forbidden)
-                    {
-                        throw new ShippingException($"ShipWorks can no longer process {EnumHelper.GetDescription((ShipmentTypeCode) shipment.ShipmentType)} shipments. Please try using USPS.");
-                    }
-
                     StoreEntity storeEntity = StoreManager.GetStore(shipment.Order.StoreID);
                     if (storeEntity == null)
                     {
@@ -1008,6 +1000,8 @@ namespace ShipWorks.Shipping
                         return GenericResult.FromError("Processing was canceled", shipment);
                     }
 
+                    ILicenseService licenseService = lifetimeScope.Resolve<ILicenseService>();
+
                     bool success = false;
                     ShippingException lastException = null;
                     ShipmentEntity processedShipment = null;
@@ -1016,6 +1010,10 @@ namespace ShipWorks.Shipping
                     {
                         try
                         {
+                            // We have to test this here because at this point the shipment has been converted to its
+                            // real time if it was originally best rate
+                            EnsureShipmentTypesAreAllowed(shipmentToTry.ShipmentTypeCode, licenseService);
+
                             using (SqlAdapter adapter = new SqlAdapter(true))
                             {
                                 adapter.SaveAndRefetch(shipmentToTry);
@@ -1053,6 +1051,19 @@ namespace ShipWorks.Shipping
             {
                 log.InfoFormat("Could not obtain lock for processing shipment {0}", shipment.ShipmentID);
                 throw new ShippingException("The shipment was being processed on another computer.", ex);
+            }
+        }
+
+        /// <summary>
+        /// Ensure that the shipment type has not been restricted
+        /// </summary>
+        private static void EnsureShipmentTypesAreAllowed(ShipmentTypeCode shipmentType, ILicenseService licenseService)
+        {
+            EditionRestrictionLevel restrictionLevel = licenseService.CheckRestriction(EditionFeature.ProcessShipment, shipmentType);
+
+            if (restrictionLevel == EditionRestrictionLevel.Forbidden)
+            {
+                throw new ShippingException($"ShipWorks can no longer process {EnumHelper.GetDescription(shipmentType)} shipments. Please try using USPS.");
             }
         }
 
