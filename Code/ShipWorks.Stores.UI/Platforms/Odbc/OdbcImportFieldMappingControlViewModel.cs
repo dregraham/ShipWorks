@@ -276,7 +276,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
                     {
                         for (int i = numberOfAttributesPerItem; i > value; i--)
                         {
-                            displayMap.Map.RemoveEntryAt(displayMap.Map.Entries.Count() - 1);
+                            displayMap.Map.RemoveEntryAt(displayMap.Map.Entries.Count - 1);
                         }
                     }
                 }

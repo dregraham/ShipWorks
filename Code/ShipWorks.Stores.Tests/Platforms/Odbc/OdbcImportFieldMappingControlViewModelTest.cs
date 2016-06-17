@@ -385,6 +385,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
                 dataSource.Setup(d => d.Name).Returns("My data source");
 
                 var testObject = mock.Create<OdbcImportFieldMappingControlViewModel>();
+                testObject.Load(dataSource.Object);
 
                 Assert.Equal("My data source", testObject.MapName);
             }
@@ -415,6 +416,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
                 dataSource.Setup(d => d.Name).Returns("My data source");
 
                 var testObject = mock.Create<OdbcImportFieldMappingControlViewModel>();
+                testObject.Load(dataSource.Object);
                 testObject.SelectedTable = new OdbcTable("My table");
                 testObject.MapName = "I entered my own map name";
 
@@ -431,6 +433,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
                 dataSource.Setup(d => d.Name).Returns("My data source");
 
                 var testObject = mock.Create<OdbcImportFieldMappingControlViewModel>();
+                testObject.Load(dataSource.Object);
                 testObject.MapName = "My data source";
                 testObject.SelectedTable = new OdbcTable("My table");
 
@@ -447,6 +450,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
                 dataSource.Setup(d => d.Name).Returns("My data source");
 
                 var testObject = mock.Create<OdbcImportFieldMappingControlViewModel>();
+                testObject.Load(dataSource.Object);
                 testObject.MapName = "My data source";
                 testObject.SelectedTable = new OdbcTable("My old table");
                 testObject.SelectedTable = new OdbcTable("My new table");
