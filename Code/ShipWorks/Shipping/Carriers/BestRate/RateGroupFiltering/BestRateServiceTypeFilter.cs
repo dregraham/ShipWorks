@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 
 namespace ShipWorks.Shipping.Carriers.BestRate.RateGroupFiltering
@@ -15,63 +14,43 @@ namespace ShipWorks.Shipping.Carriers.BestRate.RateGroupFiltering
         /// </summary>
         public RateGroup Filter(RateGroup rateGroup)
         {
-            // Now group by the ResultKey, so that we can then get the cheapest rate per group
-            IEnumerable<RateResult> orderedRates = rateGroup.Rates.GroupBy(reateResult => ((BestRateResultTag)reateResult.Tag).ResultKey,
-                                                (rateResultSource, rateResultSelector) => rateResultSelector.Aggregate(RateResultsGroupBySelector));
+            IEnumerable<RateResult> orderedRates = rateGroup.Rates
+                .GroupBy(RateResultKey)
+                .Select(PreferredCheapestRate);
 
             return rateGroup.CopyWithRates(orderedRates);
+        }
+
+        /// <summary>
+        /// Get the preferred cheapest rate from a group of rates
+        /// </summary>
+        private RateResult PreferredCheapestRate(IGrouping<string, RateResult> ratesForKey)
+        {
+            return ratesForKey.OrderBy(x => x.Amount)
+                .ThenBy(PreferredCarrier)
+                .FirstOrDefault();
+        }
+
+        /// <summary>
+        /// Get the result key from a rate
+        /// </summary>
+        private string RateResultKey(RateResult rate)
+        {
+            return (rate.Tag as BestRateResultTag)?.ResultKey;
         }
 
         /// <summary>
         /// Helper method to be able to sort/filter shipment types.  If there is a tie in cost in a ResultKey group,
         /// we currently want Express1 types to win over Endicia, and Endicia over all others.
         /// </summary>
-        private static int CarrierSortValue(RateResult rateResult)
+        private static int PreferredCarrier(RateResult rateResult)
         {
             switch (rateResult.ShipmentType)
             {
-                case ShipmentTypeCode.Express1Endicia:
-                    return 0;
-                case ShipmentTypeCode.Express1Usps:
-                    return 1;
-                case ShipmentTypeCode.Endicia:
-                    return 2;
-                default:
-                    return 50;
+                case ShipmentTypeCode.Usps: return 0;
+                case ShipmentTypeCode.Endicia: return 1;
+                default: return 8;
             }
-        }
-
-        /// <summary>
-        /// Method used by the GroupBy Aggregate function to find the service types to return.
-        /// Lowest cost will be returned.  If the cost of two service types are the same, Endicia will be returned.
-        /// </summary>
-        private RateResult RateResultsGroupBySelector(RateResult currentRateResult, RateResult nextRateResult)
-        {
-            if (currentRateResult.AmountOrDefault < nextRateResult.AmountOrDefault)
-            {
-                return currentRateResult;
-            }
-            
-            if (currentRateResult.AmountOrDefault > nextRateResult.AmountOrDefault)
-            {
-                return nextRateResult;
-            }
-
-            int currentRateResultCarrierSort = CarrierSortValue(currentRateResult);
-            int nextRateResultCarrierSort = CarrierSortValue(nextRateResult);
-
-            if (currentRateResultCarrierSort < nextRateResultCarrierSort)
-            {
-                return currentRateResult;
-            }
-
-            if (nextRateResultCarrierSort < currentRateResultCarrierSort)
-            {
-                return nextRateResult;
-            }
-
-            // The carrier rate sorts were equal, chose the current rate as it should be the faster service type.
-            return currentRateResult;
         }
     }
 }
