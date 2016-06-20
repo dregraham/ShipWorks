@@ -82,6 +82,18 @@ namespace :build do
 		msb.targets :Build
 	end
 
+	desc "Build Shipworks in the Debug configuration and set to 32 bit"
+	task :debug32 => "build:debug" do |msb|
+		puts "Setting to 32-bit...\r\n\r\n"
+		corFlags = 'C:\\Program Files (x86)\\Microsoft SDKs\\Windows\\v10.0A\\bin\\NETFX 4.6.1 Tools\\CorFlags.exe'
+		if File.exists? corFlags
+			command = '"' + corFlags + '" .\\Artifacts\\Application\\ShipWorks.exe /32bit+ /Force'
+			sh command
+		else
+			puts "Error: could not find CorFlags.exe at #{corFlags}"
+		end
+	end
+
 	desc "Build ShipWorks in the Release configuration"
 	msbuild :release => ["build:clean", "build:restore"] do |msb|
 		print "Building solution with the release config...\r\n\r\n"
