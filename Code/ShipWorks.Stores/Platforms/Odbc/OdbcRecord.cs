@@ -16,7 +16,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
         public string RecordIdentifier { get; set; }
 
         /// <summary>
-        /// Gets a value indicating whether this record has any values.
+		/// Gets a value indicating whether this record has values.
         /// </summary>
         public bool HasValues => fields.Any();
 

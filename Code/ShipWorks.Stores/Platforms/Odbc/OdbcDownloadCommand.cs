@@ -111,7 +111,9 @@ namespace ShipWorks.Stores.Platforms.Odbc
                 string tableNameInQuotes = cmdBuilder.QuoteIdentifier(fieldMap.GetExternalTableName());
 
                 List<string> columnNamesInQuotes = fieldMap.Entries.Select(e => cmdBuilder.QuoteIdentifier(e.ExternalField.Column.Name)).ToList();
+
                 columnNamesInQuotes.Add(cmdBuilder.QuoteIdentifier(fieldMap.RecordIdentifierSource));
+
                 string columnsToProject = string.Join(",", columnNamesInQuotes.Distinct());
 
                 string query = $"SELECT {columnsToProject} FROM {tableNameInQuotes}";

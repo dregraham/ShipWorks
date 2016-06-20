@@ -1,6 +1,7 @@
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -14,7 +15,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 	public class OdbcFieldMap : IOdbcFieldMap
     {
 		private readonly IOdbcFieldMapIOFactory ioFactory;
-        private readonly List<IOdbcFieldMapEntry> entries;
+        private readonly ObservableCollection<IOdbcFieldMapEntry> entries;
 
         /// <summary>
         /// Constructor
@@ -24,14 +25,14 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 		    MethodConditions.EnsureArgumentIsNotNull(ioFactory);
 
 		    this.ioFactory = ioFactory;
-		    entries = new List<IOdbcFieldMapEntry>();
+		    entries = new ObservableCollection<IOdbcFieldMapEntry>();
 		}
 
         /// <summary>
         /// The ODBC Field Map Entries
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public IEnumerable<IOdbcFieldMapEntry> Entries => entries;
+        public ObservableCollection<IOdbcFieldMapEntry> Entries => entries;
 
         /// <summary>
         /// Gets or sets the name of the record identifier column.
@@ -47,11 +48,22 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 		}
 
         /// <summary>
+        /// Removes the entry
+        /// </summary>
+        public void RemoveEntry(IOdbcFieldMapEntry entry)
+        {
+            entries.Remove(entry);
+        }
+
+        /// <summary>
         /// Reset all of the entries external fields
         /// </summary>
         private void ResetValues()
         {
-            entries.ForEach(e => e.ExternalField.ResetValue());
+            foreach (var entry in entries)
+            {
+                entry.ExternalField.ResetValue();
+            }
         }
 
         /// <summary>
@@ -172,7 +184,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
                 return clonedFieldMap;
             }
         }
-
+	
         /// <summary>
         /// Gets the name of the external table.
         /// </summary>
