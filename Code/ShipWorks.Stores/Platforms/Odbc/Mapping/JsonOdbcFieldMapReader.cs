@@ -1,10 +1,9 @@
-using System;
-using System.IO;
-using System.Linq;
 using Interapptive.Shared.Utility;
 using log4net;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System;
+using System.Linq;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 {
@@ -19,44 +18,27 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         private int entryPosition;
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="JsonOdbcFieldMapReader"/> class.
         /// </summary>
-        public JsonOdbcFieldMapReader(Stream stream, ILog log)
+        /// <exception cref="ShipWorksOdbcException">ShipWorks was unable to read the ODBC Map.</exception>
+        public JsonOdbcFieldMapReader(string serializedMap, ILog log)
         {
-            MethodConditions.EnsureArgumentIsNotNull(stream);
+            MethodConditions.EnsureArgumentIsNotNull(serializedMap);
+
             this.log = log;
 
-            stream.Position = 0;
             try
             {
-                using (StreamReader streamReader = new StreamReader(stream))
-                {
-                    string data = streamReader.ReadToEnd();
-                    json = JObject.Parse(data);
-
-                    mapEntries = json["Entries"];
-
-                    // Sent the entry position used when reading the Odbc field map entries
-                    entryPosition = 0;
-                }
+                json = JObject.Parse(serializedMap);
+                mapEntries = json["Entries"];
             }
-            catch (Exception ex)
+            catch (Exception ex) when (ex is JsonReaderException || ex is ArgumentException)
             {
-                Type exType = ex.GetType();
-                log.Error("Error reading map", ex);
-
-                // If its an error throw while reading the stream or parsing the json
-                // rethrow as a ShipWorksOdbcException.
-                if (exType == typeof(JsonReaderException) ||
-                    exType == typeof(ArgumentException) ||
-                    exType == typeof(IOException))
-                {
-                    throw new ShipWorksOdbcException("ShipWorks was unable to read the ODBC Map.", ex);
-                }
-
-                // this exception is unexpected so we throw.
-                throw;
+                throw new ShipWorksOdbcException("ShipWorks was unable to read the ODBC Map.", ex);
             }
+
+            // Sent the entry position used when reading the Odbc field map entries
+            entryPosition = 0;
         }
 
         /// <summary>
@@ -110,7 +92,24 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
             catch (Exception ex)
             {
                 log.Error("Error Deserializing Field Map Entry.", ex);
-                return null;
+                throw new ShipWorksOdbcException("Error Deserializing Field Map Entry.", ex);
+            }
+        }
+
+        /// <summary>
+        /// Reads the record identifier source from the stream
+        /// </summary>
+        /// <returns></returns>
+        public string ReadRecordIdentifierSource()
+        {
+            try
+            {
+                return json["RecordIdentifierSource"].ToString();
+            }
+            catch (Exception ex)
+            {
+                log.Error("Error parsing Record Identifier Source from map.", ex);
+                return string.Empty;
             }
         }
     }

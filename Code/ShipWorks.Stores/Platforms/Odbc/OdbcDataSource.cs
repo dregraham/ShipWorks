@@ -1,5 +1,4 @@
-﻿using Interapptive.Shared.Security;
-using Interapptive.Shared.Utility;
+﻿using Interapptive.Shared.Utility;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -17,16 +16,14 @@ namespace ShipWorks.Stores.Platforms.Odbc
     public class OdbcDataSource : IOdbcDataSource
     {
         private readonly IShipWorksDbProviderFactory odbcProvider;
-        private readonly IEncryptionProvider encryptionProvider;
         private string customConnectionString;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public OdbcDataSource(IShipWorksDbProviderFactory odbcProvider, IEncryptionProviderFactory encryptionProviderFactory)
+        public OdbcDataSource(IShipWorksDbProviderFactory odbcProvider)
         {
             this.odbcProvider = odbcProvider;
-            encryptionProvider = encryptionProviderFactory.CreateOdbcEncryptionProvider();
         }
 
         /// <summary>
@@ -148,21 +145,21 @@ namespace ShipWorks.Stores.Platforms.Odbc
         }
 
         /// <summary>
-        /// Serialize and encrypt the OdbcDataSource
+        /// Serialize the OdbcDataSource
         /// </summary>
-        public string Serialize()
+        public virtual string Serialize()
         {
-            return encryptionProvider.Encrypt(JsonConvert.SerializeObject(this));
+            return JsonConvert.SerializeObject(this);
         }
 
         /// <summary>
         /// Populate the OdbcDataSource using the given json string
         /// </summary>
-        public void Restore(string json)
+        public virtual void Restore(string json)
         {
             try
             {
-                JObject dataSource = JObject.Parse(encryptionProvider.Decrypt(json));
+                JObject dataSource = JObject.Parse(json);
 
                 Name = dataSource["Name"].ToString();
                 bool custom;
@@ -171,9 +168,9 @@ namespace ShipWorks.Stores.Platforms.Odbc
                 Password = dataSource["Password"].ToString();
                 ConnectionString = dataSource["ConnectionString"].ToString();
             }
-            catch (JsonReaderException)
+            catch (JsonReaderException ex)
             {
-                throw new ShipWorksOdbcException("Failed to restore data source");
+                throw new ShipWorksOdbcException("Failed to restore data source", ex);
             }
         }
 

@@ -7,6 +7,7 @@ using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
 using System;
 using System.IO;
+using Interapptive.Shared.Extensions;
 using Xunit;
 
 namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
@@ -22,20 +23,12 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
             log = mock.Mock<ILog>();
         }
 
-        [Fact]
-        public void ReadExternalTableName_ReturnsExternalName()
-        {
-            Stream stream = GetStreamWithFieldMap();
-            JsonOdbcFieldMapReader reader = new JsonOdbcFieldMapReader(stream, log.Object);
-
-            Assert.Equal("OdbcFieldMapExternalTableName", reader.ReadExternalTableName());
-        }
 
         [Fact]
         public void ReadyEntry_ReturnsOdbcFieldMapEntry()
         {
-            Stream stream = GetStreamWithFieldMap();
-            JsonOdbcFieldMapReader reader = new JsonOdbcFieldMapReader(stream, log.Object);
+            var map = GetSerializedFieldMap();
+            JsonOdbcFieldMapReader reader = new JsonOdbcFieldMapReader(map, log.Object);
 
             OdbcFieldMapEntry entry = reader.ReadEntry();
 
@@ -45,8 +38,8 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
         [Fact]
         public void ReadyEntry_ReturnsNullWhenNoMoreEntriesExist()
         {
-            Stream stream = GetStreamWithFieldMap();
-            JsonOdbcFieldMapReader reader = new JsonOdbcFieldMapReader(stream, log.Object);
+            var map = GetSerializedFieldMap();
+            JsonOdbcFieldMapReader reader = new JsonOdbcFieldMapReader(map, log.Object);
 
             reader.ReadEntry();
             OdbcFieldMapEntry entry2 = reader.ReadEntry();
@@ -54,21 +47,19 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
             Assert.Null(entry2);
         }
 
-        private Stream GetStreamWithFieldMap()
+        private string GetSerializedFieldMap()
         {
-            MemoryStream stream = new MemoryStream();
-
-            OdbcFieldMap map = new OdbcFieldMap(GetIoFactory())
+            using (MemoryStream stream = new MemoryStream())
             {
-                ExternalTableName = "OdbcFieldMapExternalTableName"
-            };
+                OdbcFieldMap map = new OdbcFieldMap(GetIoFactory());
 
-            map.AddEntry(GetFieldMapEntry(GetShipWorksField(OrderFields.OrderNumber, "Order Number"),
-                GetExternalField("SomeTableName", "SomeColumnName")));
+                map.AddEntry(GetFieldMapEntry(GetShipWorksField(OrderFields.OrderNumber, "Order Number"),
+                    GetExternalField("SomeTableName", "SomeColumnName")));
 
-            map.Save(stream);
+                map.Save(stream);
 
-            return stream;
+                return stream.ConvertToString();
+            }
         }
 
         private OdbcFieldMapEntry GetFieldMapEntry(ShipWorksOdbcMappableField shipworksField, ExternalOdbcMappableField externalField)
@@ -92,7 +83,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
 
             ioFactory.Setup(f => f.CreateWriter(It.IsAny<OdbcFieldMap>()))
                 .Returns((OdbcFieldMap m) => new JsonOdbcFieldMapWriter(m));
-            ioFactory.Setup(f => f.CreateReader(It.IsAny<Stream>())).Returns<Stream>(s => new JsonOdbcFieldMapReader(s, log.Object));
+            ioFactory.Setup(f => f.CreateReader(It.IsAny<Stream>())).Returns<Stream>(s => new JsonOdbcFieldMapReader(s.ConvertToString(), log.Object));
 
             return ioFactory.Object;
         }

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.SqlClient;
-using System.Diagnostics;
-using System.Linq;
-using Common.Logging;
+﻿using Common.Logging;
 using ComponentFactory.Krypton.Toolkit;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
@@ -26,6 +20,12 @@ using ShipWorks.Stores.Platforms.Ebay.Tokens;
 using ShipWorks.Stores.Platforms.Ebay.WebServices;
 using ShipWorks.Stores.Platforms.PayPal;
 using ShipWorks.Stores.Platforms.PayPal.WebServices;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
+using System.Diagnostics;
+using System.Linq;
 
 namespace ShipWorks.Stores.Platforms.Ebay
 {
@@ -527,16 +527,16 @@ namespace ShipWorks.Stores.Platforms.Ebay
         }
 
         /// <summary>
-        /// Doeses the downloaded address match original.
+        /// Does the downloaded address match original.
         /// </summary>
         private static bool DoesDownloadedAddressMatchOriginal(EbayOrderEntity order, AddressAdapter downloadedShipAddress)
         {
             bool downloadAddressMatchesOriginal = false;
 
             // See if there is an original address and if it matches the downloaded address.
-            List<ValidatedAddressEntity> validatedAddressEntities = ValidatedAddressManager.GetSuggestedAddresses(SqlAdapter.Default, order.OrderID, "Ship");
-            ValidatedAddressEntity originalAddress = validatedAddressEntities.Where(entity => entity.IsOriginal)
-                .OrderByDescending(entity => entity.ValidatedAddressID).FirstOrDefault();
+            ValidatedAddressEntity originalAddress =
+                ValidatedAddressManager.GetOriginalAddress(SqlAdapter.Default, order.OrderID, "Ship");
+
             if (originalAddress != null)
             {
                 AddressAdapter originalAddressAdapter = new AddressAdapter(originalAddress, "");

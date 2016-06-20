@@ -2,8 +2,11 @@
 using Interapptive.Shared.Security;
 using ShipWorks.ApplicationCore.Security;
 using ShipWorks.Stores.Platforms.Odbc;
+using ShipWorks.Stores.Platforms.Odbc.Loaders;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
 using ShipWorks.Stores.UI.Platforms.Odbc.WizardPages;
+using System.Reflection;
+using Module = Autofac.Module;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc
 {
@@ -29,8 +32,8 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             builder.RegisterType<OdbcControlPanel>()
                 .AsImplementedInterfaces();
 
-            builder.RegisterType<OdbcDataSource>()
-                .AsImplementedInterfaces();
+            builder.RegisterType<EncryptedOdbcDataSource>()
+                .As<IOdbcDataSource>();
 
             builder.RegisterType<OdbcCipherKey>()
                 .Keyed<ICipherKey>(CipherContext.Odbc);
@@ -46,6 +49,9 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
 
             builder.RegisterType<OdbcFieldMapFactory>()
                 .AsImplementedInterfaces();
+
+            builder.RegisterType<OdbcFieldMap>()
+                .As<IOdbcFieldMap>();
 
             builder.RegisterType<JsonOdbcFieldMapIOFactory>()
                 .AsImplementedInterfaces();
@@ -68,6 +74,34 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
 
             builder.RegisterType<OdbcSchema>()
                 .AsImplementedInterfaces();
+
+            builder.RegisterType<OdbcDownloadCommand>();
+
+            builder.RegisterType<OdbcStoreDownloader>();
+
+            builder.RegisterType<OdbcCommandFactory>();
+
+            RegisterOrderLoadingTypes(builder);
+        }
+
+        /// <summary>
+        /// Registers the order loading types.
+        /// </summary>
+        private static void RegisterOrderLoadingTypes(ContainerBuilder builder)
+        {
+            builder.RegisterType<OdbcOrderLoader>()
+                .As<IOdbcOrderLoader>();
+
+            builder.RegisterType<OdbcOrderItemLoader>()
+                .As<IOdbcOrderItemLoader>();
+
+            builder.RegisterType<OdbcItemAttributeLoader>()
+                .As<IOdbcItemAttributeLoader>();
+
+            builder
+                .RegisterAssemblyTypes(Assembly.GetAssembly(typeof(IOdbcOrderDetailLoader)))
+                .Where(t => typeof(IOdbcOrderDetailLoader).IsAssignableFrom(t))
+                .As<IOdbcOrderDetailLoader>();
         }
     }
 }

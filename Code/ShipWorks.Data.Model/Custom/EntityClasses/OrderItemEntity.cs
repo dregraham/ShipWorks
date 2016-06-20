@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 
 namespace ShipWorks.Data.Model.EntityClasses
@@ -15,7 +12,21 @@ namespace ShipWorks.Data.Model.EntityClasses
         static string baseObjectName = new OrderItemEntity().LLBLGenProEntityName;
 
         /// <summary>
-        /// Speciality property used by the 2x upgrader when updating ebay order items.  Without this set, every time an EbayOrderItem is updated
+        /// Initializes a new instance of the <see cref="OrderItemEntity"/> class.
+        /// </summary>
+        /// <remarks>Sets the order and initializes nulls to default.</remarks>
+        public OrderItemEntity(OrderEntity order)
+            : this()
+        {
+            MethodConditions.EnsureArgumentIsNotNull(order);
+
+            ((IEntity2)order).SetRelatedEntity(this, "OrderItems");
+
+            InitializeNullsToDefault();
+        }
+
+        /// <summary>
+        /// Specialty property used by the 2x upgrader when updating ebay order items.  Without this set, every time an EbayOrderItem is updated
         /// the base OrderItem is forced dirty as well, taking way to long to perform.
         /// </summary>
         public static bool Is2xUpgraderUpdatingEffectiveEbayFields

@@ -23,6 +23,16 @@ namespace ShipWorks.Stores.UI
             builder.RegisterType<StoreTypeManagerWrapper>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
+
+            builder.RegisterType<OrderRepository>()
+                .As<IOrderRepository>()
+                .SingleInstance();
+
+            builder.RegisterType<OrderNote>()
+                .As<IOrderNote>();
+
+            builder.RegisterType<OrderChargeCalculator>()
+                .As<IOrderChargeCalculator>();
         }
     }
 }

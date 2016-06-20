@@ -90,6 +90,8 @@
     <Compile Include="Custom\IParcelAccountEntityTest.cs" />
     <Compile Include="Custom\NullCarrierAccountTest.cs" />
     <Compile Include="Custom\OnTracAccountEntityTest.cs" />
+    <Compile Include="Custom\OrderItemAttributeEntityTest.cs" />
+    <Compile Include="Custom\OrderItemEntityTest.cs" />
     <Compile Include="Custom\UpsAccountEntityTest.cs" />
     <Compile Include="Custom\UspsAccountEntityTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

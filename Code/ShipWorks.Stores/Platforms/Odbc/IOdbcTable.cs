@@ -1,5 +1,6 @@
-﻿using System.Collections.Generic;
-using log4net;
+﻿using log4net;
+using System.Collections.Generic;
+using System.Reflection;
 
 namespace ShipWorks.Stores.Platforms.Odbc
 {
@@ -16,12 +17,8 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// <summary>
         /// The tables name
         /// </summary>
+        [Obfuscation(Exclude = true)]
         string Name { get; }
-
-        /// <summary>
-        /// Resets the columns.
-        /// </summary>
-        void ResetColumns();
 
         /// <summary>
         /// Loads the columns for this table

@@ -35,15 +35,15 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         public event PropertyChangedEventHandler PropertyChanged;
 
         private IOdbcTable previousSelectedTable = null;
+        private string mapName;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcImportFieldMappingControlViewModel"/> class.
         /// </summary>
-        public OdbcImportFieldMappingControlViewModel(IOdbcFieldMapFactory fieldMapFactory, IOdbcDataSource dataSource,
+        public OdbcImportFieldMappingControlViewModel(IOdbcFieldMapFactory fieldMapFactory, 
             IOdbcSchema schema, Func<Type, ILog> logFactory, IMessageHelper messageHelper)
         {
             this.fieldMapFactory = fieldMapFactory;
-            this.DataSource = dataSource;
             this.schema = schema;
             this.logFactory = logFactory;
             this.messageHelper = messageHelper;
@@ -66,13 +66,24 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// Gets the data source.
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public IOdbcDataSource DataSource { get; }
+        public IOdbcDataSource DataSource { get; private set; }
 
         /// <summary>
         /// The name the map will be saved as.
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public string MapName { get; set; }
+        public string MapName
+        {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(mapName))
+                {
+                    mapName = SelectedTable == null ? DataSource.Name : $"{DataSource.Name} - {SelectedTable.Name}";
+                }
+                return mapName;
+            }
+            set { handler.Set(nameof(MapName), ref mapName, value); }
+        }
 
         /// <summary>
         /// The external odbc tables.
@@ -96,7 +107,21 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         public IOdbcTable SelectedTable
         {
             get { return selectedTable; }
-            set { handler.Set(nameof(SelectedTable), ref selectedTable, value); }
+            set
+            {
+                // Set map name for the user, if they have not altered it.
+                // Starts by setting map name to selected data source name.
+                // When a table is selected, if map name is untouched by user,
+                // the map name is changed to "DataSourceName - SelectedColumnName"
+                if (MapName != null && DataSource.Name != null &&
+                    (MapName.Equals(DataSource.Name, StringComparison.InvariantCulture) ||
+                    MapName.Equals($"{DataSource.Name} - {SelectedTable.Name}", StringComparison.InvariantCulture)))
+                {
+                    MapName = $"{DataSource.Name} - {value.Name}";
+                }
+
+                handler.Set(nameof(SelectedTable), ref selectedTable, value);
+            }
         }
 
         /// <summary>
@@ -150,17 +175,23 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         public OdbcFieldMapDisplay ItemFieldMap { get; set; }
 
         /// <summary>
+        /// Gets or sets the record identifier for multiline order items
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public OdbcColumn RecordIdentifier { get; set; }
+
+        /// <summary>
         /// Loads the external odbc tables.
         /// </summary>
-        public void Load(OdbcStoreEntity store)
+        public void Load(IOdbcDataSource dataSource)
         {
-            MethodConditions.EnsureArgumentIsNotNull(store);
+            MethodConditions.EnsureArgumentIsNotNull(dataSource);
 
             try
             {
-                DataSource.Restore(store.ConnectionString);
-                schema.Load(DataSource);
+                DataSource = dataSource;
 
+                schema.Load(DataSource);
                 Tables = schema.Tables;
             }
             catch (ShipWorksOdbcException ex)
@@ -211,6 +242,12 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
                 return false;
             }
 
+            if (string.IsNullOrWhiteSpace(RecordIdentifier?.Name))
+            {
+                messageHelper.ShowError("When orders contain items on multiple lines, an order identifier is required to be mapped.");
+                return false;
+            }
+
             return true;
         }
 
@@ -226,13 +263,12 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
                 ItemFieldMap.Map
             });
 
-            map.ExternalTableName = selectedTable.Name;
-
             map.Entries.ToList().ForEach(e =>
             {
                 e.ExternalField.Table = selectedTable;
-                e.ExternalField.Table.ResetColumns();
             });
+
+            map.RecordIdentifierSource = RecordIdentifier?.Name;
 
             return map;
         }
@@ -277,8 +313,8 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         {
             SaveFileDialog dlg = new SaveFileDialog
             {
-                DefaultExt = "swm",
-                Filter = "ShipWorks Map Files|*.swm"
+                DefaultExt = "swdbm",
+                Filter = "ShipWorks Database Map|*.swdbm"
             };
 
             bool? result = dlg.ShowDialog();

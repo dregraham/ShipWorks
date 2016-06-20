@@ -1,3 +1,4 @@
+using Interapptive.Shared.Utility;
 using System.Reflection;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Mapping
@@ -6,6 +7,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
     /// Entry in the OdbcFieldMap.
     /// Maps a ShipWorks database column to an external Odbc column
     /// </summary>
+    [Obfuscation(Exclude = true)]
     public class OdbcFieldMapEntry : IOdbcFieldMapEntry
     {
         /// <summary>
@@ -22,13 +24,30 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <summary>
         /// Gets the ShipWorks field.
         /// </summary>
-        [Obfuscation(Exclude = true)]
-        public ShipWorksOdbcMappableField ShipWorksField { get; }
+        public IShipWorksOdbcMappableField ShipWorksField { get; }
 
         /// <summary>
         /// Gets the external field.
         /// </summary>
-        [Obfuscation(Exclude = true)]
-        public ExternalOdbcMappableField ExternalField { get; }
-	}
+        public IExternalOdbcMappableField ExternalField { get; }
+
+        /// <summary>
+        /// Loads the given ODBC Record into the External Field
+        /// </summary>
+        [Obfuscation(Exclude = false)]
+        public void LoadExternalField(OdbcRecord record)
+        {
+            MethodConditions.EnsureArgumentIsNotNull(record);
+            ExternalField.LoadValue(record);
+        }
+
+        /// <summary>
+        /// Copy the value from the External Field into the ShipWorks Field
+        /// </summary>
+        [Obfuscation(Exclude = false)]
+        public void CopyExternalValueToShipWorksField()
+        {
+            ShipWorksField?.LoadValue(ExternalField?.Value);
+        }
+    }
 }

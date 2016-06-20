@@ -7,11 +7,9 @@ namespace Interapptive.Shared.Security
     /// <summary>
     /// Class for encrypting and decrypting using AES
     /// </summary>
-    public class AesEncryptionProvider : IEncryptionProvider, IDisposable
+    public class AesEncryptionProvider : IEncryptionProvider
     {
         private readonly ICipherKey cipherKey;
-
-        private AesManaged AesManaged => new AesManaged { IV = cipherKey.InitializationVector, Key = cipherKey.Key };
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AesEncryptionProvider"/> class.
@@ -34,8 +32,11 @@ namespace Interapptive.Shared.Security
             try
             {
                 byte[] buffer = Encoding.ASCII.GetBytes(plainText);
-                ICryptoTransform encryptor = AesManaged.CreateEncryptor();
-                return Convert.ToBase64String(encryptor.TransformFinalBlock(buffer, 0, buffer.Length));
+                using (AesManaged aesManaged = GetAesManaged())
+                {
+                    ICryptoTransform encryptor = aesManaged.CreateEncryptor();
+                    return Convert.ToBase64String(encryptor.TransformFinalBlock(buffer, 0, buffer.Length));
+                }
             }
             catch (Exception ex)
             {
@@ -56,8 +57,12 @@ namespace Interapptive.Shared.Security
             try
             {
                 byte[] buffer = Convert.FromBase64String(encryptedText);
-                ICryptoTransform decryptor = AesManaged.CreateDecryptor();
-                return Encoding.ASCII.GetString(decryptor.TransformFinalBlock(buffer, 0, buffer.Length));
+                using (AesManaged aesManaged = GetAesManaged())
+                {
+                    ICryptoTransform decryptor = aesManaged.CreateDecryptor();
+                    return Encoding.ASCII.GetString(decryptor.TransformFinalBlock(buffer, 0, buffer.Length));
+                }
+                
             }
             catch (Exception ex)
             {
@@ -66,11 +71,8 @@ namespace Interapptive.Shared.Security
         }
 
         /// <summary>
-        /// Releases unmanaged and - optionally - managed resources.
+        /// Gets the aes managed.
         /// </summary>
-        public void Dispose()
-        {
-            AesManaged.Dispose();
-        }
+        private AesManaged GetAesManaged() => new AesManaged { IV = cipherKey.InitializationVector, Key = cipherKey.Key };
     }
 }

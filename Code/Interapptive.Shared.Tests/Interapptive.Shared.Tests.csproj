@@ -97,6 +97,7 @@
     <Compile Include="Utility\EnumHelperTest.cs" />
     <Compile Include="Utility\CaseInsensitiveEqualityComparerTest.cs" />
     <Compile Include="Utility\DoubleExtensionsTest.cs" />
+    <Compile Include="Utility\StreamUtilityTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -167,6 +167,7 @@
     <Compile Include="Custom\EntityClasses\NullCarrierAccount.cs" />
     <Compile Include="Custom\EntityClasses\NullEntity.cs" />
     <Compile Include="Custom\EntityClasses\OnTracAccountEntity.cs" />
+    <Compile Include="Custom\EntityClasses\OrderItemAttributeEntity.cs" />
     <Compile Include="Custom\EntityClasses\OrderItemEntity.cs" />
     <Compile Include="Custom\EntityClasses\ShippingDefaultsRuleEntity.cs" />
     <Compile Include="Custom\EntityClasses\ShippingProfileEntity.cs" />

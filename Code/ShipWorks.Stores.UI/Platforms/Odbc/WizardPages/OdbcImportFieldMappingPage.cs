@@ -1,6 +1,4 @@
-﻿using Autofac;
-using Interapptive.Shared.UI;
-using ShipWorks.ApplicationCore;
+﻿using Interapptive.Shared.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.Odbc;
@@ -14,15 +12,22 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
     /// </summary>
     public partial class OdbcImportFieldMappingPage : AddStoreWizardPage, IOdbcWizardPage
     {
-        private ILifetimeScope scope;
+        private readonly IMessageHelper messageHelper;
+        private readonly Func<IOdbcDataSource> dataSourceFactory;
+        private readonly Func<IOdbcImportFieldMappingControlViewModel> viewModelFactory;
         private IOdbcImportFieldMappingControlViewModel viewModel;
         private OdbcStoreEntity store;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcImportFieldMappingPage"/> class.
         /// </summary>
-        public OdbcImportFieldMappingPage()
+        public OdbcImportFieldMappingPage(IMessageHelper messageHelper,
+            Func<IOdbcDataSource> dataSourceFactory,
+            Func<IOdbcImportFieldMappingControlViewModel> viewModelFactory)
         {
+            this.messageHelper = messageHelper;
+            this.dataSourceFactory = dataSourceFactory;
+            this.viewModelFactory = viewModelFactory;
             InitializeComponent();
             SteppingInto += OnSteppingInto;
             StepNext += OnNext;
@@ -45,7 +50,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
 
             if (viewModel.SelectedTable == null)
             {
-                scope.Resolve<IMessageHelper>().ShowError("Please setup your import map before continuing to the next page.");
+                messageHelper.ShowError("Please setup your import map before continuing to the next page.");
                 e.NextPage = this;
                 return;
             }
@@ -66,9 +71,9 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
         private void OnSteppingInto(object sender, EventArgs eventArgs)
         {
             store = GetStore<OdbcStoreEntity>();
-            scope = IoC.BeginLifetimeScope();
 
-            IOdbcDataSource selectedDataSource = scope.Resolve<IOdbcDataSource>();
+            IOdbcDataSource selectedDataSource = dataSourceFactory();
+            
             selectedDataSource.Restore(store.ConnectionString);
 
             // Create new ViewModel when one does not exist, or a new data source is selected. This means clicking
@@ -76,27 +81,11 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
             // a new data source and clicking next, will reset all mappings.
             if (viewModel == null || !viewModel.DataSource.ConnectionString.Equals(selectedDataSource.ConnectionString, StringComparison.Ordinal))
             {
-                viewModel = scope.Resolve<IOdbcImportFieldMappingControlViewModel>();
+                viewModel = viewModelFactory();
 
-                viewModel.Load(store);
+                viewModel.Load(selectedDataSource);
                 odbcImportFieldMappingControl.DataContext = viewModel;
             }
-        }
-
-
-        /// <summary>
-        /// Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-        protected override void Dispose(bool disposing)
-        {
-            scope?.Dispose();
-
-            if (disposing)
-            {
-                components?.Dispose();
-            }
-            base.Dispose(disposing);
         }
     }
 }

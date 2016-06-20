@@ -1,5 +1,8 @@
+using Interapptive.Shared.Utility;
 using Newtonsoft.Json;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using System;
+using System.Globalization;
 using System.Reflection;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Mapping
@@ -7,16 +10,40 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
     /// <summary>
     /// The ShipWorks half of an OdbcFieldMapEntry
     /// </summary>
-    public class ShipWorksOdbcMappableField : IOdbcMappableField
-	{
-	    private readonly EntityField2 field;
+    [Obfuscation(Exclude = true)]
+    public class ShipWorksOdbcMappableField : IShipWorksOdbcMappableField
+    {
+        /// <summary>
+        /// Used for deserialization
+        /// </summary>
+        [JsonConstructor]
+        public ShipWorksOdbcMappableField(string typeName, string displayName)
+        {
+            TypeName = typeName;
+            DisplayName = displayName;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ShipWorksOdbcMappableField"/> class.
+        /// </summary>
+        public ShipWorksOdbcMappableField(EntityField2 field, OdbcOrderFieldDescription fieldDescription)
+            : this(field, EnumHelper.GetDescription(fieldDescription), false)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ShipWorksOdbcMappableField"/> class.
+        /// </summary>
+        public ShipWorksOdbcMappableField(EntityField2 field, OdbcOrderFieldDescription fieldDescription, bool isRequired)
+            : this(field, EnumHelper.GetDescription(fieldDescription), isRequired)
+        {
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ShipWorksOdbcMappableField"/> class.
         /// </summary>
         /// <param name="field">The field.</param>
         /// <param name="displayName">The display name.</param>
-        [JsonConstructor]
         public ShipWorksOdbcMappableField(EntityField2 field, string displayName) : this(field, displayName, false)
         {
         }
@@ -29,12 +56,17 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <param name="isRequired"></param>
         public ShipWorksOdbcMappableField(EntityField2 field, string displayName, bool isRequired)
 	    {
-	        this.field = field;
-            ContainingObjectName = field?.ContainingObjectName;
-            Name = field?.Name;
-	        DisplayName = displayName;
+            ContainingObjectName = field.ContainingObjectName;
+            Name = field.Name;
+            TypeName = field.DataType.FullName;
+            DisplayName = displayName;
             IsRequired = isRequired;
 	    }
+
+        /// <summary>
+        /// The type of the ShipWorks field
+        /// </summary>
+        public string TypeName { get; }
 
         /// <summary>
         /// The name of the object that contains this field
@@ -49,27 +81,81 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <summary>
         /// The fields value
         /// </summary>
-        public string Value { get; }
+        [JsonIgnore]
+        public object Value { get; private set; }
 
         /// <summary>
         /// The fields display name
         /// </summary>
-        [Obfuscation(Exclude = true)]
         public string DisplayName { get; }
+
+        /// <summary>
+        /// Is the field required to be mapped.
+        /// </summary>
+        [JsonIgnore]
+        public bool IsRequired { get; set; }
 
         /// <summary>
         /// Gets the qualified name for the field - table.column
         /// </summary>
+        [Obfuscation(Exclude = false)]
         public string GetQualifiedName()
         {
             return $"{ContainingObjectName}.{Name}";
         }
 
         /// <summary>
-        /// Is the field required to be mapped.
+        /// Set the Value to the given value
         /// </summary>
-        [JsonIgnore]
+        [Obfuscation(Exclude = false)]
+        public void LoadValue(object value)
+        {
+            Value = ChangeType(value);
+        }
+
+        /// <summary>
+        /// Convert the given object to the supplied type
+        /// </summary>
         [Obfuscation(Exclude = true)]
-        public bool IsRequired { get; set; }
+        private object ChangeType(object value)
+        {
+            Type destinationType = Type.GetType(TypeName);
+
+            if (value == null || destinationType == null || value.GetType() == destinationType)
+            {
+                return value;
+            }
+
+            try
+            {
+                // parse decimal info with number styles to ensure we can handle currency and thousands
+                if (destinationType == typeof(decimal))
+                {
+                    return ConvertDecimal(value);
+                }
+
+                return Convert.ChangeType(value, destinationType);
+            }
+            catch (Exception ex)
+            {
+                throw new ShipWorksOdbcException($"Unable to convert '{value}' to {destinationType} for {GetQualifiedName()}.", ex);
+            }
+        }
+
+        /// <summary>
+        /// Converts the given object to a decimal
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        private decimal ConvertDecimal(object value)
+        {
+            return decimal.Parse(value.ToString(),
+                NumberStyles.AllowLeadingSign |
+                NumberStyles.AllowLeadingWhite |
+                NumberStyles.AllowTrailingWhite |
+                NumberStyles.AllowCurrencySymbol |
+                NumberStyles.AllowDecimalPoint |
+                NumberStyles.AllowThousands,
+                new CultureInfo("en-US"));
+        }
     }
 }

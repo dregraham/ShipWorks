@@ -1,7 +1,7 @@
+using ShipWorks.Data.Model.HelperClasses;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using ShipWorks.Data.Model.HelperClasses;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 {
@@ -10,7 +10,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
     /// </summary>
     public class OdbcFieldMapFactory : IOdbcFieldMapFactory
 	{
-	    private readonly IOdbcFieldMapIOFactory ioFactory;
+        private readonly IOdbcFieldMapIOFactory ioFactory;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcFieldMapFactory"/> class.
@@ -43,28 +43,27 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 	    {
 	        List<ShipWorksOdbcMappableField> fields = new List<ShipWorksOdbcMappableField>
 	        {
-	            new ShipWorksOdbcMappableField(OrderFields.OrderNumber, "Order Number", true),
-	            new ShipWorksOdbcMappableField(OrderFields.OrderDate, "Order Date & Time"),
-	            new ShipWorksOdbcMappableField(OrderFields.OrderDate, "Order Date"),
-	            new ShipWorksOdbcMappableField(OrderFields.OrderDate, "Order Time"),
-	            new ShipWorksOdbcMappableField(OrderFields.LocalStatus, "Local Status"),
-	            new ShipWorksOdbcMappableField(OrderFields.OnlineStatus, "Store Status"),
-	            new ShipWorksOdbcMappableField(OrderFields.RequestedShipping, "Requested Shipping"),
-	            new ShipWorksOdbcMappableField(OrderFields.CustomerID, "Customer Number"),
-	            new ShipWorksOdbcMappableField(NoteFields.Text, "Note (Internal)"),
-	            new ShipWorksOdbcMappableField(NoteFields.Text, "Note (Public)"),
-	            new ShipWorksOdbcMappableField(OrderChargeFields.Amount, "Shipping Amount"),
-	            new ShipWorksOdbcMappableField(OrderChargeFields.Amount, "Handling Amount"),
-	            new ShipWorksOdbcMappableField(OrderChargeFields.Amount, "Discount Amount"),
-	            new ShipWorksOdbcMappableField(OrderChargeFields.Amount, "Insurance Amount"),
-	            new ShipWorksOdbcMappableField(OrderChargeFields.Amount, "Other Amount"),
-	            new ShipWorksOdbcMappableField(OrderChargeFields.Amount, "Tax Amount"),
-	            new ShipWorksOdbcMappableField(OrderPaymentDetailFields.Value, "Payment Method"),
-	            new ShipWorksOdbcMappableField(OrderPaymentDetailFields.Value, "Payment Reference"),
-	            new ShipWorksOdbcMappableField(OrderPaymentDetailFields.Value, "Credit Card Type"),
-	            new ShipWorksOdbcMappableField(OrderPaymentDetailFields.Value, "Credit Card Number"),
-	            new ShipWorksOdbcMappableField(OrderPaymentDetailFields.Value, "Credit Card Expiration"),
-	            new ShipWorksOdbcMappableField(OrderPaymentDetailFields.Value, "Credit Card Name")
+	            new ShipWorksOdbcMappableField(OrderFields.OrderNumber, OdbcOrderFieldDescription.Number, true),
+	            new ShipWorksOdbcMappableField(OrderFields.OrderDate, OdbcOrderFieldDescription.DateAndTime),
+                new ShipWorksOdbcMappableField(OrderFields.OnlineLastModified, OdbcOrderFieldDescription.LastModifiedDateAndTime),
+                new ShipWorksOdbcMappableField(OrderFields.LocalStatus, OdbcOrderFieldDescription.LocalStatus),
+	            new ShipWorksOdbcMappableField(OrderFields.OnlineStatus, OdbcOrderFieldDescription.OnlineStatus),
+	            new ShipWorksOdbcMappableField(OrderFields.RequestedShipping, OdbcOrderFieldDescription.RequestedShipping),
+	            new ShipWorksOdbcMappableField(OrderFields.CustomerID, OdbcOrderFieldDescription.CustomerID),
+	            new ShipWorksOdbcMappableField(NoteFields.Text, OdbcOrderFieldDescription.NoteInternal),
+	            new ShipWorksOdbcMappableField(NoteFields.Text, OdbcOrderFieldDescription.NotePublic),
+	            new ShipWorksOdbcMappableField(OrderChargeFields.Amount, OdbcOrderFieldDescription.ChargeShipping),
+	            new ShipWorksOdbcMappableField(OrderChargeFields.Amount, OdbcOrderFieldDescription.ChargeHandling),
+	            new ShipWorksOdbcMappableField(OrderChargeFields.Amount, OdbcOrderFieldDescription.ChargeDiscount),
+	            new ShipWorksOdbcMappableField(OrderChargeFields.Amount, OdbcOrderFieldDescription.ChargeInsurance),
+	            new ShipWorksOdbcMappableField(OrderChargeFields.Amount, OdbcOrderFieldDescription.ChargeOther),
+	            new ShipWorksOdbcMappableField(OrderChargeFields.Amount, OdbcOrderFieldDescription.ChargeTax),
+	            new ShipWorksOdbcMappableField(OrderPaymentDetailFields.Value, OdbcOrderFieldDescription.PaymentMethod),
+	            new ShipWorksOdbcMappableField(OrderPaymentDetailFields.Value, OdbcOrderFieldDescription.PaymentReference),
+	            new ShipWorksOdbcMappableField(OrderPaymentDetailFields.Value, OdbcOrderFieldDescription.PaymentCCType),
+	            new ShipWorksOdbcMappableField(OrderPaymentDetailFields.Value, OdbcOrderFieldDescription.PaymentCCNumber),
+	            new ShipWorksOdbcMappableField(OrderPaymentDetailFields.Value, OdbcOrderFieldDescription.PaymentCCExpiration),
+	            new ShipWorksOdbcMappableField(OrderPaymentDetailFields.Value, OdbcOrderFieldDescription.PaymentCCName)
 	        };
 
 	        return fields;
@@ -93,24 +92,24 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 	    {
 	        List<ShipWorksOdbcMappableField> fields = new List<ShipWorksOdbcMappableField>()
 	        {
-                new ShipWorksOdbcMappableField(OrderItemFields.Name, "Name"),
-                new ShipWorksOdbcMappableField(OrderItemFields.Code, "Code"),
-                new ShipWorksOdbcMappableField(OrderItemFields.SKU, "SKU"),
-                new ShipWorksOdbcMappableField(OrderItemFields.Quantity, "Quantity"),
-                new ShipWorksOdbcMappableField(OrderItemFields.UnitPrice, "Unit Price"),
-                new ShipWorksOdbcMappableField(OrderItemFields.UnitPrice, "Total Price"),
-                new ShipWorksOdbcMappableField(OrderItemFields.Weight, "Unit Weight"),
-                new ShipWorksOdbcMappableField(OrderItemFields.Weight, "Total Weight"),
-                new ShipWorksOdbcMappableField(OrderItemFields.LocalStatus, "Status"),
-                new ShipWorksOdbcMappableField(OrderItemFields.Description, "Description"),
-                new ShipWorksOdbcMappableField(OrderItemFields.Location, "Location"),
-                new ShipWorksOdbcMappableField(OrderItemFields.UnitCost, "Unit Cost"),
-                new ShipWorksOdbcMappableField(OrderItemFields.UnitCost, "Total Cost"),
-                new ShipWorksOdbcMappableField(OrderItemFields.Image, "Image URL"),
-                new ShipWorksOdbcMappableField(OrderItemFields.Thumbnail, "Thumbnail URL"),
-                new ShipWorksOdbcMappableField(OrderItemFields.UPC, "UPC"),
-                new ShipWorksOdbcMappableField(OrderItemFields.ISBN, "ISBN"),
-                new ShipWorksOdbcMappableField(OrderItemAttributeFields.Name, "Attribute Name")
+                new ShipWorksOdbcMappableField(OrderItemFields.Name, OdbcOrderFieldDescription.ItemName),
+                new ShipWorksOdbcMappableField(OrderItemFields.Code, OdbcOrderFieldDescription.ItemCode),
+                new ShipWorksOdbcMappableField(OrderItemFields.SKU, OdbcOrderFieldDescription.ItemSKU),
+                new ShipWorksOdbcMappableField(OrderItemFields.Quantity, OdbcOrderFieldDescription.ItemQuantity),
+                new ShipWorksOdbcMappableField(OrderItemFields.UnitPrice, OdbcOrderFieldDescription.ItemUnitPrice),
+                new ShipWorksOdbcMappableField(OrderItemFields.UnitPrice, OdbcOrderFieldDescription.ItemTotalCost),
+                new ShipWorksOdbcMappableField(OrderItemFields.Weight, OdbcOrderFieldDescription.ItemUnitWeight),
+                new ShipWorksOdbcMappableField(OrderItemFields.Weight, OdbcOrderFieldDescription.ItemTotalWeight),
+                new ShipWorksOdbcMappableField(OrderItemFields.LocalStatus, OdbcOrderFieldDescription.ItemLocalStatus),
+                new ShipWorksOdbcMappableField(OrderItemFields.Description, OdbcOrderFieldDescription.ItemDescription),
+                new ShipWorksOdbcMappableField(OrderItemFields.Location, OdbcOrderFieldDescription.ItemLocation),
+                new ShipWorksOdbcMappableField(OrderItemFields.UnitCost, OdbcOrderFieldDescription.ItemUnitCost),
+                new ShipWorksOdbcMappableField(OrderItemFields.UnitCost, OdbcOrderFieldDescription.ItemTotalCost),
+                new ShipWorksOdbcMappableField(OrderItemFields.Image, OdbcOrderFieldDescription.ItemImage),
+                new ShipWorksOdbcMappableField(OrderItemFields.Thumbnail, OdbcOrderFieldDescription.ItemThumbnail),
+                new ShipWorksOdbcMappableField(OrderItemFields.UPC, OdbcOrderFieldDescription.ItemUPC),
+                new ShipWorksOdbcMappableField(OrderItemFields.ISBN, OdbcOrderFieldDescription.ItemISBN),
+                new ShipWorksOdbcMappableField(OrderItemAttributeFields.Name, OdbcOrderFieldDescription.ItemAttributeName)
             };
 
 	        return fields;
