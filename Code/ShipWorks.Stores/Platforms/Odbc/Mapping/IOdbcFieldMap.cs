@@ -15,6 +15,11 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         List<IOdbcFieldMapEntry> Entries { get; }
 
         /// <summary>
+        /// Gets the maximum index.
+        /// </summary>
+        int MaxIndex { get; }
+
+        /// <summary>
         /// Gets or sets the name of the record identifier column.
         /// </summary>
         string RecordIdentifierSource { get; set; }
@@ -53,6 +58,11 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// Copies the values from the entries to corresponding fields on the entity
         /// </summary>
         void CopyToEntity(IEntity2 entity);
+
+        /// <summary>
+        /// Copies the values from the entries to corresponding fields on the entity
+        /// </summary>
+        void CopyToEntity(IEntity2 entity, int index);
 
         /// <summary>
         /// Finds the OdbcFieldMapEntries corresponding to the given field

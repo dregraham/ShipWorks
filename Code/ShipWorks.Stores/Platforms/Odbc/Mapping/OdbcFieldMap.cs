@@ -33,6 +33,14 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         public List<IOdbcFieldMapEntry> Entries { get; }
 
         /// <summary>
+        /// Gets the maximum index.
+        /// </summary>
+        public int MaxIndex
+        {
+            get { return Entries.Any() ? Entries.Max(e => e.Index) : 0; }
+        }
+
+        /// <summary>
         /// Gets or sets the name of the record identifier column.
         /// </summary>
         public string RecordIdentifierSource { get; set; }
