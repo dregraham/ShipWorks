@@ -72,13 +72,13 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <summary>
         /// Creates the order item field map.
         /// </summary>
-        public OdbcFieldMap CreateOrderItemFieldMap()
+        public OdbcFieldMap CreateOrderItemFieldMap(int index)
         {
             OdbcFieldMap itemMap = new OdbcFieldMap(ioFactory);
 
             foreach (ShipWorksOdbcMappableField entry in CreateShipWorksOrderItemFields())
             {
-                itemMap.AddEntry(new OdbcFieldMapEntry(entry, new ExternalOdbcMappableField(null, null)));
+                itemMap.AddEntry(new OdbcFieldMapEntry(entry, new ExternalOdbcMappableField(null, null), index));
             }
 
             return itemMap;

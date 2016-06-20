@@ -56,7 +56,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             {
                 OdbcFieldMap odbcFieldMap = mock.Create<OdbcFieldMap>();
                 mock.Mock<IOdbcFieldMapFactory>()
-                    .Setup(f => f.CreateOrderItemFieldMap())
+                    .Setup(f => f.CreateOrderItemFieldMap(0))
                     .Returns(odbcFieldMap);
 
                 var testObject = mock.Create<OdbcImportFieldMappingControlViewModel>();
