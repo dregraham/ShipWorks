@@ -1,8 +1,8 @@
-﻿using System;
-using Autofac.Extras.Moq;
+﻿using Autofac.Extras.Moq;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
+using System;
 using Xunit;
 
 namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
@@ -14,6 +14,20 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
         public OdbcFieldMapEntryTest()
         {
             mock = AutoMock.GetLoose();
+        }
+
+        [Fact]
+        public void Ctor_IndexIsZero_WhenNoIndexIsSent()
+        {
+            var testObject = new OdbcFieldMapEntry(null, null);
+            Assert.Equal(0, testObject.Index);
+        }
+
+        [Fact]
+        public void Ctor_IndexIs5_When5IsSentForIndex()
+        {
+            var testObject = new OdbcFieldMapEntry(null, null, 5);
+            Assert.Equal(5, testObject.Index);
         }
 
         [Fact]

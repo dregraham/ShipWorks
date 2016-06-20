@@ -10,16 +10,28 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
     [Obfuscation(Exclude = true)]
     public class OdbcFieldMapEntry : IOdbcFieldMapEntry
     {
+
+        public OdbcFieldMapEntry(ShipWorksOdbcMappableField shipWorksField,
+            ExternalOdbcMappableField externalField,
+            int index) 
+        {
+            ShipWorksField = shipWorksField;
+            ExternalField = externalField;
+            Index = index;
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcFieldMapEntry"/> class.
         /// </summary>
-        /// <param name="shipWorksField">The ship works field.</param>
-        /// <param name="externalField">The external field.</param>
         public OdbcFieldMapEntry(ShipWorksOdbcMappableField shipWorksField, ExternalOdbcMappableField externalField)
-		{
-		    ShipWorksField = shipWorksField;
-		    ExternalField = externalField;
-		}
+            : this(shipWorksField, externalField, 0)
+        {
+        }
+
+        /// <summary>
+        /// Gets the index.
+        /// </summary>
+        public int Index { get; }
 
         /// <summary>
         /// Gets the ShipWorks field.
