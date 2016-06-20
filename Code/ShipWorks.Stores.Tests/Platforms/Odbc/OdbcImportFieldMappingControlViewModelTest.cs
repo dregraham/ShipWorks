@@ -206,7 +206,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
                 odbcFieldMap.AddEntry(mapEntry.Object);
 
                 Mock<IOdbcFieldMapFactory> fieldMapFactory = mock.Mock<IOdbcFieldMapFactory>();
-                fieldMapFactory.Setup(f => f.CreateFieldMapFrom(It.IsAny<IEnumerable<OdbcFieldMap>>()))
+                fieldMapFactory.Setup(f => f.CreateFieldMapFrom(It.IsAny<IEnumerable<IOdbcFieldMapEntry>>()))
                     .Returns(odbcFieldMap);
 
                 testObject.SelectedTable = table1.Object;
@@ -244,7 +244,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
                 odbcFieldMap.AddEntry(mapEntry.Object);
 
                 Mock<IOdbcFieldMapFactory> fieldMapFactory = mock.Mock<IOdbcFieldMapFactory>();
-                fieldMapFactory.Setup(f => f.CreateFieldMapFrom(It.IsAny<IEnumerable<OdbcFieldMap>>()))
+                fieldMapFactory.Setup(f => f.CreateFieldMapFrom(It.IsAny<IEnumerable<IOdbcFieldMapEntry>>()))
                     .Returns(odbcFieldMap);
 
                 testObject.SelectedTable = table1.Object;
@@ -282,7 +282,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
                 odbcFieldMap.AddEntry(mapEntry.Object);
 
                 Mock<IOdbcFieldMapFactory> fieldMapFactory = mock.Mock<IOdbcFieldMapFactory>();
-                fieldMapFactory.Setup(f => f.CreateFieldMapFrom(It.IsAny<IEnumerable<OdbcFieldMap>>()))
+                fieldMapFactory.Setup(f => f.CreateFieldMapFrom(It.IsAny<IEnumerable<IOdbcFieldMapEntry>>()))
                     .Returns(odbcFieldMap);
 
                 testObject.SelectedTable = table1.Object;
@@ -322,7 +322,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
                 odbcFieldMap.AddEntry(mapEntry.Object);
 
                 Mock<IOdbcFieldMapFactory> fieldMapFactory = mock.Mock<IOdbcFieldMapFactory>();
-                fieldMapFactory.Setup(f => f.CreateFieldMapFrom(It.IsAny<IEnumerable<OdbcFieldMap>>()))
+                fieldMapFactory.Setup(f => f.CreateFieldMapFrom(It.IsAny<IEnumerable<IOdbcFieldMapEntry>>()))
                     .Returns(odbcFieldMap);
 
                 testObject.SelectedTable = table1.Object;
@@ -361,7 +361,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
                 odbcFieldMap.AddEntry(mapEntry.Object);
 
                 Mock<IOdbcFieldMapFactory> fieldMapFactory = mock.Mock<IOdbcFieldMapFactory>();
-                fieldMapFactory.Setup(f => f.CreateFieldMapFrom(It.IsAny<IEnumerable<OdbcFieldMap>>()))
+                fieldMapFactory.Setup(f => f.CreateFieldMapFrom(It.IsAny<IEnumerable<IOdbcFieldMapEntry>>()))
                     .Returns(odbcFieldMap);
 
                 testObject.SelectedTable = table1.Object;

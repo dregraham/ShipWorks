@@ -368,7 +368,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         {
             IEnumerable<OdbcFieldMap> maps = DisplayFieldMaps.Select(m => m.Map);
 
-            OdbcFieldMap map = fieldMapFactory.CreateFieldMapFrom(maps);
+            OdbcFieldMap map = fieldMapFactory.CreateFieldMapFrom(maps.SelectMany(m=>m.Entries));
 
             map.Entries.ToList().ForEach(e =>
             {

@@ -176,13 +176,13 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         }
 
         /// <summary>
-        /// Creates a new field map from a list of field maps
+        /// Creates a new field map from the entries
         /// </summary>
-        public OdbcFieldMap CreateFieldMapFrom(IEnumerable<OdbcFieldMap> maps)
+        public OdbcFieldMap CreateFieldMapFrom(IEnumerable<IOdbcFieldMapEntry> entries)
 		{
             OdbcFieldMap masterMap = new OdbcFieldMap(ioFactory);
 
-            foreach (IOdbcFieldMapEntry entry in maps.SelectMany(map => map.Entries)
+            foreach (IOdbcFieldMapEntry entry in entries
                 .Where(entry => !string.IsNullOrWhiteSpace(entry.ExternalField.Column?.Name) &&
                 !entry.ExternalField.Column.Name.Equals("(None)", StringComparison.InvariantCulture)))
             {

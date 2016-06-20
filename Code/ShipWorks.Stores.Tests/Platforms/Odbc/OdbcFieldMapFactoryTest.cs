@@ -2,7 +2,6 @@
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
-using System.Collections.Generic;
 using System.Linq;
 using Xunit;
 
@@ -64,7 +63,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             ExternalOdbcMappableField externalAddressMap = new ExternalOdbcMappableField(new OdbcTable("BillAddressValidationError"), new OdbcColumn("BillAddressValidationError"));
             itemMap.AddEntry(new OdbcFieldMapEntry(shipworksAddressMap, externalAddressMap));
 
-            var combinedMap = testObject.CreateFieldMapFrom(new List<OdbcFieldMap>() {orderMap, itemMap, addressMap});
+            var combinedMap = testObject.CreateFieldMapFrom(orderMap.Entries.Concat(addressMap.Entries).Concat(itemMap.Entries));
 
             foreach (var entry in orderMap.Entries.Where(e => e.ExternalField.Column != null))
             {
