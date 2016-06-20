@@ -1,7 +1,8 @@
-﻿using System.Collections.Generic;
-using ShipWorks.Data.Model.EntityClasses;
+﻿using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Loaders
 {
@@ -13,27 +14,20 @@ namespace ShipWorks.Stores.Platforms.Odbc.Loaders
         /// <summary>
         /// Load the item attributes from the given map into the given item entity
         /// </summary>
-        public void Load(IOdbcFieldMap map, OrderItemEntity item)
+        public void Load(IOdbcFieldMap map, OrderItemEntity item, int index)
         {
             if (item != null)
             {
-                IEnumerable<IOdbcFieldMapEntry> itemEntries = map.FindEntriesBy(OrderItemAttributeFields.Name, false);
+                IEnumerable<IOdbcFieldMapEntry> itemEntries =
+                    map.FindEntriesBy(OrderItemAttributeFields.Name, false).Where(e => e.Index == index);
 
                 foreach (IOdbcFieldMapEntry entry in itemEntries)
                 {
-                    AddItemAttributeToItem(item, entry);
+                    OrderItemAttributeEntity attribute = new OrderItemAttributeEntity(item);
+                    attribute.Name = entry.ExternalField.Column.Name;
+                    attribute.Description = entry.ShipWorksField.Value.ToString();
                 }
             }
-        }
-
-        /// <summary>
-        /// Adds an item attribute to an item.
-        /// </summary>
-        private void AddItemAttributeToItem(OrderItemEntity item, IOdbcFieldMapEntry entry)
-        {
-            OrderItemAttributeEntity attribute = new OrderItemAttributeEntity(item);
-            attribute.Name = entry.ExternalField.Column.Name;
-            attribute.Description = entry.ShipWorksField.Value.ToString();
         }
     }
 }

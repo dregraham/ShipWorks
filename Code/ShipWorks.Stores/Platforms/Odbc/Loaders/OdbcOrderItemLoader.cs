@@ -42,7 +42,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Loaders
                 item.UnitCost = GetUnitAmount(clonedMap, item, OrderItemFields.UnitCost, OdbcOrderFieldDescription.ItemUnitCost, OdbcOrderFieldDescription.ItemTotalCost);
                 item.Weight = (double) GetUnitAmount(clonedMap, item, OrderItemFields.Weight, OdbcOrderFieldDescription.ItemUnitWeight, OdbcOrderFieldDescription.ItemTotalWeight);
 
-                attributeLoader.Load(clonedMap, item);
+                attributeLoader.Load(clonedMap, item, 0);
             }
         }
 

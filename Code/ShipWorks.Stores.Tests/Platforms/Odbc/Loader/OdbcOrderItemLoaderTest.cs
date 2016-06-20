@@ -1,13 +1,13 @@
-﻿using System.Collections.Generic;
-using Autofac.Extras.Moq;
+﻿using Autofac.Extras.Moq;
+using Interapptive.Shared.Utility;
 using Moq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Stores.Platforms.Odbc.Loaders;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
+using System.Collections.Generic;
 using Xunit;
-using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
 {
@@ -152,9 +152,9 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
                 var order = new OrderEntity();
                 testObject.Load(originalMap.Object, order, new List<OdbcRecord> { record1, record2 });
 
-                attributeLoader.Verify(m => m.Load(clonedMap.Object, order.OrderItems[0]), Times.Once);
-                attributeLoader.Verify(m => m.Load(clonedMap.Object, order.OrderItems[1]), Times.Once);
-                attributeLoader.Verify(m => m.Load(It.IsAny<IOdbcFieldMap>(), It.IsAny<OrderItemEntity>()), Times.Exactly(2));
+                attributeLoader.Verify(m => m.Load(clonedMap.Object, order.OrderItems[0], 0), Times.Once);
+                attributeLoader.Verify(m => m.Load(clonedMap.Object, order.OrderItems[1], 0), Times.Once);
+                attributeLoader.Verify(m => m.Load(It.IsAny<IOdbcFieldMap>(), It.IsAny<OrderItemEntity>(), 0), Times.Exactly(2));
             }
         }
 

@@ -11,6 +11,6 @@ namespace ShipWorks.Stores.Platforms.Odbc.Loaders
         /// <summary>
         /// Loads item attributes into an item
         /// </summary>
-        void Load(IOdbcFieldMap map, OrderItemEntity item);
+        void Load(IOdbcFieldMap map, OrderItemEntity item, int index);
     }
 }
