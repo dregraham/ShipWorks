@@ -73,10 +73,10 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
             using (var mock1 = AutoMock.GetLoose())
             using (var mock2 = AutoMock.GetLoose())
             {
-                var originalMap = mock1.Mock<IOdbcFieldMap>();
                 var clonedMap = mock2.Mock<IOdbcFieldMap>();
+                var originalMap = mock1.Mock<IOdbcFieldMap>();
                 originalMap.Setup(m => m.Clone()).Returns(clonedMap.Object);
-
+                
                 var testObject = mock1.Create<OdbcOrderItemLoader>();
 
                 var record1 = new OdbcRecord();
@@ -127,9 +127,9 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
                 var order = new OrderEntity();
                 testObject.Load(originalMap.Object, order, new List<OdbcRecord> { record1, record2 });
 
-                clonedMap.Verify(m => m.CopyToEntity(order.OrderItems[0]), Times.Once);
-                clonedMap.Verify(m => m.CopyToEntity(order.OrderItems[1]), Times.Once);
-                clonedMap.Verify(m => m.CopyToEntity(It.IsAny<OrderItemEntity>()), Times.Exactly(2));
+                clonedMap.Verify(m => m.CopyToEntity(order.OrderItems[0], 0), Times.Once);
+                clonedMap.Verify(m => m.CopyToEntity(order.OrderItems[1], 0), Times.Once);
+                clonedMap.Verify(m => m.CopyToEntity(It.IsAny<OrderItemEntity>(), 0), Times.Exactly(2));
             }
         }
 
@@ -197,7 +197,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
                         GetOdbcFieldMapEntry(mock1, EnumHelper.GetDescription(OdbcOrderFieldDescription.ItemTotalPrice), 42M)
                     });
 
-                SetOrderItemQuantity(clonedMap, 2D);
+                SetOrderItemQuantity(clonedMap, 2D, 0);
 
                 var originalMap = mock1.Mock<IOdbcFieldMap>();
                 originalMap.Setup(m => m.Clone()).Returns(clonedMap.Object);
@@ -224,7 +224,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
                         GetOdbcFieldMapEntry(mock1, EnumHelper.GetDescription(OdbcOrderFieldDescription.ItemTotalPrice), 0M)
                     });
 
-                SetOrderItemQuantity(clonedMap, 2D);
+                SetOrderItemQuantity(clonedMap, 2D, 0);
 
                 var originalMap = mock1.Mock<IOdbcFieldMap>();
                 originalMap.Setup(m => m.Clone()).Returns(clonedMap.Object);
@@ -245,7 +245,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
             using (var mock2 = AutoMock.GetLoose())
             {
                 var clonedMap = mock2.Mock<IOdbcFieldMap>();
-                SetOrderItemQuantity(clonedMap, 2D);
+                SetOrderItemQuantity(clonedMap, 2D, 0);
 
                 var originalMap = mock1.Mock<IOdbcFieldMap>();
                 originalMap.Setup(m => m.Clone()).Returns(clonedMap.Object);
@@ -299,7 +299,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
                         GetOdbcFieldMapEntry(mock1, "Total Cost", 42M)
                     });
 
-                SetOrderItemQuantity(clonedMap, 2D);
+                SetOrderItemQuantity(clonedMap, 2D, 0);
 
                 var originalMap = mock1.Mock<IOdbcFieldMap>();
                 originalMap.Setup(m => m.Clone()).Returns(clonedMap.Object);
@@ -326,7 +326,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
                         GetOdbcFieldMapEntry(mock1, EnumHelper.GetDescription(OdbcOrderFieldDescription.ItemTotalCost), 0M)
                     });
 
-                SetOrderItemQuantity(clonedMap, 2D);
+                SetOrderItemQuantity(clonedMap, 2D, 0);
 
                 var originalMap = mock1.Mock<IOdbcFieldMap>();
                 originalMap.Setup(m => m.Clone()).Returns(clonedMap.Object);
@@ -347,7 +347,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
             using (var mock2 = AutoMock.GetLoose())
             {
                 var clonedMap = mock2.Mock<IOdbcFieldMap>();
-                SetOrderItemQuantity(clonedMap, 2D);
+                SetOrderItemQuantity(clonedMap, 2D, 0);
 
                 var originalMap = mock1.Mock<IOdbcFieldMap>();
                 originalMap.Setup(m => m.Clone()).Returns(clonedMap.Object);
@@ -401,7 +401,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
                         GetOdbcFieldMapEntry(mock1, EnumHelper.GetDescription(OdbcOrderFieldDescription.ItemTotalWeight), 42D)
                     });
 
-                SetOrderItemQuantity(clonedMap, 2D);
+                SetOrderItemQuantity(clonedMap, 2D, 0);
 
                 var originalMap = mock1.Mock<IOdbcFieldMap>();
                 originalMap.Setup(m => m.Clone()).Returns(clonedMap.Object);
@@ -428,7 +428,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
                         GetOdbcFieldMapEntry(mock1, EnumHelper.GetDescription(OdbcOrderFieldDescription.ItemTotalWeight), 0D)
                     });
 
-                SetOrderItemQuantity(clonedMap, 2D);
+                SetOrderItemQuantity(clonedMap, 2D, 0);
 
                 var originalMap = mock1.Mock<IOdbcFieldMap>();
                 originalMap.Setup(m => m.Clone()).Returns(clonedMap.Object);
@@ -449,7 +449,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
             using (var mock2 = AutoMock.GetLoose())
             {
                 var clonedMap = mock2.Mock<IOdbcFieldMap>();
-                SetOrderItemQuantity(clonedMap, 2D);
+                SetOrderItemQuantity(clonedMap, 2D, 0);
 
                 var originalMap = mock1.Mock<IOdbcFieldMap>();
                 originalMap.Setup(m => m.Clone()).Returns(clonedMap.Object);
@@ -462,16 +462,86 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
                 Assert.Equal(0, order.OrderItems[0].Weight);
             }
         }
+
+        [Fact]
+        public void Load_OneItemCreated_WhenMaxIndexIs0()
+        {
+            using (var mock1 = AutoMock.GetLoose())
+            using (var mock2 = AutoMock.GetLoose())
+            {
+                var clonedMap = mock2.Mock<IOdbcFieldMap>();
+                clonedMap.Setup(m => m.MaxIndex).Returns(0);
+
+                var originalMap = mock1.Mock<IOdbcFieldMap>();
+                originalMap.Setup(m => m.Clone()).Returns(clonedMap.Object);
+
+                var testObject = mock1.Create<OdbcOrderItemLoader>();
+
+                var order = new OrderEntity();
+                testObject.Load(originalMap.Object, order, new List<OdbcRecord> { new OdbcRecord() });
+
+                Assert.Equal(1, order.OrderItems.Count);
+            }
+        }
+
+        [Fact]
+        public void Load_TwoItemsCreated_WhenMaxIndexIs1()
+        {
+            using (var mock1 = AutoMock.GetLoose())
+            using (var mock2 = AutoMock.GetLoose())
+            {
+                var clonedMap = mock2.Mock<IOdbcFieldMap>();
+                clonedMap.Setup(m => m.MaxIndex).Returns(1);
+                
+                var originalMap = mock1.Mock<IOdbcFieldMap>();
+                originalMap.Setup(m => m.Clone()).Returns(clonedMap.Object);
+
+                var testObject = mock1.Create<OdbcOrderItemLoader>();
+
+                var order = new OrderEntity();
+                testObject.Load(originalMap.Object, order, new List<OdbcRecord> { new OdbcRecord() });
+
+                Assert.Equal(2, order.OrderItems.Count);
+            }
+        }
+
+        [Fact]
+        public void Load_AttributeLoaderCalledForEachIndex_WhenMaxIndexIs1()
+        {
+            using (var mock1 = AutoMock.GetLoose())
+            using (var mock2 = AutoMock.GetLoose())
+            {
+                var clonedMap = mock2.Mock<IOdbcFieldMap>();
+                clonedMap.Setup(m => m.MaxIndex).Returns(1);
+
+                var originalMap = mock1.Mock<IOdbcFieldMap>();
+                originalMap.Setup(m => m.Clone()).Returns(clonedMap.Object);
+
+                var attributeLoader = mock1.Mock<IOdbcItemAttributeLoader>();
+
+                var testObject = mock1.Create<OdbcOrderItemLoader>();
+
+                var order = new OrderEntity();
+                testObject.Load(originalMap.Object, order, new List<OdbcRecord> { new OdbcRecord() });
+
+                attributeLoader.Verify(l => l.Load(clonedMap.Object, order.OrderItems[0], 0), Times.Once);
+                attributeLoader.Verify(l => l.Load(clonedMap.Object, order.OrderItems[1], 1), Times.Once);
+                attributeLoader.Verify(
+                    l => l.Load(It.IsAny<IOdbcFieldMap>(), It.IsAny<OrderItemEntity>(), It.IsAny<int>()),
+                    Times.Exactly(2));
+            }
+        }
+
         #endregion "Unit Weight Tests"
 
         /// <summary>
         /// Sets the order item quantity - Sets up CopyToEntity
         /// </summary>
-        private static void SetOrderItemQuantity(Mock<IOdbcFieldMap> clonedMap, double quantity)
+        private static void SetOrderItemQuantity(Mock<IOdbcFieldMap> clonedMap, double quantity, int index)
         {
-            clonedMap.Setup(m => m.CopyToEntity(It.IsAny<OrderItemEntity>()))
+            clonedMap.Setup(m => m.CopyToEntity(It.IsAny<OrderItemEntity>(), index))
 #pragma warning disable S3215 // "interface" instances should not be cast to concrete types
-                    .Callback<IEntity2>(item => ((OrderItemEntity)item).Quantity = quantity);
+                    .Callback<IEntity2, int>((item, itemIndex) => ((OrderItemEntity)item).Quantity = quantity);
 #pragma warning restore S3215 // "interface" instances should not be cast to concrete types
         }
 

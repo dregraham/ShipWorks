@@ -1,4 +1,5 @@
 using Interapptive.Shared.Utility;
+using Newtonsoft.Json;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using System.Collections.Generic;
 using System.IO;
@@ -35,6 +36,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <summary>
         /// Gets the maximum index.
         /// </summary>
+        [JsonIgnore]
         public int MaxIndex
         {
             get { return Entries.Any() ? Entries.Max(e => e.Index) : 0; }

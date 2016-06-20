@@ -1,5 +1,4 @@
 using Interapptive.Shared.Utility;
-using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
@@ -31,19 +30,49 @@ namespace ShipWorks.Stores.Platforms.Odbc.Loaders
         {
             IOdbcFieldMap clonedMap = map.Clone();
 
+            int maxIndex = clonedMap.MaxIndex;
+            
             foreach (OdbcRecord odbcRecord in odbcRecords)
             {
                 clonedMap.ApplyValues(odbcRecord);
 
-                OrderItemEntity item = new OrderItemEntity(order);
-                clonedMap.CopyToEntity(item);
+                for (int i = 0; i <= maxIndex; i++)
+                {
+                    int itemIndex = i;
+                    OrderItemEntity item = new OrderItemEntity(order);
+                    clonedMap.CopyToEntity(item, itemIndex);
 
-                item.UnitPrice = GetUnitAmount(clonedMap, item, OrderItemFields.UnitPrice, OdbcOrderFieldDescription.ItemUnitPrice, OdbcOrderFieldDescription.ItemTotalPrice);
-                item.UnitCost = GetUnitAmount(clonedMap, item, OrderItemFields.UnitCost, OdbcOrderFieldDescription.ItemUnitCost, OdbcOrderFieldDescription.ItemTotalCost);
-                item.Weight = (double) GetUnitAmount(clonedMap, item, OrderItemFields.Weight, OdbcOrderFieldDescription.ItemUnitWeight, OdbcOrderFieldDescription.ItemTotalWeight);
+                    SetCost(clonedMap, item, itemIndex);
+                    SetPrice(clonedMap, item, itemIndex);
+                    SetWeight(clonedMap, item, itemIndex);
 
-                attributeLoader.Load(clonedMap, item, 0);
+                    attributeLoader.Load(clonedMap, item, itemIndex);
+                }
             }
+        }
+
+        private void SetWeight(IOdbcFieldMap clonedMap, OrderItemEntity item, int itemIndex)
+        {
+            IEnumerable<IOdbcFieldMapEntry> unitWeightFields =
+                clonedMap.FindEntriesBy(OrderItemFields.Weight, false).Where(e => e.Index == itemIndex);
+            item.Weight = (double) GetUnitAmount(unitWeightFields, item, OdbcOrderFieldDescription.ItemUnitWeight,
+                OdbcOrderFieldDescription.ItemTotalWeight);
+        }
+
+        private void SetCost(IOdbcFieldMap clonedMap, OrderItemEntity item, int itemIndex)
+        {
+            IEnumerable<IOdbcFieldMapEntry> costFields =
+                clonedMap.FindEntriesBy(OrderItemFields.UnitCost, false).Where(e => e.Index == itemIndex);
+            item.UnitCost = GetUnitAmount(costFields, item, OdbcOrderFieldDescription.ItemUnitCost,
+                OdbcOrderFieldDescription.ItemTotalCost);
+        }
+
+        private void SetPrice(IOdbcFieldMap clonedMap, OrderItemEntity item, int itemIndex)
+        {
+            IEnumerable<IOdbcFieldMapEntry> unitPriceFields =
+                clonedMap.FindEntriesBy(OrderItemFields.UnitPrice, false).Where(e => e.Index == itemIndex);
+            item.UnitPrice = GetUnitAmount(unitPriceFields, item, OdbcOrderFieldDescription.ItemUnitPrice,
+                OdbcOrderFieldDescription.ItemTotalPrice);
         }
 
         /// <summary>
@@ -52,14 +81,12 @@ namespace ShipWorks.Stores.Platforms.Odbc.Loaders
         /// <remarks>
         /// Defaults to 0 if cannot be determined.
         /// </remarks>
-        private decimal GetUnitAmount(IOdbcFieldMap map,
+        private decimal GetUnitAmount(IEnumerable<IOdbcFieldMapEntry> applicableEntries,
             OrderItemEntity item,
-            EntityField2 entityField,
             OdbcOrderFieldDescription unitDescription,
             OdbcOrderFieldDescription totalDescription)
         {
-            IEnumerable<IShipWorksOdbcMappableField> shipworksFields =
-                map.FindEntriesBy(entityField, false).Select(f => f.ShipWorksField).ToList();
+            IEnumerable<IShipWorksOdbcMappableField> shipworksFields = applicableEntries.Select(f => f.ShipWorksField).ToList();
 
             IShipWorksOdbcMappableField unitAmountField =
                 shipworksFields.SingleOrDefault(f => f.DisplayName == EnumHelper.GetDescription(unitDescription));
