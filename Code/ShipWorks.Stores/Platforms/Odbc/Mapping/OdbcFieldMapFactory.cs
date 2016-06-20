@@ -97,7 +97,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
                 new ShipWorksOdbcMappableField(OrderItemFields.SKU, OdbcOrderFieldDescription.ItemSKU),
                 new ShipWorksOdbcMappableField(OrderItemFields.Quantity, OdbcOrderFieldDescription.ItemQuantity),
                 new ShipWorksOdbcMappableField(OrderItemFields.UnitPrice, OdbcOrderFieldDescription.ItemUnitPrice),
-                new ShipWorksOdbcMappableField(OrderItemFields.UnitPrice, OdbcOrderFieldDescription.ItemTotalCost),
+                new ShipWorksOdbcMappableField(OrderItemFields.UnitPrice, OdbcOrderFieldDescription.ItemTotalPrice),
                 new ShipWorksOdbcMappableField(OrderItemFields.Weight, OdbcOrderFieldDescription.ItemUnitWeight),
                 new ShipWorksOdbcMappableField(OrderItemFields.Weight, OdbcOrderFieldDescription.ItemTotalWeight),
                 new ShipWorksOdbcMappableField(OrderItemFields.LocalStatus, OdbcOrderFieldDescription.ItemLocalStatus),

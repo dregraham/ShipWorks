@@ -45,6 +45,7 @@
         </Style>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
         <ui:VisibleWhenEqualToParameterConverter x:Key="VisibleWhenEqualToParameterConverter" />
+        <local:OdbcFieldMapMultiValueConverter x:Key="MapMultiValueConverter"></local:OdbcFieldMapMultiValueConverter>
         <DataTemplate x:Key="SourceColumnComboBoxItemTemplate">
             <Control x:Name="SourceColumns" Focusable="False">
                 <Control.Template>
@@ -247,7 +248,6 @@
                Grid.ColumnSpan="2"
                FontWeight="Bold" Content="Column Mappings" />
             <ListBox Grid.Row="1" Grid.Column="0"
-                 ItemsSource="{Binding DisplayFieldMaps, UpdateSourceTrigger=PropertyChanged}"
                  SelectedItem="{Binding SelectedFieldMap}"
                  Margin="0 5 2 0"
                  BorderBrush="Gray"
@@ -256,8 +256,16 @@
                  SelectedIndex="0"
                      HorizontalContentAlignment="Left" SelectionChanged="SelectedFieldMapChanged">
 
+                <ListBox.ItemsSource>
+                    <MultiBinding Converter="{StaticResource MapMultiValueConverter}">
+                        <Binding Path="Order" />
+                        <Binding Path="Address" />
+                        <Binding Path="Items" UpdateSourceTrigger="PropertyChanged"/>
+                        <Binding Path="Items.Count" UpdateSourceTrigger="PropertyChanged"/>
+                    </MultiBinding>
+                </ListBox.ItemsSource>
                 <ListBox.ItemTemplate>
-                    <DataTemplate>
+                    <DataTemplate DataType="local:OdbcFieldMapDisplay">
                         <Label Content="{Binding DisplayName}" Padding="0 3 3 3"
                                HorizontalAlignment="Left"
                                VerticalAlignment="Center"
@@ -349,7 +357,7 @@
                                 <RowDefinition Height="*"></RowDefinition>
                             </Grid.RowDefinitions>
                             <ItemsControl Grid.Row="1"
-                            ItemsSource="{Binding SelectedFieldMap.Map.Entries, UpdateSourceTrigger=PropertyChanged}">
+                            ItemsSource="{Binding SelectedFieldMap.Entries, UpdateSourceTrigger=PropertyChanged}">
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate DataType="{x:Type fieldMap:OdbcFieldMapEntry}">
                                         <Border BorderBrush="Gray" BorderThickness="0 0 0 1">

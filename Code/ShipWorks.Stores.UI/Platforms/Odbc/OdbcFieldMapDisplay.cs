@@ -1,4 +1,5 @@
-﻿using ShipWorks.Stores.Platforms.Odbc.Mapping;
+﻿using System.Collections.ObjectModel;
+using ShipWorks.Stores.Platforms.Odbc.Mapping;
 using System.Reflection;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc
@@ -14,7 +15,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         public OdbcFieldMapDisplay(string displayName, OdbcFieldMap map)
         {
             DisplayName = displayName;
-            Map = map;
+            Entries = new ObservableCollection<IOdbcFieldMapEntry>(map.Entries);
         }
 
         /// <summary>
@@ -27,6 +28,6 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// Gets or sets the map.
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public OdbcFieldMap Map { get; set; }
+        public ObservableCollection<IOdbcFieldMapEntry> Entries { get; set; }
     }
 }

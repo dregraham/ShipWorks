@@ -36,11 +36,6 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         ObservableCollection<OdbcColumn> Columns { get; set; }
 
         /// <summary>
-        /// List of field maps to be mapped.
-        /// </summary>
-        ObservableCollection<OdbcFieldMapDisplay> DisplayFieldMaps { get; set; }
-
-        /// <summary>
         /// The selected field map.
         /// </summary>
         OdbcFieldMapDisplay SelectedFieldMap { get; set; }
