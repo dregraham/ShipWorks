@@ -1,4 +1,5 @@
 ﻿using Autofac.Extras.Moq;
+using Interapptive.Shared.Extensions;
 using log4net;
 using Moq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -9,7 +10,6 @@ using ShipWorks.Stores.Platforms.Odbc.Mapping;
 using System;
 using System.IO;
 using System.Linq;
-using Interapptive.Shared.Extensions;
 using Xunit;
 
 namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
@@ -147,6 +147,57 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
                 testObject.CopyToEntity(order);
 
                 Assert.Equal("bob", order.BillFirstName);
+            }
+        }
+
+        [Fact]
+        public void CopyToEntity_DoesNotCopyToEntity_WhenIndexDoesNotMatchPassedIndex()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                var testObject = mock.Create<OdbcFieldMap>();
+
+                var shipworksField = mock.Mock<IShipWorksOdbcMappableField>();
+                shipworksField.Setup(e => e.Value).Returns("joe");
+                shipworksField.Setup(e => e.Name).Returns("BillFirstName");
+                shipworksField.Setup(e => e.ContainingObjectName).Returns("OrderEntity");
+
+                var entry = mock.Mock<IOdbcFieldMapEntry>();
+                entry.Setup(e => e.ShipWorksField).Returns(shipworksField.Object);
+
+                testObject.AddEntry(entry.Object);
+
+                OrderEntity order = new OrderEntity { BillFirstName = "bob" };
+
+                testObject.CopyToEntity(order, 1);
+
+                Assert.Equal("bob", order.BillFirstName);
+            }
+        }
+
+        [Fact]
+        public void CopyToEntity_CopiesToEntity_WhenIndexMatchesPassedIndex()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                var testObject = mock.Create<OdbcFieldMap>();
+
+                var shipworksField = mock.Mock<IShipWorksOdbcMappableField>();
+                shipworksField.Setup(e => e.Value).Returns("joe");
+                shipworksField.Setup(e => e.Name).Returns("BillFirstName");
+                shipworksField.Setup(e => e.ContainingObjectName).Returns("OrderEntity");
+                
+                var entry = mock.Mock<IOdbcFieldMapEntry>();
+                entry.Setup(e => e.ShipWorksField).Returns(shipworksField.Object);
+                entry.Setup(e => e.Index).Returns(1);
+
+                testObject.AddEntry(entry.Object);
+
+                OrderEntity order = new OrderEntity { BillFirstName = "bob" };
+
+                testObject.CopyToEntity(order, 1);
+
+                Assert.Equal("joe", order.BillFirstName);
             }
         }
 

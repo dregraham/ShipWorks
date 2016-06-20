@@ -1,4 +1,5 @@
 using Interapptive.Shared.Utility;
+using Newtonsoft.Json;
 using System.Reflection;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Mapping
@@ -10,7 +11,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
     [Obfuscation(Exclude = true)]
     public class OdbcFieldMapEntry : IOdbcFieldMapEntry
     {
-
+        [JsonConstructor]
         public OdbcFieldMapEntry(ShipWorksOdbcMappableField shipWorksField,
             ExternalOdbcMappableField externalField,
             int index) 

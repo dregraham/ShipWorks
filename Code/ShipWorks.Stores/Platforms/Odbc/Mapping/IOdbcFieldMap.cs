@@ -1,6 +1,5 @@
 ﻿using SD.LLBLGen.Pro.ORMSupportClasses;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.IO;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Mapping
@@ -13,7 +12,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <summary>
         /// The ODBC Field Map Entries.
         /// </summary>
-        ObservableCollection<IOdbcFieldMapEntry> Entries { get; }
+        List<IOdbcFieldMapEntry> Entries { get; }
 
         /// <summary>
         /// Gets or sets the name of the record identifier column.

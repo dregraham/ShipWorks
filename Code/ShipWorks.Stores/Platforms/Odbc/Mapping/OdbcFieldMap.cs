@@ -1,7 +1,6 @@
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -15,7 +14,6 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 	public class OdbcFieldMap : IOdbcFieldMap
     {
 		private readonly IOdbcFieldMapIOFactory ioFactory;
-        private readonly ObservableCollection<IOdbcFieldMapEntry> entries;
 
         /// <summary>
         /// Constructor
@@ -25,14 +23,14 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 		    MethodConditions.EnsureArgumentIsNotNull(ioFactory);
 
 		    this.ioFactory = ioFactory;
-		    entries = new ObservableCollection<IOdbcFieldMapEntry>();
+		    Entries = new List<IOdbcFieldMapEntry>();
 		}
 
         /// <summary>
         /// The ODBC Field Map Entries
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public ObservableCollection<IOdbcFieldMapEntry> Entries => entries;
+        public List<IOdbcFieldMapEntry> Entries { get; }
 
         /// <summary>
         /// Gets or sets the name of the record identifier column.
@@ -44,7 +42,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// </summary>
         public void AddEntry(IOdbcFieldMapEntry entry)
 		{
-			entries.Add(entry);
+			Entries.Add(entry);
 		}
 
         /// <summary>
@@ -52,7 +50,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// </summary>
         public void RemoveEntry(IOdbcFieldMapEntry entry)
         {
-            entries.Remove(entry);
+            Entries.Remove(entry);
         }
 
         /// <summary>
@@ -60,7 +58,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// </summary>
         private void ResetValues()
         {
-            foreach (var entry in entries)
+            foreach (var entry in Entries)
             {
                 entry.ExternalField.ResetValue();
             }
@@ -69,10 +67,18 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <summary>
         /// Copies the values from the entries to corresponding fields on the entity
         /// </summary>
-        public void CopyToEntity(IEntity2 entity)
+        public void CopyToEntity(IEntity2 entity) => CopyToEntity(entity, 0);
+
+        /// <summary>
+        /// Copies the values from the entries to corresponding fields on the entity
+        /// </summary>
+        public void CopyToEntity(IEntity2 entity, int index)
         {
-            IEnumerable<IOdbcFieldMapEntry> applicableEntries = entries
-                .Where(e => e.ShipWorksField.Value != null && e.ShipWorksField.ContainingObjectName == entity.LLBLGenProEntityName);
+            IEnumerable<IOdbcFieldMapEntry> applicableEntries = Entries
+                .Where(
+                    e =>
+                        e.ShipWorksField.Value != null &&
+                        e.ShipWorksField.ContainingObjectName == entity.LLBLGenProEntityName && e.Index == index);
 
             foreach (IOdbcFieldMapEntry entry in applicableEntries)
             {
@@ -97,7 +103,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
                 return;
             }
 
-            foreach (IOdbcFieldMapEntry entry in entries)
+            foreach (IOdbcFieldMapEntry entry in Entries)
             {
                 // Load data from OdbcRecord
                 entry.LoadExternalField(record);

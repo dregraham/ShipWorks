@@ -1,13 +1,12 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Data.Common;
-using System.Linq;
-using Autofac.Extras.Moq;
+﻿using Autofac.Extras.Moq;
 using log4net;
 using Moq;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
+using System.Collections.Generic;
+using System.Data.Common;
+using System.Linq;
 using Xunit;
 
 namespace ShipWorks.Stores.Tests.Platforms.Odbc
@@ -55,7 +54,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
 
                 var map = mock.Mock<IOdbcFieldMap>();
                 map.Setup(m => m.RecordIdentifierSource).Returns("Record ID");
-                map.Setup(m => m.Entries).Returns(new ObservableCollection<IOdbcFieldMapEntry>(new List<IOdbcFieldMapEntry> { mapEntry.Object }));
+                map.Setup(m => m.Entries).Returns(new List<IOdbcFieldMapEntry> { mapEntry.Object });
 
                 var testObject = mock.Create<OdbcDownloadCommand>();
 
@@ -111,7 +110,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
 
                 var map = mock.Mock<IOdbcFieldMap>();
                 map.Setup(m => m.RecordIdentifierSource).Returns("Record ID");
-                map.Setup(m => m.Entries).Returns(new ObservableCollection<IOdbcFieldMapEntry>(new List<IOdbcFieldMapEntry> { mapEntry.Object }));
+                map.Setup(m => m.Entries).Returns(new List<IOdbcFieldMapEntry> { mapEntry.Object });
 
                 var testObject = mock.Create<OdbcDownloadCommand>();
                 var records = testObject.Execute();
@@ -162,7 +161,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
 
                 var map = mock.Mock<IOdbcFieldMap>();
                 map.Setup(m => m.RecordIdentifierSource).Returns("Record ID");
-                map.Setup(m => m.Entries).Returns(new ObservableCollection<IOdbcFieldMapEntry>(new List<IOdbcFieldMapEntry> { mapEntry.Object }));
+                map.Setup(m => m.Entries).Returns(new List<IOdbcFieldMapEntry> { mapEntry.Object });
 
                 var testObject = mock.Create<OdbcDownloadCommand>();
                 var records = testObject.Execute();
@@ -213,7 +212,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
 
                 var map = mock.Mock<IOdbcFieldMap>();
                 map.Setup(m => m.RecordIdentifierSource).Returns("Record ID");
-                map.Setup(m => m.Entries).Returns(new ObservableCollection<IOdbcFieldMapEntry>(new List<IOdbcFieldMapEntry> { mapEntry.Object }));
+                map.Setup(m => m.Entries).Returns(new List<IOdbcFieldMapEntry> { mapEntry.Object });
 
                 var testObject = mock.Create<OdbcDownloadCommand>();
                 var records = testObject.Execute();
@@ -266,7 +265,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
 
                 var map = mock.Mock<IOdbcFieldMap>();
                 map.Setup(m => m.RecordIdentifierSource).Returns("Record ID");
-                map.Setup(m => m.Entries).Returns(new ObservableCollection<IOdbcFieldMapEntry>(new List<IOdbcFieldMapEntry> { mapEntry.Object }));
+                map.Setup(m => m.Entries).Returns(new List<IOdbcFieldMapEntry> { mapEntry.Object });
 
                 var testObject = mock.Create<OdbcDownloadCommand>();
                 testObject.Execute();
