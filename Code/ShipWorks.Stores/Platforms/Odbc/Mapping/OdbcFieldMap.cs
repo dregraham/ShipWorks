@@ -46,6 +46,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <summary>
         /// Gets or sets the name of the record identifier column.
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public string RecordIdentifierSource { get; set; }
 
         /// <summary>
@@ -212,7 +213,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
                 return clonedFieldMap;
             }
         }
-	
+
         /// <summary>
         /// Gets the name of the external table.
         /// </summary>
