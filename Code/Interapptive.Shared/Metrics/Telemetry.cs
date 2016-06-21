@@ -70,7 +70,7 @@ namespace Interapptive.Shared.Metrics
         private static string GetInstrumentationKey(Version version)
         {
             return version.Major > 0 ?
-                "TODO: Add real credentials" :
+                "3e4ff59c-d801-426c-9e6c-4cc8fa705396" :
                 "68bd8748-cd5d-4187-ba7f-8865ee128aae";
         }
 
