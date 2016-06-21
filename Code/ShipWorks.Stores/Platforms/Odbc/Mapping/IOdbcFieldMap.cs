@@ -1,4 +1,5 @@
 ﻿using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Data.Model;
 using System.Collections.Generic;
 using System.IO;
 
@@ -72,7 +73,14 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <summary>
         /// Finds the entries by.
         /// </summary>
-        IEnumerable<IOdbcFieldMapEntry> FindEntriesBy(EntityField2 field, bool includeEntriesWhereShipworksFieldIsNull);
+        IEnumerable<IOdbcFieldMapEntry> FindEntriesBy(EntityField2 field, bool includeWhenShipworksFieldIsNull);
+
+        /// <summary>
+        /// Finds the entries for the given entity and index.
+        /// </summary>
+        IEnumerable<IOdbcFieldMapEntry> FindEntriesBy(IEnumerable<EntityType> entityTypes,
+            int index,
+            bool includeWhenShipworksFieldIsNull);
 
         /// <summary>
         /// Make a copy of the IOdbcFieldMap

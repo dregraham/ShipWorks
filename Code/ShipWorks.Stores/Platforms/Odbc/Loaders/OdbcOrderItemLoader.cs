@@ -1,4 +1,5 @@
 using Interapptive.Shared.Utility;
+using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
@@ -39,14 +40,20 @@ namespace ShipWorks.Stores.Platforms.Odbc.Loaders
                 for (int i = 0; i <= maxIndex; i++)
                 {
                     int itemIndex = i;
-                    OrderItemEntity item = new OrderItemEntity(order);
-                    clonedMap.CopyToEntity(item, itemIndex);
 
-                    SetCost(clonedMap, item, itemIndex);
-                    SetPrice(clonedMap, item, itemIndex);
-                    SetWeight(clonedMap, item, itemIndex);
+                    if (clonedMap.FindEntriesBy(
+                            new[] {EntityType.OrderItemEntity, EntityType.OrderItemAttributeEntity}, itemIndex, false)
+                            .Any())
+                    {
+                        OrderItemEntity item = new OrderItemEntity(order);
+                        clonedMap.CopyToEntity(item, itemIndex);
 
-                    attributeLoader.Load(clonedMap, item, itemIndex);
+                        SetCost(clonedMap, item, itemIndex);
+                        SetPrice(clonedMap, item, itemIndex);
+                        SetWeight(clonedMap, item, itemIndex);
+
+                        attributeLoader.Load(clonedMap, item, itemIndex);
+                    }
                 }
             }
         }

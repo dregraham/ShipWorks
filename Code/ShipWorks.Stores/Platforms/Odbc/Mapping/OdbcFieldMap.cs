@@ -1,6 +1,7 @@
 using Interapptive.Shared.Utility;
 using Newtonsoft.Json;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Data.Model;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -184,6 +185,17 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         public IEnumerable<IOdbcFieldMapEntry> FindEntriesBy(EntityField2 field, bool includeWhenShipworksFieldIsNull)
         {
             return FindEntriesBy(field).Where(e => includeWhenShipworksFieldIsNull || e.ShipWorksField.Value != null);
+        }
+
+        /// <summary>
+        /// Finds the entries by entity and index.
+        /// </summary>
+        public IEnumerable<IOdbcFieldMapEntry> FindEntriesBy(IEnumerable<EntityType> entityTypes, int index, bool includeWhenShipworksFieldIsNull)
+        {
+            return Entries
+                .Where(entry => entityTypes.Any(e => e.ToString() == entry.ShipWorksField.ContainingObjectName))
+                .Where(e => includeWhenShipworksFieldIsNull || e.ShipWorksField.Value != null)
+                .Where(e => e.Index == index);
         }
 
         /// <summary>
