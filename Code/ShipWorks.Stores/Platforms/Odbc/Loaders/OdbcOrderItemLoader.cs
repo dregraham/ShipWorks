@@ -32,7 +32,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Loaders
             IOdbcFieldMap clonedMap = map.Clone();
 
             int maxIndex = clonedMap.MaxIndex;
-            
+
             foreach (OdbcRecord odbcRecord in odbcRecords)
             {
                 clonedMap.ApplyValues(odbcRecord);
@@ -62,6 +62,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Loaders
         {
             IEnumerable<IOdbcFieldMapEntry> unitWeightFields =
                 clonedMap.FindEntriesBy(OrderItemFields.Weight, false).Where(e => e.Index == itemIndex);
+
             item.Weight = (double) GetUnitAmount(unitWeightFields, item, OdbcOrderFieldDescription.ItemUnitWeight,
                 OdbcOrderFieldDescription.ItemTotalWeight);
         }
@@ -70,6 +71,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Loaders
         {
             IEnumerable<IOdbcFieldMapEntry> costFields =
                 clonedMap.FindEntriesBy(OrderItemFields.UnitCost, false).Where(e => e.Index == itemIndex);
+
             item.UnitCost = GetUnitAmount(costFields, item, OdbcOrderFieldDescription.ItemUnitCost,
                 OdbcOrderFieldDescription.ItemTotalCost);
         }
@@ -78,6 +80,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Loaders
         {
             IEnumerable<IOdbcFieldMapEntry> unitPriceFields =
                 clonedMap.FindEntriesBy(OrderItemFields.UnitPrice, false).Where(e => e.Index == itemIndex);
+
             item.UnitPrice = GetUnitAmount(unitPriceFields, item, OdbcOrderFieldDescription.ItemUnitPrice,
                 OdbcOrderFieldDescription.ItemTotalPrice);
         }
@@ -107,6 +110,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Loaders
             // If we don't have a total amount or the quantity is 0, we can't determine the unit amount, so return 0.
             IShipWorksOdbcMappableField totalAmountField =
                 shipworksFields.SingleOrDefault(f => f.DisplayName == EnumHelper.GetDescription(totalDescription));
+
             if (totalAmountField == null || Math.Abs(item.Quantity) < .01)
             {
                 return 0;
