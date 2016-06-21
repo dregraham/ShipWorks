@@ -2,6 +2,7 @@
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using log4net;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
@@ -17,7 +18,6 @@ using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 using System.Windows.Input;
-using SD.LLBLGen.Pro.ORMSupportClasses;
 using SaveFileDialog = Microsoft.Win32.SaveFileDialog;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc
@@ -42,9 +42,6 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         private bool isSingleLineOrder = true;
         private int numberOfAttributesPerItem;
         private int numberOfItemsPerOrder;
-        private OdbcFieldMapDisplay order;
-        private OdbcFieldMapDisplay address;
-        private ObservableCollection<OdbcFieldMapDisplay> items;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcImportFieldMappingControlViewModel"/> class.
@@ -60,9 +57,9 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             SaveMapCommand = new RelayCommand(SaveMapToDisk,() => selectedTable != null);
             TableChangedCommand = new RelayCommand(TableChanged);
 
-            order = new OdbcFieldMapDisplay("Order", fieldMapFactory.CreateOrderFieldMap());
-            address = new OdbcFieldMapDisplay("Address", fieldMapFactory.CreateAddressFieldMap());
-            items = new ObservableCollection<OdbcFieldMapDisplay>();
+            Order = new OdbcFieldMapDisplay("Order", fieldMapFactory.CreateOrderFieldMap());
+            Address = new OdbcFieldMapDisplay("Address", fieldMapFactory.CreateAddressFieldMap());
+            Items = new ObservableCollection<OdbcFieldMapDisplay>();
 
             selectedFieldMap = Order;
 
@@ -81,31 +78,19 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// Gets or sets the order entries.
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public OdbcFieldMapDisplay Order
-        {
-            get { return order; }
-            set { handler.Set(nameof(Order), ref order, value); }
-        }
+        public OdbcFieldMapDisplay Order { get; set; }
 
         /// <summary>
         /// Gets or sets the address entries.
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public OdbcFieldMapDisplay Address
-        {
-            get { return address; }
-            set { handler.Set(nameof(Address), ref address, value); }
-        }
+        public OdbcFieldMapDisplay Address { get; set; }
 
         /// <summary>
         /// Gets or sets the item entries.
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public ObservableCollection<OdbcFieldMapDisplay> Items
-        {
-            get { return items; }
-            set { handler.Set(nameof(Items), ref items, value); }
-        }
+        public ObservableCollection<OdbcFieldMapDisplay> Items { get; set; }
 
         /// <summary>
         /// The name the map will be saved as.
@@ -297,6 +282,9 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
                 entry.ShipWorksField.ContainingObjectName == field.ContainingObjectName);
         }
 
+        /// <summary>
+        /// Gets the specified number of attributes with item numbers started at the specified start number.
+        /// </summary>
         private IEnumerable<OdbcFieldMapEntry> GetRangeOfAttributes(int startAttributeNumber, int numberOfAttributes)
         {
             // Generate attribute numbers for new attributes to add and add them.

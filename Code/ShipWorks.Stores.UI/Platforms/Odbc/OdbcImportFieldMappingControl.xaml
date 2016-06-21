@@ -45,7 +45,7 @@
         </Style>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
         <ui:VisibleWhenEqualToParameterConverter x:Key="VisibleWhenEqualToParameterConverter" />
-        <local:OdbcFieldMapMultiValueConverter x:Key="MapMultiValueConverter"></local:OdbcFieldMapMultiValueConverter>
+        <local:OdbcFieldMapMultiValueConverter x:Key="MapMultiValueConverter" />
         <DataTemplate x:Key="SourceColumnComboBoxItemTemplate">
             <Control x:Name="SourceColumns" Focusable="False">
                 <Control.Template>
@@ -260,7 +260,7 @@
                     <MultiBinding Converter="{StaticResource MapMultiValueConverter}">
                         <Binding Path="Order" />
                         <Binding Path="Address" />
-                        <Binding Path="Items" UpdateSourceTrigger="PropertyChanged"/>
+                        <Binding Path="Items" />
                         <Binding Path="Items.Count" UpdateSourceTrigger="PropertyChanged"/>
                     </MultiBinding>
                 </ListBox.ItemsSource>

@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
+using System.Linq;
 using System.Windows.Data;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc
@@ -15,13 +15,8 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             ObservableCollection<OdbcFieldMapDisplay> items = values[2] as ObservableCollection<OdbcFieldMapDisplay>;
 
             ObservableCollection<OdbcFieldMapDisplay> maps = new ObservableCollection<OdbcFieldMapDisplay> {order, address};
-            if (items != null)
-            {
-                foreach (OdbcFieldMapDisplay item in items)
-                {
-                    maps.Add(item);
-                }
-            }
+
+            items?.ToList().ForEach(maps.Add);
 
             return maps;
         }
