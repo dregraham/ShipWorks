@@ -19,7 +19,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         IShipWorksOdbcMappableField ShipWorksField { get; }
 
         /// <summary>
-        /// Gets the index.
+        /// Index to help identify the entry
         /// </summary>
         int Index { get; }
 
