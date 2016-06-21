@@ -290,13 +290,13 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                 }
                 else
                 {
-                    // The cheapest rate is not a counter rate, so compile a list of the possible
-                    // rates to apply to the shipment during processing. This is basically a fail
-                    // over mechanism in case the processing with the first rate fails
-                    ratesToApplyToReturnedShipments = rateGroups
-                        .SelectMany(x => x.Rates)
-                        .Where(r => !r.IsCounterRate && r.AmountOrDefault == bestRate.AmountOrDefault)
-                        .ToList();
+                // The cheapest rate is not a counter rate, so compile a list of the possible
+                // rates to apply to the shipment during processing. This is basically a fail
+                // over mechanism in case the processing with the first rate fails
+                ratesToApplyToReturnedShipments = rateGroups
+                    .SelectMany(x => x.Rates)
+                    .Where(r => !r.IsCounterRate && r.AmountOrDefault == bestRate.AmountOrDefault)
+                    .ToList();
                 }
             }
 
@@ -357,9 +357,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             // We want to try to process with the selected rate that was provided. Build
             // up our list of fail over candidates in case the processing the shipment with
             // the first rate fails
-            List<RateResult> ratesToApplyToReturnedShipments = rateGroups
-                .ToList()
-                .SelectMany(x => x.Rates)
+            List<RateResult> ratesToApplyToReturnedShipments = filteredRates.Rates
                 .Where(r => r.AmountOrDefault == selectedRate.AmountOrDefault && r.OriginalTag != null && selectedRate.OriginalTag != null && r.OriginalTag.Equals(selectedRate.OriginalTag))
                 .ToList();
 
