@@ -16,6 +16,17 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         {
             DisplayName = displayName;
             Entries = new ObservableCollection<IOdbcFieldMapEntry>(map.Entries);
+            Index = 0;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="OdbcFieldMapDisplay"/> class.
+        /// </summary>
+        public OdbcFieldMapDisplay(string displayName, OdbcFieldMap map, int index)
+        {
+            DisplayName = displayName;
+            Entries = new ObservableCollection<IOdbcFieldMapEntry>(map.Entries);
+            Index = index;
         }
 
         /// <summary>
@@ -29,5 +40,10 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// </summary>
         [Obfuscation(Exclude = true)]
         public ObservableCollection<IOdbcFieldMapEntry> Entries { get; set; }
+
+        /// <summary>
+        /// The index of the filed
+        /// </summary>
+        public int Index { get; set; }
     }
 }

@@ -217,9 +217,9 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
                         OdbcFieldMap map = fieldMapFactory.CreateOrderItemFieldMap(i);
 
                         // Give the new item the correct number of attributes
-                        GetRangeOfAttributes(1, numberOfAttributesPerItem).ToList().ForEach(m => map.AddEntry(m));
+                        GetRangeOfAttributes(1, numberOfAttributesPerItem, i).ToList().ForEach(m => map.AddEntry(m));
 
-                        Items.Add(new OdbcFieldMapDisplay($"Item {i + 1}", map));
+                        Items.Add(new OdbcFieldMapDisplay($"Item {i + 1}", map, i));
                     }
                 }
                 else if (delta < 0)
@@ -252,7 +252,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
                     {
                         if (delta > 0)
                         {
-                            GetRangeOfAttributes(numberOfAttributesPerItem + 1, delta)
+                            GetRangeOfAttributes(numberOfAttributesPerItem + 1, delta, displayMap.Index)
                                 .ToList()
                                 .ForEach(displayMap.Entries.Add);
                         }
@@ -286,7 +286,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// <summary>
         /// Gets the specified number of attributes with item numbers started at the specified start number.
         /// </summary>
-        private IEnumerable<OdbcFieldMapEntry> GetRangeOfAttributes(int startAttributeNumber, int numberOfAttributes)
+        private IEnumerable<OdbcFieldMapEntry> GetRangeOfAttributes(int startAttributeNumber, int numberOfAttributes, int itemIndex)
         {
             // Generate attribute numbers for new attributes to add and add them.
             return Enumerable.Range(startAttributeNumber, numberOfAttributes)
@@ -294,7 +294,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
                     attributeNumber =>
                         new OdbcFieldMapEntry(
                             new ShipWorksOdbcMappableField(OrderItemAttributeFields.Name,
-                                $"Attribute {attributeNumber}"), new ExternalOdbcMappableField(null, null)));
+                                $"Attribute {attributeNumber}"), new ExternalOdbcMappableField(null, null),itemIndex));
         }
 
         /// <summary>
