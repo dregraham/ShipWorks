@@ -206,7 +206,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             set
             {
                 Debug.Assert(IsSingleLineOrder || value == 1,
-                    "Should never set multi line order numberOfItemsPerORder to a value other than 1.");
+                    "Should never set multi line order numberOfItemsPerOrder to a value other than 1.");
 
                 int delta = value - numberOfItemsPerOrder;
 
