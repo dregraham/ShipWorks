@@ -336,7 +336,7 @@
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="140" />
+                        <ColumnDefinition Width="145" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
                     <Border Grid.Row="0" Grid.Column="0"
@@ -363,7 +363,7 @@
                                         <Border BorderBrush="Gray" BorderThickness="0 0 0 1">
                                             <Grid>
                                                 <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="140" />
+                                                    <ColumnDefinition Width="145" />
                                                     <ColumnDefinition Width="*" />
                                                 </Grid.ColumnDefinitions>
                                                 <Label Grid.Column="0" Content="{Binding ShipWorksField.DisplayName}"
