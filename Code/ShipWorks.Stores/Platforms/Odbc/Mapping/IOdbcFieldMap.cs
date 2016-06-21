@@ -16,7 +16,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         List<IOdbcFieldMapEntry> Entries { get; }
 
         /// <summary>
-        /// Gets the maximum index.
+        /// Gets the maximum Entry index.
         /// </summary>
         int MaxIndex { get; }
 
@@ -29,11 +29,6 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// Add the given ODBC Field Map Entry to the ODBC Field Map.
         /// </summary>
         void AddEntry(IOdbcFieldMapEntry entry);
-
-        /// <summary>
-        /// Removes the entry
-        /// </summary>
-        void RemoveEntry(IOdbcFieldMapEntry entry);
 
         /// <summary>
         /// Loads the ODBC Field Map from the given string.

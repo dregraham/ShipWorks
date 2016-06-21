@@ -35,7 +35,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         public List<IOdbcFieldMapEntry> Entries { get; }
 
         /// <summary>
-        /// Gets the maximum index.
+        /// Gets the maximum Entry index.
         /// </summary>
         [JsonIgnore]
         public int MaxIndex
@@ -56,14 +56,6 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 		{
 			Entries.Add(entry);
 		}
-
-        /// <summary>
-        /// Removes the entry
-        /// </summary>
-        public void RemoveEntry(IOdbcFieldMapEntry entry)
-        {
-            Entries.Remove(entry);
-        }
 
         /// <summary>
         /// Reset all of the entries external fields
