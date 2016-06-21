@@ -215,10 +215,11 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
                     for (int i = numberOfItemsPerOrder; i < value; i++)
                     {
                         OdbcFieldMap map = fieldMapFactory.CreateOrderItemFieldMap(i);
-                        Items.Add(new OdbcFieldMapDisplay($"Item {i + 1}", map));
 
                         // Give the new item the correct number of attributes
                         GetRangeOfAttributes(1, numberOfAttributesPerItem).ToList().ForEach(m => map.AddEntry(m));
+
+                        Items.Add(new OdbcFieldMapDisplay($"Item {i + 1}", map));
                     }
                 }
                 else if (delta < 0)
