@@ -71,7 +71,6 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// <summary>
         /// Gets the data source.
         /// </summary>
-        [Obfuscation(Exclude = true)]
         public IOdbcDataSource DataSource { get; private set; }
 
         /// <summary>
