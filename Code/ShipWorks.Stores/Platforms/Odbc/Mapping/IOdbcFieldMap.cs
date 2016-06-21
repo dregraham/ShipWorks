@@ -13,7 +13,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <summary>
         /// The ODBC Field Map Entries.
         /// </summary>
-        List<IOdbcFieldMapEntry> Entries { get; }
+        IEnumerable<IOdbcFieldMapEntry> Entries { get; }
 
         /// <summary>
         /// Gets the maximum Entry index.

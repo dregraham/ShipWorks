@@ -16,6 +16,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 	public class OdbcFieldMap : IOdbcFieldMap
     {
 		private readonly IOdbcFieldMapIOFactory ioFactory;
+        private readonly List<IOdbcFieldMapEntry> entries;
 
         /// <summary>
         /// Constructor
@@ -25,14 +26,20 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 		    MethodConditions.EnsureArgumentIsNotNull(ioFactory);
 
 		    this.ioFactory = ioFactory;
-		    Entries = new List<IOdbcFieldMapEntry>();
+		    entries = new List<IOdbcFieldMapEntry>();
 		}
 
         /// <summary>
         /// The ODBC Field Map Entries
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public List<IOdbcFieldMapEntry> Entries { get; }
+        public IEnumerable<IOdbcFieldMapEntry> Entries
+        {
+            get
+            {
+                return entries;
+            }
+        }
 
         /// <summary>
         /// Gets the maximum Entry index.
@@ -54,7 +61,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// </summary>
         public void AddEntry(IOdbcFieldMapEntry entry)
 		{
-			Entries.Add(entry);
+			entries.Add(entry);
 		}
 
         /// <summary>

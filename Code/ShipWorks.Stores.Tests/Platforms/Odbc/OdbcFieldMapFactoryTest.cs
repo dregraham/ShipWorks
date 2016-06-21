@@ -22,13 +22,13 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         [Fact]
         public void CreateOrderMap_ReturnsMapWithCorrectNumberOfOrderMappingFields()
         {
-            Assert.Equal(21, testObject.CreateOrderFieldMap().Entries.Count);
+            Assert.Equal(21, testObject.CreateOrderFieldMap().Entries.Count());
         }
 
         [Fact]
         public void CreateItemMap_ReturnsMapWithCorrectNumberOfOrderMappingFields()
         {
-            Assert.Equal(17, testObject.CreateOrderItemFieldMap(0).Entries.Count);
+            Assert.Equal(17, testObject.CreateOrderItemFieldMap(0).Entries.Count());
         }
 
         [Fact]
@@ -42,7 +42,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         [Fact]
         public void CreateAddressMap_ReturnsMapWithCorrectNumberOfOrderMappingFields()
         {
-            Assert.Equal(32, testObject.CreateAddressFieldMap().Entries.Count);
+            Assert.Equal(32, testObject.CreateAddressFieldMap().Entries.Count());
         }
 
         [Fact]
