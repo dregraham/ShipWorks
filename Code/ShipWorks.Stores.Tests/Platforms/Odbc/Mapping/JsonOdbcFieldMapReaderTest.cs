@@ -23,6 +23,45 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
             log = mock.Mock<ILog>();
         }
 
+        [Fact]
+        public void Constructor_ThrowsArgumentNullException_WhenSerializedMapIsNull()
+        {
+            string map = null;
+
+            Assert.Throws<ArgumentNullException>(() =>new JsonOdbcFieldMapReader(map, log.Object));
+        }
+
+        [Fact]
+        public void Constructor_ThrowsShipWorksOdbcException_WhenJsonReaderExceptionIsCaught()
+        {
+            string map = string.Empty;
+
+            Assert.Throws<ShipWorksOdbcException>(() => new JsonOdbcFieldMapReader(map, log.Object));
+        }
+
+        [Fact]
+        public void ReadEntry_ThrowsShipWorksOdbcException_WhenExceptionIsCaught()
+        {
+            var map = "{Not:\"A Map\"}";
+            JsonOdbcFieldMapReader reader = new JsonOdbcFieldMapReader(map, log.Object);
+
+            Assert.Throws<ShipWorksOdbcException>(() => reader.ReadEntry());
+        }
+
+        [Fact]
+        public void ReadEntry_LogsError_WhenExceptionIsCaught()
+        {
+            var map = "{Not:\"A Map\"}";
+            JsonOdbcFieldMapReader reader = new JsonOdbcFieldMapReader(map, log.Object);
+            try
+            {
+                reader.ReadEntry();
+            }
+            catch (Exception)
+            {
+                log.Verify(l => l.Error(It.IsAny<string>(), It.IsAny<Exception>()), Times.Once);
+            }
+        }
 
         [Fact]
         public void ReadyEntry_ReturnsOdbcFieldMapEntry()
@@ -46,6 +85,8 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
 
             Assert.Null(entry2);
         }
+
+
 
         private string GetSerializedFieldMap()
         {
