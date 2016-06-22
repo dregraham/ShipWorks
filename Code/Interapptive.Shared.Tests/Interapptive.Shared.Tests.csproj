@@ -94,6 +94,7 @@
     <Compile Include="Collections\CollectionChangedEventArgsTest.cs" />
     <Compile Include="Collections\ObservableExtensionsTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Security\AesStreamEncryptionProviderTest.cs" />
     <Compile Include="Utility\EnumHelperTest.cs" />
     <Compile Include="Utility\CaseInsensitiveEqualityComparerTest.cs" />
     <Compile Include="Utility\DoubleExtensionsTest.cs" />

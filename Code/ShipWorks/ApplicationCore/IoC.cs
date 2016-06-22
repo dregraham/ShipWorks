@@ -251,6 +251,9 @@ namespace ShipWorks.ApplicationCore
 
             builder.RegisterType<LicenseCipherKey>()
                 .Keyed<ICipherKey>(CipherContext.License);
+
+            builder.RegisterType<FileCipherKey>()
+                .Keyed<ICipherKey>(CipherContext.File);
         }
 
         /// <summary>

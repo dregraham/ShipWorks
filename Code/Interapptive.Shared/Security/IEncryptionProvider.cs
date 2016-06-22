@@ -1,4 +1,6 @@
-﻿namespace Interapptive.Shared.Security
+﻿using System.IO;
+
+namespace Interapptive.Shared.Security
 {
     /// <summary>
     /// Interface for encrypting and decrypting text
@@ -14,5 +16,15 @@
         /// Decrypts the given encrypted text.
         /// </summary>
         string Decrypt(string encryptedText);
+
+        /// <summary>
+        /// Encrypts the given decrypted stream.
+        /// </summary>
+        void Encrypt(Stream sourceStream, Stream outputStream);
+
+        /// <summary>
+        /// Decrypts the given encrypted stream.
+        /// </summary>
+        void Decrypt(Stream sourceStream, Stream outputStream);
     }
 }

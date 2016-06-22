@@ -1,4 +1,7 @@
-﻿namespace Interapptive.Shared.Security
+﻿using System;
+using System.IO;
+
+namespace Interapptive.Shared.Security
 {
     /// <summary>
     /// 
@@ -30,6 +33,22 @@
         public string Decrypt(string encryptedText)
         {
             return SecureText.Decrypt(encryptedText, salt);
+        }
+
+        /// <summary>
+        /// Encrypts the given stream.
+        /// </summary>
+        public void Encrypt(Stream sourceStream, Stream outputStream)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Decrypts the given stream.
+        /// </summary>
+        public void Decrypt(Stream sourceStream, Stream outputStream)
+        {
+            throw new NotImplementedException();
         }
     }
 }
