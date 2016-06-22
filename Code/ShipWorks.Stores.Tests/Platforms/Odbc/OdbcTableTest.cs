@@ -164,7 +164,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             OdbcTable table = new OdbcTable("Orders");
 
             table.Load(dataSource.Object, log.Object);
-
+            dataTable.Dispose();
             connection.Verify(c => c.Open());
         }
 
@@ -198,7 +198,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             OdbcTable table = new OdbcTable("Orders");
 
             table.Load(dataSource.Object, log.Object);
-
+            dataTable.Dispose();
             connection.Verify(c => c.GetSchema("Columns", restriction));
         }
 
