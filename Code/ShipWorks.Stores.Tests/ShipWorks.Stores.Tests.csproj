@@ -190,6 +190,7 @@
     <Compile Include="Platforms\Odbc\OdbcImportFieldMappingControlViewModelTest.cs" />
     <Compile Include="Platforms\Odbc\OdbcRecordTests.cs" />
     <Compile Include="Platforms\Odbc\OdbcSchemaTest.cs" />
+    <Compile Include="Platforms\Odbc\OdbcStoreTypeTest.cs" />
     <Compile Include="Platforms\Odbc\OdbcTableTest.cs" />
     <Compile Include="Platforms\Sears\SearsCredentialsTest.cs" />
     <Compile Include="Platforms\Sears\SearsCipherKeyTest.cs" />
