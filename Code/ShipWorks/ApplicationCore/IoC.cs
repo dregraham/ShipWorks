@@ -253,7 +253,7 @@ namespace ShipWorks.ApplicationCore
                 .Keyed<ICipherKey>(CipherContext.License);
 
             builder.RegisterType<FileCipherKey>()
-                .Keyed<ICipherKey>(CipherContext.File);
+                .Keyed<ICipherKey>(CipherContext.Stream);
         }
 
         /// <summary>

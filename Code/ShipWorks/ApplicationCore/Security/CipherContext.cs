@@ -15,7 +15,7 @@ namespace ShipWorks.ApplicationCore.Security
         [Description("License Context")]
         License,
 
-        [Description("File Context")]
-        File
+        [Description("Stream Context")]
+        Stream
     }
 }
