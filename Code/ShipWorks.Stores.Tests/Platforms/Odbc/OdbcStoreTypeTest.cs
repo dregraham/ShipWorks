@@ -8,7 +8,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
 {
     public class OdbcStoreTypeTest
     {
-        private OdbcStoreEntity store;
+        private readonly OdbcStoreEntity store;
 
         public OdbcStoreTypeTest()
         {

@@ -31,7 +31,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Loaders
         {
             IOdbcFieldMap clonedMap = map.Clone();
 
-            int maxIndex = clonedMap.MaxIndex;
+            int maxIndex = clonedMap.Entries.Max(e => e.Index);
 
             foreach (OdbcRecord odbcRecord in odbcRecords)
             {

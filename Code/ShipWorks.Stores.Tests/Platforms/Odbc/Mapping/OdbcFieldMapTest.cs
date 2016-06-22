@@ -517,32 +517,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
             fieldMapReader.Verify(f => f.ReadEntry(), Times.Once);
         }
 
-        [Fact]
-        public void MaxIndex_SetCorrectly_WhenEntries()
-        {
-            var testObject = mock.Create<OdbcFieldMap>();
-
-            var entry = mock.Mock<IOdbcFieldMapEntry>();
-            entry.Setup(e => e.Index).Returns(42);
-
-            testObject.AddEntry(entry.Object);
-
-            Assert.Equal(42, testObject.MaxIndex);
-        }
-
-        [Fact]
-        public void MaxIndex_IsZero_WhenNoEntries()
-        {
-            var testObject = mock.Create<OdbcFieldMap>();
-
-            var entry = mock.Mock<IOdbcFieldMapEntry>();
-            entry.Setup(e => e.Index).Returns(0);
-
-            testObject.AddEntry(entry.Object);
-
-            Assert.Equal(0, testObject.MaxIndex);
-        }
-
         private Stream GetStreamWithFieldMap()
         {
             MemoryStream stream = new MemoryStream();
