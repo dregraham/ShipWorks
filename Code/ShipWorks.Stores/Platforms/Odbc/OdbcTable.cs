@@ -65,7 +65,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
                 }
                 catch (DbException ex)
                 {
-                    log.Error(ex.Message);
+                    log.Error(ex);
                     throw new ShipWorksOdbcException(
                         $"An error occurred while attempting to open a connection to {dataSource.Name}.", ex);
                 }
