@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
-using Interapptive.Shared.Utility;
+﻿using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
+using System.Collections.Generic;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Loaders
 {
@@ -21,7 +21,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Loaders
 
             if (order.IsNew)
             {
-                IEnumerable<IOdbcFieldMapEntry> paymentEntries = map.FindEntriesBy(OrderPaymentDetailFields.Value);
+                IEnumerable<IOdbcFieldMapEntry> paymentEntries = map.FindEntriesBy(OrderPaymentDetailFields.Value, false);
                 foreach (IOdbcFieldMapEntry entry in paymentEntries)
                 {
                     AddPaymentDetailToOrder(order, entry);

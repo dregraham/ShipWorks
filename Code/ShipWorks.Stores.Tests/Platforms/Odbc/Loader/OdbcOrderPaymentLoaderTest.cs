@@ -28,7 +28,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
                 mapEntry.Setup(e => e.ShipWorksField).Returns(shipworksField.Object);
 
                 map.Object.AddEntry(mapEntry.Object);
-                map.Setup(m => m.FindEntriesBy(It.IsAny<EntityField2>())).
+                map.Setup(m => m.FindEntriesBy(It.IsAny<EntityField2>(), false)).
                     Returns(new List<IOdbcFieldMapEntry> { mapEntry.Object });
 
                 OdbcOrderPaymentLoader testObject = new OdbcOrderPaymentLoader();
@@ -66,7 +66,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
 
                 map.Object.AddEntry(mapEntry.Object);
                 map.Object.AddEntry(mapEntry2.Object);
-                map.Setup(m => m.FindEntriesBy(It.IsAny<EntityField2>())).
+                map.Setup(m => m.FindEntriesBy(It.IsAny<EntityField2>(), false)).
                     Returns(new List<IOdbcFieldMapEntry> { mapEntry.Object, mapEntry2.Object });
 
                 OdbcOrderPaymentLoader testObject = new OdbcOrderPaymentLoader();
