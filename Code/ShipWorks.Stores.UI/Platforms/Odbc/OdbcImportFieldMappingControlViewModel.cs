@@ -426,7 +426,10 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
 
             // If the value has changed and there was a table previously selected,
             // see if any column has been mapped and allow user to cancel if it has been
-            if (previousSelectedTable != null && CreateMap().Entries.Any(e => e.ExternalField?.Column != null))
+            if (previousSelectedTable != null &&
+                (Order.Entries.Any(e => e.ExternalField?.Column != null) ||
+                Address.Entries.Any(e => e.ExternalField?.Column != null) ||
+                Items.SelectMany(item => item.Entries).Any(e => e.ExternalField?.Column != null)))
             {
                 DialogResult questionResult = messageHelper.ShowQuestion(MessageBoxIcon.Warning,
                     MessageBoxButtons.YesNo,
