@@ -124,7 +124,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
                 mock.Mock<IDateTimeProvider>().Setup(d => d.UtcNow).Returns(DateTime.Now);
 
                 testObject.Load(fieldMap.Object, orderEntity, odbcRecords);
-                
+
                 Assert.False(orderEntity.Fields[(int) OrderFieldIndex.OrderDate].IsChanged);
             }
         }
@@ -185,6 +185,38 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
                 testObject.Load(fieldMap.Object, orderEntity, odbcRecords);
 
                 orderItemLoader.Verify(l => l.Load(fieldMap.Object, orderEntity, odbcRecords), Times.Never);
+            }
+        }
+
+        [Fact]
+        public void Load_SetsBillingCountryCodeToUS_WhenCountryCodeIsEmptryString()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                var fieldMap = mock.Mock<IOdbcFieldMap>();
+                var orderEntity = new OrderEntity() { BillCountryCode = string.Empty };
+                var odbcRecords = new[] { new OdbcRecord() };
+                var testObject = mock.Create<OdbcOrderLoader>();
+
+                testObject.Load(fieldMap.Object, orderEntity, odbcRecords);
+
+                Assert.Equal("US", orderEntity.BillCountryCode);
+            }
+        }
+
+        [Fact]
+        public void Load_SetsShippingCountryCodeToUS_WhenCountryCodeIsEmptryString()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                var fieldMap = mock.Mock<IOdbcFieldMap>();
+                var orderEntity = new OrderEntity() { ShipCountryCode = string.Empty };
+                var odbcRecords = new[] { new OdbcRecord() };
+                var testObject = mock.Create<OdbcOrderLoader>();
+
+                testObject.Load(fieldMap.Object, orderEntity, odbcRecords);
+
+                Assert.Equal("US", orderEntity.ShipCountryCode);
             }
         }
     }
