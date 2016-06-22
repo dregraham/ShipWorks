@@ -23,5 +23,11 @@
         /// <param name="salt">The salt.</param>
         /// <returns>IEncryptionProvider.</returns>
         IEncryptionProvider CreateSecureTextEncryptionProvider(string salt);
+
+        /// <summary>
+        /// Creates the AES Stream encryption provider.
+        /// </summary>
+        /// <returns>An instance of AesStreamEncryptionProvider.</returns>
+        IEncryptionProvider CreateAesStreamEncryptionProvider();
     }
 }

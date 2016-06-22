@@ -22,7 +22,7 @@ namespace Interapptive.Shared.Tests.Security
 
         public AesStreamEncryptionProviderTest()
         {
-            testObject = new AesStreamEncryptionProvider(new FileCipherKey());
+            testObject = new AesStreamEncryptionProvider(new StreamCipherKey());
         }
 
         [Theory]

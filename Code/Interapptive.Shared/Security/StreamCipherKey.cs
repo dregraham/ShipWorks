@@ -6,12 +6,12 @@ namespace Interapptive.Shared.Security
     /// <summary>
     /// An ICipherKey implementation specific to the customer licensing.
     /// </summary>
-    public class FileCipherKey : ICipherKey
+    public class StreamCipherKey : ICipherKey
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="FileCipherKey" /> class.
+        /// Initializes a new instance of the <see cref="StreamCipherKey" /> class.
         /// </summary>
-        public FileCipherKey()
+        public StreamCipherKey()
         {
             InitializationVector = new byte[]
             {

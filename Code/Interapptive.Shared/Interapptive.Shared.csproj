@@ -159,7 +159,7 @@
     <Compile Include="Security\AesEncryptionProvider.cs" />
     <Compile Include="Security\AesStreamEncryptionProvider.cs" />
     <Compile Include="Security\EncryptionException.cs" />
-    <Compile Include="Security\FileCipherKey.cs" />
+    <Compile Include="Security\StreamCipherKey.cs" />
     <Compile Include="Security\ICipherKey.cs" />
     <Compile Include="Security\IEncryptionProvider.cs" />
     <Compile Include="Collections\ComparisonResult.cs" />
