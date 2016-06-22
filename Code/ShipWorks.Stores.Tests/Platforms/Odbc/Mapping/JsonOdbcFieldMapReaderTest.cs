@@ -86,7 +86,23 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
             Assert.Null(entry2);
         }
 
+        [Fact]
+        public void ReadRecordIdentifierSource_ReturnsEmptryString_WhenExceptionIsCaught()
+        {
+            var map = "{Not:\"A Map\"}";
+            JsonOdbcFieldMapReader reader = new JsonOdbcFieldMapReader(map, log.Object);
 
+            Assert.Equal(string.Empty, reader.ReadRecordIdentifierSource());
+        }
+
+        [Fact]
+        public void ReadRecordIdentifierSource_ReturnsRecordIdentifierSourceFromMap()
+        {
+            var map = "{RecordIdentifierSource:\"ID\"}";
+            JsonOdbcFieldMapReader reader = new JsonOdbcFieldMapReader(map, log.Object);
+
+            Assert.Equal("ID", reader.ReadRecordIdentifierSource());
+        }
 
         private string GetSerializedFieldMap()
         {

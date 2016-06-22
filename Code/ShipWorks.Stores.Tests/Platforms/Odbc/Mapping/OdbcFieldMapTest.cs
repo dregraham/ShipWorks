@@ -57,7 +57,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
         }
 
         [Fact]
-        public void Load_SetsEntries()
+        public void Load_SetsEntries_WhenPassedStream()
         {
             Stream stream = GetStreamWithFieldMap();
             OdbcFieldMap map = new OdbcFieldMap(GetIoFactory());
@@ -75,9 +75,53 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
         }
 
         [Fact]
-        public void Load_SetsEntries_WhenThereAreMultipleEntries()
+        public void Load_SetsEntries_WhenPassedStreamAndThereAreMultipleEntries()
         {
             Stream stream = GetStreamWithFieldMap();
+            OdbcFieldMap map = new OdbcFieldMap(GetIoFactory());
+
+            map.Load(stream);
+
+            map.AddEntry(GetFieldMapEntry(GetShipWorksField(OrderFields.BillFirstName, "Bill First Name"),
+                GetExternalField("SomeTableName2", "SomeColumnName2")));
+
+            IOdbcFieldMapEntry entry1 = map.Entries.FirstOrDefault();
+            Assert.Equal("Order Number", entry1.ShipWorksField.DisplayName);
+            Assert.Equal(OrderFields.OrderNumber.Name, entry1.ShipWorksField.Name);
+            Assert.Equal(OrderFields.OrderNumber.ContainingObjectName, entry1.ShipWorksField.ContainingObjectName);
+            Assert.Equal("SomeColumnName", entry1.ExternalField.Column.Name);
+            Assert.Equal("SomeTableName", entry1.ExternalField.Table.Name);
+
+            IOdbcFieldMapEntry entry2 = map.Entries.Skip(1).FirstOrDefault();
+            Assert.Equal("Bill First Name", entry2.ShipWorksField.DisplayName);
+            Assert.Equal(OrderFields.BillFirstName.Name, entry2.ShipWorksField.Name);
+            Assert.Equal(OrderFields.BillFirstName.ContainingObjectName, entry2.ShipWorksField.ContainingObjectName);
+            Assert.Equal("SomeColumnName2", entry2.ExternalField.Column.Name);
+            Assert.Equal("SomeTableName2", entry2.ExternalField.Table.Name);
+        }
+
+        [Fact]
+        public void Load_SetsEntries_WhenPassedSerializedMap()
+        {
+            string stream = GetStreamWithFieldMap().ConvertToString();
+            OdbcFieldMap map = new OdbcFieldMap(GetIoFactory());
+
+            map.Load(stream);
+
+            IOdbcFieldMapEntry entry = map.Entries.FirstOrDefault();
+
+            Assert.Equal("Order Number", entry.ShipWorksField.DisplayName);
+            Assert.Equal(OrderFields.OrderNumber.Name, entry.ShipWorksField.Name);
+            Assert.Equal(OrderFields.OrderNumber.ContainingObjectName, entry.ShipWorksField.ContainingObjectName);
+
+            Assert.Equal("SomeColumnName", entry.ExternalField.Column.Name);
+            Assert.Equal("SomeTableName", entry.ExternalField.Table.Name);
+        }
+
+        [Fact]
+        public void Load_SetsEntries_WhenPassedSerializedMapAndThereAreMultipleEntries()
+        {
+            string stream = GetStreamWithFieldMap().ConvertToString();
             OdbcFieldMap map = new OdbcFieldMap(GetIoFactory());
 
             map.Load(stream);
@@ -188,7 +232,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
                 shipworksField.Setup(e => e.Value).Returns("joe");
                 shipworksField.Setup(e => e.Name).Returns("BillFirstName");
                 shipworksField.Setup(e => e.ContainingObjectName).Returns("OrderEntity");
-                
+
                 var entry = mock.Mock<IOdbcFieldMapEntry>();
                 entry.Setup(e => e.ShipWorksField).Returns(shipworksField.Object);
                 entry.Setup(e => e.Index).Returns(1);
@@ -548,6 +592,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
 
             ioFactory.Setup(f => f.CreateWriter(It.IsAny<OdbcFieldMap>())).Returns((OdbcFieldMap m) => new JsonOdbcFieldMapWriter(m));
             ioFactory.Setup(f => f.CreateReader(It.IsAny<Stream>())).Returns<Stream>(s => new JsonOdbcFieldMapReader(s.ConvertToString(), log.Object));
+            ioFactory.Setup(f => f.CreateReader(It.IsAny<string>())).Returns<string>(s => new JsonOdbcFieldMapReader(s, log.Object));
 
             return ioFactory.Object;
         }
