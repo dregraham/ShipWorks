@@ -119,10 +119,8 @@ namespace ShipWorks.Stores.Platforms.Odbc
                 }
                 catch (ORMQueryExecutionException ex)
                 {
-                    
                     throw new DownloadException(ex.Message, ex);
                 }
-
 
                 Progress.PercentComplete = 100 * QuantitySaved / totalCount;
             }

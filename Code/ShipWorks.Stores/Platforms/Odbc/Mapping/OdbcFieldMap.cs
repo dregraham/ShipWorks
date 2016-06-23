@@ -86,7 +86,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
                 string destinationName = entry.ShipWorksField.Name;
 
                 // Set the CurrentValue of the entity field who's name matches the entry field
-                entity.Fields[destinationName].CurrentValue = entry.ShipWorksField.Value;
+                entity.SetNewFieldValue(destinationName, entry.ShipWorksField.Value);
             }
         }
 
