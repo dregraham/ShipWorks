@@ -1,7 +1,7 @@
-﻿using System;
-using Autofac.Extras.Moq;
+﻿using Autofac.Extras.Moq;
 using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
+using System;
 using Xunit;
 
 namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
@@ -42,7 +42,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
         {
             OdbcTable table = new OdbcTable("TableName");
             OdbcColumn column = new OdbcColumn("ColumnName");
-            OdbcRecord record = new OdbcRecord();
+            OdbcRecord record = new OdbcRecord(string.Empty);
             record.AddField("foo", "bar");
 
             ExternalOdbcMappableField testObject = new ExternalOdbcMappableField(table, column);
@@ -68,7 +68,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
         {
             OdbcTable table = new OdbcTable("TableName");
             OdbcColumn column = new OdbcColumn("ColumnName");
-            OdbcRecord record = new OdbcRecord();
+            OdbcRecord record = new OdbcRecord(string.Empty);
             record.AddField("ColumnName", "bar");
 
             ExternalOdbcMappableField testObject = new ExternalOdbcMappableField(table, column);
@@ -83,7 +83,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
         {
             OdbcTable table = new OdbcTable("TableName");
             OdbcColumn column = new OdbcColumn("ColumnName");
-            OdbcRecord record = new OdbcRecord();
+            OdbcRecord record = new OdbcRecord(string.Empty);
             record.AddField("ColumnName", "bar");
 
             ExternalOdbcMappableField testObject = new ExternalOdbcMappableField(table, column);

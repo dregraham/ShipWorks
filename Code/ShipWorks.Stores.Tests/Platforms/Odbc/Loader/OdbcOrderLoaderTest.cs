@@ -22,7 +22,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
                 var orderUtility = mock.Mock<IOrderChargeCalculator>();
                 var fieldMap = mock.Mock<IOdbcFieldMap>();
                 var orderEntity = new OrderEntity() {IsNew = true};
-                var odbcRecords = new[] {new OdbcRecord()};
+                var odbcRecords = new[] {new OdbcRecord(string.Empty)};
                 var testObject = mock.Create<OdbcOrderLoader>();
 
                 testObject.Load(fieldMap.Object, orderEntity, odbcRecords);
@@ -39,7 +39,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
                 var orderUtility = mock.Mock<IOrderChargeCalculator>();
                 var fieldMap = mock.Mock<IOdbcFieldMap>();
                 var orderEntity = new OrderEntity() {IsNew = false};
-                var odbcRecords = new[] {new OdbcRecord()};
+                var odbcRecords = new[] {new OdbcRecord(string.Empty)};
                 var testObject = mock.Create<OdbcOrderLoader>();
 
                 testObject.Load(fieldMap.Object, orderEntity, odbcRecords);
@@ -55,7 +55,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
             {
                 var map = mock.Mock<IOdbcFieldMap>();
                 var order = new OrderEntity() {IsNew = false};
-                var odbcRecords = new[] {new OdbcRecord()};
+                var odbcRecords = new[] {new OdbcRecord(string.Empty)};
                 var testObject = mock.Create<OdbcOrderLoader>();
 
                 testObject.Load(map.Object, order, odbcRecords);
@@ -73,7 +73,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
 
                 var fieldMap = mock.Mock<IOdbcFieldMap>();
                 var orderEntity = new OrderEntity() { IsNew = true };
-                var odbcRecords = new[] { new OdbcRecord() };
+                var odbcRecords = new[] { new OdbcRecord(string.Empty) };
                 var testObject = mock.Create<OdbcOrderLoader>();
 
                 mock.Mock<IDateTimeProvider>().Setup(d => d.UtcNow).Returns(now);
@@ -100,7 +100,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
                     .Callback<IEntity2>(entity2 => ((OrderEntity) entity2).OrderDate = mappedDate);
 #pragma warning restore S3215 // "interface" instances should not be cast to concrete types
 
-                var odbcRecords = new[] { new OdbcRecord() };
+                var odbcRecords = new[] { new OdbcRecord(string.Empty) };
                 var testObject = mock.Create<OdbcOrderLoader>();
 
                 mock.Mock<IDateTimeProvider>().Setup(d => d.UtcNow).Returns(now);
@@ -118,7 +118,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
             {
                 var fieldMap = mock.Mock<IOdbcFieldMap>();
                 var orderEntity = new OrderEntity() {IsNew = false};
-                var odbcRecords = new[] {new OdbcRecord()};
+                var odbcRecords = new[] {new OdbcRecord(string.Empty)};
                 var testObject = mock.Create<OdbcOrderLoader>();
 
                 mock.Mock<IDateTimeProvider>().Setup(d => d.UtcNow).Returns(DateTime.Now);
@@ -137,7 +137,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
             {
                 var fieldMap = mock1.Mock<IOdbcFieldMap>();
                 var orderEntity = new OrderEntity() {IsNew = false};
-                var odbcRecords = new[] {new OdbcRecord()};
+                var odbcRecords = new[] {new OdbcRecord(string.Empty)};
 
                 var detailLoader1 = mock1.Mock<IOdbcOrderDetailLoader>();
                 var detailLoader2 = mock2.Mock<IOdbcOrderDetailLoader>();
@@ -161,7 +161,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
 
                 var fieldMap = mock.Mock<IOdbcFieldMap>();
                 var orderEntity = new OrderEntity() {IsNew = true};
-                var odbcRecords = new[] {new OdbcRecord()};
+                var odbcRecords = new[] {new OdbcRecord(string.Empty)};
                 var testObject = mock.Create<OdbcOrderLoader>();
 
                 testObject.Load(fieldMap.Object, orderEntity, odbcRecords);
@@ -179,7 +179,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
 
                 var fieldMap = mock.Mock<IOdbcFieldMap>();
                 var orderEntity = new OrderEntity() {IsNew = false};
-                var odbcRecords = new[] {new OdbcRecord()};
+                var odbcRecords = new[] {new OdbcRecord(string.Empty)};
                 var testObject = mock.Create<OdbcOrderLoader>();
 
                 testObject.Load(fieldMap.Object, orderEntity, odbcRecords);
@@ -195,7 +195,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
             {
                 var fieldMap = mock.Mock<IOdbcFieldMap>();
                 var orderEntity = new OrderEntity() { BillCountryCode = string.Empty };
-                var odbcRecords = new[] { new OdbcRecord() };
+                var odbcRecords = new[] { new OdbcRecord(string.Empty) };
                 var testObject = mock.Create<OdbcOrderLoader>();
 
                 testObject.Load(fieldMap.Object, orderEntity, odbcRecords);
@@ -211,7 +211,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
             {
                 var fieldMap = mock.Mock<IOdbcFieldMap>();
                 var orderEntity = new OrderEntity() { ShipCountryCode = string.Empty };
-                var odbcRecords = new[] { new OdbcRecord() };
+                var odbcRecords = new[] { new OdbcRecord(string.Empty) };
                 var testObject = mock.Create<OdbcOrderLoader>();
 
                 testObject.Load(fieldMap.Object, orderEntity, odbcRecords);

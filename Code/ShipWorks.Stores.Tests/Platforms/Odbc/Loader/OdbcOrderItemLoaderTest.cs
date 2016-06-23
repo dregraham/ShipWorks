@@ -58,22 +58,22 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
         [Fact]
         public void Load_EnsureApplyValuesNotCalledOnOriginalMap()
         {
-            testObject.Load(originalMap.Object, new OrderEntity(), new List<OdbcRecord> {new OdbcRecord()});
+            testObject.Load(originalMap.Object, new OrderEntity(), new List<OdbcRecord> {new OdbcRecord(string.Empty)});
             originalMap.Verify(m => m.ApplyValues(It.IsAny<OdbcRecord>()), Times.Never);
         }
 
         [Fact]
         public void Load_EnsureCopyToEntityNotCalledOnOriginalMap()
         {
-            testObject.Load(originalMap.Object, new OrderEntity(), new List<OdbcRecord> {new OdbcRecord()});
+            testObject.Load(originalMap.Object, new OrderEntity(), new List<OdbcRecord> {new OdbcRecord(string.Empty) });
             originalMap.Verify(m => m.CopyToEntity(It.IsAny<IEntity2>()), Times.Never);
         }
 
         [Fact]
         public void Load_ApplyValuesCalledForEachOdbcRecord()
         {
-            var record1 = new OdbcRecord();
-            var record2 = new OdbcRecord();
+            var record1 = new OdbcRecord(string.Empty);
+            var record2 = new OdbcRecord(string.Empty);
             testObject.Load(originalMap.Object, new OrderEntity(), new List<OdbcRecord> {record1, record2});
 
             clonedMap.Verify(m => m.ApplyValues(record1), Times.Once);
@@ -84,7 +84,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
         [Fact]
         public void Load_OrderItemCountOfOrderMatchesNumberOfOdbcRecords()
         {
-            testObject.Load(originalMap.Object, order, new List<OdbcRecord> {new OdbcRecord(), new OdbcRecord()});
+            testObject.Load(originalMap.Object, order, new List<OdbcRecord> {new OdbcRecord(string.Empty), new OdbcRecord(string.Empty)});
 
             Assert.Equal(2, order.OrderItems.Count);
         }
@@ -92,7 +92,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
         [Fact]
         public void Load_CopyToEntityCalledForEachOdbcRecord()
         {
-            testObject.Load(originalMap.Object, order, new List<OdbcRecord> {new OdbcRecord(), new OdbcRecord()});
+            testObject.Load(originalMap.Object, order, new List<OdbcRecord> {new OdbcRecord(string.Empty), new OdbcRecord(string.Empty)});
 
             clonedMap.Verify(m => m.CopyToEntity(order.OrderItems[0], 0), Times.Once);
             clonedMap.Verify(m => m.CopyToEntity(order.OrderItems[1], 0), Times.Once);
@@ -103,7 +103,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
         [Fact]
         public void Load_AttributeLoaderLoadCalledForEachOdbcRecord()
         {
-            testObject.Load(originalMap.Object, order, new List<OdbcRecord> {new OdbcRecord(), new OdbcRecord()});
+            testObject.Load(originalMap.Object, order, new List<OdbcRecord> {new OdbcRecord(string.Empty), new OdbcRecord(string.Empty)});
 
             attributeLoader.Verify(m => m.Load(clonedMap.Object, order.OrderItems[0], 0), Times.Once);
             attributeLoader.Verify(m => m.Load(clonedMap.Object, order.OrderItems[1], 0), Times.Once);
@@ -117,7 +117,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
             clonedMap.Setup(m => m.FindEntriesBy(It.IsAny<EntityType[]>(), It.IsAny<int>(), false))
                 .Returns(new List<IOdbcFieldMapEntry>());
 
-            testObject.Load(originalMap.Object, order, new List<OdbcRecord> {new OdbcRecord()});
+            testObject.Load(originalMap.Object, order, new List<OdbcRecord> {new OdbcRecord(string.Empty)});
 
             Assert.Empty(order.OrderItems);
         }
@@ -125,7 +125,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
         [Fact]
         public void Load_OneItemCreated_WhenMaxIndexIs0()
         {
-            testObject.Load(originalMap.Object, order, new List<OdbcRecord> {new OdbcRecord()});
+            testObject.Load(originalMap.Object, order, new List<OdbcRecord> {new OdbcRecord(string.Empty)});
 
             Assert.Equal(1, order.OrderItems.Count);
         }
@@ -135,7 +135,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
         {
             SetOdbcFieldMapEntry("name", "value", 1);
 
-            testObject.Load(originalMap.Object, order, new List<OdbcRecord> {new OdbcRecord()});
+            testObject.Load(originalMap.Object, order, new List<OdbcRecord> {new OdbcRecord(string.Empty)});
 
             Assert.Equal(2, order.OrderItems.Count);
         }
@@ -145,7 +145,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
         {
             SetOdbcFieldMapEntry("name", "value", 1);
 
-            testObject.Load(originalMap.Object, order, new List<OdbcRecord> {new OdbcRecord()});
+            testObject.Load(originalMap.Object, order, new List<OdbcRecord> {new OdbcRecord(string.Empty)});
 
             attributeLoader.Verify(l => l.Load(clonedMap.Object, order.OrderItems[0], 0), Times.Once);
             attributeLoader.Verify(l => l.Load(clonedMap.Object, order.OrderItems[1], 1), Times.Once);
@@ -160,7 +160,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
         {
             SetOdbcFieldMapEntry(EnumHelper.GetDescription(OdbcOrderFieldDescription.ItemUnitCost), 42M);
 
-            testObject.Load(originalMap.Object, order, new List<OdbcRecord> {new OdbcRecord()});
+            testObject.Load(originalMap.Object, order, new List<OdbcRecord> {new OdbcRecord(string.Empty)});
 
             Assert.Equal(42M, order.OrderItems[0].UnitCost);
         }
@@ -172,7 +172,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
             SetOdbcFieldMapEntry(EnumHelper.GetDescription(OdbcOrderFieldDescription.ItemTotalCost), 42M);
             SetOrderItemQuantity(clonedMap, 2D, 0);
             
-            testObject.Load(originalMap.Object, order, new List<OdbcRecord> {new OdbcRecord()});
+            testObject.Load(originalMap.Object, order, new List<OdbcRecord> {new OdbcRecord(string.Empty)});
 
             Assert.Equal(21M, order.OrderItems[0].UnitCost);
         }
@@ -183,7 +183,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
             SetOdbcFieldMapEntry(EnumHelper.GetDescription(OdbcOrderFieldDescription.ItemTotalCost), 42M);
             SetOrderItemQuantity(clonedMap, 0D, 0);
 
-            testObject.Load(originalMap.Object, order, new List<OdbcRecord> {new OdbcRecord()});
+            testObject.Load(originalMap.Object, order, new List<OdbcRecord> {new OdbcRecord(string.Empty)});
 
             Assert.Equal(0M, order.OrderItems[0].UnitCost);
         }
@@ -193,7 +193,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
         {
             SetOrderItemQuantity(clonedMap, 5D, 0);
 
-            testObject.Load(originalMap.Object, order, new List<OdbcRecord> {new OdbcRecord()});
+            testObject.Load(originalMap.Object, order, new List<OdbcRecord> {new OdbcRecord(string.Empty)});
 
             Assert.Equal(0M, order.OrderItems[0].UnitCost);
         }
@@ -205,7 +205,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
         {
             SetOdbcFieldMapEntry(EnumHelper.GetDescription(OdbcOrderFieldDescription.ItemUnitPrice), 42M);
 
-            testObject.Load(originalMap.Object, order, new List<OdbcRecord> { new OdbcRecord() });
+            testObject.Load(originalMap.Object, order, new List<OdbcRecord> { new OdbcRecord(string.Empty) });
 
             Assert.Equal(42M, order.OrderItems[0].UnitPrice);
         }
@@ -216,7 +216,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
             SetOdbcFieldMapEntry(EnumHelper.GetDescription(OdbcOrderFieldDescription.ItemTotalPrice), 42M);
             SetOrderItemQuantity(clonedMap, 2D, 0);
 
-            testObject.Load(originalMap.Object, order, new List<OdbcRecord> { new OdbcRecord() });
+            testObject.Load(originalMap.Object, order, new List<OdbcRecord> { new OdbcRecord(string.Empty) });
 
             Assert.Equal(21M, order.OrderItems[0].UnitPrice);
         }
@@ -227,7 +227,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
             SetOdbcFieldMapEntry(EnumHelper.GetDescription(OdbcOrderFieldDescription.ItemTotalPrice), 42M);
             SetOrderItemQuantity(clonedMap, 0D, 0);
 
-            testObject.Load(originalMap.Object, order, new List<OdbcRecord> { new OdbcRecord() });
+            testObject.Load(originalMap.Object, order, new List<OdbcRecord> { new OdbcRecord(string.Empty) });
 
             Assert.Equal(0M, order.OrderItems[0].UnitPrice);
         }
@@ -237,7 +237,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
         {
             SetOrderItemQuantity(clonedMap, 5D, 0);
 
-            testObject.Load(originalMap.Object, order, new List<OdbcRecord> { new OdbcRecord() });
+            testObject.Load(originalMap.Object, order, new List<OdbcRecord> { new OdbcRecord(string.Empty) });
 
             Assert.Equal(0M, order.OrderItems[0].UnitPrice);
         }
@@ -249,7 +249,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
         {
             SetOdbcFieldMapEntry(EnumHelper.GetDescription(OdbcOrderFieldDescription.ItemUnitWeight), 42);
 
-            testObject.Load(originalMap.Object, order, new List<OdbcRecord> { new OdbcRecord() });
+            testObject.Load(originalMap.Object, order, new List<OdbcRecord> { new OdbcRecord(string.Empty) });
 
             Assert.Equal(42, order.OrderItems[0].Weight);
         }
@@ -261,7 +261,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
             SetOdbcFieldMapEntry(EnumHelper.GetDescription(OdbcOrderFieldDescription.ItemTotalWeight), 42);
             SetOrderItemQuantity(clonedMap, 2D, 0);
 
-            testObject.Load(originalMap.Object, order, new List<OdbcRecord> { new OdbcRecord() });
+            testObject.Load(originalMap.Object, order, new List<OdbcRecord> { new OdbcRecord(string.Empty) });
 
             Assert.Equal(21, order.OrderItems[0].Weight);
         }
@@ -272,7 +272,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
             SetOdbcFieldMapEntry(EnumHelper.GetDescription(OdbcOrderFieldDescription.ItemTotalWeight), 42M);
             SetOrderItemQuantity(clonedMap, 0D, 0);
 
-            testObject.Load(originalMap.Object, order, new List<OdbcRecord> { new OdbcRecord() });
+            testObject.Load(originalMap.Object, order, new List<OdbcRecord> { new OdbcRecord(string.Empty) });
 
             Assert.Equal(0, order.OrderItems[0].Weight);
         }
@@ -282,7 +282,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
         {
             SetOrderItemQuantity(clonedMap, 5D, 0);
 
-            testObject.Load(originalMap.Object, order, new List<OdbcRecord> { new OdbcRecord() });
+            testObject.Load(originalMap.Object, order, new List<OdbcRecord> { new OdbcRecord(string.Empty) });
 
             Assert.Equal(0, order.OrderItems[0].Weight);
         }

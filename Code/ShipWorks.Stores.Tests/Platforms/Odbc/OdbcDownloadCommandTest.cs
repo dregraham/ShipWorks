@@ -1,7 +1,6 @@
 ﻿using Autofac.Extras.Moq;
 using log4net;
 using Moq;
-using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
 using System.Collections.Generic;
@@ -287,7 +286,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
 
                 var testObject = mock.Create<OdbcDownloadCommand>();
 
-                Assert.Throws<DownloadException>(() => testObject.Execute());
+                Assert.Throws<ShipWorksOdbcException>(() => testObject.Execute());
             }
         }
     }

@@ -287,7 +287,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
 
                 testObject.AddEntry(mapEntry.Object);
 
-                OdbcRecord odbcRecord = new OdbcRecord();
+                OdbcRecord odbcRecord = new OdbcRecord(string.Empty);
 
                 testObject.ApplyValues(odbcRecord);
 
@@ -310,7 +310,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
 
                 testObject.AddEntry(mapEntry.Object);
 
-                OdbcRecord odbcRecord = new OdbcRecord();
+                OdbcRecord odbcRecord = new OdbcRecord(string.Empty);
 
                 testObject.ApplyValues(odbcRecord);
 

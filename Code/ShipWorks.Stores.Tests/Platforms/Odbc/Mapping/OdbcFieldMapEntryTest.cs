@@ -37,7 +37,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
             ShipWorksOdbcMappableField shipWorksField = new ShipWorksOdbcMappableField(OrderFields.OrderNumber, "Order Number");
             OdbcFieldMapEntry entry = new OdbcFieldMapEntry(shipWorksField, externalField);
 
-            OdbcRecord record = new OdbcRecord();
+            OdbcRecord record = new OdbcRecord(string.Empty);
             record.AddField("Number", 123);
 
             entry.LoadExternalField(record);
@@ -52,7 +52,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
             ShipWorksOdbcMappableField shipWorksField = new ShipWorksOdbcMappableField(OrderFields.OrderNumber, "Order Number");
             OdbcFieldMapEntry entry = new OdbcFieldMapEntry(shipWorksField, externalField);
 
-            OdbcRecord record = new OdbcRecord();
+            OdbcRecord record = new OdbcRecord(string.Empty);
             record.AddField("Number", 123);
 
             entry.LoadExternalField(record);
