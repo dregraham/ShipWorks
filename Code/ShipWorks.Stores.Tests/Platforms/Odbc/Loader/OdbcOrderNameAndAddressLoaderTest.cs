@@ -27,8 +27,9 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
         private readonly string stateName = "Missouri";
         private readonly string stateCode = "MO";
 
-        private AutoMock mock;
-        private Mock<IOdbcFieldMap> map;
+        private readonly AutoMock mock;
+        private readonly Mock<IOdbcFieldMap> map;
+
         public OdbcOrderNameAndAddressLoaderTest()
         {
             mock = AutoMock.GetLoose();
