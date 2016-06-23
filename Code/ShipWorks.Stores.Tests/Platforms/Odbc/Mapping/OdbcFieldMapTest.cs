@@ -145,14 +145,14 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
         }
 
         [Fact]
-        public void CopyToEntity_SetsFieldToEmptyString_WhenExternalFieldValueIsNull()
+        public void CopyToEntity_SetsFieldToEmptyString_WhenExternalFieldValueIsEmptyString()
         {
             using (var mock = AutoMock.GetLoose())
             {
                 var testObject = mock.Create<OdbcFieldMap>();
 
                 var shipworksField = mock.Mock<IShipWorksOdbcMappableField>();
-                shipworksField.Setup(e => e.Value).Returns(null);
+                shipworksField.Setup(e => e.Value).Returns(string.Empty);
                 shipworksField.Setup(e => e.Name).Returns("BillFirstName");
                 shipworksField.Setup(e => e.ContainingObjectName).Returns("OrderEntity");
 
@@ -538,10 +538,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
 
         private ShipWorksOdbcMappableField GetShipWorksField(EntityField2 field, string displayName)
         {
-            return new ShipWorksOdbcMappableField(field, displayName)
-            {
-                ContainingObjectName = field.ContainingObjectName
-            };
+            return new ShipWorksOdbcMappableField(field, displayName);
         }
 
         private Mock<IShipWorksOdbcMappableField> GetMockedShipWorksField(AutoMock mockToUse, EntityField2 field, object shipWorksValue)

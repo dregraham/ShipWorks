@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 {
@@ -11,29 +12,28 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <summary>
         /// The name of the object that contains this field
         /// </summary>
-        string ContainingObjectName { get; set; }
+        string ContainingObjectName { get; }
 
         /// <summary>
         /// Is the field required to be mapped.
         /// </summary>
         [Obfuscation(Exclude = true)]
-        bool IsRequired { get; set; }
+        bool IsRequired { get; }
 
         /// <summary>
         /// The name of the field
         /// </summary>
         [Obfuscation(Exclude = true)]
-        string Name { get; set; }
-
-        /// <summary>
-        /// Gets or sets the name of the type.
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        string TypeName { get; }
+        string Name { get; }
 
         /// <summary>
         /// Set the Value to the given value
         /// </summary>
         void LoadValue(object value);
+
+        /// <summary>
+        /// Gets the field.
+        /// </summary>
+        IEntityField2 Field { get; }
     }
 }
