@@ -44,6 +44,22 @@ namespace ShipWorks.Stores.Platforms.Odbc.Loaders
             // Load the first record into the map
             map.CopyToEntity(order);
 
+            // If the order is new load all the items
+            if (order.IsNew)
+            {
+                // load the items into the order
+                orderItemLoader.Load(map, order, records);
+
+                // Clean up the order date, if it was never mapped the value is one
+                // that cannot be inserted into SQL Server so make it UtcNow
+                // this has to be done before we load order details as some order
+                // detail items rely on the order date to be correct like Notes
+                if (!order.Fields[(int)OrderFieldIndex.OrderDate].IsChanged)
+                {
+                    order.OrderDate = dateTimeProvider.UtcNow;
+                }
+            }
+
             foreach (IOdbcOrderDetailLoader loader in orderDetailLoaders)
             {
                 // Load the map data into the order for the given
@@ -51,16 +67,10 @@ namespace ShipWorks.Stores.Platforms.Odbc.Loaders
                 loader.Load(map, order);
             }
 
+            // Now that all of the order information has been set calculate the total
             if (order.IsNew)
             {
-                // load the items into the order
-                orderItemLoader.Load(map, order, records);
                 order.OrderTotal = orderChargeCalculator.CalculateTotal(order);
-
-                if (!order.Fields[(int)OrderFieldIndex.OrderDate].IsChanged)
-                {
-                    order.OrderDate = dateTimeProvider.UtcNow;
-                }
             }
         }
     }
