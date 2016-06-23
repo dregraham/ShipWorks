@@ -150,9 +150,9 @@
                        Margin="0"
                        HorizontalContentAlignment="Right"
                        Width="170"/>
-                    <RadioButton GroupName="OrderItemStrategy" Content="A single line"
+                    <RadioButton GroupName="OrderItemStrategy" Content="A single row"
                                  IsChecked="{Binding IsSingleLineOrder, UpdateSourceTrigger=PropertyChanged}" />
-                    <RadioButton GroupName="OrderItemStrategy" Content="Multiple lines" />
+                    <RadioButton GroupName="OrderItemStrategy" Content="Multiple rows" />
                 </StackPanel>
 
                 <StackPanel Grid.Row="2" Orientation="Horizontal"
