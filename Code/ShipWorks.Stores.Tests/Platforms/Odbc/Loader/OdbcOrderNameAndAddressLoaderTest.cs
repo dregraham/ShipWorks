@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using Autofac.Extras.Moq;
+﻿using Autofac.Extras.Moq;
 using Interapptive.Shared.Business;
 using Moq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Odbc.Loaders;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
+using System;
+using System.Collections.Generic;
 using Xunit;
 
 namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
@@ -104,6 +104,14 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
             order.ShipStateProvCode = stateName;
             testObject.Load(map.Object, order);
             Assert.Equal(stateCode, order.ShipStateProvCode);
+        }
+
+        [Fact]
+        public void Load_ShipCountrySetToUS_WhenShipCountryIsBlank()
+        {
+            order.ShipCountryCode = string.Empty;
+            testObject.Load(map.Object, order);
+            Assert.Equal("US", order.ShipCountryCode);
         }
 
         [Fact]

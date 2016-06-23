@@ -1,7 +1,9 @@
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -16,6 +18,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
     {
 		private readonly IOdbcFieldMapIOFactory ioFactory;
         private readonly List<IOdbcFieldMapEntry> entries;
+        private readonly Dictionary<Type, object> typeDefaultValues; 
 
         /// <summary>
         /// Constructor
@@ -26,6 +29,8 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 
 		    this.ioFactory = ioFactory;
 		    entries = new List<IOdbcFieldMapEntry>();
+
+            typeDefaultValues = GetTypeDefaultValues();
 		}
 
         /// <summary>
@@ -59,7 +64,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// </summary>
         private void ResetValues()
         {
-            foreach (var entry in Entries)
+            foreach (IOdbcFieldMapEntry entry in Entries)
             {
                 entry.ExternalField.ResetValue();
             }
@@ -76,18 +81,46 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         public void CopyToEntity(IEntity2 entity, int index)
         {
             IEnumerable<IOdbcFieldMapEntry> applicableEntries = Entries
-                .Where(
-                    e =>
-                        e.ShipWorksField.Value != null &&
-                        e.ShipWorksField.ContainingObjectName == entity.LLBLGenProEntityName && e.Index == index);
+                .Where(e => e.ShipWorksField.ContainingObjectName == entity.LLBLGenProEntityName && e.Index == index);
 
             foreach (IOdbcFieldMapEntry entry in applicableEntries)
             {
                 string destinationName = entry.ShipWorksField.Name;
+                object value = entry.ShipWorksField.Value;
+                IEntityField2 destinationField = entity.Fields[destinationName];
+
+                // Don't write to readonly or primary key fields. They shouldn't be mapped.
+                if (destinationField.IsPrimaryKey || destinationField.IsReadOnly)
+                {
+                    throw new ShipWorksOdbcException(
+                        $"Invalid Map. '{entry.ShipWorksField.ContainingObjectName}.{entry.ShipWorksField.Name}' should never be mapped.");
+                }
+
+                Debug.Assert(typeDefaultValues.ContainsKey(destinationField.DataType), $"No default value for {destinationField.Name} because the type is {destinationField.DataType}");
+                if (value == null && !destinationField.IsNullable && typeDefaultValues.ContainsKey(destinationField.DataType))
+                {
+                    value = typeDefaultValues[destinationField.DataType];
+                }
 
                 // Set the CurrentValue of the entity field who's name matches the entry field
-                entity.SetNewFieldValue(destinationName, entry.ShipWorksField.Value);
+                entity.SetNewFieldValue(destinationName, value);
             }
+        }
+
+        private static Dictionary<Type, object> GetTypeDefaultValues()
+        {
+            return new Dictionary<Type, object>
+            {
+                {typeof(string), string.Empty},
+                {typeof(double), 0D},
+                {typeof(float), 0F},
+                {typeof(decimal), 0M},
+                {typeof(int), 0},
+                {typeof(long), 0L},
+                {typeof(short), 0},
+                {typeof(bool), false},
+                {typeof(DateTime), null} // We don't want to override dates with any default, so keep it null.
+            };
         }
 
         /// <summary>

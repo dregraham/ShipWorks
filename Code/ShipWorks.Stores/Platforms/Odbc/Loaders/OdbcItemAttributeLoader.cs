@@ -1,4 +1,5 @@
-﻿using ShipWorks.Data.Model.EntityClasses;
+﻿using Interapptive.Shared.Utility;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
 using System.Collections.Generic;
@@ -16,17 +17,16 @@ namespace ShipWorks.Stores.Platforms.Odbc.Loaders
         /// </summary>
         public void Load(IOdbcFieldMap map, OrderItemEntity item, int index)
         {
-            if (item != null)
-            {
-                IEnumerable<IOdbcFieldMapEntry> itemEntries =
-                    map.FindEntriesBy(OrderItemAttributeFields.Name, false).Where(e => e.Index == index);
+            MethodConditions.EnsureArgumentIsNotNull(item);
 
-                foreach (IOdbcFieldMapEntry entry in itemEntries)
-                {
-                    OrderItemAttributeEntity attribute = new OrderItemAttributeEntity(item);
-                    attribute.Name = entry.ExternalField.Column.Name;
-                    attribute.Description = entry.ShipWorksField.Value.ToString();
-                }
+            IEnumerable<IOdbcFieldMapEntry> itemEntries =
+                map.FindEntriesBy(OrderItemAttributeFields.Name, false).Where(e => e.Index == index);
+
+            foreach (IOdbcFieldMapEntry entry in itemEntries)
+            {
+                OrderItemAttributeEntity attribute = new OrderItemAttributeEntity(item);
+                attribute.Name = entry.ExternalField.Column.Name;
+                attribute.Description = entry.ShipWorksField.Value.ToString();
             }
         }
     }

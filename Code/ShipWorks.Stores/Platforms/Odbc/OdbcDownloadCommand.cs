@@ -82,8 +82,6 @@ namespace ShipWorks.Stores.Platforms.Odbc
                 odbcRecord.AddField(columnName, value);
             }
 
-            odbcRecord.Cleanse();
-
             return odbcRecord;
         }
 

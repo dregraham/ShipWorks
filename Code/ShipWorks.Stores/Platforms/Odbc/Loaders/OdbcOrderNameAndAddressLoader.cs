@@ -1,9 +1,9 @@
-﻿using System.Linq;
-using Interapptive.Shared.Business;
+﻿using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
+using System.Linq;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Loaders
 {
@@ -33,7 +33,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Loaders
 
             // If full name is not mapped, set name parse status to simple and unparsed name to empty
             // so that full name will set itself based on the current first, middle, last name.
-            if (string.IsNullOrWhiteSpace(unparsedNameEntry?.ExternalField.Value.ToString()))
+            if (string.IsNullOrWhiteSpace(unparsedNameEntry?.ExternalField.Value?.ToString()))
             {
                 personAdapter.NameParseStatus = PersonNameParseStatus.Simple;
 
@@ -44,7 +44,11 @@ namespace ShipWorks.Stores.Platforms.Odbc.Loaders
                 personAdapter.ParsedName = PersonName.Parse(unparsedNameEntry.ExternalField.Value.ToString());
             }
 
-            personAdapter.CountryCode = Geography.GetCountryCode(personAdapter.CountryCode);
+            // I'd like to move this logic into GetCountryCode, maybe after the demo.
+            personAdapter.CountryCode = string.IsNullOrWhiteSpace(personAdapter.CountryCode) ? 
+                "US" : 
+                Geography.GetCountryCode(personAdapter.CountryCode);
+
             personAdapter.StateProvCode = Geography.GetStateProvCode(personAdapter.StateProvCode);
         }
     }

@@ -12,6 +12,9 @@ namespace ShipWorks.Stores.Platforms.Odbc
         private readonly string recordIdentifierSource;
         private readonly Dictionary<string, object> fields = new Dictionary<string, object>();
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public OdbcRecord(string recordIdentifierSource)
         {
             this.recordIdentifierSource = recordIdentifierSource;
@@ -44,29 +47,14 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// <summary>
         /// Adds or updates the value of the field.
         /// </summary>
+        /// <remarks>
+        /// If value is DBNull or whitespace, column value is set to null.
+        /// </remarks>
         public void AddField(string columnName, object value)
         {
-            fields[columnName] = value;
-        }
-
-        /// <summary>
-        /// Cleanses this instance.
-        /// </summary>
-        public void Cleanse()
-        {
-            fields
-                .Where(field => IsFieldValueNullOrEmpty(field.Value))
-                .Select(field => field.Key)
-                .ToList()
-                .ForEach(key => fields.Remove(key));
-        }
-
-        /// <summary>
-        /// Determines whether the field value is DBNull, null, or empty string.
-        /// </summary>
-        private static bool IsFieldValueNullOrEmpty(object value)
-        {
-            return value == null || value is DBNull || (value is string && string.IsNullOrWhiteSpace((string) value));
+            fields[columnName] = value is DBNull || (value is string && string.IsNullOrWhiteSpace((string) value)) ?
+                null :
+                value;
         }
     }
 }

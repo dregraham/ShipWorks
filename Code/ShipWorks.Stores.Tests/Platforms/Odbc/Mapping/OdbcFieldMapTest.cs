@@ -145,7 +145,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
         }
 
         [Fact]
-        public void CopyToEntity_DoesNotCopyToEntity_WhenExternalFieldValueIsNull()
+        public void CopyToEntity_SetsFieldToEmptyString_WhenExternalFieldValueIsNull()
         {
             using (var mock = AutoMock.GetLoose())
             {
@@ -166,7 +166,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
 
                 testObject.CopyToEntity(order);
 
-                Assert.Equal("bob", order.BillFirstName);
+                Assert.Empty(order.BillFirstName);
             }
         }
 
