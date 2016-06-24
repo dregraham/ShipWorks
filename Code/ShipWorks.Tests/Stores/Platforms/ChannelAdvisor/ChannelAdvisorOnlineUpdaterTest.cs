@@ -219,6 +219,15 @@ namespace ShipWorks.Tests.Stores.ChannelAdvisor
         [InlineData("USPS", "USPS Priority Mail Express", "EXPRESS")]
         [InlineData("USPS", "USPS Priority Mail Express Flat Rate Envelope", "EXPRESS")]
         [InlineData("USPS", "USPS Parcel Select", "PARCELSELECT")]
+        [InlineData("STAMPS_DOT_COM", "USPS First Class", "FIRSTCLASS")]
+        [InlineData("STAMPS_DOT_COM", "USPS Priority Mail", "PRIORITY")]
+        [InlineData("STAMPS_DOT_COM", "USPS Priority Mail Flat Rate Box", "PRIORITY")]
+        [InlineData("STAMPS_DOT_COM", "USPS Priority Mail Small Flat Rate Box", "PRIORITY")]
+        [InlineData("STAMPS_DOT_COM", "USPS Priority Mail Large Flat Rate Box", "PRIORITY")]
+        [InlineData("STAMPS_DOT_COM", "USPS Priority Mail Flat Rate Envelope", "PRIORITY")]
+        [InlineData("STAMPS_DOT_COM", "USPS Priority Mail Express", "EXPRESS")]
+        [InlineData("STAMPS_DOT_COM", "USPS Priority Mail Express Flat Rate Envelope", "EXPRESS")]
+        [InlineData("STAMPS_DOT_COM", "USPS Parcel Select", "PARCELSELECT")]
         [InlineData("UPS", "UPS Ground", "GROUND")]
         [InlineData("UPS", "UPS Next Day Air", "NEXTDAY")]
         [InlineData("UPS", "UPS Next Day Air Saver", "NDAS")]
@@ -237,8 +246,11 @@ namespace ShipWorks.Tests.Stores.ChannelAdvisor
 
         [Theory]
         [InlineData("FedEx", "FEDEX")]
+        [InlineData("FEDEX", "FEDEX")]
         [InlineData("UPS", "UPS")]
+        [InlineData("Ups", "UPS")]
         [InlineData("USPS", "USPS")]
+        [InlineData("Usps", "USPS")]
         [InlineData("asdfasdfasdf", "None")]
         public void GetCarrierCode_ReturnsCorrectValue_WhenAmazonShipment(string carrierName, string expectedValue)
         {
