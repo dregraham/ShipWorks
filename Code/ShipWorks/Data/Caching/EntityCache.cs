@@ -92,7 +92,15 @@ namespace ShipWorks.Data.Caching
         /// </summary>
         public EntityBase2 GetEntity(long entityID, bool fetchIfMissing)
         {
-            EntityBase2 entity = EntityUtility.CloneEntity((EntityBase2) cache[GetCacheKey(entityID)]);
+            return GetEntity(entityID, fetchIfMissing, SqlAdapter.Default);
+        }
+
+        /// <summary>
+        /// Gets the entity with the given ID from cache.  If it does not exist, it is loaded if fetchIfMissing is true
+        /// </summary>
+        public EntityBase2 GetEntity(long entityID, bool fetchIfMissing, SqlAdapter adapter)
+        {
+            EntityBase2 entity = EntityUtility.CloneEntity((EntityBase2)cache[GetCacheKey(entityID)]);
 
             if (entity == null && fetchIfMissing)
             {
@@ -101,7 +109,7 @@ namespace ShipWorks.Data.Caching
 
                 Stopwatch sw = Stopwatch.StartNew();
 
-                entity = (EntityBase2) SqlAdapter.Default.FetchNewEntity(
+                entity = (EntityBase2)adapter.FetchNewEntity(
                     GeneralEntityFactory.Create(entityType).GetEntityFactory(),
                     new RelationPredicateBucket(new FieldCompareValuePredicate(pkField, null, ComparisonOperator.Equal, entityID)),
                     GetPrefetch(entityType));
@@ -126,6 +134,14 @@ namespace ShipWorks.Data.Caching
         /// </summary>
         public List<EntityBase2> GetEntities(List<long> keyList)
         {
+            return GetEntities(keyList, SqlAdapter.Default);
+        }
+
+        /// <summary>
+        /// Gets all the entities represented by the give keys.  Each key must be of the same EntityType
+        /// </summary>
+        public List<EntityBase2> GetEntities(List<long> keyList, SqlAdapter adapter)
+        {
             if (keyList == null)
             {
                 throw new ArgumentNullException("keyList");
@@ -147,7 +163,7 @@ namespace ShipWorks.Data.Caching
 
                 // Fetch each one that was missing or old
                 EntityCollection collection = new EntityCollection(GeneralEntityFactory.Create(entityType).GetEntityFactory());
-                SqlAdapter.Default.FetchEntityCollection(collection, new RelationPredicateBucket(pkField == needsFetched), GetPrefetch(entityType));
+                adapter.FetchEntityCollection(collection, new RelationPredicateBucket(pkField == needsFetched), GetPrefetch(entityType));
 
                 foreach (EntityBase2 entity in collection)
                 {

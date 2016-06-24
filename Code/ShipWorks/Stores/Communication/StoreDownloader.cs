@@ -661,7 +661,7 @@ namespace ShipWorks.Stores.Communication
                         if ((billingAddressChanged && config.CustomerUpdateModifiedBilling != (int)ModifiedOrderCustomerUpdateBehavior.NeverCopy)
                             || (shippingAddressChanged && config.CustomerUpdateModifiedShipping != (int)ModifiedOrderCustomerUpdateBehavior.NeverCopy))
                         {
-                            CustomerEntity existingCustomer = DataProvider.GetEntity(order.CustomerID) as CustomerEntity;
+                            CustomerEntity existingCustomer = DataProvider.GetEntity(order.CustomerID, adapter) as CustomerEntity;
                             if (existingCustomer != null)
                             {
                                 UpdateCustomerAddressIfNecessary(billingAddressChanged, (ModifiedOrderCustomerUpdateBehavior)config.CustomerUpdateModifiedBilling, order, existingCustomer, originalBillingAddress, "Bill");
