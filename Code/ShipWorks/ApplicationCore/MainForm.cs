@@ -843,7 +843,7 @@ namespace ShipWorks
             // refresh the license if it is older than 10 mins
             licenses.ForEach(license => license.Refresh());
 
-            Telemetry.TrackStartShipworks(GetCustomerIdForTelemetry(licenses), ShipWorksSession.InstanceID.ToString("D"));
+            Telemetry.TrackStartShipworks(GetCustomerIdForTelemetry(), ShipWorksSession.InstanceID.ToString("D"));
 
             // now that we updated license info we can refresh the UI to match
             if (InvokeRequired)
@@ -861,12 +861,10 @@ namespace ShipWorks
         /// <summary>
         /// Get a customer id that can be used for telemetry
         /// </summary>
-        private string GetCustomerIdForTelemetry(List<ILicense> licenses)
+        private string GetCustomerIdForTelemetry()
         {
-            string key = licenses.OfType<CustomerLicense>().FirstOrDefault()?.Key ??
-                TangoWebClient.GetLicenseStatus(licenses.FirstOrDefault().Key, StoreManager.GetEnabledStores().FirstOrDefault()).TangoCustomerID;
-
-            return SHA256.Create().ComputeHash(Encoding.UTF8.GetBytes(key)).ToHexString();
+            ITangoWebClient tangoWebClient = new TangoWebClientFactory().CreateWebClient();
+            return tangoWebClient.GetTangoCustomerId();
         }
 
         /// <summary>
@@ -4266,5 +4264,23 @@ namespace ShipWorks
         #endregion
 
         #endregion
+
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+
+            // Send telemetry data to Azure, giving it 2 seconds to complete.
+            Telemetry.Flush();
+            Thread.Sleep(2000);
+
+            base.Dispose(disposing);
+        }
     }
 }

@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 using Microsoft.Win32;
 using System.IO;
 using System.Diagnostics;
+using System.Drawing;
 using log4net;
 using System.Reflection;
 using System.Windows.Forms;
@@ -248,6 +249,23 @@ namespace Interapptive.Shared
             // Transactions
             log.Info("TransactionManager.DefaultTimeout: " + TransactionManager.DefaultTimeout.TotalSeconds);
             log.Info("TransactionManager.MaximumTimeout: " + TransactionManager.MaximumTimeout.TotalSeconds);
+        }
+
+        /// <summary>
+        /// Determines the current screen resolution in DPI.
+        /// </summary>
+        public static string GetSystemDpi()
+        {
+            float dpiX;
+            float dpiY;
+
+            using (Graphics graphics = Graphics.FromHwnd(IntPtr.Zero))
+            {
+                dpiX = graphics.DpiX;
+                dpiY = graphics.DpiY;
+            }
+
+            return $"{dpiX}x{dpiY}";
         }
     }
 }

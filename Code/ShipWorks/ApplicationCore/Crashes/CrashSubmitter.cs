@@ -8,12 +8,16 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.Windows.Forms;
 using Autofac;
 using Interapptive.Shared;
 using Interapptive.Shared.Data;
 using Interapptive.Shared.IO.Zip;
+using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Security;
+using Interapptive.Shared.Utility;
+using Interapptive.Shared.Win32;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
 using Microsoft.WindowsAzure.Storage.Queue;
@@ -40,16 +44,19 @@ namespace ShipWorks.ApplicationCore.Crashes
         static Regex reUnwantedProperties = new Regex(@"^(StackTrace|Source|TargetSite|InnerException|Data)$", RegexOptions.IgnoreCase);
 
         /// <summary>
-        /// Submits a crash report to interapptive.  The response to show the user is returned.  If logFileName is null no logs are submitted, otherwise it must be
+        /// Submits a crash report to Azure.  The response to show the user is returned.  If logFileName is null no logs are submitted, otherwise it must be
         /// a full path a log content file.
         /// </summary>
         public static CrashResponse Submit(Exception ex, string email, string logName, string logPath)
         {
+            CloudStorageAccount storageAccount;
             Version version = Assembly.GetExecutingAssembly().GetName().Version;
-            CloudStorageAccount storageAccount = CloudStorageAccount.Parse(GetConnectionString(version));
 
-            WriteToBlobStorage(storageAccount, logName, logPath, version);
-            LogCrashToQueue(storageAccount, ex, email, logName, version);
+            if (CloudStorageAccount.TryParse(GetConnectionString(version), out storageAccount))
+            {
+                WriteToBlobStorage(storageAccount, logName, logPath, version);
+                LogCrashToQueue(storageAccount, ex, email, logName, version);
+            }
 
             return null;
         }
@@ -75,9 +82,11 @@ namespace ShipWorks.ApplicationCore.Crashes
         /// <summary>
         /// Log the crash to the storage queue
         /// </summary>
-        private static void LogCrashToQueue(CloudStorageAccount storageAccount, Exception ex, string email,
-            string logName, Version version)
+        private static void LogCrashToQueue(CloudStorageAccount storageAccount, Exception ex, string email, string logName, Version version)
         {
+            long memoryInKB = 0;
+            NativeMethods.GetPhysicallyInstalledSystemMemory(out memoryInKB);
+
             SubmissionDetails details = new SubmissionDetails
             {
                 Identifier = GetIdentifier(ex),
@@ -89,7 +98,16 @@ namespace ShipWorks.ApplicationCore.Crashes
                 Exception = GetExceptionDetail(ex),
                 Environment = GetEnvironmentInfo(),
                 Assemblies = GetLoadedAssemblyList(),
-                LogName = logName
+                LogName = logName,
+                CustomerID = Telemetry.UserId,
+                InstanceID = ShipWorksSession.InstanceID.ToString("D"),
+                SessionID = Telemetry.SessionId,
+                OperatingSystem = Environment.OSVersion.ToString(),
+                Screens = Screen.AllScreens.Length.ToString(),
+                CPUs = Environment.ProcessorCount.ToString(),
+                PhysicalMemory = StringUtility.FormatByteCount(memoryInKB * 1024),
+                ScreenDimensionsPrimary = $"{Screen.PrimaryScreen.Bounds.Width}x{Screen.PrimaryScreen.Bounds.Height}",
+                ScreenDpiPrimary = MyComputer.GetSystemDpi()
             };
 
             CloudQueueClient queueClient = storageAccount.CreateCloudQueueClient();
@@ -458,6 +476,9 @@ namespace ShipWorks.ApplicationCore.Crashes
         [NDependIgnoreLongMethod]
         private static string GetEnvironmentInfo()
         {
+            long memoryInKB = 0;
+            NativeMethods.GetPhysicallyInstalledSystemMemory(out memoryInKB);
+
             StringBuilder sb = new StringBuilder();
 
             sb.AppendFormat("OS: {0}\r\n", Environment.OSVersion.VersionString);
@@ -480,6 +501,16 @@ namespace ShipWorks.ApplicationCore.Crashes
             AppendLineIgnoreException(() => sb.AppendFormat("Execution Mode IsUISupported: {0}\r\n", Program.ExecutionMode.IsUISupported));
 
             AppendLineIgnoreException(() => sb.AppendFormat("Local IP Address: {0}\r\n", new NetworkUtility().GetIPAddress()));
+
+            AppendLineIgnoreException(() => sb.AppendFormat("CustomerID: {0}\r\n", Telemetry.UserId));
+            AppendLineIgnoreException(() => sb.AppendFormat("InstanceID: {0}\r\n", ShipWorksSession.InstanceID.ToString("D")));
+            AppendLineIgnoreException(() => sb.AppendFormat("OperatingSystem: {0}\r\n", Environment.OSVersion.ToString()));
+            AppendLineIgnoreException(() => sb.AppendFormat("SessionId: {0}\r\n", Telemetry.SessionId));
+            AppendLineIgnoreException(() => sb.AppendFormat("Screens: {0}\r\n", Screen.AllScreens.Length.ToString()));
+            AppendLineIgnoreException(() => sb.AppendFormat("CPUs: {0}\r\n", Environment.ProcessorCount.ToString()));
+            AppendLineIgnoreException(() => sb.AppendFormat("PhysicalMemory: {0}\r\n", StringUtility.FormatByteCount(memoryInKB * 1024)));
+            AppendLineIgnoreException(() => sb.AppendFormat("ScreenDimensionsPrimary: {0}\r\n", $"{ Screen.PrimaryScreen.Bounds.Width}x{Screen.PrimaryScreen.Bounds.Height}"));
+            AppendLineIgnoreException(() => sb.AppendFormat("ScreenDpiPrimary: {0}\r\n", MyComputer.GetSystemDpi()));
 
             if (SqlSession.IsConfigured)
             {

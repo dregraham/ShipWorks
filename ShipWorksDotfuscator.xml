@@ -134,6 +134,9 @@
       <type name="ShipWorks.Data.Grid.Columns.GridColumnDisplayType">
         <method name=".*" regex="true" />
       </type>
+      <type name=".*" regex="true" applytoderivedtypes="true">
+        <supertype name="System.Exception" regex="true" />
+      </type>
       <type name="ShipWorks.Data.Model.EntityClasses.PostalProfileEntity" excludetype="false">
         <method name="get_Usps" signature="ShipWorks.Data.Model.EntityClasses.UspsProfileEntity()" />
       </type>

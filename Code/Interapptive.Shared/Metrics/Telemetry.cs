@@ -65,6 +65,16 @@ namespace Interapptive.Shared.Metrics
         }
 
         /// <summary>
+        /// The user id being used by the telemetry client.
+        /// </summary>
+        public static string UserId => telemetryClient.Context.User.Id;
+
+        /// <summary>
+        /// The user id being used by the telemetry client.
+        /// </summary>
+        public static string SessionId => telemetryClient.Context.Session.Id;
+
+        /// <summary>
         /// Get the storage connection string
         /// </summary>
         private static string GetInstrumentationKey(Version version)
@@ -106,7 +116,8 @@ namespace Interapptive.Shared.Metrics
             AddEventProperty(eventTelemetry, "UserObjects", NativeMethods.GetGuiResources(process.Handle, NativeMethods.GR_USEROBJECTS));
             AddEventProperty(eventTelemetry, "GDIObjects", NativeMethods.GetGuiResources(process.Handle, NativeMethods.GR_GDIOBJECTS));
             AddEventProperty(eventTelemetry, "ScreenDimensionsPrimary", $"{Screen.PrimaryScreen.Bounds.Width}x{Screen.PrimaryScreen.Bounds.Height}");
-
+            AddEventProperty(eventTelemetry, "ScreenDpiPrimary", MyComputer.GetSystemDpi());
+            
             telemetryClient.TrackEvent(eventTelemetry);
         }
 
@@ -116,6 +127,9 @@ namespace Interapptive.Shared.Metrics
         public static void TrackException(Exception ex, Dictionary<string, string> properties)
         {
             telemetryClient.TrackException(ex, properties);
+
+            // Flush so that this exception gets sent immediately!
+            Flush();
         }
 
         /// <summary>
