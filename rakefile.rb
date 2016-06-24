@@ -445,10 +445,7 @@ end
 namespace :launch do
 	desc "Launches Shipworks"
 
-	task :shipworks do
-		puts "Building Shipworks in debug mode...\r\n\r\n"
-		Rake::Task['build:debug'].execute
-
+	task :shipworks => "build:debug" do
 		puts "Launching Shipworks...\r\n\r\n"
 		command = "start .\\Artifacts\\Application\\ShipWorks.exe"
 		sh command

@@ -1,5 +1,4 @@
 ﻿using System.Reflection;
-using SD.LLBLGen.Pro.ORMSupportClasses;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 {
@@ -30,10 +29,5 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// Set the Value to the given value
         /// </summary>
         void LoadValue(object value);
-
-        /// <summary>
-        /// Gets the field.
-        /// </summary>
-        IEntityField2 Field { get; }
     }
 }

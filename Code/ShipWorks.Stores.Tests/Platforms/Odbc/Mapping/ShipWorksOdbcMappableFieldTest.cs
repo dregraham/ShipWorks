@@ -8,11 +8,11 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
     public class ShipWorksOdbcMappableFieldTest
     {
         [Fact]
-        public void GetQualifiedName_ReturnsQualifiedName()
+        public void QualifiedName_ReturnsQualifiedName()
         {
             ShipWorksOdbcMappableField testObject = new ShipWorksOdbcMappableField(OrderFields.OrderNumber, "Order Number");
 
-            Assert.Equal("OrderEntity.OrderNumber", testObject.GetQualifiedName());
+            Assert.Equal("OrderEntity.OrderNumber", testObject.QualifiedName);
         }
 
         [Fact]

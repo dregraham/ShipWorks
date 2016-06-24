@@ -21,7 +21,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
                 var map = mock.Mock<IOdbcFieldMap>();
 
                 var shipworksField = mock.Mock<IShipWorksOdbcMappableField>();
-                shipworksField.Setup(e => e.GetQualifiedName()).Returns("OrderItemAttribute.Name");
+                shipworksField.SetupGet(e => e.QualifiedName).Returns("OrderItemAttribute.Name");
                 shipworksField.Setup(e => e.Value).Returns("Large");
 
                 OdbcColumn column = new OdbcColumn("Size");
@@ -56,7 +56,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
                 var map = mock.Mock<IOdbcFieldMap>();
 
                 var shipworksField = mock.Mock<IShipWorksOdbcMappableField>();
-                shipworksField.Setup(e => e.GetQualifiedName()).Returns("OrderItemAttribute.Name");
+                shipworksField.SetupGet(e => e.QualifiedName).Returns("OrderItemAttribute.Name");
                 shipworksField.Setup(e => e.Value).Returns("Large");
 
                 OdbcColumn column = new OdbcColumn("Size");
@@ -90,7 +90,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
                 var map = mock.Mock<IOdbcFieldMap>();
 
                 var shipworksField = mock.Mock<IShipWorksOdbcMappableField>();
-                shipworksField.Setup(e => e.GetQualifiedName()).Returns("OrderItemAttribute.Name");
+                shipworksField.SetupGet(e => e.QualifiedName).Returns("OrderItemAttribute.Name");
 
                 var mapEntry = mock.Mock<IOdbcFieldMapEntry>();
                 mapEntry.Setup(e => e.ShipWorksField).Returns(shipworksField.Object);

@@ -32,13 +32,11 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <summary>
         /// The External Table
         /// </summary>
-        [Obfuscation(Exclude = true)]
         public IOdbcTable Table { get; set; }
 
         /// <summary>
         /// The External Column
         /// </summary>
-        [Obfuscation(Exclude = true)]
         public OdbcColumn Column { get; set; }
 
         /// <summary>
@@ -50,17 +48,15 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <summary>
         /// The fields display name
         /// </summary>
-        [Obfuscation(Exclude = true)]
+        [JsonIgnore]
         public string DisplayName => $"{Table.Name} {Column.Name}";
 
         /// <summary>
         /// The fields Qualified Name in the format Table.Column
         /// </summary>
-	    public string GetQualifiedName()
-	    {
-	        return $"{Table.Name}.{Column.Name}";
-	    }
-
+        [JsonIgnore]
+	    public string QualifiedName => $"{Table.Name}.{Column.Name}";
+	    
         /// <summary>
         /// Loads the given record
         /// </summary>

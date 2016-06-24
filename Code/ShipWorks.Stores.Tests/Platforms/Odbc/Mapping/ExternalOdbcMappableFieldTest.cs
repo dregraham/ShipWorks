@@ -16,14 +16,14 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
         }
 
         [Fact]
-        public void GetQualifiedName_ReturnsQualifiedName()
+        public void QualifiedName_ReturnsQualifiedName()
         {
             OdbcTable table = new OdbcTable("TableName");
             OdbcColumn column = new OdbcColumn("ColumnName");
 
             ExternalOdbcMappableField testObject = new ExternalOdbcMappableField(table, column);
 
-            Assert.Equal("TableName.ColumnName", testObject.GetQualifiedName());
+            Assert.Equal("TableName.ColumnName", testObject.QualifiedName);
         }
 
         [Fact]
