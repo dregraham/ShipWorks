@@ -214,7 +214,7 @@ namespace ShipWorks.Shipping.Services
             if (shipmentType.SupportsGetRates &&
                 rate != null &&
                 rate.Selectable &&
-                rate.ShipmentType == ShipmentTypeCode)
+                IsCompatibleShipmentType(rate.ShipmentType))
             {
                 UpdateServiceFromRate(rate);
             }
@@ -240,6 +240,14 @@ namespace ShipWorks.Shipping.Services
         public virtual RateResult GetChildRateForRate(RateResult parentRate, IEnumerable<RateResult> rates)
         {
             return parentRate;
+        }
+
+        /// <summary>
+        /// Is the given shipment type compatible with the current shipment type
+        /// </summary>
+        protected virtual bool IsCompatibleShipmentType(ShipmentTypeCode shipmentType)
+        {
+            return shipmentType == ShipmentTypeCode;
         }
 
         /// <summary>
