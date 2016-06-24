@@ -100,7 +100,7 @@ namespace ShipWorks.Data.Caching
         /// </summary>
         public EntityBase2 GetEntity(long entityID, bool fetchIfMissing, SqlAdapter adapter)
         {
-            EntityBase2 entity = EntityUtility.CloneEntity((EntityBase2)cache[GetCacheKey(entityID)]);
+            EntityBase2 entity = EntityUtility.CloneEntity((EntityBase2) cache[GetCacheKey(entityID)]);
 
             if (entity == null && fetchIfMissing)
             {
@@ -109,7 +109,7 @@ namespace ShipWorks.Data.Caching
 
                 Stopwatch sw = Stopwatch.StartNew();
 
-                entity = (EntityBase2)adapter.FetchNewEntity(
+                entity = (EntityBase2) adapter.FetchNewEntity(
                     GeneralEntityFactory.Create(entityType).GetEntityFactory(),
                     new RelationPredicateBucket(new FieldCompareValuePredicate(pkField, null, ComparisonOperator.Equal, entityID)),
                     GetPrefetch(entityType));
