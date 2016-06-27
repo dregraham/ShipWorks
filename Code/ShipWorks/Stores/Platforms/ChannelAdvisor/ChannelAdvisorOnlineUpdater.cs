@@ -484,47 +484,116 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             MethodConditions.EnsureArgumentIsNotNull(shipment);
             MethodConditions.EnsureArgumentIsNotNull(shipment.Amazon);
 
-            switch (shipment.Amazon.ShippingServiceName)
+            // Check to see if it's USPS
+            string shippingServiceName = GetAmazonShipmentClassCodeUsps(shipment.Amazon.ShippingServiceName);
+
+            // If it wasn't, check UPS
+            if (string.IsNullOrWhiteSpace(shippingServiceName))
             {
-                case "FedEx Priority Overnight®":
-                    return "PRIORITY";
-                case "FedEx Standard Overnight®":
-                    return "OVERNIGHT";
-                case "FedEx 2Day®A.M.":
-                    return "2DAY";
-                case "FedEx 2Day®":
-                    return "2DAY";
-                case "FedEx Express Saver®":
-                    return "EXPSAVER";
-                case "FedEx Home Delivery®":
-                    return "GROUND";
-                case "USPS First Class":
-                    return "FIRSTCLASS";
-                case "USPS Priority Mail":
-                    return "PRIORITY";
-                case "USPS Priority Mail Flat Rate Box":
-                    return "PRIORITY";
-                case "USPS Priority Mail Small Flat Rate Box":
-                    return "PRIORITY";
-                case "USPS Priority Mail Large Flat Rate Box":
-                    return "PRIORITY";
-                case "USPS Priority Mail Flat Rate Envelope":
-                    return "PRIORITY";
-                case "USPS Priority Mail Express":
-                    return "EXPRESS";
-                case "USPS Priority Mail Express Flat Rate Envelope":
-                    return "EXPRESS";
-                case "USPS Parcel Select":
-                    return "PARCELSELECT";
+                shippingServiceName = GetAmazonShipmentClassCodeUps(shipment.Amazon.ShippingServiceName);
+            }
+
+            // If it wasn't, check FedEx
+            if (string.IsNullOrWhiteSpace(shippingServiceName))
+            {
+                shippingServiceName = GetAmazonShipmentClassCodeFedEx(shipment.Amazon.ShippingServiceName);
+            }
+
+            // If it wasn't, default to NONE
+            if (string.IsNullOrWhiteSpace(shippingServiceName))
+            {
+                shippingServiceName = "NONE";
+            }
+
+            return shippingServiceName;
+        }
+
+        /// <summary>
+        /// Gets the actual service for a Amazon shipment for UPS
+        /// </summary>
+        /// <returns></returns>
+        private static string GetAmazonShipmentClassCodeUps(string amazonShippingServiceName)
+        {
+            switch (amazonShippingServiceName)
+            {
                 case "UPS Ground":
                     return "GROUND";
                 case "UPS Next Day Air":
                     return "NEXTDAY";
                 case "UPS Next Day Air Saver":
                     return "NDAS";
+                case "UPS 2nd Day Air":
+                    return "2DAY";
+                case "UPS 3 Day Select":
+                    return "3DS";
             }
 
-            return "NONE";
+            return string.Empty;
+        }
+
+        /// <summary>
+        /// Gets the actual service for a Amazon shipment for USPS
+        /// </summary>
+        /// <returns></returns>
+        private static string GetAmazonShipmentClassCodeUsps(string amazonShippingServiceName)
+        {
+            switch (amazonShippingServiceName)
+            {
+                case "USPS First Class":
+                    return "FIRSTCLASS";
+                case "USPS Priority Mail":
+                case "USPS Priority Mail Flat Rate Box":
+                case "USPS Priority Mail Small Flat Rate Box":
+                case "USPS Priority Mail Large Flat Rate Box":
+                case "USPS Priority Mail Flat Rate Envelope":
+                case "USPS Priority Mail Legal Flat Rate Envelope":
+                case "USPS Priority Mail Padded Flat Rate Envelope":
+                case "USPS Priority Mail Regional Rate Box A":
+                case "USPS Priority Mail Regional Rate Box B":
+                case "USPS Priority Mail Regional Rate Box C":
+                    return "PRIORITY";
+                case "USPS Priority Mail Express":
+                case "USPS Priority Mail Express Flat Rate Envelope":
+                case "USPS Express Mail":
+                case "USPS Express Mail Flat Rate Envelope":
+                case "USPS Express Mail Legal Flat Rate Envelope":
+                    return "EXPRESS";
+                case "USPS Parcel Select":
+                    return "PARCELSELECT";
+                case "USPS Bound Printed Matter":
+                    return "BOUNDPRINTEDMATTER";
+                case "USPS Media Mail":
+                    return "MEDIA";
+            }
+
+            return string.Empty;
+        }
+
+        /// <summary>
+        /// Gets the actual service for a Amazon shipment for FedEx
+        /// </summary>
+        /// <returns></returns>
+        private static string GetAmazonShipmentClassCodeFedEx(string amazonShippingServiceName)
+        {
+            switch (amazonShippingServiceName)
+            {
+                case "FedEx Priority Overnight®":
+                    return "PRIORITY";
+                case "FedEx Standard Overnight®":
+                    return "OVERNIGHT";
+                case "FedEx 2Day®A.M.":
+                case "FedEx 2Day®":
+                    return "2DAY";
+                case "FedEx Express Saver®":
+                    return "EXPSAVER";
+                case "FedEx Home Delivery®":
+                // The spreadsheet from Amazon has the double space between FedEx and Home, so adding it here just in case.
+                case "FedEx  Home Delivery®":
+                case "FedEx Ground®":
+                    return "GROUND";
+            }
+
+            return string.Empty;
         }
     }
 }
