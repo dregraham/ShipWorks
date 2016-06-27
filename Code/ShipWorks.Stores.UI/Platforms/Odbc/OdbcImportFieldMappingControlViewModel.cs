@@ -38,7 +38,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         private readonly PropertyChangedHandler handler;
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private IOdbcColumnSource previousSelectedTable = null;
+        private IOdbcColumnSource previousSelectedTable;
         private string mapName;
         private bool isSingleLineOrder = true;
         private int numberOfAttributesPerItem;
@@ -116,7 +116,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// The external odbc tables.
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public IEnumerable<OdbcColumnSource> Tables { get; set; }
+        public IEnumerable<IOdbcColumnSource> Tables { get; set; }
 
         /// <summary>
         /// Save Map Command

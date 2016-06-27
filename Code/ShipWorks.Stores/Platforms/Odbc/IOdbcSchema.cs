@@ -10,7 +10,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// <summary>
         /// ODBC Tables in this schema
         /// </summary>
-        IEnumerable<OdbcColumnSource> Tables { get; }
+        IEnumerable<IOdbcColumnSource> Tables { get; }
 
         /// <summary>
         /// Load the given DataSource
