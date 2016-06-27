@@ -47,12 +47,12 @@ namespace ShipWorks.Shipping.Carriers.BestRate.RateGroupFiltering
         /// </summary>
         private RateResult RateResultsGroupBySelector(RateResult currentRateResult, RateResult nextRateResult)
         {
-            if (currentRateResult.Amount < nextRateResult.Amount)
+            if (currentRateResult.AmountOrDefault < nextRateResult.AmountOrDefault)
             {
                 return currentRateResult;
             }
             
-            if (currentRateResult.Amount > nextRateResult.Amount)
+            if (currentRateResult.AmountOrDefault > nextRateResult.AmountOrDefault)
             {
                 return nextRateResult;
             }

@@ -123,7 +123,7 @@ namespace ShipWorks.Stores.Tests.Platforms.SparkPay
                     Order = new OrderEntity { OrderNumber = 123 }
                 };
 
-                Shipment result = testObject.Create(shipment);
+                testObject.Create(shipment);
 
                 shippingManager.Verify(s => s.GetServiceUsed(shipment), Times.Once);
             }

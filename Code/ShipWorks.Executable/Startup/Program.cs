@@ -1,6 +1,4 @@
 ﻿using System;
-using ShipWorks.ApplicationCore;
-using ShipWorks.Shipping.UI;
 
 namespace ShipWorks.Startup
 {

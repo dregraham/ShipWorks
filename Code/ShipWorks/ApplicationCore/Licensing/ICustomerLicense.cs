@@ -1,7 +1,8 @@
-﻿using ShipWorks.Stores;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Windows.Forms;
 using ShipWorks.Editions;
+using ShipWorks.Stores;
+using ShipWorks.Users.Security;
 
 namespace ShipWorks.ApplicationCore.Licensing
 {
@@ -33,7 +34,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Deletes the given channel
         /// </summary>
-        void DeleteChannel(StoreTypeCode storeType);
+        void DeleteChannel(StoreTypeCode storeType, ISecurityContext securityContext);
 
         /// <summary>
         /// Checks the restriction for a specific feature

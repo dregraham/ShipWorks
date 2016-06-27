@@ -51,7 +51,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon
 
             const string linkText = "Amazon Seller Central";
 
-            MessageLink.Text = $"Shipworks could not retrieve {EnumHelper.GetDescription(shipmentTypeCode)} rates. Please confirm your {providerType} account is linked correctly in {linkText}{extraMessaging}. ";
+            MessageLink.Text = $"ShipWorks could not retrieve {EnumHelper.GetDescription(shipmentTypeCode)} rates. " +
+                $"Please confirm your {providerType} account is linked correctly in {linkText}{extraMessaging}. ";
 
             MessageLink.LinkArea = new LinkArea(
                 MessageLink.Text.IndexOf(linkText, StringComparison.OrdinalIgnoreCase),

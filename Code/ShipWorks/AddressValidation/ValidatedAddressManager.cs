@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Threading.Tasks;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
-using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Actions;
 using ShipWorks.AddressValidation.Enums;
@@ -28,7 +28,7 @@ namespace ShipWorks.AddressValidation
         }
 
         /// <summary>
-        /// Propogates the address change to billing.
+        /// Propagates the address change to billing.
         /// </summary>
         private static void PropagateAddressChangeToBilling(IAddressValidationDataAccess dataAccess, OrderEntity order, AddressAdapter originalShippingAddress, AddressAdapter newShippingAddress, List<ValidatedAddressEntity> addressSuggestions)
         {
@@ -65,7 +65,7 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Propagate order address changes to unprocessed shipments if necessary
         /// </summary>
-        private static void PropagateAddressChangesToShipments(IAddressValidationDataAccess dataAccess, long orderID, AddressAdapter originalShippingAddress, 
+        private static void PropagateAddressChangesToShipments(IAddressValidationDataAccess dataAccess, long orderID, AddressAdapter originalShippingAddress,
             AddressAdapter newShippingAddress, List<ValidatedAddressEntity> addressSuggestions)
         {
             // If the order shipment address hasn't changed, we don't need to do anything
@@ -91,7 +91,7 @@ namespace ShipWorks.AddressValidation
 
                     if (addressSuggestions == null)
                     {
-                        CopyValidatedAddresses(dataAccess, orderID, "Ship", shipment.ShipmentID, "Ship");    
+                        CopyValidatedAddresses(dataAccess, orderID, "Ship", shipment.ShipmentID, "Ship");
                     }
                     else
                     {
@@ -253,7 +253,7 @@ namespace ShipWorks.AddressValidation
             if (string.IsNullOrEmpty(currentShippingAddress.CountryCode))
             {
                 currentShippingAddress.AddressValidationError = "ShipWorks cannot validate an address without a country.";
-                currentShippingAddress.AddressValidationStatus = (int)AddressValidationStatusType.BadAddress;
+                currentShippingAddress.AddressValidationStatus = (int) AddressValidationStatusType.BadAddress;
                 currentShippingAddress.AddressType = (int) AddressType.WillNotValidate;
 
                 return false;
@@ -263,8 +263,8 @@ namespace ShipWorks.AddressValidation
                 !PostalUtility.IsMilitaryState(currentShippingAddress.CountryCode))
             {
                 currentShippingAddress.AddressValidationError = "ShipWorks cannot validate international addresses";
-                currentShippingAddress.AddressValidationStatus = (int)AddressValidationStatusType.WillNotValidate;
-                currentShippingAddress.AddressType = (int)AddressType.WillNotValidate;
+                currentShippingAddress.AddressValidationStatus = (int) AddressValidationStatusType.WillNotValidate;
+                currentShippingAddress.AddressType = (int) AddressType.WillNotValidate;
 
                 return false;
             }
@@ -272,9 +272,9 @@ namespace ShipWorks.AddressValidation
             if (string.IsNullOrEmpty(currentShippingAddress.Street1))
             {
                 currentShippingAddress.AddressValidationError = "ShipWorks cannot validate an address without a first line.";
-                currentShippingAddress.AddressValidationStatus = (int)AddressValidationStatusType.BadAddress;
-                currentShippingAddress.AddressType = (int)AddressType.PrimaryNotFound;
-                
+                currentShippingAddress.AddressValidationStatus = (int) AddressValidationStatusType.BadAddress;
+                currentShippingAddress.AddressType = (int) AddressType.PrimaryNotFound;
+
                 return false;
             }
 
@@ -284,11 +284,11 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Validate a single shipment
         /// </summary>
-        public static void ValidateShipment(ShipmentEntity shipment, AddressValidator validator)
+        public static Task ValidateShipmentAsync(ShipmentEntity shipment, IAddressValidator validator)
         {
             // 3 retries is an arbitrary decision, but it should cover the case where we get a concurrency exception
             // validating the order and then the shipment, since the background process validates each at different times
-            ValidateShipment(shipment, validator, 3);
+            return ValidateShipmentAsync(shipment, validator, 3);
         }
 
         /// <summary>
@@ -298,7 +298,7 @@ namespace ShipWorks.AddressValidation
         /// <param name="validator">Address validator to use</param>
         /// <param name="retryCount">How many times should validation be retried</param>
         [NDependIgnoreLongMethod]
-        private static void ValidateShipment(ShipmentEntity shipment, AddressValidator validator, int retryCount)
+        private static async Task ValidateShipmentAsync(ShipmentEntity shipment, IAddressValidator validator, int retryCount)
         {
             AddressAdapter shipmentAdapter = new AddressAdapter(shipment, "Ship");
 
@@ -308,7 +308,7 @@ namespace ShipWorks.AddressValidation
                 return;
             }
 
-            OrderEntity order = DataProvider.GetEntity(shipment.OrderID) as OrderEntity;
+            OrderEntity order = shipment.Order ?? DataProvider.GetEntity(shipment.OrderID) as OrderEntity;
             if (order == null)
             {
                 return;
@@ -321,21 +321,21 @@ namespace ShipWorks.AddressValidation
                 return;
             }
 
-
-            bool canApplyChanges = store.AddressValidationSetting == (int)AddressValidationStoreSettingType.ValidateAndApply;
+            bool shouldRetry = false;
+            bool canApplyChanges = store.AddressValidationSetting == (int) AddressValidationStoreSettingType.ValidateAndApply;
 
             try
             {
                 AddressAdapter orderAdapter = new AddressAdapter(order, "Ship");
 
-                if (orderAdapter == shipmentAdapter && 
+                if (orderAdapter == shipmentAdapter &&
                     orderAdapter.AddressValidationStatus == shipmentAdapter.AddressValidationStatus)
                 {
                     // Since the order and shipment addresses match, validate the order and let propagation take care of updating the shipment
                     AddressAdapter originalShippingAddress = new AddressAdapter();
                     orderAdapter.CopyTo(originalShippingAddress);
 
-                    validator.Validate(order, "Ship", canApplyChanges, (originalAddress, suggestedAddresses) =>
+                    await validator.ValidateAsync(order.ShipPerson.ConvertTo<AddressAdapter>(), canApplyChanges, (originalAddress, suggestedAddresses) =>
                     {
                         // Use a low priority for deadlocks, since we'll just try again
                         using (new SqlDeadlockPriorityScope(-4))
@@ -363,7 +363,8 @@ namespace ShipWorks.AddressValidation
                 else if (!shipment.Processed)
                 {
                     // Since the addresses don't match, just validate the shipment
-                    validator.Validate(shipment, "Ship", canApplyChanges, (originalAddress, suggestedAddresses) =>
+                    await validator.ValidateAsync(shipment.ShipPerson.ConvertTo<AddressAdapter>(),
+                        canApplyChanges, (originalAddress, suggestedAddresses) =>
                     {
                         // Use a low priority for deadlocks, since we'll just try again
                         using (new SqlDeadlockPriorityScope(-4))
@@ -381,18 +382,20 @@ namespace ShipWorks.AddressValidation
             }
             catch (ORMConcurrencyException)
             {
-                RetryValidation(shipment, order, validator, retryCount);
+                shouldRetry = true;
             }
             catch (SqlDeadlockException)
             {
-                RetryValidation(shipment, order, validator, retryCount);
+                shouldRetry = true;
             }
-            catch (SqlException ex)
+            catch (SqlException ex) when (ex.Message.Contains("deadlock"))
             {
-                if (ex.Message.Contains("deadlock"))
-                {
-                    RetryValidation(shipment, order, validator, retryCount);   
-                }
+                shouldRetry = true;
+            }
+
+            if (shouldRetry)
+            {
+                await RetryValidation(shipment, order, validator, retryCount);
             }
         }
 
@@ -440,7 +443,7 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Attempt to retry validation if necessary
         /// </summary>
-        private static void RetryValidation(ShipmentEntity shipment, OrderEntity order, AddressValidator validator, int retryCount)
+        private static async Task RetryValidation(ShipmentEntity shipment, OrderEntity order, IAddressValidator validator, int retryCount)
         {
             if (retryCount == 0)
             {
@@ -455,12 +458,12 @@ namespace ShipWorks.AddressValidation
 
                 if (order != null)
                 {
-                    // Remove the order from the caceh so that when we retry the validation, we force a reload
+                    // Remove the order from the cache so that when we retry the validation, we force a reload
                     DataProvider.RemoveEntity(order.OrderID);
                 }
             }
 
-            ValidateShipment(shipment, validator, retryCount - 1);
+            await ValidateShipmentAsync(shipment, validator, retryCount - 1);
         }
 
         /// <summary>

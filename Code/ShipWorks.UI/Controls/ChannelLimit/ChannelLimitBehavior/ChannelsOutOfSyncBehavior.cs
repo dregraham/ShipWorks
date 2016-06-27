@@ -9,7 +9,7 @@ using ShipWorks.Stores;
 namespace ShipWorks.UI.Controls.ChannelLimit.ChannelLimitBehavior
 {
     /// <summary>
-    /// ChannelLimitBehavior for when there are stores in Shipworks that
+    /// ChannelLimitBehavior for when there are stores in ShipWorks that
     /// Tango doesn't know about.
     /// </summary>
     public class ChannelsOutOfSyncBehavior : IChannelLimitBehavior
@@ -36,7 +36,7 @@ namespace ShipWorks.UI.Controls.ChannelLimit.ChannelLimitBehavior
             channels.Clear();
 
             // Load the collection with the licenses active stores
-            // If ChannelToAdd is set, filter out 
+            // If ChannelToAdd is set, filter out
             IEnumerable<IActiveStore> activeTangoStores =
                 license.GetActiveStores();
 

@@ -1,15 +1,10 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
-using ShipWorks.Filters.Content.Editors.ValueEditors;
-using log4net;
-using ShipWorks.Data;
-using ShipWorks.Filters.Content.SqlGeneration;
-using ShipWorks.Data.Adapter;
-using System.Data.SqlClient;
 using Interapptive.Shared;
-using ShipWorks.Data.Connection;
 using Interapptive.Shared.Data;
+using log4net;
+using ShipWorks.Data.Connection;
+using ShipWorks.Filters.Content.Editors.ValueEditors;
+using ShipWorks.Filters.Content.SqlGeneration;
 
 namespace ShipWorks.Filters.Content.Conditions
 {
@@ -92,7 +87,7 @@ namespace ShipWorks.Filters.Content.Conditions
         [NDependIgnoreLongMethod]
         public void GetEffectiveOperation(ref DateOperator effectiveOp, ref DateTime effectiveValue1, ref DateTime effectiveValue2)
         {
-            DateTime now = SqlSession.Current.GetLocalDate().Date;
+            DateTime now = SqlDateTimeProvider.Current.GetLocalDate().Date;
 
             // Greater than X is really GreaterEqual X + 1
             if (op == DateOperator.GreaterThan)
@@ -254,7 +249,7 @@ namespace ShipWorks.Filters.Content.Conditions
         /// </summary>
         private DateTime GetFirstDateOf(DateWithinUnit withinUnit)
         {
-            DateTime now = SqlSession.Current.GetLocalDate().Date;
+            DateTime now = SqlDateTimeProvider.Current.GetLocalDate().Date;
 
             switch (withinUnit)
             {
@@ -327,7 +322,7 @@ namespace ShipWorks.Filters.Content.Conditions
                 cmd.CommandText = "SELECT dbo.DateToUniversalTime(@dateTime)";
                 cmd.Parameters.AddWithValue("@dateTime", dateTime);
 
-                return (DateTime)SqlCommandProvider.ExecuteScalar(cmd);
+                return (DateTime) SqlCommandProvider.ExecuteScalar(cmd);
             });
         }
 

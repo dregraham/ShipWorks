@@ -1,21 +1,22 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using log4net;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Security.Cryptography;
+using log4net;
 using ShipWorks.ApplicationCore;
-using System.Diagnostics;
 
 namespace ShipWorks.Data.Administration.SqlServerSetup
 {
     /// <summary>
     /// Utility class for installing the .NET Framework 3.5 SP1
     /// </summary>
+    [SuppressMessage("CSharp.Analyzers",
+        "CA5350: Do not use insecure cryptographic algorithm SHA1",
+        Justification = "This is what ShipWorks currently uses")]
     public class DotNet35Installer
     {
-         // Logger
+        // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(DotNet35Installer));
 
         // Redistributable filename
@@ -91,7 +92,7 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
         /// </summary>
         private void OnInstallerExited(object sender, EventArgs e)
         {
-            Process process = (Process)sender;
+            Process process = (Process) sender;
             lastExitCode = process.ExitCode;
 
             if (Exited != null)
@@ -113,7 +114,7 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
         /// </summary>
         public static string FormatReturnCode(int code)
         {
-            // 1603 is supposed to mean fatal error - but in my testing its what it keps returning
+            // 1603 is supposed to mean fatal error - but in my testing its what it keeps returning
             // for canceling using the installer UI.
             if (code == 1602)
             {

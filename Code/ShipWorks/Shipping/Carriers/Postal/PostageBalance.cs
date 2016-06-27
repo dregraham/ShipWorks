@@ -47,7 +47,18 @@ namespace ShipWorks.Shipping.Carriers.Postal
         }
 
         /// <summary>
-        /// Uses the Tango web client to log the postage in a fire and forget manner, so any upstream processing 
+        /// Balance with carrier run in background
+        /// </summary>
+        public Task<decimal> GetValueAsync()
+        {
+            return new TaskFactory().StartNew(() =>
+            {
+                return Value;
+            });
+        }
+
+        /// <summary>
+        /// Uses the Tango web client to log the postage in a fire and forget manner, so any upstream processing
         /// is not waiting on Tango to respond.
         /// </summary>
         /// <param name="amount">The amount.</param>

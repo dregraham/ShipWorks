@@ -15,7 +15,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
 {
     public class AmazonRateGroupFactoryTest
     {
-        private AutoMock mock;
+        private readonly AutoMock mock;
 
         public AmazonRateGroupFactoryTest()
         {
@@ -30,7 +30,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         {
             GetEligibleShippingServicesResponse response = ResponseWithService(new ShippingService
             {
-                Rate = new Rate { Amount = 2.34m },
+                Rate = new Rate { Amount = 2.34M },
                 ShippingServiceName = "UPS",
                 ShippingServiceId = "Foo",
                 ShippingServiceOfferId = "Bar"
@@ -42,9 +42,9 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
             RateResult rateResult = result.Rates.FirstOrDefault();
 
             Assert.Equal("UPS", rateResult.Description);
-            Assert.Equal(2.34m, rateResult.Amount);
-            Assert.Equal("Foo", ((AmazonRateTag)rateResult.Tag).ShippingServiceId);
-            Assert.Equal("Bar", ((AmazonRateTag)rateResult.Tag).ShippingServiceOfferId);
+            Assert.Equal(2.34M, rateResult.AmountOrDefault);
+            Assert.Equal("Foo", ((AmazonRateTag) rateResult.Tag).ShippingServiceId);
+            Assert.Equal("Bar", ((AmazonRateTag) rateResult.Tag).ShippingServiceOfferId);
         }
 
         [Fact]
@@ -122,7 +122,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
 
             GetEligibleShippingServicesResponse response = ResponseWithService(new ShippingService
             {
-                Rate = new Rate { Amount = 2.34m },
+                Rate = new Rate { Amount = 2.34M },
                 ShippingServiceName = "UPS",
                 ShippingServiceId = "Foo",
                 ShippingServiceOfferId = "Bar"
@@ -137,7 +137,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
             testObject.GetRateGroupFromResponse(response);
 
             Assert.Equal(1, filteredRate.Rates.Count);
-            Assert.Equal(2.34m, filteredRate.Rates.First().Amount);
+            Assert.Equal(2.34M, filteredRate.Rates.First().AmountOrDefault);
         }
 
         public GetEligibleShippingServicesResponse ResponseWithServices(Func<IEnumerable<ShippingService>> serviceCreator)
@@ -166,7 +166,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
                 Order = new AmazonOrderEntity()
                 {
                     AmazonOrderID = "10",
-                    IsPrime = (int)isPrime
+                    IsPrime = (int) isPrime
                 },
                 Amazon = new AmazonShipmentEntity()
                 {

@@ -5,6 +5,7 @@ using ShipWorks.AddressValidation.Enums;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
+using System.Threading.Tasks;
 
 namespace ShipWorks.AddressValidation
 {
@@ -16,7 +17,7 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Validate the address
         /// </summary>
-        public AddressValidationWebClientValidateAddressResult ValidateAddress(AddressAdapter addressAdapter)
+        public async Task<AddressValidationWebClientValidateAddressResult> ValidateAddressAsync(AddressAdapter addressAdapter)
         {
             // The underlying web client expects a PersonAdapter, so convert the address adapter to a person adapter
             PersonAdapter personAdapter = new PersonAdapter()
@@ -37,7 +38,7 @@ namespace ShipWorks.AddressValidation
 
             try
             {
-                UspsAddressValidationResults uspsResult = session.ValidateAddress(personAdapter);
+                UspsAddressValidationResults uspsResult = await session.ValidateAddressAsync(personAdapter);
                 validationResult.AddressType = ConvertAddressType(uspsResult);
 
                 if (uspsResult.IsSuccessfulMatch)

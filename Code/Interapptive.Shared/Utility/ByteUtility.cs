@@ -1,7 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.ComponentModel;
+using System.Linq;
 
 namespace Interapptive.Shared.Utility
 {
@@ -82,6 +79,16 @@ namespace Interapptive.Shared.Utility
             }
 
             return false;
+        }
+
+        /// <summary>
+        /// Convert a byte array to a hex string
+        /// </summary>
+        public static string ToHexString(this byte[] value)
+        {
+            return value == null ?
+                string.Empty :
+                value.Select(x => x.ToString("X2")).Aggregate(string.Empty, (x, y) => x + y);
         }
     }
 }

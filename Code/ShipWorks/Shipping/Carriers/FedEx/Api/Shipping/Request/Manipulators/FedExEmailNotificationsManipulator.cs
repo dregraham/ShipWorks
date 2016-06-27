@@ -1,10 +1,10 @@
-using System.Collections.Generic;
-using System.Linq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
 {
@@ -14,7 +14,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
     public class FedExEmailNotificationsManipulator : FedExShippingRequestManipulatorBase
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="FedExDryIceManipulator" /> class.
+        /// Initializes a new instance of the <see cref="FedExEmailNotificationsManipulator" /> class.
         /// </summary>
         public FedExEmailNotificationsManipulator()
             : this(new FedExSettings(new FedExSettingsRepository()))

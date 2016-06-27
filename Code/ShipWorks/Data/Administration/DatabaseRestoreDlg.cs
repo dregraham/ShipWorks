@@ -1,19 +1,12 @@
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
-using ShipWorks.Data.Model.EntityClasses;
-using Interapptive.Shared;
-using ShipWorks.UI;
-using Interapptive.Shared.Utility;
-using ShipWorks.Common.Threading;
-using ShipWorks.Data.Connection;
 using Interapptive.Shared.UI;
-using ShipWorks.Data.Administration.UpdateFrom2x;
+using ShipWorks.Common.Threading;
+using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Administration.UpdateFrom2x.Configuration;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Messaging.Messages;
 
 namespace ShipWorks.Data.Administration
 {
@@ -57,6 +50,8 @@ namespace ShipWorks.Data.Administration
                 return;
             }
 
+            Messenger.Current.Send(new WindowResettingMessage(this));
+
             ProgressProvider progressProvider = new ProgressProvider();
 
             ProgressDlg progressDlg = new ProgressDlg(progressProvider);
@@ -93,7 +88,7 @@ namespace ShipWorks.Data.Administration
             {
                 invoker.EndInvoke(asyncResult);
 
-                // Close when the progress closes if it wasn't cancelled
+                // Close when the progress closes if it wasn't canceled
                 if (!progressDlg.ProgressProvider.CancelRequested)
                 {
                     progressDlg.FormClosed += new FormClosedEventHandler(OnProgressSuccessClosed);

@@ -19,12 +19,12 @@ namespace ShipWorks.Stores.UI.Platforms.SparkPay.WizardPages
     class SparkPayAccountViewModel : INotifyPropertyChanged, ISparkPayAccountViewModel
     {
         private readonly Func<SparkPayStoreEntity, SparkPayStatusCodeProvider> statusCodeProviderFactory;
-        IMessageHelper messageHelper;
-        SparkPayWebClient webClient;
-        readonly PropertyChangedHandler handler;
+        private readonly IMessageHelper messageHelper;
+        private readonly SparkPayWebClient webClient;
+        private readonly PropertyChangedHandler handler;
         public event PropertyChangedEventHandler PropertyChanged;
-        string token;
-        string url;
+        private string token;
+        private string url;
 
         /// <summary>
         /// Constructor
@@ -41,10 +41,7 @@ namespace ShipWorks.Stores.UI.Platforms.SparkPay.WizardPages
         /// The token
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public string HelpUrl
-        {
-            get { return "http://support.shipworks.com/helpdesk"; }
-        }
+        public string HelpUrl => "http://support.shipworks.com/helpdesk";
 
         /// <summary>
         /// The token
@@ -81,7 +78,7 @@ namespace ShipWorks.Stores.UI.Platforms.SparkPay.WizardPages
         public bool Save(SparkPayStoreEntity store)
         {
             Dictionary<string, StoresResponse> validatedCredentials = ValidCredentials();
-            
+
             if (validatedCredentials != null && validatedCredentials.Any())
             {
                 StoresResponse storeResponse = validatedCredentials.FirstOrDefault().Value;
@@ -107,7 +104,7 @@ namespace ShipWorks.Stores.UI.Platforms.SparkPay.WizardPages
 
                 store.Token = Token;
                 store.StoreUrl = validatedCredentials.FirstOrDefault().Key;
-                
+
                 SparkPayStatusCodeProvider statusCodeProvider = statusCodeProviderFactory(store);
 
                 statusCodeProvider.UpdateFromOnlineStore();
@@ -140,7 +137,7 @@ namespace ShipWorks.Stores.UI.Platforms.SparkPay.WizardPages
             {
                 // Try getting a list of stores based on the Uri we generated
                 string apiUrl = GetApiUrl(new Uri(Url));
-                response.Add(apiUrl, GetStore(Token, apiUrl));
+                response.Add(apiUrl, GetStore(apiUrl));
             }
             catch (UriFormatException)
             {
@@ -154,7 +151,7 @@ namespace ShipWorks.Stores.UI.Platforms.SparkPay.WizardPages
                     // Path was wrong so we try again using the string that was entered
                     try
                     {
-                        response.Add(Url, GetStore(Token, Url));
+                        response.Add(Url, GetStore(Url));
                     }
                     catch (SparkPayException x)
                     {
@@ -173,9 +170,9 @@ namespace ShipWorks.Stores.UI.Platforms.SparkPay.WizardPages
         /// <summary>
         /// Returns the stores for the given uri/token
         /// </summary>
-        private StoresResponse GetStore(string token, string uri)
+        private StoresResponse GetStore(string uri)
         {
-            return webClient.GetStores(token, $"{uri}/stores");
+            return webClient.GetStores(Token, $"{uri}/stores");
         }
 
         /// <summary>

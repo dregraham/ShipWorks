@@ -1,5 +1,4 @@
 ﻿using System;
-using log4net;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Management;
@@ -7,25 +6,19 @@ using ShipWorks.Stores.UI.Platforms.SparkPay.WizardPages;
 
 namespace ShipWorks.Stores.UI.Platforms.SparkPay
 {
+    /// <summary>
+    /// Represents a settings control for the Sparkpay store
+    /// </summary>
     public partial class SparkPaySettingsControl : AccountSettingsControlBase
     {
-        private readonly ILog log;
         private readonly ISparkPayAccountViewModel viewModel;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public SparkPaySettingsControl(ISparkPayAccountViewModel viewModel) : this(LogManager.GetLogger(typeof(SparkPaySettingsControl)), viewModel)
-        {
-        }
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        private SparkPaySettingsControl(ILog log, ISparkPayAccountViewModel viewModel)
+        public SparkPaySettingsControl(ISparkPayAccountViewModel viewModel)
         {
             InitializeComponent();
-            this.log = log;
             this.viewModel = viewModel;
             sparkPayAccountControl.DataContext = viewModel;
         }
@@ -38,21 +31,21 @@ namespace ShipWorks.Stores.UI.Platforms.SparkPay
             SparkPayStoreEntity sparkPayStore = store as SparkPayStoreEntity;
             if (sparkPayStore == null)
             {
-                throw new ArgumentException("A non GenericStore store was passed to SparkPay store account settings.");
+                throw new ArgumentException("A non SparkPay store was passed to SparkPay store account settings.");
             }
 
             viewModel.Load(sparkPayStore);
         }
 
         /// <summary>
-        ///     Saves the user selected settings back to the store entity;
+        /// Saves the user selected settings back to the store entity
         /// </summary>
         public override bool SaveToEntity(StoreEntity store)
         {
             SparkPayStoreEntity sparkPayStore = store as SparkPayStoreEntity;
             if (sparkPayStore == null)
             {
-                throw new ArgumentException("A non GenericStore store was passed to SparkPay store account settings.");
+                throw new ArgumentException("A non SparkPay store was passed to SparkPay store account settings.");
             }
 
             return viewModel.Save(sparkPayStore);
@@ -63,8 +56,8 @@ namespace ShipWorks.Stores.UI.Platforms.SparkPay
         /// </summary>
         protected virtual bool ConnectionVerificationNeeded(SparkPayStoreEntity store)
         {
-            return (store.Fields[(int) SparkPayStoreFieldIndex.Token].IsChanged ||
-                    store.Fields[(int)SparkPayStoreFieldIndex.StoreUrl].IsChanged);
+            return store.Fields[(int) SparkPayStoreFieldIndex.Token].IsChanged ||
+                   store.Fields[(int) SparkPayStoreFieldIndex.StoreUrl].IsChanged;
         }
     }
 }

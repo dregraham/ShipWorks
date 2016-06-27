@@ -1,14 +1,20 @@
-﻿using ShipWorks.Users.Logon;
+﻿using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Users.Logon;
 
 namespace ShipWorks.Users
 {
     /// <summary>
-    /// Interface for wrapper for static user session class
+    /// Interface for the UserSession wrapper
     /// </summary>
     public interface IUserSession
     {
         /// <summary>
-        /// Logs the user in with the given credentials 
+        /// Currently logged in user
+        /// </summary>
+        UserEntity User { get; }
+
+        /// <summary>
+        /// Logs the user in with the given credentials
         /// </summary>
         bool Logon(LogonCredentials credentials);
 

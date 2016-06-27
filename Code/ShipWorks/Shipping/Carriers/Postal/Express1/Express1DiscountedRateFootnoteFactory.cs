@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
-using ShipWorks.Shipping.Editing;
+using Autofac;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Shipping.Editing.Rating;
+using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Express1
 {
@@ -18,11 +20,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
         /// <param name="shipmentType">Type of shipment that instantiated this factory</param>
         /// <param name="originalRates">Original rates from the carrier</param>
         /// <param name="discountedRates">Express1 rates</param>
-        public Express1DiscountedRateFootnoteFactory(ShipmentType shipmentType, List<RateResult> originalRates, List<RateResult> discountedRates)
+        public Express1DiscountedRateFootnoteFactory(ShipmentTypeCode shipmentTypeCode,
+            List<RateResult> originalRates, List<RateResult> discountedRates)
         {
             this.originalRates = originalRates;
             this.discountedRates = discountedRates;
-            ShipmentTypeCode = shipmentType.ShipmentTypeCode;
+            ShipmentTypeCode = shipmentTypeCode;
         }
 
         /// <summary>
@@ -46,6 +49,20 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
         public RateFootnoteControl CreateFootnote(FootnoteParameters parameters)
         {
             return new Express1RateDiscountedFootnote(originalRates, discountedRates);
+        }
+
+        /// <summary>
+        /// Get a view model that represents this footnote
+        /// </summary>
+        public object CreateViewModel(ICarrierShipmentAdapter shipmentAdapter)
+        {
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                IExpress1DiscountedRateFootnoteViewModel viewModel = lifetimeScope.Resolve<IExpress1DiscountedRateFootnoteViewModel>();
+                viewModel.OriginalRates = originalRates;
+                viewModel.DiscountedRates = discountedRates;
+                return viewModel;
+            }
         }
     }
 }

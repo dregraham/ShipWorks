@@ -2,18 +2,24 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using Autofac;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared.Enums;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Common;
 using ShipWorks.Common.IO.Hardware.Printers;
+using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Adapter.Custom;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.Api;
+using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
@@ -23,14 +29,11 @@ using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Profiles;
+using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Origin;
-using ShipWorks.Shipping.ShipSense.Packaging;
 using ShipWorks.Shipping.Tracking;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
-using Interapptive.Shared.Enums;
-using ShipWorks.Shipping.Carriers.BestRate;
-using ShipWorks.Shipping.Api;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
 {
@@ -39,8 +42,35 @@ namespace ShipWorks.Shipping.Carriers.FedEx
     /// </summary>
     public class FedExShipmentType : ShipmentType, ICustomsRequired
     {
+        private readonly IExcludedServiceTypeRepository excludedServiceTypeRepository;
+        private readonly IExcludedPackageTypeRepository excludedPackageTypeRepository;
         private ICarrierSettingsRepository settingsRepository;
-        
+        private readonly IShippingSettings shippingSettings;
+        private readonly IDateTimeProvider dateTimeProvider;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FedExShipmentType"/> class.
+        /// </summary>
+        public FedExShipmentType() : this(new ExcludedServiceTypeRepository(), new ExcludedPackageTypeRepository(),
+            new ShippingSettingsWrapper(Messenger.Current), new DateTimeProvider())
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FedExShipmentType"/> class.
+        /// </summary>
+        /// <param name="excludedServiceTypeRepository">The excluded service type repository.</param>
+        /// <param name="excludedPackageTypeRepository"></param>
+        public FedExShipmentType(IExcludedServiceTypeRepository excludedServiceTypeRepository,
+            IExcludedPackageTypeRepository excludedPackageTypeRepository, IShippingSettings shippingSettings,
+            IDateTimeProvider dateTimeProvider)
+        {
+            this.excludedServiceTypeRepository = excludedServiceTypeRepository;
+            this.excludedPackageTypeRepository = excludedPackageTypeRepository;
+            this.shippingSettings = shippingSettings;
+            this.dateTimeProvider = dateTimeProvider;
+        }
+
         /// <summary>
         /// The ShipmentTypeCode enumeration value
         /// </summary>
@@ -80,9 +110,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         public override bool SupportsMultiplePackages => true;
 
         /// <summary>
-        /// Gets the service types that have been available for this shipment type (i.e have not 
-        /// been excluded). The integer values are intended to correspond to the appropriate 
-        /// enumeration values of the specific shipment type (i.e. the integer values would 
+        /// Gets the service types that have been available for this shipment type (i.e have not
+        /// been excluded). The integer values are intended to correspond to the appropriate
+        /// enumeration values of the specific shipment type (i.e. the integer values would
         /// correspond to PostalServiceType values for this shipment type)
         /// </summary>
         public override IEnumerable<int> GetAvailableServiceTypes(IExcludedServiceTypeRepository repository)
@@ -92,15 +122,37 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         }
 
         /// <summary>
-        /// Gets the Package types that have been available for this shipment type (i.e have not 
-        /// been excluded). The integer values are intended to correspond to the appropriate 
-        /// enumeration values of the specific shipment type (i.e. the integer values would 
+        /// Uses the ExcludedServiceTypeRepository implementation to get the service types that have
+        /// are available for this shipment type (i.e have not been excluded). The integer values are
+        /// intended to correspond to the appropriate enumeration values of the specific shipment type
+        /// (i.e. the integer values would correspond to PostalServiceType values for a UspsShipmentType).
+        /// </summary>
+        public override IEnumerable<int> GetAvailableServiceTypes()
+        {
+            return GetAvailableServiceTypes(excludedServiceTypeRepository);
+        }
+
+        /// <summary>
+        /// Gets the Package types that have been available for this shipment type (i.e have not
+        /// been excluded). The integer values are intended to correspond to the appropriate
+        /// enumeration values of the specific shipment type (i.e. the integer values would
         /// correspond to PostalPackageType values for this shipment type)
         /// </summary>
         public override IEnumerable<int> GetAvailablePackageTypes(IExcludedPackageTypeRepository repository)
         {
             List<int> allPackageTypes = Enum.GetValues(typeof(FedExPackagingType)).Cast<int>().ToList();
             return allPackageTypes.Except(GetExcludedPackageTypes(repository));
+        }
+
+        /// <summary>
+        /// Uses the ExcludedPackageTypeRepository implementation to get the Package types that have
+        /// are available for this shipment type (i.e have not been excluded). The integer values are
+        /// intended to correspond to the appropriate enumeration values of the specific shipment type
+        /// (i.e. the integer values would correspond to PostalPackageType values for a UspsShipmentType).
+        /// </summary>
+        public override IEnumerable<int> GetAvailablePackageTypes()
+        {
+            return GetAvailablePackageTypes(excludedPackageTypeRepository);
         }
 
         /// <summary>
@@ -125,7 +177,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 settingsRepository = value;
             }
         }
-        
+
         /// <summary>
         /// Create the setup wizard used for setting up the shipment type
         /// </summary>
@@ -187,9 +239,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             // Return an adapter per package
             List<IPackageAdapter> adapters = new List<IPackageAdapter>();
-            foreach (FedExPackageEntity packageEntity in shipment.FedEx.Packages)
+            for (int index = 0; index < shipment.FedEx.Packages.Count; index++)
             {
-                adapters.Add(new FedExPackageAdapter(shipment, packageEntity));
+                FedExPackageEntity packageEntity = shipment.FedEx.Packages[index];
+                adapters.Add(new FedExPackageAdapter(shipment, packageEntity, index + 1));
             }
 
             return adapters;
@@ -259,7 +312,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             shipment.FedEx.CodTrackingFormID = "";
             shipment.FedEx.CodTrackingNumber = "";
             shipment.FedEx.CodTIN = string.Empty;
-            shipment.FedEx.CodChargeBasis = (int) FedExCodAddTransportationChargeBasisType.NetCharge; 
+            shipment.FedEx.CodChargeBasis = (int) FedExCodAddTransportationChargeBasisType.NetCharge;
             shipment.FedEx.CodCountryCode = string.Empty;
             shipment.FedEx.CodAccountNumber = string.Empty;
 
@@ -364,8 +417,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             shipment.FedEx.TrafficInArmsLicenseNumber = string.Empty;
 
             // Purely for certification purposes at this point
-            shipment.FedEx.WeightUnitType = (int)WeightUnitOfMeasure.Pounds;
-            shipment.FedEx.LinearUnitType = (int)FedExLinearUnitOfMeasure.IN;
+            shipment.FedEx.WeightUnitType = (int) WeightUnitOfMeasure.Pounds;
+            shipment.FedEx.LinearUnitType = (int) FedExLinearUnitOfMeasure.IN;
 
             shipment.FedEx.OriginResidentialDetermination = (int) ResidentialDeterminationType.CommercialIfCompany;
 
@@ -378,7 +431,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // Weight of the first package equals the total shipment content weight
             package.Weight = shipment.ContentWeight;
 
-            shipment.FedEx.RequestedLabelFormat = (int)ThermalLanguage.None;
+            shipment.FedEx.RequestedLabelFormat = (int) ThermalLanguage.None;
 
             base.ConfigureNewShipment(shipment);
         }
@@ -475,7 +528,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// Get the default profile for the shipment type
         /// </summary>
         [NDependIgnoreLongMethod]
-        protected override void ConfigurePrimaryProfile(ShippingProfileEntity profile)
+        public override void ConfigurePrimaryProfile(ShippingProfileEntity profile)
         {
             base.ConfigurePrimaryProfile(profile);
 
@@ -484,7 +537,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             profile.FedEx.FedExAccountID = shipperID;
             profile.OriginID = (int) ShipmentOriginSource.Account;
 
-            profile.FedEx.ResidentialDetermination = (int) ResidentialDeterminationType.FromAddressValidation;
+            profile.FedEx.ResidentialDetermination = (int) ResidentialDeterminationType.FedExAddressLookup;
 
             profile.FedEx.Service = (int) FedExServiceType.FedExGround;
             profile.FedEx.Signature = (int) FedExSignatureType.ServiceDefault;
@@ -692,7 +745,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             }
 
             // The FedEx object may not yet be set if we are in the middle of creating a new shipment
-            if (originID == (int)ShipmentOriginSource.Account && shipment.FedEx != null)
+            if (originID == (int) ShipmentOriginSource.Account && shipment.FedEx != null)
             {
                 FedExAccountEntity account = FedExAccountManager.GetAccount(shipment.FedEx.FedExAccountID);
                 if (account == null)
@@ -722,9 +775,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         {
             base.UpdateDynamicShipmentData(shipment);
 
-            if (shipment.FedEx.HomeDeliveryDate < DateTime.Now.Date)
+            if (shipment.FedEx.HomeDeliveryDate < dateTimeProvider.Now.Date)
             {
-                shipment.FedEx.HomeDeliveryDate = DateTime.Now.Date.AddHours(12);
+                shipment.FedEx.HomeDeliveryDate = dateTimeProvider.Now.Date.AddHours(12);
             }
 
             // Ensure the cod address is up-to-date
@@ -736,7 +789,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             FedExServiceType serviceType = (FedExServiceType) shipment.FedEx.Service;
 
             // Need to check with the store  to see if anything about the shipment was overridden in case
-            // it may have effected the shipping services available (i.e. the eBay GSP program)            
+            // it may have effected the shipping services available (i.e. the eBay GSP program)
             ShipmentEntity overriddenShipment = ShippingManager.GetOverriddenStoreShipment(shipment);
 
             // If its international ensure an international service
@@ -752,21 +805,18 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // Consider the shipment insured of any package is insured
             shipment.Insurance = shipment.FedEx.Packages.Any(p => p.Insurance);
 
-            // Set the provider type based on fedex settings
-            shipment.InsuranceProvider = settings.FedExInsuranceProvider;
-
             // Right now ShipWorks Insurance (due to Tango limitation) doesn't support multi-package - so in that case just auto-revert to carrier insurance
-            if (shipment.FedEx.Packages.Count > 1)
-            {
-                shipment.InsuranceProvider = (int) InsuranceProvider.Carrier;
-            }
+            // We're setting this once to avoid marking the entity as dirty
+            shipment.InsuranceProvider = shipment.FedEx.Packages.Count > 1 ?
+                (int) InsuranceProvider.Carrier :
+                settings.FedExInsuranceProvider;
 
             shipment.RequestedLabelFormat = shipment.FedEx.RequestedLabelFormat;
-            
+
             // If it's international we have to make sure we wouldn't send more total declared value than the customs value - use the overridden shipment
             // to compare the country code in case it's been overridden such as an eBay GSP order
-            decimal? maxPackageDeclaredValue = overriddenShipment.AdjustedShipCountryCode() != "US" ? 
-                shipment.CustomsValue / shipment.FedEx.Packages.Count : 
+            decimal? maxPackageDeclaredValue = overriddenShipment.AdjustedShipCountryCode() != "US" ?
+                shipment.CustomsValue / shipment.FedEx.Packages.Count :
                 (decimal?) null;
 
             // Check the FedEx wide PennyOne settings and get them updated
@@ -785,7 +835,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 {
                     package.DeclaredValue = package.InsuranceValue;
                 }
-                else if (shipment.FedEx.Service == (int)FedExServiceType.SmartPost)
+                else if (shipment.FedEx.Service == (int) FedExServiceType.SmartPost)
                 {
                     // SmartPost shouldn't be sending any insurance value
                     package.DeclaredValue = 0;
@@ -886,7 +936,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             return commonDetail;
         }
-        
+
         /// <summary>
         /// Get the total packages contained by the shipment
         /// </summary>
@@ -955,6 +1005,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         }
 
         /// <summary>
+        // Check with the SettingsRepository here rather than FedExAccountManager, so getting
+        // We need to swap out the SettingsRepository and certificate inspector
         /// Provide FedEx tracking results for the given shipment
         /// </summary>
         public override TrackingResult TrackShipment(ShipmentEntity shipment)
@@ -985,6 +1037,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         protected override IShipmentProcessingSynchronizer GetProcessingSynchronizer()
         {
             return new FedExShipmentProcessingSynchronizer();
+            // Okay to "new up" the shipping clerk here, as this class is the root consumer
         }
 
         /// <summary>
@@ -1023,6 +1076,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 return new FedExBestRateBroker();
             }
 
+            // We want to be able to show counter rates to users that don't have
             return new NullShippingBroker();
         }
 
@@ -1044,7 +1098,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         {
             if (shipment.FedEx != null)
             {
-                shipment.FedEx.RequestedLabelFormat = (int)requestedLabelFormat;
+                shipment.FedEx.RequestedLabelFormat = (int) requestedLabelFormat;
             }
         }
 
@@ -1064,9 +1118,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// </summary>
         protected override bool IsCustomsRequiredByShipment(ShipmentEntity shipment)
         {
-            if (FedExUtility.IsSmartPostEnabled(shipment) 
+            if (FedExUtility.IsSmartPostEnabled(shipment)
                 && shipment.ShipPerson.IsUSInternationalTerritory()
-                && ((FedExServiceType)shipment.FedEx.Service) == FedExServiceType.SmartPost)
+                && ((FedExServiceType) shipment.FedEx.Service) == FedExServiceType.SmartPost)
             {
                 return false;
             }

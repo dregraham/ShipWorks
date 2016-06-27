@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -9,63 +8,57 @@ namespace ShipWorks.AddressValidation
     /// <summary>
     /// Allow address suggestions to be stored for saving later
     /// </summary>
-    public class ValidatedAddressScope : IDisposable
+    public class ValidatedAddressScope : IValidatedAddressScope
     {
         // Maps the controls to their current value set in scope
-        readonly Dictionary<long, Dictionary<string, List<ValidatedAddressEntity>>> valueMap = 
+        readonly Dictionary<long, Dictionary<string, List<ValidatedAddressEntity>>> valueMap =
             new Dictionary<long, Dictionary<string, List<ValidatedAddressEntity>>>();
-        
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        public ValidatedAddressScope()
-        {
-            if (Current != null)
-            {
-                throw new InvalidOperationException("A ValidatedAddressScope is already in scope.");
-            }
-
-            Current = this;
-        }
 
         /// <summary>
-        /// Get the current object in scope.
+        /// Clear validated addresses for the given entity and prefix
         /// </summary>
-        public static ValidatedAddressScope Current
-        {
-            get; 
-            private set;
-        }
+        public void ClearAddresses(long value, string prefix) =>
+            StoreAddresses(value, Enumerable.Empty<ValidatedAddressEntity>(), prefix);
 
         /// <summary>
         /// Store a collection of addresses that should be saved
         /// </summary>
-        public static void StoreAddresses(long entityId, IEnumerable<ValidatedAddressEntity> addresses, string fieldPrefix)
+        public void StoreAddresses(long entityId, IEnumerable<ValidatedAddressEntity> addresses, string fieldPrefix)
         {
-            ValidatedAddressScope scope = Current;
-            if (scope == null)
-            {
-                throw new InvalidOperationException("Cannot be used when there is no ValidatedAddressScope in scope.");
-            }
-
             // Set the prefix on the addresses
             List<ValidatedAddressEntity> addressList = addresses.ToList();
             addressList.ForEach(x => x.AddressPrefix = fieldPrefix);
-            
-            if (scope.valueMap.ContainsKey(entityId))
+
+            if (valueMap.ContainsKey(entityId))
             {
-                if (scope.valueMap[entityId].ContainsKey(fieldPrefix))
+                if (valueMap[entityId].ContainsKey(fieldPrefix))
                 {
-                    scope.valueMap[entityId][fieldPrefix] = addressList;
+                    valueMap[entityId][fieldPrefix] = addressList;
                 }
                 else
                 {
-                    scope.valueMap[entityId].Add(fieldPrefix, addressList);
+                    valueMap[entityId].Add(fieldPrefix, addressList);
                 }
             }
             else
             {
-                scope.valueMap.Add(entityId, new Dictionary<string, List<ValidatedAddressEntity>>{ { fieldPrefix, addressList } });
+                valueMap.Add(entityId, new Dictionary<string, List<ValidatedAddressEntity>> { { fieldPrefix, addressList } });
+            }
+        }
+
+        /// <summary>
+        /// Create a function that will get a list of validated addresses
+        /// </summary>
+        public IEnumerable<ValidatedAddressEntity> LoadValidatedAddresses(long entityId, string addressPrefix)
+        {
+            if (HasValidatedAddresses(entityId, addressPrefix))
+            {
+                return valueMap[entityId][addressPrefix];
+            }
+
+            using (SqlAdapter sqlAdapter = new SqlAdapter())
+            {
+                return ValidatedAddressManager.GetSuggestedAddresses(sqlAdapter, entityId, addressPrefix);
             }
         }
 
@@ -82,7 +75,7 @@ namespace ShipWorks.AddressValidation
         /// </summary>
         public void FlushAddressesToDatabase(IAddressValidationDataAccess dataAccess, long entityId, string prefix)
         {
-            if (!valueMap.ContainsKey(entityId) || !valueMap[entityId].ContainsKey(prefix))
+            if (!HasValidatedAddresses(entityId, prefix))
             {
                 return;
             }
@@ -103,23 +96,11 @@ namespace ShipWorks.AddressValidation
         }
 
         /// <summary>
-        /// Terminate the scope
+        /// Are there validated addresses loaded for the current entityId or prefix?
         /// </summary>
-        public void Dispose()
+        private bool HasValidatedAddresses(long entityId, string prefix)
         {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        /// <summary>
-        /// Terminate the scope
-        /// </summary>
-        protected virtual void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                Current = null;   
-            }
+            return valueMap.ContainsKey(entityId) && valueMap[entityId].ContainsKey(prefix);
         }
     }
 }

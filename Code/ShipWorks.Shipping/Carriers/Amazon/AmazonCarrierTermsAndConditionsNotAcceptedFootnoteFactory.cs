@@ -1,6 +1,9 @@
 ﻿using System.Collections.Generic;
-using ShipWorks.Shipping.Editing.Rating;
+using Autofac;
 using Interapptive.Shared.Utility;
+using ShipWorks.ApplicationCore;
+using ShipWorks.Shipping.Editing.Rating;
+using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Shipping.Carriers.Amazon
 {
@@ -30,6 +33,18 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         public RateFootnoteControl CreateFootnote(FootnoteParameters parameters)
         {
             return new AmazonCarrierTermsAndConditionsNotAcceptedFootnoteControl(CarrierNames);
+        }
+
+        /// <summary>
+        /// Get a view model that represents this footnote
+        /// </summary>
+        public object CreateViewModel(ICarrierShipmentAdapter shipmentAdapter)
+        {
+            IAmazonCarrierTermsAndConditionsNotAcceptedFootnoteViewModel viewModel =
+                IoC.UnsafeGlobalLifetimeScope.Resolve<IAmazonCarrierTermsAndConditionsNotAcceptedFootnoteViewModel>();
+
+            viewModel.CarrierNames = CarrierNames;
+            return viewModel;
         }
 
         /// <summary>

@@ -22,9 +22,9 @@ using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Profiles;
+using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Origin;
-using ShipWorks.Shipping.ShipSense.Packaging;
 using ShipWorks.Shipping.Tracking;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 
@@ -38,6 +38,15 @@ namespace ShipWorks.Shipping.Carriers.iParcel
     {
         private readonly IiParcelRepository repository;
         private readonly IiParcelServiceGateway serviceGateway;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <remarks>This is primarily for creating mocked versions</remarks>
+        protected iParcelShipmentType()
+        {
+
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="iParcelShipmentType" /> class.
@@ -162,9 +171,10 @@ namespace ShipWorks.Shipping.Carriers.iParcel
 
             // Return an adapter per package
             List<IPackageAdapter> adapters = new List<IPackageAdapter>();
-            foreach (IParcelPackageEntity packageEntity in shipment.IParcel.Packages)
+            for (int index = 0; index < shipment.IParcel.Packages.Count; index++)
             {
-                adapters.Add(new iParcelPackageAdapter(shipment, packageEntity));
+                IParcelPackageEntity packageEntity = shipment.IParcel.Packages[index];
+                adapters.Add(new iParcelPackageAdapter(shipment, packageEntity, index + 1));
             }
 
             return adapters;
@@ -207,7 +217,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// <summary>
         /// Get the default profile for the shipment type
         /// </summary>
-        protected override void ConfigurePrimaryProfile(ShippingProfileEntity profile)
+        public override void ConfigurePrimaryProfile(ShippingProfileEntity profile)
         {
             base.ConfigurePrimaryProfile(profile);
 
@@ -364,30 +374,27 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             // Consider the shipment insured of any package is insured
             shipment.Insurance = shipment.IParcel.Packages.Any(p => p.Insurance);
 
-            // Set the provider type based on i-Parcel settings
-            shipment.InsuranceProvider = settings.IParcelInsuranceProvider;
-
             shipment.RequestedLabelFormat = shipment.IParcel.RequestedLabelFormat;
 
             // Right now ShipWorks Insurance (due to Tango limitation) doesn't support multi-package - so in that case just auto-revert to carrier insurance
-            if (shipment.IParcel.Packages.Count > 1)
-            {
-                shipment.InsuranceProvider = (int) InsuranceProvider.Carrier;
-            }
+            // We're setting this once to avoid marking the entity as dirty
+            shipment.InsuranceProvider = shipment.IParcel.Packages.Count > 1 ?
+                (int) InsuranceProvider.Carrier :
+                settings.IParcelInsuranceProvider;
 
             // Check the IParcel wide PennyOne settings and get them updated
             foreach (var package in shipment.IParcel.Packages)
             {
                 package.InsurancePennyOne = settings.IParcelInsurancePennyOne;
 
-                // The only time we send the full insuredvalue as declared value is if insurance is enabled, and they are using carrier insurance.
+                // The only time we send the full insured value as declared value is if insurance is enabled, and they are using carrier insurance.
                 if (shipment.Insurance && shipment.InsuranceProvider == (int) InsuranceProvider.Carrier)
                 {
                     package.DeclaredValue = package.InsuranceValue;
                 }
                 else
                 {
-                    // Otherwise, regardless of if they are insuring or not, penny one or not, etc., send 0, the first $100 is coverred anyway
+                    // Otherwise, regardless of if they are insuring or not, penny one or not, etc., send 0, the first $100 is covered anyway
                     package.DeclaredValue = 0;
                 }
             }

@@ -1,11 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Autofac;
 using Autofac.Core;
+using ShipWorks.Data.Model.Custom;
+using ShipWorks.Shipping.Carriers.BestRate.Footnote;
 using ShipWorks.Shipping.Carriers.BestRate.RateGroupFiltering;
 using ShipWorks.Shipping.Carriers.Postal.BestRate;
 using ShipWorks.Shipping.Carriers.UPS.BestRate;
+using ShipWorks.Shipping.Services;
+using ShipWorks.Shipping.Services.Builders;
 
 namespace ShipWorks.Shipping.Carriers.BestRate
 {
@@ -26,10 +29,30 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                 .AsSelf()
                 .Keyed<ShipmentType>(ShipmentTypeCode.BestRate);
 
+            builder.RegisterType<BrokerExceptionsRateFootnoteViewModel>()
+                .AsImplementedInterfaces()
+                .ExternallyOwned();
+
+            builder.RegisterType<CounterRatesInvalidStoreAddressFootnoteViewModel>()
+                .AsImplementedInterfaces()
+                .ExternallyOwned();
+
+            builder.RegisterType<NullAccountRepository>()
+                .Keyed<ICarrierAccountRetriever<ICarrierAccount>>(ShipmentTypeCode.BestRate)
+                .SingleInstance();
+
+            builder.RegisterType<BestRateShipmentAdapter>()
+                .Keyed<ICarrierShipmentAdapter>(ShipmentTypeCode.BestRate)
+                .ExternallyOwned();
+
+            builder.RegisterType<NullShipmentPackageTypesBuilder>()
+                .Keyed<IShipmentPackageTypesBuilder>(ShipmentTypeCode.BestRate)
+                .SingleInstance();
+
             builder.RegisterType<BestRateRatingService>()
                 .As<IBestRateBrokerRatingService>()
                 .Keyed<IRatingService>(ShipmentTypeCode.BestRate);
-            
+
             builder.Register(GenerateBestRateBrokerFactory);
 
             builder.RegisterType<BestRateRateHashingService>()
@@ -39,6 +62,10 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             builder.RegisterType<BestRateFilterFactory>()
                 .As<IRateGroupFilterFactory>()
                 .AsSelf();
+
+            builder.RegisterType<ShippingAccountRequiredForRatingFootnoteViewModel>()
+                .AsImplementedInterfaces()
+                .ExternallyOwned();
         }
 
         /// <summary>
@@ -46,8 +73,8 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// </summary>
         private IBestRateShippingBrokerFactory GenerateBestRateBrokerFactory(IComponentContext c, IEnumerable<Parameter> p)
         {
-            IEnumerable<Parameter> parameters = p as Parameter[] ?? p.ToArray();
-            if (parameters.ToArray().FirstOrDefault() == null || parameters.TypedAs<BestRateConsolidatePostalRates>() == BestRateConsolidatePostalRates.No)
+            Parameter[] parameters = p.ToArray();
+            if (parameters.FirstOrDefault() == null || parameters.TypedAs<BestRateConsolidatePostalRates>() == BestRateConsolidatePostalRates.No)
             {
                 // return BestRateShippingBrokerFactory with default behavior
                 return new BestRateShippingBrokerFactory(new List<IShippingBrokerFilter>

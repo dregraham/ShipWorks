@@ -4,7 +4,6 @@ using System.Reflection;
 
 namespace ShipWorks.Stores.Platforms.SparkPay.Enums
 {
-
     /// <summary>
     /// SparkPay API calls we use
     /// </summary>
@@ -35,5 +34,4 @@ namespace ShipWorks.Stores.Platforms.SparkPay.Enums
         [ApiValue("stores")]
         GetStores = 5
     }
-    
 }

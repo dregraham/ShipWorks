@@ -1,12 +1,11 @@
 ﻿using System;
-using Xunit;
-using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Shipping.Carriers.iParcel;
-using Moq;
-using log4net;
-using ShipWorks.Data.Model.EntityClasses;
 using System.Data;
 using System.IO;
+using log4net;
+using Moq;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.iParcel;
+using Xunit;
 
 namespace ShipWorks.Tests.Shipping.Carriers.iParcel
 {
@@ -30,17 +29,16 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
             logger = new Mock<ILog>();
             logger.Setup(l => l.Error(It.IsAny<object>(), It.IsAny<Exception>()));
 
-            testObject = new iParcelDatabaseRepository(type => logger.Object);
+            testObject = new iParcelDatabaseRepository(x => logger.Object);
         }
 
-        
         public void SaveLabel()
         {
             // MARKED WITH THE IGNORE ATTRIBTE SINCE THIS ISN'T REALLY A UNIT TEST (DUE
-            // TO THE DATABASE DEPENDENCIES). THIS WAS JUST A QUICK CHECK THAT THE IMAGE 
+            // TO THE DATABASE DEPENDENCIES). THIS WAS JUST A QUICK CHECK THAT THE IMAGE
             // LABEL WAS BEING EXTRACTED FROM THE DATASET RESPONSE CORRECTLY PRIOR
             // TO HAVING THE FULL IMPLEMENTATION WORKING END TO END. THIS WILL ALWAYS
-            // FAIL UNLESS MANUALLY WALKING THROUGH THE CODE TO BYPASS CODE THAT 
+            // FAIL UNLESS MANUALLY WALKING THROUGH THE CODE TO BYPASS CODE THAT
             // INTERACTS WITH THE DATABASE. THIS CAN/SHOULD BE REMOVED ONCE WE HAVE
             // INTEGRATION TESTS IN PLACE.
             StringReader stringReader = new StringReader(GetResponseXml());
@@ -51,11 +49,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
             testObject.SaveLabel(shipment, simulatedResponse);
         }
 
-
         [Fact]
         public void SaveTrackingInfoToEntity_AssignsTrackingNumber()
         {
-            // We can unit test this since the repository is not interacting with an external dependency 
+            // We can unit test this since the repository is not interacting with an external dependency
             // (i.e. the database) in the SaveTrackingInfoToEntity method
             using (DataSet simulatedResponse = new DataSet())
             {
@@ -72,7 +69,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
         [Fact]
         public void SaveTrackingInfoToEntity_AssignsParcelNumber()
         {
-            // We can unit test this since the repository is not interacting with an external dependency 
+            // We can unit test this since the repository is not interacting with an external dependency
             // (i.e. the database) in the SaveTrackingInfoToEntity method
             using (DataSet simulatedResponse = new DataSet())
             {

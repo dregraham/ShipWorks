@@ -156,7 +156,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
             List<UspsAccountEntity> includedAccounts = GetTag(includedRate).Accounts;
 
             Assert.Equal(account1, includedAccounts.Single(a => true));
-            Assert.Equal(10, includedRate.Amount);
+            Assert.Equal(10, includedRate.AmountOrDefault);
         }
 
         [Fact]
@@ -169,7 +169,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
             List<UspsAccountEntity> includedAccounts = GetTag(includedRate).Accounts;
 
             Assert.Equal(account2, includedAccounts.Single(a => true));
-            Assert.Equal(19, includedRate.Amount);
+            Assert.Equal(19, includedRate.AmountOrDefault);
         }
 
         [Fact]

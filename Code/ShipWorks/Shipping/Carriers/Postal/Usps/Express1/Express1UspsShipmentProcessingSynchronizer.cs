@@ -4,8 +4,8 @@ using ShipWorks.Data.Model.EntityClasses;
 namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1
 {
     /// <summary>
-    /// An IShipmentProcessingSynchronizer implementation to handle the PreProcessing 
-    /// of an Express1 for USPS shipment 
+    /// An IShipmentProcessingSynchronizer implementation to handle the PreProcessing
+    /// of an Express1 for USPS shipment
     /// </summary>
     public class Express1UspsShipmentProcessingSynchronizer : IShipmentProcessingSynchronizer
     {

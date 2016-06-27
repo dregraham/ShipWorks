@@ -1,11 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using Autofac;
 using Interapptive.Shared;
-using Interapptive.Shared.Utility;
+using log4net;
 using ShipWorks.Actions;
 using ShipWorks.ApplicationCore.Crashes;
 using ShipWorks.ApplicationCore.Dashboard;
 using ShipWorks.ApplicationCore.Enums;
+using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.ApplicationCore.Services;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
@@ -15,15 +18,14 @@ using ShipWorks.Email.Accounts;
 using ShipWorks.FileTransfer;
 using ShipWorks.Filters;
 using ShipWorks.Shipping.Carriers.FedEx;
+using ShipWorks.Shipping.Carriers.iParcel;
 using ShipWorks.Shipping.Carriers.OnTrac;
 using ShipWorks.Shipping.Carriers.Postal.Endicia;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
-using ShipWorks.Shipping.Carriers.iParcel;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Profiles;
-using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Defaults;
 using ShipWorks.Shipping.Settings.Origin;
 using ShipWorks.Shipping.Settings.Printing;
@@ -32,9 +34,6 @@ using ShipWorks.Stores.Communication;
 using ShipWorks.Templates;
 using ShipWorks.Templates.Media;
 using ShipWorks.Users;
-using log4net;
-using ShipWorks.ApplicationCore.Interaction;
-using ShipWorks.Shipping;
 
 namespace ShipWorks.ApplicationCore
 {
@@ -108,14 +107,14 @@ namespace ShipWorks.ApplicationCore
         }
 
         /// <summary>
-        /// Forces a heartbeat.  Not necessary to call, as the pacemaker will keep it pumping without this.  This just makes it happen instantly, 
+        /// Forces a heartbeat.  Not necessary to call, as the pacemaker will keep it pumping without this.  This just makes it happen instantly,
         /// and also speeds it up if its expecting changes.
         /// </summary>
         public void ForceHeartbeat(HeartbeatOptions options)
         {
             if (Pace != HeartbeatPace.Stopped)
             {
-                // If changes are expected, we increase the heartrate.  This is for things like picking up filter counts more quickly.
+                // If changes are expected, we increase the heart rate.  This is for things like picking up filter counts more quickly.
                 if ((options & HeartbeatOptions.ChangesExpected) != 0)
                 {
                     log.InfoFormat("Increasing heart rate");
@@ -135,7 +134,7 @@ namespace ShipWorks.ApplicationCore
             // Prevent two heartbeats happening at once
             lock (doingHeartbeatLock)
             {
-                // If we are already doing a hearbeat, we need to save the options the user wanted, so we can use them when we get around to the next hearbeat
+                // If we are already doing a heartbeat, we need to save the options the user wanted, so we can use them when we get around to the next heartbeat
                 if (doingHeartbeat)
                 {
                     if (pendingOptions == null)
@@ -199,7 +198,7 @@ namespace ShipWorks.ApplicationCore
 
             try
             {
-                // If somethign changed that makes it so we can't run (like the user is now logged out), then get out
+                // If something changed that makes it so we can't run (like the user is now logged out), then get out
                 if (!CanBeat())
                 {
                     return;
@@ -209,7 +208,7 @@ namespace ShipWorks.ApplicationCore
                 Stopwatch sw = Stopwatch.StartNew();
                 long connections = ConnectionMonitor.TotalConnectionCount;
 
-                // Check for any change in the database. 
+                // Check for any change in the database.
                 bool changesDetected = timestampTracker.CheckForChange();
                 log.InfoFormat("[Heartbeat] Starting (Changes: {0})", changesDetected);
 
@@ -222,13 +221,13 @@ namespace ShipWorks.ApplicationCore
                     // Changes and filters trigger actions to run, so any time there is a change, we need to check for actions.
                     ActionProcessor.StartProcessing();
 
-                    // This flag stays true until section below sees it and resets to false.  The section in question only 
-                    // runs when there are no modal windows or popups open.  This flag has to stay true until that section 
+                    // This flag stays true until section below sees it and resets to false.  The section in question only
+                    // runs when there are no modal windows or popups open.  This flag has to stay true until that section
                     // runs to ensure changes are not missed.
                     changeProcessingPending = true;
                 }
 
-                // Not dependant on DBTS, we need to make sure any filters that are affected by date changes are updated
+                // Not dependent on DBTS, we need to make sure any filters that are affected by date changes are updated
                 FilterContentManager.CheckRelativeDateFilters();
 
                 // Make sure all our counts are up-to-date
@@ -291,7 +290,7 @@ namespace ShipWorks.ApplicationCore
         }
 
         /// <summary>
-        /// Check the pace of the hearbeat.  It may need adjusted, or we may need to not beat at all due to going to fast.
+        /// Check the pace of the heartbeat.  It may need adjusted, or we may need to not beat at all due to going to fast.
         /// </summary>
         private bool CheckPace(bool forceReload)
         {
@@ -299,7 +298,7 @@ namespace ShipWorks.ApplicationCore
             TimeSpan timeSinceLastHeartbeat = DateTime.UtcNow - lastHeartbeatTime;
             if (timeSinceLastHeartbeat < minimumWait && !forceReload)
             {
-                // Increase the heartrate for one beat (if its not fast already) so we get back in here quickly.
+                // Increase the heart rate for one beat (if its not fast already) so we get back in here quickly.
                 Pace = HeartbeatPace.SingleFast;
 
                 return false;
@@ -349,7 +348,7 @@ namespace ShipWorks.ApplicationCore
 
                     case HeartbeatPace.Fast:
                         {
-                            // When we go to a fast beat, we keep it there for a wihle
+                            // When we go to a fast beat, we keep it there for a while
                             forcedFastRatesLeft = forcedFastRatesStart;
 
                             currentRate = fastRate;
@@ -388,7 +387,7 @@ namespace ShipWorks.ApplicationCore
         }
 
         /// <summary>
-        /// Runs the actual heartbeat. 
+        /// Runs the actual heartbeat.
         /// </summary>
         [NDependIgnoreLongMethod]
         protected virtual void ProcessHeartbeat(bool changesDetected, bool forceReload)
@@ -397,9 +396,9 @@ namespace ShipWorks.ApplicationCore
 
             // We only do all this checking if there was a dbts change.
             //
-            // IMPORTANT: 
+            // IMPORTANT:
             //
-            // This means that all the stuff in this section must be dependant at some level on a timestamp column.
+            // This means that all the stuff in this section must be dependent at some level on a timestamp column.
             // If some type of change checking is not 1. Then it probably should be 2. If it can't be, then it cant be excluded
             // by the timestamp tracking change detection.
             //
@@ -417,15 +416,12 @@ namespace ShipWorks.ApplicationCore
 
                 // These just mark that changes need to be checked next time data is requested
                 TemplateManager.CheckForChangesNeeded();
-                SystemData.CheckForChangesNeeded();
                 ConfigurationData.CheckForChangesNeeded();
-                ShippingSettings.CheckForChangesNeeded();
                 LabelSheetManager.CheckForChangesNeeded();
                 EmailAccountManager.CheckForChangesNeeded();
                 FtpAccountManager.CheckForChangesNeeded();
                 ComputerManager.CheckForChangesNeeded();
                 UserManager.CheckForChangesNeeded();
-                ActionManager.CheckForChangesNeeded();
                 ShippingOriginManager.CheckForChangesNeeded();
                 UspsAccountManager.CheckForChangesNeeded();
                 EndiciaAccountManager.CheckForChangesNeeded();
@@ -437,8 +433,12 @@ namespace ShipWorks.ApplicationCore
                 iParcelAccountManager.CheckForChangesNeeded();
                 ShippingDefaultsRuleManager.CheckForChangesNeeded();
                 ShippingPrintOutputManager.CheckForChangesNeeded();
-                ShippingProviderRuleManager.CheckForChangesNeeded();
                 ServiceStatusManager.CheckForChangesNeeded();
+
+                foreach (ICheckForChangesNeeded service in IoC.UnsafeGlobalLifetimeScope.Resolve<IEnumerable<ICheckForChangesNeeded>>())
+                {
+                    service.CheckForChangesNeeded();
+                }
 
                 // Check for any WorldShip shipments that need imported
                 WorldShipImportMonitor.CheckForShipments();
@@ -465,7 +465,7 @@ namespace ShipWorks.ApplicationCore
         }
 
         /// <summary>
-        /// Finish the heartbeat.  Derived class should call this at the end of their overriden function
+        /// Finish the heartbeat.  Derived class should call this at the end of their overridden function
         /// </summary>
         protected virtual void FinishHeartbeat()
         {

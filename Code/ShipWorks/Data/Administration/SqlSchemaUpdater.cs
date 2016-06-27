@@ -1,27 +1,26 @@
 using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
-using log4net;
-using System.Reflection;
+using Autofac;
 using Interapptive.Shared;
-using ShipWorks.AddressValidation;
-using ShipWorks.Data.Connection;
 using Interapptive.Shared.Data;
-using ShipWorks.Common.Threading;
-using ShipWorks.Filters;
-using ShipWorks.Users.Audit;
-using ShipWorks.ApplicationCore.Interaction;
+using log4net;
 using NDesk.Options;
 using ShipWorks.Actions;
 using ShipWorks.Actions.Scheduling.ActionSchedules.Enums;
 using ShipWorks.Actions.Triggers;
-using ShipWorks.Data.Administration.UpdateFrom2x.Database;
-using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.AddressValidation;
 using ShipWorks.ApplicationCore;
-using Autofac;
+using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.ApplicationCore.Licensing;
+using ShipWorks.Common.Threading;
+using ShipWorks.Data.Administration.UpdateFrom2x.Database;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Filters;
+using ShipWorks.Users.Audit;
 
 namespace ShipWorks.Data.Administration
 {
@@ -34,7 +33,7 @@ namespace ShipWorks.Data.Administration
         static readonly ILog log = LogManager.GetLogger(typeof(SqlSchemaUpdater));
 
         // Used for executing scripts
-        static SqlScriptLoader sqlLoader = new SqlScriptLoader("ShipWorks.Data.Administration.Scripts.Update");
+        static SqlScriptLoader sqlLoader = new SqlScriptLoader("ShipWorks.Res.Data.Administration.Scripts.Update");
 
         /// <summary>
         /// Get the database schema version that is required by this version of ShipWorks
@@ -84,7 +83,7 @@ namespace ShipWorks.Data.Administration
                     // "Could not find stored procedure"
                     if (ex.Number == 2812 || ex.Number == 21343)
                     {
-                        return new Version(3,0);
+                        return new Version(3, 0);
                     }
 
                     throw;
@@ -207,7 +206,7 @@ namespace ShipWorks.Data.Administration
                                         where name = @dbName
 
                                         IF(@isAutoShrink = 1)
-	                                        EXECUTE ('ALTER DATABASE ' + @dbName + ' SET AUTO_SHRINK OFF')";
+                                            EXECUTE ('ALTER DATABASE ' + @dbName + ' SET AUTO_SHRINK OFF')";
 
                                     cmd.ExecuteNonQuery();
                                 });
@@ -263,11 +262,11 @@ namespace ShipWorks.Data.Administration
                                         DECLARE @logName nvarchar(100)
 
                                         SELECT @dataSize = SUM(CASE WHEN type_desc = 'ROWS' THEN size END),
-	                                           @dataName = MAX(CASE WHEN type_desc = 'ROWS' THEN name END),
-	                                           @dataFileGrowth = SUM(CASE WHEN type_desc = 'ROWS' AND is_percent_growth=1 THEN growth ELSE 0 END),
-	                                           @logSize = SUM(CASE WHEN type_desc = 'LOG' THEN size END),
-	                                           @logName = MAX(CASE WHEN type_desc = 'LOG' THEN name END),
-	                                           @logFileGrowth = SUM(CASE WHEN type_desc = 'LOG' AND is_percent_growth=1 THEN growth ELSE 0 END)
+                                               @dataName = MAX(CASE WHEN type_desc = 'ROWS' THEN name END),
+                                               @dataFileGrowth = SUM(CASE WHEN type_desc = 'ROWS' AND is_percent_growth=1 THEN growth ELSE 0 END),
+                                               @logSize = SUM(CASE WHEN type_desc = 'LOG' THEN size END),
+                                               @logName = MAX(CASE WHEN type_desc = 'LOG' THEN name END),
+                                               @logFileGrowth = SUM(CASE WHEN type_desc = 'LOG' AND is_percent_growth=1 THEN growth ELSE 0 END)
                                         FROM sys.master_files
                                         where DB_NAME(database_id) = 'tempdb'
 
@@ -311,7 +310,7 @@ namespace ShipWorks.Data.Administration
                             {
                                 // Grab all of the actions that are enabled and schedule based
                                 ActionManager.InitializeForCurrentSession();
-                                IEnumerable<ActionEntity> actions = ActionManager.Actions.Where(a => a.Enabled && a.TriggerType == (int)ActionTriggerType.Scheduled);
+                                IEnumerable<ActionEntity> actions = ActionManager.Actions.Where(a => a.Enabled && a.TriggerType == (int) ActionTriggerType.Scheduled);
                                 using (SqlAdapter adapter = new SqlAdapter())
                                 {
                                     foreach (ActionEntity action in actions)
@@ -319,7 +318,7 @@ namespace ShipWorks.Data.Administration
                                         // Some trigger's state depend on the enabled state of the action
                                         ScheduledTrigger scheduledTrigger = ActionManager.LoadTrigger(action) as ScheduledTrigger;
 
-                                        if (scheduledTrigger?.Schedule != null )
+                                        if (scheduledTrigger?.Schedule != null)
                                         {
                                             // Check to see if the action is a One Time action and in the past, if so we disable it
                                             if (scheduledTrigger.Schedule.StartDateTimeInUtc < DateTime.UtcNow &&
@@ -371,7 +370,7 @@ namespace ShipWorks.Data.Administration
         {
             List<SqlUpdateScript> scripts = new List<SqlUpdateScript>();
 
-            foreach (string resource in Assembly.GetExecutingAssembly().GetManifestResourceNames().Where(r => r.StartsWith(sqlLoader.ResourcePath)))
+            foreach (string resource in sqlLoader.ScriptResources)
             {
                 scripts.Add(new SqlUpdateScript(resource));
             }
@@ -429,11 +428,11 @@ namespace ShipWorks.Data.Administration
                     DROP PROCEDURE [dbo].[{0}]", procedureName);
             SqlCommandProvider.ExecuteNonQuery(cmd);
 
-            #if DEBUG
-                string withEncryption = "";
-            #else
+#if DEBUG
+            string withEncryption = "";
+#else
                 string withEncryption = "WITH ENCRYPTION";
-            #endif
+#endif
 
             cmd.CommandText = string.Format(@"
                 CREATE PROCEDURE dbo.{2}
@@ -489,7 +488,7 @@ namespace ShipWorks.Data.Administration
                 SqlScript executor = sqlLoader[script.ScriptName];
 
                 // Update the progress as we complete each batch in the script
-                executor.BatchCompleted += delegate(object sender, SqlScriptBatchCompletedEventArgs args)
+                executor.BatchCompleted += delegate (object sender, SqlScriptBatchCompletedEventArgs args)
                 {
                     // Update the progress
                     progress.PercentComplete = Math.Min(100, ((int) (scriptsCompleted * scriptProgressValue)) + (int) ((args.Batch + 1) * (scriptProgressValue / executor.Batches.Count)));
@@ -598,54 +597,54 @@ namespace ShipWorks.Data.Administration
                 switch (type)
                 {
                     case "required":
-                    {
-                        // To make things easy we return the result in the ExitCode.  This means we are restricted to integers. So we build
-                        // a new int from the schema id
-                        int schemaID = GetSchemaID(GetRequiredSchemaVersion());
+                        {
+                            // To make things easy we return the result in the ExitCode.  This means we are restricted to integers. So we build
+                            // a new int from the schema id
+                            int schemaID = GetSchemaID(GetRequiredSchemaVersion());
 
-                        log.InfoFormat("Required shcema version: {0}", schemaID);
-                        Environment.ExitCode = schemaID;
+                            log.InfoFormat("Required shcema version: {0}", schemaID);
+                            Environment.ExitCode = schemaID;
 
-                        break;
-                    }
+                            break;
+                        }
 
                     case "database":
-                    {
-                        // At the point in which this is called, SqlSession has not been setup
-                        SqlSession.Initialize();
-
-                        try
                         {
-                            if (SqlSession.IsConfigured && SqlSession.Current.CanConnect())
-                            {
-                                // To make things easy we return the result in the ExitCode.  This means we are restricted to integers. So we build
-                                // a new int from the schema id
-                                int schemaID = GetSchemaID(GetInstalledSchemaVersion());
+                            // At the point in which this is called, SqlSession has not been setup
+                            SqlSession.Initialize();
 
-                                log.InfoFormat("Database schema version  {0}", schemaID);
-                                Environment.ExitCode = schemaID;
+                            try
+                            {
+                                if (SqlSession.IsConfigured && SqlSession.Current.CanConnect())
+                                {
+                                    // To make things easy we return the result in the ExitCode.  This means we are restricted to integers. So we build
+                                    // a new int from the schema id
+                                    int schemaID = GetSchemaID(GetInstalledSchemaVersion());
+
+                                    log.InfoFormat("Database schema version  {0}", schemaID);
+                                    Environment.ExitCode = schemaID;
+                                }
+                                else
+                                {
+                                    log.Warn("Could not determine database schema ID since SqlSession is not configured.");
+
+                                    // We don't know
+                                    Environment.ExitCode = 0;
+                                }
                             }
-                            else
+                            catch (Exception ex)
                             {
-                                log.Warn("Could not determine database schema ID since SqlSession is not configured.");
-
-                                // We don't know
+                                log.Error("Could not determine database schema ID", ex);
                                 Environment.ExitCode = 0;
                             }
-                        }
-                        catch (Exception ex)
-                        {
-                            log.Error("Could not determine database schema ID", ex);
-                            Environment.ExitCode = 0;
-                        }
 
-                        break;
-                    }
+                            break;
+                        }
 
                     default:
-                    {
-                        throw new CommandLineCommandArgumentException(CommandName, "type", string.Format("Invalid value passed to 'type' parameter: {0}", type));
-                    }
+                        {
+                            throw new CommandLineCommandArgumentException(CommandName, "type", string.Format("Invalid value passed to 'type' parameter: {0}", type));
+                        }
                 }
             }
         }

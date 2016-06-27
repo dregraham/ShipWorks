@@ -3,33 +3,33 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Windows.Forms;
-using ShipWorks.UI.Wizard;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.ApplicationCore.Licensing;
+using Autofac;
 using Interapptive.Shared;
-using ShipWorks.Data;
 using Interapptive.Shared.Net;
-using ShipWorks.Data.Connection;
-using ShipWorks.Users;
-using ShipWorks.Users.Security;
-using Interapptive.Shared.Utility;
 using Interapptive.Shared.UI;
-using ShipWorks.Data.Utility;
+using Interapptive.Shared.Utility;
 using ShipWorks.Actions;
 using ShipWorks.Actions.Tasks;
 using ShipWorks.Actions.Triggers;
+using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Licensing;
+using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
 using ShipWorks.ApplicationCore.Nudges;
-using ShipWorks.Filters;
+using ShipWorks.ApplicationCore.Setup;
+using ShipWorks.Data;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Utility;
 using ShipWorks.Editions;
 using ShipWorks.Editions.Freemium;
-using ShipWorks.Shipping.Settings;
+using ShipWorks.Filters;
 using ShipWorks.Shipping;
-using ShipWorks.ApplicationCore.Setup;
+using ShipWorks.Shipping.Settings;
 using ShipWorks.UI.Controls;
-using ShipWorks.ApplicationCore;
-using Autofac;
-using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
+using ShipWorks.UI.Wizard;
+using ShipWorks.Users;
 using ShipWorks.Users.Logon;
+using ShipWorks.Users.Security;
 using Control = System.Windows.Controls.Control;
 
 namespace ShipWorks.Stores.Management
@@ -43,10 +43,10 @@ namespace ShipWorks.Stores.Management
         // State container for use by wizard pages
         Dictionary<string, object> stateBag = new Dictionary<string, object>(StringComparer.InvariantCultureIgnoreCase);
 
-        // The store that is being creatd
+        // The store that is being created
         StoreEntity store;
 
-        // All of the store specifc wizard pages currently added.
+        // All of the store specific wizard pages currently added.
         List<WizardPage> storePages = new List<WizardPage>();
 
         // If doing a trial, this is the current trial data
@@ -180,7 +180,7 @@ namespace ShipWorks.Stores.Management
             {
                 // Initialize the session
                 UserManager.InitializeForCurrentUser();
-                UserSession.InitializeForCurrentSession();
+                UserSession.InitializeForCurrentSession(Program.ExecutionMode);
 
                 originalWizard.BeginInvoke(new MethodInvoker(originalWizard.Hide));
 
@@ -335,7 +335,7 @@ namespace ShipWorks.Stores.Management
                 {
                     ImageComboBoxItem item = (ImageComboBoxItem) comboStoreType.SelectedItem;
 
-                    return (StoreType)item.Value;
+                    return (StoreType) item.Value;
                 }
 
                 return null;
@@ -384,7 +384,7 @@ namespace ShipWorks.Stores.Management
                 // If there was an old store we need to clean it up
                 if (store != null)
                 {
-                    DeletionService.DeleteStore(store);
+                    DeletionService.DeleteStore(store, UserSession.Security);
                     store = null;
                 }
 
@@ -489,13 +489,13 @@ namespace ShipWorks.Stores.Management
         /// </summary>
         private void OnStepNextAlreadyActive(object sender, WizardStepEventArgs e)
         {
-                if (EditionSerializer.Restore(store) is FreemiumFreeEdition && StoreManager.GetDatabaseStoreCount() > 0)
-                {
-                    MessageHelper.ShowError(this, "The license you entered is for the Endicia Free for eBay ShipWorks edition.  That edition only supports a single store, and you already have some stores in ShipWorks.");
+            if (EditionSerializer.Restore(store) is FreemiumFreeEdition && StoreManager.GetDatabaseStoreCount() > 0)
+            {
+                MessageHelper.ShowError(this, "The license you entered is for the Endicia Free for eBay ShipWorks edition.  That edition only supports a single store, and you already have some stores in ShipWorks.");
 
-                    e.NextPage = CurrentPage;
-                    return;
-                }
+                e.NextPage = CurrentPage;
+                return;
+            }
         }
 
         /// <summary>
@@ -980,7 +980,7 @@ namespace ShipWorks.Stores.Management
                 if (defaultType != null)
                 {
                     ShippingSettingsEntity shippingSettings = ShippingSettings.Fetch();
-                    shippingSettings.DefaultType = (int)defaultType.Value;
+                    shippingSettings.DefaultType = (int) defaultType.Value;
 
                     ShippingSettings.Save(shippingSettings);
                 }
@@ -1050,7 +1050,7 @@ namespace ShipWorks.Stores.Management
             {
                 if (store != null)
                 {
-                    DeletionService.DeleteStore(store);
+                    DeletionService.DeleteStore(store, UserSession.Security);
                     store = null;
                 }
             }

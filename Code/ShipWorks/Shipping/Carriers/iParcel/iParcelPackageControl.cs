@@ -1,22 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.iParcel;
-using ShipWorks.UI.Controls;
 using Divelements.SandGrid;
 using Interapptive.Shared;
-using ShipWorks.Data.Model;
-using ShipWorks.Data.Connection;
 using ShipWorks.Data.Grid.DetailView;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing;
-using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Insurance;
+using ShipWorks.UI.Controls;
 
 namespace ShipWorks.Shipping.Carriers.iParcel
 {
@@ -30,10 +21,10 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         // Keeps track of the selected rows, so when the selection changes, we know what to save
         List<GridRow> selectedRows = new List<GridRow>();
 
-        // Indiciates if the event shouldn't currently be raised
+        // Indicates if the event shouldn't currently be raised
         int suspendRateCriteriaEvent = 0;
 
-        // Indiciates if the event shouldn't currently be raised
+        // Indicates if the event shouldn't currently be raised
         int suspendShipSenseFieldChangedEvent = 0;
 
         /// <summary>
@@ -145,12 +136,12 @@ namespace ShipWorks.Shipping.Carriers.iParcel
 
             // Use the i-parcel specific factory for populating the suggested tokens
             skuAndQuantity.TokenSuggestionFactory = new iParcelTokenSuggestionFactory(shipments);
-            
+
             // Start listening again
             packageCountCombo.SelectedIndexChanged += this.OnChangePackageCount;
             packagesGrid.SelectionChanged += this.OnChangeSelectedPackages;
 
-            // The only way there wouldnt be any packages is if there was no selection
+            // The only way there wouldn't be any packages is if there was no selection
             if (packagesGrid.Rows.Count > 0)
             {
                 packagesGrid.Rows[0].Selected = true;
@@ -189,7 +180,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         }
 
         /// <summary>
-        /// Update the display text of the given GridRow, which is dependant on how many packages it has
+        /// Update the display text of the given GridRow, which is dependent on how many packages it has
         /// </summary>
         private void UpdateRowText(GridRow gridRow)
         {
@@ -237,10 +228,10 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             // Have to reload the UI
             LoadShipments(loadedShipments, packageCountCombo.Enabled);
 
-            // Raise the rate critiera changed event
+            // Raise the rate criteria changed event
             RaiseRateCriteriaChanged();
 
-            // Raise the ShipSense critiera changed event
+            // Raise the ShipSense criteria changed event
             RaiseShipSenseFieldChanged();
         }
 
@@ -333,7 +324,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         }
 
         /// <summary>
-        /// Something affecting rate critiera has changed
+        /// Something affecting rate criteria has changed
         /// </summary>
         private void OnRateCriteriaChanged(object sender, EventArgs e)
         {
@@ -357,11 +348,21 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         }
 
         /// <summary>
-        /// Something affecting ShipSense critiera has changed
+        /// Something affecting ShipSense criteria has changed
         /// </summary>
         private void OnShipSenseFieldChanged(object sender, EventArgs e)
         {
             RaiseShipSenseFieldChanged();
+        }
+
+        /// <summary>
+        /// Flush any in-progress changes before saving
+        /// </summary>
+        /// <remarks>This should cause weight controls to finish, etc.</remarks>
+        internal void FlushChanges()
+        {
+            dimensionsControl.FlushChanges();
+            weight.FlushChanges();
         }
 
         /// <summary>

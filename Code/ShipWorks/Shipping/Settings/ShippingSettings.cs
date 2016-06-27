@@ -1,17 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using Interapptive.Shared.Messaging;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Connection;
-using ShipWorks.Data;
-using ShipWorks.Shipping.Carriers.FedEx;
-using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using System.Threading;
+using Autofac;
 using Interapptive.Shared;
+using ShipWorks.ApplicationCore;
+using ShipWorks.Core.Messaging;
+using ShipWorks.Data;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Messaging.Messages;
 using ShipWorks.Shipping.Insurance;
-using ShipWorks.Common.IO.Hardware.Printers;
 
 namespace ShipWorks.Shipping.Settings
 {
@@ -123,8 +121,11 @@ namespace ShipWorks.Shipping.Settings
 
             if (!isConfigured)
             {
-                new ShippingManagerWrapper().UpdateLabelFormatOfUnprocessedShipments(shipmentTypeCode);
-                Messenger.Current.Send(new CarrierConfiguredMessage(settings, shipmentTypeCode));   
+                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+                {
+                    lifetimeScope.Resolve<IShippingManager>().UpdateLabelFormatOfUnprocessedShipments(shipmentTypeCode);
+                    lifetimeScope.Resolve<IMessenger>().Send(new CarrierConfiguredMessage(settings, shipmentTypeCode));
+                }
             }
         }
 
@@ -198,7 +199,7 @@ namespace ShipWorks.Shipping.Settings
             settings.Express1EndiciaCustomsCertify = false;
             settings.Express1EndiciaCustomsSigner = "";
             settings.Express1EndiciaThermalDocTab = false;
-            settings.Express1EndiciaThermalDocTabType = (int)ThermalDocTabType.Leading;
+            settings.Express1EndiciaThermalDocTabType = (int) ThermalDocTabType.Leading;
             settings.Express1EndiciaSingleSource = false;
 
             settings.Express1UspsSingleSource = false;

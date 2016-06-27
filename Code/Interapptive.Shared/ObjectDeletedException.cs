@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Runtime.Serialization;
 
 namespace Interapptive.Shared.Utility
 {
-    [Serializable]
     public class ObjectDeletedException : Exception
     {
         public ObjectDeletedException()
@@ -21,6 +18,15 @@ namespace Interapptive.Shared.Utility
 
         public ObjectDeletedException(string message, Exception inner)
             : base(message, inner)
+        {
+
+        }
+
+        /// <summary>
+        /// Serialization constructor
+        /// </summary>
+        protected ObjectDeletedException(SerializationInfo serializationInfo, StreamingContext streamingContext) : 
+            base(serializationInfo, streamingContext)
         {
 
         }

@@ -3,24 +3,24 @@ using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Threading;
 using System.Windows.Forms;
-using ShipWorks.Data.Adapter.Custom;
-using ShipWorks.Data.Model.EntityClasses;
+using Autofac;
 using Divelements.SandGrid;
+using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Licensing;
+using ShipWorks.Common.Threading;
+using ShipWorks.Data.Adapter.Custom;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.FactoryClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Users;
-using ShipWorks.Users.Security;
-using ShipWorks.Common.Threading;
-using System.Threading;
-using ShipWorks.Data.Connection;
 using ShipWorks.Users.Audit;
-using ShipWorks.Data.Model.FactoryClasses;
-using Interapptive.Shared.UI;
-using ShipWorks.ApplicationCore;
-using Autofac;
-using ShipWorks.ApplicationCore.Licensing;
+using ShipWorks.Users.Security;
 
 namespace ShipWorks.Stores.Management
 {
@@ -89,7 +89,7 @@ namespace ShipWorks.Stores.Management
 
                 string storeType = StoreTypeManager.GetType(store).StoreTypeName;
 
-                GridRow row = new GridRow(new[] {store.StoreName, storeType, GetLastDownloadDescription(store)})
+                GridRow row = new GridRow(new[] { store.StoreName, storeType, GetLastDownloadDescription(store) })
                 {
                     Tag = store
                 };
@@ -275,14 +275,14 @@ namespace ShipWorks.Stores.Management
                         Detail = $"Deleting store '{SelectedStore.StoreName}'...",
                         CanCancel = false
                     };
-                    
+
                     workProgress.Starting();
 
                     // Progress Provider
                     ProgressProvider progressProvider = new ProgressProvider();
                     progressProvider.ProgressItems.Add(workProgress);
 
-                    // Prioress Dialog
+                    // Progress Dialog
                     ProgressDlg progressDlg = new ProgressDlg(progressProvider)
                     {
                         Title = "Delete",
@@ -304,7 +304,7 @@ namespace ShipWorks.Stores.Management
                     // Check to see if we are already downloading, and if so let the user know they can wait or cancel out of deleting.
                     // We can't wrap the whole dialog below in the ConnectionSensitiveScope because we can't start a background process
                     // inside ConnectionSensitiveScope.
-                    // Since we're inside the dialog, the user could wait a while before clicking, allowing a download to start before 
+                    // Since we're inside the dialog, the user could wait a while before clicking, allowing a download to start before
                     // getting to this code, so it's checked right before queuing the delete thread.
                     using (ConnectionSensitiveScope scope = new ConnectionSensitiveScope("delete a store", this))
                     {
@@ -381,7 +381,7 @@ namespace ShipWorks.Stores.Management
                 {
                     // Delete the store using the license service
                     ILicenseService licenseService = lifetimeScope.Resolve<ILicenseService>();
-                    licenseService.GetLicense(state.Store).DeleteStore(state.Store);
+                    licenseService.GetLicense(state.Store).DeleteStore(state.Store, UserSession.Security);
                 }
             }
 

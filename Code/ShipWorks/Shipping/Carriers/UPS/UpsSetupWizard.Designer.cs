@@ -306,6 +306,7 @@
             this.licenseAgreement.ReadOnly = true;
             this.licenseAgreement.Size = new System.Drawing.Size(470, 409);
             this.licenseAgreement.TabIndex = 0;
+            this.licenseAgreement.TabStop = false;
             this.licenseAgreement.Text = "";
             // 
             // wizardPageAccount

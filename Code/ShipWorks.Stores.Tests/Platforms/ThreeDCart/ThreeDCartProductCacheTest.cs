@@ -1,8 +1,6 @@
 ﻿using Interapptive.Shared.Collections;
 using ShipWorks.Stores.Platforms.ThreeDCart.RestApi;
 using ShipWorks.Stores.Platforms.ThreeDCart.RestApi.DTO;
-using ShipWorks.Stores.Platforms.Yahoo.ApiIntegration;
-using ShipWorks.Stores.Platforms.Yahoo.ApiIntegration.DTO;
 using Xunit;
 
 namespace ShipWorks.Stores.Tests.Platforms.ThreeDCart
@@ -10,8 +8,8 @@ namespace ShipWorks.Stores.Tests.Platforms.ThreeDCart
     public class ThreeDCartProductCacheTest
     {
         readonly ThreeDCartProductCache cache = new ThreeDCartProductCache();
-        private string url = "url";
-        private string token = "token";
+        private readonly string url = "url";
+        private readonly string token = "token";
 
         [Fact]
         public void GetStoreProductWeightCache_ReturnsNewLruCache_WhenGivenNewStoreID()

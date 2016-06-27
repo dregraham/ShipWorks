@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Interapptive.Shared.Utility;
 using ShipWorks.Actions.Tasks;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.SparkPay.CoreExtensions.Actions;
@@ -24,11 +25,7 @@ namespace ShipWorks.Stores.UI.Platforms.SparkPay
         public SparkPayOrderUpdateTaskEditor(SparkPayOrderUpdateTask task)
         {
             InitializeComponent();
-
-            if (task == null)
-            {
-                throw new ArgumentNullException("task");
-            }
+            MethodConditions.EnsureArgumentIsNotNull(task);
 
             this.task = task;
         }

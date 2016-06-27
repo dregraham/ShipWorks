@@ -24,6 +24,7 @@ using ShipWorks.Users.Security;
 using ShipWorks.Users.Audit;
 using ShipWorks.ApplicationCore.ExecutionMode;
 using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
+using System.Data.SqlClient;
 
 namespace ShipWorks.Stores.Communication
 {
@@ -386,31 +387,37 @@ namespace ShipWorks.Stores.Communication
 
                     log.InfoFormat("Starting download for store '{0}' ({1})", store.StoreName, store.StoreID);
 
-                    // We open a lock that will stay open for the duration of the store download,
-                    // which will serve to lock out any other running instance of ShipWorks from downloading
-                    // for this store.
-                    using (SqlEntityLock storeLock = new SqlEntityLock(store.StoreID, "Download"))
+                    // Connection to use during the download cycle, if it disconnects we
+                    // show the user an error, this ensures that if the lock taken below
+                    // is broken we stop downloading
+                    using (SqlConnection con = SqlSession.Current.OpenConnection())
                     {
-                        // We create the log entry right when we start
-                        downloadLog = CreateDownloadLog(store, initiatedBy);
-
-                        // Create the downloader
-                        downloader = StoreTypeManager.GetType(store).CreateDownloader();
-
-                        // Verify the license
-                        progressItem.Detail = "Connecting...";
-                        CheckLicense(store);
-
-                        // Do the download.  Operates as the super user.
-                        using (AuditBehaviorScope auditScope = new AuditBehaviorScope(
-                            AuditBehaviorUser.SuperUser,
-                            new AuditReason(initiatedBy == DownloadInitiatedBy.ShipWorks ? AuditReasonType.AutomaticDownload : AuditReasonType.ManualDownload)))
+                        // We open a lock that will stay open for the duration of the store download,
+                        // which will serve to lock out any other running instance of ShipWorks from downloading
+                        // for this store.
+                        using (SqlEntityLock storeLock = new SqlEntityLock(con, store.StoreID, "Download"))
                         {
-                            downloader.Download(progressItem, downloadLog.DownloadID);
-                        }
+                            // We create the log entry right when we start
+                            downloadLog = CreateDownloadLog(store, initiatedBy);
 
-                        // Item is complete
-                        progressItem.Completed();
+                            // Create the downloader
+                            downloader = StoreTypeManager.GetType(store).CreateDownloader();
+
+                            // Verify the license
+                            progressItem.Detail = "Connecting...";
+                            CheckLicense(store);
+
+                            // Do the download.  Operates as the super user.
+                            using (AuditBehaviorScope auditScope = new AuditBehaviorScope(
+                                AuditBehaviorUser.SuperUser,
+                                new AuditReason(initiatedBy == DownloadInitiatedBy.ShipWorks ? AuditReasonType.AutomaticDownload : AuditReasonType.ManualDownload)))
+                            {
+                                downloader.Download(progressItem, downloadLog.DownloadID, con);
+                            }
+
+                            // Item is complete
+                            progressItem.Completed();
+                        }
                     }
                 }
                 catch (SqlAppResourceLockException ex)
@@ -464,6 +471,18 @@ namespace ShipWorks.Stores.Communication
                         // Don't know what to do with it otherwise
                         throw;
                     }
+                }
+                catch (InvalidOperationException ex) when (ex.Message == "ExecuteNonQuery requires an open and available Connection. The connection's current state is closed.")
+                {
+                    log.Error("Download error", ex);
+
+                    progressItem.Failed(new DownloadException("ShipWorks was unable to maintain a connection to the database. Please try downloading again."));
+                }
+                catch (SqlException ex)
+                {
+                    log.Error("Download error", ex);
+
+                    progressItem.Failed(new DownloadException("ShipWorks was unable to maintain a connection to the database. Please try downloading again."));
                 }
 
                 // This would only be null if the store had been deleted before we tried to log the download

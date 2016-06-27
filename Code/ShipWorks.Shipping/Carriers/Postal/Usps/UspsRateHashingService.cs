@@ -20,10 +20,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 }
 
                 ratingField = base.RatingFields;
-                ratingField.ShipmentFields.Add(UspsShipmentFields.UspsAccountID);
-                ratingField.ShipmentFields.Add(UspsShipmentFields.OriginalUspsAccountID);
-                ratingField.ShipmentFields.Add(UspsShipmentFields.RateShop);
-                ratingField.ShipmentFields.Add(PostalShipmentFields.NoPostage);
+                ratingField.AddShipmentField(UspsShipmentFields.UspsAccountID, genericAccountIdFieldName);
+                ratingField.AddShipmentField(UspsShipmentFields.OriginalUspsAccountID);
+                ratingField.AddShipmentField(UspsShipmentFields.RateShop);
+                ratingField.AddShipmentField(PostalShipmentFields.NoPostage);
 
                 return ratingField;
             }

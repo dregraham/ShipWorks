@@ -9,30 +9,25 @@ using ShipWorks.Stores;
 namespace ShipWorks.UI.ValueConverters
 {
     /// <summary>
-    /// Convert an enum to an description
+    /// Convert an enum into it's description
     /// </summary>
     [Obfuscation(Exclude = true)]
     public class EnumDescriptionConverter : IValueConverter
     {
         /// <summary>
-        /// Convert an enum value into an enum description using the EnumHelper
+        /// Convert an enum into it's description
         /// </summary>
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        public virtual object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (DesignModeDetector.IsDesignerHosted())
-            {
-                // Just return a generic string
-                return "Enum Description";
-            }
-
-            return EnumHelper.GetDescription((Enum) value);
+            return !DesignModeDetector.IsDesignerHosted() ?
+                EnumHelper.GetDescription(value as Enum) : "Designer enum description.";
         }
 
         /// <summary>
-        /// Converts the description back to an enum value
+        /// Convert a value back to enum
         /// </summary>
         /// <exception cref="System.NotImplementedException"></exception>
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        public virtual object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             throw new NotImplementedException();
         }

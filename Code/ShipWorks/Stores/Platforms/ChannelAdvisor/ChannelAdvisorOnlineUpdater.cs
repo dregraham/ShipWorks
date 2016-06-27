@@ -458,13 +458,16 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             MethodConditions.EnsureArgumentIsNotNull(shipment);
             MethodConditions.EnsureArgumentIsNotNull(shipment.Amazon);
 
-            switch (shipment.Amazon.CarrierName)
+            string carrierName = shipment.Amazon.CarrierName.ToUpperInvariant();
+
+            switch (carrierName)
             {
-                case "FedEx":
+                case "FEDEX":
                     return "FEDEX";
                 case "UPS":
                     return "UPS";
                 case "USPS":
+                case "STAMPS_DOT_COM":
                     return "USPS";
                 default:
                     return "None";

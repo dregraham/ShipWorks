@@ -4,17 +4,14 @@ using System.Linq;
 using Autofac;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
-using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Settings.Origin;
-using ShipWorks.Shipping;
-using ShipWorks.Shipping.Carriers.iParcel;
-using ShipWorks.Shipping.Carriers.Ups;
 using ShipWorks.Tests.Integration.MSTest.Fixtures;
 
-namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Ups
+namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.UPS
 {
     public class UpsFixture : ShipWorksFixtureBase
     {
@@ -54,7 +51,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Ups
 
             shipmentType.ConfigureNewShipment(shipment);
 
-            shipment.Ups.Subclassification = (int)UpsPostalSubclassificationType.Irregular;
+            shipment.Ups.Subclassification = (int) UpsPostalSubclassificationType.Irregular;
 
             if (UspsEndorsement != "NULL")
             {
@@ -80,7 +77,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Ups
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
                 IRatingService ratingService = lifetimeScope.ResolveKeyed<IRatingService>(ShipmentTypeCode.UpsOnLineTools);
-                return ratingService.GetRates(shipment).Rates.Sum(x => x.Amount);
+                return ratingService.GetRates(shipment).Rates.Sum(x => x.AmountOrDefault);
             }
         }
 
@@ -98,16 +95,16 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Ups
             }
             else
             {
-                shipment.Ups.Subclassification = (int)UpsPostalSubclassificationType.Irregular;
+                shipment.Ups.Subclassification = (int) UpsPostalSubclassificationType.Irregular;
             }
-            
+
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
                 ILabelService labelService = lifetimeScope.ResolveKeyed<ILabelService>(ShipmentTypeCode.UpsOnLineTools);
-                
+
                 labelService.Create(shipment);
             }
-            
+
             shipment.ContentWeight = shipment.Ups.Packages.Sum(p => p.DimsWeight);
         }
 
@@ -164,7 +161,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Ups
         protected override void SetPackageData(ShipmentEntity shipment)
         {
             if (shipment.Ups == null)
-            { 
+            {
                 shipment.Ups = new UpsShipmentEntity();
             }
 
@@ -180,7 +177,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Ups
                     package = new UpsPackageEntity();
                     shipment.Ups.Packages.Add(package);
                 }
-                
+
                 InitializePackage(package);
 
                 if (!string.IsNullOrWhiteSpace(InsuranceValuePerPackage))
@@ -255,7 +252,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Ups
             package.InsurancePennyOne = false;
             package.DeclaredValue = 0M;
 
-            package.PackagingType = (int)UpsPackagingType.Custom;
+            package.PackagingType = (int) UpsPackagingType.Custom;
         }
     }
 }

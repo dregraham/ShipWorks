@@ -1,0 +1,6 @@
+<?xml version="1.0" standalone="yes" ?>
+<ShipWorks moduleVersion="3.0.0" schemaVersion="1.0.0">
+  <Error>
+    <Description>Something Failed. Internal Error.</Description>
+  </Error>
+</ShipWorks>

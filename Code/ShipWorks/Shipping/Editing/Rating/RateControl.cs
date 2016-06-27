@@ -85,19 +85,19 @@ namespace ShipWorks.Shipping.Editing.Rating
         /// Gets the rate group loaded in the control. If a rate group has not been loaded
         /// into the control, a group without any rate results is returned.
         /// </summary>
-        public RateGroup RateGroup 
-        { 
-            get; 
-            private set; 
+        public RateGroup RateGroup
+        {
+            get;
+            private set;
         }
-        
+
         /// <summary>
         /// Gets or sets a value indicating whether to [show the configure link].
         /// </summary>
-        public bool ActionLinkVisible 
-        { 
-            get; 
-            set; 
+        public bool ActionLinkVisible
+        {
+            get;
+            set;
         }
 
         /// <summary>
@@ -121,7 +121,7 @@ namespace ShipWorks.Shipping.Editing.Rating
         public bool ShowAllRates { get; set; }
 
         /// <summary>
-        /// Gets or sets the restricted rate count. This is the maximum rates to display when the 
+        /// Gets or sets the restricted rate count. This is the maximum rates to display when the
         /// control is configured with ShowAllRates = false
         /// </summary>
         /// <value>The restricted rate count.</value>
@@ -335,7 +335,7 @@ namespace ShipWorks.Shipping.Editing.Rating
         }
 
         /// <summary>
-        /// The rate control will track whether the More link has been clicked. This will 
+        /// The rate control will track whether the More link has been clicked. This will
         /// collapse the rates only if the link has not been previously clicked (i.e. the
         /// user elected to see more rates at some point, so we want to retain that view).
         /// </summary>
@@ -350,7 +350,7 @@ namespace ShipWorks.Shipping.Editing.Rating
         }
 
         /// <summary>
-        /// Resets the state of the control to behave as if the more link has not 
+        /// Resets the state of the control to behave as if the more link has not
         /// been clicked.
         /// </summary>
         public void ResetCollapsibleState()
@@ -359,7 +359,7 @@ namespace ShipWorks.Shipping.Editing.Rating
         }
 
         /// <summary>
-        /// Adds the show more rates row if the control is configured to not show all rates and 
+        /// Adds the show more rates row if the control is configured to not show all rates and
         /// the list of rates exceeds the restricted rate count.
         /// </summary>
         private void AddShowMoreRatesRow()
@@ -383,10 +383,10 @@ namespace ShipWorks.Shipping.Editing.Rating
                                 // The user wants to expand the rates, so set the ShowAllRates to true and load the full list of original rates
                                 ShowAllRates = true;
 
-                                // Capture that the more link has been clicked, so we don't collapse the rates again. The user 
+                                // Capture that the more link has been clicked, so we don't collapse the rates again. The user
                                 // elected to see more rates, so we want to retain view
                                 hasMoreLinkBeenClicked = true;
-                                
+
                                 LoadRates(originalRateGroup);
                             }
                         }
@@ -421,7 +421,7 @@ namespace ShipWorks.Shipping.Editing.Rating
 
                 if (rateGrid.Rows.Count == 0)
                 {
-                    // This was causing a crash when length was 0. 
+                    // This was causing a crash when length was 0.
                     if (rateGrid.Columns.DisplayColumns.Length > 0)
                     {
                         height += rateGrid.Columns.DisplayColumns[0].Bounds.Bottom;
@@ -492,7 +492,7 @@ namespace ShipWorks.Shipping.Editing.Rating
             rateGrid.SelectedElements.Clear();
         }
 
-        
+
         /// <summary>
         /// Resets the footnotes with what are contained in the specified rate group
         /// </summary>

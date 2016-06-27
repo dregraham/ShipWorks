@@ -1,0 +1,199 @@
+﻿<UserControl x:Class="ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl.BestRateShipmentControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             xmlns:ui="http://schemas.shipworks.com/ui"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:ins="clr-namespace:ShipWorks.Shipping.UI.ShippingPanel.Insurance"
+             xmlns:local="clr-namespace:ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl"
+             mc:Ignorable="d"
+             Grid.IsSharedSizeScope="False" d:DesignWidth="393.72">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/ShipWorks.UI;component/Styles/GlobalStyle.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+            <ui:VisibleWhenEqualToParameterConverter x:Key="VisibleWhenEqualToParameter" />
+            <ui:VisibleWhenEqualToParameterConverter x:Key="VisibleWhenNotEqualToParameter" Invert="true" />
+            <ui:ValueEqualToParameterConverter x:Key="ValueEqualToParameter" />
+            <ui:BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
+            <ui:StringEmptyWhenEqualToParameterConverter x:Key="StringEmptyWhenEqualToParameter" />
+            <ui:EmptyMoneyConverter x:Key="EmptyMoney" />
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <StackPanel>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="85" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <TextBlock Grid.Row="0" Grid.Column="0"
+                   Style="{StaticResource Grid.TextBlock.Label}">Ship date:</TextBlock>
+            <DatePicker Grid.Row="0" Grid.Column="1"
+                        Style="{StaticResource Grid.DatePicker.Default}"
+                        SelectedDate="{Binding ShipDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=true, NotifyOnValidationError=true}" >
+            </DatePicker>
+
+            <TextBlock Grid.Row="1" Grid.Column="0"
+                   Style="{StaticResource Grid.TextBlock.Label}">Weight:</TextBlock>
+            <ui:WeightControl Grid.Row="1" Grid.Column="1"
+                ErrorMessage="{Binding WeightErrorMessage}"
+                Weight="{Binding ContentWeight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,
+                        ValidatesOnDataErrors=true, NotifyOnValidationError=true}"/>
+
+            <Grid Grid.Row="2" Grid.ColumnSpan="2"
+              Visibility="{Binding SupportsDimensions,Converter={StaticResource BooleanToVisibility}}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="85" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.Row="0" Grid.Column="0"
+                           Style="{StaticResource Grid.TextBlock.Label}">Dimensions:</TextBlock>
+                <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal"
+                            Margin="0, 0, 2, 0">
+                    <ComboBox MinWidth="139"
+                              Style="{StaticResource Grid.ComboBox.Default}"
+                              ItemsSource ="{Binding DimensionsProfiles, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                              SelectedValue="{Binding SelectedDimensionsProfile, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding Name}" />
+                                    <TextBlock>
+                                        <TextBlock.Visibility>
+                                            <Binding Path="DimensionsProfileID" Converter="{StaticResource VisibleWhenNotEqualToParameter}">
+                                                <Binding.ConverterParameter>
+                                                    <sys:Int64>0</sys:Int64>
+                                                </Binding.ConverterParameter>
+                                            </Binding>
+                                        </TextBlock.Visibility>
+                                        <TextBlock.Text>
+                                            <MultiBinding StringFormat=" ({0} x {1} x {2})">
+                                                <Binding Path="Length" UpdateSourceTrigger="PropertyChanged"/>
+                                                <Binding Path="Width" UpdateSourceTrigger="PropertyChanged"/>
+                                                <Binding Path="Height" UpdateSourceTrigger="PropertyChanged"/>
+                                            </MultiBinding>
+                                        </TextBlock.Text>
+                                    </TextBlock>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                    <Button Style="{StaticResource Button.Link}"
+                            VerticalAlignment="Center"
+                            Margin="3, 0, 0, 0"
+                            Content="Manage..."
+                            Click="OnManageDimensionsProfiles" />
+                </StackPanel>
+                <!--
+                    Dimensions
+                -->
+                <StackPanel Grid.Row="1" Grid.Column="1"
+                            Orientation="Horizontal">
+                    <StackPanel.IsEnabled>
+                        <Binding Path="SelectedDimensionsProfile.DimensionsProfileID" Converter="{StaticResource ValueEqualToParameter}">
+                            <Binding.ConverterParameter>
+                                <sys:Int64>0</sys:Int64>
+                            </Binding.ConverterParameter>
+                        </Binding>
+                    </StackPanel.IsEnabled>
+                    <TextBox x:Name="dimsLength"
+                             Style="{StaticResource Grid.TextBox.Dimension}"
+                             Text="{Binding DimsLength, UpdateSourceTrigger=PropertyChanged,
+                                    ValidatesOnDataErrors=true, NotifyOnValidationError=true}" />
+                    <TextBox Style="{StaticResource Grid.TextBox.Dimension}"
+                             Text="{Binding DimsWidth, UpdateSourceTrigger=PropertyChanged,
+                                    ValidatesOnDataErrors=true, NotifyOnValidationError=true}" />
+                    <TextBox Style="{StaticResource Grid.TextBox.Dimension}"
+                             Text="{Binding DimsHeight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,
+                                    ValidatesOnDataErrors=true, NotifyOnValidationError=true}" />
+                    <TextBlock Margin="2, 0, 0, 0"
+                               VerticalAlignment="Center">in.  (L x W x H)</TextBlock>
+                </StackPanel>
+                <!--
+                    Add Weight
+                -->
+                <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal"
+                            Style="{StaticResource Grid.Cell}">
+                    <TextBlock VerticalAlignment="Center"
+                               Foreground="Gray">Add to weight</TextBlock>
+                    <CheckBox VerticalAlignment="Center"
+                              Margin="2, 0, 2, 0"
+                              IsChecked="{Binding DimsAddWeight}"/>
+                    <ui:WeightInput VerticalAlignment="Center"
+                                    Margin="2"
+                                    Weight="{Binding DimsWeight}">
+                        <ui:WeightInput.IsEnabled>
+                            <Binding Path="SelectedDimensionsProfile.DimensionsProfileID" Converter="{StaticResource ValueEqualToParameter}">
+                                <Binding.ConverterParameter>
+                                    <sys:Int64>0</sys:Int64>
+                                </Binding.ConverterParameter>
+                            </Binding>
+                        </ui:WeightInput.IsEnabled>
+                    </ui:WeightInput>
+                </StackPanel>
+            </Grid>
+
+            <TextBlock Grid.Row="3" Grid.Column="0"
+                       Style="{StaticResource Grid.TextBlock.Label}">Service Level:</TextBlock>
+            <ComboBox Grid.Row="3" Grid.Column="1"
+                      Style="{StaticResource Grid.ComboBox.Default}"
+                      Width="165"
+                      HorizontalAlignment="Left"
+                      ItemsSource="{Binding ServiceLevelTypes, UpdateSourceTrigger=PropertyChanged}"
+                      SelectedValue="{Binding ServiceLevel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                      SelectedValuePath="Key"
+                      DisplayMemberPath="Value" />
+
+            <TextBlock Grid.Row="4" Grid.Column="0"
+                       Style="{StaticResource Grid.TextBlock.Label}">Rate:</TextBlock>
+            <TextBlock Grid.Row="4" Grid.Column="1" >
+                <TextBlock.Style>
+                    <Style BasedOn="{StaticResource Grid.TextBlock.Label}" TargetType="{x:Type TextBlock}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding RatesLoaded}" Value="False">
+                                <DataTrigger.EnterActions>
+                                    <BeginStoryboard Name="pickIn">
+                                        <Storyboard Duration="0:0:1" RepeatBehavior="Forever">
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Text">
+                                                <DiscreteObjectKeyFrame KeyTime="0:0:00" Value="Retrieving Rates."/>
+                                                <DiscreteObjectKeyFrame KeyTime="0:0:00.33" Value="Retrieving Rates.."/>
+                                                <DiscreteObjectKeyFrame KeyTime="0:0:00.66" Value="Retrieving Rates..."/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </DataTrigger.EnterActions>
+                                <DataTrigger.ExitActions>
+                                    <StopStoryboard BeginStoryboardName="pickIn" />
+                                </DataTrigger.ExitActions>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding RatesLoaded}" Value="True">
+                                <Setter Property="Text" Value="{Binding Path=SelectedRate.Description}"></Setter>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+           </TextBlock>
+        </Grid>
+
+        <ins:InsuranceControl DataContext="{Binding InsuranceViewModel}" />
+    </StackPanel>
+</UserControl>

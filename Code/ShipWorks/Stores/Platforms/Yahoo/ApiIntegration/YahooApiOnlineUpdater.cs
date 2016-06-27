@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using Autofac;
+using Autofac.Features.OwnedInstances;
 using Interapptive.Shared;
 using log4net;
 using Quartz.Util;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -15,7 +18,6 @@ using ShipWorks.Stores.Content;
 
 namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
 {
-
     /// <summary>
     /// Uploads shipment details and order status to Yahoo
     /// </summary>
@@ -30,7 +32,8 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         /// </summary>
         /// <param name="store">The store.</param>
         public YahooApiOnlineUpdater(YahooStoreEntity store) :
-            this(LogManager.GetLogger(typeof (YahooApiOnlineUpdater)), new YahooApiWebClient(store), new ShippingManagerWrapper())
+            this(LogManager.GetLogger(typeof(YahooApiOnlineUpdater)), new YahooApiWebClient(store),
+                IoC.UnsafeGlobalLifetimeScope.Resolve<Owned<IShippingManager>>().Value)
         {
         }
 
@@ -102,7 +105,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
                 throw new ArgumentNullException("shipment");
             }
 
-            YahooOrderEntity order = (YahooOrderEntity)shipment.Order;
+            YahooOrderEntity order = (YahooOrderEntity) shipment.Order;
 
             if (!order.IsManual)
             {
@@ -152,7 +155,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
             {
                 case ShipmentTypeCode.Usps:
                 case ShipmentTypeCode.Endicia:
-                    PostalServiceType service = (PostalServiceType)shipment.Postal.Service;
+                    PostalServiceType service = (PostalServiceType) shipment.Postal.Service;
                     return ShipmentTypeManager.IsDhl(service) ? "dhl" : "usps";
 
                 case ShipmentTypeCode.Express1Endicia:
@@ -162,7 +165,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
 
                 case ShipmentTypeCode.UpsOnLineTools:
                 case ShipmentTypeCode.UpsWorldShip:
-                    if (UpsUtility.IsUpsMiService((UpsServiceType)shipment.Ups.Service))
+                    if (UpsUtility.IsUpsMiService((UpsServiceType) shipment.Ups.Service))
                     {
                         if (shipment.Ups.UspsTrackingNumber.Length > 0)
                         {

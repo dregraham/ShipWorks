@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -26,9 +27,9 @@ namespace ShipWorks.Stores.Platforms.SparkPay
         /// </summary>
         public SparkPayOnlineUpdater(
             SparkPayStoreEntity store,
-            SparkPayWebClient webClient, 
-            Func<SparkPayStoreEntity, SparkPayStatusCodeProvider> statusCodeProviderFactory, 
-            IOrderManager orderManager, 
+            SparkPayWebClient webClient,
+            Func<SparkPayStoreEntity, SparkPayStatusCodeProvider> statusCodeProviderFactory,
+            IOrderManager orderManager,
             SparkPayShipmentFactory shipmentFactory)
         {
             this.store = store;
@@ -65,8 +66,11 @@ namespace ShipWorks.Stores.Platforms.SparkPay
                 Order orderResponse = webClient.UpdateOrderStatus(store, order.OrderNumber, statusCode);
 
                 order.OnlineStatusCode = orderResponse.OrderStatusId;
-                order.OnlineStatus = statusCodeProvider.GetCodeName((int)orderResponse.OrderStatusId);
-                
+                if (orderResponse.OrderStatusId != null)
+                {
+                    order.OnlineStatus = statusCodeProvider.GetCodeName((int)orderResponse.OrderStatusId);
+                }
+
                 // Update the local database with the new status
                 OrderEntity basePrototype = new OrderEntity(orderID)
                 {
@@ -106,10 +110,7 @@ namespace ShipWorks.Stores.Platforms.SparkPay
         /// </summary>
         public void UpdateShipmentDetails(ShipmentEntity shipment)
         {
-            if (shipment == null)
-            {
-                throw new ArgumentNullException(nameof(shipment));
-            }
+            MethodConditions.EnsureArgumentIsNotNull(shipment);
 
             if (!shipment.Order.IsManual)
             {

@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Data.Connection;
-using ShipWorks.Data.Model.EntityClasses;
-using SD.LLBLGen.Pro.ORMSupportClasses;
 using System.Data.SqlClient;
-using ShipWorks.Data.Model;
-using ShipWorks.Data;
 using Interapptive.Shared.Data;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Data;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Users.Security
 {
@@ -102,7 +99,7 @@ namespace ShipWorks.Users.Security
         /// </summary>
         public static string DisplayName
         {
-            get { return UserEntity.SuperUserDisplayName;  }
+            get { return UserEntity.SuperUserDisplayName; }
         }
     }
 }

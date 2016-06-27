@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Windows.Forms;
 using Interapptive.Shared.Utility;
-using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 
 namespace ShipWorks.Shipping.Carriers.BestRate.Footnote
@@ -13,13 +11,14 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Footnote
         /// Initializes a new instance of the <see cref="BrokerExceptionsRateFootnoteControl" /> class.
         /// </summary>
         /// <param name="brokerExceptions">The broker exceptions.</param>
-        public BrokerExceptionsRateFootnoteControl(IEnumerable<BrokerException> brokerExceptions)
+        public BrokerExceptionsRateFootnoteControl(IEnumerable<BrokerException> brokerExceptions,
+            BrokerExceptionSeverityLevel severityLevel)
         {
             InitializeComponent();
-            
-			// Assuming that the brokerExceptions passed in have been properly sorted by now.
-            BrokerExceptions = brokerExceptions;           
-            pictureBox.Image = EnumHelper.GetImage(brokerExceptions.FirstOrDefault().SeverityLevel);
+
+            // Assuming that the brokerExceptions passed in have been properly sorted by now.
+            BrokerExceptions = brokerExceptions;
+            pictureBox.Image = EnumHelper.GetImage(severityLevel);
         }
 
         /// <summary>

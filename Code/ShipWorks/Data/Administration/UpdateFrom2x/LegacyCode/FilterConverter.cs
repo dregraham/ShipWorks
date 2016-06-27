@@ -1,21 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Common.Threading;
-using ShipWorks.Users.Audit;
-using System.Transactions;
-using System.Data.SqlClient;
-using ShipWorks.Data.Connection;
-using Interapptive.Shared.Data;
-using ShipWorks.Filters;
-using ShipWorks.Data.Model.EntityClasses;
-using log4net;
-using ShipWorks.Stores;
+﻿using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Transactions;
 using System.Xml.Linq;
+using Interapptive.Shared.Data;
+using log4net;
+using ShipWorks.Common.Threading;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Filters;
 using ShipWorks.Filters.Content.Conditions;
+using ShipWorks.Stores;
 using ShipWorks.Templates;
+using ShipWorks.Users.Audit;
 
 namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
 {

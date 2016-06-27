@@ -5,7 +5,7 @@ using System.Reflection;
 
 namespace ShipWorks.Stores.Platforms.SparkPay.DTO
 {
-    [Obfuscation(Feature = "PreserveLiteralValues", Exclude = true, StripAfterObfuscation = false)]
+    [Obfuscation(Exclude = true, ApplyToMembers = true)]
     public class Order
     {
         [JsonProperty("id")]
@@ -25,7 +25,7 @@ namespace ShipWorks.Stores.Platforms.SparkPay.DTO
 
         [JsonProperty("order_status_id")]
         public int? OrderStatusId { get; set; }
-        
+
         [JsonProperty("special_instructions")]
         public string SpecialEnstructions { get; set; }
 

@@ -1,12 +1,17 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Utility;
+using Interapptive.Shared.Win32;
+using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.AddressValidation.Enums;
 using ShipWorks.AddressValidation.Predicates;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -14,8 +19,6 @@ using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Data.Utility;
 using ShipWorks.SqlServer.Common.Data;
 using ShipWorks.Stores;
-using log4net;
-using ShipWorks.AddressValidation.Enums;
 
 namespace ShipWorks.AddressValidation
 {
@@ -34,6 +37,13 @@ namespace ShipWorks.AddressValidation
             };
 
         public const string SqlAppLockName = "ValidateAddresses";
+        private const int DefaultBatchSize = 50;
+        private const int MaximumBatchSize = 1024;
+        private const int DefaultConcurrency = 4;
+        private const int MaximumConcurrency = 64;
+        private const string BatchSizeRegistryKey = "batchSize";
+        private const string ValidationConcurrencyRegistryKey = "requests";
+        public const string ValidationConcurrencyBasePath = @"Software\Interapptive\ShipWorks\Options\ValidationConcurrency";
         private static readonly AddressValidator addressValidator = new AddressValidator();
         private static object lockObj = new object();
         private static Task validationThread;
@@ -68,7 +78,7 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Try to validate any orders and shipments that are pending validation
         /// </summary>
-        private static void ValidatePendingOrdersAndShipments()
+        private static async Task ValidatePendingOrdersAndShipments()
         {
             if (SqlSession.Current == null)
             {
@@ -95,19 +105,19 @@ namespace ShipWorks.AddressValidation
                 try
                 {
                     // Validate any pending orders first
-                    ValidateAddresses<OrderEntity>(new OrdersWithPendingValidationStatusPredicate(), orders => orders.Any());
+                    await ValidateAddresses<OrderEntity>(new OrdersWithPendingValidationStatusPredicate(), orders => orders.Any());
 
                     // Validate any errors, but don't continue if any of the orders in the validated batch are still errors
                     // since that would suggest that there is still something wrong with the web service. This gets called after we attempt to validate a batch.
                     // If they are all errors, each address in the batch JUST failed.
-                    ValidateAddresses<OrderEntity>(new OrdersWithErrorValidationStatusPredicate(),
+                    await ValidateAddresses<OrderEntity>(new OrdersWithErrorValidationStatusPredicate(),
                         orders => orders.Any() && orders.Any(x => x.ShipAddressValidationStatus != (int) AddressValidationStatusType.Error));
 
                     // Validate any pending shipments next
-                    ValidatePendingShipmentAddresses();
+                    await ValidatePendingShipmentAddresses();
 
                     // Validate any errors. See above comment about validating order errors...
-                    ValidateErrorShipmentAddresses();
+                    await ValidateErrorShipmentAddresses();
                 }
                 catch (Exception ex)
                 {
@@ -123,67 +133,124 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Validate shipments with a given address validation status
         /// </summary>
-        private static void ValidatePendingShipmentAddresses()
+        private static Task ValidatePendingShipmentAddresses()
         {
             Func<ICollection<ShipmentEntity>, bool> shouldContinue = shipments => shipments.Any();
-            ValidateAddresses(new UnprocessedPendingShipmentsPredicate(), shouldContinue);
+            return ValidateAddresses(new UnprocessedPendingShipmentsPredicate(), shouldContinue);
         }
 
         /// <summary>
         /// Validate shipments with a given address validation status
         /// </summary>
-        private static void ValidateErrorShipmentAddresses()
+        private static Task ValidateErrorShipmentAddresses()
         {
-            // shouldContinue evaluates the shipments after processing them through address validation. 
+            // shouldContinue evaluates the shipments after processing them through address validation.
             // If each order in the batch still has an error (or there are no shipments) this will bail.
             Func<ICollection<ShipmentEntity>, bool> shouldContinue = shipments => shipments.Any() && shipments.Any(x => x.ShipAddressValidationStatus != (int) AddressValidationStatusType.Error);
-            ValidateAddresses(new UnprocessedErrorShipmentsPredicate(), shouldContinue);
+            return ValidateAddresses(new UnprocessedErrorShipmentsPredicate(), shouldContinue);
         }
 
         /// <summary>
         /// Validate orders with a given address validation status
         /// </summary>
-        private static void ValidateAddresses<T>(IPredicateProvider predicate, Func<ICollection<T>, bool> shouldContinue) where T : EntityBase2
+        private static async Task ValidateAddresses<T>(IPredicateProvider predicate, Func<ICollection<T>, bool> shouldContinue) where T : EntityBase2
         {
+            int taskCount = GetConcurrencyCount(ValidationConcurrencyRegistryKey, DefaultConcurrency, MaximumConcurrency);
+
             EntityCollection<T> pendingOrders;
+            Stopwatch stopwatch = new Stopwatch();
 
             // The predicate gets orders in batches at a time (50 at the time of this comment).
             do
             {
+                stopwatch.Restart();
+
                 using (SqlAdapter adapter = new SqlAdapter())
                 {
                     pendingOrders = adapter.GetCollectionFromPredicate<T>(predicate);
                 }
 
-                foreach (T order in pendingOrders)
-                {
-                    if (cancellationToken.IsCancellationRequested)
-                    {
-                        return;
-                    }
+                int itemCount = pendingOrders.Count;
+                log.Info($"Validating {itemCount} items on {taskCount} thread(s)...");
 
-                    ValidateAddressEntities(order);
+                ConcurrentQueue<T> queue = new ConcurrentQueue<T>(pendingOrders);
+
+                await TaskEx.WhenAll(Enumerable.Range(1, taskCount)
+                    .Select(x => TaskEx.Run(() => ValidateAddressesTask(queue), cancellationToken)));
+
+                stopwatch.Stop();
+
+                if (itemCount > 0)
+                {
+                    long timePerItem = stopwatch.ElapsedMilliseconds / itemCount;
+                    log.Info($"Validated {itemCount} items on {taskCount} thread(s) in {stopwatch.ElapsedMilliseconds} ms ({timePerItem} ms/item)");
+                }
+            } while (shouldContinue(pendingOrders));
+        }
+
+        /// <summary>
+        /// Get the batch size defined in the registry
+        /// </summary>
+        public static int GetBatchSize()
+        {
+            return GetConcurrencyCount(BatchSizeRegistryKey, DefaultBatchSize, MaximumBatchSize);
+        }
+
+        /// <summary>
+        /// Get how many addresses should be validated concurrently
+        /// </summary>
+        private static int GetConcurrencyCount(string key, int defaultValue, int maxValue)
+        {
+            RegistryHelper registry = new RegistryHelper(ValidationConcurrencyBasePath);
+            int taskCount = defaultValue;
+
+            if (!int.TryParse(registry.GetValue(key, defaultValue.ToString()), out taskCount))
+            {
+                return defaultValue;
+            }
+
+            if (taskCount < 1 || taskCount > maxValue)
+            {
+                return defaultValue;
+            }
+
+            return taskCount;
+        }
+
+        /// <summary>
+        /// Validate addresses from the queue
+        /// </summary>
+        private static void ValidateAddressesTask<T>(ConcurrentQueue<T> queue) where T : EntityBase2
+        {
+            T entity = null;
+
+            while (queue.TryDequeue(out entity))
+            {
+                if (cancellationToken.IsCancellationRequested)
+                {
+                    return;
                 }
 
-            } while (shouldContinue(pendingOrders));
+                ValidateEntityAddress(entity);
+            }
         }
 
         /// <summary>
         /// Validates the specified shipment identifier.
         /// </summary>
-        private static void ValidateAddressEntities(IEntity2 entityToValidate)
+        private static void ValidateEntityAddress(IEntity2 entityToValidate)
         {
             try
             {
                 AddressAdapter originalEntityAddress = new AddressAdapter();
                 AddressAdapter.Copy(entityToValidate, "Ship", originalEntityAddress);
 
-                if (entityToValidate != null && validatableStatuses.Contains((int)entityToValidate.Fields["ShipAddressValidationStatus"].CurrentValue))
+                if (entityToValidate != null && validatableStatuses.Contains((int) entityToValidate.Fields["ShipAddressValidationStatus"].CurrentValue))
                 {
-                    StoreEntity store = StoreManager.GetRelatedStore((long)entityToValidate.Fields["OrderID"].CurrentValue);
-                    bool shouldAutomaticallyAdjustAddress = store.AddressValidationSetting != (int)AddressValidationStoreSettingType.ValidateAndNotify;
+                    StoreEntity store = StoreManager.GetRelatedStore((long) entityToValidate.Fields["OrderID"].CurrentValue);
+                    bool shouldAutomaticallyAdjustAddress = store.AddressValidationSetting != (int) AddressValidationStoreSettingType.ValidateAndNotify;
 
-                    addressValidator.Validate(entityToValidate, "Ship", shouldAutomaticallyAdjustAddress,
+                    Task task = addressValidator.ValidateAsync(entityToValidate, "Ship", shouldAutomaticallyAdjustAddress,
                         (originalAddress, suggestedAddresses) =>
                         {
                             using (SqlAdapter sqlAdapter = new SqlAdapter(true))
@@ -194,6 +261,7 @@ namespace ShipWorks.AddressValidation
                                 sqlAdapter.Commit();
                             }
                         });
+                    task.Wait();
                 }
             }
             catch (ObjectDeletedException)
@@ -209,7 +277,7 @@ namespace ShipWorks.AddressValidation
                 // Don't worry about this...  The next pass through will grab this order again
             }
         }
-        
+
         /// <summary>
         /// A factory method to instantiate the appropriate instance of ValidatedShipAddressBase.
         /// </summary>
