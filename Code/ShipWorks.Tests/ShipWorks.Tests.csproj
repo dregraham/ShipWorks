@@ -477,6 +477,7 @@
     <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaScanFormGatewayTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaShipmentProcessingSynchronizerTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\Express1EndiciaShipmentProcessingSynchronizerTest.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaShipmentTypeTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\PostalPackageAdapterTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\RegistrationPromotionFactoryTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Express1\Express1UspsShipmentTypeTest.cs" />

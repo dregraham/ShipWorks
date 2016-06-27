@@ -110,6 +110,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         }
 
         /// <summary>
+        /// Is the given shipment type compatible with the current shipment type
+        /// </summary>
+        protected override bool IsCompatibleShipmentType(ShipmentTypeCode shipmentType)
+        {
+            return base.IsCompatibleShipmentType(shipmentType) ||
+                shipmentType == ShipmentTypeCode.Express1Usps;
+        }
+
+        /// <summary>
         /// Perform the service update
         /// </summary>
         protected override void UpdateServiceFromRate(RateResult rate)
