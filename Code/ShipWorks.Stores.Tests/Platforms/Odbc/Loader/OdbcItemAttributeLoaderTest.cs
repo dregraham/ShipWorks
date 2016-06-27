@@ -34,8 +34,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
                 mapEntry.Setup(e => e.ExternalField).Returns(externalField.Object);
                 mapEntry.Setup(e => e.Index).Returns(5);
 
-                map.Object.AddEntry(mapEntry.Object);
-                map.Setup(m => m.FindEntriesBy(It.IsAny<EntityField2>(), false)).
+                map.Setup(m => m.FindEntriesBy(It.IsAny<EntityField2>())).
                     Returns(new List<IOdbcFieldMapEntry> {mapEntry.Object});
 
                 OdbcItemAttributeLoader testObject = new OdbcItemAttributeLoader();

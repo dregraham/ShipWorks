@@ -31,8 +31,16 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         public void HasValues_ReturnsTrue_WhenHasValues()
         {
             var testObject = new OdbcRecord(string.Empty);
-            testObject.AddField("blah",null);
+            testObject.AddField("blah", "value");
             Assert.True(testObject.HasValues);
+        }
+
+        [Fact]
+        public void HasValues_ReturnsFalse_WhenOnlyHasNullValues()
+        {
+            var testObject = new OdbcRecord(string.Empty);
+            testObject.AddField("blah", null);
+            Assert.False(testObject.HasValues);
         }
 
         [Fact]

@@ -2,8 +2,8 @@
 using Interapptive.Shared.Utility;
 using Moq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Stores.Platforms.Odbc.Loaders;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
@@ -33,8 +33,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
             SetOdbcFieldMapEntry("display", "value");
 
             clonedMap.SetupGet(m => m.Entries)
-                .Returns(() => new List<IOdbcFieldMapEntry> {odbcFieldMapEntry.Object});
-            clonedMap.Setup(m => m.FindEntriesBy(It.IsAny<EntityType[]>(), It.IsAny<int>(), false))
                 .Returns(() => new List<IOdbcFieldMapEntry> {odbcFieldMapEntry.Object});
             clonedMap.Setup(m => m.FindEntriesBy(It.IsAny<EntityField2>(), false))
                 .Returns(() => new List<IOdbcFieldMapEntry> {odbcFieldMapEntry.Object});
@@ -84,15 +82,29 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
         [Fact]
         public void Load_OrderItemCountOfOrderMatchesNumberOfOdbcRecords()
         {
-            testObject.Load(originalMap.Object, order, new List<OdbcRecord> {new OdbcRecord(string.Empty), new OdbcRecord(string.Empty)});
+            SetOrderItemCopyToEntity(clonedMap, 1, 0);
+
+            testObject.Load(originalMap.Object, order, new [] {new OdbcRecord(string.Empty), new OdbcRecord(string.Empty)});
 
             Assert.Equal(2, order.OrderItems.Count);
         }
 
         [Fact]
+        public void Load_OrderItemCountIs0_WhenClonedMapAppliesDefaultValues()
+        {
+            SetOrderItemCopyToEntity(clonedMap, 0, 0, string.Empty);
+
+            testObject.Load(originalMap.Object, order, new [] { new OdbcRecord(string.Empty) });
+
+            Assert.Empty(order.OrderItems);
+        }
+
+        [Fact]
         public void Load_CopyToEntityCalledForEachOdbcRecord()
         {
-            testObject.Load(originalMap.Object, order, new List<OdbcRecord> {new OdbcRecord(string.Empty), new OdbcRecord(string.Empty)});
+            SetOrderItemCopyToEntity(clonedMap, 1, 0);
+
+            testObject.Load(originalMap.Object, order, new [] {new OdbcRecord(string.Empty), new OdbcRecord(string.Empty)});
 
             clonedMap.Verify(m => m.CopyToEntity(order.OrderItems[0], 0), Times.Once);
             clonedMap.Verify(m => m.CopyToEntity(order.OrderItems[1], 0), Times.Once);
@@ -103,7 +115,9 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
         [Fact]
         public void Load_AttributeLoaderLoadCalledForEachOdbcRecord()
         {
-            testObject.Load(originalMap.Object, order, new List<OdbcRecord> {new OdbcRecord(string.Empty), new OdbcRecord(string.Empty)});
+            SetOrderItemCopyToEntity(clonedMap, 1, 0);
+
+            testObject.Load(originalMap.Object, order, new [] {new OdbcRecord(string.Empty), new OdbcRecord(string.Empty)});
 
             attributeLoader.Verify(m => m.Load(clonedMap.Object, order.OrderItems[0], 0), Times.Once);
             attributeLoader.Verify(m => m.Load(clonedMap.Object, order.OrderItems[1], 0), Times.Once);
@@ -114,10 +128,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
         [Fact]
         public void Load_OrderItemNotAdded_WhenNoValuesRetrieved()
         {
-            clonedMap.Setup(m => m.FindEntriesBy(It.IsAny<EntityType[]>(), It.IsAny<int>(), false))
-                .Returns(new List<IOdbcFieldMapEntry>());
-
-            testObject.Load(originalMap.Object, order, new List<OdbcRecord> {new OdbcRecord(string.Empty)});
+            testObject.Load(originalMap.Object, order, new [] {new OdbcRecord(string.Empty)});
 
             Assert.Empty(order.OrderItems);
         }
@@ -125,7 +136,9 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
         [Fact]
         public void Load_OneItemCreated_WhenMaxIndexIs0()
         {
-            testObject.Load(originalMap.Object, order, new List<OdbcRecord> {new OdbcRecord(string.Empty)});
+            SetOrderItemCopyToEntity(clonedMap, 1, 0);
+
+            testObject.Load(originalMap.Object, order, new [] {new OdbcRecord(string.Empty)});
 
             Assert.Equal(1, order.OrderItems.Count);
         }
@@ -134,8 +147,10 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
         public void Load_TwoItemsCreated_WhenMaxIndexIs1()
         {
             SetOdbcFieldMapEntry("name", "value", 1);
-
-            testObject.Load(originalMap.Object, order, new List<OdbcRecord> {new OdbcRecord(string.Empty)});
+            SetOrderItemCopyToEntity(clonedMap, 1, 0);
+            SetOrderItemCopyToEntity(clonedMap, 1, 1);
+            
+            testObject.Load(originalMap.Object, order, new [] {new OdbcRecord(string.Empty)});
 
             Assert.Equal(2, order.OrderItems.Count);
         }
@@ -145,7 +160,10 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
         {
             SetOdbcFieldMapEntry("name", "value", 1);
 
-            testObject.Load(originalMap.Object, order, new List<OdbcRecord> {new OdbcRecord(string.Empty)});
+            SetOrderItemCopyToEntity(clonedMap, 1, 0);
+            SetOrderItemCopyToEntity(clonedMap, 1, 1);
+            
+            testObject.Load(originalMap.Object, order, new [] {new OdbcRecord(string.Empty)});
 
             attributeLoader.Verify(l => l.Load(clonedMap.Object, order.OrderItems[0], 0), Times.Once);
             attributeLoader.Verify(l => l.Load(clonedMap.Object, order.OrderItems[1], 1), Times.Once);
@@ -160,7 +178,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
         {
             SetOdbcFieldMapEntry(EnumHelper.GetDescription(OdbcOrderFieldDescription.ItemUnitCost), 42M);
 
-            testObject.Load(originalMap.Object, order, new List<OdbcRecord> {new OdbcRecord(string.Empty)});
+            testObject.Load(originalMap.Object, order, new [] {new OdbcRecord(string.Empty)});
 
             Assert.Equal(42M, order.OrderItems[0].UnitCost);
         }
@@ -170,9 +188,9 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
         public void Load_UnitCostCalculatedCorrectly_WhenUnitCostNotInMap_AndTotalCostInMap_AndItemQuantityGreaterThanZero()
         {
             SetOdbcFieldMapEntry(EnumHelper.GetDescription(OdbcOrderFieldDescription.ItemTotalCost), 42M);
-            SetOrderItemQuantity(clonedMap, 2D, 0);
+            SetOrderItemCopyToEntity(clonedMap, 2D, 0);
             
-            testObject.Load(originalMap.Object, order, new List<OdbcRecord> {new OdbcRecord(string.Empty)});
+            testObject.Load(originalMap.Object, order, new [] {new OdbcRecord(string.Empty)});
 
             Assert.Equal(21M, order.OrderItems[0].UnitCost);
         }
@@ -181,9 +199,9 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
         public void Load_UnitCostZero_WhenUnitCostNotInMap_AndTotalCostInMap_AndItemQuantityZero()
         {
             SetOdbcFieldMapEntry(EnumHelper.GetDescription(OdbcOrderFieldDescription.ItemTotalCost), 42M);
-            SetOrderItemQuantity(clonedMap, 0D, 0);
+            SetOrderItemCopyToEntity(clonedMap, 0D, 0);
 
-            testObject.Load(originalMap.Object, order, new List<OdbcRecord> {new OdbcRecord(string.Empty)});
+            testObject.Load(originalMap.Object, order, new [] {new OdbcRecord(string.Empty)});
 
             Assert.Equal(0M, order.OrderItems[0].UnitCost);
         }
@@ -191,9 +209,9 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
         [Fact]
         public void Load_UnitCostZero_WhenUnitCostAndTotalCostNotInMap()
         {
-            SetOrderItemQuantity(clonedMap, 5D, 0);
+            SetOrderItemCopyToEntity(clonedMap, 5D, 0);
 
-            testObject.Load(originalMap.Object, order, new List<OdbcRecord> {new OdbcRecord(string.Empty)});
+            testObject.Load(originalMap.Object, order, new [] {new OdbcRecord(string.Empty)});
 
             Assert.Equal(0M, order.OrderItems[0].UnitCost);
         }
@@ -205,7 +223,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
         {
             SetOdbcFieldMapEntry(EnumHelper.GetDescription(OdbcOrderFieldDescription.ItemUnitPrice), 42M);
 
-            testObject.Load(originalMap.Object, order, new List<OdbcRecord> { new OdbcRecord(string.Empty) });
+            testObject.Load(originalMap.Object, order, new [] { new OdbcRecord(string.Empty) });
 
             Assert.Equal(42M, order.OrderItems[0].UnitPrice);
         }
@@ -214,9 +232,9 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
         public void Load_UnitPriceCalculatedCorrectly_WhenUnitPriceNotInMap_AndTotalPriceInMap_AndItemQuantityGreaterThanZero()
         {
             SetOdbcFieldMapEntry(EnumHelper.GetDescription(OdbcOrderFieldDescription.ItemTotalPrice), 42M);
-            SetOrderItemQuantity(clonedMap, 2D, 0);
+            SetOrderItemCopyToEntity(clonedMap, 2D, 0);
 
-            testObject.Load(originalMap.Object, order, new List<OdbcRecord> { new OdbcRecord(string.Empty) });
+            testObject.Load(originalMap.Object, order, new [] { new OdbcRecord(string.Empty) });
 
             Assert.Equal(21M, order.OrderItems[0].UnitPrice);
         }
@@ -225,9 +243,9 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
         public void Load_UnitPriceZero_WhenUnitPriceNotInMap_AndTotalPriceInMap_AndItemQuantityZero()
         {
             SetOdbcFieldMapEntry(EnumHelper.GetDescription(OdbcOrderFieldDescription.ItemTotalPrice), 42M);
-            SetOrderItemQuantity(clonedMap, 0D, 0);
+            SetOrderItemCopyToEntity(clonedMap, 0D, 0);
 
-            testObject.Load(originalMap.Object, order, new List<OdbcRecord> { new OdbcRecord(string.Empty) });
+            testObject.Load(originalMap.Object, order, new [] { new OdbcRecord(string.Empty) });
 
             Assert.Equal(0M, order.OrderItems[0].UnitPrice);
         }
@@ -235,9 +253,9 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
         [Fact]
         public void Load_UnitPriceZero_WhenUnitPriceAndTotalPriceNotInMap()
         {
-            SetOrderItemQuantity(clonedMap, 5D, 0);
+            SetOrderItemCopyToEntity(clonedMap, 5D, 0);
 
-            testObject.Load(originalMap.Object, order, new List<OdbcRecord> { new OdbcRecord(string.Empty) });
+            testObject.Load(originalMap.Object, order, new [] { new OdbcRecord(string.Empty) });
 
             Assert.Equal(0M, order.OrderItems[0].UnitPrice);
         }
@@ -259,7 +277,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
         public void Load_WeightCalculatedCorrectly_WhenUnitWeightNotInMap_AndTotalWeightInMap_AndItemQuantityGreaterThanZero()
         {
             SetOdbcFieldMapEntry(EnumHelper.GetDescription(OdbcOrderFieldDescription.ItemTotalWeight), 42);
-            SetOrderItemQuantity(clonedMap, 2D, 0);
+            SetOrderItemCopyToEntity(clonedMap, 2D, 0);
 
             testObject.Load(originalMap.Object, order, new List<OdbcRecord> { new OdbcRecord(string.Empty) });
 
@@ -270,7 +288,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
         public void Load_WeightZero_WhenUnitWeightNotInMap_AndTotalWeightInMap_AndItemQuantityZero()
         {
             SetOdbcFieldMapEntry(EnumHelper.GetDescription(OdbcOrderFieldDescription.ItemTotalWeight), 42M);
-            SetOrderItemQuantity(clonedMap, 0D, 0);
+            SetOrderItemCopyToEntity(clonedMap, 0D, 0);
 
             testObject.Load(originalMap.Object, order, new List<OdbcRecord> { new OdbcRecord(string.Empty) });
 
@@ -280,7 +298,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
         [Fact]
         public void Load_UnitWeightZero_WhenUnitWeightAndTotalWeightNotInMap()
         {
-            SetOrderItemQuantity(clonedMap, 5D, 0);
+            SetOrderItemCopyToEntity(clonedMap, 5D, 0);
 
             testObject.Load(originalMap.Object, order, new List<OdbcRecord> { new OdbcRecord(string.Empty) });
 
@@ -289,15 +307,22 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
         #endregion "Unit Weight Tests"
 
         #region "Helper Methods"
+
         /// <summary>
         /// Sets the order item quantity - Sets up CopyToEntity
         /// </summary>
-        private static void SetOrderItemQuantity(Mock<IOdbcFieldMap> clonedMap, double quantity, int index)
+        private static void SetOrderItemCopyToEntity(Mock<IOdbcFieldMap> clonedMap,
+            double quantity,
+            int index,
+            string name = "itemName")
         {
-#pragma warning disable S3215 // "interface" instances should not be cast to concrete types
-            clonedMap.Setup(m => m.CopyToEntity(It.IsAny<OrderItemEntity>(), index))
-                .Callback<IEntity2, int>((item, itemIndex) => ((OrderItemEntity)item).Quantity = quantity);
-#pragma warning restore S3215 // "interface" instances should not be cast to concrete types
+
+            clonedMap.Setup(c => c.CopyToEntity(It.IsAny<IEntity2>(), index))
+                .Callback<IEntity2, int>((entity, i) =>
+                {
+                    entity.SetNewFieldValue(OrderItemFields.Quantity.Name, quantity);
+                    entity.SetNewFieldValue(OrderItemFields.Name.Name, name);
+                });
         }
 
         private void SetOdbcFieldMapEntry(string displayName, object value, int index = 0)

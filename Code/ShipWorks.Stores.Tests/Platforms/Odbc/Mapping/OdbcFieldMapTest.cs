@@ -3,13 +3,11 @@ using Interapptive.Shared.Extensions;
 using log4net;
 using Moq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Xunit;
@@ -397,92 +395,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
 
             Assert.Empty(returnedEntries);
         }
-
-        [Fact]
-        public void FindEntriesBy_ReturnsEmptyCollection_WhenDifferentIndex()
-        {
-            OdbcFieldMap testObject = mock.Create<OdbcFieldMap>();
-
-            var entryWithWrongIndex = mock.Mock<IOdbcFieldMapEntry>();
-            entryWithWrongIndex.SetupGet(e => e.ShipWorksField)
-                .Returns(GetMockedShipWorksField(mock, OrderFields.BillFirstName, "blah").Object);
-            entryWithWrongIndex.SetupGet(e => e.Index).Returns(1);
-            testObject.AddEntry(entryWithWrongIndex.Object);
-
-            IEnumerable<IOdbcFieldMapEntry> odbcFieldMapEntries =
-                testObject.FindEntriesBy(new[] {EntityType.OrderEntity}, 5, false);
-            Assert.Empty(odbcFieldMapEntries);
-        }
-
-        [Fact]
-        public void FindEntriesBy_ReturnsEmptyCollection_WhenDifferentEntity()
-        {
-            OdbcFieldMap testObject = mock.Create<OdbcFieldMap>();
-
-            var entryWithWrongEntity = mock.Mock<IOdbcFieldMapEntry>();
-            entryWithWrongEntity.SetupGet(e => e.ShipWorksField)
-                .Returns(GetMockedShipWorksField(mock, OrderItemFields.Name, "blah").Object);
-            entryWithWrongEntity.SetupGet(e => e.Index).Returns(5);
-            testObject.AddEntry(entryWithWrongEntity.Object);
-
-            IEnumerable<IOdbcFieldMapEntry> odbcFieldMapEntries =
-                testObject.FindEntriesBy(new[] {EntityType.OrderEntity}, 5, false);
-            Assert.Empty(odbcFieldMapEntries);
-        }
-
-
-        [Fact]
-        public void FindEntriesBy_ReturnsEmptyCollection_WhenEntityHasNullValue()
-        {
-            OdbcFieldMap testObject = mock.Create<OdbcFieldMap>();
-
-            // Field that should be returned
-            var entryWithNullSwValue = mock.Mock<IOdbcFieldMapEntry>();
-            entryWithNullSwValue.SetupGet(e => e.ShipWorksField)
-                .Returns(GetMockedShipWorksField(mock, OrderFields.BillFirstName, null).Object);
-            entryWithNullSwValue.SetupGet(e => e.Index).Returns(5);
-            testObject.AddEntry(entryWithNullSwValue.Object);
-
-            IEnumerable<IOdbcFieldMapEntry> odbcFieldMapEntries =
-                testObject.FindEntriesBy(new[] {EntityType.OrderEntity}, 5, false);
-            Assert.Empty(odbcFieldMapEntries);
-        }
-
-        [Fact]
-        public void FindEntriesBy_ReturnsMatchingEntry_WhenEntityHasNullValue_AndIncludeWhenShipworksFieldIsNullIsTrue()
-        {
-            OdbcFieldMap testObject = mock.Create<OdbcFieldMap>();
-
-            // Field that should be returned
-            var entryToReturn = mock.Mock<IOdbcFieldMapEntry>();
-            entryToReturn.SetupGet(e => e.ShipWorksField)
-                .Returns(GetMockedShipWorksField(mock, OrderFields.BillFirstName, null).Object);
-            entryToReturn.SetupGet(e => e.Index).Returns(5);
-            testObject.AddEntry(entryToReturn.Object);
-
-            IEnumerable<IOdbcFieldMapEntry> odbcFieldMapEntries =
-                testObject.FindEntriesBy(new[] {EntityType.OrderEntity}, 5, true);
-
-            Assert.Equal(entryToReturn.Object, odbcFieldMapEntries.Single());
-        }
-
-        [Fact]
-        public void FindEntriesBy_ReturnsMatchingEntry_WhenSelectedByEntity()
-        {
-            OdbcFieldMap testObject = mock.Create<OdbcFieldMap>();
-
-            // Field that should be returned
-            var entryToReturn = mock.Mock<IOdbcFieldMapEntry>();
-            entryToReturn.SetupGet(e => e.ShipWorksField)
-                .Returns(GetMockedShipWorksField(mock, OrderFields.BillFirstName, "blah").Object);
-            entryToReturn.SetupGet(e => e.Index).Returns(5);
-            testObject.AddEntry(entryToReturn.Object);
-
-            IEnumerable<IOdbcFieldMapEntry> odbcFieldMapEntries =
-                testObject.FindEntriesBy(new[] {EntityType.OrderEntity}, 5, false);
-            Assert.Equal(entryToReturn.Object, odbcFieldMapEntries.Single());
-        }
-
+        
         [Fact]
         public void Clone_SavesToASteam()
         {

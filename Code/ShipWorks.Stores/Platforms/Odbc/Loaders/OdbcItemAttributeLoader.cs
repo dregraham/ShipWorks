@@ -20,7 +20,9 @@ namespace ShipWorks.Stores.Platforms.Odbc.Loaders
             MethodConditions.EnsureArgumentIsNotNull(item);
 
             IEnumerable<IOdbcFieldMapEntry> itemEntries =
-                map.FindEntriesBy(OrderItemAttributeFields.Name, false).Where(e => e.Index == index);
+                map.FindEntriesBy(OrderItemAttributeFields.Name)
+                    .Where(e => e.Index == index)
+                    .Where(e => !string.IsNullOrWhiteSpace((string) e.ShipWorksField.Value));
 
             foreach (IOdbcFieldMapEntry entry in itemEntries)
             {

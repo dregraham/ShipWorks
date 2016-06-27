@@ -132,7 +132,8 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
                 return typeDefaultValues[field.DataType];
             }
 
-            // If the value is null (and the type wasn't mapped) or the value is already the expected type, return it.
+            // If the value is null (and there wasn't a default value for the type) 
+            // or the value is already the expected type, return it.
             if (value == null || value.GetType() == field.DataType)
             {
                 return value;

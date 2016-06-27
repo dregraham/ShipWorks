@@ -3,6 +3,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Loaders
 {
@@ -21,7 +22,9 @@ namespace ShipWorks.Stores.Platforms.Odbc.Loaders
 
             if (order.IsNew)
             {
-                IEnumerable<IOdbcFieldMapEntry> paymentEntries = map.FindEntriesBy(OrderPaymentDetailFields.Value, false);
+                IEnumerable<IOdbcFieldMapEntry> paymentEntries = map.FindEntriesBy(OrderPaymentDetailFields.Value, false)
+                    .Where(e => !string.IsNullOrWhiteSpace((string) e.ShipWorksField.Value));
+
                 foreach (IOdbcFieldMapEntry entry in paymentEntries)
                 {
                     AddPaymentDetailToOrder(order, entry);
