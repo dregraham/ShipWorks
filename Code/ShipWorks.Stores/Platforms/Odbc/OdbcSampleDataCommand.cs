@@ -28,14 +28,15 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// </summary>
         public DataTable Execute(IOdbcDataSource dataSource, string query)
         {
-            try {
+            try
+            {
                 using (DbConnection connection = dataSource.CreateConnection())
                 {
                     connection.Open();
 
                     using (IShipWorksOdbcCommand cmd = dbProviderFactory.CreateOdbcCommand(query, connection))
                     {
-                        using (DbDataReader reader = cmd.ExecuteReader())
+                        using (DbDataReader reader = cmd.ExecuteReader(CommandBehavior.KeyInfo))
                         {
                             // Get an empty table that matches the schema of the query
                             DataTable resultTable = GetEmptyResultTable(reader);
