@@ -6,7 +6,7 @@
         xmlns:odbc="clr-namespace:ShipWorks.Stores.UI.Platforms.Odbc"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance odbc:OdbcCustomQueryDlgViewModel}"
-        Height="450" Width="450"
+        Height="436" Width="450"
         FontFamily="Tahoma" FontSize="11px"
         Background="{x:Static SystemColors.ControlBrush}"
         WindowStartupLocation="CenterOwner">

@@ -14,14 +14,13 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
     /// <summary>
     /// Wizard page for choosing an import map to load or to start creating a new one
     /// </summary>
-    public partial class OdbcImportFieldMappingPage : AddStoreWizardPage, IOdbcWizardPage, IDisposable, IWin32Window
+    public partial class OdbcImportFieldMappingPage : AddStoreWizardPage, IOdbcWizardPage, IWin32Window
     {
         private readonly IMessageHelper messageHelper;
         private readonly Func<IOdbcDataSource> dataSourceFactory;
         private readonly Func<IOdbcImportFieldMappingControlViewModel> viewModelFactory;
         private IOdbcImportFieldMappingControlViewModel viewModel;
         private OdbcStoreEntity store;
-        private readonly ILifetimeScope lifetimeScope;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcImportFieldMappingPage"/> class.

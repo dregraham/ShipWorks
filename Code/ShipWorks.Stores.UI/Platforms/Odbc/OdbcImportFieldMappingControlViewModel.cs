@@ -31,6 +31,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         private readonly IOdbcSchema schema;
         private readonly Func<Type, ILog> logFactory;
         private readonly IMessageHelper messageHelper;
+        private readonly IOdbcCustomQueryDlgFactory customQueryDlgFactory;
         private IOdbcColumnSource selectedTable;
         private ObservableCollection<OdbcColumn> columns;
         private OdbcFieldMapDisplay selectedFieldMap;
@@ -47,16 +48,18 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// Initializes a new instance of the <see cref="OdbcImportFieldMappingControlViewModel"/> class.
         /// </summary>
         public OdbcImportFieldMappingControlViewModel(IOdbcFieldMapFactory fieldMapFactory,
-            IOdbcSchema schema, Func<Type, ILog> logFactory, IMessageHelper messageHelper)
+            IOdbcSchema schema, Func<Type, ILog> logFactory, IMessageHelper messageHelper,
+            IOdbcCustomQueryDlgFactory customQueryDlgFactory)
         {
             this.fieldMapFactory = fieldMapFactory;
             this.schema = schema;
             this.logFactory = logFactory;
             this.messageHelper = messageHelper;
+            this.customQueryDlgFactory = customQueryDlgFactory;
 
             SaveMapCommand = new RelayCommand(SaveMapToDisk,() => selectedTable != null);
             TableChangedCommand = new RelayCommand(TableChanged);
-            OpenCustomQueryDlgCommand = new RelayCommand(OpenCustomQueryDlg);
+            OpenCustomQueryDlgCommand = new RelayCommand<OdbcImportFieldMappingControl>(OpenCustomQueryDlg);
 
             Order = new OdbcFieldMapDisplay("Order", fieldMapFactory.CreateOrderFieldMap());
             Address = new OdbcFieldMapDisplay("Address", fieldMapFactory.CreateAddressFieldMap());
@@ -491,9 +494,12 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             }
         }
 
-        private void OpenCustomQueryDlg()
+        /// <summary>
+        /// Opens the custom query dialog.
+        /// </summary>
+        private void OpenCustomQueryDlg(OdbcImportFieldMappingControl control)
         {
-            throw new NotImplementedException();
+            customQueryDlgFactory.ShowCustomQueryDlg(control);
         }
     }
 }
