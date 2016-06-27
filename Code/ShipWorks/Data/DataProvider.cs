@@ -5,6 +5,7 @@ using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore.ExecutionMode;
 using ShipWorks.Data.Caching;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
@@ -197,6 +198,14 @@ namespace ShipWorks.Data
         public static EntityBase2 GetEntity(long entityID, bool fetchIfMissing = true)
         {
             return entityCache.GetEntity(entityID, fetchIfMissing);
+        }
+
+        /// <summary>
+        /// Gets the entity with the given ID from cache.  If it does not exist, it is loaded.
+        /// </summary>
+        public static EntityBase2 GetEntity(long entityID, SqlAdapter adapter, bool fetchIfMissing = true)
+        {
+            return entityCache.GetEntity(entityID, fetchIfMissing, adapter);
         }
 
         /// <summary>
