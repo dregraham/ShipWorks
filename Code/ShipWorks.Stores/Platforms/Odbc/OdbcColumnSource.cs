@@ -94,7 +94,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
                     IShipWorksOdbcCommand cmd = dbProviderFactory.CreateOdbcCommand(query, connection);
                     Columns = new List<OdbcColumn>();
 
-                    using (DbDataReader reader = cmd.ExecuteReader())
+                    using (DbDataReader reader = cmd.ExecuteReader(CommandBehavior.SchemaOnly))
                     {
                         DataTable table = reader.GetSchemaTable();
 
@@ -102,6 +102,8 @@ namespace ShipWorks.Stores.Platforms.Odbc
                         {
                             Columns = Columns.Concat(new[] { new OdbcColumn(row["BaseColumnName"].ToString()) });
                         }
+
+                        cmd.Cancel();
                     }
                 }
                 catch (DbException ex)
