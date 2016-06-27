@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Forms;
 
-namespace ShipWorks.ApplicationCore.Licensing
+namespace Interapptive.Shared.UI
 {
     /// <summary>
     /// Interface for displaying WPF Dialogs

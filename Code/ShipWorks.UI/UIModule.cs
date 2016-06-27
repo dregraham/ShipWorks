@@ -1,5 +1,6 @@
 using System;
 using Autofac;
+using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Core.ApplicationCode;
 using ShipWorks.Editions;

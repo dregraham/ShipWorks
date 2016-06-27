@@ -5,6 +5,7 @@ using ShipWorks.Stores;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using Interapptive.Shared.UI;
 
 namespace ShipWorks.ApplicationCore.Licensing.LicenseEnforcement
 {
