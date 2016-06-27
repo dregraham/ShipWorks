@@ -11,11 +11,11 @@ using Xunit;
 
 namespace ShipWorks.Stores.Tests.Platforms.Odbc
 {
-    public class OdbcTableTest : IDisposable
+    public class OdbcColumnSourceTest : IDisposable
     {
         private readonly AutoMock mock;
 
-        public OdbcTableTest()
+        public OdbcColumnSourceTest()
         {
             mock = AutoMock.GetLoose();
         }
@@ -23,7 +23,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         [Fact]
         public void Ctor_SetsName()
         {
-            OdbcTable testObject = mock.Create<OdbcTable>(new TypedParameter(typeof(string), "SomeTableName"));
+            OdbcColumnSource testObject = mock.Create<OdbcColumnSource>(new TypedParameter(typeof(string), "SomeTableName"));
 
             Assert.Equal("SomeTableName", testObject.Name);
         }
@@ -46,7 +46,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             Mock<IOdbcSchema> schema = mock.Mock<IOdbcSchema>();
             schema.Object.Load(dataSource.Object);
 
-            OdbcTable testObject = mock.Create<OdbcTable>(new TypedParameter(typeof(string), "SomeTableName"));
+            OdbcColumnSource testObject = mock.Create<OdbcColumnSource>(new TypedParameter(typeof(string), "SomeTableName"));
             testObject.Load(dataSource.Object, log.Object);
 
             dataSource.Verify(d => d.CreateConnection());
@@ -71,7 +71,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             dataSource.Setup(d => d.CreateConnection()).Returns(conn.Object);
             dataSource.SetupGet(d => d.Name).Returns("shipworksodbc");
 
-            OdbcTable testObject = mock.Create<OdbcTable>(new TypedParameter(typeof(string), "SomeTableName"));
+            OdbcColumnSource testObject = mock.Create<OdbcColumnSource>(new TypedParameter(typeof(string), "SomeTableName"));
 
             ShipWorksOdbcException thrownException = Assert.Throws<ShipWorksOdbcException>(() => testObject.Load(dataSource.Object, log.Object));
             Assert.Equal("An error occurred while attempting to open a connection to shipworksodbc.", thrownException.Message);
@@ -96,7 +96,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             dataSource.Setup(d => d.CreateConnection()).Returns(conn.Object);
             dataSource.SetupGet(d => d.Name).Returns("shipworksodbc");
 
-            OdbcTable testObject = mock.Create<OdbcTable>(new TypedParameter(typeof(string), "SomeTableName"));
+            OdbcColumnSource testObject = mock.Create<OdbcColumnSource>(new TypedParameter(typeof(string), "SomeTableName"));
 
             ShipWorksOdbcException thrownException = Assert.Throws<ShipWorksOdbcException>(() => testObject.Load(dataSource.Object, log.Object));
             Assert.Equal("An error occurred while attempting to open a connection to shipworksodbc.", thrownException.Message);
@@ -116,7 +116,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             dataSource.SetupGet(d => d.Name).Returns("SomeName");
             dataSource.Setup(d => d.CreateConnection()).Returns(connection.Object);
 
-            OdbcTable table = new OdbcTable("Orders");
+            OdbcColumnSource table = new OdbcColumnSource("Orders");
 
             Assert.Throws<ShipWorksOdbcException>(() => table.Load(dataSource.Object, log.Object));
 
@@ -135,7 +135,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             dataSource.SetupGet(d => d.Name).Returns("SomeName");
             dataSource.Setup(d => d.CreateConnection()).Returns(connection.Object);
 
-            OdbcTable table = new OdbcTable("Orders");
+            OdbcColumnSource table = new OdbcColumnSource("Orders");
 
             Assert.Throws<ShipWorksOdbcException>(() => table.Load(dataSource.Object, log.Object));
 
@@ -161,7 +161,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             dataSource.SetupGet(d => d.Name).Returns("SomeName");
             dataSource.Setup(d => d.CreateConnection()).Returns(connection.Object);
 
-            OdbcTable table = new OdbcTable("Orders");
+            OdbcColumnSource table = new OdbcColumnSource("Orders");
 
             table.Load(dataSource.Object, log.Object);
             dataTable.Dispose();
@@ -195,7 +195,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             dataSource.SetupGet(d => d.Name).Returns("SomeName");
             dataSource.Setup(d => d.CreateConnection()).Returns(connection.Object);
 
-            OdbcTable table = new OdbcTable("Orders");
+            OdbcColumnSource table = new OdbcColumnSource("Orders");
 
             table.Load(dataSource.Object, log.Object);
             dataTable.Dispose();
@@ -221,7 +221,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             dataSource.SetupGet(d => d.Name).Returns("SomeName");
             dataSource.Setup(d => d.CreateConnection()).Returns(connection.Object);
 
-            OdbcTable table = new OdbcTable("Orders");
+            OdbcColumnSource table = new OdbcColumnSource("Orders");
 
             table.Load(dataSource.Object, log.Object);
 

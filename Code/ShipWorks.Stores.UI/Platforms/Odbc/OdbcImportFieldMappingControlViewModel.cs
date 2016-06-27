@@ -112,7 +112,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// The external odbc tables.
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public IEnumerable<OdbcTable> Tables { get; set; }
+        public IEnumerable<OdbcColumnSource> Tables { get; set; }
 
         /// <summary>
         /// Save Map Command
@@ -442,7 +442,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
                 }
             }
 
-            selectedTable.Load(DataSource, logFactory(typeof(OdbcTable)));
+            selectedTable.Load(DataSource, logFactory(typeof(OdbcColumnSource)));
             Columns = new ObservableCollection<OdbcColumn>(selectedTable.Columns);
             Columns.Insert(0, new OdbcColumn("(None)"));
 

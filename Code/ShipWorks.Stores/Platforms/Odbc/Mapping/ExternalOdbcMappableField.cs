@@ -23,7 +23,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// Constructor - used by NewtonSoft deserialization
         /// </summary>
         [JsonConstructor]
-        public ExternalOdbcMappableField(OdbcTable table, OdbcColumn column)
+        public ExternalOdbcMappableField(OdbcColumnSource table, OdbcColumn column)
         {
             Table = table;
             Column = column;

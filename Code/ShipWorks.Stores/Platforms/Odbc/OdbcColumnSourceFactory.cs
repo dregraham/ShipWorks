@@ -6,14 +6,14 @@ namespace ShipWorks.Stores.Platforms.Odbc
     /// <summary>
     /// Factory for resolving all of the dependencies needed to create an ODBC Table
     /// </summary>
-    public class OdbcTableFactory
+    public class OdbcColumnSourceFactory
     {
         /// <summary>
         /// Creates an ODBC table with the given schema and name
         /// </summary>
-        public OdbcTable CreateTable(string tableName)
+        public OdbcColumnSource CreateTable(string tableName)
         {
-            return new OdbcTable(tableName);
+            return new OdbcColumnSource(tableName);
         }
     }
 }

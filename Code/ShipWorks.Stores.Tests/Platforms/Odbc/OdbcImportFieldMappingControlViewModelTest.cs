@@ -406,7 +406,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
                 var mapFactory = mock.Create<OdbcFieldMapFactory>();
                 var testObject = mock.Create<OdbcImportFieldMappingControlViewModel>(new TypedParameter(typeof(IOdbcFieldMapFactory), mapFactory));
                 testObject.Load(dataSource.Object);
-                testObject.SelectedTable = new OdbcTable("My table");
+                testObject.SelectedTable = new OdbcColumnSource("My table");
 
                 Assert.Equal("My data source - My table", testObject.MapName);
             }
@@ -423,7 +423,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
                 var mapFactory = mock.Create<OdbcFieldMapFactory>();
                 var testObject = mock.Create<OdbcImportFieldMappingControlViewModel>(new TypedParameter(typeof(IOdbcFieldMapFactory), mapFactory));
                 testObject.Load(dataSource.Object);
-                testObject.SelectedTable = new OdbcTable("My table");
+                testObject.SelectedTable = new OdbcColumnSource("My table");
                 testObject.MapName = "I entered my own map name";
 
                 Assert.Equal("I entered my own map name", testObject.MapName);
@@ -442,7 +442,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
                 var testObject = mock.Create<OdbcImportFieldMappingControlViewModel>(new TypedParameter(typeof(IOdbcFieldMapFactory), mapFactory));
                 testObject.Load(dataSource.Object);
                 testObject.MapName = "My data source";
-                testObject.SelectedTable = new OdbcTable("My table");
+                testObject.SelectedTable = new OdbcColumnSource("My table");
 
                 Assert.Equal("My data source - My table", testObject.MapName);
             }
@@ -460,8 +460,8 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
                 var testObject = mock.Create<OdbcImportFieldMappingControlViewModel>(new TypedParameter(typeof(IOdbcFieldMapFactory), mapFactory));
                 testObject.Load(dataSource.Object);
                 testObject.MapName = "My data source";
-                testObject.SelectedTable = new OdbcTable("My old table");
-                testObject.SelectedTable = new OdbcTable("My new table");
+                testObject.SelectedTable = new OdbcColumnSource("My old table");
+                testObject.SelectedTable = new OdbcColumnSource("My new table");
 
                 Assert.Equal("My data source - My new table", testObject.MapName);
             }

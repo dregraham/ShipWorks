@@ -12,13 +12,13 @@ namespace ShipWorks.Stores.Platforms.Odbc
     /// </summary>
 	public class OdbcSchema : IOdbcSchema
     {
-	    private readonly OdbcTableFactory tableFactory;
+	    private readonly OdbcColumnSourceFactory tableFactory;
         private readonly ILog log;
 
         /// <summary>
         /// Constructor
         /// </summary>
-	    public OdbcSchema(Func<Type, ILog> logFactory, OdbcTableFactory tableFactory)
+	    public OdbcSchema(Func<Type, ILog> logFactory, OdbcColumnSourceFactory tableFactory)
         {
             log = logFactory(typeof(OdbcSchema));
 	        this.tableFactory = tableFactory;
@@ -27,7 +27,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// <summary>
         /// List of ODBC tables in the schema
         /// </summary>
-	    public IEnumerable<OdbcTable> Tables { get; private set; }
+	    public IEnumerable<OdbcColumnSource> Tables { get; private set; }
 
         /// <summary>
         /// Populates Table property with the schema of the given datasource.
@@ -45,11 +45,11 @@ namespace ShipWorks.Stores.Platforms.Odbc
                     int position = tableData.Columns.Cast<DataColumn>().ToList()
                         .FindIndex(c => c.ColumnName.Equals("TABLE_NAME", StringComparison.OrdinalIgnoreCase));
 
-                    List<OdbcTable> tables = new List<OdbcTable>();
+                    List<OdbcColumnSource> tables = new List<OdbcColumnSource>();
 
                     for (int i = 0; i < tableData.Rows.Count; i++)
                     {
-                        OdbcTable table = tableFactory.CreateTable(tableData.Rows[i].ItemArray[position].ToString());
+                        OdbcColumnSource table = tableFactory.CreateTable(tableData.Rows[i].ItemArray[position].ToString());
                         tables.Add(table);
                     }
 

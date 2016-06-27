@@ -50,17 +50,17 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         {
             OdbcFieldMap orderMap = testObject.CreateOrderFieldMap();
             ShipWorksOdbcMappableField shipworksOrderMap = new ShipWorksOdbcMappableField(OrderFields.OrderNumber, "Order Number");
-            ExternalOdbcMappableField externalOrderMap = new ExternalOdbcMappableField(new OdbcTable("Order"), new OdbcColumn("Column"));
+            ExternalOdbcMappableField externalOrderMap = new ExternalOdbcMappableField(new OdbcColumnSource("Order"), new OdbcColumn("Column"));
             orderMap.AddEntry(new OdbcFieldMapEntry(shipworksOrderMap, externalOrderMap));
 
             var itemMap = testObject.CreateOrderItemFieldMap(0);
             ShipWorksOdbcMappableField shipworksItemMap = new ShipWorksOdbcMappableField(OrderItemFields.ISBN, "ISBN");
-            ExternalOdbcMappableField externalItemMap = new ExternalOdbcMappableField(new OdbcTable("OrderItem"), new OdbcColumn("OrderItemColumn"));
+            ExternalOdbcMappableField externalItemMap = new ExternalOdbcMappableField(new OdbcColumnSource("OrderItem"), new OdbcColumn("OrderItemColumn"));
             itemMap.AddEntry(new OdbcFieldMapEntry(shipworksItemMap, externalItemMap));
 
             var addressMap = testObject.CreateAddressFieldMap();
             ShipWorksOdbcMappableField shipworksAddressMap = new ShipWorksOdbcMappableField(OrderFields.BillAddressValidationError, "BillAddressValidationError");
-            ExternalOdbcMappableField externalAddressMap = new ExternalOdbcMappableField(new OdbcTable("BillAddressValidationError"), new OdbcColumn("BillAddressValidationError"));
+            ExternalOdbcMappableField externalAddressMap = new ExternalOdbcMappableField(new OdbcColumnSource("BillAddressValidationError"), new OdbcColumn("BillAddressValidationError"));
             itemMap.AddEntry(new OdbcFieldMapEntry(shipworksAddressMap, externalAddressMap));
 
             var combinedMap = testObject.CreateFieldMapFrom(orderMap.Entries.Concat(addressMap.Entries).Concat(itemMap.Entries));

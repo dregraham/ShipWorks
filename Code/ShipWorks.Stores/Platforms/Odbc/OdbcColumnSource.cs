@@ -13,12 +13,12 @@ namespace ShipWorks.Stores.Platforms.Odbc
     /// Represents a table from an ODBC schema
     /// </summary>
     [Obfuscation(Exclude = true)]
-    public class OdbcTable : IOdbcColumnSource
+    public class OdbcColumnSource : IOdbcColumnSource
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        public OdbcTable(string name)
+        public OdbcColumnSource(string name)
         {
             Name = name;
         }
@@ -60,7 +60,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
                     for (int j = 0; j < columnData.Rows.Count; j++)
                     {
                         string columnName = columnData.Rows[j].ItemArray[3].ToString();
-                        Columns = Columns.Concat(new[] {new OdbcColumn(columnName)});
+                        Columns = Columns.Concat(new[] { new OdbcColumn(columnName) });
                     }
                 }
                 catch (DbException ex)
@@ -73,18 +73,51 @@ namespace ShipWorks.Stores.Platforms.Odbc
                 {
                     log.Error(ex);
                     throw new ShipWorksOdbcException(
-                        $"An error occurred while attempting to retrieve columns from information from the {Name} table.",
+                        $"An error occurred while attempting to retrieve columns from the {Name} table.",
                         ex);
                 }
             }
         }
 
         /// <summary>
-        /// Loads the columns for the column source
+        /// Loads the columns for the column source using the given query
         /// </summary>
+        [Obfuscation(Exclude = false)]
         public void Load(OdbcDataSource dataSource, ILog log, string query, IShipWorksDbProviderFactory dbProviderFactory)
         {
-            throw new NotImplementedException();
+            using (DbConnection connection = dataSource.CreateConnection())
+            {
+                try
+                {
+                    IShipWorksOdbcCommand cmd = dbProviderFactory.CreateOdbcCommand(query, connection);
+
+                    connection.Open();
+                    Columns = new List<OdbcColumn>();
+
+                    using (DbDataReader reader = cmd.ExecuteReader())
+                    {
+                        DataTable table = reader.GetSchemaTable();
+
+                        foreach (DataRow row in table.Rows.OfType<DataRow>())
+                        {
+                            Columns = Columns.Concat(new[] { new OdbcColumn(row["BaseColumnName"].ToString()) });
+                        }
+                    }
+                }
+                catch (DbException ex)
+                {
+                    log.Error(ex);
+                    throw new ShipWorksOdbcException(
+                        $"An error occurred while attempting to open a connection to {dataSource.Name}.", ex);
+                }
+                catch (Exception ex)
+                {
+                    log.Error(ex);
+                    throw new ShipWorksOdbcException(
+                        $"An error occurred while attempting to retrieve columns for the custom query.",
+                        ex);
+                }
+            }
         }
     }
 }

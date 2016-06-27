@@ -38,7 +38,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             builder.RegisterType<OdbcCipherKey>()
                 .Keyed<ICipherKey>(CipherContext.Odbc);
 
-            builder.RegisterType<OdbcTableFactory>()
+            builder.RegisterType<OdbcColumnSourceFactory>()
                 .AsSelf();
 
             builder.RegisterType<OdbcImportFieldMappingControl>()

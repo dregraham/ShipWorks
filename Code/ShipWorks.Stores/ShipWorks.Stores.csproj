@@ -216,8 +216,8 @@
     <Compile Include="Platforms\Odbc\OdbcSampleDataCommand.cs" />
     <Compile Include="Platforms\Odbc\OdbcSchema.cs" />
     <Compile Include="Platforms\Odbc\OdbcStoreDownloader.cs" />
-    <Compile Include="Platforms\Odbc\OdbcTable.cs" />
-    <Compile Include="Platforms\Odbc\OdbcTableFactory.cs" />
+    <Compile Include="Platforms\Odbc\OdbcColumnSource.cs" />
+    <Compile Include="Platforms\Odbc\OdbcColumnSourceFactory.cs" />
     <Compile Include="Platforms\Odbc\ShipWorksOdbcCommand.cs" />
     <Compile Include="Platforms\Odbc\ShipWorksOdbcCommandBuilder.cs" />
     <Compile Include="Platforms\Odbc\ShipWorksOdbcDataAdapter.cs" />
