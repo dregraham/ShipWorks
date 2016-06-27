@@ -1,4 +1,6 @@
-﻿using System.Data;
+﻿using log4net;
+using System;
+using System.Data;
 using System.Data.Common;
 using System.Linq;
 
@@ -10,13 +12,15 @@ namespace ShipWorks.Stores.Platforms.Odbc
     public class OdbcSampleDataCommand : IOdbcSampleDataCommand
     {
         private readonly IShipWorksDbProviderFactory dbProviderFactory;
+        private readonly ILog log;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        private OdbcSampleDataCommand(IShipWorksDbProviderFactory dbProviderFactory, OdbcColumnSource)
+        private OdbcSampleDataCommand(IShipWorksDbProviderFactory dbProviderFactory, ILog log)
         {
             this.dbProviderFactory = dbProviderFactory;
+            this.log = log;
         }
 
         /// <summary>
@@ -24,34 +28,53 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// </summary>
         public DataTable Execute(IOdbcDataSource dataSource, string query)
         {
-            using (DbConnection connection = dataSource.CreateConnection())
-            {
-                connection.Open();
-
-                using (IShipWorksOdbcCommand cmd = dbProviderFactory.CreateOdbcCommand(query, connection))
+            try {
+                using (DbConnection connection = dataSource.CreateConnection())
                 {
-                    using (DbDataReader reader = cmd.ExecuteReader())
+                    connection.Open();
+
+                    using (IShipWorksOdbcCommand cmd = dbProviderFactory.CreateOdbcCommand(query, connection))
                     {
-                        DataTable resultTable = GetEmptyResultTable(reader);
-
-                        int resultCount = 0;
-                        while (reader.Read() && resultCount < 4)
+                        using (DbDataReader reader = cmd.ExecuteReader())
                         {
-                            DataRow row = resultTable.NewRow();
+                            // Get an empty table that matches the schema of the query
+                            DataTable resultTable = GetEmptyResultTable(reader);
 
-                            for (int i = 0; i < reader.FieldCount; i++)
+                            int resultCount = 0;
+                            while (reader.Read() && resultCount < 4)
                             {
-                                row[reader.GetName(i)] = reader.GetValue(i);
+                                // Create a row and populate it with values from the reader
+                                DataRow row = resultTable.NewRow();
+                                for (int i = 0; i < reader.FieldCount; i++)
+                                {
+                                    row[reader.GetName(i)] = reader.GetValue(i);
+                                }
+
+                                resultTable.Rows.Add(row);
+                                resultCount++;
                             }
 
-                            resultTable.Rows.Add(row);
-
-                            resultCount++;
+                            // Cancel the command once we have the number
+                            // of results we want, this will hopefully improve
+                            // performance for queries that return a lot of rows
+                            cmd.Cancel();
+                            return resultTable;
                         }
-
-                        return resultTable;
                     }
                 }
+            }
+            catch (DbException ex)
+            {
+                log.Error(ex);
+                throw new ShipWorksOdbcException(
+                    $"An error occurred while attempting to open a connection to {dataSource.Name}.", ex);
+            }
+            catch (Exception ex)
+            {
+                log.Error(ex);
+                throw new ShipWorksOdbcException(
+                    $"An error occurred while attempting to retrieve columns for the custom query.",
+                    ex);
             }
         }
 
