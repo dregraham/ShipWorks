@@ -35,7 +35,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
         public IEnumerable<OdbcColumn> Columns { get; private set; }
 
         /// <summary>
-        /// Loads the columns for this table
+        /// Loads the columns for the column source
         /// </summary>
         [Obfuscation(Exclude = false)]
         public void Load(IOdbcDataSource dataSource, ILog log)
@@ -77,6 +77,14 @@ namespace ShipWorks.Stores.Platforms.Odbc
                         ex);
                 }
             }
+        }
+
+        /// <summary>
+        /// Loads the columns for the column source
+        /// </summary>
+        public void Load(OdbcDataSource dataSource, ILog log, string query, IShipWorksDbProviderFactory dbProviderFactory)
+        {
+            throw new NotImplementedException();
         }
     }
 }

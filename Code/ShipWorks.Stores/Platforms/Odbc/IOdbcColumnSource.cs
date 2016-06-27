@@ -21,8 +21,13 @@ namespace ShipWorks.Stores.Platforms.Odbc
         string Name { get; }
 
         /// <summary>
-        /// Loads the columns for this table
+        /// Loads the columns for the column source
         /// </summary>
         void Load(IOdbcDataSource dataSource, ILog logFactory);
+
+        /// <summary>
+        /// Loads the columns for the column source
+        /// </summary>
+        void Load(OdbcDataSource dataSource, ILog log, string query, IShipWorksDbProviderFactory dbProviderFactory);
     }
 }
