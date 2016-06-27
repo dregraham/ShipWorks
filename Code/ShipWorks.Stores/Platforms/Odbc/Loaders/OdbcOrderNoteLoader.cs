@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using ShipWorks.Data.Model.EntityClasses;
+﻿using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Loaders
 {
@@ -28,7 +28,9 @@ namespace ShipWorks.Stores.Platforms.Odbc.Loaders
         public void Load(IOdbcFieldMap map, OrderEntity order)
         {
             IEnumerable<IOdbcFieldMapEntry> mappedNoteFields =
-               map.FindEntriesBy(NoteFields.Text, false).ToList();
+                map.FindEntriesBy(NoteFields.Text, false)
+                    .Where(e => !string.IsNullOrWhiteSpace((string) e.ShipWorksField.Value))
+                    .ToList();
 
             foreach (IOdbcFieldMapEntry mappedNote in mappedNoteFields)
             {

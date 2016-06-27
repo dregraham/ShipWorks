@@ -29,9 +29,9 @@ namespace ShipWorks.Stores.Platforms.Odbc
         public string RecordIdentifier => GetValue(recordIdentifierSource)?.ToString();
 
         /// <summary>
-		/// Gets a value indicating whether this record has values.
+        /// Gets a value indicating whether this record has values.
         /// </summary>
-        public bool HasValues => fields.Any();
+        public bool HasValues => fields.Any(f => f.Value != null);
 
         /// <summary>
         /// Gets the value of the field - null if not set
