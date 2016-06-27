@@ -4,19 +4,24 @@ using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.UI.Wizard;
 using System;
+using System.Windows.Interop;
+using Autofac;
+using ShipWorks.ApplicationCore;
+using ShipWorks.Shipping;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
 {
     /// <summary>
     /// Wizard page for choosing an import map to load or to start creating a new one
     /// </summary>
-    public partial class OdbcImportFieldMappingPage : AddStoreWizardPage, IOdbcWizardPage
+    public partial class OdbcImportFieldMappingPage : AddStoreWizardPage, IOdbcWizardPage, IDisposable, IWin32Window
     {
         private readonly IMessageHelper messageHelper;
         private readonly Func<IOdbcDataSource> dataSourceFactory;
         private readonly Func<IOdbcImportFieldMappingControlViewModel> viewModelFactory;
         private IOdbcImportFieldMappingControlViewModel viewModel;
         private OdbcStoreEntity store;
+        private readonly ILifetimeScope lifetimeScope;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcImportFieldMappingPage"/> class.
@@ -73,7 +78,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
             store = GetStore<OdbcStoreEntity>();
 
             IOdbcDataSource selectedDataSource = dataSourceFactory();
-            
+
             selectedDataSource.Restore(store.ConnectionString);
 
             // Create new ViewModel when one does not exist, or a new data source is selected. This means clicking

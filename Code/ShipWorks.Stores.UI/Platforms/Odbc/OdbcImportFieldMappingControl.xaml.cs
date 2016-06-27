@@ -1,4 +1,6 @@
-﻿namespace ShipWorks.Stores.UI.Platforms.Odbc
+﻿using System.Windows;
+
+namespace ShipWorks.Stores.UI.Platforms.Odbc
 {
     /// <summary>
     /// Interaction logic for OdbcImportFieldMappingControl.xaml

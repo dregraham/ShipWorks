@@ -56,6 +56,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
 
             SaveMapCommand = new RelayCommand(SaveMapToDisk,() => selectedTable != null);
             TableChangedCommand = new RelayCommand(TableChanged);
+            OpenCustomQueryDlgCommand = new RelayCommand(OpenCustomQueryDlg);
 
             Order = new OdbcFieldMapDisplay("Order", fieldMapFactory.CreateOrderFieldMap());
             Address = new OdbcFieldMapDisplay("Address", fieldMapFactory.CreateAddressFieldMap());
@@ -121,7 +122,13 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// selected table must not be null for it to be enabled
         /// </remarks>
         [Obfuscation(Exclude = true)]
-        public ICommand SaveMapCommand { get; set; }
+        public ICommand SaveMapCommand { get; private set; }
+
+        /// <summary>
+        /// Open custom query dialog command.
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public ICommand OpenCustomQueryDlgCommand { get; private set; }
 
         /// <summary>
         /// The selected external odbc table.
@@ -482,6 +489,11 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
                     }
                 }
             }
+        }
+
+        private void OpenCustomQueryDlg()
+        {
+            throw new NotImplementedException();
         }
     }
 }

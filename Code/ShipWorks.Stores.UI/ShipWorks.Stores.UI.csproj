@@ -172,7 +172,14 @@
     <Compile Include="Platforms\LemonStand\WizardPages\LemonStandAccountPage.Designer.cs">
       <DependentUpon>LemonStandAccountPage.cs</DependentUpon>
     </Compile>
+    <Compile Include="Platforms\Odbc\IOdbcCustomQueryDlgFactory.cs" />
+    <Compile Include="Platforms\Odbc\IOdbcCustomQueryDlgViewModel.cs" />
     <Compile Include="Platforms\Odbc\IOdbcImportFieldMappingControlViewModel.cs" />
+    <Compile Include="Platforms\Odbc\OdbcCustomQueryDlg.xaml.cs">
+      <DependentUpon>OdbcCustomQueryDlg.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Platforms\Odbc\OdbcCustomQueryDlgFactory.cs" />
+    <Compile Include="Platforms\Odbc\OdbcCustomQueryDlgViewModel.cs" />
     <Compile Include="Platforms\Odbc\OdbcFieldMapDisplay.cs" />
     <Compile Include="Platforms\Odbc\OdbcFieldMapMultiValueConverter.cs" />
     <Compile Include="Platforms\Odbc\WizardPages\OdbcImportFieldMappingPage.cs">
@@ -347,6 +354,10 @@
     <Analyzer Include="..\..\packages\System.Security.Cryptography.Hashing.Algorithms.Analyzers.1.1.0\analyzers\dotnet\cs\System.Security.Cryptography.Hashing.Algorithms.CSharp.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Platforms\Odbc\OdbcCustomQueryDlg.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Platforms\Odbc\OdbcImportFieldMappingControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
