@@ -28,6 +28,6 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// <summary>
         /// Loads the columns for the column source
         /// </summary>
-        void Load(OdbcDataSource dataSource, ILog log, string query, IShipWorksDbProviderFactory dbProviderFactory);
+        void Load(IOdbcDataSource dataSource, ILog log, string query, IShipWorksDbProviderFactory dbProviderFactory);
     }
 }

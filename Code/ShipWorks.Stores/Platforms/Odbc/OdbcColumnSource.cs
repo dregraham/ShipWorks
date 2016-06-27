@@ -83,15 +83,15 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// Loads the columns for the column source using the given query
         /// </summary>
         [Obfuscation(Exclude = false)]
-        public void Load(OdbcDataSource dataSource, ILog log, string query, IShipWorksDbProviderFactory dbProviderFactory)
+        public void Load(IOdbcDataSource dataSource, ILog log, string query, IShipWorksDbProviderFactory dbProviderFactory)
         {
             using (DbConnection connection = dataSource.CreateConnection())
             {
                 try
                 {
-                    IShipWorksOdbcCommand cmd = dbProviderFactory.CreateOdbcCommand(query, connection);
-
                     connection.Open();
+
+                    IShipWorksOdbcCommand cmd = dbProviderFactory.CreateOdbcCommand(query, connection);
                     Columns = new List<OdbcColumn>();
 
                     using (DbDataReader reader = cmd.ExecuteReader())

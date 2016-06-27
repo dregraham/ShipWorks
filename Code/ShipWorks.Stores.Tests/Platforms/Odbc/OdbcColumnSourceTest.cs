@@ -143,7 +143,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         }
 
         [Fact]
-        public void LoadOpensConnection()
+        public void Load_OpensConnection()
         {
             DataTable dataTable = new DataTable();
             dataTable.Columns.Add("foo", typeof(string));
@@ -166,6 +166,108 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             table.Load(dataSource.Object, log.Object);
             dataTable.Dispose();
             connection.Verify(c => c.Open());
+        }
+
+        [Fact]
+        public void LoadWithProviderFactory_RethrowsShipWorksOdbcException_WhenDbConnectionThrowsDbException()
+        {
+            Mock<DbException> exception = mock.Mock<DbException>();
+            exception.SetupGet(ex => ex.Message).Returns("Something went wrong");
+
+            Mock<DbConnection> connection = mock.Mock<DbConnection>();
+            connection.Setup(c => c.Open()).Throws(exception.Object);
+            Mock<ILog> log = mock.Mock<ILog>();
+
+            Mock<IOdbcDataSource> dataSource = mock.Mock<IOdbcDataSource>();
+            dataSource.SetupGet(d => d.Name).Returns("SomeName");
+            dataSource.Setup(d => d.CreateConnection()).Returns(connection.Object);
+
+            Mock<IShipWorksDbProviderFactory> dbProviderFactory = mock.Mock<IShipWorksDbProviderFactory>();
+
+            OdbcColumnSource table = new OdbcColumnSource("Orders");
+
+            Assert.Throws<ShipWorksOdbcException>(() => table.Load(dataSource.Object, log.Object, "SELECT * FROM [Order]", dbProviderFactory.Object));
+
+            log.Verify(l => l.Error(exception.Object));
+        }
+
+        [Fact]
+        public void LoadWithProviderFactory_RethrowsShipWorksOdbcException_WhenDbConnectionThrowsGeneralException()
+        {
+            Exception ex = new Exception("Something went wrong");
+            Mock<DbConnection> connection = mock.Mock<DbConnection>();
+            connection.Setup(c => c.Open()).Throws(ex);
+            Mock<ILog> log = mock.Mock<ILog>();
+
+            Mock<IOdbcDataSource> dataSource = mock.Mock<IOdbcDataSource>();
+            dataSource.SetupGet(d => d.Name).Returns("SomeName");
+            dataSource.Setup(d => d.CreateConnection()).Returns(connection.Object);
+
+            Mock<IShipWorksDbProviderFactory> dbProviderFactory = mock.Mock<IShipWorksDbProviderFactory>();
+
+            OdbcColumnSource table = new OdbcColumnSource("Orders");
+
+            Assert.Throws<ShipWorksOdbcException>(() => table.Load(dataSource.Object, log.Object, "SELECT * FROM [Order]", dbProviderFactory.Object));
+
+            log.Verify(l => l.Error(ex));
+        }
+
+        [Fact]
+        public void LoadWithProviderFactory_OpensConnection()
+        {
+            DataTable dataTable = new DataTable();
+
+            Mock<DbConnection> connection = mock.Mock<DbConnection>();
+            connection.Setup(c => c.GetSchema(It.IsAny<string>(), It.IsAny<string[]>())).Returns(dataTable);
+            Mock<ILog> log = mock.Mock<ILog>();
+            Mock<DbDataReader> reader = mock.Mock<DbDataReader>();
+            reader.Setup(r => r.GetSchemaTable()).Returns(dataTable);
+            Mock<IShipWorksOdbcCommand> cmd = mock.Mock<IShipWorksOdbcCommand>();
+            cmd.Setup(c => c.ExecuteReader()).Returns(reader.Object);
+            Mock<IShipWorksDbProviderFactory> dbProviderFactory = mock.Mock<IShipWorksDbProviderFactory>();
+            dbProviderFactory.Setup(d => d.CreateOdbcCommand(It.IsAny<string>(), It.IsAny<DbConnection>())).Returns(cmd.Object);
+
+            Mock<IOdbcDataSource> dataSource = mock.Mock<IOdbcDataSource>();
+            dataSource.SetupGet(d => d.Name).Returns("SomeName");
+            dataSource.Setup(d => d.CreateConnection()).Returns(connection.Object);
+
+            OdbcColumnSource table = new OdbcColumnSource("Orders");
+
+            table.Load(dataSource.Object, log.Object, "SELECT * FROM [Order]", dbProviderFactory.Object);
+            dataTable.Dispose();
+            connection.Verify(c => c.Open());
+        }
+
+        [Fact]
+        public void LoadWithProviderFactory_SetsColumnsFromReaderGetSchemaTable()
+        {
+            DataTable dataTable = new DataTable();
+            dataTable.Columns.Add("BaseColumnName", typeof(string));
+            dataTable.Rows.Add("ColumnName1");
+            dataTable.Rows.Add("ColumnName2");
+
+            Mock<DbConnection> connection = mock.Mock<DbConnection>();
+            connection.Setup(c => c.GetSchema(It.IsAny<string>(), It.IsAny<string[]>())).Returns(dataTable);
+            Mock<ILog> log = mock.Mock<ILog>();
+            Mock<DbDataReader> reader = mock.Mock<DbDataReader>();
+            reader.Setup(r => r.GetSchemaTable()).Returns(dataTable);
+            Mock<IShipWorksOdbcCommand> cmd = mock.Mock<IShipWorksOdbcCommand>();
+            cmd.Setup(c => c.ExecuteReader()).Returns(reader.Object);
+            Mock<IShipWorksDbProviderFactory> dbProviderFactory = mock.Mock<IShipWorksDbProviderFactory>();
+            dbProviderFactory.Setup(d => d.CreateOdbcCommand(It.IsAny<string>(), It.IsAny<DbConnection>())).Returns(cmd.Object);
+
+            Mock<IOdbcDataSource> dataSource = mock.Mock<IOdbcDataSource>();
+            dataSource.SetupGet(d => d.Name).Returns("SomeName");
+            dataSource.Setup(d => d.CreateConnection()).Returns(connection.Object);
+
+            OdbcColumnSource table = new OdbcColumnSource("Orders");
+
+            table.Load(dataSource.Object, log.Object, "SELECT * FROM [Order]", dbProviderFactory.Object);
+
+            dataTable.Dispose();
+
+            Assert.True(table.Columns.Count(c => c.Name == "ColumnName1") == 1);
+            Assert.True(table.Columns.Count(c => c.Name == "ColumnName2") == 1);
         }
 
         [Fact]
