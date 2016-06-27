@@ -6,7 +6,7 @@
         xmlns:odbc="clr-namespace:ShipWorks.Stores.UI.Platforms.Odbc"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance odbc:OdbcCustomQueryDlgViewModel}"
-        Height="436" Width="450"
+        Height="440" Width="450"
         FontFamily="Tahoma" FontSize="11px"
         Background="{x:Static SystemColors.ControlBrush}"
         WindowStartupLocation="CenterOwner">
@@ -44,7 +44,7 @@
                   ItemsSource="{Binding Results, UpdateSourceTrigger=PropertyChanged}" />
         <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Right">
             <Button Content="OK" Command="{Binding Ok}" />
-            <Button Content="Cancel" Command="{Binding Cancel}" />
+            <Button Content="Cancel" Command="Close" />
         </StackPanel>
     </Grid>
 </Window>

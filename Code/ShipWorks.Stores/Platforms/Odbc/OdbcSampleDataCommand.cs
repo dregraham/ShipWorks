@@ -17,7 +17,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// <summary>
         /// Constructor
         /// </summary>
-        private OdbcSampleDataCommand(IShipWorksDbProviderFactory dbProviderFactory, ILog log)
+        public OdbcSampleDataCommand(IShipWorksDbProviderFactory dbProviderFactory, ILog log)
         {
             this.dbProviderFactory = dbProviderFactory;
             this.log = log;

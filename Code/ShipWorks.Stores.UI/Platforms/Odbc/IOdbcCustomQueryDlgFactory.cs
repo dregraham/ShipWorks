@@ -1,3 +1,5 @@
+using ShipWorks.Stores.Platforms.Odbc;
+
 namespace ShipWorks.Stores.UI.Platforms.Odbc
 {
     /// <summary>
@@ -8,6 +10,6 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// <summary>
         /// Shows the custom query dialog.
         /// </summary>
-        void ShowCustomQueryDlg(OdbcImportFieldMappingControl owner);
+        void ShowCustomQueryDlg(OdbcImportFieldMappingControl owner, IOdbcDataSource dataSource);
     }
 }

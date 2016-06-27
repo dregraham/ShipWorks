@@ -1,7 +1,10 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Forms.Integration;
 using System.Windows.Interop;
+using log4net;
+using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.UI.Controls.ChannelLimit;
 using IWin32Window = System.Windows.Forms.IWin32Window;
 
@@ -10,25 +13,39 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
     public class OdbcCustomQueryDlgFactory : IOdbcCustomQueryDlgFactory
     {
         private readonly IWin32Window defaultOwner;
+        private readonly IOdbcColumnSourceFactory columnSourceFactory;
+        private readonly IShipWorksDbProviderFactory dbProviderFactory;
+        private readonly Func<Type, ILog> logFactory;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcCustomQueryDlgFactory"/> class.
         /// </summary>
         /// <param name="defaultOwner">The default owner.</param>
-        public OdbcCustomQueryDlgFactory(IWin32Window defaultOwner)
+        /// <param name="columnSourceFactory"></param>
+        /// <param name="dbProviderFactory"></param>
+        /// <param name="logFactory"></param>
+        public OdbcCustomQueryDlgFactory(IWin32Window defaultOwner, IOdbcColumnSourceFactory columnSourceFactory,
+            IShipWorksDbProviderFactory dbProviderFactory, Func<Type, ILog> logFactory)
         {
             this.defaultOwner = defaultOwner;
+            this.columnSourceFactory = columnSourceFactory;
+            this.dbProviderFactory = dbProviderFactory;
+            this.logFactory = logFactory;
         }
 
         /// <summary>
         /// Shows the custom query dialog.
         /// </summary>
-        /// <param name="owner">The control.</param>
-        public void ShowCustomQueryDlg(OdbcImportFieldMappingControl owner)
+        public void ShowCustomQueryDlg(OdbcImportFieldMappingControl owner, IOdbcDataSource dataSource)
         {
             OdbcCustomQueryDlg dlg = new OdbcCustomQueryDlg();
             dlg.LoadOwner(GetOwner(owner));
-            dlg.DataContext = new OdbcCustomQueryDlgViewModel();
+
+            IOdbcColumnSource columnSource = columnSourceFactory.CreateTable("Custom Query");
+            IOdbcSampleDataCommand sampleDataCommand = new OdbcSampleDataCommand(dbProviderFactory,
+                logFactory(typeof (OdbcSampleDataCommand)));
+
+            dlg.DataContext = new OdbcCustomQueryDlgViewModel(dataSource, dbProviderFactory, sampleDataCommand, columnSource, logFactory);
             dlg.ShowDialog();
         }
 
@@ -39,7 +56,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         {
             if (owner == null)
             {
-                return null;
+                return defaultOwner;
             }
 
             // Get handle for wpf control

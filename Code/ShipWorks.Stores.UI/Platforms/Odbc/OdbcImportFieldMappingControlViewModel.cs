@@ -499,7 +499,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// </summary>
         private void OpenCustomQueryDlg(OdbcImportFieldMappingControl control)
         {
-            customQueryDlgFactory.ShowCustomQueryDlg(control);
+            customQueryDlgFactory.ShowCustomQueryDlg(control, DataSource);
         }
     }
 }
