@@ -13,7 +13,7 @@
         /// <summary>
         /// The External Table
         /// </summary>
-        IOdbcTable Table { get; set; }
+        IOdbcColumnSource Table { get; set; }
 
         /// <summary>
         /// Loads the given record

@@ -13,7 +13,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
     /// Represents a table from an ODBC schema
     /// </summary>
     [Obfuscation(Exclude = true)]
-    public class OdbcTable : IOdbcTable
+    public class OdbcTable : IOdbcColumnSource
     {
         /// <summary>
         /// Constructor

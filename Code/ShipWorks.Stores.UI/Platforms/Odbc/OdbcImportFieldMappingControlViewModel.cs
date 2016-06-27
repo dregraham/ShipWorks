@@ -31,13 +31,13 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         private readonly IOdbcSchema schema;
         private readonly Func<Type, ILog> logFactory;
         private readonly IMessageHelper messageHelper;
-        private IOdbcTable selectedTable;
+        private IOdbcColumnSource selectedTable;
         private ObservableCollection<OdbcColumn> columns;
         private OdbcFieldMapDisplay selectedFieldMap;
         private readonly PropertyChangedHandler handler;
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private IOdbcTable previousSelectedTable = null;
+        private IOdbcColumnSource previousSelectedTable = null;
         private string mapName;
         private bool isSingleLineOrder = true;
         private int numberOfAttributesPerItem;
@@ -127,7 +127,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// The selected external odbc table.
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public IOdbcTable SelectedTable
+        public IOdbcColumnSource SelectedTable
         {
             get { return selectedTable; }
             set

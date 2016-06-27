@@ -13,7 +13,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <summary>
         /// Constructor
         /// </summary>
-	    public ExternalOdbcMappableField(IOdbcTable table, OdbcColumn column)
+	    public ExternalOdbcMappableField(IOdbcColumnSource table, OdbcColumn column)
 	    {
 	        Table = table;
 	        Column = column;
@@ -32,7 +32,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <summary>
         /// The External Table
         /// </summary>
-        public IOdbcTable Table { get; set; }
+        public IOdbcColumnSource Table { get; set; }
 
         /// <summary>
         /// The External Column
@@ -56,7 +56,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// </summary>
         [JsonIgnore]
 	    public string QualifiedName => $"{Table.Name}.{Column.Name}";
-	    
+
         /// <summary>
         /// Loads the given record
         /// </summary>

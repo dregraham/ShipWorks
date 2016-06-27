@@ -7,7 +7,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
     /// <summary>
     /// Represents an ODBC table with columns and name
     /// </summary>
-    public interface IOdbcTable
+    public interface IOdbcColumnSource
     {
         /// <summary>
         /// Columns that belong to the table

@@ -162,7 +162,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
                 var testObject = mock.Create<OdbcImportFieldMappingControlViewModel>(new TypedParameter(typeof(IOdbcFieldMapFactory), mapFactory));
                 testObject.Load(mock.Mock<IOdbcDataSource>().Object);
 
-                var table = mock.Mock<IOdbcTable>();
+                var table = mock.Mock<IOdbcColumnSource>();
 
                 testObject.SelectedTable = table.Object;
 
@@ -179,8 +179,8 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
                 var messageHelper = mock.Mock<IMessageHelper>();
                 messageHelper.Setup(GetShowMessageExpression());
 
-                var table1 = mock.Mock<IOdbcTable>();
-                var table2 = mock2.Mock<IOdbcTable>();
+                var table1 = mock.Mock<IOdbcColumnSource>();
+                var table2 = mock2.Mock<IOdbcColumnSource>();
 
                 Mock<IOdbcFieldMapIOFactory> mapIOFactory = mock.Mock<IOdbcFieldMapIOFactory>();
                 OdbcFieldMap odbcFieldMap = new OdbcFieldMap(mapIOFactory.Object);
@@ -220,8 +220,8 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
                 messageHelper.Setup(GetShowMessageExpression()).Returns(DialogResult.No);
 
 
-                var table1 = mock.Mock<IOdbcTable>();
-                var table2 = mock2.Mock<IOdbcTable>();
+                var table1 = mock.Mock<IOdbcColumnSource>();
+                var table2 = mock2.Mock<IOdbcColumnSource>();
 
                 Mock<IOdbcFieldMapIOFactory> mapIOFactory = mock.Mock<IOdbcFieldMapIOFactory>();
                 OdbcFieldMap odbcFieldMap = new OdbcFieldMap(mapIOFactory.Object);
@@ -260,8 +260,8 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
                 var messageHelper = mock.Mock<IMessageHelper>();
                 messageHelper.Setup(GetShowMessageExpression()).Returns(DialogResult.No);
 
-                var table1 = mock.Mock<IOdbcTable>();
-                var table2 = mock2.Mock<IOdbcTable>();
+                var table1 = mock.Mock<IOdbcColumnSource>();
+                var table2 = mock2.Mock<IOdbcColumnSource>();
 
                 Mock<IOdbcFieldMapIOFactory> mapIOFactory = mock.Mock<IOdbcFieldMapIOFactory>();
                 OdbcFieldMap odbcFieldMap = new OdbcFieldMap(mapIOFactory.Object);
@@ -303,8 +303,8 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
                 var messageHelper = mock.Mock<IMessageHelper>();
                 messageHelper.Setup(GetShowMessageExpression()).Returns(DialogResult.Yes);
 
-                var table1 = mock.Mock<IOdbcTable>();
-                var table2 = mock2.Mock<IOdbcTable>();
+                var table1 = mock.Mock<IOdbcColumnSource>();
+                var table2 = mock2.Mock<IOdbcColumnSource>();
 
                 Mock<IOdbcFieldMapIOFactory> mapIOFactory = mock.Mock<IOdbcFieldMapIOFactory>();
                 OdbcFieldMap odbcFieldMap = new OdbcFieldMap(mapIOFactory.Object);
@@ -345,8 +345,8 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
                 messageHelper.Setup(GetShowMessageExpression()).Returns(DialogResult.Yes);
 
 
-                var table1 = mock.Mock<IOdbcTable>();
-                var table2 = mock2.Mock<IOdbcTable>();
+                var table1 = mock.Mock<IOdbcColumnSource>();
+                var table2 = mock2.Mock<IOdbcColumnSource>();
 
                 Mock<IOdbcFieldMapIOFactory> mapIOFactory = mock.Mock<IOdbcFieldMapIOFactory>();
                 OdbcFieldMap odbcFieldMap = new OdbcFieldMap(mapIOFactory.Object);

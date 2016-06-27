@@ -173,7 +173,7 @@
     <Compile Include="Platforms\Odbc\IOdbcCommand.cs" />
     <Compile Include="Platforms\Odbc\IOdbcDataSource.cs" />
     <Compile Include="Platforms\Odbc\IOdbcSchema.cs" />
-    <Compile Include="Platforms\Odbc\IOdbcTable.cs" />
+    <Compile Include="Platforms\Odbc\IOdbcColumnSource.cs" />
     <Compile Include="Platforms\Odbc\IOdbcWizardPage.cs" />
     <Compile Include="Platforms\Odbc\IShipWorksOdbcCommand.cs" />
     <Compile Include="Platforms\Odbc\IShipWorksOdbcCommandBuilder.cs" />
