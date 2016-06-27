@@ -1,5 +1,4 @@
 using log4net;
-using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
 using System.Collections.Generic;
 using System.Data;
@@ -51,7 +50,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
                             OdbcRecord odbcRecord = CreateOdbcRecord(reader);
 
                             // Only add the record if it contains values. Was causing an issue with
-                            // excel where it was trying to download emtpy rows.
+                            // excel where it was trying to download empty rows.
                             if (odbcRecord.HasValues)
                             {
                                 records.Add(odbcRecord);
@@ -67,10 +66,6 @@ namespace ShipWorks.Stores.Platforms.Odbc
                 // cant unit test OdbcException, rethrow as ShipWorksOdbcException
                 throw new ShipWorksOdbcException(ex.Message, ex);
             }
-            catch (ShipWorksOdbcException ex)
-            {
-                throw new DownloadException(ex.Message, ex);
-            }
         }
 
         /// <summary>
@@ -78,21 +73,13 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// </summary>
         private OdbcRecord CreateOdbcRecord(DbDataReader reader)
         {
-            OdbcRecord odbcRecord = new OdbcRecord();
+            OdbcRecord odbcRecord = new OdbcRecord(fieldMap.RecordIdentifierSource);
 
             for (int i = 0; i < reader.FieldCount; i++)
             {
-                if (!reader.IsDBNull(i))
-                {
-                    string columnName = reader.GetName(i);
-                    object value = reader[i];
-
-                    odbcRecord.AddField(columnName, value);
-                    if (columnName == fieldMap.RecordIdentifierSource)
-                    {
-                        odbcRecord.RecordIdentifier = value.ToString();
-                    }
-                }
+                string columnName = reader.GetName(i);
+                object value = reader[i];
+                odbcRecord.AddField(columnName, value);
             }
 
             return odbcRecord;

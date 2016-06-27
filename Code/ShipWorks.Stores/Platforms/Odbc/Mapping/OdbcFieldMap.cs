@@ -31,11 +31,18 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// The ODBC Field Map Entries
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public IEnumerable<IOdbcFieldMapEntry> Entries => entries;
+        public IEnumerable<IOdbcFieldMapEntry> Entries
+        {
+            get
+            {
+                return entries;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the name of the record identifier column.
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public string RecordIdentifierSource { get; set; }
 
         /// <summary>
@@ -51,24 +58,27 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// </summary>
         private void ResetValues()
         {
-            entries.ForEach(e => e.ExternalField.ResetValue());
+            foreach (IOdbcFieldMapEntry entry in Entries)
+            {
+                entry.ExternalField.ResetValue();
+            }
         }
 
         /// <summary>
         /// Copies the values from the entries to corresponding fields on the entity
         /// </summary>
-        public void CopyToEntity(IEntity2 entity)
+        public void CopyToEntity(IEntity2 entity) => CopyToEntity(entity, 0);
+
+        /// <summary>
+        /// Copies the values from the entries to corresponding fields on the entity
+        /// </summary>
+        public void CopyToEntity(IEntity2 entity, int index)
         {
-            IEnumerable<IOdbcFieldMapEntry> applicableEntries = entries
-                .Where(e => e.ShipWorksField.Value != null && e.ShipWorksField.ContainingObjectName == entity.LLBLGenProEntityName);
-
-            foreach (IOdbcFieldMapEntry entry in applicableEntries)
-            {
-                string destinationName = entry.ShipWorksField.Name;
-
-                // Set the CurrentValue of the entity field who's name matches the entry field
-                entity.Fields[destinationName].CurrentValue = entry.ShipWorksField.Value;
-            }
+            Entries
+                .Where(e => e.ShipWorksField.ContainingObjectName == entity.LLBLGenProEntityName)
+                .Where(e => e.Index == index)
+                .ToList()
+                .ForEach(entry => entity.SetNewFieldValue(entry.ShipWorksField.Name, entry.ShipWorksField.Value));
         }
 
         /// <summary>
@@ -85,7 +95,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
                 return;
             }
 
-            foreach (IOdbcFieldMapEntry entry in entries)
+            foreach (IOdbcFieldMapEntry entry in Entries)
             {
                 // Load data from OdbcRecord
                 entry.LoadExternalField(record);

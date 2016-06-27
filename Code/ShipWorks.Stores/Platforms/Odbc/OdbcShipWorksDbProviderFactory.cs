@@ -49,7 +49,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// </summary>
         public IShipWorksOdbcDataAdapter CreateShipWorksOdbcDataAdapter(string selectCommandText, DbConnection selectConnection)
         {
-            return new ShipWorksOdbcDataAdapter(selectCommandText,selectConnection);
+            return new ShipWorksOdbcDataAdapter(selectCommandText, selectConnection);
         }
     }
 }

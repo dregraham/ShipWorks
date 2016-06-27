@@ -1,4 +1,5 @@
 using Interapptive.Shared.Utility;
+using Newtonsoft.Json;
 using System.Reflection;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Mapping
@@ -11,23 +12,40 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
     public class OdbcFieldMapEntry : IOdbcFieldMapEntry
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="OdbcFieldMapEntry"/> class.
+        /// Constructor
         /// </summary>
-        /// <param name="shipWorksField">The ship works field.</param>
-        /// <param name="externalField">The external field.</param>
-        public OdbcFieldMapEntry(ShipWorksOdbcMappableField shipWorksField, ExternalOdbcMappableField externalField)
-		{
-		    ShipWorksField = shipWorksField;
-		    ExternalField = externalField;
-		}
+        /// <param name="shipWorksField">Mapped Shipworks field.</param>
+        /// <param name="externalField">Mapped External Field.</param>
+        /// <param name="index">Index can be used to help identify this entry.</param>
+        [JsonConstructor]
+        public OdbcFieldMapEntry(ShipWorksOdbcMappableField shipWorksField, ExternalOdbcMappableField externalField, int index) 
+        {
+            ShipWorksField = shipWorksField;
+            ExternalField = externalField;
+            Index = index;
+        }
 
         /// <summary>
-        /// Gets the ShipWorks field.
+        /// Initializes a new instance of the <see cref="OdbcFieldMapEntry"/> class.
+        /// </summary>
+        public OdbcFieldMapEntry(ShipWorksOdbcMappableField shipWorksField, ExternalOdbcMappableField externalField)
+            : this(shipWorksField, externalField, 0)
+        {
+        }
+
+        /// <summary>
+        /// Index to help identify the entry
+        /// </summary>
+        public int Index { get; }
+
+
+        /// <summary>
+        /// Mapped Shipworks field
         /// </summary>
         public IShipWorksOdbcMappableField ShipWorksField { get; }
 
         /// <summary>
-        /// Gets the external field.
+        /// Mapped External Field
         /// </summary>
         public IExternalOdbcMappableField ExternalField { get; }
 

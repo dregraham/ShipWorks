@@ -1,11 +1,11 @@
-﻿using System.Data.Common;
-using System.Linq;
-using Autofac.Extras.Moq;
+﻿using Autofac.Extras.Moq;
 using log4net;
 using Moq;
-using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
+using System.Collections.Generic;
+using System.Data.Common;
+using System.Linq;
 using Xunit;
 
 namespace ShipWorks.Stores.Tests.Platforms.Odbc
@@ -42,6 +42,18 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
                     .Returns(command.Object);
                 dbProviderFactory.Setup(f => f.CreateShipWorksOdbcCommandBuilder(It.IsAny<ShipWorksOdbcDataAdapter>()))
                     .Returns(commandBuilder.Object);
+
+                var column = new OdbcColumn("Column Name");
+
+                var externalField = mock.Mock<IExternalOdbcMappableField>();
+                externalField.Setup(f => f.Column).Returns(column);
+
+                var mapEntry = mock.Mock<IOdbcFieldMapEntry>();
+                mapEntry.Setup(e => e.ExternalField).Returns(externalField.Object);
+
+                var map = mock.Mock<IOdbcFieldMap>();
+                map.Setup(m => m.RecordIdentifierSource).Returns("Record ID");
+                map.Setup(m => m.Entries).Returns(new List<IOdbcFieldMapEntry> { mapEntry.Object });
 
                 var testObject = mock.Create<OdbcDownloadCommand>();
 
@@ -87,6 +99,18 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
                 dbProviderFactory.Setup(f => f.CreateShipWorksOdbcCommandBuilder(It.IsAny<ShipWorksOdbcDataAdapter>()))
                     .Returns(commandBuilder.Object);
 
+                var column = new OdbcColumn("Column Name");
+
+                var externalField = mock.Mock<IExternalOdbcMappableField>();
+                externalField.Setup(f => f.Column).Returns(column);
+
+                var mapEntry = mock.Mock<IOdbcFieldMapEntry>();
+                mapEntry.Setup(e => e.ExternalField).Returns(externalField.Object);
+
+                var map = mock.Mock<IOdbcFieldMap>();
+                map.Setup(m => m.RecordIdentifierSource).Returns("Record ID");
+                map.Setup(m => m.Entries).Returns(new List<IOdbcFieldMapEntry> { mapEntry.Object });
+
                 var testObject = mock.Create<OdbcDownloadCommand>();
                 var records = testObject.Execute();
 
@@ -125,6 +149,18 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
                     .Returns(command.Object);
                 dbProviderFactory.Setup(f => f.CreateShipWorksOdbcCommandBuilder(It.IsAny<ShipWorksOdbcDataAdapter>()))
                     .Returns(commandBuilder.Object);
+
+                var column = new OdbcColumn("Column Name");
+
+                var externalField = mock.Mock<IExternalOdbcMappableField>();
+                externalField.Setup(f => f.Column).Returns(column);
+
+                var mapEntry = mock.Mock<IOdbcFieldMapEntry>();
+                mapEntry.Setup(e => e.ExternalField).Returns(externalField.Object);
+
+                var map = mock.Mock<IOdbcFieldMap>();
+                map.Setup(m => m.RecordIdentifierSource).Returns("Record ID");
+                map.Setup(m => m.Entries).Returns(new List<IOdbcFieldMapEntry> { mapEntry.Object });
 
                 var testObject = mock.Create<OdbcDownloadCommand>();
                 var records = testObject.Execute();
@@ -165,8 +201,17 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
                 dbProviderFactory.Setup(f => f.CreateShipWorksOdbcCommandBuilder(It.IsAny<ShipWorksOdbcDataAdapter>()))
                     .Returns(commandBuilder.Object);
 
+                var column = new OdbcColumn("Column Name");
+
+                var externalField = mock.Mock<IExternalOdbcMappableField>();
+                externalField.Setup(f => f.Column).Returns(column);
+
+                var mapEntry = mock.Mock<IOdbcFieldMapEntry>();
+                mapEntry.Setup(e => e.ExternalField).Returns(externalField.Object);
+
                 var map = mock.Mock<IOdbcFieldMap>();
                 map.Setup(m => m.RecordIdentifierSource).Returns("Record ID");
+                map.Setup(m => m.Entries).Returns(new List<IOdbcFieldMapEntry> { mapEntry.Object });
 
                 var testObject = mock.Create<OdbcDownloadCommand>();
                 var records = testObject.Execute();
@@ -209,6 +254,18 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
 
                 var log = mock.Mock<ILog>();
 
+                var column = new OdbcColumn("Column Name");
+
+                var externalField = mock.Mock<IExternalOdbcMappableField>();
+                externalField.Setup(f => f.Column).Returns(column);
+
+                var mapEntry = mock.Mock<IOdbcFieldMapEntry>();
+                mapEntry.Setup(e => e.ExternalField).Returns(externalField.Object);
+
+                var map = mock.Mock<IOdbcFieldMap>();
+                map.Setup(m => m.RecordIdentifierSource).Returns("Record ID");
+                map.Setup(m => m.Entries).Returns(new List<IOdbcFieldMapEntry> { mapEntry.Object });
+
                 var testObject = mock.Create<OdbcDownloadCommand>();
                 testObject.Execute();
 
@@ -229,7 +286,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
 
                 var testObject = mock.Create<OdbcDownloadCommand>();
 
-                Assert.Throws<DownloadException>(() => testObject.Execute());
+                Assert.Throws<ShipWorksOdbcException>(() => testObject.Execute());
             }
         }
     }

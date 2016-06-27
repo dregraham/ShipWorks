@@ -42,38 +42,6 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         }
 
         /// <summary>
-        /// Reads the Display Name from the stream
-        /// </summary>
-        public string ReadDisplayName()
-        {
-            try
-            {
-                return json["DisplayName"].ToString();
-            }
-            catch (Exception ex)
-            {
-                log.Error("Error parsing Display Name from map.", ex);
-                return string.Empty;
-            }
-        }
-
-        /// <summary>
-        /// Reads the External Table Name from the stream
-        /// </summary>
-        public string ReadExternalTableName()
-        {
-            try
-            {
-                return json["ExternalTableName"].ToString();
-            }
-            catch (Exception ex)
-            {
-                log.Error("Error parsing External Table Name from map.", ex);
-                return string.Empty;
-            }
-        }
-
-        /// <summary>
         /// Reads the ODBC Field Map Entry from the stream
         /// </summary>
         public OdbcFieldMapEntry ReadEntry()

@@ -49,7 +49,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
                 new ShipWorksOdbcMappableField(OrderFields.LocalStatus, OdbcOrderFieldDescription.LocalStatus),
 	            new ShipWorksOdbcMappableField(OrderFields.OnlineStatus, OdbcOrderFieldDescription.OnlineStatus),
 	            new ShipWorksOdbcMappableField(OrderFields.RequestedShipping, OdbcOrderFieldDescription.RequestedShipping),
-	            new ShipWorksOdbcMappableField(OrderFields.CustomerID, OdbcOrderFieldDescription.CustomerID),
+	            new ShipWorksOdbcMappableField(OrderFields.OnlineCustomerID, OdbcOrderFieldDescription.CustomerID),
 	            new ShipWorksOdbcMappableField(NoteFields.Text, OdbcOrderFieldDescription.NoteInternal),
 	            new ShipWorksOdbcMappableField(NoteFields.Text, OdbcOrderFieldDescription.NotePublic),
 	            new ShipWorksOdbcMappableField(OrderChargeFields.Amount, OdbcOrderFieldDescription.ChargeShipping),
@@ -72,13 +72,13 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <summary>
         /// Creates the order item field map.
         /// </summary>
-        public OdbcFieldMap CreateOrderItemFieldMap()
+        public OdbcFieldMap CreateOrderItemFieldMap(int index)
         {
             OdbcFieldMap itemMap = new OdbcFieldMap(ioFactory);
 
             foreach (ShipWorksOdbcMappableField entry in CreateShipWorksOrderItemFields())
             {
-                itemMap.AddEntry(new OdbcFieldMapEntry(entry, new ExternalOdbcMappableField(null, null)));
+                itemMap.AddEntry(new OdbcFieldMapEntry(entry, new ExternalOdbcMappableField(null, null), index));
             }
 
             return itemMap;
@@ -97,7 +97,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
                 new ShipWorksOdbcMappableField(OrderItemFields.SKU, OdbcOrderFieldDescription.ItemSKU),
                 new ShipWorksOdbcMappableField(OrderItemFields.Quantity, OdbcOrderFieldDescription.ItemQuantity),
                 new ShipWorksOdbcMappableField(OrderItemFields.UnitPrice, OdbcOrderFieldDescription.ItemUnitPrice),
-                new ShipWorksOdbcMappableField(OrderItemFields.UnitPrice, OdbcOrderFieldDescription.ItemTotalCost),
+                new ShipWorksOdbcMappableField(OrderItemFields.UnitPrice, OdbcOrderFieldDescription.ItemTotalPrice),
                 new ShipWorksOdbcMappableField(OrderItemFields.Weight, OdbcOrderFieldDescription.ItemUnitWeight),
                 new ShipWorksOdbcMappableField(OrderItemFields.Weight, OdbcOrderFieldDescription.ItemTotalWeight),
                 new ShipWorksOdbcMappableField(OrderItemFields.LocalStatus, OdbcOrderFieldDescription.ItemLocalStatus),
@@ -109,7 +109,6 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
                 new ShipWorksOdbcMappableField(OrderItemFields.Thumbnail, OdbcOrderFieldDescription.ItemThumbnail),
                 new ShipWorksOdbcMappableField(OrderItemFields.UPC, OdbcOrderFieldDescription.ItemUPC),
                 new ShipWorksOdbcMappableField(OrderItemFields.ISBN, OdbcOrderFieldDescription.ItemISBN),
-                new ShipWorksOdbcMappableField(OrderItemAttributeFields.Name, OdbcOrderFieldDescription.ItemAttributeName)
             };
 
 	        return fields;
@@ -177,13 +176,13 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         }
 
         /// <summary>
-        /// Creates a new field map from a list of field maps
+        /// Creates a new field map from the entries
         /// </summary>
-        public OdbcFieldMap CreateFieldMapFrom(IEnumerable<OdbcFieldMap> maps)
+        public OdbcFieldMap CreateFieldMapFrom(IEnumerable<IOdbcFieldMapEntry> entries)
 		{
             OdbcFieldMap masterMap = new OdbcFieldMap(ioFactory);
 
-            foreach (IOdbcFieldMapEntry entry in maps.SelectMany(map => map.Entries)
+            foreach (IOdbcFieldMapEntry entry in entries
                 .Where(entry => !string.IsNullOrWhiteSpace(entry.ExternalField.Column?.Name) &&
                 !entry.ExternalField.Column.Name.Equals("(None)", StringComparison.InvariantCulture)))
             {

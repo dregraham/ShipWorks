@@ -19,6 +19,11 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         IShipWorksOdbcMappableField ShipWorksField { get; }
 
         /// <summary>
+        /// Index to help identify the entry
+        /// </summary>
+        int Index { get; }
+
+        /// <summary>
         /// Loads the given ODBC Record into the External Field
         /// </summary>
         void LoadExternalField(OdbcRecord record);

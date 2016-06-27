@@ -102,6 +102,135 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             Assert.Equal("An error occurred while attempting to open a connection to shipworksodbc.", thrownException.Message);
         }
 
+        [Fact]
+        public void Load_RethrowsShipWorksOdbcException_WhenDbConnectionThrowsDbException()
+        {
+            Mock<DbException> exception = mock.Mock<DbException>();
+            exception.SetupGet(ex => ex.Message).Returns("Something went wrong");
+
+            Mock<DbConnection> connection = mock.Mock<DbConnection>();
+            connection.Setup(c => c.Open()).Throws(exception.Object);
+            Mock<ILog> log = mock.Mock<ILog>();
+
+            Mock<IOdbcDataSource> dataSource = mock.Mock<IOdbcDataSource>();
+            dataSource.SetupGet(d => d.Name).Returns("SomeName");
+            dataSource.Setup(d => d.CreateConnection()).Returns(connection.Object);
+
+            OdbcTable table = new OdbcTable("Orders");
+
+            Assert.Throws<ShipWorksOdbcException>(() => table.Load(dataSource.Object, log.Object));
+
+            log.Verify(l => l.Error(exception.Object));
+        }
+
+        [Fact]
+        public void Load_RethrowsShipWorksOdbcException_WhenDbConnectionThrowsGeneralException()
+        {
+            Exception ex = new Exception("Something went wrong");
+            Mock<DbConnection> connection = mock.Mock<DbConnection>();
+            connection.Setup(c => c.Open()).Throws(ex);
+            Mock<ILog> log = mock.Mock<ILog>();
+
+            Mock<IOdbcDataSource> dataSource = mock.Mock<IOdbcDataSource>();
+            dataSource.SetupGet(d => d.Name).Returns("SomeName");
+            dataSource.Setup(d => d.CreateConnection()).Returns(connection.Object);
+
+            OdbcTable table = new OdbcTable("Orders");
+
+            Assert.Throws<ShipWorksOdbcException>(() => table.Load(dataSource.Object, log.Object));
+
+            log.Verify(l => l.Error(ex));
+        }
+
+        [Fact]
+        public void LoadOpensConnection()
+        {
+            DataTable dataTable = new DataTable();
+            dataTable.Columns.Add("foo", typeof(string));
+            dataTable.Columns.Add("bar", typeof(string));
+            dataTable.Columns.Add("baz", typeof(string));
+            dataTable.Columns.Add("Name", typeof(string));
+            dataTable.Rows.Add(string.Empty, string.Empty, string.Empty, "ColumnName1");
+            dataTable.Rows.Add(string.Empty, string.Empty, string.Empty, "ColumnName2");
+
+            Mock<DbConnection> connection = mock.Mock<DbConnection>();
+            connection.Setup(c => c.GetSchema(It.IsAny<string>(), It.IsAny<string[]>())).Returns(dataTable);
+            Mock<ILog> log = mock.Mock<ILog>();
+
+            Mock<IOdbcDataSource> dataSource = mock.Mock<IOdbcDataSource>();
+            dataSource.SetupGet(d => d.Name).Returns("SomeName");
+            dataSource.Setup(d => d.CreateConnection()).Returns(connection.Object);
+
+            OdbcTable table = new OdbcTable("Orders");
+
+            table.Load(dataSource.Object, log.Object);
+            dataTable.Dispose();
+            connection.Verify(c => c.Open());
+        }
+
+        [Fact]
+        public void Load_GetsSchemaFromConnection()
+        {
+            string[] restriction =
+                {
+                    null, // table_catalog
+                    null, // table_schema
+                    "Orders", // table_name
+                    null // table_type
+                };
+
+            DataTable dataTable = new DataTable();
+            dataTable.Columns.Add("foo", typeof(string));
+            dataTable.Columns.Add("bar", typeof(string));
+            dataTable.Columns.Add("baz", typeof(string));
+            dataTable.Columns.Add("Name", typeof(string));
+            dataTable.Rows.Add(string.Empty, string.Empty, string.Empty, "ColumnName1");
+            dataTable.Rows.Add(string.Empty, string.Empty, string.Empty, "ColumnName2");
+
+            Mock<DbConnection> connection = mock.Mock<DbConnection>();
+            connection.Setup(c => c.GetSchema(It.IsAny<string>(), It.IsAny<string[]>())).Returns(dataTable);
+            Mock<ILog> log = mock.Mock<ILog>();
+
+            Mock<IOdbcDataSource> dataSource = mock.Mock<IOdbcDataSource>();
+            dataSource.SetupGet(d => d.Name).Returns("SomeName");
+            dataSource.Setup(d => d.CreateConnection()).Returns(connection.Object);
+
+            OdbcTable table = new OdbcTable("Orders");
+
+            table.Load(dataSource.Object, log.Object);
+            dataTable.Dispose();
+            connection.Verify(c => c.GetSchema("Columns", restriction));
+        }
+
+        [Fact]
+        public void Load_SetsColumnsFromConnectionGetSchema()
+        {
+            DataTable dataTable = new DataTable();
+            dataTable.Columns.Add("foo", typeof(string));
+            dataTable.Columns.Add("bar", typeof(string));
+            dataTable.Columns.Add("baz", typeof(string));
+            dataTable.Columns.Add("Name", typeof(string));
+            dataTable.Rows.Add(string.Empty, string.Empty, string.Empty, "ColumnName1");
+            dataTable.Rows.Add(string.Empty, string.Empty, string.Empty, "ColumnName2");
+
+            Mock<DbConnection> connection = mock.Mock<DbConnection>();
+            connection.Setup(c => c.GetSchema(It.IsAny<string>(), It.IsAny<string[]>())).Returns(dataTable);
+            Mock<ILog> log = mock.Mock<ILog>();
+
+            Mock<IOdbcDataSource> dataSource = mock.Mock<IOdbcDataSource>();
+            dataSource.SetupGet(d => d.Name).Returns("SomeName");
+            dataSource.Setup(d => d.CreateConnection()).Returns(connection.Object);
+
+            OdbcTable table = new OdbcTable("Orders");
+
+            table.Load(dataSource.Object, log.Object);
+
+            dataTable.Dispose();
+
+            Assert.True(table.Columns.Count(c => c.Name == "ColumnName1") == 1);
+            Assert.True(table.Columns.Count(c => c.Name == "ColumnName2") == 1);
+        }
+
         public void Dispose()
         {
             mock.Dispose();

@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Interapptive.Shared.Utility;
+﻿using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Loaders
 {
@@ -22,7 +22,10 @@ namespace ShipWorks.Stores.Platforms.Odbc.Loaders
 
             if (order.IsNew)
             {
-                IEnumerable<IOdbcFieldMapEntry> chargeEntries = map.FindEntriesBy(OrderChargeFields.Amount, false);
+                // Filter out 0 amount charges.
+                IEnumerable<IOdbcFieldMapEntry> chargeEntries = map.FindEntriesBy(OrderChargeFields.Amount, false)
+                    .Where(e => ((decimal) e.ShipWorksField.Value > 0));
+
                 foreach (IOdbcFieldMapEntry chargeEntry in chargeEntries)
                 {
                     AddChargeToOrder(order, chargeEntry);

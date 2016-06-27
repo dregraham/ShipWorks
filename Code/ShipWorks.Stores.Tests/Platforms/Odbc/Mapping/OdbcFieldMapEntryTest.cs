@@ -1,8 +1,8 @@
-﻿using System;
-using Autofac.Extras.Moq;
+﻿using Autofac.Extras.Moq;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
+using System;
 using Xunit;
 
 namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
@@ -17,13 +17,27 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
         }
 
         [Fact]
+        public void Ctor_IndexIsZero_WhenNoIndexIsSent()
+        {
+            var testObject = new OdbcFieldMapEntry(null, null);
+            Assert.Equal(0, testObject.Index);
+        }
+
+        [Fact]
+        public void Ctor_IndexIs5_When5IsSentForIndex()
+        {
+            var testObject = new OdbcFieldMapEntry(null, null, 5);
+            Assert.Equal(5, testObject.Index);
+        }
+
+        [Fact]
         public void LoadExternalField_LoadsValueOnExternalField()
         {
             ExternalOdbcMappableField externalField = new ExternalOdbcMappableField(new OdbcTable("Order"), new OdbcColumn("Number"));
             ShipWorksOdbcMappableField shipWorksField = new ShipWorksOdbcMappableField(OrderFields.OrderNumber, "Order Number");
             OdbcFieldMapEntry entry = new OdbcFieldMapEntry(shipWorksField, externalField);
 
-            OdbcRecord record = new OdbcRecord();
+            OdbcRecord record = new OdbcRecord(string.Empty);
             record.AddField("Number", 123);
 
             entry.LoadExternalField(record);
@@ -38,7 +52,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
             ShipWorksOdbcMappableField shipWorksField = new ShipWorksOdbcMappableField(OrderFields.OrderNumber, "Order Number");
             OdbcFieldMapEntry entry = new OdbcFieldMapEntry(shipWorksField, externalField);
 
-            OdbcRecord record = new OdbcRecord();
+            OdbcRecord record = new OdbcRecord(string.Empty);
             record.AddField("Number", 123);
 
             entry.LoadExternalField(record);

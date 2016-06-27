@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Autofac.Extras.Moq;
+﻿using Autofac.Extras.Moq;
 using Moq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Odbc.Loaders;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
+using System.Collections.Generic;
+using System.Linq;
 using Xunit;
 
 namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
@@ -20,7 +20,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
                 var map = mock.Mock<IOdbcFieldMap>();
 
                 var shipworksField = mock.Mock<IShipWorksOdbcMappableField>();
-                shipworksField.Setup(e => e.GetQualifiedName()).Returns("OrderPaymentDetail.Value");
+                shipworksField.SetupGet(e => e.QualifiedName).Returns("OrderPaymentDetail.Value");
                 shipworksField.Setup(e => e.DisplayName).Returns("Payment Method");
                 shipworksField.Setup(e => e.Value).Returns("Credit Card");
 
@@ -28,7 +28,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
                 mapEntry.Setup(e => e.ShipWorksField).Returns(shipworksField.Object);
 
                 map.Object.AddEntry(mapEntry.Object);
-                map.Setup(m => m.FindEntriesBy(It.IsAny<EntityField2>())).
+                map.Setup(m => m.FindEntriesBy(It.IsAny<EntityField2>(), false)).
                     Returns(new List<IOdbcFieldMapEntry> { mapEntry.Object });
 
                 OdbcOrderPaymentLoader testObject = new OdbcOrderPaymentLoader();
@@ -49,7 +49,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
                 var map = mock.Mock<IOdbcFieldMap>();
 
                 var shipworksField = mock.Mock<IShipWorksOdbcMappableField>();
-                shipworksField.Setup(e => e.GetQualifiedName()).Returns("OrderPaymentDetail.Value");
+                shipworksField.SetupGet(e => e.QualifiedName).Returns("OrderPaymentDetail.Value");
                 shipworksField.Setup(e => e.DisplayName).Returns("Payment Method");
                 shipworksField.Setup(e => e.Value).Returns("Credit Card");
 
@@ -57,7 +57,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
                 mapEntry.Setup(e => e.ShipWorksField).Returns(shipworksField.Object);
 
                 var shipworksfield2 = mock.Mock<IShipWorksOdbcMappableField>();
-                shipworksfield2.Setup(e => e.GetQualifiedName()).Returns("OrderPaymentDetail.Value");
+                shipworksfield2.SetupGet(e => e.QualifiedName).Returns("OrderPaymentDetail.Value");
                 shipworksfield2.Setup(e => e.DisplayName).Returns("Credit Card Type");
                 shipworksfield2.Setup(e => e.Value).Returns("Visa");
 
@@ -66,7 +66,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
 
                 map.Object.AddEntry(mapEntry.Object);
                 map.Object.AddEntry(mapEntry2.Object);
-                map.Setup(m => m.FindEntriesBy(It.IsAny<EntityField2>())).
+                map.Setup(m => m.FindEntriesBy(It.IsAny<EntityField2>(), false)).
                     Returns(new List<IOdbcFieldMapEntry> { mapEntry.Object, mapEntry2.Object });
 
                 OdbcOrderPaymentLoader testObject = new OdbcOrderPaymentLoader();
@@ -89,7 +89,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
                 var map = mock.Mock<IOdbcFieldMap>();
 
                 var shipworksField = mock.Mock<IShipWorksOdbcMappableField>();
-                shipworksField.Setup(e => e.GetQualifiedName()).Returns("Blah");
+                shipworksField.SetupGet(e => e.QualifiedName).Returns("Blah");
 
                 var mapEntry = mock.Mock<IOdbcFieldMapEntry>();
                 mapEntry.Setup(e => e.ShipWorksField).Returns(shipworksField.Object);

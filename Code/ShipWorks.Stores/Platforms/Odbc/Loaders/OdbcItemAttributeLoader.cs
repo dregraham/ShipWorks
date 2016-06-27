@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Loaders
 {
@@ -13,27 +15,21 @@ namespace ShipWorks.Stores.Platforms.Odbc.Loaders
         /// <summary>
         /// Load the item attributes from the given map into the given item entity
         /// </summary>
-        public void Load(IOdbcFieldMap map, OrderItemEntity item)
+        public void Load(IOdbcFieldMap map, OrderItemEntity item, int index)
         {
-            if (item != null)
+            MethodConditions.EnsureArgumentIsNotNull(item);
+
+            IEnumerable<IOdbcFieldMapEntry> itemEntries =
+                map.FindEntriesBy(OrderItemAttributeFields.Name)
+                    .Where(e => e.Index == index)
+                    .Where(e => !string.IsNullOrWhiteSpace((string) e.ShipWorksField.Value));
+
+            foreach (IOdbcFieldMapEntry entry in itemEntries)
             {
-                IEnumerable<IOdbcFieldMapEntry> itemEntries = map.FindEntriesBy(OrderItemAttributeFields.Name, false);
-
-                foreach (IOdbcFieldMapEntry entry in itemEntries)
-                {
-                    AddItemAttributeToItem(item, entry);
-                }
+                OrderItemAttributeEntity attribute = new OrderItemAttributeEntity(item);
+                attribute.Name = entry.ExternalField.Column.Name;
+                attribute.Description = entry.ShipWorksField.Value.ToString();
             }
-        }
-
-        /// <summary>
-        /// Adds an item attribute to an item.
-        /// </summary>
-        private void AddItemAttributeToItem(OrderItemEntity item, IOdbcFieldMapEntry entry)
-        {
-            OrderItemAttributeEntity attribute = new OrderItemAttributeEntity(item);
-            attribute.Name = entry.ExternalField.Column.Name;
-            attribute.Description = entry.ShipWorksField.Value.ToString();
         }
     }
 }

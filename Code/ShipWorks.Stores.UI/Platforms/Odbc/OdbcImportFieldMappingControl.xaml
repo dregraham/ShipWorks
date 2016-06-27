@@ -9,6 +9,7 @@
              xmlns:behaviors="clr-namespace:ShipWorks.UI.Behaviors;assembly=ShipWorks.UI"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:ui="http://schemas.shipworks.com/ui"
+             xmlns:system="clr-namespace:System;assembly=mscorlib"
              d:DataContext="{d:DesignInstance local:OdbcImportFieldMappingControlViewModel}"
              Height="500" Width="540"
              FontFamily="Tahoma" FontSize="8.25pt"
@@ -26,16 +27,25 @@
             <Setter Property="Padding" Value="1 4 0 4" />
         </Style>
         <Style TargetType="{x:Type Button}">
-            <Setter Property="Margin" Value="5 5 0 5" />
+            <Setter Property="Margin" Value="5 2.5 0 2.5" />
             <Setter Property="Padding" Value="5 2 5 2" />
             <Setter Property="Width" Value="80" />
         </Style>
         <Style TargetType="{x:Type ComboBox}">
             <Setter Property="Margin" Value="2 5 0 5" />
             <Setter Property="Padding" Value="4 4 0 4" />
+            <Setter Property="Height" Value="24"/>
+        </Style>
+        <Style TargetType="{x:Type RadioButton}">
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="0 0 5 0" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
         </Style>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
         <ui:VisibleWhenEqualToParameterConverter x:Key="VisibleWhenEqualToParameterConverter" />
+        <local:OdbcFieldMapMultiValueConverter x:Key="MapMultiValueConverter" />
         <DataTemplate x:Key="SourceColumnComboBoxItemTemplate">
             <Control x:Name="SourceColumns" Focusable="False">
                 <Control.Template>
@@ -74,204 +84,312 @@
             </DataTemplate.Triggers>
         </DataTemplate>
     </Control.Resources>
+
     <Grid Margin="20 10 10 10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
-            <RowDefinition Height="Auto"></RowDefinition>
-            <RowDefinition Height="20"></RowDefinition>
-            <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="80"></ColumnDefinition>
-            <ColumnDefinition Width="*"></ColumnDefinition>
-            <ColumnDefinition Width="Auto"></ColumnDefinition>
-        </Grid.ColumnDefinitions>
-        <Label Grid.Row="0" Grid.Column="0"
+        <Grid Grid.Row="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="80"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="Auto"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Label Grid.Row="0" Grid.Column="0"
                Style="{StaticResource Header}"
                FontWeight="Bold" Content="Map Settings"/>
-        <Label Grid.Row="1" Grid.Column="0"
-               HorizontalAlignment="Right" Content="Name:" />
-        <Label Grid.Row="2" Grid.Column="0"
-               HorizontalAlignment="Right" Content="Table:" />
-        <TextBox Grid.Row="1" Grid.Column="1"
-                 Text="{Binding MapName, UpdateSourceTrigger=PropertyChanged}"/>
-        <ComboBox Grid.Row="2" Grid.Column="1"
+            <Label Grid.Row="1" Grid.Column="0"
+                   VerticalAlignment="Center"
+                   HorizontalAlignment="Right" Content="Name:" Margin="0"/>
+            <Label Grid.Row="2" Grid.Column="0"
+                   VerticalAlignment="Center"
+                   HorizontalAlignment="Right" Content="Table:" Margin="0"/>
+            <TextBox Grid.Row="1" Grid.Column="1"
+                     Margin="2 2.5 0 2.5"
+                 Text="{Binding MapName, UpdateSourceTrigger=PropertyChanged}"
+                     VerticalAlignment="Center"
+                     Height="24"/>
+            <ComboBox Grid.Row="2" Grid.Column="1"
+                      Margin="2 2.5 0 2.5"
                   ItemsSource="{Binding Tables, UpdateSourceTrigger=PropertyChanged}"
                   DisplayMemberPath="Name"
-                  SelectedValue="{Binding SelectedTable,Mode=TwoWay}" >
-            <i:Interaction.Behaviors>
-                <behaviors:ComboBoxSelectionChangedBehavior Command="{Binding TableChangedCommand}" />
-            </i:Interaction.Behaviors>
-        </ComboBox>
-        <Button Grid.Row="1" Grid.Column="2"
+                  SelectedValue="{Binding SelectedTable,Mode=TwoWay}"
+                      VerticalAlignment="Center">
+                <i:Interaction.Behaviors>
+                    <behaviors:ComboBoxSelectionChangedBehavior Command="{Binding TableChangedCommand}" />
+                </i:Interaction.Behaviors>
+            </ComboBox>
+            <Button Grid.Row="1" Grid.Column="2"
                 Content="Load Map..."
                 Command="{Binding SaveMapCommand}"/>
-        <Button Grid.Row="2" Grid.Column="2"
+            <Button Grid.Row="2" Grid.Column="2"
                 Content="Export Map..."
                 Command="{Binding SaveMapCommand}"/>
+        </Grid>
 
-        <Label Style="{StaticResource Header}"
-               Grid.Row="4" Grid.Column="0"
+        <Border Grid.Row="1" BorderThickness="0" BorderBrush="Gray"
+                Margin="0 0 0 0"
+                Padding="0 0 0 5">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal">
+                    <Label Content="Orders contain items on:"
+                       Margin="0"
+                       HorizontalContentAlignment="Right"
+                       Width="170"/>
+                    <RadioButton GroupName="OrderItemStrategy" Content="A single row"
+                                 IsChecked="{Binding IsSingleLineOrder, UpdateSourceTrigger=PropertyChanged}" />
+                    <RadioButton GroupName="OrderItemStrategy" Content="Multiple rows" />
+                </StackPanel>
+
+                <StackPanel Grid.Row="2" Orientation="Horizontal"
+                            Margin="0 2.5 0 2.5"
+                            d:IsHidden="true">
+                    <StackPanel.Visibility>
+                        <Binding Path="IsSingleLineOrder"
+                                 Converter="{StaticResource VisibleWhenEqualToParameterConverter}">
+                            <Binding.ConverterParameter>
+                                <system:Boolean>True</system:Boolean>
+                            </Binding.ConverterParameter>
+                        </Binding>
+                    </StackPanel.Visibility>
+                    <Label Margin="0 0 5 0" HorizontalContentAlignment="Right"
+                           VerticalAlignment="Center"
+                           Content="Each order contains up to:"
+                           Width="220" />
+                    <ComboBox ItemsSource="{Binding NumbersUpTo25, UpdateSourceTrigger=PropertyChanged}"
+                              SelectedItem="{Binding NumberOfItemsPerOrder}"
+                              Width="50" Margin="0"
+                              VerticalAlignment="Center"/>
+                    <Label Content="items" Padding="0"
+                           VerticalAlignment="Center"
+                           Margin="5 0 0 0"/>
+                </StackPanel>
+
+                <Grid Row="2" Column="0"
+                      d:IsHidden="false"
+                      Margin="0 2.5 0 2.5">
+                    <Grid.Visibility>
+                        <Binding Path="IsSingleLineOrder"
+                                 Converter="{StaticResource VisibleWhenEqualToParameterConverter}">
+                            <Binding.ConverterParameter>
+                                <system:Boolean>False</system:Boolean>
+                            </Binding.ConverterParameter>
+                        </Binding>
+                    </Grid.Visibility>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <Label Grid.Column="0" Content="Column that uniquely identifies each order:"
+                           Width="220" HorizontalContentAlignment="Right"
+                           VerticalAlignment="Center"
+                           Margin="0 0 5 0"/>
+                    <ComboBox Grid.Column="1" ItemsSource="{Binding Columns, UpdateSourceTrigger=PropertyChanged}"
+                              SelectedItem="{Binding RecordIdentifier}"
+                              TextSearch.TextPath="Name"
+                              ItemTemplate="{StaticResource SourceColumnComboBoxItemTemplate}"
+                              VerticalAlignment="Center"
+                              MinHeight="21"
+                              Margin="0"/>
+                    <Image Grid.Column="2" Source="/Shipworks.Core;component/Resources/InfoTip.png"
+                                   Margin="5 0 0 0"
+                           VerticalAlignment="Center">
+                        <Image.ToolTip>
+                            <ToolTip>
+                                <Label Content="Each repeating line that represents an item of the same order must have the same value in this column."></Label>
+                            </ToolTip>
+                        </Image.ToolTip>
+                    </Image>
+                </Grid>
+
+                <StackPanel Grid.Row="3" Grid.Column="0" Orientation="Horizontal"
+                            Margin="0 2.5 0 2.5">
+                    <Label VerticalAlignment="Center" HorizontalContentAlignment="Right"
+                           Width="220"
+                           Content="Each item contains up to:"
+                           Margin="0 0 5 0"/>
+                    <ComboBox ItemsSource="{Binding NumbersUpTo25, UpdateSourceTrigger=PropertyChanged}"
+                              SelectedItem="{Binding NumberOfAttributesPerItem, UpdateSourceTrigger=PropertyChanged}"
+                              Width="50" VerticalAlignment="Center"
+                              Margin="0"/>
+                    <Label Content="attributes" Padding="0"
+                           VerticalAlignment="Center"
+                           Margin="5 0 0 0"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <Grid Grid.Row="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="80"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Label Style="{StaticResource Header}"
+               Grid.Row="0" Grid.Column="0"
                Grid.ColumnSpan="2"
                FontWeight="Bold" Content="Column Mappings" />
-        <ListBox Grid.Row="5" Grid.Column="0"
-                 ItemsSource="{Binding FieldMaps, UpdateSourceTrigger=PropertyChanged}"
+            <ListBox Grid.Row="1" Grid.Column="0"
                  SelectedItem="{Binding SelectedFieldMap}"
                  Margin="0 5 2 0"
                  BorderBrush="Gray"
                  BorderThickness="1"
                  Background="White"
-                 SelectedIndex="0">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <Label Content="{Binding DisplayName}" Padding="3"/>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-            <ListBox.ItemContainerStyle>
-                <Style TargetType="{x:Type ListBoxItem}">
-                    <Setter Property="Template">
-                        <Setter.Value>
-                            <ControlTemplate TargetType="{x:Type ListBoxItem}">
-                                <Border x:Name="Item"
+                 SelectedIndex="0"
+                     HorizontalContentAlignment="Left" SelectionChanged="SelectedFieldMapChanged">
+
+                <ListBox.ItemsSource>
+                    <MultiBinding Converter="{StaticResource MapMultiValueConverter}">
+                        <Binding Path="Order" />
+                        <Binding Path="Address" />
+                        <Binding Path="Items" />
+                        <Binding Path="Items.Count" UpdateSourceTrigger="PropertyChanged"/>
+                    </MultiBinding>
+                </ListBox.ItemsSource>
+                <ListBox.ItemTemplate>
+                    <DataTemplate DataType="local:OdbcFieldMapDisplay">
+                        <Label Content="{Binding DisplayName}" Padding="0 3 3 3"
+                               HorizontalAlignment="Left"
+                               VerticalAlignment="Center"
+                               Margin="0"/>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="{x:Type ListBoxItem}">
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                    <Border x:Name="Item"
                                         Background="{TemplateBinding Background}"
                                         BorderBrush="{TemplateBinding BorderBrush}"
                                         BorderThickness="{TemplateBinding BorderThickness}"
                                         Padding="{TemplateBinding Padding}"
                                         SnapsToDevicePixels="True">
-                                    <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
+                                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
                                                       VerticalAlignment="{TemplateBinding VerticalAlignment}"
                                                       Content="{TemplateBinding Content}"
                                                       ContentStringFormat="{TemplateBinding ContentStringFormat}"
                                                       ContentTemplate="{TemplateBinding ContentTemplate}"
                                                       SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
-                                </Border>
-                                <ControlTemplate.Triggers>
-                                    <Trigger Property="IsSelected" Value="true" >
-                                        <Setter TargetName="Item" Property="Background">
-                                            <Setter.Value>
-                                                <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1.5">
-                                                    <GradientStop Color="#FFD8A9" Offset="0" />
-                                                    <GradientStop Color="#ffc964" Offset=".5" />
-                                                </LinearGradientBrush>
-                                            </Setter.Value>
-                                        </Setter>
-                                        <Setter TargetName="Item" Property="BorderBrush" Value="Gray" />
-                                        <Setter TargetName="Item" Property="BorderThickness" Value="1" />
-                                        <Setter TargetName="Item" Property="CornerRadius" Value="2" />
-                                    </Trigger>
-                                    <Trigger Property="IsMouseOver" Value="true" >
-                                        <Setter TargetName="Item" Property="Background">
-                                            <Setter.Value>
-                                                <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1.5">
-                                                    <GradientStop Color="#fff4c9" Offset="0" />
-                                                    <GradientStop Color="#ffe685" Offset=".5" />
-                                                </LinearGradientBrush>
-                                            </Setter.Value>
-                                        </Setter>
-                                        <Setter TargetName="Item" Property="BorderBrush" Value="Gray" />
-                                        <Setter TargetName="Item" Property="BorderThickness" Value="1" />
-                                        <Setter TargetName="Item" Property="CornerRadius" Value="2" />
-                                    </Trigger>
-                                </ControlTemplate.Triggers>
-                            </ControlTemplate>
-                        </Setter.Value>
-                    </Setter>
-                    <Setter Property="Height" Value="35" />
-                </Style>
-            </ListBox.ItemContainerStyle>
-        </ListBox>
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsSelected" Value="true" >
+                                            <Setter TargetName="Item" Property="Background">
+                                                <Setter.Value>
+                                                    <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1.5">
+                                                        <GradientStop Color="#FFD8A9" Offset="0" />
+                                                        <GradientStop Color="#ffc964" Offset=".5" />
+                                                    </LinearGradientBrush>
+                                                </Setter.Value>
+                                            </Setter>
+                                            <Setter TargetName="Item" Property="BorderBrush" Value="Gray" />
+                                            <Setter TargetName="Item" Property="BorderThickness" Value="1" />
+                                            <Setter TargetName="Item" Property="CornerRadius" Value="2" />
+                                        </Trigger>
+                                        <Trigger Property="IsMouseOver" Value="true" >
+                                            <Setter TargetName="Item" Property="Background">
+                                                <Setter.Value>
+                                                    <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1.5">
+                                                        <GradientStop Color="#fff4c9" Offset="0" />
+                                                        <GradientStop Color="#ffe685" Offset=".5" />
+                                                    </LinearGradientBrush>
+                                                </Setter.Value>
+                                            </Setter>
+                                            <Setter TargetName="Item" Property="BorderBrush" Value="Gray" />
+                                            <Setter TargetName="Item" Property="BorderThickness" Value="1" />
+                                            <Setter TargetName="Item" Property="CornerRadius" Value="2" />
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                        <Setter Property="Height" Value="35" />
+                    </Style>
+                </ListBox.ItemContainerStyle>
+            </ListBox>
 
-        <Border Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2"
+            <Border Grid.Row="1" Grid.Column="1"
                     BorderBrush="Gray" BorderThickness="1"
                     Margin="2 5 0 0"
                     Background="White">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="*" />
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="140" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <Border Grid.Row="0" Grid.Column="0"
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="145" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Border Grid.Row="0" Grid.Column="0"
                         BorderThickness="0 0 0 1" BorderBrush="Gray">
-                    <Label Content="ShipWorks Field" FontWeight="Bold"
+                        <Label Content="ShipWorks Field" FontWeight="Bold"
                            Padding="0" Margin="5"/>
-                </Border>
-                <Border Grid.Row="0" Grid.Column="1"
+                    </Border>
+                    <Border Grid.Row="0" Grid.Column="1"
                         BorderThickness="0 0 0 1" BorderBrush="Gray">
-                    <Label Content="Source Column" FontWeight="Bold"
+                        <Label Content="Source Column" FontWeight="Bold"
                            Padding="0" Margin="0 5 5 5"/>
-                </Border>
-                <ScrollViewer Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+                    </Border>
+                    <ScrollViewer x:Name="MappingGridScrollbar" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
                                   VerticalScrollBarVisibility="Auto">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"></RowDefinition>
-                            <RowDefinition Height="*"></RowDefinition>
-                        </Grid.RowDefinitions>
-                        <Border Grid.Row="0" BorderThickness="0 0 0 1" BorderBrush="Gray"
-                                Visibility="{Binding SelectedFieldMap.DisplayName,
-                            Converter={StaticResource VisibleWhenEqualToParameterConverter},
-                            ConverterParameter='Item'}">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="Auto" />
-                                </Grid.ColumnDefinitions>
-                                <Label Grid.Column="0" Content="Column that uniquely identifies each order:" />
-                                <ComboBox Grid.Column="1" ItemsSource="{Binding Columns, UpdateSourceTrigger=PropertyChanged}"
-                                      SelectedItem="{Binding RecordIdentifier}"
-                                      TextSearch.TextPath="Name"
-                                      ItemTemplate="{StaticResource SourceColumnComboBoxItemTemplate}"/>
-                                <Image Grid.Column="2" Source="/Shipworks.Core;component/Resources/InfoTip.png"
-                                   Margin="5">
-                                    <Image.ToolTip>
-                                        <ToolTip>
-                                            <Label Content="Each repeating line that represents an item of the same order must have the same value in this column."></Label>
-                                        </ToolTip>
-                                    </Image.ToolTip>
-                                </Image>
-                            </Grid>
-                        </Border>
-                        <ItemsControl Grid.Row="1"
-                            ItemsSource="{Binding SelectedFieldMap.Map.Entries, UpdateSourceTrigger=PropertyChanged}">
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate DataType="{x:Type fieldMap:OdbcFieldMapEntry}">
-                                    <Border BorderBrush="Gray" BorderThickness="0 0 0 1">
-                                        <Grid>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="140" />
-                                                <ColumnDefinition Width="*" />
-                                            </Grid.ColumnDefinitions>
-                                            <Label Grid.Column="0" Content="{Binding ShipWorksField.DisplayName}"
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"></RowDefinition>
+                                <RowDefinition Height="*"></RowDefinition>
+                            </Grid.RowDefinitions>
+                            <ItemsControl Grid.Row="1"
+                            ItemsSource="{Binding SelectedFieldMap.Entries, UpdateSourceTrigger=PropertyChanged}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate DataType="{x:Type fieldMap:OdbcFieldMapEntry}">
+                                        <Border BorderBrush="Gray" BorderThickness="0 0 0 1">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="145" />
+                                                    <ColumnDefinition Width="*" />
+                                                </Grid.ColumnDefinitions>
+                                                <Label Grid.Column="0" Content="{Binding ShipWorksField.DisplayName}"
                                                Margin="0 5 5 5"
                                                HorizontalAlignment="Left"/>
-                                            <ComboBox Grid.Column="1"
+                                                <ComboBox Grid.Column="1"
                                                       ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl},
                                                 Path=DataContext.Columns, UpdateSourceTrigger=PropertyChanged}"
                                                       HorizontalAlignment="Stretch"
                                                       Margin="0 5 5 5"
                                                       SelectedItem="{Binding ExternalField.Column}"
                                                       TextSearch.TextPath="Name"
-                                                      ItemTemplate="{StaticResource SourceColumnComboBoxItemTemplate}">
-                                            </ComboBox>
-                                            <Label Grid.Column="0" Foreground="Red"
+                                                      ItemTemplate="{StaticResource SourceColumnComboBoxItemTemplate}" />
+                                                <Label Grid.Column="0" Foreground="Red"
                                                Content="Required"
                                                Visibility="{Binding ShipWorksField.IsRequired, Converter={StaticResource BooleanToVisibility}}"
                                                HorizontalAlignment="Right"/>
-                                        </Grid>
-                                    </Border>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
-                    </Grid>
-                </ScrollViewer>
-            </Grid>
-        </Border>
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </Grid>
+                    </ScrollViewer>
+                </Grid>
+            </Border>
+        </Grid>
     </Grid>
 </UserControl>
