@@ -512,22 +512,31 @@ namespace ShipWorks.ApplicationCore.Crashes
             AppendLineIgnoreException(() => sb.AppendFormat("ScreenDimensionsPrimary: {0}\r\n", $"{ Screen.PrimaryScreen.Bounds.Width}x{Screen.PrimaryScreen.Bounds.Height}"));
             AppendLineIgnoreException(() => sb.AppendFormat("ScreenDpiPrimary: {0}\r\n", MyComputer.GetSystemDpi()));
 
+            GetSqlSessionEnvironmentInfo(sb);
+
+            return sb.ToString();
+        }
+
+        /// <summary>
+        /// Add SqlSession info to the given string builder
+        /// </summary>
+        /// <param name="environmentInfoStringBuilder"></param>
+        private static void GetSqlSessionEnvironmentInfo(StringBuilder environmentInfoStringBuilder)
+        {
             if (SqlSession.IsConfigured)
             {
-                AppendLineIgnoreException(() => sb.AppendFormat("Sql Server Instance Name: {0}\r\n", SqlSession.Current.Configuration.ServerInstance));
-                AppendLineIgnoreException(() => sb.AppendFormat("Sql Server Database Name: {0}\r\n", SqlSession.Current.Configuration.DatabaseName));
-                AppendLineIgnoreException(() => sb.AppendFormat("Sql Server Is LocalDB: {0}\r\n", SqlSession.Current.Configuration.IsLocalDb()));
+                AppendLineIgnoreException(() => environmentInfoStringBuilder.AppendFormat("Sql Server Instance Name: {0}\r\n", SqlSession.Current.Configuration.ServerInstance));
+                AppendLineIgnoreException(() => environmentInfoStringBuilder.AppendFormat("Sql Server Database Name: {0}\r\n", SqlSession.Current.Configuration.DatabaseName));
+                AppendLineIgnoreException(() => environmentInfoStringBuilder.AppendFormat("Sql Server Is LocalDB: {0}\r\n", SqlSession.Current.Configuration.IsLocalDb()));
 
-                AppendLineIgnoreException(() => sb.AppendFormat("Sql Server Machine Name: {0}\r\n", SqlSession.Current.GetServerMachineName()));
-                AppendLineIgnoreException(() => sb.AppendFormat("Sql Server Version: {0}\r\n", SqlSession.Current.GetServerVersion()));
-                AppendLineIgnoreException(() => sb.AppendFormat("Sql Server Is Local Server: {0}\r\n", SqlSession.Current.IsLocalServer()));
+                AppendLineIgnoreException(() => environmentInfoStringBuilder.AppendFormat("Sql Server Machine Name: {0}\r\n", SqlSession.Current.GetServerMachineName()));
+                AppendLineIgnoreException(() => environmentInfoStringBuilder.AppendFormat("Sql Server Version: {0}\r\n", SqlSession.Current.GetServerVersion()));
+                AppendLineIgnoreException(() => environmentInfoStringBuilder.AppendFormat("Sql Server Is Local Server: {0}\r\n", SqlSession.Current.IsLocalServer()));
             }
             else
             {
-                AppendLineIgnoreException(() => sb.AppendFormat("Sql Session reported that it is not configured."));
+                AppendLineIgnoreException(() => environmentInfoStringBuilder.AppendFormat("Sql Session reported that it is not configured."));
             }
-
-            return sb.ToString();
         }
 
         /// <summary>
