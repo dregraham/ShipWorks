@@ -172,6 +172,7 @@
     <Compile Include="Platforms\Odbc\EncryptedOdbcDataSource.cs" />
     <Compile Include="Platforms\Odbc\IOdbcCommand.cs" />
     <Compile Include="Platforms\Odbc\IOdbcDataSource.cs" />
+    <Compile Include="Platforms\Odbc\IOdbcSampleDataCommand.cs" />
     <Compile Include="Platforms\Odbc\IOdbcSchema.cs" />
     <Compile Include="Platforms\Odbc\IOdbcColumnSource.cs" />
     <Compile Include="Platforms\Odbc\IOdbcWizardPage.cs" />
@@ -212,6 +213,7 @@
     <Compile Include="Platforms\Odbc\OdbcCommandFactory.cs" />
     <Compile Include="Platforms\Odbc\OdbcDownloadCommand.cs" />
     <Compile Include="Platforms\Odbc\OdbcRecord.cs" />
+    <Compile Include="Platforms\Odbc\OdbcSampleDataCommand.cs" />
     <Compile Include="Platforms\Odbc\OdbcSchema.cs" />
     <Compile Include="Platforms\Odbc\OdbcStoreDownloader.cs" />
     <Compile Include="Platforms\Odbc\OdbcTable.cs" />
