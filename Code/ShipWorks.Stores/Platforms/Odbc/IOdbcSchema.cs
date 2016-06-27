@@ -13,9 +13,13 @@ namespace ShipWorks.Stores.Platforms.Odbc
         IEnumerable<OdbcTable> Tables { get; }
 
         /// <summary>
-        /// Load the given DataSource and retrieve a list of its tables
+        /// Load the given DataSource
         /// </summary>
-        /// <param name="dataSource"></param>
         void Load(IOdbcDataSource dataSource);
+
+        /// <summary>
+        /// Sets tables to be a single table representing the schema of this query.
+        /// </summary>
+        void Load(IOdbcDataSource dataSource, string query);
     }
 }

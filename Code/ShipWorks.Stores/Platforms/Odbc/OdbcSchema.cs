@@ -1,10 +1,9 @@
+using log4net;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
-using System.Data.Odbc;
 using System.Linq;
-using log4net;
 
 namespace ShipWorks.Stores.Platforms.Odbc
 {
@@ -31,9 +30,8 @@ namespace ShipWorks.Stores.Platforms.Odbc
 	    public IEnumerable<OdbcTable> Tables { get; private set; }
 
         /// <summary>
-        /// Loads the given Data Source's Schema
+        /// Populates Table property with the schema of the given datasource.
         /// </summary>
-        /// <param name="dataSource"></param>
         public void Load(IOdbcDataSource dataSource)
         {
             using (DbConnection connection = dataSource.CreateConnection())
@@ -77,5 +75,13 @@ namespace ShipWorks.Stores.Platforms.Odbc
                 }
             }
         }
-	}
+
+        /// <summary>
+        /// Sets tables to be a single table representing the schema of this query.
+        /// </summary>
+        public void Load(IOdbcDataSource dataSource, string query)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }
