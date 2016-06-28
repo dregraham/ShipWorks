@@ -31,13 +31,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// The ODBC Field Map Entries
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public IEnumerable<IOdbcFieldMapEntry> Entries
-        {
-            get
-            {
-                return entries;
-            }
-        }
+        public IEnumerable<IOdbcFieldMapEntry> Entries => entries;
 
         /// <summary>
         /// Gets or sets the name of the record identifier column.
@@ -52,6 +46,12 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 		{
 			entries.Add(entry);
 		}
+
+        /// <summary>
+        /// Gets or sets the custom query.
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public string CustomQuery { get; set; }
 
         /// <summary>
         /// Reset all of the entries external fields
