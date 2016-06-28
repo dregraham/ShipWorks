@@ -30,7 +30,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             Mock<IShipWorksDbProviderFactory> dbProviderFactory = mock.Mock<IShipWorksDbProviderFactory>();
             dbProviderFactory.Setup(d => d.CreateOdbcCommand(It.IsAny<string>(), It.IsAny<DbConnection>())).Returns(cmd.Object);
 
-            Mock<ILog> log = mock.Mock<ILog>();
             Mock<DbConnection> conn = mock.Mock<DbConnection>();
 
             Mock<IOdbcDataSource> dataSource = mock.Mock<IOdbcDataSource>();
@@ -38,7 +37,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
 
             OdbcSampleDataCommand testObject = mock.Create<OdbcSampleDataCommand>();
 
-            testObject.Execute(dataSource.Object, "SELECT * FROM ORDERS");
+            testObject.Execute(dataSource.Object, "SELECT * FROM ORDERS", 10);
 
             dataSource.Verify(d => d.CreateConnection());
         }
@@ -55,7 +54,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             Mock<IShipWorksDbProviderFactory> dbProviderFactory = mock.Mock<IShipWorksDbProviderFactory>();
             dbProviderFactory.Setup(d => d.CreateOdbcCommand(It.IsAny<string>(), It.IsAny<DbConnection>())).Returns(cmd.Object);
 
-            Mock<ILog> log = mock.Mock<ILog>();
             Mock<DbConnection> conn = mock.Mock<DbConnection>();
 
             Mock<IOdbcDataSource> dataSource = mock.Mock<IOdbcDataSource>();
@@ -63,7 +61,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
 
             OdbcSampleDataCommand testObject = mock.Create<OdbcSampleDataCommand>();
 
-            testObject.Execute(dataSource.Object, "SELECT * FROM ORDERS");
+            testObject.Execute(dataSource.Object, "SELECT * FROM ORDERS", 10);
 
             conn.Verify(c => c.Open());
         }
@@ -80,7 +78,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             Mock<IShipWorksDbProviderFactory> dbProviderFactory = mock.Mock<IShipWorksDbProviderFactory>();
             dbProviderFactory.Setup(d => d.CreateOdbcCommand(It.IsAny<string>(), It.IsAny<DbConnection>())).Returns(cmd.Object);
 
-            Mock<ILog> log = mock.Mock<ILog>();
             Mock<DbConnection> conn = mock.Mock<DbConnection>();
 
             Mock<IOdbcDataSource> dataSource = mock.Mock<IOdbcDataSource>();
@@ -88,7 +85,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
 
             OdbcSampleDataCommand testObject = mock.Create<OdbcSampleDataCommand>();
 
-            testObject.Execute(dataSource.Object, "SELECT * FROM ORDERS");
+            testObject.Execute(dataSource.Object, "SELECT * FROM ORDERS", 10);
 
             cmd.Verify(c => c.Cancel());
         }
@@ -105,7 +102,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             Mock<IShipWorksDbProviderFactory> dbProviderFactory = mock.Mock<IShipWorksDbProviderFactory>();
             dbProviderFactory.Setup(d => d.CreateOdbcCommand(It.IsAny<string>(), It.IsAny<DbConnection>())).Returns(cmd.Object);
 
-            Mock<ILog> log = mock.Mock<ILog>();
             Mock<DbConnection> conn = mock.Mock<DbConnection>();
 
             Mock<IOdbcDataSource> dataSource = mock.Mock<IOdbcDataSource>();
@@ -113,7 +109,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
 
             OdbcSampleDataCommand testObject = mock.Create<OdbcSampleDataCommand>();
 
-            testObject.Execute(dataSource.Object, "SELECT * FROM ORDERS");
+            testObject.Execute(dataSource.Object, "SELECT * FROM ORDERS", 10);
 
             reader.Verify(r => r.GetSchemaTable());
         }
@@ -130,7 +126,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             Mock<IShipWorksDbProviderFactory> dbProviderFactory = mock.Mock<IShipWorksDbProviderFactory>();
             dbProviderFactory.Setup(d => d.CreateOdbcCommand(It.IsAny<string>(), It.IsAny<DbConnection>())).Returns(cmd.Object);
 
-            Mock<ILog> log = mock.Mock<ILog>();
             Mock<DbConnection> conn = mock.Mock<DbConnection>();
 
             Mock<IOdbcDataSource> dataSource = mock.Mock<IOdbcDataSource>();
@@ -138,7 +133,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
 
             OdbcSampleDataCommand testObject = mock.Create<OdbcSampleDataCommand>();
 
-            testObject.Execute(dataSource.Object, "SELECT * FROM ORDERS");
+            testObject.Execute(dataSource.Object, "SELECT * FROM ORDERS", 10);
 
             dbProviderFactory.Verify(d => d.CreateOdbcCommand("SELECT * FROM ORDERS", conn.Object));
         }
@@ -155,7 +150,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             Mock<IShipWorksDbProviderFactory> dbProviderFactory = mock.Mock<IShipWorksDbProviderFactory>();
             dbProviderFactory.Setup(d => d.CreateOdbcCommand(It.IsAny<string>(), It.IsAny<DbConnection>())).Returns(cmd.Object);
 
-            Mock<ILog> log = mock.Mock<ILog>();
             Mock<DbConnection> conn = mock.Mock<DbConnection>();
 
             Mock<IOdbcDataSource> dataSource = mock.Mock<IOdbcDataSource>();
@@ -163,7 +157,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
 
             OdbcSampleDataCommand testObject = mock.Create<OdbcSampleDataCommand>();
 
-            testObject.Execute(dataSource.Object, "SELECT * FROM ORDERS");
+            testObject.Execute(dataSource.Object, "SELECT * FROM ORDERS", 10);
 
             cmd.Verify(c => c.ExecuteReader(CommandBehavior.KeyInfo));
         }
@@ -180,8 +174,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             Mock<IShipWorksDbProviderFactory> dbProviderFactory = mock.Mock<IShipWorksDbProviderFactory>();
             dbProviderFactory.Setup(d => d.CreateOdbcCommand(It.IsAny<string>(), It.IsAny<DbConnection>())).Returns(cmd.Object);
 
-            Mock<ILog> log = mock.Mock<ILog>();
-
             Mock<DbException> dbException = mock.Mock<DbException>();
 
             Mock<DbConnection> conn = mock.Mock<DbConnection>();
@@ -193,7 +185,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
 
             OdbcSampleDataCommand testObject = mock.Create<OdbcSampleDataCommand>();
 
-            ShipWorksOdbcException ex = Assert.Throws<ShipWorksOdbcException>(() => testObject.Execute(dataSource.Object, "SELECT * FROM ORDERS"));
+            ShipWorksOdbcException ex = Assert.Throws<ShipWorksOdbcException>(() => testObject.Execute(dataSource.Object, "SELECT * FROM ORDERS", 10));
 
             Assert.Contains("Data Source Name", ex.Message);
         }
@@ -210,8 +202,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             Mock<IShipWorksDbProviderFactory> dbProviderFactory = mock.Mock<IShipWorksDbProviderFactory>();
             dbProviderFactory.Setup(d => d.CreateOdbcCommand(It.IsAny<string>(), It.IsAny<DbConnection>())).Returns(cmd.Object);
 
-            Mock<ILog> log = mock.Mock<ILog>();
-
             Mock<DbConnection> conn = mock.Mock<DbConnection>();
             conn.Setup(c => c.Open()).Throws(new Exception("Something went wrong."));
 
@@ -221,7 +211,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
 
             OdbcSampleDataCommand testObject = mock.Create<OdbcSampleDataCommand>();
 
-            ShipWorksOdbcException ex = Assert.Throws<ShipWorksOdbcException>(() => testObject.Execute(dataSource.Object, "SELECT * FROM ORDERS"));
+            ShipWorksOdbcException ex = Assert.Throws<ShipWorksOdbcException>(() => testObject.Execute(dataSource.Object, "SELECT * FROM ORDERS", 10));
 
             Assert.Equal("An error occurred while attempting to retrieve columns for the custom query.", ex.Message);
         }

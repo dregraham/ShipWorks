@@ -10,6 +10,6 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// <summary>
         /// Executes the command.
         /// </summary>
-        DataTable Execute(IOdbcDataSource dataSource, string query);
+        DataTable Execute(IOdbcDataSource dataSource, string query, int numberOfResults);
     }
 }

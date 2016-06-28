@@ -62,7 +62,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
 
         private void ExecuteQuery()
         {
-            Results = sampleDataCommand.Execute(dataSource, Query);
+            Results = sampleDataCommand.Execute(dataSource, Query, 10);
         }
 
         private void SaveQuery()

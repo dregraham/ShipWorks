@@ -13,7 +13,6 @@ namespace ShipWorks.Stores.Platforms.Odbc
     {
         private readonly IShipWorksDbProviderFactory dbProviderFactory;
         private readonly ILog log;
-        private const int numberOfResults = 10;
 
         /// <summary>
         /// Constructor
@@ -27,7 +26,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// <summary>
         /// Execute the query and return sample data
         /// </summary>
-        public DataTable Execute(IOdbcDataSource dataSource, string query)
+        public DataTable Execute(IOdbcDataSource dataSource, string query, int numberOfResults)
         {
             try
             {
