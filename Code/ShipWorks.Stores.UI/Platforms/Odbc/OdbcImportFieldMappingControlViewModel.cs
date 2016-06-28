@@ -529,9 +529,16 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             SelectedTable = customColumnSource;
 
             OdbcCustomQueryDlg customQueryDlg = customQueryDlgFactory.CreateCustomQueryDlg(DataSource, SelectedTable, customQuery);
+            OdbcCustomQueryDlgViewModel customQueryVm = customQueryDlg.DataContext as OdbcCustomQueryDlgViewModel;
+
+            if (customQueryVm != null)
+            {
+                // Load the existing query into the custom query vm
+                customQueryVm.Query = "SELECT * FROM \"order\"";
+            }
             customQueryDlg.ShowDialog();
 
-            customQuery = (customQueryDlg.DataContext as OdbcCustomQueryDlgViewModel)?.Query ?? string.Empty;
+            customQuery = customQueryVm?.Query ?? string.Empty;
 
             LoadColumns();
         }

@@ -115,6 +115,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         {
             columnSource.Load(dataSource, logFactory(typeof(OdbcColumnSource)), Query, dbProviderFactory);
             odbcCustomQueryDlg.Close();
+            results.Dispose();
         }
     }
 }
