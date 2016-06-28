@@ -11,6 +11,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Windows.Forms;
+using System.Windows.Input;
+using log4net;
 using Xunit;
 
 namespace ShipWorks.Stores.Tests.Platforms.Odbc
@@ -686,6 +688,28 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
                 var endNumberOfAttributeEntriesInItemMap = itemMaps.FirstOrDefault()?.Entries.Count(e => e.ShipWorksField.DisplayName.Contains("Attribute"));
 
                 Assert.Equal(10, startingNumberOfAttributeEntriesInItemMap - endNumberOfAttributeEntriesInItemMap);
+            }
+        }
+
+        [Fact]
+        public void OpenCustomQueryDlgCommand_DelegatesToCustomQueryDlgFactory()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                var dataSource = mock.Mock<IOdbcDataSource>();
+                dataSource.Setup(d => d.Name).Returns("My data source");
+                var customQueryDlgFactory = mock.Mock<IOdbcCustomQueryDlgFactory>();
+                var mapFactory = mock.Create<OdbcFieldMapFactory>();
+                var testObject = mock.Create<OdbcImportFieldMappingControlViewModel>(new TypedParameter(typeof(IOdbcFieldMapFactory), mapFactory));
+                testObject.Tables = new List<IOdbcColumnSource>();
+                testObject.Load(dataSource.Object);
+                var openCustomQueryDlgCommand = testObject.OpenCustomQueryDlgCommand;
+
+                openCustomQueryDlgCommand.Execute(null);
+                customQueryDlgFactory.Verify(
+                    d =>
+                        d.ShowCustomQueryDlg(It.IsAny<IOdbcDataSource>(), It.IsAny<IOdbcColumnSource>(),
+                            It.IsAny<string>(), It.IsAny<IMessageHelper>()));
             }
         }
 
