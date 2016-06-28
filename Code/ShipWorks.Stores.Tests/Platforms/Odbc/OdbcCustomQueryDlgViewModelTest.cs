@@ -1,4 +1,5 @@
 ﻿using Autofac.Extras.Moq;
+using Interapptive.Shared.UI;
 using log4net;
 using Moq;
 using ShipWorks.Stores.Platforms.Odbc;
@@ -41,7 +42,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
                 var testObject = mock.Create<OdbcCustomQueryDlgViewModel>();
                 testObject.Query = "myQuery";
 
-                testObject.Ok.Execute(null);
+                testObject.Ok.Execute(mock.MockRepository.Create<IDialog>().Object);
 
                 odbcColumnSource.Verify(
                     s => s.Load(dataSource.Object, logger.Object, testObject.Query, dbProviderFactory.Object),

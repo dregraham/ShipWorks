@@ -172,13 +172,13 @@
     <Compile Include="Platforms\LemonStand\WizardPages\LemonStandAccountPage.Designer.cs">
       <DependentUpon>LemonStandAccountPage.cs</DependentUpon>
     </Compile>
-    <Compile Include="Platforms\Odbc\IOdbcCustomQueryDlgFactory.cs" />
+    <Compile Include="Platforms\Odbc\IOdbcCustomQueryModalDialog.cs" />
     <Compile Include="Platforms\Odbc\IOdbcCustomQueryDlgViewModel.cs" />
     <Compile Include="Platforms\Odbc\IOdbcImportFieldMappingControlViewModel.cs" />
     <Compile Include="Platforms\Odbc\OdbcCustomQueryDlg.xaml.cs">
       <DependentUpon>OdbcCustomQueryDlg.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Platforms\Odbc\OdbcCustomQueryDlgFactory.cs" />
+    <Compile Include="Platforms\Odbc\OdbcCustomQueryModalDialog.cs" />
     <Compile Include="Platforms\Odbc\OdbcCustomQueryDlgViewModel.cs" />
     <Compile Include="Platforms\Odbc\OdbcFieldMapDisplay.cs" />
     <Compile Include="Platforms\Odbc\OdbcFieldMapMultiValueConverter.cs" />

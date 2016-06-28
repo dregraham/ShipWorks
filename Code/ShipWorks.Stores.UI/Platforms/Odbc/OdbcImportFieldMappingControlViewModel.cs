@@ -33,7 +33,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         private readonly IOdbcSchema schema;
         private readonly Func<Type, ILog> logFactory;
         private readonly IMessageHelper messageHelper;
-        private readonly IOdbcCustomQueryDlgFactory customQueryDlgFactory;
+        private readonly IOdbcCustomQueryModalDialog customQueryModalDialog;
         private IOdbcColumnSource selectedTable;
         private ObservableCollection<OdbcColumn> columns;
         private OdbcFieldMapDisplay selectedFieldMap;
@@ -53,13 +53,13 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// </summary>
         public OdbcImportFieldMappingControlViewModel(IOdbcFieldMapFactory fieldMapFactory,
             IOdbcSchema schema, Func<Type, ILog> logFactory, IMessageHelper messageHelper,
-            IOdbcCustomQueryDlgFactory customQueryDlgFactory)
+            IOdbcCustomQueryModalDialog customQueryModalDialog)
         {
             this.fieldMapFactory = fieldMapFactory;
             this.schema = schema;
             this.logFactory = logFactory;
             this.messageHelper = messageHelper;
-            this.customQueryDlgFactory = customQueryDlgFactory;
+            this.customQueryModalDialog = customQueryModalDialog;
 
             SaveMapCommand = new RelayCommand(SaveMapToDisk,() => selectedTable != null);
             TableChangedCommand = new RelayCommand(TableChanged);
@@ -526,7 +526,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         {
             IOdbcColumnSource customColumnSource = new OdbcColumnSource(CustomQueryColumnSourceName);
 
-            customQueryDlgFactory.ShowCustomQueryDlg(DataSource, customColumnSource, customQuery, messageHelper);
+            customQueryModalDialog.Show(DataSource, customColumnSource, customQuery, messageHelper);
             customQuery = customColumnSource.Query;
 
             Tables = Tables.Concat(new[] { customColumnSource });

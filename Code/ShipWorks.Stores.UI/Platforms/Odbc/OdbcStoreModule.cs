@@ -81,7 +81,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
 
             builder.RegisterType<OdbcCommandFactory>();
 
-            builder.RegisterType<OdbcCustomQueryDlgFactory>().
+            builder.RegisterType<OdbcCustomQueryModalDialog>().
                 AsImplementedInterfaces();
 
             builder.RegisterType<OdbcSampleDataCommand>().

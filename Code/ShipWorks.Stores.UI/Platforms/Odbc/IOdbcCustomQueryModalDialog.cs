@@ -6,11 +6,11 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
     /// <summary>
     ///
     /// </summary>
-    public interface IOdbcCustomQueryDlgFactory
+    public interface IOdbcCustomQueryModalDialog
     {
         /// <summary>
         /// Shows the custom query dialog.
         /// </summary>
-        void ShowCustomQueryDlg(IOdbcDataSource dataSource, IOdbcColumnSource columnSource, string customQuery, IMessageHelper messageHelper);
+        void Show(IOdbcDataSource dataSource, IOdbcColumnSource columnSource, string customQuery, IMessageHelper messageHelper);
     }
 }

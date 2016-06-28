@@ -1,24 +1,22 @@
 ﻿using GalaSoft.MvvmLight.Command;
+using Interapptive.Shared.UI;
 using log4net;
 using ShipWorks.Core.UI;
 using ShipWorks.Stores.Platforms.Odbc;
 using System;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
 using System.Reflection;
 using System.Windows.Input;
-using Interapptive.Shared.UI;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc
 {
     /// <summary>
     /// View model for OdbcCustomQueryDlg
     /// </summary>
-    public class OdbcCustomQueryDlgViewModel : IOdbcCustomQueryDlgViewModel, INotifyPropertyChanged
+    public class OdbcCustomQueryDlgViewModel : IOdbcCustomQueryDlgViewModel, INotifyPropertyChanged, IDisposable
     {
         private readonly IOdbcDataSource dataSource;
-        private readonly IShipWorksDbProviderFactory dbProviderFactory;
         private readonly IOdbcSampleDataCommand sampleDataCommand;
         private readonly IOdbcColumnSource columnSource;
         private readonly IMessageHelper messageHelper;
@@ -49,8 +47,8 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             this.sampleDataCommand = sampleDataCommand;
 
             Execute = new RelayCommand(ExecuteQuery);
-            Ok = new RelayCommand<OdbcCustomQueryDlg>(SaveQuery);
-            Cancel = new RelayCommand<OdbcCustomQueryDlg>(CloseDialog);
+            Ok = new RelayCommand<IDialog>(SaveQuery);
+            Cancel = new RelayCommand<IDialog>(CloseDialog);
             results = new DataTable();
 
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
@@ -73,7 +71,15 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         public DataTable Results
         {
             get { return results; }
-            set { handler.Set(nameof(Results), ref results, value); }
+            set
+            {
+                if (results != value)
+                {
+                    results?.Dispose();
+                }
+
+                handler.Set(nameof(Results), ref results, value);
+            }
         }
 
         /// <summary>
@@ -116,7 +122,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// Saves the query.
         /// </summary>
         /// <param name="odbcCustomQueryDlg">The ODBC custom query dialog.</param>
-        private void SaveQuery(OdbcCustomQueryDlg odbcCustomQueryDlg)
+        private void SaveQuery(IDialog odbcCustomQueryDlg)
         {
             ExecuteQuery();
 
@@ -124,7 +130,6 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             {
                 columnSource.Query = Query;
                 CloseDialog(odbcCustomQueryDlg);
-                results.Dispose();
             }
         }
 
@@ -132,9 +137,17 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// Closes the dialog.
         /// </summary>
         /// <param name="odbcCustomQueryDlg">The ODBC custom query dialog.</param>
-        private void CloseDialog(OdbcCustomQueryDlg odbcCustomQueryDlg)
+        private void CloseDialog(IDialog odbcCustomQueryDlg)
         {
             odbcCustomQueryDlg.Close();
+        }
+
+        /// <summary>
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
+        public void Dispose()
+        {
+            results?.Dispose();
         }
     }
 }

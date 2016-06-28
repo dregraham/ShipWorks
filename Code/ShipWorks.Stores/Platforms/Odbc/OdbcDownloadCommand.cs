@@ -20,7 +20,11 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcDownloadCommand"/> class.
         /// </summary>
-        public OdbcDownloadCommand(IOdbcFieldMap fieldMap, IOdbcDataSource dataSource, IShipWorksDbProviderFactory dbProviderFactory , IOdbcDownloadQuery downloadQuery, ILog log)
+        public OdbcDownloadCommand(IOdbcFieldMap fieldMap,
+            IOdbcDataSource dataSource,
+            IShipWorksDbProviderFactory dbProviderFactory,
+            IOdbcDownloadQuery downloadQuery,
+            ILog log)
         {
             this.fieldMap = fieldMap;
             this.dataSource = dataSource;

@@ -6,17 +6,16 @@ using IWin32Window = System.Windows.Forms.IWin32Window;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc
 {
-    public class OdbcCustomQueryDlgFactory : IOdbcCustomQueryDlgFactory
+    public class OdbcCustomQueryModalDialog : IOdbcCustomQueryModalDialog
     {
         private readonly IWin32Window owner;
         private readonly IOdbcSampleDataCommand sampleDataCommand;
         private readonly Func<Type, ILog> logFactory;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="OdbcCustomQueryDlgFactory"/> class.
+        /// Initializes a new instance of the <see cref="OdbcCustomQueryModalDialog"/> class.
         /// </summary>
-        /// <param name="columnSourceFactory"></param>
-        public OdbcCustomQueryDlgFactory(IWin32Window owner, IOdbcSampleDataCommand sampleDataCommand, Func<Type, ILog> logFactory)
+        public OdbcCustomQueryModalDialog(IWin32Window owner, IOdbcSampleDataCommand sampleDataCommand, Func<Type, ILog> logFactory)
         {
             this.owner = owner;
             this.sampleDataCommand = sampleDataCommand;
@@ -26,16 +25,19 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// <summary>
         /// Shows the custom query dialog.
         /// </summary>
-        public void ShowCustomQueryDlg(IOdbcDataSource dataSource, IOdbcColumnSource columnSource, string customQuery, IMessageHelper messageHelper)
+        public void Show(IOdbcDataSource dataSource, IOdbcColumnSource columnSource, string customQuery, IMessageHelper messageHelper)
         {
             OdbcCustomQueryDlg dlg = new OdbcCustomQueryDlg();
             dlg.LoadOwner(owner);
-
             columnSource.Query = customQuery;
 
-            dlg.DataContext = new OdbcCustomQueryDlgViewModel(dataSource, sampleDataCommand, columnSource, messageHelper, logFactory);
+            using (var context = new OdbcCustomQueryDlgViewModel(dataSource, sampleDataCommand, columnSource, messageHelper, logFactory))
+            {
+                dlg.DataContext = context;
 
-            dlg.ShowDialog();
+                dlg.ShowDialog();
+            }
+
         }
     }
 }

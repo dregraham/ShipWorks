@@ -54,6 +54,11 @@ namespace Interapptive.Shared.UI
         /// Gets or sets the load owner.
         /// </summary>
         void LoadOwner(IWin32Window owner);
+
+        /// <summary>
+        /// Closes the dialog
+        /// </summary>
+        void Close();
     }
 }
 
