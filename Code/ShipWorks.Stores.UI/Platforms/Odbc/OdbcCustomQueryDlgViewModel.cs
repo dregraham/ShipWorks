@@ -47,6 +47,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
 
             Execute = new RelayCommand(ExecuteQuery);
             Ok = new RelayCommand<OdbcCustomQueryDlg>(SaveQuery);
+            Cancel = new RelayCommand<OdbcCustomQueryDlg>(CloseDialog);
             results = new DataTable();
 
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
@@ -114,8 +115,17 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         private void SaveQuery(OdbcCustomQueryDlg odbcCustomQueryDlg)
         {
             columnSource.Load(dataSource, logFactory(typeof(OdbcColumnSource)), Query, dbProviderFactory);
-            odbcCustomQueryDlg.Close();
+            CloseDialog(odbcCustomQueryDlg);
             results.Dispose();
+        }
+
+        /// <summary>
+        /// Closes the dialog.
+        /// </summary>
+        /// <param name="odbcCustomQueryDlg">The ODBC custom query dialog.</param>
+        private void CloseDialog(OdbcCustomQueryDlg odbcCustomQueryDlg)
+        {
+            odbcCustomQueryDlg.Close();
         }
     }
 }
