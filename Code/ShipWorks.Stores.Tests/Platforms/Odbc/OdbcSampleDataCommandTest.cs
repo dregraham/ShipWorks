@@ -1,17 +1,16 @@
 ﻿using Autofac.Extras.Moq;
+using Moq;
 using ShipWorks.Stores.Platforms.Odbc;
 using System;
-using Xunit;
-using Moq;
-using log4net;
-using System.Data.Common;
 using System.Data;
+using System.Data.Common;
+using Xunit;
 
 namespace ShipWorks.Stores.Tests.Platforms.Odbc
 {
     public class OdbcSampleDataCommandTest : IDisposable
     {
-        AutoMock mock;
+        readonly AutoMock mock;
 
         public OdbcSampleDataCommandTest()
         {

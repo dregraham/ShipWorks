@@ -1,12 +1,12 @@
-﻿using System;
+﻿using GalaSoft.MvvmLight.Command;
+using log4net;
+using ShipWorks.Core.UI;
+using ShipWorks.Stores.Platforms.Odbc;
+using System;
 using System.ComponentModel;
 using System.Data;
 using System.Reflection;
 using System.Windows.Input;
-using GalaSoft.MvvmLight.Command;
-using log4net;
-using ShipWorks.Core.UI;
-using ShipWorks.Stores.Platforms.Odbc;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc
 {
@@ -21,6 +21,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         private DataTable results;
         private readonly PropertyChangedHandler handler;
         public event PropertyChangedEventHandler PropertyChanged;
+        private const int NumberOfSampleResults = 10;
 
         public OdbcCustomQueryDlgViewModel(IOdbcDataSource dataSource, IShipWorksDbProviderFactory dbProviderFactory,
             IOdbcSampleDataCommand sampleDataCommand, IOdbcColumnSource columnSource, Func<Type, ILog> logFactory)
@@ -62,7 +63,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
 
         private void ExecuteQuery()
         {
-            Results = sampleDataCommand.Execute(dataSource, Query, 10);
+            Results = sampleDataCommand.Execute(dataSource, Query, NumberOfSampleResults);
         }
 
         private void SaveQuery()

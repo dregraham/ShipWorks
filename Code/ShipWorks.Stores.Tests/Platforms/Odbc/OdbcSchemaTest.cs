@@ -2,6 +2,7 @@
 using log4net;
 using Moq;
 using ShipWorks.Stores.Platforms.Odbc;
+using ShipWorks.Tests.Shared;
 using System;
 using System.Data;
 using System.Data.Common;
@@ -192,13 +193,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
 
             Mock<IOdbcDataSource> odbcDataSource = new Mock<IOdbcDataSource>();
 
-            var log = mock.Mock<ILog>();
-
-            Mock<Func<Type, ILog>> repo = mock.MockRepository.Create<Func<Type, ILog>>();
-            repo.Setup(x => x(It.IsAny<Type>()))
-                .Returns(log.Object);
-            mock.Provide(repo.Object);
-
+            Mock<ILog> log = mock.GetLogger<OdbcColumnSource>();
 
             OdbcSchema testObject = mock.Create<OdbcSchema>();
             testObject.Load(odbcDataSource.Object, query);
