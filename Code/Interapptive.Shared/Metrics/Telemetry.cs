@@ -93,15 +93,19 @@ namespace Interapptive.Shared.Metrics
             telemetryClient.Context.User.AuthenticatedUserId = tangoCustomerID;
             telemetryClient.Context.Device.Id = instanceID;
 
-            telemetryClient.Context.Properties.Add("Instance", instanceID);
+            if (!telemetryClient.Context.Properties.ContainsKey("Instance"))
+            {
+                telemetryClient.Context.Properties.Add("Instance", instanceID);
+            }
 
             EventTelemetry eventTelemetry = new EventTelemetry("StartShipWorks")
             {
                 Timestamp = DateTimeOffset.UtcNow
             };
 
-            long memoryInKB = 0;
-            NativeMethods.GetPhysicallyInstalledSystemMemory(out memoryInKB);
+            long memoryInBytes = 0;
+            memoryInBytes = (long)new Microsoft.VisualBasic.Devices.ComputerInfo().TotalPhysicalMemory;
+
             Process process = Process.GetCurrentProcess();
 
             AddEventProperty(eventTelemetry, "Screens", Screen.AllScreens.Length);
@@ -112,7 +116,7 @@ namespace Interapptive.Shared.Metrics
             AddEventProperty(eventTelemetry, "Threads", process.Threads.Count);
             AddEventProperty(eventTelemetry, "UserProcessorTime(m)", process.UserProcessorTime.TotalMinutes);
             AddEventProperty(eventTelemetry, "TotalProcessorTime(m)", process.TotalProcessorTime.TotalMinutes);
-            AddEventProperty(eventTelemetry, "PhysicalMemory", StringUtility.FormatByteCount(memoryInKB * 1024));
+            AddEventProperty(eventTelemetry, "PhysicalMemory", StringUtility.FormatByteCount(memoryInBytes, "{0:#,##0}"));
             AddEventProperty(eventTelemetry, "UserObjects", NativeMethods.GetGuiResources(process.Handle, NativeMethods.GR_USEROBJECTS));
             AddEventProperty(eventTelemetry, "GDIObjects", NativeMethods.GetGuiResources(process.Handle, NativeMethods.GR_GDIOBJECTS));
             AddEventProperty(eventTelemetry, "ScreenDimensionsPrimary", $"{Screen.PrimaryScreen.Bounds.Width}x{Screen.PrimaryScreen.Bounds.Height}");

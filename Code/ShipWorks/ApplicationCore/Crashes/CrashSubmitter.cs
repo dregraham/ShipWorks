@@ -84,8 +84,7 @@ namespace ShipWorks.ApplicationCore.Crashes
         /// </summary>
         private static void LogCrashToQueue(CloudStorageAccount storageAccount, Exception ex, string email, string logName, Version version)
         {
-            long memoryInKB = 0;
-            NativeMethods.GetPhysicallyInstalledSystemMemory(out memoryInKB);
+            long memoryInBytes = NativeMethods.GetPhysicallyInstalledSystemMemory();
 
             SubmissionDetails details = new SubmissionDetails
             {
@@ -105,7 +104,7 @@ namespace ShipWorks.ApplicationCore.Crashes
                 OperatingSystem = Environment.OSVersion.ToString(),
                 Screens = Screen.AllScreens.Length.ToString(),
                 CPUs = Environment.ProcessorCount.ToString(),
-                PhysicalMemory = StringUtility.FormatByteCount(memoryInKB * 1024),
+                PhysicalMemory = StringUtility.FormatByteCount(memoryInBytes, "{0:#,##0}"),
                 ScreenDimensionsPrimary = $"{Screen.PrimaryScreen.Bounds.Width}x{Screen.PrimaryScreen.Bounds.Height}",
                 ScreenDpiPrimary = MyComputer.GetSystemDpi()
             };
@@ -476,8 +475,7 @@ namespace ShipWorks.ApplicationCore.Crashes
         [NDependIgnoreLongMethod]
         private static string GetEnvironmentInfo()
         {
-            long memoryInKB = 0;
-            NativeMethods.GetPhysicallyInstalledSystemMemory(out memoryInKB);
+            long memoryInBytes = NativeMethods.GetPhysicallyInstalledSystemMemory();
 
             StringBuilder sb = new StringBuilder();
 
@@ -508,7 +506,7 @@ namespace ShipWorks.ApplicationCore.Crashes
             AppendLineIgnoreException(() => sb.AppendFormat("SessionId: {0}\r\n", Telemetry.SessionId));
             AppendLineIgnoreException(() => sb.AppendFormat("Screens: {0}\r\n", Screen.AllScreens.Length.ToString()));
             AppendLineIgnoreException(() => sb.AppendFormat("CPUs: {0}\r\n", Environment.ProcessorCount.ToString()));
-            AppendLineIgnoreException(() => sb.AppendFormat("PhysicalMemory: {0}\r\n", StringUtility.FormatByteCount(memoryInKB * 1024)));
+            AppendLineIgnoreException(() => sb.AppendFormat("PhysicalMemory: {0}\r\n", StringUtility.FormatByteCount(memoryInBytes, "{0:#,##0}")));
             AppendLineIgnoreException(() => sb.AppendFormat("ScreenDimensionsPrimary: {0}\r\n", $"{ Screen.PrimaryScreen.Bounds.Width}x{Screen.PrimaryScreen.Bounds.Height}"));
             AppendLineIgnoreException(() => sb.AppendFormat("ScreenDpiPrimary: {0}\r\n", MyComputer.GetSystemDpi()));
 

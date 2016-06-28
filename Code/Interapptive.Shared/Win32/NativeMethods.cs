@@ -255,12 +255,17 @@ namespace Interapptive.Shared.Win32
 
         [DllImport("advapi32.dll")]
         public static extern Int32 LsaNtStatusToWinError(Int32 status);
-
-        [DllImport("kernel32.dll", SetLastError = true)]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        public static extern bool GetPhysicallyInstalledSystemMemory(out long MemoryInKilobytes);
-
+        
         #endregion
+
+
+        public static long GetPhysicallyInstalledSystemMemory()
+        {
+            long memoryInBytes = 0;
+            memoryInBytes = (long) new Microsoft.VisualBasic.Devices.ComputerInfo().TotalPhysicalMemory;
+
+            return memoryInBytes;
+        }
 
         #region Constants
 
