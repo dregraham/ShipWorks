@@ -10,7 +10,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
 {
     public class OdbcSampleDataCommandTest : IDisposable
     {
-        readonly AutoMock mock;
+        private readonly AutoMock mock;
 
         public OdbcSampleDataCommandTest()
         {
