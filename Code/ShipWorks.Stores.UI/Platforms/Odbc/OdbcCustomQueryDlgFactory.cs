@@ -9,19 +9,17 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
     public class OdbcCustomQueryDlgFactory : IOdbcCustomQueryDlgFactory
     {
         private readonly IWin32Window owner;
-        private readonly IOdbcColumnSourceFactory columnSourceFactory;
-        private readonly IShipWorksDbProviderFactory dbProviderFactory;
+        private readonly IOdbcSampleDataCommand sampleDataCommand;
         private readonly Func<Type, ILog> logFactory;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcCustomQueryDlgFactory"/> class.
         /// </summary>
-        public OdbcCustomQueryDlgFactory(IWin32Window owner, IOdbcColumnSourceFactory columnSourceFactory,
-            IShipWorksDbProviderFactory dbProviderFactory, Func<Type, ILog> logFactory)
+        /// <param name="columnSourceFactory"></param>
+        public OdbcCustomQueryDlgFactory(IWin32Window owner, IOdbcSampleDataCommand sampleDataCommand, Func<Type, ILog> logFactory)
         {
             this.owner = owner;
-            this.columnSourceFactory = columnSourceFactory;
-            this.dbProviderFactory = dbProviderFactory;
+            this.sampleDataCommand = sampleDataCommand;
             this.logFactory = logFactory;
         }
 
@@ -35,7 +33,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
 
             columnSource.Query = customQuery;
 
-            dlg.DataContext = new OdbcCustomQueryDlgViewModel(dataSource, dbProviderFactory, columnSource, messageHelper, logFactory);
+            dlg.DataContext = new OdbcCustomQueryDlgViewModel(dataSource, sampleDataCommand, columnSource, messageHelper, logFactory);
 
             dlg.ShowDialog();
         }

@@ -428,6 +428,8 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
                 throw new ShipWorksOdbcException("Cannot save a map without a record identifier.");
             }
 
+            map.CustomQuery = customQuery;
+
             return map;
         }
 
@@ -528,6 +530,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             customQuery = customColumnSource.Query;
 
             Tables = Tables.Concat(new[] { customColumnSource });
+
             SelectedTable = customColumnSource;
         }
     }

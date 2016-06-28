@@ -34,21 +34,19 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// Initializes a new instance of the <see cref="OdbcCustomQueryDlgViewModel"/> class.
         /// </summary>
         /// <param name="dataSource">The data source.</param>
-        /// <param name="dbProviderFactory">The database provider factory.</param>
+        /// <param name="sampleDataCommand"></param>
         /// <param name="columnSource">The column source.</param>
         /// <param name="messageHelper"></param>
         /// <param name="logFactory">The log factory.</param>
-        public OdbcCustomQueryDlgViewModel(IOdbcDataSource dataSource, IShipWorksDbProviderFactory dbProviderFactory,
+        public OdbcCustomQueryDlgViewModel(IOdbcDataSource dataSource, IOdbcSampleDataCommand sampleDataCommand,
             IOdbcColumnSource columnSource, IMessageHelper messageHelper,  Func<Type, ILog> logFactory)
         {
             this.dataSource = dataSource;
-            this.dbProviderFactory = dbProviderFactory;
             this.columnSource = columnSource;
             this.messageHelper = messageHelper;
             log = logFactory(typeof(OdbcCustomQueryDlgViewModel));
 
-            sampleDataCommand = new OdbcSampleDataCommand(dbProviderFactory,
-                logFactory(typeof(OdbcSampleDataCommand)));
+            this.sampleDataCommand = sampleDataCommand;
 
             Execute = new RelayCommand(ExecuteQuery);
             Ok = new RelayCommand<OdbcCustomQueryDlg>(SaveQuery);
@@ -89,16 +87,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// </summary>
         [Obfuscation(Exclude = true)]
         public ICommand Ok { get; set; }
-
-        /// <summary>
-        /// Loads the specified custom query.
-        /// </summary>
-        /// <param name="customQuery">The custom query.</param>
-        public void Load(string customQuery)
-        {
-            Query = customQuery;
-        }
-
+        
         /// <summary>
         /// The cancel command
         /// </summary>
