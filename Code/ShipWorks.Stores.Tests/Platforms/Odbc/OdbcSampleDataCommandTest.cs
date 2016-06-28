@@ -66,6 +66,39 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         }
 
         [Fact]
+        public void Execute_ReadsNumberOfResultsFromReader()
+        {
+            DataTable schemaTable = new DataTable();
+            schemaTable.Columns.Add("BaseColumnName");
+            schemaTable.Rows.Add("foo");
+
+            Mock<DbDataReader> reader = mock.Mock<DbDataReader>();
+            reader.SetupGet(r => r.FieldCount).Returns(1);
+            reader.Setup(r => r.Read()).Returns(true);
+            reader.Setup(r => r.GetName(It.IsAny<int>())).Returns("foo");
+            reader.Setup(r => r.GetValue(It.IsAny<int>())).Returns("bar");
+            reader.Setup(r => r.GetSchemaTable()).Returns(schemaTable);
+
+            Mock<IShipWorksOdbcCommand> cmd = mock.Mock<IShipWorksOdbcCommand>();
+            cmd.Setup(c => c.ExecuteReader(It.IsAny<CommandBehavior>())).Returns(reader.Object);
+
+            Mock<IShipWorksDbProviderFactory> dbProviderFactory = mock.Mock<IShipWorksDbProviderFactory>();
+            dbProviderFactory.Setup(d => d.CreateOdbcCommand(It.IsAny<string>(), It.IsAny<DbConnection>())).Returns(cmd.Object);
+
+            Mock<DbConnection> conn = mock.Mock<DbConnection>();
+
+            Mock<IOdbcDataSource> dataSource = mock.Mock<IOdbcDataSource>();
+            dataSource.Setup(d => d.CreateConnection()).Returns(conn.Object);
+
+            OdbcSampleDataCommand testObject = mock.Create<OdbcSampleDataCommand>();
+
+            testObject.Execute(dataSource.Object, "SELECT * FROM ORDERS", 10);
+
+            reader.Verify(r => r.GetValue(It.IsAny<int>()), Times.Exactly(10));
+            schemaTable.Dispose();
+        }
+
+        [Fact]
         public void Execute_CallsCancelOnCommand()
         {
             Mock<DbDataReader> reader = mock.Mock<DbDataReader>();
