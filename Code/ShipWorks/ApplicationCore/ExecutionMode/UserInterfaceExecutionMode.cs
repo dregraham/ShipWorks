@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Interop;
 using ActiproSoftware.SyntaxEditor;
 using Interapptive.Shared.Data;
 using Interapptive.Shared.UI;
@@ -221,6 +222,7 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
 
                 CrashDialog crashDialog = new CrashDialog(exception, guiThread, userEmail, recoveryCount);
 
+                new WindowInteropHelper(crashDialog).Owner = Program.MainForm.Handle;
                 sendReportTask = crashDialog.CreateLogTask;
                 shouldReopen = crashDialog.ShowDialog().GetValueOrDefault();
             }

@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="ShipWorks"
         Topmost="True"
-        WindowStartupLocation="CenterScreen"
+        WindowStartupLocation="CenterOwner"
         SizeToContent="Height"
         WindowStyle="None"
         ResizeMode="NoResize"
