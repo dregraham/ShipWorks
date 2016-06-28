@@ -124,6 +124,9 @@ namespace ShipWorks.Stores.Management
             }
         }
 
+        /// <summary>
+        /// Configures the add store wizard dependencies.
+        /// </summary>
         private static void ConfigureAddStoreWizardDependencies(ContainerBuilder builder)
         {
             builder.RegisterType<AddStoreWizard>()

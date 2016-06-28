@@ -1,12 +1,7 @@
-﻿using System;
-using System.Windows;
-using System.Windows.Forms;
-using System.Windows.Forms.Integration;
-using System.Windows.Interop;
-using Interapptive.Shared.UI;
+﻿using Interapptive.Shared.UI;
 using log4net;
 using ShipWorks.Stores.Platforms.Odbc;
-using ShipWorks.UI.Controls.ChannelLimit;
+using System;
 using IWin32Window = System.Windows.Forms.IWin32Window;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc
@@ -21,10 +16,6 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcCustomQueryDlgFactory"/> class.
         /// </summary>
-        /// <param name="owner">The default owner.</param>
-        /// <param name="columnSourceFactory"></param>
-        /// <param name="dbProviderFactory"></param>
-        /// <param name="logFactory"></param>
         public OdbcCustomQueryDlgFactory(IWin32Window owner, IOdbcColumnSourceFactory columnSourceFactory,
             IShipWorksDbProviderFactory dbProviderFactory, Func<Type, ILog> logFactory)
         {
