@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Forms.Integration;
 using System.Windows.Interop;
+using Interapptive.Shared.UI;
 using log4net;
 using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.UI.Controls.ChannelLimit;
@@ -36,18 +37,16 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// <summary>
         /// Shows the custom query dialog.
         /// </summary>
-        public OdbcCustomQueryDlg CreateCustomQueryDlg(IOdbcDataSource dataSource, IOdbcColumnSource columnSource, string customQuery)
+        public void ShowCustomQueryDlg(IOdbcDataSource dataSource, IOdbcColumnSource columnSource, string customQuery, IMessageHelper messageHelper)
         {
             OdbcCustomQueryDlg dlg = new OdbcCustomQueryDlg();
             dlg.LoadOwner(owner);
 
+            columnSource.Query = customQuery;
 
+            dlg.DataContext = new OdbcCustomQueryDlgViewModel(dataSource, dbProviderFactory, columnSource, messageHelper, logFactory);
 
-            dlg.DataContext = new OdbcCustomQueryDlgViewModel(dataSource, dbProviderFactory, columnSource, logFactory);
-            ((IOdbcCustomQueryDlgViewModel) dlg.DataContext).Load(customQuery);
-
-            return dlg;
+            dlg.ShowDialog();
         }
-
     }
 }

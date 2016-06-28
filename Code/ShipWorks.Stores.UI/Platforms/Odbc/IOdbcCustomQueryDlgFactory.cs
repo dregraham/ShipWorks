@@ -1,3 +1,4 @@
+using Interapptive.Shared.UI;
 using ShipWorks.Stores.Platforms.Odbc;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc
@@ -10,6 +11,6 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// <summary>
         /// Shows the custom query dialog.
         /// </summary>
-        OdbcCustomQueryDlg CreateCustomQueryDlg(IOdbcDataSource dataSource, IOdbcColumnSource columnSource, string customQuery);
+        void ShowCustomQueryDlg(IOdbcDataSource dataSource, IOdbcColumnSource columnSource, string customQuery, IMessageHelper messageHelper);
     }
 }

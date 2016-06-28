@@ -8,6 +8,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Reflection;
 using System.Windows.Input;
+using Interapptive.Shared.UI;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc
 {
@@ -20,10 +21,12 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         private readonly IShipWorksDbProviderFactory dbProviderFactory;
         private readonly IOdbcSampleDataCommand sampleDataCommand;
         private readonly IOdbcColumnSource columnSource;
-        private readonly Func<Type, ILog> logFactory;
+        private readonly IMessageHelper messageHelper;
+        private readonly ILog log;
         private string query;
         private DataTable results;
         private readonly PropertyChangedHandler handler;
+        private bool validQuery;
         public event PropertyChangedEventHandler PropertyChanged;
         private const int NumberOfSampleResults = 10;
 
@@ -33,14 +36,16 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// <param name="dataSource">The data source.</param>
         /// <param name="dbProviderFactory">The database provider factory.</param>
         /// <param name="columnSource">The column source.</param>
+        /// <param name="messageHelper"></param>
         /// <param name="logFactory">The log factory.</param>
         public OdbcCustomQueryDlgViewModel(IOdbcDataSource dataSource, IShipWorksDbProviderFactory dbProviderFactory,
-            IOdbcColumnSource columnSource, Func<Type, ILog> logFactory)
+            IOdbcColumnSource columnSource, IMessageHelper messageHelper,  Func<Type, ILog> logFactory)
         {
             this.dataSource = dataSource;
             this.dbProviderFactory = dbProviderFactory;
             this.columnSource = columnSource;
-            this.logFactory = logFactory;
+            this.messageHelper = messageHelper;
+            log = logFactory(typeof(OdbcCustomQueryDlgViewModel));
 
             sampleDataCommand = new OdbcSampleDataCommand(dbProviderFactory,
                 logFactory(typeof(OdbcSampleDataCommand)));
@@ -105,7 +110,17 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// </summary>
         private void ExecuteQuery()
         {
-            Results = sampleDataCommand.Execute(dataSource, Query, NumberOfSampleResults);
+            try
+            {
+                Results = sampleDataCommand.Execute(dataSource, Query, NumberOfSampleResults);
+                validQuery = true;
+            }
+            catch (ShipWorksOdbcException ex)
+            {
+                log.Error(ex.Message);
+                messageHelper.ShowError(ex.Message);
+                validQuery = false;
+            }
         }
 
         /// <summary>
@@ -114,9 +129,14 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// <param name="odbcCustomQueryDlg">The ODBC custom query dialog.</param>
         private void SaveQuery(OdbcCustomQueryDlg odbcCustomQueryDlg)
         {
-            columnSource.Load(dataSource, logFactory(typeof(OdbcColumnSource)), Query, dbProviderFactory);
-            CloseDialog(odbcCustomQueryDlg);
-            results.Dispose();
+            ExecuteQuery();
+
+            if (validQuery)
+            {
+                columnSource.Query = Query;
+                CloseDialog(odbcCustomQueryDlg);
+                results.Dispose();
+            }
         }
 
         /// <summary>

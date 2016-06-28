@@ -522,25 +522,13 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// </summary>
         private void OpenCustomQueryDlg()
         {
-            var columnsourcefactory = new OdbcColumnSourceFactory();
+            IOdbcColumnSource customColumnSource = new OdbcColumnSource(CustomQueryColumnSourceName);
 
-            IOdbcColumnSource customColumnSource = columnsourcefactory.CreateTable(CustomQueryColumnSourceName);
-            Tables = Tables.Concat(new [] { customColumnSource});
+            customQueryDlgFactory.ShowCustomQueryDlg(DataSource, customColumnSource, customQuery, messageHelper);
+            customQuery = customColumnSource.Query;
+
+            Tables = Tables.Concat(new[] { customColumnSource });
             SelectedTable = customColumnSource;
-
-            OdbcCustomQueryDlg customQueryDlg = customQueryDlgFactory.CreateCustomQueryDlg(DataSource, SelectedTable, customQuery);
-            OdbcCustomQueryDlgViewModel customQueryVm = customQueryDlg.DataContext as OdbcCustomQueryDlgViewModel;
-
-            if (customQueryVm != null)
-            {
-                // Load the existing query into the custom query vm
-                customQueryVm.Query = "SELECT * FROM \"order\"";
-            }
-            customQueryDlg.ShowDialog();
-
-            customQuery = customQueryVm?.Query ?? string.Empty;
-
-            LoadColumns();
         }
     }
 }

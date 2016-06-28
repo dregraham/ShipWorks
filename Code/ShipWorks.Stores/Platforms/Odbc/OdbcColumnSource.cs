@@ -29,6 +29,11 @@ namespace ShipWorks.Stores.Platforms.Odbc
         public string Name { get; }
 
         /// <summary>
+        /// Gets or sets the query.
+        /// </summary>
+        public string Query { get; set; }
+
+        /// <summary>
         /// The columns in the table
         /// </summary>
         [JsonIgnore]
