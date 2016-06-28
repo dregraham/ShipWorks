@@ -12,7 +12,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
 {
     public class OdbcCustomQueryDlgFactory : IOdbcCustomQueryDlgFactory
     {
-        private readonly IWin32Window defaultOwner;
+        private readonly IWin32Window owner;
         private readonly IOdbcColumnSourceFactory columnSourceFactory;
         private readonly IShipWorksDbProviderFactory dbProviderFactory;
         private readonly Func<Type, ILog> logFactory;
@@ -20,14 +20,14 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcCustomQueryDlgFactory"/> class.
         /// </summary>
-        /// <param name="defaultOwner">The default owner.</param>
+        /// <param name="owner">The default owner.</param>
         /// <param name="columnSourceFactory"></param>
         /// <param name="dbProviderFactory"></param>
         /// <param name="logFactory"></param>
-        public OdbcCustomQueryDlgFactory(IWin32Window defaultOwner, IOdbcColumnSourceFactory columnSourceFactory,
+        public OdbcCustomQueryDlgFactory(IWin32Window owner, IOdbcColumnSourceFactory columnSourceFactory,
             IShipWorksDbProviderFactory dbProviderFactory, Func<Type, ILog> logFactory)
         {
-            this.defaultOwner = defaultOwner;
+            this.owner = owner;
             this.columnSourceFactory = columnSourceFactory;
             this.dbProviderFactory = dbProviderFactory;
             this.logFactory = logFactory;
@@ -36,10 +36,12 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// <summary>
         /// Shows the custom query dialog.
         /// </summary>
-        public OdbcCustomQueryDlg CreateCustomQueryDlg(OdbcImportFieldMappingControl owner, IOdbcDataSource dataSource, IOdbcColumnSource columnSource, string customQuery)
+        public OdbcCustomQueryDlg CreateCustomQueryDlg(IOdbcDataSource dataSource, IOdbcColumnSource columnSource, string customQuery)
         {
             OdbcCustomQueryDlg dlg = new OdbcCustomQueryDlg();
-            dlg.LoadOwner(GetOwner(owner));
+            dlg.LoadOwner(owner);
+
+
 
             dlg.DataContext = new OdbcCustomQueryDlgViewModel(dataSource, dbProviderFactory, columnSource, logFactory);
             ((IOdbcCustomQueryDlgViewModel) dlg.DataContext).Load(customQuery);
@@ -47,35 +49,5 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             return dlg;
         }
 
-        /// <summary>
-        /// Gets the IWin32Window owner from the control.
-        /// </summary>
-        private IWin32Window GetOwner(OdbcImportFieldMappingControl owner)
-        {
-            if (owner == null)
-            {
-                return defaultOwner;
-            }
-
-            // Get handle for wpf control
-            HwndSource wpfHandle = PresentationSource.FromVisual(owner) as HwndSource;
-
-            if (wpfHandle != null)
-            {
-                // Get the ElementHost if the control is owned by one.
-                ElementHost host = Control.FromChildHandle(wpfHandle.Handle) as ElementHost;
-
-                if (host != null)
-                {
-                    // We go up the parent chain here because the dialogs opened with the wizard page
-                    // as the owner were not appearing center screen. So we set the owner as the AddStoreWizard instead.
-                    // ElementHost -> ActivationErrorWizardPage -> WizardPage -> AddStoreWizard
-                    return host.Parent.Parent.Parent;
-                }
-            }
-
-            // if all else fails, set the parent as the default owner(Main Form)
-            return defaultOwner;
-        }
     }
 }

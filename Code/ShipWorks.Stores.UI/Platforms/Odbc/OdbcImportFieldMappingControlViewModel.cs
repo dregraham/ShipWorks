@@ -1,4 +1,5 @@
-﻿using GalaSoft.MvvmLight.Command;
+﻿using Autofac;
+using GalaSoft.MvvmLight.Command;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using log4net;
@@ -62,7 +63,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
 
             SaveMapCommand = new RelayCommand(SaveMapToDisk,() => selectedTable != null);
             TableChangedCommand = new RelayCommand(TableChanged);
-            OpenCustomQueryDlgCommand = new RelayCommand<OdbcImportFieldMappingControl>(OpenCustomQueryDlg);
+            OpenCustomQueryDlgCommand = new RelayCommand(OpenCustomQueryDlg);
 
             Order = new OdbcFieldMapDisplay("Order", fieldMapFactory.CreateOrderFieldMap());
             Address = new OdbcFieldMapDisplay("Address", fieldMapFactory.CreateAddressFieldMap());
@@ -519,7 +520,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// <summary>
         /// Opens the custom query dialog.
         /// </summary>
-        private void OpenCustomQueryDlg(OdbcImportFieldMappingControl control)
+        private void OpenCustomQueryDlg()
         {
             var columnsourcefactory = new OdbcColumnSourceFactory();
 
@@ -527,7 +528,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             Tables = Tables.Concat(new [] { customColumnSource});
             SelectedTable = customColumnSource;
 
-            OdbcCustomQueryDlg customQueryDlg = customQueryDlgFactory.CreateCustomQueryDlg(control, DataSource, SelectedTable, customQuery);
+            OdbcCustomQueryDlg customQueryDlg = customQueryDlgFactory.CreateCustomQueryDlg(DataSource, SelectedTable, customQuery);
             customQueryDlg.ShowDialog();
 
             customQuery = (customQueryDlg.DataContext as OdbcCustomQueryDlgViewModel)?.Query ?? string.Empty;
