@@ -43,8 +43,9 @@
                   Margin="0 5 0 5"
                   ItemsSource="{Binding Results, UpdateSourceTrigger=PropertyChanged}" />
         <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Right">
-            <Button Content="OK" Command="{Binding Ok}" />
-            <Button Content="Cancel" Command="Close" />
+            <Button Content="OK" Command="{Binding Ok}"
+                    CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type odbc:OdbcCustomQueryDlg}}}"/>
+            <Button Content="Cancel"/>
         </StackPanel>
     </Grid>
 </Window>

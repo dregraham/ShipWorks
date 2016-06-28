@@ -94,7 +94,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
                     IShipWorksOdbcCommand cmd = dbProviderFactory.CreateOdbcCommand(query, connection);
                     Columns = new List<OdbcColumn>();
 
-                    using (DbDataReader reader = cmd.ExecuteReader(CommandBehavior.SchemaOnly))
+                    using (DbDataReader reader = cmd.ExecuteReader(CommandBehavior.KeyInfo))
                     {
                         DataTable table = reader.GetSchemaTable();
 

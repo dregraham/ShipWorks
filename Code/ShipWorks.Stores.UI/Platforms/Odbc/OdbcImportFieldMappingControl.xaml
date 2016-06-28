@@ -121,7 +121,7 @@
                       Margin="2 2.5 0 2.5"
                   ItemsSource="{Binding Tables, UpdateSourceTrigger=PropertyChanged}"
                   DisplayMemberPath="Name"
-                  SelectedValue="{Binding SelectedTable,Mode=TwoWay}"
+                  SelectedValue="{Binding SelectedTable}"
                       VerticalAlignment="Center">
                 <i:Interaction.Behaviors>
                     <behaviors:ComboBoxSelectionChangedBehavior Command="{Binding TableChangedCommand}" />

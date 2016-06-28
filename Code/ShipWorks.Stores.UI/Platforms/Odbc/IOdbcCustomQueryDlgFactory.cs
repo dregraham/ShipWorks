@@ -10,6 +10,6 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// <summary>
         /// Shows the custom query dialog.
         /// </summary>
-        void ShowCustomQueryDlg(OdbcImportFieldMappingControl owner, IOdbcDataSource dataSource);
+        OdbcCustomQueryDlg CreateCustomQueryDlg(OdbcImportFieldMappingControl owner, IOdbcDataSource dataSource, IOdbcColumnSource columnSource, string customQuery);
     }
 }

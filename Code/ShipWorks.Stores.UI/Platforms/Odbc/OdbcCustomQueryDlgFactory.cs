@@ -36,17 +36,15 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// <summary>
         /// Shows the custom query dialog.
         /// </summary>
-        public void ShowCustomQueryDlg(OdbcImportFieldMappingControl owner, IOdbcDataSource dataSource)
+        public OdbcCustomQueryDlg CreateCustomQueryDlg(OdbcImportFieldMappingControl owner, IOdbcDataSource dataSource, IOdbcColumnSource columnSource, string customQuery)
         {
             OdbcCustomQueryDlg dlg = new OdbcCustomQueryDlg();
             dlg.LoadOwner(GetOwner(owner));
 
-            IOdbcColumnSource columnSource = columnSourceFactory.CreateTable("Custom Query");
-            IOdbcSampleDataCommand sampleDataCommand = new OdbcSampleDataCommand(dbProviderFactory,
-                logFactory(typeof (OdbcSampleDataCommand)));
+            dlg.DataContext = new OdbcCustomQueryDlgViewModel(dataSource, dbProviderFactory, columnSource, logFactory);
+            ((IOdbcCustomQueryDlgViewModel) dlg.DataContext).Load(customQuery);
 
-            dlg.DataContext = new OdbcCustomQueryDlgViewModel(dataSource, dbProviderFactory, sampleDataCommand, columnSource, logFactory);
-            dlg.ShowDialog();
+            return dlg;
         }
 
         /// <summary>

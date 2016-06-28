@@ -27,6 +27,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
     /// </summary>
     public class OdbcImportFieldMappingControlViewModel : IOdbcImportFieldMappingControlViewModel, INotifyPropertyChanged
     {
+        private const string CustomQueryColumnSourceName = "CUSTOM QUERY...";
         private readonly IOdbcFieldMapFactory fieldMapFactory;
         private readonly IOdbcSchema schema;
         private readonly Func<Type, ILog> logFactory;
@@ -43,6 +44,8 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         private bool isSingleLineOrder = true;
         private int numberOfAttributesPerItem;
         private int numberOfItemsPerOrder;
+        private IEnumerable<IOdbcColumnSource> tables;
+        private string customQuery = string.Empty;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcImportFieldMappingControlViewModel"/> class.
@@ -116,7 +119,11 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// The external odbc tables.
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public IEnumerable<IOdbcColumnSource> Tables { get; set; }
+        public IEnumerable<IOdbcColumnSource> Tables
+        {
+            get { return tables; }
+            set { handler.Set(nameof(Tables), ref tables, value); }
+        }
 
         /// <summary>
         /// Save Map Command
@@ -452,11 +459,26 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
                 }
             }
 
-            selectedTable.Load(DataSource, logFactory(typeof(OdbcColumnSource)));
-            Columns = new ObservableCollection<OdbcColumn>(selectedTable.Columns);
-            Columns.Insert(0, new OdbcColumn("(None)"));
+            LoadColumns();
 
             previousSelectedTable = SelectedTable;
+        }
+
+        private void LoadColumns()
+        {
+            if (!string.IsNullOrWhiteSpace(customQuery) &&
+                selectedTable.Name.Equals(CustomQueryColumnSourceName, StringComparison.InvariantCulture))
+            {
+                selectedTable.Load(DataSource, logFactory(typeof (OdbcColumnSource)), customQuery,
+                    new OdbcShipWorksDbProviderFactory());
+            }
+            else
+            {
+                selectedTable.Load(DataSource, logFactory(typeof(OdbcColumnSource)));
+            }
+
+            Columns = new ObservableCollection<OdbcColumn>(selectedTable.Columns);
+            Columns.Insert(0, new OdbcColumn("(None)"));
         }
 
         /// <summary>
@@ -499,7 +521,18 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// </summary>
         private void OpenCustomQueryDlg(OdbcImportFieldMappingControl control)
         {
-            customQueryDlgFactory.ShowCustomQueryDlg(control, DataSource);
+            var columnsourcefactory = new OdbcColumnSourceFactory();
+
+            IOdbcColumnSource customColumnSource = columnsourcefactory.CreateTable(CustomQueryColumnSourceName);
+            Tables = Tables.Concat(new [] { customColumnSource});
+            SelectedTable = customColumnSource;
+
+            OdbcCustomQueryDlg customQueryDlg = customQueryDlgFactory.CreateCustomQueryDlg(control, DataSource, SelectedTable, customQuery);
+            customQueryDlg.ShowDialog();
+
+            customQuery = (customQueryDlg.DataContext as OdbcCustomQueryDlgViewModel)?.Query ?? string.Empty;
+
+            LoadColumns();
         }
     }
 }

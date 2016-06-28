@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using System.Collections.ObjectModel;
+using System.Data;
 using System.Windows.Input;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc
@@ -27,5 +28,11 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// The OK command
         /// </summary>
         ICommand Ok { get; set; }
+
+        /// <summary>
+        /// Loads the specified custom query.
+        /// </summary>
+        /// <param name="customQuery">The custom query.</param>
+        void Load(string customQuery);
     }
 }
