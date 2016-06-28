@@ -13,6 +13,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
     {
         private readonly IShipWorksDbProviderFactory dbProviderFactory;
         private readonly ILog log;
+        private const int numberOfResults = 10;
 
         /// <summary>
         /// Constructor
@@ -42,7 +43,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
                             DataTable resultTable = GetEmptyResultTable(reader);
 
                             int resultCount = 0;
-                            while (reader.Read() && resultCount < 4)
+                            while (reader.Read() && resultCount < numberOfResults)
                             {
                                 // Create a row and populate it with values from the reader
                                 DataRow row = resultTable.NewRow();
