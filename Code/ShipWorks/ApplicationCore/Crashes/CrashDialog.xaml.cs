@@ -239,5 +239,13 @@ namespace ShipWorks.ApplicationCore.Crashes
         {
             WebHelper.OpenUrl("http://support.shipworks.com/support/tickets/new", this);
         }
+
+        /// <summary>
+        /// Allow a window with no title bar to be moved
+        /// </summary>
+        private void OnWindowMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            DragMove();
+        }
     }
 }

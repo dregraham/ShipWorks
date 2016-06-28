@@ -13,6 +13,7 @@
         ResizeMode="NoResize"
         FontFamily="Tahoma"
         FontSize="11pt"
+        MouseLeftButtonDown="OnWindowMouseLeftButtonDown"
         Width="442">
     <Window.Resources>
         <Style TargetType="TextBlock">
