@@ -42,6 +42,8 @@ namespace ShipWorks.Stores.Platforms.Odbc
                 {
                     string query = downloadQuery.GenerateSql();
 
+                    log.Info($"Query created by OdbcDownloadCommand is \"{query}\"");
+
                     using (IShipWorksOdbcCommand command = dbProviderFactory.CreateOdbcCommand(query, connection))
                     using (DbDataReader reader = command.ExecuteReader())
                     {
