@@ -173,6 +173,7 @@
     <Compile Include="Platforms\Odbc\IOdbcColumnSourceFactory.cs" />
     <Compile Include="Platforms\Odbc\IOdbcCommand.cs" />
     <Compile Include="Platforms\Odbc\IOdbcDataSource.cs" />
+    <Compile Include="Platforms\Odbc\IOdbcDownloadQuery.cs" />
     <Compile Include="Platforms\Odbc\IOdbcSampleDataCommand.cs" />
     <Compile Include="Platforms\Odbc\IOdbcSchema.cs" />
     <Compile Include="Platforms\Odbc\IOdbcColumnSource.cs" />
