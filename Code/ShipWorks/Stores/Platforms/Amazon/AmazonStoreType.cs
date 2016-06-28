@@ -16,6 +16,7 @@ using ShipWorks.Filters;
 using ShipWorks.Filters.Content;
 using ShipWorks.Filters.Content.Conditions;
 using ShipWorks.Filters.Content.Conditions.Orders;
+using ShipWorks.Shipping.Carriers.Amazon;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Management;
@@ -25,7 +26,6 @@ using ShipWorks.Stores.Platforms.Amazon.Mws;
 using ShipWorks.Stores.Platforms.Amazon.WizardPages;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 using ShipWorks.UI.Wizard;
-using ShipWorks.Shipping.Carriers.Amazon;
 
 namespace ShipWorks.Stores.Platforms.Amazon
 {
@@ -63,7 +63,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
             {
                 AmazonStoreEntity amazonStore = Store as AmazonStoreEntity;
 
-                if (amazonStore.AmazonApi == (int)AmazonApi.MarketplaceWebService && amazonStore.MerchantToken.Length == 0)
+                if (amazonStore.AmazonApi == (int) AmazonApi.MarketplaceWebService && amazonStore.MerchantToken.Length == 0)
                 {
                     return String.Format("{0}_{1}", amazonStore.MerchantID, amazonStore.MarketplaceID);
                 }
@@ -82,7 +82,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
         {
             AmazonStoreEntity amazonStore = Store as AmazonStoreEntity;
 
-            if (amazonStore.AmazonApi == (int)AmazonApi.MarketplaceWebService)
+            if (amazonStore.AmazonApi == (int) AmazonApi.MarketplaceWebService)
             {
                 // MWS doesn't have any store settings to configure
                 return new AmazonMwsStoreSettingsControl();
@@ -101,7 +101,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
         {
             AmazonStoreEntity amazonStore = Store as AmazonStoreEntity;
 
-            if (amazonStore.AmazonApi == (int)AmazonApi.MarketplaceWebService)
+            if (amazonStore.AmazonApi == (int) AmazonApi.MarketplaceWebService)
             {
                 return new AmazonMwsAccountSettingsControl();
             }
@@ -119,7 +119,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
         {
             // show the old signup for as long as possible, 10/10/2011
             // if after 10/10/2011, someone needs to signup that has used the old api in the month bofore, allow it via magickeys
-            bool showLegacy = (DateTime.UtcNow < new DateTime(2011, 10,10) && !InterapptiveOnly.MagicKeysDown) ||
+            bool showLegacy = (DateTime.UtcNow < new DateTime(2011, 10, 10) && !InterapptiveOnly.MagicKeysDown) ||
                                 (InterapptiveOnly.MagicKeysDown && DateTime.UtcNow >= new DateTime(2011, 10, 10));
 
             if (showLegacy)
@@ -133,7 +133,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
             }
             else
             {
-                return new List<WizardPage> ()
+                return new List<WizardPage>()
                 {
                     new AmazonMwsCountryPage(),
                     new AmazonMwsPage(),
@@ -169,28 +169,28 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// </summary>
         private FilterEntity CreateFilterFba()
         {
-                FilterDefinition definition = new FilterDefinition(FilterTarget.Orders);
-                definition.RootContainer.JoinType = ConditionGroupJoinType.And;
+            FilterDefinition definition = new FilterDefinition(FilterTarget.Orders);
+            definition.RootContainer.JoinType = ConditionGroupJoinType.And;
 
-                //      [Store] == this store
-                StoreCondition storeCondition = new StoreCondition();
-                storeCondition.Operator = EqualityOperator.Equals;
-                storeCondition.Value = Store.StoreID;
-                definition.RootContainer.FirstGroup.Conditions.Add(storeCondition);
+            //      [Store] == this store
+            StoreCondition storeCondition = new StoreCondition();
+            storeCondition.Operator = EqualityOperator.Equals;
+            storeCondition.Value = Store.StoreID;
+            definition.RootContainer.FirstGroup.Conditions.Add(storeCondition);
 
-                // All the order items are not FBA
-                AmazonFulfillmentChannelCondition fullfillmentCondition = new AmazonFulfillmentChannelCondition();
-                fullfillmentCondition.Operator = EqualityOperator.Equals;
-                fullfillmentCondition.Value = AmazonMwsFulfillmentChannel.AFN;
-                definition.RootContainer.FirstGroup.Conditions.Add(fullfillmentCondition);
+            // All the order items are not FBA
+            AmazonFulfillmentChannelCondition fullfillmentCondition = new AmazonFulfillmentChannelCondition();
+            fullfillmentCondition.Operator = EqualityOperator.Equals;
+            fullfillmentCondition.Value = AmazonMwsFulfillmentChannel.AFN;
+            definition.RootContainer.FirstGroup.Conditions.Add(fullfillmentCondition);
 
-                return new FilterEntity
-                {
-                    Name = "Fulfilled By Amazon",
-                    Definition = definition.GetXml(),
-                    IsFolder = false,
-                    FilterTarget = (int)FilterTarget.Orders
-                };
+            return new FilterEntity
+            {
+                Name = "Fulfilled By Amazon",
+                Definition = definition.GetXml(),
+                IsFolder = false,
+                FilterTarget = (int) FilterTarget.Orders
+            };
         }
 
         /// <summary>
@@ -229,7 +229,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
                 Name = "Shipped",
                 Definition = definition.GetXml(),
                 IsFolder = false,
-                FilterTarget = (int)FilterTarget.Orders
+                FilterTarget = (int) FilterTarget.Orders
             };
         }
 
@@ -250,7 +250,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
             definition.RootContainer.FirstGroup.Conditions.Add(onlineStatus);
 
             // All the order items are not FBA
-            AmazonFulfillmentChannelCondition fullfillmentCondition= new AmazonFulfillmentChannelCondition();
+            AmazonFulfillmentChannelCondition fullfillmentCondition = new AmazonFulfillmentChannelCondition();
             fullfillmentCondition.Operator = EqualityOperator.Equals;
             fullfillmentCondition.Value = AmazonMwsFulfillmentChannel.MFN;
             definition.RootContainer.FirstGroup.Conditions.Add(fullfillmentCondition);
@@ -267,7 +267,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
                 Name = "Ready to Ship",
                 Definition = definition.GetXml(),
                 IsFolder = false,
-                FilterTarget = (int)FilterTarget.Orders
+                FilterTarget = (int) FilterTarget.Orders
             };
         }
 
@@ -288,7 +288,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
         public override StoreDownloader CreateDownloader()
         {
             AmazonStoreEntity amazonStore = Store as AmazonStoreEntity;
-            if (amazonStore.AmazonApi == (int)AmazonApi.MarketplaceWebService)
+            if (amazonStore.AmazonApi == (int) AmazonApi.MarketplaceWebService)
             {
                 return new AmazonMwsDownloader(Store);
             }
@@ -308,7 +308,8 @@ namespace ShipWorks.Stores.Platforms.Amazon
             order.AmazonOrderID = "";
             order.AmazonCommission = 0.0m;
             order.FulfillmentChannel = (int) AmazonMwsFulfillmentChannel.Unknown;
-            order.IsPrime = (int)AmazonMwsIsPrime.Unknown;
+            order.IsPrime = (int) AmazonMwsIsPrime.Unknown;
+            order.PurchaseOrderNumber = "";
 
             return order;
         }
@@ -318,7 +319,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// </summary>
         public override OrderIdentifier CreateOrderIdentifier(OrderEntity order)
         {
-            return new AmazonOrderIdentifier(((AmazonOrderEntity)order).AmazonOrderID);
+            return new AmazonOrderIdentifier(((AmazonOrderEntity) order).AmazonOrderID);
         }
 
         /// <summary>
@@ -339,7 +340,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
 
             InitializeStoreDefaults(storeEntity);
 
-            storeEntity.AmazonApi = (int)AmazonApi.MarketplaceWebService;
+            storeEntity.AmazonApi = (int) AmazonApi.MarketplaceWebService;
 
             // set amazon defaults
             storeEntity.SellerCentralUsername = "";
@@ -400,7 +401,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
             AmazonStoreEntity amazonStore = Store as AmazonStoreEntity;
 
             // Amazon MWS has last modified and status fields
-            if (amazonStore.AmazonApi == (int)AmazonApi.MarketplaceWebService)
+            if (amazonStore.AmazonApi == (int) AmazonApi.MarketplaceWebService)
             {
                 if (column == OnlineGridColumnSupport.LastModified)
                 {
@@ -445,7 +446,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
             outline.AddElement("AmazonOrderID", () => order.Value.AmazonOrderID);
             outline.AddElement("Commission", () => order.Value.AmazonCommission);
             outline.AddElement("FulfilledBy", () => EnumHelper.GetDescription((AmazonMwsFulfillmentChannel) order.Value.FulfillmentChannel));
-            outline.AddElement("Prime", () => EnumHelper.GetDescription((AmazonMwsIsPrime)order.Value.IsPrime));
+            outline.AddElement("Prime", () => EnumHelper.GetDescription((AmazonMwsIsPrime) order.Value.IsPrime));
             outline.AddElement("LatestDeliveryDate", () => order.Value.LatestExpectedDeliveryDate);
             outline.AddElement("EarliestDeliveryDate", () => order.Value.EarliestExpectedDeliveryDate);
         }
@@ -503,7 +504,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
             // upload the tracking number for the most recent processed, not voided shipment
             try
             {
-                AmazonOnlineUpdater shipmentUpdater = new AmazonOnlineUpdater((AmazonStoreEntity)Store);
+                AmazonOnlineUpdater shipmentUpdater = new AmazonOnlineUpdater((AmazonStoreEntity) Store);
                 shipmentUpdater.UploadOrderShipmentDetails(headers);
             }
             catch (AmazonException ex)
