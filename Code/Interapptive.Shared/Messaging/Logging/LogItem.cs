@@ -16,6 +16,7 @@ namespace Interapptive.Shared.Messaging.Logging
         public LogItem(IMessageTracker tracker)
         {
             Timestamp = Stopwatch.GetTimestamp();
+            TimestampFrequency = Stopwatch.Frequency;
             Reference = tracker.Message.MessageId;
             TrackingPath = tracker.TrackingPath;
         }
@@ -26,6 +27,7 @@ namespace Interapptive.Shared.Messaging.Logging
         public LogItem(IShipWorksMessage message)
         {
             Timestamp = Stopwatch.GetTimestamp();
+            TimestampFrequency = Stopwatch.Frequency;
             Reference = message.MessageId;
         }
 
@@ -43,6 +45,11 @@ namespace Interapptive.Shared.Messaging.Logging
         /// Timestamp of the message
         /// </summary>
         public long Timestamp { get; }
+
+        /// <summary>
+        /// Frequency of the timestamp value
+        /// </summary>
+        public long TimestampFrequency { get; }
 
         /// <summary>
         /// Endpoint that should be used

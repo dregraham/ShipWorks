@@ -216,7 +216,6 @@
     <Compile Include="ShippingPanel\ObservableRegistrations\ApplyProfilePipeline.cs" />
     <Compile Include="ShippingPanel\ObservableRegistrations\IShippingPanelTransientPipeline.cs" />
     <Compile Include="ShippingPanel\ObservableRegistrations\LoadCustomsPipeline.cs" />
-    <Compile Include="ShippingPanel\ObservableRegistrations\RefreshRatesPipeline.cs" />
     <Compile Include="ShippingPanel\ObservableRegistrations\CarrierConfiguredPipeline.cs" />
     <Compile Include="ShippingPanel\ObservableRegistrations\ChangeOriginAddressFromTypePipeline.cs" />
     <Compile Include="ShippingPanel\ObservableRegistrations\ChangeShipmentTypePipeline.cs" />

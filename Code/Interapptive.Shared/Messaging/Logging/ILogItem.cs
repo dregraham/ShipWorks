@@ -24,7 +24,12 @@ namespace Interapptive.Shared.Messaging.Logging
         long Timestamp { get; }
 
         /// <summary>
-        /// Endpoint that should be used 
+        /// Frequency of the timestamp value
+        /// </summary>
+        long TimestampFrequency { get; }
+
+        /// <summary>
+        /// Endpoint that should be used
         /// </summary>
         [JsonIgnore]
         string Endpoint { get; }
