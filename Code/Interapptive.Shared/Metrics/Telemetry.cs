@@ -104,7 +104,7 @@ namespace Interapptive.Shared.Metrics
             };
 
             long memoryInBytes = 0;
-            memoryInBytes = (long)new Microsoft.VisualBasic.Devices.ComputerInfo().TotalPhysicalMemory;
+            memoryInBytes = NativeMethods.GetPhysicallyInstalledSystemMemory();
 
             Process process = Process.GetCurrentProcess();
 

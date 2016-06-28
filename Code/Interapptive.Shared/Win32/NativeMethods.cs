@@ -258,17 +258,16 @@ namespace Interapptive.Shared.Win32
         
         #endregion
 
-
+        /// <summary>
+        /// Returns the amount of RAM of the computer.
+        /// </summary>
+        /// <returns></returns>
         public static long GetPhysicallyInstalledSystemMemory()
         {
-            long memoryInBytes = 0;
-            memoryInBytes = (long) new Microsoft.VisualBasic.Devices.ComputerInfo().TotalPhysicalMemory;
-
-            return memoryInBytes;
+            return (long) new Microsoft.VisualBasic.Devices.ComputerInfo().TotalPhysicalMemory;
         }
 
         #region Constants
-
 
         public const int AW_HOR_POSITIVE = 0x00000001;
         public const int AW_HOR_NEGATIVE = 0x00000002;
