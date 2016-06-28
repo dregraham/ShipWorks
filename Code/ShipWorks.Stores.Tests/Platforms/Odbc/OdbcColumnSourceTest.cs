@@ -223,7 +223,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             Mock<DbDataReader> reader = mock.Mock<DbDataReader>();
             reader.Setup(r => r.GetSchemaTable()).Returns(dataTable);
             Mock<IShipWorksOdbcCommand> cmd = mock.Mock<IShipWorksOdbcCommand>();
-            cmd.Setup(c => c.ExecuteReader(CommandBehavior.SchemaOnly)).Returns(reader.Object);
+            cmd.Setup(c => c.ExecuteReader(CommandBehavior.KeyInfo)).Returns(reader.Object);
             Mock<IShipWorksDbProviderFactory> dbProviderFactory = mock.Mock<IShipWorksDbProviderFactory>();
             dbProviderFactory.Setup(d => d.CreateOdbcCommand(It.IsAny<string>(), It.IsAny<DbConnection>())).Returns(cmd.Object);
 
@@ -252,7 +252,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             Mock<DbDataReader> reader = mock.Mock<DbDataReader>();
             reader.Setup(r => r.GetSchemaTable()).Returns(dataTable);
             Mock<IShipWorksOdbcCommand> cmd = mock.Mock<IShipWorksOdbcCommand>();
-            cmd.Setup(c => c.ExecuteReader(CommandBehavior.SchemaOnly)).Returns(reader.Object);
+            cmd.Setup(c => c.ExecuteReader(CommandBehavior.KeyInfo)).Returns(reader.Object);
             Mock<IShipWorksDbProviderFactory> dbProviderFactory = mock.Mock<IShipWorksDbProviderFactory>();
             dbProviderFactory.Setup(d => d.CreateOdbcCommand(It.IsAny<string>(), It.IsAny<DbConnection>())).Returns(cmd.Object);
 
