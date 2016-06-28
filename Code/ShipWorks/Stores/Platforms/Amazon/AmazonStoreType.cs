@@ -449,6 +449,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
             outline.AddElement("Prime", () => EnumHelper.GetDescription((AmazonMwsIsPrime) order.Value.IsPrime));
             outline.AddElement("LatestDeliveryDate", () => order.Value.LatestExpectedDeliveryDate);
             outline.AddElement("EarliestDeliveryDate", () => order.Value.EarliestExpectedDeliveryDate);
+            outline.AddElement("PurchaseOrderNumber", () => order.Value.PurchaseOrderNumber);
         }
 
         /// <summary>
