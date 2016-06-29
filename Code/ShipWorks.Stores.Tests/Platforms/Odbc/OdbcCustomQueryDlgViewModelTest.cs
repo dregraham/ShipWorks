@@ -1,10 +1,8 @@
 ﻿using Autofac.Extras.Moq;
 using Interapptive.Shared.UI;
-using log4net;
 using Moq;
 using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Stores.UI.Platforms.Odbc;
-using ShipWorks.Tests.Shared;
 using Xunit;
 
 namespace ShipWorks.Stores.Tests.Platforms.Odbc
@@ -29,24 +27,101 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         }
 
         [Fact]
-        public void Ok_DelegatesToColumnSourceLoad()
+        public void Execute_ShowsMessage_WhenExecuteThrowsException()
         {
             using (var mock = AutoMock.GetLoose())
             {
-                var odbcColumnSource = mock.Mock<IOdbcColumnSource>();
                 var dataSource = mock.Mock<IOdbcDataSource>();
-                var dbProviderFactory = mock.Mock<IShipWorksDbProviderFactory>();
 
-                Mock<ILog> logger = mock.GetLogger<OdbcColumnSource>();
+                var sampleDataCommand = mock.Mock<IOdbcSampleDataCommand>();
+                sampleDataCommand.Setup(c => c.Execute(dataSource.Object, "myQuery", 10))
+                    .Throws(new ShipWorksOdbcException("error message"));
+
+                var messageHelper = mock.Mock<IMessageHelper>();
+                
+                var testObject = mock.Create<OdbcCustomQueryDlgViewModel>();
+                testObject.Query = "myQuery";
+
+                testObject.Execute.Execute(null);
+
+                messageHelper.Verify(mh=>mh.ShowError("error message"));
+            }
+        }
+
+        [Fact]
+        public void Ok_SavesQueryToColumnSource_WhenExecuteSucceeds()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                var columnSource = mock.Mock<IOdbcColumnSource>();
+                var testObject = mock.Create<OdbcCustomQueryDlgViewModel>();
+                testObject.Query = "myQuery";
+
+                var customQueryDialog = mock.MockRepository.Create<IDialog>();
+
+                testObject.Ok.Execute(customQueryDialog.Object);
+
+                columnSource.VerifySet(s=>s.Query = "myQuery",Times.Once);
+            }
+        }
+
+        [Fact]
+        public void Ok_ClosesDialog_WhenExecuteSucceeds()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                var testObject = mock.Create<OdbcCustomQueryDlgViewModel>();
+                testObject.Query = "myQuery";
+
+                var customQueryDialog = mock.MockRepository.Create<IDialog>();
+
+                testObject.Ok.Execute(customQueryDialog.Object);
+
+                customQueryDialog.Verify(d=>d.Close(), Times.Once);
+            }
+        }
+
+        [Fact]
+        public void Ok_DoesNotSaveQueryToColumnSource_WhenExecuteFails()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                var columnSource = mock.Mock<IOdbcColumnSource>();
+
+                var dataSource = mock.Mock<IOdbcDataSource>();
+
+                var sampleDataCommand = mock.Mock<IOdbcSampleDataCommand>();
+                sampleDataCommand.Setup(c => c.Execute(dataSource.Object, "myQuery", 10))
+                    .Throws(new ShipWorksOdbcException("error message"));
+
 
                 var testObject = mock.Create<OdbcCustomQueryDlgViewModel>();
                 testObject.Query = "myQuery";
 
-                testObject.Ok.Execute(mock.MockRepository.Create<IDialog>().Object);
+                testObject.Ok.Execute(null);
 
-                odbcColumnSource.Verify(
-                    s => s.Load(dataSource.Object, logger.Object, testObject.Query, dbProviderFactory.Object),
-                    Times.Once);
+                columnSource.VerifySet(s => s.Query = "myQuery", Times.Never);
+            }
+        }
+
+        [Fact]
+        public void Ok_DoesNotCloseDialog_WhenExecuteFails()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                var dataSource = mock.Mock<IOdbcDataSource>();
+                var sampleDataCommand = mock.Mock<IOdbcSampleDataCommand>();
+                sampleDataCommand.Setup(c => c.Execute(dataSource.Object, "myQuery", 10))
+                    .Throws<ShipWorksOdbcException>();
+
+                var testObject = mock.Create<OdbcCustomQueryDlgViewModel>();
+                testObject.Query = "myQuery";
+
+                var customQueryDialog = mock.MockRepository.Create<IDialog>();
+
+                testObject.Ok.Execute(customQueryDialog.Object);
+
+                customQueryDialog.Verify(d => d.Close(), Times.Never);
             }
         }
     }

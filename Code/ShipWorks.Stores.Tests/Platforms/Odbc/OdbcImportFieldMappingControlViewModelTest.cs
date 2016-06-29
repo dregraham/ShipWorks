@@ -11,8 +11,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Windows.Forms;
-using System.Windows.Input;
-using log4net;
 using Xunit;
 
 namespace ShipWorks.Stores.Tests.Platforms.Odbc
@@ -698,7 +696,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             {
                 var dataSource = mock.Mock<IOdbcDataSource>();
                 dataSource.Setup(d => d.Name).Returns("My data source");
-                var customQueryDlgFactory = mock.Mock<IOdbcCustomQueryModalDialog>();
+                var customQueryDialog = mock.Mock<IOdbcCustomQueryModalDialog>();
                 var mapFactory = mock.Create<OdbcFieldMapFactory>();
                 var testObject = mock.Create<OdbcImportFieldMappingControlViewModel>(new TypedParameter(typeof(IOdbcFieldMapFactory), mapFactory));
                 testObject.Tables = new List<IOdbcColumnSource>();
@@ -706,7 +704,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
                 var openCustomQueryDlgCommand = testObject.OpenCustomQueryDlgCommand;
 
                 openCustomQueryDlgCommand.Execute(null);
-                customQueryDlgFactory.Verify(
+                customQueryDialog.Verify(
                     d =>
                         d.Show(It.IsAny<IOdbcDataSource>(), It.IsAny<IOdbcColumnSource>(),
                             It.IsAny<string>(), It.IsAny<IMessageHelper>()));
