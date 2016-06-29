@@ -276,11 +276,10 @@ namespace Interapptive.Shared.Win32
         /// </summary>
         public static float GetGraphicsDeviceCapability(DeviceCap deviceCap)
         {
-            Graphics g = Graphics.FromHwnd(IntPtr.Zero);
-            IntPtr desktop = g.GetHdc();
-            int value = GetDeviceCaps(desktop, (int) deviceCap);
-            g.ReleaseHdc(desktop);
-            return value;
+            using (Graphics g = Graphics.FromHwnd(IntPtr.Zero))
+            {
+                return GetDeviceCaps(g.GetHdc(), (int) deviceCap);
+            }
         }
 
         /// <summary>
