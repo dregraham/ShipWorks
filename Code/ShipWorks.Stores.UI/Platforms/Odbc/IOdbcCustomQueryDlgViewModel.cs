@@ -1,5 +1,4 @@
-﻿using System.Collections.ObjectModel;
-using System.Data;
+﻿using System.Data;
 using System.Windows.Input;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc

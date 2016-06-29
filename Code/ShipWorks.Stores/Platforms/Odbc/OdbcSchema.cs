@@ -12,22 +12,17 @@ namespace ShipWorks.Stores.Platforms.Odbc
     /// </summary>
 	public class OdbcSchema : IOdbcSchema
     {
-        private readonly Func<Type, ILog> logFactory;
-        private readonly IOdbcColumnSourceFactory columnSourceFactory;
-        private readonly IShipWorksDbProviderFactory dbProviderFactory;
+        private readonly Func<string, IOdbcColumnSource> columnSourceFactory;
         private readonly ILog log;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public OdbcSchema(Func<Type, ILog> logFactory,
-            IOdbcColumnSourceFactory columnSourceFactory,
-            IShipWorksDbProviderFactory dbProviderFactory)
+            Func<string, IOdbcColumnSource> columnSourceFactory)
         {
             log = logFactory(typeof(OdbcSchema));
-            this.logFactory = logFactory;
             this.columnSourceFactory = columnSourceFactory;
-            this.dbProviderFactory = dbProviderFactory;
         }
 
         /// <summary>
@@ -55,7 +50,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
 
                     for (int i = 0; i < tableData.Rows.Count; i++)
                     {
-                        IOdbcColumnSource table = columnSourceFactory.CreateTable(tableData.Rows[i].ItemArray[position].ToString());
+                        IOdbcColumnSource table = columnSourceFactory(tableData.Rows[i].ItemArray[position].ToString());
                         odbcColumnSources.Add(table);
                     }
 
@@ -80,17 +75,6 @@ namespace ShipWorks.Stores.Platforms.Odbc
                     }
                 }
             }
-        }
-
-        /// <summary>
-        /// Sets tables to be a single table representing the schema of this query.
-        /// </summary>
-        public void Load(IOdbcDataSource dataSource, string query)
-        {
-            IOdbcColumnSource odbcColumnSource = columnSourceFactory.CreateTable("Custom Query");
-            odbcColumnSource.Load(dataSource, logFactory(typeof(OdbcColumnSource)), query, dbProviderFactory);
-
-            Tables = new[] {odbcColumnSource};
         }
     }
 }

@@ -16,10 +16,5 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// Load the given DataSource
         /// </summary>
         void Load(IOdbcDataSource dataSource);
-
-        /// <summary>
-        /// Sets tables to be a single table representing the schema of this query.
-        /// </summary>
-        void Load(IOdbcDataSource dataSource, string query);
     }
 }

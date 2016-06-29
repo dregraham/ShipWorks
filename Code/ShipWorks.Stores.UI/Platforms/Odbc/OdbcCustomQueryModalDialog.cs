@@ -1,8 +1,6 @@
 ﻿using Interapptive.Shared.UI;
-using log4net;
 using ShipWorks.Stores.Platforms.Odbc;
 using System;
-using IWin32Window = System.Windows.Forms.IWin32Window;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc
 {
@@ -11,40 +9,34 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
     /// </summary>
     public class OdbcCustomQueryModalDialog : IOdbcCustomQueryModalDialog
     {
-        private readonly IWin32Window owner;
-        private readonly IOdbcSampleDataCommand sampleDataCommand;
-        private readonly Func<Type, ILog> logFactory;
+        private readonly Func<IOdbcDataSource, IOdbcColumnSource, IOdbcCustomQueryDlgViewModel> odbcCustomQueryDlgViewModelFactory;
+        private readonly Func<string, IDialog> dialogFactory;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcCustomQueryModalDialog"/> class.
         /// </summary>
-        public OdbcCustomQueryModalDialog(IWin32Window owner, IOdbcSampleDataCommand sampleDataCommand, Func<Type, ILog> logFactory)
+        public OdbcCustomQueryModalDialog(
+            Func<IOdbcDataSource, IOdbcColumnSource, IOdbcCustomQueryDlgViewModel> odbcCustomQueryDlgViewModelFactory,
+            Func<string, IDialog> dialogFactory)
         {
-            this.owner = owner;
-            this.sampleDataCommand = sampleDataCommand;
-            this.logFactory = logFactory;
+            this.odbcCustomQueryDlgViewModelFactory = odbcCustomQueryDlgViewModelFactory;
+            this.dialogFactory = dialogFactory;
         }
 
         /// <summary>
         /// Shows the custom query dialog.
         /// </summary>
-        public void Show(IOdbcDataSource dataSource, IOdbcColumnSource columnSource, string customQuery, IMessageHelper messageHelper)
+        public void Show(IOdbcDataSource dataSource, IOdbcColumnSource columnSource, string customQuery)
         {
-            OdbcCustomQueryWarningDlg warningDlg = new OdbcCustomQueryWarningDlg();
-            warningDlg.LoadOwner(owner);
+            IDialog warningDlg = dialogFactory("OdbcCustomQueryWarningDlg");
             warningDlg.ShowDialog();
 
-            OdbcCustomQueryDlg customQueryDlg = new OdbcCustomQueryDlg();
-            customQueryDlg.LoadOwner(owner);
+            IDialog customQueryDlg = dialogFactory("OdbcCustomQueryDlg");
             columnSource.Query = customQuery;
 
-            using (var context = new OdbcCustomQueryDlgViewModel(dataSource, sampleDataCommand, columnSource, messageHelper, logFactory))
-            {
-                customQueryDlg.DataContext = context;
-
-                customQueryDlg.ShowDialog();
-            }
-
+            IOdbcCustomQueryDlgViewModel context = odbcCustomQueryDlgViewModelFactory(dataSource, columnSource);
+            customQueryDlg.DataContext = context;
+            customQueryDlg.ShowDialog();
         }
     }
 }

@@ -707,7 +707,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
                 customQueryDialog.Verify(
                     d =>
                         d.Show(It.IsAny<IOdbcDataSource>(), It.IsAny<IOdbcColumnSource>(),
-                            It.IsAny<string>(), It.IsAny<IMessageHelper>()));
+                            It.IsAny<string>()));
             }
         }
 
@@ -723,8 +723,8 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
                 customQueryDlgFactory.Setup(
                     customColumnSource =>
                         customColumnSource.Show(It.IsAny<IOdbcDataSource>(), It.IsAny<IOdbcColumnSource>(),
-                            It.IsAny<string>(), It.IsAny<IMessageHelper>()))
-                    .Callback<IOdbcDataSource, IOdbcColumnSource, string, IMessageHelper>((d, c, s, m) => c.Query = "Query");
+                            It.IsAny<string>()))
+                    .Callback<IOdbcDataSource, IOdbcColumnSource, string>((d, c, s) => c.Query = "Query");
 
                 var mapFactory = mock.Create<OdbcFieldMapFactory>();
                 var testObject = mock.Create<OdbcImportFieldMappingControlViewModel>(new TypedParameter(typeof(IOdbcFieldMapFactory), mapFactory));
@@ -750,8 +750,8 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
                 customQueryDlgFactory.Setup(
                     customColumnSource =>
                         customColumnSource.Show(It.IsAny<IOdbcDataSource>(), It.IsAny<IOdbcColumnSource>(),
-                            It.IsAny<string>(), It.IsAny<IMessageHelper>()))
-                    .Callback<IOdbcDataSource, IOdbcColumnSource, string, IMessageHelper>((d, c, s, m) => c.Query = string.Empty);
+                            It.IsAny<string>()))
+                    .Callback<IOdbcDataSource, IOdbcColumnSource, string>((d, c, s) => c.Query = string.Empty);
 
                 var mapFactory = mock.Create<OdbcFieldMapFactory>();
                 var testObject = mock.Create<OdbcImportFieldMappingControlViewModel>(new TypedParameter(typeof(IOdbcFieldMapFactory), mapFactory));
@@ -777,8 +777,8 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
                 customQueryDlgFactory.Setup(
                     customColumnSource =>
                         customColumnSource.Show(It.IsAny<IOdbcDataSource>(), It.IsAny<IOdbcColumnSource>(),
-                            It.IsAny<string>(), It.IsAny<IMessageHelper>()))
-                    .Callback<IOdbcDataSource, IOdbcColumnSource, string, IMessageHelper>((d, c, s, m) => c.Query = "Query");
+                            It.IsAny<string>()))
+                    .Callback<IOdbcDataSource, IOdbcColumnSource, string>((d, c, s) => c.Query = "Query");
 
                 var mapFactory = mock.Create<OdbcFieldMapFactory>();
                 var testObject = mock.Create<OdbcImportFieldMappingControlViewModel>(new TypedParameter(typeof(IOdbcFieldMapFactory), mapFactory));

@@ -31,10 +31,8 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
                 // Mock up the connection
                 connection = mock.Mock<DbConnection>();
                 connection.Setup(c => c.GetSchema(It.IsAny<string>())).Returns(tableData);
-                Mock<IOdbcColumnSource> columnSourceMock = new Mock<IOdbcColumnSource>();
-                mock.Mock<IOdbcColumnSourceFactory>()
-                    .Setup(s => s.CreateTable("Order"))
-                    .Returns(columnSourceMock.Object);
+
+                var columnSourceMock = mock.MockFunc<string, IOdbcColumnSource>().FunctionOutput;
 
                 // Mock up the data source
                 Mock<IOdbcDataSource> dataSource = mock.Mock<IOdbcDataSource>();
@@ -161,61 +159,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             ShipWorksOdbcException thrownEx = Assert.Throws<ShipWorksOdbcException>(() => testObject.Load(dataSource.Object));
 
             Assert.Equal("An error occurred while attempting to retrieve a list of tables from the shipworksodbc data source.", thrownEx.Message);
-        }
-
-        [Fact]
-        public void LoadWithQuery_TableNameCreatedIsCustomQuery()
-        {
-            Mock<IOdbcColumnSource> odbcColumnSource = new Mock<IOdbcColumnSource>();
-            Mock<IOdbcColumnSourceFactory> columnSourceFactory = mock.Mock<IOdbcColumnSourceFactory>();
-            columnSourceFactory.Setup(f => f.CreateTable(It.IsAny<string>()))
-                .Returns(odbcColumnSource.Object);
-
-            Mock<IOdbcDataSource> odbcDataSource = new Mock<IOdbcDataSource>();
-
-            OdbcSchema testObject = mock.Create<OdbcSchema>();
-
-            testObject.Load(odbcDataSource.Object, "");
-
-            columnSourceFactory.Verify(f=>f.CreateTable("Custom Query"), Times.Once);
-        }
-
-        [Fact]
-        public void LoadWithQuery_OdbcColumnSourceLoadedWithCorrectParameters()
-        {
-            string query = "the Query";
-            Mock<IOdbcColumnSource> odbcColumnSource = new Mock<IOdbcColumnSource>();
-            Mock<IOdbcColumnSourceFactory> columnSourceFactory = mock.Mock<IOdbcColumnSourceFactory>();
-            columnSourceFactory.Setup(f => f.CreateTable(It.IsAny<string>()))
-                .Returns(odbcColumnSource.Object);
-
-            var dbProviderFactory = mock.Mock<IShipWorksDbProviderFactory>();
-
-            Mock<IOdbcDataSource> odbcDataSource = new Mock<IOdbcDataSource>();
-
-            Mock<ILog> log = mock.GetLogger<OdbcColumnSource>();
-
-            OdbcSchema testObject = mock.Create<OdbcSchema>();
-            testObject.Load(odbcDataSource.Object, query);
-            
-            odbcColumnSource.Verify(s => s.Load(odbcDataSource.Object, log.Object, query, dbProviderFactory.Object), Times.Once);
-        }
-
-        [Fact]
-        public void LoadWithQuery_TableOnlyIncludesSchemaTable()
-        {
-            Mock<IOdbcColumnSource> odbcColumnSource = new Mock<IOdbcColumnSource>();
-            Mock<IOdbcColumnSourceFactory> columnSourceFactory = mock.Mock<IOdbcColumnSourceFactory>();
-            columnSourceFactory.Setup(f => f.CreateTable(It.IsAny<string>()))
-                .Returns(odbcColumnSource.Object);
-
-            Mock<IOdbcDataSource> odbcDataSource = new Mock<IOdbcDataSource>();
-
-            OdbcSchema testObject = mock.Create<OdbcSchema>();
-
-            testObject.Load(odbcDataSource.Object, "");
-
-            Assert.Equal(new [] {odbcColumnSource.Object}, testObject.Tables);
         }
 
         public void Dispose()

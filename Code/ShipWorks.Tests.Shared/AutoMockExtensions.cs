@@ -1,6 +1,5 @@
 ﻿using Autofac;
 using Autofac.Extras.Moq;
-using log4net;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Filters;
@@ -136,16 +135,15 @@ namespace ShipWorks.Tests.Shared
         /// Mocks a LoggerFunc for the specified type T. 
         /// The Func to create the logger is registered and the actual mocked logger is returned.
         /// </summary>
-        public static Mock<ILog> GetLogger<T>(this AutoMock mock)
+        public static MockedFuncAndOutput<TInput, TOutput> MockFunc<TInput, TOutput>(this AutoMock mock) where TOutput : class
         {
-            Mock<ILog> log = mock.MockRepository.Create<ILog>();
+            Mock<TOutput> functionOutput = mock.MockRepository.Create<TOutput>();
 
-            Mock<Func<Type, ILog>> repo = mock.MockRepository.Create<Func<Type, ILog>>();
-            repo.Setup(func => func(typeof(T)))
-                .Returns(log.Object);
-            mock.Provide(repo.Object);
+            Mock<Func<TInput, TOutput>> function = mock.MockRepository.Create<Func<TInput, TOutput>>();
+            function.Setup(func => func(It.IsAny<TInput>())).Returns(functionOutput.Object);
+            mock.Provide(function.Object);
             
-            return log;
+            return new MockedFuncAndOutput<TInput, TOutput>(function, functionOutput);
         }
     }
 }

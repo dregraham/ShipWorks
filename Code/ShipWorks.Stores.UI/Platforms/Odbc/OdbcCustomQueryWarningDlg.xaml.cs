@@ -1,9 +1,9 @@
-﻿using System;
+﻿using Interapptive.Shared.UI;
+using System;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Navigation;
-using Interapptive.Shared.UI;
 using IWin32Window = System.Windows.Forms.IWin32Window;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc
@@ -16,11 +16,12 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcCustomQueryWarningDlg"/> class.
         /// </summary>
-        public OdbcCustomQueryWarningDlg()
+        public OdbcCustomQueryWarningDlg(IWin32Window owner)
         {
             InitializeComponent();
+            LoadOwner(owner);
         }
-
+         
         /// <summary>
         /// Gets the handle to the window represented by the implementer.
         /// </summary>

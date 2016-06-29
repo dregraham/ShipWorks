@@ -14,9 +14,10 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcCustomQueryDlg"/> class.
         /// </summary>
-        public OdbcCustomQueryDlg()
+        public OdbcCustomQueryDlg(IWin32Window owner)
         {
             InitializeComponent();
+            LoadOwner(owner);
         }
 
         /// <summary>

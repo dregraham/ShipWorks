@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using Interapptive.Shared.Security;
+using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore.Security;
 using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Stores.Platforms.Odbc.Loaders;
@@ -38,7 +39,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             builder.RegisterType<OdbcCipherKey>()
                 .Keyed<ICipherKey>(CipherContext.Odbc);
 
-            builder.RegisterType<OdbcColumnSourceFactory>()
+            builder.RegisterType<OdbcColumnSource>()
                 .AsImplementedInterfaces();
 
             builder.RegisterType<OdbcImportFieldMappingControl>()
@@ -81,11 +82,20 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
 
             builder.RegisterType<OdbcCommandFactory>();
 
-            builder.RegisterType<OdbcCustomQueryModalDialog>().
-                AsImplementedInterfaces();
+            builder.RegisterType<OdbcCustomQueryModalDialog>()
+                .AsImplementedInterfaces();
 
-            builder.RegisterType<OdbcSampleDataCommand>().
-                AsImplementedInterfaces();
+            builder.RegisterType<OdbcSampleDataCommand>()
+                .AsImplementedInterfaces();
+
+            builder.RegisterType<OdbcCustomQueryDlgViewModel>()
+                .AsImplementedInterfaces();
+
+            builder.RegisterType<OdbcCustomQueryDlg>()
+                .Named<IDialog>("OdbcCustomQueryDlg");
+
+            builder.RegisterType<OdbcCustomQueryWarningDlg>()
+                .Named<IDialog>("OdbcCustomQueryWarningDlg");
 
             RegisterOrderLoadingTypes(builder);
         }

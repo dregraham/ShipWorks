@@ -32,12 +32,12 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// Initializes a new instance of the <see cref="OdbcCustomQueryDlgViewModel"/> class.
         /// </summary>
         /// <param name="dataSource">The data source.</param>
-        /// <param name="sampleDataCommand"></param>
         /// <param name="columnSource">The column source.</param>
+        /// <param name="sampleDataCommand"></param>
         /// <param name="messageHelper"></param>
         /// <param name="logFactory">The log factory.</param>
-        public OdbcCustomQueryDlgViewModel(IOdbcDataSource dataSource, IOdbcSampleDataCommand sampleDataCommand,
-            IOdbcColumnSource columnSource, IMessageHelper messageHelper,  Func<Type, ILog> logFactory)
+        public OdbcCustomQueryDlgViewModel(IOdbcDataSource dataSource, IOdbcColumnSource columnSource,
+            IOdbcSampleDataCommand sampleDataCommand, IMessageHelper messageHelper, Func<Type, ILog> logFactory)
         {
             this.dataSource = dataSource;
             this.columnSource = columnSource;
