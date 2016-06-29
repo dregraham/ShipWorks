@@ -258,6 +258,31 @@ namespace Interapptive.Shared.Win32
         
         #endregion
 
+        [DllImport("gdi32.dll")]
+        public static extern int GetDeviceCaps(IntPtr hdc, int nIndex);
+
+        /// <summary>
+        /// Device capabilities
+        /// http://pinvoke.net/default.aspx/gdi32/GetDeviceCaps.html
+        /// </summary>
+        public enum DeviceCap
+        {
+            LOGPIXELSX = 88,
+            LOGPIXELSY = 90
+        }
+
+        /// <summary>
+        /// Get a Graphics device capability
+        /// </summary>
+        public static float GetGraphicsDeviceCapability(DeviceCap deviceCap)
+        {
+            Graphics g = Graphics.FromHwnd(IntPtr.Zero);
+            IntPtr desktop = g.GetHdc();
+            int value = GetDeviceCaps(desktop, (int) deviceCap);
+            g.ReleaseHdc(desktop);
+            return value;
+        }
+
         /// <summary>
         /// Returns the amount of RAM of the computer.
         /// </summary>

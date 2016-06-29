@@ -256,14 +256,8 @@ namespace Interapptive.Shared
         /// </summary>
         public static string GetSystemDpi()
         {
-            float dpiX;
-            float dpiY;
-
-            using (Graphics graphics = Graphics.FromHwnd(IntPtr.Zero))
-            {
-                dpiX = graphics.DpiX;
-                dpiY = graphics.DpiY;
-            }
+            float dpiX = NativeMethods.GetGraphicsDeviceCapability(NativeMethods.DeviceCap.LOGPIXELSX);
+            float dpiY = NativeMethods.GetGraphicsDeviceCapability(NativeMethods.DeviceCap.LOGPIXELSY);
 
             return $"{dpiX}x{dpiY}";
         }
