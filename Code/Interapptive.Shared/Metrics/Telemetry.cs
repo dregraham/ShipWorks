@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
+using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Transactions;
@@ -103,25 +105,12 @@ namespace Interapptive.Shared.Metrics
                 Timestamp = DateTimeOffset.UtcNow
             };
 
-            long memoryInBytes = 0;
-            memoryInBytes = NativeMethods.GetPhysicallyInstalledSystemMemory();
+            Dictionary<string, string> commonProperties = CommonProperties();
+            foreach (KeyValuePair<string, string> keyValuePair in commonProperties.Where(kvp => !eventTelemetry.Properties.ContainsKey(kvp.Key)))
+            {
+                eventTelemetry.Properties.Add(keyValuePair.Key, keyValuePair.Value);
+            }
 
-            Process process = Process.GetCurrentProcess();
-
-            AddEventProperty(eventTelemetry, "Screens", Screen.AllScreens.Length);
-            AddEventProperty(eventTelemetry, "CPUs", Environment.ProcessorCount.ToString());
-            AddEventProperty(eventTelemetry, "TransactionManager.DefaultTimeout", TransactionManager.DefaultTimeout.TotalSeconds);
-            AddEventProperty(eventTelemetry, "TransactionManager.MaximumTimeout", TransactionManager.MaximumTimeout.TotalSeconds);
-            AddEventProperty(eventTelemetry, "Handles", process.HandleCount);
-            AddEventProperty(eventTelemetry, "Threads", process.Threads.Count);
-            AddEventProperty(eventTelemetry, "UserProcessorTime(m)", process.UserProcessorTime.TotalMinutes);
-            AddEventProperty(eventTelemetry, "TotalProcessorTime(m)", process.TotalProcessorTime.TotalMinutes);
-            AddEventProperty(eventTelemetry, "PhysicalMemory", StringUtility.FormatByteCount(memoryInBytes, "{0:#,##0}"));
-            AddEventProperty(eventTelemetry, "UserObjects", NativeMethods.GetGuiResources(process.Handle, NativeMethods.GR_USEROBJECTS));
-            AddEventProperty(eventTelemetry, "GDIObjects", NativeMethods.GetGuiResources(process.Handle, NativeMethods.GR_GDIOBJECTS));
-            AddEventProperty(eventTelemetry, "ScreenDimensionsPrimary", $"{Screen.PrimaryScreen.Bounds.Width}x{Screen.PrimaryScreen.Bounds.Height}");
-            AddEventProperty(eventTelemetry, "ScreenDpiPrimary", MyComputer.GetSystemDpi());
-            
             telemetryClient.TrackEvent(eventTelemetry);
         }
 
@@ -130,6 +119,13 @@ namespace Interapptive.Shared.Metrics
         /// </summary>
         public static void TrackException(Exception ex, Dictionary<string, string> properties)
         {
+            Dictionary<string, string> commonProperties = CommonProperties();
+            
+            foreach (KeyValuePair<string, string> keyValuePair in commonProperties.Where(kvp => !properties.ContainsKey(kvp.Key)))
+            {
+                properties.Add(keyValuePair.Key, keyValuePair.Value);
+            }
+
             telemetryClient.TrackException(ex, properties);
 
             // Flush so that this exception gets sent immediately!
@@ -145,11 +141,37 @@ namespace Interapptive.Shared.Metrics
         }
 
         /// <summary>
-        /// Add a property to the telemetry item
+        /// Gets a Dictionary of common properties to track.
         /// </summary>
-        private static void AddEventProperty(ISupportProperties telemetry, string name, object value)
+        private static Dictionary<string, string> CommonProperties()
         {
-            telemetry.Properties.Add(name, value.ToString());
+            Dictionary<string, string> properties = new Dictionary<string, string>();
+
+            // We don't want to cause a crash when using Telemetry, so wrap these in a try/catch
+            try
+            {
+                long memoryInBytes = NativeMethods.GetPhysicallyInstalledSystemMemory();
+
+                Process process = Process.GetCurrentProcess();
+                properties.Add("Screens", Screen.AllScreens.Length.ToString());
+                properties.Add("CPUs", Environment.ProcessorCount.ToString());
+                properties.Add("TransactionManager.DefaultTimeout", TransactionManager.DefaultTimeout.TotalSeconds.ToString(CultureInfo.InvariantCulture));
+                properties.Add("TransactionManager.MaximumTimeout", TransactionManager.MaximumTimeout.TotalSeconds.ToString(CultureInfo.InvariantCulture));
+                properties.Add("Handles", process.HandleCount.ToString());
+                properties.Add("Threads", process.Threads.Count.ToString());
+                properties.Add("UserProcessorTime(m)", process.UserProcessorTime.TotalMinutes.ToString(CultureInfo.InvariantCulture));
+                properties.Add("TotalProcessorTime(m)", process.TotalProcessorTime.TotalMinutes.ToString(CultureInfo.InvariantCulture));
+                properties.Add("PhysicalMemory", StringUtility.FormatByteCount(memoryInBytes, "{0:#,##0}"));
+                properties.Add("UserObjects", NativeMethods.GetGuiResources(process.Handle, NativeMethods.GR_USEROBJECTS).ToString());
+                properties.Add("GDIObjects", NativeMethods.GetGuiResources(process.Handle, NativeMethods.GR_GDIOBJECTS).ToString());
+                properties.Add("ScreenDimensionsPrimary", $"{Screen.PrimaryScreen.Bounds.Width}x{Screen.PrimaryScreen.Bounds.Height}");
+                properties.Add("ScreenDpiPrimary", MyComputer.GetSystemDpi());
+            }
+            catch
+            {
+            }
+
+            return properties;
         }
     }
 }
