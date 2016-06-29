@@ -6,6 +6,9 @@ using IWin32Window = System.Windows.Forms.IWin32Window;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc
 {
+    /// <summary>
+    /// Used to display a CustomQueryModalDialog window
+    /// </summary>
     public class OdbcCustomQueryModalDialog : IOdbcCustomQueryModalDialog
     {
         private readonly IWin32Window owner;
