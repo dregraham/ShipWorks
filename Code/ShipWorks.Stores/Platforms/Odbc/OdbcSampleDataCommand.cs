@@ -2,6 +2,7 @@
 using System;
 using System.Data;
 using System.Data.Common;
+using System.Data.Odbc;
 using System.Linq;
 
 namespace ShipWorks.Stores.Platforms.Odbc
@@ -63,6 +64,13 @@ namespace ShipWorks.Stores.Platforms.Odbc
                         }
                     }
                 }
+            }
+            catch (OdbcException ex)
+            {
+                log.Error(ex);
+                throw new ShipWorksOdbcException(
+                    $"An error occurred executing the query... {Environment.NewLine}{Environment.NewLine}{ex.Message}",
+                    ex);
             }
             catch (DbException ex)
             {
