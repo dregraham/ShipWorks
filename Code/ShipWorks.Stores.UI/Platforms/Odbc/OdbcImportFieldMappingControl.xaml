@@ -137,7 +137,7 @@
                     To enter your own query to retrieve fields from multiple database tables,
                     <Hyperlink Command="{Binding OpenCustomQueryDlgCommand}"
                                CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:OdbcImportFieldMappingControl}}}">
-                        click here
+                        click here.
                     </Hyperlink>
             </TextBlock>
         </Grid>
