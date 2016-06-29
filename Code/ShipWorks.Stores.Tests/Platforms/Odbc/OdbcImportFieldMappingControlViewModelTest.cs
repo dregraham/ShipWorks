@@ -690,7 +690,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         }
 
         [Fact]
-        public void OpenCustomQueryDlgCommand_DelegatesToCustomQueryDlgFactory()
+        public void OpenCustomQueryDlgCommand_DelegatesToCustomQueryModalDialog()
         {
             using (var mock = AutoMock.GetLoose())
             {
@@ -708,6 +708,87 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
                     d =>
                         d.Show(It.IsAny<IOdbcDataSource>(), It.IsAny<IOdbcColumnSource>(),
                             It.IsAny<string>(), It.IsAny<IMessageHelper>()));
+            }
+        }
+
+        [Fact]
+        public void OpenCustomQueryDlgCommand_AddsCustomQueryColumnSource_WhenQueryIsNotEmpty()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                var dataSource = mock.Mock<IOdbcDataSource>();
+                dataSource.Setup(d => d.Name).Returns("My data source");
+                var customQueryDlgFactory = mock.Mock<IOdbcCustomQueryModalDialog>();
+
+                customQueryDlgFactory.Setup(
+                    customColumnSource =>
+                        customColumnSource.Show(It.IsAny<IOdbcDataSource>(), It.IsAny<IOdbcColumnSource>(),
+                            It.IsAny<string>(), It.IsAny<IMessageHelper>()))
+                    .Callback<IOdbcDataSource, IOdbcColumnSource, string, IMessageHelper>((d, c, s, m) => c.Query = "Query");
+
+                var mapFactory = mock.Create<OdbcFieldMapFactory>();
+                var testObject = mock.Create<OdbcImportFieldMappingControlViewModel>(new TypedParameter(typeof(IOdbcFieldMapFactory), mapFactory));
+                testObject.Tables = new List<IOdbcColumnSource>();
+                testObject.Load(dataSource.Object);
+                var openCustomQueryDlgCommand = testObject.OpenCustomQueryDlgCommand;
+
+                openCustomQueryDlgCommand.Execute(null);
+
+                Assert.Equal("CUSTOM QUERY...", testObject.Tables.FirstOrDefault().Name);
+            }
+        }
+
+        [Fact]
+        public void OpenCustomQueryDlgCommand_DoesNotAddCustomQueryColumnSource_WhenQueryIsEmpty()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                var dataSource = mock.Mock<IOdbcDataSource>();
+                dataSource.Setup(d => d.Name).Returns("My data source");
+                var customQueryDlgFactory = mock.Mock<IOdbcCustomQueryModalDialog>();
+
+                customQueryDlgFactory.Setup(
+                    customColumnSource =>
+                        customColumnSource.Show(It.IsAny<IOdbcDataSource>(), It.IsAny<IOdbcColumnSource>(),
+                            It.IsAny<string>(), It.IsAny<IMessageHelper>()))
+                    .Callback<IOdbcDataSource, IOdbcColumnSource, string, IMessageHelper>((d, c, s, m) => c.Query = string.Empty);
+
+                var mapFactory = mock.Create<OdbcFieldMapFactory>();
+                var testObject = mock.Create<OdbcImportFieldMappingControlViewModel>(new TypedParameter(typeof(IOdbcFieldMapFactory), mapFactory));
+                testObject.Tables = new List<IOdbcColumnSource>();
+                testObject.Load(dataSource.Object);
+                var openCustomQueryDlgCommand = testObject.OpenCustomQueryDlgCommand;
+
+                openCustomQueryDlgCommand.Execute(null);
+
+                Assert.Empty(testObject.Tables);
+            }
+        }
+
+        [Fact]
+        public void OpenCustomQueryDlgCommand_SetsSelectedTableToCustomQueryColumnSource_WhenQueryIsNotEmpty()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                var dataSource = mock.Mock<IOdbcDataSource>();
+                dataSource.Setup(d => d.Name).Returns("My data source");
+                var customQueryDlgFactory = mock.Mock<IOdbcCustomQueryModalDialog>();
+
+                customQueryDlgFactory.Setup(
+                    customColumnSource =>
+                        customColumnSource.Show(It.IsAny<IOdbcDataSource>(), It.IsAny<IOdbcColumnSource>(),
+                            It.IsAny<string>(), It.IsAny<IMessageHelper>()))
+                    .Callback<IOdbcDataSource, IOdbcColumnSource, string, IMessageHelper>((d, c, s, m) => c.Query = "Query");
+
+                var mapFactory = mock.Create<OdbcFieldMapFactory>();
+                var testObject = mock.Create<OdbcImportFieldMappingControlViewModel>(new TypedParameter(typeof(IOdbcFieldMapFactory), mapFactory));
+                testObject.Tables = new List<IOdbcColumnSource>();
+                testObject.Load(dataSource.Object);
+                var openCustomQueryDlgCommand = testObject.OpenCustomQueryDlgCommand;
+
+                openCustomQueryDlgCommand.Execute(null);
+
+                Assert.Equal("CUSTOM QUERY...", testObject.SelectedTable.Name);
             }
         }
 

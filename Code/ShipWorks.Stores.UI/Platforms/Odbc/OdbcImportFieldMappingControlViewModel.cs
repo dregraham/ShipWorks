@@ -527,11 +527,15 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             IOdbcColumnSource customColumnSource = new OdbcColumnSource(CustomQueryColumnSourceName);
 
             customQueryModalDialog.Show(DataSource, customColumnSource, customQuery, messageHelper);
-            customQuery = customColumnSource.Query;
 
-            Tables = Tables.Concat(new[] { customColumnSource });
+            if (!string.IsNullOrWhiteSpace(customColumnSource.Query))
+            {
+                customQuery = customColumnSource.Query;
 
-            SelectedTable = customColumnSource;
+                Tables = Tables.Concat(new[] { customColumnSource });
+
+                SelectedTable = customColumnSource;
+            }
         }
     }
 }
