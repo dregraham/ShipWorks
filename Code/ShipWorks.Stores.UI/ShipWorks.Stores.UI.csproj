@@ -180,6 +180,9 @@
     </Compile>
     <Compile Include="Platforms\Odbc\OdbcCustomQueryModalDialog.cs" />
     <Compile Include="Platforms\Odbc\OdbcCustomQueryDlgViewModel.cs" />
+    <Compile Include="Platforms\Odbc\OdbcCustomQueryWarningDlg.xaml.cs">
+      <DependentUpon>OdbcCustomQueryWarningDlg.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Platforms\Odbc\OdbcFieldMapDisplay.cs" />
     <Compile Include="Platforms\Odbc\OdbcFieldMapMultiValueConverter.cs" />
     <Compile Include="Platforms\Odbc\WizardPages\OdbcImportFieldMappingPage.cs">
@@ -355,6 +358,10 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="Platforms\Odbc\OdbcCustomQueryDlg.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Platforms\Odbc\OdbcCustomQueryWarningDlg.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

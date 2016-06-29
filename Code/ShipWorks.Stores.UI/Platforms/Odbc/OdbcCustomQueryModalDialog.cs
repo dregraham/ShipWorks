@@ -30,15 +30,19 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// </summary>
         public void Show(IOdbcDataSource dataSource, IOdbcColumnSource columnSource, string customQuery, IMessageHelper messageHelper)
         {
-            OdbcCustomQueryDlg dlg = new OdbcCustomQueryDlg();
-            dlg.LoadOwner(owner);
+            OdbcCustomQueryWarningDlg warningDlg = new OdbcCustomQueryWarningDlg();
+            warningDlg.LoadOwner(owner);
+            warningDlg.ShowDialog();
+
+            OdbcCustomQueryDlg customQueryDlg = new OdbcCustomQueryDlg();
+            customQueryDlg.LoadOwner(owner);
             columnSource.Query = customQuery;
 
             using (var context = new OdbcCustomQueryDlgViewModel(dataSource, sampleDataCommand, columnSource, messageHelper, logFactory))
             {
-                dlg.DataContext = context;
+                customQueryDlg.DataContext = context;
 
-                dlg.ShowDialog();
+                customQueryDlg.ShowDialog();
             }
 
         }

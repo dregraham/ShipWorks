@@ -11019,7 +11019,7 @@
     <None Include="Resources\shoppingcart.png" />
     <None Include="Resources\users31.png" />
     <None Include="Resources\text_code2.png" />
-    <None Include="Resources\warning1.png" />
+    <Resource Include="Resources\warning1.png" />
     <None Include="Resources\unknown.png" />
     <None Include="Resources\stopwatch1.png" />
     <None Include="Resources\stopwatch.png" />

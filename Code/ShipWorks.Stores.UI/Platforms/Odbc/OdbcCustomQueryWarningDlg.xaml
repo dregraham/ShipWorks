@@ -1,0 +1,46 @@
+﻿<Window x:Class="ShipWorks.Stores.UI.Platforms.Odbc.OdbcCustomQueryWarningDlg"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:local="clr-namespace:ShipWorks.Stores.UI.Platforms.Odbc"
+        mc:Ignorable="d"
+        Width="450"
+        SizeToContent="Height"
+        FontFamily="tahoma" FontSize="11px"
+        Title="Custom Import Warning"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterOwner"
+        ShowInTaskbar="False"
+        WindowStyle="ToolWindow"
+        Background="{x:Static SystemColors.ControlBrush}">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Image Margin="10 0 0 0" Grid.Column="0" Height="20" Width="20"
+                Source="/Shipworks.Core;component/Resources/warning1.png"/>
+            <TextBlock Margin="10" Grid.Column="1" TextWrapping="Wrap">
+            Custom Import is an advanced feature meant to be used by customers who
+            are familiar with SQL, databases etc. The software does not validate
+            the queries used and incorrectly specified queries may adversely affect
+            or corrupt your data.
+                    <Hyperlink NavigateUri="http://support.shipworks.com/support/solutions/articles/4000083207" RequestNavigate="OpenLink">
+                        More info...
+                    </Hyperlink>
+            </TextBlock>
+        </Grid>
+        <Button Grid.Row="1" HorizontalAlignment="Right"
+                Content="OK"
+                Width="80"
+                Height="24"
+                Margin="0 0 10 10"
+                Click="CloseWindow"/>
+    </Grid>
+</Window>
