@@ -9,7 +9,11 @@
         Height="440" Width="450"
         FontFamily="Tahoma" FontSize="11px"
         Background="{x:Static SystemColors.ControlBrush}"
-        WindowStartupLocation="CenterOwner">
+        ResizeMode="NoResize"
+        ShowInTaskbar="False"
+        WindowStartupLocation="CenterOwner"
+        Title="ODBC Custom Import Query"
+        FocusManager.FocusedElement="{Binding ElementName=Query}">
     <Window.Resources>
         <Style TargetType="{x:Type Label}">
             <Setter Property="Margin" Value="0" />
@@ -32,10 +36,11 @@
             <RowDefinition Height="Auto"></RowDefinition>
         </Grid.RowDefinitions>
         <Label Grid.Row="0" Content="Your query for custom import" />
-        <TextBox Grid.Row="1" TextWrapping="Wrap"
+        <TextBox x:Name="Query" Grid.Row="1" TextWrapping="Wrap"
                  Height="150"
                  Margin="0 5 0 5"
-                 Text="{Binding Query, UpdateSourceTrigger=LostFocus}"/>
+                 Text="{Binding Query, UpdateSourceTrigger=LostFocus}"
+                 FocusManager.FocusedElement="{Binding RelativeSource={RelativeSource Self}}"/>
         <Label Grid.Row="2" Content="Query Results" HorizontalAlignment="Left" />
         <Button Grid.Row="2" Content="Execute Query" HorizontalAlignment="Right"
                 Command="{Binding Execute}"/>
