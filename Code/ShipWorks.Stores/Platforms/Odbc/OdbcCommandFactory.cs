@@ -35,7 +35,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
             dataSource.Restore(store.ConnectionString);
 
             IOdbcDownloadQuery query = string.IsNullOrWhiteSpace(odbcFieldMap.CustomQuery)
-                ? (IOdbcDownloadQuery) new TableOdbcDownloadQuery(dbProviderFactory, odbcFieldMap, dataSource) 
+                ? (IOdbcDownloadQuery) new TableOdbcDownloadQuery(dbProviderFactory, odbcFieldMap, dataSource)
                 :  new CustomQueryOdbcDownloadQuery(odbcFieldMap);
 
             return new OdbcDownloadCommand(odbcFieldMap, dataSource, dbProviderFactory, query, logFactory(typeof(OdbcDownloadCommand)));

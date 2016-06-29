@@ -80,5 +80,22 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
                 return string.Empty;
             }
         }
+
+        /// <summary>
+        /// Reads the custom query source from the stream
+        /// </summary>
+        /// <returns></returns>
+        public string ReadCustomQuery()
+        {
+            try
+            {
+                return json["CustomQuery"].ToString();
+            }
+            catch (Exception ex)
+            {
+                log.Error("Error parsing custom query from map.", ex);
+                return string.Empty;
+            }
+        }
     }
 }

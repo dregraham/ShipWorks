@@ -138,6 +138,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
                 entry = reader.ReadEntry();
             }
 
+            CustomQuery = reader.ReadCustomQuery();
             RecordIdentifierSource = reader.ReadRecordIdentifierSource();
         }
 

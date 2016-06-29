@@ -14,5 +14,10 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// Reads the record identifier source from the stream
         /// </summary>
         string ReadRecordIdentifierSource();
+
+        /// <summary>
+        /// Reads the custom query from the stream
+        /// </summary>
+        string ReadCustomQuery();
     }
 }

@@ -44,6 +44,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
 
                 using (DbConnection connection = dataSource.CreateConnection())
                 {
+                    connection.Open();
                     string query = downloadQuery.GenerateSql();
 
                     log.Info($"Query created by OdbcDownloadCommand is \"{query}\"");
