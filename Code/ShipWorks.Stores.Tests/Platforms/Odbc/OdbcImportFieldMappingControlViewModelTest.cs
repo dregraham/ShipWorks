@@ -698,7 +698,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             {
                 var dataSource = mock.Mock<IOdbcDataSource>();
                 dataSource.Setup(d => d.Name).Returns("My data source");
-                var customQueryDlgFactory = mock.Mock<IOdbcCustomQueryDlgFactory>();
+                var customQueryDlgFactory = mock.Mock<IOdbcCustomQueryModalDialog>();
                 var mapFactory = mock.Create<OdbcFieldMapFactory>();
                 var testObject = mock.Create<OdbcImportFieldMappingControlViewModel>(new TypedParameter(typeof(IOdbcFieldMapFactory), mapFactory));
                 testObject.Tables = new List<IOdbcColumnSource>();
@@ -708,7 +708,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
                 openCustomQueryDlgCommand.Execute(null);
                 customQueryDlgFactory.Verify(
                     d =>
-                        d.ShowCustomQueryDlg(It.IsAny<IOdbcDataSource>(), It.IsAny<IOdbcColumnSource>(),
+                        d.Show(It.IsAny<IOdbcDataSource>(), It.IsAny<IOdbcColumnSource>(),
                             It.IsAny<string>(), It.IsAny<IMessageHelper>()));
             }
         }
