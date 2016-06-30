@@ -40,7 +40,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
         public IEnumerable<OdbcColumn> Columns { get; private set; }
 
         /// <summary>
-        /// Loads the columns for the column source
+        /// Loads the columns, based on the table in the data source
         /// </summary>
         [Obfuscation(Exclude = false)]
         public void Load(IOdbcDataSource dataSource, ILog log)
