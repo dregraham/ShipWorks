@@ -49,7 +49,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
                                 DataRow row = resultTable.NewRow();
                                 for (int i = 0; i < reader.FieldCount; i++)
                                 {
-                                    row[reader.GetName(i)] = reader.GetValue(i);
+                                    row[i] = reader.GetValue(i);
                                 }
 
                                 resultTable.Rows.Add(row);
@@ -95,9 +95,14 @@ namespace ShipWorks.Stores.Platforms.Odbc
             DataTable schemaTable = reader.GetSchemaTable();
             DataTable result = new DataTable();
 
+            // Originally, I was using a period. This was causing blank values to show up in the result cells.
+            // This fixes the issue. More info: 
+            // http://stackoverflow.com/questions/2940618/what-is-it-about-datatable-column-names-with-dots-that-makes-them-unsuitable-for
+            string dot = "\u2024";
+
             foreach (DataRow row in schemaTable.Rows.OfType<DataRow>())
             {
-                result.Columns.Add(row["BaseColumnName"].ToString());
+                result.Columns.Add($"{row["BaseTableName"]}{dot}{row["BaseColumnName"]}");
             }
 
             return result;
