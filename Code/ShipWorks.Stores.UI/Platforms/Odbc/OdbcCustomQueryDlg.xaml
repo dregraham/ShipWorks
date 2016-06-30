@@ -6,11 +6,13 @@
         xmlns:odbc="clr-namespace:ShipWorks.Stores.UI.Platforms.Odbc"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance odbc:OdbcCustomQueryDlgViewModel}"
-        SizeToContent="Height"
         Width="450"
+        Height="452"
+        MinWidth="450"
+        MinHeight="452"
         FontFamily="Tahoma" FontSize="11px"
         Background="{x:Static SystemColors.ControlBrush}"
-        ResizeMode="NoResize"
+        ResizeMode="CanResize"
         ShowInTaskbar="False"
         WindowStartupLocation="CenterOwner"
         Title="ODBC Custom Import"
@@ -32,27 +34,25 @@
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Label Grid.Row="0" Content="Your query for custom import" />
-        <TextBox x:Name="Query" Grid.Row="1" TextWrapping="Wrap"
-                 Height="150"
-                 Margin="0 5 0 10"
+        <TextBox
+            x:Name="Query" Grid.Row="1" TextWrapping="Wrap"
+                 Margin="0 10 0 10"
                  Text="{Binding Query, UpdateSourceTrigger=LostFocus}"
                  FocusManager.FocusedElement="{Binding RelativeSource={RelativeSource Self}}" />
         <Label Grid.Row="2" Content="Query Results" HorizontalAlignment="Left" />
         <Button Grid.Row="2" Content="Execute Query" HorizontalAlignment="Right"
                 Command="{Binding Execute}" />
-        <StackPanel Grid.Row="3" Height="150" Margin="0 10 0 10" Background="White">
-            <DataGrid MaxHeight="150"
-                  ItemsSource="{Binding Results, UpdateSourceTrigger=PropertyChanged}"
+        <StackPanel Grid.Row="3" Margin="0 10 0 10" Background="White">
+            <DataGrid ItemsSource="{Binding Results, UpdateSourceTrigger=PropertyChanged}"
                   IsReadOnly="True" />
             <Label Content="{Binding ResultMessage, UpdateSourceTrigger=PropertyChanged}" />
         </StackPanel>
-
         <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Right">
             <Button Content="OK" Command="{Binding Ok}"
                     CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type odbc:OdbcCustomQueryDlg}}}" />
