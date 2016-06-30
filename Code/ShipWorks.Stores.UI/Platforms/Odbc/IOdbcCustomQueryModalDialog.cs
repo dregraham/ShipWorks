@@ -10,6 +10,6 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// <summary>
         /// Shows the custom query dialog.
         /// </summary>
-        void Show(IOdbcDataSource dataSource, IOdbcColumnSource columnSource, string customQuery);
+        bool? Show(IOdbcDataSource dataSource, IOdbcColumnSource columnSource, string customQuery);
     }
 }

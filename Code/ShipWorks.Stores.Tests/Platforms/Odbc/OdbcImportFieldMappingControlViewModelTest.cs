@@ -724,15 +724,15 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
                     customColumnSource =>
                         customColumnSource.Show(It.IsAny<IOdbcDataSource>(), It.IsAny<IOdbcColumnSource>(),
                             It.IsAny<string>()))
+                    .Returns(true)
                     .Callback<IOdbcDataSource, IOdbcColumnSource, string>((d, c, s) => c.Query = "Query");
 
                 var mapFactory = mock.Create<OdbcFieldMapFactory>();
                 var testObject = mock.Create<OdbcImportFieldMappingControlViewModel>(new TypedParameter(typeof(IOdbcFieldMapFactory), mapFactory));
                 testObject.Tables = new List<IOdbcColumnSource>();
                 testObject.Load(dataSource.Object);
-                var openCustomQueryDlgCommand = testObject.OpenCustomQueryDlgCommand;
 
-                openCustomQueryDlgCommand.Execute(null);
+                testObject.OpenCustomQueryDlgCommand.Execute(null);
 
                 Assert.Equal("CUSTOM QUERY...", testObject.Tables.FirstOrDefault().Name);
             }

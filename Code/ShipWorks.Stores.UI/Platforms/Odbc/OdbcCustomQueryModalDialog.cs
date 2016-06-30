@@ -26,7 +26,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// <summary>
         /// Shows the custom query dialog.
         /// </summary>
-        public void Show(IOdbcDataSource dataSource, IOdbcColumnSource columnSource, string customQuery)
+        public bool? Show(IOdbcDataSource dataSource, IOdbcColumnSource columnSource, string customQuery)
         {
             IDialog warningDlg = dialogFactory("OdbcCustomQueryWarningDlg");
             warningDlg.ShowDialog();
@@ -36,7 +36,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
 
             IOdbcCustomQueryDlgViewModel context = odbcCustomQueryDlgViewModelFactory(dataSource, columnSource);
             customQueryDlg.DataContext = context;
-            customQueryDlg.ShowDialog();
+            return customQueryDlg.ShowDialog();
         }
     }
 }

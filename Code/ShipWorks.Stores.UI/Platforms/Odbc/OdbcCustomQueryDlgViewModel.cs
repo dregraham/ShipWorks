@@ -51,6 +51,8 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             Cancel = new RelayCommand<IDialog>(CloseDialog);
             results = new DataTable();
 
+            query = columnSource.Query;
+
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
         }
 
@@ -129,6 +131,8 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             if (validQuery)
             {
                 columnSource.Query = Query;
+
+                odbcCustomQueryDlg.DialogResult = true;
                 CloseDialog(odbcCustomQueryDlg);
             }
         }
