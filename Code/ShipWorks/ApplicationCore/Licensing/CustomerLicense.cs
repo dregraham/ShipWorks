@@ -304,7 +304,7 @@ namespace ShipWorks.ApplicationCore.Licensing
 
             Refresh();
 
-            if (!LicenseCapabilities.IsInTrial)
+            if (LicenseCapabilities != null && !LicenseCapabilities.IsInTrial)
             {
                 // The dashboard item should not be created when in the trial period since
                 // the shipment count is unlimited.
