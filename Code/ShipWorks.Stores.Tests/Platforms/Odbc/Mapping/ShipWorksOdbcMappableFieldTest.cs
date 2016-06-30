@@ -1,4 +1,5 @@
 ﻿using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
 using System;
 using Xunit;
@@ -78,6 +79,24 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
             testObject.LoadValue("123");
 
             Assert.Equal(123L, testObject.Value);
+        }
+
+        [Fact]
+        public void LoadValue_UsesDefaultValue_WhenValueIsNullandFieldIsNotNullable()
+        {
+            ShipWorksOdbcMappableField testObject = new ShipWorksOdbcMappableField(OrderFields.OrderNumber, "Order Number");
+            testObject.LoadValue(null);
+
+            Assert.Equal(0L, testObject.Value);
+        }
+
+        [Fact]
+        public void LoadValue_ThrowsShipWorksOdbcException_WhenFieldIsNotMappable()
+        {
+            ShipWorksOdbcMappableField testObject = new ShipWorksOdbcMappableField(OrderFields.OrderID, "OrderID");
+            ShipWorksOdbcException ex = Assert.Throws<ShipWorksOdbcException>(() => testObject.LoadValue(2));
+
+            Assert.Equal($"Invalid Map. '{testObject.QualifiedName}' should never be mapped.", ex.Message);
         }
 
         [Fact]

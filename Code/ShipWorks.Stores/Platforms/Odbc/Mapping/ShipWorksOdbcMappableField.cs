@@ -51,7 +51,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// </summary>
         /// <param name="field">The field.</param>
         /// <param name="displayName">The display name.</param>
-        public ShipWorksOdbcMappableField(IEntityField2 field, string displayName) 
+        public ShipWorksOdbcMappableField(IEntityField2 field, string displayName)
             : this(field, displayName, false)
         {
         }
@@ -132,7 +132,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
                 return typeDefaultValues[field.DataType];
             }
 
-            // If the value is null (and there wasn't a default value for the type) 
+            // If the value is null (and there wasn't a default value for the type)
             // or the value is already the expected type, return it.
             if (value == null || value.GetType() == field.DataType)
             {
@@ -208,6 +208,9 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
             return calculatedField;
         }
 
+        /// <summary>
+        /// Default values for given types
+        /// </summary>
         [Obfuscation(Exclude = false)]
         private static Dictionary<Type, object> GetTypeDefaultValues()
         {
