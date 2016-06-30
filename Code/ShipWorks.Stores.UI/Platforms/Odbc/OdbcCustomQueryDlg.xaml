@@ -40,8 +40,9 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Label Grid.Row="0" Content="Your query for custom import" />
-        <TextBox
-            x:Name="Query" Grid.Row="1" TextWrapping="Wrap"
+        <TextBox x:Name="Query" Grid.Row="1"
+                 AcceptsReturn="True"
+                 TextWrapping="Wrap"
                  Margin="0 10 0 10"
                  Text="{Binding Query, UpdateSourceTrigger=LostFocus}"
                  FocusManager.FocusedElement="{Binding RelativeSource={RelativeSource Self}}" />
