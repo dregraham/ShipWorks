@@ -65,6 +65,11 @@ namespace ShipWorks.Stores.Platforms.Odbc
                     }
                 }
             }
+            catch (ShipWorksOdbcException ex)
+            {
+                log.Error(ex);
+                throw;
+            }
             catch (OdbcException ex)
             {
                 log.Error(ex);
@@ -102,7 +107,14 @@ namespace ShipWorks.Stores.Platforms.Odbc
 
             foreach (DataRow row in schemaTable.Rows.OfType<DataRow>())
             {
-                result.Columns.Add($"{row["BaseTableName"]}{dot}{row["BaseColumnName"]}");
+
+                string fullyQualifiedRowName = $"{row["BaseTableName"]}{dot}{row["BaseColumnName"]}";
+                if (result.Columns.Contains(fullyQualifiedRowName))
+                {
+                    throw new ShipWorksOdbcException($"Cannot specify a column more than once.{Environment.NewLine}{Environment.NewLine}{fullyQualifiedRowName} is in the query twice.");
+                }
+
+                result.Columns.Add(fullyQualifiedRowName);
             }
 
             return result;
