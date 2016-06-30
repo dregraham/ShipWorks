@@ -28,7 +28,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
     /// </summary>
     public class OdbcImportFieldMappingControlViewModel : IOdbcImportFieldMappingControlViewModel, INotifyPropertyChanged
     {
-        private const string CustomQueryColumnSourceName = "CUSTOM QUERY...";
+        private const string CustomQueryColumnSourceName = "Custom Import...";
         private readonly IOdbcFieldMapFactory fieldMapFactory;
         private readonly IOdbcSchema schema;
         private readonly Func<Type, ILog> logFactory;
