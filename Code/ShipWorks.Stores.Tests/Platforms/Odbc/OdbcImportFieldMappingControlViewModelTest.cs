@@ -116,7 +116,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
 
                 testObject.Load(odbcDataSource.Object);
 
-                Assert.NotNull(testObject.Tables);
+                Assert.NotNull(testObject.ColumnSources);
             }
         }
 
@@ -699,7 +699,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
                 var customQueryDialog = mock.Mock<IOdbcCustomQueryModalDialog>();
                 var mapFactory = mock.Create<OdbcFieldMapFactory>();
                 var testObject = mock.Create<OdbcImportFieldMappingControlViewModel>(new TypedParameter(typeof(IOdbcFieldMapFactory), mapFactory));
-                testObject.Tables = new List<IOdbcColumnSource>();
+                testObject.ColumnSources = new List<IOdbcColumnSource>();
                 testObject.Load(dataSource.Object);
                 var openCustomQueryDlgCommand = testObject.OpenCustomQueryDlgCommand;
 
@@ -727,12 +727,12 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
 
                 var mapFactory = mock.Create<OdbcFieldMapFactory>();
                 var testObject = mock.Create<OdbcImportFieldMappingControlViewModel>(new TypedParameter(typeof(IOdbcFieldMapFactory), mapFactory));
-                testObject.Tables = new List<IOdbcColumnSource>();
+                testObject.ColumnSources = new List<IOdbcColumnSource>();
                 testObject.Load(dataSource.Object);
 
                 testObject.OpenCustomQueryDlgCommand.Execute(null);
 
-                Assert.Equal("CUSTOM QUERY...", testObject.Tables.FirstOrDefault().Name);
+                Assert.Equal("CUSTOM QUERY...", testObject.ColumnSources.FirstOrDefault().Name);
             }
         }
 
@@ -754,12 +754,12 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
 
                 var mapFactory = mock.Create<OdbcFieldMapFactory>();
                 var testObject = mock.Create<OdbcImportFieldMappingControlViewModel>(new TypedParameter(typeof(IOdbcFieldMapFactory), mapFactory));
-                testObject.Tables = new List<IOdbcColumnSource>();
+                testObject.ColumnSources = new List<IOdbcColumnSource>();
                 testObject.Load(dataSource.Object);
 
                 testObject.OpenCustomQueryDlgCommand.Execute(null);
 
-                Assert.Empty(testObject.Tables);
+                Assert.Empty(testObject.ColumnSources);
             }
         }
 
@@ -780,13 +780,13 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
 
                 var mapFactory = mock.Create<OdbcFieldMapFactory>();
                 var testObject = mock.Create<OdbcImportFieldMappingControlViewModel>(new TypedParameter(typeof(IOdbcFieldMapFactory), mapFactory));
-                testObject.Tables = new List<IOdbcColumnSource>();
+                testObject.ColumnSources = new List<IOdbcColumnSource>();
                 testObject.Load(dataSource.Object);
                 var openCustomQueryDlgCommand = testObject.OpenCustomQueryDlgCommand;
 
                 openCustomQueryDlgCommand.Execute(null);
 
-                Assert.Empty(testObject.Tables);
+                Assert.Empty(testObject.ColumnSources);
             }
         }
 
@@ -807,7 +807,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
 
                 var mapFactory = mock.Create<OdbcFieldMapFactory>();
                 var testObject = mock.Create<OdbcImportFieldMappingControlViewModel>(new TypedParameter(typeof(IOdbcFieldMapFactory), mapFactory));
-                testObject.Tables = new List<IOdbcColumnSource>();
+                testObject.ColumnSources = new List<IOdbcColumnSource>();
                 testObject.Load(dataSource.Object);
                 var openCustomQueryDlgCommand = testObject.OpenCustomQueryDlgCommand;
 

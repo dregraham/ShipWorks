@@ -119,7 +119,7 @@
                      Height="24"/>
             <ComboBox Grid.Row="2" Grid.Column="1"
                       Margin="2 2.5 0 2.5"
-                  ItemsSource="{Binding Tables, UpdateSourceTrigger=PropertyChanged}"
+                  ItemsSource="{Binding ColumnSources, UpdateSourceTrigger=PropertyChanged}"
                   DisplayMemberPath="Name"
                   SelectedValue="{Binding SelectedTable}"
                       VerticalAlignment="Center">
