@@ -732,7 +732,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
 
                 testObject.OpenCustomQueryDlgCommand.Execute(null);
 
-                Assert.Equal("CUSTOM QUERY...", testObject.ColumnSources.FirstOrDefault().Name);
+                Assert.Equal("Custom Import...", testObject.ColumnSources.FirstOrDefault().Name);
             }
         }
 
@@ -813,7 +813,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
 
                 openCustomQueryDlgCommand.Execute(null);
 
-                Assert.Equal("CUSTOM QUERY...", testObject.SelectedTable.Name);
+                Assert.Equal("Custom Import...", testObject.SelectedTable.Name);
             }
         }
 

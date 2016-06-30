@@ -70,6 +70,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         {
             DataTable schemaTable = new DataTable();
             schemaTable.Columns.Add("BaseColumnName");
+            schemaTable.Columns.Add("BaseTableName");
             schemaTable.Rows.Add("foo");
 
             Mock<DbDataReader> reader = mock.Mock<DbDataReader>();
