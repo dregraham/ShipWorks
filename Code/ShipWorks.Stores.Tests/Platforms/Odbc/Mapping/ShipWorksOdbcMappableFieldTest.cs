@@ -8,6 +8,54 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
     public class ShipWorksOdbcMappableFieldTest
     {
         [Fact]
+        public void JsonConstructor_PopulatesProperties()
+        {
+            ShipWorksOdbcMappableField testObject = new ShipWorksOdbcMappableField("OrderEntity", "OrderNumber", "Order Number");
+
+            Assert.Equal("Order Number", testObject.DisplayName);
+            Assert.Equal(false, testObject.IsRequired);
+            Assert.Equal("OrderNumber", testObject.Name);
+            Assert.Equal("OrderEntity.OrderNumber", testObject.QualifiedName);
+            Assert.Equal("OrderEntity", testObject.ContainingObjectName);
+        }
+
+        [Fact]
+        public void ConstructorWithFieldDescription_PopulatesProperties()
+        {
+            ShipWorksOdbcMappableField testObject = new ShipWorksOdbcMappableField(OrderFields.OrderNumber, OdbcOrderFieldDescription.Number);
+
+            Assert.Equal("Order Number", testObject.DisplayName);
+            Assert.Equal(false, testObject.IsRequired);
+            Assert.Equal("OrderNumber", testObject.Name);
+            Assert.Equal("OrderEntity.OrderNumber", testObject.QualifiedName);
+            Assert.Equal("OrderEntity", testObject.ContainingObjectName);
+        }
+
+        [Fact]
+        public void ConstructorWithFieldDescriptionAndIsRequired_PopulatesProperties()
+        {
+            ShipWorksOdbcMappableField testObject = new ShipWorksOdbcMappableField(OrderFields.OrderNumber, OdbcOrderFieldDescription.Number, true);
+
+            Assert.Equal("Order Number", testObject.DisplayName);
+            Assert.Equal(true, testObject.IsRequired);
+            Assert.Equal("OrderNumber", testObject.Name);
+            Assert.Equal("OrderEntity.OrderNumber", testObject.QualifiedName);
+            Assert.Equal("OrderEntity", testObject.ContainingObjectName);
+        }
+
+        [Fact]
+        public void ConstructorWithFieldAndDisplayName_PopulatesProperties()
+        {
+            ShipWorksOdbcMappableField testObject = new ShipWorksOdbcMappableField(OrderFields.OrderNumber, "Order Number");
+
+            Assert.Equal("Order Number", testObject.DisplayName);
+            Assert.Equal(false, testObject.IsRequired);
+            Assert.Equal("OrderNumber", testObject.Name);
+            Assert.Equal("OrderEntity.OrderNumber", testObject.QualifiedName);
+            Assert.Equal("OrderEntity", testObject.ContainingObjectName);
+        }
+
+        [Fact]
         public void QualifiedName_ReturnsQualifiedName()
         {
             ShipWorksOdbcMappableField testObject = new ShipWorksOdbcMappableField(OrderFields.OrderNumber, "Order Number");
