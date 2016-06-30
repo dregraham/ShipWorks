@@ -25,8 +25,9 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         private DataTable results;
         private readonly PropertyChangedHandler handler;
         private bool validQuery;
+        private string resultMessage;
         public event PropertyChangedEventHandler PropertyChanged;
-        private const int NumberOfSampleResults = 10;
+        private const int NumberOfSampleResults = 25;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcCustomQueryDlgViewModel"/> class.
@@ -49,7 +50,6 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             Execute = new RelayCommand(ExecuteQuery);
             Ok = new RelayCommand<IDialog>(SaveQuery);
             Cancel = new RelayCommand<IDialog>(CloseDialog);
-            results = new DataTable();
 
             query = columnSource.Query;
 
@@ -103,13 +103,30 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         public ICommand Cancel { get; set; }
 
         /// <summary>
+        /// Gets or sets the result message.
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public string ResultMessage
+        {
+            get { return resultMessage; }
+            set { handler.Set(nameof(ResultMessage), ref resultMessage, value); }
+        }
+
+        /// <summary>
         /// Executes the query.
         /// </summary>
         private void ExecuteQuery()
         {
+            Results = null;
+            ResultMessage = string.Empty;
+
             try
             {
                 Results = sampleDataCommand.Execute(dataSource, Query, NumberOfSampleResults);
+                if (Results.Rows.Count==0)
+                {
+                    ResultMessage = "Query returned no results";
+                }
                 validQuery = true;
             }
             catch (ShipWorksOdbcException ex)

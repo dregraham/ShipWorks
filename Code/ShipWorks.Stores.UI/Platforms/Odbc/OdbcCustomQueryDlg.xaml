@@ -20,10 +20,10 @@
         <Style TargetType="{x:Type Label}">
             <Setter Property="Margin" Value="0" />
             <Setter Property="Padding" Value="0" />
-            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center" />
         </Style>
         <Style TargetType="{x:Type Button}">
-            <Setter Property="Margin" Value="5 0 0 0"  />
+            <Setter Property="Margin" Value="5 0 0 0" />
             <Setter Property="Padding" Value="5 2 5 2" />
             <Setter Property="Width" Value="85" />
             <Setter Property="Height" Value="24" />
@@ -31,30 +31,34 @@
     </Window.Resources>
     <Grid Margin="10">
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"></RowDefinition>
-            <RowDefinition Height="Auto"></RowDefinition>
-            <RowDefinition Height="Auto"></RowDefinition>
-            <RowDefinition Height="Auto"></RowDefinition>
-            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Label Grid.Row="0" Content="Your query for custom import" />
         <TextBox x:Name="Query" Grid.Row="1" TextWrapping="Wrap"
                  Height="150"
                  Margin="0 5 0 10"
                  Text="{Binding Query, UpdateSourceTrigger=LostFocus}"
-                 FocusManager.FocusedElement="{Binding RelativeSource={RelativeSource Self}}"/>
+                 FocusManager.FocusedElement="{Binding RelativeSource={RelativeSource Self}}" />
         <Label Grid.Row="2" Content="Query Results" HorizontalAlignment="Left" />
         <Button Grid.Row="2" Content="Execute Query" HorizontalAlignment="Right"
-                Command="{Binding Execute}"/>
-        <DataGrid Grid.Row="3" Height="150"
-                  Margin="0 10 0 10"
-                  ItemsSource="{Binding Results, UpdateSourceTrigger=PropertyChanged}" />
+                Command="{Binding Execute}" />
+        <StackPanel Grid.Row="3" Height="150" Margin="0 10 0 10" Background="White">
+            <DataGrid MaxHeight="150"
+                  ItemsSource="{Binding Results, UpdateSourceTrigger=PropertyChanged}"
+                  IsReadOnly="True" />
+            <Label Content="{Binding ResultMessage, UpdateSourceTrigger=PropertyChanged}" />
+        </StackPanel>
+
         <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Right">
             <Button Content="OK" Command="{Binding Ok}"
-                    CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type odbc:OdbcCustomQueryDlg}}}"/>
+                    CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type odbc:OdbcCustomQueryDlg}}}" />
             <Button Content="Cancel"
                     Command="{Binding Cancel}"
-                    CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type odbc:OdbcCustomQueryDlg}}}"/>
+                    CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type odbc:OdbcCustomQueryDlg}}}" />
         </StackPanel>
     </Grid>
 </Window>

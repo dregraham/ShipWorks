@@ -3,12 +3,15 @@ using Interapptive.Shared.UI;
 using Moq;
 using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Stores.UI.Platforms.Odbc;
+using System.Data;
 using Xunit;
 
 namespace ShipWorks.Stores.Tests.Platforms.Odbc
 {
     public class OdbcCustomQueryDlgViewModelTest
     {
+        private readonly int numberOfResults = 25;
+
         [Fact]
         public void Execute_DelegatesToSampleDataCommandExecute()
         {
@@ -17,12 +20,14 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
                 var sampleDataCommand = mock.Mock<IOdbcSampleDataCommand>();
                 var dataSource = mock.Mock<IOdbcDataSource>();
 
+                sampleDataCommand.Setup(c => c.Execute(dataSource.Object, "myQuery", 25)).Returns(new DataTable());
+
                 var testObject = mock.Create<OdbcCustomQueryDlgViewModel>();
                 testObject.Query = "myQuery";
 
                 testObject.Execute.Execute(null);
 
-                sampleDataCommand.Verify(c=>c.Execute(dataSource.Object, "myQuery", 10), Times.Once);
+                sampleDataCommand.Verify(c=>c.Execute(dataSource.Object, "myQuery", numberOfResults), Times.Once);
             }
         }
 
@@ -34,7 +39,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
                 var dataSource = mock.Mock<IOdbcDataSource>();
 
                 var sampleDataCommand = mock.Mock<IOdbcSampleDataCommand>();
-                sampleDataCommand.Setup(c => c.Execute(dataSource.Object, "myQuery", 10))
+                sampleDataCommand.Setup(c => c.Execute(dataSource.Object, "myQuery", numberOfResults))
                     .Throws(new ShipWorksOdbcException("error message"));
 
                 var messageHelper = mock.Mock<IMessageHelper>();
@@ -53,6 +58,10 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         {
             using (var mock = AutoMock.GetLoose())
             {
+                var dataSource = mock.Mock<IOdbcDataSource>();
+                var sampleDataCommand = mock.Mock<IOdbcSampleDataCommand>();
+                sampleDataCommand.Setup(c => c.Execute(dataSource.Object, "myQuery", numberOfResults)).Returns(new DataTable());
+
                 var columnSource = mock.Mock<IOdbcColumnSource>();
                 var testObject = mock.Create<OdbcCustomQueryDlgViewModel>();
                 testObject.Query = "myQuery";
@@ -70,6 +79,10 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         {
             using (var mock = AutoMock.GetLoose())
             {
+                var dataSource = mock.Mock<IOdbcDataSource>();
+                var sampleDataCommand = mock.Mock<IOdbcSampleDataCommand>();
+                sampleDataCommand.Setup(c => c.Execute(dataSource.Object, "myQuery", numberOfResults)).Returns(new DataTable());
+                
                 var testObject = mock.Create<OdbcCustomQueryDlgViewModel>();
                 testObject.Query = "myQuery";
 
@@ -91,7 +104,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
                 var dataSource = mock.Mock<IOdbcDataSource>();
 
                 var sampleDataCommand = mock.Mock<IOdbcSampleDataCommand>();
-                sampleDataCommand.Setup(c => c.Execute(dataSource.Object, "myQuery", 10))
+                sampleDataCommand.Setup(c => c.Execute(dataSource.Object, "myQuery", numberOfResults))
                     .Throws(new ShipWorksOdbcException("error message"));
 
 
@@ -111,7 +124,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             {
                 var dataSource = mock.Mock<IOdbcDataSource>();
                 var sampleDataCommand = mock.Mock<IOdbcSampleDataCommand>();
-                sampleDataCommand.Setup(c => c.Execute(dataSource.Object, "myQuery", 10))
+                sampleDataCommand.Setup(c => c.Execute(dataSource.Object, "myQuery", numberOfResults))
                     .Throws<ShipWorksOdbcException>();
 
                 var testObject = mock.Create<OdbcCustomQueryDlgViewModel>();
