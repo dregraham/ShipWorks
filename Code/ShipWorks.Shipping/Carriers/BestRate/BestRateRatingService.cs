@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Autofac.Features.Indexed;
+using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Editions;
@@ -161,19 +162,14 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         {
             // One final restriction check to account for a UPS account being added after the shipment
             // was previously configured to use BestRate
-            if (!IsBestRateAllowed())
+            EnumResult<EditionRestrictionLevel> restrictionLevel =
+                licenseService.CheckRestrictionWithReason(EditionFeature.ShipmentType, ShipmentTypeCode.BestRate);
+
+            if (restrictionLevel.Value != EditionRestrictionLevel.None)
             {
                 // A UPS account has been added since this shipment was configured for Best Rate. Best rate is not allowed.
-                throw new BestRateException("There is a UPS account in ShipWorks. Best Rate can no longer be used. Please choose another shipping provider.");
+                throw new BestRateException(restrictionLevel.Message);
             }
-        }
-
-        /// <summary>
-        /// Checks whether best rate is allowed
-        /// </summary>
-        private bool IsBestRateAllowed()
-        {
-            return licenseService.CheckRestriction(EditionFeature.ShipmentType, ShipmentTypeCode.BestRate) == EditionRestrictionLevel.None;
         }
     }
 }

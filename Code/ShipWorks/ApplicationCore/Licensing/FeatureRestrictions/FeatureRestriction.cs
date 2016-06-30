@@ -28,6 +28,14 @@ namespace ShipWorks.ApplicationCore.Licensing.FeatureRestrictions
         public abstract EditionRestrictionLevel Check(ILicenseCapabilities capabilities, object data);
 
         /// <summary>
+        /// Checks the restriction for this feature
+        /// </summary>
+        public virtual EnumResult<EditionRestrictionLevel> CheckWithReason(ILicenseCapabilities capabilities, object data)
+        {
+            return new EnumResult<EditionRestrictionLevel>(Check(capabilities, data));
+        }
+
+        /// <summary>
         /// Nothing to handle, return false
         /// </summary>
         public virtual bool Handle(IWin32Window owner, ILicenseCapabilities capabilities, object data)

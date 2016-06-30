@@ -63,7 +63,7 @@ namespace ShipWorks.Tests.Shared.Database
             throw new NotImplementedException();
         }
 
-        public EditionRestrictionLevel CheckRestriction(EditionFeature feature, object data)
+        public EnumResult<EditionRestrictionLevel> CheckRestriction(EditionFeature feature, object data)
         {
             throw new NotImplementedException();
         }

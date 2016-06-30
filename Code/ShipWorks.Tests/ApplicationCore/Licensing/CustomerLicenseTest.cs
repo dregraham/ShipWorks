@@ -700,7 +700,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
 
                 testObject.CheckRestriction(EditionFeature.EndiciaAccountLimit, null);
 
-                feature.Verify(x => x.Check(It.IsAny<ILicenseCapabilities>(), null));
+                feature.Verify(x => x.CheckWithReason(It.IsAny<ILicenseCapabilities>(), null));
             }
         }
 
@@ -715,14 +715,14 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
                 feature.SetupGet(f => f.EditionFeature)
                     .Returns(EditionFeature.EndiciaAccountLimit);
 
-                feature.Setup(f => f.Check(It.IsAny<ILicenseCapabilities>(), It.IsAny<object>()))
-                    .Returns(level);
+                feature.Setup(f => f.CheckWithReason(It.IsAny<ILicenseCapabilities>(), It.IsAny<object>()))
+                    .Returns(level.AsEnumResult());
 
                 CustomerLicense testObject = mock.Create<CustomerLicense>(new NamedParameter("key", "SomeKey"));
 
                 var editionRestrictionLevel = testObject.CheckRestriction(EditionFeature.EndiciaAccountLimit, null);
 
-                Assert.Equal(level, editionRestrictionLevel);
+                Assert.Equal(level, editionRestrictionLevel.Value);
             }
         }
 
@@ -742,7 +742,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
 
                 var editionRestrictionLevel = testObject.CheckRestriction(EditionFeature.GenericFile, null);
 
-                Assert.Equal(EditionRestrictionLevel.None, editionRestrictionLevel);
+                Assert.Equal(EditionRestrictionLevel.None, editionRestrictionLevel.Value);
             }
         }
 
@@ -761,7 +761,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
 
                 testObject.CheckRestriction(EditionFeature.EndiciaAccountLimit, "foo");
 
-                feature.Verify(f => f.Check(It.IsAny<ILicenseCapabilities>(), "foo"));
+                feature.Verify(f => f.CheckWithReason(It.IsAny<ILicenseCapabilities>(), "foo"));
             }
         }
 

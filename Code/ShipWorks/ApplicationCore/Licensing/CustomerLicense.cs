@@ -346,12 +346,12 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Checks the restriction for a specific feature
         /// </summary>
-        public EditionRestrictionLevel CheckRestriction(EditionFeature feature, object data)
+        public EnumResult<EditionRestrictionLevel> CheckRestriction(EditionFeature feature, object data)
         {
             Refresh();
 
             IFeatureRestriction restriction = featureRestrictions.SingleOrDefault(r => r.EditionFeature == feature);
-            return restriction?.Check(LicenseCapabilities, data) ?? EditionRestrictionLevel.None;
+            return restriction?.CheckWithReason(LicenseCapabilities, data) ?? EditionRestrictionLevel.None.AsEnumResult();
         }
 
         /// <summary>
