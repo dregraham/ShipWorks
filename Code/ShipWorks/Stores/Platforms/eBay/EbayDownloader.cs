@@ -1281,7 +1281,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
 
 
         /// <summary>
-        /// Locate an item with the given identifier.  Can be optionally restricted to only loading the ItemID
+        /// Locate an item with the given identifier
         /// </summary>
         private EbayOrderItemEntity FindItem(EbayOrderIdentifier identifier)
         {
