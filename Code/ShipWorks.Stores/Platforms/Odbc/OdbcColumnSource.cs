@@ -105,7 +105,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
 
                         foreach (DataRow row in table.Rows.OfType<DataRow>())
                         {
-                            Columns = Columns.Concat(new[] { new OdbcColumn(row["BaseColumnName"].ToString()) });
+                            Columns = Columns.Concat(new[] { new OdbcColumn(row["ColumnName"].ToString()) });
                         }
 
                         cmd.Cancel();

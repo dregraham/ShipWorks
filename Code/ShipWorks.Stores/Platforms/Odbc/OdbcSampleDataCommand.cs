@@ -101,14 +101,14 @@ namespace ShipWorks.Stores.Platforms.Odbc
             DataTable result = new DataTable();
 
             // Originally, I was using a period. This was causing blank values to show up in the result cells.
-            // This fixes the issue. More info: 
+            // This fixes the issue. More info:
             // http://stackoverflow.com/questions/2940618/what-is-it-about-datatable-column-names-with-dots-that-makes-them-unsuitable-for
             string dot = "\u2024";
 
             foreach (DataRow row in schemaTable.Rows.OfType<DataRow>())
             {
 
-                string fullyQualifiedRowName = $"{row["BaseTableName"]}{dot}{row["BaseColumnName"]}";
+                string fullyQualifiedRowName = $"{row["BaseTableName"]}{dot}{row["ColumnName"]}";
                 if (result.Columns.Contains(fullyQualifiedRowName))
                 {
                     throw new ShipWorksOdbcException($"Cannot specify a column more than once.{Environment.NewLine}{Environment.NewLine}{fullyQualifiedRowName} is in the query twice.");
