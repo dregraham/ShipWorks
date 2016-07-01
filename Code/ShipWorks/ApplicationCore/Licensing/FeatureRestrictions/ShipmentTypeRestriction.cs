@@ -19,7 +19,7 @@ namespace ShipWorks.ApplicationCore.Licensing.FeatureRestrictions
             "Please choose another shipping provider.";
 
         private const string BestRateDisabledMessage =
-            "Your plan does not support Best Rate.  You’ll need to upgrade your plan to continue using BestRate.  " +
+            "Your plan does not support Best Rate.  You’ll need to upgrade your plan to continue using Best Rate.  " +
             "Please contact our Enterprise Sales Team to learn more about this and other Enterprise features.  " +
             "You can contact us at 1-877-890-4226";
 
