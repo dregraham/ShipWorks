@@ -242,7 +242,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         public void LoadWithProviderFactory_SetsColumnsFromReaderGetSchemaTable()
         {
             DataTable dataTable = new DataTable();
-            dataTable.Columns.Add("BaseColumnName", typeof(string));
+            dataTable.Columns.Add("ColumnName", typeof(string));
             dataTable.Rows.Add("ColumnName1");
             dataTable.Rows.Add("ColumnName2");
 

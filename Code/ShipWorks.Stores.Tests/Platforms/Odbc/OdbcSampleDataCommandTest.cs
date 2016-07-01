@@ -69,7 +69,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         public void Execute_ReadsNumberOfResultsFromReader()
         {
             DataTable schemaTable = new DataTable();
-            schemaTable.Columns.Add("BaseColumnName");
+            schemaTable.Columns.Add("ColumnName");
             schemaTable.Columns.Add("BaseTableName");
             schemaTable.Rows.Add("foo");
 
