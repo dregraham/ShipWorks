@@ -107,8 +107,12 @@ namespace ShipWorks.Stores.Platforms.Odbc
 
             foreach (DataRow row in schemaTable.Rows.OfType<DataRow>())
             {
+                // For some reason when you do a union the table name comes back wrapped in []
+                // strip out the [] before returning
+                string tableName = row["BaseTableName"].ToString().Trim(new char[] { '[', ']' });
+                string columnName = row["ColumnName"].ToString().Trim(new char[] { '[', ']' });
 
-                string fullyQualifiedRowName = $"{row["BaseTableName"]}{dot}{row["ColumnName"]}";
+                string fullyQualifiedRowName = $"{tableName}{dot}{columnName}";
                 if (result.Columns.Contains(fullyQualifiedRowName))
                 {
                     throw new ShipWorksOdbcException($"Cannot specify a column more than once.{Environment.NewLine}{Environment.NewLine}{fullyQualifiedRowName} is in the query twice.");
