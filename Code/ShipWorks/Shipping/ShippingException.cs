@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Runtime.Serialization;
 
 namespace ShipWorks.Shipping
@@ -6,6 +7,7 @@ namespace ShipWorks.Shipping
     /// <summary>
     /// Thrown when a known error occurrs during shipping
     /// </summary>
+    [Description("ShippingException")]
     public class ShippingException : Exception
     {
         /// <summary>
@@ -37,7 +39,7 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Constructor
         /// </summary>
-        protected ShippingException(SerializationInfo serializationInfo, StreamingContext streamingContext) : 
+        protected ShippingException(SerializationInfo serializationInfo, StreamingContext streamingContext) :
             base(serializationInfo, streamingContext)
         {
 

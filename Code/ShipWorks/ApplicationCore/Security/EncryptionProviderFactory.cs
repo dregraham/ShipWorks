@@ -49,5 +49,15 @@ namespace ShipWorks.ApplicationCore.Security
         {
             return new SecureTextEncryptionProvider(salt);
         }
+
+        /// <summary>
+        /// Creates the AES Stream encryption provider.
+        /// </summary>
+        /// <returns>An instance of AesStreamEncryptionProvider.</returns>
+        public IEncryptionProvider CreateAesStreamEncryptionProvider()
+        {
+            ICipherKey cipherKey = cipherKeyFactory[CipherContext.Stream];
+            return new AesStreamEncryptionProvider(cipherKey);
+        }
     }
 }

@@ -286,5 +286,13 @@ namespace ShipWorks.ApplicationCore.Licensing
         {
             return TangoWebClient.AssociateShipworksWithItself(associateShipworksWithItselfRequest);
         }
+
+        /// <summary>
+        /// Gets the Tango customer id for a license.
+        /// </summary>
+        public string GetTangoCustomerId()
+        {
+            return TangoWebClient.GetTangoCustomerId();
+        }
     }
 }

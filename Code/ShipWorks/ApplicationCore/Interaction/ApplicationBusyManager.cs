@@ -1,11 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Diagnostics;
+using System.Threading;
 using System.Windows.Forms;
 using ShipWorks.ApplicationCore.Crashes;
 using ShipWorks.Data.Connection;
-using System.Diagnostics;
-using System.Threading;
 
 namespace ShipWorks.ApplicationCore.Interaction
 {
@@ -56,7 +55,7 @@ namespace ShipWorks.ApplicationCore.Interaction
                 }
             }
 
-            if (CrashWindow.IsApplicationCrashed)
+            if (CrashDialog.IsApplicationCrashed)
             {
                 return false;
             }

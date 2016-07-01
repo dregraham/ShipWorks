@@ -1,23 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using System.Windows.Forms.Design;
-using System.ComponentModel.Design;
-using ComponentFactory.Krypton.Toolkit;
-using Interapptive.Shared.Utility;
 using System.Diagnostics;
-using ShipWorks.UI.Controls.Design;
-using Interapptive.Shared.Win32;
 using System.IO;
-using log4net;
-using System.Xml.Linq;
-using ShipWorks.ApplicationCore.Crashes;
+using System.Windows.Forms;
 using System.Xml;
+using System.Xml.Linq;
+using ComponentFactory.Krypton.Toolkit;
+using log4net;
+using ShipWorks.ApplicationCore.Crashes;
+using ShipWorks.UI.Controls.Design;
 
 namespace ShipWorks.UI.Controls
 {
@@ -57,7 +49,7 @@ namespace ShipWorks.UI.Controls
             }
 
             CollapsibleGroupControl.statefile = statefile;
-            collapsedState = new Dictionary<string,bool>();
+            collapsedState = new Dictionary<string, bool>();
 
             if (File.Exists(statefile))
             {
@@ -66,7 +58,7 @@ namespace ShipWorks.UI.Controls
                     XElement root = XElement.Load(statefile);
                     foreach (var group in root.Elements("Group"))
                     {
-                        collapsedState[(string) group.Attribute("key")] = (bool)group.Attribute("collapsed");
+                        collapsedState[(string) group.Attribute("key")] = (bool) group.Attribute("collapsed");
                     }
                 }
                 catch (XmlException ex)
@@ -91,7 +83,7 @@ namespace ShipWorks.UI.Controls
         {
             try
             {
-                if (!CrashWindow.IsApplicationCrashed)
+                if (!CrashDialog.IsApplicationCrashed)
                 {
                     XElement root = new XElement("ShipWorks");
                     foreach (var group in collapsedState)
@@ -170,7 +162,7 @@ namespace ShipWorks.UI.Controls
         /// </summary>
         public void EndInit()
         {
-            // Due to differences in OS, the collapsed height may have been serialized differently than we are running now.  So if the designer had us marked as 
+            // Due to differences in OS, the collapsed height may have been serialized differently than we are running now.  So if the designer had us marked as
             // collapsed, make sure we are the correct collapsed height.
             if (initialCollapsed)
             {
@@ -189,7 +181,7 @@ namespace ShipWorks.UI.Controls
         /// <summary>
         /// Get the panel that contains the actual control content
         /// </summary>
-        [Category("Appearance")] 
+        [Category("Appearance")]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
         [Localizable(false)]
         [Description("The internal panel that contains group content.")]

@@ -1,21 +1,13 @@
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
 using System.Data.SqlClient;
-using ShipWorks.UI;
-using log4net;
-using System.Threading;
-using Interapptive.Shared;
-using ShipWorks.ApplicationCore.Appearance;
-using ShipWorks.ApplicationCore.Crashes;
 using System.Diagnostics;
+using System.Windows.Forms;
 using Interapptive.Shared.UI;
-using ShipWorks.UI.Utility;
+using log4net;
 using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Crashes;
+using ShipWorks.UI;
 
 namespace ShipWorks.Data.Connection
 {
@@ -58,13 +50,13 @@ namespace ShipWorks.Data.Connection
             }
         }
 
-		/// <summary>
-		/// Initialization
-		/// </summary>
-		private void OnLoad(object sender, System.EventArgs e)
-		{			
-			UpdateTimeToConnect();
-		}
+        /// <summary>
+        /// Initialization
+        /// </summary>
+        private void OnLoad(object sender, System.EventArgs e)
+        {
+            UpdateTimeToConnect();
+        }
 
         /// <summary>
         /// Window is now visible.
@@ -74,36 +66,36 @@ namespace ShipWorks.Data.Connection
             AttemptReconnect(false);
         }
 
-		/// <summary>
-		/// Update the time to connect text.
-		/// </summary>
-		private void UpdateTimeToConnect()
-		{
-			label2.Text = string.Format("Reconnecting in {0} seconds.", timeToConnect);
-		}
+        /// <summary>
+        /// Update the time to connect text.
+        /// </summary>
+        private void UpdateTimeToConnect()
+        {
+            label2.Text = string.Format("Reconnecting in {0} seconds.", timeToConnect);
+        }
 
-		/// <summary>
-		/// Reconnection timer.
-		/// </summary>
-		private void OnTimer(object sender, System.EventArgs e)
-		{
-			timeToConnect--;
+        /// <summary>
+        /// Reconnection timer.
+        /// </summary>
+        private void OnTimer(object sender, System.EventArgs e)
+        {
+            timeToConnect--;
 
-			UpdateTimeToConnect();
+            UpdateTimeToConnect();
 
-			if (timeToConnect == 0)
-			{
+            if (timeToConnect == 0)
+            {
                 AttemptReconnect(false);
-			}
-		}
+            }
+        }
 
-		/// <summary>
-		/// User wants to manually attempt to reconnect to the database.
-		/// </summary>
-		private void OnReconnect(object sender, System.EventArgs e)
-		{
+        /// <summary>
+        /// User wants to manually attempt to reconnect to the database.
+        /// </summary>
+        private void OnReconnect(object sender, System.EventArgs e)
+        {
             AttemptReconnect(true);
-		}
+        }
 
         /// <summary>
         /// Attempt the reconnection
@@ -159,7 +151,7 @@ namespace ShipWorks.Data.Connection
         /// </summary>
         public static ReconnectResult Reconnect(IDbConnection connection)
         {
-            if (CrashWindow.IsApplicationCrashed)
+            if (CrashDialog.IsApplicationCrashed)
             {
                 Debug.Fail("Not attempting reconnect due to already crashed.");
                 log.InfoFormat("Skipping reconnect due to crash.");
@@ -172,7 +164,7 @@ namespace ShipWorks.Data.Connection
 
             if (Program.ExecutionMode.IsUIDisplayed)
             {
-                // We have to show the UI on the UI thread.  Otherwise behavior is a little undefined.  The only problem would be 
+                // We have to show the UI on the UI thread.  Otherwise behavior is a little undefined.  The only problem would be
                 // if the UI thread is currently blocking waiting on a background operation that is waiting for the connection to come back.
                 // But as far as I know we don't do this anyhwere
                 Program.MainForm.Invoke(new MethodInvoker(() =>
@@ -181,7 +173,7 @@ namespace ShipWorks.Data.Connection
                         {
                             DialogResult result = dlg.ShowDialog(DisplayHelper.GetActiveForm());
 
-                            connected = result == DialogResult.OK ? ReconnectResult.Succeeded : 
+                            connected = result == DialogResult.OK ? ReconnectResult.Succeeded :
                                 result == DialogResult.Cancel ? ReconnectResult.Canceled :
                                 ReconnectResult.Failed;
                         }
