@@ -47,6 +47,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         private int numberOfItemsPerOrder;
         private IEnumerable<IOdbcColumnSource> columnSources;
         private bool isCustomQuerySelected = false;
+        private bool isDownloadStrategyLastModified;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcImportFieldMappingControlViewModel"/> class.
@@ -327,6 +328,16 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             set
             {
                 handler.Set(nameof(IsCustomQuerySelected), ref isCustomQuerySelected, value);
+            }
+        }
+
+        [Obfuscation(Exclude = true)]
+        public bool IsDownloadStrategyLastModified
+        {
+            get { return isDownloadStrategyLastModified; }
+            set
+            {
+                handler.Set(nameof(IsDownloadStrategyLastModified), ref isDownloadStrategyLastModified, value);
             }
         }
 

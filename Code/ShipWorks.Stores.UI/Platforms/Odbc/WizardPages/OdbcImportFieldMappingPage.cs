@@ -5,9 +5,6 @@ using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.UI.Wizard;
 using System;
 using System.Windows.Interop;
-using Autofac;
-using ShipWorks.ApplicationCore;
-using ShipWorks.Shipping;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
 {
@@ -88,7 +85,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
                 viewModel = viewModelFactory();
 
                 viewModel.Load(selectedDataSource);
-                odbcImportFieldMappingControl.DataContext = viewModel;
+                odbcMapSettingsControl.DataContext = viewModel;
             }
         }
     }

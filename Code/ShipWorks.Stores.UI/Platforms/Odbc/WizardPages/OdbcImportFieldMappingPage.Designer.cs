@@ -6,7 +6,7 @@
         /// Required designer variable.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
-        
+
         #region Component Designer generated code
 
         /// <summary>
@@ -16,7 +16,7 @@
         private void InitializeComponent()
         {
             this.elementHost = new System.Windows.Forms.Integration.ElementHost();
-            this.odbcImportFieldMappingControl = new ShipWorks.Stores.UI.Platforms.Odbc.OdbcImportFieldMappingControl();
+            this.odbcMapSettingsControl = new OdbcImportMapSettingsControl();
             this.SuspendLayout();
             //
             // elementHost
@@ -27,7 +27,7 @@
             this.elementHost.Size = new System.Drawing.Size(540, 500);
             this.elementHost.TabIndex = 0;
             this.elementHost.Text = "elementHost1";
-            this.elementHost.Child = this.odbcImportFieldMappingControl;
+            this.elementHost.Child = this.odbcMapSettingsControl;
             //
             // OdbcImportFieldMappingPage
             //
@@ -58,6 +58,6 @@
         #endregion
 
         private System.Windows.Forms.Integration.ElementHost elementHost;
-        private OdbcImportFieldMappingControl odbcImportFieldMappingControl;
+        private OdbcImportMapSettingsControl odbcMapSettingsControl;
     }
 }

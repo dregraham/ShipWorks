@@ -191,6 +191,9 @@
     <Compile Include="Platforms\Odbc\WizardPages\OdbcImportFieldMappingPage.Designer.cs">
       <DependentUpon>OdbcImportFieldMappingPage.cs</DependentUpon>
     </Compile>
+    <Compile Include="Platforms\Odbc\WizardPages\OdbcImportMapSettingsControl.xaml.cs">
+      <DependentUpon>OdbcImportMapSettingsControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Platforms\Sears\SearsStoreModule.cs" />
     <Compile Include="Platforms\SparkPay\SparkPaySettingsControl.cs">
       <SubType>UserControl</SubType>
@@ -366,6 +369,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Platforms\Odbc\OdbcImportFieldMappingControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Platforms\Odbc\WizardPages\OdbcImportMapSettingsControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
