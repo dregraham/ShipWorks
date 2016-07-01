@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Width="450"
         SizeToContent="Height"
-        FontFamily="tahoma" FontSize="11px"
+        FontFamily="tahoma" FontSize="8.25pt"
         Title="Custom Import Warning"
         ResizeMode="NoResize"
         WindowStartupLocation="CenterOwner"
@@ -28,7 +28,7 @@
                 Source="/Shipworks.Core;component/Resources/warning1.png"/>
             <TextBlock Margin="10" Grid.Column="1" TextWrapping="Wrap">
             Custom Import is an advanced feature meant to be used by customers who
-            are familiar with SQL, databases etc. The software does not validate
+            are familiar with SQL, databases, etc. The software does not validate
             the queries used and incorrectly specified queries may adversely affect
             or corrupt your data.
                     <Hyperlink NavigateUri="http://support.shipworks.com/support/solutions/articles/4000083207" RequestNavigate="OpenLink">

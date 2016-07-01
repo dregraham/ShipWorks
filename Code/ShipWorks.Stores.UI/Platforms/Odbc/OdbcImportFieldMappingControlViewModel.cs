@@ -46,6 +46,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         private int numberOfAttributesPerItem;
         private int numberOfItemsPerOrder;
         private IEnumerable<IOdbcColumnSource> columnSources;
+        private bool isCustomQuerySelected = false;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcImportFieldMappingControlViewModel"/> class.
@@ -319,6 +320,16 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         [Obfuscation(Exclude = true)]
         public List<int> NumbersUpTo25 { get; }
 
+        [Obfuscation(Exclude = true)]
+        public bool IsCustomQuerySelected
+        {
+            get { return isCustomQuerySelected; }
+            set
+            {
+                handler.Set(nameof(IsCustomQuerySelected), ref isCustomQuerySelected, value);
+            }
+        }
+
         /// <summary>
         /// Loads the external odbc tables.
         /// </summary>
@@ -464,6 +475,8 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             LoadColumns();
 
             previousSelectedColumnSource = SelectedTable;
+
+            IsCustomQuerySelected = SelectedTable.Name == CustomQueryColumnSourceName;
         }
 
         private void LoadColumns()
