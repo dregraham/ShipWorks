@@ -214,6 +214,7 @@
     <Compile Include="Platforms\Odbc\OdbcColumn.cs" />
     <Compile Include="Platforms\Odbc\OdbcCommandFactory.cs" />
     <Compile Include="Platforms\Odbc\OdbcDownloadCommand.cs" />
+    <Compile Include="Platforms\Odbc\OdbcDownloadStrategy.cs" />
     <Compile Include="Platforms\Odbc\OdbcRecord.cs" />
     <Compile Include="Platforms\Odbc\OdbcSampleDataCommand.cs" />
     <Compile Include="Platforms\Odbc\OdbcSchema.cs" />
