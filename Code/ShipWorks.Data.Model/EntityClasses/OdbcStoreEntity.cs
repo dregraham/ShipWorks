@@ -479,6 +479,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("Map", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("OdbcDownloadStrategy", fieldHashtable);
 		}
 		#endregion
 
@@ -572,6 +575,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)OdbcStoreFieldIndex.Map, true); }
 			set	{ SetValue((int)OdbcStoreFieldIndex.Map, value); }
+		}
+
+		/// <summary> The OdbcDownloadStrategy property of the Entity OdbcStore<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "OdbcStore"."OdbcDownloadStrategy"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Int32 OdbcDownloadStrategy
+		{
+			get { return (System.Int32)GetValue((int)OdbcStoreFieldIndex.OdbcDownloadStrategy, true); }
+			set	{ SetValue((int)OdbcStoreFieldIndex.OdbcDownloadStrategy, value); }
 		}
 
 

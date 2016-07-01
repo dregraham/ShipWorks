@@ -13902,6 +13902,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(OdbcStoreFieldIndex.Map);}
 		}
+		/// <summary>Creates a new OdbcStoreEntity.OdbcDownloadStrategy field instance</summary>
+		public static EntityField2 OdbcDownloadStrategy
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OdbcStoreFieldIndex.OdbcDownloadStrategy);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity OnTracAccountEntity</summary>

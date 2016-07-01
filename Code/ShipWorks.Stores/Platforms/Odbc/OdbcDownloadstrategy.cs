@@ -8,7 +8,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
     [Obfuscation(Exclude = true)]
     public enum OdbcDownloadStrategy
     {
-        all = 0,
+        All = 0,
         ByModifiedTime = 1
     }
 }

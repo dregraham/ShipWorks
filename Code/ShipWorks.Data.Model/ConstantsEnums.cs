@@ -6437,6 +6437,8 @@ namespace ShipWorks.Data.Model
 		ConnectionString,
 		///<summary>Map. </summary>
 		Map,
+		///<summary>OdbcDownloadStrategy. </summary>
+		OdbcDownloadStrategy,
 		/// <summary></summary>
 		AmountOfFields
 	}
