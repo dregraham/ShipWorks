@@ -9,7 +9,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
     /// <summary>
     /// Download Query where the results are limited to rows greater than the onlinelastmodified date
     /// </summary>
-    class OdbcLastModifiedDownloadQuery : IOdbcDownloadQuery
+    public class OdbcLastModifiedDownloadQuery : IOdbcDownloadQuery
     {
         private readonly IOdbcDownloadQuery downloadQuery;
         private readonly DateTime onlineLastModifiedStartingPoint;
@@ -34,7 +34,6 @@ namespace ShipWorks.Stores.Platforms.Odbc
             this.dbProviderFactory = dbProviderFactory;
             this.dataSource = dataSource;
             columnName = fieldMap.FindEntriesBy(OrderFields.OnlineLastModified).FirstOrDefault()?.ExternalField.Column.Name;
-
         }
 
         /// <summary>
