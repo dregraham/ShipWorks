@@ -2,12 +2,14 @@
 using ShipWorks.Stores.Platforms.Odbc;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Data;
+using System.Windows.Input;
 using ShipWorks.Stores.UI.Platforms.Odbc.WizardPages;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc
 {
     /// <summary>
-    /// View Model for the <see cref="WizardPages.OdbcImportFieldMappingControl"/>
+    /// View Model for the <see cref="WizardPages.OdbcImportFieldMappingControl" />
     /// </summary>
     public interface IOdbcImportFieldMappingControlViewModel
     {
@@ -54,6 +56,27 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// <summary>
         /// Checks the required fields have value.
         /// </summary>
-        bool EnsureRequiredMappingFieldsHaveValue();
+        bool ValidateRequiredMappingFields();
+
+        /// <summary>
+        /// Whether the column source selected is table
+        /// </summary>
+        bool IsTableSelected { get; set; }
+
+        /// <summary>
+        /// Whether the download strategy is last modified.
+        /// </summary>
+        bool IsDownloadStrategyLastModified { get; set; }
+
+        ICommand ExecuteQueryCommand { get; set; }
+        DataTable QueryResults { get; set; }
+        string CustomQuery { get; set; }
+        string ResultMessage { get; set; }
+
+        bool IsQueryValid { get; set; }
+
+        void LoadColumns();
+
+        bool ValidateRequiredMapSettings();
     }
 }

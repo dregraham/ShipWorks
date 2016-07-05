@@ -28,7 +28,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
         {
             this.messageHelper = messageHelper;
             this.dataSourceFactory = dataSourceFactory;
-            this.viewModelFactory = viewModelFactory;
+            viewModel = viewModelFactory();
             InitializeComponent();
             SteppingInto += OnSteppingInto;
             StepNext += OnNext;
@@ -49,14 +49,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
                 store = GetStore<OdbcStoreEntity>();
             }
 
-            if (viewModel.SelectedTable == null)
-            {
-                messageHelper.ShowError("Please setup your import map before continuing to the next page.");
-                e.NextPage = this;
-                return;
-            }
-
-            if (!viewModel.EnsureRequiredMappingFieldsHaveValue())
+            if (!viewModel.ValidateRequiredMappingFields())
             {
                 e.NextPage = this;
                 return;
@@ -77,16 +70,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
 
             selectedDataSource.Restore(store.ConnectionString);
 
-            // Create new ViewModel when one does not exist, or a new data source is selected. This means clicking
-            // back on the mapping page and not changing the data source will keep any mappings made, but selecting
-            // a new data source and clicking next, will reset all mappings.
-            if (viewModel == null || !viewModel.DataSource.ConnectionString.Equals(selectedDataSource.ConnectionString, StringComparison.Ordinal))
-            {
-                viewModel = viewModelFactory();
-
-                viewModel.Load(selectedDataSource);
-                mappingControl.DataContext = viewModel;
-            }
+            mappingControl.DataContext = viewModel;
         }
     }
 }

@@ -13,6 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Data;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -34,12 +35,13 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         private readonly IOdbcSchema schema;
         private readonly Func<Type, ILog> logFactory;
         private readonly IMessageHelper messageHelper;
-        private readonly IOdbcCustomQueryModalDialog customQueryModalDialog;
-        private IOdbcColumnSource selectedColumnSource;
+        private readonly IOdbcSampleDataCommand sampleDataCommand;
+        private IOdbcColumnSource selectedTable;
         private ObservableCollection<OdbcColumn> columns;
         private OdbcFieldMapDisplay selectedFieldMap;
         private readonly PropertyChangedHandler handler;
         public event PropertyChangedEventHandler PropertyChanged;
+        private readonly ILog log;
 
         private IOdbcColumnSource previousSelectedColumnSource;
         private string mapName;
@@ -47,25 +49,35 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         private int numberOfAttributesPerItem;
         private int numberOfItemsPerOrder;
         private IEnumerable<IOdbcColumnSource> columnSources;
-        private bool isCustomQuerySelected = false;
-        private bool isDownloadStrategyLastModified;
+        private bool isTableSelected = true;
+        private bool isDownloadStrategyLastModified = true;
+
+        private DataTable queryResults;
+        private string customQuery;
+        private string resultMessage;
+        private const int NumberOfSampleResults = 25;
+
+        private IOdbcColumnSource columnSource;
+
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcImportFieldMappingControlViewModel"/> class.
         /// </summary>
         public OdbcImportFieldMappingControlViewModel(IOdbcFieldMapFactory fieldMapFactory,
             IOdbcSchema schema, Func<Type, ILog> logFactory, IMessageHelper messageHelper,
-            IOdbcCustomQueryModalDialog customQueryModalDialog)
+            IOdbcSampleDataCommand sampleDataCommand)
         {
             this.fieldMapFactory = fieldMapFactory;
             this.schema = schema;
             this.logFactory = logFactory;
             this.messageHelper = messageHelper;
-            this.customQueryModalDialog = customQueryModalDialog;
+            this.sampleDataCommand = sampleDataCommand;
 
-            SaveMapCommand = new RelayCommand(SaveMapToDisk,() => selectedColumnSource != null);
+            log = logFactory(typeof (OdbcImportFieldMappingControlViewModel));
+
+            SaveMapCommand = new RelayCommand(SaveMapToDisk,() => selectedTable != null);
             TableChangedCommand = new RelayCommand(TableChanged);
-            OpenCustomQueryDlgCommand = new RelayCommand(OpenCustomQueryDlg);
+            ExecuteQueryCommand = new RelayCommand(ExecuteQuery);
 
             Order = new OdbcFieldMapDisplay("Order", fieldMapFactory.CreateOrderFieldMap());
             Address = new OdbcFieldMapDisplay("Address", fieldMapFactory.CreateAddressFieldMap());
@@ -149,7 +161,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         [Obfuscation(Exclude = true)]
         public IOdbcColumnSource SelectedTable
         {
-            get { return selectedColumnSource; }
+            get { return selectedTable; }
             set
             {
                 // Set map name for the user, if they have not altered it.
@@ -163,8 +175,15 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
                     MapName = $"{DataSource.Name} - {value.Name}";
                 }
 
-                handler.Set(nameof(SelectedTable), ref selectedColumnSource, value);
+                handler.Set(nameof(SelectedTable), ref selectedTable, value);
             }
+        }
+
+        [Obfuscation(Exclude = true)]
+        public IOdbcColumnSource ColumnSource
+        {
+            get { return columnSource; }
+            set { handler.Set(nameof(ColumnSource), ref columnSource, value); }
         }
 
         /// <summary>
@@ -317,28 +336,66 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         }
 
         /// <summary>
-        /// List of numbers 1-25 for binding to number of items and number of attributes lists
+        /// List of numbers 0-25 for binding to number of items and number of attributes lists
         /// </summary>
         [Obfuscation(Exclude = true)]
         public List<int> NumbersUpTo25 { get; }
 
+        /// <summary>
+        /// Whether the column source selected is table
+        /// </summary>
         [Obfuscation(Exclude = true)]
-        public bool IsCustomQuerySelected
+        public bool IsTableSelected
         {
-            get { return isCustomQuerySelected; }
+            get { return isTableSelected; }
             set
             {
-                handler.Set(nameof(IsCustomQuerySelected), ref isCustomQuerySelected, value);
+                ColumnSource = value ? SelectedTable : new OdbcColumnSource(CustomQueryColumnSourceName);
+
+                handler.Set(nameof(IsTableSelected), ref isTableSelected, value);
             }
         }
 
+        /// <summary>
+        /// Whether the download strategy is last modified.
+        /// </summary>
         [Obfuscation(Exclude = true)]
         public bool IsDownloadStrategyLastModified
         {
             get { return isDownloadStrategyLastModified; }
+            set { handler.Set(nameof(IsDownloadStrategyLastModified), ref isDownloadStrategyLastModified, value); }
+        }
+
+        [Obfuscation(Exclude = true)]
+        public ICommand ExecuteQueryCommand { get; set; }
+
+        [Obfuscation(Exclude = true)]
+        public DataTable QueryResults
+        {
+            get { return queryResults; }
             set
             {
-                handler.Set(nameof(IsDownloadStrategyLastModified), ref isDownloadStrategyLastModified, value);
+                handler.Set(nameof(QueryResults), ref queryResults, value);
+            }
+        }
+
+        [Obfuscation(Exclude = true)]
+        public string CustomQuery
+        {
+            get { return customQuery; }
+            set
+            {
+                handler.Set(nameof(CustomQuery), ref customQuery, value);
+            }
+        }
+
+        [Obfuscation(Exclude = true)]
+        public string ResultMessage
+        {
+            get { return resultMessage; }
+            set
+            {
+                handler.Set(nameof(ResultMessage), ref resultMessage, value);
             }
         }
 
@@ -390,10 +447,38 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             }
         }
 
+        public bool ValidateRequiredMapSettings()
+        {
+            if (IsTableSelected && SelectedTable == null)
+            {
+                messageHelper.ShowError("Please select a table before continuing to the next page.");
+                return false;
+            }
+
+            if (!IsTableSelected && string.IsNullOrWhiteSpace(CustomQuery))
+            {
+                messageHelper.ShowError("Please enter a valid query before continuing to the next page.");
+                return false;
+            }
+
+            if (!IsTableSelected)
+            {
+                ExecuteQuery();
+
+                if (!IsQueryValid)
+                {
+                    messageHelper.ShowError("Please enter a valid query before continuing to the next page.");
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
         /// <summary>
         /// Checks the required fields.
         /// </summary>
-        public bool EnsureRequiredMappingFieldsHaveValue()
+        public bool ValidateRequiredMappingFields()
         {
             // Finds an entry that is required and the external column has not been set
             IOdbcFieldMapEntry unsetRequiredFieldMap =
@@ -431,7 +516,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
 
             map.Entries.ToList().ForEach(e =>
             {
-                e.ExternalField.Table = selectedColumnSource;
+                e.ExternalField.Table = selectedTable;
             });
 
             if (!IsSingleLineOrder)
@@ -450,7 +535,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
                 throw new ShipWorksOdbcException("Cannot save a map without a record identifier.");
             }
 
-            map.CustomQuery = selectedColumnSource.Query;
+            map.CustomQuery = CustomQuery;
 
             return map;
         }
@@ -460,7 +545,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// </summary>
         private void TableChanged()
         {
-            if (previousSelectedColumnSource == selectedColumnSource)
+            if (previousSelectedColumnSource == selectedTable)
             {
                 // We set the table back.
                 return;
@@ -484,26 +569,24 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
                 }
             }
 
-            LoadColumns();
-
             previousSelectedColumnSource = SelectedTable;
 
-            IsCustomQuerySelected = SelectedTable.Name == CustomQueryColumnSourceName;
+            ColumnSource = SelectedTable;
         }
 
-        private void LoadColumns()
+        public void LoadColumns()
         {
-            if (!string.IsNullOrWhiteSpace(selectedColumnSource.Query))
+            if (IsTableSelected)
             {
-                selectedColumnSource.Load(DataSource, logFactory(typeof (OdbcColumnSource)), selectedColumnSource.Query,
-                    new OdbcShipWorksDbProviderFactory());
+                ColumnSource.Load(DataSource, logFactory(typeof(OdbcColumnSource)));
             }
             else
             {
-                selectedColumnSource.Load(DataSource, logFactory(typeof(OdbcColumnSource)));
+                ColumnSource.Load(DataSource, logFactory(typeof(OdbcColumnSource)), CustomQuery,
+                    new OdbcShipWorksDbProviderFactory());
             }
 
-            Columns = new ObservableCollection<OdbcColumn>(selectedColumnSource.Columns);
+            Columns = new ObservableCollection<OdbcColumn>(ColumnSource.Columns);
             Columns.Insert(0, new OdbcColumn("(None)"));
         }
 
@@ -512,7 +595,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// </summary>
         private void SaveMapToDisk()
         {
-            if (!EnsureRequiredMappingFieldsHaveValue())
+            if (!ValidateRequiredMappingFields())
             {
                 return;
             }
@@ -542,31 +625,35 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             }
         }
 
+        #region Custom Query
+
         /// <summary>
-        /// Opens the custom query dialog.
+        /// Executes the query.
         /// </summary>
-        private void OpenCustomQueryDlg()
+        private void ExecuteQuery()
         {
-            bool isNewCustomColumnSource = false;
-            IOdbcColumnSource customColumnSource =
-                ColumnSources.SingleOrDefault(t => !string.IsNullOrWhiteSpace(t.Query));
-            if (customColumnSource == null)
-            {
-                isNewCustomColumnSource = true;
-                customColumnSource = new OdbcColumnSource(CustomQueryColumnSourceName);
-            }
+            QueryResults = null;
+            ResultMessage = string.Empty;
 
-            bool? dialogResult = customQueryModalDialog.Show(DataSource, customColumnSource);
-
-            if ((dialogResult ?? false) && !string.IsNullOrWhiteSpace(customColumnSource.Query))
+            try
             {
-                if (isNewCustomColumnSource)
+                QueryResults = sampleDataCommand.Execute(DataSource, CustomQuery, NumberOfSampleResults);
+                if (QueryResults.Rows.Count == 0)
                 {
-                    ColumnSources = ColumnSources.Concat(new[] {customColumnSource});
+                    ResultMessage = "Query returned no results";
                 }
-
-                SelectedTable = customColumnSource;
+                IsQueryValid = true;
+            }
+            catch (ShipWorksOdbcException ex)
+            {
+                log.Error(ex.Message);
+                messageHelper.ShowError(ex.Message);
+                IsQueryValid = false;
             }
         }
+
+        public bool IsQueryValid { get; set; }
+
+        #endregion
     }
 }

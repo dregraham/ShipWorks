@@ -95,7 +95,7 @@
             <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal">
                 <RadioButton GroupName="ColumnSource"
                              Content="Table"
-                             IsChecked="{Binding IsCustomQuerySelected, UpdateSourceTrigger=PropertyChanged}" />
+                             IsChecked="{Binding IsTableSelected, UpdateSourceTrigger=PropertyChanged}" />
                 <RadioButton GroupName="ColumnSource"
                              Content="Query" />
             </StackPanel>
@@ -105,10 +105,10 @@
                    d:IsHidden="false"
                    VerticalAlignment="Top">
             <DockPanel.Visibility>
-                <Binding Path="IsCustomQuerySelected"
+                <Binding Path="IsTableSelected"
                          Converter="{StaticResource VisibleWhenEqualToParameterConverter}">
                     <Binding.ConverterParameter>
-                        <system:Boolean>False</system:Boolean>
+                        <system:Boolean>True</system:Boolean>
                     </Binding.ConverterParameter>
                 </Binding>
             </DockPanel.Visibility>
@@ -130,10 +130,10 @@
         <Grid Grid.Row="1"
               d:IsHidden="true">
             <Grid.Visibility>
-                <Binding Path="IsCustomQuerySelected"
+                <Binding Path="IsTableSelected"
                          Converter="{StaticResource VisibleWhenEqualToParameterConverter}">
                     <Binding.ConverterParameter>
-                        <system:Boolean>True</system:Boolean>
+                        <system:Boolean>False</system:Boolean>
                     </Binding.ConverterParameter>
                 </Binding>
             </Grid.Visibility>
@@ -150,17 +150,17 @@
                  AcceptsReturn="True"
                  TextWrapping="Wrap"
                  Margin="0 5 0 5"
-                 Text="{Binding Query, UpdateSourceTrigger=LostFocus}"
+                 Text="{Binding CustomQuery, UpdateSourceTrigger=LostFocus}"
                  FocusManager.FocusedElement="{Binding RelativeSource={RelativeSource Self}}" />
             <Label Grid.Row="2" Content="Query Results" HorizontalAlignment="Left" />
             <Button Grid.Row="2" Content="Execute Query" HorizontalAlignment="Right"
-                Command="{Binding Execute}" />
+                Command="{Binding ExecuteQueryCommand}" />
             <Grid Grid.Row="3" Margin="0 5 0 0" Background="White">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
-                <DataGrid Grid.Row="0" ItemsSource="{Binding Results, UpdateSourceTrigger=PropertyChanged}"
+                <DataGrid Grid.Row="0" ItemsSource="{Binding QueryResults, UpdateSourceTrigger=PropertyChanged}"
                   IsReadOnly="True" />
                 <Label Grid.Row="0"
                    Content="{Binding ResultMessage, UpdateSourceTrigger=PropertyChanged}" />

@@ -46,12 +46,13 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
                 store = GetStore<OdbcStoreEntity>();
             }
 
-            if (viewModel.SelectedTable == null)
+            if (!viewModel.ValidateRequiredMapSettings())
             {
-                messageHelper.ShowError("Please setup your import map before continuing to the next page.");
                 e.NextPage = this;
                 return;
             }
+
+            viewModel.LoadColumns();
         }
 
         /// <summary>
