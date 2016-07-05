@@ -19,12 +19,13 @@ using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 using System.Windows.Input;
+using ShipWorks.Stores.UI.Platforms.Odbc.WizardPages;
 using SaveFileDialog = Microsoft.Win32.SaveFileDialog;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc
 {
     /// <summary>
-    /// View Model for the <see cref="OdbcImportFieldMappingControl"/>
+    /// View Model for the <see cref="WizardPages.OdbcImportFieldMappingControl"/>
     /// </summary>
     public class OdbcImportFieldMappingControlViewModel : IOdbcImportFieldMappingControlViewModel, INotifyPropertyChanged
     {
@@ -392,7 +393,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// <summary>
         /// Checks the required fields.
         /// </summary>
-        public bool EnsureRequiredFieldsHaveValue()
+        public bool EnsureRequiredMappingFieldsHaveValue()
         {
             // Finds an entry that is required and the external column has not been set
             IOdbcFieldMapEntry unsetRequiredFieldMap =
@@ -511,7 +512,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// </summary>
         private void SaveMapToDisk()
         {
-            if (!EnsureRequiredFieldsHaveValue())
+            if (!EnsureRequiredMappingFieldsHaveValue())
             {
                 return;
             }

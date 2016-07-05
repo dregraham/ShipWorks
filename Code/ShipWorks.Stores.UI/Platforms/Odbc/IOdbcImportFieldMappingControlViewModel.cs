@@ -2,11 +2,12 @@
 using ShipWorks.Stores.Platforms.Odbc;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using ShipWorks.Stores.UI.Platforms.Odbc.WizardPages;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc
 {
     /// <summary>
-    /// View Model for the <see cref="OdbcImportFieldMappingControl"/>
+    /// View Model for the <see cref="WizardPages.OdbcImportFieldMappingControl"/>
     /// </summary>
     public interface IOdbcImportFieldMappingControlViewModel
     {
@@ -53,6 +54,6 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// <summary>
         /// Checks the required fields have value.
         /// </summary>
-        bool EnsureRequiredFieldsHaveValue();
+        bool EnsureRequiredMappingFieldsHaveValue();
     }
 }

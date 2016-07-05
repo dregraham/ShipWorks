@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="ShipWorks.Stores.UI.Platforms.Odbc.OdbcImportFieldMappingControl"
+﻿<UserControl x:Class="ShipWorks.Stores.UI.Platforms.Odbc.WizardPages.OdbcImportFieldMappingControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"

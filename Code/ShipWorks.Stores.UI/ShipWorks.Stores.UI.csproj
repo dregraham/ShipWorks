@@ -185,6 +185,9 @@
     </Compile>
     <Compile Include="Platforms\Odbc\OdbcFieldMapDisplay.cs" />
     <Compile Include="Platforms\Odbc\OdbcFieldMapMultiValueConverter.cs" />
+    <Compile Include="Platforms\Odbc\WizardPages\OdbcImportFieldMappingControl.xaml.cs">
+      <DependentUpon>OdbcImportFieldMappingControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Platforms\Odbc\WizardPages\OdbcImportFieldMappingPage.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -193,6 +196,12 @@
     </Compile>
     <Compile Include="Platforms\Odbc\WizardPages\OdbcImportMapSettingsControl.xaml.cs">
       <DependentUpon>OdbcImportMapSettingsControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Platforms\Odbc\WizardPages\OdbcImportMapSettingsPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Platforms\Odbc\WizardPages\OdbcImportMapSettingsPage.Designer.cs">
+      <DependentUpon>OdbcImportMapSettingsPage.cs</DependentUpon>
     </Compile>
     <Compile Include="Platforms\Sears\SearsStoreModule.cs" />
     <Compile Include="Platforms\SparkPay\SparkPaySettingsControl.cs">
@@ -230,9 +239,6 @@
     </Compile>
     <Compile Include="Platforms\Odbc\OdbcDataSourceControl.Designer.cs">
       <DependentUpon>OdbcDataSourceControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Platforms\Odbc\OdbcImportFieldMappingControl.xaml.cs">
-      <DependentUpon>OdbcImportFieldMappingControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Platforms\Odbc\OdbcImportFieldMappingControlViewModel.cs" />
     <Compile Include="Platforms\Odbc\OdbcStoreModule.cs" />
@@ -283,6 +289,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Platforms\Odbc\WizardPages\OdbcImportFieldMappingPage.resx">
       <DependentUpon>OdbcImportFieldMappingPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Platforms\Odbc\WizardPages\OdbcImportMapSettingsPage.resx">
+      <DependentUpon>OdbcImportMapSettingsPage.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Platforms\SparkPay\SparkPaySettingsControl.resx">
       <DependentUpon>SparkPaySettingsControl.cs</DependentUpon>
@@ -368,9 +377,9 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Platforms\Odbc\OdbcImportFieldMappingControl.xaml">
-      <SubType>Designer</SubType>
+    <Page Include="Platforms\Odbc\WizardPages\OdbcImportFieldMappingControl.xaml">
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Platforms\Odbc\WizardPages\OdbcImportMapSettingsControl.xaml">
       <SubType>Designer</SubType>
