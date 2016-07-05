@@ -19,6 +19,9 @@ using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 using System.Windows.Input;
+using ShipWorks.Stores.Platforms.Odbc.DataAccess;
+using ShipWorks.Stores.Platforms.Odbc.DataSource;
+using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 using SaveFileDialog = Microsoft.Win32.SaveFileDialog;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc

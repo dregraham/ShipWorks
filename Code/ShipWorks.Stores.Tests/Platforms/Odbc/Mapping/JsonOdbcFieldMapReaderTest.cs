@@ -8,6 +8,7 @@ using ShipWorks.Stores.Platforms.Odbc.Mapping;
 using System;
 using System.IO;
 using Interapptive.Shared.Extensions;
+using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 using Xunit;
 
 namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping

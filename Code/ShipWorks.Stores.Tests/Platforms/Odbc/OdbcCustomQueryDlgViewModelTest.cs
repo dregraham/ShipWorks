@@ -4,6 +4,9 @@ using Moq;
 using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Stores.UI.Platforms.Odbc;
 using System.Data;
+using ShipWorks.Stores.Platforms.Odbc.DataAccess;
+using ShipWorks.Stores.Platforms.Odbc.DataSource;
+using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 using Xunit;
 
 namespace ShipWorks.Stores.Tests.Platforms.Odbc
@@ -43,7 +46,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
                     .Throws(new ShipWorksOdbcException("error message"));
 
                 var messageHelper = mock.Mock<IMessageHelper>();
-                
+
                 var testObject = mock.Create<OdbcCustomQueryDlgViewModel>();
                 testObject.Query = "myQuery";
 
@@ -82,7 +85,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
                 var dataSource = mock.Mock<IOdbcDataSource>();
                 var sampleDataCommand = mock.Mock<IOdbcSampleDataCommand>();
                 sampleDataCommand.Setup(c => c.Execute(dataSource.Object, "myQuery", numberOfResults)).Returns(new DataTable());
-                
+
                 var testObject = mock.Create<OdbcCustomQueryDlgViewModel>();
                 testObject.Query = "myQuery";
 

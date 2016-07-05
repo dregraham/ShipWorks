@@ -8,6 +8,7 @@ using System.Windows.Interop;
 using Autofac;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Shipping;
+using ShipWorks.Stores.Platforms.Odbc.DataSource;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
 {

@@ -10,15 +10,15 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
     public enum OdbcDownloadStrategy
     {
         /// <summary>
-        /// Download all orders from the Odbc data source.
+        /// Download all orders from the ODBC data source.
         /// </summary>
-        [Description("Download all orders from the Odbc data source.")]
+        [Description("Download all orders from the ODBC data source.")]
         All = 0,
 
         /// <summary>
-        /// Download orders from the Odbc data source using the by last modified strategy.
+        /// Download orders from the ODBC data source based on last modified date of the order
         /// </summary>
-        [Description("Download orders from the Odbc data source using the by last modified strategy.")]
+        [Description("Download orders from the ODBC data source based on last modified date of the order")]
         ByModifiedTime = 1
     }
 }

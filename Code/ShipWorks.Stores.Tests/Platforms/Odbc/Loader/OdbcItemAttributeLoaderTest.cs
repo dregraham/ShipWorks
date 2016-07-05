@@ -7,6 +7,7 @@ using ShipWorks.Stores.Platforms.Odbc.Loaders;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
 using System.Collections.Generic;
 using System.Linq;
+using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 using Xunit;
 
 namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader

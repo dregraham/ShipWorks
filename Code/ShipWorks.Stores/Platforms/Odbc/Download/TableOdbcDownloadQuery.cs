@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Data.Common;
 using System.Linq;
+using ShipWorks.Stores.Platforms.Odbc.DataAccess;
+using ShipWorks.Stores.Platforms.Odbc.DataSource;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Download

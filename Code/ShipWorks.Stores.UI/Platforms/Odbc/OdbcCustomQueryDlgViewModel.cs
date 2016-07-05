@@ -8,6 +8,9 @@ using System.ComponentModel;
 using System.Data;
 using System.Reflection;
 using System.Windows.Input;
+using ShipWorks.Stores.Platforms.Odbc.DataAccess;
+using ShipWorks.Stores.Platforms.Odbc.DataSource;
+using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc
 {
