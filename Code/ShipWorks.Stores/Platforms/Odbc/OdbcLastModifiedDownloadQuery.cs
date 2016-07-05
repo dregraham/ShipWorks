@@ -46,7 +46,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
             // If the onlinelastmodified column is not mapped we cannot generate the query
             if (string.IsNullOrWhiteSpace(columnName))
             {
-                throw new ShipWorksOdbcException("The OnlineLastModified column must be mapped to download by OnlineLastModified.`");
+                throw new ShipWorksOdbcException("The OnlineLastModified column must be mapped to download by OnlineLastModified.");
             }
 
             using (DbConnection connection = dataSource.CreateConnection())
