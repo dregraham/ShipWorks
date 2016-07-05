@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Reactive.Disposables;
 using System.Windows.Forms;
-using Interapptive.Shared.Threading;
 using Interapptive.Shared.UI;
 using ShipWorks.Common.Threading;
 
@@ -12,16 +11,14 @@ namespace ShipWorks.UI.Services
     /// </summary>
     public class MessageHelperWrapper : IMessageHelper
     {
-        private readonly Func<IWin32Window> ownerFactory;
-        private readonly ISchedulerProvider schedulerProvider;
+        private readonly Func<Control> ownerFactory;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public MessageHelperWrapper(Func<IWin32Window> ownerFactory, ISchedulerProvider schedulerProvider)
+        public MessageHelperWrapper(Func<Control> ownerFactory)
         {
             this.ownerFactory = ownerFactory;
-            this.schedulerProvider = schedulerProvider;
         }
 
         /// <summary>
@@ -37,12 +34,7 @@ namespace ShipWorks.UI.Services
         /// </summary>
         public void ShowError(IWin32Window owner, string message)
         {
-            schedulerProvider.WindowsFormsEventLoop
-                .Schedule(new { Owner = owner, Message = message }, (x, y) =>
-                {
-                    MessageHelper.ShowError(y.Owner, y.Message);
-                    return Disposable.Empty;
-                });
+            ShowNotification(owner, message, MessageHelper.ShowError);
         }
 
         /// <summary>
@@ -50,12 +42,7 @@ namespace ShipWorks.UI.Services
         /// </summary>
         public void ShowInformation(string message)
         {
-            schedulerProvider.WindowsFormsEventLoop
-                .Schedule(new { Owner = ownerFactory(), Message = message }, (x, y) =>
-                {
-                    MessageHelper.ShowInformation(y.Owner, y.Message);
-                    return Disposable.Empty;
-                });
+            ShowNotification(ownerFactory(), message, MessageHelper.ShowInformation);
         }
 
         /// <summary>
@@ -103,6 +90,24 @@ namespace ShipWorks.UI.Services
             using (Form dlg = createDialog())
             {
                 return dlg.ShowDialog(ownerFactory());
+            }
+        }
+
+        /// <summary>
+        /// Show a notification as soon as possible
+        /// </summary>
+        private void ShowNotification(IWin32Window owner, string message,
+            Action<IWin32Window, string> showNotification)
+        {
+            Control schedulerControl = owner as Control ?? ownerFactory();
+
+            if (schedulerControl.InvokeRequired)
+            {
+                schedulerControl.Invoke(new Action(() => showNotification(owner, message)));
+            }
+            else
+            {
+                showNotification(owner, message);
             }
         }
     }
