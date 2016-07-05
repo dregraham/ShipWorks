@@ -1,6 +1,6 @@
 ﻿using ShipWorks.Stores.Platforms.Odbc.Mapping;
 
-namespace ShipWorks.Stores.Platforms.Odbc
+namespace ShipWorks.Stores.Platforms.Odbc.Download
 {
     /// <summary>
     /// Download query to be used when user has entered a custom query

@@ -2,6 +2,7 @@
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.GenericFile;
 using ShipWorks.Stores.Platforms.Odbc;
+using ShipWorks.Stores.Platforms.Odbc.Download;
 using Xunit;
 
 namespace ShipWorks.Stores.Tests.Platforms.Odbc

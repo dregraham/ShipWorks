@@ -1,10 +1,10 @@
-using log4net;
-using ShipWorks.Stores.Platforms.Odbc.Mapping;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Data.Odbc;
+using log4net;
+using ShipWorks.Stores.Platforms.Odbc.Mapping;
 
-namespace ShipWorks.Stores.Platforms.Odbc
+namespace ShipWorks.Stores.Platforms.Odbc.Download
 {
     /// <summary>
     /// Executes the DownloadCommand to retrieve a list of orders

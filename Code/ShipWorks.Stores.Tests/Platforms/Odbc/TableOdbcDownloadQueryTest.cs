@@ -6,6 +6,7 @@ using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
 using System;
 using System.Data.Common;
+using ShipWorks.Stores.Platforms.Odbc.Download;
 using Xunit;
 
 #endregion

@@ -1,4 +1,7 @@
-﻿using Interapptive.Shared.Business;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Interapptive.Shared.Business;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.AddressValidation;
@@ -9,11 +12,8 @@ using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Odbc.Loaders;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
-namespace ShipWorks.Stores.Platforms.Odbc
+namespace ShipWorks.Stores.Platforms.Odbc.Download
 {
     /// <summary>
     /// Downloader for an OdbcStoreDownloader
@@ -49,7 +49,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
             Progress.Detail = "Querying data source...";
             try
             {
-                IOdbcCommand downloadCommand = GenerateDownloadCommand(store as OdbcStoreEntity);
+                IOdbcCommand downloadCommand = GenerateDownloadCommand(store);
 
                 IEnumerable<OdbcRecord> downloadedOrders = downloadCommand.Execute();
                 List<IGrouping<string, OdbcRecord>> orderGroups =

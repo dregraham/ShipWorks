@@ -9,6 +9,7 @@ using ShipWorks.UI.Wizard;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using ShipWorks.Stores.Platforms.Odbc.Download;
 
 namespace ShipWorks.Stores.Platforms.Odbc
 {

@@ -1,5 +1,6 @@
 ﻿using Autofac.Extras.Moq;
 using ShipWorks.Stores.Platforms.Odbc;
+using ShipWorks.Stores.Platforms.Odbc.Download;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
 using Xunit;
 

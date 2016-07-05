@@ -4,6 +4,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
 using System;
+using ShipWorks.Stores.Platforms.Odbc.Download;
 using Xunit;
 
 namespace ShipWorks.Stores.Tests.Platforms.Odbc

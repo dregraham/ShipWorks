@@ -1,9 +1,9 @@
-﻿using ShipWorks.Stores.Platforms.Odbc.Mapping;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data.Common;
 using System.Linq;
+using ShipWorks.Stores.Platforms.Odbc.Mapping;
 
-namespace ShipWorks.Stores.Platforms.Odbc
+namespace ShipWorks.Stores.Platforms.Odbc.Download
 {
     public class TableOdbcDownloadQuery : IOdbcDownloadQuery
     {

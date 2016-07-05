@@ -1,10 +1,10 @@
-﻿using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Stores.Platforms.Odbc.Mapping;
-using System;
+﻿using System;
 using System.Data.Common;
 using System.Linq;
+using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Stores.Platforms.Odbc.Mapping;
 
-namespace ShipWorks.Stores.Platforms.Odbc
+namespace ShipWorks.Stores.Platforms.Odbc.Download
 {
     /// <summary>
     /// Download Query where the results are limited to rows greater than the onlinelastmodified date

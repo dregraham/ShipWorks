@@ -2,6 +2,7 @@
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
 using System;
+using ShipWorks.Stores.Platforms.Odbc.Download;
 
 namespace ShipWorks.Stores.Platforms.Odbc
 {

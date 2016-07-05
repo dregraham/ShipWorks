@@ -1,4 +1,4 @@
-﻿namespace ShipWorks.Stores.Platforms.Odbc
+﻿namespace ShipWorks.Stores.Platforms.Odbc.Download
 {
     /// <summary>
     /// Generates a context specific download query
