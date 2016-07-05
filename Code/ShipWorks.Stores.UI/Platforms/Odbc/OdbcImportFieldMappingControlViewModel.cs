@@ -44,7 +44,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         private readonly ILog log;
 
         private IOdbcColumnSource previousSelectedColumnSource;
-        private string mapName;
+        private string mapName = string.Empty;
         private bool isSingleLineOrder = true;
         private int numberOfAttributesPerItem;
         private int numberOfItemsPerOrder;
@@ -123,7 +123,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             {
                 if (string.IsNullOrWhiteSpace(mapName))
                 {
-                    mapName = SelectedTable == null ? DataSource.Name : $"{DataSource.Name} - {SelectedTable.Name}";
+                    mapName = ColumnSource == null ? DataSource.Name : $"{DataSource.Name} - {ColumnSource.Name}";
                 }
                 return mapName;
             }
@@ -150,18 +150,19 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         public ICommand SaveMapCommand { get; private set; }
 
         /// <summary>
-        /// Open custom query dialog command.
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public ICommand OpenCustomQueryDlgCommand { get; private set; }
-
-        /// <summary>
         /// The selected external odbc table.
         /// </summary>
         [Obfuscation(Exclude = true)]
         public IOdbcColumnSource SelectedTable
         {
             get { return selectedTable; }
+            set { handler.Set(nameof(SelectedTable), ref selectedTable, value); }
+        }
+
+        [Obfuscation(Exclude = true)]
+        public IOdbcColumnSource ColumnSource
+        {
+            get { return columnSource; }
             set
             {
                 // Set map name for the user, if they have not altered it.
@@ -170,20 +171,13 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
                 // the map name is changed to "DataSourceName - SelectedColumnName"
                 if (MapName != null && DataSource.Name != null &&
                     (MapName.Equals(DataSource.Name, StringComparison.InvariantCulture) ||
-                    MapName.Equals($"{DataSource.Name} - {SelectedTable.Name}", StringComparison.InvariantCulture)))
+                    MapName.Equals($"{DataSource.Name} - {ColumnSource.Name}", StringComparison.InvariantCulture)))
                 {
-                    MapName = $"{DataSource.Name} - {value.Name}";
+                    MapName = value == null ? $"{DataSource.Name}" : $"{DataSource.Name} - {value.Name}";
                 }
 
-                handler.Set(nameof(SelectedTable), ref selectedTable, value);
+                handler.Set(nameof(ColumnSource), ref columnSource, value);
             }
-        }
-
-        [Obfuscation(Exclude = true)]
-        public IOdbcColumnSource ColumnSource
-        {
-            get { return columnSource; }
-            set { handler.Set(nameof(ColumnSource), ref columnSource, value); }
         }
 
         /// <summary>
@@ -412,11 +406,29 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
 
                 schema.Load(DataSource);
                 ColumnSources = schema.Tables;
+
+                ResetViewModel();
             }
             catch (ShipWorksOdbcException ex)
             {
                 messageHelper.ShowError(ex.Message);
             }
+        }
+
+        private void ResetViewModel()
+        {
+            MapName = string.Empty;
+            IsDownloadStrategyLastModified = true;
+            IsTableSelected = true;
+            CustomQuery = string.Empty;
+            ColumnSource = null;
+            QueryResults = null;
+            ResultMessage = string.Empty;
+            RecordIdentifier = null;
+            selectedTable = null;
+            SelectedFieldMap = Order;
+            NumberOfItemsPerOrder = 0;
+            NumberOfAttributesPerItem = 0;
         }
 
         /// <summary>
@@ -565,6 +577,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
                 if (questionResult != DialogResult.Yes)
                 {
                     SelectedTable = previousSelectedColumnSource;
+                    ColumnSource = SelectedTable;
                     return;
                 }
             }
