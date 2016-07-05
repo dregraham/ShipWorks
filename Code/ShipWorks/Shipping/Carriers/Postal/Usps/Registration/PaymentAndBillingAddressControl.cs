@@ -10,6 +10,9 @@ using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps.Registration
 {
+    /// <summary>
+    /// Address control for the payment and billing screen
+    /// </summary>
     public partial class PaymentAndBillingAddressControl : UserControl
     {
         private readonly Dictionary<CreditCardTypeInternal, CreditCardType> creditCardTranslation =
