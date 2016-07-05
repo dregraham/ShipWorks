@@ -111,11 +111,11 @@ namespace Interapptive.Shared.Utility
 
         /// <summary>
         /// Get an Enum value by ApiValue
-        /// 
+        ///
         /// </summary>
         /// <typeparam name="T">The type of Enum for which to find by ApiValue</typeparam>
         /// <param name="apiValue">The text on which to query</param>
-        /// <returns>Returns the first T enum whose ApiValue matches the provided apiValue 
+        /// <returns>Returns the first T enum whose ApiValue matches the provided apiValue
         /// If no T enum is found for apiValue, throw InvalidOperationException
         /// </returns>
         /// <exception cref="System.ArgumentNullException">Throws ArgumentNullException if apiValue is null or white space  </exception>
@@ -137,7 +137,7 @@ namespace Interapptive.Shared.Utility
                 }
             }
 
-            // If we didn't find out, throw 
+            // If we didn't find out, throw
             throw new InvalidOperationException(string.Format("No matching Enum was found for Enum type '{0}', apiValue '{1}'.", typeof(T).ToString(), apiValue));
         }
 
@@ -249,7 +249,7 @@ namespace Interapptive.Shared.Utility
 
                     metadata.DescriptionAttribute = (DescriptionAttribute) Attribute.GetCustomAttribute(fieldInfo, typeof(DescriptionAttribute));
                     metadata.DetailsAttribute = (DetailsAttribute)Attribute.GetCustomAttribute(fieldInfo, typeof(DetailsAttribute));
-                    
+
                     ImageResourceAttribute imageAttribute = (ImageResourceAttribute) Attribute.GetCustomAttribute(fieldInfo, typeof(ImageResourceAttribute));
                     if (imageAttribute != null)
                     {
