@@ -68,7 +68,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
             {
                 ConnectionString = string.Empty,
                 Map = string.Empty,
-                OdbcDownloadStrategy = (int) OdbcDownloadStrategy.All
+                OdbcDownloadStrategy = (int) OdbcDownloadStrategy.ByModifiedTime
             };
 
             InitializeStoreDefaults(store);
