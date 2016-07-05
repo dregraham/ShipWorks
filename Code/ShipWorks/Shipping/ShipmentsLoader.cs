@@ -220,12 +220,11 @@ namespace ShipWorks.Shipping
         private async Task ValidateShipmentsInternal(ProgressItem workProgress, int initialCount)
         {
             int count = 0;
-            int total = initialCount;
             workProgress.Starting();
 
             // Loading orders may load more than one shipment, so the actual count of shipments to
             // validate may change during the loading process
-            total = finishedLoadingShipments ? globalShipments.Count : Math.Max(total, globalShipments.Count);
+            int total = finishedLoadingShipments ? globalShipments.Count : Math.Max(initialCount, globalShipments.Count);
 
             workProgress.Detail = $"Validating {count} of {total}";
 
@@ -236,6 +235,8 @@ namespace ShipWorks.Shipping
                         globalShipments[shipment.ShipmentID] = shipment;
 
                         count++;
+                        total = Math.Max(total, globalShipments.Count);
+
                         workProgress.PercentComplete = (100 * count) / total;
 
                         if (count != total)
