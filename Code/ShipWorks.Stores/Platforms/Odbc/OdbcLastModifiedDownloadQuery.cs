@@ -58,7 +58,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
                 string columnNameInQuotes = cmdBuilder.QuoteIdentifier(columnName);
 
                 // Generate the query
-                return $@"SELECT sub.* FROM({downloadQuery.GenerateSql()}) sub WHERE {columnNameInQuotes} > '{onlineLastModifiedStartingPoint.ToString("u")}'";
+                return $@"SELECT sub.* FROM({downloadQuery.GenerateSql()}) sub WHERE {columnNameInQuotes} > '{onlineLastModifiedStartingPoint.ToString("yyyy-MM-ddTHH\\:mm\\:ss.fff")}' ORDER BY {columnNameInQuotes} ASC";
             }
         }
     }

@@ -31,14 +31,33 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// </summary>
         public IOdbcCommand CreateDownloadCommand(OdbcStoreEntity store)
         {
+            IOdbcDownloadQuery downloadQuery = GetDownloadQuery(store, odbcFieldMap, dataSource, dbProviderFactory);
+
+            return new OdbcDownloadCommand(odbcFieldMap, dataSource, dbProviderFactory, downloadQuery, logFactory(typeof(OdbcDownloadCommand)));
+        }
+
+        /// <summary>
+        /// Creates the download command using OnlineLastModified.
+        /// </summary>
+        public IOdbcCommand CreateDownloadCommand(OdbcStoreEntity store, DateTime onlineLastModified)
+        {
+            IOdbcDownloadQuery downloadQuery = GetDownloadQuery(store, odbcFieldMap, dataSource, dbProviderFactory);
+            IOdbcDownloadQuery lastModifiedQuery = new OdbcLastModifiedDownloadQuery(downloadQuery, onlineLastModified, odbcFieldMap, dbProviderFactory, dataSource);
+
+            return new OdbcDownloadCommand(odbcFieldMap, dataSource, dbProviderFactory, lastModifiedQuery, logFactory(typeof(OdbcDownloadCommand)));
+        }
+
+        /// <summary>
+        /// Creates the download query used to retrieve orders.
+        /// </summary>
+        private static IOdbcDownloadQuery GetDownloadQuery(OdbcStoreEntity store, IOdbcFieldMap odbcFieldMap, IOdbcDataSource dataSource, IShipWorksDbProviderFactory dbProviderFactory)
+        {
             odbcFieldMap.Load(store.Map);
             dataSource.Restore(store.ConnectionString);
 
-            IOdbcDownloadQuery query = string.IsNullOrWhiteSpace(odbcFieldMap.CustomQuery)
-                ? (IOdbcDownloadQuery) new TableOdbcDownloadQuery(dbProviderFactory, odbcFieldMap, dataSource)
-                :  new CustomQueryOdbcDownloadQuery(odbcFieldMap);
-
-            return new OdbcDownloadCommand(odbcFieldMap, dataSource, dbProviderFactory, query, logFactory(typeof(OdbcDownloadCommand)));
+            return string.IsNullOrWhiteSpace(odbcFieldMap.CustomQuery)
+                ? (IOdbcDownloadQuery)new TableOdbcDownloadQuery(dbProviderFactory, odbcFieldMap, dataSource)
+                : new CustomQueryOdbcDownloadQuery(odbcFieldMap);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Interapptive.Shared.Business;
+using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.AddressValidation;
 using ShipWorks.Data.Connection;
@@ -8,6 +9,7 @@ using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Odbc.Loaders;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -47,7 +49,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
             Progress.Detail = "Querying data source...";
             try
             {
-                IOdbcCommand downloadCommand = commandFactory.CreateDownloadCommand(store);
+                IOdbcCommand downloadCommand = GenerateDownloadCommand(store as OdbcStoreEntity);
 
                 IEnumerable<OdbcRecord> downloadedOrders = downloadCommand.Execute();
                 List<IGrouping<string, OdbcRecord>> orderGroups =
@@ -66,6 +68,28 @@ namespace ShipWorks.Stores.Platforms.Odbc
             {
                 throw new DownloadException(ex.Message, ex);
             }
+        }
+
+
+        /// <summary>
+        /// Generates the download command based on the store entity
+        /// </summary>
+        private IOdbcCommand GenerateDownloadCommand(OdbcStoreEntity odbcStore)
+        {
+            MethodConditions.EnsureArgumentIsNotNull(odbcStore, "OdbcStore");
+
+            if (store.OdbcDownloadStrategy == (int) OdbcDownloadStrategy.ByModifiedTime)
+            {
+                // Used in the case that GetOnlineLastModifiedStartingPoint returns null
+                int defaultDaysBack = store.InitialDownloadDays.GetValueOrDefault(7);
+
+                // Get the starting point
+                DateTime startingPoint = GetOnlineLastModifiedStartingPoint().GetValueOrDefault(DateTime.UtcNow.AddDays(-defaultDaysBack));
+
+                return commandFactory.CreateDownloadCommand(odbcStore, startingPoint);
+            }
+
+            return commandFactory.CreateDownloadCommand(odbcStore);
         }
 
         /// <summary>
