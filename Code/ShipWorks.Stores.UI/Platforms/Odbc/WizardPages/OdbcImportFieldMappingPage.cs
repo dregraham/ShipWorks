@@ -20,10 +20,11 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
     {
         private readonly Func<IOdbcDataSource> dataSourceFactory;
         private readonly Func<string, IOdbcColumnSource> columnSourceFactory;
-        private readonly IOdbcImportFieldMappingControlViewModel viewModel;
+        private IOdbcImportFieldMappingControlViewModel viewModel;
         private OdbcStoreEntity store;
         private const string CustomQueryColumnSourceName = "Custom Import";
         private string previousColumnSource;
+        private readonly Func<IOdbcImportFieldMappingControlViewModel> viewModelFactory;
 
 
         /// <summary>
@@ -80,9 +81,9 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
 
                 selectedDataSource.Restore(store.ConnectionString);
 
-            string columnSourceName = store.OdbcColumnSourceType == (int) OdbcColumnSourceType.Table
-                ? store.OdbcColumnSource
-                : CustomQueryColumnSourceName;
+                string columnSourceName = store.OdbcColumnSourceType == (int) OdbcColumnSourceType.Table ?
+                    store.OdbcColumnSource :
+                    CustomQueryColumnSourceName;
 
                 IOdbcColumnSource columnSource = columnSourceFactory(columnSourceName);
 
