@@ -1,6 +1,8 @@
 ﻿using Interapptive.Shared.UI;
 using ShipWorks.Stores.Platforms.Odbc;
 using System;
+using ShipWorks.Stores.Platforms.Odbc.DataSource;
+using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc
 {

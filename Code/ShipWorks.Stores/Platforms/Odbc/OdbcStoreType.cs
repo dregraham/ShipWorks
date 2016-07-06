@@ -9,6 +9,7 @@ using ShipWorks.UI.Wizard;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using ShipWorks.Stores.Platforms.Odbc.Download;
 
 namespace ShipWorks.Stores.Platforms.Odbc
 {
@@ -67,7 +68,8 @@ namespace ShipWorks.Stores.Platforms.Odbc
             OdbcStoreEntity store = new OdbcStoreEntity
             {
                 ConnectionString = string.Empty,
-                Map = string.Empty
+                Map = string.Empty,
+                OdbcDownloadStrategy = (int) OdbcDownloadStrategy.ByModifiedTime
             };
 
             InitializeStoreDefaults(store);

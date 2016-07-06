@@ -56,7 +56,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 		/// <summary>Method which initializes the internal datastores.</summary>
 		private void Init()
 		{
-			base.InitClass( (174 + 0));
+			base.InitClass( (175 + 0));
 			InitActionEntityInfos();
 			InitActionFilterTriggerEntityInfos();
 			InitActionQueueEntityInfos();
@@ -1667,6 +1667,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("OdbcStoreEntity", "StoreID", typeof(System.Int64), true, false, false, false,  (int)OdbcStoreFieldIndex.StoreID, 0, 0, 19);
 			base.AddElementFieldInfo("OdbcStoreEntity", "ConnectionString", typeof(System.String), false, false, false, false,  (int)OdbcStoreFieldIndex.ConnectionString, 2048, 0, 0);
 			base.AddElementFieldInfo("OdbcStoreEntity", "Map", typeof(System.String), false, false, false, false,  (int)OdbcStoreFieldIndex.Map, 2147483647, 0, 0);
+			base.AddElementFieldInfo("OdbcStoreEntity", "OdbcDownloadStrategy", typeof(System.Int32), false, false, false, false,  (int)OdbcStoreFieldIndex.OdbcDownloadStrategy, 0, 0, 10);
 		}
 		/// <summary>Inits OnTracAccountEntity's FieldInfo objects</summary>
 		private void InitOnTracAccountEntityInfos()

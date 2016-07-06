@@ -2,6 +2,7 @@
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.GenericFile;
 using ShipWorks.Stores.Platforms.Odbc;
+using ShipWorks.Stores.Platforms.Odbc.Download;
 using Xunit;
 
 namespace ShipWorks.Stores.Tests.Platforms.Odbc
@@ -73,6 +74,16 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             var testObject = new OdbcStoreType(store, null);
 
             Assert.True(testObject.GridOnlineColumnSupported(OnlineGridColumnSupport.LastModified));
+        }
+
+        [Fact]
+        public void CreateStoreInstance_ReturnsOdbcStoreEntity_WithOdbcDownloadStrategyByModifiedTime()
+        {
+            OdbcStoreType testObject = new OdbcStoreType(store, null);
+
+            OdbcStoreEntity odbcStore = testObject.CreateStoreInstance() as OdbcStoreEntity;
+
+            Assert.Equal((int) OdbcDownloadStrategy.ByModifiedTime, odbcStore.OdbcDownloadStrategy);
         }
     }
 }

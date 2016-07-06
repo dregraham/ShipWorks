@@ -3,6 +3,7 @@ using Interapptive.Shared.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.Odbc;
+using ShipWorks.Stores.Platforms.Odbc.DataSource;
 using ShipWorks.UI.Wizard;
 using IWin32Window = System.Windows.Interop.IWin32Window;
 

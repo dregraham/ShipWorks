@@ -1,6 +1,7 @@
 using Interapptive.Shared.Utility;
 using Newtonsoft.Json;
 using System.Reflection;
+using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 {
