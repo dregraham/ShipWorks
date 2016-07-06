@@ -19,10 +19,9 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
         [Fact]
         public void QualifiedName_ReturnsQualifiedName()
         {
-            OdbcColumnSource table = new OdbcColumnSource("TableName");
             OdbcColumn column = new OdbcColumn("ColumnName");
 
-            ExternalOdbcMappableField testObject = new ExternalOdbcMappableField(table, column);
+            ExternalOdbcMappableField testObject = new ExternalOdbcMappableField(column);
 
             Assert.Equal("TableName.ColumnName", testObject.QualifiedName);
         }
@@ -30,10 +29,9 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
         [Fact]
         public void DisplayName_ReturnsTableAndColumnName()
         {
-            OdbcColumnSource table = new OdbcColumnSource("TableName");
             OdbcColumn column = new OdbcColumn("ColumnName");
 
-            ExternalOdbcMappableField testObject = new ExternalOdbcMappableField(table, column);
+            ExternalOdbcMappableField testObject = new ExternalOdbcMappableField(column);
 
             Assert.Equal("TableName ColumnName", testObject.DisplayName);
         }
@@ -41,12 +39,11 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
         [Fact]
         public void Value_IsNull_WhenRecordDoesNotContainColumn()
         {
-            OdbcColumnSource table = new OdbcColumnSource("TableName");
             OdbcColumn column = new OdbcColumn("ColumnName");
             OdbcRecord record = new OdbcRecord(string.Empty);
             record.AddField("foo", "bar");
 
-            ExternalOdbcMappableField testObject = new ExternalOdbcMappableField(table, column);
+            ExternalOdbcMappableField testObject = new ExternalOdbcMappableField(column);
 
             testObject.LoadValue(record);
 
@@ -56,10 +53,9 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
         [Fact]
         public void LoadValue_ThrowsArgumentNullException_WithNullRecord()
         {
-            OdbcColumnSource table = new OdbcColumnSource("TableName");
             OdbcColumn column = new OdbcColumn("ColumnName");
 
-            ExternalOdbcMappableField testObject = new ExternalOdbcMappableField(table, column);
+            ExternalOdbcMappableField testObject = new ExternalOdbcMappableField(column);
 
             Assert.Throws<ArgumentNullException>(() => testObject.LoadValue(null));
         }
@@ -67,12 +63,11 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
         [Fact]
         public void LoadValue_LoadsValueFromOdbcRecord()
         {
-            OdbcColumnSource table = new OdbcColumnSource("TableName");
             OdbcColumn column = new OdbcColumn("ColumnName");
             OdbcRecord record = new OdbcRecord(string.Empty);
             record.AddField("ColumnName", "bar");
 
-            ExternalOdbcMappableField testObject = new ExternalOdbcMappableField(table, column);
+            ExternalOdbcMappableField testObject = new ExternalOdbcMappableField(column);
 
             testObject.LoadValue(record);
 
@@ -82,12 +77,11 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
         [Fact]
         public void ResetValue_SetsValueToNull()
         {
-            OdbcColumnSource table = new OdbcColumnSource("TableName");
             OdbcColumn column = new OdbcColumn("ColumnName");
             OdbcRecord record = new OdbcRecord(string.Empty);
             record.AddField("ColumnName", "bar");
 
-            ExternalOdbcMappableField testObject = new ExternalOdbcMappableField(table, column);
+            ExternalOdbcMappableField testObject = new ExternalOdbcMappableField(column);
 
             testObject.LoadValue(record);
 
