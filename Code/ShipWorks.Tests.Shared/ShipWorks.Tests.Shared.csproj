@@ -132,6 +132,7 @@
     <Compile Include="EntityBuilders\FedExShipmentEntityBuilder.cs" />
     <Compile Include="EntityBuilders\IParcelProfileEntityBuilder.cs" />
     <Compile Include="EntityBuilders\Modify.cs" />
+    <Compile Include="EntityBuilders\OrderItemEntityBuilder.cs" />
     <Compile Include="EntityBuilders\OrderEntityBuilder.cs" />
     <Compile Include="Database\ShipWorksLocalDb.cs" />
     <Compile Include="EntityBuilders\IParcelShipmentEntityBuilder.cs" />

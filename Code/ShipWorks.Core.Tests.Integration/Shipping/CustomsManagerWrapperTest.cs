@@ -1,11 +1,15 @@
 ﻿using System;
 using Autofac;
+using Autofac.Core.Lifetime;
+using Autofac.Core.Registration;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.Other;
+using ShipWorks.Shipping.Services;
 using ShipWorks.Startup;
 using ShipWorks.Tests.Shared;
 using ShipWorks.Tests.Shared.Database;
@@ -16,13 +20,15 @@ namespace ShipWorks.Core.Tests.Integration.Shipping
 {
     [Collection("Database collection")]
     [Trait("Category", "ContinuousIntegration")]
-    public class CustomsManagerTest : IDisposable
+    public class CustomsManagerWrapperTest : IDisposable
     {
         private readonly DataContext context;
         private readonly ShipmentEntity shipment;
         private readonly SqlAdapter adapter;
+        private readonly CustomsManagerWrapper testObject;
+        private readonly ILifetimeScope lifetimeScope;
 
-        public CustomsManagerTest(DatabaseFixture db)
+        public CustomsManagerWrapperTest(DatabaseFixture db)
         {
             context = db.CreateDataContext(x => ContainerInitializer.Initialize(x));
 
@@ -32,19 +38,23 @@ namespace ShipWorks.Core.Tests.Integration.Shipping
                 .Save();
 
             adapter = new SqlAdapter(false);
+
+            lifetimeScope = IoC.BeginLifetimeScope();
+
+            testObject = new CustomsManagerWrapper(lifetimeScope.Resolve<IShippingManager>());
         }
 
         [Fact]
         public void LoadCustomsItems_ThrowsArgumentNull_WhenShipmentIsNull()
         {
-            Assert.Throws<ArgumentNullException>(() => CustomsManager.LoadCustomsItems(null, false, adapter));
+            Assert.Throws<ArgumentNullException>(() => testObject.LoadCustomsItems(null, false, adapter));
         }
 
 
         [Fact]
         public void LoadCustomsItems_ThrowsArgumentNull_WhenSqlAdapterIsNull()
         {
-            Assert.Throws<ArgumentNullException>(() => CustomsManager.LoadCustomsItems(shipment, false, null));
+            Assert.Throws<ArgumentNullException>(() => testObject.LoadCustomsItems(shipment, false, null));
         }
 
         [Fact]
@@ -56,7 +66,7 @@ namespace ShipWorks.Core.Tests.Integration.Shipping
             context.Mock.AddRegistration(x =>
                 x.RegisterInstance(shipmentType.Object).Keyed<ShipmentType>(ShipmentTypeCode.Other));
 
-            CustomsManager.LoadCustomsItems(shipment, false, adapter);
+            testObject.LoadCustomsItems(shipment, false, adapter);
 
             shipmentType.Verify(x => x.IsCustomsRequired(shipment));
         }
@@ -67,7 +77,7 @@ namespace ShipWorks.Core.Tests.Integration.Shipping
             Modify.Shipment(shipment).Set(x => x.CustomsGenerated, true).Save();
             Create.Entity<ShipmentCustomsItemEntity>().Set(x => x.ShipmentID, shipment.ShipmentID).Save();
 
-            CustomsManager.LoadCustomsItems(shipment, false, adapter);
+            testObject.LoadCustomsItems(shipment, false, adapter);
 
             Assert.NotEmpty(shipment.CustomsItems);
             Assert.True(shipment.CustomsItemsLoaded);
@@ -79,7 +89,7 @@ namespace ShipWorks.Core.Tests.Integration.Shipping
             Modify.Shipment(shipment).Set(x => x.CustomsGenerated, true).Save();
             Create.Entity<ShipmentCustomsItemEntity>().Set(x => x.ShipmentID, shipment.ShipmentID).Save();
 
-            CustomsManager.LoadCustomsItems(shipment, true, adapter);
+            testObject.LoadCustomsItems(shipment, true, adapter);
 
             Assert.NotEmpty(shipment.CustomsItems);
             Assert.True(shipment.CustomsItemsLoaded);
@@ -93,7 +103,7 @@ namespace ShipWorks.Core.Tests.Integration.Shipping
 
             shipment.CustomsItemsLoaded = true;
 
-            CustomsManager.LoadCustomsItems(shipment, true, adapter);
+            testObject.LoadCustomsItems(shipment, true, adapter);
 
             Assert.NotEmpty(shipment.CustomsItems);
             Assert.True(shipment.CustomsItemsLoaded);
@@ -107,7 +117,7 @@ namespace ShipWorks.Core.Tests.Integration.Shipping
 
             shipment.CustomsItemsLoaded = true;
 
-            CustomsManager.LoadCustomsItems(shipment, false, adapter);
+            testObject.LoadCustomsItems(shipment, false, adapter);
 
             Assert.Empty(shipment.CustomsItems);
             Assert.True(shipment.CustomsItemsLoaded);
@@ -118,7 +128,7 @@ namespace ShipWorks.Core.Tests.Integration.Shipping
         {
             shipment.Processed = true;
 
-            CustomsManager.LoadCustomsItems(shipment, false, adapter);
+            testObject.LoadCustomsItems(shipment, false, adapter);
 
             Assert.False(shipment.CustomsGenerated);
             Assert.Empty(shipment.CustomsItems);
@@ -127,7 +137,7 @@ namespace ShipWorks.Core.Tests.Integration.Shipping
         [Fact]
         public void LoadCustomsItems_MarksCustomsAsGenerated_WhenShipmentIsNotProcessedAndNotAlreadyGenerated()
         {
-            CustomsManager.LoadCustomsItems(shipment, false, adapter);
+            testObject.LoadCustomsItems(shipment, false, adapter);
 
             Assert.True(shipment.CustomsGenerated);
             Assert.Empty(shipment.CustomsItems);
@@ -175,7 +185,7 @@ namespace ShipWorks.Core.Tests.Integration.Shipping
 
             using (SqlAdapter transactedAdapter = new SqlAdapter(true))
             {
-                CustomsManager.LoadCustomsItems(shipment, false, transactedAdapter);
+                testObject.LoadCustomsItems(shipment, false, transactedAdapter);
                 transactedAdapter.Commit();
             }
 
@@ -203,6 +213,7 @@ namespace ShipWorks.Core.Tests.Integration.Shipping
         public void Dispose()
         {
             adapter.Dispose();
+            lifetimeScope.Dispose();
             context.Dispose();
         }
     }

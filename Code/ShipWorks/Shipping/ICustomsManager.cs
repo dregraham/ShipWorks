@@ -1,6 +1,7 @@
 ﻿using ShipWorks.Data.Model.EntityClasses;
 using System;
 using System.Collections.Generic;
+using ShipWorks.Data.Connection;
 
 namespace ShipWorks.Shipping
 {
@@ -12,7 +13,7 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Ensure custom's contents for the given shipment have been created
         /// </summary>
-        void LoadCustomsItems(ShipmentEntity shipment, bool v);
+        void LoadCustomsItems(ShipmentEntity shipment, bool reloadIfPresent, SqlAdapter adapter);
 
         /// <summary>
         /// Ensure customs items are loaded if the address or shipment type has changed

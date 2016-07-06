@@ -75,7 +75,7 @@ namespace ShipWorks.Tests.Shared.EntityBuilders
         /// <summary>
         /// Add an item to the order
         /// </summary>
-        public OrderEntityBuilder WithItem(Action<EntityBuilder<OrderItemEntity>> builderConfiguration) =>
+        public OrderEntityBuilder WithItem(Action<OrderItemEntityBuilder> builderConfiguration) =>
             CreateCollectionEntity(builderConfiguration, x => x.OrderItems);
 
         /// <summary>

@@ -577,15 +577,7 @@ namespace ShipWorks.Shipping
             }
 
             // Populate the order items so we can compute the hash
-            using (SqlAdapter adapter = new SqlAdapter())
-            {
-                adapter.FetchEntityCollection(shipment.Order.OrderItems, new RelationPredicateBucket(OrderItemFields.OrderID == shipment.Order.OrderID));
-
-                foreach (OrderItemEntity orderItemEntity in shipment.Order.OrderItems)
-                {
-                    adapter.FetchEntityCollection(orderItemEntity.OrderItemAttributes, new RelationPredicateBucket(OrderItemAttributeFields.OrderItemID == orderItemEntity.OrderItemID));
-                }
-            }
+            OrderUtility.PopulateOrderDetails(shipment);
 
             // Get our knowledge base entry for this shipment
             Knowledgebase knowledgebase = new Knowledgebase();
@@ -618,7 +610,11 @@ namespace ShipWorks.Shipping
                         // Make sure the customs items are loaded before applying the knowledge base entry
                         // data to the shipment/packages and customs info otherwise the customs data of
                         // the "before" data will be empty in the first change set
-                        CustomsManager.LoadCustomsItems(shipment, false);
+                        using (SqlAdapter adapter = new SqlAdapter())
+                        {
+                            CustomsManager.LoadCustomsItems(shipment, false, adapter);
+                        }
+
                         knowledgebaseEntry.ApplyTo(packageAdapters, shipment.CustomsItems);
 
                         if (shipment.CustomsItems.Any())

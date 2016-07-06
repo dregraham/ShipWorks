@@ -249,10 +249,8 @@ namespace ShipWorks.Shipping
                 shipmentType.LoadShipmentData(shipment, false);
                 shipmentType.UpdateDynamicShipmentData(shipment);
 
-                adapter.SaveAndRefetch(shipment);
-
                 // Go ahead and create customs if needed
-                lifetimeScope.Resolve<ICustomsManager>().LoadCustomsItems(shipment, false);
+                lifetimeScope.Resolve<ICustomsManager>().LoadCustomsItems(shipment, false, adapter);
 
                 lifetimeScope.Resolve<IValidatedAddressManager>()
                     .CopyValidatedAddresses(adapter, order.OrderID, "Ship", shipment.ShipmentID, "Ship");
@@ -273,16 +271,7 @@ namespace ShipWorks.Shipping
             SaveShipment(shipment,
                 lifetimeScope.Resolve<IOrderManager>(),
                 shipmentTypeManager);
-
-            lock (siblingData)
-            {
-                List<long> shipmentList = siblingData[(long) shipment.Fields[(int) ShipmentFieldIndex.OrderID].CurrentValue];
-                if (shipmentList != null)
-                {
-                    shipmentList.Add(shipment.ShipmentID);
-                }
-            }
-
+            
             return shipment;
         }
 
@@ -339,10 +328,10 @@ namespace ShipWorks.Shipping
                 throw new ObjectDeletedException();
             }
 
-            using (SqlAdapter adpater = new SqlAdapter(true))
+            using (SqlAdapter adapter = new SqlAdapter(true))
             {
                 // Refresh the entity
-                adpater.FetchEntity(shipment);
+                adapter.FetchEntity(shipment);
 
                 // Check if its been deleted
                 if (shipment.Fields.State == EntityState.Deleted ||
@@ -361,10 +350,10 @@ namespace ShipWorks.Shipping
                 // Refresh customs (if it was loaded in the first place)
                 if (shipment.CustomsItemsLoaded)
                 {
-                    CustomsManager.LoadCustomsItems(shipment, true);
+                    CustomsManager.LoadCustomsItems(shipment, true, adapter);
                 }
 
-                adpater.Commit();
+                adapter.Commit();
             }
 
             return shipment;
@@ -714,7 +703,10 @@ namespace ShipWorks.Shipping
             {
                 shipmentType.LoadShipmentData(shipment, false);
 
-                CustomsManager.LoadCustomsItems(shipment, false);
+                using (SqlAdapter adapter = new SqlAdapter())
+                {
+                    CustomsManager.LoadCustomsItems(shipment, false, adapter);
+                }
             }
             catch (SqlForeignKeyException)
             {

@@ -34,8 +34,8 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Ensure custom's contents for the given shipment have been created
         /// </summary>
-        public void LoadCustomsItems(ShipmentEntity shipment, bool reloadIfPresent) =>
-            CustomsManager.LoadCustomsItems(shipment, reloadIfPresent);
+        public void LoadCustomsItems(ShipmentEntity shipment, bool reloadIfPresent, SqlAdapter adapter) =>
+            CustomsManager.LoadCustomsItems(shipment, reloadIfPresent, adapter);
 
         /// <summary>
         /// Ensure customs items are loaded if the address or shipment type has changed
@@ -55,7 +55,10 @@ namespace ShipWorks.Shipping
             {
                 try
                 {
-                    LoadCustomsItems(shipment, false);
+                    using (SqlAdapter adapter = new SqlAdapter())
+                    {
+                        CustomsManager.LoadCustomsItems(shipment, false, adapter);
+                    }
                 }
                 catch (SqlForeignKeyException ex)
                 {
