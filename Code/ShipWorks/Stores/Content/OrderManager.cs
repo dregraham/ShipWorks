@@ -1,10 +1,14 @@
-﻿using Interapptive.Shared.Utility;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data;
+using ShipWorks.Data.Adapter.Custom;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.FactoryClasses;
+using ShipWorks.Data.Model.HelperClasses;
 
 namespace ShipWorks.Stores.Content
 {
@@ -49,7 +53,7 @@ namespace ShipWorks.Stores.Content
             EntityType entityType = EntityUtility.GetEntityType(orderId);
             IEntityField2 pkField = EntityUtility.GetPrimaryKeyField(entityType);
 
-            using (SqlAdapter sqlAdapter = SqlAdapter.Create(true))
+            using (SqlAdapter sqlAdapter = SqlAdapter.Create(false))
             {
                 EntityBase2 entity = (EntityBase2)sqlAdapter.FetchNewEntity(
                     GeneralEntityFactory.Create(entityType).GetEntityFactory(),
@@ -59,6 +63,25 @@ namespace ShipWorks.Stores.Content
             }
 
             return order;
+        }
+
+        /// <summary>
+        /// Get orders with the data specified in the prefetch path loaded
+        /// </summary>
+        public IEnumerable<OrderEntity> LoadOrders(IEnumerable<long> orderIdList, IPrefetchPath2 prefetchPath)
+        {
+            MethodConditions.EnsureArgumentIsNotNull(prefetchPath, nameof(prefetchPath));
+
+            OrderCollection orders = new OrderCollection();
+
+            using (SqlAdapter sqlAdapter = SqlAdapter.Create(false))
+            {
+                sqlAdapter.FetchEntityCollection(orders,
+                    new RelationPredicateBucket(new FieldCompareRangePredicate(OrderFields.OrderID, null, orderIdList.ToArray())),
+                    prefetchPath);
+            }
+
+            return orders;
         }
     }
 }
