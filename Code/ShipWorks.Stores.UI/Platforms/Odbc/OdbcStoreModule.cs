@@ -99,6 +99,9 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             builder.RegisterType<OdbcCustomQueryWarningDlg>()
                 .Named<IDialog>("OdbcCustomQueryWarningDlg");
 
+            builder.RegisterType<OdbcColumnSource>()
+                .AsImplementedInterfaces();
+
             RegisterOrderLoadingTypes(builder);
         }
 

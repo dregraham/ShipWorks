@@ -49,14 +49,14 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// Initializes a new instance of the <see cref="OdbcMapSettingsControlViewModel"/> class.
         /// </summary>
         public OdbcMapSettingsControlViewModel(IOdbcSchema schema, IOdbcSampleDataCommand sampleDataCommand, Func<Type, ILog> logFactory,
-            IMessageHelper messageHelper, Func<string, IDialog> dialogFactory)
+            IMessageHelper messageHelper, Func<string, IDialog> dialogFactory, IOdbcColumnSource> columnSourceFactory)
         {
             this.schema = schema;
             this.sampleDataCommand = sampleDataCommand;
             this.messageHelper = messageHelper;
             this.dialogFactory = dialogFactory;
             ExecuteQueryCommand = new RelayCommand(ExecuteQuery);
-            customQueryColumnSource = new OdbcColumnSource(CustomQueryColumnSourceName);
+            customQueryColumnSource = columnSourceFactory("Custom");
             log = logFactory(typeof(OdbcImportFieldMappingControlViewModel));
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
         }
@@ -76,7 +76,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             {
                 if (string.IsNullOrWhiteSpace(mapName))
                 {
-                    mapName = ColumnSource == null ? DataSource.Name : $"{DataSource.Name} - {ColumnSource.Name}";
+                    mapName = ColumnSource == null ? DataSource.Name : $"{DataSource.Name}";
                 }
 
                 return mapName;
@@ -134,9 +134,9 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
                 // the map name is changed to "DataSourceName - SelectedColumnName"
                 if (MapName != null && DataSource.Name != null &&
                     (MapName.Equals(DataSource.Name, StringComparison.InvariantCulture) ||
-                    MapName.Equals($"{DataSource.Name} - {ColumnSource.Name}", StringComparison.InvariantCulture)))
+                    MapName.Equals($"{DataSource.Name}", StringComparison.InvariantCulture)))
                 {
-                    MapName = value == null ? $"{DataSource.Name}" : $"{DataSource.Name} - {value.Name}";
+                    MapName = $"{DataSource.Name}";
                 }
 
                 handler.Set(nameof(ColumnSource), ref columnSource, value);

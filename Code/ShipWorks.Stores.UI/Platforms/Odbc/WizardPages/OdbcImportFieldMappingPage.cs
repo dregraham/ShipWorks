@@ -20,6 +20,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
         private readonly IMessageHelper messageHelper;
         private readonly Func<IOdbcDataSource> dataSourceFactory;
         private readonly Func<Type, ILog> logFactory;
+        private readonly Func<string, IOdbcColumnSource> columnSourceFactory;
         private readonly Func<IOdbcImportFieldMappingControlViewModel> viewModelFactory;
         private IOdbcImportFieldMappingControlViewModel viewModel;
         private OdbcStoreEntity store;
@@ -32,11 +33,13 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
         public OdbcImportFieldMappingPage(IMessageHelper messageHelper,
             Func<IOdbcDataSource> dataSourceFactory,
             Func<IOdbcImportFieldMappingControlViewModel> viewModelFactory,
-            Func<Type, ILog> logFactory)
+            Func<Type, ILog> logFactory,
+            Func<string, IOdbcColumnSource> columnSourceFactory)
         {
             this.messageHelper = messageHelper;
             this.dataSourceFactory = dataSourceFactory;
             this.logFactory = logFactory;
+            this.columnSourceFactory = columnSourceFactory;
             viewModel = viewModelFactory();
             InitializeComponent();
             SteppingInto += OnSteppingInto;
@@ -79,18 +82,12 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
 
             selectedDataSource.Restore(store.ConnectionString);
 
-            IOdbcColumnSource columnSource;
+            string columnSourceName = store.OdbcColumnSourceType == (int) OdbcColumnSourceType.Table
+                ? store.OdbcColumnSource
+                : "Custom";
 
-            if (store.OdbcColumnSourceType == (int) OdbcColumnSourceType.Table)
-            {
-                columnSource = new OdbcColumnSource(store.OdbcColumnSource);
-                columnSource.Load(selectedDataSource, logFactory(typeof(OdbcColumnSource)));
-            }
-            else
-            {
-                columnSource = new OdbcColumnSource(CustomQueryColumnSourceName);
-                columnSource.Load(selectedDataSource, logFactory(typeof(OdbcColumnSource)), store.OdbcColumnSource, new OdbcShipWorksDbProviderFactory());
-            }
+            IOdbcColumnSource columnSource = columnSourceFactory(columnSourceName);
+            columnSource.Load(selectedDataSource, store.OdbcColumnSource,(OdbcColumnSourceType) store.OdbcColumnSourceType);
 
             mappingControl.DataContext = viewModel;
             viewModel.LoadColumnSource(columnSource);

@@ -1,7 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Reflection;
-using log4net;
-using ShipWorks.Stores.Platforms.Odbc.DataAccess;
 
 namespace ShipWorks.Stores.Platforms.Odbc.DataSource.Schema
 {
@@ -16,19 +13,13 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataSource.Schema
         IEnumerable<OdbcColumn> Columns { get; }
 
         /// <summary>
-        /// The tables name
+        /// The Column Source Name
         /// </summary>
-        [Obfuscation(Exclude = true)]
         string Name { get; }
 
         /// <summary>
         /// Loads the columns for the column source
         /// </summary>
-        void Load(IOdbcDataSource dataSource, ILog log);
-
-        /// <summary>
-        /// Loads the columns for the column source
-        /// </summary>
-        void Load(IOdbcDataSource dataSource, ILog log, string query, IShipWorksDbProviderFactory dbProviderFactory);
+        void Load(IOdbcDataSource dataSource, string source, OdbcColumnSourceType sourceType);
     }
 }
