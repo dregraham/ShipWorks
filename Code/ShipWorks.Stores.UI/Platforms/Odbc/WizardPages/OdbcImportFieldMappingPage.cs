@@ -9,6 +9,7 @@ using log4net;
 using ShipWorks.Stores.Platforms.Odbc.DataAccess;
 using ShipWorks.Stores.Platforms.Odbc.DataSource;
 using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
+using ShipWorks.Stores.Platforms.Odbc.Download;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
 {
@@ -90,7 +91,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
             columnSource.Load(selectedDataSource, store.OdbcColumnSource,(OdbcColumnSourceType) store.OdbcColumnSourceType);
 
             mappingControl.DataContext = viewModel;
-            viewModel.LoadColumnSource(columnSource);
+            viewModel.LoadColumnSource(columnSource, (OdbcDownloadStrategy) store.OdbcDownloadStrategy);
         }
     }
 }

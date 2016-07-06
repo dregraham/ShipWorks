@@ -150,10 +150,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         public string CustomQuery
         {
             get { return customQuery; }
-            set
-            {
-                handler.Set(nameof(CustomQuery), ref customQuery, value);
-            }
+            set { handler.Set(nameof(CustomQuery), ref customQuery, value); }
         }
 
         /// <summary>

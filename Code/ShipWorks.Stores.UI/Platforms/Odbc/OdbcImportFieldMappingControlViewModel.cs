@@ -23,6 +23,7 @@ using System.Windows.Input;
 using ShipWorks.Stores.Platforms.Odbc.DataAccess;
 using ShipWorks.Stores.Platforms.Odbc.DataSource;
 using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
+using ShipWorks.Stores.Platforms.Odbc.Download;
 using SaveFileDialog = Microsoft.Win32.SaveFileDialog;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc
@@ -340,11 +341,18 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// <summary>
         /// Loads the column source.
         /// </summary>
-        public void LoadColumnSource(IOdbcColumnSource source)
+        public void LoadColumnSource(IOdbcColumnSource source, OdbcDownloadStrategy downloadStrategy)
         {
             columnSource = source;
             Columns = new ObservableCollection<OdbcColumn>(columnSource.Columns);
             Columns.Insert(0, new OdbcColumn("(None)"));
+
+            IOdbcFieldMapEntry lastModifiedEntry = FindEntriesBy(Order, OrderFields.OnlineLastModified).FirstOrDefault();
+
+            if (lastModifiedEntry != null)
+            {
+                lastModifiedEntry.ShipWorksField.IsRequired = downloadStrategy == OdbcDownloadStrategy.ByModifiedTime;
+            }
         }
 
         /// <summary>

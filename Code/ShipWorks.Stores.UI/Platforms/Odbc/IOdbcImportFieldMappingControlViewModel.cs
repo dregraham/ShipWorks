@@ -1,5 +1,6 @@
 ﻿using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
+using ShipWorks.Stores.Platforms.Odbc.Download;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc
 {
@@ -21,6 +22,6 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// <summary>
         /// Loads the column source.
         /// </summary>
-        void LoadColumnSource(IOdbcColumnSource source);
+        void LoadColumnSource(IOdbcColumnSource source, OdbcDownloadStrategy downloadStrategy);
     }
 }
