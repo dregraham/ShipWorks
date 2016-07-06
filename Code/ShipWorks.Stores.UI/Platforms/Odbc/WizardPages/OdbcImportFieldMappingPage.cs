@@ -4,6 +4,8 @@ using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.UI.Wizard;
 using System;
+using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Interop;
 using log4net;
 using ShipWorks.Stores.Platforms.Odbc.DataAccess;
@@ -24,6 +26,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
         private OdbcStoreEntity store;
         private const string CustomQueryColumnSourceName = "Custom Import";
         private string previousColumnSource;
+        private OdbcDownloadStrategy? previousDownloadStrategy = null;
         private readonly Func<IOdbcImportFieldMappingControlViewModel> viewModelFactory;
 
 
@@ -74,26 +77,39 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
         {
             store = GetStore<OdbcStoreEntity>();
 
+            OdbcDownloadStrategy currentDownloadStrategy = (OdbcDownloadStrategy) store.OdbcDownloadStrategy;
+            string currentColumnSource = store.OdbcColumnSource;
+
+            // Only load column source when the page is first loaded or the column source changes.
             if (string.IsNullOrWhiteSpace(previousColumnSource) ||
-                !previousColumnSource.Equals(store.OdbcColumnSource, StringComparison.Ordinal))
+                !previousColumnSource.Equals(currentColumnSource, StringComparison.Ordinal))
             {
                 IOdbcDataSource selectedDataSource = dataSourceFactory();
 
                 selectedDataSource.Restore(store.ConnectionString);
 
                 string columnSourceName = store.OdbcColumnSourceType == (int) OdbcColumnSourceType.Table ?
-                    store.OdbcColumnSource :
+                    currentColumnSource :
                     CustomQueryColumnSourceName;
 
                 IOdbcColumnSource columnSource = columnSourceFactory(columnSourceName);
 
-                columnSource.Load(selectedDataSource, store.OdbcColumnSource,
+                columnSource.Load(selectedDataSource, currentColumnSource,
                     (OdbcColumnSourceType) store.OdbcColumnSourceType);
 
                 viewModel = viewModelFactory();
                 mappingControl.DataContext = viewModel;
-                viewModel.LoadColumnSource(columnSource, (OdbcDownloadStrategy) store.OdbcDownloadStrategy);
-                previousColumnSource = store.OdbcColumnSource;
+                viewModel.LoadColumnSource(columnSource);
+                previousColumnSource = currentColumnSource;
+            }
+            
+            // Only load download strategy when the page is first loaded or the download strategy changes.
+            if (previousDownloadStrategy == null ||
+                previousDownloadStrategy != currentDownloadStrategy)
+            {
+                viewModel.LoadDownloadStrategy(currentDownloadStrategy);
+                
+                previousDownloadStrategy = currentDownloadStrategy;
             }
         }
     }

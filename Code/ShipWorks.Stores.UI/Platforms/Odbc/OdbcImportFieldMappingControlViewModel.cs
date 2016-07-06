@@ -345,20 +345,35 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// <summary>
         /// Loads the column source.
         /// </summary>
-        public void LoadColumnSource(IOdbcColumnSource source, OdbcDownloadStrategy downloadStrategy)
+        public void LoadColumnSource(IOdbcColumnSource source)
         {
             MethodConditions.EnsureArgumentIsNotNull(source, "ColumnSource");
 
             ColumnSource = source;
             Columns = new ObservableCollection<OdbcColumn>(ColumnSource.Columns);
             Columns.Insert(0, new OdbcColumn("(None)"));
+        }
 
+        /// <summary>
+        /// Loads the download strategy.
+        /// </summary>
+        /// <param name="downloadStrategy">The download strategy.</param>
+        public void LoadDownloadStrategy(OdbcDownloadStrategy downloadStrategy)
+        {
             IOdbcFieldMapEntry lastModifiedEntry = FindEntriesBy(Order, OrderFields.OnlineLastModified).FirstOrDefault();
+
+            int lastModifiedEntryIndex = Order.Entries.IndexOf(lastModifiedEntry);
 
             if (lastModifiedEntry != null)
             {
                 lastModifiedEntry.ShipWorksField.IsRequired = downloadStrategy == OdbcDownloadStrategy.ByModifiedTime;
             }
+
+            // Have to remove and insert the entry because this is what is bound to the property changed trigger.
+            // The entry itself must change, not just a property on it. This avoids having to add a property changed
+            // handler to the ShipWorksMappableField
+            Order.Entries.RemoveAt(lastModifiedEntryIndex);
+            Order.Entries.Insert(lastModifiedEntryIndex, lastModifiedEntry);
         }
 
         /// <summary>

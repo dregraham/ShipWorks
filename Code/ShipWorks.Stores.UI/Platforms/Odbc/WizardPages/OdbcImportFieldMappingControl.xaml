@@ -336,14 +336,17 @@
                                                 <StackPanel Grid.Column="0" Orientation="Horizontal">
                                                     <Label Content="{Binding ShipWorksField.DisplayName}"
                                                            Margin="0 5 0 5"
+                                                           Padding="5 5 0 5"
                                                            HorizontalAlignment="Left">
 
                                                     </Label>
-                                                    <Label Foreground="Red"
+                                                    <Label x:Name="IsRequired"
+                                                           Foreground="Red"
                                                            Content="*"
                                                            Visibility="{Binding ShipWorksField.IsRequired, Converter={StaticResource BooleanToVisibility}, UpdateSourceTrigger=PropertyChanged}"
                                                            HorizontalAlignment="Left"
-                                                           Margin="0"/>
+                                                           Margin="0"
+                                                           Padding="0 5 5 5"/>
                                                 </StackPanel>
 
                                                 <ComboBox Grid.Column="1"
