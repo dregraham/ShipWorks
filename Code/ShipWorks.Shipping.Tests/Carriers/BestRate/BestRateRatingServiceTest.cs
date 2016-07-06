@@ -2,6 +2,7 @@
 using System.Linq;
 using Autofac.Extras.Moq;
 using Autofac.Features.Indexed;
+using Interapptive.Shared.Utility;
 using Moq;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Model.EntityClasses;
@@ -48,9 +49,10 @@ namespace ShipWorks.Shipping.Tests.Carriers.BestRate
         public void GetRates_ReturnsInvalidRateGroup_WhenBestRateIsHidden()
         {
             Mock<ILicenseService> licenseService = mock.Mock<ILicenseService>();
-            licenseService.Setup(s => s.CheckRestriction(EditionFeature.ShipmentType, ShipmentTypeCode.BestRate)).Returns(EditionRestrictionLevel.Hidden);
-            
-            ShipmentEntity shipment = new ShipmentEntity { BestRateEvents = (int)BestRateEventTypes.RateSelected };
+            licenseService.Setup(s => s.CheckRestrictionWithReason(EditionFeature.ShipmentType, ShipmentTypeCode.BestRate))
+                .Returns(EditionRestrictionLevel.Hidden.AsEnumResult());
+
+            ShipmentEntity shipment = new ShipmentEntity { BestRateEvents = (int) BestRateEventTypes.RateSelected };
 
             BestRateRatingService testObject = mock.Create<BestRateRatingService>();
             RateGroup rateGroup = testObject.GetRates(shipment);
@@ -62,9 +64,10 @@ namespace ShipWorks.Shipping.Tests.Carriers.BestRate
         public void GetRates_ReturnsInvalidRateGroup_WhenBestRateIsForbidden()
         {
             Mock<ILicenseService> licenseService = mock.Mock<ILicenseService>();
-            licenseService.Setup(s => s.CheckRestriction(EditionFeature.ShipmentType, ShipmentTypeCode.BestRate)).Returns(EditionRestrictionLevel.Forbidden);
+            licenseService.Setup(s => s.CheckRestrictionWithReason(EditionFeature.ShipmentType, ShipmentTypeCode.BestRate))
+                .Returns(EditionRestrictionLevel.Forbidden.AsEnumResult());
 
-            ShipmentEntity shipment = new ShipmentEntity { BestRateEvents = (int)BestRateEventTypes.RateSelected };
+            ShipmentEntity shipment = new ShipmentEntity { BestRateEvents = (int) BestRateEventTypes.RateSelected };
 
             BestRateRatingService testObject = mock.Create<BestRateRatingService>();
             RateGroup rateGroup = testObject.GetRates(shipment);
@@ -167,7 +170,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.BestRate
             FakeExceptionHandlerBroker fakeBroker = new FakeExceptionHandlerBroker(new List<BrokerException> { informationLevelBrokerException, errorLevelBrokerException, warningLevelBrokerException });
 
             // We want the factory to return our fake broker for this test
-            mock.Mock<IBestRateShippingBrokerFactory>().Setup(f => f.CreateBrokers(It.IsAny<ShipmentEntity>())).Returns(new List<IBestRateShippingBroker> {fakeBroker});
+            mock.Mock<IBestRateShippingBrokerFactory>().Setup(f => f.CreateBrokers(It.IsAny<ShipmentEntity>())).Returns(new List<IBestRateShippingBroker> { fakeBroker });
 
             ShipmentEntity shipment = new ShipmentEntity();
 
