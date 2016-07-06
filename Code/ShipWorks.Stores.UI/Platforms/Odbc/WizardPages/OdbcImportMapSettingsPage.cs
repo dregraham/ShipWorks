@@ -12,8 +12,8 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
     {
         private readonly IMessageHelper messageHelper;
         private readonly Func<IOdbcDataSource> dataSourceFactory;
-        private readonly Func<IOdbcImportFieldMappingControlViewModel> viewModelFactory;
-        private IOdbcImportFieldMappingControlViewModel viewModel;
+        private readonly Func<IOdbcMapSettingsControlViewModel> viewModelFactory;
+        private IOdbcMapSettingsControlViewModel viewModel;
         private OdbcStoreEntity store;
 
         /// <summary>
@@ -21,7 +21,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
         /// </summary>
         public OdbcImportMapSettingsPage(IMessageHelper messageHelper,
             Func<IOdbcDataSource> dataSourceFactory,
-            Func<IOdbcImportFieldMappingControlViewModel> viewModelFactory)
+            Func<IOdbcMapSettingsControlViewModel> viewModelFactory)
         {
             this.messageHelper = messageHelper;
             this.dataSourceFactory = dataSourceFactory;
@@ -52,7 +52,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
                 return;
             }
 
-            viewModel.LoadColumns();
+            //viewModel.LoadColumns();
         }
 
         /// <summary>

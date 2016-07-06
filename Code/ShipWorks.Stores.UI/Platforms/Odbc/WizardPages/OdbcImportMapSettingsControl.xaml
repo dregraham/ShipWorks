@@ -9,7 +9,7 @@
              xmlns:odbc="clr-namespace:ShipWorks.Stores.UI.Platforms.Odbc"
              mc:Ignorable="d"
              xmlns:ui="http://schemas.shipworks.com/ui"
-             d:DataContext="{d:DesignInstance odbc:OdbcImportFieldMappingControlViewModel}"
+             d:DataContext="{d:DesignInstance odbc:OdbcMapSettingsControlViewModel}"
              Height="500" Width="540"
              FontFamily="Tahoma" FontSize="8.25pt"
              Background="{x:Static SystemColors.ControlBrush}">

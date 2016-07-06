@@ -175,6 +175,7 @@
     <Compile Include="Platforms\Odbc\IOdbcCustomQueryModalDialog.cs" />
     <Compile Include="Platforms\Odbc\IOdbcCustomQueryDlgViewModel.cs" />
     <Compile Include="Platforms\Odbc\IOdbcImportFieldMappingControlViewModel.cs" />
+    <Compile Include="Platforms\Odbc\IOdbcMapSettingsControlViewModel.cs" />
     <Compile Include="Platforms\Odbc\OdbcCustomQueryDlg.xaml.cs">
       <DependentUpon>OdbcCustomQueryDlg.xaml</DependentUpon>
     </Compile>
@@ -185,6 +186,7 @@
     </Compile>
     <Compile Include="Platforms\Odbc\OdbcFieldMapDisplay.cs" />
     <Compile Include="Platforms\Odbc\OdbcFieldMapMultiValueConverter.cs" />
+    <Compile Include="Platforms\Odbc\OdbcMapSettingsControlViewModel.cs" />
     <Compile Include="Platforms\Odbc\WizardPages\OdbcImportFieldMappingControl.xaml.cs">
       <DependentUpon>OdbcImportFieldMappingControl.xaml</DependentUpon>
     </Compile>
