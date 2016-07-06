@@ -6439,6 +6439,10 @@ namespace ShipWorks.Data.Model
 		Map,
 		///<summary>OdbcDownloadStrategy. </summary>
 		OdbcDownloadStrategy,
+		///<summary>OdbcColumnSourceType. </summary>
+		OdbcColumnSourceType,
+		///<summary>OdbcColumnSource. </summary>
+		OdbcColumnSource,
 		/// <summary></summary>
 		AmountOfFields
 	}

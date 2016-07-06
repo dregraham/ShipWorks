@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using ShipWorks.Stores.Platforms.Odbc.Download;
+using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 
 namespace ShipWorks.Stores.Platforms.Odbc
 {
@@ -69,7 +70,9 @@ namespace ShipWorks.Stores.Platforms.Odbc
             {
                 ConnectionString = string.Empty,
                 Map = string.Empty,
-                OdbcDownloadStrategy = (int) OdbcDownloadStrategy.ByModifiedTime
+                OdbcDownloadStrategy = (int) OdbcDownloadStrategy.ByModifiedTime,
+                OdbcColumnSourceType = (int) OdbcColumnSourceType.Table,
+                OdbcColumnSource = string.Empty
             };
 
             InitializeStoreDefaults(store);

@@ -3,6 +3,9 @@ using System.Reflection;
 
 namespace ShipWorks.Stores.Platforms.Odbc.DataSource.Schema
 {
+    /// <summary>
+    /// Type of Column Source
+    /// </summary>
     [Obfuscation(Exclude = true)]
     public enum OdbcColumnSourceType
     {
