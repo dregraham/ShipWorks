@@ -214,7 +214,6 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// <summary>
         /// Saves the map settings.
         /// </summary>
-        /// <param name="store">The store.</param>
         public void SaveMapSettings(OdbcStoreEntity store)
         {
             store.OdbcDownloadStrategy = IsDownloadStrategyLastModified ?

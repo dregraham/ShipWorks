@@ -52,6 +52,8 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
                 e.NextPage = this;
                 return;
             }
+
+            viewModel.SaveMapSettings(store);
         }
 
         /// <summary>
