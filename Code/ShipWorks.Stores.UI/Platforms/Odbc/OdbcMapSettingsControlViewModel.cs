@@ -17,17 +17,15 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
 {
     public class OdbcMapSettingsControlViewModel : IOdbcMapSettingsControlViewModel, INotifyPropertyChanged
     {
-        private const string CustomQueryColumnSourceName = "Custom Import...";
+        private const string CustomQueryColumnSourceName = "Custom Import";
         private readonly IOdbcSchema schema;
         private readonly IOdbcSampleDataCommand sampleDataCommand;
         private string mapName = string.Empty;
         private IOdbcColumnSource selectedTable;
-        private IOdbcColumnSource previousSelectedColumnSource;
         private bool isTableSelected = true;
         private bool isDownloadStrategyLastModified = true;
         private IEnumerable<IOdbcColumnSource> columnSources;
         private DataTable queryResults;
-        private string customQuery;
         private string resultMessage;
         private const int NumberOfSampleResults = 25;
         private IOdbcColumnSource columnSource;
@@ -35,17 +33,19 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         private readonly ILog log;
         private readonly IMessageHelper messageHelper;
 
-
-
         private readonly PropertyChangedHandler handler;
         public event PropertyChangedEventHandler PropertyChanged;
 
         public OdbcMapSettingsControlViewModel(IOdbcSchema schema, IOdbcSampleDataCommand sampleDataCommand, Func<Type, ILog> logFactory,
             IMessageHelper messageHelper)
         {
+            this.schema = schema;
+            this.sampleDataCommand = sampleDataCommand;
+            this.messageHelper = messageHelper;
             ExecuteQueryCommand = new RelayCommand(ExecuteQuery);
+            customQueryColumnSource = new OdbcColumnSource(CustomQueryColumnSourceName);
             log = logFactory(typeof(OdbcImportFieldMappingControlViewModel));
-
+            handler = new PropertyChangedHandler(this, () => PropertyChanged);
         }
 
         /// <summary>
@@ -65,6 +65,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
                 {
                     mapName = ColumnSource == null ? DataSource.Name : $"{DataSource.Name} - {ColumnSource.Name}";
                 }
+
                 return mapName;
             }
             set { handler.Set(nameof(MapName), ref mapName, value); }
@@ -100,10 +101,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         public IOdbcColumnSource CustomQueryColumnSource
         {
             get { return customQueryColumnSource; }
-            set
-            {
-                handler.Set(nameof(CustomQueryColumnSource), ref customQueryColumnSource, value);
-            }
+            set { handler.Set(nameof(CustomQueryColumnSource), ref customQueryColumnSource, value); }
         }
 
         [Obfuscation(Exclude = true)]
@@ -160,21 +158,17 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         public DataTable QueryResults
         {
             get { return queryResults; }
-            set
-            {
-                handler.Set(nameof(QueryResults), ref queryResults, value);
-            }
+            set { handler.Set(nameof(QueryResults), ref queryResults, value); }
         }
 
         [Obfuscation(Exclude = true)]
         public string ResultMessage
         {
             get { return resultMessage; }
-            set
-            {
-                handler.Set(nameof(ResultMessage), ref resultMessage, value);
-            }
+            set { handler.Set(nameof(ResultMessage), ref resultMessage, value); }
         }
+
+        public bool IsQueryValid { get; set; }
 
 
         /// <summary>
@@ -190,7 +184,6 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
 
                 schema.Load(DataSource);
                 ColumnSources = schema.Tables;
-
             }
             catch (ShipWorksOdbcException ex)
             {
@@ -251,6 +244,5 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             }
         }
 
-        public bool IsQueryValid { get; set; }
     }
 }

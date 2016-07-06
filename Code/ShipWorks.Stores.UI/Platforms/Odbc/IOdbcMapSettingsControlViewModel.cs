@@ -48,7 +48,6 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         DataTable QueryResults { get; set; }
         string ResultMessage { get; set; }
 
-        bool IsQueryValid { get; set; }
 
 
         bool ValidateRequiredMapSettings();

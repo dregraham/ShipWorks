@@ -45,9 +45,11 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             builder.RegisterType<WizardPages.OdbcImportFieldMappingControl>()
                 .AsSelf();
 
+            builder.RegisterType<OdbcMapSettingsControlViewModel>()
+                .AsImplementedInterfaces();
+
             builder.RegisterType<OdbcImportFieldMappingControlViewModel>()
-                .AsImplementedInterfaces()
-                .SingleInstance();
+                .AsImplementedInterfaces();
 
             builder.RegisterType<OdbcFieldMapFactory>()
                 .AsImplementedInterfaces();
