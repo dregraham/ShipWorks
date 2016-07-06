@@ -23,7 +23,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
 
             ExternalOdbcMappableField testObject = new ExternalOdbcMappableField(column);
 
-            Assert.Equal("TableName.ColumnName", testObject.QualifiedName);
+            Assert.Equal("ColumnName", testObject.QualifiedName);
         }
 
         [Fact]
@@ -33,7 +33,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
 
             ExternalOdbcMappableField testObject = new ExternalOdbcMappableField(column);
 
-            Assert.Equal("TableName ColumnName", testObject.DisplayName);
+            Assert.Equal("ColumnName", testObject.DisplayName);
         }
 
         [Fact]

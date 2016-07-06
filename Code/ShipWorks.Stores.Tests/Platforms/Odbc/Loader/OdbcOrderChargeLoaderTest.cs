@@ -42,7 +42,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
         {
             ShipWorksOdbcMappableField shipworksField = new ShipWorksOdbcMappableField(OrderChargeFields.Amount, "Tax");
             shipworksField.LoadValue(123);
-            ExternalOdbcMappableField externalField = new ExternalOdbcMappableField(new OdbcColumnSource("Order"), new OdbcColumn("Tax Column"));
+            ExternalOdbcMappableField externalField = new ExternalOdbcMappableField(new OdbcColumn("Tax Column"));
             OdbcFieldMapEntry entry1 = new OdbcFieldMapEntry(shipworksField, externalField);
 
             Mock<IOdbcFieldMap> map = mock.Mock<IOdbcFieldMap>();
@@ -62,7 +62,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
         {
             ShipWorksOdbcMappableField shipworksField = new ShipWorksOdbcMappableField(OrderChargeFields.Amount, "Tax Amount");
             shipworksField.LoadValue(123);
-            ExternalOdbcMappableField externalField = new ExternalOdbcMappableField(new OdbcColumnSource("Order"), new OdbcColumn("Tax Column"));
+            ExternalOdbcMappableField externalField = new ExternalOdbcMappableField(new OdbcColumn("Tax Column"));
             OdbcFieldMapEntry entry1 = new OdbcFieldMapEntry(shipworksField, externalField);
 
             Mock<IOdbcFieldMap> map = mock.Mock<IOdbcFieldMap>();
@@ -84,7 +84,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
         {
             ShipWorksOdbcMappableField shipworksField = new ShipWorksOdbcMappableField(OrderChargeFields.Amount, "Tax Amount");
             shipworksField.LoadValue(123);
-            ExternalOdbcMappableField externalField = new ExternalOdbcMappableField(new OdbcColumnSource("Order"), new OdbcColumn("Tax Column"));
+            ExternalOdbcMappableField externalField = new ExternalOdbcMappableField(new OdbcColumn("Tax Column"));
             OdbcFieldMapEntry entry1 = new OdbcFieldMapEntry(shipworksField, externalField);
 
             Mock<IOdbcFieldMap> map = mock.Mock<IOdbcFieldMap>();
@@ -106,7 +106,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
         {
             ShipWorksOdbcMappableField shipworksField = new ShipWorksOdbcMappableField(OrderChargeFields.Amount, "Tax Amount");
             shipworksField.LoadValue(123);
-            ExternalOdbcMappableField externalField = new ExternalOdbcMappableField(new OdbcColumnSource("Order"), new OdbcColumn("Tax Column"));
+            ExternalOdbcMappableField externalField = new ExternalOdbcMappableField(new OdbcColumn("Tax Column"));
             OdbcFieldMapEntry entry1 = new OdbcFieldMapEntry(shipworksField, externalField);
 
             Mock<IOdbcFieldMap> map = mock.Mock<IOdbcFieldMap>();

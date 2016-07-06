@@ -121,7 +121,8 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.DataSource.Schema
 
             OdbcColumnSource table = mock.Create<OdbcColumnSource>(new TypedParameter(typeof(string), "Orders"));
 
-            table.Load(dataSource.Object, "Orders", OdbcColumnSourceType.Table);
+            Assert.Throws<ShipWorksOdbcException>(
+                () => table.Load(dataSource.Object, "Orders", OdbcColumnSourceType.Table));
 
             log.Verify(l => l.Error(exception.Object));
         }
@@ -139,8 +140,8 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.DataSource.Schema
             dataSource.Setup(d => d.CreateConnection()).Returns(connection.Object);
 
             OdbcColumnSource table = mock.Create<OdbcColumnSource>(new TypedParameter(typeof(string), "Orders"));
-
-            table.Load(dataSource.Object, "Orders", OdbcColumnSourceType.Table);
+            Assert.Throws<ShipWorksOdbcException>(
+                () => table.Load(dataSource.Object, "Orders", OdbcColumnSourceType.Table));
 
             log.Verify(l => l.Error(ex));
         }

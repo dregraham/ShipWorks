@@ -343,6 +343,8 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// </summary>
         public void LoadColumnSource(IOdbcColumnSource source, OdbcDownloadStrategy downloadStrategy)
         {
+            MethodConditions.EnsureArgumentIsNotNull(source, "ColumnSource");
+
             columnSource = source;
             Columns = new ObservableCollection<OdbcColumn>(columnSource.Columns);
             Columns.Insert(0, new OdbcColumn("(None)"));
