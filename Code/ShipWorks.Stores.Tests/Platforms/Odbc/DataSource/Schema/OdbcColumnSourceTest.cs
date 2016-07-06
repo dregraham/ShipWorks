@@ -43,7 +43,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.DataSource.Schema
             dataSource.Setup(d => d.CreateConnection()).Returns(conn.Object);
 
             // mock the log
-            Mock<ILog> log = mock.Mock<ILog>();
+            mock.Mock<ILog>();
 
             // mock the schema
             Mock<IOdbcSchema> schema = mock.Mock<IOdbcSchema>();
@@ -67,7 +67,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.DataSource.Schema
             conn.Setup(c => c.Open()).Throws(ex.Object);
 
             // mock the log
-            Mock<ILog> log = mock.Mock<ILog>();
+            mock.Mock<ILog>();
 
             // mock the data source
             Mock<IOdbcDataSource> dataSource = mock.Mock<IOdbcDataSource>();
@@ -92,7 +92,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.DataSource.Schema
             conn.Setup(c => c.GetSchema(It.IsAny<string>(), It.IsAny<string[]>())).Throws(ex.Object);
 
             // mock the log
-            Mock<ILog> log = mock.Mock<ILog>();
+            mock.Mock<ILog>();
 
             // mock the data source
             Mock<IOdbcDataSource> dataSource = mock.Mock<IOdbcDataSource>();
@@ -159,7 +159,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.DataSource.Schema
 
             Mock<DbConnection> connection = mock.Mock<DbConnection>();
             connection.Setup(c => c.GetSchema(It.IsAny<string>(), It.IsAny<string[]>())).Returns(dataTable);
-            Mock<ILog> log = mock.Mock<ILog>();
+            mock.Mock<ILog>();
 
             Mock<IOdbcDataSource> dataSource = mock.Mock<IOdbcDataSource>();
             dataSource.SetupGet(d => d.Name).Returns("SomeName");
@@ -186,7 +186,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.DataSource.Schema
             dataSource.SetupGet(d => d.Name).Returns("SomeName");
             dataSource.Setup(d => d.CreateConnection()).Returns(connection.Object);
 
-            Mock<IShipWorksDbProviderFactory> dbProviderFactory = mock.Mock<IShipWorksDbProviderFactory>();
+            mock.Mock<IShipWorksDbProviderFactory>();
 
             OdbcColumnSource table = mock.Create<OdbcColumnSource>(new TypedParameter(typeof(string), "Custom"));
 
@@ -207,7 +207,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.DataSource.Schema
             dataSource.SetupGet(d => d.Name).Returns("SomeName");
             dataSource.Setup(d => d.CreateConnection()).Returns(connection.Object);
 
-            Mock<IShipWorksDbProviderFactory> dbProviderFactory = mock.Mock<IShipWorksDbProviderFactory>();
+            mock.Mock<IShipWorksDbProviderFactory>();
 
             OdbcColumnSource table = mock.Create<OdbcColumnSource>(new TypedParameter(typeof(string), "Custom"));
 
@@ -223,7 +223,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.DataSource.Schema
 
             Mock<DbConnection> connection = mock.Mock<DbConnection>();
             connection.Setup(c => c.GetSchema(It.IsAny<string>(), It.IsAny<string[]>())).Returns(dataTable);
-            Mock<ILog> log = mock.Mock<ILog>();
+            mock.Mock<ILog>();
             Mock<DbDataReader> reader = mock.Mock<DbDataReader>();
             reader.Setup(r => r.GetSchemaTable()).Returns(dataTable);
             Mock<IShipWorksOdbcCommand> cmd = mock.Mock<IShipWorksOdbcCommand>();
@@ -252,7 +252,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.DataSource.Schema
 
             Mock<DbConnection> connection = mock.Mock<DbConnection>();
             connection.Setup(c => c.GetSchema(It.IsAny<string>(), It.IsAny<string[]>())).Returns(dataTable);
-            Mock<ILog> log = mock.Mock<ILog>();
+            mock.Mock<ILog>();
             Mock<DbDataReader> reader = mock.Mock<DbDataReader>();
             reader.Setup(r => r.GetSchemaTable()).Returns(dataTable);
             Mock<IShipWorksOdbcCommand> cmd = mock.Mock<IShipWorksOdbcCommand>();
@@ -295,7 +295,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.DataSource.Schema
 
             Mock<DbConnection> connection = mock.Mock<DbConnection>();
             connection.Setup(c => c.GetSchema(It.IsAny<string>(), It.IsAny<string[]>())).Returns(dataTable);
-            Mock<ILog> log = mock.Mock<ILog>();
+            mock.Mock<ILog>();
 
             Mock<IOdbcDataSource> dataSource = mock.Mock<IOdbcDataSource>();
             dataSource.SetupGet(d => d.Name).Returns("SomeName");

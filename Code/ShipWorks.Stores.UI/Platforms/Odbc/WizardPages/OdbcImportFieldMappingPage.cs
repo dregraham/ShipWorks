@@ -18,12 +18,9 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
     /// </summary>
     public partial class OdbcImportFieldMappingPage : AddStoreWizardPage, IOdbcWizardPage, IWin32Window
     {
-        private readonly IMessageHelper messageHelper;
         private readonly Func<IOdbcDataSource> dataSourceFactory;
-        private readonly Func<Type, ILog> logFactory;
         private readonly Func<string, IOdbcColumnSource> columnSourceFactory;
-        private readonly Func<IOdbcImportFieldMappingControlViewModel> viewModelFactory;
-        private IOdbcImportFieldMappingControlViewModel viewModel;
+        private readonly IOdbcImportFieldMappingControlViewModel viewModel;
         private OdbcStoreEntity store;
         private const string CustomQueryColumnSourceName = "Custom Import";
 
@@ -31,15 +28,11 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcImportFieldMappingPage"/> class.
         /// </summary>
-        public OdbcImportFieldMappingPage(IMessageHelper messageHelper,
-            Func<IOdbcDataSource> dataSourceFactory,
+        public OdbcImportFieldMappingPage(Func<IOdbcDataSource> dataSourceFactory,
             Func<IOdbcImportFieldMappingControlViewModel> viewModelFactory,
-            Func<Type, ILog> logFactory,
             Func<string, IOdbcColumnSource> columnSourceFactory)
         {
-            this.messageHelper = messageHelper;
             this.dataSourceFactory = dataSourceFactory;
-            this.logFactory = logFactory;
             this.columnSourceFactory = columnSourceFactory;
             viewModel = viewModelFactory();
             InitializeComponent();
@@ -85,7 +78,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
 
             string columnSourceName = store.OdbcColumnSourceType == (int) OdbcColumnSourceType.Table
                 ? store.OdbcColumnSource
-                : "Custom";
+                : CustomQueryColumnSourceName;
 
             IOdbcColumnSource columnSource = columnSourceFactory(columnSourceName);
             columnSource.Load(selectedDataSource, store.OdbcColumnSource,(OdbcColumnSourceType) store.OdbcColumnSourceType);
