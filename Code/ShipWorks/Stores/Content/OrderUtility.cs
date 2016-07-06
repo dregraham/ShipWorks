@@ -341,12 +341,25 @@ namespace ShipWorks.Stores.Content
 
             using (SqlAdapter adapter = SqlAdapter.Create(false))
             {
-                adapter.FetchEntityCollection(shipment.Order.OrderItems, new RelationPredicateBucket(OrderItemFields.OrderID == shipment.Order.OrderID));
+                PopulateOrderDetails(shipment, adapter);
+            }
+        }
 
-                foreach (OrderItemEntity orderItemEntity in shipment.Order.OrderItems)
-                {
-                    adapter.FetchEntityCollection(orderItemEntity.OrderItemAttributes, new RelationPredicateBucket(OrderItemAttributeFields.OrderItemID == orderItemEntity.OrderItemID));
-                }
+        /// <summary>
+        /// Populates the order, order items, and order item attribute for the given shipment.
+        /// </summary>
+        public static void PopulateOrderDetails(ShipmentEntity shipment, SqlAdapter adapter)
+        {
+            if (shipment.Order == null)
+            {
+                shipment.Order = (OrderEntity) DataProvider.GetEntity(shipment.OrderID);
+            }
+
+            adapter.FetchEntityCollection(shipment.Order.OrderItems, new RelationPredicateBucket(OrderItemFields.OrderID == shipment.Order.OrderID));
+
+            foreach (OrderItemEntity orderItemEntity in shipment.Order.OrderItems)
+            {
+                adapter.FetchEntityCollection(orderItemEntity.OrderItemAttributes, new RelationPredicateBucket(OrderItemAttributeFields.OrderItemID == orderItemEntity.OrderItemID));
             }
         }
 

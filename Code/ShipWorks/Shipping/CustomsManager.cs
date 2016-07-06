@@ -9,6 +9,7 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Stores.Content;
 
 namespace ShipWorks.Shipping
 {
@@ -65,14 +66,16 @@ namespace ShipWorks.Shipping
                 {
                     using (SqlAdapter adapter = SqlAdapter.Create(true))
                     {
+                        OrderUtility.PopulateOrderDetails(shipment, adapter);
+
                         decimal customsValue = 0m;
 
                         // By default create one content item representing each item in the order
-                        foreach (OrderItemEntity item in DataProvider.GetRelatedEntities(shipment.OrderID, EntityType.OrderItemEntity))
+                        foreach (OrderItemEntity item in shipment.Order.OrderItems)
                         {
-                            object attributePrice = adapter.GetScalar(OrderItemAttributeFields.UnitPrice, null, AggregateFunction.Sum, OrderItemAttributeFields.OrderItemID == item.OrderItemID);
+                            decimal attributePrice = item.OrderItemAttributes.Sum(oia => oia.UnitPrice); 
 
-                            decimal priceAndValue = item.UnitPrice + ((attributePrice is DBNull) ? 0M : Convert.ToDecimal(attributePrice));
+                            decimal priceAndValue = item.UnitPrice + attributePrice; 
 
                             ShipmentCustomsItemEntity customsItem = new ShipmentCustomsItemEntity
                             {
@@ -86,8 +89,6 @@ namespace ShipWorks.Shipping
                                 NumberOfPieces = 0,
                                 UnitPriceAmount = priceAndValue
                             };
-
-                            adapter.SaveAndRefetch(customsItem);
 
                             customsValue += ((decimal) customsItem.Quantity * customsItem.UnitValue);
                         }
