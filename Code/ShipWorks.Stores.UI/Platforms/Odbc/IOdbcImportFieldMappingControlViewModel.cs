@@ -1,10 +1,4 @@
 ﻿using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores.Platforms.Odbc;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Data;
-using System.Windows.Input;
-using ShipWorks.Stores.Platforms.Odbc.DataSource;
 using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc
@@ -14,18 +8,6 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
     /// </summary>
     public interface IOdbcImportFieldMappingControlViewModel
     {
-
-
-        /// <summary>
-        /// The columns from the selected external odbc table.
-        /// </summary>
-        ObservableCollection<OdbcColumn> Columns { get; set; }
-
-        /// <summary>
-        /// The selected field map.
-        /// </summary>
-        OdbcFieldMapDisplay SelectedFieldMap { get; set; }
-
         /// <summary>
         /// Save the Map to the given store.
         /// </summary>
@@ -36,10 +18,9 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// </summary>
         bool ValidateRequiredMappingFields();
 
-
-
-        void LoadColumns(bool IsTableSelected, IOdbcColumnSource ColumnSource, IOdbcDataSource DataSource,
-            IOdbcColumnSource CustomQueryColumnSource);
-
+        /// <summary>
+        /// Loads the column source.
+        /// </summary>
+        void LoadColumnSource(IOdbcColumnSource source);
     }
 }

@@ -40,6 +40,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         private readonly PropertyChangedHandler handler;
         public event PropertyChangedEventHandler PropertyChanged;
         private readonly ILog log;
+        private IOdbcColumnSource columnSource;
 
         private bool isSingleLineOrder = true;
         private int numberOfAttributesPerItem;
@@ -250,8 +251,6 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
                                 $"Attribute {attributeNumber}"), new ExternalOdbcMappableField(null, null),itemIndex));
         }
 
-
-
         /// <summary>
         /// Saves the map.
         /// </summary>
@@ -319,11 +318,13 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
 
             OdbcFieldMap map = fieldMapFactory.CreateFieldMapFrom(mapEntries);
 
-            //todo: replace with column source
-            //map.Entries.ToList().ForEach(e =>
-            //{
-            //    e.ExternalField.Table = selectedTable;
-            //});
+            if (string.IsNullOrWhiteSpace(columnSource.Query))
+            {
+                map.Entries.ToList().ForEach(e =>
+                {
+                    e.ExternalField.Table = columnSource;
+                });
+            }
 
             if (!IsSingleLineOrder)
             {
@@ -341,25 +342,16 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
                 throw new ShipWorksOdbcException("Cannot save a map without a record identifier.");
             }
 
-            //todo: Save query
-            //map.CustomQuery = CustomQueryColumnSource.Query;
-
             return map;
         }
 
-        public void LoadColumns(bool IsTableSelected, IOdbcColumnSource ColumnSource, IOdbcDataSource DataSource, IOdbcColumnSource CustomQueryColumnSource)
+        /// <summary>
+        /// Loads the column source.
+        /// </summary>
+        public void LoadColumnSource(IOdbcColumnSource source)
         {
-            if (IsTableSelected)
-            {
-                ColumnSource.Load(DataSource, logFactory(typeof(OdbcColumnSource)));
-            }
-            else
-            {
-                ColumnSource.Load(DataSource, logFactory(typeof(OdbcColumnSource)), CustomQueryColumnSource.Query,
-                    new OdbcShipWorksDbProviderFactory());
-            }
-
-            Columns = new ObservableCollection<OdbcColumn>(ColumnSource.Columns);
+            columnSource = source;
+            Columns = new ObservableCollection<OdbcColumn>(columnSource.Columns);
             Columns.Insert(0, new OdbcColumn("(None)"));
         }
 

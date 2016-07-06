@@ -24,7 +24,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataSource.Schema
         /// <summary>
         /// Loads the columns for the column source
         /// </summary>
-        void Load(IOdbcDataSource dataSource, ILog logFactory);
+        void Load(IOdbcDataSource dataSource, ILog log);
 
         /// <summary>
         /// Loads the columns for the column source
