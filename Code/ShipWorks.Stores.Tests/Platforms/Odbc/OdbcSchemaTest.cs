@@ -1,12 +1,11 @@
-﻿using System;
-using System.Data;
-using System.Data.Common;
-using System.Data.Odbc;
-using System.Linq;
-using Autofac.Extras.Moq;
+﻿using Autofac.Extras.Moq;
 using log4net;
 using Moq;
 using ShipWorks.Stores.Platforms.Odbc;
+using ShipWorks.Tests.Shared;
+using System;
+using System.Data;
+using System.Data.Common;
 using Xunit;
 
 namespace ShipWorks.Stores.Tests.Platforms.Odbc
@@ -32,17 +31,19 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
                 // Mock up the connection
                 connection = mock.Mock<DbConnection>();
                 connection.Setup(c => c.GetSchema(It.IsAny<string>())).Returns(tableData);
+
+                var columnSourceMock = mock.MockFunc<string, IOdbcColumnSource>().FunctionOutput;
+
+                // Mock up the data source
+                Mock<IOdbcDataSource> dataSource = mock.Mock<IOdbcDataSource>();
+                dataSource.Setup(d => d.CreateConnection()).Returns(connection.Object);
+
+                OdbcSchema testObject = mock.Create<OdbcSchema>();
+
+                testObject.Load(dataSource.Object);
+
+                Assert.Contains(columnSourceMock.Object, testObject.Tables);
             }
-
-            // Mock up the data source
-            Mock<IOdbcDataSource> dataSource = mock.Mock<IOdbcDataSource>();
-            dataSource.Setup(d => d.CreateConnection()).Returns(connection.Object);
-
-            OdbcSchema testObject = mock.Create<OdbcSchema>();
-
-            testObject.Load(dataSource.Object);
-
-            Assert.Equal(1, testObject.Tables.Count(t => t.Name == "Order"));
         }
 
         [Fact]

@@ -1,10 +1,9 @@
+using log4net;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
-using System.Data.Odbc;
 using System.Linq;
-using log4net;
 
 namespace ShipWorks.Stores.Platforms.Odbc
 {
@@ -13,27 +12,27 @@ namespace ShipWorks.Stores.Platforms.Odbc
     /// </summary>
 	public class OdbcSchema : IOdbcSchema
     {
-	    private readonly OdbcTableFactory tableFactory;
+        private readonly Func<string, IOdbcColumnSource> columnSourceFactory;
         private readonly ILog log;
 
         /// <summary>
         /// Constructor
         /// </summary>
-	    public OdbcSchema(Func<Type, ILog> logFactory, OdbcTableFactory tableFactory)
+        public OdbcSchema(Func<Type, ILog> logFactory,
+            Func<string, IOdbcColumnSource> columnSourceFactory)
         {
             log = logFactory(typeof(OdbcSchema));
-	        this.tableFactory = tableFactory;
-	    }
+            this.columnSourceFactory = columnSourceFactory;
+        }
 
         /// <summary>
         /// List of ODBC tables in the schema
         /// </summary>
-	    public IEnumerable<OdbcTable> Tables { get; private set; }
+	    public IEnumerable<IOdbcColumnSource> Tables { get; private set; }
 
         /// <summary>
-        /// Loads the given Data Source's Schema
+        /// Populates Table property with the schema of the given datasource.
         /// </summary>
-        /// <param name="dataSource"></param>
         public void Load(IOdbcDataSource dataSource)
         {
             using (DbConnection connection = dataSource.CreateConnection())
@@ -47,15 +46,15 @@ namespace ShipWorks.Stores.Platforms.Odbc
                     int position = tableData.Columns.Cast<DataColumn>().ToList()
                         .FindIndex(c => c.ColumnName.Equals("TABLE_NAME", StringComparison.OrdinalIgnoreCase));
 
-                    List<OdbcTable> tables = new List<OdbcTable>();
+                    List<IOdbcColumnSource> odbcColumnSources = new List<IOdbcColumnSource>();
 
                     for (int i = 0; i < tableData.Rows.Count; i++)
                     {
-                        OdbcTable table = tableFactory.CreateTable(tableData.Rows[i].ItemArray[position].ToString());
-                        tables.Add(table);
+                        IOdbcColumnSource table = columnSourceFactory(tableData.Rows[i].ItemArray[position].ToString());
+                        odbcColumnSources.Add(table);
                     }
 
-                    Tables = tables;
+                    Tables = odbcColumnSources;
                 }
                 catch (DbException ex)
                 {
@@ -77,5 +76,5 @@ namespace ShipWorks.Stores.Platforms.Odbc
                 }
             }
         }
-	}
+    }
 }

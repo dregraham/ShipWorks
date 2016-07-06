@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data;
 using System.Data.Common;
 
 namespace ShipWorks.Stores.Platforms.Odbc
@@ -11,5 +12,15 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// </summary>
         /// <returns>An System.Data.Odbc.OdbcDataReader object.</returns>
         DbDataReader ExecuteReader();
+
+        /// <summary>
+        /// Executes the reader.
+        /// </summary>
+        DbDataReader ExecuteReader(CommandBehavior commandBehavior);
+
+        /// <summary>
+        /// Tries to cancel the execution of the OdbcCommand
+        /// </summary>
+        void Cancel();
     }
 }

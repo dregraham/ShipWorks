@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Interop;
+using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore.Licensing;
 using IWin32Window = System.Windows.Forms.IWin32Window;
 

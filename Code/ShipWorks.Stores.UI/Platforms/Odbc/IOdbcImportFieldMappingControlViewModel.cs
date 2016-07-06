@@ -23,12 +23,12 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// <summary>
         /// The external odbc tables.
         /// </summary>
-        IEnumerable<OdbcTable> Tables { get; set; }
+        IEnumerable<IOdbcColumnSource> ColumnSources { get; set; }
 
         /// <summary>
         /// The selected external odbc table.
         /// </summary>
-        IOdbcTable SelectedTable { get; set; }
+        IOdbcColumnSource SelectedTable { get; set; }
 
         /// <summary>
         /// The columns from the selected external odbc table.

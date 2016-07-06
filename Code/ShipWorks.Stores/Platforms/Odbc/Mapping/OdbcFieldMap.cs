@@ -10,7 +10,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
     /// <summary>
     /// Contains Field Mapping information for ODBC.
     /// </summary>
-    /// <seealso cref="ShipWorks.Stores.Platforms.Odbc.Mapping.IOdbcFieldMap" />
+    /// <seealso cref="IOdbcFieldMap" />
 	public class OdbcFieldMap : IOdbcFieldMap
     {
 		private readonly IOdbcFieldMapIOFactory ioFactory;
@@ -31,19 +31,19 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// The ODBC Field Map Entries
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public IEnumerable<IOdbcFieldMapEntry> Entries
-        {
-            get
-            {
-                return entries;
-            }
-        }
+        public IEnumerable<IOdbcFieldMapEntry> Entries => entries;
 
         /// <summary>
         /// Gets or sets the name of the record identifier column.
         /// </summary>
         [Obfuscation(Exclude = true)]
         public string RecordIdentifierSource { get; set; }
+
+        /// <summary>
+        /// Gets or sets the custom query.
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public string CustomQuery { get; set; }
 
         /// <summary>
         /// Add the given ODBC Field Map Entry to the ODBC Field Map
@@ -138,6 +138,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
                 entry = reader.ReadEntry();
             }
 
+            CustomQuery = reader.ReadCustomQuery();
             RecordIdentifierSource = reader.ReadRecordIdentifierSource();
         }
 

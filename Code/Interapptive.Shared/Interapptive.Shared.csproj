@@ -88,6 +88,8 @@
       <HintPath>..\..\packages\Newtonsoft.Json.4.5.6\lib\net40\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="Rebex.Mail">
       <HintPath>..\..\Components\Rebex.Mail.dll</HintPath>
     </Reference>
@@ -139,6 +141,7 @@
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Services" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -147,6 +150,7 @@
     </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extensions\StreamExtensions.cs" />
@@ -218,6 +222,7 @@
     <Compile Include="Security\SecureText.cs" />
     <Compile Include="Security\SecureTextEncryptionProvider.cs" />
     <Compile Include="Threading\IExternalProcess.cs" />
+    <Compile Include="UI\IDialog.cs" />
     <Compile Include="UI\IMessageHelper.cs" />
     <Compile Include="Pdf\IPdfDocument.cs" />
     <Compile Include="Utility\DetailsAttribute.cs" />

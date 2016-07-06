@@ -20,6 +20,11 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         string RecordIdentifierSource { get; set; }
 
         /// <summary>
+        /// Gets or sets the custom query.
+        /// </summary>
+        string CustomQuery { get; set; }
+
+        /// <summary>
         /// Add the given ODBC Field Map Entry to the ODBC Field Map.
         /// </summary>
         void AddEntry(IOdbcFieldMapEntry entry);

@@ -1,10 +1,8 @@
 using log4net;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
 using System.Collections.Generic;
-using System.Data;
 using System.Data.Common;
 using System.Data.Odbc;
-using System.Linq;
 
 namespace ShipWorks.Stores.Platforms.Odbc
 {
@@ -16,16 +14,22 @@ namespace ShipWorks.Stores.Platforms.Odbc
         private readonly IOdbcFieldMap fieldMap;
         private readonly IOdbcDataSource dataSource;
         private readonly IShipWorksDbProviderFactory dbProviderFactory;
+        private readonly IOdbcDownloadQuery downloadQuery;
         private readonly ILog log;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcDownloadCommand"/> class.
         /// </summary>
-        public OdbcDownloadCommand(IOdbcFieldMap fieldMap, IOdbcDataSource dataSource, IShipWorksDbProviderFactory dbProviderFactory, ILog log)
+        public OdbcDownloadCommand(IOdbcFieldMap fieldMap,
+            IOdbcDataSource dataSource,
+            IShipWorksDbProviderFactory dbProviderFactory,
+            IOdbcDownloadQuery downloadQuery,
+            ILog log)
         {
             this.fieldMap = fieldMap;
             this.dataSource = dataSource;
             this.dbProviderFactory = dbProviderFactory;
+            this.downloadQuery = downloadQuery;
             this.log = log;
         }
 
@@ -40,7 +44,10 @@ namespace ShipWorks.Stores.Platforms.Odbc
 
                 using (DbConnection connection = dataSource.CreateConnection())
                 {
-                    string query = GetQuery(connection);
+                    connection.Open();
+                    string query = downloadQuery.GenerateSql();
+
+                    log.Info($"Query created by OdbcDownloadCommand is \"{query}\"");
 
                     using (IShipWorksOdbcCommand command = dbProviderFactory.CreateOdbcCommand(query, connection))
                     using (DbDataReader reader = command.ExecuteReader())
@@ -83,29 +90,6 @@ namespace ShipWorks.Stores.Platforms.Odbc
             }
 
             return odbcRecord;
-        }
-
-        /// <summary>
-        /// Gets the query text
-        /// </summary>
-        private string GetQuery(DbConnection connection)
-        {
-            using (IShipWorksOdbcDataAdapter adapter = dbProviderFactory.CreateShipWorksOdbcDataAdapter(string.Empty, connection))
-            using (IShipWorksOdbcCommandBuilder cmdBuilder = dbProviderFactory.CreateShipWorksOdbcCommandBuilder(adapter))
-            {
-                connection.Open();
-
-                string tableNameInQuotes = cmdBuilder.QuoteIdentifier(fieldMap.GetExternalTableName());
-
-                List<string> columnNamesInQuotes = fieldMap.Entries.Select(e => cmdBuilder.QuoteIdentifier(e.ExternalField.Column.Name)).ToList();
-                columnNamesInQuotes.Add(cmdBuilder.QuoteIdentifier(fieldMap.RecordIdentifierSource));
-                string columnsToProject = string.Join(",", columnNamesInQuotes.Distinct());
-
-                string query = $"SELECT {columnsToProject} FROM {tableNameInQuotes}";
-                log.Info($"Query created by OdbcDownloadCommand is \"{query}\"");
-
-                return query;
-            }
         }
     }
 }

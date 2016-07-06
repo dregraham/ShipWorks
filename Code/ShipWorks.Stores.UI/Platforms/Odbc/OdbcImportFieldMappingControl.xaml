@@ -91,8 +91,9 @@
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
-        <Grid Grid.Row="0">
+        <Grid Grid.Row="0" Margin="0 0 0 5">
             <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"></RowDefinition>
                 <RowDefinition Height="Auto"></RowDefinition>
                 <RowDefinition Height="Auto"></RowDefinition>
                 <RowDefinition Height="Auto"></RowDefinition>
@@ -118,9 +119,9 @@
                      Height="24"/>
             <ComboBox Grid.Row="2" Grid.Column="1"
                       Margin="2 2.5 0 2.5"
-                  ItemsSource="{Binding Tables, UpdateSourceTrigger=PropertyChanged}"
+                  ItemsSource="{Binding ColumnSources, UpdateSourceTrigger=PropertyChanged}"
                   DisplayMemberPath="Name"
-                  SelectedValue="{Binding SelectedTable,Mode=TwoWay}"
+                  SelectedValue="{Binding SelectedTable}"
                       VerticalAlignment="Center">
                 <i:Interaction.Behaviors>
                     <behaviors:ComboBoxSelectionChangedBehavior Command="{Binding TableChangedCommand}" />
@@ -132,12 +133,44 @@
             <Button Grid.Row="2" Grid.Column="2"
                 Content="Export Map..."
                 Command="{Binding SaveMapCommand}"/>
+            <TextBlock d:IsHidden="false" 
+                       Grid.Row="3" Grid.Column="1"
+                       TextWrapping="Wrap" Margin="2 0 0 2.5">
+                <TextBlock.Visibility>
+                    <Binding Path="IsCustomQuerySelected"
+                                 Converter="{StaticResource VisibleWhenEqualToParameterConverter}">
+                        <Binding.ConverterParameter>
+                            <system:Boolean>False</system:Boolean>
+                        </Binding.ConverterParameter>
+                    </Binding>
+                </TextBlock.Visibility>
+                    To enter a custom query to retrieve fields from multiple database tables,
+                    <Hyperlink Command="{Binding OpenCustomQueryDlgCommand}"
+                               CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:OdbcImportFieldMappingControl}}}">
+                        click here.
+                    </Hyperlink>
+            </TextBlock>
+            <TextBlock d:IsHidden="true" 
+                       Grid.Row="3" Grid.Column="1"
+                       TextWrapping="Wrap" Margin="2 0 0 2.5">
+                <TextBlock.Visibility>
+                    <Binding Path="IsCustomQuerySelected"
+                                 Converter="{StaticResource VisibleWhenEqualToParameterConverter}">
+                        <Binding.ConverterParameter>
+                            <system:Boolean>True</system:Boolean>
+                        </Binding.ConverterParameter>
+                    </Binding>
+                </TextBlock.Visibility>
+                    To edit your custom import query
+                    <Hyperlink Command="{Binding OpenCustomQueryDlgCommand}"
+                               CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:OdbcImportFieldMappingControl}}}">
+                        click here.
+                    </Hyperlink>
+            </TextBlock>
+            
         </Grid>
 
-        <Border Grid.Row="1" BorderThickness="0" BorderBrush="Gray"
-                Margin="0 0 0 0"
-                Padding="0 0 0 5">
-            <Grid>
+        <Grid Grid.Row="1" Margin="0 0 0 5">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
@@ -145,11 +178,15 @@
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
 
+                <Label Style="{StaticResource Header}"
+               Grid.Row="0" Grid.Column="0"
+               FontWeight="Bold" Content="Item Settings" />
+
                 <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal">
                     <Label Content="Orders contain items on:"
                        Margin="0"
                        HorizontalContentAlignment="Right"
-                       Width="170"/>
+                       Width="168"/>
                     <RadioButton GroupName="OrderItemStrategy" Content="A single row"
                                  IsChecked="{Binding IsSingleLineOrder, UpdateSourceTrigger=PropertyChanged}" />
                     <RadioButton GroupName="OrderItemStrategy" Content="Multiple rows" />
@@ -157,7 +194,7 @@
 
                 <StackPanel Grid.Row="2" Orientation="Horizontal"
                             Margin="0 2.5 0 2.5"
-                            d:IsHidden="true">
+                            d:IsHidden="false">
                     <StackPanel.Visibility>
                         <Binding Path="IsSingleLineOrder"
                                  Converter="{StaticResource VisibleWhenEqualToParameterConverter}">
@@ -169,7 +206,7 @@
                     <Label Margin="0 0 5 0" HorizontalContentAlignment="Right"
                            VerticalAlignment="Center"
                            Content="Each order contains up to:"
-                           Width="220" />
+                           Width="223" />
                     <ComboBox ItemsSource="{Binding NumbersUpTo25, UpdateSourceTrigger=PropertyChanged}"
                               SelectedItem="{Binding NumberOfItemsPerOrder}"
                               Width="50" Margin="0"
@@ -180,7 +217,7 @@
                 </StackPanel>
 
                 <Grid Row="2" Column="0"
-                      d:IsHidden="false"
+                      d:IsHidden="true"
                       Margin="0 2.5 0 2.5">
                     <Grid.Visibility>
                         <Binding Path="IsSingleLineOrder"
@@ -196,7 +233,7 @@
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
                     <Label Grid.Column="0" Content="Column that uniquely identifies each order:"
-                           Width="220" HorizontalContentAlignment="Right"
+                           Width="223" HorizontalContentAlignment="Right"
                            VerticalAlignment="Center"
                            Margin="0 0 5 0"/>
                     <ComboBox Grid.Column="1" ItemsSource="{Binding Columns, UpdateSourceTrigger=PropertyChanged}"
@@ -220,7 +257,7 @@
                 <StackPanel Grid.Row="3" Grid.Column="0" Orientation="Horizontal"
                             Margin="0 2.5 0 2.5">
                     <Label VerticalAlignment="Center" HorizontalContentAlignment="Right"
-                           Width="220"
+                           Width="223"
                            Content="Each item contains up to:"
                            Margin="0 0 5 0"/>
                     <ComboBox ItemsSource="{Binding NumbersUpTo25, UpdateSourceTrigger=PropertyChanged}"
@@ -232,7 +269,7 @@
                            Margin="5 0 0 0"/>
                 </StackPanel>
             </Grid>
-        </Border>
+
 
         <Grid Grid.Row="2">
             <Grid.RowDefinitions>

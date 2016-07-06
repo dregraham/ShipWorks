@@ -131,7 +131,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
 
         private ExternalOdbcMappableField GetExternalField(string tableName, string columnName)
         {
-            return new ExternalOdbcMappableField(new OdbcTable(tableName), new OdbcColumn(columnName));
+            return new ExternalOdbcMappableField(new OdbcColumnSource(tableName), new OdbcColumn(columnName));
         }
 
         private IOdbcFieldMapIOFactory GetIoFactory()

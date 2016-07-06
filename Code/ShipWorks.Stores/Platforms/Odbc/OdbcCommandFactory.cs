@@ -34,7 +34,11 @@ namespace ShipWorks.Stores.Platforms.Odbc
             odbcFieldMap.Load(store.Map);
             dataSource.Restore(store.ConnectionString);
 
-            return new OdbcDownloadCommand(odbcFieldMap, dataSource, dbProviderFactory, logFactory(typeof(OdbcDownloadCommand)));
+            IOdbcDownloadQuery query = string.IsNullOrWhiteSpace(odbcFieldMap.CustomQuery)
+                ? (IOdbcDownloadQuery) new TableOdbcDownloadQuery(dbProviderFactory, odbcFieldMap, dataSource)
+                :  new CustomQueryOdbcDownloadQuery(odbcFieldMap);
+
+            return new OdbcDownloadCommand(odbcFieldMap, dataSource, dbProviderFactory, query, logFactory(typeof(OdbcDownloadCommand)));
         }
     }
 }

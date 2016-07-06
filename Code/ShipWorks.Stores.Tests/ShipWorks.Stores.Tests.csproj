@@ -103,6 +103,7 @@
       <HintPath>..\..\packages\Newtonsoft.Json.4.5.6\lib\net40\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="PresentationCore" />
     <Reference Include="SD.LLBLGen.Pro.DQE.SqlServer.NET20, Version=2.6.0.0, Culture=neutral, PublicKeyToken=ca73b74ba4e3ff27, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Components\SD.LLBLGen.Pro.DQE.SqlServer.NET20.dll</HintPath>
@@ -168,6 +169,7 @@
     <Compile Include="Platforms\LemonStand\LemonStandDownloaderTest.cs" />
     <Compile Include="Platforms\LemonStand\LemonStandOrderIdentifierTest.cs" />
     <Compile Include="Platforms\LemonStand\LemonStandStoreTypeTest.cs" />
+    <Compile Include="Platforms\Odbc\CustomQueryOdbcDownloadQueryTest.cs" />
     <Compile Include="Platforms\Odbc\EncryptedOdbcDataSourceTest.cs" />
     <Compile Include="Platforms\Odbc\JsonOdbcFieldMapIOFactoryTest.cs" />
     <Compile Include="Platforms\Odbc\Loader\OdbcItemAttributeLoaderTest.cs" />
@@ -185,13 +187,16 @@
     <Compile Include="Platforms\Odbc\Mapping\ShipWorksOdbcMappableFieldTest.cs" />
     <Compile Include="Platforms\Odbc\OdbcColumnTest.cs" />
     <Compile Include="Platforms\Odbc\OdbcCommandFactoryTest.cs" />
+    <Compile Include="Platforms\Odbc\OdbcCustomQueryDlgViewModelTest.cs" />
     <Compile Include="Platforms\Odbc\OdbcDownloadCommandTest.cs" />
     <Compile Include="Platforms\Odbc\OdbcFieldMapFactoryTest.cs" />
     <Compile Include="Platforms\Odbc\OdbcImportFieldMappingControlViewModelTest.cs" />
     <Compile Include="Platforms\Odbc\OdbcRecordTests.cs" />
+    <Compile Include="Platforms\Odbc\OdbcSampleDataCommandTest.cs" />
     <Compile Include="Platforms\Odbc\OdbcSchemaTest.cs" />
     <Compile Include="Platforms\Odbc\OdbcStoreTypeTest.cs" />
-    <Compile Include="Platforms\Odbc\OdbcTableTest.cs" />
+    <Compile Include="Platforms\Odbc\OdbcColumnSourceTest.cs" />
+    <Compile Include="Platforms\Odbc\TableOdbcDownloadQueryTest.cs" />
     <Compile Include="Platforms\Sears\SearsCredentialsTest.cs" />
     <Compile Include="Platforms\Sears\SearsCipherKeyTest.cs" />
     <Compile Include="Platforms\SparkPay\DTO\OrderStatusResponseTest.cs" />
@@ -239,6 +244,10 @@
     <ProjectReference Include="..\ShipWorks.Stores\ShipWorks.Stores.csproj">
       <Project>{c53624d5-5b3b-48a6-9729-52a573726de9}</Project>
       <Name>ShipWorks.Stores</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ShipWorks.Tests.Shared\ShipWorks.Tests.Shared.csproj">
+      <Project>{C12E4E75-63BC-4720-8BB2-5ACBA56285CA}</Project>
+      <Name>ShipWorks.Tests.Shared</Name>
     </ProjectReference>
     <ProjectReference Include="..\ShipWorks\ShipWorks.Core.csproj">
       <Project>{02653371-c0dc-4d70-949d-60d37c69f781}</Project>

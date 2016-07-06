@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Interop;
-using ShipWorks.ApplicationCore.Licensing;
+using Interapptive.Shared.UI;
 using IWin32Window = System.Windows.Forms.IWin32Window;
 
 namespace ShipWorks.UI.Controls.ChannelLimit

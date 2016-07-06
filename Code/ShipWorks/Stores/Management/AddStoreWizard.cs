@@ -66,14 +66,16 @@ namespace ShipWorks.Stores.Management
         private bool showActivationError = false;
 
         private readonly ILicenseService licenseService;
+        private readonly Func<IChannelLimitFactory> channelLimitFactory;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        private AddStoreWizard(ILifetimeScope scope)
+        public AddStoreWizard(ILifetimeScope scope, ILicenseService licenseService, Func<IChannelLimitFactory> channelLimitFactory)
         {
             this.scope = scope;
-            licenseService = scope.Resolve<ILicenseService>();
+            this.licenseService = licenseService;
+            this.channelLimitFactory = channelLimitFactory;
 
             InitializeComponent();
         }
@@ -100,9 +102,9 @@ namespace ShipWorks.Stores.Management
                     return false;
                 }
 
-                using (ShipWorksSetupLock wizardLock = new ShipWorksSetupLock())
-                using (ILifetimeScope scope = IoC.BeginLifetimeScope())
-                using (AddStoreWizard wizard = new AddStoreWizard(scope))
+                using (new ShipWorksSetupLock())
+                using (ILifetimeScope scope = IoC.BeginLifetimeScope(ConfigureAddStoreWizardDependencies))
+                using (AddStoreWizard wizard = scope.Resolve<AddStoreWizard>())
                 {
                     // If it was successful, make sure our local list of stores is refreshed
                     if (wizard.ShowDialog(owner) == DialogResult.OK)
@@ -120,6 +122,17 @@ namespace ShipWorks.Stores.Management
                 MessageHelper.ShowInformation(owner, "Another user is already setting up ShipWorks. This can only be done on one computer at a time.");
                 return false;
             }
+        }
+
+        /// <summary>
+        /// Configures the add store wizard dependencies.
+        /// </summary>
+        private static void ConfigureAddStoreWizardDependencies(ContainerBuilder builder)
+        {
+            builder.RegisterType<AddStoreWizard>()
+                .AsSelf()
+                .As<IWin32Window>()
+                .SingleInstance();
         }
 
         /// <summary>
@@ -1015,7 +1028,7 @@ namespace ShipWorks.Stores.Management
                 {
                     if (activateResult.Value == LicenseActivationState.MaxChannelsExceeded)
                     {
-                        IChannelLimitFactory factory = scope.Resolve<IChannelLimitFactory>();
+                        IChannelLimitFactory factory = channelLimitFactory();
                         Control channelLimitControl =
                             (Control) factory.CreateControl((ICustomerLicense) license, (StoreTypeCode) Store.TypeCode, EditionFeature.ChannelCount, this);
 

@@ -99,6 +99,44 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
         }
 
         [Fact]
+        public void Load_SetsCustomQuery_WhenPassedSerializedMapWithCustomQuery()
+        {
+            MemoryStream stream = new MemoryStream();
+            OdbcFieldMap originalMap = new OdbcFieldMap(GetIoFactory());
+            originalMap.AddEntry(GetFieldMapEntry(GetShipWorksField(OrderFields.OrderNumber, "Order Number"),
+                GetExternalField("SomeTableName", "SomeColumnName")));
+            originalMap.CustomQuery = "SELECT * FROM [ORDER]";
+            originalMap.Save(stream);
+            string mapJson = stream.ConvertToString();
+            OdbcFieldMap testObject = new OdbcFieldMap(GetIoFactory());
+
+            testObject.Load(mapJson);
+
+            stream.Dispose();
+
+            Assert.Equal("SELECT * FROM [ORDER]", testObject.CustomQuery);
+        }
+
+        [Fact]
+        public void Load_DoesNotSetCustomQuery_WhenPassedSerializedMapWithoutCustomQuery()
+        {
+            MemoryStream stream = new MemoryStream();
+            OdbcFieldMap originalMap = new OdbcFieldMap(GetIoFactory());
+            originalMap.AddEntry(GetFieldMapEntry(GetShipWorksField(OrderFields.OrderNumber, "Order Number"),
+                GetExternalField("SomeTableName", "SomeColumnName")));
+
+            originalMap.Save(stream);
+            string mapJson = stream.ConvertToString();
+            OdbcFieldMap testObject = new OdbcFieldMap(GetIoFactory());
+
+            testObject.Load(mapJson);
+
+            stream.Dispose();
+
+            Assert.Equal("", testObject.CustomQuery);
+        }
+
+        [Fact]
         public void Load_SetsEntries_WhenPassedSerializedMap()
         {
             string stream = GetStreamWithFieldMap().ConvertToString();
@@ -395,7 +433,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
 
             Assert.Empty(returnedEntries);
         }
-        
+
         [Fact]
         public void Clone_SavesToASteam()
         {
@@ -439,6 +477,8 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
             map.AddEntry(GetFieldMapEntry(GetShipWorksField(OrderFields.OrderNumber, "Order Number"),
                 GetExternalField("SomeTableName", "SomeColumnName")));
 
+            map.CustomQuery = "SELECT * FROM [ORDER]";
+
             map.Save(stream);
 
             return stream;
@@ -465,7 +505,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
 
         private ExternalOdbcMappableField GetExternalField(string tableName, string columnName)
         {
-            return new ExternalOdbcMappableField(new OdbcTable(tableName), new OdbcColumn(columnName));
+            return new ExternalOdbcMappableField(new OdbcColumnSource(tableName), new OdbcColumn(columnName));
         }
 
         private IOdbcFieldMapIOFactory GetIoFactory()
