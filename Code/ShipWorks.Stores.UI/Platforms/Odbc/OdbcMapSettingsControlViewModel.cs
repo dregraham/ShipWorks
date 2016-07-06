@@ -116,6 +116,9 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             set { handler.Set(nameof(CustomQueryColumnSource), ref customQueryColumnSource, value); }
         }
 
+        /// <summary>
+        /// The column source that will be used.
+        /// </summary>
         [Obfuscation(Exclude = true)]
         public IOdbcColumnSource ColumnSource
         {
@@ -218,6 +221,13 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
                 (int) OdbcDownloadStrategy.ByModifiedTime :
                 (int) OdbcDownloadStrategy.All;
 
+            store.OdbcColumnSourceType = IsTableSelected ?
+                (int) OdbcColumnSourceType.Table :
+                (int) OdbcColumnSourceType.CustomQuery;
+
+            store.OdbcColumnSource = IsTableSelected ?
+                SelectedTable.Name :
+                CustomQueryColumnSource.Query;
         }
 
         /// <summary>
