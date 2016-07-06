@@ -121,9 +121,6 @@
                       DisplayMemberPath="Name"
                       SelectedValue="{Binding SelectedTable}"
                       VerticalAlignment="Center">
-                <i:Interaction.Behaviors>
-                    <ui:ComboBoxSelectionChangedBehavior Command="{Binding TableChangedCommand}" />
-                </i:Interaction.Behaviors>
             </ComboBox>
         </DockPanel>
 
@@ -150,8 +147,7 @@
                  AcceptsReturn="True"
                  TextWrapping="Wrap"
                  Margin="0 5 0 5"
-                 Text="{Binding CustomQuery, UpdateSourceTrigger=LostFocus}"
-                 FocusManager.FocusedElement="{Binding RelativeSource={RelativeSource Self}}" />
+                 Text="{Binding CustomQueryColumnSource.Query, UpdateSourceTrigger=LostFocus}"/>
             <Label Grid.Row="2" Content="Query Results" HorizontalAlignment="Left" />
             <Button Grid.Row="2" Content="Execute Query" HorizontalAlignment="Right"
                 Command="{Binding ExecuteQueryCommand}" />

@@ -70,7 +70,6 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
 
         ICommand ExecuteQueryCommand { get; set; }
         DataTable QueryResults { get; set; }
-        string CustomQuery { get; set; }
         string ResultMessage { get; set; }
 
         bool IsQueryValid { get; set; }

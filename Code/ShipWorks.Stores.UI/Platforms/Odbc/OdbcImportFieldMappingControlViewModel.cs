@@ -58,6 +58,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         private const int NumberOfSampleResults = 25;
 
         private IOdbcColumnSource columnSource;
+        private IOdbcColumnSource customQueryColumnSource;
 
 
         /// <summary>
@@ -76,7 +77,6 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             log = logFactory(typeof (OdbcImportFieldMappingControlViewModel));
 
             SaveMapCommand = new RelayCommand(SaveMapToDisk,() => selectedTable != null);
-            TableChangedCommand = new RelayCommand(TableChanged);
             ExecuteQueryCommand = new RelayCommand(ExecuteQuery);
 
             Order = new OdbcFieldMapDisplay("Order", fieldMapFactory.CreateOrderFieldMap());
@@ -156,7 +156,22 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         public IOdbcColumnSource SelectedTable
         {
             get { return selectedTable; }
-            set { handler.Set(nameof(SelectedTable), ref selectedTable, value); }
+            set
+            {
+                handler.Set(nameof(SelectedTable), ref selectedTable, value);
+
+                ColumnSource = SelectedTable;
+            }
+        }
+
+        [Obfuscation(Exclude = true)]
+        public IOdbcColumnSource CustomQueryColumnSource
+        {
+            get { return customQueryColumnSource; }
+            set
+            {
+                handler.Set(nameof(CustomQueryColumnSource), ref customQueryColumnSource, value);
+            }
         }
 
         [Obfuscation(Exclude = true)]
@@ -344,9 +359,9 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             get { return isTableSelected; }
             set
             {
-                ColumnSource = value ? SelectedTable : new OdbcColumnSource(CustomQueryColumnSourceName);
-
                 handler.Set(nameof(IsTableSelected), ref isTableSelected, value);
+
+                ColumnSource = value ? SelectedTable : CustomQueryColumnSource;
             }
         }
 
@@ -370,16 +385,6 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             set
             {
                 handler.Set(nameof(QueryResults), ref queryResults, value);
-            }
-        }
-
-        [Obfuscation(Exclude = true)]
-        public string CustomQuery
-        {
-            get { return customQuery; }
-            set
-            {
-                handler.Set(nameof(CustomQuery), ref customQuery, value);
             }
         }
 
@@ -420,12 +425,12 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             MapName = string.Empty;
             IsDownloadStrategyLastModified = true;
             IsTableSelected = true;
-            CustomQuery = string.Empty;
+            CustomQueryColumnSource = new OdbcColumnSource(CustomQueryColumnSourceName);
             ColumnSource = null;
             QueryResults = null;
             ResultMessage = string.Empty;
             RecordIdentifier = null;
-            selectedTable = null;
+            SelectedTable = null;
             SelectedFieldMap = Order;
             NumberOfItemsPerOrder = 0;
             NumberOfAttributesPerItem = 0;
@@ -467,7 +472,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
                 return false;
             }
 
-            if (!IsTableSelected && string.IsNullOrWhiteSpace(CustomQuery))
+            if (!IsTableSelected && string.IsNullOrWhiteSpace(CustomQueryColumnSource.Query))
             {
                 messageHelper.ShowError("Please enter a valid query before continuing to the next page.");
                 return false;
@@ -547,44 +552,9 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
                 throw new ShipWorksOdbcException("Cannot save a map without a record identifier.");
             }
 
-            map.CustomQuery = CustomQuery;
+            map.CustomQuery = CustomQueryColumnSource.Query;
 
             return map;
-        }
-
-        /// <summary>
-        /// Fires when user changes table.
-        /// </summary>
-        private void TableChanged()
-        {
-            if (previousSelectedColumnSource == selectedTable)
-            {
-                // We set the table back.
-                return;
-            }
-
-            // If the value has changed and there was a table previously selected,
-            // see if any column has been mapped and allow user to cancel if it has been
-            if (previousSelectedColumnSource != null &&
-                (Order.Entries.Any(e => e.ExternalField?.Column != null) ||
-                Address.Entries.Any(e => e.ExternalField?.Column != null) ||
-                Items.SelectMany(item => item.Entries).Any(e => e.ExternalField?.Column != null)))
-            {
-                DialogResult questionResult = messageHelper.ShowQuestion(MessageBoxIcon.Warning,
-                    MessageBoxButtons.YesNo,
-                    "Changing the selected table will clear your current mapping selections. Do you want to continue?");
-
-                if (questionResult != DialogResult.Yes)
-                {
-                    SelectedTable = previousSelectedColumnSource;
-                    ColumnSource = SelectedTable;
-                    return;
-                }
-            }
-
-            previousSelectedColumnSource = SelectedTable;
-
-            ColumnSource = SelectedTable;
         }
 
         public void LoadColumns()
@@ -595,7 +565,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             }
             else
             {
-                ColumnSource.Load(DataSource, logFactory(typeof(OdbcColumnSource)), CustomQuery,
+                ColumnSource.Load(DataSource, logFactory(typeof(OdbcColumnSource)), CustomQueryColumnSource.Query,
                     new OdbcShipWorksDbProviderFactory());
             }
 
@@ -650,7 +620,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
 
             try
             {
-                QueryResults = sampleDataCommand.Execute(DataSource, CustomQuery, NumberOfSampleResults);
+                QueryResults = sampleDataCommand.Execute(DataSource, CustomQueryColumnSource.Query, NumberOfSampleResults);
                 if (QueryResults.Rows.Count == 0)
                 {
                     ResultMessage = "Query returned no results";
