@@ -41,7 +41,6 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         private readonly PropertyChangedHandler handler;
         public event PropertyChangedEventHandler PropertyChanged;
         private readonly ILog log;
-        private IOdbcColumnSource columnSource;
 
         private bool isSingleLineOrder = true;
         private int numberOfAttributesPerItem;
@@ -69,6 +68,11 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
 
             NumbersUpTo25 = Enumerable.Range(0, 26).ToList();
         }
+
+        /// <summary>
+        /// The column source.
+        /// </summary>
+        public IOdbcColumnSource ColumnSource { get; private set; }
 
         /// <summary>
         /// Gets or sets the order entries.
@@ -345,8 +349,8 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         {
             MethodConditions.EnsureArgumentIsNotNull(source, "ColumnSource");
 
-            columnSource = source;
-            Columns = new ObservableCollection<OdbcColumn>(columnSource.Columns);
+            ColumnSource = source;
+            Columns = new ObservableCollection<OdbcColumn>(ColumnSource.Columns);
             Columns.Insert(0, new OdbcColumn("(None)"));
 
             IOdbcFieldMapEntry lastModifiedEntry = FindEntriesBy(Order, OrderFields.OnlineLastModified).FirstOrDefault();

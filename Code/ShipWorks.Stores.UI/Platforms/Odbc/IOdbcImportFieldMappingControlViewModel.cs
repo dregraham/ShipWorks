@@ -23,5 +23,10 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// Loads the column source.
         /// </summary>
         void LoadColumnSource(IOdbcColumnSource source, OdbcDownloadStrategy downloadStrategy);
+
+        /// <summary>
+        /// The column source.
+        /// </summary>
+        IOdbcColumnSource ColumnSource { get; }
     }
 }
