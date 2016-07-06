@@ -3,8 +3,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:local="clr-namespace:ShipWorks.Stores.UI.Platforms.Odbc.WizardPages"
-             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:system="clr-namespace:System;assembly=mscorlib"
              xmlns:odbc="clr-namespace:ShipWorks.Stores.UI.Platforms.Odbc"
              mc:Ignorable="d"
@@ -16,6 +14,7 @@
     <Control.Resources>
         <Style TargetType="{x:Type Label}">
             <Setter Property="Margin" Value="0 5 0 5" />
+            <Setter Property="Padding" Value="0" />
         </Style>
         <Style TargetType="{x:Type TextBox}">
             <Setter Property="Margin" Value="0 5 0 5" />
@@ -25,6 +24,7 @@
             <Setter Property="Margin" Value="5 5 0 5" />
             <Setter Property="Padding" Value="5 2 5 2" />
             <Setter Property="Width" Value="85" />
+            <Setter Property="Height" Value="24" />
         </Style>
         <Style TargetType="{x:Type ComboBox}">
             <Setter Property="Margin" Value="0 5 0 5" />
@@ -38,7 +38,6 @@
             <Setter Property="Padding" Value="0" />
             <Setter Property="VerticalContentAlignment" Value="Center" />
         </Style>
-        <BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
         <ui:VisibleWhenEqualToParameterConverter x:Key="VisibleWhenEqualToParameterConverter" />
         <ui:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
     </Control.Resources>
@@ -67,20 +66,20 @@
                    VerticalAlignment="Center"
                    HorizontalAlignment="Right" Content="Name:"/>
             <TextBox Grid.Row="1" Grid.Column="1"
-                     Margin="0 5 0 5"
+                     Margin="5 5 0 5"
                      Text="{Binding MapName, UpdateSourceTrigger=PropertyChanged}"
                      VerticalAlignment="Center"
                      Height="24"/>
             <Button Grid.Row="1" Grid.Column="2"
-                Content="Load Map..."
-                Command="{Binding SaveMapCommand}"/>
+                Content="Load Map..."/>
 
             <Label Grid.Row="2" Grid.Column="0"
                    VerticalAlignment="Center"
                    HorizontalAlignment="Right"
                    Content="Download:"/>
 
-            <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal">
+            <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal"
+                        Margin="5 5 0 5">
                 <RadioButton GroupName="DownloadStrategy"
                              Content="Orders by last modified date"
                              IsChecked="{Binding IsDownloadStrategyLastModified, UpdateSourceTrigger=PropertyChanged}" />
@@ -93,7 +92,8 @@
                    HorizontalAlignment="Right"
                    Content="Column Source:"/>
 
-            <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal">
+            <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal"
+                        Margin="5 5 0 5">
                 <RadioButton GroupName="ColumnSource"
                              Content="Table"
                              IsChecked="{Binding IsTableSelected, UpdateSourceTrigger=PropertyChanged}" />
@@ -121,7 +121,8 @@
             <ComboBox ItemsSource="{Binding ColumnSources, UpdateSourceTrigger=PropertyChanged}"
                       DisplayMemberPath="Name"
                       SelectedValue="{Binding SelectedTable}"
-                      VerticalAlignment="Center">
+                      VerticalAlignment="Center"
+                      Margin="5 5 0 5">
             </ComboBox>
         </DockPanel>
 
@@ -149,7 +150,8 @@
                  TextWrapping="Wrap"
                  Margin="0 5 0 5"
                  Text="{Binding CustomQuery, UpdateSourceTrigger=LostFocus}"/>
-            <Label Grid.Row="2" Content="Query Results" HorizontalAlignment="Left" />
+            <Label Grid.Row="2" Content="Query Results" HorizontalAlignment="Left"
+                   VerticalAlignment="Center"/>
             <Button Grid.Row="2" Content="Execute Query" HorizontalAlignment="Right"
                 Command="{Binding ExecuteQueryCommand}" />
             <Grid Grid.Row="3" Margin="0 5 0 0">

@@ -38,6 +38,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         private IOdbcColumnSource customQueryColumnSource;
         private readonly ILog log;
         private readonly IMessageHelper messageHelper;
+        private readonly Func<string, IDialog> dialogFactory;
         private bool isQueryValid;
 
         private readonly PropertyChangedHandler handler;
@@ -48,11 +49,12 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// Initializes a new instance of the <see cref="OdbcMapSettingsControlViewModel"/> class.
         /// </summary>
         public OdbcMapSettingsControlViewModel(IOdbcSchema schema, IOdbcSampleDataCommand sampleDataCommand, Func<Type, ILog> logFactory,
-            IMessageHelper messageHelper)
+            IMessageHelper messageHelper, Func<string, IDialog> dialogFactory)
         {
             this.schema = schema;
             this.sampleDataCommand = sampleDataCommand;
             this.messageHelper = messageHelper;
+            this.dialogFactory = dialogFactory;
             ExecuteQueryCommand = new RelayCommand(ExecuteQuery);
             customQueryColumnSource = new OdbcColumnSource(CustomQueryColumnSourceName);
             log = logFactory(typeof(OdbcImportFieldMappingControlViewModel));
@@ -164,6 +166,13 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             set
             {
                 handler.Set(nameof(IsTableSelected), ref isTableSelected, value);
+
+                // Show warning dlg when query is selected
+                if (!value)
+                {
+                    IDialog warningDlg = dialogFactory("OdbcCustomQueryWarningDlg");
+                    warningDlg.ShowDialog();
+                }
 
                 ColumnSource = value ? SelectedTable : CustomQueryColumnSource;
             }
