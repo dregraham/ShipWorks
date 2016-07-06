@@ -248,7 +248,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
                     attributeNumber =>
                         new OdbcFieldMapEntry(
                             new ShipWorksOdbcMappableField(OrderItemAttributeFields.Name,
-                                $"Attribute {attributeNumber}"), new ExternalOdbcMappableField(null, null),itemIndex));
+                                $"Attribute {attributeNumber}"), new ExternalOdbcMappableField(null),itemIndex));
         }
 
         /// <summary>
@@ -317,14 +317,6 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             mapEntries.AddRange(Items.SelectMany(item => item.Entries));
 
             OdbcFieldMap map = fieldMapFactory.CreateFieldMapFrom(mapEntries);
-
-            if (string.IsNullOrWhiteSpace(columnSource.Query))
-            {
-                map.Entries.ToList().ForEach(e =>
-                {
-                    e.ExternalField.Table = columnSource;
-                });
-            }
 
             if (!IsSingleLineOrder)
             {

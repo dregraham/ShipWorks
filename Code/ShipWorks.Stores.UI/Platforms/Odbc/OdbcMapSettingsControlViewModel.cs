@@ -41,6 +41,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         private bool isQueryValid;
 
         private readonly PropertyChangedHandler handler;
+        private string customQuery;
         public event PropertyChangedEventHandler PropertyChanged;
 
         /// <summary>
@@ -141,6 +142,19 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         }
 
         /// <summary>
+        /// the custom query
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public string CustomQuery
+        {
+            get { return customQuery; }
+            set
+            {
+                handler.Set(nameof(CustomQuery), ref customQuery, value);
+            }
+        }
+
+        /// <summary>
         /// Whether the column source selected is table
         /// </summary>
         [Obfuscation(Exclude = true)]
@@ -226,7 +240,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
 
             store.OdbcColumnSource = IsTableSelected ?
                 SelectedTable.Name :
-                CustomQueryColumnSource.Query;
+                CustomQuery;
         }
 
         /// <summary>
@@ -240,7 +254,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
                 return false;
             }
 
-            if (!IsTableSelected && string.IsNullOrWhiteSpace(CustomQueryColumnSource.Query))
+            if (!IsTableSelected && string.IsNullOrWhiteSpace(CustomQuery))
             {
                 messageHelper.ShowError("Please enter a valid query before continuing to the next page.");
                 return false;
@@ -270,7 +284,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
 
             try
             {
-                QueryResults = sampleDataCommand.Execute(DataSource, CustomQueryColumnSource.Query, NumberOfSampleResults);
+                QueryResults = sampleDataCommand.Execute(DataSource, CustomQuery, NumberOfSampleResults);
 
                 if (QueryResults.Rows.Count == 0)
                 {

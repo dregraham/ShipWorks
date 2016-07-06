@@ -99,9 +99,6 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             builder.RegisterType<OdbcSampleDataCommand>()
                 .AsImplementedInterfaces();
 
-            builder.RegisterType<OdbcCustomQueryDlgViewModel>()
-                .AsImplementedInterfaces();
-
             builder.RegisterType<OdbcCustomQueryDlg>()
                 .Named<IDialog>("OdbcCustomQueryDlg");
 

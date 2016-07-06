@@ -148,7 +148,7 @@
                  AcceptsReturn="True"
                  TextWrapping="Wrap"
                  Margin="0 5 0 5"
-                 Text="{Binding CustomQueryColumnSource.Query, UpdateSourceTrigger=LostFocus}"/>
+                 Text="{Binding CustomQuery, UpdateSourceTrigger=LostFocus}"/>
             <Label Grid.Row="2" Content="Query Results" HorizontalAlignment="Left" />
             <Button Grid.Row="2" Content="Execute Query" HorizontalAlignment="Right"
                 Command="{Binding ExecuteQueryCommand}" />

@@ -59,7 +59,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
             dataSource.Restore(store.ConnectionString);
 
             return store.OdbcColumnSourceType == (int) OdbcColumnSourceType.Table
-                ? (IOdbcDownloadQuery)new TableOdbcDownloadQuery(dbProviderFactory, odbcFieldMap, dataSource)
+                ? (IOdbcDownloadQuery)new TableOdbcDownloadQuery(store, dbProviderFactory, odbcFieldMap, dataSource)
                 : new CustomQueryOdbcDownloadQuery(store);
         }
     }

@@ -68,10 +68,5 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// Make a copy of the IOdbcFieldMap
         /// </summary>
         IOdbcFieldMap Clone();
-
-        /// <summary>
-        /// Gets the name of the external table.
-        /// </summary>
-        string GetExternalTableName();
     }
 }

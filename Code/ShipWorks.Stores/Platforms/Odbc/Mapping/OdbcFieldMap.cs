@@ -176,13 +176,5 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
                 return clonedFieldMap;
             }
         }
-
-        /// <summary>
-        /// Gets the name of the external table.
-        /// </summary>
-        public string GetExternalTableName()
-        {
-            return Entries.FirstOrDefault()?.ExternalField.Table.Name ?? string.Empty;
-        }
     }
 }

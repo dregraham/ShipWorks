@@ -30,10 +30,5 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataSource.Schema
         /// Loads the columns for the column source
         /// </summary>
         void Load(IOdbcDataSource dataSource, ILog log, string query, IShipWorksDbProviderFactory dbProviderFactory);
-
-        /// <summary>
-        /// Gets or sets the query.
-        /// </summary>
-        string Query { get; set; }
     }
 }

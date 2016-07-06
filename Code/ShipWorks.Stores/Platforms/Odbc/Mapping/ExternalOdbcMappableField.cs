@@ -14,26 +14,10 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <summary>
         /// Constructor
         /// </summary>
-	    public ExternalOdbcMappableField(IOdbcColumnSource table, OdbcColumn column)
+	    public ExternalOdbcMappableField(OdbcColumn column)
 	    {
-	        Table = table;
 	        Column = column;
 	    }
-
-        /// <summary>
-        /// Constructor - used by NewtonSoft deserialization
-        /// </summary>
-        [JsonConstructor]
-        public ExternalOdbcMappableField(OdbcColumnSource table, OdbcColumn column)
-        {
-            Table = table;
-            Column = column;
-        }
-
-        /// <summary>
-        /// The External Table
-        /// </summary>
-        public IOdbcColumnSource Table { get; set; }
 
         /// <summary>
         /// The External Column
@@ -50,13 +34,13 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// The fields display name
         /// </summary>
         [JsonIgnore]
-        public string DisplayName => $"{Table.Name} {Column.Name}";
+        public string DisplayName => $"{Column.Name}";
 
         /// <summary>
         /// The fields Qualified Name in the format Table.Column
         /// </summary>
         [JsonIgnore]
-	    public string QualifiedName => $"{Table.Name}.{Column.Name}";
+	    public string QualifiedName => $"{Column.Name}";
 
         /// <summary>
         /// Loads the given record
