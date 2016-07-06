@@ -40,6 +40,7 @@
         </Style>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
         <ui:VisibleWhenEqualToParameterConverter x:Key="VisibleWhenEqualToParameterConverter" />
+        <ui:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
     </Control.Resources>
     <Grid Margin="10">
         <Grid.RowDefinitions>
@@ -102,7 +103,7 @@
         </Grid>
 
         <DockPanel Grid.Row="1"
-                   d:IsHidden="false"
+                   d:IsHidden="true"
                    VerticalAlignment="Top">
             <DockPanel.Visibility>
                 <Binding Path="IsTableSelected"
@@ -125,7 +126,7 @@
         </DockPanel>
 
         <Grid Grid.Row="1"
-              d:IsHidden="true">
+              d:IsHidden="false">
             <Grid.Visibility>
                 <Binding Path="IsTableSelected"
                          Converter="{StaticResource VisibleWhenEqualToParameterConverter}">
@@ -151,15 +152,18 @@
             <Label Grid.Row="2" Content="Query Results" HorizontalAlignment="Left" />
             <Button Grid.Row="2" Content="Execute Query" HorizontalAlignment="Right"
                 Command="{Binding ExecuteQueryCommand}" />
-            <Grid Grid.Row="3" Margin="0 5 0 0" Background="White">
+            <Grid Grid.Row="3" Margin="0 5 0 0">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
+
                 <DataGrid Grid.Row="0" ItemsSource="{Binding QueryResults, UpdateSourceTrigger=PropertyChanged}"
                   IsReadOnly="True" />
-                <Label Grid.Row="0"
-                   Content="{Binding ResultMessage, UpdateSourceTrigger=PropertyChanged}" />
+                <Label Grid.Row="1"
+                   Content="{Binding ResultMessage, UpdateSourceTrigger=PropertyChanged}"
+                       Visibility="{Binding ResultMessage, Converter={StaticResource StringToVisibilityConverter}}">
+                </Label>
             </Grid>
         </Grid>
 

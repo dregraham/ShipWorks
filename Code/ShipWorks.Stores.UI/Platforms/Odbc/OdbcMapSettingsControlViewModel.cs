@@ -9,13 +9,18 @@ using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.Core.UI;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Stores.Platforms.Odbc.DataAccess;
 using ShipWorks.Stores.Platforms.Odbc.DataSource;
 using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
+using ShipWorks.Stores.Platforms.Odbc.Download;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc
 {
+    /// <summary>
+    /// ViewModel for OdbcMapSettingsControl
+    /// </summary>
     public class OdbcMapSettingsControlViewModel : IOdbcMapSettingsControlViewModel, INotifyPropertyChanged
     {
         private const string CustomQueryColumnSourceName = "Custom Import";
@@ -33,10 +38,14 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         private IOdbcColumnSource customQueryColumnSource;
         private readonly ILog log;
         private readonly IMessageHelper messageHelper;
+        private bool isQueryValid;
 
         private readonly PropertyChangedHandler handler;
         public event PropertyChangedEventHandler PropertyChanged;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="OdbcMapSettingsControlViewModel"/> class.
+        /// </summary>
         public OdbcMapSettingsControlViewModel(IOdbcSchema schema, IOdbcSampleDataCommand sampleDataCommand, Func<Type, ILog> logFactory,
             IMessageHelper messageHelper)
         {
@@ -72,7 +81,6 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             set { handler.Set(nameof(MapName), ref mapName, value); }
         }
 
-
         /// <summary>
         /// The external odbc tables.
         /// </summary>
@@ -98,6 +106,9 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             }
         }
 
+        /// <summary>
+        /// The custom query column source.
+        /// </summary>
         [Obfuscation(Exclude = true)]
         public IOdbcColumnSource CustomQueryColumnSource
         {
@@ -126,7 +137,6 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             }
         }
 
-
         /// <summary>
         /// Whether the column source selected is table
         /// </summary>
@@ -152,9 +162,15 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             set { handler.Set(nameof(IsDownloadStrategyLastModified), ref isDownloadStrategyLastModified, value); }
         }
 
+        /// <summary>
+        /// Command that executes the query
+        /// </summary>
         [Obfuscation(Exclude = true)]
         public ICommand ExecuteQueryCommand { get; set; }
 
+        /// <summary>
+        /// The query results.
+        /// </summary>
         [Obfuscation(Exclude = true)]
         public DataTable QueryResults
         {
@@ -162,15 +178,15 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             set { handler.Set(nameof(QueryResults), ref queryResults, value); }
         }
 
+        /// <summary>
+        /// Message to indicate failed query execution or no results
+        /// </summary>
         [Obfuscation(Exclude = true)]
         public string ResultMessage
         {
             get { return resultMessage; }
             set { handler.Set(nameof(ResultMessage), ref resultMessage, value); }
         }
-
-        public bool IsQueryValid { get; set; }
-
 
         /// <summary>
         /// Loads the external odbc tables.
@@ -192,6 +208,21 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             }
         }
 
+        /// <summary>
+        /// Saves the map settings.
+        /// </summary>
+        /// <param name="store">The store.</param>
+        public void SaveMapSettings(OdbcStoreEntity store)
+        {
+            store.OdbcDownloadStrategy = IsDownloadStrategyLastModified ?
+                (int) OdbcDownloadStrategy.ByModifiedTime :
+                (int) OdbcDownloadStrategy.All;
+
+        }
+
+        /// <summary>
+        /// Validates the required map settings.
+        /// </summary>
         public bool ValidateRequiredMapSettings()
         {
             if (IsTableSelected && SelectedTable == null)
@@ -210,7 +241,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             {
                 ExecuteQuery();
 
-                if (!IsQueryValid)
+                if (!isQueryValid)
                 {
                     messageHelper.ShowError("Please enter a valid query before continuing to the next page.");
                     return false;
@@ -231,19 +262,20 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             try
             {
                 QueryResults = sampleDataCommand.Execute(DataSource, CustomQueryColumnSource.Query, NumberOfSampleResults);
+
                 if (QueryResults.Rows.Count == 0)
                 {
                     ResultMessage = "Query returned no results";
                 }
-                IsQueryValid = true;
+
+                isQueryValid = true;
             }
             catch (ShipWorksOdbcException ex)
             {
                 log.Error(ex.Message);
                 messageHelper.ShowError(ex.Message);
-                IsQueryValid = false;
+                isQueryValid = false;
             }
         }
-
     }
 }
