@@ -49,7 +49,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// Initializes a new instance of the <see cref="OdbcMapSettingsControlViewModel"/> class.
         /// </summary>
         public OdbcMapSettingsControlViewModel(IOdbcSchema schema, IOdbcSampleDataCommand sampleDataCommand, Func<Type, ILog> logFactory,
-            IMessageHelper messageHelper, Func<string, IDialog> dialogFactory, IOdbcColumnSource> columnSourceFactory)
+            IMessageHelper messageHelper, Func<string, IDialog> dialogFactory, Func<string, IOdbcColumnSource> columnSourceFactory)
         {
             this.schema = schema;
             this.sampleDataCommand = sampleDataCommand;
