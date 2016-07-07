@@ -28,7 +28,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
 
             if (store.OdbcColumnSourceType != (int) OdbcColumnSourceType.Table)
             {
-                throw new ShipWorksOdbcException("None table column source passed to table query.");
+                throw new ShipWorksOdbcException("An incompatible source was provided to perform an ODBC table based query.");
             }
         }
 
