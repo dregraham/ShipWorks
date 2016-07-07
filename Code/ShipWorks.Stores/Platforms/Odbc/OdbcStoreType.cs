@@ -103,6 +103,14 @@ namespace ShipWorks.Stores.Platforms.Odbc
             return base.GridOnlineColumnSupported(column);
         }
 
-        public override InitialDownloadPolicy InitialDownloadPolicy => new InitialDownloadPolicy(InitialDownloadRestrictionType.DaysBack);
+        public override InitialDownloadPolicy InitialDownloadPolicy
+        {
+            get
+            {
+                return ((OdbcStoreEntity) Store).OdbcDownloadStrategy == (int) OdbcDownloadStrategy.ByModifiedTime
+                    ? new InitialDownloadPolicy(InitialDownloadRestrictionType.DaysBack) { DefaultDaysBack = 30, MaxDaysBack = 30}
+                    : new InitialDownloadPolicy(InitialDownloadRestrictionType.None);
+            }
+        }
     }
 }
