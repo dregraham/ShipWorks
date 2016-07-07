@@ -104,7 +104,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
                 var mapFactory = mock.Create<OdbcFieldMapFactory>();
                 var testObject = mock.Create<OdbcImportFieldMappingControlViewModel>(new TypedParameter(typeof(IOdbcFieldMapFactory), mapFactory));
 
-                Assert.Throws<ArgumentNullException>(() => testObject.LoadColumnSource(null, OdbcDownloadStrategy.All));
+                Assert.Throws<ArgumentNullException>(() => testObject.LoadColumnSource(null));
             }
         }
 
