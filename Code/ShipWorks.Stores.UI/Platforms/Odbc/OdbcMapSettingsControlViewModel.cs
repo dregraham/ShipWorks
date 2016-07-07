@@ -80,7 +80,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             {
                 if (string.IsNullOrWhiteSpace(mapName))
                 {
-                    mapName = ColumnSource == null ? DataSource.Name : $"{DataSource.Name}";
+                    mapName = ColumnSource == null ? DataSource.Name : $"{DataSource.Name} - {ColumnSource.Name}";
                 }
 
                 return mapName;
@@ -138,9 +138,9 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
                 // the map name is changed to "DataSourceName - SelectedColumnName"
                 if (MapName != null && DataSource.Name != null &&
                     (MapName.Equals(DataSource.Name, StringComparison.InvariantCulture) ||
-                    MapName.Equals($"{DataSource.Name}", StringComparison.InvariantCulture)))
+                     MapName.Equals($"{DataSource.Name} - {ColumnSource.Name}", StringComparison.InvariantCulture)))
                 {
-                    MapName = $"{DataSource.Name}";
+                    MapName = value == null ? $"{DataSource.Name}" : $"{DataSource.Name} - {value.Name}";
                 }
 
                 handler.Set(nameof(ColumnSource), ref columnSource, value);
