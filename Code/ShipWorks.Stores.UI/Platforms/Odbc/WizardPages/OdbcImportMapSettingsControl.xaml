@@ -53,7 +53,6 @@
                 <RowDefinition Height="Auto"></RowDefinition>
                 <RowDefinition Height="Auto"></RowDefinition>
                 <RowDefinition Height="Auto"></RowDefinition>
-                <RowDefinition Height="Auto"></RowDefinition>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="90"></ColumnDefinition>
@@ -84,14 +83,17 @@
                 <RadioButton GroupName="DownloadStrategy"
                              Content="Orders by last modified date"
                              IsChecked="{Binding DownloadStrategyIsLastModified, UpdateSourceTrigger=PropertyChanged}" />
+                <RadioButton GroupName="DownloadStrategy"
+                             Content="All orders"/>
             </StackPanel>
 
-            <Label Grid.Row="4" Grid.Column="0"
+
+            <Label Grid.Row="3" Grid.Column="0"
                    VerticalAlignment="Center"
                    HorizontalAlignment="Right"
                    Content="Column Source:"/>
 
-            <StackPanel Grid.Row="4" Grid.Column="1" Orientation="Horizontal"
+            <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal"
                         Margin="5 5 0 5">
                 <RadioButton GroupName="ColumnSource"
                              Content="Table"
