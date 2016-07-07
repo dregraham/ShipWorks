@@ -38,7 +38,7 @@ namespace ShipWorks.Shipping.Tests.Services
             messenger = new TestMessenger();
             mock.Provide<IMessenger>(messenger);
 
-            mock.Mock<IShipmentsLoader>()
+            mock.Override<IShipmentsLoader>()
                 .Setup(x => x.LoadAsync(It.IsAny<IEnumerable<long>>()))
                 .ReturnsAsync(new ShipmentsLoadedEventArgs(null, false, null, new[] { shipment }.ToList()));
 

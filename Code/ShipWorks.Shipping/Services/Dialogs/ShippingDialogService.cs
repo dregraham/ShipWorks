@@ -7,6 +7,7 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Autofac;
+using Autofac.Features.OwnedInstances;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.UI;
@@ -38,19 +39,20 @@ namespace ShipWorks.Shipping.Services.Dialogs
         private readonly IMessageHelper messageHelper;
         private readonly ISchedulerProvider schedulerProvider;
         private readonly IShippingManager shippingManager;
-        private readonly IShipmentsLoader shipmentsLoader;
+        private readonly Func<Owned<IShipmentsLoader>> shipmentsLoaderFactory;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public ShippingDialogService(IMessenger messenger, IMessageHelper messageHelper,
-            ISchedulerProvider schedulerProvider, IShippingManager shippingManager, IShipmentsLoader shipmentsLoader)
+            ISchedulerProvider schedulerProvider, IShippingManager shippingManager,
+            Func<Owned<IShipmentsLoader>> shipmentsLoaderFactory)
         {
             this.messenger = messenger;
             this.messageHelper = messageHelper;
             this.schedulerProvider = schedulerProvider;
             this.shippingManager = shippingManager;
-            this.shipmentsLoader = shipmentsLoader;
+            this.shipmentsLoaderFactory = shipmentsLoaderFactory;
         }
 
         /// <summary>
@@ -123,6 +125,7 @@ namespace ShipWorks.Shipping.Services.Dialogs
                 return;
             }
 
+            IShipmentsLoader shipmentsLoader = shipmentsLoaderFactory().Value;
             ShipmentsLoadedEventArgs results = await shipmentsLoader.LoadAsync(message.OrderIDs).ConfigureAwait(false);
 
             if (results.Cancelled)

@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
+using Autofac.Features.OwnedInstances;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Threading;
 using log4net;
@@ -21,7 +22,7 @@ namespace ShipWorks.Shipping.Services
     /// </summary>
     public class ShipmentLoaderService : IInitializeForCurrentUISession
     {
-        private readonly IShipmentsLoader shipmentLoader;
+        private readonly Func<Owned<IShipmentsLoader>> shipmentLoaderFactory;
         private readonly IMessenger messenger;
         private readonly ISchedulerProvider schedulerProvider;
         private readonly ICarrierShipmentAdapterFactory carrierShipmentAdapterFactory;
@@ -32,11 +33,11 @@ namespace ShipWorks.Shipping.Services
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShipmentLoaderService(IShipmentsLoader shipmentLoader, IMessenger messenger,
+        public ShipmentLoaderService(Func<Owned<IShipmentsLoader>> shipmentLoaderFactory, IMessenger messenger,
             ISchedulerProvider schedulerProvider, ICarrierShipmentAdapterFactory carrierShipmentAdapterFactory,
             IStoreTypeManager storeTypeManager, Func<Type, ILog> logFactory)
         {
-            this.shipmentLoader = shipmentLoader;
+            this.shipmentLoaderFactory = shipmentLoaderFactory;
             this.messenger = messenger;
             this.schedulerProvider = schedulerProvider;
             this.carrierShipmentAdapterFactory = carrierShipmentAdapterFactory;
@@ -54,6 +55,7 @@ namespace ShipWorks.Shipping.Services
                 return orderIDs.Select(x => new BasicOrderSelection(x)).Cast<IOrderSelection>().ToArray();
             }
 
+            IShipmentsLoader shipmentLoader = shipmentLoaderFactory().Value;
             ShipmentsLoadedEventArgs results = await shipmentLoader.LoadAsync(orderIDs).ConfigureAwait(false);
 
             OrderEntity order = results.Shipments.FirstOrDefault()?.Order;

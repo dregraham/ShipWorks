@@ -2,12 +2,9 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Autofac.Extras.Moq;
-using Moq;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Configuration;
 using ShipWorks.Shipping.Loading;
 using ShipWorks.Startup;
-using ShipWorks.Tests.Shared;
 using ShipWorks.Tests.Shared.Database;
 using ShipWorks.Tests.Shared.EntityBuilders;
 using Xunit;
@@ -42,7 +39,15 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         [Fact]
         public async Task Load_ReturnsEmptyShipmentCollection_WhenOrderHasNoShipments()
         {
-            var results = await testObject.LoadAsync(new[] { order.OrderID });
+            var newOrder = Create.Order(context.Store, context.Customer)
+                .WithOrderNumber(12345)
+                .WithItem()
+                .WithItem()
+                .Save();
+
+            context.UpdateShippingSetting(x => x.AutoCreateShipments = false);
+
+            var results = await testObject.LoadAsync(new[] { newOrder.OrderID });
 
             Assert.Empty(results.Shipments);
         }
@@ -64,9 +69,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         {
             OrderEntity testOrder = Create.Order(order.Store, order.Customer).Save();
 
-            mock.Override<IShippingConfiguration>()
-                .Setup(x => x.ShouldAutoCreateShipment(It.IsAny<OrderEntity>()))
-                .Returns(true);
+            context.UpdateShippingSetting(x => x.AutoCreateShipments = true);
 
             var results = await mock.Create<ShipmentsLoader>().LoadAsync(new[] { testOrder.OrderID });
 

@@ -22,7 +22,6 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Filters;
 using ShipWorks.Stores;
 using ShipWorks.Stores.Content;
-using ShipWorks.Users;
 using ShipWorks.Users.Security;
 
 namespace ShipWorks.Shipping.Loading
@@ -42,19 +41,21 @@ namespace ShipWorks.Shipping.Loading
         private readonly IOrderManager orderManager;
         private readonly IStoreManager storeManager;
         private readonly Func<IWin32Window> ownerCreator;
+        private readonly IMessageHelper messageHelper;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public ShipmentsLoader(IShipmentFactory shipmentFactory,
             IOrderManager orderManager, IStoreManager storeManager, Func<IWin32Window> ownerCreator,
-            IMessageHelper messageHelper)
+            IMessageHelper messageHelper, ISecurityContext securityContext)
         {
             this.shipmentFactory = shipmentFactory;
             this.orderManager = orderManager;
             this.storeManager = storeManager;
             this.ownerCreator = ownerCreator;
             this.messageHelper = messageHelper;
+            this.securityContext = securityContext;
 
             globalShipments = new Dictionary<long, ShipmentEntity>();
             shipmentsToValidate = new BlockingCollection<ShipmentEntity>();
@@ -91,7 +92,10 @@ namespace ShipWorks.Shipping.Loading
                 progressDlg.Title = "Load Shipments";
                 progressDlg.Description = "ShipWorks is loading shipments for the selected orders.";
 
-                messageHelper.ExecuteOnUIThread(owner => progressDlg.Show(owner));
+                if (entityIDsOriginalSort.Count > 1)
+                {
+                    messageHelper.ExecuteOnUIThread(owner => progressDlg.Show(owner));
+                }
 
                 Task loadShipmentsTask = TaskEx.Run(() => LoadShipmentsInternal(workProgress, entityIDsOriginalSort));
                 Task validateTask = shouldValidate ? CreateValidationTask(progressProvider, count) : TaskUtility.CompletedTask;
@@ -180,7 +184,7 @@ namespace ShipWorks.Shipping.Loading
                         // Execute the work
                         try
                         {
-                            if (UserSession.Security.HasPermission(PermissionType.ShipmentsCreateEditProcess, order.OrderID))
+                            if (securityContext.HasPermission(PermissionType.ShipmentsCreateEditProcess, order.OrderID))
                             {
                                 shipmentFactory.AutoCreateIfNecessary(order);
                             }
@@ -400,6 +404,6 @@ namespace ShipWorks.Shipping.Loading
 
             return prefetchPath;
         });
-        private readonly IMessageHelper messageHelper;
+        private readonly ISecurityContext securityContext;
     }
 }
