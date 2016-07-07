@@ -487,6 +487,11 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// </summary>
         public override void ConfigureNewShipment(ShipmentEntity shipment)
         {
+            if (shipment.BestRate == null)
+            {
+                shipment.BestRate = new BestRateShipmentEntity(shipment.ShipmentID);
+            }
+
             base.ConfigureNewShipment(shipment);
 
             shipment.BestRate.InsuranceValue = 0;

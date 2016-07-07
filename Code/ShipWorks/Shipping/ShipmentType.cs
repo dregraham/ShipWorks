@@ -524,7 +524,6 @@ namespace ShipWorks.Shipping
             shipment.ActualLabelFormat = null;
             shipment.ShipSenseStatus = (int) ShipSenseStatus.NotApplied;
             shipment.BilledType = 0;
-            shipment.BilledWeight = 0;
 
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
@@ -532,6 +531,11 @@ namespace ShipWorks.Shipping
 
                 // First apply the base profile
                 ApplyProfile(shipment, shippingProfileManager.GetOrCreatePrimaryProfile(this));
+
+                // ApplyShipSense will call CustomsManager.LoadCustomsItems which will save the shipment to the database,
+                // but we want to defer that as long as possible, so call GenerateCustomsItems here so that when
+                // LoadCustomsItems is called, saving will be skipped.
+                CustomsManager.GenerateCustomsItems(shipment);
 
                 // Now apply ShipSense
                 ApplyShipSense(shipment);
@@ -546,6 +550,14 @@ namespace ShipWorks.Shipping
                     {
                         ApplyProfile(shipment, profile);
                     }
+                }
+
+                // This was brought in from LoadShipmentData.  Since we are no longer using that method for creating a new shipment,
+                // we still needed to do this logic.
+                IShipmentProcessingSynchronizer shipmentProcessingSynchronizer = GetProcessingSynchronizer(lifetimeScope);
+                if (shipmentProcessingSynchronizer != null)
+                {
+                    shipmentProcessingSynchronizer.ReplaceInvalidAccount(shipment);
                 }
             }
         }
@@ -774,7 +786,8 @@ namespace ShipWorks.Shipping
                     // We need to use a temporary address so that we only do a single update on the destination address
                     // This is necessary because the source has a null parsed name which causes the destination to
                     // look dirty even if we end up setting the ParsedName to what it originally was.
-                    StoreEntity store = lifetimeScope.Resolve<IStoreManager>().GetRelatedStore(shipment);
+                    StoreEntity store = shipment.Order?.Store ?? lifetimeScope.Resolve<IStoreManager>().GetRelatedStore(shipment.OrderID);
+
                     PersonAdapter storeCopy = new PersonAdapter();
                     PersonAdapter.Copy(store, string.Empty, storeCopy);
                     storeCopy.ParsedName = PersonName.Parse(store.StoreName);

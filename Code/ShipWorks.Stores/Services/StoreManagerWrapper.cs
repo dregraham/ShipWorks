@@ -50,7 +50,7 @@ namespace ShipWorks.Stores.Services
         /// <summary>
         /// Get the store for the related entity
         /// </summary>
-        public StoreEntity GetRelatedStore(long orderId) => StoreManager.GetRelatedStore(orderId);
+        public StoreEntity GetRelatedStore(long entityId) => StoreManager.GetRelatedStore(entityId);
 
         /// <summary>
         /// Get the store for the shipment

@@ -73,7 +73,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
 
             sqlAdapterRetry.ExecuteWithRetry(() =>
             {
-                shipment = ShippingManager.CreateShipment(order, lifetimeScope);
+                shipment = ShippingManager.CreateShipment(order);
             });
 
             return shipment;
@@ -139,7 +139,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
 
             Assert.Equal(6.25, shipment.ContentWeight);
             Assert.Equal(6.25, shipment.TotalWeight);
-            Assert.Equal(6.25, shipment.BilledWeight);
+            Assert.Equal(0, shipment.BilledWeight);
         }
 
         [Fact]

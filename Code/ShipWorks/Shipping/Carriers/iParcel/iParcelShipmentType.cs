@@ -74,6 +74,11 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// </summary>
         public override void ConfigureNewShipment(ShipmentEntity shipment)
         {
+            if (shipment.IParcel == null)
+            {
+                shipment.IParcel = new IParcelShipmentEntity(shipment.ShipmentID);
+            }
+
             IParcelShipmentEntity iParcelShipmentEntity = shipment.IParcel;
 
             iParcelShipmentEntity.Reference = string.Empty;

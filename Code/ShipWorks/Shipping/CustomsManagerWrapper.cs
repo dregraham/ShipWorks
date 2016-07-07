@@ -38,6 +38,17 @@ namespace ShipWorks.Shipping
             CustomsManager.LoadCustomsItems(shipment, reloadIfPresent, adapter);
 
         /// <summary>
+        /// Generate customs for a shipment.  If the shipment is processed, or doesn't require customs,
+        /// or customs have already been generated, nothing will be done.
+        /// 
+        /// Customs items are not persisted to the database, as that is the caller's responsibility.
+        /// </summary>
+        public void GenerateCustomsItems(ShipmentEntity shipment)
+        {
+            CustomsManager.GenerateCustomsItems(shipment);
+        }
+
+        /// <summary>
         /// Ensure customs items are loaded if the address or shipment type has changed
         /// </summary>
         public IDictionary<ShipmentEntity, Exception> EnsureCustomsLoaded(IEnumerable<ShipmentEntity> shipments)

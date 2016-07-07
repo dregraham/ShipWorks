@@ -136,6 +136,76 @@ namespace ShipWorks.Core.Tests.Integration.Shipping
         [Fact]
         public void LoadCustomsItems_SavesCustomsItems_FromOrderItems()
         {
+            ModifyOrderToHaveCustoms();
+
+            using (SqlAdapter transactedAdapter = new SqlAdapter(true))
+            {
+                CustomsManager.LoadCustomsItems(shipment, false, transactedAdapter);
+                transactedAdapter.Commit();
+            }
+
+            Assert.Equal(true, shipment.CustomsGenerated);
+
+            var predicate = new RelationPredicateBucket(ShipmentCustomsItemFields.ShipmentID == shipment.ShipmentID);
+            using (EntityCollection<ShipmentCustomsItemEntity> customs = new EntityCollection<ShipmentCustomsItemEntity>())
+            {
+                adapter.FetchEntityCollection(customs, predicate);
+
+                Assert.Equal(2, customs.Count);
+
+                Assert.Equal("US", customs[0].CountryOfOrigin);
+                Assert.Equal("Foo", customs[0].Description);
+                Assert.Equal(3, customs[0].Quantity);
+                Assert.Equal(2.5, customs[0].Weight);
+                Assert.Equal(5.62M, customs[0].UnitValue);
+
+                Assert.Equal("US", customs[1].CountryOfOrigin);
+                Assert.Equal("Bar", customs[1].Description);
+                Assert.Equal(2, customs[1].Quantity);
+                Assert.Equal(0.6, customs[1].Weight);
+                Assert.Equal(12.61M, customs[1].UnitValue);
+            }
+        }
+
+        [Fact]
+        public void GenerateCustomsItems_SavesCustomsItems_FromOrderItems()
+        {
+            ModifyOrderToHaveCustoms();
+
+            using (SqlAdapter transactedAdapter = new SqlAdapter(true))
+            {
+                CustomsManager.GenerateCustomsItems(shipment);
+
+                transactedAdapter.SaveAndRefetch(shipment);
+
+                transactedAdapter.Commit();
+            }
+
+            Assert.Equal(true, shipment.CustomsGenerated);
+
+            var predicate = new RelationPredicateBucket(ShipmentCustomsItemFields.ShipmentID == shipment.ShipmentID);
+            using (EntityCollection<ShipmentCustomsItemEntity> customs = new EntityCollection<ShipmentCustomsItemEntity>())
+            {
+                adapter.FetchEntityCollection(customs, predicate);
+
+                Assert.Equal(2, customs.Count);
+
+                Assert.Equal("US", customs[0].CountryOfOrigin);
+                Assert.Equal("Foo", customs[0].Description);
+                Assert.Equal(3, customs[0].Quantity);
+                Assert.Equal(2.5, customs[0].Weight);
+                Assert.Equal(5.62M, customs[0].UnitValue);
+
+                Assert.Equal("US", customs[1].CountryOfOrigin);
+                Assert.Equal("Bar", customs[1].Description);
+                Assert.Equal(2, customs[1].Quantity);
+                Assert.Equal(0.6, customs[1].Weight);
+                Assert.Equal(12.61M, customs[1].UnitValue);
+            }
+        }
+
+        private void ModifyOrderToHaveCustoms()
+        {
             Modify.Order(context.Order)
                 .WithItem(i =>
                 {
@@ -172,32 +242,6 @@ namespace ShipWorks.Core.Tests.Integration.Shipping
                     });
                 })
                 .Set(x => x.ShipCountryCode, "UK").Save();
-
-            using (SqlAdapter transactedAdapter = new SqlAdapter(true))
-            {
-                CustomsManager.LoadCustomsItems(shipment, false, transactedAdapter);
-                transactedAdapter.Commit();
-            }
-
-            var predicate = new RelationPredicateBucket(ShipmentCustomsItemFields.ShipmentID == shipment.ShipmentID);
-            using (EntityCollection<ShipmentCustomsItemEntity> customs = new EntityCollection<ShipmentCustomsItemEntity>())
-            {
-                adapter.FetchEntityCollection(customs, predicate);
-
-                Assert.Equal(2, customs.Count);
-
-                Assert.Equal("US", customs[0].CountryOfOrigin);
-                Assert.Equal("Foo", customs[0].Description);
-                Assert.Equal(3, customs[0].Quantity);
-                Assert.Equal(2.5, customs[0].Weight);
-                Assert.Equal(5.62M, customs[0].UnitValue);
-
-                Assert.Equal("US", customs[1].CountryOfOrigin);
-                Assert.Equal("Bar", customs[1].Description);
-                Assert.Equal(2, customs[1].Quantity);
-                Assert.Equal(0.6, customs[1].Weight);
-                Assert.Equal(12.61M, customs[1].UnitValue);
-            }
         }
 
         public void Dispose()

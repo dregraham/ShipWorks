@@ -165,10 +165,15 @@ namespace ShipWorks.Shipping
         /// Create a shipment for the given order.  The order\shipment reference is created between the two objects.
         /// </summary>
         [NDependIgnoreLongMethod]
-        public static ShipmentEntity CreateShipment(OrderEntity order, ILifetimeScope lifetimeScope)
+        private static ShipmentEntity CreateShipment(OrderEntity order, ILifetimeScope lifetimeScope)
         {
             lifetimeScope.Resolve<ISecurityContext>()
                 .DemandPermission(PermissionType.ShipmentsCreateEditProcess, order.OrderID);
+
+            if (order.Store == null)
+            {
+                order.Store = StoreManager.GetStore(order.StoreID);
+            }
 
             // Create the shipment
             ShipmentEntity shipment = new ShipmentEntity();
@@ -198,8 +203,12 @@ namespace ShipWorks.Shipping
             shipment.RequestedLabelFormat = (int) ThermalLanguage.None;
 
             // We have to get the order items to calculate the weight
-            IEnumerable<EntityBase2> orderItems = lifetimeScope.Resolve<IDataProvider>()
-                .GetRelatedEntities(order.OrderID, EntityType.OrderItemEntity);
+            IEnumerable<EntityBase2> orderItems = order.OrderItems;
+            if (orderItems.None())
+            {
+                // We have to get the order items to calculate the weight
+                orderItems = lifetimeScope.Resolve<IDataProvider>().GetRelatedEntities(order.OrderID, EntityType.OrderItemEntity);
+            }
 
             // Set the initial weights
             shipment.ContentWeight = orderItems.OfType<OrderItemEntity>().Sum(i => i.Quantity * i.Weight);
@@ -207,7 +216,7 @@ namespace ShipWorks.Shipping
 
             // Set the rating billing info.
             shipment.BilledType = (int) BilledType.Unknown;
-            shipment.BilledWeight = shipment.TotalWeight;
+            shipment.BilledWeight = 0;
 
             // Content items aren't generated until they are needed
             shipment.CustomsGenerated = false;
@@ -235,28 +244,21 @@ namespace ShipWorks.Shipping
             IShipmentTypeManager shipmentTypeManager = lifetimeScope.Resolve<IShipmentTypeManager>();
 
             ShipmentType shipmentType = shipmentTypeManager.InitialShipmentType(shipment);
+            
+            // Apply the determined shipment type
+            shipment.ShipmentTypeCode = shipmentType.ShipmentTypeCode;
+            
+            // Apply the default values to the shipment
+            shipmentType.ConfigureNewShipment(shipment);
+            shipmentType.UpdateDynamicShipmentData(shipment);
 
-            // Save the record
-            using (SqlAdapter adapter = SqlAdapter.Create(true))
+            using (SqlAdapter adapter = new SqlAdapter())
             {
-                // Apply the determined shipment type
-                shipment.ShipmentTypeCode = shipmentType.ShipmentTypeCode;
-
-                // Save the shipment
-                adapter.SaveAndRefetch(shipment);
-
-                // Apply the default values to the shipment
-                shipmentType.LoadShipmentData(shipment, false);
-                shipmentType.UpdateDynamicShipmentData(shipment);
-
-                // Go ahead and create customs if needed
-                lifetimeScope.Resolve<ICustomsManager>().LoadCustomsItems(shipment, false, adapter);
-
-                lifetimeScope.Resolve<IValidatedAddressManager>()
-                    .CopyValidatedAddresses(adapter, order.OrderID, "Ship", shipment.ShipmentID, "Ship");
-
-                adapter.Commit();
+                OrderUtility.PopulateOrderDetails(shipment, adapter);
             }
+
+            // Go ahead and create customs if needed
+            lifetimeScope.Resolve<ICustomsManager>().GenerateCustomsItems(shipment);
 
             if (shipment.ShipSenseStatus != (int) ShipSenseStatus.NotApplied)
             {
@@ -270,7 +272,8 @@ namespace ShipWorks.Shipping
             // this path), and entities were removed, they were still being persisted to the database.
             SaveShipment(shipment,
                 lifetimeScope.Resolve<IOrderManager>(),
-                shipmentTypeManager);
+                shipmentTypeManager,
+                lifetimeScope.Resolve<IValidatedAddressManager>());
             
             return shipment;
         }
@@ -406,7 +409,8 @@ namespace ShipWorks.Shipping
             {
                 SaveShipment(shipment,
                     lifetimeScope.Resolve<IOrderManager>(),
-                    lifetimeScope.Resolve<IShipmentTypeManager>());
+                    lifetimeScope.Resolve<IShipmentTypeManager>(),
+                    lifetimeScope.Resolve<IValidatedAddressManager>());
             }
         }
 
@@ -414,7 +418,7 @@ namespace ShipWorks.Shipping
         /// Save the given shipment.
         /// </summary>
         [NDependIgnoreLongMethod]
-        private static void SaveShipment(ShipmentEntity shipment, IOrderManager orderManager, IShipmentTypeManager shipmentTypeManager)
+        private static void SaveShipment(ShipmentEntity shipment, IOrderManager orderManager, IShipmentTypeManager shipmentTypeManager, IValidatedAddressManager validatedAddressManager)
         {
             // Ensure the latest ShipSense data is recorded for this shipment before saving
             SaveShipSenseFieldsToShipment(shipment, orderManager, shipmentTypeManager);
@@ -463,6 +467,8 @@ namespace ShipWorks.Shipping
                 try
                 {
                     adapter.SaveAndRefetch(shipment);
+
+                    validatedAddressManager.CopyValidatedAddresses(adapter, order.OrderID, "Ship", shipment.ShipmentID, "Ship");
 
                     // Delete everything that had been tracked to be deleted
                     foreach (IEntity2 entity in deleteList)

@@ -25,7 +25,9 @@ namespace ShipWorks.Tests.Shared.EntityBuilders
         public OrderEntityBuilder(StoreEntity store, CustomerEntity customer)
         {
             Set(x => x.Store, store);
+            Set(x => x.StoreID, store.StoreID);
             Set(x => x.Customer, customer);
+            Set(x => x.CustomerID, customer.CustomerID);
         }
 
         /// <summary>

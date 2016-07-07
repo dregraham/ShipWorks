@@ -296,6 +296,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         public override void ConfigureNewShipment(ShipmentEntity shipment)
         {
+            if (shipment.Postal == null)
+            {
+                shipment.Postal = new PostalShipmentEntity(shipment.ShipmentID);
+            }
+            if (shipment.Postal.Usps == null)
+            {
+                shipment.Postal.Usps = new UspsShipmentEntity(shipment.ShipmentID);
+            }
+
             // We can be called during the creation of the base Postal shipment, before the USPS one exists
             if (shipment.Postal.Usps != null)
             {
