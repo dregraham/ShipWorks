@@ -100,15 +100,16 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
                 viewModel = viewModelFactory();
                 mappingControl.DataContext = viewModel;
                 viewModel.LoadColumnSource(columnSource);
+                viewModel.LoadDownloadStrategy(currentDownloadStrategy);
                 previousColumnSource = currentColumnSource;
             }
-            
+
             // Only load download strategy when the page is first loaded or the download strategy changes.
             if (previousDownloadStrategy == null ||
                 previousDownloadStrategy != currentDownloadStrategy)
             {
                 viewModel.LoadDownloadStrategy(currentDownloadStrategy);
-                
+
                 previousDownloadStrategy = currentDownloadStrategy;
             }
         }
