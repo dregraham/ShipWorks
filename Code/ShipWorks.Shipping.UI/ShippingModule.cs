@@ -1,5 +1,4 @@
-﻿using System;
-using Autofac;
+﻿using Autofac;
 using Interapptive.Shared;
 using Interapptive.Shared.Net;
 using ShipWorks.AddressValidation;
@@ -108,9 +107,8 @@ namespace ShipWorks.Shipping.UI
             builder.RegisterType<ShipmentFactory>()
                 .AsImplementedInterfaces();
 
-            builder.RegisterType<ShipmentLoader>()
-                .AsImplementedInterfaces()
-                .SingleInstance();
+            builder.RegisterType<ShipmentsLoader>()
+                .AsImplementedInterfaces();
 
             builder.RegisterType<ShipmentPackageTypesBuilderFactory>()
                 .AsImplementedInterfaces()
@@ -176,7 +174,7 @@ namespace ShipWorks.Shipping.UI
                         case ShipmentTypeCode.Other:
                             return (IShipmentViewModel) container.Resolve<OtherShipmentViewModel>();
                         case ShipmentTypeCode.BestRate:
-                            return (IShipmentViewModel)container.Resolve<BestRateShipmentViewModel>();
+                            return (IShipmentViewModel) container.Resolve<BestRateShipmentViewModel>();
                         default:
                             return container.Resolve<ShipmentViewModel>();
                     }

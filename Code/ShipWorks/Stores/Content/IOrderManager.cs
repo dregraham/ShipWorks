@@ -1,4 +1,5 @@
-﻿using SD.LLBLGen.Pro.ORMSupportClasses;
+﻿using System.Collections.Generic;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Stores.Content
@@ -27,5 +28,10 @@ namespace ShipWorks.Stores.Content
         /// Load the specified order using the given prefetch path
         /// </summary>
         OrderEntity LoadOrder(long orderID, IPrefetchPath2 prefetchPath);
+
+        /// <summary>
+        /// Load the specified orders using the given prefetch path
+        /// </summary>
+        IEnumerable<OrderEntity> LoadOrders(IEnumerable<long> orderIdList, IPrefetchPath2 prefetchPath);
     }
 }

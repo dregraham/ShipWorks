@@ -2,12 +2,9 @@
 using System.Linq;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data;
 using ShipWorks.Data.Adapter.Custom;
 using ShipWorks.Data.Connection;
-using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.FactoryClasses;
 using ShipWorks.Data.Model.HelperClasses;
 
 namespace ShipWorks.Stores.Content
@@ -42,27 +39,11 @@ namespace ShipWorks.Stores.Content
         }
 
         /// <summary>
-        /// Get an order with the data specified in the prefetch path loaded
+        /// Get order with the data specified in the prefetch path loaded
         /// </summary>
         public OrderEntity LoadOrder(long orderId, IPrefetchPath2 prefetchPath)
         {
-            MethodConditions.EnsureArgumentIsNotNull(prefetchPath, nameof(prefetchPath));
-
-            OrderEntity order = null; 
-
-            EntityType entityType = EntityUtility.GetEntityType(orderId);
-            IEntityField2 pkField = EntityUtility.GetPrimaryKeyField(entityType);
-
-            using (SqlAdapter sqlAdapter = SqlAdapter.Create(false))
-            {
-                EntityBase2 entity = (EntityBase2)sqlAdapter.FetchNewEntity(
-                    GeneralEntityFactory.Create(entityType).GetEntityFactory(),
-                    new RelationPredicateBucket(new FieldCompareValuePredicate(pkField, null, ComparisonOperator.Equal, orderId)),
-                     prefetchPath);
-                order = entity as OrderEntity;
-            }
-
-            return order;
+            return LoadOrders(new[] { orderId }, prefetchPath).FirstOrDefault();
         }
 
         /// <summary>

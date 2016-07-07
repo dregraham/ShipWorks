@@ -4,8 +4,6 @@ using System.Threading.Tasks;
 using Autofac.Extras.Moq;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.FedEx;
-using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Configuration;
 using ShipWorks.Shipping.Loading;
 using ShipWorks.Startup;
@@ -18,14 +16,14 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
 {
     [Collection("Database collection")]
     [Trait("Category", "ContinuousIntegration")]
-    public class ShipmentLoaderTest : IDisposable
+    public class ShipmentsLoaderTest : IDisposable
     {
         private readonly AutoMock mock;
         private readonly DataContext context;
         private readonly OrderEntity order;
-        private readonly ShipmentLoader testObject;
+        private readonly ShipmentsLoader testObject;
 
-        public ShipmentLoaderTest(DatabaseFixture db)
+        public ShipmentsLoaderTest(DatabaseFixture db)
         {
             context = db.CreateDataContext(x => ContainerInitializer.Initialize(x));
             mock = context.Mock;
@@ -38,37 +36,27 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
                 .WithShipment()
                 .Save();
 
-            testObject = mock.Create<ShipmentLoader>();
+            testObject = mock.Create<ShipmentsLoader>();
         }
 
         [Fact]
-        public async Task Load_ReturnsOrder_WhenOrderHasNoShipments()
+        public async Task Load_ReturnsEmptyShipmentCollection_WhenOrderHasNoShipments()
         {
-            var loadedOrder = await testObject.Load(order.OrderID);
+            var results = await testObject.LoadAsync(new[] { order.OrderID });
 
-            Assert.Equal(order.OrderID, loadedOrder.Order.OrderID);
+            Assert.Empty(results.Shipments);
         }
 
         [Fact]
-        public async Task Load_ReturnsOrder_WhenOrderHasShipment()
-        {
-            Create.Shipment(order).AsUps(x => x.WithPackage()).Save();
-
-            var loadedOrder = await testObject.Load(order.OrderID);
-
-            Assert.Equal(order.OrderID, loadedOrder.Order.OrderID);
-        }
-        
-        [Fact]
-        public async Task Load_ReturnsShipmentAdapters_FromLoadedShipments()
+        public async Task Load_ReturnsShipments_FromLoadedShipments()
         {
             Modify.Shipment(order.Shipments[0]).AsPostal(x => x.AsUsps()).Save();
             Modify.Shipment(order.Shipments[1]).AsFedEx(x => x.WithPackage()).Save();
 
-            var loadedOrder = await testObject.Load(order.OrderID);
+            var results = await testObject.LoadAsync(new[] { order.OrderID });
 
-            Assert.NotNull(loadedOrder.ShipmentAdapters.OfType<UspsShipmentAdapter>().Single());
-            Assert.NotNull(loadedOrder.ShipmentAdapters.OfType<FedExShipmentAdapter>().Single());
+            Assert.Contains(ShipmentTypeCode.Usps, results.Shipments.Select(x => x.ShipmentTypeCode));
+            Assert.Contains(ShipmentTypeCode.FedEx, results.Shipments.Select(x => x.ShipmentTypeCode));
         }
 
         [Fact]
@@ -80,49 +68,49 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
                 .Setup(x => x.ShouldAutoCreateShipment(It.IsAny<OrderEntity>()))
                 .Returns(true);
 
-            var loadedOrder = await mock.Create<ShipmentLoader>().Load(testOrder.OrderID);
+            var results = await mock.Create<ShipmentsLoader>().LoadAsync(new[] { testOrder.OrderID });
 
-            Assert.Equal(1, loadedOrder.Order.Shipments.Count);
+            Assert.Equal(1, results.Shipments.Count);
         }
 
         [Fact]
         public async Task Load_IncludesOrderItems()
         {
-            var response = await testObject.Load(order.OrderID);
+            var response = await testObject.LoadAsync(new[] { order.OrderID });
 
-            OrderEntity loadedOrder = response.Order;
+            OrderEntity results = response.Shipments.First().Order;
 
-            Assert.Equal(2, loadedOrder.OrderItems.Count);
+            Assert.Equal(2, results.OrderItems.Count);
         }
 
         [Fact]
         public async Task Load_IncludesStore()
         {
-            var response = await testObject.Load(order.OrderID);
+            var response = await testObject.LoadAsync(new[] { order.OrderID });
 
-            OrderEntity loadedOrder = response.Order;
+            OrderEntity results = response.Shipments.First().Order;
 
-            Assert.NotNull(loadedOrder.Store);
+            Assert.NotNull(results.Store);
         }
 
         [Fact]
         public async Task Load_DoesNotIncludeCustomer()
         {
-            var response = await testObject.Load(order.OrderID);
+            var response = await testObject.LoadAsync(new[] { order.OrderID });
 
-            OrderEntity loadedOrder = response.Order;
+            OrderEntity results = response.Shipments.First().Order;
 
-            Assert.Null(loadedOrder.Customer);
+            Assert.Null(results.Customer);
         }
 
         [Fact]
         public async Task Load_IncludesShipments()
         {
-            var response = await testObject.Load(order.OrderID);
+            var response = await testObject.LoadAsync(new[] { order.OrderID });
 
-            OrderEntity loadedOrder = response.Order;
+            OrderEntity results = response.Shipments.First().Order;
 
-            Assert.Equal(2, loadedOrder.Shipments.Count);
+            Assert.Equal(2, results.Shipments.Count);
         }
 
         [Fact]
@@ -139,11 +127,9 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
                 .AsOther()
                 .Save();
 
-            var response = await testObject.Load(order.OrderID);
+            var results = await testObject.LoadAsync(new[] { order.OrderID });
 
-            OrderEntity loadedOrder = response.Order;
-
-            ShipmentEntity loadedShipment = loadedOrder.Shipment(shipment.ShipmentID);
+            ShipmentEntity loadedShipment = results.Shipments.Where(x => x.ShipmentID == shipment.ShipmentID).First();
             Assert.NotNull(loadedShipment.Postal.Endicia);
             Assert.NotNull(loadedShipment.Postal.Usps);
             Assert.NotNull(loadedShipment.OnTrac);
@@ -159,12 +145,12 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
                 .AsFedEx(fedEx => fedEx.WithPackage().WithPackage())
                 .Save();
 
-            var response = await testObject.Load(order.OrderID);
+            var response = await testObject.LoadAsync(new[] { order.OrderID });
 
-            OrderEntity loadedOrder = response.Order;
+            OrderEntity results = response.Shipments.First().Order;
 
-            Assert.NotNull(loadedOrder.Shipment(shipment.ShipmentID).FedEx);
-            Assert.Equal(2, loadedOrder.Shipment(shipment.ShipmentID).FedEx.Packages.Count);
+            Assert.NotNull(results.Shipment(shipment.ShipmentID).FedEx);
+            Assert.Equal(2, results.Shipment(shipment.ShipmentID).FedEx.Packages.Count);
         }
 
         [Fact]
@@ -174,12 +160,12 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
                 .AsUps(Ups => Ups.WithPackage().WithPackage())
                 .Save();
 
-            var response = await testObject.Load(order.OrderID);
+            var response = await testObject.LoadAsync(new[] { order.OrderID });
 
-            OrderEntity loadedOrder = response.Order;
+            OrderEntity results = response.Shipments.First().Order;
 
-            Assert.NotNull(loadedOrder.Shipment(shipment.ShipmentID).Ups);
-            Assert.Equal(2, loadedOrder.Shipment(shipment.ShipmentID).Ups.Packages.Count);
+            Assert.NotNull(results.Shipment(shipment.ShipmentID).Ups);
+            Assert.Equal(2, results.Shipment(shipment.ShipmentID).Ups.Packages.Count);
         }
 
         [Fact]
@@ -189,12 +175,12 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
                 .AsIParcel(IParcel => IParcel.WithPackage().WithPackage())
                 .Save();
 
-            var response = await testObject.Load(order.OrderID);
+            var response = await testObject.LoadAsync(new[] { order.OrderID });
 
-            OrderEntity loadedOrder = response.Order;
+            OrderEntity results = response.Shipments.First().Order;
 
-            Assert.NotNull(loadedOrder.Shipment(shipment.ShipmentID).IParcel);
-            Assert.Equal(2, loadedOrder.Shipment(shipment.ShipmentID).IParcel.Packages.Count);
+            Assert.NotNull(results.Shipment(shipment.ShipmentID).IParcel);
+            Assert.Equal(2, results.Shipment(shipment.ShipmentID).IParcel.Packages.Count);
         }
 
         [Fact]
@@ -205,11 +191,11 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
                 .WithCustomsItem()
                 .Save();
 
-            var response = await testObject.Load(order.OrderID);
+            var response = await testObject.LoadAsync(new[] { order.OrderID });
 
-            OrderEntity loadedOrder = response.Order;
+            OrderEntity results = response.Shipments.First().Order;
 
-            Assert.Equal(2, loadedOrder.Shipment(shipment.ShipmentID).CustomsItems.Count);
+            Assert.Equal(2, results.Shipment(shipment.ShipmentID).CustomsItems.Count);
         }
 
         [Fact]
@@ -220,11 +206,11 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
                 .Save()
                 .ShipmentID;
 
-            var response = await testObject.Load(order.OrderID);
+            var response = await testObject.LoadAsync(new[] { order.OrderID });
 
-            OrderEntity loadedOrder = response.Order;
+            OrderEntity results = response.Shipments.First().Order;
 
-            Assert.NotNull(loadedOrder.Shipment(shipmentId).InsurancePolicy);
+            Assert.NotNull(results.Shipment(shipmentId).InsurancePolicy);
         }
 
         public void Dispose() => context.Dispose();

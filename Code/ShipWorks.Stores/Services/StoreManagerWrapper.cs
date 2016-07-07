@@ -77,5 +77,11 @@ namespace ShipWorks.Stores.Services
             StatusPresetManager.CheckForChanges();
             StoreManager.CheckForChanges();
         }
+
+        /// <summary>
+        /// Checks whether any stores have automatic validation enabled
+        /// </summary>
+        public bool DoAnyStoresHaveAutomaticValidationEnabled() =>
+            StoreManager.DoAnyStoresHaveAutomaticValidationEnabled();
     }
 }

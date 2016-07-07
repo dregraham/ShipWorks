@@ -85,6 +85,23 @@ namespace ShipWorks.UI.Services
         /// <summary>
         /// Show a dialog and get the results
         /// </summary>
+        public void ExecuteOnUIThread(Action<IWin32Window> action)
+        {
+            Control schedulerControl = ownerFactory();
+
+            if (schedulerControl.InvokeRequired)
+            {
+                schedulerControl.Invoke(action, schedulerControl);
+            }
+            else
+            {
+                action(schedulerControl);
+            }
+        }
+
+        /// <summary>
+        /// Show a dialog and get the results
+        /// </summary>
         public DialogResult ShowDialog(Func<Form> createDialog)
         {
             using (Form dlg = createDialog())

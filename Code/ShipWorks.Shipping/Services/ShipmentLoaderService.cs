@@ -6,11 +6,13 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Threading;
+using log4net;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Core.Messaging.Messages.Shipping;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages;
-using ShipWorks.Shipping.Loading;
+using ShipWorks.Stores;
 
 namespace ShipWorks.Shipping.Services
 {
@@ -19,32 +21,48 @@ namespace ShipWorks.Shipping.Services
     /// </summary>
     public class ShipmentLoaderService : IInitializeForCurrentUISession
     {
-        private readonly IShipmentLoader shipmentLoader;
+        private readonly IShipmentsLoader shipmentLoader;
         private readonly IMessenger messenger;
         private readonly ISchedulerProvider schedulerProvider;
+        private readonly ICarrierShipmentAdapterFactory carrierShipmentAdapterFactory;
+        private readonly IStoreTypeManager storeTypeManager;
         private IDisposable subscription;
+        private readonly ILog log;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShipmentLoaderService(IShipmentLoader shipmentLoader, IMessenger messenger, ISchedulerProvider schedulerProvider)
+        public ShipmentLoaderService(IShipmentsLoader shipmentLoader, IMessenger messenger,
+            ISchedulerProvider schedulerProvider, ICarrierShipmentAdapterFactory carrierShipmentAdapterFactory,
+            IStoreTypeManager storeTypeManager, Func<Type, ILog> logFactory)
         {
             this.shipmentLoader = shipmentLoader;
             this.messenger = messenger;
             this.schedulerProvider = schedulerProvider;
+            this.carrierShipmentAdapterFactory = carrierShipmentAdapterFactory;
+            this.storeTypeManager = storeTypeManager;
+            this.log = logFactory(this.GetType());
         }
 
         /// <summary>
-        /// Loads the order and sends a message that it has been loaded.
+        /// Loads the order
         /// </summary>
-        public async Task<IEnumerable<IOrderSelection>> LoadAndNotify(IEnumerable<long> entityIDs)
+        public async Task<IEnumerable<IOrderSelection>> Load(IEnumerable<long> orderIDs)
         {
-            if (entityIDs.CompareCountTo(1) != ComparisonResult.Equal)
+            if (orderIDs.CompareCountTo(1) != ComparisonResult.Equal)
             {
-                return entityIDs.Select(x => new BasicOrderSelection(x)).Cast<IOrderSelection>().ToArray();
+                return orderIDs.Select(x => new BasicOrderSelection(x)).Cast<IOrderSelection>().ToArray();
             }
 
-            LoadedOrderSelection orderSelectionLoaded = await shipmentLoader.Load(entityIDs.Single());
+            ShipmentsLoadedEventArgs results = await shipmentLoader.LoadAsync(orderIDs).ConfigureAwait(false);
+
+            OrderEntity order = results.Shipments.FirstOrDefault()?.Order;
+            List<ICarrierShipmentAdapter> adapters = results.Shipments.Select(carrierShipmentAdapterFactory.Get).ToList();
+
+            LoadedOrderSelection orderSelectionLoaded = results.Error == null ?
+                new LoadedOrderSelection(order, adapters, GetDestinationAddressEditable(order)) :
+                new LoadedOrderSelection(results.Error, order, adapters, GetDestinationAddressEditable(order));
+
             return new IOrderSelection[] { orderSelectionLoaded };
         }
 
@@ -60,8 +78,9 @@ namespace ShipWorks.Shipping.Services
 
             subscription = messenger.OfType<OrderSelectionChangingMessage>()
                 .Throttle(TimeSpan.FromMilliseconds(100), schedulerProvider.Default)
-                .SelectMany(x => Observable.FromAsync(() => LoadAndNotify(x.OrderIdList)))
                 .ObserveOn(schedulerProvider.WindowsFormsEventLoop)
+                .SelectMany(x => Observable.FromAsync(() => Load(x.OrderIdList)))
+                .CatchAndContinue((Exception ex) => log.Error(ex))
                 .Subscribe(x => messenger.Send(new OrderSelectionChangedMessage(this, x)));
         }
 
@@ -77,5 +96,21 @@ namespace ShipWorks.Shipping.Services
         /// Dispose the object
         /// </summary>
         public void Dispose() => EndSession();
+
+        /// <summary>
+        /// Get whether the destination address is editable
+        /// </summary>
+        private ShippingAddressEditStateType GetDestinationAddressEditable(OrderEntity order)
+        {
+            ShipmentEntity firstShipment = order.Shipments.FirstOrDefault();
+
+            if (firstShipment != null)
+            {
+                return storeTypeManager.GetType(order.Store)
+                    .ShippingAddressEditableState(order, firstShipment);
+            }
+
+            return ShippingAddressEditStateType.Editable;
+        }
     }
 }

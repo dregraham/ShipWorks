@@ -1133,6 +1133,7 @@
     <Compile Include="Shipping\Settings\IShippingProviderRuleManager.cs" />
     <Compile Include="Shipping\IRatingService.cs" />
     <Compile Include="Shipping\ISupportExpress1Rates.cs" />
+    <Compile Include="Shipping\ShipmentsLoaderConstants.cs" />
     <Compile Include="Stores\Management\ActivationErrorWizardPage.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -7175,7 +7176,7 @@
     <Compile Include="Shipping\ShipmentSiblingData.cs" />
     <Compile Include="Shipping\CoreExtensions\Grid\ShipmentNumberDisplayType.cs" />
     <Compile Include="Shipping\Editing\ShipmentGridHiddenSortColumn.cs" />
-    <Compile Include="Shipping\ShipmentsLoader.cs" />
+    <Compile Include="Shipping\IShipmentsLoader.cs" />
     <Compile Include="Shipping\ShipmentsLoadedEvent.cs" />
     <Compile Include="Data\Grid\Columns\GridColumnSettingsDlg.cs">
       <SubType>Form</SubType>
