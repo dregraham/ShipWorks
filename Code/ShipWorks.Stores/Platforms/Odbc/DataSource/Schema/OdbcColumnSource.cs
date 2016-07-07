@@ -47,8 +47,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataSource.Schema
             {
                 LoadCustomQueryColumns(dataSource, source);
             }
-
-            if (sourceType == OdbcColumnSourceType.Table)
+            else
             {
                 LoadTableColumns(dataSource, source);
             }
