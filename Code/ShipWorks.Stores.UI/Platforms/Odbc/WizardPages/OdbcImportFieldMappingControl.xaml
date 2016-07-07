@@ -31,7 +31,7 @@
             <Setter Property="Padding" Value="5 2 5 2" />
             <Setter Property="Width" Value="80" />
         </Style>
-        <Style TargetType="{x:Type ComboBox}">
+        <Style TargetType="{x:Type ui:ShipWorksComboBox}">
             <Setter Property="Margin" Value="2 5 0 5" />
             <Setter Property="Padding" Value="4 4 0 4" />
             <Setter Property="Height" Value="24"/>
@@ -130,7 +130,7 @@
                            VerticalAlignment="Center"
                            Content="Each order contains up to:"
                            Width="223" />
-                    <ComboBox ItemsSource="{Binding NumbersUpTo25, UpdateSourceTrigger=PropertyChanged}"
+                <ui:ShipWorksComboBox ItemsSource="{Binding NumbersUpTo25, UpdateSourceTrigger=PropertyChanged}"
                               SelectedItem="{Binding NumberOfItemsPerOrder}"
                               Width="50" Margin="0"
                               VerticalAlignment="Center"/>
@@ -159,7 +159,7 @@
                            Width="223" HorizontalContentAlignment="Right"
                            VerticalAlignment="Center"
                            Margin="0 0 5 0"/>
-                    <ComboBox Grid.Column="1" ItemsSource="{Binding Columns, UpdateSourceTrigger=PropertyChanged}"
+                <ui:ShipWorksComboBox Grid.Column="1" ItemsSource="{Binding Columns, UpdateSourceTrigger=PropertyChanged}"
                               SelectedItem="{Binding RecordIdentifier}"
                               TextSearch.TextPath="Name"
                               ItemTemplate="{StaticResource SourceColumnComboBoxItemTemplate}"
@@ -183,7 +183,7 @@
                            Width="223"
                            Content="Each item contains up to:"
                            Margin="0 0 5 0"/>
-                    <ComboBox ItemsSource="{Binding NumbersUpTo25, UpdateSourceTrigger=PropertyChanged}"
+                <ui:ShipWorksComboBox ItemsSource="{Binding NumbersUpTo25, UpdateSourceTrigger=PropertyChanged}"
                               SelectedItem="{Binding NumberOfAttributesPerItem, UpdateSourceTrigger=PropertyChanged}"
                               Width="50" VerticalAlignment="Center"
                               Margin="0"/>
@@ -346,10 +346,10 @@
                                                            Visibility="{Binding ShipWorksField.IsRequired, Converter={StaticResource BooleanToVisibility}, UpdateSourceTrigger=PropertyChanged}"
                                                            HorizontalAlignment="Left"
                                                            Margin="0"
-                                                           Padding="0 5 5 5"/>
+                                                           Padding="2 7 5 5"/>
                                                 </StackPanel>
 
-                                                <ComboBox Grid.Column="1"
+                                                <ui:ShipWorksComboBox Grid.Column="1"
                                                       ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl},
                                                 Path=DataContext.Columns, UpdateSourceTrigger=PropertyChanged}"
                                                       HorizontalAlignment="Stretch"
