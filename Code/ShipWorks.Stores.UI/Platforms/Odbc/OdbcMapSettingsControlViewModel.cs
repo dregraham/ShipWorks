@@ -40,7 +40,6 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         private readonly IMessageHelper messageHelper;
         private readonly Func<string, IDialog> dialogFactory;
         private bool isQueryValid;
-
         private readonly PropertyChangedHandler handler;
         private string customQuery;
         public event PropertyChangedEventHandler PropertyChanged;
@@ -56,7 +55,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             this.messageHelper = messageHelper;
             this.dialogFactory = dialogFactory;
             ExecuteQueryCommand = new RelayCommand(ExecuteQuery);
-            customQueryColumnSource = columnSourceFactory("Custom");
+            customQueryColumnSource = columnSourceFactory(CustomQueryColumnSourceName);
             log = logFactory(typeof(OdbcImportFieldMappingControlViewModel));
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
         }
