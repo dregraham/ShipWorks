@@ -96,7 +96,7 @@ namespace ShipWorks.Common.Threading
         /// Execute the operation asynchronously using the given items
         /// </summary>
         public Task<BackgroundExecutorCompletedEventArgs<T>> ExecuteAsync(BackgroundExecutorCallback<T> worker, IEnumerable<T> items) =>
-                ExecuteAsync(worker, items, null);
+            ExecuteAsync(worker, items, null);
 
         /// <summary>
         /// Execute the operation asynchronously using the given item collection

@@ -414,6 +414,7 @@ namespace ShipWorks.Shipping.Editing
             {
                 MessageHelper.ShowError(this, "The order has been deleted.");
 
+                // Calls ToList so that Remove won't be called on the collection we are iterating through.
                 entityGrid.Rows.Cast<ShipmentGridRow>()
                     .Where(row => row.Shipment.OrderID == order.OrderID)
                     .ToList()
