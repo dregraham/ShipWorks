@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Linq;
 using System.Reflection;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.Command;
@@ -28,8 +29,8 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         private readonly IOdbcSampleDataCommand sampleDataCommand;
         private string mapName = string.Empty;
         private IOdbcColumnSource selectedTable;
-        private bool isTableSelected = true;
-        private bool isDownloadStrategyLastModified = true;
+        private bool columnSourceIsTable = true;
+        private bool downloadStrategyIsLastModified = true;
         private IEnumerable<IOdbcColumnSource> columnSources;
         private DataTable queryResults;
         private string resultMessage;
@@ -42,6 +43,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         private bool isQueryValid;
         private readonly PropertyChangedHandler handler;
         private string customQuery;
+        private int downloadDaysBack = 30;
         public event PropertyChangedEventHandler PropertyChanged;
 
         /// <summary>
@@ -57,6 +59,9 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             ExecuteQueryCommand = new RelayCommand(ExecuteQuery);
             customQueryColumnSource = columnSourceFactory(CustomQueryColumnSourceName);
             log = logFactory(typeof(OdbcImportFieldMappingControlViewModel));
+
+            NumbersUpTo30 = Enumerable.Range(1, 30).ToList();
+
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
         }
 
@@ -156,12 +161,12 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// Whether the column source selected is table
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public bool IsTableSelected
+        public bool ColumnSourceIsTable
         {
-            get { return isTableSelected; }
+            get { return columnSourceIsTable; }
             set
             {
-                handler.Set(nameof(IsTableSelected), ref isTableSelected, value);
+                handler.Set(nameof(ColumnSourceIsTable), ref columnSourceIsTable, value);
 
                 // Show warning dlg when query is selected
                 if (!value)
@@ -178,10 +183,10 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// Whether the download strategy is last modified.
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public bool IsDownloadStrategyLastModified
+        public bool DownloadStrategyIsLastModified
         {
-            get { return isDownloadStrategyLastModified; }
-            set { handler.Set(nameof(IsDownloadStrategyLastModified), ref isDownloadStrategyLastModified, value); }
+            get { return downloadStrategyIsLastModified; }
+            set { handler.Set(nameof(DownloadStrategyIsLastModified), ref downloadStrategyIsLastModified, value); }
         }
 
         /// <summary>
@@ -211,6 +216,22 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         }
 
         /// <summary>
+        /// List of numbers 0-25 for binding to number of items and number of attributes lists
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public List<int> NumbersUpTo30 { get; }
+
+        /// <summary>
+        /// The number of days back to begin downloading
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public int DownloadDaysBack
+        {
+            get { return downloadDaysBack; }
+            set { handler.Set(nameof(DownloadDaysBack), ref downloadDaysBack, value); }
+        }
+
+        /// <summary>
         /// Loads the external odbc tables.
         /// </summary>
         public void Load(IOdbcDataSource dataSource)
@@ -235,17 +256,22 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// </summary>
         public void SaveMapSettings(OdbcStoreEntity store)
         {
-            store.OdbcDownloadStrategy = IsDownloadStrategyLastModified ?
+            store.OdbcDownloadStrategy = DownloadStrategyIsLastModified ?
                 (int) OdbcDownloadStrategy.ByModifiedTime :
                 (int) OdbcDownloadStrategy.All;
 
-            store.OdbcColumnSourceType = IsTableSelected ?
+            store.OdbcColumnSourceType = ColumnSourceIsTable ?
                 (int) OdbcColumnSourceType.Table :
                 (int) OdbcColumnSourceType.CustomQuery;
 
-            store.OdbcColumnSource = IsTableSelected ?
+            store.OdbcColumnSource = ColumnSourceIsTable ?
                 SelectedTable.Name :
                 CustomQuery;
+
+            if (DownloadStrategyIsLastModified)
+            {
+                store.InitialDownloadDays = DownloadDaysBack;
+            }
         }
 
         /// <summary>
@@ -253,19 +279,19 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// </summary>
         public bool ValidateRequiredMapSettings()
         {
-            if (IsTableSelected && SelectedTable == null)
+            if (ColumnSourceIsTable && SelectedTable == null)
             {
                 messageHelper.ShowError("Please select a table before continuing to the next page.");
                 return false;
             }
 
-            if (!IsTableSelected && string.IsNullOrWhiteSpace(CustomQuery))
+            if (!ColumnSourceIsTable && string.IsNullOrWhiteSpace(CustomQuery))
             {
                 messageHelper.ShowError("Please enter a valid query before continuing to the next page.");
                 return false;
             }
 
-            if (!IsTableSelected)
+            if (!ColumnSourceIsTable)
             {
                 ExecuteQuery();
 

@@ -38,6 +38,7 @@
             <Setter Property="Padding" Value="0" />
             <Setter Property="VerticalContentAlignment" Value="Center" />
         </Style>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"></BooleanToVisibilityConverter>
         <ui:VisibleWhenEqualToParameterConverter x:Key="VisibleWhenEqualToParameterConverter" />
         <ui:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
     </Control.Resources>
@@ -82,21 +83,19 @@
                         Margin="5 5 0 5">
                 <RadioButton GroupName="DownloadStrategy"
                              Content="Orders by last modified date"
-                             IsChecked="{Binding IsDownloadStrategyLastModified, UpdateSourceTrigger=PropertyChanged}" />
-                <RadioButton GroupName="DownloadStrategy"
-                             Content="All orders"/>
+                             IsChecked="{Binding DownloadStrategyIsLastModified, UpdateSourceTrigger=PropertyChanged}" />
             </StackPanel>
 
-            <Label Grid.Row="3" Grid.Column="0"
+            <Label Grid.Row="4" Grid.Column="0"
                    VerticalAlignment="Center"
                    HorizontalAlignment="Right"
                    Content="Column Source:"/>
 
-            <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal"
+            <StackPanel Grid.Row="4" Grid.Column="1" Orientation="Horizontal"
                         Margin="5 5 0 5">
                 <RadioButton GroupName="ColumnSource"
                              Content="Table"
-                             IsChecked="{Binding IsTableSelected, UpdateSourceTrigger=PropertyChanged}" />
+                             IsChecked="{Binding ColumnSourceIsTable, UpdateSourceTrigger=PropertyChanged}" />
                 <RadioButton GroupName="ColumnSource"
                              Content="Query" />
             </StackPanel>
@@ -106,7 +105,7 @@
                    d:IsHidden="true"
                    VerticalAlignment="Top">
             <DockPanel.Visibility>
-                <Binding Path="IsTableSelected"
+                <Binding Path="ColumnSourceIsTable"
                          Converter="{StaticResource VisibleWhenEqualToParameterConverter}">
                     <Binding.ConverterParameter>
                         <system:Boolean>True</system:Boolean>
@@ -129,7 +128,7 @@
         <Grid Grid.Row="1"
               d:IsHidden="false">
             <Grid.Visibility>
-                <Binding Path="IsTableSelected"
+                <Binding Path="ColumnSourceIsTable"
                          Converter="{StaticResource VisibleWhenEqualToParameterConverter}">
                     <Binding.ConverterParameter>
                         <system:Boolean>False</system:Boolean>

@@ -9,6 +9,7 @@ using ShipWorks.UI.Wizard;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.Odbc.Download;
 using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 
@@ -101,5 +102,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
 
             return base.GridOnlineColumnSupported(column);
         }
+
+        public override InitialDownloadPolicy InitialDownloadPolicy => new InitialDownloadPolicy(InitialDownloadRestrictionType.DaysBack);
     }
 }
