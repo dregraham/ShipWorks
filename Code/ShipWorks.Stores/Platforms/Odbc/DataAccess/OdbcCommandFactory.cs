@@ -2,6 +2,7 @@
 using log4net;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Odbc.DataSource;
+using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 using ShipWorks.Stores.Platforms.Odbc.Download;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
 
@@ -57,9 +58,9 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
             odbcFieldMap.Load(store.Map);
             dataSource.Restore(store.ConnectionString);
 
-            return string.IsNullOrWhiteSpace(odbcFieldMap.CustomQuery)
-                ? (IOdbcDownloadQuery)new TableOdbcDownloadQuery(dbProviderFactory, odbcFieldMap, dataSource)
-                : new CustomQueryOdbcDownloadQuery(odbcFieldMap);
+            return store.OdbcColumnSourceType == (int) OdbcColumnSourceType.Table
+                ? (IOdbcDownloadQuery)new TableOdbcDownloadQuery(store, dbProviderFactory, odbcFieldMap, dataSource)
+                : new CustomQueryOdbcDownloadQuery(store);
         }
     }
 }

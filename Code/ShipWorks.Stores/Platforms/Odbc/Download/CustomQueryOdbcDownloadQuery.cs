@@ -1,4 +1,4 @@
-﻿using ShipWorks.Stores.Platforms.Odbc.Mapping;
+﻿using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Download
 {
@@ -7,19 +7,19 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
     /// </summary>
     public class CustomQueryOdbcDownloadQuery : IOdbcDownloadQuery
     {
-        private readonly IOdbcFieldMap map;
+        private readonly OdbcStoreEntity store;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CustomQueryOdbcDownloadQuery"/> class.
         /// </summary>
-        public CustomQueryOdbcDownloadQuery(IOdbcFieldMap map)
+        public CustomQueryOdbcDownloadQuery(OdbcStoreEntity store)
         {
-            this.map = map;
+            this.store = store;
         }
 
         /// <summary>
         /// Generates the Sql to download orders.
         /// </summary>
-        public string GenerateSql() => map.CustomQuery;
+        public string GenerateSql() => store.OdbcColumnSource;
     }
 }

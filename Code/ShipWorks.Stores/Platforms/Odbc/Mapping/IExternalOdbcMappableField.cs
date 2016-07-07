@@ -13,11 +13,6 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         OdbcColumn Column { get; set; }
 
         /// <summary>
-        /// The External Table
-        /// </summary>
-        IOdbcColumnSource Table { get; set; }
-
-        /// <summary>
         /// Loads the given record
         /// </summary>
         void LoadValue(OdbcRecord record);

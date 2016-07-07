@@ -172,24 +172,31 @@
     <Compile Include="Platforms\LemonStand\WizardPages\LemonStandAccountPage.Designer.cs">
       <DependentUpon>LemonStandAccountPage.cs</DependentUpon>
     </Compile>
-    <Compile Include="Platforms\Odbc\IOdbcCustomQueryModalDialog.cs" />
-    <Compile Include="Platforms\Odbc\IOdbcCustomQueryDlgViewModel.cs" />
     <Compile Include="Platforms\Odbc\IOdbcImportFieldMappingControlViewModel.cs" />
-    <Compile Include="Platforms\Odbc\OdbcCustomQueryDlg.xaml.cs">
-      <DependentUpon>OdbcCustomQueryDlg.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Platforms\Odbc\OdbcCustomQueryModalDialog.cs" />
-    <Compile Include="Platforms\Odbc\OdbcCustomQueryDlgViewModel.cs" />
+    <Compile Include="Platforms\Odbc\IOdbcMapSettingsControlViewModel.cs" />
     <Compile Include="Platforms\Odbc\OdbcCustomQueryWarningDlg.xaml.cs">
       <DependentUpon>OdbcCustomQueryWarningDlg.xaml</DependentUpon>
     </Compile>
     <Compile Include="Platforms\Odbc\OdbcFieldMapDisplay.cs" />
     <Compile Include="Platforms\Odbc\OdbcFieldMapMultiValueConverter.cs" />
+    <Compile Include="Platforms\Odbc\OdbcMapSettingsControlViewModel.cs" />
+    <Compile Include="Platforms\Odbc\WizardPages\OdbcImportFieldMappingControl.xaml.cs">
+      <DependentUpon>OdbcImportFieldMappingControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Platforms\Odbc\WizardPages\OdbcImportFieldMappingPage.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Platforms\Odbc\WizardPages\OdbcImportFieldMappingPage.Designer.cs">
       <DependentUpon>OdbcImportFieldMappingPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Platforms\Odbc\WizardPages\OdbcImportMapSettingsControl.xaml.cs">
+      <DependentUpon>OdbcImportMapSettingsControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Platforms\Odbc\WizardPages\OdbcImportMapSettingsPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Platforms\Odbc\WizardPages\OdbcImportMapSettingsPage.Designer.cs">
+      <DependentUpon>OdbcImportMapSettingsPage.cs</DependentUpon>
     </Compile>
     <Compile Include="Platforms\Sears\SearsStoreModule.cs" />
     <Compile Include="Platforms\SparkPay\SparkPaySettingsControl.cs">
@@ -227,9 +234,6 @@
     </Compile>
     <Compile Include="Platforms\Odbc\OdbcDataSourceControl.Designer.cs">
       <DependentUpon>OdbcDataSourceControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Platforms\Odbc\OdbcImportFieldMappingControl.xaml.cs">
-      <DependentUpon>OdbcImportFieldMappingControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Platforms\Odbc\OdbcImportFieldMappingControlViewModel.cs" />
     <Compile Include="Platforms\Odbc\OdbcStoreModule.cs" />
@@ -280,6 +284,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Platforms\Odbc\WizardPages\OdbcImportFieldMappingPage.resx">
       <DependentUpon>OdbcImportFieldMappingPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Platforms\Odbc\WizardPages\OdbcImportMapSettingsPage.resx">
+      <DependentUpon>OdbcImportMapSettingsPage.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Platforms\SparkPay\SparkPaySettingsControl.resx">
       <DependentUpon>SparkPaySettingsControl.cs</DependentUpon>
@@ -357,15 +364,15 @@
     <Analyzer Include="..\..\packages\System.Security.Cryptography.Hashing.Algorithms.Analyzers.1.1.0\analyzers\dotnet\cs\System.Security.Cryptography.Hashing.Algorithms.CSharp.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Platforms\Odbc\OdbcCustomQueryDlg.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Platforms\Odbc\OdbcCustomQueryWarningDlg.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Platforms\Odbc\OdbcImportFieldMappingControl.xaml">
+    <Page Include="Platforms\Odbc\WizardPages\OdbcImportFieldMappingControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Platforms\Odbc\WizardPages\OdbcImportMapSettingsControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

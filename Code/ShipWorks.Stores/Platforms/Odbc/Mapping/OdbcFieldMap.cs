@@ -40,12 +40,6 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         public string RecordIdentifierSource { get; set; }
 
         /// <summary>
-        /// Gets or sets the custom query.
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public string CustomQuery { get; set; }
-
-        /// <summary>
         /// Add the given ODBC Field Map Entry to the ODBC Field Map
         /// </summary>
         public void AddEntry(IOdbcFieldMapEntry entry)
@@ -138,7 +132,6 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
                 entry = reader.ReadEntry();
             }
 
-            CustomQuery = reader.ReadCustomQuery();
             RecordIdentifierSource = reader.ReadRecordIdentifierSource();
         }
 
@@ -182,14 +175,6 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 
                 return clonedFieldMap;
             }
-        }
-
-        /// <summary>
-        /// Gets the name of the external table.
-        /// </summary>
-        public string GetExternalTableName()
-        {
-            return Entries.FirstOrDefault()?.ExternalField.Table.Name ?? string.Empty;
         }
     }
 }

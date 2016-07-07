@@ -1759,11 +1759,13 @@ namespace ShipWorks.Data.Adapter
 		/// <summary>Inits OdbcStoreEntity's mappings</summary>
 		private void InitOdbcStoreEntityMappings()
 		{
-			base.AddElementMapping( "OdbcStoreEntity", "ShipWorksLocal", @"dbo", "OdbcStore", 4 );
+			base.AddElementMapping( "OdbcStoreEntity", "ShipWorksLocal", @"dbo", "OdbcStore", 6 );
 			base.AddElementFieldMapping( "OdbcStoreEntity", "StoreID", "StoreID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 0 );
 			base.AddElementFieldMapping( "OdbcStoreEntity", "ConnectionString", "ConnectionString", false, (int)SqlDbType.NVarChar, 2048, 0, 0, false, "", null, typeof(System.String), 1 );
 			base.AddElementFieldMapping( "OdbcStoreEntity", "Map", "Map", false, (int)SqlDbType.NVarChar, 2147483647, 0, 0, false, "", null, typeof(System.String), 2 );
 			base.AddElementFieldMapping( "OdbcStoreEntity", "OdbcDownloadStrategy", "OdbcDownloadStrategy", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 3 );
+			base.AddElementFieldMapping( "OdbcStoreEntity", "OdbcColumnSourceType", "OdbcColumnSourceType", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 4 );
+			base.AddElementFieldMapping( "OdbcStoreEntity", "OdbcColumnSource", "OdbcColumnSource", false, (int)SqlDbType.NVarChar, 2048, 0, 0, false, "", null, typeof(System.String), 5 );
 		}
 		/// <summary>Inits OnTracAccountEntity's mappings</summary>
 		private void InitOnTracAccountEntityMappings()

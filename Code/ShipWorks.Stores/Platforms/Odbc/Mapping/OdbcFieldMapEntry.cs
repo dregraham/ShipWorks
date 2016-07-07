@@ -18,7 +18,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <param name="externalField">Mapped External Field.</param>
         /// <param name="index">Index can be used to help identify this entry.</param>
         [JsonConstructor]
-        public OdbcFieldMapEntry(ShipWorksOdbcMappableField shipWorksField, ExternalOdbcMappableField externalField, int index) 
+        public OdbcFieldMapEntry(ShipWorksOdbcMappableField shipWorksField, ExternalOdbcMappableField externalField, int index)
         {
             ShipWorksField = shipWorksField;
             ExternalField = externalField;
@@ -37,7 +37,6 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// Index to help identify the entry
         /// </summary>
         public int Index { get; }
-
 
         /// <summary>
         /// Mapped Shipworks field

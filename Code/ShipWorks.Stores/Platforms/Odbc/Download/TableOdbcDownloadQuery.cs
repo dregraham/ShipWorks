@@ -1,14 +1,17 @@
 ﻿using System.Collections.Generic;
 using System.Data.Common;
 using System.Linq;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Odbc.DataAccess;
 using ShipWorks.Stores.Platforms.Odbc.DataSource;
+using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Download
 {
     public class TableOdbcDownloadQuery : IOdbcDownloadQuery
     {
+        private readonly OdbcStoreEntity store;
         private readonly IShipWorksDbProviderFactory dbProviderFactory;
         private readonly IOdbcDataSource dataSource;
         private readonly IOdbcFieldMap fieldMap;
@@ -16,11 +19,17 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         /// <summary>
         /// Initializes a new instance of the <see cref="TableOdbcDownloadQuery"/> class.
         /// </summary>
-        public TableOdbcDownloadQuery(IShipWorksDbProviderFactory dbProviderFactory, IOdbcFieldMap fieldMap, IOdbcDataSource dataSource)
+        public TableOdbcDownloadQuery(OdbcStoreEntity store, IShipWorksDbProviderFactory dbProviderFactory, IOdbcFieldMap fieldMap, IOdbcDataSource dataSource)
         {
+            this.store = store;
             this.dbProviderFactory = dbProviderFactory;
             this.dataSource = dataSource;
             this.fieldMap = fieldMap;
+
+            if (store.OdbcColumnSourceType != (int) OdbcColumnSourceType.Table)
+            {
+                throw new ShipWorksOdbcException("None table column source passed to table query.");
+            }
         }
 
         /// <summary>
@@ -34,7 +43,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
             {
                 connection.Open();
 
-                string tableNameInQuotes = cmdBuilder.QuoteIdentifier(fieldMap.GetExternalTableName());
+                string tableNameInQuotes = cmdBuilder.QuoteIdentifier(store.OdbcColumnSource);
 
                 List<string> columnNamesInQuotes = fieldMap.Entries.Select(e => cmdBuilder.QuoteIdentifier(e.ExternalField.Column.Name)).ToList();
                 columnNamesInQuotes.Add(cmdBuilder.QuoteIdentifier(fieldMap.RecordIdentifierSource));

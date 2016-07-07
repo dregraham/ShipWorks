@@ -6,7 +6,7 @@
         /// Required designer variable.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
-        
+
         #region Component Designer generated code
 
         /// <summary>
@@ -16,21 +16,21 @@
         private void InitializeComponent()
         {
             this.elementHost = new System.Windows.Forms.Integration.ElementHost();
-            this.odbcImportFieldMappingControl = new ShipWorks.Stores.UI.Platforms.Odbc.OdbcImportFieldMappingControl();
+            this.mappingControl = new ShipWorks.Stores.UI.Platforms.Odbc.WizardPages.OdbcImportFieldMappingControl();
             this.SuspendLayout();
-            //
+            // 
             // elementHost
-            //
+            // 
             this.elementHost.Dock = System.Windows.Forms.DockStyle.Fill;
             this.elementHost.Location = new System.Drawing.Point(0, 0);
             this.elementHost.Name = "elementHost";
             this.elementHost.Size = new System.Drawing.Size(540, 500);
             this.elementHost.TabIndex = 0;
             this.elementHost.Text = "elementHost1";
-            this.elementHost.Child = this.odbcImportFieldMappingControl;
-            //
+            this.elementHost.Child = this.mappingControl;
+            // 
             // OdbcImportFieldMappingPage
-            //
+            // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.elementHost);
@@ -58,6 +58,6 @@
         #endregion
 
         private System.Windows.Forms.Integration.ElementHost elementHost;
-        private OdbcImportFieldMappingControl odbcImportFieldMappingControl;
+        private OdbcImportFieldMappingControl mappingControl;
     }
 }

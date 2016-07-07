@@ -112,7 +112,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
                 OdbcFieldMap map = new OdbcFieldMap(GetIoFactory());
 
                 map.AddEntry(GetFieldMapEntry(GetShipWorksField(OrderFields.OrderNumber, "Order Number"),
-                    GetExternalField("SomeTableName", "SomeColumnName")));
+                    GetExternalField("SomeColumnName")));
 
                 map.Save(stream);
 
@@ -130,9 +130,9 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
             return new ShipWorksOdbcMappableField(field, displayName);
         }
 
-        private ExternalOdbcMappableField GetExternalField(string tableName, string columnName)
+        private ExternalOdbcMappableField GetExternalField(string columnName)
         {
-            return new ExternalOdbcMappableField(new OdbcColumnSource(tableName), new OdbcColumn(columnName));
+            return new ExternalOdbcMappableField(new OdbcColumn(columnName));
         }
 
         private IOdbcFieldMapIOFactory GetIoFactory()

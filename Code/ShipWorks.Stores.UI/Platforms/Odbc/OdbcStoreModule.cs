@@ -46,8 +46,11 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             builder.RegisterType<OdbcColumnSource>()
                 .AsImplementedInterfaces();
 
-            builder.RegisterType<OdbcImportFieldMappingControl>()
+            builder.RegisterType<WizardPages.OdbcImportFieldMappingControl>()
                 .AsSelf();
+
+            builder.RegisterType<OdbcMapSettingsControlViewModel>()
+                .AsImplementedInterfaces();
 
             builder.RegisterType<OdbcImportFieldMappingControlViewModel>()
                 .AsImplementedInterfaces();
@@ -62,6 +65,10 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
                 .AsImplementedInterfaces();
 
             builder.RegisterType<OdbcDataSourcePage>()
+                .As<IOdbcWizardPage>()
+                .ExternallyOwned();
+
+            builder.RegisterType<OdbcImportMapSettingsPage>()
                 .As<IOdbcWizardPage>()
                 .ExternallyOwned();
 
@@ -86,20 +93,14 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
 
             builder.RegisterType<OdbcCommandFactory>();
 
-            builder.RegisterType<OdbcCustomQueryModalDialog>()
-                .AsImplementedInterfaces();
-
             builder.RegisterType<OdbcSampleDataCommand>()
                 .AsImplementedInterfaces();
 
-            builder.RegisterType<OdbcCustomQueryDlgViewModel>()
-                .AsImplementedInterfaces();
-
-            builder.RegisterType<OdbcCustomQueryDlg>()
-                .Named<IDialog>("OdbcCustomQueryDlg");
-
             builder.RegisterType<OdbcCustomQueryWarningDlg>()
                 .Named<IDialog>("OdbcCustomQueryWarningDlg");
+
+            builder.RegisterType<OdbcColumnSource>()
+                .AsImplementedInterfaces();
 
             RegisterOrderLoadingTypes(builder);
         }

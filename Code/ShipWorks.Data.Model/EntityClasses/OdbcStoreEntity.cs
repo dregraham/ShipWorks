@@ -482,6 +482,12 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("OdbcDownloadStrategy", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("OdbcColumnSourceType", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("OdbcColumnSource", fieldHashtable);
 		}
 		#endregion
 
@@ -586,6 +592,28 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Int32)GetValue((int)OdbcStoreFieldIndex.OdbcDownloadStrategy, true); }
 			set	{ SetValue((int)OdbcStoreFieldIndex.OdbcDownloadStrategy, value); }
+		}
+
+		/// <summary> The OdbcColumnSourceType property of the Entity OdbcStore<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "OdbcStore"."OdbcColumnSourceType"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Int32 OdbcColumnSourceType
+		{
+			get { return (System.Int32)GetValue((int)OdbcStoreFieldIndex.OdbcColumnSourceType, true); }
+			set	{ SetValue((int)OdbcStoreFieldIndex.OdbcColumnSourceType, value); }
+		}
+
+		/// <summary> The OdbcColumnSource property of the Entity OdbcStore<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "OdbcStore"."OdbcColumnSource"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 2048<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String OdbcColumnSource
+		{
+			get { return (System.String)GetValue((int)OdbcStoreFieldIndex.OdbcColumnSource, true); }
+			set	{ SetValue((int)OdbcStoreFieldIndex.OdbcColumnSource, value); }
 		}
 
 

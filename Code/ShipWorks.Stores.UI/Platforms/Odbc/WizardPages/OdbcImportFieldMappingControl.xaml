@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="ShipWorks.Stores.UI.Platforms.Odbc.OdbcImportFieldMappingControl"
+﻿<UserControl x:Class="ShipWorks.Stores.UI.Platforms.Odbc.WizardPages.OdbcImportFieldMappingControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -91,84 +91,7 @@
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
-        <Grid Grid.Row="0" Margin="0 0 0 5">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"></RowDefinition>
-                <RowDefinition Height="Auto"></RowDefinition>
-                <RowDefinition Height="Auto"></RowDefinition>
-                <RowDefinition Height="Auto"></RowDefinition>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="80"></ColumnDefinition>
-                <ColumnDefinition Width="*"></ColumnDefinition>
-                <ColumnDefinition Width="Auto"></ColumnDefinition>
-            </Grid.ColumnDefinitions>
-            <Label Grid.Row="0" Grid.Column="0"
-               Style="{StaticResource Header}"
-               FontWeight="Bold" Content="Map Settings"/>
-            <Label Grid.Row="1" Grid.Column="0"
-                   VerticalAlignment="Center"
-                   HorizontalAlignment="Right" Content="Name:" Margin="0"/>
-            <Label Grid.Row="2" Grid.Column="0"
-                   VerticalAlignment="Center"
-                   HorizontalAlignment="Right" Content="Table:" Margin="0"/>
-            <TextBox Grid.Row="1" Grid.Column="1"
-                     Margin="2 2.5 0 2.5"
-                 Text="{Binding MapName, UpdateSourceTrigger=PropertyChanged}"
-                     VerticalAlignment="Center"
-                     Height="24"/>
-            <ComboBox Grid.Row="2" Grid.Column="1"
-                      Margin="2 2.5 0 2.5"
-                  ItemsSource="{Binding ColumnSources, UpdateSourceTrigger=PropertyChanged}"
-                  DisplayMemberPath="Name"
-                  SelectedValue="{Binding SelectedTable}"
-                      VerticalAlignment="Center">
-                <i:Interaction.Behaviors>
-                    <behaviors:ComboBoxSelectionChangedBehavior Command="{Binding TableChangedCommand}" />
-                </i:Interaction.Behaviors>
-            </ComboBox>
-            <Button Grid.Row="1" Grid.Column="2"
-                Content="Load Map..."
-                Command="{Binding SaveMapCommand}"/>
-            <Button Grid.Row="2" Grid.Column="2"
-                Content="Export Map..."
-                Command="{Binding SaveMapCommand}"/>
-            <TextBlock d:IsHidden="false" 
-                       Grid.Row="3" Grid.Column="1"
-                       TextWrapping="Wrap" Margin="2 0 0 2.5">
-                <TextBlock.Visibility>
-                    <Binding Path="IsCustomQuerySelected"
-                                 Converter="{StaticResource VisibleWhenEqualToParameterConverter}">
-                        <Binding.ConverterParameter>
-                            <system:Boolean>False</system:Boolean>
-                        </Binding.ConverterParameter>
-                    </Binding>
-                </TextBlock.Visibility>
-                    To enter a custom query to retrieve fields from multiple database tables,
-                    <Hyperlink Command="{Binding OpenCustomQueryDlgCommand}"
-                               CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:OdbcImportFieldMappingControl}}}">
-                        click here.
-                    </Hyperlink>
-            </TextBlock>
-            <TextBlock d:IsHidden="true" 
-                       Grid.Row="3" Grid.Column="1"
-                       TextWrapping="Wrap" Margin="2 0 0 2.5">
-                <TextBlock.Visibility>
-                    <Binding Path="IsCustomQuerySelected"
-                                 Converter="{StaticResource VisibleWhenEqualToParameterConverter}">
-                        <Binding.ConverterParameter>
-                            <system:Boolean>True</system:Boolean>
-                        </Binding.ConverterParameter>
-                    </Binding>
-                </TextBlock.Visibility>
-                    To edit your custom import query
-                    <Hyperlink Command="{Binding OpenCustomQueryDlgCommand}"
-                               CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:OdbcImportFieldMappingControl}}}">
-                        click here.
-                    </Hyperlink>
-            </TextBlock>
-            
-        </Grid>
+
 
         <Grid Grid.Row="1" Margin="0 0 0 5">
                 <Grid.RowDefinitions>
@@ -284,6 +207,12 @@
                Grid.Row="0" Grid.Column="0"
                Grid.ColumnSpan="2"
                FontWeight="Bold" Content="Column Mappings" />
+            <Label Style="{StaticResource Header}" Grid.Row="0" Grid.Column="1"
+                   Content="* Required"
+                   Foreground="Red"
+                   HorizontalAlignment="Right"
+                   ></Label>
+
             <ListBox Grid.Row="1" Grid.Column="0"
                  SelectedItem="{Binding SelectedFieldMap}"
                  Margin="0 5 2 0"
@@ -403,9 +332,23 @@
                                                     <ColumnDefinition Width="145" />
                                                     <ColumnDefinition Width="*" />
                                                 </Grid.ColumnDefinitions>
-                                                <Label Grid.Column="0" Content="{Binding ShipWorksField.DisplayName}"
-                                               Margin="0 5 5 5"
-                                               HorizontalAlignment="Left"/>
+
+                                                <StackPanel Grid.Column="0" Orientation="Horizontal">
+                                                    <Label Content="{Binding ShipWorksField.DisplayName}"
+                                                           Margin="0 5 0 5"
+                                                           Padding="5 5 0 5"
+                                                           HorizontalAlignment="Left">
+
+                                                    </Label>
+                                                    <Label x:Name="IsRequired"
+                                                           Foreground="Red"
+                                                           Content="*"
+                                                           Visibility="{Binding ShipWorksField.IsRequired, Converter={StaticResource BooleanToVisibility}, UpdateSourceTrigger=PropertyChanged}"
+                                                           HorizontalAlignment="Left"
+                                                           Margin="0"
+                                                           Padding="0 5 5 5"/>
+                                                </StackPanel>
+
                                                 <ComboBox Grid.Column="1"
                                                       ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl},
                                                 Path=DataContext.Columns, UpdateSourceTrigger=PropertyChanged}"
@@ -414,10 +357,7 @@
                                                       SelectedItem="{Binding ExternalField.Column}"
                                                       TextSearch.TextPath="Name"
                                                       ItemTemplate="{StaticResource SourceColumnComboBoxItemTemplate}" />
-                                                <Label Grid.Column="0" Foreground="Red"
-                                               Content="Required"
-                                               Visibility="{Binding ShipWorksField.IsRequired, Converter={StaticResource BooleanToVisibility}}"
-                                               HorizontalAlignment="Right"/>
+
                                             </Grid>
                                         </Border>
                                     </DataTemplate>

@@ -2,8 +2,10 @@
 
 using System;
 using System.Data.Common;
+using Autofac;
 using Autofac.Extras.Moq;
 using Moq;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Stores.Platforms.Odbc.DataAccess;
 using ShipWorks.Stores.Platforms.Odbc.DataSource;
@@ -34,7 +36,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Download
         public void GenerateSql_GeneratesCorrectSql()
         {
             var fieldMap = mock.Mock<IOdbcFieldMap>();
-            fieldMap.Setup(m => m.GetExternalTableName()).Returns("MyTable");
             fieldMap.Setup(m => m.RecordIdentifierSource).Returns("FieldId");
             fieldMap.Setup(m => m.Entries)
                 .Returns(() => new[] {GetFieldMapEntry("field1"), GetFieldMapEntry("field2")});
@@ -50,7 +51,13 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Download
                 .Returns(cmdBuilder.Object);
 
 
-            var testObject = mock.Create<TableOdbcDownloadQuery>();
+            var testObject =
+                mock.Create<TableOdbcDownloadQuery>(new TypedParameter(typeof(OdbcStoreEntity),
+                    new OdbcStoreEntity()
+                    {
+                        OdbcColumnSourceType = (int) OdbcColumnSourceType.Table,
+                        OdbcColumnSource = "MyTable"
+                    }));
             string sql = testObject.GenerateSql();
 
             Assert.Equal("SELECT [field1], [field2], [FieldId] FROM [MyTable]", sql);
