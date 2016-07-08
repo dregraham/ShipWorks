@@ -151,9 +151,12 @@ namespace ShipWorks.Shipping
             ResizeBegin += (sender, args) => ratesSplitContainer.Panel1MinSize = 0;
             ResizeEnd += (sender, args) => SetServiceControlMinimumHeight();
 
-            //TODO: Delete this line in the next story, use the hash that's stored on the shipment so that we don't have to populate the order!!!
-            shipments.ForEach(OrderUtility.PopulateOrderDetails);
-            shipments.ForEach(x => shippingManager.EnsureShipmentLoaded(x));
+            shipments.ForEach(shipment =>
+            {
+                OrderUtility.PopulateOrderDetails(shipment);
+                shippingManager.EnsureShipmentLoaded(shipment);
+            });
+
             shipSenseSynchronizer = new ShipSenseSynchronizer(shipments);
 
             uspsAccountConvertedToken = Messenger.Current.OfType<UspsAutomaticExpeditedChangedMessage>().Subscribe(OnStampsUspsAutomaticExpeditedChanged);
@@ -1271,8 +1274,10 @@ namespace ShipWorks.Shipping
                 return;
             }
 
-            //TODO: Delete this line in the next story, use the hash that's stored on the shipment so that we don't have to populate the order!!!
-            OrderUtility.PopulateOrderDetails(shipment);
+            ////TODO: Delete this line in the next story, use the hash that's stored on the shipment so that we don't have to populate the order!!!
+            //OrderUtility.PopulateOrderDetails(shipment);
+            Debug.Assert(shipment.Order != null, "Still need to call PopulateOrderDetails.  Order is null.");
+            Debug.Assert(shipment.Order.OrderItems.Count != 0, "Still need to call PopulateOrderDetails. OrderItems is empty.");
 
             shipSenseSynchronizer.Add(loadedShipmentEntities);
             shipSenseSynchronizer.SynchronizeWith(shipment);
@@ -1675,24 +1680,6 @@ namespace ShipWorks.Shipping
         {
             shipmentControl.AddShipments(e.Shipments);
             shipmentControl.SelectShipments(e.Shipments);
-        }
-
-        /// <summary>
-        /// Shipments have been added to the grid
-        /// </summary>
-        private void OnShipmentsAdded(object sender, EventArgs e)
-        {
-            UpdateEditControlsSecurity();
-
-            ShipmentGridShipmentsChangedEventArgs eventArgs = (ShipmentGridShipmentsChangedEventArgs)e;
-            foreach (ShipmentEntity shipment in eventArgs.ShipmentsAdded)
-            {
-                //TODO: Delete this line in the next story, use the hash that's stored on the shipment so that we don't have to populate the order!!!
-                OrderUtility.PopulateOrderDetails(shipment);
-                shippingManager.EnsureShipmentLoaded(shipment);
-
-                shipSenseSynchronizer.Add(shipment);
-            }
         }
 
         /// <summary>

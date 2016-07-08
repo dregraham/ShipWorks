@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
@@ -8,6 +9,7 @@ using Autofac;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
@@ -221,18 +223,10 @@ namespace ShipWorks.Shipping
         /// </summary>
         public virtual bool IsAllowedFor(ShipmentEntity shipment)
         {
-            // Amazon prime orders can only be shipped via the Amazon carrier
-            // this is restriction is per Amazon.
-            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
-            {
-                IOrderManager orderManager = lifetimeScope.Resolve<IOrderManager>();
-                orderManager.PopulateOrderDetails(shipment);
+            IAmazonOrder order = DataProvider.GetEntity(shipment.OrderID) as IAmazonOrder;
 
-                IAmazonOrder order = shipment.Order as IAmazonOrder;
-
-                // If the order is Amazon Prime return false
-                return !order?.IsPrime ?? true;
-            }
+            // If the order is Amazon Prime return false
+            return !order?.IsPrime ?? true;
         }
 
         /// <summary>
@@ -622,10 +616,7 @@ namespace ShipWorks.Shipping
                         // Make sure the customs items are loaded before applying the knowledge base entry
                         // data to the shipment/packages and customs info otherwise the customs data of
                         // the "before" data will be empty in the first change set
-                        using (SqlAdapter adapter = new SqlAdapter())
-                        {
-                            CustomsManager.LoadCustomsItems(shipment, false, adapter);
-                        }
+                        Debug.Assert(shipment.CustomsItems.Any() || shipment.Order.OrderItems.None(), "Customs have not been loaded.  Be sure to load customs prior to calling this method.");
 
                         knowledgebaseEntry.ApplyTo(packageAdapters, shipment.CustomsItems);
 

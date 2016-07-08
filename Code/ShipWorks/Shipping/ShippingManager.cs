@@ -181,6 +181,8 @@ namespace ShipWorks.Shipping
             // It goes with the order
             shipment.Order = order;
 
+            OrderUtility.PopulateOrderDetails(shipment);
+
             // Set some defaults
             shipment.ShipDate = lifetimeScope.Resolve<IDateTimeProvider>().Now.Date.AddHours(12);
             shipment.ShipmentType = (int) ShipmentTypeCode.None;

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using Interapptive.Shared.Collections;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data;
@@ -331,14 +332,22 @@ namespace ShipWorks.Stores.Content
         /// <summary>
         /// Populates the order, order items, and order item attribute for the given shipment.
         /// </summary>
+        public static OrderEntity FetchOrder(long orderID)
+        {
+            OrderEntity order = DataProvider.GetEntity(orderID) as OrderEntity;
+            if (order != null)
+            {
+                PopulateOrderDetails(order);
+            }
+            return order;
+        }
+
+        /// <summary>
+        /// Populates the order, order items, and order item attribute for the given shipment.
+        /// </summary>
         /// <param name="shipment">The shipment.</param>
         public static void PopulateOrderDetails(ShipmentEntity shipment)
         {
-            if (shipment.Order == null)
-            {
-                shipment.Order = (OrderEntity) DataProvider.GetEntity(shipment.OrderID);
-            }
-
             using (SqlAdapter adapter = SqlAdapter.Create(false))
             {
                 PopulateOrderDetails(shipment, adapter);
@@ -355,32 +364,14 @@ namespace ShipWorks.Stores.Content
                 shipment.Order = (OrderEntity) DataProvider.GetEntity(shipment.OrderID);
             }
 
-            adapter.FetchEntityCollection(shipment.Order.OrderItems, new RelationPredicateBucket(OrderItemFields.OrderID == shipment.Order.OrderID));
-
-            foreach (OrderItemEntity orderItemEntity in shipment.Order.OrderItems)
-            {
-                adapter.FetchEntityCollection(orderItemEntity.OrderItemAttributes, new RelationPredicateBucket(OrderItemAttributeFields.OrderItemID == orderItemEntity.OrderItemID));
-            }
-        }
-
-        /// <summary>
-        /// Populates the order, order items, and order item attribute for the given shipment.
-        /// </summary>
-        public static OrderEntity FetchOrder(long orderID)
-        {
-            OrderEntity order = DataProvider.GetEntity(orderID) as OrderEntity;
-            if (order != null)
-            {
-                PopulateOrderDetails(order);
-            }
-            return order;
+            PopulateOrderDetails(shipment.Order, adapter);
         }
 
         /// <summary>
         /// Populates the order, order items, and order item attribute for the given order.
         /// </summary>
         /// <param name="order">The order.</param>
-        public static void PopulateOrderDetails(OrderEntity order)
+        private static void PopulateOrderDetails(OrderEntity order)
         {
             using (SqlAdapter adapter = SqlAdapter.Create(false))
             {
@@ -395,11 +386,17 @@ namespace ShipWorks.Stores.Content
         /// <param name="adapter">The adapter.</param>
         public static void PopulateOrderDetails(OrderEntity order, SqlAdapter adapter)
         {
-            adapter.FetchEntityCollection(order.OrderItems, new RelationPredicateBucket(OrderItemFields.OrderID == order.OrderID));
+            if (order.OrderItems.None())
+            {
+                adapter.FetchEntityCollection(order.OrderItems, new RelationPredicateBucket(OrderItemFields.OrderID == order.OrderID));
+            }
 
             foreach (OrderItemEntity orderItemEntity in order.OrderItems)
             {
-                adapter.FetchEntityCollection(orderItemEntity.OrderItemAttributes, new RelationPredicateBucket(OrderItemAttributeFields.OrderItemID == orderItemEntity.OrderItemID));
+                if (orderItemEntity.OrderItemAttributes.None())
+                {
+                    adapter.FetchEntityCollection(orderItemEntity.OrderItemAttributes, new RelationPredicateBucket(OrderItemAttributeFields.OrderItemID == orderItemEntity.OrderItemID));
+                }
             }
         }
 
