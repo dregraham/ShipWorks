@@ -47,10 +47,12 @@ namespace Interapptive.Shared.Metrics
             {
                 stopwatch.Stop();
 
-                AddMetric("Duration", stopwatch.ElapsedMilliseconds);
+                AddMetric("DurationIn(ms)", stopwatch.ElapsedMilliseconds);
 
                 Telemetry.TrackEvent(eventTelemetry);
             }
+            // If for some reason the code throws, we don't want to stop the user from 
+            // doing their work, so igoring all exceptions here.
             catch
             {
             }

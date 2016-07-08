@@ -138,8 +138,6 @@ namespace Interapptive.Shared.Metrics
         public static void TrackEvent(EventTelemetry eventTelemetry)
         {
             telemetryClient.TrackEvent(eventTelemetry);
-
-            Flush();
         }
 
         /// <summary>
