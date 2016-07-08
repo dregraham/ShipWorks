@@ -290,16 +290,23 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         public bool ValidateRequiredMappingFields()
         {
             // Finds an entry that is required and the external column has not been set
-            IOdbcFieldMapEntry unsetRequiredFieldMap =
-               Order.Entries.FirstOrDefault(
+            IEnumerable<IOdbcFieldMapEntry> unsetRequiredFieldMapEntries =
+               Order.Entries.Where(
                     entry =>
                         entry.ShipWorksField.IsRequired &&
-                        (entry.ExternalField.Column?.Name.Equals("(None)", StringComparison.InvariantCulture) ?? true));
+                        (entry.ExternalField.Column?.Name.Equals("(None)", StringComparison.InvariantCulture) ?? true)).ToList();
 
-            if (unsetRequiredFieldMap != null)
+            if (unsetRequiredFieldMapEntries.Count() == 1)
             {
-                string displayName = unsetRequiredFieldMap.ShipWorksField.DisplayName;
+                string displayName = unsetRequiredFieldMapEntries.FirstOrDefault()?.ShipWorksField.Name;
                 messageHelper.ShowError($"{displayName} is a required field. Please select a column to map to {displayName}.");
+                return false;
+            }
+
+            if (unsetRequiredFieldMapEntries.Count() > 1)
+            {
+                string displayNames = string.Join(", ", unsetRequiredFieldMapEntries.Select(x => x.ShipWorksField.Name));
+                messageHelper.ShowError($"{displayNames} are required fields. Please select columns to map to {displayNames}.");
                 return false;
             }
 

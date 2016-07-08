@@ -149,7 +149,7 @@
                  TextWrapping="Wrap"
                  Margin="0 5 0 5"
                  Text="{Binding CustomQuery, UpdateSourceTrigger=LostFocus}"/>
-            <Label Grid.Row="2" Content="Query Results" HorizontalAlignment="Left"
+            <Label Grid.Row="2" Content="Query Results (Top 25)" HorizontalAlignment="Left"
                    VerticalAlignment="Center"/>
             <Button Grid.Row="2" Content="Execute Query" HorizontalAlignment="Right"
                 Command="{Binding ExecuteQueryCommand}" />
