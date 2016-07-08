@@ -84,6 +84,7 @@ namespace ShipWorks.Shipping
                 if (createIfNone)
                 {
                     ShipmentEntity shipment = InternalCreateFirstShipment(orderID);
+                    shipment.JustCreated = true;
                     shipments.Add(shipment);
                 }
             }
