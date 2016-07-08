@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data.Common;
+using System.Data.Odbc;
 using System.Linq;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Platforms.Odbc.DataAccess;
@@ -60,7 +61,31 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
                 string columnNameInQuotes = cmdBuilder.QuoteIdentifier(columnName);
 
                 // Generate the query
-                return $@"SELECT sub.* FROM({downloadQuery.GenerateSql()}) sub WHERE {columnNameInQuotes} > '{onlineLastModifiedStartingPoint.ToString("yyyy-MM-ddTHH\\:mm\\:ss.fff")}' ORDER BY {columnNameInQuotes} ASC";
+                return $@"SELECT sub.* FROM({downloadQuery.GenerateSql()}) sub WHERE {columnNameInQuotes} > ? ORDER BY {columnNameInQuotes} ASC";
+            }
+        }
+
+        /// <summary>
+        /// Sets the command text property of the command
+        /// </summary>
+        public void PopulateCommandText(IShipWorksOdbcCommand command)
+        {
+            // If the onlinelastmodified column is not mapped we cannot generate the query
+            if (string.IsNullOrWhiteSpace(columnName))
+            {
+                throw new ShipWorksOdbcException("The OnlineLastModified column must be mapped to download by OnlineLastModified.");
+            }
+
+            command.SetCommandText(GenerateSql());
+
+            using (DbConnection connection = dataSource.CreateConnection())
+            using (IShipWorksOdbcDataAdapter adapter = dbProviderFactory.CreateShipWorksOdbcDataAdapter(string.Empty, connection))
+            using (IShipWorksOdbcCommandBuilder cmdBuilder = dbProviderFactory.CreateShipWorksOdbcCommandBuilder(adapter))
+            {
+                // Connect to the database to get the quoted identifier
+                connection.Open();
+                string columnNameInQuotes = cmdBuilder.QuoteIdentifier(columnName);
+                command.AddParameter(columnNameInQuotes, OdbcType.DateTime, onlineLastModifiedStartingPoint);
             }
         }
     }

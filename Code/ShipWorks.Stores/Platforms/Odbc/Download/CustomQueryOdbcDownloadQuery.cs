@@ -1,4 +1,5 @@
 ﻿using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Platforms.Odbc.DataAccess;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Download
 {
@@ -21,5 +22,13 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         /// Generates the Sql to download orders.
         /// </summary>
         public string GenerateSql() => store.OdbcColumnSource;
+
+        /// <summary>
+        /// Populate the command test property of the command
+        /// </summary>
+        public void PopulateCommandText(IShipWorksOdbcCommand command)
+        {
+            command.SetCommandText(GenerateSql());
+        }
     }
 }

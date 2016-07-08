@@ -37,6 +37,14 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
         }
 
         /// <summary>
+        /// Creates an ODBC command from the given query and connection
+        /// </summary>
+        public IShipWorksOdbcCommand CreateOdbcCommand(DbConnection connection)
+        {
+            return new ShipWorksOdbcCommand((OdbcConnection)connection);
+        }
+
+        /// <summary>
         /// Creates a ShipWorks ODBC command builder.
         /// </summary>
         public IShipWorksOdbcCommandBuilder CreateShipWorksOdbcCommandBuilder(IShipWorksOdbcDataAdapter shipWorksAdapter)

@@ -47,22 +47,24 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
                 using (DbConnection connection = dataSource.CreateConnection())
                 {
                     connection.Open();
-                    string query = downloadQuery.GenerateSql();
 
-                    log.Info($"Query created by OdbcDownloadCommand is \"{query}\"");
-
-                    using (IShipWorksOdbcCommand command = dbProviderFactory.CreateOdbcCommand(query, connection))
-                    using (DbDataReader reader = command.ExecuteReader())
+                    using (IShipWorksOdbcCommand command = dbProviderFactory.CreateOdbcCommand(connection))
                     {
-                        while (reader.Read())
-                        {
-                            OdbcRecord odbcRecord = CreateOdbcRecord(reader);
+                        downloadQuery.PopulateCommandText(command);
+                        log.Info($"Query created by OdbcDownloadCommand is \"{command.CommandText}\"");
 
-                            // Only add the record if it contains values. Was causing an issue with
-                            // excel where it was trying to download empty rows.
-                            if (odbcRecord.HasValues)
+                        using (DbDataReader reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
                             {
-                                records.Add(odbcRecord);
+                                OdbcRecord odbcRecord = CreateOdbcRecord(reader);
+
+                                // Only add the record if it contains values. Was causing an issue with
+                                // excel where it was trying to download empty rows.
+                                if (odbcRecord.HasValues)
+                                {
+                                    records.Add(odbcRecord);
+                                }
                             }
                         }
                     }

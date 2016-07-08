@@ -42,7 +42,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Download
                 commandBuilder.Setup(b => b.QuoteIdentifier(It.IsAny<string>())).Returns<string>(x => $"\'{x}\'");
 
                 var dbProviderFactory = mock.Mock<IShipWorksDbProviderFactory>();
-                dbProviderFactory.Setup(f => f.CreateOdbcCommand(It.IsAny<string>(), It.IsAny<DbConnection>()))
+                dbProviderFactory.Setup(f => f.CreateOdbcCommand(It.IsAny<DbConnection>()))
                     .Returns(command.Object);
                 dbProviderFactory.Setup(f => f.CreateShipWorksOdbcCommandBuilder(It.IsAny<ShipWorksOdbcDataAdapter>()))
                     .Returns(commandBuilder.Object);
@@ -98,7 +98,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Download
                 commandBuilder.Setup(b => b.QuoteIdentifier(It.IsAny<string>())).Returns<string>(x => $"\'{x}\'");
 
                 var dbProviderFactory = mock.Mock<IShipWorksDbProviderFactory>();
-                dbProviderFactory.Setup(f => f.CreateOdbcCommand(It.IsAny<string>(), It.IsAny<DbConnection>()))
+                dbProviderFactory.Setup(f => f.CreateOdbcCommand(It.IsAny<DbConnection>()))
                     .Returns(command.Object);
                 dbProviderFactory.Setup(f => f.CreateShipWorksOdbcCommandBuilder(It.IsAny<ShipWorksOdbcDataAdapter>()))
                     .Returns(commandBuilder.Object);
@@ -144,12 +144,13 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Download
 
                 var command = mock.Mock<IShipWorksOdbcCommand>();
                 command.Setup(c => c.ExecuteReader()).Returns(reader.Object);
+                command.SetupGet(c => c.CommandText).Returns("some text");
 
                 var commandBuilder = mock.Mock<IShipWorksOdbcCommandBuilder>();
                 commandBuilder.Setup(b => b.QuoteIdentifier(It.IsAny<string>())).Returns<string>(x => $"\'{x}\'");
 
                 var dbProviderFactory = mock.Mock<IShipWorksDbProviderFactory>();
-                dbProviderFactory.Setup(f => f.CreateOdbcCommand(It.IsAny<string>(), It.IsAny<DbConnection>()))
+                dbProviderFactory.Setup(f => f.CreateOdbcCommand(It.IsAny<DbConnection>()))
                     .Returns(command.Object);
                 dbProviderFactory.Setup(f => f.CreateShipWorksOdbcCommandBuilder(It.IsAny<ShipWorksOdbcDataAdapter>()))
                     .Returns(commandBuilder.Object);
@@ -200,7 +201,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Download
                 commandBuilder.Setup(b => b.QuoteIdentifier(It.IsAny<string>())).Returns<string>(x => $"\'{x}\'");
 
                 var dbProviderFactory = mock.Mock<IShipWorksDbProviderFactory>();
-                dbProviderFactory.Setup(f => f.CreateOdbcCommand(It.IsAny<string>(), It.IsAny<DbConnection>()))
+                dbProviderFactory.Setup(f => f.CreateOdbcCommand(It.IsAny<DbConnection>()))
                     .Returns(command.Object);
                 dbProviderFactory.Setup(f => f.CreateShipWorksOdbcCommandBuilder(It.IsAny<ShipWorksOdbcDataAdapter>()))
                     .Returns(commandBuilder.Object);
@@ -251,7 +252,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Download
                 commandBuilder.Setup(b => b.QuoteIdentifier(It.IsAny<string>())).Returns<string>(x => $"\'{x}\'");
 
                 var dbProviderFactory = mock.Mock<IShipWorksDbProviderFactory>();
-                dbProviderFactory.Setup(f => f.CreateOdbcCommand(It.IsAny<string>(), It.IsAny<DbConnection>()))
+                dbProviderFactory.Setup(f => f.CreateOdbcCommand(It.IsAny<DbConnection>()))
                     .Returns(command.Object);
                 dbProviderFactory.Setup(f => f.CreateShipWorksOdbcCommandBuilder(It.IsAny<ShipWorksOdbcDataAdapter>()))
                     .Returns(commandBuilder.Object);
@@ -278,7 +279,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Download
         }
 
         [Fact]
-        public void Execute_GetsQueryFromIOdbcDownloadQuery()
+        public void Execute_PopulatesCommandTextFromIOdbcDownloadQuery()
         {
             using (var mock = AutoMock.GetLoose())
             {
@@ -304,7 +305,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Download
                 commandBuilder.Setup(b => b.QuoteIdentifier(It.IsAny<string>())).Returns<string>(x => $"\'{x}\'");
 
                 var dbProviderFactory = mock.Mock<IShipWorksDbProviderFactory>();
-                dbProviderFactory.Setup(f => f.CreateOdbcCommand(It.IsAny<string>(), It.IsAny<DbConnection>()))
+                dbProviderFactory.Setup(f => f.CreateOdbcCommand(It.IsAny<DbConnection>()))
                     .Returns(command.Object);
                 dbProviderFactory.Setup(f => f.CreateShipWorksOdbcCommandBuilder(It.IsAny<ShipWorksOdbcDataAdapter>()))
                     .Returns(commandBuilder.Object);
@@ -326,7 +327,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Download
                 var testObject = mock.Create<OdbcDownloadCommand>();
                 testObject.Execute();
 
-                query.Verify(q => q.GenerateSql());
+                query.Verify(q => q.PopulateCommandText(command.Object));
             }
         }
 
