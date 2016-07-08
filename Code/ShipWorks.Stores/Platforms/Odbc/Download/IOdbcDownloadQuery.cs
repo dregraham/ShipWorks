@@ -15,6 +15,6 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         /// <summary>
         /// Adds Command Text to the given sql command
         /// </summary>
-        void PopulateCommandText(IShipWorksOdbcCommand command);
+        void ConfigureCommand(IShipWorksOdbcCommand command);
     }
 }

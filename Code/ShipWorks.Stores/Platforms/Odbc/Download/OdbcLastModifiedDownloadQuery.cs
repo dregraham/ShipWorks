@@ -52,40 +52,34 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
                 throw new ShipWorksOdbcException("The OnlineLastModified column must be mapped to download by OnlineLastModified.");
             }
 
-            using (DbConnection connection = dataSource.CreateConnection())
-            using (IShipWorksOdbcDataAdapter adapter = dbProviderFactory.CreateShipWorksOdbcDataAdapter(string.Empty, connection))
-            using (IShipWorksOdbcCommandBuilder cmdBuilder = dbProviderFactory.CreateShipWorksOdbcCommandBuilder(adapter))
-            {
-                // Connect to the database to get the quoted identifier
-                connection.Open();
-                string columnNameInQuotes = cmdBuilder.QuoteIdentifier(columnName);
+            string columnNameInQuotes = WrapColumnInQuoteIdentifier(columnName);
 
-                // Generate the query
-                return $@"SELECT sub.* FROM({downloadQuery.GenerateSql()}) sub WHERE {columnNameInQuotes} > ? ORDER BY {columnNameInQuotes} ASC";
-            }
+            // Generate the query
+            return $@"SELECT sub.* FROM({downloadQuery.GenerateSql()}) sub WHERE {columnNameInQuotes} > ? ORDER BY {columnNameInQuotes} ASC";
         }
 
         /// <summary>
         /// Sets the command text property of the command
         /// </summary>
-        public void PopulateCommandText(IShipWorksOdbcCommand command)
+        public void ConfigureCommand(IShipWorksOdbcCommand command)
         {
-            // If the onlinelastmodified column is not mapped we cannot generate the query
-            if (string.IsNullOrWhiteSpace(columnName))
-            {
-                throw new ShipWorksOdbcException("The OnlineLastModified column must be mapped to download by OnlineLastModified.");
-            }
+            command.ChangeCommandText(GenerateSql());
+            string columnNameInQuotes = WrapColumnInQuoteIdentifier(columnName);
 
-            command.SetCommandText(GenerateSql());
+            command.AddParameter(columnNameInQuotes, OdbcType.DateTime, onlineLastModifiedStartingPoint);
+        }
 
+        /// <summary>
+        /// Wraps the given column string in the data sources quoted identifier
+        /// </summary>
+        private string WrapColumnInQuoteIdentifier(string column)
+        {
             using (DbConnection connection = dataSource.CreateConnection())
             using (IShipWorksOdbcDataAdapter adapter = dbProviderFactory.CreateShipWorksOdbcDataAdapter(string.Empty, connection))
             using (IShipWorksOdbcCommandBuilder cmdBuilder = dbProviderFactory.CreateShipWorksOdbcCommandBuilder(adapter))
             {
-                // Connect to the database to get the quoted identifier
                 connection.Open();
-                string columnNameInQuotes = cmdBuilder.QuoteIdentifier(columnName);
-                command.AddParameter(columnNameInQuotes, OdbcType.DateTime, onlineLastModifiedStartingPoint);
+                return cmdBuilder.QuoteIdentifier(column);
             }
         }
     }

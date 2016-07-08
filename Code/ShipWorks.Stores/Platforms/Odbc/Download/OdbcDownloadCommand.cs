@@ -17,7 +17,6 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         private readonly IOdbcDataSource dataSource;
         private readonly IShipWorksDbProviderFactory dbProviderFactory;
         private readonly IOdbcDownloadQuery downloadQuery;
-        private readonly ILog log;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcDownloadCommand"/> class.
@@ -25,14 +24,12 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         public OdbcDownloadCommand(IOdbcFieldMap fieldMap,
             IOdbcDataSource dataSource,
             IShipWorksDbProviderFactory dbProviderFactory,
-            IOdbcDownloadQuery downloadQuery,
-            ILog log)
+            IOdbcDownloadQuery downloadQuery)
         {
             this.fieldMap = fieldMap;
             this.dataSource = dataSource;
             this.dbProviderFactory = dbProviderFactory;
             this.downloadQuery = downloadQuery;
-            this.log = log;
         }
 
         /// <summary>
@@ -50,8 +47,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
 
                     using (IShipWorksOdbcCommand command = dbProviderFactory.CreateOdbcCommand(connection))
                     {
-                        downloadQuery.PopulateCommandText(command);
-                        log.Info($"Query created by OdbcDownloadCommand is \"{command.CommandText}\"");
+                        downloadQuery.ConfigureCommand(command);
 
                         using (DbDataReader reader = command.ExecuteReader())
                         {

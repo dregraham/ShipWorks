@@ -26,9 +26,9 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         /// <summary>
         /// Populate the command test property of the command
         /// </summary>
-        public void PopulateCommandText(IShipWorksOdbcCommand command)
+        public void ConfigureCommand(IShipWorksOdbcCommand command)
         {
-            command.SetCommandText(GenerateSql());
+            command.ChangeCommandText(GenerateSql());
         }
     }
 }

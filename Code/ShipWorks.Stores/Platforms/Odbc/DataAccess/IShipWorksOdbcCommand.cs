@@ -8,11 +8,6 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
     public interface IShipWorksOdbcCommand : IDisposable
     {
         /// <summary>
-        /// Gets the command text
-        /// </summary>
-        string CommandText { get; }
-
-        /// <summary>
         /// Sends the System.Data.Odbc.OdbcCommand.CommandText to the System.Data.Odbc.OdbcCommand.Connection
         /// and builds an System.Data.Odbc.OdbcDataReader.
         /// </summary>
@@ -28,7 +23,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
         /// Sets the command text
         /// </summary>
         /// <param name="sql"></param>
-        void SetCommandText(string sql);
+        void ChangeCommandText(string sql);
 
         /// <summary>
         /// Adds the given parameter to the command

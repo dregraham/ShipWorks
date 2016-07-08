@@ -15,17 +15,15 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
     {
         private readonly IOdbcFieldMap odbcFieldMap;
         private readonly IOdbcDataSource dataSource;
-        private readonly Func<Type, ILog> logFactory;
         private readonly IShipWorksDbProviderFactory dbProviderFactory;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcCommandFactory"/> class.
         /// </summary>
-        public OdbcCommandFactory(IOdbcFieldMap odbcFieldMap, IOdbcDataSource dataSource, Func<Type, ILog> logFactory, IShipWorksDbProviderFactory dbProviderFactory)
+        public OdbcCommandFactory(IOdbcFieldMap odbcFieldMap, IOdbcDataSource dataSource, IShipWorksDbProviderFactory dbProviderFactory)
         {
             this.odbcFieldMap = odbcFieldMap;
             this.dataSource = dataSource;
-            this.logFactory = logFactory;
             this.dbProviderFactory = dbProviderFactory;
         }
 
@@ -36,7 +34,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
         {
             IOdbcDownloadQuery downloadQuery = GetDownloadQuery(store, odbcFieldMap, dataSource, dbProviderFactory);
 
-            return new OdbcDownloadCommand(odbcFieldMap, dataSource, dbProviderFactory, downloadQuery, logFactory(typeof(OdbcDownloadCommand)));
+            return new OdbcDownloadCommand(odbcFieldMap, dataSource, dbProviderFactory, downloadQuery);
         }
 
         /// <summary>
@@ -47,7 +45,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
             IOdbcDownloadQuery downloadQuery = GetDownloadQuery(store, odbcFieldMap, dataSource, dbProviderFactory);
             IOdbcDownloadQuery lastModifiedQuery = new OdbcLastModifiedDownloadQuery(downloadQuery, onlineLastModified, odbcFieldMap, dbProviderFactory, dataSource);
 
-            return new OdbcDownloadCommand(odbcFieldMap, dataSource, dbProviderFactory, lastModifiedQuery, logFactory(typeof(OdbcDownloadCommand)));
+            return new OdbcDownloadCommand(odbcFieldMap, dataSource, dbProviderFactory, lastModifiedQuery);
         }
 
         /// <summary>

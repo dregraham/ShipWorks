@@ -59,9 +59,9 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         /// Populate the command with the table download query
         /// </summary>
         /// <param name="command"></param>
-        public void PopulateCommandText(IShipWorksOdbcCommand command)
+        public void ConfigureCommand(IShipWorksOdbcCommand command)
         {
-            throw new System.NotImplementedException();
+            command.ChangeCommandText(GenerateSql());
         }
     }
 }

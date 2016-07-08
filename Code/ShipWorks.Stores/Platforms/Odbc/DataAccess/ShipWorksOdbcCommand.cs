@@ -1,6 +1,7 @@
 ﻿using System.Data;
 using System.Data.Common;
 using System.Data.Odbc;
+using log4net;
 
 namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
 {
@@ -9,6 +10,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
     /// </summary>
     public class ShipWorksOdbcCommand : IShipWorksOdbcCommand
     {
+        private readonly ILog log;
         private readonly OdbcCommand command;
 
         /// <summary>
@@ -16,8 +18,10 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
         /// </summary>
         /// <param name="query">The query.</param>
         /// <param name="connection">The connection.</param>
-        public ShipWorksOdbcCommand(string query, OdbcConnection connection)
+        /// <param name="log"></param>
+        public ShipWorksOdbcCommand(string query, OdbcConnection connection, ILog log)
         {
+            this.log = log;
             command = new OdbcCommand(query, connection);
         }
 
@@ -25,15 +29,12 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
         /// Initializes a new instance of the <see cref="ShipWorksOdbcCommand"/> class.
         /// </summary>
         /// <param name="connection">The connection.</param>
-        public ShipWorksOdbcCommand(OdbcConnection connection)
+        /// <param name="log"></param>
+        public ShipWorksOdbcCommand(OdbcConnection connection, ILog log)
         {
+            this.log = log;
             command = connection.CreateCommand();
         }
-
-        /// <summary>
-        /// Gets the command text
-        /// </summary>
-        public string CommandText => command?.CommandText;
 
         /// <summary>
         /// Sends the System.Data.Odbc.OdbcCommand.CommandText to the System.Data.Odbc.OdbcCommand.Connection
@@ -42,7 +43,11 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
         /// <returns>
         /// An System.Data.Odbc.OdbcDataReader object.
         /// </returns>
-        public DbDataReader ExecuteReader() => command.ExecuteReader();
+        public DbDataReader ExecuteReader()
+        {
+            log.Info(command.CommandText);
+            return command.ExecuteReader();
+        }
 
         /// <summary>
         /// Sends the System.Data.Odbc.OdbcCommand.CommandText to the System.Data.Odbc.OdbcCommand.Connection
@@ -51,12 +56,16 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
         /// <returns>
         /// An System.Data.Odbc.OdbcDataReader object.
         /// </returns>
-        public DbDataReader ExecuteReader(CommandBehavior commandBehavior) => command.ExecuteReader(commandBehavior);
+        public DbDataReader ExecuteReader(CommandBehavior commandBehavior)
+        {
+            log.Info(command.CommandText);
+            return command.ExecuteReader(commandBehavior);
+        }
 
         /// <summary>
         /// Sets the command text of the command
         /// </summary>
-        public void SetCommandText(string sql)
+        public void ChangeCommandText(string sql)
         {
             command.CommandText = sql;
         }

@@ -1,5 +1,7 @@
-﻿using System.Data.Common;
+﻿using System;
+using System.Data.Common;
 using System.Data.Odbc;
+using log4net;
 
 namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
 {
@@ -8,6 +10,13 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
     /// </summary>
     public class OdbcShipWorksDbProviderFactory : IShipWorksDbProviderFactory
     {
+        private readonly Func<Type, ILog> logFactory;
+
+        public OdbcShipWorksDbProviderFactory(Func<Type, ILog> logFactory)
+        {
+            this.logFactory = logFactory;
+        }
+
         /// <summary>
         /// Returns an OdbcConnection
         /// </summary>
@@ -33,7 +42,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
         /// </summary>
         public IShipWorksOdbcCommand CreateOdbcCommand(string query, DbConnection connection)
         {
-            return new ShipWorksOdbcCommand(query, (OdbcConnection) connection);
+            return new ShipWorksOdbcCommand(query, (OdbcConnection) connection, logFactory(typeof(ShipWorksOdbcCommand)));
         }
 
         /// <summary>
@@ -41,7 +50,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
         /// </summary>
         public IShipWorksOdbcCommand CreateOdbcCommand(DbConnection connection)
         {
-            return new ShipWorksOdbcCommand((OdbcConnection)connection);
+            return new ShipWorksOdbcCommand((OdbcConnection)connection, logFactory(typeof(ShipWorksOdbcCommand)));
         }
 
         /// <summary>

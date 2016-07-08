@@ -1,4 +1,5 @@
-﻿using Autofac.Extras.Moq;
+﻿using System;
+using Autofac.Extras.Moq;
 using ShipWorks.Stores.Platforms.Odbc;
 using System.Data;
 using System.Data.Odbc;
@@ -7,12 +8,19 @@ using Xunit;
 
 namespace ShipWorks.Stores.Tests.Platforms.Odbc
 {
-    public class OdbcShipWorksDbProviderFactoryTest
+    public class OdbcShipWorksDbProviderFactoryTest : IDisposable
     {
+        private readonly AutoMock mock;
+
+        public OdbcShipWorksDbProviderFactoryTest()
+        {
+            mock = AutoMock.GetLoose();
+        }
+
         [Fact]
         public void CreateOdbcConnection_ReturnsOdbcConnection()
         {
-            OdbcShipWorksDbProviderFactory testObject = new OdbcShipWorksDbProviderFactory();
+            OdbcShipWorksDbProviderFactory testObject = mock.Create<OdbcShipWorksDbProviderFactory>();
             using (IDbConnection connection = testObject.CreateOdbcConnection())
             {
                 Assert.IsAssignableFrom<OdbcConnection>(connection);
@@ -22,7 +30,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         [Fact]
         public void CreateOdbcConnection_ReturnsOdbcConnection_WhenConnectionStringProvided()
         {
-            OdbcShipWorksDbProviderFactory testObject = new OdbcShipWorksDbProviderFactory();
+            OdbcShipWorksDbProviderFactory testObject = mock.Create<OdbcShipWorksDbProviderFactory>();
             using (IDbConnection connection = testObject.CreateOdbcConnection("dsn=blah"))
             {
                 Assert.IsAssignableFrom<OdbcConnection>(connection);
@@ -33,7 +41,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         public void CreateOdbcConnection_SetsConnectionStringOfConnection_WhenConnectionStringProvided()
         {
             string connectionString = "dsn=blah";
-            OdbcShipWorksDbProviderFactory testObject = new OdbcShipWorksDbProviderFactory();
+            OdbcShipWorksDbProviderFactory testObject = mock.Create<OdbcShipWorksDbProviderFactory>();
             using (IDbConnection connection = testObject.CreateOdbcConnection(connectionString))
             {
                 Assert.Equal(connectionString, connection.ConnectionString);
@@ -43,7 +51,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         [Fact]
         public void CreateOdbcCommand_ReturnsShipworksOdbcCommand()
         {
-            OdbcShipWorksDbProviderFactory testObject = new OdbcShipWorksDbProviderFactory();
+            OdbcShipWorksDbProviderFactory testObject = mock.Create<OdbcShipWorksDbProviderFactory>();
 
             using (var connection = testObject.CreateOdbcConnection())
             using (var command = testObject.CreateOdbcCommand("query", connection))
@@ -61,7 +69,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
                 var shipworksDataAdapter = mock.Mock<IShipWorksOdbcDataAdapter>();
                 shipworksDataAdapter.SetupGet(a => a.Adapter).Returns(adapter);
 
-                OdbcShipWorksDbProviderFactory testObject = new OdbcShipWorksDbProviderFactory();
+                OdbcShipWorksDbProviderFactory testObject = mock.Create<OdbcShipWorksDbProviderFactory>();
                 IShipWorksOdbcCommandBuilder shipWorksOdbcCommandBuilder =
                     testObject.CreateShipWorksOdbcCommandBuilder(shipworksDataAdapter.Object);
 
@@ -72,10 +80,15 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         [Fact]
         public void CreateShipworksOdbcDataAdapter_ReturnsShipworksOdbcDataAdapter()
         {
-            OdbcShipWorksDbProviderFactory testObject = new OdbcShipWorksDbProviderFactory();
+            OdbcShipWorksDbProviderFactory testObject = mock.Create<OdbcShipWorksDbProviderFactory>();
             var shipWorksOdbcDataAdapter = testObject.CreateShipWorksOdbcDataAdapter(string.Empty, null);
 
             Assert.IsType<ShipWorksOdbcDataAdapter>(shipWorksOdbcDataAdapter);
+        }
+
+        public void Dispose()
+        {
+            mock.Dispose();
         }
     }
 }
