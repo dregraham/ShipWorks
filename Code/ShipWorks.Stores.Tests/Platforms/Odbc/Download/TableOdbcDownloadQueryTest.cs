@@ -90,7 +90,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Download
                         OdbcColumnSourceType = (int)OdbcColumnSourceType.Table,
                         OdbcColumnSource = "MyTable"
                     }));
-            string sql = testObject.GenerateSql();
 
             testObject.ConfigureCommand(command.Object);
         }
