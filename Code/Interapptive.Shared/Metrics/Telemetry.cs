@@ -133,6 +133,14 @@ namespace Interapptive.Shared.Metrics
         }
 
         /// <summary>
+        /// Track an event
+        /// </summary>
+        public static void TrackEvent(EventTelemetry eventTelemetry)
+        {
+            telemetryClient.TrackEvent(eventTelemetry);
+        }
+
+        /// <summary>
         /// Flush any stored telemetry information
         /// </summary>
         public static void Flush()
