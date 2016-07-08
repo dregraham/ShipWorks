@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Linq;
-using System.Reactive.Linq;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using Autofac;
+﻿using Autofac;
 using Interapptive.Shared;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.UI;
@@ -38,6 +30,14 @@ using ShipWorks.Stores;
 using ShipWorks.Stores.Content;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Linq;
+using System.Reactive.Linq;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 using Timer = System.Windows.Forms.Timer;
 
 namespace ShipWorks.Shipping
@@ -1927,7 +1927,7 @@ namespace ShipWorks.Shipping
         /// Void the selected shipments that are processed, and have not yet been already voided.
         /// </summary>
         [NDependIgnoreLongMethod]
-        private void OnVoid(object sender, EventArgs e)
+        private async void OnVoid(object sender, EventArgs e)
         {
             // Confirm they want to void
             using (ShipmentVoidConfirmDlg dlg = new ShipmentVoidConfirmDlg())
@@ -1954,76 +1954,76 @@ namespace ShipWorks.Shipping
                 "Shipment {0} of {1}");
 
             List<string> newErrors = new List<string>();
+            
+            await executor.ExecuteAsync((shipment, state, issueAdder) => VoidShipment(shipment, newErrors), shipments);
 
-            // Code to execute once background load is complete
-            executor.ExecuteCompleted += (s, args) =>
+            // Apply the edits that were made in the background to the grid rows
+            ApplyShipmentsToGridRows(shipments);
+
+            // This clears out all the deleted ones
+            shipmentControl.SelectionChanged -= this.OnChangeSelectedShipments;
+            shipmentControl.RefreshAndResort();
+            shipmentControl.SelectionChanged += this.OnChangeSelectedShipments;
+
+            if (newErrors.Count > 0)
             {
-                // Apply the edits that were made in the background to the grid rows
-                ApplyShipmentsToGridRows(shipments);
+                string message = "Some errors occurred during voiding.\n\n";
 
-                // This clears out all the deleted ones
-                shipmentControl.SelectionChanged -= this.OnChangeSelectedShipments;
-                shipmentControl.RefreshAndResort();
-                shipmentControl.SelectionChanged += this.OnChangeSelectedShipments;
-
-                if (newErrors.Count > 0)
+                foreach (string error in newErrors.Take(3))
                 {
-                    string message = "Some errors occurred during voiding.\n\n";
-
-                    foreach (string error in newErrors.Take(3))
-                    {
-                        message += error + "\n\n";
-                    }
-
-                    if (newErrors.Count > 3)
-                    {
-                        message += "See the shipment list for all errors.";
-                    }
-
-                    MessageHelper.ShowError(this, message);
+                    message += error + "\n\n";
                 }
 
-                LoadSelectedShipments(true);
-            };
+                if (newErrors.Count > 3)
+                {
+                    message += "See the shipment list for all errors.";
+                }
 
-            // Code to execute for each shipment
-            executor.ExecuteAsync((ShipmentEntity shipment, object state, BackgroundIssueAdder<ShipmentEntity> issueAdder) =>
+                MessageHelper.ShowError(this, message);
+            }
+
+            await LoadSelectedShipments(true);
+        }
+
+        /// <summary>
+        /// Voids the shipment.
+        /// </summary>
+        private void VoidShipment(ShipmentEntity shipment, List<string> newErrors)
+        {
+            long shipmentID = shipment.ShipmentID;
+            string errorMessage = null;
+
+            // Process it
+            GenericResult<ICarrierShipmentAdapter> result = shippingManager.VoidShipment(shipmentID, ErrorManager);
+
+            if (result.Success)
             {
-                long shipmentID = shipment.ShipmentID;
-                string errorMessage = null;
+                ErrorManager.Remove(shipmentID);
+            }
+            else
+            {
+                errorMessage = result.Message;
+            }
 
-                // Process it
-                GenericResult<ICarrierShipmentAdapter> result = shippingManager.VoidShipment(shipmentID, ErrorManager);
+            try
+            {
+                // Reload it so we can show the most recent data when the grid redisplays
+                shippingManager.RefreshShipment(shipment);
+            }
+            catch (ObjectDeletedException ex)
+            {
+                // If there wasn't already a different error, set this as the error
+                if (errorMessage == null)
+                {
+                    errorMessage = "The shipment has been deleted.";
+                    ErrorManager.SetShipmentErrorMessage(shipmentID, new ShippingException(errorMessage, ex));
+                }
+            }
 
-                if (result.Success)
-                {
-                    ErrorManager.Remove(shipmentID);
-                }
-                else
-                {
-                    errorMessage = result.Message;
-                }
-
-                try
-                {
-                    // Reload it so we can show the most recent data when the grid redisplays
-                    shippingManager.RefreshShipment(shipment);
-                }
-                catch (ObjectDeletedException ex)
-                {
-                    // If there wasn't already a different error, set this as the error
-                    if (errorMessage == null)
-                    {
-                        errorMessage = "The shipment has been deleted.";
-                        ErrorManager.SetShipmentErrorMessage(shipmentID, new ShippingException(errorMessage, ex));
-                    }
-                }
-
-                if (errorMessage != null)
-                {
-                    newErrors.Add("Order " + shipment.Order.OrderNumberComplete + ": " + errorMessage);
-                }
-            }, shipments); // Each shipment to execute the code for
+            if (errorMessage != null)
+            {
+                newErrors.Add("Order " + shipment.Order.OrderNumberComplete + ": " + errorMessage);
+            }
         }
 
         /// <summary>
