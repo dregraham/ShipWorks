@@ -18,7 +18,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         private readonly DateTime onlineLastModifiedStartingPoint;
         private readonly IShipWorksDbProviderFactory dbProviderFactory;
         private readonly IOdbcDataSource dataSource;
-        private readonly string columnName;
+        private readonly string lastModifiedColumnName;
 
         /// <summary>
         /// Constructor
@@ -36,7 +36,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
             this.onlineLastModifiedStartingPoint = onlineLastModifiedStartingPoint;
             this.dbProviderFactory = dbProviderFactory;
             this.dataSource = dataSource;
-            columnName = fieldMap.FindEntriesBy(OrderFields.OnlineLastModified).FirstOrDefault()?.ExternalField.Column.Name;
+            lastModifiedColumnName = fieldMap.FindEntriesBy(OrderFields.OnlineLastModified).FirstOrDefault()?.ExternalField.Column.Name;
         }
 
         /// <summary>
@@ -47,12 +47,12 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         public string GenerateSql()
         {
             // If the onlinelastmodified column is not mapped we cannot generate the query
-            if (string.IsNullOrWhiteSpace(columnName))
+            if (string.IsNullOrWhiteSpace(lastModifiedColumnName))
             {
                 throw new ShipWorksOdbcException("The OnlineLastModified column must be mapped to download by OnlineLastModified.");
             }
 
-            string columnNameInQuotes = WrapColumnInQuoteIdentifier(columnName);
+            string columnNameInQuotes = WrapColumnInQuoteIdentifier(lastModifiedColumnName);
 
             // Generate the query
             return $@"SELECT sub.* FROM({downloadQuery.GenerateSql()}) sub WHERE {columnNameInQuotes} > ? ORDER BY {columnNameInQuotes} ASC";
@@ -64,7 +64,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         public void ConfigureCommand(IShipWorksOdbcCommand command)
         {
             command.ChangeCommandText(GenerateSql());
-            string columnNameInQuotes = WrapColumnInQuoteIdentifier(columnName);
+            string columnNameInQuotes = WrapColumnInQuoteIdentifier(lastModifiedColumnName);
 
             command.AddParameter(columnNameInQuotes, OdbcType.DateTime, onlineLastModifiedStartingPoint);
         }
