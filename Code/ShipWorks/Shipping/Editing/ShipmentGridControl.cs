@@ -13,6 +13,7 @@ using ShipWorks.Data.Grid;
 using ShipWorks.Data.Grid.Columns;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Filters;
+using ShipWorks.Stores.Content;
 using ShipWorks.UI.Utility;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
@@ -662,6 +663,8 @@ namespace ShipWorks.Shipping.Editing
             {
                 if (order == null)
                 {
+                    OrderUtility.PopulateOrderDetails(shipment);
+                    ShippingManager.EnsureShipmentLoaded(shipment);
                     order = shipment.Order;
                 }
                 else
