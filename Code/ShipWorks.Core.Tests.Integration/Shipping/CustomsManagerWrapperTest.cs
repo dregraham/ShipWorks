@@ -1,7 +1,5 @@
 ﻿using System;
 using Autofac;
-using Autofac.Core.Lifetime;
-using Autofac.Core.Registration;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Connection;
@@ -9,7 +7,6 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.Other;
-using ShipWorks.Shipping.Services;
 using ShipWorks.Startup;
 using ShipWorks.Tests.Shared;
 using ShipWorks.Tests.Shared.Database;
@@ -49,7 +46,6 @@ namespace ShipWorks.Core.Tests.Integration.Shipping
         {
             Assert.Throws<ArgumentNullException>(() => testObject.LoadCustomsItems(null, false, adapter));
         }
-
 
         [Fact]
         public void LoadCustomsItems_ThrowsArgumentNull_WhenSqlAdapterIsNull()

@@ -40,7 +40,6 @@ namespace ShipWorks.Core.Tests.Integration.Shipping
             Assert.Throws<ArgumentNullException>(() => CustomsManager.LoadCustomsItems(null, false, adapter));
         }
 
-
         [Fact]
         public void LoadCustomsItems_ThrowsArgumentNull_WhenSqlAdapterIsNull()
         {

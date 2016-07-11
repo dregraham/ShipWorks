@@ -16,14 +16,12 @@ namespace ShipWorks.Tests.Shared.EntityBuilders
         /// </summary>
         public OrderItemEntityBuilder()
         {
-
         }
         /// <summary>
         /// Modify an existing order item
         /// </summary>
         public OrderItemEntityBuilder(OrderItemEntity orderItem) : base(orderItem)
         {
-
         }
 
         /// <summary>
