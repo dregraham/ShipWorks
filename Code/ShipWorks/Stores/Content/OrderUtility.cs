@@ -380,6 +380,11 @@ namespace ShipWorks.Stores.Content
         /// <param name="adapter">The adapter.</param>
         public static void PopulateOrderDetails(OrderEntity order, SqlAdapter adapter)
         {
+            if (order.Store == null)
+            {
+                order.Store = StoreManager.GetStore(order.StoreID);
+            }
+
             if (order.OrderItems.None())
             {
                 adapter.FetchEntityCollection(order.OrderItems, new RelationPredicateBucket(OrderItemFields.OrderID == order.OrderID));

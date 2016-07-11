@@ -169,12 +169,7 @@ namespace ShipWorks.Shipping
         {
             lifetimeScope.Resolve<ISecurityContext>()
                 .DemandPermission(PermissionType.ShipmentsCreateEditProcess, order.OrderID);
-
-            if (order.Store == null)
-            {
-                order.Store = StoreManager.GetStore(order.StoreID);
-            }
-
+            
             // Create the shipment
             ShipmentEntity shipment = new ShipmentEntity();
 
@@ -204,16 +199,8 @@ namespace ShipWorks.Shipping
             //TODO: Remove this once the profile copying is implemented.
             shipment.RequestedLabelFormat = (int) ThermalLanguage.None;
 
-            // We have to get the order items to calculate the weight
-            IEnumerable<EntityBase2> orderItems = order.OrderItems;
-            if (orderItems.None())
-            {
-                // We have to get the order items to calculate the weight
-                orderItems = lifetimeScope.Resolve<IDataProvider>().GetRelatedEntities(order.OrderID, EntityType.OrderItemEntity);
-            }
-
             // Set the initial weights
-            shipment.ContentWeight = orderItems.OfType<OrderItemEntity>().Sum(i => i.Quantity * i.Weight);
+            shipment.ContentWeight = order.OrderItems.Sum(i => i.Quantity * i.Weight);
             shipment.TotalWeight = shipment.ContentWeight;
 
             // Set the rating billing info.
@@ -239,9 +226,8 @@ namespace ShipWorks.Shipping
             shipment.OriginOriginID = (int) ShipmentOriginSource.Store;
 
             // The from address will be dependent on the specific service type, but we'll default it to that of the store
-            StoreEntity store = lifetimeScope.Resolve<IStoreManager>().GetStore(order.StoreID);
-            PersonAdapter.Copy(store, "", shipment, "Origin");
-            shipment.OriginFirstName = store.StoreName;
+            PersonAdapter.Copy(order.Store, "", shipment, "Origin");
+            shipment.OriginFirstName = order.Store.StoreName;
 
             IShipmentTypeManager shipmentTypeManager = lifetimeScope.Resolve<IShipmentTypeManager>();
 
@@ -253,11 +239,6 @@ namespace ShipWorks.Shipping
             // Apply the default values to the shipment
             shipmentType.ConfigureNewShipment(shipment);
             shipmentType.UpdateDynamicShipmentData(shipment);
-
-            using (SqlAdapter adapter = new SqlAdapter())
-            {
-                OrderUtility.PopulateOrderDetails(shipment, adapter);
-            }
 
             // Go ahead and create customs if needed
             lifetimeScope.Resolve<ICustomsManager>().GenerateCustomsItems(shipment);
