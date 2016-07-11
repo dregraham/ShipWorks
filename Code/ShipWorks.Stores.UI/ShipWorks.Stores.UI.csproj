@@ -198,6 +198,9 @@
     <Compile Include="Platforms\Odbc\WizardPages\OdbcImportMapSettingsPage.Designer.cs">
       <DependentUpon>OdbcImportMapSettingsPage.cs</DependentUpon>
     </Compile>
+    <Compile Include="Platforms\Odbc\WizardPages\OdbcMappingControl.xaml.cs">
+      <DependentUpon>OdbcMappingControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Platforms\Odbc\WizardPages\OdbcUploadShipmentDataSourceWizardPage.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -382,6 +385,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Platforms\Odbc\WizardPages\OdbcImportMapSettingsControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Platforms\Odbc\WizardPages\OdbcMappingControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
