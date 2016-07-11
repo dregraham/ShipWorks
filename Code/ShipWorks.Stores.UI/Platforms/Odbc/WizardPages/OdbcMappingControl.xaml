@@ -28,25 +28,12 @@
             <Setter Property="Margin" Value="2 5 0 5" />
             <Setter Property="Padding" Value="1 4 0 4" />
         </Style>
-        <Style TargetType="{x:Type Button}">
-            <Setter Property="Margin" Value="5 2.5 0 2.5" />
-            <Setter Property="Padding" Value="5 2 5 2" />
-            <Setter Property="Width" Value="80" />
-        </Style>
         <Style TargetType="{x:Type ui:ShipWorksComboBox}">
             <Setter Property="Margin" Value="2 5 0 5" />
             <Setter Property="Padding" Value="4 4 0 4" />
             <Setter Property="Height" Value="24"/>
         </Style>
-        <Style TargetType="{x:Type RadioButton}">
-            <Setter Property="HorizontalAlignment" Value="Center"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="Margin" Value="0 0 5 0" />
-            <Setter Property="Padding" Value="0" />
-            <Setter Property="VerticalContentAlignment" Value="Center" />
-        </Style>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
-        <ui:VisibleWhenEqualToParameterConverter x:Key="VisibleWhenEqualToParameterConverter" />
         <odbc:OdbcFieldMapMultiValueConverter x:Key="MapMultiValueConverter" />
         <DataTemplate x:Key="SourceColumnComboBoxItemTemplate">
             <Control x:Name="SourceColumns" Focusable="False">
