@@ -6,10 +6,16 @@ using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
 {
+    /// <summary>
+    /// Odbc add store wizard page dealing with uploading shipment details
+    /// </summary>
     public partial class OdbcUploadShipmentDataSourceWizardPage : AddStoreWizardPage, IOdbcWizardPage
     {
         private OdbcStoreEntity store;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="OdbcUploadShipmentDataSourceWizardPage"/> class.
+        /// </summary>
         public OdbcUploadShipmentDataSourceWizardPage()
         {
             InitializeComponent();
