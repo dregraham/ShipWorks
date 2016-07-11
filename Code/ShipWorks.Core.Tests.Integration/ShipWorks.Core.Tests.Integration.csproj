@@ -157,6 +157,7 @@
     <Compile Include="Shipping\CustomsManagerWrapperTest.cs" />
     <Compile Include="Shipping\CustomsManagerTest.cs" />
     <Compile Include="Stores\Content\OrderManagerTest.cs" />
+    <Compile Include="Stores\Content\OrderUtilityTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Interapptive.Shared\Interapptive.Shared.csproj">

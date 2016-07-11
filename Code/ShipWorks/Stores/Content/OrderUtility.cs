@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Data;
 using System.Linq;
 using Interapptive.Shared.Collections;
+using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data;
@@ -53,28 +55,20 @@ namespace ShipWorks.Stores.Content
         }
 
         /// <summary>
-        /// Calculate the order total of the given order
+        /// Calculate the order total of the order.  The FK rows must be present and referenced
+        /// by the order object.
         /// </summary>
-        public static decimal CalculateTotal(long orderID, bool includeCharges)
+        public static decimal CalculateTotal(OrderEntity order, bool includeCharges)
         {
-            PrefetchPath2 prefetch = new PrefetchPath2(EntityType.OrderEntity);
+            MethodConditions.EnsureArgumentIsNotNull(order);
 
-            // Grab items and their attributes
-            prefetch.Add(OrderEntity.PrefetchPathOrderItems).SubPath.Add(OrderItemEntity.PrefetchPathOrderItemAttributes);
+            PopulateOrderDetails(order);
 
-            // Grab charges
-            if (includeCharges)
-            {
-                prefetch.Add(OrderEntity.PrefetchPathOrderCharges);
-            }
+            // If includeCharges was true, send the order's OrderCharges collection.  Otherwise, if charges should not be included,
+            // send an empty collection.
+            EntityCollection<OrderChargeEntity> orderCharges = includeCharges ? order.OrderCharges : new EntityCollection<OrderChargeEntity>();
 
-            using (SqlAdapter adapter = new SqlAdapter())
-            {
-                OrderEntity order = new OrderEntity(orderID);
-                adapter.FetchEntity(order, prefetch);
-
-                return CalculateTotal(order);
-            }
+            return CalculateTotal(order.OrderItems, orderCharges);
         }
 
         /// <summary>
@@ -389,6 +383,11 @@ namespace ShipWorks.Stores.Content
             if (order.OrderItems.None())
             {
                 adapter.FetchEntityCollection(order.OrderItems, new RelationPredicateBucket(OrderItemFields.OrderID == order.OrderID));
+            }
+
+            if (order.OrderCharges.None())
+            {
+                adapter.FetchEntityCollection(order.OrderCharges, new RelationPredicateBucket(OrderChargeFields.OrderID == order.OrderID));
             }
 
             foreach (OrderItemEntity orderItemEntity in order.OrderItems)

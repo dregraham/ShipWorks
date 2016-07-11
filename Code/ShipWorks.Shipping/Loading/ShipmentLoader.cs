@@ -134,7 +134,11 @@ namespace ShipWorks.Shipping.Loading
             IPrefetchPath2 prefetchPath = new PrefetchPath2(EntityType.OrderEntity);
 
             prefetchPath.Add(OrderEntity.PrefetchPathStore);
-            prefetchPath.Add(OrderEntity.PrefetchPathOrderItems);
+            prefetchPath.Add(OrderEntity.PrefetchPathOrderCharges);
+
+            IPrefetchPathElement2 itemsPath = prefetchPath.Add(OrderEntity.PrefetchPathOrderItems);
+            itemsPath.SubPath.Add(OrderItemEntity.PrefetchPathOrderItemAttributes);
+
             IPrefetchPathElement2 shipmentsPath = prefetchPath.Add(OrderEntity.PrefetchPathShipments);
 
             IPrefetchPathElement2 upsShipmentPath = shipmentsPath.SubPath.Add(ShipmentEntity.PrefetchPathUps);
