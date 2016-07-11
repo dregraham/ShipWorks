@@ -9,6 +9,9 @@ using ShipWorks.UI.Wizard;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using ShipWorks.Stores.Management;
+using ShipWorks.Stores.Platforms.Odbc.Download;
+using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 
 namespace ShipWorks.Stores.Platforms.Odbc
 {
@@ -67,7 +70,10 @@ namespace ShipWorks.Stores.Platforms.Odbc
             OdbcStoreEntity store = new OdbcStoreEntity
             {
                 ConnectionString = string.Empty,
-                Map = string.Empty
+                Map = string.Empty,
+                OdbcDownloadStrategy = (int) OdbcDownloadStrategy.ByModifiedTime,
+                OdbcColumnSourceType = (int) OdbcColumnSourceType.Table,
+                OdbcColumnSource = string.Empty
             };
 
             InitializeStoreDefaults(store);
@@ -95,6 +101,16 @@ namespace ShipWorks.Stores.Platforms.Odbc
             }
 
             return base.GridOnlineColumnSupported(column);
+        }
+
+        public override InitialDownloadPolicy InitialDownloadPolicy
+        {
+            get
+            {
+                return ((OdbcStoreEntity) Store).OdbcDownloadStrategy == (int) OdbcDownloadStrategy.ByModifiedTime
+                    ? new InitialDownloadPolicy(InitialDownloadRestrictionType.DaysBack) { DefaultDaysBack = 30, MaxDaysBack = 30}
+                    : new InitialDownloadPolicy(InitialDownloadRestrictionType.None);
+            }
         }
     }
 }

@@ -5604,7 +5604,10 @@ CREATE TABLE [dbo].[OdbcStore]
 (
 	[StoreID] [bigint] NOT NULL,
 	[ConnectionString] [nvarchar](2048) NOT NULL,
-	[Map] [nvarchar](max) NOT NULL
+	[Map] [nvarchar](max) NOT NULL,
+	[OdbcDownloadStrategy] [int] NOT NULL,
+	[OdbcColumnSourceType] [int] NOT NULL,
+	[OdbcColumnSource] [nvarchar](2048) NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_OdbcStore] on [dbo].[OdbcStore]'

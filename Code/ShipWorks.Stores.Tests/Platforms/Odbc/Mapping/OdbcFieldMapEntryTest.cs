@@ -3,6 +3,7 @@ using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
 using System;
+using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 using Xunit;
 
 namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
@@ -33,7 +34,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
         [Fact]
         public void LoadExternalField_LoadsValueOnExternalField()
         {
-            ExternalOdbcMappableField externalField = new ExternalOdbcMappableField(new OdbcColumnSource("Order"), new OdbcColumn("Number"));
+            ExternalOdbcMappableField externalField = new ExternalOdbcMappableField(new OdbcColumn("Number"));
             ShipWorksOdbcMappableField shipWorksField = new ShipWorksOdbcMappableField(OrderFields.OrderNumber, "Order Number");
             OdbcFieldMapEntry entry = new OdbcFieldMapEntry(shipWorksField, externalField);
 
@@ -48,7 +49,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
         [Fact]
         public void CopyValueToShipWorksField_CopiesValueFromExternalFieldToShipWorksField()
         {
-            ExternalOdbcMappableField externalField = new ExternalOdbcMappableField(new OdbcColumnSource("Order"), new OdbcColumn("Number"));
+            ExternalOdbcMappableField externalField = new ExternalOdbcMappableField(new OdbcColumn("Number"));
             ShipWorksOdbcMappableField shipWorksField = new ShipWorksOdbcMappableField(OrderFields.OrderNumber, "Order Number");
             OdbcFieldMapEntry entry = new OdbcFieldMapEntry(shipWorksField, externalField);
 

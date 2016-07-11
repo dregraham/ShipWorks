@@ -1,4 +1,6 @@
 ﻿using Interapptive.Shared.Security;
+using ShipWorks.Stores.Platforms.Odbc.DataAccess;
+using ShipWorks.Stores.Platforms.Odbc.DataSource;
 
 namespace ShipWorks.Stores.Platforms.Odbc
 {

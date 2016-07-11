@@ -10,6 +10,7 @@ using ShipWorks.Stores.Platforms.Odbc.Mapping;
 using System;
 using System.IO;
 using System.Linq;
+using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 using Xunit;
 
 namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
@@ -69,7 +70,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
             Assert.Equal(OrderFields.OrderNumber.ContainingObjectName, entry.ShipWorksField.ContainingObjectName);
 
             Assert.Equal("SomeColumnName", entry.ExternalField.Column.Name);
-            Assert.Equal("SomeTableName", entry.ExternalField.Table.Name);
         }
 
         [Fact]
@@ -81,59 +81,19 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
             map.Load(stream);
 
             map.AddEntry(GetFieldMapEntry(GetShipWorksField(OrderFields.BillFirstName, "Bill First Name"),
-                GetExternalField("SomeTableName2", "SomeColumnName2")));
+                GetExternalField("SomeColumnName2")));
 
             IOdbcFieldMapEntry entry1 = map.Entries.FirstOrDefault();
             Assert.Equal("Order Number", entry1.ShipWorksField.DisplayName);
             Assert.Equal(OrderFields.OrderNumber.Name, entry1.ShipWorksField.Name);
             Assert.Equal(OrderFields.OrderNumber.ContainingObjectName, entry1.ShipWorksField.ContainingObjectName);
             Assert.Equal("SomeColumnName", entry1.ExternalField.Column.Name);
-            Assert.Equal("SomeTableName", entry1.ExternalField.Table.Name);
 
             IOdbcFieldMapEntry entry2 = map.Entries.Skip(1).FirstOrDefault();
             Assert.Equal("Bill First Name", entry2.ShipWorksField.DisplayName);
             Assert.Equal(OrderFields.BillFirstName.Name, entry2.ShipWorksField.Name);
             Assert.Equal(OrderFields.BillFirstName.ContainingObjectName, entry2.ShipWorksField.ContainingObjectName);
             Assert.Equal("SomeColumnName2", entry2.ExternalField.Column.Name);
-            Assert.Equal("SomeTableName2", entry2.ExternalField.Table.Name);
-        }
-
-        [Fact]
-        public void Load_SetsCustomQuery_WhenPassedSerializedMapWithCustomQuery()
-        {
-            MemoryStream stream = new MemoryStream();
-            OdbcFieldMap originalMap = new OdbcFieldMap(GetIoFactory());
-            originalMap.AddEntry(GetFieldMapEntry(GetShipWorksField(OrderFields.OrderNumber, "Order Number"),
-                GetExternalField("SomeTableName", "SomeColumnName")));
-            originalMap.CustomQuery = "SELECT * FROM [ORDER]";
-            originalMap.Save(stream);
-            string mapJson = stream.ConvertToString();
-            OdbcFieldMap testObject = new OdbcFieldMap(GetIoFactory());
-
-            testObject.Load(mapJson);
-
-            stream.Dispose();
-
-            Assert.Equal("SELECT * FROM [ORDER]", testObject.CustomQuery);
-        }
-
-        [Fact]
-        public void Load_DoesNotSetCustomQuery_WhenPassedSerializedMapWithoutCustomQuery()
-        {
-            MemoryStream stream = new MemoryStream();
-            OdbcFieldMap originalMap = new OdbcFieldMap(GetIoFactory());
-            originalMap.AddEntry(GetFieldMapEntry(GetShipWorksField(OrderFields.OrderNumber, "Order Number"),
-                GetExternalField("SomeTableName", "SomeColumnName")));
-
-            originalMap.Save(stream);
-            string mapJson = stream.ConvertToString();
-            OdbcFieldMap testObject = new OdbcFieldMap(GetIoFactory());
-
-            testObject.Load(mapJson);
-
-            stream.Dispose();
-
-            Assert.Equal("", testObject.CustomQuery);
         }
 
         [Fact]
@@ -151,7 +111,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
             Assert.Equal(OrderFields.OrderNumber.ContainingObjectName, entry.ShipWorksField.ContainingObjectName);
 
             Assert.Equal("SomeColumnName", entry.ExternalField.Column.Name);
-            Assert.Equal("SomeTableName", entry.ExternalField.Table.Name);
         }
 
         [Fact]
@@ -163,21 +122,19 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
             map.Load(stream);
 
             map.AddEntry(GetFieldMapEntry(GetShipWorksField(OrderFields.BillFirstName, "Bill First Name"),
-                GetExternalField("SomeTableName2", "SomeColumnName2")));
+                GetExternalField("SomeColumnName2")));
 
             IOdbcFieldMapEntry entry1 = map.Entries.FirstOrDefault();
             Assert.Equal("Order Number", entry1.ShipWorksField.DisplayName);
             Assert.Equal(OrderFields.OrderNumber.Name, entry1.ShipWorksField.Name);
             Assert.Equal(OrderFields.OrderNumber.ContainingObjectName, entry1.ShipWorksField.ContainingObjectName);
             Assert.Equal("SomeColumnName", entry1.ExternalField.Column.Name);
-            Assert.Equal("SomeTableName", entry1.ExternalField.Table.Name);
 
             IOdbcFieldMapEntry entry2 = map.Entries.Skip(1).FirstOrDefault();
             Assert.Equal("Bill First Name", entry2.ShipWorksField.DisplayName);
             Assert.Equal(OrderFields.BillFirstName.Name, entry2.ShipWorksField.Name);
             Assert.Equal(OrderFields.BillFirstName.ContainingObjectName, entry2.ShipWorksField.ContainingObjectName);
             Assert.Equal("SomeColumnName2", entry2.ExternalField.Column.Name);
-            Assert.Equal("SomeTableName2", entry2.ExternalField.Table.Name);
         }
 
         [Fact]
@@ -358,7 +315,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
         public void FindEntriesBy_ReturnsCorrectEntry_WhenMapContainsGivenField()
         {
             OdbcFieldMap testObject = mock.Create<OdbcFieldMap>();
-            IOdbcFieldMapEntry expectedEntry = GetFieldMapEntry(GetShipWorksField(OrderFields.BillFirstName, "Bill First Name"), GetExternalField("SomeTableName2", "SomeColumnName2"));
+            IOdbcFieldMapEntry expectedEntry = GetFieldMapEntry(GetShipWorksField(OrderFields.BillFirstName, "Bill First Name"), GetExternalField("SomeColumnName2"));
             testObject.AddEntry(expectedEntry);
 
             IOdbcFieldMapEntry returnedEntry = testObject.FindEntriesBy(OrderFields.BillFirstName).FirstOrDefault();
@@ -370,7 +327,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
         public void FindEntriesBy_ReturnsEmptyCollection_WhenMapDoesNotContainGivenField()
         {
             OdbcFieldMap testObject = mock.Create<OdbcFieldMap>();
-            IOdbcFieldMapEntry mapEntry = GetFieldMapEntry(GetShipWorksField(OrderFields.BillFirstName, "Bill First Name"), GetExternalField("SomeTableName2", "SomeColumnName2"));
+            IOdbcFieldMapEntry mapEntry = GetFieldMapEntry(GetShipWorksField(OrderFields.BillFirstName, "Bill First Name"), GetExternalField("SomeColumnName2"));
             testObject.AddEntry(mapEntry);
 
             var returnedEntries = testObject.FindEntriesBy(OrderItemAttributeFields.IsManual);
@@ -382,7 +339,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
         public void FindEntriesBy_ReturnsCorrectEntry_WhenMapContainsGivenField_AndIncludeWhenShipWorksFieldIsNullIsTrue()
         {
             OdbcFieldMap testObject = mock.Create<OdbcFieldMap>();
-            IOdbcFieldMapEntry expectedEntry = GetFieldMapEntry(GetShipWorksField(OrderFields.BillFirstName, "Bill First Name"), GetExternalField("SomeTableName2", "SomeColumnName2"));
+            IOdbcFieldMapEntry expectedEntry = GetFieldMapEntry(GetShipWorksField(OrderFields.BillFirstName, "Bill First Name"), GetExternalField("SomeColumnName2"));
             testObject.AddEntry(expectedEntry);
 
             IOdbcFieldMapEntry returnedEntry = testObject.FindEntriesBy(OrderFields.BillFirstName, true).FirstOrDefault();
@@ -394,7 +351,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
         public void FindEntriesBy_ReturnsEmptyCollection_WhenMapDoesNotContainGivenField_AndIncludeWhenShipWorksFieldIsNullIsTrue()
         {
             OdbcFieldMap testObject = mock.Create<OdbcFieldMap>();
-            IOdbcFieldMapEntry mapEntry = GetFieldMapEntry(GetShipWorksField(OrderFields.BillFirstName, "Bill First Name"), GetExternalField("SomeTableName2", "SomeColumnName2"));
+            IOdbcFieldMapEntry mapEntry = GetFieldMapEntry(GetShipWorksField(OrderFields.BillFirstName, "Bill First Name"), GetExternalField("SomeColumnName2"));
             testObject.AddEntry(mapEntry);
 
             var returnedEntries = testObject.FindEntriesBy(OrderItemAttributeFields.IsManual, true);
@@ -475,9 +432,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
             OdbcFieldMap map = new OdbcFieldMap(GetIoFactory());
 
             map.AddEntry(GetFieldMapEntry(GetShipWorksField(OrderFields.OrderNumber, "Order Number"),
-                GetExternalField("SomeTableName", "SomeColumnName")));
-
-            map.CustomQuery = "SELECT * FROM [ORDER]";
+                GetExternalField("SomeColumnName")));
 
             map.Save(stream);
 
@@ -503,9 +458,9 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
             return odbcMappableField;
         }
 
-        private ExternalOdbcMappableField GetExternalField(string tableName, string columnName)
+        private ExternalOdbcMappableField GetExternalField(string columnName)
         {
-            return new ExternalOdbcMappableField(new OdbcColumnSource(tableName), new OdbcColumn(columnName));
+            return new ExternalOdbcMappableField(new OdbcColumn(columnName));
         }
 
         private IOdbcFieldMapIOFactory GetIoFactory()

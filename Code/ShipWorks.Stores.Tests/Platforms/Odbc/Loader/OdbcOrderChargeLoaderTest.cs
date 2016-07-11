@@ -6,6 +6,7 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Platforms.Odbc;
+using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 using ShipWorks.Stores.Platforms.Odbc.Loaders;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
 using Xunit;
@@ -41,7 +42,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
         {
             ShipWorksOdbcMappableField shipworksField = new ShipWorksOdbcMappableField(OrderChargeFields.Amount, "Tax");
             shipworksField.LoadValue(123);
-            ExternalOdbcMappableField externalField = new ExternalOdbcMappableField(new OdbcColumnSource("Order"), new OdbcColumn("Tax Column"));
+            ExternalOdbcMappableField externalField = new ExternalOdbcMappableField(new OdbcColumn("Tax Column"));
             OdbcFieldMapEntry entry1 = new OdbcFieldMapEntry(shipworksField, externalField);
 
             Mock<IOdbcFieldMap> map = mock.Mock<IOdbcFieldMap>();
@@ -61,7 +62,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
         {
             ShipWorksOdbcMappableField shipworksField = new ShipWorksOdbcMappableField(OrderChargeFields.Amount, "Tax Amount");
             shipworksField.LoadValue(123);
-            ExternalOdbcMappableField externalField = new ExternalOdbcMappableField(new OdbcColumnSource("Order"), new OdbcColumn("Tax Column"));
+            ExternalOdbcMappableField externalField = new ExternalOdbcMappableField(new OdbcColumn("Tax Column"));
             OdbcFieldMapEntry entry1 = new OdbcFieldMapEntry(shipworksField, externalField);
 
             Mock<IOdbcFieldMap> map = mock.Mock<IOdbcFieldMap>();
@@ -83,7 +84,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
         {
             ShipWorksOdbcMappableField shipworksField = new ShipWorksOdbcMappableField(OrderChargeFields.Amount, "Tax Amount");
             shipworksField.LoadValue(123);
-            ExternalOdbcMappableField externalField = new ExternalOdbcMappableField(new OdbcColumnSource("Order"), new OdbcColumn("Tax Column"));
+            ExternalOdbcMappableField externalField = new ExternalOdbcMappableField(new OdbcColumn("Tax Column"));
             OdbcFieldMapEntry entry1 = new OdbcFieldMapEntry(shipworksField, externalField);
 
             Mock<IOdbcFieldMap> map = mock.Mock<IOdbcFieldMap>();
@@ -105,7 +106,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
         {
             ShipWorksOdbcMappableField shipworksField = new ShipWorksOdbcMappableField(OrderChargeFields.Amount, "Tax Amount");
             shipworksField.LoadValue(123);
-            ExternalOdbcMappableField externalField = new ExternalOdbcMappableField(new OdbcColumnSource("Order"), new OdbcColumn("Tax Column"));
+            ExternalOdbcMappableField externalField = new ExternalOdbcMappableField(new OdbcColumn("Tax Column"));
             OdbcFieldMapEntry entry1 = new OdbcFieldMapEntry(shipworksField, externalField);
 
             Mock<IOdbcFieldMap> map = mock.Mock<IOdbcFieldMap>();

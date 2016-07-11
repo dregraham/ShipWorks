@@ -13,57 +13,50 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Data;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 using System.Windows.Input;
+using ShipWorks.Stores.Platforms.Odbc.DataAccess;
+using ShipWorks.Stores.Platforms.Odbc.DataSource;
+using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
+using ShipWorks.Stores.Platforms.Odbc.Download;
 using SaveFileDialog = Microsoft.Win32.SaveFileDialog;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc
 {
     /// <summary>
-    /// View Model for the <see cref="OdbcImportFieldMappingControl"/>
+    /// View Model for the <see cref="WizardPages.OdbcImportFieldMappingControl"/>
     /// </summary>
     public class OdbcImportFieldMappingControlViewModel : IOdbcImportFieldMappingControlViewModel, INotifyPropertyChanged
     {
-        private const string CustomQueryColumnSourceName = "Custom Import...";
         private readonly IOdbcFieldMapFactory fieldMapFactory;
-        private readonly IOdbcSchema schema;
         private readonly Func<Type, ILog> logFactory;
         private readonly IMessageHelper messageHelper;
-        private readonly IOdbcCustomQueryModalDialog customQueryModalDialog;
-        private IOdbcColumnSource selectedColumnSource;
         private ObservableCollection<OdbcColumn> columns;
         private OdbcFieldMapDisplay selectedFieldMap;
         private readonly PropertyChangedHandler handler;
         public event PropertyChangedEventHandler PropertyChanged;
+        private readonly ILog log;
 
-        private IOdbcColumnSource previousSelectedColumnSource;
-        private string mapName;
         private bool isSingleLineOrder = true;
         private int numberOfAttributesPerItem;
         private int numberOfItemsPerOrder;
-        private IEnumerable<IOdbcColumnSource> columnSources;
-        private bool isCustomQuerySelected = false;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcImportFieldMappingControlViewModel"/> class.
         /// </summary>
         public OdbcImportFieldMappingControlViewModel(IOdbcFieldMapFactory fieldMapFactory,
-            IOdbcSchema schema, Func<Type, ILog> logFactory, IMessageHelper messageHelper,
-            IOdbcCustomQueryModalDialog customQueryModalDialog)
+             Func<Type, ILog> logFactory, IMessageHelper messageHelper)
         {
             this.fieldMapFactory = fieldMapFactory;
-            this.schema = schema;
             this.logFactory = logFactory;
             this.messageHelper = messageHelper;
-            this.customQueryModalDialog = customQueryModalDialog;
 
-            SaveMapCommand = new RelayCommand(SaveMapToDisk,() => selectedColumnSource != null);
-            TableChangedCommand = new RelayCommand(TableChanged);
-            OpenCustomQueryDlgCommand = new RelayCommand(OpenCustomQueryDlg);
+            log = logFactory(typeof (OdbcImportFieldMappingControlViewModel));
 
             Order = new OdbcFieldMapDisplay("Order", fieldMapFactory.CreateOrderFieldMap());
             Address = new OdbcFieldMapDisplay("Address", fieldMapFactory.CreateAddressFieldMap());
@@ -77,9 +70,9 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         }
 
         /// <summary>
-        /// Gets the data source.
+        /// The column source.
         /// </summary>
-        public IOdbcDataSource DataSource { get; private set; }
+        public IOdbcColumnSource ColumnSource { get; private set; }
 
         /// <summary>
         /// Gets or sets the order entries.
@@ -100,33 +93,6 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         public ObservableCollection<OdbcFieldMapDisplay> Items { get; set; }
 
         /// <summary>
-        /// The name the map will be saved as.
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public string MapName
-        {
-            get
-            {
-                if (string.IsNullOrWhiteSpace(mapName))
-                {
-                    mapName = SelectedTable == null ? DataSource.Name : $"{DataSource.Name} - {SelectedTable.Name}";
-                }
-                return mapName;
-            }
-            set { handler.Set(nameof(MapName), ref mapName, value); }
-        }
-
-        /// <summary>
-        /// The external odbc tables.
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public IEnumerable<IOdbcColumnSource> ColumnSources
-        {
-            get { return columnSources; }
-            set { handler.Set(nameof(ColumnSources), ref columnSources, value); }
-        }
-
-        /// <summary>
         /// Save Map Command
         /// </summary>
         /// <remarks>
@@ -134,36 +100,6 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// </remarks>
         [Obfuscation(Exclude = true)]
         public ICommand SaveMapCommand { get; private set; }
-
-        /// <summary>
-        /// Open custom query dialog command.
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public ICommand OpenCustomQueryDlgCommand { get; private set; }
-
-        /// <summary>
-        /// The selected external odbc table.
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public IOdbcColumnSource SelectedTable
-        {
-            get { return selectedColumnSource; }
-            set
-            {
-                // Set map name for the user, if they have not altered it.
-                // Starts by setting map name to selected data source name.
-                // When a table is selected, if map name is untouched by user,
-                // the map name is changed to "DataSourceName - SelectedColumnName"
-                if (MapName != null && DataSource.Name != null &&
-                    (MapName.Equals(DataSource.Name, StringComparison.InvariantCulture) ||
-                    MapName.Equals($"{DataSource.Name} - {SelectedTable.Name}", StringComparison.InvariantCulture)))
-                {
-                    MapName = $"{DataSource.Name} - {value.Name}";
-                }
-
-                handler.Set(nameof(SelectedTable), ref selectedColumnSource, value);
-            }
-        }
 
         /// <summary>
         /// Gets or sets the table changed command.
@@ -291,6 +227,12 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         }
 
         /// <summary>
+        /// List of numbers 0-25 for binding to number of items and number of attributes lists
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public List<int> NumbersUpTo25 { get; }
+
+        /// <summary>
         /// Finds the OdbcFieldMapEntries corresponding to the given field
         /// </summary>
         private IEnumerable<IOdbcFieldMapEntry> FindEntriesBy(OdbcFieldMapDisplay map, EntityField2 field)
@@ -311,43 +253,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
                     attributeNumber =>
                         new OdbcFieldMapEntry(
                             new ShipWorksOdbcMappableField(OrderItemAttributeFields.Name,
-                                $"Attribute {attributeNumber}"), new ExternalOdbcMappableField(null, null),itemIndex));
-        }
-
-        /// <summary>
-        /// List of numbers 1-25 for binding to number of items and number of attributes lists
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public List<int> NumbersUpTo25 { get; }
-
-        [Obfuscation(Exclude = true)]
-        public bool IsCustomQuerySelected
-        {
-            get { return isCustomQuerySelected; }
-            set
-            {
-                handler.Set(nameof(IsCustomQuerySelected), ref isCustomQuerySelected, value);
-            }
-        }
-
-        /// <summary>
-        /// Loads the external odbc tables.
-        /// </summary>
-        public void Load(IOdbcDataSource dataSource)
-        {
-            MethodConditions.EnsureArgumentIsNotNull(dataSource);
-
-            try
-            {
-                DataSource = dataSource;
-
-                schema.Load(DataSource);
-                ColumnSources = schema.Tables;
-            }
-            catch (ShipWorksOdbcException ex)
-            {
-                messageHelper.ShowError(ex.Message);
-            }
+                                $"Attribute {attributeNumber}"), new ExternalOdbcMappableField(null),itemIndex));
         }
 
         /// <summary>
@@ -381,19 +287,26 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// <summary>
         /// Checks the required fields.
         /// </summary>
-        public bool EnsureRequiredFieldsHaveValue()
+        public bool ValidateRequiredMappingFields()
         {
             // Finds an entry that is required and the external column has not been set
-            IOdbcFieldMapEntry unsetRequiredFieldMap =
-               Order.Entries.FirstOrDefault(
+            IEnumerable<IOdbcFieldMapEntry> unsetRequiredFieldMapEntries =
+               Order.Entries.Where(
                     entry =>
                         entry.ShipWorksField.IsRequired &&
-                        (entry.ExternalField.Column?.Name.Equals("(None)", StringComparison.InvariantCulture) ?? true));
+                        (entry.ExternalField.Column?.Name.Equals("(None)", StringComparison.InvariantCulture) ?? true)).ToList();
 
-            if (unsetRequiredFieldMap != null)
+            if (unsetRequiredFieldMapEntries.Count() == 1)
             {
-                string displayName = unsetRequiredFieldMap.ShipWorksField.DisplayName;
+                string displayName = unsetRequiredFieldMapEntries.FirstOrDefault()?.ShipWorksField.Name;
                 messageHelper.ShowError($"{displayName} is a required field. Please select a column to map to {displayName}.");
+                return false;
+            }
+
+            if (unsetRequiredFieldMapEntries.Count() > 1)
+            {
+                string displayNames = string.Join(", ", unsetRequiredFieldMapEntries.Select(x => x.ShipWorksField.Name));
+                messageHelper.ShowError($"{displayNames} are required fields. Please select columns to map to {displayNames}.");
                 return false;
             }
 
@@ -417,11 +330,6 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
 
             OdbcFieldMap map = fieldMapFactory.CreateFieldMapFrom(mapEntries);
 
-            map.Entries.ToList().ForEach(e =>
-            {
-                e.ExternalField.Table = selectedColumnSource;
-            });
-
             if (!IsSingleLineOrder)
             {
                 map.RecordIdentifierSource = RecordIdentifier?.Name;
@@ -438,61 +346,41 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
                 throw new ShipWorksOdbcException("Cannot save a map without a record identifier.");
             }
 
-            map.CustomQuery = selectedColumnSource.Query;
-
             return map;
         }
 
         /// <summary>
-        /// Fires when user changes table.
+        /// Loads the column source.
         /// </summary>
-        private void TableChanged()
+        public void LoadColumnSource(IOdbcColumnSource source)
         {
-            if (previousSelectedColumnSource == selectedColumnSource)
-            {
-                // We set the table back.
-                return;
-            }
+            MethodConditions.EnsureArgumentIsNotNull(source, "ColumnSource");
 
-            // If the value has changed and there was a table previously selected,
-            // see if any column has been mapped and allow user to cancel if it has been
-            if (previousSelectedColumnSource != null &&
-                (Order.Entries.Any(e => e.ExternalField?.Column != null) ||
-                Address.Entries.Any(e => e.ExternalField?.Column != null) ||
-                Items.SelectMany(item => item.Entries).Any(e => e.ExternalField?.Column != null)))
-            {
-                DialogResult questionResult = messageHelper.ShowQuestion(MessageBoxIcon.Warning,
-                    MessageBoxButtons.YesNo,
-                    "Changing the selected table will clear your current mapping selections. Do you want to continue?");
-
-                if (questionResult != DialogResult.Yes)
-                {
-                    SelectedTable = previousSelectedColumnSource;
-                    return;
-                }
-            }
-
-            LoadColumns();
-
-            previousSelectedColumnSource = SelectedTable;
-
-            IsCustomQuerySelected = SelectedTable.Name == CustomQueryColumnSourceName;
+            ColumnSource = source;
+            Columns = new ObservableCollection<OdbcColumn>(ColumnSource.Columns);
+            Columns.Insert(0, new OdbcColumn("(None)"));
         }
 
-        private void LoadColumns()
+        /// <summary>
+        /// Loads the download strategy.
+        /// </summary>
+        /// <param name="downloadStrategy">The download strategy.</param>
+        public void LoadDownloadStrategy(OdbcDownloadStrategy downloadStrategy)
         {
-            if (!string.IsNullOrWhiteSpace(selectedColumnSource.Query))
+            IOdbcFieldMapEntry lastModifiedEntry = FindEntriesBy(Order, OrderFields.OnlineLastModified).FirstOrDefault();
+
+            int lastModifiedEntryIndex = Order.Entries.IndexOf(lastModifiedEntry);
+
+            if (lastModifiedEntry != null)
             {
-                selectedColumnSource.Load(DataSource, logFactory(typeof (OdbcColumnSource)), selectedColumnSource.Query,
-                    new OdbcShipWorksDbProviderFactory());
-            }
-            else
-            {
-                selectedColumnSource.Load(DataSource, logFactory(typeof(OdbcColumnSource)));
+                lastModifiedEntry.ShipWorksField.IsRequired = downloadStrategy == OdbcDownloadStrategy.ByModifiedTime;
             }
 
-            Columns = new ObservableCollection<OdbcColumn>(selectedColumnSource.Columns);
-            Columns.Insert(0, new OdbcColumn("(None)"));
+            // Have to remove and insert the entry because this is what is bound to the property changed trigger.
+            // The entry itself must change, not just a property on it. This avoids having to add a property changed
+            // handler to the ShipWorksMappableField
+            Order.Entries.RemoveAt(lastModifiedEntryIndex);
+            Order.Entries.Insert(lastModifiedEntryIndex, lastModifiedEntry);
         }
 
         /// <summary>
@@ -500,7 +388,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// </summary>
         private void SaveMapToDisk()
         {
-            if (!EnsureRequiredFieldsHaveValue())
+            if (!ValidateRequiredMappingFields())
             {
                 return;
             }
@@ -527,33 +415,6 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
                         messageHelper.ShowError(ex.Message);
                     }
                 }
-            }
-        }
-
-        /// <summary>
-        /// Opens the custom query dialog.
-        /// </summary>
-        private void OpenCustomQueryDlg()
-        {
-            bool isNewCustomColumnSource = false;
-            IOdbcColumnSource customColumnSource =
-                ColumnSources.SingleOrDefault(t => !string.IsNullOrWhiteSpace(t.Query));
-            if (customColumnSource == null)
-            {
-                isNewCustomColumnSource = true;
-                customColumnSource = new OdbcColumnSource(CustomQueryColumnSourceName);
-            }
-
-            bool? dialogResult = customQueryModalDialog.Show(DataSource, customColumnSource);
-
-            if ((dialogResult ?? false) && !string.IsNullOrWhiteSpace(customColumnSource.Query))
-            {
-                if (isNewCustomColumnSource)
-                {
-                    ColumnSources = ColumnSources.Concat(new[] {customColumnSource});
-                }
-
-                SelectedTable = customColumnSource;
             }
         }
     }

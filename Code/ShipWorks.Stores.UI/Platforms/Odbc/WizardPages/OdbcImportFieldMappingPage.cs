@@ -4,10 +4,14 @@ using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.UI.Wizard;
 using System;
+using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Interop;
-using Autofac;
-using ShipWorks.ApplicationCore;
-using ShipWorks.Shipping;
+using log4net;
+using ShipWorks.Stores.Platforms.Odbc.DataAccess;
+using ShipWorks.Stores.Platforms.Odbc.DataSource;
+using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
+using ShipWorks.Stores.Platforms.Odbc.Download;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
 {
@@ -16,22 +20,26 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
     /// </summary>
     public partial class OdbcImportFieldMappingPage : AddStoreWizardPage, IOdbcWizardPage, IWin32Window
     {
-        private readonly IMessageHelper messageHelper;
         private readonly Func<IOdbcDataSource> dataSourceFactory;
-        private readonly Func<IOdbcImportFieldMappingControlViewModel> viewModelFactory;
+        private readonly Func<string, IOdbcColumnSource> columnSourceFactory;
         private IOdbcImportFieldMappingControlViewModel viewModel;
         private OdbcStoreEntity store;
+        private const string CustomQueryColumnSourceName = "Custom Import";
+        private string previousColumnSource;
+        private OdbcDownloadStrategy? previousDownloadStrategy = null;
+        private readonly Func<IOdbcImportFieldMappingControlViewModel> viewModelFactory;
+
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcImportFieldMappingPage"/> class.
         /// </summary>
-        public OdbcImportFieldMappingPage(IMessageHelper messageHelper,
-            Func<IOdbcDataSource> dataSourceFactory,
-            Func<IOdbcImportFieldMappingControlViewModel> viewModelFactory)
+        public OdbcImportFieldMappingPage(Func<IOdbcDataSource> dataSourceFactory,
+            Func<IOdbcImportFieldMappingControlViewModel> viewModelFactory,
+            Func<string, IOdbcColumnSource> columnSourceFactory)
         {
-            this.messageHelper = messageHelper;
             this.dataSourceFactory = dataSourceFactory;
             this.viewModelFactory = viewModelFactory;
+            this.columnSourceFactory = columnSourceFactory;
             InitializeComponent();
             SteppingInto += OnSteppingInto;
             StepNext += OnNext;
@@ -40,7 +48,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
         /// <summary>
         /// The position in which to show this wizard page
         /// </summary>
-        public int Position => 1;
+        public int Position => 2;
 
         /// <summary>
         /// Save the map to the ODBC Store
@@ -52,14 +60,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
                 store = GetStore<OdbcStoreEntity>();
             }
 
-            if (viewModel.SelectedTable == null)
-            {
-                messageHelper.ShowError("Please setup your import map before continuing to the next page.");
-                e.NextPage = this;
-                return;
-            }
-
-            if (!viewModel.EnsureRequiredFieldsHaveValue())
+            if (!viewModel.ValidateRequiredMappingFields())
             {
                 e.NextPage = this;
                 return;
@@ -76,19 +77,40 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
         {
             store = GetStore<OdbcStoreEntity>();
 
-            IOdbcDataSource selectedDataSource = dataSourceFactory();
+            OdbcDownloadStrategy currentDownloadStrategy = (OdbcDownloadStrategy) store.OdbcDownloadStrategy;
+            string currentColumnSource = store.OdbcColumnSource;
 
-            selectedDataSource.Restore(store.ConnectionString);
-
-            // Create new ViewModel when one does not exist, or a new data source is selected. This means clicking
-            // back on the mapping page and not changing the data source will keep any mappings made, but selecting
-            // a new data source and clicking next, will reset all mappings.
-            if (viewModel == null || !viewModel.DataSource.ConnectionString.Equals(selectedDataSource.ConnectionString, StringComparison.Ordinal))
+            // Only load column source when the page is first loaded or the column source changes.
+            if (string.IsNullOrWhiteSpace(previousColumnSource) ||
+                !previousColumnSource.Equals(currentColumnSource, StringComparison.Ordinal))
             {
-                viewModel = viewModelFactory();
+                IOdbcDataSource selectedDataSource = dataSourceFactory();
 
-                viewModel.Load(selectedDataSource);
-                odbcImportFieldMappingControl.DataContext = viewModel;
+                selectedDataSource.Restore(store.ConnectionString);
+
+                string columnSourceName = store.OdbcColumnSourceType == (int) OdbcColumnSourceType.Table ?
+                    currentColumnSource :
+                    CustomQueryColumnSourceName;
+
+                IOdbcColumnSource columnSource = columnSourceFactory(columnSourceName);
+
+                columnSource.Load(selectedDataSource, currentColumnSource,
+                    (OdbcColumnSourceType) store.OdbcColumnSourceType);
+
+                viewModel = viewModelFactory();
+                mappingControl.DataContext = viewModel;
+                viewModel.LoadColumnSource(columnSource);
+                viewModel.LoadDownloadStrategy(currentDownloadStrategy);
+                previousColumnSource = currentColumnSource;
+            }
+
+            // Only load download strategy when the page is first loaded or the download strategy changes.
+            if (previousDownloadStrategy == null ||
+                previousDownloadStrategy != currentDownloadStrategy)
+            {
+                viewModel.LoadDownloadStrategy(currentDownloadStrategy);
+
+                previousDownloadStrategy = currentDownloadStrategy;
             }
         }
     }

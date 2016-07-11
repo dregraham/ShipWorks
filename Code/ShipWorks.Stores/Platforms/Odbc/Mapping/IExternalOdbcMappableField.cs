@@ -1,4 +1,6 @@
-﻿namespace ShipWorks.Stores.Platforms.Odbc.Mapping
+﻿using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
+
+namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 {
     /// <summary>
     /// Provides a mechanism for interacting with an external ODBC field
@@ -9,11 +11,6 @@
         /// The External Column
         /// </summary>
         OdbcColumn Column { get; set; }
-
-        /// <summary>
-        /// The External Table
-        /// </summary>
-        IOdbcColumnSource Table { get; set; }
 
         /// <summary>
         /// Loads the given record

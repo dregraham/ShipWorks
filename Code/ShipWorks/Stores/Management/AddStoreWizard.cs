@@ -583,7 +583,9 @@ namespace ShipWorks.Stores.Management
         {
             // The generic file store type has no controls to put in the settings page
             // which results in a blank wizard page, so skip it.
-            if (store.TypeCode == (int) StoreTypeCode.GenericFile)
+            // Don't need page for odbc either when the download strategy is all.
+            if (store.TypeCode == (int) StoreTypeCode.GenericFile
+                || (store.TypeCode == (int) StoreTypeCode.Odbc) && ((OdbcStoreEntity) store).OdbcDownloadStrategy == 0)
             {
                 e.Skip = true;
                 e.RaiseStepEventWhenSkipping = true;
@@ -608,7 +610,9 @@ namespace ShipWorks.Stores.Management
 
             // Only reset the UI if the store has changed.  The only potential issue here is with generic where you could actually
             // be pointing to a totally different capabilities type without changing store types, but thats unlikely, and not catastrophic.
-            if (initialDownloadConfiguredStoreID != store.StoreID || e.FirstTime)
+            // We also want to reset ui for ODBC, since it is possible for them to go back and change the download strategy. We don't want
+            // to show the "Download all of my orders" option for ODBC download by last modified.
+            if (initialDownloadConfiguredStoreID != store.StoreID || e.FirstTime || Store.TypeCode == (int) StoreTypeCode.Odbc)
             {
                 store.InitialDownloadDays = null;
                 store.InitialDownloadOrder = null;
