@@ -3,6 +3,7 @@ using System.IO;
 using System.Net;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
+using log4net;
 using Quartz.Util;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
@@ -15,6 +16,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
     /// </summary>
     public class YahooApiWebClient : IYahooApiWebClient
     {
+        private readonly ILog log;
         private readonly string yahooStoreID;
         private readonly string token;
         private readonly string yahooOrderEndpoint;
@@ -25,8 +27,9 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         /// Initializes a new instance of the <see cref="YahooApiWebClient"/> class.
         /// </summary>
         /// <param name="store">The Yahoo Store Entity</param>
-        public YahooApiWebClient(YahooStoreEntity store)
+        public YahooApiWebClient(YahooStoreEntity store, ILog log)
         {
+            this.log = log;
             yahooStoreID = store.YahooStoreID;
             token = store.AccessToken;
             yahooOrderEndpoint = $"https://{yahooStoreID}.order.store.yahooapis.com/V1";
@@ -116,6 +119,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         /// <param name="itemID">The Yahoo Item ID</param>
         public YahooResponse GetItem(string itemID)
         {
+            log.Info("Building item request.");
             string body = RequestBodyIntro + GetRequestBodyIntro +
                           "<CatalogQuery>" +
                           "<ItemQueryList>" +
@@ -204,6 +208,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         /// <param name="xmlBody">The XML body.</param>
         private HttpTextPostRequestSubmitter CreateCatalogRequestSubmitter(string xmlBody)
         {
+            log.Info("Creating catalog request submitter.");
             HttpTextPostRequestSubmitter submitter = new HttpTextPostRequestSubmitter(xmlBody, "xml")
             {
                 Verb = HttpVerb.Post,
@@ -261,8 +266,11 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
                 ApiLogEntry logEntry = new ApiLogEntry(ApiLogSource.Yahoo, action);
                 logEntry.LogRequest(submitter);
 
+                log.Info("Submitting request.");
+
                 using (IHttpResponseReader reader = submitter.GetResponse())
                 {
+                    log.Info("Reading response.");
                     string responseData = reader.ReadResult();
                     logEntry.LogResponse(responseData, "txt");
 

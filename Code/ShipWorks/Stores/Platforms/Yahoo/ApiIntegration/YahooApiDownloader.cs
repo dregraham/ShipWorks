@@ -6,6 +6,7 @@ using System.Net;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Utility;
+using log4net;
 using Quartz.Util;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
@@ -21,6 +22,8 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
     /// </summary>
     public class YahooApiDownloader : StoreDownloader
     {
+        static readonly ILog log = LogManager.GetLogger(typeof(YahooApiDownloader));
+
         private readonly IYahooApiWebClient webClient;
         private readonly ISqlAdapterRetry sqlAdapter;
         private const int InvalidStartRangeErrorCode = 20021;
@@ -33,7 +36,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         /// <param name="store"></param>
         public YahooApiDownloader(StoreEntity store) :
             this(store,
-                new YahooApiWebClient((YahooStoreEntity)store),
+                new YahooApiWebClient((YahooStoreEntity)store, LogManager.GetLogger(typeof(YahooApiWebClient))),
                 new SqlAdapterRetry<SqlException>(5, -5, "YahooApiDownloader.LoadOrder"))
         {
         }
@@ -438,28 +441,40 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
                 return item.ShipWeight;
             }
 
-            // If item is null, that means it is not in the cache
-            // So make the call to get the item weight and cache it
-            YahooResponse response = webClient.GetItem(itemID);
-
-            // Check the get item response for the catalog access forbidden error code. If
-            // we get the error, set CatalogEnabled to false and return 0
-            if (response?.ErrorMessages?.Error?.FirstOrDefault()?.Code == CatalogAccessForbidden)
+            try
             {
-                CatalogEnabled = false;
+                log.Info("Attempting to get item information from yahoo api.");
+
+                // If item is null, that means it is not in the cache
+                // So make the call to get the item weight and cache it
+                YahooResponse response = webClient.GetItem(itemID);
+
+                log.Info("Retrieved item information from yahoo api.");
+
+                // Check the get item response for the catalog access forbidden error code. If
+                // we get the error, set CatalogEnabled to false and return 0
+                if (response?.ErrorMessages?.Error?.FirstOrDefault()?.Code == CatalogAccessForbidden)
+                {
+                    CatalogEnabled = false;
+                    return 0;
+                }
+
+                YahooCatalogItem newItem = response?.ResponseResourceList.Catalog.ItemList.Item.FirstOrDefault();
+
+                if (newItem == null)
+                {
+                    throw new YahooException("Error deserializing XML response from Yahoo Catalog API");
+                }
+
+                productWeightCache[itemID] = newItem;
+
+                return newItem.ShipWeight;
+            }
+            catch (NullReferenceException ex)
+            {
+                log.Error("Error retrieving item information", ex);
                 return 0;
             }
-
-            YahooCatalogItem newItem = response?.ResponseResourceList.Catalog.ItemList.Item.FirstOrDefault();
-
-            if (newItem == null)
-            {
-                throw new YahooException("Error deserializing XML response from Yahoo Catalog API");
-            }
-
-            productWeightCache[itemID] = newItem;
-
-            return newItem.ShipWeight;
         }
 
         /// <summary>
@@ -671,14 +686,6 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
             }
 
             return result.ToUniversalTime();
-        }
-
-        /// <summary>
-        /// Changes html encoded quotes to regular quotes.
-        /// </summary>
-        private string QuoteClean(string storeText)
-        {
-            return storeText.Replace("&quot;", "\"");
         }
     }
 }
