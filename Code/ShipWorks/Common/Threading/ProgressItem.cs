@@ -1,8 +1,7 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
-using log4net;
 using System.Diagnostics;
+using Interapptive.Shared.Threading;
+using log4net;
 
 namespace ShipWorks.Common.Threading
 {
@@ -29,7 +28,7 @@ namespace ShipWorks.Common.Threading
         // If set to failure, this allows an exception message to be displayed
         Exception error = null;
 
-        // Gets or sets an object that contains data to associate with the item. 
+        // Gets or sets an object that contains data to associate with the item.
         object tag = null;
 
         // Indicates if the action can be cancelled
@@ -41,7 +40,7 @@ namespace ShipWorks.Common.Threading
 
         // Raised when an of the properties of the item changed
         public event EventHandler Changed;
-        
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -58,10 +57,7 @@ namespace ShipWorks.Common.Threading
         /// <summary>
         /// Name of the progress item
         /// </summary>
-        public string Name
-        {
-            get { return name; }
-        }
+        public string Name => name;
 
         /// <summary>
         /// The detailed progress of the given item
@@ -155,7 +151,7 @@ namespace ShipWorks.Common.Threading
         }
 
         /// <summary>
-        /// Gets or sets an object that contains data to associate with the item. 
+        /// Gets or sets an object that contains data to associate with the item.
         /// </summary>
         public object Tag
         {
@@ -195,7 +191,7 @@ namespace ShipWorks.Common.Threading
         /// </summary>
         public bool IsCancelRequested
         {
-            get 
+            get
             {
                 lock (cancelRequestedLock)
                 {

@@ -126,7 +126,8 @@ namespace ShipWorks.Shipping.Services.Dialogs
             }
 
             IShipmentsLoader shipmentsLoader = shipmentsLoaderFactory().Value;
-            ShipmentsLoadedEventArgs results = await shipmentsLoader.LoadAsync(message.OrderIDs).ConfigureAwait(false);
+            ShipmentsLoadedEventArgs results = await shipmentsLoader.LoadAsync(message.OrderIDs, ProgressDisplayOptions.Delay)
+                .ConfigureAwait(false);
 
             if (results.Cancelled)
             {

@@ -212,7 +212,6 @@
     <Compile Include="Configuration\IShippingConfiguration.cs" />
     <Compile Include="Configuration\ShippingConfiguration.cs" />
     <Compile Include="Loading\IShipmentLoader.cs" />
-    <Compile Include="Loading\ShipmentLoader.cs" />
     <Compile Include="Loading\ShipmentsLoader.cs" />
     <Compile Include="Loading\ShippingPanelLoadedShipmentResult.cs" />
     <Compile Include="Rating\ExceptionsRateFootnoteViewModel.cs" />

@@ -1,18 +1,18 @@
-﻿using Interapptive.Shared.Collections;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.Net;
+using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using ShipWorks.ApplicationCore.Logging;
-using ShipWorks.Common.Threading;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication.Throttling;
 using ShipWorks.Stores.Platforms.ThreeDCart.Enums;
 using ShipWorks.Stores.Platforms.ThreeDCart.RestApi.DTO;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
 
 namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
 {
@@ -27,7 +27,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
         private const string ContentType = "application/json";
         private const string GetOrderLimit = "50";
         private const string PrivateKey = "c9fc5ce5b29d27121753baae724968b1";
-        private readonly Type exceptionToRethrow = typeof (ThreeDCartException);
+        private readonly Type exceptionToRethrow = typeof(ThreeDCartException);
         private readonly string secureUrl;
         private readonly string token;
         private readonly ThreeDCartWebClientRequestThrottle throttler = new ThreeDCartWebClientRequestThrottle();
@@ -197,7 +197,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
                 new Uri(
                     $"{HttpHost}/{OrderApiVersion}/{OrderUrlExtension}/{shipment.OrderID}/{ShipmentUrlExtension}/{shipment.ShipmentID}");
             submitter.RequestBody = JsonConvert.SerializeObject(shipment, Formatting.None,
-                new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore});
+                new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore });
 
             return submitter;
         }

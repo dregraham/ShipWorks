@@ -56,7 +56,8 @@ namespace ShipWorks.Shipping.Services
             }
 
             IShipmentsLoader shipmentLoader = shipmentLoaderFactory().Value;
-            ShipmentsLoadedEventArgs results = await shipmentLoader.LoadAsync(orderIDs).ConfigureAwait(false);
+            ShipmentsLoadedEventArgs results = await shipmentLoader.LoadAsync(orderIDs, ProgressDisplayOptions.NeverShow)
+                .ConfigureAwait(true);
 
             OrderEntity order = results.Shipments.FirstOrDefault()?.Order;
             List<ICarrierShipmentAdapter> adapters = results.Shipments.Select(carrierShipmentAdapterFactory.Get).ToList();

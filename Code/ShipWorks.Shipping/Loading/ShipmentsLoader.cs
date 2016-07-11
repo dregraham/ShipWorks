@@ -3,10 +3,12 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Reactive.Disposables;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Interapptive.Shared;
 using Interapptive.Shared.Collections;
+using Interapptive.Shared.Threading;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using log4net;
@@ -29,11 +31,11 @@ namespace ShipWorks.Shipping.Loading
     /// <summary>
     /// Loads shipments from a list of orders in the background with progress
     /// </summary>
-    public class ShipmentsLoader : IShipmentsLoader
+    public class ShipmentsLoader : IShipmentsLoader, IDisposable
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(ShipmentsLoader));
-        private BlockingCollection<ShipmentEntity> shipmentsToValidate;
-        private Dictionary<long, ShipmentEntity> globalShipments;
+        private readonly BlockingCollection<ShipmentEntity> shipmentsToValidate;
+        private readonly Dictionary<long, ShipmentEntity> globalShipments;
         private bool wasCanceled;
         private bool finishedLoadingShipments;
         private const int ValidateAddressesTaskCount = 2;
@@ -42,13 +44,14 @@ namespace ShipWorks.Shipping.Loading
         private readonly IStoreManager storeManager;
         private readonly Func<IWin32Window> ownerCreator;
         private readonly IMessageHelper messageHelper;
+        private readonly ISecurityContext securityContext;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public ShipmentsLoader(IShipmentFactory shipmentFactory,
             IOrderManager orderManager, IStoreManager storeManager, Func<IWin32Window> ownerCreator,
-            IMessageHelper messageHelper, ISecurityContext securityContext)
+            IMessageHelper messageHelper, ISecurityContext securityContext, IFilterHelper filterHelper)
         {
             this.shipmentFactory = shipmentFactory;
             this.orderManager = orderManager;
@@ -56,6 +59,7 @@ namespace ShipWorks.Shipping.Loading
             this.ownerCreator = ownerCreator;
             this.messageHelper = messageHelper;
             this.securityContext = securityContext;
+            this.filterHelper = filterHelper;
 
             globalShipments = new Dictionary<long, ShipmentEntity>();
             shipmentsToValidate = new BlockingCollection<ShipmentEntity>();
@@ -64,7 +68,7 @@ namespace ShipWorks.Shipping.Loading
         /// <summary>
         /// Load the shipments for the given collection of orders or shipments
         /// </summary>
-        public async Task<ShipmentsLoadedEventArgs> LoadAsync(IEnumerable<long> entityIDs)
+        public async Task<ShipmentsLoadedEventArgs> LoadAsync(IEnumerable<long> entityIDs, ProgressDisplayOptions displayOptions)
         {
             MethodConditions.EnsureArgumentIsNotNull(entityIDs, nameof(entityIDs));
 
@@ -79,24 +83,12 @@ namespace ShipWorks.Shipping.Loading
 
             bool shouldValidate = storeManager.DoAnyStoresHaveAutomaticValidationEnabled();
 
-            // Progress Provider
             ProgressProvider progressProvider = new ProgressProvider();
-
-            // Load Shipment Progress Item
-            ProgressItem workProgress = new ProgressItem("Load Shipments");
-            progressProvider.ProgressItems.Add(workProgress);
+            IProgressReporter workProgress = progressProvider.AddItem("Load Shipments");
 
             // Progress Dialog
-            using (ProgressDlg progressDlg = new ProgressDlg(progressProvider))
+            using (CreateProgressDialog(displayOptions, progressProvider))
             {
-                progressDlg.Title = "Load Shipments";
-                progressDlg.Description = "ShipWorks is loading shipments for the selected orders.";
-
-                if (entityIDsOriginalSort.Count > 1)
-                {
-                    messageHelper.ExecuteOnUIThread(owner => progressDlg.Show(owner));
-                }
-
                 Task loadShipmentsTask = TaskEx.Run(() => LoadShipmentsInternal(workProgress, entityIDsOriginalSort));
                 Task validateTask = shouldValidate ? CreateValidationTask(progressProvider, count) : TaskUtility.CompletedTask;
 
@@ -107,9 +99,8 @@ namespace ShipWorks.Shipping.Loading
                 catch (Exception ex)
                 {
                     log.Error(ex);
+                    return new ShipmentsLoadedEventArgs(ex, wasCanceled, null, new List<ShipmentEntity>());
                 }
-
-                messageHelper.ExecuteOnUIThread(owner => progressDlg.CloseForced());
             }
 
             if (wasCanceled)
@@ -132,12 +123,23 @@ namespace ShipWorks.Shipping.Loading
         }
 
         /// <summary>
+        /// Create the loading progress dialog
+        /// </summary>
+        private IDisposable CreateProgressDialog(ProgressDisplayOptions options, IProgressProvider progressProvider)
+        {
+            return options == ProgressDisplayOptions.NeverShow ?
+                Disposable.Empty :
+                messageHelper.ShowProgressDialog("Load Shipments",
+                    "ShipWorks is loading shipments for the selected orders.",
+                    progressProvider, TimeSpan.FromMilliseconds(250));
+        }
+
+        /// <summary>
         /// Create the address validation task
         /// </summary>
-        private Task CreateValidationTask(ProgressProvider progressProvider, int count)
+        private Task CreateValidationTask(IProgressProvider progressProvider, int count)
         {
-            ProgressItem validationProgress = new ProgressItem("Validate Shipment Addresses");
-            progressProvider.ProgressItems.Add(validationProgress);
+            IProgressReporter validationProgress = progressProvider.AddItem("Validate Shipment Addresses");
 
             return ValidateShipmentsInternal(validationProgress, count);
         }
@@ -154,10 +156,10 @@ namespace ShipWorks.Shipping.Loading
         /// Load all the shipments on a background thread
         /// </summary>
         [NDependIgnoreLongMethod]
-        private void LoadShipmentsInternal(ProgressItem workProgress, List<long> entityIDsOriginalSort)
+        private void LoadShipmentsInternal(IProgressReporter workProgress, List<long> entityIDsOriginalSort)
         {
             // We need to make sure filters are up to date so profiles being applied can be as accurate as possible.
-            FilterHelper.EnsureFiltersUpToDate(TimeSpan.FromSeconds(15));
+            filterHelper.EnsureFiltersUpToDate(TimeSpan.FromSeconds(15));
 
             int count = 0;
             int total = entityIDsOriginalSort.Count;
@@ -236,9 +238,9 @@ namespace ShipWorks.Shipping.Loading
                             // Add them to the global list
                             globalShipments.Add(shipment.ShipmentID, shipment);
 
-                            // try for a few ms to add an item
                             while (!shipmentsToValidate.TryAdd(shipment, TimeSpan.FromMilliseconds(50)) && !workProgress.IsCancelRequested)
                             {
+                                // Try for a few ms to add an item
                             }
                         }
                     }
@@ -258,7 +260,6 @@ namespace ShipWorks.Shipping.Loading
                 throw new InvalidOperationException("Invalid key type passed to load shipments.");
             }
 
-
             finishedLoadingShipments = true;
             shipmentsToValidate.CompleteAdding();
 
@@ -268,7 +269,7 @@ namespace ShipWorks.Shipping.Loading
         /// <summary>
         /// Validate all the shipments on a background thread
         /// </summary>
-        private async Task ValidateShipmentsInternal(ProgressItem workProgress, int initialCount)
+        private async Task ValidateShipmentsInternal(IProgressReporter workProgress, int initialCount)
         {
             int count = 0;
             workProgress.Starting();
@@ -299,7 +300,7 @@ namespace ShipWorks.Shipping.Loading
                     {
                         wasCanceled = true;
                     }
-                });
+                }).ConfigureAwait(false);
             }
 
             workProgress.Completed();
@@ -308,7 +309,7 @@ namespace ShipWorks.Shipping.Loading
         /// <summary>
         /// Validate orders with a given address validation status
         /// </summary>
-        private static async Task ValidateAddressesTask(ProgressItem workProgress,
+        private static async Task ValidateAddressesTask(IProgressReporter workProgress,
             BlockingCollection<ShipmentEntity> shipmentsQueue, Action<ShipmentEntity> updateProgress)
         {
             Stopwatch stopwatch = new Stopwatch();
@@ -317,14 +318,14 @@ namespace ShipWorks.Shipping.Loading
             {
                 stopwatch.Restart();
 
-                int itemCount = shipmentsQueue.Count();
+                int itemCount = shipmentsQueue.Count;
                 log.Info($"Validating {itemCount} items on {ValidateAddressesTaskCount} thread(s)...");
 
                 // Start a number of tasks to do address validation.
                 await TaskEx
                     .WhenAll(Enumerable.Range(1, ValidateAddressesTaskCount)
                         .Select(_ => TaskEx.Run(() => ValidateShipments(workProgress, shipmentsQueue, new AddressValidator(), updateProgress)))
-                    );
+                    ).ConfigureAwait(false);
 
                 stopwatch.Stop();
 
@@ -339,7 +340,7 @@ namespace ShipWorks.Shipping.Loading
         /// <summary>
         /// Validate shipments from the queue
         /// </summary>
-        private static async Task ValidateShipments(ProgressItem workProgress,
+        private static async Task ValidateShipments(IProgressReporter workProgress,
             BlockingCollection<ShipmentEntity> shipmentsQueue, AddressValidator addressValidator,
             Action<ShipmentEntity> updateProgress)
         {
@@ -356,11 +357,20 @@ namespace ShipWorks.Shipping.Loading
                         adapter.FetchEntity(shipment);
                     }
 
-                    await ValidatedAddressManager.ValidateShipmentAsync(shipment, addressValidator);
+                    await ValidatedAddressManager.ValidateShipmentAsync(shipment, addressValidator)
+                        .ConfigureAwait(false);
 
                     updateProgress(shipment);
                 }
             }
+        }
+
+        /// <summary>
+        /// Dispose resources
+        /// </summary>
+        public void Dispose()
+        {
+            shipmentsToValidate.Dispose();
         }
 
         /// <summary>
@@ -404,6 +414,6 @@ namespace ShipWorks.Shipping.Loading
 
             return prefetchPath;
         });
-        private readonly ISecurityContext securityContext;
+        private readonly IFilterHelper filterHelper;
     }
 }

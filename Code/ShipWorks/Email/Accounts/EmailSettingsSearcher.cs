@@ -1,16 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Common.Threading;
-using log4net;
-using System.Threading;
-using Rebex.Net;
-using System.Net.Sockets;
 using System.Diagnostics;
-using Interapptive.Shared.Utility;
-using System.Text.RegularExpressions;
+using System.Threading;
 using Interapptive.Shared;
+using Interapptive.Shared.Threading;
+using log4net;
+using Rebex.Net;
+using ShipWorks.Common.Threading;
 
 namespace ShipWorks.Email.Accounts
 {
@@ -81,7 +77,7 @@ namespace ShipWorks.Email.Accounts
         /// <summary>
         /// Worker thread for executing a save request
         /// </summary>
-        private void SearchCallback(object state) 
+        private void SearchCallback(object state)
         {
             SearchRequest request = (SearchRequest) state;
 
@@ -169,7 +165,7 @@ namespace ShipWorks.Email.Accounts
             {
                 return null;
             }
-            
+
             // See if we found the settings
             if (incomingResult == null)
             {
@@ -345,7 +341,7 @@ namespace ShipWorks.Email.Accounts
                         {
                             log.Error("Probe failed.", ex);
                         }
-                       // Auth, socket, (or other) problems
+                        // Auth, socket, (or other) problems
                         catch (Pop3Exception ex)
                         {
                             log.Error("Probe failed.", ex);
@@ -412,12 +408,14 @@ namespace ShipWorks.Email.Accounts
             }
 
             // Return the valid connection information
-            return new SmtpProbeResult { 
-                Host = host, 
-                Username = username, 
-                Password = password, 
-                Port = port, 
-                SmtpSecurity = smtpSecurity };
+            return new SmtpProbeResult
+            {
+                Host = host,
+                Username = username,
+                Password = password,
+                Port = port,
+                SmtpSecurity = smtpSecurity
+            };
         }
 
         /// <summary>

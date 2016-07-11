@@ -1,42 +1,41 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Common.Threading;
 using System.Data;
 using System.Data.SqlClient;
-using ShipWorks.Data.Connection;
+using System.IO;
+using System.Linq;
+using System.Transactions;
+using System.Xml.Linq;
+using Interapptive.Shared;
 using Interapptive.Shared.Data;
+using Interapptive.Shared.Threading;
+using log4net;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Actions;
 using ShipWorks.Actions.Tasks;
 using ShipWorks.Actions.Tasks.Common;
-using System.Xml.Linq;
-using log4net;
-using ShipWorks.Data.Model.EntityClasses;
-using System.Transactions;
-using ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks;
-using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Actions.Triggers;
 using ShipWorks.Data.Adapter.Custom;
-using ShipWorks.Actions;
-using ShipWorks.Stores.Communication;
+using ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping;
+using ShipWorks.Stores.Communication;
+using ShipWorks.Stores.Platforms.Amazon.CoreExtensions.Actions;
+using ShipWorks.Stores.Platforms.AmeriCommerce.CoreExtensions.Actions;
+using ShipWorks.Stores.Platforms.ChannelAdvisor.CoreExtensions.Actions;
+using ShipWorks.Stores.Platforms.CommerceInterface.CoreExtensions.Actions;
 using ShipWorks.Stores.Platforms.Ebay.CoreExtensions.Actions;
 using ShipWorks.Stores.Platforms.GenericModule.CoreExtensions.Actions;
 using ShipWorks.Stores.Platforms.Infopia.CoreExtensions.Actions;
-using ShipWorks.Stores.Platforms.AmeriCommerce.CoreExtensions.Actions;
 using ShipWorks.Stores.Platforms.Magento.CoreExtensions.Actions;
-using ShipWorks.Stores.Platforms.Volusion.CoreExtensions.Actions;
-using ShipWorks.Stores.Platforms.OrderMotion.CoreExtensions.Actions;
-using ShipWorks.Stores.Platforms.MarketplaceAdvisor.CoreExtensions.Actions;
-using ShipWorks.Stores.Platforms.ChannelAdvisor.CoreExtensions.Actions;
-using ShipWorks.Stores.Platforms.Yahoo.CoreExtensions.Actions;
-using ShipWorks.Stores.Platforms.Amazon.CoreExtensions.Actions;
-using ShipWorks.Stores.Platforms.CommerceInterface.CoreExtensions.Actions;
-using ShipWorks.Stores.Platforms.NetworkSolutions.CoreExtensions.Actions;
 using ShipWorks.Stores.Platforms.MarketplaceAdvisor;
-using System.IO;
-using Interapptive.Shared;
-using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Stores.Platforms.MarketplaceAdvisor.CoreExtensions.Actions;
+using ShipWorks.Stores.Platforms.NetworkSolutions.CoreExtensions.Actions;
+using ShipWorks.Stores.Platforms.OrderMotion.CoreExtensions.Actions;
+using ShipWorks.Stores.Platforms.Volusion.CoreExtensions.Actions;
+using ShipWorks.Stores.Platforms.Yahoo.CoreExtensions.Actions;
 
 namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
 {
@@ -50,7 +49,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
         /// <summary>
         /// Convert all the 2x actions in the current database to 3x actions
         /// </summary>
-        public static void ConvertActions(ProgressItem progress)
+        public static void ConvertActions(IProgressReporter progress)
         {
             progress.Starting();
             progress.Detail = "Converting actions...";
@@ -88,9 +87,9 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
         /// <summary>
         /// Convert a single action
         /// </summary>
-        private static void ConvertAction(ProgressItem progress, DataTable actions, DataRow action)
+        private static void ConvertAction(IProgressReporter progress, DataTable actions, DataRow action)
         {
-            int originalStoreID = (int)action["StoreID"];
+            int originalStoreID = (int) action["StoreID"];
             long storeID;
 
             using (SqlConnection con = SqlSession.Current.OpenConnection())
@@ -111,15 +110,15 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
 
             ActionEntity actionEntity = CreateAction(
                 store,
-                (string)action["ActionName"],
-                (bool)action["Enabled"]);
+                (string) action["ActionName"],
+                (bool) action["Enabled"]);
 
             PersistAction(
                 actionEntity,
                 store,
                 Convert.ToInt32(action["TriggerType"]),
-                (string)action["TriggerSettings"],
-                (string)action["TasksXml"]);
+                (string) action["TriggerSettings"],
+                (string) action["TasksXml"]);
         }
 
         /// <summary>
@@ -133,7 +132,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
                 Enabled = enabled,
                 TaskSummary = "",
 
-                ComputerLimitedType = (int)ComputerLimitedType.TriggeringComputer,
+                ComputerLimitedType = (int) ComputerLimitedType.TriggeringComputer,
                 InternalComputerLimitedList = string.Empty,
 
                 StoreLimited = true,
@@ -157,7 +156,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
             long? restrictFilterNodeID = null;
 
             // The OrderDownloaded trigger had an option filter.  But in v3 its not on the trigger, it's on each task.  We may need to apply it to tasks.
-            if (action.TriggerType == (int)ActionTriggerType.OrderDownloaded)
+            if (action.TriggerType == (int) ActionTriggerType.OrderDownloaded)
             {
                 restrictFilterNodeID = ApplyOrderDownloadedTriggerOptions(triggerSettings, restrictFilterNodeID);
             }
@@ -178,7 +177,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
         private static long? ApplyOrderDownloadedTriggerOptions(string triggerSettings, long? restrictFilterNodeID)
         {
             XElement xSettings = XElement.Parse(triggerSettings);
-            string filterName = (string)xSettings.Element("Filter");
+            string filterName = (string) xSettings.Element("Filter");
 
             if (!string.IsNullOrWhiteSpace(filterName))
             {
@@ -219,9 +218,9 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
                 default: throw new InvalidOperationException("Unknown V2 action trigger type " + v2TriggerType);
             }
 
-            action.TriggerType = (int)triggerType;
+            action.TriggerType = (int) triggerType;
 
-            switch ((ActionTriggerType)action.TriggerType)
+            switch ((ActionTriggerType) action.TriggerType)
             {
                 case ActionTriggerType.OrderDownloaded:
                     LoadOrderDownloadedTrigger(action);
@@ -248,12 +247,12 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
         {
             ShipmentVoidedTrigger trigger = new ShipmentVoidedTrigger();
 
-            int shipmentType = (int)xSettings.Element("ShipmentType");
+            int shipmentType = (int) xSettings.Element("ShipmentType");
 
             trigger.RestrictType = shipmentType >= 0 && shipmentType < 7;
             if (trigger.RestrictType)
             {
-                trigger.ShipmentType = (ShipmentTypeCode)shipmentType;
+                trigger.ShipmentType = (ShipmentTypeCode) shipmentType;
             }
 
             trigger.RestrictStandardReturn = true;
@@ -269,12 +268,12 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
         {
             ShipmentProcessedTrigger trigger = new ShipmentProcessedTrigger();
 
-            int shipmentType = (int)xSettings.Element("ShipmentType");
+            int shipmentType = (int) xSettings.Element("ShipmentType");
 
             trigger.RestrictType = shipmentType >= 0 && shipmentType < 7;
             if (trigger.RestrictType)
             {
-                trigger.ShipmentType = (ShipmentTypeCode)shipmentType;
+                trigger.ShipmentType = (ShipmentTypeCode) shipmentType;
             }
 
             trigger.RestrictStandardReturn = true;
@@ -289,10 +288,10 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
         private static void LoadDownloadFinishedTrigger(ActionEntity action, XElement xSettings)
         {
             DownloadFinishedTrigger trigger = new DownloadFinishedTrigger();
-            trigger.OnlyIfNewOrders = (bool)xSettings.Element("NewOrders");
+            trigger.OnlyIfNewOrders = (bool) xSettings.Element("NewOrders");
 
-            int resultType = (int)xSettings.Element("DownloadResult");
-            trigger.RequiredResult = (resultType != -1) ? (DownloadResult?)resultType : (DownloadResult?)null;
+            int resultType = (int) xSettings.Element("DownloadResult");
+            trigger.RequiredResult = (resultType != -1) ? (DownloadResult?) resultType : (DownloadResult?) null;
 
             action.TriggerSettings = trigger.GetXml();
         }
@@ -337,7 +336,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
             if (restrictFilterNodeID != null)
             {
                 taskEntity.FilterCondition = true;
-                taskEntity.FilterConditionNodeID = (long)restrictFilterNodeID;
+                taskEntity.FilterConditionNodeID = (long) restrictFilterNodeID;
             }
 
             // Save the task
@@ -353,7 +352,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
         [NDependIgnoreComplexMethodAttribute]
         private static ActionTask InstantiateTask(XElement xTask, StoreEntity store)
         {
-            string v2TypeName = (string)xTask.Attribute("type");
+            string v2TypeName = (string) xTask.Attribute("type");
 
             switch (v2TypeName)
             {
@@ -397,8 +396,8 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
         /// </summary>
         private static ActionTask LoadNetworkSolutionsOrderUpdateTask(NetworkSolutionsOrderUpdateTask task, XElement xTask)
         {
-            task.Comment = (string)xTask.Element("Comments");
-            task.StatusCode = (long)xTask.Element("Code");
+            task.Comment = (string) xTask.Element("Comments");
+            task.StatusCode = (long) xTask.Element("Code");
 
             return task;
         }
@@ -409,7 +408,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
         private static ActionTask LoadMivaShipmentUploadTask(GenericStoreOrderUpdateTask task, XElement xTask)
         {
             task.Comment = "";
-            task.StatusCode = (string)xTask.Element("Status");
+            task.StatusCode = (string) xTask.Element("Status");
 
             return task;
         }
@@ -419,7 +418,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
         /// </summary>
         private static ActionTask LoadCommerceInterfaceShipmentUploadTask(CommerceInterfaceShipmentUploadTask task, XElement xTask)
         {
-            task.StatusCode = (int)xTask.Element("Code");
+            task.StatusCode = (int) xTask.Element("Code");
             return task;
         }
 
@@ -428,8 +427,8 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
         /// </summary>
         private static ActionTask LoadMarketworksFlagsTask(MarketplaceAdvisorChangeFlagsTaskBase task, XElement xTask)
         {
-            task.FlagsOn = (MarketplaceAdvisorOmsFlagTypes)(int)xTask.Element("OnFlags");
-            task.FlagsOff = (MarketplaceAdvisorOmsFlagTypes)(int)xTask.Element("OffFlags");
+            task.FlagsOn = (MarketplaceAdvisorOmsFlagTypes) (int) xTask.Element("OnFlags");
+            task.FlagsOff = (MarketplaceAdvisorOmsFlagTypes) (int) xTask.Element("OffFlags");
 
             return task;
         }
@@ -439,7 +438,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
         /// </summary>
         private static ActionTask LoadVolusionShipmentUploadTask(VolusionShipmentUploadTask task, XElement xTask)
         {
-            task.SendEmail = (bool)xTask.Element("SendEmail");
+            task.SendEmail = (bool) xTask.Element("SendEmail");
             return task;
         }
 
@@ -448,7 +447,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
         /// </summary>
         private static ActionTask LoadMagentoShipmentUpdateTask(MagentoShipmentUploadTask task, XElement xTask)
         {
-            task.Comment = (string)xTask.Element("Comments");
+            task.Comment = (string) xTask.Element("Comments");
             return task;
         }
 
@@ -457,7 +456,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
         /// </summary>
         private static ActionTask LoadAmeriCommerceUpdateStatusTask(AmeriCommerceOrderUpdateTask task, XElement xTask)
         {
-            task.StatusCode = (int)xTask.Element("Status");
+            task.StatusCode = (int) xTask.Element("Status");
             return task;
         }
 
@@ -466,7 +465,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
         /// </summary>
         private static ActionTask LoadInfopiaOrderUpdateTask(InfopiaOrderUpdateTask task, XElement xTask)
         {
-            task.Status = (string)xTask.Element("Status");
+            task.Status = (string) xTask.Element("Status");
             return task;
         }
 
@@ -475,8 +474,8 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
         /// </summary>
         private static ActionTask LoadGenericOrderUpdateTask(GenericStoreOrderUpdateTask task, XElement xTask)
         {
-            task.Comment = (string)xTask.Element("Comments");
-            task.StatusCode = (string)xTask.Element("Code");
+            task.Comment = (string) xTask.Element("Comments");
+            task.StatusCode = (string) xTask.Element("Code");
 
             return task;
         }
@@ -486,8 +485,8 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
         /// </summary>
         private static ActionTask LoadEbayOnlineUpdateTask(EbayOnlineUpdateTask task, XElement xTask)
         {
-            task.MarkShipped = (bool)xTask.Element("Shipped");
-            task.MarkPaid = (bool)xTask.Element("Paid");
+            task.MarkShipped = (bool) xTask.Element("Shipped");
+            task.MarkPaid = (bool) xTask.Element("Paid");
 
             return task;
         }
@@ -498,10 +497,10 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
         private static PrintTask LoadPrintTaskSettings(PrintTask printTask, XElement xTask)
         {
             // TODO: translate into converted templateID
-            string templateName = (string)xTask.Element("Template");
+            string templateName = (string) xTask.Element("Template");
 
             // In V3 copies are at the template level not the task level
-            int copies = (int)xTask.Element("Copies");
+            int copies = (int) xTask.Element("Copies");
             if (copies > 1)
             {
                 log.Warn("Ignore Copies for PrintTask since in V3 it's stored in the template");
@@ -516,7 +515,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
         private static EmailTask LoadEmailTaskSettings(EmailTask emailTask, XElement xTask)
         {
             // TODO: translate into converted templateID
-            string templateName = (string)xTask.Element("Template");
+            string templateName = (string) xTask.Element("Template");
 
             return emailTask;
         }
@@ -526,7 +525,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
         /// </summary>
         private static PlaySoundTask LoadPlaySoundTaskSettings(PlaySoundTask playSoundTask, XElement xTask)
         {
-            string soundFile = (string)xTask.Element("SoundFile");
+            string soundFile = (string) xTask.Element("SoundFile");
 
             if (File.Exists(soundFile))
             {
@@ -537,7 +536,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
                 log.WarnFormat("PlaySound task could not find file '{0}'", soundFile);
             }
 
-            playSoundTask.Entity.InputSource = (int)ActionTaskInputSource.Nothing;
+            playSoundTask.Entity.InputSource = (int) ActionTaskInputSource.Nothing;
 
             return playSoundTask;
         }
@@ -547,7 +546,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
         /// </summary>
         private static SetOrderStatusTask LoadOrderStatusTaskSettings(SetOrderStatusTask setOrderStatusTask, XElement xTask)
         {
-            string status = (string)xTask.Element("Status");
+            string status = (string) xTask.Element("Status");
 
             setOrderStatusTask.Status = status;
 
@@ -561,7 +560,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
         {
             ActionTaskDescriptorBinding binding = new ActionTaskDescriptorBinding(typeof(T), store);
 
-            return (T)(object)binding.CreateInstance();
+            return (T) (object) binding.CreateInstance();
         }
 
         /// <summary>

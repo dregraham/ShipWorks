@@ -1,17 +1,17 @@
-﻿using Interapptive.Shared.Net;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using Interapptive.Shared.Net;
+using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
 using log4net;
 using Newtonsoft.Json;
 using ShipWorks.ApplicationCore.Logging;
-using ShipWorks.Common.Threading;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication.Throttling;
 using ShipWorks.Stores.Platforms.SparkPay.DTO;
 using ShipWorks.Stores.Platforms.SparkPay.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
 using HttpJsonVariableRequestSubmitter = ShipWorks.Stores.Platforms.SparkPay.Factories.HttpJsonVariableRequestSubmitter;
 
 namespace ShipWorks.Stores.Platforms.SparkPay
@@ -243,7 +243,7 @@ namespace ShipWorks.Stores.Platforms.SparkPay
             catch (WebException ex)
             {
                 HttpWebResponse webResponse = ex.Response as HttpWebResponse;
-                if (webResponse != null && webResponse.StatusCode == (HttpStatusCode)OverApiLimitStatusCode)
+                if (webResponse != null && webResponse.StatusCode == (HttpStatusCode) OverApiLimitStatusCode)
                 {
                     throw new RequestThrottledException(ex.Message);
                 }

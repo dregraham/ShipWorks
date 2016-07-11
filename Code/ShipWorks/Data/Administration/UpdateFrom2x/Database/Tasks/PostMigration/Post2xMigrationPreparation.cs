@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
+using Interapptive.Shared;
 using Interapptive.Shared.Data;
-using Interapptive.Shared.Utility;
+using Interapptive.Shared.Security;
+using Interapptive.Shared.Threading;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Common.Threading;
 using ShipWorks.Data.Adapter.Custom;
@@ -12,9 +12,6 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Stores.Platforms.Ebay;
-using System.Transactions;
-using Interapptive.Shared;
-using Interapptive.Shared.Security;
 using ShipWorks.Users;
 using ShipWorks.Users.Audit;
 using ShipWorks.Users.Security;
@@ -29,7 +26,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.PostMigratio
         /// <summary>
         /// Prepare for the final 2x migration wizard pages to be shown right after the v3 schema is updated - but before the UI steps\pages are shown.
         /// </summary>
-        public static void PrepareForFinalStepsAfter3xSchemaUpdate(ProgressProvider progressProvider)
+        public static void PrepareForFinalStepsAfter3xSchemaUpdate(IProgressProvider progressProvider)
         {
             // Create the progress item
             ProgressItem progress = new ProgressItem("Final Steps");

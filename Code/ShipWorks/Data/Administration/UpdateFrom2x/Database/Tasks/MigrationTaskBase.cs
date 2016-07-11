@@ -1,15 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Common.Threading;
-using System.Data.SqlClient;
-using Interapptive.Shared.Data;
-using ShipWorks.Data.Connection;
 using System.Data;
+using System.Data.SqlClient;
 using System.Transactions;
+using Interapptive.Shared.Data;
+using Interapptive.Shared.Threading;
 using log4net;
-using ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.Specialized;
+using ShipWorks.Common.Threading;
+using ShipWorks.Data.Connection;
 
 namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks
 {
@@ -19,9 +16,9 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks
     /// </summary>
     public abstract class MigrationTaskBase
     {
-        // Logger 
+        // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(MigrationTaskBase));
-						  
+
         // this instance can be executed
         bool canRun = false;
 
@@ -53,7 +50,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks
         MigrationSqlScriptLoader scriptLoader;
 
         // bookkeeping
-        DateTime createTime; 
+        DateTime createTime;
         DateTime startTime;
         DateTime lastUpdateTime;
 
@@ -63,7 +60,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks
         /// <summary>
         /// Returns the running progress item
         /// </summary>
-        protected ProgressItem Progress
+        protected IProgressReporter Progress
         {
             get
             {
@@ -218,7 +215,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks
         /// <summary>
         /// Identifying type code
         /// </summary>
-        public abstract MigrationTaskTypeCode TaskTypeCode { get; } 
+        public abstract MigrationTaskTypeCode TaskTypeCode { get; }
         #endregion
 
         #region Instantiation
@@ -226,8 +223,8 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks
         /// <summary>
         /// Constructor
         /// </summary>
-        protected MigrationTaskBase(string identifier) 
-            : this (identifier, MigrationTaskInstancing.MainDatabaseOnly, MigrationTaskRunPattern.RunOnce)
+        protected MigrationTaskBase(string identifier)
+            : this(identifier, MigrationTaskInstancing.MainDatabaseOnly, MigrationTaskRunPattern.RunOnce)
         {
         }
 
@@ -251,7 +248,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks
             database = toCopy.identifier;
 
             // progress
-            estimatedWorkCount= toCopy.estimatedWorkCount;
+            estimatedWorkCount = toCopy.estimatedWorkCount;
             actualWorkCount = 0;
 
             // behavior
@@ -295,8 +292,8 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks
         /// </summary>
         private void UpdateProgress()
         {
-            // propogate this back up to the engine since it must be aware of the overall progress to 
-            // accurately set ProgressPercent. 
+            // propogate this back up to the engine since it must be aware of the overall progress to
+            // accurately set ProgressPercent.
             if (executionPlan != null)
             {
                 executionPlan.UpdateProgress();
@@ -304,7 +301,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks
         }
 
         /// <summary>
-        /// Calculate the amount of work this task has to do 
+        /// Calculate the amount of work this task has to do
         /// </summary>
         public void CalculateEstimate()
         {
@@ -313,8 +310,8 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks
         }
 
         /// <summary>
-        /// Record the start of this task.  
-        /// 
+        /// Record the start of this task.
+        ///
         /// Not using Run's connection because that is potentially for an archive DB
         /// </summary>
         private void RecordStart()
@@ -350,8 +347,8 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks
         }
 
         /// <summary>
-        /// Record the start of this task.  
-        /// 
+        /// Record the start of this task.
+        ///
         /// Not using Run's connection because that is potentially for an archive DB
         /// </summary>
         private void RecordProgress()
@@ -420,17 +417,17 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks
 
         /// <summary>
         /// Run a single unit of work.
-        /// 
+        ///
         ///     Return the number of work units complete.
         ///     Return 0 if CompleteWorkUnit() is being used instead to report progress
-        ///     
+        ///
         /// If the task RunPattern is Repeat, the task will be called repeatedly until non-zero is returned
         /// </summary>
         protected abstract int Run();
 
         /// <summary>
         /// Perform calculations to get the estimated number of work units to be performed.
-        /// 
+        ///
         /// Ruturn the number of work units.
         /// </summary>
         protected abstract int RunEstimate(SqlConnection con);
@@ -443,7 +440,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks
             // safeguard to protect against deserialized or otherwise not-completetely configured tasks from running
             if (!canRun)
             {
-                throw new MigrationException(String.Format("The MigrationTaskBase instance with id '{0}' is not runnable.", ExecutionPlanIdentifier)); 
+                throw new MigrationException(String.Format("The MigrationTaskBase instance with id '{0}' is not runnable.", ExecutionPlanIdentifier));
             }
 
             // track the number of work units performed or estimated
@@ -470,7 +467,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks
                 RecordStart();
 
                 // Run a single time
-                if ( runPattern == MigrationTaskRunPattern.RunOnce)
+                if (runPattern == MigrationTaskRunPattern.RunOnce)
                 {
                     log.InfoFormat("Running task {0} once.", ExecutionPlanIdentifier);
 
@@ -504,7 +501,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks
                         if (i == 0)
                         {
                             Completed = true;
-                        }                        
+                        }
 
                         // increment and record the returned progress
                         ReportWorkProgress(i);
@@ -522,7 +519,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks
                     } while (i > 0);
                 }
             }
-                
+
             // return the rows impacted
             return count;
         }
@@ -540,7 +537,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks
             }
 
             // open a connection to the main database and change databases to the archive
-            // note: may be better to just construct a new connection instead of doing it this way 
+            // note: may be better to just construct a new connection instead of doing it this way
             // due to (connection pooling issues)
             SqlConnection con = SqlSession.Current.OpenConnection();
             con.ChangeDatabase(task.Database);

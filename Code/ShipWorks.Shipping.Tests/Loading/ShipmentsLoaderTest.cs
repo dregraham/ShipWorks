@@ -1,133 +1,147 @@
-﻿//using System;
-//using System.Linq;
-//using System.Threading.Tasks;
-//using Autofac.Extras.Moq;
-//using Moq;
-//using SD.LLBLGen.Pro.ORMSupportClasses;
-//using ShipWorks.AddressValidation;
-//using ShipWorks.Data.Model.EntityClasses;
-//using ShipWorks.Shipping.Loading;
-//using ShipWorks.Stores;
-//using ShipWorks.Stores.Content;
-//using ShipWorks.Tests.Shared;
-//using Xunit;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Autofac.Extras.Moq;
+using Interapptive.Shared.Threading;
+using Moq;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.AddressValidation;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Loading;
+using ShipWorks.Stores;
+using ShipWorks.Stores.Content;
+using ShipWorks.Tests.Shared;
+using ShipWorks.Users.Security;
+using Xunit;
 
-//namespace ShipWorks.Shipping.Tests.Loading
-//{
-//    public class ShipmentsLoaderTest : IDisposable
-//    {
-//        private readonly AutoMock mock;
-//        private ShipmentsLoader testObject;
-//        private readonly OrderEntity orderEntity;
-//        private readonly ShipmentEntity shipmentEntity;
+namespace ShipWorks.Shipping.Tests.Loading
+{
+    public class ShipmentsLoaderTest : IDisposable
+    {
+        private readonly AutoMock mock;
+        private ShipmentsLoader testObject;
+        private readonly OrderEntity orderEntity;
+        private readonly ShipmentEntity shipmentEntity;
 
-//        public ShipmentsLoaderTest()
-//        {
-//            mock = AutoMockExtensions.GetLooseThatReturnsMocks();
+        public ShipmentsLoaderTest()
+        {
+            mock = AutoMockExtensions.GetLooseThatReturnsMocks();
 
-//            orderEntity = new OrderEntity(1006)
-//            {
-//                StoreID = 1,
-//                Store = new StoreEntity(1)
-//            };
+            orderEntity = new OrderEntity(1006)
+            {
+                StoreID = 1,
+                Store = new StoreEntity(1)
+            };
 
-//            shipmentEntity = new ShipmentEntity(1031)
-//            {
-//                Processed = false,
-//                Order = orderEntity
-//            };
+            shipmentEntity = new ShipmentEntity(1031)
+            {
+                Processed = false,
+                Order = orderEntity
+            };
 
-//            mock.Mock<IStoreTypeManager>()
-//                .Setup(x => x.GetType(It.IsAny<StoreEntity>()))
-//                .Returns(mock.CreateMock<TestStoreType>().Object);
+            mock.Provide<ISchedulerProvider>(new ImmediateSchedulerProvider());
 
-//            mock.Mock<IOrderManager>()
-//                .Setup(x => x.LoadOrder(It.IsAny<long>(), It.IsAny<IPrefetchPath2>()))
-//                .Returns(orderEntity);
-//        }
+            mock.Mock<IStoreTypeManager>()
+                .Setup(x => x.GetType(It.IsAny<StoreEntity>()))
+                .Returns(mock.CreateMock<TestStoreType>().Object);
 
-//        [Fact]
-//        public async Task ShipmentsReturned_Correct_WhenOrderHasMultipleShipments_Test()
-//        {
-//            orderEntity.Shipments.Add(new ShipmentEntity());
+            mock.Mock<IOrderManager>()
+                .Setup(x => x.LoadOrders(It.IsAny<IEnumerable<long>>(), It.IsAny<IPrefetchPath2>()))
+                .Returns(new[] { orderEntity });
 
-//            var adapter1 = new ShipmentEntity();
-//            var adapter2 = new ShipmentEntity();
-//            orderEntity.Shipments.AddRange(new[] { adapter1, adapter2 });
+            mock.Mock<ISecurityContext>()
+                .Setup(x => x.HasPermission(It.IsAny<PermissionType>(), It.IsAny<long>()))
+                .Returns(true);
+        }
 
-//            testObject = mock.Create<ShipmentsLoader>();
+        [Fact]
+        public async Task ShipmentsReturned_Correct_WhenOrderHasMultipleShipments_Test()
+        {
+            var extraShipment = new ShipmentEntity();
+            orderEntity.Shipments.Add(extraShipment);
 
-//            var orderSelectionLoaded = await testObject.LoadAsync(new[] { orderEntity.OrderID });
+            testObject = mock.Create<ShipmentsLoader>();
 
-//            Assert.Equal(2, orderSelectionLoaded.Shipments.Count());
-//            Assert.Contains(adapter1, orderSelectionLoaded.Shipments);
-//            Assert.Contains(adapter2, orderSelectionLoaded.Shipments);
-//        }
+            var orderSelectionLoaded = await testObject.LoadAsync(new[] { orderEntity.OrderID },
+                ProgressDisplayOptions.NeverShow);
 
-//        [Fact]
-//        public async Task NoShipmentsReturned_WhenAutoCreateIsFalse_Test()
-//        {
-//            orderEntity.Shipments.Clear();
+            Assert.Equal(2, orderSelectionLoaded.Shipments.Count());
+            Assert.Contains(extraShipment, orderSelectionLoaded.Shipments);
+            Assert.Contains(shipmentEntity, orderSelectionLoaded.Shipments);
+        }
 
-//            testObject = mock.Create<ShipmentsLoader>();
+        [Fact]
+        public async Task NoShipmentsReturned_WhenAutoCreateIsFalse_Test()
+        {
+            orderEntity.Shipments.Clear();
 
-//            var orderSelectionLoaded = await testObject.LoadAsync(new[] { orderEntity.OrderID });
+            testObject = mock.Create<ShipmentsLoader>();
 
-//            Assert.Equal(0, orderSelectionLoaded.Shipments.Count());
-//        }
+            var orderSelectionLoaded = await testObject.LoadAsync(new[] { orderEntity.OrderID },
+                ProgressDisplayOptions.NeverShow);
 
-//        [Fact]
-//        public async Task ShipmentsReturned_WhenAutoCreateIsTrueAndHasPermission_Test()
-//        {
-//            orderEntity.Shipments.Clear();
+            Assert.Equal(0, orderSelectionLoaded.Shipments.Count());
+        }
 
-//            testObject = mock.Create<ShipmentsLoader>();
+        [Fact]
+        public async Task ShipmentsReturned_WhenAutoCreateIsTrueAndHasPermission_Test()
+        {
+            orderEntity.Shipments.Clear();
 
-//            await testObject.LoadAsync(new[] { orderEntity.OrderID });
+            testObject = mock.Create<ShipmentsLoader>();
 
-//            mock.Mock<IShipmentFactory>()
-//                .Verify(x => x.AutoCreateIfNecessary(orderEntity));
-//        }
+            await testObject.LoadAsync(new[] { orderEntity.OrderID },
+                ProgressDisplayOptions.NeverShow);
 
-//        [Fact]
-//        public async Task AddressValidation_Performed_WhenAddressValidationAllowed_Test()
-//        {
-//            testObject = mock.Create<ShipmentsLoader>();
+            mock.Mock<IShipmentFactory>()
+                .Verify(x => x.AutoCreateIfNecessary(orderEntity));
+        }
 
-//            await testObject.LoadAsync(new[] { orderEntity.OrderID });
+        //TODO: This test should be re-instated when we get validation working with in-memory objects
+        //[Fact]
+        //public async Task AddressValidation_Performed_WhenAddressValidationAllowed_Test()
+        //{
+        //    mock.Override<IStoreManager>().Setup(x => x.DoAnyStoresHaveAutomaticValidationEnabled()).Returns(true);
+        //    testObject = mock.Create<ShipmentsLoader>();
 
-//            mock.Mock<IValidatedAddressManager>().Verify(av => av.ValidateShipmentAsync(It.IsAny<ShipmentEntity>()), Times.Once);
-//        }
+        //    await testObject.LoadAsync(new[] { orderEntity.OrderID },
+        //        ProgressDisplayOptions.NeverShow);
 
-//        [Fact]
-//        public async Task AddressValidation_NotPerformed_WhenNoShipmentsAndAddressValidationAllowed_Test()
-//        {
-//            orderEntity.Shipments.Clear();
+        //    mock.Mock<IValidatedAddressManager>().Verify(av => av.ValidateShipmentAsync(It.IsAny<ShipmentEntity>()), Times.Once);
+        //}
 
-//            testObject = mock.Create<ShipmentsLoader>();
+        [Fact]
+        public async Task AddressValidation_NotPerformed_WhenNoShipmentsAndAddressValidationAllowed_Test()
+        {
+            orderEntity.Shipments.Clear();
 
-//            await testObject.LoadAsync(new[] { orderEntity.OrderID });
+            testObject = mock.Create<ShipmentsLoader>();
 
-//            mock.Mock<IValidatedAddressManager>().Verify(av => av.ValidateShipmentAsync(It.IsAny<ShipmentEntity>()), Times.Never);
-//        }
+            await testObject.LoadAsync(new[] { orderEntity.OrderID },
+                ProgressDisplayOptions.NeverShow);
 
-//        [Fact]
-//        public async Task OrderSelectionLoaded_HasException_WhenInvalidOrderID_Test()
-//        {
-//            mock.Mock<IOrderManager>()
-//                .Setup(x => x.LoadOrder(It.IsAny<long>(), It.IsAny<IPrefetchPath2>()))
-//                .Throws<InvalidOperationException>();
+            mock.Mock<IValidatedAddressManager>().Verify(av => av.ValidateShipmentAsync(It.IsAny<ShipmentEntity>()), Times.Never);
+        }
 
-//            testObject = mock.Create<ShipmentsLoader>();
+        [Fact]
+        public async Task OrderSelectionLoaded_HasException_WhenInvalidOrderID_Test()
+        {
+            mock.Mock<IOrderManager>()
+                .Setup(x => x.LoadOrders(It.IsAny<long[]>(), It.IsAny<IPrefetchPath2>()))
+                .Throws<InvalidOperationException>();
 
-//            var orderSelectionLoaded = await testObject.LoadAsync(new[] { 0L });
+            testObject = mock.Create<ShipmentsLoader>();
 
-//            Assert.NotNull(orderSelectionLoaded.Error);
-//        }
+            var orderSelectionLoaded = await testObject.LoadAsync(new[] { 0L },
+                ProgressDisplayOptions.NeverShow);
 
-//        public void Dispose()
-//        {
-//            mock.Dispose();
-//        }
-//    }
-//}
+            Assert.NotNull(orderSelectionLoaded.Error);
+        }
+
+        public void Dispose()
+        {
+            mock.Dispose();
+        }
+    }
+}

@@ -1126,6 +1126,7 @@
     <Compile Include="Shipping\Insurance\InsuranceUtilityWrapper.cs" />
     <Compile Include="Shipping\IRatesRetriever.cs" />
     <Compile Include="Shipping\IShipmentFactory.cs" />
+    <Compile Include="Shipping\ProgressDisplayOptions.cs" />
     <Compile Include="Shipping\Services\CarrierShipmentAdapterBase.cs" />
     <Compile Include="Shipping\IShippingOriginManager.cs" />
     <Compile Include="Shipping\Services\IShipmentCustomsItemAdapter.cs" />
@@ -6565,7 +6566,6 @@
     <Compile Include="ApplicationCore\Logging\ApiLogEntry.cs" />
     <Compile Include="ApplicationCore\Logging\ApiPrivateLogSourceAttribute.cs" />
     <Compile Include="Common\Threading\ProgressProvider.cs" />
-    <Compile Include="Common\Threading\ProgressItemCollection.cs" />
     <Compile Include="ApplicationCore\Crashes\CrashSubmitter.cs" />
     <Compile Include="ApplicationCore\Crashes\CrashSubmitException.cs" />
     <Compile Include="ApplicationCore\DataPath.cs" />
@@ -8536,7 +8536,6 @@
     <Compile Include="Data\Connection\DatabaseLogonDlg.Designer.cs">
       <DependentUpon>DatabaseLogonDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="Common\Threading\IProgressReporter.cs" />
     <Compile Include="UI\PopupSizerLocation.cs" />
     <Compile Include="UI\PopupSizerStyle.cs" />
     <Compile Include="UI\Utility\ThemedBorderProvider.cs" />
@@ -8728,7 +8727,6 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Common\Threading\ProgressItem.cs" />
-    <Compile Include="Common\Threading\ProgressItemStatus.cs" />
     <Compile Include="UI\Controls\SectionTitle.cs">
       <SubType>Component</SubType>
     </Compile>

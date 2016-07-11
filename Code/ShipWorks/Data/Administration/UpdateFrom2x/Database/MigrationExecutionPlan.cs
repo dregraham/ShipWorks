@@ -1,16 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks;
-using System.Data.SqlClient;
-using ShipWorks.Data.Connection;
-using log4net;
 using System.Data;
-using ShipWorks.Common.Threading;
-using System.Transactions;
+using System.Data.SqlClient;
 using System.Data.SqlTypes;
+using System.Transactions;
 using Interapptive.Shared.Data;
+using Interapptive.Shared.Threading;
+using log4net;
+using ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks;
+using ShipWorks.Data.Connection;
 
 namespace ShipWorks.Data.Administration.UpdateFrom2x.Database
 {
@@ -19,15 +17,15 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database
     /// execution plan.  A single MigrationTaskBase in the MigrationEngine
     /// can result in multiple instances of the same type in the generated executin
     /// plan.
-    /// 
+    ///
     /// Once the execution plan is generated and execution has started, it is resumable.
     /// </summary>
     public class MigrationExecutionPlan
     {
-        // Logger 
+        // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(MigrationExecutionPlan));
-						  
-        // Task prototypes to base the execution plan off of 
+
+        // Task prototypes to base the execution plan off of
         IList<MigrationTaskBase> taskPrototypes;
 
         // The runtime task instances that make up the execution plan
@@ -54,7 +52,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database
         }
 
         /// <summary>
-        /// Gets the engine this plan is a part of 
+        /// Gets the engine this plan is a part of
         /// </summary>
         public MigrationController MigrationController
         {
@@ -63,7 +61,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database
 
         /// <summary>
         /// Convenience property for getting the currently executing task.
-        ///  
+        ///
         /// Null if it isn't on a task.
         /// </summary>
         public MigrationTaskBase CurrentTask
@@ -128,7 +126,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database
 
         /// <summary>
         /// Compares the execution plan that was saved to the database with that one
-        /// which was just generated.  Any discrepency means the upgrade is corrupt and 
+        /// which was just generated.  Any discrepency means the upgrade is corrupt and
         /// must exit.
         /// </summary>
         private void ReconcileExecutionPlan(List<MigrationTaskBase> existingTasks)
@@ -149,8 +147,8 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database
                     // failure
                     log.ErrorFormat("Execution plan mismatch @ index {0}  \n" +
                                     "     Generated (identifier, type): {1}, {2}\n" +
-                                    "     Existing (identifier, type): {3}, {4}", 
-                                    i, 
+                                    "     Existing (identifier, type): {3}, {4}",
+                                    i,
                                     taskInstances[i].ExecutionPlanIdentifier, taskInstances[i].GetType(),
                                     existingTasks[i].ExecutionPlanIdentifier, existingTasks[i].GetType());
 
@@ -180,21 +178,21 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database
                 using (SqlCommand cmd = SqlCommandProvider.Create(con))
                 {
                     cmd.CommandText = @"INSERT INTO v2m_MigrationPlan (
-                                        TaskTypeCode, 
-                                        TaskIdentifier, 
-                                        DatabaseName, 
-                                        IsArchiveDB, 
-                                        CreateTime, 
-                                        StartTime, 
-                                        LastUpdated, 
-                                        Completed, 
-                                        Estimatedwork, 
+                                        TaskTypeCode,
+                                        TaskIdentifier,
+                                        DatabaseName,
+                                        IsArchiveDB,
+                                        CreateTime,
+                                        StartTime,
+                                        LastUpdated,
+                                        Completed,
+                                        Estimatedwork,
                                         Progress
-                                        ) 
+                                        )
                                     Values (
                                         @TaskTypeCode,
                                         @TaskIdentifier,
-                                        @DatabaseName,  
+                                        @DatabaseName,
                                         @IsArchiveDB,
                                         @CreateTime,
                                         @StartTime,
@@ -217,7 +215,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database
 
                     foreach (MigrationTaskBase task in taskInstances)
                     {
-                        cmd.Parameters["@TaskTypeCode"].Value = (int)task.TaskTypeCode;
+                        cmd.Parameters["@TaskTypeCode"].Value = (int) task.TaskTypeCode;
                         cmd.Parameters["@TaskIdentifier"].Value = task.Identifier;
                         cmd.Parameters["@DatabaseName"].Value = task.Database;
                         cmd.Parameters["@IsArchiveDB"].Value = task.IsArchiveDatabase;
@@ -254,21 +252,21 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database
                 {
                     while (reader.Read())
                     {
-                        MigrationTaskTypeCode typeCode = (MigrationTaskTypeCode)((int)reader["TaskTypeCode"]);
+                        MigrationTaskTypeCode typeCode = (MigrationTaskTypeCode) ((int) reader["TaskTypeCode"]);
 
                         // create a new instance based on the typecode
                         MigrationTaskBase task = MigrationController.CreateTaskInstance(typeCode);
 
                         // populate from serialized data
-                        task.Identifier = (string)reader["TaskIdentifier"];
-                        task.Database = (string)reader["DatabaseName"];
-                        task.IsArchiveDatabase = (bool)reader["IsArchiveDB"];
-                        task.CreateTime = (DateTime)reader["CreateTime"];
-                        task.StartTime = (DateTime)reader["StartTime"];
-                        task.LastUpdateTime = (DateTime)reader["LastUpdated"];
-                        task.Completed = (bool)reader["Completed"];
-                        task.EstimatedWorkCount = (int)reader["EstimatedWork"];
-                        task.ActualWorkCount = (int)reader["Progress"];
+                        task.Identifier = (string) reader["TaskIdentifier"];
+                        task.Database = (string) reader["DatabaseName"];
+                        task.IsArchiveDatabase = (bool) reader["IsArchiveDB"];
+                        task.CreateTime = (DateTime) reader["CreateTime"];
+                        task.StartTime = (DateTime) reader["StartTime"];
+                        task.LastUpdateTime = (DateTime) reader["LastUpdated"];
+                        task.Completed = (bool) reader["Completed"];
+                        task.EstimatedWorkCount = (int) reader["EstimatedWork"];
+                        task.ActualWorkCount = (int) reader["Progress"];
 
                         // add it to the list
                         savedTasks.Add(task);
@@ -280,7 +278,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database
         }
 
         /// <summary>
-        /// Creates the execution plan in memory based on the 
+        /// Creates the execution plan in memory based on the
         /// existing archive databases and task prototypes.
         /// </summary>
         private void GenerateExecutionPlan()
@@ -292,7 +290,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database
                 MigrationTaskBase instance = null;
 
                 // create the task instance for the main database
-                if (task.Instancing == MigrationTaskInstancing.MainDatabaseOnly || 
+                if (task.Instancing == MigrationTaskInstancing.MainDatabaseOnly ||
                     task.Instancing == MigrationTaskInstancing.MainDatabaseAndArchives)
                 {
                     // main database only
@@ -302,7 +300,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database
                 }
 
                 // create the task for archive databases too
-                if (task.Instancing == MigrationTaskInstancing.ArchiveDatabasesOnly || 
+                if (task.Instancing == MigrationTaskInstancing.ArchiveDatabasesOnly ||
                     task.Instancing == MigrationTaskInstancing.MainDatabaseAndArchives)
                 {
                     foreach (ArchiveSet archiveSet in controller.ArchiveSets)
@@ -323,13 +321,13 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database
         #region Progress
 
         /// <summary>
-        /// Recalculates the current progress item's PercentComplete 
+        /// Recalculates the current progress item's PercentComplete
         /// based on all of the tasks in the plan
         /// </summary>
         public void UpdateProgress()
         {
             // get the current progressitem out of the migration context
-            ProgressItem progressItem = MigrationContext.Current.ProgressItem;
+            IProgressReporter progressItem = MigrationContext.Current.ProgressItem;
 
             // if we aren't in a reportable operation, just exit
             if (progressItem == null)
@@ -337,7 +335,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database
                 return;
             }
 
-            if (executingTaskIndex < 0) 
+            if (executingTaskIndex < 0)
             {
                 progressItem.PercentComplete = 0;
             }
@@ -349,9 +347,9 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database
             {
                 // current progress = (completed task count / total task count) + ( 1 / total task count) * ( current task actual / current task estimated)
                 //                  = ( executing Index / total task count) ....
-                double percent = ((double)executingTaskIndex / taskInstances.Count) + (1.0 / taskInstances.Count) * Math.Min(1.0, ((double)CurrentTask.ActualWorkCount / Math.Max(1, CurrentTask.EstimatedWorkCount)));
+                double percent = ((double) executingTaskIndex / taskInstances.Count) + (1.0 / taskInstances.Count) * Math.Min(1.0, ((double) CurrentTask.ActualWorkCount / Math.Max(1, CurrentTask.EstimatedWorkCount)));
                 percent = Math.Round(percent, 2);
-                progressItem.PercentComplete = Math.Min(100, (int)(100 * percent));
+                progressItem.PercentComplete = Math.Min(100, (int) (100 * percent));
             }
         }
 
@@ -362,7 +360,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database
         public void SetProgressDetail(string detail)
         {
             // get the current progressitem out of the migration context
-            ProgressItem progressItem = MigrationContext.Current.ProgressItem;
+            IProgressReporter progressItem = MigrationContext.Current.ProgressItem;
 
             // if we aren't in a reportable operation, just exit
             if (progressItem == null)
@@ -411,7 +409,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database
         public void CalculateEstimates()
         {
             // progress reporting
-            ProgressItem progress = MigrationContext.Current.ProgressItem;
+            IProgressReporter progress = MigrationContext.Current.ProgressItem;
 
             // reset our position
             executingTaskIndex = -1;
@@ -442,9 +440,9 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database
 
                     // update progress
                     double percent = Math.Round(Math.Min(100, (executingTaskIndex + 1.0) / taskInstances.Count), 2);
-                    progress.PercentComplete = (int)(100 * percent);
+                    progress.PercentComplete = (int) (100 * percent);
                 }
-            
+
                 MigrationContext.Current.CurrentTask = null;
 
                 // reset our position
@@ -463,7 +461,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database
         public void Execute()
         {
             // progress reporting
-            ProgressItem progress = MigrationContext.Current.ProgressItem;
+            IProgressReporter progress = MigrationContext.Current.ProgressItem;
             progress.Starting();
 
             // open a database connection
@@ -507,7 +505,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database
             progress.Detail = "Done";
         }
 
-       
+
 
         #endregion
     }

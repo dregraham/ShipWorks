@@ -1,34 +1,28 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
-using log4net;
-using ShipWorks.UI;
-using System.IO;
-using Interapptive.Shared;
-using System.Threading;
+using System.Data;
 using System.Data.SqlClient;
-using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Security.AccessControl;
+using System.Text;
 using System.Text.RegularExpressions;
-using ICSharpCode.SharpZipLib.Zip;
+using System.Xml;
+using Interapptive.Shared;
+using Interapptive.Shared.Data;
+using Interapptive.Shared.IO.Zip;
+using Interapptive.Shared.Threading;
+using Interapptive.Shared.Utility;
+using log4net;
+using ShipWorks.ApplicationCore;
+using ShipWorks.Common.Threading;
+using ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Users;
-using ShipWorks.Data.Model.HelperClasses;
-using Interapptive.Shared.IO.Zip;
-using System.Data;
-using System.Xml;
-using System.Reflection;
-using Interapptive.Shared.Utility;
-using ShipWorks.Common.Threading;
-using ShipWorks.ApplicationCore;
-using ShipWorks.Data.Connection;
-using System.Security.AccessControl;
-using System.Security.Principal;
-using ShipWorks.Users.Security;
 using ShipWorks.Users.Audit;
-using Interapptive.Shared.Data;
-using System.Linq;
-using ShipWorks.Data.Administration.UpdateFrom2x;
-using ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode;
+using ShipWorks.Users.Security;
 
 namespace ShipWorks.Data.Administration
 {
@@ -41,7 +35,7 @@ namespace ShipWorks.Data.Administration
         static readonly ILog log = LogManager.GetLogger(typeof(ShipWorksBackup));
 
         // File the backup will be written to \ restored from
-        ProgressProvider progress;
+        IProgressProvider progress;
 
         // The user that is doing the backup
         long userID = -1;
@@ -66,7 +60,7 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShipWorksBackup(SqlSession sqlSession, UserEntity user, ProgressProvider progress)
+        public ShipWorksBackup(SqlSession sqlSession, UserEntity user, IProgressProvider progress)
         {
             this.sqlSession = sqlSession;
             this.progress = progress;
@@ -76,7 +70,7 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShipWorksBackup(SqlSession sqlSession, long userID, ProgressProvider progress)
+        public ShipWorksBackup(SqlSession sqlSession, long userID, IProgressProvider progress)
         {
             this.sqlSession = sqlSession;
             this.progress = progress;
@@ -233,12 +227,12 @@ namespace ShipWorks.Data.Administration
             List<BackupDatabase> databases = new List<BackupDatabase>();
 
             BackupDatabase primary = new BackupDatabase
-                {
-                    DatabaseName = SqlSession.Current.Configuration.DatabaseName,
-                    BackupFile = Path.Combine(tempPath, "shipworks.dat"),
-                    Progress = new ProgressItem("Create SQL Server Backup"),
-                    IsArchive = false
-                };
+            {
+                DatabaseName = SqlSession.Current.Configuration.DatabaseName,
+                BackupFile = Path.Combine(tempPath, "shipworks.dat"),
+                Progress = new ProgressItem("Create SQL Server Backup"),
+                IsArchive = false
+            };
 
             // Always have the primary database
             databases.Add(primary);
@@ -249,12 +243,12 @@ namespace ShipWorks.Data.Administration
                 foreach (string archiveDbName in ShipWorks2xArchiveUtility.GetArchiveDatabaseNames(con))
                 {
                     BackupDatabase archive = new BackupDatabase
-                       {
-                           DatabaseName = archiveDbName,
-                           BackupFile = Path.Combine(tempPath, archiveDbName + ".dat"),
-                           Progress = new ProgressItem(string.Format("Create Archive Backup ({0})", databases.Count)),
-                           IsArchive = true
-                       };
+                    {
+                        DatabaseName = archiveDbName,
+                        BackupFile = Path.Combine(tempPath, archiveDbName + ".dat"),
+                        Progress = new ProgressItem(string.Format("Create Archive Backup ({0})", databases.Count)),
+                        IsArchive = true
+                    };
 
                     databases.Add(archive);
                 }
@@ -341,7 +335,7 @@ namespace ShipWorks.Data.Administration
                 Regex percentRegex = new Regex(@"(\d+) percent processed.");
 
                 // InfoMessage will provide progress updates
-                con.InfoMessage += delegate(object sender, SqlInfoMessageEventArgs e)
+                con.InfoMessage += delegate (object sender, SqlInfoMessageEventArgs e)
                 {
                     Match match = percentRegex.Match(e.Message);
                     if (match.Success)
@@ -386,7 +380,7 @@ namespace ShipWorks.Data.Administration
             progressItem.Starting();
 
             // Progress updates
-            zipWriter.Progress += delegate(object sender, ZipWriterProgressEventArgs args)
+            zipWriter.Progress += delegate (object sender, ZipWriterProgressEventArgs args)
                 {
                     progressItem.PercentComplete = (int) (((float) args.TotalBytesProcessed / (float) args.TotalBytesTotal) * 100);
                     progressItem.Detail = string.Format("{0} processed", StringUtility.FormatByteCount(args.TotalBytesProcessed));
@@ -553,7 +547,7 @@ namespace ShipWorks.Data.Administration
             using (ZipReader reader = new ZipReader(zipFilePath))
             {
                 // Progress
-                reader.Progress += delegate(object sender, ZipReaderProgressEventArgs args)
+                reader.Progress += delegate (object sender, ZipReaderProgressEventArgs args)
                     {
                         progress.PercentComplete = (int) (((float) args.TotalBytesProcessed / (float) args.TotalBytesTotal) * 100);
                         progress.Detail = string.Format("{0} processed", StringUtility.FormatByteCount(args.TotalBytesProcessed));
@@ -765,7 +759,7 @@ namespace ShipWorks.Data.Administration
                 Regex percentRegex = new Regex(@"(\d+) percent processed.");
 
                 // InfoMessage will provide progress updates
-                con.InfoMessage += delegate(object sender, SqlInfoMessageEventArgs e)
+                con.InfoMessage += delegate (object sender, SqlInfoMessageEventArgs e)
                 {
                     Match match = percentRegex.Match(e.Message);
                     if (match.Success)

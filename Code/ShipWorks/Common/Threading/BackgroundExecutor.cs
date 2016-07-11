@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Interapptive.Shared;
+using Interapptive.Shared.Threading;
 
 namespace ShipWorks.Common.Threading
 {
