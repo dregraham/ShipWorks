@@ -79,7 +79,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         {
             MethodConditions.EnsureArgumentIsNotNull(odbcStore, "OdbcStore");
 
-            if (store.ImportStrategy == (int) OdbcDownloadStrategy.ByModifiedTime)
+            if (store.ImportStrategy == (int) OdbcImportStrategy.ByModifiedTime)
             {
                 // Used in the case that GetOnlineLastModifiedStartingPoint returns null
                 int defaultDaysBack = store.InitialDownloadDays.GetValueOrDefault(7);

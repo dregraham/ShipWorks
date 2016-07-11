@@ -361,8 +361,8 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// <summary>
         /// Loads the download strategy.
         /// </summary>
-        /// <param name="downloadStrategy">The download strategy.</param>
-        public void LoadDownloadStrategy(OdbcDownloadStrategy downloadStrategy)
+        /// <param name="importStrategy">The download strategy.</param>
+        public void LoadDownloadStrategy(OdbcImportStrategy importStrategy)
         {
             IOdbcFieldMapEntry lastModifiedEntry = FindEntriesBy(Order, OrderFields.OnlineLastModified).FirstOrDefault();
 
@@ -370,7 +370,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
 
             if (lastModifiedEntry != null)
             {
-                lastModifiedEntry.ShipWorksField.IsRequired = downloadStrategy == OdbcDownloadStrategy.ByModifiedTime;
+                lastModifiedEntry.ShipWorksField.IsRequired = importStrategy == OdbcImportStrategy.ByModifiedTime;
             }
 
             // Have to remove and insert the entry because this is what is bound to the property changed trigger.

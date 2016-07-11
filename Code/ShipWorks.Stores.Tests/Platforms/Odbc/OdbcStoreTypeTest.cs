@@ -84,7 +84,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
 
             OdbcStoreEntity odbcStore = testObject.CreateStoreInstance() as OdbcStoreEntity;
 
-            Assert.Equal((int) OdbcDownloadStrategy.ByModifiedTime, odbcStore.ImportStrategy);
+            Assert.Equal((int) OdbcImportStrategy.ByModifiedTime, odbcStore.ImportStrategy);
         }
 
         [Fact]

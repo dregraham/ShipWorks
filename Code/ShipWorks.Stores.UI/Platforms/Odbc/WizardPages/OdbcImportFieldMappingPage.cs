@@ -21,7 +21,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
         private OdbcStoreEntity store;
         private const string CustomQueryColumnSourceName = "Custom Import";
         private string previousColumnSource;
-        private OdbcDownloadStrategy? previousDownloadStrategy = null;
+        private OdbcImportStrategy? previousImportStrategy = null;
         private readonly Func<IOdbcImportFieldMappingControlViewModel> viewModelFactory;
 
 
@@ -72,7 +72,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
         {
             store = GetStore<OdbcStoreEntity>();
 
-            OdbcDownloadStrategy currentDownloadStrategy = (OdbcDownloadStrategy) store.ImportStrategy;
+            OdbcImportStrategy currentImportStrategy = (OdbcImportStrategy) store.ImportStrategy;
             string currentColumnSource = store.ImportColumnSource;
 
             // Only load column source when the page is first loaded or the column source changes.
@@ -95,17 +95,17 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
                 viewModel = viewModelFactory();
                 mappingControl.DataContext = viewModel;
                 viewModel.LoadColumnSource(columnSource);
-                viewModel.LoadDownloadStrategy(currentDownloadStrategy);
+                viewModel.LoadDownloadStrategy(currentImportStrategy);
                 previousColumnSource = currentColumnSource;
             }
 
             // Only load download strategy when the page is first loaded or the download strategy changes.
-            if (previousDownloadStrategy == null ||
-                previousDownloadStrategy != currentDownloadStrategy)
+            if (previousImportStrategy == null ||
+                previousImportStrategy != currentImportStrategy)
             {
-                viewModel.LoadDownloadStrategy(currentDownloadStrategy);
+                viewModel.LoadDownloadStrategy(currentImportStrategy);
 
-                previousDownloadStrategy = currentDownloadStrategy;
+                previousImportStrategy = currentImportStrategy;
             }
         }
     }

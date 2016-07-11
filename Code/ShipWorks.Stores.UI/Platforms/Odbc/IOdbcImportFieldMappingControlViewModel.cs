@@ -27,7 +27,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// <summary>
         /// Loads the download strategy.
         /// </summary>
-        void LoadDownloadStrategy(OdbcDownloadStrategy downloadStrategy);
+        void LoadDownloadStrategy(OdbcImportStrategy importStrategy);
 
         /// <summary>
         /// The column source.

@@ -257,8 +257,8 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         public void SaveMapSettings(OdbcStoreEntity store)
         {
             store.ImportStrategy = DownloadStrategyIsLastModified ?
-                (int) OdbcDownloadStrategy.ByModifiedTime :
-                (int) OdbcDownloadStrategy.All;
+                (int) OdbcImportStrategy.ByModifiedTime :
+                (int) OdbcImportStrategy.All;
 
             store.ImportSourceType = ColumnSourceIsTable ?
                 (int) OdbcColumnSourceType.Table :
