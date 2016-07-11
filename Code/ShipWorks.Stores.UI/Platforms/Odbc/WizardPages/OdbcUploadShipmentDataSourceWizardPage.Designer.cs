@@ -42,19 +42,17 @@
             // uploadToSame
             // 
             this.uploadToSame.AutoSize = true;
-            this.uploadToSame.Checked = true;
-            this.uploadToSame.Location = new System.Drawing.Point(3, 3);
+            this.uploadToSame.Location = new System.Drawing.Point(3, 26);
             this.uploadToSame.Name = "uploadToSame";
             this.uploadToSame.Size = new System.Drawing.Size(249, 17);
             this.uploadToSame.TabIndex = 0;
-            this.uploadToSame.TabStop = true;
             this.uploadToSame.Text = "Upload shipment data to the same data source";
             this.uploadToSame.UseVisualStyleBackColor = true;
             // 
             // uploadToDifferent
             // 
             this.uploadToDifferent.AutoSize = true;
-            this.uploadToDifferent.Location = new System.Drawing.Point(3, 26);
+            this.uploadToDifferent.Location = new System.Drawing.Point(3, 49);
             this.uploadToDifferent.Name = "uploadToDifferent";
             this.uploadToDifferent.Size = new System.Drawing.Size(256, 17);
             this.uploadToDifferent.TabIndex = 1;
@@ -64,10 +62,12 @@
             // doNotUpload
             // 
             this.doNotUpload.AutoSize = true;
-            this.doNotUpload.Location = new System.Drawing.Point(3, 49);
+            this.doNotUpload.Checked = true;
+            this.doNotUpload.Location = new System.Drawing.Point(3, 3);
             this.doNotUpload.Name = "doNotUpload";
             this.doNotUpload.Size = new System.Drawing.Size(163, 17);
             this.doNotUpload.TabIndex = 2;
+            this.doNotUpload.TabStop = true;
             this.doNotUpload.Text = "Do not upload shipment data";
             this.doNotUpload.UseVisualStyleBackColor = true;
             // 
