@@ -6443,6 +6443,8 @@ namespace ShipWorks.Data.Model
 		OdbcColumnSourceType,
 		///<summary>OdbcColumnSource. </summary>
 		OdbcColumnSource,
+		///<summary>ShipmentUploadStrategy. </summary>
+		ShipmentUploadStrategy,
 		/// <summary></summary>
 		AmountOfFields
 	}
