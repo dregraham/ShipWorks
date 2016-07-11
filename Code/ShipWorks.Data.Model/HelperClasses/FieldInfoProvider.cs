@@ -1670,6 +1670,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("OdbcStoreEntity", "OdbcDownloadStrategy", typeof(System.Int32), false, false, false, false,  (int)OdbcStoreFieldIndex.OdbcDownloadStrategy, 0, 0, 10);
 			base.AddElementFieldInfo("OdbcStoreEntity", "OdbcColumnSourceType", typeof(System.Int32), false, false, false, false,  (int)OdbcStoreFieldIndex.OdbcColumnSourceType, 0, 0, 10);
 			base.AddElementFieldInfo("OdbcStoreEntity", "OdbcColumnSource", typeof(System.String), false, false, false, false,  (int)OdbcStoreFieldIndex.OdbcColumnSource, 2048, 0, 0);
+			base.AddElementFieldInfo("OdbcStoreEntity", "ShipmentUploadStrategy", typeof(System.Int32), false, false, false, false,  (int)OdbcStoreFieldIndex.ShipmentUploadStrategy, 0, 0, 10);
 		}
 		/// <summary>Inits OnTracAccountEntity's FieldInfo objects</summary>
 		private void InitOnTracAccountEntityInfos()

@@ -488,6 +488,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("OdbcColumnSource", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("ShipmentUploadStrategy", fieldHashtable);
 		}
 		#endregion
 
@@ -614,6 +617,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)OdbcStoreFieldIndex.OdbcColumnSource, true); }
 			set	{ SetValue((int)OdbcStoreFieldIndex.OdbcColumnSource, value); }
+		}
+
+		/// <summary> The ShipmentUploadStrategy property of the Entity OdbcStore<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "OdbcStore"."ShipmentUploadStrategy"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Int32 ShipmentUploadStrategy
+		{
+			get { return (System.Int32)GetValue((int)OdbcStoreFieldIndex.ShipmentUploadStrategy, true); }
+			set	{ SetValue((int)OdbcStoreFieldIndex.ShipmentUploadStrategy, value); }
 		}
 
 

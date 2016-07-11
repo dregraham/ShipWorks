@@ -11,7 +11,8 @@ CREATE TABLE [dbo].[OdbcStore]
 	[Map] [nvarchar](max) NOT NULL,
 	[OdbcDownloadStrategy] [int] NOT NULL,
 	[OdbcColumnSourceType] [int] NOT NULL,
-	[OdbcColumnSource] [nvarchar](2048) NOT NULL
+	[OdbcColumnSource] [nvarchar](2048) NOT NULL,
+	[ShipmentUploadStrategy] [int] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_OdbcStore] on [dbo].[OdbcStore]'

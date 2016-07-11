@@ -3,6 +3,7 @@ using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.GenericFile;
 using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Stores.Platforms.Odbc.Download;
+using ShipWorks.Stores.Platforms.Odbc.Upload;
 using Xunit;
 
 namespace ShipWorks.Stores.Tests.Platforms.Odbc
@@ -84,6 +85,17 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             OdbcStoreEntity odbcStore = testObject.CreateStoreInstance() as OdbcStoreEntity;
 
             Assert.Equal((int) OdbcDownloadStrategy.ByModifiedTime, odbcStore.OdbcDownloadStrategy);
+        }
+
+        [Fact]
+        public void CreateStoreInstance_SetsShipmentUploadStrategyToDoNotUpload()
+        {
+            OdbcStoreType testObject = new OdbcStoreType(store, null);
+
+            OdbcStoreEntity odbcStore = testObject.CreateStoreInstance() as OdbcStoreEntity;
+
+            Assert.Equal((int) OdbcShipmentUploadStrategy.DoNotUpload, odbcStore.ShipmentUploadStrategy);
+
         }
     }
 }

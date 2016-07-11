@@ -5,13 +5,13 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.GenericFile;
+using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
+using ShipWorks.Stores.Platforms.Odbc.Download;
+using ShipWorks.Stores.Platforms.Odbc.Upload;
 using ShipWorks.UI.Wizard;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using ShipWorks.Stores.Management;
-using ShipWorks.Stores.Platforms.Odbc.Download;
-using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 
 namespace ShipWorks.Stores.Platforms.Odbc
 {
@@ -73,7 +73,8 @@ namespace ShipWorks.Stores.Platforms.Odbc
                 Map = string.Empty,
                 OdbcDownloadStrategy = (int) OdbcDownloadStrategy.ByModifiedTime,
                 OdbcColumnSourceType = (int) OdbcColumnSourceType.Table,
-                OdbcColumnSource = string.Empty
+                OdbcColumnSource = string.Empty,
+                ShipmentUploadStrategy = (int) OdbcShipmentUploadStrategy.DoNotUpload
             };
 
             InitializeStoreDefaults(store);

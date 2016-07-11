@@ -227,6 +227,7 @@
     <Compile Include="Platforms\Odbc\DataAccess\ShipWorksOdbcDataAdapter.cs" />
     <Compile Include="Platforms\Odbc\ShipWorksOdbcException.cs" />
     <Compile Include="Platforms\Odbc\Download\TableOdbcDownloadQuery.cs" />
+    <Compile Include="Platforms\Odbc\Upload\OdbcShipmentUploadStrategy.cs" />
     <Compile Include="Platforms\SparkPay\CoreExtensions\Actions\SparkPayOrderUpdateTask.cs" />
     <Compile Include="Platforms\SparkPay\CoreExtensions\Actions\SparkPayShipmentUploadTask.cs" />
     <Compile Include="Platforms\SparkPay\DTO\Address.cs" />

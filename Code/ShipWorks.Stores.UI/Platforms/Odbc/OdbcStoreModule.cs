@@ -76,6 +76,10 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
                 .As<IOdbcWizardPage>()
                 .ExternallyOwned();
 
+            builder.RegisterType<OdbcUploadShipmentDataSourceWizardPage>()
+                .As<IOdbcWizardPage>()
+                .ExternallyOwned();
+
             builder.RegisterType<JsonOdbcFieldMapReader>()
                 .AsImplementedInterfaces()
                 .AsSelf();
