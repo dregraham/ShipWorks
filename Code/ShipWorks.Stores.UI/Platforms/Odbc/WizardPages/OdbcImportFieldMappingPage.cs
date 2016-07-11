@@ -1,17 +1,12 @@
-﻿using Interapptive.Shared.UI;
-using ShipWorks.Data.Model.EntityClasses;
+﻿using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.Odbc;
-using ShipWorks.UI.Wizard;
-using System;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Interop;
-using log4net;
-using ShipWorks.Stores.Platforms.Odbc.DataAccess;
 using ShipWorks.Stores.Platforms.Odbc.DataSource;
 using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 using ShipWorks.Stores.Platforms.Odbc.Download;
+using ShipWorks.UI.Wizard;
+using System;
+using System.Windows.Interop;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
 {
@@ -77,8 +72,8 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
         {
             store = GetStore<OdbcStoreEntity>();
 
-            OdbcDownloadStrategy currentDownloadStrategy = (OdbcDownloadStrategy) store.OdbcDownloadStrategy;
-            string currentColumnSource = store.OdbcColumnSource;
+            OdbcDownloadStrategy currentDownloadStrategy = (OdbcDownloadStrategy) store.ImportStrategy;
+            string currentColumnSource = store.ImportColumnSource;
 
             // Only load column source when the page is first loaded or the column source changes.
             if (string.IsNullOrWhiteSpace(previousColumnSource) ||
@@ -88,14 +83,14 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
 
                 selectedDataSource.Restore(store.ConnectionString);
 
-                string columnSourceName = store.OdbcColumnSourceType == (int) OdbcColumnSourceType.Table ?
+                string columnSourceName = store.ImportSourceType== (int) OdbcColumnSourceType.Table ?
                     currentColumnSource :
                     CustomQueryColumnSourceName;
 
                 IOdbcColumnSource columnSource = columnSourceFactory(columnSourceName);
 
                 columnSource.Load(selectedDataSource, currentColumnSource,
-                    (OdbcColumnSourceType) store.OdbcColumnSourceType);
+                    (OdbcColumnSourceType) store.ImportSourceType);
 
                 viewModel = viewModelFactory();
                 mappingControl.DataContext = viewModel;

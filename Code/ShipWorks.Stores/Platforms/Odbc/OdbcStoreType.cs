@@ -70,11 +70,11 @@ namespace ShipWorks.Stores.Platforms.Odbc
             OdbcStoreEntity store = new OdbcStoreEntity
             {
                 ConnectionString = string.Empty,
-                Map = string.Empty,
-                OdbcDownloadStrategy = (int) OdbcDownloadStrategy.ByModifiedTime,
-                OdbcColumnSourceType = (int) OdbcColumnSourceType.Table,
-                OdbcColumnSource = string.Empty,
-                ShipmentUploadStrategy = (int) OdbcShipmentUploadStrategy.DoNotUpload
+                ImportMap = string.Empty,
+                ImportStrategy = (int) OdbcDownloadStrategy.ByModifiedTime,
+                ImportSourceType = (int) OdbcColumnSourceType.Table,
+                ImportColumnSource = string.Empty,
+                UploadStrategy = (int) OdbcShipmentUploadStrategy.DoNotUpload
             };
 
             InitializeStoreDefaults(store);
@@ -108,7 +108,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
         {
             get
             {
-                return ((OdbcStoreEntity) Store).OdbcDownloadStrategy == (int) OdbcDownloadStrategy.ByModifiedTime
+                return ((OdbcStoreEntity) Store).ImportStrategy == (int) OdbcDownloadStrategy.ByModifiedTime
                     ? new InitialDownloadPolicy(InitialDownloadRestrictionType.DaysBack) { DefaultDaysBack = 30, MaxDaysBack = 30}
                     : new InitialDownloadPolicy(InitialDownloadRestrictionType.None);
             }

@@ -18,7 +18,7 @@
         /// </summary>
         private void SelectedFieldMapChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
-            //MappingGridScrollbar.ScrollToTop();
+            //MappingGridScrollbar.ScrollToTop
         }
     }
 }

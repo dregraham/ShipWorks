@@ -8,6 +8,8 @@ using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Platforms.Odbc;
+using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
+using ShipWorks.Stores.Platforms.Odbc.Download;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
 using System;
 using System.Collections.Generic;
@@ -18,12 +20,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Windows.Forms;
 using System.Windows.Input;
-using ShipWorks.Stores.Platforms.Odbc.DataAccess;
-using ShipWorks.Stores.Platforms.Odbc.DataSource;
-using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
-using ShipWorks.Stores.Platforms.Odbc.Download;
 using SaveFileDialog = Microsoft.Win32.SaveFileDialog;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc
@@ -279,7 +276,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
                 memoryStream.Position = 0;
                 using (StreamReader reader = new StreamReader(memoryStream))
                 {
-                    store.Map = reader.ReadToEnd();
+                    store.ImportMap = reader.ReadToEnd();
                 }
             }
         }

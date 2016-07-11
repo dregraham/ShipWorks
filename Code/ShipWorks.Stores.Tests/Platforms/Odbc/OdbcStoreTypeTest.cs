@@ -58,7 +58,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             var testObject = new OdbcStoreType(store, null);
             var newStore = testObject.CreateStoreInstance();
 
-            Assert.Empty(((OdbcStoreEntity) newStore).Map);
+            Assert.Empty(((OdbcStoreEntity) newStore).ImportMap);
         }
 
         [Fact]
@@ -84,7 +84,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
 
             OdbcStoreEntity odbcStore = testObject.CreateStoreInstance() as OdbcStoreEntity;
 
-            Assert.Equal((int) OdbcDownloadStrategy.ByModifiedTime, odbcStore.OdbcDownloadStrategy);
+            Assert.Equal((int) OdbcDownloadStrategy.ByModifiedTime, odbcStore.ImportStrategy);
         }
 
         [Fact]
@@ -94,7 +94,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
 
             OdbcStoreEntity odbcStore = testObject.CreateStoreInstance() as OdbcStoreEntity;
 
-            Assert.Equal((int) OdbcShipmentUploadStrategy.DoNotUpload, odbcStore.ShipmentUploadStrategy);
+            Assert.Equal((int) OdbcShipmentUploadStrategy.DoNotUpload, odbcStore.UploadStrategy);
 
         }
     }

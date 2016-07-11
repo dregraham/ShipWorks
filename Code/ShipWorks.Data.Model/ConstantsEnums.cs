@@ -6435,16 +6435,22 @@ namespace ShipWorks.Data.Model
 		StoreID,
 		///<summary>ConnectionString. </summary>
 		ConnectionString,
-		///<summary>Map. </summary>
-		Map,
-		///<summary>OdbcDownloadStrategy. </summary>
-		OdbcDownloadStrategy,
-		///<summary>OdbcColumnSourceType. </summary>
-		OdbcColumnSourceType,
-		///<summary>OdbcColumnSource. </summary>
-		OdbcColumnSource,
-		///<summary>ShipmentUploadStrategy. </summary>
-		ShipmentUploadStrategy,
+		///<summary>ImportMap. </summary>
+		ImportMap,
+		///<summary>ImportStrategy. </summary>
+		ImportStrategy,
+		///<summary>ImportSourceType. </summary>
+		ImportSourceType,
+		///<summary>ImportColumnSource. </summary>
+		ImportColumnSource,
+		///<summary>UploadStrategy. </summary>
+		UploadStrategy,
+		///<summary>UploadMap. </summary>
+		UploadMap,
+		///<summary>UploadColumnSourceType. </summary>
+		UploadColumnSourceType,
+		///<summary>UploadColumnSource. </summary>
+		UploadColumnSource,
 		/// <summary></summary>
 		AmountOfFields
 	}

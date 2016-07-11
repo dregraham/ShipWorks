@@ -38,15 +38,15 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
 
             if (uploadToSame.Checked)
             {
-                store.ShipmentUploadStrategy = (int)OdbcShipmentUploadStrategy.UseImportDataSource;
+                store.UploadStrategy = (int)OdbcShipmentUploadStrategy.UseImportDataSource;
             }
             else if (uploadToDifferent.Checked)
             {
-                store.ShipmentUploadStrategy = (int)OdbcShipmentUploadStrategy.UseShipmentDataSource;
+                store.UploadStrategy = (int)OdbcShipmentUploadStrategy.UseShipmentDataSource;
             }
             else
             {
-                store.ShipmentUploadStrategy = (int)OdbcShipmentUploadStrategy.DoNotUpload;
+                store.UploadStrategy = (int)OdbcShipmentUploadStrategy.DoNotUpload;
             }
         }
     }

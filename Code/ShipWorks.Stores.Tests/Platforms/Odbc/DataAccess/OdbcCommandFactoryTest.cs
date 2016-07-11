@@ -1,12 +1,11 @@
 ﻿using Autofac.Extras.Moq;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores.Platforms.Odbc;
-using ShipWorks.Stores.Platforms.Odbc.Mapping;
-using System;
 using ShipWorks.Stores.Platforms.Odbc.DataAccess;
 using ShipWorks.Stores.Platforms.Odbc.DataSource;
 using ShipWorks.Stores.Platforms.Odbc.Download;
+using ShipWorks.Stores.Platforms.Odbc.Mapping;
+using System;
 using Xunit;
 
 namespace ShipWorks.Stores.Tests.Platforms.Odbc
@@ -20,7 +19,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             {
                 OdbcStoreEntity odbcStore = new OdbcStoreEntity()
                 {
-                    Map = "I Am A Map"
+                    ImportMap = "I Am A Map"
                 };
 
                 Mock<IOdbcFieldMap> odbcFieldMap = mock.Mock<IOdbcFieldMap>();
@@ -29,7 +28,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
 
                 testObject.CreateDownloadCommand(odbcStore);
 
-                odbcFieldMap.Verify(p => p.Load(It.Is<string>(s => s == odbcStore.Map)), Times.Once());
+                odbcFieldMap.Verify(p => p.Load(It.Is<string>(s => s == odbcStore.ImportMap)), Times.Once());
             }
         }
 
@@ -70,7 +69,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             {
                 OdbcStoreEntity odbcStore = new OdbcStoreEntity()
                 {
-                    Map = "I Am A Map"
+                    ImportMap = "I Am A Map"
                 };
 
                 Mock<IOdbcFieldMap> odbcFieldMap = mock.Mock<IOdbcFieldMap>();
@@ -79,7 +78,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
 
                 testObject.CreateDownloadCommand(odbcStore, DateTime.UtcNow);
 
-                odbcFieldMap.Verify(p => p.Load(It.Is<string>(s => s == odbcStore.Map)), Times.Once());
+                odbcFieldMap.Verify(p => p.Load(It.Is<string>(s => s == odbcStore.ImportMap)), Times.Once());
             }
         }
 

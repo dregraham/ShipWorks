@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Interapptive.Shared.Business;
+﻿using Interapptive.Shared.Business;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.AddressValidation;
@@ -13,6 +10,9 @@ using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Odbc.DataAccess;
 using ShipWorks.Stores.Platforms.Odbc.Loaders;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Download
 {
@@ -39,7 +39,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
             this.orderLoader = orderLoader;
             this.store = (OdbcStoreEntity) store;
 
-            fieldMap.Load(this.store.Map);
+            fieldMap.Load(this.store.ImportMap);
         }
 
         /// <summary>
@@ -79,7 +79,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         {
             MethodConditions.EnsureArgumentIsNotNull(odbcStore, "OdbcStore");
 
-            if (store.OdbcDownloadStrategy == (int) OdbcDownloadStrategy.ByModifiedTime)
+            if (store.ImportStrategy == (int) OdbcDownloadStrategy.ByModifiedTime)
             {
                 // Used in the case that GetOnlineLastModifiedStartingPoint returns null
                 int defaultDaysBack = store.InitialDownloadDays.GetValueOrDefault(7);

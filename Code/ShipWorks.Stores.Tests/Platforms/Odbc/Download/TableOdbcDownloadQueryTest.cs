@@ -1,17 +1,16 @@
 ﻿#region
 
-using System;
-using System.Data.Common;
 using Autofac;
 using Autofac.Extras.Moq;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Stores.Platforms.Odbc.DataAccess;
 using ShipWorks.Stores.Platforms.Odbc.DataSource;
 using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 using ShipWorks.Stores.Platforms.Odbc.Download;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
+using System;
+using System.Data.Common;
 using Xunit;
 
 #endregion
@@ -55,8 +54,8 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Download
                 mock.Create<TableOdbcDownloadQuery>(new TypedParameter(typeof(OdbcStoreEntity),
                     new OdbcStoreEntity()
                     {
-                        OdbcColumnSourceType = (int) OdbcColumnSourceType.Table,
-                        OdbcColumnSource = "MyTable"
+                        ImportSourceType = (int) OdbcColumnSourceType.Table,
+                        ImportColumnSource = "MyTable"
                     }));
             string sql = testObject.GenerateSql();
 
@@ -87,8 +86,8 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Download
                 mock.Create<TableOdbcDownloadQuery>(new TypedParameter(typeof(OdbcStoreEntity),
                     new OdbcStoreEntity()
                     {
-                        OdbcColumnSourceType = (int)OdbcColumnSourceType.Table,
-                        OdbcColumnSource = "MyTable"
+                        ImportSourceType = (int)OdbcColumnSourceType.Table,
+                        ImportColumnSource = "MyTable"
                     }));
 
             testObject.ConfigureCommand(command.Object);

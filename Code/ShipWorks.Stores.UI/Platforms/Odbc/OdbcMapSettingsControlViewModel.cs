@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Linq;
-using System.Reflection;
-using System.Windows.Input;
-using GalaSoft.MvvmLight.Command;
+﻿using GalaSoft.MvvmLight.Command;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using log4net;
@@ -16,6 +9,13 @@ using ShipWorks.Stores.Platforms.Odbc.DataAccess;
 using ShipWorks.Stores.Platforms.Odbc.DataSource;
 using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 using ShipWorks.Stores.Platforms.Odbc.Download;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Linq;
+using System.Reflection;
+using System.Windows.Input;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc
 {
@@ -256,15 +256,15 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// </summary>
         public void SaveMapSettings(OdbcStoreEntity store)
         {
-            store.OdbcDownloadStrategy = DownloadStrategyIsLastModified ?
+            store.ImportStrategy = DownloadStrategyIsLastModified ?
                 (int) OdbcDownloadStrategy.ByModifiedTime :
                 (int) OdbcDownloadStrategy.All;
 
-            store.OdbcColumnSourceType = ColumnSourceIsTable ?
+            store.ImportSourceType = ColumnSourceIsTable ?
                 (int) OdbcColumnSourceType.Table :
                 (int) OdbcColumnSourceType.CustomQuery;
 
-            store.OdbcColumnSource = ColumnSourceIsTable ?
+            store.ImportColumnSource = ColumnSourceIsTable ?
                 SelectedTable.Name :
                 CustomQuery;
 

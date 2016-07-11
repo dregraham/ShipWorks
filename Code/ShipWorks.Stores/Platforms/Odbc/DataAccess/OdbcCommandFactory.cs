@@ -1,10 +1,9 @@
-﻿using System;
-using log4net;
-using ShipWorks.Data.Model.EntityClasses;
+﻿using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Odbc.DataSource;
 using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 using ShipWorks.Stores.Platforms.Odbc.Download;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
+using System;
 
 namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
 {
@@ -53,10 +52,10 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
         /// </summary>
         private static IOdbcDownloadQuery GetDownloadQuery(OdbcStoreEntity store, IOdbcFieldMap odbcFieldMap, IOdbcDataSource dataSource, IShipWorksDbProviderFactory dbProviderFactory)
         {
-            odbcFieldMap.Load(store.Map);
+            odbcFieldMap.Load(store.ImportMap);
             dataSource.Restore(store.ConnectionString);
 
-            return store.OdbcColumnSourceType == (int) OdbcColumnSourceType.Table
+            return store.ImportSourceType == (int) OdbcColumnSourceType.Table
                 ? (IOdbcDownloadQuery)new TableOdbcDownloadQuery(store, dbProviderFactory, odbcFieldMap, dataSource)
                 : new CustomQueryOdbcDownloadQuery(store);
         }
