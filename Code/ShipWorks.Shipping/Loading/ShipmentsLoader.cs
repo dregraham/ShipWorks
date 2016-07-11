@@ -17,7 +17,6 @@ using ShipWorks.AddressValidation;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Common.Threading;
 using ShipWorks.Core.Common.Threading;
-using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
@@ -45,6 +44,7 @@ namespace ShipWorks.Shipping.Loading
         private readonly Func<IWin32Window> ownerCreator;
         private readonly IMessageHelper messageHelper;
         private readonly ISecurityContext securityContext;
+        private readonly IFilterHelper filterHelper;
 
         /// <summary>
         /// Constructor
@@ -108,15 +108,11 @@ namespace ShipWorks.Shipping.Loading
                 globalShipments.Clear();
             }
 
-            EntityType keyType = entityIDsOriginalSort.Any() ?
-                EntityUtility.GetEntityType(entityIDsOriginalSort.First()) :
-                EntityType.OrderEntity;
-
             // Sort the list of shipments in the original keys order.
             // During loading, we reverse the keys order so that we validate addresses in reverse order
             // from what the background process does...it validates in sequential primary key ascending order.
             List<ShipmentEntity> reorderedShipments = entityIDsOriginalSort
-                .Join(globalShipments, i => i, o => GetKeyFromEntity(keyType, o), (i, o) => o.Value)
+                .Join(globalShipments, i => i, o => o.Value.OrderID, (i, o) => o.Value)
                 .ToList();
 
             return new ShipmentsLoadedEventArgs(null, wasCanceled, null, reorderedShipments);
@@ -145,14 +141,6 @@ namespace ShipWorks.Shipping.Loading
         }
 
         /// <summary>
-        /// Get the key from the given entity
-        /// </summary>
-        private long GetKeyFromEntity(EntityType keyType, KeyValuePair<long, ShipmentEntity> o)
-        {
-            return keyType == EntityType.OrderEntity ? o.Value.OrderID : o.Value.ShipmentID;
-        }
-
-        /// <summary>
         /// Load all the shipments on a background thread
         /// </summary>
         [NDependIgnoreLongMethod]
@@ -163,63 +151,13 @@ namespace ShipWorks.Shipping.Loading
 
             int count = 0;
             int total = entityIDsOriginalSort.Count;
-            EntityType keyType = entityIDsOriginalSort.Any() ? EntityUtility.GetEntityType(entityIDsOriginalSort.First()) : EntityType.OrderEntity;
-
             workProgress.Starting();
 
             IOrderedEnumerable<long> orderByDescending = entityIDsOriginalSort.OrderByDescending(id => id);
 
-            if (keyType == EntityType.OrderEntity)
+            foreach (IEnumerable<long> orders in orderByDescending.SplitIntoChunksOf(100))
             {
-                foreach (IEnumerable<long> orders in orderByDescending.SplitIntoChunksOf(100))
-                {
-                    foreach (OrderEntity order in orderManager.LoadOrders(orders, fullOrderPrefetchPath.Value))
-                    {
-                        if (workProgress.IsCancelRequested)
-                        {
-                            wasCanceled = true;
-                            break;
-                        }
-
-                        workProgress.Detail = $"Loading {count + 1} of {total}";
-
-                        // Execute the work
-                        try
-                        {
-                            if (securityContext.HasPermission(PermissionType.ShipmentsCreateEditProcess, order.OrderID))
-                            {
-                                shipmentFactory.AutoCreateIfNecessary(order);
-                            }
-
-                            // Queue the shipments to be validated
-                            foreach (ShipmentEntity shipment in order.Shipments)
-                            {
-                                // Add them to the global list
-                                globalShipments.Add(shipment.ShipmentID, shipment);
-
-                                // try for a few ms to add an item
-                                while (!shipmentsToValidate.TryAdd(shipment, TimeSpan.FromMilliseconds(50)) && !workProgress.IsCancelRequested)
-                                {
-                                    // We may need to try multiple times to successfully add to queue
-                                }
-                            }
-                        }
-                        catch (SqlForeignKeyException)
-                        {
-                            // If the order got deleted just forget it - its not an error, the shipments just don't load.
-                            log.WarnFormat("Did not load shipments for entity {0} due to FK exception.", order.OrderID);
-                        }
-
-                        count++;
-
-                        workProgress.PercentComplete = (100 * count) / total;
-                    }
-                }
-
-            }
-            else if (keyType == EntityType.ShipmentEntity)
-            {
-                foreach (long entityID in orderByDescending)
+                foreach (OrderEntity order in orderManager.LoadOrders(orders, fullOrderPrefetchPath.Value))
                 {
                     if (workProgress.IsCancelRequested)
                     {
@@ -232,32 +170,32 @@ namespace ShipWorks.Shipping.Loading
                     // Execute the work
                     try
                     {
-                        ShipmentEntity shipment = ShippingManager.GetShipment(entityID);
-                        if (shipment != null)
+                        if (securityContext.HasPermission(PermissionType.ShipmentsCreateEditProcess, order.OrderID))
                         {
-                            // Add them to the global list
+                            shipmentFactory.AutoCreateIfNecessary(order);
+                        }
+
+                        // Queue the shipments to be validated
+                        foreach (ShipmentEntity shipment in order.Shipments)
+                        {
                             globalShipments.Add(shipment.ShipmentID, shipment);
 
                             while (!shipmentsToValidate.TryAdd(shipment, TimeSpan.FromMilliseconds(50)) && !workProgress.IsCancelRequested)
                             {
-                                // Try for a few ms to add an item
+                                // We may need to try multiple times to successfully add to queue
                             }
                         }
                     }
                     catch (SqlForeignKeyException)
                     {
                         // If the order got deleted just forget it - its not an error, the shipments just don't load.
-                        log.WarnFormat("Did not load shipments for entity {0} due to FK exception.", entityID);
+                        log.WarnFormat("Did not load shipments for entity {0} due to FK exception.", order.OrderID);
                     }
 
                     count++;
 
                     workProgress.PercentComplete = (100 * count) / total;
                 }
-            }
-            else
-            {
-                throw new InvalidOperationException("Invalid key type passed to load shipments.");
             }
 
             finishedLoadingShipments = true;
@@ -414,6 +352,5 @@ namespace ShipWorks.Shipping.Loading
 
             return prefetchPath;
         });
-        private readonly IFilterHelper filterHelper;
     }
 }

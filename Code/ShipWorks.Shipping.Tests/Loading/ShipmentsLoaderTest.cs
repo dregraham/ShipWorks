@@ -124,21 +124,6 @@ namespace ShipWorks.Shipping.Tests.Loading
             mock.Mock<IValidatedAddressManager>().Verify(av => av.ValidateShipmentAsync(It.IsAny<ShipmentEntity>()), Times.Never);
         }
 
-        [Fact]
-        public async Task OrderSelectionLoaded_HasException_WhenInvalidOrderID_Test()
-        {
-            mock.Mock<IOrderManager>()
-                .Setup(x => x.LoadOrders(It.IsAny<long[]>(), It.IsAny<IPrefetchPath2>()))
-                .Throws<InvalidOperationException>();
-
-            testObject = mock.Create<ShipmentsLoader>();
-
-            var orderSelectionLoaded = await testObject.LoadAsync(new[] { 0L },
-                ProgressDisplayOptions.NeverShow);
-
-            Assert.NotNull(orderSelectionLoaded.Error);
-        }
-
         public void Dispose()
         {
             mock.Dispose();
