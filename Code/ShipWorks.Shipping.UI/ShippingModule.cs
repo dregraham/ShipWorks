@@ -100,10 +100,6 @@ namespace ShipWorks.Shipping.UI
             builder.RegisterType<BestRateShipmentViewModel>()
                 .FindConstructorsWith(new NonDefaultConstructorFinder());
 
-            builder.RegisterType<ShipmentAddressValidator>()
-                .AsImplementedInterfaces()
-                .SingleInstance();
-
             builder.RegisterType<ShipmentFactory>()
                 .AsImplementedInterfaces();
 
