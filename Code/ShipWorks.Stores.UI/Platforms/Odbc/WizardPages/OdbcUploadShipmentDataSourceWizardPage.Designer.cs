@@ -28,11 +28,15 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(OdbcUploadShipmentDataSourceWizardPage));
             this.uploadToSame = new System.Windows.Forms.RadioButton();
             this.uploadToDifferent = new System.Windows.Forms.RadioButton();
             this.doNotUpload = new System.Windows.Forms.RadioButton();
             this.uploadStrategyPanel = new System.Windows.Forms.Panel();
+            this.labelShipmentUpdate = new System.Windows.Forms.Label();
+            this.pictureBoxShipmentUpdate = new System.Windows.Forms.PictureBox();
             this.uploadStrategyPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxShipmentUpdate)).BeginInit();
             this.SuspendLayout();
             // 
             // uploadToSame
@@ -41,10 +45,10 @@
             this.uploadToSame.Checked = true;
             this.uploadToSame.Location = new System.Drawing.Point(3, 3);
             this.uploadToSame.Name = "uploadToSame";
-            this.uploadToSame.Size = new System.Drawing.Size(178, 17);
+            this.uploadToSame.Size = new System.Drawing.Size(249, 17);
             this.uploadToSame.TabIndex = 0;
             this.uploadToSame.TabStop = true;
-            this.uploadToSame.Text = "Upload to the same data source";
+            this.uploadToSame.Text = "Upload shipment data to the same data source";
             this.uploadToSame.UseVisualStyleBackColor = true;
             // 
             // uploadToDifferent
@@ -52,9 +56,9 @@
             this.uploadToDifferent.AutoSize = true;
             this.uploadToDifferent.Location = new System.Drawing.Point(3, 26);
             this.uploadToDifferent.Name = "uploadToDifferent";
-            this.uploadToDifferent.Size = new System.Drawing.Size(185, 17);
+            this.uploadToDifferent.Size = new System.Drawing.Size(256, 17);
             this.uploadToDifferent.TabIndex = 1;
-            this.uploadToDifferent.Text = "Upload to a different data source";
+            this.uploadToDifferent.Text = "Upload shipment data to a different data source";
             this.uploadToDifferent.UseVisualStyleBackColor = true;
             // 
             // doNotUpload
@@ -72,15 +76,36 @@
             this.uploadStrategyPanel.Controls.Add(this.uploadToDifferent);
             this.uploadStrategyPanel.Controls.Add(this.uploadToSame);
             this.uploadStrategyPanel.Controls.Add(this.doNotUpload);
-            this.uploadStrategyPanel.Location = new System.Drawing.Point(20, 10);
+            this.uploadStrategyPanel.Location = new System.Drawing.Point(60, 31);
             this.uploadStrategyPanel.Name = "uploadStrategyPanel";
-            this.uploadStrategyPanel.Size = new System.Drawing.Size(198, 78);
+            this.uploadStrategyPanel.Size = new System.Drawing.Size(437, 78);
             this.uploadStrategyPanel.TabIndex = 3;
+            // 
+            // labelShipmentUpdate
+            // 
+            this.labelShipmentUpdate.AutoSize = true;
+            this.labelShipmentUpdate.Location = new System.Drawing.Point(50, 15);
+            this.labelShipmentUpdate.Name = "labelShipmentUpdate";
+            this.labelShipmentUpdate.Size = new System.Drawing.Size(156, 13);
+            this.labelShipmentUpdate.TabIndex = 27;
+            this.labelShipmentUpdate.Text = "When a shipment is processed:";
+            // 
+            // pictureBoxShipmentUpdate
+            // 
+            this.pictureBoxShipmentUpdate.Image = ((System.Drawing.Image)(resources.GetObject("pictureBoxShipmentUpdate.Image")));
+            this.pictureBoxShipmentUpdate.Location = new System.Drawing.Point(20, 10);
+            this.pictureBoxShipmentUpdate.Name = "pictureBoxShipmentUpdate";
+            this.pictureBoxShipmentUpdate.Size = new System.Drawing.Size(24, 24);
+            this.pictureBoxShipmentUpdate.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+            this.pictureBoxShipmentUpdate.TabIndex = 26;
+            this.pictureBoxShipmentUpdate.TabStop = false;
             // 
             // OdbcUploadShipmentDataSourceWizardPage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.labelShipmentUpdate);
+            this.Controls.Add(this.pictureBoxShipmentUpdate);
             this.Controls.Add(this.uploadStrategyPanel);
             this.Description = "Select how you would like to upload shipment data for your store";
             this.Name = "OdbcUploadShipmentDataSourceWizardPage";
@@ -89,7 +114,9 @@
             this.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNext);
             this.uploadStrategyPanel.ResumeLayout(false);
             this.uploadStrategyPanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxShipmentUpdate)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -99,5 +126,7 @@
         private System.Windows.Forms.RadioButton uploadToDifferent;
         private System.Windows.Forms.RadioButton doNotUpload;
         private System.Windows.Forms.Panel uploadStrategyPanel;
+        private System.Windows.Forms.Label labelShipmentUpdate;
+        private System.Windows.Forms.PictureBox pictureBoxShipmentUpdate;
     }
 }
