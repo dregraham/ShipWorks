@@ -1,4 +1,10 @@
-﻿using GalaSoft.MvvmLight.Command;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Reflection;
+using System.Windows.Input;
+using GalaSoft.MvvmLight.Command;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using log4net;
@@ -8,30 +14,16 @@ using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Stores.Platforms.Odbc.DataAccess;
 using ShipWorks.Stores.Platforms.Odbc.DataSource;
 using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
-using ShipWorks.Stores.Platforms.Odbc.Download;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Linq;
-using System.Reflection;
-using System.Windows.Input;
 
-namespace ShipWorks.Stores.UI.Platforms.Odbc
+namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
 {
-    /// <summary>
-    /// ViewModel for OdbcMapSettingsControl
-    /// </summary>
-    public class OdbcMapSettingsControlViewModel : IOdbcMapSettingsControlViewModel, INotifyPropertyChanged
+    public abstract class OdbcMapSettingsControlViewModel : IOdbcMapSettingsControlViewModel
     {
         private const string CustomQueryColumnSourceName = "Custom Import";
-        private readonly IOdbcSchema schema;
         private readonly IOdbcSampleDataCommand sampleDataCommand;
         private string mapName = string.Empty;
         private IOdbcColumnSource selectedTable;
-        private bool columnSourceIsTable = true;
-        private bool downloadStrategyIsLastModified = true;
-        private IEnumerable<IOdbcColumnSource> columnSources;
+        private IEnumerable<IOdbcColumnSource> tables;
         private DataTable queryResults;
         private string resultMessage;
         private const int NumberOfSampleResults = 25;
@@ -39,36 +31,31 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         private IOdbcColumnSource customQueryColumnSource;
         private readonly ILog log;
         private readonly IMessageHelper messageHelper;
-        private readonly Func<string, IDialog> dialogFactory;
         private bool isQueryValid;
-        private readonly PropertyChangedHandler handler;
         private string customQuery;
-        private int downloadDaysBack = 30;
+
         public event PropertyChangedEventHandler PropertyChanged;
+        protected readonly PropertyChangedHandler Handler;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="OdbcMapSettingsControlViewModel"/> class.
+        /// Initializes a new instance of the <see cref="OdbcImportMapSettingsControlViewModel"/> class.
         /// </summary>
-        public OdbcMapSettingsControlViewModel(IOdbcSchema schema, IOdbcSampleDataCommand sampleDataCommand, Func<Type, ILog> logFactory,
-            IMessageHelper messageHelper, Func<string, IDialog> dialogFactory, Func<string, IOdbcColumnSource> columnSourceFactory)
+        protected OdbcMapSettingsControlViewModel(IOdbcSampleDataCommand sampleDataCommand, Func<Type, ILog> logFactory,
+            IMessageHelper messageHelper, Func<string, IOdbcColumnSource> columnSourceFactory)
         {
-            this.schema = schema;
             this.sampleDataCommand = sampleDataCommand;
             this.messageHelper = messageHelper;
-            this.dialogFactory = dialogFactory;
             ExecuteQueryCommand = new RelayCommand(ExecuteQuery);
             customQueryColumnSource = columnSourceFactory(CustomQueryColumnSourceName);
             log = logFactory(typeof(OdbcImportFieldMappingControlViewModel));
 
-            NumbersUpTo30 = Enumerable.Range(1, 30).ToList();
-
-            handler = new PropertyChangedHandler(this, () => PropertyChanged);
+            Handler = new PropertyChangedHandler(this, () => PropertyChanged);
         }
 
         /// <summary>
         /// Gets the data source.
         /// </summary>
-        public IOdbcDataSource DataSource { get; private set; }
+        public IOdbcDataSource DataSource { get; protected set; }
 
         /// <summary>
         /// The name the map will be saved as.
@@ -85,17 +72,17 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
 
                 return mapName;
             }
-            set { handler.Set(nameof(MapName), ref mapName, value); }
+            set { Handler.Set(nameof(MapName), ref mapName, value); }
         }
 
         /// <summary>
         /// The external odbc tables.
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public IEnumerable<IOdbcColumnSource> ColumnSources
+        public IEnumerable<IOdbcColumnSource> Tables
         {
-            get { return columnSources; }
-            set { handler.Set(nameof(ColumnSources), ref columnSources, value); }
+            get { return tables; }
+            set { Handler.Set(nameof(Tables), ref tables, value); }
         }
 
         /// <summary>
@@ -107,7 +94,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             get { return selectedTable; }
             set
             {
-                handler.Set(nameof(SelectedTable), ref selectedTable, value);
+                Handler.Set(nameof(SelectedTable), ref selectedTable, value);
 
                 ColumnSource = SelectedTable;
             }
@@ -120,7 +107,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         public IOdbcColumnSource CustomQueryColumnSource
         {
             get { return customQueryColumnSource; }
-            set { handler.Set(nameof(CustomQueryColumnSource), ref customQueryColumnSource, value); }
+            set { Handler.Set(nameof(CustomQueryColumnSource), ref customQueryColumnSource, value); }
         }
 
         /// <summary>
@@ -143,7 +130,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
                     MapName = value == null ? $"{DataSource.Name}" : $"{DataSource.Name} - {value.Name}";
                 }
 
-                handler.Set(nameof(ColumnSource), ref columnSource, value);
+                Handler.Set(nameof(ColumnSource), ref columnSource, value);
             }
         }
 
@@ -154,39 +141,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         public string CustomQuery
         {
             get { return customQuery; }
-            set { handler.Set(nameof(CustomQuery), ref customQuery, value); }
-        }
-
-        /// <summary>
-        /// Whether the column source selected is table
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public bool ColumnSourceIsTable
-        {
-            get { return columnSourceIsTable; }
-            set
-            {
-                handler.Set(nameof(ColumnSourceIsTable), ref columnSourceIsTable, value);
-
-                // Show warning dlg when query is selected
-                if (!value)
-                {
-                    IDialog warningDlg = dialogFactory("OdbcCustomQueryWarningDlg");
-                    warningDlg.ShowDialog();
-                }
-
-                ColumnSource = value ? SelectedTable : CustomQueryColumnSource;
-            }
-        }
-
-        /// <summary>
-        /// Whether the download strategy is last modified.
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public bool DownloadStrategyIsLastModified
-        {
-            get { return downloadStrategyIsLastModified; }
-            set { handler.Set(nameof(DownloadStrategyIsLastModified), ref downloadStrategyIsLastModified, value); }
+            set { Handler.Set(nameof(CustomQuery), ref customQuery, value); }
         }
 
         /// <summary>
@@ -202,7 +157,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         public DataTable QueryResults
         {
             get { return queryResults; }
-            set { handler.Set(nameof(QueryResults), ref queryResults, value); }
+            set { Handler.Set(nameof(QueryResults), ref queryResults, value); }
         }
 
         /// <summary>
@@ -212,67 +167,14 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         public string ResultMessage
         {
             get { return resultMessage; }
-            set { handler.Set(nameof(ResultMessage), ref resultMessage, value); }
+            set { Handler.Set(nameof(ResultMessage), ref resultMessage, value); }
         }
 
         /// <summary>
-        /// List of numbers 0-25 for binding to number of items and number of attributes lists
+        /// Whether the column source selected is table
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public List<int> NumbersUpTo30 { get; }
-
-        /// <summary>
-        /// The number of days back to begin downloading
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public int DownloadDaysBack
-        {
-            get { return downloadDaysBack; }
-            set { handler.Set(nameof(DownloadDaysBack), ref downloadDaysBack, value); }
-        }
-
-        /// <summary>
-        /// Loads the external odbc tables.
-        /// </summary>
-        public void Load(IOdbcDataSource dataSource)
-        {
-            MethodConditions.EnsureArgumentIsNotNull(dataSource);
-
-            try
-            {
-                DataSource = dataSource;
-
-                schema.Load(DataSource);
-                ColumnSources = schema.Tables;
-            }
-            catch (ShipWorksOdbcException ex)
-            {
-                messageHelper.ShowError(ex.Message);
-            }
-        }
-
-        /// <summary>
-        /// Saves the map settings.
-        /// </summary>
-        public void SaveMapSettings(OdbcStoreEntity store)
-        {
-            store.ImportStrategy = DownloadStrategyIsLastModified ?
-                (int) OdbcImportStrategy.ByModifiedTime :
-                (int) OdbcImportStrategy.All;
-
-            store.ImportSourceType = ColumnSourceIsTable ?
-                (int) OdbcColumnSourceType.Table :
-                (int) OdbcColumnSourceType.CustomQuery;
-
-            store.ImportColumnSource = ColumnSourceIsTable ?
-                SelectedTable.Name :
-                CustomQuery;
-
-            if (DownloadStrategyIsLastModified)
-            {
-                store.InitialDownloadDays = DownloadDaysBack;
-            }
-        }
+        public abstract bool ColumnSourceIsTable { get; set; }
 
         /// <summary>
         /// Validates the required map settings.
@@ -331,5 +233,22 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
                 isQueryValid = false;
             }
         }
+
+        /// <summary>
+        /// Loads the external odbc tables.
+        /// </summary>
+        public void Load(IOdbcDataSource dataSource, IEnumerable<IOdbcColumnSource> externalTables)
+        {
+            MethodConditions.EnsureArgumentIsNotNull(dataSource);
+            MethodConditions.EnsureArgumentIsNotNull(externalTables);
+
+            DataSource = dataSource;
+            Tables = externalTables;
+        }
+
+        /// <summary>
+        /// Saves the map settings.
+        /// </summary>
+        public abstract void SaveMapSettings(OdbcStoreEntity store);
     }
 }

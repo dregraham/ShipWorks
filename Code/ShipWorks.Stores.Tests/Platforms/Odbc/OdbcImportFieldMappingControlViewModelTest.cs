@@ -14,6 +14,7 @@ using System.Windows.Forms;
 using ShipWorks.Stores.Platforms.Odbc.DataSource;
 using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 using ShipWorks.Stores.Platforms.Odbc.Download;
+using ShipWorks.Stores.UI.Platforms.Odbc.ViewModels;
 using Xunit;
 
 namespace ShipWorks.Stores.Tests.Platforms.Odbc

@@ -4,6 +4,8 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Stores.Platforms.Odbc.DataSource;
+using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
+using ShipWorks.Stores.UI.Platforms.Odbc.ViewModels;
 using ShipWorks.UI.Wizard;
 using IWin32Window = System.Windows.Interop.IWin32Window;
 
@@ -14,6 +16,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
         private readonly IMessageHelper messageHelper;
         private readonly Func<IOdbcDataSource> dataSourceFactory;
         private readonly Func<IOdbcMapSettingsControlViewModel> viewModelFactory;
+        private readonly IOdbcSchema schema;
         private IOdbcMapSettingsControlViewModel viewModel;
         private OdbcStoreEntity store;
 
@@ -22,11 +25,13 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
         /// </summary>
         public OdbcImportMapSettingsPage(IMessageHelper messageHelper,
             Func<IOdbcDataSource> dataSourceFactory,
-            Func<IOdbcMapSettingsControlViewModel> viewModelFactory)
+            Func<IOdbcMapSettingsControlViewModel> viewModelFactory,
+            IOdbcSchema schema)
         {
             this.messageHelper = messageHelper;
             this.dataSourceFactory = dataSourceFactory;
             this.viewModelFactory = viewModelFactory;
+            this.schema = schema;
             InitializeComponent();
             SteppingInto += OnSteppingInto;
             StepNext += OnNext;
@@ -77,7 +82,16 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
             {
                 viewModel = viewModelFactory();
 
-                viewModel.Load(selectedDataSource);
+                try
+                {
+                    schema.Load(selectedDataSource);
+                }
+                catch (ShipWorksOdbcException ex)
+                {
+                    messageHelper.ShowError(ex.Message);
+                }
+
+                viewModel.Load(selectedDataSource, schema.Tables);
                 mapSettingsControl.DataContext = viewModel;
             }
         }

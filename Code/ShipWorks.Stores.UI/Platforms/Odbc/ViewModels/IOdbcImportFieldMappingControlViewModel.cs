@@ -2,7 +2,7 @@
 using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 using ShipWorks.Stores.Platforms.Odbc.Download;
 
-namespace ShipWorks.Stores.UI.Platforms.Odbc
+namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
 {
     /// <summary>
     /// View Model for the <see cref="WizardPages.OdbcImportFieldMappingControl" />

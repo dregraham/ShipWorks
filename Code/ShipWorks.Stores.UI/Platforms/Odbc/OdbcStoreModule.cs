@@ -11,6 +11,7 @@ using ShipWorks.Stores.Platforms.Odbc.DataAccess;
 using ShipWorks.Stores.Platforms.Odbc.DataSource;
 using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 using ShipWorks.Stores.Platforms.Odbc.Download;
+using ShipWorks.Stores.UI.Platforms.Odbc.ViewModels;
 using Module = Autofac.Module;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc
@@ -49,7 +50,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             builder.RegisterType<WizardPages.OdbcImportFieldMappingControl>()
                 .AsSelf();
 
-            builder.RegisterType<OdbcMapSettingsControlViewModel>()
+            builder.RegisterType<OdbcImportMapSettingsControlViewModel>()
                 .AsImplementedInterfaces();
 
             builder.RegisterType<OdbcImportFieldMappingControlViewModel>()

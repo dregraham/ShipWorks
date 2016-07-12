@@ -11,7 +11,8 @@
              xmlns:ui="http://schemas.shipworks.com/ui"
              xmlns:system="clr-namespace:System;assembly=mscorlib"
              xmlns:wizardPages="clr-namespace:ShipWorks.Stores.UI.Platforms.Odbc.WizardPages"
-             d:DataContext="{d:DesignInstance local:OdbcImportFieldMappingControlViewModel}"
+             xmlns:viewModels="clr-namespace:ShipWorks.Stores.UI.Platforms.Odbc.ViewModels"
+             d:DataContext="{d:DesignInstance viewModels:OdbcImportFieldMappingControlViewModel}"
              Height="500" Width="540"
              FontFamily="Tahoma" FontSize="8.25pt"
              Background="{x:Static SystemColors.ControlBrush}">

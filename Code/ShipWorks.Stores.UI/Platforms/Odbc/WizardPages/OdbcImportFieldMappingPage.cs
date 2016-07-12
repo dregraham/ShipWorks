@@ -7,6 +7,7 @@ using ShipWorks.Stores.Platforms.Odbc.Download;
 using ShipWorks.UI.Wizard;
 using System;
 using System.Windows.Interop;
+using ShipWorks.Stores.UI.Platforms.Odbc.ViewModels;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
 {

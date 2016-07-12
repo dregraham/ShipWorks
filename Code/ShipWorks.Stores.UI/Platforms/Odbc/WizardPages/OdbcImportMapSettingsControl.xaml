@@ -7,7 +7,8 @@
              xmlns:odbc="clr-namespace:ShipWorks.Stores.UI.Platforms.Odbc"
              mc:Ignorable="d"
              xmlns:ui="http://schemas.shipworks.com/ui"
-             d:DataContext="{d:DesignInstance odbc:OdbcMapSettingsControlViewModel}"
+             xmlns:viewModels="clr-namespace:ShipWorks.Stores.UI.Platforms.Odbc.ViewModels"
+             d:DataContext="{d:DesignInstance viewModels:OdbcImportMapSettingsControlViewModel}"
              Height="500" Width="540"
              FontFamily="Tahoma" FontSize="8.25pt"
              Background="{x:Static SystemColors.ControlBrush}">
@@ -118,7 +119,7 @@
                    Content="Table:"
                    Margin="0"
                    Width="90"/>
-            <ui:ShipWorksComboBox ItemsSource="{Binding ColumnSources, UpdateSourceTrigger=PropertyChanged}"
+            <ui:ShipWorksComboBox ItemsSource="{Binding Tables, UpdateSourceTrigger=PropertyChanged}"
                                   DisplayMemberPath="Name"
                                   SelectedValue="{Binding SelectedTable}"
                                   VerticalAlignment="Center"

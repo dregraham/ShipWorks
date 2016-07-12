@@ -1,7 +1,9 @@
-﻿using ShipWorks.Data.Model.EntityClasses;
+﻿using System.Collections.Generic;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Odbc.DataSource;
+using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 
-namespace ShipWorks.Stores.UI.Platforms.Odbc
+namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
 {
     public interface IOdbcMapSettingsControlViewModel
     {
@@ -13,7 +15,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// <summary>
         /// Loads the external odbc tables.
         /// </summary>
-        void Load(IOdbcDataSource dataSource);
+        void Load(IOdbcDataSource dataSource, IEnumerable<IOdbcColumnSource> externalTables);
 
         /// <summary>
         /// Validates the required map settings.

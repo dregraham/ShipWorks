@@ -1,4 +1,12 @@
-﻿using Autofac;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Windows.Input;
 using GalaSoft.MvvmLight.Command;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
@@ -11,19 +19,9 @@ using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 using ShipWorks.Stores.Platforms.Odbc.Download;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Data;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Windows.Input;
 using SaveFileDialog = Microsoft.Win32.SaveFileDialog;
 
-namespace ShipWorks.Stores.UI.Platforms.Odbc
+namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
 {
     /// <summary>
     /// View Model for the <see cref="WizardPages.OdbcImportFieldMappingControl"/>
