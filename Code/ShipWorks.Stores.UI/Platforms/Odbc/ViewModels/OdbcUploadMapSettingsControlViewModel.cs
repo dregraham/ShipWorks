@@ -11,9 +11,10 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
     /// <summary>
     /// ViewModel for OdbcUploadMapSettingsControl
     /// </summary>
-    public class OdbcUploadMapSettingsControlViewModel : OdbcMapSettingsControlViewModel{
+    public class OdbcUploadMapSettingsControlViewModel : OdbcMapSettingsControlViewModel
+    {
         private readonly Func<string, IDialog> dialogFactory;
-        private bool columnSourceIsTable;
+        private bool columnSourceIsTable = true;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcUploadMapSettingsControlViewModel"/> class.

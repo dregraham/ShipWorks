@@ -36,17 +36,20 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
                 store = GetStore<OdbcStoreEntity>();
             }
 
-            if (uploadToSame.Checked)
+            if (doNotUpload.Checked)
             {
-                store.UploadStrategy = (int)OdbcShipmentUploadStrategy.UseImportDataSource;
+                store.UploadStrategy = (int) OdbcShipmentUploadStrategy.DoNotUpload;
+                store.UploadColumnSourceType = 0;
+                store.UploadMap = string.Empty;
+                store.UploadColumnSource = string.Empty;
             }
-            else if (uploadToDifferent.Checked)
+            else if (uploadToSame.Checked)
             {
-                store.UploadStrategy = (int)OdbcShipmentUploadStrategy.UseShipmentDataSource;
+                store.UploadStrategy = (int) OdbcShipmentUploadStrategy.UseImportDataSource;
             }
-            else
+            else if(uploadToDifferent.Checked)
             {
-                store.UploadStrategy = (int)OdbcShipmentUploadStrategy.DoNotUpload;
+                store.UploadStrategy = (int) OdbcShipmentUploadStrategy.UseShipmentDataSource;
             }
         }
     }

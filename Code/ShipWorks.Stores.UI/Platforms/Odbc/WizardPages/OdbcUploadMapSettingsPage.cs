@@ -6,13 +6,16 @@ using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Stores.Platforms.Odbc.DataSource;
 using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
+using ShipWorks.Stores.Platforms.Odbc.Upload;
 using ShipWorks.Stores.UI.Platforms.Odbc.ViewModels;
 using ShipWorks.UI.Wizard;
-using IWin32Window = System.Windows.Interop.IWin32Window;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
 {
-    public partial class OdbcImportMapSettingsPage : AddStoreWizardPage, IOdbcWizardPage, IWin32Window
+    /// <summary>
+    /// Wizard page for inputting upload map settings
+    /// </summary>
+    public partial class OdbcUploadMapSettingsPage : AddStoreWizardPage, IOdbcWizardPage
     {
         private readonly IMessageHelper messageHelper;
         private readonly Func<IOdbcDataSource> dataSourceFactory;
@@ -22,9 +25,9 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
         private OdbcStoreEntity store;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="OdbcImportFieldMappingPage"/> class.
+        /// Initializes a new instance of the <see cref="OdbcUploadMapSettingsPage"/> class.
         /// </summary>
-        public OdbcImportMapSettingsPage(IMessageHelper messageHelper,
+        public OdbcUploadMapSettingsPage(IMessageHelper messageHelper,
             Func<IOdbcDataSource> dataSourceFactory,
             IIndex<string, IOdbcMapSettingsControlViewModel> viewModelFactory,
             IOdbcSchema schema)
@@ -39,9 +42,9 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
         }
 
         /// <summary>
-        /// The position in which to show this wizard page
+        /// Gets the position.
         /// </summary>
-        public int Position => 1;
+        public int Position => 4;
 
         /// <summary>
         /// Save the map to the ODBC Store
@@ -62,13 +65,20 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
             viewModel.SaveMapSettings(store);
         }
 
+
         /// <summary>
+        /// Called when [stepping into].
         /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="eventArgs">The <see cref="System.EventArgs" /> instance containing the event data.</param>
-        private void OnSteppingInto(object sender, EventArgs eventArgs)
+        private void OnSteppingInto(object sender, WizardSteppingIntoEventArgs e)
         {
             store = GetStore<OdbcStoreEntity>();
+
+            if (store.UploadStrategy == (int) OdbcShipmentUploadStrategy.DoNotUpload)
+            {
+                e.Skip = true;
+                e.RaiseStepEventWhenSkipping = false;
+                return;
+            }
 
             IOdbcDataSource selectedDataSource = dataSourceFactory();
 
@@ -81,7 +91,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
                 !viewModel.DataSource.ConnectionString.Equals(selectedDataSource.ConnectionString,
                     StringComparison.Ordinal))
             {
-                viewModel = viewModelFactory["Import"];
+                viewModel = viewModelFactory["Upload"];
 
                 try
                 {
