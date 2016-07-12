@@ -24,16 +24,9 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <summary>
         /// Creates the order field map.
         /// </summary>
-        public OdbcFieldMap CreateOrderFieldMap()
+        public IOdbcFieldMap CreateOrderFieldMap()
         {
-            OdbcFieldMap orderMap = new OdbcFieldMap(ioFactory);
-
-            foreach (ShipWorksOdbcMappableField orderField in CreateShipWorksOrderFields())
-	        {
-	            orderMap.AddEntry(new OdbcFieldMapEntry(orderField, new ExternalOdbcMappableField(null)));
-	        }
-
-	        return orderMap;
+            return CreateEmptyMap(CreateShipWorksOrderFields());
 		}
 
         /// <summary>
@@ -72,16 +65,9 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <summary>
         /// Creates the order item field map.
         /// </summary>
-        public OdbcFieldMap CreateOrderItemFieldMap(int index)
+        public IOdbcFieldMap CreateOrderItemFieldMap(int index)
         {
-            OdbcFieldMap itemMap = new OdbcFieldMap(ioFactory);
-
-            foreach (ShipWorksOdbcMappableField entry in CreateShipWorksOrderItemFields())
-            {
-                itemMap.AddEntry(new OdbcFieldMapEntry(entry, new ExternalOdbcMappableField(null), index));
-            }
-
-            return itemMap;
+            return CreateEmptyMap(CreateShipWorksOrderItemFields(), index);
         }
 
         /// <summary>
@@ -118,16 +104,9 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <summary>
         /// Creates the address field map.
         /// </summary>
-        public OdbcFieldMap CreateAddressFieldMap()
+        public IOdbcFieldMap CreateAddressFieldMap()
         {
-            OdbcFieldMap addressMap = new OdbcFieldMap(ioFactory);
-
-            foreach (ShipWorksOdbcMappableField entry in CreateShipWorksAddressFields())
-            {
-                addressMap.AddEntry(new OdbcFieldMapEntry(entry, new ExternalOdbcMappableField(null)));
-            }
-
-            return addressMap;
+            return CreateEmptyMap(CreateShipWorksAddressFields());
         }
 
         /// <summary>
@@ -135,7 +114,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// </summary>
         private IEnumerable<ShipWorksOdbcMappableField> CreateShipWorksAddressFields()
 	    {
-            List<ShipWorksOdbcMappableField> fields = new List<ShipWorksOdbcMappableField>()
+            List<ShipWorksOdbcMappableField> addressFields = new List<ShipWorksOdbcMappableField>()
             {
                 new ShipWorksOdbcMappableField(OrderFields.BillFirstName, "Bill First Name"),
                 new ShipWorksOdbcMappableField(OrderFields.BillMiddleName, "Bill Middle Name"),
@@ -172,7 +151,76 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
                 new ShipWorksOdbcMappableField(OrderFields.ShipWebsite, "Ship Website"),
             };
 
-            return fields;
+            return addressFields;
+        }
+
+        /// <summary>
+        /// Creates the empty map.
+        /// </summary>
+        private IOdbcFieldMap CreateEmptyMap(IEnumerable<ShipWorksOdbcMappableField> shipWorksOdbcMappableFields, int index = 0)
+        {
+            IOdbcFieldMap map = new OdbcFieldMap(ioFactory);
+
+            foreach (ShipWorksOdbcMappableField entry in shipWorksOdbcMappableFields)
+            {
+                map.AddEntry(new OdbcFieldMapEntry(entry, new ExternalOdbcMappableField(null), index));
+            }
+
+            return map;
+        }
+
+        /// <summary>
+        /// Creates the shipment field map.
+        /// </summary>
+        public IOdbcFieldMap CreateShipmentFieldMap()
+        {
+            return CreateEmptyMap(CreateShipmentFields());
+        }
+
+        /// <summary>
+        /// Creates the shipment fields.
+        /// </summary>
+        private IEnumerable<ShipWorksOdbcMappableField> CreateShipmentFields()
+        {
+            return new List<ShipWorksOdbcMappableField>
+            {
+                new ShipWorksOdbcMappableField(OrderFields.OrderNumber, OdbcOrderFieldDescription.Number, true),
+                new ShipWorksOdbcMappableField(ShipmentFields.TrackingNumber, "Tracking Number", true),
+                new ShipWorksOdbcMappableField(ShipmentFields.ShipDate, "Ship Date"),
+                new ShipWorksOdbcMappableField(ShipmentFields.ShipmentType, "Provider"),
+                new ShipWorksOdbcMappableField(OrderFields.LocalStatus, OdbcOrderFieldDescription.LocalStatus)
+                // Todo: Still need to add Service, Packaging, # of Packages, Length, Width, Height, Weight, Shipping Cost,
+                // Todo: Insured Value & Insurance Fee
+            };
+        }
+
+        /// <summary>
+        /// Creates the shipto address field map.
+        /// </summary>
+        public IOdbcFieldMap CreateShiptoAddressFieldMap()
+        {
+            return CreateEmptyMap(CreateShipToAddressFields());
+        }
+
+        private IEnumerable<ShipWorksOdbcMappableField> CreateShipToAddressFields()
+        {
+            return new List<ShipWorksOdbcMappableField>
+            {
+                new ShipWorksOdbcMappableField(ShipmentFields.ShipFirstName, "Ship First Name"),
+                new ShipWorksOdbcMappableField(ShipmentFields.ShipMiddleName, "Ship Middle Name"),
+                new ShipWorksOdbcMappableField(ShipmentFields.ShipLastName, "Ship Last Name"),
+                new ShipWorksOdbcMappableField(ShipmentFields.ShipUnparsedName, "Ship Full Name"),
+                new ShipWorksOdbcMappableField(ShipmentFields.ShipCompany, "Ship Company"),
+                new ShipWorksOdbcMappableField(ShipmentFields.ShipStreet1, "Ship Address 1"),
+                new ShipWorksOdbcMappableField(ShipmentFields.ShipStreet2, "Ship Address 2"),
+                new ShipWorksOdbcMappableField(ShipmentFields.ShipStreet3, "Ship Address 3"),
+                new ShipWorksOdbcMappableField(ShipmentFields.ShipCity, "Ship City"),
+                new ShipWorksOdbcMappableField(ShipmentFields.ShipStateProvCode, "Ship State/Province"),
+                new ShipWorksOdbcMappableField(ShipmentFields.ShipPostalCode, "Ship Postal Code"),
+                new ShipWorksOdbcMappableField(ShipmentFields.ShipCountryCode, "Ship Country"),
+                new ShipWorksOdbcMappableField(ShipmentFields.ShipEmail, "Ship Email"),
+                new ShipWorksOdbcMappableField(ShipmentFields.ShipPhone, "Ship Phone")
+            };
         }
 
         /// <summary>

@@ -162,7 +162,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
                 {
                     for (int i = numberOfItemsPerOrder; i < value; i++)
                     {
-                        OdbcFieldMap map = fieldMapFactory.CreateOrderItemFieldMap(i);
+                        IOdbcFieldMap map = fieldMapFactory.CreateOrderItemFieldMap(i);
 
                         // Give the new item the correct number of attributes
                         GetRangeOfAttributes(1, numberOfAttributesPerItem, i).ToList().ForEach(m => map.AddEntry(m));

@@ -62,7 +62,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <param name="field">The field.</param>
         /// <param name="displayName">The display name.</param>
         /// <param name="isRequired">if set to <c>true</c> [is required].</param>
-        private ShipWorksOdbcMappableField(IEntityField2 field, string displayName, bool isRequired)
+        public ShipWorksOdbcMappableField(IEntityField2 field, string displayName, bool isRequired)
         {
             this.field = field;
             DisplayName = displayName;
