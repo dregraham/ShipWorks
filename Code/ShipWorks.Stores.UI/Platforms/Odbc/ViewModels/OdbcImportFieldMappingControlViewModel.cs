@@ -1,13 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Windows.Input;
-using GalaSoft.MvvmLight.Command;
+﻿using GalaSoft.MvvmLight.Command;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using log4net;
@@ -19,6 +10,15 @@ using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 using ShipWorks.Stores.Platforms.Odbc.Download;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Windows.Input;
 using SaveFileDialog = Microsoft.Win32.SaveFileDialog;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
@@ -29,7 +29,6 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
     public class OdbcImportFieldMappingControlViewModel : IOdbcImportFieldMappingControlViewModel, INotifyPropertyChanged
     {
         private readonly IOdbcFieldMapFactory fieldMapFactory;
-        private readonly Func<Type, ILog> logFactory;
         private readonly IMessageHelper messageHelper;
         private ObservableCollection<OdbcColumn> columns;
         private OdbcFieldMapDisplay selectedFieldMap;
@@ -48,7 +47,6 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
              Func<Type, ILog> logFactory, IMessageHelper messageHelper)
         {
             this.fieldMapFactory = fieldMapFactory;
-            this.logFactory = logFactory;
             this.messageHelper = messageHelper;
 
             log = logFactory(typeof (OdbcImportFieldMappingControlViewModel));
@@ -226,6 +224,14 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
         /// </summary>
         [Obfuscation(Exclude = true)]
         public List<int> NumbersUpTo25 { get; }
+
+        public ILog Log
+        {
+            get
+            {
+                return log;
+            }
+        }
 
         /// <summary>
         /// Finds the OdbcFieldMapEntries corresponding to the given field

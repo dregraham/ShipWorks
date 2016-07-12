@@ -179,9 +179,11 @@
     <Compile Include="Platforms\Odbc\OdbcFieldMapMultiValueConverter.cs" />
     <Compile Include="Platforms\Odbc\ViewModels\IOdbcImportFieldMappingControlViewModel.cs" />
     <Compile Include="Platforms\Odbc\ViewModels\IOdbcMapSettingsControlViewModel.cs" />
+    <Compile Include="Platforms\Odbc\ViewModels\IOdbcUploadMappingControlViewModel.cs" />
     <Compile Include="Platforms\Odbc\ViewModels\OdbcImportFieldMappingControlViewModel.cs" />
     <Compile Include="Platforms\Odbc\ViewModels\OdbcImportMapSettingsControlViewModel.cs" />
     <Compile Include="Platforms\Odbc\ViewModels\OdbcMapSettingsControlViewModel.cs" />
+    <Compile Include="Platforms\Odbc\ViewModels\OdbcUploadMappingControlViewModel.cs" />
     <Compile Include="Platforms\Odbc\ViewModels\OdbcUploadMapSettingsControlViewModel.cs" />
     <Compile Include="Platforms\Odbc\WizardPages\OdbcImportFieldMappingControl.xaml.cs">
       <DependentUpon>OdbcImportFieldMappingControl.xaml</DependentUpon>
