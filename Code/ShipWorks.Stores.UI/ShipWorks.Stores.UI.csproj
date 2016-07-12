@@ -204,6 +204,9 @@
     <Compile Include="Platforms\Odbc\WizardPages\OdbcMappingControl.xaml.cs">
       <DependentUpon>OdbcMappingControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Platforms\Odbc\WizardPages\OdbcUploadMapSettingsControl.xaml.cs">
+      <DependentUpon>OdbcUploadMapSettingsControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Platforms\Odbc\WizardPages\OdbcUploadShipmentDataSourceWizardPage.cs">
       <SubType>UserControl</SubType>
     </Compile>
