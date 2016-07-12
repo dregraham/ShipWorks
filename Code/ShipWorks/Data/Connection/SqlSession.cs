@@ -132,6 +132,7 @@ namespace ShipWorks.Data.Connection
                 current.Configuration.Freeze();
             }
         }
+
         /// <summary>
         /// Returns DatabaseGuid of database.
         /// </summary>
