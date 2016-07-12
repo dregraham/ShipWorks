@@ -27,12 +27,16 @@ namespace ShipWorks.Shipping.Services
         /// Create a shipment for a given order, if necessary
         /// </summary>
         /// <param name="order"></param>
-        public void AutoCreateIfNecessary(OrderEntity order)
+        public bool AutoCreateIfNecessary(OrderEntity order)
         {
             if (shippingSettings.ShouldAutoCreateShipment(order))
             {
                 Create(order);
+
+                return true;
             }
+
+            return false;
         }
     }
 }

@@ -8,12 +8,14 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Interapptive.Shared;
 using Interapptive.Shared.Collections;
+using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.AddressValidation;
+using ShipWorks.AddressValidation.Enums;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Common.Threading;
 using ShipWorks.Core.Common.Threading;
@@ -146,62 +148,77 @@ namespace ShipWorks.Shipping.Loading
         [NDependIgnoreLongMethod]
         private void LoadShipmentsInternal(IProgressReporter workProgress, List<long> entityIDsOriginalSort)
         {
-            // We need to make sure filters are up to date so profiles being applied can be as accurate as possible.
-            filterHelper.EnsureFiltersUpToDate(TimeSpan.FromSeconds(15));
-
-            int count = 0;
-            int total = entityIDsOriginalSort.Count;
-            workProgress.Starting();
-
-            IOrderedEnumerable<long> orderByDescending = entityIDsOriginalSort.OrderByDescending(id => id);
-
-            foreach (IEnumerable<long> orders in orderByDescending.SplitIntoChunksOf(100))
+            using (TrackedDurationEvent trackedDurationEvent = new TrackedDurationEvent("LoadShipments"))
             {
-                foreach (OrderEntity order in orderManager.LoadOrders(orders, fullOrderPrefetchPath.Value))
+                // We need to make sure filters are up to date so profiles being applied can be as accurate as possible.
+                filterHelper.EnsureFiltersUpToDate(TimeSpan.FromSeconds(15));
+
+                int needsValidationCount = 0;
+                int newShipmentCount = 0;
+                int count = 0;
+                int total = entityIDsOriginalSort.Count;
+                workProgress.Starting();
+
+                IOrderedEnumerable<long> orderByDescending = entityIDsOriginalSort.OrderByDescending(id => id);
+
+                foreach (IEnumerable<long> orders in orderByDescending.SplitIntoChunksOf(100))
                 {
-                    if (workProgress.IsCancelRequested)
+                    foreach (OrderEntity order in orderManager.LoadOrders(orders, fullOrderPrefetchPath.Value))
                     {
-                        wasCanceled = true;
-                        break;
-                    }
-
-                    workProgress.Detail = $"Loading {count + 1} of {total}";
-
-                    // Execute the work
-                    try
-                    {
-                        if (securityContext.HasPermission(PermissionType.ShipmentsCreateEditProcess, order.OrderID))
+                        if (workProgress.IsCancelRequested)
                         {
-                            shipmentFactory.AutoCreateIfNecessary(order);
+                            wasCanceled = true;
+                            break;
                         }
 
-                        // Queue the shipments to be validated
-                        foreach (ShipmentEntity shipment in order.Shipments)
-                        {
-                            globalShipments.Add(shipment.ShipmentID, shipment);
+                        workProgress.Detail = $"Loading {count + 1} of {total}";
 
-                            while (!shipmentsToValidate.TryAdd(shipment, TimeSpan.FromMilliseconds(50)) && !workProgress.IsCancelRequested)
+                        // Execute the work
+                        try
+                        {
+                            if (shipmentFactory.AutoCreateIfNecessary(order))
                             {
-                                // We may need to try multiple times to successfully add to queue
+                                newShipmentCount += 1;
+                            }
+
+                            // Queue the shipments to be validated
+                            foreach (ShipmentEntity shipment in order.Shipments)
+                            {
+                                if (shipment.ShipAddressValidationStatus == (int) AddressValidationStatusType.Pending)
+                                {
+                                    needsValidationCount += 1;
+                                }
+
+                                globalShipments.Add(shipment.ShipmentID, shipment);
+
+                                while (!shipmentsToValidate.TryAdd(shipment, TimeSpan.FromMilliseconds(50)) && !workProgress.IsCancelRequested)
+                                {
+                                    // We may need to try multiple times to successfully add to queue
+                                }
                             }
                         }
-                    }
-                    catch (SqlForeignKeyException)
-                    {
-                        // If the order got deleted just forget it - its not an error, the shipments just don't load.
-                        log.WarnFormat("Did not load shipments for entity {0} due to FK exception.", order.OrderID);
-                    }
+                        catch (SqlForeignKeyException)
+                        {
+                            // If the order got deleted just forget it - its not an error, the shipments just don't load.
+                            log.WarnFormat("Did not load shipments for entity {0} due to FK exception.", order.OrderID);
+                        }
 
-                    count++;
+                        count++;
 
-                    workProgress.PercentComplete = (100 * count) / total;
+                        workProgress.PercentComplete = (100 * count) / total;
+                    }
                 }
+
+                finishedLoadingShipments = true;
+                shipmentsToValidate.CompleteAdding();
+
+                workProgress.Completed();
+
+                trackedDurationEvent.AddMetric("Orders", entityIDsOriginalSort.Count);
+                trackedDurationEvent.AddMetric("TotalShipments", globalShipments.Count);
+                trackedDurationEvent.AddMetric("PendingValidation", needsValidationCount);
+                trackedDurationEvent.AddMetric("ShipmentsCreated", newShipmentCount);
             }
-
-            finishedLoadingShipments = true;
-            shipmentsToValidate.CompleteAdding();
-
-            workProgress.Completed();
         }
 
         /// <summary>

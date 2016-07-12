@@ -84,7 +84,6 @@ namespace ShipWorks.Shipping
                 if (createIfNone)
                 {
                     ShipmentEntity shipment = InternalCreateFirstShipment(orderID);
-                    shipment.JustCreated = true;
                     shipments.Add(shipment);
                 }
             }
@@ -170,7 +169,7 @@ namespace ShipWorks.Shipping
         {
             lifetimeScope.Resolve<ISecurityContext>()
                 .DemandPermission(PermissionType.ShipmentsCreateEditProcess, order.OrderID);
-            
+
             // Create the shipment
             ShipmentEntity shipment = new ShipmentEntity();
 
@@ -233,10 +232,10 @@ namespace ShipWorks.Shipping
             IShipmentTypeManager shipmentTypeManager = lifetimeScope.Resolve<IShipmentTypeManager>();
 
             ShipmentType shipmentType = shipmentTypeManager.InitialShipmentType(shipment);
-            
+
             // Apply the determined shipment type
             shipment.ShipmentTypeCode = shipmentType.ShipmentTypeCode;
-            
+
             // Apply the default values to the shipment
             shipmentType.ConfigureNewShipment(shipment);
             shipmentType.UpdateDynamicShipmentData(shipment);
@@ -258,7 +257,7 @@ namespace ShipWorks.Shipping
                 lifetimeScope.Resolve<IOrderManager>(),
                 shipmentTypeManager,
                 lifetimeScope.Resolve<IValidatedAddressManager>());
-            
+
             return shipment;
         }
 
