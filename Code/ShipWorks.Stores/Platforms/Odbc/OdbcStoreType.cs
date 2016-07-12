@@ -74,7 +74,10 @@ namespace ShipWorks.Stores.Platforms.Odbc
                 ImportStrategy = (int) OdbcImportStrategy.ByModifiedTime,
                 ImportSourceType = (int) OdbcColumnSourceType.Table,
                 ImportColumnSource = string.Empty,
-                UploadStrategy = (int) OdbcShipmentUploadStrategy.DoNotUpload
+                UploadMap = string.Empty,
+                UploadStrategy = (int) OdbcShipmentUploadStrategy.DoNotUpload,
+                UploadColumnSourceType = (int) OdbcColumnSourceType.Table,
+                UploadColumnSource = string.Empty
             };
 
             InitializeStoreDefaults(store);
