@@ -223,7 +223,15 @@ namespace ShipWorks.Shipping
         /// </summary>
         public virtual bool IsAllowedFor(ShipmentEntity shipment)
         {
-            IAmazonOrder order = DataProvider.GetEntity(shipment.OrderID) as IAmazonOrder;
+            IAmazonOrder order;
+            if (shipment.Order == null)
+            {
+                order = DataProvider.GetEntity(shipment.OrderID) as IAmazonOrder;
+            }
+            else
+            {
+                order = shipment.Order as IAmazonOrder;
+            }
 
             // If the order is Amazon Prime return false
             return !order?.IsPrime ?? true;
