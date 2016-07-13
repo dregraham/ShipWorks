@@ -20,9 +20,9 @@ namespace ShipWorks.Shipping.Services
     /// <summary>
     /// Implementation for ShipmentLoaderService
     /// </summary>
-    public class ShipmentLoaderService : IInitializeForCurrentUISession
+    public class OrderLoaderService : IInitializeForCurrentUISession
     {
-        private readonly Func<Owned<IShipmentsLoader>> shipmentLoaderFactory;
+        private readonly Func<Owned<IOrderLoader>> shipmentLoaderFactory;
         private readonly IMessenger messenger;
         private readonly ISchedulerProvider schedulerProvider;
         private readonly ICarrierShipmentAdapterFactory carrierShipmentAdapterFactory;
@@ -33,7 +33,7 @@ namespace ShipWorks.Shipping.Services
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShipmentLoaderService(Func<Owned<IShipmentsLoader>> shipmentLoaderFactory, IMessenger messenger,
+        public OrderLoaderService(Func<Owned<IOrderLoader>> shipmentLoaderFactory, IMessenger messenger,
             ISchedulerProvider schedulerProvider, ICarrierShipmentAdapterFactory carrierShipmentAdapterFactory,
             IStoreTypeManager storeTypeManager, Func<Type, ILog> logFactory)
         {
@@ -55,7 +55,7 @@ namespace ShipWorks.Shipping.Services
                 return orderIDs.Select(x => new BasicOrderSelection(x)).Cast<IOrderSelection>().ToArray();
             }
 
-            IShipmentsLoader shipmentLoader = shipmentLoaderFactory().Value;
+            IOrderLoader shipmentLoader = shipmentLoaderFactory().Value;
             ShipmentsLoadedEventArgs results = await shipmentLoader.LoadAsync(orderIDs, ProgressDisplayOptions.NeverShow)
                 .ConfigureAwait(true);
 
@@ -105,7 +105,7 @@ namespace ShipWorks.Shipping.Services
         /// </summary>
         private ShippingAddressEditStateType GetDestinationAddressEditable(OrderEntity order)
         {
-            ShipmentEntity firstShipment = order.Shipments.FirstOrDefault();
+            ShipmentEntity firstShipment = order?.Shipments.FirstOrDefault();
 
             if (firstShipment != null)
             {

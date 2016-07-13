@@ -6,7 +6,7 @@ namespace ShipWorks.Shipping
     /// <summary>
     /// Loads shipments from a list of orders in the background with progress
     /// </summary>
-    public interface IShipmentsLoader
+    public interface IOrderLoader
     {
         /// <summary>
         /// Load the shipments for the given collection of orders or shipments

@@ -18,7 +18,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         private readonly AutoMock mock;
         private readonly DataContext context;
         private readonly OrderEntity order;
-        private readonly ShipmentsLoader testObject;
+        private readonly OrderLoader testObject;
 
         public ShipmentsLoaderTest(DatabaseFixture db)
         {
@@ -33,7 +33,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
                 .WithShipment()
                 .Save();
 
-            testObject = mock.Create<ShipmentsLoader>();
+            testObject = mock.Create<OrderLoader>();
         }
 
         [Fact]
@@ -73,7 +73,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
 
             context.UpdateShippingSetting(x => x.AutoCreateShipments = true);
 
-            var results = await mock.Create<ShipmentsLoader>().LoadAsync(new[] { testOrder.OrderID },
+            var results = await mock.Create<OrderLoader>().LoadAsync(new[] { testOrder.OrderID },
                 ProgressDisplayOptions.NeverShow);
 
             Assert.Equal(1, results.Shipments.Count);

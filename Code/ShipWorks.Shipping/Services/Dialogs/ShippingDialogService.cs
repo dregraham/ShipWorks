@@ -39,14 +39,14 @@ namespace ShipWorks.Shipping.Services.Dialogs
         private readonly IMessageHelper messageHelper;
         private readonly ISchedulerProvider schedulerProvider;
         private readonly IShippingManager shippingManager;
-        private readonly Func<Owned<IShipmentsLoader>> shipmentsLoaderFactory;
+        private readonly Func<Owned<IOrderLoader>> shipmentsLoaderFactory;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public ShippingDialogService(IMessenger messenger, IMessageHelper messageHelper,
             ISchedulerProvider schedulerProvider, IShippingManager shippingManager,
-            Func<Owned<IShipmentsLoader>> shipmentsLoaderFactory)
+            Func<Owned<IOrderLoader>> shipmentsLoaderFactory)
         {
             this.messenger = messenger;
             this.messageHelper = messageHelper;
@@ -125,7 +125,7 @@ namespace ShipWorks.Shipping.Services.Dialogs
                 return;
             }
 
-            IShipmentsLoader shipmentsLoader = shipmentsLoaderFactory().Value;
+            IOrderLoader shipmentsLoader = shipmentsLoaderFactory().Value;
             ShipmentsLoadedEventArgs results = await shipmentsLoader.LoadAsync(message.OrderIDs, ProgressDisplayOptions.Delay)
                 .ConfigureAwait(false);
 

@@ -4,7 +4,6 @@ using Interapptive.Shared.Net;
 using ShipWorks.AddressValidation;
 using ShipWorks.Core.ApplicationCode;
 using ShipWorks.Shipping.Insurance;
-using ShipWorks.Shipping.Loading;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Rating;
 using ShipWorks.Shipping.Services;
@@ -101,9 +100,6 @@ namespace ShipWorks.Shipping.UI
                 .FindConstructorsWith(new NonDefaultConstructorFinder());
 
             builder.RegisterType<ShipmentFactory>()
-                .AsImplementedInterfaces();
-
-            builder.RegisterType<ShipmentsLoader>()
                 .AsImplementedInterfaces();
 
             builder.RegisterType<ShipmentPackageTypesBuilderFactory>()

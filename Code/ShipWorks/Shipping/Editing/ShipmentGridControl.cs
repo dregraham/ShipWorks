@@ -438,7 +438,7 @@ namespace ShipWorks.Shipping.Editing
                 {
                     using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
                     {
-                        IShipmentsLoader loader = lifetimeScope.Resolve<IShipmentsLoader>();
+                        IOrderLoader loader = lifetimeScope.Resolve<IOrderLoader>();
                         ShipmentsLoadedEventArgs result = await loader.LoadAsync(dlg.Selection.OrderedKeys,
                             ProgressDisplayOptions.Delay);
                         OnLoadMoreShipmentsCompleted(this, result);

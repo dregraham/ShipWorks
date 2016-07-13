@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -6,18 +6,16 @@ using Autofac.Extras.Moq;
 using Interapptive.Shared.Threading;
 using Moq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.AddressValidation;
+using ShipWorks.Common.Threading;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Loading;
-using ShipWorks.Stores;
 using ShipWorks.Stores.Content;
 using ShipWorks.Tests.Shared;
-using ShipWorks.Users.Security;
 using Xunit;
 
 namespace ShipWorks.Shipping.Tests.Loading
 {
-    public class ShipmentsLoaderTest : IDisposable
+    class ShipmentsLoaderTest
     {
         private readonly AutoMock mock;
         private ShipmentsLoader testObject;
@@ -42,17 +40,9 @@ namespace ShipWorks.Shipping.Tests.Loading
 
             mock.Provide<ISchedulerProvider>(new ImmediateSchedulerProvider());
 
-            mock.Mock<IStoreTypeManager>()
-                .Setup(x => x.GetType(It.IsAny<StoreEntity>()))
-                .Returns(mock.CreateMock<TestStoreType>().Object);
-
             mock.Mock<IOrderManager>()
                 .Setup(x => x.LoadOrders(It.IsAny<IEnumerable<long>>(), It.IsAny<IPrefetchPath2>()))
                 .Returns(new[] { orderEntity });
-
-            mock.Mock<ISecurityContext>()
-                .Setup(x => x.HasPermission(It.IsAny<PermissionType>(), It.IsAny<long>()))
-                .Returns(true);
         }
 
         [Fact]
@@ -63,25 +53,14 @@ namespace ShipWorks.Shipping.Tests.Loading
 
             testObject = mock.Create<ShipmentsLoader>();
 
-            var orderSelectionLoaded = await testObject.LoadAsync(new[] { orderEntity.OrderID },
-                ProgressDisplayOptions.NeverShow);
+            IDictionary<long, ShipmentEntity> globalShipments = new Dictionary<long, ShipmentEntity>();
 
-            Assert.Equal(2, orderSelectionLoaded.Shipments.Count());
-            Assert.Contains(extraShipment, orderSelectionLoaded.Shipments);
-            Assert.Contains(shipmentEntity, orderSelectionLoaded.Shipments);
-        }
+            await testObject.StartTask(new ProgressProvider(),
+                new List<long> { orderEntity.OrderID }, globalShipments, new BlockingCollection<ShipmentEntity>());
 
-        [Fact]
-        public async Task NoShipmentsReturned_WhenAutoCreateIsFalse_Test()
-        {
-            orderEntity.Shipments.Clear();
-
-            testObject = mock.Create<ShipmentsLoader>();
-
-            var orderSelectionLoaded = await testObject.LoadAsync(new[] { orderEntity.OrderID },
-                ProgressDisplayOptions.NeverShow);
-
-            Assert.Equal(0, orderSelectionLoaded.Shipments.Count());
+            Assert.Equal(2, globalShipments.Count());
+            Assert.Contains(extraShipment, globalShipments.Values);
+            Assert.Contains(shipmentEntity, globalShipments.Values);
         }
 
         [Fact]
@@ -91,42 +70,12 @@ namespace ShipWorks.Shipping.Tests.Loading
 
             testObject = mock.Create<ShipmentsLoader>();
 
-            await testObject.LoadAsync(new[] { orderEntity.OrderID },
-                ProgressDisplayOptions.NeverShow);
+            await testObject.StartTask(new ProgressProvider(),
+                new List<long> { orderEntity.OrderID }, new Dictionary<long, ShipmentEntity>(),
+                new BlockingCollection<ShipmentEntity>());
 
             mock.Mock<IShipmentFactory>()
                 .Verify(x => x.AutoCreateIfNecessary(orderEntity));
-        }
-
-        //TODO: This test should be re-instated when we get validation working with in-memory objects
-        //[Fact]
-        //public async Task AddressValidation_Performed_WhenAddressValidationAllowed_Test()
-        //{
-        //    mock.Override<IStoreManager>().Setup(x => x.DoAnyStoresHaveAutomaticValidationEnabled()).Returns(true);
-        //    testObject = mock.Create<ShipmentsLoader>();
-
-        //    await testObject.LoadAsync(new[] { orderEntity.OrderID },
-        //        ProgressDisplayOptions.NeverShow);
-
-        //    mock.Mock<IValidatedAddressManager>().Verify(av => av.ValidateShipmentAsync(It.IsAny<ShipmentEntity>()), Times.Once);
-        //}
-
-        [Fact]
-        public async Task AddressValidation_NotPerformed_WhenNoShipmentsAndAddressValidationAllowed_Test()
-        {
-            orderEntity.Shipments.Clear();
-
-            testObject = mock.Create<ShipmentsLoader>();
-
-            await testObject.LoadAsync(new[] { orderEntity.OrderID },
-                ProgressDisplayOptions.NeverShow);
-
-            mock.Mock<IValidatedAddressManager>().Verify(av => av.ValidateShipmentAsync(It.IsAny<ShipmentEntity>()), Times.Never);
-        }
-
-        public void Dispose()
-        {
-            mock.Dispose();
         }
     }
 }

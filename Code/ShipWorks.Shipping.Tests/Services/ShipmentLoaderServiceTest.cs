@@ -19,7 +19,7 @@ namespace ShipWorks.Shipping.Tests.Services
     public class ShipmentLoaderServiceTest
     {
         private readonly AutoMock mock;
-        private readonly ShipmentLoaderService testObject;
+        private readonly OrderLoaderService testObject;
         private readonly TestMessenger messenger;
 
         ShipmentEntity shipment = new ShipmentEntity
@@ -38,11 +38,11 @@ namespace ShipWorks.Shipping.Tests.Services
             messenger = new TestMessenger();
             mock.Provide<IMessenger>(messenger);
 
-            mock.Override<IShipmentsLoader>()
+            mock.Override<IOrderLoader>()
                 .Setup(x => x.LoadAsync(It.IsAny<IEnumerable<long>>(), It.IsAny<ProgressDisplayOptions>()))
                 .ReturnsAsync(new ShipmentsLoadedEventArgs(null, false, null, new[] { shipment }.ToList()));
 
-            testObject = mock.Create<ShipmentLoaderService>();
+            testObject = mock.Create<OrderLoaderService>();
         }
 
         [Fact]

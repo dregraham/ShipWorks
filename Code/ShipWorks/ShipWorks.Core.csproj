@@ -836,6 +836,7 @@
     <Compile Include="ApplicationCore\Security\CipherContext.cs" />
     <Compile Include="ApplicationCore\Security\EncryptionProviderFactory.cs" />
     <Compile Include="ApplicationCore\Security\LicenseEncryptionProvider.cs" />
+    <Compile Include="ApplicationCore\ComponentRegistration\ComponentAttribute.cs" />
     <Compile Include="ApplicationCore\Services\Hosting\Background\BackgroundServiceController.cs" />
     <Compile Include="ApplicationCore\Services\Hosting\Background\BackgroundServiceHost.cs" />
     <Compile Include="ApplicationCore\Services\Hosting\Background\BackgroundServiceRegistrar.cs" />
@@ -7176,7 +7177,7 @@
     <Compile Include="Shipping\ShipmentSiblingData.cs" />
     <Compile Include="Shipping\CoreExtensions\Grid\ShipmentNumberDisplayType.cs" />
     <Compile Include="Shipping\Editing\ShipmentGridHiddenSortColumn.cs" />
-    <Compile Include="Shipping\IShipmentsLoader.cs" />
+    <Compile Include="Shipping\IOrderLoader.cs" />
     <Compile Include="Shipping\ShipmentsLoadedEvent.cs" />
     <Compile Include="Data\Grid\Columns\GridColumnSettingsDlg.cs">
       <SubType>Form</SubType>
