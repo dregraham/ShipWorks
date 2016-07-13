@@ -43,5 +43,10 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
         /// Saves the map.
         /// </summary>
         void Save(OdbcStoreEntity store);
+
+        /// <summary>
+        /// Validates the required mapping fields.
+        /// </summary>
+        bool ValidateRequiredMappingFields();
     }
 }

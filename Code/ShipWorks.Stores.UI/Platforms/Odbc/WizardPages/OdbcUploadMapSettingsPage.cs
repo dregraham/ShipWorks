@@ -65,7 +65,6 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
             viewModel.SaveMapSettings(store);
         }
 
-
         /// <summary>
         /// Called when [stepping into].
         /// </summary>

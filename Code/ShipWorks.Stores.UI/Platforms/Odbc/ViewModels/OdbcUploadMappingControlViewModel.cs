@@ -137,7 +137,6 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
         }
 
         /// <summary>
-        /// Checks the required fields.
         /// </summary>
         public bool ValidateRequiredMappingFields()
         {
