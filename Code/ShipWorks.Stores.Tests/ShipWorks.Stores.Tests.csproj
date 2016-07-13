@@ -197,6 +197,7 @@
     <Compile Include="Platforms\Odbc\OdbcStoreTypeTest.cs" />
     <Compile Include="Platforms\Odbc\DataSource\Schema\OdbcColumnSourceTest.cs" />
     <Compile Include="Platforms\Odbc\Download\TableOdbcDownloadQueryTest.cs" />
+    <Compile Include="Platforms\Odbc\OdbcUploadMappingControlViewModelTest.cs" />
     <Compile Include="Platforms\Sears\SearsCredentialsTest.cs" />
     <Compile Include="Platforms\Sears\SearsCipherKeyTest.cs" />
     <Compile Include="Platforms\SparkPay\DTO\OrderStatusResponseTest.cs" />

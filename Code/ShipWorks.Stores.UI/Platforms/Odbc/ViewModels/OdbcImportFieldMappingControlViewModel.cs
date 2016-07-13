@@ -1,7 +1,6 @@
 ﻿using GalaSoft.MvvmLight.Command;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
-using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
@@ -34,7 +33,6 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
         private OdbcFieldMapDisplay selectedFieldMap;
         private readonly PropertyChangedHandler handler;
         public event PropertyChangedEventHandler PropertyChanged;
-        private readonly ILog log;
 
         private bool isSingleLineOrder = true;
         private int numberOfAttributesPerItem;
@@ -43,13 +41,10 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcImportFieldMappingControlViewModel"/> class.
         /// </summary>
-        public OdbcImportFieldMappingControlViewModel(IOdbcFieldMapFactory fieldMapFactory,
-             Func<Type, ILog> logFactory, IMessageHelper messageHelper)
+        public OdbcImportFieldMappingControlViewModel(IOdbcFieldMapFactory fieldMapFactory, IMessageHelper messageHelper)
         {
             this.fieldMapFactory = fieldMapFactory;
             this.messageHelper = messageHelper;
-
-            log = logFactory(typeof (OdbcImportFieldMappingControlViewModel));
 
             Order = new OdbcFieldMapDisplay("Order", fieldMapFactory.CreateOrderFieldMap());
             Address = new OdbcFieldMapDisplay("Address", fieldMapFactory.CreateAddressFieldMap());
@@ -224,14 +219,6 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
         /// </summary>
         [Obfuscation(Exclude = true)]
         public List<int> NumbersUpTo25 { get; }
-
-        public ILog Log
-        {
-            get
-            {
-                return log;
-            }
-        }
 
         /// <summary>
         /// Finds the OdbcFieldMapEntries corresponding to the given field
