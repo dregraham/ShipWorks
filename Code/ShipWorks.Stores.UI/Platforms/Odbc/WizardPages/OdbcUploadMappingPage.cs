@@ -65,14 +65,8 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
         {
             store = GetStore<OdbcStoreEntity>();
 
-            if (store.UploadStrategy == (int) OdbcShipmentUploadStrategy.DoNotUpload)
-            {
-                e.Skip = true;
-                e.RaiseStepEventWhenSkipping = false;
-                return;
-            }
-
-            if (store.UploadColumnSourceType == (int) OdbcColumnSourceType.CustomQuery)
+            if (store.UploadStrategy == (int) OdbcShipmentUploadStrategy.DoNotUpload ||
+                store.UploadColumnSourceType == (int)OdbcColumnSourceType.CustomQuery)
             {
                 e.Skip = true;
                 e.RaiseStepEventWhenSkipping = false;
