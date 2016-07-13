@@ -441,40 +441,47 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
                 return item.ShipWeight;
             }
 
+            YahooResponse response;
             try
             {
                 log.Info("Attempting to get item information from yahoo api.");
 
                 // If item is null, that means it is not in the cache
                 // So make the call to get the item weight and cache it
-                YahooResponse response = webClient.GetItem(itemID);
+                response = webClient.GetItem(itemID);
 
                 log.Info("Retrieved item information from yahoo api.");
-
-                // Check the get item response for the catalog access forbidden error code. If
-                // we get the error, set CatalogEnabled to false and return 0
-                if (response?.ErrorMessages?.Error?.FirstOrDefault()?.Code == CatalogAccessForbidden)
-                {
-                    CatalogEnabled = false;
-                    return 0;
-                }
-
-                YahooCatalogItem newItem = response?.ResponseResourceList.Catalog.ItemList.Item.FirstOrDefault();
-
-                if (newItem == null)
-                {
-                    throw new YahooException("Error deserializing XML response from Yahoo Catalog API");
-                }
-
-                productWeightCache[itemID] = newItem;
-
-                return newItem.ShipWeight;
             }
             catch (NullReferenceException ex)
             {
                 log.Error("Error retrieving item information", ex);
                 return 0;
             }
+
+            if (response == null)
+            {
+                return 0;
+            }
+
+            // Check the get item response for the catalog access forbidden error code. If
+            // we get the error, set CatalogEnabled to false and return 0
+            if (response.ErrorMessages?.Error?.FirstOrDefault()?.Code == CatalogAccessForbidden)
+            {
+                CatalogEnabled = false;
+                return 0;
+            }
+
+            YahooCatalogItem newItem = response.ResponseResourceList?.Catalog?.ItemList?.Item?.FirstOrDefault();
+
+            if (newItem == null)
+            {
+                log.Error("Error deserializing XML response from Yahoo Catalog API");
+                return 0;
+            }
+
+            productWeightCache[itemID] = newItem;
+
+            return newItem.ShipWeight;
         }
 
         /// <summary>
