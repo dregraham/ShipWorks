@@ -24,20 +24,26 @@ namespace ShipWorks.Shipping.Loading
         private readonly IFilterHelper filterHelper;
         private readonly ILog log;
         private readonly IOrderManager orderManager;
+        private readonly Func<string, ITrackedDurationEvent> startDurationEvent;
         private readonly IShipmentFactory shipmentFactory;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public ShipmentsLoader(IShipmentFactory shipmentFactory, IOrderManager orderManager,
-            IFilterHelper filterHelper, Func<Type, ILog> getLogger)
+            IFilterHelper filterHelper, Func<string, ITrackedDurationEvent> startDurationEvent,
+            Func<Type, ILog> getLogger)
         {
             this.shipmentFactory = shipmentFactory;
             this.orderManager = orderManager;
             this.filterHelper = filterHelper;
+            this.startDurationEvent = startDurationEvent;
             log = getLogger(GetType());
         }
 
+        /// <summary>
+        /// Start the task to load shipments
+        /// </summary>
         public Task<bool> StartTask(IProgressProvider progressProvider, List<long> orderIDs,
             IDictionary<long, ShipmentEntity> globalShipments, BlockingCollection<ShipmentEntity> shipmentsToValidate)
         {
@@ -52,7 +58,7 @@ namespace ShipWorks.Shipping.Loading
         private bool LoadShipments(IProgressReporter workProgress, List<long> entityIDsOriginalSort,
             IDictionary<long, ShipmentEntity> globalShipments, BlockingCollection<ShipmentEntity> shipmentsToValidate)
         {
-            using (TrackedDurationEvent trackedDurationEvent = new TrackedDurationEvent("LoadShipments"))
+            using (ITrackedDurationEvent trackedDurationEvent = startDurationEvent("LoadShipments"))
             {
                 bool wasCanceled = false;
 

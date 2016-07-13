@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using Autofac;
 using Autofac.Core;
 using Interapptive.Shared;
+using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Pdf;
 using Interapptive.Shared.Security;
 using Interapptive.Shared.Threading;
@@ -106,6 +107,10 @@ namespace ShipWorks.ApplicationCore
             builder.Register((_, p) => new AddressSelector(p.OfType<string>().FirstOrDefault()))
                 .AsImplementedInterfaces();
 
+            //builder.Register((_, p) => new TrackedDurationEvent(p.OfType<string>().FirstOrDefault))
+            builder.RegisterType<TrackedDurationEvent>()
+                .AsImplementedInterfaces();
+
             builder.RegisterType<ShipBillAddressEditorDlg>();
 
             builder.Register(c => Program.MainForm)
@@ -167,8 +172,6 @@ namespace ShipWorks.ApplicationCore
             builder.RegisterAssemblyTypes(allAssemblies)
                 .Where(x => x.IsAssignableTo<IInitializeForCurrentUISession>())
                 .AsImplementedInterfaces();
-
-            builder.Register((_, parameters) => LogManager.GetLogger(parameters.TypedAs<Type>()));
 
             ComponentAttribute.Register(builder, allAssemblies);
 
