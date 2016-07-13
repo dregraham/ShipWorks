@@ -50,11 +50,13 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
         /// <summary>
         /// Gets or sets the shipment map
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public OdbcFieldMapDisplay Shipment { get; set; }
 
         /// <summary>
         /// Gets or sets the shipment address map.
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public OdbcFieldMapDisplay ShipmentAddress { get; set; }
 
         /// <summary>
