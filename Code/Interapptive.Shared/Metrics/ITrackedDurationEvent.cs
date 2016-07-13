@@ -11,10 +11,5 @@ namespace Interapptive.Shared.Metrics
         /// Add a metric value to the event
         /// </summary>
         void AddMetric(string metricName, double metricValue);
-
-        /// <summary>
-        /// Dispose
-        /// </summary>
-        void Dispose();
     }
 }
