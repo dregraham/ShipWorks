@@ -19,10 +19,29 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             OdbcFieldMapDisplay order = values[0] as OdbcFieldMapDisplay;
             OdbcFieldMapDisplay address = values[1] as OdbcFieldMapDisplay;
             ObservableCollection<OdbcFieldMapDisplay> items = values[2] as ObservableCollection<OdbcFieldMapDisplay>;
+            OdbcFieldMapDisplay shipment = values[3] as OdbcFieldMapDisplay;
+            OdbcFieldMapDisplay shipmentAddress = values[4] as OdbcFieldMapDisplay;
 
-            ObservableCollection<OdbcFieldMapDisplay> maps = new ObservableCollection<OdbcFieldMapDisplay> { order, address };
+            ObservableCollection<OdbcFieldMapDisplay> maps;
 
-            items?.ToList().ForEach(maps.Add);
+            if (shipment == null)
+            {
+                maps = new ObservableCollection<OdbcFieldMapDisplay>
+                {
+                    order,
+                    address
+                };
+
+                items?.ToList().ForEach(maps.Add);
+            }
+            else
+            {
+                maps = new ObservableCollection<OdbcFieldMapDisplay>()
+                {
+                    shipment,
+                    shipmentAddress
+                };
+            }
 
             return maps;
         }

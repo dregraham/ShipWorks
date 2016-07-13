@@ -87,15 +87,14 @@
         </DataTemplate>
     </Control.Resources>
 
-    <Grid Margin="20 10 10 10">
+    <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
 
 
-        <Grid Grid.Row="1" Margin="0 0 0 5">
+        <Grid Grid.Row="0" Margin="20 10 10 5">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
@@ -196,6 +195,7 @@
             </Grid>
 
 
-        <wizardPages:OdbcMappingControl Grid.Row="2"></wizardPages:OdbcMappingControl>
+        <wizardPages:OdbcMappingControl Grid.Row="1"
+                                        Margin="10 0 0 0"></wizardPages:OdbcMappingControl>
     </Grid>
 </UserControl>

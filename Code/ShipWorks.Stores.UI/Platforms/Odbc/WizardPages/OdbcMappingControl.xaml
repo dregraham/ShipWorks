@@ -10,7 +10,6 @@
              xmlns:ui="http://schemas.shipworks.com/ui"
              xmlns:system="clr-namespace:System;assembly=mscorlib"
              xmlns:viewModels="clr-namespace:ShipWorks.Stores.UI.Platforms.Odbc.ViewModels"
-             d:DataContext="{d:DesignInstance viewModels:OdbcImportFieldMappingControlViewModel}"
              Width="Auto"
              Height="Auto"
              d:DesignHeight="500"
@@ -74,7 +73,7 @@
             </DataTemplate.Triggers>
         </DataTemplate>
     </Control.Resources>
-    <Grid>
+    <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
@@ -107,6 +106,8 @@
                     <Binding Path="Order" />
                     <Binding Path="Address" />
                     <Binding Path="Items" />
+                    <Binding Path="Shipment"/>
+                    <Binding Path="ShipmentAddress"/>
                     <Binding Path="Items.Count" UpdateSourceTrigger="PropertyChanged"/>
                 </MultiBinding>
             </ListBox.ItemsSource>

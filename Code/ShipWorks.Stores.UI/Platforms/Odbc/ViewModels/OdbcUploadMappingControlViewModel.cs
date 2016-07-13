@@ -126,13 +126,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
             mapEntries.AddRange(ShipmentAddress.Entries);
 
             OdbcFieldMap map = fieldMapFactory.CreateFieldMapFrom(mapEntries);
-
-            if (string.IsNullOrEmpty(map.RecordIdentifierSource))
-            {
-                // This should never happen. We check for validated fields before calling this...
-                throw new ShipWorksOdbcException("Cannot save a map without a record identifier.");
-            }
-
+            
             return map;
         }
 
