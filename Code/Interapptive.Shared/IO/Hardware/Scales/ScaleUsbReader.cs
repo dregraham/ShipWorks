@@ -10,6 +10,8 @@ namespace Interapptive.Shared.IO.Hardware.Scales
     /// </summary>
     class ScaleUsbReader
     {
+        const int ReportIDData = 3;
+        const int ReportIDStatus = 4;
         readonly ScaleReadResult scaleNotAttached = ScaleReadResult.NotFound("Could not find a USB scale attached to the computer.");
 
         // 2 and 4 are stable, 3 is moving
@@ -68,15 +70,26 @@ namespace Interapptive.Shared.IO.Hardware.Scales
         {
             try
             {
-                byte[] data = usbDevice.ReadInputReport();
+                byte[] data = null;
 
-                // Ensure its a scale usage report
-                if (data.Length != 6 || data[0] != 3)
+                do
                 {
-                    return ScaleReadResult.NotFound($"Unexpected data from USB scale: {data[0]}.");
+                    data = usbDevice.ReadInputReport();
+
+                    // Ensure the data is as large as we expect
+                    if (data?.Length != 6)
+                    {
+                        return ScaleReadResult.NotFound($"Unexpected data from USB scale: {data[0]}.");
+                    }
+                } while (data[0] == ReportIDStatus);
+
+                // Ensure it's a scale data input report
+                if (data[0] != ReportIDData)
+                {
+                    return ScaleReadResult.NoStatus();
                 }
 
-                // Per USB POS spec (pos1_02.pdf)
+                // Per USB POS spec (http://www.usb.org/developers/hidpage/pos1_02.pdf)
                 int scaleStatus = data[1];
                 int weightUnit = data[2];
                 int dataScaling = data[3];
@@ -92,7 +105,7 @@ namespace Interapptive.Shared.IO.Hardware.Scales
                 double scalingFactor = (dataScaling & 0x7F) - (dataScaling & 0x80);
 
                 // Calculate the actual value
-                double unitValue = Math.Pow(10, scalingFactor) * (Convert.ToDouble(weightLsb) + (Convert.ToDouble(weightMsb) * 256.0));
+                double unitValue = Math.Pow(10, scalingFactor) * (Convert.ToDouble(weightLsb) + (Convert.ToDouble(weightMsb) * 256));
 
                 // Now we need to convert based on units.  These come from the USB POS spec.  The spec does not explicitly state these numbers
                 // but lists them in the correct numerical order.
