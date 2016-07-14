@@ -155,9 +155,10 @@
                      Grid.Row="1"
                      Margin="0 5 0 5"
                      AcceptsReturn="True"
-                     Text="{Binding CustomQuery, UpdateSourceTrigger=LostFocus}"
-                     ui:EntityFieldLength.FieldName="OdbcStoreCustomQuery" 
-                     TextWrapping="Wrap" />
+                     Text="{Binding CustomQuery,
+                                    UpdateSourceTrigger=LostFocus}"
+                     TextWrapping="Wrap"
+                     ui:EntityFieldLength.FieldName="OdbcStoreCustomQuery" />
             <Label Grid.Row="2"
                    HorizontalAlignment="Left"
                    VerticalAlignment="Center"

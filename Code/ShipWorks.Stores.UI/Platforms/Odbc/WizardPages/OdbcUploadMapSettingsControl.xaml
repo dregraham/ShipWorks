@@ -140,9 +140,12 @@
                      Grid.Row="1"
                      Margin="0 5 0 5"
                      AcceptsReturn="True"
-                     ui:EntityFieldLength.FieldName="OdbcStoreCustomQuery" 
-                     Text="{Binding CustomQuery, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=true, NotifyOnValidationError=true}"
-                     TextWrapping="Wrap" />
+                     Text="{Binding CustomQuery,
+                                    UpdateSourceTrigger=LostFocus,
+                                    ValidatesOnDataErrors=true,
+                                    NotifyOnValidationError=true}"
+                     TextWrapping="Wrap"
+                     ui:EntityFieldLength.FieldName="OdbcStoreCustomQuery" />
         </Grid>
     </Grid>
 </UserControl>

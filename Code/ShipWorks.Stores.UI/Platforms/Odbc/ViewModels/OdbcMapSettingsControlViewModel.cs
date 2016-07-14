@@ -4,14 +4,10 @@ using System.ComponentModel;
 using System.Data;
 using System.Reflection;
 using System.Windows.Input;
-using GalaSoft.MvvmLight.Command;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
-using log4net;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores.Platforms.Odbc;
-using ShipWorks.Stores.Platforms.Odbc.DataAccess;
 using ShipWorks.Stores.Platforms.Odbc.DataSource;
 using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 
@@ -20,34 +16,26 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
     public abstract class OdbcMapSettingsControlViewModel : IOdbcMapSettingsControlViewModel
     {
         private const string CustomQueryColumnSourceName = "Custom Import";
-        private readonly IOdbcSampleDataCommand sampleDataCommand;
         private string mapName = string.Empty;
         private IOdbcColumnSource selectedTable;
         private IEnumerable<IOdbcColumnSource> tables;
         private DataTable queryResults;
         private string resultMessage;
-        private const int NumberOfSampleResults = 25;
         private IOdbcColumnSource columnSource;
         private IOdbcColumnSource customQueryColumnSource;
-        private readonly ILog log;
-        private readonly IMessageHelper messageHelper;
-        private bool isQueryValid;
         private string customQuery;
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected readonly PropertyChangedHandler Handler;
+        protected readonly IMessageHelper MessageHelper;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcImportMapSettingsControlViewModel"/> class.
         /// </summary>
-        protected OdbcMapSettingsControlViewModel(IOdbcSampleDataCommand sampleDataCommand, Func<Type, ILog> logFactory,
-            IMessageHelper messageHelper, Func<string, IOdbcColumnSource> columnSourceFactory)
+        protected OdbcMapSettingsControlViewModel(IMessageHelper messageHelper, Func<string, IOdbcColumnSource> columnSourceFactory)
         {
-            this.sampleDataCommand = sampleDataCommand;
-            this.messageHelper = messageHelper;
-            ExecuteQueryCommand = new RelayCommand(ExecuteQuery);
+            MessageHelper = messageHelper;
             customQueryColumnSource = columnSourceFactory(CustomQueryColumnSourceName);
-            log = logFactory(typeof(OdbcImportFieldMappingControlViewModel));
 
             Handler = new PropertyChangedHandler(this, () => PropertyChanged);
         }
@@ -179,59 +167,21 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
         /// <summary>
         /// Validates the required map settings.
         /// </summary>
-        public bool ValidateRequiredMapSettings()
+        public virtual bool ValidateRequiredMapSettings()
         {
             if (ColumnSourceIsTable && SelectedTable == null)
             {
-                messageHelper.ShowError("Please select a table before continuing to the next page.");
+                MessageHelper.ShowError("Please select a table before continuing to the next page.");
                 return false;
             }
 
             if (!ColumnSourceIsTable && string.IsNullOrWhiteSpace(CustomQuery))
             {
-                messageHelper.ShowError("Please enter a valid query before continuing to the next page.");
+                MessageHelper.ShowError("Please enter a valid query before continuing to the next page.");
                 return false;
             }
 
-            if (!ColumnSourceIsTable)
-            {
-                ExecuteQuery();
-
-                if (!isQueryValid)
-                {
-                    messageHelper.ShowError("Please enter a valid query before continuing to the next page.");
-                    return false;
-                }
-            }
-
             return true;
-        }
-
-        /// <summary>
-        /// Executes the query.
-        /// </summary>
-        private void ExecuteQuery()
-        {
-            QueryResults = null;
-            ResultMessage = string.Empty;
-
-            try
-            {
-                QueryResults = sampleDataCommand.Execute(DataSource, CustomQuery, NumberOfSampleResults);
-
-                if (QueryResults.Rows.Count == 0)
-                {
-                    ResultMessage = "Query returned no results";
-                }
-
-                isQueryValid = true;
-            }
-            catch (ShipWorksOdbcException ex)
-            {
-                log.Error(ex.Message);
-                messageHelper.ShowError(ex.Message);
-                isQueryValid = false;
-            }
         }
 
         /// <summary>

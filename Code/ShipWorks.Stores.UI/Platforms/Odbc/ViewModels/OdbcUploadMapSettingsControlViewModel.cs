@@ -1,8 +1,6 @@
 ﻿using System;
 using Interapptive.Shared.UI;
-using log4net;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores.Platforms.Odbc.DataAccess;
 using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 using System.Reflection;
 
@@ -20,13 +18,11 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
         /// Initializes a new instance of the <see cref="OdbcUploadMapSettingsControlViewModel"/> class.
         /// </summary>
         /// <param name="dialogFactory">The dialog factory.</param>
-        /// <param name="sampleDataCommand">The sample data command.</param>
-        /// <param name="logFactory">The log factory.</param>
         /// <param name="messageHelper">The message helper.</param>
         /// <param name="columnSourceFactory">The column source factory.</param>
-        public OdbcUploadMapSettingsControlViewModel(Func<string, IDialog> dialogFactory, IOdbcSampleDataCommand sampleDataCommand,
-            Func<Type, ILog> logFactory, IMessageHelper messageHelper, Func<string, IOdbcColumnSource> columnSourceFactory) :
-            base(sampleDataCommand, logFactory, messageHelper, columnSourceFactory)
+        public OdbcUploadMapSettingsControlViewModel(Func<string, IDialog> dialogFactory, IMessageHelper messageHelper,
+            Func<string, IOdbcColumnSource> columnSourceFactory) :
+                base(messageHelper, columnSourceFactory)
         {
             this.dialogFactory = dialogFactory;
         }
