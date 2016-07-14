@@ -185,11 +185,13 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
             return new List<ShipWorksOdbcMappableField>
             {
                 new ShipWorksOdbcMappableField(OrderFields.OrderNumber, OdbcOrderFieldDescription.Number, true),
-                new ShipWorksOdbcMappableField(ShipmentFields.TrackingNumber, "Tracking Number", true),
-                new ShipWorksOdbcMappableField(ShipmentFields.ShipDate, "Ship Date"),
-                new ShipWorksOdbcMappableField(ShipmentFields.ShipmentType, "Provider"),
-                new ShipWorksOdbcMappableField(OrderFields.LocalStatus, OdbcOrderFieldDescription.LocalStatus)
-                // Todo: Still need to add Service, Packaging, # of Packages, Length, Width, Height, Weight, Shipping Cost,
+                new ShipWorksOdbcMappableField(ShipmentFields.TrackingNumber, OdbcShipmentFieldDescription.TrackingNumber, true),
+                new ShipWorksOdbcMappableField(ShipmentFields.ShipDate, OdbcShipmentFieldDescription.ShipDate),
+                new ShipWorksOdbcMappableField(ShipmentFields.ShipmentType, OdbcShipmentFieldDescription.Provider),
+                new ShipWorksOdbcMappableField(OrderFields.LocalStatus, OdbcOrderFieldDescription.LocalStatus),
+                new ShipWorksOdbcMappableField(ShipmentFields.TotalWeight, OdbcShipmentFieldDescription.TotalWeight),
+                new ShipWorksOdbcMappableField(ShipmentFields.ShipmentCost, OdbcShipmentFieldDescription.ShipmentCost)
+                // Todo: Still need to add Service, Packaging, # of Packages, Length, Width, Height,
                 // Todo: Insured Value & Insurance Fee
             };
         }
@@ -202,6 +204,9 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
             return CreateEmptyMap(CreateShipToAddressFields());
         }
 
+        /// <summary>
+        /// Creates the ship to address fields.
+        /// </summary>
         private IEnumerable<ShipWorksOdbcMappableField> CreateShipToAddressFields()
         {
             return new List<ShipWorksOdbcMappableField>
