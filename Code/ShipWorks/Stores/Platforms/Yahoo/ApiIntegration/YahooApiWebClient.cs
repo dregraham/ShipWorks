@@ -119,7 +119,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         /// <param name="itemID">The Yahoo Item ID</param>
         public YahooResponse GetItem(string itemID)
         {
-            log.Info("Building item request.");
+            log.Debug("Building item request.");
             string body = RequestBodyIntro + GetRequestBodyIntro +
                           "<CatalogQuery>" +
                           "<ItemQueryList>" +
@@ -208,7 +208,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         /// <param name="xmlBody">The XML body.</param>
         private HttpTextPostRequestSubmitter CreateCatalogRequestSubmitter(string xmlBody)
         {
-            log.Info("Creating catalog request submitter.");
+            log.Debug("Creating catalog request submitter.");
             HttpTextPostRequestSubmitter submitter = new HttpTextPostRequestSubmitter(xmlBody, "xml")
             {
                 Verb = HttpVerb.Post,
@@ -266,11 +266,11 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
                 ApiLogEntry logEntry = new ApiLogEntry(ApiLogSource.Yahoo, action);
                 logEntry.LogRequest(submitter);
 
-                log.Info("Submitting request.");
+                log.Debug("Submitting request.");
 
                 using (IHttpResponseReader reader = submitter.GetResponse())
                 {
-                    log.Info("Reading response.");
+                    log.Debug("Reading response.");
                     string responseData = reader.ReadResult();
                     logEntry.LogResponse(responseData, "txt");
 
