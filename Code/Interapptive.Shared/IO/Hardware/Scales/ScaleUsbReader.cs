@@ -90,6 +90,7 @@ namespace Interapptive.Shared.IO.Hardware.Scales
                 }
 
                 // Per USB POS spec (http://www.usb.org/developers/hidpage/pos1_02.pdf)
+                // Byte 1 == Scale Status (1 == Fault, 2 == Stable @ 0, 3 == In Motion, 4 == Stable, 5 == Under 0, 6 == Over Weight, 7 == Requires Calibration, 8 == Requires Re-Zeroing)
                 int scaleStatus = data[1];
                 int weightUnit = data[2];
                 int dataScaling = data[3];
