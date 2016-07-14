@@ -1,5 +1,6 @@
 ﻿using System;
 using Interapptive.Shared.Security;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Administration;
 
 namespace ShipWorks.ApplicationCore.Security
@@ -39,7 +40,7 @@ namespace ShipWorks.ApplicationCore.Security
                 string decryptedResult = base.Decrypt(encryptedText);
                 return decryptedResult == EmptyValue ? string.Empty : decryptedResult;
             }
-            catch (EncryptionException ex) when (ex.Message == "Could not find stored procedure 'GetDatabaseGuid'.")
+            catch (EncryptionException ex) when (ex.InnerException.InnerException is DatabaseIdentifierException)
             {
                 // If we cannot find the GetDatabaseGuid check to see if an upgrade is required
                 // if an upgrade is required then we know that the new database does not have the
