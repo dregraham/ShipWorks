@@ -3,23 +3,29 @@ using Interapptive.Shared.Security;
 using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore.Security;
 using ShipWorks.Stores.Platforms.Odbc;
-using ShipWorks.Stores.Platforms.Odbc.Loaders;
-using ShipWorks.Stores.Platforms.Odbc.Mapping;
-using ShipWorks.Stores.UI.Platforms.Odbc.WizardPages;
-using System.Reflection;
 using ShipWorks.Stores.Platforms.Odbc.DataAccess;
 using ShipWorks.Stores.Platforms.Odbc.DataSource;
 using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 using ShipWorks.Stores.Platforms.Odbc.Download;
+using ShipWorks.Stores.Platforms.Odbc.Loaders;
+using ShipWorks.Stores.Platforms.Odbc.Mapping;
 using ShipWorks.Stores.UI.Platforms.Odbc.ViewModels;
+using ShipWorks.Stores.UI.Platforms.Odbc.WizardPages;
+using System.Reflection;
 using Module = Autofac.Module;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc
 {
     public class OdbcStoreModule : Module
     {
+        /// <summary>
+        /// Override to add registrations to the container.
+        /// </summary>
         protected override void Load(ContainerBuilder builder)
         {
+            RegisterOrderLoadingTypes(builder);
+            RegisterFieldMapClasses(builder);
+
             builder.RegisterType<OdbcStoreType>()
                 .Keyed<StoreType>(StoreTypeCode.Odbc)
                 .ExternallyOwned();
@@ -44,12 +50,6 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             builder.RegisterType<OdbcCipherKey>()
                 .Keyed<ICipherKey>(CipherContext.Odbc);
 
-            builder.RegisterType<OdbcColumnSource>()
-                .AsImplementedInterfaces();
-
-            builder.RegisterType<WizardPages.OdbcImportFieldMappingControl>()
-                .AsSelf();
-
             builder.RegisterType<OdbcImportMapSettingsControlViewModel>()
                 .Keyed<IOdbcMapSettingsControlViewModel>("Import");
 
@@ -62,6 +62,30 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             builder.RegisterType<OdbcUploadMappingControlViewModel>()
                 .AsImplementedInterfaces();
 
+            builder.RegisterType<OdbcSchema>()
+                .AsImplementedInterfaces();
+
+            builder.RegisterType<OdbcDownloadCommand>();
+
+            builder.RegisterType<OdbcStoreDownloader>();
+
+            builder.RegisterType<OdbcCommandFactory>();
+
+            builder.RegisterType<OdbcSampleDataCommand>()
+                .AsImplementedInterfaces();
+
+            builder.RegisterType<OdbcCustomQueryWarningDlg>()
+                .Named<IDialog>("OdbcCustomQueryWarningDlg");
+
+            builder.RegisterType<OdbcColumnSource>()
+                .AsImplementedInterfaces();
+        }
+
+        /// <summary>
+        /// Registers the field map classes.
+        /// </summary>
+        private static void RegisterFieldMapClasses(ContainerBuilder builder)
+        {
             builder.RegisterType<OdbcFieldMapFactory>()
                 .AsImplementedInterfaces();
 
@@ -71,9 +95,25 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             builder.RegisterType<JsonOdbcFieldMapIOFactory>()
                 .AsImplementedInterfaces();
 
+            RegisterWizardPages(builder);
+
+            builder.RegisterType<JsonOdbcFieldMapReader>()
+                .AsImplementedInterfaces()
+                .AsSelf();
+
+            builder.RegisterType<JsonOdbcFieldMapWriter>()
+                .AsImplementedInterfaces()
+                .AsSelf();
+        }
+
+        /// <summary>
+        /// Registers the wizard pages.
+        /// </summary>
+        private static void RegisterWizardPages(ContainerBuilder builder)
+        {
             builder.RegisterType<OdbcDataSourcePage>()
-                .As<IOdbcWizardPage>()
-                .ExternallyOwned();
+                            .As<IOdbcWizardPage>()
+                            .ExternallyOwned();
 
             builder.RegisterType<OdbcImportMapSettingsPage>()
                 .As<IOdbcWizardPage>()
@@ -94,34 +134,6 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             builder.RegisterType<OdbcUploadMappingPage>()
                 .As<IOdbcWizardPage>()
                 .ExternallyOwned();
-
-            builder.RegisterType<JsonOdbcFieldMapReader>()
-                .AsImplementedInterfaces()
-                .AsSelf();
-
-            builder.RegisterType<JsonOdbcFieldMapWriter>()
-                .AsImplementedInterfaces()
-                .AsSelf();
-
-            builder.RegisterType<OdbcSchema>()
-                .AsImplementedInterfaces();
-
-            builder.RegisterType<OdbcDownloadCommand>();
-
-            builder.RegisterType<OdbcStoreDownloader>();
-
-            builder.RegisterType<OdbcCommandFactory>();
-
-            builder.RegisterType<OdbcSampleDataCommand>()
-                .AsImplementedInterfaces();
-
-            builder.RegisterType<OdbcCustomQueryWarningDlg>()
-                .Named<IDialog>("OdbcCustomQueryWarningDlg");
-
-            builder.RegisterType<OdbcColumnSource>()
-                .AsImplementedInterfaces();
-
-            RegisterOrderLoadingTypes(builder);
         }
 
         /// <summary>
