@@ -42,12 +42,12 @@
             this.elementHost1.Text = "elementHost1";
             this.elementHost1.Child = this.mapSettingsControl;
             //
-            // OdbcImportMapSettingsPage
+            // OdbcUploadMapSettingsPage
             //
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.elementHost1);
-            this.Name = "OdbcImportMapSettingsPage";
+            this.Name = "OdbcUploadMapSettingsPage";
             this.Size = new System.Drawing.Size(540, 500);
             this.ResumeLayout(false);
 

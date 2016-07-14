@@ -11,7 +11,7 @@
              Background="{x:Static SystemColors.ControlBrush}"
              FontFamily="Tahoma"
              FontSize="8.25pt"
-             d:DataContext="{d:DesignInstance viewModels:OdbcImportMapSettingsControlViewModel}"
+             d:DataContext="{d:DesignInstance viewModels:OdbcUploadMapSettingsControlViewModel}"
              mc:Ignorable="d">
     <Control.Resources>
         <Style TargetType="{x:Type Label}">
@@ -135,7 +135,7 @@
             </Grid.RowDefinitions>
             <Label Grid.Row="0"
                    Margin="0 5 0 5"
-                   Content="Your query for custom import" />
+                   Content="Your query for custom upload:" />
             <TextBox x:Name="Query"
                      Grid.Row="1"
                      Margin="0 5 0 5"

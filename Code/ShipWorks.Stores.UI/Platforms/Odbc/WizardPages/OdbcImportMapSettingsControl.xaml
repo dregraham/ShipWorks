@@ -150,7 +150,7 @@
             </Grid.RowDefinitions>
             <Label Grid.Row="0"
                    Margin="0 5 0 5"
-                   Content="Your query for custom import" />
+                   Content="Your query for custom import:" />
             <TextBox x:Name="Query"
                      Grid.Row="1"
                      Margin="0 5 0 5"
