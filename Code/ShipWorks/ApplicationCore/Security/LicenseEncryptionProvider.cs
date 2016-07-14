@@ -10,16 +10,18 @@ namespace ShipWorks.ApplicationCore.Security
     /// </summary>
     public class LicenseEncryptionProvider : AesEncryptionProvider
     {
+        private readonly ISqlSchemaVersion sqlSchemaVersion;
         private const string EmptyValue = "ShipWorks legacy user";
-        private readonly bool isCustomerLicenseSupported;
+        private bool isCustomerLicenseSupported;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LicenseEncryptionProvider"/> class.
         /// </summary>
-        public LicenseEncryptionProvider(ICipherKey cipherKey, bool isCustomerLicenseSupported)
+        public LicenseEncryptionProvider(ICipherKey cipherKey, ISqlSchemaVersion sqlSchemaVersion)
             : base(cipherKey)
         {
-            this.isCustomerLicenseSupported = isCustomerLicenseSupported;
+            this.sqlSchemaVersion = sqlSchemaVersion;
+            isCustomerLicenseSupported = sqlSchemaVersion.IsCustomerLicenseSupported();
         }
 
         /// <summary>
@@ -42,10 +44,13 @@ namespace ShipWorks.ApplicationCore.Security
             }
             catch (EncryptionException ex) when (ex.InnerException.InnerException is DatabaseIdentifierException)
             {
-                // If we cannot find the GetDatabaseGuid check to see if an upgrade is required
-                // if an upgrade is required then we know that the new database does not have the
-                // GetDatabaseGuid because it is of a schema version older than webreg, return empty string
-                if (SqlSchemaUpdater.IsUpgradeRequired())
+                // refresh isCustomerLicenseSupported as we may have restored the database to a version
+                // that does not support customer licenses yet, the database is in a state where it needs
+                // to be upgraded
+                isCustomerLicenseSupported = sqlSchemaVersion.IsCustomerLicenseSupported();
+
+                // if the database does not yet support customer licenses return an empty string
+                if (!isCustomerLicenseSupported)
                 {
                     return string.Empty;
                 }
