@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
+﻿using System.Reflection;
 
 namespace ShipWorks.Data.Utility
 {
@@ -168,5 +164,7 @@ namespace ShipWorks.Data.Utility
         AmazonShipmentShippingServiceName,
         AmazonShipmentShippingServiceID,
         AmazonShipmentShippingServiceOfferID,
+
+        OdbcStoreCustomQuery
     }
 }

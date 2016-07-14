@@ -140,32 +140,9 @@
                      Grid.Row="1"
                      Margin="0 5 0 5"
                      AcceptsReturn="True"
-                     Text="{Binding CustomQuery,
-                                    UpdateSourceTrigger=LostFocus}"
+                     ui:EntityFieldLength.FieldName="OdbcStoreCustomQuery" 
+                     Text="{Binding CustomQuery, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=true, NotifyOnValidationError=true}"
                      TextWrapping="Wrap" />
-            <Label Grid.Row="2"
-                   HorizontalAlignment="Left"
-                   VerticalAlignment="Center"
-                   Content="Query Results (Top 25)" />
-            <Button Grid.Row="2"
-                    HorizontalAlignment="Right"
-                    Command="{Binding ExecuteQueryCommand}"
-                    Content="Execute Query" />
-            <Grid Grid.Row="3" Margin="0 5 0 0">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-                <DataGrid Grid.Row="0"
-                          IsReadOnly="True"
-                          ItemsSource="{Binding QueryResults,
-                                                UpdateSourceTrigger=PropertyChanged}" />
-                <Label Grid.Row="1"
-                       Content="{Binding ResultMessage,
-                                         UpdateSourceTrigger=PropertyChanged}"
-                       Visibility="{Binding ResultMessage,
-                                            Converter={StaticResource StringToVisibilityConverter}}" />
-            </Grid>
         </Grid>
     </Grid>
 </UserControl>
