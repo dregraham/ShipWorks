@@ -7,6 +7,7 @@ using ShipWorks.ApplicationCore.Security;
 using System;
 using System.IO;
 using System.Text;
+using ShipWorks.Data.Administration;
 using Xunit;
 
 #endregion
@@ -112,7 +113,7 @@ namespace ShipWorks.Tests.ApplicationCore.Security
                 Assert.Equal(string.Empty, decryptedText);
             }
         }
-        
+
         [Fact]
         public void Encrypt_ReturnsEncryptedStream_WhenGivenDecryptedStream()
         {
@@ -194,7 +195,7 @@ namespace ShipWorks.Tests.ApplicationCore.Security
                 Assert.Equal(string.Empty, decryptedText);
             }
         }
-        
+
         private MemoryStream GetStream(string text)
         {
             byte[] byteArray = Encoding.ASCII.GetBytes(text);
@@ -214,13 +215,14 @@ namespace ShipWorks.Tests.ApplicationCore.Security
         private LicenseEncryptionProvider GetLicenseEncryptionProvider(AutoMock mock,
             bool isCustomerLicenseSupported)
         {
-            var booleanParameter = new TypedParameter(typeof(bool), isCustomerLicenseSupported);
+            var sqlSchemaVersion = mock.Mock<ISqlSchemaVersion>();
+            sqlSchemaVersion.Setup(s => s.IsCustomerLicenseSupported()).Returns(isCustomerLicenseSupported);
 
             var cipher = mock.Mock<ICipherKey>();
             cipher.SetupGet(c => c.Key).Returns(key.ToByteArray());
             cipher.SetupGet(c => c.InitializationVector).Returns(iv);
 
-            return mock.Create<LicenseEncryptionProvider>(booleanParameter);
+            return mock.Create<LicenseEncryptionProvider>();
         }
     }
 }
