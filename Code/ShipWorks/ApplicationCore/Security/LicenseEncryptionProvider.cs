@@ -1,4 +1,6 @@
-﻿using Interapptive.Shared.Security;
+﻿using System;
+using Interapptive.Shared.Security;
+using ShipWorks.Data.Administration;
 
 namespace ShipWorks.ApplicationCore.Security
 {
@@ -13,12 +15,12 @@ namespace ShipWorks.ApplicationCore.Security
         /// <summary>
         /// Initializes a new instance of the <see cref="LicenseEncryptionProvider"/> class.
         /// </summary>
-        public LicenseEncryptionProvider(ICipherKey cipherKey, bool isCustomerLicenseSupported) 
+        public LicenseEncryptionProvider(ICipherKey cipherKey, bool isCustomerLicenseSupported)
             : base(cipherKey)
         {
             this.isCustomerLicenseSupported = isCustomerLicenseSupported;
         }
-        
+
         /// <summary>
         /// Gets the decrypted string
         /// </summary>
@@ -32,8 +34,23 @@ namespace ShipWorks.ApplicationCore.Security
                 return string.Empty;
             }
 
-            string decryptedResult = base.Decrypt(encryptedText);
-            return decryptedResult == EmptyValue ? string.Empty : decryptedResult;
+            try
+            {
+                string decryptedResult = base.Decrypt(encryptedText);
+                return decryptedResult == EmptyValue ? string.Empty : decryptedResult;
+            }
+            catch (EncryptionException ex) when (ex.Message == "Could not find stored procedure 'GetDatabaseGuid'.")
+            {
+                // If we cannot find the GetDatabaseGuid check to see if an upgrade is required
+                // if an upgrade is required then we know that the new database does not have the
+                // GetDatabaseGuid because it is of a schema version older than webreg, return empty string
+                if (SqlSchemaUpdater.IsUpgradeRequired())
+                {
+                    return string.Empty;
+                }
+
+                throw;
+            }
         }
 
         /// <summary>
