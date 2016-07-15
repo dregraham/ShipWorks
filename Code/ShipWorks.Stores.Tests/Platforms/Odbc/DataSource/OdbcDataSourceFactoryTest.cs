@@ -1,8 +1,8 @@
-﻿using System;
-using Autofac.Extras.Moq;
+﻿using Autofac.Extras.Moq;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Odbc.DataSource;
+using System;
 using Xunit;
 
 namespace ShipWorks.Stores.Tests.Platforms.Odbc.DataSource
@@ -30,14 +30,14 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.DataSource
         [Fact]
         public void CreateImportDataSource_CallsRestoreOnDataSourceWithStoreConnectionString()
         {
-            var store = new OdbcStoreEntity() {ConnectionString = "foobarbaz"};
+            var store = new OdbcStoreEntity() {ImportConnectionString = "foobarbaz"};
 
             Mock<IOdbcDataSource> dataSource = mock.Mock<IOdbcDataSource>();
             OdbcDataSourceFactory testObject = mock.Create<OdbcDataSourceFactory>();
 
             testObject.CreateImportDataSource(store);
 
-            dataSource.Verify(d => d.Restore(store.ConnectionString));
+            dataSource.Verify(d => d.Restore(store.ImportConnectionString));
         }
 
         public void Dispose()
