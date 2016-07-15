@@ -169,6 +169,8 @@
     <Compile Include="Platforms\LemonStand\LemonStandStatusCodeProvider.cs" />
     <Compile Include="Platforms\LemonStand\LemonStandStoreType.cs" />
     <Compile Include="Platforms\LemonStand\LemonStandWebClient.cs" />
+    <Compile Include="Platforms\Odbc\DataSource\IOdbcDataSourceFactory.cs" />
+    <Compile Include="Platforms\Odbc\DataSource\OdbcDataSourceFactory.cs" />
     <Compile Include="Platforms\Odbc\DataSource\Schema\OdbcColumnSourceType.cs" />
     <Compile Include="Platforms\Odbc\Download\CustomQueryOdbcDownloadQuery.cs" />
     <Compile Include="Platforms\Odbc\EncryptedOdbcDataSource.cs" />

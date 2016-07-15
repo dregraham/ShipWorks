@@ -79,6 +79,9 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
 
             builder.RegisterType<OdbcColumnSource>()
                 .AsImplementedInterfaces();
+
+            builder.RegisterType<OdbcDataSourceFactory>()
+                .AsImplementedInterfaces();
         }
 
         /// <summary>
