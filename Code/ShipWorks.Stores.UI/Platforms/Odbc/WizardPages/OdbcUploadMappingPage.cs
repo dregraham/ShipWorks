@@ -37,7 +37,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
         /// <summary>
         /// Gets the position.
         /// </summary>
-        public int Position => 5;
+        public int Position => 6;
 
         /// <summary>
         /// Save the map to the ODBC Store

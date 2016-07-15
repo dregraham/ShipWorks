@@ -12,6 +12,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcFieldMapDisplay"/> class.
         /// </summary>
+
         public OdbcFieldMapDisplay(string displayName, IOdbcFieldMap map)
         {
             DisplayName = displayName;
