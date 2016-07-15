@@ -79,7 +79,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
             if (string.IsNullOrWhiteSpace(previousColumnSource) ||
                 !previousColumnSource.Equals(currentColumnSource, StringComparison.Ordinal))
             {
-                IOdbcDataSource selectedDataSource = dataSourceFactory.CreateImportDataSource(store);
+                IOdbcDataSource selectedDataSource = dataSourceFactory.CreateUploadDataSource(store);
 
                 IOdbcColumnSource columnSource = columnSourceFactory(currentColumnSource);
 
