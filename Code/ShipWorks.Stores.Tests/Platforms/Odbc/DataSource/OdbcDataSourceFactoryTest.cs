@@ -15,7 +15,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.DataSource
         [Fact]
         public void CreateImportDataSource_ThrowsArgumentNullException_WhenStoreIsNull()
         {
-            OdbcDataSourceFactory testObject = mock.Create<OdbcDataSourceFactory>();
+            OdbcDataSourceService testObject = mock.Create<OdbcDataSourceService>();
 
             Assert.Throws<ArgumentNullException>(() => testObject.CreateImportDataSource(null));
         }
@@ -23,7 +23,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.DataSource
         [Fact]
         public void CreateUploadDataSource_ThrowsArgumentNullException_WhenStoreIsNull()
         {
-            OdbcDataSourceFactory testObject = mock.Create<OdbcDataSourceFactory>();
+            OdbcDataSourceService testObject = mock.Create<OdbcDataSourceService>();
 
             Assert.Throws<ArgumentNullException>(() => testObject.CreateUploadDataSource(null));
         }
@@ -34,7 +34,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.DataSource
             OdbcStoreEntity store = new OdbcStoreEntity() {ImportConnectionString = "foobarbaz"};
 
             Mock<IOdbcDataSource> dataSource = mock.Mock<IOdbcDataSource>();
-            OdbcDataSourceFactory testObject = mock.Create<OdbcDataSourceFactory>();
+            OdbcDataSourceService testObject = mock.Create<OdbcDataSourceService>();
 
             testObject.CreateImportDataSource(store);
 
@@ -47,7 +47,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.DataSource
             OdbcStoreEntity store = new OdbcStoreEntity() { UploadConnectionString = "foobarbaz", UploadStrategy = (int) OdbcShipmentUploadStrategy.UseShipmentDataSource};
 
             Mock<IOdbcDataSource> dataSource = mock.Mock<IOdbcDataSource>();
-            OdbcDataSourceFactory testObject = mock.Create<OdbcDataSourceFactory>();
+            OdbcDataSourceService testObject = mock.Create<OdbcDataSourceService>();
 
             testObject.CreateUploadDataSource(store);
 
@@ -59,7 +59,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.DataSource
         {
             OdbcStoreEntity store = new OdbcStoreEntity() { UploadConnectionString = "foobarbaz", UploadStrategy = (int) OdbcShipmentUploadStrategy.DoNotUpload};
 
-            OdbcDataSourceFactory testObject = mock.Create<OdbcDataSourceFactory>();
+            OdbcDataSourceService testObject = mock.Create<OdbcDataSourceService>();
             IOdbcDataSource source = testObject.CreateUploadDataSource(store);
 
             Assert.Null(source);

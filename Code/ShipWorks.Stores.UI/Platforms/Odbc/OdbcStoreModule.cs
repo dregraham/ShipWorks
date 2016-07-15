@@ -80,7 +80,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             builder.RegisterType<OdbcColumnSource>()
                 .AsImplementedInterfaces();
 
-            builder.RegisterType<OdbcDataSourceFactory>()
+            builder.RegisterType<OdbcDataSourceService>()
                 .AsImplementedInterfaces();
         }
 

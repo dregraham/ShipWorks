@@ -1,6 +1,7 @@
 ﻿using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using System;
+using System.Collections.Generic;
 using ShipWorks.Stores.Platforms.Odbc.Upload;
 
 namespace ShipWorks.Stores.Platforms.Odbc.DataSource
@@ -8,17 +9,25 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataSource
     /// <summary>
     /// Factory for creating datasource
     /// </summary>
-    public class OdbcDataSourceFactory : IOdbcDataSourceFactory
+    public class OdbcDataSourceService : IOdbcDataSourceService
     {
         private readonly Func<IOdbcDataSource> dataSourceFactory;
+        private readonly IOdbcDataSourceRepository dataSourceRepository;
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="dataSourceFactory"></param>
-        public OdbcDataSourceFactory(Func<IOdbcDataSource> dataSourceFactory)
+        /// <param name="dataSourceRepository"></param>
+        public OdbcDataSourceService(Func<IOdbcDataSource> dataSourceFactory, IOdbcDataSourceRepository dataSourceRepository)
         {
             this.dataSourceFactory = dataSourceFactory;
+            this.dataSourceRepository = dataSourceRepository;
+        }
+
+        public IEnumerable<IOdbcDataSource> GetDataSources()
+        {
+            return dataSourceRepository.GetDataSources();
         }
 
         /// <summary>

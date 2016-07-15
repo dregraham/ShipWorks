@@ -185,8 +185,8 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             {
                 try
                 {
-                    IOdbcDataSourceRepository repo = scope.Resolve<IOdbcDataSourceRepository>();
-                    genericResult = GenericResult.FromSuccess(repo.GetDataSources().ToList());
+                    IOdbcDataSourceService dataSourceService = scope.Resolve<IOdbcDataSourceService>();
+                    genericResult = GenericResult.FromSuccess(dataSourceService.GetDataSources().ToList());
                 }
                 catch (DataException ex)
                 {

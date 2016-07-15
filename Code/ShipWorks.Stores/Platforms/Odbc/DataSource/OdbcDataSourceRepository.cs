@@ -11,7 +11,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataSource
     public class OdbcDataSourceRepository : IOdbcDataSourceRepository
     {
         private readonly IDsnProvider dsnProvider;
-        private readonly IOdbcDataSourceFactory odbcDataSourceFactory;
+        private readonly IOdbcDataSourceService odbcDataSourceService;
         private readonly ILog log;
 
         /// <summary>
@@ -19,13 +19,13 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataSource
         /// </summary>
         public OdbcDataSourceRepository(
             IDsnProvider dsnProvider,
-            IOdbcDataSourceFactory odbcDataSourceFactory,
+            IOdbcDataSourceService odbcDataSourceService,
             Func<Type, ILog> logFactory)
         {
             log = logFactory(typeof(OdbcDataSourceRepository));
 
             this.dsnProvider = dsnProvider;
-            this.odbcDataSourceFactory = odbcDataSourceFactory;
+            this.odbcDataSourceService = odbcDataSourceService;
         }
 
         /// <summary>
@@ -45,7 +45,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataSource
                 {
                     // Create a new data source and call change connection to
                     // initialize the data source to the data source name
-                    IOdbcDataSource dataSource = odbcDataSourceFactory.CreateEmptyDataSource();
+                    IOdbcDataSource dataSource = odbcDataSourceService.CreateEmptyDataSource();
                     dataSource.ChangeConnection(dataSourceName, string.Empty, string.Empty);
 
                     // Add the data source to the collection
@@ -69,7 +69,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataSource
         /// </summary>
         private IOdbcDataSource CreateEmptyCustomDataSource()
         {
-            IOdbcDataSource dataSource = odbcDataSourceFactory.CreateEmptyDataSource();
+            IOdbcDataSource dataSource = odbcDataSourceService.CreateEmptyDataSource();
             dataSource.ChangeConnection(string.Empty);
             return dataSource;
         }
