@@ -1666,11 +1666,14 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			base.AddElementFieldInfo("OdbcStoreEntity", "StoreID", typeof(System.Int64), true, false, false, false,  (int)OdbcStoreFieldIndex.StoreID, 0, 0, 19);
 			base.AddElementFieldInfo("OdbcStoreEntity", "ConnectionString", typeof(System.String), false, false, false, false,  (int)OdbcStoreFieldIndex.ConnectionString, 2048, 0, 0);
-			base.AddElementFieldInfo("OdbcStoreEntity", "Map", typeof(System.String), false, false, false, false,  (int)OdbcStoreFieldIndex.Map, 2147483647, 0, 0);
-			base.AddElementFieldInfo("OdbcStoreEntity", "OdbcDownloadStrategy", typeof(System.Int32), false, false, false, false,  (int)OdbcStoreFieldIndex.OdbcDownloadStrategy, 0, 0, 10);
-			base.AddElementFieldInfo("OdbcStoreEntity", "OdbcColumnSourceType", typeof(System.Int32), false, false, false, false,  (int)OdbcStoreFieldIndex.OdbcColumnSourceType, 0, 0, 10);
-			base.AddElementFieldInfo("OdbcStoreEntity", "OdbcColumnSource", typeof(System.String), false, false, false, false,  (int)OdbcStoreFieldIndex.OdbcColumnSource, 2048, 0, 0);
-			base.AddElementFieldInfo("OdbcStoreEntity", "ShipmentUploadStrategy", typeof(System.Int32), false, false, false, false,  (int)OdbcStoreFieldIndex.ShipmentUploadStrategy, 0, 0, 10);
+			base.AddElementFieldInfo("OdbcStoreEntity", "ImportMap", typeof(System.String), false, false, false, false,  (int)OdbcStoreFieldIndex.ImportMap, 2147483647, 0, 0);
+			base.AddElementFieldInfo("OdbcStoreEntity", "ImportStrategy", typeof(System.Int32), false, false, false, false,  (int)OdbcStoreFieldIndex.ImportStrategy, 0, 0, 10);
+			base.AddElementFieldInfo("OdbcStoreEntity", "ImportSourceType", typeof(System.Int32), false, false, false, false,  (int)OdbcStoreFieldIndex.ImportSourceType, 0, 0, 10);
+			base.AddElementFieldInfo("OdbcStoreEntity", "ImportColumnSource", typeof(System.String), false, false, false, false,  (int)OdbcStoreFieldIndex.ImportColumnSource, 2048, 0, 0);
+			base.AddElementFieldInfo("OdbcStoreEntity", "UploadStrategy", typeof(System.Int32), false, false, false, false,  (int)OdbcStoreFieldIndex.UploadStrategy, 0, 0, 10);
+			base.AddElementFieldInfo("OdbcStoreEntity", "UploadMap", typeof(System.String), false, false, false, false,  (int)OdbcStoreFieldIndex.UploadMap, 2147483647, 0, 0);
+			base.AddElementFieldInfo("OdbcStoreEntity", "UploadColumnSourceType", typeof(System.Int32), false, false, false, false,  (int)OdbcStoreFieldIndex.UploadColumnSourceType, 0, 0, 10);
+			base.AddElementFieldInfo("OdbcStoreEntity", "UploadColumnSource", typeof(System.String), false, false, false, false,  (int)OdbcStoreFieldIndex.UploadColumnSource, 2048, 0, 0);
 		}
 		/// <summary>Inits OnTracAccountEntity's FieldInfo objects</summary>
 		private void InitOnTracAccountEntityInfos()

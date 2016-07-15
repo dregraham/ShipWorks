@@ -2,6 +2,7 @@
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.GenericFile;
 using ShipWorks.Stores.Platforms.Odbc;
+using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 using ShipWorks.Stores.Platforms.Odbc.Download;
 using ShipWorks.Stores.Platforms.Odbc.Upload;
 using Xunit;
@@ -53,13 +54,64 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         }
 
         [Fact]
-        public void CreateStoreInstance_ReturnsStoreWithEmptyMap()
+        public void CreateStoreInstance_ReturnsStoreWithEmptyImportMap()
         {
             var testObject = new OdbcStoreType(store, null);
             var newStore = testObject.CreateStoreInstance();
 
-            Assert.Empty(((OdbcStoreEntity) newStore).Map);
+            Assert.Empty(((OdbcStoreEntity) newStore).ImportMap);
         }
+
+        [Fact]
+        public void CreateStoreInstance_ReturnsOdbcStoreEntity_WithImportStrategyByModifiedTime()
+        {
+            OdbcStoreType testObject = new OdbcStoreType(store, null);
+
+            OdbcStoreEntity odbcStore = testObject.CreateStoreInstance() as OdbcStoreEntity;
+
+            Assert.Equal((int)OdbcImportStrategy.ByModifiedTime, odbcStore.ImportStrategy);
+        }
+
+        [Fact]
+        public void CreateStoreInstance_SetsShipmentUploadStrategyToDoNotUpload()
+        {
+            OdbcStoreType testObject = new OdbcStoreType(store, null);
+
+            OdbcStoreEntity odbcStore = testObject.CreateStoreInstance() as OdbcStoreEntity;
+
+            Assert.Equal((int)OdbcShipmentUploadStrategy.DoNotUpload, odbcStore.UploadStrategy);
+        }
+
+        [Fact]
+        public void CreateStoreInstance_SetsUploadMapToEmptyString()
+        {
+            OdbcStoreType testObject = new OdbcStoreType(store, null);
+
+            OdbcStoreEntity odbcStore = testObject.CreateStoreInstance() as OdbcStoreEntity;
+
+            Assert.Empty(odbcStore.UploadMap);
+        }
+
+        [Fact]
+        public void CreateStoreInstance_SetUploadColumnSourceTypeToTable()
+        {
+            OdbcStoreType testObject = new OdbcStoreType(store, null);
+
+            OdbcStoreEntity odbcStore = testObject.CreateStoreInstance() as OdbcStoreEntity;
+
+            Assert.Equal((int)OdbcColumnSourceType.Table, odbcStore.UploadColumnSourceType);
+        }
+
+        [Fact]
+        public void CreateStoreInstance_SetsUploadColumnSourceToEmpty()
+        {
+            OdbcStoreType testObject = new OdbcStoreType(store, null);
+
+            OdbcStoreEntity odbcStore = testObject.CreateStoreInstance() as OdbcStoreEntity;
+
+            Assert.Empty(odbcStore.UploadColumnSource);
+        }
+
 
         [Fact]
         public void GridOnlineColumnSupported_ReturnsTrue_WhenColumnIsOnlineStatus()
@@ -75,27 +127,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             var testObject = new OdbcStoreType(store, null);
 
             Assert.True(testObject.GridOnlineColumnSupported(OnlineGridColumnSupport.LastModified));
-        }
-
-        [Fact]
-        public void CreateStoreInstance_ReturnsOdbcStoreEntity_WithOdbcDownloadStrategyByModifiedTime()
-        {
-            OdbcStoreType testObject = new OdbcStoreType(store, null);
-
-            OdbcStoreEntity odbcStore = testObject.CreateStoreInstance() as OdbcStoreEntity;
-
-            Assert.Equal((int) OdbcDownloadStrategy.ByModifiedTime, odbcStore.OdbcDownloadStrategy);
-        }
-
-        [Fact]
-        public void CreateStoreInstance_SetsShipmentUploadStrategyToDoNotUpload()
-        {
-            OdbcStoreType testObject = new OdbcStoreType(store, null);
-
-            OdbcStoreEntity odbcStore = testObject.CreateStoreInstance() as OdbcStoreEntity;
-
-            Assert.Equal((int) OdbcShipmentUploadStrategy.DoNotUpload, odbcStore.ShipmentUploadStrategy);
-
         }
     }
 }

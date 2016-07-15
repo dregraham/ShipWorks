@@ -13897,30 +13897,45 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(OdbcStoreFieldIndex.ConnectionString);}
 		}
-		/// <summary>Creates a new OdbcStoreEntity.Map field instance</summary>
-		public static EntityField2 Map
+		/// <summary>Creates a new OdbcStoreEntity.ImportMap field instance</summary>
+		public static EntityField2 ImportMap
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(OdbcStoreFieldIndex.Map);}
+			get { return (EntityField2)EntityFieldFactory.Create(OdbcStoreFieldIndex.ImportMap);}
 		}
-		/// <summary>Creates a new OdbcStoreEntity.OdbcDownloadStrategy field instance</summary>
-		public static EntityField2 OdbcDownloadStrategy
+		/// <summary>Creates a new OdbcStoreEntity.ImportStrategy field instance</summary>
+		public static EntityField2 ImportStrategy
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(OdbcStoreFieldIndex.OdbcDownloadStrategy);}
+			get { return (EntityField2)EntityFieldFactory.Create(OdbcStoreFieldIndex.ImportStrategy);}
 		}
-		/// <summary>Creates a new OdbcStoreEntity.OdbcColumnSourceType field instance</summary>
-		public static EntityField2 OdbcColumnSourceType
+		/// <summary>Creates a new OdbcStoreEntity.ImportSourceType field instance</summary>
+		public static EntityField2 ImportSourceType
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(OdbcStoreFieldIndex.OdbcColumnSourceType);}
+			get { return (EntityField2)EntityFieldFactory.Create(OdbcStoreFieldIndex.ImportSourceType);}
 		}
-		/// <summary>Creates a new OdbcStoreEntity.OdbcColumnSource field instance</summary>
-		public static EntityField2 OdbcColumnSource
+		/// <summary>Creates a new OdbcStoreEntity.ImportColumnSource field instance</summary>
+		public static EntityField2 ImportColumnSource
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(OdbcStoreFieldIndex.OdbcColumnSource);}
+			get { return (EntityField2)EntityFieldFactory.Create(OdbcStoreFieldIndex.ImportColumnSource);}
 		}
-		/// <summary>Creates a new OdbcStoreEntity.ShipmentUploadStrategy field instance</summary>
-		public static EntityField2 ShipmentUploadStrategy
+		/// <summary>Creates a new OdbcStoreEntity.UploadStrategy field instance</summary>
+		public static EntityField2 UploadStrategy
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(OdbcStoreFieldIndex.ShipmentUploadStrategy);}
+			get { return (EntityField2)EntityFieldFactory.Create(OdbcStoreFieldIndex.UploadStrategy);}
+		}
+		/// <summary>Creates a new OdbcStoreEntity.UploadMap field instance</summary>
+		public static EntityField2 UploadMap
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OdbcStoreFieldIndex.UploadMap);}
+		}
+		/// <summary>Creates a new OdbcStoreEntity.UploadColumnSourceType field instance</summary>
+		public static EntityField2 UploadColumnSourceType
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OdbcStoreFieldIndex.UploadColumnSourceType);}
+		}
+		/// <summary>Creates a new OdbcStoreEntity.UploadColumnSource field instance</summary>
+		public static EntityField2 UploadColumnSource
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OdbcStoreFieldIndex.UploadColumnSource);}
 		}
 	}
 

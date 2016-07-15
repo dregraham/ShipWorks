@@ -49,6 +49,22 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <summary>
         /// Initializes a new instance of the <see cref="ShipWorksOdbcMappableField"/> class.
         /// </summary>
+        public ShipWorksOdbcMappableField(IEntityField2 field, OdbcShipmentFieldDescription fieldDescription)
+            : this(field, EnumHelper.GetDescription(fieldDescription), false)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ShipWorksOdbcMappableField"/> class.
+        /// </summary>
+        public ShipWorksOdbcMappableField(IEntityField2 field, OdbcShipmentFieldDescription fieldDescription, bool isRequired)
+            : this(field, EnumHelper.GetDescription(fieldDescription), isRequired)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ShipWorksOdbcMappableField"/> class.
+        /// </summary>
         /// <param name="field">The field.</param>
         /// <param name="displayName">The display name.</param>
         public ShipWorksOdbcMappableField(IEntityField2 field, string displayName)
@@ -62,7 +78,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <param name="field">The field.</param>
         /// <param name="displayName">The display name.</param>
         /// <param name="isRequired">if set to <c>true</c> [is required].</param>
-        private ShipWorksOdbcMappableField(IEntityField2 field, string displayName, bool isRequired)
+        public ShipWorksOdbcMappableField(IEntityField2 field, string displayName, bool isRequired)
         {
             this.field = field;
             DisplayName = displayName;

@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
-using System.Data.Common;
-using System.Linq;
-using ShipWorks.Data.Model.EntityClasses;
+﻿using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Odbc.DataAccess;
 using ShipWorks.Stores.Platforms.Odbc.DataSource;
 using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
+using System.Collections.Generic;
+using System.Data.Common;
+using System.Linq;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Download
 {
@@ -26,7 +26,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
             this.dataSource = dataSource;
             this.fieldMap = fieldMap;
 
-            if (store.OdbcColumnSourceType != (int) OdbcColumnSourceType.Table)
+            if (store.ImportSourceType != (int) OdbcColumnSourceType.Table)
             {
                 throw new ShipWorksOdbcException("An incompatible source was provided to perform an ODBC table based query.");
             }
@@ -43,7 +43,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
             {
                 connection.Open();
 
-                string tableNameInQuotes = cmdBuilder.QuoteIdentifier(store.OdbcColumnSource);
+                string tableNameInQuotes = cmdBuilder.QuoteIdentifier(store.ImportColumnSource);
 
                 List<string> columnNamesInQuotes = fieldMap.Entries.Select(e => cmdBuilder.QuoteIdentifier(e.ExternalField.Column.Name)).ToList();
                 columnNamesInQuotes.Add(cmdBuilder.QuoteIdentifier(fieldMap.RecordIdentifierSource));

@@ -478,19 +478,28 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("ConnectionString", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
-			_fieldsCustomProperties.Add("Map", fieldHashtable);
+			_fieldsCustomProperties.Add("ImportMap", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
-			_fieldsCustomProperties.Add("OdbcDownloadStrategy", fieldHashtable);
+			_fieldsCustomProperties.Add("ImportStrategy", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
-			_fieldsCustomProperties.Add("OdbcColumnSourceType", fieldHashtable);
+			_fieldsCustomProperties.Add("ImportSourceType", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
-			_fieldsCustomProperties.Add("OdbcColumnSource", fieldHashtable);
+			_fieldsCustomProperties.Add("ImportColumnSource", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
-			_fieldsCustomProperties.Add("ShipmentUploadStrategy", fieldHashtable);
+			_fieldsCustomProperties.Add("UploadStrategy", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("UploadMap", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("UploadColumnSourceType", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("UploadColumnSource", fieldHashtable);
 		}
 		#endregion
 
@@ -575,59 +584,92 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)OdbcStoreFieldIndex.ConnectionString, value); }
 		}
 
-		/// <summary> The Map property of the Entity OdbcStore<br/><br/>
+		/// <summary> The ImportMap property of the Entity OdbcStore<br/><br/>
 		/// </summary>
-		/// <remarks>Mapped on  table field: "OdbcStore"."Map"<br/>
+		/// <remarks>Mapped on  table field: "OdbcStore"."ImportMap"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 2147483647<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.String Map
+		public virtual System.String ImportMap
 		{
-			get { return (System.String)GetValue((int)OdbcStoreFieldIndex.Map, true); }
-			set	{ SetValue((int)OdbcStoreFieldIndex.Map, value); }
+			get { return (System.String)GetValue((int)OdbcStoreFieldIndex.ImportMap, true); }
+			set	{ SetValue((int)OdbcStoreFieldIndex.ImportMap, value); }
 		}
 
-		/// <summary> The OdbcDownloadStrategy property of the Entity OdbcStore<br/><br/>
+		/// <summary> The ImportStrategy property of the Entity OdbcStore<br/><br/>
 		/// </summary>
-		/// <remarks>Mapped on  table field: "OdbcStore"."OdbcDownloadStrategy"<br/>
+		/// <remarks>Mapped on  table field: "OdbcStore"."ImportStrategy"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Int32 OdbcDownloadStrategy
+		public virtual System.Int32 ImportStrategy
 		{
-			get { return (System.Int32)GetValue((int)OdbcStoreFieldIndex.OdbcDownloadStrategy, true); }
-			set	{ SetValue((int)OdbcStoreFieldIndex.OdbcDownloadStrategy, value); }
+			get { return (System.Int32)GetValue((int)OdbcStoreFieldIndex.ImportStrategy, true); }
+			set	{ SetValue((int)OdbcStoreFieldIndex.ImportStrategy, value); }
 		}
 
-		/// <summary> The OdbcColumnSourceType property of the Entity OdbcStore<br/><br/>
+		/// <summary> The ImportSourceType property of the Entity OdbcStore<br/><br/>
 		/// </summary>
-		/// <remarks>Mapped on  table field: "OdbcStore"."OdbcColumnSourceType"<br/>
+		/// <remarks>Mapped on  table field: "OdbcStore"."ImportColumnSourceType"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Int32 OdbcColumnSourceType
+		public virtual System.Int32 ImportSourceType
 		{
-			get { return (System.Int32)GetValue((int)OdbcStoreFieldIndex.OdbcColumnSourceType, true); }
-			set	{ SetValue((int)OdbcStoreFieldIndex.OdbcColumnSourceType, value); }
+			get { return (System.Int32)GetValue((int)OdbcStoreFieldIndex.ImportSourceType, true); }
+			set	{ SetValue((int)OdbcStoreFieldIndex.ImportSourceType, value); }
 		}
 
-		/// <summary> The OdbcColumnSource property of the Entity OdbcStore<br/><br/>
+		/// <summary> The ImportColumnSource property of the Entity OdbcStore<br/><br/>
 		/// </summary>
-		/// <remarks>Mapped on  table field: "OdbcStore"."OdbcColumnSource"<br/>
+		/// <remarks>Mapped on  table field: "OdbcStore"."ImportColumnSource"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 2048<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.String OdbcColumnSource
+		public virtual System.String ImportColumnSource
 		{
-			get { return (System.String)GetValue((int)OdbcStoreFieldIndex.OdbcColumnSource, true); }
-			set	{ SetValue((int)OdbcStoreFieldIndex.OdbcColumnSource, value); }
+			get { return (System.String)GetValue((int)OdbcStoreFieldIndex.ImportColumnSource, true); }
+			set	{ SetValue((int)OdbcStoreFieldIndex.ImportColumnSource, value); }
 		}
 
-		/// <summary> The ShipmentUploadStrategy property of the Entity OdbcStore<br/><br/>
+		/// <summary> The UploadStrategy property of the Entity OdbcStore<br/><br/>
 		/// </summary>
-		/// <remarks>Mapped on  table field: "OdbcStore"."ShipmentUploadStrategy"<br/>
+		/// <remarks>Mapped on  table field: "OdbcStore"."UploadStrategy"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Int32 ShipmentUploadStrategy
+		public virtual System.Int32 UploadStrategy
 		{
-			get { return (System.Int32)GetValue((int)OdbcStoreFieldIndex.ShipmentUploadStrategy, true); }
-			set	{ SetValue((int)OdbcStoreFieldIndex.ShipmentUploadStrategy, value); }
+			get { return (System.Int32)GetValue((int)OdbcStoreFieldIndex.UploadStrategy, true); }
+			set	{ SetValue((int)OdbcStoreFieldIndex.UploadStrategy, value); }
+		}
+
+		/// <summary> The UploadMap property of the Entity OdbcStore<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "OdbcStore"."UploadMap"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 2147483647<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String UploadMap
+		{
+			get { return (System.String)GetValue((int)OdbcStoreFieldIndex.UploadMap, true); }
+			set	{ SetValue((int)OdbcStoreFieldIndex.UploadMap, value); }
+		}
+
+		/// <summary> The UploadColumnSourceType property of the Entity OdbcStore<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "OdbcStore"."UploadColumnSourceType"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Int32 UploadColumnSourceType
+		{
+			get { return (System.Int32)GetValue((int)OdbcStoreFieldIndex.UploadColumnSourceType, true); }
+			set	{ SetValue((int)OdbcStoreFieldIndex.UploadColumnSourceType, value); }
+		}
+
+		/// <summary> The UploadColumnSource property of the Entity OdbcStore<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "OdbcStore"."UploadColumnSource"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 2048<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String UploadColumnSource
+		{
+			get { return (System.String)GetValue((int)OdbcStoreFieldIndex.UploadColumnSource, true); }
+			set	{ SetValue((int)OdbcStoreFieldIndex.UploadColumnSource, value); }
 		}
 
 

@@ -21,7 +21,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         /// <summary>
         /// Generates the Sql to download orders.
         /// </summary>
-        public string GenerateSql() => store.OdbcColumnSource;
+        public string GenerateSql() => store.ImportColumnSource;
 
         /// <summary>
         /// Populate the command test property of the command

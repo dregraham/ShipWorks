@@ -1,11 +1,11 @@
 ﻿namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
 {
     /// <summary>
-    /// Interaction logic for OdbcImportMapSettingsControl.xaml
+    /// Interaction logic for OdbcUploadMapSettingsControl.xaml
     /// </summary>
-    public partial class OdbcImportMapSettingsControl
+    public partial class OdbcUploadMapSettingsControl
     {
-        public OdbcImportMapSettingsControl()
+        public OdbcUploadMapSettingsControl()
         {
             InitializeComponent();
         }

@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="ShipWorks.Stores.UI.Platforms.Odbc.WizardPages.OdbcImportMapSettingsControl"
+﻿<UserControl x:Class="ShipWorks.Stores.UI.Platforms.Odbc.WizardPages.OdbcUploadMapSettingsControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -11,7 +11,7 @@
              Background="{x:Static SystemColors.ControlBrush}"
              FontFamily="Tahoma"
              FontSize="8.25pt"
-             d:DataContext="{d:DesignInstance viewModels:OdbcImportMapSettingsControlViewModel}"
+             d:DataContext="{d:DesignInstance viewModels:OdbcUploadMapSettingsControlViewModel}"
              mc:Ignorable="d">
     <Control.Resources>
         <Style TargetType="{x:Type Label}">
@@ -63,7 +63,7 @@
             <Label Grid.Row="0"
                    Grid.Column="0"
                    Margin="0 0 0 5"
-                   Content="Import Settings"
+                   Content="Upload Settings"
                    FontWeight="Bold" />
             <Label Grid.Row="1"
                    Grid.Column="0"
@@ -80,21 +80,6 @@
             <Button Grid.Row="1"
                     Grid.Column="2"
                     Content="Load Map..." />
-            <Label Grid.Row="2"
-                   Grid.Column="0"
-                   HorizontalAlignment="Right"
-                   VerticalAlignment="Center"
-                   Content="Download:" />
-            <StackPanel Grid.Row="2"
-                        Grid.Column="1"
-                        Margin="5 5 0 5"
-                        Orientation="Horizontal">
-                <RadioButton Content="Orders by last modified date"
-                             GroupName="DownloadStrategy"
-                             IsChecked="{Binding DownloadStrategyIsLastModified,
-                                                 UpdateSourceTrigger=PropertyChanged}" />
-                <RadioButton Content="All orders" GroupName="DownloadStrategy" />
-            </StackPanel>
             <Label Grid.Row="3"
                    Grid.Column="0"
                    HorizontalAlignment="Right"
@@ -150,38 +135,17 @@
             </Grid.RowDefinitions>
             <Label Grid.Row="0"
                    Margin="0 5 0 5"
-                   Content="Your query for custom import:" />
+                   Content="Your query for custom upload:" />
             <TextBox x:Name="Query"
                      Grid.Row="1"
                      Margin="0 5 0 5"
                      AcceptsReturn="True"
                      Text="{Binding CustomQuery,
-                                    UpdateSourceTrigger=LostFocus}"
+                                    UpdateSourceTrigger=LostFocus,
+                                    ValidatesOnDataErrors=true,
+                                    NotifyOnValidationError=true}"
                      TextWrapping="Wrap"
                      ui:EntityFieldLength.FieldName="OdbcStoreCustomQuery" />
-            <Label Grid.Row="2"
-                   HorizontalAlignment="Left"
-                   VerticalAlignment="Center"
-                   Content="Query Results (Top 25)" />
-            <Button Grid.Row="2"
-                    HorizontalAlignment="Right"
-                    Command="{Binding ExecuteQueryCommand}"
-                    Content="Execute Query" />
-            <Grid Grid.Row="3" Margin="0 5 0 0">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-                <DataGrid Grid.Row="0"
-                          IsReadOnly="True"
-                          ItemsSource="{Binding QueryResults,
-                                                UpdateSourceTrigger=PropertyChanged}" />
-                <Label Grid.Row="1"
-                       Content="{Binding ResultMessage,
-                                         UpdateSourceTrigger=PropertyChanged}"
-                       Visibility="{Binding ResultMessage,
-                                            Converter={StaticResource StringToVisibilityConverter}}" />
-            </Grid>
         </Grid>
     </Grid>
 </UserControl>

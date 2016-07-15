@@ -172,14 +172,19 @@
     <Compile Include="Platforms\LemonStand\WizardPages\LemonStandAccountPage.Designer.cs">
       <DependentUpon>LemonStandAccountPage.cs</DependentUpon>
     </Compile>
-    <Compile Include="Platforms\Odbc\IOdbcImportFieldMappingControlViewModel.cs" />
-    <Compile Include="Platforms\Odbc\IOdbcMapSettingsControlViewModel.cs" />
     <Compile Include="Platforms\Odbc\OdbcCustomQueryWarningDlg.xaml.cs">
       <DependentUpon>OdbcCustomQueryWarningDlg.xaml</DependentUpon>
     </Compile>
     <Compile Include="Platforms\Odbc\OdbcFieldMapDisplay.cs" />
     <Compile Include="Platforms\Odbc\OdbcFieldMapMultiValueConverter.cs" />
-    <Compile Include="Platforms\Odbc\OdbcMapSettingsControlViewModel.cs" />
+    <Compile Include="Platforms\Odbc\ViewModels\IOdbcImportFieldMappingControlViewModel.cs" />
+    <Compile Include="Platforms\Odbc\ViewModels\IOdbcMapSettingsControlViewModel.cs" />
+    <Compile Include="Platforms\Odbc\ViewModels\IOdbcUploadMappingControlViewModel.cs" />
+    <Compile Include="Platforms\Odbc\ViewModels\OdbcImportFieldMappingControlViewModel.cs" />
+    <Compile Include="Platforms\Odbc\ViewModels\OdbcImportMapSettingsControlViewModel.cs" />
+    <Compile Include="Platforms\Odbc\ViewModels\OdbcMapSettingsControlViewModel.cs" />
+    <Compile Include="Platforms\Odbc\ViewModels\OdbcUploadMappingControlViewModel.cs" />
+    <Compile Include="Platforms\Odbc\ViewModels\OdbcUploadMapSettingsControlViewModel.cs" />
     <Compile Include="Platforms\Odbc\WizardPages\OdbcImportFieldMappingControl.xaml.cs">
       <DependentUpon>OdbcImportFieldMappingControl.xaml</DependentUpon>
     </Compile>
@@ -197,6 +202,24 @@
     </Compile>
     <Compile Include="Platforms\Odbc\WizardPages\OdbcImportMapSettingsPage.Designer.cs">
       <DependentUpon>OdbcImportMapSettingsPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Platforms\Odbc\WizardPages\OdbcMappingControl.xaml.cs">
+      <DependentUpon>OdbcMappingControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Platforms\Odbc\WizardPages\OdbcUploadMappingPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Platforms\Odbc\WizardPages\OdbcUploadMappingPage.Designer.cs">
+      <DependentUpon>OdbcUploadMappingPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Platforms\Odbc\WizardPages\OdbcUploadMapSettingsControl.xaml.cs">
+      <DependentUpon>OdbcUploadMapSettingsControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Platforms\Odbc\WizardPages\OdbcUploadMapSettingsPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Platforms\Odbc\WizardPages\OdbcUploadMapSettingsPage.Designer.cs">
+      <DependentUpon>OdbcUploadMapSettingsPage.cs</DependentUpon>
     </Compile>
     <Compile Include="Platforms\Odbc\WizardPages\OdbcUploadShipmentDataSourceWizardPage.cs">
       <SubType>UserControl</SubType>
@@ -241,7 +264,6 @@
     <Compile Include="Platforms\Odbc\OdbcDataSourceControl.Designer.cs">
       <DependentUpon>OdbcDataSourceControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Platforms\Odbc\OdbcImportFieldMappingControlViewModel.cs" />
     <Compile Include="Platforms\Odbc\OdbcStoreModule.cs" />
     <Compile Include="Platforms\Odbc\WizardPages\OdbcDataSourcePage.cs">
       <SubType>UserControl</SubType>
@@ -293,6 +315,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Platforms\Odbc\WizardPages\OdbcImportMapSettingsPage.resx">
       <DependentUpon>OdbcImportMapSettingsPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Platforms\Odbc\WizardPages\OdbcUploadMappingPage.resx">
+      <DependentUpon>OdbcUploadMappingPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Platforms\Odbc\WizardPages\OdbcUploadMapSettingsPage.resx">
+      <DependentUpon>OdbcUploadMapSettingsPage.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Platforms\Odbc\WizardPages\OdbcUploadShipmentDataSourceWizardPage.resx">
       <DependentUpon>OdbcUploadShipmentDataSourceWizardPage.cs</DependentUpon>
@@ -382,6 +410,14 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Platforms\Odbc\WizardPages\OdbcImportMapSettingsControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Platforms\Odbc\WizardPages\OdbcMappingControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Platforms\Odbc\WizardPages\OdbcUploadMapSettingsControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

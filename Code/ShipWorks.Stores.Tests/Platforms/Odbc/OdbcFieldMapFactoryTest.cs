@@ -1,9 +1,8 @@
 ﻿using Autofac.Extras.Moq;
 using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Stores.Platforms.Odbc;
+using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
 using System.Linq;
-using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 using Xunit;
 
 namespace ShipWorks.Stores.Tests.Platforms.Odbc
@@ -49,7 +48,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         [Fact]
         public void CreateFieldMapFrom_ReturnsMapContainingAllEntriesThatAreMappedOfProvidedMap()
         {
-            OdbcFieldMap orderMap = testObject.CreateOrderFieldMap();
+            IOdbcFieldMap orderMap = testObject.CreateOrderFieldMap();
             ShipWorksOdbcMappableField shipworksOrderMap = new ShipWorksOdbcMappableField(OrderFields.OrderNumber, "Order Number");
             ExternalOdbcMappableField externalOrderMap = new ExternalOdbcMappableField(new OdbcColumn("Column"));
             orderMap.AddEntry(new OdbcFieldMapEntry(shipworksOrderMap, externalOrderMap));

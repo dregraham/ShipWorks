@@ -7,7 +7,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
     /// Configuration option for how the Store downloads orders from the Odbc Source
     /// </summary>
     [Obfuscation(Exclude = true)]
-    public enum OdbcDownloadStrategy
+    public enum OdbcImportStrategy
     {
         /// <summary>
         /// Download all orders from the ODBC data source.

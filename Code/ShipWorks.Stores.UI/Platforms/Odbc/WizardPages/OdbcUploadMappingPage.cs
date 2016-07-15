@@ -3,34 +3,27 @@ using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Stores.Platforms.Odbc.DataSource;
 using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
-using ShipWorks.Stores.Platforms.Odbc.Download;
+using ShipWorks.Stores.Platforms.Odbc.Upload;
+using ShipWorks.Stores.UI.Platforms.Odbc.ViewModels;
 using ShipWorks.UI.Wizard;
 using System;
-using System.Windows.Interop;
-using ShipWorks.Stores.UI.Platforms.Odbc.ViewModels;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
 {
-    /// <summary>
-    /// Wizard page for choosing an import map to load or to start creating a new one
-    /// </summary>
-    public partial class OdbcImportFieldMappingPage : AddStoreWizardPage, IOdbcWizardPage, IWin32Window
+    public partial class OdbcUploadMappingPage : AddStoreWizardPage, IOdbcWizardPage
     {
         private readonly Func<IOdbcDataSource> dataSourceFactory;
         private readonly Func<string, IOdbcColumnSource> columnSourceFactory;
-        private IOdbcImportFieldMappingControlViewModel viewModel;
+        private IOdbcUploadMappingControlViewModel viewModel;
         private OdbcStoreEntity store;
-        private const string CustomQueryColumnSourceName = "Custom Import";
         private string previousColumnSource;
-        private OdbcImportStrategy? previousImportStrategy = null;
-        private readonly Func<IOdbcImportFieldMappingControlViewModel> viewModelFactory;
-
+        private readonly Func<IOdbcUploadMappingControlViewModel> viewModelFactory;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcImportFieldMappingPage"/> class.
         /// </summary>
-        public OdbcImportFieldMappingPage(Func<IOdbcDataSource> dataSourceFactory,
-            Func<IOdbcImportFieldMappingControlViewModel> viewModelFactory,
+        public OdbcUploadMappingPage(Func<IOdbcDataSource> dataSourceFactory,
+            Func<IOdbcUploadMappingControlViewModel> viewModelFactory,
             Func<string, IOdbcColumnSource> columnSourceFactory)
         {
             this.dataSourceFactory = dataSourceFactory;
@@ -42,9 +35,9 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
         }
 
         /// <summary>
-        /// The position in which to show this wizard page
+        /// Gets the position.
         /// </summary>
-        public int Position => 2;
+        public int Position => 5;
 
         /// <summary>
         /// Save the map to the ODBC Store
@@ -66,15 +59,21 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
         }
 
         /// <summary>
+        /// Called when [stepping into].
         /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="System.EventArgs" /> instance containing the event data.</param>
         private void OnSteppingInto(object sender, WizardSteppingIntoEventArgs e)
         {
             store = GetStore<OdbcStoreEntity>();
 
-            OdbcImportStrategy currentImportStrategy = (OdbcImportStrategy) store.ImportStrategy;
-            string currentColumnSource = store.ImportColumnSource;
+            if (store.UploadStrategy == (int) OdbcShipmentUploadStrategy.DoNotUpload ||
+                store.UploadColumnSourceType == (int)OdbcColumnSourceType.CustomQuery)
+            {
+                e.Skip = true;
+                e.RaiseStepEventWhenSkipping = false;
+                return;
+            }
+
+            string currentColumnSource = store.UploadColumnSource;
 
             // Only load column source when the page is first loaded or the column source changes.
             if (string.IsNullOrWhiteSpace(previousColumnSource) ||
@@ -84,29 +83,15 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
 
                 selectedDataSource.Restore(store.ConnectionString);
 
-                string columnSourceName = store.ImportSourceType == (int) OdbcColumnSourceType.Table ?
-                    currentColumnSource :
-                    CustomQueryColumnSourceName;
-
-                IOdbcColumnSource columnSource = columnSourceFactory(columnSourceName);
+                IOdbcColumnSource columnSource = columnSourceFactory(currentColumnSource);
 
                 columnSource.Load(selectedDataSource, currentColumnSource,
-                    (OdbcColumnSourceType) store.ImportSourceType);
+                    (OdbcColumnSourceType)store.ImportSourceType);
 
                 viewModel = viewModelFactory();
                 mappingControl.DataContext = viewModel;
                 viewModel.LoadColumnSource(columnSource);
-                viewModel.LoadDownloadStrategy(currentImportStrategy);
                 previousColumnSource = currentColumnSource;
-            }
-
-            // Only load download strategy when the page is first loaded or the download strategy changes.
-            if (previousImportStrategy == null ||
-                previousImportStrategy != currentImportStrategy)
-            {
-                viewModel.LoadDownloadStrategy(currentImportStrategy);
-
-                previousImportStrategy = currentImportStrategy;
             }
         }
     }

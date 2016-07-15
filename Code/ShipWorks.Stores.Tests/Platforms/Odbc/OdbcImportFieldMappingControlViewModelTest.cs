@@ -2,18 +2,14 @@
 using Autofac.Extras.Moq;
 using Interapptive.Shared.UI;
 using Moq;
-using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
 using ShipWorks.Stores.UI.Platforms.Odbc;
+using ShipWorks.Stores.UI.Platforms.Odbc.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Windows.Forms;
-using ShipWorks.Stores.Platforms.Odbc.DataSource;
-using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
-using ShipWorks.Stores.Platforms.Odbc.Download;
 using Xunit;
 
 namespace ShipWorks.Stores.Tests.Platforms.Odbc

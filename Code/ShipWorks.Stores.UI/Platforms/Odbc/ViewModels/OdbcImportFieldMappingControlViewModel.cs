@@ -1,32 +1,26 @@
-﻿using Autofac;
-using GalaSoft.MvvmLight.Command;
+﻿using GalaSoft.MvvmLight.Command;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
-using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Platforms.Odbc;
+using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
+using ShipWorks.Stores.Platforms.Odbc.Download;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Windows.Forms;
 using System.Windows.Input;
-using ShipWorks.Stores.Platforms.Odbc.DataAccess;
-using ShipWorks.Stores.Platforms.Odbc.DataSource;
-using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
-using ShipWorks.Stores.Platforms.Odbc.Download;
 using SaveFileDialog = Microsoft.Win32.SaveFileDialog;
 
-namespace ShipWorks.Stores.UI.Platforms.Odbc
+namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
 {
     /// <summary>
     /// View Model for the <see cref="WizardPages.OdbcImportFieldMappingControl"/>
@@ -34,13 +28,11 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
     public class OdbcImportFieldMappingControlViewModel : IOdbcImportFieldMappingControlViewModel, INotifyPropertyChanged
     {
         private readonly IOdbcFieldMapFactory fieldMapFactory;
-        private readonly Func<Type, ILog> logFactory;
         private readonly IMessageHelper messageHelper;
         private ObservableCollection<OdbcColumn> columns;
         private OdbcFieldMapDisplay selectedFieldMap;
         private readonly PropertyChangedHandler handler;
         public event PropertyChangedEventHandler PropertyChanged;
-        private readonly ILog log;
 
         private bool isSingleLineOrder = true;
         private int numberOfAttributesPerItem;
@@ -49,14 +41,10 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcImportFieldMappingControlViewModel"/> class.
         /// </summary>
-        public OdbcImportFieldMappingControlViewModel(IOdbcFieldMapFactory fieldMapFactory,
-             Func<Type, ILog> logFactory, IMessageHelper messageHelper)
+        public OdbcImportFieldMappingControlViewModel(IOdbcFieldMapFactory fieldMapFactory, IMessageHelper messageHelper)
         {
             this.fieldMapFactory = fieldMapFactory;
-            this.logFactory = logFactory;
             this.messageHelper = messageHelper;
-
-            log = logFactory(typeof (OdbcImportFieldMappingControlViewModel));
 
             Order = new OdbcFieldMapDisplay("Order", fieldMapFactory.CreateOrderFieldMap());
             Address = new OdbcFieldMapDisplay("Address", fieldMapFactory.CreateAddressFieldMap());
@@ -167,7 +155,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
                 {
                     for (int i = numberOfItemsPerOrder; i < value; i++)
                     {
-                        OdbcFieldMap map = fieldMapFactory.CreateOrderItemFieldMap(i);
+                        IOdbcFieldMap map = fieldMapFactory.CreateOrderItemFieldMap(i);
 
                         // Give the new item the correct number of attributes
                         GetRangeOfAttributes(1, numberOfAttributesPerItem, i).ToList().ForEach(m => map.AddEntry(m));
@@ -279,7 +267,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
                 memoryStream.Position = 0;
                 using (StreamReader reader = new StreamReader(memoryStream))
                 {
-                    store.Map = reader.ReadToEnd();
+                    store.ImportMap = reader.ReadToEnd();
                 }
             }
         }
@@ -364,8 +352,8 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// <summary>
         /// Loads the download strategy.
         /// </summary>
-        /// <param name="downloadStrategy">The download strategy.</param>
-        public void LoadDownloadStrategy(OdbcDownloadStrategy downloadStrategy)
+        /// <param name="importStrategy">The download strategy.</param>
+        public void LoadDownloadStrategy(OdbcImportStrategy importStrategy)
         {
             IOdbcFieldMapEntry lastModifiedEntry = FindEntriesBy(Order, OrderFields.OnlineLastModified).FirstOrDefault();
 
@@ -373,7 +361,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
 
             if (lastModifiedEntry != null)
             {
-                lastModifiedEntry.ShipWorksField.IsRequired = downloadStrategy == OdbcDownloadStrategy.ByModifiedTime;
+                lastModifiedEntry.ShipWorksField.IsRequired = importStrategy == OdbcImportStrategy.ByModifiedTime;
             }
 
             // Have to remove and insert the entry because this is what is bound to the property changed trigger.

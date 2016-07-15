@@ -585,7 +585,7 @@ namespace ShipWorks.Stores.Management
             // which results in a blank wizard page, so skip it.
             // Don't need page for odbc either when the download strategy is all.
             if (store.TypeCode == (int) StoreTypeCode.GenericFile
-                || (store.TypeCode == (int) StoreTypeCode.Odbc) && ((OdbcStoreEntity) store).OdbcDownloadStrategy == 0)
+                || (store.TypeCode == (int) StoreTypeCode.Odbc) && ((OdbcStoreEntity) store).ImportStrategy == 0)
             {
                 e.Skip = true;
                 e.RaiseStepEventWhenSkipping = true;
