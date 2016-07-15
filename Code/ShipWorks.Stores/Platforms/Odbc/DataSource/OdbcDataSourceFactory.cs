@@ -62,7 +62,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataSource
                 dataSource.Restore(store.ImportConnectionString);
             }
 
-            if (store.UploadStrategy == (int) OdbcShipmentUploadStrategy.UseImportDataSource)
+            if (store.UploadStrategy == (int) OdbcShipmentUploadStrategy.UseShipmentDataSource)
             {
                 dataSource.Restore(store.UploadConnectionString);
             }
