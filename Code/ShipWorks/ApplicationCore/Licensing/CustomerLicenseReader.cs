@@ -11,14 +11,13 @@ namespace ShipWorks.ApplicationCore.Licensing
     public class CustomerLicenseReader : ICustomerLicenseReader
     {
         private readonly IEncryptionProvider encryptionProvider;
-        
 
         /// <summary>
         /// Constructor
         /// </summary>
         public CustomerLicenseReader(IEncryptionProviderFactory encryptionProviderFactory)
         {
-            this.encryptionProvider = encryptionProviderFactory.CreateLicenseEncryptionProvider();            
+            encryptionProvider = encryptionProviderFactory.CreateLicenseEncryptionProvider();
         }
 
         /// <summary>

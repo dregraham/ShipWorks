@@ -26,6 +26,8 @@ namespace ShipWorks.Shipping
         /// </summary>
         public static bool IsCustomsRequired(ShipmentEntity shipment)
         {
+            OrderUtility.PopulateOrderDetails(shipment);
+
             // Defer to the shipment type to inspect the shipment to determine whether
             // customs is required based on any carrier-specific logic (i.e. best-rate)
             ShipmentType shipmpentType = ShipmentTypeManager.GetType(shipment);

@@ -196,7 +196,6 @@ DROP PROCEDURE [dbo].[GetDatabaseGuid]";
             using (SqlAdapter sqlAdapter = new SqlAdapter(SqlSession.Current.OpenConnection()))
             {
                 UserEntity user = UserUtility.CreateUser("shipworks", "shipworks@shipworks.com", string.Empty, true);
-                //UserEntity user = Create.Entity<UserEntity>().Save(sqlAdapter);
                 ComputerEntity computer = Create.Entity<ComputerEntity>().Save(sqlAdapter);
 
                 UserSession.Logon(user, computer, true);

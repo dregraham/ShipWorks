@@ -32,7 +32,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         /// </summary>
         /// <param name="store">The store.</param>
         public YahooApiOnlineUpdater(YahooStoreEntity store) :
-            this(LogManager.GetLogger(typeof(YahooApiOnlineUpdater)), new YahooApiWebClient(store),
+            this(LogManager.GetLogger(typeof(YahooApiOnlineUpdater)), new YahooApiWebClient(store, LogManager.GetLogger(typeof(YahooApiWebClient))),
                 IoC.UnsafeGlobalLifetimeScope.Resolve<Owned<IShippingManager>>().Value)
         {
         }
