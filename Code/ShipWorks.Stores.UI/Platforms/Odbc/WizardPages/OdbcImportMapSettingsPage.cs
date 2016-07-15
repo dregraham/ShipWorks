@@ -72,7 +72,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
 
             IOdbcDataSource selectedDataSource = dataSourceFactory();
 
-            selectedDataSource.Restore(store.ConnectionString);
+            selectedDataSource.Restore(store.ImportConnectionString);
 
             // Create new ViewModel when one does not exist, or a new data source is selected. This means clicking
             // back on the mapping page and not changing the data source will keep any mappings made, but selecting

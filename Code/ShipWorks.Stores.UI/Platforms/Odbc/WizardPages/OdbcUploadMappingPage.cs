@@ -81,7 +81,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
             {
                 IOdbcDataSource selectedDataSource = dataSourceFactory();
 
-                selectedDataSource.Restore(store.ConnectionString);
+                selectedDataSource.Restore(store.ImportConnectionString);
 
                 IOdbcColumnSource columnSource = columnSourceFactory(currentColumnSource);
 

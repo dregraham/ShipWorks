@@ -1,5 +1,4 @@
-﻿using System;
-using Autofac.Features.Indexed;
+﻿using Autofac.Features.Indexed;
 using Interapptive.Shared.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Management;
@@ -9,6 +8,7 @@ using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 using ShipWorks.Stores.Platforms.Odbc.Upload;
 using ShipWorks.Stores.UI.Platforms.Odbc.ViewModels;
 using ShipWorks.UI.Wizard;
+using System;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
 {
@@ -81,7 +81,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
 
             IOdbcDataSource selectedDataSource = dataSourceFactory();
 
-            selectedDataSource.Restore(store.ConnectionString);
+            selectedDataSource.Restore(store.ImportConnectionString);
 
             // Create new ViewModel when one does not exist, or a new data source is selected. This means clicking
             // back on the mapping page and not changing the data source will keep any mappings made, but selecting
