@@ -40,7 +40,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
 
             if (testSuccessful)
             {
-                odbcDataSourceControl.SaveToEntity(store);
+                store.ConnectionString = odbcDataSourceControl.SelectedDataSource.Serialize();
             }
             else
             {
