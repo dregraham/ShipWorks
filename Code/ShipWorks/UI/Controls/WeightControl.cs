@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Linq;
 using System.Reactive.Linq;
 using System.Reflection;
 using System.Threading;
@@ -72,7 +71,7 @@ namespace ShipWorks.UI.Controls
 
             // Start the background thread that will monitor the current weight
             scaleSubscription = ScaleReader.ReadEvents
-                .TakeWhile(_ => !(Program.MainForm.Disposing || Program.MainForm.IsDisposed || CrashWindow.IsApplicationCrashed))
+                .TakeWhile(_ => !(Program.MainForm.Disposing || Program.MainForm.IsDisposed || CrashDialog.IsApplicationCrashed))
                 .ObserveOn(SynchronizationContext.Current)
                 .Subscribe(x => UpdateLiveWeight(x.Status == ScaleReadStatus.Success ? x.Weight : (double?) null));
         }
@@ -87,7 +86,7 @@ namespace ShipWorks.UI.Controls
         {
             get
             {
-                // Always return the current weight rather than the parsed weight since
+                // Always return the currrent weight rather than the parsed weight since
                 // the current weight will be the most precise (i.e. it is not impacted
                 // by rounding for display purposes).
                 return currentWeight;
@@ -359,6 +358,7 @@ namespace ShipWorks.UI.Controls
         }
 
         /// <summary>
+
         /// Grab the weight from the scale
         /// </summary>
         private async void OnWeigh(object sender, EventArgs e)
@@ -466,6 +466,7 @@ namespace ShipWorks.UI.Controls
             FlushChanges();
 
             base.OnLeave(e);
+
         }
 
         /// <summary>

@@ -27,7 +27,7 @@ namespace ShipWorks.ApplicationCore.Security
         public IEncryptionProvider CreateLicenseEncryptionProvider()
         {
             ICipherKey cipherKey = cipherKeyFactory[CipherContext.License];
-            return new LicenseEncryptionProvider(cipherKey, sqlSchemaVersion.IsCustomerLicenseSupported());
+            return new LicenseEncryptionProvider(cipherKey, sqlSchemaVersion);
         }
 
         /// <summary>
@@ -48,6 +48,16 @@ namespace ShipWorks.ApplicationCore.Security
         public IEncryptionProvider CreateSecureTextEncryptionProvider(string salt)
         {
             return new SecureTextEncryptionProvider(salt);
+        }
+
+        /// <summary>
+        /// Creates the AES Stream encryption provider.
+        /// </summary>
+        /// <returns>An instance of AesStreamEncryptionProvider.</returns>
+        public IEncryptionProvider CreateAesStreamEncryptionProvider()
+        {
+            ICipherKey cipherKey = cipherKeyFactory[CipherContext.Stream];
+            return new AesStreamEncryptionProvider(cipherKey);
         }
     }
 }

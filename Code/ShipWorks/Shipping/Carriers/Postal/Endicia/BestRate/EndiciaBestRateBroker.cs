@@ -38,7 +38,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.BestRate
         protected EndiciaBestRateBroker(EndiciaShipmentType shipmentType, ICarrierAccountRepository<EndiciaAccountEntity> accountRepository, string carrierDescription) :
             base(shipmentType, accountRepository, carrierDescription)
         {
-
+            GetRatesAction = (shipment, type) => GetRatesFunction(shipment);
         }
 
         /// <summary>

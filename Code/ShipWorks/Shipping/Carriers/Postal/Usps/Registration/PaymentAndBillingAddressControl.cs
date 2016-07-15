@@ -1,15 +1,29 @@
-﻿using Interapptive.Shared.Business;
-using Interapptive.Shared.UI;
-using Interapptive.Shared.Utility;
-using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
-using System;
+﻿using System;
+using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
+using Interapptive.Shared.Business;
+using Interapptive.Shared.UI;
+using Interapptive.Shared.Utility;
+using ShipWorks.ApplicationCore.Licensing;
+using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps.Registration
 {
+    /// <summary>
+    /// Address control for the payment and billing screen
+    /// </summary>
     public partial class PaymentAndBillingAddressControl : UserControl
     {
+        private readonly Dictionary<CreditCardTypeInternal, CreditCardType> creditCardTranslation =
+            new Dictionary<CreditCardTypeInternal, CreditCardType>
+            {
+                { CreditCardTypeInternal.AmericanExpress, CreditCardType.AmericanExpress },
+                { CreditCardTypeInternal.Discover, CreditCardType.Discover },
+                { CreditCardTypeInternal.MasterCard, CreditCardType.MasterCard },
+                { CreditCardTypeInternal.Visa, CreditCardType.Visa },
+            };
+
         /// <summary>
         /// Initializes a new instance of the <see cref="PaymentAndBillingAddressControl"/> class.
         /// </summary>
@@ -39,9 +53,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Registration
         {
             get
             {
-                return string.IsNullOrWhiteSpace(creditCardExpirationYear.Text)
-                    ? 0
-                    : Convert.ToInt32(creditCardExpirationYear.Value);
+                return string.IsNullOrWhiteSpace(creditCardExpirationYear.Text) ?
+                    0 :
+                    Convert.ToInt32(creditCardExpirationYear.Value);
             }
         }
 
@@ -52,16 +66,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Registration
         {
             get
             {
-                return string.IsNullOrWhiteSpace(creditCardExpirationMonth.Text)
-                    ? 0
-                    : Convert.ToInt32(creditCardExpirationMonth.Value);
+                return string.IsNullOrWhiteSpace(creditCardExpirationMonth.Text) ?
+                    0 :
+                    Convert.ToInt32(creditCardExpirationMonth.Value);
             }
         }
 
         /// <summary>
         /// Gets the type of the card.
         /// </summary>
-        public CreditCardType CardType => (CreditCardType) cardType.SelectedValue;
+        public CreditCardType CardType => creditCardTranslation[(CreditCardTypeInternal) cardType.SelectedValue];
 
         /// <summary>
         /// Gets the name of the card holder.

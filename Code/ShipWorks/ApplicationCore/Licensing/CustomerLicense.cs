@@ -304,7 +304,7 @@ namespace ShipWorks.ApplicationCore.Licensing
 
             Refresh();
 
-            if (!LicenseCapabilities.IsInTrial)
+            if (LicenseCapabilities != null && !LicenseCapabilities.IsInTrial)
             {
                 // The dashboard item should not be created when in the trial period since
                 // the shipment count is unlimited.
@@ -346,12 +346,12 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Checks the restriction for a specific feature
         /// </summary>
-        public EditionRestrictionLevel CheckRestriction(EditionFeature feature, object data)
+        public EnumResult<EditionRestrictionLevel> CheckRestriction(EditionFeature feature, object data)
         {
             Refresh();
 
             IFeatureRestriction restriction = featureRestrictions.SingleOrDefault(r => r.EditionFeature == feature);
-            return restriction?.Check(LicenseCapabilities, data) ?? EditionRestrictionLevel.None;
+            return restriction?.CheckWithReason(LicenseCapabilities, data) ?? EditionRestrictionLevel.None.AsEnumResult();
         }
 
         /// <summary>

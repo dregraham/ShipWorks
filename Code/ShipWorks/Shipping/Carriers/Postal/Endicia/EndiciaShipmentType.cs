@@ -24,6 +24,7 @@ using Autofac;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Shipping.Carriers.BestRate;
+using ShipWorks.Shipping.Carriers.Postal.Endicia.BestRate;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 {
@@ -564,6 +565,21 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             bucket.Relations.Add(PostalShipmentEntity.Relations.EndiciaShipmentEntityUsingShipmentID);
 
             adapter.UpdateEntitiesDirectly(new EndiciaShipmentEntity { RequestedLabelFormat = newLabelFormat }, bucket);
+        }
+
+        /// <summary>
+        /// Gets an instance to the best rate shipping broker for the Endicia shipment type based on the shipment configuration.
+        /// </summary>
+        /// <param name="shipment">The shipment.</param>
+        public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment)
+        {
+            if (AccountRepository.Accounts.Any())
+            {
+                return new EndiciaBestRateBroker(this, AccountRepository);
+            }
+
+            // We want to be able to show counter rates to users that don't have
+            return new NullShippingBroker();
         }
     }
 }

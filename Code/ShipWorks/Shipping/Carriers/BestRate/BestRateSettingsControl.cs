@@ -17,7 +17,6 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             ShipmentTypeCode.BestRate,
             ShipmentTypeCode.Other,
             ShipmentTypeCode.PostalWebTools,
-            ShipmentTypeCode.Endicia,
             ShipmentTypeCode.Express1Endicia,
             ShipmentTypeCode.Express1Usps,
             ShipmentTypeCode.UpsOnLineTools,
