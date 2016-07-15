@@ -1,6 +1,6 @@
-﻿using System;
-using Interapptive.Shared.Utility;
+﻿using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
+using System;
 
 namespace ShipWorks.Stores.Platforms.Odbc.DataSource
 {
@@ -28,7 +28,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataSource
             MethodConditions.EnsureArgumentIsNotNull(store, "Odbc Store");
 
             IOdbcDataSource dataSource = dataSourceFactory();
-            dataSource.Restore(store.ConnectionString);
+            dataSource.Restore(store.ImportConnectionString);
 
             return dataSource;
         }
@@ -41,7 +41,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataSource
             MethodConditions.EnsureArgumentIsNotNull(store, "Odbc Store");
 
             IOdbcDataSource dataSource = dataSourceFactory();
-            dataSource.Restore(store.ConnectionString);
+            dataSource.Restore(store.ImportConnectionString);
 
             return dataSource;
         }
