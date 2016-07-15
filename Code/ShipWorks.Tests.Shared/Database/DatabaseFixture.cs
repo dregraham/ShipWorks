@@ -164,7 +164,7 @@ DROP PROCEDURE [dbo].[GetDatabaseGuid]";
 
             return new DataContext(mock, context.Item1, context.Item2);
         }
-        
+
         /// <summary>
         /// Override registration for Control, which is usually MainForm
         /// </summary>
@@ -195,7 +195,8 @@ DROP PROCEDURE [dbo].[GetDatabaseGuid]";
 
             using (SqlAdapter sqlAdapter = new SqlAdapter(SqlSession.Current.OpenConnection()))
             {
-                UserEntity user = Create.Entity<UserEntity>().Save(sqlAdapter);
+                UserEntity user = UserUtility.CreateUser("shipworks", "shipworks@shipworks.com", string.Empty, true);
+                //UserEntity user = Create.Entity<UserEntity>().Save(sqlAdapter);
                 ComputerEntity computer = Create.Entity<ComputerEntity>().Save(sqlAdapter);
 
                 UserSession.Logon(user, computer, true);

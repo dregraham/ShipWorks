@@ -1,5 +1,4 @@
 ﻿using System;
-using Interapptive.Shared.Business;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
@@ -9,7 +8,8 @@ namespace ShipWorks.Tests.Shared.EntityBuilders
     /// <summary>
     /// Build an order entity
     /// </summary>
-    public class OrderItemEntityBuilder : EntityBuilder<OrderItemEntity>
+    public class OrderItemEntityBuilder<TOrderItem> : EntityBuilder<TOrderItem>
+        where TOrderItem : OrderItemEntity, new()
     {
         /// <summary>
         /// Modify an existing order item
@@ -17,10 +17,11 @@ namespace ShipWorks.Tests.Shared.EntityBuilders
         public OrderItemEntityBuilder()
         {
         }
+
         /// <summary>
         /// Modify an existing order item
         /// </summary>
-        public OrderItemEntityBuilder(OrderItemEntity orderItem) : base(orderItem)
+        public OrderItemEntityBuilder(TOrderItem orderItem) : base(orderItem)
         {
         }
 
@@ -35,18 +36,18 @@ namespace ShipWorks.Tests.Shared.EntityBuilders
         /// <summary>
         /// Add an item attribute to the order item
         /// </summary>
-        public OrderItemEntityBuilder WithItemAttribute() => WithItemAttribute(null);
+        public OrderItemEntityBuilder<TOrderItem> WithItemAttribute() => WithItemAttribute(null);
 
         /// <summary>
         /// Add an item attribute to the order item
         /// </summary>
-        public OrderItemEntityBuilder WithItemAttribute(Action<EntityBuilder<OrderItemAttributeEntity>> builderConfiguration) =>
+        public OrderItemEntityBuilder<TOrderItem> WithItemAttribute(Action<EntityBuilder<OrderItemAttributeEntity>> builderConfiguration) =>
             CreateCollectionEntity(builderConfiguration, x => x.OrderItemAttributes);
 
         /// <summary>
         /// Create an entity and add it to a collection
         /// </summary>
-        protected OrderItemEntityBuilder CreateCollectionEntity<T, TBuilder>(Action<TBuilder> builderConfiguration,
+        protected OrderItemEntityBuilder<TOrderItem> CreateCollectionEntity<T, TBuilder>(Action<TBuilder> builderConfiguration,
             Func<OrderItemEntity, EntityCollection<T>> addAction)
             where T : EntityBase2, new()
             where TBuilder : EntityBuilder<T>, new()
