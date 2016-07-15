@@ -1,6 +1,7 @@
 ﻿using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using System;
+using ShipWorks.Stores.Platforms.Odbc.Upload;
 
 namespace ShipWorks.Stores.Platforms.Odbc.DataSource
 {
@@ -49,8 +50,22 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataSource
         {
             MethodConditions.EnsureArgumentIsNotNull(store, "Odbc Store");
 
+            if (store.UploadStrategy == (int)OdbcShipmentUploadStrategy.DoNotUpload)
+            {
+                return null;
+            }
+
             IOdbcDataSource dataSource = dataSourceFactory();
-            dataSource.Restore(store.ImportConnectionString);
+
+            if (store.UploadStrategy == (int) OdbcShipmentUploadStrategy.UseImportDataSource)
+            {
+                dataSource.Restore(store.ImportConnectionString);
+            }
+
+            if (store.UploadStrategy == (int) OdbcShipmentUploadStrategy.UseImportDataSource)
+            {
+                dataSource.Restore(store.UploadConnectionString);
+            }
 
             return dataSource;
         }
