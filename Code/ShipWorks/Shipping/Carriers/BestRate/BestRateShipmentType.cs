@@ -357,9 +357,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             // We want to try to process with the selected rate that was provided. Build
             // up our list of fail over candidates in case the processing the shipment with
             // the first rate fails
-            List<RateResult> ratesToApplyToReturnedShipments = rateGroups
-                .ToList()
-                .SelectMany(x => x.Rates)
+            List<RateResult> ratesToApplyToReturnedShipments = filteredRates.Rates
                 .Where(r => r.AmountOrDefault == selectedRate.AmountOrDefault && r.OriginalTag != null && selectedRate.OriginalTag != null && r.OriginalTag.Equals(selectedRate.OriginalTag))
                 .ToList();
 

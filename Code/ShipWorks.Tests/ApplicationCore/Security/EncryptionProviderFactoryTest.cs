@@ -95,6 +95,32 @@ namespace ShipWorks.Tests.ApplicationCore.Security
             }
         }
 
+        [Fact]
+        public void CreateAesStreamEncryptionProvider_UsesStreamCipher()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                var cipherProvider = MockCipherProvider(mock, CipherContext.Stream);
+
+                mock.Create<EncryptionProviderFactory>().CreateAesStreamEncryptionProvider();
+
+                cipherProvider.Verify(i => i[It.Is<CipherContext>(c => c == CipherContext.Stream)], Times.Once);
+            }
+        }
+
+        [Fact]
+        public void CreateAesStreamEncryptionProvider_ReturnsAesStreamEncryptionProvider()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                MockCipherProvider(mock, CipherContext.Stream);
+
+                IEncryptionProvider provider = mock.Create<EncryptionProviderFactory>().CreateAesStreamEncryptionProvider();
+
+                Assert.IsType<AesStreamEncryptionProvider>(provider);
+            }
+        }
+
         private static Mock<IIndex<CipherContext, ICipherKey>> MockCipherProvider(AutoMock mock, CipherContext license)
         {
             var cipherKey = mock.Mock<ICipherKey>();

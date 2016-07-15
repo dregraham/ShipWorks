@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using ShipWorks.ApplicationCore.ExecutionMode;
 
 namespace ShipWorks.Tests.Shared
@@ -34,9 +35,9 @@ namespace ShipWorks.Tests.Shared
         /// <summary>
         /// Handle any exceptions
         /// </summary>
-        public override void HandleException(Exception exception, bool guiThread, string userEmail)
+        public override Task HandleException(Exception exception, bool guiThread, string userEmail)
         {
-            // Test doesn't need to do anything
+            return TaskEx.FromResult(true);
         }
     }
 }

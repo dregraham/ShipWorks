@@ -1,16 +1,15 @@
 ﻿using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using Interapptive.Shared.Utility;
-using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
-using ShipWorks.Shipping.Editing;
-using System;
+using Autofac;
+using ShipWorks.ApplicationCore;
+using ShipWorks.Data;
 using ShipWorks.Data.Model.Custom;
-using ShipWorks.Data.Model.Custom.EntityClasses;
 using ShipWorks.Shipping.Editing.Rating;
-using ShipWorks.Stores.Platforms.Amazon.WebServices.Associates;
 using ShipWorks.Properties;
+using ShipWorks.Stores;
 
 namespace ShipWorks.Shipping.Carriers.Postal.BestRate
 {
@@ -204,5 +203,37 @@ namespace ShipWorks.Shipping.Carriers.Postal.BestRate
         /// <param name="postalShipmentEntity">Postal shipment on which the account id should be set</param>
         /// <param name="account">Account that should be used for this shipment</param>
         protected abstract void UpdateChildAccountId(PostalShipmentEntity postalShipmentEntity, T account);
+
+        /// <summary>
+        /// Gets rates from the RatingService without Express1 rates
+        /// </summary>
+        protected RateGroup GetRatesFunction(ShipmentEntity shipment)
+        {
+            RateGroup rates;
+
+            // Get rates from ISupportExpress1Rates if it is registered for the shipmenttypecode
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                ShipmentType.UpdateDynamicShipmentData(shipment);
+
+                OrderHeader orderHeader = DataProvider.GetOrderHeader(shipment.OrderID);
+
+                // Confirm the address of the cloned shipment with the store giving it a chance to inspect/alter the shipping address
+                StoreType storeType = StoreTypeManager.GetType(StoreManager.GetStore(orderHeader.StoreID));
+                storeType.OverrideShipmentDetails(shipment);
+
+                ISupportExpress1Rates ratingService = lifetimeScope.ResolveKeyed<ISupportExpress1Rates>(ShipmentType.ShipmentTypeCode);
+
+                // Get rates without express1 rates
+                rates = ratingService.GetRates(shipment, false);
+            }
+
+            rates = rates.CopyWithRates(MergeDescriptionsWithNonSelectableRates(rates.Rates));
+
+            // If a postal counter provider, show USPS logo, otherwise show appropriate logo such as endicia:
+            rates.Rates.ForEach(UseProperUspsLogo);
+
+            return rates;
+        }
     }
 }

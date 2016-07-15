@@ -30,11 +30,12 @@ namespace ShipWorks.Stores.Tests.Platforms.Yahoo
             postalShipmentEntity = new PostalShipmentEntity { Service = (int)PostalServiceType.FirstClass };
             otherShipmentEntity = new OtherShipmentEntity { Carrier = "Some other carrier", Service = "Fast Ground" };
             upsEntity = new UpsShipmentEntity { Service = (int)UpsServiceType.UpsGround, UspsTrackingNumber = "mi tracking #" };
+            Mock<ILog> log = new Mock<ILog>();
 
 
             shippingManager.Setup(x => x.EnsureShipmentLoaded(shipmentEntity));
 
-            testObject = new YahooApiOnlineUpdater(LogManager.GetLogger(typeof(YahooApiOnlineUpdater)), new YahooApiWebClient(yahooApiStore.Object), shippingManager.Object);
+            testObject = new YahooApiOnlineUpdater(LogManager.GetLogger(typeof(YahooApiOnlineUpdater)), new YahooApiWebClient(yahooApiStore.Object, log.Object), shippingManager.Object);
         }
 
         [Fact]

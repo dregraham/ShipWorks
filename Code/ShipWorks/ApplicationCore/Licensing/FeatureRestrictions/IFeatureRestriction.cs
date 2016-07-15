@@ -1,4 +1,5 @@
 ﻿using System.Windows.Forms;
+using Interapptive.Shared.Utility;
 using ShipWorks.Editions;
 
 namespace ShipWorks.ApplicationCore.Licensing.FeatureRestrictions
@@ -14,6 +15,11 @@ namespace ShipWorks.ApplicationCore.Licensing.FeatureRestrictions
         /// Checks the restriction for this feature
         /// </summary>
         EditionRestrictionLevel Check(ILicenseCapabilities capabilities, object data);
+
+        /// <summary>
+        /// Checks the restriction for this feature with a reason for the restriction
+        /// </summary>
+        EnumResult<EditionRestrictionLevel> CheckWithReason(ILicenseCapabilities capabilities, object data);
 
         /// <summary>
         /// Handles the restriction for this feature

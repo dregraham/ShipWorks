@@ -33,6 +33,11 @@ namespace ShipWorks.ApplicationCore.Licensing
         EditionRestrictionLevel CheckRestriction(EditionFeature feature, object data);
 
         /// <summary>
+        /// Checks the restriction for a specific feature
+        /// </summary>
+        EnumResult<EditionRestrictionLevel> CheckRestrictionWithReason(EditionFeature feature, object data);
+
+        /// <summary>
         /// Handles the restriction for a specific feature
         /// </summary>
         bool HandleRestriction(EditionFeature feature, object data, IWin32Window owner);

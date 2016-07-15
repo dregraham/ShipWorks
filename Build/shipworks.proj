@@ -55,7 +55,6 @@
       CopyToLatest;
       RunTests;
       PackageModules;
-      SqlSnapshot;
       CreateInstaller;
       PackageResults;
     </BuildDependsOn>
@@ -234,14 +233,6 @@
     <PackageMivaModules ModuleFileMiva4="@(Miva4Module)" ModuleFileMiva5="@(Miva5Module)" OutputDirectory="$(ModulesDirectory)">
       <Output TaskParameter="PackagedFiles" PropertyName="PackagedMivaFiles" />
     </PackageMivaModules>
-
-  </Target>
-
-  <!-- Create a snapshot of the SQL database so that we can do schema comparisons for upgrades-->
-  <Target Name="SqlSnapshot" Condition=" $(CreateInstaller) == 'True' ">
-
-    <Message Text="Taking SQL Snapshot" />
-    <Exec Command='".\SqlSnapper\RedGate.SQLSnapper.exe" /server:INTSQL01\Development /database:ShipWorksSchema_staging /makesnapshot:"$(LogDirectory)\DatabaseSchema$(VersionMajor).$(VersionMinor).$(VersionBuild).$(VersionRevision).snp"' />
 
   </Target>
 

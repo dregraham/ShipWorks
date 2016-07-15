@@ -1,14 +1,14 @@
-﻿using Autofac.Features.OwnedInstances;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows.Forms;
+using Autofac.Features.OwnedInstances;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Editions;
 using ShipWorks.Stores;
 using ShipWorks.Users;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Windows.Forms;
 
 namespace ShipWorks.ApplicationCore.Licensing
 {
@@ -73,13 +73,21 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public EditionRestrictionLevel CheckRestriction(EditionFeature feature, object data)
         {
+            return CheckRestrictionWithReason(feature, data).Value;
+        }
+
+        /// <summary>
+        /// Checks the restriction for a specific feature
+        /// </summary>
+        public EnumResult<EditionRestrictionLevel> CheckRestrictionWithReason(EditionFeature feature, object data)
+        {
             if (SqlSession.Current == null || !getUserSession().Value.IsLoggedOn)
             {
-                return EditionRestrictionLevel.Forbidden;
+                return EditionRestrictionLevel.Forbidden.AsEnumResult();
             }
 
             return IsLegacy ?
-                EditionManager.ActiveRestrictions.CheckRestriction(feature, data).Level :
+                EditionManager.ActiveRestrictions.CheckRestriction(feature, data).Level.AsEnumResult() :
                 GetCustomerLicense().CheckRestriction(feature, data);
         }
 
@@ -93,9 +101,9 @@ namespace ShipWorks.ApplicationCore.Licensing
                 return false;
             }
 
-            return  IsLegacy
-                ? EditionManager.HandleRestrictionIssue(owner, EditionManager.ActiveRestrictions.CheckRestriction(feature, data))
-                : GetCustomerLicense().HandleRestriction(feature, data, owner);
+            return IsLegacy ?
+                EditionManager.HandleRestrictionIssue(owner, EditionManager.ActiveRestrictions.CheckRestriction(feature, data)) :
+                GetCustomerLicense().HandleRestriction(feature, data, owner);
         }
 
         /// <summary>
@@ -106,16 +114,13 @@ namespace ShipWorks.ApplicationCore.Licensing
         {
             try
             {
-                if (IsLegacy)
-                {
-                    return storeManager.GetEnabledStores().Select(GetLicense);
-                }
-
-                return new[] { GetCustomerLicense() };
+                return IsLegacy ?
+                    storeManager.GetEnabledStores().Select(GetLicense) :
+                    new[] { GetCustomerLicense() };
             }
             catch (ShipWorksLicenseException ex)
             {
-                return new[] {new DisabledLicense(ex.Message)};
+                return new[] { new DisabledLicense(ex.Message) };
             }
         }
 

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Interapptive.Shared;
+using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.AddressValidation;
@@ -140,78 +141,87 @@ namespace ShipWorks.Shipping
         [NDependIgnoreLongMethod]
         private void LoadShipmentsInternal(ProgressItem workProgress, List<long> entityIDsOriginalSort)
         {
-            // We need to make sure filters are up to date so profiles being applied can be as accurate as possible.
-            FilterHelper.EnsureFiltersUpToDate(TimeSpan.FromSeconds(15));
-
-            int count = 0;
-            int total = entityIDsOriginalSort.Count;
-            EntityType keyType = entityIDsOriginalSort.Any() ? EntityUtility.GetEntityType(entityIDsOriginalSort.First()) : EntityType.OrderEntity;
-
-            workProgress.Starting();
-
-            IOrderedEnumerable<long> orderByDescending = entityIDsOriginalSort.OrderByDescending(id => id);
-
-            foreach (long entityID in orderByDescending)
+            using (TrackedDurationEvent trackedDurationEvent = new TrackedDurationEvent("LoadShipments"))
             {
-                if (workProgress.IsCancelRequested)
+                // We need to make sure filters are up to date so profiles being applied can be as accurate as possible.
+                FilterHelper.EnsureFiltersUpToDate(TimeSpan.FromSeconds(15));
+
+                int newShipmentCount = 0;
+                int count = 0;
+                int total = entityIDsOriginalSort.Count;
+                EntityType keyType = entityIDsOriginalSort.Any() ? EntityUtility.GetEntityType(entityIDsOriginalSort.First()) : EntityType.OrderEntity;
+
+                workProgress.Starting();
+
+                IOrderedEnumerable<long> orderByDescending = entityIDsOriginalSort.OrderByDescending(id => id);
+
+                foreach (long entityID in orderByDescending)
                 {
-                    wasCanceled = true;
-                    break;
-                }
-
-                workProgress.Detail = $"Loading {count + 1} of {total}";
-
-                // Execute the work
-                try
-                {
-                    List<ShipmentEntity> iterationShipments = new List<ShipmentEntity>();
-
-                    if (keyType == EntityType.OrderEntity)
+                    if (workProgress.IsCancelRequested)
                     {
-                        bool createIfNone = UserSession.Security.HasPermission(PermissionType.ShipmentsCreateEditProcess, entityID);
-
-                        iterationShipments.AddRange(ShippingManager.GetShipments(entityID, createIfNone));
+                        wasCanceled = true;
+                        break;
                     }
-                    else if (keyType == EntityType.ShipmentEntity)
+
+                    workProgress.Detail = $"Loading {count + 1} of {total}";
+
+                    // Execute the work
+                    try
                     {
-                        ShipmentEntity shipment = ShippingManager.GetShipment(entityID);
-                        if (shipment != null)
+                        List<ShipmentEntity> iterationShipments = new List<ShipmentEntity>();
+
+                        if (keyType == EntityType.OrderEntity)
                         {
-                            iterationShipments.Add(shipment);
+                            bool createIfNone = UserSession.Security.HasPermission(PermissionType.ShipmentsCreateEditProcess, entityID);
+
+                            iterationShipments.AddRange(ShippingManager.GetShipments(entityID, createIfNone));
+                            newShipmentCount += iterationShipments.Count(s => s.JustCreated);
+                        }
+                        else if (keyType == EntityType.ShipmentEntity)
+                        {
+                            ShipmentEntity shipment = ShippingManager.GetShipment(entityID);
+                            if (shipment != null)
+                            {
+                                iterationShipments.Add(shipment);
+                            }
+                        }
+                        else
+                        {
+                            throw new InvalidOperationException("Invalid key type passed to load shipments.");
+                        }
+
+                        // Queue the shipments to be validated
+                        foreach (ShipmentEntity shipment in iterationShipments)
+                        {
+                            // Add them to the global list
+                            globalShipments.Add(shipment.ShipmentID, shipment);
+
+                            // try for a few ms to add an item
+                            while (!shipmentsToValidate.TryAdd(shipment, TimeSpan.FromMilliseconds(50)) && !workProgress.IsCancelRequested)
+                            {
+                            }
                         }
                     }
-                    else
+                    catch (SqlForeignKeyException)
                     {
-                        throw new InvalidOperationException("Invalid key type passed to load shipments.");
+                        // If the order got deleted just forget it - its not an error, the shipments just don't load.
+                        log.WarnFormat("Did not load shipments for entity {0} due to FK exception.", entityID);
                     }
 
-                    // Queue the shipments to be validated
-                    foreach (ShipmentEntity shipment in iterationShipments)
-                    {
-                        // Add them to the global list
-                        globalShipments.Add(shipment.ShipmentID, shipment);
+                    count++;
 
-                        // try for a few ms to add an item
-                        while (!shipmentsToValidate.TryAdd(shipment, TimeSpan.FromMilliseconds(50)) && !workProgress.IsCancelRequested)
-                        {
-                        }
-                    }
-                }
-                catch (SqlForeignKeyException)
-                {
-                    // If the order got deleted just forget it - its not an error, the shipments just don't load.
-                    log.WarnFormat("Did not load shipments for entity {0} due to FK exception.", entityID);
+                    workProgress.PercentComplete = (100*count)/total;
                 }
 
-                count++;
+                finishedLoadingShipments = true;
+                shipmentsToValidate.CompleteAdding();
 
-                workProgress.PercentComplete = (100 * count) / total;
+                workProgress.Completed();
+
+                trackedDurationEvent.AddMetric("Orders", entityIDsOriginalSort.Count);
+                trackedDurationEvent.AddMetric("TotalShipments", globalShipments.Count);
+                trackedDurationEvent.AddMetric("ShipmentsCreated", newShipmentCount);
             }
-
-            finishedLoadingShipments = true;
-            shipmentsToValidate.CompleteAdding();
-
-            workProgress.Completed();
         }
 
         /// <summary>
@@ -220,12 +230,11 @@ namespace ShipWorks.Shipping
         private async Task ValidateShipmentsInternal(ProgressItem workProgress, int initialCount)
         {
             int count = 0;
-            int total = initialCount;
             workProgress.Starting();
 
             // Loading orders may load more than one shipment, so the actual count of shipments to
             // validate may change during the loading process
-            total = finishedLoadingShipments ? globalShipments.Count : Math.Max(total, globalShipments.Count);
+            int total = finishedLoadingShipments ? globalShipments.Count : Math.Max(initialCount, globalShipments.Count);
 
             workProgress.Detail = $"Validating {count} of {total}";
 
@@ -236,6 +245,8 @@ namespace ShipWorks.Shipping
                         globalShipments[shipment.ShipmentID] = shipment;
 
                         count++;
+                        total = Math.Max(total, globalShipments.Count);
+
                         workProgress.PercentComplete = (100 * count) / total;
 
                         if (count != total)
