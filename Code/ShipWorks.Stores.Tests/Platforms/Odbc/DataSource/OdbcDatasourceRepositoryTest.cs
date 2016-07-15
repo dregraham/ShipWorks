@@ -24,6 +24,11 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.DataSource
                 dsnProvider.Setup(p => p.GetDataSourceNames())
                     .Returns(new[] { "blah" });
 
+                Mock<IOdbcDataSource> dataSource = mock.Mock<IOdbcDataSource>();
+
+                Mock<IOdbcDataSourceFactory> dataSourceFactory = mock.Mock<IOdbcDataSourceFactory>();
+                dataSourceFactory.Setup(d => d.CreateEmptyDataSource()).Returns(dataSource.Object);
+
                 OdbcDataSourceRepository repo = mock.Create<OdbcDataSourceRepository>();
                 repo.GetDataSources();
 
@@ -36,9 +41,11 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.DataSource
         {
             using (var mock = AutoMock.GetLoose())
             {
-                Mock<IDsnProvider> dsnProvider = mock.Mock<IDsnProvider>();
-                dsnProvider.Setup(p => p.GetDataSourceNames())
-                    .Returns(new[] { "blah" });
+                Mock<IOdbcDataSource> dataSource = mock.Mock<IOdbcDataSource>();
+                dataSource.SetupGet(d => d.IsCustom).Returns(true);
+
+                Mock<IOdbcDataSourceFactory> dataSourceFactory = mock.Mock<IOdbcDataSourceFactory>();
+                dataSourceFactory.Setup(d => d.CreateEmptyDataSource()).Returns(dataSource.Object);
 
                 Mock<IShipWorksDbProviderFactory> providerFactory = mock.Mock<IShipWorksDbProviderFactory>();
                 Mock<IEncryptionProviderFactory> encryptionFactory = mock.Mock<IEncryptionProviderFactory>();
@@ -55,6 +62,13 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.DataSource
         {
             using (var mock = AutoMock.GetLoose())
             {
+                Mock<IOdbcDataSource> dataSourcemock = mock.Mock<IOdbcDataSource>();
+                dataSourcemock.SetupGet(d => d.IsCustom).Returns(true);
+                dataSourcemock.SetupGet(d => d.Name).Returns("blah");
+
+                Mock<IOdbcDataSourceFactory> dataSourceFactory = mock.Mock<IOdbcDataSourceFactory>();
+                dataSourceFactory.Setup(d => d.CreateEmptyDataSource()).Returns(dataSourcemock.Object);
+
                 Mock<IDsnProvider> dsnProvider = mock.Mock<IDsnProvider>();
                 dsnProvider.Setup(p => p.GetDataSourceNames())
                     .Returns(new[] {"blah"});
@@ -74,6 +88,9 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.DataSource
         {
             using (var mock = AutoMock.GetLoose())
             {
+                Mock<IOdbcDataSourceFactory> dataSourceFactory = mock.Mock<IOdbcDataSourceFactory>();
+                dataSourceFactory.Setup(d => d.CreateEmptyDataSource()).Returns(mock.Mock<IOdbcDataSource>().Object);
+
                 Mock<IDsnProvider> dsnProvider = mock.Mock<IDsnProvider>();
                 dsnProvider.Setup(p => p.GetDataSourceNames())
                     .Returns(new[] {"1", "2", "3", "4", "5"});

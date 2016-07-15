@@ -12,7 +12,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
 {
     public partial class OdbcUploadMappingPage : AddStoreWizardPage, IOdbcWizardPage
     {
-        private readonly Func<IOdbcDataSource> dataSourceFactory;
+        private readonly IOdbcDataSourceFactory dataSourceFactory;
         private readonly Func<string, IOdbcColumnSource> columnSourceFactory;
         private IOdbcUploadMappingControlViewModel viewModel;
         private OdbcStoreEntity store;
@@ -22,7 +22,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcImportFieldMappingPage"/> class.
         /// </summary>
-        public OdbcUploadMappingPage(Func<IOdbcDataSource> dataSourceFactory,
+        public OdbcUploadMappingPage(IOdbcDataSourceFactory dataSourceFactory,
             Func<IOdbcUploadMappingControlViewModel> viewModelFactory,
             Func<string, IOdbcColumnSource> columnSourceFactory)
         {
@@ -79,9 +79,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
             if (string.IsNullOrWhiteSpace(previousColumnSource) ||
                 !previousColumnSource.Equals(currentColumnSource, StringComparison.Ordinal))
             {
-                IOdbcDataSource selectedDataSource = dataSourceFactory();
-
-                selectedDataSource.Restore(store.ImportConnectionString);
+                IOdbcDataSource selectedDataSource = dataSourceFactory.CreateImportDataSource(store);
 
                 IOdbcColumnSource columnSource = columnSourceFactory(currentColumnSource);
 

@@ -8,6 +8,12 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataSource
     public interface IOdbcDataSourceFactory
     {
         /// <summary>
+        /// Create an empty data source
+        /// </summary>
+        /// <returns></returns>
+        IOdbcDataSource CreateEmptyDataSource();
+
+        /// <summary>
         /// Create the import datasource for the given store
         /// </summary>
         IOdbcDataSource CreateImportDataSource(OdbcStoreEntity store);
