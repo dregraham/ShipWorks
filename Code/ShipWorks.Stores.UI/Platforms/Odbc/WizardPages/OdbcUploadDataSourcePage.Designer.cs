@@ -45,8 +45,10 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.odbcDataSourceControl);
+            this.Description = "Setup the ODBC data source used for uploading your shipments.";
             this.Name = "OdbcUploadDataSourcePage";
             this.Size = new System.Drawing.Size(621, 231);
+            this.Title = "Setup Upload Data Source";
             this.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNext);
             this.SteppingInto += new System.EventHandler<ShipWorks.UI.Wizard.WizardSteppingIntoEventArgs>(this.OnSteppingInto);
             this.ResumeLayout(false);

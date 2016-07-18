@@ -45,9 +45,11 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.odbcDataSourceControl);
+            this.Description = "Setup the ODBC data source used for importing your orders.";
             this.Font = new System.Drawing.Font("Tahoma", 8.25F);
             this.Name = "OdbcImportDataSourcePage";
             this.Size = new System.Drawing.Size(512, 209);
+            this.Title = "Setup Import Data Source";
             this.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNext);
             this.ResumeLayout(false);
 
