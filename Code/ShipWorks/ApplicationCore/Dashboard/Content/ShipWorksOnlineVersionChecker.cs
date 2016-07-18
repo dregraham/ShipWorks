@@ -1,21 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Net;
+using System.Diagnostics;
 using System.IO;
+using System.Linq;
+using System.Net;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.XPath;
+using log4net;
 using ShipWorks.Data.Adapter.Custom;
 using ShipWorks.Data.Connection;
-using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Users;
-using System.Diagnostics;
-using log4net;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Insurance;
+using ShipWorks.Users;
 
 namespace ShipWorks.ApplicationCore.Dashboard.Content
 {
@@ -33,7 +30,7 @@ namespace ShipWorks.ApplicationCore.Dashboard.Content
         public static ShipWorksOnlineVersion CheckOnlineVersion()
         {
             Uri requestUri = new Uri("http://www.interapptive.com/shipworks/version.php");
-            
+
             HttpWebRequest request = (HttpWebRequest) WebRequest.Create(requestUri);
             request.UserAgent = "shipworks";
 
@@ -76,6 +73,12 @@ namespace ShipWorks.ApplicationCore.Dashboard.Content
             catch (XmlException ex)
             {
                 log.Error("Online version response could not be parsed: " + ex.Message);
+
+                throw new WebException(ex.Message, ex);
+            }
+            catch (InvalidOperationException ex)
+            {
+                log.Error("Online version could not be retrieved: " + ex.Message);
 
                 throw new WebException(ex.Message, ex);
             }

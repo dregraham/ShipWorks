@@ -4,6 +4,7 @@ using System.Globalization;
 using System.IO;
 using System.Reflection;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Interapptive.Shared;
 using Interapptive.Shared.UI;
@@ -82,7 +83,7 @@ namespace ShipWorks
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
-        public static void Main()
+        public static async Task Main()
         {
             // These come first regardless of ExecutionMode. Even the ServiceExecutionMode uses UI to prompt for credentials.
             Application.SetCompatibleTextRenderingDefault(false);
@@ -153,7 +154,7 @@ namespace ShipWorks
             }
             catch (Exception ex)
             {
-                HandleUnhandledException(ex, false);
+                await HandleUnhandledException(ex, false);
             }
 
             Environment.Exit(Environment.ExitCode);
@@ -341,23 +342,23 @@ namespace ShipWorks
         /// <summary>
         /// An unhandled exception occurred in the AppDomain, outside of a GUI thread.
         /// </summary>
-        private static void OnAppDomainException(object sender, UnhandledExceptionEventArgs e)
+        private static async void OnAppDomainException(object sender, UnhandledExceptionEventArgs e)
         {
-            HandleUnhandledException((Exception) e.ExceptionObject, false);
+            await HandleUnhandledException((Exception) e.ExceptionObject, false);
         }
 
         /// <summary>
         /// An unhandled exception occurred in a GUI thread.
         /// </summary>
-        private static void OnApplicationException(object sender, ThreadExceptionEventArgs e)
+        private static async void OnApplicationException(object sender, ThreadExceptionEventArgs e)
         {
-            HandleUnhandledException(e.Exception, true);
+            await HandleUnhandledException(e.Exception, true);
         }
 
         /// <summary>
         /// Handles an unhandled exception.
         /// </summary>
-        private static void HandleUnhandledException(Exception ex, bool guiThread)
+        private async static Task HandleUnhandledException(Exception ex, bool guiThread)
         {
             // No executionMode, so default to the original exception handling.
             if (isCrashing)
@@ -380,7 +381,7 @@ namespace ShipWorks
             // If executionMode exists, use it's HandleException method.  Otherwise we'll use the default.
             if (ExecutionMode != null)
             {
-                ExecutionMode.HandleException(ex, guiThread, userEmail);
+                await ExecutionMode.HandleException(ex, guiThread, userEmail);
             }
             else
             {

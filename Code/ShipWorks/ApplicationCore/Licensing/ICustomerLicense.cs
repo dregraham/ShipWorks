@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Windows.Forms;
+using Interapptive.Shared.Utility;
 using ShipWorks.Editions;
 using ShipWorks.Stores;
 using ShipWorks.Users.Security;
@@ -39,7 +40,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Checks the restriction for a specific feature
         /// </summary>
-        EditionRestrictionLevel CheckRestriction(EditionFeature feature, object data);
+        EnumResult<EditionRestrictionLevel> CheckRestriction(EditionFeature feature, object data);
 
         /// <summary>
         /// Handles the restriction for a specific feature

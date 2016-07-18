@@ -9,6 +9,7 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Stores.Content;
 
 namespace ShipWorks.Shipping
 {
@@ -22,6 +23,8 @@ namespace ShipWorks.Shipping
         /// </summary>
         public static bool IsCustomsRequired(ShipmentEntity shipment)
         {
+            OrderUtility.PopulateOrderDetails(shipment);
+
             // Defer to the shipment type to inspect the shipment to determine whether
             // customs is required based on any carrier-specific logic (i.e. best-rate)
             ShipmentType shipmpentType = ShipmentTypeManager.GetType(shipment);

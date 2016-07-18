@@ -245,6 +245,9 @@ namespace ShipWorks.ApplicationCore
 
             builder.RegisterType<LicenseCipherKey>()
                 .Keyed<ICipherKey>(CipherContext.License);
+
+            builder.RegisterType<StreamCipherKey>()
+                .Keyed<ICipherKey>(CipherContext.Stream);
         }
 
         /// <summary>

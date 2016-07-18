@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Diagnostics;
-using System.Linq;
-using System.Windows.Forms;
-using Autofac;
+﻿using Autofac;
 using Divelements.SandGrid;
 using Divelements.SandGrid.Rendering;
 using Interapptive.Shared;
@@ -20,9 +13,17 @@ using ShipWorks.Data.Grid;
 using ShipWorks.Data.Grid.Columns;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Filters;
+using ShipWorks.Stores.Content;
 using ShipWorks.UI.Utility;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Diagnostics;
+using System.Linq;
+using System.Windows.Forms;
 
 namespace ShipWorks.Shipping.Editing
 {
@@ -54,16 +55,6 @@ namespace ShipWorks.Shipping.Editing
         /// The grid selection has changed
         /// </summary>
         public event ShipmentSelectionChangedEventHandler SelectionChanged;
-
-        /// <summary>
-        /// Raised when shipments are added to the grid
-        /// </summary>
-        public event EventHandler ShipmentsAdded;
-
-        /// <summary>
-        /// Raised when shipments are removed from the grid
-        /// </summary>
-        public event EventHandler ShipmentsRemoved;
 
         /// <summary>
         /// Constructor
@@ -161,10 +152,7 @@ namespace ShipWorks.Shipping.Editing
 
             UpdateSelectionDependentUI();
 
-            if (SelectionChanged != null)
-            {
-                SelectionChanged(this, new ShipmentSelectionChangedEventArgs(previousSelection.Values.ToList()));
-            }
+            SelectionChanged?.Invoke(this, new ShipmentSelectionChangedEventArgs(previousSelection.Values.ToList()));
 
             previousSelection = SelectedRows.ToDictionary(r => r.Shipment.ShipmentID);
         }
@@ -280,18 +268,12 @@ namespace ShipWorks.Shipping.Editing
             // that some where selected.
             SuspendSelectionProcessing();
 
-            bool removed = false;
-
-            List<ShipmentEntity> shipmentsDeleted = new List<ShipmentEntity>();
-
             // Go through each one and remove the grid row for any shipment that is now deleted
             foreach (ShipmentGridRow row in AllRows.ToList())
             {
                 if (row.Shipment.DeletedFromDatabase)
                 {
                     RemoveShipmentRow(row.Shipment.ShipmentID);
-                    removed = true;
-                    shipmentsDeleted.Add(row.Shipment);
                 }
             }
 
@@ -300,45 +282,15 @@ namespace ShipWorks.Shipping.Editing
 
             // Force the sort and refresh of displayed data
             Resort();
-
-            if (removed)
-            {
-                ShipmentGridShipmentsChangedEventArgs eventArgs = new ShipmentGridShipmentsChangedEventArgs(null, shipmentsDeleted);
-                RaiseShipmentsRemoved(eventArgs);
-            }
         }
 
-        /// <summary>
-        /// Raise the ShipmentsAdded event
-        /// </summary>
-        private void RaiseShipmentsAdded(ShipmentGridShipmentsChangedEventArgs eventArgs)
-        {
-            if (ShipmentsAdded != null)
-            {
-                ShipmentsAdded(this, eventArgs);
-            }
-        }
-
-        /// <summary>
-        /// Raise the ShipmentsRemoved event
-        /// </summary>
-        private void RaiseShipmentsRemoved(ShipmentGridShipmentsChangedEventArgs eventArgs)
-        {
-            if (ShipmentsRemoved != null)
-            {
-                ShipmentsRemoved(this, eventArgs);
-            }
-        }
 
         #region Shipment Management
 
         /// <summary>
         /// The total number of selected rows
         /// </summary>
-        public int SelectedRowCount
-        {
-            get { return entityGrid.SelectedElements.Count; }
-        }
+        public int SelectedRowCount => entityGrid.SelectedElements.Count;
 
         /// <summary>
         /// Get the strongly typed collection of selected shipment rows
@@ -453,42 +405,23 @@ namespace ShipWorks.Shipping.Editing
             try
             {
                 ShipmentEntity shipment = ShippingManager.CreateShipment(order.OrderID);
-                ShipmentGridRow row = AddShipment(shipment, selectedRow.SortIndex);
 
+                AddShipment(shipment, selectedRow.SortIndex);
                 SelectShipments(new List<ShipmentEntity>() { shipment });
 
                 Resort();
-
-                ShipmentGridShipmentsChangedEventArgs eventArgs = new ShipmentGridShipmentsChangedEventArgs(new List<ShipmentEntity>() { shipment }, null);
-                RaiseShipmentsAdded(eventArgs);
             }
             catch (SqlForeignKeyException)
             {
                 MessageHelper.ShowError(this, "The order has been deleted.");
 
-                List<ShipmentGridRow> toRemove = new List<ShipmentGridRow>();
-
-                // Delete all the rows that are for this order
-                foreach (ShipmentGridRow row in entityGrid.Rows)
-                {
-                    if (row.Shipment.OrderID == order.OrderID)
-                    {
-                        toRemove.Add(row);
-                    }
-                }
-
-                foreach (ShipmentGridRow row in toRemove)
-                {
-                    RemoveShipmentRow(row.Shipment.ShipmentID);
-                }
+                // Calls ToList so that Remove won't be called on the collection we are iterating through.
+                entityGrid.Rows.Cast<ShipmentGridRow>()
+                    .Where(row => row.Shipment.OrderID == order.OrderID)
+                    .ToList()
+                    .ForEach(row => RemoveShipmentRow(row.Shipment.ShipmentID));
 
                 Resort();
-
-                if (toRemove.Count > 0)
-                {
-                    ShipmentGridShipmentsChangedEventArgs eventArgs = new ShipmentGridShipmentsChangedEventArgs(null, toRemove.Select(row => row.Shipment).ToList());
-                    RaiseShipmentsRemoved(eventArgs);
-                }
             }
         }
 
@@ -551,9 +484,6 @@ namespace ShipWorks.Shipping.Editing
             ResumeSelectionProcessing();
 
             UpdateStatusBar();
-
-            ShipmentGridShipmentsChangedEventArgs eventArgs = new ShipmentGridShipmentsChangedEventArgs(shipments, null);
-            RaiseShipmentsAdded(eventArgs);
         }
 
         /// <summary>
@@ -561,7 +491,7 @@ namespace ShipWorks.Shipping.Editing
         /// </summary>
         void OnLoadMoreShipmentsCompleted(object sender, ShipmentsLoadedEventArgs e)
         {
-            if (this.IsDisposed)
+            if (IsDisposed)
             {
                 return;
             }
@@ -586,11 +516,7 @@ namespace ShipWorks.Shipping.Editing
 
             Resort();
             ResumeSelectionProcessing();
-
             UpdateStatusBar();
-
-            ShipmentGridShipmentsChangedEventArgs eventArgs = new ShipmentGridShipmentsChangedEventArgs(e.Shipments, null);
-            RaiseShipmentsAdded(eventArgs);
         }
 
         /// <summary>
@@ -610,7 +536,7 @@ namespace ShipWorks.Shipping.Editing
         /// <summary>
         /// Delete the selected shipments
         /// </summary>
-        private void OnDeleteShipments(object sender, EventArgs e)
+        private async void OnDeleteShipments(object sender, EventArgs e)
         {
             List<ShipmentGridRow> shipmentRows = entityGrid.SelectedElements.Cast<ShipmentGridRow>().ToList();
             bool processed = shipmentRows.Count(r => r.Shipment.Processed) > 0;
@@ -644,8 +570,7 @@ namespace ShipWorks.Shipping.Editing
                     "ShipWorks is deleting the selected shipments.",
                     "Deleting {0} of {1}");
 
-                executor.ExecuteCompleted += OnDeleteCompleted;
-                executor.ExecuteAsync((gridRow, state, issueAdder) =>
+                BackgroundExecutorCompletedEventArgs<ShipmentGridRow> completedEventArgs = await executor.ExecuteAsync((gridRow, state, issueAdder) =>
                 {
                     ShipmentEntity shipment = gridRow.Shipment;
                     long shipmentID = shipment.ShipmentID;
@@ -668,13 +593,15 @@ namespace ShipWorks.Shipping.Editing
                 },
                 shipmentRows,
                 shipmentRows.Select(row => row.Shipment).ToList());
+
+                OnDeleteCompleted(completedEventArgs);
             }
         }
 
         /// <summary>
         /// The async delete of shipments has completed
         /// </summary>
-        void OnDeleteCompleted(object sender, BackgroundExecutorCompletedEventArgs<ShipmentGridRow> e)
+        void OnDeleteCompleted(BackgroundExecutorCompletedEventArgs<ShipmentGridRow> e)
         {
             if (e.Issues.Count > 0)
             {
@@ -683,11 +610,6 @@ namespace ShipWorks.Shipping.Editing
 
             Resort();
             ResumeSelectionProcessing();
-
-            List<ShipmentEntity> shipments = (List<ShipmentEntity>) e.UserState;
-
-            ShipmentGridShipmentsChangedEventArgs eventArgs = new ShipmentGridShipmentsChangedEventArgs(null, shipments);
-            RaiseShipmentsRemoved(eventArgs);
         }
 
         /// <summary>
@@ -697,17 +619,12 @@ namespace ShipWorks.Shipping.Editing
         {
             SuspendSelectionProcessing();
 
-            List<ShipmentEntity> shipmentsDeleted = new List<ShipmentEntity>();
             foreach (ShipmentGridRow selected in entityGrid.SelectedElements.ToArray())
             {
                 RemoveShipmentRow(selected.Shipment.ShipmentID);
-                shipmentsDeleted.Add(selected.Shipment);
             }
 
             ResumeSelectionProcessing();
-
-            ShipmentGridShipmentsChangedEventArgs eventArgs = new ShipmentGridShipmentsChangedEventArgs(null, shipmentsDeleted);
-            RaiseShipmentsRemoved(eventArgs);
         }
 
         /// <summary>
@@ -746,6 +663,8 @@ namespace ShipWorks.Shipping.Editing
             {
                 if (order == null)
                 {
+                    OrderUtility.PopulateOrderDetails(shipment);
+                    ShippingManager.EnsureShipmentLoaded(shipment);
                     order = shipment.Order;
                 }
                 else

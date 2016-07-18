@@ -2,14 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Windows.Forms;
+using System.Threading.Tasks;
 using Interapptive.Shared.Data;
-using ShipWorks.ApplicationCore.Crashes;
+using log4net;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Data.Connection;
-using ShipWorks.Users;
-using log4net;
 
 namespace ShipWorks.ApplicationCore.ExecutionMode
 {
@@ -116,7 +113,7 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
         /// just before the app terminates.
         /// </summary>
         /// <param name="exception">The exception that has bubbled up the entire stack.</param>
-        public override void HandleException(Exception exception, bool guiThread, string userEmail)
+        public override Task HandleException(Exception exception, bool guiThread, string userEmail)
         {
             if (ConnectionMonitor.HandleTerminatedConnection(exception))
             {
@@ -131,6 +128,8 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
                     log.Fatal(SqlUtility.GetRunningSqlCommands(SqlSession.Current.Configuration.GetConnectionString()));
                 }
             }
+
+            return TaskEx.FromResult(true);
         }
     }
 }

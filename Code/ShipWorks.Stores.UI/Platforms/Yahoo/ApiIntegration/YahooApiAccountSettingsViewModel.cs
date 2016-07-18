@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Reflection;
+using log4net;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Yahoo;
 using ShipWorks.Stores.Platforms.Yahoo.ApiIntegration;
@@ -13,6 +14,7 @@ namespace ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration
     /// </summary>
     public class YahooApiAccountSettingsViewModel : YahooApiAccountViewModel, INotifyPropertyChanged
     {
+        private readonly Func<Type, ILog> logFactory;
         private string helpUrl ;
 
         /// <summary>
@@ -20,8 +22,9 @@ namespace ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration
         /// </summary>
         /// <param name="storeTypeManager"></param>
         /// <param name="storeWebClient">The store web client.</param>
-        public YahooApiAccountSettingsViewModel(IStoreTypeManager storeTypeManager, Func<YahooStoreEntity, IYahooApiWebClient> storeWebClient) : base(storeWebClient)
+        public YahooApiAccountSettingsViewModel(IStoreTypeManager storeTypeManager, Func<YahooStoreEntity, ILog, IYahooApiWebClient> storeWebClient, Func<Type, ILog> logFactory) : base(storeWebClient, logFactory)
         {
+            this.logFactory = logFactory;
             YahooStoreType storeType = storeTypeManager.GetType(StoreTypeCode.Yahoo) as YahooStoreType;
             HelpUrl = storeType?.InvalidAccessTokenHelpUrl;
         }
@@ -77,7 +80,7 @@ namespace ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration
 
             try
             {
-                YahooResponse response = StoreWebClient(new YahooStoreEntity() { YahooStoreID = YahooStoreID, AccessToken = AccessToken })
+                YahooResponse response = StoreWebClient(new YahooStoreEntity() { YahooStoreID = YahooStoreID, AccessToken = AccessToken }, logFactory(typeof(YahooApiWebClient)))
                     .ValidateCredentials();
 
                 string error = CheckCredentialsError(response);

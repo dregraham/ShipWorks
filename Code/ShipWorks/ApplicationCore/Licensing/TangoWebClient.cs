@@ -161,6 +161,17 @@ namespace ShipWorks.ApplicationCore.Licensing
         }
 
         /// <summary>
+        /// Gets the Tango customer id for a license.
+        /// </summary>
+        public static string GetTangoCustomerId()
+        {
+            StoreEntity store = StoreManager.GetEnabledStores().FirstOrDefault() ??
+                                StoreManager.GetAllStores().FirstOrDefault();
+
+            return store != null ? GetLicenseStatus(store.License, store).TangoCustomerID : string.Empty;
+        }
+
+        /// <summary>
         /// Returns an InsureShipAffiliate for the specified store.
         /// If one cannot be found, an InsureShipException is thrown.
         /// </summary>
@@ -1182,13 +1193,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public static ILicenseCapabilities GetLicenseCapabilities(ICustomerLicense license)
         {
-            HttpVariableRequestSubmitter postRequest = new HttpVariableRequestSubmitter();
-
-            postRequest.Variables.Add("action", "login");
-            postRequest.Variables.Add("customerlicense", license.Key);
-            postRequest.Variables.Add("version", Version);
-
-            XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "GetLicenseCapabilities");
+            XmlDocument xmlResponse = GetLicenseCapabilitiesXmlDocument(license);
 
             try
             {
@@ -1198,6 +1203,22 @@ namespace ShipWorks.ApplicationCore.Licensing
             {
                 throw new TangoException(ex);
             }
+        }
+
+        /// <summary>
+        /// Gets the license capabilities.
+        /// </summary>
+        private static XmlDocument GetLicenseCapabilitiesXmlDocument(ICustomerLicense license)
+        {
+            HttpVariableRequestSubmitter postRequest = new HttpVariableRequestSubmitter();
+
+            postRequest.Variables.Add("action", "login");
+            postRequest.Variables.Add("customerlicense", license.Key);
+            postRequest.Variables.Add("version", Version);
+
+            XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "GetLicenseCapabilities");
+
+            return xmlResponse;
         }
 
         /// <summary>

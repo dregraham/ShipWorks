@@ -176,7 +176,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 // Increment the page, if that's the method we are using
                 //if (usePagedDownload)
                 //{
-                    page++;
+                page++;
                 //}
             }
         }
@@ -187,7 +187,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
         private void ProcessOrder(OrderType orderType)
         {
             // Get the ShipWorks order.  This ends up calling our overriden FindOrder implementation
-            EbayOrderEntity order = (EbayOrderEntity)InstantiateOrder(new EbayOrderIdentifier(orderType.OrderID));
+            EbayOrderEntity order = (EbayOrderEntity) InstantiateOrder(new EbayOrderIdentifier(orderType.OrderID));
 
             // Special processing for cancelled orders. If we'd never seen it before, there's no reason to do anything - just ignore it.
             if (orderType.OrderStatus == OrderStatusCodeType.Cancelled && order.IsNew)
@@ -209,11 +209,11 @@ namespace ShipWorks.Stores.Platforms.Ebay
             order.OnlineLastModified = orderType.CheckoutStatus.LastModifiedTime;
 
             // Online status
-            order.OnlineStatusCode = (int)orderType.OrderStatus;
+            order.OnlineStatusCode = (int) orderType.OrderStatus;
             order.OnlineStatus = EbayUtility.GetOrderStatusName(orderType.OrderStatus);
 
             // SellingManager Pro
-            order.SellingManagerRecord = orderType.ShippingDetails.SellingManagerSalesRecordNumberSpecified ? orderType.ShippingDetails.SellingManagerSalesRecordNumber : (int?)null;
+            order.SellingManagerRecord = orderType.ShippingDetails.SellingManagerSalesRecordNumberSpecified ? orderType.ShippingDetails.SellingManagerSalesRecordNumber : (int?) null;
 
             // Buyer , email, and address
             order.EbayBuyerID = orderType.BuyerUserID;
@@ -514,7 +514,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
             // Split the name
             PersonName personName = PersonName.Parse(address.Name);
 
-            order.ShipNameParseStatus = (int)personName.ParseStatus;
+            order.ShipNameParseStatus = (int) personName.ParseStatus;
             order.ShipUnparsedName = personName.UnparsedName;
             order.ShipCompany = address.CompanyName ?? "";
             order.ShipFirstName = personName.First;
@@ -618,7 +618,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
             RelationPredicateBucket bucket = new RelationPredicateBucket
             (
                 DownloadFields.StoreID == Store.StoreID &
-                DownloadFields.Result == (int)DownloadResult.Success &
+                DownloadFields.Result == (int) DownloadResult.Success &
                 DownloadFields.QuantityTotal > 0
             );
 
@@ -630,7 +630,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
             ISortExpression sort = new SortExpression(DownloadFields.DownloadID | SortOperator.Descending);
 
             List<DateTime> startDates = new DateTimeList();
-            using (SqlDataReader reader = (SqlDataReader)SqlAdapter.Default.FetchDataReader(resultFields, bucket, CommandBehavior.CloseConnection, previousDownloadCount, sort, false))
+            using (SqlDataReader reader = (SqlDataReader) SqlAdapter.Default.FetchDataReader(resultFields, bucket, CommandBehavior.CloseConnection, previousDownloadCount, sort, false))
             {
                 while (reader.Read())
                 {
@@ -1005,7 +1005,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
             order.OrderTotal = OrderUtility.CalculateTotal(order);
 
             if (order.OrderTotal != Convert.ToDecimal(amountPaid) &&
-                order.OnlineStatusCode is int && (int)order.OnlineStatusCode == (int)OrderStatusCodeType.Completed && // only make adjustments if it's considered complete
+                order.OnlineStatusCode is int && (int) order.OnlineStatusCode == (int) OrderStatusCodeType.Completed && // only make adjustments if it's considered complete
                 !order.CombinedLocally) // Don't bother trying to reconcile a locally combined order
             {
                 OrderChargeEntity otherCharge = GetCharge(order, "OTHER", "Other");
@@ -1228,7 +1228,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 SqlAdapter.Default.FetchEntityCollection(collection, bucket, prefetch);
                 EbayOrderEntity ebayOrder = collection.FirstOrDefault();
 
-                if (ebayOrder==null)
+                if (ebayOrder == null)
                 {
                     ebayOrder = GetCombinedOrder(identifier, includeCharges);
                 }
@@ -1281,9 +1281,9 @@ namespace ShipWorks.Stores.Platforms.Ebay
 
 
         /// <summary>
-        /// Locate an item with the given identifier.  Can be optionally restricted to only loading the ItemID
+        /// Locate an item with the given identifier
         /// </summary>
-        private EbayOrderItemEntity FindItem(EbayOrderIdentifier identifier, bool idOnly = false)
+        private EbayOrderItemEntity FindItem(EbayOrderIdentifier identifier)
         {
             if (identifier.EbayOrderID != 0)
             {
@@ -1292,7 +1292,8 @@ namespace ShipWorks.Stores.Platforms.Ebay
 
             object objItemID = SqlAdapter.Default.GetScalar(EbayOrderItemFields.OrderItemID,
                 null, AggregateFunction.None,
-                EbayOrderItemFields.EbayItemID == identifier.EbayItemID & EbayOrderItemFields.EbayTransactionID == identifier.TransactionID,
+                EbayOrderItemFields.EbayItemID == identifier.EbayItemID &
+                    EbayOrderItemFields.EbayTransactionID == identifier.TransactionID,
                 null);
 
             if (objItemID == null)
@@ -1307,15 +1308,13 @@ namespace ShipWorks.Stores.Platforms.Ebay
 
                 EbayOrderItemEntity item = new EbayOrderItemEntity(itemID);
 
-                if (!idOnly)
-                {
-                    PrefetchPath2 prefetch = new PrefetchPath2(EntityType.OrderItemEntity);
-                    prefetch.Add(OrderItemEntity.PrefetchPathOrderItemAttributes);
+                PrefetchPath2 prefetch = new PrefetchPath2(EntityType.OrderItemEntity);
+                prefetch.Add(OrderItemEntity.PrefetchPathOrderItemAttributes);
+                prefetch.Add(OrderItemEntity.PrefetchPathOrder);
 
-                    SqlAdapter.Default.FetchEntity(item, prefetch);
-                }
+                SqlAdapter.Default.FetchEntity(item, prefetch);
 
-                return item;
+                return item.Order.StoreID == Store.StoreID ? item : null;
             }
         }
 
@@ -1547,7 +1546,8 @@ namespace ShipWorks.Stores.Platforms.Ebay
         private void ProcessFeedback(FeedbackDetailType feedback)
         {
             SqlAdapterRetry<SqlException> sqlDeadlockRetry = new SqlAdapterRetry<SqlException>(5, -5, string.Format("EbayDownloader.ProcessFeedback for feedback.OrderLineItemID {0}", feedback.OrderLineItemID));
-            sqlDeadlockRetry.ExecuteWithRetry(adapter => {
+            sqlDeadlockRetry.ExecuteWithRetry(adapter =>
+            {
                 EbayOrderItemEntity item = FindItem(new EbayOrderIdentifier(feedback.OrderLineItemID));
 
                 if (item == null)
@@ -1560,12 +1560,12 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 // Feedback we've recieved
                 if (feedback.Role == TradingRoleCodeType.Seller)
                 {
-                    item.FeedbackReceivedType = (int)feedback.CommentType;
+                    item.FeedbackReceivedType = (int) feedback.CommentType;
                     item.FeedbackReceivedComments = feedback.CommentText;
                 }
                 else
                 {
-                    item.FeedbackLeftType = (int)feedback.CommentType;
+                    item.FeedbackLeftType = (int) feedback.CommentType;
                     item.FeedbackLeftComments = feedback.CommentText;
                 }
 

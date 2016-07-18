@@ -275,7 +275,7 @@ namespace ShipWorks.ApplicationCore
             ConnectionMonitor.VerifyConnected();
 
             // Make sure we are not in a failure state
-            if (ConnectionMonitor.Status != ConnectionMonitorStatus.Normal || CrashWindow.IsApplicationCrashed)
+            if (ConnectionMonitor.Status != ConnectionMonitorStatus.Normal || CrashDialog.IsApplicationCrashed)
             {
                 return false;
             }

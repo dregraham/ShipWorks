@@ -10,6 +10,15 @@ namespace ShipWorks.Data.Model.EntityClasses
     public partial class ShipmentEntity
     {
         /// <summary>
+        /// THIS IS ONLY TEMPORARY 
+        /// It is being used to determine number of newly created shipments for the
+        /// LoadShipments telemetry metrics.
+        /// 
+        /// Delete this after the performance code stories are done.
+        /// </summary>
+        public bool JustCreated { get; set; }
+
+        /// <summary>
         /// Utility flag to help track if we've pulled customs items form the database
         /// </summary>
         public bool CustomsItemsLoaded { get; set; }
