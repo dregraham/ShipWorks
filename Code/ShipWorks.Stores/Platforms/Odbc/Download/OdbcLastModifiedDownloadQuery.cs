@@ -68,7 +68,6 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
             string columnNameInQuotes = WrapColumnInQuoteIdentifier(lastModifiedColumnName);
 
             OdbcParameter param = new OdbcParameter(columnNameInQuotes, OdbcType.DateTime, 23, ParameterDirection.Input, false, 1, 3, columnNameInQuotes, DataRowVersion.Current, onlineLastModifiedStartingPoint);
-
             command.AddParameter(param);
         }
 
