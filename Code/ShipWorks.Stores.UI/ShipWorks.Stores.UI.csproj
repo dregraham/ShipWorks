@@ -206,12 +206,6 @@
     <Compile Include="Platforms\Odbc\WizardPages\OdbcMappingControl.xaml.cs">
       <DependentUpon>OdbcMappingControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Platforms\Odbc\WizardPages\OdbcUploadDataSourcePage.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Platforms\Odbc\WizardPages\OdbcUploadDataSourcePage.Designer.cs">
-      <DependentUpon>OdbcUploadDataSourcePage.cs</DependentUpon>
-    </Compile>
     <Compile Include="Platforms\Odbc\WizardPages\OdbcUploadMappingPage.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -227,11 +221,11 @@
     <Compile Include="Platforms\Odbc\WizardPages\OdbcUploadMapSettingsPage.Designer.cs">
       <DependentUpon>OdbcUploadMapSettingsPage.cs</DependentUpon>
     </Compile>
-    <Compile Include="Platforms\Odbc\WizardPages\OdbcUploadShipmentStrategyPage.cs">
+    <Compile Include="Platforms\Odbc\WizardPages\OdbcUploadShipmentDataSourceWizardPage.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Platforms\Odbc\WizardPages\OdbcUploadShipmentStrategyPage.Designer.cs">
-      <DependentUpon>OdbcUploadShipmentStrategyPage.cs</DependentUpon>
+    <Compile Include="Platforms\Odbc\WizardPages\OdbcUploadShipmentDataSourceWizardPage.Designer.cs">
+      <DependentUpon>OdbcUploadShipmentDataSourceWizardPage.cs</DependentUpon>
     </Compile>
     <Compile Include="Platforms\Sears\SearsStoreModule.cs" />
     <Compile Include="Platforms\SparkPay\SparkPaySettingsControl.cs">
@@ -271,11 +265,11 @@
       <DependentUpon>OdbcDataSourceControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Platforms\Odbc\OdbcStoreModule.cs" />
-    <Compile Include="Platforms\Odbc\WizardPages\OdbcImportDataSourcePage.cs">
+    <Compile Include="Platforms\Odbc\WizardPages\OdbcDataSourcePage.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Platforms\Odbc\WizardPages\OdbcImportDataSourcePage.Designer.cs">
-      <DependentUpon>OdbcImportDataSourcePage.cs</DependentUpon>
+    <Compile Include="Platforms\Odbc\WizardPages\OdbcDataSourcePage.Designer.cs">
+      <DependentUpon>OdbcDataSourcePage.cs</DependentUpon>
     </Compile>
     <Compile Include="Platforms\Yahoo\ApiIntegration\WizardPages\YahooApiAccountPage.xaml.cs">
       <DependentUpon>YahooApiAccountPage.xaml</DependentUpon>
@@ -322,17 +316,14 @@
     <EmbeddedResource Include="Platforms\Odbc\WizardPages\OdbcImportMapSettingsPage.resx">
       <DependentUpon>OdbcImportMapSettingsPage.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Platforms\Odbc\WizardPages\OdbcUploadDataSourcePage.resx">
-      <DependentUpon>OdbcUploadDataSourcePage.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Platforms\Odbc\WizardPages\OdbcUploadMappingPage.resx">
       <DependentUpon>OdbcUploadMappingPage.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Platforms\Odbc\WizardPages\OdbcUploadMapSettingsPage.resx">
       <DependentUpon>OdbcUploadMapSettingsPage.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Platforms\Odbc\WizardPages\OdbcUploadShipmentStrategyPage.resx">
-      <DependentUpon>OdbcUploadShipmentStrategyPage.cs</DependentUpon>
+    <EmbeddedResource Include="Platforms\Odbc\WizardPages\OdbcUploadShipmentDataSourceWizardPage.resx">
+      <DependentUpon>OdbcUploadShipmentDataSourceWizardPage.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Platforms\SparkPay\SparkPaySettingsControl.resx">
       <DependentUpon>SparkPaySettingsControl.cs</DependentUpon>
@@ -346,8 +337,8 @@
     <EmbeddedResource Include="Platforms\SparkPay\WizardPages\SparkPayAccountHost.resx">
       <DependentUpon>SparkPayAccountHost.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Platforms\Odbc\WizardPages\OdbcImportDataSourcePage.resx">
-      <DependentUpon>OdbcImportDataSourcePage.cs</DependentUpon>
+    <EmbeddedResource Include="Platforms\Odbc\WizardPages\OdbcDataSourcePage.resx">
+      <DependentUpon>OdbcDataSourcePage.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Platforms\Odbc\OdbcDataSourceControl.resx">
       <DependentUpon>OdbcDataSourceControl.cs</DependentUpon>

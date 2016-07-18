@@ -36,8 +36,9 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.DataSource
         {
             using (var mock = AutoMock.GetLoose())
             {
-                Mock<IOdbcDataSource> dataSource = mock.Mock<IOdbcDataSource>();
-                dataSource.SetupGet(d => d.IsCustom).Returns(true);
+                Mock<IDsnProvider> dsnProvider = mock.Mock<IDsnProvider>();
+                dsnProvider.Setup(p => p.GetDataSourceNames())
+                    .Returns(new[] { "blah" });
 
                 Mock<IShipWorksDbProviderFactory> providerFactory = mock.Mock<IShipWorksDbProviderFactory>();
                 Mock<IEncryptionProviderFactory> encryptionFactory = mock.Mock<IEncryptionProviderFactory>();
@@ -54,10 +55,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.DataSource
         {
             using (var mock = AutoMock.GetLoose())
             {
-                Mock<IOdbcDataSource> dataSourcemock = mock.Mock<IOdbcDataSource>();
-                dataSourcemock.SetupGet(d => d.IsCustom).Returns(true);
-                dataSourcemock.SetupGet(d => d.Name).Returns("blah");
-
                 Mock<IDsnProvider> dsnProvider = mock.Mock<IDsnProvider>();
                 dsnProvider.Setup(p => p.GetDataSourceNames())
                     .Returns(new[] {"blah"});

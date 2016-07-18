@@ -1665,7 +1665,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 		private void InitOdbcStoreEntityInfos()
 		{
 			base.AddElementFieldInfo("OdbcStoreEntity", "StoreID", typeof(System.Int64), true, false, false, false,  (int)OdbcStoreFieldIndex.StoreID, 0, 0, 19);
-			base.AddElementFieldInfo("OdbcStoreEntity", "ImportConnectionString", typeof(System.String), false, false, false, false,  (int)OdbcStoreFieldIndex.ImportConnectionString, 2048, 0, 0);
+			base.AddElementFieldInfo("OdbcStoreEntity", "ConnectionString", typeof(System.String), false, false, false, false,  (int)OdbcStoreFieldIndex.ConnectionString, 2048, 0, 0);
 			base.AddElementFieldInfo("OdbcStoreEntity", "ImportMap", typeof(System.String), false, false, false, false,  (int)OdbcStoreFieldIndex.ImportMap, 2147483647, 0, 0);
 			base.AddElementFieldInfo("OdbcStoreEntity", "ImportStrategy", typeof(System.Int32), false, false, false, false,  (int)OdbcStoreFieldIndex.ImportStrategy, 0, 0, 10);
 			base.AddElementFieldInfo("OdbcStoreEntity", "ImportSourceType", typeof(System.Int32), false, false, false, false,  (int)OdbcStoreFieldIndex.ImportSourceType, 0, 0, 10);
@@ -1674,7 +1674,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("OdbcStoreEntity", "UploadMap", typeof(System.String), false, false, false, false,  (int)OdbcStoreFieldIndex.UploadMap, 2147483647, 0, 0);
 			base.AddElementFieldInfo("OdbcStoreEntity", "UploadColumnSourceType", typeof(System.Int32), false, false, false, false,  (int)OdbcStoreFieldIndex.UploadColumnSourceType, 0, 0, 10);
 			base.AddElementFieldInfo("OdbcStoreEntity", "UploadColumnSource", typeof(System.String), false, false, false, false,  (int)OdbcStoreFieldIndex.UploadColumnSource, 2048, 0, 0);
-			base.AddElementFieldInfo("OdbcStoreEntity", "UploadConnectionString", typeof(System.String), false, false, false, false,  (int)OdbcStoreFieldIndex.UploadConnectionString, 2048, 0, 0);
 		}
 		/// <summary>Inits OnTracAccountEntity's FieldInfo objects</summary>
 		private void InitOnTracAccountEntityInfos()

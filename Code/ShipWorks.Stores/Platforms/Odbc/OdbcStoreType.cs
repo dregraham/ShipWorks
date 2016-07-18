@@ -69,7 +69,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
         {
             OdbcStoreEntity store = new OdbcStoreEntity
             {
-                ImportConnectionString = string.Empty,
+                ConnectionString = string.Empty,
                 ImportMap = string.Empty,
                 ImportStrategy = (int) OdbcImportStrategy.ByModifiedTime,
                 ImportSourceType = (int) OdbcColumnSourceType.Table,
@@ -77,8 +77,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
                 UploadMap = string.Empty,
                 UploadStrategy = (int) OdbcShipmentUploadStrategy.DoNotUpload,
                 UploadColumnSourceType = (int) OdbcColumnSourceType.Table,
-                UploadColumnSource = string.Empty,
-                UploadConnectionString = string.Empty,
+                UploadColumnSource = string.Empty
             };
 
             InitializeStoreDefaults(store);

@@ -15,7 +15,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
     public partial class OdbcImportMapSettingsPage : AddStoreWizardPage, IOdbcWizardPage, IWin32Window
     {
         private readonly IMessageHelper messageHelper;
-        private readonly IOdbcDataSourceService dataSourceService;
+        private readonly Func<IOdbcDataSource> dataSourceFactory;
         private readonly IIndex<string, IOdbcMapSettingsControlViewModel> viewModelFactory;
         private readonly IOdbcSchema schema;
         private IOdbcMapSettingsControlViewModel viewModel;
@@ -25,12 +25,12 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
         /// Initializes a new instance of the <see cref="OdbcImportFieldMappingPage"/> class.
         /// </summary>
         public OdbcImportMapSettingsPage(IMessageHelper messageHelper,
-            IOdbcDataSourceService dataSourceService,
+            Func<IOdbcDataSource> dataSourceFactory,
             IIndex<string, IOdbcMapSettingsControlViewModel> viewModelFactory,
             IOdbcSchema schema)
         {
             this.messageHelper = messageHelper;
-            this.dataSourceService = dataSourceService;
+            this.dataSourceFactory = dataSourceFactory;
             this.viewModelFactory = viewModelFactory;
             this.schema = schema;
             InitializeComponent();
@@ -70,7 +70,9 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
         {
             store = GetStore<OdbcStoreEntity>();
 
-            IOdbcDataSource selectedDataSource = dataSourceService.GetImportDataSource(store);
+            IOdbcDataSource selectedDataSource = dataSourceFactory();
+
+            selectedDataSource.Restore(store.ConnectionString);
 
             // Create new ViewModel when one does not exist, or a new data source is selected. This means clicking
             // back on the mapping page and not changing the data source will keep any mappings made, but selecting

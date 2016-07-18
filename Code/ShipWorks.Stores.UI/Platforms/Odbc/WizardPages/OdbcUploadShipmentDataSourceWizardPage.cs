@@ -9,14 +9,14 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
     /// <summary>
     /// Odbc add store wizard page dealing with uploading shipment details
     /// </summary>
-    public partial class OdbcUploadShipmentStrategyPage : AddStoreWizardPage, IOdbcWizardPage
+    public partial class OdbcUploadShipmentDataSourceWizardPage : AddStoreWizardPage, IOdbcWizardPage
     {
         private OdbcStoreEntity store;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="OdbcUploadShipmentStrategyPage"/> class.
+        /// Initializes a new instance of the <see cref="OdbcUploadShipmentDataSourceWizardPage"/> class.
         /// </summary>
-        public OdbcUploadShipmentStrategyPage()
+        public OdbcUploadShipmentDataSourceWizardPage()
         {
             InitializeComponent();
         }

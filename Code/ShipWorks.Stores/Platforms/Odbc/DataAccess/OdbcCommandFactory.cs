@@ -53,7 +53,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
         private static IOdbcDownloadQuery GetDownloadQuery(OdbcStoreEntity store, IOdbcFieldMap odbcFieldMap, IOdbcDataSource dataSource, IShipWorksDbProviderFactory dbProviderFactory)
         {
             odbcFieldMap.Load(store.ImportMap);
-            dataSource.Restore(store.ImportConnectionString);
+            dataSource.Restore(store.ConnectionString);
 
             return store.ImportSourceType == (int) OdbcColumnSourceType.Table
                 ? (IOdbcDownloadQuery)new TableOdbcDownloadQuery(store, dbProviderFactory, odbcFieldMap, dataSource)

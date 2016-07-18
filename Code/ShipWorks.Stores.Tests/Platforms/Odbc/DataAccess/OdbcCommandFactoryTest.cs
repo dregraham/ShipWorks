@@ -43,7 +43,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
 
                 var testObject = mock.Create<OdbcCommandFactory>();
 
-                testObject.CreateDownloadCommand(new OdbcStoreEntity {ImportConnectionString = connectionString});
+                testObject.CreateDownloadCommand(new OdbcStoreEntity {ConnectionString = connectionString});
 
                 dataSource.Verify(p => p.Restore(It.Is<string>(s => s == connectionString)), Times.Once());
             }
@@ -93,7 +93,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
 
                 var testObject = mock.Create<OdbcCommandFactory>();
 
-                testObject.CreateDownloadCommand(new OdbcStoreEntity { ImportConnectionString = connectionString }, DateTime.UtcNow);
+                testObject.CreateDownloadCommand(new OdbcStoreEntity { ConnectionString = connectionString }, DateTime.UtcNow);
 
                 dataSource.Verify(p => p.Restore(It.Is<string>(s => s == connectionString)), Times.Once());
             }

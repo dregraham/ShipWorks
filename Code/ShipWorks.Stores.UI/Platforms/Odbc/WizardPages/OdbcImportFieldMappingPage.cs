@@ -16,7 +16,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
     /// </summary>
     public partial class OdbcImportFieldMappingPage : AddStoreWizardPage, IOdbcWizardPage, IWin32Window
     {
-        private readonly IOdbcDataSourceService dataSourceService;
+        private readonly Func<IOdbcDataSource> dataSourceFactory;
         private readonly Func<string, IOdbcColumnSource> columnSourceFactory;
         private IOdbcImportFieldMappingControlViewModel viewModel;
         private OdbcStoreEntity store;
@@ -29,11 +29,11 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcImportFieldMappingPage"/> class.
         /// </summary>
-        public OdbcImportFieldMappingPage(IOdbcDataSourceService dataSourceService,
+        public OdbcImportFieldMappingPage(Func<IOdbcDataSource> dataSourceFactory,
             Func<IOdbcImportFieldMappingControlViewModel> viewModelFactory,
             Func<string, IOdbcColumnSource> columnSourceFactory)
         {
-            this.dataSourceService = dataSourceService;
+            this.dataSourceFactory = dataSourceFactory;
             this.viewModelFactory = viewModelFactory;
             this.columnSourceFactory = columnSourceFactory;
             InitializeComponent();
@@ -80,7 +80,9 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
             if (string.IsNullOrWhiteSpace(previousColumnSource) ||
                 !previousColumnSource.Equals(currentColumnSource, StringComparison.Ordinal))
             {
-                IOdbcDataSource selectedDataSource = dataSourceService.GetImportDataSource(store);
+                IOdbcDataSource selectedDataSource = dataSourceFactory();
+
+                selectedDataSource.Restore(store.ConnectionString);
 
                 string columnSourceName = store.ImportSourceType == (int) OdbcColumnSourceType.Table ?
                     currentColumnSource :

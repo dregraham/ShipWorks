@@ -41,7 +41,6 @@ namespace ShipWorks.Stores.Management
     partial class AddStoreWizard : WizardForm
     {
         private readonly ILifetimeScope scope;
-
         // State container for use by wizard pages
         Dictionary<string, object> stateBag = new Dictionary<string, object>(StringComparer.InvariantCultureIgnoreCase);
 

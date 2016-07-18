@@ -7,7 +7,7 @@ GO
 CREATE TABLE [dbo].[OdbcStore]
 (
 	[StoreID] [bigint] NOT NULL,
-	[ImportConnectionString] [nvarchar](2048) NOT NULL,
+	[ConnectionString] [nvarchar](2048) NOT NULL,
 	[ImportMap] [nvarchar](max) NOT NULL,
 	[ImportStrategy] [int] NOT NULL,
 	[ImportColumnSourceType] [int] NOT NULL,
@@ -15,8 +15,7 @@ CREATE TABLE [dbo].[OdbcStore]
 	[UploadStrategy] [int] NOT NULL,
 	[UploadMap] [nvarchar](max) NOT NULL,
 	[UploadColumnSourceType] [int] NOT NULL,
-	[UploadColumnSource] [nvarchar](2048) NOT NULL,
-	[UploadConnectionString] [nvarchar](2048) NOT NULL,
+	[UploadColumnSource] [nvarchar](2048) NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_OdbcStore] on [dbo].[OdbcStore]'

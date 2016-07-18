@@ -13892,10 +13892,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(OdbcStoreFieldIndex.StoreID);}
 		}
-		/// <summary>Creates a new OdbcStoreEntity.ImportConnectionString field instance</summary>
-		public static EntityField2 ImportConnectionString
+		/// <summary>Creates a new OdbcStoreEntity.ConnectionString field instance</summary>
+		public static EntityField2 ConnectionString
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(OdbcStoreFieldIndex.ImportConnectionString);}
+			get { return (EntityField2)EntityFieldFactory.Create(OdbcStoreFieldIndex.ConnectionString);}
 		}
 		/// <summary>Creates a new OdbcStoreEntity.ImportMap field instance</summary>
 		public static EntityField2 ImportMap
@@ -13936,11 +13936,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 UploadColumnSource
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(OdbcStoreFieldIndex.UploadColumnSource);}
-		}
-		/// <summary>Creates a new OdbcStoreEntity.UploadConnectionString field instance</summary>
-		public static EntityField2 UploadConnectionString
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(OdbcStoreFieldIndex.UploadConnectionString);}
 		}
 	}
 

@@ -28,7 +28,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
         /// <summary>
         /// Adds the given parameter to the command
         /// </summary>
-        void AddParameter(OdbcParameter parameter);
+        void AddParameter(string parameterName, OdbcType type, object value);
 
         /// <summary>
         /// Tries to cancel the execution of the OdbcCommand

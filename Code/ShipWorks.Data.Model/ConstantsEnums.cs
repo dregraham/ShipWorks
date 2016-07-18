@@ -6433,8 +6433,8 @@ namespace ShipWorks.Data.Model
 		InitialDownloadOrder,
 		///<summary>StoreID. </summary>
 		StoreID,
-		///<summary>ImportConnectionString. </summary>
-		ImportConnectionString,
+		///<summary>ConnectionString. </summary>
+		ConnectionString,
 		///<summary>ImportMap. </summary>
 		ImportMap,
 		///<summary>ImportStrategy. </summary>
@@ -6451,8 +6451,6 @@ namespace ShipWorks.Data.Model
 		UploadColumnSourceType,
 		///<summary>UploadColumnSource. </summary>
 		UploadColumnSource,
-		///<summary>UploadConnectionString. </summary>
-		UploadConnectionString,
 		/// <summary></summary>
 		AmountOfFields
 	}

@@ -10,12 +10,12 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
     /// <summary>
     /// Odbc Data Source wizard page
     /// </summary>
-    public partial class OdbcImportDataSourcePage : AddStoreWizardPage, IOdbcWizardPage
+    public partial class OdbcDataSourcePage : AddStoreWizardPage, IOdbcWizardPage
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        public OdbcImportDataSourcePage(IExternalProcess odbcControlPanel)
+        public OdbcDataSourcePage(IExternalProcess odbcControlPanel)
         {
             InitializeComponent();
             odbcDataSourceControl.LoadDependencies(odbcControlPanel);
@@ -28,7 +28,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
         public int Position => 0;
 
         /// <summary>
-        /// User is moving to the next wizard page, perform any autoconfiguration or credentials saving
+        ///     User is moving to the next wizard page, perform any autoconfiguration or credentials saving
         /// </summary>
         private void OnStepNext(object sender, WizardStepEventArgs e)
         {
@@ -40,7 +40,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
 
             if (testSuccessful)
             {
-                store.ImportConnectionString = odbcDataSourceControl.SelectedDataSource.Serialize();
+                odbcDataSourceControl.SaveToEntity(store);
             }
             else
             {

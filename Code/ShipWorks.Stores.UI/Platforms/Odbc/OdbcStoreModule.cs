@@ -79,9 +79,6 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
 
             builder.RegisterType<OdbcColumnSource>()
                 .AsImplementedInterfaces();
-
-            builder.RegisterType<OdbcDataSourceService>()
-                .AsImplementedInterfaces();
         }
 
         /// <summary>
@@ -114,26 +111,29 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// </summary>
         private static void RegisterWizardPages(ContainerBuilder builder)
         {
-            builder.RegisterType<OdbcImportDataSourcePage>()
-                .As<IOdbcWizardPage>();
+            builder.RegisterType<OdbcDataSourcePage>()
+                            .As<IOdbcWizardPage>()
+                            .ExternallyOwned();
 
             builder.RegisterType<OdbcImportMapSettingsPage>()
-                .As<IOdbcWizardPage>();
+                .As<IOdbcWizardPage>()
+                .ExternallyOwned();
 
             builder.RegisterType<OdbcImportFieldMappingPage>()
-                .As<IOdbcWizardPage>();
+                .As<IOdbcWizardPage>()
+                .ExternallyOwned();
 
-            builder.RegisterType<OdbcUploadShipmentStrategyPage>()
-                .As<IOdbcWizardPage>();
-
-            builder.RegisterType<OdbcUploadDataSourcePage>()
-                .As<IOdbcWizardPage>();
+            builder.RegisterType<OdbcUploadShipmentDataSourceWizardPage>()
+                .As<IOdbcWizardPage>()
+                .ExternallyOwned();
 
             builder.RegisterType<OdbcUploadMapSettingsPage>()
-                .As<IOdbcWizardPage>();
+                .As<IOdbcWizardPage>()
+                .ExternallyOwned();
 
             builder.RegisterType<OdbcUploadMappingPage>()
-                .As<IOdbcWizardPage>();
+                .As<IOdbcWizardPage>()
+                .ExternallyOwned();
         }
 
         /// <summary>

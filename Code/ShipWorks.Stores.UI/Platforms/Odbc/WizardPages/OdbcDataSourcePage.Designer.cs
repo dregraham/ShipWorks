@@ -1,13 +1,13 @@
 ﻿namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
 {
-    partial class OdbcUploadDataSourcePage
+    partial class OdbcDataSourcePage
     {
-        /// <summary> 
+        /// <summary>
         /// Required designer variable.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
 
-        /// <summary> 
+        /// <summary>
         /// Clean up any resources being used.
         /// </summary>
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
@@ -22,8 +22,8 @@
 
         #region Component Designer generated code
 
-        /// <summary> 
-        /// Required method for Designer support - do not modify 
+        /// <summary>
+        /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent()
@@ -38,17 +38,17 @@
             this.odbcDataSourceControl.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.odbcDataSourceControl.Name = "odbcDataSourceControl";
             this.odbcDataSourceControl.Size = new System.Drawing.Size(487, 209);
-            this.odbcDataSourceControl.TabIndex = 1;
+            this.odbcDataSourceControl.TabIndex = 0;
             // 
-            // OdbcUploadDataSourcePage
+            // OdbcDataSourcePage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.odbcDataSourceControl);
-            this.Name = "OdbcUploadDataSourcePage";
-            this.Size = new System.Drawing.Size(621, 231);
+            this.Font = new System.Drawing.Font("Tahoma", 8.25F);
+            this.Name = "OdbcDataSourcePage";
+            this.Size = new System.Drawing.Size(512, 209);
             this.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNext);
-            this.SteppingInto += new System.EventHandler<ShipWorks.UI.Wizard.WizardSteppingIntoEventArgs>(this.OnSteppingInto);
             this.ResumeLayout(false);
 
         }
