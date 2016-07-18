@@ -1759,9 +1759,9 @@ namespace ShipWorks.Data.Adapter
 		/// <summary>Inits OdbcStoreEntity's mappings</summary>
 		private void InitOdbcStoreEntityMappings()
 		{
-			base.AddElementMapping( "OdbcStoreEntity", "ShipWorksLocal", @"dbo", "OdbcStore", 10 );
+			base.AddElementMapping( "OdbcStoreEntity", "ShipWorksLocal", @"dbo", "OdbcStore", 11 );
 			base.AddElementFieldMapping( "OdbcStoreEntity", "StoreID", "StoreID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 0 );
-			base.AddElementFieldMapping( "OdbcStoreEntity", "ConnectionString", "ConnectionString", false, (int)SqlDbType.NVarChar, 2048, 0, 0, false, "", null, typeof(System.String), 1 );
+			base.AddElementFieldMapping( "OdbcStoreEntity", "ImportConnectionString", "ImportConnectionString", false, (int)SqlDbType.NVarChar, 2048, 0, 0, false, "", null, typeof(System.String), 1 );
 			base.AddElementFieldMapping( "OdbcStoreEntity", "ImportMap", "ImportMap", false, (int)SqlDbType.NVarChar, 2147483647, 0, 0, false, "", null, typeof(System.String), 2 );
 			base.AddElementFieldMapping( "OdbcStoreEntity", "ImportStrategy", "ImportStrategy", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 3 );
 			base.AddElementFieldMapping( "OdbcStoreEntity", "ImportSourceType", "ImportColumnSourceType", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 4 );
@@ -1770,6 +1770,7 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementFieldMapping( "OdbcStoreEntity", "UploadMap", "UploadMap", false, (int)SqlDbType.NVarChar, 2147483647, 0, 0, false, "", null, typeof(System.String), 7 );
 			base.AddElementFieldMapping( "OdbcStoreEntity", "UploadColumnSourceType", "UploadColumnSourceType", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 8 );
 			base.AddElementFieldMapping( "OdbcStoreEntity", "UploadColumnSource", "UploadColumnSource", false, (int)SqlDbType.NVarChar, 2048, 0, 0, false, "", null, typeof(System.String), 9 );
+			base.AddElementFieldMapping( "OdbcStoreEntity", "UploadConnectionString", "UploadConnectionString", false, (int)SqlDbType.NVarChar, 2048, 0, 0, false, "", null, typeof(System.String), 10 );
 		}
 		/// <summary>Inits OnTracAccountEntity's mappings</summary>
 		private void InitOnTracAccountEntityMappings()
