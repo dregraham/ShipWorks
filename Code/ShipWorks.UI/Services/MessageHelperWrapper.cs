@@ -1,4 +1,5 @@
 ﻿
+using Interapptive.Shared.UI;
 using ShipWorks.Common.Threading;
 using System;
 using System.Reactive.Disposables;
@@ -29,19 +30,13 @@ namespace ShipWorks.UI.Services
         /// <summary>
         /// Show an error message box with the given error text.
         /// </summary>
-        public void ShowError(IWin32Window owner, string message)
-        {
-            ShowNotification(owner, message, MessageHelper.ShowError);
-        }
+        public void ShowError(IWin32Window owner, string message) => MessageHelper.ShowError(owner, message);
 
         /// <summary>
         /// Show an information message
         /// </summary>
-        public void ShowInformation(string message)
-        {
-            ShowNotification(ownerFactory(), message, MessageHelper.ShowInformation);
-        }
-
+        public void ShowInformation(string message) => MessageHelper.ShowInformation(ownerFactory(), message);
+        
         /// <summary>
         /// Show a yes/no question with the given text
         /// </summary>
@@ -91,19 +86,14 @@ namespace ShipWorks.UI.Services
         }
 
         /// <summary>
+        /// Show an information message, takes an owner
         /// </summary>
-            Action<IWin32Window, string> showNotification)
-        {
-            Control schedulerControl = owner as Control ?? ownerFactory();
-            MessageHelper.ShowMessage(owner, message);
-            if (schedulerControl.InvokeRequired)
-            {
-                schedulerControl.Invoke(new Action(() => showNotification(owner, message)));
-        }
-            else
-            {
-                showNotification(owner, message);
-            }
+        public void ShowInformation(IWin32Window owner, string message) => MessageHelper.ShowInformation(owner, message);
+
+        /// <summary>
+        /// Show a question message box.
+        /// </summary>
+        public DialogResult ShowQuestion(MessageBoxIcon icon, MessageBoxButtons buttons, string message)
             => MessageHelper.ShowQuestion(ownerFactory(), icon, buttons, message);
     }
 }
