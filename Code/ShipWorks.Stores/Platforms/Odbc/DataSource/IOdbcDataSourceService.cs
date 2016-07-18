@@ -18,16 +18,16 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataSource
         /// Create an empty data source
         /// </summary>
         /// <returns></returns>
-        IOdbcDataSource CreateEmptyDataSource();
+        IOdbcDataSource GetEmptyDataSource();
 
         /// <summary>
         /// Create the import datasource for the given store
         /// </summary>
-        IOdbcDataSource CreateImportDataSource(OdbcStoreEntity store);
+        IOdbcDataSource GetImportDataSource(OdbcStoreEntity store);
 
         /// <summary>
         /// Create the upload datasource for the given store
         /// </summary>
-        IOdbcDataSource CreateUploadDataSource(OdbcStoreEntity store);
+        IOdbcDataSource GetUploadDataSource(OdbcStoreEntity store);
     }
 }

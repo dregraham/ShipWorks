@@ -11,7 +11,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataSource
     public class OdbcDataSourceRepository : IOdbcDataSourceRepository
     {
         private readonly IDsnProvider dsnProvider;
-        private readonly IOdbcDataSourceService odbcDataSourceService;
+        private readonly Func<IOdbcDataSource> odbcDataSourceFactory;
         private readonly ILog log;
 
         /// <summary>
@@ -19,13 +19,13 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataSource
         /// </summary>
         public OdbcDataSourceRepository(
             IDsnProvider dsnProvider,
-            IOdbcDataSourceService odbcDataSourceService,
+            Func<IOdbcDataSource> odbcDataSourceFactory,
             Func<Type, ILog> logFactory)
         {
             log = logFactory(typeof(OdbcDataSourceRepository));
 
             this.dsnProvider = dsnProvider;
-            this.odbcDataSourceService = odbcDataSourceService;
+            this.odbcDataSourceFactory = odbcDataSourceFactory;
         }
 
         /// <summary>
@@ -45,7 +45,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataSource
                 {
                     // Create a new data source and call change connection to
                     // initialize the data source to the data source name
-                    IOdbcDataSource dataSource = odbcDataSourceService.CreateEmptyDataSource();
+                    IOdbcDataSource dataSource = odbcDataSourceFactory();
                     dataSource.ChangeConnection(dataSourceName, string.Empty, string.Empty);
 
                     // Add the data source to the collection
@@ -69,7 +69,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataSource
         /// </summary>
         private IOdbcDataSource CreateEmptyCustomDataSource()
         {
-            IOdbcDataSource dataSource = odbcDataSourceService.CreateEmptyDataSource();
+            IOdbcDataSource dataSource = odbcDataSourceFactory();
             dataSource.ChangeConnection(string.Empty);
             return dataSource;
         }

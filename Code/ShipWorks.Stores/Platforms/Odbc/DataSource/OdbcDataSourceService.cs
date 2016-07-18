@@ -34,7 +34,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataSource
         /// Create an empty data source
         /// </summary>
         /// <returns></returns>
-        public IOdbcDataSource CreateEmptyDataSource()
+        public IOdbcDataSource GetEmptyDataSource()
         {
             return dataSourceFactory();
         }
@@ -42,7 +42,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataSource
         /// <summary>
         /// Create the import datasource for the given store
         /// </summary>
-        public IOdbcDataSource CreateImportDataSource(OdbcStoreEntity store)
+        public IOdbcDataSource GetImportDataSource(OdbcStoreEntity store)
         {
             MethodConditions.EnsureArgumentIsNotNull(store, "Odbc Store");
 
@@ -55,7 +55,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataSource
         /// <summary>
         /// Create the upload datasource for the given store
         /// </summary>
-        public IOdbcDataSource CreateUploadDataSource(OdbcStoreEntity store)
+        public IOdbcDataSource GetUploadDataSource(OdbcStoreEntity store)
         {
             MethodConditions.EnsureArgumentIsNotNull(store, "Odbc Store");
 

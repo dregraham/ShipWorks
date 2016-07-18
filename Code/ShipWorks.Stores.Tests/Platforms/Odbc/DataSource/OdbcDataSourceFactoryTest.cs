@@ -17,7 +17,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.DataSource
         {
             OdbcDataSourceService testObject = mock.Create<OdbcDataSourceService>();
 
-            Assert.Throws<ArgumentNullException>(() => testObject.CreateImportDataSource(null));
+            Assert.Throws<ArgumentNullException>(() => testObject.GetImportDataSource(null));
         }
 
         [Fact]
@@ -25,7 +25,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.DataSource
         {
             OdbcDataSourceService testObject = mock.Create<OdbcDataSourceService>();
 
-            Assert.Throws<ArgumentNullException>(() => testObject.CreateUploadDataSource(null));
+            Assert.Throws<ArgumentNullException>(() => testObject.GetUploadDataSource(null));
         }
 
         [Fact]
@@ -36,7 +36,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.DataSource
             Mock<IOdbcDataSource> dataSource = mock.Mock<IOdbcDataSource>();
             OdbcDataSourceService testObject = mock.Create<OdbcDataSourceService>();
 
-            testObject.CreateImportDataSource(store);
+            testObject.GetImportDataSource(store);
 
             dataSource.Verify(d => d.Restore(store.ImportConnectionString));
         }
@@ -49,7 +49,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.DataSource
             Mock<IOdbcDataSource> dataSource = mock.Mock<IOdbcDataSource>();
             OdbcDataSourceService testObject = mock.Create<OdbcDataSourceService>();
 
-            testObject.CreateUploadDataSource(store);
+            testObject.GetUploadDataSource(store);
 
             dataSource.Verify(d => d.Restore(store.UploadConnectionString));
         }
@@ -60,7 +60,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.DataSource
             OdbcStoreEntity store = new OdbcStoreEntity() { UploadConnectionString = "foobarbaz", UploadStrategy = (int) OdbcShipmentUploadStrategy.DoNotUpload};
 
             OdbcDataSourceService testObject = mock.Create<OdbcDataSourceService>();
-            IOdbcDataSource source = testObject.CreateUploadDataSource(store);
+            IOdbcDataSource source = testObject.GetUploadDataSource(store);
 
             Assert.Null(source);
         }

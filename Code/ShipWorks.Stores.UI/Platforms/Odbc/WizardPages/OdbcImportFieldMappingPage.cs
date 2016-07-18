@@ -80,7 +80,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
             if (string.IsNullOrWhiteSpace(previousColumnSource) ||
                 !previousColumnSource.Equals(currentColumnSource, StringComparison.Ordinal))
             {
-                IOdbcDataSource selectedDataSource = dataSourceService.CreateImportDataSource(store);
+                IOdbcDataSource selectedDataSource = dataSourceService.GetImportDataSource(store);
 
                 string columnSourceName = store.ImportSourceType == (int) OdbcColumnSourceType.Table ?
                     currentColumnSource :
