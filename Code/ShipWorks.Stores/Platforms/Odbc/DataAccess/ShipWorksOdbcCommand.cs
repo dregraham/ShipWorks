@@ -67,7 +67,8 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
         /// </summary>
         public int ExecuteNonQuery()
         {
-            throw new System.NotImplementedException();
+            log.Info(command.CommandText);
+            return command.ExecuteNonQuery();
         }
 
         /// <summary>
