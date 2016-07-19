@@ -1,6 +1,7 @@
 using Interapptive.Shared.Utility;
 using Newtonsoft.Json;
 using System.Reflection;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 {
@@ -56,6 +57,11 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         {
             MethodConditions.EnsureArgumentIsNotNull(record);
             ExternalField.LoadValue(record);
+        }
+
+        public void LoadShipWorksField(IEntity2 entity)
+        {
+            throw new System.NotImplementedException();
         }
 
         /// <summary>
