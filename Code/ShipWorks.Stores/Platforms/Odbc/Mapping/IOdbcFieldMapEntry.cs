@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 {
@@ -27,6 +28,11 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// Loads the given ODBC Record into the External Field
         /// </summary>
         void LoadExternalField(OdbcRecord record);
+
+        /// <summary>
+        /// Loads the given entity into the ShipWorksField
+        /// </summary>
+        void LoadShipWorksField(IEntity2 entity);
 
         /// <summary>
         /// Copies the Value from the external field to the ShipWorks field
