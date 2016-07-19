@@ -11,7 +11,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
     public class OdbcShipWorksDbProviderFactory : IShipWorksDbProviderFactory
     {
         private readonly Func<Type, ILog> logFactory;
-        private ILog log;
+        private readonly ILog log;
 
         public OdbcShipWorksDbProviderFactory(Func<Type, ILog> logFactory)
         {
