@@ -61,10 +61,6 @@ namespace ShipWorks.Shipping
         // it reentrantly.
         private bool loadingSelectedShipments = false;
 
-        // Usually when changing selected shipments if the service control type doesn't change we don't recreate it, we just load the new data into it.
-        // But after changing shipping settings we need to make sure a new one gets initialized to pick up any new settings.
-        private bool forceRecreateServiceControl = false;
-
         // Indicates which tab in the dialog will be initially displayed
         private InitialShippingTabDisplay initialDisplay = InitialShippingTabDisplay.Shipping;
 
@@ -87,6 +83,8 @@ namespace ShipWorks.Shipping
         private RateSelectedEventArgs preSelectedRateEventArgs;
 
         private readonly ShipSenseSynchronizer shipSenseSynchronizer;
+
+        private Dictionary<ShipmentTypeCode, ServiceControlBase> serviceControlCache = new Dictionary<ShipmentTypeCode, ServiceControlBase>();
 
         private readonly Timer shipSenseChangedTimer = new Timer();
         private const int shipSenseChangedDebounceTime = 500;
@@ -896,8 +894,6 @@ namespace ShipWorks.Shipping
         {
             ServiceControlBase newServiceControl = GetServiceControlForShipments(shipments, shipmentType);
 
-            forceRecreateServiceControl = true;
-
             // If there is a service control, load the data into it before making it visible
             if (newServiceControl != null)
             {
@@ -939,36 +935,12 @@ namespace ShipWorks.Shipping
             // If there was a setup control, remove it
             ClearPreviousSetupControl();
 
+            // Clear the rate control events so that any leftover events don't fire for the new service control.
+            rateControl.ClearEvents();
+
             AddNewServiceControl(newServiceControl);
 
-            RemoveExistingServiceControl(oldServiceControl, reduceFlash);
-        }
-
-        /// <summary>
-        /// Remove existing service control from the dialog if it's not null
-        /// </summary>
-        private void RemoveExistingServiceControl(ServiceControlBase oldServiceControl, Control reduceFlash)
-        {
-            // Finally, remove the old service control, or the blank panel we created
-            if (oldServiceControl != null)
-            {
-                oldServiceControl.RecipientDestinationChanged -= OnOriginOrDestinationChanged;
-                oldServiceControl.OriginDestinationChanged -= OnOriginOrDestinationChanged;
-                oldServiceControl.ShipmentServiceChanged -= OnShipmentServiceChanged;
-                oldServiceControl.RateCriteriaChanged -= OnRateCriteriaChanged;
-                oldServiceControl.ShipSenseFieldChanged -= OnShipSenseFieldChanged;
-                oldServiceControl.ShipmentsAdded -= OnServiceControlShipmentsAdded;
-                oldServiceControl.ShipmentTypeChanged -= OnShipmentTypeChanged;
-                oldServiceControl.ClearRatesAction = x => { };
-                rateControl.RateSelected -= oldServiceControl.OnRateSelected;
-                rateControl.ActionLinkClicked -= oldServiceControl.OnConfigureRateClick;
-
-                oldServiceControl.Dispose();
-            }
-            else
-            {
-                reduceFlash.Dispose();
-            }
+            reduceFlash?.Dispose();
         }
 
         /// <summary>
@@ -992,8 +964,10 @@ namespace ShipWorks.Shipping
             newServiceControl.ClearRatesAction = ClearRates;
             rateControl.RateSelected += newServiceControl.OnRateSelected;
             rateControl.ActionLinkClicked += newServiceControl.OnConfigureRateClick;
+            rateControl.ReloadRatesRequired += OnRateReloadRequired;
 
             newServiceControl.Dock = DockStyle.Fill;
+            serviceControlArea.Controls.Clear();
             serviceControlArea.Controls.Add(newServiceControl);
         }
 
@@ -1007,28 +981,26 @@ namespace ShipWorks.Shipping
                 return null;
             }
 
-            ServiceControlBase newServiceControl = shipmentType == null ?
-                new MultiSelectServiceControl(rateControl) :
-                shipmentType.CreateServiceControl(rateControl, lifetimeScope);
-
-            if (newServiceControl == null)
+            ServiceControlBase newServiceControl;
+            if (shipmentType == null)
             {
-                return null;
+                newServiceControl = new MultiSelectServiceControl(rateControl);
+            }
+            else
+            {
+                if (serviceControlCache.ContainsKey(shipmentType.ShipmentTypeCode))
+                {
+                    newServiceControl = serviceControlCache[shipmentType.ShipmentTypeCode];
+                }
+                else
+                {
+                    newServiceControl = shipmentType.CreateServiceControl(rateControl, lifetimeScope);
+                    newServiceControl.Initialize(lifetimeScope);
+                    newServiceControl.Width = serviceControlArea.Width;
+                    serviceControlCache.Add(shipmentType.ShipmentTypeCode, newServiceControl);
+                }
             }
 
-            // If the type we need didn't change, then don't change it
-            if (!forceRecreateServiceControl &&
-                ServiceControl != null &&
-                ServiceControl.GetType() == newServiceControl.GetType() &&
-                ServiceControl.ShipmentTypeCode == newServiceControl.ShipmentTypeCode)
-            {
-                // Get rid of the one we just created and use the old one
-                newServiceControl.Dispose();
-                return ServiceControl;
-            }
-
-            newServiceControl.Initialize(lifetimeScope);
-            newServiceControl.Width = serviceControlArea.Width;
             return newServiceControl;
         }
 
@@ -2158,8 +2130,9 @@ namespace ShipWorks.Shipping
 
             LoadShipmentTypeCombo();
 
-            // Reload the selected shipments in case the settings affected their values
-            forceRecreateServiceControl = true;
+            // Dispose each of the service controls and clear the cache.
+            DisposeSerivceControlCache();
+
             LoadSelectedShipments(false);
         }
 
@@ -2256,9 +2229,25 @@ namespace ShipWorks.Shipping
                 components?.Dispose();
 
                 uspsAccountConvertedToken?.Dispose();
+
+                // Dispose each of the service controls and clear the cache.
+                DisposeSerivceControlCache();
             }
 
             base.Dispose(disposing);
+        }
+
+        /// <summary>
+        /// Dispose each service control and clear the cache
+        /// </summary>
+        private void DisposeSerivceControlCache()
+        {
+            foreach (ServiceControlBase serviceControl in serviceControlCache.Values)
+            {
+                serviceControl.Dispose();
+            }
+
+            serviceControlCache.Clear();
         }
     }
 }
