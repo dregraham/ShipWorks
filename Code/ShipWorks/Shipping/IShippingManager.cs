@@ -100,5 +100,10 @@ namespace ShipWorks.Shipping
         /// Gets the shipment type carrier name.
         /// </summary>
         string GetCarrierName(ShipmentTypeCode shipmentTypeCode);
+
+        /// <summary>
+        /// Returns the most recent, non-voided, processed shipment for the provided order
+        /// </summary>
+        ShipmentEntity GetLatestActiveShipment(long orderID);
     }
 }
