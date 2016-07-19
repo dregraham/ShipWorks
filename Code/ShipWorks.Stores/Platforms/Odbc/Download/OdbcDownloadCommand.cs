@@ -35,6 +35,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         /// <summary>
         /// Downloads all the orders.
         /// </summary>
+        /// <exception cref="ShipWorksOdbcException">The Connection string is not valid</exception>
         public IEnumerable<OdbcRecord> Execute()
         {
             try

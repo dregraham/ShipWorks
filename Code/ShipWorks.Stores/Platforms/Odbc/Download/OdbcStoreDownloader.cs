@@ -45,6 +45,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         /// <summary>
         /// Import ODBC Orders from external datasource.
         /// </summary>
+        /// <exception cref="DownloadException"></exception>
         protected override void Download()
         {
             Progress.Detail = "Querying data source...";

@@ -15,6 +15,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
         /// <summary>
         /// Creates an Odbc DbConnection with a given connection string
         /// </summary>
+        /// <exception cref="ShipWorksOdbcException">The Connection string is not valid</exception>
         DbConnection CreateOdbcConnection(string connectionString);
 
         /// <summary>

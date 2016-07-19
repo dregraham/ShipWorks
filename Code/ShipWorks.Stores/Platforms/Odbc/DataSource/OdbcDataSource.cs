@@ -1,12 +1,12 @@
-﻿using System;
+﻿using Interapptive.Shared.Utility;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using ShipWorks.Stores.Platforms.Odbc.DataAccess;
+using System;
 using System.Data;
 using System.Data.Common;
 using System.Reflection;
 using System.Text;
-using Interapptive.Shared.Utility;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using ShipWorks.Stores.Platforms.Odbc.DataAccess;
 
 namespace ShipWorks.Stores.Platforms.Odbc.DataSource
 {
@@ -128,20 +128,18 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataSource
         public GenericResult<IOdbcDataSource> TestConnection()
         {
             GenericResult<IOdbcDataSource> testResult;
-
-            using (IDbConnection connection = odbcProvider.CreateOdbcConnection(BuildConnectionString()))
+            try
             {
-                try
+                using (IDbConnection connection = odbcProvider.CreateOdbcConnection(BuildConnectionString()))
                 {
                     connection.Open();
                     testResult = GenericResult.FromSuccess((IOdbcDataSource) this);
                 }
-                catch (Exception ex)
-                {
-                    testResult = GenericResult.FromError(ex.Message, (IOdbcDataSource) this);
-                }
             }
-
+            catch (Exception ex)
+            {
+                testResult = GenericResult.FromError(ex.Message, (IOdbcDataSource) this);
+            }
             return testResult;
         }
 
@@ -178,6 +176,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataSource
         /// <summary>
         /// Creates a new ODBC Connection
         /// </summary>
+        /// <exception cref="ShipWorksOdbcException">The Connection string is not valid</exception>
         public DbConnection CreateConnection()
         {
             return odbcProvider.CreateOdbcConnection(ConnectionString);

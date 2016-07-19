@@ -1,12 +1,11 @@
+using log4net;
+using ShipWorks.Stores.Platforms.Odbc.DataAccess;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.Linq;
 using System.Reflection;
-using log4net;
-using Newtonsoft.Json;
-using ShipWorks.Stores.Platforms.Odbc.DataAccess;
 
 namespace ShipWorks.Stores.Platforms.Odbc.DataSource.Schema
 {
@@ -57,6 +56,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataSource.Schema
         /// <summary>
         /// Loads the columns, based on the table in the data source
         /// </summary>
+        /// <exception cref="ShipWorksOdbcException" />
         [Obfuscation(Exclude = false)]
         private void LoadTableColumns(IOdbcDataSource dataSource, string tableName)
         {
@@ -104,6 +104,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataSource.Schema
         /// <summary>
         /// Loads the columns for the column source using the given query
         /// </summary>
+        /// <exception cref="ShipWorksOdbcException" />
         [Obfuscation(Exclude = false)]
         private void LoadCustomQueryColumns(IOdbcDataSource dataSource, string query)
         {

@@ -15,6 +15,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataSource.Schema
         /// <summary>
         /// Load the given DataSource
         /// </summary>
+        /// <exception cref="ShipWorksOdbcException"/>
         void Load(IOdbcDataSource dataSource);
     }
 }

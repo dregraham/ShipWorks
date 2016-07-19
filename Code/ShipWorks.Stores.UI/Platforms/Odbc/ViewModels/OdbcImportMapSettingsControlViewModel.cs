@@ -118,7 +118,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
         private void ExecuteQuery()
         {
             QueryResults = null;
-            ResultMessage = String.Empty;
+            ResultMessage = string.Empty;
 
             try
             {

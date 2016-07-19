@@ -44,6 +44,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         /// OnlineLastModified greater than the onlineLastModifiedStartingPoint
         /// </summary>
         /// <returns></returns>
+        /// <exception cref="ShipWorksOdbcException">The OnlineLastModified column must be mapped to download by OnlineLastModified.</exception>
         public string GenerateSql()
         {
             // If the onlinelastmodified column is not mapped we cannot generate the query
@@ -61,6 +62,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         /// <summary>
         /// Sets the command text property of the command
         /// </summary>
+        /// <exception cref="ShipWorksOdbcException">The Connection string is not valid</exception>
         public void ConfigureCommand(IShipWorksOdbcCommand command)
         {
             command.ChangeCommandText(GenerateSql());
@@ -72,6 +74,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         /// <summary>
         /// Wraps the given column string in the data sources quoted identifier
         /// </summary>
+        /// <exception cref="ShipWorksOdbcException">The Connection string is not valid</exception>
         private string WrapColumnInQuoteIdentifier(string column)
         {
             using (DbConnection connection = dataSource.CreateConnection())
