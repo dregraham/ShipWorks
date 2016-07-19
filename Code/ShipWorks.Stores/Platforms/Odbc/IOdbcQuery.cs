@@ -1,6 +1,6 @@
 ﻿using ShipWorks.Stores.Platforms.Odbc.DataAccess;
 
-namespace ShipWorks.Stores.Platforms.Odbc.Download
+namespace ShipWorks.Stores.Platforms.Odbc
 {
     /// <summary>
     /// Generates a context specific Odbc query
@@ -8,7 +8,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
     public interface IOdbcQuery
     {
         /// <summary>
-        /// Generates the Sql to download orders.
+        /// Generates the Sql for the query
         /// </summary>
         /// <exception cref="ShipWorksOdbcException">The Connection string is not valid</exception>
         string GenerateSql();

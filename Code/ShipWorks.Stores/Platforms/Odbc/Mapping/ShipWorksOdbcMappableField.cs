@@ -130,6 +130,23 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         }
 
         /// <summary>
+        /// Set the Value to matching field from the given entity
+        /// </summary>
+        [Obfuscation(Exclude = false)]
+        public void LoadValue(IEntity2 entity)
+        {
+            Value = entity.Fields[Name].CurrentValue;
+        }
+
+        /// <summary>
+        /// Reset the value
+        /// </summary>
+        public void ResetValue()
+        {
+            Value = null;
+        }
+
+        /// <summary>
         /// Convert the given object to the supplied type
         /// </summary>
         [Obfuscation(Exclude = false)]
