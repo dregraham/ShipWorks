@@ -85,6 +85,7 @@ namespace ShipWorks.Shipping
         private readonly ShipSenseSynchronizer shipSenseSynchronizer;
 
         private Dictionary<ShipmentTypeCode, ServiceControlBase> serviceControlCache = new Dictionary<ShipmentTypeCode, ServiceControlBase>();
+        private CustomsControlCache customsControlCache = new CustomsControlCache();
 
         private readonly Timer shipSenseChangedTimer = new Timer();
         private const int shipSenseChangedDebounceTime = 500;
@@ -894,6 +895,8 @@ namespace ShipWorks.Shipping
         {
             ServiceControlBase newServiceControl = GetServiceControlForShipments(shipments, shipmentType);
 
+            LoadCustomsControl(shipments, shipmentType, enableEditing);
+
             // If there is a service control, load the data into it before making it visible
             if (newServiceControl != null)
             {
@@ -901,9 +904,6 @@ namespace ShipWorks.Shipping
             }
 
             ReplaceServiceControlIfChanged(newServiceControl);
-
-            // Update the custom's control
-            LoadCustomsControl(shipments, shipmentType, enableEditing);
 
             // Update the provider in the shipment grid
             shipmentControl.Refresh();
@@ -1274,60 +1274,32 @@ namespace ShipWorks.Shipping
         {
             CustomsControlBase newCustomsControl = null;
 
-            if (shipments.Any())
+            if (shipments.Any(CustomsManager.IsCustomsRequired))
             {
                 // If its null, its multi select
-                newCustomsControl = shipmentType == null ? new CustomsControlBase() : shipmentType.CreateCustomsControl();
+                newCustomsControl = customsControlCache.Get(shipmentType);
 
-                // If the type we need didn't change, then don't change it
-                if (CustomsControl != null && CustomsControl.GetType() == newCustomsControl.GetType())
-                {
-                    newCustomsControl = CustomsControl;
-                }
-                else
-                {
-                    newCustomsControl.Initialize();
-                }
-            }
-
-            // If there is a service control, load the data into it before making it visible
-            if (newCustomsControl != null)
-            {
                 newCustomsControl.LoadShipments(shipments, enableEditing);
-                newCustomsControl.ShipSenseFieldChanged += OnShipSenseFieldChanged;
-            }
 
-            // See if the customs control has changed
-            if (CustomsControl != newCustomsControl)
-            {
-                CustomsControlBase oldCustomsControl = CustomsControl;
-                Control reduceFlash = null;
+                if (CustomsControl != newCustomsControl)
+                {
+                    if (CustomsControl != null)
+                    {
+                        CustomsControl.ShipSenseFieldChanged -= OnShipSenseFieldChanged;
+                    }
 
-                // If there was not an old service control, create a blank panel that will cover our new service control
-                // while it's controls are being positioned
-                if (oldCustomsControl == null)
-                {
-                    reduceFlash = new Panel();
-                    reduceFlash.Dock = DockStyle.Fill;
-                    customsControlArea.Controls.Add(reduceFlash);
-                }
+                    newCustomsControl.ShipSenseFieldChanged += OnShipSenseFieldChanged;
 
-                // If there is a new service control, add it to our controls under either the old one, or the blank panel we created.
-                if (newCustomsControl != null)
-                {
-                    newCustomsControl.Dock = DockStyle.Fill;
-                    customsControlArea.Controls.Add(newCustomsControl);
-                }
+                    using (Control reduceFlash = new Panel())
+                    {
+                        reduceFlash.Dock = DockStyle.Fill;
+                        customsControlArea.Controls.Clear();
+                        customsControlArea.Controls.Add(reduceFlash);
 
-                // Finally, remove the old service control, or the blank panel we created
-                if (oldCustomsControl != null)
-                {
-                    oldCustomsControl.ShipSenseFieldChanged -= OnShipSenseFieldChanged;
-                    oldCustomsControl.Dispose();
-                }
-                else
-                {
-                    reduceFlash.Dispose();
+                        customsControlArea.Controls.Add(newCustomsControl);
+
+                        customsControlArea.Controls.Remove(reduceFlash);
+                    }
                 }
             }
 
