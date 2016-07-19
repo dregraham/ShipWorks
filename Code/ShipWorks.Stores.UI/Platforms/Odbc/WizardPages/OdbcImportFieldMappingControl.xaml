@@ -204,6 +204,6 @@
                        Padding="0" />
             </StackPanel>
         </Grid>
-        <wizardPages:OdbcMappingControl Grid.Row="1" Margin="10 0 0 0" />
+        <wizardPages:OdbcMappingControl Grid.Row="1" Margin="0 0 0 0" />
     </Grid>
 </UserControl>
