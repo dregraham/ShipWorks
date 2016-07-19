@@ -40,10 +40,10 @@
             this.credentialsPanel = new System.Windows.Forms.Panel();
             this.btnTestConnection2 = new System.Windows.Forms.Button();
             this.customPanel = new System.Windows.Forms.Panel();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.customConnectionString = new System.Windows.Forms.RichTextBox();
             this.btnTestConnection = new System.Windows.Forms.Button();
             this.customLabel = new System.Windows.Forms.Label();
-            this.customConnectionString = new System.Windows.Forms.RichTextBox();
-            this.panel1 = new System.Windows.Forms.Panel();
             this.credentialsPanel.SuspendLayout();
             this.customPanel.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -178,12 +178,33 @@
             this.customPanel.Size = new System.Drawing.Size(489, 114);
             this.customPanel.TabIndex = 8;
             // 
+            // panel1
+            // 
+            this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel1.Controls.Add(this.customConnectionString);
+            this.panel1.Location = new System.Drawing.Point(106, 7);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(374, 52);
+            this.panel1.TabIndex = 13;
+            // 
+            // customConnectionString
+            // 
+            this.customConnectionString.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.customConnectionString.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.customConnectionString.Location = new System.Drawing.Point(0, 0);
+            this.customConnectionString.MaxLength = 2048;
+            this.customConnectionString.Name = "customConnectionString";
+            this.customConnectionString.Size = new System.Drawing.Size(372, 50);
+            this.customConnectionString.TabIndex = 11;
+            this.customConnectionString.Text = "";
+            this.customConnectionString.TextChanged += new System.EventHandler(this.OnChangedCustomConnectionString);
+            // 
             // btnTestConnection
             // 
             this.btnTestConnection.Location = new System.Drawing.Point(382, 61);
             this.btnTestConnection.Name = "btnTestConnection";
             this.btnTestConnection.Size = new System.Drawing.Size(99, 23);
-            this.btnTestConnection.TabIndex = 11;
+            this.btnTestConnection.TabIndex = 12;
             this.btnTestConnection.Text = "Test Connection";
             this.btnTestConnection.UseVisualStyleBackColor = true;
             this.btnTestConnection.Click += new System.EventHandler(this.OnTestConnection);
@@ -198,27 +219,6 @@
             this.customLabel.TabIndex = 6;
             this.customLabel.Text = "Connection String:";
             this.customLabel.TextAlign = System.Drawing.ContentAlignment.TopRight;
-            // 
-            // customConnectionString
-            // 
-            this.customConnectionString.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.customConnectionString.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.customConnectionString.Location = new System.Drawing.Point(0, 0);
-            this.customConnectionString.MaxLength = 2048;
-            this.customConnectionString.Name = "customConnectionString";
-            this.customConnectionString.Size = new System.Drawing.Size(372, 50);
-            this.customConnectionString.TabIndex = 12;
-            this.customConnectionString.Text = "";
-            this.customConnectionString.TextChanged += new System.EventHandler(this.OnChangedCustomConnectionString);
-            // 
-            // panel1
-            // 
-            this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel1.Controls.Add(this.customConnectionString);
-            this.panel1.Location = new System.Drawing.Point(106, 7);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(374, 52);
-            this.panel1.TabIndex = 13;
             // 
             // OdbcDataSourceControl
             // 
