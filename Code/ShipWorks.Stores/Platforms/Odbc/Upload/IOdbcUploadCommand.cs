@@ -1,4 +1,4 @@
-﻿namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
+﻿namespace ShipWorks.Stores.Platforms.Odbc.Upload
 {
     /// <summary>
     /// Interface for uploading data to ODBC
