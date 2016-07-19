@@ -29,5 +29,10 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// Set the Value to the given value
         /// </summary>
         void LoadValue(object value);
+
+        /// <summary>
+        /// Resets the value.
+        /// </summary>
+        void ResetValue();
     }
 }
