@@ -12,9 +12,9 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
     /// <summary>
     /// Download Query where the results are limited to rows greater than the onlinelastmodified date
     /// </summary>
-    public class OdbcLastModifiedDownloadQuery : IOdbcDownloadQuery
+    public class OdbcLastModifiedDownloadQuery : IOdbcQuery
     {
-        private readonly IOdbcDownloadQuery downloadQuery;
+        private readonly IOdbcQuery downloadQuery;
         private readonly DateTime onlineLastModifiedStartingPoint;
         private readonly IShipWorksDbProviderFactory dbProviderFactory;
         private readonly IOdbcDataSource dataSource;
@@ -26,7 +26,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         /// <param name="downloadQuery">Query to limit</param>
         /// <param name="onlineLastModifiedStartingPoint">date to limit the query from </param>
         public OdbcLastModifiedDownloadQuery(
-            IOdbcDownloadQuery downloadQuery,
+            IOdbcQuery downloadQuery,
             DateTime onlineLastModifiedStartingPoint,
             IOdbcFieldMap fieldMap,
             IShipWorksDbProviderFactory dbProviderFactory,

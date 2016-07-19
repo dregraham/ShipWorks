@@ -3,9 +3,9 @@
 namespace ShipWorks.Stores.Platforms.Odbc.Download
 {
     /// <summary>
-    /// Generates a context specific download query
+    /// Generates a context specific Odbc query
     /// </summary>
-    public interface IOdbcDownloadQuery
+    public interface IOdbcQuery
     {
         /// <summary>
         /// Generates the Sql to download orders.

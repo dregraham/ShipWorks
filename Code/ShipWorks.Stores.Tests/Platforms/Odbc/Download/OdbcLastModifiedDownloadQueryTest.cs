@@ -29,7 +29,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Download
             string originalDownloadQuery = "SELECT * FROM FOO";
             DateTime onlineLastModifiedStartingPoint = DateTime.UtcNow;
 
-            Mock<IOdbcDownloadQuery> downloadQuery = mock.Mock<IOdbcDownloadQuery>();
+            Mock<IOdbcQuery> downloadQuery = mock.Mock<IOdbcQuery>();
             downloadQuery.Setup(d => d.GenerateSql()).Returns(originalDownloadQuery);
             Mock<IOdbcFieldMap> fieldMap = mock.Mock<IOdbcFieldMap>();
             Mock<IShipWorksDbProviderFactory> dbProviderFactory = mock.Mock<IShipWorksDbProviderFactory>();
@@ -49,7 +49,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Download
             DateTime onlineLastModifiedStartingPoint = DateTime.UtcNow;
             OdbcColumn column = new OdbcColumn("");
 
-            Mock<IOdbcDownloadQuery> downloadQuery = mock.Mock<IOdbcDownloadQuery>();
+            Mock<IOdbcQuery> downloadQuery = mock.Mock<IOdbcQuery>();
             downloadQuery.Setup(d => d.GenerateSql()).Returns(originalDownloadQuery);
 
             Mock<IExternalOdbcMappableField> externalField = mock.Mock<IExternalOdbcMappableField>();
@@ -85,7 +85,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Download
             DateTime onlineLastModifiedStartingPoint = DateTime.UtcNow;
             OdbcColumn column = new OdbcColumn("OnlineLastModified");
 
-            Mock<IOdbcDownloadQuery> downloadQuery = mock.Mock<IOdbcDownloadQuery>();
+            Mock<IOdbcQuery> downloadQuery = mock.Mock<IOdbcQuery>();
             downloadQuery.Setup(d => d.GenerateSql()).Returns(originalDownloadQuery);
 
             Mock<IExternalOdbcMappableField> externalField = mock.Mock<IExternalOdbcMappableField>();
@@ -119,7 +119,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Download
             DateTime onlineLastModifiedStartingPoint = DateTime.UtcNow;
             OdbcColumn column = new OdbcColumn("OnlineLastModified");
 
-            Mock<IOdbcDownloadQuery> downloadQuery = mock.Mock<IOdbcDownloadQuery>();
+            Mock<IOdbcQuery> downloadQuery = mock.Mock<IOdbcQuery>();
             downloadQuery.Setup(d => d.GenerateSql()).Returns(originalDownloadQuery);
 
             Mock<IExternalOdbcMappableField> externalField = mock.Mock<IExternalOdbcMappableField>();
@@ -154,7 +154,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Download
             DateTime onlineLastModifiedStartingPoint = DateTime.UtcNow;
             OdbcColumn column = new OdbcColumn("OnlineLastModified");
 
-            Mock<IOdbcDownloadQuery> downloadQuery = mock.Mock<IOdbcDownloadQuery>();
+            Mock<IOdbcQuery> downloadQuery = mock.Mock<IOdbcQuery>();
             downloadQuery.Setup(d => d.GenerateSql()).Returns(originalDownloadQuery);
 
             Mock<IExternalOdbcMappableField> externalField = mock.Mock<IExternalOdbcMappableField>();
@@ -189,7 +189,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Download
             DateTime onlineLastModifiedStartingPoint = DateTime.UtcNow;
             OdbcColumn column = new OdbcColumn("OnlineLastModified");
 
-            Mock<IOdbcDownloadQuery> downloadQuery = mock.Mock<IOdbcDownloadQuery>();
+            Mock<IOdbcQuery> downloadQuery = mock.Mock<IOdbcQuery>();
             downloadQuery.Setup(d => d.GenerateSql()).Returns(originalDownloadQuery);
 
             Mock<IExternalOdbcMappableField> externalField = mock.Mock<IExternalOdbcMappableField>();
@@ -228,7 +228,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Download
             DateTime onlineLastModifiedStartingPoint = DateTime.UtcNow;
             OdbcColumn column = new OdbcColumn("");
 
-            Mock<IOdbcDownloadQuery> downloadQuery = mock.Mock<IOdbcDownloadQuery>();
+            Mock<IOdbcQuery> downloadQuery = mock.Mock<IOdbcQuery>();
             downloadQuery.Setup(d => d.GenerateSql()).Returns(originalDownloadQuery);
 
             Mock<IExternalOdbcMappableField> externalField = mock.Mock<IExternalOdbcMappableField>();
@@ -265,7 +265,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Download
             DateTime onlineLastModifiedStartingPoint = DateTime.UtcNow;
             OdbcColumn column = new OdbcColumn("OnlineLastModified");
 
-            Mock<IOdbcDownloadQuery> downloadQuery = mock.Mock<IOdbcDownloadQuery>();
+            Mock<IOdbcQuery> downloadQuery = mock.Mock<IOdbcQuery>();
             downloadQuery.Setup(d => d.GenerateSql()).Returns(originalDownloadQuery);
 
             Mock<IExternalOdbcMappableField> externalField = mock.Mock<IExternalOdbcMappableField>();
@@ -304,7 +304,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Download
             DateTime onlineLastModifiedStartingPoint = DateTime.UtcNow;
             OdbcColumn column = new OdbcColumn("OnlineLastModified");
 
-            Mock<IOdbcDownloadQuery> downloadQuery = mock.Mock<IOdbcDownloadQuery>();
+            Mock<IOdbcQuery> downloadQuery = mock.Mock<IOdbcQuery>();
             downloadQuery.Setup(d => d.GenerateSql()).Returns(originalDownloadQuery);
 
             Mock<IExternalOdbcMappableField> externalField = mock.Mock<IExternalOdbcMappableField>();

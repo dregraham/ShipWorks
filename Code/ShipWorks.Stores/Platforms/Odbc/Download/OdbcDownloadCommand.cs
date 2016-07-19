@@ -16,7 +16,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         private readonly IOdbcFieldMap fieldMap;
         private readonly IOdbcDataSource dataSource;
         private readonly IShipWorksDbProviderFactory dbProviderFactory;
-        private readonly IOdbcDownloadQuery downloadQuery;
+        private readonly IOdbcQuery downloadQuery;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcDownloadCommand"/> class.
@@ -24,7 +24,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         public OdbcDownloadCommand(IOdbcFieldMap fieldMap,
             IOdbcDataSource dataSource,
             IShipWorksDbProviderFactory dbProviderFactory,
-            IOdbcDownloadQuery downloadQuery)
+            IOdbcQuery downloadQuery)
         {
             this.fieldMap = fieldMap;
             this.dataSource = dataSource;

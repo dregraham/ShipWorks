@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Download
 {
-    public class TableOdbcDownloadQuery : IOdbcDownloadQuery
+    public class TableOdbcDownloadQuery : IOdbcQuery
     {
         private readonly OdbcStoreEntity store;
         private readonly IShipWorksDbProviderFactory dbProviderFactory;

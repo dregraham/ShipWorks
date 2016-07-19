@@ -176,7 +176,7 @@
     <Compile Include="Platforms\Odbc\EncryptedOdbcDataSource.cs" />
     <Compile Include="Platforms\Odbc\DataAccess\IOdbcCommand.cs" />
     <Compile Include="Platforms\Odbc\DataSource\IOdbcDataSource.cs" />
-    <Compile Include="Platforms\Odbc\Download\IOdbcDownloadQuery.cs" />
+    <Compile Include="Platforms\Odbc\Download\IOdbcQuery.cs" />
     <Compile Include="Platforms\Odbc\DataAccess\IOdbcSampleDataCommand.cs" />
     <Compile Include="Platforms\Odbc\DataSource\Schema\IOdbcSchema.cs" />
     <Compile Include="Platforms\Odbc\DataSource\Schema\IOdbcColumnSource.cs" />

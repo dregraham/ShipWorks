@@ -31,7 +31,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
         /// </summary>
         public IOdbcCommand CreateDownloadCommand(OdbcStoreEntity store)
         {
-            IOdbcDownloadQuery downloadQuery = GetDownloadQuery(store, odbcFieldMap, dataSource, dbProviderFactory);
+            IOdbcQuery downloadQuery = GetDownloadQuery(store, odbcFieldMap, dataSource, dbProviderFactory);
 
             return new OdbcDownloadCommand(odbcFieldMap, dataSource, dbProviderFactory, downloadQuery);
         }
@@ -41,8 +41,8 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
         /// </summary>
         public IOdbcCommand CreateDownloadCommand(OdbcStoreEntity store, DateTime onlineLastModified)
         {
-            IOdbcDownloadQuery downloadQuery = GetDownloadQuery(store, odbcFieldMap, dataSource, dbProviderFactory);
-            IOdbcDownloadQuery lastModifiedQuery = new OdbcLastModifiedDownloadQuery(downloadQuery, onlineLastModified, odbcFieldMap, dbProviderFactory, dataSource);
+            IOdbcQuery downloadQuery = GetDownloadQuery(store, odbcFieldMap, dataSource, dbProviderFactory);
+            IOdbcQuery lastModifiedQuery = new OdbcLastModifiedDownloadQuery(downloadQuery, onlineLastModified, odbcFieldMap, dbProviderFactory, dataSource);
 
             return new OdbcDownloadCommand(odbcFieldMap, dataSource, dbProviderFactory, lastModifiedQuery);
         }
@@ -50,13 +50,13 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
         /// <summary>
         /// Creates the download query used to retrieve orders.
         /// </summary>
-        private static IOdbcDownloadQuery GetDownloadQuery(OdbcStoreEntity store, IOdbcFieldMap odbcFieldMap, IOdbcDataSource dataSource, IShipWorksDbProviderFactory dbProviderFactory)
+        private static IOdbcQuery GetDownloadQuery(OdbcStoreEntity store, IOdbcFieldMap odbcFieldMap, IOdbcDataSource dataSource, IShipWorksDbProviderFactory dbProviderFactory)
         {
             odbcFieldMap.Load(store.ImportMap);
             dataSource.Restore(store.ImportConnectionString);
 
             return store.ImportSourceType == (int) OdbcColumnSourceType.Table
-                ? (IOdbcDownloadQuery)new TableOdbcDownloadQuery(store, dbProviderFactory, odbcFieldMap, dataSource)
+                ? (IOdbcQuery)new TableOdbcDownloadQuery(store, dbProviderFactory, odbcFieldMap, dataSource)
                 : new CustomQueryOdbcDownloadQuery(store);
         }
     }
