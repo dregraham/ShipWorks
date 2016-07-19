@@ -138,6 +138,7 @@
             </Grid>
             <Label Grid.Row="0"
                    Grid.Column="0"
+                   Margin="3 0 0 0"
                    Content="Item Settings"
                    FontWeight="Bold"
                    Style="{StaticResource Header}" />

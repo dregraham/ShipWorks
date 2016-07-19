@@ -62,7 +62,7 @@
             </Grid.ColumnDefinitions>
             <Label Grid.Row="0"
                    Grid.Column="0"
-                   Margin="0 0 0 5"
+                   Margin="13 0 -20 5"
                    Content="Import Settings"
                    FontWeight="Bold" />
             <Label Grid.Row="1"

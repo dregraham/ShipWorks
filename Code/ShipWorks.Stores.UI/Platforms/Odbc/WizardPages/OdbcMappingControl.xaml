@@ -82,6 +82,7 @@
         <Label Grid.Row="0"
                Grid.Column="0"
                Grid.ColumnSpan="2"
+               Margin="4 0 0 0"
                Content="Column Mappings"
                FontWeight="Bold"
                Style="{StaticResource Header}" />
