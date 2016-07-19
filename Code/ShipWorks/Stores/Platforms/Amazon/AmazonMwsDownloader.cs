@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using System.Xml.XPath;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
@@ -184,7 +185,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
             order.IsPrime = (int) TranslateIsPrime(isPrime);
 
             // Purchase order number
-            order.PurchaseOrderNumber = XPathUtility.Evaluate(xpath, "amz:PurchaseOrderNumber", string.Empty);
+            order.PurchaseOrderNumber = WebUtility.HtmlDecode(XPathUtility.Evaluate(xpath, "amz:PurchaseOrderNumber", string.Empty));
 
             // no customer ID in this Api
             order.OnlineCustomerID = null;
