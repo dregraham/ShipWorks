@@ -6,7 +6,7 @@
     public interface IOdbcUploadCommand
     {
         /// <summary>
-        /// Execute the command
+        /// Executes the command and returns the number of rows affected.
         /// </summary>
         int Execute();
     }

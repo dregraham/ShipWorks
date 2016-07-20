@@ -201,6 +201,7 @@
     <Compile Include="Platforms\Odbc\OdbcUploadMappingControlViewModelTest.cs" />
     <Compile Include="Platforms\Odbc\Upload\OdbcTableUploadQueryTest.cs" />
     <Compile Include="Platforms\Odbc\Upload\OdbcUploadCommandTest.cs" />
+    <Compile Include="Platforms\Odbc\Upload\OdbcUploaderTest.cs" />
     <Compile Include="Platforms\Sears\SearsCredentialsTest.cs" />
     <Compile Include="Platforms\Sears\SearsCipherKeyTest.cs" />
     <Compile Include="Platforms\SparkPay\DTO\OrderStatusResponseTest.cs" />

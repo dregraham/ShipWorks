@@ -3,15 +3,15 @@ using ShipWorks.Stores.Platforms.Odbc.DataSource;
 using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 using ShipWorks.Stores.Platforms.Odbc.Download;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
-using System;
 using ShipWorks.Stores.Platforms.Odbc.Upload;
+using System;
 
 namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
 {
     /// <summary>
     /// Creates an OdbcCommand for a store
     /// </summary>
-    public class OdbcCommandFactory
+    public class OdbcCommandFactory : IOdbcCommandFactory
     {
         private readonly IOdbcDataSource dataSource;
         private readonly IShipWorksDbProviderFactory dbProviderFactory;

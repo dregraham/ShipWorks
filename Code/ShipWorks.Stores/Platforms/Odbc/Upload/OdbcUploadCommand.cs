@@ -1,7 +1,6 @@
-﻿using System.Data.Common;
-using ShipWorks.Stores.Platforms.Odbc.DataAccess;
+﻿using ShipWorks.Stores.Platforms.Odbc.DataAccess;
 using ShipWorks.Stores.Platforms.Odbc.DataSource;
-using ShipWorks.Stores.Platforms.Odbc.Download;
+using System.Data.Common;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Upload
 {
@@ -27,7 +26,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Upload
         }
 
         /// <summary>
-        /// Execute the command
+        /// Executes the command and returns the number of rows affected.
         /// </summary>
         public int Execute()
         {
