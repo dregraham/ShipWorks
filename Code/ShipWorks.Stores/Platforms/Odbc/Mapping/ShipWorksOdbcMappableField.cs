@@ -135,7 +135,12 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         [Obfuscation(Exclude = false)]
         public void LoadValue(IEntity2 entity)
         {
-            Value = entity.Fields[Name].CurrentValue;
+            IEntityField2 entityField = entity.Fields[Name];
+
+            if (entityField != null)
+            {
+                Value = entityField.CurrentValue;
+            }
         }
 
         /// <summary>

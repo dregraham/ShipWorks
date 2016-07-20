@@ -1,10 +1,12 @@
-﻿using SD.LLBLGen.Pro.ORMSupportClasses;
+﻿using System;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Stores.Platforms.Odbc.DataAccess;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
 using System.Collections.Generic;
+using log4net;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Upload
 {
@@ -13,15 +15,17 @@ namespace ShipWorks.Stores.Platforms.Odbc.Upload
         private readonly IShippingManager shippingManager;
         private readonly IOdbcFieldMap fieldMap;
         private readonly IOdbcCommandFactory commandFactory;
+        private readonly ILog log;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcUploader"/> class.
         /// </summary>
-        public OdbcUploader(IShippingManager shippingManager, IOdbcFieldMap fieldMap, IOdbcCommandFactory commandFactory)
+        public OdbcUploader(IShippingManager shippingManager, IOdbcFieldMap fieldMap, IOdbcCommandFactory commandFactory, Func<Type, ILog> logFactory)
         {
             this.shippingManager = shippingManager;
             this.fieldMap = fieldMap;
             this.commandFactory = commandFactory;
+            log = logFactory(typeof(OdbcUploader));
         }
 
         /// <summary>
@@ -48,6 +52,13 @@ namespace ShipWorks.Stores.Platforms.Odbc.Upload
             fieldMap.Load(store.UploadMap);
 
             ShipmentEntity shipment = shippingManager.GetLatestActiveShipment(orderid);
+
+            if (shipment == null || !shipment.Processed)
+            {
+                log.Error($"Unable to upload {orderid} as it is has not been processed.");
+                return;
+            }
+
             Upload(store, shipment);
         }
 
