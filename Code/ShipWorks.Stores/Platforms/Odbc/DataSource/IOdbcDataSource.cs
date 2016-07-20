@@ -1,5 +1,5 @@
-﻿using System.Data.Common;
-using Interapptive.Shared.Utility;
+﻿using Interapptive.Shared.Utility;
+using System.Data.Common;
 
 namespace ShipWorks.Stores.Platforms.Odbc.DataSource
 {
@@ -16,6 +16,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataSource
         /// <summary>
         /// Creates an ODBC connection to the Data Source
         /// </summary>
+        /// <exception cref="ShipWorksOdbcException">The Connection string is not valid</exception>
         DbConnection CreateConnection();
 
         /// <summary>

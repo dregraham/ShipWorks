@@ -33,6 +33,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataSource.Schema
         /// <summary>
         /// Populates Table property with the schema of the given datasource.
         /// </summary>
+        /// <exception cref="ShipWorksOdbcException"/>
         public void Load(IOdbcDataSource dataSource)
         {
             using (DbConnection connection = dataSource.CreateConnection())

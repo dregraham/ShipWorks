@@ -28,6 +28,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
         /// <summary>
         /// Execute the query and return sample data
         /// </summary>
+        /// <exception cref="ShipWorksOdbcException"></exception>
         public DataTable Execute(IOdbcDataSource dataSource, string query, int numberOfResults)
         {
             try

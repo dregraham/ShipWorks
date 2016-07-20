@@ -85,7 +85,11 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
 
             username.Text = SelectedDataSource?.Username ?? string.Empty;
             password.Text = SelectedDataSource?.Password ?? string.Empty;
-            customConnectionString.Text = SelectedDataSource?.ConnectionString ?? string.Empty;
+
+            if (SelectedDataSource!= null && SelectedDataSource.IsCustom)
+            {
+                customConnectionString.Text = SelectedDataSource?.ConnectionString ?? string.Empty;
+            }
         }
 
         /// <summary>
@@ -203,20 +207,36 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// <summary>
         /// Called when leaving the username
         /// </summary>
-        private void OnChangedUsername(object sender, EventArgs e) =>
-            SelectedDataSource.ChangeConnection(SelectedDataSource.Name, username.Text, SelectedDataSource.Password);
+        private void OnChangedUsername(object sender, EventArgs e)
+        {
+            if (!SelectedDataSource.IsCustom)
+            {
+                SelectedDataSource.ChangeConnection(SelectedDataSource.Name, username.Text, SelectedDataSource.Password);
+            }
+        }
 
         /// <summary>
         /// Called when leaving password
         /// </summary>
-        private void OnChangedPassword(object sender, EventArgs e) =>
-            SelectedDataSource.ChangeConnection(SelectedDataSource.Name, SelectedDataSource.Username, password.Text);
+        private void OnChangedPassword(object sender, EventArgs e)
+        {
+            if (!SelectedDataSource.IsCustom)
+            {
+                SelectedDataSource.ChangeConnection(SelectedDataSource.Name, SelectedDataSource.Username, password.Text);
+            }
+        }
+
 
         /// <summary>
         /// Called when leaving customConnectionString
         /// </summary>
-        private void OnChangedCustomConnectionString(object sender, EventArgs e) =>
-            SelectedDataSource.ChangeConnection(customConnectionString.Text);
+        private void OnChangedCustomConnectionString(object sender, EventArgs e)
+        {
+            if (SelectedDataSource.IsCustom)
+            {
+                SelectedDataSource.ChangeConnection(customConnectionString.Text);
+            }
+        }
 
         /// <summary>
         /// Called when [click add data source].

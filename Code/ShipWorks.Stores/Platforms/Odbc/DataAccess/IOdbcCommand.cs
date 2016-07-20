@@ -10,6 +10,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
         /// <summary>
         /// Executes this command.
         /// </summary>
+        /// <exception cref="ShipWorksOdbcException">The Connection string is not valid</exception>
         IEnumerable<OdbcRecord> Execute();
     }
 }

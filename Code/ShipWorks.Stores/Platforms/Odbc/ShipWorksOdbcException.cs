@@ -11,6 +11,10 @@ namespace ShipWorks.Stores.Platforms.Odbc
         {
         }
 
+        public ShipWorksOdbcException(Exception ex) : this(ex.Message, ex)
+        {
+        }
+
         public ShipWorksOdbcException(string message)
             : base(message)
         {

@@ -31,9 +31,9 @@
             this.elementHost = new System.Windows.Forms.Integration.ElementHost();
             this.mappingControl = new ShipWorks.Stores.UI.Platforms.Odbc.WizardPages.OdbcMappingControl();
             this.SuspendLayout();
-            // 
+            //
             // elementHost
-            // 
+            //
             this.elementHost.Dock = System.Windows.Forms.DockStyle.Fill;
             this.elementHost.Location = new System.Drawing.Point(0, 0);
             this.elementHost.Name = "elementHost";
@@ -41,13 +41,13 @@
             this.elementHost.TabIndex = 0;
             this.elementHost.Text = "elementHost1";
             this.elementHost.Child = this.mappingControl;
-            // 
+            //
             // OdbcUploadMappingPage
-            // 
+            //
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.elementHost);
-            this.Description = "Setup the database table and mappings of your columns into ShipWorks";
+            this.Description = "Setup the column mappings for uploading shipment details";
             this.Name = "OdbcUploadMappingPage";
             this.Size = new System.Drawing.Size(540, 500);
             this.Title = "Column Mappings";

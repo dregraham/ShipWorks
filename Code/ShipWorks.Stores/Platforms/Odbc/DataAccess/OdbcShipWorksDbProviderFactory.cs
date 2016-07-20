@@ -1,7 +1,7 @@
-﻿using System;
+﻿using log4net;
+using System;
 using System.Data.Common;
 using System.Data.Odbc;
-using log4net;
 
 namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
 {
@@ -11,10 +11,12 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
     public class OdbcShipWorksDbProviderFactory : IShipWorksDbProviderFactory
     {
         private readonly Func<Type, ILog> logFactory;
+        private readonly ILog log;
 
         public OdbcShipWorksDbProviderFactory(Func<Type, ILog> logFactory)
         {
             this.logFactory = logFactory;
+            log = logFactory(typeof(OdbcShipWorksDbProviderFactory));
         }
 
         /// <summary>
@@ -30,10 +32,19 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
         /// </summary>
         /// <param name="connectionString"></param>
         /// <returns></returns>
+        /// <exception cref="ShipWorksOdbcException">The Connection string is not valid</exception>
         public DbConnection CreateOdbcConnection(string connectionString)
         {
             DbConnection connection = CreateOdbcConnection();
-            connection.ConnectionString = connectionString;
+            try
+            {
+                connection.ConnectionString = connectionString;
+            }
+            catch (ArgumentException ex)
+            {
+                log.Error(ex);
+                throw new ShipWorksOdbcException(ex);
+            }
             return connection;
         }
 
