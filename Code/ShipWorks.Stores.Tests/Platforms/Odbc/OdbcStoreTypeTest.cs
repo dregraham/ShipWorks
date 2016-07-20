@@ -143,7 +143,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         [Fact]
         public void CreateAddStoreWizardOnlineUpdateActionControl_ReturnsOnlineUpdateShipmentUpdateActionControl_WhenUploadStrategyIsNotDoNotUpload()
         {
-            store.UploadStrategy = (int)OdbcShipmentUploadStrategy.DoNotUpload;
+            store.UploadStrategy = (int) OdbcShipmentUploadStrategy.UseImportDataSource;
 
             OdbcStoreType testObject = new OdbcStoreType(store, null, null);
 
