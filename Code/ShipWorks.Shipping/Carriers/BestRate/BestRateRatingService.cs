@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Autofac.Features.Indexed;
+using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Editions;
@@ -27,7 +28,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// Constructor
         /// </summary>
         public BestRateRatingService(IIndex<ShipmentTypeCode, ShipmentType> shipmentTypeFactory, IBestRateShippingBrokerFactory brokerFactory,
-			IRateGroupFilterFactory filterFactory, ILicenseService licenseService)
+            IRateGroupFilterFactory filterFactory, ILicenseService licenseService)
         {
             this.shipmentTypeFactory = shipmentTypeFactory;
             this.brokerFactory = brokerFactory;
@@ -45,15 +46,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         {
             try
             {
-                // One final restriction check to account for a UPS account being added after the shipment
-                // was previously configured to use BestRate
-                bool isAllowed = licenseService.CheckRestriction(EditionFeature.ShipmentType, ShipmentTypeCode.BestRate) == EditionRestrictionLevel.None;
-                if (!isAllowed)
-                {
-                    // A UPS account has been added since this shipment was configured for Best Rate. Best rate is not allowed. 
-                    BestRateException exception = new BestRateException("There is a UPS account in ShipWorks. Best Rate can no longer be used. Please choose another shipping provider.");
-                    return new InvalidRateGroup(ShipmentTypeCode.BestRate, exception);
-                }
+                EnsureBestRateIsAllowed();
 
                 BestRateShipmentType.AddBestRateEvent(shipment, BestRateEventTypes.RatesCompared);
 
@@ -96,6 +89,8 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// <returns>IEnumerable of RateGroup for each carrier enabled for best rate</returns>
         public IEnumerable<RateGroup> GetRates(ShipmentEntity shipment, List<BrokerException> exceptionHandler)
         {
+            EnsureBestRateIsAllowed();
+
             // Don't create counter rate brokers
             List<IBestRateShippingBroker> bestRateShippingBrokers = brokerFactory.CreateBrokers(shipment).ToList();
 
@@ -158,6 +153,23 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         private static Task<RateGroup> StartGetRatesTask(IBestRateShippingBroker broker, ShipmentEntity shipment, List<BrokerException> brokerExceptions)
         {
             return Task<RateGroup>.Factory.StartNew(() => broker.GetBestRates(shipment, brokerExceptions));
+        }
+
+        /// <summary>
+        /// Ensure that we are allowed to use best rate
+        /// </summary>
+        private void EnsureBestRateIsAllowed()
+        {
+            // One final restriction check to account for a UPS account being added after the shipment
+            // was previously configured to use BestRate
+            EnumResult<EditionRestrictionLevel> restrictionLevel =
+                licenseService.CheckRestrictionWithReason(EditionFeature.ShipmentType, ShipmentTypeCode.BestRate);
+
+            if (restrictionLevel.Value != EditionRestrictionLevel.None)
+            {
+                // A UPS account has been added since this shipment was configured for Best Rate. Best rate is not allowed.
+                throw new BestRateException(restrictionLevel.Message);
+            }
         }
     }
 }

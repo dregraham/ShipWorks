@@ -1,10 +1,10 @@
-﻿using System;
+﻿using Interapptive.Shared;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Interapptive.Shared;
 
 namespace ShipWorks.Common.Threading
 {
@@ -93,12 +93,10 @@ namespace ShipWorks.Common.Threading
         public bool PropagateException { get; set; }
 
         /// <summary>
-        /// Execute the operation asynchronously using the given entity key collection
+        /// Execute the operation asynchronously using the given items
         /// </summary>
-        public void ExecuteAsync(BackgroundExecutorCallback<T> worker, IEnumerable<T> items)
-        {
+        public Task<BackgroundExecutorCompletedEventArgs<T>> ExecuteAsync(BackgroundExecutorCallback<T> worker, IEnumerable<T> items) =>
             ExecuteAsync(worker, items, null);
-        }
 
         /// <summary>
         /// Execute the operation asynchronously using the given item collection

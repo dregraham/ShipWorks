@@ -1,6 +1,5 @@
 ﻿using System;
 using log4net;
-using ShipWorks.ApplicationCore.ExecutionMode;
 
 namespace ShipWorks.ApplicationCore.Crashes
 {
@@ -9,7 +8,7 @@ namespace ShipWorks.ApplicationCore.Crashes
     /// </summary>
     public class ServiceCrash
     {
-        private readonly ILog log = LogManager.GetLogger(typeof (ServiceCrash));
+        private readonly ILog log = LogManager.GetLogger(typeof(ServiceCrash));
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ServiceCrash" /> class.
@@ -34,7 +33,10 @@ namespace ShipWorks.ApplicationCore.Crashes
         {
             try
             {
-                CrashSubmitter.Submit(Exception, userEmail, string.Empty, null);
+                string logName = Guid.NewGuid() + ".zip";
+                string logFileToSubmit = CrashSubmitter.CreateCrashLogZip();
+
+                CrashSubmitter.Submit(Exception, userEmail, logName, logFileToSubmit);
             }
             catch (Exception e)
             {

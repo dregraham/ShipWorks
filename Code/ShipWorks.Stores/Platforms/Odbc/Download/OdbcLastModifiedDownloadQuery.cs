@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data;
 using System.Data.Common;
 using System.Data.Odbc;
 using System.Linq;
@@ -68,7 +69,8 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
             command.ChangeCommandText(GenerateSql());
             string columnNameInQuotes = WrapColumnInQuoteIdentifier(lastModifiedColumnName);
 
-            command.AddParameter(columnNameInQuotes, OdbcType.DateTime, onlineLastModifiedStartingPoint);
+            OdbcParameter param = new OdbcParameter(columnNameInQuotes, OdbcType.DateTime, 23, ParameterDirection.Input, false, 1, 3, columnNameInQuotes, DataRowVersion.Current, onlineLastModifiedStartingPoint);
+            command.AddParameter(param);
         }
 
         /// <summary>

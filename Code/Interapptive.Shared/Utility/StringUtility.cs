@@ -31,10 +31,44 @@ namespace Interapptive.Shared.Utility
 
             if (Math.Abs(bytes) < 1024 * 1024 * 1024)
             {
-                return string.Format("{0:#,##0.0} MB", bytes / (double) (1024 * 1024));
+                return string.Format("{0:#,##0.0} MB", bytes / (double)(1024 * 1024));
             }
 
-            return string.Format("{0:#,##0.00} GB", bytes / (double) (1024 * 1024 * 1024));
+            return string.Format("{0:#,##0.00} GB", bytes / (double)(1024 * 1024 * 1024));
+        }
+
+        /// <summary>
+        /// Intelligently format the byte count in bytes, kb, or mb
+        /// </summary>
+        /// <param name="bytes">Number to format</param>
+        /// <param name="decimalFormat">Decimal format, i.e. {0:#,##0}</param>
+        public static string FormatByteCount(long bytes, string decimalFormat)
+        {
+            string format = string.Empty;
+            double value = 0;
+
+            if (Math.Abs(bytes) < 1024)
+            {
+                format = $"{decimalFormat} Bytes";
+                value = bytes;
+            }
+            else if (Math.Abs(bytes) < 1024 * 1024 * 20)
+            {
+                format = $"{decimalFormat} KB";
+                value = (double) bytes / 1024;
+            }
+            else if (Math.Abs(bytes) < 1024 * 1024 * 1024)
+            {
+                format = $"{decimalFormat} MB";
+                value = (double) bytes/(1024 * 1024);
+            }
+            else
+            {
+                format = $"{decimalFormat} GB";
+                value = (double) bytes/(1024 * 1024 * 1024);
+            }
+
+            return string.Format(format, value);
         }
 
         /// <summary>

@@ -1,4 +1,7 @@
-﻿using Interapptive.Shared.Security;
+﻿using System;
+using Interapptive.Shared.Security;
+using ShipWorks.ApplicationCore.Licensing;
+using ShipWorks.Data.Administration;
 
 namespace ShipWorks.ApplicationCore.Security
 {
@@ -7,18 +10,20 @@ namespace ShipWorks.ApplicationCore.Security
     /// </summary>
     public class LicenseEncryptionProvider : AesEncryptionProvider
     {
+        private readonly ISqlSchemaVersion sqlSchemaVersion;
         private const string EmptyValue = "ShipWorks legacy user";
-        private readonly bool isCustomerLicenseSupported;
+        private bool isCustomerLicenseSupported;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LicenseEncryptionProvider"/> class.
         /// </summary>
-        public LicenseEncryptionProvider(ICipherKey cipherKey, bool isCustomerLicenseSupported) 
+        public LicenseEncryptionProvider(ICipherKey cipherKey, ISqlSchemaVersion sqlSchemaVersion)
             : base(cipherKey)
         {
-            this.isCustomerLicenseSupported = isCustomerLicenseSupported;
+            this.sqlSchemaVersion = sqlSchemaVersion;
+            isCustomerLicenseSupported = sqlSchemaVersion.IsCustomerLicenseSupported();
         }
-        
+
         /// <summary>
         /// Gets the decrypted string
         /// </summary>
@@ -32,8 +37,26 @@ namespace ShipWorks.ApplicationCore.Security
                 return string.Empty;
             }
 
-            string decryptedResult = base.Decrypt(encryptedText);
-            return decryptedResult == EmptyValue ? string.Empty : decryptedResult;
+            try
+            {
+                string decryptedResult = base.Decrypt(encryptedText);
+                return decryptedResult == EmptyValue ? string.Empty : decryptedResult;
+            }
+            catch (EncryptionException ex) when (ex.InnerException.InnerException is DatabaseIdentifierException)
+            {
+                // refresh isCustomerLicenseSupported as we may have restored the database to a version
+                // that does not support customer licenses yet, the database is in a state where it needs
+                // to be upgraded
+                isCustomerLicenseSupported = sqlSchemaVersion.IsCustomerLicenseSupported();
+
+                // if the database does not yet support customer licenses return an empty string
+                if (!isCustomerLicenseSupported)
+                {
+                    return string.Empty;
+                }
+
+                throw;
+            }
         }
 
         /// <summary>

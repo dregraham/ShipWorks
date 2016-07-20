@@ -163,6 +163,7 @@ namespace ShipWorks.Shipping.Services.Dialogs
             builder.RegisterType<ShippingDlg>()
                 .AsSelf()
                 .As<Control>()
+                .As<IWin32Window>()
                 .SingleInstance();
         }
 

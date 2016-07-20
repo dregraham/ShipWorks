@@ -47,5 +47,11 @@
         /// </summary>
         public static ScaleReadResult ReadError(string message) =>
             new ScaleReadResult(ScaleReadStatus.ReadError, double.NegativeInfinity, message);
+
+        /// <summary>
+        /// Get a no status result
+        /// </summary>
+        public static ScaleReadResult NoStatus() =>
+            new ScaleReadResult(ScaleReadStatus.NoStatus, double.NegativeInfinity, string.Empty);
     }
 }

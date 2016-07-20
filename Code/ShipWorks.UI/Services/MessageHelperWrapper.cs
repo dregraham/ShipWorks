@@ -1,4 +1,4 @@
-﻿using Interapptive.Shared.Threading;
+﻿
 using Interapptive.Shared.UI;
 using ShipWorks.Common.Threading;
 using System;
@@ -12,16 +12,14 @@ namespace ShipWorks.UI.Services
     /// </summary>
     public class MessageHelperWrapper : IMessageHelper
     {
-        private readonly Func<IWin32Window> ownerFactory;
-        private readonly ISchedulerProvider schedulerProvider;
+        private readonly Func<Control> ownerFactory;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public MessageHelperWrapper(Func<IWin32Window> ownerFactory, ISchedulerProvider schedulerProvider)
+        public MessageHelperWrapper(Func<Control> ownerFactory)
         {
             this.ownerFactory = ownerFactory;
-            this.schedulerProvider = schedulerProvider;
         }
 
         /// <summary>
@@ -32,29 +30,13 @@ namespace ShipWorks.UI.Services
         /// <summary>
         /// Show an error message box with the given error text.
         /// </summary>
-        public void ShowError(IWin32Window owner, string message)
-        {
-            schedulerProvider.WindowsFormsEventLoop
-                .Schedule(new { Owner = owner, Message = message }, (x, y) =>
-                {
-                    MessageHelper.ShowError(y.Owner, y.Message);
-                    return Disposable.Empty;
-                });
-        }
+        public void ShowError(IWin32Window owner, string message) => MessageHelper.ShowError(owner, message);
 
         /// <summary>
         /// Show an information message
         /// </summary>
-        public void ShowInformation(string message)
-        {
-            schedulerProvider.WindowsFormsEventLoop
-                .Schedule(new { Owner = ownerFactory(), Message = message }, (x, y) =>
-                {
-                    MessageHelper.ShowInformation(y.Owner, y.Message);
-                    return Disposable.Empty;
-                });
-        }
-
+        public void ShowInformation(string message) => MessageHelper.ShowInformation(ownerFactory(), message);
+        
         /// <summary>
         /// Show a yes/no question with the given text
         /// </summary>
@@ -106,13 +88,10 @@ namespace ShipWorks.UI.Services
         /// <summary>
         /// Show an information message, takes an owner
         /// </summary>
-        public void ShowInformation(IWin32Window owner, string message)
-        {
-            MessageHelper.ShowMessage(owner, message);
-        }
+        public void ShowInformation(IWin32Window owner, string message) => MessageHelper.ShowInformation(owner, message);
 
         /// <summary>
-        /// Show a question message box.  
+        /// Show a question message box.
         /// </summary>
         public DialogResult ShowQuestion(MessageBoxIcon icon, MessageBoxButtons buttons, string message)
             => MessageHelper.ShowQuestion(ownerFactory(), icon, buttons, message);

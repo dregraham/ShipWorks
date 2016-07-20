@@ -1,3 +1,17 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data.SqlClient;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using System.Xml;
+using System.Xml.Linq;
 using Autofac;
 using Divelements.SandGrid;
 using Divelements.SandRibbon;
@@ -6,6 +20,7 @@ using Interapptive.Shared;
 using Interapptive.Shared.Data;
 using Interapptive.Shared.IO.Zip;
 using Interapptive.Shared.Messaging;
+using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Security;
 using Interapptive.Shared.UI;
@@ -83,19 +98,6 @@ using ShipWorks.Users;
 using ShipWorks.Users.Audit;
 using ShipWorks.Users.Logon;
 using ShipWorks.Users.Security;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data.SqlClient;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using System.Xml;
-using System.Xml.Linq;
 using TD.SandDock;
 using Application = System.Windows.Forms.Application;
 using SandButton = Divelements.SandRibbon.Button;
@@ -353,7 +355,7 @@ namespace ShipWorks
                 return;
             }
 
-            if (CrashWindow.IsApplicationCrashed)
+            if (CrashDialog.IsApplicationCrashed)
             {
                 return;
             }
@@ -841,6 +843,8 @@ namespace ShipWorks
             // refresh the license if it is older than 10 mins
             licenses.ForEach(license => license.Refresh());
 
+            Telemetry.TrackStartShipworks(GetCustomerIdForTelemetry(), ShipWorksSession.InstanceID.ToString("D"));
+
             // now that we updated license info we can refresh the UI to match
             if (InvokeRequired)
             {
@@ -852,6 +856,15 @@ namespace ShipWorks
             }
 
             ForceHeartbeat();
+        }
+
+        /// <summary>
+        /// Get a customer id that can be used for telemetry
+        /// </summary>
+        private string GetCustomerIdForTelemetry()
+        {
+            ITangoWebClient tangoWebClient = new TangoWebClientFactory().CreateWebClient();
+            return tangoWebClient.GetTangoCustomerId();
         }
 
         /// <summary>
@@ -4251,5 +4264,23 @@ namespace ShipWorks
         #endregion
 
         #endregion
+
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+
+            // Send telemetry data to Azure, giving it 2 seconds to complete.
+            Telemetry.Flush();
+            Thread.Sleep(2000);
+
+            base.Dispose(disposing);
+        }
     }
 }

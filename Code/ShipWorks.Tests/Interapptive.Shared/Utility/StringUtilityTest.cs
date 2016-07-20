@@ -1,4 +1,5 @@
-﻿using Interapptive.Shared.Utility;
+﻿using System.Collections.Generic;
+using Interapptive.Shared.Utility;
 using Xunit;
 
 namespace ShipWorks.Tests.Interapptive.Shared.Utility
@@ -60,6 +61,31 @@ namespace ShipWorks.Tests.Interapptive.Shared.Utility
         {
             string result = StringUtility.FormatFriendlyCurrency(.452M);
             Assert.Equal("$0.45", result);
+        }
+
+        [Theory]
+        [InlineData(10, "{0:#,##0}", "10 Bytes")]
+        [InlineData(1023, "{0:#,##0}", "1,023 Bytes")]
+        [InlineData(1024, "{0:#,##0}", "1 KB")]
+        [InlineData(20971519, "{0:#,##0}", "20,480 KB")]
+        [InlineData(20971520, "{0:#,##0}", "20 MB")]
+        [InlineData(1073741823, "{0:#,##0}", "1,024 MB")]
+        [InlineData(1073741824, "{0:#,##0}", "1 GB")]
+        [InlineData(1288490188.8, "{0:#,##0}", "1 GB")]
+        [InlineData(1610612736, "{0:#,##0}", "2 GB")]
+        [InlineData(10, "{0:#,##0.00}", "10.00 Bytes")]
+        [InlineData(1023, "{0:#,##0.00}", "1,023.00 Bytes")]
+        [InlineData(1024, "{0:#,##0.00}", "1.00 KB")]
+        [InlineData(20971519, "{0:#,##0.00}", "20,480.00 KB")]
+        [InlineData(20971520, "{0:#,##0.00}", "20.00 MB")]
+        [InlineData(1073741823, "{0:#,##0.00}", "1,024.00 MB")]
+        [InlineData(1073741824, "{0:#,##0.00}", "1.00 GB")]
+        [InlineData(1288490188.8, "{0:#,##0.00}", "1.20 GB")]
+        [InlineData(1610612736, "{0:#,##0.00}", "1.50 GB")]
+        public void FormatByteCount_ReturnsFriendlyValue(long byteSize, string format, string expectedResult)
+        {
+            string result = StringUtility.FormatByteCount(byteSize, format);
+            Assert.Equal(expectedResult, result);
         }
     }
 }
