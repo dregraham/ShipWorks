@@ -1,13 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
-using ShipWorks.UI.Utility;
-using ShipWorks.Shipping;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 
@@ -33,7 +26,7 @@ namespace ShipWorks.Common.IO.Hardware.Printers
         /// </summary>
         private void OnLoad(object sender, EventArgs e)
         {
-            EnumHelper.BindComboBox<ThermalLanguage>(thermalLanguage, null, true);
+            EnumHelper.BindComboBox<ThermalLanguage>(thermalLanguage, null);
             thermalLanguage.SelectedIndex = -1;
         }
 

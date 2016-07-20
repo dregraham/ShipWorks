@@ -461,7 +461,6 @@
     <Compile Include="Utility\CallbackDescriptionAttribute.cs" />
     <Compile Include="Utility\GenericResult.cs" />
     <Compile Include="Utility\GuidHelper.cs" />
-    <Compile Include="Utility\HiddenAttribute.cs" />
     <Compile Include="Utility\IDateTimeProvider.cs" />
     <Compile Include="Utility\NDesk.Options.cs" />
     <Compile Include="Utility\NDesk.Options.Extensions.cs" />
@@ -487,7 +486,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utility\EnumEntry.cs" />
     <Compile Include="Utility\EnumHelper.cs" />
-    <Compile Include="Utility\EnumList.cs" />
     <Compile Include="Utility\ImageResourceAttribute.cs" />
     <Compile Include="Win32\NativeWindowHandle.cs" />
     <Compile Include="Win32\RegistryHelper.cs" />

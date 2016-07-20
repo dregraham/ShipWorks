@@ -19,7 +19,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ThreeDCart
         readonly Mock<StoreEntity> otherStore = new Mock<StoreEntity>();
         readonly Mock<ThreeDCartStoreEntity> threeDCartStore = new Mock<ThreeDCartStoreEntity>();
         readonly Mock<ThreeDCartStoreEntity> soapThreeDCartStore = new Mock<ThreeDCartStoreEntity>();
-        private readonly List<EnumEntry<ThreeDCartOrderStatus>> orderStatuses = EnumHelper.GetEnumList<ThreeDCartOrderStatus>();
+        private readonly List<EnumEntry<ThreeDCartOrderStatus>> orderStatuses = EnumHelper.GetEnumList<ThreeDCartOrderStatus>().ToList();
 
         public ThreeDCartStoreTypeTest()
         {
@@ -27,7 +27,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ThreeDCart
             threeDCartStore.Setup(s => s.RestUser).Returns(true);
             testObject = new ThreeDCartStoreType(threeDCartStore.Object);
 
-            soapThreeDCartStore.Setup(s => s.TypeCode).Returns((int)StoreTypeCode.ThreeDCart);
+            soapThreeDCartStore.Setup(s => s.TypeCode).Returns((int) StoreTypeCode.ThreeDCart);
             soapThreeDCartStore.Setup(s => s.RestUser).Returns(false);
             soapTestObject = new ThreeDCartStoreType(soapThreeDCartStore.Object);
         }
@@ -68,7 +68,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ThreeDCart
         [Fact]
         public void CreateOrderIdentifier_ReturnsThreeDCartOrderIdentifier_FromThreeDCartOrder()
         {
-            ThreeDCartOrderEntity order = new ThreeDCartOrderEntity() {OrderNumber = 100};
+            ThreeDCartOrderEntity order = new ThreeDCartOrderEntity() { OrderNumber = 100 };
 
             Assert.IsAssignableFrom<ThreeDCartOrderIdentifier>(testObject.CreateOrderIdentifier(order));
         }

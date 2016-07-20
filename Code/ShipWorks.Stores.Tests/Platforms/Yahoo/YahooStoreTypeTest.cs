@@ -21,7 +21,8 @@ namespace ShipWorks.Stores.Tests.Platforms.Yahoo
         readonly Mock<StoreEntity> otherStore = new Mock<StoreEntity>();
         readonly Mock<YahooStoreEntity> yahooApiStore = new Mock<YahooStoreEntity>();
         private readonly Mock<YahooStoreEntity> yahooEmailStore = new Mock<YahooStoreEntity>();
-        private readonly List<EnumEntry<YahooApiOrderStatus>> orderStatuses = EnumHelper.GetEnumList<YahooApiOrderStatus>();
+        private readonly List<EnumEntry<YahooApiOrderStatus>> orderStatuses =
+            EnumHelper.GetEnumList<YahooApiOrderStatus>().ToList();
         private readonly YahooOrderItemEntity item;
 
         public YahooStoreTypeTest()
