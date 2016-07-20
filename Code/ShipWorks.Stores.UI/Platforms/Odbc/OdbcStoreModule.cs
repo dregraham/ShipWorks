@@ -13,6 +13,7 @@ using ShipWorks.Stores.Platforms.Odbc.Upload;
 using ShipWorks.Stores.UI.Platforms.Odbc.ViewModels;
 using ShipWorks.Stores.UI.Platforms.Odbc.WizardPages;
 using System.Reflection;
+using ShipWorks.Stores.Platforms.Odbc.CoreExtensions.Actions;
 using Module = Autofac.Module;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc
@@ -26,7 +27,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         {
             RegisterOrderLoadingTypes(builder);
             RegisterFieldMapClasses(builder);
-            
+
             builder.RegisterType<OdbcStoreType>()
                 .Keyed<StoreType>(StoreTypeCode.Odbc)
                 .ExternallyOwned();
@@ -89,6 +90,8 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
 
             builder.RegisterType<OdbcUploader>()
                 .As<IOdbcUploader>();
+
+            builder.RegisterType<OdbcUploadMenuCommand>();
         }
 
         /// <summary>

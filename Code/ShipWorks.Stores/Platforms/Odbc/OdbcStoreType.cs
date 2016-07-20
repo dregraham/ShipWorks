@@ -12,6 +12,8 @@ using ShipWorks.UI.Wizard;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using ShipWorks.ApplicationCore.Interaction;
+using ShipWorks.Stores.Platforms.Odbc.CoreExtensions.Actions;
 
 namespace ShipWorks.Stores.Platforms.Odbc
 {
@@ -21,14 +23,16 @@ namespace ShipWorks.Stores.Platforms.Odbc
     public class OdbcStoreType : StoreType
     {
         private readonly Func<StoreEntity, OdbcStoreDownloader> downloaderFactory;
+        private readonly Func<OdbcStoreEntity, OdbcUploadMenuCommand> uploadMenuCommandFactory;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public OdbcStoreType(StoreEntity store, Func<StoreEntity, OdbcStoreDownloader> downloaderFactory)
+        public OdbcStoreType(StoreEntity store, Func<StoreEntity, OdbcStoreDownloader> downloaderFactory, Func<OdbcStoreEntity, OdbcUploadMenuCommand> uploadMenuCommandFactory)
             : base(store)
         {
             this.downloaderFactory = downloaderFactory;
+            this.uploadMenuCommandFactory = uploadMenuCommandFactory;
         }
 
         /// <summary>
@@ -108,6 +112,9 @@ namespace ShipWorks.Stores.Platforms.Odbc
             return base.GridOnlineColumnSupported(column);
         }
 
+        /// <summary>
+        /// Sets the stores initial download policy
+        /// </summary>
         public override InitialDownloadPolicy InitialDownloadPolicy
         {
             get
@@ -116,6 +123,22 @@ namespace ShipWorks.Stores.Platforms.Odbc
                     ? new InitialDownloadPolicy(InitialDownloadRestrictionType.DaysBack) { DefaultDaysBack = 30, MaxDaysBack = 30}
                     : new InitialDownloadPolicy(InitialDownloadRestrictionType.None);
             }
+        }
+
+        /// <summary>
+        /// Creates the menu commands for the store
+        /// </summary>
+        public override List<MenuCommand> CreateOnlineUpdateInstanceCommands()
+        {
+            OdbcStoreEntity odbcStore = Store as OdbcStoreEntity;
+            MethodConditions.EnsureArgumentIsNotNull(odbcStore);
+
+            if (odbcStore?.UploadStrategy == (int) OdbcShipmentUploadStrategy.DoNotUpload)
+            {
+               return new List<MenuCommand>();
+            }
+
+            return new List<MenuCommand>(new[] {uploadMenuCommandFactory(odbcStore)});
         }
     }
 }
