@@ -36,7 +36,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Upload
         private void SetupShippingManagerToGetLatestActiveShipment()
         {
             shippingManager = mock.Mock<IShippingManager>();
-            shippingManager.Setup(m => m.GetLatestActiveShipment(It.IsAny<long>())).Returns(new ShipmentEntity());
+            shippingManager.Setup(m => m.GetLatestActiveShipment(It.IsAny<long>())).Returns(new ShipmentEntity() {Processed = true});
         }
 
         private void SetupCommand(int rowsAffected)

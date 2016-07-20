@@ -91,7 +91,12 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.DataAccess
 
                 var testObject = mock.Create<OdbcCommandFactory>();
 
-                testObject.CreateUploadCommand(new OdbcStoreEntity { UploadConnectionString = connectionString }, odbcFieldMap.Object);
+                testObject.CreateUploadCommand(
+                    new OdbcStoreEntity
+                    {
+                        UploadConnectionString = connectionString,
+                        UploadStrategy = (int) OdbcShipmentUploadStrategy.UseShipmentDataSource
+                    }, odbcFieldMap.Object);
 
                 dataSource.Verify(p => p.Restore(It.Is<string>(s => s == connectionString)), Times.Once());
             }
