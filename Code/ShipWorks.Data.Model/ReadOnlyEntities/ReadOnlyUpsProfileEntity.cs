@@ -17,7 +17,7 @@ using ShipWorks.Data.Model.EntityInterfaces;
 namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
 {
     /// <summary>
-    /// Entity interface which represents the entity 'UpsProfile'. <br/><br/>
+    /// Read-only representation of the entity 'UpsProfile'. <br/><br/>
     /// 
     /// </summary>
     [Serializable]

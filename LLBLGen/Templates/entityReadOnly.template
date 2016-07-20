@@ -17,7 +17,7 @@ using <[RootNamespace]>.EntityInterfaces;
 namespace <[RootNamespace]>.ReadOnlyEntityClasses
 {
     /// <summary>
-    /// Entity interface which represents the entity '<[CurrentEntityName]>'. <br/><br/>
+    /// Read-only representation of the entity '<[CurrentEntityName]>'. <br/><br/>
     /// <[Foreach CustomProperty Entity]>
     /// <[CustomPropertyName]>: <[CustomPropertyValue]><br/><[NextForeach]>
     /// </summary>

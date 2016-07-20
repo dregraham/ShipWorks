@@ -17,7 +17,7 @@ using ShipWorks.Data.Model.EntityInterfaces;
 namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
 {
     /// <summary>
-    /// Entity interface which represents the entity 'FedExPackage'. <br/><br/>
+    /// Read-only representation of the entity 'FedExPackage'. <br/><br/>
     /// 
     /// </summary>
     [Serializable]

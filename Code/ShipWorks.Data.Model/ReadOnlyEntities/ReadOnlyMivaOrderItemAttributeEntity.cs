@@ -17,7 +17,7 @@ using ShipWorks.Data.Model.EntityInterfaces;
 namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
 {
     /// <summary>
-    /// Entity interface which represents the entity 'MivaOrderItemAttribute'. <br/><br/>
+    /// Read-only representation of the entity 'MivaOrderItemAttribute'. <br/><br/>
     /// 
     /// </summary>
     [Serializable]
