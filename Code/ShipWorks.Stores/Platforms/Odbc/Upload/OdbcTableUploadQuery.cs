@@ -14,12 +14,12 @@ namespace ShipWorks.Stores.Platforms.Odbc.Upload
     /// </summary>
     public class OdbcTableUploadQuery : IOdbcQuery
     {
-        private readonly OdbcFieldMap fieldMap;
+        private readonly IOdbcFieldMap fieldMap;
         private readonly OdbcStoreEntity store;
         private readonly IShipWorksDbProviderFactory dbProviderFactory;
         private readonly IOdbcDataSource dataSource;
 
-        public OdbcTableUploadQuery(OdbcFieldMap fieldMap,
+        public OdbcTableUploadQuery(IOdbcFieldMap fieldMap,
             OdbcStoreEntity store,
             IShipWorksDbProviderFactory dbProviderFactory,
             IOdbcDataSource dataSource)

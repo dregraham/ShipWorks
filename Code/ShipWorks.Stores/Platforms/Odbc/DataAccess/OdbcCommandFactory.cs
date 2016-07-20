@@ -4,6 +4,7 @@ using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 using ShipWorks.Stores.Platforms.Odbc.Download;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
 using System;
+using ShipWorks.Stores.Platforms.Odbc.Upload;
 
 namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
 {
@@ -47,6 +48,13 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
             return new OdbcDownloadCommand(odbcFieldMap, dataSource, dbProviderFactory, lastModifiedQuery);
         }
 
+        public IOdbcUploadCommand CreateUploadCommand(OdbcStoreEntity store, IOdbcFieldMap map)
+        {
+            IOdbcQuery uploadQuery = GetUploadQuery(store, map, dataSource, dbProviderFactory);
+
+            return new OdbcUploadCommand(dataSource, dbProviderFactory, uploadQuery);
+        }
+
         /// <summary>
         /// Creates the download query used to retrieve orders.
         /// </summary>
@@ -58,6 +66,17 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
             return store.ImportSourceType == (int) OdbcColumnSourceType.Table
                 ? (IOdbcQuery)new TableOdbcDownloadQuery(store, dbProviderFactory, odbcFieldMap, dataSource)
                 : new CustomQueryOdbcDownloadQuery(store);
+        }
+
+        /// <summary>
+        /// Creates the download query used to retrieve orders.
+        /// </summary>
+        private static IOdbcQuery GetUploadQuery(OdbcStoreEntity store, IOdbcFieldMap odbcFieldMap, IOdbcDataSource dataSource, IShipWorksDbProviderFactory dbProviderFactory)
+        {
+            odbcFieldMap.Load(store.UploadMap);
+            dataSource.Restore(store.UploadConnectionString);
+
+            return new OdbcTableUploadQuery(odbcFieldMap, store, dbProviderFactory, dataSource);
         }
     }
 }
