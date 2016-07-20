@@ -1,5 +1,6 @@
 ﻿using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Content;
+using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.GenericFile;
 using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
@@ -127,6 +128,26 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             var testObject = new OdbcStoreType(store, null, null);
 
             Assert.True(testObject.GridOnlineColumnSupported(OnlineGridColumnSupport.LastModified));
+        }
+
+        [Fact]
+        public void CreateAddStoreWizardOnlineUpdateActionControl_ReturnsNull_WhenUploadStrategyIsDoNotUpload()
+        {
+            store.UploadStrategy = (int) OdbcShipmentUploadStrategy.DoNotUpload;
+
+            OdbcStoreType testObject = new OdbcStoreType(store, null, null);
+
+            Assert.Null(testObject.CreateAddStoreWizardOnlineUpdateActionControl());
+        }
+
+        [Fact]
+        public void CreateAddStoreWizardOnlineUpdateActionControl_ReturnsOnlineUpdateShipmentUpdateActionControl_WhenUploadStrategyIsNotDoNotUpload()
+        {
+            store.UploadStrategy = (int)OdbcShipmentUploadStrategy.DoNotUpload;
+
+            OdbcStoreType testObject = new OdbcStoreType(store, null, null);
+
+            Assert.IsAssignableFrom<OnlineUpdateShipmentUpdateActionControl>(testObject.CreateAddStoreWizardOnlineUpdateActionControl());
         }
     }
 }

@@ -13,6 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using ShipWorks.ApplicationCore.Interaction;
+using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.Odbc.CoreExtensions.Actions;
 
 namespace ShipWorks.Stores.Platforms.Odbc
@@ -139,6 +140,15 @@ namespace ShipWorks.Stores.Platforms.Odbc
             }
 
             return new List<MenuCommand>(new[] {uploadMenuCommandFactory(odbcStore)});
+        }
+
+        /// <summary>
+        /// Creates the add store wizard online update action control.
+        /// </summary>
+        public override OnlineUpdateActionControlBase CreateAddStoreWizardOnlineUpdateActionControl()
+        {
+            return ((OdbcStoreEntity) Store).UploadStrategy == (int) OdbcShipmentUploadStrategy.DoNotUpload ? null :
+                new OnlineUpdateShipmentUpdateActionControl(typeof(OdbcShipmentUploadTask));
         }
     }
 }
