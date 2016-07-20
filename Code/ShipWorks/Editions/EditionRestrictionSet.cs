@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using ShipWorks.Shipping;
-using ShipWorks.Stores;
-using System.Collections.ObjectModel;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.Postal;
 using System.Text.RegularExpressions;
 using Interapptive.Shared;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping;
+using ShipWorks.Shipping.Carriers.Postal;
+using ShipWorks.Stores;
 
 namespace ShipWorks.Editions
 {
@@ -36,7 +34,7 @@ namespace ShipWorks.Editions
         }
 
         /// <summary>
-        /// Check the restriction level of the given feature. 'data' is relative in context to the specified feature, and must be 
+        /// Check the restriction level of the given feature. 'data' is relative in context to the specified feature, and must be
         /// of the type the feature expectes
         /// </summary>
         public EditionRestrictionIssue CheckRestriction(EditionFeature feature)
@@ -45,9 +43,9 @@ namespace ShipWorks.Editions
         }
 
         /// <summary>
-        /// Check the restriction level of the given feature. 'data' is relative in context to the specified feature, and must be 
+        /// Check the restriction level of the given feature. 'data' is relative in context to the specified feature, and must be
         /// of the type the feature expectes
-        /// 
+        ///
         /// virtual for unit tests
         /// </summary>
         [NDependIgnoreComplexMethodAttribute]
@@ -116,8 +114,8 @@ namespace ShipWorks.Editions
         {
             var restriction = restrictions.FirstOrDefault(r => r.Feature == feature);
 
-            return (restriction != null) ? 
-                new EditionRestrictionIssue(restriction, null) : 
+            return (restriction != null) ?
+                new EditionRestrictionIssue(restriction, null) :
                 EditionRestrictionIssue.None;
         }
 
@@ -128,7 +126,7 @@ namespace ShipWorks.Editions
         {
             int count = restrictions.Count(r => r.Feature == feature);
 
-            if (count > 0 && count == StoreManager.GetAllStores().Count)
+            if (count > 0 && count == StoreManager.GetAllStoresReadOnly().Count())
             {
                 return new EditionRestrictionIssue(restrictions.First(r => r.Feature == feature), null);
             }
@@ -162,9 +160,9 @@ namespace ShipWorks.Editions
         private EditionRestrictionIssue CheckShipmentTypeRestriction(EditionFeature feature, ShipmentTypeCode typeCode)
         {
             // Just take the first one that restricts it
-            var restriction = restrictions.FirstOrDefault(r => r.Feature == feature && (ShipmentTypeCode)r.Data == typeCode);
+            var restriction = restrictions.FirstOrDefault(r => r.Feature == feature && (ShipmentTypeCode) r.Data == typeCode);
 
-            return (restriction != null) ? 
+            return (restriction != null) ?
                 new EditionRestrictionIssue(restriction, typeCode) :
                 EditionRestrictionIssue.None;
         }

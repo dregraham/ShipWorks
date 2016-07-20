@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using Autofac;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.UI;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -17,10 +19,11 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Data.Utility;
-using ShipWorks.Users.Security;
 using ShipWorks.Filters;
+using ShipWorks.Users.Security;
 
 namespace ShipWorks.Stores
 {
@@ -43,6 +46,7 @@ namespace ShipWorks.Stores
 
         // Increments every time there is a change
         static int version = 0;
+        private static ReadOnlyCollection<IStoreEntity> readOnlyCollection;
 
         /// <summary>
         /// Initialize StoreManager
@@ -74,6 +78,8 @@ namespace ShipWorks.Stores
                 if (storeSynchronizer.Synchronize())
                 {
                     storeSynchronizer.EntityCollection.Sort((int) StoreFieldIndex.StoreName, ListSortDirection.Ascending);
+                    readOnlyCollection = storeSynchronizer.EntityCollection
+                        .Where(s => s.SetupComplete).Select(x => x.AsReadOnly()).ToReadOnly();
 
                     changes = true;
 
@@ -172,6 +178,11 @@ namespace ShipWorks.Stores
                 return stores;
             }
         }
+
+        /// <summary>
+        /// Get the current list of stores.  All stores are returned, regardless of security.
+        /// </summary>
+        public static IEnumerable<IStoreEntity> GetAllStoresReadOnly() => readOnlyCollection;
 
         /// <summary>
         /// Get all stores, regardless of security, that are currently enabled for downloading and shipping
