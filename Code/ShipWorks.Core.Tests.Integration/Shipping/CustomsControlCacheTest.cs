@@ -1,9 +1,5 @@
 ﻿using System;
-using System.CodeDom;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Moq;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
@@ -22,6 +18,8 @@ using ShipWorks.Shipping.Editing;
 using ShipWorks.Startup;
 using ShipWorks.Tests.Shared.Database;
 using ShipWorks.Tests.Shared.EntityBuilders;
+using ShipWorks.UI.Controls;
+using ShipWorks.Users;
 using Xunit;
 
 namespace ShipWorks.Core.Tests.Integration.Shipping
@@ -45,6 +43,17 @@ namespace ShipWorks.Core.Tests.Integration.Shipping
                 .Save();
 
             adapter = new SqlAdapter(false);
+
+            UserSettingsEntity userSettings = new UserSettingsEntity();
+            userSettings.ShippingWeightFormat = (int)WeightDisplayFormat.FractionalPounds;
+
+            UserEntity user = new UserEntity();
+            user.Settings = userSettings;
+
+            Mock<IUserSession> session = new Mock<IUserSession>();
+            session.Setup(s => s.User).Returns(user);
+
+            context.Mock.Provide<IUserSession>(session.Object);
 
             customsControlCache = new CustomsControlCache();
         }
