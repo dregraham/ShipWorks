@@ -475,7 +475,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("StoreID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
-			_fieldsCustomProperties.Add("ConnectionString", fieldHashtable);
+			_fieldsCustomProperties.Add("ImportConnectionString", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("ImportMap", fieldHashtable);
@@ -500,6 +500,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("UploadColumnSource", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("UploadConnectionString", fieldHashtable);
 		}
 		#endregion
 
@@ -573,15 +576,15 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)OdbcStoreFieldIndex.StoreID, value); }
 		}
 
-		/// <summary> The ConnectionString property of the Entity OdbcStore<br/><br/>
+		/// <summary> The ImportConnectionString property of the Entity OdbcStore<br/><br/>
 		/// </summary>
-		/// <remarks>Mapped on  table field: "OdbcStore"."ConnectionString"<br/>
+		/// <remarks>Mapped on  table field: "OdbcStore"."ImportConnectionString"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 2048<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.String ConnectionString
+		public virtual System.String ImportConnectionString
 		{
-			get { return (System.String)GetValue((int)OdbcStoreFieldIndex.ConnectionString, true); }
-			set	{ SetValue((int)OdbcStoreFieldIndex.ConnectionString, value); }
+			get { return (System.String)GetValue((int)OdbcStoreFieldIndex.ImportConnectionString, true); }
+			set	{ SetValue((int)OdbcStoreFieldIndex.ImportConnectionString, value); }
 		}
 
 		/// <summary> The ImportMap property of the Entity OdbcStore<br/><br/>
@@ -670,6 +673,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)OdbcStoreFieldIndex.UploadColumnSource, true); }
 			set	{ SetValue((int)OdbcStoreFieldIndex.UploadColumnSource, value); }
+		}
+
+		/// <summary> The UploadConnectionString property of the Entity OdbcStore<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "OdbcStore"."UploadConnectionString"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 2048<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String UploadConnectionString
+		{
+			get { return (System.String)GetValue((int)OdbcStoreFieldIndex.UploadConnectionString, true); }
+			set	{ SetValue((int)OdbcStoreFieldIndex.UploadConnectionString, value); }
 		}
 
 

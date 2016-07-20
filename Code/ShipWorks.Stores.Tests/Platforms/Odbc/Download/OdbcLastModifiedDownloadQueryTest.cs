@@ -333,7 +333,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Download
 
             testObject.ConfigureCommand(command.Object);
 
-            command.Verify(c=> c.AddParameter(It.IsAny<string>(), OdbcType.DateTime, It.IsAny<object>()));
+            command.Verify(c=> c.AddParameter(It.IsAny<OdbcParameter>()));
         }
 
         public void Dispose()

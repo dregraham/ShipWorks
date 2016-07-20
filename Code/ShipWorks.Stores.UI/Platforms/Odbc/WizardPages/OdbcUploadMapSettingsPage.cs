@@ -1,5 +1,4 @@
-﻿using System;
-using Autofac.Features.Indexed;
+﻿using Autofac.Features.Indexed;
 using Interapptive.Shared.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Management;
@@ -9,6 +8,7 @@ using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 using ShipWorks.Stores.Platforms.Odbc.Upload;
 using ShipWorks.Stores.UI.Platforms.Odbc.ViewModels;
 using ShipWorks.UI.Wizard;
+using System;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
 {
@@ -18,7 +18,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
     public partial class OdbcUploadMapSettingsPage : AddStoreWizardPage, IOdbcWizardPage
     {
         private readonly IMessageHelper messageHelper;
-        private readonly Func<IOdbcDataSource> dataSourceFactory;
+        private readonly IOdbcDataSourceService dataSourceService;
         private readonly IIndex<string, IOdbcMapSettingsControlViewModel> viewModelFactory;
         private readonly IOdbcSchema schema;
         private IOdbcMapSettingsControlViewModel viewModel;
@@ -28,12 +28,12 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
         /// Initializes a new instance of the <see cref="OdbcUploadMapSettingsPage"/> class.
         /// </summary>
         public OdbcUploadMapSettingsPage(IMessageHelper messageHelper,
-            Func<IOdbcDataSource> dataSourceFactory,
+            IOdbcDataSourceService dataSourceService,
             IIndex<string, IOdbcMapSettingsControlViewModel> viewModelFactory,
             IOdbcSchema schema)
         {
             this.messageHelper = messageHelper;
-            this.dataSourceFactory = dataSourceFactory;
+            this.dataSourceService = dataSourceService;
             this.viewModelFactory = viewModelFactory;
             this.schema = schema;
             InitializeComponent();
@@ -44,7 +44,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
         /// <summary>
         /// Gets the position.
         /// </summary>
-        public int Position => 4;
+        public int Position => 5;
 
         /// <summary>
         /// Save the map to the ODBC Store
@@ -79,9 +79,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
                 return;
             }
 
-            IOdbcDataSource selectedDataSource = dataSourceFactory();
-
-            selectedDataSource.Restore(store.ConnectionString);
+            IOdbcDataSource selectedDataSource = dataSourceService.GetUploadDataSource(store);
 
             // Create new ViewModel when one does not exist, or a new data source is selected. This means clicking
             // back on the mapping page and not changing the data source will keep any mappings made, but selecting

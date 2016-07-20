@@ -36,7 +36,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// <summary>
         /// Gets the selected data source.
         /// </summary>
-        private EncryptedOdbcDataSource SelectedDataSource => dataSource.SelectedItem as EncryptedOdbcDataSource;
+        public EncryptedOdbcDataSource SelectedDataSource => dataSource.SelectedItem as EncryptedOdbcDataSource;
 
         /// <summary>
         /// Loads the dependencies.
@@ -75,29 +75,6 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
 
             return connectionResult.Success;
         }
-
-        /// <summary>
-        /// Saves the connection string to the OdbcStoreEntity
-        /// </summary>
-        public void SaveToEntity(OdbcStoreEntity store)
-        {
-            if (SelectedDataSource == null)
-            {
-                MessageHelper.ShowError(this, "You must add a datasource to continue.");
-                return;
-            }
-
-            try
-            {
-                store.ConnectionString = SelectedDataSource.Serialize();
-            }
-            catch (Exception ex)
-            {
-                log.Error(ex);
-                MessageHelper.ShowError(this, "An error occurred while trying to save the data source.");
-            }
-        }
-
 
         /// <summary>
         /// Sets the selected data source
@@ -208,8 +185,8 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             {
                 try
                 {
-                    IOdbcDataSourceRepository repo = scope.Resolve<IOdbcDataSourceRepository>();
-                    genericResult = GenericResult.FromSuccess(repo.GetDataSources().ToList());
+                    IOdbcDataSourceService dataSourceService = scope.Resolve<IOdbcDataSourceService>();
+                    genericResult = GenericResult.FromSuccess(dataSourceService.GetDataSources().ToList());
                 }
                 catch (DataException ex)
                 {

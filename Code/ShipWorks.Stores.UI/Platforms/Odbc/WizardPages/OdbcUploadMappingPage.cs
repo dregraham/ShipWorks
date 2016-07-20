@@ -12,7 +12,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
 {
     public partial class OdbcUploadMappingPage : AddStoreWizardPage, IOdbcWizardPage
     {
-        private readonly Func<IOdbcDataSource> dataSourceFactory;
+        private readonly IOdbcDataSourceService dataSourceService;
         private readonly Func<string, IOdbcColumnSource> columnSourceFactory;
         private IOdbcUploadMappingControlViewModel viewModel;
         private OdbcStoreEntity store;
@@ -22,11 +22,11 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcImportFieldMappingPage"/> class.
         /// </summary>
-        public OdbcUploadMappingPage(Func<IOdbcDataSource> dataSourceFactory,
+        public OdbcUploadMappingPage(IOdbcDataSourceService dataSourceService,
             Func<IOdbcUploadMappingControlViewModel> viewModelFactory,
             Func<string, IOdbcColumnSource> columnSourceFactory)
         {
-            this.dataSourceFactory = dataSourceFactory;
+            this.dataSourceService = dataSourceService;
             this.viewModelFactory = viewModelFactory;
             this.columnSourceFactory = columnSourceFactory;
             InitializeComponent();
@@ -37,7 +37,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
         /// <summary>
         /// Gets the position.
         /// </summary>
-        public int Position => 5;
+        public int Position => 6;
 
         /// <summary>
         /// Save the map to the ODBC Store
@@ -79,9 +79,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
             if (string.IsNullOrWhiteSpace(previousColumnSource) ||
                 !previousColumnSource.Equals(currentColumnSource, StringComparison.Ordinal))
             {
-                IOdbcDataSource selectedDataSource = dataSourceFactory();
-
-                selectedDataSource.Restore(store.ConnectionString);
+                IOdbcDataSource selectedDataSource = dataSourceService.GetUploadDataSource(store);
 
                 IOdbcColumnSource columnSource = columnSourceFactory(currentColumnSource);
 

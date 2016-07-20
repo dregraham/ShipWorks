@@ -50,7 +50,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             var testObject = new OdbcStoreType(store, null);
             var newStore = testObject.CreateStoreInstance();
 
-            Assert.Empty(((OdbcStoreEntity) newStore).ConnectionString);
+            Assert.Empty(((OdbcStoreEntity) newStore).ImportConnectionString);
         }
 
         [Fact]

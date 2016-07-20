@@ -73,9 +73,9 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
         /// <summary>
         /// Adds the given parameter to the command
         /// </summary>
-        public void AddParameter(string parameterName, OdbcType type, object value)
+        public void AddParameter(OdbcParameter parameter)
         {
-            command.Parameters.Add(parameterName, type).Value = value;
+            command.Parameters.Add(parameter);
         }
 
         /// <summary>

@@ -1,6 +1,6 @@
 ﻿namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
 {
-    partial class OdbcUploadShipmentDataSourceWizardPage
+    partial class OdbcUploadShipmentStrategyPage
     {
         /// <summary> 
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(OdbcUploadShipmentDataSourceWizardPage));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(OdbcUploadShipmentStrategyPage));
             this.uploadToSame = new System.Windows.Forms.RadioButton();
             this.uploadToDifferent = new System.Windows.Forms.RadioButton();
             this.doNotUpload = new System.Windows.Forms.RadioButton();
@@ -100,7 +100,7 @@
             this.pictureBoxShipmentUpdate.TabIndex = 26;
             this.pictureBoxShipmentUpdate.TabStop = false;
             // 
-            // OdbcUploadShipmentDataSourceWizardPage
+            // OdbcUploadShipmentStrategyPage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -108,13 +108,14 @@
             this.Controls.Add(this.pictureBoxShipmentUpdate);
             this.Controls.Add(this.uploadStrategyPanel);
             this.Description = "Select how you would like to upload shipment data for your store";
-            this.Name = "OdbcUploadShipmentDataSourceWizardPage";
+            this.Name = "OdbcUploadShipmentStrategyPage";
             this.Size = new System.Drawing.Size(500, 500);
             this.Title = "Upload Options";
             this.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNext);
             this.uploadStrategyPanel.ResumeLayout(false);
             this.uploadStrategyPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxShipmentUpdate)).EndInit();
+            this.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNext);
             this.ResumeLayout(false);
             this.PerformLayout();
 
