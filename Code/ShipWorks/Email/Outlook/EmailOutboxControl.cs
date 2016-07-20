@@ -16,8 +16,8 @@ using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Data.Grid.Columns.Definitions;
 using ShipWorks.Email.Accounts;
 using Divelements.SandGrid;
+using Interapptive.Shared.UI;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.UI;
 using ShipWorks.Data.Grid;
 using ShipWorks.Data.Connection;
 using ShipWorks.Users;
@@ -141,8 +141,57 @@ namespace ShipWorks.Email.Outlook
         {
             emailsSent = true;
 
-            EmailCommunicator.StartEmailingMessages(entityGrid.Selection.OrderedKeys.Select(key => (EmailOutboundEntity) entityGrid.EntityGateway.GetEntityFromKey(key)));
+            EmailCommunicator.StartEmailingMessages(GetMessagesToSend(true));
             EmailCommunicator.ShowProgressDlg(this);
+        }
+
+        /// <summary>
+        /// Get the list of messages to send.  
+        /// 
+        /// If any message is set to be sent in the future, the user will be given a message asking them if they want to send them now.  If yes, those messages will be updated
+        /// to be able to be sent.  If the user says No, the future messages will be ignored.
+        /// </summary>
+        /// <param name="onlySelected">If true, only messages that are selected in the grid will be returned.  Otherwise all messages in the grid will be returned.</param>
+        /// <returns></returns>
+        private List<EmailOutboundEntity> GetMessagesToSend(bool onlySelected)
+        {
+            List<EmailOutboundEntity> messages = new List<EmailOutboundEntity>();
+
+            messages = onlySelected ? entityGrid.Selection.OrderedKeys.Select(key => (EmailOutboundEntity) entityGrid.EntityGateway.GetEntityFromKey(key)).ToList() : 
+                entityGrid.EntityGateway.GetOrderedKeys().Select(key => (EmailOutboundEntity)entityGrid.EntityGateway.GetEntityFromKey(key)).ToList();
+
+            // Get the number of messages that are marked as future sends
+            int delayedMessageCount = messages.Count(m => m.DontSendBefore != null && m.DontSendBefore > DateTime.UtcNow);
+
+            if (delayedMessageCount > 0)
+            {
+                // Ask the user if they want to send future messages now.
+                DialogResult answer = MessageHelper.ShowQuestion(this,
+                    MessageBoxIcon.Warning,
+                    MessageBoxButtons.YesNo,
+                    "One or more of the selected messages are scheduled to be delivered in the future.  Do you want to send these messages now?");
+
+                if (answer == DialogResult.No)
+                {
+                    // The user does not want to send delayed messages now, so filter those out.
+                    messages = messages.Where(m => m.DontSendBefore == null || m.DontSendBefore <= DateTime.UtcNow).ToList();
+                }
+                else
+                {
+                    // The user does want to send these messages now, so update their DontSendBefore to null and save to the database.
+                    // We need to save to the db because the email sender actually re-reads them from the db, so anyting in memory would be ingored.
+                    using (SqlAdapter adapter = SqlAdapter.Create(false))
+                    {
+                        foreach (EmailOutboundEntity emailOutboundEntity in messages.Where(m => m.DontSendBefore != null && m.DontSendBefore > DateTime.UtcNow))
+                        {
+                            emailOutboundEntity.DontSendBefore = null;
+                            adapter.SaveAndRefetch(emailOutboundEntity);
+                        }
+                    }
+                }
+            }
+
+            return messages;
         }
 
         /// <summary>
@@ -150,10 +199,10 @@ namespace ShipWorks.Email.Outlook
         /// </summary>
         private void OnSendAll(object sender, EventArgs e)
         {
-            if (EmailCommunicator.StartEmailingAccounts())
-            {
-                EmailCommunicator.ShowProgressDlg(this);
-            }
+            emailsSent = true;
+
+            EmailCommunicator.StartEmailingMessages(GetMessagesToSend(false));
+            EmailCommunicator.ShowProgressDlg(this);
         }
 
         /// <summary>
