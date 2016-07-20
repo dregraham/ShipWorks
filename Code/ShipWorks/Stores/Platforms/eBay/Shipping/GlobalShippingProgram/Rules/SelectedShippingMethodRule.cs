@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Platforms.Ebay.Enums;
 
 namespace ShipWorks.Stores.Platforms.Ebay.Shipping.GlobalShippingProgram.Rules
@@ -17,14 +14,14 @@ namespace ShipWorks.Stores.Platforms.Ebay.Shipping.GlobalShippingProgram.Rules
         /// </summary>
         /// <param name="ebayOrder"></param>
         /// <returns>A Boolean value indicating whether the rule passed.</returns>
-        public bool Evaluate(Data.Model.EntityClasses.EbayOrderEntity ebayOrder)
+        public bool Evaluate(IEbayOrderEntity ebayOrder)
         {
             bool isRuleSatisfied = false;
 
             if (ebayOrder != null)
             {
                 // The shipping method of the order needs to be the global shipping program
-                isRuleSatisfied = ebayOrder.SelectedShippingMethod == (int)EbayShippingMethod.GlobalShippingProgram;
+                isRuleSatisfied = ebayOrder.SelectedShippingMethod == (int) EbayShippingMethod.GlobalShippingProgram;
             }
 
             return isRuleSatisfied;

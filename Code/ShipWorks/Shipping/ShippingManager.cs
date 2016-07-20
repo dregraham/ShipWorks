@@ -944,12 +944,17 @@ namespace ShipWorks.Shipping
                 shipment.Order = (OrderEntity) DataProvider.GetEntity(shipment.OrderID);
             }
 
-            StoreEntity storeEntity = StoreManager.GetStore(shipment.Order.StoreID);
+            StoreEntity storeEntity = shipment.Order?.Store ?? StoreManager.GetStore(shipment.Order.StoreID);
             StoreType storeType = StoreTypeManager.GetType(storeEntity);
 
             // Clone the shipment and check with the store in case anything was overridden. We clone
             // the original shipment so that the shipment is not altered and inadvertently saved
             // to the database.
+            if (!storeType.WillOverrideShipmentDetailsChangeShipment(shipment))
+            {
+                return shipment;
+            }
+
             ShipmentEntity overriddenShipment = EntityUtility.CloneEntity(shipment);
             storeType.OverrideShipmentDetails(overriddenShipment);
 
