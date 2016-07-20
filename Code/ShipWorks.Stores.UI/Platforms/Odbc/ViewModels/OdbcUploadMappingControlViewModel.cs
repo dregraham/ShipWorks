@@ -2,6 +2,7 @@
 using Interapptive.Shared.Utility;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
@@ -128,7 +129,10 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
             mapEntries.AddRange(ShipmentAddress.Entries);
 
             OdbcFieldMap map = fieldMapFactory.CreateFieldMapFrom(mapEntries);
-            
+
+            IEnumerable<IOdbcFieldMapEntry> entries = map.FindEntriesBy(OrderFields.OrderNumber);
+            map.RecordIdentifierSource = entries.FirstOrDefault()?.ExternalField.Column.Name;
+
             return map;
         }
 
