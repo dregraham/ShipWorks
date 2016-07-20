@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Shipping.Settings
 {
@@ -29,6 +30,11 @@ namespace ShipWorks.Shipping.Settings
         ShippingSettingsEntity Fetch();
 
         /// <summary>
+        /// Fetch the current shipping settings
+        /// </summary>
+        IShippingSettingsEntity FetchReadOnly();
+
+        /// <summary>
         /// The list of shipment types that have been fully configured for use within ShipWorks
         /// </summary>
         IEnumerable<ShipmentTypeCode> GetConfiguredTypes();
@@ -37,7 +43,7 @@ namespace ShipWorks.Shipping.Settings
         /// Sets the default shipping provider to the given shipment type code.
         /// </summary>
         void SetDefaultProvider(ShipmentTypeCode shimentTypeCode);
-		
+
         /// <summary>
         /// Save the current shipping settings
         /// </summary>

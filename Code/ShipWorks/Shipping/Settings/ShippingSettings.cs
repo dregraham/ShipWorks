@@ -8,6 +8,7 @@ using ShipWorks.Core.Messaging;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Shipping.Insurance;
 
@@ -22,6 +23,7 @@ namespace ShipWorks.Shipping.Settings
         static bool needCheckForChanges = false;
 
         static object threadLock = new object();
+        private static IShippingSettingsEntity readOnlyEntity;
 
         /// <summary>
         /// Initialize for the currently logged on user
@@ -29,9 +31,8 @@ namespace ShipWorks.Shipping.Settings
         public static void InitializeForCurrentDatabase()
         {
             entity = new ShippingSettingsEntity(true);
-            SqlAdapter.Default.FetchEntity(entity);
 
-            needCheckForChanges = false;
+            RefreshSettingsData();
         }
 
         /// <summary>
@@ -51,12 +52,37 @@ namespace ShipWorks.Shipping.Settings
             {
                 if (needCheckForChanges)
                 {
-                    SqlAdapter.Default.FetchEntity(entity);
-                    needCheckForChanges = false;
+                    RefreshSettingsData();
                 }
 
                 return EntityUtility.CloneEntity(entity);
             }
+        }
+
+        /// <summary>
+        /// Fetch the latest shipping settings
+        /// </summary>
+        public static IShippingSettingsEntity FetchReadOnly()
+        {
+            lock (threadLock)
+            {
+                if (needCheckForChanges)
+                {
+                    RefreshSettingsData();
+                }
+
+                return readOnlyEntity;
+            }
+        }
+
+        /// <summary>
+        /// Load the shipping settings if necessary
+        /// </summary>
+        private static void RefreshSettingsData()
+        {
+            SqlAdapter.Default.FetchEntity(entity);
+            readOnlyEntity = entity.AsReadOnly();
+            needCheckForChanges = false;
         }
 
         /// <summary>
@@ -69,6 +95,7 @@ namespace ShipWorks.Shipping.Settings
                 adapter.SaveAndRefetch(settings);
 
                 Interlocked.Exchange(ref entity, EntityUtility.CloneEntity(settings));
+                readOnlyEntity = entity.AsReadOnly();
             }
 
             needCheckForChanges = false;
