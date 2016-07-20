@@ -1,0 +1,90 @@
+﻿///////////////////////////////////////////////////////////////
+// This is generated code.
+//////////////////////////////////////////////////////////////
+// Code is generated using LLBLGen Pro version: <[LLBLGenVersion]>
+// Code is generated on: <[Time]>
+// Code is generated using templates: <[TemplateName]>
+// Templates vendor: Solutions Design.
+// Templates version: <[TemplateVersion]>
+//////////////////////////////////////////////////////////////
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
+
+namespace <[RootNamespace]>.EntityInterfaces
+{
+    /// <summary>
+    /// Entity interface which represents the entity '<[CurrentEntityName]>'. <br/><br/>
+    /// <[Foreach CustomProperty Entity]>
+    /// <[CustomPropertyName]>: <[CustomPropertyValue]><br/><[NextForeach]>
+    /// </summary>
+    public <[If UsePartialClasses]>partial <[EndIf]>interface I<[CurrentEntityName]>Entity<[ If IsSubType ]>: I<[ SuperTypeName ]>Entity<[ EndIf ]>
+    {
+        <[Foreach EntityField]><[If Not EntityFieldOverrides]>
+        /// <summary> The <[EntityFieldName]> property of the Entity <[CurrentEntityName]><br/><br/>
+        /// <[Foreach CustomProperty EntityField]>
+        /// <[CustomPropertyName]>: <[CustomPropertyValue]><br/><[NextForeach]></summary>
+        /// <remarks>Mapped on <[ CaseCamel TargetType ]> field: "<[SourceObjectName]>"."<[SourceColumnName]>"<br/>
+        /// <[ TargetType ]> field type characteristics (type, precision, scale, length): <[SourceColumnDbType]>, <[SourceColumnPrecision]>, <[SourceColumnScale]>, <[SourceColumnMaxLength]><br/>
+        /// <[ TargetType ]> field behavior characteristics (is nullable, is PK, is identity): <[SourceColumnIsNullable]>, <[IsPrimaryKey]>, <[IsIdentity]></remarks>
+        <[If GenerateAsNullableType]>Nullable<<[TypeOfField]>><[Else]><[TypeOfField]><[EndIf]> <[EntityFieldName]> { get; }<[EndIf]><[NextForeach]>
+        <[Foreach RelatedEntity OneToOne]><[If Not MappedFieldRelationIsHidden]>
+        I<[RelationEndPointName]>Entity <[MappedFieldNameRelation]> { get; }<[EndIf]><[NextForeach]>
+        <[Foreach RelatedEntity ManyToOne]><[If Not MappedFieldRelationIsHidden]>
+        I<[RelationEndPointName]>Entity <[MappedFieldNameRelation]> { get; }<[EndIf]><[NextForeach]>
+        <[Foreach RelatedEntity OneToMany]><[If Not MappedFieldRelationIsHidden]>
+        IEnumerable<I<[RelationEndPointName]>Entity> <[MappedFieldNameRelation]> { get; }<[EndIf]><[NextForeach]>
+
+        /// <summary>
+        /// Get a read only version of the entity
+        /// </summary>
+        <[ If IsSubType ]>new <[EndIf]>I<[CurrentEntityName]>Entity AsReadOnly();
+
+        /// <summary>
+        /// Get a read only version of the entity
+        /// </summary>
+        <[ If IsSubType ]>new <[EndIf]>I<[CurrentEntityName]>Entity AsReadOnly(IDictionary<object, object> objectMap);
+    }
+}
+
+namespace <[RootNamespace]>.EntityClasses
+{
+    using <[RootNamespace]>.EntityInterfaces;
+    using <[RootNamespace]>.ReadOnlyEntityClasses;
+
+    /// <summary>
+    /// Entity interface which represents the entity '<[CurrentEntityName]>'. <br/><br/>
+    /// <[Foreach CustomProperty Entity]>
+    /// <[CustomPropertyName]>: <[CustomPropertyValue]><br/><[NextForeach]>
+    /// </summary>
+    public <[If UsePartialClasses]>partial <[EndIf]>class <[CurrentEntityName]>Entity : I<[CurrentEntityName]>Entity
+    {<[Foreach RelatedEntity OneToOne]><[If Not MappedFieldRelationIsHidden]>
+        I<[RelationEndPointName]>Entity I<[CurrentEntityName]>Entity.<[MappedFieldNameRelation]> => <[MappedFieldNameRelation]>;<[EndIf]><[NextForeach]>
+        <[Foreach RelatedEntity ManyToOne]><[If Not MappedFieldRelationIsHidden]>
+        I<[RelationEndPointName]>Entity I<[CurrentEntityName]>Entity.<[MappedFieldNameRelation]> => <[MappedFieldNameRelation]>;<[EndIf]><[NextForeach]>
+        <[Foreach RelatedEntity OneToMany]><[If Not MappedFieldRelationIsHidden]>
+        IEnumerable<I<[RelationEndPointName]>Entity> I<[CurrentEntityName]>Entity.<[MappedFieldNameRelation]> => <[MappedFieldNameRelation]>;<[EndIf]><[NextForeach]>
+
+        /// <summary>
+        /// Get a read only version of the entity
+        /// </summary>
+        public <[ If IsSubType ]>new<[Else]>virtual<[EndIf]> I<[CurrentEntityName]>Entity AsReadOnly() =>
+            AsReadOnly(new Dictionary<object, object>());
+
+        /// <summary>
+        /// Get a read only version of the entity that handles cyclic references
+        /// </summary>
+        public <[ If IsSubType ]>new<[Else]>virtual<[EndIf]> I<[CurrentEntityName]>Entity AsReadOnly(IDictionary<object, object> objectMap)
+        {
+            if (objectMap.ContainsKey(this))
+            {
+                return (I<[CurrentEntityName]>Entity) objectMap[this];
+            }
+
+            objectMap.Add(this, null);
+
+            return new ReadOnly<[CurrentEntityName]>Entity(this, objectMap);
+        }
+    }
+}
