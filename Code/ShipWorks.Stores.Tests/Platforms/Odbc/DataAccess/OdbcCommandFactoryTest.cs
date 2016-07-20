@@ -14,26 +14,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.DataAccess
     public class OdbcCommandFactoryTest
     {
         [Fact]
-        public void CreateDownloadCommand_LoadIsCalledWithStoreMap()
-        {
-            using (var mock = AutoMock.GetLoose())
-            {
-                OdbcStoreEntity odbcStore = new OdbcStoreEntity()
-                {
-                    ImportMap = "I Am A Map"
-                };
-
-                Mock<IOdbcFieldMap> odbcFieldMap = mock.Mock<IOdbcFieldMap>();
-
-                OdbcCommandFactory testObject = mock.Create<OdbcCommandFactory>();
-
-                testObject.CreateDownloadCommand(odbcStore);
-
-                odbcFieldMap.Verify(p => p.Load(It.Is<string>(s => s == odbcStore.ImportMap)), Times.Once());
-            }
-        }
-
-        [Fact]
         public void CreateDownloadCommand_DatasourceRestoreCalledWithEncryptedStoreConnectionString()
         {
             using (var mock = AutoMock.GetLoose())
@@ -42,9 +22,12 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.DataAccess
 
                 var dataSource = mock.Mock<IOdbcDataSource>();
 
+                Mock<IOdbcFieldMap> odbcFieldMap = mock.Mock<IOdbcFieldMap>();
+
                 var testObject = mock.Create<OdbcCommandFactory>();
 
-                testObject.CreateDownloadCommand(new OdbcStoreEntity {ImportConnectionString = connectionString});
+
+                testObject.CreateDownloadCommand(new OdbcStoreEntity {ImportConnectionString = connectionString}, odbcFieldMap.Object);
 
                 dataSource.Verify(p => p.Restore(It.Is<string>(s => s == connectionString)), Times.Once());
             }
@@ -55,31 +38,12 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.DataAccess
         {
             using (var mock = AutoMock.GetLoose())
             {
+                Mock<IOdbcFieldMap> odbcFieldMap = mock.Mock<IOdbcFieldMap>();
                 var testObject = mock.Create<OdbcCommandFactory>();
 
-                IOdbcCommand downloadCommand = testObject.CreateDownloadCommand(new OdbcStoreEntity());
+                IOdbcCommand downloadCommand = testObject.CreateDownloadCommand(new OdbcStoreEntity(), odbcFieldMap.Object);
 
                 Assert.IsType<OdbcDownloadCommand>(downloadCommand);
-            }
-        }
-
-        [Fact]
-        public void CreateDownloadCommandWithDateTime_LoadIsCalledWithStoreImportMap()
-        {
-            using (var mock = AutoMock.GetLoose())
-            {
-                OdbcStoreEntity odbcStore = new OdbcStoreEntity()
-                {
-                    ImportMap = "I Am A Map"
-                };
-
-                Mock<IOdbcFieldMap> odbcFieldMap = mock.Mock<IOdbcFieldMap>();
-
-                OdbcCommandFactory testObject = mock.Create<OdbcCommandFactory>();
-
-                testObject.CreateDownloadCommand(odbcStore, DateTime.UtcNow);
-
-                odbcFieldMap.Verify(p => p.Load(It.Is<string>(s => s == odbcStore.ImportMap)), Times.Once());
             }
         }
 
@@ -89,12 +53,13 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.DataAccess
             using (var mock = AutoMock.GetLoose())
             {
                 var connectionString = "encrypted connection string";
+                Mock<IOdbcFieldMap> odbcFieldMap = mock.Mock<IOdbcFieldMap>();
 
                 var dataSource = mock.Mock<IOdbcDataSource>();
 
                 var testObject = mock.Create<OdbcCommandFactory>();
 
-                testObject.CreateDownloadCommand(new OdbcStoreEntity { ImportConnectionString = connectionString }, DateTime.UtcNow);
+                testObject.CreateDownloadCommand(new OdbcStoreEntity { ImportConnectionString = connectionString }, DateTime.UtcNow, odbcFieldMap.Object);
 
                 dataSource.Verify(p => p.Restore(It.Is<string>(s => s == connectionString)), Times.Once());
             }
@@ -106,8 +71,9 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.DataAccess
             using (var mock = AutoMock.GetLoose())
             {
                 var testObject = mock.Create<OdbcCommandFactory>();
+                Mock<IOdbcFieldMap> odbcFieldMap = mock.Mock<IOdbcFieldMap>();
 
-                IOdbcCommand downloadCommand = testObject.CreateDownloadCommand(new OdbcStoreEntity(), DateTime.UtcNow);
+                IOdbcCommand downloadCommand = testObject.CreateDownloadCommand(new OdbcStoreEntity(), DateTime.UtcNow, odbcFieldMap.Object);
 
                 Assert.IsType<OdbcDownloadCommand>(downloadCommand);
             }
