@@ -80,26 +80,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.DataAccess
         }
 
         [Fact]
-        public void CreateUploadCommand_LoadIsCalledWithStoreUploadMap()
-        {
-            using (var mock = AutoMock.GetLoose())
-            {
-                OdbcStoreEntity odbcStore = new OdbcStoreEntity()
-                {
-                    UploadMap = "I Am A Map"
-                };
-
-                Mock<IOdbcFieldMap> odbcFieldMap = mock.Mock<IOdbcFieldMap>();
-
-                OdbcCommandFactory testObject = mock.Create<OdbcCommandFactory>();
-
-                testObject.CreateUploadCommand(odbcStore, odbcFieldMap.Object);
-
-                odbcFieldMap.Verify(p => p.Load(It.Is<string>(s => s == odbcStore.UploadMap)), Times.Once());
-            }
-        }
-
-        [Fact]
         public void CreateUploadCommand_DatasourceRestoreCalledWithEncryptedStoreConnectionString()
         {
             using (var mock = AutoMock.GetLoose())

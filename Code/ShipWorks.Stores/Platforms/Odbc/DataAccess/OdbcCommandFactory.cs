@@ -46,6 +46,9 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
             return new OdbcDownloadCommand(odbcFieldMap, dataSource, dbProviderFactory, lastModifiedQuery);
         }
 
+        /// <summary>
+        /// Creates the upload command for the given store and map
+        /// </summary>
         public IOdbcUploadCommand CreateUploadCommand(OdbcStoreEntity store, IOdbcFieldMap map)
         {
             IOdbcQuery uploadQuery = GetUploadQuery(store, map, dataSource, dbProviderFactory);
@@ -70,7 +73,6 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
         /// </summary>
         private static IOdbcQuery GetUploadQuery(OdbcStoreEntity store, IOdbcFieldMap odbcFieldMap, IOdbcDataSource dataSource, IShipWorksDbProviderFactory dbProviderFactory)
         {
-            odbcFieldMap.Load(store.UploadMap);
             dataSource.Restore(store.UploadConnectionString);
 
             return new OdbcTableUploadQuery(odbcFieldMap, store, dbProviderFactory, dataSource);
