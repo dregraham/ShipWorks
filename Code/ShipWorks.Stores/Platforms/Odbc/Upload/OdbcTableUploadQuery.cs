@@ -3,8 +3,10 @@ using System.Data.Odbc;
 using System.Linq;
 using System.Text;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Platforms.Odbc.DataAccess;
 using ShipWorks.Stores.Platforms.Odbc.DataSource;
+using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Upload
@@ -35,6 +37,17 @@ namespace ShipWorks.Stores.Platforms.Odbc.Upload
         /// </summary>
         public string GenerateSql()
         {
+            if (store.UploadColumnSourceType != (int) OdbcColumnSourceType.Table)
+            {
+                throw new ShipWorksOdbcException("Unable to Generate SQL for non table upload column source.");
+            }
+
+            IOdbcFieldMapEntry orderNumberField = fieldMap.FindEntriesBy(OrderFields.OrderNumber).FirstOrDefault();
+            if (orderNumberField == null)
+            {
+                throw new ShipWorksOdbcException("The Order Number field must be mapped to upload shipment data.");
+            }
+
             StringBuilder builder = new StringBuilder($"UPDATE {store.UploadColumnSource} SET ");
 
             using (DbConnection connection = dataSource.CreateConnection())
@@ -43,17 +56,19 @@ namespace ShipWorks.Stores.Platforms.Odbc.Upload
             {
                 connection.Open();
 
-                IOdbcFieldMapEntry lastEntry = fieldMap.Entries.Last();
-                foreach (IOdbcFieldMapEntry entry in fieldMap.Entries)
+                IOdbcFieldMapEntry lastEntry = fieldMap.Entries.Except(new[] { orderNumberField }).LastOrDefault();
+                foreach (IOdbcFieldMapEntry entry in fieldMap.Entries.Except(new [] {orderNumberField}))
                 {
                     string columnNameInQuotes = cmdBuilder.QuoteIdentifier(entry.ExternalField.Column.Name);
                     // update the external column to the shipworks field value
                     builder.Append($"{columnNameInQuotes} = @{entry.ExternalField.Column.Name}");
 
-                    builder.Append(entry != lastEntry ? ", " : ";");
+                    builder.Append(entry != lastEntry ? ", " : " ");
                 }
-            }
 
+                string orderNumberColumnInQuotes = cmdBuilder.QuoteIdentifier(orderNumberField.ExternalField.Column.Name);
+                builder.Append($"WHERE {orderNumberColumnInQuotes} = @{orderNumberField.ExternalField.Column.Name}");
+            }
             return builder.ToString();
         }
 

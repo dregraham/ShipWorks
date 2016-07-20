@@ -2,6 +2,7 @@
 using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
 using System;
+using ShipWorks.Data.Model.EntityClasses;
 using Xunit;
 
 namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
@@ -169,6 +170,15 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
             testObject.LoadValue(2.51F);
 
             Assert.Equal(2.51M, testObject.Value);
+        }
+
+        [Fact]
+        public void LoadValue_LoadsTrackingNumber_WhenEntityIsShipmentAndFieldIsTrackingNumber()
+        {
+            ShipWorksOdbcMappableField testObject = new ShipWorksOdbcMappableField(ShipmentFields.TrackingNumber, "Tracking Number");
+            testObject.LoadValue(new ShipmentEntity() {TrackingNumber = "abcdefghijklmnopqrstuvwxyz"});
+
+            Assert.Equal("abcdefghijklmnopqrstuvwxyz", testObject.Value);
         }
     }
 }
