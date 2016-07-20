@@ -526,6 +526,7 @@ namespace ShipWorks.Shipping
             shipment.ActualLabelFormat = null;
             shipment.ShipSenseStatus = (int) ShipSenseStatus.NotApplied;
             shipment.BilledType = 0;
+            shipment.BilledWeight = 0;
 
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
