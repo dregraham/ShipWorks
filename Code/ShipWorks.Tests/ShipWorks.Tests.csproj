@@ -197,6 +197,7 @@
     <Compile Include="Actions\Scheduling\QuartzNet\QuartzSchedulingEngineTest.cs" />
     <Compile Include="Actions\Scheduling\QuartzNet\ActionJobTest.cs" />
     <Compile Include="Actions\Scheduling\SchedulerTest.cs" />
+    <Compile Include="Actions\Tasks\ActionTaskTest.cs" />
     <Compile Include="Actions\Tasks\Common\BackupDatabaseTaskTest.cs" />
     <Compile Include="Actions\Tasks\Common\DownloadOrdersTaskTest.cs" />
     <Compile Include="Actions\Tasks\Common\EmailTaskTest.cs" />
@@ -701,6 +702,10 @@
     <ProjectReference Include="..\ShipWorks.SqlServer\ShipWorks.SqlServer.sqlproj">
       <Project>{d9fba556-68e0-4961-a400-636a9a6bc7bc}</Project>
       <Name>ShipWorks.SqlServer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ShipWorks.Stores.Tests\ShipWorks.Stores.Tests.csproj">
+      <Project>{671844e9-8696-4979-b050-f46c7fb672a4}</Project>
+      <Name>ShipWorks.Stores.Tests</Name>
     </ProjectReference>
     <ProjectReference Include="..\ShipWorks.Stores.UI\ShipWorks.Stores.UI.csproj">
       <Project>{bbf456b8-8182-4fc1-8e59-3aafae5bfa53}</Project>

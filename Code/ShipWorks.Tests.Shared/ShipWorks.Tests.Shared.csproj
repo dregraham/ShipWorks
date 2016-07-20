@@ -124,6 +124,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AssemblyProvider.cs" />
     <Compile Include="AutoMockExtensions.cs" />
     <Compile Include="Database\DatabaseFixture.cs" />
     <Compile Include="Database\DataContext.cs" />
