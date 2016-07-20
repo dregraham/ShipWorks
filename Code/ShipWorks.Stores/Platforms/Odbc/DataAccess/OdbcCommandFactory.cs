@@ -73,7 +73,17 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
         /// </summary>
         private static IOdbcQuery GetUploadQuery(OdbcStoreEntity store, IOdbcFieldMap odbcFieldMap, IOdbcDataSource dataSource, IShipWorksDbProviderFactory dbProviderFactory)
         {
-            dataSource.Restore(store.UploadConnectionString);
+            switch (store.UploadStrategy)
+            {
+                case (int) OdbcShipmentUploadStrategy.UseImportDataSource:
+                    dataSource.Restore(store.ImportConnectionString);
+                    break;
+                case (int)OdbcShipmentUploadStrategy.UseShipmentDataSource:
+                    dataSource.Restore(store.UploadConnectionString);
+                    break;
+                default:
+                    return null;
+            }
 
             return new OdbcTableUploadQuery(odbcFieldMap, store, dbProviderFactory, dataSource);
         }
