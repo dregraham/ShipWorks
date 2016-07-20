@@ -171,6 +171,7 @@
     <Compile Include="Platforms\LemonStand\LemonStandWebClient.cs" />
     <Compile Include="Platforms\Odbc\DataAccess\IOdbcCommandFactory.cs" />
     <Compile Include="Platforms\Odbc\CoreExtensions\Actions\OdbcShipmentUploadTask.cs" />
+    <Compile Include="Platforms\Odbc\CoreExtensions\Actions\OdbcUploadMenuCommand.cs" />
     <Compile Include="Platforms\Odbc\Upload\IOdbcUploadCommand.cs" />
     <Compile Include="Platforms\Odbc\Upload\IOdbcUploader.cs" />
     <Compile Include="Platforms\Odbc\Upload\OdbcTableUploadQuery.cs" />
