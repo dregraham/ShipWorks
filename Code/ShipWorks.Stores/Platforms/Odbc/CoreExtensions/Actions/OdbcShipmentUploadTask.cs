@@ -35,7 +35,12 @@ namespace ShipWorks.Stores.Platforms.Odbc.CoreExtensions.Actions
         /// <summary>
         /// Whether this task supports the given store
         /// </summary>
-        public override bool SupportsStore(StoreEntity store) => store is OdbcStoreEntity;
+        public override bool SupportsStore(StoreEntity store)
+        {
+            OdbcStoreEntity odbcStore = store as OdbcStoreEntity;
+
+            return odbcStore != null && odbcStore.UploadStrategy != (int) OdbcShipmentUploadStrategy.DoNotUpload;
+        }
 
         /// <summary>
         /// Runs this upload task
