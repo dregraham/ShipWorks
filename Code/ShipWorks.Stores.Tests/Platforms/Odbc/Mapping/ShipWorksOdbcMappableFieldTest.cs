@@ -85,7 +85,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
         public void LoadValue_UsesDefaultValue_WhenValueIsNullandFieldIsNotNullable()
         {
             ShipWorksOdbcMappableField testObject = new ShipWorksOdbcMappableField(OrderFields.OrderNumber, "Order Number");
-            testObject.LoadValue(null);
+            testObject.LoadValue((object)null);
 
             Assert.Equal(0L, testObject.Value);
         }

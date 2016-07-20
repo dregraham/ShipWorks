@@ -59,9 +59,13 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
             ExternalField.LoadValue(record);
         }
 
+        /// <summary>
+        /// Loads the given entity into the ShipWorksField
+        /// </summary>
         public void LoadShipWorksField(IEntity2 entity)
         {
-            throw new System.NotImplementedException();
+            MethodConditions.EnsureArgumentIsNotNull(entity);
+            ShipWorksField.LoadValue(entity);
         }
 
         /// <summary>
