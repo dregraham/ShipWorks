@@ -1,13 +1,14 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using Autofac;
 using ShipWorks.Actions;
 using ShipWorks.Actions.Tasks;
 using ShipWorks.Actions.Tasks.Common;
 using ShipWorks.Actions.Tasks.Common.Editors;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping;
 using ShipWorks.Stores.Platforms.Odbc.Upload;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace ShipWorks.Stores.Platforms.Odbc.CoreExtensions.Actions
 {
@@ -15,15 +16,6 @@ namespace ShipWorks.Stores.Platforms.Odbc.CoreExtensions.Actions
     public class OdbcShipmentUploadTask : StoreInstanceTaskBase
     {
         private const long MaxBatchSize = 1000;
-        private readonly IShippingManager shippingManager;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="OdbcShipmentUploadTask"/> class.
-        /// </summary>
-        public OdbcShipmentUploadTask(IShippingManager shippingManager)
-        {
-            this.shippingManager = shippingManager;
-        }
 
         /// <summary>
         /// Gets the type of the input entity.
@@ -79,15 +71,17 @@ namespace ShipWorks.Stores.Platforms.Odbc.CoreExtensions.Actions
         }
 
         /// <summary>
-        /// Updloads the shipment details.
+        /// Uploads the shipment details.
         /// </summary>
         private void UpdloadShipmentDetails(OdbcStoreEntity store, IEnumerable<long> shipmentKeys)
         {
             try
             {
-                OdbcUploader uploader = new OdbcUploader(shippingManager);
-
-                uploader.UploadShipments(store, shipmentKeys);
+                using (ILifetimeScope scope = IoC.BeginLifetimeScope())
+                {
+                    IOdbcUploader uploader = scope.Resolve<IOdbcUploader>();
+                    uploader.UploadShipments(store, shipmentKeys);
+                }
             }
             catch (ShipWorksOdbcException ex)
             {
