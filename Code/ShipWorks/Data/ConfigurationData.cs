@@ -1,8 +1,8 @@
-using System.Threading;
 using ShipWorks.ApplicationCore.Options;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Users.Logon;
+using System.Threading;
 
 namespace ShipWorks.Data
 {
@@ -12,7 +12,7 @@ namespace ShipWorks.Data
     public static class ConfigurationData
     {
         static ConfigurationEntity config;
-        static bool needCheckForChanges = false;
+        static bool needCheckForChanges;
 
         /// <summary>
         /// Completely reload the count cache
@@ -40,7 +40,10 @@ namespace ShipWorks.Data
         {
             if (needCheckForChanges)
             {
-                SqlAdapter.Default.FetchEntity(config);
+
+                ConfigurationEntity newConfig = new ConfigurationEntity(true);
+                SqlAdapter.Default.FetchEntity(newConfig);
+                config = newConfig;
                 needCheckForChanges = false;
             }
 

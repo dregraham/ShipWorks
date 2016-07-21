@@ -1,6 +1,5 @@
-﻿using System.Linq;
-using System.Windows.Forms;
-using Autofac;
+﻿using Autofac;
+using Autofac.Core;
 using Interapptive.Shared;
 using Interapptive.Shared.Pdf;
 using Interapptive.Shared.Security;
@@ -21,20 +20,20 @@ using ShipWorks.Data.Administration;
 using ShipWorks.Data.Connection;
 using ShipWorks.Editions;
 using ShipWorks.Editions.Brown;
+using ShipWorks.Filters;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.Postal.Endicia;
+using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Stores.Content;
 using ShipWorks.UI.Controls;
-using ShipWorks.Users.Security;
-using ShipWorks.Shipping.Profiles;
-using System;
-using System.Reflection;
-using Autofac.Core;
-using ShipWorks.Filters;
-using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Users;
+using ShipWorks.Users.Security;
+using System;
+using System.Linq;
+using System.Reflection;
+using System.Windows.Forms;
 
 namespace ShipWorks.ApplicationCore
 {
@@ -90,8 +89,7 @@ namespace ShipWorks.ApplicationCore
             builder.RegisterGeneric(typeof(AccountManagerBase<>))
                 .AsSelf()
                 .SingleInstance();
-
-
+            
             builder.RegisterInstance(Messenger.Current)
                 .AsImplementedInterfaces()
                 .ExternallyOwned();
@@ -169,6 +167,9 @@ namespace ShipWorks.ApplicationCore
                     x.IsAssignableTo<IMainFormElementRegistration>())
                 .AsImplementedInterfaces()
                 .SingleInstance();
+
+            builder.RegisterType<ConfigurationDataWrapper>()
+                .As<IConfigurationData>();
 
             builder.RegisterAssemblyTypes(allAssemblies)
                 .Where(x => x.IsAssignableTo<IInitializeForCurrentUISession>())
