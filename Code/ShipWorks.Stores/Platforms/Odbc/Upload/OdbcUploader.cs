@@ -11,6 +11,9 @@ using ShipWorks.Stores.Content;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Upload
 {
+    /// <summary>
+    /// Uploader for Odbc stores
+    /// </summary>
     public class OdbcUploader : IOdbcUploader
     {
         private readonly IShippingManager shippingManager;
@@ -66,7 +69,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Upload
         }
 
         /// <summary>
-        /// Uploads the specified store.
+        /// Uploads the shipment details
         /// </summary>
         /// <exception cref="ShipWorksOdbcException">Unable to update shipment.</exception>
         private void Upload(OdbcStoreEntity store, ShipmentEntity shipment)
