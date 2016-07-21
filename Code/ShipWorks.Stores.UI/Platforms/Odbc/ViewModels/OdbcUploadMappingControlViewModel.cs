@@ -140,23 +140,28 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
         /// </summary>
         public bool ValidateRequiredMappingFields()
         {
-            // Find duplicate mapped entries
-            string[] duplicateColumns =
+            // get a list of all of the mapped columns
+            List<IOdbcFieldMapEntry> mappedExternalColumns =
                 Shipment.Entries.Where(
-                    entry =>
-                        !entry.ExternalField.Column?.Name.Equals("(None)", StringComparison.InvariantCulture) ?? false)
-                    .GroupBy(e => e.ExternalField.Column.Name)
-                    .SelectMany(grp => grp.Skip(1))
-                    .Select(e => e.ExternalField.Column.Name)
-                    .Distinct()
-                    .Select(d => "    - " + d)
-                    .ToArray();
+                    e => !e.ExternalField.Column?.Name.Equals("(None)", StringComparison.InvariantCulture) ?? false)
+                    .ToList();
+
+            mappedExternalColumns.AddRange(ShipmentAddress.Entries.Where(
+                e => !e.ExternalField.Column?.Name.Equals("(None)", StringComparison.InvariantCulture) ?? false));
+
+            // see if any of the external columns are duplicated
+            string [] duplicateColumns = mappedExternalColumns.GroupBy(e => e.ExternalField.Column.Name)
+                .SelectMany(g => g.Skip(1))
+                .Select(e => e.ExternalField.Column.Name)
+                .Distinct()
+                .Select(d => "    - " + d)
+                .ToArray();
 
             if (duplicateColumns.Any())
             {
                 string displayName = string.Join(Environment.NewLine, duplicateColumns);
 
-                messageHelper.ShowError($"Each column can only be mapped once. The following columns are mapped more than once:{Environment.NewLine} {displayName}");
+                messageHelper.ShowError($"Each column can only be mapped once. The following columns are mapped more than once:{Environment.NewLine}{displayName}");
                 return false;
             }
 
