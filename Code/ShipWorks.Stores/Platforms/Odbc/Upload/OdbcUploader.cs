@@ -7,12 +7,14 @@ using ShipWorks.Stores.Platforms.Odbc.DataAccess;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
 using System.Collections.Generic;
 using log4net;
+using ShipWorks.Stores.Content;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Upload
 {
     public class OdbcUploader : IOdbcUploader
     {
         private readonly IShippingManager shippingManager;
+        private readonly IOrderManager orderManager;
         private readonly IOdbcFieldMap fieldMap;
         private readonly IOdbcCommandFactory commandFactory;
         private readonly ILog log;
@@ -20,9 +22,10 @@ namespace ShipWorks.Stores.Platforms.Odbc.Upload
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcUploader"/> class.
         /// </summary>
-        public OdbcUploader(IShippingManager shippingManager, IOdbcFieldMap fieldMap, IOdbcCommandFactory commandFactory, Func<Type, ILog> logFactory)
+        public OdbcUploader(IShippingManager shippingManager, IOrderManager orderManager, IOdbcFieldMap fieldMap, IOdbcCommandFactory commandFactory, Func<Type, ILog> logFactory)
         {
             this.shippingManager = shippingManager;
+            this.orderManager = orderManager;
             this.fieldMap = fieldMap;
             this.commandFactory = commandFactory;
             log = logFactory(typeof(OdbcUploader));
@@ -51,7 +54,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Upload
         {
             fieldMap.Load(store.UploadMap);
 
-            ShipmentEntity shipment = shippingManager.GetLatestActiveShipment(orderid);
+            ShipmentEntity shipment = orderManager.GetLatestActiveShipment(orderid);
 
             if (shipment == null || !shipment.Processed)
             {
