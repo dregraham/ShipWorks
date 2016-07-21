@@ -140,6 +140,26 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
         /// </summary>
         public bool ValidateRequiredMappingFields()
         {
+            // Find duplicate mapped entries
+            string[] duplicateColumns =
+                Shipment.Entries.Where(
+                    entry =>
+                        !entry.ExternalField.Column?.Name.Equals("(None)", StringComparison.InvariantCulture) ?? false)
+                    .GroupBy(e => e.ExternalField.Column.Name)
+                    .SelectMany(grp => grp.Skip(1))
+                    .Select(e => e.ExternalField.Column.Name)
+                    .Distinct()
+                    .Select(d => "    - " + d)
+                    .ToArray();
+
+            if (duplicateColumns.Any())
+            {
+                string displayName = string.Join(Environment.NewLine, duplicateColumns);
+
+                messageHelper.ShowError($"Each column can only be mapped once. The following columns are mapped more than once:{Environment.NewLine} {displayName}");
+                return false;
+            }
+
             // Finds an entry that is required and the external column has not been set
             IEnumerable<IOdbcFieldMapEntry> unsetRequiredFieldMapEntries =
                Shipment.Entries.Where(
