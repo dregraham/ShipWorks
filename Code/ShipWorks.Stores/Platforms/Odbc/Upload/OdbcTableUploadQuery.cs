@@ -21,6 +21,9 @@ namespace ShipWorks.Stores.Platforms.Odbc.Upload
         private readonly IShipWorksDbProviderFactory dbProviderFactory;
         private readonly IOdbcDataSource dataSource;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public OdbcTableUploadQuery(IOdbcFieldMap fieldMap,
             OdbcStoreEntity store,
             IShipWorksDbProviderFactory dbProviderFactory,
@@ -60,10 +63,19 @@ namespace ShipWorks.Stores.Platforms.Odbc.Upload
                 builder.Append($"UPDATE {tableToUpdate} SET ");
 
                 IOdbcFieldMapEntry lastEntry = fieldMap.Entries.Except(new[] { orderNumberField }).LastOrDefault();
+
+                // Build the update statement for every mapped field except the order number because we are not
+                // the order number is used as the predicate for the sql statement
                 foreach (IOdbcFieldMapEntry entry in fieldMap.Entries.Except(new [] {orderNumberField}))
                 {
                     string columnNameInQuotes = cmdBuilder.QuoteIdentifier(entry.ExternalField.Column.Name);
+
                     // update the external column to the shipworks field value
+                    // cannot use named parameters as ODBC does not support it
+                    // see https://msdn.microsoft.com/en-us/library/system.data.odbc.odbccommand.parameters(v=vs.100).aspx
+                    // "When CommandType is set to Text, the .NET Framework Data Provider for ODBC does not support
+                    //  passing named parameters to an SQL statement or to a stored procedure called by an OdbcCommand.
+                    //  In either of these cases, use the question mark (?) placeholder. "
                     builder.Append($"{columnNameInQuotes} = ?");
 
                     builder.Append(entry != lastEntry ? ", " : " ");
@@ -72,6 +84,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Upload
                 string orderNumberColumnInQuotes = cmdBuilder.QuoteIdentifier(orderNumberField.ExternalField.Column.Name);
                 builder.Append($"WHERE {orderNumberColumnInQuotes} = ?");
             }
+
             return builder.ToString();
         }
 
