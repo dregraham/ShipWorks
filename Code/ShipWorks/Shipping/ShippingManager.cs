@@ -1359,7 +1359,7 @@ namespace ShipWorks.Shipping
                 return true;
             }
 
-            return ShippingSettings.Fetch().ConfiguredTypes.Contains((int) shipmentTypeCode);
+            return ShippingSettings.FetchReadOnly().ConfiguredTypes.Contains(shipmentTypeCode);
         }
 
         /// <summary>
@@ -1373,7 +1373,7 @@ namespace ShipWorks.Shipping
                 return true;
             }
 
-            return ShippingSettings.Fetch().ActivatedTypes.Contains((int) shipmentTypeCode);
+            return ShippingSettings.FetchReadOnly().ActivatedTypes.Contains(shipmentTypeCode);
         }
 
         /// <summary>
@@ -1381,7 +1381,7 @@ namespace ShipWorks.Shipping
         /// </summary>
         public static bool IsShipmentTypeEnabled(ShipmentTypeCode shipmentTypeCode)
         {
-            return !ShippingSettings.Fetch().ExcludedTypes.Contains((int) shipmentTypeCode);
+            return !ShippingSettings.FetchReadOnly().ExcludedTypes.Contains(shipmentTypeCode);
         }
 
         /// <summary>

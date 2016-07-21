@@ -180,6 +180,7 @@
     <Compile Include="Custom\EntityClasses\LabelSheetEntity.cs" />
     <Compile Include="Custom\EntityClasses\OrderEntity.cs" />
     <Compile Include="Custom\EntityClasses\ShipmentEntity.cs" />
+    <Compile Include="Custom\EntityClasses\ShippingSettingsEntity.Interfaces.cs" />
     <Compile Include="Custom\EntityClasses\StoreEntity.cs" />
     <Compile Include="Custom\EntityClasses\TemplateEntity.cs" />
     <Compile Include="Custom\EntityClasses\TemplateFolderEntity.cs" />
@@ -2331,6 +2332,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <Compile Include="Custom\EntityClasses\ShippingSettingsEntity.ReadOnly.cs" />
     <None Include="packages.config" />
     <None Include="Properties\interapptive_public.snk" />
   </ItemGroup>

@@ -310,11 +310,11 @@ namespace ShipWorks.Shipping.Settings
             using (SqlAdapter adapter = SqlAdapter.Create(true))
             {
                 settings = ShippingSettings.Fetch();
-                List<int> existingExcludedTypes = settings.ExcludedTypes.ToList();
-                settings.ExcludedTypes = panelProviders.UnselectedShipmentTypes.Select(x => (int) x.ShipmentTypeCode).ToArray();
+                List<ShipmentTypeCode> existingExcludedTypes = settings.ExcludedTypes.ToList();
+                settings.ExcludedTypes = panelProviders.UnselectedShipmentTypes.Select(x => x.ShipmentTypeCode);
 
-                List<int> typesAdded = existingExcludedTypes.Except(settings.ExcludedTypes).ToList();
-                List<int> typesRemoved = settings.ExcludedTypes.Except(existingExcludedTypes).ToList();
+                List<ShipmentTypeCode> typesAdded = existingExcludedTypes.Except(settings.ExcludedTypes).ToList();
+                List<ShipmentTypeCode> typesRemoved = settings.ExcludedTypes.Except(existingExcludedTypes).ToList();
 
                 if (typesRemoved.Any() || typesAdded.Any())
                 {

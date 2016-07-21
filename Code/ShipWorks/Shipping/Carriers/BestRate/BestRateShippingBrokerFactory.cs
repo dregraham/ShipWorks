@@ -31,7 +31,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         public IEnumerable<IBestRateShippingBroker> CreateBrokers(ShipmentEntity shipment)
         {
             ShippingSettingsEntity shippingSettings = ShippingSettings.Fetch();
-            List <ShipmentType> shipmentTypes = ShipmentTypeManager.ShipmentTypes;
+            List<ShipmentType> shipmentTypes = ShipmentTypeManager.ShipmentTypes;
 
             List<IBestRateShippingBroker> brokers = new List<IBestRateShippingBroker>();
             foreach (ShipmentType shipmentType in shipmentTypes)
@@ -69,10 +69,8 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// </summary>
         private static bool IsShipmentTypeExcluded(ShippingSettingsEntity shippingSettings, ShipmentTypeCode shipmentTypeCode)
         {
-            int shipmentTypeCodeValue = (int)shipmentTypeCode;
-
             // Always include web tools, so we get USPS counter rates as needed
-            return (shippingSettings.BestRateExcludedTypes.Contains(shipmentTypeCodeValue) && shipmentTypeCode != ShipmentTypeCode.PostalWebTools);
+            return (shippingSettings.BestRateExcludedTypes.Contains(shipmentTypeCode) && shipmentTypeCode != ShipmentTypeCode.PostalWebTools);
         }
     }
 }

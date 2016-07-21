@@ -124,9 +124,9 @@ namespace ShipWorks.Shipping.Settings
             CheckForChangesNeeded();
             ShippingSettingsEntity settings = Fetch();
 
-            List<int> configured = new List<int>(settings.ConfiguredTypes);
+            List<ShipmentTypeCode> configured = settings.ConfiguredTypes.ToList();
 
-            bool isConfigured = configured.Contains((int) shipmentTypeCode);
+            bool isConfigured = configured.Contains(shipmentTypeCode);
 
             if (!isConfigured)
             {
@@ -139,8 +139,8 @@ namespace ShipWorks.Shipping.Settings
             // Make sure its marked as configured
             if (!isConfigured)
             {
-                configured.Add((int) shipmentTypeCode);
-                settings.ConfiguredTypes = configured.ToArray();
+                configured.Add(shipmentTypeCode);
+                settings.ConfiguredTypes = configured;
             }
 
             // Save the changes, if any
@@ -161,12 +161,12 @@ namespace ShipWorks.Shipping.Settings
         /// </summary>
         private static void Activate(ShipmentTypeCode shipmentTypeCode, ShippingSettingsEntity settings)
         {
-            List<int> activated = new List<int>(settings.ActivatedTypes);
+            List<ShipmentTypeCode> activated = settings.ActivatedTypes.ToList();
 
             // If its configured, its activated
-            if (!activated.Contains((int) shipmentTypeCode))
+            if (!activated.Contains(shipmentTypeCode))
             {
-                activated.Add((int) shipmentTypeCode);
+                activated.Add(shipmentTypeCode);
                 settings.ActivatedTypes = activated.ToArray();
             }
         }
@@ -190,11 +190,11 @@ namespace ShipWorks.Shipping.Settings
         {
             ShippingSettingsEntity settings = new ShippingSettingsEntity(true);
 
-            settings.ActivatedTypes = new int[0];
-            settings.ConfiguredTypes = new int[0];
+            settings.ActivatedTypes = Enumerable.Empty<ShipmentTypeCode>();
+            settings.ConfiguredTypes = Enumerable.Empty<ShipmentTypeCode>();
 
             // Only want to show the single USPS provider by default
-            settings.ExcludedTypes = new int[] { (int) ShipmentTypeCode.Endicia, (int) ShipmentTypeCode.Express1Endicia, (int) ShipmentTypeCode.Express1Usps, (int) ShipmentTypeCode.PostalWebTools, (int) ShipmentTypeCode.iParcel, (int) ShipmentTypeCode.OnTrac };
+            settings.ExcludedTypes = new[] { ShipmentTypeCode.Endicia, ShipmentTypeCode.Express1Endicia, ShipmentTypeCode.Express1Usps, ShipmentTypeCode.PostalWebTools, ShipmentTypeCode.iParcel, ShipmentTypeCode.OnTrac };
             settings.DefaultType = (int) ShipmentTypeCode.None;
 
             settings.BlankPhoneOption = (int) ShipmentBlankPhoneOption.ShipperPhone;
@@ -247,7 +247,7 @@ namespace ShipWorks.Shipping.Settings
             settings.UpsMailInnovationsEnabled = false;
             settings.WorldShipMailInnovationsEnabled = false;
 
-            settings.BestRateExcludedTypes = new int[0];
+            settings.BestRateExcludedTypes = Enumerable.Empty<ShipmentTypeCode>();
             settings.ShipSenseEnabled = true;
             settings.ShipSenseUniquenessXml = "<ShipSenseUniqueness><ItemProperty><Name>SKU</Name><Name>Code</Name></ItemProperty><ItemAttribute /></ShipSenseUniqueness>";
             settings.ShipSenseProcessedShipmentID = 0;

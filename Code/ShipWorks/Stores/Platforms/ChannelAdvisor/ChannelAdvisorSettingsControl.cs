@@ -1,10 +1,10 @@
 ﻿using System;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores.Management;
-using ShipWorks.Shipping.Settings;
 using System.Linq;
-using ShipWorks.Shipping;
 using Interapptive.Shared.UI;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping;
+using ShipWorks.Shipping.Settings;
+using ShipWorks.Stores.Management;
 
 namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 {
@@ -16,7 +16,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
             // Show Amazon control if the Amazon ctrl is configured.
             ShippingSettingsEntity settings = ShippingSettings.Fetch();
-            amazon.Visible = settings.ConfiguredTypes.Contains((int)ShipmentTypeCode.Amazon);
+            amazon.Visible = settings.ConfiguredTypes.Contains(ShipmentTypeCode.Amazon);
         }
 
         /// <summary>
@@ -59,7 +59,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             }
             return true;
         }
-        
+
         /// <summary>
         /// Called when Attributes Controle is resized
         /// </summary>
@@ -70,7 +70,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             Height = attributes.Height + consolidator.Height;
 
             // Adjust height if the Amazon control is visible
-            if(amazon.Visible)
+            if (amazon.Visible)
             {
                 Height += amazon.Height;
             }

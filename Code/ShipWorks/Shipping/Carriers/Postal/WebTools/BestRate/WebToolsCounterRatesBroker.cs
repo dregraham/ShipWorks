@@ -67,8 +67,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools.BestRate
                 {
                     rateResult.Description = rateResult.Description.Replace("(w/o Postage) ", string.Empty);
 
-                    // We want WebTools account setup wizard to show when a rate is selected so the user 
-                    // can create their own WebTools account since these rates are just counter rates 
+                    // We want WebTools account setup wizard to show when a rate is selected so the user
+                    // can create their own WebTools account since these rates are just counter rates
                     // using a ShipWorks account.
                     BestRateResultTag bestRateResultTag = (BestRateResultTag) rateResult.Tag;
                     bestRateResultTag.SignUpAction = DisplaySetupWizard;
@@ -78,7 +78,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools.BestRate
             {
                 if (ex.InnerExceptions.Count == 1 && ex.InnerExceptions.OfType<CounterRatesOriginAddressException>().Any())
                 {
-                    // There was a problem with the origin address, so add the invalid store address footer factory 
+                    // There was a problem with the origin address, so add the invalid store address footer factory
                     // to the rate group and eat the exception
                     bestRates.AddFootnoteFactory(new CounterRatesInvalidStoreAddressFootnoteFactory(ShipmentType.ShipmentTypeCode));
                 }
@@ -110,7 +110,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools.BestRate
                         // We also want to ensure sure that the provider is no longer excluded in
                         // the global settings
                         ShippingSettingsEntity settings = ShippingSettings.Fetch();
-                        settings.ExcludedTypes = settings.ExcludedTypes.Where(shipmentType => shipmentType != (int) actualPostalShipmentType.ShipmentTypeCode).ToArray();
+                        settings.ExcludedTypes = settings.ExcludedTypes.Where(shipmentType => shipmentType != actualPostalShipmentType.ShipmentTypeCode).ToArray();
 
                         ShippingSettings.Save(settings);
                     }

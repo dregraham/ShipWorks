@@ -130,7 +130,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
                         // We also want to ensure sure that the provider is no longer excluded in
                         // the global settings
                         ShippingSettingsEntity settings = ShippingSettings.Fetch();
-                        settings.ExcludedTypes = settings.ExcludedTypes.Where(shipmentType => shipmentType != (int) ShipmentType.ShipmentTypeCode).ToArray();
+                        settings.ExcludedTypes = settings.ExcludedTypes.Where(shipmentType => shipmentType != ShipmentType.ShipmentTypeCode).ToArray();
 
                         ShippingSettings.Save(settings);
                     }

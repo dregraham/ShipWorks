@@ -5,8 +5,8 @@ using ShipWorks.Shipping.Settings;
 namespace ShipWorks.Shipping.Carriers.Other
 {
     /// <summary>
-    /// An IShipmentProcessingSynchronizer implementation to handle the PreProcessing 
-    /// of an Other shipment 
+    /// An IShipmentProcessingSynchronizer implementation to handle the PreProcessing
+    /// of an Other shipment
     /// </summary>
     public class OtherShipmentProcessingSynchronizer : IShipmentProcessingSynchronizer
     {
@@ -18,12 +18,12 @@ namespace ShipWorks.Shipping.Carriers.Other
         /// </value>
         public bool HasAccounts
         {
-            get 
+            get
             {
                 // Since there aren't any actual accounts for "Other", we'll just check
                 // whether the shipment type has been configured
                 ShippingSettingsEntity settings = ShippingSettings.Fetch();
-                return settings.ConfiguredTypes.Contains((int)ShipmentTypeCode.Other);
+                return settings.ConfiguredTypes.Contains(ShipmentTypeCode.Other);
             }
         }
 

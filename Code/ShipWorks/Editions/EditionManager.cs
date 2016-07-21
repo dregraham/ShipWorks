@@ -111,7 +111,7 @@ namespace ShipWorks.Editions
             ActiveRestrictions = new EditionRestrictionSet(restrictions);
 
             // Let anyone who cares know that enabled carriers may have changed.
-            Messenger.Current.Send(new EnabledCarriersChangedMessage(new object(), new List<int>(), new List<int>()));
+            Messenger.Current.Send(new EnabledCarriersChangedMessage(new object(), new List<ShipmentTypeCode>(), new List<ShipmentTypeCode>()));
         }
 
         /// <summary>
