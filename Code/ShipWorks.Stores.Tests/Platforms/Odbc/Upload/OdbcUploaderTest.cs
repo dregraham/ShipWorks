@@ -10,6 +10,7 @@ using ShipWorks.Stores.Platforms.Odbc.DataAccess;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
 using ShipWorks.Stores.Platforms.Odbc.Upload;
 using System;
+using ShipWorks.Stores.Content;
 using Xunit;
 
 #endregion
@@ -31,12 +32,13 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Upload
         private readonly AutoMock mock;
         private Mock<ICarrierShipmentAdapter> shipmentAdapter;
         private Mock<IShippingManager> shippingManager;
+        private Mock<IOrderManager> orderManager;
         private Mock<IOdbcCommandFactory> commandFactory;
 
-        private void SetupShippingManagerToGetLatestActiveShipment()
+        private void SetupOrderManagerToGetLatestActiveShipment()
         {
-            shippingManager = mock.Mock<IShippingManager>();
-            shippingManager.Setup(m => m.GetLatestActiveShipment(It.IsAny<long>())).Returns(new ShipmentEntity() {Processed = true});
+            orderManager = mock.Mock<IOrderManager>();
+            orderManager.Setup(m => m.GetLatestActiveShipment(It.IsAny<long>())).Returns(new ShipmentEntity() {Processed = true});
         }
 
         private void SetupCommand(int rowsAffected)
@@ -62,7 +64,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Upload
         public void UploadLatestShipment_ShipWorksOdbcExceptionThrown_WhenNoRowsAffected()
         {
             SetupCommand(0);
-            SetupShippingManagerToGetLatestActiveShipment();
+            SetupOrderManagerToGetLatestActiveShipment();
 
             OdbcUploader testObject = mock.Create<OdbcUploader>();
 
@@ -73,7 +75,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Upload
         public void UploadLatestShipment_CommandCreatedWithStoreAndFieldMap()
         {
             SetupCommand(5);
-            SetupShippingManagerToGetLatestActiveShipment();
+            SetupOrderManagerToGetLatestActiveShipment();
             var store = new OdbcStoreEntity();
             var fieldMap = mock.Mock<IOdbcFieldMap>();
 
@@ -88,7 +90,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Upload
         {
             string fieldMapText = "I'm a map!!!";
 
-            SetupShippingManagerToGetLatestActiveShipment();
+            SetupOrderManagerToGetLatestActiveShipment();
             SetupCommand(5);
 
             var fieldMap = mock.Mock<IOdbcFieldMap>();
@@ -104,13 +106,13 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Upload
         public void UploadLatestShipment_GetsShipment()
         {
             SetupCommand(5);
-            SetupShippingManagerToGetLatestActiveShipment();
+            SetupOrderManagerToGetLatestActiveShipment();
 
             OdbcUploader testObject = mock.Create<OdbcUploader>();
             testObject.UploadLatestShipment(new OdbcStoreEntity(), 5);
 
-            shippingManager.Verify(m => m.GetLatestActiveShipment(5), Times.Once);
-            shippingManager.Verify(m => m.GetLatestActiveShipment(It.IsAny<long>()), Times.Once);
+            orderManager.Verify(m => m.GetLatestActiveShipment(5), Times.Once);
+            orderManager.Verify(m => m.GetLatestActiveShipment(It.IsAny<long>()), Times.Once);
         }
 
         [Fact]
