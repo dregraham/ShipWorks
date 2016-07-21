@@ -244,6 +244,11 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         /// </summary>
         public override void ConfigureNewShipment(ShipmentEntity shipment)
         {
+            if (shipment.OnTrac == null)
+            {
+                shipment.OnTrac = new OnTracShipmentEntity(shipment.ShipmentID);
+            }
+
             OnTracShipmentEntity onTracShipment = shipment.OnTrac;
 
             onTracShipment.DeclaredValue = 0;

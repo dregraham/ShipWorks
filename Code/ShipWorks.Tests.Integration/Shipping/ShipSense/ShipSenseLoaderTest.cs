@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
+using Interapptive.Shared.Threading;
 using Moq;
-using ShipWorks.Common.Threading;
 using ShipWorks.Shipping.ShipSense;
 using ShipWorks.Shipping.ShipSense.Population;
 using ShipWorks.Startup;

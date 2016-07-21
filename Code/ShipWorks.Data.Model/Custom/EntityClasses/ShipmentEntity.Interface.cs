@@ -9,15 +9,6 @@ namespace ShipWorks.Data.Model.EntityInterfaces
     public partial interface IShipmentEntity
     {
         /// <summary>
-        /// THIS IS ONLY TEMPORARY
-        /// It is being used to determine number of newly created shipments for the
-        /// LoadShipments telemetry metrics.
-        ///
-        /// Delete this after the performance code stories are done.
-        /// </summary>
-        bool JustCreated { get; }
-
-        /// <summary>
         /// Utility flag to help track if we've pulled customs items form the database
         /// </summary>
         bool CustomsItemsLoaded { get; }

@@ -1,18 +1,15 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
-using ShipWorks.UI;
-using Interapptive.Shared.Utility;
 using Interapptive.Shared.Collections;
+using Interapptive.Shared.Threading;
 
 namespace ShipWorks.Common.Threading
 {
     /// <summary>
     /// Manages multiple progress items and their status
     /// </summary>
-    public class ProgressProvider
+    public class ProgressProvider : IProgressProvider
     {
-        ProgressItemCollection progressItems = new ProgressItemCollection();
+        ObservableCollection<IProgressReporter> progressItems = new ObservableCollection<IProgressReporter>();
 
         bool cancelRequested = false;
 
@@ -21,30 +18,18 @@ namespace ShipWorks.Common.Threading
         /// </summary>
         public ProgressProvider()
         {
-            progressItems.CollectionChanged += new CollectionChangedEventHandler<ProgressItem>(OnProgressItemCollectionChanged);
+            progressItems.CollectionChanged += OnProgressItemCollectionChanged;
         }
 
         /// <summary>
         /// The current list of items in progress
         /// </summary>
-        public ProgressItemCollection ProgressItems
-        {
-            get 
-            {
-                return progressItems;
-            }
-        }
+        public ObservableCollection<IProgressReporter> ProgressItems => progressItems;
 
         /// <summary>
         /// Indicates if the requested operation has been requested to be canceled.
         /// </summary>
-        public bool CancelRequested
-        {
-            get
-            {
-                return cancelRequested;
-            }
-        }
+        public bool CancelRequested => cancelRequested;
 
         /// <summary>
         /// Indicates if the current state of the items allows for cancelation.
@@ -147,9 +132,20 @@ namespace ShipWorks.Common.Threading
         }
 
         /// <summary>
+        /// Creates and adds a new ProgressItem of the given name
+        /// </summary>
+        public IProgressReporter AddItem(string name)
+        {
+            ProgressItem item = new ProgressItem(name);
+            ProgressItems.Add(item);
+
+            return item;
+        }
+
+        /// <summary>
         /// Called when changes are made to the progress item collection
         /// </summary>
-        void OnProgressItemCollectionChanged(object sender, CollectionChangedEventArgs<ProgressItem> e)
+        void OnProgressItemCollectionChanged(object sender, CollectionChangedEventArgs<IProgressReporter> e)
         {
             if (CancelRequested)
             {

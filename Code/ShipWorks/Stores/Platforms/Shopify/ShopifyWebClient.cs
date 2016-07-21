@@ -4,23 +4,18 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Net;
 using System.Web;
+using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.Net;
+using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
-using ShipWorks.Stores.Communication.Throttling;
 using log4net;
 using Newtonsoft.Json.Linq;
-using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore.Logging;
-using ShipWorks.Common.Threading;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores.Communication;
-using ShipWorks.Stores.Content;
-using ShipWorks.Stores.Platforms.Shopify.Enums;
-using System.Text;
-using Interapptive.Shared.Collections;
 using ShipWorks.Shipping;
-using Interapptive.Shared.Business;
-using Interapptive.Shared.Business.Geography;
+using ShipWorks.Stores.Communication.Throttling;
+using ShipWorks.Stores.Platforms.Shopify.Enums;
 
 namespace ShipWorks.Stores.Platforms.Shopify
 {
@@ -39,7 +34,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
 
         ShopifyStoreEntity store;
         ShopifyEndpoints endpoints;
-        
+
         /// <summary>
         /// Create an instance of the web client for connecting to the specified store
         /// </summary>
@@ -143,7 +138,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
                 request.Uri = new Uri(new ShopifyEndpoints(shopUrlName).GetApiAccessTokenUrl(requestToken));
                 request.Verb = HttpVerb.Post;
 
-                // Get the response from the call.  
+                // Get the response from the call.
                 // This is the JSON response that contains the access token
                 using (var reader = ProcessRequestReader(request, ShopifyWebClientApiCall.GetAccessToken, null))
                 {
@@ -223,7 +218,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
             request.Variables.Add("updated_at_min", DateTime.UtcNow.ToString("o"));
 
             using (IHttpResponseReader respReader = ProcessAuthenticatedRequestReader(request, ShopifyWebClientApiCall.GetServerCurrentDateTime, progress))
-            {            
+            {
                 DateTime serverDateTime;
 
                 // Try to parse the date.  If it doesn't succeed, use DateTime.Now less 2 min
@@ -361,7 +356,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
                     catch (ShopifyException ex)
                     {
                         // If the product does not exist on Shopify, just cache and return null
-                        if (ex.InnerException is WebException && 
+                        if (ex.InnerException is WebException &&
                             ((HttpWebResponse) ((WebException) ex.InnerException).Response).StatusCode == HttpStatusCode.NotFound)
                         {
                             product = null;
@@ -399,7 +394,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
             if (shipment.Order.IsManual)
             {
                 log.InfoFormat("Not uploading shipment details for OrderID {0} since it is manual.", shipment.Order.OrderID);
-                return;            
+                return;
             }
 
             try
@@ -548,7 +543,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
             catch (WebException ex)
             {
                 HttpWebResponse webResponse = ex.Response as HttpWebResponse;
-                if (webResponse != null && webResponse.StatusCode == (HttpStatusCode)ShopifyConstants.OverApiLimitStatusCode)
+                if (webResponse != null && webResponse.StatusCode == (HttpStatusCode) ShopifyConstants.OverApiLimitStatusCode)
                 {
                     throw new RequestThrottledException(ex.Message);
                 }

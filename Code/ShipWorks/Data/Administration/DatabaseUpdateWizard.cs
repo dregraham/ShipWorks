@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using System.Xml.Linq;
 using Interapptive.Shared;
 using Interapptive.Shared.Data;
+using Interapptive.Shared.Threading;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Win32;
 using log4net;
@@ -816,7 +817,7 @@ namespace ShipWorks.Data.Administration
             progressDlg.Show(this);
 
             // Used for async invoke
-            MethodInvoker<ProgressProvider> invoker = new MethodInvoker<ProgressProvider>(AsyncUpdateDatabase);
+            MethodInvoker<IProgressProvider> invoker = new MethodInvoker<IProgressProvider>(AsyncUpdateDatabase);
 
             // Pass along user state
             Dictionary<string, object> userState = new Dictionary<string, object>();
@@ -830,7 +831,7 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Method meant to be called from an asycn invoker to update the database in the background
         /// </summary>
-        private void AsyncUpdateDatabase(ProgressProvider progressProvider)
+        private void AsyncUpdateDatabase(IProgressProvider progressProvider)
         {
             // First see if we need to get migrated from 2x -> 3x
             if (v2migrationController != null &&

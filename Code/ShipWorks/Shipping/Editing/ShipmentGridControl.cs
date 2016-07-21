@@ -436,9 +436,13 @@ namespace ShipWorks.Shipping.Editing
 
                 if (dlg.ShowDialog(this) == DialogResult.OK)
                 {
-                    ShipmentsLoader loader = new ShipmentsLoader(this);
-                    ShipmentsLoadedEventArgs result = await loader.LoadAsync(dlg.Selection.OrderedKeys);
-                    OnLoadMoreShipmentsCompleted(this, result);
+                    using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+                    {
+                        IOrderLoader loader = lifetimeScope.Resolve<IOrderLoader>();
+                        ShipmentsLoadedEventArgs result = await loader.LoadAsync(dlg.Selection.OrderedKeys,
+                            ProgressDisplayOptions.Delay);
+                        OnLoadMoreShipmentsCompleted(this, result);
+                    }
                 }
             }
         }
@@ -452,9 +456,10 @@ namespace ShipWorks.Shipping.Editing
 
             if (dlg.DialogResult == DialogResult.OK)
             {
-                if (entityGrid.Rows.Count + dlg.Selection.Count > ShipmentsLoader.MaxAllowedOrders)
+                if (entityGrid.Rows.Count + dlg.Selection.Count > ShipmentsLoaderConstants.MaxAllowedOrders)
                 {
-                    MessageHelper.ShowInformation(dlg, string.Format("You can only ship up to {0} orders at a time.", ShipmentsLoader.MaxAllowedOrders));
+                    MessageHelper.ShowInformation(dlg,
+                        $"You can only ship up to {ShipmentsLoaderConstants.MaxAllowedOrders} orders at a time.");
                     e.Cancel = true;
                 }
             }

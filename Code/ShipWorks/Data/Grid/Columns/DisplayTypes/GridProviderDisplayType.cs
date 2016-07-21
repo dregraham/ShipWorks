@@ -143,12 +143,12 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes
             using (SqlAdapter sqlAdapter = new SqlAdapter())
             {
                 sqlAdapter.SaveAndRefetch(shipment);
-            }
 
-            // Perform this after the save otherwise customs items will be duplicated on
-            // international shipments
-            ShippingManager.EnsureShipmentLoaded(shipment);
-            CustomsManager.LoadCustomsItems(shipment, false);
+                // Perform this after the save otherwise customs items will be duplicated on
+                // international shipments
+                ShippingManager.EnsureShipmentLoaded(shipment);
+                CustomsManager.LoadCustomsItems(shipment, false, sqlAdapter);
+            }
 
             Program.MainForm.ForceHeartbeat();
 

@@ -1,19 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks;
-using Interapptive.Shared.Data;
-using ShipWorks.Data.Connection;
-using System.Data.SqlClient;
-using ShipWorks.Common.Threading;
 using System.Data;
-using System.Collections;
-using log4net;
-using System.Threading;
+using System.Data.SqlClient;
+using System.Linq;
 using Interapptive.Shared;
+using Interapptive.Shared.Data;
+using Interapptive.Shared.Threading;
+using log4net;
+using ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks;
 using ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.Specialized;
-using ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.PostMigration;
+using ShipWorks.Data.Connection;
 
 namespace ShipWorks.Data.Administration.UpdateFrom2x.Database
 {
@@ -22,14 +18,14 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database
     /// </summary>
     public class MigrationController
     {
-        // Logger 
+        // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(MigrationController));
-						  
+
         // Current state of the procedure
         MigrationState migrationState = MigrationState.Unknown;
 
         // current database version
-        Version installedDbVersion; 
+        Version installedDbVersion;
 
         // the runtime instantiation of the execution plan
         MigrationExecutionPlan executionPlan;
@@ -41,7 +37,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database
         List<MigrationTaskBase> taskPrototypes;
 
         // pre-execution tasks to check the database and add any
-        // MigrationNotices to present to the user before generating 
+        // MigrationNotices to present to the user before generating
         // and executing the execution plan.
         List<MigrationTaskBase> inspectionTasks;
 
@@ -117,7 +113,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database
 
             // Check constraints before we do anything - This will need to be moved to a pre-execution step because user interaction may be required
             controller.AddTask(new CheckConstraintsMigrationTask());
-           
+
             // drop foreign keys in every database
             controller.AddScriptTask("Drop2xForeignKeys", "Drop2xForeignKeys.sql", "Removing constraints...", MigrationTaskInstancing.MainDatabaseAndArchives, MigrationTaskRunPattern.RunOnce);
 
@@ -223,7 +219,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database
 
             // fedex Closings
             controller.AddScriptTask("MoveFedexClosings", "MigrateData_FedexClosings.sql", "Upgrading FedEx End of Day Closings...", MigrationTaskInstancing.MainDatabaseOnly, MigrationTaskRunPattern.Repeated);
-            
+
             // update order table rollups
             controller.AddScriptTask("UpdateOrderRollups", "UpdateOrderRollups.sql", "Updating order counts...", MigrationTaskInstancing.MainDatabaseOnly, MigrationTaskRunPattern.Repeated);
 
@@ -246,7 +242,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database
             controller.AddScriptTask("Enable3xConstraints", "Enable3xConstraints.sql", "Enabling constraints...", MigrationTaskInstancing.MainDatabaseOnly, MigrationTaskRunPattern.RunOnce);
 
             // create the 3x indexes
-            controller.AddScriptTask("Create3xIndexes", "Create3xIndexes.sql", "Creating indexes...", MigrationTaskInstancing.MainDatabaseOnly, MigrationTaskRunPattern.Repeated);          
+            controller.AddScriptTask("Create3xIndexes", "Create3xIndexes.sql", "Creating indexes...", MigrationTaskInstancing.MainDatabaseOnly, MigrationTaskRunPattern.Repeated);
 
             // Update the database to be marked with the correct db version
             controller.AddTask(new UpdateSchemaVersionMigrationTask());
@@ -290,8 +286,8 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database
                 }
                 else
                 {
-                    // rows in the execution plan table indicates a failed run.  
-                    // at this point, assuming we'll be able to resum.  This gets 
+                    // rows in the execution plan table indicates a failed run.
+                    // at this point, assuming we'll be able to resum.  This gets
                     // validated at a later point
                     migrationState = MigrationState.ResumeRequired;
                 }
@@ -355,7 +351,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database
                         // read all of the sets
                         while (reader.Read())
                         {
-                            archiveSets.Add(new ArchiveSet { ArchiveSetName = (string)reader["ArchiveSetName"], DBName = (string)reader["DbName"] });
+                            archiveSets.Add(new ArchiveSet { ArchiveSetName = (string) reader["ArchiveSetName"], DBName = (string) reader["DbName"] });
                         }
                     }
                 }
@@ -390,23 +386,23 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database
         /// <summary>
         /// Begin the execution
         /// </summary>
-        public bool Execute(ProgressProvider progress)
+        public bool Execute(IProgressProvider progress)
         {
             EnsureInitialization();
 
             using (MigrationContext context = new MigrationContext(migrationProperties))
             {
                 // create the progress items
-                ProgressItem estimateProgressItem = progress.ProgressItems.Add("Prepare for Upgrade");
-                estimateProgressItem.CanCancel = false;                
+                IProgressReporter estimateProgressItem = progress.AddItem("Prepare for Upgrade");
+                estimateProgressItem.CanCancel = false;
 
-                ProgressItem executeProgressItem = progress.ProgressItems.Add("Upgrade Data");
+                IProgressReporter executeProgressItem = progress.AddItem("Upgrade Data");
 
                 // first calculate execution estimates
                 context.ProgressItem = estimateProgressItem;
                 context.ExecutionPhase = MigrationTaskExecutionPhase.Estimate;
                 executionPlan.CalculateEstimates();
-                
+
                 // kick off the actual work
                 context.ExecutionPhase = MigrationTaskExecutionPhase.Execute;
                 context.ProgressItem = executeProgressItem;
@@ -450,7 +446,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database
             {
                 cmd.CommandText = @"SELECT COALESCE(OBJECT_ID('dbo.v2m_MigrationPlan'), 0)";
 
-                return (int)SqlCommandProvider.ExecuteScalar(cmd) > 0;
+                return (int) SqlCommandProvider.ExecuteScalar(cmd) > 0;
             });
         }
 
@@ -485,7 +481,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database
 
         /// <summary>
         /// Adds a migration task to the engine.
-        /// 
+        ///
         /// Cannot be called once the engine has been initialized and the
         /// execution plan generated.
         /// </summary>
@@ -499,8 +495,8 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database
 
         /// <summary>
         /// Adds an inspection task to the engine.
-        /// 
-        /// Cannot be called once the engine has been initialized and 
+        ///
+        /// Cannot be called once the engine has been initialized and
         /// the execution plan generated.
         /// </summary>
         public MigrationTaskBase AddInspectionTask(MigrationTaskBase task)
@@ -528,7 +524,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database
             return AddScriptTask(identifier, scriptResource, progressDetail, MigrationTaskInstancing.MainDatabaseOnly, MigrationTaskRunPattern.RunOnce);
         }
 
-       
+
 
         #endregion
     }

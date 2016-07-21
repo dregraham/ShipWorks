@@ -1,29 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using ShipWorks.UI.Wizard;
-using Interapptive.Shared.UI;
-using ShipWorks.Data.Administration.UpdateFrom2x.Configuration;
-using System.IO;
-using ShipWorks.Common.Threading;
-using Interapptive.Shared.Data;
 using System.Data.SqlClient;
-using log4net;
-using ICSharpCode.SharpZipLib.Zip;
-using Interapptive.Shared.Utility;
+using System.IO;
+using System.Linq;
 using System.Transactions;
+using System.Windows.Forms;
+using ICSharpCode.SharpZipLib.Zip;
 using Interapptive.Shared;
-using ShipWorks.Data.Connection;
+using Interapptive.Shared.Data;
+using Interapptive.Shared.IO.Zip;
+using Interapptive.Shared.Threading;
+using Interapptive.Shared.UI;
+using Interapptive.Shared.Utility;
+using log4net;
+using ShipWorks.ApplicationCore;
+using ShipWorks.Common.Threading;
+using ShipWorks.Data.Administration.UpdateFrom2x.Configuration;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Templates;
 using ShipWorks.Templates.Distribution;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.ApplicationCore;
-using Interapptive.Shared.IO.Zip;
+using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.PostMigration
 {
@@ -107,14 +103,14 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.PostMigratio
             e.NextPage = this;
 
             // Create the progress provider and window
-            ProgressProvider progressProvider = new ProgressProvider();
+            IProgressProvider progressProvider = new ProgressProvider();
             ProgressDlg progressDlg = new ProgressDlg(progressProvider);
             progressDlg.Title = "Importing Templates";
             progressDlg.Description = "ShipWorks is importing old templates.";
             progressDlg.Show(this);
 
             // Used for async invoke
-            MethodInvoker<ProgressProvider, string> invoker = new MethodInvoker<ProgressProvider, string>(AsyncImportTemplates);
+            MethodInvoker<IProgressProvider, string> invoker = new MethodInvoker<IProgressProvider, string>(AsyncImportTemplates);
 
             // Pass along user state
             Dictionary<string, object> userState = new Dictionary<string, object>();
@@ -123,7 +119,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.PostMigratio
 
             // Kick off the async upgrade process
             invoker.BeginInvoke(
-                progressDlg.ProgressProvider, 
+                progressDlg.ProgressProvider,
                 radioDontImport.Checked ? null : (radioImportTemplatesBackupFile.Checked ? importTemplatesBackupFile.Text : importTemplatesAppDataFolder.Text),
                 new AsyncCallback(OnAsyncComplete), userState);
         }
@@ -132,9 +128,9 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.PostMigratio
         /// Method meant to be called from an async invoker to update the database in the background
         /// </summary>
         [NDependIgnoreLongMethod]
-        private void AsyncImportTemplates(ProgressProvider progressProvider, string path)
+        private void AsyncImportTemplates(IProgressProvider progressProvider, string path)
         {
-            var progressImport = progressProvider.ProgressItems.Add("Import Templates");
+            var progressImport = progressProvider.AddItem("Import Templates");
             progressImport.CanCancel = false;
 
             bool isBackupFile = path != null && path.EndsWith("swb");
@@ -146,7 +142,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.PostMigratio
                 path = ExtractTemplatesFromBackup(path, progressExtract);
             }
 
-            var progressInstall = progressProvider.ProgressItems.Add("Install Templates");
+            var progressInstall = progressProvider.AddItem("Install Templates");
             progressInstall.CanCancel = false;
 
             using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required, SqlCommandProvider.DefaultTimeout))
@@ -213,7 +209,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.PostMigratio
             using (ZipReader reader = new ZipReader(path))
             {
                 // Progress
-                reader.Progress += delegate(object sender, ZipReaderProgressEventArgs args)
+                reader.Progress += delegate (object sender, ZipReaderProgressEventArgs args)
                 {
                     progress.PercentComplete = (int) (((float) args.TotalBytesProcessed / (float) args.TotalBytesTotal) * 100);
                     progress.Detail = string.Format("{0} processed", StringUtility.FormatByteCount(args.TotalBytesProcessed));
@@ -248,7 +244,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.PostMigratio
         /// <summary>
         /// Import the templates from the given path
         /// </summary>
-        private void ImportTemplates(TemplateTree tree, string path, ProgressItem progress)
+        private void ImportTemplates(TemplateTree tree, string path, IProgressReporter progress)
         {
             List<string> templateList = GenerateTemplateList(path);
 

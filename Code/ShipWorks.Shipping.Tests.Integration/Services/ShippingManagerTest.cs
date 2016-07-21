@@ -73,7 +73,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
 
             sqlAdapterRetry.ExecuteWithRetry(() =>
             {
-                shipment = ShippingManager.CreateShipment(order, lifetimeScope);
+                shipment = ShippingManager.CreateShipment(order);
             });
 
             return shipment;
@@ -139,7 +139,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
 
             Assert.Equal(6.25, shipment.ContentWeight);
             Assert.Equal(6.25, shipment.TotalWeight);
-            Assert.Equal(6.25, shipment.BilledWeight);
+            Assert.Equal(0, shipment.BilledWeight);
         }
 
         [Fact]
@@ -191,16 +191,28 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         }
 
         [Theory]
-        [InlineData(ShipmentTypeCode.Usps)]
+        [InlineData(ShipmentTypeCode.None)]
+        [InlineData(ShipmentTypeCode.Endicia)]
+        [InlineData(ShipmentTypeCode.Express1Endicia)]
+        [InlineData(ShipmentTypeCode.Express1Usps)]
         [InlineData(ShipmentTypeCode.FedEx)]
+        [InlineData(ShipmentTypeCode.iParcel)]
+        [InlineData(ShipmentTypeCode.OnTrac)]
+        [InlineData(ShipmentTypeCode.Other)]
+        [InlineData(ShipmentTypeCode.PostalWebTools)]
+        [InlineData(ShipmentTypeCode.UpsOnLineTools)]
+        [InlineData(ShipmentTypeCode.UpsWorldShip)]
+        [InlineData(ShipmentTypeCode.Usps)]
         public void CreateShipment_SetsShipmentType_BasedOnShipmentTypeManager(ShipmentTypeCode shipmentTypeCode)
         {
-            var shipmentType = mock.CreateMock<ShipmentType>();
-            shipmentType.Setup(x => x.ShipmentTypeCode).Returns(shipmentTypeCode);
+            //var shipmentType = mock.CreateMock<ShipmentType>();
+            //shipmentType.Setup(x => x.ShipmentTypeCode).Returns(shipmentTypeCode);
+
+            var shipmentType = ShipmentTypeManager.GetType(shipmentTypeCode);
 
             mock.Override<IShipmentTypeManager>()
                 .Setup(x => x.InitialShipmentType(It.IsAny<ShipmentEntity>()))
-                .Returns(shipmentType.Object);
+                .Returns(shipmentType);
 
             ShipmentEntity shipment = CreateShipment(context.Order, mock.Container);
 

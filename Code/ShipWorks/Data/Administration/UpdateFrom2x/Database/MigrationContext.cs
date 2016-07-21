@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using Interapptive.Shared.Threading;
 using ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks;
-using ShipWorks.Common.Threading;
 
 namespace ShipWorks.Data.Administration.UpdateFrom2x.Database
 {
@@ -15,12 +12,12 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database
         MigrationPropertyBag propertyBag;
         MigrationTaskExecutionPhase executionPhase;
         MigrationTaskBase currentTask;
-        ProgressItem progressItem;
+        IProgressReporter progressItem;
 
         /// <summary>
         /// Current progress reporting item
         /// </summary>
-        public ProgressItem ProgressItem
+        public IProgressReporter ProgressItem
         {
             get { return progressItem; }
             set { progressItem = value; }
@@ -34,7 +31,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database
             get { return instance.currentTask; }
             set { instance.currentTask = value; }
         }
-        
+
         /// <summary>
         /// Migration properties valid for the duration of the migration
         /// </summary>

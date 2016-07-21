@@ -40,6 +40,14 @@ namespace ShipWorks.Stores
         /// <summary>
         /// Construction
         /// </summary>
+        protected StoreType() : this(null)
+        {
+
+        }
+
+        /// <summary>
+        /// Construction
+        /// </summary>
         protected StoreType(StoreEntity store)
         {
             if (store != null)

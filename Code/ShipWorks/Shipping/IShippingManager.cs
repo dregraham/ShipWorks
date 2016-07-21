@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Services;
@@ -75,11 +74,6 @@ namespace ShipWorks.Shipping
         /// Indicates if the shipment type of the given type code has gone through the full setup wizard \ configuration
         /// </summary>
         bool IsShipmentTypeConfigured(ShipmentTypeCode shipmentTypeCode);
-
-        /// <summary>
-        /// Create a new shipment for the given order
-        /// </summary>
-        ShipmentEntity CreateShipment(OrderEntity order);
 
         /// <summary>
         /// Create a shipment as a copy of an existing shipment

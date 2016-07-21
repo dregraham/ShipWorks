@@ -60,6 +60,19 @@ namespace ShipWorks.Shipping.Carriers.Other
         public override bool SupportsReturns => true;
 
         /// <summary>
+        /// Configure data for the newly created shipment
+        /// </summary>
+        public override void ConfigureNewShipment(ShipmentEntity shipment)
+        {
+            if (shipment.Other == null)
+            {
+                shipment.Other = new OtherShipmentEntity(shipment.ShipmentID);
+            }
+
+            base.ConfigureNewShipment(shipment);
+        }
+
+        /// <summary>
         /// Get the default profile for the shipment type
         /// </summary>
         public override void ConfigurePrimaryProfile(ShippingProfileEntity profile)

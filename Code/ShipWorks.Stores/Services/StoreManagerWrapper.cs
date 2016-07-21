@@ -50,7 +50,7 @@ namespace ShipWorks.Stores.Services
         /// <summary>
         /// Get the store for the related entity
         /// </summary>
-        public StoreEntity GetRelatedStore(long orderId) => StoreManager.GetRelatedStore(orderId);
+        public StoreEntity GetRelatedStore(long entityId) => StoreManager.GetRelatedStore(entityId);
 
         /// <summary>
         /// Get the store for the shipment
@@ -77,5 +77,11 @@ namespace ShipWorks.Stores.Services
             StatusPresetManager.CheckForChanges();
             StoreManager.CheckForChanges();
         }
+
+        /// <summary>
+        /// Checks whether any stores have automatic validation enabled
+        /// </summary>
+        public bool DoAnyStoresHaveAutomaticValidationEnabled() =>
+            StoreManager.DoAnyStoresHaveAutomaticValidationEnabled();
     }
 }

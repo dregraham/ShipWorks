@@ -5,8 +5,8 @@ using System.Linq;
 using System.Transactions;
 using System.Xml.Linq;
 using Interapptive.Shared.Data;
+using Interapptive.Shared.Threading;
 using log4net;
-using ShipWorks.Common.Threading;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Filters;
@@ -27,7 +27,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
         /// <summary>
         /// Convert all the 2x filters to 3x filters
         /// </summary>
-        public static void ConvertFilters(ProgressItem progress)
+        public static void ConvertFilters(IProgressReporter progress)
         {
             progress.Starting();
             progress.Detail = "Preparing...";
@@ -108,7 +108,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
         /// <summary>
         /// Create all the filters and folders for the given set of nodes using the specified parent
         /// </summary>
-        private static void CreateFilters(List<NodeV2> nodes, FilterNodeEntity parentNode, ProgressItem progress)
+        private static void CreateFilters(List<NodeV2> nodes, FilterNodeEntity parentNode, IProgressReporter progress)
         {
             // Go through each order filter
             foreach (NodeV2 node in nodes.ToList())

@@ -292,6 +292,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         [NDependIgnoreLongMethod]
         public override void ConfigureNewShipment(ShipmentEntity shipment)
         {
+            if (shipment.FedEx == null)
+            {
+                shipment.FedEx = new FedExShipmentEntity(shipment.ShipmentID);
+            }
+
             shipment.FedEx.MasterFormID = "";
 
             shipment.FedEx.HomeDeliveryType = (int) FedExHomeDeliveryType.None;

@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using ShipWorks.Common.Threading;
+using Interapptive.Shared.Threading;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.ShipSense.Hashing;
 
@@ -12,7 +12,7 @@ namespace ShipWorks.Shipping.ShipSense
         /// </summary>
         IKnowledgebaseHash HashingStrategy { get; }
 
-         /// <summary>
+        /// <summary>
         /// Gets the IShipSenseOrderItemKeyFactory being used by the knowledge base.
         /// </summary>
         IShipSenseOrderItemKeyFactory KeyFactory { get; }

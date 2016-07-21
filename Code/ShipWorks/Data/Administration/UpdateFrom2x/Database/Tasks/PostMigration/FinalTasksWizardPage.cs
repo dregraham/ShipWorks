@@ -1,22 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using ShipWorks.UI.Wizard;
-using ShipWorks.Common.Threading;
-using Interapptive.Shared.Data;
 using System.Data.SqlClient;
-using log4net;
-using Interapptive.Shared.UI;
-using System.Threading;
-using ShipWorks.Data.Connection;
-using ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode;
 using System.Transactions;
+using System.Windows.Forms;
 using Interapptive.Shared;
+using Interapptive.Shared.Data;
+using Interapptive.Shared.Threading;
+using Interapptive.Shared.UI;
+using log4net;
+using ShipWorks.Common.Threading;
+using ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode;
+using ShipWorks.Data.Connection;
+using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.PostMigration
 {
@@ -71,14 +66,14 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.PostMigratio
             e.NextPage = this;
 
             // Create the progress provider and window
-            ProgressProvider progressProvider = new ProgressProvider();
+            IProgressProvider progressProvider = new ProgressProvider();
             ProgressDlg progressDlg = new ProgressDlg(progressProvider);
             progressDlg.Title = "Finalizing Upgrade";
             progressDlg.Description = "ShipWorks is performing some final steps.";
             progressDlg.Show(this);
 
             // Used for async invoke
-            MethodInvoker<ProgressProvider> invoker = new MethodInvoker<ProgressProvider>(AsyncPerformSteps);
+            MethodInvoker<IProgressProvider> invoker = new MethodInvoker<IProgressProvider>(AsyncPerformSteps);
 
             // Pass along user state
             Dictionary<string, object> userState = new Dictionary<string, object>();
@@ -92,13 +87,13 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.PostMigratio
         /// <summary>
         /// Method meant to be called from an asycn invoker to update the database in the background
         /// </summary>
-        private void AsyncPerformSteps(ProgressProvider progressProvider)
+        private void AsyncPerformSteps(IProgressProvider progressProvider)
         {
-            var progressEmail = progressProvider.ProgressItems.Add("Import Email History");
-            var progressActions = progressProvider.ProgressItems.Add("Prepare Actions");
-            var progressFilters = progressProvider.ProgressItems.Add("Prepare Filters");
-            var progressDeleteArchives = progressProvider.ProgressItems.Add("Remove Archives");
-            var progressCleanup = progressProvider.ProgressItems.Add("Finalize Database");
+            var progressEmail = progressProvider.AddItem("Import Email History");
+            var progressActions = progressProvider.AddItem("Prepare Actions");
+            var progressFilters = progressProvider.AddItem("Prepare Filters");
+            var progressDeleteArchives = progressProvider.AddItem("Remove Archives");
+            var progressCleanup = progressProvider.AddItem("Finalize Database");
 
             EmailLogImporter.ImportEmailHistory(progressEmail);
 
@@ -112,7 +107,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.PostMigratio
         /// <summary>
         /// Drops the linked Archive Databases
         /// </summary>
-        private static void RemoveArchives(ProgressItem progress)
+        private static void RemoveArchives(IProgressReporter progress)
         {
             progress.Starting();
 
@@ -143,7 +138,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.PostMigratio
         /// <summary>
         /// Cleanup all data related to migration to leave the database in a perfectly clean 3x state
         /// </summary>
-        private static void CleanupDatabase(ProgressItem progress)
+        private static void CleanupDatabase(IProgressReporter progress)
         {
             progress.Starting();
 
@@ -182,7 +177,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.PostMigratio
         private static List<string> GenerateDropArchivesSqlCommands(SqlConnection con)
         {
             List<string> commands = new List<string>();
-            
+
             // need to drop all archive databases
             using (SqlCommand cmd = SqlCommandProvider.Create(con))
             {
@@ -193,8 +188,8 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.PostMigratio
                     while (reader.Read())
                     {
                         commands.Add(string.Format("IF DB_ID('{0}') IS NOT NULL" +
-                                                   "  BEGIN" + 
-                                                   "         ALTER DATABASE [{0}] SET SINGLE_USER WITH ROLLBACK IMMEDIATE" + 
+                                                   "  BEGIN" +
+                                                   "         ALTER DATABASE [{0}] SET SINGLE_USER WITH ROLLBACK IMMEDIATE" +
                                                    "         DROP DATABASE [{0}]" +
                                                    "  END", reader[0]));
                     }

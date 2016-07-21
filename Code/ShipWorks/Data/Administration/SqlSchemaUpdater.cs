@@ -6,6 +6,7 @@ using System.Linq;
 using Autofac;
 using Interapptive.Shared;
 using Interapptive.Shared.Data;
+using Interapptive.Shared.Threading;
 using log4net;
 using NDesk.Options;
 using ShipWorks.Actions;
@@ -140,7 +141,7 @@ namespace ShipWorks.Data.Administration
         /// customer or production scenarios.
         /// </summary>
         [NDependIgnoreLongMethod]
-        public static void UpdateDatabase(ProgressProvider progressProvider, bool debuggingMode = false)
+        public static void UpdateDatabase(IProgressProvider progressProvider, bool debuggingMode = false)
         {
             Version installed = GetInstalledSchemaVersion();
 

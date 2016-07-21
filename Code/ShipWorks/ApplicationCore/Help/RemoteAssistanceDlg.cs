@@ -1,18 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
-using System.Text;
+using System.Net;
+using System.Threading;
 using System.Windows.Forms;
+using Interapptive.Shared.Net;
+using Interapptive.Shared.Threading;
 using Interapptive.Shared.UI;
 using ShipWorks.Common.Threading;
-using System.Threading;
-using System.Net;
-using System.IO;
-using Interapptive.Shared.Net;
-using System.Diagnostics;
 
 namespace ShipWorks.ApplicationCore.Help
 {
@@ -72,11 +70,11 @@ namespace ShipWorks.ApplicationCore.Help
             ProgressDlg progressDlg = (ProgressDlg) state["progressDlg"];
             string pin = (string) state["pin"];
 
-            ProgressProvider progressProvider = progressDlg.ProgressProvider;
+            IProgressProvider progressProvider = progressDlg.ProgressProvider;
 
             // Create the progress items
-            ProgressItem progressConnect = progressProvider.ProgressItems.Add("Connect");
-            ProgressItem progressLaunch = progressProvider.ProgressItems.Add("Initiate");
+            IProgressReporter progressConnect = progressProvider.AddItem("Connect");
+            IProgressReporter progressLaunch = progressProvider.AddItem("Initiate");
 
             // Start connection phase
             progressConnect.Detail = "Connecting to support...";
@@ -201,7 +199,7 @@ namespace ShipWorks.ApplicationCore.Help
         {
             CookieContainer cookies = new CookieContainer();
 
-            // grab the cookies from the response            
+            // grab the cookies from the response
             HttpWebRequest request = (HttpWebRequest) WebRequest.Create(activateUrl);
             request.CookieContainer = cookies;
             request.Method = "POST";
@@ -224,7 +222,7 @@ namespace ShipWorks.ApplicationCore.Help
         /// <summary>
         /// Download the remote assistance client
         /// </summary>
-        private string DownloadClient(string pin, CookieContainer cookies, ProgressItem progress)
+        private string DownloadClient(string pin, CookieContainer cookies, IProgressReporter progress)
         {
             string clientExe = Path.Combine(DataPath.CreateUniqueTempPath(), "launcher.exe");
 

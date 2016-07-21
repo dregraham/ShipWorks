@@ -156,6 +156,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Metrics\DeobfuscationProcessor.cs" />
+    <Compile Include="Metrics\ITrackedDurationEvent.cs" />
     <Compile Include="Metrics\Telemetry.cs" />
     <Compile Include="Metrics\TrackedDurationEvent.cs" />
     <Compile Include="Security\AesEncryptionProvider.cs" />
@@ -220,6 +221,7 @@
     <Compile Include="System.ComponentModel.DataAnnotations\MaxLengthAttribute.cs" />
     <Compile Include="System.ComponentModel.DataAnnotations\MinLengthAttribute.cs" />
     <Compile Include="System.ComponentModel.DataAnnotations\PhoneAttribute.cs" />
+    <Compile Include="Threading\IProgressReporter.cs" />
     <Compile Include="Threading\ISchedulerProvider.cs" />
     <Compile Include="Net\ApiLogEncryption.cs" />
     <Compile Include="Net\HttpJsonVariableRequestSubmitter.cs" />
@@ -227,8 +229,10 @@
     <Compile Include="Security\IEncryptionProviderFactory.cs" />
     <Compile Include="Security\SecureText.cs" />
     <Compile Include="Security\SecureTextEncryptionProvider.cs" />
+    <Compile Include="Threading\ProgressItemStatus.cs" />
     <Compile Include="UI\IMessageHelper.cs" />
     <Compile Include="Pdf\IPdfDocument.cs" />
+    <Compile Include="Threading\IProgressProvider.cs" />
     <Compile Include="Utility\DetailsAttribute.cs" />
     <Compile Include="Utility\EnumResult.cs" />
     <Compile Include="Utility\DoubleExtensions.cs" />

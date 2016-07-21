@@ -1,19 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Common.Threading;
+using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
+using Interapptive.Shared;
 using Interapptive.Shared.Data;
-using ShipWorks.Data.Connection;
+using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
 using log4net;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Email;
-using ShipWorks.Templates;
 using ShipWorks.Email.Accounts;
-using System.Data;
-using Interapptive.Shared;
+using ShipWorks.Templates;
 
 namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.PostMigration
 {
@@ -30,7 +28,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.PostMigratio
         /// Migrate all the email history from ShipWorks 2x
         /// </summary>
         [NDependIgnoreLongMethod]
-        public static void ImportEmailHistory(ProgressItem progress)
+        public static void ImportEmailHistory(IProgressReporter progress)
         {
             progress.Starting();
 
@@ -116,7 +114,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.PostMigratio
                                     emailOutbound.SendAttemptCount = 1;
                                     emailOutbound.SendAttemptLastError = (oldResult == 0) ? "" : (oldResult == 1) ? "Canceled" : errorMessage;
 
-                                    // Create the Relations which will link the order\customer to the email 
+                                    // Create the Relations which will link the order\customer to the email
                                     emailOutbound.RelatedObjects.Add(new EmailOutboundRelationEntity { ObjectID = contextID.Value, RelationType = (int) EmailOutboundRelationType.ContextObject });
                                     emailOutbound.RelatedObjects.Add(new EmailOutboundRelationEntity { ObjectID = contextID.Value, RelationType = (int) EmailOutboundRelationType.RelatedObject });
 

@@ -1,23 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
-using ShipWorks.UI.Wizard;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Common.Threading;
-using ShipWorks.Data.Connection;
-using ShipWorks.Data.Adapter.Custom;
+using Interapptive.Shared.Threading;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Common.Threading;
+using ShipWorks.Data.Adapter.Custom;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Stores;
 using ShipWorks.Stores.Platforms.NetworkSolutions;
 using ShipWorks.Stores.Platforms.NetworkSolutions.WebServices;
-using Interapptive.Shared.UI;
-using ShipWorks.Stores;
-using System.Data.SqlClient;
+using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.PostMigration.StorePages
 {
@@ -82,20 +76,20 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.PostMigratio
         /// <summary>
         /// Method meant to be called from an asycn invoker to update the database in the background
         /// </summary>
-        private void AsyncPerformSteps(ProgressProvider progressProvider)
+        private void AsyncPerformSteps(IProgressProvider progressProvider)
         {
-            List<ProgressItem> progressItems = new List<ProgressItem>();
+            List<IProgressReporter> progressItems = new List<IProgressReporter>();
 
             // add all of the progress items
             foreach (NetworkSolutionsStoreEntity store in netSolStores)
             {
-                progressItems.Add(progressProvider.ProgressItems.Add(store.StoreName));
+                progressItems.Add(progressProvider.AddItem(store.StoreName));
             }
 
             int i = 0;
             foreach (NetworkSolutionsStoreEntity store in netSolStores)
             {
-                ProgressItem currentProgress = progressItems[i];
+                IProgressReporter currentProgress = progressItems[i];
 
                 // do the work for this store
                 UpdateLicenseData(store, currentProgress);
@@ -105,10 +99,10 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.PostMigratio
         }
 
         /// <summary>
-        /// Updates the local Store Url to that returned by the NetSol API.  A call to Tango needs to be made to 
+        /// Updates the local Store Url to that returned by the NetSol API.  A call to Tango needs to be made to
         /// link this user's license key to the new license identifier
         /// </summary>
-        private void UpdateLicenseData(NetworkSolutionsStoreEntity store, ProgressItem progress)
+        private void UpdateLicenseData(NetworkSolutionsStoreEntity store, IProgressReporter progress)
         {
             // begin
             progress.Starting();
@@ -174,7 +168,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.PostMigratio
             progressDlg.Show(this);
 
             // Used for async invoke
-            MethodInvoker<ProgressProvider> invoker = new MethodInvoker<ProgressProvider>(AsyncPerformSteps);
+            MethodInvoker<IProgressProvider> invoker = new MethodInvoker<IProgressProvider>(AsyncPerformSteps);
 
             // Pass along user state
             Dictionary<string, object> userState = new Dictionary<string, object>();
@@ -196,18 +190,18 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.PostMigratio
                 return;
             }
 
-            Dictionary<string, object> userState = (Dictionary<string, object>)result.AsyncState;
-            MethodInvoker<ProgressProvider> invoker = (MethodInvoker<ProgressProvider>)userState["invoker"];
-            ProgressDlg progressDlg = (ProgressDlg)userState["progressDlg"];
+            Dictionary<string, object> userState = (Dictionary<string, object>) result.AsyncState;
+            MethodInvoker<ProgressProvider> invoker = (MethodInvoker<ProgressProvider>) userState["invoker"];
+            ProgressDlg progressDlg = (ProgressDlg) userState["progressDlg"];
 
             // complete
             invoker.EndInvoke(result);
 
             // go to the next page
-            progressDlg.FormClosed += (object sender, FormClosedEventArgs e) => 
+            progressDlg.FormClosed += (object sender, FormClosedEventArgs e) =>
             {
-                Wizard.MoveNext(); 
-                progressDlg.Dispose(); 
+                Wizard.MoveNext();
+                progressDlg.Dispose();
             };
         }
     }

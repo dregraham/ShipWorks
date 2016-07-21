@@ -13,15 +13,6 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         private PersonAdapter shipPerson;
 
         /// <summary>
-        /// THIS IS ONLY TEMPORARY
-        /// It is being used to determine number of newly created shipments for the
-        /// LoadShipments telemetry metrics.
-        ///
-        /// Delete this after the performance code stories are done.
-        /// </summary>
-        public bool JustCreated { get; private set; }
-
-        /// <summary>
         /// Utility flag to help track if we've pulled customs items form the database
         /// </summary>
         public bool CustomsItemsLoaded { get; private set; }
@@ -62,7 +53,6 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// </summary>
         partial void CopyCustomShipmentData(IShipmentEntity source)
         {
-            JustCreated = source.JustCreated;
             CustomsItemsLoaded = source.CustomsItemsLoaded;
             originPerson = source.OriginPerson.CopyToNew();
             shipPerson = source.ShipPerson.CopyToNew();

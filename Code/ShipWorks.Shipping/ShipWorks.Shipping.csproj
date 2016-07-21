@@ -211,8 +211,11 @@
     <Compile Include="Carriers\Ups\UpsShipmentServicesBuilder.cs" />
     <Compile Include="Configuration\IShippingConfiguration.cs" />
     <Compile Include="Configuration\ShippingConfiguration.cs" />
-    <Compile Include="Loading\IShipmentLoader.cs" />
-    <Compile Include="Loading\ShipmentLoader.cs" />
+    <Compile Include="Loading\IShipmentsLoader.cs" />
+    <Compile Include="Loading\IShipmentsValidator.cs" />
+    <Compile Include="Loading\ShipmentsLoader.cs" />
+    <Compile Include="Loading\OrderLoader.cs" />
+    <Compile Include="Loading\ShipmentsValidator.cs" />
     <Compile Include="Loading\ShippingPanelLoadedShipmentResult.cs" />
     <Compile Include="Rating\ExceptionsRateFootnoteViewModel.cs" />
     <Compile Include="Rating\InformationFootnoteViewModel.cs" />
@@ -228,7 +231,6 @@
     <Compile Include="Services\DimensionsManagerWrapper.cs" />
     <Compile Include="Services\IDimensionsManager.cs" />
     <Compile Include="Rating\IRateSelection.cs" />
-    <Compile Include="IValidator.cs" />
     <Compile Include="Rating\IRateSelectionFactory.cs" />
     <Compile Include="Rating\RateSelection.cs" />
     <Compile Include="Rating\RateSelectionFactory.cs" />
@@ -236,7 +238,7 @@
     <Compile Include="Services\RatesRetriever.cs" />
     <Compile Include="Services\RatesRetrieverService.cs" />
     <Compile Include="Services\ShipmentFactory.cs" />
-    <Compile Include="Services\ShipmentLoaderService.cs" />
+    <Compile Include="Services\OrderLoaderService.cs" />
     <Compile Include="Services\ShipmentProcessor.cs" />
     <Compile Include="Services\ShipmentProcessorExecutionState.cs" />
     <Compile Include="Services\ShipmentProcessorService.cs" />
@@ -245,7 +247,6 @@
     <Compile Include="Services\Dialogs\ShippingDialogService.cs" />
     <Compile Include="Services\ShippingManagerWrapper.cs" />
     <Compile Include="Services\ShippingProfileManagerWrapper.cs" />
-    <Compile Include="ShipmentAddressValidator.cs" />
     <Compile Include="ShippingErrorManager.cs" />
     <Compile Include="Services\ShippingOriginManagerWrapper.cs" />
     <Compile Include="..\ShipWorks\Properties\AssemblyInfoCommon.cs">

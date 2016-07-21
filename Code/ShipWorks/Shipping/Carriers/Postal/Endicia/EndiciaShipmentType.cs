@@ -87,6 +87,24 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         }
 
         /// <summary>
+        /// Apply the configured defaults and profile rule settings to the given shipment
+        /// </summary>
+        public override void ConfigureNewShipment(ShipmentEntity shipment)
+        {
+            if (shipment.Postal == null)
+            {
+                shipment.Postal = new PostalShipmentEntity(shipment.ShipmentID);
+            }
+
+            if (shipment.Postal.Endicia == null)
+            {
+                shipment.Postal.Endicia = new EndiciaShipmentEntity(shipment.ShipmentID);
+            }
+
+            base.ConfigureNewShipment(shipment);
+        }
+
+        /// <summary>
         /// Get the service description for the shipment
         /// </summary>
         public override string GetServiceDescription(ShipmentEntity shipment)

@@ -6,7 +6,9 @@ using Autofac;
 using Divelements.SandGrid;
 using Divelements.SandGrid.Specialized;
 using Interapptive.Shared.Collections;
+using Interapptive.Shared.Threading;
 using Interapptive.Shared.UI;
+using Interapptive.Shared.Utility;
 using Interapptive.Shared.Win32;
 using log4net;
 using ShipWorks.ApplicationCore;
@@ -34,7 +36,7 @@ namespace ShipWorks.Common.Threading
         bool autoCloseWhenComplete = false;
 
         // Source of progress items to display
-        ProgressProvider progressProvider;
+        IProgressProvider progressProvider;
 
         // What to show for the "OK" button, depending on state
         string closeTextWhenRunning = "OK";
@@ -58,19 +60,14 @@ namespace ShipWorks.Common.Threading
         /// <summary>
         /// Constructor
         /// </summary>
-        public ProgressDlg(ProgressProvider progressProvider)
+        public ProgressDlg(IProgressProvider progressProvider)
         {
             InitializeComponent();
-
-            if (progressProvider == null)
-            {
-                throw new ArgumentNullException("progressProvider");
-            }
 
             // Get rid of the sample rows from the designer
             progressGrid.Rows.Clear();
 
-            this.progressProvider = progressProvider;
+            this.progressProvider = MethodConditions.EnsureArgumentIsNotNull(progressProvider, nameof(progressProvider));
 
             title.Text = "";
             description.Text = "";
@@ -104,7 +101,7 @@ namespace ShipWorks.Common.Threading
             LoadProgressItems();
 
             // We have to listen for changes to the progress rows
-            progressProvider.ProgressItems.CollectionChanged += new CollectionChangedEventHandler<ProgressItem>(OnChangeProgressItems);
+            progressProvider.ProgressItems.CollectionChanged += OnChangeProgressItems;
         }
 
         #region Properties
@@ -112,10 +109,7 @@ namespace ShipWorks.Common.Threading
         /// <summary>
         /// The ProgressProvider the window is using for displaying progress.
         /// </summary>
-        public ProgressProvider ProgressProvider
-        {
-            get { return progressProvider; }
-        }
+        public IProgressProvider ProgressProvider => progressProvider;
 
         /// <summary>
         /// Title of the progress control
@@ -305,7 +299,7 @@ namespace ShipWorks.Common.Threading
         /// <summary>
         /// A change to the collection of progress items
         /// </summary>
-        void OnChangeProgressItems(object sender, CollectionChangedEventArgs<ProgressItem> e)
+        void OnChangeProgressItems(object sender, CollectionChangedEventArgs<IProgressReporter> e)
         {
             if (IsDisposed)
             {
@@ -679,7 +673,7 @@ namespace ShipWorks.Common.Threading
             }
 
             // Don't care what happens to them now
-            progressProvider.ProgressItems.CollectionChanged -= new CollectionChangedEventHandler<ProgressItem>(OnChangeProgressItems);
+            progressProvider.ProgressItems.CollectionChanged -= OnChangeProgressItems;
 
             ClearRows();
         }

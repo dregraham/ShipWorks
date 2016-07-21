@@ -7,6 +7,7 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Autofac;
+using Autofac.Features.OwnedInstances;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.UI;
@@ -37,20 +38,21 @@ namespace ShipWorks.Shipping.Services.Dialogs
         private CompositeDisposable subscriptions;
         private readonly IMessageHelper messageHelper;
         private readonly ISchedulerProvider schedulerProvider;
-        private readonly IWin32Window mainWindow;
         private readonly IShippingManager shippingManager;
+        private readonly Func<Owned<IOrderLoader>> shipmentsLoaderFactory;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public ShippingDialogService(IMessenger messenger, IMessageHelper messageHelper,
-            ISchedulerProvider schedulerProvider, IWin32Window mainWindow, IShippingManager shippingManager)
+            ISchedulerProvider schedulerProvider, IShippingManager shippingManager,
+            Func<Owned<IOrderLoader>> shipmentsLoaderFactory)
         {
             this.messenger = messenger;
             this.messageHelper = messageHelper;
             this.schedulerProvider = schedulerProvider;
-            this.mainWindow = mainWindow;
             this.shippingManager = shippingManager;
+            this.shipmentsLoaderFactory = shipmentsLoaderFactory;
         }
 
         /// <summary>
@@ -115,17 +117,17 @@ namespace ShipWorks.Shipping.Services.Dialogs
         /// </summary>
         private async Task LoadOrdersForShippingDialog(OpenShippingDialogWithOrdersMessage message)
         {
-            Control owner = IoC.UnsafeGlobalLifetimeScope.Resolve<Control>();
-
-            if (message.OrderIDs.Count() > ShipmentsLoader.MaxAllowedOrders)
+            if (message.OrderIDs.Count() > ShipmentsLoaderConstants.MaxAllowedOrders)
             {
                 string actionName = shippingPanelTabNames[message.InitialDisplay];
-                MessageHelper.ShowInformation(mainWindow, $"You can only {actionName} up to {ShipmentsLoader.MaxAllowedOrders} orders at a time.");
+                messageHelper.ShowInformation(
+                    $"You can only {actionName} up to {ShipmentsLoaderConstants.MaxAllowedOrders} orders at a time.");
                 return;
             }
 
-            ShipmentsLoader loader = new ShipmentsLoader(owner);
-            ShipmentsLoadedEventArgs results = await loader.LoadAsync(message.OrderIDs).ConfigureAwait(false);
+            IOrderLoader shipmentsLoader = shipmentsLoaderFactory().Value;
+            ShipmentsLoadedEventArgs results = await shipmentsLoader.LoadAsync(message.OrderIDs, ProgressDisplayOptions.Delay)
+                .ConfigureAwait(false);
 
             if (results.Cancelled)
             {
@@ -142,10 +144,7 @@ namespace ShipWorks.Shipping.Services.Dialogs
         {
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope(ConfigureShippingDialogDependencies))
             {
-                // Show the shipping window.
-                ShippingDlg dlg = lifetimeScope.Resolve<ShippingDlg>(TypedParameter.From(message));
-
-                dlg.ShowDialog(mainWindow);
+                messageHelper.ShowDialog(() => lifetimeScope.Resolve<ShippingDlg>(TypedParameter.From(message)));
             }
 
             // We always check for new server messages after shipping, since if there was a shipping problem

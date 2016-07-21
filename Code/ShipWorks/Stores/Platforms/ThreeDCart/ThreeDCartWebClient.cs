@@ -9,16 +9,16 @@ using System.Xml.XPath;
 using Interapptive.Shared;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Net;
+using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
+using log4net;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Communication.Throttling;
 using ShipWorks.Stores.Platforms.ThreeDCart.AdvancedApi;
 using ShipWorks.Stores.Platforms.ThreeDCart.Enums;
 using ShipWorks.Stores.Platforms.ThreeDCart.WebServices.Cart;
 using ShipWorks.Stores.Platforms.ThreeDCart.WebServices.CartAdvanced;
-using log4net;
-using ShipWorks.Common.Threading;
-using ShipWorks.Stores.Communication.Throttling;
 
 namespace ShipWorks.Stores.Platforms.ThreeDCart
 {
@@ -634,10 +634,10 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
                 {
                     // Create our product dto to return, setting the properties we know
                     ThreeDCartProductDTO productDto = new ThreeDCartProductDTO
-                        {
-                            ItemName = threeDCartOrderItemProductId,
-                            WarehouseBin = warehouseBin
-                        };
+                    {
+                        ItemName = threeDCartOrderItemProductId,
+                        WarehouseBin = warehouseBin
+                    };
 
                     LoadProductImages(productDto, apiProduct);
 
@@ -679,13 +679,13 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
 
                         // Create the product dto to return
                         ThreeDCartProductDTO productDto = new ThreeDCartProductDTO
-                            {
-                                ItemName = threeDCartOrderItemName,
-                                OptionDescription = optionTypeValue.OptionValueNode.XPathSelectElement("Name").Value,
-                                OptionName = optionTypeValue.OptionTypeNode.Value,
-                                OptionPrice = optionPrice,
-                                WarehouseBin = warehouseBin
-                            };
+                        {
+                            ItemName = threeDCartOrderItemName,
+                            OptionDescription = optionTypeValue.OptionValueNode.XPathSelectElement("Name").Value,
+                            OptionName = optionTypeValue.OptionTypeNode.Value,
+                            OptionPrice = optionPrice,
+                            WarehouseBin = warehouseBin
+                        };
 
                         LoadProductImages(productDto, apiProduct);
 
@@ -848,7 +848,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
             }
             catch (Exception ex)
             {
-                throw WebHelper.TranslateWebException(ex, typeof (ThreeDCartException));
+                throw WebHelper.TranslateWebException(ex, typeof(ThreeDCartException));
             }
 
             // Return the result xml
@@ -955,7 +955,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
                     XmlNode errorNode = GetErrorFromResponse(orderCountResultNode);
                     if (errorNode != null)
                     {
-                        throw new ThreeDCartException("ShipWorks was unable to connect to 3dcart with the Store Url and API User Key provided.",  errorNode);
+                        throw new ThreeDCartException("ShipWorks was unable to connect to 3dcart with the Store Url and API User Key provided.", errorNode);
                     }
                 }
             }
