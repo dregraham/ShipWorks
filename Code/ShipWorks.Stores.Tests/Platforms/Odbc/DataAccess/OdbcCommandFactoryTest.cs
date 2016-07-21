@@ -6,6 +6,7 @@ using ShipWorks.Stores.Platforms.Odbc.DataSource;
 using ShipWorks.Stores.Platforms.Odbc.Download;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
 using System;
+using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Stores.Platforms.Odbc.Upload;
 using Xunit;
 
@@ -111,9 +112,27 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.DataAccess
 
                 Mock<IOdbcFieldMap> odbcFieldMap = mock.Mock<IOdbcFieldMap>();
 
-                IOdbcUploadCommand downloadCommand = testObject.CreateUploadCommand(new OdbcStoreEntity(), odbcFieldMap.Object);
+                IOdbcUploadCommand downloadCommand =
+                    testObject.CreateUploadCommand(
+                        new OdbcStoreEntity {UploadStrategy = (int) OdbcShipmentUploadStrategy.UseImportDataSource},
+                        odbcFieldMap.Object);
 
                 Assert.IsType<OdbcUploadCommand>(downloadCommand);
+            }
+        }
+
+        [Fact]
+        public void CreateUploadCommand_ThrowsShipWorksOdbcException_WhenStoreUploadStrategyIsDoNotUpload()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                var testObject = mock.Create<OdbcCommandFactory>();
+
+                Mock<IOdbcFieldMap> odbcFieldMap = mock.Mock<IOdbcFieldMap>();
+
+                Assert.Throws<ShipWorksOdbcException>(
+                    () => testObject.CreateUploadCommand(new OdbcStoreEntity(), odbcFieldMap.Object));
+
             }
         }
     }
