@@ -1,4 +1,12 @@
-﻿using Autofac;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Linq;
+using System.Reactive.Linq;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using Autofac;
 using Interapptive.Shared;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.UI;
@@ -30,14 +38,6 @@ using ShipWorks.Stores;
 using ShipWorks.Stores.Content;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Linq;
-using System.Reactive.Linq;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using Timer = System.Windows.Forms.Timer;
 
 namespace ShipWorks.Shipping
@@ -285,7 +285,7 @@ namespace ShipWorks.Shipping
 
             if (!multiValued && comboShipmentType.SelectedIndex >= 0)
             {
-                selected = (ShipmentTypeCode)comboShipmentType.SelectedValue;
+                selected = (ShipmentTypeCode) comboShipmentType.SelectedValue;
             }
 
             List<KeyValuePair<string, ShipmentTypeCode>> enabledTypes = ShipmentTypeManager.ShipmentTypes
@@ -472,7 +472,7 @@ namespace ShipWorks.Shipping
 
             // Get the list of setup shipment types up front - so in case it changes from another ShipWorks in the middle of loading,
             // all shipments of the same type are loaded in the same way.
-            uiActivatedShipmentTypes = ShippingSettings.Fetch().ActivatedTypes.Select(v => (ShipmentTypeCode)v).ToList();
+            uiActivatedShipmentTypes = ShippingSettings.Fetch().ActivatedTypes.Select(v => (ShipmentTypeCode) v).ToList();
             uiActivatedShipmentTypes.Add(ShipmentTypeCode.None);
 
             BackgroundExecutor<ShipmentEntity> executor = new BackgroundExecutor<ShipmentEntity>(this, "Preparing Shipments", "ShipWorks is preparing the shipments.", "Shipment {0} of {1}");
@@ -585,11 +585,11 @@ namespace ShipWorks.Shipping
             loadingSelectedShipments = false;
 
             // Extract userState
-            Dictionary<string, object> userState = (Dictionary<string, object>)e.UserState;
-            loadedShipmentEntities = (List<ShipmentEntity>)userState["loaded"];
-            List<ShipmentEntity> deleted = (List<ShipmentEntity>)userState["deleted"];
-            bool resortWhenDone = (bool)userState["resortWhenDone"];
-            bool getRatesWhenDone = (bool)userState["getRatesWhenDone"];
+            Dictionary<string, object> userState = (Dictionary<string, object>) e.UserState;
+            loadedShipmentEntities = (List<ShipmentEntity>) userState["loaded"];
+            List<ShipmentEntity> deleted = (List<ShipmentEntity>) userState["deleted"];
+            bool resortWhenDone = (bool) userState["resortWhenDone"];
+            bool getRatesWhenDone = (bool) userState["getRatesWhenDone"];
 
             // Go thread each shipment that we loaded and update the corresponding row in the grid with the latest shipment data
             ApplyShipmentsToGridRows(loadedShipmentEntities);
@@ -753,7 +753,7 @@ namespace ShipWorks.Shipping
                 if (shipmentType != null)
                 {
                     // If the selected type is one that's not currently enabled, add it back in so it can be selected
-                    List<KeyValuePair<string, ShipmentTypeCode>> enabledTypes = (List<KeyValuePair<string, ShipmentTypeCode>>)comboShipmentType.DataSource;
+                    List<KeyValuePair<string, ShipmentTypeCode>> enabledTypes = (List<KeyValuePair<string, ShipmentTypeCode>>) comboShipmentType.DataSource;
                     if (enabledTypes.All(p => p.Value != shipmentType.ShipmentTypeCode))
                     {
                         enabledTypes.Add(new KeyValuePair<string, ShipmentTypeCode>(shipmentType.ShipmentTypeName, shipmentType.ShipmentTypeCode));
@@ -985,6 +985,7 @@ namespace ShipWorks.Shipping
             if (shipmentType == null)
             {
                 newServiceControl = new MultiSelectServiceControl(rateControl);
+                newServiceControl.Initialize(lifetimeScope);
             }
             else
             {
@@ -1020,7 +1021,7 @@ namespace ShipWorks.Shipping
                 ShipmentTypeCode shipmentTypeCode = shipment.ShipmentTypeCode;
 
                 // Check that the combo box has the shipment type in it
-                List<KeyValuePair<string, ShipmentTypeCode>> dataSource = (List<KeyValuePair<string, ShipmentTypeCode>>)comboShipmentType.DataSource;
+                List<KeyValuePair<string, ShipmentTypeCode>> dataSource = (List<KeyValuePair<string, ShipmentTypeCode>>) comboShipmentType.DataSource;
                 if (dataSource.Select(d => d.Value).All(v => v != shipmentTypeCode))
                 {
                     // The combo box does not have the shipment type in it, so we need to reload
@@ -1429,7 +1430,7 @@ namespace ShipWorks.Shipping
                         // If the there is a specific shipment type selected, set it
                         if (!comboShipmentType.MultiValued)
                         {
-                            shipment.ShipmentTypeCode = (ShipmentTypeCode)comboShipmentType.SelectedValue;
+                            shipment.ShipmentTypeCode = (ShipmentTypeCode) comboShipmentType.SelectedValue;
                         }
                     }
                 }
@@ -1469,8 +1470,8 @@ namespace ShipWorks.Shipping
         {
             contextMenuProfiles.Items.Clear();
 
-            ShipmentTypeCode? shipmentTypeCode = comboShipmentType.MultiValued ? (ShipmentTypeCode?)null :
-                (ShipmentTypeCode)comboShipmentType.SelectedValue;
+            ShipmentTypeCode? shipmentTypeCode = comboShipmentType.MultiValued ? (ShipmentTypeCode?) null :
+                (ShipmentTypeCode) comboShipmentType.SelectedValue;
 
             // Add each relevant profile
             if (shipmentTypeCode != null)
@@ -1512,8 +1513,8 @@ namespace ShipWorks.Shipping
         /// </summary>
         private void OnApplyProfile(object sender, EventArgs e)
         {
-            ToolStripMenuItem menuItem = (ToolStripMenuItem)sender;
-            ShippingProfileEntity profile = (ShippingProfileEntity)menuItem.Tag;
+            ToolStripMenuItem menuItem = (ToolStripMenuItem) sender;
+            ShippingProfileEntity profile = (ShippingProfileEntity) menuItem.Tag;
 
             // Save any changes that have been made thus far, so the profile changes can be made on top of that
             SaveChangesToUIDisplayedShipments();
@@ -1625,7 +1626,7 @@ namespace ShipWorks.Shipping
         {
             UpdateEditControlsSecurity();
 
-            ShipmentGridShipmentsChangedEventArgs eventArgs = (ShipmentGridShipmentsChangedEventArgs)e;
+            ShipmentGridShipmentsChangedEventArgs eventArgs = (ShipmentGridShipmentsChangedEventArgs) e;
             foreach (ShipmentEntity shipment in eventArgs.ShipmentsAdded)
             {
                 //TODO: Delete this line in the next story, use the hash that's stored on the shipment so that we don't have to populate the order!!!
@@ -1643,7 +1644,7 @@ namespace ShipWorks.Shipping
         {
             UpdateEditControlsSecurity();
 
-            ShipmentGridShipmentsChangedEventArgs eventArgs = (ShipmentGridShipmentsChangedEventArgs)e;
+            ShipmentGridShipmentsChangedEventArgs eventArgs = (ShipmentGridShipmentsChangedEventArgs) e;
             foreach (ShipmentEntity shipment in eventArgs.ShipmentsRemoved)
             {
                 shipSenseSynchronizer.Remove(shipment);
@@ -1678,7 +1679,7 @@ namespace ShipWorks.Shipping
                 return null;
             }
 
-            return shipmentTypeManager.Get((ShipmentTypeCode)typeCode);
+            return shipmentTypeManager.Get((ShipmentTypeCode) typeCode);
         }
 
         /// <summary>
@@ -1829,7 +1830,7 @@ namespace ShipWorks.Shipping
             // What to do for each shipment
             getRatesBackgroundWorker.DoWork += (_sender, _e) =>
             {
-                ShipmentEntity shipment = (ShipmentEntity)_e.Argument;
+                ShipmentEntity shipment = (ShipmentEntity) _e.Argument;
                 _e.Result = _e.Argument;
 
                 try
@@ -1898,7 +1899,7 @@ namespace ShipWorks.Shipping
                 "Shipment {0} of {1}");
 
             List<string> newErrors = new List<string>();
-            
+
             await executor.ExecuteAsync((shipment, state, issueAdder) => VoidShipment(shipment, newErrors), shipments);
 
             // Apply the edits that were made in the background to the grid rows
@@ -2048,11 +2049,11 @@ namespace ShipWorks.Shipping
         private void CounterRateCarrierConfiguredWhileProcessing()
         {
             // This is for a specific shipment type, so we're always going to need to show the wizard
-            Invoke((MethodInvoker)delegate
-           {
-               ServiceControl.SaveToShipments();
-               ServiceControl.LoadAccounts();
-           });
+            Invoke((MethodInvoker) delegate
+            {
+                ServiceControl.SaveToShipments();
+                ServiceControl.LoadAccounts();
+            });
         }
 
         /// <summary>
