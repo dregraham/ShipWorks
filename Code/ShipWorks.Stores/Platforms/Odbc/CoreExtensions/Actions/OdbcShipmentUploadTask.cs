@@ -12,6 +12,9 @@ using System.Linq;
 
 namespace ShipWorks.Stores.Platforms.Odbc.CoreExtensions.Actions
 {
+    /// <summary>
+    /// Action task for uploading shipment details for ODBC
+    /// </summary>
     [ActionTask("Upload shipment details", "OdbcShipmentUploadTask", ActionTaskCategory.UpdateOnline)]
     public class OdbcShipmentUploadTask : StoreInstanceTaskBase
     {

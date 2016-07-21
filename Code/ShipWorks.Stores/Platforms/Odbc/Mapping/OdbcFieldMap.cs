@@ -108,13 +108,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
             // Reset all the values first
             ResetValues();
 
-            // If the entities are null return after resetting values
-            if (entities == null)
-            {
-                return;
-            }
-
-            foreach (IEntity2 entity in entities)
+            foreach (IEntity2 entity in entities ?? Enumerable.Empty<IEntity2>())
             {
                 foreach (IOdbcFieldMapEntry entry in Entries)
                 {

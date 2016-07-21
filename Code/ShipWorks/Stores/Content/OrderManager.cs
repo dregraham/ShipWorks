@@ -44,7 +44,7 @@ namespace ShipWorks.Stores.Content
         {
             MethodConditions.EnsureArgumentIsNotNull(prefetchPath, nameof(prefetchPath));
 
-            OrderEntity order = null; 
+            OrderEntity order = null;
 
             EntityType entityType = EntityUtility.GetEntityType(orderId);
             IEntityField2 pkField = EntityUtility.GetPrimaryKeyField(entityType);
@@ -60,5 +60,10 @@ namespace ShipWorks.Stores.Content
 
             return order;
         }
+
+        /// <summary>
+        /// Returns the most recent, non-voided, processed shipment for the provided order
+        /// </summary>
+        public ShipmentEntity GetLatestActiveShipment(long orderID) => OrderUtility.GetLatestActiveShipment(orderID);
     }
 }

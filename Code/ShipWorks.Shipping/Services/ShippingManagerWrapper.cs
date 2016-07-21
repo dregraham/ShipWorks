@@ -226,10 +226,5 @@ namespace ShipWorks.Shipping.Services
         /// </summary>
         public string GetCarrierName(ShipmentTypeCode shipmentTypeCode) =>
             ShippingManager.GetCarrierName(shipmentTypeCode);
-
-        /// <summary>
-        /// Returns the most recent, non-voided, processed shipment for the provided order
-        /// </summary>
-        public ShipmentEntity GetLatestActiveShipment(long orderID) => OrderUtility.GetLatestActiveShipment(orderID);
     }
 }

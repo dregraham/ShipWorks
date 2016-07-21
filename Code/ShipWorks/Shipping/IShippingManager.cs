@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Services;
@@ -100,10 +99,5 @@ namespace ShipWorks.Shipping
         /// Gets the shipment type carrier name.
         /// </summary>
         string GetCarrierName(ShipmentTypeCode shipmentTypeCode);
-
-        /// <summary>
-        /// Returns the most recent, non-voided, processed shipment for the provided order
-        /// </summary>
-        ShipmentEntity GetLatestActiveShipment(long orderID);
     }
 }
