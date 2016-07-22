@@ -70,7 +70,7 @@
             </DataTemplate.Triggers>
         </DataTemplate>
     </Control.Resources>
-    <Grid Margin="10">
+    <Grid Margin="20 10 10 10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
@@ -82,7 +82,6 @@
         <Label Grid.Row="0"
                Grid.Column="0"
                Grid.ColumnSpan="2"
-               Margin="14 0 0 0"
                Content="Column Mappings"
                FontWeight="Bold"
                Style="{StaticResource Header}" />
