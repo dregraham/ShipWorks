@@ -39,7 +39,7 @@ namespace ShipWorks.Shipping.Tests.Services
             mock.Provide<IMessenger>(messenger);
 
             mock.Override<IOrderLoader>()
-                .Setup(x => x.LoadAsync(It.IsAny<IEnumerable<long>>(), It.IsAny<ProgressDisplayOptions>()))
+                .Setup(x => x.LoadAsync(It.IsAny<IEnumerable<long>>(), It.IsAny<ProgressDisplayOptions>(), It.IsAny<bool>()))
                 .ReturnsAsync(new ShipmentsLoadedEventArgs(null, false, null, new[] { shipment }.ToList()));
 
             testObject = mock.Create<OrderLoaderService>();
@@ -48,7 +48,7 @@ namespace ShipWorks.Shipping.Tests.Services
         [Fact]
         public async Task Load_DelegatesToShipmentAdapterFactory_WhenShipmentsLoaded()
         {
-            LoadedOrderSelection handlededOrderSelectionLoaded = (await testObject.Load(new[] { 1L }))
+            LoadedOrderSelection handlededOrderSelectionLoaded = (await testObject.Load(new[] { 1L }, false))
                 .OfType<LoadedOrderSelection>().Single();
 
             mock.Mock<ICarrierShipmentAdapterFactory>()
@@ -64,7 +64,7 @@ namespace ShipWorks.Shipping.Tests.Services
                 .Setup(x => x.Get(It.IsAny<ShipmentEntity>()))
                 .Returns(adapter);
 
-            LoadedOrderSelection result = (await testObject.Load(new[] { 1L }))
+            LoadedOrderSelection result = (await testObject.Load(new[] { 1L }, false))
                 .OfType<LoadedOrderSelection>().Single();
 
             Assert.Equal(shipment.Order, result.Order);

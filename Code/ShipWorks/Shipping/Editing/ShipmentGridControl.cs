@@ -440,7 +440,7 @@ namespace ShipWorks.Shipping.Editing
                     {
                         IOrderLoader loader = lifetimeScope.Resolve<IOrderLoader>();
                         ShipmentsLoadedEventArgs result = await loader.LoadAsync(dlg.Selection.OrderedKeys,
-                            ProgressDisplayOptions.Delay);
+                            ProgressDisplayOptions.Delay, true);
                         OnLoadMoreShipmentsCompleted(this, result);
                     }
                 }

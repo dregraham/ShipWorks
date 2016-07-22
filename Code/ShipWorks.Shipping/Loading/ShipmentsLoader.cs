@@ -45,7 +45,7 @@ namespace ShipWorks.Shipping.Loading
         /// Start the task to load shipments
         /// </summary>
         public Task<bool> StartTask(IProgressProvider progressProvider, List<long> orderIDs,
-            IDictionary<long, ShipmentEntity> globalShipments, BlockingCollection<ShipmentEntity> shipmentsToValidate)
+            IDictionary<long, ShipmentEntity> globalShipments, BlockingCollection<ShipmentEntity> shipmentsToValidate, bool createIfNoShipments)
         {
             IProgressReporter workProgress = progressProvider.AddItem("Load Shipments");
 
@@ -56,7 +56,7 @@ namespace ShipWorks.Shipping.Loading
                 // We need to make sure filters are up to date so profiles being applied can be as accurate as possible.
                 filterHelper.EnsureFiltersUpToDate(TimeSpan.FromSeconds(15));
 
-                bool wasCanceled = LoadShipments(workProgress, orderIDs, globalShipments, shipmentsToValidate);
+                bool wasCanceled = LoadShipments(workProgress, orderIDs, globalShipments, shipmentsToValidate, createIfNoShipments);
 
                 workProgress.Completed();
 
@@ -68,7 +68,7 @@ namespace ShipWorks.Shipping.Loading
         /// Load all the shipments on a background thread
         /// </summary>
         private bool LoadShipments(IProgressReporter workProgress, List<long> entityIDsOriginalSort,
-            IDictionary<long, ShipmentEntity> globalShipments, BlockingCollection<ShipmentEntity> shipmentsToValidate)
+            IDictionary<long, ShipmentEntity> globalShipments, BlockingCollection<ShipmentEntity> shipmentsToValidate, bool createIfNoShipments)
         {
             using (ITrackedDurationEvent trackedDurationEvent = startDurationEvent("LoadShipments"))
             {
@@ -95,7 +95,7 @@ namespace ShipWorks.Shipping.Loading
                         // Execute the work
                         try
                         {
-                            if (shipmentFactory.AutoCreateIfNecessary(order))
+                            if (shipmentFactory.AutoCreateIfNecessary(order, createIfNoShipments))
                             {
                                 newShipmentCount += 1;
                             }

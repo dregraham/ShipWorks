@@ -15,6 +15,6 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Auto create a shipment if necessary
         /// </summary>
-        bool AutoCreateIfNecessary(OrderEntity order);
+        bool AutoCreateIfNecessary(OrderEntity order, bool createIfNoShipments);
     }
 }

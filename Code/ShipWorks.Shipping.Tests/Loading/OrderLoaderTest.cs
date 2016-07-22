@@ -63,7 +63,7 @@ namespace ShipWorks.Shipping.Tests.Loading
             testObject = mock.Create<OrderLoader>();
 
             var orderSelectionLoaded = await testObject.LoadAsync(new[] { orderEntity.OrderID },
-                ProgressDisplayOptions.NeverShow);
+                ProgressDisplayOptions.NeverShow, false);
 
             Assert.Equal(0, orderSelectionLoaded.Shipments.Count());
         }
@@ -76,7 +76,7 @@ namespace ShipWorks.Shipping.Tests.Loading
             testObject = mock.Create<OrderLoader>();
 
             await testObject.LoadAsync(new[] { orderEntity.OrderID },
-                ProgressDisplayOptions.NeverShow);
+                ProgressDisplayOptions.NeverShow, false);
 
             mock.Mock<IValidatedAddressManager>().Verify(av => av.ValidateShipmentAsync(It.IsAny<ShipmentEntity>()), Times.Never);
         }
