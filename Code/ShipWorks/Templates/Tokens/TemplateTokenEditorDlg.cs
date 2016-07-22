@@ -15,7 +15,7 @@ namespace ShipWorks.Templates.Tokens
     /// <summary>
     /// Window for editing a token in a bigger view
     /// </summary>
-    public partial class TemplateTokenEditorDlg : Form
+    public partial class TemplateTokenEditorDlg : Form, ITemplateTokenEditorDlg
     {
         /// <summary>
         /// Constructor

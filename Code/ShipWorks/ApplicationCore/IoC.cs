@@ -34,6 +34,7 @@ using System;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
+using ShipWorks.Templates.Tokens;
 
 namespace ShipWorks.ApplicationCore
 {
@@ -191,6 +192,8 @@ namespace ShipWorks.ApplicationCore
             builder.RegisterType<UspsAccountInfoControl>();
             builder.RegisterType<UspsAccountManagerControl>();
             builder.RegisterType<UspsPurchasePostageDlg>();
+            builder.RegisterType<TemplateTokenEditorDlg>()
+                .As<ITemplateTokenEditorDlg>();
         }
 
         /// <summary>
@@ -224,7 +227,7 @@ namespace ShipWorks.ApplicationCore
 
             builder.RegisterType<CustomerLicenseReader>()
                 .AsImplementedInterfaces();
-                
+
             builder.RegisterType<StoreLicense>()
                 .AsSelf();
 
