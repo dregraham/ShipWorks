@@ -169,9 +169,11 @@
     <Compile Include="Platforms\LemonStand\LemonStandStatusCodeProvider.cs" />
     <Compile Include="Platforms\LemonStand\LemonStandStoreType.cs" />
     <Compile Include="Platforms\LemonStand\LemonStandWebClient.cs" />
-    <Compile Include="Platforms\Odbc\DataAccess\IOdbcCommandFactory.cs" />
+    <Compile Include="Platforms\Odbc\DataAccess\IOdbcDownloadCommandFactory.cs" />
     <Compile Include="Platforms\Odbc\CoreExtensions\Actions\OdbcShipmentUploadTask.cs" />
     <Compile Include="Platforms\Odbc\CoreExtensions\Actions\OdbcUploadMenuCommand.cs" />
+    <Compile Include="Platforms\Odbc\DataAccess\IOdbcUploadCommandFactory.cs" />
+    <Compile Include="Platforms\Odbc\DataAccess\OdbcUploadCommandFactory.cs" />
     <Compile Include="Platforms\Odbc\Upload\IOdbcUploadCommand.cs" />
     <Compile Include="Platforms\Odbc\Upload\IOdbcUploader.cs" />
     <Compile Include="Platforms\Odbc\Upload\OdbcTableUploadQuery.cs" />
@@ -223,7 +225,7 @@
     <Compile Include="Platforms\Odbc\Mapping\ShipWorksOdbcMappableField.cs" />
     <Compile Include="Platforms\Odbc\OdbcCipherKey.cs" />
     <Compile Include="Platforms\Odbc\DataSource\Schema\OdbcColumn.cs" />
-    <Compile Include="Platforms\Odbc\DataAccess\OdbcCommandFactory.cs" />
+    <Compile Include="Platforms\Odbc\DataAccess\OdbcDownloadCommandFactory.cs" />
     <Compile Include="Platforms\Odbc\Download\OdbcDownloadCommand.cs" />
     <Compile Include="Platforms\Odbc\Download\OdbcImportStrategy.cs" />
     <Compile Include="Platforms\Odbc\Download\OdbcLastModifiedDownloadQuery.cs" />

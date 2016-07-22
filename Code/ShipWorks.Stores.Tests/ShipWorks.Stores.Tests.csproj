@@ -169,6 +169,7 @@
     <Compile Include="Platforms\LemonStand\LemonStandDownloaderTest.cs" />
     <Compile Include="Platforms\LemonStand\LemonStandOrderIdentifierTest.cs" />
     <Compile Include="Platforms\LemonStand\LemonStandStoreTypeTest.cs" />
+    <Compile Include="Platforms\Odbc\DataAccess\OdbcUploadCommandFactoryTest.cs" />
     <Compile Include="Platforms\Odbc\DataSource\OdbcDataSourceFactoryTest.cs" />
     <Compile Include="Platforms\Odbc\Download\CustomQueryOdbcDownloadQueryTest.cs" />
     <Compile Include="Platforms\Odbc\EncryptedOdbcDataSourceTest.cs" />
@@ -187,7 +188,7 @@
     <Compile Include="Platforms\Odbc\Mapping\OdbcFieldMapTest.cs" />
     <Compile Include="Platforms\Odbc\Mapping\ShipWorksOdbcMappableFieldTest.cs" />
     <Compile Include="Platforms\Odbc\DataSource\Schema\OdbcColumnTest.cs" />
-    <Compile Include="Platforms\Odbc\DataAccess\OdbcCommandFactoryTest.cs" />
+    <Compile Include="Platforms\Odbc\DataAccess\OdbcDownloadCommandFactoryTest.cs" />
     <Compile Include="Platforms\Odbc\Download\OdbcDownloadCommandTest.cs" />
     <Compile Include="Platforms\Odbc\OdbcFieldMapFactoryTest.cs" />
     <Compile Include="Platforms\Odbc\OdbcImportFieldMappingControlViewModelTest.cs" />

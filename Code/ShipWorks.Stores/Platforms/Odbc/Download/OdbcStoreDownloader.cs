@@ -21,7 +21,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
     /// </summary>
     public class OdbcStoreDownloader : StoreDownloader
     {
-        private readonly OdbcCommandFactory commandFactory;
+        private readonly OdbcDownloadCommandFactory downloadCommandFactory;
         private readonly IOdbcFieldMap fieldMap;
         private readonly IOdbcOrderLoader orderLoader;
         private readonly OdbcStoreEntity store;
@@ -30,11 +30,11 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         /// Initializes a new instance of the <see cref="OdbcStoreDownloader"/> class.
         /// </summary>
         public OdbcStoreDownloader(StoreEntity store,
-            OdbcCommandFactory commandFactory,
+            OdbcDownloadCommandFactory downloadCommandFactory,
             IOdbcFieldMap fieldMap,
             IOdbcOrderLoader orderLoader) : base(store)
         {
-            this.commandFactory = commandFactory;
+            this.downloadCommandFactory = downloadCommandFactory;
             this.fieldMap = fieldMap;
             this.orderLoader = orderLoader;
             this.store = (OdbcStoreEntity) store;
@@ -88,10 +88,10 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
                 // Get the starting point
                 DateTime startingPoint = GetOnlineLastModifiedStartingPoint().GetValueOrDefault(DateTime.UtcNow.AddDays(-defaultDaysBack));
 
-                return commandFactory.CreateDownloadCommand(odbcStore, startingPoint, fieldMap);
+                return downloadCommandFactory.CreateDownloadCommand(odbcStore, startingPoint, fieldMap);
             }
 
-            return commandFactory.CreateDownloadCommand(odbcStore, fieldMap);
+            return downloadCommandFactory.CreateDownloadCommand(odbcStore, fieldMap);
         }
 
         /// <summary>

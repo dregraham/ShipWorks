@@ -71,8 +71,6 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
 
             builder.RegisterType<OdbcStoreDownloader>();
 
-            builder.RegisterType<OdbcCommandFactory>();
-
             builder.RegisterType<OdbcSampleDataCommand>()
                 .AsImplementedInterfaces();
 
@@ -85,8 +83,11 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             builder.RegisterType<OdbcDataSourceService>()
                 .AsImplementedInterfaces();
 
-            builder.RegisterType<OdbcCommandFactory>()
-                .As<IOdbcCommandFactory>();
+            builder.RegisterType<OdbcDownloadCommandFactory>()
+                .As<IOdbcDownloadCommandFactory>();
+
+            builder.RegisterType<OdbcUploadCommandFactory>()
+                .As<IOdbcUploadCommandFactory>();
 
             builder.RegisterType<OdbcUploader>()
                 .As<IOdbcUploader>();

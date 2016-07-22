@@ -19,18 +19,18 @@ namespace ShipWorks.Stores.Platforms.Odbc.Upload
         private readonly IShippingManager shippingManager;
         private readonly IOrderManager orderManager;
         private readonly IOdbcFieldMap fieldMap;
-        private readonly IOdbcCommandFactory commandFactory;
+        private readonly IOdbcUploadCommandFactory uploadCommandFactory;
         private readonly ILog log;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcUploader"/> class.
         /// </summary>
-        public OdbcUploader(IShippingManager shippingManager, IOrderManager orderManager, IOdbcFieldMap fieldMap, IOdbcCommandFactory commandFactory, Func<Type, ILog> logFactory)
+        public OdbcUploader(IShippingManager shippingManager, IOrderManager orderManager, IOdbcFieldMap fieldMap, IOdbcUploadCommandFactory uploadCommandFactory, Func<Type, ILog> logFactory)
         {
             this.shippingManager = shippingManager;
             this.orderManager = orderManager;
             this.fieldMap = fieldMap;
-            this.commandFactory = commandFactory;
+            this.uploadCommandFactory = uploadCommandFactory;
             log = logFactory(typeof(OdbcUploader));
         }
 
@@ -76,7 +76,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Upload
         {
             fieldMap.ApplyValues(new IEntity2[] {shipment, shipment.Order});
 
-            IOdbcUploadCommand odbcUploadCommand = commandFactory.CreateUploadCommand(store, fieldMap);
+            IOdbcUploadCommand odbcUploadCommand = uploadCommandFactory.CreateUploadCommand(store, fieldMap);
             int rowsAffected = odbcUploadCommand.Execute();
 
             if (rowsAffected == 0)

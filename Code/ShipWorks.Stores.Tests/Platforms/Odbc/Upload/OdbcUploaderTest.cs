@@ -33,7 +33,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Upload
         private Mock<ICarrierShipmentAdapter> shipmentAdapter;
         private Mock<IShippingManager> shippingManager;
         private Mock<IOrderManager> orderManager;
-        private Mock<IOdbcCommandFactory> commandFactory;
+        private Mock<IOdbcUploadCommandFactory> commandFactory;
 
         private void SetupOrderManagerToGetLatestActiveShipment()
         {
@@ -46,7 +46,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Upload
             var uploadCommand = mock.Mock<IOdbcUploadCommand>();
             uploadCommand.Setup(c => c.Execute()).Returns(rowsAffected);
 
-            commandFactory = mock.Mock<IOdbcCommandFactory>();
+            commandFactory = mock.Mock<IOdbcUploadCommandFactory>();
             commandFactory.Setup(f => f.CreateUploadCommand(It.IsAny<OdbcStoreEntity>(), It.IsAny<IOdbcFieldMap>()))
                 .Returns(uploadCommand.Object);
         }
