@@ -208,5 +208,15 @@ namespace ShipWorks.Stores.Platforms.GenericFile
                 adapter.DeleteEntity(new FtpAccountEntity(generic.FtpAccountID.Value));
             }
         }
+
+        /// <summary>
+        /// Generic file does not support uploading tracking or downloading by ordernumber
+        /// or days back so we return false to skip this page
+        /// </summary>
+        /// <returns></returns>
+        public override bool ShowTaskWizardPage()
+        {
+            return false;
+        }
     }
 }

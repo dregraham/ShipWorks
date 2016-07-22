@@ -150,5 +150,22 @@ namespace ShipWorks.Stores.Platforms.Odbc
             return ((OdbcStoreEntity) Store).UploadStrategy == (int) OdbcShipmentUploadStrategy.DoNotUpload ? null :
                 new OnlineUpdateShipmentUpdateActionControl(typeof(OdbcShipmentUploadTask));
         }
+
+        /// <summary>
+        /// Show the settings wizard page only if the store has a download strategy or upload strategy
+        /// </summary>
+        /// <returns></returns>
+        public override bool ShowTaskWizardPage()
+        {
+            OdbcStoreEntity odbcStore = Store as OdbcStoreEntity;
+
+            if (odbcStore == null)
+            {
+                return false;
+            }
+
+            return odbcStore.ImportStrategy != (int) OdbcImportStrategy.All ||
+                   odbcStore.UploadStrategy != (int) OdbcShipmentUploadStrategy.DoNotUpload;
+        }
     }
 }

@@ -582,11 +582,8 @@ namespace ShipWorks.Stores.Management
         /// </summary>
         private void OnSteppingIntoSettings(object sender, WizardSteppingIntoEventArgs e)
         {
-            // The generic file store type has no controls to put in the settings page
-            // which results in a blank wizard page, so skip it.
-            // Don't need page for odbc either when the download strategy is all.
-            if (store.TypeCode == (int) StoreTypeCode.GenericFile
-                || (store.TypeCode == (int) StoreTypeCode.Odbc) && ((OdbcStoreEntity) store).ImportStrategy == 0)
+            StoreType storeType = StoreTypeManager.GetType(Store);
+            if (!storeType.ShowTaskWizardPage())
             {
                 e.Skip = true;
                 e.RaiseStepEventWhenSkipping = true;
