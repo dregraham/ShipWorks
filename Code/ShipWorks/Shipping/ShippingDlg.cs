@@ -941,9 +941,6 @@ namespace ShipWorks.Shipping
             // If there was a setup control, remove it
             ClearPreviousSetupControl();
 
-            // Clear the rate control events so that any leftover events don't fire for the new service control.
-            rateControl.ClearEvents();
-
             AddNewServiceControl(newServiceControl);
 
             reduceFlash?.Dispose();
@@ -954,6 +951,9 @@ namespace ShipWorks.Shipping
         /// </summary>
         private void AddNewServiceControl(ServiceControlBase newServiceControl)
         {
+            // Clear the rate control events so that any leftover events don't fire for the new service control.
+            rateControl.ClearEvents();
+
             // If there is a new service control, add it to our controls under either the old one, or the blank panel we created.
             if (newServiceControl == null)
             {
@@ -968,6 +968,7 @@ namespace ShipWorks.Shipping
             newServiceControl.ShipmentsAdded += OnServiceControlShipmentsAdded;
             newServiceControl.ShipmentTypeChanged += OnShipmentTypeChanged;
             newServiceControl.ClearRatesAction = ClearRates;
+
             rateControl.RateSelected += newServiceControl.OnRateSelected;
             rateControl.ActionLinkClicked += newServiceControl.OnConfigureRateClick;
             rateControl.ReloadRatesRequired += OnRateReloadRequired;
