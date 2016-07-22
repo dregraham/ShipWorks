@@ -1,5 +1,4 @@
 ﻿using System;
-using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Services;
@@ -18,7 +17,6 @@ namespace ShipWorks.Stores.Platforms.Odbc.Upload
     {
         private readonly IShippingManager shippingManager;
         private readonly IOrderManager orderManager;
-        private readonly IOdbcFieldMap fieldMap;
         private readonly IOdbcUploadCommandFactory uploadCommandFactory;
         private readonly ILog log;
 
@@ -29,7 +27,6 @@ namespace ShipWorks.Stores.Platforms.Odbc.Upload
         {
             this.shippingManager = shippingManager;
             this.orderManager = orderManager;
-            this.fieldMap = fieldMap;
             this.uploadCommandFactory = uploadCommandFactory;
             log = logFactory(typeof(OdbcUploader));
         }
@@ -40,8 +37,6 @@ namespace ShipWorks.Stores.Platforms.Odbc.Upload
         /// <exception cref="ShipWorksOdbcException">Unable to update shipment.</exception>
         public void UploadShipments(OdbcStoreEntity store, IEnumerable<long> shipmentIds)
         {
-            fieldMap.Load(store.UploadMap);
-
             foreach (long shipmentId in shipmentIds)
             {
                 ICarrierShipmentAdapter carrierShipmentAdapter = shippingManager.GetShipment(shipmentId);
@@ -55,8 +50,6 @@ namespace ShipWorks.Stores.Platforms.Odbc.Upload
         /// <exception cref="ShipWorksOdbcException">Unable to update shipment.</exception>
         public void UploadLatestShipment(OdbcStoreEntity store, long orderid)
         {
-            fieldMap.Load(store.UploadMap);
-
             ShipmentEntity shipment = orderManager.GetLatestActiveShipment(orderid);
 
             if (shipment == null || !shipment.Processed)
@@ -74,9 +67,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Upload
         /// <exception cref="ShipWorksOdbcException">Unable to update shipment.</exception>
         private void Upload(OdbcStoreEntity store, ShipmentEntity shipment)
         {
-            fieldMap.ApplyValues(new IEntity2[] {shipment, shipment.Order});
-
-            IOdbcUploadCommand odbcUploadCommand = uploadCommandFactory.CreateUploadCommand(store, fieldMap);
+            IOdbcUploadCommand odbcUploadCommand = uploadCommandFactory.CreateUploadCommand(store, shipment);
             int rowsAffected = odbcUploadCommand.Execute();
 
             if (rowsAffected == 0)

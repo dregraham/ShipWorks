@@ -20,7 +20,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.DataAccess
                 var connectionString = "encrypted connection string";
 
                 var dataSource = mock.Mock<IOdbcDataSource>();
-                Mock<IOdbcFieldMap> odbcFieldMap = mock.Mock<IOdbcFieldMap>();
 
                 var testObject = mock.Create<OdbcUploadCommandFactory>();
 
@@ -29,7 +28,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.DataAccess
                     {
                         UploadConnectionString = connectionString,
                         UploadStrategy = (int)OdbcShipmentUploadStrategy.UseShipmentDataSource
-                    }, odbcFieldMap.Object);
+                    }, new ShipmentEntity() {Order = new OrderEntity()});
 
                 dataSource.Verify(p => p.Restore(It.Is<string>(s => s == connectionString)), Times.Once());
             }
@@ -42,12 +41,10 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.DataAccess
             {
                 var testObject = mock.Create<OdbcUploadCommandFactory>();
 
-                Mock<IOdbcFieldMap> odbcFieldMap = mock.Mock<IOdbcFieldMap>();
-
                 IOdbcUploadCommand downloadCommand =
                     testObject.CreateUploadCommand(
                         new OdbcStoreEntity { UploadStrategy = (int)OdbcShipmentUploadStrategy.UseImportDataSource },
-                        odbcFieldMap.Object);
+                        new ShipmentEntity() { Order = new OrderEntity() });
 
                 Assert.IsType<OdbcUploadCommand>(downloadCommand);
             }
@@ -60,10 +57,8 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.DataAccess
             {
                 var testObject = mock.Create<OdbcUploadCommandFactory>();
 
-                Mock<IOdbcFieldMap> odbcFieldMap = mock.Mock<IOdbcFieldMap>();
-
                 Assert.Throws<ShipWorksOdbcException>(
-                    () => testObject.CreateUploadCommand(new OdbcStoreEntity(), odbcFieldMap.Object));
+                    () => testObject.CreateUploadCommand(new OdbcStoreEntity(), new ShipmentEntity() { Order = new OrderEntity() }));
 
             }
         }

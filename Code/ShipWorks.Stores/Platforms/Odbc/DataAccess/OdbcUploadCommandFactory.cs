@@ -1,4 +1,5 @@
 ﻿using Interapptive.Shared.Utility;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Odbc.DataSource;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
@@ -13,22 +14,26 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
     {
         private readonly IOdbcDataSource dataSource;
         private readonly IShipWorksDbProviderFactory dbProviderFactory;
+        private readonly IOdbcFieldMap fieldMap;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcDownloadCommandFactory"/> class.
         /// </summary>
-        public OdbcUploadCommandFactory(IOdbcDataSource dataSource, IShipWorksDbProviderFactory dbProviderFactory)
+        public OdbcUploadCommandFactory(IOdbcDataSource dataSource, IShipWorksDbProviderFactory dbProviderFactory, IOdbcFieldMap fieldMap)
         {
             this.dataSource = dataSource;
             this.dbProviderFactory = dbProviderFactory;
+            this.fieldMap = fieldMap;
         }
 
         /// <summary>
         /// Creates the upload command for the given store and map
         /// </summary>
-        public IOdbcUploadCommand CreateUploadCommand(OdbcStoreEntity store, IOdbcFieldMap map)
+        public IOdbcUploadCommand CreateUploadCommand(OdbcStoreEntity store, ShipmentEntity shipment)
         {
-            IOdbcQuery uploadQuery = GetUploadQuery(store, map, dataSource, dbProviderFactory);
+            fieldMap.ApplyValues(new IEntity2[] { shipment, shipment.Order });
+
+            IOdbcQuery uploadQuery = GetUploadQuery(store, fieldMap, dataSource, dbProviderFactory);
 
             if (uploadQuery == null)
             {
