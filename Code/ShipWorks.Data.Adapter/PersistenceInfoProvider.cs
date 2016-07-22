@@ -339,7 +339,7 @@ namespace ShipWorks.Data.Adapter
 		/// <summary>Inits AmazonOrderEntity's mappings</summary>
 		private void InitAmazonOrderEntityMappings()
 		{
-			base.AddElementMapping( "AmazonOrderEntity", "ShipWorksLocal", @"dbo", "AmazonOrder", 7 );
+			base.AddElementMapping( "AmazonOrderEntity", "ShipWorksLocal", @"dbo", "AmazonOrder", 8 );
 			base.AddElementFieldMapping( "AmazonOrderEntity", "OrderID", "OrderID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 0 );
 			base.AddElementFieldMapping( "AmazonOrderEntity", "AmazonOrderID", "AmazonOrderID", false, (int)SqlDbType.VarChar, 32, 0, 0, false, "", null, typeof(System.String), 1 );
 			base.AddElementFieldMapping( "AmazonOrderEntity", "AmazonCommission", "AmazonCommission", false, (int)SqlDbType.Money, 0, 4, 19, false, "", null, typeof(System.Decimal), 2 );
@@ -347,6 +347,7 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementFieldMapping( "AmazonOrderEntity", "IsPrime", "IsPrime", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 4 );
 			base.AddElementFieldMapping( "AmazonOrderEntity", "EarliestExpectedDeliveryDate", "EarliestExpectedDeliveryDate", true, (int)SqlDbType.DateTime, 0, 0, 0, false, "", null, typeof(System.DateTime), 5 );
 			base.AddElementFieldMapping( "AmazonOrderEntity", "LatestExpectedDeliveryDate", "LatestExpectedDeliveryDate", true, (int)SqlDbType.DateTime, 0, 0, 0, false, "", null, typeof(System.DateTime), 6 );
+			base.AddElementFieldMapping( "AmazonOrderEntity", "PurchaseOrderNumber", "PurchaseOrderNumber", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 7 );
 		}
 		/// <summary>Inits AmazonOrderItemEntity's mappings</summary>
 		private void InitAmazonOrderItemEntityMappings()
