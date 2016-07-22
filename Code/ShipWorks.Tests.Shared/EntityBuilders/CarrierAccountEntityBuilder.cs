@@ -11,7 +11,9 @@ namespace ShipWorks.Tests.Shared.EntityBuilders
     /// <summary>
     /// Build a carrier account
     /// </summary>
-    public class CarrierAccountEntityBuilder<T> : EntityBuilder<T> where T : EntityBase2, ICarrierAccount, new()
+    public class CarrierAccountEntityBuilder<T, TInterface> : EntityBuilder<T>
+        where T : EntityBase2, TInterface, new()
+        where TInterface : ICarrierAccount
     {
         /// <summary>
         /// Save the carrier account
@@ -20,7 +22,7 @@ namespace ShipWorks.Tests.Shared.EntityBuilders
         public override T Save(SqlAdapter adapter)
         {
             T entity = base.Save(adapter);
-            ICarrierAccountRepository<T> repository = IoC.UnsafeGlobalLifetimeScope.Resolve<Owned<ICarrierAccountRepository<T>>>().Value;
+            ICarrierAccountRepository<T, TInterface> repository = IoC.UnsafeGlobalLifetimeScope.Resolve<Owned<ICarrierAccountRepository<T, TInterface>>>().Value;
             repository.CheckForChangesNeeded();
             return entity;
         }

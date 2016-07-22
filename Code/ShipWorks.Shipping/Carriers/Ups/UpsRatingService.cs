@@ -6,6 +6,7 @@ using System.Linq;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.BestRate.Footnote;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
@@ -19,7 +20,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
     /// </summary>
     public class UpsRatingService : IRatingService
     {
-        private readonly ICarrierAccountRepository<UpsAccountEntity> accountRepository;
+        private readonly ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> accountRepository;
         private readonly UpsApiTransitTimeClient transitTimeClient;
         private readonly UpsApiRateClient upsApiRateClient;
         private readonly UpsShipmentType shipmentType;
@@ -28,7 +29,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// Initializes a new instance of the <see cref="UpsRatingService"/> class.
         /// </summary>
         public UpsRatingService(
-            ICarrierAccountRepository<UpsAccountEntity> accountRepository,
+            ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> accountRepository,
             UpsApiTransitTimeClient transitTimeClient,
             UpsApiRateClient upsApiRateClient,
             UpsShipmentType shipmentType)

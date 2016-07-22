@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
@@ -10,7 +11,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
     /// <summary>
     /// A repository for FedEx counter rate accounts
     /// </summary>
-    public class FedExCounterRateAccountRepository : FedExSettingsRepository, ICarrierAccountRepository<FedExAccountEntity>
+    public class FedExCounterRateAccountRepository : FedExSettingsRepository, ICarrierAccountRepository<FedExAccountEntity, IFedExAccountEntity>
     {
         private readonly ICredentialStore credentialStore;
         private readonly Lazy<List<FedExAccountEntity>> lazyAccounts;
@@ -29,6 +30,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
         /// Gets the accounts for the carrier.
         /// </summary>
         public IEnumerable<FedExAccountEntity> Accounts => lazyAccounts.Value;
+
+        /// <summary>
+        /// Gets the accounts for the carrier.
+        /// </summary>
+        public IEnumerable<IFedExAccountEntity> AccountsReadOnly => lazyAccounts.Value;
 
         /// <summary>
         /// Force a check for changes
@@ -72,6 +78,15 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
         /// </summary>
         /// <returns>Returns the first counter rate.</returns>
         public FedExAccountEntity GetAccount(long accountID)
+        {
+            return Accounts.First();
+        }
+
+        /// <summary>
+        /// Returns a carrier counter rate account.
+        /// </summary>
+        /// <returns>Returns the first counter rate.</returns>
+        public IFedExAccountEntity GetAccountReadOnly(long accountID)
         {
             return Accounts.First();
         }

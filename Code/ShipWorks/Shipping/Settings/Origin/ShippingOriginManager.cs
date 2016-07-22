@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Utility;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
-using ShipWorks.Data.Model;
+using System.Linq;
+using Interapptive.Shared.Collections;
 using ShipWorks.Data;
+using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Data.Utility;
 
 namespace ShipWorks.Shipping.Settings.Origin
 {
@@ -16,6 +16,7 @@ namespace ShipWorks.Shipping.Settings.Origin
     public static class ShippingOriginManager
     {
         static TableSynchronizer<ShippingOriginEntity> synchronizer;
+        static IEnumerable<IShippingOriginEntity> readOnlyOrigins;
         static bool needCheckForChanges = false;
 
         /// <summary>
@@ -50,6 +51,8 @@ namespace ShipWorks.Shipping.Settings.Origin
                     synchronizer.EntityCollection.Sort((int) ShippingOriginFieldIndex.Description, ListSortDirection.Ascending);
                 }
 
+                readOnlyOrigins = synchronizer.EntityCollection.Select(x => x.AsReadOnly()).ToReadOnly();
+
                 needCheckForChanges = false;
             }
         }
@@ -74,11 +77,38 @@ namespace ShipWorks.Shipping.Settings.Origin
         }
 
         /// <summary>
+        /// Return the active list of origins
+        /// </summary>
+        public static IEnumerable<IShippingOriginEntity> OriginsReadOnly
+        {
+            get
+            {
+                lock (synchronizer)
+                {
+                    if (needCheckForChanges)
+                    {
+                        InternalCheckForChanges();
+                    }
+
+                    return readOnlyOrigins;
+                }
+            }
+        }
+
+        /// <summary>
         /// Get the shipper with the specified ID, or null if not found.
         /// </summary>
         public static ShippingOriginEntity GetOrigin(long originID)
         {
             return Origins.Where(s => s.ShippingOriginID == originID).FirstOrDefault();
+        }
+
+        /// <summary>
+        /// Get the shipper with the specified ID, or null if not found.
+        /// </summary>
+        public static IShippingOriginEntity GetOriginReadOnly(long originID)
+        {
+            return OriginsReadOnly.FirstOrDefault(x => x.ShippingOriginID == originID);
         }
     }
 }

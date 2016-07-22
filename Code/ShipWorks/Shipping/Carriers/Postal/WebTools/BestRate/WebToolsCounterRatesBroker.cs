@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Autofac;
 using ShipWorks.ApplicationCore;
+using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.Custom.EntityClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
@@ -18,7 +19,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools.BestRate
     /// <summary>
     /// Gets counter rates for USPS
     /// </summary>
-    public class WebToolsCounterRatesBroker : PostalResellerBestRateBroker<NullCarrierAccount>
+    public class WebToolsCounterRatesBroker : PostalResellerBestRateBroker<NullCarrierAccount, ICarrierAccount>
     {
         private readonly PostalShipmentType actualPostalShipmentType;
 
@@ -35,7 +36,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools.BestRate
         /// <summary>
         /// Constructor
         /// </summary>
-        private WebToolsCounterRatesBroker(PostalWebShipmentType shipmentType, ICarrierAccountRepository<NullCarrierAccount> accountRepository) :
+        private WebToolsCounterRatesBroker(PostalWebShipmentType shipmentType, ICarrierAccountRepository<NullCarrierAccount, ICarrierAccount> accountRepository) :
             base(shipmentType, accountRepository, "USPS")
         {
 

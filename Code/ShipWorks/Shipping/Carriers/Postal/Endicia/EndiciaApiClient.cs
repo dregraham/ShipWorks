@@ -5,19 +5,23 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
-using System.Text;
+using Autofac;
+using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Net;
+using Interapptive.Shared.Security;
 using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Editions;
-using ShipWorks.Data.Connection;
-using ShipWorks.Shipping.Editing;
+using ShipWorks.Editions.Freemium;
+using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Account;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.WebServices.LabelService;
@@ -28,12 +32,6 @@ using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Templates.Tokens;
 using ShipWorks.UI;
-using Autofac;
-using Interapptive.Shared;
-using Interapptive.Shared.Security;
-using ShipWorks.ApplicationCore.Licensing;
-using ShipWorks.Editions.Freemium;
-using ShipWorks.Shipping.Carriers.BestRate;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 {
@@ -43,7 +41,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
     [NDependIgnoreLongTypes]
     public class EndiciaApiClient
     {
-        private readonly ICarrierAccountRepository<EndiciaAccountEntity> accountRepository;
+        private readonly ICarrierAccountRepository<EndiciaAccountEntity, IEndiciaAccountEntity> accountRepository;
         private readonly ILogEntryFactory logEntryFactory;
         private readonly ICertificateInspector certificateInspector;
         readonly ILog log = LogManager.GetLogger(typeof(EndiciaApiClient));
@@ -69,7 +67,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <param name="accountRepository">The account repository.</param>
         /// <param name="logEntryFactory">The log entry factory.</param>
         /// <param name="certificateInspector">The certificate inspector.</param>
-        public EndiciaApiClient(ICarrierAccountRepository<EndiciaAccountEntity> accountRepository, ILogEntryFactory logEntryFactory, ICertificateInspector certificateInspector)
+        public EndiciaApiClient(ICarrierAccountRepository<EndiciaAccountEntity, IEndiciaAccountEntity> accountRepository, ILogEntryFactory logEntryFactory, ICertificateInspector certificateInspector)
         {
             this.accountRepository = accountRepository;
             this.logEntryFactory = logEntryFactory;

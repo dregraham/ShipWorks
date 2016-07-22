@@ -53,7 +53,7 @@ namespace ShipWorks.Shipping.Settings.Origin
             shipmentType = ShipmentTypeManager.GetType(code);
 
             List<KeyValuePair<string, long>> origins = shipmentType.GetOrigins();
-       
+
             originCombo.DisplayMember = "Key";
             originCombo.ValueMember = "Value";
             originCombo.DataSource = origins;
@@ -243,14 +243,14 @@ namespace ShipWorks.Shipping.Settings.Origin
         /// <value>The selected origin.</value>
         public ShipmentOriginSource? SelectedOrigin
         {
-            get 
-            { 
+            get
+            {
                 if (originCombo.MultiValued)
                 {
                     return null;
                 }
 
-                return (ShipmentOriginSource) (long) originCombo.SelectedValue; 
+                return (ShipmentOriginSource) (long) originCombo.SelectedValue;
             }
         }
 

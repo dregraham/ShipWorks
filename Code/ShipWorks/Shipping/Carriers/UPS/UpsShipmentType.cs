@@ -14,6 +14,7 @@ using ShipWorks.Data.Adapter.Custom;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.BestRate;
@@ -66,7 +67,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// have to be done is to assign this property with a repository that contains
         /// the appropriate account information for getting counter rates.
         /// </summary>
-        public ICarrierAccountRepository<UpsAccountEntity> AccountRepository { get; set; }
+        public ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> AccountRepository { get; set; }
 
         /// <summary>
         /// Gets a value indicating whether this shipment type has accounts
@@ -597,15 +598,15 @@ namespace ShipWorks.Shipping.Carriers.UPS
             // The Ups object may not yet be set if we are in the middle of creating a new shipment
             if (originID == (int) ShipmentOriginSource.Account && shipment.Ups != null)
             {
-                UpsAccountEntity account = UpsAccountManager.GetAccount(shipment.Ups.UpsAccountID);
+                IUpsAccountEntity account = UpsAccountManager.GetAccountReadOnly(shipment.Ups.UpsAccountID);
                 if (account == null)
                 {
-                    account = UpsAccountManager.Accounts.FirstOrDefault();
+                    account = UpsAccountManager.AccountsReadOnly.FirstOrDefault();
                 }
 
                 if (account != null)
                 {
-                    PersonAdapter.Copy(account, "", person);
+                    account.Address.CopyTo(person);
                     return true;
                 }
                 else

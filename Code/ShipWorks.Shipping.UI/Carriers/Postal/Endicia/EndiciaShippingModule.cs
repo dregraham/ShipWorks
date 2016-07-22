@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.Postal.Endicia;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
 using ShipWorks.Shipping.Services;
@@ -38,13 +39,13 @@ namespace ShipWorks.Shipping.Carriers.Endicia
                 .Keyed<ILabelService>(ShipmentTypeCode.Endicia);
 
             builder.RegisterType<EndiciaAccountRepository>()
-                .As<ICarrierAccountRepository<EndiciaAccountEntity>>()
-                .Keyed<ICarrierAccountRepository<EndiciaAccountEntity>>(ShipmentTypeCode.Endicia)
+                .As<ICarrierAccountRepository<EndiciaAccountEntity, IEndiciaAccountEntity>>()
+                .Keyed<ICarrierAccountRepository<EndiciaAccountEntity, IEndiciaAccountEntity>>(ShipmentTypeCode.Endicia)
                 .Keyed<ICarrierAccountRetriever<ICarrierAccount>>(ShipmentTypeCode.Endicia)
                 .SingleInstance();
 
             builder.RegisterType<Express1EndiciaAccountRepository>()
-                .Keyed<ICarrierAccountRepository<EndiciaAccountEntity>>(ShipmentTypeCode.Express1Endicia);
+                .Keyed<ICarrierAccountRepository<EndiciaAccountEntity, IEndiciaAccountEntity>>(ShipmentTypeCode.Express1Endicia);
 
             builder.RegisterType<EndiciaRatingService>()
                 .Keyed<IRatingService>(ShipmentTypeCode.Endicia)

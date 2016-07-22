@@ -2,10 +2,10 @@
 // This is generated code.
 //////////////////////////////////////////////////////////////
 // Code is generated using LLBLGen Pro version: 2.6
-// Code is generated on: 
+// Code is generated on:
 // Code is generated using templates: ShipWorks
 // Templates vendor: Solutions Design.
-// Templates version: 
+// Templates version:
 //////////////////////////////////////////////////////////////
 using System;
 using System.Collections.Generic;
@@ -16,11 +16,11 @@ namespace ShipWorks.Data.Model.EntityInterfaces
 {
     /// <summary>
     /// Entity interface which represents the entity 'UspsAccount'. <br/><br/>
-    /// 
+    ///
     /// </summary>
     public partial interface IUspsAccountEntity
     {
-        
+
         /// <summary> The UspsAccountID property of the Entity UspsAccount<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "UspsAccount"."UspsAccountID"<br/>
@@ -165,9 +165,9 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         System.Int32 PendingInitialAccount { get; }
-        
-        
-        
+
+
+
 
         /// <summary>
         /// Get a read only version of the entity
@@ -188,12 +188,12 @@ namespace ShipWorks.Data.Model.EntityClasses
 
     /// <summary>
     /// Entity interface which represents the entity 'UspsAccount'. <br/><br/>
-    /// 
+    ///
     /// </summary>
     public partial class UspsAccountEntity : IUspsAccountEntity
     {
-        
-        
+
+
 
         /// <summary>
         /// Get a read only version of the entity

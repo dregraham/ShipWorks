@@ -41,6 +41,7 @@ using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Amazon;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
+using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Shipping
 {
@@ -805,10 +806,10 @@ namespace ShipWorks.Shipping
             }
 
             // Try looking it up as ShippingOriginID
-            ShippingOriginEntity origin = ShippingOriginManager.GetOrigin(originID);
+            IShippingOriginEntity origin = ShippingOriginManager.GetOriginReadOnly(originID);
             if (origin != null)
             {
-                PersonAdapter.Copy(origin, "", person);
+                PersonAdapter.Copy(origin.AsPersonAdapter(), person);
 
                 return true;
             }

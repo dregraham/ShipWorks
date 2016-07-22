@@ -3,6 +3,7 @@ using System.Linq;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores;
 using ShipWorks.Stores.Platforms.Amazon;
 
@@ -13,7 +14,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
     /// </summary>
     public class AmazonUpsLabelEnforcer : IAmazonLabelEnforcer
     {
-        private readonly ICarrierAccountRepository<UpsAccountEntity> accountRepository;
+        private readonly ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> accountRepository;
         private readonly IStoreManager storeManager;
         private readonly ISqlDateTimeProvider dateTimeProvider;
 
@@ -23,7 +24,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// <param name="accountRepository">The account repository.</param>
         /// <param name="storeManager">The store manager.</param>
         /// <param name="dateTimeProvider">The date time provider.</param>
-        public AmazonUpsLabelEnforcer(ICarrierAccountRepository<UpsAccountEntity> accountRepository, IStoreManager storeManager, ISqlDateTimeProvider dateTimeProvider)
+        public AmazonUpsLabelEnforcer(ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> accountRepository,
+            IStoreManager storeManager, ISqlDateTimeProvider dateTimeProvider)
         {
             this.accountRepository = accountRepository;
             this.storeManager = storeManager;

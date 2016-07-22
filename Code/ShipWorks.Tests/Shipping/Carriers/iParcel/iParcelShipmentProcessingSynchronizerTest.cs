@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
-using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.iParcel;
+using Xunit;
 
 namespace ShipWorks.Tests.Shipping.Carriers.iParcel
 {
@@ -11,11 +12,11 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
     {
         private iParcelShipmentProcessingSynchronizer testObject;
 
-        private Mock<ICarrierAccountRepository<IParcelAccountEntity>> accountRepository;
+        private Mock<ICarrierAccountRepository<IParcelAccountEntity, IIParcelAccountEntity>> accountRepository;
 
         public iParcelShipmentProcessingSynchronizerTest()
         {
-            accountRepository = new Mock<ICarrierAccountRepository<IParcelAccountEntity>>();
+            accountRepository = new Mock<ICarrierAccountRepository<IParcelAccountEntity, IIParcelAccountEntity>>();
 
             testObject = new iParcelShipmentProcessingSynchronizer(accountRepository.Object);
         }

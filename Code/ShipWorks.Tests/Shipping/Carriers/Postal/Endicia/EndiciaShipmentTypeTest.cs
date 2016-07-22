@@ -1,30 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Interapptive.Shared.Utility;
-using Xunit;
 using Moq;
-using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.Postal.Endicia;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.BestRate;
+using Xunit;
 
 namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia
 {
     public class EndiciaShipmentTypeTest
     {
         private readonly EndiciaShipmentType testObject;
-        private readonly Mock<ICarrierAccountRepository<EndiciaAccountEntity>> accountRepository;
+        private readonly Mock<ICarrierAccountRepository<EndiciaAccountEntity, IEndiciaAccountEntity>> accountRepository;
         private readonly List<PostalServicePackagingCombination> allCombinations = new List<PostalServicePackagingCombination>();
         private readonly List<PostalServicePackagingCombination> adultSignatureCombinationsAllowed = new List<PostalServicePackagingCombination>();
 
         public EndiciaShipmentTypeTest()
         {
-            accountRepository = new Mock<ICarrierAccountRepository<EndiciaAccountEntity>>();
+            accountRepository = new Mock<ICarrierAccountRepository<EndiciaAccountEntity, IEndiciaAccountEntity>>();
 
             testObject = new EndiciaShipmentType();
 
@@ -47,7 +45,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia
         [Fact]
         public void GetShippingBroker_ReturnsEndiciaShippingBroker_WhenEndiciaAccountsExist()
         {
-            accountRepository.Setup(r => r.Accounts).Returns(new List<EndiciaAccountEntity>() {new EndiciaAccountEntity(1)});
+            accountRepository.Setup(r => r.Accounts).Returns(new List<EndiciaAccountEntity>() { new EndiciaAccountEntity(1) });
             testObject.AccountRepository = accountRepository.Object;
 
             IBestRateShippingBroker broker = testObject.GetShippingBroker(new ShipmentEntity());

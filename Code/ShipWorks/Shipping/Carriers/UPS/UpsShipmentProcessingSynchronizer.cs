@@ -1,11 +1,12 @@
 ﻿using System.Linq;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Shipping.Carriers.UPS
 {
     public class UpsShipmentProcessingSynchronizer : IShipmentProcessingSynchronizer
     {
-        private readonly ICarrierAccountRepository<UpsAccountEntity> accountRepository;
+        private readonly ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> accountRepository;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UpsShipmentProcessingSynchronizer"/> class.
@@ -18,7 +19,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// Initializes a new instance of the <see cref="UpsShipmentProcessingSynchronizer"/> class.
         /// </summary>
         /// <param name="accountRepository">The account repository.</param>
-        public UpsShipmentProcessingSynchronizer(ICarrierAccountRepository<UpsAccountEntity> accountRepository)
+        public UpsShipmentProcessingSynchronizer(ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> accountRepository)
         {
             this.accountRepository = accountRepository;
         }

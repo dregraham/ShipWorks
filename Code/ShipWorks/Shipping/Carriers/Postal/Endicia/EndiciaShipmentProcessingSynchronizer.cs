@@ -1,15 +1,16 @@
 ﻿using System.Linq;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 {
     /// <summary>
-    /// An IShipmentProcessingSynchronizer implementation to handle the PreProcessing 
-    /// of an Endicia shipment 
+    /// An IShipmentProcessingSynchronizer implementation to handle the PreProcessing
+    /// of an Endicia shipment
     /// </summary>
     public class EndiciaShipmentProcessingSynchronizer : IShipmentProcessingSynchronizer
     {
-        private readonly ICarrierAccountRepository<EndiciaAccountEntity> accountRepository;
+        private readonly ICarrierAccountRepository<EndiciaAccountEntity, IEndiciaAccountEntity> accountRepository;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EndiciaShipmentProcessingSynchronizer"/> class.
@@ -22,7 +23,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// Initializes a new instance of the <see cref="EndiciaShipmentProcessingSynchronizer"/> class.
         /// </summary>
         /// <param name="accountRepository">The account repository.</param>
-        public EndiciaShipmentProcessingSynchronizer(ICarrierAccountRepository<EndiciaAccountEntity> accountRepository)
+        public EndiciaShipmentProcessingSynchronizer(ICarrierAccountRepository<EndiciaAccountEntity, IEndiciaAccountEntity> accountRepository)
         {
             this.accountRepository = accountRepository;
         }
@@ -49,9 +50,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         {
             if (accountRepository.Accounts.Any())
             {
-                    // Grab the first account in the repository to set the account ID
-                    shipment.Postal.Endicia.EndiciaAccountID = accountRepository.Accounts.First().EndiciaAccountID;
-                }
+                // Grab the first account in the repository to set the account ID
+                shipment.Postal.Endicia.EndiciaAccountID = accountRepository.Accounts.First().EndiciaAccountID;
+            }
             else
             {
                 throw new EndiciaException("An Endicia account must be created to process this shipment.");

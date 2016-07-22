@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.BestRate;
-using ShipWorks.Shipping.Carriers.Postal.Express1;
-using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
@@ -20,13 +17,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
         /// </summary>
         public Express1EndiciaBestRateBroker() : this(new Express1EndiciaShipmentType(), new Express1EndiciaAccountRepository())
         {
-            
+
         }
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public Express1EndiciaBestRateBroker(EndiciaShipmentType shipmentType, ICarrierAccountRepository<EndiciaAccountEntity> accountRepository) :
+        public Express1EndiciaBestRateBroker(EndiciaShipmentType shipmentType, ICarrierAccountRepository<EndiciaAccountEntity, IEndiciaAccountEntity> accountRepository) :
             base(shipmentType, accountRepository, "USPS")
         {
 
@@ -43,7 +40,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
             rateGroup.Rates.ForEach(rr => rr.ShipmentType = ShipmentTypeCode.Express1Endicia);
 
             return rateGroup;
-		}
+        }
 
         /// <summary>
         /// Configures extra settings required by the broker

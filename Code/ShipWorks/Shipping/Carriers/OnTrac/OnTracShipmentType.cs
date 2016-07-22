@@ -10,6 +10,7 @@ using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.OnTrac.BestRate;
@@ -479,12 +480,12 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
                 // shipment not processed
                 if (originID == (int) ShipmentOriginSource.Account && shipment.OnTrac != null)
                 {
-                    OnTracAccountEntity account = OnTracAccountManager.GetAccount(shipment.OnTrac.OnTracAccountID)
-                        ?? OnTracAccountManager.Accounts.FirstOrDefault();
+                    IOnTracAccountEntity account = OnTracAccountManager.GetAccountReadOnly(shipment.OnTrac.OnTracAccountID)
+                        ?? OnTracAccountManager.AccountsReadOnly.FirstOrDefault();
 
                     if (account != null)
                     {
-                        PersonAdapter.Copy(account, "", person);
+                        account.Address.CopyTo(person);
                         isSuccessfull = true;
                     }
                 }

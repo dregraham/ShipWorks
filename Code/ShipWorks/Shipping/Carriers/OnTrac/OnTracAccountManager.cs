@@ -1,11 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using Interapptive.Shared.Collections;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Utility;
 using ShipWorks.Messaging.Messages;
 
@@ -17,6 +19,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
     public static class OnTracAccountManager
     {
         static TableSynchronizer<OnTracAccountEntity> synchronizer;
+        static IEnumerable<IOnTracAccountEntity> readOnlyAccounts;
         static bool needCheckForChanges;
 
         /// <summary>
@@ -43,6 +46,25 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
                     }
 
                     return EntityUtility.CloneEntityCollection(synchronizer.EntityCollection);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Return the active list of OnTrac accounts
+        /// </summary>
+        public static IEnumerable<IOnTracAccountEntity> AccountsReadOnly
+        {
+            get
+            {
+                lock (synchronizer)
+                {
+                    if (needCheckForChanges)
+                    {
+                        InternalCheckForChanges();
+                    }
+
+                    return readOnlyAccounts;
                 }
             }
         }
@@ -90,6 +112,8 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
                     synchronizer.EntityCollection.Sort((int) OnTracAccountFieldIndex.OnTracAccountID, ListSortDirection.Ascending);
                 }
 
+                readOnlyAccounts = synchronizer.EntityCollection.Select(x => x.AsReadOnly()).ToReadOnly();
+
                 needCheckForChanges = false;
             }
         }
@@ -100,6 +124,14 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         public static OnTracAccountEntity GetAccount(long accountID)
         {
             return Accounts.FirstOrDefault(a => a.OnTracAccountID == accountID);
+        }
+
+        /// <summary>
+        /// Get the account with the specified ID, or null if not found.
+        /// </summary>
+        public static IOnTracAccountEntity GetAccountReadOnly(long accountID)
+        {
+            return AccountsReadOnly.FirstOrDefault(a => a.OnTracAccountID == accountID);
         }
 
         /// <summary>

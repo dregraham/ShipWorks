@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Services.Builders;
 
@@ -40,7 +41,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
                 .Keyed<ILabelService>(ShipmentTypeCode.OnTrac);
 
             builder.RegisterType<OnTracAccountRepository>()
-                .As<ICarrierAccountRepository<OnTracAccountEntity>>();
+                .As<ICarrierAccountRepository<OnTracAccountEntity, IOnTracAccountEntity>>();
 
             builder.RegisterType<OnTracRateHashingService>()
                 .Keyed<IRateHashingService>(ShipmentTypeCode.OnTrac);

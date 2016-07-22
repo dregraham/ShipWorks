@@ -19,14 +19,15 @@ namespace ShipWorks.Shipping.Carriers.BestRate
     /// Defines most of the logic for the carrier specific best rate brokers
     /// </summary>
     /// <typeparam name="TAccount">Type of account</typeparam>
-    public abstract class BestRateBroker<TAccount> : IBestRateShippingBroker where TAccount : ICarrierAccount
+    public abstract class BestRateBroker<TAccount, TAccountInterface> : IBestRateShippingBroker
+        where TAccount : TAccountInterface where TAccountInterface : ICarrierAccount
     {
         private readonly string carrierDescription;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        protected BestRateBroker(ShipmentType shipmentType, ICarrierAccountRepository<TAccount> accountRepository, string carrierDescription)
+        protected BestRateBroker(ShipmentType shipmentType, ICarrierAccountRepository<TAccount, TAccountInterface> accountRepository, string carrierDescription)
         {
             this.AccountRepository = accountRepository;
             this.carrierDescription = carrierDescription;
@@ -38,7 +39,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// <summary>
         /// Gets or sets the account repository.
         /// </summary>
-        protected ICarrierAccountRepository<TAccount> AccountRepository
+        protected ICarrierAccountRepository<TAccount, TAccountInterface> AccountRepository
         {
             get;
             private set;
@@ -259,8 +260,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                     return true;
                 }
 
-                PersonAdapter personAdapter = new PersonAdapter(account, "");
-                return personAdapter.AdjustedCountryCode((ShipmentTypeCode) shipment.ShipmentType) == shipment.AdjustedOriginCountryCode();
+                return account.Address.AdjustedCountryCode((ShipmentTypeCode) shipment.ShipmentType) == shipment.AdjustedOriginCountryCode();
             });
 
             return accounts.ToList();
@@ -455,7 +455,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             // Set the address of the shipment to either the account, or the address of the original shipment
             if (!IsCounterRate && currentShipment.OriginOriginID == (int) ShipmentOriginSource.Account)
             {
-                PersonAdapter.Copy(account, "", currentShipment, "Origin");
+                account.Address.CopyTo(currentShipment, "Origin");
             }
             else
             {

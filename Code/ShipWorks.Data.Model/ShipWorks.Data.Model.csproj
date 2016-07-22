@@ -161,6 +161,10 @@
     <Compile Include="Custom\EntityClasses\EbayOrderItemEntity.cs" />
     <Compile Include="Custom\EntityClasses\EtsyOrderEntity.cs" />
     <Compile Include="Custom\EntityClasses\FedExAccountEntity.cs" />
+    <Compile Include="Custom\EntityClasses\OnTracAccountEntity.Interface.cs" />
+    <Compile Include="Custom\EntityClasses\IParcelAccountEntity.Interface.cs" />
+    <Compile Include="Custom\EntityClasses\OnTracAccountEntity.ReadOnly.cs" />
+    <Compile Include="Custom\EntityClasses\IParcelAccountEntity.ReadOnly.cs" />
     <Compile Include="Custom\EntityClasses\InsurancePolicyEntity.cs" />
     <Compile Include="Custom\EntityClasses\iParcelAccountEntity.cs" />
     <Compile Include="Custom\EntityClasses\IRuleEntity.cs" />
@@ -171,6 +175,9 @@
     <Compile Include="Custom\EntityClasses\ShipmentEntity.Interface.cs" />
     <Compile Include="Custom\EntityClasses\ShipmentEntity.ReadOnly.cs" />
     <Compile Include="Custom\EntityClasses\ShippingDefaultsRuleEntity.cs" />
+    <Compile Include="Custom\EntityClasses\ShippingOriginEntity.Interface.cs" />
+    <Compile Include="Custom\EntityClasses\ShippingOriginEntity.ReadOnly.cs" />
+    <Compile Include="Custom\EntityClasses\ShippingOriginEntity.cs" />
     <Compile Include="Custom\EntityClasses\ShippingProfileEntity.cs" />
     <Compile Include="Custom\EntityClasses\ShippingProviderRuleEntity.cs" />
     <Compile Include="Custom\EntityClasses\ShippingSettingsEntity.cs" />
@@ -187,7 +194,15 @@
     <Compile Include="Custom\ActiveTableInheritanceInfoProvider.cs" />
     <Compile Include="Custom\EntityClasses\ThreeDCartStoreEntity.cs" />
     <Compile Include="Custom\EntityClasses\UpsAccountEntity.cs" />
+    <Compile Include="Custom\EntityClasses\FedExAccountEntity.Interface.cs" />
+    <Compile Include="Custom\EntityClasses\FedExAccountEntity.ReadOnly.cs" />
     <Compile Include="Custom\EntityClasses\UserEntity.cs" />
+    <Compile Include="Custom\EntityClasses\EndiciaAccountEntity.Interface.cs" />
+    <Compile Include="Custom\EntityClasses\UspsAccountEntity.Interface.cs" />
+    <Compile Include="Custom\EntityClasses\EndiciaAccountEntity.ReadOnly.cs" />
+    <Compile Include="Custom\EntityClasses\UspsAccountEntity.ReadOnly.cs" />
+    <Compile Include="Custom\EntityClasses\UpsAccountEntity.ReadOnly.cs" />
+    <Compile Include="Custom\EntityClasses\UpsAccountEntity.Interface.cs" />
     <Compile Include="Custom\EntityClasses\UspsAccountEntity.cs" />
     <Compile Include="Custom\EntityPersistedAction.cs" />
     <Compile Include="Custom\EntityPersistedEvent.cs" />

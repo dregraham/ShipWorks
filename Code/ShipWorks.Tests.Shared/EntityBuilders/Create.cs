@@ -48,7 +48,9 @@ namespace ShipWorks.Tests.Shared.EntityBuilders
         /// <summary>
         /// Create a carrier account
         /// </summary>
-        public static CarrierAccountEntityBuilder<T> CarrierAccount<T>() where T : EntityBase2, ICarrierAccount, new() =>
-            new CarrierAccountEntityBuilder<T>();
+        public static CarrierAccountEntityBuilder<T, TInterface> CarrierAccount<T, TInterface>()
+            where T : EntityBase2, TInterface, new()
+            where TInterface : ICarrierAccount =>
+            new CarrierAccountEntityBuilder<T, TInterface>();
     }
 }

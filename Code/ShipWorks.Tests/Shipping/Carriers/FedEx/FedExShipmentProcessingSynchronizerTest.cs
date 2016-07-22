@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
-using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.FedEx;
+using Xunit;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx
 {
@@ -11,11 +12,11 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx
     {
         private FedExShipmentProcessingSynchronizer testObject;
 
-        private Mock<ICarrierAccountRepository<FedExAccountEntity>> accountRepository;
+        private Mock<ICarrierAccountRepository<FedExAccountEntity, IFedExAccountEntity>> accountRepository;
 
         public FedExShipmentProcessingSynchronizerTest()
         {
-            accountRepository = new Mock<ICarrierAccountRepository<FedExAccountEntity>>();
+            accountRepository = new Mock<ICarrierAccountRepository<FedExAccountEntity, IFedExAccountEntity>>();
 
             testObject = new FedExShipmentProcessingSynchronizer(accountRepository.Object);
         }

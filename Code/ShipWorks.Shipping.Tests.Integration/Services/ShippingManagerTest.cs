@@ -6,12 +6,12 @@ using Moq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.AddressValidation;
 using ShipWorks.AddressValidation.Enums;
-using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Editions;
 using ShipWorks.Shipping.Carriers.BestRate;
@@ -412,7 +412,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         [Fact]
         public void CreateShipment_ResetsAccountData_WhenFedExAccountDoesNotExist()
         {
-            var account = Create.CarrierAccount<FedExAccountEntity>().Save();
+            var account = Create.CarrierAccount<FedExAccountEntity, IFedExAccountEntity>().Save();
 
             Create.Profile().AsPrimary()
                 .AsFedEx(p => p.Set(x => x.FedExAccountID, account.AccountId + 2000))
@@ -490,7 +490,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         [Fact]
         public void CreateShipment_ResetsAccountData_WhenUpsAccountDoesNotExist()
         {
-            var account = Create.CarrierAccount<UpsAccountEntity>().Save();
+            var account = Create.CarrierAccount<UpsAccountEntity, IUpsAccountEntity>().Save();
 
             Create.Profile().AsPrimary()
                 .AsUps(p => p.Set(x => x.UpsAccountID, account.AccountId + 2000))
@@ -568,7 +568,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         [Fact]
         public void CreateShipment_ResetsAccountData_WheniParcelAccountDoesNotExist()
         {
-            var account = Create.CarrierAccount<IParcelAccountEntity>().Save();
+            var account = Create.CarrierAccount<IParcelAccountEntity, IIParcelAccountEntity>().Save();
 
             Create.Profile().AsPrimary()
                 .AsIParcel(p => p.Set(x => x.IParcelAccountID, account.AccountId + 2000))
@@ -651,7 +651,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         [Fact]
         public void CreateShipment_ResetsAccountData_WhenUspsAccountDoesNotExist()
         {
-            var account = Create.CarrierAccount<UspsAccountEntity>().Save();
+            var account = Create.CarrierAccount<UspsAccountEntity, IUspsAccountEntity>().Save();
 
             Create.Profile().AsPrimary()
                 .AsPostal(p => p.AsUsps(u => u.Set(x => x.UspsAccountID, account.UspsAccountID + 2000)))
@@ -735,7 +735,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         [Fact]
         public void CreateShipment_ResetsAccountData_WhenEndiciaAccountDoesNotExist()
         {
-            var account = Create.CarrierAccount<EndiciaAccountEntity>()
+            var account = Create.CarrierAccount<EndiciaAccountEntity, IEndiciaAccountEntity>()
                 .Set(x => x.AccountNumber, "abc123").Save();
 
             Create.Profile().AsPrimary()
@@ -813,7 +813,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         [Fact]
         public void CreateShipment_ResetsAccountData_WhenOnTracAccountDoesNotExist()
         {
-            var account = Create.CarrierAccount<OnTracAccountEntity>().Save();
+            var account = Create.CarrierAccount<OnTracAccountEntity, IOnTracAccountEntity>().Save();
 
             Create.Profile().AsPrimary()
                 .AsOnTrac(u => u.Set(x => x.OnTracAccountID, account.OnTracAccountID + 2000))

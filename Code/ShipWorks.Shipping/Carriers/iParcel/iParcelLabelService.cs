@@ -2,6 +2,7 @@
 using Interapptive.Shared.Utility;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Content;
 
 namespace ShipWorks.Shipping.Carriers.iParcel
@@ -11,7 +12,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
     /// </summary>
     public class iParcelLabelService : ILabelService
     {
-        private readonly ICarrierAccountRepository<IParcelAccountEntity> accountRepository;
+        private readonly ICarrierAccountRepository<IParcelAccountEntity, IIParcelAccountEntity> accountRepository;
         private readonly IiParcelRepository repository;
         private readonly IiParcelServiceGateway serviceGateway;
         private readonly IOrderManager orderManager;
@@ -19,7 +20,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// <summary>
         /// Constructor
         /// </summary>
-        public iParcelLabelService(ICarrierAccountRepository<IParcelAccountEntity> accountRepository, IiParcelRepository repository, IiParcelServiceGateway serviceGateway, IOrderManager orderManager)
+        public iParcelLabelService(ICarrierAccountRepository<IParcelAccountEntity, IIParcelAccountEntity> accountRepository, IiParcelRepository repository, IiParcelServiceGateway serviceGateway, IOrderManager orderManager)
         {
             this.accountRepository = accountRepository;
             this.repository = repository;

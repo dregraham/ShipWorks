@@ -2,6 +2,7 @@
 using ShipWorks.Core.ApplicationCode;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.FedEx;
@@ -41,7 +42,7 @@ namespace ShipWorks.Shipping.UI.Carriers.FedEx
                 .SingleInstance();
 
             builder.RegisterType<FedExAccountRepository>()
-                .As<ICarrierAccountRepository<FedExAccountEntity>>()
+                .As<ICarrierAccountRepository<FedExAccountEntity, IFedExAccountEntity>>()
                 .Keyed<ICarrierAccountRetriever<ICarrierAccount>>(ShipmentTypeCode.FedEx)
                 .SingleInstance();
 
