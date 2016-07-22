@@ -43,7 +43,7 @@
         <ui:VisibleWhenEqualToParameterConverter x:Key="VisibleWhenEqualToParameterConverter" />
         <ui:StringToVisibilityConverter x:Key="StringToVisibilityConverter" />
     </Control.Resources>
-    <Grid Margin="10">
+    <Grid Margin="20 10 10 10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
@@ -62,7 +62,7 @@
             </Grid.ColumnDefinitions>
             <Label Grid.Row="0"
                    Grid.Column="0"
-                   Margin="13 0 -20 5"
+                   Margin="3 0 -20 5"
                    Content="Import Settings"
                    FontWeight="Bold" />
             <Label Grid.Row="1"

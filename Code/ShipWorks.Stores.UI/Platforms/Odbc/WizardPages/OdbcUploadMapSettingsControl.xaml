@@ -41,9 +41,8 @@
             <Setter Property="VerticalContentAlignment" Value="Center" />
         </Style>
         <ui:VisibleWhenEqualToParameterConverter x:Key="VisibleWhenEqualToParameterConverter" />
-        <ui:StringToVisibilityConverter x:Key="StringToVisibilityConverter" />
     </Control.Resources>
-    <Grid Margin="10">
+    <Grid Margin="20 10 10 10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
@@ -62,7 +61,7 @@
             </Grid.ColumnDefinitions>
             <Label Grid.Row="0"
                    Grid.Column="0"
-                   Margin="13 0 -20 5"
+                   Margin="0 0 -20 5"
                    Content="Upload Settings"
                    FontWeight="Bold" />
             <Label Grid.Row="1"
@@ -98,7 +97,7 @@
         </Grid>
         <DockPanel Grid.Row="1"
                    VerticalAlignment="Top"
-                   d:IsHidden="false">
+                   d:IsHidden="true">
             <DockPanel.Visibility>
                 <Binding Converter="{StaticResource VisibleWhenEqualToParameterConverter}" Path="ColumnSourceIsTable">
                     <Binding.ConverterParameter>
@@ -118,7 +117,7 @@
                                                         UpdateSourceTrigger=PropertyChanged}"
                                   SelectedValue="{Binding SelectedTable}" />
         </DockPanel>
-        <Grid Grid.Row="1" d:IsHidden="true">
+        <Grid Grid.Row="1" d:IsHidden="false">
             <Grid.Visibility>
                 <Binding Converter="{StaticResource VisibleWhenEqualToParameterConverter}" Path="ColumnSourceIsTable">
                     <Binding.ConverterParameter>
@@ -146,6 +145,15 @@
                                     NotifyOnValidationError=true}"
                      TextWrapping="Wrap"
                      ui:EntityFieldLength.FieldName="OdbcStoreCustomQuery" />
+            <TextBlock Grid.Row="2">
+                For help writing your query,
+                <Hyperlink Command="{Binding OpenTemplateEditorDlgCommand}">click here.</Hyperlink>
+            </TextBlock>
+
+            <Button Grid.Row="2"
+                    HorizontalAlignment="Right"
+                    Command="{Binding OpenTemplateEditorDlgCommand}"
+                    Content="Edit Query" />
         </Grid>
     </Grid>
 </UserControl>

@@ -176,6 +176,7 @@
     <Compile Include="Platforms\Odbc\DataAccess\OdbcUploadCommandFactory.cs" />
     <Compile Include="Platforms\Odbc\Upload\IOdbcUploadCommand.cs" />
     <Compile Include="Platforms\Odbc\Upload\IOdbcUploader.cs" />
+    <Compile Include="Platforms\Odbc\Upload\OdbcCustomUploadQuery.cs" />
     <Compile Include="Platforms\Odbc\Upload\OdbcTableUploadQuery.cs" />
     <Compile Include="Platforms\Odbc\Upload\OdbcUploadCommand.cs" />
     <Compile Include="Platforms\Odbc\DataSource\IOdbcDataSourceService.cs" />

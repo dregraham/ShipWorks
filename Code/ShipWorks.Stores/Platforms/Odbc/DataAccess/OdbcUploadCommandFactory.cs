@@ -12,7 +12,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
     /// <summary>
     /// Creates an OdbcUploadCommand for a store
     /// </summary>
-    public class OdbcUploadCommandFactory
+    public class OdbcUploadCommandFactory : IOdbcUploadCommandFactory
     {
         private readonly IOdbcDataSource dataSource;
         private readonly IShipWorksDbProviderFactory dbProviderFactory;
