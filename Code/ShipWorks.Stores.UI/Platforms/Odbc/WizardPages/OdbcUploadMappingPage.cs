@@ -84,7 +84,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
                 IOdbcColumnSource columnSource = columnSourceFactory(currentColumnSource);
 
                 columnSource.Load(selectedDataSource, currentColumnSource,
-                    (OdbcColumnSourceType)store.ImportSourceType);
+                    (OdbcColumnSourceType)store.UploadColumnSourceType);
 
                 viewModel = viewModelFactory();
                 mappingControl.DataContext = viewModel;
