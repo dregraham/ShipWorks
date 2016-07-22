@@ -484,7 +484,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("ImportStrategy", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
-			_fieldsCustomProperties.Add("ImportSourceType", fieldHashtable);
+			_fieldsCustomProperties.Add("ImportColumnSourceType", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("ImportColumnSource", fieldHashtable);
@@ -609,15 +609,15 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)OdbcStoreFieldIndex.ImportStrategy, value); }
 		}
 
-		/// <summary> The ImportSourceType property of the Entity OdbcStore<br/><br/>
+		/// <summary> The ImportColumnSourceType property of the Entity OdbcStore<br/><br/>
 		/// </summary>
 		/// <remarks>Mapped on  table field: "OdbcStore"."ImportColumnSourceType"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Int32 ImportSourceType
+		public virtual System.Int32 ImportColumnSourceType
 		{
-			get { return (System.Int32)GetValue((int)OdbcStoreFieldIndex.ImportSourceType, true); }
-			set	{ SetValue((int)OdbcStoreFieldIndex.ImportSourceType, value); }
+			get { return (System.Int32)GetValue((int)OdbcStoreFieldIndex.ImportColumnSourceType, true); }
+			set	{ SetValue((int)OdbcStoreFieldIndex.ImportColumnSourceType, value); }
 		}
 
 		/// <summary> The ImportColumnSource property of the Entity OdbcStore<br/><br/>

@@ -20,6 +20,11 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
         DbDataReader ExecuteReader(CommandBehavior commandBehavior);
 
         /// <summary>
+        /// Executes the query and returns the number or rows affected
+        /// </summary>
+        int ExecuteNonQuery();
+
+        /// <summary>
         /// Sets the command text
         /// </summary>
         /// <param name="sql"></param>

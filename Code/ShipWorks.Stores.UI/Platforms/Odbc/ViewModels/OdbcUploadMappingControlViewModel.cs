@@ -2,6 +2,7 @@
 using Interapptive.Shared.Utility;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
@@ -128,7 +129,10 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
             mapEntries.AddRange(ShipmentAddress.Entries);
 
             OdbcFieldMap map = fieldMapFactory.CreateFieldMapFrom(mapEntries);
-            
+
+            IEnumerable<IOdbcFieldMapEntry> entries = map.FindEntriesBy(OrderFields.OrderNumber);
+            map.RecordIdentifierSource = entries.FirstOrDefault()?.ExternalField.Column.Name;
+
             return map;
         }
 
@@ -136,6 +140,31 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
         /// </summary>
         public bool ValidateRequiredMappingFields()
         {
+            // get a list of all of the mapped columns
+            List<IOdbcFieldMapEntry> mappedExternalColumns =
+                Shipment.Entries.Where(
+                    e => !e.ExternalField.Column?.Name.Equals("(None)", StringComparison.InvariantCulture) ?? false)
+                    .ToList();
+
+            mappedExternalColumns.AddRange(ShipmentAddress.Entries.Where(
+                e => !e.ExternalField.Column?.Name.Equals("(None)", StringComparison.InvariantCulture) ?? false));
+
+            // see if any of the external columns are duplicated
+            string [] duplicateColumns = mappedExternalColumns.GroupBy(e => e.ExternalField.Column.Name)
+                .SelectMany(g => g.Skip(1))
+                .Select(e => e.ExternalField.Column.Name)
+                .Distinct()
+                .Select(d => "    - " + d)
+                .ToArray();
+
+            if (duplicateColumns.Any())
+            {
+                string displayName = string.Join(Environment.NewLine, duplicateColumns);
+
+                messageHelper.ShowError($"Each column can only be mapped once. The following columns are mapped more than once:{Environment.NewLine}{displayName}");
+                return false;
+            }
+
             // Finds an entry that is required and the external column has not been set
             IEnumerable<IOdbcFieldMapEntry> unsetRequiredFieldMapEntries =
                Shipment.Entries.Where(

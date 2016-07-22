@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Download
 {
-    public class TableOdbcDownloadQuery : IOdbcDownloadQuery
+    public class TableOdbcDownloadQuery : IOdbcQuery
     {
         private readonly OdbcStoreEntity store;
         private readonly IShipWorksDbProviderFactory dbProviderFactory;
@@ -27,7 +27,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
             this.dataSource = dataSource;
             this.fieldMap = fieldMap;
 
-            if (store.ImportSourceType != (int) OdbcColumnSourceType.Table)
+            if (store.ImportColumnSourceType != (int) OdbcColumnSourceType.Table)
             {
                 throw new ShipWorksOdbcException("An incompatible source was provided to perform an ODBC table based query.");
             }

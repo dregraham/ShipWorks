@@ -45,6 +45,11 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         void ApplyValues(OdbcRecord record);
 
         /// <summary>
+        /// Applies the given entity values to the external fields
+        /// </summary>
+        void ApplyValues(IEnumerable<IEntity2> entities);
+
+        /// <summary>
         /// Copies the values from the entries to corresponding fields on the entity
         /// </summary>
         void CopyToEntity(IEntity2 entity);

@@ -9,9 +9,11 @@ using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 using ShipWorks.Stores.Platforms.Odbc.Download;
 using ShipWorks.Stores.Platforms.Odbc.Loaders;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
+using ShipWorks.Stores.Platforms.Odbc.Upload;
 using ShipWorks.Stores.UI.Platforms.Odbc.ViewModels;
 using ShipWorks.Stores.UI.Platforms.Odbc.WizardPages;
 using System.Reflection;
+using ShipWorks.Stores.Platforms.Odbc.CoreExtensions.Actions;
 using Module = Autofac.Module;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc
@@ -82,6 +84,14 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
 
             builder.RegisterType<OdbcDataSourceService>()
                 .AsImplementedInterfaces();
+
+            builder.RegisterType<OdbcCommandFactory>()
+                .As<IOdbcCommandFactory>();
+
+            builder.RegisterType<OdbcUploader>()
+                .As<IOdbcUploader>();
+
+            builder.RegisterType<OdbcUploadMenuCommand>();
         }
 
         /// <summary>

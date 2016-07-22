@@ -88,10 +88,10 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
                 // Get the starting point
                 DateTime startingPoint = GetOnlineLastModifiedStartingPoint().GetValueOrDefault(DateTime.UtcNow.AddDays(-defaultDaysBack));
 
-                return commandFactory.CreateDownloadCommand(odbcStore, startingPoint);
+                return commandFactory.CreateDownloadCommand(odbcStore, startingPoint, fieldMap);
             }
 
-            return commandFactory.CreateDownloadCommand(odbcStore);
+            return commandFactory.CreateDownloadCommand(odbcStore, fieldMap);
         }
 
         /// <summary>

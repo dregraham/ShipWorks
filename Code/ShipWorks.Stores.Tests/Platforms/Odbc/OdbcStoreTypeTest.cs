@@ -1,5 +1,6 @@
 ﻿using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Content;
+using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.GenericFile;
 using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
@@ -21,7 +22,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         [Fact]
         public void TypeCode_IsOdbc()
         {
-            var testObject = new OdbcStoreType(store, null);
+            var testObject = new OdbcStoreType(store, null, null);
 
             Assert.Equal(StoreTypeCode.Odbc, testObject.TypeCode);
         }
@@ -29,7 +30,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         [Fact]
         public void CreateOrderIdentifier_ReturnsGenericFileOrderIdentifier()
         {
-            var testObject = new OdbcStoreType(store, null);
+            var testObject = new OdbcStoreType(store, null, null);
             var order = new OrderEntity() {OrderNumber = 42};
             OrderIdentifier orderIdentifier = testObject.CreateOrderIdentifier(order);
             Assert.IsType<GenericFileOrderIdentifier>(orderIdentifier);
@@ -38,7 +39,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         [Fact]
         public void CreateStoreInstance_ReturnsOdbcStoreEntity()
         {
-            var testObject = new OdbcStoreType(store, null);
+            var testObject = new OdbcStoreType(store, null, null);
             var newStore = testObject.CreateStoreInstance();
 
             Assert.IsType<OdbcStoreEntity>(newStore);
@@ -47,7 +48,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         [Fact]
         public void CreateStoreInstance_ReturnsStoreWithEmptyConnectionString()
         {
-            var testObject = new OdbcStoreType(store, null);
+            var testObject = new OdbcStoreType(store, null, null);
             var newStore = testObject.CreateStoreInstance();
 
             Assert.Empty(((OdbcStoreEntity) newStore).ImportConnectionString);
@@ -56,7 +57,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         [Fact]
         public void CreateStoreInstance_ReturnsStoreWithEmptyImportMap()
         {
-            var testObject = new OdbcStoreType(store, null);
+            var testObject = new OdbcStoreType(store, null, null);
             var newStore = testObject.CreateStoreInstance();
 
             Assert.Empty(((OdbcStoreEntity) newStore).ImportMap);
@@ -65,7 +66,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         [Fact]
         public void CreateStoreInstance_ReturnsOdbcStoreEntity_WithImportStrategyByModifiedTime()
         {
-            OdbcStoreType testObject = new OdbcStoreType(store, null);
+            OdbcStoreType testObject = new OdbcStoreType(store, null, null);
 
             OdbcStoreEntity odbcStore = testObject.CreateStoreInstance() as OdbcStoreEntity;
 
@@ -75,7 +76,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         [Fact]
         public void CreateStoreInstance_SetsShipmentUploadStrategyToDoNotUpload()
         {
-            OdbcStoreType testObject = new OdbcStoreType(store, null);
+            OdbcStoreType testObject = new OdbcStoreType(store, null, null);
 
             OdbcStoreEntity odbcStore = testObject.CreateStoreInstance() as OdbcStoreEntity;
 
@@ -85,7 +86,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         [Fact]
         public void CreateStoreInstance_SetsUploadMapToEmptyString()
         {
-            OdbcStoreType testObject = new OdbcStoreType(store, null);
+            OdbcStoreType testObject = new OdbcStoreType(store, null, null);
 
             OdbcStoreEntity odbcStore = testObject.CreateStoreInstance() as OdbcStoreEntity;
 
@@ -95,7 +96,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         [Fact]
         public void CreateStoreInstance_SetUploadColumnSourceTypeToTable()
         {
-            OdbcStoreType testObject = new OdbcStoreType(store, null);
+            OdbcStoreType testObject = new OdbcStoreType(store, null, null);
 
             OdbcStoreEntity odbcStore = testObject.CreateStoreInstance() as OdbcStoreEntity;
 
@@ -105,7 +106,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         [Fact]
         public void CreateStoreInstance_SetsUploadColumnSourceToEmpty()
         {
-            OdbcStoreType testObject = new OdbcStoreType(store, null);
+            OdbcStoreType testObject = new OdbcStoreType(store, null, null);
 
             OdbcStoreEntity odbcStore = testObject.CreateStoreInstance() as OdbcStoreEntity;
 
@@ -116,7 +117,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         [Fact]
         public void GridOnlineColumnSupported_ReturnsTrue_WhenColumnIsOnlineStatus()
         {
-            var testObject = new OdbcStoreType(store, null);
+            var testObject = new OdbcStoreType(store, null, null);
 
             Assert.True(testObject.GridOnlineColumnSupported(OnlineGridColumnSupport.OnlineStatus));
         }
@@ -124,9 +125,29 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         [Fact]
         public void GridOnlineColumnSupported_ReturnsTrue_WhenColumnIsLastModified()
         {
-            var testObject = new OdbcStoreType(store, null);
+            var testObject = new OdbcStoreType(store, null, null);
 
             Assert.True(testObject.GridOnlineColumnSupported(OnlineGridColumnSupport.LastModified));
+        }
+
+        [Fact]
+        public void CreateAddStoreWizardOnlineUpdateActionControl_ReturnsNull_WhenUploadStrategyIsDoNotUpload()
+        {
+            store.UploadStrategy = (int) OdbcShipmentUploadStrategy.DoNotUpload;
+
+            OdbcStoreType testObject = new OdbcStoreType(store, null, null);
+
+            Assert.Null(testObject.CreateAddStoreWizardOnlineUpdateActionControl());
+        }
+
+        [Fact]
+        public void CreateAddStoreWizardOnlineUpdateActionControl_ReturnsOnlineUpdateShipmentUpdateActionControl_WhenUploadStrategyIsNotDoNotUpload()
+        {
+            store.UploadStrategy = (int) OdbcShipmentUploadStrategy.UseImportDataSource;
+
+            OdbcStoreType testObject = new OdbcStoreType(store, null, null);
+
+            Assert.IsAssignableFrom<OnlineUpdateShipmentUpdateActionControl>(testObject.CreateAddStoreWizardOnlineUpdateActionControl());
         }
     }
 }

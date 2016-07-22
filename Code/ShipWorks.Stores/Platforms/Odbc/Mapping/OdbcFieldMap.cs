@@ -54,6 +54,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         {
             foreach (IOdbcFieldMapEntry entry in Entries)
             {
+                entry.ShipWorksField.ResetValue();
                 entry.ExternalField.ResetValue();
             }
         }
@@ -96,6 +97,24 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 
                 // Copy the External fields to the ShipWorks fields
                 entry.CopyExternalValueToShipWorksField();
+            }
+        }
+
+        /// <summary>
+        /// Apply the given entity values to the entries ShipWorks fields
+        /// </summary>
+        public void ApplyValues(IEnumerable<IEntity2> entities)
+        {
+            // Reset all the values first
+            ResetValues();
+
+            foreach (IEntity2 entity in entities ?? Enumerable.Empty<IEntity2>())
+            {
+                foreach (IOdbcFieldMapEntry entry in Entries)
+                {
+                    // Load data from entity
+                    entry.LoadShipWorksField(entity);
+                }
             }
         }
 

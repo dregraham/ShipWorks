@@ -8,6 +8,7 @@ using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
@@ -272,10 +273,12 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
             {
                 OdbcFieldMap testObject = mock.Create<OdbcFieldMap>();
 
+                var shipWorksOdbcMappableField = mock.Mock<IShipWorksOdbcMappableField>();
                 var externalOdbcMappableField = mock.Mock<IExternalOdbcMappableField>();
                 externalOdbcMappableField.Setup(e => e.Value).Returns("blah");
 
                 var mapEntry = mock.Mock<IOdbcFieldMapEntry>();
+                mapEntry.Setup(e => e.ShipWorksField).Returns(shipWorksOdbcMappableField.Object);
                 mapEntry.Setup(e => e.ExternalField).Returns(externalOdbcMappableField.Object);
 
                 testObject.AddEntry(mapEntry.Object);
@@ -295,10 +298,12 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
             {
                 OdbcFieldMap testObject = mock.Create<OdbcFieldMap>();
 
+                var shipWorksOdbcMappableField = mock.Mock<IShipWorksOdbcMappableField>();
                 var externalOdbcMappableField = mock.Mock<IExternalOdbcMappableField>();
                 externalOdbcMappableField.Setup(e => e.Value).Returns("blah");
 
                 var mapEntry = mock.Mock<IOdbcFieldMapEntry>();
+                mapEntry.Setup(e => e.ShipWorksField).Returns(shipWorksOdbcMappableField.Object);
                 mapEntry.Setup(e => e.ExternalField).Returns(externalOdbcMappableField.Object);
 
                 testObject.AddEntry(mapEntry.Object);
@@ -308,6 +313,51 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
                 testObject.ApplyValues(odbcRecord);
 
                 mapEntry.Verify(m => m.CopyExternalValueToShipWorksField(), Times.Once);
+            }
+        }
+
+        [Fact]
+        public void ApplyValues_DelegatesToLoadShipWorksField()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                OdbcFieldMap testObject = mock.Create<OdbcFieldMap>();
+
+                var shipWorksOdbcMappableField = mock.Mock<IShipWorksOdbcMappableField>();
+                var externalOdbcMappableField = mock.Mock<IExternalOdbcMappableField>();
+
+                var mapEntry = mock.Mock<IOdbcFieldMapEntry>();
+                mapEntry.Setup(e => e.ShipWorksField).Returns(shipWorksOdbcMappableField.Object);
+                mapEntry.Setup(e => e.ExternalField).Returns(externalOdbcMappableField.Object);
+                testObject.AddEntry(mapEntry.Object);
+
+                IEnumerable<IEntity2> entities = new List<IEntity2>() {new ShipmentEntity()};
+
+                testObject.ApplyValues(entities);
+
+                mapEntry.Verify(m => m.LoadShipWorksField(It.Is<IEntity2>(r => r.Equals(entities.FirstOrDefault()))), Times.Once);
+            }
+        }
+
+        [Fact]
+        public void ApplyValues_DoesNotDelegatesToLoadShipWorksField_WhenEntitiesIsNull()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                OdbcFieldMap testObject = mock.Create<OdbcFieldMap>();
+
+                var shipWorksOdbcMappableField = mock.Mock<IShipWorksOdbcMappableField>();
+                var externalOdbcMappableField = mock.Mock<IExternalOdbcMappableField>();
+                var mapEntry = mock.Mock<IOdbcFieldMapEntry>();
+                mapEntry.Setup(e => e.ShipWorksField).Returns(shipWorksOdbcMappableField.Object);
+                mapEntry.Setup(e => e.ExternalField).Returns(externalOdbcMappableField.Object);
+                testObject.AddEntry(mapEntry.Object);
+
+                IEnumerable<IEntity2> entities = null;
+
+                testObject.ApplyValues(entities);
+
+                mapEntry.Verify(m => m.LoadShipWorksField(null), Times.Never);
             }
         }
 

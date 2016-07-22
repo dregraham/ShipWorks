@@ -225,7 +225,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Download
         }
 
         [Fact]
-        public void Execute_PopulatesCommandTextFromIOdbcDownloadQuery()
+        public void Execute_PopulatesCommandTextFromIOdbcQuery()
         {
             using (var mock = AutoMock.GetLoose())
             {
@@ -268,7 +268,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Download
                 map.Setup(m => m.RecordIdentifierSource).Returns("Record ID");
                 map.Setup(m => m.Entries).Returns(new List<IOdbcFieldMapEntry> { mapEntry.Object });
 
-                var query = mock.Mock<IOdbcDownloadQuery>();
+                var query = mock.Mock<IOdbcQuery>();
 
                 var testObject = mock.Create<OdbcDownloadCommand>();
                 testObject.Execute();

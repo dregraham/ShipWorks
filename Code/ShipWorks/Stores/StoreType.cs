@@ -601,5 +601,14 @@ namespace ShipWorks.Stores
             // Just accept whatever the recommendation is by default.
             return customsRequiredRecommendation;
         }
+
+        /// <summary>
+        /// Determines whether or not to show the wizard page that configures the upload/download settings for the store
+        /// </summary>
+        /// <remarks>For example Generic File has no upload or download settings so we skip showing the page.</remarks>
+        public virtual bool ShowTaskWizardPage()
+        {
+            return true;
+        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 {
@@ -29,5 +30,15 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// Set the Value to the given value
         /// </summary>
         void LoadValue(object value);
+
+        /// <summary>
+        /// Set the Value to the given entities matching field value
+        /// </summary>
+        void LoadValue(IEntity2 value);
+
+        /// <summary>
+        /// Resets the value.
+        /// </summary>
+        void ResetValue();
     }
 }

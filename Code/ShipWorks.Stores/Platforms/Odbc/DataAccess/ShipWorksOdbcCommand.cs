@@ -63,6 +63,15 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
         }
 
         /// <summary>
+        /// Executes the query and returns the number or rows affected
+        /// </summary>
+        public int ExecuteNonQuery()
+        {
+            log.Info(command.CommandText);
+            return command.ExecuteNonQuery();
+        }
+
+        /// <summary>
         /// Sets the command text of the command
         /// </summary>
         public void ChangeCommandText(string sql)

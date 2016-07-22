@@ -169,6 +169,13 @@
     <Compile Include="Platforms\LemonStand\LemonStandStatusCodeProvider.cs" />
     <Compile Include="Platforms\LemonStand\LemonStandStoreType.cs" />
     <Compile Include="Platforms\LemonStand\LemonStandWebClient.cs" />
+    <Compile Include="Platforms\Odbc\DataAccess\IOdbcCommandFactory.cs" />
+    <Compile Include="Platforms\Odbc\CoreExtensions\Actions\OdbcShipmentUploadTask.cs" />
+    <Compile Include="Platforms\Odbc\CoreExtensions\Actions\OdbcUploadMenuCommand.cs" />
+    <Compile Include="Platforms\Odbc\Upload\IOdbcUploadCommand.cs" />
+    <Compile Include="Platforms\Odbc\Upload\IOdbcUploader.cs" />
+    <Compile Include="Platforms\Odbc\Upload\OdbcTableUploadQuery.cs" />
+    <Compile Include="Platforms\Odbc\Upload\OdbcUploadCommand.cs" />
     <Compile Include="Platforms\Odbc\DataSource\IOdbcDataSourceService.cs" />
     <Compile Include="Platforms\Odbc\DataSource\OdbcDataSourceService.cs" />
     <Compile Include="Platforms\Odbc\DataSource\Schema\OdbcColumnSourceType.cs" />
@@ -176,7 +183,7 @@
     <Compile Include="Platforms\Odbc\EncryptedOdbcDataSource.cs" />
     <Compile Include="Platforms\Odbc\DataAccess\IOdbcCommand.cs" />
     <Compile Include="Platforms\Odbc\DataSource\IOdbcDataSource.cs" />
-    <Compile Include="Platforms\Odbc\Download\IOdbcDownloadQuery.cs" />
+    <Compile Include="Platforms\Odbc\IOdbcQuery.cs" />
     <Compile Include="Platforms\Odbc\DataAccess\IOdbcSampleDataCommand.cs" />
     <Compile Include="Platforms\Odbc\DataSource\Schema\IOdbcSchema.cs" />
     <Compile Include="Platforms\Odbc\DataSource\Schema\IOdbcColumnSource.cs" />
@@ -231,6 +238,7 @@
     <Compile Include="Platforms\Odbc\ShipWorksOdbcException.cs" />
     <Compile Include="Platforms\Odbc\Download\TableOdbcDownloadQuery.cs" />
     <Compile Include="Platforms\Odbc\Upload\OdbcShipmentUploadStrategy.cs" />
+    <Compile Include="Platforms\Odbc\Upload\OdbcUploader.cs" />
     <Compile Include="Platforms\SparkPay\CoreExtensions\Actions\SparkPayOrderUpdateTask.cs" />
     <Compile Include="Platforms\SparkPay\CoreExtensions\Actions\SparkPayShipmentUploadTask.cs" />
     <Compile Include="Platforms\SparkPay\DTO\Address.cs" />

@@ -12,6 +12,9 @@ using ShipWorks.UI.Wizard;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using ShipWorks.ApplicationCore.Interaction;
+using ShipWorks.Stores.Management;
+using ShipWorks.Stores.Platforms.Odbc.CoreExtensions.Actions;
 
 namespace ShipWorks.Stores.Platforms.Odbc
 {
@@ -21,14 +24,16 @@ namespace ShipWorks.Stores.Platforms.Odbc
     public class OdbcStoreType : StoreType
     {
         private readonly Func<StoreEntity, OdbcStoreDownloader> downloaderFactory;
+        private readonly Func<OdbcStoreEntity, OdbcUploadMenuCommand> uploadMenuCommandFactory;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public OdbcStoreType(StoreEntity store, Func<StoreEntity, OdbcStoreDownloader> downloaderFactory)
+        public OdbcStoreType(StoreEntity store, Func<StoreEntity, OdbcStoreDownloader> downloaderFactory, Func<OdbcStoreEntity, OdbcUploadMenuCommand> uploadMenuCommandFactory)
             : base(store)
         {
             this.downloaderFactory = downloaderFactory;
+            this.uploadMenuCommandFactory = uploadMenuCommandFactory;
         }
 
         /// <summary>
@@ -72,7 +77,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
                 ImportConnectionString = string.Empty,
                 ImportMap = string.Empty,
                 ImportStrategy = (int) OdbcImportStrategy.ByModifiedTime,
-                ImportSourceType = (int) OdbcColumnSourceType.Table,
+                ImportColumnSourceType = (int) OdbcColumnSourceType.Table,
                 ImportColumnSource = string.Empty,
                 UploadMap = string.Empty,
                 UploadStrategy = (int) OdbcShipmentUploadStrategy.DoNotUpload,
@@ -108,6 +113,9 @@ namespace ShipWorks.Stores.Platforms.Odbc
             return base.GridOnlineColumnSupported(column);
         }
 
+        /// <summary>
+        /// Sets the stores initial download policy
+        /// </summary>
         public override InitialDownloadPolicy InitialDownloadPolicy
         {
             get
@@ -116,6 +124,48 @@ namespace ShipWorks.Stores.Platforms.Odbc
                     ? new InitialDownloadPolicy(InitialDownloadRestrictionType.DaysBack) { DefaultDaysBack = 30, MaxDaysBack = 30}
                     : new InitialDownloadPolicy(InitialDownloadRestrictionType.None);
             }
+        }
+
+        /// <summary>
+        /// Creates the menu commands for the store
+        /// </summary>
+        public override List<MenuCommand> CreateOnlineUpdateInstanceCommands()
+        {
+            OdbcStoreEntity odbcStore = Store as OdbcStoreEntity;
+            MethodConditions.EnsureArgumentIsNotNull(odbcStore);
+
+            if (odbcStore?.UploadStrategy == (int) OdbcShipmentUploadStrategy.DoNotUpload)
+            {
+               return new List<MenuCommand>();
+            }
+
+            return new List<MenuCommand>(new[] {uploadMenuCommandFactory(odbcStore)});
+        }
+
+        /// <summary>
+        /// Creates the add store wizard online update action control.
+        /// </summary>
+        public override OnlineUpdateActionControlBase CreateAddStoreWizardOnlineUpdateActionControl()
+        {
+            return ((OdbcStoreEntity) Store).UploadStrategy == (int) OdbcShipmentUploadStrategy.DoNotUpload ? null :
+                new OnlineUpdateShipmentUpdateActionControl(typeof(OdbcShipmentUploadTask));
+        }
+
+        /// <summary>
+        /// Show the settings wizard page only if the store has a download strategy or upload strategy
+        /// </summary>
+        /// <returns></returns>
+        public override bool ShowTaskWizardPage()
+        {
+            OdbcStoreEntity odbcStore = Store as OdbcStoreEntity;
+
+            if (odbcStore == null)
+            {
+                return false;
+            }
+
+            return odbcStore.ImportStrategy != (int) OdbcImportStrategy.All ||
+                   odbcStore.UploadStrategy != (int) OdbcShipmentUploadStrategy.DoNotUpload;
         }
     }
 }

@@ -79,7 +79,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
                 (int) OdbcImportStrategy.ByModifiedTime :
                 (int) OdbcImportStrategy.All;
 
-            store.ImportSourceType = ColumnSourceIsTable ?
+            store.ImportColumnSourceType = ColumnSourceIsTable ?
                 (int) OdbcColumnSourceType.Table :
                 (int) OdbcColumnSourceType.CustomQuery;
 

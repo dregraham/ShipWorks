@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ShipWorks.Tests.Shared;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -19,7 +20,7 @@ namespace ShipWorks.Tests.Core
         [Fact]
         public void Verify_EnumObfuscation_IsSet()
         {
-            IEnumerable<Assembly> assemblies = AppDomain.CurrentDomain.GetAssemblies().Where(a => a.FullName.Contains("ShipWorks")).OrderBy(a => a.FullName);
+            IEnumerable<Assembly> assemblies = AssemblyProvider.GetAssemblies();
             IEnumerable<Type> types = assemblies
                 .SelectMany(t => t.GetTypes())
                 .Where(t => t.Namespace != null &&
@@ -76,7 +77,8 @@ namespace ShipWorks.Tests.Core
                 "ChannelAdvisor.WebServices".ToUpperInvariant(),
                 "MarketplaceAdvisor.WebServices".ToUpperInvariant(),
                 "PayPal.WebServices".ToUpperInvariant(),
-                "ShipWorks.Stores.Content.Panels.MapPanelType".ToUpperInvariant()
+                "ShipWorks.Stores.Content.Panels.MapPanelType".ToUpperInvariant(),
+                "ShipWorks.Stores.Platforms.Odbc.Odbc32".ToUpperInvariant()
             };
 
         /// <summary>
@@ -243,6 +245,7 @@ namespace ShipWorks.Tests.Core
                 "ShipWorks.Templates.Saving.SavePromptWhen".ToUpperInvariant(),
                 "ShipWorks.Templates.Tokens.TokenSelectionMode".ToUpperInvariant(),
                 "ShipWorks.Templates.Tokens.TokenUsage".ToUpperInvariant(),
+                "ShipWorks.UI.AttachedProperties.LimitScrollSizeMode".ToUpperInvariant(),
                 "ShipWorks.UI.Controls.Colors.ColorChooser+ChangeStyle".ToUpperInvariant(),
                 "ShipWorks.UI.Controls.Colors.ColorWheel+MouseState".ToUpperInvariant(),
                 "ShipWorks.UI.Controls.Html.Core.HtmlApi+CARET_DIRECTION".ToUpperInvariant(),
