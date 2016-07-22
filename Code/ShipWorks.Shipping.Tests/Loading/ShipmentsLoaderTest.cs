@@ -56,7 +56,7 @@ namespace ShipWorks.Shipping.Tests.Loading
             IDictionary<long, ShipmentEntity> globalShipments = new Dictionary<long, ShipmentEntity>();
 
             await testObject.StartTask(new ProgressProvider(),
-                new List<long> { orderEntity.OrderID }, globalShipments, new BlockingCollection<ShipmentEntity>());
+                new List<long> { orderEntity.OrderID }, globalShipments, new BlockingCollection<ShipmentEntity>(), false);
 
             Assert.Equal(2, globalShipments.Count());
             Assert.Contains(extraShipment, globalShipments.Values);
@@ -72,10 +72,10 @@ namespace ShipWorks.Shipping.Tests.Loading
 
             await testObject.StartTask(new ProgressProvider(),
                 new List<long> { orderEntity.OrderID }, new Dictionary<long, ShipmentEntity>(),
-                new BlockingCollection<ShipmentEntity>());
+                new BlockingCollection<ShipmentEntity>(), true);
 
             mock.Mock<IShipmentFactory>()
-                .Verify(x => x.AutoCreateIfNecessary(orderEntity));
+                .Verify(x => x.AutoCreateIfNecessary(orderEntity, true));
         }
     }
 }

@@ -11,9 +11,12 @@ using log4net;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Core.Messaging.Messages.Shipping;
+using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages;
+using ShipWorks.Shipping.Settings;
 using ShipWorks.Stores;
+using ShipWorks.Stores.Content;
 
 namespace ShipWorks.Shipping.Services
 {
@@ -29,26 +32,32 @@ namespace ShipWorks.Shipping.Services
         private readonly IStoreTypeManager storeTypeManager;
         private IDisposable subscription;
         private readonly ILog log;
+        private readonly IOrderManager orderManager;
+        private readonly IShippingSettings shippingSettings;
 
-        /// <summary>
-        /// Constructor
-        /// </summary>
+#pragma warning disable S107 // Methods should not have too many parameters
+                            /// <summary>
+                            /// Constructor
+                            /// </summary>
         public OrderLoaderService(Func<Owned<IOrderLoader>> shipmentLoaderFactory, IMessenger messenger,
             ISchedulerProvider schedulerProvider, ICarrierShipmentAdapterFactory carrierShipmentAdapterFactory,
-            IStoreTypeManager storeTypeManager, Func<Type, ILog> logFactory)
+            IStoreTypeManager storeTypeManager, Func<Type, ILog> logFactory, IOrderManager orderManager, IShippingSettings shippingSettings)
+#pragma warning restore S107 // Methods should not have too many parameters
         {
             this.shipmentLoaderFactory = shipmentLoaderFactory;
             this.messenger = messenger;
             this.schedulerProvider = schedulerProvider;
             this.carrierShipmentAdapterFactory = carrierShipmentAdapterFactory;
             this.storeTypeManager = storeTypeManager;
+            this.orderManager = orderManager;
+            this.shippingSettings = shippingSettings;
             this.log = logFactory(this.GetType());
         }
 
         /// <summary>
         /// Loads the order
         /// </summary>
-        public async Task<IEnumerable<IOrderSelection>> Load(IEnumerable<long> orderIDs)
+        public async Task<IEnumerable<IOrderSelection>> Load(IEnumerable<long> orderIDs, bool createIfNoShipments)
         {
             if (orderIDs.CompareCountTo(1) != ComparisonResult.Equal)
             {
@@ -56,10 +65,18 @@ namespace ShipWorks.Shipping.Services
             }
 
             IOrderLoader shipmentLoader = shipmentLoaderFactory().Value;
-            ShipmentsLoadedEventArgs results = await shipmentLoader.LoadAsync(orderIDs, ProgressDisplayOptions.NeverShow)
+            ShipmentsLoadedEventArgs results = await shipmentLoader.LoadAsync(orderIDs, ProgressDisplayOptions.NeverShow, createIfNoShipments)
                 .ConfigureAwait(true);
 
+            // Only 1 order was requested.  If auto creation of shipments isn't enabled, the results.Shipments will be empty 
+            // and we can't get an order, but we need one for the shipping panel.  So if there are no shipments, load the
+            // requested order.
             OrderEntity order = results.Shipments.FirstOrDefault()?.Order;
+            if (order == null)
+            {
+                order = orderManager.FetchOrder(orderIDs.First());
+            }
+            
             List<ICarrierShipmentAdapter> adapters = results.Shipments.Select(carrierShipmentAdapterFactory.Get).ToList();
 
             LoadedOrderSelection orderSelectionLoaded = results.Error == null ?
@@ -82,7 +99,7 @@ namespace ShipWorks.Shipping.Services
             subscription = messenger.OfType<OrderSelectionChangingMessage>()
                 .Throttle(TimeSpan.FromMilliseconds(100), schedulerProvider.Default)
                 .ObserveOn(schedulerProvider.WindowsFormsEventLoop)
-                .SelectMany(x => Observable.FromAsync(() => Load(x.OrderIdList)))
+                .SelectMany(x => Observable.FromAsync(() => Load(x.OrderIdList, shippingSettings.Fetch().AutoCreateShipments)))
                 .CatchAndContinue((Exception ex) => log.Error(ex))
                 .Subscribe(x => messenger.Send(new OrderSelectionChangedMessage(this, x)));
         }

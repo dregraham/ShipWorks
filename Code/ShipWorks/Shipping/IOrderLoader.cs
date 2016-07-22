@@ -11,6 +11,6 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Load the shipments for the given collection of orders or shipments
         /// </summary>
-        Task<ShipmentsLoadedEventArgs> LoadAsync(IEnumerable<long> entityIDs, ProgressDisplayOptions displayOptions);
+        Task<ShipmentsLoadedEventArgs> LoadAsync(IEnumerable<long> entityIDs, ProgressDisplayOptions displayOptions, bool createIfNoShipments);
     }
 }

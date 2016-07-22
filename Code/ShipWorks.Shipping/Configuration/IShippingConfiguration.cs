@@ -10,6 +10,6 @@ namespace ShipWorks.Shipping.Configuration
         /// <summary>
         /// Gets whether a new shipment should be auto-created for an order
         /// </summary>
-        bool ShouldAutoCreateShipment(OrderEntity order);
+        bool ShouldAutoCreateShipment(OrderEntity order, bool createIfNoShipments);
     }
 }

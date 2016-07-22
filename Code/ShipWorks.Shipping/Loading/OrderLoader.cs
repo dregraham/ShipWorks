@@ -40,7 +40,7 @@ namespace ShipWorks.Shipping.Loading
         /// <summary>
         /// Load the shipments for the given collection of orders or shipments
         /// </summary>
-        public async Task<ShipmentsLoadedEventArgs> LoadAsync(IEnumerable<long> entityIDs, ProgressDisplayOptions displayOptions)
+        public async Task<ShipmentsLoadedEventArgs> LoadAsync(IEnumerable<long> entityIDs, ProgressDisplayOptions displayOptions, bool createIfNoShipments)
         {
             MethodConditions.EnsureArgumentIsNotNull(entityIDs, nameof(entityIDs));
 
@@ -57,7 +57,7 @@ namespace ShipWorks.Shipping.Loading
             try
             {
                 wasCanceled = await LoadShipments(entityIDsOriginalSort, globalShipments,
-                    displayOptions, new ProgressProvider());
+                    displayOptions, new ProgressProvider(), createIfNoShipments);
             }
             catch (Exception ex)
             {
@@ -84,14 +84,14 @@ namespace ShipWorks.Shipping.Loading
         /// Load the shipments
         /// </summary>
         private async Task<bool> LoadShipments(List<long> orderIDs, IDictionary<long, ShipmentEntity> globalShipments,
-            ProgressDisplayOptions displayOptions, IProgressProvider progressProvider)
+            ProgressDisplayOptions displayOptions, IProgressProvider progressProvider, bool createIfNoShipments)
         {
             using (BlockingCollection<ShipmentEntity> shipmentsToValidate = new BlockingCollection<ShipmentEntity>())
             {
                 using (CreateProgressDialog(displayOptions, progressProvider))
                 {
                     Task<bool> loadShipmentsTask = shipmentLoader
-                        .StartTask(progressProvider, orderIDs, globalShipments, shipmentsToValidate);
+                        .StartTask(progressProvider, orderIDs, globalShipments, shipmentsToValidate, createIfNoShipments);
 
                     Task<bool> validateTask = shipmentsLoaderValidator
                         .StartTask(progressProvider, globalShipments, shipmentsToValidate);
