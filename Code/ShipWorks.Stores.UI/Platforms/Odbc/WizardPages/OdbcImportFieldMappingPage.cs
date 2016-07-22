@@ -82,14 +82,14 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
             {
                 IOdbcDataSource selectedDataSource = dataSourceService.GetImportDataSource(store);
 
-                string columnSourceName = store.ImportSourceType == (int) OdbcColumnSourceType.Table ?
+                string columnSourceName = store.ImportColumnSourceType == (int) OdbcColumnSourceType.Table ?
                     currentColumnSource :
                     CustomQueryColumnSourceName;
 
                 IOdbcColumnSource columnSource = columnSourceFactory(columnSourceName);
 
                 columnSource.Load(selectedDataSource, currentColumnSource,
-                    (OdbcColumnSourceType) store.ImportSourceType);
+                    (OdbcColumnSourceType) store.ImportColumnSourceType);
 
                 viewModel = viewModelFactory();
                 mappingControl.DataContext = viewModel;

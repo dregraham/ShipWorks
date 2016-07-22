@@ -1764,7 +1764,7 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementFieldMapping( "OdbcStoreEntity", "ImportConnectionString", "ImportConnectionString", false, (int)SqlDbType.NVarChar, 2048, 0, 0, false, "", null, typeof(System.String), 1 );
 			base.AddElementFieldMapping( "OdbcStoreEntity", "ImportMap", "ImportMap", false, (int)SqlDbType.NVarChar, 2147483647, 0, 0, false, "", null, typeof(System.String), 2 );
 			base.AddElementFieldMapping( "OdbcStoreEntity", "ImportStrategy", "ImportStrategy", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 3 );
-			base.AddElementFieldMapping( "OdbcStoreEntity", "ImportSourceType", "ImportColumnSourceType", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 4 );
+			base.AddElementFieldMapping( "OdbcStoreEntity", "ImportColumnSourceType", "ImportColumnSourceType", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 4 );
 			base.AddElementFieldMapping( "OdbcStoreEntity", "ImportColumnSource", "ImportColumnSource", false, (int)SqlDbType.NVarChar, 2048, 0, 0, false, "", null, typeof(System.String), 5 );
 			base.AddElementFieldMapping( "OdbcStoreEntity", "UploadStrategy", "UploadStrategy", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 6 );
 			base.AddElementFieldMapping( "OdbcStoreEntity", "UploadMap", "UploadMap", false, (int)SqlDbType.NVarChar, 2147483647, 0, 0, false, "", null, typeof(System.String), 7 );

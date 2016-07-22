@@ -13907,10 +13907,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(OdbcStoreFieldIndex.ImportStrategy);}
 		}
-		/// <summary>Creates a new OdbcStoreEntity.ImportSourceType field instance</summary>
-		public static EntityField2 ImportSourceType
+		/// <summary>Creates a new OdbcStoreEntity.ImportColumnSourceType field instance</summary>
+		public static EntityField2 ImportColumnSourceType
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(OdbcStoreFieldIndex.ImportSourceType);}
+			get { return (EntityField2)EntityFieldFactory.Create(OdbcStoreFieldIndex.ImportColumnSourceType);}
 		}
 		/// <summary>Creates a new OdbcStoreEntity.ImportColumnSource field instance</summary>
 		public static EntityField2 ImportColumnSource

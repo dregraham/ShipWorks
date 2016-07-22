@@ -77,7 +77,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
                 ImportConnectionString = string.Empty,
                 ImportMap = string.Empty,
                 ImportStrategy = (int) OdbcImportStrategy.ByModifiedTime,
-                ImportSourceType = (int) OdbcColumnSourceType.Table,
+                ImportColumnSourceType = (int) OdbcColumnSourceType.Table,
                 ImportColumnSource = string.Empty,
                 UploadMap = string.Empty,
                 UploadStrategy = (int) OdbcShipmentUploadStrategy.DoNotUpload,

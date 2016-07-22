@@ -71,7 +71,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
         {
             dataSource.Restore(store.ImportConnectionString);
 
-            return store.ImportSourceType == (int) OdbcColumnSourceType.Table
+            return store.ImportColumnSourceType == (int) OdbcColumnSourceType.Table
                 ? (IOdbcQuery)new TableOdbcDownloadQuery(store, dbProviderFactory, odbcFieldMap, dataSource)
                 : new CustomQueryOdbcDownloadQuery(store);
         }

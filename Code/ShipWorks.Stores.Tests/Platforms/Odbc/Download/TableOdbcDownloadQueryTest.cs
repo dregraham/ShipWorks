@@ -54,7 +54,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Download
                 mock.Create<TableOdbcDownloadQuery>(new TypedParameter(typeof(OdbcStoreEntity),
                     new OdbcStoreEntity()
                     {
-                        ImportSourceType = (int) OdbcColumnSourceType.Table,
+                        ImportColumnSourceType = (int) OdbcColumnSourceType.Table,
                         ImportColumnSource = "MyTable"
                     }));
             string sql = testObject.GenerateSql();
@@ -86,7 +86,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Download
                 mock.Create<TableOdbcDownloadQuery>(new TypedParameter(typeof(OdbcStoreEntity),
                     new OdbcStoreEntity()
                     {
-                        ImportSourceType = (int)OdbcColumnSourceType.Table,
+                        ImportColumnSourceType = (int)OdbcColumnSourceType.Table,
                         ImportColumnSource = "MyTable"
                     }));
 
