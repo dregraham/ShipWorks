@@ -50,7 +50,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             }
             catch (EncryptionException ex) when(ex.InnerException is CryptographicException)
             {
-                // This was hapenning when the key and the databaseid didn't match. This woulde happen when switching 
+                // This was hapenning when the key and the databaseid didn't match. This would happen when switching 
                 // or restoring a database and shouldn't happen.
                 // I don't know if it is hapenning anymore...
                 log.Error(ex);
