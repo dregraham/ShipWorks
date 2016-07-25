@@ -1,12 +1,12 @@
-﻿using System.Collections.Generic;
-using ShipWorks.Templates.Processing.TemplateXml;
+﻿using ShipWorks.Templates.Processing.TemplateXml;
+using System.Collections.Generic;
 
 namespace ShipWorks.Templates.Tokens
 {
     /// <summary>
     /// Wrapper for the static TemplateTokenProcessor
     /// </summary>
-    public class TemplateTokenProcessorWrapper : ITemplateTokenProcessorWrapper
+    public class TemplateTokenProcessorWrapper : ITemplateTokenProcessor
     {
         /// <summary>
         /// Process the tokens in the token string for the given entity ID

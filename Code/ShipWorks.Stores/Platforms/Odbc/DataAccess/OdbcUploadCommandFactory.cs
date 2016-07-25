@@ -17,12 +17,12 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
         private readonly IOdbcDataSource dataSource;
         private readonly IShipWorksDbProviderFactory dbProviderFactory;
         private readonly IOdbcFieldMap fieldMap;
-        private readonly ITemplateTokenProcessorWrapper templateTokenProcessor;
+        private readonly ITemplateTokenProcessor templateTokenProcessor;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcDownloadCommandFactory"/> class.
         /// </summary>
-        public OdbcUploadCommandFactory(IOdbcDataSource dataSource, IShipWorksDbProviderFactory dbProviderFactory, IOdbcFieldMap fieldMap, ITemplateTokenProcessorWrapper templateTokenProcessor)
+        public OdbcUploadCommandFactory(IOdbcDataSource dataSource, IShipWorksDbProviderFactory dbProviderFactory, IOdbcFieldMap fieldMap, ITemplateTokenProcessor templateTokenProcessor)
         {
             this.dataSource = dataSource;
             this.dbProviderFactory = dbProviderFactory;

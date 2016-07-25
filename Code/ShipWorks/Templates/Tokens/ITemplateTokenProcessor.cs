@@ -1,12 +1,12 @@
-﻿using System.Collections.Generic;
-using ShipWorks.Templates.Processing.TemplateXml;
+﻿using ShipWorks.Templates.Processing.TemplateXml;
+using System.Collections.Generic;
 
 namespace ShipWorks.Templates.Tokens
 {
     /// <summary>
     /// Interface that represents the TemplateTokenProcessor
     /// </summary>
-    public interface ITemplateTokenProcessorWrapper
+    public interface ITemplateTokenProcessor
     {
         /// <summary>
         /// Process the tokens in the token string for the given TemplateXPathNavigator as input

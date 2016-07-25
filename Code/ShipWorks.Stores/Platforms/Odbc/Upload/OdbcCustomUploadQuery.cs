@@ -11,12 +11,12 @@ namespace ShipWorks.Stores.Platforms.Odbc.Upload
     {
         private readonly OdbcStoreEntity store;
         private readonly ShipmentEntity shipment;
-        private readonly ITemplateTokenProcessorWrapper templateTokenProcessor;
+        private readonly ITemplateTokenProcessor templateTokenProcessor;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public OdbcCustomUploadQuery(OdbcStoreEntity store, ShipmentEntity shipment, ITemplateTokenProcessorWrapper templateTokenProcessor)
+        public OdbcCustomUploadQuery(OdbcStoreEntity store, ShipmentEntity shipment, ITemplateTokenProcessor templateTokenProcessor)
         {
             this.store = store;
             this.shipment = shipment;
