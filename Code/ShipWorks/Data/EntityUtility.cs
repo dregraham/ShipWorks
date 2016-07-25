@@ -2,10 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
-using System.IO;
 using System.Linq;
-using System.Runtime.Serialization;
-using System.Runtime.Serialization.Formatters.Binary;
 using Interapptive.Shared;
 using Interapptive.Shared.Collections;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -180,20 +177,21 @@ namespace ShipWorks.Data
 
             if (deep)
             {
-                SerializationHelper.Optimization = SerializationOptimization.Fast;
-                SerializationHelper.PreserveObjectIDs = false;
+                return entity.DeepClone();
+                //SerializationHelper.Optimization = SerializationOptimization.Fast;
+                //SerializationHelper.PreserveObjectIDs = false;
 
-                using (MemoryStream memoryStream = new MemoryStream(1284))
-                {
-                    BinaryFormatter formatter = new BinaryFormatter(null, new StreamingContext(StreamingContextStates.Clone));
+                //using (MemoryStream memoryStream = new MemoryStream(1284))
+                //{
+                //    BinaryFormatter formatter = new BinaryFormatter(null, new StreamingContext(StreamingContextStates.Clone));
 
-                    formatter.Serialize(memoryStream, entity);
-                    memoryStream.Seek(0, SeekOrigin.Begin);
+                //    formatter.Serialize(memoryStream, entity);
+                //    memoryStream.Seek(0, SeekOrigin.Begin);
 
-                    T clone = (T) formatter.Deserialize(memoryStream);
+                //    T clone = (T) formatter.Deserialize(memoryStream);
 
-                    return clone;
-                }
+                //    return clone;
+                //}
             }
             else
             {
@@ -204,6 +202,51 @@ namespace ShipWorks.Data
 
                 return clone;
             }
+        }
+
+        public static T DeepClone<T>(this T entity) where T : EntityBase2
+        {
+            return entity.DeepCloneInternal(new Dictionary<EntityBase2, EntityBase2>());
+        }
+
+        private static T DeepCloneInternal<T>(this T entity, IDictionary<EntityBase2, EntityBase2> existingClones) where T : EntityBase2
+        {
+            if (existingClones.ContainsKey(entity))
+            {
+                return (T) existingClones[entity];
+            }
+
+            //var fields = entity.Fields.Clone();
+            //T clone = (T) EntityFactoryFactory.GetFactory(entity.GetType()).Create(fields);
+
+            T clone = CloneEntity(entity, false);
+
+            existingClones.Add(entity, clone);
+
+            var entityBase = entity as EntityBase2;
+            if (entityBase != null)
+            {
+                var data = entityBase.GetRelatedData();
+
+                foreach (var item in data.Where(x => x.Value != null))
+                {
+                    if (item.Value is IEntity2)
+                    {
+                        clone.SetRelatedEntity(((EntityBase2) item.Value).DeepCloneInternal(existingClones), item.Key);
+                    }
+                    else if (item.Value is IEntityCollection2)
+                    {
+                        var collection = (IEntityCollection2) item.Value;
+
+                        foreach (EntityBase2 entityItem in collection)
+                        {
+                            clone.SetRelatedEntity(entityItem.DeepCloneInternal(existingClones), item.Key);
+                        }
+                    }
+                }
+            }
+
+            return clone;
         }
 
         /// <summary>

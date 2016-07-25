@@ -84,7 +84,7 @@ namespace ShipWorks.Shipping
 
         private readonly ShipSenseSynchronizer shipSenseSynchronizer;
 
-        private Dictionary<ShipmentTypeCode, ServiceControlBase> serviceControlCache = new Dictionary<ShipmentTypeCode, ServiceControlBase>();
+        private Dictionary<int, ServiceControlBase> serviceControlCache = new Dictionary<int, ServiceControlBase>();
         private CustomsControlCache customsControlCache = new CustomsControlCache();
 
         private readonly Timer shipSenseChangedTimer = new Timer();
@@ -937,6 +937,11 @@ namespace ShipWorks.Shipping
                 reduceFlash.Dock = DockStyle.Fill;
                 serviceControlArea.Controls.Add(reduceFlash);
             }
+            else
+            {
+                oldServiceControl.UnloadShipments();
+                UnhookEvents(oldServiceControl);
+            }
 
             // If there was a setup control, remove it
             ClearPreviousSetupControl();
@@ -978,6 +983,30 @@ namespace ShipWorks.Shipping
         }
 
         /// <summary>
+        /// Add the new service control to the dialog, if it's not null
+        /// </summary>
+        private void UnhookEvents(ServiceControlBase oldServiceControl)
+        {
+            // If there is a new service control, add it to our controls under either the old one, or the blank panel we created.
+            if (oldServiceControl == null)
+            {
+                return;
+            }
+
+            oldServiceControl.RecipientDestinationChanged -= OnOriginOrDestinationChanged;
+            oldServiceControl.OriginDestinationChanged -= OnOriginOrDestinationChanged;
+            oldServiceControl.ShipmentServiceChanged -= OnShipmentServiceChanged;
+            oldServiceControl.RateCriteriaChanged -= OnRateCriteriaChanged;
+            oldServiceControl.ShipSenseFieldChanged -= OnShipSenseFieldChanged;
+            oldServiceControl.ShipmentsAdded -= OnServiceControlShipmentsAdded;
+            oldServiceControl.ShipmentTypeChanged -= OnShipmentTypeChanged;
+            oldServiceControl.ClearRatesAction = ClearRates;
+            rateControl.RateSelected -= oldServiceControl.OnRateSelected;
+            rateControl.ActionLinkClicked -= oldServiceControl.OnConfigureRateClick;
+            rateControl.ReloadRatesRequired -= OnRateReloadRequired;
+        }
+
+        /// <summary>
         /// Get a service control for the list of shipments and the given shipment type
         /// </summary>
         private ServiceControlBase GetServiceControlForShipments(IEnumerable<ShipmentEntity> shipments, ShipmentType shipmentType)
@@ -987,28 +1016,43 @@ namespace ShipWorks.Shipping
                 return null;
             }
 
-            ServiceControlBase newServiceControl;
-            if (shipmentType == null)
+            int key = shipmentType != null ? (int) shipmentType.ShipmentTypeCode : -1;
+
+            if (serviceControlCache.ContainsKey(key))
             {
-                newServiceControl = new MultiSelectServiceControl(rateControl);
-                newServiceControl.Initialize(lifetimeScope);
-            }
-            else
-            {
-                if (serviceControlCache.ContainsKey(shipmentType.ShipmentTypeCode))
-                {
-                    newServiceControl = serviceControlCache[shipmentType.ShipmentTypeCode];
-                }
-                else
-                {
-                    newServiceControl = shipmentType.CreateServiceControl(rateControl, lifetimeScope);
-                    newServiceControl.Initialize(lifetimeScope);
-                    newServiceControl.Width = serviceControlArea.Width;
-                    serviceControlCache.Add(shipmentType.ShipmentTypeCode, newServiceControl);
-                }
+                return serviceControlCache[key];
             }
 
-            return newServiceControl;
+            ServiceControlBase serviceControl = shipmentType?.CreateServiceControl(rateControl, lifetimeScope) ??
+                new MultiSelectServiceControl(rateControl);
+            serviceControl.Initialize(lifetimeScope);
+            serviceControl.Width = serviceControlArea.Width;
+            serviceControlCache.Add(key, serviceControl);
+            return serviceControl;
+
+
+            //ServiceControlBase newServiceControl;
+            //if (shipmentType == null)
+            //{
+            //    newServiceControl = new MultiSelectServiceControl(rateControl);
+            //    newServiceControl.Initialize(lifetimeScope);
+            //}
+            //else
+            //{
+            //    if (serviceControlCache.ContainsKey((int) shipmentType.ShipmentTypeCode))
+            //    {
+            //        newServiceControl = serviceControlCache[(int) shipmentType.ShipmentTypeCode];
+            //    }
+            //    else
+            //    {
+            //        newServiceControl = shipmentType.CreateServiceControl(rateControl, lifetimeScope);
+            //        newServiceControl.Initialize(lifetimeScope);
+            //        newServiceControl.Width = serviceControlArea.Width;
+            //        serviceControlCache.Add((int) shipmentType.ShipmentTypeCode, newServiceControl);
+            //    }
+            //}
+
+            //return newServiceControl;
         }
 
         /// <summary>
@@ -1293,6 +1337,7 @@ namespace ShipWorks.Shipping
                     if (CustomsControl != null)
                     {
                         CustomsControl.ShipSenseFieldChanged -= OnShipSenseFieldChanged;
+                        CustomsControl.UnloadShipments();
                     }
 
                     newCustomsControl.ShipSenseFieldChanged += OnShipSenseFieldChanged;
@@ -2209,6 +2254,8 @@ namespace ShipWorks.Shipping
             }
 
             serviceControlCache.Clear();
+            customsControlCache.Dispose();
+            customsControlCache = new CustomsControlCache();
         }
     }
 }

@@ -8,6 +8,6 @@
         /// <summary>
         /// Max amount of orders that can be loaded
         /// </summary>
-        public static int MaxAllowedOrders => 1000;
+        public static int MaxAllowedOrders => int.MaxValue;
     }
 }

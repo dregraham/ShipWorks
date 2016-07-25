@@ -627,5 +627,13 @@ namespace ShipWorks.Shipping.Editing
         {
 
         }
+
+        /// <summary>
+        /// Unload shipments
+        /// </summary>
+        internal void UnloadShipments()
+        {
+            loadedShipments.Clear();
+        }
     }
 }
