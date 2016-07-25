@@ -68,7 +68,7 @@
             this.doNotUpload.Size = new System.Drawing.Size(163, 17);
             this.doNotUpload.TabIndex = 2;
             this.doNotUpload.TabStop = true;
-            this.doNotUpload.Text = "Do not upload shipment data";
+            this.doNotUpload.Text = "Do not upload shipment details";
             this.doNotUpload.UseVisualStyleBackColor = true;
             // 
             // uploadStrategyPanel
@@ -88,7 +88,7 @@
             this.labelShipmentUpdate.Name = "labelShipmentUpdate";
             this.labelShipmentUpdate.Size = new System.Drawing.Size(156, 13);
             this.labelShipmentUpdate.TabIndex = 27;
-            this.labelShipmentUpdate.Text = "When a shipment is processed:";
+            this.labelShipmentUpdate.Text = "Where to upload shipment details:";
             // 
             // pictureBoxShipmentUpdate
             // 
@@ -107,7 +107,7 @@
             this.Controls.Add(this.labelShipmentUpdate);
             this.Controls.Add(this.pictureBoxShipmentUpdate);
             this.Controls.Add(this.uploadStrategyPanel);
-            this.Description = "Select how you would like to upload shipment data for your store";
+            this.Description = "Select how you would like to upload shipment details for your store.";
             this.Name = "OdbcUploadShipmentStrategyPage";
             this.Size = new System.Drawing.Size(500, 500);
             this.Title = "Upload Options";

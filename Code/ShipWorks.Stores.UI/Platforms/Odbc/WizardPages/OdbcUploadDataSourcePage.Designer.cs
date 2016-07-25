@@ -57,7 +57,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.uploadsettings);
             this.Controls.Add(this.odbcDataSourceControl);
-            this.Description = "Setup the ODBC data source used for uploading your shipments.";
+            this.Description = "Setup the ODBC data source used for uploading your shipment details.";
             this.Name = "OdbcUploadDataSourcePage";
             this.Size = new System.Drawing.Size(547, 291);
             this.Title = "Setup Upload Data Source";
