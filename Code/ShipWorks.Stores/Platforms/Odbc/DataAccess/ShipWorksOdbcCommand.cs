@@ -1,7 +1,10 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
 using System.Data.Common;
 using System.Data.Odbc;
+using Interapptive.Shared.Net;
 using log4net;
+using ShipWorks.ApplicationCore.Logging;
 
 namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
 {
@@ -10,7 +13,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
     /// </summary>
     public class ShipWorksOdbcCommand : IShipWorksOdbcCommand
     {
-        private readonly ILog log;
+        private readonly Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory;
         private readonly OdbcCommand command;
 
         /// <summary>
@@ -18,10 +21,10 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
         /// </summary>
         /// <param name="query">The query.</param>
         /// <param name="connection">The connection.</param>
-        /// <param name="log"></param>
-        public ShipWorksOdbcCommand(string query, OdbcConnection connection, ILog log)
+        /// <param name="apiLogEntryFactory"></param>
+        public ShipWorksOdbcCommand(string query, OdbcConnection connection, Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory)
         {
-            this.log = log;
+            this.apiLogEntryFactory = apiLogEntryFactory;
             command = new OdbcCommand(query, connection);
         }
 
@@ -29,10 +32,10 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
         /// Initializes a new instance of the <see cref="ShipWorksOdbcCommand"/> class.
         /// </summary>
         /// <param name="connection">The connection.</param>
-        /// <param name="log"></param>
-        public ShipWorksOdbcCommand(OdbcConnection connection, ILog log)
+        /// <param name="apiLogEntryFactory"></param>
+        public ShipWorksOdbcCommand(OdbcConnection connection, Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory)
         {
-            this.log = log;
+            this.apiLogEntryFactory = apiLogEntryFactory;
             command = connection.CreateCommand();
         }
 
@@ -45,7 +48,9 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
         /// </returns>
         public DbDataReader ExecuteReader()
         {
-            log.Info(command.CommandText);
+            IApiLogEntry apiLogger = apiLogEntryFactory(ApiLogSource.Odbc, "Read");
+            apiLogger.LogRequest(command.CommandText, "log");
+
             return command.ExecuteReader();
         }
 
@@ -58,8 +63,10 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
         /// </returns>
         public DbDataReader ExecuteReader(CommandBehavior commandBehavior)
         {
-            log.Info(command.CommandText);
-            return command.ExecuteReader(commandBehavior);
+            IApiLogEntry apiLogger = apiLogEntryFactory(ApiLogSource.Odbc, "Read");
+            apiLogger.LogRequest(command.CommandText, "log");
+
+            return command.ExecuteReader();
         }
 
         /// <summary>
@@ -67,8 +74,13 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
         /// </summary>
         public int ExecuteNonQuery()
         {
-            log.Info(command.CommandText);
-            return command.ExecuteNonQuery();
+            IApiLogEntry apiLogger = apiLogEntryFactory(ApiLogSource.Odbc, "Write");
+            apiLogger.LogRequest(command.CommandText, "log");
+
+            int recordsAffected = command.ExecuteNonQuery();
+            apiLogger.LogResponse($"{recordsAffected} records affected", "log");
+
+            return recordsAffected;
         }
 
         /// <summary>

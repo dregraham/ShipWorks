@@ -2,6 +2,8 @@
 using System;
 using System.Data.Common;
 using System.Data.Odbc;
+using Interapptive.Shared.Net;
+using ShipWorks.ApplicationCore.Logging;
 
 namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
 {
@@ -10,12 +12,12 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
     /// </summary>
     public class OdbcShipWorksDbProviderFactory : IShipWorksDbProviderFactory
     {
-        private readonly Func<Type, ILog> logFactory;
         private readonly ILog log;
+        private readonly Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory;
 
-        public OdbcShipWorksDbProviderFactory(Func<Type, ILog> logFactory)
+        public OdbcShipWorksDbProviderFactory(Func<Type, ILog> logFactory, Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory)
         {
-            this.logFactory = logFactory;
+            this.apiLogEntryFactory = apiLogEntryFactory;
             log = logFactory(typeof(OdbcShipWorksDbProviderFactory));
         }
 
@@ -53,7 +55,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
         /// </summary>
         public IShipWorksOdbcCommand CreateOdbcCommand(string query, DbConnection connection)
         {
-            return new ShipWorksOdbcCommand(query, (OdbcConnection) connection, logFactory(typeof(ShipWorksOdbcCommand)));
+            return new ShipWorksOdbcCommand(query, (OdbcConnection) connection, apiLogEntryFactory);
         }
 
         /// <summary>
@@ -61,7 +63,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
         /// </summary>
         public IShipWorksOdbcCommand CreateOdbcCommand(DbConnection connection)
         {
-            return new ShipWorksOdbcCommand((OdbcConnection)connection, logFactory(typeof(ShipWorksOdbcCommand)));
+            return new ShipWorksOdbcCommand((OdbcConnection)connection, apiLogEntryFactory);
         }
 
         /// <summary>
