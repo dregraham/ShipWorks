@@ -21,7 +21,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
     /// </summary>
     public class OdbcStoreDownloader : StoreDownloader
     {
-        private readonly OdbcDownloadCommandFactory downloadCommandFactory;
+        private readonly IOdbcDownloadCommandFactory downloadCommandFactory;
         private readonly IOdbcFieldMap fieldMap;
         private readonly IOdbcOrderLoader orderLoader;
         private readonly OdbcStoreEntity store;
@@ -30,7 +30,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         /// Initializes a new instance of the <see cref="OdbcStoreDownloader"/> class.
         /// </summary>
         public OdbcStoreDownloader(StoreEntity store,
-            OdbcDownloadCommandFactory downloadCommandFactory,
+            IOdbcDownloadCommandFactory downloadCommandFactory,
             IOdbcFieldMap fieldMap,
             IOdbcOrderLoader orderLoader) : base(store)
         {
