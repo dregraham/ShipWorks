@@ -147,11 +147,6 @@
                 For help writing your query,
                 <Hyperlink NavigateUri="http://support.shipworks.com" RequestNavigate="OpenLink">click here.</Hyperlink>
             </TextBlock>
-
-            <Button Grid.Row="2"
-                    HorizontalAlignment="Right"
-                    Command="{Binding OpenTemplateEditorDlgCommand}"
-                    Content="Edit Query" />
         </Grid>
     </Grid>
 </UserControl>

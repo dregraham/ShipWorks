@@ -196,8 +196,6 @@ namespace ShipWorks.ApplicationCore
             builder.RegisterType<UspsAccountInfoControl>();
             builder.RegisterType<UspsAccountManagerControl>();
             builder.RegisterType<UspsPurchasePostageDlg>();
-            builder.RegisterType<TemplateTokenEditorDlg>()
-                .As<ITemplateTokenEditorDlg>();
         }
 
         /// <summary>

@@ -15,7 +15,6 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
     public class OdbcUploadMapSettingsControlViewModel : OdbcMapSettingsControlViewModel
     {
         private readonly Func<string, IDialog> dialogFactory;
-        private readonly ITemplateTokenEditorDlg tokenEditorDlg;
         private readonly IWin32Window owner;
         private bool columnSourceIsTable = true;
 
@@ -40,13 +39,11 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
         /// Initializes a new instance of the <see cref="OdbcUploadMapSettingsControlViewModel"/> class.
         /// </summary>
         public OdbcUploadMapSettingsControlViewModel(Func<string, IDialog> dialogFactory, IMessageHelper messageHelper,
-            Func<string, IOdbcColumnSource> columnSourceFactory, ITemplateTokenEditorDlg tokenEditorDlg, IWin32Window owner) :
+            Func<string, IOdbcColumnSource> columnSourceFactory, IWin32Window owner) :
                 base(messageHelper, columnSourceFactory)
         {
             this.dialogFactory = dialogFactory;
-            this.tokenEditorDlg = tokenEditorDlg;
             this.owner = owner;
-            OpenTemplateEditorDlgCommand = new RelayCommand(OpenTemplateEditorDlg);
             CustomQuery = InitialQueryComment;
         }
 
@@ -69,25 +66,6 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
                 }
 
                 ColumnSource = value ? SelectedTable : CustomQueryColumnSource;
-            }
-        }
-
-        /// <summary>
-        /// The open template editor dialog command.
-        /// </summary>
-        public object OpenTemplateEditorDlgCommand { get; set; }
-
-        /// <summary>
-        /// Opens the template editor dialog.
-        /// </summary>
-        public void OpenTemplateEditorDlg()
-        {
-            tokenEditorDlg.TokenText = CustomQuery;
-            DialogResult result = tokenEditorDlg.ShowDialog(owner);
-
-            if (result==DialogResult.OK)
-            {
-                CustomQuery = tokenEditorDlg.TokenText;
             }
         }
 
