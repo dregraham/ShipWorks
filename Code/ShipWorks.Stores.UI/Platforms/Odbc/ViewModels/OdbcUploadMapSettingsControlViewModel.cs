@@ -20,11 +20,22 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
         private readonly IWin32Window owner;
         private bool columnSourceIsTable = true;
 
-        private const string InitialQueryComment = "/* \n" +
-                          "Below is a sample query for uploading your shipment details. \n\n" +
-                          "For more sample queries and details on writing an upload query please visit www.support.shipworks.com \n\n" +
-                          "UPDATE SHIPMENT SET TrackingNumber = tracking WHERE OrderID = OrderNumber \n" +
-                          "*/";
+        private const string InitialQueryComment =
+            "/****************************************************************/\n" +
+            "/*                                                              */\n" +
+            "/* A sample query highlighting a few of the tokens that can be  */\n" +
+            "/* used for uploading shipment details to your database has     */\n" +
+            "/* been provided below.                                         */\n" +
+            "/*                                                              */\n" +
+            "/* For more samples and additional information on how to        */\n" +
+            "/* leverage ShipWorks tokens when uploading shipment details    */\n" +
+            "/* using a custom query, please visit                           */\n" +
+            "/* http://www.support.shipworks.com/                            */\n" +
+            "/*                                                              */\n" +
+            "/****************************************************************/\n\n" +
+            "UPDATE ShipmentDetails\n" +
+            "SET TrackingNumber = \'<xsl:value-of select=\"//TrackingNumber\"/>\'\n" +
+            "WHERE OrderID = < xsl:value-of select = \"//Order/Number\" />";
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcUploadMapSettingsControlViewModel"/> class.
