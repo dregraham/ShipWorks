@@ -6,14 +6,14 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
     /// <summary>
     /// Download query to be used when user has entered a custom query
     /// </summary>
-    public class CustomQueryOdbcDownloadQuery : IOdbcQuery
+    public class OdbcCustomDownloadQuery : IOdbcQuery
     {
         private readonly OdbcStoreEntity store;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CustomQueryOdbcDownloadQuery"/> class.
+        /// Initializes a new instance of the <see cref="OdbcCustomDownloadQuery"/> class.
         /// </summary>
-        public CustomQueryOdbcDownloadQuery(OdbcStoreEntity store)
+        public OdbcCustomDownloadQuery(OdbcStoreEntity store)
         {
             this.store = store;
         }

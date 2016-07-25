@@ -182,7 +182,7 @@
     <Compile Include="Platforms\Odbc\DataSource\IOdbcDataSourceService.cs" />
     <Compile Include="Platforms\Odbc\DataSource\OdbcDataSourceService.cs" />
     <Compile Include="Platforms\Odbc\DataSource\Schema\OdbcColumnSourceType.cs" />
-    <Compile Include="Platforms\Odbc\Download\CustomQueryOdbcDownloadQuery.cs" />
+    <Compile Include="Platforms\Odbc\Download\OdbcCustomDownloadQuery.cs" />
     <Compile Include="Platforms\Odbc\EncryptedOdbcDataSource.cs" />
     <Compile Include="Platforms\Odbc\DataAccess\IOdbcCommand.cs" />
     <Compile Include="Platforms\Odbc\DataSource\IOdbcDataSource.cs" />
@@ -239,7 +239,7 @@
     <Compile Include="Platforms\Odbc\DataAccess\ShipWorksOdbcCommandBuilder.cs" />
     <Compile Include="Platforms\Odbc\DataAccess\ShipWorksOdbcDataAdapter.cs" />
     <Compile Include="Platforms\Odbc\ShipWorksOdbcException.cs" />
-    <Compile Include="Platforms\Odbc\Download\TableOdbcDownloadQuery.cs" />
+    <Compile Include="Platforms\Odbc\Download\OdbcTableDownloadQuery.cs" />
     <Compile Include="Platforms\Odbc\Upload\OdbcShipmentUploadStrategy.cs" />
     <Compile Include="Platforms\Odbc\Upload\OdbcUploader.cs" />
     <Compile Include="Platforms\SparkPay\CoreExtensions\Actions\SparkPayOrderUpdateTask.cs" />
