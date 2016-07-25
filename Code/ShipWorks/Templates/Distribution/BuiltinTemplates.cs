@@ -1,17 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Text;
 using System.Reflection;
 using System.Windows.Forms;
-using System.IO;
+using Interapptive.Shared.IO.Zip;
+using Interapptive.Shared.Utility;
+using log4net;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data;
-using ShipWorks.Data.Model.EntityClasses;
-using log4net;
-using Interapptive.Shared.Utility;
-using Interapptive.Shared.IO.Zip;
 using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Templates.Distribution
 {
@@ -93,14 +92,14 @@ namespace ShipWorks.Templates.Distribution
             string templateDiretory = Path.Combine(sourceDirectory, templateFullName);
             string templateFile = Path.Combine(templateDiretory, "template.xsl");
 
-            // If the file doesn't exist, we may not yet have extracted the templates. This can be the case especially when installing individual templates from the 
+            // If the file doesn't exist, we may not yet have extracted the templates. This can be the case especially when installing individual templates from the
             // InstallTemplate function directly
             if (!File.Exists(templateFile))
             {
                 ExtractSourceTemplates();
             }
 
-            TemplateInstaller installer = new TemplateInstaller(sourceDirectory, TemplateVersionType.Version3);
+            TemplateInstaller installer = new TemplateInstaller(sourceDirectory);
 
             return installer.InstallTemplate(templateFullName, tree);
         }
@@ -120,7 +119,7 @@ namespace ShipWorks.Templates.Distribution
 
             using (SqlAdapter adapter = new SqlAdapter(true))
             {
-                TemplateInstaller installer = new TemplateInstaller(sourceDirectory, TemplateVersionType.Version3);
+                TemplateInstaller installer = new TemplateInstaller(sourceDirectory);
 
                 // Add each template to the install queue
                 foreach (string templateFullName in templateList)

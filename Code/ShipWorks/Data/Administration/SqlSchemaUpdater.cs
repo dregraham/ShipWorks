@@ -16,7 +16,6 @@ using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Common.Threading;
-using ShipWorks.Data.Administration.UpdateFrom2x.Database;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Filters;
@@ -176,13 +175,8 @@ namespace ShipWorks.Data.Administration
                             // Update the assemblies
                             UpdateAssemblies(progressFunctionality);
 
-                            // We could be running in the middle of a 2x migration, in which case there are no filters yet and certain other things.
-                            // So the following stuff only runs when we are in a "regular" 3x update.
-                            if (!MigrationController.IsMigrationInProgress())
-                            {
-                                // If the filter sql version has changed, that means we need to regenerate them to get updated calculation SQL into the database
-                                UpdateFilters(progressFunctionality, ExistingConnectionScope.ScopedConnection, ExistingConnectionScope.ScopedTransaction);
-                            }
+                            // If the filter sql version has changed, that means we need to regenerate them to get updated calculation SQL into the database
+                            UpdateFilters(progressFunctionality, ExistingConnectionScope.ScopedConnection, ExistingConnectionScope.ScopedTransaction);
 
                             // Functionality is done
                             progressFunctionality.PercentComplete = 100;

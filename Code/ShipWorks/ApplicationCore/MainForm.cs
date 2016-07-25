@@ -5,7 +5,6 @@ using System.Data.SqlClient;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -49,8 +48,6 @@ using ShipWorks.Core.Messaging;
 using ShipWorks.Data;
 using ShipWorks.Data.Administration;
 using ShipWorks.Data.Administration.SqlServerSetup;
-using ShipWorks.Data.Administration.UpdateFrom2x.Configuration;
-using ShipWorks.Data.Administration.UpdateFrom2x.Database;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Grid.Columns;
 using ShipWorks.Data.Grid.DetailView;
@@ -245,13 +242,6 @@ namespace ShipWorks
         /// </summary>
         private void OnShown(object sender, EventArgs e)
         {
-            // If we were just upgraded, we need to move the old sqlsession to where it needs to be
-            if (!ShipWorks2xConfigurationMigrator.MigrateIfRequired(this))
-            {
-                Close();
-                return;
-            }
-
             // Its visible, but possibly not completely drawn
             Refresh();
 
@@ -889,7 +879,7 @@ namespace ShipWorks
             log.InfoFormat("CheckDatabaseVersion: Installed: {0}, Required {1}", installedVersion, SqlSchemaUpdater.GetRequiredSchemaVersion());
 
             // See if it needs upgraded
-            if (SqlSchemaUpdater.IsUpgradeRequired() || !SqlSession.Current.IsSqlServer2008OrLater() || MigrationController.IsMigrationInProgress())
+            if (SqlSchemaUpdater.IsUpgradeRequired() || !SqlSession.Current.IsSqlServer2008OrLater())
             {
                 using (ConnectionSensitiveScope scope = new ConnectionSensitiveScope("update the database", this))
                 {

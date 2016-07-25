@@ -25,7 +25,6 @@ using ShipWorks.ApplicationCore.MessageBoxes;
 using ShipWorks.Common.Threading;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Administration.SqlServerSetup;
-using ShipWorks.Data.Administration.UpdateFrom2x.Configuration;
 using ShipWorks.Data.Connection;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Properties;
@@ -2124,14 +2123,6 @@ namespace ShipWorks.Data.Administration
                     databaseRestored = true;
                     progressDlg.FormClosed += new FormClosedEventHandler(OnMoveNextAfterRestore);
                 }
-
-                // If this is an old backup file, the upgrade wizard will run, and it will get the default
-                // place to get templates from this.
-                ConfigurationMigrationState.ApplicationDataSource = new ShipWorks2xApplicationDataSource
-                {
-                    SourceType = ShipWorks2xApplicationDataSourceType.BackupFile,
-                    Path = backupFile.Text
-                };
             }
             catch (Exception ex)
             {
