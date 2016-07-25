@@ -139,6 +139,7 @@
                      Grid.Row="1"
                      Margin="0 5 0 5"
                      AcceptsReturn="True"
+                     FontFamily="Courier New"
                      Text="{Binding CustomQuery,
                                     UpdateSourceTrigger=LostFocus}"
                      TextWrapping="Wrap"
