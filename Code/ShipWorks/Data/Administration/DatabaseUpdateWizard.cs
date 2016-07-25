@@ -90,7 +90,7 @@ namespace ShipWorks.Data.Administration
         {
             InitializeComponent();
 
-            installed = SqlServerInstaller.IsMsdeMigrationInProgress ? new Version(0, 0, 0, 0) : SqlSchemaUpdater.GetInstalledSchemaVersion();
+            installed = SqlSchemaUpdater.GetInstalledSchemaVersion();
             showFirewallPage = installed < new Version(3, 0);
 
             sqlInstaller = new SqlServerInstaller();
@@ -105,25 +105,22 @@ namespace ShipWorks.Data.Administration
             int placeholderIndex = Pages.IndexOf(wizardPagePrerequisitePlaceholder);
             Pages.Remove(wizardPagePrerequisitePlaceholder);
 
-            if (!SqlServerInstaller.IsMsdeMigrationInProgress)
+            // If its not the current sql version, then sql is going to be upgraded, which means we need some prereqs
+            if (!SqlSession.Current.IsSqlServer2008OrLater())
             {
-                // If its not the current sql version, then sql is going to be upgraded, which means we need some prereqs
-                if (!SqlSession.Current.IsSqlServer2008OrLater())
-                {
-                    // Add the pages to detect and install .NET 3.5 SP1 if necessary
-                    DotNet35DownloadPage dotNet35Page = new DotNet35DownloadPage(
-                        wizardPageLogin,
-                        StartupAction.ContinueDatabaseUpgrade,
-                        () => { return new XElement("Empty"); });
-                    Pages.Insert(placeholderIndex, dotNet35Page);
+                // Add the pages to detect and install .NET 3.5 SP1 if necessary
+                DotNet35DownloadPage dotNet35Page = new DotNet35DownloadPage(
+                    wizardPageLogin,
+                    StartupAction.ContinueDatabaseUpgrade,
+                    () => { return new XElement("Empty"); });
+                Pages.Insert(placeholderIndex, dotNet35Page);
 
-                    // Add the pages to detect and install windows installer if necessary
-                    WindowsInstallerDownloadPage windowsInstallerPage = new WindowsInstallerDownloadPage(
-                        dotNet35Page,
-                        StartupAction.ContinueDatabaseUpgrade,
-                        () => { return new XElement("Empty"); });
-                    Pages.Insert(placeholderIndex, windowsInstallerPage);
-                }
+                // Add the pages to detect and install windows installer if necessary
+                WindowsInstallerDownloadPage windowsInstallerPage = new WindowsInstallerDownloadPage(
+                    dotNet35Page,
+                    StartupAction.ContinueDatabaseUpgrade,
+                    () => { return new XElement("Empty"); });
+                Pages.Insert(placeholderIndex, windowsInstallerPage);
             }
         }
 
@@ -136,7 +133,7 @@ namespace ShipWorks.Data.Administration
 
             if (StartupController.StartupAction == StartupAction.ContinueDatabaseUpgrade)
             {
-                if (!SqlServerInstaller.IsMsdeMigrationInProgress && StartupController.StartupArgument.Name == "AfterInstallSuccess")
+                if (StartupController.StartupArgument.Name == "AfterInstallSuccess")
                 {
                     log.InfoFormat("Replaying upgrade SQL Server after install success needed reboot.");
 
@@ -166,12 +163,6 @@ namespace ShipWorks.Data.Administration
         [NDependIgnoreLongMethod]
         private void OnSteppingIntoUpgradeInfo(object sender, WizardSteppingIntoEventArgs e)
         {
-            if (SqlServerInstaller.IsMsdeMigrationInProgress)
-            {
-                e.Skip = true;
-                return;
-            }
-
             // If its 08, we move right on to the db upgrade
             if (SqlSession.Current.IsSqlServer2008OrLater())
             {
@@ -230,12 +221,6 @@ namespace ShipWorks.Data.Administration
         [NDependIgnoreLongMethod]
         private void OnSteppingIntoLogin(object sender, WizardSteppingIntoEventArgs e)
         {
-            if (SqlServerInstaller.IsMsdeMigrationInProgress)
-            {
-                e.Skip = true;
-                return;
-            }
-
             Cursor.Current = Cursors.WaitCursor;
 
             const string loggedInNoRights = "You are currently logged on to ShipWorks as '{0}', a user that does not have rights to update the ShipWorks database.";
@@ -433,12 +418,6 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         private void OnSteppingIntoBackup(object sender, WizardSteppingIntoEventArgs e)
         {
-            if (SqlServerInstaller.IsMsdeMigrationInProgress)
-            {
-                e.Skip = true;
-                return;
-            }
-
             const string backupText = "User '{0}' does not have permissions to create a backup.";
 
             // Make sure we are on the right machine
@@ -515,7 +494,7 @@ namespace ShipWorks.Data.Administration
             Cursor.Current = Cursors.WaitCursor;
 
             // If the installer is already available, or we don't need to download, just skip over the download.
-            if (sqlInstaller.IsInstallerLocalFileValid(SqlServerInstallerPurpose.Upgrade) || (!SqlServerInstaller.IsMsdeMigrationInProgress && SqlSession.Current.IsSqlServer2008OrLater()))
+            if (sqlInstaller.IsInstallerLocalFileValid(SqlServerInstallerPurpose.Upgrade) || SqlSession.Current.IsSqlServer2008OrLater())
             {
                 e.Skip = true;
                 return;
@@ -555,7 +534,7 @@ namespace ShipWorks.Data.Administration
         private void OnSteppingIntoUpgradeSqlServer(object sender, WizardSteppingIntoEventArgs e)
         {
             // If its already upgraded, move on
-            if (!SqlServerInstaller.IsMsdeMigrationInProgress && SqlSession.Current.IsSqlServer2008OrLater())
+            if (SqlSession.Current.IsSqlServer2008OrLater())
             {
                 e.Skip = true;
                 e.RaiseStepEventWhenSkipping = true;
@@ -575,7 +554,7 @@ namespace ShipWorks.Data.Administration
             }
 
             // If its upgraded now, we are ok to move on.
-            if (!SqlServerInstaller.IsMsdeMigrationInProgress && SqlSession.Current.IsSqlServer2008OrLater())
+            if (SqlSession.Current.IsSqlServer2008OrLater())
             {
                 e.NextPage = wizardPageWindowsFirewall;
                 return;
