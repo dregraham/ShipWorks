@@ -1,12 +1,11 @@
-﻿using System;
+﻿using log4net;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Services;
-using ShipWorks.Stores.Platforms.Odbc.DataAccess;
-using ShipWorks.Stores.Platforms.Odbc.Mapping;
-using System.Collections.Generic;
-using log4net;
 using ShipWorks.Stores.Content;
+using ShipWorks.Stores.Platforms.Odbc.DataAccess;
+using System;
+using System.Collections.Generic;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Upload
 {
@@ -23,7 +22,10 @@ namespace ShipWorks.Stores.Platforms.Odbc.Upload
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcUploader"/> class.
         /// </summary>
-        public OdbcUploader(IShippingManager shippingManager, IOrderManager orderManager, IOdbcFieldMap fieldMap, IOdbcUploadCommandFactory uploadCommandFactory, Func<Type, ILog> logFactory)
+        public OdbcUploader(IShippingManager shippingManager,
+            IOrderManager orderManager,
+            IOdbcUploadCommandFactory uploadCommandFactory,
+            Func<Type, ILog> logFactory)
         {
             this.shippingManager = shippingManager;
             this.orderManager = orderManager;
