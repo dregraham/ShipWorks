@@ -8,9 +8,9 @@ namespace Interapptive.Shared.Tests.Collections
 {
     public class ObservableExtensionsTest
     {
-        Subject<int> stream = new Subject<int>();
-        Subject<int> open = new Subject<int>();
-        Subject<int> close = new Subject<int>();
+        readonly Subject<int> stream = new Subject<int>();
+        readonly Subject<int> open = new Subject<int>();
+        readonly Subject<int> close = new Subject<int>();
 
         [Fact]
         public void IgnoreBetweenMessages_IgnoresMessages_BeforeWindowIsOpen()

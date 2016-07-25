@@ -12,8 +12,6 @@ namespace ShipWorks.Shipping
     /// </summary>
     public class ShipmentAddressValidator : IValidator<ShipmentEntity>
     {
-        static readonly ILog log = LogManager.GetLogger(typeof(ShipmentAddressValidator));
-
         private readonly IValidatedAddressManager validatedAddressManager;
         private readonly IFilterHelper filterHelper;
 

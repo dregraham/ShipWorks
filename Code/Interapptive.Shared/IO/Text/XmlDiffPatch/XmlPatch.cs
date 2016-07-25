@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 // <copyright file="XmlPatch.cs" company="Microsoft">
 //     Copyright (c) Microsoft Corporation.  All rights reserved.
-// </copyright>                                                                
+// </copyright>
 //------------------------------------------------------------------------------
 
 using System;
@@ -19,7 +19,7 @@ namespace Microsoft.XmlDiffPatch
 //
 /// <include file='doc\XmlPatch.uex' path='docs/doc[@for="XmlPatch"]/*' />
 /// <summary>
-///    XML Patch modifies XML documents or nodes according to the XDL diffgram created by XML Diff.  
+///    XML Patch modifies XML documents or nodes according to the XDL diffgram created by XML Diff.
 /// </summary>
 public class XmlPatch
 {
@@ -36,11 +36,11 @@ public class XmlPatch
     /// <include file='doc\XmlPatch.uex' path='docs/doc[@for="XmlPatch.Patch1"]/*' />
     /// <summary>
     ///    Reads the XDL diffgram from the diffgramFileName and modifies the original XML document
-    ///    sourceDoc according to the changes described in the diffgram. 
+    ///    sourceDoc according to the changes described in the diffgram.
     /// </summary>
     /// <param name="sourceDoc">The original xml document</param>
     /// <param name="diffgramFileName">XmlReader for the XDL diffgram.</param>
-	public void Patch( XmlDocument sourceDoc, XmlReader diffgram ) 
+	public void Patch( XmlDocument sourceDoc, XmlReader diffgram )
 	{
         if ( sourceDoc == null )
             throw new ArgumentNullException( "sourceDoc" );
@@ -51,21 +51,21 @@ public class XmlPatch
 		Patch( ref sourceNode, diffgram );
         Debug.Assert( sourceNode == sourceDoc );
 	}
-    
+
     /// <include file='doc\XmlPatch.uex' path='docs/doc[@for="XmlPatch.Patch3"]/*' />
     /// <summary>
     ///    Reads the XDL diffgram from the diffgramFileName and modifies the original XML document
-    ///    sourceDoc according to the changes described in the diffgram. 
+    ///    sourceDoc according to the changes described in the diffgram.
     /// </summary>
     /// <param name="sourceDoc">The original xml document</param>
     /// <param name="diffgramFileName">XmlReader for the XDL diffgram.</param>
-	public void Patch( string sourceFile, Stream outputStream, XmlReader diffgram ) 
+	public void Patch( string sourceFile, Stream outputStream, XmlReader diffgram )
 	{
         if ( sourceFile == null )
             throw new ArgumentNullException( "sourceFile" );
         if ( outputStream == null )
             throw new ArgumentNullException( "outputStream" );
-        if ( diffgram == null ) 
+        if ( diffgram == null )
             throw new ArgumentException( "diffgram" );
 
         XmlDocument diffDoc = new XmlDocument();
@@ -78,7 +78,7 @@ public class XmlPatch
                                                   XmlNodeType.Element,
                                                   new XmlParserContext( nt, new XmlNamespaceManager( nt ),
                                                                         string.Empty, XmlSpace.Default ) );
-            Patch( tr, outputStream, diffDoc ); 
+            Patch( tr, outputStream, diffDoc );
         }
         // patch document
         else {
@@ -89,7 +89,7 @@ public class XmlPatch
     /// <include file='doc\XmlPatch.uex' path='docs/doc[@for="XmlPatch.Patch3"]/*' />
     /// <summary>
     ///    Reads the XDL diffgram from the diffgramFileName and modifies the original XML document
-    ///    sourceDoc according to the changes described in the diffgram. 
+    ///    sourceDoc according to the changes described in the diffgram.
     /// </summary>
     /// <param name="sourceDoc">The original xml document</param>
     /// <param name="diffgramFileName">XmlReader for the XDL diffgram.</param>
@@ -98,7 +98,7 @@ public class XmlPatch
             throw new ArgumentNullException( "sourceReader" );
         if ( outputStream == null )
             throw new ArgumentNullException( "outputStream" );
-        if ( diffgram == null ) 
+        if ( diffgram == null )
             throw new ArgumentException( "diffgram" );
 
         XmlDocument diffDoc = new XmlDocument();
@@ -108,7 +108,7 @@ public class XmlPatch
     }
 
     private void Patch( XmlReader sourceReader, Stream outputStream, XmlDocument diffDoc ) {
-        bool bFragments = diffDoc.DocumentElement.GetAttribute( "fragments" ) == "yes"; 
+        bool bFragments = diffDoc.DocumentElement.GetAttribute( "fragments" ) == "yes";
         Encoding enc = null;
 
         if ( bFragments ) {
@@ -172,7 +172,7 @@ public class XmlPatch
     /// <include file='doc\XmlPatch.uex' path='docs/doc[@for="XmlPatch.Patch2"]/*' />
     /// <summary>
     ///    Reads the XDL diffgram from the diffgramFileName and modifies the original XML document
-    ///    sourceDoc according to the changes described in the diffgram. 
+    ///    sourceDoc according to the changes described in the diffgram.
     /// </summary>
     /// <param name="sourceDoc">The original xml node</param>
     /// <param name="diffgramFileName">XmlReader for the XDL diffgram.</param>
@@ -200,7 +200,7 @@ public class XmlPatch
             XmlPatchError.Error( XmlPatchError.MissingSrcDocAttribute );
 
         ulong hashValue = 0;
-        try { 
+        try {
             hashValue = ulong.Parse( srcDocAttr.Value );
         }
         catch {
@@ -210,7 +210,7 @@ public class XmlPatch
         XmlAttribute optionsAttr = (XmlAttribute) diffgramAttributes.GetNamedItem( "options" );
         if ( optionsAttr == null )
             XmlPatchError.Error( XmlPatchError.MissingOptionsAttribute );
-            
+
         // parse options
         XmlDiffOptions xmlDiffOptions = XmlDiffOptions.None;
         try {
@@ -219,7 +219,7 @@ public class XmlPatch
         catch {
             XmlPatchError.Error( XmlPatchError.InvalidOptionsAttribute );
         }
-        
+
         _ignoreChildOrder = ( (int)xmlDiffOptions & (int)XmlDiffOptions.IgnoreChildOrder ) != 0;
 
         // Calculate the hash value of source document and check if it agrees with
@@ -228,7 +228,7 @@ public class XmlPatch
             XmlPatchError.Error( XmlPatchError.SrcDocMismatch );
 
         // Translate diffgram & Apply patch
-        if ( sourceNode.NodeType == XmlNodeType.Document ) 
+        if ( sourceNode.NodeType == XmlNodeType.Document )
         {
             Patch patch = CreatePatch( sourceNode, diffgramEl );
 
@@ -314,14 +314,14 @@ public class XmlPatch
         _sourceRootNode = sourceNode;
 
         // create patch for <xmldiff> node children
-        CreatePatchForChildren( sourceNode, 
+        CreatePatchForChildren( sourceNode,
                                 diffgramElement,
                                 patch );
         return patch;
     }
 
-    private void CreatePatchForChildren( XmlNode sourceParent, 
-                                         XmlElement diffgramParent, 
+    private void CreatePatchForChildren( XmlNode sourceParent,
+                                         XmlElement diffgramParent,
                                          XmlPatchParentOperation patchParent )
     {
         Debug.Assert( sourceParent != null );
@@ -345,7 +345,7 @@ public class XmlPatch
             if ( matchAttr != string.Empty )
             {
                 matchNodes = PathDescriptorParser.SelectNodes( _sourceRootNode, sourceParent, matchAttr );
-                
+
                 if ( matchNodes.Count == 0 )
                     XmlPatchError.Error( XmlPatchError.NoMatchingNode, matchAttr );
             }
@@ -390,20 +390,20 @@ public class XmlPatch
                             bool bElement = (nodeType == XmlNodeType.Element);
 
                             if ( nodeType != XmlNodeType.DocumentType ) {
-                                patchOp = new PatchAddNode( nodeType,  
-                                                            diffOp.GetAttribute( "name" ), 
-                                                            diffOp.GetAttribute( "ns" ), 
-                                                            diffOp.GetAttribute( "prefix" ), 
+                                patchOp = new PatchAddNode( nodeType,
+                                                            diffOp.GetAttribute( "name" ),
+                                                            diffOp.GetAttribute( "ns" ),
+                                                            diffOp.GetAttribute( "prefix" ),
                                                             bElement ? string.Empty : diffOp.InnerText,
                                                             _ignoreChildOrder );
                                 if ( bElement )
                                     CreatePatchForChildren( sourceParent, diffOp, (XmlPatchParentOperation) patchOp );
                             }
                             else {
-                                patchOp = new PatchAddNode( nodeType,  
-                                                            diffOp.GetAttribute( "name" ), 
-                                                            diffOp.GetAttribute( "systemId" ), 
-                                                            diffOp.GetAttribute( "publicId" ), 
+                                patchOp = new PatchAddNode( nodeType,
+                                                            diffOp.GetAttribute( "name" ),
+                                                            diffOp.GetAttribute( "systemId" ),
+                                                            diffOp.GetAttribute( "publicId" ),
                                                             diffOp.InnerText,
                                                             _ignoreChildOrder );
                             }
@@ -440,15 +440,15 @@ public class XmlPatch
 
                     XmlNode matchNode = matchNodes.Item( 0 );
                     if ( matchNode.NodeType != XmlNodeType.DocumentType ) {
-                        patchOp = new PatchChange( matchNode, 
+                        patchOp = new PatchChange( matchNode,
                                                 diffOp.HasAttribute( "name" ) ? diffOp.GetAttribute( "name" ) : null,
-                                                diffOp.HasAttribute( "ns" ) ? diffOp.GetAttribute( "ns" ) : null, 
-                                                diffOp.HasAttribute( "prefix" ) ? diffOp.GetAttribute( "prefix" ) : null, 
+                                                diffOp.HasAttribute( "ns" ) ? diffOp.GetAttribute( "ns" ) : null,
+                                                diffOp.HasAttribute( "prefix" ) ? diffOp.GetAttribute( "prefix" ) : null,
                                                 (matchNode.NodeType == XmlNodeType.Element) ? null : diffOp );
                     }
                     else {
                         patchOp = new PatchChange( matchNode,
-                                                   diffOp.HasAttribute( "name" ) ? diffOp.GetAttribute( "name" ) : null, 
+                                                   diffOp.HasAttribute( "name" ) ? diffOp.GetAttribute( "name" ) : null,
                                                    diffOp.HasAttribute( "systemId" ) ? diffOp.GetAttribute( "systemId" ) : null,
                                                    diffOp.HasAttribute( "publicId" ) ? diffOp.GetAttribute( "publicId" ) : null,
                                                    diffOp.IsEmpty ? null : diffOp );
