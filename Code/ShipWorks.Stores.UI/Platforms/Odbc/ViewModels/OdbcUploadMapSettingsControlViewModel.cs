@@ -1,12 +1,12 @@
-﻿using System;
+﻿using GalaSoft.MvvmLight.Command;
 using Interapptive.Shared.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
+using ShipWorks.Templates.Tokens;
+using System;
+using System.ComponentModel;
 using System.Reflection;
 using System.Windows.Forms;
-using System.Windows.Input;
-using GalaSoft.MvvmLight.Command;
-using ShipWorks.Templates.Tokens;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
 {
@@ -73,7 +73,12 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
         public void OpenTemplateEditorDlg()
         {
             tokenEditorDlg.TokenText = CustomQuery;
-            tokenEditorDlg.ShowDialog(owner);
+            DialogResult result = tokenEditorDlg.ShowDialog(owner);
+
+            if (result==DialogResult.OK)
+            {
+                CustomQuery = tokenEditorDlg.TokenText;
+            }
         }
 
         /// <summary>

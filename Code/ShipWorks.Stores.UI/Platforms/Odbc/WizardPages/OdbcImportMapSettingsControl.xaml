@@ -76,7 +76,7 @@
                      Margin="5 5 0 5"
                      VerticalAlignment="Center"
                      Text="{Binding MapName,
-                                    UpdateSourceTrigger=PropertyChanged}" />
+                                    UpdateSourceTrigger=LostFocus}" />
             <Button Grid.Row="1"
                     Grid.Column="2"
                     Content="Load Map..." />
