@@ -145,7 +145,7 @@
                      ui:EntityFieldLength.FieldName="OdbcStoreCustomQuery" />
             <TextBlock Grid.Row="2">
                 For help writing your query,
-                <Hyperlink Command="{Binding OpenTemplateEditorDlgCommand}">click here.</Hyperlink>
+                <Hyperlink NavigateUri="http://support.shipworks.com" RequestNavigate="OpenLink">click here.</Hyperlink>
             </TextBlock>
 
             <Button Grid.Row="2"
