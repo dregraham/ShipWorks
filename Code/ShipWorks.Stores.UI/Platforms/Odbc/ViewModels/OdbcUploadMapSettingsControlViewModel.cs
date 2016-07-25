@@ -35,7 +35,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
             "/****************************************************************/\n\n" +
             "UPDATE ShipmentDetails\n" +
             "SET TrackingNumber = \'<xsl:value-of select=\"//TrackingNumber\"/>\'\n" +
-            "WHERE OrderID = < xsl:value-of select = \"//Order/Number\" />";
+            "WHERE OrderID = <xsl:value-of select = \"//Order/Number\" />";
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcUploadMapSettingsControlViewModel"/> class.
