@@ -86,7 +86,9 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
         /// </summary>
         private IOdbcQuery CreateTableUploadQuery(OdbcStoreEntity store, ShipmentEntity shipment)
         {
+            fieldMap.Load(store.UploadMap);
             fieldMap.ApplyValues(new IEntity2[] { shipment, shipment.Order });
+
             return new OdbcTableUploadQuery(fieldMap, store, dbProviderFactory, dataSource);
         }
     }
