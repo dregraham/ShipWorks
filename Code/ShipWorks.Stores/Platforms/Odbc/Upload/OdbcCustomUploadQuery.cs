@@ -28,7 +28,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Upload
         /// </summary>
         public string GenerateSql()
         {
-            return templateTokenProcessor.ProcessTokens(store.UploadColumnSource, shipment.ShipmentID);
+            return templateTokenProcessor.ProcessTokens(store.UploadColumnSource, shipment.ShipmentID, false);
         }
 
         /// <summary>

@@ -4,7 +4,6 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 using ShipWorks.Templates.Tokens;
 using System;
-using System.ComponentModel;
 using System.Reflection;
 using System.Windows.Forms;
 
@@ -34,8 +33,8 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
             "/*                                                              */\n" +
             "/****************************************************************/\n\n" +
             "UPDATE ShipmentDetails\n" +
-            "SET TrackingNumber = \'<xsl:value-of select=\"//TrackingNumber\"/>\'\n" +
-            "WHERE OrderID = <xsl:value-of select = \"//Order/Number\" />";
+            "SET TrackingNumber = '{//TrackingNumber}'\n" +
+            "WHERE OrderID = {//Order/Number}";
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcUploadMapSettingsControlViewModel"/> class.

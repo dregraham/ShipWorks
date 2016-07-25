@@ -31,7 +31,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Upload
 
                 testObject.GenerateSql();
 
-                tokenProcessor.Verify(p=>p.ProcessTokens(uploadColumnSource, shipmentId, true), Times.Once);
+                tokenProcessor.Verify(p=>p.ProcessTokens(uploadColumnSource, shipmentId, false), Times.Once);
             }
         }
 
