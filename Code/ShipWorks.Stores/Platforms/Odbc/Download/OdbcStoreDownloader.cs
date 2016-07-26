@@ -44,7 +44,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         }
 
         /// <summary>
-        /// Import ODBC Orders from external datasource.
+        /// Import ODBC Orders from external data source.
         /// </summary>
         /// <param name="trackedDurationEvent"></param>
         /// <exception cref="DownloadException"></exception>
@@ -54,6 +54,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
             try
             {
                 IOdbcCommand downloadCommand = GenerateDownloadCommand(store, trackedDurationEvent);
+                trackedDurationEvent.AddProperty("Odbc.Driver", downloadCommand.Driver);
 
                 IEnumerable<OdbcRecord> downloadedOrders = downloadCommand.Execute();
                 List<IGrouping<string, OdbcRecord>> orderGroups =

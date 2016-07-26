@@ -26,6 +26,14 @@ namespace ShipWorks.Stores.Platforms.Odbc.Upload
         }
 
         /// <summary>
+        /// Gets the name of the ODBC driver being used to execute this command.
+        /// </summary>
+        public string Driver
+        {
+            get { return dataSource.Driver; }
+        }
+
+        /// <summary>
         /// Executes the command and returns the number of rows affected.
         /// </summary>
         public int Execute()

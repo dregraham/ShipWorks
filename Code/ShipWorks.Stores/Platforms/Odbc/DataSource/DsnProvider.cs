@@ -29,23 +29,19 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataSource
         /// <exception cref="System.Data.DataException">
         /// Thrown when there is an issue retrieving information from the data sources.
         /// </exception>
-        public IEnumerable<string> GetDataSourceNames()
+        public IEnumerable<DsnInfo> GetDataSourceNames()
         {
             try
             {
-                List<string> odbcDataSources = new List<string>();
-                string odbcDataSource;
-
+                List<DsnInfo> odbcDataSources = new List<DsnInfo>();
                 InitializeSqlEnvHandle();
 
-                odbcDataSource = GetNextDsn();
-
                 // Continue adding DSNs to the list of data source names until there aren't any more
-                while (!string.IsNullOrWhiteSpace(odbcDataSource))
+                DsnInfo dsnInfo = GetNextDsn();
+                while (!string.IsNullOrWhiteSpace(dsnInfo?.Name))
                 {
-                    odbcDataSources.Add(odbcDataSource);
-
-                    odbcDataSource = GetNextDsn();
+                    odbcDataSources.Add(dsnInfo);
+                    dsnInfo = GetNextDsn();
                 }
 
                 return odbcDataSources;
@@ -65,14 +61,13 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataSource
             }
         }
 
+
         /// <summary>
-        /// Gets the name of the next DSN.
+        /// Gets the next DSN.
         /// </summary>
-        /// <returns>
-        /// Returns Next DSN Name; null if none.
-        /// </returns>
+        /// <returns>An instance of DsnInfo for the next DSN read from ODBC DSNs; otherwise null.</returns>
         /// <exception cref="DataException">Error getting ODBC Data Sources</exception>
-        private string GetNextDsn()
+        private DsnInfo GetNextDsn()
         {
             if (sqlEnvHandle == IntPtr.Zero)
             {
@@ -88,15 +83,15 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataSource
                 throw new DataException("Error getting ODBC Data Sources");
             }
 
-            string nextDsn = null;
+            DsnInfo dsnInfo = null;
             if (resultCode == Odbc32.SqlSuccess)
             {
-                nextDsn = dsnName.ToString();
+                dsnInfo = new DsnInfo(dsnName.ToString(), dsnDesc.ToString());
             }
 
             direction = Odbc32.Direction.SqlFetchNext;
 
-            return nextDsn;
+            return dsnInfo;
         }
 
         /// <summary>

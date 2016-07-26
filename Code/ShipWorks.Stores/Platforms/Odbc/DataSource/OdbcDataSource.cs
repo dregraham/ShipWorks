@@ -25,6 +25,11 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataSource
         public OdbcDataSource(IShipWorksDbProviderFactory odbcProvider)
         {
             this.odbcProvider = odbcProvider;
+
+            Name = string.Empty;
+            Username = string.Empty;
+            Password = string.Empty;
+            Driver = string.Empty;
         }
 
         /// <summary>
@@ -49,6 +54,12 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataSource
         public bool IsCustom { get; private set; }
 
         /// <summary>
+        /// Gets the name of the ODBC driver for the data source.
+        /// </summary>
+        /// <value>The driver.</value>
+        public string Driver { get; private set; }
+
+        /// <summary>
         /// Gets or sets the custom connection string.
         /// </summary>
         public string ConnectionString
@@ -70,17 +81,29 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataSource
             IsCustom = true;
             Name = "Custom...";
             ConnectionString = connectionString;
+            Driver = "Customized connection string";
         }
 
         /// <summary>
-        /// Changes the connection to use a new dsn, username and password
+        /// Changes the connection to use a new dsn, username and password.
         /// </summary>
         public void ChangeConnection(string dsn, string username, string password)
+        {
+            ChangeConnection(dsn, username, password, "Unknown");
+        }
+
+        /// <summary>
+        /// Changes the connection to use a new dsn, username, password, and ODBC driver
+        /// used to connect to the data source.
+        /// </summary>
+        public void ChangeConnection(string dsn, string username, string password, string driver)
+
         {
             IsCustom = false;
             Name = dsn;
             Username = username;
             Password = password;
+            Driver = string.IsNullOrWhiteSpace(driver) ? "Unknown" : driver;
         }
 
         /// <summary>
@@ -160,12 +183,14 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataSource
             {
                 JObject dataSource = JObject.Parse(json);
 
-                Name = dataSource["Name"].ToString();
                 bool custom;
                 IsCustom = bool.TryParse(dataSource["IsCustom"].ToString(), out custom) && custom;
+
+                Name = dataSource["Name"].ToString();
                 Username = dataSource["Username"].ToString();
                 Password = dataSource["Password"].ToString();
                 ConnectionString = dataSource["ConnectionString"].ToString();
+                Driver = dataSource["Driver"]?.ToString() ?? "Unknown";
             }
             catch (JsonReaderException ex)
             {

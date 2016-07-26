@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Web.UI.WebControls.WebParts;
 using Microsoft.ApplicationInsights.DataContracts;
 
 namespace Interapptive.Shared.Metrics
@@ -35,6 +36,21 @@ namespace Interapptive.Shared.Metrics
             else
             {
                 eventTelemetry.Metrics.Add(new KeyValuePair<string, double>(metricName, metricValue));
+            }
+        }
+
+        /// <summary>
+        /// Adds a property value to the event.
+        /// </summary>
+        public void AddProperty(string propertyName, string propertyValue)
+        {
+            if (eventTelemetry.Properties.ContainsKey(propertyName))
+            {
+                eventTelemetry.Properties[propertyName] = propertyValue;
+            }
+            else
+            {
+                eventTelemetry.Properties.Add(propertyName, propertyValue);
             }
         }
 

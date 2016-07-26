@@ -2,6 +2,7 @@
 using Interapptive.Shared.Security;
 using Moq;
 using ShipWorks.Stores.Platforms.Odbc;
+using ShipWorks.Stores.Platforms.Odbc.DataSource;
 using Xunit;
 
 namespace ShipWorks.Stores.Tests.Platforms.Odbc

@@ -40,7 +40,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataSource
         }
 
         /// <summary>
-        /// Create the import datasource for the given store
+        /// Create the import data source for the given store
         /// </summary>
         public IOdbcDataSource GetImportDataSource(OdbcStoreEntity store)
         {
@@ -53,7 +53,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataSource
         }
 
         /// <summary>
-        /// Create the upload datasource for the given store
+        /// Create the upload data source for the given store
         /// </summary>
         public IOdbcDataSource GetUploadDataSource(OdbcStoreEntity store)
         {

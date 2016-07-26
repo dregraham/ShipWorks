@@ -134,6 +134,22 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Upload
             Assert.Equal(exception.Object.Message, ex.Message);
         }
 
+        [Fact]
+        public void Driver_DelegatesToDataSource()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                Mock<IOdbcDataSource> dataSource = mock.Mock<IOdbcDataSource>();
+                dataSource.SetupGet(d => d.Driver).Returns("Some test driver");
+
+                OdbcUploadCommand testObject = mock.Create<OdbcUploadCommand>();
+                string driverName = testObject.Driver;
+
+                dataSource.Verify(d => d.Driver, Times.Once());
+                Assert.Equal("Some test driver", driverName);
+            }
+        }
+
         public void Dispose()
         {
             mock?.Dispose();
