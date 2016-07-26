@@ -487,9 +487,7 @@ namespace ShipWorks.Shipping
             userState["resortWhenDone"] = resortWhenDone;
             userState["getRatesWhenDone"] = getRatesWhenDone;
 
-            // We need to load a copy of the shipments, since its going to be on the background thread.  Otherwise the UI could try to draw at the exact same
-            // time it was being loaded on the background, and crashes could occur.
-            IEnumerable<ShipmentEntity> shipmentsToLoad = shipmentControl.SelectedRows.Select(r => EntityUtility.CloneEntity(r.Shipment));
+            IEnumerable<ShipmentEntity> shipmentsToLoad = shipmentControl.SelectedShipments;
 
             TaskCompletionSource<object> completionSource = new TaskCompletionSource<object>();
 
@@ -512,14 +510,6 @@ namespace ShipWorks.Shipping
                 {
                     try
                     {
-                        shippingManager.EnsureShipmentLoaded(shipment);
-
-                        // Even without the type being setup, we can still load the customs stuff.  Normally EnsureShipmentLoaded would do that for us.
-                        using (SqlAdapter adapter = new SqlAdapter())
-                        {
-                            CustomsManager.LoadCustomsItems(shipment, false, adapter);
-                        }
-
                         loaded.Add(shipment);
                     }
                     catch (ObjectDeletedException)

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Interapptive.Shared.Collections;
@@ -148,6 +149,8 @@ namespace ShipWorks.Shipping.Loading
                 {
                     count += 1;
                 }
+
+                shipment.CustomsItemsLoaded = shipment.CustomsItemsLoaded || shipment.CustomsItems.Any();
 
                 globalShipments.Add(shipment.ShipmentID, shipment);
 
