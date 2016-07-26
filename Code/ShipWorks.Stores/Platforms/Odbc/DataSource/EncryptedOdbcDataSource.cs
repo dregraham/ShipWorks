@@ -1,8 +1,7 @@
 ﻿using Interapptive.Shared.Security;
 using ShipWorks.Stores.Platforms.Odbc.DataAccess;
-using ShipWorks.Stores.Platforms.Odbc.DataSource;
 
-namespace ShipWorks.Stores.Platforms.Odbc
+namespace ShipWorks.Stores.Platforms.Odbc.DataSource
 {
     /// <summary>
     /// OdbcDatasource that inputs and outputs encrypted json.
@@ -14,7 +13,8 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// <summary>
         /// Initializes a new instance of the <see cref="EncryptedOdbcDataSource"/> class.
         /// </summary>
-        public EncryptedOdbcDataSource(IShipWorksDbProviderFactory odbcProvider, IEncryptionProviderFactory encryptionProviderFactory) : base(odbcProvider)
+        public EncryptedOdbcDataSource(IShipWorksDbProviderFactory odbcProvider, IEncryptionProviderFactory encryptionProviderFactory) 
+            : base(odbcProvider)
         {
             odbcEncryptionProvider = encryptionProviderFactory.CreateOdbcEncryptionProvider();
         }

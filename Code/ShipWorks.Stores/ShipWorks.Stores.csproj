@@ -184,7 +184,7 @@
     <Compile Include="Platforms\Odbc\DataSource\OdbcDataSourceService.cs" />
     <Compile Include="Platforms\Odbc\DataSource\Schema\OdbcColumnSourceType.cs" />
     <Compile Include="Platforms\Odbc\Download\OdbcCustomDownloadQuery.cs" />
-    <Compile Include="Platforms\Odbc\EncryptedOdbcDataSource.cs" />
+    <Compile Include="Platforms\Odbc\DataSource\EncryptedOdbcDataSource.cs" />
     <Compile Include="Platforms\Odbc\DataAccess\IOdbcCommand.cs" />
     <Compile Include="Platforms\Odbc\DataSource\IOdbcDataSource.cs" />
     <Compile Include="Platforms\Odbc\IOdbcQuery.cs" />
