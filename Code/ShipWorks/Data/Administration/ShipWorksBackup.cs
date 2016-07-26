@@ -431,42 +431,14 @@ namespace ShipWorks.Data.Administration
                     return;
                 }
 
+                if (database == null)
+                {
+                    throw new InvalidDataException("The file is not a valid ShipWorks backup, or the SQL Server database was not included when the backup was created.");
+                }
+
                 database.Progress = restoreProgress;
 
                 RestoreSqlBackup(database);
-            }
-        }
-
-        /// <summary>
-        /// Get a new database archive name to replace the given original name. This is for when we are restoring a backup with an archive, and
-        /// the archive name is already in use.
-        /// </summary>
-        private string GetAlternateArchiveName(SqlConnection con, string originalName)
-        {
-            string alternateName = String.Format("{0}_archive_{1}", con.Database, Guid.NewGuid().ToString("N"));
-            if (alternateName.Length > 128)
-            {
-                // just to maintain uniqueness in this crazy scenario
-                alternateName = String.Format("shipworks_archive_{0}", Guid.NewGuid().ToString("N"));
-            }
-
-            // write it to the master database
-            try
-            {
-                SqlCommand cmd = SqlCommandProvider.Create(con);
-                cmd.CommandText = "UPDATE ArchiveSets SET DbName = @newDbName WHERE DbName = @oldDbName";
-                cmd.Parameters.AddWithValue("@newDbName", alternateName);
-                cmd.Parameters.AddWithValue("@oldDbName", originalName);
-
-                SqlCommandProvider.ExecuteNonQuery(cmd);
-
-                return alternateName;
-            }
-            catch (SqlException ex)
-            {
-                throw new InvalidOperationException(
-                    "An error occurred while registering a cloned Archive Set database.\n\n" +
-                    "Detail:\n" + ex.Message, ex);
             }
         }
 
@@ -652,10 +624,7 @@ namespace ShipWorks.Data.Administration
         [NDependIgnoreTooManyParams]
         private void ExecuteSqlRestore(SqlConnection con, string databaseName, string backupFilePath, string sourceLogicalDb, string sourceLogicalLog, string targetPhysDb, string targetPhysLog, ProgressItem progress)
         {
-            if (RestoreStarting != null)
-            {
-                RestoreStarting(this, EventArgs.Empty);
-            }
+            RestoreStarting?.Invoke(this, EventArgs.Empty);
 
             progress.Detail = "Logging off all users";
 
