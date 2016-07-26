@@ -3,16 +3,19 @@ using System.Reflection;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 {
-    [Obfuscation(Exclude = true)]
+    /// <summary>
+    /// Strategies for reading OdbcFields
+    /// </summary>
+    [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
     public enum OdbcFieldValueResolutionStrategy
     {
         [Description("Default")]
-        Default,
+        Default = 0,
 
         [Description("Shipping Carrier")]
-        ShippingCarrier,
+        ShippingCarrier = 1,
 
         [Description("Shipping Provider")]
-        ShippingService
+        ShippingService = 2
     }
 }
