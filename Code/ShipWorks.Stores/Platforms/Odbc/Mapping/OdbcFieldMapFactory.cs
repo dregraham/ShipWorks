@@ -2,6 +2,8 @@ using ShipWorks.Data.Model.HelperClasses;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Autofac.Features.Indexed;
+using ShipWorks.Stores.Platforms.Odbc.Upload.FieldValueResolvers;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 {
@@ -11,15 +13,18 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
     public class OdbcFieldMapFactory : IOdbcFieldMapFactory
 	{
         private readonly IOdbcFieldMapIOFactory ioFactory;
+        private readonly IIndex<OdbcFieldValueResolutionStrategy, IOdbcFieldValueResolver> fieldValueResolverFactory;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcFieldMapFactory"/> class.
         /// </summary>
         /// <param name="ioFactory">The io factory.</param>
-        public OdbcFieldMapFactory(IOdbcFieldMapIOFactory ioFactory)
-	    {
-	        this.ioFactory = ioFactory;
-	    }
+        /// <param name="fieldValueResolverFactory"></param>
+        public OdbcFieldMapFactory(IOdbcFieldMapIOFactory ioFactory, IIndex<OdbcFieldValueResolutionStrategy, IOdbcFieldValueResolver> fieldValueResolverFactory)
+        {
+            this.ioFactory = ioFactory;
+            this.fieldValueResolverFactory = fieldValueResolverFactory;
+        }
 
         /// <summary>
         /// Creates the order field map.
@@ -36,27 +41,27 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 	    {
 	        List<ShipWorksOdbcMappableField> fields = new List<ShipWorksOdbcMappableField>
 	        {
-	            new ShipWorksOdbcMappableField(OrderFields.OrderNumber, OdbcOrderFieldDescription.Number, true),
-	            new ShipWorksOdbcMappableField(OrderFields.OrderDate, OdbcOrderFieldDescription.DateAndTime),
-                new ShipWorksOdbcMappableField(OrderFields.OnlineLastModified, OdbcOrderFieldDescription.LastModifiedDateAndTime),
-                new ShipWorksOdbcMappableField(OrderFields.LocalStatus, OdbcOrderFieldDescription.LocalStatus),
-	            new ShipWorksOdbcMappableField(OrderFields.OnlineStatus, OdbcOrderFieldDescription.OnlineStatus),
-	            new ShipWorksOdbcMappableField(OrderFields.RequestedShipping, OdbcOrderFieldDescription.RequestedShipping),
-	            new ShipWorksOdbcMappableField(OrderFields.OnlineCustomerID, OdbcOrderFieldDescription.CustomerID),
-	            new ShipWorksOdbcMappableField(NoteFields.Text, OdbcOrderFieldDescription.NoteInternal),
-	            new ShipWorksOdbcMappableField(NoteFields.Text, OdbcOrderFieldDescription.NotePublic),
-	            new ShipWorksOdbcMappableField(OrderChargeFields.Amount, OdbcOrderFieldDescription.ChargeShipping),
-	            new ShipWorksOdbcMappableField(OrderChargeFields.Amount, OdbcOrderFieldDescription.ChargeHandling),
-	            new ShipWorksOdbcMappableField(OrderChargeFields.Amount, OdbcOrderFieldDescription.ChargeDiscount),
-	            new ShipWorksOdbcMappableField(OrderChargeFields.Amount, OdbcOrderFieldDescription.ChargeInsurance),
-	            new ShipWorksOdbcMappableField(OrderChargeFields.Amount, OdbcOrderFieldDescription.ChargeOther),
-	            new ShipWorksOdbcMappableField(OrderChargeFields.Amount, OdbcOrderFieldDescription.ChargeTax),
-	            new ShipWorksOdbcMappableField(OrderPaymentDetailFields.Value, OdbcOrderFieldDescription.PaymentMethod),
-	            new ShipWorksOdbcMappableField(OrderPaymentDetailFields.Value, OdbcOrderFieldDescription.PaymentReference),
-	            new ShipWorksOdbcMappableField(OrderPaymentDetailFields.Value, OdbcOrderFieldDescription.PaymentCCType),
-	            new ShipWorksOdbcMappableField(OrderPaymentDetailFields.Value, OdbcOrderFieldDescription.PaymentCCNumber),
-	            new ShipWorksOdbcMappableField(OrderPaymentDetailFields.Value, OdbcOrderFieldDescription.PaymentCCExpiration),
-	            new ShipWorksOdbcMappableField(OrderPaymentDetailFields.Value, OdbcOrderFieldDescription.PaymentCCName)
+	            new ShipWorksOdbcMappableField(OrderFields.OrderNumber, OdbcOrderFieldDescription.Number, true, OdbcFieldValueResolutionStrategy.Default),
+	            new ShipWorksOdbcMappableField(OrderFields.OrderDate, OdbcOrderFieldDescription.DateAndTime, OdbcFieldValueResolutionStrategy.Default),
+                new ShipWorksOdbcMappableField(OrderFields.OnlineLastModified, OdbcOrderFieldDescription.LastModifiedDateAndTime, OdbcFieldValueResolutionStrategy.Default),
+                new ShipWorksOdbcMappableField(OrderFields.LocalStatus, OdbcOrderFieldDescription.LocalStatus, OdbcFieldValueResolutionStrategy.Default),
+	            new ShipWorksOdbcMappableField(OrderFields.OnlineStatus, OdbcOrderFieldDescription.OnlineStatus, OdbcFieldValueResolutionStrategy.Default),
+	            new ShipWorksOdbcMappableField(OrderFields.RequestedShipping, OdbcOrderFieldDescription.RequestedShipping, OdbcFieldValueResolutionStrategy.Default),
+	            new ShipWorksOdbcMappableField(OrderFields.OnlineCustomerID, OdbcOrderFieldDescription.CustomerID, OdbcFieldValueResolutionStrategy.Default),
+	            new ShipWorksOdbcMappableField(NoteFields.Text, OdbcOrderFieldDescription.NoteInternal, OdbcFieldValueResolutionStrategy.Default),
+	            new ShipWorksOdbcMappableField(NoteFields.Text, OdbcOrderFieldDescription.NotePublic, OdbcFieldValueResolutionStrategy.Default),
+	            new ShipWorksOdbcMappableField(OrderChargeFields.Amount, OdbcOrderFieldDescription.ChargeShipping, OdbcFieldValueResolutionStrategy.Default),
+	            new ShipWorksOdbcMappableField(OrderChargeFields.Amount, OdbcOrderFieldDescription.ChargeHandling, OdbcFieldValueResolutionStrategy.Default),
+	            new ShipWorksOdbcMappableField(OrderChargeFields.Amount, OdbcOrderFieldDescription.ChargeDiscount, OdbcFieldValueResolutionStrategy.Default),
+	            new ShipWorksOdbcMappableField(OrderChargeFields.Amount, OdbcOrderFieldDescription.ChargeInsurance, OdbcFieldValueResolutionStrategy.Default),
+	            new ShipWorksOdbcMappableField(OrderChargeFields.Amount, OdbcOrderFieldDescription.ChargeOther, OdbcFieldValueResolutionStrategy.Default),
+	            new ShipWorksOdbcMappableField(OrderChargeFields.Amount, OdbcOrderFieldDescription.ChargeTax, OdbcFieldValueResolutionStrategy.Default),
+	            new ShipWorksOdbcMappableField(OrderPaymentDetailFields.Value, OdbcOrderFieldDescription.PaymentMethod, OdbcFieldValueResolutionStrategy.Default),
+	            new ShipWorksOdbcMappableField(OrderPaymentDetailFields.Value, OdbcOrderFieldDescription.PaymentReference, OdbcFieldValueResolutionStrategy.Default),
+	            new ShipWorksOdbcMappableField(OrderPaymentDetailFields.Value, OdbcOrderFieldDescription.PaymentCCType, OdbcFieldValueResolutionStrategy.Default),
+	            new ShipWorksOdbcMappableField(OrderPaymentDetailFields.Value, OdbcOrderFieldDescription.PaymentCCNumber, OdbcFieldValueResolutionStrategy.Default),
+	            new ShipWorksOdbcMappableField(OrderPaymentDetailFields.Value, OdbcOrderFieldDescription.PaymentCCExpiration, OdbcFieldValueResolutionStrategy.Default),
+	            new ShipWorksOdbcMappableField(OrderPaymentDetailFields.Value, OdbcOrderFieldDescription.PaymentCCName, OdbcFieldValueResolutionStrategy.Default)
 	        };
 
 	        return fields;
@@ -78,23 +83,23 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 	    {
 	        List<ShipWorksOdbcMappableField> fields = new List<ShipWorksOdbcMappableField>()
 	        {
-                new ShipWorksOdbcMappableField(OrderItemFields.Name, OdbcOrderFieldDescription.ItemName),
-                new ShipWorksOdbcMappableField(OrderItemFields.Code, OdbcOrderFieldDescription.ItemCode),
-                new ShipWorksOdbcMappableField(OrderItemFields.SKU, OdbcOrderFieldDescription.ItemSKU),
-                new ShipWorksOdbcMappableField(OrderItemFields.Quantity, OdbcOrderFieldDescription.ItemQuantity),
-                new ShipWorksOdbcMappableField(OrderItemFields.UnitPrice, OdbcOrderFieldDescription.ItemUnitPrice),
-                new ShipWorksOdbcMappableField(OrderItemFields.UnitPrice, OdbcOrderFieldDescription.ItemTotalPrice),
-                new ShipWorksOdbcMappableField(OrderItemFields.Weight, OdbcOrderFieldDescription.ItemUnitWeight),
-                new ShipWorksOdbcMappableField(OrderItemFields.Weight, OdbcOrderFieldDescription.ItemTotalWeight),
-                new ShipWorksOdbcMappableField(OrderItemFields.LocalStatus, OdbcOrderFieldDescription.ItemLocalStatus),
-                new ShipWorksOdbcMappableField(OrderItemFields.Description, OdbcOrderFieldDescription.ItemDescription),
-                new ShipWorksOdbcMappableField(OrderItemFields.Location, OdbcOrderFieldDescription.ItemLocation),
-                new ShipWorksOdbcMappableField(OrderItemFields.UnitCost, OdbcOrderFieldDescription.ItemUnitCost),
-                new ShipWorksOdbcMappableField(OrderItemFields.UnitCost, OdbcOrderFieldDescription.ItemTotalCost),
-                new ShipWorksOdbcMappableField(OrderItemFields.Image, OdbcOrderFieldDescription.ItemImage),
-                new ShipWorksOdbcMappableField(OrderItemFields.Thumbnail, OdbcOrderFieldDescription.ItemThumbnail),
-                new ShipWorksOdbcMappableField(OrderItemFields.UPC, OdbcOrderFieldDescription.ItemUPC),
-                new ShipWorksOdbcMappableField(OrderItemFields.ISBN, OdbcOrderFieldDescription.ItemISBN),
+                new ShipWorksOdbcMappableField(OrderItemFields.Name, OdbcOrderFieldDescription.ItemName, OdbcFieldValueResolutionStrategy.Default),
+                new ShipWorksOdbcMappableField(OrderItemFields.Code, OdbcOrderFieldDescription.ItemCode, OdbcFieldValueResolutionStrategy.Default),
+                new ShipWorksOdbcMappableField(OrderItemFields.SKU, OdbcOrderFieldDescription.ItemSKU, OdbcFieldValueResolutionStrategy.Default),
+                new ShipWorksOdbcMappableField(OrderItemFields.Quantity, OdbcOrderFieldDescription.ItemQuantity, OdbcFieldValueResolutionStrategy.Default),
+                new ShipWorksOdbcMappableField(OrderItemFields.UnitPrice, OdbcOrderFieldDescription.ItemUnitPrice, OdbcFieldValueResolutionStrategy.Default),
+                new ShipWorksOdbcMappableField(OrderItemFields.UnitPrice, OdbcOrderFieldDescription.ItemTotalPrice, OdbcFieldValueResolutionStrategy.Default),
+                new ShipWorksOdbcMappableField(OrderItemFields.Weight, OdbcOrderFieldDescription.ItemUnitWeight, OdbcFieldValueResolutionStrategy.Default),
+                new ShipWorksOdbcMappableField(OrderItemFields.Weight, OdbcOrderFieldDescription.ItemTotalWeight, OdbcFieldValueResolutionStrategy.Default),
+                new ShipWorksOdbcMappableField(OrderItemFields.LocalStatus, OdbcOrderFieldDescription.ItemLocalStatus, OdbcFieldValueResolutionStrategy.Default),
+                new ShipWorksOdbcMappableField(OrderItemFields.Description, OdbcOrderFieldDescription.ItemDescription, OdbcFieldValueResolutionStrategy.Default),
+                new ShipWorksOdbcMappableField(OrderItemFields.Location, OdbcOrderFieldDescription.ItemLocation, OdbcFieldValueResolutionStrategy.Default),
+                new ShipWorksOdbcMappableField(OrderItemFields.UnitCost, OdbcOrderFieldDescription.ItemUnitCost, OdbcFieldValueResolutionStrategy.Default),
+                new ShipWorksOdbcMappableField(OrderItemFields.UnitCost, OdbcOrderFieldDescription.ItemTotalCost, OdbcFieldValueResolutionStrategy.Default),
+                new ShipWorksOdbcMappableField(OrderItemFields.Image, OdbcOrderFieldDescription.ItemImage, OdbcFieldValueResolutionStrategy.Default),
+                new ShipWorksOdbcMappableField(OrderItemFields.Thumbnail, OdbcOrderFieldDescription.ItemThumbnail, OdbcFieldValueResolutionStrategy.Default),
+                new ShipWorksOdbcMappableField(OrderItemFields.UPC, OdbcOrderFieldDescription.ItemUPC, OdbcFieldValueResolutionStrategy.Default),
+                new ShipWorksOdbcMappableField(OrderItemFields.ISBN, OdbcOrderFieldDescription.ItemISBN, OdbcFieldValueResolutionStrategy.Default),
             };
 
 	        return fields;
@@ -116,39 +121,39 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 	    {
             List<ShipWorksOdbcMappableField> addressFields = new List<ShipWorksOdbcMappableField>()
             {
-                new ShipWorksOdbcMappableField(OrderFields.BillFirstName, "Bill First Name"),
-                new ShipWorksOdbcMappableField(OrderFields.BillMiddleName, "Bill Middle Name"),
-                new ShipWorksOdbcMappableField(OrderFields.BillLastName, "Bill Last Name"),
-                new ShipWorksOdbcMappableField(OrderFields.BillUnparsedName, "Bill Full Name"),
-                new ShipWorksOdbcMappableField(OrderFields.BillCompany, "Bill Company"),
-                new ShipWorksOdbcMappableField(OrderFields.BillStreet1, "Bill Address 1"),
-                new ShipWorksOdbcMappableField(OrderFields.BillStreet2, "Bill Address 2"),
-                new ShipWorksOdbcMappableField(OrderFields.BillStreet3, "Bill Address 3"),
-                new ShipWorksOdbcMappableField(OrderFields.BillCity, "Bill City"),
-                new ShipWorksOdbcMappableField(OrderFields.BillStateProvCode, "Bill State/Province"),
-                new ShipWorksOdbcMappableField(OrderFields.BillPostalCode, "Bill Postal Code"),
-                new ShipWorksOdbcMappableField(OrderFields.BillCountryCode, "Bill Country"),
-                new ShipWorksOdbcMappableField(OrderFields.BillEmail, "Bill Email"),
-                new ShipWorksOdbcMappableField(OrderFields.BillPhone, "Bill Phone"),
-                new ShipWorksOdbcMappableField(OrderFields.BillFax, "Bill Fax"),
-                new ShipWorksOdbcMappableField(OrderFields.BillWebsite, "Bill Website"),
+                new ShipWorksOdbcMappableField(OrderFields.BillFirstName, "Bill First Name", OdbcFieldValueResolutionStrategy.Default),
+                new ShipWorksOdbcMappableField(OrderFields.BillMiddleName, "Bill Middle Name", OdbcFieldValueResolutionStrategy.Default),
+                new ShipWorksOdbcMappableField(OrderFields.BillLastName, "Bill Last Name", OdbcFieldValueResolutionStrategy.Default),
+                new ShipWorksOdbcMappableField(OrderFields.BillUnparsedName, "Bill Full Name", OdbcFieldValueResolutionStrategy.Default),
+                new ShipWorksOdbcMappableField(OrderFields.BillCompany, "Bill Company", OdbcFieldValueResolutionStrategy.Default),
+                new ShipWorksOdbcMappableField(OrderFields.BillStreet1, "Bill Address 1", OdbcFieldValueResolutionStrategy.Default),
+                new ShipWorksOdbcMappableField(OrderFields.BillStreet2, "Bill Address 2", OdbcFieldValueResolutionStrategy.Default),
+                new ShipWorksOdbcMappableField(OrderFields.BillStreet3, "Bill Address 3", OdbcFieldValueResolutionStrategy.Default),
+                new ShipWorksOdbcMappableField(OrderFields.BillCity, "Bill City", OdbcFieldValueResolutionStrategy.Default),
+                new ShipWorksOdbcMappableField(OrderFields.BillStateProvCode, "Bill State/Province", OdbcFieldValueResolutionStrategy.Default),
+                new ShipWorksOdbcMappableField(OrderFields.BillPostalCode, "Bill Postal Code", OdbcFieldValueResolutionStrategy.Default),
+                new ShipWorksOdbcMappableField(OrderFields.BillCountryCode, "Bill Country", OdbcFieldValueResolutionStrategy.Default),
+                new ShipWorksOdbcMappableField(OrderFields.BillEmail, "Bill Email", OdbcFieldValueResolutionStrategy.Default),
+                new ShipWorksOdbcMappableField(OrderFields.BillPhone, "Bill Phone", OdbcFieldValueResolutionStrategy.Default),
+                new ShipWorksOdbcMappableField(OrderFields.BillFax, "Bill Fax", OdbcFieldValueResolutionStrategy.Default),
+                new ShipWorksOdbcMappableField(OrderFields.BillWebsite, "Bill Website", OdbcFieldValueResolutionStrategy.Default),
 
-                new ShipWorksOdbcMappableField(OrderFields.ShipFirstName, "Ship First Name"),
-                new ShipWorksOdbcMappableField(OrderFields.ShipMiddleName, "Ship Middle Name"),
-                new ShipWorksOdbcMappableField(OrderFields.ShipLastName, "Ship Last Name"),
-                new ShipWorksOdbcMappableField(OrderFields.ShipUnparsedName, "Ship Full Name"),
-                new ShipWorksOdbcMappableField(OrderFields.ShipCompany, "Ship Company"),
-                new ShipWorksOdbcMappableField(OrderFields.ShipStreet1, "Ship Address 1"),
-                new ShipWorksOdbcMappableField(OrderFields.ShipStreet2, "Ship Address 2"),
-                new ShipWorksOdbcMappableField(OrderFields.ShipStreet3, "Ship Address 3"),
-                new ShipWorksOdbcMappableField(OrderFields.ShipCity, "Ship City"),
-                new ShipWorksOdbcMappableField(OrderFields.ShipStateProvCode, "Ship State/Province"),
-                new ShipWorksOdbcMappableField(OrderFields.ShipPostalCode, "Ship Postal Code"),
-                new ShipWorksOdbcMappableField(OrderFields.ShipCountryCode, "Ship Country"),
-                new ShipWorksOdbcMappableField(OrderFields.ShipEmail, "Ship Email"),
-                new ShipWorksOdbcMappableField(OrderFields.ShipPhone, "Ship Phone"),
-                new ShipWorksOdbcMappableField(OrderFields.ShipFax, "Ship Fax"),
-                new ShipWorksOdbcMappableField(OrderFields.ShipWebsite, "Ship Website"),
+                new ShipWorksOdbcMappableField(OrderFields.ShipFirstName, "Ship First Name", OdbcFieldValueResolutionStrategy.Default),
+                new ShipWorksOdbcMappableField(OrderFields.ShipMiddleName, "Ship Middle Name", OdbcFieldValueResolutionStrategy.Default),
+                new ShipWorksOdbcMappableField(OrderFields.ShipLastName, "Ship Last Name", OdbcFieldValueResolutionStrategy.Default),
+                new ShipWorksOdbcMappableField(OrderFields.ShipUnparsedName, "Ship Full Name", OdbcFieldValueResolutionStrategy.Default),
+                new ShipWorksOdbcMappableField(OrderFields.ShipCompany, "Ship Company", OdbcFieldValueResolutionStrategy.Default),
+                new ShipWorksOdbcMappableField(OrderFields.ShipStreet1, "Ship Address 1", OdbcFieldValueResolutionStrategy.Default),
+                new ShipWorksOdbcMappableField(OrderFields.ShipStreet2, "Ship Address 2", OdbcFieldValueResolutionStrategy.Default),
+                new ShipWorksOdbcMappableField(OrderFields.ShipStreet3, "Ship Address 3", OdbcFieldValueResolutionStrategy.Default),
+                new ShipWorksOdbcMappableField(OrderFields.ShipCity, "Ship City", OdbcFieldValueResolutionStrategy.Default),
+                new ShipWorksOdbcMappableField(OrderFields.ShipStateProvCode, "Ship State/Province", OdbcFieldValueResolutionStrategy.Default),
+                new ShipWorksOdbcMappableField(OrderFields.ShipPostalCode, "Ship Postal Code", OdbcFieldValueResolutionStrategy.Default),
+                new ShipWorksOdbcMappableField(OrderFields.ShipCountryCode, "Ship Country", OdbcFieldValueResolutionStrategy.Default),
+                new ShipWorksOdbcMappableField(OrderFields.ShipEmail, "Ship Email", OdbcFieldValueResolutionStrategy.Default),
+                new ShipWorksOdbcMappableField(OrderFields.ShipPhone, "Ship Phone", OdbcFieldValueResolutionStrategy.Default),
+                new ShipWorksOdbcMappableField(OrderFields.ShipFax, "Ship Fax", OdbcFieldValueResolutionStrategy.Default),
+                new ShipWorksOdbcMappableField(OrderFields.ShipWebsite, "Ship Website", OdbcFieldValueResolutionStrategy.Default),
             };
 
             return addressFields;
@@ -159,7 +164,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// </summary>
         private IOdbcFieldMap CreateEmptyMap(IEnumerable<ShipWorksOdbcMappableField> shipWorksOdbcMappableFields, int index = 0)
         {
-            IOdbcFieldMap map = new OdbcFieldMap(ioFactory);
+            IOdbcFieldMap map = new OdbcFieldMap(ioFactory, fieldValueResolverFactory);
 
             foreach (ShipWorksOdbcMappableField entry in shipWorksOdbcMappableFields)
             {
@@ -184,13 +189,13 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         {
             return new List<ShipWorksOdbcMappableField>
             {
-                new ShipWorksOdbcMappableField(OrderFields.OrderNumber, OdbcOrderFieldDescription.Number, true),
-                new ShipWorksOdbcMappableField(ShipmentFields.TrackingNumber, OdbcShipmentFieldDescription.TrackingNumber, true),
-                new ShipWorksOdbcMappableField(ShipmentFields.ShipDate, OdbcShipmentFieldDescription.ShipDate),
-                new ShipWorksOdbcMappableField(ShipmentFields.ShipmentType, OdbcShipmentFieldDescription.Provider),
-                new ShipWorksOdbcMappableField(OrderFields.LocalStatus, OdbcOrderFieldDescription.LocalStatus),
-                new ShipWorksOdbcMappableField(ShipmentFields.TotalWeight, OdbcShipmentFieldDescription.TotalWeight),
-                new ShipWorksOdbcMappableField(ShipmentFields.ShipmentCost, OdbcShipmentFieldDescription.ShipmentCost)
+                new ShipWorksOdbcMappableField(OrderFields.OrderNumber, OdbcOrderFieldDescription.Number, true, OdbcFieldValueResolutionStrategy.Default),
+                new ShipWorksOdbcMappableField(ShipmentFields.TrackingNumber, OdbcShipmentFieldDescription.TrackingNumber, true, OdbcFieldValueResolutionStrategy.Default),
+                new ShipWorksOdbcMappableField(ShipmentFields.ShipDate, OdbcShipmentFieldDescription.ShipDate, OdbcFieldValueResolutionStrategy.Default),
+                new ShipWorksOdbcMappableField(ShipmentFields.ShipmentType, OdbcShipmentFieldDescription.Provider, OdbcFieldValueResolutionStrategy.ShippingCarrier),
+                new ShipWorksOdbcMappableField(OrderFields.LocalStatus, OdbcOrderFieldDescription.LocalStatus, OdbcFieldValueResolutionStrategy.Default),
+                new ShipWorksOdbcMappableField(ShipmentFields.TotalWeight, OdbcShipmentFieldDescription.TotalWeight, OdbcFieldValueResolutionStrategy.Default),
+                new ShipWorksOdbcMappableField(ShipmentFields.ShipmentCost, OdbcShipmentFieldDescription.ShipmentCost, OdbcFieldValueResolutionStrategy.Default)
                 // Todo: Still need to add Service, Packaging, # of Packages, Length, Width, Height,
                 // Todo: Insured Value & Insurance Fee
             };
@@ -211,20 +216,20 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         {
             return new List<ShipWorksOdbcMappableField>
             {
-                new ShipWorksOdbcMappableField(ShipmentFields.ShipFirstName, "Ship First Name"),
-                new ShipWorksOdbcMappableField(ShipmentFields.ShipMiddleName, "Ship Middle Name"),
-                new ShipWorksOdbcMappableField(ShipmentFields.ShipLastName, "Ship Last Name"),
-                new ShipWorksOdbcMappableField(ShipmentFields.ShipUnparsedName, "Ship Full Name"),
-                new ShipWorksOdbcMappableField(ShipmentFields.ShipCompany, "Ship Company"),
-                new ShipWorksOdbcMappableField(ShipmentFields.ShipStreet1, "Ship Address 1"),
-                new ShipWorksOdbcMappableField(ShipmentFields.ShipStreet2, "Ship Address 2"),
-                new ShipWorksOdbcMappableField(ShipmentFields.ShipStreet3, "Ship Address 3"),
-                new ShipWorksOdbcMappableField(ShipmentFields.ShipCity, "Ship City"),
-                new ShipWorksOdbcMappableField(ShipmentFields.ShipStateProvCode, "Ship State/Province"),
-                new ShipWorksOdbcMappableField(ShipmentFields.ShipPostalCode, "Ship Postal Code"),
-                new ShipWorksOdbcMappableField(ShipmentFields.ShipCountryCode, "Ship Country"),
-                new ShipWorksOdbcMappableField(ShipmentFields.ShipEmail, "Ship Email"),
-                new ShipWorksOdbcMappableField(ShipmentFields.ShipPhone, "Ship Phone")
+                new ShipWorksOdbcMappableField(ShipmentFields.ShipFirstName, "Ship First Name", OdbcFieldValueResolutionStrategy.Default),
+                new ShipWorksOdbcMappableField(ShipmentFields.ShipMiddleName, "Ship Middle Name", OdbcFieldValueResolutionStrategy.Default),
+                new ShipWorksOdbcMappableField(ShipmentFields.ShipLastName, "Ship Last Name", OdbcFieldValueResolutionStrategy.Default),
+                new ShipWorksOdbcMappableField(ShipmentFields.ShipUnparsedName, "Ship Full Name", OdbcFieldValueResolutionStrategy.Default),
+                new ShipWorksOdbcMappableField(ShipmentFields.ShipCompany, "Ship Company", OdbcFieldValueResolutionStrategy.Default),
+                new ShipWorksOdbcMappableField(ShipmentFields.ShipStreet1, "Ship Address 1", OdbcFieldValueResolutionStrategy.Default),
+                new ShipWorksOdbcMappableField(ShipmentFields.ShipStreet2, "Ship Address 2", OdbcFieldValueResolutionStrategy.Default),
+                new ShipWorksOdbcMappableField(ShipmentFields.ShipStreet3, "Ship Address 3", OdbcFieldValueResolutionStrategy.Default),
+                new ShipWorksOdbcMappableField(ShipmentFields.ShipCity, "Ship City", OdbcFieldValueResolutionStrategy.Default),
+                new ShipWorksOdbcMappableField(ShipmentFields.ShipStateProvCode, "Ship State/Province", OdbcFieldValueResolutionStrategy.Default),
+                new ShipWorksOdbcMappableField(ShipmentFields.ShipPostalCode, "Ship Postal Code", OdbcFieldValueResolutionStrategy.Default),
+                new ShipWorksOdbcMappableField(ShipmentFields.ShipCountryCode, "Ship Country", OdbcFieldValueResolutionStrategy.Default),
+                new ShipWorksOdbcMappableField(ShipmentFields.ShipEmail, "Ship Email", OdbcFieldValueResolutionStrategy.Default),
+                new ShipWorksOdbcMappableField(ShipmentFields.ShipPhone, "Ship Phone", OdbcFieldValueResolutionStrategy.Default)
             };
         }
 
@@ -233,7 +238,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// </summary>
         public OdbcFieldMap CreateFieldMapFrom(IEnumerable<IOdbcFieldMapEntry> entries)
 		{
-            OdbcFieldMap masterMap = new OdbcFieldMap(ioFactory);
+            OdbcFieldMap masterMap = new OdbcFieldMap(ioFactory, fieldValueResolverFactory);
 
             foreach (IOdbcFieldMapEntry entry in entries
                 .Where(entry => !string.IsNullOrWhiteSpace(entry.ExternalField.Column?.Name) &&

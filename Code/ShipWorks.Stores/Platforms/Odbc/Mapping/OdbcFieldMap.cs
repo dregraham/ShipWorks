@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using Autofac.Features.Indexed;
+using ShipWorks.Stores.Platforms.Odbc.Upload.FieldValueResolvers;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 {
@@ -14,17 +16,19 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 	public class OdbcFieldMap : IOdbcFieldMap
     {
 		private readonly IOdbcFieldMapIOFactory ioFactory;
+        private readonly IIndex<OdbcFieldValueResolutionStrategy, IOdbcFieldValueResolver> fieldValueResolverFactory;
         private readonly List<IOdbcFieldMapEntry> entries;
 
         /// <summary>
         /// Constructor
         /// </summary>
-		public OdbcFieldMap(IOdbcFieldMapIOFactory ioFactory)
+		public OdbcFieldMap(IOdbcFieldMapIOFactory ioFactory, IIndex<OdbcFieldValueResolutionStrategy, IOdbcFieldValueResolver> fieldValueResolverFactory)
 		{
 		    MethodConditions.EnsureArgumentIsNotNull(ioFactory);
 
 		    this.ioFactory = ioFactory;
-		    entries = new List<IOdbcFieldMapEntry>();
+            this.fieldValueResolverFactory = fieldValueResolverFactory;
+            entries = new List<IOdbcFieldMapEntry>();
 		}
 
         /// <summary>
@@ -113,7 +117,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
                 foreach (IOdbcFieldMapEntry entry in Entries)
                 {
                     // Load data from entity
-                    entry.LoadShipWorksField(entity);
+                    entry.LoadShipWorksField(entity, fieldValueResolverFactory[entry.ShipWorksField.ResolutionStrategy]);
                 }
             }
         }
@@ -189,7 +193,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
             using (MemoryStream stream = new MemoryStream())
             {
                 Save(stream);
-                OdbcFieldMap clonedFieldMap = new OdbcFieldMap(ioFactory);
+                OdbcFieldMap clonedFieldMap = new OdbcFieldMap(ioFactory, fieldValueResolverFactory);
                 clonedFieldMap.Load(stream);
 
                 return clonedFieldMap;

@@ -241,7 +241,8 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
                     attributeNumber =>
                         new OdbcFieldMapEntry(
                             new ShipWorksOdbcMappableField(OrderItemAttributeFields.Name,
-                                $"Attribute {attributeNumber}"), new ExternalOdbcMappableField(null),itemIndex));
+                                $"Attribute {attributeNumber}", OdbcFieldValueResolutionStrategy.Default),
+                            new ExternalOdbcMappableField(null), itemIndex));
         }
 
         /// <summary>

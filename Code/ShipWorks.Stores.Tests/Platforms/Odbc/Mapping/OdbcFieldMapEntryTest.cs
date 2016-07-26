@@ -3,8 +3,6 @@ using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
 using System;
-using System.Collections.Generic;
-using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 using Xunit;
 
@@ -37,7 +35,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
         public void LoadExternalField_LoadsValueOnExternalField()
         {
             ExternalOdbcMappableField externalField = new ExternalOdbcMappableField(new OdbcColumn("Number"));
-            ShipWorksOdbcMappableField shipWorksField = new ShipWorksOdbcMappableField(OrderFields.OrderNumber, "Order Number");
+            ShipWorksOdbcMappableField shipWorksField = new ShipWorksOdbcMappableField(OrderFields.OrderNumber, "Order Number", OdbcFieldValueResolutionStrategy.Default);
             OdbcFieldMapEntry entry = new OdbcFieldMapEntry(shipWorksField, externalField);
 
             OdbcRecord record = new OdbcRecord(string.Empty);
@@ -49,24 +47,10 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
         }
 
         [Fact]
-        public void LoadShipWorksField_LoadsValueOnShipWorksField()
-        {
-            ExternalOdbcMappableField externalField = new ExternalOdbcMappableField(new OdbcColumn("Tracking Number"));
-            ShipWorksOdbcMappableField shipWorksField = new ShipWorksOdbcMappableField(ShipmentFields.TrackingNumber, "Tracking Number");
-            OdbcFieldMapEntry entry = new OdbcFieldMapEntry(shipWorksField, externalField);
-
-            ShipmentEntity shipment = new ShipmentEntity() {TrackingNumber = "12345"};
-
-            entry.LoadShipWorksField(shipment);
-
-            Assert.Equal("12345", entry.ShipWorksField.Value);
-        }
-
-        [Fact]
         public void CopyValueToShipWorksField_CopiesValueFromExternalFieldToShipWorksField()
         {
             ExternalOdbcMappableField externalField = new ExternalOdbcMappableField(new OdbcColumn("Number"));
-            ShipWorksOdbcMappableField shipWorksField = new ShipWorksOdbcMappableField(OrderFields.OrderNumber, "Order Number");
+            ShipWorksOdbcMappableField shipWorksField = new ShipWorksOdbcMappableField(OrderFields.OrderNumber, "Order Number", OdbcFieldValueResolutionStrategy.Default);
             OdbcFieldMapEntry entry = new OdbcFieldMapEntry(shipWorksField, externalField);
 
             OdbcRecord record = new OdbcRecord(string.Empty);

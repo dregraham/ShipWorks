@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.Reflection;
+using ShipWorks.Stores.Platforms.Odbc.Upload.FieldValueResolvers;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 {
@@ -25,40 +26,40 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// Used for deserialization
         /// </summary>
         [JsonConstructor]
-        public ShipWorksOdbcMappableField(string containingObjectName, string name, string displayName)
-            : this(GetField(containingObjectName, name), displayName, false)
+        public ShipWorksOdbcMappableField(string containingObjectName, string name, string displayName, OdbcFieldValueResolutionStrategy resolutionStrategy)
+            : this(GetField(containingObjectName, name, resolutionStrategy), displayName, false, resolutionStrategy)
         {
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ShipWorksOdbcMappableField"/> class.
         /// </summary>
-        public ShipWorksOdbcMappableField(IEntityField2 field, OdbcOrderFieldDescription fieldDescription)
-            : this(field, EnumHelper.GetDescription(fieldDescription), false)
+        public ShipWorksOdbcMappableField(IEntityField2 field, OdbcOrderFieldDescription fieldDescription, OdbcFieldValueResolutionStrategy resolutionStrategy)
+            : this(field, EnumHelper.GetDescription(fieldDescription), false, resolutionStrategy)
         {
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ShipWorksOdbcMappableField"/> class.
         /// </summary>
-        public ShipWorksOdbcMappableField(IEntityField2 field, OdbcOrderFieldDescription fieldDescription, bool isRequired)
-            : this(field, EnumHelper.GetDescription(fieldDescription), isRequired)
+        public ShipWorksOdbcMappableField(IEntityField2 field, OdbcOrderFieldDescription fieldDescription, bool isRequired, OdbcFieldValueResolutionStrategy resolutionStrategy)
+            : this(field, EnumHelper.GetDescription(fieldDescription), isRequired, resolutionStrategy)
         {
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ShipWorksOdbcMappableField"/> class.
         /// </summary>
-        public ShipWorksOdbcMappableField(IEntityField2 field, OdbcShipmentFieldDescription fieldDescription)
-            : this(field, EnumHelper.GetDescription(fieldDescription), false)
+        public ShipWorksOdbcMappableField(IEntityField2 field, OdbcShipmentFieldDescription fieldDescription, OdbcFieldValueResolutionStrategy resolutionStrategy)
+            : this(field, EnumHelper.GetDescription(fieldDescription), false, resolutionStrategy)
         {
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ShipWorksOdbcMappableField"/> class.
         /// </summary>
-        public ShipWorksOdbcMappableField(IEntityField2 field, OdbcShipmentFieldDescription fieldDescription, bool isRequired)
-            : this(field, EnumHelper.GetDescription(fieldDescription), isRequired)
+        public ShipWorksOdbcMappableField(IEntityField2 field, OdbcShipmentFieldDescription fieldDescription, bool isRequired, OdbcFieldValueResolutionStrategy resolutionStrategy)
+            : this(field, EnumHelper.GetDescription(fieldDescription), isRequired, resolutionStrategy)
         {
         }
 
@@ -67,8 +68,8 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// </summary>
         /// <param name="field">The field.</param>
         /// <param name="displayName">The display name.</param>
-        public ShipWorksOdbcMappableField(IEntityField2 field, string displayName)
-            : this(field, displayName, false)
+        public ShipWorksOdbcMappableField(IEntityField2 field, string displayName, OdbcFieldValueResolutionStrategy resolutionStrategy)
+            : this(field, displayName, false, resolutionStrategy)
         {
         }
 
@@ -78,12 +79,13 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <param name="field">The field.</param>
         /// <param name="displayName">The display name.</param>
         /// <param name="isRequired">if set to <c>true</c> [is required].</param>
-        public ShipWorksOdbcMappableField(IEntityField2 field, string displayName, bool isRequired)
+        public ShipWorksOdbcMappableField(IEntityField2 field, string displayName, bool isRequired, OdbcFieldValueResolutionStrategy resolutionStrategy)
         {
             this.field = field;
             DisplayName = displayName;
             IsRequired = isRequired;
             typeDefaultValues = GetTypeDefaultValues();
+            ResolutionStrategy = resolutionStrategy;
         }
 
         /// <summary>
@@ -121,6 +123,11 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         public string QualifiedName => $"{ContainingObjectName}.{Name}";
 
         /// <summary>
+        /// The resolution strategy for the field
+        /// </summary>
+        public OdbcFieldValueResolutionStrategy ResolutionStrategy { get; }
+
+        /// <summary>
         /// Set the Value to the given value
         /// </summary>
         [Obfuscation(Exclude = false)]
@@ -133,14 +140,12 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// Set the Value to matching field from the given entity
         /// </summary>
         [Obfuscation(Exclude = false)]
-        public void LoadValue(IEntity2 entity)
+        public void LoadValue(IEntity2 entity, IOdbcFieldValueResolver valueResolver)
         {
-            IEntityField2 entityField = entity.Fields[Name];
+            MethodConditions.EnsureArgumentIsNotNull(valueResolver, "Value Resolver");
+            MethodConditions.EnsureArgumentIsNotNull(entity, "Entity");
 
-            if (entityField != null)
-            {
-                Value = entityField.CurrentValue;
-            }
+            Value = valueResolver.GetValue(this, entity);
         }
 
         /// <summary>
@@ -157,7 +162,6 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         [Obfuscation(Exclude = false)]
         private object ChangeType(object value)
         {
-
             // Don't write to readonly or primary key fields. They shouldn't be mapped.
             if (IsFieldMappable())
             {
@@ -222,8 +226,13 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// Gets the field.
         /// </summary>
         [Obfuscation(Exclude = false)]
-        private static IEntityField2 GetField(string containingObjectName, string fieldName)
+        private static IEntityField2 GetField(string containingObjectName, string fieldName, OdbcFieldValueResolutionStrategy resolutionStrategy)
         {
+            if (resolutionStrategy != OdbcFieldValueResolutionStrategy.Default)
+            {
+                return null;
+            }
+
             EntityType entityType;
 
             try

@@ -40,7 +40,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
         [Fact]
         public void Load_GetsChargeEntriesFromMap()
         {
-            ShipWorksOdbcMappableField shipworksField = new ShipWorksOdbcMappableField(OrderChargeFields.Amount, "Tax");
+            ShipWorksOdbcMappableField shipworksField = new ShipWorksOdbcMappableField(OrderChargeFields.Amount, "Tax", OdbcFieldValueResolutionStrategy.Default);
             shipworksField.LoadValue(123);
             ExternalOdbcMappableField externalField = new ExternalOdbcMappableField(new OdbcColumn("Tax Column"));
             OdbcFieldMapEntry entry1 = new OdbcFieldMapEntry(shipworksField, externalField);
@@ -60,7 +60,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
         [Fact]
         public void Load_SetsChargeAmountFromShipWorksFieldValue()
         {
-            ShipWorksOdbcMappableField shipworksField = new ShipWorksOdbcMappableField(OrderChargeFields.Amount, "Tax Amount");
+            ShipWorksOdbcMappableField shipworksField = new ShipWorksOdbcMappableField(OrderChargeFields.Amount, "Tax Amount", OdbcFieldValueResolutionStrategy.Default);
             shipworksField.LoadValue(123);
             ExternalOdbcMappableField externalField = new ExternalOdbcMappableField(new OdbcColumn("Tax Column"));
             OdbcFieldMapEntry entry1 = new OdbcFieldMapEntry(shipworksField, externalField);
@@ -82,7 +82,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
         [Fact]
         public void Load_SetsChargeTypeToTax_WhenChargeDisplayNameIsTaxAmount()
         {
-            ShipWorksOdbcMappableField shipworksField = new ShipWorksOdbcMappableField(OrderChargeFields.Amount, "Tax Amount");
+            ShipWorksOdbcMappableField shipworksField = new ShipWorksOdbcMappableField(OrderChargeFields.Amount, "Tax Amount", OdbcFieldValueResolutionStrategy.Default);
             shipworksField.LoadValue(123);
             ExternalOdbcMappableField externalField = new ExternalOdbcMappableField(new OdbcColumn("Tax Column"));
             OdbcFieldMapEntry entry1 = new OdbcFieldMapEntry(shipworksField, externalField);
@@ -104,7 +104,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Loader
         [Fact]
         public void Load_SetsDescriptionToTax_WhenChargeDisplayNameIsTaxAmount()
         {
-            ShipWorksOdbcMappableField shipworksField = new ShipWorksOdbcMappableField(OrderChargeFields.Amount, "Tax Amount");
+            ShipWorksOdbcMappableField shipworksField = new ShipWorksOdbcMappableField(OrderChargeFields.Amount, "Tax Amount", OdbcFieldValueResolutionStrategy.Default);
             shipworksField.LoadValue(123);
             ExternalOdbcMappableField externalField = new ExternalOdbcMappableField(new OdbcColumn("Tax Column"));
             OdbcFieldMapEntry entry1 = new OdbcFieldMapEntry(shipworksField, externalField);

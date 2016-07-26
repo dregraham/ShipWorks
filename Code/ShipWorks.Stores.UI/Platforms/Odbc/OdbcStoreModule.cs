@@ -16,6 +16,7 @@ using System.Reflection;
 using Interapptive.Shared.Net;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Stores.Platforms.Odbc.CoreExtensions.Actions;
+using ShipWorks.Stores.Platforms.Odbc.Upload.FieldValueResolvers;
 using Module = Autofac.Module;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc
@@ -29,6 +30,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         {
             RegisterOrderLoadingTypes(builder);
             RegisterFieldMapClasses(builder);
+            RegisterFieldValueResolvers(builder);
 
             builder.RegisterType<OdbcStoreType>()
                 .Keyed<StoreType>(StoreTypeCode.Odbc)
@@ -98,6 +100,15 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
 
             builder.RegisterType<ApiLogEntry>()
                 .As<IApiLogEntry>();
+        }
+
+        /// <summary>
+        /// Registers the field value resolvers
+        /// </summary>
+        private static void RegisterFieldValueResolvers(ContainerBuilder builder)
+        {
+            builder.RegisterType<OdbcShippingServiceFieldValueResolver>()
+                .Keyed<IOdbcFieldValueResolver>(OdbcFieldValueResolutionStrategy.ShippingService);
         }
 
         /// <summary>
