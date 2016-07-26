@@ -57,7 +57,8 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         /// <summary>
         /// Kicks off download for the store
         /// </summary>
-        /// <param name="trackedDurationEvent"></param>
+        /// <param name="trackedDurationEvent">The telemetry event that can be used to 
+        /// associate any store-specific download properties/metrics.</param>
         protected override void Download(TrackedDurationEvent trackedDurationEvent)
         {
             Progress.Detail = "Checking for new orders...";

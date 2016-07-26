@@ -67,7 +67,8 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         /// <summary>
         /// Download orders and statuses for the 3dcart store
         /// </summary>
-        /// <param name="trackedDurationEvent"></param>
+        /// <param name="trackedDurationEvent">The telemetry event that can be used to 
+        /// associate any store-specific download properties/metrics.</param>
         protected override void Download(TrackedDurationEvent trackedDurationEvent)
         {
             try

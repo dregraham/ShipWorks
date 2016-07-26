@@ -68,11 +68,11 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         }
 
         /// <summary>
-        ///     Download orders from LemonStand
+        /// Download orders from LemonStand
         /// </summary>
-        /// <param name="trackedDurationEvent"></param>
-        /// <exception cref="DownloadException">
-        /// </exception>
+        /// <param name="trackedDurationEvent">The telemetry event that can be used to 
+        /// associate any store-specific download properties/metrics.</param>
+        /// <exception cref="DownloadException"></exception>
         protected override void Download(TrackedDurationEvent trackedDurationEvent)
         {
             UpdateOrderStatuses();

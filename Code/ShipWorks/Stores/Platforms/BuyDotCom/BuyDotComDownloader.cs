@@ -44,7 +44,8 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom
         /// <summary>
         /// Download Orders
         /// </summary>
-        /// <param name="trackedDurationEvent"></param>
+        /// <param name="trackedDurationEvent">The telemetry event that can be used to 
+        /// associate any store-specific download properties/metrics.</param>
         protected override void Download(TrackedDurationEvent trackedDurationEvent)
         {
             Progress.Detail = "Checking for orders...";

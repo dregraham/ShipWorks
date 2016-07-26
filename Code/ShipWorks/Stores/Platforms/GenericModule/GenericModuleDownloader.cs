@@ -62,7 +62,8 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         /// <summary>
         /// Begin order download
         /// </summary>
-        /// <param name="trackedDurationEvent"></param>
+        /// <param name="trackedDurationEvent">The telemetry event that can be used to 
+        /// associate any store-specific download properties/metrics.</param>
         [NDependIgnoreLongMethod]
         protected override void Download(TrackedDurationEvent trackedDurationEvent)
         {

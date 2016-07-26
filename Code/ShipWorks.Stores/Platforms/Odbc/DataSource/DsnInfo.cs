@@ -1,5 +1,8 @@
 ﻿namespace ShipWorks.Stores.Platforms.Odbc.DataSource
 {
+    /// <summary>
+    /// A DTO for the registered ODBC data sources on the client machine.
+    /// </summary>
     public class DsnInfo
     {
         /// <summary>

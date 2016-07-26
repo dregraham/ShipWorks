@@ -51,7 +51,8 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// <summary>
         /// Start the download from Amazon.com using the Marketplace Web Service (MWS)
         /// </summary>
-        /// <param name="trackedDurationEvent"></param>
+        /// <param name="trackedDurationEvent">The telemetry event that can be used to 
+        /// associate any store-specific download properties/metrics.</param>
         protected override void Download(TrackedDurationEvent trackedDurationEvent)
         {
             try

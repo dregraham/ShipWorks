@@ -46,7 +46,8 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         /// <summary>
         /// Import ODBC Orders from external data source.
         /// </summary>
-        /// <param name="trackedDurationEvent"></param>
+        /// <param name="trackedDurationEvent">The telemetry event that can be used to 
+        /// associate any store-specific download properties/metrics.</param>
         /// <exception cref="DownloadException"></exception>
         protected override void Download(TrackedDurationEvent trackedDurationEvent)
         {

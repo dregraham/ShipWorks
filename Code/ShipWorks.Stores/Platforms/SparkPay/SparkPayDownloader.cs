@@ -36,7 +36,8 @@ namespace ShipWorks.Stores.Platforms.SparkPay
         /// <summary>
         /// Downloads orders for the given store using the newest last modified or store default or 30.
         /// </summary>
-        /// <param name="trackedDurationEvent"></param>
+        /// <param name="trackedDurationEvent">The telemetry event that can be used to 
+        /// associate any store-specific download properties/metrics.</param>
         protected override void Download(TrackedDurationEvent trackedDurationEvent)
         {
             try

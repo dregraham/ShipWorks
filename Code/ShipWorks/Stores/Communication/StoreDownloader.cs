@@ -176,7 +176,8 @@ namespace ShipWorks.Stores.Communication
         /// <summary>
         /// Must be implemented by derived types to do the actual download
         /// </summary>
-        /// <param name="trackedDurationEvent"></param>
+        /// <param name="trackedDurationEvent">The telemetry event that can be used to 
+        /// associate any store-specific download properties/metrics.</param>
         protected abstract void Download(TrackedDurationEvent trackedDurationEvent);
 
         /// <summary>

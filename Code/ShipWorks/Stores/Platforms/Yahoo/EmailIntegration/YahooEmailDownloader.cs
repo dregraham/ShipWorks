@@ -49,7 +49,8 @@ namespace ShipWorks.Stores.Platforms.Yahoo.EmailIntegration
         /// <summary>
         /// Initiate the download
         /// </summary>
-        /// <param name="trackedDurationEvent"></param>
+        /// <param name="trackedDurationEvent">The telemetry event that can be used to 
+        /// associate any store-specific download properties/metrics.</param>
         protected override void Download(TrackedDurationEvent trackedDurationEvent)
         {
             try
