@@ -14,17 +14,15 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
     public class OdbcFieldMapFactory : IOdbcFieldMapFactory
 	{
         private readonly IOdbcFieldMapIOFactory ioFactory;
-        private readonly IIndex<OdbcFieldValueResolutionStrategy, IOdbcFieldValueResolver> fieldValueResolverFactory;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcFieldMapFactory"/> class.
         /// </summary>
         /// <param name="ioFactory">The io factory.</param>
         /// <param name="fieldValueResolverFactory"></param>
-        public OdbcFieldMapFactory(IOdbcFieldMapIOFactory ioFactory, IIndex<OdbcFieldValueResolutionStrategy, IOdbcFieldValueResolver> fieldValueResolverFactory)
+        public OdbcFieldMapFactory(IOdbcFieldMapIOFactory ioFactory)
         {
             this.ioFactory = ioFactory;
-            this.fieldValueResolverFactory = fieldValueResolverFactory;
         }
 
         /// <summary>
@@ -165,7 +163,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// </summary>
         private IOdbcFieldMap CreateEmptyMap(IEnumerable<ShipWorksOdbcMappableField> shipWorksOdbcMappableFields, int index = 0)
         {
-            IOdbcFieldMap map = new OdbcFieldMap(ioFactory, fieldValueResolverFactory);
+            IOdbcFieldMap map = new OdbcFieldMap(ioFactory);
 
             foreach (ShipWorksOdbcMappableField entry in shipWorksOdbcMappableFields)
             {
@@ -240,7 +238,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// </summary>
         public OdbcFieldMap CreateFieldMapFrom(IEnumerable<IOdbcFieldMapEntry> entries)
 		{
-            OdbcFieldMap masterMap = new OdbcFieldMap(ioFactory, fieldValueResolverFactory);
+            OdbcFieldMap masterMap = new OdbcFieldMap(ioFactory);
 
             foreach (IOdbcFieldMapEntry entry in entries
                 .Where(entry => !string.IsNullOrWhiteSpace(entry.ExternalField.Column?.Name) &&

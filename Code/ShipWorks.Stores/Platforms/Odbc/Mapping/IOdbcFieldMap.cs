@@ -1,6 +1,8 @@
 ﻿using SD.LLBLGen.Pro.ORMSupportClasses;
 using System.Collections.Generic;
 using System.IO;
+using Autofac.Features.Indexed;
+using ShipWorks.Stores.Platforms.Odbc.Upload.FieldValueResolvers;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 {
@@ -47,7 +49,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <summary>
         /// Applies the given entity values to the external fields
         /// </summary>
-        void ApplyValues(IEnumerable<IEntity2> entities);
+        void ApplyValues(IEnumerable<IEntity2> entities, IIndex<OdbcFieldValueResolutionStrategy, IOdbcFieldValueResolver> fieldValueResolverFactory);
 
         /// <summary>
         /// Copies the values from the entries to corresponding fields on the entity

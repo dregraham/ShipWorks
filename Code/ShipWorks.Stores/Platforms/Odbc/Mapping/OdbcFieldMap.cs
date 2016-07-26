@@ -16,18 +16,16 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 	public class OdbcFieldMap : IOdbcFieldMap
     {
 		private readonly IOdbcFieldMapIOFactory ioFactory;
-        private readonly IIndex<OdbcFieldValueResolutionStrategy, IOdbcFieldValueResolver> fieldValueResolverFactory;
         private readonly List<IOdbcFieldMapEntry> entries;
 
         /// <summary>
         /// Constructor
         /// </summary>
-		public OdbcFieldMap(IOdbcFieldMapIOFactory ioFactory, IIndex<OdbcFieldValueResolutionStrategy, IOdbcFieldValueResolver> fieldValueResolverFactory)
+		public OdbcFieldMap(IOdbcFieldMapIOFactory ioFactory)
 		{
 		    MethodConditions.EnsureArgumentIsNotNull(ioFactory);
 
 		    this.ioFactory = ioFactory;
-            this.fieldValueResolverFactory = fieldValueResolverFactory;
             entries = new List<IOdbcFieldMapEntry>();
 		}
 
@@ -107,7 +105,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <summary>
         /// Apply the given entity values to the entries ShipWorks fields
         /// </summary>
-        public void ApplyValues(IEnumerable<IEntity2> entities)
+        public void ApplyValues(IEnumerable<IEntity2> entities, IIndex<OdbcFieldValueResolutionStrategy, IOdbcFieldValueResolver> fieldValueResolverFactory)
         {
             // Reset all the values first
             ResetValues();
@@ -193,7 +191,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
             using (MemoryStream stream = new MemoryStream())
             {
                 Save(stream);
-                OdbcFieldMap clonedFieldMap = new OdbcFieldMap(ioFactory, fieldValueResolverFactory);
+                OdbcFieldMap clonedFieldMap = new OdbcFieldMap(ioFactory);
                 clonedFieldMap.Load(stream);
 
                 return clonedFieldMap;

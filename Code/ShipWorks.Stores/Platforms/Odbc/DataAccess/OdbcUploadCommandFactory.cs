@@ -1,10 +1,12 @@
-﻿using Interapptive.Shared.Utility;
+﻿using Autofac.Features.Indexed;
+using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Odbc.DataSource;
 using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
 using ShipWorks.Stores.Platforms.Odbc.Upload;
+using ShipWorks.Stores.Platforms.Odbc.Upload.FieldValueResolvers;
 using ShipWorks.Templates.Tokens;
 
 namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
@@ -18,16 +20,18 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
         private readonly IShipWorksDbProviderFactory dbProviderFactory;
         private readonly IOdbcFieldMap fieldMap;
         private readonly ITemplateTokenProcessor templateTokenProcessor;
+        private readonly IIndex<OdbcFieldValueResolutionStrategy, IOdbcFieldValueResolver> odbcFieldValueResolvers;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcDownloadCommandFactory"/> class.
         /// </summary>
-        public OdbcUploadCommandFactory(IOdbcDataSource dataSource, IShipWorksDbProviderFactory dbProviderFactory, IOdbcFieldMap fieldMap, ITemplateTokenProcessor templateTokenProcessor)
+        public OdbcUploadCommandFactory(IOdbcDataSource dataSource, IShipWorksDbProviderFactory dbProviderFactory, IOdbcFieldMap fieldMap, ITemplateTokenProcessor templateTokenProcessor, IIndex<OdbcFieldValueResolutionStrategy, IOdbcFieldValueResolver> odbcFieldValueResolvers)
         {
             this.dataSource = dataSource;
             this.dbProviderFactory = dbProviderFactory;
             this.fieldMap = fieldMap;
             this.templateTokenProcessor = templateTokenProcessor;
+            this.odbcFieldValueResolvers = odbcFieldValueResolvers;
         }
 
         /// <summary>
@@ -87,7 +91,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
         private IOdbcQuery CreateTableUploadQuery(OdbcStoreEntity store, ShipmentEntity shipment)
         {
             fieldMap.Load(store.UploadMap);
-            fieldMap.ApplyValues(new IEntity2[] { shipment, shipment.Order });
+            fieldMap.ApplyValues(new IEntity2[] { shipment, shipment.Order }, odbcFieldValueResolvers);
 
             return new OdbcTableUploadQuery(fieldMap, store, dbProviderFactory, dataSource);
         }

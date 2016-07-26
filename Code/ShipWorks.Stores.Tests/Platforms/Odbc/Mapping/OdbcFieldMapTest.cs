@@ -365,7 +365,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
 
                 IEnumerable<IEntity2> entities = new List<IEntity2>() {new ShipmentEntity()};
 
-                testObject.ApplyValues(entities);
+                testObject.ApplyValues(entities, repo.Object);
 
                 mapEntry.Verify(m => m.LoadShipWorksField(It.Is<IEntity2>(r => r.Equals(entities.FirstOrDefault())), It.IsAny<IOdbcFieldValueResolver>()), Times.Once);
             }
@@ -378,6 +378,12 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
             {
                 OdbcFieldMap testObject = mock.Create<OdbcFieldMap>();
 
+                Mock<IOdbcFieldValueResolver> resolver = mock.Mock<IOdbcFieldValueResolver>();
+
+                Mock<IIndex<OdbcFieldValueResolutionStrategy, IOdbcFieldValueResolver>> repo = mock.MockRepository.Create<IIndex<OdbcFieldValueResolutionStrategy, IOdbcFieldValueResolver>>();
+                repo.Setup(x => x[It.IsAny<OdbcFieldValueResolutionStrategy>()]).Returns(resolver.Object);
+                mock.Provide(repo.Object);
+
                 var shipWorksOdbcMappableField = mock.Mock<IShipWorksOdbcMappableField>();
                 var externalOdbcMappableField = mock.Mock<IExternalOdbcMappableField>();
                 var mapEntry = mock.Mock<IOdbcFieldMapEntry>();
@@ -387,7 +393,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
 
                 IEnumerable<IEntity2> entities = null;
 
-                testObject.ApplyValues(entities);
+                testObject.ApplyValues(entities, repo.Object);
 
                 mapEntry.Verify(m => m.LoadShipWorksField(null, It.IsAny<IOdbcFieldValueResolver>()), Times.Never);
             }
@@ -509,12 +515,9 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
 
         private Stream GetStreamWithFieldMap()
         {
-            Mock<IIndex<OdbcFieldValueResolutionStrategy, IOdbcFieldValueResolver>> fieldValueResolverFactory =
-                mock.Mock<IIndex<OdbcFieldValueResolutionStrategy, IOdbcFieldValueResolver>>();
-
             MemoryStream stream = new MemoryStream();
 
-            OdbcFieldMap map = new OdbcFieldMap(GetIoFactory(), fieldValueResolverFactory.Object);
+            OdbcFieldMap map = new OdbcFieldMap(GetIoFactory());
 
             map.AddEntry(GetFieldMapEntry(GetShipWorksField(OrderFields.OrderNumber, "Order Number"),
                 GetExternalField("SomeColumnName")));
