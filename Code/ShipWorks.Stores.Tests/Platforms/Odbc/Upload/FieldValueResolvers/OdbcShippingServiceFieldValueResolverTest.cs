@@ -6,7 +6,7 @@ using ShipWorks.Shipping;
 using ShipWorks.Stores.Platforms.Odbc.Upload.FieldValueResolvers;
 using Xunit;
 
-namespace ShipWorks.Stores.Tests.Platforms.Odbc.Upload
+namespace ShipWorks.Stores.Tests.Platforms.Odbc.Upload.FieldValueResolvers
 {
     public class OdbcShippingServiceFieldValueResolverTest : IDisposable
     {

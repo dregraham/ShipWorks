@@ -200,10 +200,10 @@
     <Compile Include="Platforms\Odbc\DataSource\Schema\OdbcColumnSourceTest.cs" />
     <Compile Include="Platforms\Odbc\Download\TableOdbcDownloadQueryTest.cs" />
     <Compile Include="Platforms\Odbc\OdbcUploadMappingControlViewModelTest.cs" />
+    <Compile Include="Platforms\Odbc\Upload\FieldValueResolvers\OdbcDefaultFieldValueResolverTest.cs" />
     <Compile Include="Platforms\Odbc\Upload\FieldValueResolvers\OdbcShippingCarrierFieldValueResolverTest.cs" />
+    <Compile Include="Platforms\Odbc\Upload\FieldValueResolvers\OdbcShippingServiceFieldValueResolverTest.cs" />
     <Compile Include="Platforms\Odbc\Upload\OdbcCustomUploadQueryTest.cs" />
-    <Compile Include="Platforms\Odbc\Upload\OdbcDefaultFieldValueResolverTest.cs" />
-    <Compile Include="Platforms\Odbc\Upload\OdbcShippingServiceFieldValueResolverTest.cs" />
     <Compile Include="Platforms\Odbc\Upload\OdbcTableUploadQueryTest.cs" />
     <Compile Include="Platforms\Odbc\Upload\OdbcUploadCommandTest.cs" />
     <Compile Include="Platforms\Odbc\Upload\OdbcUploaderTest.cs" />

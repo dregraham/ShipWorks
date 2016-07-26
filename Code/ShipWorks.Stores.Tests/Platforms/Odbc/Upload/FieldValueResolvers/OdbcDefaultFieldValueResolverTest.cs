@@ -1,12 +1,11 @@
-﻿using System;
-using Autofac.Extras.Moq;
+﻿using Autofac.Extras.Moq;
 using Moq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
 using ShipWorks.Stores.Platforms.Odbc.Upload.FieldValueResolvers;
 using Xunit;
 
-namespace ShipWorks.Stores.Tests.Platforms.Odbc.Upload
+namespace ShipWorks.Stores.Tests.Platforms.Odbc.Upload.FieldValueResolvers
 {
     public class OdbcDefaultFieldValueResolverTest
     {
