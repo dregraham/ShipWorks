@@ -6,22 +6,24 @@ using ShipWorks.Stores.Platforms.Odbc.Mapping;
 namespace ShipWorks.Stores.Platforms.Odbc.Upload.FieldValueResolvers
 {
     /// <summary>
-    /// Resolver for the Shipping Service
+    /// Resolver for the carrier name
     /// </summary>
-    public class OdbcShippingServiceFieldValueResolver : IOdbcFieldValueResolver
+    /// <seealso cref="ShipWorks.Stores.Platforms.Odbc.Upload.FieldValueResolvers.IOdbcFieldValueResolver" />
+    public class OdbcShippingCarrierFieldValueResolver : IOdbcFieldValueResolver
     {
         private readonly IShippingManager shippingManager;
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="OdbcShippingCarrierFieldValueResolver"/> class.
         /// </summary>
-        public OdbcShippingServiceFieldValueResolver(IShippingManager shippingManager)
+        /// <param name="shippingManager">The shipping manager.</param>
+        public OdbcShippingCarrierFieldValueResolver(IShippingManager shippingManager)
         {
             this.shippingManager = shippingManager;
         }
 
         /// <summary>
-        /// Gets the service used if the given entity is a shipmententity
+        /// Get the carrier name if this is a shipment entity.
         /// </summary>
         public object GetValue(IShipWorksOdbcMappableField field, IEntity2 entity)
         {
@@ -31,7 +33,12 @@ namespace ShipWorks.Stores.Platforms.Odbc.Upload.FieldValueResolvers
             ShipmentEntity shipment = entity as ShipmentEntity;
 #pragma warning restore S3215 // "interface" instances should not be cast to concrete types
 
-            return shipment == null ? null : shippingManager.GetServiceUsed(shipment);
+            if (shipment==null)
+            {
+                return null;
+            }
+
+            return shippingManager.GetCarrierName(shipment.ShipmentTypeCode);
         }
     }
 }
