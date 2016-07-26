@@ -906,6 +906,7 @@
     <Compile Include="Data\DataProviderWrapper.cs" />
     <Compile Include="Data\DataResourceManagerWrapper.cs" />
     <Compile Include="Data\DeletionServiceWrapper.cs" />
+    <Compile Include="Data\IConfigurationData.cs" />
     <Compile Include="Data\IDatabaseIdentifier.cs" />
     <Compile Include="Data\IDataProvider.cs" />
     <Compile Include="Data\IDataResourceManager.cs" />

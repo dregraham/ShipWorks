@@ -510,6 +510,14 @@ namespace ShipWorks.Shipping
                 {
                     try
                     {
+                        shippingManager.EnsureShipmentLoaded(shipment);
+
+                        // Even without the type being setup, we can still load the customs stuff.  Normally EnsureShipmentLoaded would do that for us.
+                        using (SqlAdapter adapter = new SqlAdapter())
+                        {
+                            CustomsManager.LoadCustomsItems(shipment, false, adapter);
+                        }
+
                         loaded.Add(shipment);
                     }
                     catch (ObjectDeletedException)

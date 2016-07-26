@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Linq;
 using System.Reflection;
-using System.Windows.Forms;
 using Autofac;
 using Autofac.Core;
 using Interapptive.Shared;
@@ -35,6 +33,8 @@ using ShipWorks.Shipping.Settings;
 using ShipWorks.Stores.Content;
 using ShipWorks.UI.Controls;
 using ShipWorks.Users;
+using System.Linq;
+using System.Windows.Forms;
 using ShipWorks.Users.Security;
 
 namespace ShipWorks.ApplicationCore
@@ -91,7 +91,7 @@ namespace ShipWorks.ApplicationCore
             builder.RegisterGeneric(typeof(AccountManagerBase<>))
                 .AsSelf()
                 .SingleInstance();
-
+            
             builder.RegisterInstance(Messenger.Current)
                 .AsImplementedInterfaces()
                 .ExternallyOwned();
@@ -107,7 +107,6 @@ namespace ShipWorks.ApplicationCore
             builder.Register((_, p) => new AddressSelector(p.OfType<string>().FirstOrDefault()))
                 .AsImplementedInterfaces();
 
-            //builder.Register((_, p) => new TrackedDurationEvent(p.OfType<string>().FirstOrDefault))
             builder.RegisterType<TrackedDurationEvent>()
                 .AsImplementedInterfaces();
 
@@ -168,6 +167,9 @@ namespace ShipWorks.ApplicationCore
                     x.IsAssignableTo<IMainFormElementRegistration>())
                 .AsImplementedInterfaces()
                 .SingleInstance();
+
+            builder.RegisterType<ConfigurationDataWrapper>()
+                .As<IConfigurationData>();
 
             builder.RegisterAssemblyTypes(allAssemblies)
                 .Where(x => x.IsAssignableTo<IInitializeForCurrentUISession>())
