@@ -6,6 +6,7 @@ using Interapptive.Shared;
 using Interapptive.Shared.Data;
 using Interapptive.Shared.UI;
 using log4net;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Data.Connection
@@ -25,6 +26,8 @@ namespace ShipWorks.Data.Connection
         // Cached properties of the server
         string serverMachineName;
         Version serverVersion;
+
+        private Guid databaseId = Guid.Empty;
 
         /// <summary>
         /// Static constructor
@@ -127,6 +130,40 @@ namespace ShipWorks.Data.Connection
 
                 current = value;
                 current.Configuration.Freeze();
+            }
+        }
+
+        /// <summary>
+        /// Returns DatabaseGuid of database.
+        /// </summary>
+        public Guid DatabaseIdentifier
+        {
+            get
+            {
+                if (databaseId == Guid.Empty)
+                {
+                    databaseId = GetDatabaseId();
+                }
+
+                return databaseId;
+            }
+        }
+
+        /// <summary>
+        /// Returns DatabaseGuid of database.
+        /// </summary>
+        private static Guid GetDatabaseId()
+        {
+            try
+            {
+                using (SqlConnection con = Current.OpenConnection())
+                {
+                    return SqlCommandProvider.ExecuteScalar<Guid>(con, "exec GetDatabaseGuid");
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new DatabaseIdentifierException(ex);
             }
         }
 

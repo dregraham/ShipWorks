@@ -392,6 +392,8 @@ namespace ShipWorks.Data.Model
 		EarliestExpectedDeliveryDate,
 		///<summary>LatestExpectedDeliveryDate. </summary>
 		LatestExpectedDeliveryDate,
+		///<summary>PurchaseOrderNumber. </summary>
+		PurchaseOrderNumber,
 		/// <summary></summary>
 		AmountOfFields
 	}

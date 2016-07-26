@@ -641,7 +641,7 @@ GO
 IF NOT EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[dbo].[Order]') AND name = N'IX_Auto_ShipFirstName')
 CREATE NONCLUSTERED INDEX [IX_Auto_ShipFirstName] ON [dbo].[Order]
 (
-	[ShipFirstName] ASC
+    [ShipFirstName] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 GO
 PRINT N'Creating index [IX_Order_ShipMilitaryAddress] on [dbo].[Order]'
@@ -674,7 +674,8 @@ CREATE TABLE [dbo].[AmazonOrder]
 [FulfillmentChannel] [int] NOT NULL,
 [IsPrime] [int] NOT NULL,
 [EarliestExpectedDeliveryDate] [datetime] NULL,
-[LatestExpectedDeliveryDate] [datetime] NULL
+[LatestExpectedDeliveryDate] [datetime] NULL,
+[PurchaseOrderNumber] [nvarchar](50) NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_AmazonOrder] on [dbo].[AmazonOrder]'
@@ -1072,9 +1073,9 @@ PRINT N'Creating index [IX_Shipment_OrderID_ShipSenseStatus] on [dbo].[Shipment]
 GO
 CREATE NONCLUSTERED INDEX [IX_Shipment_OrderID_ShipSenseStatus] ON [dbo].[Shipment]
 (
-	[OrderID] ASC,
-	[Processed] ASC,
-	[ShipSenseStatus] ASC
+    [OrderID] ASC,
+    [Processed] ASC,
+    [ShipSenseStatus] ASC
 )
 GO
 PRINT N'Creating index [IX_Shipment_RequestedLabelFormat] on [dbo].[Shipment]'
@@ -4702,24 +4703,24 @@ GO
 PRINT N'Creating [dbo].[ExcludedServiceType]'
 GO
 CREATE TABLE [dbo].[ExcludedServiceType](
-	[ShipmentType] [int] NOT NULL,
-	[ServiceType] [int] NOT NULL,
+    [ShipmentType] [int] NOT NULL,
+    [ServiceType] [int] NOT NULL,
  CONSTRAINT [PK_ExcludedServiceType] PRIMARY KEY CLUSTERED
 (
-	[ShipmentType] ASC,
-	[ServiceType] ASC
+    [ShipmentType] ASC,
+    [ServiceType] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
 PRINT N'Creating [dbo].[ExcludedPackageType]'
 GO
 CREATE TABLE [dbo].[ExcludedPackageType](
-	[ShipmentType] [int] NOT NULL,
-	[PackageType] [int] NOT NULL,
+    [ShipmentType] [int] NOT NULL,
+    [PackageType] [int] NOT NULL,
  CONSTRAINT [PK_ExcludedPackageType] PRIMARY KEY CLUSTERED
 (
-	[ShipmentType] ASC,
-	[PackageType] ASC
+    [ShipmentType] ASC,
+    [PackageType] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
@@ -4838,24 +4839,24 @@ GO
 PRINT N'Creating [dbo].[ValidatedAddress]'
 GO
 CREATE TABLE [dbo].[ValidatedAddress](
-	[ValidatedAddressID] [bigint] IDENTITY(1100,1000) NOT NULL,
-	[ConsumerID] [bigint] NOT NULL,
-	[AddressPrefix] [nvarchar](10) NOT NULL,
-	[IsOriginal] [bit] NOT NULL,
-	[Street1] [nvarchar](60) NOT NULL,
-	[Street2] [nvarchar](60) NOT NULL,
-	[Street3] [nvarchar](60) NOT NULL,
-	[City] [nvarchar](50) NOT NULL,
-	[StateProvCode] [nvarchar](50) NOT NULL,
-	[PostalCode] [nvarchar](20) NOT NULL,
-	[CountryCode] [nvarchar](50) NOT NULL,
-	[ResidentialStatus] [int] NOT NULL,
-	[POBox] [int] NOT NULL,
-	[USTerritory] [int] NOT NULL,
-	[MilitaryAddress] [int] NOT NULL,
+    [ValidatedAddressID] [bigint] IDENTITY(1100,1000) NOT NULL,
+    [ConsumerID] [bigint] NOT NULL,
+    [AddressPrefix] [nvarchar](10) NOT NULL,
+    [IsOriginal] [bit] NOT NULL,
+    [Street1] [nvarchar](60) NOT NULL,
+    [Street2] [nvarchar](60) NOT NULL,
+    [Street3] [nvarchar](60) NOT NULL,
+    [City] [nvarchar](50) NOT NULL,
+    [StateProvCode] [nvarchar](50) NOT NULL,
+    [PostalCode] [nvarchar](20) NOT NULL,
+    [CountryCode] [nvarchar](50) NOT NULL,
+    [ResidentialStatus] [int] NOT NULL,
+    [POBox] [int] NOT NULL,
+    [USTerritory] [int] NOT NULL,
+    [MilitaryAddress] [int] NOT NULL,
  CONSTRAINT [PK_ValidatedAddress] PRIMARY KEY CLUSTERED
 (
-	[ValidatedAddressID] ASC
+    [ValidatedAddressID] ASC
 )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
@@ -5516,10 +5517,10 @@ PRINT N'Creating [dbo].[LemonStandStore]'
 GO
 CREATE TABLE [dbo].[LemonStandStore]
 (
-	[StoreID] [bigint] NOT NULL,
-	[Token] [varchar](100) NOT NULL,
-	[StoreURL] [varchar](255) NOT NULL,
-	[StatusCodes] [xml] NULL,
+    [StoreID] [bigint] NOT NULL,
+    [Token] [varchar](100) NOT NULL,
+    [StoreURL] [varchar](255) NOT NULL,
+    [StatusCodes] [xml] NULL,
 )
 GO
 PRINT N'Creating primary key [PK_LemonStandStore] on [dbo].[LemonStandStore]'
@@ -5555,10 +5556,10 @@ PRINT N'Creating [dbo].[LemonStandOrderItem]'
 GO
 CREATE TABLE [dbo].[LemonStandOrderItem]
 (
-	[OrderItemID] [bigint] NOT NULL,
-	[UrlName] [nvarchar](100) NOT NULL,
-	[ShortDescription] [nvarchar](255) NOT NULL,
-	[Category] [nvarchar](100) NOT NULL
+    [OrderItemID] [bigint] NOT NULL,
+    [UrlName] [nvarchar](100) NOT NULL,
+    [ShortDescription] [nvarchar](255) NOT NULL,
+    [Category] [nvarchar](100) NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_LemonStandOrderItem] on [dbo].[LemonStandOrderItem]'
@@ -5575,7 +5576,7 @@ GO
 
 CREATE NONCLUSTERED INDEX [IX_Auto_LemonStandOrderID] ON [dbo].[LemonStandOrder]
 (
-	[LemonStandOrderID] ASC
+    [LemonStandOrderID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 GO
 

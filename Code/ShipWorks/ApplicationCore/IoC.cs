@@ -90,8 +90,7 @@ namespace ShipWorks.ApplicationCore
             builder.RegisterGeneric(typeof(AccountManagerBase<>))
                 .AsSelf()
                 .SingleInstance();
-
-
+            
             builder.RegisterInstance(Messenger.Current)
                 .AsImplementedInterfaces()
                 .ExternallyOwned();
@@ -164,6 +163,9 @@ namespace ShipWorks.ApplicationCore
                     x.IsAssignableTo<IMainFormElementRegistration>())
                 .AsImplementedInterfaces()
                 .SingleInstance();
+
+            builder.RegisterType<ConfigurationDataWrapper>()
+                .As<IConfigurationData>();
 
             builder.RegisterAssemblyTypes(allAssemblies)
                 .Where(x => x.IsAssignableTo<IInitializeForCurrentUISession>())
