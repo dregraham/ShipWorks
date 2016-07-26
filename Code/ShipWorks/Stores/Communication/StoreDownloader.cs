@@ -27,6 +27,7 @@ using ShipWorks.Data.Utility;
 using ShipWorks.SqlServer.Common.Data;
 using System.Data.SqlClient;
 using Interapptive.Shared.Metrics;
+using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Stores.Communication
 {
@@ -161,12 +162,12 @@ namespace ShipWorks.Stores.Communication
             this.progress = progress;
             this.downloadLogID = downloadLogID;
             this.connection = connection;
-
-            string durationEventName = $"Store.{StoreTypeIdentity.FromCode(StoreType.TypeCode).TangoCode}.Order.Download";
-            using (TrackedDurationEvent trackedDurationEvent = new TrackedDurationEvent(durationEventName))
+            
+            using (TrackedDurationEvent trackedDurationEvent = new TrackedDurationEvent("Store.Order.Download"))
             {
                 Download(trackedDurationEvent);
 
+                trackedDurationEvent.AddProperty("Store.Type", EnumHelper.GetDescription(StoreType.TypeCode));
                 trackedDurationEvent.AddMetric("Orders.Total", QuantitySaved);
                 trackedDurationEvent.AddMetric("Orders.New", QuantityNew);
             }
