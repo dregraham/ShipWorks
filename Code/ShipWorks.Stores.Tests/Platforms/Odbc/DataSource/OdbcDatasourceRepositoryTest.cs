@@ -57,7 +57,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.DataSource
                 Mock<IOdbcDataSource> dataSourceMock = mock.Mock<IOdbcDataSource>();
                 dataSourceMock.SetupGet(d => d.IsCustom).Returns(true);
                 dataSourceMock.SetupGet(d => d.Name).Returns("dsnName");
-                    dataSourceMock.SetupGet(d => d.Driver).Returns("dsnDriver");
+                dataSourceMock.SetupGet(d => d.Driver).Returns("dsnDriver");
 
                 Mock <IDsnProvider> dsnProvider = mock.Mock<IDsnProvider>();
                 dsnProvider.Setup(p => p.GetDataSourceNames())
