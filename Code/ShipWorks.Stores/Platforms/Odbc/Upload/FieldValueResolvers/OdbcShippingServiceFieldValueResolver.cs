@@ -3,7 +3,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
 
-namespace ShipWorks.Stores.Platforms.Odbc.Upload
+namespace ShipWorks.Stores.Platforms.Odbc.Upload.FieldValueResolvers
 {
     /// <summary>
     /// Resolver for the Shipping Service
