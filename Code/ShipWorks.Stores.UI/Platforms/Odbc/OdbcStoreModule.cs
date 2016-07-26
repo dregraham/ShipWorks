@@ -1,8 +1,11 @@
 ﻿using Autofac;
+using Interapptive.Shared.Net;
 using Interapptive.Shared.Security;
 using Interapptive.Shared.UI;
+using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.ApplicationCore.Security;
 using ShipWorks.Stores.Platforms.Odbc;
+using ShipWorks.Stores.Platforms.Odbc.CoreExtensions.Actions;
 using ShipWorks.Stores.Platforms.Odbc.DataAccess;
 using ShipWorks.Stores.Platforms.Odbc.DataSource;
 using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
@@ -10,13 +13,10 @@ using ShipWorks.Stores.Platforms.Odbc.Download;
 using ShipWorks.Stores.Platforms.Odbc.Loaders;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
 using ShipWorks.Stores.Platforms.Odbc.Upload;
+using ShipWorks.Stores.Platforms.Odbc.Upload.FieldValueResolvers;
 using ShipWorks.Stores.UI.Platforms.Odbc.ViewModels;
 using ShipWorks.Stores.UI.Platforms.Odbc.WizardPages;
 using System.Reflection;
-using Interapptive.Shared.Net;
-using ShipWorks.ApplicationCore.Logging;
-using ShipWorks.Stores.Platforms.Odbc.CoreExtensions.Actions;
-using ShipWorks.Stores.Platforms.Odbc.Upload.FieldValueResolvers;
 using Module = Autofac.Module;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc
@@ -109,6 +109,9 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         {
             builder.RegisterType<OdbcShippingServiceFieldValueResolver>()
                 .Keyed<IOdbcFieldValueResolver>(OdbcFieldValueResolutionStrategy.ShippingService);
+
+            builder.RegisterType<OdbcShippingCarrierFieldValueResolver>()
+                .Keyed<IOdbcFieldValueResolver>(OdbcFieldValueResolutionStrategy.ShippingCarrier);
         }
 
         /// <summary>
