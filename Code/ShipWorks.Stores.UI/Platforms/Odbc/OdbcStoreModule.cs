@@ -112,6 +112,9 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
 
             builder.RegisterType<OdbcShippingCarrierFieldValueResolver>()
                 .Keyed<IOdbcFieldValueResolver>(OdbcFieldValueResolutionStrategy.ShippingCarrier);
+
+            builder.RegisterType<OdbcDefaultFieldValueResolver>()
+                .Keyed<IOdbcFieldValueResolver>(OdbcFieldValueResolutionStrategy.Default);
         }
 
         /// <summary>
