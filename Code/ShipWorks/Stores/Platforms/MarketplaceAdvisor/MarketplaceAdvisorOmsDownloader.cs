@@ -13,6 +13,7 @@ using ShipWorks.Stores.Platforms.MarketplaceAdvisor.WebServices.Oms;
 using ShipWorks.Stores.Content;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared.Metrics;
 
 namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
 {
@@ -39,7 +40,8 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
         /// <summary>
         /// Download the orders
         /// </summary>
-        protected override void Download()
+        /// <param name="trackedDurationEvent"></param>
+        protected override void Download(TrackedDurationEvent trackedDurationEvent)
         {
             try
             {

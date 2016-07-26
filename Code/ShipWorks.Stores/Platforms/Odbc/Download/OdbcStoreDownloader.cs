@@ -13,6 +13,7 @@ using ShipWorks.Stores.Platforms.Odbc.Mapping;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Interapptive.Shared.Metrics;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Download
 {
@@ -45,8 +46,9 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         /// <summary>
         /// Import ODBC Orders from external datasource.
         /// </summary>
+        /// <param name="trackedDurationEvent"></param>
         /// <exception cref="DownloadException"></exception>
-        protected override void Download()
+        protected override void Download(TrackedDurationEvent trackedDurationEvent)
         {
             Progress.Detail = "Querying data source...";
             try

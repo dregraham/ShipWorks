@@ -18,6 +18,7 @@ using System.Data.SqlTypes;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Win32;
 
 namespace ShipWorks.Stores.Platforms.PayPal
@@ -51,7 +52,8 @@ namespace ShipWorks.Stores.Platforms.PayPal
         /// <summary>
         /// Download orders from PayPal
         /// </summary>
-        protected override void Download()
+        /// <param name="trackedDurationEvent"></param>
+        protected override void Download(TrackedDurationEvent trackedDurationEvent)
         {
             try
             {

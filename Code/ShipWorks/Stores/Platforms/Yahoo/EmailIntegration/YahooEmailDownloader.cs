@@ -19,6 +19,7 @@ using ShipWorks.Email.Accounts;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
 using Interapptive.Shared;
+using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Net;
 
 namespace ShipWorks.Stores.Platforms.Yahoo.EmailIntegration
@@ -48,7 +49,8 @@ namespace ShipWorks.Stores.Platforms.Yahoo.EmailIntegration
         /// <summary>
         /// Initiate the download
         /// </summary>
-        protected override void Download()
+        /// <param name="trackedDurationEvent"></param>
+        protected override void Download(TrackedDurationEvent trackedDurationEvent)
         {
             try
             {

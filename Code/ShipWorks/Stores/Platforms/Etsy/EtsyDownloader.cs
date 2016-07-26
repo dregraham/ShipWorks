@@ -20,6 +20,7 @@ using Interapptive.Shared.Net;
 using System.Text.RegularExpressions;
 using Interapptive.Shared;
 using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared.Metrics;
 using ShipWorks.Data;
 using ShipWorks.Data.Model;
 
@@ -60,7 +61,8 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// <summary>
         /// Download data for the Etsy store
         /// </summary>
-        protected override void Download()
+        /// <param name="trackedDurationEvent"></param>
+        protected override void Download(TrackedDurationEvent trackedDurationEvent)
         {
             try
             {

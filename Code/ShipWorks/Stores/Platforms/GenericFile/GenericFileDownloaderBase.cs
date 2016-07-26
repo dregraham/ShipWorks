@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Interapptive.Shared.Metrics;
 using ShipWorks.Stores.Communication;
 using log4net;
 using ShipWorks.Data.Model.EntityClasses;
@@ -55,7 +56,8 @@ namespace ShipWorks.Stores.Platforms.GenericFile
         /// <summary>
         /// Import from the XML file
         /// </summary>
-        protected override void Download()
+        /// <param name="trackedDurationEvent"></param>
+        protected override void Download(TrackedDurationEvent trackedDurationEvent)
         {
             try
             {

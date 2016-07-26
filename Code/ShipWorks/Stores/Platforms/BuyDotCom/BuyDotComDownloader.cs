@@ -18,6 +18,7 @@ using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore;
 using System.Windows.Forms;
 using System.Threading.Tasks;
+using Interapptive.Shared.Metrics;
 
 namespace ShipWorks.Stores.Platforms.BuyDotCom
 {
@@ -43,7 +44,8 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom
         /// <summary>
         /// Download Orders
         /// </summary>
-        protected override void Download()
+        /// <param name="trackedDurationEvent"></param>
+        protected override void Download(TrackedDurationEvent trackedDurationEvent)
         {
             Progress.Detail = "Checking for orders...";
 

@@ -5,6 +5,7 @@ using System.Linq;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Collections;
+using Interapptive.Shared.Metrics;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Quartz.Util;
@@ -69,9 +70,10 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         /// <summary>
         ///     Download orders from LemonStand
         /// </summary>
+        /// <param name="trackedDurationEvent"></param>
         /// <exception cref="DownloadException">
         /// </exception>
-        protected override void Download()
+        protected override void Download(TrackedDurationEvent trackedDurationEvent)
         {
             UpdateOrderStatuses();
 

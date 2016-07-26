@@ -17,6 +17,7 @@ using System.Text.RegularExpressions;
 using log4net;
 using System.Globalization;
 using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared.Metrics;
 using ShipWorks.Stores.Platforms.Newegg.Net.Orders;
 using ShipWorks.Stores.Platforms.Newegg.Net.Orders.Download;
 using ShipWorks.Stores.Platforms.Newegg.Enums;
@@ -53,7 +54,8 @@ namespace ShipWorks.Stores.Platforms.Newegg
         /// <summary>
         /// Must be implemented by derived types to do the actual download
         /// </summary>
-        protected override void Download()
+        /// <param name="trackedDurationEvent"></param>
+        protected override void Download(TrackedDurationEvent trackedDurationEvent)
         {
             try
             {

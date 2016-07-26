@@ -14,6 +14,7 @@ using Interapptive.Shared.Net;
 using ShipWorks.Data.Connection;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared.Metrics;
 
 namespace ShipWorks.Stores.Platforms.ShopSite
 {
@@ -36,7 +37,8 @@ namespace ShipWorks.Stores.Platforms.ShopSite
         /// <summary>
         /// Download data for the ShopSite store
         /// </summary>
-        protected override void Download()
+        /// <param name="trackedDurationEvent"></param>
+        protected override void Download(TrackedDurationEvent trackedDurationEvent)
         {
             Progress.Detail = "Checking for orders...";
 

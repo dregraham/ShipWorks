@@ -19,6 +19,7 @@ using System.Globalization;
 using Interapptive.Shared;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Collections;
+using Interapptive.Shared.Metrics;
 
 namespace ShipWorks.Stores.Platforms.Amazon
 {
@@ -50,7 +51,8 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// <summary>
         /// Start the download from Amazon.com using the Marketplace Web Service (MWS)
         /// </summary>
-        protected override void Download()
+        /// <param name="trackedDurationEvent"></param>
+        protected override void Download(TrackedDurationEvent trackedDurationEvent)
         {
             try
             {

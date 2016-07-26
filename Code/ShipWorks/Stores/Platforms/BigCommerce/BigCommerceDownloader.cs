@@ -7,6 +7,7 @@ using System.Linq;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Enums;
+using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Common.Threading;
@@ -63,7 +64,8 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         /// <summary>
         /// Download orders and statuses for the BigCommerce store
         /// </summary>
-        protected override void Download()
+        /// <param name="trackedDurationEvent"></param>
+        protected override void Download(TrackedDurationEvent trackedDurationEvent)
         {
             try
             {

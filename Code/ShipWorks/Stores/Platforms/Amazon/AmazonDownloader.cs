@@ -17,6 +17,7 @@ using Interapptive.Shared;
 using ShipWorks.Stores.Content;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared.Metrics;
 
 namespace ShipWorks.Stores.Platforms.Amazon
 {
@@ -40,8 +41,9 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// <summary>
         /// Start the download from Amazon.com
         /// </summary>
+        /// <param name="trackedDurationEvent"></param>
         [NDependIgnoreLongMethod]
-        protected override void Download()
+        protected override void Download(TrackedDurationEvent trackedDurationEvent)
         {
             try
             {
