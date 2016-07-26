@@ -182,6 +182,7 @@
     <Compile Include="Platforms\Odbc\Upload\IOdbcUploader.cs" />
     <Compile Include="Platforms\Odbc\Upload\OdbcCustomUploadQuery.cs" />
     <Compile Include="Platforms\Odbc\Upload\FieldValueResolvers\OdbcShippingServiceFieldValueResolver.cs" />
+    <Compile Include="Platforms\Odbc\Upload\FieldValueResolvers\OdbcDefaultFieldValueResolver.cs" />
     <Compile Include="Platforms\Odbc\Upload\OdbcTableUploadQuery.cs" />
     <Compile Include="Platforms\Odbc\Upload\OdbcUploadCommand.cs" />
     <Compile Include="Platforms\Odbc\DataSource\IOdbcDataSourceService.cs" />

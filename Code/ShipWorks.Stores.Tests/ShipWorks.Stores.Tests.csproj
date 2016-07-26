@@ -202,6 +202,7 @@
     <Compile Include="Platforms\Odbc\OdbcUploadMappingControlViewModelTest.cs" />
     <Compile Include="Platforms\Odbc\Upload\FieldValueResolvers\OdbcShippingCarrierFieldValueResolverTest.cs" />
     <Compile Include="Platforms\Odbc\Upload\OdbcCustomUploadQueryTest.cs" />
+    <Compile Include="Platforms\Odbc\Upload\OdbcDefaultFieldValueResolverTest.cs" />
     <Compile Include="Platforms\Odbc\Upload\OdbcShippingServiceFieldValueResolverTest.cs" />
     <Compile Include="Platforms\Odbc\Upload\OdbcTableUploadQueryTest.cs" />
     <Compile Include="Platforms\Odbc\Upload\OdbcUploadCommandTest.cs" />
