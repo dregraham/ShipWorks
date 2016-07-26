@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Autofac.Features.Indexed;
+using Interapptive.Shared.Utility;
 using ShipWorks.Stores.Platforms.Odbc.Upload.FieldValueResolvers;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Mapping
@@ -195,8 +196,9 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
                 new ShipWorksOdbcMappableField(ShipmentFields.ShipmentType, OdbcShipmentFieldDescription.Provider, OdbcFieldValueResolutionStrategy.ShippingCarrier),
                 new ShipWorksOdbcMappableField(OrderFields.LocalStatus, OdbcOrderFieldDescription.LocalStatus, OdbcFieldValueResolutionStrategy.Default),
                 new ShipWorksOdbcMappableField(ShipmentFields.TotalWeight, OdbcShipmentFieldDescription.TotalWeight, OdbcFieldValueResolutionStrategy.Default),
-                new ShipWorksOdbcMappableField(ShipmentFields.ShipmentCost, OdbcShipmentFieldDescription.ShipmentCost, OdbcFieldValueResolutionStrategy.Default)
-                // Todo: Still need to add Service, Packaging, # of Packages, Length, Width, Height,
+                new ShipWorksOdbcMappableField(ShipmentFields.ShipmentCost, OdbcShipmentFieldDescription.ShipmentCost, OdbcFieldValueResolutionStrategy.Default),
+                new ShipWorksOdbcMappableField("", "", EnumHelper.GetDescription(OdbcFieldValueResolutionStrategy.ShippingService), OdbcFieldValueResolutionStrategy.ShippingService)
+                // Todo: Still need to add Packaging, # of Packages, Length, Width, Height,
                 // Todo: Insured Value & Insurance Fee
             };
         }
