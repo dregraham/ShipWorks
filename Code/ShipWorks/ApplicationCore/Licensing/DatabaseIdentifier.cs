@@ -1,9 +1,9 @@
-﻿using SD.LLBLGen.Pro.ORMSupportClasses;
+﻿using System;
+using System.Data.SqlClient;
+using System.Diagnostics;
+using Interapptive.Shared.Data;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
-using System;
-using System.Data.SqlClient;
-using System.Transactions;
 
 namespace ShipWorks.ApplicationCore.Licensing
 {
@@ -13,23 +13,11 @@ namespace ShipWorks.ApplicationCore.Licensing
     public class DatabaseIdentifier : IDatabaseIdentifier
     {
         /// <summary>
-        /// Returns DatabaseGuid from database.
+        /// Returns DatabaseGuid of database.
         /// </summary>
         public Guid Get()
         {
-            try
-            {
-                using (new TransactionScope(TransactionScopeOption.Suppress))
-                using (SqlAdapter sqlAdapter = new SqlAdapter())
-                {
-                    RetrievalQuery getDatabaseGuidQuery = new RetrievalQuery(new SqlCommand("exec GetDatabaseGuid"));
-                    return (Guid) sqlAdapter.ExecuteScalarQuery(getDatabaseGuidQuery);
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new DatabaseIdentifierException(ex);
-            }
+            return SqlSession.Current.DatabaseIdentifier;
         }
     }
 }

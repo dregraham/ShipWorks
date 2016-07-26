@@ -203,10 +203,9 @@ namespace ShipWorks.Email
         }
 
         /// <summary>
-        /// Initiate the emailing of the given messages.  If skipDontSendBefore is true messages whose DontSendUntil date has not yet come will be skipped.  Otherwise they will be tried, but if its
-        /// still too early, an error will be displayed. Either way they dont actually get sent.
+        /// Initiate the emailing of the given messages.
         /// </summary>
-        public static void StartEmailingMessages(IEnumerable<EmailOutboundEntity> messages, bool skipDontSendBefore = true)
+        public static void StartEmailingMessages(IEnumerable<EmailOutboundEntity> messages)
         {
             Debug.Assert(!Program.ExecutionMode.IsUIDisplayed || !Program.MainForm.InvokeRequired);
 
@@ -216,12 +215,7 @@ namespace ShipWorks.Email
                 return;
             }
 
-            IEnumerable<EmailOutboundEntity> messagesToSend = messages;
-
-            if (skipDontSendBefore)
-            {
-                messagesToSend = messages.Where(m => m.DontSendBefore == null || m.DontSendBefore <= DateTime.UtcNow);
-            }
+            IEnumerable<EmailOutboundEntity> messagesToSend = messages.Where(m => m.DontSendBefore == null || m.DontSendBefore <= DateTime.UtcNow);
 
             // We have to split up the messages by account
             foreach (IGrouping<long, EmailOutboundEntity> accountGroup in messagesToSend.GroupBy(m => m.AccountID))
