@@ -191,11 +191,11 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
                 new ShipWorksOdbcMappableField(OrderFields.OrderNumber, OdbcOrderFieldDescription.Number, true, OdbcFieldValueResolutionStrategy.Default),
                 new ShipWorksOdbcMappableField(ShipmentFields.TrackingNumber, OdbcShipmentFieldDescription.TrackingNumber, true, OdbcFieldValueResolutionStrategy.Default),
                 new ShipWorksOdbcMappableField(ShipmentFields.ShipDate, OdbcShipmentFieldDescription.ShipDate, OdbcFieldValueResolutionStrategy.Default),
-                new ShipWorksOdbcMappableField(ShipmentFields.ShipmentType, OdbcShipmentFieldDescription.Provider, OdbcFieldValueResolutionStrategy.ShippingCarrier),
                 new ShipWorksOdbcMappableField(OrderFields.LocalStatus, OdbcOrderFieldDescription.LocalStatus, OdbcFieldValueResolutionStrategy.Default),
                 new ShipWorksOdbcMappableField(ShipmentFields.TotalWeight, OdbcShipmentFieldDescription.TotalWeight, OdbcFieldValueResolutionStrategy.Default),
                 new ShipWorksOdbcMappableField(ShipmentFields.ShipmentCost, OdbcShipmentFieldDescription.ShipmentCost, OdbcFieldValueResolutionStrategy.Default),
-                new ShipWorksOdbcMappableField("", "", EnumHelper.GetDescription(OdbcFieldValueResolutionStrategy.ShippingService), OdbcFieldValueResolutionStrategy.ShippingService)
+                new ShipWorksOdbcMappableField("", "", EnumHelper.GetDescription(OdbcFieldValueResolutionStrategy.ShippingService), OdbcFieldValueResolutionStrategy.ShippingService),
+                new ShipWorksOdbcMappableField("", "", EnumHelper.GetDescription(OdbcFieldValueResolutionStrategy.ShippingCarrier), OdbcFieldValueResolutionStrategy.ShippingCarrier)
                 // Todo: Still need to add Packaging, # of Packages, Length, Width, Height,
                 // Todo: Insured Value & Insurance Fee
             };

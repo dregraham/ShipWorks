@@ -91,12 +91,12 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <summary>
         /// The name of the object that contains this field
         /// </summary>
-        public string ContainingObjectName => field.ContainingObjectName;
+        public string ContainingObjectName => field?.ContainingObjectName ?? string.Empty;
 
         /// <summary>
         /// The name of the field
         /// </summary>
-        public string Name => field.Name;
+        public string Name => field?.Name ?? string.Empty;
 
         /// <summary>
         /// The fields value

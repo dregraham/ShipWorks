@@ -12,10 +12,10 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         [Description("Default")]
         Default = 0,
 
-        [Description("Shipping Carrier")]
+        [Description("Shipping Provider")]
         ShippingCarrier = 1,
 
-        [Description("Shipping Provider")]
+        [Description("Shipping Service")]
         ShippingService = 2
     }
 }
