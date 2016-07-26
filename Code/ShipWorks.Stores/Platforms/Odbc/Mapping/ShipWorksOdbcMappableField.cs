@@ -4,12 +4,12 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Adapter.Custom;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.FactoryClasses;
+using ShipWorks.Stores.Platforms.Odbc.Upload.FieldValueResolvers;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.Reflection;
-using ShipWorks.Stores.Platforms.Odbc.Upload.FieldValueResolvers;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 {
@@ -145,7 +145,10 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
             MethodConditions.EnsureArgumentIsNotNull(valueResolver, "Value Resolver");
             MethodConditions.EnsureArgumentIsNotNull(entity, "Entity");
 
-            Value = valueResolver.GetValue(this, entity);
+            if (Value==null)
+            {
+                Value = valueResolver.GetValue(this, entity);
+            }
         }
 
         /// <summary>
