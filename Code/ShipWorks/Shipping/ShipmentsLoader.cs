@@ -18,6 +18,7 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Filters;
+using ShipWorks.Shipping.Settings;
 using ShipWorks.Stores;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
@@ -29,6 +30,7 @@ namespace ShipWorks.Shipping
     /// </summary>
     public class ShipmentsLoader
     {
+        private static readonly IEnumerable<int> maxAllowedOrderOptions = new[] { 1000, 5000, 10000, 50000, 100000 };
         private static readonly ILog log = LogManager.GetLogger(typeof(ShipmentsLoader));
         private BlockingCollection<ShipmentEntity> shipmentsToValidate;
         private Dictionary<long, ShipmentEntity> globalShipments;
@@ -50,12 +52,21 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// The maximum number of orders that we support loading at a time.
         /// </summary>
-        public static int MaxAllowedOrders => 1000;
+        public static int MaxAllowedOrders
+        {
+            get
+            {
+                int maxAllowedOrders = ShippingSettings.Fetch().ShipmentEditLimit;
+
+                return MaxAllowedOrderOptions.Contains(maxAllowedOrders) ?
+                    maxAllowedOrders : MaxAllowedOrderOptions.First();
+            }
+        }
 
         /// <summary>
         /// Valid options for the max allowed orders
         /// </summary>
-        public static IEnumerable<int> MaxAllowedOrderOptions => new[] { 1000, 5000, 10000, 50000, 100000 };
+        public static IEnumerable<int> MaxAllowedOrderOptions => maxAllowedOrderOptions;
 
         /// <summary>
         /// Load the shipments for the given collection of orders or shipments

@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -68,15 +67,23 @@ namespace ShipWorks.ApplicationCore.Options
 
             autoCreateShipments.Checked = settings.AutoCreateShipments;
 
-            IEnumerable<int> shipmentEditLimitOptions = ShipmentsLoader.MaxAllowedOrderOptions;
-            shipmentEditLimit.DataSource = shipmentEditLimitOptions
+            SetupShipmentEditLimit(settings);
+        }
+
+        /// <summary>
+        /// Setup the shipment edit limit dropdown
+        /// </summary>\
+        private void SetupShipmentEditLimit(ShippingSettingsEntity settings)
+        {
+            shipmentEditLimit.DataSource = ShipmentsLoader.MaxAllowedOrderOptions
                 .ToDictionary(x => x.ToString("#,###"), x => x)
                 .ToList();
             shipmentEditLimit.DisplayMember = "Key";
             shipmentEditLimit.ValueMember = "Value";
-            shipmentEditLimit.SelectedValue = shipmentEditLimitOptions.Contains(settings.ShipmentEditLimit) ?
-                settings.ShipmentEditLimit :
-                shipmentEditLimitOptions.First();
+            shipmentEditLimit.SelectedValue =
+                ShipmentsLoader.MaxAllowedOrderOptions.Contains(settings.ShipmentEditLimit) ?
+                    settings.ShipmentEditLimit :
+                    ShipmentsLoader.MaxAllowedOrderOptions.First();
         }
 
         /// <summary>
