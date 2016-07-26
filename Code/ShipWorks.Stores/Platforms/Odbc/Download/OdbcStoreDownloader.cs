@@ -53,7 +53,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
             Progress.Detail = "Querying data source...";
             try
             {
-                IOdbcCommand downloadCommand = GenerateDownloadCommand(store);
+                IOdbcCommand downloadCommand = GenerateDownloadCommand(store, trackedDurationEvent);
 
                 IEnumerable<OdbcRecord> downloadedOrders = downloadCommand.Execute();
                 List<IGrouping<string, OdbcRecord>> orderGroups =
@@ -78,21 +78,24 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         /// <summary>
         /// Generates the download command based on the store entity
         /// </summary>
-        private IOdbcCommand GenerateDownloadCommand(OdbcStoreEntity odbcStore)
+        private IOdbcCommand GenerateDownloadCommand(OdbcStoreEntity odbcStore, TrackedDurationEvent trackedDurationEvent)
         {
             MethodConditions.EnsureArgumentIsNotNull(odbcStore, "OdbcStore");
-
+            
             if (store.ImportStrategy == (int) OdbcImportStrategy.ByModifiedTime)
             {
                 // Used in the case that GetOnlineLastModifiedStartingPoint returns null
                 int defaultDaysBack = store.InitialDownloadDays.GetValueOrDefault(7);
 
-                // Get the starting point
+                // Get the starting point and include it for telemetry
                 DateTime startingPoint = GetOnlineLastModifiedStartingPoint().GetValueOrDefault(DateTime.UtcNow.AddDays(-defaultDaysBack));
+                trackedDurationEvent.AddMetric("Minutes.Back", DateTime.UtcNow.Subtract(startingPoint).TotalMinutes);
 
                 return downloadCommandFactory.CreateDownloadCommand(odbcStore, startingPoint, fieldMap);
             }
-
+            
+            // Use -1 to indicate that we are using the "all orders" download strategy
+            trackedDurationEvent.AddMetric("Minutes.Back", -1);
             return downloadCommandFactory.CreateDownloadCommand(odbcStore, fieldMap);
         }
 
