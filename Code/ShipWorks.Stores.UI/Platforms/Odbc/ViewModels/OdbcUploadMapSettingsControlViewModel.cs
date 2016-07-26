@@ -28,7 +28,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
             "/* For more samples and additional information on how to        */\n" +
             "/* leverage ShipWorks tokens when uploading shipment details    */\n" +
             "/* using a custom query, please visit                           */\n" +
-            "/* http://www.support.shipworks.com/                            */\n" +
+            "/* http://support.shipworks.com/                                */\n" +
             "/*                                                              */\n" +
             "/****************************************************************/\n\n" +
             "UPDATE ShipmentDetails\n" +
