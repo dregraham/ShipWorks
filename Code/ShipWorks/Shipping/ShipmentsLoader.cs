@@ -53,6 +53,11 @@ namespace ShipWorks.Shipping
         public static int MaxAllowedOrders => 1000;
 
         /// <summary>
+        /// Valid options for the max allowed orders
+        /// </summary>
+        public static IEnumerable<int> MaxAllowedOrderOptions => new[] { 1000, 5000, 10000, 50000, 100000 };
+
+        /// <summary>
         /// Load the shipments for the given collection of orders or shipments
         /// </summary>
         public async Task<ShipmentsLoadedEventArgs> LoadAsync(IEnumerable<long> entityIDs)
@@ -210,7 +215,7 @@ namespace ShipWorks.Shipping
 
                     count++;
 
-                    workProgress.PercentComplete = (100*count)/total;
+                    workProgress.PercentComplete = (100 * count) / total;
                 }
 
                 finishedLoadingShipments = true;
