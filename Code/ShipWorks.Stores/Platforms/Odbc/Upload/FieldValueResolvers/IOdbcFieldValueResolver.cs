@@ -1,7 +1,7 @@
 ﻿using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
 
-namespace ShipWorks.Stores.Platforms.Odbc.Upload
+namespace ShipWorks.Stores.Platforms.Odbc.Upload.FieldValueResolvers
 {
     /// <summary>
     /// Represents an OdbcField Value Resolver
