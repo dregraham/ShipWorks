@@ -5,6 +5,7 @@ using Autofac;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Utility;
 using Moq;
+using ShipWorks.ApplicationCore.ExecutionMode;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores;
@@ -14,6 +15,43 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
 {
     public class LicenseServiceTest
     {
+        [Fact]
+        public void InitializeForCurrentDatabase_ForcesCustomerKeyRefresh()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                Mock<ICustomerLicenseReader> customerLicenseReader = mock.Mock<ICustomerLicenseReader>();
+                customerLicenseReader.Setup(r => r.Read()).Returns("");
+
+                Mock<ICustomerLicense> customerLicense = mock.Mock<ICustomerLicense>();
+
+                // Mock up the CustomerLicense constructor parameter Func<string, ICustomerLicense>
+                Mock<Func<string, ICustomerLicense>> repo = mock.MockRepository.Create<Func<string, ICustomerLicense>>();
+                repo.Setup(x => x(It.IsAny<string>())).Returns(customerLicense.Object);
+                mock.Provide(repo.Object);
+
+                LicenseService testObject = mock.Create<LicenseService>();
+
+                // Get customer key cached
+                testObject.AllowsLogOn();
+
+                // Reset calls back to 0
+                customerLicenseReader.ResetCalls();
+                testObject.AllowsLogOn();
+                customerLicenseReader.Verify(l => l.Read(), Times.Never);
+
+                // Reset calls to 0
+                customerLicenseReader.ResetCalls();
+
+                // Clear the cache
+                testObject.InitializeForCurrentDatabase(new UserInterfaceExecutionMode(null));
+                testObject.AllowsLogOn();
+
+                // Make sure we read once.
+                customerLicenseReader.Verify(l => l.Read(), Times.Once);
+            }
+        }
+
         [Fact]
         public void AllowsLogOn_ForcesLicenseRefresh()
         {

@@ -16,7 +16,7 @@ namespace ShipWorks.ApplicationCore.Licensing
     /// <summary>
     /// Service for license related tasks
     /// </summary>
-    public class LicenseService : ILicenseService
+    public class LicenseService : ILicenseService, IInitializeForCurrentDatabase
     {
         private readonly Lazy<ICustomerLicenseReader> reader;
         private readonly Func<string, ICustomerLicense> customerLicenseFactory;
@@ -191,6 +191,15 @@ namespace ShipWorks.ApplicationCore.Licensing
             }
 
             return cachedCustomerLicense;
+        }
+
+        /// <summary>
+        /// Initializes this class for the current database.
+        /// </summary>
+        public void InitializeForCurrentDatabase(ExecutionMode.ExecutionMode executionMode)
+        {
+            // Set isLegacy to null so that we will go to the db to get the new CustomerKey
+            isLegacy = null;
         }
     }
 }
