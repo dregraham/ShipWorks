@@ -18,24 +18,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Upload
         }
 
         [Fact]
-        public void GetValue_ThrowsArgumentNullException_WhenGivenFieldIsNull()
-        {
-            OdbcDefaultFieldValueResolver testObject = mock.Create<OdbcDefaultFieldValueResolver>();
-            IEntity2 entity = mock.Create<IEntity2>();
-
-            Assert.Throws<ArgumentNullException>(() => testObject.GetValue(null, entity));
-        }
-
-        [Fact]
-        public void GetValue_ThrowsArgumentNullException_WhenGivenEntityIsNull()
-        {
-            OdbcDefaultFieldValueResolver testObject = mock.Create<OdbcDefaultFieldValueResolver>();
-            IShipWorksOdbcMappableField field = mock.Create<IShipWorksOdbcMappableField>();
-
-            Assert.Throws<ArgumentNullException>(() => testObject.GetValue(field, null));
-        }
-
-        [Fact]
         public void GetValue_ReturnsCurrentFieldValue()
         {
             Mock<IEntity2> entity = mock.Mock<IEntity2>();

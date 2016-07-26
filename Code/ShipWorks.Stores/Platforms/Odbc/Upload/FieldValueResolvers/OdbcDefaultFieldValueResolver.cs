@@ -14,9 +14,6 @@ namespace ShipWorks.Stores.Platforms.Odbc.Upload.FieldValueResolvers
         /// </summary>
         public object GetValue(IShipWorksOdbcMappableField field, IEntity2 entity)
         {
-            MethodConditions.EnsureArgumentIsNotNull(field);
-            MethodConditions.EnsureArgumentIsNotNull(entity);
-
             IEntityField2 entityField = entity.Fields[field.Name];
 
             return entityField?.CurrentValue;
