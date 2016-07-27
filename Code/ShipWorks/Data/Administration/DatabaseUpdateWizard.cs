@@ -5,7 +5,6 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
-using System.Reflection;
 using System.Windows.Forms;
 using System.Xml.Linq;
 using Interapptive.Shared;
@@ -224,106 +223,62 @@ namespace ShipWorks.Data.Administration
             Cursor.Current = Cursors.WaitCursor;
 
             const string loggedInNoRights = "You are currently logged on to ShipWorks as '{0}', a user that does not have rights to update the ShipWorks database.";
-            const string loggedInNeedAdmin = "Please log on to ShipWorks as an administrator to update the ShipWorks database.";
             const string loggedInNeedRights = "Please log on to ShipWorks as a user that has rights to update the ShipWorks database.";
 
-            // Below db version 1.2.0 (ShipWorks 2.4), there were no users.  So to be logged
-            // in at all is to be an admin.
-            if (installed < new Version(1, 2))
+            // If there are no admin users, it would be impossible to go on
+            if (!UserUtility.HasAdminUsers())
             {
-                log.Debug("Pre 2.4 database, no need for admin logon.");
-
                 e.Skip = true;
                 return;
             }
-            // See if we need to login 2.x style
-            else if (installed < new Version(3, 0))
+
+            string username;
+            string password;
+
+            // See if we can try to login automatically
+            if (UserSession.GetSavedUserCredentials(out username, out password))
             {
-                // If there are no admin users, it would be impossible to go on
-                if (!UserUtility.Has2xAdminUsers())
+                long userID = UserUtility.GetShipWorksUserID(username, password);
+
+                // Not a valid user
+                if (userID < 0)
                 {
-                    e.Skip = true;
+                    labelNeedUpgradeRights.Text = loggedInNeedRights;
                     return;
                 }
 
-                string username;
-                string password;
+                log.DebugFormat("3.x credentials found, UserID {0}", userID);
 
-                // See if we can try to login automatically
-                if (UserSession.GetSavedUserCredentials(out username, out password))
+                // Determine if the given user has rights to upgrade shipworks
+                if (SecurityContext.HasPermission(userID, PermissionType.DatabaseSetup))
                 {
-                    log.Debug("2.x credentials found, attempting admin login.");
-
-                    if (UserUtility.IsShipWorks2xAdmin(username, password))
+                    // If they also have the rights to backup, just move on
+                    if (SecurityContext.HasPermission(userID, PermissionType.DatabaseBackup))
                     {
+                        userID3x = userID;
+                        userName3x = username;
+
                         logonAfterUsername = username;
                         logonAfterPassword = password;
 
                         e.Skip = true;
                         return;
                     }
-                }
-
-                labelNeedUpgradeRights.Text = loggedInNeedAdmin;
-            }
-            // Login using 3.0 schema
-            else
-            {
-                // If there are no admin users, it would be impossible to go on
-                if (!UserUtility.HasAdminUsers())
-                {
-                    e.Skip = true;
-                    return;
-                }
-
-                string username;
-                string password;
-
-                // See if we can try to login automatically
-                if (UserSession.GetSavedUserCredentials(out username, out password))
-                {
-                    long userID = UserUtility.GetShipWorksUserID(username, password);
-
-                    // Not a valid user
-                    if (userID < 0)
+                    // If they can't backup, they have to have the opportunity to login as someone who can
+                    else
                     {
                         labelNeedUpgradeRights.Text = loggedInNeedRights;
                         return;
                     }
-
-                    log.DebugFormat("3.x credentials found, UserID {0}", userID);
-
-                    // Determine if the given user has rights to upgrade shipworks
-                    if (SecurityContext.HasPermission(userID, PermissionType.DatabaseSetup))
-                    {
-                        // If they also have the rights to backup, just move on
-                        if (SecurityContext.HasPermission(userID, PermissionType.DatabaseBackup))
-                        {
-                            userID3x = userID;
-                            userName3x = username;
-
-                            logonAfterUsername = username;
-                            logonAfterPassword = password;
-
-                            e.Skip = true;
-                            return;
-                        }
-                        // If they can't backup, they have to have the opportunity to login as someone who can
-                        else
-                        {
-                            labelNeedUpgradeRights.Text = loggedInNeedRights;
-                            return;
-                        }
-                    }
-                    else
-                    {
-                        labelNeedUpgradeRights.Text = string.Format(loggedInNoRights, username);
-                        return;
-                    }
                 }
-
-                labelNeedUpgradeRights.Text = loggedInNeedRights;
+                else
+                {
+                    labelNeedUpgradeRights.Text = string.Format(loggedInNoRights, username);
+                    return;
+                }
             }
+
+            labelNeedUpgradeRights.Text = loggedInNeedRights;
         }
 
         /// <summary>
@@ -365,48 +320,29 @@ namespace ShipWorks.Data.Administration
                 return;
             }
 
-            // See if we need to login 2.x style
-            if (installed < new Version(3, 0))
+            long userID = UserUtility.GetShipWorksUserID(username.Text, password.Text);
+
+            // Not a valid user
+            if (userID < 0)
             {
-                if (!UserUtility.IsShipWorks2xAdmin(username.Text, password.Text))
-                {
-                    MessageHelper.ShowMessage(this, "Incorrect username or password.");
-                    e.NextPage = CurrentPage;
-                    return;
-                }
-                else
-                {
-                    logonAfterUsername = username.Text;
-                    logonAfterPassword = password.Text;
-                }
+                MessageHelper.ShowMessage(this, "Incorrect username or password.");
+                e.NextPage = CurrentPage;
+                return;
             }
-            // Login using 3.0 schema
-            else
+
+            // Determine if the given user has rights to upgrade shipworks
+            if (!SecurityContext.HasPermission(userID, PermissionType.DatabaseSetup))
             {
-                long userID = UserUtility.GetShipWorksUserID(username.Text, password.Text);
-
-                // Not a valid user
-                if (userID < 0)
-                {
-                    MessageHelper.ShowMessage(this, "Incorrect username or password.");
-                    e.NextPage = CurrentPage;
-                    return;
-                }
-
-                // Determine if the given user has rights to upgrade shipworks
-                if (!SecurityContext.HasPermission(userID, PermissionType.DatabaseSetup))
-                {
-                    MessageHelper.ShowMessage(this, "The user does not have permission to update the database.");
-                    e.NextPage = CurrentPage;
-                    return;
-                }
-
-                userID3x = userID;
-                userName3x = username.Text;
-
-                logonAfterUsername = username.Text;
-                logonAfterPassword = password.Text;
+                MessageHelper.ShowMessage(this, "The user does not have permission to update the database.");
+                e.NextPage = CurrentPage;
+                return;
             }
+
+            userID3x = userID;
+            userName3x = username.Text;
+
+            logonAfterUsername = username.Text;
+            logonAfterPassword = password.Text;
         }
 
         #endregion
@@ -433,14 +369,6 @@ namespace ShipWorks.Data.Administration
                 labelBackupNoPermission.Text = string.Format(backupText, userName3x);
                 labelBackupNoPermission.Visible = true;
                 backup.Enabled = false;
-            }
-            // Skip if running an internal version - internal debug versions are 0.0.0.0
-            else if (installed < new Version(3, 0) && !InterapptiveOnly.MagicKeysDown && Assembly.GetExecutingAssembly().GetName().Version.Major == 3)
-            {
-                labelBackupInfo.Text = "You must create a backup before updating your ShipWorks 2 database.  We don't expect anything to go wrong, but it doesn't hurt to be safe.";
-                labelBackupNoPermission.Visible = false;
-
-                NextEnabled = backupCompleted;
             }
             else
             {

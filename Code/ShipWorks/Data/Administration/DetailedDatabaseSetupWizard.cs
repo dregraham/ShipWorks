@@ -4,7 +4,6 @@ using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics;
-using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -224,86 +223,47 @@ namespace ShipWorks.Data.Administration
                     // We removed the first pages, which the wizard handles after OnLoad finishes - but it hasn't finished (we are still in it), so we have
                     // to ensure the first page ourself, or MoveNext won't work
                     SetCurrent(0);
+                    bool wasDoingRestore = (bool) StartupController.StartupArgument.Element("Restore");
 
-                    if (StartupController.StartupArgument.Name == "Upgrade2x")
+                    if (wasDoingRestore)
                     {
-                        var setupControls = new List<Control>
-                                    {
-                                        radioChooseCreate2008, pictureBoxSetupNewDatabase, labelSetupNewDatabase,
-                                        radioChooseConnect2008, pictureBoxConnectRunningDatabase, labelConnectRunningDatabase
-                                    };
-
-                        var restoreControls = new List<Control>
-                                    {
-                                        radioChooseRestore2008, pictureBoxRestoreDatabase, labelRestoreDatabase
-                                    };
-
-                        int setupOffset = radioChooseConnect2008.Top - radioChooseCreate2008.Top;
-                        int restoreOffset = radioChooseCreate2008.Top - radioChooseRestore2008.Top;
-
-                        foreach (var control in setupControls)
-                        {
-                            control.Top += setupOffset;
-                        }
-
-                        foreach (var control in restoreControls)
-                        {
-                            control.Top += restoreOffset;
-                        }
-
                         radioChooseRestore2008.Checked = true;
-                        radioChooseRestore2008.Text = "Upgrade from a ShipWorks 2 Backup";
-                        labelRestoreDatabase.Text = "Select this option to import ShipWorks 2 data without affecting ShipWorks 2.";
+                        MoveNext();
 
-                        radioChooseCreate2008.ForeColor = SystemColors.GrayText;
-                        radioChooseConnect2008.ForeColor = SystemColors.GrayText;
-
-                        instanceName.Text = "SHIPWORKS3";
+                        radioRestoreIntoNewDatabase.Checked = true;
+                        MoveNext();
                     }
                     else
                     {
-                        bool wasDoingRestore = (bool) StartupController.StartupArgument.Element("Restore");
+                        radioChooseCreate2008.Checked = true;
+                        MoveNext();
+                    }
 
-                        if (wasDoingRestore)
+                    radioInstallSqlServer.Checked = true;
+                    instanceName.Text = (string) StartupController.StartupArgument.Element("InstanceName");
+
+                    // If we are here after rebooting from a successful install that needed a reboot, fast-forward past the install page
+                    var afterInstallSuccess = StartupController.StartupArgument.Element("AfterInstallSuccess");
+                    if (afterInstallSuccess != null && (bool) afterInstallSuccess)
+                    {
+                        log.InfoFormat("Replaying SQL Install Success after reboot.");
+
+                        installedInstances.Add(instanceName.Text);
+
+                        // Reload all the SQL Session from last time
+                        sqlSession.Configuration.ServerInstance = Environment.MachineName + "\\" + instanceName.Text;
+                        sqlSession.Configuration.Username = "sa";
+                        sqlSession.Configuration.Password = SqlInstanceUtility.ShipWorksSaPassword;
+                        sqlSession.Configuration.WindowsAuth = false;
+
+                        // Since we installed it, we can do this without asking.  We didn't do it right after install completed because
+                        // a reboot was required (which is why we are here now)
+                        using (SqlConnection con = sqlSession.OpenConnection())
                         {
-                            radioChooseRestore2008.Checked = true;
-                            MoveNext();
-
-                            radioRestoreIntoNewDatabase.Checked = true;
-                            MoveNext();
-                        }
-                        else
-                        {
-                            radioChooseCreate2008.Checked = true;
-                            MoveNext();
+                            SqlUtility.EnableClr(con);
                         }
 
-                        radioInstallSqlServer.Checked = true;
-                        instanceName.Text = (string) StartupController.StartupArgument.Element("InstanceName");
-
-                        // If we are here after rebooting from a successful install that needed a reboot, fast-forward past the install page
-                        var afterInstallSuccess = StartupController.StartupArgument.Element("AfterInstallSuccess");
-                        if (afterInstallSuccess != null && (bool) afterInstallSuccess)
-                        {
-                            log.InfoFormat("Replaying SQL Install Success after reboot.");
-
-                            installedInstances.Add(instanceName.Text);
-
-                            // Reload all the SQL Session from last time
-                            sqlSession.Configuration.ServerInstance = Environment.MachineName + "\\" + instanceName.Text;
-                            sqlSession.Configuration.Username = "sa";
-                            sqlSession.Configuration.Password = SqlInstanceUtility.ShipWorksSaPassword;
-                            sqlSession.Configuration.WindowsAuth = false;
-
-                            // Since we installed it, we can do this without asking.  We didn't do it right after install completed because
-                            // a reboot was required (which is why we are here now)
-                            using (SqlConnection con = sqlSession.OpenConnection())
-                            {
-                                SqlUtility.EnableClr(con);
-                            }
-
-                            MoveNext();
-                        }
+                        MoveNext();
                     }
                 }
 
@@ -1272,11 +1232,6 @@ namespace ShipWorks.Data.Administration
                         status = "Ready";
                     }
                 }
-                // ShipWorks 2
-                else if (database.Status == SqlDatabaseStatus.ShipWorks2x)
-                {
-                    status = "ShipWorks 2";
-                }
                 // Not a ShipWorks database
                 else if (database.Status == SqlDatabaseStatus.NonShipWorks)
                 {
@@ -1445,7 +1400,7 @@ namespace ShipWorks.Data.Administration
                 {
                     SqlDatabaseDetail detail = ShipWorksDatabaseUtility.GetDatabaseDetail(database, con);
 
-                    if (detail.Status == SqlDatabaseStatus.ShipWorks || detail.Status == SqlDatabaseStatus.ShipWorks2x)
+                    if (detail.Status == SqlDatabaseStatus.ShipWorks)
                     {
                         // As long as it's a ShipWorks database, we can upgrade it later if it's out of date
                         sqlSession.Configuration.DatabaseName = database;
@@ -1878,75 +1833,39 @@ namespace ShipWorks.Data.Administration
                     return;
                 }
 
-                // Below db version 1.2.0 (ShipWorks 2.4), there were no users.  So to be logged
-                // in at all is to be an admin.
-                if (installed < new Version(1, 2))
+                if (!UserUtility.HasAdminUsers())
                 {
-                    log.Debug("Pre 2.4 database, no need for admin logon.");
-
                     e.Skip = true;
                 }
-                // See if we need to login 2.x style
-                else if (installed < new Version(3, 0))
-                {
-                    if (!UserUtility.Has2xAdminUsers())
-                    {
-                        e.Skip = true;
-                    }
-                    else
-                    {
-                        string username;
-                        string password;
-
-                        // See if we can try to login automatically
-                        if (UserSession.GetSavedUserCredentials(out username, out password))
-                        {
-                            log.Debug("2.x credentials found, attempting admin login.");
-
-                            if (UserUtility.IsShipWorks2xAdmin(username, password))
-                            {
-                                e.Skip = true;
-                            }
-                        }
-                    }
-                }
-                // Login using 3.0 schema
                 else
                 {
-                    if (!UserUtility.HasAdminUsers())
+                    string username;
+                    string password;
+                    long userID = -1;
+
+                    // See if we can try to login automatically
+                    if (UserSession.GetSavedUserCredentials(out username, out password))
                     {
-                        e.Skip = true;
+                        userID = UserUtility.GetShipWorksUserID(username, password);
                     }
-                    else
+                    else if (UserSession.IsLoggedOn)
                     {
-                        string username;
-                        string password;
-                        long userID = -1;
+                        userID = UserSession.User.UserID;
+                    }
 
-                        // See if we can try to login automatically
-                        if (UserSession.GetSavedUserCredentials(out username, out password))
-                        {
-                            userID = UserUtility.GetShipWorksUserID(username, password);
-                        }
-                        else if (UserSession.IsLoggedOn)
-                        {
-                            userID = UserSession.User.UserID;
-                        }
+                    if (userID < 0)
+                    {
+                        return;
+                    }
 
-                        if (userID < 0)
-                        {
-                            return;
-                        }
+                    log.DebugFormat("3.x credentials found, UserID {0}", userID);
 
-                        log.DebugFormat("3.x credentials found, UserID {0}", userID);
+                    // Determine if the given user has rights to restore shipworks
+                    if (SecurityContext.HasPermission(userID, PermissionType.DatabaseRestore))
+                    {
+                        userForRestore = userID;
 
-                        // Determine if the given user has rights to restore shipworks
-                        if (SecurityContext.HasPermission(userID, PermissionType.DatabaseRestore))
-                        {
-                            userForRestore = userID;
-
-                            e.Skip = true;
-                        }
+                        e.Skip = true;
                     }
                 }
             }
@@ -1995,39 +1914,25 @@ namespace ShipWorks.Data.Administration
             {
                 Version installed = SqlSchemaUpdater.GetInstalledSchemaVersion();
 
-                // See if we need to login 2.x style
-                if (installed < new Version(3, 0))
+                long userID = UserUtility.GetShipWorksUserID(restoreUsername.Text, restorePassword.Text);
+
+                // Not a valid user
+                if (userID < 0)
                 {
-                    if (!UserUtility.IsShipWorks2xAdmin(restoreUsername.Text, restorePassword.Text))
-                    {
-                        MessageHelper.ShowMessage(this, "Incorrect username or password.");
-                        e.NextPage = CurrentPage;
-                        return;
-                    }
+                    MessageHelper.ShowMessage(this, "Incorrect username or password.");
+                    e.NextPage = CurrentPage;
+                    return;
                 }
-                // Login using 3.0 schema
-                else
+
+                // Determine if the given user has rights to upgrade shipworks
+                if (!SecurityContext.HasPermission(userID, PermissionType.DatabaseRestore))
                 {
-                    long userID = UserUtility.GetShipWorksUserID(restoreUsername.Text, restorePassword.Text);
-
-                    // Not a valid user
-                    if (userID < 0)
-                    {
-                        MessageHelper.ShowMessage(this, "Incorrect username or password.");
-                        e.NextPage = CurrentPage;
-                        return;
-                    }
-
-                    // Determine if the given user has rights to upgrade shipworks
-                    if (!SecurityContext.HasPermission(userID, PermissionType.DatabaseRestore))
-                    {
-                        MessageHelper.ShowMessage(this, "The user does not have permission to restore the database.");
-                        e.NextPage = CurrentPage;
-                        return;
-                    }
-
-                    userForRestore = userID;
+                    MessageHelper.ShowMessage(this, "The user does not have permission to restore the database.");
+                    e.NextPage = CurrentPage;
+                    return;
                 }
+
+                userForRestore = userID;
             }
         }
 

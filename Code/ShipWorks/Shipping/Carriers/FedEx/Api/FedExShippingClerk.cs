@@ -513,12 +513,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 log.Error(string.Format("Shipment ID {0} does not have a FedEx account selected. Select a valid FedEx account that is available in ShipWorks.", shipmentEntity.ShipmentID));
                 throw new FedExException("No FedEx account is selected for the shipment.");
             }
-
-            if (account.Is2xMigrationPending)
-            {
-                log.Error(string.Format("Attempt to use a FedEx account migrated from ShipWorks 2 that has not been configured for ShipWorks 3. The FedEx account (account number {0}) needs to be configured for ShipWorks3.", account.AccountNumber));
-                throw new FedExException("The FedEx account selected for the shipment was migrated from ShipWorks 2, but has not yet been configured for ShipWorks 3.");
-            }
         }
 
         /// <summary>

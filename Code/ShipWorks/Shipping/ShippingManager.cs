@@ -783,12 +783,6 @@ namespace ShipWorks.Shipping
 
             ShipmentType shipmentType = ShipmentTypeManager.GetType(shipment);
 
-            // Mark sure the type is setup - its possible it's not in the case of upgrading from V2
-            if (!IsShipmentTypeConfigured(shipmentType.ShipmentTypeCode))
-            {
-                throw new ShippingException($"The '{shipmentType.ShipmentTypeName}' shipping provider was migrated from ShipWorks 2, and has not yet been configured for ShipWorks 3.");
-            }
-
             TrackingResult result = shipmentType.TrackShipment(shipment);
 
             return result;
@@ -831,12 +825,6 @@ namespace ShipWorks.Shipping
 
                     // Get the ShipmentType instance
                     ShipmentType shipmentType = ShipmentTypeManager.GetType(shipment);
-
-                    // Mark sure the type is setup - its possible it's not in the case of upgrading from V2
-                    if (!IsShipmentTypeConfigured(shipmentType.ShipmentTypeCode))
-                    {
-                        throw new ShippingException(String.Format("The '{0}' shipping provider was migrated from ShipWorks 2, and has not yet been configured for ShipWorks 3.", shipmentType.ShipmentTypeName));
-                    }
 
                     // Ensure the carrier specific data has been loaded in case the shipment type needs it for voiding
                     EnsureShipmentLoaded(shipment);
@@ -1118,13 +1106,6 @@ namespace ShipWorks.Shipping
                     if (shipmentType == null)
                     {
                         return;
-                    }
-
-                    // Make sure the type is setup - its possible it's not in the case of upgrading from V2
-                    if (!IsShipmentTypeConfigured(shipmentType.ShipmentTypeCode))
-                    {
-                        throw new ShippingException(
-                            $"The '{shipmentType.ShipmentTypeName}' shipping provider was migrated from ShipWorks 2, and has not yet been configured for ShipWorks 3.");
                     }
 
                     // Validate that the license is valid

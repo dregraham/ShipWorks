@@ -4,22 +4,22 @@
 #define FORCE_NEED_IE		  FALSE
 
 #ifndef EditionType
-	#define EditionType 'Standard'
+    #define EditionType 'Standard'
 #endif
 
 #if (EditionType == 'Standard')
-	#define EditionName ''
-	#define EditionAppConfig 'ShipWorks.exe.config'
+    #define EditionName ''
+    #define EditionAppConfig 'ShipWorks.exe.config'
 #endif
 
 #if (EditionType == 'Endicia')
-	#define EditionName ' (Free for eBay)'
-	#define EditionAppConfig 'App.Endicia.config'
+    #define EditionName ' (Free for eBay)'
+    #define EditionAppConfig 'App.Endicia.config'
 #endif
 
 #if (EditionType == 'UPS')
-	#define EditionName ' (UPS Only)'
-	#define EditionAppConfig 'App.Ups.config'
+    #define EditionName ' (UPS Only)'
+    #define EditionAppConfig 'App.Ups.config'
 #endif
 
 [Setup]
@@ -221,33 +221,33 @@ var
   appPath: string;
   instanceID: string;
 begin
-	if (Length(newAppID) = 0)
-	then begin
-		newAppID := GetGuid('');
-	end;
+    if (Length(newAppID) = 0)
+    then begin
+        newAppID := GetGuid('');
+    end;
 
-	try
-	    appPath := ExpandConstant('{app}');
+    try
+        appPath := ExpandConstant('{app}');
 
-		if RegQueryStringValue(HKEY_LOCAL_MACHINE, 'Software\Interapptive\ShipWorks\Instances' , appPath, instanceID)
-		then begin
-			Result := instanceID;
-		end
-		else
-		begin
-			Result := newAppID;
-		end;
+        if RegQueryStringValue(HKEY_LOCAL_MACHINE, 'Software\Interapptive\ShipWorks\Instances' , appPath, instanceID)
+        then begin
+            Result := instanceID;
+        end
+        else
+        begin
+            Result := newAppID;
+        end;
 
     except
 
-		if RegQueryStringValue(HKEY_LOCAL_MACHINE, 'Software\Interapptive\ShipWorks', 'LastInstalledInstanceID', instanceID)
-		then begin
-			Result := instanceID;
-		end
-		else
-		begin
-			Result := newAppID;
-		end;
+        if RegQueryStringValue(HKEY_LOCAL_MACHINE, 'Software\Interapptive\ShipWorks', 'LastInstalledInstanceID', instanceID)
+        then begin
+            Result := instanceID;
+        end
+        else
+        begin
+            Result := newAppID;
+        end;
     end;
 end;
 
@@ -276,25 +276,25 @@ end;
 //----------------------------------------------------------------
 function ShipWorksVersionHasScheduler(): Boolean;
 var
-	TargetExe: string;
-	VersionMS: Cardinal;
-	VersionLS: Cardinal;
-	VersionMajor: Integer;
-	VersionMinor: Integer;
+    TargetExe: string;
+    VersionMS: Cardinal;
+    VersionLS: Cardinal;
+    VersionMajor: Integer;
+    VersionMinor: Integer;
 begin
 
-	TargetExe := ExpandConstant('{app}') + '\ShipWorks.exe';
-	if (FileExists(TargetExe))
+    TargetExe := ExpandConstant('{app}') + '\ShipWorks.exe';
+    if (FileExists(TargetExe))
     then begin
 
-	    if (GetVersionNumbers(TargetExe, VersionMS, VersionLS))
-	    then begin
-	        VersionMajor := (VersionMS shr 16) and $ffff;
-	        VersionMinor := VersionMS and $ffff;
+        if (GetVersionNumbers(TargetExe, VersionMS, VersionLS))
+        then begin
+            VersionMajor := (VersionMS shr 16) and $ffff;
+            VersionMinor := VersionMS and $ffff;
 
            // MsgBox(IntToStr(VersionMajor) + ' ' + IntToStr(VersionMinor),
-		   //				    mbConfirmation,
-		   //				    MB_OKCANCEL)
+           //				    mbConfirmation,
+           //				    MB_OKCANCEL)
 
             if (
                 (VersionMajor > 3) or
@@ -308,11 +308,11 @@ begin
                 Result := true;
             end;
         end;
-	end
-	else
-	begin
-		Result := false;
-	end;
+    end
+    else
+    begin
+        Result := false;
+    end;
 
 end;
 
@@ -322,14 +322,14 @@ end;
 function CommonAppDataExists(): Boolean;
 begin
 
-	if (DirExists(ExpandConstant('{commonappdata}') + '\Interapptive'))
+    if (DirExists(ExpandConstant('{commonappdata}') + '\Interapptive'))
     then begin
         Result := true;
     end
-	else
-	begin
-		Result := false;
-	end;
+    else
+    begin
+        Result := false;
+    end;
 
 end;
 
@@ -353,14 +353,14 @@ end;
 //----------------------------------------------------------------
 procedure CheckInstallConditions(CurPage: Integer);
 begin
-	// Has to be XPSP2+
-	CheckForWinVersion(CurPage);
+    // Has to be XPSP2+
+    CheckForWinVersion(CurPage);
 
-	// Has to be logged on as administrator
-	CheckForAdmin(CurPage);
+    // Has to be logged on as administrator
+    CheckForAdmin(CurPage);
 
-	// Needs to be IE 5.5
-	CheckForIEVersion(CurPage);
+    // Needs to be IE 5.5
+    CheckForIEVersion(CurPage);
 end;
 
 //----------------------------------------------------------------
@@ -368,59 +368,37 @@ end;
 //----------------------------------------------------------------
 function CheckUpgradeIssues() : Boolean;
 var
-	TargetExe: string;
-	VersionFound: string;
-	SchemaFound: Integer;
+    TargetExe: string;
+    VersionFound: string;
+    SchemaFound: Integer;
 begin
 
-	Result := True;
+    Result := True;
 
-	TargetExe := ExpandConstant('{app}') + '\ShipWorks.exe';
+    TargetExe := ExpandConstant('{app}') + '\ShipWorks.exe';
 
-	if (FileExists(TargetExe))
-	then begin
-		GetVersionNumbersString(TargetExe, VersionFound);
+    if (FileExists(TargetExe))
+    then begin
+        // See if a DB upgrade will be required.
+        if Exec(ExpandConstant(TargetExe), '/command:getdbschemaversion -type:database', '', SW_SHOW, ewWaitUntilTerminated, SchemaFound)
+        then begin
 
-		// Upgrading from 2x
-		if (Pos('2.', VersionFound) = 1)
-		then begin
+            if ((SchemaFound > 0) and ({#RequiredSchemaID} > SchemaFound))
+            then begin
 
-			 // During beta we found it best to not even allow them to overwrite sw2, or they end up regretting it.
-			 MsgBox(
-				'The installation folder you selected contains ShipWorks 2. We have found that it is best to leave ShipWorks 2 around while getting up to speed with ShipWorks 3.' + #13 +
-                   '' + #13 +
-                   'Please select a different installation directory.  The first time you run ShipWorks 3 it will walk you through upgrading your data from ShipWorks 2.',
-                 mbCriticalError,
-                 MB_OK);
-             Result := False;
-		end
+                if (MsgBox('The version of ShipWorks being installed will require your database to be updated.' + #13 +
+                            '' + #13 +
+                            'Continue with installation?',
+                    mbConfirmation,
+                    MB_OKCANCEL) = IDCANCEL)
+                then begin
+                    Result := False;
+                end;
 
-		// Existing 3x version
-		else if (Pos('3.', VersionFound) = 1)
-		then begin
+            end;
 
-			// See if a DB upgrade will be required.
-		    if Exec(ExpandConstant(TargetExe), '/command:getdbschemaversion -type:database', '', SW_SHOW, ewWaitUntilTerminated, SchemaFound)
-		    then begin
-
-				if ((SchemaFound > 0) and ({#RequiredSchemaID} > SchemaFound))
-				then begin
-
-					if (MsgBox('The version of ShipWorks being installed will require your database to be updated.' + #13 +
-							   '' + #13 +
-							   'Continue with installation?',
-						mbConfirmation,
-						MB_OKCANCEL) = IDCANCEL)
-					then begin
-						Result := False;
-					end;
-
-				end;
-
-			end;
-
-		end;
-	end;
+        end;
+    end;
 
 end;
 
@@ -430,28 +408,28 @@ end;
 //----------------------------------------------------------------
 function NextButtonClick(CurPage: Integer): Boolean;
 var
-	serviceWasStopped: Integer;
+    serviceWasStopped: Integer;
 begin
 
-	Result := True;
+    Result := True;
 
-	if (CurPage = wpWelcome)
-	then begin
-		CheckInstallConditions(CurPage);
-	end;
+    if (CurPage = wpWelcome)
+    then begin
+        CheckInstallConditions(CurPage);
+    end;
 
-	if (CurPage = wpSelectDir)
-	then begin
-		Result := CheckUpgradeIssues();
-	end;
+    if (CurPage = wpSelectDir)
+    then begin
+        Result := CheckUpgradeIssues();
+    end;
 
     if (CurPage = wpReady)
     then begin
 
-		if (ShipWorksVersionHasScheduler())
-		then begin
-			Exec(ExpandConstant(ExpandConstant('{app}') + '\ShipWorks.exe'), '/s=scheduler /stop', '', SW_SHOW, ewWaitUntilTerminated, serviceWasStopped)
-		end;
+        if (ShipWorksVersionHasScheduler())
+        then begin
+            Exec(ExpandConstant(ExpandConstant('{app}') + '\ShipWorks.exe'), '/s=scheduler /stop', '', SW_SHOW, ewWaitUntilTerminated, serviceWasStopped)
+        end;
 
         if IsTaskSelected('desktopicon')
         then begin
@@ -469,7 +447,7 @@ end;
 //----------------------------------------------------------------
 function NeedRestart(): Boolean;
 begin
-	Result := DotNetNeedsReboot;
+    Result := DotNetNeedsReboot;
 end;
 
 // In case we need to see if anything went wrong
