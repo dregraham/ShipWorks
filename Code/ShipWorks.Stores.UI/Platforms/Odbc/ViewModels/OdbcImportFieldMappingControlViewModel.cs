@@ -191,6 +191,9 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
                 {
                     foreach (OdbcFieldMapDisplay displayMap in itemMaps)
                     {
+                        // Disabling this condition because the simplification it suggests is invalid code. 
+                        // The two branches of the if statement do very different things (adding or removing attributes)
+#pragma warning disable S3240 // The simplest possible condition syntax should be used
                         if (delta > 0)
                         {
                             fieldMapFactory.GetAttributeRangeFieldMap(numberOfAttributesPerItem + 1, delta, displayMap.Index).Entries
@@ -204,6 +207,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
                                 .ToList()
                                 .ForEach(m => displayMap.Entries.Remove(m));
                         }
+#pragma warning restore S3240 // The simplest possible condition syntax should be used
 
                         Debug.Assert(FindEntriesBy(displayMap, OrderItemAttributeFields.Name).Count() == value,
                             "Error setting number of attributes");
