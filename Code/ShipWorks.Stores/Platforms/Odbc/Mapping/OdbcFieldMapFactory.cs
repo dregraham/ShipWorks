@@ -1,10 +1,8 @@
+using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.HelperClasses;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Autofac.Features.Indexed;
-using Interapptive.Shared.Utility;
-using ShipWorks.Stores.Platforms.Odbc.Upload.FieldValueResolvers;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 {
@@ -249,5 +247,18 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 
             return masterMap;
 		}
+
+        /// <summary>
+        /// Gets a map with the specified number of attributes with item numbers started at the specified start number.
+        /// </summary>
+        public IOdbcFieldMap GetAttributeRangeFieldMap(int startAttributeNumber, int numberOfAttributes, int itemIndex)
+        {
+            // Generate attribute numbers for new attributes to add and add them.
+            IEnumerable<ShipWorksOdbcMappableField> attributeFieldMapEntries = Enumerable.Range(startAttributeNumber, numberOfAttributes)
+                .Select(
+                    attributeNumber => new ShipWorksOdbcMappableField(OrderItemAttributeFields.Name, $"Attribute {attributeNumber}", OdbcFieldValueResolutionStrategy.Default));
+
+            return CreateEmptyMap(attributeFieldMapEntries, itemIndex);
+        }
 	}
 }
