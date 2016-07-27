@@ -1,6 +1,6 @@
 ﻿using Autofac.Extras.Moq;
 using Moq;
-using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
 using ShipWorks.Stores.Platforms.Odbc.Upload.FieldValueResolvers;
 using Xunit;
@@ -19,33 +19,49 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Upload.FieldValueResolvers
         [Fact]
         public void GetValue_ReturnsCurrentFieldValue()
         {
-            Mock<IEntity2> entity = mock.Mock<IEntity2>();
-            Mock<IEntityField2> entityField = mock.Mock<IEntityField2>();
-            entityField.Setup(ef => ef.CurrentValue).Returns("A Value");
-            entity.Setup(e => e.Fields["MatchingFieldName"]).Returns(entityField.Object);
+            string cityName = "the city name";
+            ShipmentEntity shipment = new ShipmentEntity();
+            shipment.ShipCity = cityName;
 
-            Mock<IShipWorksOdbcMappableField> field = mock.Mock<IShipWorksOdbcMappableField>();
-            field.Setup(f => f.Name).Returns("MatchingFieldName");
+            Mock<IShipWorksOdbcMappableField> field = mock.MockRepository.Create<IShipWorksOdbcMappableField>();
+            field.Setup(f => f.Name).Returns("ShipCity");
+            field.Setup(f => f.ContainingObjectName).Returns("ShipmentEntity");
 
             OdbcDefaultFieldValueResolver testObject = mock.Create<OdbcDefaultFieldValueResolver>();
 
-            Assert.Equal("A Value", testObject.GetValue(field.Object, entity.Object));
+            Assert.Equal(cityName, testObject.GetValue(field.Object, shipment));
         }
 
         [Fact]
         public void GetValue_ReturnsNull_WhenTheGivenEntityDoesNotContainTheGivenField()
         {
-            Mock<IEntity2> entity = mock.Mock<IEntity2>();
-            Mock<IEntityField2> entityField = mock.Mock<IEntityField2>();
-            entityField.Setup(ef => ef.CurrentValue).Returns("A Value");
-            entity.Setup(e => e.Fields["MatchingFieldName"]).Returns(entityField.Object);
+            string cityName = "the city name";
+            ShipmentEntity shipment = new ShipmentEntity();
+            shipment.ShipCity = cityName;
 
-            Mock<IShipWorksOdbcMappableField> field = mock.Mock<IShipWorksOdbcMappableField>();
-            field.Setup(f => f.Name).Returns("Not a MatchingFieldName");
+            Mock<IShipWorksOdbcMappableField> field = mock.MockRepository.Create<IShipWorksOdbcMappableField>();
+            field.Setup(f => f.Name).Returns("BadFieldName");
+            field.Setup(f => f.ContainingObjectName).Returns("ShipmentEntity");
 
             OdbcDefaultFieldValueResolver testObject = mock.Create<OdbcDefaultFieldValueResolver>();
 
-            Assert.Null(testObject.GetValue(field.Object, entity.Object));
+            Assert.Null(testObject.GetValue(field.Object, shipment));
+        }
+
+        [Fact]
+        public void GetValue_ReturnsNull_WhenTheGivenEntityDoesNotCorespondToTheContainingObjectName()
+        {
+            string cityName = "the city name";
+            ShipmentEntity shipment = new ShipmentEntity();
+            shipment.ShipCity = cityName;
+
+            Mock<IShipWorksOdbcMappableField> field = mock.MockRepository.Create<IShipWorksOdbcMappableField>();
+            field.Setup(f => f.Name).Returns("ShipCity");
+            field.Setup(f => f.ContainingObjectName).Returns("Order");
+
+            OdbcDefaultFieldValueResolver testObject = mock.Create<OdbcDefaultFieldValueResolver>();
+
+            Assert.Null(testObject.GetValue(field.Object, shipment));
         }
     }
 }
