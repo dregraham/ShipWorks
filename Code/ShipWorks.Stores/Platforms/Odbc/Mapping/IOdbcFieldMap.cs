@@ -1,8 +1,8 @@
-﻿using SD.LLBLGen.Pro.ORMSupportClasses;
+﻿using Autofac.Features.Indexed;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Stores.Platforms.Odbc.Upload.FieldValueResolvers;
 using System.Collections.Generic;
 using System.IO;
-using Autofac.Features.Indexed;
-using ShipWorks.Stores.Platforms.Odbc.Upload.FieldValueResolvers;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 {
@@ -49,6 +49,11 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <summary>
         /// Applies the given entity values to the external fields
         /// </summary>
+        /// <param name="entities">Entities we want to pull data from.</param>
+        /// <param name="fieldValueResolverFactory">
+        /// Each entry specifies a resolution strategy which cooresponds to a key in this parameter. This strategy
+        /// is then used to get the correct value from the shipworks entities.
+        /// </param>
         void ApplyValues(IEnumerable<IEntity2> entities, IIndex<OdbcFieldValueResolutionStrategy, IOdbcFieldValueResolver> fieldValueResolverFactory);
 
         /// <summary>

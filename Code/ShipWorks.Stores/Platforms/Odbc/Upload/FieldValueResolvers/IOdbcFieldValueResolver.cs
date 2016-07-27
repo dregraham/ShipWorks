@@ -9,7 +9,8 @@ namespace ShipWorks.Stores.Platforms.Odbc.Upload.FieldValueResolvers
     public interface IOdbcFieldValueResolver
     {
         /// <summary>
-        /// Get a value for the specific field from the given entity
+        /// Get a value for the specific field from the given entity. 
+        /// If resolver cannot find the correct value, null is returned.
         /// </summary>
         object GetValue(IShipWorksOdbcMappableField field, IEntity2 entity);
     }
