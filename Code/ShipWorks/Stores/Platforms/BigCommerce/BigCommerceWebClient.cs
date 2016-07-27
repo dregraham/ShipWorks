@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using Interapptive.Shared;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Net;
+using log4net;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using RestSharp;
@@ -12,7 +12,6 @@ using ShipWorks.Common.Threading;
 using ShipWorks.Stores.Communication.Throttling;
 using ShipWorks.Stores.Platforms.BigCommerce.DTO;
 using ShipWorks.Stores.Platforms.BigCommerce.Enums;
-using log4net;
 
 namespace ShipWorks.Stores.Platforms.BigCommerce
 {
@@ -41,7 +40,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
             this(apiUserName, apiUrl, apiToken, null)
         {
         }
-        
+
         /// <summary>
         /// Create an instance of the web client for connecting to the specified store
         /// </summary>
@@ -71,9 +70,9 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
 
             bigCommerceOrderStatuses = new List<BigCommerceOrderStatus>();
 
-            successHttpStatusCodes = new List<HttpStatusCode> { HttpStatusCode.OK, 
-                                                                HttpStatusCode.Created, 
-                                                                HttpStatusCode.Accepted, 
+            successHttpStatusCodes = new List<HttpStatusCode> { HttpStatusCode.OK,
+                                                                HttpStatusCode.Created,
+                                                                HttpStatusCode.Accepted,
                                                                 HttpStatusCode.NoContent};
         }
 
@@ -107,7 +106,8 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         /// <param name="shippingMethod">Carrier and service for this shipment</param>
         /// <param name="orderItems">The list of BigCommerceItem's in this shipment</param>
         /// <exception cref="BigCommerceException" />
-        public void UploadOrderShipmentDetails(long orderNumber, long orderAddressID, string trackingNumber, string shippingMethod, List<BigCommerceItem> orderItems)
+        public void UploadOrderShipmentDetails(long orderNumber, long orderAddressID, string trackingNumber,
+            Tuple<string, string> shippingMethod, List<BigCommerceItem> orderItems)
         {
             string uploadShipmentResource = BigCommerceWebClientEndpoints.GetUploadShipmentResource(orderNumber);
 
@@ -115,13 +115,14 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
             restRequest.RequestFormat = DataFormat.Json;
 
             BigCommerceAddShipment addShipment = new BigCommerceAddShipment
-                {
-                    order_address_id = (int)orderAddressID,
-                    tracking_number = trackingNumber,
-                    shipping_method = shippingMethod,
-                    comments = string.Empty,
-                    items = orderItems
-                };
+            {
+                order_address_id = (int) orderAddressID,
+                tracking_number = trackingNumber,
+                shipping_provider = shippingMethod.Item1,
+                shipping_method = shippingMethod.Item2,
+                comments = string.Empty,
+                items = orderItems
+            };
 
             restRequest.AddBody(addShipment);
 
@@ -162,14 +163,14 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
             string updateOrderStatusResource = BigCommerceWebClientEndpoints.GetOrderResource(orderNumber);
 
             RestRequest restRequest = new RestRequest(updateOrderStatusResource, Method.PUT)
-                {
-                    RequestFormat = DataFormat.Json
-                };
+            {
+                RequestFormat = DataFormat.Json
+            };
 
             BigCommerceUpdateOrderStatusRequest updateOrderStatusRequest = new BigCommerceUpdateOrderStatusRequest
-                {
-                    status_id = statusCode
-                };
+            {
+                status_id = statusCode
+            };
 
             restRequest.AddBody(updateOrderStatusRequest);
 
@@ -217,7 +218,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
             // Return the sum of modified and created orders
             return modifiedCount + createdCount;
         }
-        
+
         /// <summary>
         /// Make a call to BigCommerce requesting a count of orders matching criteria.
         /// </summary>
@@ -326,7 +327,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         /// <exception cref="BigCommerceException" />
         private void CheckRestResponseForError(IRestResponse restResponse)
         {
-            if ((int)restResponse.StatusCode == BigCommerceConstants.MaxRequestsPerHourLimitReachedStatusCode)
+            if ((int) restResponse.StatusCode == BigCommerceConstants.MaxRequestsPerHourLimitReachedStatusCode)
             {
                 // Check to see if we are over the API requests per hour limit
                 log.Error("BigCommerce max API requests per hour reached.");
@@ -339,7 +340,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
                 log.Error("BigCommerce returned a 500 error, so we will wait and try again soon.");
                 throw new BigCommerceWebClientRequestThrottledException();
             }
-            
+
             if (restResponse.StatusCode == HttpStatusCode.NoContent || restResponse.StatusCode == HttpStatusCode.NotModified)
             {
                 // If NoContent or NotModified is returned, the search found nothing, so just return a blank Content
@@ -349,9 +350,9 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
             {
                 // Check to see if we we denied access due to authentication.
                 log.Error("BigCommerce API credentials are invalid.");
-                throw new BigCommerceException("The BigCommerce API credentials are invalid", (int)restResponse.StatusCode);
+                throw new BigCommerceException("The BigCommerce API credentials are invalid", (int) restResponse.StatusCode);
             }
-            else if (!successHttpStatusCodes.Contains(restResponse.StatusCode) || 
+            else if (!successHttpStatusCodes.Contains(restResponse.StatusCode) ||
                      !(restResponse.ResponseStatus == ResponseStatus.Completed || restResponse.ResponseStatus == ResponseStatus.None))
             {
                 // There was an error, find the error message and throw
@@ -365,10 +366,10 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
                 }
                 else
                 {
-                    errorMessage = string.Format("ShipWorks was unable to communicate with BigCommerce due to the following error: {0}{0}{1}", Environment.NewLine, restResponse.ErrorMessage);    
+                    errorMessage = string.Format("ShipWorks was unable to communicate with BigCommerce due to the following error: {0}{0}{1}", Environment.NewLine, restResponse.ErrorMessage);
                 }
 
-                throw new BigCommerceException(errorMessage, (int)restResponse.StatusCode);
+                throw new BigCommerceException(errorMessage, (int) restResponse.StatusCode);
             }
             else if (restResponse.Content == "null")
             {
@@ -442,7 +443,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
 
             // Create a request for getting orders
             RestRequest request = new RestRequest(BigCommerceWebClientEndpoints.GetOrdersResource());
-            
+
             request.AddParameter("limit", orderSearchCriteria.PageSize);
             request.AddParameter("page", orderSearchCriteria.Page);
 
@@ -481,7 +482,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
 
                 // Since BigCommerce creates an order when something is added to the shopping cart (with status of InComplete), while downloading we can get into
                 // the situation where all orders in a page are only InComplete.  When we filter out the InComplete orders, there aren't any left, so we think
-                // there are no orders left to download.  
+                // there are no orders left to download.
                 // So here we check to see if the page is the full page size and if there are no non-InComplete orders.  If so, throw the
                 // BigCommerceMaxIncompleteOrdersReachedException so that we skip to the next page.
                 if (ordersRestResponse.Count == BigCommerceConstants.OrdersPageSize && !nonIncompleteOrders.Any())
@@ -562,7 +563,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
             if (shipmentAddressValidation != null && !shipmentAddressValidation.Any())
             {
                 // There were not matching shipping addresses to order product addresses, so get each address per distinct order product
-                // address id.  We need to do this individually as the order could have multiple ship to addresses and we wouldn't know which 
+                // address id.  We need to do this individually as the order could have multiple ship to addresses and we wouldn't know which
                 // shipping address goes to which orde product address id.
 
                 // Clear out the current shipping addresses
@@ -702,7 +703,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
                 }
                 catch (Exception ex)
                 {
-                    throw WebHelper.TranslateWebException(ex, typeof (BigCommerceException));
+                    throw WebHelper.TranslateWebException(ex, typeof(BigCommerceException));
                 }
             }
 
@@ -750,11 +751,11 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
 
                     // Create the dto product image
                     productImage = new BigCommerceProductImage
-                        {
-                            ProductID = product.product_id,
-                            Image = product.Image,
-                            Thumbnail = product.ThumbnailImage
-                        };
+                    {
+                        ProductID = product.product_id,
+                        Image = product.Image,
+                        Thumbnail = product.ThumbnailImage
+                    };
 
                     // And add it to the cache
                     productImageCache[product.product_id] = productImage;
@@ -795,7 +796,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
             catch (BigCommerceException bigCommerceException)
             {
                 // Sometimes we get a resource not found when asking for products.  Since this is just images, we can continue on
-                if (bigCommerceException.HttpStatusCode != (int)HttpStatusCode.NotFound)
+                if (bigCommerceException.HttpStatusCode != (int) HttpStatusCode.NotFound)
                 {
                     throw new BigCommerceException(string.Format("ShipWorks was unable to download products for order ID {0}.", orderId), bigCommerceException);
                 }
@@ -817,14 +818,14 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
             // See if we can successfully call GetOrderCount, if we throw, we can't connect or login
             try
             {
-                BigCommerceWebClientOrderSearchCriteria orderSearchCriteria = new BigCommerceWebClientOrderSearchCriteria(BigCommerceWebClientOrderDateSearchType.CreatedDate, 
-                    DateTime.UtcNow.AddMinutes(-1), DateTime.UtcNow, 
+                BigCommerceWebClientOrderSearchCriteria orderSearchCriteria = new BigCommerceWebClientOrderSearchCriteria(BigCommerceWebClientOrderDateSearchType.CreatedDate,
+                    DateTime.UtcNow.AddMinutes(-1), DateTime.UtcNow,
                     DateTime.UtcNow.AddMinutes(-1), DateTime.UtcNow)
-                    { 
-                        PageSize = BigCommerceConstants.OrdersPageSize, 
-                        Page = 1
-                    };
-                
+                {
+                    PageSize = BigCommerceConstants.OrdersPageSize,
+                    Page = 1
+                };
+
                 GetOrderCount(orderSearchCriteria);
             }
             catch (BigCommerceException ex)
