@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Windows.Forms;
+﻿using Autofac;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Management;
-using ShipWorks.Stores.Platforms.Odbc;
-using ShipWorks.Stores.Services;
+using ShipWorks.Stores.UI.Platforms.Odbc.WizardPages;
+using System;
+using System.Windows.Forms;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc
 {
@@ -15,8 +14,6 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
     public partial class OdbcConnectionSettingsControl : AccountSettingsControlBase
     {
         private readonly IStoreManager storeManager;
-        private readonly IEnumerable<IOdbcWizardPage> importPages;
-        private readonly IEnumerable<IOdbcWizardPage> uploadPages;
         private OdbcStoreEntity odbcStore;
 
         /// <summary>
@@ -24,17 +21,10 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// </summary>
         /// <param name="pages">The pages.</param>
         /// <param name="storeManager"></param>
-        public OdbcConnectionSettingsControl(IEnumerable<IOdbcWizardPage> pages, IStoreManager storeManager)
+        public OdbcConnectionSettingsControl(IStoreManager storeManager)
         {
             this.storeManager = storeManager;
             InitializeComponent();
-
-            IEnumerable<IOdbcWizardPage> wizardPages = pages as IOdbcWizardPage[] ?? pages.ToArray();
-
-            // todo: change the 1 to 3 when doing story for other pages.
-            importPages = wizardPages.Where(p => p.Position < 1);
-            uploadPages = wizardPages.Where(p => p.Position >= 3);
-
         }
 
         /// <summary>
@@ -44,11 +34,19 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void OnClickEditImportSettings(object sender, EventArgs e)
         {
-            using (OdbcImportSettingsWizard wizard = new OdbcImportSettingsWizard(odbcStore, importPages))
+            using (ILifetimeScope scope = IoC.BeginLifetimeScope())
             {
-                if (wizard.ShowDialog(this) == DialogResult.OK)
+                OdbcImportDataSourcePage[] importPages =
                 {
-                    storeManager.SaveStore(odbcStore);
+                    scope.Resolve<OdbcImportDataSourcePage>()
+                };
+
+                using (OdbcImportSettingsWizard wizard = new OdbcImportSettingsWizard(odbcStore, importPages))
+                {
+                    if (wizard.ShowDialog(this) == DialogResult.OK)
+                    {
+                        storeManager.SaveStore(odbcStore);
+                    }
                 }
             }
         }

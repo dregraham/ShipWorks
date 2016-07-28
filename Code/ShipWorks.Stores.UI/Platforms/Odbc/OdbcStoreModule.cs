@@ -4,6 +4,7 @@ using Interapptive.Shared.Security;
 using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.ApplicationCore.Security;
+using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Stores.Platforms.Odbc.CoreExtensions.Actions;
 using ShipWorks.Stores.Platforms.Odbc.DataAccess;
@@ -17,7 +18,6 @@ using ShipWorks.Stores.Platforms.Odbc.Upload.FieldValueResolvers;
 using ShipWorks.Stores.UI.Platforms.Odbc.ViewModels;
 using ShipWorks.Stores.UI.Platforms.Odbc.WizardPages;
 using System.Reflection;
-using ShipWorks.Stores.Management;
 using Module = Autofac.Module;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc
@@ -149,7 +149,8 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         private static void RegisterWizardPages(ContainerBuilder builder)
         {
             builder.RegisterType<OdbcImportDataSourcePage>()
-                .As<IOdbcWizardPage>();
+                .As<IOdbcWizardPage>()
+                .AsSelf();
 
             builder.RegisterType<OdbcImportMapSettingsPage>()
                 .As<IOdbcWizardPage>();
