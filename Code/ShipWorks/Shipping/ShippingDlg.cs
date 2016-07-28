@@ -84,7 +84,7 @@ namespace ShipWorks.Shipping
 
         private readonly ShipSenseSynchronizer shipSenseSynchronizer;
 
-        private Dictionary<ShipmentTypeCode, ServiceControlBase> serviceControlCache = new Dictionary<ShipmentTypeCode, ServiceControlBase>();
+        private Dictionary<int, ServiceControlBase> serviceControlCache = new Dictionary<int, ServiceControlBase>();
         private CustomsControlCache customsControlCache = new CustomsControlCache();
 
         private readonly Timer shipSenseChangedTimer = new Timer();
@@ -498,53 +498,53 @@ namespace ShipWorks.Shipping
                 completionSource.SetResult(null);
             };
 
-            // Code to execute for each shipment
-            executor.ExecuteAsync((shipment, state, issueAdder) =>
+            using (SqlAdapter adapter = new SqlAdapter())
             {
-                // If we already know its deleted, don't bother
-                if (shipment.DeletedFromDatabase)
+                // Code to execute for each shipment
+                executor.ExecuteAsync((shipment, state, issueAdder) =>
                 {
-                    deleted.Add(shipment);
-                }
-                else
-                {
-                    try
+                    // If we already know its deleted, don't bother
+                    if (shipment.DeletedFromDatabase)
                     {
-                        shippingManager.EnsureShipmentLoaded(shipment);
-
-                        // Even without the type being setup, we can still load the customs stuff.  Normally EnsureShipmentLoaded would do that for us.
-                        using (SqlAdapter adapter = new SqlAdapter())
+                        deleted.Add(shipment);
+                    }
+                    else
+                    {
+                        try
                         {
-                            CustomsManager.LoadCustomsItems(shipment, false, adapter);
-                        }
+                            shippingManager.EnsureShipmentLoaded(shipment);
 
-                        loaded.Add(shipment);
-                    }
-                    catch (ObjectDeletedException)
-                    {
-                        deleted.Add(shipment);
-                    }
-                    catch (SqlForeignKeyException)
-                    {
-                        deleted.Add(shipment);
-                    }
-                    catch (InvalidOperationException ex)
-                    {
-                        // If a processed shipment has been deleted by another SW instance and the user tries to load it here,
-                        // the New Shipment creation procedure can be initiated.  This can result in
-                        // an InvalidOperationException.  It can only mean the base shipment entity has been deleted.
-                        if (ex.Data.Contains("UpdateDynamicData"))
+                            // Even without the type being setup, we can still load the customs stuff.  Normally EnsureShipmentLoaded would do that for us.
+                            CustomsManager.LoadCustomsItems(shipment, false, adapter);
+
+                            loaded.Add(shipment);
+                        }
+                        catch (ObjectDeletedException)
                         {
                             deleted.Add(shipment);
                         }
-                        else
+                        catch (SqlForeignKeyException)
                         {
-                            // we don't want any other causes of InvalidOperationException to get eaten
-                            throw;
+                            deleted.Add(shipment);
+                        }
+                        catch (InvalidOperationException ex)
+                        {
+                            // If a processed shipment has been deleted by another SW instance and the user tries to load it here,
+                            // the New Shipment creation procedure can be initiated.  This can result in
+                            // an InvalidOperationException.  It can only mean the base shipment entity has been deleted.
+                            if (ex.Data.Contains("UpdateDynamicData"))
+                            {
+                                deleted.Add(shipment);
+                            }
+                            else
+                            {
+                                // we don't want any other causes of InvalidOperationException to get eaten
+                                throw;
+                            }
                         }
                     }
-                }
-            }, shipmentsToLoad, userState); // Execute the code for each shipment
+                }, shipmentsToLoad, userState); // Execute the code for each shipment
+            }
 
             return completionSource.Task;
         }
@@ -935,6 +935,11 @@ namespace ShipWorks.Shipping
                 reduceFlash.Dock = DockStyle.Fill;
                 serviceControlArea.Controls.Add(reduceFlash);
             }
+            else
+            {
+                oldServiceControl.UnloadShipments();
+                UnhookEvents(oldServiceControl);
+            }
 
             // If there was a setup control, remove it
             ClearPreviousSetupControl();
@@ -977,6 +982,30 @@ namespace ShipWorks.Shipping
         }
 
         /// <summary>
+        /// Add the new service control to the dialog, if it's not null
+        /// </summary>
+        private void UnhookEvents(ServiceControlBase oldServiceControl)
+        {
+            // If there is a new service control, add it to our controls under either the old one, or the blank panel we created.
+            if (oldServiceControl == null)
+            {
+                return;
+            }
+
+            oldServiceControl.RecipientDestinationChanged -= OnOriginOrDestinationChanged;
+            oldServiceControl.OriginDestinationChanged -= OnOriginOrDestinationChanged;
+            oldServiceControl.ShipmentServiceChanged -= OnShipmentServiceChanged;
+            oldServiceControl.RateCriteriaChanged -= OnRateCriteriaChanged;
+            oldServiceControl.ShipSenseFieldChanged -= OnShipSenseFieldChanged;
+            oldServiceControl.ShipmentsAdded -= OnServiceControlShipmentsAdded;
+            oldServiceControl.ShipmentTypeChanged -= OnShipmentTypeChanged;
+            oldServiceControl.ClearRatesAction = ClearRates;
+            rateControl.RateSelected -= oldServiceControl.OnRateSelected;
+            rateControl.ActionLinkClicked -= oldServiceControl.OnConfigureRateClick;
+            rateControl.ReloadRatesRequired -= OnRateReloadRequired;
+        }
+
+        /// <summary>
         /// Get a service control for the list of shipments and the given shipment type
         /// </summary>
         private ServiceControlBase GetServiceControlForShipments(IEnumerable<ShipmentEntity> shipments, ShipmentType shipmentType)
@@ -986,28 +1015,19 @@ namespace ShipWorks.Shipping
                 return null;
             }
 
-            ServiceControlBase newServiceControl;
-            if (shipmentType == null)
+            int key = shipmentType != null ? (int) shipmentType.ShipmentTypeCode : -1;
+
+            if (serviceControlCache.ContainsKey(key))
             {
-                newServiceControl = new MultiSelectServiceControl(rateControl);
-                newServiceControl.Initialize(lifetimeScope);
-            }
-            else
-            {
-                if (serviceControlCache.ContainsKey(shipmentType.ShipmentTypeCode))
-                {
-                    newServiceControl = serviceControlCache[shipmentType.ShipmentTypeCode];
-                }
-                else
-                {
-                    newServiceControl = shipmentType.CreateServiceControl(rateControl, lifetimeScope);
-                    newServiceControl.Initialize(lifetimeScope);
-                    newServiceControl.Width = serviceControlArea.Width;
-                    serviceControlCache.Add(shipmentType.ShipmentTypeCode, newServiceControl);
-                }
+                return serviceControlCache[key];
             }
 
-            return newServiceControl;
+            ServiceControlBase serviceControl = shipmentType?.CreateServiceControl(rateControl, lifetimeScope) ??
+                new MultiSelectServiceControl(rateControl);
+            serviceControl.Initialize(lifetimeScope);
+            serviceControl.Width = serviceControlArea.Width;
+            serviceControlCache.Add(key, serviceControl);
+            return serviceControl;
         }
 
         /// <summary>
@@ -1247,7 +1267,6 @@ namespace ShipWorks.Shipping
             }
 
             Debug.Assert(shipment.Order != null, "Still need to call PopulateOrderDetails.  Order is null.");
-            Debug.Assert(shipment.Order.OrderItems.Count != 0, "Still need to call PopulateOrderDetails. OrderItems is empty.");
 
             shipSenseSynchronizer.Add(loadedShipmentEntities);
             shipSenseSynchronizer.SynchronizeWith(shipment);
@@ -1292,6 +1311,7 @@ namespace ShipWorks.Shipping
                     if (CustomsControl != null)
                     {
                         CustomsControl.ShipSenseFieldChanged -= OnShipSenseFieldChanged;
+                        CustomsControl.UnloadShipments();
                     }
 
                     newCustomsControl.ShipSenseFieldChanged += OnShipSenseFieldChanged;
@@ -2208,6 +2228,8 @@ namespace ShipWorks.Shipping
             }
 
             serviceControlCache.Clear();
+            customsControlCache.Dispose();
+            customsControlCache = new CustomsControlCache();
         }
     }
 }

@@ -628,6 +628,14 @@ namespace ShipWorks.Shipping.Editing
 
         }
 
+        /// <summary>
+        /// Unload shipments
+        /// </summary>
+        internal void UnloadShipments()
+        {
+            loadedShipments.Clear();
+        }
+
         /// <summary> 
         /// Clean up any resources being used.
         /// </summary>
@@ -646,6 +654,8 @@ namespace ShipWorks.Shipping.Editing
                 ShipmentsAdded = null;
                 ShipmentTypeChanged = null;
                 ClearRatesAction = null;
+
+                UnloadShipments();
             }
 
             base.Dispose(disposing);
