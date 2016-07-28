@@ -1,5 +1,7 @@
+using Autofac.Features.Indexed;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Stores.Platforms.Odbc.Upload.FieldValueResolvers;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -24,7 +26,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 		    MethodConditions.EnsureArgumentIsNotNull(ioFactory);
 
 		    this.ioFactory = ioFactory;
-		    entries = new List<IOdbcFieldMapEntry>();
+            entries = new List<IOdbcFieldMapEntry>();
 		}
 
         /// <summary>
@@ -103,7 +105,12 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <summary>
         /// Apply the given entity values to the entries ShipWorks fields
         /// </summary>
-        public void ApplyValues(IEnumerable<IEntity2> entities)
+        /// <param name="entities">Entities we want to pull data from.</param>
+        /// <param name="fieldValueResolverFactory">
+        /// Each entry specifies a resolution strategy which cooresponds to a key in this parameter. This strategy
+        /// is then used to get the correct value from the shipworks entities.
+        /// </param>
+        public void ApplyValues(IEnumerable<IEntity2> entities, IIndex<OdbcFieldValueResolutionStrategy, IOdbcFieldValueResolver> fieldValueResolverFactory)
         {
             // Reset all the values first
             ResetValues();
@@ -113,7 +120,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
                 foreach (IOdbcFieldMapEntry entry in Entries)
                 {
                     // Load data from entity
-                    entry.LoadShipWorksField(entity);
+                    entry.LoadShipWorksField(entity, fieldValueResolverFactory[entry.ShipWorksField.ResolutionStrategy]);
                 }
             }
         }
@@ -143,6 +150,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// </summary>
         private void Load(IOdbcFieldMapReader reader)
         {
+            entries.Clear();
             OdbcFieldMapEntry entry = reader.ReadEntry();
             while (entry != null)
             {

@@ -11,7 +11,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Autofac.Features.Indexed;
 using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
+using ShipWorks.Stores.Platforms.Odbc.Upload.FieldValueResolvers;
 using Xunit;
 
 namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
@@ -59,8 +61,14 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
         [Fact]
         public void Load_SetsEntries_WhenPassedStream()
         {
+            Mock<IOdbcFieldValueResolver> resolver = mock.Mock<IOdbcFieldValueResolver>();
+
+            Mock<IIndex<OdbcFieldValueResolutionStrategy, IOdbcFieldValueResolver>> repo = mock.MockRepository.Create<IIndex<OdbcFieldValueResolutionStrategy, IOdbcFieldValueResolver>>();
+            repo.Setup(x => x[It.IsAny<OdbcFieldValueResolutionStrategy>()]).Returns(resolver.Object);
+            mock.Provide(repo.Object);
+
             Stream stream = GetStreamWithFieldMap();
-            OdbcFieldMap map = new OdbcFieldMap(GetIoFactory());
+            OdbcFieldMap map = mock.Create<OdbcFieldMap>();
 
             map.Load(stream);
 
@@ -76,8 +84,14 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
         [Fact]
         public void Load_SetsEntries_WhenPassedStreamAndThereAreMultipleEntries()
         {
+            Mock<IOdbcFieldValueResolver> resolver = mock.Mock<IOdbcFieldValueResolver>();
+
+            Mock<IIndex<OdbcFieldValueResolutionStrategy, IOdbcFieldValueResolver>> repo = mock.MockRepository.Create<IIndex<OdbcFieldValueResolutionStrategy, IOdbcFieldValueResolver>>();
+            repo.Setup(x => x[It.IsAny<OdbcFieldValueResolutionStrategy>()]).Returns(resolver.Object);
+            mock.Provide(repo.Object);
+
             Stream stream = GetStreamWithFieldMap();
-            OdbcFieldMap map = new OdbcFieldMap(GetIoFactory());
+            OdbcFieldMap map = mock.Create<OdbcFieldMap>();
 
             map.Load(stream);
 
@@ -100,8 +114,14 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
         [Fact]
         public void Load_SetsEntries_WhenPassedSerializedMap()
         {
+            Mock<IOdbcFieldValueResolver> resolver = mock.Mock<IOdbcFieldValueResolver>();
+
+            Mock<IIndex<OdbcFieldValueResolutionStrategy, IOdbcFieldValueResolver>> repo = mock.MockRepository.Create<IIndex<OdbcFieldValueResolutionStrategy, IOdbcFieldValueResolver>>();
+            repo.Setup(x => x[It.IsAny<OdbcFieldValueResolutionStrategy>()]).Returns(resolver.Object);
+            mock.Provide(repo.Object);
+
             string stream = GetStreamWithFieldMap().ConvertToString();
-            OdbcFieldMap map = new OdbcFieldMap(GetIoFactory());
+            OdbcFieldMap map = mock.Create<OdbcFieldMap>();
 
             map.Load(stream);
 
@@ -117,8 +137,14 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
         [Fact]
         public void Load_SetsEntries_WhenPassedSerializedMapAndThereAreMultipleEntries()
         {
+            Mock<IOdbcFieldValueResolver> resolver = mock.Mock<IOdbcFieldValueResolver>();
+
+            Mock<IIndex<OdbcFieldValueResolutionStrategy, IOdbcFieldValueResolver>> repo = mock.MockRepository.Create<IIndex<OdbcFieldValueResolutionStrategy, IOdbcFieldValueResolver>>();
+            repo.Setup(x => x[It.IsAny<OdbcFieldValueResolutionStrategy>()]).Returns(resolver.Object);
+            mock.Provide(repo.Object);
+
             string stream = GetStreamWithFieldMap().ConvertToString();
-            OdbcFieldMap map = new OdbcFieldMap(GetIoFactory());
+            OdbcFieldMap map = mock.Create<OdbcFieldMap>();
 
             map.Load(stream);
 
@@ -321,6 +347,12 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
         {
             using (var mock = AutoMock.GetLoose())
             {
+                Mock<IOdbcFieldValueResolver> resolver = mock.Mock<IOdbcFieldValueResolver>();
+
+                Mock<IIndex<OdbcFieldValueResolutionStrategy, IOdbcFieldValueResolver>> repo = mock.MockRepository.Create<IIndex<OdbcFieldValueResolutionStrategy, IOdbcFieldValueResolver>>();
+                repo.Setup(x => x[It.IsAny<OdbcFieldValueResolutionStrategy>()]).Returns(resolver.Object);
+                mock.Provide(repo.Object);
+
                 OdbcFieldMap testObject = mock.Create<OdbcFieldMap>();
 
                 var shipWorksOdbcMappableField = mock.Mock<IShipWorksOdbcMappableField>();
@@ -333,9 +365,9 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
 
                 IEnumerable<IEntity2> entities = new List<IEntity2>() {new ShipmentEntity()};
 
-                testObject.ApplyValues(entities);
+                testObject.ApplyValues(entities, repo.Object);
 
-                mapEntry.Verify(m => m.LoadShipWorksField(It.Is<IEntity2>(r => r.Equals(entities.FirstOrDefault()))), Times.Once);
+                mapEntry.Verify(m => m.LoadShipWorksField(It.Is<IEntity2>(r => r.Equals(entities.FirstOrDefault())), It.IsAny<IOdbcFieldValueResolver>()), Times.Once);
             }
         }
 
@@ -346,6 +378,12 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
             {
                 OdbcFieldMap testObject = mock.Create<OdbcFieldMap>();
 
+                Mock<IOdbcFieldValueResolver> resolver = mock.Mock<IOdbcFieldValueResolver>();
+
+                Mock<IIndex<OdbcFieldValueResolutionStrategy, IOdbcFieldValueResolver>> repo = mock.MockRepository.Create<IIndex<OdbcFieldValueResolutionStrategy, IOdbcFieldValueResolver>>();
+                repo.Setup(x => x[It.IsAny<OdbcFieldValueResolutionStrategy>()]).Returns(resolver.Object);
+                mock.Provide(repo.Object);
+
                 var shipWorksOdbcMappableField = mock.Mock<IShipWorksOdbcMappableField>();
                 var externalOdbcMappableField = mock.Mock<IExternalOdbcMappableField>();
                 var mapEntry = mock.Mock<IOdbcFieldMapEntry>();
@@ -355,9 +393,9 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
 
                 IEnumerable<IEntity2> entities = null;
 
-                testObject.ApplyValues(entities);
+                testObject.ApplyValues(entities, repo.Object);
 
-                mapEntry.Verify(m => m.LoadShipWorksField(null), Times.Never);
+                mapEntry.Verify(m => m.LoadShipWorksField(null, It.IsAny<IOdbcFieldValueResolver>()), Times.Never);
             }
         }
 
@@ -496,7 +534,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
 
         private ShipWorksOdbcMappableField GetShipWorksField(EntityField2 field, string displayName)
         {
-            return new ShipWorksOdbcMappableField(field, displayName);
+            return new ShipWorksOdbcMappableField(field, displayName, OdbcFieldValueResolutionStrategy.Default);
         }
 
         private Mock<IShipWorksOdbcMappableField> GetMockedShipWorksField(AutoMock mockToUse, EntityField2 field, object shipWorksValue)

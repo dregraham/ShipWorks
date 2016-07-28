@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Stores.Platforms.Odbc.Upload.FieldValueResolvers;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 {
@@ -27,6 +28,11 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         string Name { get; }
 
         /// <summary>
+        /// The resolution strategy for the field
+        /// </summary>
+        OdbcFieldValueResolutionStrategy ResolutionStrategy { get; }
+
+        /// <summary>
         /// Set the Value to the given value
         /// </summary>
         void LoadValue(object value);
@@ -34,7 +40,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <summary>
         /// Set the Value to the given entities matching field value
         /// </summary>
-        void LoadValue(IEntity2 value);
+        void LoadValue(IEntity2 value, IOdbcFieldValueResolver valueResolver);
 
         /// <summary>
         /// Resets the value.

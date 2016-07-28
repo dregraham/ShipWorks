@@ -5,7 +5,9 @@ using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
 using System;
 using System.IO;
+using Autofac.Features.Indexed;
 using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
+using ShipWorks.Stores.Platforms.Odbc.Upload.FieldValueResolvers;
 using Xunit;
 
 namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
@@ -38,10 +40,10 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
         public void Write_WritesSerializedMapToStream()
         {
             string expectedResult =
-                "{\"Entries\":[{\"Index\":0,\"ShipWorksField\":{\"ContainingObjectName\":\"OrderEntity\",\"Name\":\"OrderNumber\",\"DisplayName\":\"Order Number\"},\"ExternalField\":{\"Column\":{\"Name\":\"OrderNumberColumn\"}}}]}";
+                "{\"Entries\":[{\"Index\":0,\"ShipWorksField\":{\"ContainingObjectName\":\"OrderEntity\",\"Name\":\"OrderNumber\",\"DisplayName\":\"Order Number\",\"ResolutionStrategy\":0},\"ExternalField\":{\"Column\":{\"Name\":\"OrderNumberColumn\"}}}]}";
 
-            Mock<IOdbcFieldMapIOFactory> ioFactory = mock.Mock<IOdbcFieldMapIOFactory>();
-            OdbcFieldMap map = new OdbcFieldMap(ioFactory.Object);
+            Mock <IOdbcFieldMapIOFactory> ioFactory = mock.Mock<IOdbcFieldMapIOFactory>();
+            OdbcFieldMap map = mock.Create<OdbcFieldMap>();
 
             JsonOdbcFieldMapWriter testObject = new JsonOdbcFieldMapWriter(map);
             ioFactory.Setup(f => f.CreateWriter(map)).Returns(testObject);
@@ -50,7 +52,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
 
             ExternalOdbcMappableField externalOdbcMappableField = new ExternalOdbcMappableField(column);
             ShipWorksOdbcMappableField shipworksOdbcMappableField =
-                new ShipWorksOdbcMappableField(OrderFields.OrderNumber, "Order Number");
+                new ShipWorksOdbcMappableField(OrderFields.OrderNumber, "Order Number", OdbcFieldValueResolutionStrategy.Default);
 
             OdbcFieldMapEntry entry = new OdbcFieldMapEntry(shipworksOdbcMappableField, externalOdbcMappableField);
 

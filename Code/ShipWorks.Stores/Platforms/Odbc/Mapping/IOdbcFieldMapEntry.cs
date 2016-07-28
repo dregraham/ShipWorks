@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Stores.Platforms.Odbc.Upload.FieldValueResolvers;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 {
@@ -32,7 +33,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <summary>
         /// Loads the given entity into the ShipWorksField
         /// </summary>
-        void LoadShipWorksField(IEntity2 entity);
+        void LoadShipWorksField(IEntity2 entity, IOdbcFieldValueResolver valueResolver);
 
         /// <summary>
         /// Copies the Value from the external field to the ShipWorks field

@@ -34,7 +34,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Upload
             cmdBuilder.Setup(c => c.QuoteIdentifier(It.IsAny<string>())).Returns((string c) => c);
 
             OdbcFieldMapEntry orderNumberEntry = new OdbcFieldMapEntry(
-                new ShipWorksOdbcMappableField(OrderFields.OrderNumber, "Order Number"),
+                new ShipWorksOdbcMappableField(OrderFields.OrderNumber, "Order Number", OdbcFieldValueResolutionStrategy.Default),
                 new ExternalOdbcMappableField(new OdbcColumn("ExternalOrderNumberColumn")));
 
             Mock<IOdbcFieldMap> fieldMap = mock.Mock<IOdbcFieldMap>();
@@ -44,7 +44,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Upload
                 {
                    orderNumberEntry,
                     new OdbcFieldMapEntry(
-                        new ShipWorksOdbcMappableField(ShipmentFields.TrackingNumber, "Tracking Number"),
+                        new ShipWorksOdbcMappableField(ShipmentFields.TrackingNumber, "Tracking Number", OdbcFieldValueResolutionStrategy.Default),
                         new ExternalOdbcMappableField(new OdbcColumn("ExternalShipmentTrackingField")))
                 });
             Mock<IShipWorksDbProviderFactory> dbProviderFactory = mock.Mock<IShipWorksDbProviderFactory>();
@@ -76,7 +76,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Upload
             cmdBuilder.Setup(c => c.QuoteIdentifier(It.IsAny<string>())).Returns((string c) => c);
 
             OdbcFieldMapEntry orderNumberEntry = new OdbcFieldMapEntry(
-                new ShipWorksOdbcMappableField(OrderFields.OrderNumber, "Order Number"),
+                new ShipWorksOdbcMappableField(OrderFields.OrderNumber, "Order Number", OdbcFieldValueResolutionStrategy.Default),
                 new ExternalOdbcMappableField(new OdbcColumn("ExternalOrderNumberColumn")));
 
             Mock<IOdbcFieldMap> fieldMap = mock.Mock<IOdbcFieldMap>();
@@ -86,7 +86,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Upload
                 {
                    orderNumberEntry,
                     new OdbcFieldMapEntry(
-                        new ShipWorksOdbcMappableField(ShipmentFields.TrackingNumber, "Tracking Number"),
+                        new ShipWorksOdbcMappableField(ShipmentFields.TrackingNumber, "Tracking Number", OdbcFieldValueResolutionStrategy.Default),
                         new ExternalOdbcMappableField(new OdbcColumn("ExternalShipmentTrackingField")))
                 });
             Mock<IShipWorksDbProviderFactory> dbProviderFactory = mock.Mock<IShipWorksDbProviderFactory>();
@@ -156,7 +156,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Upload
             cmdBuilder.Setup(c => c.QuoteIdentifier(It.IsAny<string>())).Returns((string c) => c);
 
             OdbcFieldMapEntry orderNumberEntry = new OdbcFieldMapEntry(
-                new ShipWorksOdbcMappableField(OrderFields.OrderNumber, "Order Number"),
+                new ShipWorksOdbcMappableField(OrderFields.OrderNumber, "Order Number", OdbcFieldValueResolutionStrategy.Default),
                 new ExternalOdbcMappableField(new OdbcColumn("ExternalOrderNumberColumn")));
 
             Mock<IOdbcFieldMap> fieldMap = mock.Mock<IOdbcFieldMap>();
@@ -166,7 +166,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Upload
                 {
                    orderNumberEntry,
                     new OdbcFieldMapEntry(
-                        new ShipWorksOdbcMappableField(ShipmentFields.TrackingNumber, "Tracking Number"),
+                        new ShipWorksOdbcMappableField(ShipmentFields.TrackingNumber, "Tracking Number", OdbcFieldValueResolutionStrategy.Default),
                         new ExternalOdbcMappableField(new OdbcColumn("ExternalShipmentTrackingField")))
                 });
             Mock<IShipWorksDbProviderFactory> dbProviderFactory = mock.Mock<IShipWorksDbProviderFactory>();
@@ -200,7 +200,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Upload
             cmdBuilder.Setup(c => c.QuoteIdentifier(It.IsAny<string>())).Returns((string c) => c);
 
             OdbcFieldMapEntry orderNumberEntry = new OdbcFieldMapEntry(
-                new ShipWorksOdbcMappableField(OrderFields.OrderNumber, "Order Number"),
+                new ShipWorksOdbcMappableField(OrderFields.OrderNumber, "Order Number", OdbcFieldValueResolutionStrategy.Default),
                 new ExternalOdbcMappableField(new OdbcColumn("ExternalOrderNumberColumn")));
 
             Mock<IOdbcFieldMap> fieldMap = mock.Mock<IOdbcFieldMap>();
@@ -210,7 +210,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Upload
                 {
                    orderNumberEntry,
                     new OdbcFieldMapEntry(
-                        new ShipWorksOdbcMappableField(ShipmentFields.TrackingNumber, "Tracking Number"),
+                        new ShipWorksOdbcMappableField(ShipmentFields.TrackingNumber, "Tracking Number", OdbcFieldValueResolutionStrategy.Default),
                         new ExternalOdbcMappableField(new OdbcColumn("ExternalShipmentTrackingField")))
                 });
             Mock<IShipWorksDbProviderFactory> dbProviderFactory = mock.Mock<IShipWorksDbProviderFactory>();

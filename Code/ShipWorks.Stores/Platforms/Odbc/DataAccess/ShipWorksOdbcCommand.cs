@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Interapptive.Shared.Net;
+using ShipWorks.ApplicationCore.Logging;
+using System;
 using System.Data;
 using System.Data.Common;
 using System.Data.Odbc;
 using System.Linq;
 using System.Text;
-using Interapptive.Shared.Net;
-using log4net;
-using ShipWorks.ApplicationCore.Logging;
 
 namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
 {
@@ -123,7 +121,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
                 string.Join(", ", command.Parameters
                 .Cast<OdbcParameter>()
                 .ToDictionary(parameter => parameter.ParameterName,
-                    parameter => parameter.Value.ToString())
+                    parameter => parameter.Value?.ToString() ?? "null")
                 .Select(kvp => kvp.Key + " = " + kvp.Value)));
 
             return commandData.ToString();

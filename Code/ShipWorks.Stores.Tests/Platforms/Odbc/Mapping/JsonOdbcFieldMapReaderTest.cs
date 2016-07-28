@@ -7,8 +7,11 @@ using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
 using System;
 using System.IO;
+using Autofac;
+using Autofac.Features.Indexed;
 using Interapptive.Shared.Extensions;
 using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
+using ShipWorks.Stores.Platforms.Odbc.Upload.FieldValueResolvers;
 using Xunit;
 
 namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
@@ -109,7 +112,8 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
         {
             using (MemoryStream stream = new MemoryStream())
             {
-                OdbcFieldMap map = new OdbcFieldMap(GetIoFactory());
+                OdbcFieldMap map =
+                    mock.Create<OdbcFieldMap>(new TypedParameter(typeof(IOdbcFieldMapIOFactory), GetIoFactory()));
 
                 map.AddEntry(GetFieldMapEntry(GetShipWorksField(OrderFields.OrderNumber, "Order Number"),
                     GetExternalField("SomeColumnName")));
@@ -127,7 +131,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
 
         private ShipWorksOdbcMappableField GetShipWorksField(EntityField2 field, string displayName)
         {
-            return new ShipWorksOdbcMappableField(field, displayName);
+            return new ShipWorksOdbcMappableField(field, displayName, OdbcFieldValueResolutionStrategy.Default);
         }
 
         private ExternalOdbcMappableField GetExternalField(string columnName)

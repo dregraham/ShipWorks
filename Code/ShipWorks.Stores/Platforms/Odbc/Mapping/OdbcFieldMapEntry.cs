@@ -2,6 +2,7 @@ using Interapptive.Shared.Utility;
 using Newtonsoft.Json;
 using System.Reflection;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Stores.Platforms.Odbc.Upload.FieldValueResolvers;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 {
@@ -62,10 +63,12 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <summary>
         /// Loads the given entity into the ShipWorksField
         /// </summary>
-        public void LoadShipWorksField(IEntity2 entity)
+        public void LoadShipWorksField(IEntity2 entity, IOdbcFieldValueResolver valueResolver)
         {
             MethodConditions.EnsureArgumentIsNotNull(entity);
-            ShipWorksField.LoadValue(entity);
+            MethodConditions.EnsureArgumentIsNotNull(valueResolver);
+
+            ShipWorksField.LoadValue(entity, valueResolver);
         }
 
         /// <summary>
