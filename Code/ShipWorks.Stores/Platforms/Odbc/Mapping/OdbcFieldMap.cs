@@ -150,6 +150,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// </summary>
         private void Load(IOdbcFieldMapReader reader)
         {
+            entries.Clear();
             OdbcFieldMapEntry entry = reader.ReadEntry();
             while (entry != null)
             {
