@@ -23,6 +23,8 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
     {
         private readonly ILog log;
         private IExternalProcess odbcControlPanel;
+        private IOdbcDataSource loadedDataSource;
+        private bool loadedDataSourceNotFound;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcDataSourceControl"/> class.
@@ -31,12 +33,17 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         {
             InitializeComponent();
             log = LogManager.GetLogger(typeof(OdbcDataSourceControl));
+            loadedDataSourceNotFound = false;
         }
 
         /// <summary>
         /// Gets the selected data source.
         /// </summary>
-        public EncryptedOdbcDataSource SelectedDataSource => dataSource.SelectedItem as EncryptedOdbcDataSource;
+        public IOdbcDataSource SelectedDataSource
+        {
+            get { return dataSource.SelectedItem as EncryptedOdbcDataSource; }
+            set { dataSource.SelectedItem = value; }
+        }
 
         /// <summary>
         /// Loads the dependencies.
@@ -44,6 +51,30 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         public void LoadDependencies(IExternalProcess odbcControlPanelProcess)
         {
             odbcControlPanel = odbcControlPanelProcess;
+        }
+
+        /// <summary>
+        /// Loads the data source.
+        /// </summary>
+        /// <param name="source">The source.</param>
+        public void LoadDataSource(IOdbcDataSource source)
+        {
+            loadedDataSource = source;
+
+            List<IOdbcDataSource> dataSources = dataSource.Items.Cast<IOdbcDataSource>().ToList();
+            IOdbcDataSource matchingDataSource = dataSources.First(d => d.Name.Equals(loadedDataSource.Name, StringComparison.InvariantCulture));
+
+            if (matchingDataSource != null)
+            {
+                // If loaded data source matches a data source currently in the list, select it.
+                SelectedDataSource = matchingDataSource;
+            }
+            else
+            {
+                // If the loaded data source does not match one in the list, add it
+                RefreshDataSources();
+                SelectedDataSource = loadedDataSource;
+            }
         }
 
         /// <summary>
@@ -57,6 +88,12 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             {
                 MessageHelper.ShowWarning(ParentForm, $"ShipWorks could not find any ODBC data sources. {Environment.NewLine} " +
                                                 "Please add one to continue.");
+                return false;
+            }
+
+            if (loadedDataSourceNotFound && SelectedDataSource == loadedDataSource)
+            {
+                MessageHelper.ShowWarning(ParentForm, "ShipWorks could not find the selected ODBC data source on this machine.");
                 return false;
             }
 
@@ -150,7 +187,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// </remarks>
         private void BindDataSources(List<IOdbcDataSource> dataSources)
         {
-            EncryptedOdbcDataSource currentDataSource = SelectedDataSource;
+            IOdbcDataSource currentDataSource = SelectedDataSource;
 
             dataSource.DataSource = dataSources;
             dataSource.DisplayMember = "Name";
@@ -190,7 +227,17 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
                 try
                 {
                     IOdbcDataSourceService dataSourceService = scope.Resolve<IOdbcDataSourceService>();
-                    genericResult = GenericResult.FromSuccess(dataSourceService.GetDataSources().ToList());
+
+                    var dataSources = dataSourceService.GetDataSources().ToList();
+
+                    // If a data source was loaded from the store, make sure it is in the list
+                    if (loadedDataSource != null && !dataSources.Exists(x=>x.ConnectionString == loadedDataSource.ConnectionString))
+                    {
+                        dataSources.Add(loadedDataSource);
+                        loadedDataSourceNotFound = true;
+                    }
+
+                    genericResult = GenericResult.FromSuccess(dataSources);
                 }
                 catch (DataException ex)
                 {
