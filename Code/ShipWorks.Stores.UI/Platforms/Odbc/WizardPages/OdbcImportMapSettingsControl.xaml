@@ -36,14 +36,14 @@
         <Style TargetType="{x:Type RadioButton}">
             <Setter Property="HorizontalAlignment" Value="Center" />
             <Setter Property="VerticalAlignment" Value="Center" />
-            <Setter Property="Margin" Value="0 0 5 0" />
+            <Setter Property="Margin" Value="0 0 15 0" />
             <Setter Property="Padding" Value="0" />
             <Setter Property="VerticalContentAlignment" Value="Center" />
         </Style>
         <ui:VisibleWhenEqualToParameterConverter x:Key="VisibleWhenEqualToParameterConverter" />
         <ui:StringToVisibilityConverter x:Key="StringToVisibilityConverter" />
     </Control.Resources>
-    <Grid Margin="10">
+    <Grid Margin="20 10 10 10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
@@ -62,7 +62,7 @@
             </Grid.ColumnDefinitions>
             <Label Grid.Row="0"
                    Grid.Column="0"
-                   Margin="13 0 -20 5"
+                   Margin="3 0 -20 5"
                    Content="Import Settings"
                    FontWeight="Bold" />
             <Label Grid.Row="1"
@@ -76,7 +76,7 @@
                      Margin="5 5 0 5"
                      VerticalAlignment="Center"
                      Text="{Binding MapName,
-                                    UpdateSourceTrigger=PropertyChanged}" />
+                                    UpdateSourceTrigger=LostFocus}" />
             <Button Grid.Row="1"
                     Grid.Column="2"
                     Content="Load Map..." />
@@ -151,14 +151,17 @@
             <Label Grid.Row="0"
                    Margin="0 5 0 5"
                    Content="Your query for custom import:" />
-            <TextBox x:Name="Query"
-                     Grid.Row="1"
-                     Margin="0 5 0 5"
-                     AcceptsReturn="True"
-                     Text="{Binding CustomQuery,
-                                    UpdateSourceTrigger=LostFocus}"
-                     TextWrapping="Wrap"
-                     ui:EntityFieldLength.FieldName="OdbcStoreCustomQuery" />
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                <TextBox x:Name="Query"
+                         Margin="0 5 0 5"
+                         AcceptsReturn="True"
+                         FontFamily="Courier New"
+                         Text="{Binding CustomQuery,
+                                        UpdateSourceTrigger=LostFocus}"
+                         TextWrapping="Wrap"
+                         ui:EntityFieldLength.FieldName="OdbcStoreCustomQuery" />
+            </ScrollViewer>
+
             <Label Grid.Row="2"
                    HorizontalAlignment="Left"
                    VerticalAlignment="Center"
@@ -172,10 +175,12 @@
                     <RowDefinition Height="*" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
-                <DataGrid Grid.Row="0"
-                          IsReadOnly="True"
-                          ItemsSource="{Binding QueryResults,
-                                                UpdateSourceTrigger=PropertyChanged}" />
+                <ScrollViewer Grid.Row="0"
+                              HorizontalScrollBarVisibility="Auto"
+                              VerticalScrollBarVisibility="Auto">
+                    <DataGrid IsReadOnly="True" ItemsSource="{Binding QueryResults, UpdateSourceTrigger=PropertyChanged}" />
+                </ScrollViewer>
+
                 <Label Grid.Row="1"
                        Content="{Binding ResultMessage,
                                          UpdateSourceTrigger=PropertyChanged}"

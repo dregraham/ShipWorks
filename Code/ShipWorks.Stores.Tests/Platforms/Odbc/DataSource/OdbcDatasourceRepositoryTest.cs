@@ -22,7 +22,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.DataSource
             {
                 Mock<IDsnProvider> dsnProvider = mock.Mock<IDsnProvider>();
                 dsnProvider.Setup(p => p.GetDataSourceNames())
-                    .Returns(new[] { "blah" });
+                    .Returns(new[] { new DsnInfo("dsnName", "dsnDriver") });
 
                 OdbcDataSourceRepository repo = mock.Create<OdbcDataSourceRepository>();
                 repo.GetDataSources();
@@ -54,21 +54,25 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.DataSource
         {
             using (var mock = AutoMock.GetLoose())
             {
-                Mock<IOdbcDataSource> dataSourcemock = mock.Mock<IOdbcDataSource>();
-                dataSourcemock.SetupGet(d => d.IsCustom).Returns(true);
-                dataSourcemock.SetupGet(d => d.Name).Returns("blah");
+                Mock<IOdbcDataSource> dataSourceMock = mock.Mock<IOdbcDataSource>();
+                dataSourceMock.SetupGet(d => d.IsCustom).Returns(true);
+                dataSourceMock.SetupGet(d => d.Name).Returns("dsnName");
+                dataSourceMock.SetupGet(d => d.Driver).Returns("dsnDriver");
 
-                Mock<IDsnProvider> dsnProvider = mock.Mock<IDsnProvider>();
+                Mock <IDsnProvider> dsnProvider = mock.Mock<IDsnProvider>();
                 dsnProvider.Setup(p => p.GetDataSourceNames())
-                    .Returns(new[] {"blah"});
+                    .Returns(new[] { new DsnInfo("dsnName", "dsnDriver") });
+
                 Mock<IShipWorksDbProviderFactory> providerFactory = mock.Mock<IShipWorksDbProviderFactory>();
                 Mock<IEncryptionProviderFactory> encryptionFactory = mock.Mock<IEncryptionProviderFactory>();
                 Func<IOdbcDataSource> odbcDataSourceFactory = () => new EncryptedOdbcDataSource(providerFactory.Object, encryptionFactory.Object);
                 var testObject = mock.Create<OdbcDataSourceRepository>(new TypedParameter(typeof(Func<IOdbcDataSource>), odbcDataSourceFactory));
                 var odbcDataSources = testObject.GetDataSources();
-                IOdbcDataSource dataSource = odbcDataSources.First(d => d.Name == "blah");
 
-                Assert.Equal("blah", dataSource.Name);
+                IOdbcDataSource dataSource = odbcDataSources.First(d => d.Name == "dsnName");
+
+                Assert.Equal("dsnName", dataSource.Name);
+                Assert.Equal("dsnDriver", dataSource.Driver);
             }
         }
 
@@ -79,7 +83,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.DataSource
             {
                 Mock<IDsnProvider> dsnProvider = mock.Mock<IDsnProvider>();
                 dsnProvider.Setup(p => p.GetDataSourceNames())
-                    .Returns(new[] {"1", "2", "3", "4", "5"});
+                    .Returns(new[] { new DsnInfo("1", "driver 1"), new DsnInfo("2", "driver 2"), new DsnInfo("3", "driver 3"), new DsnInfo("4", "driver 4"), new DsnInfo("5", "driver 5") });
 
                 var testObject = mock.Create<OdbcDataSourceRepository>();
                 var odbcDataSources = testObject.GetDataSources();

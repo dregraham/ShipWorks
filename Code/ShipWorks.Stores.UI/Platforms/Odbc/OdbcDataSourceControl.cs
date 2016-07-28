@@ -211,7 +211,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         {
             if (!SelectedDataSource.IsCustom)
             {
-                SelectedDataSource.ChangeConnection(SelectedDataSource.Name, username.Text, SelectedDataSource.Password);
+                SelectedDataSource.ChangeConnection(SelectedDataSource.Name, username.Text, SelectedDataSource.Password, SelectedDataSource.Driver);
             }
         }
 
@@ -222,7 +222,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         {
             if (!SelectedDataSource.IsCustom)
             {
-                SelectedDataSource.ChangeConnection(SelectedDataSource.Name, SelectedDataSource.Username, password.Text);
+                SelectedDataSource.ChangeConnection(SelectedDataSource.Name, SelectedDataSource.Username, password.Text, SelectedDataSource.Driver);
             }
         }
 

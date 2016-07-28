@@ -13,6 +13,8 @@ using ShipWorks.Stores.Platforms.Odbc.Upload;
 using ShipWorks.Stores.UI.Platforms.Odbc.ViewModels;
 using ShipWorks.Stores.UI.Platforms.Odbc.WizardPages;
 using System.Reflection;
+using Interapptive.Shared.Net;
+using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Stores.Platforms.Odbc.CoreExtensions.Actions;
 using Module = Autofac.Module;
 
@@ -71,8 +73,6 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
 
             builder.RegisterType<OdbcStoreDownloader>();
 
-            builder.RegisterType<OdbcCommandFactory>();
-
             builder.RegisterType<OdbcSampleDataCommand>()
                 .AsImplementedInterfaces();
 
@@ -85,13 +85,19 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             builder.RegisterType<OdbcDataSourceService>()
                 .AsImplementedInterfaces();
 
-            builder.RegisterType<OdbcCommandFactory>()
-                .As<IOdbcCommandFactory>();
+            builder.RegisterType<OdbcDownloadCommandFactory>()
+                .As<IOdbcDownloadCommandFactory>();
+
+            builder.RegisterType<OdbcUploadCommandFactory>()
+                .As<IOdbcUploadCommandFactory>();
 
             builder.RegisterType<OdbcUploader>()
                 .As<IOdbcUploader>();
 
             builder.RegisterType<OdbcUploadMenuCommand>();
+
+            builder.RegisterType<ApiLogEntry>()
+                .As<IApiLogEntry>();
         }
 
         /// <summary>

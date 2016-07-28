@@ -86,6 +86,36 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.DataSource
         }
 
         [Fact]
+        public void Restore_SetsDriverToUnknown_WhenDriverInfoIsNotSerialized()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                string previousState = "{\"Name\":\"Custom...\",\"Username\":null,\"Password\":null,\"IsCustom\":true,\"ConnectionString\":\"CustomConnectionString\"}";
+
+                OdbcDataSource dataSource = mock.Create<OdbcDataSource>();
+
+                dataSource.Restore(previousState);
+
+                Assert.Equal("Unknown", dataSource.Driver);
+            }
+        }
+
+        [Fact]
+        public void Restore_SetsDriverToSerializedValue()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                string previousState = "{\"Name\":\"Custom...\",\"Username\":null,\"Password\":null,\"IsCustom\":true,\"ConnectionString\":\"CustomConnectionString\",\"Driver\":\"Some ODBC Driver\"}";
+
+                OdbcDataSource dataSource = mock.Create<OdbcDataSource>();
+
+                dataSource.Restore(previousState);
+
+                Assert.Equal("Some ODBC Driver", dataSource.Driver);
+            }
+        }
+
+        [Fact]
         public void Name_WhenDataSourceIsNotCustom_IsDsn()
         {
             using (var mock = AutoMock.GetLoose())

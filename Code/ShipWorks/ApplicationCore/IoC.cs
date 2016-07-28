@@ -27,6 +27,7 @@ using ShipWorks.Shipping.Carriers.Postal.Endicia;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Stores.Content;
+using ShipWorks.Templates.Tokens;
 using ShipWorks.UI.Controls;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
@@ -172,6 +173,10 @@ namespace ShipWorks.ApplicationCore
 
             builder.Register((_, parameters) => LogManager.GetLogger(parameters.TypedAs<Type>()));
 
+            builder.RegisterType<TemplateTokenProcessorWrapper>()
+                .As<ITemplateTokenProcessor>()
+                .SingleInstance();
+
             foreach (IComponentRegistration registration in builder.Build().ComponentRegistry.Registrations)
             {
                 container.ComponentRegistry.Register(registration);
@@ -226,7 +231,7 @@ namespace ShipWorks.ApplicationCore
 
             builder.RegisterType<CustomerLicenseReader>()
                 .AsImplementedInterfaces();
-                
+
             builder.RegisterType<StoreLicense>()
                 .AsSelf();
 

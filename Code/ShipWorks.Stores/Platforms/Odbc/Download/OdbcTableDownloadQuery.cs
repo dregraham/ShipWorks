@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Download
 {
-    public class TableOdbcDownloadQuery : IOdbcQuery
+    public class OdbcTableDownloadQuery : IOdbcQuery
     {
         private readonly OdbcStoreEntity store;
         private readonly IShipWorksDbProviderFactory dbProviderFactory;
@@ -17,10 +17,10 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         private readonly IOdbcFieldMap fieldMap;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TableOdbcDownloadQuery"/> class.
+        /// Initializes a new instance of the <see cref="OdbcTableDownloadQuery"/> class.
         /// </summary>
         /// <exception cref="ShipWorksOdbcException">An incompatible source was provided to perform an ODBC table based query.</exception>
-        public TableOdbcDownloadQuery(OdbcStoreEntity store, IShipWorksDbProviderFactory dbProviderFactory, IOdbcFieldMap fieldMap, IOdbcDataSource dataSource)
+        public OdbcTableDownloadQuery(OdbcStoreEntity store, IShipWorksDbProviderFactory dbProviderFactory, IOdbcFieldMap fieldMap, IOdbcDataSource dataSource)
         {
             this.store = store;
             this.dbProviderFactory = dbProviderFactory;

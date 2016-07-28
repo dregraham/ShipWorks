@@ -13,7 +13,7 @@ using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
 {
-    public abstract class OdbcMapSettingsControlViewModel : IOdbcMapSettingsControlViewModel
+    public abstract class OdbcMapSettingsControlViewModel : INotifyPropertyChanged, IOdbcMapSettingsControlViewModel
     {
         private const string CustomQueryColumnSourceName = "Custom Import";
         private string mapName = string.Empty;

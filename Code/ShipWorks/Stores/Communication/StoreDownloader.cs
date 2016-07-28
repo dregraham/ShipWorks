@@ -26,6 +26,8 @@ using ShipWorks.ApplicationCore.Crashes;
 using ShipWorks.Data.Utility;
 using ShipWorks.SqlServer.Common.Data;
 using System.Data.SqlClient;
+using Interapptive.Shared.Metrics;
+using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Stores.Communication
 {
@@ -160,14 +162,23 @@ namespace ShipWorks.Stores.Communication
             this.progress = progress;
             this.downloadLogID = downloadLogID;
             this.connection = connection;
+            
+            using (TrackedDurationEvent trackedDurationEvent = new TrackedDurationEvent("Store.Order.Download"))
+            {
+                Download(trackedDurationEvent);
 
-            Download();
+                trackedDurationEvent.AddProperty("Store.Type", EnumHelper.GetDescription(StoreType.TypeCode));
+                trackedDurationEvent.AddMetric("Orders.Total", QuantitySaved);
+                trackedDurationEvent.AddMetric("Orders.New", QuantityNew);
+            }
         }
 
         /// <summary>
         /// Must be implemented by derived types to do the actual download
         /// </summary>
-        protected abstract void Download();
+        /// <param name="trackedDurationEvent">The telemetry event that can be used to 
+        /// associate any store-specific download properties/metrics.</param>
+        protected abstract void Download(TrackedDurationEvent trackedDurationEvent);
 
         /// <summary>
         /// Gets the largest last modified time we have in our database for non-manual orders for this store.

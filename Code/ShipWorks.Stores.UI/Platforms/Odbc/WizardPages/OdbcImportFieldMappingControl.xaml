@@ -40,7 +40,7 @@
         <Style TargetType="{x:Type RadioButton}">
             <Setter Property="HorizontalAlignment" Value="Center" />
             <Setter Property="VerticalAlignment" Value="Center" />
-            <Setter Property="Margin" Value="0 0 5 0" />
+            <Setter Property="Margin" Value="0 0 15 0" />
             <Setter Property="Padding" Value="0" />
             <Setter Property="VerticalContentAlignment" Value="Center" />
         </Style>
@@ -138,7 +138,6 @@
             </Grid>
             <Label Grid.Row="0"
                    Grid.Column="0"
-                   Margin="3 0 0 0"
                    Content="Item Settings"
                    FontWeight="Bold"
                    Style="{StaticResource Header}" />

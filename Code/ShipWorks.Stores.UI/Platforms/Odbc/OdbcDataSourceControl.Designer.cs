@@ -93,7 +93,7 @@
             // 
             // password
             // 
-            this.password.Location = new System.Drawing.Point(92, 31);
+            this.password.Location = new System.Drawing.Point(92, 32);
             this.password.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.password.MaxLength = 255;
             this.password.Name = "password";
@@ -105,7 +105,7 @@
             // passwordLabel
             // 
             this.passwordLabel.AutoSize = true;
-            this.passwordLabel.Location = new System.Drawing.Point(29, 34);
+            this.passwordLabel.Location = new System.Drawing.Point(29, 35);
             this.passwordLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.passwordLabel.Name = "passwordLabel";
             this.passwordLabel.Size = new System.Drawing.Size(57, 13);
@@ -128,7 +128,7 @@
             this.credentialsOptionalLabel.Enabled = false;
             this.credentialsOptionalLabel.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.credentialsOptionalLabel.ForeColor = System.Drawing.Color.DimGray;
-            this.credentialsOptionalLabel.Location = new System.Drawing.Point(89, 59);
+            this.credentialsOptionalLabel.Location = new System.Drawing.Point(89, 60);
             this.credentialsOptionalLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.credentialsOptionalLabel.Name = "credentialsOptionalLabel";
             this.credentialsOptionalLabel.Size = new System.Drawing.Size(254, 13);
@@ -160,7 +160,7 @@
             // 
             // btnTestConnection2
             // 
-            this.btnTestConnection2.Location = new System.Drawing.Point(368, 54);
+            this.btnTestConnection2.Location = new System.Drawing.Point(368, 58);
             this.btnTestConnection2.Name = "btnTestConnection2";
             this.btnTestConnection2.Size = new System.Drawing.Size(99, 23);
             this.btnTestConnection2.TabIndex = 11;
@@ -173,16 +173,16 @@
             this.customPanel.Controls.Add(this.customConnectionStringPanel);
             this.customPanel.Controls.Add(this.btnTestConnection);
             this.customPanel.Controls.Add(this.customLabel);
-            this.customPanel.Location = new System.Drawing.Point(0, 61);
+            this.customPanel.Location = new System.Drawing.Point(0, 60);
             this.customPanel.Name = "customPanel";
-            this.customPanel.Size = new System.Drawing.Size(489, 114);
+            this.customPanel.Size = new System.Drawing.Size(492, 114);
             this.customPanel.TabIndex = 8;
             // 
-            // panel1
+            // customConnectionStringPanel
             // 
             this.customConnectionStringPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.customConnectionStringPanel.Controls.Add(this.customConnectionString);
-            this.customConnectionStringPanel.Location = new System.Drawing.Point(106, 7);
+            this.customConnectionStringPanel.Location = new System.Drawing.Point(106, 5);
             this.customConnectionStringPanel.Name = "customConnectionStringPanel";
             this.customConnectionStringPanel.Size = new System.Drawing.Size(374, 52);
             this.customConnectionStringPanel.TabIndex = 0;
@@ -194,6 +194,7 @@
             this.customConnectionString.Location = new System.Drawing.Point(0, 0);
             this.customConnectionString.MaxLength = 2048;
             this.customConnectionString.Name = "customConnectionString";
+            this.customConnectionString.ShortcutsEnabled = false;
             this.customConnectionString.Size = new System.Drawing.Size(372, 50);
             this.customConnectionString.TabIndex = 0;
             this.customConnectionString.Text = "";
@@ -201,7 +202,7 @@
             // 
             // btnTestConnection
             // 
-            this.btnTestConnection.Location = new System.Drawing.Point(382, 61);
+            this.btnTestConnection.Location = new System.Drawing.Point(382, 62);
             this.btnTestConnection.Name = "btnTestConnection";
             this.btnTestConnection.Size = new System.Drawing.Size(99, 23);
             this.btnTestConnection.TabIndex = 1;
@@ -212,7 +213,7 @@
             // customLabel
             // 
             this.customLabel.AutoSize = true;
-            this.customLabel.Location = new System.Drawing.Point(4, 7);
+            this.customLabel.Location = new System.Drawing.Point(5, 8);
             this.customLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.customLabel.Name = "customLabel";
             this.customLabel.Size = new System.Drawing.Size(96, 13);

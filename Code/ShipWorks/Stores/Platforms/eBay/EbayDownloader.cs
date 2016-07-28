@@ -26,6 +26,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
+using Interapptive.Shared.Metrics;
 
 namespace ShipWorks.Stores.Platforms.Ebay
 {
@@ -59,7 +60,9 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// <summary>
         /// Begin the order download process
         /// </summary>
-        protected override void Download()
+        /// <param name="trackedDurationEvent">The telemetry event that can be used to 
+        /// associate any store-specific download properties/metrics.</param>
+        protected override void Download(TrackedDurationEvent trackedDurationEvent)
         {
             try
             {

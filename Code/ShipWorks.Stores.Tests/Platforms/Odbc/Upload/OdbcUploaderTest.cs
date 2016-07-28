@@ -33,7 +33,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Upload
         private Mock<ICarrierShipmentAdapter> shipmentAdapter;
         private Mock<IShippingManager> shippingManager;
         private Mock<IOrderManager> orderManager;
-        private Mock<IOdbcCommandFactory> commandFactory;
+        private Mock<IOdbcUploadCommandFactory> commandFactory;
 
         private void SetupOrderManagerToGetLatestActiveShipment()
         {
@@ -46,8 +46,8 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Upload
             var uploadCommand = mock.Mock<IOdbcUploadCommand>();
             uploadCommand.Setup(c => c.Execute()).Returns(rowsAffected);
 
-            commandFactory = mock.Mock<IOdbcCommandFactory>();
-            commandFactory.Setup(f => f.CreateUploadCommand(It.IsAny<OdbcStoreEntity>(), It.IsAny<IOdbcFieldMap>()))
+            commandFactory = mock.Mock<IOdbcUploadCommandFactory>();
+            commandFactory.Setup(f => f.CreateUploadCommand(It.IsAny<OdbcStoreEntity>(), It.IsAny<ShipmentEntity>()))
                 .Returns(uploadCommand.Object);
         }
 
@@ -77,29 +77,11 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Upload
             SetupCommand(5);
             SetupOrderManagerToGetLatestActiveShipment();
             var store = new OdbcStoreEntity();
-            var fieldMap = mock.Mock<IOdbcFieldMap>();
 
             OdbcUploader testObject = mock.Create<OdbcUploader>();
             testObject.UploadLatestShipment(store, 2);
 
-            commandFactory.Verify(f=>f.CreateUploadCommand(store, fieldMap.Object));
-        }
-
-        [Fact]
-        public void UploadLatestShipment_FieldMapLoadCalledOnceWithCorrectFieldMap()
-        {
-            string fieldMapText = "I'm a map!!!";
-
-            SetupOrderManagerToGetLatestActiveShipment();
-            SetupCommand(5);
-
-            var fieldMap = mock.Mock<IOdbcFieldMap>();
-
-            OdbcUploader testObject = mock.Create<OdbcUploader>();
-            testObject.UploadLatestShipment(new OdbcStoreEntity {UploadMap = fieldMapText}, 2);
-
-            fieldMap.Verify(f => f.Load(fieldMapText), Times.Once);
-            fieldMap.Verify(f => f.Load(It.IsAny<string>()), Times.Once);
+            commandFactory.Verify(f=>f.CreateUploadCommand(store, It.IsAny<ShipmentEntity>()));
         }
 
         [Fact]
@@ -113,23 +95,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Upload
 
             orderManager.Verify(m => m.GetLatestActiveShipment(5), Times.Once);
             orderManager.Verify(m => m.GetLatestActiveShipment(It.IsAny<long>()), Times.Once);
-        }
-
-        [Fact]
-        public void UploadShipments_FieldMapLoadCalledOnceWithCorrectFieldMap()
-        {
-            string fieldMapText = "I'm a map!!!";
-
-            SetupShippingManagerToGetShipment(new ShipmentEntity());
-            SetupCommand(5);
-
-            var fieldMap = mock.Mock<IOdbcFieldMap>();
-
-            OdbcUploader testObject = mock.Create<OdbcUploader>();
-            testObject.UploadShipments(new OdbcStoreEntity {UploadMap = fieldMapText}, new long[] {1, 2});
-
-            fieldMap.Verify(f => f.Load(fieldMapText), Times.Once);
-            fieldMap.Verify(f => f.Load(It.IsAny<string>()), Times.Once);
         }
 
         [Fact]

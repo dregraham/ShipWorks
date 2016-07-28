@@ -10,6 +10,6 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataSource
         /// <summary>
         /// Returns an IEnumerable of DSNs
         /// </summary>
-        IEnumerable<string> GetDataSourceNames();
+        IEnumerable<DsnInfo> GetDataSourceNames();
     }
 }

@@ -18,9 +18,9 @@
             this.elementHost = new System.Windows.Forms.Integration.ElementHost();
             this.mappingControl = new ShipWorks.Stores.UI.Platforms.Odbc.WizardPages.OdbcImportFieldMappingControl();
             this.SuspendLayout();
-            //
+            // 
             // elementHost
-            //
+            // 
             this.elementHost.Dock = System.Windows.Forms.DockStyle.Fill;
             this.elementHost.Location = new System.Drawing.Point(0, 0);
             this.elementHost.Name = "elementHost";
@@ -28,13 +28,13 @@
             this.elementHost.TabIndex = 0;
             this.elementHost.Text = "elementHost1";
             this.elementHost.Child = this.mappingControl;
-            //
+            // 
             // OdbcImportFieldMappingPage
-            //
+            // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.elementHost);
-            this.Description = "Setup the column mappings for importing order details";
+            this.Description = "Setup the column mappings for importing order details.";
             this.Name = "OdbcImportFieldMappingPage";
             this.Size = new System.Drawing.Size(540, 500);
             this.Title = "Column Mappings";

@@ -41,12 +41,12 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataSource
                 List<IOdbcDataSource> dataSources = new List<IOdbcDataSource>();
 
                 // Build a collection of OdbcDataSources available on the machine
-                foreach (string dataSourceName in dsnProvider.GetDataSourceNames())
+                foreach (DsnInfo dsnInfo in dsnProvider.GetDataSourceNames())
                 {
                     // Create a new data source and call change connection to
                     // initialize the data source to the data source name
                     IOdbcDataSource dataSource = odbcDataSourceFactory();
-                    dataSource.ChangeConnection(dataSourceName, string.Empty, string.Empty);
+                    dataSource.ChangeConnection(dsnInfo.Name, string.Empty, string.Empty, dsnInfo.Driver);
 
                     // Add the data source to the collection
                     dataSources.Add(dataSource);
@@ -71,6 +71,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataSource
         {
             IOdbcDataSource dataSource = odbcDataSourceFactory();
             dataSource.ChangeConnection(string.Empty);
+
             return dataSource;
         }
     }

@@ -13,6 +13,7 @@ using ShipWorks.Stores.Platforms.Odbc.Mapping;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Interapptive.Shared.Metrics;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Download
 {
@@ -21,7 +22,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
     /// </summary>
     public class OdbcStoreDownloader : StoreDownloader
     {
-        private readonly OdbcCommandFactory commandFactory;
+        private readonly IOdbcDownloadCommandFactory downloadCommandFactory;
         private readonly IOdbcFieldMap fieldMap;
         private readonly IOdbcOrderLoader orderLoader;
         private readonly OdbcStoreEntity store;
@@ -30,11 +31,11 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         /// Initializes a new instance of the <see cref="OdbcStoreDownloader"/> class.
         /// </summary>
         public OdbcStoreDownloader(StoreEntity store,
-            OdbcCommandFactory commandFactory,
+            IOdbcDownloadCommandFactory downloadCommandFactory,
             IOdbcFieldMap fieldMap,
             IOdbcOrderLoader orderLoader) : base(store)
         {
-            this.commandFactory = commandFactory;
+            this.downloadCommandFactory = downloadCommandFactory;
             this.fieldMap = fieldMap;
             this.orderLoader = orderLoader;
             this.store = (OdbcStoreEntity) store;
@@ -43,15 +44,18 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         }
 
         /// <summary>
-        /// Import ODBC Orders from external datasource.
+        /// Import ODBC Orders from external data source.
         /// </summary>
+        /// <param name="trackedDurationEvent">The telemetry event that can be used to 
+        /// associate any store-specific download properties/metrics.</param>
         /// <exception cref="DownloadException"></exception>
-        protected override void Download()
+        protected override void Download(TrackedDurationEvent trackedDurationEvent)
         {
             Progress.Detail = "Querying data source...";
             try
             {
-                IOdbcCommand downloadCommand = GenerateDownloadCommand(store);
+                IOdbcCommand downloadCommand = GenerateDownloadCommand(store, trackedDurationEvent);
+                trackedDurationEvent.AddProperty("Odbc.Driver", downloadCommand.Driver);
 
                 IEnumerable<OdbcRecord> downloadedOrders = downloadCommand.Execute();
                 List<IGrouping<string, OdbcRecord>> orderGroups =
@@ -76,22 +80,25 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         /// <summary>
         /// Generates the download command based on the store entity
         /// </summary>
-        private IOdbcCommand GenerateDownloadCommand(OdbcStoreEntity odbcStore)
+        private IOdbcCommand GenerateDownloadCommand(OdbcStoreEntity odbcStore, TrackedDurationEvent trackedDurationEvent)
         {
             MethodConditions.EnsureArgumentIsNotNull(odbcStore, "OdbcStore");
-
+            
             if (store.ImportStrategy == (int) OdbcImportStrategy.ByModifiedTime)
             {
                 // Used in the case that GetOnlineLastModifiedStartingPoint returns null
                 int defaultDaysBack = store.InitialDownloadDays.GetValueOrDefault(7);
 
-                // Get the starting point
+                // Get the starting point and include it for telemetry
                 DateTime startingPoint = GetOnlineLastModifiedStartingPoint().GetValueOrDefault(DateTime.UtcNow.AddDays(-defaultDaysBack));
+                trackedDurationEvent.AddMetric("Minutes.Back", DateTime.UtcNow.Subtract(startingPoint).TotalMinutes);
 
-                return commandFactory.CreateDownloadCommand(odbcStore, startingPoint, fieldMap);
+                return downloadCommandFactory.CreateDownloadCommand(odbcStore, startingPoint, fieldMap);
             }
-
-            return commandFactory.CreateDownloadCommand(odbcStore, fieldMap);
+            
+            // Use -1 to indicate that we are using the "all orders" download strategy
+            trackedDurationEvent.AddMetric("Minutes.Back", -1);
+            return downloadCommandFactory.CreateDownloadCommand(odbcStore, fieldMap);
         }
 
         /// <summary>

@@ -1,7 +1,13 @@
-﻿using System.Data;
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
 using System.Data.Common;
 using System.Data.Odbc;
+using System.Linq;
+using System.Text;
+using Interapptive.Shared.Net;
 using log4net;
+using ShipWorks.ApplicationCore.Logging;
 
 namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
 {
@@ -10,7 +16,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
     /// </summary>
     public class ShipWorksOdbcCommand : IShipWorksOdbcCommand
     {
-        private readonly ILog log;
+        private readonly Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory;
         private readonly OdbcCommand command;
 
         /// <summary>
@@ -18,10 +24,10 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
         /// </summary>
         /// <param name="query">The query.</param>
         /// <param name="connection">The connection.</param>
-        /// <param name="log"></param>
-        public ShipWorksOdbcCommand(string query, OdbcConnection connection, ILog log)
+        /// <param name="apiLogEntryFactory"></param>
+        public ShipWorksOdbcCommand(string query, OdbcConnection connection, Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory)
         {
-            this.log = log;
+            this.apiLogEntryFactory = apiLogEntryFactory;
             command = new OdbcCommand(query, connection);
         }
 
@@ -29,13 +35,13 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
         /// Initializes a new instance of the <see cref="ShipWorksOdbcCommand"/> class.
         /// </summary>
         /// <param name="connection">The connection.</param>
-        /// <param name="log"></param>
-        public ShipWorksOdbcCommand(OdbcConnection connection, ILog log)
+        /// <param name="apiLogEntryFactory"></param>
+        public ShipWorksOdbcCommand(OdbcConnection connection, Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory)
         {
-            this.log = log;
+            this.apiLogEntryFactory = apiLogEntryFactory;
             command = connection.CreateCommand();
         }
-
+        
         /// <summary>
         /// Sends the System.Data.Odbc.OdbcCommand.CommandText to the System.Data.Odbc.OdbcCommand.Connection
         /// and builds an System.Data.Odbc.OdbcDataReader.
@@ -45,7 +51,9 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
         /// </returns>
         public DbDataReader ExecuteReader()
         {
-            log.Info(command.CommandText);
+            IApiLogEntry apiLogger = apiLogEntryFactory(ApiLogSource.Odbc, "Read");
+            apiLogger.LogRequest(BuildLoggedCommandText(), "log");
+
             return command.ExecuteReader();
         }
 
@@ -58,8 +66,10 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
         /// </returns>
         public DbDataReader ExecuteReader(CommandBehavior commandBehavior)
         {
-            log.Info(command.CommandText);
-            return command.ExecuteReader(commandBehavior);
+            IApiLogEntry apiLogger = apiLogEntryFactory(ApiLogSource.Odbc, "Read");
+            apiLogger.LogRequest(BuildLoggedCommandText(), "log");
+
+            return command.ExecuteReader();
         }
 
         /// <summary>
@@ -67,8 +77,13 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
         /// </summary>
         public int ExecuteNonQuery()
         {
-            log.Info(command.CommandText);
-            return command.ExecuteNonQuery();
+            IApiLogEntry apiLogger = apiLogEntryFactory(ApiLogSource.Odbc, "Write");
+            apiLogger.LogRequest(BuildLoggedCommandText(), "log");
+
+            int recordsAffected = command.ExecuteNonQuery();
+            apiLogger.LogResponse($"{recordsAffected} records affected", "log");
+
+            return recordsAffected;
         }
 
         /// <summary>
@@ -85,6 +100,33 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
         public void AddParameter(OdbcParameter parameter)
         {
             command.Parameters.Add(parameter);
+        }
+
+        /// <summary>
+        /// Uses the configuration of the ODBC command (command text and any parameters) to build 
+        /// a string that can be used for logging the interaction with the database.
+        /// </summary>
+        /// <returns>A formatted string containing the command text along with the parameter names/values.</returns>
+        private string BuildLoggedCommandText()
+        {
+            StringBuilder commandData = new StringBuilder(command.CommandText);
+
+            commandData.Append(Environment.NewLine);
+            commandData.Append("Parameters: ");
+
+            // Write out "(none)" when there aren't any parameters; otherwise turn 
+            // the command's parameters into a comma separated list in the format
+            // of [ParameterName] = [Value]. (Sonar Lint prevented compilation if
+            // this didn't used the ternary operator.)
+            commandData.Append(command.Parameters.Count == 0 ? 
+                "(none)" : 
+                string.Join(", ", command.Parameters
+                .Cast<OdbcParameter>()
+                .ToDictionary(parameter => parameter.ParameterName,
+                    parameter => parameter.Value.ToString())
+                .Select(kvp => kvp.Key + " = " + kvp.Value)));
+
+            return commandData.ToString();
         }
 
         /// <summary>

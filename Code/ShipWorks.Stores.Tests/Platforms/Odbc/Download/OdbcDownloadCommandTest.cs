@@ -293,5 +293,21 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Download
                 Assert.Throws<ShipWorksOdbcException>(() => testObject.Execute());
             }
         }
+
+        [Fact]
+        public void Driver_DelegatesToDataSource()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                Mock<IOdbcDataSource> dataSource = mock.Mock<IOdbcDataSource>();
+                dataSource.SetupGet(d => d.Driver).Returns("Some test driver");
+                
+                OdbcDownloadCommand testObject = mock.Create<OdbcDownloadCommand>();
+                string driverName = testObject.Driver;
+
+                dataSource.Verify(d => d.Driver, Times.Once());
+                Assert.Equal("Some test driver", driverName);
+            }
+        }
     }
 }

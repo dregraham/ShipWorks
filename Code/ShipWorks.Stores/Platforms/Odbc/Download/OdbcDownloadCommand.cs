@@ -33,6 +33,14 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         }
 
         /// <summary>
+        /// Gets the name of the driver being used to execute this command.
+        /// </summary>
+        public string Driver
+        {
+            get { return dataSource.Driver; }
+        }
+
+        /// <summary>
         /// Downloads all the orders.
         /// </summary>
         /// <exception cref="ShipWorksOdbcException">The Connection string is not valid</exception>
@@ -45,11 +53,9 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
                 using (DbConnection connection = dataSource.CreateConnection())
                 {
                     connection.Open();
-
                     using (IShipWorksOdbcCommand command = dbProviderFactory.CreateOdbcCommand(connection))
                     {
                         downloadQuery.ConfigureCommand(command);
-
                         using (DbDataReader reader = command.ExecuteReader())
                         {
                             while (reader.Read())

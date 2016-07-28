@@ -1,7 +1,4 @@
-﻿using System;
-using System.ComponentModel;
-using System.Reflection;
-using GalaSoft.MvvmLight.Command;
+﻿using GalaSoft.MvvmLight.Command;
 using Interapptive.Shared.UI;
 using log4net;
 using ShipWorks.Data.Model.EntityClasses;
@@ -9,13 +6,15 @@ using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Stores.Platforms.Odbc.DataAccess;
 using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 using ShipWorks.Stores.Platforms.Odbc.Download;
+using System;
+using System.Reflection;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
 {
     /// <summary>
     /// ViewModel for OdbcMapSettingsControl
     /// </summary>
-    public class OdbcImportMapSettingsControlViewModel : OdbcMapSettingsControlViewModel, INotifyPropertyChanged
+    public class OdbcImportMapSettingsControlViewModel : OdbcMapSettingsControlViewModel
     {
         private bool columnSourceIsTable = true;
         private bool downloadStrategyIsLastModified = true;
