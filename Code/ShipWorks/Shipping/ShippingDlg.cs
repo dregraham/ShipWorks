@@ -458,13 +458,13 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Update the shipment details section to display the data currently in the selected shipments
         /// </summary>
-        [NDependIgnoreLongMethodAttribute]
-        private Task LoadSelectedShipments(bool resortWhenDone, bool getRatesWhenDone)
+        [NDependIgnoreLongMethod]
+        private async Task LoadSelectedShipments(bool resortWhenDone, bool getRatesWhenDone)
         {
             // If we're already in the process of loading shipments, there is no need to process this
             if (loadingSelectedShipments)
             {
-                return TaskUtility.CompletedTask;
+                return;
             }
 
             // We are now in the process of loading shipments
@@ -489,19 +489,13 @@ namespace ShipWorks.Shipping
 
             IEnumerable<ShipmentEntity> shipmentsToLoad = shipmentControl.SelectedShipments;
 
-            TaskCompletionSource<object> completionSource = new TaskCompletionSource<object>();
-
             // Code to execute once background load is complete
-            executor.ExecuteCompleted += (sender, e) =>
-            {
-                LoadSelectedShipmentsCompleted(sender, e);
-                completionSource.SetResult(null);
-            };
+            executor.ExecuteCompleted += LoadSelectedShipmentsCompleted;
 
             using (SqlAdapter adapter = new SqlAdapter())
             {
                 // Code to execute for each shipment
-                executor.ExecuteAsync((shipment, state, issueAdder) =>
+                await executor.ExecuteAsync((shipment, state, issueAdder) =>
                 {
                     // If we already know its deleted, don't bother
                     if (shipment.DeletedFromDatabase)
@@ -545,8 +539,6 @@ namespace ShipWorks.Shipping
                     }
                 }, shipmentsToLoad, userState); // Execute the code for each shipment
             }
-
-            return completionSource.Task;
         }
 
         /// <summary>
