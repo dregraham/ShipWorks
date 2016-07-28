@@ -464,7 +464,9 @@
     <Compile Include="Actions\Scheduling\QuartzNet\ActionScheduleAdapters\HourlyActionScheduleAdapter.cs" />
     <Compile Include="Actions\Scheduling\QuartzNet\ActionScheduleAdapters\OneTimeActionScheduleAdapter.cs" />
     <Compile Include="Actions\Scheduling\QuartzNet\ActionScheduleAdapters\MonthlyActionScheduleAdapter.cs" />
+    <Compile Include="Actions\Scheduling\QuartzNet\VersionAgnosticSerializationBinder.cs" />
     <Compile Include="Actions\Scheduling\QuartzNet\IntervalCalendar.cs" />
+    <Compile Include="Actions\Scheduling\QuartzNet\VersionAgnosticObjectSerializer.cs" />
     <Compile Include="Actions\Scheduling\QuartzNet\QuartzActionSchedule.cs" />
     <Compile Include="Actions\Scheduling\QuartzNet\ReflectingActionScheduleAdapter.cs" />
     <Compile Include="Actions\Scheduling\QuartzNet\IActionScheduleAdapter.cs" />
