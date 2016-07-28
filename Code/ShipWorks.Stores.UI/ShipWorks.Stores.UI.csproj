@@ -177,6 +177,12 @@
     </Compile>
     <Compile Include="Platforms\Odbc\OdbcFieldMapDisplay.cs" />
     <Compile Include="Platforms\Odbc\OdbcFieldMapMultiValueConverter.cs" />
+    <Compile Include="Platforms\Odbc\OdbcImportSettingsWizard.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Platforms\Odbc\OdbcImportSettingsWizard.Designer.cs">
+      <DependentUpon>OdbcImportSettingsWizard.cs</DependentUpon>
+    </Compile>
     <Compile Include="Platforms\Odbc\ViewModels\IOdbcImportFieldMappingControlViewModel.cs" />
     <Compile Include="Platforms\Odbc\ViewModels\IOdbcMapSettingsControlViewModel.cs" />
     <Compile Include="Platforms\Odbc\ViewModels\IOdbcUploadMappingControlViewModel.cs" />
@@ -315,6 +321,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Platforms\LemonStand\WizardPages\LemonStandAccountPage.resx">
       <DependentUpon>LemonStandAccountPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Platforms\Odbc\OdbcImportSettingsWizard.resx">
+      <DependentUpon>OdbcImportSettingsWizard.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Platforms\Odbc\WizardPages\OdbcImportFieldMappingPage.resx">
       <DependentUpon>OdbcImportFieldMappingPage.cs</DependentUpon>
