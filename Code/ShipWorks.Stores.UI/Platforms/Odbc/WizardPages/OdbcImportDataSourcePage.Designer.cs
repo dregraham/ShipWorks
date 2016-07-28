@@ -48,6 +48,7 @@
             this.odbcDataSourceControl.Location = new System.Drawing.Point(30, 23);
             this.odbcDataSourceControl.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.odbcDataSourceControl.Name = "odbcDataSourceControl";
+            this.odbcDataSourceControl.SelectedDataSource = null;
             this.odbcDataSourceControl.Size = new System.Drawing.Size(487, 209);
             this.odbcDataSourceControl.TabIndex = 0;
             // 
@@ -63,6 +64,7 @@
             this.Size = new System.Drawing.Size(532, 242);
             this.Title = "Setup Import Data Source";
             this.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNext);
+            this.SteppingInto += new System.EventHandler<ShipWorks.UI.Wizard.WizardSteppingIntoEventArgs>(this.OnSteppingInto);
             this.ResumeLayout(false);
             this.PerformLayout();
 

@@ -4,6 +4,7 @@ using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.UI.Wizard;
 using System.Windows.Forms;
+using ShipWorks.Stores.Platforms.Odbc.DataSource;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
 {
@@ -12,11 +13,14 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
     /// </summary>
     public partial class OdbcImportDataSourcePage : AddStoreWizardPage, IOdbcWizardPage
     {
+        private readonly IOdbcDataSourceService dataSourceService;
+
         /// <summary>
         /// Constructor
         /// </summary>
-        public OdbcImportDataSourcePage(IExternalProcess odbcControlPanel)
+        public OdbcImportDataSourcePage(IExternalProcess odbcControlPanel, IOdbcDataSourceService dataSourceService)
         {
+            this.dataSourceService = dataSourceService;
             InitializeComponent();
             odbcDataSourceControl.LoadDependencies(odbcControlPanel);
             odbcDataSourceControl.RefreshDataSources();
@@ -26,6 +30,19 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
         /// The position in which to show this wizard page
         /// </summary>
         public int Position => 0;
+
+        /// <summary>
+        /// Load data source from store and pass into control
+        /// </summary>
+        private void OnSteppingInto(object sender, WizardSteppingIntoEventArgs e)
+        {
+            OdbcStoreEntity store = GetStore<OdbcStoreEntity>();
+
+            if (!string.IsNullOrWhiteSpace(store.ImportConnectionString))
+            {
+                odbcDataSourceControl.LoadDataSource(dataSourceService.GetImportDataSource(store));
+            }
+        }
 
         /// <summary>
         /// User is moving to the next wizard page, perform any autoconfiguration or credentials saving
