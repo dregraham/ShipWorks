@@ -21,7 +21,7 @@ namespace ShipWorks.Stores.Management
         /// </summary>
         public T GetStore<T>() where T: StoreEntity
         {
-            return (T) ((AddStoreWizard) Wizard).Store;
+            return (T) ((IStoreWizard) Wizard).Store;
         }
     }
 }

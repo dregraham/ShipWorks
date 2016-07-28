@@ -16,12 +16,6 @@ namespace ShipWorks.UI.Wizard
         string title;
         string description;
 
-        // The wizard that we are apart of
-        WizardForm wizard;
-
-        // If true, clicking next will require elevation
-        bool nextRequiresElevation = false;
-
         // Tracks if this is the first time the Shown event has been raised
         bool firstTimeShown = true;
 
@@ -56,17 +50,7 @@ namespace ShipWorks.UI.Wizard
         /// <summary>
         /// Gets the Wizard control we are apart of
         /// </summary>
-        internal protected WizardForm Wizard
-        {
-            get
-            {
-                return this.wizard;
-            }
-            set
-            {
-                wizard = value;
-            }
-        }
+        protected internal WizardForm Wizard { get; set; }
 
         /// <summary>
         /// Title of the page
@@ -77,12 +61,7 @@ namespace ShipWorks.UI.Wizard
         {
             get
             {
-                if (title == null)
-                {
-                    return string.Empty;
-                }
-
-                return title;
+                return title ?? string.Empty;
             }
             set
             {
@@ -104,12 +83,7 @@ namespace ShipWorks.UI.Wizard
         {
             get
             {
-                if (description == null)
-                {
-                    return string.Empty;
-                }
-
-                return description;
+                return description ?? string.Empty;
             }
             set
             {
@@ -127,27 +101,14 @@ namespace ShipWorks.UI.Wizard
         /// </summary>
         [DefaultValue(false)]
         [Category("Wizard")]
-        public bool NextRequiresElevation
-        {
-            get
-            {
-                return nextRequiresElevation;
-            }
-            set
-            {
-                nextRequiresElevation = value;
-            }
-        }
+        public bool NextRequiresElevation { get; set; } = false;
 
         /// <summary>
         /// Raise the SteppingBack event.
         /// </summary>
         internal void RaiseSteppingBack(WizardStepEventArgs e)
         {
-            if (StepBack != null)
-            {
-                StepBack(this, e);
-            }
+            StepBack?.Invoke(this, e);
         }
 
         /// <summary>
@@ -155,10 +116,7 @@ namespace ShipWorks.UI.Wizard
         /// </summary>
         internal void RaiseSteppingNext(WizardStepEventArgs e)
         {
-            if (StepNext != null)
-            {
-                StepNext(this, e);
-            }
+            StepNext?.Invoke(this, e);
         }
 
         /// <summary>
@@ -166,10 +124,7 @@ namespace ShipWorks.UI.Wizard
         /// </summary>
         internal void RaiseSteppingInto(WizardSteppingIntoEventArgs e)
         {
-            if (SteppingInto != null)
-            {
-                SteppingInto(this, e);
-            }
+            SteppingInto?.Invoke(this, e);
         }
 
         /// <summary>
@@ -177,10 +132,7 @@ namespace ShipWorks.UI.Wizard
         /// </summary>
         internal void RaisePageShown()
         {
-            if (PageShown != null)
-            {
-                PageShown(this, new WizardPageShownEventArgs(firstTimeShown));
-            }
+            PageShown?.Invoke(this, new WizardPageShownEventArgs(firstTimeShown));
 
             firstTimeShown = false;
         }
@@ -190,11 +142,7 @@ namespace ShipWorks.UI.Wizard
         /// </summary>
         internal void RaiseCancelling(CancelEventArgs e)
         {
-            if (Cancelling != null)
-            {
-                Cancelling(this, e);
-            }
+            Cancelling?.Invoke(this, e);
         }
-
     }
 }
