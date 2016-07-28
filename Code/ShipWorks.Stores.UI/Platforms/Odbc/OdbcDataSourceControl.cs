@@ -22,7 +22,6 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         private readonly ILog log;
         private IExternalProcess odbcControlPanel;
         private IOdbcDataSource loadedDataSource;
-        private bool loadedDataSourceNotFound;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcDataSourceControl"/> class.
@@ -31,7 +30,6 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         {
             InitializeComponent();
             log = LogManager.GetLogger(typeof(OdbcDataSourceControl));
-            loadedDataSourceNotFound = false;
         }
 
         /// <summary>
@@ -76,12 +74,6 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             {
                 MessageHelper.ShowWarning(ParentForm, $"ShipWorks could not find any ODBC data sources. {Environment.NewLine} " +
                                                 "Please add one to continue.");
-                return false;
-            }
-
-            if (loadedDataSourceNotFound && SelectedDataSource == loadedDataSource)
-            {
-                MessageHelper.ShowWarning(ParentForm, "ShipWorks could not find the selected ODBC data source on this machine.");
                 return false;
             }
 
@@ -230,18 +222,16 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
                     // If the datasource matches a datasource in the list, remove that datasource and replace it with the loaded one.
                     if (loadedDataSource!= null)
                     {
-                        IOdbcDataSource matchingDataSource = dataSources.FirstOrDefault(ds => ds.Name == loadedDataSource.Name);
+                        int? matchingSourceIndex = dataSources
+                            .Select((value, index) => new {value, index})
+                            .FirstOrDefault(x => x.value.Name == loadedDataSource.Name)?.index;
 
-                        if (matchingDataSource == null)
+                        if (matchingSourceIndex.HasValue)
                         {
-                            loadedDataSourceNotFound = true;
-                        }
-                        else
-                        {
-                            dataSources.Remove(matchingDataSource);
+                            dataSources.RemoveAt(matchingSourceIndex.Value);
                         }
 
-                        dataSources.Insert(0, loadedDataSource);
+                        dataSources.Insert(matchingSourceIndex ?? 0, loadedDataSource);
                     }
 
                     genericResult = GenericResult.FromSuccess(dataSources);
