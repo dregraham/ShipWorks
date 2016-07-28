@@ -17,6 +17,7 @@ using ShipWorks.Stores.Platforms.Odbc.Upload.FieldValueResolvers;
 using ShipWorks.Stores.UI.Platforms.Odbc.ViewModels;
 using ShipWorks.Stores.UI.Platforms.Odbc.WizardPages;
 using System.Reflection;
+using ShipWorks.Stores.Management;
 using Module = Autofac.Module;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc
@@ -167,6 +168,10 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
 
             builder.RegisterType<OdbcUploadMappingPage>()
                 .As<IOdbcWizardPage>();
+
+            builder.RegisterType<OdbcConnectionSettingsControl>()
+                .Keyed<AccountSettingsControlBase>(StoreTypeCode.Odbc)
+                .ExternallyOwned();
         }
 
         /// <summary>
