@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Forms;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.Odbc;
+using ShipWorks.Stores.Services;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc
 {
@@ -12,6 +14,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
     /// </summary>
     public partial class OdbcConnectionSettingsControl : AccountSettingsControlBase
     {
+        private readonly IStoreManager storeManager;
         private readonly IEnumerable<IOdbcWizardPage> importPages;
         private readonly IEnumerable<IOdbcWizardPage> uploadPages;
         private OdbcStoreEntity odbcStore;
@@ -20,8 +23,10 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// Initializes a new instance of the <see cref="OdbcConnectionSettingsControl"/> class.
         /// </summary>
         /// <param name="pages">The pages.</param>
-        public OdbcConnectionSettingsControl(IEnumerable<IOdbcWizardPage> pages)
+        /// <param name="storeManager"></param>
+        public OdbcConnectionSettingsControl(IEnumerable<IOdbcWizardPage> pages, IStoreManager storeManager)
         {
+            this.storeManager = storeManager;
             InitializeComponent();
 
             IEnumerable<IOdbcWizardPage> wizardPages = pages as IOdbcWizardPage[] ?? pages.ToArray();
@@ -41,7 +46,10 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         {
             using (OdbcImportSettingsWizard wizard = new OdbcImportSettingsWizard(odbcStore, importPages))
             {
-                wizard.ShowDialog(this);
+                if (wizard.ShowDialog(this) == DialogResult.OK)
+                {
+                    storeManager.SaveStore(odbcStore);
+                }
             }
         }
 
