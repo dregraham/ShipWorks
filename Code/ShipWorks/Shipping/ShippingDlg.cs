@@ -488,14 +488,12 @@ namespace ShipWorks.Shipping
             userState["getRatesWhenDone"] = getRatesWhenDone;
 
             IEnumerable<ShipmentEntity> shipmentsToLoad = shipmentControl.SelectedShipments;
-
-            // Code to execute once background load is complete
-            executor.ExecuteCompleted += LoadSelectedShipmentsCompleted;
+            bool canceled = false;
 
             using (SqlAdapter adapter = new SqlAdapter())
             {
                 // Code to execute for each shipment
-                await executor.ExecuteAsync((shipment, state, issueAdder) =>
+                BackgroundExecutorCompletedEventArgs<ShipmentEntity> result = await executor.ExecuteAsync((shipment, state, issueAdder) =>
                 {
                     // If we already know its deleted, don't bother
                     if (shipment.DeletedFromDatabase)
@@ -538,7 +536,11 @@ namespace ShipWorks.Shipping
                         }
                     }
                 }, shipmentsToLoad, userState); // Execute the code for each shipment
+
+                canceled = result.Canceled;
             }
+
+            LoadSelectedShipmentsCompleted(userState, canceled);
         }
 
         /// <summary>
@@ -576,12 +578,11 @@ namespace ShipWorks.Shipping
         /// The second part of the load selected shipments routine, after we have assured all carrier specific data has been loaded
         /// </summary>
         [NDependIgnoreLongMethod]
-        private void LoadSelectedShipmentsCompleted(object sender, BackgroundExecutorCompletedEventArgs<ShipmentEntity> e)
+        private void LoadSelectedShipmentsCompleted(Dictionary<string, object> userState, bool canceled)
         {
             loadingSelectedShipments = false;
 
             // Extract userState
-            Dictionary<string, object> userState = (Dictionary<string, object>) e.UserState;
             loadedShipmentEntities = (List<ShipmentEntity>) userState["loaded"];
             List<ShipmentEntity> deleted = (List<ShipmentEntity>) userState["deleted"];
             bool resortWhenDone = (bool) userState["resortWhenDone"];
@@ -599,14 +600,14 @@ namespace ShipWorks.Shipping
             //
             // If they had canceled, then the selection will be bigger than what was loaded obviously - and the rest of this function
             // will take care of unselecting it.
-            if (!e.Canceled && HasSelectionChanged(loadedShipmentEntities))
+            if (!canceled && HasSelectionChanged(loadedShipmentEntities))
             {
                 LoadSelectedShipments(resortWhenDone);
                 return;
             }
 
             resortWhenDone = resortWhenDone ||
-                             DeselectRowsIfCanceled(e.Canceled, resortWhenDone) ||
+                             DeselectRowsIfCanceled(canceled, resortWhenDone) ||
                              deleted.Any();
 
             // To have editing enabled, it's necessary for shipments to be unprocessed and to have permissions for all of them
