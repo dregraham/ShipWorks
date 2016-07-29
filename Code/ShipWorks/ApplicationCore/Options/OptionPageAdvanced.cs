@@ -1,25 +1,20 @@
 using System;
-using System.Data;
-using System.Data.SqlClient;
+using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Interapptive.Shared.UI;
-using ShipWorks.Data;
 using Interapptive.Shared.Utility;
+using ShipWorks.Common.Threading;
+using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.ShipSense;
+using ShipWorks.Shipping.ShipSense.Population;
+using ShipWorks.Shipping.ShipSense.Settings;
 using ShipWorks.Users;
 using ShipWorks.Users.Audit;
 using ShipWorks.Users.Logon;
-using ShipWorks.Shipping.ShipSense.Settings;
-using ShipWorks.Data.Connection;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using Interapptive.Shared.Data;
-using ShipWorks.Shipping.ShipSense.Population;
-using ShipWorks.Common.Threading;
-using System.Threading.Tasks;
 
 namespace ShipWorks.ApplicationCore.Options
 {
@@ -29,7 +24,7 @@ namespace ShipWorks.ApplicationCore.Options
     public partial class OptionPageAdvanced : OptionPageBase
     {
         ConfigurationEntity config;
-        
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -37,7 +32,7 @@ namespace ShipWorks.ApplicationCore.Options
         {
             InitializeComponent();
         }
-        
+
         /// <summary>
         /// Do initialization
         /// </summary>
@@ -58,10 +53,10 @@ namespace ShipWorks.ApplicationCore.Options
             updateCustomerShipping.Checked = config.CustomerUpdateShipping;
 
             EnumHelper.BindComboBox<ModifiedOrderCustomerUpdateBehavior>(orderBillingAddressChanged);
-            orderBillingAddressChanged.SelectedValue = (ModifiedOrderCustomerUpdateBehavior)config.CustomerUpdateModifiedBilling;
+            orderBillingAddressChanged.SelectedValue = (ModifiedOrderCustomerUpdateBehavior) config.CustomerUpdateModifiedBilling;
 
             EnumHelper.BindComboBox<ModifiedOrderCustomerUpdateBehavior>(orderShippingAddressChanged);
-            orderShippingAddressChanged.SelectedValue = (ModifiedOrderCustomerUpdateBehavior)config.CustomerUpdateModifiedShipping;
+            orderShippingAddressChanged.SelectedValue = (ModifiedOrderCustomerUpdateBehavior) config.CustomerUpdateModifiedShipping;
 
             auditNewOrders.Checked = config.AuditNewOrders;
             auditDeletedOrders.Checked = config.AuditDeletedOrders;
@@ -71,6 +66,24 @@ namespace ShipWorks.ApplicationCore.Options
             clearKnowledgebase.Visible = UserSession.User.IsAdmin;
 
             autoCreateShipments.Checked = settings.AutoCreateShipments;
+
+            SetupShipmentEditLimit(settings);
+        }
+
+        /// <summary>
+        /// Setup the shipment edit limit dropdown
+        /// </summary>
+        private void SetupShipmentEditLimit(ShippingSettingsEntity settings)
+        {
+            shipmentEditLimit.DataSource = ShipmentsLoaderConstants.MaxAllowedOrderOptions
+                .ToDictionary(x => x.ToString("#,###"), x => x)
+                .ToList();
+            shipmentEditLimit.DisplayMember = "Key";
+            shipmentEditLimit.ValueMember = "Value";
+            shipmentEditLimit.SelectedValue =
+                ShipmentsLoaderConstants.MaxAllowedOrderOptions.Contains(settings.ShipmentEditLimit) ?
+                    settings.ShipmentEditLimit :
+                    ShipmentsLoaderConstants.MaxAllowedOrderOptions.First();
         }
 
         /// <summary>
@@ -96,6 +109,7 @@ namespace ShipWorks.ApplicationCore.Options
             ShippingSettingsEntity settings = ShippingSettings.Fetch();
             settings.ShipSenseEnabled = enableShipSense.Checked;
             settings.AutoCreateShipments = autoCreateShipments.Checked;
+            settings.ShipmentEditLimit = (int) shipmentEditLimit.SelectedValue;
             ShippingSettings.Save(settings);
 
             ConfigurationData.Save(config);
@@ -117,7 +131,7 @@ namespace ShipWorks.ApplicationCore.Options
             using (ShipSenseConfirmationDlg confirmationDialog = new ShipSenseConfirmationDlg(ConfirmationText))
             {
                 // Make note of whether we need to reload the knowledge base here, so we can
-                // dispose of the confirmation dialog and show the progress dialog while 
+                // dispose of the confirmation dialog and show the progress dialog while
                 // the loader is running.
                 result = confirmationDialog.ShowDialog(this);
                 isReloadRequested = confirmationDialog.IsReloadRequested;
@@ -143,7 +157,7 @@ namespace ShipWorks.ApplicationCore.Options
                     progressDialog.CloseTextWhenComplete = "Close";
 
 
-                    // The reset could take a few seconds depending on the size of the database, so 
+                    // The reset could take a few seconds depending on the size of the database, so
                     // reset the knowledge base on a separate thread
                     Task resetTask = new Knowledgebase().ResetAsync(UserSession.User, progressItem);
                     Task reloadTask = null;
@@ -224,8 +238,8 @@ namespace ShipWorks.ApplicationCore.Options
         }
 
         /// <summary>
-        /// Creates a task to reload the ShipSense knowledge base with the latest shipment history. 
-        /// This overloaded version allows the reload process to attach a progress item to an existing 
+        /// Creates a task to reload the ShipSense knowledge base with the latest shipment history.
+        /// This overloaded version allows the reload process to attach a progress item to an existing
         /// progress provider.
         /// </summary>
         /// <remarks>
@@ -242,7 +256,7 @@ namespace ShipWorks.ApplicationCore.Options
 
             ShipSenseLoader loader = new ShipSenseLoader(progressItem);
 
-            // Indicate that we want to reset the hash keys and prepare the environment for the 
+            // Indicate that we want to reset the hash keys and prepare the environment for the
             // load process to begin
             loader.ResetOrderHashKeys = true;
             loader.PrepareForLoading();

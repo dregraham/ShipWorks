@@ -18742,6 +18742,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.FedExFimsPassword);}
 		}
+		/// <summary>Creates a new ShippingSettingsEntity.ShipmentEditLimit field instance</summary>
+		public static EntityField2 ShipmentEditLimit
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.ShipmentEditLimit);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity ShipSenseKnowledgebaseEntity</summary>
