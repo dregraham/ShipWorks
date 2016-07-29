@@ -2,6 +2,7 @@
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Management;
+using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Stores.UI.Platforms.Odbc.WizardPages;
 using System;
 using System.Windows.Forms;
@@ -36,11 +37,13 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         {
             using (ILifetimeScope scope = IoC.BeginLifetimeScope())
             {
-                OdbcImportDataSourcePage[] importPages =
+                IOdbcWizardPage[] importPages =
                 {
-                    scope.Resolve<OdbcImportDataSourcePage>()
+                    scope.Resolve<OdbcImportDataSourcePage>(),
+                    scope.Resolve<OdbcImportMapSettingsPage>(),
+                    scope.Resolve<OdbcImportFieldMappingPage>()
                 };
-
+                
                 using (OdbcImportSettingsWizard wizard = new OdbcImportSettingsWizard(odbcStore, importPages))
                 {
                     if (wizard.ShowDialog(this) == DialogResult.OK)
