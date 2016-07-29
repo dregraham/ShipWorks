@@ -220,7 +220,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         {
             ShipmentTypeCode shipmentType = shipment.ShipmentTypeCode;
 
-            string carrier = validProviders.ContainsKey(shipmentType) ? validProviders[shipmentType] : "other";
+            string carrier = validProviders.ContainsKey(shipmentType) ? validProviders[shipmentType] : string.Empty;
             string service = GetShippingService(shipment, carrier);
 
             return Tuple.Create(carrier, service);
@@ -234,7 +234,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
             string service = ShippingManager.GetServiceUsed(shipment) ?? string.Empty;
 
             // If the service starts with the carrier name, cut the carrier name off
-            if (service.ToLower().StartsWith(carrier))
+            if (!string.IsNullOrEmpty(carrier) && service.ToLower().StartsWith(carrier))
             {
                 service = service.Substring(carrier.Length + 1);
             }
