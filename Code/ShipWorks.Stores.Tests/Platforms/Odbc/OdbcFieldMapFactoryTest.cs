@@ -22,19 +22,19 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         [Fact]
         public void CreateOrderMap_ReturnsMapWithCorrectNumberOfOrderMappingFields()
         {
-            Assert.Equal(21, testObject.CreateOrderFieldMap().Entries.Count());
+            Assert.Equal(21, testObject.CreateOrderFieldMap(null).Entries.Count());
         }
 
         [Fact]
         public void CreateItemMap_ReturnsMapWithCorrectNumberOfOrderMappingFields()
         {
-            Assert.Equal(17, testObject.CreateOrderItemFieldMap(0).Entries.Count());
+            Assert.Equal(17, testObject.CreateOrderItemFieldMap(null, 0).Entries.Count());
         }
 
         [Fact]
         public void CreateItemMap_ReturnsMapWithCorrectIndexSet()
         {
-            var itemMap = testObject.CreateOrderItemFieldMap(5);
+            var itemMap = testObject.CreateOrderItemFieldMap(null, 5);
 
             Assert.True(itemMap.Entries.All(e => e.Index == 5));
         }
@@ -42,23 +42,23 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         [Fact]
         public void CreateAddressMap_ReturnsMapWithCorrectNumberOfOrderMappingFields()
         {
-            Assert.Equal(32, testObject.CreateAddressFieldMap().Entries.Count());
+            Assert.Equal(32, testObject.CreateAddressFieldMap(null).Entries.Count());
         }
 
         [Fact]
         public void CreateFieldMapFrom_ReturnsMapContainingAllEntriesThatAreMappedOfProvidedMap()
         {
-            IOdbcFieldMap orderMap = testObject.CreateOrderFieldMap();
+            IOdbcFieldMap orderMap = testObject.CreateOrderFieldMap(null);
             ShipWorksOdbcMappableField shipworksOrderMap = new ShipWorksOdbcMappableField(OrderFields.OrderNumber, "Order Number", OdbcFieldValueResolutionStrategy.Default);
             ExternalOdbcMappableField externalOrderMap = new ExternalOdbcMappableField(new OdbcColumn("Column"));
             orderMap.AddEntry(new OdbcFieldMapEntry(shipworksOrderMap, externalOrderMap));
 
-            var itemMap = testObject.CreateOrderItemFieldMap(0);
+            var itemMap = testObject.CreateOrderItemFieldMap(null, 0);
             ShipWorksOdbcMappableField shipworksItemMap = new ShipWorksOdbcMappableField(OrderItemFields.ISBN, "ISBN", OdbcFieldValueResolutionStrategy.Default);
             ExternalOdbcMappableField externalItemMap = new ExternalOdbcMappableField(new OdbcColumn("OrderItemColumn"));
             itemMap.AddEntry(new OdbcFieldMapEntry(shipworksItemMap, externalItemMap));
 
-            var addressMap = testObject.CreateAddressFieldMap();
+            var addressMap = testObject.CreateAddressFieldMap(null);
             ShipWorksOdbcMappableField shipworksAddressMap = new ShipWorksOdbcMappableField(OrderFields.BillAddressValidationError, "BillAddressValidationError", OdbcFieldValueResolutionStrategy.Default);
             ExternalOdbcMappableField externalAddressMap = new ExternalOdbcMappableField(new OdbcColumn("BillAddressValidationError"));
             itemMap.AddEntry(new OdbcFieldMapEntry(shipworksAddressMap, externalAddressMap));

@@ -16,8 +16,6 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcFieldMapFactory"/> class.
         /// </summary>
-        /// <param name="ioFactory">The io factory.</param>
-        /// <param name="fieldValueResolverFactory"></param>
         public OdbcFieldMapFactory(IOdbcFieldMapIOFactory ioFactory)
         {
             this.ioFactory = ioFactory;
@@ -26,9 +24,9 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <summary>
         /// Creates the order field map.
         /// </summary>
-        public IOdbcFieldMap CreateOrderFieldMap()
+        public IOdbcFieldMap CreateOrderFieldMap(IOdbcFieldMap storeFieldMap)
         {
-            return CreateEmptyMap(CreateShipWorksOrderFields());
+            return CreateMapWithMappedFields(CreateShipWorksOrderFields(), storeFieldMap);
 		}
 
         /// <summary>
@@ -67,9 +65,9 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <summary>
         /// Creates the order item field map.
         /// </summary>
-        public IOdbcFieldMap CreateOrderItemFieldMap(int index)
+        public IOdbcFieldMap CreateOrderItemFieldMap(IOdbcFieldMap storeFieldMap, int index)
         {
-            return CreateEmptyMap(CreateShipWorksOrderItemFields(), index);
+            return CreateMapWithMappedFields(CreateShipWorksOrderItemFields(), storeFieldMap, index);
         }
 
         /// <summary>
@@ -101,14 +99,14 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 
 	        return fields;
 	    }
-
-
+        
         /// <summary>
         /// Creates the address field map.
         /// </summary>
-        public IOdbcFieldMap CreateAddressFieldMap()
+        /// <param name="storeFieldMap"></param>
+        public IOdbcFieldMap CreateAddressFieldMap(IOdbcFieldMap storeFieldMap)
         {
-            return CreateEmptyMap(CreateShipWorksAddressFields());
+            return CreateMapWithMappedFields(CreateShipWorksAddressFields(), storeFieldMap);
         }
 
         /// <summary>
@@ -159,16 +157,31 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <summary>
         /// Creates the empty map.
         /// </summary>
-        private IOdbcFieldMap CreateEmptyMap(IEnumerable<ShipWorksOdbcMappableField> shipWorksOdbcMappableFields, int index = 0)
+        private IOdbcFieldMap CreateMapWithMappedFields(IEnumerable<ShipWorksOdbcMappableField> shipWorksOdbcMappableFields, IOdbcFieldMap storeFieldMap, int index = 0)
         {
             IOdbcFieldMap map = new OdbcFieldMap(ioFactory);
 
             foreach (ShipWorksOdbcMappableField entry in shipWorksOdbcMappableFields)
             {
-                map.AddEntry(new OdbcFieldMapEntry(entry, new ExternalOdbcMappableField(null), index));
+                // If StoreFieldMap isn't null and has a matching entry, use the entries external field, else create a new one.
+                IExternalOdbcMappableField externalEntry =
+                    storeFieldMap?.Entries.FirstOrDefault(entryFromStoreMap => IsMatchingField(entry, entryFromStoreMap, index))?.ExternalField ??
+                    new ExternalOdbcMappableField(null);
+
+                map.AddEntry(new OdbcFieldMapEntry(entry, externalEntry, index));
             }
 
             return map;
+        }
+
+        /// <summary>
+        /// Is matching field
+        /// </summary>
+        private static bool IsMatchingField(ShipWorksOdbcMappableField fieldFromNewMap, IOdbcFieldMapEntry entryFromStoreMap, int index)
+        {
+            return entryFromStoreMap.ShipWorksField.Name == fieldFromNewMap.Name &&
+                   entryFromStoreMap.ShipWorksField.ContainingObjectName == fieldFromNewMap.ContainingObjectName &&
+                   entryFromStoreMap.Index == index;
         }
 
         /// <summary>
@@ -176,7 +189,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// </summary>
         public IOdbcFieldMap CreateShipmentFieldMap()
         {
-            return CreateEmptyMap(CreateShipmentFields());
+            return CreateMapWithMappedFields(CreateShipmentFields(), null);
         }
 
         /// <summary>
@@ -204,7 +217,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// </summary>
         public IOdbcFieldMap CreateShiptoAddressFieldMap()
         {
-            return CreateEmptyMap(CreateShipToAddressFields());
+            return CreateMapWithMappedFields(CreateShipToAddressFields(), null);
         }
 
         /// <summary>
@@ -258,7 +271,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
                 .Select(
                     attributeNumber => new ShipWorksOdbcMappableField(OrderItemAttributeFields.Name, $"Attribute {attributeNumber}", OdbcFieldValueResolutionStrategy.Default));
 
-            return CreateEmptyMap(attributeFieldMapEntries, itemIndex);
+            return CreateMapWithMappedFields(attributeFieldMapEntries, null, itemIndex);
         }
 	}
 }

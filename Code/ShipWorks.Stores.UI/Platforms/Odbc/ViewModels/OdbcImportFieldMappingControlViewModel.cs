@@ -45,9 +45,9 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
         {
             this.fieldMapFactory = fieldMapFactory;
             this.messageHelper = messageHelper;
-
-            Order = new OdbcFieldMapDisplay("Order", fieldMapFactory.CreateOrderFieldMap());
-            Address = new OdbcFieldMapDisplay("Address", fieldMapFactory.CreateAddressFieldMap());
+            
+            Order = new OdbcFieldMapDisplay("Order", fieldMapFactory.CreateOrderFieldMap(null));
+            Address = new OdbcFieldMapDisplay("Address", fieldMapFactory.CreateAddressFieldMap(null));
             Items = new ObservableCollection<OdbcFieldMapDisplay>();
 
             selectedFieldMap = Order;
@@ -155,7 +155,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
                 {
                     for (int i = numberOfItemsPerOrder; i < value; i++)
                     {
-                        IOdbcFieldMap map = fieldMapFactory.CreateOrderItemFieldMap(i);
+                        IOdbcFieldMap map = fieldMapFactory.CreateOrderItemFieldMap(null, i);
 
                         // Give the new item the correct number of attributes
                         fieldMapFactory.GetAttributeRangeFieldMap(1, numberOfAttributesPerItem, i).Entries.ToList().ForEach(m => map.AddEntry(m));

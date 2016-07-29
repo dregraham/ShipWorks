@@ -10,17 +10,17 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <summary>
         /// Creates the order field map.
         /// </summary>
-        IOdbcFieldMap CreateOrderFieldMap();
+        IOdbcFieldMap CreateOrderFieldMap(IOdbcFieldMap storeFieldMap);
 
         /// <summary>
         /// Creates the order item field map.
         /// </summary>
-        IOdbcFieldMap CreateOrderItemFieldMap(int index);
+        IOdbcFieldMap CreateOrderItemFieldMap(IOdbcFieldMap storeFieldMap, int index);
 
         /// <summary>
         /// Creates the address field map.
         /// </summary>
-        IOdbcFieldMap CreateAddressFieldMap();
+        IOdbcFieldMap CreateAddressFieldMap(IOdbcFieldMap storeFieldMap);
 
         /// <summary>
         /// Creates the shipment field map.
