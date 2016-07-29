@@ -218,8 +218,6 @@
     <Compile Include="Rating\InformationFootnoteViewModel.cs" />
     <Compile Include="Services\Accounts\IShippingAccountListProvider.cs" />
     <Compile Include="Services\Accounts\ShippingAccountListProvider.cs" />
-    <Compile Include="Services\Builders\IShipmentPackageTypesBuilder.cs" />
-    <Compile Include="Services\Builders\IShipmentPackageTypesBuilderFactory.cs" />
     <Compile Include="Services\Builders\ShipmentPackageTypesBuilderFactory.cs" />
     <Compile Include="Services\Builders\ShipmentServicesBuilderFactory.cs" />
     <Compile Include="Services\CarrierAccountRetrieverFactory.cs" />

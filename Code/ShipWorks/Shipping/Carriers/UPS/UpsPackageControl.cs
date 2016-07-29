@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Windows.Forms;
+using Autofac;
 using Divelements.SandGrid;
 using Interapptive.Shared;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Grid.DetailView;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Insurance;
+using ShipWorks.Shipping.Services.Builders;
 using ShipWorks.UI.Controls;
 
 namespace ShipWorks.Shipping.Carriers.UPS
@@ -81,21 +84,23 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
             packageCountCombo.SelectedIndexChanged += this.OnChangePackageCount;
 
-            LoadPackagingTypes();
+            LoadPackagingTypes(new List<ShipmentEntity>());
         }
 
         /// <summary>
         /// Load the packaging type drop down with appropriate values
         /// </summary>
-        private void LoadPackagingTypes()
+        private void LoadPackagingTypes(List<ShipmentEntity> shipments)
         {
             packagingType.DisplayMember = "Value";
             packagingType.ValueMember = "Key";
 
-            //TODO: This is a temporary crash fix that should be removed when we implement the package builder classes
-            packagingType.DataSource = ShipmentTypeManager.GetType(shipmentTypeCode)
-                .BuildPackageTypeDictionary(new List<ShipmentEntity>())
-                .ToList();
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                IShipmentPackageTypesBuilderFactory factory = lifetimeScope.Resolve<IShipmentPackageTypesBuilderFactory>();
+                IShipmentPackageTypesBuilder builder = factory.Get(shipmentTypeCode);
+                packagingType.DataSource = builder.BuildPackageTypeDictionary(shipments).ToList();
+            }
         }
 
         /// <summary>
@@ -124,7 +129,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             packagesGrid.Rows.Clear();
             selectedRows.Clear();
 
-            LoadPackagingTypes();
+            LoadPackagingTypes(shipments);
 
             List<List<UpsPackageEntity>> packageBuckets = new List<List<UpsPackageEntity>>();
 
