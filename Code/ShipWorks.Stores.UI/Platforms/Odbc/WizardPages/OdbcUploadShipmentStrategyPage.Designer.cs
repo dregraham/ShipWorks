@@ -44,9 +44,9 @@
             this.uploadToSame.AutoSize = true;
             this.uploadToSame.Location = new System.Drawing.Point(3, 26);
             this.uploadToSame.Name = "uploadToSame";
-            this.uploadToSame.Size = new System.Drawing.Size(249, 17);
+            this.uploadToSame.Size = new System.Drawing.Size(258, 17);
             this.uploadToSame.TabIndex = 0;
-            this.uploadToSame.Text = "Upload shipment data to the same data source";
+            this.uploadToSame.Text = "Upload shipment details to the same data source";
             this.uploadToSame.UseVisualStyleBackColor = true;
             // 
             // uploadToDifferent
@@ -54,9 +54,9 @@
             this.uploadToDifferent.AutoSize = true;
             this.uploadToDifferent.Location = new System.Drawing.Point(3, 49);
             this.uploadToDifferent.Name = "uploadToDifferent";
-            this.uploadToDifferent.Size = new System.Drawing.Size(256, 17);
+            this.uploadToDifferent.Size = new System.Drawing.Size(265, 17);
             this.uploadToDifferent.TabIndex = 1;
-            this.uploadToDifferent.Text = "Upload shipment data to a different data source";
+            this.uploadToDifferent.Text = "Upload shipment details to a different data source";
             this.uploadToDifferent.UseVisualStyleBackColor = true;
             // 
             // doNotUpload
@@ -65,7 +65,7 @@
             this.doNotUpload.Checked = true;
             this.doNotUpload.Location = new System.Drawing.Point(3, 3);
             this.doNotUpload.Name = "doNotUpload";
-            this.doNotUpload.Size = new System.Drawing.Size(163, 17);
+            this.doNotUpload.Size = new System.Drawing.Size(172, 17);
             this.doNotUpload.TabIndex = 2;
             this.doNotUpload.TabStop = true;
             this.doNotUpload.Text = "Do not upload shipment details";
@@ -86,7 +86,7 @@
             this.labelShipmentUpdate.AutoSize = true;
             this.labelShipmentUpdate.Location = new System.Drawing.Point(50, 15);
             this.labelShipmentUpdate.Name = "labelShipmentUpdate";
-            this.labelShipmentUpdate.Size = new System.Drawing.Size(156, 13);
+            this.labelShipmentUpdate.Size = new System.Drawing.Size(171, 13);
             this.labelShipmentUpdate.TabIndex = 27;
             this.labelShipmentUpdate.Text = "Where to upload shipment details:";
             // 
