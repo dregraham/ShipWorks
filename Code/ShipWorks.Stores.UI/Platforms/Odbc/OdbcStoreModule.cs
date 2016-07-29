@@ -153,22 +153,27 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
                 .AsSelf();
 
             builder.RegisterType<OdbcImportMapSettingsPage>()
-                .As<IOdbcWizardPage>();
+                .As<IOdbcWizardPage>()
+                .AsSelf();
 
             builder.RegisterType<OdbcImportFieldMappingPage>()
-                .As<IOdbcWizardPage>();
+                .As<IOdbcWizardPage>()
+                .AsSelf();
 
             builder.RegisterType<OdbcUploadShipmentStrategyPage>()
                 .As<IOdbcWizardPage>();
 
             builder.RegisterType<OdbcUploadDataSourcePage>()
-                .As<IOdbcWizardPage>();
+                .As<IOdbcWizardPage>()
+                .AsSelf();
 
             builder.RegisterType<OdbcUploadMapSettingsPage>()
-                .As<IOdbcWizardPage>();
+                .As<IOdbcWizardPage>()
+                .AsSelf();
 
             builder.RegisterType<OdbcUploadMappingPage>()
-                .As<IOdbcWizardPage>();
+                .As<IOdbcWizardPage>()
+                .AsSelf();
 
             builder.RegisterType<OdbcConnectionSettingsControl>()
                 .Keyed<AccountSettingsControlBase>(StoreTypeCode.Odbc)
