@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Linq;
 using System.Reflection;
 using System.Windows.Input;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Stores.Platforms.Odbc.DataSource;
 using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 
@@ -28,6 +30,8 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
         public event PropertyChangedEventHandler PropertyChanged;
         protected readonly PropertyChangedHandler Handler;
         protected readonly IMessageHelper MessageHelper;
+        private readonly Func<string, IOdbcColumnSource> columnSourceFactory;
+        private IOdbcSchema schema;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcImportMapSettingsControlViewModel"/> class.
@@ -35,6 +39,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
         protected OdbcMapSettingsControlViewModel(IMessageHelper messageHelper, Func<string, IOdbcColumnSource> columnSourceFactory)
         {
             MessageHelper = messageHelper;
+            this.columnSourceFactory = columnSourceFactory;
             customQueryColumnSource = columnSourceFactory(CustomQueryColumnSourceName);
 
             Handler = new PropertyChangedHandler(this, () => PropertyChanged);
@@ -181,24 +186,76 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
                 return false;
             }
 
+            if (ColumnSourceIsTable)
+            {
+                schema.Load(DataSource);
+                IEnumerable<IOdbcColumnSource> currentTables = schema.Tables;
+
+                if (currentTables.All(t => t.Name != SelectedTable.Name))
+                {
+                    MessageHelper.ShowError("The selected table does not exist in the current data source");
+                    return false;
+                }
+            }
+
             return true;
         }
 
         /// <summary>
         /// Loads the external odbc tables.
         /// </summary>
-        public void Load(IOdbcDataSource dataSource, IEnumerable<IOdbcColumnSource> externalTables)
+        public void Load(IOdbcDataSource dataSource, IOdbcSchema odbcSchema, string columnSourceFromStore, OdbcStoreEntity store)
         {
             MethodConditions.EnsureArgumentIsNotNull(dataSource);
-            MethodConditions.EnsureArgumentIsNotNull(externalTables);
+            MethodConditions.EnsureArgumentIsNotNull(odbcSchema);
+
+            try
+            {
+                odbcSchema.Load(dataSource);
+            }
+            catch (ShipWorksOdbcException ex)
+            {
+                MessageHelper.ShowError(ex.Message);
+            }
 
             DataSource = dataSource;
-            Tables = externalTables;
+            schema = odbcSchema;
+
+            LoadMapSettings(store);
+
+            IOdbcColumnSource loadedColumnSource;
+
+            Tables = odbcSchema.Tables as IList<IOdbcColumnSource> ?? odbcSchema.Tables.ToList();
+
+            if (ColumnSourceIsTable)
+            {
+                loadedColumnSource = columnSourceFactory(columnSourceFromStore);
+                IOdbcColumnSource table = Tables.FirstOrDefault(t => t.Name == loadedColumnSource.Name);
+
+                if (table != null)
+                {
+                    SelectedTable = table;
+                }
+                else
+                {
+                    Tables = Tables.Concat(new[] {loadedColumnSource});
+                    SelectedTable = loadedColumnSource;
+                }
+            }
+            else
+            {
+                CustomQuery = columnSourceFromStore;
+            }
         }
 
         /// <summary>
         /// Saves the map settings.
         /// </summary>
         public abstract void SaveMapSettings(OdbcStoreEntity store);
+
+        /// <summary>
+        /// Loads the map settings.
+        /// </summary>
+        public abstract void LoadMapSettings(OdbcStoreEntity store);
     }
 }

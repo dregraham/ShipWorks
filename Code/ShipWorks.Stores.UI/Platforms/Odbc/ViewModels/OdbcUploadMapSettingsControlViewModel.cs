@@ -83,5 +83,10 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
                 SelectedTable.Name :
                 CustomQuery;
         }
+
+        public override void LoadMapSettings(OdbcStoreEntity store)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

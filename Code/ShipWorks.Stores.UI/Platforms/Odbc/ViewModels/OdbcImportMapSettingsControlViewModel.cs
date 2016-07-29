@@ -7,6 +7,7 @@ using ShipWorks.Stores.Platforms.Odbc.DataAccess;
 using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 using ShipWorks.Stores.Platforms.Odbc.Download;
 using System;
+using System.Linq;
 using System.Reflection;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
@@ -110,6 +111,17 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
 
             return true;
         }
+
+        /// <summary>
+        /// Loads the map settings.
+        /// </summary>
+        public override void LoadMapSettings(OdbcStoreEntity store)
+        {
+            DownloadStrategyIsLastModified = store.ImportStrategy == (int)OdbcImportStrategy.ByModifiedTime;
+
+            ColumnSourceIsTable = store.ImportColumnSourceType == (int)OdbcColumnSourceType.Table;
+        }
+
 
         /// <summary>
         /// Executes the query.

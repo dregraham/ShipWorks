@@ -80,17 +80,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
                     StringComparison.Ordinal))
             {
                 viewModel = viewModelFactory["Import"];
-
-                try
-                {
-                    schema.Load(selectedDataSource);
-                }
-                catch (ShipWorksOdbcException ex)
-                {
-                    messageHelper.ShowError(ex.Message);
-                }
-
-                viewModel.Load(selectedDataSource, schema.Tables);
+                viewModel.Load(selectedDataSource, schema, store.ImportColumnSource, store);
                 mapSettingsControl.DataContext = viewModel;
             }
         }

@@ -15,7 +15,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
         /// <summary>
         /// Loads the external odbc tables.
         /// </summary>
-        void Load(IOdbcDataSource dataSource, IEnumerable<IOdbcColumnSource> externalTables);
+        void Load(IOdbcDataSource dataSource, IOdbcSchema odbcSchema, string columnSourceFromStore, OdbcStoreEntity store);
 
         /// <summary>
         /// Validates the required map settings.
@@ -26,5 +26,10 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
         /// Saves the map settings.
         /// </summary>
         void SaveMapSettings(OdbcStoreEntity store);
+
+        /// <summary>
+        /// Loads the map settings.
+        /// </summary>
+        void LoadMapSettings(OdbcStoreEntity store);
     }
 }

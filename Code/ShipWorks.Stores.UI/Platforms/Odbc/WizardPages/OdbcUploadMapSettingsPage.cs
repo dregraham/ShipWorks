@@ -90,16 +90,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
             {
                 viewModel = viewModelFactory["Upload"];
 
-                try
-                {
-                    schema.Load(selectedDataSource);
-                }
-                catch (ShipWorksOdbcException ex)
-                {
-                    messageHelper.ShowError(ex.Message);
-                }
-
-                viewModel.Load(selectedDataSource, schema.Tables);
+                viewModel.Load(selectedDataSource, schema, store.UploadColumnSource, store);
                 mapSettingsControl.DataContext = viewModel;
             }
         }
