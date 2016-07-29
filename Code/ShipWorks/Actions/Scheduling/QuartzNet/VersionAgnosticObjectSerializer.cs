@@ -4,6 +4,9 @@ using Quartz.Spi;
 
 namespace ShipWorks.Actions.Scheduling.QuartzNet
 {
+    /// <summary>
+    /// Basic serializer that uses a custom binder
+    /// </summary>
     public class VersionAgnosticObjectSerializer : IObjectSerializer
     {
         /// <summary>
