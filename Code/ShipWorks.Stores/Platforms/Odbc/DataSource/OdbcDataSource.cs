@@ -97,7 +97,6 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataSource
         /// used to connect to the data source.
         /// </summary>
         public void ChangeConnection(string dsn, string username, string password, string driver)
-
         {
             IsCustom = false;
             Name = dsn;

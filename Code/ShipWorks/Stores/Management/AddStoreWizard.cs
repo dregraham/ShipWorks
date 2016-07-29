@@ -38,7 +38,7 @@ namespace ShipWorks.Stores.Management
     /// Wizard for adding a new store to ShipWorks
     /// </summary>
     [NDependIgnoreLongTypes]
-    partial class AddStoreWizard : WizardForm
+    partial class AddStoreWizard : WizardForm, IStoreWizard
     {
         private readonly ILifetimeScope scope;
 
@@ -226,10 +226,7 @@ namespace ShipWorks.Stores.Management
         /// <summary>
         /// The store currently being configured by the wizard
         /// </summary>
-        public StoreEntity Store
-        {
-            get { return store; }
-        }
+        public StoreEntity Store => store;
 
         /// <summary>
         /// Wizard is loading

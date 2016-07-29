@@ -41,7 +41,7 @@
             this.btnTestConnection2 = new System.Windows.Forms.Button();
             this.customPanel = new System.Windows.Forms.Panel();
             this.customConnectionStringPanel = new System.Windows.Forms.Panel();
-            this.customConnectionString = new System.Windows.Forms.RichTextBox();
+            this.customConnectionString = new System.Windows.Forms.TextBox();
             this.btnTestConnection = new System.Windows.Forms.Button();
             this.customLabel = new System.Windows.Forms.Label();
             this.credentialsPanel.SuspendLayout();
@@ -194,10 +194,10 @@
             this.customConnectionString.Location = new System.Drawing.Point(0, 0);
             this.customConnectionString.MaxLength = 2048;
             this.customConnectionString.Name = "customConnectionString";
-            this.customConnectionString.ShortcutsEnabled = false;
             this.customConnectionString.Size = new System.Drawing.Size(372, 50);
             this.customConnectionString.TabIndex = 0;
             this.customConnectionString.Text = "";
+            this.customConnectionString.Multiline = true;
             this.customConnectionString.TextChanged += new System.EventHandler(this.OnChangedCustomConnectionString);
             // 
             // btnTestConnection
@@ -261,7 +261,7 @@
         private System.Windows.Forms.Label customLabel;
         private System.Windows.Forms.Button btnTestConnection2;
         private System.Windows.Forms.Button btnTestConnection;
-        private System.Windows.Forms.RichTextBox customConnectionString;
+        private System.Windows.Forms.TextBox customConnectionString;
         private System.Windows.Forms.Panel customConnectionStringPanel;
     }
 }

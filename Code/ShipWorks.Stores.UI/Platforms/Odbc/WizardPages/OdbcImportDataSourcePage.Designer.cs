@@ -63,6 +63,7 @@
             this.Size = new System.Drawing.Size(532, 242);
             this.Title = "Setup Import Data Source";
             this.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNext);
+            this.SteppingInto += new System.EventHandler<ShipWorks.UI.Wizard.WizardSteppingIntoEventArgs>(this.OnSteppingInto);
             this.ResumeLayout(false);
             this.PerformLayout();
 

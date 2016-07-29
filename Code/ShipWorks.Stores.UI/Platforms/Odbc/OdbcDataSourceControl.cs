@@ -5,14 +5,12 @@ using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.ApplicationCore;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores.Platforms.Odbc;
+using ShipWorks.Stores.Platforms.Odbc.DataSource;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Windows.Forms;
-using ShipWorks.Stores.Platforms.Odbc.DataSource;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc
 {
@@ -23,6 +21,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
     {
         private readonly ILog log;
         private IExternalProcess odbcControlPanel;
+        private IOdbcDataSource loadedDataSource;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcDataSourceControl"/> class.
@@ -36,7 +35,11 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// <summary>
         /// Gets the selected data source.
         /// </summary>
-        public EncryptedOdbcDataSource SelectedDataSource => dataSource.SelectedItem as EncryptedOdbcDataSource;
+        public IOdbcDataSource SelectedDataSource
+        {
+            get { return dataSource.SelectedItem as EncryptedOdbcDataSource; }
+            private set { dataSource.SelectedItem = value; }
+        }
 
         /// <summary>
         /// Loads the dependencies.
@@ -44,6 +47,20 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         public void LoadDependencies(IExternalProcess odbcControlPanelProcess)
         {
             odbcControlPanel = odbcControlPanelProcess;
+        }
+
+        /// <summary>
+        /// Loads the data source.
+        /// </summary>
+        /// <param name="source">The source.</param>
+        public void LoadDataSource(IOdbcDataSource source)
+        {
+            loadedDataSource = source;
+
+            // If the loaded data source does not match one in the list, add it
+            RefreshDataSources();
+            SelectedDataSource = loadedDataSource;
+            SetSelectedDatasourceProperties();
         }
 
         /// <summary>
@@ -81,12 +98,20 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// </summary>
         private void SelectedDataSourceChanged(object sender, EventArgs e)
         {
+            SetSelectedDatasourceProperties();
+        }
+
+        /// <summary>
+        /// Sets the selected datasource properties.
+        /// </summary>
+        private void SetSelectedDatasourceProperties()
+        {
             UpdatePanelVisibility();
 
             username.Text = SelectedDataSource?.Username ?? string.Empty;
             password.Text = SelectedDataSource?.Password ?? string.Empty;
 
-            if (SelectedDataSource!= null && SelectedDataSource.IsCustom)
+            if (SelectedDataSource != null && SelectedDataSource.IsCustom)
             {
                 customConnectionString.Text = SelectedDataSource?.ConnectionString ?? string.Empty;
             }
@@ -150,7 +175,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// </remarks>
         private void BindDataSources(List<IOdbcDataSource> dataSources)
         {
-            EncryptedOdbcDataSource currentDataSource = SelectedDataSource;
+            IOdbcDataSource currentDataSource = SelectedDataSource;
 
             dataSource.DataSource = dataSources;
             dataSource.DisplayMember = "Name";
@@ -190,7 +215,26 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
                 try
                 {
                     IOdbcDataSourceService dataSourceService = scope.Resolve<IOdbcDataSourceService>();
-                    genericResult = GenericResult.FromSuccess(dataSourceService.GetDataSources().ToList());
+
+                    List<IOdbcDataSource> dataSources = dataSourceService.GetDataSources().ToList();
+
+                    // If a data source was loaded from the store, make sure it is in the list.
+                    // If the datasource matches a datasource in the list, remove that datasource and replace it with the loaded one.
+                    if (loadedDataSource!= null)
+                    {
+                        int? matchingSourceIndex = dataSources
+                            .Select((value, index) => new {value, index})
+                            .FirstOrDefault(x => x.value.Name == loadedDataSource.Name)?.index;
+
+                        if (matchingSourceIndex.HasValue)
+                        {
+                            dataSources.RemoveAt(matchingSourceIndex.Value);
+                        }
+
+                        dataSources.Insert(matchingSourceIndex ?? 0, loadedDataSource);
+                    }
+
+                    genericResult = GenericResult.FromSuccess(dataSources);
                 }
                 catch (DataException ex)
                 {

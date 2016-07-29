@@ -74,5 +74,10 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataSource
         /// </summary>
         /// <exception cref="ShipWorksOdbcException">The Connection string is not valid</exception>
         DbConnection CreateConnection();
+
+        /// <summary>
+        /// Serialize the OdbcDataSource
+        /// </summary>
+        string Serialize();
     }
 }
