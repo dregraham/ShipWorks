@@ -177,7 +177,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <summary>
         /// Is matching field
         /// </summary>
-        private static bool IsMatchingField(ShipWorksOdbcMappableField fieldFromNewMap, IOdbcFieldMapEntry entryFromStoreMap, int index)
+        private static bool IsMatchingField(IShipWorksOdbcMappableField fieldFromNewMap, IOdbcFieldMapEntry entryFromStoreMap, int index)
         {
             return entryFromStoreMap.ShipWorksField.Name == fieldFromNewMap.Name &&
                    entryFromStoreMap.ShipWorksField.ContainingObjectName == fieldFromNewMap.ContainingObjectName &&

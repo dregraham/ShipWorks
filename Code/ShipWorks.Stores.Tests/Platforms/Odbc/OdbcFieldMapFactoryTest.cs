@@ -1,4 +1,6 @@
 ﻿using Autofac.Extras.Moq;
+using log4net;
+using Moq;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
@@ -10,19 +12,41 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
     public class OdbcFieldMapFactoryTest
     {
         readonly OdbcFieldMapFactory testObject;
+        readonly AutoMock mock;
+        private OdbcFieldMap fieldMap;
 
-        public OdbcFieldMapFactoryTest()
+        public OdbcFieldMapFactoryTest() 
         {
-            using (AutoMock mock = AutoMock.GetLoose())
-            {
-                testObject = mock.Create<OdbcFieldMapFactory>();
-            }
+            mock = AutoMock.GetLoose();
+            testObject = mock.Create<OdbcFieldMapFactory>();
+
+            Mock<ILog> ilogMock = mock.Mock<ILog>();
+            JsonOdbcFieldMapIOFactory ioFactory = new JsonOdbcFieldMapIOFactory(type => ilogMock.Object);
+            fieldMap = new OdbcFieldMap(ioFactory);
         }
 
         [Fact]
         public void CreateOrderMap_ReturnsMapWithCorrectNumberOfOrderMappingFields()
         {
             Assert.Equal(21, testObject.CreateOrderFieldMap(null).Entries.Count());
+        }
+
+        [Fact]
+        public void CreateOrderMap_ReturnsOrderMapWithOrderNumberExternalFieldPopulated_WhenStoreFieldMapContainsEntry()
+        {
+            fieldMap.Load("{\"Entries\":[{\"Index\":0,\"ShipWorksField\":{\"ContainingObjectName\":\"OrderEntity\",\"Name\":\"OrderNumber\",\"DisplayName\":\"Order Number\",\"ResolutionStrategy\":0},\"ExternalField\":{\"Column\":{\"Name\":\"OrderID\"}}}],\"RecordIdentifierSource\":\"OrderID\"}");
+
+            IOdbcFieldMap newFieldMap = testObject.CreateOrderFieldMap(fieldMap);
+            Assert.Equal(fieldMap.Entries.First().ExternalField, newFieldMap.Entries.Single(e=>e.ShipWorksField.Name == "OrderNumber").ExternalField);
+        }
+
+        [Fact]
+        public void CreateOrderMap_ReturnsOrderMapWithExternalFieldReturnsOrderMapWithLocalStatusNotPopulated_WhenStoreFieldMapDoesNotContainLocalStatus()
+        {
+            fieldMap.Load("{\"Entries\":[{\"Index\":0,\"ShipWorksField\":{\"ContainingObjectName\":\"OrderEntity\",\"Name\":\"OrderNumber\",\"DisplayName\":\"Order Number\",\"ResolutionStrategy\":0},\"ExternalField\":{\"Column\":{\"Name\":\"OrderID\"}}}],\"RecordIdentifierSource\":\"OrderID\"}");
+
+            IOdbcFieldMap newFieldMap = testObject.CreateOrderFieldMap(fieldMap);
+            Assert.Null(newFieldMap.Entries.Single(e => e.ShipWorksField.Name == "LocalStatus").ExternalField.Column);
         }
 
         [Fact]
