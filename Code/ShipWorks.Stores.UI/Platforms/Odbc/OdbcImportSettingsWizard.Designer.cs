@@ -69,7 +69,7 @@
             this.LastPageCancelable = true;
             this.Name = "OdbcImportSettingsWizard";
             this.NextVisible = true;
-            this.Text = "OdbcImportSettingsWizard";
+            this.Text = "Odbc Store Setup Wizard";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
             this.topPanel.ResumeLayout(false);
             this.topPanel.PerformLayout();
