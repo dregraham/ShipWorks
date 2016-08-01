@@ -41,7 +41,9 @@
             <Setter Property="VerticalContentAlignment" Value="Center" />
         </Style>
         <ui:VisibleWhenEqualToParameterConverter x:Key="VisibleWhenEqualToParameterConverter" />
-        <ui:InvertBooleanConverter x:Key="InvertBoolean" />
+        <ui:RadioButtonCheckedConverter x:Key="RadioButtonCheckedConverter" />
+        <system:Boolean x:Key="True">True</system:Boolean>
+        <system:Boolean x:Key="False">False</system:Boolean>
     </Control.Resources>
     <Grid Margin="20 10 10 10">
         <Grid.RowDefinitions>
@@ -92,9 +94,12 @@
                 <RadioButton Content="Table"
                              GroupName="ColumnSource"
                              IsChecked="{Binding ColumnSourceIsTable,
-                                                 UpdateSourceTrigger=PropertyChanged}" />
-                <RadioButton Content="Query" GroupName="ColumnSource" 
-                             IsChecked="{Binding ColumnSourceIsTable, Converter={StaticResource InvertBoolean}}"/>
+                                        Converter={StaticResource RadioButtonCheckedConverter},
+                                        ConverterParameter={StaticResource True}}" />
+                <RadioButton Content="Query" GroupName="ColumnSource"
+                             IsChecked="{Binding ColumnSourceIsTable,
+                                        Converter={StaticResource RadioButtonCheckedConverter},
+                                        ConverterParameter={StaticResource False}}"/>
             </StackPanel>
         </Grid>
         <DockPanel Grid.Row="1"

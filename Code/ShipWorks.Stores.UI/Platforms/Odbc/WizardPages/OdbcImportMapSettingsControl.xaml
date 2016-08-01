@@ -42,7 +42,10 @@
         </Style>
         <ui:VisibleWhenEqualToParameterConverter x:Key="VisibleWhenEqualToParameterConverter" />
         <ui:StringToVisibilityConverter x:Key="StringToVisibilityConverter" />
-        <ui:InvertBooleanConverter x:Key="InvertBoolean" />
+        <ui:RadioButtonCheckedConverter x:Key="RadioButtonCheckedConverter"/>
+
+        <system:Boolean x:Key="True">True</system:Boolean>
+        <system:Boolean x:Key="False">False</system:Boolean>
     </Control.Resources>
     <Grid Margin="20 10 10 10">
         <Grid.RowDefinitions>
@@ -93,9 +96,12 @@
                 <RadioButton Content="Orders by last modified date"
                              GroupName="DownloadStrategy"
                              IsChecked="{Binding DownloadStrategyIsLastModified,
-                                                 UpdateSourceTrigger=PropertyChanged}" />
-                <RadioButton Content="All orders" GroupName="DownloadStrategy" 
-                             IsChecked="{Binding DownloadStrategyIsLastModified, Converter={StaticResource InvertBoolean}}"/>
+                                        Converter={StaticResource RadioButtonCheckedConverter},
+                                        ConverterParameter={StaticResource True}}" />
+                <RadioButton Content="All orders" GroupName="DownloadStrategy"
+                             IsChecked="{Binding DownloadStrategyIsLastModified,
+                                        Converter={StaticResource RadioButtonCheckedConverter},
+                                        ConverterParameter={StaticResource False}}"/>
             </StackPanel>
             <Label Grid.Row="3"
                    Grid.Column="0"
@@ -109,9 +115,12 @@
                 <RadioButton Content="Table"
                              GroupName="ColumnSource"
                              IsChecked="{Binding ColumnSourceIsTable,
-                                                 UpdateSourceTrigger=PropertyChanged}" />
-                <RadioButton Content="Query" GroupName="ColumnSource" 
-                             IsChecked="{Binding ColumnSourceIsTable, Converter={StaticResource InvertBoolean}}"/>
+                                        Converter={StaticResource RadioButtonCheckedConverter},
+                                        ConverterParameter={StaticResource True}}" />
+                <RadioButton Content="Query" GroupName="ColumnSource"
+                             IsChecked="{Binding ColumnSourceIsTable,
+                                        Converter={StaticResource RadioButtonCheckedConverter},
+                                        ConverterParameter={StaticResource False}}"/>
             </StackPanel>
         </Grid>
         <DockPanel Grid.Row="1"

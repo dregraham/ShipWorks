@@ -81,7 +81,9 @@
                 </MultiDataTrigger>
             </DataTemplate.Triggers>
         </DataTemplate>
-        <ui:InvertBooleanConverter x:Key="InvertBoolean" />
+        <ui:RadioButtonCheckedConverter x:Key="RadioButtonCheckedConverter" />
+        <system:Boolean x:Key="True">True</system:Boolean>
+        <system:Boolean x:Key="False">False</system:Boolean>
     </Control.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -152,9 +154,12 @@
                 <RadioButton Content="A single row"
                              GroupName="OrderItemStrategy"
                              IsChecked="{Binding IsSingleLineOrder,
-                                                 UpdateSourceTrigger=PropertyChanged}" />
-                <RadioButton Content="Multiple rows" GroupName="OrderItemStrategy" 
-                             IsChecked="{Binding IsSingleLineOrder, Converter={StaticResource InvertBoolean}}"/>
+                                        Converter={StaticResource RadioButtonCheckedConverter},
+                                        ConverterParameter={StaticResource True}}" />
+                <RadioButton Content="Multiple rows" GroupName="OrderItemStrategy"
+                             IsChecked="{Binding IsSingleLineOrder,
+                                        Converter={StaticResource RadioButtonCheckedConverter},
+                                        ConverterParameter={StaticResource False}}"/>
             </StackPanel>
             <StackPanel Grid.Row="2"
                         Margin="0 2.5 0 2.5"
