@@ -315,18 +315,11 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
         {
             IOdbcFieldMapEntry lastModifiedEntry = FindEntriesBy(Order, OrderFields.OnlineLastModified).FirstOrDefault();
 
-            int lastModifiedEntryIndex = Order.Entries.IndexOf(lastModifiedEntry);
-
             if (lastModifiedEntry != null)
             {
                 lastModifiedEntry.ShipWorksField.IsRequired = importStrategy == OdbcImportStrategy.ByModifiedTime;
             }
-
-            // Have to remove and insert the entry because this is what is bound to the property changed trigger.
-            // The entry itself must change, not just a property on it. This avoids having to add a property changed
-            // handler to the ShipWorksMappableField
-            Order.Entries.RemoveAt(lastModifiedEntryIndex);
-            Order.Entries.Insert(lastModifiedEntryIndex, lastModifiedEntry);
+            handler.RaisePropertyChanged(nameof(lastModifiedEntry.ShipWorksField.IsRequired));
         }
 
 
