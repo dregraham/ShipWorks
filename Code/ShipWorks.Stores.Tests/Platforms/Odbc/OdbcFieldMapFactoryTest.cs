@@ -51,13 +51,13 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         [Fact]
         public void CreateItemMap_ReturnsMapWithCorrectNumberOfOrderMappingFields()
         {
-            Assert.Equal(17, testObject.CreateOrderItemFieldMap(null, 0).Entries.Count());
+            Assert.Equal(17, testObject.CreateOrderItemFieldMap(null, 0, 0).Entries.Count());
         }
 
         [Fact]
         public void CreateItemMap_ReturnsMapWithCorrectIndexSet()
         {
-            var itemMap = testObject.CreateOrderItemFieldMap(null, 5);
+            var itemMap = testObject.CreateOrderItemFieldMap(null, 5, 0);
 
             Assert.True(itemMap.Entries.All(e => e.Index == 5));
         }
@@ -76,7 +76,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             ExternalOdbcMappableField externalOrderMap = new ExternalOdbcMappableField(new OdbcColumn("Column"));
             orderMap.AddEntry(new OdbcFieldMapEntry(shipworksOrderMap, externalOrderMap));
 
-            var itemMap = testObject.CreateOrderItemFieldMap(null, 0);
+            var itemMap = testObject.CreateOrderItemFieldMap(null, 0, 0);
             ShipWorksOdbcMappableField shipworksItemMap = new ShipWorksOdbcMappableField(OrderItemFields.ISBN, "ISBN", OdbcFieldValueResolutionStrategy.Default);
             ExternalOdbcMappableField externalItemMap = new ExternalOdbcMappableField(new OdbcColumn("OrderItemColumn"));
             itemMap.AddEntry(new OdbcFieldMapEntry(shipworksItemMap, externalItemMap));
