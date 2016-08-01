@@ -30,7 +30,7 @@ namespace ShipWorks.Shipping
     /// </summary>
     public class ShipmentsLoader
     {
-        private static readonly IEnumerable<int> maxAllowedOrderOptions = new[] { 1000, 5000, 10000, 50000, 100000 };
+        private static readonly IEnumerable<int> maxAllowedOrderOptions = new[] { 500, 1000, 5000, 10000, 50000, 100000 };
         private static readonly ILog log = LogManager.GetLogger(typeof(ShipmentsLoader));
         private BlockingCollection<ShipmentEntity> shipmentsToValidate;
         private Dictionary<long, ShipmentEntity> globalShipments;
@@ -59,9 +59,14 @@ namespace ShipWorks.Shipping
                 int maxAllowedOrders = ShippingSettings.Fetch().ShipmentEditLimit;
 
                 return MaxAllowedOrderOptions.Contains(maxAllowedOrders) ?
-                    maxAllowedOrders : MaxAllowedOrderOptions.First();
+                    maxAllowedOrders : DefaultMaxAllowedOrders;
             }
         }
+
+        /// <summary>
+        /// Get the default maximum allowed order count
+        /// </summary>
+        public static int DefaultMaxAllowedOrders => MaxAllowedOrderOptions.Last();
 
         /// <summary>
         /// Valid options for the max allowed orders

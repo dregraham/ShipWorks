@@ -120,7 +120,7 @@ namespace ShipWorks.Shipping.Services.Dialogs
             if (message.OrderIDs.Count() > ShipmentsLoader.MaxAllowedOrders)
             {
                 string actionName = shippingPanelTabNames[message.InitialDisplay];
-                MessageHelper.ShowInformation(mainWindow, $"You can only {actionName} up to {ShipmentsLoader.MaxAllowedOrders} orders at a time.");
+                MessageHelper.ShowInformation(mainWindow, $"You can only {actionName} up to {ShipmentsLoader.MaxAllowedOrders:#,###} orders at a time.");
                 return;
             }
 

@@ -5,7 +5,7 @@ GO
 PRINT N'Altering [dbo].[ShippingSettings]'
 GO
 ALTER TABLE [dbo].[ShippingSettings] ADD
-[ShipmentEditLimit] [int] NOT NULL CONSTRAINT [DF_ShippingSettings_ShipmentEditLimit] DEFAULT ((1000))
+[ShipmentEditLimit] [int] NOT NULL CONSTRAINT [DF_ShippingSettings_ShipmentEditLimit] DEFAULT ((100000))
 GO
 PRINT N'Dropping constraints from [dbo].[[ShippingSettings]]'
 GO
