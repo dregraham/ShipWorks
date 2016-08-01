@@ -35,7 +35,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
         private readonly PropertyChangedHandler handler;
         public event PropertyChangedEventHandler PropertyChanged;
         private readonly Func<string, IOdbcColumnSource> columnSourceFactory;
-        private IOdbcDataSourceService dataSourceService;
+        private readonly IOdbcDataSourceService dataSourceService;
 
         private const string CustomQueryColumnSourceName = "Custom Import";
         private bool isSingleLineOrder = true;

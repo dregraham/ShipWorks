@@ -12,12 +12,11 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
     public class OdbcFieldMapFactoryTest
     {
         readonly OdbcFieldMapFactory testObject;
-        readonly AutoMock mock;
-        private OdbcFieldMap fieldMap;
+        private readonly OdbcFieldMap fieldMap;
 
         public OdbcFieldMapFactoryTest() 
         {
-            mock = AutoMock.GetLoose();
+            AutoMock mock = AutoMock.GetLoose();
             testObject = mock.Create<OdbcFieldMapFactory>();
 
             Mock<ILog> ilogMock = mock.Mock<ILog>();
