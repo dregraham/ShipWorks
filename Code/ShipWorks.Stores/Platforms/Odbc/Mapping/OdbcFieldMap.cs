@@ -140,9 +140,12 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// </summary>
         public void Load(string serializedMap)
         {
-            IOdbcFieldMapReader reader = ioFactory.CreateReader(serializedMap);
+            if (!string.IsNullOrWhiteSpace(serializedMap))
+            {
+                IOdbcFieldMapReader reader = ioFactory.CreateReader(serializedMap);
 
-            Load(reader);
+                Load(reader);
+            }
         }
 
         /// <summary>
