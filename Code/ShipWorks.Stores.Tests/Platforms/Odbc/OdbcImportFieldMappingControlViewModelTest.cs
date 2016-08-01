@@ -93,18 +93,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         }
 
         [Fact]
-        public void Load_ThrowsArgumentNullException_WhenDataSourceIsNull()
-        {
-            using (var mock = AutoMock.GetLoose())
-            {
-                var mapFactory = mock.Create<OdbcFieldMapFactory>();
-                var testObject = mock.Create<OdbcImportFieldMappingControlViewModel>(new TypedParameter(typeof(IOdbcFieldMapFactory), mapFactory));
-
-                Assert.Throws<ArgumentNullException>(() => testObject.LoadColumnSource(null));
-            }
-        }
-
-        [Fact]
         public void Save_ThrowsArgumentNullException_WhenStoreIsNull()
         {
             using (var mock = AutoMock.GetLoose())

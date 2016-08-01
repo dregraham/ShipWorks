@@ -1,6 +1,7 @@
 using Interapptive.Shared.Utility;
 using Newtonsoft.Json;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 using ShipWorks.Stores.Platforms.Odbc.Upload.FieldValueResolvers;
 using System.Reflection;
 
@@ -66,6 +67,10 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         {
             MethodConditions.EnsureArgumentIsNotNull(record);
             ExternalField.LoadValue(record);
+        }
+        public void LoadExternalField(OdbcColumn column)
+        {
+            ExternalField.Column = column;
         }
 
         /// <summary>

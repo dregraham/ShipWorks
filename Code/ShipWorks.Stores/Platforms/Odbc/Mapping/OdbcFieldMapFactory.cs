@@ -262,6 +262,16 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 		}
 
         /// <summary>
+        /// Creates a new field map from the entries
+        /// </summary>
+        public IOdbcFieldMap CreateFieldMapFrom(string jsonFieldMap)
+        {
+            OdbcFieldMap fieldMap = new OdbcFieldMap(ioFactory);
+            fieldMap.Load(jsonFieldMap);
+            return fieldMap;
+        }
+
+        /// <summary>
         /// Gets a map with the specified number of attributes with item numbers started at the specified start number.
         /// </summary>
         public IOdbcFieldMap GetAttributeRangeFieldMap(int startAttributeNumber, int numberOfAttributes, int itemIndex)

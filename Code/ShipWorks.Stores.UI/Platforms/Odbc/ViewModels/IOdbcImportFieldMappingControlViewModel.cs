@@ -1,6 +1,5 @@
 ﻿using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
-using ShipWorks.Stores.Platforms.Odbc.Download;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
 {
@@ -10,6 +9,11 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
     public interface IOdbcImportFieldMappingControlViewModel
     {
         /// <summary>
+        /// Loads the specified store.
+        /// </summary>
+        void Load(OdbcStoreEntity store);
+     
+        /// <summary>
         /// Save the Map to the given store.
         /// </summary>
         void Save(OdbcStoreEntity store);
@@ -18,16 +22,6 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
         /// Checks the required fields have value.
         /// </summary>
         bool ValidateRequiredMappingFields();
-
-        /// <summary>
-        /// Loads the column source.
-        /// </summary>
-        void LoadColumnSource(IOdbcColumnSource source);
-
-        /// <summary>
-        /// Loads the download strategy.
-        /// </summary>
-        void LoadDownloadStrategy(OdbcImportStrategy importStrategy);
 
         /// <summary>
         /// The column source.

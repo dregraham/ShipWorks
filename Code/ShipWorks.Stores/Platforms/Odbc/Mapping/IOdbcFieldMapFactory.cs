@@ -6,7 +6,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
     /// Factory for creating Odbc field maps
     /// </summary>
     public interface IOdbcFieldMapFactory
-	{
+    {
         /// <summary>
         /// Creates the order field map.
         /// </summary>
@@ -40,9 +40,14 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         OdbcFieldMap CreateFieldMapFrom(IEnumerable<IOdbcFieldMapEntry> entries);
 
         /// <summary>
+        /// Create a FieldMap from a serialized json string
+        /// </summary>
+        IOdbcFieldMap CreateFieldMapFrom(string jsonFieldMap);
+
+        /// <summary>
         /// Gets a map with the specified number of attributes with item numbers started at the specified start number.
         /// </summary>
         IOdbcFieldMap GetAttributeRangeFieldMap(int startAttributeNumber, int numberOfAttributes, int itemIndex);
 
-	}
+    }
 }

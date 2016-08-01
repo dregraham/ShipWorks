@@ -6,6 +6,7 @@ using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Platforms.Odbc;
+using ShipWorks.Stores.Platforms.Odbc.DataSource;
 using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 using ShipWorks.Stores.Platforms.Odbc.Download;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
@@ -33,7 +34,10 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
         private OdbcFieldMapDisplay selectedFieldMap;
         private readonly PropertyChangedHandler handler;
         public event PropertyChangedEventHandler PropertyChanged;
+        private readonly Func<string, IOdbcColumnSource> columnSourceFactory;
+        private IOdbcDataSourceService dataSourceService;
 
+        private const string CustomQueryColumnSourceName = "Custom Import";
         private bool isSingleLineOrder = true;
         private int numberOfAttributesPerItem;
         private int numberOfItemsPerOrder;
@@ -41,16 +45,15 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcImportFieldMappingControlViewModel"/> class.
         /// </summary>
-        public OdbcImportFieldMappingControlViewModel(IOdbcFieldMapFactory fieldMapFactory, IMessageHelper messageHelper)
+        public OdbcImportFieldMappingControlViewModel(IOdbcFieldMapFactory fieldMapFactory,
+            IMessageHelper messageHelper,
+            Func<string, IOdbcColumnSource> columnSourceFactory,
+            IOdbcDataSourceService dataSourceService)
         {
             this.fieldMapFactory = fieldMapFactory;
             this.messageHelper = messageHelper;
-            
-            Order = new OdbcFieldMapDisplay("Order", fieldMapFactory.CreateOrderFieldMap(null));
-            Address = new OdbcFieldMapDisplay("Address", fieldMapFactory.CreateAddressFieldMap(null));
-            Items = new ObservableCollection<OdbcFieldMapDisplay>();
-
-            selectedFieldMap = Order;
+            this.columnSourceFactory = columnSourceFactory;
+            this.dataSourceService = dataSourceService;
 
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
 
@@ -235,6 +238,75 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
         }
 
         /// <summary>
+        /// Loads the specified store.
+        /// </summary>
+        public void Load(OdbcStoreEntity store)
+        {
+            LoadColumnSource(store);
+            LoadMap(store);
+            LoadDownloadStrategy((OdbcImportStrategy)store.ImportStrategy);
+        }
+
+        /// <summary>
+        /// Loads the import map from the store
+        /// </summary>
+        /// <param name="store">The store.</param>
+        private void LoadMap(OdbcStoreEntity store)
+        {
+            IOdbcFieldMap fieldMap = fieldMapFactory.CreateFieldMapFrom(store.ImportMap);
+
+            Order = new OdbcFieldMapDisplay("Order", fieldMapFactory.CreateOrderFieldMap(fieldMap));
+            Address = new OdbcFieldMapDisplay("Address", fieldMapFactory.CreateAddressFieldMap(fieldMap));
+            Items = new ObservableCollection<OdbcFieldMapDisplay>();
+
+            selectedFieldMap = Order;
+        }
+
+        /// <summary>
+        /// Loads the column source.
+        /// </summary>
+        private void LoadColumnSource(OdbcStoreEntity store)
+        {
+            IOdbcDataSource selectedDataSource = dataSourceService.GetImportDataSource(store);
+
+            string columnSourceName = store.ImportColumnSourceType == (int)OdbcColumnSourceType.Table ?
+                store.ImportColumnSource :
+                CustomQueryColumnSourceName;
+
+            IOdbcColumnSource columnSource = columnSourceFactory(columnSourceName);
+
+            columnSource.Load(selectedDataSource, store.ImportColumnSource,
+                (OdbcColumnSourceType)store.ImportColumnSourceType);
+
+            ColumnSource = columnSource;
+            Columns = new ObservableCollection<OdbcColumn>(ColumnSource.Columns);
+            Columns.Insert(0, new OdbcColumn("(None)"));
+        }
+
+        /// <summary>
+        /// Loads the download strategy.
+        /// </summary>
+        /// <param name="importStrategy">The download strategy.</param>
+        private void LoadDownloadStrategy(OdbcImportStrategy importStrategy)
+        {
+            IOdbcFieldMapEntry lastModifiedEntry = FindEntriesBy(Order, OrderFields.OnlineLastModified).FirstOrDefault();
+
+            int lastModifiedEntryIndex = Order.Entries.IndexOf(lastModifiedEntry);
+
+            if (lastModifiedEntry != null)
+            {
+                lastModifiedEntry.ShipWorksField.IsRequired = importStrategy == OdbcImportStrategy.ByModifiedTime;
+            }
+
+            // Have to remove and insert the entry because this is what is bound to the property changed trigger.
+            // The entry itself must change, not just a property on it. This avoids having to add a property changed
+            // handler to the ShipWorksMappableField
+            Order.Entries.RemoveAt(lastModifiedEntryIndex);
+            Order.Entries.Insert(lastModifiedEntryIndex, lastModifiedEntry);
+        }
+
+
+        /// <summary>
         /// Saves the map.
         /// </summary>
         public void Save(OdbcStoreEntity store)
@@ -302,9 +374,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
         /// </summary>
         private OdbcFieldMap CreateMap()
         {
-            List<IOdbcFieldMapEntry> mapEntries = Order.Entries.ToList();
-            mapEntries.AddRange(Address.Entries);
-            mapEntries.AddRange(Items.SelectMany(item => item.Entries));
+            List<IOdbcFieldMapEntry> mapEntries = GetAllMapEntries();
 
             OdbcFieldMap map = fieldMapFactory.CreateFieldMapFrom(mapEntries);
 
@@ -327,38 +397,12 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
             return map;
         }
 
-        /// <summary>
-        /// Loads the column source.
-        /// </summary>
-        public void LoadColumnSource(IOdbcColumnSource source)
+        private List<IOdbcFieldMapEntry> GetAllMapEntries()
         {
-            MethodConditions.EnsureArgumentIsNotNull(source, "ColumnSource");
-
-            ColumnSource = source;
-            Columns = new ObservableCollection<OdbcColumn>(ColumnSource.Columns);
-            Columns.Insert(0, new OdbcColumn("(None)"));
-        }
-
-        /// <summary>
-        /// Loads the download strategy.
-        /// </summary>
-        /// <param name="importStrategy">The download strategy.</param>
-        public void LoadDownloadStrategy(OdbcImportStrategy importStrategy)
-        {
-            IOdbcFieldMapEntry lastModifiedEntry = FindEntriesBy(Order, OrderFields.OnlineLastModified).FirstOrDefault();
-
-            int lastModifiedEntryIndex = Order.Entries.IndexOf(lastModifiedEntry);
-
-            if (lastModifiedEntry != null)
-            {
-                lastModifiedEntry.ShipWorksField.IsRequired = importStrategy == OdbcImportStrategy.ByModifiedTime;
-            }
-
-            // Have to remove and insert the entry because this is what is bound to the property changed trigger.
-            // The entry itself must change, not just a property on it. This avoids having to add a property changed
-            // handler to the ShipWorksMappableField
-            Order.Entries.RemoveAt(lastModifiedEntryIndex);
-            Order.Entries.Insert(lastModifiedEntryIndex, lastModifiedEntry);
+            List<IOdbcFieldMapEntry> mapEntries = Order.Entries.ToList();
+            mapEntries.AddRange(Address.Entries);
+            mapEntries.AddRange(Items.SelectMany(item => item.Entries));
+            return mapEntries;
         }
 
         /// <summary>
