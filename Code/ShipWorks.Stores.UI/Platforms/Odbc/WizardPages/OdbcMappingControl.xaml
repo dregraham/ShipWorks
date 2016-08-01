@@ -105,7 +105,7 @@
                 <MultiBinding Converter="{StaticResource MapMultiValueConverter}">
                     <Binding Path="Order" />
                     <Binding Path="Address" />
-                    <Binding Path="Items" />
+                    <Binding Path="Items" UpdateSourceTrigger="PropertyChanged" />
                     <Binding Path="Shipment" />
                     <Binding Path="ShipmentAddress" />
                     <Binding Path="Items.Count" UpdateSourceTrigger="PropertyChanged" />

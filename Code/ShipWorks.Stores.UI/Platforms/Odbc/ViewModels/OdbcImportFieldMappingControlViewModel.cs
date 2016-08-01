@@ -17,6 +17,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Reflection;
 using System.Windows.Input;
 using SaveFileDialog = Microsoft.Win32.SaveFileDialog;
@@ -137,6 +138,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
                 Items[0].DisplayName = value ? "Item 1" : "Item";
 
                 handler.Set(nameof(IsSingleLineOrder), ref isSingleLineOrder, value);
+                handler.RaisePropertyChanged(nameof(Items));
             }
         }
 
@@ -273,6 +275,13 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
                 Items.Add(new OdbcFieldMapDisplay($"Item {index + 1}", map, index));
             }
 
+            RecordIdentifier = new OdbcColumn(storeFieldMap.RecordIdentifierSource);
+            IOdbcFieldMapEntry orderNumberEntry = storeFieldMap.FindEntriesBy(OrderFields.OrderNumber, true).Single();
+
+            if (numberOfItemsPerOrder == 1 && RecordIdentifier.Name != orderNumberEntry.ExternalField.Column.Name)
+            {
+                IsSingleLineOrder = false;
+            }
 
             selectedFieldMap = Order;
         }
