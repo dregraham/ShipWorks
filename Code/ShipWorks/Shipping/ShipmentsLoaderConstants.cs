@@ -26,6 +26,11 @@ namespace ShipWorks.Shipping
         }
 
         /// <summary>
+        /// Default max allowed orders
+        /// </summary>
+        public static int DefaultMaxAllowedOrders => MaxAllowedOrderOptions.Last();
+
+        /// <summary>
         /// Valid options for the max allowed orders
         /// </summary>
         public static IEnumerable<int> MaxAllowedOrderOptions => maxAllowedOrderOptions;

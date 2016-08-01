@@ -254,7 +254,7 @@ namespace ShipWorks.Shipping.Settings
             settings.ShipSenseEndShipmentID = 0;
 
             settings.AutoCreateShipments = true;
-            settings.ShipmentEditLimit = 1000;
+            settings.ShipmentEditLimit = ShipmentsLoaderConstants.DefaultMaxAllowedOrders;
 
             settings.FedExFimsEnabled = false;
             settings.FedExFimsUsername = string.Empty;

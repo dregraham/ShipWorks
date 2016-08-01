@@ -83,7 +83,7 @@ namespace ShipWorks.ApplicationCore.Options
             shipmentEditLimit.SelectedValue =
                 ShipmentsLoaderConstants.MaxAllowedOrderOptions.Contains(settings.ShipmentEditLimit) ?
                     settings.ShipmentEditLimit :
-                    ShipmentsLoaderConstants.MaxAllowedOrderOptions.First();
+                    ShipmentsLoaderConstants.DefaultMaxAllowedOrders;
         }
 
         /// <summary>
