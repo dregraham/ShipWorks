@@ -447,12 +447,6 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
                 map.RecordIdentifierSource = entries.FirstOrDefault()?.ExternalField.Column.Name;
             }
 
-            if (string.IsNullOrEmpty(map.RecordIdentifierSource))
-            {
-                // This should never happen. We check for validated fields before calling this...
-                throw new ShipWorksOdbcException("Cannot save a map without a record identifier.");
-            }
-
             return map;
         }
 
