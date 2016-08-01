@@ -227,7 +227,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
 
             Tables = odbcSchema.Tables as IList<IOdbcColumnSource> ?? odbcSchema.Tables.ToList();
 
-            if (ColumnSourceIsTable)
+            if (ColumnSourceIsTable && !string.IsNullOrWhiteSpace(columnSourceFromStore))
             {
                 loadedColumnSource = columnSourceFactory(columnSourceFromStore);
                 IOdbcColumnSource table = Tables.FirstOrDefault(t => t.Name == loadedColumnSource.Name);
