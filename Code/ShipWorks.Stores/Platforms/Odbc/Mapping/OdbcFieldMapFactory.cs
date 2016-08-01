@@ -65,9 +65,12 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <summary>
         /// Creates the order item field map.
         /// </summary>
-        public IOdbcFieldMap CreateOrderItemFieldMap(IOdbcFieldMap storeFieldMap, int index)
+        public IOdbcFieldMap CreateOrderItemFieldMap(IOdbcFieldMap storeFieldMap, int index, int numberOfAttributesPerItem)
         {
-            return CreateMapWithMappedFields(CreateShipWorksOrderItemFields(), storeFieldMap, index);
+            IEnumerable<ShipWorksOdbcMappableField> itemFields = CreateShipWorksOrderItemFields();
+            IEnumerable<ShipWorksOdbcMappableField> attributeFields = GetAttributeRange(1, numberOfAttributesPerItem);
+            
+            return CreateMapWithMappedFields(itemFields.Concat(attributeFields), storeFieldMap, index);
         }
 
         /// <summary>
@@ -181,6 +184,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         {
             return entryFromStoreMap.ShipWorksField.Name == fieldFromNewMap.Name &&
                    entryFromStoreMap.ShipWorksField.ContainingObjectName == fieldFromNewMap.ContainingObjectName &&
+                   entryFromStoreMap.ShipWorksField.DisplayName == fieldFromNewMap.DisplayName &&
                    entryFromStoreMap.Index == index;
         }
 
@@ -277,11 +281,19 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         public IOdbcFieldMap GetAttributeRangeFieldMap(int startAttributeNumber, int numberOfAttributes, int itemIndex)
         {
             // Generate attribute numbers for new attributes to add and add them.
-            IEnumerable<ShipWorksOdbcMappableField> attributeFieldMapEntries = Enumerable.Range(startAttributeNumber, numberOfAttributes)
-                .Select(
-                    attributeNumber => new ShipWorksOdbcMappableField(OrderItemAttributeFields.Name, $"Attribute {attributeNumber}", OdbcFieldValueResolutionStrategy.Default));
+            IEnumerable<ShipWorksOdbcMappableField> attributeFieldMapEntries = GetAttributeRange(startAttributeNumber, numberOfAttributes);
 
             return CreateMapWithMappedFields(attributeFieldMapEntries, null, itemIndex);
         }
-	}
+
+        /// <summary>
+        /// Gets the specified number of attributes with item numbers started at the specified start number.
+        /// </summary>
+        private static IEnumerable<ShipWorksOdbcMappableField> GetAttributeRange(int startAttributeNumber, int numberOfAttributes)
+        {
+            return Enumerable.Range(startAttributeNumber, numberOfAttributes)
+                .Select(
+                    attributeNumber => new ShipWorksOdbcMappableField(OrderItemAttributeFields.Name, $"Attribute {attributeNumber}", OdbcFieldValueResolutionStrategy.Default));
+        }
+    }
 }

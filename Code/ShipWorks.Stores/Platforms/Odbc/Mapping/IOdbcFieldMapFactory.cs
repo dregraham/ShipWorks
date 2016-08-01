@@ -15,7 +15,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <summary>
         /// Creates the order item field map.
         /// </summary>
-        IOdbcFieldMap CreateOrderItemFieldMap(IOdbcFieldMap storeFieldMap, int index);
+        IOdbcFieldMap CreateOrderItemFieldMap(IOdbcFieldMap storeFieldMap, int index, int numberOfAttributesPerItem);
 
         /// <summary>
         /// Creates the address field map.
@@ -48,6 +48,5 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// Gets a map with the specified number of attributes with item numbers started at the specified start number.
         /// </summary>
         IOdbcFieldMap GetAttributeRangeFieldMap(int startAttributeNumber, int numberOfAttributes, int itemIndex);
-
     }
 }

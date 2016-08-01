@@ -19,12 +19,12 @@ namespace ShipWorks.Stores.Platforms.Odbc.Loaders
         {
             MethodConditions.EnsureArgumentIsNotNull(item);
 
-            IEnumerable<IOdbcFieldMapEntry> itemEntries =
+            IEnumerable<IOdbcFieldMapEntry> itemAttributeEntries =
                 map.FindEntriesBy(OrderItemAttributeFields.Name)
                     .Where(e => e.Index == index)
                     .Where(e => !string.IsNullOrWhiteSpace((string) e.ShipWorksField.Value));
 
-            foreach (IOdbcFieldMapEntry entry in itemEntries)
+            foreach (IOdbcFieldMapEntry entry in itemAttributeEntries)
             {
                 OrderItemAttributeEntity attribute = new OrderItemAttributeEntity(item);
                 attribute.Name = entry.ExternalField.Column.Name;

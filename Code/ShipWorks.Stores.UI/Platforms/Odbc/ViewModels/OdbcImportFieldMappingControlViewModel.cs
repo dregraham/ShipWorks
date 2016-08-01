@@ -158,10 +158,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
                 {
                     for (int i = numberOfItemsPerOrder; i < value; i++)
                     {
-                        IOdbcFieldMap map = fieldMapFactory.CreateOrderItemFieldMap(null, i);
-
-                        // Give the new item the correct number of attributes
-                        fieldMapFactory.GetAttributeRangeFieldMap(1, numberOfAttributesPerItem, i).Entries.ToList().ForEach(m => map.AddEntry(m));
+                        IOdbcFieldMap map = fieldMapFactory.CreateOrderItemFieldMap(null, i, numberOfAttributesPerItem);
 
                         Items.Add(new OdbcFieldMapDisplay($"Item {i + 1}", map, i));
                     }
@@ -253,11 +250,29 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
         /// <param name="store">The store.</param>
         private void LoadMap(OdbcStoreEntity store)
         {
-            IOdbcFieldMap fieldMap = fieldMapFactory.CreateFieldMapFrom(store.ImportMap);
+            IOdbcFieldMap storeFieldMap = fieldMapFactory.CreateFieldMapFrom(store.ImportMap);
 
-            Order = new OdbcFieldMapDisplay("Order", fieldMapFactory.CreateOrderFieldMap(fieldMap));
-            Address = new OdbcFieldMapDisplay("Address", fieldMapFactory.CreateAddressFieldMap(fieldMap));
+            Order = new OdbcFieldMapDisplay("Order", fieldMapFactory.CreateOrderFieldMap(storeFieldMap));
+            Address = new OdbcFieldMapDisplay("Address", fieldMapFactory.CreateAddressFieldMap(storeFieldMap));
+
+            numberOfItemsPerOrder = storeFieldMap.Entries.Max(e => e.Index)+1;
+            numberOfAttributesPerItem = 0;
+            for (int index = 0; index < numberOfItemsPerOrder; index++)
+            {
+                int attributeCountForThisItem = storeFieldMap.FindEntriesBy(OrderItemAttributeFields.Name).Count(e => e.Index == index);
+                numberOfAttributesPerItem = Math.Max(numberOfAttributesPerItem, attributeCountForThisItem);
+            }
+            handler.Set(nameof(NumberOfAttributesPerItem), ref numberOfAttributesPerItem, numberOfAttributesPerItem);
+            handler.Set(nameof(NumberOfItemsPerOrder), ref numberOfItemsPerOrder, numberOfItemsPerOrder);
+
             Items = new ObservableCollection<OdbcFieldMapDisplay>();
+            for (int index = 0; index < numberOfItemsPerOrder; index++)
+            {
+                IOdbcFieldMap map = fieldMapFactory.CreateOrderItemFieldMap(storeFieldMap, index, numberOfAttributesPerItem);
+
+                Items.Add(new OdbcFieldMapDisplay($"Item {index + 1}", map, index));
+            }
+
 
             selectedFieldMap = Order;
         }
