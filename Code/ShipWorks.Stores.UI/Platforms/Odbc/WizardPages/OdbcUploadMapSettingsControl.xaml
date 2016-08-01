@@ -41,6 +41,7 @@
             <Setter Property="VerticalContentAlignment" Value="Center" />
         </Style>
         <ui:VisibleWhenEqualToParameterConverter x:Key="VisibleWhenEqualToParameterConverter" />
+        <ui:InvertBooleanConverter x:Key="InvertBoolean" />
     </Control.Resources>
     <Grid Margin="20 10 10 10">
         <Grid.RowDefinitions>
@@ -92,7 +93,8 @@
                              GroupName="ColumnSource"
                              IsChecked="{Binding ColumnSourceIsTable,
                                                  UpdateSourceTrigger=PropertyChanged}" />
-                <RadioButton Content="Query" GroupName="ColumnSource" />
+                <RadioButton Content="Query" GroupName="ColumnSource" 
+                             IsChecked="{Binding ColumnSourceIsTable, Converter={StaticResource InvertBoolean}}"/>
             </StackPanel>
         </Grid>
         <DockPanel Grid.Row="1"

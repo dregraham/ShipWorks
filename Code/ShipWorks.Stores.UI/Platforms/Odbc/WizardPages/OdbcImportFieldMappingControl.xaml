@@ -81,6 +81,7 @@
                 </MultiDataTrigger>
             </DataTemplate.Triggers>
         </DataTemplate>
+        <ui:InvertBooleanConverter x:Key="InvertBoolean" />
     </Control.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -152,7 +153,8 @@
                              GroupName="OrderItemStrategy"
                              IsChecked="{Binding IsSingleLineOrder,
                                                  UpdateSourceTrigger=PropertyChanged}" />
-                <RadioButton Content="Multiple rows" GroupName="OrderItemStrategy" />
+                <RadioButton Content="Multiple rows" GroupName="OrderItemStrategy" 
+                             IsChecked="{Binding IsSingleLineOrder, Converter={StaticResource InvertBoolean}}"/>
             </StackPanel>
             <StackPanel Grid.Row="2"
                         Margin="0 2.5 0 2.5"
