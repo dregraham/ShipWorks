@@ -39,6 +39,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
         private readonly IOdbcDataSourceService dataSourceService;
 
         private const string CustomQueryColumnSourceName = "Custom Import";
+        private const string EmptyColumnName = "(None)";
         private bool isSingleLineOrder = true;
         private int numberOfAttributesPerItem;
         private int numberOfItemsPerOrder;
@@ -193,7 +194,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
                 {
                     foreach (OdbcFieldMapDisplay displayMap in itemMaps)
                     {
-                        // Disabling this condition because the simplification it suggests is invalid code. 
+                        // Disabling this condition because the simplification it suggests is invalid code.
                         // The two branches of the if statement do very different things (adding or removing attributes)
 #pragma warning disable S3240 // The simplest possible condition syntax should be used
                         if (delta > 0)
@@ -254,6 +255,8 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
         {
             IOdbcFieldMap storeFieldMap = fieldMapFactory.CreateFieldMapFrom(store.ImportMap);
 
+            EnsureExternalFieldsExistInColumnSource(storeFieldMap);
+
             Order = new OdbcFieldMapDisplay("Order", fieldMapFactory.CreateOrderFieldMap(storeFieldMap));
             selectedFieldMap = Order;
 
@@ -294,6 +297,34 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
             if (numberOfItemsPerOrder == 1 && RecordIdentifier.Name != orderNumberEntry.ExternalField.Column.Name)
             {
                 IsSingleLineOrder = false;
+            }
+        }
+
+        /// <summary>
+        /// Checks to see that any external columns loaded from the store exist in the selected column source.
+        /// If they do not exist, set them to none so that the old mappings are not retained.
+        /// </summary>
+        /// <param name="storeFieldMap">The store field map.</param>
+        private void EnsureExternalFieldsExistInColumnSource(IOdbcFieldMap storeFieldMap)
+        {
+            if (storeFieldMap.Entries.Any())
+            {
+                List<string> columnsNotFound = new List<string>();
+
+                foreach (IOdbcFieldMapEntry entry in storeFieldMap.Entries)
+                {
+                    if (!Columns.Any(
+                        c => c.Name.Equals(entry.ExternalField.Column.Name, StringComparison.InvariantCulture)))
+                    {
+                        columnsNotFound.Add(entry.ExternalField.Column.Name);
+                        entry.ExternalField.Column = new OdbcColumn(EmptyColumnName);
+                    }
+                }
+                if (columnsNotFound.Any())
+                {
+                    messageHelper.ShowWarning(
+                        $"The columns {string.Join(", ", columnsNotFound)} could not be found in the current data source. Any mappings that use these columns have been reset. Changes will not be saved until the finish button is clicked.");
+                }
             }
         }
 

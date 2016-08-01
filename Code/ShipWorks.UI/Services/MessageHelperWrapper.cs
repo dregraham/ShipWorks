@@ -36,7 +36,7 @@ namespace ShipWorks.UI.Services
         /// Show an information message
         /// </summary>
         public void ShowInformation(string message) => MessageHelper.ShowInformation(ownerFactory(), message);
-        
+
         /// <summary>
         /// Show a yes/no question with the given text
         /// </summary>
@@ -95,5 +95,10 @@ namespace ShipWorks.UI.Services
         /// </summary>
         public DialogResult ShowQuestion(MessageBoxIcon icon, MessageBoxButtons buttons, string message)
             => MessageHelper.ShowQuestion(ownerFactory(), icon, buttons, message);
+
+        /// <summary>
+        /// Show a warning message
+        /// </summary>
+        public void ShowWarning(string message) => MessageHelper.ShowWarning(ownerFactory(), message);
     }
 }

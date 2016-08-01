@@ -12,7 +12,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
     public class OdbcFieldMapFactory : IOdbcFieldMapFactory
 	{
         private readonly IOdbcFieldMapIOFactory ioFactory;
-
+        private const string EmptyColumnName = "(None)";
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcFieldMapFactory"/> class.
         /// </summary>
@@ -69,7 +69,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         {
             IEnumerable<ShipWorksOdbcMappableField> itemFields = CreateShipWorksOrderItemFields();
             IEnumerable<ShipWorksOdbcMappableField> attributeFields = GetAttributeRange(1, numberOfAttributesPerItem);
-            
+
             return CreateMapWithMappedFields(itemFields.Concat(attributeFields), storeFieldMap, index);
         }
 
@@ -102,7 +102,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 
 	        return fields;
 	    }
-        
+
         /// <summary>
         /// Creates the address field map.
         /// </summary>
@@ -257,7 +257,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 
             foreach (IOdbcFieldMapEntry entry in entries
                 .Where(entry => !string.IsNullOrWhiteSpace(entry.ExternalField.Column?.Name) &&
-                !entry.ExternalField.Column.Name.Equals("(None)", StringComparison.InvariantCulture)))
+                !entry.ExternalField.Column.Name.Equals(EmptyColumnName, StringComparison.InvariantCulture)))
             {
                 masterMap.AddEntry(entry);
             }
