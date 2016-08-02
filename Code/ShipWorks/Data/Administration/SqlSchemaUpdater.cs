@@ -353,6 +353,36 @@ namespace ShipWorks.Data.Administration
                                     customerLicense.Save();
                                 }
                             }
+
+                            // If we were upgrading from this version, Regenerate scheduled actions
+                            // To fix issue caused by breaking out assemblies
+                            if (installed < new Version(5, 4, 0, 0))
+                            {
+                                // Grab all of the actions that are enabled and schedule based
+                                ActionManager.InitializeForCurrentSession();
+                                using (SqlAdapter adapter = new SqlAdapter())
+                                {
+                                    foreach (ActionEntity action in ActionManager.Actions)
+                                    {
+                                        // Some trigger's state depend on the enabled state of the action
+                                        ScheduledTrigger scheduledTrigger = ActionManager.LoadTrigger(action) as ScheduledTrigger;
+
+                                        if (scheduledTrigger?.Schedule != null)
+                                        {
+                                            // Check to see if the action is a One Time action and in the past, if so we disable it
+                                            if (scheduledTrigger.Schedule.StartDateTimeInUtc >= DateTime.UtcNow ||
+                                                scheduledTrigger.Schedule.ScheduleType != ActionScheduleType.OneTime)
+                                            {
+                                                scheduledTrigger.SaveExtraState(action, adapter);
+                                            }
+                                        }
+
+                                        ActionManager.SaveAction(action, adapter);
+                                    }
+
+                                    adapter.Commit();
+                                }
+                            }
                         }
                     }
                 }

@@ -461,7 +461,7 @@ namespace ShipWorks.Users
                 throw new InvalidOperationException("No user is logged on.");
             }
 
-            Messenger.Current.Send(new WindowResettingMessage(Program.MainForm));
+            Messenger.Current.Send(new WindowResettingMessage(Program.ExecutionMode));
 
             log.InfoFormat("Logging off '{0}'.", loggedInUser.Username);
 
