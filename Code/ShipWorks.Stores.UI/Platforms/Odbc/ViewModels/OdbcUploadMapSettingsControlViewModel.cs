@@ -1,8 +1,6 @@
-﻿using GalaSoft.MvvmLight.Command;
-using Interapptive.Shared.UI;
+﻿using Interapptive.Shared.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
-using ShipWorks.Templates.Tokens;
 using System;
 using System.Reflection;
 using System.Windows.Forms;
@@ -84,9 +82,12 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
                 CustomQuery;
         }
 
+        /// <summary>
+        /// Loads the map settings.
+        /// </summary>
         public override void LoadMapSettings(OdbcStoreEntity store)
         {
-            throw new NotImplementedException();
+            //TODO: implement loading settings in next story
         }
     }
 }
