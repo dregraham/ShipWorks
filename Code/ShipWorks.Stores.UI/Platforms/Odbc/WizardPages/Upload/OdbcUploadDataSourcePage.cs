@@ -1,10 +1,11 @@
-﻿using System.Windows.Forms;
-using Interapptive.Shared.Threading;
+﻿using Interapptive.Shared.Threading;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.Odbc;
+using ShipWorks.Stores.Platforms.Odbc.DataSource;
 using ShipWorks.Stores.Platforms.Odbc.Upload;
 using ShipWorks.UI.Wizard;
+using System.Windows.Forms;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages.Upload
 {
@@ -15,12 +16,16 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages.Upload
     /// <seealso cref="ShipWorks.Stores.Platforms.Odbc.IOdbcWizardPage" />
     public partial class OdbcUploadDataSourcePage : AddStoreWizardPage, IOdbcWizardPage
     {
+        private readonly IOdbcDataSourceService dataSourceService;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcUploadDataSourcePage"/> class.
         /// </summary>
         /// <param name="odbcControlPanel">The ODBC control panel.</param>
-        public OdbcUploadDataSourcePage(IExternalProcess odbcControlPanel)
+        /// <param name="dataSourceService"></param>
+        public OdbcUploadDataSourcePage(IExternalProcess odbcControlPanel, IOdbcDataSourceService dataSourceService)
         {
+            this.dataSourceService = dataSourceService;
             InitializeComponent();
             odbcDataSourceControl.LoadDependencies(odbcControlPanel);
             odbcDataSourceControl.RefreshDataSources();
@@ -63,6 +68,10 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages.Upload
             {
                 e.Skip = true;
                 e.RaiseStepEventWhenSkipping = false;
+            }
+            else if (!string.IsNullOrWhiteSpace(store.ImportConnectionString))
+            {
+                odbcDataSourceControl.LoadDataSource(dataSourceService.GetImportDataSource(store));
             }
         }
     }
