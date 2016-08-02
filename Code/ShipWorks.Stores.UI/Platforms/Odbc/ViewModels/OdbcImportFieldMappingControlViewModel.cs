@@ -263,32 +263,12 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
             Address = new OdbcFieldMapDisplay("Address", fieldMapFactory.CreateAddressFieldMap(storeFieldMap));
             Items = new ObservableCollection<OdbcFieldMapDisplay>();
 
-            // If there are no item fields, there are no items.
-            if (!storeFieldMap.Entries.Any(e =>
+            // Only attempt to load item mappings when the map contains item entries
+            if (storeFieldMap.Entries.Any(e =>
                 e.ShipWorksField.ContainingObjectName == "OrderItemEntity" ||
                 e.ShipWorksField.ContainingObjectName == "OrderItemAttributeEntity"))
             {
-                return;
-            }
-
-            numberOfItemsPerOrder = storeFieldMap.Entries.Max(e => e.Index) + 1;
-            numberOfAttributesPerItem = 0;
-            for (int index = 0; index < numberOfItemsPerOrder; index++)
-            {
-                int attributeCountForThisItem =
-                    storeFieldMap.FindEntriesBy(OrderItemAttributeFields.Name).Count(e => e.Index == index);
-                numberOfAttributesPerItem = Math.Max(numberOfAttributesPerItem, attributeCountForThisItem);
-            }
-
-            handler.Set(nameof(NumberOfAttributesPerItem), ref numberOfAttributesPerItem, numberOfAttributesPerItem);
-            handler.Set(nameof(NumberOfItemsPerOrder), ref numberOfItemsPerOrder, numberOfItemsPerOrder);
-
-            for (int index = 0; index < numberOfItemsPerOrder; index++)
-            {
-                IOdbcFieldMap map = fieldMapFactory.CreateOrderItemFieldMap(storeFieldMap, index,
-                    numberOfAttributesPerItem);
-
-                Items.Add(new OdbcFieldMapDisplay($"Item {index + 1}", map, index));
+                LoadItemMappings(storeFieldMap);
             }
 
             RecordIdentifier = new OdbcColumn(storeFieldMap.RecordIdentifierSource);
@@ -301,10 +281,59 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
         }
 
         /// <summary>
+        /// Loads the item mappings.
+        /// </summary>
+        /// <param name="storeFieldMap">The store field map.</param>
+        private void LoadItemMappings(IOdbcFieldMap storeFieldMap)
+        {
+            numberOfItemsPerOrder = storeFieldMap.Entries.Max(e => e.Index) + 1;
+            handler.Set(nameof(NumberOfItemsPerOrder), ref numberOfItemsPerOrder, numberOfItemsPerOrder);
+
+            LoadNumberOfItemAttributes(storeFieldMap);
+
+            for (int index = 0; index < numberOfItemsPerOrder; index++)
+            {
+                IOdbcFieldMap map = fieldMapFactory.CreateOrderItemFieldMap(storeFieldMap, index,
+                    numberOfAttributesPerItem);
+
+                Items.Add(new OdbcFieldMapDisplay($"Item {index + 1}", map, index));
+            }
+        }
+
+        /// <summary>
+        /// Loads the number of item attributes.
+        /// </summary>
+        private void LoadNumberOfItemAttributes(IOdbcFieldMap storeFieldMap)
+        {
+            numberOfAttributesPerItem = 0;
+
+            // Go through each item mapping and see how many attributes are mapped to it
+            for (int index = 0; index < numberOfItemsPerOrder; index++)
+            {
+                IEnumerable<IOdbcFieldMapEntry> attributeEntries =
+                    storeFieldMap.FindEntriesBy(OrderItemAttributeFields.Name).Where(e => e.Index == index);
+
+                int attributeCountForThisItem = 0;
+
+                // Get the highest attribute index for this item
+                foreach (IOdbcFieldMapEntry attributeEntry in attributeEntries)
+                {
+                    // Get the attributes index from the name
+                    int attributeIndex = int.Parse(attributeEntry.ShipWorksField.DisplayName.Substring("Attribute ".Length));
+
+                    attributeCountForThisItem = Math.Max(attributeCountForThisItem, attributeIndex);
+                }
+
+                numberOfAttributesPerItem = Math.Max(numberOfAttributesPerItem, attributeCountForThisItem);
+            }
+
+            handler.Set(nameof(NumberOfAttributesPerItem), ref numberOfAttributesPerItem, numberOfAttributesPerItem);
+        }
+
+        /// <summary>
         /// Checks to see that any external columns loaded from the store exist in the selected column source.
         /// If they do not exist, set them to none so that the old mappings are not retained.
         /// </summary>
-        /// <param name="storeFieldMap">The store field map.</param>
         private void EnsureExternalFieldsExistInColumnSource(IOdbcFieldMap storeFieldMap)
         {
             if (storeFieldMap.Entries.Any())
