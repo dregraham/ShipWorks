@@ -42,6 +42,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             IsPrime = source.IsPrime;
             EarliestExpectedDeliveryDate = source.EarliestExpectedDeliveryDate;
             LatestExpectedDeliveryDate = source.LatestExpectedDeliveryDate;
+            PurchaseOrderNumber = source.PurchaseOrderNumber;
             
             
             
@@ -86,6 +87,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         public Nullable<System.DateTime> LatestExpectedDeliveryDate { get; }
+        /// <summary> The PurchaseOrderNumber property of the Entity AmazonOrder<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "AmazonOrder"."PurchaseOrderNumber"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.String PurchaseOrderNumber { get; }
         
         
         

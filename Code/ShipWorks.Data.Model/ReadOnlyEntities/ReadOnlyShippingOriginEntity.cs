@@ -2,10 +2,10 @@
 // This is generated code.
 //////////////////////////////////////////////////////////////
 // Code is generated using LLBLGen Pro version: 2.6
-// Code is generated on:
+// Code is generated on: 
 // Code is generated using templates: ShipWorks
 // Templates vendor: Solutions Design.
-// Templates version:
+// Templates version: 
 //////////////////////////////////////////////////////////////
 using System;
 using System.Collections.Generic;
@@ -18,7 +18,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
 {
     /// <summary>
     /// Read-only representation of the entity 'ShippingOrigin'. <br/><br/>
-    ///
+    /// 
     /// </summary>
     [Serializable]
     public partial class ReadOnlyShippingOriginEntity : IShippingOriginEntity
@@ -35,7 +35,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             {
                 objectMap[source] = this;
             }
-
+            
             ShippingOriginID = source.ShippingOriginID;
             RowVersion = source.RowVersion;
             Description = source.Description;
@@ -54,14 +54,14 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             Fax = source.Fax;
             Email = source.Email;
             Website = source.Website;
-
-
-
+            
+            
+            
 
             CopyCustomShippingOriginData(source);
         }
 
-
+        
         /// <summary> The ShippingOriginID property of the Entity ShippingOrigin<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "ShippingOrigin"."ShippingOriginID"<br/>
@@ -170,9 +170,9 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.String Website { get; }
-
-
-
+        
+        
+        
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>

@@ -87,6 +87,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             FedExFimsEnabled = source.FedExFimsEnabled;
             FedExFimsUsername = source.FedExFimsUsername;
             FedExFimsPassword = source.FedExFimsPassword;
+            ShipmentEditLimit = source.ShipmentEditLimit;
             
             
             
@@ -401,6 +402,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.String FedExFimsPassword { get; }
+        /// <summary> The ShipmentEditLimit property of the Entity ShippingSettings<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "ShippingSettings"."ShipmentEditLimit"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.Int32 ShipmentEditLimit { get; }
         
         
         

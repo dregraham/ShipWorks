@@ -1,4 +1,11 @@
-﻿using Autofac;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Diagnostics;
+using System.Linq;
+using System.Windows.Forms;
+using Autofac;
 using Divelements.SandGrid;
 using Divelements.SandGrid.Rendering;
 using Interapptive.Shared;
@@ -17,13 +24,6 @@ using ShipWorks.Stores.Content;
 using ShipWorks.UI.Utility;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Diagnostics;
-using System.Linq;
-using System.Windows.Forms;
 
 namespace ShipWorks.Shipping.Editing
 {
@@ -459,7 +459,7 @@ namespace ShipWorks.Shipping.Editing
                 if (entityGrid.Rows.Count + dlg.Selection.Count > ShipmentsLoaderConstants.MaxAllowedOrders)
                 {
                     MessageHelper.ShowInformation(dlg,
-                        $"You can only ship up to {ShipmentsLoaderConstants.MaxAllowedOrders} orders at a time.");
+                        $"You can only ship up to {ShipmentsLoaderConstants.MaxAllowedOrders:#,###} orders at a time.");
                     e.Cancel = true;
                 }
             }
