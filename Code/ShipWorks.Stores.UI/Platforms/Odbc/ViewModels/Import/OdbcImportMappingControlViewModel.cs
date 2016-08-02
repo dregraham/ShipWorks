@@ -264,6 +264,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
             }
 
             RecordIdentifier = new OdbcColumn(storeFieldMap.RecordIdentifierSource);
+
             IOdbcFieldMapEntry orderNumberEntry =
                 storeFieldMap.FindEntriesBy(OrderFields.OrderNumber, true).SingleOrDefault();
 
