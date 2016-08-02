@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Linq;
-using System.Reflection;
-using System.Windows.Input;
-using Interapptive.Shared.UI;
+﻿using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
@@ -13,6 +6,13 @@ using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Stores.Platforms.Odbc.DataSource;
 using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 using ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Linq;
+using System.Reflection;
+using System.Windows.Input;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
 {
@@ -205,6 +205,10 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
         /// <summary>
         /// Loads the external odbc tables.
         /// </summary>
+        /// <param name="dataSource">ODBC Datasource</param>
+        /// <param name="odbcSchema">Object to retrieve the list of column sources (tables). </param>
+        /// <param name="columnSourceFromStore">Displays current datasource along with the one from the store.</param>
+        /// <param name="store">Odbc Store Entity</param>
         public void Load(IOdbcDataSource dataSource, IOdbcSchema odbcSchema, string columnSourceFromStore, OdbcStoreEntity store)
         {
             MethodConditions.EnsureArgumentIsNotNull(dataSource);

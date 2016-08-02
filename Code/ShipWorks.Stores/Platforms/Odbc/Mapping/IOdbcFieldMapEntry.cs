@@ -1,7 +1,7 @@
 ﻿using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 using ShipWorks.Stores.Platforms.Odbc.Upload.FieldValueResolvers;
 using System.Reflection;
-using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 {
@@ -40,6 +40,10 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// Copies the Value from the external field to the ShipWorks field
         /// </summary>
         void CopyExternalValueToShipWorksField();
+
+        /// <summary>
+        /// Loads the given ODBC Column into the External Field
+        /// </summary>
         void LoadExternalField(OdbcRecord record);
     }
 }

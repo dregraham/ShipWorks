@@ -68,6 +68,10 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
             MethodConditions.EnsureArgumentIsNotNull(record);
             ExternalField.LoadValue(record);
         }
+
+        /// <summary>
+        /// Loads the given ODBC Column into the External Field
+        /// </summary>
         public void LoadExternalField(OdbcColumn column)
         {
             ExternalField.Column = column;
