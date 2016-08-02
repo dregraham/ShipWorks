@@ -12,7 +12,7 @@ using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Stores.Platforms.Odbc.DataAccess;
 using Xunit;
 
-namespace ShipWorks.Stores.Tests.Platforms.Odbc
+namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Import
 {
     public class OdbcImportMapSettingsControlViewModelTest : IDisposable
     {

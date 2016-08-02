@@ -6,7 +6,7 @@ using ShipWorks.Stores.Platforms.Odbc.DataSource;
 using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 using Xunit;
 
-namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Import
+namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels
 {
     public class OdbcMapSettingsControlViewModelTest
     {

@@ -1,12 +1,11 @@
-﻿using Autofac;
+﻿using System;
+using Autofac;
 using Autofac.Extras.Moq;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
-using ShipWorks.Stores.UI.Platforms.Odbc.ViewModels;
-using System;
 using ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Upload;
 using Xunit;
 
-namespace ShipWorks.Stores.Tests.Platforms.Odbc
+namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Upload
 {
     public class OdbcUploadMappingControlViewModelTest
     {
