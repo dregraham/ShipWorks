@@ -87,7 +87,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// <summary> The ShippingServiceOfferID property of the Entity AmazonShipment<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "AmazonShipment"."ShippingServiceOfferID"<br/>
-        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 250<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.String ShippingServiceOfferID { get; }
         /// <summary> The InsuranceValue property of the Entity AmazonShipment<br/><br/>
