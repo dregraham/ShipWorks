@@ -35,7 +35,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void OnClickEditImportSettings(object sender, EventArgs e)
         {
-            using (ILifetimeScope scope = IoC.BeginLifetimeScope())
+            using (ILifetimeScope scope = IoC.BeginLifetimeScope(ConfigureOdbcSettingsWizardDependencies))
             {
                 IOdbcWizardPage[] importPages =
                 {
@@ -43,15 +43,28 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
                     scope.Resolve<OdbcImportMapSettingsPage>(),
                     scope.Resolve<OdbcImportFieldMappingPage>()
                 };
-                
-                using (OdbcImportSettingsWizard wizard = new OdbcImportSettingsWizard(odbcStore, importPages))
+
+                using (OdbcImportSettingsWizard wizard = scope.Resolve<OdbcImportSettingsWizard>())
                 {
+                    wizard.LoadPages(odbcStore, importPages);
+
                     if (wizard.ShowDialog(this) == DialogResult.OK)
                     {
                         storeManager.SaveStore(odbcStore);
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// Configures the add store wizard dependencies.
+        /// </summary>
+        private static void ConfigureOdbcSettingsWizardDependencies(ContainerBuilder builder)
+        {
+            builder.RegisterType<OdbcImportSettingsWizard>()
+                .AsSelf()
+                .As<IWin32Window>()
+                .SingleInstance();
         }
 
         /// <summary>

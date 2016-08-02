@@ -15,20 +15,26 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcImportSettingsWizard"/> class.
         /// </summary>
+        public OdbcImportSettingsWizard()
+        {
+            InitializeComponent();
+        }
+
+        /// <summary>
+        /// Loads the pages.
+        /// </summary>
         /// <param name="odbcStore">The ODBC store.</param>
-        /// <param name="wizardPages"></param>
-        public OdbcImportSettingsWizard(OdbcStoreEntity odbcStore, IEnumerable<IOdbcWizardPage> wizardPages)
+        /// <param name="wizardPages">The wizard pages.</param>
+        public void LoadPages(OdbcStoreEntity odbcStore, IEnumerable<IOdbcWizardPage> wizardPages)
         {
             Store = odbcStore;
 
             Pages.AddRange(wizardPages.Cast<WizardPage>().ToArray());
-
-            InitializeComponent();
         }
 
         /// <summary>
         /// The store currently being configured by the wizard
         /// </summary>
-        public StoreEntity Store { get; }
+        public StoreEntity Store { get; private set; }
     }
 }
