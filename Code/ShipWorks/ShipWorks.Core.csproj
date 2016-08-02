@@ -1132,6 +1132,8 @@
     <Compile Include="Shipping\IRatesRetriever.cs" />
     <Compile Include="Shipping\IShipmentFactory.cs" />
     <Compile Include="Shipping\ProgressDisplayOptions.cs" />
+    <Compile Include="Shipping\Services\Builders\IShipmentPackageTypesBuilder.cs" />
+    <Compile Include="Shipping\Services\Builders\IShipmentPackageTypesBuilderFactory.cs" />
     <Compile Include="Shipping\Services\CarrierShipmentAdapterBase.cs" />
     <Compile Include="Shipping\IShippingOriginManager.cs" />
     <Compile Include="Shipping\Services\IShipmentCustomsItemAdapter.cs" />
