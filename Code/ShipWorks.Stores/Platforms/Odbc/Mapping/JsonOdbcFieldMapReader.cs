@@ -72,7 +72,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         {
             try
             {
-                return json["RecordIdentifierSource"]?.ToString();
+                return json["RecordIdentifierSource"]?.ToString() ?? string.Empty;
             }
             catch (Exception ex)
             {
