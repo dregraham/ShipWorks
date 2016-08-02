@@ -1,13 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Windows.Input;
-using GalaSoft.MvvmLight.Command;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -19,7 +9,15 @@ using ShipWorks.Stores.Platforms.Odbc.DataSource;
 using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 using ShipWorks.Stores.Platforms.Odbc.Download;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
-using ShipWorks.Stores.UI.Platforms.Odbc.Controls.Import;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Windows.Input;
 using SaveFileDialog = Microsoft.Win32.SaveFileDialog;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
@@ -93,12 +91,6 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
         /// </remarks>
         [Obfuscation(Exclude = true)]
         public ICommand SaveMapCommand { get; private set; }
-
-        /// <summary>
-        /// Gets or sets the table changed command.
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public RelayCommand TableChangedCommand { get; private set; }
 
         /// <summary>
         /// The columns from the selected external odbc table.

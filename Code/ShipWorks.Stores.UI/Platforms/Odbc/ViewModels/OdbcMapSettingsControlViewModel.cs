@@ -5,7 +5,6 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Stores.Platforms.Odbc.DataSource;
 using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
-using ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -35,9 +34,9 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
         private IOdbcSchema schema;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="OdbcImportMapSettingsControlViewModel"/> class.
+        /// Initializes a new instance of the <see cref="OdbcMapSettingsControlViewModel"/> class.
         /// </summary>
-        protected OdbcMapSettingsControlViewModel(IMessageHelper messageHelper, Func<string, IOdbcColumnSource> columnSourceFactory)
+        public OdbcMapSettingsControlViewModel(IMessageHelper messageHelper, Func<string, IOdbcColumnSource> columnSourceFactory)
         {
             MessageHelper = messageHelper;
             this.columnSourceFactory = columnSourceFactory;
@@ -117,7 +116,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
                 // Starts by setting map name to selected data source name.
                 // When a table is selected, if map name is untouched by user,
                 // the map name is changed to "DataSourceName - SelectedColumnName"
-                if (MapName != null && DataSource.Name != null &&
+                if (DataSource.Name != null &&
                     (MapName.Equals(DataSource.Name, StringComparison.InvariantCulture) ||
                      MapName.Equals($"{DataSource.Name} - {ColumnSource.Name}", StringComparison.InvariantCulture)))
                 {
