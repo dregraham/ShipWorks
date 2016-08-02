@@ -2,17 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using Interapptive.Shared;
+using log4net;
+using Quartz.Util;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.BigCommerce.DTO;
-using log4net;
-using Quartz.Util;
-using ShipWorks.Data.Model;
 
 namespace ShipWorks.Stores.Platforms.BigCommerce
 {
@@ -23,6 +23,18 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
     {
         static readonly ILog log = LogManager.GetLogger(typeof(BigCommerceOnlineUpdater));
         readonly BigCommerceStoreEntity bigCommerceStore;
+
+        // Valid list of providers from https://developer.bigcommerce.com/api/stores/v2/orders/shipments#create-a-shipment
+        private static Dictionary<ShipmentTypeCode, string> validProviders = new Dictionary<ShipmentTypeCode, string>
+        {
+            { ShipmentTypeCode.Endicia, "endicia" },
+            { ShipmentTypeCode.Express1Endicia, "endicia" },
+            { ShipmentTypeCode.Usps, "usps" },
+            { ShipmentTypeCode.Express1Usps, "usps" },
+            { ShipmentTypeCode.FedEx, "fedex" },
+            { ShipmentTypeCode.UpsOnLineTools, "ups" },
+            { ShipmentTypeCode.UpsWorldShip, "ups" },
+        };
 
         // status code provider
         BigCommerceStatusCodeProvider statusCodeProvider;
@@ -63,7 +75,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         /// </summary>
         public void UpdateOrderStatus(long orderID, int statusCode, UnitOfWork2 unitOfWork)
         {
-            OrderEntity order = (OrderEntity)DataProvider.GetEntity(orderID);
+            OrderEntity order = (OrderEntity) DataProvider.GetEntity(orderID);
             if (order != null)
             {
                 if (!order.IsManual)
@@ -161,7 +173,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
 
             // If the order item doesn't have a valid OrderAddressID, we know it's a legacy order.  Set a flag noting this.
             // Note: Digital items have an order address id of 0 when downloaded
-            bool hasBigCommerceRequiredShippingFields = order.OrderItems.Any(oi => (((BigCommerceOrderItemEntity)oi).OrderAddressID > 0));
+            bool hasBigCommerceRequiredShippingFields = order.OrderItems.Any(oi => (((BigCommerceOrderItemEntity) oi).OrderAddressID > 0));
 
             // If this is a legacy order AND it is a multi-ship to order, we can't determine which items go to which order.
             // So we'll skip uploading shipment info, and inform the user to use the website to finish.
@@ -180,7 +192,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
             else
             {
                 // This is an order downloaded via the API, we should be good to go with the downloaded data.
-                BigCommerceOrderItemEntity orderItem = (BigCommerceOrderItemEntity)order.OrderItems.FirstOrDefault(oi => (((BigCommerceOrderItemEntity)oi).OrderAddressID > 0));
+                BigCommerceOrderItemEntity orderItem = (BigCommerceOrderItemEntity) order.OrderItems.FirstOrDefault(oi => (((BigCommerceOrderItemEntity) oi).OrderAddressID > 0));
                 bigCommerceOrderAddressId = orderItem.OrderAddressID;
             }
 
@@ -194,7 +206,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
             // Get the BigCommerceItems to pass to the web client
             List<BigCommerceItem> bigCommerceOrderItems = GetOrderItems(order, orderProducts);
 
-            string shippingMethod = GetShippingMethod(shipment);
+            Tuple<string, string> shippingMethod = GetShippingMethod(shipment);
 
             webClient.UploadOrderShipmentDetails(order.OrderNumber, bigCommerceOrderAddressId, shipment.TrackingNumber, shippingMethod, bigCommerceOrderItems);
         }
@@ -204,24 +216,31 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         /// </summary>
         /// <param name="shipment">The shipment.</param>
         /// <returns></returns>
-        private static string GetShippingMethod(ShipmentEntity shipment)
+        private static Tuple<string, string> GetShippingMethod(ShipmentEntity shipment)
         {
-            string carrier = ShipmentTypeManager.GetType(shipment).ToString();
-            string service = ShippingManager.GetServiceUsed(shipment);
+            ShipmentTypeCode shipmentType = shipment.ShipmentTypeCode;
+
+            string carrier = validProviders.ContainsKey(shipmentType) ? validProviders[shipmentType] : string.Empty;
+            string service = GetShippingService(shipment, carrier);
+
+            return Tuple.Create(carrier, service);
+        }
+
+        /// <summary>
+        /// Get the service used for the shipment
+        /// </summary>
+        private static string GetShippingService(ShipmentEntity shipment, string carrier)
+        {
+            string service = ShippingManager.GetServiceUsed(shipment) ?? string.Empty;
 
             // If the service starts with the carrier name, cut the carrier name off
-            if (service.StartsWith(carrier))
+            if (!string.IsNullOrEmpty(carrier) && service.ToLower().StartsWith(carrier))
             {
                 service = service.Substring(carrier.Length + 1);
             }
 
             // Bigcommerce doesn't like it when you set shipping_method to an empty string
-            if (carrier.IsNullOrWhiteSpace() && service.IsNullOrWhiteSpace())
-            {
-                return "No shipping method was entered";
-            }
-
-            return $"{carrier} ({service})";
+            return service.IsNullOrWhiteSpace() ? "other" : service;
         }
 
         /// <summary>
@@ -234,7 +253,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         {
             List<BigCommerceItem> bigCommerceOrderItems = new List<BigCommerceItem>();
 
-            // To support legacy order items that wouldn't have order address id or order product id, we may need to 
+            // To support legacy order items that wouldn't have order address id or order product id, we may need to
             // use the list of order products received from BigCommerce.  If the passed orderProducts is null, we use
             // order.OrderItems, otherwise we use orderProducts.  This assumes the check has already been done and the
             // appropriate orderProducts has been passed.
@@ -250,10 +269,10 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
 
                         // Create a list of BigCommerceItems to send to BigCommerce for this shipment
                         BigCommerceItem bigCommerceItem = new BigCommerceItem
-                            {
-                                order_product_id = (int) bigCommerceOrderItem.OrderProductID,
-                                quantity = (int) bigCommerceOrderItem.Quantity
-                            };
+                        {
+                            order_product_id = (int) bigCommerceOrderItem.OrderProductID,
+                            quantity = (int) bigCommerceOrderItem.Quantity
+                        };
 
                         bigCommerceOrderItems.Add(bigCommerceItem);
                     }

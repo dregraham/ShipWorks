@@ -106,7 +106,8 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         /// <param name="shippingMethod">Carrier and service for this shipment</param>
         /// <param name="orderItems">The list of BigCommerceItem's in this shipment</param>
         /// <exception cref="BigCommerceException" />
-        public void UploadOrderShipmentDetails(long orderNumber, long orderAddressID, string trackingNumber, string shippingMethod, List<BigCommerceItem> orderItems)
+        public void UploadOrderShipmentDetails(long orderNumber, long orderAddressID, string trackingNumber,
+            Tuple<string, string> shippingMethod, List<BigCommerceItem> orderItems)
         {
             string uploadShipmentResource = BigCommerceWebClientEndpoints.GetUploadShipmentResource(orderNumber);
 
@@ -117,7 +118,8 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
             {
                 order_address_id = (int) orderAddressID,
                 tracking_number = trackingNumber,
-                shipping_method = shippingMethod,
+                shipping_provider = shippingMethod.Item1,
+                shipping_method = shippingMethod.Item2,
                 comments = string.Empty,
                 items = orderItems
             };
