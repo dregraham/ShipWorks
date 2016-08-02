@@ -7,6 +7,9 @@ using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 using ShipWorks.Stores.Platforms.Odbc.Download;
 using ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import;
 using System;
+using System.Data;
+using ShipWorks.Stores.Platforms.Odbc;
+using ShipWorks.Stores.Platforms.Odbc.DataAccess;
 using Xunit;
 
 namespace ShipWorks.Stores.Tests.Platforms.Odbc
@@ -108,6 +111,60 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             testObject.SaveMapSettings(store);
 
             Assert.Equal((int)OdbcImportStrategy.All, store.ImportStrategy);
+        }
+
+        [Fact]
+        public void ValidateREquiredMapSettings_ReturnsFalse_WhenSampleDataCommandThrowsShipWorksOdbcException()
+        {
+            Mock<IOdbcDataSource> dataSource = mock.Mock<IOdbcDataSource>();
+            Mock<IOdbcSchema> schema = mock.Mock<IOdbcSchema>();
+            Mock<IOdbcColumnSource> columnSource = mock.Mock<IOdbcColumnSource>();
+            columnSource.Setup(c => c.Name).Returns("Orders");
+            Mock<IOdbcSampleDataCommand> sampleDataCommand = mock.Mock<IOdbcSampleDataCommand>();
+            sampleDataCommand.Setup(s => s.Execute(It.IsAny<IOdbcDataSource>(), It.IsAny<string>(), It.IsAny<int>()))
+                .Throws(new ShipWorksOdbcException("Something went wrong"));
+
+            OdbcStoreEntity store = new OdbcStoreEntity()
+            {
+                ImportStrategy = (int)OdbcImportStrategy.ByModifiedTime,
+                ImportColumnSourceType = (int)OdbcColumnSourceType.CustomQuery
+            };
+
+            OdbcImportMapSettingsControlViewModel testObject = mock.Create<OdbcImportMapSettingsControlViewModel>();
+
+            testObject.Load(dataSource.Object, schema.Object, "ColumnSource", store);
+            testObject.CustomQuery = "select *";
+            testObject.ColumnSourceIsTable = false;
+            testObject.SaveMapSettings(store);
+
+            Assert.False(testObject.ValidateRequiredMapSettings());
+        }
+
+        [Fact]
+        public void ValidateREquiredMapSettings_ReturnsTrue_WhenQueryIsValid()
+        {
+            Mock<IOdbcDataSource> dataSource = mock.Mock<IOdbcDataSource>();
+            Mock<IOdbcSchema> schema = mock.Mock<IOdbcSchema>();
+            Mock<IOdbcColumnSource> columnSource = mock.Mock<IOdbcColumnSource>();
+            columnSource.Setup(c => c.Name).Returns("Orders");
+            Mock<IOdbcSampleDataCommand> sampleDataCommand = mock.Mock<IOdbcSampleDataCommand>();
+            sampleDataCommand.Setup(s => s.Execute(It.IsAny<IOdbcDataSource>(), It.IsAny<string>(), It.IsAny<int>()))
+                .Returns(new DataTable());
+
+            OdbcStoreEntity store = new OdbcStoreEntity()
+            {
+                ImportStrategy = (int)OdbcImportStrategy.ByModifiedTime,
+                ImportColumnSourceType = (int)OdbcColumnSourceType.CustomQuery
+            };
+
+            OdbcImportMapSettingsControlViewModel testObject = mock.Create<OdbcImportMapSettingsControlViewModel>();
+
+            testObject.Load(dataSource.Object, schema.Object, "ColumnSource", store);
+            testObject.CustomQuery = "select *";
+            testObject.ColumnSourceIsTable = false;
+            testObject.SaveMapSettings(store);
+
+            Assert.True(testObject.ValidateRequiredMapSettings());
         }
 
         [Fact]
