@@ -870,7 +870,7 @@ namespace ShipWorks.Data.Administration
             }
 
             Dictionary<string, object> userState = (Dictionary<string, object>) result.AsyncState;
-            MethodInvoker<ProgressProvider> invoker = (MethodInvoker<ProgressProvider>) userState["invoker"];
+            MethodInvoker<IProgressProvider> invoker = (MethodInvoker<IProgressProvider>) userState["invoker"];
             ProgressDlg progressDlg = (ProgressDlg) userState["progressDlg"];
 
             try
