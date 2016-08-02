@@ -16,8 +16,12 @@ using ShipWorks.Stores.Platforms.Odbc.Mapping;
 using ShipWorks.Stores.Platforms.Odbc.Upload;
 using ShipWorks.Stores.Platforms.Odbc.Upload.FieldValueResolvers;
 using ShipWorks.Stores.UI.Platforms.Odbc.ViewModels;
-using ShipWorks.Stores.UI.Platforms.Odbc.WizardPages;
 using System.Reflection;
+using ShipWorks.Stores.UI.Platforms.Odbc.Controls;
+using ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import;
+using ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Upload;
+using ShipWorks.Stores.UI.Platforms.Odbc.WizardPages.Import;
+using ShipWorks.Stores.UI.Platforms.Odbc.WizardPages.Upload;
 using Module = Autofac.Module;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc
@@ -63,7 +67,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             builder.RegisterType<OdbcUploadMapSettingsControlViewModel>()
                 .Keyed<IOdbcMapSettingsControlViewModel>("Upload");
 
-            builder.RegisterType<OdbcImportFieldMappingControlViewModel>()
+            builder.RegisterType<OdbcImportMappingControlViewModel>()
                 .AsImplementedInterfaces();
 
             builder.RegisterType<OdbcUploadMappingControlViewModel>()
@@ -79,7 +83,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             builder.RegisterType<OdbcSampleDataCommand>()
                 .AsImplementedInterfaces();
 
-            builder.RegisterType<OdbcCustomQueryWarningDlg>()
+            builder.RegisterType<Controls.OdbcCustomQueryWarningDlg>()
                 .Named<IDialog>("OdbcCustomQueryWarningDlg");
 
             builder.RegisterType<OdbcColumnSource>()
@@ -156,7 +160,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
                 .As<IOdbcWizardPage>()
                 .AsSelf();
 
-            builder.RegisterType<OdbcImportFieldMappingPage>()
+            builder.RegisterType<OdbcImportMappingPage>()
                 .As<IOdbcWizardPage>()
                 .AsSelf();
 

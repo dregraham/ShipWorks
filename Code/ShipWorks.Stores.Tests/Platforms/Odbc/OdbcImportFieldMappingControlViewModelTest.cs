@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Windows.Forms;
+using ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import;
 using Xunit;
 
 namespace ShipWorks.Stores.Tests.Platforms.Odbc
@@ -24,7 +25,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             {
                 var mapFactory = mock.Create<OdbcFieldMapFactory>();
 
-                var testObject = mock.Create<OdbcImportFieldMappingControlViewModel>(new TypedParameter(typeof(IOdbcFieldMapFactory), mapFactory));
+                var testObject = mock.Create<OdbcImportMappingControlViewModel>(new TypedParameter(typeof(IOdbcFieldMapFactory), mapFactory));
                 testObject.Load(new OdbcStoreEntity());
 
 
@@ -38,7 +39,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             using (var mock = AutoMock.GetLoose())
             {
                 var mapFactory = mock.Create<OdbcFieldMapFactory>();
-                var testObject = mock.Create<OdbcImportFieldMappingControlViewModel>(new TypedParameter(typeof(IOdbcFieldMapFactory), mapFactory));
+                var testObject = mock.Create<OdbcImportMappingControlViewModel>(new TypedParameter(typeof(IOdbcFieldMapFactory), mapFactory));
                 testObject.Load(new OdbcStoreEntity());
 
                 Assert.NotEmpty(testObject.Address.Entries);
@@ -51,7 +52,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             using (var mock = AutoMock.GetLoose())
             {
                 var mapFactory = mock.Create<OdbcFieldMapFactory>();
-                var testObject = mock.Create<OdbcImportFieldMappingControlViewModel>(new TypedParameter(typeof(IOdbcFieldMapFactory), mapFactory));
+                var testObject = mock.Create<OdbcImportMappingControlViewModel>(new TypedParameter(typeof(IOdbcFieldMapFactory), mapFactory));
                 testObject.Load(new OdbcStoreEntity());
 
                 testObject.NumberOfItemsPerOrder = 1;
@@ -67,7 +68,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             using (var mock = AutoMock.GetLoose())
             {
                 var mapFactory = mock.Create<OdbcFieldMapFactory>();
-                var testObject = mock.Create<OdbcImportFieldMappingControlViewModel>(new TypedParameter(typeof(IOdbcFieldMapFactory), mapFactory));
+                var testObject = mock.Create<OdbcImportMappingControlViewModel>(new TypedParameter(typeof(IOdbcFieldMapFactory), mapFactory));
                 testObject.Load(new OdbcStoreEntity());
 
                 Assert.Equal(testObject.Order, testObject.SelectedFieldMap);
@@ -80,7 +81,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             using (var mock = AutoMock.GetLoose())
             {
                 var mapFactory = mock.Create<OdbcFieldMapFactory>();
-                var testObject = mock.Create<OdbcImportFieldMappingControlViewModel>(new TypedParameter(typeof(IOdbcFieldMapFactory), mapFactory));
+                var testObject = mock.Create<OdbcImportMappingControlViewModel>(new TypedParameter(typeof(IOdbcFieldMapFactory), mapFactory));
                 testObject.Load(new OdbcStoreEntity());
 
                 Assert.Equal("Order", testObject.Order.DisplayName);
@@ -93,7 +94,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             using (var mock = AutoMock.GetLoose())
             {
                 var mapFactory = mock.Create<OdbcFieldMapFactory>();
-                var testObject = mock.Create<OdbcImportFieldMappingControlViewModel>(new TypedParameter(typeof(IOdbcFieldMapFactory), mapFactory));
+                var testObject = mock.Create<OdbcImportMappingControlViewModel>(new TypedParameter(typeof(IOdbcFieldMapFactory), mapFactory));
                 testObject.Load(new OdbcStoreEntity());
 
                 Assert.Equal("Address", testObject.Address.DisplayName);
@@ -106,7 +107,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             using (var mock = AutoMock.GetLoose())
             {
                 var mapFactory = mock.Create<OdbcFieldMapFactory>();
-                var testObject = mock.Create<OdbcImportFieldMappingControlViewModel>(new TypedParameter(typeof(IOdbcFieldMapFactory), mapFactory));
+                var testObject = mock.Create<OdbcImportMappingControlViewModel>(new TypedParameter(typeof(IOdbcFieldMapFactory), mapFactory));
                 testObject.Load(new OdbcStoreEntity());
 
                 testObject.NumberOfItemsPerOrder = 0;
@@ -129,7 +130,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             using (var mock = AutoMock.GetLoose())
             {
                 var mapFactory = mock.Create<OdbcFieldMapFactory>();
-                var testObject = mock.Create<OdbcImportFieldMappingControlViewModel>(new TypedParameter(typeof(IOdbcFieldMapFactory), mapFactory));
+                var testObject = mock.Create<OdbcImportMappingControlViewModel>(new TypedParameter(typeof(IOdbcFieldMapFactory), mapFactory));
                 testObject.Load(new OdbcStoreEntity());
 
                 testObject.NumberOfItemsPerOrder = 5;
@@ -146,7 +147,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             using (var mock = AutoMock.GetLoose())
             {
                 var mapFactory = mock.Create<OdbcFieldMapFactory>();
-                var testObject = mock.Create<OdbcImportFieldMappingControlViewModel>(new TypedParameter(typeof(IOdbcFieldMapFactory), mapFactory));
+                var testObject = mock.Create<OdbcImportMappingControlViewModel>(new TypedParameter(typeof(IOdbcFieldMapFactory), mapFactory));
                 testObject.Load(new OdbcStoreEntity());
 
                 testObject.NumberOfItemsPerOrder = 1;
@@ -168,7 +169,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             using (var mock = AutoMock.GetLoose())
             {
                 var mapFactory = mock.Create<OdbcFieldMapFactory>();
-                var testObject = mock.Create<OdbcImportFieldMappingControlViewModel>(new TypedParameter(typeof(IOdbcFieldMapFactory), mapFactory));
+                var testObject = mock.Create<OdbcImportMappingControlViewModel>(new TypedParameter(typeof(IOdbcFieldMapFactory), mapFactory));
                 testObject.Load(new OdbcStoreEntity());
 
                 testObject.NumberOfItemsPerOrder = 0;
@@ -184,7 +185,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             using (var mock = AutoMock.GetLoose())
             {
                 var mapFactory = mock.Create<OdbcFieldMapFactory>();
-                var testObject = mock.Create<OdbcImportFieldMappingControlViewModel>(new TypedParameter(typeof(IOdbcFieldMapFactory), mapFactory));
+                var testObject = mock.Create<OdbcImportMappingControlViewModel>(new TypedParameter(typeof(IOdbcFieldMapFactory), mapFactory));
                 testObject.Load(new OdbcStoreEntity());
 
                 testObject.NumberOfItemsPerOrder = 1;
@@ -206,7 +207,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             using (var mock = AutoMock.GetLoose())
             {
                 var mapFactory = mock.Create<OdbcFieldMapFactory>();
-                var testObject = mock.Create<OdbcImportFieldMappingControlViewModel>(new TypedParameter(typeof(IOdbcFieldMapFactory), mapFactory));
+                var testObject = mock.Create<OdbcImportMappingControlViewModel>(new TypedParameter(typeof(IOdbcFieldMapFactory), mapFactory));
                 testObject.Load(new OdbcStoreEntity());
 
                 testObject.NumberOfItemsPerOrder = 20;
@@ -222,7 +223,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             using (var mock = AutoMock.GetLoose())
             {
                 var mapFactory = mock.Create<OdbcFieldMapFactory>();
-                var testObject = mock.Create<OdbcImportFieldMappingControlViewModel>(new TypedParameter(typeof(IOdbcFieldMapFactory), mapFactory));
+                var testObject = mock.Create<OdbcImportMappingControlViewModel>(new TypedParameter(typeof(IOdbcFieldMapFactory), mapFactory));
                 testObject.Load(new OdbcStoreEntity());
 
                 testObject.NumberOfItemsPerOrder = 2;
@@ -239,7 +240,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             using (var mock = AutoMock.GetLoose())
             {
                 var mapFactory = mock.Create<OdbcFieldMapFactory>();
-                var testObject = mock.Create<OdbcImportFieldMappingControlViewModel>(new TypedParameter(typeof(IOdbcFieldMapFactory), mapFactory));
+                var testObject = mock.Create<OdbcImportMappingControlViewModel>(new TypedParameter(typeof(IOdbcFieldMapFactory), mapFactory));
                 testObject.Load(new OdbcStoreEntity());
 
                 testObject.IsSingleLineOrder = true;
@@ -260,7 +261,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             using (var mock = AutoMock.GetLoose())
             {
                 var mapFactory = mock.Create<OdbcFieldMapFactory>();
-                var testObject = mock.Create<OdbcImportFieldMappingControlViewModel>(new TypedParameter(typeof(IOdbcFieldMapFactory), mapFactory));
+                var testObject = mock.Create<OdbcImportMappingControlViewModel>(new TypedParameter(typeof(IOdbcFieldMapFactory), mapFactory));
                 testObject.Load(new OdbcStoreEntity());
 
                 testObject.IsSingleLineOrder = true;
@@ -280,7 +281,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             using (var mock = AutoMock.GetLoose())
             {
                 var mapFactory = mock.Create<OdbcFieldMapFactory>();
-                var testObject = mock.Create<OdbcImportFieldMappingControlViewModel>(new TypedParameter(typeof(IOdbcFieldMapFactory), mapFactory));
+                var testObject = mock.Create<OdbcImportMappingControlViewModel>(new TypedParameter(typeof(IOdbcFieldMapFactory), mapFactory));
                 testObject.Load(new OdbcStoreEntity());
 
                 testObject.IsSingleLineOrder = true;
@@ -302,7 +303,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             using (var mock = AutoMock.GetLoose())
             {
                 var mapFactory = mock.Create<OdbcFieldMapFactory>();
-                var testObject = mock.Create<OdbcImportFieldMappingControlViewModel>(new TypedParameter(typeof(IOdbcFieldMapFactory), mapFactory));
+                var testObject = mock.Create<OdbcImportMappingControlViewModel>(new TypedParameter(typeof(IOdbcFieldMapFactory), mapFactory));
                 testObject.Load(new OdbcStoreEntity());
 
                 testObject.IsSingleLineOrder = true;
@@ -327,7 +328,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             using (var mock = AutoMock.GetLoose())
             {
                 var mapFactory = mock.Create<OdbcFieldMapFactory>();
-                var testObject = mock.Create<OdbcImportFieldMappingControlViewModel>(new TypedParameter(typeof(IOdbcFieldMapFactory), mapFactory));
+                var testObject = mock.Create<OdbcImportMappingControlViewModel>(new TypedParameter(typeof(IOdbcFieldMapFactory), mapFactory));
                 testObject.Load(new OdbcStoreEntity());
 
                 testObject.IsSingleLineOrder = true;

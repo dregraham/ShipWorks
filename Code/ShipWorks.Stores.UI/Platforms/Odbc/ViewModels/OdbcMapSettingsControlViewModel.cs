@@ -12,6 +12,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Stores.Platforms.Odbc.DataSource;
 using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
+using ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
 {
