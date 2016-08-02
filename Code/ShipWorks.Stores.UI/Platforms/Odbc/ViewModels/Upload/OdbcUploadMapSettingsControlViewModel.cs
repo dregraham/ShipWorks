@@ -1,9 +1,9 @@
-﻿using System;
-using GalaSoft.MvvmLight.Command;
-using System.Windows.Forms;
-using Interapptive.Shared.UI;
+﻿using Interapptive.Shared.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
+using System;
+using System.Reflection;
+using System.Windows.Forms;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Upload
 {
