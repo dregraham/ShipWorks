@@ -1,21 +1,21 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using ShipWorks.Data.Model.EntityClasses;
+﻿using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.UI.Wizard;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc.Controls
 {
     /// <summary>
     ///
     /// </summary>
-    public partial class OdbcImportSettingsWizard : WizardForm, IStoreWizard
+    public partial class OdbcSettingsWizard : WizardForm, IStoreWizard
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="OdbcImportSettingsWizard"/> class.
+        /// Initializes a new instance of the <see cref="OdbcSettingsWizard"/> class.
         /// </summary>
-        public OdbcImportSettingsWizard()
+        public OdbcSettingsWizard()
         {
             InitializeComponent();
         }

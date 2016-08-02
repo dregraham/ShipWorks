@@ -193,11 +193,11 @@
     <Compile Include="Platforms\Odbc\Controls\OdbcDataSourceControl.Designer.cs">
       <DependentUpon>OdbcDataSourceControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Platforms\Odbc\Controls\OdbcImportSettingsWizard.cs">
+    <Compile Include="Platforms\Odbc\Controls\OdbcSettingsWizard.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Platforms\Odbc\Controls\OdbcImportSettingsWizard.Designer.cs">
-      <DependentUpon>OdbcImportSettingsWizard.cs</DependentUpon>
+    <Compile Include="Platforms\Odbc\Controls\OdbcSettingsWizard.Designer.cs">
+      <DependentUpon>OdbcSettingsWizard.cs</DependentUpon>
     </Compile>
     <Compile Include="Platforms\Odbc\Controls\OdbcMappingControl.xaml.cs">
       <DependentUpon>OdbcMappingControl.xaml</DependentUpon>
@@ -334,8 +334,8 @@
     <EmbeddedResource Include="Platforms\Odbc\Controls\OdbcDataSourceControl.resx">
       <DependentUpon>OdbcDataSourceControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Platforms\Odbc\Controls\OdbcImportSettingsWizard.resx">
-      <DependentUpon>OdbcImportSettingsWizard.cs</DependentUpon>
+    <EmbeddedResource Include="Platforms\Odbc\Controls\OdbcSettingsWizard.resx">
+      <DependentUpon>OdbcSettingsWizard.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Platforms\Odbc\WizardPages\Import\OdbcImportDataSourcePage.resx">
       <DependentUpon>OdbcImportDataSourcePage.cs</DependentUpon>

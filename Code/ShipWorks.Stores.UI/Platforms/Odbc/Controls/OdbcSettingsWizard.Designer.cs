@@ -1,6 +1,6 @@
 ﻿namespace ShipWorks.Stores.UI.Platforms.Odbc.Controls
 {
-    partial class OdbcImportSettingsWizard
+    partial class OdbcSettingsWizard
     {
         /// <summary>
         /// Required designer variable.
@@ -61,13 +61,13 @@
             // 
             this.topPanel.Size = new System.Drawing.Size(534, 56);
             // 
-            // OdbcImportSettingsWizard
+            // OdbcSettingsWizard
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(534, 611);
             this.LastPageCancelable = true;
-            this.Name = "OdbcImportSettingsWizard";
+            this.Name = "OdbcSettingsWizard";
             this.NextVisible = true;
             this.Text = "Odbc Store Setup Wizard";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();

@@ -1,12 +1,11 @@
-﻿using System;
-using System.Windows.Forms;
-using Autofac;
+﻿using Autofac;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.Odbc;
-using ShipWorks.Stores.UI.Platforms.Odbc.WizardPages;
 using ShipWorks.Stores.UI.Platforms.Odbc.WizardPages.Import;
+using System;
+using System.Windows.Forms;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc.Controls
 {
@@ -45,7 +44,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.Controls
                     scope.Resolve<OdbcImportMappingPage>()
                 };
 
-                using (OdbcImportSettingsWizard wizard = scope.Resolve<OdbcImportSettingsWizard>())
+                using (OdbcSettingsWizard wizard = scope.Resolve<OdbcSettingsWizard>())
                 {
                     wizard.LoadPages(odbcStore, importPages);
 
@@ -62,7 +61,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.Controls
         /// </summary>
         private static void ConfigureOdbcSettingsWizardDependencies(ContainerBuilder builder)
         {
-            builder.RegisterType<OdbcImportSettingsWizard>()
+            builder.RegisterType<OdbcSettingsWizard>()
                 .AsSelf()
                 .As<IWin32Window>()
                 .SingleInstance();
