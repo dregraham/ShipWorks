@@ -84,8 +84,13 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.Controls
         /// </summary>
         private void OnUploadStrategySelectedIndexChanged(object sender, EventArgs e)
         {
+            if (odbcStore == null)
+            {
+                return;
+            }
+
             odbcStore.UploadStrategy = (int) uploadStrategy.SelectedValue;
-            
+
             ToggleUploadSettingsEnabled();
         }
 
