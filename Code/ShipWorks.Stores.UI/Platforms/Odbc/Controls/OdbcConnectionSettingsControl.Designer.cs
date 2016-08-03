@@ -81,7 +81,7 @@
             // 
             this.uploadStrategy.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.uploadStrategy.FormattingEnabled = true;
-            this.uploadStrategy.Location = new System.Drawing.Point(248, 88);
+            this.uploadStrategy.Location = new System.Drawing.Point(249, 88);
             this.uploadStrategy.Name = "uploadStrategy";
             this.uploadStrategy.Size = new System.Drawing.Size(266, 21);
             this.uploadStrategy.TabIndex = 5;
