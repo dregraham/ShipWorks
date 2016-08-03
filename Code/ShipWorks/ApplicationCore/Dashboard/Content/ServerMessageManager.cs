@@ -1,24 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Adapter.Custom;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Data.Connection;
-using log4net;
-using ShipWorks.Data;
-using ShipWorks.Users;
-using Interapptive.Shared.Net;
-using System.Net;
 using System.Diagnostics;
-using System.Xml.Linq;
-using ShipWorks.Stores;
-using ShipWorks.Shipping;
+using System.Linq;
 using System.Xml;
+using System.Xml.Linq;
 using Interapptive.Shared;
 using Interapptive.Shared.Data;
+using Interapptive.Shared.Net;
+using log4net;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Data.Adapter.Custom;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Shipping;
+using ShipWorks.Stores;
+using ShipWorks.Users;
 
 namespace ShipWorks.ApplicationCore.Dashboard.Content
 {
@@ -377,7 +374,7 @@ namespace ShipWorks.ApplicationCore.Dashboard.Content
             using (SqlAdapter adapter = new SqlAdapter())
             {
                 adapter.FetchEntityCollection(shipments,
-                    new RelationPredicateBucket(ShipmentFields.ShipmentType == affectedTypes.Select(c => (int) c).ToArray() & ShipmentFields.Processed == true), 
+                    new RelationPredicateBucket(ShipmentFields.ShipmentType == affectedTypes.Select(c => (int) c).ToArray() & ShipmentFields.Processed == true),
                     1,
                     null,
                     null,
@@ -426,7 +423,7 @@ namespace ShipWorks.ApplicationCore.Dashboard.Content
             FieldCompareSetPredicate notInSignoff = new FieldCompareSetPredicate(
                 ServerMessageFields.ServerMessageID, null, ServerMessageSignoffFields.ServerMessageID, null, SetOperator.In,
                 ServerMessageSignoffFields.ComputerID == UserSession.Computer.ComputerID &
-                ServerMessageSignoffFields.UserID == UserSession.User.UserID);
+                ServerMessageSignoffFields.UserID == UserSession.User?.UserID);
             notInSignoff.Negate = true;
 
             // Add the subquery
