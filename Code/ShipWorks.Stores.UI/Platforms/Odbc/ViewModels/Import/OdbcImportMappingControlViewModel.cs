@@ -340,7 +340,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
                     if (!Columns.Any(
                         c => c.Name.Equals(entry.ExternalField.Column.Name, StringComparison.InvariantCulture)))
                     {
-                        columnsNotFound.Add(entry.ExternalField.Column.Name);
+                        columnsNotFound.Add(entry.ExternalField.Column.Name.Trim());
                         entry.ExternalField.Column = new OdbcColumn(EmptyColumnName);
                     }
                 }
