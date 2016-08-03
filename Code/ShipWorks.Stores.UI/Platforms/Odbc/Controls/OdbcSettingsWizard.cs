@@ -1,7 +1,6 @@
 ﻿using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Management;
-using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.UI.Wizard;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,12 +28,12 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.Controls
         /// </summary>
         /// <param name="odbcStore">The ODBC store.</param>
         /// <param name="wizardPages">The wizard pages.</param>
-        public void LoadPages(OdbcStoreEntity odbcStore, IEnumerable<IOdbcWizardPage> wizardPages)
+        public void LoadPages(OdbcStoreEntity odbcStore, IEnumerable<WizardPage> wizardPages)
         {
             originalOdbcStoreEntity = odbcStore;
             Store = EntityUtility.CloneEntity(odbcStore);
 
-            Pages.AddRange(wizardPages.Cast<WizardPage>().ToArray());
+            Pages.AddRange(wizardPages.ToArray());
         }
 
         /// <summary>

@@ -17,6 +17,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages.Upload
     public partial class OdbcUploadDataSourcePage : AddStoreWizardPage, IOdbcWizardPage
     {
         private readonly IOdbcDataSourceService dataSourceService;
+        private OdbcStoreEntity store;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcUploadDataSourcePage"/> class.
@@ -37,12 +38,29 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages.Upload
         public int Position => 4;
 
         /// <summary>
+        /// Called when [stepping into].
+        /// </summary>
+        private void OnSteppingInto(object sender, WizardSteppingIntoEventArgs e)
+        {
+            store = GetStore<OdbcStoreEntity>();
+
+            if (store.UploadStrategy != (int)OdbcShipmentUploadStrategy.UseShipmentDataSource)
+            {
+                e.Skip = true;
+                e.RaiseStepEventWhenSkipping = false;
+            }
+            else if (!string.IsNullOrWhiteSpace(store.UploadConnectionString))
+            {
+                odbcDataSourceControl.LoadDataSource(dataSourceService.GetUploadDataSource(store));
+            }
+        }
+
+        /// <summary>
         /// User is moving to the next wizard page, perform any autoconfiguration or credentials saving
         /// </summary>
         private void OnStepNext(object sender, WizardStepEventArgs e)
         {
             Cursor.Current = Cursors.WaitCursor;
-            OdbcStoreEntity store = GetStore<OdbcStoreEntity>();
 
             // Test the connection using the OdbcDataSourceControl
             bool testSuccessful = odbcDataSourceControl.TestConnection();
@@ -54,24 +72,6 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages.Upload
             else
             {
                 e.NextPage = this;
-            }
-        }
-
-        /// <summary>
-        /// Called when [stepping into].
-        /// </summary>
-        private void OnSteppingInto(object sender, WizardSteppingIntoEventArgs e)
-        {
-            OdbcStoreEntity store = GetStore<OdbcStoreEntity>();
-
-            if (store.UploadStrategy != (int)OdbcShipmentUploadStrategy.UseShipmentDataSource)
-            {
-                e.Skip = true;
-                e.RaiseStepEventWhenSkipping = false;
-            }
-            else if (!string.IsNullOrWhiteSpace(store.UploadConnectionString))
-            {
-                odbcDataSourceControl.LoadDataSource(dataSourceService.GetUploadDataSource(store));
             }
         }
     }

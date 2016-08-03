@@ -66,7 +66,6 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(534, 611);
-            this.LastPageCancelable = true;
             this.Name = "OdbcSettingsWizard";
             this.NextVisible = true;
             this.Text = "Odbc Store Setup Wizard";

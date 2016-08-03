@@ -29,8 +29,8 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(OdbcUploadShipmentStrategyPage));
-            this.uploadToSame = new System.Windows.Forms.RadioButton();
-            this.uploadToDifferent = new System.Windows.Forms.RadioButton();
+            this.useImportDataSource = new System.Windows.Forms.RadioButton();
+            this.useShipmentDataSource = new System.Windows.Forms.RadioButton();
             this.doNotUpload = new System.Windows.Forms.RadioButton();
             this.uploadStrategyPanel = new System.Windows.Forms.Panel();
             this.labelShipmentUpdate = new System.Windows.Forms.Label();
@@ -39,25 +39,25 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxShipmentUpdate)).BeginInit();
             this.SuspendLayout();
             // 
-            // uploadToSame
+            // useImportDataSource
             // 
-            this.uploadToSame.AutoSize = true;
-            this.uploadToSame.Location = new System.Drawing.Point(3, 26);
-            this.uploadToSame.Name = "uploadToSame";
-            this.uploadToSame.Size = new System.Drawing.Size(258, 17);
-            this.uploadToSame.TabIndex = 0;
-            this.uploadToSame.Text = "Upload shipment details to the same data source";
-            this.uploadToSame.UseVisualStyleBackColor = true;
+            this.useImportDataSource.AutoSize = true;
+            this.useImportDataSource.Location = new System.Drawing.Point(3, 26);
+            this.useImportDataSource.Name = "useImportDataSource";
+            this.useImportDataSource.Size = new System.Drawing.Size(258, 17);
+            this.useImportDataSource.TabIndex = 0;
+            this.useImportDataSource.Text = "Upload shipment details to the same data source";
+            this.useImportDataSource.UseVisualStyleBackColor = true;
             // 
-            // uploadToDifferent
+            // useShipmentDataSource
             // 
-            this.uploadToDifferent.AutoSize = true;
-            this.uploadToDifferent.Location = new System.Drawing.Point(3, 49);
-            this.uploadToDifferent.Name = "uploadToDifferent";
-            this.uploadToDifferent.Size = new System.Drawing.Size(265, 17);
-            this.uploadToDifferent.TabIndex = 1;
-            this.uploadToDifferent.Text = "Upload shipment details to a different data source";
-            this.uploadToDifferent.UseVisualStyleBackColor = true;
+            this.useShipmentDataSource.AutoSize = true;
+            this.useShipmentDataSource.Location = new System.Drawing.Point(3, 49);
+            this.useShipmentDataSource.Name = "useShipmentDataSource";
+            this.useShipmentDataSource.Size = new System.Drawing.Size(265, 17);
+            this.useShipmentDataSource.TabIndex = 1;
+            this.useShipmentDataSource.Text = "Upload shipment details to a different data source";
+            this.useShipmentDataSource.UseVisualStyleBackColor = true;
             // 
             // doNotUpload
             // 
@@ -73,8 +73,8 @@
             // 
             // uploadStrategyPanel
             // 
-            this.uploadStrategyPanel.Controls.Add(this.uploadToDifferent);
-            this.uploadStrategyPanel.Controls.Add(this.uploadToSame);
+            this.uploadStrategyPanel.Controls.Add(this.useShipmentDataSource);
+            this.uploadStrategyPanel.Controls.Add(this.useImportDataSource);
             this.uploadStrategyPanel.Controls.Add(this.doNotUpload);
             this.uploadStrategyPanel.Location = new System.Drawing.Point(60, 31);
             this.uploadStrategyPanel.Name = "uploadStrategyPanel";
@@ -112,10 +112,10 @@
             this.Size = new System.Drawing.Size(500, 500);
             this.Title = "Upload Options";
             this.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNext);
+            this.SteppingInto += new System.EventHandler<ShipWorks.UI.Wizard.WizardSteppingIntoEventArgs>(this.OnSteppingInto);
             this.uploadStrategyPanel.ResumeLayout(false);
             this.uploadStrategyPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxShipmentUpdate)).EndInit();
-            this.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNext);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -123,8 +123,8 @@
 
         #endregion
 
-        private System.Windows.Forms.RadioButton uploadToSame;
-        private System.Windows.Forms.RadioButton uploadToDifferent;
+        private System.Windows.Forms.RadioButton useImportDataSource;
+        private System.Windows.Forms.RadioButton useShipmentDataSource;
         private System.Windows.Forms.RadioButton doNotUpload;
         private System.Windows.Forms.Panel uploadStrategyPanel;
         private System.Windows.Forms.Label labelShipmentUpdate;

@@ -27,15 +27,24 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages.Upload
         public int Position => 3;
 
         /// <summary>
+        /// Called when [stepping into].
+        /// </summary>
+        private void OnSteppingInto(object sender, WizardSteppingIntoEventArgs e)
+        {
+            store = GetStore<OdbcStoreEntity>();
+            
+            OdbcShipmentUploadStrategy uploadStrategy = (OdbcShipmentUploadStrategy)store.UploadStrategy;
+
+            doNotUpload.Checked = uploadStrategy == OdbcShipmentUploadStrategy.DoNotUpload;
+            useShipmentDataSource.Checked = uploadStrategy == OdbcShipmentUploadStrategy.UseShipmentDataSource;
+            useImportDataSource.Checked = uploadStrategy == OdbcShipmentUploadStrategy.UseImportDataSource;
+        }
+
+        /// <summary>
         /// Called when [step next].
         /// </summary>
         private void OnStepNext(object sender, WizardStepEventArgs e)
         {
-            if (store == null)
-            {
-                store = GetStore<OdbcStoreEntity>();
-            }
-
             if (doNotUpload.Checked)
             {
                 store.UploadStrategy = (int) OdbcShipmentUploadStrategy.DoNotUpload;
@@ -43,11 +52,11 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages.Upload
                 store.UploadMap = string.Empty;
                 store.UploadColumnSource = string.Empty;
             }
-            else if (uploadToSame.Checked)
+            else if (useImportDataSource.Checked)
             {
                 store.UploadStrategy = (int) OdbcShipmentUploadStrategy.UseImportDataSource;
             }
-            else if(uploadToDifferent.Checked)
+            else if (useShipmentDataSource.Checked)
             {
                 store.UploadStrategy = (int) OdbcShipmentUploadStrategy.UseShipmentDataSource;
             }
