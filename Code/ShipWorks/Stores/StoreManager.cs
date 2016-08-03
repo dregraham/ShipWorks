@@ -32,6 +32,9 @@ namespace ShipWorks.Stores
     /// </summary>
     public static class StoreManager
     {
+        private static readonly string orderEntityName = ((IEntityCore) new OrderEntity()).LLBLGenProEntityName;
+        private static readonly string orderItemEntityName = ((IEntityCore) new OrderItemEntity()).LLBLGenProEntityName;
+
         static readonly ILog log = LogManager.GetLogger(typeof(StoreManager));
 
         static TableSynchronizer<StoreEntity> storeSynchronizer;
@@ -145,24 +148,24 @@ namespace ShipWorks.Stores
                 OrderEntity order = storeType.CreateOrder();
                 if (order.GetType() != typeof(OrderEntity))
                 {
-                    if (!orderTables.Contains(order.LLBLGenProEntityName))
+                    if (!orderTables.Contains(orderEntityName))
                     {
-                        orderTables.Add(order.LLBLGenProEntityName);
+                        orderTables.Add(orderEntityName);
                     }
                 }
 
                 OrderItemEntity item = storeType.CreateOrderItemInstance();
                 if (item.GetType() != typeof(OrderItemEntity))
                 {
-                    if (!itemTables.Contains(item.LLBLGenProEntityName))
+                    if (!itemTables.Contains(orderItemEntityName))
                     {
-                        itemTables.Add(item.LLBLGenProEntityName);
+                        itemTables.Add(orderItemEntityName);
                     }
                 }
             }
 
-            ActiveTableInheritanceManager.SetActiveTables(new OrderEntity().LLBLGenProEntityName, orderTables);
-            ActiveTableInheritanceManager.SetActiveTables(new OrderItemEntity().LLBLGenProEntityName, itemTables);
+            ActiveTableInheritanceManager.SetActiveTables(orderEntityName, orderTables);
+            ActiveTableInheritanceManager.SetActiveTables(orderItemEntityName, itemTables);
         }
 
         /// <summary>

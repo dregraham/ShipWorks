@@ -158,7 +158,7 @@ namespace ShipWorks.Data.Connection
             {
                 using (SqlConnection con = Current.OpenConnection())
                 {
-                    return SqlCommandProvider.ExecuteScalar<Guid>(con, "exec GetDatabaseGuid");
+                    return DbCommandProvider.ExecuteScalar<Guid>(con, "exec GetDatabaseGuid");
                 }
             }
             catch (Exception ex)
@@ -278,7 +278,7 @@ namespace ShipWorks.Data.Connection
         {
             using (SqlConnection con = OpenConnection())
             {
-                string version = (string) SqlCommandProvider.ExecuteScalar(con, "SELECT @@Version");
+                string version = (string) DbCommandProvider.ExecuteScalar(con, "SELECT @@Version");
                 log.InfoFormat("SQL Server version: {0}", version);
 
                 return !version.ToLower().Contains("x86");
@@ -363,7 +363,7 @@ namespace ShipWorks.Data.Connection
                 {
                     using (SqlConnection con = OpenConnection())
                     {
-                        SqlCommandProvider.ExecuteNonQuery(con, "SELECT transaction_id FROM sys.dm_tran_current_transaction");
+                        DbCommandProvider.ExecuteNonQuery(con, "SELECT transaction_id FROM sys.dm_tran_current_transaction");
                     }
                 }
                 catch (SqlException ex)
@@ -387,13 +387,13 @@ namespace ShipWorks.Data.Connection
                     // Try to read it
                     using (SqlConnection con = OpenConnection())
                     {
-                        SqlCommandProvider.ExecuteScalar(con, "SELECT SystemDataID FROM SystemData");
+                        DbCommandProvider.ExecuteScalar(con, "SELECT SystemDataID FROM SystemData");
                     }
 
                     // Now try to write it
                     using (SqlConnection con = OpenConnection())
                     {
-                        SqlCommandProvider.ExecuteScalar(con, "UPDATE SystemData SET TemplateVersion = TemplateVersion");
+                        DbCommandProvider.ExecuteScalar(con, "UPDATE SystemData SET TemplateVersion = TemplateVersion");
                     }
                 }
                 catch (SqlException ex)
@@ -462,7 +462,7 @@ namespace ShipWorks.Data.Connection
         {
             using (SqlConnection con = OpenConnection())
             {
-                return 0 != (int) SqlCommandProvider.ExecuteScalar(con, "select value_in_use from sys.configurations where name = 'clr enabled'");
+                return 0 != (int) DbCommandProvider.ExecuteScalar(con, "select value_in_use from sys.configurations where name = 'clr enabled'");
             }
         }
 
@@ -475,7 +475,7 @@ namespace ShipWorks.Data.Connection
             {
                 using (SqlConnection con = OpenConnection())
                 {
-                    serverMachineName = (string) SqlCommandProvider.ExecuteScalar(con, "SELECT SERVERPROPERTY( 'MachineName' )");
+                    serverMachineName = (string) DbCommandProvider.ExecuteScalar(con, "SELECT SERVERPROPERTY( 'MachineName' )");
                 }
             }
 

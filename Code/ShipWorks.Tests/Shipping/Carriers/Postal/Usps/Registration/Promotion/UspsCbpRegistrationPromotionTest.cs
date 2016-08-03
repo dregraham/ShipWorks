@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using ShipWorks.Shipping.Carriers.Postal.Usps.Registration.Promotion;
 using Xunit;
-using ShipWorks.Shipping.Carriers.Postal;
-using ShipWorks.Shipping.Carriers.Postal.Usps.Registration.Promotion;
 
 namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.Registration.Promotion
 {

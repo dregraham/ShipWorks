@@ -1,29 +1,23 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Filters;
-using ShipWorks.Filters.Content;
-using System.Threading;
-using ShipWorks.Data.Model.EntityClasses;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using System.Diagnostics;
-using log4net;
-using ShipWorks.Filters.Content.SqlGeneration;
+using System.Data.Common;
 using System.Data.SqlClient;
-using ShipWorks.ApplicationCore;
-using ShipWorks.SqlServer.Filters;
-using System.Transactions;
+using System.Diagnostics;
+using System.Linq;
+using System.Threading;
 using Interapptive.Shared;
-using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Data.Connection;
-using ShipWorks.ApplicationCore.Interaction;
-using Interapptive.Shared.Utility;
-using ShipWorks.Common.Threading;
-using ShipWorks.Users;
-using ShipWorks.Data.Adapter.Custom;
 using Interapptive.Shared.Data;
+using log4net;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.ApplicationCore.Interaction;
+using ShipWorks.Common.Threading;
+using ShipWorks.Data.Adapter.Custom;
 using ShipWorks.Data.Administration.Retry;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Filters.Content;
+using ShipWorks.SqlServer.Filters;
+using ShipWorks.Users;
 
 namespace ShipWorks.Filters.Search
 {
@@ -56,7 +50,7 @@ namespace ShipWorks.Filters.Search
         ManualResetEvent searchComplete = new ManualResetEvent(true);
 
         // The command used to execute the search
-        SqlCommand searchCmd;
+        DbCommand searchCmd;
         object searchCmdLock = new object();
 
         // Scheduling
@@ -304,7 +298,7 @@ namespace ShipWorks.Filters.Search
 
                     lock (searchCmdLock)
                     {
-                        searchCmd = SqlCommandProvider.Create(null);
+                        searchCmd = DbCommandProvider.Create(null);
                         searchCmd.CommandText = nodeContent.InitialCalculation.Replace("<SwFilterNodeID />", searchNode.FilterNodeID.ToString());
 
                         // debugging delay
@@ -316,7 +310,7 @@ namespace ShipWorks.Filters.Search
                     SqlAdapterRetry<SqlException> sqlAdapterRetry = new SqlAdapterRetry<SqlException>(5, -5, "SearchProvider.SearchThread ExecuteSearch.");
                     sqlAdapterRetry.ExecuteWithRetry(() =>
                     {
-                        searchCompleted = ExecuteSearch();    
+                        searchCompleted = ExecuteSearch();
                     });
 
                     lock (searchCmdLock)
@@ -330,7 +324,7 @@ namespace ShipWorks.Filters.Search
 
                         // This gets the Node => Node count association loaded.  The Heartbeat of the MainForm does this too - but we do it now, so that
                         // when the SearchStatus event gets raised at the end of this thread, its ready to go with the MainGridControl updates the grid
-                        // in response to the SearchStatus event.  Without this, it may be up to a second (heartbeat rate) before the grid is updated, 
+                        // in response to the SearchStatus event.  Without this, it may be up to a second (heartbeat rate) before the grid is updated,
                         // and might be out-of-sync with the status of the search bar.  And that doesn't look right.
                         FilterContentManager.CheckForChanges();
                     }
@@ -418,7 +412,7 @@ namespace ShipWorks.Filters.Search
                         }
                     }
                 }
-                    // Depending on the timing of the cancel, it could throw either SqlException or InvalidOperationException
+                // Depending on the timing of the cancel, it could throw either SqlException or InvalidOperationException
                 catch (SqlException)
                 {
                     if (!isCancelRequested)
@@ -444,7 +438,7 @@ namespace ShipWorks.Filters.Search
         private FilterNodeContentEntity CreateSearchFilterNodeContentEntity(FilterDefinition definition)
         {
             FilterNodeContentEntity nodeContent;
-            
+
             // Create a new count and initialize the filter node to do it.  Up to and through the first alpha we didn't apply the count
             // to the node until after the results were calculated.  This provided a very "smooth" search experience where you were always
             // taken directly from one result set to the next.  But, if the search takes a while, then you'd be viewing a result set from
@@ -524,7 +518,7 @@ namespace ShipWorks.Filters.Search
         {
             get { return isSearching; }
         }
-        
+
         /// <summary>
         /// Raises the status changed event
         /// </summary>
@@ -564,7 +558,7 @@ namespace ShipWorks.Filters.Search
                 searchNode.ParentNode = null;
                 searchNode.FilterNodeContent = content;
                 searchNode.Created = DateTime.UtcNow;
-                searchNode.Purpose = (int)FilterNodePurpose.Search;
+                searchNode.Purpose = (int) FilterNodePurpose.Search;
 
                 // We'll just point to and re-use the placeholder sequence.  We don't actually need the sequence\filter for
                 // anything other than that some code references them for such things as determining FilterTarget and the filter
@@ -680,7 +674,7 @@ namespace ShipWorks.Filters.Search
                 {
                     log.Warn(string.Format("FilterNode {0} looks like it was already deleted", searchNode.FilterNodeID), ex);
                 }
-                
+
                 // Delete our search database entry
                 adapter.DeleteEntitiesDirectly(typeof(SearchEntity), new RelationPredicateBucket(SearchFields.FilterNodeID == searchNode.FilterNodeID));
 

@@ -278,17 +278,13 @@
       <HintPath>..\..\Components\SandDock.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SD.LLBLGen.Pro.DQE.SqlServer.NET20, Version=2.6.0.0, Culture=neutral, PublicKeyToken=ca73b74ba4e3ff27, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Components\SD.LLBLGen.Pro.DQE.SqlServer.NET20.dll</HintPath>
+    <Reference Include="SD.LLBLGen.Pro.DQE.SqlServer, Version=5.0.0.0, Culture=neutral, PublicKeyToken=ca73b74ba4e3ff27, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\SD.LLBLGen.Pro.DQE.SqlServer.5.0.4\lib\net35\SD.LLBLGen.Pro.DQE.SqlServer.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="SD.LLBLGen.Pro.LinqSupportClasses.NET35, Version=2.6.0.0, Culture=neutral, PublicKeyToken=ca73b74ba4e3ff27, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Components\SD.LLBLGen.Pro.LinqSupportClasses.NET35.dll</HintPath>
-    </Reference>
-    <Reference Include="SD.LLBLGen.Pro.ORMSupportClasses.NET20, Version=2.6.0.0, Culture=neutral, PublicKeyToken=ca73b74ba4e3ff27, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Components\SD.LLBLGen.Pro.ORMSupportClasses.NET20.dll</HintPath>
+    <Reference Include="SD.LLBLGen.Pro.ORMSupportClasses, Version=5.0.0.0, Culture=neutral, PublicKeyToken=ca73b74ba4e3ff27, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\SD.LLBLGen.Pro.ORMSupportClasses.5.0.4\lib\net35\SD.LLBLGen.Pro.ORMSupportClasses.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="SpreadsheetGear, Version=6.0.3.189, Culture=neutral, PublicKeyToken=39c186f5904944ec, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -1768,18 +1764,6 @@
     </Compile>
     <Compile Include="Data\Administration\SqlDatabaseStatus.cs" />
     <Compile Include="Data\Administration\SqlShrinkDatabase.cs" />
-    <Compile Include="Data\Administration\UpdateFrom2x\Database\Tasks\PostMigration\ShippingPages\Express1WizardPage.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Data\Administration\UpdateFrom2x\Database\Tasks\PostMigration\ShippingPages\Express1WizardPage.Designer.cs">
-      <DependentUpon>Express1WizardPage.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Data\Administration\UpdateFrom2x\Database\Tasks\PostMigration\StorePages\AmazonWizardPage.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Data\Administration\UpdateFrom2x\Database\Tasks\PostMigration\StorePages\AmazonWizardPage.Designer.cs">
-      <DependentUpon>AmazonWizardPage.cs</DependentUpon>
-    </Compile>
     <Compile Include="Data\Caching\EntityCacheChangeMonitorChangedEvent.cs" />
     <Compile Include="Data\Caching\EntityCacheChangeMonitor.cs" />
     <Compile Include="Data\Caching\EntityChangeTrackingChangeset.cs" />
@@ -3842,143 +3826,9 @@
     <Compile Include="Data\Administration\SqlServerSetup\DotNet35InstallPage.Designer.cs">
       <DependentUpon>DotNet35InstallPage.cs</DependentUpon>
     </Compile>
-    <Compile Include="Data\Administration\UpdateFrom2x\Configuration\ConfigurationMigrationAction.cs" />
-    <Compile Include="Data\Administration\UpdateFrom2x\Configuration\ConfigurationMigrationException.cs" />
-    <Compile Include="Data\Administration\UpdateFrom2x\Configuration\ConfigurationMigrationSource.cs" />
-    <Compile Include="Data\Administration\UpdateFrom2x\Configuration\ShipWorks2xDataPaths.cs" />
-    <Compile Include="Data\Administration\UpdateFrom2x\Database\ArchiveSet.cs" />
-    <Compile Include="Data\Administration\UpdateFrom2x\Database\MigrationContext.cs" />
-    <Compile Include="Data\Administration\UpdateFrom2x\Database\MigrationController.cs" />
-    <Compile Include="Data\Administration\UpdateFrom2x\Database\MigrationException.cs" />
-    <Compile Include="Data\Administration\UpdateFrom2x\Database\MigrationExecutionInvoker.cs" />
-    <Compile Include="Data\Administration\UpdateFrom2x\Database\MigrationExecutionPlan.cs" />
-    <Compile Include="Data\Administration\UpdateFrom2x\Database\MigrationPropertyBag.cs" />
-    <Compile Include="Data\Administration\UpdateFrom2x\Database\MigrationSqlScriptLoader.cs" />
-    <Compile Include="Data\Administration\UpdateFrom2x\Database\MigrationState.cs" />
-    <Compile Include="Data\Administration\UpdateFrom2x\Database\Tasks\MigrationRowKeyTranslator.cs" />
-    <Compile Include="Data\Administration\UpdateFrom2x\Database\Tasks\PostMigration\EmailLogImporter.cs" />
-    <Compile Include="Data\Administration\UpdateFrom2x\Database\Tasks\PostMigration\StorePages\ChannelAdvisorAccountKeyWizardPage.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Data\Administration\UpdateFrom2x\Database\Tasks\PostMigration\StorePages\ChannelAdvisorAccountKeyWizardPage.Designer.cs">
-      <DependentUpon>ChannelAdvisorAccountKeyWizardPage.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Data\Administration\UpdateFrom2x\Database\Tasks\PostMigration\ShippingPages\WorldShipWizardPage.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Data\Administration\UpdateFrom2x\Database\Tasks\PostMigration\ShippingPages\WorldShipWizardPage.Designer.cs">
-      <DependentUpon>WorldShipWizardPage.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Data\Administration\UpdateFrom2x\Database\Tasks\PostMigration\ShippingPages\UpsShipperWizardPage.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Data\Administration\UpdateFrom2x\Database\Tasks\PostMigration\ShippingPages\UpsShipperWizardPage.Designer.cs">
-      <DependentUpon>UpsShipperWizardPage.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Data\Administration\UpdateFrom2x\Database\Tasks\PostMigration\ShippingPages\EndiciaWizardPage.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Data\Administration\UpdateFrom2x\Database\Tasks\PostMigration\ShippingPages\EndiciaWizardPage.Designer.cs">
-      <DependentUpon>EndiciaWizardPage.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Data\Administration\UpdateFrom2x\Database\Tasks\PostMigration\ShippingPages\FedExAccountLineControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Data\Administration\UpdateFrom2x\Database\Tasks\PostMigration\ShippingPages\FedExAccountLineControl.Designer.cs">
-      <DependentUpon>FedExAccountLineControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Data\Administration\UpdateFrom2x\Database\Tasks\PostMigration\ShippingPages\FedExWizardPage.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Data\Administration\UpdateFrom2x\Database\Tasks\PostMigration\ShippingPages\FedExWizardPage.Designer.cs">
-      <DependentUpon>FedExWizardPage.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Data\Administration\UpdateFrom2x\Database\Tasks\PostMigration\FinalTasksWizardPage.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Data\Administration\UpdateFrom2x\Database\Tasks\PostMigration\FinalTasksWizardPage.Designer.cs">
-      <DependentUpon>FinalTasksWizardPage.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Data\Administration\UpdateFrom2x\Database\Tasks\PostMigration\ImportCertificatesWizardPage.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Data\Administration\UpdateFrom2x\Database\Tasks\PostMigration\ImportCertificatesWizardPage.Designer.cs">
-      <DependentUpon>ImportCertificatesWizardPage.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Data\Administration\UpdateFrom2x\Database\Tasks\PostMigration\ImportTemplatesWizardPage.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Data\Administration\UpdateFrom2x\Database\Tasks\PostMigration\ImportTemplatesWizardPage.Designer.cs">
-      <DependentUpon>ImportTemplatesWizardPage.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Data\Administration\UpdateFrom2x\Database\Tasks\PostMigration\ShippingPages\OtherShipperWizardPage.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Data\Administration\UpdateFrom2x\Database\Tasks\PostMigration\ShippingPages\OtherShipperWizardPage.Designer.cs">
-      <DependentUpon>OtherShipperWizardPage.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Data\Administration\UpdateFrom2x\Database\Tasks\PostMigration\Post2xMigrationPreparation.cs" />
-    <Compile Include="Data\Administration\UpdateFrom2x\Database\Tasks\PostMigration\Post2xMigrationStep.cs" />
-    <Compile Include="Data\Administration\UpdateFrom2x\Database\Tasks\PostMigration\Post2xMigrationUtility.cs" />
-    <Compile Include="Data\Administration\UpdateFrom2x\Database\Tasks\PostMigration\ShippingPages\UspsWizardPage.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Data\Administration\UpdateFrom2x\Database\Tasks\PostMigration\ShippingPages\UspsWizardPage.Designer.cs">
-      <DependentUpon>UspsWizardPage.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Data\Administration\UpdateFrom2x\Database\Tasks\PostMigration\StorePages\NetworkSolutionsLicenseWizardPage.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Data\Administration\UpdateFrom2x\Database\Tasks\PostMigration\StorePages\NetworkSolutionsLicenseWizardPage.Designer.cs">
-      <DependentUpon>NetworkSolutionsLicenseWizardPage.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Data\Administration\UpdateFrom2x\Database\Tasks\PostMigration\UserSecurityInfoWizardPage.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Data\Administration\UpdateFrom2x\Database\Tasks\PostMigration\UserSecurityInfoWizardPage.Designer.cs">
-      <DependentUpon>UserSecurityInfoWizardPage.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Data\Administration\UpdateFrom2x\Database\Tasks\PostMigration\StorePages\YahooEmailWizardPage.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Data\Administration\UpdateFrom2x\Database\Tasks\PostMigration\StorePages\YahooEmailWizardPage.Designer.cs">
-      <DependentUpon>YahooEmailWizardPage.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Data\Administration\UpdateFrom2x\Database\Tasks\Specialized\ConvertStatusCodesMigrationTask.cs" />
-    <Compile Include="Data\Administration\UpdateFrom2x\Database\Tasks\MigrationRowKeyType.cs" />
-    <Compile Include="Data\Administration\UpdateFrom2x\Database\Tasks\MigrationTaskBase.cs" />
-    <Compile Include="Data\Administration\UpdateFrom2x\Database\Tasks\MigrationTaskExecutionPhase.cs" />
-    <Compile Include="Data\Administration\UpdateFrom2x\Database\Tasks\Specialized\UpgradePaymentDetailsMigrationTask.cs" />
-    <Compile Include="Data\Administration\UpdateFrom2x\Database\Tasks\WellKnownMigrationTaskIds.cs" />
-    <Compile Include="Data\Administration\UpdateFrom2x\Database\Tasks\MigrationTaskInstancing.cs" />
-    <Compile Include="Data\Administration\UpdateFrom2x\Database\Tasks\MigrationTaskRunPattern.cs" />
-    <Compile Include="Data\Administration\UpdateFrom2x\Database\Tasks\MigrationTaskTypeCode.cs" />
-    <Compile Include="Data\Administration\UpdateFrom2x\Database\Tasks\Specialized\CheckConstraintsMigrationTask.cs" />
-    <Compile Include="Data\Administration\UpdateFrom2x\Database\Tasks\Specialized\PrepareMainDatabaseMigrationTask.cs" />
-    <Compile Include="Data\Administration\UpdateFrom2x\Database\Tasks\Specialized\ScriptMigrationTask.cs" />
-    <Compile Include="Data\Administration\UpdateFrom2x\Database\Tasks\Specialized\SslCertificateImportMigrationTask.cs" />
-    <Compile Include="Data\Administration\UpdateFrom2x\Database\Tasks\Specialized\LoadStatusPresetsMigrationTask.cs" />
-    <Compile Include="Data\Administration\UpdateFrom2x\Database\Tasks\Specialized\UpdateSchemaVersionMigrationTask.cs" />
-    <Compile Include="Data\Administration\UpdateFrom2x\Database\Tasks\Specialized\UpdateV2MigrationTask.cs" />
     <Compile Include="Data\Administration\SqlServerSetup\SqlInstanceUtility.cs" />
     <Compile Include="Data\Administration\SqlServerSetup\SqlServerInstallerPurpose.cs" />
     <Compile Include="Data\Administration\SqlServerSetup\SqlWindowsFirewallUtility.cs" />
-    <Compile Include="Data\Administration\UpdateFrom2x\Configuration\ConfigurationMigrationWizard.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Data\Administration\UpdateFrom2x\Configuration\ConfigurationMigrationWizard.Designer.cs">
-      <DependentUpon>ConfigurationMigrationWizard.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Data\Administration\UpdateFrom2x\Database\Tasks\Specialized\UpsNotificationMigrationTask.cs" />
-    <Compile Include="Data\Administration\UpdateFrom2x\Database\Tasks\Specialized\Utility\ConversionOnlineStatusCodeProvider.cs" />
-    <Compile Include="Data\Administration\UpdateFrom2x\LegacyCode\ActionConverter.cs" />
-    <Compile Include="Data\Administration\UpdateFrom2x\LegacyCode\FilterConverter.cs" />
-    <Compile Include="Data\Administration\UpdateFrom2x\LegacyCode\FilterDefinitionLoader.cs" />
-    <Compile Include="Data\Administration\UpdateFrom2x\LegacyCode\FilterTreeLayoutLoader.cs" />
-    <Compile Include="Data\Administration\UpdateFrom2x\LegacyCode\ShipWorks2xArchiveUtility.cs" />
-    <Compile Include="Data\Administration\UpdateFrom2x\Configuration\ShipWorks2xApplicationDataSource.cs" />
-    <Compile Include="Data\Administration\UpdateFrom2x\Configuration\ConfigurationMigrationState.cs" />
-    <Compile Include="Data\Administration\UpdateFrom2x\LegacyCode\Template2xHelper.cs" />
     <Compile Include="Data\Grid\StaticGridSelection.cs" />
     <Compile Include="Data\Grid\EntityGridSelection.cs">
       <SubType>Component</SubType>
@@ -3989,8 +3839,6 @@
     </Compile>
     <Compile Include="Data\Utility\SqlTableSeed.cs" />
     <Compile Include="Data\Administration\SqlUpdateScript.cs" />
-    <Compile Include="Data\Administration\UpdateFrom2x\Configuration\ShipWorks2xConfigurationMigrator.cs" />
-    <Compile Include="Data\Administration\UpdateFrom2x\Configuration\ShipWorks2xApplicationDataSourceType.cs" />
     <Compile Include="Data\Connection\SqlDeadlockPriorityScope.cs" />
     <Compile Include="Data\Grid\Columns\DisplayTypes\Decorators\Editors\GridColumnDecoratorEditor.cs">
       <SubType>UserControl</SubType>
@@ -6231,7 +6079,6 @@
       <DependentUpon>InternalTestVersionDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="Templates\Distribution\TemplateInstallingEventArgs.cs" />
-    <Compile Include="Templates\Distribution\TemplateVersionType.cs" />
     <Compile Include="Templates\Distribution\TemplateInstaller.cs" />
     <Compile Include="Templates\Emailing\EmailSendDateDelayProviderEvent.cs" />
     <Compile Include="Templates\Management\AddSnippetDlg.cs">
@@ -7702,55 +7549,6 @@
     <EmbeddedResource Include="Data\Administration\SqlServerSetup\DotNet35InstallPage.resx">
       <DependentUpon>DotNet35InstallPage.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Data\Administration\UpdateFrom2x\Database\Tasks\PostMigration\ShippingPages\Express1WizardPage.resx">
-      <DependentUpon>Express1WizardPage.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Data\Administration\UpdateFrom2x\Database\Tasks\PostMigration\StorePages\AmazonWizardPage.resx">
-      <DependentUpon>AmazonWizardPage.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Data\Administration\UpdateFrom2x\Database\Tasks\PostMigration\StorePages\ChannelAdvisorAccountKeyWizardPage.resx">
-      <DependentUpon>ChannelAdvisorAccountKeyWizardPage.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Data\Administration\UpdateFrom2x\Database\Tasks\PostMigration\ShippingPages\WorldShipWizardPage.resx">
-      <DependentUpon>WorldShipWizardPage.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Data\Administration\UpdateFrom2x\Database\Tasks\PostMigration\ShippingPages\UpsShipperWizardPage.resx">
-      <DependentUpon>UpsShipperWizardPage.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Data\Administration\UpdateFrom2x\Database\Tasks\PostMigration\ShippingPages\EndiciaWizardPage.resx">
-      <DependentUpon>EndiciaWizardPage.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Data\Administration\UpdateFrom2x\Database\Tasks\PostMigration\ShippingPages\FedExAccountLineControl.resx">
-      <DependentUpon>FedExAccountLineControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Data\Administration\UpdateFrom2x\Database\Tasks\PostMigration\ShippingPages\FedExWizardPage.resx">
-      <DependentUpon>FedExWizardPage.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Data\Administration\UpdateFrom2x\Database\Tasks\PostMigration\FinalTasksWizardPage.resx">
-      <DependentUpon>FinalTasksWizardPage.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Data\Administration\UpdateFrom2x\Database\Tasks\PostMigration\ImportCertificatesWizardPage.resx">
-      <DependentUpon>ImportCertificatesWizardPage.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Data\Administration\UpdateFrom2x\Database\Tasks\PostMigration\ImportTemplatesWizardPage.resx">
-      <DependentUpon>ImportTemplatesWizardPage.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Data\Administration\UpdateFrom2x\Database\Tasks\PostMigration\ShippingPages\OtherShipperWizardPage.resx">
-      <DependentUpon>OtherShipperWizardPage.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Data\Administration\UpdateFrom2x\Database\Tasks\PostMigration\ShippingPages\UspsWizardPage.resx">
-      <DependentUpon>UspsWizardPage.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Data\Administration\UpdateFrom2x\Database\Tasks\PostMigration\StorePages\NetworkSolutionsLicenseWizardPage.resx">
-      <DependentUpon>NetworkSolutionsLicenseWizardPage.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Data\Administration\UpdateFrom2x\Database\Tasks\PostMigration\UserSecurityInfoWizardPage.resx">
-      <DependentUpon>UserSecurityInfoWizardPage.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Data\Administration\UpdateFrom2x\Database\Tasks\PostMigration\StorePages\YahooEmailWizardPage.resx">
-      <DependentUpon>YahooEmailWizardPage.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Data\Connection\SingleUserModeDlg.resx">
       <DependentUpon>SingleUserModeDlg.cs</DependentUpon>
     </EmbeddedResource>
@@ -8906,9 +8704,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ApplicationCore\Help\RemoteAssistanceDlg.resx">
       <DependentUpon>RemoteAssistanceDlg.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Data\Administration\UpdateFrom2x\Configuration\ConfigurationMigrationWizard.resx">
-      <DependentUpon>ConfigurationMigrationWizard.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Data\Grid\Columns\DisplayTypes\Decorators\Editors\GridColumnDecoratorEditor.resx">
       <DependentUpon>GridColumnDecoratorEditor.cs</DependentUpon>
@@ -11134,10 +10929,6 @@
       <Project>{1E53A000-FDEB-4E9E-8BE0-19CDC14A0282}</Project>
       <Name>Interapptive.Shared</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ShipWorks.Data.Adapter\ShipWorks.Data.Adapter.csproj">
-      <Project>{D5EB1EB5-DD70-4461-9377-B462031837DC}</Project>
-      <Name>ShipWorks.Data.Adapter</Name>
-    </ProjectReference>
     <ProjectReference Include="..\ShipWorks.Data.Model\ShipWorks.Data.Model.csproj">
       <Project>{6F05267C-1883-4526-8D83-E46B7B2D2FAF}</Project>
       <Name>ShipWorks.Data.Model</Name>
@@ -11201,8 +10992,8 @@
     <Analyzer Include="..\..\packages\InterapptiveAnalyzers.1.0.5714.23531\analyzers\dotnet\cs\InterapptiveAnalyzers.dll" />
     <Analyzer Include="..\..\packages\Microsoft.AnalyzerPowerPack.1.1.0\analyzers\dotnet\cs\Microsoft.AnalyzerPowerPack.Common.dll" />
     <Analyzer Include="..\..\packages\Microsoft.AnalyzerPowerPack.1.1.0\analyzers\dotnet\cs\Microsoft.AnalyzerPowerPack.CSharp.dll" />
-    <Analyzer Include="..\..\packages\SonarLint.1.6.0\analyzers\SonarLint.CSharp.dll" />
-    <Analyzer Include="..\..\packages\SonarLint.1.6.0\analyzers\SonarLint.dll" />
+    <Analyzer Include="..\..\packages\SonarAnalyzer.CSharp.1.15.0\analyzers\SonarAnalyzer.CSharp.dll" />
+    <Analyzer Include="..\..\packages\SonarAnalyzer.CSharp.1.15.0\analyzers\SonarAnalyzer.dll" />
     <Analyzer Include="..\..\packages\System.Runtime.Analyzers.1.1.0\analyzers\dotnet\cs\System.Runtime.Analyzers.dll" />
     <Analyzer Include="..\..\packages\System.Runtime.Analyzers.1.1.0\analyzers\dotnet\cs\System.Runtime.CSharp.Analyzers.dll" />
     <Analyzer Include="..\..\packages\System.Runtime.InteropServices.Analyzers.1.1.0\analyzers\dotnet\cs\System.Runtime.InteropServices.Analyzers.dll" />

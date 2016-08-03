@@ -1,20 +1,12 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.HelperClasses;
-using log4net;
 using System.Data.SqlClient;
-using ShipWorks.Data;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Adapter.Custom;
-using ShipWorks.Data.Connection;
-using Interapptive.Shared.Utility;
-using Divelements.SandGrid;
-using ShipWorks.UI;
 using System.Windows.Forms;
-using Interapptive.Shared.UI;
 using Interapptive.Shared.Data;
+using Interapptive.Shared.UI;
+using log4net;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Users.Audit
 {
@@ -76,7 +68,7 @@ namespace ShipWorks.Users.Audit
         /// </summary>
         private static long GetTransactionID(SqlConnection con)
         {
-            return SqlCommandProvider.ExecuteScalar<long>(con, "SELECT dbo.GetTransactionID()");
+            return DbCommandProvider.ExecuteScalar<long>(con, "SELECT dbo.GetTransactionID()");
         }
 
         /// <summary>

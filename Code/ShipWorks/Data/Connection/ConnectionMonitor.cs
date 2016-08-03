@@ -1,5 +1,6 @@
 using System;
 using System.Data;
+using System.Data.Common;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Threading;
@@ -10,6 +11,7 @@ using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore.Crashes;
 using ShipWorks.Common.Threading;
+using ShipWorks.Data.Model;
 using ShipWorks.UI;
 
 namespace ShipWorks.Data.Connection
@@ -94,7 +96,7 @@ namespace ShipWorks.Data.Connection
         /// <summary>
         /// Handles reconnecting to the database
         /// </summary>
-        private static void Reconnect(SqlConnection con)
+        private static void Reconnect(DbConnection con)
         {
             if (IsUIThread())
             {
@@ -140,7 +142,7 @@ namespace ShipWorks.Data.Connection
         /// <summary>
         /// Background thread reconnect - waits for the UI thread to detect DB disconnect and reconnects
         /// </summary>
-        private static void BackgroundReconnect(SqlConnection con)
+        private static void BackgroundReconnect(DbConnection con)
         {
             log.InfoFormat("Background thread starting to wait for reconnect event.");
 
@@ -163,7 +165,7 @@ namespace ShipWorks.Data.Connection
         /// Responsible for opening connections, and attempting to gracefully handle lost connection to the database.
         /// </summary>
         [NDependIgnoreLongMethod]
-        public static void OpenConnection(SqlConnection con)
+        public static void OpenConnection(DbConnection con)
         {
             if (con == null)
             {
@@ -240,7 +242,7 @@ namespace ShipWorks.Data.Connection
                                 SqlSession master = new SqlSession(SqlSession.Current);
                                 master.Configuration.DatabaseName = "master";
 
-                                using (SqlConnection testConnection = new SqlConnection(master.Configuration.GetConnectionString()))
+                                using (DbConnection testConnection = DataAccessAdapter.CreateConnection(master.Configuration.GetConnectionString()))
                                 {
                                     testConnection.Open();
 
@@ -329,7 +331,7 @@ namespace ShipWorks.Data.Connection
         /// <summary>
         /// Prepare the open connection for use
         /// </summary>
-        private static void PrepareConnectionForUse(SqlConnection con)
+        private static void PrepareConnectionForUse(DbConnection con)
         {
             // Since we are pooling, it will open without actually connecting to the server.
             // We need to do this to validate we can actually connect.  This sees at least a 10x slow down
@@ -339,7 +341,7 @@ namespace ShipWorks.Data.Connection
             // If there is a deadlock priority in scope, set it now
             if (SqlDeadlockPriorityScope.Current != null)
             {
-                SqlCommandProvider.ExecuteNonQuery(con, string.Format("SET DEADLOCK_PRIORITY {0}", SqlDeadlockPriorityScope.Current.DeadlockPriority));
+                DbCommandProvider.ExecuteNonQuery(con, string.Format("SET DEADLOCK_PRIORITY {0}", SqlDeadlockPriorityScope.Current.DeadlockPriority));
 
                 // To read it back...
                 // "SELECT deadlock_priority FROM sys.dm_exec_sessions where session_id = @@SPID"
@@ -363,17 +365,17 @@ namespace ShipWorks.Data.Connection
         /// does not do this! http://support.microsoft.com/kb/309544
         ///
         /// </summary>
-        public static void ValidateOpenConnection(SqlConnection con)
+        public static void ValidateOpenConnection(DbConnection con)
         {
             if (con == null)
             {
                 throw new ArgumentNullException("con");
             }
 
-            SqlCommand cmd = SqlCommandProvider.Create(con);
+            DbCommand cmd = DbCommandProvider.Create(con);
             cmd.CommandTimeout = 5;
             cmd.CommandText = "SET TRANSACTION ISOLATION LEVEL READ COMMITTED";
-            SqlCommandProvider.ExecuteNonQuery(cmd);
+            DbCommandProvider.ExecuteNonQuery(cmd);
         }
 
         /// <summary>
@@ -394,7 +396,7 @@ namespace ShipWorks.Data.Connection
 
                 return true;
             }
-            else if (IsSqlConnectionException(ex) || ex is SingleUserModeException)
+            else if (IsDbConnectionException(ex) || ex is SingleUserModeException)
             {
                 connectionLost = true;
 
@@ -404,22 +406,22 @@ namespace ShipWorks.Data.Connection
                     // if the UI thread is currently blocking waiting on a background operation that is waiting for the connection to come back.
                     // But as far as I know we don't do this anyhwere
                     Program.MainForm.Invoke(new MethodInvoker(() =>
+                    {
+                        if (ex is SingleUserModeException)
                         {
-                            if (ex is SingleUserModeException)
+                            using (SingleUserModeDlg dlg = new SingleUserModeDlg())
                             {
-                                using (SingleUserModeDlg dlg = new SingleUserModeDlg())
-                                {
-                                    dlg.ShowDialog(DisplayHelper.GetActiveForm());
-                                }
+                                dlg.ShowDialog(DisplayHelper.GetActiveForm());
                             }
-                            else
+                        }
+                        else
+                        {
+                            using (ConnectionTerminatedDlg dlg = new ConnectionTerminatedDlg())
                             {
-                                using (ConnectionTerminatedDlg dlg = new ConnectionTerminatedDlg())
-                                {
-                                    dlg.ShowDialog(DisplayHelper.GetActiveForm());
-                                }
+                                dlg.ShowDialog(DisplayHelper.GetActiveForm());
                             }
-                        }));
+                        }
+                    }));
                 }
 
                 return true;
@@ -443,7 +445,7 @@ namespace ShipWorks.Data.Connection
                 }
 
                 // See if its a connection lost exception and update our state
-                if (IsSqlConnectionException(ex) || ex is ConnectionLostException)
+                if (IsDbConnectionException(ex) || ex is ConnectionLostException)
                 {
                     connectionLost = true;
                 }
@@ -455,7 +457,7 @@ namespace ShipWorks.Data.Connection
         /// <summary>
         /// Indicates if the exception is due to a failed sql connection
         /// </summary>
-        private static bool IsSqlConnectionException(Exception ex)
+        private static bool IsDbConnectionException(Exception ex)
         {
             int[] connectionErrors = new int[] {
                 232,   // Win32: The pipe is being closed.

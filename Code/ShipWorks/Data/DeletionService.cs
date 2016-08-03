@@ -15,12 +15,12 @@ using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.FactoryClasses;
 using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Data.Utility;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Shipping.Policies;
 using ShipWorks.Stores;
 using ShipWorks.Stores.Content;
 using ShipWorks.Templates.Printing;
-using ShipWorks.Data.Utility;
 using ShipWorks.Users.Audit;
 using ShipWorks.Users.Security;
 
@@ -304,7 +304,7 @@ namespace ShipWorks.Data
         /// </summary>
         private static void DeleteChildRelations(RelationPredicateBucket baseFilter, EntityType parentType, SqlAdapter adapter)
         {
-            EntityBase2 parentEntity = (EntityBase2) GeneralEntityFactory.Create(parentType);
+            IEntityCore parentEntity = GeneralEntityFactory.Create(parentType);
 
             foreach (IEntityRelation relation in parentEntity.GetAllRelations())
             {
@@ -335,7 +335,7 @@ namespace ShipWorks.Data
         /// </summary>
         private static void DeleteInheritanceSubTypes(RelationPredicateBucket baseFilter, EntityType entityType, SqlAdapter adapter)
         {
-            EntityBase2 entity = (EntityBase2) GeneralEntityFactory.Create(entityType);
+            IEntityCore entity = GeneralEntityFactory.Create(entityType);
             IInheritanceInfo inheritanceInfo = entity.GetInheritanceInfo();
 
             if (inheritanceInfo == null)

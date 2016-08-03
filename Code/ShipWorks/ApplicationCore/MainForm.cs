@@ -48,8 +48,6 @@ using ShipWorks.Core.Messaging;
 using ShipWorks.Data;
 using ShipWorks.Data.Administration;
 using ShipWorks.Data.Administration.SqlServerSetup;
-using ShipWorks.Data.Administration.UpdateFrom2x.Configuration;
-using ShipWorks.Data.Administration.UpdateFrom2x.Database;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Grid.Columns;
 using ShipWorks.Data.Grid.DetailView;
@@ -244,13 +242,6 @@ namespace ShipWorks
         /// </summary>
         private void OnShown(object sender, EventArgs e)
         {
-            // If we were just upgraded, we need to move the old sqlsession to where it needs to be
-            if (!ShipWorks2xConfigurationMigrator.MigrateIfRequired(this))
-            {
-                Close();
-                return;
-            }
-
             // Its visible, but possibly not completely drawn
             Refresh();
 
@@ -438,27 +429,6 @@ namespace ShipWorks
         [NDependIgnoreLongMethod]
         private bool LogonToSqlServer()
         {
-            // If we are here b\c MSDE was uninstalled, but SQL 08 isn't ready yet, we need to force the user back into the Database Upgrade window when they come back.
-            // If we didn't do that, then they wouldn't be able to get back in b\c normally it requires a successfully connection (which they can't have now, b\c MSDE is
-            // uninstalled).
-            if (SqlServerInstaller.IsMsdeMigrationInProgress)
-            {
-                log.InfoFormat("Forcing Database Upgrade window open to MSDE migration file existing.");
-
-                using (ConnectionSensitiveScope scope = new ConnectionSensitiveScope("update the database", this))
-                {
-                    if (!scope.Acquired)
-                    {
-                        return false;
-                    }
-
-                    if (!DatabaseUpdateWizard.Run(this))
-                    {
-                        return false;
-                    }
-                }
-            }
-
             bool canConnect = SqlSession.Current.CanConnect();
 
             // If we couldn't connect, see if it's b\c another ShipWorks is upgrading or restoring
@@ -888,7 +858,7 @@ namespace ShipWorks
             log.InfoFormat("CheckDatabaseVersion: Installed: {0}, Required {1}", installedVersion, SqlSchemaUpdater.GetRequiredSchemaVersion());
 
             // See if it needs upgraded
-            if (SqlSchemaUpdater.IsUpgradeRequired() || !SqlSession.Current.IsSqlServer2008OrLater() || MigrationController.IsMigrationInProgress())
+            if (SqlSchemaUpdater.IsUpgradeRequired() || !SqlSession.Current.IsSqlServer2008OrLater())
             {
                 using (ConnectionSensitiveScope scope = new ConnectionSensitiveScope("update the database", this))
                 {
@@ -1775,10 +1745,6 @@ namespace ShipWorks
                 // If the configuration is complete, or the database changed in any way...
                 if (configurationComplete || databaseChanged)
                 {
-                    // If they were in the middle of upgrading MSDE to 08... and had to reboot, or whatever.  But then chose Setup Database and finished successfully
-                    // then we need to forget about that MSDE upgrade that was in the middle of happening, the user has moved on.
-                    SqlServerInstaller.CancelMsdeMigrationInProgress();
-
                     // This makes sure that when we exit the context scope, we don't still briefly look logged in to constantly
                     // running background threads.  Being logged in asserts that the schema is correct - and at this point, we just connected to a random database, so we don't know that.
                     // We can't use LogOff here, because that tries to audit the logoff.  We are now connected to a different database, so it wouldn't make any sense to do that audit.

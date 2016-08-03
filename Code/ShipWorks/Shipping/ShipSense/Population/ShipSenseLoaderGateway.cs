@@ -1,22 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Common;
 using System.Data.SqlClient;
 using System.Linq;
 using Interapptive.Shared.Data;
-using ShipWorks.Users.Audit;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data;
 using ShipWorks.Data.Adapter.Custom;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Settings;
-using ShipWorks.Shipping.ShipSense.Packaging;
 using ShipWorks.SqlServer.Common.Data;
 using ShipWorks.Stores.Content;
+using ShipWorks.Users.Audit;
 
 namespace ShipWorks.Shipping.ShipSense.Population
 {
@@ -26,8 +26,8 @@ namespace ShipWorks.Shipping.ShipSense.Population
     public class ShipSenseLoaderGateway : IShipSenseLoaderGateway
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(ShipSenseLoaderGateway));
-        
-        private SqlConnection connection; 
+
+        private SqlConnection connection;
         private readonly IKnowledgebase knowledgebase;
 
         private OrderEntity previousProcessedOrder;
@@ -42,7 +42,7 @@ namespace ShipWorks.Shipping.ShipSense.Population
         }
 
         /// <summary>
-        /// Opens the current connection if it is not already open. This is primarily 
+        /// Opens the current connection if it is not already open. This is primarily
         /// intended for maintaining the connection to the applock.
         /// </summary>
         private void OpenConnection()
@@ -67,14 +67,14 @@ namespace ShipWorks.Shipping.ShipSense.Population
             {
                 try
                 {
-                    ShippingSettingsEntity shippingSettings = ShippingSettings.Fetch();
+                    IShippingSettingsEntity shippingSettings = ShippingSettings.FetchReadOnly();
                     int total = 0;
 
-                    using (SqlConnection conn = SqlSession.Current.OpenConnection())
+                    using (DbConnection conn = SqlSession.Current.OpenConnection())
                     {
-                        using (SqlCommand command = SqlCommandProvider.Create(conn))
+                        using (DbCommand command = DbCommandProvider.Create(conn))
                         {
-                            command.CommandText = @"                                        
+                            command.CommandText = @"
                                         WITH UniqueOrderShipments (Shipments)
                                         AS
                                         (
@@ -90,7 +90,7 @@ namespace ShipWorks.Shipping.ShipSense.Population
                             command.Parameters.Add(new SqlParameter("LastProcessedShipmentID", shippingSettings.ShipSenseProcessedShipmentID));
                             command.Parameters.Add(new SqlParameter("EndShipmentID", shippingSettings.ShipSenseEndShipmentID));
 
-                            using (SqlDataReader reader = SqlCommandProvider.ExecuteReader(command))
+                            using (DbDataReader reader = DbCommandProvider.ExecuteReader(command))
                             {
                                 if (reader.Read())
                                 {
@@ -120,18 +120,18 @@ namespace ShipWorks.Shipping.ShipSense.Population
                 try
                 {
                     int total = 0;
-                    using (SqlConnection conn = SqlSession.Current.OpenConnection())
+                    using (DbConnection conn = SqlSession.Current.OpenConnection())
                     {
-                        using (SqlCommand command = SqlCommandProvider.Create(conn))
+                        using (DbCommand command = DbCommandProvider.Create(conn))
                         {
-                            command.CommandText = @"                                        
-                                        SELECT COUNT(0) 
+                            command.CommandText = @"
+                                        SELECT COUNT(0)
                                         FROM [Order] WITH (NOLOCK)
-                                        WHERE 
-	                                        OnlineLastModified >= DATEADD(day, -30, GETUTCDATE()) 
-	                                        AND	LEN(ShipSenseHashKey) = 0";
+                                        WHERE
+                                            OnlineLastModified >= DATEADD(day, -30, GETUTCDATE())
+                                            AND	LEN(ShipSenseHashKey) = 0";
 
-                            using (SqlDataReader reader = SqlCommandProvider.ExecuteReader(command))
+                            using (DbDataReader reader = DbCommandProvider.ExecuteReader(command))
                             {
                                 if (reader.Read())
                                 {
@@ -160,13 +160,13 @@ namespace ShipWorks.Shipping.ShipSense.Population
             {
                 using (AuditBehaviorScope scope = new AuditBehaviorScope(AuditState.Disabled))
                 {
-                    using (SqlConnection conn = SqlSession.Current.OpenConnection())
+                    using (DbConnection conn = SqlSession.Current.OpenConnection())
                     {
-                        using (SqlCommand command = SqlCommandProvider.Create(conn))
+                        using (DbCommand command = DbCommandProvider.Create(conn))
                         {
                             command.CommandText = "UPDATE [Order] SET ShipSenseHashKey = ''";
 
-                            SqlCommandProvider.ExecuteNonQuery(command);
+                            DbCommandProvider.ExecuteNonQuery(command);
                         }
                     }
                 }
@@ -179,7 +179,7 @@ namespace ShipWorks.Shipping.ShipSense.Population
         }
 
         /// <summary>
-        /// Updates the shipment range of the shipping settings that will be used when rebuilding 
+        /// Updates the shipment range of the shipping settings that will be used when rebuilding
         /// the ShipSense knowledge base.
         /// </summary>
         public void ResetShippingSettingsForLoading()
@@ -200,15 +200,20 @@ namespace ShipWorks.Shipping.ShipSense.Population
         {
             long startingShipmentID = 0;
 
-            using (SqlConnection connection = SqlSession.Current.OpenConnection())
+            using (DbConnection connection = SqlSession.Current.OpenConnection())
             {
-                using (SqlCommand command = SqlCommandProvider.Create(connection))
+                using (DbCommand command = DbCommandProvider.Create(connection))
                 {
                     command.CommandText = @"
                                         DECLARE @ShipSenseProcessedShipmentID BIGINT
-                                        WITH Shipments AS                                        (	                                        SELECT TOP 25000 ShipmentID FROM Shipment WITH (NOLOCK) WHERE Processed = 1 ORDER BY ShipmentID DESC                                        )                                        SELECT MIN(ShipmentID) FROM Shipments";
+                                        WITH Shipments AS
+                                        (
+                                            SELECT TOP 25000 ShipmentID FROM Shipment WITH (NOLOCK) WHERE Processed = 1 ORDER BY ShipmentID DESC
+                                        )
 
-                    using (SqlDataReader reader = SqlCommandProvider.ExecuteReader(command))
+                                        SELECT MIN(ShipmentID) FROM Shipments";
+
+                    using (DbDataReader reader = DbCommandProvider.ExecuteReader(command))
                     {
                         if (reader.Read())
                         {
@@ -231,13 +236,13 @@ namespace ShipWorks.Shipping.ShipSense.Population
         {
             long endingShipmentID = 0;
 
-            using (SqlConnection connection = SqlSession.Current.OpenConnection())
+            using (DbConnection connection = SqlSession.Current.OpenConnection())
             {
-                using (SqlCommand command = SqlCommandProvider.Create(connection))
+                using (DbCommand command = DbCommandProvider.Create(connection))
                 {
                     command.CommandText = @"SELECT MAX(ShipmentID) FROM SHIPMENT WITH (NOLOCK) WHERE Processed = 1";
 
-                    using (SqlDataReader reader = SqlCommandProvider.ExecuteReader(command))
+                    using (DbDataReader reader = DbCommandProvider.ExecuteReader(command))
                     {
                         if (reader.Read())
                         {
@@ -264,18 +269,18 @@ namespace ShipWorks.Shipping.ShipSense.Population
             long endShipmentID = shippingSettings.ShipSenseEndShipmentID;
             long lastProcessedShipmentID = shippingSettings.ShipSenseProcessedShipmentID;
 
-            /*         
+            /*
             SELECT MAX(s.shipmentID)
-            FROM 
+            FROM
                 Shipment s WITH(NOLOCK)
-            INNER JOIN 
+            INNER JOIN
                 [Order] o WITH(NOLOCK)
             ON s.OrderID = o.OrderID
-            WHERE s.shipmentID <= @endShipmentID 
-              AND s.ShipmentID > @processedShipmentID 
+            WHERE s.shipmentID <= @endShipmentID
+              AND s.ShipmentID > @processedShipmentID
               AND s.Processed = 1
-            GROUP BY o.ShipSenseHashKey  
-            ORDER BY MAX(s.shipmentID) ASC       
+            GROUP BY o.ShipSenseHashKey
+            ORDER BY MAX(s.shipmentID) ASC
              */
             RelationPredicateBucket shipmentBucket = new RelationPredicateBucket();
             shipmentBucket.Relations.Add(new EntityRelation(ShipmentFields.OrderID, OrderFields.OrderID, RelationType.ManyToOne));
@@ -339,7 +344,7 @@ namespace ShipWorks.Shipping.ShipSense.Population
                     // Make sure we have all of the order information
                     OrderUtility.PopulateOrderDetails(shipment);
 
-                    // Apply the data from the package adapters and the customs items to the knowledge base 
+                    // Apply the data from the package adapters and the customs items to the knowledge base
                     // entry, so the shipment data will get saved to the knowledge base; the knowledge base
                     // is smart enough to know when to save the customs items associated with an entry.
                     KnowledgebaseEntry entry = new KnowledgebaseEntry();
@@ -354,14 +359,14 @@ namespace ShipWorks.Shipping.ShipSense.Population
             }
             catch (Exception ex)
             {
-                // We may want to eat this exception entirely, so the user isn't impacted 
+                // We may want to eat this exception entirely, so the user isn't impacted
                 log.ErrorFormat("An error occurred writing shipment ID {0} to the knowledge base: {1}", shipment.ShipmentID, ex.Message);
                 throw new ShipSenseException("Shipment ID {0} was not logged to the knowledge base during data population.", ex);
             }
         }
 
-        /// <summary>        
-        /// Gets an OrderEntity that doesn't have a ShipSenseHashKey. 
+        /// <summary>
+        /// Gets an OrderEntity that doesn't have a ShipSenseHashKey.
         /// </summary>
         public OrderEntity FetchNextOrderToAnalyze()
         {

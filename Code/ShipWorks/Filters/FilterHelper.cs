@@ -1,45 +1,38 @@
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
+using System.Diagnostics;
+using System.Drawing;
 using System.Linq;
-using System.Text;
-using ShipWorks.AddressValidation;
-using ShipWorks.Data.Model.EntityClasses;
+using System.Threading;
+using System.Transactions;
+using Interapptive.Shared.Data;
+using Interapptive.Shared.Utility;
+using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.AddressValidation.Enums;
+using ShipWorks.Data;
+using ShipWorks.Data.Adapter.Custom;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Grid.Columns;
+using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Editions;
+using ShipWorks.Filters.Content;
 using ShipWorks.Filters.Content.Conditions;
 using ShipWorks.Filters.Content.Conditions.Orders.Address;
 using ShipWorks.Filters.Management;
-using ShipWorks.Data.Adapter.Custom;
-using System.Data.SqlClient;
-using ShipWorks.Data;
-using ShipWorks.Data.Model.HelperClasses;
-using System.Drawing;
 using ShipWorks.Properties;
-using ShipWorks.Data.Adapter;
-using ShipWorks.Filters.Content;
-using ShipWorks.Filters.Content.Conditions.Special;
-using ShipWorks.Data.Model.FactoryClasses;
-using ShipWorks.Data.Connection;
-using ShipWorks.Data.Grid;
-using ShipWorks.Data.Model;
-using ShipWorks.Data.Grid.Columns;
-using System.Data;
 using ShipWorks.Users;
-using System.Transactions;
-using ShipWorks.SqlServer.Filters;
-using log4net;
-using System.Diagnostics;
-using System.Threading;
-using Interapptive.Shared.Utility;
-using Interapptive.Shared.Data;
-using ShipWorks.AddressValidation.Enums;
-using ShipWorks.Editions;
 
 namespace ShipWorks.Filters
 {
     /// <summary>
     /// Utility class for filters
     /// </summary>
-    public static class FilterHelper 
+    public static class FilterHelper
     {
         static readonly ILog log = LogManager.GetLogger(typeof(FilterHelper));
 
@@ -221,8 +214,8 @@ namespace ShipWorks.Filters
             node.FilterSequence = sequence;
             node.FilterNodeContent = content;
             node.Created = DateTime.UtcNow;
-            node.Purpose = (int)FilterNodePurpose.Standard;
-            
+            node.Purpose = (int) FilterNodePurpose.Standard;
+
             FilterLayoutEntity layout = new FilterLayoutEntity();
             layout.User = user;
             layout.FilterTarget = (int) target;
@@ -238,12 +231,12 @@ namespace ShipWorks.Filters
         {
             // When copying, we add " (Copy)" to the filter name which can push the filter's name over the max length.
             // Check here and throw if the requested name is too long.
-            if (name.Length > filter.Fields[(int)FilterFieldIndex.Name].MaxLength)
+            if (name.Length > filter.Fields[(int) FilterFieldIndex.Name].MaxLength)
             {
                 throw new FilterException(
                     string.Format(
                         "Filter names may only be {0} characters or less.  Please shorten the requested filter name '{1}'.",
-                        filter.Fields[(int)FilterFieldIndex.Name].MaxLength, name));
+                        filter.Fields[(int) FilterFieldIndex.Name].MaxLength, name));
             }
 
             int count = FilterCollection.GetCount(SqlAdapter.Default,
@@ -353,7 +346,7 @@ namespace ShipWorks.Filters
                     case FilterImageType.Folder: return Resources.folderclosed;
                     case FilterImageType.FolderWithCondition: return Resources.folderfilter;
                     case FilterImageType.Filter: return Resources.filter;
-               }
+                }
 
                 throw new NotFoundException("Could not find filter image for " + filterImageType);
             }
@@ -565,7 +558,7 @@ namespace ShipWorks.Filters
                 // up-to-date
                 using (SqlConnection con = SqlSession.Current.OpenConnection())
                 {
-                    rowVersion = (byte[]) SqlCommandProvider.ExecuteScalar(con, "SELECT @@DBTS");
+                    rowVersion = (byte[]) DbCommandProvider.ExecuteScalar(con, "SELECT @@DBTS");
                 }
             }
 
@@ -591,7 +584,7 @@ namespace ShipWorks.Filters
                 {
                     using (SqlConnection con = SqlSession.Current.OpenConnection())
                     {
-                        object result = SqlCommandProvider.ExecuteScalar(con, "SELECT MIN(RowVersion) FROM FilterNodeContentDirty WITH (NOLOCK)");
+                        object result = DbCommandProvider.ExecuteScalar(con, "SELECT MIN(RowVersion) FROM FilterNodeContentDirty WITH (NOLOCK)");
 
                         // No dirty means we're up to date
                         if (result == null || ((byte[]) result).Length == 0)
@@ -657,10 +650,10 @@ namespace ShipWorks.Filters
 
             FilterEntity filter = new FilterEntity();
             filter.Name = name;
-            filter.FilterTarget = (int)definition.FilterTarget;
+            filter.FilterTarget = (int) definition.FilterTarget;
             filter.IsFolder = false;
             filter.Definition = definition.GetXml();
-            filter.State = (int)FilterState.Enabled;
+            filter.State = (int) FilterState.Enabled;
 
             return filter;
         }
@@ -672,10 +665,10 @@ namespace ShipWorks.Filters
         {
             FilterEntity folder = new FilterEntity();
             folder.Name = name;
-            folder.FilterTarget = (int)target;
+            folder.FilterTarget = (int) target;
             folder.IsFolder = true;
             folder.Definition = null;
-            folder.State = (int)FilterState.Enabled;
+            folder.State = (int) FilterState.Enabled;
 
             return folder;
         }

@@ -35,10 +35,6 @@ namespace ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration
         private long? backupOrderNumber;
         private YahooOrderNumberValidation isValid;
         private string validationErrorMessage;
-        private const int InvalidUsernameCode = 10010;
-        private const int InvalidAccessTokenCode = 10009;
-        private const int InvalidStatusIDFormatCode = 10402;
-        private const int OrderDoesNotExistCode = 20021;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="YahooApiAccountViewModel"/> class.

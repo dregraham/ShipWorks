@@ -1,23 +1,18 @@
 ﻿///////////////////////////////////////////////////////////////
 // This is generated code. 
 //////////////////////////////////////////////////////////////
-// Code is generated using LLBLGen Pro version: 2.6
+// Code is generated using LLBLGen Pro version: 5.0
 // Code is generated on: 
-// Code is generated using templates: ShipWorks
+// Code is generated using templates: SD.TemplateBindings.SharedTemplates
 // Templates vendor: Solutions Design.
 // Templates version: 
 //////////////////////////////////////////////////////////////
 using System;
-using System.Reflection;
 
 namespace ShipWorks.Data.Model
 {
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: Action.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum ActionFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: Action.</summary>
+	public enum ActionFieldIndex
 	{
 		///<summary>ActionID. </summary>
 		ActionID,
@@ -46,13 +41,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ActionFilterTrigger.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum ActionFilterTriggerFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ActionFilterTrigger.</summary>
+	public enum ActionFilterTriggerFieldIndex
 	{
 		///<summary>ActionID. </summary>
 		ActionID,
@@ -67,13 +57,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ActionQueue.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum ActionQueueFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ActionQueue.</summary>
+	public enum ActionQueueFieldIndex
 	{
 		///<summary>ActionQueueID. </summary>
 		ActionQueueID,
@@ -106,13 +91,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ActionQueueSelection.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum ActionQueueSelectionFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ActionQueueSelection.</summary>
+	public enum ActionQueueSelectionFieldIndex
 	{
 		///<summary>ActionQueueSelectionID. </summary>
 		ActionQueueSelectionID,
@@ -123,13 +103,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ActionQueueStep.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum ActionQueueStepFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ActionQueueStep.</summary>
+	public enum ActionQueueStepFieldIndex
 	{
 		///<summary>ActionQueueStepID. </summary>
 		ActionQueueStepID,
@@ -170,13 +145,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ActionTask.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum ActionTaskFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ActionTask.</summary>
+	public enum ActionTaskFieldIndex
 	{
 		///<summary>ActionTaskID. </summary>
 		ActionTaskID,
@@ -205,13 +175,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: AmazonASIN.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum AmazonASINFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: AmazonASIN.</summary>
+	public enum AmazonASINFieldIndex
 	{
 		///<summary>StoreID. </summary>
 		StoreID,
@@ -222,161 +187,156 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: AmazonOrder.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum AmazonOrderFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: AmazonOrder.</summary>
+	public enum AmazonOrderFieldIndex
 	{
 		///<summary>OrderID. Inherited from Order</summary>
 		OrderID_Order,
-		///<summary>RowVersion. </summary>
+		///<summary>RowVersion. Inherited from Order</summary>
 		RowVersion,
-		///<summary>StoreID. </summary>
+		///<summary>StoreID. Inherited from Order</summary>
 		StoreID,
-		///<summary>CustomerID. </summary>
+		///<summary>CustomerID. Inherited from Order</summary>
 		CustomerID,
-		///<summary>OrderNumber. </summary>
+		///<summary>OrderNumber. Inherited from Order</summary>
 		OrderNumber,
-		///<summary>OrderNumberComplete. </summary>
+		///<summary>OrderNumberComplete. Inherited from Order</summary>
 		OrderNumberComplete,
-		///<summary>OrderDate. </summary>
+		///<summary>OrderDate. Inherited from Order</summary>
 		OrderDate,
-		///<summary>OrderTotal. </summary>
+		///<summary>OrderTotal. Inherited from Order</summary>
 		OrderTotal,
-		///<summary>LocalStatus. </summary>
+		///<summary>LocalStatus. Inherited from Order</summary>
 		LocalStatus,
-		///<summary>IsManual. </summary>
+		///<summary>IsManual. Inherited from Order</summary>
 		IsManual,
-		///<summary>OnlineLastModified. </summary>
+		///<summary>OnlineLastModified. Inherited from Order</summary>
 		OnlineLastModified,
-		///<summary>OnlineCustomerID. </summary>
+		///<summary>OnlineCustomerID. Inherited from Order</summary>
 		OnlineCustomerID,
-		///<summary>OnlineStatus. </summary>
+		///<summary>OnlineStatus. Inherited from Order</summary>
 		OnlineStatus,
-		///<summary>OnlineStatusCode. </summary>
+		///<summary>OnlineStatusCode. Inherited from Order</summary>
 		OnlineStatusCode,
-		///<summary>RequestedShipping. </summary>
+		///<summary>RequestedShipping. Inherited from Order</summary>
 		RequestedShipping,
-		///<summary>BillFirstName. </summary>
+		///<summary>BillFirstName. Inherited from Order</summary>
 		BillFirstName,
-		///<summary>BillMiddleName. </summary>
+		///<summary>BillMiddleName. Inherited from Order</summary>
 		BillMiddleName,
-		///<summary>BillLastName. </summary>
+		///<summary>BillLastName. Inherited from Order</summary>
 		BillLastName,
-		///<summary>BillCompany. </summary>
+		///<summary>BillCompany. Inherited from Order</summary>
 		BillCompany,
-		///<summary>BillStreet1. </summary>
+		///<summary>BillStreet1. Inherited from Order</summary>
 		BillStreet1,
-		///<summary>BillStreet2. </summary>
+		///<summary>BillStreet2. Inherited from Order</summary>
 		BillStreet2,
-		///<summary>BillStreet3. </summary>
+		///<summary>BillStreet3. Inherited from Order</summary>
 		BillStreet3,
-		///<summary>BillCity. </summary>
+		///<summary>BillCity. Inherited from Order</summary>
 		BillCity,
-		///<summary>BillStateProvCode. </summary>
+		///<summary>BillStateProvCode. Inherited from Order</summary>
 		BillStateProvCode,
-		///<summary>BillPostalCode. </summary>
+		///<summary>BillPostalCode. Inherited from Order</summary>
 		BillPostalCode,
-		///<summary>BillCountryCode. </summary>
+		///<summary>BillCountryCode. Inherited from Order</summary>
 		BillCountryCode,
-		///<summary>BillPhone. </summary>
+		///<summary>BillPhone. Inherited from Order</summary>
 		BillPhone,
-		///<summary>BillFax. </summary>
+		///<summary>BillFax. Inherited from Order</summary>
 		BillFax,
-		///<summary>BillEmail. </summary>
+		///<summary>BillEmail. Inherited from Order</summary>
 		BillEmail,
-		///<summary>BillWebsite. </summary>
+		///<summary>BillWebsite. Inherited from Order</summary>
 		BillWebsite,
-		///<summary>BillAddressValidationSuggestionCount. </summary>
+		///<summary>BillAddressValidationSuggestionCount. Inherited from Order</summary>
 		BillAddressValidationSuggestionCount,
-		///<summary>BillAddressValidationStatus. </summary>
+		///<summary>BillAddressValidationStatus. Inherited from Order</summary>
 		BillAddressValidationStatus,
-		///<summary>BillAddressValidationError. </summary>
+		///<summary>BillAddressValidationError. Inherited from Order</summary>
 		BillAddressValidationError,
-		///<summary>BillResidentialStatus. </summary>
+		///<summary>BillResidentialStatus. Inherited from Order</summary>
 		BillResidentialStatus,
-		///<summary>BillPOBox. </summary>
+		///<summary>BillPOBox. Inherited from Order</summary>
 		BillPOBox,
-		///<summary>BillUSTerritory. </summary>
+		///<summary>BillUSTerritory. Inherited from Order</summary>
 		BillUSTerritory,
-		///<summary>BillMilitaryAddress. </summary>
+		///<summary>BillMilitaryAddress. Inherited from Order</summary>
 		BillMilitaryAddress,
-		///<summary>ShipFirstName. </summary>
+		///<summary>ShipFirstName. Inherited from Order</summary>
 		ShipFirstName,
-		///<summary>ShipMiddleName. </summary>
+		///<summary>ShipMiddleName. Inherited from Order</summary>
 		ShipMiddleName,
-		///<summary>ShipLastName. </summary>
+		///<summary>ShipLastName. Inherited from Order</summary>
 		ShipLastName,
-		///<summary>ShipCompany. </summary>
+		///<summary>ShipCompany. Inherited from Order</summary>
 		ShipCompany,
-		///<summary>ShipStreet1. </summary>
+		///<summary>ShipStreet1. Inherited from Order</summary>
 		ShipStreet1,
-		///<summary>ShipStreet2. </summary>
+		///<summary>ShipStreet2. Inherited from Order</summary>
 		ShipStreet2,
-		///<summary>ShipStreet3. </summary>
+		///<summary>ShipStreet3. Inherited from Order</summary>
 		ShipStreet3,
-		///<summary>ShipCity. </summary>
+		///<summary>ShipCity. Inherited from Order</summary>
 		ShipCity,
-		///<summary>ShipStateProvCode. </summary>
+		///<summary>ShipStateProvCode. Inherited from Order</summary>
 		ShipStateProvCode,
-		///<summary>ShipPostalCode. </summary>
+		///<summary>ShipPostalCode. Inherited from Order</summary>
 		ShipPostalCode,
-		///<summary>ShipCountryCode. </summary>
+		///<summary>ShipCountryCode. Inherited from Order</summary>
 		ShipCountryCode,
-		///<summary>ShipPhone. </summary>
+		///<summary>ShipPhone. Inherited from Order</summary>
 		ShipPhone,
-		///<summary>ShipFax. </summary>
+		///<summary>ShipFax. Inherited from Order</summary>
 		ShipFax,
-		///<summary>ShipEmail. </summary>
+		///<summary>ShipEmail. Inherited from Order</summary>
 		ShipEmail,
-		///<summary>ShipWebsite. </summary>
+		///<summary>ShipWebsite. Inherited from Order</summary>
 		ShipWebsite,
-		///<summary>ShipAddressValidationSuggestionCount. </summary>
+		///<summary>ShipAddressValidationSuggestionCount. Inherited from Order</summary>
 		ShipAddressValidationSuggestionCount,
-		///<summary>ShipAddressValidationStatus. </summary>
+		///<summary>ShipAddressValidationStatus. Inherited from Order</summary>
 		ShipAddressValidationStatus,
-		///<summary>ShipAddressValidationError. </summary>
+		///<summary>ShipAddressValidationError. Inherited from Order</summary>
 		ShipAddressValidationError,
-		///<summary>ShipResidentialStatus. </summary>
+		///<summary>ShipResidentialStatus. Inherited from Order</summary>
 		ShipResidentialStatus,
-		///<summary>ShipPOBox. </summary>
+		///<summary>ShipPOBox. Inherited from Order</summary>
 		ShipPOBox,
-		///<summary>ShipUSTerritory. </summary>
+		///<summary>ShipUSTerritory. Inherited from Order</summary>
 		ShipUSTerritory,
-		///<summary>ShipMilitaryAddress. </summary>
+		///<summary>ShipMilitaryAddress. Inherited from Order</summary>
 		ShipMilitaryAddress,
-		///<summary>RollupItemCount. </summary>
+		///<summary>RollupItemCount. Inherited from Order</summary>
 		RollupItemCount,
-		///<summary>RollupItemName. </summary>
+		///<summary>RollupItemName. Inherited from Order</summary>
 		RollupItemName,
-		///<summary>RollupItemCode. </summary>
+		///<summary>RollupItemCode. Inherited from Order</summary>
 		RollupItemCode,
-		///<summary>RollupItemSKU. </summary>
+		///<summary>RollupItemSKU. Inherited from Order</summary>
 		RollupItemSKU,
-		///<summary>RollupItemLocation. </summary>
+		///<summary>RollupItemLocation. Inherited from Order</summary>
 		RollupItemLocation,
-		///<summary>RollupItemQuantity. </summary>
+		///<summary>RollupItemQuantity. Inherited from Order</summary>
 		RollupItemQuantity,
-		///<summary>RollupItemTotalWeight. </summary>
+		///<summary>RollupItemTotalWeight. Inherited from Order</summary>
 		RollupItemTotalWeight,
-		///<summary>RollupNoteCount. </summary>
+		///<summary>RollupNoteCount. Inherited from Order</summary>
 		RollupNoteCount,
-		///<summary>BillNameParseStatus. </summary>
+		///<summary>BillNameParseStatus. Inherited from Order</summary>
 		BillNameParseStatus,
-		///<summary>BillUnparsedName. </summary>
+		///<summary>BillUnparsedName. Inherited from Order</summary>
 		BillUnparsedName,
-		///<summary>ShipNameParseStatus. </summary>
+		///<summary>ShipNameParseStatus. Inherited from Order</summary>
 		ShipNameParseStatus,
-		///<summary>ShipUnparsedName. </summary>
+		///<summary>ShipUnparsedName. Inherited from Order</summary>
 		ShipUnparsedName,
-		///<summary>ShipSenseHashKey. </summary>
+		///<summary>ShipSenseHashKey. Inherited from Order</summary>
 		ShipSenseHashKey,
-		///<summary>ShipSenseRecognitionStatus. </summary>
+		///<summary>ShipSenseRecognitionStatus. Inherited from Order</summary>
 		ShipSenseRecognitionStatus,
-		///<summary>ShipAddressType. </summary>
+		///<summary>ShipAddressType. Inherited from Order</summary>
 		ShipAddressType,
 		///<summary>OrderID. </summary>
 		OrderID,
@@ -397,49 +357,44 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: AmazonOrderItem.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum AmazonOrderItemFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: AmazonOrderItem.</summary>
+	public enum AmazonOrderItemFieldIndex
 	{
 		///<summary>OrderItemID. Inherited from OrderItem</summary>
 		OrderItemID_OrderItem,
-		///<summary>RowVersion. </summary>
+		///<summary>RowVersion. Inherited from OrderItem</summary>
 		RowVersion,
-		///<summary>OrderID. </summary>
+		///<summary>OrderID. Inherited from OrderItem</summary>
 		OrderID,
-		///<summary>Name. </summary>
+		///<summary>Name. Inherited from OrderItem</summary>
 		Name,
-		///<summary>Code. </summary>
+		///<summary>Code. Inherited from OrderItem</summary>
 		Code,
-		///<summary>SKU. </summary>
+		///<summary>SKU. Inherited from OrderItem</summary>
 		SKU,
-		///<summary>ISBN. </summary>
+		///<summary>ISBN. Inherited from OrderItem</summary>
 		ISBN,
-		///<summary>UPC. </summary>
+		///<summary>UPC. Inherited from OrderItem</summary>
 		UPC,
-		///<summary>Description. </summary>
+		///<summary>Description. Inherited from OrderItem</summary>
 		Description,
-		///<summary>Location. </summary>
+		///<summary>Location. Inherited from OrderItem</summary>
 		Location,
-		///<summary>Image. </summary>
+		///<summary>Image. Inherited from OrderItem</summary>
 		Image,
-		///<summary>Thumbnail. </summary>
+		///<summary>Thumbnail. Inherited from OrderItem</summary>
 		Thumbnail,
-		///<summary>UnitPrice. </summary>
+		///<summary>UnitPrice. Inherited from OrderItem</summary>
 		UnitPrice,
-		///<summary>UnitCost. </summary>
+		///<summary>UnitCost. Inherited from OrderItem</summary>
 		UnitCost,
-		///<summary>Weight. </summary>
+		///<summary>Weight. Inherited from OrderItem</summary>
 		Weight,
-		///<summary>Quantity. </summary>
+		///<summary>Quantity. Inherited from OrderItem</summary>
 		Quantity,
-		///<summary>LocalStatus. </summary>
+		///<summary>LocalStatus. Inherited from OrderItem</summary>
 		LocalStatus,
-		///<summary>IsManual. </summary>
+		///<summary>IsManual. Inherited from OrderItem</summary>
 		IsManual,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
@@ -452,13 +407,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: AmazonProfile.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum AmazonProfileFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: AmazonProfile.</summary>
+	public enum AmazonProfileFieldIndex
 	{
 		///<summary>ShippingProfileID. </summary>
 		ShippingProfileID,
@@ -481,13 +431,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: AmazonShipment.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum AmazonShipmentFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: AmazonShipment.</summary>
+	public enum AmazonShipmentFieldIndex
 	{
 		///<summary>ShipmentID. </summary>
 		ShipmentID,
@@ -522,73 +467,68 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: AmazonStore.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum AmazonStoreFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: AmazonStore.</summary>
+	public enum AmazonStoreFieldIndex
 	{
 		///<summary>StoreID. Inherited from Store</summary>
 		StoreID_Store,
-		///<summary>RowVersion. </summary>
+		///<summary>RowVersion. Inherited from Store</summary>
 		RowVersion,
-		///<summary>License. </summary>
+		///<summary>License. Inherited from Store</summary>
 		License,
-		///<summary>Edition. </summary>
+		///<summary>Edition. Inherited from Store</summary>
 		Edition,
-		///<summary>TypeCode. </summary>
+		///<summary>TypeCode. Inherited from Store</summary>
 		TypeCode,
-		///<summary>Enabled. </summary>
+		///<summary>Enabled. Inherited from Store</summary>
 		Enabled,
-		///<summary>SetupComplete. </summary>
+		///<summary>SetupComplete. Inherited from Store</summary>
 		SetupComplete,
-		///<summary>StoreName. </summary>
+		///<summary>StoreName. Inherited from Store</summary>
 		StoreName,
-		///<summary>Company. </summary>
+		///<summary>Company. Inherited from Store</summary>
 		Company,
-		///<summary>Street1. </summary>
+		///<summary>Street1. Inherited from Store</summary>
 		Street1,
-		///<summary>Street2. </summary>
+		///<summary>Street2. Inherited from Store</summary>
 		Street2,
-		///<summary>Street3. </summary>
+		///<summary>Street3. Inherited from Store</summary>
 		Street3,
-		///<summary>City. </summary>
+		///<summary>City. Inherited from Store</summary>
 		City,
-		///<summary>StateProvCode. </summary>
+		///<summary>StateProvCode. Inherited from Store</summary>
 		StateProvCode,
-		///<summary>PostalCode. </summary>
+		///<summary>PostalCode. Inherited from Store</summary>
 		PostalCode,
-		///<summary>CountryCode. </summary>
+		///<summary>CountryCode. Inherited from Store</summary>
 		CountryCode,
-		///<summary>Phone. </summary>
+		///<summary>Phone. Inherited from Store</summary>
 		Phone,
-		///<summary>Fax. </summary>
+		///<summary>Fax. Inherited from Store</summary>
 		Fax,
-		///<summary>Email. </summary>
+		///<summary>Email. Inherited from Store</summary>
 		Email,
-		///<summary>Website. </summary>
+		///<summary>Website. Inherited from Store</summary>
 		Website,
-		///<summary>AutoDownload. </summary>
+		///<summary>AutoDownload. Inherited from Store</summary>
 		AutoDownload,
-		///<summary>AutoDownloadMinutes. </summary>
+		///<summary>AutoDownloadMinutes. Inherited from Store</summary>
 		AutoDownloadMinutes,
-		///<summary>AutoDownloadOnlyAway. </summary>
+		///<summary>AutoDownloadOnlyAway. Inherited from Store</summary>
 		AutoDownloadOnlyAway,
-		///<summary>AddressValidationSetting. </summary>
+		///<summary>AddressValidationSetting. Inherited from Store</summary>
 		AddressValidationSetting,
-		///<summary>ComputerDownloadPolicy. </summary>
+		///<summary>ComputerDownloadPolicy. Inherited from Store</summary>
 		ComputerDownloadPolicy,
-		///<summary>DefaultEmailAccountID. </summary>
+		///<summary>DefaultEmailAccountID. Inherited from Store</summary>
 		DefaultEmailAccountID,
-		///<summary>ManualOrderPrefix. </summary>
+		///<summary>ManualOrderPrefix. Inherited from Store</summary>
 		ManualOrderPrefix,
-		///<summary>ManualOrderPostfix. </summary>
+		///<summary>ManualOrderPostfix. Inherited from Store</summary>
 		ManualOrderPostfix,
-		///<summary>InitialDownloadDays. </summary>
+		///<summary>InitialDownloadDays. Inherited from Store</summary>
 		InitialDownloadDays,
-		///<summary>InitialDownloadOrder. </summary>
+		///<summary>InitialDownloadOrder. Inherited from Store</summary>
 		InitialDownloadOrder,
 		///<summary>StoreID. </summary>
 		StoreID,
@@ -631,73 +571,68 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: AmeriCommerceStore.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum AmeriCommerceStoreFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: AmeriCommerceStore.</summary>
+	public enum AmeriCommerceStoreFieldIndex
 	{
 		///<summary>StoreID. Inherited from Store</summary>
 		StoreID_Store,
-		///<summary>RowVersion. </summary>
+		///<summary>RowVersion. Inherited from Store</summary>
 		RowVersion,
-		///<summary>License. </summary>
+		///<summary>License. Inherited from Store</summary>
 		License,
-		///<summary>Edition. </summary>
+		///<summary>Edition. Inherited from Store</summary>
 		Edition,
-		///<summary>TypeCode. </summary>
+		///<summary>TypeCode. Inherited from Store</summary>
 		TypeCode,
-		///<summary>Enabled. </summary>
+		///<summary>Enabled. Inherited from Store</summary>
 		Enabled,
-		///<summary>SetupComplete. </summary>
+		///<summary>SetupComplete. Inherited from Store</summary>
 		SetupComplete,
-		///<summary>StoreName. </summary>
+		///<summary>StoreName. Inherited from Store</summary>
 		StoreName,
-		///<summary>Company. </summary>
+		///<summary>Company. Inherited from Store</summary>
 		Company,
-		///<summary>Street1. </summary>
+		///<summary>Street1. Inherited from Store</summary>
 		Street1,
-		///<summary>Street2. </summary>
+		///<summary>Street2. Inherited from Store</summary>
 		Street2,
-		///<summary>Street3. </summary>
+		///<summary>Street3. Inherited from Store</summary>
 		Street3,
-		///<summary>City. </summary>
+		///<summary>City. Inherited from Store</summary>
 		City,
-		///<summary>StateProvCode. </summary>
+		///<summary>StateProvCode. Inherited from Store</summary>
 		StateProvCode,
-		///<summary>PostalCode. </summary>
+		///<summary>PostalCode. Inherited from Store</summary>
 		PostalCode,
-		///<summary>CountryCode. </summary>
+		///<summary>CountryCode. Inherited from Store</summary>
 		CountryCode,
-		///<summary>Phone. </summary>
+		///<summary>Phone. Inherited from Store</summary>
 		Phone,
-		///<summary>Fax. </summary>
+		///<summary>Fax. Inherited from Store</summary>
 		Fax,
-		///<summary>Email. </summary>
+		///<summary>Email. Inherited from Store</summary>
 		Email,
-		///<summary>Website. </summary>
+		///<summary>Website. Inherited from Store</summary>
 		Website,
-		///<summary>AutoDownload. </summary>
+		///<summary>AutoDownload. Inherited from Store</summary>
 		AutoDownload,
-		///<summary>AutoDownloadMinutes. </summary>
+		///<summary>AutoDownloadMinutes. Inherited from Store</summary>
 		AutoDownloadMinutes,
-		///<summary>AutoDownloadOnlyAway. </summary>
+		///<summary>AutoDownloadOnlyAway. Inherited from Store</summary>
 		AutoDownloadOnlyAway,
-		///<summary>AddressValidationSetting. </summary>
+		///<summary>AddressValidationSetting. Inherited from Store</summary>
 		AddressValidationSetting,
-		///<summary>ComputerDownloadPolicy. </summary>
+		///<summary>ComputerDownloadPolicy. Inherited from Store</summary>
 		ComputerDownloadPolicy,
-		///<summary>DefaultEmailAccountID. </summary>
+		///<summary>DefaultEmailAccountID. Inherited from Store</summary>
 		DefaultEmailAccountID,
-		///<summary>ManualOrderPrefix. </summary>
+		///<summary>ManualOrderPrefix. Inherited from Store</summary>
 		ManualOrderPrefix,
-		///<summary>ManualOrderPostfix. </summary>
+		///<summary>ManualOrderPostfix. Inherited from Store</summary>
 		ManualOrderPostfix,
-		///<summary>InitialDownloadDays. </summary>
+		///<summary>InitialDownloadDays. Inherited from Store</summary>
 		InitialDownloadDays,
-		///<summary>InitialDownloadOrder. </summary>
+		///<summary>InitialDownloadOrder. Inherited from Store</summary>
 		InitialDownloadOrder,
 		///<summary>StoreID. </summary>
 		StoreID,
@@ -714,13 +649,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: Audit.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum AuditFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: Audit.</summary>
+	public enum AuditFieldIndex
 	{
 		///<summary>AuditID. </summary>
 		AuditID,
@@ -747,13 +677,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: AuditChange.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum AuditChangeFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: AuditChange.</summary>
+	public enum AuditChangeFieldIndex
 	{
 		///<summary>AuditChangeID. </summary>
 		AuditChangeID,
@@ -766,13 +691,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: AuditChangeDetail.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum AuditChangeDetailFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: AuditChangeDetail.</summary>
+	public enum AuditChangeDetailFieldIndex
 	{
 		///<summary>AuditChangeDetailID. </summary>
 		AuditChangeDetailID,
@@ -797,13 +717,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: BestRateProfile.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum BestRateProfileFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: BestRateProfile.</summary>
+	public enum BestRateProfileFieldIndex
 	{
 		///<summary>ShippingProfileID. </summary>
 		ShippingProfileID,
@@ -826,13 +741,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: BestRateShipment.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum BestRateShipmentFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: BestRateShipment.</summary>
+	public enum BestRateShipmentFieldIndex
 	{
 		///<summary>ShipmentID. </summary>
 		ShipmentID,
@@ -857,49 +767,44 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: BigCommerceOrderItem.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum BigCommerceOrderItemFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: BigCommerceOrderItem.</summary>
+	public enum BigCommerceOrderItemFieldIndex
 	{
 		///<summary>OrderItemID. Inherited from OrderItem</summary>
 		OrderItemID_OrderItem,
-		///<summary>RowVersion. </summary>
+		///<summary>RowVersion. Inherited from OrderItem</summary>
 		RowVersion,
-		///<summary>OrderID. </summary>
+		///<summary>OrderID. Inherited from OrderItem</summary>
 		OrderID,
-		///<summary>Name. </summary>
+		///<summary>Name. Inherited from OrderItem</summary>
 		Name,
-		///<summary>Code. </summary>
+		///<summary>Code. Inherited from OrderItem</summary>
 		Code,
-		///<summary>SKU. </summary>
+		///<summary>SKU. Inherited from OrderItem</summary>
 		SKU,
-		///<summary>ISBN. </summary>
+		///<summary>ISBN. Inherited from OrderItem</summary>
 		ISBN,
-		///<summary>UPC. </summary>
+		///<summary>UPC. Inherited from OrderItem</summary>
 		UPC,
-		///<summary>Description. </summary>
+		///<summary>Description. Inherited from OrderItem</summary>
 		Description,
-		///<summary>Location. </summary>
+		///<summary>Location. Inherited from OrderItem</summary>
 		Location,
-		///<summary>Image. </summary>
+		///<summary>Image. Inherited from OrderItem</summary>
 		Image,
-		///<summary>Thumbnail. </summary>
+		///<summary>Thumbnail. Inherited from OrderItem</summary>
 		Thumbnail,
-		///<summary>UnitPrice. </summary>
+		///<summary>UnitPrice. Inherited from OrderItem</summary>
 		UnitPrice,
-		///<summary>UnitCost. </summary>
+		///<summary>UnitCost. Inherited from OrderItem</summary>
 		UnitCost,
-		///<summary>Weight. </summary>
+		///<summary>Weight. Inherited from OrderItem</summary>
 		Weight,
-		///<summary>Quantity. </summary>
+		///<summary>Quantity. Inherited from OrderItem</summary>
 		Quantity,
-		///<summary>LocalStatus. </summary>
+		///<summary>LocalStatus. Inherited from OrderItem</summary>
 		LocalStatus,
-		///<summary>IsManual. </summary>
+		///<summary>IsManual. Inherited from OrderItem</summary>
 		IsManual,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
@@ -916,73 +821,68 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: BigCommerceStore.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum BigCommerceStoreFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: BigCommerceStore.</summary>
+	public enum BigCommerceStoreFieldIndex
 	{
 		///<summary>StoreID. Inherited from Store</summary>
 		StoreID_Store,
-		///<summary>RowVersion. </summary>
+		///<summary>RowVersion. Inherited from Store</summary>
 		RowVersion,
-		///<summary>License. </summary>
+		///<summary>License. Inherited from Store</summary>
 		License,
-		///<summary>Edition. </summary>
+		///<summary>Edition. Inherited from Store</summary>
 		Edition,
-		///<summary>TypeCode. </summary>
+		///<summary>TypeCode. Inherited from Store</summary>
 		TypeCode,
-		///<summary>Enabled. </summary>
+		///<summary>Enabled. Inherited from Store</summary>
 		Enabled,
-		///<summary>SetupComplete. </summary>
+		///<summary>SetupComplete. Inherited from Store</summary>
 		SetupComplete,
-		///<summary>StoreName. </summary>
+		///<summary>StoreName. Inherited from Store</summary>
 		StoreName,
-		///<summary>Company. </summary>
+		///<summary>Company. Inherited from Store</summary>
 		Company,
-		///<summary>Street1. </summary>
+		///<summary>Street1. Inherited from Store</summary>
 		Street1,
-		///<summary>Street2. </summary>
+		///<summary>Street2. Inherited from Store</summary>
 		Street2,
-		///<summary>Street3. </summary>
+		///<summary>Street3. Inherited from Store</summary>
 		Street3,
-		///<summary>City. </summary>
+		///<summary>City. Inherited from Store</summary>
 		City,
-		///<summary>StateProvCode. </summary>
+		///<summary>StateProvCode. Inherited from Store</summary>
 		StateProvCode,
-		///<summary>PostalCode. </summary>
+		///<summary>PostalCode. Inherited from Store</summary>
 		PostalCode,
-		///<summary>CountryCode. </summary>
+		///<summary>CountryCode. Inherited from Store</summary>
 		CountryCode,
-		///<summary>Phone. </summary>
+		///<summary>Phone. Inherited from Store</summary>
 		Phone,
-		///<summary>Fax. </summary>
+		///<summary>Fax. Inherited from Store</summary>
 		Fax,
-		///<summary>Email. </summary>
+		///<summary>Email. Inherited from Store</summary>
 		Email,
-		///<summary>Website. </summary>
+		///<summary>Website. Inherited from Store</summary>
 		Website,
-		///<summary>AutoDownload. </summary>
+		///<summary>AutoDownload. Inherited from Store</summary>
 		AutoDownload,
-		///<summary>AutoDownloadMinutes. </summary>
+		///<summary>AutoDownloadMinutes. Inherited from Store</summary>
 		AutoDownloadMinutes,
-		///<summary>AutoDownloadOnlyAway. </summary>
+		///<summary>AutoDownloadOnlyAway. Inherited from Store</summary>
 		AutoDownloadOnlyAway,
-		///<summary>AddressValidationSetting. </summary>
+		///<summary>AddressValidationSetting. Inherited from Store</summary>
 		AddressValidationSetting,
-		///<summary>ComputerDownloadPolicy. </summary>
+		///<summary>ComputerDownloadPolicy. Inherited from Store</summary>
 		ComputerDownloadPolicy,
-		///<summary>DefaultEmailAccountID. </summary>
+		///<summary>DefaultEmailAccountID. Inherited from Store</summary>
 		DefaultEmailAccountID,
-		///<summary>ManualOrderPrefix. </summary>
+		///<summary>ManualOrderPrefix. Inherited from Store</summary>
 		ManualOrderPrefix,
-		///<summary>ManualOrderPostfix. </summary>
+		///<summary>ManualOrderPostfix. Inherited from Store</summary>
 		ManualOrderPostfix,
-		///<summary>InitialDownloadDays. </summary>
+		///<summary>InitialDownloadDays. Inherited from Store</summary>
 		InitialDownloadDays,
-		///<summary>InitialDownloadOrder. </summary>
+		///<summary>InitialDownloadOrder. Inherited from Store</summary>
 		InitialDownloadOrder,
 		///<summary>StoreID. </summary>
 		StoreID,
@@ -1001,49 +901,44 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: BuyDotComOrderItem.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum BuyDotComOrderItemFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: BuyDotComOrderItem.</summary>
+	public enum BuyDotComOrderItemFieldIndex
 	{
 		///<summary>OrderItemID. Inherited from OrderItem</summary>
 		OrderItemID_OrderItem,
-		///<summary>RowVersion. </summary>
+		///<summary>RowVersion. Inherited from OrderItem</summary>
 		RowVersion,
-		///<summary>OrderID. </summary>
+		///<summary>OrderID. Inherited from OrderItem</summary>
 		OrderID,
-		///<summary>Name. </summary>
+		///<summary>Name. Inherited from OrderItem</summary>
 		Name,
-		///<summary>Code. </summary>
+		///<summary>Code. Inherited from OrderItem</summary>
 		Code,
-		///<summary>SKU. </summary>
+		///<summary>SKU. Inherited from OrderItem</summary>
 		SKU,
-		///<summary>ISBN. </summary>
+		///<summary>ISBN. Inherited from OrderItem</summary>
 		ISBN,
-		///<summary>UPC. </summary>
+		///<summary>UPC. Inherited from OrderItem</summary>
 		UPC,
-		///<summary>Description. </summary>
+		///<summary>Description. Inherited from OrderItem</summary>
 		Description,
-		///<summary>Location. </summary>
+		///<summary>Location. Inherited from OrderItem</summary>
 		Location,
-		///<summary>Image. </summary>
+		///<summary>Image. Inherited from OrderItem</summary>
 		Image,
-		///<summary>Thumbnail. </summary>
+		///<summary>Thumbnail. Inherited from OrderItem</summary>
 		Thumbnail,
-		///<summary>UnitPrice. </summary>
+		///<summary>UnitPrice. Inherited from OrderItem</summary>
 		UnitPrice,
-		///<summary>UnitCost. </summary>
+		///<summary>UnitCost. Inherited from OrderItem</summary>
 		UnitCost,
-		///<summary>Weight. </summary>
+		///<summary>Weight. Inherited from OrderItem</summary>
 		Weight,
-		///<summary>Quantity. </summary>
+		///<summary>Quantity. Inherited from OrderItem</summary>
 		Quantity,
-		///<summary>LocalStatus. </summary>
+		///<summary>LocalStatus. Inherited from OrderItem</summary>
 		LocalStatus,
-		///<summary>IsManual. </summary>
+		///<summary>IsManual. Inherited from OrderItem</summary>
 		IsManual,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
@@ -1062,73 +957,68 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: BuyDotComStore.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum BuyDotComStoreFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: BuyDotComStore.</summary>
+	public enum BuyDotComStoreFieldIndex
 	{
 		///<summary>StoreID. Inherited from Store</summary>
 		StoreID_Store,
-		///<summary>RowVersion. </summary>
+		///<summary>RowVersion. Inherited from Store</summary>
 		RowVersion,
-		///<summary>License. </summary>
+		///<summary>License. Inherited from Store</summary>
 		License,
-		///<summary>Edition. </summary>
+		///<summary>Edition. Inherited from Store</summary>
 		Edition,
-		///<summary>TypeCode. </summary>
+		///<summary>TypeCode. Inherited from Store</summary>
 		TypeCode,
-		///<summary>Enabled. </summary>
+		///<summary>Enabled. Inherited from Store</summary>
 		Enabled,
-		///<summary>SetupComplete. </summary>
+		///<summary>SetupComplete. Inherited from Store</summary>
 		SetupComplete,
-		///<summary>StoreName. </summary>
+		///<summary>StoreName. Inherited from Store</summary>
 		StoreName,
-		///<summary>Company. </summary>
+		///<summary>Company. Inherited from Store</summary>
 		Company,
-		///<summary>Street1. </summary>
+		///<summary>Street1. Inherited from Store</summary>
 		Street1,
-		///<summary>Street2. </summary>
+		///<summary>Street2. Inherited from Store</summary>
 		Street2,
-		///<summary>Street3. </summary>
+		///<summary>Street3. Inherited from Store</summary>
 		Street3,
-		///<summary>City. </summary>
+		///<summary>City. Inherited from Store</summary>
 		City,
-		///<summary>StateProvCode. </summary>
+		///<summary>StateProvCode. Inherited from Store</summary>
 		StateProvCode,
-		///<summary>PostalCode. </summary>
+		///<summary>PostalCode. Inherited from Store</summary>
 		PostalCode,
-		///<summary>CountryCode. </summary>
+		///<summary>CountryCode. Inherited from Store</summary>
 		CountryCode,
-		///<summary>Phone. </summary>
+		///<summary>Phone. Inherited from Store</summary>
 		Phone,
-		///<summary>Fax. </summary>
+		///<summary>Fax. Inherited from Store</summary>
 		Fax,
-		///<summary>Email. </summary>
+		///<summary>Email. Inherited from Store</summary>
 		Email,
-		///<summary>Website. </summary>
+		///<summary>Website. Inherited from Store</summary>
 		Website,
-		///<summary>AutoDownload. </summary>
+		///<summary>AutoDownload. Inherited from Store</summary>
 		AutoDownload,
-		///<summary>AutoDownloadMinutes. </summary>
+		///<summary>AutoDownloadMinutes. Inherited from Store</summary>
 		AutoDownloadMinutes,
-		///<summary>AutoDownloadOnlyAway. </summary>
+		///<summary>AutoDownloadOnlyAway. Inherited from Store</summary>
 		AutoDownloadOnlyAway,
-		///<summary>AddressValidationSetting. </summary>
+		///<summary>AddressValidationSetting. Inherited from Store</summary>
 		AddressValidationSetting,
-		///<summary>ComputerDownloadPolicy. </summary>
+		///<summary>ComputerDownloadPolicy. Inherited from Store</summary>
 		ComputerDownloadPolicy,
-		///<summary>DefaultEmailAccountID. </summary>
+		///<summary>DefaultEmailAccountID. Inherited from Store</summary>
 		DefaultEmailAccountID,
-		///<summary>ManualOrderPrefix. </summary>
+		///<summary>ManualOrderPrefix. Inherited from Store</summary>
 		ManualOrderPrefix,
-		///<summary>ManualOrderPostfix. </summary>
+		///<summary>ManualOrderPostfix. Inherited from Store</summary>
 		ManualOrderPostfix,
-		///<summary>InitialDownloadDays. </summary>
+		///<summary>InitialDownloadDays. Inherited from Store</summary>
 		InitialDownloadDays,
-		///<summary>InitialDownloadOrder. </summary>
+		///<summary>InitialDownloadOrder. Inherited from Store</summary>
 		InitialDownloadOrder,
 		///<summary>StoreID. </summary>
 		StoreID,
@@ -1139,161 +1029,156 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ChannelAdvisorOrder.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum ChannelAdvisorOrderFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ChannelAdvisorOrder.</summary>
+	public enum ChannelAdvisorOrderFieldIndex
 	{
 		///<summary>OrderID. Inherited from Order</summary>
 		OrderID_Order,
-		///<summary>RowVersion. </summary>
+		///<summary>RowVersion. Inherited from Order</summary>
 		RowVersion,
-		///<summary>StoreID. </summary>
+		///<summary>StoreID. Inherited from Order</summary>
 		StoreID,
-		///<summary>CustomerID. </summary>
+		///<summary>CustomerID. Inherited from Order</summary>
 		CustomerID,
-		///<summary>OrderNumber. </summary>
+		///<summary>OrderNumber. Inherited from Order</summary>
 		OrderNumber,
-		///<summary>OrderNumberComplete. </summary>
+		///<summary>OrderNumberComplete. Inherited from Order</summary>
 		OrderNumberComplete,
-		///<summary>OrderDate. </summary>
+		///<summary>OrderDate. Inherited from Order</summary>
 		OrderDate,
-		///<summary>OrderTotal. </summary>
+		///<summary>OrderTotal. Inherited from Order</summary>
 		OrderTotal,
-		///<summary>LocalStatus. </summary>
+		///<summary>LocalStatus. Inherited from Order</summary>
 		LocalStatus,
-		///<summary>IsManual. </summary>
+		///<summary>IsManual. Inherited from Order</summary>
 		IsManual,
-		///<summary>OnlineLastModified. </summary>
+		///<summary>OnlineLastModified. Inherited from Order</summary>
 		OnlineLastModified,
-		///<summary>OnlineCustomerID. </summary>
+		///<summary>OnlineCustomerID. Inherited from Order</summary>
 		OnlineCustomerID,
-		///<summary>OnlineStatus. </summary>
+		///<summary>OnlineStatus. Inherited from Order</summary>
 		OnlineStatus,
-		///<summary>OnlineStatusCode. </summary>
+		///<summary>OnlineStatusCode. Inherited from Order</summary>
 		OnlineStatusCode,
-		///<summary>RequestedShipping. </summary>
+		///<summary>RequestedShipping. Inherited from Order</summary>
 		RequestedShipping,
-		///<summary>BillFirstName. </summary>
+		///<summary>BillFirstName. Inherited from Order</summary>
 		BillFirstName,
-		///<summary>BillMiddleName. </summary>
+		///<summary>BillMiddleName. Inherited from Order</summary>
 		BillMiddleName,
-		///<summary>BillLastName. </summary>
+		///<summary>BillLastName. Inherited from Order</summary>
 		BillLastName,
-		///<summary>BillCompany. </summary>
+		///<summary>BillCompany. Inherited from Order</summary>
 		BillCompany,
-		///<summary>BillStreet1. </summary>
+		///<summary>BillStreet1. Inherited from Order</summary>
 		BillStreet1,
-		///<summary>BillStreet2. </summary>
+		///<summary>BillStreet2. Inherited from Order</summary>
 		BillStreet2,
-		///<summary>BillStreet3. </summary>
+		///<summary>BillStreet3. Inherited from Order</summary>
 		BillStreet3,
-		///<summary>BillCity. </summary>
+		///<summary>BillCity. Inherited from Order</summary>
 		BillCity,
-		///<summary>BillStateProvCode. </summary>
+		///<summary>BillStateProvCode. Inherited from Order</summary>
 		BillStateProvCode,
-		///<summary>BillPostalCode. </summary>
+		///<summary>BillPostalCode. Inherited from Order</summary>
 		BillPostalCode,
-		///<summary>BillCountryCode. </summary>
+		///<summary>BillCountryCode. Inherited from Order</summary>
 		BillCountryCode,
-		///<summary>BillPhone. </summary>
+		///<summary>BillPhone. Inherited from Order</summary>
 		BillPhone,
-		///<summary>BillFax. </summary>
+		///<summary>BillFax. Inherited from Order</summary>
 		BillFax,
-		///<summary>BillEmail. </summary>
+		///<summary>BillEmail. Inherited from Order</summary>
 		BillEmail,
-		///<summary>BillWebsite. </summary>
+		///<summary>BillWebsite. Inherited from Order</summary>
 		BillWebsite,
-		///<summary>BillAddressValidationSuggestionCount. </summary>
+		///<summary>BillAddressValidationSuggestionCount. Inherited from Order</summary>
 		BillAddressValidationSuggestionCount,
-		///<summary>BillAddressValidationStatus. </summary>
+		///<summary>BillAddressValidationStatus. Inherited from Order</summary>
 		BillAddressValidationStatus,
-		///<summary>BillAddressValidationError. </summary>
+		///<summary>BillAddressValidationError. Inherited from Order</summary>
 		BillAddressValidationError,
-		///<summary>BillResidentialStatus. </summary>
+		///<summary>BillResidentialStatus. Inherited from Order</summary>
 		BillResidentialStatus,
-		///<summary>BillPOBox. </summary>
+		///<summary>BillPOBox. Inherited from Order</summary>
 		BillPOBox,
-		///<summary>BillUSTerritory. </summary>
+		///<summary>BillUSTerritory. Inherited from Order</summary>
 		BillUSTerritory,
-		///<summary>BillMilitaryAddress. </summary>
+		///<summary>BillMilitaryAddress. Inherited from Order</summary>
 		BillMilitaryAddress,
-		///<summary>ShipFirstName. </summary>
+		///<summary>ShipFirstName. Inherited from Order</summary>
 		ShipFirstName,
-		///<summary>ShipMiddleName. </summary>
+		///<summary>ShipMiddleName. Inherited from Order</summary>
 		ShipMiddleName,
-		///<summary>ShipLastName. </summary>
+		///<summary>ShipLastName. Inherited from Order</summary>
 		ShipLastName,
-		///<summary>ShipCompany. </summary>
+		///<summary>ShipCompany. Inherited from Order</summary>
 		ShipCompany,
-		///<summary>ShipStreet1. </summary>
+		///<summary>ShipStreet1. Inherited from Order</summary>
 		ShipStreet1,
-		///<summary>ShipStreet2. </summary>
+		///<summary>ShipStreet2. Inherited from Order</summary>
 		ShipStreet2,
-		///<summary>ShipStreet3. </summary>
+		///<summary>ShipStreet3. Inherited from Order</summary>
 		ShipStreet3,
-		///<summary>ShipCity. </summary>
+		///<summary>ShipCity. Inherited from Order</summary>
 		ShipCity,
-		///<summary>ShipStateProvCode. </summary>
+		///<summary>ShipStateProvCode. Inherited from Order</summary>
 		ShipStateProvCode,
-		///<summary>ShipPostalCode. </summary>
+		///<summary>ShipPostalCode. Inherited from Order</summary>
 		ShipPostalCode,
-		///<summary>ShipCountryCode. </summary>
+		///<summary>ShipCountryCode. Inherited from Order</summary>
 		ShipCountryCode,
-		///<summary>ShipPhone. </summary>
+		///<summary>ShipPhone. Inherited from Order</summary>
 		ShipPhone,
-		///<summary>ShipFax. </summary>
+		///<summary>ShipFax. Inherited from Order</summary>
 		ShipFax,
-		///<summary>ShipEmail. </summary>
+		///<summary>ShipEmail. Inherited from Order</summary>
 		ShipEmail,
-		///<summary>ShipWebsite. </summary>
+		///<summary>ShipWebsite. Inherited from Order</summary>
 		ShipWebsite,
-		///<summary>ShipAddressValidationSuggestionCount. </summary>
+		///<summary>ShipAddressValidationSuggestionCount. Inherited from Order</summary>
 		ShipAddressValidationSuggestionCount,
-		///<summary>ShipAddressValidationStatus. </summary>
+		///<summary>ShipAddressValidationStatus. Inherited from Order</summary>
 		ShipAddressValidationStatus,
-		///<summary>ShipAddressValidationError. </summary>
+		///<summary>ShipAddressValidationError. Inherited from Order</summary>
 		ShipAddressValidationError,
-		///<summary>ShipResidentialStatus. </summary>
+		///<summary>ShipResidentialStatus. Inherited from Order</summary>
 		ShipResidentialStatus,
-		///<summary>ShipPOBox. </summary>
+		///<summary>ShipPOBox. Inherited from Order</summary>
 		ShipPOBox,
-		///<summary>ShipUSTerritory. </summary>
+		///<summary>ShipUSTerritory. Inherited from Order</summary>
 		ShipUSTerritory,
-		///<summary>ShipMilitaryAddress. </summary>
+		///<summary>ShipMilitaryAddress. Inherited from Order</summary>
 		ShipMilitaryAddress,
-		///<summary>RollupItemCount. </summary>
+		///<summary>RollupItemCount. Inherited from Order</summary>
 		RollupItemCount,
-		///<summary>RollupItemName. </summary>
+		///<summary>RollupItemName. Inherited from Order</summary>
 		RollupItemName,
-		///<summary>RollupItemCode. </summary>
+		///<summary>RollupItemCode. Inherited from Order</summary>
 		RollupItemCode,
-		///<summary>RollupItemSKU. </summary>
+		///<summary>RollupItemSKU. Inherited from Order</summary>
 		RollupItemSKU,
-		///<summary>RollupItemLocation. </summary>
+		///<summary>RollupItemLocation. Inherited from Order</summary>
 		RollupItemLocation,
-		///<summary>RollupItemQuantity. </summary>
+		///<summary>RollupItemQuantity. Inherited from Order</summary>
 		RollupItemQuantity,
-		///<summary>RollupItemTotalWeight. </summary>
+		///<summary>RollupItemTotalWeight. Inherited from Order</summary>
 		RollupItemTotalWeight,
-		///<summary>RollupNoteCount. </summary>
+		///<summary>RollupNoteCount. Inherited from Order</summary>
 		RollupNoteCount,
-		///<summary>BillNameParseStatus. </summary>
+		///<summary>BillNameParseStatus. Inherited from Order</summary>
 		BillNameParseStatus,
-		///<summary>BillUnparsedName. </summary>
+		///<summary>BillUnparsedName. Inherited from Order</summary>
 		BillUnparsedName,
-		///<summary>ShipNameParseStatus. </summary>
+		///<summary>ShipNameParseStatus. Inherited from Order</summary>
 		ShipNameParseStatus,
-		///<summary>ShipUnparsedName. </summary>
+		///<summary>ShipUnparsedName. Inherited from Order</summary>
 		ShipUnparsedName,
-		///<summary>ShipSenseHashKey. </summary>
+		///<summary>ShipSenseHashKey. Inherited from Order</summary>
 		ShipSenseHashKey,
-		///<summary>ShipSenseRecognitionStatus. </summary>
+		///<summary>ShipSenseRecognitionStatus. Inherited from Order</summary>
 		ShipSenseRecognitionStatus,
-		///<summary>ShipAddressType. </summary>
+		///<summary>ShipAddressType. Inherited from Order</summary>
 		ShipAddressType,
 		///<summary>OrderID. </summary>
 		OrderID,
@@ -1320,49 +1205,44 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ChannelAdvisorOrderItem.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum ChannelAdvisorOrderItemFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ChannelAdvisorOrderItem.</summary>
+	public enum ChannelAdvisorOrderItemFieldIndex
 	{
 		///<summary>OrderItemID. Inherited from OrderItem</summary>
 		OrderItemID_OrderItem,
-		///<summary>RowVersion. </summary>
+		///<summary>RowVersion. Inherited from OrderItem</summary>
 		RowVersion,
-		///<summary>OrderID. </summary>
+		///<summary>OrderID. Inherited from OrderItem</summary>
 		OrderID,
-		///<summary>Name. </summary>
+		///<summary>Name. Inherited from OrderItem</summary>
 		Name,
-		///<summary>Code. </summary>
+		///<summary>Code. Inherited from OrderItem</summary>
 		Code,
-		///<summary>SKU. </summary>
+		///<summary>SKU. Inherited from OrderItem</summary>
 		SKU,
-		///<summary>ISBN. </summary>
+		///<summary>ISBN. Inherited from OrderItem</summary>
 		ISBN,
-		///<summary>UPC. </summary>
+		///<summary>UPC. Inherited from OrderItem</summary>
 		UPC,
-		///<summary>Description. </summary>
+		///<summary>Description. Inherited from OrderItem</summary>
 		Description,
-		///<summary>Location. </summary>
+		///<summary>Location. Inherited from OrderItem</summary>
 		Location,
-		///<summary>Image. </summary>
+		///<summary>Image. Inherited from OrderItem</summary>
 		Image,
-		///<summary>Thumbnail. </summary>
+		///<summary>Thumbnail. Inherited from OrderItem</summary>
 		Thumbnail,
-		///<summary>UnitPrice. </summary>
+		///<summary>UnitPrice. Inherited from OrderItem</summary>
 		UnitPrice,
-		///<summary>UnitCost. </summary>
+		///<summary>UnitCost. Inherited from OrderItem</summary>
 		UnitCost,
-		///<summary>Weight. </summary>
+		///<summary>Weight. Inherited from OrderItem</summary>
 		Weight,
-		///<summary>Quantity. </summary>
+		///<summary>Quantity. Inherited from OrderItem</summary>
 		Quantity,
-		///<summary>LocalStatus. </summary>
+		///<summary>LocalStatus. Inherited from OrderItem</summary>
 		LocalStatus,
-		///<summary>IsManual. </summary>
+		///<summary>IsManual. Inherited from OrderItem</summary>
 		IsManual,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
@@ -1387,73 +1267,68 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ChannelAdvisorStore.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum ChannelAdvisorStoreFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ChannelAdvisorStore.</summary>
+	public enum ChannelAdvisorStoreFieldIndex
 	{
 		///<summary>StoreID. Inherited from Store</summary>
 		StoreID_Store,
-		///<summary>RowVersion. </summary>
+		///<summary>RowVersion. Inherited from Store</summary>
 		RowVersion,
-		///<summary>License. </summary>
+		///<summary>License. Inherited from Store</summary>
 		License,
-		///<summary>Edition. </summary>
+		///<summary>Edition. Inherited from Store</summary>
 		Edition,
-		///<summary>TypeCode. </summary>
+		///<summary>TypeCode. Inherited from Store</summary>
 		TypeCode,
-		///<summary>Enabled. </summary>
+		///<summary>Enabled. Inherited from Store</summary>
 		Enabled,
-		///<summary>SetupComplete. </summary>
+		///<summary>SetupComplete. Inherited from Store</summary>
 		SetupComplete,
-		///<summary>StoreName. </summary>
+		///<summary>StoreName. Inherited from Store</summary>
 		StoreName,
-		///<summary>Company. </summary>
+		///<summary>Company. Inherited from Store</summary>
 		Company,
-		///<summary>Street1. </summary>
+		///<summary>Street1. Inherited from Store</summary>
 		Street1,
-		///<summary>Street2. </summary>
+		///<summary>Street2. Inherited from Store</summary>
 		Street2,
-		///<summary>Street3. </summary>
+		///<summary>Street3. Inherited from Store</summary>
 		Street3,
-		///<summary>City. </summary>
+		///<summary>City. Inherited from Store</summary>
 		City,
-		///<summary>StateProvCode. </summary>
+		///<summary>StateProvCode. Inherited from Store</summary>
 		StateProvCode,
-		///<summary>PostalCode. </summary>
+		///<summary>PostalCode. Inherited from Store</summary>
 		PostalCode,
-		///<summary>CountryCode. </summary>
+		///<summary>CountryCode. Inherited from Store</summary>
 		CountryCode,
-		///<summary>Phone. </summary>
+		///<summary>Phone. Inherited from Store</summary>
 		Phone,
-		///<summary>Fax. </summary>
+		///<summary>Fax. Inherited from Store</summary>
 		Fax,
-		///<summary>Email. </summary>
+		///<summary>Email. Inherited from Store</summary>
 		Email,
-		///<summary>Website. </summary>
+		///<summary>Website. Inherited from Store</summary>
 		Website,
-		///<summary>AutoDownload. </summary>
+		///<summary>AutoDownload. Inherited from Store</summary>
 		AutoDownload,
-		///<summary>AutoDownloadMinutes. </summary>
+		///<summary>AutoDownloadMinutes. Inherited from Store</summary>
 		AutoDownloadMinutes,
-		///<summary>AutoDownloadOnlyAway. </summary>
+		///<summary>AutoDownloadOnlyAway. Inherited from Store</summary>
 		AutoDownloadOnlyAway,
-		///<summary>AddressValidationSetting. </summary>
+		///<summary>AddressValidationSetting. Inherited from Store</summary>
 		AddressValidationSetting,
-		///<summary>ComputerDownloadPolicy. </summary>
+		///<summary>ComputerDownloadPolicy. Inherited from Store</summary>
 		ComputerDownloadPolicy,
-		///<summary>DefaultEmailAccountID. </summary>
+		///<summary>DefaultEmailAccountID. Inherited from Store</summary>
 		DefaultEmailAccountID,
-		///<summary>ManualOrderPrefix. </summary>
+		///<summary>ManualOrderPrefix. Inherited from Store</summary>
 		ManualOrderPrefix,
-		///<summary>ManualOrderPostfix. </summary>
+		///<summary>ManualOrderPostfix. Inherited from Store</summary>
 		ManualOrderPostfix,
-		///<summary>InitialDownloadDays. </summary>
+		///<summary>InitialDownloadDays. Inherited from Store</summary>
 		InitialDownloadDays,
-		///<summary>InitialDownloadOrder. </summary>
+		///<summary>InitialDownloadOrder. Inherited from Store</summary>
 		InitialDownloadOrder,
 		///<summary>StoreID. </summary>
 		StoreID,
@@ -1476,161 +1351,156 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ClickCartProOrder.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum ClickCartProOrderFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ClickCartProOrder.</summary>
+	public enum ClickCartProOrderFieldIndex
 	{
 		///<summary>OrderID. Inherited from Order</summary>
 		OrderID_Order,
-		///<summary>RowVersion. </summary>
+		///<summary>RowVersion. Inherited from Order</summary>
 		RowVersion,
-		///<summary>StoreID. </summary>
+		///<summary>StoreID. Inherited from Order</summary>
 		StoreID,
-		///<summary>CustomerID. </summary>
+		///<summary>CustomerID. Inherited from Order</summary>
 		CustomerID,
-		///<summary>OrderNumber. </summary>
+		///<summary>OrderNumber. Inherited from Order</summary>
 		OrderNumber,
-		///<summary>OrderNumberComplete. </summary>
+		///<summary>OrderNumberComplete. Inherited from Order</summary>
 		OrderNumberComplete,
-		///<summary>OrderDate. </summary>
+		///<summary>OrderDate. Inherited from Order</summary>
 		OrderDate,
-		///<summary>OrderTotal. </summary>
+		///<summary>OrderTotal. Inherited from Order</summary>
 		OrderTotal,
-		///<summary>LocalStatus. </summary>
+		///<summary>LocalStatus. Inherited from Order</summary>
 		LocalStatus,
-		///<summary>IsManual. </summary>
+		///<summary>IsManual. Inherited from Order</summary>
 		IsManual,
-		///<summary>OnlineLastModified. </summary>
+		///<summary>OnlineLastModified. Inherited from Order</summary>
 		OnlineLastModified,
-		///<summary>OnlineCustomerID. </summary>
+		///<summary>OnlineCustomerID. Inherited from Order</summary>
 		OnlineCustomerID,
-		///<summary>OnlineStatus. </summary>
+		///<summary>OnlineStatus. Inherited from Order</summary>
 		OnlineStatus,
-		///<summary>OnlineStatusCode. </summary>
+		///<summary>OnlineStatusCode. Inherited from Order</summary>
 		OnlineStatusCode,
-		///<summary>RequestedShipping. </summary>
+		///<summary>RequestedShipping. Inherited from Order</summary>
 		RequestedShipping,
-		///<summary>BillFirstName. </summary>
+		///<summary>BillFirstName. Inherited from Order</summary>
 		BillFirstName,
-		///<summary>BillMiddleName. </summary>
+		///<summary>BillMiddleName. Inherited from Order</summary>
 		BillMiddleName,
-		///<summary>BillLastName. </summary>
+		///<summary>BillLastName. Inherited from Order</summary>
 		BillLastName,
-		///<summary>BillCompany. </summary>
+		///<summary>BillCompany. Inherited from Order</summary>
 		BillCompany,
-		///<summary>BillStreet1. </summary>
+		///<summary>BillStreet1. Inherited from Order</summary>
 		BillStreet1,
-		///<summary>BillStreet2. </summary>
+		///<summary>BillStreet2. Inherited from Order</summary>
 		BillStreet2,
-		///<summary>BillStreet3. </summary>
+		///<summary>BillStreet3. Inherited from Order</summary>
 		BillStreet3,
-		///<summary>BillCity. </summary>
+		///<summary>BillCity. Inherited from Order</summary>
 		BillCity,
-		///<summary>BillStateProvCode. </summary>
+		///<summary>BillStateProvCode. Inherited from Order</summary>
 		BillStateProvCode,
-		///<summary>BillPostalCode. </summary>
+		///<summary>BillPostalCode. Inherited from Order</summary>
 		BillPostalCode,
-		///<summary>BillCountryCode. </summary>
+		///<summary>BillCountryCode. Inherited from Order</summary>
 		BillCountryCode,
-		///<summary>BillPhone. </summary>
+		///<summary>BillPhone. Inherited from Order</summary>
 		BillPhone,
-		///<summary>BillFax. </summary>
+		///<summary>BillFax. Inherited from Order</summary>
 		BillFax,
-		///<summary>BillEmail. </summary>
+		///<summary>BillEmail. Inherited from Order</summary>
 		BillEmail,
-		///<summary>BillWebsite. </summary>
+		///<summary>BillWebsite. Inherited from Order</summary>
 		BillWebsite,
-		///<summary>BillAddressValidationSuggestionCount. </summary>
+		///<summary>BillAddressValidationSuggestionCount. Inherited from Order</summary>
 		BillAddressValidationSuggestionCount,
-		///<summary>BillAddressValidationStatus. </summary>
+		///<summary>BillAddressValidationStatus. Inherited from Order</summary>
 		BillAddressValidationStatus,
-		///<summary>BillAddressValidationError. </summary>
+		///<summary>BillAddressValidationError. Inherited from Order</summary>
 		BillAddressValidationError,
-		///<summary>BillResidentialStatus. </summary>
+		///<summary>BillResidentialStatus. Inherited from Order</summary>
 		BillResidentialStatus,
-		///<summary>BillPOBox. </summary>
+		///<summary>BillPOBox. Inherited from Order</summary>
 		BillPOBox,
-		///<summary>BillUSTerritory. </summary>
+		///<summary>BillUSTerritory. Inherited from Order</summary>
 		BillUSTerritory,
-		///<summary>BillMilitaryAddress. </summary>
+		///<summary>BillMilitaryAddress. Inherited from Order</summary>
 		BillMilitaryAddress,
-		///<summary>ShipFirstName. </summary>
+		///<summary>ShipFirstName. Inherited from Order</summary>
 		ShipFirstName,
-		///<summary>ShipMiddleName. </summary>
+		///<summary>ShipMiddleName. Inherited from Order</summary>
 		ShipMiddleName,
-		///<summary>ShipLastName. </summary>
+		///<summary>ShipLastName. Inherited from Order</summary>
 		ShipLastName,
-		///<summary>ShipCompany. </summary>
+		///<summary>ShipCompany. Inherited from Order</summary>
 		ShipCompany,
-		///<summary>ShipStreet1. </summary>
+		///<summary>ShipStreet1. Inherited from Order</summary>
 		ShipStreet1,
-		///<summary>ShipStreet2. </summary>
+		///<summary>ShipStreet2. Inherited from Order</summary>
 		ShipStreet2,
-		///<summary>ShipStreet3. </summary>
+		///<summary>ShipStreet3. Inherited from Order</summary>
 		ShipStreet3,
-		///<summary>ShipCity. </summary>
+		///<summary>ShipCity. Inherited from Order</summary>
 		ShipCity,
-		///<summary>ShipStateProvCode. </summary>
+		///<summary>ShipStateProvCode. Inherited from Order</summary>
 		ShipStateProvCode,
-		///<summary>ShipPostalCode. </summary>
+		///<summary>ShipPostalCode. Inherited from Order</summary>
 		ShipPostalCode,
-		///<summary>ShipCountryCode. </summary>
+		///<summary>ShipCountryCode. Inherited from Order</summary>
 		ShipCountryCode,
-		///<summary>ShipPhone. </summary>
+		///<summary>ShipPhone. Inherited from Order</summary>
 		ShipPhone,
-		///<summary>ShipFax. </summary>
+		///<summary>ShipFax. Inherited from Order</summary>
 		ShipFax,
-		///<summary>ShipEmail. </summary>
+		///<summary>ShipEmail. Inherited from Order</summary>
 		ShipEmail,
-		///<summary>ShipWebsite. </summary>
+		///<summary>ShipWebsite. Inherited from Order</summary>
 		ShipWebsite,
-		///<summary>ShipAddressValidationSuggestionCount. </summary>
+		///<summary>ShipAddressValidationSuggestionCount. Inherited from Order</summary>
 		ShipAddressValidationSuggestionCount,
-		///<summary>ShipAddressValidationStatus. </summary>
+		///<summary>ShipAddressValidationStatus. Inherited from Order</summary>
 		ShipAddressValidationStatus,
-		///<summary>ShipAddressValidationError. </summary>
+		///<summary>ShipAddressValidationError. Inherited from Order</summary>
 		ShipAddressValidationError,
-		///<summary>ShipResidentialStatus. </summary>
+		///<summary>ShipResidentialStatus. Inherited from Order</summary>
 		ShipResidentialStatus,
-		///<summary>ShipPOBox. </summary>
+		///<summary>ShipPOBox. Inherited from Order</summary>
 		ShipPOBox,
-		///<summary>ShipUSTerritory. </summary>
+		///<summary>ShipUSTerritory. Inherited from Order</summary>
 		ShipUSTerritory,
-		///<summary>ShipMilitaryAddress. </summary>
+		///<summary>ShipMilitaryAddress. Inherited from Order</summary>
 		ShipMilitaryAddress,
-		///<summary>RollupItemCount. </summary>
+		///<summary>RollupItemCount. Inherited from Order</summary>
 		RollupItemCount,
-		///<summary>RollupItemName. </summary>
+		///<summary>RollupItemName. Inherited from Order</summary>
 		RollupItemName,
-		///<summary>RollupItemCode. </summary>
+		///<summary>RollupItemCode. Inherited from Order</summary>
 		RollupItemCode,
-		///<summary>RollupItemSKU. </summary>
+		///<summary>RollupItemSKU. Inherited from Order</summary>
 		RollupItemSKU,
-		///<summary>RollupItemLocation. </summary>
+		///<summary>RollupItemLocation. Inherited from Order</summary>
 		RollupItemLocation,
-		///<summary>RollupItemQuantity. </summary>
+		///<summary>RollupItemQuantity. Inherited from Order</summary>
 		RollupItemQuantity,
-		///<summary>RollupItemTotalWeight. </summary>
+		///<summary>RollupItemTotalWeight. Inherited from Order</summary>
 		RollupItemTotalWeight,
-		///<summary>RollupNoteCount. </summary>
+		///<summary>RollupNoteCount. Inherited from Order</summary>
 		RollupNoteCount,
-		///<summary>BillNameParseStatus. </summary>
+		///<summary>BillNameParseStatus. Inherited from Order</summary>
 		BillNameParseStatus,
-		///<summary>BillUnparsedName. </summary>
+		///<summary>BillUnparsedName. Inherited from Order</summary>
 		BillUnparsedName,
-		///<summary>ShipNameParseStatus. </summary>
+		///<summary>ShipNameParseStatus. Inherited from Order</summary>
 		ShipNameParseStatus,
-		///<summary>ShipUnparsedName. </summary>
+		///<summary>ShipUnparsedName. Inherited from Order</summary>
 		ShipUnparsedName,
-		///<summary>ShipSenseHashKey. </summary>
+		///<summary>ShipSenseHashKey. Inherited from Order</summary>
 		ShipSenseHashKey,
-		///<summary>ShipSenseRecognitionStatus. </summary>
+		///<summary>ShipSenseRecognitionStatus. Inherited from Order</summary>
 		ShipSenseRecognitionStatus,
-		///<summary>ShipAddressType. </summary>
+		///<summary>ShipAddressType. Inherited from Order</summary>
 		ShipAddressType,
 		///<summary>OrderID. </summary>
 		OrderID,
@@ -1639,161 +1509,156 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: CommerceInterfaceOrder.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum CommerceInterfaceOrderFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: CommerceInterfaceOrder.</summary>
+	public enum CommerceInterfaceOrderFieldIndex
 	{
 		///<summary>OrderID. Inherited from Order</summary>
 		OrderID_Order,
-		///<summary>RowVersion. </summary>
+		///<summary>RowVersion. Inherited from Order</summary>
 		RowVersion,
-		///<summary>StoreID. </summary>
+		///<summary>StoreID. Inherited from Order</summary>
 		StoreID,
-		///<summary>CustomerID. </summary>
+		///<summary>CustomerID. Inherited from Order</summary>
 		CustomerID,
-		///<summary>OrderNumber. </summary>
+		///<summary>OrderNumber. Inherited from Order</summary>
 		OrderNumber,
-		///<summary>OrderNumberComplete. </summary>
+		///<summary>OrderNumberComplete. Inherited from Order</summary>
 		OrderNumberComplete,
-		///<summary>OrderDate. </summary>
+		///<summary>OrderDate. Inherited from Order</summary>
 		OrderDate,
-		///<summary>OrderTotal. </summary>
+		///<summary>OrderTotal. Inherited from Order</summary>
 		OrderTotal,
-		///<summary>LocalStatus. </summary>
+		///<summary>LocalStatus. Inherited from Order</summary>
 		LocalStatus,
-		///<summary>IsManual. </summary>
+		///<summary>IsManual. Inherited from Order</summary>
 		IsManual,
-		///<summary>OnlineLastModified. </summary>
+		///<summary>OnlineLastModified. Inherited from Order</summary>
 		OnlineLastModified,
-		///<summary>OnlineCustomerID. </summary>
+		///<summary>OnlineCustomerID. Inherited from Order</summary>
 		OnlineCustomerID,
-		///<summary>OnlineStatus. </summary>
+		///<summary>OnlineStatus. Inherited from Order</summary>
 		OnlineStatus,
-		///<summary>OnlineStatusCode. </summary>
+		///<summary>OnlineStatusCode. Inherited from Order</summary>
 		OnlineStatusCode,
-		///<summary>RequestedShipping. </summary>
+		///<summary>RequestedShipping. Inherited from Order</summary>
 		RequestedShipping,
-		///<summary>BillFirstName. </summary>
+		///<summary>BillFirstName. Inherited from Order</summary>
 		BillFirstName,
-		///<summary>BillMiddleName. </summary>
+		///<summary>BillMiddleName. Inherited from Order</summary>
 		BillMiddleName,
-		///<summary>BillLastName. </summary>
+		///<summary>BillLastName. Inherited from Order</summary>
 		BillLastName,
-		///<summary>BillCompany. </summary>
+		///<summary>BillCompany. Inherited from Order</summary>
 		BillCompany,
-		///<summary>BillStreet1. </summary>
+		///<summary>BillStreet1. Inherited from Order</summary>
 		BillStreet1,
-		///<summary>BillStreet2. </summary>
+		///<summary>BillStreet2. Inherited from Order</summary>
 		BillStreet2,
-		///<summary>BillStreet3. </summary>
+		///<summary>BillStreet3. Inherited from Order</summary>
 		BillStreet3,
-		///<summary>BillCity. </summary>
+		///<summary>BillCity. Inherited from Order</summary>
 		BillCity,
-		///<summary>BillStateProvCode. </summary>
+		///<summary>BillStateProvCode. Inherited from Order</summary>
 		BillStateProvCode,
-		///<summary>BillPostalCode. </summary>
+		///<summary>BillPostalCode. Inherited from Order</summary>
 		BillPostalCode,
-		///<summary>BillCountryCode. </summary>
+		///<summary>BillCountryCode. Inherited from Order</summary>
 		BillCountryCode,
-		///<summary>BillPhone. </summary>
+		///<summary>BillPhone. Inherited from Order</summary>
 		BillPhone,
-		///<summary>BillFax. </summary>
+		///<summary>BillFax. Inherited from Order</summary>
 		BillFax,
-		///<summary>BillEmail. </summary>
+		///<summary>BillEmail. Inherited from Order</summary>
 		BillEmail,
-		///<summary>BillWebsite. </summary>
+		///<summary>BillWebsite. Inherited from Order</summary>
 		BillWebsite,
-		///<summary>BillAddressValidationSuggestionCount. </summary>
+		///<summary>BillAddressValidationSuggestionCount. Inherited from Order</summary>
 		BillAddressValidationSuggestionCount,
-		///<summary>BillAddressValidationStatus. </summary>
+		///<summary>BillAddressValidationStatus. Inherited from Order</summary>
 		BillAddressValidationStatus,
-		///<summary>BillAddressValidationError. </summary>
+		///<summary>BillAddressValidationError. Inherited from Order</summary>
 		BillAddressValidationError,
-		///<summary>BillResidentialStatus. </summary>
+		///<summary>BillResidentialStatus. Inherited from Order</summary>
 		BillResidentialStatus,
-		///<summary>BillPOBox. </summary>
+		///<summary>BillPOBox. Inherited from Order</summary>
 		BillPOBox,
-		///<summary>BillUSTerritory. </summary>
+		///<summary>BillUSTerritory. Inherited from Order</summary>
 		BillUSTerritory,
-		///<summary>BillMilitaryAddress. </summary>
+		///<summary>BillMilitaryAddress. Inherited from Order</summary>
 		BillMilitaryAddress,
-		///<summary>ShipFirstName. </summary>
+		///<summary>ShipFirstName. Inherited from Order</summary>
 		ShipFirstName,
-		///<summary>ShipMiddleName. </summary>
+		///<summary>ShipMiddleName. Inherited from Order</summary>
 		ShipMiddleName,
-		///<summary>ShipLastName. </summary>
+		///<summary>ShipLastName. Inherited from Order</summary>
 		ShipLastName,
-		///<summary>ShipCompany. </summary>
+		///<summary>ShipCompany. Inherited from Order</summary>
 		ShipCompany,
-		///<summary>ShipStreet1. </summary>
+		///<summary>ShipStreet1. Inherited from Order</summary>
 		ShipStreet1,
-		///<summary>ShipStreet2. </summary>
+		///<summary>ShipStreet2. Inherited from Order</summary>
 		ShipStreet2,
-		///<summary>ShipStreet3. </summary>
+		///<summary>ShipStreet3. Inherited from Order</summary>
 		ShipStreet3,
-		///<summary>ShipCity. </summary>
+		///<summary>ShipCity. Inherited from Order</summary>
 		ShipCity,
-		///<summary>ShipStateProvCode. </summary>
+		///<summary>ShipStateProvCode. Inherited from Order</summary>
 		ShipStateProvCode,
-		///<summary>ShipPostalCode. </summary>
+		///<summary>ShipPostalCode. Inherited from Order</summary>
 		ShipPostalCode,
-		///<summary>ShipCountryCode. </summary>
+		///<summary>ShipCountryCode. Inherited from Order</summary>
 		ShipCountryCode,
-		///<summary>ShipPhone. </summary>
+		///<summary>ShipPhone. Inherited from Order</summary>
 		ShipPhone,
-		///<summary>ShipFax. </summary>
+		///<summary>ShipFax. Inherited from Order</summary>
 		ShipFax,
-		///<summary>ShipEmail. </summary>
+		///<summary>ShipEmail. Inherited from Order</summary>
 		ShipEmail,
-		///<summary>ShipWebsite. </summary>
+		///<summary>ShipWebsite. Inherited from Order</summary>
 		ShipWebsite,
-		///<summary>ShipAddressValidationSuggestionCount. </summary>
+		///<summary>ShipAddressValidationSuggestionCount. Inherited from Order</summary>
 		ShipAddressValidationSuggestionCount,
-		///<summary>ShipAddressValidationStatus. </summary>
+		///<summary>ShipAddressValidationStatus. Inherited from Order</summary>
 		ShipAddressValidationStatus,
-		///<summary>ShipAddressValidationError. </summary>
+		///<summary>ShipAddressValidationError. Inherited from Order</summary>
 		ShipAddressValidationError,
-		///<summary>ShipResidentialStatus. </summary>
+		///<summary>ShipResidentialStatus. Inherited from Order</summary>
 		ShipResidentialStatus,
-		///<summary>ShipPOBox. </summary>
+		///<summary>ShipPOBox. Inherited from Order</summary>
 		ShipPOBox,
-		///<summary>ShipUSTerritory. </summary>
+		///<summary>ShipUSTerritory. Inherited from Order</summary>
 		ShipUSTerritory,
-		///<summary>ShipMilitaryAddress. </summary>
+		///<summary>ShipMilitaryAddress. Inherited from Order</summary>
 		ShipMilitaryAddress,
-		///<summary>RollupItemCount. </summary>
+		///<summary>RollupItemCount. Inherited from Order</summary>
 		RollupItemCount,
-		///<summary>RollupItemName. </summary>
+		///<summary>RollupItemName. Inherited from Order</summary>
 		RollupItemName,
-		///<summary>RollupItemCode. </summary>
+		///<summary>RollupItemCode. Inherited from Order</summary>
 		RollupItemCode,
-		///<summary>RollupItemSKU. </summary>
+		///<summary>RollupItemSKU. Inherited from Order</summary>
 		RollupItemSKU,
-		///<summary>RollupItemLocation. </summary>
+		///<summary>RollupItemLocation. Inherited from Order</summary>
 		RollupItemLocation,
-		///<summary>RollupItemQuantity. </summary>
+		///<summary>RollupItemQuantity. Inherited from Order</summary>
 		RollupItemQuantity,
-		///<summary>RollupItemTotalWeight. </summary>
+		///<summary>RollupItemTotalWeight. Inherited from Order</summary>
 		RollupItemTotalWeight,
-		///<summary>RollupNoteCount. </summary>
+		///<summary>RollupNoteCount. Inherited from Order</summary>
 		RollupNoteCount,
-		///<summary>BillNameParseStatus. </summary>
+		///<summary>BillNameParseStatus. Inherited from Order</summary>
 		BillNameParseStatus,
-		///<summary>BillUnparsedName. </summary>
+		///<summary>BillUnparsedName. Inherited from Order</summary>
 		BillUnparsedName,
-		///<summary>ShipNameParseStatus. </summary>
+		///<summary>ShipNameParseStatus. Inherited from Order</summary>
 		ShipNameParseStatus,
-		///<summary>ShipUnparsedName. </summary>
+		///<summary>ShipUnparsedName. Inherited from Order</summary>
 		ShipUnparsedName,
-		///<summary>ShipSenseHashKey. </summary>
+		///<summary>ShipSenseHashKey. Inherited from Order</summary>
 		ShipSenseHashKey,
-		///<summary>ShipSenseRecognitionStatus. </summary>
+		///<summary>ShipSenseRecognitionStatus. Inherited from Order</summary>
 		ShipSenseRecognitionStatus,
-		///<summary>ShipAddressType. </summary>
+		///<summary>ShipAddressType. Inherited from Order</summary>
 		ShipAddressType,
 		///<summary>OrderID. </summary>
 		OrderID,
@@ -1802,13 +1667,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: Computer.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum ComputerFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: Computer.</summary>
+	public enum ComputerFieldIndex
 	{
 		///<summary>ComputerID. </summary>
 		ComputerID,
@@ -1821,13 +1681,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: Configuration.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum ConfigurationFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: Configuration.</summary>
+	public enum ConfigurationFieldIndex
 	{
 		///<summary>ConfigurationID. </summary>
 		ConfigurationID,
@@ -1858,13 +1713,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: Customer.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum CustomerFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: Customer.</summary>
+	public enum CustomerFieldIndex
 	{
 		///<summary>CustomerID. </summary>
 		CustomerID,
@@ -1939,13 +1789,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: DimensionsProfile.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum DimensionsProfileFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: DimensionsProfile.</summary>
+	public enum DimensionsProfileFieldIndex
 	{
 		///<summary>DimensionsProfileID. </summary>
 		DimensionsProfileID,
@@ -1962,13 +1807,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: Download.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum DownloadFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: Download.</summary>
+	public enum DownloadFieldIndex
 	{
 		///<summary>DownloadID. </summary>
 		DownloadID,
@@ -1999,13 +1839,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: DownloadDetail.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum DownloadDetailFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: DownloadDetail.</summary>
+	public enum DownloadDetailFieldIndex
 	{
 		///<summary>DownloadedDetailID. </summary>
 		DownloadedDetailID,
@@ -2028,13 +1863,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: EbayCombinedOrderRelation.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum EbayCombinedOrderRelationFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: EbayCombinedOrderRelation.</summary>
+	public enum EbayCombinedOrderRelationFieldIndex
 	{
 		///<summary>EbayCombinedOrderRelationID. </summary>
 		EbayCombinedOrderRelationID,
@@ -2047,161 +1877,156 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: EbayOrder.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum EbayOrderFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: EbayOrder.</summary>
+	public enum EbayOrderFieldIndex
 	{
 		///<summary>OrderID. Inherited from Order</summary>
 		OrderID_Order,
-		///<summary>RowVersion. </summary>
+		///<summary>RowVersion. Inherited from Order</summary>
 		RowVersion,
-		///<summary>StoreID. </summary>
+		///<summary>StoreID. Inherited from Order</summary>
 		StoreID,
-		///<summary>CustomerID. </summary>
+		///<summary>CustomerID. Inherited from Order</summary>
 		CustomerID,
-		///<summary>OrderNumber. </summary>
+		///<summary>OrderNumber. Inherited from Order</summary>
 		OrderNumber,
-		///<summary>OrderNumberComplete. </summary>
+		///<summary>OrderNumberComplete. Inherited from Order</summary>
 		OrderNumberComplete,
-		///<summary>OrderDate. </summary>
+		///<summary>OrderDate. Inherited from Order</summary>
 		OrderDate,
-		///<summary>OrderTotal. </summary>
+		///<summary>OrderTotal. Inherited from Order</summary>
 		OrderTotal,
-		///<summary>LocalStatus. </summary>
+		///<summary>LocalStatus. Inherited from Order</summary>
 		LocalStatus,
-		///<summary>IsManual. </summary>
+		///<summary>IsManual. Inherited from Order</summary>
 		IsManual,
-		///<summary>OnlineLastModified. </summary>
+		///<summary>OnlineLastModified. Inherited from Order</summary>
 		OnlineLastModified,
-		///<summary>OnlineCustomerID. </summary>
+		///<summary>OnlineCustomerID. Inherited from Order</summary>
 		OnlineCustomerID,
-		///<summary>OnlineStatus. </summary>
+		///<summary>OnlineStatus. Inherited from Order</summary>
 		OnlineStatus,
-		///<summary>OnlineStatusCode. </summary>
+		///<summary>OnlineStatusCode. Inherited from Order</summary>
 		OnlineStatusCode,
-		///<summary>RequestedShipping. </summary>
+		///<summary>RequestedShipping. Inherited from Order</summary>
 		RequestedShipping,
-		///<summary>BillFirstName. </summary>
+		///<summary>BillFirstName. Inherited from Order</summary>
 		BillFirstName,
-		///<summary>BillMiddleName. </summary>
+		///<summary>BillMiddleName. Inherited from Order</summary>
 		BillMiddleName,
-		///<summary>BillLastName. </summary>
+		///<summary>BillLastName. Inherited from Order</summary>
 		BillLastName,
-		///<summary>BillCompany. </summary>
+		///<summary>BillCompany. Inherited from Order</summary>
 		BillCompany,
-		///<summary>BillStreet1. </summary>
+		///<summary>BillStreet1. Inherited from Order</summary>
 		BillStreet1,
-		///<summary>BillStreet2. </summary>
+		///<summary>BillStreet2. Inherited from Order</summary>
 		BillStreet2,
-		///<summary>BillStreet3. </summary>
+		///<summary>BillStreet3. Inherited from Order</summary>
 		BillStreet3,
-		///<summary>BillCity. </summary>
+		///<summary>BillCity. Inherited from Order</summary>
 		BillCity,
-		///<summary>BillStateProvCode. </summary>
+		///<summary>BillStateProvCode. Inherited from Order</summary>
 		BillStateProvCode,
-		///<summary>BillPostalCode. </summary>
+		///<summary>BillPostalCode. Inherited from Order</summary>
 		BillPostalCode,
-		///<summary>BillCountryCode. </summary>
+		///<summary>BillCountryCode. Inherited from Order</summary>
 		BillCountryCode,
-		///<summary>BillPhone. </summary>
+		///<summary>BillPhone. Inherited from Order</summary>
 		BillPhone,
-		///<summary>BillFax. </summary>
+		///<summary>BillFax. Inherited from Order</summary>
 		BillFax,
-		///<summary>BillEmail. </summary>
+		///<summary>BillEmail. Inherited from Order</summary>
 		BillEmail,
-		///<summary>BillWebsite. </summary>
+		///<summary>BillWebsite. Inherited from Order</summary>
 		BillWebsite,
-		///<summary>BillAddressValidationSuggestionCount. </summary>
+		///<summary>BillAddressValidationSuggestionCount. Inherited from Order</summary>
 		BillAddressValidationSuggestionCount,
-		///<summary>BillAddressValidationStatus. </summary>
+		///<summary>BillAddressValidationStatus. Inherited from Order</summary>
 		BillAddressValidationStatus,
-		///<summary>BillAddressValidationError. </summary>
+		///<summary>BillAddressValidationError. Inherited from Order</summary>
 		BillAddressValidationError,
-		///<summary>BillResidentialStatus. </summary>
+		///<summary>BillResidentialStatus. Inherited from Order</summary>
 		BillResidentialStatus,
-		///<summary>BillPOBox. </summary>
+		///<summary>BillPOBox. Inherited from Order</summary>
 		BillPOBox,
-		///<summary>BillUSTerritory. </summary>
+		///<summary>BillUSTerritory. Inherited from Order</summary>
 		BillUSTerritory,
-		///<summary>BillMilitaryAddress. </summary>
+		///<summary>BillMilitaryAddress. Inherited from Order</summary>
 		BillMilitaryAddress,
-		///<summary>ShipFirstName. </summary>
+		///<summary>ShipFirstName. Inherited from Order</summary>
 		ShipFirstName,
-		///<summary>ShipMiddleName. </summary>
+		///<summary>ShipMiddleName. Inherited from Order</summary>
 		ShipMiddleName,
-		///<summary>ShipLastName. </summary>
+		///<summary>ShipLastName. Inherited from Order</summary>
 		ShipLastName,
-		///<summary>ShipCompany. </summary>
+		///<summary>ShipCompany. Inherited from Order</summary>
 		ShipCompany,
-		///<summary>ShipStreet1. </summary>
+		///<summary>ShipStreet1. Inherited from Order</summary>
 		ShipStreet1,
-		///<summary>ShipStreet2. </summary>
+		///<summary>ShipStreet2. Inherited from Order</summary>
 		ShipStreet2,
-		///<summary>ShipStreet3. </summary>
+		///<summary>ShipStreet3. Inherited from Order</summary>
 		ShipStreet3,
-		///<summary>ShipCity. </summary>
+		///<summary>ShipCity. Inherited from Order</summary>
 		ShipCity,
-		///<summary>ShipStateProvCode. </summary>
+		///<summary>ShipStateProvCode. Inherited from Order</summary>
 		ShipStateProvCode,
-		///<summary>ShipPostalCode. </summary>
+		///<summary>ShipPostalCode. Inherited from Order</summary>
 		ShipPostalCode,
-		///<summary>ShipCountryCode. </summary>
+		///<summary>ShipCountryCode. Inherited from Order</summary>
 		ShipCountryCode,
-		///<summary>ShipPhone. </summary>
+		///<summary>ShipPhone. Inherited from Order</summary>
 		ShipPhone,
-		///<summary>ShipFax. </summary>
+		///<summary>ShipFax. Inherited from Order</summary>
 		ShipFax,
-		///<summary>ShipEmail. </summary>
+		///<summary>ShipEmail. Inherited from Order</summary>
 		ShipEmail,
-		///<summary>ShipWebsite. </summary>
+		///<summary>ShipWebsite. Inherited from Order</summary>
 		ShipWebsite,
-		///<summary>ShipAddressValidationSuggestionCount. </summary>
+		///<summary>ShipAddressValidationSuggestionCount. Inherited from Order</summary>
 		ShipAddressValidationSuggestionCount,
-		///<summary>ShipAddressValidationStatus. </summary>
+		///<summary>ShipAddressValidationStatus. Inherited from Order</summary>
 		ShipAddressValidationStatus,
-		///<summary>ShipAddressValidationError. </summary>
+		///<summary>ShipAddressValidationError. Inherited from Order</summary>
 		ShipAddressValidationError,
-		///<summary>ShipResidentialStatus. </summary>
+		///<summary>ShipResidentialStatus. Inherited from Order</summary>
 		ShipResidentialStatus,
-		///<summary>ShipPOBox. </summary>
+		///<summary>ShipPOBox. Inherited from Order</summary>
 		ShipPOBox,
-		///<summary>ShipUSTerritory. </summary>
+		///<summary>ShipUSTerritory. Inherited from Order</summary>
 		ShipUSTerritory,
-		///<summary>ShipMilitaryAddress. </summary>
+		///<summary>ShipMilitaryAddress. Inherited from Order</summary>
 		ShipMilitaryAddress,
-		///<summary>RollupItemCount. </summary>
+		///<summary>RollupItemCount. Inherited from Order</summary>
 		RollupItemCount,
-		///<summary>RollupItemName. </summary>
+		///<summary>RollupItemName. Inherited from Order</summary>
 		RollupItemName,
-		///<summary>RollupItemCode. </summary>
+		///<summary>RollupItemCode. Inherited from Order</summary>
 		RollupItemCode,
-		///<summary>RollupItemSKU. </summary>
+		///<summary>RollupItemSKU. Inherited from Order</summary>
 		RollupItemSKU,
-		///<summary>RollupItemLocation. </summary>
+		///<summary>RollupItemLocation. Inherited from Order</summary>
 		RollupItemLocation,
-		///<summary>RollupItemQuantity. </summary>
+		///<summary>RollupItemQuantity. Inherited from Order</summary>
 		RollupItemQuantity,
-		///<summary>RollupItemTotalWeight. </summary>
+		///<summary>RollupItemTotalWeight. Inherited from Order</summary>
 		RollupItemTotalWeight,
-		///<summary>RollupNoteCount. </summary>
+		///<summary>RollupNoteCount. Inherited from Order</summary>
 		RollupNoteCount,
-		///<summary>BillNameParseStatus. </summary>
+		///<summary>BillNameParseStatus. Inherited from Order</summary>
 		BillNameParseStatus,
-		///<summary>BillUnparsedName. </summary>
+		///<summary>BillUnparsedName. Inherited from Order</summary>
 		BillUnparsedName,
-		///<summary>ShipNameParseStatus. </summary>
+		///<summary>ShipNameParseStatus. Inherited from Order</summary>
 		ShipNameParseStatus,
-		///<summary>ShipUnparsedName. </summary>
+		///<summary>ShipUnparsedName. Inherited from Order</summary>
 		ShipUnparsedName,
-		///<summary>ShipSenseHashKey. </summary>
+		///<summary>ShipSenseHashKey. Inherited from Order</summary>
 		ShipSenseHashKey,
-		///<summary>ShipSenseRecognitionStatus. </summary>
+		///<summary>ShipSenseRecognitionStatus. Inherited from Order</summary>
 		ShipSenseRecognitionStatus,
-		///<summary>ShipAddressType. </summary>
+		///<summary>ShipAddressType. Inherited from Order</summary>
 		ShipAddressType,
 		///<summary>OrderID. </summary>
 		OrderID,
@@ -2254,49 +2079,44 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: EbayOrderItem.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum EbayOrderItemFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: EbayOrderItem.</summary>
+	public enum EbayOrderItemFieldIndex
 	{
 		///<summary>OrderItemID. Inherited from OrderItem</summary>
 		OrderItemID_OrderItem,
-		///<summary>RowVersion. </summary>
+		///<summary>RowVersion. Inherited from OrderItem</summary>
 		RowVersion,
-		///<summary>OrderID. </summary>
+		///<summary>OrderID. Inherited from OrderItem</summary>
 		OrderID,
-		///<summary>Name. </summary>
+		///<summary>Name. Inherited from OrderItem</summary>
 		Name,
-		///<summary>Code. </summary>
+		///<summary>Code. Inherited from OrderItem</summary>
 		Code,
-		///<summary>SKU. </summary>
+		///<summary>SKU. Inherited from OrderItem</summary>
 		SKU,
-		///<summary>ISBN. </summary>
+		///<summary>ISBN. Inherited from OrderItem</summary>
 		ISBN,
-		///<summary>UPC. </summary>
+		///<summary>UPC. Inherited from OrderItem</summary>
 		UPC,
-		///<summary>Description. </summary>
+		///<summary>Description. Inherited from OrderItem</summary>
 		Description,
-		///<summary>Location. </summary>
+		///<summary>Location. Inherited from OrderItem</summary>
 		Location,
-		///<summary>Image. </summary>
+		///<summary>Image. Inherited from OrderItem</summary>
 		Image,
-		///<summary>Thumbnail. </summary>
+		///<summary>Thumbnail. Inherited from OrderItem</summary>
 		Thumbnail,
-		///<summary>UnitPrice. </summary>
+		///<summary>UnitPrice. Inherited from OrderItem</summary>
 		UnitPrice,
-		///<summary>UnitCost. </summary>
+		///<summary>UnitCost. Inherited from OrderItem</summary>
 		UnitCost,
-		///<summary>Weight. </summary>
+		///<summary>Weight. Inherited from OrderItem</summary>
 		Weight,
-		///<summary>Quantity. </summary>
+		///<summary>Quantity. Inherited from OrderItem</summary>
 		Quantity,
-		///<summary>LocalStatus. </summary>
+		///<summary>LocalStatus. Inherited from OrderItem</summary>
 		LocalStatus,
-		///<summary>IsManual. </summary>
+		///<summary>IsManual. Inherited from OrderItem</summary>
 		IsManual,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
@@ -2337,73 +2157,68 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: EbayStore.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum EbayStoreFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: EbayStore.</summary>
+	public enum EbayStoreFieldIndex
 	{
 		///<summary>StoreID. Inherited from Store</summary>
 		StoreID_Store,
-		///<summary>RowVersion. </summary>
+		///<summary>RowVersion. Inherited from Store</summary>
 		RowVersion,
-		///<summary>License. </summary>
+		///<summary>License. Inherited from Store</summary>
 		License,
-		///<summary>Edition. </summary>
+		///<summary>Edition. Inherited from Store</summary>
 		Edition,
-		///<summary>TypeCode. </summary>
+		///<summary>TypeCode. Inherited from Store</summary>
 		TypeCode,
-		///<summary>Enabled. </summary>
+		///<summary>Enabled. Inherited from Store</summary>
 		Enabled,
-		///<summary>SetupComplete. </summary>
+		///<summary>SetupComplete. Inherited from Store</summary>
 		SetupComplete,
-		///<summary>StoreName. </summary>
+		///<summary>StoreName. Inherited from Store</summary>
 		StoreName,
-		///<summary>Company. </summary>
+		///<summary>Company. Inherited from Store</summary>
 		Company,
-		///<summary>Street1. </summary>
+		///<summary>Street1. Inherited from Store</summary>
 		Street1,
-		///<summary>Street2. </summary>
+		///<summary>Street2. Inherited from Store</summary>
 		Street2,
-		///<summary>Street3. </summary>
+		///<summary>Street3. Inherited from Store</summary>
 		Street3,
-		///<summary>City. </summary>
+		///<summary>City. Inherited from Store</summary>
 		City,
-		///<summary>StateProvCode. </summary>
+		///<summary>StateProvCode. Inherited from Store</summary>
 		StateProvCode,
-		///<summary>PostalCode. </summary>
+		///<summary>PostalCode. Inherited from Store</summary>
 		PostalCode,
-		///<summary>CountryCode. </summary>
+		///<summary>CountryCode. Inherited from Store</summary>
 		CountryCode,
-		///<summary>Phone. </summary>
+		///<summary>Phone. Inherited from Store</summary>
 		Phone,
-		///<summary>Fax. </summary>
+		///<summary>Fax. Inherited from Store</summary>
 		Fax,
-		///<summary>Email. </summary>
+		///<summary>Email. Inherited from Store</summary>
 		Email,
-		///<summary>Website. </summary>
+		///<summary>Website. Inherited from Store</summary>
 		Website,
-		///<summary>AutoDownload. </summary>
+		///<summary>AutoDownload. Inherited from Store</summary>
 		AutoDownload,
-		///<summary>AutoDownloadMinutes. </summary>
+		///<summary>AutoDownloadMinutes. Inherited from Store</summary>
 		AutoDownloadMinutes,
-		///<summary>AutoDownloadOnlyAway. </summary>
+		///<summary>AutoDownloadOnlyAway. Inherited from Store</summary>
 		AutoDownloadOnlyAway,
-		///<summary>AddressValidationSetting. </summary>
+		///<summary>AddressValidationSetting. Inherited from Store</summary>
 		AddressValidationSetting,
-		///<summary>ComputerDownloadPolicy. </summary>
+		///<summary>ComputerDownloadPolicy. Inherited from Store</summary>
 		ComputerDownloadPolicy,
-		///<summary>DefaultEmailAccountID. </summary>
+		///<summary>DefaultEmailAccountID. Inherited from Store</summary>
 		DefaultEmailAccountID,
-		///<summary>ManualOrderPrefix. </summary>
+		///<summary>ManualOrderPrefix. Inherited from Store</summary>
 		ManualOrderPrefix,
-		///<summary>ManualOrderPostfix. </summary>
+		///<summary>ManualOrderPostfix. Inherited from Store</summary>
 		ManualOrderPostfix,
-		///<summary>InitialDownloadDays. </summary>
+		///<summary>InitialDownloadDays. Inherited from Store</summary>
 		InitialDownloadDays,
-		///<summary>InitialDownloadOrder. </summary>
+		///<summary>InitialDownloadOrder. Inherited from Store</summary>
 		InitialDownloadOrder,
 		///<summary>StoreID. </summary>
 		StoreID,
@@ -2440,13 +2255,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: EmailAccount.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum EmailAccountFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: EmailAccount.</summary>
+	public enum EmailAccountFieldIndex
 	{
 		///<summary>EmailAccountID. </summary>
 		EmailAccountID,
@@ -2505,13 +2315,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: EmailOutbound.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum EmailOutboundFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: EmailOutbound.</summary>
+	public enum EmailOutboundFieldIndex
 	{
 		///<summary>EmailOutboundID. </summary>
 		EmailOutboundID,
@@ -2558,13 +2363,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: EmailOutboundRelation.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum EmailOutboundRelationFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: EmailOutboundRelation.</summary>
+	public enum EmailOutboundRelationFieldIndex
 	{
 		///<summary>EmailOutboundRelationID. </summary>
 		EmailOutboundRelationID,
@@ -2577,13 +2377,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: EndiciaAccount.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum EndiciaAccountFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: EndiciaAccount.</summary>
+	public enum EndiciaAccountFieldIndex
 	{
 		///<summary>EndiciaAccountID. </summary>
 		EndiciaAccountID,
@@ -2640,13 +2435,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: EndiciaProfile.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum EndiciaProfileFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: EndiciaProfile.</summary>
+	public enum EndiciaProfileFieldIndex
 	{
 		///<summary>ShippingProfileID. </summary>
 		ShippingProfileID,
@@ -2661,13 +2451,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: EndiciaScanForm.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum EndiciaScanFormFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: EndiciaScanForm.</summary>
+	public enum EndiciaScanFormFieldIndex
 	{
 		///<summary>EndiciaScanFormID. </summary>
 		EndiciaScanFormID,
@@ -2686,13 +2471,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: EndiciaShipment.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum EndiciaShipmentFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: EndiciaShipment.</summary>
+	public enum EndiciaShipmentFieldIndex
 	{
 		///<summary>ShipmentID. </summary>
 		ShipmentID,
@@ -2717,161 +2497,156 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: EtsyOrder.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum EtsyOrderFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: EtsyOrder.</summary>
+	public enum EtsyOrderFieldIndex
 	{
 		///<summary>OrderID. Inherited from Order</summary>
 		OrderID_Order,
-		///<summary>RowVersion. </summary>
+		///<summary>RowVersion. Inherited from Order</summary>
 		RowVersion,
-		///<summary>StoreID. </summary>
+		///<summary>StoreID. Inherited from Order</summary>
 		StoreID,
-		///<summary>CustomerID. </summary>
+		///<summary>CustomerID. Inherited from Order</summary>
 		CustomerID,
-		///<summary>OrderNumber. </summary>
+		///<summary>OrderNumber. Inherited from Order</summary>
 		OrderNumber,
-		///<summary>OrderNumberComplete. </summary>
+		///<summary>OrderNumberComplete. Inherited from Order</summary>
 		OrderNumberComplete,
-		///<summary>OrderDate. </summary>
+		///<summary>OrderDate. Inherited from Order</summary>
 		OrderDate,
-		///<summary>OrderTotal. </summary>
+		///<summary>OrderTotal. Inherited from Order</summary>
 		OrderTotal,
-		///<summary>LocalStatus. </summary>
+		///<summary>LocalStatus. Inherited from Order</summary>
 		LocalStatus,
-		///<summary>IsManual. </summary>
+		///<summary>IsManual. Inherited from Order</summary>
 		IsManual,
-		///<summary>OnlineLastModified. </summary>
+		///<summary>OnlineLastModified. Inherited from Order</summary>
 		OnlineLastModified,
-		///<summary>OnlineCustomerID. </summary>
+		///<summary>OnlineCustomerID. Inherited from Order</summary>
 		OnlineCustomerID,
-		///<summary>OnlineStatus. </summary>
+		///<summary>OnlineStatus. Inherited from Order</summary>
 		OnlineStatus,
-		///<summary>OnlineStatusCode. </summary>
+		///<summary>OnlineStatusCode. Inherited from Order</summary>
 		OnlineStatusCode,
-		///<summary>RequestedShipping. </summary>
+		///<summary>RequestedShipping. Inherited from Order</summary>
 		RequestedShipping,
-		///<summary>BillFirstName. </summary>
+		///<summary>BillFirstName. Inherited from Order</summary>
 		BillFirstName,
-		///<summary>BillMiddleName. </summary>
+		///<summary>BillMiddleName. Inherited from Order</summary>
 		BillMiddleName,
-		///<summary>BillLastName. </summary>
+		///<summary>BillLastName. Inherited from Order</summary>
 		BillLastName,
-		///<summary>BillCompany. </summary>
+		///<summary>BillCompany. Inherited from Order</summary>
 		BillCompany,
-		///<summary>BillStreet1. </summary>
+		///<summary>BillStreet1. Inherited from Order</summary>
 		BillStreet1,
-		///<summary>BillStreet2. </summary>
+		///<summary>BillStreet2. Inherited from Order</summary>
 		BillStreet2,
-		///<summary>BillStreet3. </summary>
+		///<summary>BillStreet3. Inherited from Order</summary>
 		BillStreet3,
-		///<summary>BillCity. </summary>
+		///<summary>BillCity. Inherited from Order</summary>
 		BillCity,
-		///<summary>BillStateProvCode. </summary>
+		///<summary>BillStateProvCode. Inherited from Order</summary>
 		BillStateProvCode,
-		///<summary>BillPostalCode. </summary>
+		///<summary>BillPostalCode. Inherited from Order</summary>
 		BillPostalCode,
-		///<summary>BillCountryCode. </summary>
+		///<summary>BillCountryCode. Inherited from Order</summary>
 		BillCountryCode,
-		///<summary>BillPhone. </summary>
+		///<summary>BillPhone. Inherited from Order</summary>
 		BillPhone,
-		///<summary>BillFax. </summary>
+		///<summary>BillFax. Inherited from Order</summary>
 		BillFax,
-		///<summary>BillEmail. </summary>
+		///<summary>BillEmail. Inherited from Order</summary>
 		BillEmail,
-		///<summary>BillWebsite. </summary>
+		///<summary>BillWebsite. Inherited from Order</summary>
 		BillWebsite,
-		///<summary>BillAddressValidationSuggestionCount. </summary>
+		///<summary>BillAddressValidationSuggestionCount. Inherited from Order</summary>
 		BillAddressValidationSuggestionCount,
-		///<summary>BillAddressValidationStatus. </summary>
+		///<summary>BillAddressValidationStatus. Inherited from Order</summary>
 		BillAddressValidationStatus,
-		///<summary>BillAddressValidationError. </summary>
+		///<summary>BillAddressValidationError. Inherited from Order</summary>
 		BillAddressValidationError,
-		///<summary>BillResidentialStatus. </summary>
+		///<summary>BillResidentialStatus. Inherited from Order</summary>
 		BillResidentialStatus,
-		///<summary>BillPOBox. </summary>
+		///<summary>BillPOBox. Inherited from Order</summary>
 		BillPOBox,
-		///<summary>BillUSTerritory. </summary>
+		///<summary>BillUSTerritory. Inherited from Order</summary>
 		BillUSTerritory,
-		///<summary>BillMilitaryAddress. </summary>
+		///<summary>BillMilitaryAddress. Inherited from Order</summary>
 		BillMilitaryAddress,
-		///<summary>ShipFirstName. </summary>
+		///<summary>ShipFirstName. Inherited from Order</summary>
 		ShipFirstName,
-		///<summary>ShipMiddleName. </summary>
+		///<summary>ShipMiddleName. Inherited from Order</summary>
 		ShipMiddleName,
-		///<summary>ShipLastName. </summary>
+		///<summary>ShipLastName. Inherited from Order</summary>
 		ShipLastName,
-		///<summary>ShipCompany. </summary>
+		///<summary>ShipCompany. Inherited from Order</summary>
 		ShipCompany,
-		///<summary>ShipStreet1. </summary>
+		///<summary>ShipStreet1. Inherited from Order</summary>
 		ShipStreet1,
-		///<summary>ShipStreet2. </summary>
+		///<summary>ShipStreet2. Inherited from Order</summary>
 		ShipStreet2,
-		///<summary>ShipStreet3. </summary>
+		///<summary>ShipStreet3. Inherited from Order</summary>
 		ShipStreet3,
-		///<summary>ShipCity. </summary>
+		///<summary>ShipCity. Inherited from Order</summary>
 		ShipCity,
-		///<summary>ShipStateProvCode. </summary>
+		///<summary>ShipStateProvCode. Inherited from Order</summary>
 		ShipStateProvCode,
-		///<summary>ShipPostalCode. </summary>
+		///<summary>ShipPostalCode. Inherited from Order</summary>
 		ShipPostalCode,
-		///<summary>ShipCountryCode. </summary>
+		///<summary>ShipCountryCode. Inherited from Order</summary>
 		ShipCountryCode,
-		///<summary>ShipPhone. </summary>
+		///<summary>ShipPhone. Inherited from Order</summary>
 		ShipPhone,
-		///<summary>ShipFax. </summary>
+		///<summary>ShipFax. Inherited from Order</summary>
 		ShipFax,
-		///<summary>ShipEmail. </summary>
+		///<summary>ShipEmail. Inherited from Order</summary>
 		ShipEmail,
-		///<summary>ShipWebsite. </summary>
+		///<summary>ShipWebsite. Inherited from Order</summary>
 		ShipWebsite,
-		///<summary>ShipAddressValidationSuggestionCount. </summary>
+		///<summary>ShipAddressValidationSuggestionCount. Inherited from Order</summary>
 		ShipAddressValidationSuggestionCount,
-		///<summary>ShipAddressValidationStatus. </summary>
+		///<summary>ShipAddressValidationStatus. Inherited from Order</summary>
 		ShipAddressValidationStatus,
-		///<summary>ShipAddressValidationError. </summary>
+		///<summary>ShipAddressValidationError. Inherited from Order</summary>
 		ShipAddressValidationError,
-		///<summary>ShipResidentialStatus. </summary>
+		///<summary>ShipResidentialStatus. Inherited from Order</summary>
 		ShipResidentialStatus,
-		///<summary>ShipPOBox. </summary>
+		///<summary>ShipPOBox. Inherited from Order</summary>
 		ShipPOBox,
-		///<summary>ShipUSTerritory. </summary>
+		///<summary>ShipUSTerritory. Inherited from Order</summary>
 		ShipUSTerritory,
-		///<summary>ShipMilitaryAddress. </summary>
+		///<summary>ShipMilitaryAddress. Inherited from Order</summary>
 		ShipMilitaryAddress,
-		///<summary>RollupItemCount. </summary>
+		///<summary>RollupItemCount. Inherited from Order</summary>
 		RollupItemCount,
-		///<summary>RollupItemName. </summary>
+		///<summary>RollupItemName. Inherited from Order</summary>
 		RollupItemName,
-		///<summary>RollupItemCode. </summary>
+		///<summary>RollupItemCode. Inherited from Order</summary>
 		RollupItemCode,
-		///<summary>RollupItemSKU. </summary>
+		///<summary>RollupItemSKU. Inherited from Order</summary>
 		RollupItemSKU,
-		///<summary>RollupItemLocation. </summary>
+		///<summary>RollupItemLocation. Inherited from Order</summary>
 		RollupItemLocation,
-		///<summary>RollupItemQuantity. </summary>
+		///<summary>RollupItemQuantity. Inherited from Order</summary>
 		RollupItemQuantity,
-		///<summary>RollupItemTotalWeight. </summary>
+		///<summary>RollupItemTotalWeight. Inherited from Order</summary>
 		RollupItemTotalWeight,
-		///<summary>RollupNoteCount. </summary>
+		///<summary>RollupNoteCount. Inherited from Order</summary>
 		RollupNoteCount,
-		///<summary>BillNameParseStatus. </summary>
+		///<summary>BillNameParseStatus. Inherited from Order</summary>
 		BillNameParseStatus,
-		///<summary>BillUnparsedName. </summary>
+		///<summary>BillUnparsedName. Inherited from Order</summary>
 		BillUnparsedName,
-		///<summary>ShipNameParseStatus. </summary>
+		///<summary>ShipNameParseStatus. Inherited from Order</summary>
 		ShipNameParseStatus,
-		///<summary>ShipUnparsedName. </summary>
+		///<summary>ShipUnparsedName. Inherited from Order</summary>
 		ShipUnparsedName,
-		///<summary>ShipSenseHashKey. </summary>
+		///<summary>ShipSenseHashKey. Inherited from Order</summary>
 		ShipSenseHashKey,
-		///<summary>ShipSenseRecognitionStatus. </summary>
+		///<summary>ShipSenseRecognitionStatus. Inherited from Order</summary>
 		ShipSenseRecognitionStatus,
-		///<summary>ShipAddressType. </summary>
+		///<summary>ShipAddressType. Inherited from Order</summary>
 		ShipAddressType,
 		///<summary>OrderID. </summary>
 		OrderID,
@@ -2882,73 +2657,68 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: EtsyStore.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum EtsyStoreFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: EtsyStore.</summary>
+	public enum EtsyStoreFieldIndex
 	{
 		///<summary>StoreID. Inherited from Store</summary>
 		StoreID_Store,
-		///<summary>RowVersion. </summary>
+		///<summary>RowVersion. Inherited from Store</summary>
 		RowVersion,
-		///<summary>License. </summary>
+		///<summary>License. Inherited from Store</summary>
 		License,
-		///<summary>Edition. </summary>
+		///<summary>Edition. Inherited from Store</summary>
 		Edition,
-		///<summary>TypeCode. </summary>
+		///<summary>TypeCode. Inherited from Store</summary>
 		TypeCode,
-		///<summary>Enabled. </summary>
+		///<summary>Enabled. Inherited from Store</summary>
 		Enabled,
-		///<summary>SetupComplete. </summary>
+		///<summary>SetupComplete. Inherited from Store</summary>
 		SetupComplete,
-		///<summary>StoreName. </summary>
+		///<summary>StoreName. Inherited from Store</summary>
 		StoreName,
-		///<summary>Company. </summary>
+		///<summary>Company. Inherited from Store</summary>
 		Company,
-		///<summary>Street1. </summary>
+		///<summary>Street1. Inherited from Store</summary>
 		Street1,
-		///<summary>Street2. </summary>
+		///<summary>Street2. Inherited from Store</summary>
 		Street2,
-		///<summary>Street3. </summary>
+		///<summary>Street3. Inherited from Store</summary>
 		Street3,
-		///<summary>City. </summary>
+		///<summary>City. Inherited from Store</summary>
 		City,
-		///<summary>StateProvCode. </summary>
+		///<summary>StateProvCode. Inherited from Store</summary>
 		StateProvCode,
-		///<summary>PostalCode. </summary>
+		///<summary>PostalCode. Inherited from Store</summary>
 		PostalCode,
-		///<summary>CountryCode. </summary>
+		///<summary>CountryCode. Inherited from Store</summary>
 		CountryCode,
-		///<summary>Phone. </summary>
+		///<summary>Phone. Inherited from Store</summary>
 		Phone,
-		///<summary>Fax. </summary>
+		///<summary>Fax. Inherited from Store</summary>
 		Fax,
-		///<summary>Email. </summary>
+		///<summary>Email. Inherited from Store</summary>
 		Email,
-		///<summary>Website. </summary>
+		///<summary>Website. Inherited from Store</summary>
 		Website,
-		///<summary>AutoDownload. </summary>
+		///<summary>AutoDownload. Inherited from Store</summary>
 		AutoDownload,
-		///<summary>AutoDownloadMinutes. </summary>
+		///<summary>AutoDownloadMinutes. Inherited from Store</summary>
 		AutoDownloadMinutes,
-		///<summary>AutoDownloadOnlyAway. </summary>
+		///<summary>AutoDownloadOnlyAway. Inherited from Store</summary>
 		AutoDownloadOnlyAway,
-		///<summary>AddressValidationSetting. </summary>
+		///<summary>AddressValidationSetting. Inherited from Store</summary>
 		AddressValidationSetting,
-		///<summary>ComputerDownloadPolicy. </summary>
+		///<summary>ComputerDownloadPolicy. Inherited from Store</summary>
 		ComputerDownloadPolicy,
-		///<summary>DefaultEmailAccountID. </summary>
+		///<summary>DefaultEmailAccountID. Inherited from Store</summary>
 		DefaultEmailAccountID,
-		///<summary>ManualOrderPrefix. </summary>
+		///<summary>ManualOrderPrefix. Inherited from Store</summary>
 		ManualOrderPrefix,
-		///<summary>ManualOrderPostfix. </summary>
+		///<summary>ManualOrderPostfix. Inherited from Store</summary>
 		ManualOrderPostfix,
-		///<summary>InitialDownloadDays. </summary>
+		///<summary>InitialDownloadDays. Inherited from Store</summary>
 		InitialDownloadDays,
-		///<summary>InitialDownloadOrder. </summary>
+		///<summary>InitialDownloadOrder. Inherited from Store</summary>
 		InitialDownloadOrder,
 		///<summary>StoreID. </summary>
 		StoreID,
@@ -2965,13 +2735,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ExcludedPackageType.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum ExcludedPackageTypeFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ExcludedPackageType.</summary>
+	public enum ExcludedPackageTypeFieldIndex
 	{
 		///<summary>ShipmentType. </summary>
 		ShipmentType,
@@ -2980,13 +2745,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ExcludedServiceType.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum ExcludedServiceTypeFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ExcludedServiceType.</summary>
+	public enum ExcludedServiceTypeFieldIndex
 	{
 		///<summary>ShipmentType. </summary>
 		ShipmentType,
@@ -2995,13 +2755,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: FedExAccount.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum FedExAccountFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: FedExAccount.</summary>
+	public enum FedExAccountFieldIndex
 	{
 		///<summary>FedExAccountID. </summary>
 		FedExAccountID,
@@ -3046,13 +2801,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: FedExEndOfDayClose.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum FedExEndOfDayCloseFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: FedExEndOfDayClose.</summary>
+	public enum FedExEndOfDayCloseFieldIndex
 	{
 		///<summary>FedExEndOfDayCloseID. </summary>
 		FedExEndOfDayCloseID,
@@ -3067,13 +2817,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: FedExPackage.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum FedExPackageFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: FedExPackage.</summary>
+	public enum FedExPackageFieldIndex
 	{
 		///<summary>FedExPackageID. </summary>
 		FedExPackageID,
@@ -3146,13 +2891,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: FedExProfile.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum FedExProfileFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: FedExProfile.</summary>
+	public enum FedExProfileFieldIndex
 	{
 		///<summary>ShippingProfileID. </summary>
 		ShippingProfileID,
@@ -3229,13 +2969,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: FedExProfilePackage.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum FedExProfilePackageFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: FedExProfilePackage.</summary>
+	public enum FedExProfilePackageFieldIndex
 	{
 		///<summary>FedExProfilePackageID. </summary>
 		FedExProfilePackageID,
@@ -3294,13 +3029,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: FedExShipment.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum FedExShipmentFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: FedExShipment.</summary>
+	public enum FedExShipmentFieldIndex
 	{
 		///<summary>ShipmentID. </summary>
 		ShipmentID,
@@ -3611,13 +3341,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: Filter.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum FilterFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: Filter.</summary>
+	public enum FilterFieldIndex
 	{
 		///<summary>FilterID. </summary>
 		FilterID,
@@ -3636,13 +3361,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: FilterLayout.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum FilterLayoutFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: FilterLayout.</summary>
+	public enum FilterLayoutFieldIndex
 	{
 		///<summary>FilterLayoutID. </summary>
 		FilterLayoutID,
@@ -3657,13 +3377,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: FilterNode.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum FilterNodeFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: FilterNode.</summary>
+	public enum FilterNodeFieldIndex
 	{
 		///<summary>FilterNodeID. </summary>
 		FilterNodeID,
@@ -3682,13 +3397,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: FilterNodeColumnSettings.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum FilterNodeColumnSettingsFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: FilterNodeColumnSettings.</summary>
+	public enum FilterNodeColumnSettingsFieldIndex
 	{
 		///<summary>FilterNodeColumnSettingsID. </summary>
 		FilterNodeColumnSettingsID,
@@ -3703,13 +3413,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: FilterNodeContent.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum FilterNodeContentFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: FilterNodeContent.</summary>
+	public enum FilterNodeContentFieldIndex
 	{
 		///<summary>FilterNodeContentID. </summary>
 		FilterNodeContentID,
@@ -3734,13 +3439,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: FilterNodeContentDetail.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum FilterNodeContentDetailFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: FilterNodeContentDetail.</summary>
+	public enum FilterNodeContentDetailFieldIndex
 	{
 		///<summary>FilterNodeContentID. </summary>
 		FilterNodeContentID,
@@ -3749,13 +3449,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: FilterSequence.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum FilterSequenceFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: FilterSequence.</summary>
+	public enum FilterSequenceFieldIndex
 	{
 		///<summary>FilterSequenceID. </summary>
 		FilterSequenceID,
@@ -3770,13 +3465,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: FtpAccount.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum FtpAccountFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: FtpAccount.</summary>
+	public enum FtpAccountFieldIndex
 	{
 		///<summary>FtpAccountID. </summary>
 		FtpAccountID,
@@ -3799,73 +3489,68 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: GenericFileStore.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum GenericFileStoreFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: GenericFileStore.</summary>
+	public enum GenericFileStoreFieldIndex
 	{
 		///<summary>StoreID. Inherited from Store</summary>
 		StoreID_Store,
-		///<summary>RowVersion. </summary>
+		///<summary>RowVersion. Inherited from Store</summary>
 		RowVersion,
-		///<summary>License. </summary>
+		///<summary>License. Inherited from Store</summary>
 		License,
-		///<summary>Edition. </summary>
+		///<summary>Edition. Inherited from Store</summary>
 		Edition,
-		///<summary>TypeCode. </summary>
+		///<summary>TypeCode. Inherited from Store</summary>
 		TypeCode,
-		///<summary>Enabled. </summary>
+		///<summary>Enabled. Inherited from Store</summary>
 		Enabled,
-		///<summary>SetupComplete. </summary>
+		///<summary>SetupComplete. Inherited from Store</summary>
 		SetupComplete,
-		///<summary>StoreName. </summary>
+		///<summary>StoreName. Inherited from Store</summary>
 		StoreName,
-		///<summary>Company. </summary>
+		///<summary>Company. Inherited from Store</summary>
 		Company,
-		///<summary>Street1. </summary>
+		///<summary>Street1. Inherited from Store</summary>
 		Street1,
-		///<summary>Street2. </summary>
+		///<summary>Street2. Inherited from Store</summary>
 		Street2,
-		///<summary>Street3. </summary>
+		///<summary>Street3. Inherited from Store</summary>
 		Street3,
-		///<summary>City. </summary>
+		///<summary>City. Inherited from Store</summary>
 		City,
-		///<summary>StateProvCode. </summary>
+		///<summary>StateProvCode. Inherited from Store</summary>
 		StateProvCode,
-		///<summary>PostalCode. </summary>
+		///<summary>PostalCode. Inherited from Store</summary>
 		PostalCode,
-		///<summary>CountryCode. </summary>
+		///<summary>CountryCode. Inherited from Store</summary>
 		CountryCode,
-		///<summary>Phone. </summary>
+		///<summary>Phone. Inherited from Store</summary>
 		Phone,
-		///<summary>Fax. </summary>
+		///<summary>Fax. Inherited from Store</summary>
 		Fax,
-		///<summary>Email. </summary>
+		///<summary>Email. Inherited from Store</summary>
 		Email,
-		///<summary>Website. </summary>
+		///<summary>Website. Inherited from Store</summary>
 		Website,
-		///<summary>AutoDownload. </summary>
+		///<summary>AutoDownload. Inherited from Store</summary>
 		AutoDownload,
-		///<summary>AutoDownloadMinutes. </summary>
+		///<summary>AutoDownloadMinutes. Inherited from Store</summary>
 		AutoDownloadMinutes,
-		///<summary>AutoDownloadOnlyAway. </summary>
+		///<summary>AutoDownloadOnlyAway. Inherited from Store</summary>
 		AutoDownloadOnlyAway,
-		///<summary>AddressValidationSetting. </summary>
+		///<summary>AddressValidationSetting. Inherited from Store</summary>
 		AddressValidationSetting,
-		///<summary>ComputerDownloadPolicy. </summary>
+		///<summary>ComputerDownloadPolicy. Inherited from Store</summary>
 		ComputerDownloadPolicy,
-		///<summary>DefaultEmailAccountID. </summary>
+		///<summary>DefaultEmailAccountID. Inherited from Store</summary>
 		DefaultEmailAccountID,
-		///<summary>ManualOrderPrefix. </summary>
+		///<summary>ManualOrderPrefix. Inherited from Store</summary>
 		ManualOrderPrefix,
-		///<summary>ManualOrderPostfix. </summary>
+		///<summary>ManualOrderPostfix. Inherited from Store</summary>
 		ManualOrderPostfix,
-		///<summary>InitialDownloadDays. </summary>
+		///<summary>InitialDownloadDays. Inherited from Store</summary>
 		InitialDownloadDays,
-		///<summary>InitialDownloadOrder. </summary>
+		///<summary>InitialDownloadOrder. Inherited from Store</summary>
 		InitialDownloadOrder,
 		///<summary>StoreID. </summary>
 		StoreID,
@@ -3910,73 +3595,68 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: GenericModuleStore.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum GenericModuleStoreFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: GenericModuleStore.</summary>
+	public enum GenericModuleStoreFieldIndex
 	{
 		///<summary>StoreID. Inherited from Store</summary>
 		StoreID_Store,
-		///<summary>RowVersion. </summary>
+		///<summary>RowVersion. Inherited from Store</summary>
 		RowVersion,
-		///<summary>License. </summary>
+		///<summary>License. Inherited from Store</summary>
 		License,
-		///<summary>Edition. </summary>
+		///<summary>Edition. Inherited from Store</summary>
 		Edition,
-		///<summary>TypeCode. </summary>
+		///<summary>TypeCode. Inherited from Store</summary>
 		TypeCode,
-		///<summary>Enabled. </summary>
+		///<summary>Enabled. Inherited from Store</summary>
 		Enabled,
-		///<summary>SetupComplete. </summary>
+		///<summary>SetupComplete. Inherited from Store</summary>
 		SetupComplete,
-		///<summary>StoreName. </summary>
+		///<summary>StoreName. Inherited from Store</summary>
 		StoreName,
-		///<summary>Company. </summary>
+		///<summary>Company. Inherited from Store</summary>
 		Company,
-		///<summary>Street1. </summary>
+		///<summary>Street1. Inherited from Store</summary>
 		Street1,
-		///<summary>Street2. </summary>
+		///<summary>Street2. Inherited from Store</summary>
 		Street2,
-		///<summary>Street3. </summary>
+		///<summary>Street3. Inherited from Store</summary>
 		Street3,
-		///<summary>City. </summary>
+		///<summary>City. Inherited from Store</summary>
 		City,
-		///<summary>StateProvCode. </summary>
+		///<summary>StateProvCode. Inherited from Store</summary>
 		StateProvCode,
-		///<summary>PostalCode. </summary>
+		///<summary>PostalCode. Inherited from Store</summary>
 		PostalCode,
-		///<summary>CountryCode. </summary>
+		///<summary>CountryCode. Inherited from Store</summary>
 		CountryCode,
-		///<summary>Phone. </summary>
+		///<summary>Phone. Inherited from Store</summary>
 		Phone,
-		///<summary>Fax. </summary>
+		///<summary>Fax. Inherited from Store</summary>
 		Fax,
-		///<summary>Email. </summary>
+		///<summary>Email. Inherited from Store</summary>
 		Email,
-		///<summary>Website. </summary>
+		///<summary>Website. Inherited from Store</summary>
 		Website,
-		///<summary>AutoDownload. </summary>
+		///<summary>AutoDownload. Inherited from Store</summary>
 		AutoDownload,
-		///<summary>AutoDownloadMinutes. </summary>
+		///<summary>AutoDownloadMinutes. Inherited from Store</summary>
 		AutoDownloadMinutes,
-		///<summary>AutoDownloadOnlyAway. </summary>
+		///<summary>AutoDownloadOnlyAway. Inherited from Store</summary>
 		AutoDownloadOnlyAway,
-		///<summary>AddressValidationSetting. </summary>
+		///<summary>AddressValidationSetting. Inherited from Store</summary>
 		AddressValidationSetting,
-		///<summary>ComputerDownloadPolicy. </summary>
+		///<summary>ComputerDownloadPolicy. Inherited from Store</summary>
 		ComputerDownloadPolicy,
-		///<summary>DefaultEmailAccountID. </summary>
+		///<summary>DefaultEmailAccountID. Inherited from Store</summary>
 		DefaultEmailAccountID,
-		///<summary>ManualOrderPrefix. </summary>
+		///<summary>ManualOrderPrefix. Inherited from Store</summary>
 		ManualOrderPrefix,
-		///<summary>ManualOrderPostfix. </summary>
+		///<summary>ManualOrderPostfix. Inherited from Store</summary>
 		ManualOrderPostfix,
-		///<summary>InitialDownloadDays. </summary>
+		///<summary>InitialDownloadDays. Inherited from Store</summary>
 		InitialDownloadDays,
-		///<summary>InitialDownloadOrder. </summary>
+		///<summary>InitialDownloadOrder. Inherited from Store</summary>
 		InitialDownloadOrder,
 		///<summary>StoreID. </summary>
 		StoreID,
@@ -4021,13 +3701,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: GridColumnFormat.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum GridColumnFormatFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: GridColumnFormat.</summary>
+	public enum GridColumnFormatFieldIndex
 	{
 		///<summary>GridColumnFormatID. </summary>
 		GridColumnFormatID,
@@ -4040,13 +3715,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: GridColumnLayout.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum GridColumnLayoutFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: GridColumnLayout.</summary>
+	public enum GridColumnLayoutFieldIndex
 	{
 		///<summary>GridColumnLayoutID. </summary>
 		GridColumnLayoutID,
@@ -4065,13 +3735,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: GridColumnPosition.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum GridColumnPositionFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: GridColumnPosition.</summary>
+	public enum GridColumnPositionFieldIndex
 	{
 		///<summary>GridColumnPositionID. </summary>
 		GridColumnPositionID,
@@ -4088,161 +3753,156 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: GrouponOrder.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum GrouponOrderFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: GrouponOrder.</summary>
+	public enum GrouponOrderFieldIndex
 	{
 		///<summary>OrderID. Inherited from Order</summary>
 		OrderID_Order,
-		///<summary>RowVersion. </summary>
+		///<summary>RowVersion. Inherited from Order</summary>
 		RowVersion,
-		///<summary>StoreID. </summary>
+		///<summary>StoreID. Inherited from Order</summary>
 		StoreID,
-		///<summary>CustomerID. </summary>
+		///<summary>CustomerID. Inherited from Order</summary>
 		CustomerID,
-		///<summary>OrderNumber. </summary>
+		///<summary>OrderNumber. Inherited from Order</summary>
 		OrderNumber,
-		///<summary>OrderNumberComplete. </summary>
+		///<summary>OrderNumberComplete. Inherited from Order</summary>
 		OrderNumberComplete,
-		///<summary>OrderDate. </summary>
+		///<summary>OrderDate. Inherited from Order</summary>
 		OrderDate,
-		///<summary>OrderTotal. </summary>
+		///<summary>OrderTotal. Inherited from Order</summary>
 		OrderTotal,
-		///<summary>LocalStatus. </summary>
+		///<summary>LocalStatus. Inherited from Order</summary>
 		LocalStatus,
-		///<summary>IsManual. </summary>
+		///<summary>IsManual. Inherited from Order</summary>
 		IsManual,
-		///<summary>OnlineLastModified. </summary>
+		///<summary>OnlineLastModified. Inherited from Order</summary>
 		OnlineLastModified,
-		///<summary>OnlineCustomerID. </summary>
+		///<summary>OnlineCustomerID. Inherited from Order</summary>
 		OnlineCustomerID,
-		///<summary>OnlineStatus. </summary>
+		///<summary>OnlineStatus. Inherited from Order</summary>
 		OnlineStatus,
-		///<summary>OnlineStatusCode. </summary>
+		///<summary>OnlineStatusCode. Inherited from Order</summary>
 		OnlineStatusCode,
-		///<summary>RequestedShipping. </summary>
+		///<summary>RequestedShipping. Inherited from Order</summary>
 		RequestedShipping,
-		///<summary>BillFirstName. </summary>
+		///<summary>BillFirstName. Inherited from Order</summary>
 		BillFirstName,
-		///<summary>BillMiddleName. </summary>
+		///<summary>BillMiddleName. Inherited from Order</summary>
 		BillMiddleName,
-		///<summary>BillLastName. </summary>
+		///<summary>BillLastName. Inherited from Order</summary>
 		BillLastName,
-		///<summary>BillCompany. </summary>
+		///<summary>BillCompany. Inherited from Order</summary>
 		BillCompany,
-		///<summary>BillStreet1. </summary>
+		///<summary>BillStreet1. Inherited from Order</summary>
 		BillStreet1,
-		///<summary>BillStreet2. </summary>
+		///<summary>BillStreet2. Inherited from Order</summary>
 		BillStreet2,
-		///<summary>BillStreet3. </summary>
+		///<summary>BillStreet3. Inherited from Order</summary>
 		BillStreet3,
-		///<summary>BillCity. </summary>
+		///<summary>BillCity. Inherited from Order</summary>
 		BillCity,
-		///<summary>BillStateProvCode. </summary>
+		///<summary>BillStateProvCode. Inherited from Order</summary>
 		BillStateProvCode,
-		///<summary>BillPostalCode. </summary>
+		///<summary>BillPostalCode. Inherited from Order</summary>
 		BillPostalCode,
-		///<summary>BillCountryCode. </summary>
+		///<summary>BillCountryCode. Inherited from Order</summary>
 		BillCountryCode,
-		///<summary>BillPhone. </summary>
+		///<summary>BillPhone. Inherited from Order</summary>
 		BillPhone,
-		///<summary>BillFax. </summary>
+		///<summary>BillFax. Inherited from Order</summary>
 		BillFax,
-		///<summary>BillEmail. </summary>
+		///<summary>BillEmail. Inherited from Order</summary>
 		BillEmail,
-		///<summary>BillWebsite. </summary>
+		///<summary>BillWebsite. Inherited from Order</summary>
 		BillWebsite,
-		///<summary>BillAddressValidationSuggestionCount. </summary>
+		///<summary>BillAddressValidationSuggestionCount. Inherited from Order</summary>
 		BillAddressValidationSuggestionCount,
-		///<summary>BillAddressValidationStatus. </summary>
+		///<summary>BillAddressValidationStatus. Inherited from Order</summary>
 		BillAddressValidationStatus,
-		///<summary>BillAddressValidationError. </summary>
+		///<summary>BillAddressValidationError. Inherited from Order</summary>
 		BillAddressValidationError,
-		///<summary>BillResidentialStatus. </summary>
+		///<summary>BillResidentialStatus. Inherited from Order</summary>
 		BillResidentialStatus,
-		///<summary>BillPOBox. </summary>
+		///<summary>BillPOBox. Inherited from Order</summary>
 		BillPOBox,
-		///<summary>BillUSTerritory. </summary>
+		///<summary>BillUSTerritory. Inherited from Order</summary>
 		BillUSTerritory,
-		///<summary>BillMilitaryAddress. </summary>
+		///<summary>BillMilitaryAddress. Inherited from Order</summary>
 		BillMilitaryAddress,
-		///<summary>ShipFirstName. </summary>
+		///<summary>ShipFirstName. Inherited from Order</summary>
 		ShipFirstName,
-		///<summary>ShipMiddleName. </summary>
+		///<summary>ShipMiddleName. Inherited from Order</summary>
 		ShipMiddleName,
-		///<summary>ShipLastName. </summary>
+		///<summary>ShipLastName. Inherited from Order</summary>
 		ShipLastName,
-		///<summary>ShipCompany. </summary>
+		///<summary>ShipCompany. Inherited from Order</summary>
 		ShipCompany,
-		///<summary>ShipStreet1. </summary>
+		///<summary>ShipStreet1. Inherited from Order</summary>
 		ShipStreet1,
-		///<summary>ShipStreet2. </summary>
+		///<summary>ShipStreet2. Inherited from Order</summary>
 		ShipStreet2,
-		///<summary>ShipStreet3. </summary>
+		///<summary>ShipStreet3. Inherited from Order</summary>
 		ShipStreet3,
-		///<summary>ShipCity. </summary>
+		///<summary>ShipCity. Inherited from Order</summary>
 		ShipCity,
-		///<summary>ShipStateProvCode. </summary>
+		///<summary>ShipStateProvCode. Inherited from Order</summary>
 		ShipStateProvCode,
-		///<summary>ShipPostalCode. </summary>
+		///<summary>ShipPostalCode. Inherited from Order</summary>
 		ShipPostalCode,
-		///<summary>ShipCountryCode. </summary>
+		///<summary>ShipCountryCode. Inherited from Order</summary>
 		ShipCountryCode,
-		///<summary>ShipPhone. </summary>
+		///<summary>ShipPhone. Inherited from Order</summary>
 		ShipPhone,
-		///<summary>ShipFax. </summary>
+		///<summary>ShipFax. Inherited from Order</summary>
 		ShipFax,
-		///<summary>ShipEmail. </summary>
+		///<summary>ShipEmail. Inherited from Order</summary>
 		ShipEmail,
-		///<summary>ShipWebsite. </summary>
+		///<summary>ShipWebsite. Inherited from Order</summary>
 		ShipWebsite,
-		///<summary>ShipAddressValidationSuggestionCount. </summary>
+		///<summary>ShipAddressValidationSuggestionCount. Inherited from Order</summary>
 		ShipAddressValidationSuggestionCount,
-		///<summary>ShipAddressValidationStatus. </summary>
+		///<summary>ShipAddressValidationStatus. Inherited from Order</summary>
 		ShipAddressValidationStatus,
-		///<summary>ShipAddressValidationError. </summary>
+		///<summary>ShipAddressValidationError. Inherited from Order</summary>
 		ShipAddressValidationError,
-		///<summary>ShipResidentialStatus. </summary>
+		///<summary>ShipResidentialStatus. Inherited from Order</summary>
 		ShipResidentialStatus,
-		///<summary>ShipPOBox. </summary>
+		///<summary>ShipPOBox. Inherited from Order</summary>
 		ShipPOBox,
-		///<summary>ShipUSTerritory. </summary>
+		///<summary>ShipUSTerritory. Inherited from Order</summary>
 		ShipUSTerritory,
-		///<summary>ShipMilitaryAddress. </summary>
+		///<summary>ShipMilitaryAddress. Inherited from Order</summary>
 		ShipMilitaryAddress,
-		///<summary>RollupItemCount. </summary>
+		///<summary>RollupItemCount. Inherited from Order</summary>
 		RollupItemCount,
-		///<summary>RollupItemName. </summary>
+		///<summary>RollupItemName. Inherited from Order</summary>
 		RollupItemName,
-		///<summary>RollupItemCode. </summary>
+		///<summary>RollupItemCode. Inherited from Order</summary>
 		RollupItemCode,
-		///<summary>RollupItemSKU. </summary>
+		///<summary>RollupItemSKU. Inherited from Order</summary>
 		RollupItemSKU,
-		///<summary>RollupItemLocation. </summary>
+		///<summary>RollupItemLocation. Inherited from Order</summary>
 		RollupItemLocation,
-		///<summary>RollupItemQuantity. </summary>
+		///<summary>RollupItemQuantity. Inherited from Order</summary>
 		RollupItemQuantity,
-		///<summary>RollupItemTotalWeight. </summary>
+		///<summary>RollupItemTotalWeight. Inherited from Order</summary>
 		RollupItemTotalWeight,
-		///<summary>RollupNoteCount. </summary>
+		///<summary>RollupNoteCount. Inherited from Order</summary>
 		RollupNoteCount,
-		///<summary>BillNameParseStatus. </summary>
+		///<summary>BillNameParseStatus. Inherited from Order</summary>
 		BillNameParseStatus,
-		///<summary>BillUnparsedName. </summary>
+		///<summary>BillUnparsedName. Inherited from Order</summary>
 		BillUnparsedName,
-		///<summary>ShipNameParseStatus. </summary>
+		///<summary>ShipNameParseStatus. Inherited from Order</summary>
 		ShipNameParseStatus,
-		///<summary>ShipUnparsedName. </summary>
+		///<summary>ShipUnparsedName. Inherited from Order</summary>
 		ShipUnparsedName,
-		///<summary>ShipSenseHashKey. </summary>
+		///<summary>ShipSenseHashKey. Inherited from Order</summary>
 		ShipSenseHashKey,
-		///<summary>ShipSenseRecognitionStatus. </summary>
+		///<summary>ShipSenseRecognitionStatus. Inherited from Order</summary>
 		ShipSenseRecognitionStatus,
-		///<summary>ShipAddressType. </summary>
+		///<summary>ShipAddressType. Inherited from Order</summary>
 		ShipAddressType,
 		///<summary>OrderID. </summary>
 		OrderID,
@@ -4251,49 +3911,44 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: GrouponOrderItem.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum GrouponOrderItemFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: GrouponOrderItem.</summary>
+	public enum GrouponOrderItemFieldIndex
 	{
 		///<summary>OrderItemID. Inherited from OrderItem</summary>
 		OrderItemID_OrderItem,
-		///<summary>RowVersion. </summary>
+		///<summary>RowVersion. Inherited from OrderItem</summary>
 		RowVersion,
-		///<summary>OrderID. </summary>
+		///<summary>OrderID. Inherited from OrderItem</summary>
 		OrderID,
-		///<summary>Name. </summary>
+		///<summary>Name. Inherited from OrderItem</summary>
 		Name,
-		///<summary>Code. </summary>
+		///<summary>Code. Inherited from OrderItem</summary>
 		Code,
-		///<summary>SKU. </summary>
+		///<summary>SKU. Inherited from OrderItem</summary>
 		SKU,
-		///<summary>ISBN. </summary>
+		///<summary>ISBN. Inherited from OrderItem</summary>
 		ISBN,
-		///<summary>UPC. </summary>
+		///<summary>UPC. Inherited from OrderItem</summary>
 		UPC,
-		///<summary>Description. </summary>
+		///<summary>Description. Inherited from OrderItem</summary>
 		Description,
-		///<summary>Location. </summary>
+		///<summary>Location. Inherited from OrderItem</summary>
 		Location,
-		///<summary>Image. </summary>
+		///<summary>Image. Inherited from OrderItem</summary>
 		Image,
-		///<summary>Thumbnail. </summary>
+		///<summary>Thumbnail. Inherited from OrderItem</summary>
 		Thumbnail,
-		///<summary>UnitPrice. </summary>
+		///<summary>UnitPrice. Inherited from OrderItem</summary>
 		UnitPrice,
-		///<summary>UnitCost. </summary>
+		///<summary>UnitCost. Inherited from OrderItem</summary>
 		UnitCost,
-		///<summary>Weight. </summary>
+		///<summary>Weight. Inherited from OrderItem</summary>
 		Weight,
-		///<summary>Quantity. </summary>
+		///<summary>Quantity. Inherited from OrderItem</summary>
 		Quantity,
-		///<summary>LocalStatus. </summary>
+		///<summary>LocalStatus. Inherited from OrderItem</summary>
 		LocalStatus,
-		///<summary>IsManual. </summary>
+		///<summary>IsManual. Inherited from OrderItem</summary>
 		IsManual,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
@@ -4310,73 +3965,68 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: GrouponStore.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum GrouponStoreFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: GrouponStore.</summary>
+	public enum GrouponStoreFieldIndex
 	{
 		///<summary>StoreID. Inherited from Store</summary>
 		StoreID_Store,
-		///<summary>RowVersion. </summary>
+		///<summary>RowVersion. Inherited from Store</summary>
 		RowVersion,
-		///<summary>License. </summary>
+		///<summary>License. Inherited from Store</summary>
 		License,
-		///<summary>Edition. </summary>
+		///<summary>Edition. Inherited from Store</summary>
 		Edition,
-		///<summary>TypeCode. </summary>
+		///<summary>TypeCode. Inherited from Store</summary>
 		TypeCode,
-		///<summary>Enabled. </summary>
+		///<summary>Enabled. Inherited from Store</summary>
 		Enabled,
-		///<summary>SetupComplete. </summary>
+		///<summary>SetupComplete. Inherited from Store</summary>
 		SetupComplete,
-		///<summary>StoreName. </summary>
+		///<summary>StoreName. Inherited from Store</summary>
 		StoreName,
-		///<summary>Company. </summary>
+		///<summary>Company. Inherited from Store</summary>
 		Company,
-		///<summary>Street1. </summary>
+		///<summary>Street1. Inherited from Store</summary>
 		Street1,
-		///<summary>Street2. </summary>
+		///<summary>Street2. Inherited from Store</summary>
 		Street2,
-		///<summary>Street3. </summary>
+		///<summary>Street3. Inherited from Store</summary>
 		Street3,
-		///<summary>City. </summary>
+		///<summary>City. Inherited from Store</summary>
 		City,
-		///<summary>StateProvCode. </summary>
+		///<summary>StateProvCode. Inherited from Store</summary>
 		StateProvCode,
-		///<summary>PostalCode. </summary>
+		///<summary>PostalCode. Inherited from Store</summary>
 		PostalCode,
-		///<summary>CountryCode. </summary>
+		///<summary>CountryCode. Inherited from Store</summary>
 		CountryCode,
-		///<summary>Phone. </summary>
+		///<summary>Phone. Inherited from Store</summary>
 		Phone,
-		///<summary>Fax. </summary>
+		///<summary>Fax. Inherited from Store</summary>
 		Fax,
-		///<summary>Email. </summary>
+		///<summary>Email. Inherited from Store</summary>
 		Email,
-		///<summary>Website. </summary>
+		///<summary>Website. Inherited from Store</summary>
 		Website,
-		///<summary>AutoDownload. </summary>
+		///<summary>AutoDownload. Inherited from Store</summary>
 		AutoDownload,
-		///<summary>AutoDownloadMinutes. </summary>
+		///<summary>AutoDownloadMinutes. Inherited from Store</summary>
 		AutoDownloadMinutes,
-		///<summary>AutoDownloadOnlyAway. </summary>
+		///<summary>AutoDownloadOnlyAway. Inherited from Store</summary>
 		AutoDownloadOnlyAway,
-		///<summary>AddressValidationSetting. </summary>
+		///<summary>AddressValidationSetting. Inherited from Store</summary>
 		AddressValidationSetting,
-		///<summary>ComputerDownloadPolicy. </summary>
+		///<summary>ComputerDownloadPolicy. Inherited from Store</summary>
 		ComputerDownloadPolicy,
-		///<summary>DefaultEmailAccountID. </summary>
+		///<summary>DefaultEmailAccountID. Inherited from Store</summary>
 		DefaultEmailAccountID,
-		///<summary>ManualOrderPrefix. </summary>
+		///<summary>ManualOrderPrefix. Inherited from Store</summary>
 		ManualOrderPrefix,
-		///<summary>ManualOrderPostfix. </summary>
+		///<summary>ManualOrderPostfix. Inherited from Store</summary>
 		ManualOrderPostfix,
-		///<summary>InitialDownloadDays. </summary>
+		///<summary>InitialDownloadDays. Inherited from Store</summary>
 		InitialDownloadDays,
-		///<summary>InitialDownloadOrder. </summary>
+		///<summary>InitialDownloadOrder. Inherited from Store</summary>
 		InitialDownloadOrder,
 		///<summary>StoreID. </summary>
 		StoreID,
@@ -4387,49 +4037,44 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: InfopiaOrderItem.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum InfopiaOrderItemFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: InfopiaOrderItem.</summary>
+	public enum InfopiaOrderItemFieldIndex
 	{
 		///<summary>OrderItemID. Inherited from OrderItem</summary>
 		OrderItemID_OrderItem,
-		///<summary>RowVersion. </summary>
+		///<summary>RowVersion. Inherited from OrderItem</summary>
 		RowVersion,
-		///<summary>OrderID. </summary>
+		///<summary>OrderID. Inherited from OrderItem</summary>
 		OrderID,
-		///<summary>Name. </summary>
+		///<summary>Name. Inherited from OrderItem</summary>
 		Name,
-		///<summary>Code. </summary>
+		///<summary>Code. Inherited from OrderItem</summary>
 		Code,
-		///<summary>SKU. </summary>
+		///<summary>SKU. Inherited from OrderItem</summary>
 		SKU,
-		///<summary>ISBN. </summary>
+		///<summary>ISBN. Inherited from OrderItem</summary>
 		ISBN,
-		///<summary>UPC. </summary>
+		///<summary>UPC. Inherited from OrderItem</summary>
 		UPC,
-		///<summary>Description. </summary>
+		///<summary>Description. Inherited from OrderItem</summary>
 		Description,
-		///<summary>Location. </summary>
+		///<summary>Location. Inherited from OrderItem</summary>
 		Location,
-		///<summary>Image. </summary>
+		///<summary>Image. Inherited from OrderItem</summary>
 		Image,
-		///<summary>Thumbnail. </summary>
+		///<summary>Thumbnail. Inherited from OrderItem</summary>
 		Thumbnail,
-		///<summary>UnitPrice. </summary>
+		///<summary>UnitPrice. Inherited from OrderItem</summary>
 		UnitPrice,
-		///<summary>UnitCost. </summary>
+		///<summary>UnitCost. Inherited from OrderItem</summary>
 		UnitCost,
-		///<summary>Weight. </summary>
+		///<summary>Weight. Inherited from OrderItem</summary>
 		Weight,
-		///<summary>Quantity. </summary>
+		///<summary>Quantity. Inherited from OrderItem</summary>
 		Quantity,
-		///<summary>LocalStatus. </summary>
+		///<summary>LocalStatus. Inherited from OrderItem</summary>
 		LocalStatus,
-		///<summary>IsManual. </summary>
+		///<summary>IsManual. Inherited from OrderItem</summary>
 		IsManual,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
@@ -4442,73 +4087,68 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: InfopiaStore.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum InfopiaStoreFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: InfopiaStore.</summary>
+	public enum InfopiaStoreFieldIndex
 	{
 		///<summary>StoreID. Inherited from Store</summary>
 		StoreID_Store,
-		///<summary>RowVersion. </summary>
+		///<summary>RowVersion. Inherited from Store</summary>
 		RowVersion,
-		///<summary>License. </summary>
+		///<summary>License. Inherited from Store</summary>
 		License,
-		///<summary>Edition. </summary>
+		///<summary>Edition. Inherited from Store</summary>
 		Edition,
-		///<summary>TypeCode. </summary>
+		///<summary>TypeCode. Inherited from Store</summary>
 		TypeCode,
-		///<summary>Enabled. </summary>
+		///<summary>Enabled. Inherited from Store</summary>
 		Enabled,
-		///<summary>SetupComplete. </summary>
+		///<summary>SetupComplete. Inherited from Store</summary>
 		SetupComplete,
-		///<summary>StoreName. </summary>
+		///<summary>StoreName. Inherited from Store</summary>
 		StoreName,
-		///<summary>Company. </summary>
+		///<summary>Company. Inherited from Store</summary>
 		Company,
-		///<summary>Street1. </summary>
+		///<summary>Street1. Inherited from Store</summary>
 		Street1,
-		///<summary>Street2. </summary>
+		///<summary>Street2. Inherited from Store</summary>
 		Street2,
-		///<summary>Street3. </summary>
+		///<summary>Street3. Inherited from Store</summary>
 		Street3,
-		///<summary>City. </summary>
+		///<summary>City. Inherited from Store</summary>
 		City,
-		///<summary>StateProvCode. </summary>
+		///<summary>StateProvCode. Inherited from Store</summary>
 		StateProvCode,
-		///<summary>PostalCode. </summary>
+		///<summary>PostalCode. Inherited from Store</summary>
 		PostalCode,
-		///<summary>CountryCode. </summary>
+		///<summary>CountryCode. Inherited from Store</summary>
 		CountryCode,
-		///<summary>Phone. </summary>
+		///<summary>Phone. Inherited from Store</summary>
 		Phone,
-		///<summary>Fax. </summary>
+		///<summary>Fax. Inherited from Store</summary>
 		Fax,
-		///<summary>Email. </summary>
+		///<summary>Email. Inherited from Store</summary>
 		Email,
-		///<summary>Website. </summary>
+		///<summary>Website. Inherited from Store</summary>
 		Website,
-		///<summary>AutoDownload. </summary>
+		///<summary>AutoDownload. Inherited from Store</summary>
 		AutoDownload,
-		///<summary>AutoDownloadMinutes. </summary>
+		///<summary>AutoDownloadMinutes. Inherited from Store</summary>
 		AutoDownloadMinutes,
-		///<summary>AutoDownloadOnlyAway. </summary>
+		///<summary>AutoDownloadOnlyAway. Inherited from Store</summary>
 		AutoDownloadOnlyAway,
-		///<summary>AddressValidationSetting. </summary>
+		///<summary>AddressValidationSetting. Inherited from Store</summary>
 		AddressValidationSetting,
-		///<summary>ComputerDownloadPolicy. </summary>
+		///<summary>ComputerDownloadPolicy. Inherited from Store</summary>
 		ComputerDownloadPolicy,
-		///<summary>DefaultEmailAccountID. </summary>
+		///<summary>DefaultEmailAccountID. Inherited from Store</summary>
 		DefaultEmailAccountID,
-		///<summary>ManualOrderPrefix. </summary>
+		///<summary>ManualOrderPrefix. Inherited from Store</summary>
 		ManualOrderPrefix,
-		///<summary>ManualOrderPostfix. </summary>
+		///<summary>ManualOrderPostfix. Inherited from Store</summary>
 		ManualOrderPostfix,
-		///<summary>InitialDownloadDays. </summary>
+		///<summary>InitialDownloadDays. Inherited from Store</summary>
 		InitialDownloadDays,
-		///<summary>InitialDownloadOrder. </summary>
+		///<summary>InitialDownloadOrder. Inherited from Store</summary>
 		InitialDownloadOrder,
 		///<summary>StoreID. </summary>
 		StoreID,
@@ -4517,13 +4157,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: InsurancePolicy.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum InsurancePolicyFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: InsurancePolicy.</summary>
+	public enum InsurancePolicyFieldIndex
 	{
 		///<summary>ShipmentID. </summary>
 		ShipmentID,
@@ -4548,13 +4183,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: IParcelAccount.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum IParcelAccountFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: IParcelAccount.</summary>
+	public enum IParcelAccountFieldIndex
 	{
 		///<summary>IParcelAccountID. </summary>
 		IParcelAccountID,
@@ -4595,13 +4225,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: IParcelPackage.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum IParcelPackageFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: IParcelPackage.</summary>
+	public enum IParcelPackageFieldIndex
 	{
 		///<summary>IParcelPackageID. </summary>
 		IParcelPackageID,
@@ -4638,13 +4263,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: IParcelProfile.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum IParcelProfileFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: IParcelProfile.</summary>
+	public enum IParcelProfileFieldIndex
 	{
 		///<summary>ShippingProfileID. </summary>
 		ShippingProfileID,
@@ -4665,13 +4285,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: IParcelProfilePackage.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum IParcelProfilePackageFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: IParcelProfilePackage.</summary>
+	public enum IParcelProfilePackageFieldIndex
 	{
 		///<summary>IParcelProfilePackageID. </summary>
 		IParcelProfilePackageID,
@@ -4694,13 +4309,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: IParcelShipment.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum IParcelShipmentFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: IParcelShipment.</summary>
+	public enum IParcelShipmentFieldIndex
 	{
 		///<summary>ShipmentID. </summary>
 		ShipmentID,
@@ -4721,13 +4331,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: LabelSheet.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum LabelSheetFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: LabelSheet.</summary>
+	public enum LabelSheetFieldIndex
 	{
 		///<summary>LabelSheetID. </summary>
 		LabelSheetID,
@@ -4758,161 +4363,156 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: LemonStandOrder.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum LemonStandOrderFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: LemonStandOrder.</summary>
+	public enum LemonStandOrderFieldIndex
 	{
 		///<summary>OrderID. Inherited from Order</summary>
 		OrderID_Order,
-		///<summary>RowVersion. </summary>
+		///<summary>RowVersion. Inherited from Order</summary>
 		RowVersion,
-		///<summary>StoreID. </summary>
+		///<summary>StoreID. Inherited from Order</summary>
 		StoreID,
-		///<summary>CustomerID. </summary>
+		///<summary>CustomerID. Inherited from Order</summary>
 		CustomerID,
-		///<summary>OrderNumber. </summary>
+		///<summary>OrderNumber. Inherited from Order</summary>
 		OrderNumber,
-		///<summary>OrderNumberComplete. </summary>
+		///<summary>OrderNumberComplete. Inherited from Order</summary>
 		OrderNumberComplete,
-		///<summary>OrderDate. </summary>
+		///<summary>OrderDate. Inherited from Order</summary>
 		OrderDate,
-		///<summary>OrderTotal. </summary>
+		///<summary>OrderTotal. Inherited from Order</summary>
 		OrderTotal,
-		///<summary>LocalStatus. </summary>
+		///<summary>LocalStatus. Inherited from Order</summary>
 		LocalStatus,
-		///<summary>IsManual. </summary>
+		///<summary>IsManual. Inherited from Order</summary>
 		IsManual,
-		///<summary>OnlineLastModified. </summary>
+		///<summary>OnlineLastModified. Inherited from Order</summary>
 		OnlineLastModified,
-		///<summary>OnlineCustomerID. </summary>
+		///<summary>OnlineCustomerID. Inherited from Order</summary>
 		OnlineCustomerID,
-		///<summary>OnlineStatus. </summary>
+		///<summary>OnlineStatus. Inherited from Order</summary>
 		OnlineStatus,
-		///<summary>OnlineStatusCode. </summary>
+		///<summary>OnlineStatusCode. Inherited from Order</summary>
 		OnlineStatusCode,
-		///<summary>RequestedShipping. </summary>
+		///<summary>RequestedShipping. Inherited from Order</summary>
 		RequestedShipping,
-		///<summary>BillFirstName. </summary>
+		///<summary>BillFirstName. Inherited from Order</summary>
 		BillFirstName,
-		///<summary>BillMiddleName. </summary>
+		///<summary>BillMiddleName. Inherited from Order</summary>
 		BillMiddleName,
-		///<summary>BillLastName. </summary>
+		///<summary>BillLastName. Inherited from Order</summary>
 		BillLastName,
-		///<summary>BillCompany. </summary>
+		///<summary>BillCompany. Inherited from Order</summary>
 		BillCompany,
-		///<summary>BillStreet1. </summary>
+		///<summary>BillStreet1. Inherited from Order</summary>
 		BillStreet1,
-		///<summary>BillStreet2. </summary>
+		///<summary>BillStreet2. Inherited from Order</summary>
 		BillStreet2,
-		///<summary>BillStreet3. </summary>
+		///<summary>BillStreet3. Inherited from Order</summary>
 		BillStreet3,
-		///<summary>BillCity. </summary>
+		///<summary>BillCity. Inherited from Order</summary>
 		BillCity,
-		///<summary>BillStateProvCode. </summary>
+		///<summary>BillStateProvCode. Inherited from Order</summary>
 		BillStateProvCode,
-		///<summary>BillPostalCode. </summary>
+		///<summary>BillPostalCode. Inherited from Order</summary>
 		BillPostalCode,
-		///<summary>BillCountryCode. </summary>
+		///<summary>BillCountryCode. Inherited from Order</summary>
 		BillCountryCode,
-		///<summary>BillPhone. </summary>
+		///<summary>BillPhone. Inherited from Order</summary>
 		BillPhone,
-		///<summary>BillFax. </summary>
+		///<summary>BillFax. Inherited from Order</summary>
 		BillFax,
-		///<summary>BillEmail. </summary>
+		///<summary>BillEmail. Inherited from Order</summary>
 		BillEmail,
-		///<summary>BillWebsite. </summary>
+		///<summary>BillWebsite. Inherited from Order</summary>
 		BillWebsite,
-		///<summary>BillAddressValidationSuggestionCount. </summary>
+		///<summary>BillAddressValidationSuggestionCount. Inherited from Order</summary>
 		BillAddressValidationSuggestionCount,
-		///<summary>BillAddressValidationStatus. </summary>
+		///<summary>BillAddressValidationStatus. Inherited from Order</summary>
 		BillAddressValidationStatus,
-		///<summary>BillAddressValidationError. </summary>
+		///<summary>BillAddressValidationError. Inherited from Order</summary>
 		BillAddressValidationError,
-		///<summary>BillResidentialStatus. </summary>
+		///<summary>BillResidentialStatus. Inherited from Order</summary>
 		BillResidentialStatus,
-		///<summary>BillPOBox. </summary>
+		///<summary>BillPOBox. Inherited from Order</summary>
 		BillPOBox,
-		///<summary>BillUSTerritory. </summary>
+		///<summary>BillUSTerritory. Inherited from Order</summary>
 		BillUSTerritory,
-		///<summary>BillMilitaryAddress. </summary>
+		///<summary>BillMilitaryAddress. Inherited from Order</summary>
 		BillMilitaryAddress,
-		///<summary>ShipFirstName. </summary>
+		///<summary>ShipFirstName. Inherited from Order</summary>
 		ShipFirstName,
-		///<summary>ShipMiddleName. </summary>
+		///<summary>ShipMiddleName. Inherited from Order</summary>
 		ShipMiddleName,
-		///<summary>ShipLastName. </summary>
+		///<summary>ShipLastName. Inherited from Order</summary>
 		ShipLastName,
-		///<summary>ShipCompany. </summary>
+		///<summary>ShipCompany. Inherited from Order</summary>
 		ShipCompany,
-		///<summary>ShipStreet1. </summary>
+		///<summary>ShipStreet1. Inherited from Order</summary>
 		ShipStreet1,
-		///<summary>ShipStreet2. </summary>
+		///<summary>ShipStreet2. Inherited from Order</summary>
 		ShipStreet2,
-		///<summary>ShipStreet3. </summary>
+		///<summary>ShipStreet3. Inherited from Order</summary>
 		ShipStreet3,
-		///<summary>ShipCity. </summary>
+		///<summary>ShipCity. Inherited from Order</summary>
 		ShipCity,
-		///<summary>ShipStateProvCode. </summary>
+		///<summary>ShipStateProvCode. Inherited from Order</summary>
 		ShipStateProvCode,
-		///<summary>ShipPostalCode. </summary>
+		///<summary>ShipPostalCode. Inherited from Order</summary>
 		ShipPostalCode,
-		///<summary>ShipCountryCode. </summary>
+		///<summary>ShipCountryCode. Inherited from Order</summary>
 		ShipCountryCode,
-		///<summary>ShipPhone. </summary>
+		///<summary>ShipPhone. Inherited from Order</summary>
 		ShipPhone,
-		///<summary>ShipFax. </summary>
+		///<summary>ShipFax. Inherited from Order</summary>
 		ShipFax,
-		///<summary>ShipEmail. </summary>
+		///<summary>ShipEmail. Inherited from Order</summary>
 		ShipEmail,
-		///<summary>ShipWebsite. </summary>
+		///<summary>ShipWebsite. Inherited from Order</summary>
 		ShipWebsite,
-		///<summary>ShipAddressValidationSuggestionCount. </summary>
+		///<summary>ShipAddressValidationSuggestionCount. Inherited from Order</summary>
 		ShipAddressValidationSuggestionCount,
-		///<summary>ShipAddressValidationStatus. </summary>
+		///<summary>ShipAddressValidationStatus. Inherited from Order</summary>
 		ShipAddressValidationStatus,
-		///<summary>ShipAddressValidationError. </summary>
+		///<summary>ShipAddressValidationError. Inherited from Order</summary>
 		ShipAddressValidationError,
-		///<summary>ShipResidentialStatus. </summary>
+		///<summary>ShipResidentialStatus. Inherited from Order</summary>
 		ShipResidentialStatus,
-		///<summary>ShipPOBox. </summary>
+		///<summary>ShipPOBox. Inherited from Order</summary>
 		ShipPOBox,
-		///<summary>ShipUSTerritory. </summary>
+		///<summary>ShipUSTerritory. Inherited from Order</summary>
 		ShipUSTerritory,
-		///<summary>ShipMilitaryAddress. </summary>
+		///<summary>ShipMilitaryAddress. Inherited from Order</summary>
 		ShipMilitaryAddress,
-		///<summary>RollupItemCount. </summary>
+		///<summary>RollupItemCount. Inherited from Order</summary>
 		RollupItemCount,
-		///<summary>RollupItemName. </summary>
+		///<summary>RollupItemName. Inherited from Order</summary>
 		RollupItemName,
-		///<summary>RollupItemCode. </summary>
+		///<summary>RollupItemCode. Inherited from Order</summary>
 		RollupItemCode,
-		///<summary>RollupItemSKU. </summary>
+		///<summary>RollupItemSKU. Inherited from Order</summary>
 		RollupItemSKU,
-		///<summary>RollupItemLocation. </summary>
+		///<summary>RollupItemLocation. Inherited from Order</summary>
 		RollupItemLocation,
-		///<summary>RollupItemQuantity. </summary>
+		///<summary>RollupItemQuantity. Inherited from Order</summary>
 		RollupItemQuantity,
-		///<summary>RollupItemTotalWeight. </summary>
+		///<summary>RollupItemTotalWeight. Inherited from Order</summary>
 		RollupItemTotalWeight,
-		///<summary>RollupNoteCount. </summary>
+		///<summary>RollupNoteCount. Inherited from Order</summary>
 		RollupNoteCount,
-		///<summary>BillNameParseStatus. </summary>
+		///<summary>BillNameParseStatus. Inherited from Order</summary>
 		BillNameParseStatus,
-		///<summary>BillUnparsedName. </summary>
+		///<summary>BillUnparsedName. Inherited from Order</summary>
 		BillUnparsedName,
-		///<summary>ShipNameParseStatus. </summary>
+		///<summary>ShipNameParseStatus. Inherited from Order</summary>
 		ShipNameParseStatus,
-		///<summary>ShipUnparsedName. </summary>
+		///<summary>ShipUnparsedName. Inherited from Order</summary>
 		ShipUnparsedName,
-		///<summary>ShipSenseHashKey. </summary>
+		///<summary>ShipSenseHashKey. Inherited from Order</summary>
 		ShipSenseHashKey,
-		///<summary>ShipSenseRecognitionStatus. </summary>
+		///<summary>ShipSenseRecognitionStatus. Inherited from Order</summary>
 		ShipSenseRecognitionStatus,
-		///<summary>ShipAddressType. </summary>
+		///<summary>ShipAddressType. Inherited from Order</summary>
 		ShipAddressType,
 		///<summary>OrderID. </summary>
 		OrderID,
@@ -4921,49 +4521,44 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: LemonStandOrderItem.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum LemonStandOrderItemFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: LemonStandOrderItem.</summary>
+	public enum LemonStandOrderItemFieldIndex
 	{
 		///<summary>OrderItemID. Inherited from OrderItem</summary>
 		OrderItemID_OrderItem,
-		///<summary>RowVersion. </summary>
+		///<summary>RowVersion. Inherited from OrderItem</summary>
 		RowVersion,
-		///<summary>OrderID. </summary>
+		///<summary>OrderID. Inherited from OrderItem</summary>
 		OrderID,
-		///<summary>Name. </summary>
+		///<summary>Name. Inherited from OrderItem</summary>
 		Name,
-		///<summary>Code. </summary>
+		///<summary>Code. Inherited from OrderItem</summary>
 		Code,
-		///<summary>SKU. </summary>
+		///<summary>SKU. Inherited from OrderItem</summary>
 		SKU,
-		///<summary>ISBN. </summary>
+		///<summary>ISBN. Inherited from OrderItem</summary>
 		ISBN,
-		///<summary>UPC. </summary>
+		///<summary>UPC. Inherited from OrderItem</summary>
 		UPC,
-		///<summary>Description. </summary>
+		///<summary>Description. Inherited from OrderItem</summary>
 		Description,
-		///<summary>Location. </summary>
+		///<summary>Location. Inherited from OrderItem</summary>
 		Location,
-		///<summary>Image. </summary>
+		///<summary>Image. Inherited from OrderItem</summary>
 		Image,
-		///<summary>Thumbnail. </summary>
+		///<summary>Thumbnail. Inherited from OrderItem</summary>
 		Thumbnail,
-		///<summary>UnitPrice. </summary>
+		///<summary>UnitPrice. Inherited from OrderItem</summary>
 		UnitPrice,
-		///<summary>UnitCost. </summary>
+		///<summary>UnitCost. Inherited from OrderItem</summary>
 		UnitCost,
-		///<summary>Weight. </summary>
+		///<summary>Weight. Inherited from OrderItem</summary>
 		Weight,
-		///<summary>Quantity. </summary>
+		///<summary>Quantity. Inherited from OrderItem</summary>
 		Quantity,
-		///<summary>LocalStatus. </summary>
+		///<summary>LocalStatus. Inherited from OrderItem</summary>
 		LocalStatus,
-		///<summary>IsManual. </summary>
+		///<summary>IsManual. Inherited from OrderItem</summary>
 		IsManual,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
@@ -4976,73 +4571,68 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: LemonStandStore.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum LemonStandStoreFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: LemonStandStore.</summary>
+	public enum LemonStandStoreFieldIndex
 	{
 		///<summary>StoreID. Inherited from Store</summary>
 		StoreID_Store,
-		///<summary>RowVersion. </summary>
+		///<summary>RowVersion. Inherited from Store</summary>
 		RowVersion,
-		///<summary>License. </summary>
+		///<summary>License. Inherited from Store</summary>
 		License,
-		///<summary>Edition. </summary>
+		///<summary>Edition. Inherited from Store</summary>
 		Edition,
-		///<summary>TypeCode. </summary>
+		///<summary>TypeCode. Inherited from Store</summary>
 		TypeCode,
-		///<summary>Enabled. </summary>
+		///<summary>Enabled. Inherited from Store</summary>
 		Enabled,
-		///<summary>SetupComplete. </summary>
+		///<summary>SetupComplete. Inherited from Store</summary>
 		SetupComplete,
-		///<summary>StoreName. </summary>
+		///<summary>StoreName. Inherited from Store</summary>
 		StoreName,
-		///<summary>Company. </summary>
+		///<summary>Company. Inherited from Store</summary>
 		Company,
-		///<summary>Street1. </summary>
+		///<summary>Street1. Inherited from Store</summary>
 		Street1,
-		///<summary>Street2. </summary>
+		///<summary>Street2. Inherited from Store</summary>
 		Street2,
-		///<summary>Street3. </summary>
+		///<summary>Street3. Inherited from Store</summary>
 		Street3,
-		///<summary>City. </summary>
+		///<summary>City. Inherited from Store</summary>
 		City,
-		///<summary>StateProvCode. </summary>
+		///<summary>StateProvCode. Inherited from Store</summary>
 		StateProvCode,
-		///<summary>PostalCode. </summary>
+		///<summary>PostalCode. Inherited from Store</summary>
 		PostalCode,
-		///<summary>CountryCode. </summary>
+		///<summary>CountryCode. Inherited from Store</summary>
 		CountryCode,
-		///<summary>Phone. </summary>
+		///<summary>Phone. Inherited from Store</summary>
 		Phone,
-		///<summary>Fax. </summary>
+		///<summary>Fax. Inherited from Store</summary>
 		Fax,
-		///<summary>Email. </summary>
+		///<summary>Email. Inherited from Store</summary>
 		Email,
-		///<summary>Website. </summary>
+		///<summary>Website. Inherited from Store</summary>
 		Website,
-		///<summary>AutoDownload. </summary>
+		///<summary>AutoDownload. Inherited from Store</summary>
 		AutoDownload,
-		///<summary>AutoDownloadMinutes. </summary>
+		///<summary>AutoDownloadMinutes. Inherited from Store</summary>
 		AutoDownloadMinutes,
-		///<summary>AutoDownloadOnlyAway. </summary>
+		///<summary>AutoDownloadOnlyAway. Inherited from Store</summary>
 		AutoDownloadOnlyAway,
-		///<summary>AddressValidationSetting. </summary>
+		///<summary>AddressValidationSetting. Inherited from Store</summary>
 		AddressValidationSetting,
-		///<summary>ComputerDownloadPolicy. </summary>
+		///<summary>ComputerDownloadPolicy. Inherited from Store</summary>
 		ComputerDownloadPolicy,
-		///<summary>DefaultEmailAccountID. </summary>
+		///<summary>DefaultEmailAccountID. Inherited from Store</summary>
 		DefaultEmailAccountID,
-		///<summary>ManualOrderPrefix. </summary>
+		///<summary>ManualOrderPrefix. Inherited from Store</summary>
 		ManualOrderPrefix,
-		///<summary>ManualOrderPostfix. </summary>
+		///<summary>ManualOrderPostfix. Inherited from Store</summary>
 		ManualOrderPostfix,
-		///<summary>InitialDownloadDays. </summary>
+		///<summary>InitialDownloadDays. Inherited from Store</summary>
 		InitialDownloadDays,
-		///<summary>InitialDownloadOrder. </summary>
+		///<summary>InitialDownloadOrder. Inherited from Store</summary>
 		InitialDownloadOrder,
 		///<summary>StoreID. </summary>
 		StoreID,
@@ -5055,161 +4645,156 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: MagentoOrder.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum MagentoOrderFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: MagentoOrder.</summary>
+	public enum MagentoOrderFieldIndex
 	{
 		///<summary>OrderID. Inherited from Order</summary>
 		OrderID_Order,
-		///<summary>RowVersion. </summary>
+		///<summary>RowVersion. Inherited from Order</summary>
 		RowVersion,
-		///<summary>StoreID. </summary>
+		///<summary>StoreID. Inherited from Order</summary>
 		StoreID,
-		///<summary>CustomerID. </summary>
+		///<summary>CustomerID. Inherited from Order</summary>
 		CustomerID,
-		///<summary>OrderNumber. </summary>
+		///<summary>OrderNumber. Inherited from Order</summary>
 		OrderNumber,
-		///<summary>OrderNumberComplete. </summary>
+		///<summary>OrderNumberComplete. Inherited from Order</summary>
 		OrderNumberComplete,
-		///<summary>OrderDate. </summary>
+		///<summary>OrderDate. Inherited from Order</summary>
 		OrderDate,
-		///<summary>OrderTotal. </summary>
+		///<summary>OrderTotal. Inherited from Order</summary>
 		OrderTotal,
-		///<summary>LocalStatus. </summary>
+		///<summary>LocalStatus. Inherited from Order</summary>
 		LocalStatus,
-		///<summary>IsManual. </summary>
+		///<summary>IsManual. Inherited from Order</summary>
 		IsManual,
-		///<summary>OnlineLastModified. </summary>
+		///<summary>OnlineLastModified. Inherited from Order</summary>
 		OnlineLastModified,
-		///<summary>OnlineCustomerID. </summary>
+		///<summary>OnlineCustomerID. Inherited from Order</summary>
 		OnlineCustomerID,
-		///<summary>OnlineStatus. </summary>
+		///<summary>OnlineStatus. Inherited from Order</summary>
 		OnlineStatus,
-		///<summary>OnlineStatusCode. </summary>
+		///<summary>OnlineStatusCode. Inherited from Order</summary>
 		OnlineStatusCode,
-		///<summary>RequestedShipping. </summary>
+		///<summary>RequestedShipping. Inherited from Order</summary>
 		RequestedShipping,
-		///<summary>BillFirstName. </summary>
+		///<summary>BillFirstName. Inherited from Order</summary>
 		BillFirstName,
-		///<summary>BillMiddleName. </summary>
+		///<summary>BillMiddleName. Inherited from Order</summary>
 		BillMiddleName,
-		///<summary>BillLastName. </summary>
+		///<summary>BillLastName. Inherited from Order</summary>
 		BillLastName,
-		///<summary>BillCompany. </summary>
+		///<summary>BillCompany. Inherited from Order</summary>
 		BillCompany,
-		///<summary>BillStreet1. </summary>
+		///<summary>BillStreet1. Inherited from Order</summary>
 		BillStreet1,
-		///<summary>BillStreet2. </summary>
+		///<summary>BillStreet2. Inherited from Order</summary>
 		BillStreet2,
-		///<summary>BillStreet3. </summary>
+		///<summary>BillStreet3. Inherited from Order</summary>
 		BillStreet3,
-		///<summary>BillCity. </summary>
+		///<summary>BillCity. Inherited from Order</summary>
 		BillCity,
-		///<summary>BillStateProvCode. </summary>
+		///<summary>BillStateProvCode. Inherited from Order</summary>
 		BillStateProvCode,
-		///<summary>BillPostalCode. </summary>
+		///<summary>BillPostalCode. Inherited from Order</summary>
 		BillPostalCode,
-		///<summary>BillCountryCode. </summary>
+		///<summary>BillCountryCode. Inherited from Order</summary>
 		BillCountryCode,
-		///<summary>BillPhone. </summary>
+		///<summary>BillPhone. Inherited from Order</summary>
 		BillPhone,
-		///<summary>BillFax. </summary>
+		///<summary>BillFax. Inherited from Order</summary>
 		BillFax,
-		///<summary>BillEmail. </summary>
+		///<summary>BillEmail. Inherited from Order</summary>
 		BillEmail,
-		///<summary>BillWebsite. </summary>
+		///<summary>BillWebsite. Inherited from Order</summary>
 		BillWebsite,
-		///<summary>BillAddressValidationSuggestionCount. </summary>
+		///<summary>BillAddressValidationSuggestionCount. Inherited from Order</summary>
 		BillAddressValidationSuggestionCount,
-		///<summary>BillAddressValidationStatus. </summary>
+		///<summary>BillAddressValidationStatus. Inherited from Order</summary>
 		BillAddressValidationStatus,
-		///<summary>BillAddressValidationError. </summary>
+		///<summary>BillAddressValidationError. Inherited from Order</summary>
 		BillAddressValidationError,
-		///<summary>BillResidentialStatus. </summary>
+		///<summary>BillResidentialStatus. Inherited from Order</summary>
 		BillResidentialStatus,
-		///<summary>BillPOBox. </summary>
+		///<summary>BillPOBox. Inherited from Order</summary>
 		BillPOBox,
-		///<summary>BillUSTerritory. </summary>
+		///<summary>BillUSTerritory. Inherited from Order</summary>
 		BillUSTerritory,
-		///<summary>BillMilitaryAddress. </summary>
+		///<summary>BillMilitaryAddress. Inherited from Order</summary>
 		BillMilitaryAddress,
-		///<summary>ShipFirstName. </summary>
+		///<summary>ShipFirstName. Inherited from Order</summary>
 		ShipFirstName,
-		///<summary>ShipMiddleName. </summary>
+		///<summary>ShipMiddleName. Inherited from Order</summary>
 		ShipMiddleName,
-		///<summary>ShipLastName. </summary>
+		///<summary>ShipLastName. Inherited from Order</summary>
 		ShipLastName,
-		///<summary>ShipCompany. </summary>
+		///<summary>ShipCompany. Inherited from Order</summary>
 		ShipCompany,
-		///<summary>ShipStreet1. </summary>
+		///<summary>ShipStreet1. Inherited from Order</summary>
 		ShipStreet1,
-		///<summary>ShipStreet2. </summary>
+		///<summary>ShipStreet2. Inherited from Order</summary>
 		ShipStreet2,
-		///<summary>ShipStreet3. </summary>
+		///<summary>ShipStreet3. Inherited from Order</summary>
 		ShipStreet3,
-		///<summary>ShipCity. </summary>
+		///<summary>ShipCity. Inherited from Order</summary>
 		ShipCity,
-		///<summary>ShipStateProvCode. </summary>
+		///<summary>ShipStateProvCode. Inherited from Order</summary>
 		ShipStateProvCode,
-		///<summary>ShipPostalCode. </summary>
+		///<summary>ShipPostalCode. Inherited from Order</summary>
 		ShipPostalCode,
-		///<summary>ShipCountryCode. </summary>
+		///<summary>ShipCountryCode. Inherited from Order</summary>
 		ShipCountryCode,
-		///<summary>ShipPhone. </summary>
+		///<summary>ShipPhone. Inherited from Order</summary>
 		ShipPhone,
-		///<summary>ShipFax. </summary>
+		///<summary>ShipFax. Inherited from Order</summary>
 		ShipFax,
-		///<summary>ShipEmail. </summary>
+		///<summary>ShipEmail. Inherited from Order</summary>
 		ShipEmail,
-		///<summary>ShipWebsite. </summary>
+		///<summary>ShipWebsite. Inherited from Order</summary>
 		ShipWebsite,
-		///<summary>ShipAddressValidationSuggestionCount. </summary>
+		///<summary>ShipAddressValidationSuggestionCount. Inherited from Order</summary>
 		ShipAddressValidationSuggestionCount,
-		///<summary>ShipAddressValidationStatus. </summary>
+		///<summary>ShipAddressValidationStatus. Inherited from Order</summary>
 		ShipAddressValidationStatus,
-		///<summary>ShipAddressValidationError. </summary>
+		///<summary>ShipAddressValidationError. Inherited from Order</summary>
 		ShipAddressValidationError,
-		///<summary>ShipResidentialStatus. </summary>
+		///<summary>ShipResidentialStatus. Inherited from Order</summary>
 		ShipResidentialStatus,
-		///<summary>ShipPOBox. </summary>
+		///<summary>ShipPOBox. Inherited from Order</summary>
 		ShipPOBox,
-		///<summary>ShipUSTerritory. </summary>
+		///<summary>ShipUSTerritory. Inherited from Order</summary>
 		ShipUSTerritory,
-		///<summary>ShipMilitaryAddress. </summary>
+		///<summary>ShipMilitaryAddress. Inherited from Order</summary>
 		ShipMilitaryAddress,
-		///<summary>RollupItemCount. </summary>
+		///<summary>RollupItemCount. Inherited from Order</summary>
 		RollupItemCount,
-		///<summary>RollupItemName. </summary>
+		///<summary>RollupItemName. Inherited from Order</summary>
 		RollupItemName,
-		///<summary>RollupItemCode. </summary>
+		///<summary>RollupItemCode. Inherited from Order</summary>
 		RollupItemCode,
-		///<summary>RollupItemSKU. </summary>
+		///<summary>RollupItemSKU. Inherited from Order</summary>
 		RollupItemSKU,
-		///<summary>RollupItemLocation. </summary>
+		///<summary>RollupItemLocation. Inherited from Order</summary>
 		RollupItemLocation,
-		///<summary>RollupItemQuantity. </summary>
+		///<summary>RollupItemQuantity. Inherited from Order</summary>
 		RollupItemQuantity,
-		///<summary>RollupItemTotalWeight. </summary>
+		///<summary>RollupItemTotalWeight. Inherited from Order</summary>
 		RollupItemTotalWeight,
-		///<summary>RollupNoteCount. </summary>
+		///<summary>RollupNoteCount. Inherited from Order</summary>
 		RollupNoteCount,
-		///<summary>BillNameParseStatus. </summary>
+		///<summary>BillNameParseStatus. Inherited from Order</summary>
 		BillNameParseStatus,
-		///<summary>BillUnparsedName. </summary>
+		///<summary>BillUnparsedName. Inherited from Order</summary>
 		BillUnparsedName,
-		///<summary>ShipNameParseStatus. </summary>
+		///<summary>ShipNameParseStatus. Inherited from Order</summary>
 		ShipNameParseStatus,
-		///<summary>ShipUnparsedName. </summary>
+		///<summary>ShipUnparsedName. Inherited from Order</summary>
 		ShipUnparsedName,
-		///<summary>ShipSenseHashKey. </summary>
+		///<summary>ShipSenseHashKey. Inherited from Order</summary>
 		ShipSenseHashKey,
-		///<summary>ShipSenseRecognitionStatus. </summary>
+		///<summary>ShipSenseRecognitionStatus. Inherited from Order</summary>
 		ShipSenseRecognitionStatus,
-		///<summary>ShipAddressType. </summary>
+		///<summary>ShipAddressType. Inherited from Order</summary>
 		ShipAddressType,
 		///<summary>OrderID. </summary>
 		OrderID,
@@ -5218,113 +4803,108 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: MagentoStore.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum MagentoStoreFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: MagentoStore.</summary>
+	public enum MagentoStoreFieldIndex
 	{
 		///<summary>StoreID. Inherited from Store</summary>
 		StoreID_Store,
-		///<summary>RowVersion. </summary>
+		///<summary>RowVersion. Inherited from Store</summary>
 		RowVersion,
-		///<summary>License. </summary>
+		///<summary>License. Inherited from Store</summary>
 		License,
-		///<summary>Edition. </summary>
+		///<summary>Edition. Inherited from Store</summary>
 		Edition,
-		///<summary>TypeCode. </summary>
+		///<summary>TypeCode. Inherited from Store</summary>
 		TypeCode,
-		///<summary>Enabled. </summary>
+		///<summary>Enabled. Inherited from Store</summary>
 		Enabled,
-		///<summary>SetupComplete. </summary>
+		///<summary>SetupComplete. Inherited from Store</summary>
 		SetupComplete,
-		///<summary>StoreName. </summary>
+		///<summary>StoreName. Inherited from Store</summary>
 		StoreName,
-		///<summary>Company. </summary>
+		///<summary>Company. Inherited from Store</summary>
 		Company,
-		///<summary>Street1. </summary>
+		///<summary>Street1. Inherited from Store</summary>
 		Street1,
-		///<summary>Street2. </summary>
+		///<summary>Street2. Inherited from Store</summary>
 		Street2,
-		///<summary>Street3. </summary>
+		///<summary>Street3. Inherited from Store</summary>
 		Street3,
-		///<summary>City. </summary>
+		///<summary>City. Inherited from Store</summary>
 		City,
-		///<summary>StateProvCode. </summary>
+		///<summary>StateProvCode. Inherited from Store</summary>
 		StateProvCode,
-		///<summary>PostalCode. </summary>
+		///<summary>PostalCode. Inherited from Store</summary>
 		PostalCode,
-		///<summary>CountryCode. </summary>
+		///<summary>CountryCode. Inherited from Store</summary>
 		CountryCode,
-		///<summary>Phone. </summary>
+		///<summary>Phone. Inherited from Store</summary>
 		Phone,
-		///<summary>Fax. </summary>
+		///<summary>Fax. Inherited from Store</summary>
 		Fax,
-		///<summary>Email. </summary>
+		///<summary>Email. Inherited from Store</summary>
 		Email,
-		///<summary>Website. </summary>
+		///<summary>Website. Inherited from Store</summary>
 		Website,
-		///<summary>AutoDownload. </summary>
+		///<summary>AutoDownload. Inherited from Store</summary>
 		AutoDownload,
-		///<summary>AutoDownloadMinutes. </summary>
+		///<summary>AutoDownloadMinutes. Inherited from Store</summary>
 		AutoDownloadMinutes,
-		///<summary>AutoDownloadOnlyAway. </summary>
+		///<summary>AutoDownloadOnlyAway. Inherited from Store</summary>
 		AutoDownloadOnlyAway,
-		///<summary>AddressValidationSetting. </summary>
+		///<summary>AddressValidationSetting. Inherited from Store</summary>
 		AddressValidationSetting,
-		///<summary>ComputerDownloadPolicy. </summary>
+		///<summary>ComputerDownloadPolicy. Inherited from Store</summary>
 		ComputerDownloadPolicy,
-		///<summary>DefaultEmailAccountID. </summary>
+		///<summary>DefaultEmailAccountID. Inherited from Store</summary>
 		DefaultEmailAccountID,
-		///<summary>ManualOrderPrefix. </summary>
+		///<summary>ManualOrderPrefix. Inherited from Store</summary>
 		ManualOrderPrefix,
-		///<summary>ManualOrderPostfix. </summary>
+		///<summary>ManualOrderPostfix. Inherited from Store</summary>
 		ManualOrderPostfix,
-		///<summary>InitialDownloadDays. </summary>
+		///<summary>InitialDownloadDays. Inherited from Store</summary>
 		InitialDownloadDays,
-		///<summary>InitialDownloadOrder. </summary>
+		///<summary>InitialDownloadOrder. Inherited from Store</summary>
 		InitialDownloadOrder,
 		///<summary>StoreID. Inherited from GenericModuleStore</summary>
 		StoreID_GenericModuleStore,
-		///<summary>ModuleUsername. </summary>
+		///<summary>ModuleUsername. Inherited from GenericModuleStore</summary>
 		ModuleUsername,
-		///<summary>ModulePassword. </summary>
+		///<summary>ModulePassword. Inherited from GenericModuleStore</summary>
 		ModulePassword,
-		///<summary>ModuleUrl. </summary>
+		///<summary>ModuleUrl. Inherited from GenericModuleStore</summary>
 		ModuleUrl,
-		///<summary>ModuleVersion. </summary>
+		///<summary>ModuleVersion. Inherited from GenericModuleStore</summary>
 		ModuleVersion,
-		///<summary>ModulePlatform. </summary>
+		///<summary>ModulePlatform. Inherited from GenericModuleStore</summary>
 		ModulePlatform,
-		///<summary>ModuleDeveloper. </summary>
+		///<summary>ModuleDeveloper. Inherited from GenericModuleStore</summary>
 		ModuleDeveloper,
-		///<summary>ModuleOnlineStoreCode. </summary>
+		///<summary>ModuleOnlineStoreCode. Inherited from GenericModuleStore</summary>
 		ModuleOnlineStoreCode,
-		///<summary>ModuleStatusCodes. </summary>
+		///<summary>ModuleStatusCodes. Inherited from GenericModuleStore</summary>
 		ModuleStatusCodes,
-		///<summary>ModuleDownloadPageSize. </summary>
+		///<summary>ModuleDownloadPageSize. Inherited from GenericModuleStore</summary>
 		ModuleDownloadPageSize,
-		///<summary>ModuleRequestTimeout. </summary>
+		///<summary>ModuleRequestTimeout. Inherited from GenericModuleStore</summary>
 		ModuleRequestTimeout,
-		///<summary>ModuleDownloadStrategy. </summary>
+		///<summary>ModuleDownloadStrategy. Inherited from GenericModuleStore</summary>
 		ModuleDownloadStrategy,
-		///<summary>ModuleOnlineStatusSupport. </summary>
+		///<summary>ModuleOnlineStatusSupport. Inherited from GenericModuleStore</summary>
 		ModuleOnlineStatusSupport,
-		///<summary>ModuleOnlineStatusDataType. </summary>
+		///<summary>ModuleOnlineStatusDataType. Inherited from GenericModuleStore</summary>
 		ModuleOnlineStatusDataType,
-		///<summary>ModuleOnlineCustomerSupport. </summary>
+		///<summary>ModuleOnlineCustomerSupport. Inherited from GenericModuleStore</summary>
 		ModuleOnlineCustomerSupport,
-		///<summary>ModuleOnlineCustomerDataType. </summary>
+		///<summary>ModuleOnlineCustomerDataType. Inherited from GenericModuleStore</summary>
 		ModuleOnlineCustomerDataType,
-		///<summary>ModuleOnlineShipmentDetails. </summary>
+		///<summary>ModuleOnlineShipmentDetails. Inherited from GenericModuleStore</summary>
 		ModuleOnlineShipmentDetails,
-		///<summary>ModuleHttpExpect100Continue. </summary>
+		///<summary>ModuleHttpExpect100Continue. Inherited from GenericModuleStore</summary>
 		ModuleHttpExpect100Continue,
-		///<summary>ModuleResponseEncoding. </summary>
+		///<summary>ModuleResponseEncoding. Inherited from GenericModuleStore</summary>
 		ModuleResponseEncoding,
-		///<summary>SchemaVersion. </summary>
+		///<summary>SchemaVersion. Inherited from GenericModuleStore</summary>
 		SchemaVersion,
 		///<summary>StoreID. </summary>
 		StoreID,
@@ -5335,161 +4915,156 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: MarketplaceAdvisorOrder.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum MarketplaceAdvisorOrderFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: MarketplaceAdvisorOrder.</summary>
+	public enum MarketplaceAdvisorOrderFieldIndex
 	{
 		///<summary>OrderID. Inherited from Order</summary>
 		OrderID_Order,
-		///<summary>RowVersion. </summary>
+		///<summary>RowVersion. Inherited from Order</summary>
 		RowVersion,
-		///<summary>StoreID. </summary>
+		///<summary>StoreID. Inherited from Order</summary>
 		StoreID,
-		///<summary>CustomerID. </summary>
+		///<summary>CustomerID. Inherited from Order</summary>
 		CustomerID,
-		///<summary>OrderNumber. </summary>
+		///<summary>OrderNumber. Inherited from Order</summary>
 		OrderNumber,
-		///<summary>OrderNumberComplete. </summary>
+		///<summary>OrderNumberComplete. Inherited from Order</summary>
 		OrderNumberComplete,
-		///<summary>OrderDate. </summary>
+		///<summary>OrderDate. Inherited from Order</summary>
 		OrderDate,
-		///<summary>OrderTotal. </summary>
+		///<summary>OrderTotal. Inherited from Order</summary>
 		OrderTotal,
-		///<summary>LocalStatus. </summary>
+		///<summary>LocalStatus. Inherited from Order</summary>
 		LocalStatus,
-		///<summary>IsManual. </summary>
+		///<summary>IsManual. Inherited from Order</summary>
 		IsManual,
-		///<summary>OnlineLastModified. </summary>
+		///<summary>OnlineLastModified. Inherited from Order</summary>
 		OnlineLastModified,
-		///<summary>OnlineCustomerID. </summary>
+		///<summary>OnlineCustomerID. Inherited from Order</summary>
 		OnlineCustomerID,
-		///<summary>OnlineStatus. </summary>
+		///<summary>OnlineStatus. Inherited from Order</summary>
 		OnlineStatus,
-		///<summary>OnlineStatusCode. </summary>
+		///<summary>OnlineStatusCode. Inherited from Order</summary>
 		OnlineStatusCode,
-		///<summary>RequestedShipping. </summary>
+		///<summary>RequestedShipping. Inherited from Order</summary>
 		RequestedShipping,
-		///<summary>BillFirstName. </summary>
+		///<summary>BillFirstName. Inherited from Order</summary>
 		BillFirstName,
-		///<summary>BillMiddleName. </summary>
+		///<summary>BillMiddleName. Inherited from Order</summary>
 		BillMiddleName,
-		///<summary>BillLastName. </summary>
+		///<summary>BillLastName. Inherited from Order</summary>
 		BillLastName,
-		///<summary>BillCompany. </summary>
+		///<summary>BillCompany. Inherited from Order</summary>
 		BillCompany,
-		///<summary>BillStreet1. </summary>
+		///<summary>BillStreet1. Inherited from Order</summary>
 		BillStreet1,
-		///<summary>BillStreet2. </summary>
+		///<summary>BillStreet2. Inherited from Order</summary>
 		BillStreet2,
-		///<summary>BillStreet3. </summary>
+		///<summary>BillStreet3. Inherited from Order</summary>
 		BillStreet3,
-		///<summary>BillCity. </summary>
+		///<summary>BillCity. Inherited from Order</summary>
 		BillCity,
-		///<summary>BillStateProvCode. </summary>
+		///<summary>BillStateProvCode. Inherited from Order</summary>
 		BillStateProvCode,
-		///<summary>BillPostalCode. </summary>
+		///<summary>BillPostalCode. Inherited from Order</summary>
 		BillPostalCode,
-		///<summary>BillCountryCode. </summary>
+		///<summary>BillCountryCode. Inherited from Order</summary>
 		BillCountryCode,
-		///<summary>BillPhone. </summary>
+		///<summary>BillPhone. Inherited from Order</summary>
 		BillPhone,
-		///<summary>BillFax. </summary>
+		///<summary>BillFax. Inherited from Order</summary>
 		BillFax,
-		///<summary>BillEmail. </summary>
+		///<summary>BillEmail. Inherited from Order</summary>
 		BillEmail,
-		///<summary>BillWebsite. </summary>
+		///<summary>BillWebsite. Inherited from Order</summary>
 		BillWebsite,
-		///<summary>BillAddressValidationSuggestionCount. </summary>
+		///<summary>BillAddressValidationSuggestionCount. Inherited from Order</summary>
 		BillAddressValidationSuggestionCount,
-		///<summary>BillAddressValidationStatus. </summary>
+		///<summary>BillAddressValidationStatus. Inherited from Order</summary>
 		BillAddressValidationStatus,
-		///<summary>BillAddressValidationError. </summary>
+		///<summary>BillAddressValidationError. Inherited from Order</summary>
 		BillAddressValidationError,
-		///<summary>BillResidentialStatus. </summary>
+		///<summary>BillResidentialStatus. Inherited from Order</summary>
 		BillResidentialStatus,
-		///<summary>BillPOBox. </summary>
+		///<summary>BillPOBox. Inherited from Order</summary>
 		BillPOBox,
-		///<summary>BillUSTerritory. </summary>
+		///<summary>BillUSTerritory. Inherited from Order</summary>
 		BillUSTerritory,
-		///<summary>BillMilitaryAddress. </summary>
+		///<summary>BillMilitaryAddress. Inherited from Order</summary>
 		BillMilitaryAddress,
-		///<summary>ShipFirstName. </summary>
+		///<summary>ShipFirstName. Inherited from Order</summary>
 		ShipFirstName,
-		///<summary>ShipMiddleName. </summary>
+		///<summary>ShipMiddleName. Inherited from Order</summary>
 		ShipMiddleName,
-		///<summary>ShipLastName. </summary>
+		///<summary>ShipLastName. Inherited from Order</summary>
 		ShipLastName,
-		///<summary>ShipCompany. </summary>
+		///<summary>ShipCompany. Inherited from Order</summary>
 		ShipCompany,
-		///<summary>ShipStreet1. </summary>
+		///<summary>ShipStreet1. Inherited from Order</summary>
 		ShipStreet1,
-		///<summary>ShipStreet2. </summary>
+		///<summary>ShipStreet2. Inherited from Order</summary>
 		ShipStreet2,
-		///<summary>ShipStreet3. </summary>
+		///<summary>ShipStreet3. Inherited from Order</summary>
 		ShipStreet3,
-		///<summary>ShipCity. </summary>
+		///<summary>ShipCity. Inherited from Order</summary>
 		ShipCity,
-		///<summary>ShipStateProvCode. </summary>
+		///<summary>ShipStateProvCode. Inherited from Order</summary>
 		ShipStateProvCode,
-		///<summary>ShipPostalCode. </summary>
+		///<summary>ShipPostalCode. Inherited from Order</summary>
 		ShipPostalCode,
-		///<summary>ShipCountryCode. </summary>
+		///<summary>ShipCountryCode. Inherited from Order</summary>
 		ShipCountryCode,
-		///<summary>ShipPhone. </summary>
+		///<summary>ShipPhone. Inherited from Order</summary>
 		ShipPhone,
-		///<summary>ShipFax. </summary>
+		///<summary>ShipFax. Inherited from Order</summary>
 		ShipFax,
-		///<summary>ShipEmail. </summary>
+		///<summary>ShipEmail. Inherited from Order</summary>
 		ShipEmail,
-		///<summary>ShipWebsite. </summary>
+		///<summary>ShipWebsite. Inherited from Order</summary>
 		ShipWebsite,
-		///<summary>ShipAddressValidationSuggestionCount. </summary>
+		///<summary>ShipAddressValidationSuggestionCount. Inherited from Order</summary>
 		ShipAddressValidationSuggestionCount,
-		///<summary>ShipAddressValidationStatus. </summary>
+		///<summary>ShipAddressValidationStatus. Inherited from Order</summary>
 		ShipAddressValidationStatus,
-		///<summary>ShipAddressValidationError. </summary>
+		///<summary>ShipAddressValidationError. Inherited from Order</summary>
 		ShipAddressValidationError,
-		///<summary>ShipResidentialStatus. </summary>
+		///<summary>ShipResidentialStatus. Inherited from Order</summary>
 		ShipResidentialStatus,
-		///<summary>ShipPOBox. </summary>
+		///<summary>ShipPOBox. Inherited from Order</summary>
 		ShipPOBox,
-		///<summary>ShipUSTerritory. </summary>
+		///<summary>ShipUSTerritory. Inherited from Order</summary>
 		ShipUSTerritory,
-		///<summary>ShipMilitaryAddress. </summary>
+		///<summary>ShipMilitaryAddress. Inherited from Order</summary>
 		ShipMilitaryAddress,
-		///<summary>RollupItemCount. </summary>
+		///<summary>RollupItemCount. Inherited from Order</summary>
 		RollupItemCount,
-		///<summary>RollupItemName. </summary>
+		///<summary>RollupItemName. Inherited from Order</summary>
 		RollupItemName,
-		///<summary>RollupItemCode. </summary>
+		///<summary>RollupItemCode. Inherited from Order</summary>
 		RollupItemCode,
-		///<summary>RollupItemSKU. </summary>
+		///<summary>RollupItemSKU. Inherited from Order</summary>
 		RollupItemSKU,
-		///<summary>RollupItemLocation. </summary>
+		///<summary>RollupItemLocation. Inherited from Order</summary>
 		RollupItemLocation,
-		///<summary>RollupItemQuantity. </summary>
+		///<summary>RollupItemQuantity. Inherited from Order</summary>
 		RollupItemQuantity,
-		///<summary>RollupItemTotalWeight. </summary>
+		///<summary>RollupItemTotalWeight. Inherited from Order</summary>
 		RollupItemTotalWeight,
-		///<summary>RollupNoteCount. </summary>
+		///<summary>RollupNoteCount. Inherited from Order</summary>
 		RollupNoteCount,
-		///<summary>BillNameParseStatus. </summary>
+		///<summary>BillNameParseStatus. Inherited from Order</summary>
 		BillNameParseStatus,
-		///<summary>BillUnparsedName. </summary>
+		///<summary>BillUnparsedName. Inherited from Order</summary>
 		BillUnparsedName,
-		///<summary>ShipNameParseStatus. </summary>
+		///<summary>ShipNameParseStatus. Inherited from Order</summary>
 		ShipNameParseStatus,
-		///<summary>ShipUnparsedName. </summary>
+		///<summary>ShipUnparsedName. Inherited from Order</summary>
 		ShipUnparsedName,
-		///<summary>ShipSenseHashKey. </summary>
+		///<summary>ShipSenseHashKey. Inherited from Order</summary>
 		ShipSenseHashKey,
-		///<summary>ShipSenseRecognitionStatus. </summary>
+		///<summary>ShipSenseRecognitionStatus. Inherited from Order</summary>
 		ShipSenseRecognitionStatus,
-		///<summary>ShipAddressType. </summary>
+		///<summary>ShipAddressType. Inherited from Order</summary>
 		ShipAddressType,
 		///<summary>OrderID. </summary>
 		OrderID,
@@ -5504,73 +5079,68 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: MarketplaceAdvisorStore.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum MarketplaceAdvisorStoreFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: MarketplaceAdvisorStore.</summary>
+	public enum MarketplaceAdvisorStoreFieldIndex
 	{
 		///<summary>StoreID. Inherited from Store</summary>
 		StoreID_Store,
-		///<summary>RowVersion. </summary>
+		///<summary>RowVersion. Inherited from Store</summary>
 		RowVersion,
-		///<summary>License. </summary>
+		///<summary>License. Inherited from Store</summary>
 		License,
-		///<summary>Edition. </summary>
+		///<summary>Edition. Inherited from Store</summary>
 		Edition,
-		///<summary>TypeCode. </summary>
+		///<summary>TypeCode. Inherited from Store</summary>
 		TypeCode,
-		///<summary>Enabled. </summary>
+		///<summary>Enabled. Inherited from Store</summary>
 		Enabled,
-		///<summary>SetupComplete. </summary>
+		///<summary>SetupComplete. Inherited from Store</summary>
 		SetupComplete,
-		///<summary>StoreName. </summary>
+		///<summary>StoreName. Inherited from Store</summary>
 		StoreName,
-		///<summary>Company. </summary>
+		///<summary>Company. Inherited from Store</summary>
 		Company,
-		///<summary>Street1. </summary>
+		///<summary>Street1. Inherited from Store</summary>
 		Street1,
-		///<summary>Street2. </summary>
+		///<summary>Street2. Inherited from Store</summary>
 		Street2,
-		///<summary>Street3. </summary>
+		///<summary>Street3. Inherited from Store</summary>
 		Street3,
-		///<summary>City. </summary>
+		///<summary>City. Inherited from Store</summary>
 		City,
-		///<summary>StateProvCode. </summary>
+		///<summary>StateProvCode. Inherited from Store</summary>
 		StateProvCode,
-		///<summary>PostalCode. </summary>
+		///<summary>PostalCode. Inherited from Store</summary>
 		PostalCode,
-		///<summary>CountryCode. </summary>
+		///<summary>CountryCode. Inherited from Store</summary>
 		CountryCode,
-		///<summary>Phone. </summary>
+		///<summary>Phone. Inherited from Store</summary>
 		Phone,
-		///<summary>Fax. </summary>
+		///<summary>Fax. Inherited from Store</summary>
 		Fax,
-		///<summary>Email. </summary>
+		///<summary>Email. Inherited from Store</summary>
 		Email,
-		///<summary>Website. </summary>
+		///<summary>Website. Inherited from Store</summary>
 		Website,
-		///<summary>AutoDownload. </summary>
+		///<summary>AutoDownload. Inherited from Store</summary>
 		AutoDownload,
-		///<summary>AutoDownloadMinutes. </summary>
+		///<summary>AutoDownloadMinutes. Inherited from Store</summary>
 		AutoDownloadMinutes,
-		///<summary>AutoDownloadOnlyAway. </summary>
+		///<summary>AutoDownloadOnlyAway. Inherited from Store</summary>
 		AutoDownloadOnlyAway,
-		///<summary>AddressValidationSetting. </summary>
+		///<summary>AddressValidationSetting. Inherited from Store</summary>
 		AddressValidationSetting,
-		///<summary>ComputerDownloadPolicy. </summary>
+		///<summary>ComputerDownloadPolicy. Inherited from Store</summary>
 		ComputerDownloadPolicy,
-		///<summary>DefaultEmailAccountID. </summary>
+		///<summary>DefaultEmailAccountID. Inherited from Store</summary>
 		DefaultEmailAccountID,
-		///<summary>ManualOrderPrefix. </summary>
+		///<summary>ManualOrderPrefix. Inherited from Store</summary>
 		ManualOrderPrefix,
-		///<summary>ManualOrderPostfix. </summary>
+		///<summary>ManualOrderPostfix. Inherited from Store</summary>
 		ManualOrderPostfix,
-		///<summary>InitialDownloadDays. </summary>
+		///<summary>InitialDownloadDays. Inherited from Store</summary>
 		InitialDownloadDays,
-		///<summary>InitialDownloadOrder. </summary>
+		///<summary>InitialDownloadOrder. Inherited from Store</summary>
 		InitialDownloadOrder,
 		///<summary>StoreID. </summary>
 		StoreID,
@@ -5585,27 +5155,22 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: MivaOrderItemAttribute.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum MivaOrderItemAttributeFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: MivaOrderItemAttribute.</summary>
+	public enum MivaOrderItemAttributeFieldIndex
 	{
 		///<summary>OrderItemAttributeID. Inherited from OrderItemAttribute</summary>
 		OrderItemAttributeID_OrderItemAttribute,
-		///<summary>RowVersion. </summary>
+		///<summary>RowVersion. Inherited from OrderItemAttribute</summary>
 		RowVersion,
-		///<summary>OrderItemID. </summary>
+		///<summary>OrderItemID. Inherited from OrderItemAttribute</summary>
 		OrderItemID,
-		///<summary>Name. </summary>
+		///<summary>Name. Inherited from OrderItemAttribute</summary>
 		Name,
-		///<summary>Description. </summary>
+		///<summary>Description. Inherited from OrderItemAttribute</summary>
 		Description,
-		///<summary>UnitPrice. </summary>
+		///<summary>UnitPrice. Inherited from OrderItemAttribute</summary>
 		UnitPrice,
-		///<summary>IsManual. </summary>
+		///<summary>IsManual. Inherited from OrderItemAttribute</summary>
 		IsManual,
 		///<summary>OrderItemAttributeID. </summary>
 		OrderItemAttributeID,
@@ -5618,113 +5183,108 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: MivaStore.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum MivaStoreFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: MivaStore.</summary>
+	public enum MivaStoreFieldIndex
 	{
 		///<summary>StoreID. Inherited from Store</summary>
 		StoreID_Store,
-		///<summary>RowVersion. </summary>
+		///<summary>RowVersion. Inherited from Store</summary>
 		RowVersion,
-		///<summary>License. </summary>
+		///<summary>License. Inherited from Store</summary>
 		License,
-		///<summary>Edition. </summary>
+		///<summary>Edition. Inherited from Store</summary>
 		Edition,
-		///<summary>TypeCode. </summary>
+		///<summary>TypeCode. Inherited from Store</summary>
 		TypeCode,
-		///<summary>Enabled. </summary>
+		///<summary>Enabled. Inherited from Store</summary>
 		Enabled,
-		///<summary>SetupComplete. </summary>
+		///<summary>SetupComplete. Inherited from Store</summary>
 		SetupComplete,
-		///<summary>StoreName. </summary>
+		///<summary>StoreName. Inherited from Store</summary>
 		StoreName,
-		///<summary>Company. </summary>
+		///<summary>Company. Inherited from Store</summary>
 		Company,
-		///<summary>Street1. </summary>
+		///<summary>Street1. Inherited from Store</summary>
 		Street1,
-		///<summary>Street2. </summary>
+		///<summary>Street2. Inherited from Store</summary>
 		Street2,
-		///<summary>Street3. </summary>
+		///<summary>Street3. Inherited from Store</summary>
 		Street3,
-		///<summary>City. </summary>
+		///<summary>City. Inherited from Store</summary>
 		City,
-		///<summary>StateProvCode. </summary>
+		///<summary>StateProvCode. Inherited from Store</summary>
 		StateProvCode,
-		///<summary>PostalCode. </summary>
+		///<summary>PostalCode. Inherited from Store</summary>
 		PostalCode,
-		///<summary>CountryCode. </summary>
+		///<summary>CountryCode. Inherited from Store</summary>
 		CountryCode,
-		///<summary>Phone. </summary>
+		///<summary>Phone. Inherited from Store</summary>
 		Phone,
-		///<summary>Fax. </summary>
+		///<summary>Fax. Inherited from Store</summary>
 		Fax,
-		///<summary>Email. </summary>
+		///<summary>Email. Inherited from Store</summary>
 		Email,
-		///<summary>Website. </summary>
+		///<summary>Website. Inherited from Store</summary>
 		Website,
-		///<summary>AutoDownload. </summary>
+		///<summary>AutoDownload. Inherited from Store</summary>
 		AutoDownload,
-		///<summary>AutoDownloadMinutes. </summary>
+		///<summary>AutoDownloadMinutes. Inherited from Store</summary>
 		AutoDownloadMinutes,
-		///<summary>AutoDownloadOnlyAway. </summary>
+		///<summary>AutoDownloadOnlyAway. Inherited from Store</summary>
 		AutoDownloadOnlyAway,
-		///<summary>AddressValidationSetting. </summary>
+		///<summary>AddressValidationSetting. Inherited from Store</summary>
 		AddressValidationSetting,
-		///<summary>ComputerDownloadPolicy. </summary>
+		///<summary>ComputerDownloadPolicy. Inherited from Store</summary>
 		ComputerDownloadPolicy,
-		///<summary>DefaultEmailAccountID. </summary>
+		///<summary>DefaultEmailAccountID. Inherited from Store</summary>
 		DefaultEmailAccountID,
-		///<summary>ManualOrderPrefix. </summary>
+		///<summary>ManualOrderPrefix. Inherited from Store</summary>
 		ManualOrderPrefix,
-		///<summary>ManualOrderPostfix. </summary>
+		///<summary>ManualOrderPostfix. Inherited from Store</summary>
 		ManualOrderPostfix,
-		///<summary>InitialDownloadDays. </summary>
+		///<summary>InitialDownloadDays. Inherited from Store</summary>
 		InitialDownloadDays,
-		///<summary>InitialDownloadOrder. </summary>
+		///<summary>InitialDownloadOrder. Inherited from Store</summary>
 		InitialDownloadOrder,
 		///<summary>StoreID. Inherited from GenericModuleStore</summary>
 		StoreID_GenericModuleStore,
-		///<summary>ModuleUsername. </summary>
+		///<summary>ModuleUsername. Inherited from GenericModuleStore</summary>
 		ModuleUsername,
-		///<summary>ModulePassword. </summary>
+		///<summary>ModulePassword. Inherited from GenericModuleStore</summary>
 		ModulePassword,
-		///<summary>ModuleUrl. </summary>
+		///<summary>ModuleUrl. Inherited from GenericModuleStore</summary>
 		ModuleUrl,
-		///<summary>ModuleVersion. </summary>
+		///<summary>ModuleVersion. Inherited from GenericModuleStore</summary>
 		ModuleVersion,
-		///<summary>ModulePlatform. </summary>
+		///<summary>ModulePlatform. Inherited from GenericModuleStore</summary>
 		ModulePlatform,
-		///<summary>ModuleDeveloper. </summary>
+		///<summary>ModuleDeveloper. Inherited from GenericModuleStore</summary>
 		ModuleDeveloper,
-		///<summary>ModuleOnlineStoreCode. </summary>
+		///<summary>ModuleOnlineStoreCode. Inherited from GenericModuleStore</summary>
 		ModuleOnlineStoreCode,
-		///<summary>ModuleStatusCodes. </summary>
+		///<summary>ModuleStatusCodes. Inherited from GenericModuleStore</summary>
 		ModuleStatusCodes,
-		///<summary>ModuleDownloadPageSize. </summary>
+		///<summary>ModuleDownloadPageSize. Inherited from GenericModuleStore</summary>
 		ModuleDownloadPageSize,
-		///<summary>ModuleRequestTimeout. </summary>
+		///<summary>ModuleRequestTimeout. Inherited from GenericModuleStore</summary>
 		ModuleRequestTimeout,
-		///<summary>ModuleDownloadStrategy. </summary>
+		///<summary>ModuleDownloadStrategy. Inherited from GenericModuleStore</summary>
 		ModuleDownloadStrategy,
-		///<summary>ModuleOnlineStatusSupport. </summary>
+		///<summary>ModuleOnlineStatusSupport. Inherited from GenericModuleStore</summary>
 		ModuleOnlineStatusSupport,
-		///<summary>ModuleOnlineStatusDataType. </summary>
+		///<summary>ModuleOnlineStatusDataType. Inherited from GenericModuleStore</summary>
 		ModuleOnlineStatusDataType,
-		///<summary>ModuleOnlineCustomerSupport. </summary>
+		///<summary>ModuleOnlineCustomerSupport. Inherited from GenericModuleStore</summary>
 		ModuleOnlineCustomerSupport,
-		///<summary>ModuleOnlineCustomerDataType. </summary>
+		///<summary>ModuleOnlineCustomerDataType. Inherited from GenericModuleStore</summary>
 		ModuleOnlineCustomerDataType,
-		///<summary>ModuleOnlineShipmentDetails. </summary>
+		///<summary>ModuleOnlineShipmentDetails. Inherited from GenericModuleStore</summary>
 		ModuleOnlineShipmentDetails,
-		///<summary>ModuleHttpExpect100Continue. </summary>
+		///<summary>ModuleHttpExpect100Continue. Inherited from GenericModuleStore</summary>
 		ModuleHttpExpect100Continue,
-		///<summary>ModuleResponseEncoding. </summary>
+		///<summary>ModuleResponseEncoding. Inherited from GenericModuleStore</summary>
 		ModuleResponseEncoding,
-		///<summary>SchemaVersion. </summary>
+		///<summary>SchemaVersion. Inherited from GenericModuleStore</summary>
 		SchemaVersion,
 		///<summary>StoreID. </summary>
 		StoreID,
@@ -5741,161 +5301,156 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: NetworkSolutionsOrder.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum NetworkSolutionsOrderFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: NetworkSolutionsOrder.</summary>
+	public enum NetworkSolutionsOrderFieldIndex
 	{
 		///<summary>OrderID. Inherited from Order</summary>
 		OrderID_Order,
-		///<summary>RowVersion. </summary>
+		///<summary>RowVersion. Inherited from Order</summary>
 		RowVersion,
-		///<summary>StoreID. </summary>
+		///<summary>StoreID. Inherited from Order</summary>
 		StoreID,
-		///<summary>CustomerID. </summary>
+		///<summary>CustomerID. Inherited from Order</summary>
 		CustomerID,
-		///<summary>OrderNumber. </summary>
+		///<summary>OrderNumber. Inherited from Order</summary>
 		OrderNumber,
-		///<summary>OrderNumberComplete. </summary>
+		///<summary>OrderNumberComplete. Inherited from Order</summary>
 		OrderNumberComplete,
-		///<summary>OrderDate. </summary>
+		///<summary>OrderDate. Inherited from Order</summary>
 		OrderDate,
-		///<summary>OrderTotal. </summary>
+		///<summary>OrderTotal. Inherited from Order</summary>
 		OrderTotal,
-		///<summary>LocalStatus. </summary>
+		///<summary>LocalStatus. Inherited from Order</summary>
 		LocalStatus,
-		///<summary>IsManual. </summary>
+		///<summary>IsManual. Inherited from Order</summary>
 		IsManual,
-		///<summary>OnlineLastModified. </summary>
+		///<summary>OnlineLastModified. Inherited from Order</summary>
 		OnlineLastModified,
-		///<summary>OnlineCustomerID. </summary>
+		///<summary>OnlineCustomerID. Inherited from Order</summary>
 		OnlineCustomerID,
-		///<summary>OnlineStatus. </summary>
+		///<summary>OnlineStatus. Inherited from Order</summary>
 		OnlineStatus,
-		///<summary>OnlineStatusCode. </summary>
+		///<summary>OnlineStatusCode. Inherited from Order</summary>
 		OnlineStatusCode,
-		///<summary>RequestedShipping. </summary>
+		///<summary>RequestedShipping. Inherited from Order</summary>
 		RequestedShipping,
-		///<summary>BillFirstName. </summary>
+		///<summary>BillFirstName. Inherited from Order</summary>
 		BillFirstName,
-		///<summary>BillMiddleName. </summary>
+		///<summary>BillMiddleName. Inherited from Order</summary>
 		BillMiddleName,
-		///<summary>BillLastName. </summary>
+		///<summary>BillLastName. Inherited from Order</summary>
 		BillLastName,
-		///<summary>BillCompany. </summary>
+		///<summary>BillCompany. Inherited from Order</summary>
 		BillCompany,
-		///<summary>BillStreet1. </summary>
+		///<summary>BillStreet1. Inherited from Order</summary>
 		BillStreet1,
-		///<summary>BillStreet2. </summary>
+		///<summary>BillStreet2. Inherited from Order</summary>
 		BillStreet2,
-		///<summary>BillStreet3. </summary>
+		///<summary>BillStreet3. Inherited from Order</summary>
 		BillStreet3,
-		///<summary>BillCity. </summary>
+		///<summary>BillCity. Inherited from Order</summary>
 		BillCity,
-		///<summary>BillStateProvCode. </summary>
+		///<summary>BillStateProvCode. Inherited from Order</summary>
 		BillStateProvCode,
-		///<summary>BillPostalCode. </summary>
+		///<summary>BillPostalCode. Inherited from Order</summary>
 		BillPostalCode,
-		///<summary>BillCountryCode. </summary>
+		///<summary>BillCountryCode. Inherited from Order</summary>
 		BillCountryCode,
-		///<summary>BillPhone. </summary>
+		///<summary>BillPhone. Inherited from Order</summary>
 		BillPhone,
-		///<summary>BillFax. </summary>
+		///<summary>BillFax. Inherited from Order</summary>
 		BillFax,
-		///<summary>BillEmail. </summary>
+		///<summary>BillEmail. Inherited from Order</summary>
 		BillEmail,
-		///<summary>BillWebsite. </summary>
+		///<summary>BillWebsite. Inherited from Order</summary>
 		BillWebsite,
-		///<summary>BillAddressValidationSuggestionCount. </summary>
+		///<summary>BillAddressValidationSuggestionCount. Inherited from Order</summary>
 		BillAddressValidationSuggestionCount,
-		///<summary>BillAddressValidationStatus. </summary>
+		///<summary>BillAddressValidationStatus. Inherited from Order</summary>
 		BillAddressValidationStatus,
-		///<summary>BillAddressValidationError. </summary>
+		///<summary>BillAddressValidationError. Inherited from Order</summary>
 		BillAddressValidationError,
-		///<summary>BillResidentialStatus. </summary>
+		///<summary>BillResidentialStatus. Inherited from Order</summary>
 		BillResidentialStatus,
-		///<summary>BillPOBox. </summary>
+		///<summary>BillPOBox. Inherited from Order</summary>
 		BillPOBox,
-		///<summary>BillUSTerritory. </summary>
+		///<summary>BillUSTerritory. Inherited from Order</summary>
 		BillUSTerritory,
-		///<summary>BillMilitaryAddress. </summary>
+		///<summary>BillMilitaryAddress. Inherited from Order</summary>
 		BillMilitaryAddress,
-		///<summary>ShipFirstName. </summary>
+		///<summary>ShipFirstName. Inherited from Order</summary>
 		ShipFirstName,
-		///<summary>ShipMiddleName. </summary>
+		///<summary>ShipMiddleName. Inherited from Order</summary>
 		ShipMiddleName,
-		///<summary>ShipLastName. </summary>
+		///<summary>ShipLastName. Inherited from Order</summary>
 		ShipLastName,
-		///<summary>ShipCompany. </summary>
+		///<summary>ShipCompany. Inherited from Order</summary>
 		ShipCompany,
-		///<summary>ShipStreet1. </summary>
+		///<summary>ShipStreet1. Inherited from Order</summary>
 		ShipStreet1,
-		///<summary>ShipStreet2. </summary>
+		///<summary>ShipStreet2. Inherited from Order</summary>
 		ShipStreet2,
-		///<summary>ShipStreet3. </summary>
+		///<summary>ShipStreet3. Inherited from Order</summary>
 		ShipStreet3,
-		///<summary>ShipCity. </summary>
+		///<summary>ShipCity. Inherited from Order</summary>
 		ShipCity,
-		///<summary>ShipStateProvCode. </summary>
+		///<summary>ShipStateProvCode. Inherited from Order</summary>
 		ShipStateProvCode,
-		///<summary>ShipPostalCode. </summary>
+		///<summary>ShipPostalCode. Inherited from Order</summary>
 		ShipPostalCode,
-		///<summary>ShipCountryCode. </summary>
+		///<summary>ShipCountryCode. Inherited from Order</summary>
 		ShipCountryCode,
-		///<summary>ShipPhone. </summary>
+		///<summary>ShipPhone. Inherited from Order</summary>
 		ShipPhone,
-		///<summary>ShipFax. </summary>
+		///<summary>ShipFax. Inherited from Order</summary>
 		ShipFax,
-		///<summary>ShipEmail. </summary>
+		///<summary>ShipEmail. Inherited from Order</summary>
 		ShipEmail,
-		///<summary>ShipWebsite. </summary>
+		///<summary>ShipWebsite. Inherited from Order</summary>
 		ShipWebsite,
-		///<summary>ShipAddressValidationSuggestionCount. </summary>
+		///<summary>ShipAddressValidationSuggestionCount. Inherited from Order</summary>
 		ShipAddressValidationSuggestionCount,
-		///<summary>ShipAddressValidationStatus. </summary>
+		///<summary>ShipAddressValidationStatus. Inherited from Order</summary>
 		ShipAddressValidationStatus,
-		///<summary>ShipAddressValidationError. </summary>
+		///<summary>ShipAddressValidationError. Inherited from Order</summary>
 		ShipAddressValidationError,
-		///<summary>ShipResidentialStatus. </summary>
+		///<summary>ShipResidentialStatus. Inherited from Order</summary>
 		ShipResidentialStatus,
-		///<summary>ShipPOBox. </summary>
+		///<summary>ShipPOBox. Inherited from Order</summary>
 		ShipPOBox,
-		///<summary>ShipUSTerritory. </summary>
+		///<summary>ShipUSTerritory. Inherited from Order</summary>
 		ShipUSTerritory,
-		///<summary>ShipMilitaryAddress. </summary>
+		///<summary>ShipMilitaryAddress. Inherited from Order</summary>
 		ShipMilitaryAddress,
-		///<summary>RollupItemCount. </summary>
+		///<summary>RollupItemCount. Inherited from Order</summary>
 		RollupItemCount,
-		///<summary>RollupItemName. </summary>
+		///<summary>RollupItemName. Inherited from Order</summary>
 		RollupItemName,
-		///<summary>RollupItemCode. </summary>
+		///<summary>RollupItemCode. Inherited from Order</summary>
 		RollupItemCode,
-		///<summary>RollupItemSKU. </summary>
+		///<summary>RollupItemSKU. Inherited from Order</summary>
 		RollupItemSKU,
-		///<summary>RollupItemLocation. </summary>
+		///<summary>RollupItemLocation. Inherited from Order</summary>
 		RollupItemLocation,
-		///<summary>RollupItemQuantity. </summary>
+		///<summary>RollupItemQuantity. Inherited from Order</summary>
 		RollupItemQuantity,
-		///<summary>RollupItemTotalWeight. </summary>
+		///<summary>RollupItemTotalWeight. Inherited from Order</summary>
 		RollupItemTotalWeight,
-		///<summary>RollupNoteCount. </summary>
+		///<summary>RollupNoteCount. Inherited from Order</summary>
 		RollupNoteCount,
-		///<summary>BillNameParseStatus. </summary>
+		///<summary>BillNameParseStatus. Inherited from Order</summary>
 		BillNameParseStatus,
-		///<summary>BillUnparsedName. </summary>
+		///<summary>BillUnparsedName. Inherited from Order</summary>
 		BillUnparsedName,
-		///<summary>ShipNameParseStatus. </summary>
+		///<summary>ShipNameParseStatus. Inherited from Order</summary>
 		ShipNameParseStatus,
-		///<summary>ShipUnparsedName. </summary>
+		///<summary>ShipUnparsedName. Inherited from Order</summary>
 		ShipUnparsedName,
-		///<summary>ShipSenseHashKey. </summary>
+		///<summary>ShipSenseHashKey. Inherited from Order</summary>
 		ShipSenseHashKey,
-		///<summary>ShipSenseRecognitionStatus. </summary>
+		///<summary>ShipSenseRecognitionStatus. Inherited from Order</summary>
 		ShipSenseRecognitionStatus,
-		///<summary>ShipAddressType. </summary>
+		///<summary>ShipAddressType. Inherited from Order</summary>
 		ShipAddressType,
 		///<summary>OrderID. </summary>
 		OrderID,
@@ -5904,73 +5459,68 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: NetworkSolutionsStore.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum NetworkSolutionsStoreFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: NetworkSolutionsStore.</summary>
+	public enum NetworkSolutionsStoreFieldIndex
 	{
 		///<summary>StoreID. Inherited from Store</summary>
 		StoreID_Store,
-		///<summary>RowVersion. </summary>
+		///<summary>RowVersion. Inherited from Store</summary>
 		RowVersion,
-		///<summary>License. </summary>
+		///<summary>License. Inherited from Store</summary>
 		License,
-		///<summary>Edition. </summary>
+		///<summary>Edition. Inherited from Store</summary>
 		Edition,
-		///<summary>TypeCode. </summary>
+		///<summary>TypeCode. Inherited from Store</summary>
 		TypeCode,
-		///<summary>Enabled. </summary>
+		///<summary>Enabled. Inherited from Store</summary>
 		Enabled,
-		///<summary>SetupComplete. </summary>
+		///<summary>SetupComplete. Inherited from Store</summary>
 		SetupComplete,
-		///<summary>StoreName. </summary>
+		///<summary>StoreName. Inherited from Store</summary>
 		StoreName,
-		///<summary>Company. </summary>
+		///<summary>Company. Inherited from Store</summary>
 		Company,
-		///<summary>Street1. </summary>
+		///<summary>Street1. Inherited from Store</summary>
 		Street1,
-		///<summary>Street2. </summary>
+		///<summary>Street2. Inherited from Store</summary>
 		Street2,
-		///<summary>Street3. </summary>
+		///<summary>Street3. Inherited from Store</summary>
 		Street3,
-		///<summary>City. </summary>
+		///<summary>City. Inherited from Store</summary>
 		City,
-		///<summary>StateProvCode. </summary>
+		///<summary>StateProvCode. Inherited from Store</summary>
 		StateProvCode,
-		///<summary>PostalCode. </summary>
+		///<summary>PostalCode. Inherited from Store</summary>
 		PostalCode,
-		///<summary>CountryCode. </summary>
+		///<summary>CountryCode. Inherited from Store</summary>
 		CountryCode,
-		///<summary>Phone. </summary>
+		///<summary>Phone. Inherited from Store</summary>
 		Phone,
-		///<summary>Fax. </summary>
+		///<summary>Fax. Inherited from Store</summary>
 		Fax,
-		///<summary>Email. </summary>
+		///<summary>Email. Inherited from Store</summary>
 		Email,
-		///<summary>Website. </summary>
+		///<summary>Website. Inherited from Store</summary>
 		Website,
-		///<summary>AutoDownload. </summary>
+		///<summary>AutoDownload. Inherited from Store</summary>
 		AutoDownload,
-		///<summary>AutoDownloadMinutes. </summary>
+		///<summary>AutoDownloadMinutes. Inherited from Store</summary>
 		AutoDownloadMinutes,
-		///<summary>AutoDownloadOnlyAway. </summary>
+		///<summary>AutoDownloadOnlyAway. Inherited from Store</summary>
 		AutoDownloadOnlyAway,
-		///<summary>AddressValidationSetting. </summary>
+		///<summary>AddressValidationSetting. Inherited from Store</summary>
 		AddressValidationSetting,
-		///<summary>ComputerDownloadPolicy. </summary>
+		///<summary>ComputerDownloadPolicy. Inherited from Store</summary>
 		ComputerDownloadPolicy,
-		///<summary>DefaultEmailAccountID. </summary>
+		///<summary>DefaultEmailAccountID. Inherited from Store</summary>
 		DefaultEmailAccountID,
-		///<summary>ManualOrderPrefix. </summary>
+		///<summary>ManualOrderPrefix. Inherited from Store</summary>
 		ManualOrderPrefix,
-		///<summary>ManualOrderPostfix. </summary>
+		///<summary>ManualOrderPostfix. Inherited from Store</summary>
 		ManualOrderPostfix,
-		///<summary>InitialDownloadDays. </summary>
+		///<summary>InitialDownloadDays. Inherited from Store</summary>
 		InitialDownloadDays,
-		///<summary>InitialDownloadOrder. </summary>
+		///<summary>InitialDownloadOrder. Inherited from Store</summary>
 		InitialDownloadOrder,
 		///<summary>StoreID. </summary>
 		StoreID,
@@ -5985,161 +5535,156 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: NeweggOrder.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum NeweggOrderFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: NeweggOrder.</summary>
+	public enum NeweggOrderFieldIndex
 	{
 		///<summary>OrderID. Inherited from Order</summary>
 		OrderID_Order,
-		///<summary>RowVersion. </summary>
+		///<summary>RowVersion. Inherited from Order</summary>
 		RowVersion,
-		///<summary>StoreID. </summary>
+		///<summary>StoreID. Inherited from Order</summary>
 		StoreID,
-		///<summary>CustomerID. </summary>
+		///<summary>CustomerID. Inherited from Order</summary>
 		CustomerID,
-		///<summary>OrderNumber. </summary>
+		///<summary>OrderNumber. Inherited from Order</summary>
 		OrderNumber,
-		///<summary>OrderNumberComplete. </summary>
+		///<summary>OrderNumberComplete. Inherited from Order</summary>
 		OrderNumberComplete,
-		///<summary>OrderDate. </summary>
+		///<summary>OrderDate. Inherited from Order</summary>
 		OrderDate,
-		///<summary>OrderTotal. </summary>
+		///<summary>OrderTotal. Inherited from Order</summary>
 		OrderTotal,
-		///<summary>LocalStatus. </summary>
+		///<summary>LocalStatus. Inherited from Order</summary>
 		LocalStatus,
-		///<summary>IsManual. </summary>
+		///<summary>IsManual. Inherited from Order</summary>
 		IsManual,
-		///<summary>OnlineLastModified. </summary>
+		///<summary>OnlineLastModified. Inherited from Order</summary>
 		OnlineLastModified,
-		///<summary>OnlineCustomerID. </summary>
+		///<summary>OnlineCustomerID. Inherited from Order</summary>
 		OnlineCustomerID,
-		///<summary>OnlineStatus. </summary>
+		///<summary>OnlineStatus. Inherited from Order</summary>
 		OnlineStatus,
-		///<summary>OnlineStatusCode. </summary>
+		///<summary>OnlineStatusCode. Inherited from Order</summary>
 		OnlineStatusCode,
-		///<summary>RequestedShipping. </summary>
+		///<summary>RequestedShipping. Inherited from Order</summary>
 		RequestedShipping,
-		///<summary>BillFirstName. </summary>
+		///<summary>BillFirstName. Inherited from Order</summary>
 		BillFirstName,
-		///<summary>BillMiddleName. </summary>
+		///<summary>BillMiddleName. Inherited from Order</summary>
 		BillMiddleName,
-		///<summary>BillLastName. </summary>
+		///<summary>BillLastName. Inherited from Order</summary>
 		BillLastName,
-		///<summary>BillCompany. </summary>
+		///<summary>BillCompany. Inherited from Order</summary>
 		BillCompany,
-		///<summary>BillStreet1. </summary>
+		///<summary>BillStreet1. Inherited from Order</summary>
 		BillStreet1,
-		///<summary>BillStreet2. </summary>
+		///<summary>BillStreet2. Inherited from Order</summary>
 		BillStreet2,
-		///<summary>BillStreet3. </summary>
+		///<summary>BillStreet3. Inherited from Order</summary>
 		BillStreet3,
-		///<summary>BillCity. </summary>
+		///<summary>BillCity. Inherited from Order</summary>
 		BillCity,
-		///<summary>BillStateProvCode. </summary>
+		///<summary>BillStateProvCode. Inherited from Order</summary>
 		BillStateProvCode,
-		///<summary>BillPostalCode. </summary>
+		///<summary>BillPostalCode. Inherited from Order</summary>
 		BillPostalCode,
-		///<summary>BillCountryCode. </summary>
+		///<summary>BillCountryCode. Inherited from Order</summary>
 		BillCountryCode,
-		///<summary>BillPhone. </summary>
+		///<summary>BillPhone. Inherited from Order</summary>
 		BillPhone,
-		///<summary>BillFax. </summary>
+		///<summary>BillFax. Inherited from Order</summary>
 		BillFax,
-		///<summary>BillEmail. </summary>
+		///<summary>BillEmail. Inherited from Order</summary>
 		BillEmail,
-		///<summary>BillWebsite. </summary>
+		///<summary>BillWebsite. Inherited from Order</summary>
 		BillWebsite,
-		///<summary>BillAddressValidationSuggestionCount. </summary>
+		///<summary>BillAddressValidationSuggestionCount. Inherited from Order</summary>
 		BillAddressValidationSuggestionCount,
-		///<summary>BillAddressValidationStatus. </summary>
+		///<summary>BillAddressValidationStatus. Inherited from Order</summary>
 		BillAddressValidationStatus,
-		///<summary>BillAddressValidationError. </summary>
+		///<summary>BillAddressValidationError. Inherited from Order</summary>
 		BillAddressValidationError,
-		///<summary>BillResidentialStatus. </summary>
+		///<summary>BillResidentialStatus. Inherited from Order</summary>
 		BillResidentialStatus,
-		///<summary>BillPOBox. </summary>
+		///<summary>BillPOBox. Inherited from Order</summary>
 		BillPOBox,
-		///<summary>BillUSTerritory. </summary>
+		///<summary>BillUSTerritory. Inherited from Order</summary>
 		BillUSTerritory,
-		///<summary>BillMilitaryAddress. </summary>
+		///<summary>BillMilitaryAddress. Inherited from Order</summary>
 		BillMilitaryAddress,
-		///<summary>ShipFirstName. </summary>
+		///<summary>ShipFirstName. Inherited from Order</summary>
 		ShipFirstName,
-		///<summary>ShipMiddleName. </summary>
+		///<summary>ShipMiddleName. Inherited from Order</summary>
 		ShipMiddleName,
-		///<summary>ShipLastName. </summary>
+		///<summary>ShipLastName. Inherited from Order</summary>
 		ShipLastName,
-		///<summary>ShipCompany. </summary>
+		///<summary>ShipCompany. Inherited from Order</summary>
 		ShipCompany,
-		///<summary>ShipStreet1. </summary>
+		///<summary>ShipStreet1. Inherited from Order</summary>
 		ShipStreet1,
-		///<summary>ShipStreet2. </summary>
+		///<summary>ShipStreet2. Inherited from Order</summary>
 		ShipStreet2,
-		///<summary>ShipStreet3. </summary>
+		///<summary>ShipStreet3. Inherited from Order</summary>
 		ShipStreet3,
-		///<summary>ShipCity. </summary>
+		///<summary>ShipCity. Inherited from Order</summary>
 		ShipCity,
-		///<summary>ShipStateProvCode. </summary>
+		///<summary>ShipStateProvCode. Inherited from Order</summary>
 		ShipStateProvCode,
-		///<summary>ShipPostalCode. </summary>
+		///<summary>ShipPostalCode. Inherited from Order</summary>
 		ShipPostalCode,
-		///<summary>ShipCountryCode. </summary>
+		///<summary>ShipCountryCode. Inherited from Order</summary>
 		ShipCountryCode,
-		///<summary>ShipPhone. </summary>
+		///<summary>ShipPhone. Inherited from Order</summary>
 		ShipPhone,
-		///<summary>ShipFax. </summary>
+		///<summary>ShipFax. Inherited from Order</summary>
 		ShipFax,
-		///<summary>ShipEmail. </summary>
+		///<summary>ShipEmail. Inherited from Order</summary>
 		ShipEmail,
-		///<summary>ShipWebsite. </summary>
+		///<summary>ShipWebsite. Inherited from Order</summary>
 		ShipWebsite,
-		///<summary>ShipAddressValidationSuggestionCount. </summary>
+		///<summary>ShipAddressValidationSuggestionCount. Inherited from Order</summary>
 		ShipAddressValidationSuggestionCount,
-		///<summary>ShipAddressValidationStatus. </summary>
+		///<summary>ShipAddressValidationStatus. Inherited from Order</summary>
 		ShipAddressValidationStatus,
-		///<summary>ShipAddressValidationError. </summary>
+		///<summary>ShipAddressValidationError. Inherited from Order</summary>
 		ShipAddressValidationError,
-		///<summary>ShipResidentialStatus. </summary>
+		///<summary>ShipResidentialStatus. Inherited from Order</summary>
 		ShipResidentialStatus,
-		///<summary>ShipPOBox. </summary>
+		///<summary>ShipPOBox. Inherited from Order</summary>
 		ShipPOBox,
-		///<summary>ShipUSTerritory. </summary>
+		///<summary>ShipUSTerritory. Inherited from Order</summary>
 		ShipUSTerritory,
-		///<summary>ShipMilitaryAddress. </summary>
+		///<summary>ShipMilitaryAddress. Inherited from Order</summary>
 		ShipMilitaryAddress,
-		///<summary>RollupItemCount. </summary>
+		///<summary>RollupItemCount. Inherited from Order</summary>
 		RollupItemCount,
-		///<summary>RollupItemName. </summary>
+		///<summary>RollupItemName. Inherited from Order</summary>
 		RollupItemName,
-		///<summary>RollupItemCode. </summary>
+		///<summary>RollupItemCode. Inherited from Order</summary>
 		RollupItemCode,
-		///<summary>RollupItemSKU. </summary>
+		///<summary>RollupItemSKU. Inherited from Order</summary>
 		RollupItemSKU,
-		///<summary>RollupItemLocation. </summary>
+		///<summary>RollupItemLocation. Inherited from Order</summary>
 		RollupItemLocation,
-		///<summary>RollupItemQuantity. </summary>
+		///<summary>RollupItemQuantity. Inherited from Order</summary>
 		RollupItemQuantity,
-		///<summary>RollupItemTotalWeight. </summary>
+		///<summary>RollupItemTotalWeight. Inherited from Order</summary>
 		RollupItemTotalWeight,
-		///<summary>RollupNoteCount. </summary>
+		///<summary>RollupNoteCount. Inherited from Order</summary>
 		RollupNoteCount,
-		///<summary>BillNameParseStatus. </summary>
+		///<summary>BillNameParseStatus. Inherited from Order</summary>
 		BillNameParseStatus,
-		///<summary>BillUnparsedName. </summary>
+		///<summary>BillUnparsedName. Inherited from Order</summary>
 		BillUnparsedName,
-		///<summary>ShipNameParseStatus. </summary>
+		///<summary>ShipNameParseStatus. Inherited from Order</summary>
 		ShipNameParseStatus,
-		///<summary>ShipUnparsedName. </summary>
+		///<summary>ShipUnparsedName. Inherited from Order</summary>
 		ShipUnparsedName,
-		///<summary>ShipSenseHashKey. </summary>
+		///<summary>ShipSenseHashKey. Inherited from Order</summary>
 		ShipSenseHashKey,
-		///<summary>ShipSenseRecognitionStatus. </summary>
+		///<summary>ShipSenseRecognitionStatus. Inherited from Order</summary>
 		ShipSenseRecognitionStatus,
-		///<summary>ShipAddressType. </summary>
+		///<summary>ShipAddressType. Inherited from Order</summary>
 		ShipAddressType,
 		///<summary>OrderID. </summary>
 		OrderID,
@@ -6152,49 +5697,44 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: NeweggOrderItem.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum NeweggOrderItemFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: NeweggOrderItem.</summary>
+	public enum NeweggOrderItemFieldIndex
 	{
 		///<summary>OrderItemID. Inherited from OrderItem</summary>
 		OrderItemID_OrderItem,
-		///<summary>RowVersion. </summary>
+		///<summary>RowVersion. Inherited from OrderItem</summary>
 		RowVersion,
-		///<summary>OrderID. </summary>
+		///<summary>OrderID. Inherited from OrderItem</summary>
 		OrderID,
-		///<summary>Name. </summary>
+		///<summary>Name. Inherited from OrderItem</summary>
 		Name,
-		///<summary>Code. </summary>
+		///<summary>Code. Inherited from OrderItem</summary>
 		Code,
-		///<summary>SKU. </summary>
+		///<summary>SKU. Inherited from OrderItem</summary>
 		SKU,
-		///<summary>ISBN. </summary>
+		///<summary>ISBN. Inherited from OrderItem</summary>
 		ISBN,
-		///<summary>UPC. </summary>
+		///<summary>UPC. Inherited from OrderItem</summary>
 		UPC,
-		///<summary>Description. </summary>
+		///<summary>Description. Inherited from OrderItem</summary>
 		Description,
-		///<summary>Location. </summary>
+		///<summary>Location. Inherited from OrderItem</summary>
 		Location,
-		///<summary>Image. </summary>
+		///<summary>Image. Inherited from OrderItem</summary>
 		Image,
-		///<summary>Thumbnail. </summary>
+		///<summary>Thumbnail. Inherited from OrderItem</summary>
 		Thumbnail,
-		///<summary>UnitPrice. </summary>
+		///<summary>UnitPrice. Inherited from OrderItem</summary>
 		UnitPrice,
-		///<summary>UnitCost. </summary>
+		///<summary>UnitCost. Inherited from OrderItem</summary>
 		UnitCost,
-		///<summary>Weight. </summary>
+		///<summary>Weight. Inherited from OrderItem</summary>
 		Weight,
-		///<summary>Quantity. </summary>
+		///<summary>Quantity. Inherited from OrderItem</summary>
 		Quantity,
-		///<summary>LocalStatus. </summary>
+		///<summary>LocalStatus. Inherited from OrderItem</summary>
 		LocalStatus,
-		///<summary>IsManual. </summary>
+		///<summary>IsManual. Inherited from OrderItem</summary>
 		IsManual,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
@@ -6213,73 +5753,68 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: NeweggStore.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum NeweggStoreFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: NeweggStore.</summary>
+	public enum NeweggStoreFieldIndex
 	{
 		///<summary>StoreID. Inherited from Store</summary>
 		StoreID_Store,
-		///<summary>RowVersion. </summary>
+		///<summary>RowVersion. Inherited from Store</summary>
 		RowVersion,
-		///<summary>License. </summary>
+		///<summary>License. Inherited from Store</summary>
 		License,
-		///<summary>Edition. </summary>
+		///<summary>Edition. Inherited from Store</summary>
 		Edition,
-		///<summary>TypeCode. </summary>
+		///<summary>TypeCode. Inherited from Store</summary>
 		TypeCode,
-		///<summary>Enabled. </summary>
+		///<summary>Enabled. Inherited from Store</summary>
 		Enabled,
-		///<summary>SetupComplete. </summary>
+		///<summary>SetupComplete. Inherited from Store</summary>
 		SetupComplete,
-		///<summary>StoreName. </summary>
+		///<summary>StoreName. Inherited from Store</summary>
 		StoreName,
-		///<summary>Company. </summary>
+		///<summary>Company. Inherited from Store</summary>
 		Company,
-		///<summary>Street1. </summary>
+		///<summary>Street1. Inherited from Store</summary>
 		Street1,
-		///<summary>Street2. </summary>
+		///<summary>Street2. Inherited from Store</summary>
 		Street2,
-		///<summary>Street3. </summary>
+		///<summary>Street3. Inherited from Store</summary>
 		Street3,
-		///<summary>City. </summary>
+		///<summary>City. Inherited from Store</summary>
 		City,
-		///<summary>StateProvCode. </summary>
+		///<summary>StateProvCode. Inherited from Store</summary>
 		StateProvCode,
-		///<summary>PostalCode. </summary>
+		///<summary>PostalCode. Inherited from Store</summary>
 		PostalCode,
-		///<summary>CountryCode. </summary>
+		///<summary>CountryCode. Inherited from Store</summary>
 		CountryCode,
-		///<summary>Phone. </summary>
+		///<summary>Phone. Inherited from Store</summary>
 		Phone,
-		///<summary>Fax. </summary>
+		///<summary>Fax. Inherited from Store</summary>
 		Fax,
-		///<summary>Email. </summary>
+		///<summary>Email. Inherited from Store</summary>
 		Email,
-		///<summary>Website. </summary>
+		///<summary>Website. Inherited from Store</summary>
 		Website,
-		///<summary>AutoDownload. </summary>
+		///<summary>AutoDownload. Inherited from Store</summary>
 		AutoDownload,
-		///<summary>AutoDownloadMinutes. </summary>
+		///<summary>AutoDownloadMinutes. Inherited from Store</summary>
 		AutoDownloadMinutes,
-		///<summary>AutoDownloadOnlyAway. </summary>
+		///<summary>AutoDownloadOnlyAway. Inherited from Store</summary>
 		AutoDownloadOnlyAway,
-		///<summary>AddressValidationSetting. </summary>
+		///<summary>AddressValidationSetting. Inherited from Store</summary>
 		AddressValidationSetting,
-		///<summary>ComputerDownloadPolicy. </summary>
+		///<summary>ComputerDownloadPolicy. Inherited from Store</summary>
 		ComputerDownloadPolicy,
-		///<summary>DefaultEmailAccountID. </summary>
+		///<summary>DefaultEmailAccountID. Inherited from Store</summary>
 		DefaultEmailAccountID,
-		///<summary>ManualOrderPrefix. </summary>
+		///<summary>ManualOrderPrefix. Inherited from Store</summary>
 		ManualOrderPrefix,
-		///<summary>ManualOrderPostfix. </summary>
+		///<summary>ManualOrderPostfix. Inherited from Store</summary>
 		ManualOrderPostfix,
-		///<summary>InitialDownloadDays. </summary>
+		///<summary>InitialDownloadDays. Inherited from Store</summary>
 		InitialDownloadDays,
-		///<summary>InitialDownloadOrder. </summary>
+		///<summary>InitialDownloadOrder. Inherited from Store</summary>
 		InitialDownloadOrder,
 		///<summary>StoreID. </summary>
 		StoreID,
@@ -6294,13 +5829,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: Note.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum NoteFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: Note.</summary>
+	public enum NoteFieldIndex
 	{
 		///<summary>NoteID. </summary>
 		NoteID,
@@ -6321,13 +5851,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ObjectLabel.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum ObjectLabelFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ObjectLabel.</summary>
+	public enum ObjectLabelFieldIndex
 	{
 		///<summary>ObjectID. </summary>
 		ObjectID,
@@ -6344,13 +5869,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ObjectReference.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum ObjectReferenceFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ObjectReference.</summary>
+	public enum ObjectReferenceFieldIndex
 	{
 		///<summary>ObjectReferenceID. </summary>
 		ObjectReferenceID,
@@ -6365,13 +5885,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: OnTracAccount.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum OnTracAccountFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: OnTracAccount.</summary>
+	public enum OnTracAccountFieldIndex
 	{
 		///<summary>OnTracAccountID. </summary>
 		OnTracAccountID,
@@ -6408,13 +5923,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: OnTracProfile.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum OnTracProfileFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: OnTracProfile.</summary>
+	public enum OnTracProfileFieldIndex
 	{
 		///<summary>ShippingProfileID. </summary>
 		ShippingProfileID,
@@ -6453,13 +5963,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: OnTracShipment.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum OnTracShipmentFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: OnTracShipment.</summary>
+	public enum OnTracShipmentFieldIndex
 	{
 		///<summary>ShipmentID. </summary>
 		ShipmentID,
@@ -6508,13 +6013,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: Order.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum OrderFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: Order.</summary>
+	public enum OrderFieldIndex
 	{
 		///<summary>OrderID. </summary>
 		OrderID,
@@ -6667,13 +6167,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: OrderCharge.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum OrderChargeFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: OrderCharge.</summary>
+	public enum OrderChargeFieldIndex
 	{
 		///<summary>OrderChargeID. </summary>
 		OrderChargeID,
@@ -6690,13 +6185,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: OrderItem.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum OrderItemFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: OrderItem.</summary>
+	public enum OrderItemFieldIndex
 	{
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
@@ -6737,13 +6227,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: OrderItemAttribute.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum OrderItemAttributeFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: OrderItemAttribute.</summary>
+	public enum OrderItemAttributeFieldIndex
 	{
 		///<summary>OrderItemAttributeID. </summary>
 		OrderItemAttributeID,
@@ -6762,161 +6247,156 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: OrderMotionOrder.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum OrderMotionOrderFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: OrderMotionOrder.</summary>
+	public enum OrderMotionOrderFieldIndex
 	{
 		///<summary>OrderID. Inherited from Order</summary>
 		OrderID_Order,
-		///<summary>RowVersion. </summary>
+		///<summary>RowVersion. Inherited from Order</summary>
 		RowVersion,
-		///<summary>StoreID. </summary>
+		///<summary>StoreID. Inherited from Order</summary>
 		StoreID,
-		///<summary>CustomerID. </summary>
+		///<summary>CustomerID. Inherited from Order</summary>
 		CustomerID,
-		///<summary>OrderNumber. </summary>
+		///<summary>OrderNumber. Inherited from Order</summary>
 		OrderNumber,
-		///<summary>OrderNumberComplete. </summary>
+		///<summary>OrderNumberComplete. Inherited from Order</summary>
 		OrderNumberComplete,
-		///<summary>OrderDate. </summary>
+		///<summary>OrderDate. Inherited from Order</summary>
 		OrderDate,
-		///<summary>OrderTotal. </summary>
+		///<summary>OrderTotal. Inherited from Order</summary>
 		OrderTotal,
-		///<summary>LocalStatus. </summary>
+		///<summary>LocalStatus. Inherited from Order</summary>
 		LocalStatus,
-		///<summary>IsManual. </summary>
+		///<summary>IsManual. Inherited from Order</summary>
 		IsManual,
-		///<summary>OnlineLastModified. </summary>
+		///<summary>OnlineLastModified. Inherited from Order</summary>
 		OnlineLastModified,
-		///<summary>OnlineCustomerID. </summary>
+		///<summary>OnlineCustomerID. Inherited from Order</summary>
 		OnlineCustomerID,
-		///<summary>OnlineStatus. </summary>
+		///<summary>OnlineStatus. Inherited from Order</summary>
 		OnlineStatus,
-		///<summary>OnlineStatusCode. </summary>
+		///<summary>OnlineStatusCode. Inherited from Order</summary>
 		OnlineStatusCode,
-		///<summary>RequestedShipping. </summary>
+		///<summary>RequestedShipping. Inherited from Order</summary>
 		RequestedShipping,
-		///<summary>BillFirstName. </summary>
+		///<summary>BillFirstName. Inherited from Order</summary>
 		BillFirstName,
-		///<summary>BillMiddleName. </summary>
+		///<summary>BillMiddleName. Inherited from Order</summary>
 		BillMiddleName,
-		///<summary>BillLastName. </summary>
+		///<summary>BillLastName. Inherited from Order</summary>
 		BillLastName,
-		///<summary>BillCompany. </summary>
+		///<summary>BillCompany. Inherited from Order</summary>
 		BillCompany,
-		///<summary>BillStreet1. </summary>
+		///<summary>BillStreet1. Inherited from Order</summary>
 		BillStreet1,
-		///<summary>BillStreet2. </summary>
+		///<summary>BillStreet2. Inherited from Order</summary>
 		BillStreet2,
-		///<summary>BillStreet3. </summary>
+		///<summary>BillStreet3. Inherited from Order</summary>
 		BillStreet3,
-		///<summary>BillCity. </summary>
+		///<summary>BillCity. Inherited from Order</summary>
 		BillCity,
-		///<summary>BillStateProvCode. </summary>
+		///<summary>BillStateProvCode. Inherited from Order</summary>
 		BillStateProvCode,
-		///<summary>BillPostalCode. </summary>
+		///<summary>BillPostalCode. Inherited from Order</summary>
 		BillPostalCode,
-		///<summary>BillCountryCode. </summary>
+		///<summary>BillCountryCode. Inherited from Order</summary>
 		BillCountryCode,
-		///<summary>BillPhone. </summary>
+		///<summary>BillPhone. Inherited from Order</summary>
 		BillPhone,
-		///<summary>BillFax. </summary>
+		///<summary>BillFax. Inherited from Order</summary>
 		BillFax,
-		///<summary>BillEmail. </summary>
+		///<summary>BillEmail. Inherited from Order</summary>
 		BillEmail,
-		///<summary>BillWebsite. </summary>
+		///<summary>BillWebsite. Inherited from Order</summary>
 		BillWebsite,
-		///<summary>BillAddressValidationSuggestionCount. </summary>
+		///<summary>BillAddressValidationSuggestionCount. Inherited from Order</summary>
 		BillAddressValidationSuggestionCount,
-		///<summary>BillAddressValidationStatus. </summary>
+		///<summary>BillAddressValidationStatus. Inherited from Order</summary>
 		BillAddressValidationStatus,
-		///<summary>BillAddressValidationError. </summary>
+		///<summary>BillAddressValidationError. Inherited from Order</summary>
 		BillAddressValidationError,
-		///<summary>BillResidentialStatus. </summary>
+		///<summary>BillResidentialStatus. Inherited from Order</summary>
 		BillResidentialStatus,
-		///<summary>BillPOBox. </summary>
+		///<summary>BillPOBox. Inherited from Order</summary>
 		BillPOBox,
-		///<summary>BillUSTerritory. </summary>
+		///<summary>BillUSTerritory. Inherited from Order</summary>
 		BillUSTerritory,
-		///<summary>BillMilitaryAddress. </summary>
+		///<summary>BillMilitaryAddress. Inherited from Order</summary>
 		BillMilitaryAddress,
-		///<summary>ShipFirstName. </summary>
+		///<summary>ShipFirstName. Inherited from Order</summary>
 		ShipFirstName,
-		///<summary>ShipMiddleName. </summary>
+		///<summary>ShipMiddleName. Inherited from Order</summary>
 		ShipMiddleName,
-		///<summary>ShipLastName. </summary>
+		///<summary>ShipLastName. Inherited from Order</summary>
 		ShipLastName,
-		///<summary>ShipCompany. </summary>
+		///<summary>ShipCompany. Inherited from Order</summary>
 		ShipCompany,
-		///<summary>ShipStreet1. </summary>
+		///<summary>ShipStreet1. Inherited from Order</summary>
 		ShipStreet1,
-		///<summary>ShipStreet2. </summary>
+		///<summary>ShipStreet2. Inherited from Order</summary>
 		ShipStreet2,
-		///<summary>ShipStreet3. </summary>
+		///<summary>ShipStreet3. Inherited from Order</summary>
 		ShipStreet3,
-		///<summary>ShipCity. </summary>
+		///<summary>ShipCity. Inherited from Order</summary>
 		ShipCity,
-		///<summary>ShipStateProvCode. </summary>
+		///<summary>ShipStateProvCode. Inherited from Order</summary>
 		ShipStateProvCode,
-		///<summary>ShipPostalCode. </summary>
+		///<summary>ShipPostalCode. Inherited from Order</summary>
 		ShipPostalCode,
-		///<summary>ShipCountryCode. </summary>
+		///<summary>ShipCountryCode. Inherited from Order</summary>
 		ShipCountryCode,
-		///<summary>ShipPhone. </summary>
+		///<summary>ShipPhone. Inherited from Order</summary>
 		ShipPhone,
-		///<summary>ShipFax. </summary>
+		///<summary>ShipFax. Inherited from Order</summary>
 		ShipFax,
-		///<summary>ShipEmail. </summary>
+		///<summary>ShipEmail. Inherited from Order</summary>
 		ShipEmail,
-		///<summary>ShipWebsite. </summary>
+		///<summary>ShipWebsite. Inherited from Order</summary>
 		ShipWebsite,
-		///<summary>ShipAddressValidationSuggestionCount. </summary>
+		///<summary>ShipAddressValidationSuggestionCount. Inherited from Order</summary>
 		ShipAddressValidationSuggestionCount,
-		///<summary>ShipAddressValidationStatus. </summary>
+		///<summary>ShipAddressValidationStatus. Inherited from Order</summary>
 		ShipAddressValidationStatus,
-		///<summary>ShipAddressValidationError. </summary>
+		///<summary>ShipAddressValidationError. Inherited from Order</summary>
 		ShipAddressValidationError,
-		///<summary>ShipResidentialStatus. </summary>
+		///<summary>ShipResidentialStatus. Inherited from Order</summary>
 		ShipResidentialStatus,
-		///<summary>ShipPOBox. </summary>
+		///<summary>ShipPOBox. Inherited from Order</summary>
 		ShipPOBox,
-		///<summary>ShipUSTerritory. </summary>
+		///<summary>ShipUSTerritory. Inherited from Order</summary>
 		ShipUSTerritory,
-		///<summary>ShipMilitaryAddress. </summary>
+		///<summary>ShipMilitaryAddress. Inherited from Order</summary>
 		ShipMilitaryAddress,
-		///<summary>RollupItemCount. </summary>
+		///<summary>RollupItemCount. Inherited from Order</summary>
 		RollupItemCount,
-		///<summary>RollupItemName. </summary>
+		///<summary>RollupItemName. Inherited from Order</summary>
 		RollupItemName,
-		///<summary>RollupItemCode. </summary>
+		///<summary>RollupItemCode. Inherited from Order</summary>
 		RollupItemCode,
-		///<summary>RollupItemSKU. </summary>
+		///<summary>RollupItemSKU. Inherited from Order</summary>
 		RollupItemSKU,
-		///<summary>RollupItemLocation. </summary>
+		///<summary>RollupItemLocation. Inherited from Order</summary>
 		RollupItemLocation,
-		///<summary>RollupItemQuantity. </summary>
+		///<summary>RollupItemQuantity. Inherited from Order</summary>
 		RollupItemQuantity,
-		///<summary>RollupItemTotalWeight. </summary>
+		///<summary>RollupItemTotalWeight. Inherited from Order</summary>
 		RollupItemTotalWeight,
-		///<summary>RollupNoteCount. </summary>
+		///<summary>RollupNoteCount. Inherited from Order</summary>
 		RollupNoteCount,
-		///<summary>BillNameParseStatus. </summary>
+		///<summary>BillNameParseStatus. Inherited from Order</summary>
 		BillNameParseStatus,
-		///<summary>BillUnparsedName. </summary>
+		///<summary>BillUnparsedName. Inherited from Order</summary>
 		BillUnparsedName,
-		///<summary>ShipNameParseStatus. </summary>
+		///<summary>ShipNameParseStatus. Inherited from Order</summary>
 		ShipNameParseStatus,
-		///<summary>ShipUnparsedName. </summary>
+		///<summary>ShipUnparsedName. Inherited from Order</summary>
 		ShipUnparsedName,
-		///<summary>ShipSenseHashKey. </summary>
+		///<summary>ShipSenseHashKey. Inherited from Order</summary>
 		ShipSenseHashKey,
-		///<summary>ShipSenseRecognitionStatus. </summary>
+		///<summary>ShipSenseRecognitionStatus. Inherited from Order</summary>
 		ShipSenseRecognitionStatus,
-		///<summary>ShipAddressType. </summary>
+		///<summary>ShipAddressType. Inherited from Order</summary>
 		ShipAddressType,
 		///<summary>OrderID. </summary>
 		OrderID,
@@ -6929,73 +6409,68 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: OrderMotionStore.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum OrderMotionStoreFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: OrderMotionStore.</summary>
+	public enum OrderMotionStoreFieldIndex
 	{
 		///<summary>StoreID. Inherited from Store</summary>
 		StoreID_Store,
-		///<summary>RowVersion. </summary>
+		///<summary>RowVersion. Inherited from Store</summary>
 		RowVersion,
-		///<summary>License. </summary>
+		///<summary>License. Inherited from Store</summary>
 		License,
-		///<summary>Edition. </summary>
+		///<summary>Edition. Inherited from Store</summary>
 		Edition,
-		///<summary>TypeCode. </summary>
+		///<summary>TypeCode. Inherited from Store</summary>
 		TypeCode,
-		///<summary>Enabled. </summary>
+		///<summary>Enabled. Inherited from Store</summary>
 		Enabled,
-		///<summary>SetupComplete. </summary>
+		///<summary>SetupComplete. Inherited from Store</summary>
 		SetupComplete,
-		///<summary>StoreName. </summary>
+		///<summary>StoreName. Inherited from Store</summary>
 		StoreName,
-		///<summary>Company. </summary>
+		///<summary>Company. Inherited from Store</summary>
 		Company,
-		///<summary>Street1. </summary>
+		///<summary>Street1. Inherited from Store</summary>
 		Street1,
-		///<summary>Street2. </summary>
+		///<summary>Street2. Inherited from Store</summary>
 		Street2,
-		///<summary>Street3. </summary>
+		///<summary>Street3. Inherited from Store</summary>
 		Street3,
-		///<summary>City. </summary>
+		///<summary>City. Inherited from Store</summary>
 		City,
-		///<summary>StateProvCode. </summary>
+		///<summary>StateProvCode. Inherited from Store</summary>
 		StateProvCode,
-		///<summary>PostalCode. </summary>
+		///<summary>PostalCode. Inherited from Store</summary>
 		PostalCode,
-		///<summary>CountryCode. </summary>
+		///<summary>CountryCode. Inherited from Store</summary>
 		CountryCode,
-		///<summary>Phone. </summary>
+		///<summary>Phone. Inherited from Store</summary>
 		Phone,
-		///<summary>Fax. </summary>
+		///<summary>Fax. Inherited from Store</summary>
 		Fax,
-		///<summary>Email. </summary>
+		///<summary>Email. Inherited from Store</summary>
 		Email,
-		///<summary>Website. </summary>
+		///<summary>Website. Inherited from Store</summary>
 		Website,
-		///<summary>AutoDownload. </summary>
+		///<summary>AutoDownload. Inherited from Store</summary>
 		AutoDownload,
-		///<summary>AutoDownloadMinutes. </summary>
+		///<summary>AutoDownloadMinutes. Inherited from Store</summary>
 		AutoDownloadMinutes,
-		///<summary>AutoDownloadOnlyAway. </summary>
+		///<summary>AutoDownloadOnlyAway. Inherited from Store</summary>
 		AutoDownloadOnlyAway,
-		///<summary>AddressValidationSetting. </summary>
+		///<summary>AddressValidationSetting. Inherited from Store</summary>
 		AddressValidationSetting,
-		///<summary>ComputerDownloadPolicy. </summary>
+		///<summary>ComputerDownloadPolicy. Inherited from Store</summary>
 		ComputerDownloadPolicy,
-		///<summary>DefaultEmailAccountID. </summary>
+		///<summary>DefaultEmailAccountID. Inherited from Store</summary>
 		DefaultEmailAccountID,
-		///<summary>ManualOrderPrefix. </summary>
+		///<summary>ManualOrderPrefix. Inherited from Store</summary>
 		ManualOrderPrefix,
-		///<summary>ManualOrderPostfix. </summary>
+		///<summary>ManualOrderPostfix. Inherited from Store</summary>
 		ManualOrderPostfix,
-		///<summary>InitialDownloadDays. </summary>
+		///<summary>InitialDownloadDays. Inherited from Store</summary>
 		InitialDownloadDays,
-		///<summary>InitialDownloadOrder. </summary>
+		///<summary>InitialDownloadOrder. Inherited from Store</summary>
 		InitialDownloadOrder,
 		///<summary>StoreID. </summary>
 		StoreID,
@@ -7006,13 +6481,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: OrderPaymentDetail.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum OrderPaymentDetailFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: OrderPaymentDetail.</summary>
+	public enum OrderPaymentDetailFieldIndex
 	{
 		///<summary>OrderPaymentDetailID. </summary>
 		OrderPaymentDetailID,
@@ -7027,13 +6497,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: OtherProfile.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum OtherProfileFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: OtherProfile.</summary>
+	public enum OtherProfileFieldIndex
 	{
 		///<summary>ShippingProfileID. </summary>
 		ShippingProfileID,
@@ -7044,13 +6509,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: OtherShipment.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum OtherShipmentFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: OtherShipment.</summary>
+	public enum OtherShipmentFieldIndex
 	{
 		///<summary>ShipmentID. </summary>
 		ShipmentID,
@@ -7063,161 +6523,156 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: PayPalOrder.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum PayPalOrderFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: PayPalOrder.</summary>
+	public enum PayPalOrderFieldIndex
 	{
 		///<summary>OrderID. Inherited from Order</summary>
 		OrderID_Order,
-		///<summary>RowVersion. </summary>
+		///<summary>RowVersion. Inherited from Order</summary>
 		RowVersion,
-		///<summary>StoreID. </summary>
+		///<summary>StoreID. Inherited from Order</summary>
 		StoreID,
-		///<summary>CustomerID. </summary>
+		///<summary>CustomerID. Inherited from Order</summary>
 		CustomerID,
-		///<summary>OrderNumber. </summary>
+		///<summary>OrderNumber. Inherited from Order</summary>
 		OrderNumber,
-		///<summary>OrderNumberComplete. </summary>
+		///<summary>OrderNumberComplete. Inherited from Order</summary>
 		OrderNumberComplete,
-		///<summary>OrderDate. </summary>
+		///<summary>OrderDate. Inherited from Order</summary>
 		OrderDate,
-		///<summary>OrderTotal. </summary>
+		///<summary>OrderTotal. Inherited from Order</summary>
 		OrderTotal,
-		///<summary>LocalStatus. </summary>
+		///<summary>LocalStatus. Inherited from Order</summary>
 		LocalStatus,
-		///<summary>IsManual. </summary>
+		///<summary>IsManual. Inherited from Order</summary>
 		IsManual,
-		///<summary>OnlineLastModified. </summary>
+		///<summary>OnlineLastModified. Inherited from Order</summary>
 		OnlineLastModified,
-		///<summary>OnlineCustomerID. </summary>
+		///<summary>OnlineCustomerID. Inherited from Order</summary>
 		OnlineCustomerID,
-		///<summary>OnlineStatus. </summary>
+		///<summary>OnlineStatus. Inherited from Order</summary>
 		OnlineStatus,
-		///<summary>OnlineStatusCode. </summary>
+		///<summary>OnlineStatusCode. Inherited from Order</summary>
 		OnlineStatusCode,
-		///<summary>RequestedShipping. </summary>
+		///<summary>RequestedShipping. Inherited from Order</summary>
 		RequestedShipping,
-		///<summary>BillFirstName. </summary>
+		///<summary>BillFirstName. Inherited from Order</summary>
 		BillFirstName,
-		///<summary>BillMiddleName. </summary>
+		///<summary>BillMiddleName. Inherited from Order</summary>
 		BillMiddleName,
-		///<summary>BillLastName. </summary>
+		///<summary>BillLastName. Inherited from Order</summary>
 		BillLastName,
-		///<summary>BillCompany. </summary>
+		///<summary>BillCompany. Inherited from Order</summary>
 		BillCompany,
-		///<summary>BillStreet1. </summary>
+		///<summary>BillStreet1. Inherited from Order</summary>
 		BillStreet1,
-		///<summary>BillStreet2. </summary>
+		///<summary>BillStreet2. Inherited from Order</summary>
 		BillStreet2,
-		///<summary>BillStreet3. </summary>
+		///<summary>BillStreet3. Inherited from Order</summary>
 		BillStreet3,
-		///<summary>BillCity. </summary>
+		///<summary>BillCity. Inherited from Order</summary>
 		BillCity,
-		///<summary>BillStateProvCode. </summary>
+		///<summary>BillStateProvCode. Inherited from Order</summary>
 		BillStateProvCode,
-		///<summary>BillPostalCode. </summary>
+		///<summary>BillPostalCode. Inherited from Order</summary>
 		BillPostalCode,
-		///<summary>BillCountryCode. </summary>
+		///<summary>BillCountryCode. Inherited from Order</summary>
 		BillCountryCode,
-		///<summary>BillPhone. </summary>
+		///<summary>BillPhone. Inherited from Order</summary>
 		BillPhone,
-		///<summary>BillFax. </summary>
+		///<summary>BillFax. Inherited from Order</summary>
 		BillFax,
-		///<summary>BillEmail. </summary>
+		///<summary>BillEmail. Inherited from Order</summary>
 		BillEmail,
-		///<summary>BillWebsite. </summary>
+		///<summary>BillWebsite. Inherited from Order</summary>
 		BillWebsite,
-		///<summary>BillAddressValidationSuggestionCount. </summary>
+		///<summary>BillAddressValidationSuggestionCount. Inherited from Order</summary>
 		BillAddressValidationSuggestionCount,
-		///<summary>BillAddressValidationStatus. </summary>
+		///<summary>BillAddressValidationStatus. Inherited from Order</summary>
 		BillAddressValidationStatus,
-		///<summary>BillAddressValidationError. </summary>
+		///<summary>BillAddressValidationError. Inherited from Order</summary>
 		BillAddressValidationError,
-		///<summary>BillResidentialStatus. </summary>
+		///<summary>BillResidentialStatus. Inherited from Order</summary>
 		BillResidentialStatus,
-		///<summary>BillPOBox. </summary>
+		///<summary>BillPOBox. Inherited from Order</summary>
 		BillPOBox,
-		///<summary>BillUSTerritory. </summary>
+		///<summary>BillUSTerritory. Inherited from Order</summary>
 		BillUSTerritory,
-		///<summary>BillMilitaryAddress. </summary>
+		///<summary>BillMilitaryAddress. Inherited from Order</summary>
 		BillMilitaryAddress,
-		///<summary>ShipFirstName. </summary>
+		///<summary>ShipFirstName. Inherited from Order</summary>
 		ShipFirstName,
-		///<summary>ShipMiddleName. </summary>
+		///<summary>ShipMiddleName. Inherited from Order</summary>
 		ShipMiddleName,
-		///<summary>ShipLastName. </summary>
+		///<summary>ShipLastName. Inherited from Order</summary>
 		ShipLastName,
-		///<summary>ShipCompany. </summary>
+		///<summary>ShipCompany. Inherited from Order</summary>
 		ShipCompany,
-		///<summary>ShipStreet1. </summary>
+		///<summary>ShipStreet1. Inherited from Order</summary>
 		ShipStreet1,
-		///<summary>ShipStreet2. </summary>
+		///<summary>ShipStreet2. Inherited from Order</summary>
 		ShipStreet2,
-		///<summary>ShipStreet3. </summary>
+		///<summary>ShipStreet3. Inherited from Order</summary>
 		ShipStreet3,
-		///<summary>ShipCity. </summary>
+		///<summary>ShipCity. Inherited from Order</summary>
 		ShipCity,
-		///<summary>ShipStateProvCode. </summary>
+		///<summary>ShipStateProvCode. Inherited from Order</summary>
 		ShipStateProvCode,
-		///<summary>ShipPostalCode. </summary>
+		///<summary>ShipPostalCode. Inherited from Order</summary>
 		ShipPostalCode,
-		///<summary>ShipCountryCode. </summary>
+		///<summary>ShipCountryCode. Inherited from Order</summary>
 		ShipCountryCode,
-		///<summary>ShipPhone. </summary>
+		///<summary>ShipPhone. Inherited from Order</summary>
 		ShipPhone,
-		///<summary>ShipFax. </summary>
+		///<summary>ShipFax. Inherited from Order</summary>
 		ShipFax,
-		///<summary>ShipEmail. </summary>
+		///<summary>ShipEmail. Inherited from Order</summary>
 		ShipEmail,
-		///<summary>ShipWebsite. </summary>
+		///<summary>ShipWebsite. Inherited from Order</summary>
 		ShipWebsite,
-		///<summary>ShipAddressValidationSuggestionCount. </summary>
+		///<summary>ShipAddressValidationSuggestionCount. Inherited from Order</summary>
 		ShipAddressValidationSuggestionCount,
-		///<summary>ShipAddressValidationStatus. </summary>
+		///<summary>ShipAddressValidationStatus. Inherited from Order</summary>
 		ShipAddressValidationStatus,
-		///<summary>ShipAddressValidationError. </summary>
+		///<summary>ShipAddressValidationError. Inherited from Order</summary>
 		ShipAddressValidationError,
-		///<summary>ShipResidentialStatus. </summary>
+		///<summary>ShipResidentialStatus. Inherited from Order</summary>
 		ShipResidentialStatus,
-		///<summary>ShipPOBox. </summary>
+		///<summary>ShipPOBox. Inherited from Order</summary>
 		ShipPOBox,
-		///<summary>ShipUSTerritory. </summary>
+		///<summary>ShipUSTerritory. Inherited from Order</summary>
 		ShipUSTerritory,
-		///<summary>ShipMilitaryAddress. </summary>
+		///<summary>ShipMilitaryAddress. Inherited from Order</summary>
 		ShipMilitaryAddress,
-		///<summary>RollupItemCount. </summary>
+		///<summary>RollupItemCount. Inherited from Order</summary>
 		RollupItemCount,
-		///<summary>RollupItemName. </summary>
+		///<summary>RollupItemName. Inherited from Order</summary>
 		RollupItemName,
-		///<summary>RollupItemCode. </summary>
+		///<summary>RollupItemCode. Inherited from Order</summary>
 		RollupItemCode,
-		///<summary>RollupItemSKU. </summary>
+		///<summary>RollupItemSKU. Inherited from Order</summary>
 		RollupItemSKU,
-		///<summary>RollupItemLocation. </summary>
+		///<summary>RollupItemLocation. Inherited from Order</summary>
 		RollupItemLocation,
-		///<summary>RollupItemQuantity. </summary>
+		///<summary>RollupItemQuantity. Inherited from Order</summary>
 		RollupItemQuantity,
-		///<summary>RollupItemTotalWeight. </summary>
+		///<summary>RollupItemTotalWeight. Inherited from Order</summary>
 		RollupItemTotalWeight,
-		///<summary>RollupNoteCount. </summary>
+		///<summary>RollupNoteCount. Inherited from Order</summary>
 		RollupNoteCount,
-		///<summary>BillNameParseStatus. </summary>
+		///<summary>BillNameParseStatus. Inherited from Order</summary>
 		BillNameParseStatus,
-		///<summary>BillUnparsedName. </summary>
+		///<summary>BillUnparsedName. Inherited from Order</summary>
 		BillUnparsedName,
-		///<summary>ShipNameParseStatus. </summary>
+		///<summary>ShipNameParseStatus. Inherited from Order</summary>
 		ShipNameParseStatus,
-		///<summary>ShipUnparsedName. </summary>
+		///<summary>ShipUnparsedName. Inherited from Order</summary>
 		ShipUnparsedName,
-		///<summary>ShipSenseHashKey. </summary>
+		///<summary>ShipSenseHashKey. Inherited from Order</summary>
 		ShipSenseHashKey,
-		///<summary>ShipSenseRecognitionStatus. </summary>
+		///<summary>ShipSenseRecognitionStatus. Inherited from Order</summary>
 		ShipSenseRecognitionStatus,
-		///<summary>ShipAddressType. </summary>
+		///<summary>ShipAddressType. Inherited from Order</summary>
 		ShipAddressType,
 		///<summary>OrderID. </summary>
 		OrderID,
@@ -7232,73 +6687,68 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: PayPalStore.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum PayPalStoreFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: PayPalStore.</summary>
+	public enum PayPalStoreFieldIndex
 	{
 		///<summary>StoreID. Inherited from Store</summary>
 		StoreID_Store,
-		///<summary>RowVersion. </summary>
+		///<summary>RowVersion. Inherited from Store</summary>
 		RowVersion,
-		///<summary>License. </summary>
+		///<summary>License. Inherited from Store</summary>
 		License,
-		///<summary>Edition. </summary>
+		///<summary>Edition. Inherited from Store</summary>
 		Edition,
-		///<summary>TypeCode. </summary>
+		///<summary>TypeCode. Inherited from Store</summary>
 		TypeCode,
-		///<summary>Enabled. </summary>
+		///<summary>Enabled. Inherited from Store</summary>
 		Enabled,
-		///<summary>SetupComplete. </summary>
+		///<summary>SetupComplete. Inherited from Store</summary>
 		SetupComplete,
-		///<summary>StoreName. </summary>
+		///<summary>StoreName. Inherited from Store</summary>
 		StoreName,
-		///<summary>Company. </summary>
+		///<summary>Company. Inherited from Store</summary>
 		Company,
-		///<summary>Street1. </summary>
+		///<summary>Street1. Inherited from Store</summary>
 		Street1,
-		///<summary>Street2. </summary>
+		///<summary>Street2. Inherited from Store</summary>
 		Street2,
-		///<summary>Street3. </summary>
+		///<summary>Street3. Inherited from Store</summary>
 		Street3,
-		///<summary>City. </summary>
+		///<summary>City. Inherited from Store</summary>
 		City,
-		///<summary>StateProvCode. </summary>
+		///<summary>StateProvCode. Inherited from Store</summary>
 		StateProvCode,
-		///<summary>PostalCode. </summary>
+		///<summary>PostalCode. Inherited from Store</summary>
 		PostalCode,
-		///<summary>CountryCode. </summary>
+		///<summary>CountryCode. Inherited from Store</summary>
 		CountryCode,
-		///<summary>Phone. </summary>
+		///<summary>Phone. Inherited from Store</summary>
 		Phone,
-		///<summary>Fax. </summary>
+		///<summary>Fax. Inherited from Store</summary>
 		Fax,
-		///<summary>Email. </summary>
+		///<summary>Email. Inherited from Store</summary>
 		Email,
-		///<summary>Website. </summary>
+		///<summary>Website. Inherited from Store</summary>
 		Website,
-		///<summary>AutoDownload. </summary>
+		///<summary>AutoDownload. Inherited from Store</summary>
 		AutoDownload,
-		///<summary>AutoDownloadMinutes. </summary>
+		///<summary>AutoDownloadMinutes. Inherited from Store</summary>
 		AutoDownloadMinutes,
-		///<summary>AutoDownloadOnlyAway. </summary>
+		///<summary>AutoDownloadOnlyAway. Inherited from Store</summary>
 		AutoDownloadOnlyAway,
-		///<summary>AddressValidationSetting. </summary>
+		///<summary>AddressValidationSetting. Inherited from Store</summary>
 		AddressValidationSetting,
-		///<summary>ComputerDownloadPolicy. </summary>
+		///<summary>ComputerDownloadPolicy. Inherited from Store</summary>
 		ComputerDownloadPolicy,
-		///<summary>DefaultEmailAccountID. </summary>
+		///<summary>DefaultEmailAccountID. Inherited from Store</summary>
 		DefaultEmailAccountID,
-		///<summary>ManualOrderPrefix. </summary>
+		///<summary>ManualOrderPrefix. Inherited from Store</summary>
 		ManualOrderPrefix,
-		///<summary>ManualOrderPostfix. </summary>
+		///<summary>ManualOrderPostfix. Inherited from Store</summary>
 		ManualOrderPostfix,
-		///<summary>InitialDownloadDays. </summary>
+		///<summary>InitialDownloadDays. Inherited from Store</summary>
 		InitialDownloadDays,
-		///<summary>InitialDownloadOrder. </summary>
+		///<summary>InitialDownloadOrder. Inherited from Store</summary>
 		InitialDownloadOrder,
 		///<summary>StoreID. </summary>
 		StoreID,
@@ -7319,13 +6769,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: Permission.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum PermissionFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: Permission.</summary>
+	public enum PermissionFieldIndex
 	{
 		///<summary>PermissionID. </summary>
 		PermissionID,
@@ -7338,13 +6783,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: PostalProfile.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum PostalProfileFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: PostalProfile.</summary>
+	public enum PostalProfileFieldIndex
 	{
 		///<summary>ShippingProfileID. </summary>
 		ShippingProfileID,
@@ -7393,13 +6833,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: PostalShipment.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum PostalShipmentFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: PostalShipment.</summary>
+	public enum PostalShipmentFieldIndex
 	{
 		///<summary>ShipmentID. </summary>
 		ShipmentID,
@@ -7448,13 +6883,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: PrintResult.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum PrintResultFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: PrintResult.</summary>
+	public enum PrintResultFieldIndex
 	{
 		///<summary>PrintResultID. </summary>
 		PrintResultID,
@@ -7505,161 +6935,156 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ProStoresOrder.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum ProStoresOrderFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ProStoresOrder.</summary>
+	public enum ProStoresOrderFieldIndex
 	{
 		///<summary>OrderID. Inherited from Order</summary>
 		OrderID_Order,
-		///<summary>RowVersion. </summary>
+		///<summary>RowVersion. Inherited from Order</summary>
 		RowVersion,
-		///<summary>StoreID. </summary>
+		///<summary>StoreID. Inherited from Order</summary>
 		StoreID,
-		///<summary>CustomerID. </summary>
+		///<summary>CustomerID. Inherited from Order</summary>
 		CustomerID,
-		///<summary>OrderNumber. </summary>
+		///<summary>OrderNumber. Inherited from Order</summary>
 		OrderNumber,
-		///<summary>OrderNumberComplete. </summary>
+		///<summary>OrderNumberComplete. Inherited from Order</summary>
 		OrderNumberComplete,
-		///<summary>OrderDate. </summary>
+		///<summary>OrderDate. Inherited from Order</summary>
 		OrderDate,
-		///<summary>OrderTotal. </summary>
+		///<summary>OrderTotal. Inherited from Order</summary>
 		OrderTotal,
-		///<summary>LocalStatus. </summary>
+		///<summary>LocalStatus. Inherited from Order</summary>
 		LocalStatus,
-		///<summary>IsManual. </summary>
+		///<summary>IsManual. Inherited from Order</summary>
 		IsManual,
-		///<summary>OnlineLastModified. </summary>
+		///<summary>OnlineLastModified. Inherited from Order</summary>
 		OnlineLastModified,
-		///<summary>OnlineCustomerID. </summary>
+		///<summary>OnlineCustomerID. Inherited from Order</summary>
 		OnlineCustomerID,
-		///<summary>OnlineStatus. </summary>
+		///<summary>OnlineStatus. Inherited from Order</summary>
 		OnlineStatus,
-		///<summary>OnlineStatusCode. </summary>
+		///<summary>OnlineStatusCode. Inherited from Order</summary>
 		OnlineStatusCode,
-		///<summary>RequestedShipping. </summary>
+		///<summary>RequestedShipping. Inherited from Order</summary>
 		RequestedShipping,
-		///<summary>BillFirstName. </summary>
+		///<summary>BillFirstName. Inherited from Order</summary>
 		BillFirstName,
-		///<summary>BillMiddleName. </summary>
+		///<summary>BillMiddleName. Inherited from Order</summary>
 		BillMiddleName,
-		///<summary>BillLastName. </summary>
+		///<summary>BillLastName. Inherited from Order</summary>
 		BillLastName,
-		///<summary>BillCompany. </summary>
+		///<summary>BillCompany. Inherited from Order</summary>
 		BillCompany,
-		///<summary>BillStreet1. </summary>
+		///<summary>BillStreet1. Inherited from Order</summary>
 		BillStreet1,
-		///<summary>BillStreet2. </summary>
+		///<summary>BillStreet2. Inherited from Order</summary>
 		BillStreet2,
-		///<summary>BillStreet3. </summary>
+		///<summary>BillStreet3. Inherited from Order</summary>
 		BillStreet3,
-		///<summary>BillCity. </summary>
+		///<summary>BillCity. Inherited from Order</summary>
 		BillCity,
-		///<summary>BillStateProvCode. </summary>
+		///<summary>BillStateProvCode. Inherited from Order</summary>
 		BillStateProvCode,
-		///<summary>BillPostalCode. </summary>
+		///<summary>BillPostalCode. Inherited from Order</summary>
 		BillPostalCode,
-		///<summary>BillCountryCode. </summary>
+		///<summary>BillCountryCode. Inherited from Order</summary>
 		BillCountryCode,
-		///<summary>BillPhone. </summary>
+		///<summary>BillPhone. Inherited from Order</summary>
 		BillPhone,
-		///<summary>BillFax. </summary>
+		///<summary>BillFax. Inherited from Order</summary>
 		BillFax,
-		///<summary>BillEmail. </summary>
+		///<summary>BillEmail. Inherited from Order</summary>
 		BillEmail,
-		///<summary>BillWebsite. </summary>
+		///<summary>BillWebsite. Inherited from Order</summary>
 		BillWebsite,
-		///<summary>BillAddressValidationSuggestionCount. </summary>
+		///<summary>BillAddressValidationSuggestionCount. Inherited from Order</summary>
 		BillAddressValidationSuggestionCount,
-		///<summary>BillAddressValidationStatus. </summary>
+		///<summary>BillAddressValidationStatus. Inherited from Order</summary>
 		BillAddressValidationStatus,
-		///<summary>BillAddressValidationError. </summary>
+		///<summary>BillAddressValidationError. Inherited from Order</summary>
 		BillAddressValidationError,
-		///<summary>BillResidentialStatus. </summary>
+		///<summary>BillResidentialStatus. Inherited from Order</summary>
 		BillResidentialStatus,
-		///<summary>BillPOBox. </summary>
+		///<summary>BillPOBox. Inherited from Order</summary>
 		BillPOBox,
-		///<summary>BillUSTerritory. </summary>
+		///<summary>BillUSTerritory. Inherited from Order</summary>
 		BillUSTerritory,
-		///<summary>BillMilitaryAddress. </summary>
+		///<summary>BillMilitaryAddress. Inherited from Order</summary>
 		BillMilitaryAddress,
-		///<summary>ShipFirstName. </summary>
+		///<summary>ShipFirstName. Inherited from Order</summary>
 		ShipFirstName,
-		///<summary>ShipMiddleName. </summary>
+		///<summary>ShipMiddleName. Inherited from Order</summary>
 		ShipMiddleName,
-		///<summary>ShipLastName. </summary>
+		///<summary>ShipLastName. Inherited from Order</summary>
 		ShipLastName,
-		///<summary>ShipCompany. </summary>
+		///<summary>ShipCompany. Inherited from Order</summary>
 		ShipCompany,
-		///<summary>ShipStreet1. </summary>
+		///<summary>ShipStreet1. Inherited from Order</summary>
 		ShipStreet1,
-		///<summary>ShipStreet2. </summary>
+		///<summary>ShipStreet2. Inherited from Order</summary>
 		ShipStreet2,
-		///<summary>ShipStreet3. </summary>
+		///<summary>ShipStreet3. Inherited from Order</summary>
 		ShipStreet3,
-		///<summary>ShipCity. </summary>
+		///<summary>ShipCity. Inherited from Order</summary>
 		ShipCity,
-		///<summary>ShipStateProvCode. </summary>
+		///<summary>ShipStateProvCode. Inherited from Order</summary>
 		ShipStateProvCode,
-		///<summary>ShipPostalCode. </summary>
+		///<summary>ShipPostalCode. Inherited from Order</summary>
 		ShipPostalCode,
-		///<summary>ShipCountryCode. </summary>
+		///<summary>ShipCountryCode. Inherited from Order</summary>
 		ShipCountryCode,
-		///<summary>ShipPhone. </summary>
+		///<summary>ShipPhone. Inherited from Order</summary>
 		ShipPhone,
-		///<summary>ShipFax. </summary>
+		///<summary>ShipFax. Inherited from Order</summary>
 		ShipFax,
-		///<summary>ShipEmail. </summary>
+		///<summary>ShipEmail. Inherited from Order</summary>
 		ShipEmail,
-		///<summary>ShipWebsite. </summary>
+		///<summary>ShipWebsite. Inherited from Order</summary>
 		ShipWebsite,
-		///<summary>ShipAddressValidationSuggestionCount. </summary>
+		///<summary>ShipAddressValidationSuggestionCount. Inherited from Order</summary>
 		ShipAddressValidationSuggestionCount,
-		///<summary>ShipAddressValidationStatus. </summary>
+		///<summary>ShipAddressValidationStatus. Inherited from Order</summary>
 		ShipAddressValidationStatus,
-		///<summary>ShipAddressValidationError. </summary>
+		///<summary>ShipAddressValidationError. Inherited from Order</summary>
 		ShipAddressValidationError,
-		///<summary>ShipResidentialStatus. </summary>
+		///<summary>ShipResidentialStatus. Inherited from Order</summary>
 		ShipResidentialStatus,
-		///<summary>ShipPOBox. </summary>
+		///<summary>ShipPOBox. Inherited from Order</summary>
 		ShipPOBox,
-		///<summary>ShipUSTerritory. </summary>
+		///<summary>ShipUSTerritory. Inherited from Order</summary>
 		ShipUSTerritory,
-		///<summary>ShipMilitaryAddress. </summary>
+		///<summary>ShipMilitaryAddress. Inherited from Order</summary>
 		ShipMilitaryAddress,
-		///<summary>RollupItemCount. </summary>
+		///<summary>RollupItemCount. Inherited from Order</summary>
 		RollupItemCount,
-		///<summary>RollupItemName. </summary>
+		///<summary>RollupItemName. Inherited from Order</summary>
 		RollupItemName,
-		///<summary>RollupItemCode. </summary>
+		///<summary>RollupItemCode. Inherited from Order</summary>
 		RollupItemCode,
-		///<summary>RollupItemSKU. </summary>
+		///<summary>RollupItemSKU. Inherited from Order</summary>
 		RollupItemSKU,
-		///<summary>RollupItemLocation. </summary>
+		///<summary>RollupItemLocation. Inherited from Order</summary>
 		RollupItemLocation,
-		///<summary>RollupItemQuantity. </summary>
+		///<summary>RollupItemQuantity. Inherited from Order</summary>
 		RollupItemQuantity,
-		///<summary>RollupItemTotalWeight. </summary>
+		///<summary>RollupItemTotalWeight. Inherited from Order</summary>
 		RollupItemTotalWeight,
-		///<summary>RollupNoteCount. </summary>
+		///<summary>RollupNoteCount. Inherited from Order</summary>
 		RollupNoteCount,
-		///<summary>BillNameParseStatus. </summary>
+		///<summary>BillNameParseStatus. Inherited from Order</summary>
 		BillNameParseStatus,
-		///<summary>BillUnparsedName. </summary>
+		///<summary>BillUnparsedName. Inherited from Order</summary>
 		BillUnparsedName,
-		///<summary>ShipNameParseStatus. </summary>
+		///<summary>ShipNameParseStatus. Inherited from Order</summary>
 		ShipNameParseStatus,
-		///<summary>ShipUnparsedName. </summary>
+		///<summary>ShipUnparsedName. Inherited from Order</summary>
 		ShipUnparsedName,
-		///<summary>ShipSenseHashKey. </summary>
+		///<summary>ShipSenseHashKey. Inherited from Order</summary>
 		ShipSenseHashKey,
-		///<summary>ShipSenseRecognitionStatus. </summary>
+		///<summary>ShipSenseRecognitionStatus. Inherited from Order</summary>
 		ShipSenseRecognitionStatus,
-		///<summary>ShipAddressType. </summary>
+		///<summary>ShipAddressType. Inherited from Order</summary>
 		ShipAddressType,
 		///<summary>OrderID. </summary>
 		OrderID,
@@ -7672,73 +7097,68 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ProStoresStore.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum ProStoresStoreFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ProStoresStore.</summary>
+	public enum ProStoresStoreFieldIndex
 	{
 		///<summary>StoreID. Inherited from Store</summary>
 		StoreID_Store,
-		///<summary>RowVersion. </summary>
+		///<summary>RowVersion. Inherited from Store</summary>
 		RowVersion,
-		///<summary>License. </summary>
+		///<summary>License. Inherited from Store</summary>
 		License,
-		///<summary>Edition. </summary>
+		///<summary>Edition. Inherited from Store</summary>
 		Edition,
-		///<summary>TypeCode. </summary>
+		///<summary>TypeCode. Inherited from Store</summary>
 		TypeCode,
-		///<summary>Enabled. </summary>
+		///<summary>Enabled. Inherited from Store</summary>
 		Enabled,
-		///<summary>SetupComplete. </summary>
+		///<summary>SetupComplete. Inherited from Store</summary>
 		SetupComplete,
-		///<summary>StoreName. </summary>
+		///<summary>StoreName. Inherited from Store</summary>
 		StoreName,
-		///<summary>Company. </summary>
+		///<summary>Company. Inherited from Store</summary>
 		Company,
-		///<summary>Street1. </summary>
+		///<summary>Street1. Inherited from Store</summary>
 		Street1,
-		///<summary>Street2. </summary>
+		///<summary>Street2. Inherited from Store</summary>
 		Street2,
-		///<summary>Street3. </summary>
+		///<summary>Street3. Inherited from Store</summary>
 		Street3,
-		///<summary>City. </summary>
+		///<summary>City. Inherited from Store</summary>
 		City,
-		///<summary>StateProvCode. </summary>
+		///<summary>StateProvCode. Inherited from Store</summary>
 		StateProvCode,
-		///<summary>PostalCode. </summary>
+		///<summary>PostalCode. Inherited from Store</summary>
 		PostalCode,
-		///<summary>CountryCode. </summary>
+		///<summary>CountryCode. Inherited from Store</summary>
 		CountryCode,
-		///<summary>Phone. </summary>
+		///<summary>Phone. Inherited from Store</summary>
 		Phone,
-		///<summary>Fax. </summary>
+		///<summary>Fax. Inherited from Store</summary>
 		Fax,
-		///<summary>Email. </summary>
+		///<summary>Email. Inherited from Store</summary>
 		Email,
-		///<summary>Website. </summary>
+		///<summary>Website. Inherited from Store</summary>
 		Website,
-		///<summary>AutoDownload. </summary>
+		///<summary>AutoDownload. Inherited from Store</summary>
 		AutoDownload,
-		///<summary>AutoDownloadMinutes. </summary>
+		///<summary>AutoDownloadMinutes. Inherited from Store</summary>
 		AutoDownloadMinutes,
-		///<summary>AutoDownloadOnlyAway. </summary>
+		///<summary>AutoDownloadOnlyAway. Inherited from Store</summary>
 		AutoDownloadOnlyAway,
-		///<summary>AddressValidationSetting. </summary>
+		///<summary>AddressValidationSetting. Inherited from Store</summary>
 		AddressValidationSetting,
-		///<summary>ComputerDownloadPolicy. </summary>
+		///<summary>ComputerDownloadPolicy. Inherited from Store</summary>
 		ComputerDownloadPolicy,
-		///<summary>DefaultEmailAccountID. </summary>
+		///<summary>DefaultEmailAccountID. Inherited from Store</summary>
 		DefaultEmailAccountID,
-		///<summary>ManualOrderPrefix. </summary>
+		///<summary>ManualOrderPrefix. Inherited from Store</summary>
 		ManualOrderPrefix,
-		///<summary>ManualOrderPostfix. </summary>
+		///<summary>ManualOrderPostfix. Inherited from Store</summary>
 		ManualOrderPostfix,
-		///<summary>InitialDownloadDays. </summary>
+		///<summary>InitialDownloadDays. Inherited from Store</summary>
 		InitialDownloadDays,
-		///<summary>InitialDownloadOrder. </summary>
+		///<summary>InitialDownloadOrder. Inherited from Store</summary>
 		InitialDownloadOrder,
 		///<summary>StoreID. </summary>
 		StoreID,
@@ -7777,13 +7197,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: Resource.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum ResourceFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: Resource.</summary>
+	public enum ResourceFieldIndex
 	{
 		///<summary>ResourceID. </summary>
 		ResourceID,
@@ -7798,13 +7213,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ScanFormBatch.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum ScanFormBatchFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ScanFormBatch.</summary>
+	public enum ScanFormBatchFieldIndex
 	{
 		///<summary>ScanFormBatchID. </summary>
 		ScanFormBatchID,
@@ -7817,13 +7227,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: Search.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum SearchFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: Search.</summary>
+	public enum SearchFieldIndex
 	{
 		///<summary>SearchID. </summary>
 		SearchID,
@@ -7840,161 +7245,156 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: SearsOrder.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum SearsOrderFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: SearsOrder.</summary>
+	public enum SearsOrderFieldIndex
 	{
 		///<summary>OrderID. Inherited from Order</summary>
 		OrderID_Order,
-		///<summary>RowVersion. </summary>
+		///<summary>RowVersion. Inherited from Order</summary>
 		RowVersion,
-		///<summary>StoreID. </summary>
+		///<summary>StoreID. Inherited from Order</summary>
 		StoreID,
-		///<summary>CustomerID. </summary>
+		///<summary>CustomerID. Inherited from Order</summary>
 		CustomerID,
-		///<summary>OrderNumber. </summary>
+		///<summary>OrderNumber. Inherited from Order</summary>
 		OrderNumber,
-		///<summary>OrderNumberComplete. </summary>
+		///<summary>OrderNumberComplete. Inherited from Order</summary>
 		OrderNumberComplete,
-		///<summary>OrderDate. </summary>
+		///<summary>OrderDate. Inherited from Order</summary>
 		OrderDate,
-		///<summary>OrderTotal. </summary>
+		///<summary>OrderTotal. Inherited from Order</summary>
 		OrderTotal,
-		///<summary>LocalStatus. </summary>
+		///<summary>LocalStatus. Inherited from Order</summary>
 		LocalStatus,
-		///<summary>IsManual. </summary>
+		///<summary>IsManual. Inherited from Order</summary>
 		IsManual,
-		///<summary>OnlineLastModified. </summary>
+		///<summary>OnlineLastModified. Inherited from Order</summary>
 		OnlineLastModified,
-		///<summary>OnlineCustomerID. </summary>
+		///<summary>OnlineCustomerID. Inherited from Order</summary>
 		OnlineCustomerID,
-		///<summary>OnlineStatus. </summary>
+		///<summary>OnlineStatus. Inherited from Order</summary>
 		OnlineStatus,
-		///<summary>OnlineStatusCode. </summary>
+		///<summary>OnlineStatusCode. Inherited from Order</summary>
 		OnlineStatusCode,
-		///<summary>RequestedShipping. </summary>
+		///<summary>RequestedShipping. Inherited from Order</summary>
 		RequestedShipping,
-		///<summary>BillFirstName. </summary>
+		///<summary>BillFirstName. Inherited from Order</summary>
 		BillFirstName,
-		///<summary>BillMiddleName. </summary>
+		///<summary>BillMiddleName. Inherited from Order</summary>
 		BillMiddleName,
-		///<summary>BillLastName. </summary>
+		///<summary>BillLastName. Inherited from Order</summary>
 		BillLastName,
-		///<summary>BillCompany. </summary>
+		///<summary>BillCompany. Inherited from Order</summary>
 		BillCompany,
-		///<summary>BillStreet1. </summary>
+		///<summary>BillStreet1. Inherited from Order</summary>
 		BillStreet1,
-		///<summary>BillStreet2. </summary>
+		///<summary>BillStreet2. Inherited from Order</summary>
 		BillStreet2,
-		///<summary>BillStreet3. </summary>
+		///<summary>BillStreet3. Inherited from Order</summary>
 		BillStreet3,
-		///<summary>BillCity. </summary>
+		///<summary>BillCity. Inherited from Order</summary>
 		BillCity,
-		///<summary>BillStateProvCode. </summary>
+		///<summary>BillStateProvCode. Inherited from Order</summary>
 		BillStateProvCode,
-		///<summary>BillPostalCode. </summary>
+		///<summary>BillPostalCode. Inherited from Order</summary>
 		BillPostalCode,
-		///<summary>BillCountryCode. </summary>
+		///<summary>BillCountryCode. Inherited from Order</summary>
 		BillCountryCode,
-		///<summary>BillPhone. </summary>
+		///<summary>BillPhone. Inherited from Order</summary>
 		BillPhone,
-		///<summary>BillFax. </summary>
+		///<summary>BillFax. Inherited from Order</summary>
 		BillFax,
-		///<summary>BillEmail. </summary>
+		///<summary>BillEmail. Inherited from Order</summary>
 		BillEmail,
-		///<summary>BillWebsite. </summary>
+		///<summary>BillWebsite. Inherited from Order</summary>
 		BillWebsite,
-		///<summary>BillAddressValidationSuggestionCount. </summary>
+		///<summary>BillAddressValidationSuggestionCount. Inherited from Order</summary>
 		BillAddressValidationSuggestionCount,
-		///<summary>BillAddressValidationStatus. </summary>
+		///<summary>BillAddressValidationStatus. Inherited from Order</summary>
 		BillAddressValidationStatus,
-		///<summary>BillAddressValidationError. </summary>
+		///<summary>BillAddressValidationError. Inherited from Order</summary>
 		BillAddressValidationError,
-		///<summary>BillResidentialStatus. </summary>
+		///<summary>BillResidentialStatus. Inherited from Order</summary>
 		BillResidentialStatus,
-		///<summary>BillPOBox. </summary>
+		///<summary>BillPOBox. Inherited from Order</summary>
 		BillPOBox,
-		///<summary>BillUSTerritory. </summary>
+		///<summary>BillUSTerritory. Inherited from Order</summary>
 		BillUSTerritory,
-		///<summary>BillMilitaryAddress. </summary>
+		///<summary>BillMilitaryAddress. Inherited from Order</summary>
 		BillMilitaryAddress,
-		///<summary>ShipFirstName. </summary>
+		///<summary>ShipFirstName. Inherited from Order</summary>
 		ShipFirstName,
-		///<summary>ShipMiddleName. </summary>
+		///<summary>ShipMiddleName. Inherited from Order</summary>
 		ShipMiddleName,
-		///<summary>ShipLastName. </summary>
+		///<summary>ShipLastName. Inherited from Order</summary>
 		ShipLastName,
-		///<summary>ShipCompany. </summary>
+		///<summary>ShipCompany. Inherited from Order</summary>
 		ShipCompany,
-		///<summary>ShipStreet1. </summary>
+		///<summary>ShipStreet1. Inherited from Order</summary>
 		ShipStreet1,
-		///<summary>ShipStreet2. </summary>
+		///<summary>ShipStreet2. Inherited from Order</summary>
 		ShipStreet2,
-		///<summary>ShipStreet3. </summary>
+		///<summary>ShipStreet3. Inherited from Order</summary>
 		ShipStreet3,
-		///<summary>ShipCity. </summary>
+		///<summary>ShipCity. Inherited from Order</summary>
 		ShipCity,
-		///<summary>ShipStateProvCode. </summary>
+		///<summary>ShipStateProvCode. Inherited from Order</summary>
 		ShipStateProvCode,
-		///<summary>ShipPostalCode. </summary>
+		///<summary>ShipPostalCode. Inherited from Order</summary>
 		ShipPostalCode,
-		///<summary>ShipCountryCode. </summary>
+		///<summary>ShipCountryCode. Inherited from Order</summary>
 		ShipCountryCode,
-		///<summary>ShipPhone. </summary>
+		///<summary>ShipPhone. Inherited from Order</summary>
 		ShipPhone,
-		///<summary>ShipFax. </summary>
+		///<summary>ShipFax. Inherited from Order</summary>
 		ShipFax,
-		///<summary>ShipEmail. </summary>
+		///<summary>ShipEmail. Inherited from Order</summary>
 		ShipEmail,
-		///<summary>ShipWebsite. </summary>
+		///<summary>ShipWebsite. Inherited from Order</summary>
 		ShipWebsite,
-		///<summary>ShipAddressValidationSuggestionCount. </summary>
+		///<summary>ShipAddressValidationSuggestionCount. Inherited from Order</summary>
 		ShipAddressValidationSuggestionCount,
-		///<summary>ShipAddressValidationStatus. </summary>
+		///<summary>ShipAddressValidationStatus. Inherited from Order</summary>
 		ShipAddressValidationStatus,
-		///<summary>ShipAddressValidationError. </summary>
+		///<summary>ShipAddressValidationError. Inherited from Order</summary>
 		ShipAddressValidationError,
-		///<summary>ShipResidentialStatus. </summary>
+		///<summary>ShipResidentialStatus. Inherited from Order</summary>
 		ShipResidentialStatus,
-		///<summary>ShipPOBox. </summary>
+		///<summary>ShipPOBox. Inherited from Order</summary>
 		ShipPOBox,
-		///<summary>ShipUSTerritory. </summary>
+		///<summary>ShipUSTerritory. Inherited from Order</summary>
 		ShipUSTerritory,
-		///<summary>ShipMilitaryAddress. </summary>
+		///<summary>ShipMilitaryAddress. Inherited from Order</summary>
 		ShipMilitaryAddress,
-		///<summary>RollupItemCount. </summary>
+		///<summary>RollupItemCount. Inherited from Order</summary>
 		RollupItemCount,
-		///<summary>RollupItemName. </summary>
+		///<summary>RollupItemName. Inherited from Order</summary>
 		RollupItemName,
-		///<summary>RollupItemCode. </summary>
+		///<summary>RollupItemCode. Inherited from Order</summary>
 		RollupItemCode,
-		///<summary>RollupItemSKU. </summary>
+		///<summary>RollupItemSKU. Inherited from Order</summary>
 		RollupItemSKU,
-		///<summary>RollupItemLocation. </summary>
+		///<summary>RollupItemLocation. Inherited from Order</summary>
 		RollupItemLocation,
-		///<summary>RollupItemQuantity. </summary>
+		///<summary>RollupItemQuantity. Inherited from Order</summary>
 		RollupItemQuantity,
-		///<summary>RollupItemTotalWeight. </summary>
+		///<summary>RollupItemTotalWeight. Inherited from Order</summary>
 		RollupItemTotalWeight,
-		///<summary>RollupNoteCount. </summary>
+		///<summary>RollupNoteCount. Inherited from Order</summary>
 		RollupNoteCount,
-		///<summary>BillNameParseStatus. </summary>
+		///<summary>BillNameParseStatus. Inherited from Order</summary>
 		BillNameParseStatus,
-		///<summary>BillUnparsedName. </summary>
+		///<summary>BillUnparsedName. Inherited from Order</summary>
 		BillUnparsedName,
-		///<summary>ShipNameParseStatus. </summary>
+		///<summary>ShipNameParseStatus. Inherited from Order</summary>
 		ShipNameParseStatus,
-		///<summary>ShipUnparsedName. </summary>
+		///<summary>ShipUnparsedName. Inherited from Order</summary>
 		ShipUnparsedName,
-		///<summary>ShipSenseHashKey. </summary>
+		///<summary>ShipSenseHashKey. Inherited from Order</summary>
 		ShipSenseHashKey,
-		///<summary>ShipSenseRecognitionStatus. </summary>
+		///<summary>ShipSenseRecognitionStatus. Inherited from Order</summary>
 		ShipSenseRecognitionStatus,
-		///<summary>ShipAddressType. </summary>
+		///<summary>ShipAddressType. Inherited from Order</summary>
 		ShipAddressType,
 		///<summary>OrderID. </summary>
 		OrderID,
@@ -8011,49 +7411,44 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: SearsOrderItem.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum SearsOrderItemFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: SearsOrderItem.</summary>
+	public enum SearsOrderItemFieldIndex
 	{
 		///<summary>OrderItemID. Inherited from OrderItem</summary>
 		OrderItemID_OrderItem,
-		///<summary>RowVersion. </summary>
+		///<summary>RowVersion. Inherited from OrderItem</summary>
 		RowVersion,
-		///<summary>OrderID. </summary>
+		///<summary>OrderID. Inherited from OrderItem</summary>
 		OrderID,
-		///<summary>Name. </summary>
+		///<summary>Name. Inherited from OrderItem</summary>
 		Name,
-		///<summary>Code. </summary>
+		///<summary>Code. Inherited from OrderItem</summary>
 		Code,
-		///<summary>SKU. </summary>
+		///<summary>SKU. Inherited from OrderItem</summary>
 		SKU,
-		///<summary>ISBN. </summary>
+		///<summary>ISBN. Inherited from OrderItem</summary>
 		ISBN,
-		///<summary>UPC. </summary>
+		///<summary>UPC. Inherited from OrderItem</summary>
 		UPC,
-		///<summary>Description. </summary>
+		///<summary>Description. Inherited from OrderItem</summary>
 		Description,
-		///<summary>Location. </summary>
+		///<summary>Location. Inherited from OrderItem</summary>
 		Location,
-		///<summary>Image. </summary>
+		///<summary>Image. Inherited from OrderItem</summary>
 		Image,
-		///<summary>Thumbnail. </summary>
+		///<summary>Thumbnail. Inherited from OrderItem</summary>
 		Thumbnail,
-		///<summary>UnitPrice. </summary>
+		///<summary>UnitPrice. Inherited from OrderItem</summary>
 		UnitPrice,
-		///<summary>UnitCost. </summary>
+		///<summary>UnitCost. Inherited from OrderItem</summary>
 		UnitCost,
-		///<summary>Weight. </summary>
+		///<summary>Weight. Inherited from OrderItem</summary>
 		Weight,
-		///<summary>Quantity. </summary>
+		///<summary>Quantity. Inherited from OrderItem</summary>
 		Quantity,
-		///<summary>LocalStatus. </summary>
+		///<summary>LocalStatus. Inherited from OrderItem</summary>
 		LocalStatus,
-		///<summary>IsManual. </summary>
+		///<summary>IsManual. Inherited from OrderItem</summary>
 		IsManual,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
@@ -8070,73 +7465,68 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: SearsStore.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum SearsStoreFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: SearsStore.</summary>
+	public enum SearsStoreFieldIndex
 	{
 		///<summary>StoreID. Inherited from Store</summary>
 		StoreID_Store,
-		///<summary>RowVersion. </summary>
+		///<summary>RowVersion. Inherited from Store</summary>
 		RowVersion,
-		///<summary>License. </summary>
+		///<summary>License. Inherited from Store</summary>
 		License,
-		///<summary>Edition. </summary>
+		///<summary>Edition. Inherited from Store</summary>
 		Edition,
-		///<summary>TypeCode. </summary>
+		///<summary>TypeCode. Inherited from Store</summary>
 		TypeCode,
-		///<summary>Enabled. </summary>
+		///<summary>Enabled. Inherited from Store</summary>
 		Enabled,
-		///<summary>SetupComplete. </summary>
+		///<summary>SetupComplete. Inherited from Store</summary>
 		SetupComplete,
-		///<summary>StoreName. </summary>
+		///<summary>StoreName. Inherited from Store</summary>
 		StoreName,
-		///<summary>Company. </summary>
+		///<summary>Company. Inherited from Store</summary>
 		Company,
-		///<summary>Street1. </summary>
+		///<summary>Street1. Inherited from Store</summary>
 		Street1,
-		///<summary>Street2. </summary>
+		///<summary>Street2. Inherited from Store</summary>
 		Street2,
-		///<summary>Street3. </summary>
+		///<summary>Street3. Inherited from Store</summary>
 		Street3,
-		///<summary>City. </summary>
+		///<summary>City. Inherited from Store</summary>
 		City,
-		///<summary>StateProvCode. </summary>
+		///<summary>StateProvCode. Inherited from Store</summary>
 		StateProvCode,
-		///<summary>PostalCode. </summary>
+		///<summary>PostalCode. Inherited from Store</summary>
 		PostalCode,
-		///<summary>CountryCode. </summary>
+		///<summary>CountryCode. Inherited from Store</summary>
 		CountryCode,
-		///<summary>Phone. </summary>
+		///<summary>Phone. Inherited from Store</summary>
 		Phone,
-		///<summary>Fax. </summary>
+		///<summary>Fax. Inherited from Store</summary>
 		Fax,
-		///<summary>Email. </summary>
+		///<summary>Email. Inherited from Store</summary>
 		Email,
-		///<summary>Website. </summary>
+		///<summary>Website. Inherited from Store</summary>
 		Website,
-		///<summary>AutoDownload. </summary>
+		///<summary>AutoDownload. Inherited from Store</summary>
 		AutoDownload,
-		///<summary>AutoDownloadMinutes. </summary>
+		///<summary>AutoDownloadMinutes. Inherited from Store</summary>
 		AutoDownloadMinutes,
-		///<summary>AutoDownloadOnlyAway. </summary>
+		///<summary>AutoDownloadOnlyAway. Inherited from Store</summary>
 		AutoDownloadOnlyAway,
-		///<summary>AddressValidationSetting. </summary>
+		///<summary>AddressValidationSetting. Inherited from Store</summary>
 		AddressValidationSetting,
-		///<summary>ComputerDownloadPolicy. </summary>
+		///<summary>ComputerDownloadPolicy. Inherited from Store</summary>
 		ComputerDownloadPolicy,
-		///<summary>DefaultEmailAccountID. </summary>
+		///<summary>DefaultEmailAccountID. Inherited from Store</summary>
 		DefaultEmailAccountID,
-		///<summary>ManualOrderPrefix. </summary>
+		///<summary>ManualOrderPrefix. Inherited from Store</summary>
 		ManualOrderPrefix,
-		///<summary>ManualOrderPostfix. </summary>
+		///<summary>ManualOrderPostfix. Inherited from Store</summary>
 		ManualOrderPostfix,
-		///<summary>InitialDownloadDays. </summary>
+		///<summary>InitialDownloadDays. Inherited from Store</summary>
 		InitialDownloadDays,
-		///<summary>InitialDownloadOrder. </summary>
+		///<summary>InitialDownloadOrder. Inherited from Store</summary>
 		InitialDownloadOrder,
 		///<summary>StoreID. </summary>
 		StoreID,
@@ -8151,13 +7541,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ServerMessage.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum ServerMessageFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ServerMessage.</summary>
+	public enum ServerMessageFieldIndex
 	{
 		///<summary>ServerMessageID. </summary>
 		ServerMessageID,
@@ -8194,13 +7579,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ServerMessageSignoff.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum ServerMessageSignoffFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ServerMessageSignoff.</summary>
+	public enum ServerMessageSignoffFieldIndex
 	{
 		///<summary>ServerMessageSignoffID. </summary>
 		ServerMessageSignoffID,
@@ -8217,13 +7597,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ServiceStatus.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum ServiceStatusFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ServiceStatus.</summary>
+	public enum ServiceStatusFieldIndex
 	{
 		///<summary>ServiceStatusID. </summary>
 		ServiceStatusID,
@@ -8246,13 +7621,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: Shipment.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum ShipmentFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: Shipment.</summary>
+	public enum ShipmentFieldIndex
 	{
 		///<summary>ShipmentID. </summary>
 		ShipmentID,
@@ -8403,13 +7773,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ShipmentCustomsItem.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum ShipmentCustomsItemFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ShipmentCustomsItem.</summary>
+	public enum ShipmentCustomsItemFieldIndex
 	{
 		///<summary>ShipmentCustomsItemID. </summary>
 		ShipmentCustomsItemID,
@@ -8436,13 +7801,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ShippingDefaultsRule.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum ShippingDefaultsRuleFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ShippingDefaultsRule.</summary>
+	public enum ShippingDefaultsRuleFieldIndex
 	{
 		///<summary>ShippingDefaultsRuleID. </summary>
 		ShippingDefaultsRuleID,
@@ -8459,13 +7819,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ShippingOrigin.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum ShippingOriginFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ShippingOrigin.</summary>
+	public enum ShippingOriginFieldIndex
 	{
 		///<summary>ShippingOriginID. </summary>
 		ShippingOriginID,
@@ -8506,13 +7861,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ShippingPrintOutput.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum ShippingPrintOutputFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ShippingPrintOutput.</summary>
+	public enum ShippingPrintOutputFieldIndex
 	{
 		///<summary>ShippingPrintOutputID. </summary>
 		ShippingPrintOutputID,
@@ -8525,13 +7875,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ShippingPrintOutputRule.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum ShippingPrintOutputRuleFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ShippingPrintOutputRule.</summary>
+	public enum ShippingPrintOutputRuleFieldIndex
 	{
 		///<summary>ShippingPrintOutputRuleID. </summary>
 		ShippingPrintOutputRuleID,
@@ -8544,13 +7889,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ShippingProfile.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum ShippingProfileFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ShippingProfile.</summary>
+	public enum ShippingProfileFieldIndex
 	{
 		///<summary>ShippingProfileID. </summary>
 		ShippingProfileID,
@@ -8577,13 +7917,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ShippingProviderRule.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum ShippingProviderRuleFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ShippingProviderRule.</summary>
+	public enum ShippingProviderRuleFieldIndex
 	{
 		///<summary>ShippingProviderRuleID. </summary>
 		ShippingProviderRuleID,
@@ -8596,13 +7931,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ShippingSettings.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum ShippingSettingsFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ShippingSettings.</summary>
+	public enum ShippingSettingsFieldIndex
 	{
 		///<summary>ShippingSettingsID. </summary>
 		ShippingSettingsID,
@@ -8711,13 +8041,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ShipSenseKnowledgebase.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum ShipSenseKnowledgebaseFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ShipSenseKnowledgebase.</summary>
+	public enum ShipSenseKnowledgebaseFieldIndex
 	{
 		///<summary>Hash. </summary>
 		Hash,
@@ -8726,161 +8051,156 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ShopifyOrder.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum ShopifyOrderFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ShopifyOrder.</summary>
+	public enum ShopifyOrderFieldIndex
 	{
 		///<summary>OrderID. Inherited from Order</summary>
 		OrderID_Order,
-		///<summary>RowVersion. </summary>
+		///<summary>RowVersion. Inherited from Order</summary>
 		RowVersion,
-		///<summary>StoreID. </summary>
+		///<summary>StoreID. Inherited from Order</summary>
 		StoreID,
-		///<summary>CustomerID. </summary>
+		///<summary>CustomerID. Inherited from Order</summary>
 		CustomerID,
-		///<summary>OrderNumber. </summary>
+		///<summary>OrderNumber. Inherited from Order</summary>
 		OrderNumber,
-		///<summary>OrderNumberComplete. </summary>
+		///<summary>OrderNumberComplete. Inherited from Order</summary>
 		OrderNumberComplete,
-		///<summary>OrderDate. </summary>
+		///<summary>OrderDate. Inherited from Order</summary>
 		OrderDate,
-		///<summary>OrderTotal. </summary>
+		///<summary>OrderTotal. Inherited from Order</summary>
 		OrderTotal,
-		///<summary>LocalStatus. </summary>
+		///<summary>LocalStatus. Inherited from Order</summary>
 		LocalStatus,
-		///<summary>IsManual. </summary>
+		///<summary>IsManual. Inherited from Order</summary>
 		IsManual,
-		///<summary>OnlineLastModified. </summary>
+		///<summary>OnlineLastModified. Inherited from Order</summary>
 		OnlineLastModified,
-		///<summary>OnlineCustomerID. </summary>
+		///<summary>OnlineCustomerID. Inherited from Order</summary>
 		OnlineCustomerID,
-		///<summary>OnlineStatus. </summary>
+		///<summary>OnlineStatus. Inherited from Order</summary>
 		OnlineStatus,
-		///<summary>OnlineStatusCode. </summary>
+		///<summary>OnlineStatusCode. Inherited from Order</summary>
 		OnlineStatusCode,
-		///<summary>RequestedShipping. </summary>
+		///<summary>RequestedShipping. Inherited from Order</summary>
 		RequestedShipping,
-		///<summary>BillFirstName. </summary>
+		///<summary>BillFirstName. Inherited from Order</summary>
 		BillFirstName,
-		///<summary>BillMiddleName. </summary>
+		///<summary>BillMiddleName. Inherited from Order</summary>
 		BillMiddleName,
-		///<summary>BillLastName. </summary>
+		///<summary>BillLastName. Inherited from Order</summary>
 		BillLastName,
-		///<summary>BillCompany. </summary>
+		///<summary>BillCompany. Inherited from Order</summary>
 		BillCompany,
-		///<summary>BillStreet1. </summary>
+		///<summary>BillStreet1. Inherited from Order</summary>
 		BillStreet1,
-		///<summary>BillStreet2. </summary>
+		///<summary>BillStreet2. Inherited from Order</summary>
 		BillStreet2,
-		///<summary>BillStreet3. </summary>
+		///<summary>BillStreet3. Inherited from Order</summary>
 		BillStreet3,
-		///<summary>BillCity. </summary>
+		///<summary>BillCity. Inherited from Order</summary>
 		BillCity,
-		///<summary>BillStateProvCode. </summary>
+		///<summary>BillStateProvCode. Inherited from Order</summary>
 		BillStateProvCode,
-		///<summary>BillPostalCode. </summary>
+		///<summary>BillPostalCode. Inherited from Order</summary>
 		BillPostalCode,
-		///<summary>BillCountryCode. </summary>
+		///<summary>BillCountryCode. Inherited from Order</summary>
 		BillCountryCode,
-		///<summary>BillPhone. </summary>
+		///<summary>BillPhone. Inherited from Order</summary>
 		BillPhone,
-		///<summary>BillFax. </summary>
+		///<summary>BillFax. Inherited from Order</summary>
 		BillFax,
-		///<summary>BillEmail. </summary>
+		///<summary>BillEmail. Inherited from Order</summary>
 		BillEmail,
-		///<summary>BillWebsite. </summary>
+		///<summary>BillWebsite. Inherited from Order</summary>
 		BillWebsite,
-		///<summary>BillAddressValidationSuggestionCount. </summary>
+		///<summary>BillAddressValidationSuggestionCount. Inherited from Order</summary>
 		BillAddressValidationSuggestionCount,
-		///<summary>BillAddressValidationStatus. </summary>
+		///<summary>BillAddressValidationStatus. Inherited from Order</summary>
 		BillAddressValidationStatus,
-		///<summary>BillAddressValidationError. </summary>
+		///<summary>BillAddressValidationError. Inherited from Order</summary>
 		BillAddressValidationError,
-		///<summary>BillResidentialStatus. </summary>
+		///<summary>BillResidentialStatus. Inherited from Order</summary>
 		BillResidentialStatus,
-		///<summary>BillPOBox. </summary>
+		///<summary>BillPOBox. Inherited from Order</summary>
 		BillPOBox,
-		///<summary>BillUSTerritory. </summary>
+		///<summary>BillUSTerritory. Inherited from Order</summary>
 		BillUSTerritory,
-		///<summary>BillMilitaryAddress. </summary>
+		///<summary>BillMilitaryAddress. Inherited from Order</summary>
 		BillMilitaryAddress,
-		///<summary>ShipFirstName. </summary>
+		///<summary>ShipFirstName. Inherited from Order</summary>
 		ShipFirstName,
-		///<summary>ShipMiddleName. </summary>
+		///<summary>ShipMiddleName. Inherited from Order</summary>
 		ShipMiddleName,
-		///<summary>ShipLastName. </summary>
+		///<summary>ShipLastName. Inherited from Order</summary>
 		ShipLastName,
-		///<summary>ShipCompany. </summary>
+		///<summary>ShipCompany. Inherited from Order</summary>
 		ShipCompany,
-		///<summary>ShipStreet1. </summary>
+		///<summary>ShipStreet1. Inherited from Order</summary>
 		ShipStreet1,
-		///<summary>ShipStreet2. </summary>
+		///<summary>ShipStreet2. Inherited from Order</summary>
 		ShipStreet2,
-		///<summary>ShipStreet3. </summary>
+		///<summary>ShipStreet3. Inherited from Order</summary>
 		ShipStreet3,
-		///<summary>ShipCity. </summary>
+		///<summary>ShipCity. Inherited from Order</summary>
 		ShipCity,
-		///<summary>ShipStateProvCode. </summary>
+		///<summary>ShipStateProvCode. Inherited from Order</summary>
 		ShipStateProvCode,
-		///<summary>ShipPostalCode. </summary>
+		///<summary>ShipPostalCode. Inherited from Order</summary>
 		ShipPostalCode,
-		///<summary>ShipCountryCode. </summary>
+		///<summary>ShipCountryCode. Inherited from Order</summary>
 		ShipCountryCode,
-		///<summary>ShipPhone. </summary>
+		///<summary>ShipPhone. Inherited from Order</summary>
 		ShipPhone,
-		///<summary>ShipFax. </summary>
+		///<summary>ShipFax. Inherited from Order</summary>
 		ShipFax,
-		///<summary>ShipEmail. </summary>
+		///<summary>ShipEmail. Inherited from Order</summary>
 		ShipEmail,
-		///<summary>ShipWebsite. </summary>
+		///<summary>ShipWebsite. Inherited from Order</summary>
 		ShipWebsite,
-		///<summary>ShipAddressValidationSuggestionCount. </summary>
+		///<summary>ShipAddressValidationSuggestionCount. Inherited from Order</summary>
 		ShipAddressValidationSuggestionCount,
-		///<summary>ShipAddressValidationStatus. </summary>
+		///<summary>ShipAddressValidationStatus. Inherited from Order</summary>
 		ShipAddressValidationStatus,
-		///<summary>ShipAddressValidationError. </summary>
+		///<summary>ShipAddressValidationError. Inherited from Order</summary>
 		ShipAddressValidationError,
-		///<summary>ShipResidentialStatus. </summary>
+		///<summary>ShipResidentialStatus. Inherited from Order</summary>
 		ShipResidentialStatus,
-		///<summary>ShipPOBox. </summary>
+		///<summary>ShipPOBox. Inherited from Order</summary>
 		ShipPOBox,
-		///<summary>ShipUSTerritory. </summary>
+		///<summary>ShipUSTerritory. Inherited from Order</summary>
 		ShipUSTerritory,
-		///<summary>ShipMilitaryAddress. </summary>
+		///<summary>ShipMilitaryAddress. Inherited from Order</summary>
 		ShipMilitaryAddress,
-		///<summary>RollupItemCount. </summary>
+		///<summary>RollupItemCount. Inherited from Order</summary>
 		RollupItemCount,
-		///<summary>RollupItemName. </summary>
+		///<summary>RollupItemName. Inherited from Order</summary>
 		RollupItemName,
-		///<summary>RollupItemCode. </summary>
+		///<summary>RollupItemCode. Inherited from Order</summary>
 		RollupItemCode,
-		///<summary>RollupItemSKU. </summary>
+		///<summary>RollupItemSKU. Inherited from Order</summary>
 		RollupItemSKU,
-		///<summary>RollupItemLocation. </summary>
+		///<summary>RollupItemLocation. Inherited from Order</summary>
 		RollupItemLocation,
-		///<summary>RollupItemQuantity. </summary>
+		///<summary>RollupItemQuantity. Inherited from Order</summary>
 		RollupItemQuantity,
-		///<summary>RollupItemTotalWeight. </summary>
+		///<summary>RollupItemTotalWeight. Inherited from Order</summary>
 		RollupItemTotalWeight,
-		///<summary>RollupNoteCount. </summary>
+		///<summary>RollupNoteCount. Inherited from Order</summary>
 		RollupNoteCount,
-		///<summary>BillNameParseStatus. </summary>
+		///<summary>BillNameParseStatus. Inherited from Order</summary>
 		BillNameParseStatus,
-		///<summary>BillUnparsedName. </summary>
+		///<summary>BillUnparsedName. Inherited from Order</summary>
 		BillUnparsedName,
-		///<summary>ShipNameParseStatus. </summary>
+		///<summary>ShipNameParseStatus. Inherited from Order</summary>
 		ShipNameParseStatus,
-		///<summary>ShipUnparsedName. </summary>
+		///<summary>ShipUnparsedName. Inherited from Order</summary>
 		ShipUnparsedName,
-		///<summary>ShipSenseHashKey. </summary>
+		///<summary>ShipSenseHashKey. Inherited from Order</summary>
 		ShipSenseHashKey,
-		///<summary>ShipSenseRecognitionStatus. </summary>
+		///<summary>ShipSenseRecognitionStatus. Inherited from Order</summary>
 		ShipSenseRecognitionStatus,
-		///<summary>ShipAddressType. </summary>
+		///<summary>ShipAddressType. Inherited from Order</summary>
 		ShipAddressType,
 		///<summary>OrderID. </summary>
 		OrderID,
@@ -8893,49 +8213,44 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ShopifyOrderItem.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum ShopifyOrderItemFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ShopifyOrderItem.</summary>
+	public enum ShopifyOrderItemFieldIndex
 	{
 		///<summary>OrderItemID. Inherited from OrderItem</summary>
 		OrderItemID_OrderItem,
-		///<summary>RowVersion. </summary>
+		///<summary>RowVersion. Inherited from OrderItem</summary>
 		RowVersion,
-		///<summary>OrderID. </summary>
+		///<summary>OrderID. Inherited from OrderItem</summary>
 		OrderID,
-		///<summary>Name. </summary>
+		///<summary>Name. Inherited from OrderItem</summary>
 		Name,
-		///<summary>Code. </summary>
+		///<summary>Code. Inherited from OrderItem</summary>
 		Code,
-		///<summary>SKU. </summary>
+		///<summary>SKU. Inherited from OrderItem</summary>
 		SKU,
-		///<summary>ISBN. </summary>
+		///<summary>ISBN. Inherited from OrderItem</summary>
 		ISBN,
-		///<summary>UPC. </summary>
+		///<summary>UPC. Inherited from OrderItem</summary>
 		UPC,
-		///<summary>Description. </summary>
+		///<summary>Description. Inherited from OrderItem</summary>
 		Description,
-		///<summary>Location. </summary>
+		///<summary>Location. Inherited from OrderItem</summary>
 		Location,
-		///<summary>Image. </summary>
+		///<summary>Image. Inherited from OrderItem</summary>
 		Image,
-		///<summary>Thumbnail. </summary>
+		///<summary>Thumbnail. Inherited from OrderItem</summary>
 		Thumbnail,
-		///<summary>UnitPrice. </summary>
+		///<summary>UnitPrice. Inherited from OrderItem</summary>
 		UnitPrice,
-		///<summary>UnitCost. </summary>
+		///<summary>UnitCost. Inherited from OrderItem</summary>
 		UnitCost,
-		///<summary>Weight. </summary>
+		///<summary>Weight. Inherited from OrderItem</summary>
 		Weight,
-		///<summary>Quantity. </summary>
+		///<summary>Quantity. Inherited from OrderItem</summary>
 		Quantity,
-		///<summary>LocalStatus. </summary>
+		///<summary>LocalStatus. Inherited from OrderItem</summary>
 		LocalStatus,
-		///<summary>IsManual. </summary>
+		///<summary>IsManual. Inherited from OrderItem</summary>
 		IsManual,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
@@ -8946,73 +8261,68 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ShopifyStore.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum ShopifyStoreFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ShopifyStore.</summary>
+	public enum ShopifyStoreFieldIndex
 	{
 		///<summary>StoreID. Inherited from Store</summary>
 		StoreID_Store,
-		///<summary>RowVersion. </summary>
+		///<summary>RowVersion. Inherited from Store</summary>
 		RowVersion,
-		///<summary>License. </summary>
+		///<summary>License. Inherited from Store</summary>
 		License,
-		///<summary>Edition. </summary>
+		///<summary>Edition. Inherited from Store</summary>
 		Edition,
-		///<summary>TypeCode. </summary>
+		///<summary>TypeCode. Inherited from Store</summary>
 		TypeCode,
-		///<summary>Enabled. </summary>
+		///<summary>Enabled. Inherited from Store</summary>
 		Enabled,
-		///<summary>SetupComplete. </summary>
+		///<summary>SetupComplete. Inherited from Store</summary>
 		SetupComplete,
-		///<summary>StoreName. </summary>
+		///<summary>StoreName. Inherited from Store</summary>
 		StoreName,
-		///<summary>Company. </summary>
+		///<summary>Company. Inherited from Store</summary>
 		Company,
-		///<summary>Street1. </summary>
+		///<summary>Street1. Inherited from Store</summary>
 		Street1,
-		///<summary>Street2. </summary>
+		///<summary>Street2. Inherited from Store</summary>
 		Street2,
-		///<summary>Street3. </summary>
+		///<summary>Street3. Inherited from Store</summary>
 		Street3,
-		///<summary>City. </summary>
+		///<summary>City. Inherited from Store</summary>
 		City,
-		///<summary>StateProvCode. </summary>
+		///<summary>StateProvCode. Inherited from Store</summary>
 		StateProvCode,
-		///<summary>PostalCode. </summary>
+		///<summary>PostalCode. Inherited from Store</summary>
 		PostalCode,
-		///<summary>CountryCode. </summary>
+		///<summary>CountryCode. Inherited from Store</summary>
 		CountryCode,
-		///<summary>Phone. </summary>
+		///<summary>Phone. Inherited from Store</summary>
 		Phone,
-		///<summary>Fax. </summary>
+		///<summary>Fax. Inherited from Store</summary>
 		Fax,
-		///<summary>Email. </summary>
+		///<summary>Email. Inherited from Store</summary>
 		Email,
-		///<summary>Website. </summary>
+		///<summary>Website. Inherited from Store</summary>
 		Website,
-		///<summary>AutoDownload. </summary>
+		///<summary>AutoDownload. Inherited from Store</summary>
 		AutoDownload,
-		///<summary>AutoDownloadMinutes. </summary>
+		///<summary>AutoDownloadMinutes. Inherited from Store</summary>
 		AutoDownloadMinutes,
-		///<summary>AutoDownloadOnlyAway. </summary>
+		///<summary>AutoDownloadOnlyAway. Inherited from Store</summary>
 		AutoDownloadOnlyAway,
-		///<summary>AddressValidationSetting. </summary>
+		///<summary>AddressValidationSetting. Inherited from Store</summary>
 		AddressValidationSetting,
-		///<summary>ComputerDownloadPolicy. </summary>
+		///<summary>ComputerDownloadPolicy. Inherited from Store</summary>
 		ComputerDownloadPolicy,
-		///<summary>DefaultEmailAccountID. </summary>
+		///<summary>DefaultEmailAccountID. Inherited from Store</summary>
 		DefaultEmailAccountID,
-		///<summary>ManualOrderPrefix. </summary>
+		///<summary>ManualOrderPrefix. Inherited from Store</summary>
 		ManualOrderPrefix,
-		///<summary>ManualOrderPostfix. </summary>
+		///<summary>ManualOrderPostfix. Inherited from Store</summary>
 		ManualOrderPostfix,
-		///<summary>InitialDownloadDays. </summary>
+		///<summary>InitialDownloadDays. Inherited from Store</summary>
 		InitialDownloadDays,
-		///<summary>InitialDownloadOrder. </summary>
+		///<summary>InitialDownloadOrder. Inherited from Store</summary>
 		InitialDownloadOrder,
 		///<summary>StoreID. </summary>
 		StoreID,
@@ -9027,73 +8337,68 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ShopSiteStore.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum ShopSiteStoreFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ShopSiteStore.</summary>
+	public enum ShopSiteStoreFieldIndex
 	{
 		///<summary>StoreID. Inherited from Store</summary>
 		StoreID_Store,
-		///<summary>RowVersion. </summary>
+		///<summary>RowVersion. Inherited from Store</summary>
 		RowVersion,
-		///<summary>License. </summary>
+		///<summary>License. Inherited from Store</summary>
 		License,
-		///<summary>Edition. </summary>
+		///<summary>Edition. Inherited from Store</summary>
 		Edition,
-		///<summary>TypeCode. </summary>
+		///<summary>TypeCode. Inherited from Store</summary>
 		TypeCode,
-		///<summary>Enabled. </summary>
+		///<summary>Enabled. Inherited from Store</summary>
 		Enabled,
-		///<summary>SetupComplete. </summary>
+		///<summary>SetupComplete. Inherited from Store</summary>
 		SetupComplete,
-		///<summary>StoreName. </summary>
+		///<summary>StoreName. Inherited from Store</summary>
 		StoreName,
-		///<summary>Company. </summary>
+		///<summary>Company. Inherited from Store</summary>
 		Company,
-		///<summary>Street1. </summary>
+		///<summary>Street1. Inherited from Store</summary>
 		Street1,
-		///<summary>Street2. </summary>
+		///<summary>Street2. Inherited from Store</summary>
 		Street2,
-		///<summary>Street3. </summary>
+		///<summary>Street3. Inherited from Store</summary>
 		Street3,
-		///<summary>City. </summary>
+		///<summary>City. Inherited from Store</summary>
 		City,
-		///<summary>StateProvCode. </summary>
+		///<summary>StateProvCode. Inherited from Store</summary>
 		StateProvCode,
-		///<summary>PostalCode. </summary>
+		///<summary>PostalCode. Inherited from Store</summary>
 		PostalCode,
-		///<summary>CountryCode. </summary>
+		///<summary>CountryCode. Inherited from Store</summary>
 		CountryCode,
-		///<summary>Phone. </summary>
+		///<summary>Phone. Inherited from Store</summary>
 		Phone,
-		///<summary>Fax. </summary>
+		///<summary>Fax. Inherited from Store</summary>
 		Fax,
-		///<summary>Email. </summary>
+		///<summary>Email. Inherited from Store</summary>
 		Email,
-		///<summary>Website. </summary>
+		///<summary>Website. Inherited from Store</summary>
 		Website,
-		///<summary>AutoDownload. </summary>
+		///<summary>AutoDownload. Inherited from Store</summary>
 		AutoDownload,
-		///<summary>AutoDownloadMinutes. </summary>
+		///<summary>AutoDownloadMinutes. Inherited from Store</summary>
 		AutoDownloadMinutes,
-		///<summary>AutoDownloadOnlyAway. </summary>
+		///<summary>AutoDownloadOnlyAway. Inherited from Store</summary>
 		AutoDownloadOnlyAway,
-		///<summary>AddressValidationSetting. </summary>
+		///<summary>AddressValidationSetting. Inherited from Store</summary>
 		AddressValidationSetting,
-		///<summary>ComputerDownloadPolicy. </summary>
+		///<summary>ComputerDownloadPolicy. Inherited from Store</summary>
 		ComputerDownloadPolicy,
-		///<summary>DefaultEmailAccountID. </summary>
+		///<summary>DefaultEmailAccountID. Inherited from Store</summary>
 		DefaultEmailAccountID,
-		///<summary>ManualOrderPrefix. </summary>
+		///<summary>ManualOrderPrefix. Inherited from Store</summary>
 		ManualOrderPrefix,
-		///<summary>ManualOrderPostfix. </summary>
+		///<summary>ManualOrderPostfix. Inherited from Store</summary>
 		ManualOrderPostfix,
-		///<summary>InitialDownloadDays. </summary>
+		///<summary>InitialDownloadDays. Inherited from Store</summary>
 		InitialDownloadDays,
-		///<summary>InitialDownloadOrder. </summary>
+		///<summary>InitialDownloadOrder. Inherited from Store</summary>
 		InitialDownloadOrder,
 		///<summary>StoreID. </summary>
 		StoreID,
@@ -9112,73 +8417,68 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: SparkPayStore.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum SparkPayStoreFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: SparkPayStore.</summary>
+	public enum SparkPayStoreFieldIndex
 	{
 		///<summary>StoreID. Inherited from Store</summary>
 		StoreID_Store,
-		///<summary>RowVersion. </summary>
+		///<summary>RowVersion. Inherited from Store</summary>
 		RowVersion,
-		///<summary>License. </summary>
+		///<summary>License. Inherited from Store</summary>
 		License,
-		///<summary>Edition. </summary>
+		///<summary>Edition. Inherited from Store</summary>
 		Edition,
-		///<summary>TypeCode. </summary>
+		///<summary>TypeCode. Inherited from Store</summary>
 		TypeCode,
-		///<summary>Enabled. </summary>
+		///<summary>Enabled. Inherited from Store</summary>
 		Enabled,
-		///<summary>SetupComplete. </summary>
+		///<summary>SetupComplete. Inherited from Store</summary>
 		SetupComplete,
-		///<summary>StoreName. </summary>
+		///<summary>StoreName. Inherited from Store</summary>
 		StoreName,
-		///<summary>Company. </summary>
+		///<summary>Company. Inherited from Store</summary>
 		Company,
-		///<summary>Street1. </summary>
+		///<summary>Street1. Inherited from Store</summary>
 		Street1,
-		///<summary>Street2. </summary>
+		///<summary>Street2. Inherited from Store</summary>
 		Street2,
-		///<summary>Street3. </summary>
+		///<summary>Street3. Inherited from Store</summary>
 		Street3,
-		///<summary>City. </summary>
+		///<summary>City. Inherited from Store</summary>
 		City,
-		///<summary>StateProvCode. </summary>
+		///<summary>StateProvCode. Inherited from Store</summary>
 		StateProvCode,
-		///<summary>PostalCode. </summary>
+		///<summary>PostalCode. Inherited from Store</summary>
 		PostalCode,
-		///<summary>CountryCode. </summary>
+		///<summary>CountryCode. Inherited from Store</summary>
 		CountryCode,
-		///<summary>Phone. </summary>
+		///<summary>Phone. Inherited from Store</summary>
 		Phone,
-		///<summary>Fax. </summary>
+		///<summary>Fax. Inherited from Store</summary>
 		Fax,
-		///<summary>Email. </summary>
+		///<summary>Email. Inherited from Store</summary>
 		Email,
-		///<summary>Website. </summary>
+		///<summary>Website. Inherited from Store</summary>
 		Website,
-		///<summary>AutoDownload. </summary>
+		///<summary>AutoDownload. Inherited from Store</summary>
 		AutoDownload,
-		///<summary>AutoDownloadMinutes. </summary>
+		///<summary>AutoDownloadMinutes. Inherited from Store</summary>
 		AutoDownloadMinutes,
-		///<summary>AutoDownloadOnlyAway. </summary>
+		///<summary>AutoDownloadOnlyAway. Inherited from Store</summary>
 		AutoDownloadOnlyAway,
-		///<summary>AddressValidationSetting. </summary>
+		///<summary>AddressValidationSetting. Inherited from Store</summary>
 		AddressValidationSetting,
-		///<summary>ComputerDownloadPolicy. </summary>
+		///<summary>ComputerDownloadPolicy. Inherited from Store</summary>
 		ComputerDownloadPolicy,
-		///<summary>DefaultEmailAccountID. </summary>
+		///<summary>DefaultEmailAccountID. Inherited from Store</summary>
 		DefaultEmailAccountID,
-		///<summary>ManualOrderPrefix. </summary>
+		///<summary>ManualOrderPrefix. Inherited from Store</summary>
 		ManualOrderPrefix,
-		///<summary>ManualOrderPostfix. </summary>
+		///<summary>ManualOrderPostfix. Inherited from Store</summary>
 		ManualOrderPostfix,
-		///<summary>InitialDownloadDays. </summary>
+		///<summary>InitialDownloadDays. Inherited from Store</summary>
 		InitialDownloadDays,
-		///<summary>InitialDownloadOrder. </summary>
+		///<summary>InitialDownloadOrder. Inherited from Store</summary>
 		InitialDownloadOrder,
 		///<summary>StoreID. </summary>
 		StoreID,
@@ -9191,13 +8491,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: StatusPreset.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum StatusPresetFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: StatusPreset.</summary>
+	public enum StatusPresetFieldIndex
 	{
 		///<summary>StatusPresetID. </summary>
 		StatusPresetID,
@@ -9214,13 +8509,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: Store.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum StoreFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: Store.</summary>
+	public enum StoreFieldIndex
 	{
 		///<summary>StoreID. </summary>
 		StoreID,
@@ -9285,13 +8575,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: SystemData.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum SystemDataFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: SystemData.</summary>
+	public enum SystemDataFieldIndex
 	{
 		///<summary>SystemDataID. </summary>
 		SystemDataID,
@@ -9306,13 +8591,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: Template.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum TemplateFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: Template.</summary>
+	public enum TemplateFieldIndex
 	{
 		///<summary>TemplateID. </summary>
 		TemplateID,
@@ -9363,13 +8643,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: TemplateComputerSettings.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum TemplateComputerSettingsFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: TemplateComputerSettings.</summary>
+	public enum TemplateComputerSettingsFieldIndex
 	{
 		///<summary>TemplateComputerSettingsID. </summary>
 		TemplateComputerSettingsID,
@@ -9384,13 +8659,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: TemplateFolder.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum TemplateFolderFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: TemplateFolder.</summary>
+	public enum TemplateFolderFieldIndex
 	{
 		///<summary>TemplateFolderID. </summary>
 		TemplateFolderID,
@@ -9403,13 +8673,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: TemplateStoreSettings.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum TemplateStoreSettingsFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: TemplateStoreSettings.</summary>
+	public enum TemplateStoreSettingsFieldIndex
 	{
 		///<summary>TemplateStoreSettingsID. </summary>
 		TemplateStoreSettingsID,
@@ -9432,13 +8697,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: TemplateUserSettings.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum TemplateUserSettingsFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: TemplateUserSettings.</summary>
+	public enum TemplateUserSettingsFieldIndex
 	{
 		///<summary>TemplateUserSettingsID. </summary>
 		TemplateUserSettingsID,
@@ -9457,161 +8717,156 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ThreeDCartOrder.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum ThreeDCartOrderFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ThreeDCartOrder.</summary>
+	public enum ThreeDCartOrderFieldIndex
 	{
 		///<summary>OrderID. Inherited from Order</summary>
 		OrderID_Order,
-		///<summary>RowVersion. </summary>
+		///<summary>RowVersion. Inherited from Order</summary>
 		RowVersion,
-		///<summary>StoreID. </summary>
+		///<summary>StoreID. Inherited from Order</summary>
 		StoreID,
-		///<summary>CustomerID. </summary>
+		///<summary>CustomerID. Inherited from Order</summary>
 		CustomerID,
-		///<summary>OrderNumber. </summary>
+		///<summary>OrderNumber. Inherited from Order</summary>
 		OrderNumber,
-		///<summary>OrderNumberComplete. </summary>
+		///<summary>OrderNumberComplete. Inherited from Order</summary>
 		OrderNumberComplete,
-		///<summary>OrderDate. </summary>
+		///<summary>OrderDate. Inherited from Order</summary>
 		OrderDate,
-		///<summary>OrderTotal. </summary>
+		///<summary>OrderTotal. Inherited from Order</summary>
 		OrderTotal,
-		///<summary>LocalStatus. </summary>
+		///<summary>LocalStatus. Inherited from Order</summary>
 		LocalStatus,
-		///<summary>IsManual. </summary>
+		///<summary>IsManual. Inherited from Order</summary>
 		IsManual,
-		///<summary>OnlineLastModified. </summary>
+		///<summary>OnlineLastModified. Inherited from Order</summary>
 		OnlineLastModified,
-		///<summary>OnlineCustomerID. </summary>
+		///<summary>OnlineCustomerID. Inherited from Order</summary>
 		OnlineCustomerID,
-		///<summary>OnlineStatus. </summary>
+		///<summary>OnlineStatus. Inherited from Order</summary>
 		OnlineStatus,
-		///<summary>OnlineStatusCode. </summary>
+		///<summary>OnlineStatusCode. Inherited from Order</summary>
 		OnlineStatusCode,
-		///<summary>RequestedShipping. </summary>
+		///<summary>RequestedShipping. Inherited from Order</summary>
 		RequestedShipping,
-		///<summary>BillFirstName. </summary>
+		///<summary>BillFirstName. Inherited from Order</summary>
 		BillFirstName,
-		///<summary>BillMiddleName. </summary>
+		///<summary>BillMiddleName. Inherited from Order</summary>
 		BillMiddleName,
-		///<summary>BillLastName. </summary>
+		///<summary>BillLastName. Inherited from Order</summary>
 		BillLastName,
-		///<summary>BillCompany. </summary>
+		///<summary>BillCompany. Inherited from Order</summary>
 		BillCompany,
-		///<summary>BillStreet1. </summary>
+		///<summary>BillStreet1. Inherited from Order</summary>
 		BillStreet1,
-		///<summary>BillStreet2. </summary>
+		///<summary>BillStreet2. Inherited from Order</summary>
 		BillStreet2,
-		///<summary>BillStreet3. </summary>
+		///<summary>BillStreet3. Inherited from Order</summary>
 		BillStreet3,
-		///<summary>BillCity. </summary>
+		///<summary>BillCity. Inherited from Order</summary>
 		BillCity,
-		///<summary>BillStateProvCode. </summary>
+		///<summary>BillStateProvCode. Inherited from Order</summary>
 		BillStateProvCode,
-		///<summary>BillPostalCode. </summary>
+		///<summary>BillPostalCode. Inherited from Order</summary>
 		BillPostalCode,
-		///<summary>BillCountryCode. </summary>
+		///<summary>BillCountryCode. Inherited from Order</summary>
 		BillCountryCode,
-		///<summary>BillPhone. </summary>
+		///<summary>BillPhone. Inherited from Order</summary>
 		BillPhone,
-		///<summary>BillFax. </summary>
+		///<summary>BillFax. Inherited from Order</summary>
 		BillFax,
-		///<summary>BillEmail. </summary>
+		///<summary>BillEmail. Inherited from Order</summary>
 		BillEmail,
-		///<summary>BillWebsite. </summary>
+		///<summary>BillWebsite. Inherited from Order</summary>
 		BillWebsite,
-		///<summary>BillAddressValidationSuggestionCount. </summary>
+		///<summary>BillAddressValidationSuggestionCount. Inherited from Order</summary>
 		BillAddressValidationSuggestionCount,
-		///<summary>BillAddressValidationStatus. </summary>
+		///<summary>BillAddressValidationStatus. Inherited from Order</summary>
 		BillAddressValidationStatus,
-		///<summary>BillAddressValidationError. </summary>
+		///<summary>BillAddressValidationError. Inherited from Order</summary>
 		BillAddressValidationError,
-		///<summary>BillResidentialStatus. </summary>
+		///<summary>BillResidentialStatus. Inherited from Order</summary>
 		BillResidentialStatus,
-		///<summary>BillPOBox. </summary>
+		///<summary>BillPOBox. Inherited from Order</summary>
 		BillPOBox,
-		///<summary>BillUSTerritory. </summary>
+		///<summary>BillUSTerritory. Inherited from Order</summary>
 		BillUSTerritory,
-		///<summary>BillMilitaryAddress. </summary>
+		///<summary>BillMilitaryAddress. Inherited from Order</summary>
 		BillMilitaryAddress,
-		///<summary>ShipFirstName. </summary>
+		///<summary>ShipFirstName. Inherited from Order</summary>
 		ShipFirstName,
-		///<summary>ShipMiddleName. </summary>
+		///<summary>ShipMiddleName. Inherited from Order</summary>
 		ShipMiddleName,
-		///<summary>ShipLastName. </summary>
+		///<summary>ShipLastName. Inherited from Order</summary>
 		ShipLastName,
-		///<summary>ShipCompany. </summary>
+		///<summary>ShipCompany. Inherited from Order</summary>
 		ShipCompany,
-		///<summary>ShipStreet1. </summary>
+		///<summary>ShipStreet1. Inherited from Order</summary>
 		ShipStreet1,
-		///<summary>ShipStreet2. </summary>
+		///<summary>ShipStreet2. Inherited from Order</summary>
 		ShipStreet2,
-		///<summary>ShipStreet3. </summary>
+		///<summary>ShipStreet3. Inherited from Order</summary>
 		ShipStreet3,
-		///<summary>ShipCity. </summary>
+		///<summary>ShipCity. Inherited from Order</summary>
 		ShipCity,
-		///<summary>ShipStateProvCode. </summary>
+		///<summary>ShipStateProvCode. Inherited from Order</summary>
 		ShipStateProvCode,
-		///<summary>ShipPostalCode. </summary>
+		///<summary>ShipPostalCode. Inherited from Order</summary>
 		ShipPostalCode,
-		///<summary>ShipCountryCode. </summary>
+		///<summary>ShipCountryCode. Inherited from Order</summary>
 		ShipCountryCode,
-		///<summary>ShipPhone. </summary>
+		///<summary>ShipPhone. Inherited from Order</summary>
 		ShipPhone,
-		///<summary>ShipFax. </summary>
+		///<summary>ShipFax. Inherited from Order</summary>
 		ShipFax,
-		///<summary>ShipEmail. </summary>
+		///<summary>ShipEmail. Inherited from Order</summary>
 		ShipEmail,
-		///<summary>ShipWebsite. </summary>
+		///<summary>ShipWebsite. Inherited from Order</summary>
 		ShipWebsite,
-		///<summary>ShipAddressValidationSuggestionCount. </summary>
+		///<summary>ShipAddressValidationSuggestionCount. Inherited from Order</summary>
 		ShipAddressValidationSuggestionCount,
-		///<summary>ShipAddressValidationStatus. </summary>
+		///<summary>ShipAddressValidationStatus. Inherited from Order</summary>
 		ShipAddressValidationStatus,
-		///<summary>ShipAddressValidationError. </summary>
+		///<summary>ShipAddressValidationError. Inherited from Order</summary>
 		ShipAddressValidationError,
-		///<summary>ShipResidentialStatus. </summary>
+		///<summary>ShipResidentialStatus. Inherited from Order</summary>
 		ShipResidentialStatus,
-		///<summary>ShipPOBox. </summary>
+		///<summary>ShipPOBox. Inherited from Order</summary>
 		ShipPOBox,
-		///<summary>ShipUSTerritory. </summary>
+		///<summary>ShipUSTerritory. Inherited from Order</summary>
 		ShipUSTerritory,
-		///<summary>ShipMilitaryAddress. </summary>
+		///<summary>ShipMilitaryAddress. Inherited from Order</summary>
 		ShipMilitaryAddress,
-		///<summary>RollupItemCount. </summary>
+		///<summary>RollupItemCount. Inherited from Order</summary>
 		RollupItemCount,
-		///<summary>RollupItemName. </summary>
+		///<summary>RollupItemName. Inherited from Order</summary>
 		RollupItemName,
-		///<summary>RollupItemCode. </summary>
+		///<summary>RollupItemCode. Inherited from Order</summary>
 		RollupItemCode,
-		///<summary>RollupItemSKU. </summary>
+		///<summary>RollupItemSKU. Inherited from Order</summary>
 		RollupItemSKU,
-		///<summary>RollupItemLocation. </summary>
+		///<summary>RollupItemLocation. Inherited from Order</summary>
 		RollupItemLocation,
-		///<summary>RollupItemQuantity. </summary>
+		///<summary>RollupItemQuantity. Inherited from Order</summary>
 		RollupItemQuantity,
-		///<summary>RollupItemTotalWeight. </summary>
+		///<summary>RollupItemTotalWeight. Inherited from Order</summary>
 		RollupItemTotalWeight,
-		///<summary>RollupNoteCount. </summary>
+		///<summary>RollupNoteCount. Inherited from Order</summary>
 		RollupNoteCount,
-		///<summary>BillNameParseStatus. </summary>
+		///<summary>BillNameParseStatus. Inherited from Order</summary>
 		BillNameParseStatus,
-		///<summary>BillUnparsedName. </summary>
+		///<summary>BillUnparsedName. Inherited from Order</summary>
 		BillUnparsedName,
-		///<summary>ShipNameParseStatus. </summary>
+		///<summary>ShipNameParseStatus. Inherited from Order</summary>
 		ShipNameParseStatus,
-		///<summary>ShipUnparsedName. </summary>
+		///<summary>ShipUnparsedName. Inherited from Order</summary>
 		ShipUnparsedName,
-		///<summary>ShipSenseHashKey. </summary>
+		///<summary>ShipSenseHashKey. Inherited from Order</summary>
 		ShipSenseHashKey,
-		///<summary>ShipSenseRecognitionStatus. </summary>
+		///<summary>ShipSenseRecognitionStatus. Inherited from Order</summary>
 		ShipSenseRecognitionStatus,
-		///<summary>ShipAddressType. </summary>
+		///<summary>ShipAddressType. Inherited from Order</summary>
 		ShipAddressType,
 		///<summary>OrderID. </summary>
 		OrderID,
@@ -9620,49 +8875,44 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ThreeDCartOrderItem.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum ThreeDCartOrderItemFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ThreeDCartOrderItem.</summary>
+	public enum ThreeDCartOrderItemFieldIndex
 	{
 		///<summary>OrderItemID. Inherited from OrderItem</summary>
 		OrderItemID_OrderItem,
-		///<summary>RowVersion. </summary>
+		///<summary>RowVersion. Inherited from OrderItem</summary>
 		RowVersion,
-		///<summary>OrderID. </summary>
+		///<summary>OrderID. Inherited from OrderItem</summary>
 		OrderID,
-		///<summary>Name. </summary>
+		///<summary>Name. Inherited from OrderItem</summary>
 		Name,
-		///<summary>Code. </summary>
+		///<summary>Code. Inherited from OrderItem</summary>
 		Code,
-		///<summary>SKU. </summary>
+		///<summary>SKU. Inherited from OrderItem</summary>
 		SKU,
-		///<summary>ISBN. </summary>
+		///<summary>ISBN. Inherited from OrderItem</summary>
 		ISBN,
-		///<summary>UPC. </summary>
+		///<summary>UPC. Inherited from OrderItem</summary>
 		UPC,
-		///<summary>Description. </summary>
+		///<summary>Description. Inherited from OrderItem</summary>
 		Description,
-		///<summary>Location. </summary>
+		///<summary>Location. Inherited from OrderItem</summary>
 		Location,
-		///<summary>Image. </summary>
+		///<summary>Image. Inherited from OrderItem</summary>
 		Image,
-		///<summary>Thumbnail. </summary>
+		///<summary>Thumbnail. Inherited from OrderItem</summary>
 		Thumbnail,
-		///<summary>UnitPrice. </summary>
+		///<summary>UnitPrice. Inherited from OrderItem</summary>
 		UnitPrice,
-		///<summary>UnitCost. </summary>
+		///<summary>UnitCost. Inherited from OrderItem</summary>
 		UnitCost,
-		///<summary>Weight. </summary>
+		///<summary>Weight. Inherited from OrderItem</summary>
 		Weight,
-		///<summary>Quantity. </summary>
+		///<summary>Quantity. Inherited from OrderItem</summary>
 		Quantity,
-		///<summary>LocalStatus. </summary>
+		///<summary>LocalStatus. Inherited from OrderItem</summary>
 		LocalStatus,
-		///<summary>IsManual. </summary>
+		///<summary>IsManual. Inherited from OrderItem</summary>
 		IsManual,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
@@ -9671,73 +8921,68 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ThreeDCartStore.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum ThreeDCartStoreFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ThreeDCartStore.</summary>
+	public enum ThreeDCartStoreFieldIndex
 	{
 		///<summary>StoreID. Inherited from Store</summary>
 		StoreID_Store,
-		///<summary>RowVersion. </summary>
+		///<summary>RowVersion. Inherited from Store</summary>
 		RowVersion,
-		///<summary>License. </summary>
+		///<summary>License. Inherited from Store</summary>
 		License,
-		///<summary>Edition. </summary>
+		///<summary>Edition. Inherited from Store</summary>
 		Edition,
-		///<summary>TypeCode. </summary>
+		///<summary>TypeCode. Inherited from Store</summary>
 		TypeCode,
-		///<summary>Enabled. </summary>
+		///<summary>Enabled. Inherited from Store</summary>
 		Enabled,
-		///<summary>SetupComplete. </summary>
+		///<summary>SetupComplete. Inherited from Store</summary>
 		SetupComplete,
-		///<summary>StoreName. </summary>
+		///<summary>StoreName. Inherited from Store</summary>
 		StoreName,
-		///<summary>Company. </summary>
+		///<summary>Company. Inherited from Store</summary>
 		Company,
-		///<summary>Street1. </summary>
+		///<summary>Street1. Inherited from Store</summary>
 		Street1,
-		///<summary>Street2. </summary>
+		///<summary>Street2. Inherited from Store</summary>
 		Street2,
-		///<summary>Street3. </summary>
+		///<summary>Street3. Inherited from Store</summary>
 		Street3,
-		///<summary>City. </summary>
+		///<summary>City. Inherited from Store</summary>
 		City,
-		///<summary>StateProvCode. </summary>
+		///<summary>StateProvCode. Inherited from Store</summary>
 		StateProvCode,
-		///<summary>PostalCode. </summary>
+		///<summary>PostalCode. Inherited from Store</summary>
 		PostalCode,
-		///<summary>CountryCode. </summary>
+		///<summary>CountryCode. Inherited from Store</summary>
 		CountryCode,
-		///<summary>Phone. </summary>
+		///<summary>Phone. Inherited from Store</summary>
 		Phone,
-		///<summary>Fax. </summary>
+		///<summary>Fax. Inherited from Store</summary>
 		Fax,
-		///<summary>Email. </summary>
+		///<summary>Email. Inherited from Store</summary>
 		Email,
-		///<summary>Website. </summary>
+		///<summary>Website. Inherited from Store</summary>
 		Website,
-		///<summary>AutoDownload. </summary>
+		///<summary>AutoDownload. Inherited from Store</summary>
 		AutoDownload,
-		///<summary>AutoDownloadMinutes. </summary>
+		///<summary>AutoDownloadMinutes. Inherited from Store</summary>
 		AutoDownloadMinutes,
-		///<summary>AutoDownloadOnlyAway. </summary>
+		///<summary>AutoDownloadOnlyAway. Inherited from Store</summary>
 		AutoDownloadOnlyAway,
-		///<summary>AddressValidationSetting. </summary>
+		///<summary>AddressValidationSetting. Inherited from Store</summary>
 		AddressValidationSetting,
-		///<summary>ComputerDownloadPolicy. </summary>
+		///<summary>ComputerDownloadPolicy. Inherited from Store</summary>
 		ComputerDownloadPolicy,
-		///<summary>DefaultEmailAccountID. </summary>
+		///<summary>DefaultEmailAccountID. Inherited from Store</summary>
 		DefaultEmailAccountID,
-		///<summary>ManualOrderPrefix. </summary>
+		///<summary>ManualOrderPrefix. Inherited from Store</summary>
 		ManualOrderPrefix,
-		///<summary>ManualOrderPostfix. </summary>
+		///<summary>ManualOrderPostfix. Inherited from Store</summary>
 		ManualOrderPostfix,
-		///<summary>InitialDownloadDays. </summary>
+		///<summary>InitialDownloadDays. Inherited from Store</summary>
 		InitialDownloadDays,
-		///<summary>InitialDownloadOrder. </summary>
+		///<summary>InitialDownloadOrder. Inherited from Store</summary>
 		InitialDownloadOrder,
 		///<summary>StoreID. </summary>
 		StoreID,
@@ -9756,13 +9001,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: UpsAccount.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum UpsAccountFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: UpsAccount.</summary>
+	public enum UpsAccountFieldIndex
 	{
 		///<summary>UpsAccountID. </summary>
 		UpsAccountID,
@@ -9811,13 +9051,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: UpsPackage.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum UpsPackageFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: UpsPackage.</summary>
+	public enum UpsPackageFieldIndex
 	{
 		///<summary>UpsPackageID. </summary>
 		UpsPackageID,
@@ -9872,13 +9107,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: UpsProfile.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum UpsProfileFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: UpsProfile.</summary>
+	public enum UpsProfileFieldIndex
 	{
 		///<summary>ShippingProfileID. </summary>
 		ShippingProfileID,
@@ -9955,13 +9185,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: UpsProfilePackage.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum UpsProfilePackageFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: UpsProfilePackage.</summary>
+	public enum UpsProfilePackageFieldIndex
 	{
 		///<summary>UpsProfilePackageID. </summary>
 		UpsProfilePackageID,
@@ -10004,13 +9229,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: UpsShipment.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum UpsShipmentFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: UpsShipment.</summary>
+	public enum UpsShipmentFieldIndex
 	{
 		///<summary>ShipmentID. </summary>
 		ShipmentID,
@@ -10117,13 +9337,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: User.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum UserFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: User.</summary>
+	public enum UserFieldIndex
 	{
 		///<summary>UserID. </summary>
 		UserID,
@@ -10142,13 +9357,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: UserColumnSettings.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum UserColumnSettingsFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: UserColumnSettings.</summary>
+	public enum UserColumnSettingsFieldIndex
 	{
 		///<summary>UserColumnSettingsID. </summary>
 		UserColumnSettingsID,
@@ -10163,13 +9373,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: UserSettings.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum UserSettingsFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: UserSettings.</summary>
+	public enum UserSettingsFieldIndex
 	{
 		///<summary>UserID. </summary>
 		UserID,
@@ -10204,13 +9409,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: UspsAccount.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum UspsAccountFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: UspsAccount.</summary>
+	public enum UspsAccountFieldIndex
 	{
 		///<summary>UspsAccountID. </summary>
 		UspsAccountID,
@@ -10263,13 +9463,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: UspsProfile.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum UspsProfileFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: UspsProfile.</summary>
+	public enum UspsProfileFieldIndex
 	{
 		///<summary>ShippingProfileID. </summary>
 		ShippingProfileID,
@@ -10284,13 +9479,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: UspsScanForm.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum UspsScanFormFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: UspsScanForm.</summary>
+	public enum UspsScanFormFieldIndex
 	{
 		///<summary>UspsScanFormID. </summary>
 		UspsScanFormID,
@@ -10309,13 +9499,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: UspsShipment.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum UspsShipmentFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: UspsShipment.</summary>
+	public enum UspsShipmentFieldIndex
 	{
 		///<summary>ShipmentID. </summary>
 		ShipmentID,
@@ -10340,13 +9525,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ValidatedAddress.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum ValidatedAddressFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ValidatedAddress.</summary>
+	public enum ValidatedAddressFieldIndex
 	{
 		///<summary>ValidatedAddressID. </summary>
 		ValidatedAddressID,
@@ -10381,13 +9561,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: VersionSignoff.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum VersionSignoffFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: VersionSignoff.</summary>
+	public enum VersionSignoffFieldIndex
 	{
 		///<summary>VersionSignoffID. </summary>
 		VersionSignoffID,
@@ -10400,73 +9575,68 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: VolusionStore.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum VolusionStoreFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: VolusionStore.</summary>
+	public enum VolusionStoreFieldIndex
 	{
 		///<summary>StoreID. Inherited from Store</summary>
 		StoreID_Store,
-		///<summary>RowVersion. </summary>
+		///<summary>RowVersion. Inherited from Store</summary>
 		RowVersion,
-		///<summary>License. </summary>
+		///<summary>License. Inherited from Store</summary>
 		License,
-		///<summary>Edition. </summary>
+		///<summary>Edition. Inherited from Store</summary>
 		Edition,
-		///<summary>TypeCode. </summary>
+		///<summary>TypeCode. Inherited from Store</summary>
 		TypeCode,
-		///<summary>Enabled. </summary>
+		///<summary>Enabled. Inherited from Store</summary>
 		Enabled,
-		///<summary>SetupComplete. </summary>
+		///<summary>SetupComplete. Inherited from Store</summary>
 		SetupComplete,
-		///<summary>StoreName. </summary>
+		///<summary>StoreName. Inherited from Store</summary>
 		StoreName,
-		///<summary>Company. </summary>
+		///<summary>Company. Inherited from Store</summary>
 		Company,
-		///<summary>Street1. </summary>
+		///<summary>Street1. Inherited from Store</summary>
 		Street1,
-		///<summary>Street2. </summary>
+		///<summary>Street2. Inherited from Store</summary>
 		Street2,
-		///<summary>Street3. </summary>
+		///<summary>Street3. Inherited from Store</summary>
 		Street3,
-		///<summary>City. </summary>
+		///<summary>City. Inherited from Store</summary>
 		City,
-		///<summary>StateProvCode. </summary>
+		///<summary>StateProvCode. Inherited from Store</summary>
 		StateProvCode,
-		///<summary>PostalCode. </summary>
+		///<summary>PostalCode. Inherited from Store</summary>
 		PostalCode,
-		///<summary>CountryCode. </summary>
+		///<summary>CountryCode. Inherited from Store</summary>
 		CountryCode,
-		///<summary>Phone. </summary>
+		///<summary>Phone. Inherited from Store</summary>
 		Phone,
-		///<summary>Fax. </summary>
+		///<summary>Fax. Inherited from Store</summary>
 		Fax,
-		///<summary>Email. </summary>
+		///<summary>Email. Inherited from Store</summary>
 		Email,
-		///<summary>Website. </summary>
+		///<summary>Website. Inherited from Store</summary>
 		Website,
-		///<summary>AutoDownload. </summary>
+		///<summary>AutoDownload. Inherited from Store</summary>
 		AutoDownload,
-		///<summary>AutoDownloadMinutes. </summary>
+		///<summary>AutoDownloadMinutes. Inherited from Store</summary>
 		AutoDownloadMinutes,
-		///<summary>AutoDownloadOnlyAway. </summary>
+		///<summary>AutoDownloadOnlyAway. Inherited from Store</summary>
 		AutoDownloadOnlyAway,
-		///<summary>AddressValidationSetting. </summary>
+		///<summary>AddressValidationSetting. Inherited from Store</summary>
 		AddressValidationSetting,
-		///<summary>ComputerDownloadPolicy. </summary>
+		///<summary>ComputerDownloadPolicy. Inherited from Store</summary>
 		ComputerDownloadPolicy,
-		///<summary>DefaultEmailAccountID. </summary>
+		///<summary>DefaultEmailAccountID. Inherited from Store</summary>
 		DefaultEmailAccountID,
-		///<summary>ManualOrderPrefix. </summary>
+		///<summary>ManualOrderPrefix. Inherited from Store</summary>
 		ManualOrderPrefix,
-		///<summary>ManualOrderPostfix. </summary>
+		///<summary>ManualOrderPostfix. Inherited from Store</summary>
 		ManualOrderPostfix,
-		///<summary>InitialDownloadDays. </summary>
+		///<summary>InitialDownloadDays. Inherited from Store</summary>
 		InitialDownloadDays,
-		///<summary>InitialDownloadOrder. </summary>
+		///<summary>InitialDownloadOrder. Inherited from Store</summary>
 		InitialDownloadOrder,
 		///<summary>StoreID. </summary>
 		StoreID,
@@ -10491,13 +9661,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: WorldShipGoods.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum WorldShipGoodsFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: WorldShipGoods.</summary>
+	public enum WorldShipGoodsFieldIndex
 	{
 		///<summary>WorldShipGoodsID. </summary>
 		WorldShipGoodsID,
@@ -10524,13 +9689,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: WorldShipPackage.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum WorldShipPackageFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: WorldShipPackage.</summary>
+	public enum WorldShipPackageFieldIndex
 	{
 		///<summary>UpsPackageID. </summary>
 		UpsPackageID,
@@ -10623,13 +9783,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: WorldShipProcessed.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum WorldShipProcessedFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: WorldShipProcessed.</summary>
+	public enum WorldShipProcessedFieldIndex
 	{
 		///<summary>WorldShipProcessedID. </summary>
 		WorldShipProcessedID,
@@ -10668,13 +9823,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: WorldShipShipment.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum WorldShipShipmentFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: WorldShipShipment.</summary>
+	public enum WorldShipShipmentFieldIndex
 	{
 		///<summary>ShipmentID. </summary>
 		ShipmentID,
@@ -10811,161 +9961,156 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: YahooOrder.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum YahooOrderFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: YahooOrder.</summary>
+	public enum YahooOrderFieldIndex
 	{
 		///<summary>OrderID. Inherited from Order</summary>
 		OrderID_Order,
-		///<summary>RowVersion. </summary>
+		///<summary>RowVersion. Inherited from Order</summary>
 		RowVersion,
-		///<summary>StoreID. </summary>
+		///<summary>StoreID. Inherited from Order</summary>
 		StoreID,
-		///<summary>CustomerID. </summary>
+		///<summary>CustomerID. Inherited from Order</summary>
 		CustomerID,
-		///<summary>OrderNumber. </summary>
+		///<summary>OrderNumber. Inherited from Order</summary>
 		OrderNumber,
-		///<summary>OrderNumberComplete. </summary>
+		///<summary>OrderNumberComplete. Inherited from Order</summary>
 		OrderNumberComplete,
-		///<summary>OrderDate. </summary>
+		///<summary>OrderDate. Inherited from Order</summary>
 		OrderDate,
-		///<summary>OrderTotal. </summary>
+		///<summary>OrderTotal. Inherited from Order</summary>
 		OrderTotal,
-		///<summary>LocalStatus. </summary>
+		///<summary>LocalStatus. Inherited from Order</summary>
 		LocalStatus,
-		///<summary>IsManual. </summary>
+		///<summary>IsManual. Inherited from Order</summary>
 		IsManual,
-		///<summary>OnlineLastModified. </summary>
+		///<summary>OnlineLastModified. Inherited from Order</summary>
 		OnlineLastModified,
-		///<summary>OnlineCustomerID. </summary>
+		///<summary>OnlineCustomerID. Inherited from Order</summary>
 		OnlineCustomerID,
-		///<summary>OnlineStatus. </summary>
+		///<summary>OnlineStatus. Inherited from Order</summary>
 		OnlineStatus,
-		///<summary>OnlineStatusCode. </summary>
+		///<summary>OnlineStatusCode. Inherited from Order</summary>
 		OnlineStatusCode,
-		///<summary>RequestedShipping. </summary>
+		///<summary>RequestedShipping. Inherited from Order</summary>
 		RequestedShipping,
-		///<summary>BillFirstName. </summary>
+		///<summary>BillFirstName. Inherited from Order</summary>
 		BillFirstName,
-		///<summary>BillMiddleName. </summary>
+		///<summary>BillMiddleName. Inherited from Order</summary>
 		BillMiddleName,
-		///<summary>BillLastName. </summary>
+		///<summary>BillLastName. Inherited from Order</summary>
 		BillLastName,
-		///<summary>BillCompany. </summary>
+		///<summary>BillCompany. Inherited from Order</summary>
 		BillCompany,
-		///<summary>BillStreet1. </summary>
+		///<summary>BillStreet1. Inherited from Order</summary>
 		BillStreet1,
-		///<summary>BillStreet2. </summary>
+		///<summary>BillStreet2. Inherited from Order</summary>
 		BillStreet2,
-		///<summary>BillStreet3. </summary>
+		///<summary>BillStreet3. Inherited from Order</summary>
 		BillStreet3,
-		///<summary>BillCity. </summary>
+		///<summary>BillCity. Inherited from Order</summary>
 		BillCity,
-		///<summary>BillStateProvCode. </summary>
+		///<summary>BillStateProvCode. Inherited from Order</summary>
 		BillStateProvCode,
-		///<summary>BillPostalCode. </summary>
+		///<summary>BillPostalCode. Inherited from Order</summary>
 		BillPostalCode,
-		///<summary>BillCountryCode. </summary>
+		///<summary>BillCountryCode. Inherited from Order</summary>
 		BillCountryCode,
-		///<summary>BillPhone. </summary>
+		///<summary>BillPhone. Inherited from Order</summary>
 		BillPhone,
-		///<summary>BillFax. </summary>
+		///<summary>BillFax. Inherited from Order</summary>
 		BillFax,
-		///<summary>BillEmail. </summary>
+		///<summary>BillEmail. Inherited from Order</summary>
 		BillEmail,
-		///<summary>BillWebsite. </summary>
+		///<summary>BillWebsite. Inherited from Order</summary>
 		BillWebsite,
-		///<summary>BillAddressValidationSuggestionCount. </summary>
+		///<summary>BillAddressValidationSuggestionCount. Inherited from Order</summary>
 		BillAddressValidationSuggestionCount,
-		///<summary>BillAddressValidationStatus. </summary>
+		///<summary>BillAddressValidationStatus. Inherited from Order</summary>
 		BillAddressValidationStatus,
-		///<summary>BillAddressValidationError. </summary>
+		///<summary>BillAddressValidationError. Inherited from Order</summary>
 		BillAddressValidationError,
-		///<summary>BillResidentialStatus. </summary>
+		///<summary>BillResidentialStatus. Inherited from Order</summary>
 		BillResidentialStatus,
-		///<summary>BillPOBox. </summary>
+		///<summary>BillPOBox. Inherited from Order</summary>
 		BillPOBox,
-		///<summary>BillUSTerritory. </summary>
+		///<summary>BillUSTerritory. Inherited from Order</summary>
 		BillUSTerritory,
-		///<summary>BillMilitaryAddress. </summary>
+		///<summary>BillMilitaryAddress. Inherited from Order</summary>
 		BillMilitaryAddress,
-		///<summary>ShipFirstName. </summary>
+		///<summary>ShipFirstName. Inherited from Order</summary>
 		ShipFirstName,
-		///<summary>ShipMiddleName. </summary>
+		///<summary>ShipMiddleName. Inherited from Order</summary>
 		ShipMiddleName,
-		///<summary>ShipLastName. </summary>
+		///<summary>ShipLastName. Inherited from Order</summary>
 		ShipLastName,
-		///<summary>ShipCompany. </summary>
+		///<summary>ShipCompany. Inherited from Order</summary>
 		ShipCompany,
-		///<summary>ShipStreet1. </summary>
+		///<summary>ShipStreet1. Inherited from Order</summary>
 		ShipStreet1,
-		///<summary>ShipStreet2. </summary>
+		///<summary>ShipStreet2. Inherited from Order</summary>
 		ShipStreet2,
-		///<summary>ShipStreet3. </summary>
+		///<summary>ShipStreet3. Inherited from Order</summary>
 		ShipStreet3,
-		///<summary>ShipCity. </summary>
+		///<summary>ShipCity. Inherited from Order</summary>
 		ShipCity,
-		///<summary>ShipStateProvCode. </summary>
+		///<summary>ShipStateProvCode. Inherited from Order</summary>
 		ShipStateProvCode,
-		///<summary>ShipPostalCode. </summary>
+		///<summary>ShipPostalCode. Inherited from Order</summary>
 		ShipPostalCode,
-		///<summary>ShipCountryCode. </summary>
+		///<summary>ShipCountryCode. Inherited from Order</summary>
 		ShipCountryCode,
-		///<summary>ShipPhone. </summary>
+		///<summary>ShipPhone. Inherited from Order</summary>
 		ShipPhone,
-		///<summary>ShipFax. </summary>
+		///<summary>ShipFax. Inherited from Order</summary>
 		ShipFax,
-		///<summary>ShipEmail. </summary>
+		///<summary>ShipEmail. Inherited from Order</summary>
 		ShipEmail,
-		///<summary>ShipWebsite. </summary>
+		///<summary>ShipWebsite. Inherited from Order</summary>
 		ShipWebsite,
-		///<summary>ShipAddressValidationSuggestionCount. </summary>
+		///<summary>ShipAddressValidationSuggestionCount. Inherited from Order</summary>
 		ShipAddressValidationSuggestionCount,
-		///<summary>ShipAddressValidationStatus. </summary>
+		///<summary>ShipAddressValidationStatus. Inherited from Order</summary>
 		ShipAddressValidationStatus,
-		///<summary>ShipAddressValidationError. </summary>
+		///<summary>ShipAddressValidationError. Inherited from Order</summary>
 		ShipAddressValidationError,
-		///<summary>ShipResidentialStatus. </summary>
+		///<summary>ShipResidentialStatus. Inherited from Order</summary>
 		ShipResidentialStatus,
-		///<summary>ShipPOBox. </summary>
+		///<summary>ShipPOBox. Inherited from Order</summary>
 		ShipPOBox,
-		///<summary>ShipUSTerritory. </summary>
+		///<summary>ShipUSTerritory. Inherited from Order</summary>
 		ShipUSTerritory,
-		///<summary>ShipMilitaryAddress. </summary>
+		///<summary>ShipMilitaryAddress. Inherited from Order</summary>
 		ShipMilitaryAddress,
-		///<summary>RollupItemCount. </summary>
+		///<summary>RollupItemCount. Inherited from Order</summary>
 		RollupItemCount,
-		///<summary>RollupItemName. </summary>
+		///<summary>RollupItemName. Inherited from Order</summary>
 		RollupItemName,
-		///<summary>RollupItemCode. </summary>
+		///<summary>RollupItemCode. Inherited from Order</summary>
 		RollupItemCode,
-		///<summary>RollupItemSKU. </summary>
+		///<summary>RollupItemSKU. Inherited from Order</summary>
 		RollupItemSKU,
-		///<summary>RollupItemLocation. </summary>
+		///<summary>RollupItemLocation. Inherited from Order</summary>
 		RollupItemLocation,
-		///<summary>RollupItemQuantity. </summary>
+		///<summary>RollupItemQuantity. Inherited from Order</summary>
 		RollupItemQuantity,
-		///<summary>RollupItemTotalWeight. </summary>
+		///<summary>RollupItemTotalWeight. Inherited from Order</summary>
 		RollupItemTotalWeight,
-		///<summary>RollupNoteCount. </summary>
+		///<summary>RollupNoteCount. Inherited from Order</summary>
 		RollupNoteCount,
-		///<summary>BillNameParseStatus. </summary>
+		///<summary>BillNameParseStatus. Inherited from Order</summary>
 		BillNameParseStatus,
-		///<summary>BillUnparsedName. </summary>
+		///<summary>BillUnparsedName. Inherited from Order</summary>
 		BillUnparsedName,
-		///<summary>ShipNameParseStatus. </summary>
+		///<summary>ShipNameParseStatus. Inherited from Order</summary>
 		ShipNameParseStatus,
-		///<summary>ShipUnparsedName. </summary>
+		///<summary>ShipUnparsedName. Inherited from Order</summary>
 		ShipUnparsedName,
-		///<summary>ShipSenseHashKey. </summary>
+		///<summary>ShipSenseHashKey. Inherited from Order</summary>
 		ShipSenseHashKey,
-		///<summary>ShipSenseRecognitionStatus. </summary>
+		///<summary>ShipSenseRecognitionStatus. Inherited from Order</summary>
 		ShipSenseRecognitionStatus,
-		///<summary>ShipAddressType. </summary>
+		///<summary>ShipAddressType. Inherited from Order</summary>
 		ShipAddressType,
 		///<summary>OrderID. </summary>
 		OrderID,
@@ -10974,49 +10119,44 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: YahooOrderItem.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum YahooOrderItemFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: YahooOrderItem.</summary>
+	public enum YahooOrderItemFieldIndex
 	{
 		///<summary>OrderItemID. Inherited from OrderItem</summary>
 		OrderItemID_OrderItem,
-		///<summary>RowVersion. </summary>
+		///<summary>RowVersion. Inherited from OrderItem</summary>
 		RowVersion,
-		///<summary>OrderID. </summary>
+		///<summary>OrderID. Inherited from OrderItem</summary>
 		OrderID,
-		///<summary>Name. </summary>
+		///<summary>Name. Inherited from OrderItem</summary>
 		Name,
-		///<summary>Code. </summary>
+		///<summary>Code. Inherited from OrderItem</summary>
 		Code,
-		///<summary>SKU. </summary>
+		///<summary>SKU. Inherited from OrderItem</summary>
 		SKU,
-		///<summary>ISBN. </summary>
+		///<summary>ISBN. Inherited from OrderItem</summary>
 		ISBN,
-		///<summary>UPC. </summary>
+		///<summary>UPC. Inherited from OrderItem</summary>
 		UPC,
-		///<summary>Description. </summary>
+		///<summary>Description. Inherited from OrderItem</summary>
 		Description,
-		///<summary>Location. </summary>
+		///<summary>Location. Inherited from OrderItem</summary>
 		Location,
-		///<summary>Image. </summary>
+		///<summary>Image. Inherited from OrderItem</summary>
 		Image,
-		///<summary>Thumbnail. </summary>
+		///<summary>Thumbnail. Inherited from OrderItem</summary>
 		Thumbnail,
-		///<summary>UnitPrice. </summary>
+		///<summary>UnitPrice. Inherited from OrderItem</summary>
 		UnitPrice,
-		///<summary>UnitCost. </summary>
+		///<summary>UnitCost. Inherited from OrderItem</summary>
 		UnitCost,
-		///<summary>Weight. </summary>
+		///<summary>Weight. Inherited from OrderItem</summary>
 		Weight,
-		///<summary>Quantity. </summary>
+		///<summary>Quantity. Inherited from OrderItem</summary>
 		Quantity,
-		///<summary>LocalStatus. </summary>
+		///<summary>LocalStatus. Inherited from OrderItem</summary>
 		LocalStatus,
-		///<summary>IsManual. </summary>
+		///<summary>IsManual. Inherited from OrderItem</summary>
 		IsManual,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
@@ -11027,13 +10167,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: YahooProduct.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum YahooProductFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: YahooProduct.</summary>
+	public enum YahooProductFieldIndex
 	{
 		///<summary>StoreID. </summary>
 		StoreID,
@@ -11044,73 +10179,68 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: YahooStore.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum YahooStoreFieldIndex:int
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: YahooStore.</summary>
+	public enum YahooStoreFieldIndex
 	{
 		///<summary>StoreID. Inherited from Store</summary>
 		StoreID_Store,
-		///<summary>RowVersion. </summary>
+		///<summary>RowVersion. Inherited from Store</summary>
 		RowVersion,
-		///<summary>License. </summary>
+		///<summary>License. Inherited from Store</summary>
 		License,
-		///<summary>Edition. </summary>
+		///<summary>Edition. Inherited from Store</summary>
 		Edition,
-		///<summary>TypeCode. </summary>
+		///<summary>TypeCode. Inherited from Store</summary>
 		TypeCode,
-		///<summary>Enabled. </summary>
+		///<summary>Enabled. Inherited from Store</summary>
 		Enabled,
-		///<summary>SetupComplete. </summary>
+		///<summary>SetupComplete. Inherited from Store</summary>
 		SetupComplete,
-		///<summary>StoreName. </summary>
+		///<summary>StoreName. Inherited from Store</summary>
 		StoreName,
-		///<summary>Company. </summary>
+		///<summary>Company. Inherited from Store</summary>
 		Company,
-		///<summary>Street1. </summary>
+		///<summary>Street1. Inherited from Store</summary>
 		Street1,
-		///<summary>Street2. </summary>
+		///<summary>Street2. Inherited from Store</summary>
 		Street2,
-		///<summary>Street3. </summary>
+		///<summary>Street3. Inherited from Store</summary>
 		Street3,
-		///<summary>City. </summary>
+		///<summary>City. Inherited from Store</summary>
 		City,
-		///<summary>StateProvCode. </summary>
+		///<summary>StateProvCode. Inherited from Store</summary>
 		StateProvCode,
-		///<summary>PostalCode. </summary>
+		///<summary>PostalCode. Inherited from Store</summary>
 		PostalCode,
-		///<summary>CountryCode. </summary>
+		///<summary>CountryCode. Inherited from Store</summary>
 		CountryCode,
-		///<summary>Phone. </summary>
+		///<summary>Phone. Inherited from Store</summary>
 		Phone,
-		///<summary>Fax. </summary>
+		///<summary>Fax. Inherited from Store</summary>
 		Fax,
-		///<summary>Email. </summary>
+		///<summary>Email. Inherited from Store</summary>
 		Email,
-		///<summary>Website. </summary>
+		///<summary>Website. Inherited from Store</summary>
 		Website,
-		///<summary>AutoDownload. </summary>
+		///<summary>AutoDownload. Inherited from Store</summary>
 		AutoDownload,
-		///<summary>AutoDownloadMinutes. </summary>
+		///<summary>AutoDownloadMinutes. Inherited from Store</summary>
 		AutoDownloadMinutes,
-		///<summary>AutoDownloadOnlyAway. </summary>
+		///<summary>AutoDownloadOnlyAway. Inherited from Store</summary>
 		AutoDownloadOnlyAway,
-		///<summary>AddressValidationSetting. </summary>
+		///<summary>AddressValidationSetting. Inherited from Store</summary>
 		AddressValidationSetting,
-		///<summary>ComputerDownloadPolicy. </summary>
+		///<summary>ComputerDownloadPolicy. Inherited from Store</summary>
 		ComputerDownloadPolicy,
-		///<summary>DefaultEmailAccountID. </summary>
+		///<summary>DefaultEmailAccountID. Inherited from Store</summary>
 		DefaultEmailAccountID,
-		///<summary>ManualOrderPrefix. </summary>
+		///<summary>ManualOrderPrefix. Inherited from Store</summary>
 		ManualOrderPrefix,
-		///<summary>ManualOrderPostfix. </summary>
+		///<summary>ManualOrderPostfix. Inherited from Store</summary>
 		ManualOrderPostfix,
-		///<summary>InitialDownloadDays. </summary>
+		///<summary>InitialDownloadDays. Inherited from Store</summary>
 		InitialDownloadDays,
-		///<summary>InitialDownloadOrder. </summary>
+		///<summary>InitialDownloadOrder. Inherited from Store</summary>
 		InitialDownloadOrder,
 		///<summary>StoreID. </summary>
 		StoreID,
@@ -11130,13 +10260,8 @@ namespace ShipWorks.Data.Model
 
 
 
-
-
-	/// <summary>
-	/// Enum definition for all the entity types defined in this namespace. Used by the entityfields factory.
-	/// </summary>
-	[Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum EntityType:int
+	/// <summary>Enum definition for all the entity types defined in this namespace. Used by the entityfields factory.</summary>
+	public enum EntityType
 	{
 		///<summary>Action</summary>
 		ActionEntity,
@@ -11489,8 +10614,6 @@ namespace ShipWorks.Data.Model
 	}
 
 
-
-
 	#region Custom ConstantsEnums Code
 	
 	// __LLBLGENPRO_USER_CODE_REGION_START CustomUserConstants
@@ -11501,5 +10624,4 @@ namespace ShipWorks.Data.Model
 
 	#endregion
 }
-
 

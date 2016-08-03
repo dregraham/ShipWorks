@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <preset name="SD.Presets.Adapter.General2008.ShipWorks" lastModifiedOn="2007-07-16T13:36:04.59375-05:00" createdBy="Brian Nottingham" isSealed="false" xmlns="http://sd/llblgen/pro/presetElementDefinitions.xsd">
   <supportedPlatforms>
-    <platform name=".NET 3.5" />
+    <platform name=".NET 4.0" />
   </supportedPlatforms>
   <supportedTemplateGroups>
     <templateGroup name="Adapter" />

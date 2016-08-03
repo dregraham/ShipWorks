@@ -27,9 +27,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
     {
         FedExAccountEntity account;
 
-        // track if the account is one being migrated from 2
-        bool migrating2xAccount = false;
-
         /// <summary>
         /// Constructor
         /// </summary>
@@ -41,35 +38,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         }
 
         /// <summary>
-        /// Constructor for specifying the account to be configured
-        /// </summary>
-        public FedExSetupWizard(FedExAccountEntity account)
-        {
-            InitializeComponent();
-
-            if (!account.Is2xMigrationPending)
-            {
-                throw new InvalidOperationException("This constructor is only meant for accounts that need migrated to 3x");
-            }
-
-            this.account = account;
-            migrating2xAccount = true;
-        }
-
-        /// <summary>
         /// Initialization
         /// </summary>
         private void OnLoad(object sender, EventArgs e)
         {
             ShipmentType shipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode.FedEx);
-
-            // Some values are already configured via the SW upgrade
-            if (!migrating2xAccount)
-            {
-                account.CountryCode = "US";
-                account.SmartPostHubList = "<Root />";
-                account.InitializeNullsToDefault();
-            }
+            account.CountryCode = "US";
+            account.SmartPostHubList = "<Root />";
+            account.InitializeNullsToDefault();
 
             personControl.LoadEntity(new PersonAdapter(account, ""));
             accountSettingsControl.LoadAccount(account);
@@ -84,20 +60,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 Pages.Add(new ShippingWizardPagePrinting(shipmentType));
                 Pages.Add(new ShippingWizardPageAutomation(shipmentType));
 
-                // If we are not migrating a specific account - but all accounts are not migrated, that means we're here JUST to go through configuration,
-                // and not specific account setup.
-                if (!migrating2xAccount && FedExAccountManager.Accounts.Count > 0 && FedExAccountManager.Accounts.All(a => a.Is2xMigrationPending))
-                {
-                    Pages.Remove(wizardPageInitial);
-                    Pages.Remove(wizardPageContactInfo);
-                    Pages.Remove(wizardPageSettings);
-
-                    account = null;
-                }
-                else
-                {
-                    optionsControl.LoadSettings();
-                }
+                optionsControl.LoadSettings();
             }
             // Otherwise it will just be to setup the account
             else
@@ -107,7 +70,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             }
 
             Pages.Add(new ShippingWizardPageFinish(shipmentType));
-            Pages[Pages.Count - 1].SteppingInto += new EventHandler<WizardSteppingIntoEventArgs>(OnSteppingIntoFinish);
+            Pages[Pages.Count - 1].SteppingInto += OnSteppingIntoFinish;
 
             licenseAgreement.Rtf = ResourceUtility.ReadString("ShipWorks.Shipping.Carriers.FedEx.FedExEULA.rtf");
 
@@ -239,7 +202,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // If we are canceling - but had created an account - we need to undo that
             if (DialogResult == DialogResult.Cancel && account != null)
             {
-                if (!account.IsNew && !migrating2xAccount)
+                if (!account.IsNew)
                 {
                     FedExAccountManager.DeleteAccount(account);
                 }

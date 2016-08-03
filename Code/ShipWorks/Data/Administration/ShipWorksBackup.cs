@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Common;
 using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
@@ -17,7 +18,6 @@ using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Common.Threading;
-using ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Users;
@@ -53,7 +53,6 @@ namespace ShipWorks.Data.Administration
         {
             public string DatabaseName { get; set; }
             public string BackupFile { get; set; }
-            public bool IsArchive { get; set; }
             public ProgressItem Progress { get; set; }
         }
 
@@ -231,28 +230,10 @@ namespace ShipWorks.Data.Administration
                 DatabaseName = SqlSession.Current.Configuration.DatabaseName,
                 BackupFile = Path.Combine(tempPath, "shipworks.dat"),
                 Progress = new ProgressItem("Create SQL Server Backup"),
-                IsArchive = false
             };
 
             // Always have the primary database
             databases.Add(primary);
-
-            // See if the ArchiveSets table exists.  Only valid for ShipWorks2 - but during upgrade we allow backing up - which could be for ShipWorks2
-            using (SqlConnection con = SqlSession.Current.OpenConnection())
-            {
-                foreach (string archiveDbName in ShipWorks2xArchiveUtility.GetArchiveDatabaseNames(con))
-                {
-                    BackupDatabase archive = new BackupDatabase
-                    {
-                        DatabaseName = archiveDbName,
-                        BackupFile = Path.Combine(tempPath, archiveDbName + ".dat"),
-                        Progress = new ProgressItem(string.Format("Create Archive Backup ({0})", databases.Count)),
-                        IsArchive = true
-                    };
-
-                    databases.Add(archive);
-                }
-            }
 
             return databases;
         }
@@ -319,9 +300,9 @@ namespace ShipWorks.Data.Administration
             progressItem.Starting();
             progressItem.Detail = "Connecting to SQL Server";
 
-            using (SqlConnection con = SqlSession.Current.OpenConnection())
+            using (DbConnection con = SqlSession.Current.OpenConnection())
             {
-                SqlCommand cmd = SqlCommandProvider.Create(con);
+                DbCommand cmd = DbCommandProvider.Create(con);
                 cmd.CommandTimeout = (int) TimeSpan.FromHours(2).TotalSeconds;
 
                 cmd.CommandText =
@@ -329,28 +310,32 @@ namespace ShipWorks.Data.Administration
                     " TO DISK = @FilePath      " +
                     " WITH INIT, NOUNLOAD, SKIP, STATS = 2, NOFORMAT";
 
-                cmd.Parameters.AddWithValue("@Database", database);
-                cmd.Parameters.AddWithValue("@FilePath", backupFile);
+                cmd.AddParameterWithValue("@Database", database);
+                cmd.AddParameterWithValue("@FilePath", backupFile);
 
                 Regex percentRegex = new Regex(@"(\d+) percent processed.");
 
                 // InfoMessage will provide progress updates
-                con.InfoMessage += delegate (object sender, SqlInfoMessageEventArgs e)
+                SqlConnection sqlConn = con as SqlConnection;
+                if (sqlConn != null)
                 {
-                    Match match = percentRegex.Match(e.Message);
-                    if (match.Success)
+                    sqlConn.InfoMessage += delegate (object sender, SqlInfoMessageEventArgs e)
                     {
-                        progressItem.PercentComplete = Convert.ToInt32(match.Groups[1].Value);
-                        progressItem.Detail = string.Format("{0}% complete", progressItem.PercentComplete);
-                    }
-                };
+                        Match match = percentRegex.Match(e.Message);
+                        if (match.Success)
+                        {
+                            progressItem.PercentComplete = Convert.ToInt32(match.Groups[1].Value);
+                            progressItem.Detail = string.Format("{0}% complete", progressItem.PercentComplete);
+                        }
+                    };
+                }
 
                 progressItem.Detail = "";
 
                 try
                 {
                     // The InfoMessage events only come back in real-time when using ExecuteScalar - NOT ExecuteNonQuery
-                    SqlCommandProvider.ExecuteScalar(cmd);
+                    DbCommandProvider.ExecuteScalar(cmd);
                 }
                 catch (SqlException ex)
                 {
@@ -445,102 +430,30 @@ namespace ShipWorks.Data.Administration
                 log.Info("Starting restore");
 
                 // Extract all the database files
-                List<BackupDatabase> databases = ExtractRestoreDatabases(filename, tempPath, decompressProgress);
+                BackupDatabase database = ExtractRestoreDatabase(filename, tempPath, decompressProgress);
 
                 if (IsCancelled)
                 {
                     return;
                 }
 
-                // If the primary backup file is not there, then its an invalid backup file, or the db wasn't backed up
-                if (databases.Count(d => !d.IsArchive) != 1)
+                if (database == null)
                 {
                     throw new InvalidDataException("The file is not a valid ShipWorks backup, or the SQL Server database was not included when the backup was created.");
                 }
 
-                // Add in any progress for archives (we already added the main one)
-                foreach (BackupDatabase database in databases)
-                {
-                    if (database.IsArchive)
-                    {
-                        progress.ProgressItems.Add(database.Progress);
-                    }
-                    else
-                    {
-                        database.Progress = restoreProgress;
-                    }
-                }
+                database.Progress = restoreProgress;
 
-                // Determine what archive db names the current database is using.  Since we are overwriting this database, any archives it's using
-                // are valid to be overwritten.
-                List<string> previousArchiveNames;
-                using (SqlConnection con = SqlSession.Current.OpenConnection())
-                {
-                    previousArchiveNames = ShipWorks2xArchiveUtility.GetArchiveDatabaseNames(con);
-                }
-
-                // First do the primary
-                RestoreSqlBackup(databases.Single(d => !d.IsArchive));
-
-                // Now restore each of the archives
-                foreach (BackupDatabase archive in databases.Where(d => d.IsArchive))
-                {
-                    using (SqlConnection con = SqlSession.Current.OpenConnection())
-                    {
-                        // If the database name of this archive already exists - and its not from the previous archive list - then
-                        // we need to leave the existing one alone (we don't know who is using it) and create a copy instead.
-                        if (SqlUtility.DoesDatabaseExist(con, archive.DatabaseName) && !previousArchiveNames.Contains(archive.DatabaseName))
-                        {
-                            log.InfoFormat("Archive already exists in target server, have to create copy. {0}", archive.DatabaseName);
-
-                            archive.DatabaseName = GetAlternateArchiveName(con, archive.DatabaseName);
-                        }
-                    }
-
-                    RestoreSqlBackup(archive);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Get a new database archive name to replace the given original name. This is for when we are restoring a backup with an archive, and
-        /// the archive name is already in use.
-        /// </summary>
-        private string GetAlternateArchiveName(SqlConnection con, string originalName)
-        {
-            string alternateName = String.Format("{0}_archive_{1}", con.Database, Guid.NewGuid().ToString("N"));
-            if (alternateName.Length > 128)
-            {
-                // just to maintain uniqueness in this crazy scenario
-                alternateName = String.Format("shipworks_archive_{0}", Guid.NewGuid().ToString("N"));
-            }
-
-            // write it to the master database
-            try
-            {
-                SqlCommand cmd = SqlCommandProvider.Create(con);
-                cmd.CommandText = "UPDATE ArchiveSets SET DbName = @newDbName WHERE DbName = @oldDbName";
-                cmd.Parameters.AddWithValue("@newDbName", alternateName);
-                cmd.Parameters.AddWithValue("@oldDbName", originalName);
-
-                SqlCommandProvider.ExecuteNonQuery(cmd);
-
-                return alternateName;
-            }
-            catch (SqlException ex)
-            {
-                throw new InvalidOperationException(
-                    "An error occurred while registering a cloned Archive Set database.\n\n" +
-                    "Detail:\n" + ex.Message, ex);
+                RestoreSqlBackup(database);
             }
         }
 
         /// <summary>
         /// Extract the backup file to the to given path
         /// </summary>
-        private List<BackupDatabase> ExtractRestoreDatabases(string zipFilePath, string tempPath, ProgressItem progress)
+        private BackupDatabase ExtractRestoreDatabase(string zipFilePath, string tempPath, ProgressItem progress)
         {
-            List<BackupDatabase> databases = new List<BackupDatabase>();
+            BackupDatabase database = null;
 
             progress.Starting();
 
@@ -555,24 +468,22 @@ namespace ShipWorks.Data.Administration
                         args.Cancel = IsCancelled;
                     };
 
-                foreach (ZipReaderItem item in reader.ReadItems())
+                ZipReaderItem item = reader.ReadItems().OfType<ZipReaderItem>()
+                    .FirstOrDefault(x => x.Name.StartsWith(@"Database\") && x.Name.EndsWith("shipworks.dat"));
+
+                if (item != null)
                 {
-                    // We are only looking for database backup files
-                    if (item.Name.StartsWith(@"Database\") && item.Name.EndsWith(".dat"))
+                    log.InfoFormat("Extracting '{0}'...", item.Name);
+
+                    string targetPath = Path.Combine(tempPath, Path.GetFileName(item.Name));
+                    item.Extract(targetPath);
+
+                    database = new BackupDatabase
                     {
-                        log.InfoFormat("Extracting '{0}'...", item.Name);
-
-                        string targetPath = Path.Combine(tempPath, Path.GetFileName(item.Name));
-                        item.Extract(targetPath);
-
-                        BackupDatabase database = new BackupDatabase();
-                        database.BackupFile = targetPath;
-                        database.IsArchive = !item.Name.EndsWith("shipworks.dat");
-                        database.DatabaseName = database.IsArchive ? Path.GetFileNameWithoutExtension(item.Name) : SqlSession.Current.Configuration.DatabaseName;
-                        database.Progress = database.IsArchive ? new ProgressItem(string.Format("Restore Archive ({0})", databases.Count(b => b.IsArchive) + 1)) : null;
-
-                        databases.Add(database);
-                    }
+                        BackupFile = targetPath,
+                        DatabaseName = SqlSession.Current.Configuration.DatabaseName,
+                        Progress = null,
+                    };
                 }
             }
 
@@ -584,7 +495,7 @@ namespace ShipWorks.Data.Administration
 
             progress.Completed();
 
-            return databases;
+            return database;
         }
 
         /// <summary>
@@ -600,20 +511,10 @@ namespace ShipWorks.Data.Administration
             progress.Starting();
             progress.Detail = "Connecting to SQL Server";
 
-            log.InfoFormat("Restoring '{0}' (Archive:{1})...", database.DatabaseName, database.IsArchive);
+            log.InfoFormat("Restoring '{0}'...", database.DatabaseName);
 
             using (SqlConnection con = SqlSession.Current.OpenConnection())
             {
-                if (database.IsArchive)
-                {
-                    // if the database doesn't exist yet, create it
-                    if (!SqlUtility.DoesDatabaseExist(con, database.DatabaseName))
-                    {
-                        log.InfoFormat("Creating new blank database to restore into");
-                        ShipWorksDatabaseUtility.CreateDatabase(database.DatabaseName, con);
-                    }
-                }
-
                 // Change into the database we are restoring into
                 con.ChangeDatabase(database.DatabaseName);
 
@@ -634,14 +535,14 @@ namespace ShipWorks.Data.Administration
 
                 // We have to move the original logical files to the the file locations we are restoring to.  First we find
                 // the current logical file names.
-                SqlCommand cmd = SqlCommandProvider.Create(con);
+                DbCommand cmd = DbCommandProvider.Create(con);
                 cmd.CommandText = "restore filelistonly from disk = @FilePath";
-                cmd.Parameters.AddWithValue("@FilePath", database.BackupFile);
+                cmd.AddParameterWithValue("@FilePath", database.BackupFile);
 
                 try
                 {
                     // Determine logical names in the backup source
-                    using (SqlDataReader reader = SqlCommandProvider.ExecuteReader(cmd))
+                    using (DbDataReader reader = DbCommandProvider.ExecuteReader(cmd))
                     {
                         while (reader.Read())
                         {
@@ -694,7 +595,7 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         private static void GetPhysicalFileLocations(SqlConnection con, out string targetPhysDb, out string targetPhysLog)
         {
-            SqlCommand cmd = SqlCommandProvider.Create(con);
+            DbCommand cmd = DbCommandProvider.Create(con);
             cmd.CommandText = "sp_helpfile";
             cmd.CommandType = CommandType.StoredProcedure;
 
@@ -703,7 +604,7 @@ namespace ShipWorks.Data.Administration
             targetPhysLog = null;
 
             // Determine current physical files
-            using (SqlDataReader reader = SqlCommandProvider.ExecuteReader(cmd))
+            using (DbDataReader reader = DbCommandProvider.ExecuteReader(cmd))
             {
                 while (reader.Read())
                 {
@@ -729,10 +630,7 @@ namespace ShipWorks.Data.Administration
         [NDependIgnoreTooManyParams]
         private void ExecuteSqlRestore(SqlConnection con, string databaseName, string backupFilePath, string sourceLogicalDb, string sourceLogicalLog, string targetPhysDb, string targetPhysLog, ProgressItem progress)
         {
-            if (RestoreStarting != null)
-            {
-                RestoreStarting(this, EventArgs.Empty);
-            }
+            RestoreStarting?.Invoke(this, EventArgs.Empty);
 
             progress.Detail = "Logging off all users";
 
@@ -745,7 +643,7 @@ namespace ShipWorks.Data.Administration
             try
             {
                 // Determine physical names of the backup target
-                SqlCommand cmdRestore = SqlCommandProvider.Create(con);
+                DbCommand cmdRestore = DbCommandProvider.Create(con);
                 cmdRestore.CommandText =
                     "RESTORE DATABASE @Database  " +
                     " FROM DISK = @FilePath      " +
@@ -753,8 +651,8 @@ namespace ShipWorks.Data.Administration
                     "  MOVE '" + sourceLogicalDb + "' TO '" + targetPhysDb + "', " +
                     "  MOVE '" + sourceLogicalLog + "' TO '" + targetPhysLog + "'";
 
-                cmdRestore.Parameters.AddWithValue("@FilePath", backupFilePath);
-                cmdRestore.Parameters.AddWithValue("@Database", databaseName);
+                cmdRestore.AddParameterWithValue("@FilePath", backupFilePath);
+                cmdRestore.AddParameterWithValue("@Database", databaseName);
 
                 Regex percentRegex = new Regex(@"(\d+) percent processed.");
 
@@ -773,7 +671,7 @@ namespace ShipWorks.Data.Administration
 
                 // The InfoMessage events only come back in real-time when using ExecuteScalar - NOT ExecuteNonQuery
                 cmdRestore.CommandTimeout = 1800;
-                SqlCommandProvider.ExecuteScalar(cmdRestore);
+                DbCommandProvider.ExecuteScalar(cmdRestore);
             }
             finally
             {
@@ -844,7 +742,7 @@ namespace ShipWorks.Data.Administration
         {
             using (SqlConnection con = SqlSession.Current.OpenConnection())
             {
-                return (int) SqlCommandProvider.ExecuteScalar(con, "select count(*) from sys.tables");
+                return (int) DbCommandProvider.ExecuteScalar(con, "select count(*) from sys.tables");
             }
         }
 

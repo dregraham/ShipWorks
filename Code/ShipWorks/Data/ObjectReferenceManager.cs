@@ -1,18 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
+using System.Data.Common;
 using System.Data.SqlClient;
-using SqlObjectReferenceManager = ShipWorks.SqlServer.Common.Data.ObjectReferenceManager;
-using ShipWorks.Data.Connection;
+using System.Text;
 using System.Text.RegularExpressions;
 using Interapptive.Shared;
-using ShipWorks.Data.Model;
-using ShipWorks.Templates;
-using ShipWorks.Users;
-using ShipWorks.Data.Model.EntityClasses;
-using SD.LLBLGen.Pro.ORMSupportClasses;
 using Interapptive.Shared.Data;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.EntityClasses;
+using SqlObjectReferenceManager = ShipWorks.SqlServer.Common.Data.ObjectReferenceManager;
 
 namespace ShipWorks.Data
 {
@@ -39,7 +36,7 @@ namespace ShipWorks.Data
         /// <summary>
         /// Marks the given object as being referenced by the specified consumer.  The reason can be used as needed
         /// by other parts of ShipWorks (for example, when deleting a filter, it could show the reasons of
-        /// who is using the filter).  If the consumer already has a reference by the given key name, then the reference is updated with 
+        /// who is using the filter).  If the consumer already has a reference by the given key name, then the reference is updated with
         /// the new consumerID and reason.
         /// </summary>
         public static long SetReference(long consumerID, string key, long objectID, string reason)
@@ -96,17 +93,17 @@ namespace ShipWorks.Data
             }
 
             List<string> reasons = new List<string>();
-            
-            using (SqlConnection con = SqlSession.Current.OpenConnection())
+
+            using (DbConnection con = SqlSession.Current.OpenConnection())
             {
-                SqlCommand cmd = SqlCommandProvider.Create(con);
+                DbCommand cmd = DbCommandProvider.Create(con);
                 cmd.CommandText = string.Format(@"
-                SELECT DISTINCT Reason 
-                FROM ObjectReference 
+                SELECT DISTINCT Reason
+                FROM ObjectReference
                 WHERE Reason IS NOT NULL AND
                       ObjectID IN ({0})", GetInList(objectIDs));
 
-                using (SqlDataReader reader = SqlCommandProvider.ExecuteReader(cmd))
+                using (DbDataReader reader = DbCommandProvider.ExecuteReader(cmd))
                 {
                     while (reader.Read())
                     {

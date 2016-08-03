@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.Common;
 using System.Data.SqlClient;
 using System.Linq;
 using Interapptive.Shared;
@@ -255,9 +256,9 @@ namespace ShipWorks.Filters
             return ExistingConnectionScope.ExecuteWithCommand(cmd =>
             {
                 cmd.CommandText = "SELECT dbo.GetFilterNodeLevels(@FilterLayoutID)";
-                cmd.Parameters.AddWithValue("@FilterLayoutID", layoutID);
+                cmd.AddParameterWithValue("@FilterLayoutID", layoutID);
 
-                return (int) SqlCommandProvider.ExecuteScalar(cmd);
+                return (int) DbCommandProvider.ExecuteScalar(cmd);
             });
         }
 
@@ -349,14 +350,14 @@ namespace ShipWorks.Filters
             using (SqlConnection con = SqlSession.Current.OpenConnection())
             {
                 // We need to detect any changes to sequences or nodes
-                SqlCommand cmd = SqlCommandProvider.Create(con);
+                DbCommand cmd = DbCommandProvider.Create(con);
                 cmd.CommandText = @"
                     SELECT CAST(MAX(RowVersion) as bigint)
                       FROM FilterLayout";
 
                 // We're using this version of ExecuteScalar because it will throw a better exception if the returned value cannot be cast.
                 // A customer was crashing on a NullReferenceException and the original cast to long was one possible location of the crash.
-                long dbTimestamp = SqlCommandProvider.ExecuteScalar<long>(cmd);
+                long dbTimestamp = DbCommandProvider.ExecuteScalar<long>(cmd);
 
                 // Get the local timestamp
                 long localTimestamp = layouts.Max(l => SqlUtility.GetTimestampValue(l.RowVersion));

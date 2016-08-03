@@ -184,6 +184,7 @@ _sgbak
 Code/ShipWorks.Native/x64
 /Backup2
 LLBLGen/ShipWorks[0-9]*.lgp
+LLBLGen/ShipWorks[0-9]*.llblgenproj
 InstallUtil.InstallLog
 Build/InnoSetup.iss
 Build/ShipWorks*.*.*.*

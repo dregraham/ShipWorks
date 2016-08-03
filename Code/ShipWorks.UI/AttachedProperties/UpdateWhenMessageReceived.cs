@@ -147,7 +147,7 @@ namespace ShipWorks.UI.AttachedProperties
 
             for (int i = 0; i < childCount; i++)
             {
-                DependencyObject child = VisualTreeHelper.GetChild(element, i) as DependencyObject;
+                DependencyObject child = VisualTreeHelper.GetChild(element, i);
                 if (SetSelectedText(child, textValue))
                 {
                     return true;

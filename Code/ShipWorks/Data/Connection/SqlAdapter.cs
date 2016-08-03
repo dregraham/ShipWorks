@@ -9,7 +9,6 @@ using System.Text.RegularExpressions;
 using Interapptive.Shared.Data;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Adapter;
 using ShipWorks.Data.Adapter.Custom;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.FactoryClasses;
@@ -40,7 +39,7 @@ namespace ShipWorks.Data.Connection
         bool entitySaved = false;
 
         // The user passes in the connection to use
-        SqlConnection overrideConnection;
+        DbConnection overrideConnection;
 
         // The active TransactionScope, of the adapter was instructed to be required to be in a transaction
         System.Transactions.TransactionScope transactionScope;
@@ -59,7 +58,7 @@ namespace ShipWorks.Data.Connection
         // Needed to keep LLBLgen from trying to create its own trans for a recursive save
         private static System.Reflection.FieldInfo fieldIsTransactionInProgress;
 
-        // Needed to allow SqlAdapter to use an existing SqlTransaction
+        // Needed to allow SqlAdapter to use an existing DbTransaction
         private static System.Reflection.FieldInfo fieldPhysicalTransaction;
 
         /// <summary>
@@ -72,13 +71,13 @@ namespace ShipWorks.Data.Connection
 
             SetSqlServerCompatibilityLevel(SqlServerCompatibilityLevel.SqlServer2005);
 
-            fieldIsTransactionInProgress = typeof(DataAccessAdapterBase).GetField("_isTransactionInProgress", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+            fieldIsTransactionInProgress = typeof(DataAccessAdapterCore).GetField("_isTransactionInProgress", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
             if (fieldIsTransactionInProgress == null)
             {
                 throw new InvalidOperationException("Could not get _isTransactionInProgress field");
             }
 
-            fieldPhysicalTransaction = typeof(DataAccessAdapterBase).GetField("_physicalTransaction", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+            fieldPhysicalTransaction = typeof(DataAccessAdapterCore).GetField("_physicalTransaction", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
             if (fieldPhysicalTransaction == null)
             {
                 throw new InvalidOperationException("Could not get _physicalTransaction field");
@@ -96,7 +95,7 @@ namespace ShipWorks.Data.Connection
         /// <summary>
         /// Constructor that specifies the connection that the adapter should use
         /// </summary>
-        public SqlAdapter(SqlConnection connectionToUse)
+        public SqlAdapter(DbConnection connectionToUse)
             : base("", true, catalogNameOverwrites, null)
         {
             this.overrideConnection = connectionToUse;
@@ -107,7 +106,7 @@ namespace ShipWorks.Data.Connection
         /// <summary>
         /// Constructor that specifies the connection that the adapter should use
         /// </summary>
-        public SqlAdapter(SqlConnection connectionToUse, SqlTransaction transactionToUse)
+        public SqlAdapter(DbConnection connectionToUse, DbTransaction transactionToUse)
             : base("", true, catalogNameOverwrites, null)
         {
             overrideConnection = connectionToUse;
@@ -171,7 +170,7 @@ namespace ShipWorks.Data.Connection
 
                 return new System.Transactions.TransactionScope(
                     System.Transactions.TransactionScopeOption.Required,
-                    new System.Transactions.TransactionOptions { IsolationLevel = isolation, Timeout = SqlCommandProvider.DefaultTimeout });
+                    new System.Transactions.TransactionOptions { IsolationLevel = isolation, Timeout = DbCommandProvider.DefaultTimeout });
             }
 
             return null;
@@ -182,7 +181,7 @@ namespace ShipWorks.Data.Connection
         /// </summary>
         private void InitializeCommon()
         {
-            CommandTimeOut = (int) SqlCommandProvider.DefaultTimeout.TotalSeconds;
+            CommandTimeOut = (int) DbCommandProvider.DefaultTimeout.TotalSeconds;
 
             if (Debugger.IsAttached)
             {
@@ -196,7 +195,7 @@ namespace ShipWorks.Data.Connection
         protected override void Dispose(bool isDisposing)
         {
             bool ensureOverrideOpenAfterDispose = false;
-            SqlConnection existingConnection = overrideConnection;
+            DbConnection existingConnection = overrideConnection;
 
             // If a connection was passed in, we have to prevent the base implementation from
             // closing it.
@@ -204,13 +203,13 @@ namespace ShipWorks.Data.Connection
             {
                 ensureOverrideOpenAfterDispose = true;
 
-                System.Reflection.FieldInfo activeConnection = typeof(DataAccessAdapterBase).GetField(
+                System.Reflection.FieldInfo activeConnection = typeof(DataAccessAdapterCore).GetField(
                     "_activeConnection",
                     System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
 
                 if (activeConnection == null)
                 {
-                    throw new InvalidOperationException("Could not find DataAccessAdapterBase._activeConnection.");
+                    throw new InvalidOperationException("Could not find DataAccessAdapterCore._activeConnection.");
                 }
 
                 // Clear it, so it doesn't get disposed by base. OverrideConnection will be used when activeConnection is
@@ -244,28 +243,24 @@ namespace ShipWorks.Data.Connection
         /// <summary>
         /// Opens a SQL connection
         /// </summary>
+        /// <remarks>InComPlusTransaction was removed because all the COM+ code was removed from LLBLgen v3.5</remarks>
         [EditorBrowsable(EditorBrowsableState.Never)]
         public override void OpenConnection()
         {
-            if (InComPlusTransaction)
-            {
-                throw new NotSupportedException("Cannot be in com plus transaction due to custom OpenConnection functionality.");
-            }
-
-            IDbConnection connection = GetActiveConnection();
+            DbConnection connection = GetActiveConnection();
 
             if (connection.State != ConnectionState.Open)
             {
-                ConnectionMonitor.OpenConnection((SqlConnection) connection);
+                ConnectionMonitor.OpenConnection(connection);
             }
         }
 
         /// <summary>
         /// Intercept creation of the connection to override connection if necessary
         /// </summary>
-        protected override IDbConnection CreateNewPhysicalConnection(string connectionString)
+        protected override DbConnection CreateNewPhysicalConnection(string connectionString)
         {
-            SqlConnection con;
+            DbConnection con;
 
             if (overrideConnection != null)
             {
@@ -273,12 +268,16 @@ namespace ShipWorks.Data.Connection
             }
             else
             {
-                con = (SqlConnection) base.CreateNewPhysicalConnection(connectionString);
+                con = base.CreateNewPhysicalConnection(connectionString);
             }
 
             if (logInfoMessages)
             {
-                con.InfoMessage += new SqlInfoMessageEventHandler(OnInfoMessage);
+                SqlConnection sqlConn = con as SqlConnection;
+                if (sqlConn != null)
+                {
+                    sqlConn.InfoMessage += new SqlInfoMessageEventHandler(OnInfoMessage);
+                }
             }
 
             return con;
@@ -328,10 +327,7 @@ namespace ShipWorks.Data.Connection
         /// </summary>
         void OnTransactionCompleted(object sender, System.Transactions.TransactionEventArgs e)
         {
-            if (TransactionCompleted != null)
-            {
-                TransactionCompleted(this, e);
-            }
+            TransactionCompleted?.Invoke(this, e);
         }
 
         /// <summary>
@@ -386,15 +382,18 @@ namespace ShipWorks.Data.Connection
                     return;
                 }
 
-                SqlConnection con = (SqlConnection) GetActiveConnection();
+                SqlConnection con = GetActiveConnection() as SqlConnection;
 
-                if (value)
+                if (con != null)
                 {
-                    con.InfoMessage += new SqlInfoMessageEventHandler(OnInfoMessage);
-                }
-                else
-                {
-                    con.InfoMessage -= new SqlInfoMessageEventHandler(OnInfoMessage);
+                    if (value)
+                    {
+                        con.InfoMessage += new SqlInfoMessageEventHandler(OnInfoMessage);
+                    }
+                    else
+                    {
+                        con.InfoMessage -= new SqlInfoMessageEventHandler(OnInfoMessage);
+                    }
                 }
 
                 logInfoMessages = value;
@@ -585,7 +584,7 @@ namespace ShipWorks.Data.Connection
         /// <summary>
         /// Override to wrap exceptions
         /// </summary>
-        public override int CallActionStoredProcedure(string storedProcedureToCall, SqlParameter[] parameters)
+        public override int CallActionStoredProcedure(string storedProcedureToCall, DbParameter[] parameters)
         {
             try
             {
@@ -707,7 +706,7 @@ namespace ShipWorks.Data.Connection
         #region Identity Inserts
 
         /// <summary>
-        /// Indiciates if the SET IDENTITY INSERT should be set before inserts, allowing pk values to be explicitly set
+        /// Indicates if the SET IDENTITY INSERT should be set before inserts, allowing pk values to be explicitly set
         /// </summary>
         public bool IdentityInsert
         {
@@ -731,14 +730,19 @@ namespace ShipWorks.Data.Connection
             // If we are doing an identity insert, we have to remove the identity information
             if (identityInsert)
             {
-                RemoveIdentityProperty(persistenceInfoObjects, fieldCores);
+                RemoveIdentityProperty(persistenceInfoObjects, fieldCores, entityToSave.Fields);
             }
 
             IActionQuery saveQuery = CreateDynamicQueryEngine().CreateInsertDQ(fieldCores, persistenceInfoObjects, this.GetActiveConnection());
 
             if (identityInsert)
             {
-                BatchActionQuery query = (BatchActionQuery) saveQuery;
+                BatchActionQuery query = saveQuery as BatchActionQuery;
+                if (query == null)
+                {
+                    query = new BatchActionQuery();
+                    query.AddActionQuery(saveQuery);
+                }
 
                 // Turn identity insert on in the first statement
                 query[0].Command.CommandText = string.Format(@"
@@ -759,7 +763,8 @@ namespace ShipWorks.Data.Connection
         /// <summary>
         /// Remove all flags for all identity fields to make them normal writable fields
         /// </summary>
-        private void RemoveIdentityProperty(IFieldPersistenceInfo[] infos, IEntityFieldCore[] fields)
+        private void RemoveIdentityProperty(IFieldPersistenceInfo[] infos, IEntityFieldCore[] fields,
+            IEntityFieldsCore containingEntityFields)
         {
             for (int i = 0; i < infos.Length; i++)
             {
@@ -768,17 +773,17 @@ namespace ShipWorks.Data.Connection
                 if (info.IsIdentity)
                 {
                     infos[i] = CloneWithIdentityOff(info);
-                    fields[i] = CloneWithReadOnlyOff(fields[i]);
+                    fields[i] = CloneWithReadOnlyOff(fields[i], containingEntityFields);
                 }
             }
         }
 
         /// <summary>
-        /// Clone the persistance info, setting the identity value off.
+        /// Clone the persistence info, setting the identity value off.
         /// </summary>
         private IFieldPersistenceInfo CloneWithIdentityOff(IFieldPersistenceInfo info)
         {
-            IFieldPersistenceInfo clone = new FieldPersistenceInfo(
+            return new FieldPersistenceInfo(
                  info.SourceCatalogName,
                  info.SourceSchemaName,
                  info.SourceObjectName,
@@ -789,17 +794,17 @@ namespace ShipWorks.Data.Connection
                  info.SourceColumnScale,
                  info.SourceColumnPrecision,
                  false,
-                 info.IdentityValueSequenceName,
+                 null,
                  info.TypeConverterToUse,
                  info.ActualDotNetType);
-
-            return clone;
         }
 
         /// <summary>
         /// Clone the given field with the ReadOnly flag turned off
         /// </summary>
-        private IEntityFieldCore CloneWithReadOnlyOff(IEntityFieldCore field)
+        /// <remarks>The LinkedSuperTypeField property is derived from the containing entity fields collection,
+        /// which we now pass into the constructor because the property has been made read-only in LLBLgen 4.2</remarks>
+        private IEntityFieldCore CloneWithReadOnlyOff(IEntityFieldCore field, IEntityFieldsCore containingEntityFields)
         {
             IEntityFieldCore clone = new EntityField2(
                new FieldInfo(
@@ -813,7 +818,8 @@ namespace ShipWorks.Data.Connection
                    field.FieldIndex,
                    field.MaxLength,
                    field.Scale,
-                   field.Precision));
+                   field.Precision),
+                containingEntityFields);
 
             clone.AggregateFunctionToApply = field.AggregateFunctionToApply;
             clone.Alias = field.Alias;
@@ -821,7 +827,6 @@ namespace ShipWorks.Data.Connection
             clone.ExpressionToApply = field.ExpressionToApply;
             clone.IsChanged = field.IsChanged;
             clone.IsNull = field.IsNull;
-            clone.LinkedSuperTypeField = field.LinkedSuperTypeField;
             clone.ObjectAlias = field.ObjectAlias;
 
             return clone;

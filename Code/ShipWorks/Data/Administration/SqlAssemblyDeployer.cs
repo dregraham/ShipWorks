@@ -1,13 +1,14 @@
 using System;
-using System.Text;
-using System.Reflection;
-using log4net;
-using System.Data.SqlClient;
-using Microsoft.SqlServer.Server;
-using System.IO;
 using System.Collections;
+using System.Data.Common;
+using System.Data.SqlClient;
+using System.IO;
+using System.Reflection;
+using System.Text;
 using Interapptive.Shared;
 using Interapptive.Shared.Data;
+using log4net;
+using Microsoft.SqlServer.Server;
 
 namespace ShipWorks.Data.Administration
 {
@@ -150,7 +151,7 @@ namespace ShipWorks.Data.Administration
                 hex.AppendFormat("{0:X2}", b);
             }
 
-            using (SqlCommand cmd = SqlCommandProvider.Create(con))
+            using (DbCommand cmd = DbCommandProvider.Create(con))
             {
                 cmd.Transaction = transaction;
                 cmd.CommandText = string.Format(@"
@@ -158,7 +159,7 @@ namespace ShipWorks.Data.Administration
                     FROM 0x{1}
                     WITH PERMISSION_SET = SAFE", assembly.GetName().Name, hex);
 
-                SqlCommandProvider.ExecuteNonQuery(cmd);    
+                DbCommandProvider.ExecuteNonQuery(cmd);
             }
         }
 
@@ -195,7 +196,7 @@ namespace ShipWorks.Data.Administration
             command.AppendFormat(GetParameterDeclaration(method));
             command.AppendFormat("AS EXTERNAL NAME [{0}].[{1}].[{2}]", method.DeclaringType.Assembly.GetName().Name, method.DeclaringType.FullName, method.Name);
 
-            SqlCommandProvider.ExecuteNonQuery(con, command.ToString(), transaction);
+            DbCommandProvider.ExecuteNonQuery(con, command.ToString(), transaction);
         }
 
         /// <summary>
@@ -227,7 +228,7 @@ namespace ShipWorks.Data.Administration
             command.AppendFormat("CREATE TRIGGER [{0}] ON [{1}] {2} ", triggerName, trigger.Target, trigger.Event);
             command.AppendFormat("AS EXTERNAL NAME [{0}].[{1}].[{2}]", method.DeclaringType.Assembly.GetName().Name, method.DeclaringType.FullName, method.Name);
 
-            SqlCommandProvider.ExecuteNonQuery(con, command.ToString(), transaction);
+            DbCommandProvider.ExecuteNonQuery(con, command.ToString(), transaction);
         }
 
         /// <summary>
@@ -265,7 +266,7 @@ namespace ShipWorks.Data.Administration
             command.AppendFormat(" RETURNS {0} ", returnType);
             command.AppendFormat(" AS EXTERNAL NAME [{0}].[{1}].[{2}]", method.DeclaringType.Assembly.GetName().Name, method.DeclaringType.FullName, method.Name);
 
-            SqlCommandProvider.ExecuteNonQuery(con, command.ToString(), transaction);
+            DbCommandProvider.ExecuteNonQuery(con, command.ToString(), transaction);
         }
 
         /// <summary>

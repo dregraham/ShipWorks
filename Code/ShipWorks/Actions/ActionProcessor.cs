@@ -1,36 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using log4net;
+using System.Data.Common;
+using System.Data.SqlClient;
 using System.Diagnostics;
-using ShipWorks.ApplicationCore.Interaction;
+using System.Linq;
 using System.Threading;
-using ShipWorks.Data.Adapter.Custom;
+using Interapptive.Shared.Data;
+using log4net;
+using ShipWorks.ApplicationCore.ExecutionMode;
+using ShipWorks.ApplicationCore.Interaction;
+using ShipWorks.Common.Threading;
+using ShipWorks.Data;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
-using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Users;
 using ShipWorks.Data.Model.EntityClasses;
-using System.ComponentModel;
-using ShipWorks.Actions.Tasks;
-using ShipWorks.Filters;
-using ShipWorks.Data;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using System.Data;
-using Interapptive.Shared.Utility;
-using ShipWorks.Actions.Triggers;
-using ShipWorks.Data.Model;
-using ShipWorks.Data.Utility;
-using System.Transactions;
-using System.Data.SqlClient;
-using ShipWorks.SqlServer.Filters;
-using ShipWorks.Data.Adapter;
-using ShipWorks.Stores;
-using ShipWorks.Common.Threading;
-using System.Windows.Forms;
-using Interapptive.Shared.Data;
-using ShipWorks.ApplicationCore.ExecutionMode;
 
 namespace ShipWorks.Actions
 {
@@ -104,7 +87,7 @@ namespace ShipWorks.Actions
                 bool anyWorkToDo = false;
 
                 SqlAdapterRetry<SqlException> sqlAdapterRetry = new SqlAdapterRetry<SqlException>(5, -5, "ActionProcessor.WorkerThread cleaning up queues.");
-                sqlAdapterRetry.ExecuteWithRetry(() => 
+                sqlAdapterRetry.ExecuteWithRetry(() =>
                     {
                         using (SqlConnection sqlConnection = SqlSession.Current.OpenConnection())
                         {
@@ -136,26 +119,26 @@ namespace ShipWorks.Actions
         }
 
         /// <summary>
-        /// Checks the queue to see if there's any work to do.  
+        /// Checks the queue to see if there's any work to do.
         /// </summary>
         private static bool AnyWorkToDo(SqlConnection sqlConnection)
         {
             // First see if there are any to process
-            using (SqlCommand cmd = SqlCommandProvider.Create(sqlConnection))
+            using (DbCommand cmd = DbCommandProvider.Create(sqlConnection))
             {
                 // Only process the scheduled actions based on the action manager configuration
                 cmd.CommandText = "SELECT TOP(1) ActionQueueID FROM ActionQueue WHERE ActionQueueType = @ExecutionModeActionQueueType";
-                cmd.Parameters.AddWithValue("@ExecutionModeActionQueueType", (int) ActionManager.ExecutionModeActionQueueType);
+                cmd.AddParameterWithValue("@ExecutionModeActionQueueType", (int) ActionManager.ExecutionModeActionQueueType);
 
                 // If the UI isn't running somehwere, and we are the background process, go ahead and do UI actions too since it's not open
                 if (!Program.ExecutionMode.IsUISupported && !UserInterfaceExecutionMode.IsProcessRunning)
                 {
                     // Additionally process UI actions if the UI is not running
                     cmd.CommandText += " OR ActionQueueType = @UIActionQueueType";
-                    cmd.Parameters.AddWithValue("@UIActionQueueType", (int) ActionQueueType.UserInterface);
+                    cmd.AddParameterWithValue("@UIActionQueueType", (int) ActionQueueType.UserInterface);
                 }
 
-                if (SqlCommandProvider.ExecuteScalar(cmd) == null)
+                if (DbCommandProvider.ExecuteScalar(cmd) == null)
                 {
                     return false;
                 }
@@ -170,15 +153,15 @@ namespace ShipWorks.Actions
         private static void CleanupQueues(SqlConnection sqlConnection)
         {
             // Null out any context ownership for contexts that are no longer active.  This should only happen if a ShipWorks blows up during processing a context.
-            using (SqlCommand cmd = SqlCommandProvider.Create(sqlConnection))
+            using (DbCommand cmd = DbCommandProvider.Create(sqlConnection))
             {
                 cmd.CommandText = @"
                         UPDATE ActionQueue
                             SET ContextLock = NULL
-                            WHERE ContextLock IS NOT NULL 
+                            WHERE ContextLock IS NOT NULL
                             AND APPLOCK_TEST('public', ContextLock, 'Exclusive', 'Session') = 1";
 
-                int updated = SqlCommandProvider.ExecuteNonQuery(cmd);
+                int updated = DbCommandProvider.ExecuteNonQuery(cmd);
                 if (updated > 0)
                 {
                     log.InfoFormat("ContextLock removed from {0} queues", updated);
@@ -187,18 +170,18 @@ namespace ShipWorks.Actions
 
             // Now change any Postponed queues back to running if they don't have a ContextLock.  This would be for queues that were postponed, but then ShipWorks
             // blew up while they were being processed.
-            using (SqlCommand cmd = SqlCommandProvider.Create(sqlConnection))
+            using (DbCommand cmd = DbCommandProvider.Create(sqlConnection))
             {
                 cmd.CommandText = @"
-                        UPDATE ActionQueue 
+                        UPDATE ActionQueue
                             SET Status = @incomplete
-                            WHERE Status = @postponed 
+                            WHERE Status = @postponed
                                 AND ContextLock IS NULL";
 
-                cmd.Parameters.AddWithValue("@incomplete", (int)ActionQueueStatus.Incomplete);
-                cmd.Parameters.AddWithValue("@postponed", (int)ActionQueueStatus.Postponed);
+                cmd.AddParameterWithValue("@incomplete", (int) ActionQueueStatus.Incomplete);
+                cmd.AddParameterWithValue("@postponed", (int) ActionQueueStatus.Postponed);
 
-                int updated = SqlCommandProvider.ExecuteNonQuery(cmd);
+                int updated = DbCommandProvider.ExecuteNonQuery(cmd);
                 if (updated > 0)
                 {
                     log.InfoFormat("Updated {0} ActionQueue records back to incomplete from postponed.", updated);
@@ -285,7 +268,7 @@ namespace ShipWorks.Actions
                         }
                     }
 
-                  // If there are still postponed steps in the context, we have to force them to complete with what they can now
+                    // If there are still postponed steps in the context, we have to force them to complete with what they can now
                 } while (FlushPostponedQueues(context));
             }
         }
@@ -323,7 +306,7 @@ namespace ShipWorks.Actions
             context.FlushingPostponed = true;
 
             // Just flush the last one.. to kind of "rewind" to the most recent, which will actually
-            // keep things in order, since it'd be like when we were going the last one, it went 
+            // keep things in order, since it'd be like when we were going the last one, it went
             // ahead without postponing.  We only flush the last one, since flushing it may release other steps
             // that full complete other postponed queues, rather than forcing them to flush now imcomplete.
             //
@@ -332,7 +315,7 @@ namespace ShipWorks.Actions
             // we would end up outputing:
             //  1.  A full sheet of 4 labels
             //  2.  Then we'd flush one sheet of 1 label
-            //  3.  BUT then we'd flush a report with the 4 steps that had been postponed - the 5th queue hadn't gotten to the report step yet. 
+            //  3.  BUT then we'd flush a report with the 4 steps that had been postponed - the 5th queue hadn't gotten to the report step yet.
             //
             ActionPostponement postponement = context.Postponements.Last();
             context.Postponements.Remove(postponement);

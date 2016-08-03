@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Common;
 using System.Data.SqlClient;
 using System.Linq;
 using Autofac;
@@ -17,7 +18,6 @@ using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Common.Threading;
-using ShipWorks.Data.Administration.UpdateFrom2x.Database;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Filters;
@@ -72,11 +72,11 @@ namespace ShipWorks.Data.Administration
             {
                 try
                 {
-                    using (SqlCommand cmd = SqlCommandProvider.Create(con, "GetAssemblySchemaVersion"))
+                    using (DbCommand cmd = DbCommandProvider.Create(con, "GetAssemblySchemaVersion"))
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
 
-                        return new Version((string) SqlCommandProvider.ExecuteScalar(cmd));
+                        return new Version((string) DbCommandProvider.ExecuteScalar(cmd));
                     }
                 }
                 catch (SqlException ex)
@@ -177,13 +177,8 @@ namespace ShipWorks.Data.Administration
                             // Update the assemblies
                             UpdateAssemblies(progressFunctionality);
 
-                            // We could be running in the middle of a 2x migration, in which case there are no filters yet and certain other things.
-                            // So the following stuff only runs when we are in a "regular" 3x update.
-                            if (!MigrationController.IsMigrationInProgress())
-                            {
-                                // If the filter sql version has changed, that means we need to regenerate them to get updated calculation SQL into the database
-                                UpdateFilters(progressFunctionality, ExistingConnectionScope.ScopedConnection, ExistingConnectionScope.ScopedTransaction);
-                            }
+                            // If the filter sql version has changed, that means we need to regenerate them to get updated calculation SQL into the database
+                            UpdateFilters(progressFunctionality, ExistingConnectionScope.ScopedConnection, ExistingConnectionScope.ScopedTransaction);
 
                             // Functionality is done
                             progressFunctionality.PercentComplete = 100;
@@ -422,7 +417,7 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         public static void UpdateSchemaVersionStoredProcedure(SqlConnection con, Version version)
         {
-            using (SqlCommand cmd = SqlCommandProvider.Create(con))
+            using (DbCommand cmd = DbCommandProvider.Create(con))
             {
                 UpdateSchemaVersionStoredProcedure(cmd, version);
             }
@@ -431,7 +426,7 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Update the schema version stored procedure to say the current schema is the given version
         /// </summary>
-        public static void UpdateSchemaVersionStoredProcedure(SqlCommand cmd, Version version)
+        public static void UpdateSchemaVersionStoredProcedure(DbCommand cmd, Version version)
         {
             UpdateVersionStoredProcedure(cmd, version, "GetSchemaVersion");
         }
@@ -439,7 +434,7 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Update the assembly version stored procedure to say the current schema is the given version
         /// </summary>
-        public static void UpdateAssemblyVersionStoredProcedure(SqlCommand cmd)
+        public static void UpdateAssemblyVersionStoredProcedure(DbCommand cmd)
         {
             UpdateVersionStoredProcedure(cmd, GetRequiredSchemaVersion(), "GetAssemblySchemaVersion");
         }
@@ -447,7 +442,7 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Update a stored procedure for checking a version
         /// </summary>
-        private static void UpdateVersionStoredProcedure(SqlCommand cmd, Version version, string procedureName)
+        private static void UpdateVersionStoredProcedure(DbCommand cmd, Version version, string procedureName)
         {
             if (version == null)
             {
@@ -457,7 +452,7 @@ namespace ShipWorks.Data.Administration
             cmd.CommandText = string.Format(@"
                 IF EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[dbo].[{0}]') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
                     DROP PROCEDURE [dbo].[{0}]", procedureName);
-            SqlCommandProvider.ExecuteNonQuery(cmd);
+            DbCommandProvider.ExecuteNonQuery(cmd);
 
 #if DEBUG
             string withEncryption = "";
@@ -470,7 +465,7 @@ namespace ShipWorks.Data.Administration
                 {0}
                 AS
                 SELECT '{1}' AS 'SchemaVersion'", withEncryption, version.ToString(4), procedureName);
-            SqlCommandProvider.ExecuteNonQuery(cmd);
+            DbCommandProvider.ExecuteNonQuery(cmd);
         }
 
         /// <summary>
@@ -584,11 +579,11 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         public static Version GetInstalledSchemaVersion(SqlConnection con)
         {
-            SqlCommand cmd = SqlCommandProvider.Create(con);
+            DbCommand cmd = DbCommandProvider.Create(con);
             cmd.CommandText = "GetSchemaVersion";
             cmd.CommandType = CommandType.StoredProcedure;
 
-            return new Version((string) SqlCommandProvider.ExecuteScalar(cmd));
+            return new Version((string) DbCommandProvider.ExecuteScalar(cmd));
         }
 
         /// <summary>

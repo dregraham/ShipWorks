@@ -1,9 +1,9 @@
 ﻿///////////////////////////////////////////////////////////////
 // This is generated code. 
 //////////////////////////////////////////////////////////////
-// Code is generated using LLBLGen Pro version: 2.6
+// Code is generated using LLBLGen Pro version: 5.0
 // Code is generated on: 
-// Code is generated using templates: SD.TemplateBindings.SharedTemplates.NET20
+// Code is generated using templates: SD.TemplateBindings.SharedTemplates
 // Templates vendor: Solutions Design.
 // Templates version: 
 //////////////////////////////////////////////////////////////
@@ -23,25 +23,17 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 
 namespace ShipWorks.Data.Model.EntityClasses
 {
-	
 	// __LLBLGENPRO_USER_CODE_REGION_START AdditionalNamespaces
 	// __LLBLGENPRO_USER_CODE_REGION_END
-
-	/// <summary>
-	/// Entity class which represents the entity 'FedExPackage'.<br/><br/>
-	/// 
-	/// </summary>
+	/// <summary>Entity class which represents the entity 'FedExPackage'.<br/><br/></summary>
 	[Serializable]
-	public partial class FedExPackageEntity : CommonEntityBase, ISerializable
+	public partial class FedExPackageEntity : CommonEntityBase
 		// __LLBLGENPRO_USER_CODE_REGION_START AdditionalInterfaces
 		// __LLBLGENPRO_USER_CODE_REGION_END	
 	{
 		#region Class Member Declarations
-
-
 		private FedExShipmentEntity _fedExShipment;
 
-		
 		// __LLBLGENPRO_USER_CODE_REGION_START PrivateMembers
 		// __LLBLGENPRO_USER_CODE_REGION_END
 		#endregion
@@ -55,9 +47,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			/// <summary>Member name FedExShipment</summary>
 			public static readonly string FedExShipment = "FedExShipment";
-
-
-
 		}
 		#endregion
 		
@@ -66,11 +55,11 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			SetupCustomPropertyHashtables();
 		}
-
+		
 		/// <summary> CTor</summary>
 		public FedExPackageEntity():base("FedExPackageEntity")
 		{
-			InitClassEmpty(null, CreateFields());
+			InitClassEmpty(null, null);
 		}
 
 		/// <summary> CTor</summary>
@@ -85,16 +74,15 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <param name="validator">The custom validator object for this FedExPackageEntity</param>
 		public FedExPackageEntity(IValidator validator):base("FedExPackageEntity")
 		{
-			InitClassEmpty(validator, CreateFields());
+			InitClassEmpty(validator, null);
 		}
 				
-
 		/// <summary> CTor</summary>
 		/// <param name="fedExPackageID">PK value for FedExPackage which data should be fetched into this FedExPackage object</param>
 		/// <remarks>The entity is not fetched by this constructor. Use a DataAccessAdapter for that.</remarks>
 		public FedExPackageEntity(System.Int64 fedExPackageID):base("FedExPackageEntity")
 		{
-			InitClassEmpty(null, CreateFields());
+			InitClassEmpty(null, null);
 			this.FedExPackageID = fedExPackageID;
 		}
 
@@ -104,7 +92,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>The entity is not fetched by this constructor. Use a DataAccessAdapter for that.</remarks>
 		public FedExPackageEntity(System.Int64 fedExPackageID, IValidator validator):base("FedExPackageEntity")
 		{
-			InitClassEmpty(validator, CreateFields());
+			InitClassEmpty(validator, null);
 			this.FedExPackageID = fedExPackageID;
 		}
 
@@ -116,17 +104,13 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			if(SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
-
-
 				_fedExShipment = (FedExShipmentEntity)info.GetValue("_fedExShipment", typeof(FedExShipmentEntity));
 				if(_fedExShipment!=null)
 				{
 					_fedExShipment.AfterSave+=new EventHandler(OnEntityAfterSave);
 				}
-
-				base.FixupDeserialization(FieldInfoProviderSingleton.GetInstance());
+				this.FixupDeserialization(FieldInfoProviderSingleton.GetInstance());
 			}
-			
 			// __LLBLGENPRO_USER_CODE_REGION_START DeserializationConstructor
 			// __LLBLGENPRO_USER_CODE_REGION_END
 		}
@@ -146,30 +130,20 @@ namespace ShipWorks.Data.Model.EntityClasses
 					break;
 			}
 		}
-				
-		/// <summary>Gets the inheritance info provider instance of the project this entity instance is located in. </summary>
-		/// <returns>ready to use inheritance info provider instance.</returns>
-		protected override IInheritanceInfoProvider GetInheritanceInfoProvider()
-		{
-			return InheritanceInfoProviderSingleton.GetInstance();
-		}
-		
+
 		/// <summary> Sets the related entity property to the entity specified. If the property is a collection, it will add the entity specified to that collection.</summary>
 		/// <param name="propertyName">Name of the property.</param>
 		/// <param name="entity">Entity to set as an related entity</param>
 		/// <remarks>Used by prefetch path logic.</remarks>
-		[EditorBrowsable(EditorBrowsableState.Never)]
-		public override void SetRelatedEntityProperty(string propertyName, IEntity2 entity)
+		protected override void SetRelatedEntityProperty(string propertyName, IEntityCore entity)
 		{
 			switch(propertyName)
 			{
 				case "FedExShipment":
 					this.FedExShipment = (FedExShipmentEntity)entity;
 					break;
-
-
-
 				default:
+					this.OnSetRelatedEntityProperty(propertyName, entity);
 					break;
 			}
 		}
@@ -177,47 +151,38 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary>Gets the relation objects which represent the relation the fieldName specified is mapped on. </summary>
 		/// <param name="fieldName">Name of the field mapped onto the relation of which the relation objects have to be obtained.</param>
 		/// <returns>RelationCollection with relation object(s) which represent the relation the field is maped on</returns>
-		public override RelationCollection GetRelationsForFieldOfType(string fieldName)
+		protected override RelationCollection GetRelationsForFieldOfType(string fieldName)
 		{
-			return FedExPackageEntity.GetRelationsForField(fieldName);
+			return GetRelationsForField(fieldName);
 		}
 
 		/// <summary>Gets the relation objects which represent the relation the fieldName specified is mapped on. </summary>
 		/// <param name="fieldName">Name of the field mapped onto the relation of which the relation objects have to be obtained.</param>
 		/// <returns>RelationCollection with relation object(s) which represent the relation the field is maped on</returns>
-		public static RelationCollection GetRelationsForField(string fieldName)
+		internal static RelationCollection GetRelationsForField(string fieldName)
 		{
 			RelationCollection toReturn = new RelationCollection();
 			switch(fieldName)
 			{
 				case "FedExShipment":
-					toReturn.Add(FedExPackageEntity.Relations.FedExShipmentEntityUsingShipmentID);
+					toReturn.Add(Relations.FedExShipmentEntityUsingShipmentID);
 					break;
-
-
-
 				default:
-
 					break;				
 			}
 			return toReturn;
 		}
 #if !CF
-		/// <summary>Checks if the relation mapped by the property with the name specified is a one way / single sided relation. If the passed in name is null, it
-		/// will return true if the entity has any single-sided relation</summary>
+		/// <summary>Checks if the relation mapped by the property with the name specified is a one way / single sided relation. If the passed in name is null, it/ will return true if the entity has any single-sided relation</summary>
 		/// <param name="propertyName">Name of the property which is mapped onto the relation to check, or null to check if the entity has any relation/ which is single sided</param>
 		/// <returns>true if the relation is single sided / one way (so the opposite relation isn't present), false otherwise</returns>
-		[EditorBrowsable(EditorBrowsableState.Never)]
 		protected override bool CheckOneWayRelations(string propertyName)
 		{
-			// use template trick to calculate the # of single-sided / oneway relations
 			int numberOfOneWayRelations = 0;
 			switch(propertyName)
 			{
 				case null:
 					return ((numberOfOneWayRelations > 0) || base.CheckOneWayRelations(null));
-
-
 				default:
 					return base.CheckOneWayRelations(propertyName);
 			}
@@ -226,16 +191,13 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary> Sets the internal parameter related to the fieldname passed to the instance relatedEntity. </summary>
 		/// <param name="relatedEntity">Instance to set as the related entity of type entityType</param>
 		/// <param name="fieldName">Name of field mapped onto the relation which resolves in the instance relatedEntity</param>
-		[EditorBrowsable(EditorBrowsableState.Never)]
-		public override void SetRelatedEntity(IEntity2 relatedEntity, string fieldName)
+		protected override void SetRelatedEntity(IEntityCore relatedEntity, string fieldName)
 		{
 			switch(fieldName)
 			{
 				case "FedExShipment":
 					SetupSyncFedExShipment(relatedEntity);
 					break;
-
-
 				default:
 					break;
 			}
@@ -245,16 +207,13 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <param name="relatedEntity">Instance to unset as the related entity of type entityType</param>
 		/// <param name="fieldName">Name of field mapped onto the relation which resolves in the instance relatedEntity</param>
 		/// <param name="signalRelatedEntityManyToOne">if set to true it will notify the manytoone side, if applicable.</param>
-		[EditorBrowsable(EditorBrowsableState.Never)]
-		public override void UnsetRelatedEntity(IEntity2 relatedEntity, string fieldName, bool signalRelatedEntityManyToOne)
+		protected override void UnsetRelatedEntity(IEntityCore relatedEntity, string fieldName, bool signalRelatedEntityManyToOne)
 		{
 			switch(fieldName)
 			{
 				case "FedExShipment":
 					DesetupSyncFedExShipment(false, true);
 					break;
-
-
 				default:
 					break;
 			}
@@ -262,89 +221,58 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets a collection of related entities referenced by this entity which depend on this entity (this entity is the PK side of their FK fields). These entities will have to be persisted after this entity during a recursive save.</summary>
 		/// <returns>Collection with 0 or more IEntity2 objects, referenced by this entity</returns>
-		public override List<IEntity2> GetDependingRelatedEntities()
+		protected override List<IEntity2> GetDependingRelatedEntities()
 		{
 			List<IEntity2> toReturn = new List<IEntity2>();
-
 			return toReturn;
 		}
 		
 		/// <summary> Gets a collection of related entities referenced by this entity which this entity depends on (this entity is the FK side of their PK fields). These
 		/// entities will have to be persisted before this entity during a recursive save.</summary>
 		/// <returns>Collection with 0 or more IEntity2 objects, referenced by this entity</returns>
-		public override List<IEntity2> GetDependentRelatedEntities()
+		protected override List<IEntity2> GetDependentRelatedEntities()
 		{
 			List<IEntity2> toReturn = new List<IEntity2>();
 			if(_fedExShipment!=null)
 			{
 				toReturn.Add(_fedExShipment);
 			}
-
 			return toReturn;
 		}
 		
-		/// <summary>Gets a list of all entity collections stored as member variables in this entity. The contents of the ArrayList is used by the DataAccessAdapter to perform recursive saves. Only 1:n related collections are returned.</summary>
+		/// <summary>Gets a list of all entity collections stored as member variables in this entity. Only 1:n related collections are returned.</summary>
 		/// <returns>Collection with 0 or more IEntityCollection2 objects, referenced by this entity</returns>
-		public override List<IEntityCollection2> GetMemberEntityCollections()
+		protected override List<IEntityCollection2> GetMemberEntityCollections()
 		{
 			List<IEntityCollection2> toReturn = new List<IEntityCollection2>();
-
-
 			return toReturn;
 		}
-		
-
 
 		/// <summary>ISerializable member. Does custom serialization so event handlers do not get serialized. Serializes members of this entity class and uses the base class' implementation to serialize the rest.</summary>
 		/// <param name="info"></param>
 		/// <param name="context"></param>
 		[EditorBrowsable(EditorBrowsableState.Never)]
-		public override void GetObjectData(SerializationInfo info, StreamingContext context)
+		protected override void GetObjectData(SerializationInfo info, StreamingContext context)
 		{
 			if (SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
-
-
 				info.AddValue("_fedExShipment", (!this.MarkedForDeletion?_fedExShipment:null));
-
 			}
-			
 			// __LLBLGENPRO_USER_CODE_REGION_START GetObjectInfo
 			// __LLBLGENPRO_USER_CODE_REGION_END
 			base.GetObjectData(info, context);
 		}
 
-		/// <summary>Returns true if the original value for the field with the fieldIndex passed in, read from the persistent storage was NULL, false otherwise.
-		/// Should not be used for testing if the current value is NULL, use <see cref="TestCurrentFieldValueForNull"/> for that.</summary>
-		/// <param name="fieldIndex">Index of the field to test if that field was NULL in the persistent storage</param>
-		/// <returns>true if the field with the passed in index was NULL in the persistent storage, false otherwise</returns>
-		public bool TestOriginalFieldValueForNull(FedExPackageFieldIndex fieldIndex)
-		{
-			return base.Fields[(int)fieldIndex].IsNull;
-		}
-		
-		/// <summary>Returns true if the current value for the field with the fieldIndex passed in represents null/not defined, false otherwise.
-		/// Should not be used for testing if the original value (read from the db) is NULL</summary>
-		/// <param name="fieldIndex">Index of the field to test if its currentvalue is null/undefined</param>
-		/// <returns>true if the field's value isn't defined yet, false otherwise</returns>
-		public bool TestCurrentFieldValueForNull(FedExPackageFieldIndex fieldIndex)
-		{
-			return base.CheckIfCurrentFieldValueIsNull((int)fieldIndex);
-		}
 
 				
 		/// <summary>Gets a list of all the EntityRelation objects the type of this instance has.</summary>
 		/// <returns>A list of all the EntityRelation objects the type of this instance has. Hierarchy relations are excluded.</returns>
-		public override List<IEntityRelation> GetAllRelations()
+		protected override List<IEntityRelation> GetAllRelations()
 		{
 			return new FedExPackageRelations().GetAllRelations();
 		}
-		
 
-
-
-		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch
-		/// the related entity of type 'FedExShipment' to this entity. Use DataAccessAdapter.FetchNewEntity() to fetch this related entity.</summary>
+		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entity of type 'FedExShipment' to this entity.</summary>
 		/// <returns></returns>
 		public virtual IRelationPredicateBucket GetRelationInfoFedExShipment()
 		{
@@ -352,23 +280,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(FedExShipmentFields.ShipmentID, null, ComparisonOperator.Equal, this.ShipmentID));
 			return bucket;
 		}
-
-	
 		
-		/// <summary>Creates entity fields object for this entity. Used in constructor to setup this entity in a polymorphic scenario.</summary>
-		protected virtual IEntityFields2 CreateFields()
-		{
-			return EntityFieldsFactory.CreateEntityFieldsObject(ShipWorks.Data.Model.EntityType.FedExPackageEntity);
-		}
-
-		/// <summary>
-		/// Creates the ITypeDefaultValue instance used to provide default values for value types which aren't of type nullable(of T)
-		/// </summary>
-		/// <returns></returns>
-		protected override ITypeDefaultValue CreateTypeDefaultValueProvider()
-		{
-			return new TypeDefaultValue();
-		}
 
 		/// <summary>Creates a new instance of the factory related to this entity</summary>
 		protected override IEntityFactory2 CreateEntityFactory()
@@ -381,8 +293,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override void AddToMemberEntityCollectionsQueue(Queue<IEntityCollection2> collectionsQueue) 
 		{
 			base.AddToMemberEntityCollectionsQueue(collectionsQueue);
-
-
 		}
 		
 		/// <summary>Gets the member collections queue from the queue (base first)</summary>
@@ -391,16 +301,14 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			base.GetFromMemberEntityCollectionsQueue(collectionsQueue);
 
-
 		}
 		
 		/// <summary>Determines whether the entity has populated member collections</summary>
 		/// <returns>true if the entity has populated member collections.</returns>
 		protected override bool HasPopulatedMemberEntityCollections()
 		{
-
-
-			return base.HasPopulatedMemberEntityCollections();
+			bool toReturn = false;
+			return toReturn ? true : base.HasPopulatedMemberEntityCollections();
 		}
 		
 		/// <summary>Creates the member entity collections queue.</summary>
@@ -409,44 +317,20 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override void CreateMemberEntityCollectionsQueue(Queue<IEntityCollection2> collectionsQueue, Queue<bool> requiredQueue) 
 		{
 			base.CreateMemberEntityCollectionsQueue(collectionsQueue, requiredQueue);
-
-
 		}
 #endif
-		/// <summary>
-		/// Gets all related data objects, stored by name. The name is the field name mapped onto the relation for that particular data element. 
-		/// </summary>
+		/// <summary>Gets all related data objects, stored by name. The name is the field name mapped onto the relation for that particular data element.</summary>
 		/// <returns>Dictionary with per name the related referenced data element, which can be an entity collection or an entity or null</returns>
-		public override Dictionary<string, object> GetRelatedData()
+		protected override Dictionary<string, object> GetRelatedData()
 		{
 			Dictionary<string, object> toReturn = new Dictionary<string, object>();
 			toReturn.Add("FedExShipment", _fedExShipment);
-
-
-
 			return toReturn;
-		}
-		
-		/// <summary> Adds the internals to the active context. </summary>
-		protected override void AddInternalsToContext()
-		{
-
-
-			if(_fedExShipment!=null)
-			{
-				_fedExShipment.ActiveContext = base.ActiveContext;
-			}
-
 		}
 
 		/// <summary> Initializes the class members</summary>
-		protected virtual void InitClassMembers()
+		private void InitClassMembers()
 		{
-
-
-
-			_fedExShipment = null;
-
 			PerformDependencyInjection();
 			
 			// __LLBLGENPRO_USER_CODE_REGION_START InitClassMembers
@@ -454,115 +338,81 @@ namespace ShipWorks.Data.Model.EntityClasses
 			OnInitClassMembersComplete();
 		}
 
+
 		#region Custom Property Hashtable Setup
 		/// <summary> Initializes the hashtables for the entity type and entity field custom properties. </summary>
 		private static void SetupCustomPropertyHashtables()
 		{
 			_customProperties = new Dictionary<string, string>();
 			_fieldsCustomProperties = new Dictionary<string, Dictionary<string, string>>();
-
-			Dictionary<string, string> fieldHashtable = null;
+			Dictionary<string, string> fieldHashtable;
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("FedExPackageID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("ShipmentID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("Weight", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("DimsProfileID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("DimsLength", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("DimsWidth", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("DimsHeight", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("DimsWeight", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("DimsAddWeight", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("SkidPieces", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("Insurance", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("InsuranceValue", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("InsurancePennyOne", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("DeclaredValue", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("TrackingNumber", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("PriorityAlert", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("PriorityAlertEnhancementType", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("PriorityAlertDetailContent", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("DryIceWeight", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("ContainsAlcohol", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("DangerousGoodsEnabled", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("DangerousGoodsType", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("DangerousGoodsAccessibilityType", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("DangerousGoodsCargoAircraftOnly", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("DangerousGoodsEmergencyContactPhone", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("DangerousGoodsOfferor", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("DangerousGoodsPackagingCount", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("HazardousMaterialNumber", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("HazardousMaterialClass", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("HazardousMaterialProperName", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("HazardousMaterialPackingGroup", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("HazardousMaterialQuantityValue", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("HazardousMaterialQuanityUnits", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("HazardousMaterialTechnicalName", fieldHashtable);
 		}
 		#endregion
@@ -572,19 +422,19 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <param name="resetFKFields">if set to true it will also reset the FK fields pointing to the related entity</param>
 		private void DesetupSyncFedExShipment(bool signalRelatedEntity, bool resetFKFields)
 		{
-			base.PerformDesetupSyncRelatedEntity( _fedExShipment, new PropertyChangedEventHandler( OnFedExShipmentPropertyChanged ), "FedExShipment", FedExPackageEntity.Relations.FedExShipmentEntityUsingShipmentID, true, signalRelatedEntity, "Packages", resetFKFields, new int[] { (int)FedExPackageFieldIndex.ShipmentID } );		
+			this.PerformDesetupSyncRelatedEntity( _fedExShipment, new PropertyChangedEventHandler( OnFedExShipmentPropertyChanged ), "FedExShipment", ShipWorks.Data.Model.RelationClasses.StaticFedExPackageRelations.FedExShipmentEntityUsingShipmentIDStatic, true, signalRelatedEntity, "Packages", resetFKFields, new int[] { (int)FedExPackageFieldIndex.ShipmentID } );
 			_fedExShipment = null;
 		}
 
 		/// <summary> setups the sync logic for member _fedExShipment</summary>
 		/// <param name="relatedEntity">Instance to set as the related entity of type entityType</param>
-		private void SetupSyncFedExShipment(IEntity2 relatedEntity)
+		private void SetupSyncFedExShipment(IEntityCore relatedEntity)
 		{
 			if(_fedExShipment!=relatedEntity)
 			{
 				DesetupSyncFedExShipment(true, true);
 				_fedExShipment = (FedExShipmentEntity)relatedEntity;
-				base.PerformSetupSyncRelatedEntity( _fedExShipment, new PropertyChangedEventHandler( OnFedExShipmentPropertyChanged ), "FedExShipment", FedExPackageEntity.Relations.FedExShipmentEntityUsingShipmentID, true, new string[] {  } );
+				this.PerformSetupSyncRelatedEntity( _fedExShipment, new PropertyChangedEventHandler( OnFedExShipmentPropertyChanged ), "FedExShipment", ShipWorks.Data.Model.RelationClasses.StaticFedExPackageRelations.FedExShipmentEntityUsingShipmentIDStatic, true, new string[] {  } );
 			}
 		}
 		
@@ -600,23 +450,21 @@ namespace ShipWorks.Data.Model.EntityClasses
 			}
 		}
 
-
 		/// <summary> Initializes the class with empty data, as if it is a new Entity.</summary>
 		/// <param name="validator">The validator object for this FedExPackageEntity</param>
 		/// <param name="fields">Fields of this entity</param>
-		protected virtual void InitClassEmpty(IValidator validator, IEntityFields2 fields)
+		private void InitClassEmpty(IValidator validator, IEntityFields2 fields)
 		{
 			OnInitializing();
-			base.Fields = fields;
-			base.IsNew=true;
-			base.Validator = validator;
+			this.Fields = fields ?? CreateFields();
+			this.Validator = validator;
 			InitClassMembers();
 
-			
 			// __LLBLGENPRO_USER_CODE_REGION_START InitClassEmpty
 			// __LLBLGENPRO_USER_CODE_REGION_END
 
 			OnInitialized();
+
 		}
 
 		#region Class Property Declarations
@@ -633,31 +481,23 @@ namespace ShipWorks.Data.Model.EntityClasses
 			get { return _customProperties;}
 		}
 
-
-
-		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'FedExShipment' 
-		/// for this entity. Add the object returned by this property to an existing PrefetchPath2 instance.</summary>
+		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'FedExShipment' for this entity.</summary>
 		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
 		public static IPrefetchPathElement2 PrefetchPathFedExShipment
 		{
-			get
-			{
-				return new PrefetchPathElement2(new EntityCollection(EntityFactoryCache2.GetEntityFactory(typeof(FedExShipmentEntityFactory))),
-					(IEntityRelation)GetRelationsForField("FedExShipment")[0], (int)ShipWorks.Data.Model.EntityType.FedExPackageEntity, (int)ShipWorks.Data.Model.EntityType.FedExShipmentEntity, 0, null, null, null, null, "FedExShipment", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.ManyToOne);
-			}
+			get	{ return new PrefetchPathElement2(new EntityCollection(EntityFactoryCache2.GetEntityFactory(typeof(FedExShipmentEntityFactory))),	(IEntityRelation)GetRelationsForField("FedExShipment")[0], (int)ShipWorks.Data.Model.EntityType.FedExPackageEntity, (int)ShipWorks.Data.Model.EntityType.FedExShipmentEntity, 0, null, null, null, null, "FedExShipment", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.ManyToOne); }
 		}
 
 
 		/// <summary> The custom properties for the type of this entity instance.</summary>
 		/// <remarks>The data returned from this property should be considered read-only: it is not thread safe to alter this data at runtime.</remarks>
 		[Browsable(false), XmlIgnore]
-		public override Dictionary<string, string> CustomPropertiesOfType
+		protected override Dictionary<string, string> CustomPropertiesOfType
 		{
-			get { return FedExPackageEntity.CustomProperties;}
+			get { return CustomProperties;}
 		}
 
-		/// <summary> The custom properties for the fields of this entity type. The returned Hashtable contains per fieldname a hashtable of name-value
-		/// pairs. </summary>
+		/// <summary> The custom properties for the fields of this entity type. The returned Hashtable contains per fieldname a hashtable of name-value pairs. </summary>
 		/// <remarks>The data returned from this property should be considered read-only: it is not thread safe to alter this data at runtime.</remarks>
 		public  static Dictionary<string, Dictionary<string, string>> FieldsCustomProperties
 		{
@@ -667,13 +507,12 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary> The custom properties for the fields of the type of this entity instance. The returned Hashtable contains per fieldname a hashtable of name-value pairs. </summary>
 		/// <remarks>The data returned from this property should be considered read-only: it is not thread safe to alter this data at runtime.</remarks>
 		[Browsable(false), XmlIgnore]
-		public override Dictionary<string, Dictionary<string, string>> FieldsCustomPropertiesOfType
+		protected override Dictionary<string, Dictionary<string, string>> FieldsCustomPropertiesOfType
 		{
-			get { return FedExPackageEntity.FieldsCustomProperties;}
+			get { return FieldsCustomProperties;}
 		}
 
-		/// <summary> The FedExPackageID property of the Entity FedExPackage<br/><br/>
-		/// </summary>
+		/// <summary> The FedExPackageID property of the Entity FedExPackage<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "FedExPackage"."FedExPackageID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
@@ -683,8 +522,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)FedExPackageFieldIndex.FedExPackageID, value); }
 		}
 
-		/// <summary> The ShipmentID property of the Entity FedExPackage<br/><br/>
-		/// </summary>
+		/// <summary> The ShipmentID property of the Entity FedExPackage<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "FedExPackage"."ShipmentID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
@@ -694,8 +532,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)FedExPackageFieldIndex.ShipmentID, value); }
 		}
 
-		/// <summary> The Weight property of the Entity FedExPackage<br/><br/>
-		/// </summary>
+		/// <summary> The Weight property of the Entity FedExPackage<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "FedExPackage"."Weight"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
@@ -705,8 +542,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)FedExPackageFieldIndex.Weight, value); }
 		}
 
-		/// <summary> The DimsProfileID property of the Entity FedExPackage<br/><br/>
-		/// </summary>
+		/// <summary> The DimsProfileID property of the Entity FedExPackage<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "FedExPackage"."DimsProfileID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
@@ -716,8 +552,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)FedExPackageFieldIndex.DimsProfileID, value); }
 		}
 
-		/// <summary> The DimsLength property of the Entity FedExPackage<br/><br/>
-		/// </summary>
+		/// <summary> The DimsLength property of the Entity FedExPackage<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "FedExPackage"."DimsLength"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
@@ -727,8 +562,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)FedExPackageFieldIndex.DimsLength, value); }
 		}
 
-		/// <summary> The DimsWidth property of the Entity FedExPackage<br/><br/>
-		/// </summary>
+		/// <summary> The DimsWidth property of the Entity FedExPackage<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "FedExPackage"."DimsWidth"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
@@ -738,8 +572,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)FedExPackageFieldIndex.DimsWidth, value); }
 		}
 
-		/// <summary> The DimsHeight property of the Entity FedExPackage<br/><br/>
-		/// </summary>
+		/// <summary> The DimsHeight property of the Entity FedExPackage<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "FedExPackage"."DimsHeight"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
@@ -749,8 +582,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)FedExPackageFieldIndex.DimsHeight, value); }
 		}
 
-		/// <summary> The DimsWeight property of the Entity FedExPackage<br/><br/>
-		/// </summary>
+		/// <summary> The DimsWeight property of the Entity FedExPackage<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "FedExPackage"."DimsWeight"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
@@ -760,8 +592,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)FedExPackageFieldIndex.DimsWeight, value); }
 		}
 
-		/// <summary> The DimsAddWeight property of the Entity FedExPackage<br/><br/>
-		/// </summary>
+		/// <summary> The DimsAddWeight property of the Entity FedExPackage<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "FedExPackage"."DimsAddWeight"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
@@ -771,8 +602,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)FedExPackageFieldIndex.DimsAddWeight, value); }
 		}
 
-		/// <summary> The SkidPieces property of the Entity FedExPackage<br/><br/>
-		/// </summary>
+		/// <summary> The SkidPieces property of the Entity FedExPackage<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "FedExPackage"."SkidPieces"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
@@ -782,8 +612,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)FedExPackageFieldIndex.SkidPieces, value); }
 		}
 
-		/// <summary> The Insurance property of the Entity FedExPackage<br/><br/>
-		/// </summary>
+		/// <summary> The Insurance property of the Entity FedExPackage<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "FedExPackage"."Insurance"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
@@ -793,8 +622,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)FedExPackageFieldIndex.Insurance, value); }
 		}
 
-		/// <summary> The InsuranceValue property of the Entity FedExPackage<br/><br/>
-		/// </summary>
+		/// <summary> The InsuranceValue property of the Entity FedExPackage<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "FedExPackage"."InsuranceValue"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Money, 19, 4, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
@@ -804,8 +632,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)FedExPackageFieldIndex.InsuranceValue, value); }
 		}
 
-		/// <summary> The InsurancePennyOne property of the Entity FedExPackage<br/><br/>
-		/// </summary>
+		/// <summary> The InsurancePennyOne property of the Entity FedExPackage<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "FedExPackage"."InsurancePennyOne"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
@@ -815,8 +642,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)FedExPackageFieldIndex.InsurancePennyOne, value); }
 		}
 
-		/// <summary> The DeclaredValue property of the Entity FedExPackage<br/><br/>
-		/// </summary>
+		/// <summary> The DeclaredValue property of the Entity FedExPackage<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "FedExPackage"."DeclaredValue"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Money, 19, 4, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
@@ -826,8 +652,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)FedExPackageFieldIndex.DeclaredValue, value); }
 		}
 
-		/// <summary> The TrackingNumber property of the Entity FedExPackage<br/><br/>
-		/// </summary>
+		/// <summary> The TrackingNumber property of the Entity FedExPackage<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "FedExPackage"."TrackingNumber"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
@@ -837,8 +662,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)FedExPackageFieldIndex.TrackingNumber, value); }
 		}
 
-		/// <summary> The PriorityAlert property of the Entity FedExPackage<br/><br/>
-		/// </summary>
+		/// <summary> The PriorityAlert property of the Entity FedExPackage<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "FedExPackage"."PriorityAlert"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
@@ -848,8 +672,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)FedExPackageFieldIndex.PriorityAlert, value); }
 		}
 
-		/// <summary> The PriorityAlertEnhancementType property of the Entity FedExPackage<br/><br/>
-		/// </summary>
+		/// <summary> The PriorityAlertEnhancementType property of the Entity FedExPackage<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "FedExPackage"."PriorityAlertEnhancementType"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
@@ -859,8 +682,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)FedExPackageFieldIndex.PriorityAlertEnhancementType, value); }
 		}
 
-		/// <summary> The PriorityAlertDetailContent property of the Entity FedExPackage<br/><br/>
-		/// </summary>
+		/// <summary> The PriorityAlertDetailContent property of the Entity FedExPackage<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "FedExPackage"."PriorityAlertDetailContent"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 1024<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
@@ -870,8 +692,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)FedExPackageFieldIndex.PriorityAlertDetailContent, value); }
 		}
 
-		/// <summary> The DryIceWeight property of the Entity FedExPackage<br/><br/>
-		/// </summary>
+		/// <summary> The DryIceWeight property of the Entity FedExPackage<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "FedExPackage"."DryIceWeight"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
@@ -881,8 +702,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)FedExPackageFieldIndex.DryIceWeight, value); }
 		}
 
-		/// <summary> The ContainsAlcohol property of the Entity FedExPackage<br/><br/>
-		/// </summary>
+		/// <summary> The ContainsAlcohol property of the Entity FedExPackage<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "FedExPackage"."ContainsAlcohol"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
@@ -892,8 +712,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)FedExPackageFieldIndex.ContainsAlcohol, value); }
 		}
 
-		/// <summary> The DangerousGoodsEnabled property of the Entity FedExPackage<br/><br/>
-		/// </summary>
+		/// <summary> The DangerousGoodsEnabled property of the Entity FedExPackage<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "FedExPackage"."DangerousGoodsEnabled"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
@@ -903,8 +722,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)FedExPackageFieldIndex.DangerousGoodsEnabled, value); }
 		}
 
-		/// <summary> The DangerousGoodsType property of the Entity FedExPackage<br/><br/>
-		/// </summary>
+		/// <summary> The DangerousGoodsType property of the Entity FedExPackage<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "FedExPackage"."DangerousGoodsType"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
@@ -914,8 +732,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)FedExPackageFieldIndex.DangerousGoodsType, value); }
 		}
 
-		/// <summary> The DangerousGoodsAccessibilityType property of the Entity FedExPackage<br/><br/>
-		/// </summary>
+		/// <summary> The DangerousGoodsAccessibilityType property of the Entity FedExPackage<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "FedExPackage"."DangerousGoodsAccessibilityType"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
@@ -925,8 +742,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)FedExPackageFieldIndex.DangerousGoodsAccessibilityType, value); }
 		}
 
-		/// <summary> The DangerousGoodsCargoAircraftOnly property of the Entity FedExPackage<br/><br/>
-		/// </summary>
+		/// <summary> The DangerousGoodsCargoAircraftOnly property of the Entity FedExPackage<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "FedExPackage"."DangerousGoodsCargoAircraftOnly"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
@@ -936,8 +752,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)FedExPackageFieldIndex.DangerousGoodsCargoAircraftOnly, value); }
 		}
 
-		/// <summary> The DangerousGoodsEmergencyContactPhone property of the Entity FedExPackage<br/><br/>
-		/// </summary>
+		/// <summary> The DangerousGoodsEmergencyContactPhone property of the Entity FedExPackage<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "FedExPackage"."DangerousGoodsEmergencyContactPhone"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 16<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
@@ -947,8 +762,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)FedExPackageFieldIndex.DangerousGoodsEmergencyContactPhone, value); }
 		}
 
-		/// <summary> The DangerousGoodsOfferor property of the Entity FedExPackage<br/><br/>
-		/// </summary>
+		/// <summary> The DangerousGoodsOfferor property of the Entity FedExPackage<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "FedExPackage"."DangerousGoodsOfferor"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 128<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
@@ -958,8 +772,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)FedExPackageFieldIndex.DangerousGoodsOfferor, value); }
 		}
 
-		/// <summary> The DangerousGoodsPackagingCount property of the Entity FedExPackage<br/><br/>
-		/// </summary>
+		/// <summary> The DangerousGoodsPackagingCount property of the Entity FedExPackage<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "FedExPackage"."DangerousGoodsPackagingCount"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
@@ -969,8 +782,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)FedExPackageFieldIndex.DangerousGoodsPackagingCount, value); }
 		}
 
-		/// <summary> The HazardousMaterialNumber property of the Entity FedExPackage<br/><br/>
-		/// </summary>
+		/// <summary> The HazardousMaterialNumber property of the Entity FedExPackage<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "FedExPackage"."HazardousMaterialNumber"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 16<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
@@ -980,8 +792,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)FedExPackageFieldIndex.HazardousMaterialNumber, value); }
 		}
 
-		/// <summary> The HazardousMaterialClass property of the Entity FedExPackage<br/><br/>
-		/// </summary>
+		/// <summary> The HazardousMaterialClass property of the Entity FedExPackage<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "FedExPackage"."HazardousMaterialClass"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 8<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
@@ -991,8 +802,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)FedExPackageFieldIndex.HazardousMaterialClass, value); }
 		}
 
-		/// <summary> The HazardousMaterialProperName property of the Entity FedExPackage<br/><br/>
-		/// </summary>
+		/// <summary> The HazardousMaterialProperName property of the Entity FedExPackage<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "FedExPackage"."HazardousMaterialProperName"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 64<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
@@ -1002,8 +812,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)FedExPackageFieldIndex.HazardousMaterialProperName, value); }
 		}
 
-		/// <summary> The HazardousMaterialPackingGroup property of the Entity FedExPackage<br/><br/>
-		/// </summary>
+		/// <summary> The HazardousMaterialPackingGroup property of the Entity FedExPackage<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "FedExPackage"."HazardousMaterialPackingGroup"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
@@ -1013,8 +822,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)FedExPackageFieldIndex.HazardousMaterialPackingGroup, value); }
 		}
 
-		/// <summary> The HazardousMaterialQuantityValue property of the Entity FedExPackage<br/><br/>
-		/// </summary>
+		/// <summary> The HazardousMaterialQuantityValue property of the Entity FedExPackage<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "FedExPackage"."HazardousMaterialQuantityValue"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
@@ -1024,8 +832,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)FedExPackageFieldIndex.HazardousMaterialQuantityValue, value); }
 		}
 
-		/// <summary> The HazardousMaterialQuanityUnits property of the Entity FedExPackage<br/><br/>
-		/// </summary>
+		/// <summary> The HazardousMaterialQuanityUnits property of the Entity FedExPackage<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "FedExPackage"."HazardousMaterialQuanityUnits"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
@@ -1035,8 +842,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)FedExPackageFieldIndex.HazardousMaterialQuanityUnits, value); }
 		}
 
-		/// <summary> The HazardousMaterialTechnicalName property of the Entity FedExPackage<br/><br/>
-		/// </summary>
+		/// <summary> The HazardousMaterialTechnicalName property of the Entity FedExPackage<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "FedExPackage"."HazardousMaterialTechnicalName"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 64<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
@@ -1046,45 +852,24 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)FedExPackageFieldIndex.HazardousMaterialTechnicalName, value); }
 		}
 
-
-
-		/// <summary> Gets / sets related entity of type 'FedExShipmentEntity' which has to be set using a fetch action earlier. If no related entity
-		/// is set for this property, null is returned. This property is not visible in databound grids.</summary>
-		[Browsable(false)]
+		/// <summary> Gets / sets related entity of type 'FedExShipmentEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned..<br/><br/></summary>
+		[Browsable(true)]
 		public virtual FedExShipmentEntity FedExShipment
 		{
-			get
-			{
-				return _fedExShipment;
-			}
+			get	{ return _fedExShipment; }
 			set
 			{
-				if(base.IsDeserializing)
+				if(this.IsDeserializing)
 				{
 					SetupSyncFedExShipment(value);
 				}
 				else
 				{
-					if(value==null)
-					{
-						if(_fedExShipment != null)
-						{
-							_fedExShipment.UnsetRelatedEntity(this, "Packages");
-						}
-					}
-					else
-					{
-						if(_fedExShipment!=value)
-						{
-							((IEntity2)value).SetRelatedEntity(this, "Packages");
-						}
-					}
+					SetSingleRelatedEntityNavigator(value, "Packages", "FedExShipment", _fedExShipment, true); 
 				}
 			}
 		}
-
 	
-		
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>
 		protected override InheritanceHierarchyType LLBLGenProIsInHierarchyOfType
 		{
@@ -1099,10 +884,11 @@ namespace ShipWorks.Data.Model.EntityClasses
 		
 		/// <summary>Returns the ShipWorks.Data.Model.EntityType enum value for this entity.</summary>
 		[Browsable(false), XmlIgnore]
-		public override int LLBLGenProEntityTypeValue 
+		protected override int LLBLGenProEntityTypeValue 
 		{ 
 			get { return (int)ShipWorks.Data.Model.EntityType.FedExPackageEntity; }
 		}
+
 		#endregion
 
 

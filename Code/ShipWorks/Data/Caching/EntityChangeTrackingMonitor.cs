@@ -6,11 +6,9 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Web.UI.WebControls;
-using Autofac;
 using Interapptive.Shared.Data;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Administration;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
@@ -77,13 +75,13 @@ namespace ShipWorks.Data.Caching
         {
             using (SqlConnection con = SqlSession.Current.OpenConnection())
             {
-                object result = SqlCommandProvider.ExecuteScalar(con, "SELECT CHANGE_TRACKING_CURRENT_VERSION()");
+                object result = DbCommandProvider.ExecuteScalar(con, "SELECT CHANGE_TRACKING_CURRENT_VERSION()");
 
                 if (result is DBNull)
                 {
                     new SqlChangeTracking().Enable();
 
-                    result = SqlCommandProvider.ExecuteScalar(con, "SELECT CHANGE_TRACKING_CURRENT_VERSION()");
+                    result = DbCommandProvider.ExecuteScalar(con, "SELECT CHANGE_TRACKING_CURRENT_VERSION()");
 
                     if (result is DBNull)
                     {
@@ -219,15 +217,16 @@ namespace ShipWorks.Data.Caching
             dataSet = new DataSet();
             string lsvParameter = "@lsv";
 
-            using (SqlConnection con = SqlSession.Current.OpenConnection())
+            using (DbConnection con = SqlSession.Current.OpenConnection())
             {
-                using (SqlCommand cmd = SqlCommandProvider.Create(con))
+                using (DbCommand cmd = DbCommandProvider.Create(con))
                 {
                     cmd.CommandText = syncQuery;
-                    cmd.Parameters.AddWithValue(lsvParameter, lastSyncVersion);
+                    cmd.AddParameterWithValue(lsvParameter, lastSyncVersion);
 
-                    using (DataAdapter adapter = new SqlDataAdapter(cmd))
+                    using (DbDataAdapter adapter = DataAccessAdapter.GetDbProviderFactory().CreateDataAdapter())
                     {
+                        adapter.SelectCommand = cmd;
                         adapter.Fill(dataSet);
                     }
                 }

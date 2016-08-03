@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using System.Data.Common;
 using System.Data.SqlClient;
 using Interapptive.Shared.Data;
 using log4net;
@@ -46,17 +47,17 @@ namespace ShipWorks.Actions.Tasks.Common
                 while (retryAttempts >= 0)
                 {
                     retryAttempts--;
-                    using (SqlConnection connection = SqlSession.Current.OpenConnection())
+                    using (DbConnection connection = SqlSession.Current.OpenConnection())
                     {
                         try
                         {
-                            using (SqlCommand command = SqlCommandProvider.Create(connection, scriptName))
+                            using (DbCommand command = DbCommandProvider.Create(connection, scriptName))
                             {
                                 command.CommandType = CommandType.StoredProcedure;
                                 // Disable the command timeout since the scripts should take care of timing themselves out
                                 command.CommandTimeout = 0;
-                                command.Parameters.AddWithValue("@olderThan", olderThanInUtc);
-                                command.Parameters.AddWithValue("@runUntil", (object) runUntilInUtc ?? DBNull.Value);
+                                command.AddParameterWithValue("@olderThan", olderThanInUtc);
+                                command.AddParameterWithValue("@runUntil", (object) runUntilInUtc ?? DBNull.Value);
 
                                 command.ExecuteNonQuery();
                             }

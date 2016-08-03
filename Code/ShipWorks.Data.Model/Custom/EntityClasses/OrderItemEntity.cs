@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using SD.LLBLGen.Pro.ORMSupportClasses;
+﻿using SD.LLBLGen.Pro.ORMSupportClasses;
 
 namespace ShipWorks.Data.Model.EntityClasses
 {
@@ -12,7 +8,7 @@ namespace ShipWorks.Data.Model.EntityClasses
     public partial class OrderItemEntity
     {
         // We cache this so we only have to look it up once
-        static string baseObjectName = new OrderItemEntity().LLBLGenProEntityName;
+        static string baseObjectName = ((IEntityCore) new OrderItemEntity()).LLBLGenProEntityName;
 
         /// <summary>
         /// Speciality property used by the 2x upgrader when updating ebay order items.  Without this set, every time an EbayOrderItem is updated
