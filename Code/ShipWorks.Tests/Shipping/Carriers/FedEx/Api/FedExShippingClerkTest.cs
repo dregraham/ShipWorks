@@ -368,16 +368,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void Ship_ThrowsFedExException_WhenFedExAccountIsPending2xMigration()
-        {
-            // Create the shipment and setup the repository to return an account that needs to be
-            // migrated for this test (indicated by the meter number)
-            settingsRepository.Setup(r => r.GetAccount(It.IsAny<ShipmentEntity>())).Returns(new FedExAccountEntity() { MeterNumber = string.Empty });
-
-            Assert.Throws<FedExException>(() => testObject.Ship(shipmentEntity));
-        }
-
-        [Fact]
         public void Ship_DelegatesToRequestFactory_WhenCreatingShipRequest()
         {
             testObject.Ship(shipmentEntity);

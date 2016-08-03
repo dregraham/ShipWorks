@@ -51,9 +51,6 @@ namespace ShipWorks.Data.Administration
         SqlServerInstaller sqlInstaller;
         WizardDownloadHelper sqlDownloader;
 
-        // Indicates if a backup has been completed
-        bool backupCompleted = false;
-
         // Indicates if the firewall has been opened'
         bool showFirewallPage = false;
         bool firewallOpened = false;
@@ -404,8 +401,6 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         private void MarkBackupCompleted()
         {
-            backupCompleted = true;
-
             pictureBackupComplete.Visible = true;
             labelBackupComplete.Visible = true;
         }
