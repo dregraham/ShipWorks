@@ -33,16 +33,16 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Upload
         /// The columns from the selected external odbc table.
         /// </summary>
         ObservableCollection<OdbcColumn> Columns { get; set; }
-
-        /// <summary>
-        /// Loads the column source.
-        /// </summary>
-        void LoadColumnSource(IOdbcColumnSource source);
-
+        
         /// <summary>
         /// Saves the map.
         /// </summary>
         void Save(OdbcStoreEntity store);
+
+        /// <summary>
+        /// Loads the map.
+        /// </summary>
+        void Load(OdbcStoreEntity store);
 
         /// <summary>
         /// Validates the required mapping fields.

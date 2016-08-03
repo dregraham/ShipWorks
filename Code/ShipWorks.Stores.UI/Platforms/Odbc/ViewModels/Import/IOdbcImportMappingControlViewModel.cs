@@ -5,7 +5,7 @@ using ShipWorks.Stores.UI.Platforms.Odbc.Controls.Import;
 namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
 {
     /// <summary>
-    /// View Model for the <see cref="OdbcImportFieldMappingControl" />
+    /// View Model for the <see cref="OdbcImportMappingControl" />
     /// </summary>
     public interface IOdbcImportMappingControlViewModel
     {

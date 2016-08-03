@@ -87,7 +87,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Upload
         /// </summary>
         public override void LoadMapSettings(OdbcStoreEntity store)
         {
-            //TODO: implement loading settings in next story
+            ColumnSourceIsTable = store.UploadColumnSourceType == (int)OdbcColumnSourceType.Table;
         }
     }
 }

@@ -16,7 +16,7 @@
         private void InitializeComponent()
         {
             this.elementHost = new System.Windows.Forms.Integration.ElementHost();
-            this.mappingControl = new Controls.Import.OdbcImportFieldMappingControl();
+            this.mappingControl = new Controls.Import.OdbcImportMappingControl();
             this.SuspendLayout();
             // 
             // elementHost
@@ -58,6 +58,6 @@
         #endregion
 
         private System.Windows.Forms.Integration.ElementHost elementHost;
-        private Controls.Import.OdbcImportFieldMappingControl mappingControl;
+        private Controls.Import.OdbcImportMappingControl mappingControl;
     }
 }

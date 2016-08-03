@@ -60,6 +60,8 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.Controls
                 {
                     scope.Resolve<OdbcUploadShipmentStrategyPage>(),
                     scope.Resolve<OdbcUploadDataSourcePage>(),
+                    scope.Resolve<OdbcUploadMapSettingsPage>(),
+                    scope.Resolve<OdbcUploadMappingPage>(),
                     scope.Resolve<OdbcSetupFinishPage>()
                 };
 

@@ -191,9 +191,9 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <summary>
         /// Creates the shipment field map.
         /// </summary>
-        public IOdbcFieldMap CreateShipmentFieldMap()
+        public IOdbcFieldMap CreateShipmentFieldMap(IOdbcFieldMap storeFieldMap)
         {
-            return CreateMapWithMappedFields(CreateShipmentFields(), null);
+            return CreateMapWithMappedFields(CreateShipmentFields(), storeFieldMap);
         }
 
         /// <summary>
@@ -219,9 +219,9 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <summary>
         /// Creates the shipto address field map.
         /// </summary>
-        public IOdbcFieldMap CreateShiptoAddressFieldMap()
+        public IOdbcFieldMap CreateShiptoAddressFieldMap(IOdbcFieldMap storeFieldMap)
         {
-            return CreateMapWithMappedFields(CreateShipToAddressFields(), null);
+            return CreateMapWithMappedFields(CreateShipToAddressFields(), storeFieldMap);
         }
 
         /// <summary>

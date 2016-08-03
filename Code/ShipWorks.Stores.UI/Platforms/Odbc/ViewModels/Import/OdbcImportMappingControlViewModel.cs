@@ -23,7 +23,7 @@ using SaveFileDialog = Microsoft.Win32.SaveFileDialog;
 namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
 {
     /// <summary>
-    /// View Model for the <see cref="OdbcImportFieldMappingControl"/>
+    /// View Model for the <see cref="OdbcImportMappingControl"/>
     /// </summary>
     public class OdbcImportMappingControlViewModel : IOdbcImportMappingControlViewModel, INotifyPropertyChanged
     {
@@ -234,18 +234,19 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
         /// </summary>
         public void Load(OdbcStoreEntity store)
         {
+            MethodConditions.EnsureArgumentIsNotNull(store);
+
             LoadColumnSource(store);
-            LoadMap(store);
+            LoadMap(store.ImportMap);
             LoadDownloadStrategy((OdbcImportStrategy)store.ImportStrategy);
         }
 
         /// <summary>
         /// Loads the import map from the store
         /// </summary>
-        /// <param name="store">The store.</param>
-        private void LoadMap(OdbcStoreEntity store)
+        private void LoadMap(string importMap)
         {
-            IOdbcFieldMap storeFieldMap = fieldMapFactory.CreateFieldMapFrom(store.ImportMap);
+            IOdbcFieldMap storeFieldMap = fieldMapFactory.CreateFieldMapFrom(importMap);
 
             EnsureExternalFieldsExistInColumnSource(storeFieldMap);
 
@@ -371,7 +372,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
 
             ColumnSource = columnSource;
             Columns = new ObservableCollection<OdbcColumn>(ColumnSource.Columns);
-            Columns.Insert(0, new OdbcColumn("(None)"));
+            Columns.Insert(0, new OdbcColumn(EmptyColumnName));
         }
 
         /// <summary>

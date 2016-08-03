@@ -88,8 +88,10 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages.Upload
                     (OdbcColumnSourceType)store.UploadColumnSourceType);
 
                 viewModel = viewModelFactory();
+                viewModel.Load(store);
+
                 mappingControl.DataContext = viewModel;
-                viewModel.LoadColumnSource(columnSource);
+
                 previousColumnSource = currentColumnSource;
             }
         }

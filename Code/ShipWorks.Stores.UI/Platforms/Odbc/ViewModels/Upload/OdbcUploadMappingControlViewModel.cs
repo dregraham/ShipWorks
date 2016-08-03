@@ -11,6 +11,7 @@ using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Platforms.Odbc;
+using ShipWorks.Stores.Platforms.Odbc.DataSource;
 using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
 
@@ -23,22 +24,25 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Upload
     {
         private readonly IOdbcFieldMapFactory fieldMapFactory;
         private readonly IMessageHelper messageHelper;
+        private readonly Func<string, IOdbcColumnSource> columnSourceFactory;
+        private readonly IOdbcDataSourceService dataSourceService;
         private OdbcFieldMapDisplay selectedFieldMap;
         private readonly PropertyChangedHandler handler;
         private ObservableCollection<OdbcColumn> columns;
         public event PropertyChangedEventHandler PropertyChanged;
 
+        private const string EmptyColumnName = "(None)";
+
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcUploadMappingControlViewModel"/> class.
         /// </summary>
-        public OdbcUploadMappingControlViewModel(IOdbcFieldMapFactory fieldMapFactory, IMessageHelper messageHelper)
+        public OdbcUploadMappingControlViewModel(IOdbcFieldMapFactory fieldMapFactory, IMessageHelper messageHelper,
+            Func<string, IOdbcColumnSource> columnSourceFactory, IOdbcDataSourceService dataSourceService)
         {
             this.fieldMapFactory = fieldMapFactory;
             this.messageHelper = messageHelper;
-
-            Shipment = new OdbcFieldMapDisplay("Shipment", fieldMapFactory.CreateShipmentFieldMap());
-            ShipmentAddress = new OdbcFieldMapDisplay("Address", fieldMapFactory.CreateShiptoAddressFieldMap());
-            selectedFieldMap = Shipment;
+            this.columnSourceFactory = columnSourceFactory;
+            this.dataSourceService = dataSourceService;
 
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
         }
@@ -80,16 +84,67 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Upload
             set { handler.Set(nameof(Columns), ref columns, value); }
         }
 
+        public void Load(OdbcStoreEntity store)
+        {
+            MethodConditions.EnsureArgumentIsNotNull(store);
+
+            LoadColumnSource(store);
+            LoadMap(store.UploadMap);
+        }
+
         /// <summary>
         /// Loads the column source.
         /// </summary>
-        public void LoadColumnSource(IOdbcColumnSource source)
+        private void LoadColumnSource(OdbcStoreEntity store)
         {
-            MethodConditions.EnsureArgumentIsNotNull(source, "ColumnSource");
+            IOdbcDataSource selectedDataSource = dataSourceService.GetUploadDataSource(store);
 
-            ColumnSource = source;
+            // If we are in the upload mapping page, we know the column source is a table, not a custom query
+            IOdbcColumnSource columnSource = columnSourceFactory(store.UploadColumnSource);
+            columnSource.Load(selectedDataSource, store.UploadColumnSource, OdbcColumnSourceType.Table);
+
+            ColumnSource = columnSource;
             Columns = new ObservableCollection<OdbcColumn>(ColumnSource.Columns);
             Columns.Insert(0, new OdbcColumn("(None)"));
+        }
+
+        private void LoadMap(string uploadMap)
+        {
+            IOdbcFieldMap storeFieldMap = fieldMapFactory.CreateFieldMapFrom(uploadMap);
+
+            EnsureExternalFieldsExistInColumnSource(storeFieldMap);
+
+            Shipment = new OdbcFieldMapDisplay("Shipment", fieldMapFactory.CreateShipmentFieldMap(storeFieldMap));
+            SelectedFieldMap = Shipment;
+
+            ShipmentAddress = new OdbcFieldMapDisplay("Address", fieldMapFactory.CreateShiptoAddressFieldMap(storeFieldMap));
+        }
+
+        /// <summary>
+        /// Checks to see that any external columns loaded from the store exist in the selected column source.
+        /// If they do not exist, set them to none so that the old mappings are not retained.
+        /// </summary>
+        private void EnsureExternalFieldsExistInColumnSource(IOdbcFieldMap storeFieldMap)
+        {
+            if (storeFieldMap.Entries.Any())
+            {
+                List<string> columnsNotFound = new List<string>();
+
+                foreach (IOdbcFieldMapEntry entry in storeFieldMap.Entries)
+                {
+                    if (!Columns.Any(
+                        c => c.Name.Equals(entry.ExternalField.Column.Name, StringComparison.InvariantCulture)))
+                    {
+                        columnsNotFound.Add(entry.ExternalField.Column.Name.Trim());
+                        entry.ExternalField.Column = new OdbcColumn(EmptyColumnName);
+                    }
+                }
+                if (columnsNotFound.Any())
+                {
+                    messageHelper.ShowWarning(
+                        $"The column(s) {string.Join(", ", columnsNotFound)} could not be found in the current data source. Any mappings that use these column(s) have been reset. Changes will not be saved until the finish button is clicked.");
+                }
+            }
         }
 
         /// <summary>

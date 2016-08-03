@@ -3,22 +3,14 @@
     /// <summary>
     /// Interaction logic for OdbcImportFieldMappingControl.xaml
     /// </summary>
-    public partial class OdbcImportFieldMappingControl
+    public partial class OdbcImportMappingControl
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="OdbcImportFieldMappingControl"/> class.
+        /// Initializes a new instance of the <see cref="OdbcImportMappingControl"/> class.
         /// </summary>
-        public OdbcImportFieldMappingControl()
+        public OdbcImportMappingControl()
         {
             InitializeComponent();
-        }
-
-        /// <summary>
-        /// When a new map is selected, reset the mapping grid scrollbar to the top
-        /// </summary>
-        private void SelectedFieldMapChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
-        {
-            //MappingGridScrollbar.ScrollToTop
         }
     }
 }
