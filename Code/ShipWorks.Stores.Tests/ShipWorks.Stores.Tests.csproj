@@ -274,6 +274,10 @@
     <EmbeddedResource Include="Platforms\ThreeDCart\Artifacts\GetOrderResponseItemHasNoAttributes.json" />
     <EmbeddedResource Include="Platforms\ThreeDCart\Artifacts\GetOrderResponseItemHasOneAttribute.json" />
     <EmbeddedResource Include="Platforms\ThreeDCart\Artifacts\GetOrderResponseItemHasOneAttributeWithoutPrice.json" />
+    <EmbeddedResource Include="Platforms\Odbc\Artifacts\MapWithItemsAndNoAttributes.json" />
+    <EmbeddedResource Include="Platforms\Odbc\Artifacts\MapWithItemsAndWithAttributes.json" />
+    <EmbeddedResource Include="Platforms\Odbc\Artifacts\MapWithItemsAndWithAttributesOutOfOrder.json" />
+    <EmbeddedResource Include="Platforms\Odbc\Artifacts\MapWithNoItems.json" />
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\..\packages\InterapptiveAnalyzers.1.0.5714.23531\analyzers\dotnet\cs\InterapptiveAnalyzers.dll" />

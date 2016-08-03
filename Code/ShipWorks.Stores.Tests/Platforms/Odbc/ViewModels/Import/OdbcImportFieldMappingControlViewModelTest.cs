@@ -5,12 +5,13 @@ using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
 using ShipWorks.Stores.UI.Platforms.Odbc;
-using ShipWorks.Stores.UI.Platforms.Odbc.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.Common;
 using System.Linq;
-using System.Linq.Expressions;
-using System.Windows.Forms;
+using ShipWorks.Stores.Platforms.Odbc.DataSource;
+using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 using ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import;
 using Xunit;
 
@@ -347,10 +348,227 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             }
         }
 
-        private static Expression<Func<IMessageHelper, DialogResult>> GetShowMessageExpression()
+        [Fact]
+        public void Load_SetsNumberOfItemsToZero_WhenLoadedMapDoesNotContainItemEntries()
         {
-            return messageHelper =>
-                messageHelper.ShowQuestion(It.IsAny<MessageBoxIcon>(), It.IsAny<MessageBoxButtons>(), It.IsAny<string>());
+            using (var mock = AutoMock.GetLoose())
+            {
+                string mapPath = "ShipWorks.Stores.Tests.Platforms.Odbc.Artifacts.MapWithNoItems.json";
+
+                List<string> columnNames = new List<string>()
+                {
+                    "OrderId",
+                    "OrderDate",
+                    "OnlineLastModified"
+                };
+
+                var testObject = CreateViewModelForMapLoadingTests(mock, columnNames, mapPath);
+
+                Assert.Equal(0, testObject.NumberOfItemsPerOrder);
+            }
+        }
+
+        [Fact]
+        public void Load_SetsNumberOfItemAttributesToZero_WhenLoadedMapDoesNotContainItemAttributeEntries()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                string mapPath = "ShipWorks.Stores.Tests.Platforms.Odbc.Artifacts.MapWithItemsAndNoAttributes.json";
+
+                List<string> columnNames = new List<string>()
+                {
+                    "OrderId",
+                    "OnlineLastModified",
+                    "ItemName"
+                };
+
+                var testObject = CreateViewModelForMapLoadingTests(mock, columnNames, mapPath);
+
+                Assert.Equal(0, testObject.NumberOfAttributesPerItem);
+            }
+        }
+
+        [Fact]
+        public void Load_SetsNumberOfItems_WhenLoadedMapContainsItemEntries()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                string mapPath = "ShipWorks.Stores.Tests.Platforms.Odbc.Artifacts.MapWithItemsAndNoAttributes.json";
+
+                List<string> columnNames = new List<string>()
+                {
+                    "OrderId",
+                    "OrderDate",
+                    "ItemName"
+                };
+
+                var testObject = CreateViewModelForMapLoadingTests(mock, columnNames, mapPath);
+
+                Assert.Equal(1, testObject.NumberOfItemsPerOrder);
+            }
+        }
+
+        [Fact]
+        public void Load_SetsNumberOfItemAttributes_WhenLoadedMapContainsItemAttributeEntries()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                string mapPath = "ShipWorks.Stores.Tests.Platforms.Odbc.Artifacts.MapWithItemsAndWithAttributes.json";
+
+                List<string> columnNames = new List<string>()
+                {
+                    "OrderId",
+                    "OnlineLastModified",
+                    "ItemName",
+                    "ItemAttributeName"
+                };
+
+                var testObject = CreateViewModelForMapLoadingTests(mock, columnNames, mapPath);
+
+                Assert.Equal(1, testObject.NumberOfAttributesPerItem);
+            }
+        }
+
+        [Fact]
+        public void Load_SetsCorrectNumberOfItemAttributes_WhenLoadedMapContainsItemAttributeEntriesThatAreNotInOrder()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                string mapPath = "ShipWorks.Stores.Tests.Platforms.Odbc.Artifacts.MapWithItemsAndWithAttributesOutOfOrder.json";
+
+                List<string> columnNames = new List<string>()
+                {
+                    "OrderId",
+                    "OnlineLastModified",
+                    "ItemName1",
+                    "ItemAttributeName1",
+                    "ItemAttributeName3",
+                    "ItemName2",
+                    "ItemAttributeName2"
+                };
+
+                var testObject = CreateViewModelForMapLoadingTests(mock, columnNames, mapPath);
+
+                Assert.Equal(3, testObject.NumberOfAttributesPerItem);
+            }
+        }
+
+        [Fact]
+        public void ValidateRequiredMappingFields_DelegatesToMessageHelper_WhenOneRequiredFieldIsNotMapped()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                string mapPath = "ShipWorks.Stores.Tests.Platforms.Odbc.Artifacts.MapWithNoItems.json";
+
+                List<string> columnNames = new List<string>()
+                {
+                    "OrderDate",
+                    "OnlineLastModified"
+                };
+
+                var messageHelper = mock.Mock<IMessageHelper>();
+
+                var testObject = CreateViewModelForMapLoadingTests(mock, columnNames, mapPath);
+                testObject.ValidateRequiredMappingFields();
+
+                messageHelper.Verify(m => m.ShowError(It.IsAny<string>()), Times.Once);
+            }
+        }
+
+        [Fact]
+        public void ValidateRequiredMappingFields_DelegatesToMessageHelper_WhenMultipleRequiredFieldsAreNotMapped()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                string mapPath = "ShipWorks.Stores.Tests.Platforms.Odbc.Artifacts.MapWithNoItems.json";
+
+                List<string> columnNames = new List<string>()
+                {
+                    "OrderDate"
+                };
+
+                var messageHelper = mock.Mock<IMessageHelper>();
+
+                var testObject = CreateViewModelForMapLoadingTests(mock, columnNames, mapPath);
+                testObject.ValidateRequiredMappingFields();
+
+                messageHelper.Verify(m => m.ShowError(It.IsAny<string>()), Times.Once);
+            }
+        }
+
+        [Fact]
+        public void ValidateRequiredMappingFields_DelegatesToMessageHelper_WhenMultiLineOrdersIsSelectedAndRecordIdentifierIsNotSet()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                string mapPath = "ShipWorks.Stores.Tests.Platforms.Odbc.Artifacts.MapWithItemsAndNoAttributes.json";
+
+                List<string> columnNames = new List<string>()
+                {
+                    "OrderNumber",
+                    "OrderDate",
+                    "OnlineLastModified",
+                    "ItemName"
+                };
+                var messageHelper = mock.Mock<IMessageHelper>();
+
+                var testObject = CreateViewModelForMapLoadingTests(mock, columnNames, mapPath);
+
+                testObject.ValidateRequiredMappingFields();
+
+                messageHelper.Verify(m => m.ShowError(It.IsAny<string>()), Times.Once);
+            }
+        }
+
+        private static OdbcImportMappingControlViewModel CreateViewModelForMapLoadingTests(AutoMock mock, List<string> columnNames, string mapPath)
+        {
+            JsonOdbcFieldMapIOFactory ioFactory = mock.Create<JsonOdbcFieldMapIOFactory>();
+
+            DataTable dataTable = new DataTable();
+            dataTable.Columns.Add("foo", typeof(string));
+            dataTable.Columns.Add("bar", typeof(string));
+            dataTable.Columns.Add("baz", typeof(string));
+            dataTable.Columns.Add("Name", typeof(string));
+
+            foreach (string columnName in columnNames)
+            {
+                dataTable.Rows.Add(string.Empty, string.Empty, string.Empty, columnName);
+            }
+
+            Mock<DbConnection> connection = mock.Mock<DbConnection>();
+            connection.Setup(c => c.GetSchema(It.IsAny<string>(), It.IsAny<string[]>())).Returns(dataTable);
+
+            Mock<IOdbcDataSource> dataSource = mock.Mock<IOdbcDataSource>();
+            dataSource.SetupGet(d => d.Name).Returns("SomeName");
+            dataSource.Setup(d => d.CreateConnection()).Returns(connection.Object);
+
+            OdbcColumnSource table = mock.Create<OdbcColumnSource>(new TypedParameter(typeof(string), "Table"));
+
+            table.Load(dataSource.Object, "Table", OdbcColumnSourceType.Table);
+
+            dataTable.Dispose();
+
+            Mock<Func<string, IOdbcColumnSource>> repo = mock.MockRepository.Create<Func<string, IOdbcColumnSource>>();
+            repo.Setup(r => r(It.IsAny<string>())).Returns(table);
+
+            var store = new OdbcStoreEntity
+            {
+                ImportMap = EmbeddedResourceHelper.GetEmbeddedResourceString(mapPath),
+                ImportColumnSourceType = (int)OdbcColumnSourceType.Table,
+                ImportColumnSource = "Table"
+            };
+
+            Mock<IOdbcDataSourceService> dataSourceService = mock.Mock<IOdbcDataSourceService>();
+            dataSourceService.Setup(s => s.GetImportDataSource(store)).Returns(dataSource.Object);
+
+            var mapFactory = mock.Create<OdbcFieldMapFactory>(new TypedParameter(typeof(IOdbcFieldMapIOFactory), ioFactory));
+
+            var testObject = mock.Create<OdbcImportMappingControlViewModel>(new TypedParameter(typeof(IOdbcFieldMapFactory),
+                mapFactory), new TypedParameter(typeof(Func<string, IOdbcColumnSource>), repo.Object));
+
+            testObject.Load(store);
+
+            return testObject;
         }
     }
 }
