@@ -5,6 +5,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataSource.Schema
     /// <summary>
     /// Represents a column from an ODBC table
     /// </summary>
+    [Obfuscation(Exclude = true)]
 	public class OdbcColumn
     {
         /// <summary>
@@ -18,7 +19,6 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataSource.Schema
         /// <summary>
         /// The column name
         /// </summary>
-        [Obfuscation(Exclude = true)]
 	    public string Name { get; }
 
         /// <summary>
