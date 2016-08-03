@@ -32,8 +32,6 @@
             this.label1 = new System.Windows.Forms.Label();
             this.openImportSettingsWizard = new System.Windows.Forms.Button();
             this.uploadSettingsLabel = new System.Windows.Forms.Label();
-            this.uploadStrategy = new System.Windows.Forms.ComboBox();
-            this.labelShipmentUpdate = new System.Windows.Forms.Label();
             this.editUploadSettings = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.SuspendLayout();
@@ -77,28 +75,9 @@
             this.uploadSettingsLabel.TabIndex = 3;
             this.uploadSettingsLabel.Text = "Upload Settings";
             // 
-            // uploadStrategy
-            // 
-            this.uploadStrategy.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.uploadStrategy.FormattingEnabled = true;
-            this.uploadStrategy.Location = new System.Drawing.Point(248, 88);
-            this.uploadStrategy.Name = "uploadStrategy";
-            this.uploadStrategy.Size = new System.Drawing.Size(266, 21);
-            this.uploadStrategy.TabIndex = 5;
-            this.uploadStrategy.SelectedIndexChanged += new System.EventHandler(this.OnUploadStrategySelectedIndexChanged);
-            // 
-            // labelShipmentUpdate
-            // 
-            this.labelShipmentUpdate.AutoSize = true;
-            this.labelShipmentUpdate.Location = new System.Drawing.Point(71, 91);
-            this.labelShipmentUpdate.Name = "labelShipmentUpdate";
-            this.labelShipmentUpdate.Size = new System.Drawing.Size(171, 13);
-            this.labelShipmentUpdate.TabIndex = 28;
-            this.labelShipmentUpdate.Text = "Where to upload shipment details:";
-            // 
             // editUploadSettings
             // 
-            this.editUploadSettings.Location = new System.Drawing.Point(248, 115);
+            this.editUploadSettings.Location = new System.Drawing.Point(248, 84);
             this.editUploadSettings.Name = "editUploadSettings";
             this.editUploadSettings.Size = new System.Drawing.Size(125, 23);
             this.editUploadSettings.TabIndex = 30;
@@ -109,7 +88,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(44, 120);
+            this.label2.Location = new System.Drawing.Point(44, 89);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(198, 13);
             this.label2.TabIndex = 29;
@@ -121,8 +100,6 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.editUploadSettings);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.labelShipmentUpdate);
-            this.Controls.Add(this.uploadStrategy);
             this.Controls.Add(this.uploadSettingsLabel);
             this.Controls.Add(this.openImportSettingsWizard);
             this.Controls.Add(this.label1);
@@ -140,8 +117,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button openImportSettingsWizard;
         private System.Windows.Forms.Label uploadSettingsLabel;
-        private System.Windows.Forms.ComboBox uploadStrategy;
-        private System.Windows.Forms.Label labelShipmentUpdate;
         private System.Windows.Forms.Button editUploadSettings;
         private System.Windows.Forms.Label label2;
     }

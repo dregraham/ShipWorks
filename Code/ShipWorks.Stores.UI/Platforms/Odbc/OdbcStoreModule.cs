@@ -15,13 +15,14 @@ using ShipWorks.Stores.Platforms.Odbc.Loaders;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
 using ShipWorks.Stores.Platforms.Odbc.Upload;
 using ShipWorks.Stores.Platforms.Odbc.Upload.FieldValueResolvers;
-using ShipWorks.Stores.UI.Platforms.Odbc.ViewModels;
-using System.Reflection;
 using ShipWorks.Stores.UI.Platforms.Odbc.Controls;
+using ShipWorks.Stores.UI.Platforms.Odbc.ViewModels;
 using ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import;
 using ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Upload;
+using ShipWorks.Stores.UI.Platforms.Odbc.WizardPages;
 using ShipWorks.Stores.UI.Platforms.Odbc.WizardPages.Import;
 using ShipWorks.Stores.UI.Platforms.Odbc.WizardPages.Upload;
+using System.Reflection;
 using Module = Autofac.Module;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc
@@ -165,7 +166,8 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
                 .AsSelf();
 
             builder.RegisterType<OdbcUploadShipmentStrategyPage>()
-                .As<IOdbcWizardPage>();
+                .As<IOdbcWizardPage>()
+                .AsSelf();
 
             builder.RegisterType<OdbcUploadDataSourcePage>()
                 .As<IOdbcWizardPage>()
@@ -177,6 +179,9 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
 
             builder.RegisterType<OdbcUploadMappingPage>()
                 .As<IOdbcWizardPage>()
+                .AsSelf();
+
+            builder.RegisterType<OdbcSetupFinishPage>()
                 .AsSelf();
 
             builder.RegisterType<OdbcConnectionSettingsControl>()

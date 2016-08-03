@@ -11,7 +11,7 @@ end
 
 Albacore.configure do |config|
 	config.msbuild do |msbuild|
-		msbuild.parameters = "/m:3"
+		msbuild.parameters = "/m:8 /verbosity:minimal"
 		msbuild.solution = "ShipWorks.sln"		# Assumes rake will be executed from the directory containing the rakefile and solution file
 		msbuild.command = "#{program_files}/MSBuild/14.0/Bin/msbuild.exe"
 		#msbuild.properties = { TreatWarningsAsErrors: true }
