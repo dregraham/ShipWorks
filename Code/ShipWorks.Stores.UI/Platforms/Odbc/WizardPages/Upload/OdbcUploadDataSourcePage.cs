@@ -49,9 +49,9 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages.Upload
                 e.Skip = true;
                 e.RaiseStepEventWhenSkipping = false;
             }
-            else if (!string.IsNullOrWhiteSpace(store.ImportConnectionString))
+            else if (!string.IsNullOrWhiteSpace(store.UploadConnectionString))
             {
-                odbcDataSourceControl.LoadDataSource(dataSourceService.GetImportDataSource(store));
+                odbcDataSourceControl.LoadDataSource(dataSourceService.GetUploadDataSource(store));
             }
         }
 
