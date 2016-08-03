@@ -43,14 +43,14 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
             orderManager.PopulateOrderDetails(shipment);
             IAmazonOrder amazonOrder = shipment.Order as IAmazonOrder;
 
-            if (amazonOrder?.IsPrime == false)
-            {
-                throw new AmazonShippingException("Not an Amazon Prime Order");
-            }
-
             if (amazonOrder == null)
             {
                 throw new AmazonShippingException("Not an Amazon Order");
+            }
+
+            if (amazonOrder?.IsPrime == false)
+            {
+                throw new AmazonShippingException("Not an Amazon Prime Order");
             }
 
             ShipmentRequestDetails requestDetails = requestFactory.Create(shipment, amazonOrder);
