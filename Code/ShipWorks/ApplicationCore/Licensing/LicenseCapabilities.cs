@@ -33,7 +33,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             ShipmentTypeRestriction = new Dictionary<ShipmentTypeCode, IEnumerable<ShipmentTypeRestrictionType>>();
             ShipmentTypeShippingPolicy = new Dictionary<ShipmentTypeCode, Dictionary<ShippingPolicyType, string>>();
             forbiddenChannels = new List<StoreTypeCode>();
-            
+
             // Check the response for errors and throw a ShipWorksLicenseException
             CheckResponseForErrors(xmlResponse);
 
@@ -311,7 +311,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         {
             XPathNavigator xpath = xmlResponse.CreateNavigator();
 
-            // Grab the nodes that are vital to ShipWorks functioning 
+            // Grab the nodes that are vital to ShipWorks functioning
             string channelLimitSanityCheck = GetStringValueFromNameValuePair("NumberOfChannels", capabilitiesNode);
             string shipmentLimitSanityCheck = GetStringValueFromNameValuePair("NumberOfShipments", capabilitiesNode);
 
@@ -369,10 +369,10 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <exception cref="ShipWorksLicenseException">The license associated with this account is invalid.</exception>
         private XmlNode GetPricingCapabilitiesNode(XmlNode sourceNode)
         {
-            // When changing plans in the middle of a billing cycle there will be two groups of capabilities 
-            // that need to be inspected. When upgrading a plan, the increased capabilities should take effect 
-            // immediately while capabilities of downgraded plans should not take effect until the next 
-            // billing cycle (i.e. always choose the plan with the higher capabilities). The plan with the 
+            // When changing plans in the middle of a billing cycle there will be two groups of capabilities
+            // that need to be inspected. When upgrading a plan, the increased capabilities should take effect
+            // immediately while capabilities of downgraded plans should not take effect until the next
+            // billing cycle (i.e. always choose the plan with the higher capabilities). The plan with the
             // higher capabilities can be determined by shipment limit.
 
             try
@@ -415,7 +415,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             XPathNavigator xpath = response.CreateNavigator();
 
             IsInTrial = XPathUtility.Evaluate(xpath, "//IsInTrial", false);
-            
+
             CustomDataSources = GetBoolValueFromNameValuePair("CustomDataSources", capabilitiesNode);
 
             // Generic file channel capability
@@ -423,8 +423,9 @@ namespace ShipWorks.ApplicationCore.Licensing
             {
                 // Custom data sources is disabled. Add GenericFile to the list of stores that are not allowed.
                 forbiddenChannels.Add(StoreTypeCode.GenericFile);
+                forbiddenChannels.Add(StoreTypeCode.Odbc);
             }
-            
+
             // Generic module channel capability
             if (!GetBoolValueFromNameValuePair("CustomDataSourcesAPI", capabilitiesNode))
             {
