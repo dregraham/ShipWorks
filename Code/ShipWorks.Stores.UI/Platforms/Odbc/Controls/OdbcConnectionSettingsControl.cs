@@ -1,9 +1,12 @@
 ﻿using Autofac;
+using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.Odbc;
+using ShipWorks.Stores.Platforms.Odbc.Upload;
 using ShipWorks.Stores.UI.Platforms.Odbc.WizardPages.Import;
+using ShipWorks.Stores.UI.Platforms.Odbc.WizardPages.Upload;
 using System;
 using System.Windows.Forms;
 
@@ -26,14 +29,14 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.Controls
         {
             this.storeManager = storeManager;
             InitializeComponent();
+
+            EnumHelper.BindComboBox<OdbcShipmentUploadStrategy>(uploadStrategy);
         }
 
         /// <summary>
-        /// Called when [click edit import settings].
+        /// Launches import settings wizard and saves to store.
         /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
-        private void OnClickEditImportSettings(object sender, EventArgs e)
+        private void OnEditImportSettingsClick(object sender, EventArgs e)
         {
             using (ILifetimeScope scope = IoC.BeginLifetimeScope(ConfigureOdbcSettingsWizardDependencies))
             {
@@ -47,11 +50,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.Controls
                 using (OdbcSettingsWizard wizard = scope.Resolve<OdbcSettingsWizard>())
                 {
                     wizard.LoadPages(odbcStore, importPages);
-
-                    if (wizard.ShowDialog(this) == DialogResult.OK)
-                    {
-                        storeManager.SaveStore(odbcStore);
-                    }
+                    wizard.ShowDialog(this);
                 }
             }
         }
@@ -70,13 +69,52 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.Controls
         /// <summary>
         /// Load the data from the given store into the control
         /// </summary>
-        /// <param name="store"></param>
         public override void LoadStore(StoreEntity store)
         {
             OdbcStoreEntity odbcStoreEntity = store as OdbcStoreEntity;
             if (odbcStoreEntity != null)
             {
                 odbcStore = odbcStoreEntity;
+                uploadStrategy.SelectedValue = (OdbcShipmentUploadStrategy) odbcStore.UploadStrategy;
+            }
+        }
+
+        /// <summary>
+        /// Handles the SelectedIndexChanged event of the uploadStrategy control.
+        /// </summary>
+        private void OnUploadStrategySelectedIndexChanged(object sender, EventArgs e)
+        {
+            odbcStore.UploadStrategy = (int) uploadStrategy.SelectedValue;
+            
+            ToggleUploadSettingsEnabled();
+        }
+
+        /// <summary>
+        /// EditUploadSettings button is enabled if there are settings to edit.
+        /// </summary>
+        private void ToggleUploadSettingsEnabled()
+        {
+            editUploadSettings.Enabled =
+                            (OdbcShipmentUploadStrategy)uploadStrategy.SelectedValue == OdbcShipmentUploadStrategy.UseShipmentDataSource;
+        }
+
+        /// <summary>
+        /// Launches the upload settings wizard and updates settings.
+        /// </summary>
+        private void OnEditUploadSettingsClick(object sender, EventArgs e)
+        {
+            using (ILifetimeScope scope = IoC.BeginLifetimeScope(ConfigureOdbcSettingsWizardDependencies))
+            {
+                IOdbcWizardPage[] uploadPages =
+                {
+                    scope.Resolve<OdbcUploadDataSourcePage>()
+                };
+
+                using (OdbcSettingsWizard wizard = scope.Resolve<OdbcSettingsWizard>())
+                {
+                    wizard.LoadPages(odbcStore, uploadPages);
+                    wizard.ShowDialog(this);
+                }
             }
         }
     }
