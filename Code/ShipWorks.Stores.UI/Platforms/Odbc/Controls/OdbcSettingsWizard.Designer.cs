@@ -70,6 +70,7 @@
             this.Name = "OdbcSettingsWizard";
             this.NextVisible = true;
             this.Text = "Odbc Store Setup Wizard";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.OnOdbcSettingsWizardClosed);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
             this.topPanel.ResumeLayout(false);
             this.topPanel.PerformLayout();
