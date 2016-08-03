@@ -75,22 +75,22 @@ namespace ShipWorks.Data.Model.EntityClasses
 		}
 				
 		/// <summary> CTor</summary>
-		/// <param name="objectID">PK value for ObjectLabel which data should be fetched into this ObjectLabel object</param>
+		/// <param name="entityID">PK value for ObjectLabel which data should be fetched into this ObjectLabel object</param>
 		/// <remarks>The entity is not fetched by this constructor. Use a DataAccessAdapter for that.</remarks>
-		public ObjectLabelEntity(System.Int64 objectID):base("ObjectLabelEntity")
+		public ObjectLabelEntity(System.Int64 entityID):base("ObjectLabelEntity")
 		{
 			InitClassEmpty(null, null);
-			this.ObjectID = objectID;
+			this.EntityID = entityID;
 		}
 
 		/// <summary> CTor</summary>
-		/// <param name="objectID">PK value for ObjectLabel which data should be fetched into this ObjectLabel object</param>
+		/// <param name="entityID">PK value for ObjectLabel which data should be fetched into this ObjectLabel object</param>
 		/// <param name="validator">The custom validator object for this ObjectLabelEntity</param>
 		/// <remarks>The entity is not fetched by this constructor. Use a DataAccessAdapter for that.</remarks>
-		public ObjectLabelEntity(System.Int64 objectID, IValidator validator):base("ObjectLabelEntity")
+		public ObjectLabelEntity(System.Int64 entityID, IValidator validator):base("ObjectLabelEntity")
 		{
 			InitClassEmpty(validator, null);
-			this.ObjectID = objectID;
+			this.EntityID = entityID;
 		}
 
 		/// <summary> Protected CTor for deserialization</summary>
@@ -297,7 +297,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties = new Dictionary<string, Dictionary<string, string>>();
 			Dictionary<string, string> fieldHashtable;
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("ObjectID", fieldHashtable);
+			_fieldsCustomProperties.Add("EntityID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("RowVersion", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
@@ -366,14 +366,14 @@ namespace ShipWorks.Data.Model.EntityClasses
 			get { return FieldsCustomProperties;}
 		}
 
-		/// <summary> The ObjectID property of the Entity ObjectLabel<br/><br/></summary>
+		/// <summary> The EntityID property of the Entity ObjectLabel<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "ObjectLabel"."ObjectID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
-		public virtual System.Int64 ObjectID
+		public virtual System.Int64 EntityID
 		{
-			get { return (System.Int64)GetValue((int)ObjectLabelFieldIndex.ObjectID, true); }
-			set	{ SetValue((int)ObjectLabelFieldIndex.ObjectID, value); }
+			get { return (System.Int64)GetValue((int)ObjectLabelFieldIndex.EntityID, true); }
+			set	{ SetValue((int)ObjectLabelFieldIndex.EntityID, value); }
 		}
 
 		/// <summary> The RowVersion property of the Entity ObjectLabel<br/><br/></summary>

@@ -36,14 +36,14 @@ namespace ShipWorks.Data.Model.RelationClasses
 		#region Class Property Declarations
 
 		/// <summary>Returns a new IEntityRelation object, between OrderMotionOrderEntity and NoteEntity over the 1:n relation they have, using the relation between the fields:
-		/// OrderMotionOrder.OrderID - Note.ObjectID
+		/// OrderMotionOrder.OrderID - Note.EntityID
 		/// </summary>
-		public override IEntityRelation NoteEntityUsingObjectID
+		public override IEntityRelation NoteEntityUsingEntityID
 		{
 			get
 			{
 				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "Notes" , true);
-				relation.AddEntityFieldPair(OrderMotionOrderFields.OrderID, NoteFields.ObjectID);
+				relation.AddEntityFieldPair(OrderMotionOrderFields.OrderID, NoteFields.EntityID);
 				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("OrderMotionOrderEntity", true);
 				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("NoteEntity", false);
 				return relation;
@@ -193,7 +193,7 @@ namespace ShipWorks.Data.Model.RelationClasses
 	/// <summary>Static class which is used for providing relationship instances which are re-used internally for syncing</summary>
 	internal static class StaticOrderMotionOrderRelations
 	{
-		internal static readonly IEntityRelation NoteEntityUsingObjectIDStatic = new OrderMotionOrderRelations().NoteEntityUsingObjectID;
+		internal static readonly IEntityRelation NoteEntityUsingEntityIDStatic = new OrderMotionOrderRelations().NoteEntityUsingEntityID;
 		internal static readonly IEntityRelation OrderChargeEntityUsingOrderIDStatic = new OrderMotionOrderRelations().OrderChargeEntityUsingOrderID;
 		internal static readonly IEntityRelation OrderItemEntityUsingOrderIDStatic = new OrderMotionOrderRelations().OrderItemEntityUsingOrderID;
 		internal static readonly IEntityRelation OrderPaymentDetailEntityUsingOrderIDStatic = new OrderMotionOrderRelations().OrderPaymentDetailEntityUsingOrderID;

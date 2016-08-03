@@ -39,7 +39,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             PermissionID = source.PermissionID;
             UserID = source.UserID;
             PermissionType = source.PermissionType;
-            ObjectID = source.ObjectID;
+            EntityID = source.EntityID;
             
             
             User = source.User?.AsReadOnly(objectMap);
@@ -67,12 +67,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Int32 PermissionType { get; }
-        /// <summary> The ObjectID property of the Entity Permission<br/><br/>
+        /// <summary> The EntityID property of the Entity Permission<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "Permission"."ObjectID"<br/>
         /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-        public Nullable<System.Int64> ObjectID { get; }
+        public Nullable<System.Int64> EntityID { get; }
         
         
         public IUserEntity User { get; }

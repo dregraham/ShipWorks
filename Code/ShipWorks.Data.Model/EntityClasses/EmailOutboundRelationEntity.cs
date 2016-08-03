@@ -351,7 +351,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("EmailOutboundID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("ObjectID", fieldHashtable);
+			_fieldsCustomProperties.Add("EntityID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("RelationType", fieldHashtable);
 		}
@@ -472,14 +472,14 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)EmailOutboundRelationFieldIndex.EmailOutboundID, value); }
 		}
 
-		/// <summary> The ObjectID property of the Entity EmailOutboundRelation<br/><br/></summary>
+		/// <summary> The EntityID property of the Entity EmailOutboundRelation<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "EmailOutboundRelation"."ObjectID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Int64 ObjectID
+		public virtual System.Int64 EntityID
 		{
-			get { return (System.Int64)GetValue((int)EmailOutboundRelationFieldIndex.ObjectID, true); }
-			set	{ SetValue((int)EmailOutboundRelationFieldIndex.ObjectID, value); }
+			get { return (System.Int64)GetValue((int)EmailOutboundRelationFieldIndex.EntityID, true); }
+			set	{ SetValue((int)EmailOutboundRelationFieldIndex.EntityID, value); }
 		}
 
 		/// <summary> The RelationType property of the Entity EmailOutboundRelation<br/><br/></summary>

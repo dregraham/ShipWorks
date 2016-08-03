@@ -80,8 +80,8 @@ namespace ShipWorks.Data.Model
 		TriggerComputerID,
 		///<summary>InternalComputerLimitedList. </summary>
 		InternalComputerLimitedList,
-		///<summary>ObjectID. </summary>
-		ObjectID,
+		///<summary>EntityID. </summary>
+		EntityID,
 		///<summary>Status. </summary>
 		Status,
 		///<summary>NextStep. </summary>
@@ -98,8 +98,8 @@ namespace ShipWorks.Data.Model
 		ActionQueueSelectionID,
 		///<summary>ActionQueueID. </summary>
 		ActionQueueID,
-		///<summary>ObjectID. </summary>
-		ObjectID,
+		///<summary>EntityID. </summary>
+		EntityID,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -670,8 +670,8 @@ namespace ShipWorks.Data.Model
 		Date,
 		///<summary>Action. </summary>
 		Action,
-		///<summary>ObjectID. </summary>
-		ObjectID,
+		///<summary>EntityID. </summary>
+		EntityID,
 		///<summary>HasEvents. </summary>
 		HasEvents,
 		/// <summary></summary>
@@ -686,8 +686,8 @@ namespace ShipWorks.Data.Model
 		AuditID,
 		///<summary>ChangeType. </summary>
 		ChangeType,
-		///<summary>ObjectID. </summary>
-		ObjectID,
+		///<summary>EntityID. </summary>
+		EntityID,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -2370,8 +2370,8 @@ namespace ShipWorks.Data.Model
 		EmailOutboundRelationID,
 		///<summary>EmailOutboundID. </summary>
 		EmailOutboundID,
-		///<summary>ObjectID. </summary>
-		ObjectID,
+		///<summary>EntityID. </summary>
+		EntityID,
 		///<summary>RelationType. </summary>
 		RelationType,
 		/// <summary></summary>
@@ -3444,8 +3444,8 @@ namespace ShipWorks.Data.Model
 	{
 		///<summary>FilterNodeContentID. </summary>
 		FilterNodeContentID,
-		///<summary>ObjectID. </summary>
-		ObjectID,
+		///<summary>EntityID. </summary>
+		EntityID,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -5836,8 +5836,8 @@ namespace ShipWorks.Data.Model
 		NoteID,
 		///<summary>RowVersion. </summary>
 		RowVersion,
-		///<summary>ObjectID. </summary>
-		ObjectID,
+		///<summary>EntityID. </summary>
+		EntityID,
 		///<summary>UserID. </summary>
 		UserID,
 		///<summary>Edited. </summary>
@@ -5854,8 +5854,8 @@ namespace ShipWorks.Data.Model
 	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ObjectLabel.</summary>
 	public enum ObjectLabelFieldIndex
 	{
-		///<summary>ObjectID. </summary>
-		ObjectID,
+		///<summary>EntityID. </summary>
+		EntityID,
 		///<summary>RowVersion. </summary>
 		RowVersion,
 		///<summary>ObjectType. </summary>
@@ -5878,8 +5878,8 @@ namespace ShipWorks.Data.Model
 		ConsumerID,
 		///<summary>ReferenceKey. </summary>
 		ReferenceKey,
-		///<summary>ObjectID. </summary>
-		ObjectID,
+		///<summary>EntityID. </summary>
+		EntityID,
 		///<summary>Reason. </summary>
 		Reason,
 		/// <summary></summary>
@@ -6778,8 +6778,8 @@ namespace ShipWorks.Data.Model
 		UserID,
 		///<summary>PermissionType. </summary>
 		PermissionType,
-		///<summary>ObjectID. </summary>
-		ObjectID,
+		///<summary>EntityID. </summary>
+		EntityID,
 		/// <summary></summary>
 		AmountOfFields
 	}

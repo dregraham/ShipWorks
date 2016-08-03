@@ -1,34 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using Interapptive.Shared;
+using Interapptive.Shared.Business;
+using Interapptive.Shared.UI;
+using log4net;
+using ShipWorks.ApplicationCore.Interaction;
+using ShipWorks.Data;
+using ShipWorks.Data.Adapter.Custom;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Controls;
+using ShipWorks.Data.Grid.Columns;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Filters;
 using ShipWorks.Stores.Communication;
+using ShipWorks.Stores.Content.Panels;
+using ShipWorks.Templates.Tokens;
 using ShipWorks.UI.Wizard;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data;
-using ShipWorks.Data.Controls;
-using ShipWorks.Filters;
-using ShipWorks.UI;
-using ShipWorks.Data.Connection;
-using ShipWorks.Stores.Platforms;
-using ShipWorks.Templates.Tokens;
-using log4net;
-using ShipWorks.Data.Adapter.Custom;
-using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Data.Grid.Columns;
-using ShipWorks.Stores.Content.Panels;
-using ShipWorks.Data.Model;
-using ShipWorks.ApplicationCore.Interaction;
-using ShipWorks.Data.Grid.Paging;
-using Interapptive.Shared.Business;
-using Interapptive.Shared.UI;
 
 namespace ShipWorks.Stores.Content
 {
@@ -107,8 +101,8 @@ namespace ShipWorks.Stores.Content
             amountSpent.Text = "";
 
             var validStores = (from store in StoreManager.GetAllStores()
-                 where UserSession.Security.HasPermission(PermissionType.OrdersModify, store.StoreID)
-                 select new { Key = store.StoreName, Value = store })
+                               where UserSession.Security.HasPermission(PermissionType.OrdersModify, store.StoreID)
+                               select new { Key = store.StoreName, Value = store })
                 .ToList();
 
             comboStores.DisplayMember = "Key";
@@ -474,7 +468,7 @@ namespace ShipWorks.Stores.Content
                     // Save the notes (use clones, in case the save fails, the original's are left as they were)
                     foreach (NoteEntity note in noteControl.LocalNotes.Select(n => EntityUtility.CloneEntity(n)))
                     {
-                        note.ObjectID = order.OrderID;
+                        note.EntityID = order.OrderID;
 
                         NoteManager.SaveNote(note);
                     }

@@ -36,14 +36,14 @@ namespace ShipWorks.Data.Model.RelationClasses
 		#region Class Property Declarations
 
 		/// <summary>Returns a new IEntityRelation object, between EtsyOrderEntity and NoteEntity over the 1:n relation they have, using the relation between the fields:
-		/// EtsyOrder.OrderID - Note.ObjectID
+		/// EtsyOrder.OrderID - Note.EntityID
 		/// </summary>
-		public override IEntityRelation NoteEntityUsingObjectID
+		public override IEntityRelation NoteEntityUsingEntityID
 		{
 			get
 			{
 				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "Notes" , true);
-				relation.AddEntityFieldPair(EtsyOrderFields.OrderID, NoteFields.ObjectID);
+				relation.AddEntityFieldPair(EtsyOrderFields.OrderID, NoteFields.EntityID);
 				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("EtsyOrderEntity", true);
 				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("NoteEntity", false);
 				return relation;
@@ -193,7 +193,7 @@ namespace ShipWorks.Data.Model.RelationClasses
 	/// <summary>Static class which is used for providing relationship instances which are re-used internally for syncing</summary>
 	internal static class StaticEtsyOrderRelations
 	{
-		internal static readonly IEntityRelation NoteEntityUsingObjectIDStatic = new EtsyOrderRelations().NoteEntityUsingObjectID;
+		internal static readonly IEntityRelation NoteEntityUsingEntityIDStatic = new EtsyOrderRelations().NoteEntityUsingEntityID;
 		internal static readonly IEntityRelation OrderChargeEntityUsingOrderIDStatic = new EtsyOrderRelations().OrderChargeEntityUsingOrderID;
 		internal static readonly IEntityRelation OrderItemEntityUsingOrderIDStatic = new EtsyOrderRelations().OrderItemEntityUsingOrderID;
 		internal static readonly IEntityRelation OrderPaymentDetailEntityUsingOrderIDStatic = new EtsyOrderRelations().OrderPaymentDetailEntityUsingOrderID;

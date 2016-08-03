@@ -36,14 +36,14 @@ namespace ShipWorks.Data.Model.RelationClasses
 		#region Class Property Declarations
 
 		/// <summary>Returns a new IEntityRelation object, between SearsOrderEntity and NoteEntity over the 1:n relation they have, using the relation between the fields:
-		/// SearsOrder.OrderID - Note.ObjectID
+		/// SearsOrder.OrderID - Note.EntityID
 		/// </summary>
-		public override IEntityRelation NoteEntityUsingObjectID
+		public override IEntityRelation NoteEntityUsingEntityID
 		{
 			get
 			{
 				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "Notes" , true);
-				relation.AddEntityFieldPair(SearsOrderFields.OrderID, NoteFields.ObjectID);
+				relation.AddEntityFieldPair(SearsOrderFields.OrderID, NoteFields.EntityID);
 				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("SearsOrderEntity", true);
 				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("NoteEntity", false);
 				return relation;
@@ -193,7 +193,7 @@ namespace ShipWorks.Data.Model.RelationClasses
 	/// <summary>Static class which is used for providing relationship instances which are re-used internally for syncing</summary>
 	internal static class StaticSearsOrderRelations
 	{
-		internal static readonly IEntityRelation NoteEntityUsingObjectIDStatic = new SearsOrderRelations().NoteEntityUsingObjectID;
+		internal static readonly IEntityRelation NoteEntityUsingEntityIDStatic = new SearsOrderRelations().NoteEntityUsingEntityID;
 		internal static readonly IEntityRelation OrderChargeEntityUsingOrderIDStatic = new SearsOrderRelations().OrderChargeEntityUsingOrderID;
 		internal static readonly IEntityRelation OrderItemEntityUsingOrderIDStatic = new SearsOrderRelations().OrderItemEntityUsingOrderID;
 		internal static readonly IEntityRelation OrderPaymentDetailEntityUsingOrderIDStatic = new SearsOrderRelations().OrderPaymentDetailEntityUsingOrderID;

@@ -287,7 +287,7 @@ namespace ShipWorks.Users.Security
 
                         NoteEntity note = (NoteEntity) DataProvider.GetEntity(entityID);
 
-                        return note != null && HasPermission(PermissionType.EntityTypeEditNotes, note.ObjectID);
+                        return note != null && HasPermission(PermissionType.EntityTypeEditNotes, note.EntityID);
                     }
 
                 case PermissionType.RelatedObjectSendEmail:

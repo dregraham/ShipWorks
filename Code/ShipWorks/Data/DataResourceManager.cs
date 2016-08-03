@@ -315,7 +315,7 @@ namespace ShipWorks.Data
 
             foreach (ObjectReferenceEntity reference in ObjectReferenceCollection.Fetch(SqlAdapter.Default, ObjectReferenceFields.ConsumerID == consumerID))
             {
-                if (EntityUtility.GetEntityType(reference.ObjectID) == EntityType.ResourceEntity)
+                if (EntityUtility.GetEntityType(reference.EntityID) == EntityType.ResourceEntity)
                 {
                     references.Add(reference.ObjectReferenceID);
                 }
@@ -357,7 +357,7 @@ namespace ShipWorks.Data
 
                         // See if we can find the resource.  The only way we wouldn't is if someone manually removed it from the DB
                         ResourceCollection resources = new ResourceCollection();
-                        adapter.FetchEntityCollection(resources, new RelationPredicateBucket(ResourceFields.ResourceID == objectReference.ObjectID), 1, null, null, excludeDataFields);
+                        adapter.FetchEntityCollection(resources, new RelationPredicateBucket(ResourceFields.ResourceID == objectReference.EntityID), 1, null, null, excludeDataFields);
 
                         if (resources.Count > 0)
                         {

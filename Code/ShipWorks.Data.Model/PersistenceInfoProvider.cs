@@ -266,7 +266,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("ActionQueueEntity", "TriggerDate", "TriggerDate", false, "DateTime", 0, 0, 0, false, "", null, typeof(System.DateTime), 7);
 			this.AddElementFieldMapping("ActionQueueEntity", "TriggerComputerID", "TriggerComputerID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 8);
 			this.AddElementFieldMapping("ActionQueueEntity", "InternalComputerLimitedList", "ComputerLimitedList", false, "VarChar", 150, 0, 0, false, "", null, typeof(System.String), 9);
-			this.AddElementFieldMapping("ActionQueueEntity", "ObjectID", "ObjectID", true, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 10);
+			this.AddElementFieldMapping("ActionQueueEntity", "EntityID", "ObjectID", true, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 10);
 			this.AddElementFieldMapping("ActionQueueEntity", "Status", "Status", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 11);
 			this.AddElementFieldMapping("ActionQueueEntity", "NextStep", "NextStep", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 12);
 			this.AddElementFieldMapping("ActionQueueEntity", "ContextLock", "ContextLock", true, "NVarChar", 36, 0, 0, false, "", null, typeof(System.String), 13);
@@ -278,7 +278,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementMapping("ActionQueueSelectionEntity", @"ShipWorksLocal", @"dbo", "ActionQueueSelection", 3, 0);
 			this.AddElementFieldMapping("ActionQueueSelectionEntity", "ActionQueueSelectionID", "ActionQueueSelectionID", false, "BigInt", 0, 19, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("ActionQueueSelectionEntity", "ActionQueueID", "ActionQueueID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 1);
-			this.AddElementFieldMapping("ActionQueueSelectionEntity", "ObjectID", "ObjectID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 2);
+			this.AddElementFieldMapping("ActionQueueSelectionEntity", "EntityID", "ObjectID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 2);
 		}
 
 		/// <summary>Inits ActionQueueStepEntity's mappings</summary>
@@ -442,7 +442,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("AuditEntity", "ReasonDetail", "ReasonDetail", true, "VarChar", 100, 0, 0, false, "", null, typeof(System.String), 6);
 			this.AddElementFieldMapping("AuditEntity", "Date", "Date", false, "DateTime", 0, 0, 0, false, "", null, typeof(System.DateTime), 7);
 			this.AddElementFieldMapping("AuditEntity", "Action", "Action", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 8);
-			this.AddElementFieldMapping("AuditEntity", "ObjectID", "ObjectID", true, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 9);
+			this.AddElementFieldMapping("AuditEntity", "EntityID", "ObjectID", true, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 9);
 			this.AddElementFieldMapping("AuditEntity", "HasEvents", "HasEvents", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 10);
 		}
 
@@ -453,7 +453,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("AuditChangeEntity", "AuditChangeID", "AuditChangeID", false, "BigInt", 0, 19, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("AuditChangeEntity", "AuditID", "AuditID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 1);
 			this.AddElementFieldMapping("AuditChangeEntity", "ChangeType", "ChangeType", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 2);
-			this.AddElementFieldMapping("AuditChangeEntity", "ObjectID", "ObjectID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 3);
+			this.AddElementFieldMapping("AuditChangeEntity", "EntityID", "ObjectID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 3);
 		}
 
 		/// <summary>Inits AuditChangeDetailEntity's mappings</summary>
@@ -882,7 +882,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementMapping("EmailOutboundRelationEntity", @"ShipWorksLocal", @"dbo", "EmailOutboundRelation", 4, 0);
 			this.AddElementFieldMapping("EmailOutboundRelationEntity", "EmailOutboundRelationID", "EmailOutboundRelationID", false, "BigInt", 0, 19, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("EmailOutboundRelationEntity", "EmailOutboundID", "EmailOutboundID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 1);
-			this.AddElementFieldMapping("EmailOutboundRelationEntity", "ObjectID", "ObjectID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 2);
+			this.AddElementFieldMapping("EmailOutboundRelationEntity", "EntityID", "ObjectID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 2);
 			this.AddElementFieldMapping("EmailOutboundRelationEntity", "RelationType", "RelationType", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 3);
 		}
 
@@ -1375,7 +1375,7 @@ namespace ShipWorks.Data.Model
 		{
 			this.AddElementMapping("FilterNodeContentDetailEntity", @"ShipWorksLocal", @"dbo", "FilterNodeContentDetail", 2, 2);
 			this.AddElementFieldMapping("FilterNodeContentDetailEntity", "FilterNodeContentID", "FilterNodeContentID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
-			this.AddElementFieldMapping("FilterNodeContentDetailEntity", "ObjectID", "ObjectID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 1);
+			this.AddElementFieldMapping("FilterNodeContentDetailEntity", "EntityID", "ObjectID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 1);
 		}
 
 		/// <summary>Inits FilterSequenceEntity's mappings</summary>
@@ -1810,7 +1810,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementMapping("NoteEntity", @"ShipWorksLocal", @"dbo", "Note", 8, 0);
 			this.AddElementFieldMapping("NoteEntity", "NoteID", "NoteID", false, "BigInt", 0, 19, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("NoteEntity", "RowVersion", "RowVersion", false, "Timestamp", 2147483647, 0, 0, false, "", null, typeof(System.Byte[]), 1);
-			this.AddElementFieldMapping("NoteEntity", "ObjectID", "ObjectID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 2);
+			this.AddElementFieldMapping("NoteEntity", "EntityID", "ObjectID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 2);
 			this.AddElementFieldMapping("NoteEntity", "UserID", "UserID", true, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 3);
 			this.AddElementFieldMapping("NoteEntity", "Edited", "Edited", false, "DateTime", 0, 0, 0, false, "", null, typeof(System.DateTime), 4);
 			this.AddElementFieldMapping("NoteEntity", "Text", "Text", false, "NVarChar", 2147483647, 0, 0, false, "", null, typeof(System.String), 5);
@@ -1822,7 +1822,7 @@ namespace ShipWorks.Data.Model
 		private void InitObjectLabelEntityMappings()
 		{
 			this.AddElementMapping("ObjectLabelEntity", @"ShipWorksLocal", @"dbo", "ObjectLabel", 6, 0);
-			this.AddElementFieldMapping("ObjectLabelEntity", "ObjectID", "ObjectID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
+			this.AddElementFieldMapping("ObjectLabelEntity", "EntityID", "ObjectID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("ObjectLabelEntity", "RowVersion", "RowVersion", false, "Timestamp", 2147483647, 0, 0, false, "", null, typeof(System.Byte[]), 1);
 			this.AddElementFieldMapping("ObjectLabelEntity", "ObjectType", "ObjectType", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 2);
 			this.AddElementFieldMapping("ObjectLabelEntity", "ParentID", "ParentID", true, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 3);
@@ -1837,7 +1837,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("ObjectReferenceEntity", "ObjectReferenceID", "ObjectReferenceID", false, "BigInt", 0, 19, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("ObjectReferenceEntity", "ConsumerID", "ConsumerID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 1);
 			this.AddElementFieldMapping("ObjectReferenceEntity", "ReferenceKey", "ReferenceKey", false, "VarChar", 250, 0, 0, false, "", null, typeof(System.String), 2);
-			this.AddElementFieldMapping("ObjectReferenceEntity", "ObjectID", "ObjectID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 3);
+			this.AddElementFieldMapping("ObjectReferenceEntity", "EntityID", "ObjectID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 3);
 			this.AddElementFieldMapping("ObjectReferenceEntity", "Reason", "Reason", true, "NVarChar", 250, 0, 0, false, "", null, typeof(System.String), 4);
 		}
 
@@ -2124,7 +2124,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("PermissionEntity", "PermissionID", "PermissionID", false, "BigInt", 0, 19, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("PermissionEntity", "UserID", "UserID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 1);
 			this.AddElementFieldMapping("PermissionEntity", "PermissionType", "PermissionType", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 2);
-			this.AddElementFieldMapping("PermissionEntity", "ObjectID", "ObjectID", true, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 3);
+			this.AddElementFieldMapping("PermissionEntity", "EntityID", "ObjectID", true, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 3);
 		}
 
 		/// <summary>Inits PostalProfileEntity's mappings</summary>

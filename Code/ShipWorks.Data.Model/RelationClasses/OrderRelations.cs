@@ -30,7 +30,7 @@ namespace ShipWorks.Data.Model.RelationClasses
 		public virtual List<IEntityRelation> GetAllRelations()
 		{
 			List<IEntityRelation> toReturn = new List<IEntityRelation>();
-			toReturn.Add(this.NoteEntityUsingObjectID);
+			toReturn.Add(this.NoteEntityUsingEntityID);
 			toReturn.Add(this.OrderChargeEntityUsingOrderID);
 			toReturn.Add(this.OrderItemEntityUsingOrderID);
 			toReturn.Add(this.OrderPaymentDetailEntityUsingOrderID);
@@ -44,14 +44,14 @@ namespace ShipWorks.Data.Model.RelationClasses
 		#region Class Property Declarations
 
 		/// <summary>Returns a new IEntityRelation object, between OrderEntity and NoteEntity over the 1:n relation they have, using the relation between the fields:
-		/// Order.OrderID - Note.ObjectID
+		/// Order.OrderID - Note.EntityID
 		/// </summary>
-		public virtual IEntityRelation NoteEntityUsingObjectID
+		public virtual IEntityRelation NoteEntityUsingEntityID
 		{
 			get
 			{
 				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "Notes" , true);
-				relation.AddEntityFieldPair(OrderFields.OrderID, NoteFields.ObjectID);
+				relation.AddEntityFieldPair(OrderFields.OrderID, NoteFields.EntityID);
 				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("OrderEntity", true);
 				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("NoteEntity", false);
 				return relation;
@@ -442,7 +442,7 @@ namespace ShipWorks.Data.Model.RelationClasses
 	/// <summary>Static class which is used for providing relationship instances which are re-used internally for syncing</summary>
 	internal static class StaticOrderRelations
 	{
-		internal static readonly IEntityRelation NoteEntityUsingObjectIDStatic = new OrderRelations().NoteEntityUsingObjectID;
+		internal static readonly IEntityRelation NoteEntityUsingEntityIDStatic = new OrderRelations().NoteEntityUsingEntityID;
 		internal static readonly IEntityRelation OrderChargeEntityUsingOrderIDStatic = new OrderRelations().OrderChargeEntityUsingOrderID;
 		internal static readonly IEntityRelation OrderItemEntityUsingOrderIDStatic = new OrderRelations().OrderItemEntityUsingOrderID;
 		internal static readonly IEntityRelation OrderPaymentDetailEntityUsingOrderIDStatic = new OrderRelations().OrderPaymentDetailEntityUsingOrderID;

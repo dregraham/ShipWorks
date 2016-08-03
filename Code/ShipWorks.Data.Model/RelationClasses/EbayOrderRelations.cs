@@ -68,14 +68,14 @@ namespace ShipWorks.Data.Model.RelationClasses
 		}
 
 		/// <summary>Returns a new IEntityRelation object, between EbayOrderEntity and NoteEntity over the 1:n relation they have, using the relation between the fields:
-		/// EbayOrder.OrderID - Note.ObjectID
+		/// EbayOrder.OrderID - Note.EntityID
 		/// </summary>
-		public override IEntityRelation NoteEntityUsingObjectID
+		public override IEntityRelation NoteEntityUsingEntityID
 		{
 			get
 			{
 				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "Notes" , true);
-				relation.AddEntityFieldPair(EbayOrderFields.OrderID, NoteFields.ObjectID);
+				relation.AddEntityFieldPair(EbayOrderFields.OrderID, NoteFields.EntityID);
 				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("EbayOrderEntity", true);
 				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("NoteEntity", false);
 				return relation;
@@ -227,7 +227,7 @@ namespace ShipWorks.Data.Model.RelationClasses
 	{
 		internal static readonly IEntityRelation EbayCombinedOrderRelationEntityUsingOrderIDStatic = new EbayOrderRelations().EbayCombinedOrderRelationEntityUsingOrderID;
 		internal static readonly IEntityRelation EbayOrderItemEntityUsingLocalEbayOrderIDStatic = new EbayOrderRelations().EbayOrderItemEntityUsingLocalEbayOrderID;
-		internal static readonly IEntityRelation NoteEntityUsingObjectIDStatic = new EbayOrderRelations().NoteEntityUsingObjectID;
+		internal static readonly IEntityRelation NoteEntityUsingEntityIDStatic = new EbayOrderRelations().NoteEntityUsingEntityID;
 		internal static readonly IEntityRelation OrderChargeEntityUsingOrderIDStatic = new EbayOrderRelations().OrderChargeEntityUsingOrderID;
 		internal static readonly IEntityRelation OrderItemEntityUsingOrderIDStatic = new EbayOrderRelations().OrderItemEntityUsingOrderID;
 		internal static readonly IEntityRelation OrderPaymentDetailEntityUsingOrderIDStatic = new EbayOrderRelations().OrderPaymentDetailEntityUsingOrderID;

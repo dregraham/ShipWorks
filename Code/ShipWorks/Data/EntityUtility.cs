@@ -447,13 +447,13 @@ namespace ShipWorks.Data
 
             if (fromEntity == EntityType.OrderEntity && toEntity == EntityType.NoteEntity)
             {
-                EntityRelation relation = new EntityRelation(OrderFields.OrderID, NoteFields.ObjectID, RelationType.OneToMany, true, string.Empty);
+                EntityRelation relation = new EntityRelation(OrderFields.OrderID, NoteFields.EntityID, RelationType.OneToMany, true, string.Empty);
                 return new RelationCollection(relation);
             }
 
             if (fromEntity == EntityType.CustomerEntity && toEntity == EntityType.NoteEntity)
             {
-                EntityRelation relation = new EntityRelation(CustomerFields.CustomerID, NoteFields.ObjectID, RelationType.OneToMany, true, string.Empty);
+                EntityRelation relation = new EntityRelation(CustomerFields.CustomerID, NoteFields.EntityID, RelationType.OneToMany, true, string.Empty);
                 return new RelationCollection(relation);
             }
 

@@ -36,7 +36,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
                 objectMap[source] = this;
             }
             
-            ObjectID = source.ObjectID;
+            EntityID = source.EntityID;
             RowVersion = source.RowVersion;
             ObjectType = source.ObjectType;
             ParentID = source.ParentID;
@@ -50,12 +50,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         }
 
         
-        /// <summary> The ObjectID property of the Entity ObjectLabel<br/><br/>
+        /// <summary> The EntityID property of the Entity ObjectLabel<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "ObjectLabel"."ObjectID"<br/>
         /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
-        public System.Int64 ObjectID { get; }
+        public System.Int64 EntityID { get; }
         /// <summary> The RowVersion property of the Entity ObjectLabel<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "ObjectLabel"."RowVersion"<br/>

@@ -3197,7 +3197,7 @@ namespace ShipWorks
 
                     // Turn off all columns except the object and the note
                     foreach (GridColumnPosition position in noteLayout.AllColumns
-                        .Where(p => p != noteLayout.AllColumns[NoteFields.ObjectID] && p != noteLayout.AllColumns[NoteFields.Text]))
+                        .Where(p => p != noteLayout.AllColumns[NoteFields.EntityID] && p != noteLayout.AllColumns[NoteFields.Text]))
                     {
                         position.Visible = false;
                     }

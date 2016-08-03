@@ -39,7 +39,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             ObjectReferenceID = source.ObjectReferenceID;
             ConsumerID = source.ConsumerID;
             ReferenceKey = source.ReferenceKey;
-            ObjectID = source.ObjectID;
+            EntityID = source.EntityID;
             Reason = source.Reason;
             
             
@@ -67,12 +67,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 250<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.String ReferenceKey { get; }
-        /// <summary> The ObjectID property of the Entity ObjectReference<br/><br/>
+        /// <summary> The EntityID property of the Entity ObjectReference<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "ObjectReference"."ObjectID"<br/>
         /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        public System.Int64 ObjectID { get; }
+        public System.Int64 EntityID { get; }
         /// <summary> The Reason property of the Entity ObjectReference<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "ObjectReference"."Reason"<br/>

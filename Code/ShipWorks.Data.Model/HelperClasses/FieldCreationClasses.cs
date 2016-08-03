@@ -162,10 +162,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ActionQueueFieldIndex.InternalComputerLimitedList);}
 		}
-		/// <summary>Creates a new ActionQueueEntity.ObjectID field instance</summary>
-		public static EntityField2 ObjectID
+		/// <summary>Creates a new ActionQueueEntity.EntityID field instance</summary>
+		public static EntityField2 EntityID
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(ActionQueueFieldIndex.ObjectID);}
+			get { return (EntityField2)EntityFieldFactory.Create(ActionQueueFieldIndex.EntityID);}
 		}
 		/// <summary>Creates a new ActionQueueEntity.Status field instance</summary>
 		public static EntityField2 Status
@@ -197,10 +197,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ActionQueueSelectionFieldIndex.ActionQueueID);}
 		}
-		/// <summary>Creates a new ActionQueueSelectionEntity.ObjectID field instance</summary>
-		public static EntityField2 ObjectID
+		/// <summary>Creates a new ActionQueueSelectionEntity.EntityID field instance</summary>
+		public static EntityField2 EntityID
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(ActionQueueSelectionFieldIndex.ObjectID);}
+			get { return (EntityField2)EntityFieldFactory.Create(ActionQueueSelectionFieldIndex.EntityID);}
 		}
 	}
 
@@ -1527,10 +1527,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(AuditFieldIndex.Action);}
 		}
-		/// <summary>Creates a new AuditEntity.ObjectID field instance</summary>
-		public static EntityField2 ObjectID
+		/// <summary>Creates a new AuditEntity.EntityID field instance</summary>
+		public static EntityField2 EntityID
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(AuditFieldIndex.ObjectID);}
+			get { return (EntityField2)EntityFieldFactory.Create(AuditFieldIndex.EntityID);}
 		}
 		/// <summary>Creates a new AuditEntity.HasEvents field instance</summary>
 		public static EntityField2 HasEvents
@@ -1557,10 +1557,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(AuditChangeFieldIndex.ChangeType);}
 		}
-		/// <summary>Creates a new AuditChangeEntity.ObjectID field instance</summary>
-		public static EntityField2 ObjectID
+		/// <summary>Creates a new AuditChangeEntity.EntityID field instance</summary>
+		public static EntityField2 EntityID
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(AuditChangeFieldIndex.ObjectID);}
+			get { return (EntityField2)EntityFieldFactory.Create(AuditChangeFieldIndex.EntityID);}
 		}
 	}
 
@@ -5517,10 +5517,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(EmailOutboundRelationFieldIndex.EmailOutboundID);}
 		}
-		/// <summary>Creates a new EmailOutboundRelationEntity.ObjectID field instance</summary>
-		public static EntityField2 ObjectID
+		/// <summary>Creates a new EmailOutboundRelationEntity.EntityID field instance</summary>
+		public static EntityField2 EntityID
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(EmailOutboundRelationFieldIndex.ObjectID);}
+			get { return (EntityField2)EntityFieldFactory.Create(EmailOutboundRelationFieldIndex.EntityID);}
 		}
 		/// <summary>Creates a new EmailOutboundRelationEntity.RelationType field instance</summary>
 		public static EntityField2 RelationType
@@ -8002,10 +8002,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(FilterNodeContentDetailFieldIndex.FilterNodeContentID);}
 		}
-		/// <summary>Creates a new FilterNodeContentDetailEntity.ObjectID field instance</summary>
-		public static EntityField2 ObjectID
+		/// <summary>Creates a new FilterNodeContentDetailEntity.EntityID field instance</summary>
+		public static EntityField2 EntityID
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(FilterNodeContentDetailFieldIndex.ObjectID);}
+			get { return (EntityField2)EntityFieldFactory.Create(FilterNodeContentDetailFieldIndex.EntityID);}
 		}
 	}
 
@@ -13642,10 +13642,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(NoteFieldIndex.RowVersion);}
 		}
-		/// <summary>Creates a new NoteEntity.ObjectID field instance</summary>
-		public static EntityField2 ObjectID
+		/// <summary>Creates a new NoteEntity.EntityID field instance</summary>
+		public static EntityField2 EntityID
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(NoteFieldIndex.ObjectID);}
+			get { return (EntityField2)EntityFieldFactory.Create(NoteFieldIndex.EntityID);}
 		}
 		/// <summary>Creates a new NoteEntity.UserID field instance</summary>
 		public static EntityField2 UserID
@@ -13677,10 +13677,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 	/// <summary>Field Creation Class for entity ObjectLabelEntity</summary>
 	public partial class ObjectLabelFields
 	{
-		/// <summary>Creates a new ObjectLabelEntity.ObjectID field instance</summary>
-		public static EntityField2 ObjectID
+		/// <summary>Creates a new ObjectLabelEntity.EntityID field instance</summary>
+		public static EntityField2 EntityID
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(ObjectLabelFieldIndex.ObjectID);}
+			get { return (EntityField2)EntityFieldFactory.Create(ObjectLabelFieldIndex.EntityID);}
 		}
 		/// <summary>Creates a new ObjectLabelEntity.RowVersion field instance</summary>
 		public static EntityField2 RowVersion
@@ -13727,10 +13727,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ObjectReferenceFieldIndex.ReferenceKey);}
 		}
-		/// <summary>Creates a new ObjectReferenceEntity.ObjectID field instance</summary>
-		public static EntityField2 ObjectID
+		/// <summary>Creates a new ObjectReferenceEntity.EntityID field instance</summary>
+		public static EntityField2 EntityID
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(ObjectReferenceFieldIndex.ObjectID);}
+			get { return (EntityField2)EntityFieldFactory.Create(ObjectReferenceFieldIndex.EntityID);}
 		}
 		/// <summary>Creates a new ObjectReferenceEntity.Reason field instance</summary>
 		public static EntityField2 Reason
@@ -15827,10 +15827,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(PermissionFieldIndex.PermissionType);}
 		}
-		/// <summary>Creates a new PermissionEntity.ObjectID field instance</summary>
-		public static EntityField2 ObjectID
+		/// <summary>Creates a new PermissionEntity.EntityID field instance</summary>
+		public static EntityField2 EntityID
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(PermissionFieldIndex.ObjectID);}
+			get { return (EntityField2)EntityFieldFactory.Create(PermissionFieldIndex.EntityID);}
 		}
 	}
 

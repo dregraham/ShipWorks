@@ -269,7 +269,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("ActionQueueEntity", "TriggerDate", typeof(System.DateTime), false, false, false, false,  (int)ActionQueueFieldIndex.TriggerDate, 0, 0, 0);
 			this.AddElementFieldInfo("ActionQueueEntity", "TriggerComputerID", typeof(System.Int64), false, true, false, false,  (int)ActionQueueFieldIndex.TriggerComputerID, 0, 0, 19);
 			this.AddElementFieldInfo("ActionQueueEntity", "InternalComputerLimitedList", typeof(System.String), false, false, false, false,  (int)ActionQueueFieldIndex.InternalComputerLimitedList, 150, 0, 0);
-			this.AddElementFieldInfo("ActionQueueEntity", "ObjectID", typeof(Nullable<System.Int64>), false, false, false, true,  (int)ActionQueueFieldIndex.ObjectID, 0, 0, 19);
+			this.AddElementFieldInfo("ActionQueueEntity", "EntityID", typeof(Nullable<System.Int64>), false, false, false, true,  (int)ActionQueueFieldIndex.EntityID, 0, 0, 19);
 			this.AddElementFieldInfo("ActionQueueEntity", "Status", typeof(System.Int32), false, false, false, false,  (int)ActionQueueFieldIndex.Status, 0, 0, 10);
 			this.AddElementFieldInfo("ActionQueueEntity", "NextStep", typeof(System.Int32), false, false, false, false,  (int)ActionQueueFieldIndex.NextStep, 0, 0, 10);
 			this.AddElementFieldInfo("ActionQueueEntity", "ContextLock", typeof(System.String), false, false, false, true,  (int)ActionQueueFieldIndex.ContextLock, 36, 0, 0);
@@ -280,7 +280,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddFieldIndexEnumForElementName(typeof(ActionQueueSelectionFieldIndex), "ActionQueueSelectionEntity");
 			this.AddElementFieldInfo("ActionQueueSelectionEntity", "ActionQueueSelectionID", typeof(System.Int64), true, false, true, false,  (int)ActionQueueSelectionFieldIndex.ActionQueueSelectionID, 0, 0, 19);
 			this.AddElementFieldInfo("ActionQueueSelectionEntity", "ActionQueueID", typeof(System.Int64), false, true, false, false,  (int)ActionQueueSelectionFieldIndex.ActionQueueID, 0, 0, 19);
-			this.AddElementFieldInfo("ActionQueueSelectionEntity", "ObjectID", typeof(System.Int64), false, false, false, false,  (int)ActionQueueSelectionFieldIndex.ObjectID, 0, 0, 19);
+			this.AddElementFieldInfo("ActionQueueSelectionEntity", "EntityID", typeof(System.Int64), false, false, false, false,  (int)ActionQueueSelectionFieldIndex.EntityID, 0, 0, 19);
 		}
 		/// <summary>Inits ActionQueueStepEntity's FieldInfo objects</summary>
 		private void InitActionQueueStepEntityInfos()
@@ -434,7 +434,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("AuditEntity", "ReasonDetail", typeof(System.String), false, false, false, true,  (int)AuditFieldIndex.ReasonDetail, 100, 0, 0);
 			this.AddElementFieldInfo("AuditEntity", "Date", typeof(System.DateTime), false, false, false, false,  (int)AuditFieldIndex.Date, 0, 0, 0);
 			this.AddElementFieldInfo("AuditEntity", "Action", typeof(System.Int32), false, false, false, false,  (int)AuditFieldIndex.Action, 0, 0, 10);
-			this.AddElementFieldInfo("AuditEntity", "ObjectID", typeof(Nullable<System.Int64>), false, false, false, true,  (int)AuditFieldIndex.ObjectID, 0, 0, 19);
+			this.AddElementFieldInfo("AuditEntity", "EntityID", typeof(Nullable<System.Int64>), false, false, false, true,  (int)AuditFieldIndex.EntityID, 0, 0, 19);
 			this.AddElementFieldInfo("AuditEntity", "HasEvents", typeof(System.Boolean), false, false, false, false,  (int)AuditFieldIndex.HasEvents, 0, 0, 0);
 		}
 		/// <summary>Inits AuditChangeEntity's FieldInfo objects</summary>
@@ -444,7 +444,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("AuditChangeEntity", "AuditChangeID", typeof(System.Int64), true, false, true, false,  (int)AuditChangeFieldIndex.AuditChangeID, 0, 0, 19);
 			this.AddElementFieldInfo("AuditChangeEntity", "AuditID", typeof(System.Int64), false, true, false, false,  (int)AuditChangeFieldIndex.AuditID, 0, 0, 19);
 			this.AddElementFieldInfo("AuditChangeEntity", "ChangeType", typeof(System.Int32), false, false, false, false,  (int)AuditChangeFieldIndex.ChangeType, 0, 0, 10);
-			this.AddElementFieldInfo("AuditChangeEntity", "ObjectID", typeof(System.Int64), false, false, false, false,  (int)AuditChangeFieldIndex.ObjectID, 0, 0, 19);
+			this.AddElementFieldInfo("AuditChangeEntity", "EntityID", typeof(System.Int64), false, false, false, false,  (int)AuditChangeFieldIndex.EntityID, 0, 0, 19);
 		}
 		/// <summary>Inits AuditChangeDetailEntity's FieldInfo objects</summary>
 		private void InitAuditChangeDetailEntityInfos()
@@ -848,7 +848,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddFieldIndexEnumForElementName(typeof(EmailOutboundRelationFieldIndex), "EmailOutboundRelationEntity");
 			this.AddElementFieldInfo("EmailOutboundRelationEntity", "EmailOutboundRelationID", typeof(System.Int64), true, false, true, false,  (int)EmailOutboundRelationFieldIndex.EmailOutboundRelationID, 0, 0, 19);
 			this.AddElementFieldInfo("EmailOutboundRelationEntity", "EmailOutboundID", typeof(System.Int64), false, true, false, false,  (int)EmailOutboundRelationFieldIndex.EmailOutboundID, 0, 0, 19);
-			this.AddElementFieldInfo("EmailOutboundRelationEntity", "ObjectID", typeof(System.Int64), false, false, false, false,  (int)EmailOutboundRelationFieldIndex.ObjectID, 0, 0, 19);
+			this.AddElementFieldInfo("EmailOutboundRelationEntity", "EntityID", typeof(System.Int64), false, false, false, false,  (int)EmailOutboundRelationFieldIndex.EntityID, 0, 0, 19);
 			this.AddElementFieldInfo("EmailOutboundRelationEntity", "RelationType", typeof(System.Int32), false, false, false, false,  (int)EmailOutboundRelationFieldIndex.RelationType, 0, 0, 10);
 		}
 		/// <summary>Inits EndiciaAccountEntity's FieldInfo objects</summary>
@@ -1321,7 +1321,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			this.AddFieldIndexEnumForElementName(typeof(FilterNodeContentDetailFieldIndex), "FilterNodeContentDetailEntity");
 			this.AddElementFieldInfo("FilterNodeContentDetailEntity", "FilterNodeContentID", typeof(System.Int64), false, true, false, false,  (int)FilterNodeContentDetailFieldIndex.FilterNodeContentID, 0, 0, 19);
-			this.AddElementFieldInfo("FilterNodeContentDetailEntity", "ObjectID", typeof(System.Int64), false, false, false, false,  (int)FilterNodeContentDetailFieldIndex.ObjectID, 0, 0, 19);
+			this.AddElementFieldInfo("FilterNodeContentDetailEntity", "EntityID", typeof(System.Int64), false, false, false, false,  (int)FilterNodeContentDetailFieldIndex.EntityID, 0, 0, 19);
 		}
 		/// <summary>Inits FilterSequenceEntity's FieldInfo objects</summary>
 		private void InitFilterSequenceEntityInfos()
@@ -1722,7 +1722,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddFieldIndexEnumForElementName(typeof(NoteFieldIndex), "NoteEntity");
 			this.AddElementFieldInfo("NoteEntity", "NoteID", typeof(System.Int64), true, false, true, false,  (int)NoteFieldIndex.NoteID, 0, 0, 19);
 			this.AddElementFieldInfo("NoteEntity", "RowVersion", typeof(System.Byte[]), false, false, true, false,  (int)NoteFieldIndex.RowVersion, 2147483647, 0, 0);
-			this.AddElementFieldInfo("NoteEntity", "ObjectID", typeof(System.Int64), false, true, false, false,  (int)NoteFieldIndex.ObjectID, 0, 0, 19);
+			this.AddElementFieldInfo("NoteEntity", "EntityID", typeof(System.Int64), false, true, false, false,  (int)NoteFieldIndex.EntityID, 0, 0, 19);
 			this.AddElementFieldInfo("NoteEntity", "UserID", typeof(Nullable<System.Int64>), false, true, false, true,  (int)NoteFieldIndex.UserID, 0, 0, 19);
 			this.AddElementFieldInfo("NoteEntity", "Edited", typeof(System.DateTime), false, false, false, false,  (int)NoteFieldIndex.Edited, 0, 0, 0);
 			this.AddElementFieldInfo("NoteEntity", "Text", typeof(System.String), false, false, false, false,  (int)NoteFieldIndex.Text, 2147483647, 0, 0);
@@ -1733,7 +1733,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 		private void InitObjectLabelEntityInfos()
 		{
 			this.AddFieldIndexEnumForElementName(typeof(ObjectLabelFieldIndex), "ObjectLabelEntity");
-			this.AddElementFieldInfo("ObjectLabelEntity", "ObjectID", typeof(System.Int64), true, false, false, false,  (int)ObjectLabelFieldIndex.ObjectID, 0, 0, 19);
+			this.AddElementFieldInfo("ObjectLabelEntity", "EntityID", typeof(System.Int64), true, false, false, false,  (int)ObjectLabelFieldIndex.EntityID, 0, 0, 19);
 			this.AddElementFieldInfo("ObjectLabelEntity", "RowVersion", typeof(System.Byte[]), false, false, true, false,  (int)ObjectLabelFieldIndex.RowVersion, 2147483647, 0, 0);
 			this.AddElementFieldInfo("ObjectLabelEntity", "ObjectType", typeof(System.Int32), false, false, false, false,  (int)ObjectLabelFieldIndex.ObjectType, 0, 0, 10);
 			this.AddElementFieldInfo("ObjectLabelEntity", "ParentID", typeof(Nullable<System.Int64>), false, false, false, true,  (int)ObjectLabelFieldIndex.ParentID, 0, 0, 19);
@@ -1747,7 +1747,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("ObjectReferenceEntity", "ObjectReferenceID", typeof(System.Int64), true, false, true, false,  (int)ObjectReferenceFieldIndex.ObjectReferenceID, 0, 0, 19);
 			this.AddElementFieldInfo("ObjectReferenceEntity", "ConsumerID", typeof(System.Int64), false, false, false, false,  (int)ObjectReferenceFieldIndex.ConsumerID, 0, 0, 19);
 			this.AddElementFieldInfo("ObjectReferenceEntity", "ReferenceKey", typeof(System.String), false, false, false, false,  (int)ObjectReferenceFieldIndex.ReferenceKey, 250, 0, 0);
-			this.AddElementFieldInfo("ObjectReferenceEntity", "ObjectID", typeof(System.Int64), false, false, false, false,  (int)ObjectReferenceFieldIndex.ObjectID, 0, 0, 19);
+			this.AddElementFieldInfo("ObjectReferenceEntity", "EntityID", typeof(System.Int64), false, false, false, false,  (int)ObjectReferenceFieldIndex.EntityID, 0, 0, 19);
 			this.AddElementFieldInfo("ObjectReferenceEntity", "Reason", typeof(System.String), false, false, false, true,  (int)ObjectReferenceFieldIndex.Reason, 250, 0, 0);
 		}
 		/// <summary>Inits OnTracAccountEntity's FieldInfo objects</summary>
@@ -2019,7 +2019,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("PermissionEntity", "PermissionID", typeof(System.Int64), true, false, true, false,  (int)PermissionFieldIndex.PermissionID, 0, 0, 19);
 			this.AddElementFieldInfo("PermissionEntity", "UserID", typeof(System.Int64), false, true, false, false,  (int)PermissionFieldIndex.UserID, 0, 0, 19);
 			this.AddElementFieldInfo("PermissionEntity", "PermissionType", typeof(System.Int32), false, false, false, false,  (int)PermissionFieldIndex.PermissionType, 0, 0, 10);
-			this.AddElementFieldInfo("PermissionEntity", "ObjectID", typeof(Nullable<System.Int64>), false, false, false, true,  (int)PermissionFieldIndex.ObjectID, 0, 0, 19);
+			this.AddElementFieldInfo("PermissionEntity", "EntityID", typeof(Nullable<System.Int64>), false, false, false, true,  (int)PermissionFieldIndex.EntityID, 0, 0, 19);
 		}
 		/// <summary>Inits PostalProfileEntity's FieldInfo objects</summary>
 		private void InitPostalProfileEntityInfos()

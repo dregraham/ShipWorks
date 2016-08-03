@@ -33,12 +33,12 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// Table field type characteristics (type, precision, scale, length): Timestamp, 0, 0, 2147483647<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         System.Byte[] RowVersion { get; }
-        /// <summary> The ObjectID property of the Entity Note<br/><br/>
+        /// <summary> The EntityID property of the Entity Note<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "Note"."ObjectID"<br/>
         /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        System.Int64 ObjectID { get; }
+        System.Int64 EntityID { get; }
         /// <summary> The UserID property of the Entity Note<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "Note"."UserID"<br/>

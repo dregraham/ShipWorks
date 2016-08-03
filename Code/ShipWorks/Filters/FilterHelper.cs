@@ -534,7 +534,7 @@ namespace ShipWorks.Filters
                 {
                     int count = FilterNodeContentDetailCollection.GetCount(adapter,
                         FilterNodeContentDetailFields.FilterNodeContentID == filterContentID &
-                        FilterNodeContentDetailFields.ObjectID == objectID);
+                        FilterNodeContentDetailFields.EntityID == objectID);
 
                     return count != 0;
                 }

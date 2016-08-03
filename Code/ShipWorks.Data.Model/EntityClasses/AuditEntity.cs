@@ -437,7 +437,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("Action", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("ObjectID", fieldHashtable);
+			_fieldsCustomProperties.Add("EntityID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("HasEvents", fieldHashtable);
 		}
@@ -675,14 +675,14 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)AuditFieldIndex.Action, value); }
 		}
 
-		/// <summary> The ObjectID property of the Entity Audit<br/><br/></summary>
+		/// <summary> The EntityID property of the Entity Audit<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "Audit"."ObjectID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Int64> ObjectID
+		public virtual Nullable<System.Int64> EntityID
 		{
-			get { return (Nullable<System.Int64>)GetValue((int)AuditFieldIndex.ObjectID, false); }
-			set	{ SetValue((int)AuditFieldIndex.ObjectID, value); }
+			get { return (Nullable<System.Int64>)GetValue((int)AuditFieldIndex.EntityID, false); }
+			set	{ SetValue((int)AuditFieldIndex.EntityID, value); }
 		}
 
 		/// <summary> The HasEvents property of the Entity Audit<br/><br/></summary>

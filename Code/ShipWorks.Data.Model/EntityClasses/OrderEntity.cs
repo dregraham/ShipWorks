@@ -236,7 +236,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 					toReturn.Add(Relations.StoreEntityUsingStoreID);
 					break;
 				case "Notes":
-					toReturn.Add(Relations.NoteEntityUsingObjectID);
+					toReturn.Add(Relations.NoteEntityUsingEntityID);
 					break;
 				case "OrderCharges":
 					toReturn.Add(Relations.OrderChargeEntityUsingOrderID);
@@ -453,7 +453,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		public virtual IRelationPredicateBucket GetRelationInfoNotes()
 		{
 			IRelationPredicateBucket bucket = new RelationPredicateBucket();
-			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(NoteFields.ObjectID, null, ComparisonOperator.Equal, this.OrderID));
+			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(NoteFields.EntityID, null, ComparisonOperator.Equal, this.OrderID));
 			return bucket;
 		}
 

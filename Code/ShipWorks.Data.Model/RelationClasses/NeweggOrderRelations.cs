@@ -36,14 +36,14 @@ namespace ShipWorks.Data.Model.RelationClasses
 		#region Class Property Declarations
 
 		/// <summary>Returns a new IEntityRelation object, between NeweggOrderEntity and NoteEntity over the 1:n relation they have, using the relation between the fields:
-		/// NeweggOrder.OrderID - Note.ObjectID
+		/// NeweggOrder.OrderID - Note.EntityID
 		/// </summary>
-		public override IEntityRelation NoteEntityUsingObjectID
+		public override IEntityRelation NoteEntityUsingEntityID
 		{
 			get
 			{
 				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "Notes" , true);
-				relation.AddEntityFieldPair(NeweggOrderFields.OrderID, NoteFields.ObjectID);
+				relation.AddEntityFieldPair(NeweggOrderFields.OrderID, NoteFields.EntityID);
 				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("NeweggOrderEntity", true);
 				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("NoteEntity", false);
 				return relation;
@@ -193,7 +193,7 @@ namespace ShipWorks.Data.Model.RelationClasses
 	/// <summary>Static class which is used for providing relationship instances which are re-used internally for syncing</summary>
 	internal static class StaticNeweggOrderRelations
 	{
-		internal static readonly IEntityRelation NoteEntityUsingObjectIDStatic = new NeweggOrderRelations().NoteEntityUsingObjectID;
+		internal static readonly IEntityRelation NoteEntityUsingEntityIDStatic = new NeweggOrderRelations().NoteEntityUsingEntityID;
 		internal static readonly IEntityRelation OrderChargeEntityUsingOrderIDStatic = new NeweggOrderRelations().OrderChargeEntityUsingOrderID;
 		internal static readonly IEntityRelation OrderItemEntityUsingOrderIDStatic = new NeweggOrderRelations().OrderItemEntityUsingOrderID;
 		internal static readonly IEntityRelation OrderPaymentDetailEntityUsingOrderIDStatic = new NeweggOrderRelations().OrderPaymentDetailEntityUsingOrderID;

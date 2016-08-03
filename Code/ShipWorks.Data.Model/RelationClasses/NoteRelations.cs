@@ -30,7 +30,7 @@ namespace ShipWorks.Data.Model.RelationClasses
 		public virtual List<IEntityRelation> GetAllRelations()
 		{
 			List<IEntityRelation> toReturn = new List<IEntityRelation>();
-			toReturn.Add(this.OrderEntityUsingObjectID);
+			toReturn.Add(this.OrderEntityUsingEntityID);
 			toReturn.Add(this.UserEntityUsingUserID);
 			return toReturn;
 		}
@@ -40,14 +40,14 @@ namespace ShipWorks.Data.Model.RelationClasses
 
 
 		/// <summary>Returns a new IEntityRelation object, between NoteEntity and OrderEntity over the m:1 relation they have, using the relation between the fields:
-		/// Note.ObjectID - Order.OrderID
+		/// Note.EntityID - Order.OrderID
 		/// </summary>
-		public virtual IEntityRelation OrderEntityUsingObjectID
+		public virtual IEntityRelation OrderEntityUsingEntityID
 		{
 			get
 			{
 				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.ManyToOne, "Order", false);
-				relation.AddEntityFieldPair(OrderFields.OrderID, NoteFields.ObjectID);
+				relation.AddEntityFieldPair(OrderFields.OrderID, NoteFields.EntityID);
 				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("OrderEntity", false);
 				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("NoteEntity", true);
 				return relation;
@@ -81,7 +81,7 @@ namespace ShipWorks.Data.Model.RelationClasses
 	/// <summary>Static class which is used for providing relationship instances which are re-used internally for syncing</summary>
 	internal static class StaticNoteRelations
 	{
-		internal static readonly IEntityRelation OrderEntityUsingObjectIDStatic = new NoteRelations().OrderEntityUsingObjectID;
+		internal static readonly IEntityRelation OrderEntityUsingEntityIDStatic = new NoteRelations().OrderEntityUsingEntityID;
 		internal static readonly IEntityRelation UserEntityUsingUserIDStatic = new NoteRelations().UserEntityUsingUserID;
 
 		/// <summary>CTor</summary>

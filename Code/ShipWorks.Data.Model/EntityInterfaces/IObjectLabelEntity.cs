@@ -21,12 +21,12 @@ namespace ShipWorks.Data.Model.EntityInterfaces
     public partial interface IObjectLabelEntity
     {
         
-        /// <summary> The ObjectID property of the Entity ObjectLabel<br/><br/>
+        /// <summary> The EntityID property of the Entity ObjectLabel<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "ObjectLabel"."ObjectID"<br/>
         /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
-        System.Int64 ObjectID { get; }
+        System.Int64 EntityID { get; }
         /// <summary> The RowVersion property of the Entity ObjectLabel<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "ObjectLabel"."RowVersion"<br/>

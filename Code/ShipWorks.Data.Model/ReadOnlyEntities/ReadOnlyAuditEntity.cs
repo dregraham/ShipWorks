@@ -45,7 +45,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             ReasonDetail = source.ReasonDetail;
             Date = source.Date;
             Action = source.Action;
-            ObjectID = source.ObjectID;
+            EntityID = source.EntityID;
             HasEvents = source.HasEvents;
             
             
@@ -113,12 +113,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Int32 Action { get; }
-        /// <summary> The ObjectID property of the Entity Audit<br/><br/>
+        /// <summary> The EntityID property of the Entity Audit<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "Audit"."ObjectID"<br/>
         /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-        public Nullable<System.Int64> ObjectID { get; }
+        public Nullable<System.Int64> EntityID { get; }
         /// <summary> The HasEvents property of the Entity Audit<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "Audit"."HasEvents"<br/>

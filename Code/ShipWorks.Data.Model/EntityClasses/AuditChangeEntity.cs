@@ -379,7 +379,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("ChangeType", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("ObjectID", fieldHashtable);
+			_fieldsCustomProperties.Add("EntityID", fieldHashtable);
 		}
 		#endregion
 
@@ -515,14 +515,14 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)AuditChangeFieldIndex.ChangeType, value); }
 		}
 
-		/// <summary> The ObjectID property of the Entity AuditChange<br/><br/></summary>
+		/// <summary> The EntityID property of the Entity AuditChange<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "AuditChange"."ObjectID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Int64 ObjectID
+		public virtual System.Int64 EntityID
 		{
-			get { return (System.Int64)GetValue((int)AuditChangeFieldIndex.ObjectID, true); }
-			set	{ SetValue((int)AuditChangeFieldIndex.ObjectID, value); }
+			get { return (System.Int64)GetValue((int)AuditChangeFieldIndex.EntityID, true); }
+			set	{ SetValue((int)AuditChangeFieldIndex.EntityID, value); }
 		}
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'AuditChangeDetailEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>

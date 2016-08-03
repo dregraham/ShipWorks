@@ -39,7 +39,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             AuditChangeID = source.AuditChangeID;
             AuditID = source.AuditID;
             ChangeType = source.ChangeType;
-            ObjectID = source.ObjectID;
+            EntityID = source.EntityID;
             
             
             Audit = source.Audit?.AsReadOnly(objectMap);
@@ -69,12 +69,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Int32 ChangeType { get; }
-        /// <summary> The ObjectID property of the Entity AuditChange<br/><br/>
+        /// <summary> The EntityID property of the Entity AuditChange<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "AuditChange"."ObjectID"<br/>
         /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        public System.Int64 ObjectID { get; }
+        public System.Int64 EntityID { get; }
         
         
         public IAuditEntity Audit { get; }

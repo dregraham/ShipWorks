@@ -52,7 +52,7 @@ namespace ShipWorks.Users.Audit
                 audit.Date = DateTime.UtcNow;
 
                 audit.Action = (int) action;
-                audit.ObjectID = null;
+                audit.EntityID = null;
 
                 audit.HasEvents = false;
 

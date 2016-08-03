@@ -355,7 +355,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("PermissionType", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("ObjectID", fieldHashtable);
+			_fieldsCustomProperties.Add("EntityID", fieldHashtable);
 		}
 		#endregion
 
@@ -484,14 +484,14 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)PermissionFieldIndex.PermissionType, value); }
 		}
 
-		/// <summary> The ObjectID property of the Entity Permission<br/><br/></summary>
+		/// <summary> The EntityID property of the Entity Permission<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "Permission"."ObjectID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Int64> ObjectID
+		public virtual Nullable<System.Int64> EntityID
 		{
-			get { return (Nullable<System.Int64>)GetValue((int)PermissionFieldIndex.ObjectID, false); }
-			set	{ SetValue((int)PermissionFieldIndex.ObjectID, value); }
+			get { return (Nullable<System.Int64>)GetValue((int)PermissionFieldIndex.EntityID, false); }
+			set	{ SetValue((int)PermissionFieldIndex.EntityID, value); }
 		}
 
 		/// <summary> Gets / sets related entity of type 'UserEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned..<br/><br/></summary>

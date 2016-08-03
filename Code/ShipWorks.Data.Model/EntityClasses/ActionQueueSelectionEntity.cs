@@ -351,7 +351,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("ActionQueueID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("ObjectID", fieldHashtable);
+			_fieldsCustomProperties.Add("EntityID", fieldHashtable);
 		}
 		#endregion
 
@@ -470,14 +470,14 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)ActionQueueSelectionFieldIndex.ActionQueueID, value); }
 		}
 
-		/// <summary> The ObjectID property of the Entity ActionQueueSelection<br/><br/></summary>
+		/// <summary> The EntityID property of the Entity ActionQueueSelection<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "ActionQueueSelection"."ObjectID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Int64 ObjectID
+		public virtual System.Int64 EntityID
 		{
-			get { return (System.Int64)GetValue((int)ActionQueueSelectionFieldIndex.ObjectID, true); }
-			set	{ SetValue((int)ActionQueueSelectionFieldIndex.ObjectID, value); }
+			get { return (System.Int64)GetValue((int)ActionQueueSelectionFieldIndex.EntityID, true); }
+			set	{ SetValue((int)ActionQueueSelectionFieldIndex.EntityID, value); }
 		}
 
 		/// <summary> Gets / sets related entity of type 'ActionQueueEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned..<br/><br/></summary>

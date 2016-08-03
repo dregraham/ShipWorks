@@ -216,7 +216,7 @@ namespace ShipWorks.Actions
 
                         ActionQueueSelectionEntity selected = new ActionQueueSelectionEntity();
                         selected.ActionQueueID = actionQueueID;
-                        selected.ObjectID = id;
+                        selected.EntityID = id;
                         chunk.Add(selected);
 
                         // Save up to 500 at a time
@@ -254,7 +254,7 @@ namespace ShipWorks.Actions
             entity.ActionQueueType = action.TriggerType == (int) ActionTriggerType.Scheduled ? (int) ActionQueueType.Scheduled : (int) ActionQueueType.UserInterface;
             entity.ActionName = action.Name;
             entity.ActionVersion = action.RowVersion;
-            entity.ObjectID = objectID;
+            entity.EntityID = objectID;
             entity.TriggerComputerID = UserSession.Computer.ComputerID;
 
             if (action.ComputerLimitedType == (int) ComputerLimitedType.TriggeringComputer)

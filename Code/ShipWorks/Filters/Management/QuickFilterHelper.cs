@@ -1,16 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Connection;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Model.HelperClasses;
-using System.Data;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Data.Adapter.Custom;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
 
 namespace ShipWorks.Filters.Management
 {
@@ -53,7 +51,7 @@ namespace ShipWorks.Filters.Management
             node.FilterSequence = sequence;
             node.FilterNodeContent = content;
             node.Created = DateTime.UtcNow;
-            node.Purpose = (int)FilterNodePurpose.Quick;
+            node.Purpose = (int) FilterNodePurpose.Quick;
 
             return node;
         }
@@ -125,8 +123,8 @@ namespace ShipWorks.Filters.Management
             using (SqlAdapter adapter = new SqlAdapter())
             {
                 // Query all quick filters that are not referenced, and have were created at least 48 hours ago.  This is b\c when a local filter
-                // is first created, its not referenced until the user eventually saves.  So that gives ample time for the user to do so without 
-                // the filter being deleted from underneath.  If they had the window open over 48 hours without saving, I think then they'd crash, 
+                // is first created, its not referenced until the user eventually saves.  So that gives ample time for the user to do so without
+                // the filter being deleted from underneath.  If they had the window open over 48 hours without saving, I think then they'd crash,
                 // but then that's just stupid of them.
                 RelationPredicateBucket bucket = new RelationPredicateBucket(
                     FilterNodeFields.Purpose == (int) FilterNodePurpose.Quick &
@@ -135,7 +133,7 @@ namespace ShipWorks.Filters.Management
                 bucket.PredicateExpression.AddWithAnd(
                     new FieldCompareSetPredicate(
                         FilterNodeFields.FilterNodeID, null,
-                        ObjectReferenceFields.ObjectID, null,
+                        ObjectReferenceFields.EntityID, null,
                         SetOperator.In, null,
                         true));
 

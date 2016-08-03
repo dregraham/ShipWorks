@@ -399,7 +399,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("InternalComputerLimitedList", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("ObjectID", fieldHashtable);
+			_fieldsCustomProperties.Add("EntityID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("Status", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
@@ -578,14 +578,14 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)ActionQueueFieldIndex.InternalComputerLimitedList, value); }
 		}
 
-		/// <summary> The ObjectID property of the Entity ActionQueue<br/><br/></summary>
+		/// <summary> The EntityID property of the Entity ActionQueue<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "ActionQueue"."ObjectID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Int64> ObjectID
+		public virtual Nullable<System.Int64> EntityID
 		{
-			get { return (Nullable<System.Int64>)GetValue((int)ActionQueueFieldIndex.ObjectID, false); }
-			set	{ SetValue((int)ActionQueueFieldIndex.ObjectID, value); }
+			get { return (Nullable<System.Int64>)GetValue((int)ActionQueueFieldIndex.EntityID, false); }
+			set	{ SetValue((int)ActionQueueFieldIndex.EntityID, value); }
 		}
 
 		/// <summary> The Status property of the Entity ActionQueue<br/><br/></summary>

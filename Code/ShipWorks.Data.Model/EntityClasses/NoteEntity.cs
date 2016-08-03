@@ -122,7 +122,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch((NoteFieldIndex)fieldIndex)
 			{
-				case NoteFieldIndex.ObjectID:
+				case NoteFieldIndex.EntityID:
 					DesetupSyncOrder(true, false);
 					break;
 				case NoteFieldIndex.UserID:
@@ -168,7 +168,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			switch(fieldName)
 			{
 				case "Order":
-					toReturn.Add(Relations.OrderEntityUsingObjectID);
+					toReturn.Add(Relations.OrderEntityUsingEntityID);
 					break;
 				default:
 					break;				
@@ -280,7 +280,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		public virtual IRelationPredicateBucket GetRelationInfoOrder()
 		{
 			IRelationPredicateBucket bucket = new RelationPredicateBucket();
-			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(OrderFields.OrderID, null, ComparisonOperator.Equal, this.ObjectID));
+			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(OrderFields.OrderID, null, ComparisonOperator.Equal, this.EntityID));
 			return bucket;
 		}
 		
@@ -354,7 +354,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("RowVersion", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("ObjectID", fieldHashtable);
+			_fieldsCustomProperties.Add("EntityID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("UserID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
@@ -373,7 +373,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <param name="resetFKFields">if set to true it will also reset the FK fields pointing to the related entity</param>
 		private void DesetupSyncOrder(bool signalRelatedEntity, bool resetFKFields)
 		{
-			this.PerformDesetupSyncRelatedEntity( _order, new PropertyChangedEventHandler( OnOrderPropertyChanged ), "Order", ShipWorks.Data.Model.RelationClasses.StaticNoteRelations.OrderEntityUsingObjectIDStatic, true, signalRelatedEntity, "Notes", resetFKFields, new int[] { (int)NoteFieldIndex.ObjectID } );
+			this.PerformDesetupSyncRelatedEntity( _order, new PropertyChangedEventHandler( OnOrderPropertyChanged ), "Order", ShipWorks.Data.Model.RelationClasses.StaticNoteRelations.OrderEntityUsingEntityIDStatic, true, signalRelatedEntity, "Notes", resetFKFields, new int[] { (int)NoteFieldIndex.EntityID } );
 			_order = null;
 		}
 
@@ -385,7 +385,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			{
 				DesetupSyncOrder(true, true);
 				_order = (OrderEntity)relatedEntity;
-				this.PerformSetupSyncRelatedEntity( _order, new PropertyChangedEventHandler( OnOrderPropertyChanged ), "Order", ShipWorks.Data.Model.RelationClasses.StaticNoteRelations.OrderEntityUsingObjectIDStatic, true, new string[] {  } );
+				this.PerformSetupSyncRelatedEntity( _order, new PropertyChangedEventHandler( OnOrderPropertyChanged ), "Order", ShipWorks.Data.Model.RelationClasses.StaticNoteRelations.OrderEntityUsingEntityIDStatic, true, new string[] {  } );
 			}
 		}
 		
@@ -483,14 +483,14 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		}
 
-		/// <summary> The ObjectID property of the Entity Note<br/><br/></summary>
+		/// <summary> The EntityID property of the Entity Note<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "Note"."ObjectID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Int64 ObjectID
+		public virtual System.Int64 EntityID
 		{
-			get { return (System.Int64)GetValue((int)NoteFieldIndex.ObjectID, true); }
-			set	{ SetValue((int)NoteFieldIndex.ObjectID, value); }
+			get { return (System.Int64)GetValue((int)NoteFieldIndex.EntityID, true); }
+			set	{ SetValue((int)NoteFieldIndex.EntityID, value); }
 		}
 
 		/// <summary> The UserID property of the Entity Note<br/><br/></summary>

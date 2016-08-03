@@ -38,7 +38,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             
             ActionQueueSelectionID = source.ActionQueueSelectionID;
             ActionQueueID = source.ActionQueueID;
-            ObjectID = source.ObjectID;
+            EntityID = source.EntityID;
             
             
             ActionQueue = source.ActionQueue?.AsReadOnly(objectMap);
@@ -60,12 +60,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Int64 ActionQueueID { get; }
-        /// <summary> The ObjectID property of the Entity ActionQueueSelection<br/><br/>
+        /// <summary> The EntityID property of the Entity ActionQueueSelection<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "ActionQueueSelection"."ObjectID"<br/>
         /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        public System.Int64 ObjectID { get; }
+        public System.Int64 EntityID { get; }
         
         
         public IActionQueueEntity ActionQueue { get; }

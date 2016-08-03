@@ -38,7 +38,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             
             NoteID = source.NoteID;
             RowVersion = source.RowVersion;
-            ObjectID = source.ObjectID;
+            EntityID = source.EntityID;
             UserID = source.UserID;
             Edited = source.Edited;
             Text = source.Text;
@@ -65,12 +65,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): Timestamp, 0, 0, 2147483647<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Byte[] RowVersion { get; }
-        /// <summary> The ObjectID property of the Entity Note<br/><br/>
+        /// <summary> The EntityID property of the Entity Note<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "Note"."ObjectID"<br/>
         /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        public System.Int64 ObjectID { get; }
+        public System.Int64 EntityID { get; }
         /// <summary> The UserID property of the Entity Note<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "Note"."UserID"<br/>

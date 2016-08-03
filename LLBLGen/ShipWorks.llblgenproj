@@ -168,9 +168,9 @@
           <Field Name="ActionQueueType" Type="int" FieldIndex="4" />
           <Field Name="ActionVersion" Type="byte[]" MaxLength="8" FieldIndex="5" />
           <Field Name="ContextLock" Type="string" IsOptional="true" MaxLength="36" FieldIndex="13" />
+          <Field Name="EntityID" Type="long" IsOptional="true" FieldIndex="10" />
           <Field Name="InternalComputerLimitedList" Type="string" MaxLength="150" FieldIndex="9" />
           <Field Name="NextStep" Type="int" FieldIndex="12" />
-          <Field Name="ObjectID" Type="long" IsOptional="true" FieldIndex="10" />
           <Field Name="QueueVersion" Type="byte[]" IsReadOnly="true" MaxLength="8" FieldIndex="6" />
           <Field Name="RowVersion" Type="byte[]" IsReadOnly="true" FieldIndex="1" />
           <Field Name="Status" Type="int" FieldIndex="11" />
@@ -182,7 +182,7 @@
         <Fields>
           <Field Name="ActionQueueID" Type="long" IsAutoCreated="true" FieldIndex="1" />
           <Field Name="ActionQueueSelectionID" Type="long" IsReadOnly="true" IsPrimaryKey="true" FieldIndex="0" />
-          <Field Name="ObjectID" Type="long" FieldIndex="2" />
+          <Field Name="EntityID" Type="long" FieldIndex="2" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="ActionQueueStep" ObjectID="83a78908-e50f-4515-9484-a0ebba78dc82">
@@ -317,8 +317,8 @@
           <Field Name="AuditID" Type="long" IsReadOnly="true" IsPrimaryKey="true" FieldIndex="0" />
           <Field Name="ComputerID" Type="long" IsAutoCreated="true" FieldIndex="4" />
           <Field Name="Date" Type="datetime" FieldIndex="7" />
+          <Field Name="EntityID" Type="long" IsOptional="true" FieldIndex="9" />
           <Field Name="HasEvents" Type="bool" FieldIndex="10" />
-          <Field Name="ObjectID" Type="long" IsOptional="true" FieldIndex="9" />
           <Field Name="Reason" Type="int" FieldIndex="5" />
           <Field Name="ReasonDetail" Type="string" IsOptional="true" MaxLength="100" FieldIndex="6" />
           <Field Name="RowVersion" Type="byte[]" IsReadOnly="true" FieldIndex="1" />
@@ -331,7 +331,7 @@
           <Field Name="AuditChangeID" Type="long" IsReadOnly="true" IsPrimaryKey="true" FieldIndex="0" />
           <Field Name="AuditID" Type="long" IsAutoCreated="true" FieldIndex="1" />
           <Field Name="ChangeType" Type="int" FieldIndex="2" />
-          <Field Name="ObjectID" Type="long" FieldIndex="3" />
+          <Field Name="EntityID" Type="long" FieldIndex="3" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="AuditChangeDetail" ObjectID="21bb8c21-c77d-4753-889e-25ec716fec90">
@@ -703,7 +703,7 @@
         <Fields>
           <Field Name="EmailOutboundID" Type="long" IsAutoCreated="true" FieldIndex="1" />
           <Field Name="EmailOutboundRelationID" Type="long" IsReadOnly="true" IsPrimaryKey="true" FieldIndex="0" />
-          <Field Name="ObjectID" Type="long" FieldIndex="2" />
+          <Field Name="EntityID" Type="long" FieldIndex="2" />
           <Field Name="RelationType" Type="int" FieldIndex="3" />
         </Fields>
       </EntityDefinition>
@@ -1153,8 +1153,8 @@
       </EntityDefinition>
       <EntityDefinition Name="FilterNodeContentDetail" ObjectID="7ab075a5-d2ec-44c0-99f5-304d43b7b1e0">
         <Fields>
+          <Field Name="EntityID" Type="long" FieldIndex="1" />
           <Field Name="FilterNodeContentID" Type="long" FieldIndex="0" />
-          <Field Name="ObjectID" Type="long" FieldIndex="1" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="FilterSequence" ObjectID="9144d3c4-f0bb-475f-b279-07fe2e609ec6">
@@ -1499,8 +1499,8 @@
       <EntityDefinition Name="Note" ObjectID="70d4c415-32dd-4e12-aade-f051f5da63d5">
         <Fields>
           <Field Name="Edited" Type="datetime" FieldIndex="4" />
+          <Field Name="EntityID" Type="long" IsAutoCreated="true" FieldIndex="2" />
           <Field Name="NoteID" Type="long" IsReadOnly="true" IsPrimaryKey="true" FieldIndex="0" />
-          <Field Name="ObjectID" Type="long" IsAutoCreated="true" FieldIndex="2" />
           <Field Name="RowVersion" Type="byte[]" IsReadOnly="true" FieldIndex="1" />
           <Field Name="Source" Type="int" FieldIndex="6" />
           <Field Name="Text" Type="string" MaxLength="2147483647" FieldIndex="5" />
@@ -1510,9 +1510,9 @@
       </EntityDefinition>
       <EntityDefinition Name="ObjectLabel" ObjectID="09e080da-79f8-4807-b714-e70482caa57c">
         <Fields>
+          <Field Name="EntityID" Type="long" IsPrimaryKey="true" FieldIndex="0" />
           <Field Name="IsDeleted" Type="bool" FieldIndex="5" />
           <Field Name="Label" Type="string" MaxLength="100" FieldIndex="4" />
-          <Field Name="ObjectID" Type="long" IsPrimaryKey="true" FieldIndex="0" />
           <Field Name="ObjectType" Type="int" FieldIndex="2" />
           <Field Name="ParentID" Type="long" IsOptional="true" FieldIndex="3" />
           <Field Name="RowVersion" Type="byte[]" IsReadOnly="true" FieldIndex="1" />
@@ -1521,7 +1521,7 @@
       <EntityDefinition Name="ObjectReference" ObjectID="57ab01da-d841-43a8-9553-b49a7addfe02">
         <Fields>
           <Field Name="ConsumerID" Type="long" FieldIndex="1" />
-          <Field Name="ObjectID" Type="long" FieldIndex="3" />
+          <Field Name="EntityID" Type="long" FieldIndex="3" />
           <Field Name="ObjectReferenceID" Type="long" IsReadOnly="true" IsPrimaryKey="true" FieldIndex="0" />
           <Field Name="Reason" Type="string" IsOptional="true" MaxLength="250" FieldIndex="4" />
           <Field Name="ReferenceKey" Type="string" MaxLength="250" FieldIndex="2" />
@@ -1773,7 +1773,7 @@
       </EntityDefinition>
       <EntityDefinition Name="Permission" ObjectID="dc1f96db-2b36-4864-82a1-acd8f153c310">
         <Fields>
-          <Field Name="ObjectID" Type="long" IsOptional="true" FieldIndex="3" />
+          <Field Name="EntityID" Type="long" IsOptional="true" FieldIndex="3" />
           <Field Name="PermissionID" Type="long" IsReadOnly="true" IsPrimaryKey="true" FieldIndex="0" />
           <Field Name="PermissionType" Type="int" FieldIndex="2" />
           <Field Name="UserID" Type="long" IsAutoCreated="true" FieldIndex="1" />
@@ -3140,7 +3140,7 @@
       </NormalRelationship>
       <NormalRelationship Name="Note.Order-Order.Notes" Start=":Note" End=":Order" StartNavigator="Order" EndNavigator="Notes" Type="4" ModelOnly="true">
         <FieldRelationships>
-          <FieldFieldRelationship FkField="ObjectID" PkField="OrderID" />
+          <FieldFieldRelationship FkField="EntityID" PkField="OrderID" />
         </FieldRelationships>
       </NormalRelationship>
       <NormalRelationship Name="OnTracProfile.ShippingProfile-ShippingProfile.OnTrac" Start=":OnTracProfile" End=":ShippingProfile" StartNavigator="ShippingProfile" EndNavigator="OnTrac" Type="1">
@@ -8683,9 +8683,9 @@
             <FieldMapping FieldName="ActionQueueType" TargetFieldName="ActionQueueType" />
             <FieldMapping FieldName="ActionVersion" TargetFieldName="ActionVersion" />
             <FieldMapping FieldName="ContextLock" TargetFieldName="ContextLock" />
+            <FieldMapping FieldName="EntityID" TargetFieldName="ObjectID" />
             <FieldMapping FieldName="InternalComputerLimitedList" TargetFieldName="ComputerLimitedList" />
             <FieldMapping FieldName="NextStep" TargetFieldName="NextStep" />
-            <FieldMapping FieldName="ObjectID" TargetFieldName="ObjectID" />
             <FieldMapping FieldName="QueueVersion" TargetFieldName="QueueVersion" />
             <FieldMapping FieldName="RowVersion" TargetFieldName="RowVersion" />
             <FieldMapping FieldName="Status" TargetFieldName="Status" />
@@ -8697,7 +8697,7 @@
           <FieldMappings>
             <FieldMapping FieldName="ActionQueueID" TargetFieldName="ActionQueueID" />
             <FieldMapping FieldName="ActionQueueSelectionID" TargetFieldName="ActionQueueSelectionID" SequenceToUse="SCOPE_IDENTITY()" />
-            <FieldMapping FieldName="ObjectID" TargetFieldName="ObjectID" />
+            <FieldMapping FieldName="EntityID" TargetFieldName="ObjectID" />
           </FieldMappings>
         </EntityMapping>
         <EntityMapping EntityName=":ActionQueueStep" TargetName="ShipWorksLocal:dbo:ActionQueueStep">
@@ -8836,8 +8836,8 @@
             <FieldMapping FieldName="AuditID" TargetFieldName="AuditID" SequenceToUse="SCOPE_IDENTITY()" />
             <FieldMapping FieldName="ComputerID" TargetFieldName="ComputerID" />
             <FieldMapping FieldName="Date" TargetFieldName="Date" />
+            <FieldMapping FieldName="EntityID" TargetFieldName="ObjectID" />
             <FieldMapping FieldName="HasEvents" TargetFieldName="HasEvents" />
-            <FieldMapping FieldName="ObjectID" TargetFieldName="ObjectID" />
             <FieldMapping FieldName="Reason" TargetFieldName="Reason" />
             <FieldMapping FieldName="ReasonDetail" TargetFieldName="ReasonDetail" />
             <FieldMapping FieldName="RowVersion" TargetFieldName="RowVersion" />
@@ -8850,7 +8850,7 @@
             <FieldMapping FieldName="AuditChangeID" TargetFieldName="AuditChangeID" SequenceToUse="SCOPE_IDENTITY()" />
             <FieldMapping FieldName="AuditID" TargetFieldName="AuditID" />
             <FieldMapping FieldName="ChangeType" TargetFieldName="ChangeType" />
-            <FieldMapping FieldName="ObjectID" TargetFieldName="ObjectID" />
+            <FieldMapping FieldName="EntityID" TargetFieldName="ObjectID" />
           </FieldMappings>
         </EntityMapping>
         <EntityMapping EntityName=":AuditChangeDetail" TargetName="ShipWorksLocal:dbo:AuditChangeDetail">
@@ -9229,7 +9229,7 @@
           <FieldMappings>
             <FieldMapping FieldName="EmailOutboundID" TargetFieldName="EmailOutboundID" />
             <FieldMapping FieldName="EmailOutboundRelationID" TargetFieldName="EmailOutboundRelationID" SequenceToUse="SCOPE_IDENTITY()" />
-            <FieldMapping FieldName="ObjectID" TargetFieldName="ObjectID" />
+            <FieldMapping FieldName="EntityID" TargetFieldName="ObjectID" />
             <FieldMapping FieldName="RelationType" TargetFieldName="RelationType" />
           </FieldMappings>
         </EntityMapping>
@@ -9681,8 +9681,8 @@
         </EntityMapping>
         <EntityMapping EntityName=":FilterNodeContentDetail" TargetName="ShipWorksLocal:dbo:FilterNodeContentDetail" ActionCombination="2">
           <FieldMappings>
+            <FieldMapping FieldName="EntityID" TargetFieldName="ObjectID" />
             <FieldMapping FieldName="FilterNodeContentID" TargetFieldName="FilterNodeContentID" />
-            <FieldMapping FieldName="ObjectID" TargetFieldName="ObjectID" />
           </FieldMappings>
         </EntityMapping>
         <EntityMapping EntityName=":FilterSequence" TargetName="ShipWorksLocal:dbo:FilterSequence">
@@ -10048,8 +10048,8 @@
         <EntityMapping EntityName=":Note" TargetName="ShipWorksLocal:dbo:Note">
           <FieldMappings>
             <FieldMapping FieldName="Edited" TargetFieldName="Edited" />
+            <FieldMapping FieldName="EntityID" TargetFieldName="ObjectID" />
             <FieldMapping FieldName="NoteID" TargetFieldName="NoteID" SequenceToUse="SCOPE_IDENTITY()" />
-            <FieldMapping FieldName="ObjectID" TargetFieldName="ObjectID" />
             <FieldMapping FieldName="RowVersion" TargetFieldName="RowVersion" />
             <FieldMapping FieldName="Source" TargetFieldName="Source" />
             <FieldMapping FieldName="Text" TargetFieldName="Text" />
@@ -10059,9 +10059,9 @@
         </EntityMapping>
         <EntityMapping EntityName=":ObjectLabel" TargetName="ShipWorksLocal:dbo:ObjectLabel">
           <FieldMappings>
+            <FieldMapping FieldName="EntityID" TargetFieldName="ObjectID" />
             <FieldMapping FieldName="IsDeleted" TargetFieldName="IsDeleted" />
             <FieldMapping FieldName="Label" TargetFieldName="Label" />
-            <FieldMapping FieldName="ObjectID" TargetFieldName="ObjectID" />
             <FieldMapping FieldName="ObjectType" TargetFieldName="ObjectType" />
             <FieldMapping FieldName="ParentID" TargetFieldName="ParentID" />
             <FieldMapping FieldName="RowVersion" TargetFieldName="RowVersion" />
@@ -10070,7 +10070,7 @@
         <EntityMapping EntityName=":ObjectReference" TargetName="ShipWorksLocal:dbo:ObjectReference">
           <FieldMappings>
             <FieldMapping FieldName="ConsumerID" TargetFieldName="ConsumerID" />
-            <FieldMapping FieldName="ObjectID" TargetFieldName="ObjectID" />
+            <FieldMapping FieldName="EntityID" TargetFieldName="ObjectID" />
             <FieldMapping FieldName="ObjectReferenceID" TargetFieldName="ObjectReferenceID" SequenceToUse="SCOPE_IDENTITY()" />
             <FieldMapping FieldName="Reason" TargetFieldName="Reason" />
             <FieldMapping FieldName="ReferenceKey" TargetFieldName="ReferenceKey" />
@@ -10326,7 +10326,7 @@
         </EntityMapping>
         <EntityMapping EntityName=":Permission" TargetName="ShipWorksLocal:dbo:Permission">
           <FieldMappings>
-            <FieldMapping FieldName="ObjectID" TargetFieldName="ObjectID" />
+            <FieldMapping FieldName="EntityID" TargetFieldName="ObjectID" />
             <FieldMapping FieldName="PermissionID" TargetFieldName="PermissionID" SequenceToUse="SCOPE_IDENTITY()" />
             <FieldMapping FieldName="PermissionType" TargetFieldName="PermissionType" />
             <FieldMapping FieldName="UserID" TargetFieldName="UserID" />
