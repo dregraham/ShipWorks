@@ -34,19 +34,19 @@
             // 
             // next
             // 
-            this.next.Location = new System.Drawing.Point(366, 576);
+            this.next.Location = new System.Drawing.Point(359, 576);
             // 
             // cancel
             // 
-            this.cancel.Location = new System.Drawing.Point(447, 576);
+            this.cancel.Location = new System.Drawing.Point(440, 576);
             // 
             // back
             // 
-            this.back.Location = new System.Drawing.Point(285, 576);
+            this.back.Location = new System.Drawing.Point(278, 576);
             // 
             // mainPanel
             // 
-            this.mainPanel.Size = new System.Drawing.Size(534, 504);
+            this.mainPanel.Size = new System.Drawing.Size(524, 504);
             // 
             // etchBottom
             // 
@@ -66,6 +66,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(534, 611);
+            this.MinimumSize = new System.Drawing.Size(550, 650);
             this.Name = "OdbcSettingsWizard";
             this.NextVisible = true;
             this.Text = "Odbc Store Setup Wizard";
