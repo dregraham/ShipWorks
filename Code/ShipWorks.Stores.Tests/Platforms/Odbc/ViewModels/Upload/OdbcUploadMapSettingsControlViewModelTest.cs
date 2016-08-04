@@ -10,7 +10,7 @@ using Xunit;
 
 namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Upload
 {
-    public class OdbcUploadMapSettingsControlViewModelTest
+    public class OdbcUploadMapSettingsControlViewModelTest : IDisposable
     {
         private readonly AutoMock mock;
         private const string InitialQueryComment =
