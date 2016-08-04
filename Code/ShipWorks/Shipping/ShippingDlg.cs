@@ -1286,21 +1286,21 @@ namespace ShipWorks.Shipping
         private void UpdateInsuranceDisplay() => ServiceControl?.UpdateInsuranceDisplay();
 
         /// <summary>
-        /// Update the custom's control with the given shipments, controlling if it can be edited or not
+        /// Update the customs control with the given shipments, controlling if it can be edited or not
         /// </summary>
         private void LoadCustomsControl(IEnumerable<ShipmentEntity> shipments)
         {
             ShipmentType shipmentType = shipments.Any() ? GetShipmentType(shipments) : null;
 
             // To have editing enabled, it's necessary for shipments to be unprocessed and to have permissions for all of them
-            bool enableEditing = !shipments.Any(s => s.Processed) &&
+            bool enableEditing = shipments.None(s => s.Processed) &&
                 shipments.All(s => UserSession.Security.HasPermission(PermissionType.ShipmentsCreateEditProcess, s.OrderID));
 
             LoadCustomsControl(shipments, shipmentType, enableEditing);
         }
 
         /// <summary>
-        /// Update the custom's control with the given shipments, controlling if it can be edited or not
+        /// Update the customs control with the given shipments, controlling if it can be edited or not
         /// </summary>
         private void LoadCustomsControl(IEnumerable<ShipmentEntity> shipments, ShipmentType shipmentType, bool enableEditing)
         {
