@@ -660,6 +660,7 @@
     <Compile Include="ApplicationCore\CommandLineOptions\RedeployAssembliesCommandLineOption.cs" />
     <Compile Include="ApplicationCore\CommandLineOptions\RegenerateAllFiltersCommandLineOption.cs" />
     <Compile Include="ApplicationCore\CommandLineOptions\UninstallShipWorksCommandLineOption.cs" />
+    <Compile Include="ApplicationCore\ComponentRegistration\ServiceAttribute.cs" />
     <Compile Include="ApplicationCore\Crashes\CrashDetailsDialog.xaml.cs">
       <DependentUpon>CrashDetailsDialog.xaml</DependentUpon>
     </Compile>
@@ -896,6 +897,12 @@
     <Compile Include="Data\Administration\ISqlSchemaVersion.cs" />
     <Compile Include="Data\Administration\Retry\ISqlAdapterRetry.cs" />
     <Compile Include="Data\Administration\SqlChangeTracking.cs" />
+    <Compile Include="Data\Administration\VersionSpeicifcUpdates\IVersionSpecificUpdate.cs" />
+    <Compile Include="Data\Administration\VersionSpeicifcUpdates\V_05_00_00_00.cs" />
+    <Compile Include="Data\Administration\VersionSpeicifcUpdates\V_05_04_00_00.cs" />
+    <Compile Include="Data\Administration\VersionSpeicifcUpdates\V_04_05_00_00.cs" />
+    <Compile Include="Data\Administration\VersionSpeicifcUpdates\V_03_12_00_00.cs" />
+    <Compile Include="Data\Administration\VersionSpeicifcUpdates\V_03_09_03_00.cs" />
     <Compile Include="Data\ConfigurationDataWrapper.cs" />
     <Compile Include="Data\Connection\ISqlDateTimeProvider.cs" />
     <Compile Include="Data\Administration\SqlSchemaVersion.cs" />

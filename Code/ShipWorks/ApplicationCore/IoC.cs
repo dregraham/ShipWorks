@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Linq;
 using System.Reflection;
+using System.Windows.Forms;
 using Autofac;
 using Autofac.Core;
 using Interapptive.Shared;
@@ -33,8 +35,6 @@ using ShipWorks.Shipping.Settings;
 using ShipWorks.Stores.Content;
 using ShipWorks.UI.Controls;
 using ShipWorks.Users;
-using System.Linq;
-using System.Windows.Forms;
 using ShipWorks.Users.Security;
 
 namespace ShipWorks.ApplicationCore
@@ -91,7 +91,7 @@ namespace ShipWorks.ApplicationCore
             builder.RegisterGeneric(typeof(AccountManagerBase<>))
                 .AsSelf()
                 .SingleInstance();
-            
+
             builder.RegisterInstance(Messenger.Current)
                 .AsImplementedInterfaces()
                 .ExternallyOwned();
@@ -176,6 +176,7 @@ namespace ShipWorks.ApplicationCore
                 .AsImplementedInterfaces();
 
             ComponentAttribute.Register(builder, allAssemblies);
+            ServiceAttribute.Register(builder, allAssemblies);
 
             foreach (IComponentRegistration registration in builder.Build().ComponentRegistry.Registrations)
             {

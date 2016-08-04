@@ -10,16 +10,11 @@ using Interapptive.Shared.Data;
 using Interapptive.Shared.Threading;
 using log4net;
 using NDesk.Options;
-using ShipWorks.Actions;
-using ShipWorks.Actions.Scheduling.ActionSchedules.Enums;
-using ShipWorks.Actions.Triggers;
-using ShipWorks.AddressValidation;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Interaction;
-using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Common.Threading;
+using ShipWorks.Data.Administration.VersionSpeicifcUpdates;
 using ShipWorks.Data.Connection;
-using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Filters;
 using ShipWorks.Users.Audit;
 
@@ -185,111 +180,6 @@ namespace ShipWorks.Data.Administration
                             progressFunctionality.Detail = "Done";
                             progressFunctionality.Completed();
 
-                            // If we were upgrading from 3.9.3.0 or before we adjust the FILEGROW settings.  Can't be in a transaction, so has to be here.
-                            if (installed <= new Version(3, 9, 3, 0))
-                            {
-                                ExistingConnectionScope.ExecuteWithCommand(cmd =>
-                                {
-                                    cmd.CommandText = @"
-
-                                        DECLARE @dbName nvarchar(100)
-                                        DECLARE @isAutoShrink int
-
-                                        SET @dbName = DB_NAME()
-
-                                        SELECT @isAutoShrink = CONVERT(int,DATABASEPROPERTYEX([Name] , 'IsAutoShrink'))
-                                        FROM master.dbo.sysdatabases
-                                        where name = @dbName
-
-                                        IF(@isAutoShrink = 1)
-                                            EXECUTE ('ALTER DATABASE ' + @dbName + ' SET AUTO_SHRINK OFF')";
-
-                                    cmd.ExecuteNonQuery();
-                                });
-
-                                // Update size and growth of shipworks database
-                                ExistingConnectionScope.ExecuteWithCommand(cmd =>
-                                {
-                                    cmd.CommandText = @"
-                                        DECLARE @logSize int
-                                        DECLARE @dataSize int
-                                        DECLARE @dataFileGrowth int
-                                        DECLARE @logFileGrowth int
-                                        DECLARE @dataName nvarchar(100)
-                                        DECLARE @logName nvarchar(100)
-                                        DECLARE @dbName nvarchar(100)
-
-                                        SET @dbName = DB_NAME()
-
-                                        SELECT @dataSize = SUM(CASE WHEN type_desc = 'ROWS' THEN size END),
-                                               @dataName = MAX(CASE WHEN type_desc = 'ROWS' THEN name END),
-                                               @dataFileGrowth = SUM(CASE WHEN type_desc = 'ROWS' AND is_percent_growth=1 THEN growth ELSE 0 END),
-                                               @logSize = SUM(CASE WHEN type_desc = 'LOG' THEN size END),
-                                               @logName = MAX(CASE WHEN type_desc = 'LOG' THEN name END),
-                                               @logFileGrowth = SUM(CASE WHEN type_desc = 'LOG' AND is_percent_growth=1 THEN growth ELSE 0 END)
-                                        FROM sys.master_files
-                                        where DB_NAME(database_id) = @dbName
-
-                                        IF (@logSize < 25600)
-                                            EXECUTE ('ALTER DATABASE ' + @dbName + ' MODIFY FILE ( NAME = N''' + @logName + ''', SIZE = 200MB)' )
-
-                                        IF (@dataSize < 25600)
-                                            EXECUTE ('ALTER DATABASE ' + @dbName + ' MODIFY FILE ( NAME = N''' + @dataName + ''', SIZE = 200MB)' )
-
-                                        IF (@dataFileGrowth < 25600 OR @dataFileGrowth >= 64000)
-                                            EXECUTE ('ALTER DATABASE ' + @dbName + ' MODIFY FILE ( NAME = N''' + @dataName + ''', FILEGROWTH = 200MB)' )
-
-                                        IF (@logFileGrowth < 25600 OR @logFileGrowth >= 64000)
-                                            EXECUTE ('ALTER DATABASE ' + @dbName + ' MODIFY FILE ( NAME = N''' + @logName + ''', FILEGROWTH = 200MB)' )
-                                    ";
-
-                                    cmd.ExecuteNonQuery();
-                                });
-
-                                // Update size and growth of tempdb
-                                ExistingConnectionScope.ExecuteWithCommand(cmd =>
-                                {
-                                    cmd.CommandText = @"
-                                        DECLARE @logSize int
-                                        DECLARE @dataSize int
-                                        DECLARE @dataFileGrowth int
-                                        DECLARE @logFileGrowth int
-                                        DECLARE @dataName nvarchar(100)
-                                        DECLARE @logName nvarchar(100)
-
-                                        SELECT @dataSize = SUM(CASE WHEN type_desc = 'ROWS' THEN size END),
-                                               @dataName = MAX(CASE WHEN type_desc = 'ROWS' THEN name END),
-                                               @dataFileGrowth = SUM(CASE WHEN type_desc = 'ROWS' AND is_percent_growth=1 THEN growth ELSE 0 END),
-                                               @logSize = SUM(CASE WHEN type_desc = 'LOG' THEN size END),
-                                               @logName = MAX(CASE WHEN type_desc = 'LOG' THEN name END),
-                                               @logFileGrowth = SUM(CASE WHEN type_desc = 'LOG' AND is_percent_growth=1 THEN growth ELSE 0 END)
-                                        FROM sys.master_files
-                                        where DB_NAME(database_id) = 'tempdb'
-
-                                        IF (@logSize < 25600)
-                                            EXECUTE ('ALTER DATABASE tempdb MODIFY FILE ( NAME = N''' + @logName + ''', SIZE = 200MB)' )
-
-                                        IF (@dataSize < 25600)
-                                            EXECUTE ('ALTER DATABASE tempdb MODIFY FILE ( NAME = N''' + @dataName + ''', SIZE = 200MB)' )
-
-                                        IF (@dataFileGrowth < 25600)
-                                            EXECUTE ('ALTER DATABASE tempdb MODIFY FILE ( NAME = N''' + @dataName + ''', FILEGROWTH = 200MB)' )
-
-                                        IF (@logFileGrowth < 25600)
-                                            EXECUTE ('ALTER DATABASE tempdb MODIFY FILE ( NAME = N''' + @logName + ''', FILEGROWTH = 200MB)' )
-                                    ";
-
-                                    cmd.ExecuteNonQuery();
-                                });
-                            }
-
-                            // If we were upgrading from this version, add AddressValidation filters.
-                            if (installed < new Version(3, 12, 0, 0))
-                            {
-                                AddressValidationDatabaseUpgrade addressValidationDatabaseUpgrade = new AddressValidationDatabaseUpgrade();
-                                ExistingConnectionScope.ExecuteWithAdapter(addressValidationDatabaseUpgrade.Upgrade);
-                            }
-
                             // This was needed for databases created before Beta6.  Any ALTER DATABASE statements must happen outside of transaction, so we had to put this here (and do it every time, even if not needed)
                             SqlUtility.SetChangeTrackingRetention(ExistingConnectionScope.ScopedConnection, 1);
 
@@ -300,84 +190,7 @@ namespace ShipWorks.Data.Administration
                                 SingleUserModeScope.RestoreMultiUserMode(ExistingConnectionScope.ScopedConnection);
                             }
 
-                            // If we were upgrading from this version, Regenerate scheduled actions
-                            // To fix issue caused by breaking out assemblies
-                            if (installed < new Version(4, 5, 0, 0))
-                            {
-                                // Grab all of the actions that are enabled and schedule based
-                                ActionManager.InitializeForCurrentSession();
-                                IEnumerable<ActionEntity> actions = ActionManager.Actions.Where(a => a.Enabled && a.TriggerType == (int) ActionTriggerType.Scheduled);
-                                using (SqlAdapter adapter = new SqlAdapter())
-                                {
-                                    foreach (ActionEntity action in actions)
-                                    {
-                                        // Some trigger's state depend on the enabled state of the action
-                                        ScheduledTrigger scheduledTrigger = ActionManager.LoadTrigger(action) as ScheduledTrigger;
-
-                                        if (scheduledTrigger?.Schedule != null)
-                                        {
-                                            // Check to see if the action is a One Time action and in the past, if so we disable it
-                                            if (scheduledTrigger.Schedule.StartDateTimeInUtc < DateTime.UtcNow &&
-                                                scheduledTrigger.Schedule.ScheduleType == ActionScheduleType.OneTime)
-                                            {
-                                                action.Enabled = false;
-                                            }
-                                            else
-                                            {
-                                                scheduledTrigger.SaveExtraState(action, adapter);
-                                            }
-                                        }
-
-                                        ActionManager.SaveAction(action, adapter);
-                                    }
-
-                                    adapter.Commit();
-                                }
-                            }
-
-                            // update Configuration table Key column to have an encrypted empty string
-                            // using the GetDatabaseGuid stored procedure as the salt.
-                            if (installed < new Version(5, 0, 0, 0))
-                            {
-                                using (ILifetimeScope iocScope = IoC.BeginLifetimeScope())
-                                {
-                                    // Resolve a CustomerLicense passing in an empty string as the key parameter
-                                    ICustomerLicense customerLicense = iocScope.Resolve<ICustomerLicense>(new TypedParameter(typeof(string), string.Empty));
-
-                                    // Save the license
-                                    customerLicense.Save();
-                                }
-                            }
-
-                            // If we were upgrading from this version, Regenerate scheduled actions
-                            // To fix issue caused by breaking out assemblies
-                            if (installed < new Version(5, 4, 0, 0))
-                            {
-                                // Grab all of the actions that are enabled and schedule based
-                                ActionManager.InitializeForCurrentSession();
-                                using (SqlAdapter adapter = new SqlAdapter())
-                                {
-                                    foreach (ActionEntity action in ActionManager.Actions)
-                                    {
-                                        // Some trigger's state depend on the enabled state of the action
-                                        ScheduledTrigger scheduledTrigger = ActionManager.LoadTrigger(action) as ScheduledTrigger;
-
-                                        if (scheduledTrigger?.Schedule != null)
-                                        {
-                                            // Check to see if the action is a One Time action and in the past, if so we disable it
-                                            if (scheduledTrigger.Schedule.StartDateTimeInUtc >= DateTime.UtcNow ||
-                                                scheduledTrigger.Schedule.ScheduleType != ActionScheduleType.OneTime)
-                                            {
-                                                scheduledTrigger.SaveExtraState(action, adapter);
-                                            }
-                                        }
-
-                                        ActionManager.SaveAction(action, adapter);
-                                    }
-
-                                    adapter.Commit();
-                                }
-                            }
+                            ApplyVersionSpecificUpdates(installed);
                         }
                     }
                 }
@@ -385,6 +198,25 @@ namespace ShipWorks.Data.Administration
                 {
                     log.Error("UpdateDatabase failed", ex);
                     throw;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Apply version specific updates
+        /// </summary>
+        private static void ApplyVersionSpecificUpdates(Version installed)
+        {
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                IEnumerable<IVersionSpecificUpdate> applicableUpdates =
+                    lifetimeScope.Resolve<IEnumerable<IVersionSpecificUpdate>>()
+                        .Where(x => installed < x.AppliesTo)
+                        .OrderBy(x => x.AppliesTo);
+
+                foreach (IVersionSpecificUpdate versionSpecificUpdate in applicableUpdates)
+                {
+                    versionSpecificUpdate.Update();
                 }
             }
         }
