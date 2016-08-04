@@ -13,22 +13,21 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Upload
     public class OdbcUploadMapSettingsControlViewModel : OdbcMapSettingsControlViewModel
     {
         private readonly Func<string, IDialog> dialogFactory;
-        private readonly IWin32Window owner;
         private bool columnSourceIsTable = true;
 
         private const string InitialQueryComment =
-            "/****************************************************************/\n" +
-            "/*                                                              */\n" +
-            "/* A sample query highlighting a few of the tokens that can be  */\n" +
-            "/* used for uploading shipment details to your database has     */\n" +
-            "/* been provided below.                                         */\n" +
-            "/*                                                              */\n" +
-            "/* For more samples and additional information on how to        */\n" +
-            "/* leverage ShipWorks tokens when uploading shipment details    */\n" +
-            "/* using a custom query, please visit                           */\n" +
-            "/* http://support.shipworks.com/                                */\n" +
-            "/*                                                              */\n" +
-            "/****************************************************************/\n\n" +
+            "/**********************************************************************/\n" +
+            "/*                                                                    */\n" +
+            "/* A sample query highlighting a few of the tokens that can be        */\n" +
+            "/* used for uploading shipment details to your database has           */\n" +
+            "/* been provided below.                                               */\n" +
+            "/*                                                                    */\n" +
+            "/* For more samples and additional information on how to              */\n" +
+            "/* leverage ShipWorks tokens when uploading shipment details          */\n" +
+            "/* using a custom query, please visit                                 */\n" +
+            "/* http://support.shipworks.com/support/solutions/articles/4000085355 */\n" +
+            "/*                                                                    */\n" +
+            "/**********************************************************************/\n\n" +
             "UPDATE ShipmentDetails\n" +
             "SET TrackingNumber = '{//TrackingNumber}'\n" +
             "WHERE OrderID = {//Order/Number}";
@@ -37,11 +36,9 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Upload
         /// Initializes a new instance of the <see cref="OdbcUploadMapSettingsControlViewModel"/> class.
         /// </summary>
         public OdbcUploadMapSettingsControlViewModel(Func<string, IDialog> dialogFactory, IMessageHelper messageHelper,
-            Func<string, IOdbcColumnSource> columnSourceFactory, IWin32Window owner) :
-                base(messageHelper, columnSourceFactory)
+            Func<string, IOdbcColumnSource> columnSourceFactory) : base(messageHelper, columnSourceFactory)
         {
             this.dialogFactory = dialogFactory;
-            this.owner = owner;
             CustomQuery = InitialQueryComment;
         }
 

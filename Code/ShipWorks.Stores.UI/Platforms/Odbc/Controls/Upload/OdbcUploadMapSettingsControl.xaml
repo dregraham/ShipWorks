@@ -5,8 +5,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:system="clr-namespace:System;assembly=mscorlib"
              xmlns:ui="http://schemas.shipworks.com/ui"
-             xmlns:viewModels="clr-namespace:ShipWorks.Stores.UI.Platforms.Odbc.ViewModels"
              xmlns:upload="clr-namespace:ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Upload"
+             xmlns:viewModels="clr-namespace:ShipWorks.Stores.UI.Platforms.Odbc.ViewModels"
              Width="540"
              Height="500"
              Background="{x:Static SystemColors.ControlBrush}"
@@ -95,12 +95,13 @@
                 <RadioButton Content="Table"
                              GroupName="ColumnSource"
                              IsChecked="{Binding ColumnSourceIsTable,
-                                        Converter={StaticResource RadioButtonCheckedConverter},
-                                        ConverterParameter={StaticResource True}}" />
-                <RadioButton Content="Query" GroupName="ColumnSource"
+                                                 Converter={StaticResource RadioButtonCheckedConverter},
+                                                 ConverterParameter={StaticResource True}}" />
+                <RadioButton Content="Query"
+                             GroupName="ColumnSource"
                              IsChecked="{Binding ColumnSourceIsTable,
-                                        Converter={StaticResource RadioButtonCheckedConverter},
-                                        ConverterParameter={StaticResource False}}"/>
+                                                 Converter={StaticResource RadioButtonCheckedConverter},
+                                                 ConverterParameter={StaticResource False}}" />
             </StackPanel>
         </Grid>
         <DockPanel Grid.Row="1"
@@ -153,7 +154,7 @@
             </ScrollViewer>
             <TextBlock Grid.Row="2">
                 For help writing your query,
-                <Hyperlink NavigateUri="http://support.shipworks.com" RequestNavigate="OpenLink">click here.</Hyperlink>
+                <Hyperlink NavigateUri="http://support.shipworks.com/support/solutions/articles/4000085355" RequestNavigate="OpenLink">click here.</Hyperlink>
             </TextBlock>
         </Grid>
     </Grid>
