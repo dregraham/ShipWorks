@@ -135,7 +135,6 @@ Source: {#AppArtifacts}\SandDock.dll; DestDir: {app}; Flags: overwritereadonly i
 Source: {#AppArtifacts}\SD.LLBLGen.Pro.DQE.SqlServer.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
 Source: {#AppArtifacts}\SD.LLBLGen.Pro.ORMSupportClasses.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
 Source: {#AppArtifacts}\ShipWorks.Core.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
-Source: {#AppArtifacts}\ShipWorks.Data.Adapter.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
 Source: {#AppArtifacts}\ShipWorks.Data.Model.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
 Source: {#AppArtifacts}\ShipWorks.Res.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
 Source: {#AppArtifacts}\ShipWorks.Shared.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
@@ -165,7 +164,6 @@ Source: {#AppArtifacts}\Win32\ShipWorks.Native.dll; DestDir: {app}; Flags: overw
     Source: {#AppArtifacts}\ShipWorks.pdb; DestDir: {app}; Flags: overwritereadonly ignoreversion
     Source: {#AppArtifacts}\ShipWorks.Shared.pdb; DestDir: {app}; Flags: overwritereadonly ignoreversion
     Source: {#AppArtifacts}\ShipWorks.Data.Model.pdb; DestDir: {app}; Flags: overwritereadonly ignoreversion
-    Source: {#AppArtifacts}\ShipWorks.Data.Adapter.pdb; DestDir: {app}; Flags: overwritereadonly ignoreversion
     Source: {#AppArtifacts}\ShipWorks.SqlServer.pdb; DestDir: {app}; Flags: overwritereadonly ignoreversion
     Source: {#AppArtifacts}\Interapptive.Shared.pdb; DestDir: {app}; Flags: overwritereadonly ignoreversion
 #endif
