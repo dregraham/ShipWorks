@@ -248,7 +248,10 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
             }
             else
             {
-                CustomQuery = columnSourceFromStore;
+                if (!string.IsNullOrWhiteSpace(columnSourceFromStore))
+                {
+                    CustomQuery = columnSourceFromStore;
+                }
             }
         }
 
