@@ -954,7 +954,6 @@ namespace ShipWorks.Shipping
             if (newServiceControl == null)
             {
                 serviceControlArea.Controls.Clear();
-                serviceControlArea.Controls.Add(newServiceControl);
                 return;
             }
 
