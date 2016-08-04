@@ -953,6 +953,8 @@ namespace ShipWorks.Shipping
             // If there is a new service control, add it to our controls under either the old one, or the blank panel we created.
             if (newServiceControl == null)
             {
+                serviceControlArea.Controls.Clear();
+                serviceControlArea.Controls.Add(newServiceControl);
                 return;
             }
 
