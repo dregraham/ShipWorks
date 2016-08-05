@@ -12,7 +12,6 @@ using log4net;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Data;
 using ShipWorks.Data.Administration;
-using ShipWorks.Data.Administration.UpdateFrom2x.Database;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores;
@@ -260,12 +259,6 @@ namespace ShipWorks.ApplicationCore.Services
                     if (!SqlSchemaUpdater.IsCorrectSchemaVersion())
                     {
                         LogThrottledWarn("Schema is not the correct version.");
-                        return hasChanged;
-                    }
-
-                    if (MigrationController.IsMigrationInProgress())
-                    {
-                        LogThrottledWarn("A ShipWorks 2 upgrade is in progress.");
                         return hasChanged;
                     }
 

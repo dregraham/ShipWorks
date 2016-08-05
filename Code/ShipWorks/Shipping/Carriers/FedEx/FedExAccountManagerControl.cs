@@ -1,15 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
-using ShipWorks.Data.Model.EntityClasses;
 using Divelements.SandGrid;
-using ShipWorks.UI;
 using Interapptive.Shared.UI;
+using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
 {
@@ -50,11 +43,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 sandGrid.Rows.Add(row);
                 row.Tag = shipper;
 
-                if (shipper.Is2xMigrationPending)
-                {
-                    row.Cells[0].Text += " (ShipWorks 2)";
-                }
-
                 if (shipper.FedExAccountID == initialShipperID)
                 {
                     row.Selected = true;
@@ -84,7 +72,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 add.Hide();
 
                 // Adjust the location of the remove button based on the visiblity of the add button and
-                // make sure it's on top of the add button. 
+                // make sure it's on top of the add button.
                 delete.Top = add.Top;
                 delete.BringToFront();
             }
@@ -111,24 +99,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             FedExAccountEntity shipper = (FedExAccountEntity) sandGrid.SelectedElements[0].Tag;
             initialShipperID = shipper.FedExAccountID;
 
-            if (shipper.Is2xMigrationPending)
+            using (FedExAccountEditorDlg dlg = new FedExAccountEditorDlg(shipper))
             {
-                DialogResult result = MessageHelper.ShowQuestion(this, "This account was migrated from ShipWorks 2.\n\nWould you like to configure the account for use in ShipWorks 3?");
-
-                if (result == DialogResult.OK)
-                {
-                    using (FedExSetupWizard setupWizard = new FedExSetupWizard(shipper))
-                    {
-                        setupWizard.ShowDialog(this);
-                    }
-                }
-            }
-            else
-            {
-                using (FedExAccountEditorDlg dlg = new FedExAccountEditorDlg(shipper))
-                {
-                    dlg.ShowDialog(this);
-                }
+                dlg.ShowDialog(this);
             }
 
             FedExAccountManager.CheckForChangesNeeded();

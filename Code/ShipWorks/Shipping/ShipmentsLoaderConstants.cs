@@ -18,10 +18,10 @@ namespace ShipWorks.Shipping
         {
             get
             {
-                int maxAllowedOrders = ShippingSettings.Fetch().ShipmentEditLimit;
+                int? maxAllowedOrders = ShippingSettings.Fetch()?.ShipmentEditLimit;
 
-                return MaxAllowedOrderOptions.Contains(maxAllowedOrders) ?
-                    maxAllowedOrders : MaxAllowedOrderOptions.First();
+                return maxAllowedOrders.HasValue && MaxAllowedOrderOptions.Contains(maxAllowedOrders.Value) ?
+                    maxAllowedOrders.Value : MaxAllowedOrderOptions.First();
             }
         }
 

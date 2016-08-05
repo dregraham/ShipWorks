@@ -2,19 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.Data;
-using System.Text;
 using System.Windows.Forms;
-using ShipWorks.Data.Model.EntityClasses;
 using Divelements.SandGrid;
-using Interapptive.Shared.Utility;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.UI.Controls.SandGrid;
-using ShipWorks.Data;
-using ShipWorks.UI.Utility;
-using ShipWorks.Templates.Management;
 using ShipWorks.ApplicationCore.Appearance;
-using ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.PostMigration;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Templates.Management;
+using ShipWorks.UI.Controls.SandGrid;
+using ShipWorks.UI.Utility;
 
 namespace ShipWorks.Templates.Controls
 {
@@ -479,7 +473,8 @@ namespace ShipWorks.Templates.Controls
                 // ID would be null for our fake root folder
                 if (row.IsFolder && !row.TemplateTreeNode.IsRoot)
                 {
-                    row.Expanded = folderState.IsExpanded(row.TemplateTreeNode.Entity, defaultExpanded && !row.TemplateTreeNode.Folder.IsBuiltin && row.TemplateTreeNode.Name != ImportTemplatesWizardPage.ImportRootFolderName);
+                    row.Expanded = folderState.IsExpanded(row.TemplateTreeNode.Entity,
+                        defaultExpanded && !row.TemplateTreeNode.Folder.IsBuiltin);
                 }
             }
         }
@@ -507,7 +502,7 @@ namespace ShipWorks.Templates.Controls
         }
 
         /// <summary>
-        /// Ensure that the row that represents the specified node is visible 
+        /// Ensure that the row that represents the specified node is visible
         /// </summary>
         public void EnsureNodeVisible(TemplateTreeNode treeNode)
         {
@@ -574,7 +569,7 @@ namespace ShipWorks.Templates.Controls
             }
 
             return null;
-        }   
+        }
 
         /// <summary>
         /// Begin a rename operation on the given filter
@@ -636,7 +631,7 @@ namespace ShipWorks.Templates.Controls
                 }
                 else
                 {
-                    rows = row.ParentRow.NestedRows; 
+                    rows = row.ParentRow.NestedRows;
                 }
 
                 rows.SetSort(new GridColumn[] { sandGrid.Columns[0] }, new ListSortDirection[] { ListSortDirection.Ascending });

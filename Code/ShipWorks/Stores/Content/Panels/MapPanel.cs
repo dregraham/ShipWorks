@@ -13,13 +13,12 @@ using Interapptive.Shared.Collections;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore.Interaction;
+using ShipWorks.Core.Common.Threading;
 using ShipWorks.Data;
 using ShipWorks.Data.Grid;
 using ShipWorks.Data.Model;
 using ShipWorks.Filters;
-using ShipWorks.Shipping.ShipSense.Hashing;
 using Image = System.Drawing.Image;
-using ShipWorks.Core.Common.Threading;
 
 namespace ShipWorks.Stores.Content.Panels
 {
@@ -50,13 +49,13 @@ namespace ShipWorks.Stores.Content.Panels
         /// Load the state of the panel.
         /// </summary>
         public void LoadState()
-        {}
+        { }
 
         /// <summary>
         /// Save the state of the panel.
         /// </summary>
         public void SaveState()
-        {}
+        { }
 
         /// <summary>
         /// Indicates if the panel can handle multiple selected items at one time.
@@ -224,7 +223,7 @@ namespace ShipWorks.Stores.Content.Panels
             {
                 GoogleResponse googleResponse = new GoogleResponse();
 
-                if (((HttpWebResponse)ex.Response).StatusCode == HttpStatusCode.Forbidden)
+                if (((HttpWebResponse) ex.Response).StatusCode == HttpStatusCode.Forbidden)
                 {
                     googleResponse.IsThrottled = true;
                 }
@@ -247,11 +246,11 @@ namespace ShipWorks.Stores.Content.Panels
                 Size returnSize = new Size(640, 640);
                 if (panelSize.Width > panelSize.Height)
                 {
-                    returnSize.Height = (int)(640*((double)panelSize.Height/panelSize.Width));
+                    returnSize.Height = (int) (640 * ((double) panelSize.Height / panelSize.Width));
                 }
                 else
                 {
-                    returnSize.Width = (int)(640*((double)panelSize.Width/panelSize.Height));
+                    returnSize.Width = (int) (640 * ((double) panelSize.Width / panelSize.Height));
                 }
                 return returnSize;
             }
@@ -276,7 +275,7 @@ namespace ShipWorks.Stores.Content.Panels
         /// Update the content to reflect changes to the loaded stores
         /// </summary>
         public void UpdateStoreDependentUI()
-        {}
+        { }
 
 
         /// <summary>
@@ -296,7 +295,7 @@ namespace ShipWorks.Stores.Content.Panels
         }
 
         /// <summary>
-        /// Refresh the existing selected content by requerying for the relevant keys to ensure an up-to-date related row 
+        /// Refresh the existing selected content by requerying for the relevant keys to ensure an up-to-date related row
         /// list with up-to-date displayed entity content.
         /// </summary>
         public Task ReloadContent()
@@ -363,7 +362,7 @@ namespace ShipWorks.Stores.Content.Panels
             {
                 return;
             }
-            
+
             string url = string.Format("https://www.google.com/maps/place/{0}+{1}+{2}+{3}+{4}",
                 addressAdapter.Street1,
                 addressAdapter.City,

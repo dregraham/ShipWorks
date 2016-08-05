@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Services.Protocols;
 using System.Xml;
-using Xunit;
+using Interapptive.Shared.Net;
+using log4net;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping;
 using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx;
@@ -15,19 +17,16 @@ using ShipWorks.Shipping.Carriers.FedEx.Api.Close.Response.Manipulators;
 using ShipWorks.Shipping.Carriers.FedEx.Api.PackageMovement.Response;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response;
-using ShipWorks.Shipping.Carriers.FedEx.WebServices.PackageMovement;
+using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Close;
+using ShipWorks.Shipping.Carriers.FedEx.WebServices.PackageMovement;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate;
 using ShipWorks.Shipping.Editing.Rating;
+using ShipWorks.Shipping.Settings;
 using ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping;
-using log4net;
+using Xunit;
 using Notification = ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate.Notification;
 using ServiceType = ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate.ServiceType;
-using Interapptive.Shared.Net;
-using ShipWorks.Shipping.Settings;
-using ShipWorks.Shipping;
-using ShipWorks.Shipping.Carriers.FedEx.Enums;
-using ShipWorks.Data.Model;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
 {
@@ -230,7 +229,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
 
             excludedServiceTypeRepository = new Mock<IExcludedServiceTypeRepository>();
             excludedServiceTypeRepository.Setup(x => x.GetExcludedServiceTypes(It.IsAny<ShipmentType>()))
-                .Returns(new List<ExcludedServiceTypeEntity> { new ExcludedServiceTypeEntity((int)ShipmentTypeCode.FedEx, (int)FedExServiceType.FedExGround) });
+                .Returns(new List<ExcludedServiceTypeEntity> { new ExcludedServiceTypeEntity((int) ShipmentTypeCode.FedEx, (int) FedExServiceType.FedExGround) });
 
             FedExShippingClerkParameters parameters = new FedExShippingClerkParameters()
             {
@@ -357,45 +356,13 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
 
                 testObject.Ship(shipmentEntity);
             }
-                // catch the exception that is thrown so we can verify the correct message gets logged
-            catch (FedExException)
-            {}
-            finally
-            {
-                // Hard code the shipment IDn the expected error message since it was setup in the shipment above
-                const string expectedErrorMessage = "Shipment ID 1001 does not have a FedEx account selected. Select a valid FedEx account that is available in ShipWorks.";
-                log.Verify(l => l.Error(expectedErrorMessage), Times.Once());
-            }
-        }
-
-        [Fact]
-        public void Ship_ThrowsFedExException_WhenFedExAccountIsPending2xMigration()
-        {
-            // Create the shipment and setup the repository to return an account that needs to be 
-            // migrated for this test (indicated by the meter number)
-            settingsRepository.Setup(r => r.GetAccount(It.IsAny<ShipmentEntity>())).Returns(new FedExAccountEntity() { MeterNumber = string.Empty });
-
-            Assert.Throws<FedExException>(() => testObject.Ship(shipmentEntity));
-        }
-
-        [Fact]
-        public void Ship_WritesToErrorLog_WhenFedExAccountIsPending2xMigration()
-        {
-            try
-            {
-                // Create the shipment and setup the repository to return an account that needs to be 
-                // migrated for this test (indicated by the meter number)
-                settingsRepository.Setup(r => r.GetAccount(It.IsAny<ShipmentEntity>())).Returns(new FedExAccountEntity() { AccountNumber = "123ABC", MeterNumber = string.Empty });
-
-                testObject.Ship(shipmentEntity);
-            }
-                // catch the exception that is thrown so we can verify the correct message gets logged
+            // catch the exception that is thrown so we can verify the correct message gets logged
             catch (FedExException)
             { }
             finally
             {
-                // Hard code the account number in the expected error message since it is being mocked
-                const string expectedErrorMessage = "Attempt to use a FedEx account migrated from ShipWorks 2 that has not been configured for ShipWorks 3. The FedEx account (account number 123ABC) needs to be configured for ShipWorks3.";
+                // Hard code the shipment IDn the expected error message since it was setup in the shipment above
+                const string expectedErrorMessage = "Shipment ID 1001 does not have a FedEx account selected. Select a valid FedEx account that is available in ShipWorks.";
                 log.Verify(l => l.Error(expectedErrorMessage), Times.Once());
             }
         }
@@ -447,7 +414,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         [Fact]
         public void Ship_CatchesWebException_AndThrowsFedExException()
         {
-            // Setup the ship request to throw a "web-request-type" of exception 
+            // Setup the ship request to throw a "web-request-type" of exception
             shippingRequest.Setup(r => r.Submit()).Throws(new TimeoutException("This is slow"));
 
             Assert.Throws<FedExException>(() => testObject.Ship(shipmentEntity));
@@ -590,7 +557,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         {
             // This is a borderline integration test rather than unit test, since we're returning a "real" ground close response which will
             // be processed from the test object. Since it's the real ground request we have to have the knowledge of the inner workings of
-            // the response and configure the reply to simulate the close entity being populated (i.e. the integration test characteristics). 
+            // the response and configure the reply to simulate the close entity being populated (i.e. the integration test characteristics).
             ShipWorks.Shipping.Carriers.FedEx.WebServices.Close.Notification[] notifications = new ShipWorks.Shipping.Carriers.FedEx.WebServices.Close.Notification[]
             {
                 new ShipWorks.Shipping.Carriers.FedEx.WebServices.Close.Notification() { Code = "8" }
@@ -639,7 +606,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         [Fact]
         public void CloseGround_CatchesWebException_AndThrowsFedExException()
         {
-            // Setup the ground request to throw a "web-request-type" of exception 
+            // Setup the ground request to throw a "web-request-type" of exception
             groundCloseRequest.Setup(r => r.Submit()).Throws(new TimeoutException("This is slow"));
 
             FedExAccountEntity account = new FedExAccountEntity();
@@ -711,7 +678,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         {
             // This is a borderline integration test rather than unit test, since we're returning a "real" smartPost close response which will
             // be processed from the test object. Since it's the real smartPost request we have to have the knowledge of the inner workings of
-            // the response and configure the reply to simulate the close entity being populated (i.e. the integration test characteristics). 
+            // the response and configure the reply to simulate the close entity being populated (i.e. the integration test characteristics).
             ShipWorks.Shipping.Carriers.FedEx.WebServices.Close.Notification[] notifications = new ShipWorks.Shipping.Carriers.FedEx.WebServices.Close.Notification[]
             {
                 new ShipWorks.Shipping.Carriers.FedEx.WebServices.Close.Notification() { Code = "8" }
@@ -761,7 +728,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         [Fact]
         public void CloseSmartPost_CatchesWebException_AndThrowsFedExException()
         {
-            // Setup the smartPost request to throw a "web-request-type" of exception 
+            // Setup the smartPost request to throw a "web-request-type" of exception
             smartPostCloseRequest.Setup(r => r.Submit()).Throws(new TimeoutException("This is slow"));
 
             FedExAccountEntity account = new FedExAccountEntity();
@@ -953,7 +920,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
                 testObject.RegisterAccount(new FedExAccountEntity());
             }
             catch (FedExException)
-            {}
+            { }
 
             finally
             {
@@ -981,7 +948,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
                 testObject.RegisterAccount(new FedExAccountEntity());
             }
             catch (FedExException)
-            {}
+            { }
 
             finally
             {
@@ -1010,7 +977,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
                 testObject.RegisterAccount(new FedExAccountEntity());
             }
             catch (ArgumentNullException)
-            {}
+            { }
 
             finally
             {
@@ -1032,7 +999,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
                 testObject.GetRates(shipmentEntity);
             }
             catch (FedExException)
-            {}
+            { }
 
             log.Verify(l => l.Warn("The FedEx certificate did not pass inspection and could not be trusted."));
         }
@@ -1054,7 +1021,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
                 testObject.GetRates(shipmentEntity);
             }
             catch (FedExException)
-            {}
+            { }
 
             log.Verify(l => l.Warn("The FedEx certificate did not pass inspection and could not be trusted."));
         }
@@ -1220,7 +1187,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
 
             // Setup the requests to return the native rate reply
             rateResponse.Setup(r => r.NativeResponse).Returns(nativeRateReply);
-            
+
             RateGroup rates = testObject.GetRates(shipmentEntity);
 
             // We should get rates back (priority overnight for basic, smart post, and One Rate)
@@ -1380,7 +1347,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             RateGroup rates = testObject.GetRates(shipmentEntity);
 
             // Multiply by two to account for the basic rate, smart post rates, and One Rate rates
-            Assert.Equal(nativeRateReply.RateReplyDetails.Length*3, rates.Rates.Count);
+            Assert.Equal(nativeRateReply.RateReplyDetails.Length * 3, rates.Rates.Count);
         }
 
 
@@ -1389,7 +1356,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         {
             testObject.GetRates(shipmentEntity);
 
-            // Check that a rate request was created that supplied a list of specialized manipulators 
+            // Check that a rate request was created that supplied a list of specialized manipulators
             // containing one manipulator that was the smart post manipulator
             requestFactory.Verify(f => f.CreateRateRequest(shipmentEntity, It.Is<List<ICarrierRequestManipulator>>
                 (l => l != null && l.Count == 1 && l[0].GetType() == typeof(FedExRateSmartPostManipulator))), Times.Once());
@@ -1400,7 +1367,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         {
             testObject.GetRates(shipmentEntity);
 
-            // Check that a rate request was created that supplied a list of specialized manipulators 
+            // Check that a rate request was created that supplied a list of specialized manipulators
             // containing one manipulator that was the One Rate manipulator
             requestFactory.Verify(f => f.CreateRateRequest(shipmentEntity, It.Is<List<ICarrierRequestManipulator>>
                 (l => l != null && l.Count == 1 && l[0].GetType() == typeof(FedExRateOneRateManipulator))), Times.Once());
@@ -1426,7 +1393,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
                 testObject.GetRates(shipmentEntity);
             }
             catch (FedExSoapCarrierException)
-            {}
+            { }
 
             finally
             {
@@ -1454,7 +1421,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
                 testObject.GetRates(shipmentEntity);
             }
             catch (FedExException)
-            {}
+            { }
 
             finally
             {
@@ -1482,7 +1449,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
                 testObject.GetRates(shipmentEntity);
             }
             catch (FedExException)
-            {}
+            { }
 
             finally
             {
@@ -1511,7 +1478,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
                 testObject.GetRates(shipmentEntity);
             }
             catch (ArgumentNullException)
-            {}
+            { }
 
             finally
             {
@@ -1522,7 +1489,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         [Fact]
         public void GetRates_DoesNotThrowException_WhenSmartPostRatesCatchesFedExException()
         {
-            // Just throw an error when the request is created using the specialized 
+            // Just throw an error when the request is created using the specialized
             // manipulators (i.e. the smart post rate request). Setup the call to create
             // the "basic" rates as well, so the exception is not thrown when a null value is supplied
             requestFactory.Setup(f => f.CreateRateRequest(It.IsAny<ShipmentEntity>(), It.IsAny<List<ICarrierRequestManipulator>>())).Throws(new FedExException());
@@ -1534,7 +1501,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         [Fact]
         public void GetRates_WritesWarningToLog_WhenSmartPostRatesCatchesFedExException()
         {
-            // Just throw an error when the request is created using the specialized 
+            // Just throw an error when the request is created using the specialized
             // manipulators (i.e. the smart post rate request). Setup the call to create
             // the "basic" rates as well, so the exception is not thrown when a null value is supplied
             requestFactory.Setup(f => f.CreateRateRequest(It.IsAny<ShipmentEntity>(), It.IsAny<List<ICarrierRequestManipulator>>())).Throws(new FedExException());
@@ -1548,7 +1515,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         [Fact]
         public void GetRates_DoesNotThrowException_WhenSmartPostRatesCatchesFedExApiException()
         {
-            // Just throw an error when the request is created using the specialized 
+            // Just throw an error when the request is created using the specialized
             // manipulators (i.e. the smart post rate request). Setup the call to create
             // the "basic" rates as well, so the exception is not thrown when a null value is supplied
             Notification[] notifications = new Notification[1] { new Notification { Message = "message" } };
@@ -1562,7 +1529,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         [Fact]
         public void GetRates_WritesWarningToLog_WhenSmartPostRatesCatchesFedExApiException()
         {
-            // Just throw an error when the request is created using the specialized 
+            // Just throw an error when the request is created using the specialized
             // manipulators (i.e. the smart post rate request). Setup the call to create
             // the "basic" rates as well, so the exception is not thrown when a null value is supplied
             Notification[] notifications = new Notification[1] { new Notification { Message = "message" } };

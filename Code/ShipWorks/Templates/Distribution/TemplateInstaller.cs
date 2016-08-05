@@ -1,25 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Text;
-using ShipWorks.Data;
-using ShipWorks.Data.Model.EntityClasses;
-using log4net;
-using System.Reflection;
-using ShipWorks.Data.Connection;
-using Interapptive.Shared.Utility;
 using System.Xml;
+using System.Xml.Linq;
 using System.Xml.XPath;
+using Interapptive.Shared.Utility;
+using log4net;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Templates.Management.Skeletons;
 using ShipWorks.Templates.Media;
 using ShipWorks.Templates.Saving;
-using System.Xml.Linq;
-using ShipWorks.ApplicationCore;
-using System.IO;
-using Interapptive.Shared.IO.Zip;
-using System.Windows.Forms;
-using ShipWorks.Templates.Management.Skeletons;
-using ShipWorks.Data.Model;
-using ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode;
 
 namespace ShipWorks.Templates.Distribution
 {
@@ -31,7 +24,6 @@ namespace ShipWorks.Templates.Distribution
         static readonly ILog log = LogManager.GetLogger(typeof(TemplateInstaller));
 
         string sourceDirectory;
-        TemplateVersionType versionType;
 
         /// <summary>
         /// Represents a template that is pending installation
@@ -68,14 +60,13 @@ namespace ShipWorks.Templates.Distribution
         /// Raised when a template is about to be installed
         /// </summary>
         public event EventHandler<TemplateInstallingEventArgs> TemplateInstalling;
-        
+
         /// <summary>
         /// Constructor
         /// </summary>
-        public TemplateInstaller(string sourceDirectory, TemplateVersionType versionType)
+        public TemplateInstaller(string sourceDirectory)
         {
             this.sourceDirectory = sourceDirectory;
-            this.versionType = versionType;
         }
 
         /// <summary>
@@ -165,15 +156,7 @@ namespace ShipWorks.Templates.Distribution
             // Read the template XSL.
             template.Xsl = PrepareTemplateXsl(installInfo);
 
-            // Read the template settings from the embedded settings resource
-            if (versionType == TemplateVersionType.Version3)
-            {
-                ReadTemplateSettings(template, installInfo.SourceFullName);
-            }
-            else
-            {
-                Template2xHelper.ReadTemplateSettings(template);
-            }
+            ReadTemplateSettings(template, installInfo.SourceFullName);
 
             // Save the template.
             TemplateEditingService.SaveTemplate(template, true, SqlAdapter.Default);
@@ -206,12 +189,6 @@ namespace ShipWorks.Templates.Distribution
 
                 // First we have to fixup the imports, which may be needed by subsequent steps
                 changed |= FixupXslImports(xDocument);
-
-                // Now fixup image paths for v2 Graphic Order Template derivatives
-                if (versionType == TemplateVersionType.Version2)
-                {
-                    changed |= Template2xHelper.ConvertTemplateContent(xDocument);
-                }
 
                 // And finally prepare image paths for any known relative image locations
                 changed |= PrepareImagePaths(xDocument, templateDiretory);
@@ -319,7 +296,7 @@ namespace ShipWorks.Templates.Distribution
             template.Context = (int) EnumHelper.GetEnumList<TemplateInputContext>().Single(c => c.Description == XPathUtility.Evaluate(xpath, "//General/Context", "")).Value;
             template.OutputFormat = (int) EnumHelper.GetEnumList<TemplateOutputFormat>().Single(f => f.Description == XPathUtility.Evaluate(xpath, "//General/OutputFormat", "")).Value;
             template.OutputEncoding = XPathUtility.Evaluate(xpath, "//General/OutputEncoding", "utf-8");
-        
+
             // Page Setup
             template.PageWidth = XPathUtility.Evaluate(xpath, "//PageSetup/Width", 8.5);
             template.PageHeight = XPathUtility.Evaluate(xpath, "//PageSetup/Height", 11.0);
@@ -366,7 +343,7 @@ namespace ShipWorks.Templates.Distribution
                 var siblingFolders = (parent != null) ? parent.ChildFolders : tree.RootFolders;
 
                 TemplateFolderEntity folder = siblingFolders.SingleOrDefault(f => f.Name == folderName);
-                
+
                 if (folder != null)
                 {
                     parent = folder;

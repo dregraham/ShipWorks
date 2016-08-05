@@ -208,11 +208,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 throw new EndiciaException($"No {EnumHelper.GetDescription((ShipmentTypeCode) postal.Shipment.ShipmentType)} account is selected for the shipment.");
             }
 
-            if (account.IsDazzleMigrationPending)
-            {
-                throw new EndiciaException("The Endicia account selected for the shipment was migrated from ShipWorks 2, and has not yet been configured for ShipWorks 3.");
-            }
-
             if (postal.Shipment.ShipmentType == (int) ShipmentTypeCode.Endicia)
             {
                 using (var lifetimeScope = IoC.BeginLifetimeScope())

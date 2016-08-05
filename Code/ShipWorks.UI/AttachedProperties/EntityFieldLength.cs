@@ -10,8 +10,6 @@ namespace ShipWorks.UI.AttachedProperties
     /// </summary>
     public static class EntityFieldLength
     {
-        private static readonly EntityFieldLengthProvider entityFieldLengthProvider = new EntityFieldLengthProvider();
-
         public static readonly DependencyProperty FieldNameProperty = DependencyProperty.RegisterAttached("FieldName", typeof(EntityFieldLengthSource),
                 typeof(EntityFieldLength), new PropertyMetadata(EntityFieldLengthSource.None, OnNameChanged));
 
