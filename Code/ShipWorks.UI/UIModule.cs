@@ -89,6 +89,9 @@ namespace ShipWorks.UI
             builder.RegisterType<GenericModuleBehavior>()
                 .Keyed<IChannelLimitBehavior>(EditionFeature.GenericModule);
 
+            builder.RegisterType<OdbcBehavior>()
+                .Keyed<IChannelLimitBehavior>(EditionFeature.Odbc);
+
             builder.RegisterType<ChannelsOutOfSyncBehavior>()
                 .Keyed<IChannelLimitBehavior>(EditionFeature.ClientChannelsAccountedFor);
         }

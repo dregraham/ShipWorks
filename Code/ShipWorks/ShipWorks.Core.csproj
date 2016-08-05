@@ -697,6 +697,7 @@
     <Compile Include="ApplicationCore\Licensing\ComplianceLevel.cs" />
     <Compile Include="ApplicationCore\Licensing\CreditCardTypeInternal.cs" />
     <Compile Include="ApplicationCore\Licensing\LicenseCipherKey.cs" />
+    <Compile Include="ApplicationCore\Licensing\LicenseEnforcement\OdbcStoreTypeEnforcer.cs" />
     <Compile Include="ApplicationCore\Licensing\UpsStatus.cs" />
     <Compile Include="ApplicationCore\Licensing\ITangoWebClientFactory.cs" />
     <Compile Include="ApplicationCore\Licensing\UspsPendingAccountType.cs" />
