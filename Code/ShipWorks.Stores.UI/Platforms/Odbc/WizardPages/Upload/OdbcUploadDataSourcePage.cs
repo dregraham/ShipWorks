@@ -18,6 +18,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages.Upload
     {
         private readonly IOdbcDataSourceService dataSourceService;
         private OdbcStoreEntity store;
+        private bool dataSourceLoaded;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcUploadDataSourcePage"/> class.
@@ -49,9 +50,10 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages.Upload
                 e.Skip = true;
                 e.RaiseStepEventWhenSkipping = false;
             }
-            else if (!string.IsNullOrWhiteSpace(store.UploadConnectionString))
+            else if (!string.IsNullOrWhiteSpace(store.UploadConnectionString) && !dataSourceLoaded)
             {
                 odbcDataSourceControl.LoadDataSource(dataSourceService.GetUploadDataSource(store));
+                dataSourceLoaded = true;
             }
         }
 
