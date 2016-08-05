@@ -22,7 +22,7 @@ namespace ShipWorks.Shipping
 
                 return maxAllowedOrders.HasValue && MaxAllowedOrderOptions.Contains(maxAllowedOrders.Value) ?
                     maxAllowedOrders.Value :
-                    MaxAllowedOrderOptions.First();
+                    DefaultMaxAllowedOrders;
             }
         }
 

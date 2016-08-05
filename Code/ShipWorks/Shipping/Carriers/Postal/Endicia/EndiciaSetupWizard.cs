@@ -33,7 +33,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
     {
         EndiciaAccountEntity account;
         EndiciaApiClient endiciaApiClient = new EndiciaApiClient();
-
         // User has completed the signup process for the account
         bool signupCompleted = false;
 

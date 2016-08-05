@@ -120,7 +120,7 @@ namespace ShipWorks.ApplicationCore.Licensing
                 license = LicenseDecoder.Decode(key, "2.f");
             }
 
-            // Then try the old ShipWorks 2 version
+	        // Now see if its a freemium license
             if (license == null)
             {
                 license = LicenseDecoder.Decode(key, "2.m");
