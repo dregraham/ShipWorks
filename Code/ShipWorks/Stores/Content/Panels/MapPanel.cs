@@ -20,6 +20,8 @@ using ShipWorks.Data.Grid;
 using ShipWorks.Data.Model;
 using ShipWorks.Filters;
 using ShipWorks.Messaging.Messages;
+using ShipWorks.Messaging.Messages.Panels;
+using TD.SandDock;
 using Image = System.Drawing.Image;
 
 namespace ShipWorks.Stores.Content.Panels
@@ -30,8 +32,9 @@ namespace ShipWorks.Stores.Content.Panels
     public partial class MapPanel : UserControl, IDockingPanelContent
     {
         private readonly static FilterTarget[] supportedTargets = new[] { FilterTarget.Orders, FilterTarget.Customers };
-        private LruCache<string, Image> imageCache = new LruCache<string, Image>(100);
-        private IObserver<PersonAdapter> observer;
+        private LruCache<string, GoogleResponse> imageCache = new LruCache<string, GoogleResponse>(100);
+        private IObserver<PersonAdapter> imageLoadingObserver;
+        private bool isPanelShown = false;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MapPanel"/> class.
@@ -40,6 +43,16 @@ namespace ShipWorks.Stores.Content.Panels
         {
             InitializeComponent();
             Load += OnMapPanelLoad;
+
+            Messenger.Current.OfType<PanelShownMessage>()
+                .Where(x => IsOwnedBy(x.Panel))
+                .Where(_ => !isPanelShown)
+                .Do(_ => isPanelShown = true)
+                .Subscribe(_ => LoadImage(googleImage.Tag as PersonAdapter));
+
+            Messenger.Current.OfType<PanelHiddenMessage>()
+                .Where(x => IsOwnedBy(x.Panel))
+                .Subscribe(_ => isPanelShown = false);
         }
 
         /// <summary>
@@ -71,172 +84,6 @@ namespace ShipWorks.Stores.Content.Panels
         public Task ChangeContent(IGridSelection selection) => TaskEx.FromResult(true);
 
         /// <summary>
-        /// Map panel has loaded
-        /// </summary>
-        private void OnMapPanelLoad(object sender, EventArgs e)
-        {
-            Messenger.Current
-                .OfType<OrderSelectionChangingMessage>()
-                .Subscribe(x =>
-                {
-                    googleImage.Tag = null;
-                    googleImage.Visible = false;
-                    errorLabel.Text = string.Empty;
-                });
-
-            Messenger.Current
-                .OfType<OrderSelectionChangedMessage>()
-                .Where(x => x.LoadedOrderSelection.CompareCountTo(1) == ComparisonResult.Equal)
-                .Select(x => x.LoadedOrderSelection.Single())
-                .OfType<LoadedOrderSelection>()
-                .Select(x => new PersonAdapter(x.Order, "Ship").CopyToNew())
-                .Subscribe(x => observer?.OnNext(x));
-
-            Observable.Create<PersonAdapter>(x => SaveGetImageObserver(x))
-                .Where(x => x != null)
-                .Select(x => new { Address = x, Size })
-                .Throttle(TimeSpan.FromMilliseconds(200))
-                .SelectMany(x => Observable.FromAsync(() => GetImage(x.Address, x.Size)))
-                .ObserveOn(new SchedulerProvider(() => Program.MainForm).WindowsFormsEventLoop)
-                .Subscribe(x => DisplayResult(x));
-        }
-
-        /// <summary>
-        /// Save the getImageObserver
-        /// </summary>
-        private IDisposable SaveGetImageObserver(IObserver<PersonAdapter> getImageObserver)
-        {
-            observer = getImageObserver;
-            return Disposable.Create(() => observer = null);
-        }
-
-        /// <summary>
-        /// Display the result
-        /// </summary>
-        private void DisplayResult(GoogleResponse googleResponse)
-        {
-            if (googleResponse.ReturnedImage != null)
-            {
-                googleImage.Tag = googleResponse.Address;
-                googleImage.Image = googleResponse.ReturnedImage;
-                googleImage.Visible = true;
-                errorLabel.Text = string.Empty;
-            }
-            else if (googleResponse.IsThrottled)
-            {
-                googleImage.Tag = null;
-                googleImage.Visible = false;
-                errorLabel.Text = @"Too many requests. Please try again later.";
-            }
-            else
-            {
-                googleImage.Tag = null;
-                googleImage.Visible = false;
-                errorLabel.Text = @"Cannot contact map server.";
-            }
-        }
-
-        /// <summary>
-        /// Gets the image from Google.
-        /// </summary>
-        private async Task<GoogleResponse> GetImage(PersonAdapter person, Size size)
-        {
-            if (person == null)
-            {
-                return null;
-            }
-
-            Size adjustedSize = GetPictureSize(size);
-
-            string hash = GetAddressHash(person, adjustedSize);
-
-            return GetCachedImage(person, hash) ??
-                await GetImageFromGoogle(person, adjustedSize, hash);
-        }
-
-        /// <summary>
-        /// Get a hash for the requested address and size
-        /// </summary>
-        private static string GetAddressHash(PersonAdapter person, Size size)
-        {
-            string hashValue = string.Join("|", person.Street1, person.City,
-                person.StateProvCode, size.Width.ToString(), size.Height.ToString());
-            return new StringHash().Hash(hashValue, "somesalt");
-        }
-
-        /// <summary>
-        /// Get the requested image from Google
-        /// </summary>
-        private async Task<GoogleResponse> GetImageFromGoogle(PersonAdapter person, Size size, string hash)
-        {
-            GoogleResponse response = await LoadImageFromGoogle(person, size);
-
-            if (!response.IsThrottled)
-            {
-                imageCache[hash] = response.ReturnedImage;
-            }
-
-            response.Address = person;
-
-            return response;
-        }
-
-        /// <summary>
-        /// Get the requested image from cache
-        /// </summary>
-        private GoogleResponse GetCachedImage(PersonAdapter person, string hash)
-        {
-            Image image = imageCache[hash];
-            if (image == null)
-            {
-                return null;
-            }
-
-            return new GoogleResponse
-            {
-                ReturnedImage = image,
-                Address = person,
-            };
-        }
-
-        /// <summary>
-        /// Load an image from Google for the address and size
-        /// </summary>
-        private async Task<GoogleResponse> LoadImageFromGoogle(PersonAdapter addressAdapter, Size size)
-        {
-            try
-            {
-                byte[] image;
-
-                using (WebClient imageDownloader = new WebClient())
-                {
-                    image = await imageDownloader.DownloadDataTaskAsync(string.Format(GetImageUrl(),
-                        addressAdapter.Street1,
-                        addressAdapter.City,
-                        addressAdapter.StateProvCode,
-                        size.Width,
-                        size.Height));
-                }
-
-                using (MemoryStream stream = new MemoryStream(image))
-                {
-                    return new GoogleResponse { ReturnedImage = Image.FromStream(stream) };
-                }
-            }
-            catch (WebException ex)
-            {
-                GoogleResponse googleResponse = new GoogleResponse();
-
-                if (((HttpWebResponse) ex.Response).StatusCode == HttpStatusCode.Forbidden)
-                {
-                    googleResponse.IsThrottled = true;
-                }
-
-                return googleResponse;
-            }
-        }
-
-        /// <summary>
         /// Gets the size of the picture - Since max size is 640, panelSize is over 640, the largest possible size of the same aspect ratio is returned.
         /// </summary>
         public static Size GetPictureSize(Size panelSize)
@@ -256,16 +103,6 @@ namespace ShipWorks.Stores.Content.Panels
                 returnSize.Width = (int) (640 * ((double) panelSize.Width / panelSize.Height));
             }
             return returnSize;
-        }
-
-        /// <summary>
-        /// Gets the URL.
-        /// </summary>
-        private string GetImageUrl()
-        {
-            return MapType == MapPanelType.Satellite ?
-                "http://maps.google.com/maps/api/staticmap?center={0}+{1}+{2}&zoom=18&size={3}x{4}&maptype=hybrid&sensor=false&markers=size:medium%7Ccolor:blue%7C{0}+{1}+{2}" :
-                "http://maps.googleapis.com/maps/api/streetview?size={3}x{4}&location={0}+{1}+{2}&fov=120&heading=235&pitch=10&sensor=false";
         }
 
         /// <summary>
@@ -298,6 +135,59 @@ namespace ShipWorks.Stores.Content.Panels
         public Task UpdateContent() => TaskUtility.CompletedTask;
 
         /// <summary>
+        /// Map panel has loaded
+        /// </summary>
+        private void OnMapPanelLoad(object sender, EventArgs e)
+        {
+            BuildOrderSelectionChangingHandler();
+            BuildOrderSelectionChangedHandler();
+            BuildImageLoadListener();
+        }
+
+        /// <summary>
+        /// Build the handler for order selection changing messages
+        /// </summary>
+        private void BuildOrderSelectionChangingHandler()
+        {
+            Messenger.Current
+                .OfType<OrderSelectionChangingMessage>()
+                .Subscribe(x =>
+                {
+                    googleImage.Tag = null;
+                    googleImage.Visible = false;
+                    errorLabel.Text = string.Empty;
+                });
+        }
+
+        /// <summary>
+        /// Build the handler for order selection changed messages
+        /// </summary>
+        private void BuildOrderSelectionChangedHandler()
+        {
+            Messenger.Current
+                .OfType<OrderSelectionChangedMessage>()
+                .Where(x => x.LoadedOrderSelection.CompareCountTo(1) == ComparisonResult.Equal)
+                .Select(x => x.LoadedOrderSelection.Single())
+                .OfType<LoadedOrderSelection>()
+                .Select(x => new PersonAdapter(x.Order, "Ship").CopyToNew())
+                .Subscribe(LoadImage);
+        }
+
+        /// <summary>
+        /// Build listener for loading images
+        /// </summary>
+        private void BuildImageLoadListener()
+        {
+            Observable.Create<PersonAdapter>(x => SaveGetImageObserver(x))
+                .Where(x => x != null)
+                .Select(x => new { Address = x, Size })
+                .Throttle(TimeSpan.FromMilliseconds(200))
+                .SelectMany(x => Observable.FromAsync(() => GetImage(x.Address, x.Size)))
+                .ObserveOn(new SchedulerProvider(() => Program.MainForm).WindowsFormsEventLoop)
+                .Subscribe(x => DisplayResult(x));
+        }
+
+        /// <summary>
         /// Called when [size changed].
         /// </summary>
         /// <param name="sender">The sender.</param>
@@ -307,7 +197,7 @@ namespace ShipWorks.Stores.Content.Panels
             googleImage.Size = new Size(Size.Width, Size.Height);
             googleImage.Location = new Point(0, 0);
 
-            observer?.OnNext(googleImage.Tag as PersonAdapter);
+            LoadImage(googleImage.Tag as PersonAdapter);
         }
 
         /// <summary>
@@ -329,6 +219,154 @@ namespace ShipWorks.Stores.Content.Panels
                 address.CountryCode);
 
             Process.Start(url);
+        }
+
+        /// <summary>
+        /// Find the parent dock control of the given control
+        /// </summary>
+        private DockControl FindParentDockControl(Control control)
+        {
+            Control parent = control.Parent;
+            if (parent == null)
+            {
+                return null;
+            }
+
+            return parent as DockControl ?? FindParentDockControl(parent);
+        }
+
+        /// <summary>
+        /// Save the getImageObserver
+        /// </summary>
+        private IDisposable SaveGetImageObserver(IObserver<PersonAdapter> getImageObserver)
+        {
+            imageLoadingObserver = getImageObserver;
+            return Disposable.Create(() => imageLoadingObserver = null);
+        }
+
+        /// <summary>
+        /// Display the result
+        /// </summary>
+        private void DisplayResult(GoogleResponse googleResponse)
+        {
+            googleImage.Tag = googleResponse.Address;
+
+            if (googleResponse.ReturnedImage != null)
+            {
+                googleImage.Image = googleResponse.ReturnedImage;
+                googleImage.Visible = true;
+                errorLabel.Text = string.Empty;
+            }
+            else if (googleResponse.IsThrottled)
+            {
+                googleImage.Visible = false;
+                errorLabel.Text = @"Too many requests. Please try again later.";
+            }
+            else
+            {
+                googleImage.Visible = false;
+                errorLabel.Text = @"Cannot contact map server.";
+            }
+        }
+
+        /// <summary>
+        /// Gets the image from Google.
+        /// </summary>
+        private async Task<GoogleResponse> GetImage(PersonAdapter person, Size size)
+        {
+            if (person == null)
+            {
+                return null;
+            }
+
+            Size adjustedSize = GetPictureSize(size);
+
+            string hash = GetAddressHash(person, adjustedSize);
+
+            return imageCache[hash] ??
+                await GetImageFromGoogle(person, adjustedSize, hash);
+        }
+
+        /// <summary>
+        /// Get a hash for the requested address and size
+        /// </summary>
+        private static string GetAddressHash(PersonAdapter person, Size size)
+        {
+            string hashValue = string.Join("|", person.Street1, person.City,
+                person.StateProvCode, size.Width.ToString(), size.Height.ToString());
+            return new StringHash().Hash(hashValue, "somesalt");
+        }
+
+        /// <summary>
+        /// Get the requested image from Google
+        /// </summary>
+        private async Task<GoogleResponse> GetImageFromGoogle(PersonAdapter person, Size size, string hash)
+        {
+            GoogleResponse response = isPanelShown ?
+                await LoadImageFromGoogle(person, size) :
+                new GoogleResponse();
+
+            if (!response.IsThrottled && response.ReturnedImage != null)
+            {
+                imageCache[hash] = response;
+            }
+
+            response.Address = person;
+
+            return response;
+        }
+
+        /// <summary>
+        /// Load an image from Google for the address and size
+        /// </summary>
+        private async Task<GoogleResponse> LoadImageFromGoogle(PersonAdapter addressAdapter, Size size)
+        {
+            try
+            {
+                byte[] image;
+
+                using (WebClient imageDownloader = new WebClient())
+                {
+                    image = await imageDownloader.DownloadDataTaskAsync(string.Format(GetImageUrl(),
+                        addressAdapter.Street1,
+                        addressAdapter.City,
+                        addressAdapter.StateProvCode,
+                        size.Width,
+                        size.Height));
+                }
+
+                using (MemoryStream stream = new MemoryStream(image))
+                {
+                    return new GoogleResponse { ReturnedImage = Image.FromStream(stream) };
+                }
+            }
+            catch (WebException ex)
+            {
+                return new GoogleResponse
+                {
+                    IsThrottled = ((HttpWebResponse) ex.Response).StatusCode == HttpStatusCode.Forbidden
+                };
+            }
+        }
+
+        /// <summary>
+        /// Start loading an image for the given address
+        /// </summary>
+        private void LoadImage(PersonAdapter person) => imageLoadingObserver?.OnNext(person);
+
+        /// <summary>
+        /// Is the panel associated with the message a parent of this control?
+        /// </summary>
+        private bool IsOwnedBy(DockControl panel) => panel == FindParentDockControl(this);
+
+        /// <summary>
+        /// Gets the URL.
+        /// </summary>
+        private string GetImageUrl()
+        {
+            return MapType == MapPanelType.Satellite ?
+                "http://maps.google.com/maps/api/staticmap?center={0}+{1}+{2}&zoom=18&size={3}x{4}&maptype=hybrid&sensor=false&markers=size:medium%7Ccolor:blue%7C{0}+{1}+{2}" :
+                "http://maps.googleapis.com/maps/api/streetview?size={3}x{4}&location={0}+{1}+{2}&fov=120&heading=235&pitch=10&sensor=false";
         }
 
         /// <summary>
