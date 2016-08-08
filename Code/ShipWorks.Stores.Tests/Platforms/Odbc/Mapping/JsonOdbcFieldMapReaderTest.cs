@@ -1,17 +1,15 @@
-﻿using Autofac.Extras.Moq;
+﻿using Autofac;
+using Autofac.Extras.Moq;
+using Interapptive.Shared.Extensions;
 using log4net;
 using Moq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Platforms.Odbc;
+using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
 using System;
 using System.IO;
-using Autofac;
-using Autofac.Features.Indexed;
-using Interapptive.Shared.Extensions;
-using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
-using ShipWorks.Stores.Platforms.Odbc.Upload.FieldValueResolvers;
 using Xunit;
 
 namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
@@ -91,7 +89,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
         }
 
         [Fact]
-        public void ReadRecordIdentifierSource_ReturnsEmptryString_WhenExceptionIsCaught()
+        public void ReadRecordIdentifierSource_ReturnsEmptyString_WhenExceptionIsCaught()
         {
             var map = "{Not:\"A Map\"}";
             JsonOdbcFieldMapReader reader = new JsonOdbcFieldMapReader(map, log.Object);

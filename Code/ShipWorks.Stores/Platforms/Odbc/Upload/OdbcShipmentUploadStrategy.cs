@@ -9,13 +9,13 @@ namespace ShipWorks.Stores.Platforms.Odbc.Upload
     [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
     public enum OdbcShipmentUploadStrategy
     {
-        [Description("Do not upload")]
+        [Description("Do not upload shipment details")]
         DoNotUpload = 0,
 
-        [Description("Upload to import data source")]
+        [Description("Upload shipment details to the same data source")]
         UseImportDataSource = 1,
 
-        [Description("Upload to shipment data source")]
+        [Description("Upload shipment details to a different data source")]
         UseShipmentDataSource = 2
     }
 }

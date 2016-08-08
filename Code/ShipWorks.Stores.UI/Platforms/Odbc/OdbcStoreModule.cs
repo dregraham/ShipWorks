@@ -15,8 +15,13 @@ using ShipWorks.Stores.Platforms.Odbc.Loaders;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
 using ShipWorks.Stores.Platforms.Odbc.Upload;
 using ShipWorks.Stores.Platforms.Odbc.Upload.FieldValueResolvers;
+using ShipWorks.Stores.UI.Platforms.Odbc.Controls;
 using ShipWorks.Stores.UI.Platforms.Odbc.ViewModels;
+using ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import;
+using ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Upload;
 using ShipWorks.Stores.UI.Platforms.Odbc.WizardPages;
+using ShipWorks.Stores.UI.Platforms.Odbc.WizardPages.Import;
+using ShipWorks.Stores.UI.Platforms.Odbc.WizardPages.Upload;
 using System.Reflection;
 using Module = Autofac.Module;
 
@@ -63,7 +68,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             builder.RegisterType<OdbcUploadMapSettingsControlViewModel>()
                 .Keyed<IOdbcMapSettingsControlViewModel>("Upload");
 
-            builder.RegisterType<OdbcImportFieldMappingControlViewModel>()
+            builder.RegisterType<OdbcImportMappingControlViewModel>()
                 .AsImplementedInterfaces();
 
             builder.RegisterType<OdbcUploadMappingControlViewModel>()
@@ -79,7 +84,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             builder.RegisterType<OdbcSampleDataCommand>()
                 .AsImplementedInterfaces();
 
-            builder.RegisterType<OdbcCustomQueryWarningDlg>()
+            builder.RegisterType<Controls.OdbcCustomQueryWarningDlg>()
                 .Named<IDialog>("OdbcCustomQueryWarningDlg");
 
             builder.RegisterType<OdbcColumnSource>()
@@ -153,22 +158,31 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
                 .AsSelf();
 
             builder.RegisterType<OdbcImportMapSettingsPage>()
-                .As<IOdbcWizardPage>();
+                .As<IOdbcWizardPage>()
+                .AsSelf();
 
-            builder.RegisterType<OdbcImportFieldMappingPage>()
-                .As<IOdbcWizardPage>();
+            builder.RegisterType<OdbcImportMappingPage>()
+                .As<IOdbcWizardPage>()
+                .AsSelf();
 
             builder.RegisterType<OdbcUploadShipmentStrategyPage>()
-                .As<IOdbcWizardPage>();
+                .As<IOdbcWizardPage>()
+                .AsSelf();
 
             builder.RegisterType<OdbcUploadDataSourcePage>()
-                .As<IOdbcWizardPage>();
+                .As<IOdbcWizardPage>()
+                .AsSelf();
 
             builder.RegisterType<OdbcUploadMapSettingsPage>()
-                .As<IOdbcWizardPage>();
+                .As<IOdbcWizardPage>()
+                .AsSelf();
 
             builder.RegisterType<OdbcUploadMappingPage>()
-                .As<IOdbcWizardPage>();
+                .As<IOdbcWizardPage>()
+                .AsSelf();
+
+            builder.RegisterType<OdbcSetupFinishPage>()
+                .AsSelf();
 
             builder.RegisterType<OdbcConnectionSettingsControl>()
                 .Keyed<AccountSettingsControlBase>(StoreTypeCode.Odbc)

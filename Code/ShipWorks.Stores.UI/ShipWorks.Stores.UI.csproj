@@ -172,77 +172,95 @@
     <Compile Include="Platforms\LemonStand\WizardPages\LemonStandAccountPage.Designer.cs">
       <DependentUpon>LemonStandAccountPage.cs</DependentUpon>
     </Compile>
-    <Compile Include="Platforms\Odbc\OdbcConnectionSettingsControl.cs">
+    <Compile Include="Platforms\Odbc\Controls\Import\OdbcImportMappingControl.xaml.cs">
+      <DependentUpon>OdbcImportMappingControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Platforms\Odbc\Controls\Import\OdbcImportMapSettingsControl.xaml.cs">
+      <DependentUpon>OdbcImportMapSettingsControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Platforms\Odbc\Controls\OdbcConnectionSettingsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Platforms\Odbc\OdbcConnectionSettingsControl.Designer.cs">
+    <Compile Include="Platforms\Odbc\Controls\OdbcConnectionSettingsControl.Designer.cs">
       <DependentUpon>OdbcConnectionSettingsControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Platforms\Odbc\OdbcCustomQueryWarningDlg.xaml.cs">
+    <Compile Include="Platforms\Odbc\Controls\OdbcCustomQueryWarningDlg.xaml.cs">
       <DependentUpon>OdbcCustomQueryWarningDlg.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Platforms\Odbc\Controls\OdbcDataSourceControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Platforms\Odbc\Controls\OdbcDataSourceControl.Designer.cs">
+      <DependentUpon>OdbcDataSourceControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Platforms\Odbc\Controls\OdbcSettingsWizard.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Platforms\Odbc\Controls\OdbcSettingsWizard.Designer.cs">
+      <DependentUpon>OdbcSettingsWizard.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Platforms\Odbc\Controls\OdbcMappingControl.xaml.cs">
+      <DependentUpon>OdbcMappingControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Platforms\Odbc\Controls\Upload\OdbcUploadMapSettingsControl.xaml.cs">
+      <DependentUpon>OdbcUploadMapSettingsControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Platforms\Odbc\OdbcFieldMapDisplay.cs" />
     <Compile Include="Platforms\Odbc\OdbcFieldMapMultiValueConverter.cs" />
-    <Compile Include="Platforms\Odbc\OdbcImportSettingsWizard.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Platforms\Odbc\OdbcImportSettingsWizard.Designer.cs">
-      <DependentUpon>OdbcImportSettingsWizard.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Platforms\Odbc\ViewModels\IOdbcImportFieldMappingControlViewModel.cs" />
+    <Compile Include="Platforms\Odbc\ViewModels\Import\IOdbcImportMappingControlViewModel.cs" />
+    <Compile Include="Platforms\Odbc\ViewModels\Import\OdbcImportMappingControlViewModel.cs" />
+    <Compile Include="Platforms\Odbc\ViewModels\Import\OdbcImportMapSettingsControlViewModel.cs" />
     <Compile Include="Platforms\Odbc\ViewModels\IOdbcMapSettingsControlViewModel.cs" />
-    <Compile Include="Platforms\Odbc\ViewModels\IOdbcUploadMappingControlViewModel.cs" />
-    <Compile Include="Platforms\Odbc\ViewModels\OdbcImportFieldMappingControlViewModel.cs" />
-    <Compile Include="Platforms\Odbc\ViewModels\OdbcImportMapSettingsControlViewModel.cs" />
     <Compile Include="Platforms\Odbc\ViewModels\OdbcMapSettingsControlViewModel.cs" />
-    <Compile Include="Platforms\Odbc\ViewModels\OdbcUploadMappingControlViewModel.cs" />
-    <Compile Include="Platforms\Odbc\ViewModels\OdbcUploadMapSettingsControlViewModel.cs" />
-    <Compile Include="Platforms\Odbc\WizardPages\OdbcImportFieldMappingControl.xaml.cs">
-      <DependentUpon>OdbcImportFieldMappingControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Platforms\Odbc\WizardPages\OdbcImportFieldMappingPage.cs">
+    <Compile Include="Platforms\Odbc\ViewModels\Upload\IOdbcUploadMappingControlViewModel.cs" />
+    <Compile Include="Platforms\Odbc\ViewModels\Upload\OdbcUploadMappingControlViewModel.cs" />
+    <Compile Include="Platforms\Odbc\ViewModels\Upload\OdbcUploadMapSettingsControlViewModel.cs" />
+    <Compile Include="Platforms\Odbc\WizardPages\Import\OdbcImportDataSourcePage.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Platforms\Odbc\WizardPages\OdbcImportFieldMappingPage.Designer.cs">
-      <DependentUpon>OdbcImportFieldMappingPage.cs</DependentUpon>
+    <Compile Include="Platforms\Odbc\WizardPages\Import\OdbcImportDataSourcePage.Designer.cs">
+      <DependentUpon>OdbcImportDataSourcePage.cs</DependentUpon>
     </Compile>
-    <Compile Include="Platforms\Odbc\WizardPages\OdbcImportMapSettingsControl.xaml.cs">
-      <DependentUpon>OdbcImportMapSettingsControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Platforms\Odbc\WizardPages\OdbcImportMapSettingsPage.cs">
+    <Compile Include="Platforms\Odbc\WizardPages\Import\OdbcImportMappingPage.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Platforms\Odbc\WizardPages\OdbcImportMapSettingsPage.Designer.cs">
+    <Compile Include="Platforms\Odbc\WizardPages\Import\OdbcImportMappingPage.Designer.cs">
+      <DependentUpon>OdbcImportMappingPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Platforms\Odbc\WizardPages\Import\OdbcImportMapSettingsPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Platforms\Odbc\WizardPages\Import\OdbcImportMapSettingsPage.Designer.cs">
       <DependentUpon>OdbcImportMapSettingsPage.cs</DependentUpon>
     </Compile>
-    <Compile Include="Platforms\Odbc\WizardPages\OdbcMappingControl.xaml.cs">
-      <DependentUpon>OdbcMappingControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Platforms\Odbc\WizardPages\OdbcUploadDataSourcePage.cs">
+    <Compile Include="Platforms\Odbc\WizardPages\OdbcSetupFinishPage.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Platforms\Odbc\WizardPages\OdbcUploadDataSourcePage.Designer.cs">
+    <Compile Include="Platforms\Odbc\WizardPages\OdbcSetupFinishPage.Designer.cs">
+      <DependentUpon>OdbcSetupFinishPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Platforms\Odbc\WizardPages\Upload\OdbcUploadDataSourcePage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Platforms\Odbc\WizardPages\Upload\OdbcUploadDataSourcePage.Designer.cs">
       <DependentUpon>OdbcUploadDataSourcePage.cs</DependentUpon>
     </Compile>
-    <Compile Include="Platforms\Odbc\WizardPages\OdbcUploadMappingPage.cs">
+    <Compile Include="Platforms\Odbc\WizardPages\Upload\OdbcUploadMappingPage.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Platforms\Odbc\WizardPages\OdbcUploadMappingPage.Designer.cs">
+    <Compile Include="Platforms\Odbc\WizardPages\Upload\OdbcUploadMappingPage.Designer.cs">
       <DependentUpon>OdbcUploadMappingPage.cs</DependentUpon>
     </Compile>
-    <Compile Include="Platforms\Odbc\WizardPages\OdbcUploadMapSettingsControl.xaml.cs">
-      <DependentUpon>OdbcUploadMapSettingsControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Platforms\Odbc\WizardPages\OdbcUploadMapSettingsPage.cs">
+    <Compile Include="Platforms\Odbc\WizardPages\Upload\OdbcUploadMapSettingsPage.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Platforms\Odbc\WizardPages\OdbcUploadMapSettingsPage.Designer.cs">
+    <Compile Include="Platforms\Odbc\WizardPages\Upload\OdbcUploadMapSettingsPage.Designer.cs">
       <DependentUpon>OdbcUploadMapSettingsPage.cs</DependentUpon>
     </Compile>
-    <Compile Include="Platforms\Odbc\WizardPages\OdbcUploadShipmentStrategyPage.cs">
+    <Compile Include="Platforms\Odbc\WizardPages\Upload\OdbcUploadShipmentStrategyPage.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Platforms\Odbc\WizardPages\OdbcUploadShipmentStrategyPage.Designer.cs">
+    <Compile Include="Platforms\Odbc\WizardPages\Upload\OdbcUploadShipmentStrategyPage.Designer.cs">
       <DependentUpon>OdbcUploadShipmentStrategyPage.cs</DependentUpon>
     </Compile>
     <Compile Include="Platforms\Sears\SearsStoreModule.cs" />
@@ -276,19 +294,7 @@
       <DependentUpon>SparkPayAccountControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Platforms\SparkPay\WizardPages\SparkPayAccountViewModel.cs" />
-    <Compile Include="Platforms\Odbc\OdbcDataSourceControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Platforms\Odbc\OdbcDataSourceControl.Designer.cs">
-      <DependentUpon>OdbcDataSourceControl.cs</DependentUpon>
-    </Compile>
     <Compile Include="Platforms\Odbc\OdbcStoreModule.cs" />
-    <Compile Include="Platforms\Odbc\WizardPages\OdbcImportDataSourcePage.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Platforms\Odbc\WizardPages\OdbcImportDataSourcePage.Designer.cs">
-      <DependentUpon>OdbcImportDataSourcePage.cs</DependentUpon>
-    </Compile>
     <Compile Include="Platforms\Yahoo\ApiIntegration\WizardPages\YahooApiAccountPage.xaml.cs">
       <DependentUpon>YahooApiAccountPage.xaml</DependentUpon>
     </Compile>
@@ -328,28 +334,37 @@
     <EmbeddedResource Include="Platforms\LemonStand\WizardPages\LemonStandAccountPage.resx">
       <DependentUpon>LemonStandAccountPage.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Platforms\Odbc\OdbcConnectionSettingsControl.resx">
+    <EmbeddedResource Include="Platforms\Odbc\Controls\OdbcConnectionSettingsControl.resx">
       <DependentUpon>OdbcConnectionSettingsControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Platforms\Odbc\OdbcImportSettingsWizard.resx">
-      <DependentUpon>OdbcImportSettingsWizard.cs</DependentUpon>
+    <EmbeddedResource Include="Platforms\Odbc\Controls\OdbcDataSourceControl.resx">
+      <DependentUpon>OdbcDataSourceControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Platforms\Odbc\WizardPages\OdbcImportFieldMappingPage.resx">
-      <DependentUpon>OdbcImportFieldMappingPage.cs</DependentUpon>
+    <EmbeddedResource Include="Platforms\Odbc\Controls\OdbcSettingsWizard.resx">
+      <DependentUpon>OdbcSettingsWizard.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Platforms\Odbc\WizardPages\OdbcImportMapSettingsPage.resx">
+    <EmbeddedResource Include="Platforms\Odbc\WizardPages\Import\OdbcImportDataSourcePage.resx">
+      <DependentUpon>OdbcImportDataSourcePage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Platforms\Odbc\WizardPages\Import\OdbcImportMappingPage.resx">
+      <DependentUpon>OdbcImportMappingPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Platforms\Odbc\WizardPages\Import\OdbcImportMapSettingsPage.resx">
       <DependentUpon>OdbcImportMapSettingsPage.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Platforms\Odbc\WizardPages\OdbcUploadDataSourcePage.resx">
+    <EmbeddedResource Include="Platforms\Odbc\WizardPages\OdbcSetupFinishPage.resx">
+      <DependentUpon>OdbcSetupFinishPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Platforms\Odbc\WizardPages\Upload\OdbcUploadDataSourcePage.resx">
       <DependentUpon>OdbcUploadDataSourcePage.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Platforms\Odbc\WizardPages\OdbcUploadMappingPage.resx">
+    <EmbeddedResource Include="Platforms\Odbc\WizardPages\Upload\OdbcUploadMappingPage.resx">
       <DependentUpon>OdbcUploadMappingPage.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Platforms\Odbc\WizardPages\OdbcUploadMapSettingsPage.resx">
+    <EmbeddedResource Include="Platforms\Odbc\WizardPages\Upload\OdbcUploadMapSettingsPage.resx">
       <DependentUpon>OdbcUploadMapSettingsPage.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Platforms\Odbc\WizardPages\OdbcUploadShipmentStrategyPage.resx">
+    <EmbeddedResource Include="Platforms\Odbc\WizardPages\Upload\OdbcUploadShipmentStrategyPage.resx">
       <DependentUpon>OdbcUploadShipmentStrategyPage.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Platforms\SparkPay\SparkPaySettingsControl.resx">
@@ -363,12 +378,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Platforms\SparkPay\WizardPages\SparkPayAccountHost.resx">
       <DependentUpon>SparkPayAccountHost.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Platforms\Odbc\WizardPages\OdbcImportDataSourcePage.resx">
-      <DependentUpon>OdbcImportDataSourcePage.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Platforms\Odbc\OdbcDataSourceControl.resx">
-      <DependentUpon>OdbcDataSourceControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Platforms\Yahoo\ApiIntegration\WizardPages\YahooApiAccountPageHost.resx">
       <DependentUpon>YahooApiAccountPageHost.cs</DependentUpon>
@@ -428,25 +437,25 @@
     <Analyzer Include="..\..\packages\System.Security.Cryptography.Hashing.Algorithms.Analyzers.1.1.0\analyzers\dotnet\cs\System.Security.Cryptography.Hashing.Algorithms.CSharp.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Platforms\Odbc\OdbcCustomQueryWarningDlg.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Platforms\Odbc\WizardPages\OdbcImportFieldMappingControl.xaml">
+    <Page Include="Platforms\Odbc\Controls\Import\OdbcImportMappingControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Platforms\Odbc\WizardPages\OdbcImportMapSettingsControl.xaml">
-      <SubType>Designer</SubType>
+    <Page Include="Platforms\Odbc\Controls\Import\OdbcImportMapSettingsControl.xaml">
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
-    <Page Include="Platforms\Odbc\WizardPages\OdbcMappingControl.xaml">
-      <SubType>Designer</SubType>
+    <Page Include="Platforms\Odbc\Controls\OdbcCustomQueryWarningDlg.xaml">
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
-    <Page Include="Platforms\Odbc\WizardPages\OdbcUploadMapSettingsControl.xaml">
-      <SubType>Designer</SubType>
+    <Page Include="Platforms\Odbc\Controls\OdbcMappingControl.xaml">
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Platforms\Odbc\Controls\Upload\OdbcUploadMapSettingsControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Platforms\SparkPay\WizardPages\SparkPayAccountControl.xaml">
       <SubType>Designer</SubType>
@@ -461,6 +470,7 @@
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

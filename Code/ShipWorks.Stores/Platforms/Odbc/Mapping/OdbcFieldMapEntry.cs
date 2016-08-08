@@ -1,8 +1,9 @@
 using Interapptive.Shared.Utility;
 using Newtonsoft.Json;
-using System.Reflection;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 using ShipWorks.Stores.Platforms.Odbc.Upload.FieldValueResolvers;
+using System.Reflection;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 {
@@ -21,6 +22,14 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <param name="index">Index can be used to help identify this entry.</param>
         [JsonConstructor]
         public OdbcFieldMapEntry(ShipWorksOdbcMappableField shipWorksField, ExternalOdbcMappableField externalField, int index)
+            : this((IShipWorksOdbcMappableField) shipWorksField, externalField, index)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="OdbcFieldMapEntry"/> class.
+        /// </summary>
+        public OdbcFieldMapEntry(IShipWorksOdbcMappableField shipWorksField, IExternalOdbcMappableField externalField, int index)
         {
             ShipWorksField = shipWorksField;
             ExternalField = externalField;
@@ -58,6 +67,14 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         {
             MethodConditions.EnsureArgumentIsNotNull(record);
             ExternalField.LoadValue(record);
+        }
+
+        /// <summary>
+        /// Loads the given ODBC Column into the External Field
+        /// </summary>
+        public void LoadExternalField(OdbcColumn column)
+        {
+            ExternalField.Column = column;
         }
 
         /// <summary>
