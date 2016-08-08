@@ -1,39 +1,40 @@
-﻿using System.Windows.Forms;
+﻿using System.IO;
+using System.Windows.Forms;
 
 namespace Interapptive.Shared.UI
 {
     /// <summary>
-    /// Interface to get a file from the user
+    /// Interface to get a file name from the user
     /// </summary>
     public interface IFileDialog
     {
         /// <summary>
-        /// Shows the open file Dialog box
+        /// Gets or sets the current file name filter string, which determines the choices that appear in the 
+        /// "Save as file type" or "Files of type" box in the dialog box.
         /// </summary>
-        /// <remarks>Sets FileName property if dialog result is OK</remarks>
-        /// <param name="filter">
-        /// The file name filter string, which determines the choices that appear in the "Files of type" box in the dialog box.
-        /// </param>
-        /// <returns>DialogResult</returns>
-        DialogResult ShowOpenFile(string filter);
+        string Filter { set; }
+
 
         /// <summary>
-        /// Shows the save file dialog box.
+        /// Gets or sets the default file extension.
         /// </summary>
-        /// <remarks>Sets FileName property if dialog result is OK</remarks>
-        /// <param name="filter"> 
-        /// The file name filter string, which determines the choices that appear in the "Save as file type" box in the dialog box.
-        /// </param>
-        /// <param name="defaultExtension">The default file extension.</param>
-        /// <param name="initialFileName">
-        /// A string containing the file name selected in the file dialog box.
-        /// </param>
-        /// <returns>DialogResult</returns>
-        DialogResult ShowSaveFile(string filter, string defaultExtension, string initialFileName);
+        string DefaultExt { set; }
+
 
         /// <summary>
-        /// Gets the name of the file - Empty string if not set.
+        /// Gets or sets the default file name used to initialize the file dialog box.
         /// </summary>
-        string FileName { get; }
+        string DefaultFileName { set; }
+
+        /// <summary>
+        /// Shows the file Dialog box
+        /// </summary>
+        DialogResult ShowDialog();
+
+
+        /// <summary>
+        /// Gets a stream of the file
+        /// </summary>
+        Stream CreateFileStream();
     }
 }

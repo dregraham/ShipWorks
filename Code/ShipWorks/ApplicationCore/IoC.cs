@@ -4,6 +4,7 @@ using Interapptive.Shared;
 using Interapptive.Shared.Pdf;
 using Interapptive.Shared.Security;
 using Interapptive.Shared.Threading;
+using Interapptive.Shared.UI;
 using Interapptive.Shared.Win32;
 using log4net;
 using ShipWorks.AddressValidation;
@@ -35,6 +36,8 @@ using System;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
+using OpenFileDialog = Interapptive.Shared.UI.OpenFileDialog;
+using SaveFileDialog = Interapptive.Shared.UI.SaveFileDialog;
 
 namespace ShipWorks.ApplicationCore
 {
@@ -198,6 +201,9 @@ namespace ShipWorks.ApplicationCore
             builder.RegisterType<UspsAccountInfoControl>();
             builder.RegisterType<UspsAccountManagerControl>();
             builder.RegisterType<UspsPurchasePostageDlg>();
+
+            builder.RegisterType<OpenFileDialog>().Keyed<FileDialogType>(FileDialogType.Open);
+            builder.RegisterType<SaveFileDialog>().Keyed<FileDialogType>(FileDialogType.Save);
         }
 
         /// <summary>

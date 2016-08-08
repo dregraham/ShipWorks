@@ -236,9 +236,12 @@
     <Compile Include="Security\SecureText.cs" />
     <Compile Include="Security\SecureTextEncryptionProvider.cs" />
     <Compile Include="Threading\IExternalProcess.cs" />
+    <Compile Include="UI\OpenFileDialog.cs" />
     <Compile Include="UI\IDialog.cs" />
+    <Compile Include="UI\IFileDialog.cs" />
     <Compile Include="UI\IMessageHelper.cs" />
     <Compile Include="Pdf\IPdfDocument.cs" />
+    <Compile Include="UI\SaveFileDialog.cs" />
     <Compile Include="Utility\DetailsAttribute.cs" />
     <Compile Include="Utility\EnumResult.cs" />
     <Compile Include="Utility\DoubleExtensions.cs" />
