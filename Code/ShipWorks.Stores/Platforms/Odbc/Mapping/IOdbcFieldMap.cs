@@ -12,6 +12,11 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
     public interface IOdbcFieldMap
     {
         /// <summary>
+        /// The name of the map
+        /// </summary>
+        string Name { get; set; }
+
+        /// <summary>
         /// The ODBC Field Map Entries.
         /// </summary>
         IEnumerable<IOdbcFieldMapEntry> Entries { get; }

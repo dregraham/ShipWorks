@@ -30,6 +30,11 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 		}
 
         /// <summary>
+        /// The name of the map
+        /// </summary>
+        public string Name { get; set; }
+
+        /// <summary>
         /// The ODBC Field Map Entries
         /// </summary>
         [Obfuscation(Exclude = true)]

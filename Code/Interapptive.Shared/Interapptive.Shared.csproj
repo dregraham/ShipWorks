@@ -236,6 +236,7 @@
     <Compile Include="Security\SecureText.cs" />
     <Compile Include="Security\SecureTextEncryptionProvider.cs" />
     <Compile Include="Threading\IExternalProcess.cs" />
+    <Compile Include="UI\FileDialogType.cs" />
     <Compile Include="UI\OpenFileDialog.cs" />
     <Compile Include="UI\IDialog.cs" />
     <Compile Include="UI\IFileDialog.cs" />
