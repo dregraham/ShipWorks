@@ -182,10 +182,12 @@
     <Compile Include="Platforms\Odbc\Loader\OdbcOrderNoteLoaderTest.cs" />
     <Compile Include="Platforms\Odbc\Loader\OdbcOrderPaymentLoaderTest.cs" />
     <Compile Include="Platforms\Odbc\Mapping\ExternalOdbcMappableFieldTest.cs" />
+    <Compile Include="Platforms\Odbc\Mapping\FakeOdbcSettingsFile.cs" />
     <Compile Include="Platforms\Odbc\Mapping\JsonOdbcFieldMapReaderTest.cs" />
     <Compile Include="Platforms\Odbc\Mapping\JsonOdbcFieldMapWriterTest.cs" />
     <Compile Include="Platforms\Odbc\Mapping\OdbcFieldMapEntryTest.cs" />
     <Compile Include="Platforms\Odbc\Mapping\OdbcFieldMapTest.cs" />
+    <Compile Include="Platforms\Odbc\Mapping\OdbcSettingsFileTest.cs" />
     <Compile Include="Platforms\Odbc\Mapping\ShipWorksOdbcMappableFieldTest.cs" />
     <Compile Include="Platforms\Odbc\DataSource\Schema\OdbcColumnTest.cs" />
     <Compile Include="Platforms\Odbc\DataAccess\OdbcDownloadCommandFactoryTest.cs" />

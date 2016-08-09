@@ -1,27 +1,26 @@
-﻿using System;
-using System.IO;
-using System.Windows.Forms;
-using Autofac.Features.Indexed;
+﻿using Autofac.Features.Indexed;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
+using System;
+using System.IO;
+using System.Windows.Forms;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 {
     /// <summary>
     ///
     /// </summary>
-    public abstract class OdbcSettingsFile
+    public abstract class FakeOdbcSettingsFile
     {
         private readonly IIndex<FileDialogType, IFileDialog> fileDialogFactory;
         private readonly IMessageHelper messageHelper;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="OdbcSettingsFile"/> class.
+        /// Initializes a new instance of the <see cref="FakeOdbcSettingsFile"/> class.
         /// </summary>
-        protected OdbcSettingsFile(IIndex<FileDialogType, IFileDialog> fileDialogFactory, IMessageHelper messageHelper)
+        protected FakeOdbcSettingsFile(IIndex<FileDialogType, IFileDialog> fileDialogFactory, IMessageHelper messageHelper)
         {
             this.fileDialogFactory = fileDialogFactory;
             this.messageHelper = messageHelper;
@@ -109,39 +108,36 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
             }
         }
 
-
         /// <summary>
-        /// Opens the save file dialog to save the map
+        /// Gets the stream to save.
         /// </summary>
-        public void Save()
+        public Stream GetStreamToSave()
         {
             IFileDialog fileDialog = fileDialogFactory[FileDialogType.Save];
             fileDialog.DefaultExt = Extension;
             fileDialog.Filter = Filter;
             fileDialog.DefaultFileName = OdbcFieldMap.Name;
 
-            if (fileDialog.ShowDialog() != DialogResult.OK)
-            {
-                return;
-            }
+            return fileDialog.ShowDialog() == DialogResult.OK ? fileDialog.CreateFileStream() : null;
+        }
 
+        /// <summary>
+        /// Opens the save file dialog to save the map
+        /// </summary>
+        public void Save(TextWriter textWriter)
+        {
             try
             {
-                using (Stream fileStream = fileDialog.CreateFileStream())
-                using (StreamWriter streamWriter = new StreamWriter(fileStream))
-                {
-                    JObject map = new JObject
-                    {
-                        {"FieldMap", new JObject(OdbcFieldMap.Serialize())},
-                        {"ColumnSourceType", new JObject(EnumHelper.GetApiValue(ColumnSourceType))},
-                        {"ColumnSource", new JObject(ColumnSource)}
-                    };
+                JObject settings = new JObject();
 
-                    WriteAdditionalParamatersToMap(map);
+                settings.Add("ColumnSourceType", EnumHelper.GetApiValue(ColumnSourceType));
+                settings.Add("ColumnSource", ColumnSource);
+                settings.Add("FieldMap", OdbcFieldMap.Serialize());
 
-                    JsonSerializer serializer = new JsonSerializer();
-                    serializer.Serialize(streamWriter, map);
-                }
+                WriteAdditionalParamatersToMap(settings);
+
+                textWriter.Write(settings.ToString());
+                textWriter.Flush();
             }
             catch (IOException ex)
             {

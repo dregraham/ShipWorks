@@ -35,6 +35,8 @@ namespace Interapptive.Shared.UI
         /// <summary>
         /// Gets a stream of the file
         /// </summary>
+        /// <exception cref="IOException"></exception>
+        /// <exception cref="UnauthorizedAccessException" />
         Stream CreateFileStream();
     }
 }

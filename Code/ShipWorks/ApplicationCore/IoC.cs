@@ -36,8 +36,6 @@ using System;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
-using OpenFileDialog = Interapptive.Shared.UI.OpenFileDialog;
-using SaveFileDialog = Interapptive.Shared.UI.SaveFileDialog;
 
 namespace ShipWorks.ApplicationCore
 {
@@ -202,8 +200,8 @@ namespace ShipWorks.ApplicationCore
             builder.RegisterType<UspsAccountManagerControl>();
             builder.RegisterType<UspsPurchasePostageDlg>();
 
-            builder.RegisterType<OpenFileDialog>().Keyed<FileDialogType>(FileDialogType.Open);
-            builder.RegisterType<SaveFileDialog>().Keyed<FileDialogType>(FileDialogType.Save);
+            builder.RegisterType<ShipWorksOpenFileDialog>().Keyed<FileDialogType>(FileDialogType.Open);
+            builder.RegisterType<ShipWorksSaveFileDialog>().Keyed<FileDialogType>(FileDialogType.Save);
         }
 
         /// <summary>

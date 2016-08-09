@@ -7,12 +7,15 @@ namespace Interapptive.Shared.UI
     /// <summary>
     /// Gets a file from the user
     /// </summary>
-    public class SaveFileDialog : IFileDialog
+    public class ShipWorksSaveFileDialog : IFileDialog
     {
         private readonly Control owner;
         private string selectedFileName;
 
-        public SaveFileDialog(Func<Control> ownerFunc)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ShipWorksSaveFileDialog"/> class.
+        /// </summary>
+        public ShipWorksSaveFileDialog(Func<Control> ownerFunc)
         {
             owner = ownerFunc();
         }
@@ -38,7 +41,7 @@ namespace Interapptive.Shared.UI
         /// </summary>
         public DialogResult ShowDialog()
         {
-            using (System.Windows.Forms.SaveFileDialog saveFileDialog = new System.Windows.Forms.SaveFileDialog())
+            using (SaveFileDialog saveFileDialog = new SaveFileDialog())
             {
                 saveFileDialog.Filter = Filter;
                 saveFileDialog.AddExtension = true;
@@ -59,6 +62,7 @@ namespace Interapptive.Shared.UI
         /// <summary>
         /// Gets a stream of the file
         /// </summary>
+        /// <exception cref="UnauthorizedAccessException"></exception>
         public Stream CreateFileStream()
         {
             return string.IsNullOrEmpty(selectedFileName) ? null : File.OpenRead(selectedFileName);

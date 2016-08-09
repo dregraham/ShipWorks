@@ -1,13 +1,13 @@
-﻿using System.ComponentModel;
+﻿using Interapptive.Shared.Utility;
+using System.ComponentModel;
 using System.Reflection;
-using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Stores.Platforms.Odbc.DataSource.Schema
 {
     /// <summary>
     /// Type of Column Source
     /// </summary>
-    [Obfuscation(Exclude = true)]
+    [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
     public enum OdbcColumnSourceType
     {
         [ApiValue("Table")]
