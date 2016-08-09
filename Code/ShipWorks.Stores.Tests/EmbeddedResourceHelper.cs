@@ -4,8 +4,14 @@ using System.Reflection;
 
 namespace ShipWorks.Stores.Tests
 {
+    /// <summary>
+    /// Helper class for getting embedded resources.
+    /// </summary>
     public static class EmbeddedResourceHelper
     {
+        /// <summary>
+        /// Gets the embedded resource string.
+        /// </summary>
         public static string GetEmbeddedResourceString(string embeddedResourceName)
         {
             string txt;
@@ -25,6 +31,9 @@ namespace ShipWorks.Stores.Tests
             return txt;
         }
 
+        /// <summary>
+        /// Gets the embedded resource stream.
+        /// </summary>
         public static Stream GetEmbeddedResourceStream(string embeddedResourceName)
         {
             Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(embeddedResourceName);

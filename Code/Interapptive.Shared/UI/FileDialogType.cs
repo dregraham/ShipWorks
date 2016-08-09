@@ -7,7 +7,6 @@ namespace Interapptive.Shared.UI
     /// File Dialog Type
     /// </summary>
     [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
-
     public enum FileDialogType
     {
         [Description("Open File")]

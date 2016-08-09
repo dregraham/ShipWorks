@@ -39,7 +39,6 @@ namespace Interapptive.Shared.UI
         /// <summary>
         /// Shows the dialog.
         /// </summary>
-        /// <returns></returns>
         public DialogResult ShowDialog()
         {
             using (OpenFileDialog openFileDialog = new OpenFileDialog())

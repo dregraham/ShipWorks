@@ -13,14 +13,12 @@ namespace Interapptive.Shared.UI
         /// "Save as file type" or "Files of type" box in the dialog box.
         /// </summary>
         string Filter { set; }
-
-
+        
         /// <summary>
         /// Gets or sets the default file extension.
         /// </summary>
         string DefaultExt { set; }
-
-
+        
         /// <summary>
         /// Gets or sets the default file name used to initialize the file dialog box.
         /// </summary>
@@ -30,8 +28,7 @@ namespace Interapptive.Shared.UI
         /// Shows the file Dialog box
         /// </summary>
         DialogResult ShowDialog();
-
-
+        
         /// <summary>
         /// Gets a stream of the file
         /// </summary>
