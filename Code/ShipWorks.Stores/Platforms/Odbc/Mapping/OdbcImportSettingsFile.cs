@@ -5,13 +5,24 @@ using ShipWorks.Stores.Platforms.Odbc.Download;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 {
+    /// <summary>
+    /// Saves and Opens Odbc Import Settings from disk.
+    /// </summary>
+    /// <seealso cref="ShipWorks.Stores.Platforms.Odbc.Mapping.OdbcSettingsFile" />
     public class OdbcImportSettingsFile : OdbcSettingsFile
     {
         public OdbcImportSettingsFile(IMessageHelper messageHelper, IOdbcFieldMap fieldMap) : base(messageHelper, fieldMap)
         {
         }
 
+        /// <summary>
+        /// The action to perform on this file (Import)
+        /// </summary>
         public override string Action => "Import";
+        
+        /// <summary>
+        /// The file extension.
+        /// </summary>
         public override string Extension => ".swoim";
 
         public OdbcImportStrategy OdbcImportStrategy { get; set; }

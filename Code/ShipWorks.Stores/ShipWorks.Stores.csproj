@@ -177,6 +177,7 @@
     <Compile Include="Platforms\Odbc\DataSource\DsnInfo.cs" />
     <Compile Include="Platforms\Odbc\Mapping\OdbcImportSettingsFile.cs" />
     <Compile Include="Platforms\Odbc\Mapping\OdbcSettingsFile.cs" />
+    <Compile Include="Platforms\Odbc\Mapping\OdbcUploadSettingsFile.cs" />
     <Compile Include="Platforms\Odbc\Upload\FieldValueResolvers\IOdbcFieldValueResolver.cs" />
     <Compile Include="Platforms\Odbc\Mapping\OdbcFieldValueResolutionStrategy.cs" />
     <Compile Include="Platforms\Odbc\Upload\FieldValueResolvers\OdbcShippingCarrierFieldValueResolver.cs" />
