@@ -49,7 +49,9 @@ namespace ShipWorks.Stores.Platforms.Odbc
             get
             {
                 OdbcStoreEntity odbcStore = (OdbcStoreEntity) Store;
-                return $"{odbcStore.ImportConnectionString} {SystemData.Fetch().DatabaseID.ToString("D")}";
+                StringHash stringHash = new StringHash();
+
+                return $"{stringHash.Hash(odbcStore.ImportConnectionString, "ODBC")} {SystemData.Fetch().DatabaseID.ToString("D")}";
             }
         }
 
