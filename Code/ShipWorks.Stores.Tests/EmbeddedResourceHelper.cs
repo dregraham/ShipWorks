@@ -8,7 +8,7 @@ namespace ShipWorks.Stores.Tests
     {
         public static string GetEmbeddedResourceString(string embeddedResourceName)
         {
-            string txt = string.Empty;
+            string txt;
             using (Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(embeddedResourceName))
             {
                 if (stream == null)
@@ -23,6 +23,18 @@ namespace ShipWorks.Stores.Tests
             }
 
             return txt;
+        }
+
+        public static Stream GetEmbeddedResourceStream(string embeddedResourceName)
+        {
+            Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(embeddedResourceName);
+
+            if (stream == null)
+            {
+                throw new InvalidOperationException("Error getting the embedded resource");
+            }
+            
+            return stream;
         }
     }
 }

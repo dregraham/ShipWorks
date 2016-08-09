@@ -17,7 +17,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcSettingsFile"/> class.
         /// </summary>
-        protected OdbcSettingsFile(IMessageHelper messageHelper, IOdbcFieldMap fieldMap)
+        protected OdbcSettingsFile(IOdbcFieldMap fieldMap, IMessageHelper messageHelper)
         {
             this.messageHelper = messageHelper;
             OdbcFieldMap = fieldMap;
@@ -66,15 +66,31 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <summary>
         /// Opens the load file dialog to load the map
         /// </summary>
-        public void Open(StreamReader reader)
+        public void Open(TextReader reader)
         {
             try
             {
-                JObject map = JObject.Parse(reader.ReadToEnd());
+                string json = reader.ReadToEnd();
 
-                ColumnSourceType = EnumHelper.GetEnumByApiValue<OdbcColumnSourceType>(map.GetValue("ColumnSourceType").ToString());
-                ColumnSource = map.GetValue("ColumnSource").ToString();
-                OdbcFieldMap.Load(map.GetValue("FieldMap").ToString());
+                JObject map = JObject.Parse(json);
+
+                string columnSourceTypeFromDisk = map.GetValue("ColumnSourceType")?.ToString();
+                if (!string.IsNullOrWhiteSpace(columnSourceTypeFromDisk))
+                {
+                    ColumnSourceType = EnumHelper.GetEnumByApiValue<OdbcColumnSourceType>(columnSourceTypeFromDisk);
+                }
+
+                string columnSourceFromDisk = map.GetValue("ColumnSource")?.ToString();
+                if (!string.IsNullOrWhiteSpace(columnSourceFromDisk))
+                {
+                    ColumnSource = columnSourceFromDisk;
+                }
+
+                string mapFromDisk = map.GetValue("FieldMap")?.ToString();
+                if (!string.IsNullOrWhiteSpace(mapFromDisk))
+                {
+                    OdbcFieldMap.Load(mapFromDisk);
+                }
 
                 ReadAdditionalParamatersFromMap(map);
             }

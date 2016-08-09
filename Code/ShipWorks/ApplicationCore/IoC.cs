@@ -91,7 +91,7 @@ namespace ShipWorks.ApplicationCore
             builder.RegisterGeneric(typeof(AccountManagerBase<>))
                 .AsSelf()
                 .SingleInstance();
-            
+
             builder.RegisterInstance(Messenger.Current)
                 .AsImplementedInterfaces()
                 .ExternallyOwned();

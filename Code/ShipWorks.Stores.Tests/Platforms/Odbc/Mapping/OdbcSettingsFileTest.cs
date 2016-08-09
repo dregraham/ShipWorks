@@ -8,22 +8,25 @@ using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
 using System;
 using System.IO;
-using System.Text;
+using System.Linq;
 using System.Windows.Forms;
+using Autofac;
+using System.Text;
+using ShipWorks.Stores.Platforms.Odbc;
 using Xunit;
 
 namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
 {
     public class OdbcSettingsFileTest : IDisposable
     {
-        private AutoMock mock;
+        private readonly AutoMock mock;
         private string defaultFileName = "Field map name";
-        
+
         public OdbcSettingsFileTest()
         {
-            mock = AutoMock.GetLoose();    
+            mock = AutoMock.GetLoose();
         }
-        
+
         [Fact]
         public void Save_ColumnSourceTypeSavedToStream()
         {
@@ -87,12 +90,120 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
             }
         }
 
+        [Fact]
+        public void Open_SetsColumnSourceType_WhenDialogResultIsOK()
+        {
+            using (Stream stream = EmbeddedResourceHelper.GetEmbeddedResourceStream(
+                "ShipWorks.Stores.Tests.Platforms.Odbc.Artifacts.MapSavedToDisk.json"))
+            using (var streamReader = new StreamReader(stream))
+            {
+                var ioFactory = mock.Create<JsonOdbcFieldMapIOFactory>();
+                var map = mock.Create<OdbcFieldMap>(new TypedParameter(typeof(IOdbcFieldMapIOFactory), ioFactory));
+
+                MockDialog(FileDialogType.Open, DialogResult.OK, stream);
+
+                var testObject = mock.Create<FakeOdbcSettingsFile>(new TypedParameter(typeof(IOdbcFieldMap), map));
+                testObject.Open(streamReader);
+
+                Assert.Equal(OdbcColumnSourceType.Table, testObject.ColumnSourceType);
+            }
+        }
+
+        [Fact]
+        public void Open_SetsColumnSource_WhenDialogResultIsOK()
+        {
+            using (Stream stream = EmbeddedResourceHelper.GetEmbeddedResourceStream(
+                    "ShipWorks.Stores.Tests.Platforms.Odbc.Artifacts.MapSavedToDisk.json"))
+            using (var streamReader = new StreamReader(stream))
+            {
+                var ioFactory = mock.Create<JsonOdbcFieldMapIOFactory>();
+                var map = mock.Create<OdbcFieldMap>(new TypedParameter(typeof(IOdbcFieldMapIOFactory), ioFactory));
+
+                MockDialog(FileDialogType.Open, DialogResult.OK, stream);
+
+                var testObject = mock.Create<FakeOdbcSettingsFile>(new TypedParameter(typeof(IOdbcFieldMap), map));
+                testObject.Open(streamReader);
+
+                Assert.Equal("Table", testObject.ColumnSource);
+            }
+        }
+
+        [Fact]
+        public void Open_SetsOdbcFieldMap_WhenDialogResultIsOK()
+        {
+            using (Stream stream = EmbeddedResourceHelper.GetEmbeddedResourceStream(
+                    "ShipWorks.Stores.Tests.Platforms.Odbc.Artifacts.MapSavedToDisk.json"))
+            using (var streamReader = new StreamReader(stream))
+            {
+                var ioFactory = mock.Create<JsonOdbcFieldMapIOFactory>();
+                var map = mock.Create<OdbcFieldMap>(new TypedParameter(typeof(IOdbcFieldMapIOFactory), ioFactory));
+
+                MockDialog(FileDialogType.Open, DialogResult.OK, stream);
+
+                var testObject = mock.Create<FakeOdbcSettingsFile>(new TypedParameter(typeof(IOdbcFieldMap), map));
+                testObject.Open(streamReader);
+
+                Assert.Equal(2, testObject.OdbcFieldMap.Entries.Count());
+            }
+        }
+
+        [Fact]
+        public void Open_DelegatesToMessageHelper_WhenIOExceptionIsThrown()
+        {
+            var streamReader = mock.Mock<TextReader>();
+            streamReader.Setup(r => r.ReadToEnd()).Throws(new IOException());
+            var messageHelper = mock.Mock<IMessageHelper>();
+            var testObject = mock.Create<FakeOdbcSettingsFile>();
+
+            testObject.Open(streamReader.Object);
+
+            messageHelper.Verify(m => m.ShowError(It.IsAny<string>()), Times.Once);
+        }
+
+        [Fact]
+        public void Open_DelegatesToMessageHelper_WhenUnauthorizedAccessExceptionIsThrown()
+        {
+            var streamReader = mock.Mock<TextReader>();
+            streamReader.Setup(r => r.ReadToEnd()).Throws(new UnauthorizedAccessException());
+            var messageHelper = mock.Mock<IMessageHelper>();
+            var testObject = mock.Create<FakeOdbcSettingsFile>();
+
+            testObject.Open(streamReader.Object);
+
+            messageHelper.Verify(m => m.ShowError(It.IsAny<string>()), Times.Once);
+        }
+
+        [Fact]
+        public void Open_DelegatesToMessageHelper_WhenShipWorksOdbcExceptionIsThrown()
+        {
+            var streamReader = mock.Mock<TextReader>();
+            streamReader.Setup(r => r.ReadToEnd()).Throws(new ShipWorksOdbcException());
+            var messageHelper = mock.Mock<IMessageHelper>();
+            var testObject = mock.Create<FakeOdbcSettingsFile>();
+
+            testObject.Open(streamReader.Object);
+
+            messageHelper.Verify(m => m.ShowError(It.IsAny<string>()), Times.Once);
+        }
 
         private Mock<IOdbcFieldMap> MockFieldMap()
         {
             Mock<IOdbcFieldMap> fieldMap = mock.MockRepository.Create<IOdbcFieldMap>();
             fieldMap.Setup(f => f.Name).Returns(defaultFileName);
             return fieldMap;
+        }
+
+        private void MockDialog(FileDialogType dialogType, DialogResult result, Stream stream)
+        {
+            var fileDialogMock = mock.MockRepository.Create<IFileDialog>();
+            var dialogIndex = mock.MockRepository.Create<IIndex<FileDialogType, IFileDialog>>();
+
+            fileDialogMock.Setup(d => d.ShowDialog()).Returns(result);
+            fileDialogMock.Setup(d => d.CreateFileStream()).Returns(stream);
+
+            dialogIndex.Setup(i => i[dialogType]).Returns(fileDialogMock.Object);
+
+            mock.Provide(dialogIndex.Object);
         }
 
         public void Dispose()

@@ -6,7 +6,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
 {
     public class FakeOdbcSettingsFile : OdbcSettingsFile
     {
-        public FakeOdbcSettingsFile(IMessageHelper messageHelper, IOdbcFieldMap fieldMap) : base(messageHelper, fieldMap)
+        public FakeOdbcSettingsFile(IOdbcFieldMap fieldMap, IMessageHelper messageHelper) : base(fieldMap, messageHelper)
         {
         }
 

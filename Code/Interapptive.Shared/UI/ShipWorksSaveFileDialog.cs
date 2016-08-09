@@ -25,7 +25,7 @@ namespace Interapptive.Shared.UI
         /// "Save as file type" or "Files of type" box in the dialog box.
         /// </summary>
         public string Filter { get; set; }
-        
+
         /// <summary>
         /// Gets or sets the default file extension.
         /// </summary>

@@ -285,6 +285,7 @@
     <EmbeddedResource Include="Platforms\Odbc\Artifacts\MapWithNoItems.json" />
     <EmbeddedResource Include="Platforms\Odbc\Artifacts\UploadMap.json" />
     <EmbeddedResource Include="Platforms\Odbc\Artifacts\UploadMapWithDuplicateEntries.json" />
+    <EmbeddedResource Include="Platforms\Odbc\Artifacts\MapSavedToDisk.json" />
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\..\packages\InterapptiveAnalyzers.1.0.5714.23531\analyzers\dotnet\cs\InterapptiveAnalyzers.dll" />
