@@ -34,7 +34,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
                 testObject.Open(streamReader);
 
                 Assert.Equal(OdbcImportStrategy.ByModifiedTime, testObject.OdbcImportStrategy);
-            }    
+            }
         }
 
         [Fact]

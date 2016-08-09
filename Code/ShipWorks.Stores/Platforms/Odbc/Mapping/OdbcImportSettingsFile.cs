@@ -11,7 +11,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
     /// <seealso cref="ShipWorks.Stores.Platforms.Odbc.Mapping.OdbcSettingsFile" />
     public class OdbcImportSettingsFile : OdbcSettingsFile, IOdbcImportSettingsFile
     {
-        public OdbcImportSettingsFile(IMessageHelper messageHelper, IOdbcFieldMap fieldMap) : base(messageHelper, fieldMap)
+        public OdbcImportSettingsFile(IOdbcFieldMap fieldMap, IMessageHelper messageHelper) : base(fieldMap, messageHelper)
         {
         }
 
@@ -19,7 +19,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// The action to perform on this file (Import)
         /// </summary>
         public override string Action => "Import";
-        
+
         /// <summary>
         /// The file extension.
         /// </summary>
