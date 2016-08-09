@@ -211,5 +211,22 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
                 return clonedFieldMap;
             }
         }
+
+        /// <summary>
+        /// Serializes this instance to JSON
+        /// </summary>
+        public string Serialize()
+        {
+            using (Stream memoryStream = new MemoryStream())
+            {
+                Save(memoryStream);
+
+                memoryStream.Position = 0;
+                using (StreamReader reader = new StreamReader(memoryStream))
+                {
+                    return reader.ReadToEnd();
+                }
+            }
+        }
     }
 }

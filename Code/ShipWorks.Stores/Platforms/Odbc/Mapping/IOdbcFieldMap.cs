@@ -85,5 +85,10 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// Make a copy of the IOdbcFieldMap
         /// </summary>
         IOdbcFieldMap Clone();
+
+        /// <summary>
+        /// Serializes this instance to JSON
+        /// </summary>
+        string Serialize();
     }
 }

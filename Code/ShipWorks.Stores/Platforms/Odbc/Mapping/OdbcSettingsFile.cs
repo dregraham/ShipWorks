@@ -3,6 +3,9 @@ using System.IO;
 using System.Windows.Forms;
 using Autofac.Features.Indexed;
 using Interapptive.Shared.UI;
+using Interapptive.Shared.Utility;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Mapping
@@ -13,16 +16,14 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
     public abstract class OdbcSettingsFile
     {
         private readonly IIndex<FileDialogType, IFileDialog> fileDialogFactory;
-        private readonly IOdbcFieldMap fieldMap;
         private readonly IMessageHelper messageHelper;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcSettingsFile"/> class.
         /// </summary>
-        protected OdbcSettingsFile(IIndex<FileDialogType, IFileDialog> fileDialogFactory, IOdbcFieldMap fieldMap, IMessageHelper messageHelper)
+        protected OdbcSettingsFile(IIndex<FileDialogType, IFileDialog> fileDialogFactory, IMessageHelper messageHelper)
         {
             this.fileDialogFactory = fileDialogFactory;
-            this.fieldMap = fieldMap;
             this.messageHelper = messageHelper;
         }
 
@@ -57,6 +58,16 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         private string Filter => $"ShipWorks ODBC {Action} Map (*{Extension})|*{Extension}";
 
         /// <summary>
+        /// Reads the additional paramaters from map.
+        /// </summary>
+        protected abstract void ReadAdditionalParamatersFromMap(JObject map);
+
+        /// <summary>
+        /// Writes the additional paramaters to map.
+        /// </summary>
+        protected abstract void WriteAdditionalParamatersToMap(JObject map);
+
+        /// <summary>
         /// Opens the load file dialog to load the map
         /// </summary>
         public void Open()
@@ -64,31 +75,40 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
             IFileDialog fileDialog = fileDialogFactory[FileDialogType.Open];
             fileDialog.DefaultExt = Extension;
             fileDialog.Filter = Filter;
-            fileDialog.DefaultFileName = fieldMap.Name;
 
-            if (fileDialog.ShowDialog() == DialogResult.OK)
+            if (fileDialog.ShowDialog() != DialogResult.OK)
+            {
+                return;
+            }
+
+            try
             {
                 using (Stream fileStream = fileDialog.CreateFileStream())
+                using (StreamReader streamReader = new StreamReader(fileStream))
                 {
-                    try
-                    {
-                        fieldMap.Load(fileStream);
-                    }
-                    catch (IOException ex)
-                    {
-                        messageHelper.ShowError(ex.Message);
-                    }
-                    catch (UnauthorizedAccessException ex)
-                    {
-                        messageHelper.ShowError(ex.Message);
-                    }
-                    catch (ShipWorksOdbcException ex)
-                    {
-                        messageHelper.ShowError(ex.Message);
-                    }
+                    JObject map = JObject.Parse(streamReader.ReadToEnd());
+
+                    ColumnSourceType = EnumHelper.GetEnumByApiValue<OdbcColumnSourceType>(map.GetValue("ColumnSourceType").ToString());
+                    ColumnSource = map.GetValue("ColumnSource").ToString();
+                    OdbcFieldMap.Load(map.GetValue("FieldMap").ToString());
+
+                    ReadAdditionalParamatersFromMap(map);
                 }
             }
+            catch (IOException ex)
+            {
+                messageHelper.ShowError(ex.Message);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                messageHelper.ShowError(ex.Message);
+            }
+            catch (ShipWorksOdbcException ex)
+            {
+                messageHelper.ShowError(ex.Message);
+            }
         }
+
 
         /// <summary>
         /// Opens the save file dialog to save the map
@@ -98,29 +118,42 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
             IFileDialog fileDialog = fileDialogFactory[FileDialogType.Save];
             fileDialog.DefaultExt = Extension;
             fileDialog.Filter = Filter;
-            fileDialog.DefaultFileName = fieldMap.Name;
+            fileDialog.DefaultFileName = OdbcFieldMap.Name;
 
-            if (fileDialog.ShowDialog() == DialogResult.OK)
+            if (fileDialog.ShowDialog() != DialogResult.OK)
+            {
+                return;
+            }
+
+            try
             {
                 using (Stream fileStream = fileDialog.CreateFileStream())
+                using (StreamWriter streamWriter = new StreamWriter(fileStream))
                 {
-                    try
+                    JObject map = new JObject
                     {
-                        fieldMap.Save(fileStream);
-                    }
-                    catch (IOException ex)
-                    {
-                        messageHelper.ShowError(ex.Message);
-                    }
-                    catch (UnauthorizedAccessException ex)
-                    {
-                        messageHelper.ShowError(ex.Message);
-                    }
-                    catch (ShipWorksOdbcException ex)
-                    {
-                        messageHelper.ShowError(ex.Message);
-                    }
+                        {"FieldMap", new JObject(OdbcFieldMap.Serialize())},
+                        {"ColumnSourceType", new JObject(EnumHelper.GetApiValue(ColumnSourceType))},
+                        {"ColumnSource", new JObject(ColumnSource)}
+                    };
+
+                    WriteAdditionalParamatersToMap(map);
+
+                    JsonSerializer serializer = new JsonSerializer();
+                    serializer.Serialize(streamWriter, map);
                 }
+            }
+            catch (IOException ex)
+            {
+                messageHelper.ShowError(ex.Message);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                messageHelper.ShowError(ex.Message);
+            }
+            catch (ShipWorksOdbcException ex)
+            {
+                messageHelper.ShowError(ex.Message);
             }
         }
     }
