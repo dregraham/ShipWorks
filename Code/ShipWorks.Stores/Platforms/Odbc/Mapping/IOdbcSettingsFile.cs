@@ -41,7 +41,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <summary>
         /// Opens the load file dialog to load the map
         /// </summary>
-        void Open(StreamReader reader);
+        void Open(TextReader reader);
 
         /// <summary>
         /// Opens the save file dialog to save the map
