@@ -489,12 +489,27 @@ namespace ShipWorks.Stores.Management
         /// </summary>
         private void OnStepNextAlreadyActive(object sender, WizardStepEventArgs e)
         {
-            if (EditionSerializer.Restore(store) is FreemiumFreeEdition && StoreManager.GetDatabaseStoreCount() > 0)
+            if (string.IsNullOrWhiteSpace(licenseKey.Text))
             {
-                MessageHelper.ShowError(this, "The license you entered is for the Endicia Free for eBay ShipWorks edition.  That edition only supports a single store, and you already have some stores in ShipWorks.");
-
+                MessageHelper.ShowError(this, "Please enter the license key for your store to continue");
                 e.NextPage = CurrentPage;
                 return;
+            }
+
+            LicenseActivationState licenseState = LicenseActivationHelper.ActivateAndSetLicense(store, licenseKey.Text.Trim(), this);
+
+            if (licenseState != LicenseActivationState.Active)
+            {
+                e.NextPage = CurrentPage;
+            }
+            else
+            {
+                if (EditionSerializer.Restore(store) is FreemiumFreeEdition && StoreManager.GetDatabaseStoreCount() > 0)
+                {
+                    MessageHelper.ShowError(this, "The license you entered is for the Endicia Free for eBay ShipWorks edition.  That edition only supports a single store, and you already have some stores in ShipWorks.");
+
+                    e.NextPage = CurrentPage;
+                }
             }
         }
 
