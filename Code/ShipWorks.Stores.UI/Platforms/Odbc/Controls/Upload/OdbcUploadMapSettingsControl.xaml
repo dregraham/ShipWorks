@@ -78,11 +78,11 @@
                      Height="24"
                      Margin="5 5 0 5"
                      VerticalAlignment="Center"
-                     Text="{Binding MapName,
-                                    UpdateSourceTrigger=LostFocus}" />
+                     Text="{Binding MapName, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
             <Button Grid.Row="1"
                     Grid.Column="2"
-                    Content="Load Map..." />
+                    Content="Load Map..."
+                    Command="{Binding OpenMapSettingsFileCommand}"/>
             <Label Grid.Row="3"
                    Grid.Column="0"
                    HorizontalAlignment="Right"

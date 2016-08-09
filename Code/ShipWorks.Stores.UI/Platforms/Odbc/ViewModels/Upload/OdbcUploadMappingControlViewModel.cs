@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using Interapptive.Shared.UI;
+﻿using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
@@ -14,6 +7,12 @@ using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Stores.Platforms.Odbc.DataSource;
 using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Linq;
+using System.Reflection;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Upload
 {
@@ -30,6 +29,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Upload
         private readonly PropertyChangedHandler handler;
         private ObservableCollection<OdbcColumn> columns;
         public event PropertyChangedEventHandler PropertyChanged;
+        private string loadedMapName;
 
         private const string EmptyColumnName = "(None)";
 
@@ -84,10 +84,13 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Upload
             set { handler.Set(nameof(Columns), ref columns, value); }
         }
 
+        /// <summary>
+        /// Loads the map from the store.
+        /// </summary>
         public void Load(OdbcStoreEntity store)
         {
             MethodConditions.EnsureArgumentIsNotNull(store);
-
+            
             LoadColumnSource(store);
             LoadMap(store.UploadMap);
         }
@@ -108,9 +111,13 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Upload
             Columns.Insert(0, new OdbcColumn("(None)"));
         }
 
+        /// <summary>
+        /// Loads the map.
+        /// </summary>
         private void LoadMap(string uploadMap)
         {
             IOdbcFieldMap storeFieldMap = fieldMapFactory.CreateFieldMapFrom(uploadMap);
+            loadedMapName = storeFieldMap.Name;
 
             EnsureExternalFieldsExistInColumnSource(storeFieldMap);
 
@@ -154,39 +161,32 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Upload
         {
             MethodConditions.EnsureArgumentIsNotNull(store);
 
-            OdbcFieldMap map = CreateMap();
+            IOdbcFieldMap map = CreateMap();
 
-            using (Stream memoryStream = new MemoryStream())
+            try
             {
-                try
-                {
-                    map.Save(memoryStream);
-                }
-                catch (ShipWorksOdbcException ex)
-                {
-                    messageHelper.ShowError(ex.Message);
-                }
-
-                memoryStream.Position = 0;
-                using (StreamReader reader = new StreamReader(memoryStream))
-                {
-                    store.UploadMap = reader.ReadToEnd();
-                }
+                store.UploadMap = map.Serialize();
+            }
+            catch (ShipWorksOdbcException ex)
+            {
+                messageHelper.ShowError(ex.Message);
             }
         }
+
 
         /// <summary>
         /// Build a single ODBC Field Map from the Order Address and Item Field Maps
         /// </summary>
-        private OdbcFieldMap CreateMap()
+        private IOdbcFieldMap CreateMap()
         {
             List<IOdbcFieldMapEntry> mapEntries = Shipment.Entries.ToList();
             mapEntries.AddRange(ShipmentAddress.Entries);
 
-            OdbcFieldMap map = fieldMapFactory.CreateFieldMapFrom(mapEntries);
+            IOdbcFieldMap map = fieldMapFactory.CreateFieldMapFrom(mapEntries);
 
             IEnumerable<IOdbcFieldMapEntry> entries = map.FindEntriesBy(OrderFields.OrderNumber);
             map.RecordIdentifierSource = entries.FirstOrDefault()?.ExternalField.Column.Name;
+            map.Name = loadedMapName;
 
             return map;
         }

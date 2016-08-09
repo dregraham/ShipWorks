@@ -1,9 +1,14 @@
-﻿using Interapptive.Shared.UI;
+﻿using Autofac.Features.Indexed;
+using GalaSoft.MvvmLight.Command;
+using Interapptive.Shared.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
+using ShipWorks.Stores.Platforms.Odbc.Mapping;
 using System;
+using System.IO;
 using System.Reflection;
 using System.Windows.Forms;
+using System.Windows.Input;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Upload
 {
@@ -14,6 +19,9 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Upload
     {
         private readonly Func<string, IDialog> dialogFactory;
         private bool columnSourceIsTable = true;
+        private IOdbcFieldMap fieldMap;
+        private readonly IIndex<FileDialogType, IFileDialog> fileDialogFactory;
+        private readonly IOdbcSettingsFile uploadSettingsFile;
 
         private const string InitialQueryComment =
             "/**********************************************************************/\n" +
@@ -35,11 +43,20 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Upload
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcUploadMapSettingsControlViewModel"/> class.
         /// </summary>
-        public OdbcUploadMapSettingsControlViewModel(Func<string, IDialog> dialogFactory, IMessageHelper messageHelper,
-            Func<string, IOdbcColumnSource> columnSourceFactory) : base(messageHelper, columnSourceFactory)
+        public OdbcUploadMapSettingsControlViewModel(
+            Func<string, IDialog> dialogFactory,
+            IMessageHelper messageHelper,
+            Func<string, IOdbcColumnSource> columnSourceFactory,
+            IOdbcFieldMap fieldMap,
+            IIndex<FileDialogType, IFileDialog> fileDialogFactory,
+            IOdbcSettingsFile uploadSettingsFile) : base(messageHelper, columnSourceFactory)
         {
             this.dialogFactory = dialogFactory;
+            this.fieldMap = fieldMap;
+            this.fileDialogFactory = fileDialogFactory;
+            this.uploadSettingsFile = uploadSettingsFile;
             CustomQuery = InitialQueryComment;
+            OpenMapSettingsFileCommand = new RelayCommand(OpenMapSettingsFile);
         }
 
         /// <summary>
@@ -65,6 +82,40 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Upload
         }
 
         /// <summary>
+        /// Gets the load map command.
+        /// </summary>
+        public ICommand OpenMapSettingsFileCommand { get; }
+
+        /// <summary>
+        /// Loads the map.
+        /// </summary>
+        private void OpenMapSettingsFile()
+        {
+            IFileDialog fileDialog = fileDialogFactory[FileDialogType.Open];
+            fileDialog.DefaultExt = uploadSettingsFile.Extension;
+            fileDialog.Filter = uploadSettingsFile.Filter;
+            fileDialog.DefaultFileName = fieldMap.Name;
+
+            if (fileDialog.ShowDialog() != DialogResult.OK)
+            {
+                return;
+            }
+
+            using (Stream streamToOpen = fileDialog.CreateFileStream())
+            using (StreamReader reader = new StreamReader(streamToOpen))
+            {
+                uploadSettingsFile.Open(reader);
+                ColumnSourceIsTable = uploadSettingsFile.ColumnSourceType == OdbcColumnSourceType.Table;
+                LoadAndSetColumnSource(uploadSettingsFile.ColumnSource);
+                MapName = uploadSettingsFile.OdbcFieldMap.Name;
+
+                fieldMap = uploadSettingsFile.OdbcFieldMap;
+            }
+
+            MapName = fieldMap.Name;
+        }
+
+        /// <summary>
         /// Saves the map settings.
         /// </summary>
         /// <param name="store"></param>
@@ -77,6 +128,9 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Upload
             store.UploadColumnSource = ColumnSourceIsTable ?
                 SelectedTable.Name :
                 CustomQuery;
+
+            fieldMap.Name = MapName;
+            store.UploadMap = fieldMap.Serialize();
         }
 
         /// <summary>
@@ -84,6 +138,9 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Upload
         /// </summary>
         public override void LoadMapSettings(OdbcStoreEntity store)
         {
+            fieldMap.Load(store.UploadMap);
+            MapName = fieldMap.Name;
+
             ColumnSourceIsTable = store.UploadColumnSourceType == (int)OdbcColumnSourceType.Table;
         }
     }

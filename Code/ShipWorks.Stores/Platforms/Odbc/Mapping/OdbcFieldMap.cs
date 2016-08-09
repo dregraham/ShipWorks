@@ -32,6 +32,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <summary>
         /// The name of the map
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public string Name { get; set; }
 
         /// <summary>
@@ -168,6 +169,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
             }
 
             RecordIdentifierSource = reader.ReadRecordIdentifierSource();
+            Name = reader.ReadName();
         }
 
         /// <summary>
