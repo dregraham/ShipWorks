@@ -9,7 +9,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
     /// Saves and Opens Odbc Import Settings from disk.
     /// </summary>
     /// <seealso cref="ShipWorks.Stores.Platforms.Odbc.Mapping.OdbcSettingsFile" />
-    public class OdbcImportSettingsFile : OdbcSettingsFile
+    public class OdbcImportSettingsFile : OdbcSettingsFile, IOdbcImportSettingsFile
     {
         public OdbcImportSettingsFile(IMessageHelper messageHelper, IOdbcFieldMap fieldMap) : base(messageHelper, fieldMap)
         {

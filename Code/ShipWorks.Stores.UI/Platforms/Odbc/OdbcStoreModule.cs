@@ -146,6 +146,12 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             builder.RegisterType<JsonOdbcFieldMapWriter>()
                 .AsImplementedInterfaces()
                 .AsSelf();
+
+            builder.RegisterType<OdbcImportSettingsFile>()
+                .As<IOdbcImportSettingsFile>();
+
+            builder.RegisterType<OdbcUploadSettingsFile>()
+                .As<IOdbcSettingsFile>();
         }
 
         /// <summary>

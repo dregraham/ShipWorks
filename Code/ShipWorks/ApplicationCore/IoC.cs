@@ -200,8 +200,8 @@ namespace ShipWorks.ApplicationCore
             builder.RegisterType<UspsAccountManagerControl>();
             builder.RegisterType<UspsPurchasePostageDlg>();
 
-            builder.RegisterType<ShipWorksOpenFileDialog>().Keyed<FileDialogType>(FileDialogType.Open);
-            builder.RegisterType<ShipWorksSaveFileDialog>().Keyed<FileDialogType>(FileDialogType.Save);
+            builder.RegisterType<ShipWorksOpenFileDialog>().Keyed<IFileDialog>(FileDialogType.Open);
+            builder.RegisterType<ShipWorksSaveFileDialog>().Keyed<IFileDialog>(FileDialogType.Save);
         }
 
         /// <summary>

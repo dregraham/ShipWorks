@@ -10,7 +10,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
     /// <summary>
     /// Used to save and load OdbcSettings from disk.
     /// </summary>
-    public abstract class OdbcSettingsFile
+    public abstract class OdbcSettingsFile : IOdbcSettingsFile
     {
         private readonly IMessageHelper messageHelper;
 

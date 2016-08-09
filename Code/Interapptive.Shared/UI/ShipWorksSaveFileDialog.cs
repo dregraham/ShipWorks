@@ -65,7 +65,7 @@ namespace Interapptive.Shared.UI
         /// <exception cref="UnauthorizedAccessException"></exception>
         public Stream CreateFileStream()
         {
-            return string.IsNullOrEmpty(selectedFileName) ? null : File.OpenRead(selectedFileName);
+            return string.IsNullOrEmpty(selectedFileName) ? null : File.Open(selectedFileName, FileMode.Create);
         }
     }
 }

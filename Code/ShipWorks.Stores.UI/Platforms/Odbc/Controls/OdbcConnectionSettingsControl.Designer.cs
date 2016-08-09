@@ -34,6 +34,8 @@
             this.uploadSettingsLabel = new System.Windows.Forms.Label();
             this.editUploadSettings = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
+            this.exportImportMap = new System.Windows.Forms.Button();
+            this.exportUploadMap = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // importSettingsLabel
@@ -94,10 +96,32 @@
             this.label2.TabIndex = 29;
             this.label2.Text = "Edit settings to upload shipment details:";
             // 
+            // exportImportMap
+            // 
+            this.exportImportMap.Location = new System.Drawing.Point(379, 40);
+            this.exportImportMap.Name = "exportImportMap";
+            this.exportImportMap.Size = new System.Drawing.Size(110, 23);
+            this.exportImportMap.TabIndex = 31;
+            this.exportImportMap.Text = "Export Import Map";
+            this.exportImportMap.UseVisualStyleBackColor = true;
+            this.exportImportMap.Click += new System.EventHandler(this.OnExportImportMapClick);
+            // 
+            // exportUploadMap
+            // 
+            this.exportUploadMap.Location = new System.Drawing.Point(379, 84);
+            this.exportUploadMap.Name = "exportUploadMap";
+            this.exportUploadMap.Size = new System.Drawing.Size(110, 23);
+            this.exportUploadMap.TabIndex = 32;
+            this.exportUploadMap.Text = "Export Upload Map";
+            this.exportUploadMap.UseVisualStyleBackColor = true;
+            this.exportUploadMap.Click += new System.EventHandler(this.OnExportUploadMap);
+            // 
             // OdbcConnectionSettingsControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.exportUploadMap);
+            this.Controls.Add(this.exportImportMap);
             this.Controls.Add(this.editUploadSettings);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.uploadSettingsLabel);
@@ -119,5 +143,7 @@
         private System.Windows.Forms.Label uploadSettingsLabel;
         private System.Windows.Forms.Button editUploadSettings;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Button exportImportMap;
+        private System.Windows.Forms.Button exportUploadMap;
     }
 }

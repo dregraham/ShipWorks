@@ -175,6 +175,8 @@
     <Compile Include="Platforms\Odbc\DataAccess\IOdbcUploadCommandFactory.cs" />
     <Compile Include="Platforms\Odbc\DataAccess\OdbcUploadCommandFactory.cs" />
     <Compile Include="Platforms\Odbc\DataSource\DsnInfo.cs" />
+    <Compile Include="Platforms\Odbc\Mapping\IOdbcImportSettingsFile.cs" />
+    <Compile Include="Platforms\Odbc\Mapping\IOdbcSettingsFile.cs" />
     <Compile Include="Platforms\Odbc\Mapping\OdbcImportSettingsFile.cs" />
     <Compile Include="Platforms\Odbc\Mapping\OdbcSettingsFile.cs" />
     <Compile Include="Platforms\Odbc\Mapping\OdbcUploadSettingsFile.cs" />
