@@ -5,7 +5,6 @@ using Newtonsoft.Json.Linq;
 using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 using System;
 using System.IO;
-using System.Windows.Forms;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 {
@@ -54,7 +53,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <summary>
         /// Gets the filter value.
         /// </summary>
-        private string Filter => $"ShipWorks ODBC {Action} Map (*{Extension})|*{Extension}";
+        public string Filter => $"ShipWorks ODBC {Action} Map (*{Extension})|*{Extension}";
 
         /// <summary>
         /// Reads the additional paramaters from map.
@@ -69,30 +68,17 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <summary>
         /// Opens the load file dialog to load the map
         /// </summary>
-        public void Open()
+        public void Open(StreamReader reader)
         {
-            IFileDialog fileDialog = fileDialogFactory[FileDialogType.Open];
-            fileDialog.DefaultExt = Extension;
-            fileDialog.Filter = Filter;
-
-            if (fileDialog.ShowDialog() != DialogResult.OK)
-            {
-                return;
-            }
-
             try
             {
-                using (Stream fileStream = fileDialog.CreateFileStream())
-                using (StreamReader streamReader = new StreamReader(fileStream))
-                {
-                    JObject map = JObject.Parse(streamReader.ReadToEnd());
+                JObject map = JObject.Parse(reader.ReadToEnd());
 
-                    ColumnSourceType = EnumHelper.GetEnumByApiValue<OdbcColumnSourceType>(map.GetValue("ColumnSourceType").ToString());
-                    ColumnSource = map.GetValue("ColumnSource").ToString();
-                    OdbcFieldMap.Load(map.GetValue("FieldMap").ToString());
+                ColumnSourceType = EnumHelper.GetEnumByApiValue<OdbcColumnSourceType>(map.GetValue("ColumnSourceType").ToString());
+                ColumnSource = map.GetValue("ColumnSource").ToString();
+                OdbcFieldMap.Load(map.GetValue("FieldMap").ToString());
 
-                    ReadAdditionalParamatersFromMap(map);
-                }
+                ReadAdditionalParamatersFromMap(map);
             }
             catch (IOException ex)
             {
@@ -106,19 +92,6 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
             {
                 messageHelper.ShowError(ex.Message);
             }
-        }
-
-        /// <summary>
-        /// Gets the stream to save.
-        /// </summary>
-        public Stream GetStreamToSave()
-        {
-            IFileDialog fileDialog = fileDialogFactory[FileDialogType.Save];
-            fileDialog.DefaultExt = Extension;
-            fileDialog.Filter = Filter;
-            fileDialog.DefaultFileName = OdbcFieldMap.Name;
-
-            return fileDialog.ShowDialog() == DialogResult.OK ? fileDialog.CreateFileStream() : null;
         }
 
         /// <summary>

@@ -23,108 +23,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
         {
             mock = AutoMock.GetLoose();    
         }
-
-        [Fact]
-        public void GetStreamToSave_DefaultExtensionIsSetInFileDialog()
-        {
-            var mockDialog = MockDialog(FileDialogType.Save, DialogResult.Abort, null);
-
-            var testObject = mock.Create<FakeOdbcSettingsFile>();
-
-            testObject.OdbcFieldMap = MockFieldMap().Object;
-
-            testObject.GetStreamToSave();
-
-            mockDialog.VerifySet(d => d.DefaultExt = testObject.Extension);
-        }
-
-        [Fact]
-        public void GetStreamToSave_FilterIsSetInFileDialog()
-        {
-            var mockDialog = MockDialog(FileDialogType.Save, DialogResult.Abort, null);
-
-            var testObject = mock.Create<FakeOdbcSettingsFile>();
-            testObject.OdbcFieldMap = MockFieldMap().Object;
-
-            testObject.GetStreamToSave();
-
-            mockDialog.VerifySet(d => d.Filter = $"ShipWorks ODBC {testObject.Action} Map (*{testObject.Extension})|*{testObject.Extension}");
-        }
-
-        [Fact]
-        public void GetStreamToSave_DefaultFileNameIsSetInFileDialog()
-        {
-            var mockDialog = MockDialog(FileDialogType.Save, DialogResult.Abort, null);
-
-            var testObject = mock.Create<FakeOdbcSettingsFile>();
-            testObject.OdbcFieldMap = MockFieldMap().Object;
-
-            testObject.GetStreamToSave();
-
-            mockDialog.VerifySet(d => d.DefaultFileName = defaultFileName);
-        }
-
-        [Fact]
-        public void GetStreamToSave_StreamNotRequested_WhenUserCancelsDialog()
-        {
-            var mockDialog = MockDialog(FileDialogType.Save, DialogResult.Abort, null);
-
-            var testObject = mock.Create<FakeOdbcSettingsFile>();
-            testObject.OdbcFieldMap = MockFieldMap().Object;
-
-            testObject.GetStreamToSave();
-
-            mockDialog.Verify(d=>d.CreateFileStream(), Times.Never);
-        }
-
-        [Fact]
-        public void GetStreamToSave_StreamNotReturned_WhenUserCancelsDialog()
-        {
-            using (var stream = new MemoryStream())
-            {
-                MockDialog(FileDialogType.Save, DialogResult.Abort, stream);
-
-                var testObject = mock.Create<FakeOdbcSettingsFile>();
-                testObject.OdbcFieldMap = MockFieldMap().Object;
-
-                Stream streamToSave = testObject.GetStreamToSave();
-
-                Assert.Null(streamToSave);
-            }
-        }
-
-        [Fact]
-        public void GetStreamToSave_StreamRequested_WhenUserSelectsAFile()
-        {
-            using (var stream = new MemoryStream())
-            {
-                var mockDialog = MockDialog(FileDialogType.Save, DialogResult.OK, stream);
-
-                var testObject = mock.Create<FakeOdbcSettingsFile>();
-                testObject.OdbcFieldMap = MockFieldMap().Object;
-
-                testObject.GetStreamToSave();
-
-                mockDialog.Verify(d => d.CreateFileStream(), Times.Once);
-            }
-        }
-
-        [Fact]
-        public void GetStreamToSave_StreamReturned_WhenUserSelectsAFile()
-        {
-            using (var stream = new MemoryStream())
-            {
-                MockDialog(FileDialogType.Save, DialogResult.OK, stream);
-
-                var testObject = mock.Create<FakeOdbcSettingsFile>();
-                testObject.OdbcFieldMap = MockFieldMap().Object;
-
-                Stream streamToSave = testObject.GetStreamToSave();
-
-                Assert.Equal(stream, streamToSave);
-            }
-        }
-
+        
         [Fact]
         public void Save_ColumnSourceTypeSavedToStream()
         {
@@ -194,21 +93,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
             Mock<IOdbcFieldMap> fieldMap = mock.MockRepository.Create<IOdbcFieldMap>();
             fieldMap.Setup(f => f.Name).Returns(defaultFileName);
             return fieldMap;
-        }
-
-        private Mock<IFileDialog> MockDialog(FileDialogType dialogType, DialogResult result, MemoryStream stream)
-        {
-            var fileDialogMock = mock.MockRepository.Create<IFileDialog>();
-            var dialogIndex = mock.MockRepository.Create<IIndex<FileDialogType, IFileDialog>>();
-
-            fileDialogMock.Setup(d => d.ShowDialog()).Returns(result);
-            fileDialogMock.Setup(d => d.CreateFileStream()).Returns(stream);
-
-            dialogIndex.Setup(i => i[dialogType]).Returns(fileDialogMock.Object);
-
-            mock.Provide(dialogIndex.Object);
-
-            return fileDialogMock;
         }
 
         public void Dispose()
