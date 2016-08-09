@@ -1,5 +1,4 @@
-﻿using Autofac.Features.Indexed;
-using Interapptive.Shared.UI;
+﻿using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using Newtonsoft.Json.Linq;
 using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
@@ -9,19 +8,17 @@ using System.IO;
 namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 {
     /// <summary>
-    ///
+    /// Used to save and load OdbcSettings from disk.
     /// </summary>
-    public abstract class FakeOdbcSettingsFile
+    public abstract class OdbcSettingsFile
     {
-        private readonly IIndex<FileDialogType, IFileDialog> fileDialogFactory;
         private readonly IMessageHelper messageHelper;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="FakeOdbcSettingsFile"/> class.
+        /// Initializes a new instance of the <see cref="OdbcSettingsFile"/> class.
         /// </summary>
-        protected FakeOdbcSettingsFile(IIndex<FileDialogType, IFileDialog> fileDialogFactory, IMessageHelper messageHelper)
+        protected OdbcSettingsFile(IMessageHelper messageHelper)
         {
-            this.fileDialogFactory = fileDialogFactory;
             this.messageHelper = messageHelper;
         }
 
@@ -101,11 +98,12 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         {
             try
             {
-                JObject settings = new JObject();
-
-                settings.Add("ColumnSourceType", EnumHelper.GetApiValue(ColumnSourceType));
-                settings.Add("ColumnSource", ColumnSource);
-                settings.Add("FieldMap", OdbcFieldMap.Serialize());
+                JObject settings = new JObject
+                {
+                    {"ColumnSourceType", EnumHelper.GetApiValue(ColumnSourceType)},
+                    {"ColumnSource", ColumnSource},
+                    {"FieldMap", OdbcFieldMap.Serialize()}
+                };
 
                 WriteAdditionalParamatersToMap(settings);
 

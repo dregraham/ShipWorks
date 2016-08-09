@@ -4,10 +4,9 @@ using Newtonsoft.Json.Linq;
 
 namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
 {
-    public class FakeOdbcSettingsFile : Stores.Platforms.Odbc.Mapping.FakeOdbcSettingsFile
+    public class FakeOdbcSettingsFile : Stores.Platforms.Odbc.Mapping.OdbcSettingsFile
     {
-        public FakeOdbcSettingsFile(IIndex<FileDialogType, IFileDialog> fileDialogFactory, IMessageHelper messageHelper) :
-            base(fileDialogFactory, messageHelper)
+        public FakeOdbcSettingsFile(IMessageHelper messageHelper) : base(messageHelper)
         {
         }
 
