@@ -114,7 +114,7 @@
             this.exportUploadMap.TabIndex = 32;
             this.exportUploadMap.Text = "Export Upload Map";
             this.exportUploadMap.UseVisualStyleBackColor = true;
-            this.exportUploadMap.Click += new System.EventHandler(this.OnExportUploadMap);
+            this.exportUploadMap.Click += new System.EventHandler(this.OnExportUploadMapClick);
             // 
             // OdbcConnectionSettingsControl
             // 

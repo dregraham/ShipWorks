@@ -1,5 +1,4 @@
-﻿using System;
-using Autofac.Features.Indexed;
+﻿using Autofac.Features.Indexed;
 using Interapptive.Shared.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Management;
@@ -8,6 +7,7 @@ using ShipWorks.Stores.Platforms.Odbc.DataSource;
 using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 using ShipWorks.Stores.UI.Platforms.Odbc.ViewModels;
 using ShipWorks.UI.Wizard;
+using System;
 using IWin32Window = System.Windows.Interop.IWin32Window;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages.Import
@@ -82,6 +82,10 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages.Import
                 viewModel = viewModelFactory["Import"];
                 viewModel.Load(selectedDataSource, schema, store.ImportColumnSource, store);
                 mapSettingsControl.DataContext = viewModel;
+            }
+            else
+            {
+                viewModel.LoadMapSettings(store);
             }
         }
     }

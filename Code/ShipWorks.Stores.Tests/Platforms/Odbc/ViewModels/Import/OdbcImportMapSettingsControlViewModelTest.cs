@@ -1,15 +1,19 @@
 ﻿using Autofac.Extras.Moq;
+using Autofac.Features.Indexed;
 using Interapptive.Shared.UI;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Platforms.Odbc;
+using ShipWorks.Stores.Platforms.Odbc.DataAccess;
 using ShipWorks.Stores.Platforms.Odbc.DataSource;
 using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 using ShipWorks.Stores.Platforms.Odbc.Download;
+using ShipWorks.Stores.Platforms.Odbc.Mapping;
 using ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import;
 using System;
 using System.Data;
-using ShipWorks.Stores.Platforms.Odbc;
-using ShipWorks.Stores.Platforms.Odbc.DataAccess;
+using System.IO;
+using System.Windows.Forms;
 using Xunit;
 
 namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Import
@@ -17,6 +21,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Import
     public class OdbcImportMapSettingsControlViewModelTest : IDisposable
     {
         private readonly AutoMock mock;
+        private const string DefaultFileName = "default file name";
 
         public OdbcImportMapSettingsControlViewModelTest()
         {
@@ -297,6 +302,302 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Import
             testObject.ColumnSource = null;
 
             Assert.Equal($"{dataSourceName}", testObject.MapName);
+        }
+
+        [Fact]
+        public void OpenMapSettingsFileCommand_SetsDefaultExtension()
+        {
+            var importSettingsFileMock = mock.Mock<IOdbcImportSettingsFile>();
+            importSettingsFileMock.Setup(s => s.Extension).Returns(".blah");
+
+            var dialogMock = MockDialog(FileDialogType.Open, DialogResult.Abort, null);
+            MockFieldMap();
+
+            var testObject = mock.Create<OdbcImportMapSettingsControlViewModel>();
+
+            testObject.OpenMapSettingsFileCommand.Execute(null);
+
+            dialogMock.VerifySet(d => d.DefaultExt = ".blah");
+        }
+
+        [Fact]
+        public void OpenMapSettingsFileCommand_SetsDefaultFilter()
+        {
+            var importSettingsFileMock = mock.Mock<IOdbcImportSettingsFile>();
+            importSettingsFileMock.Setup(s => s.Filter).Returns("filter");
+
+            var dialogMock = MockDialog(FileDialogType.Open, DialogResult.Abort, null);
+            MockFieldMap();
+
+            var testObject = mock.Create<OdbcImportMapSettingsControlViewModel>();
+
+            testObject.OpenMapSettingsFileCommand.Execute(null);
+
+            dialogMock.VerifySet(d => d.Filter = "filter");
+        }
+
+        [Fact]
+        public void OpenMapSettingsFileCommand_SetsDefaultFilename_FromOdbcMapName()
+        {
+            var dialogMock = MockDialog(FileDialogType.Open, DialogResult.Abort, null);
+            MockFieldMap();
+
+            var testObject = mock.Create<OdbcImportMapSettingsControlViewModel>();
+
+            testObject.OpenMapSettingsFileCommand.Execute(null);
+
+            dialogMock.VerifySet(d => d.DefaultFileName = DefaultFileName);
+        }
+
+        [Fact]
+        public void OpenMapSettingsFileCommand_DoesNotAttemptToReadStream_WhenUserCancels()
+        {
+            var dialogMock = MockDialog(FileDialogType.Open, DialogResult.Abort, null);
+            MockFieldMap();
+
+            var testObject = mock.Create<OdbcImportMapSettingsControlViewModel>();
+
+            testObject.OpenMapSettingsFileCommand.Execute(null);
+
+            dialogMock.Verify(d => d.CreateFileStream(), Times.Never);
+        }
+
+        [Fact]
+        public void OpenMapSettingsFileCommand_ReadsStreamFromDialog_WhenUserSelectsFile()
+        {
+            using (var stream = new MemoryStream())
+            {
+                var dialogMock = MockDialog(FileDialogType.Open, DialogResult.OK, stream);
+                var fieldMapMock = MockFieldMap();
+
+                var settingsMock = mock.Mock<IOdbcImportSettingsFile>();
+                settingsMock.Setup(s => s.OdbcFieldMap).Returns(fieldMapMock.Object);
+
+                Mock<IOdbcDataSource> dataSource = mock.Mock<IOdbcDataSource>();
+                Mock<IOdbcSchema> schema = mock.Mock<IOdbcSchema>();
+                Mock<IOdbcColumnSource> columnSource = mock.Mock<IOdbcColumnSource>();
+                columnSource.Setup(c => c.Name).Returns("Orders");
+
+                OdbcStoreEntity store = new OdbcStoreEntity()
+                {
+                    ImportStrategy = (int)OdbcImportStrategy.ByModifiedTime,
+                    ImportColumnSourceType = (int)OdbcColumnSourceType.Table
+                };
+
+                var testObject = mock.Create<OdbcImportMapSettingsControlViewModel>();
+                testObject.Load(dataSource.Object, schema.Object, "source", store);
+                
+                testObject.OpenMapSettingsFileCommand.Execute(null);
+
+                dialogMock.Verify(d => d.CreateFileStream(), Times.Once);
+            }
+        }
+
+        [Fact]
+        public void OpenMapSettingsFileCommand_ReadsStreamFromDialog_LoadsImportSettingsFileWithReaderFromDialog()
+        {
+            using (var stream = new MemoryStream())
+            {
+                MockDialog(FileDialogType.Open, DialogResult.OK, stream);
+                var fieldMapMock = MockFieldMap();
+
+                var settingsMock = mock.Mock<IOdbcImportSettingsFile>();
+                settingsMock.Setup(s => s.OdbcFieldMap).Returns(fieldMapMock.Object);
+
+                bool correctStreamUsed = false;
+                int streamHashCode = stream.GetHashCode();
+                settingsMock.Setup(s => s.Open(It.Is<StreamReader>(r => r.BaseStream.GetHashCode() == streamHashCode)))
+                    .Callback(() => correctStreamUsed = true);
+
+                Mock<IOdbcDataSource> dataSource = mock.Mock<IOdbcDataSource>();
+                Mock<IOdbcSchema> schema = mock.Mock<IOdbcSchema>();
+                Mock<IOdbcColumnSource> columnSource = mock.Mock<IOdbcColumnSource>();
+                columnSource.Setup(c => c.Name).Returns("Orders");
+
+                OdbcStoreEntity store = new OdbcStoreEntity();
+
+                var testObject = mock.Create<OdbcImportMapSettingsControlViewModel>();
+                testObject.Load(dataSource.Object, schema.Object, "source", store);
+
+                testObject.OpenMapSettingsFileCommand.Execute(null);
+
+                Assert.True(correctStreamUsed);
+            }
+        }
+
+        [Theory]
+        [InlineData(OdbcImportStrategy.All, false)]
+        [InlineData(OdbcImportStrategy.ByModifiedTime, true)]
+        public void OpenMapSettingsFileCommand_SetsDownloadStrategyIsLastModified(OdbcImportStrategy strategy, bool isLastModified)
+        {
+            using (var stream = new MemoryStream())
+            {
+                MockDialog(FileDialogType.Open, DialogResult.OK, stream);
+                var fieldMapMock = MockFieldMap();
+
+                var settingsMock = mock.Mock<IOdbcImportSettingsFile>();
+                settingsMock.Setup(s => s.OdbcFieldMap).Returns(fieldMapMock.Object);
+                settingsMock.Setup(s => s.OdbcImportStrategy).Returns(strategy);
+
+                Mock<IOdbcDataSource> dataSource = mock.Mock<IOdbcDataSource>();
+                Mock<IOdbcSchema> schema = mock.Mock<IOdbcSchema>();
+                Mock<IOdbcColumnSource> columnSource = mock.Mock<IOdbcColumnSource>();
+                columnSource.Setup(c => c.Name).Returns("Orders");
+                OdbcStoreEntity store = new OdbcStoreEntity();
+
+                var testObject = mock.Create<OdbcImportMapSettingsControlViewModel>();
+                testObject.Load(dataSource.Object, schema.Object, "source", store);
+
+                testObject.OpenMapSettingsFileCommand.Execute(null);
+
+                Assert.Equal(testObject.DownloadStrategyIsLastModified, isLastModified);
+            }
+        }
+
+        [Theory]
+        [InlineData(OdbcColumnSourceType.CustomQuery, false)]
+        [InlineData(OdbcColumnSourceType.Table, true)]
+        public void OpenMapSettingsFileCommand_SetsColumnSourceIsTable(OdbcColumnSourceType sourceType, bool isTable)
+        {
+            using (var stream = new MemoryStream())
+            {
+                MockDialog(FileDialogType.Open, DialogResult.OK, stream);
+                var fieldMapMock = MockFieldMap();
+
+                var settingsMock = mock.Mock<IOdbcImportSettingsFile>();
+                settingsMock.Setup(s => s.OdbcFieldMap).Returns(fieldMapMock.Object);
+                settingsMock.Setup(s => s.ColumnSourceType).Returns(sourceType);
+
+                Mock<IOdbcDataSource> dataSource = mock.Mock<IOdbcDataSource>();
+                Mock<IOdbcSchema> schema = mock.Mock<IOdbcSchema>();
+                Mock<IOdbcColumnSource> columnSource = mock.Mock<IOdbcColumnSource>();
+                columnSource.Setup(c => c.Name).Returns("Orders");
+                OdbcStoreEntity store = new OdbcStoreEntity();
+
+                var testObject = mock.Create<OdbcImportMapSettingsControlViewModel>();
+                testObject.Load(dataSource.Object, schema.Object, "source", store);
+
+                testObject.OpenMapSettingsFileCommand.Execute(null);
+
+                Assert.Equal(testObject.ColumnSourceIsTable, isTable);
+            }
+        }
+
+        [Fact]
+        public void OpenMapSettingsFileCommand_SetsColumnSource()
+        {
+            using (var stream = new MemoryStream())
+            {
+                MockDialog(FileDialogType.Open, DialogResult.OK, stream);
+                var fieldMapMock = MockFieldMap();
+
+                var settingsMock = mock.Mock<IOdbcImportSettingsFile>();
+                settingsMock.Setup(s => s.OdbcFieldMap).Returns(fieldMapMock.Object);
+                settingsMock.Setup(s => s.ColumnSourceType).Returns(OdbcColumnSourceType.Table);
+                settingsMock.Setup(s => s.ColumnSource).Returns("a table");
+
+                Mock<IOdbcDataSource> dataSource = mock.Mock<IOdbcDataSource>();
+                Mock<IOdbcSchema> schema = mock.Mock<IOdbcSchema>();
+                Mock<IOdbcColumnSource> columnSource = mock.MockRepository.Create<IOdbcColumnSource>();
+                columnSource.Setup(c => c.Name).Returns("Orders");
+                OdbcStoreEntity store = new OdbcStoreEntity();
+
+                var aTableColumnSourceMock = mock.MockRepository.Create<IOdbcColumnSource>();
+                aTableColumnSourceMock.Setup(x => x.Name).Returns("a table");
+                var columnSourceFuncMock = mock.MockRepository.Create<Func<string, IOdbcColumnSource>>();
+                columnSourceFuncMock.Setup(f => f("a table")).Returns(aTableColumnSourceMock.Object);
+                mock.Provide(columnSourceFuncMock.Object);
+
+                var testObject = mock.Create<OdbcImportMapSettingsControlViewModel>();
+                testObject.Load(dataSource.Object, schema.Object, "source", store);
+
+                testObject.OpenMapSettingsFileCommand.Execute(null);
+
+                Assert.Equal("a table", testObject.SelectedTable.Name);
+            }
+        }
+        
+        [Fact]
+        public void OpenMapSettingsFileCommand_SetsCustomQuery()
+        {
+            using (var stream = new MemoryStream())
+            {
+                MockDialog(FileDialogType.Open, DialogResult.OK, stream);
+                var fieldMapMock = MockFieldMap();
+
+                var settingsMock = mock.Mock<IOdbcImportSettingsFile>();
+                settingsMock.Setup(s => s.OdbcFieldMap).Returns(fieldMapMock.Object);
+                settingsMock.Setup(s => s.ColumnSourceType).Returns(OdbcColumnSourceType.CustomQuery);
+                settingsMock.Setup(s => s.ColumnSource).Returns("my query");
+
+                Mock<IOdbcDataSource> dataSource = mock.Mock<IOdbcDataSource>();
+                Mock<IOdbcSchema> schema = mock.Mock<IOdbcSchema>();
+                Mock<IOdbcColumnSource> columnSource = mock.MockRepository.Create<IOdbcColumnSource>();
+                columnSource.Setup(c => c.Name).Returns("Orders");
+                OdbcStoreEntity store = new OdbcStoreEntity();
+
+                var testObject = mock.Create<OdbcImportMapSettingsControlViewModel>();
+                testObject.Load(dataSource.Object, schema.Object, "source", store);
+
+                testObject.OpenMapSettingsFileCommand.Execute(null);
+
+                Assert.Equal("my query", testObject.CustomQuery);
+            }
+        }
+
+        [Fact]
+        public void OpenMapSettingsFileCommand_FieldMapNameIsSetFromDisk()
+        {
+            using (var stream = new MemoryStream())
+            {
+                MockDialog(FileDialogType.Open, DialogResult.OK, stream);
+                var fieldMapMock = MockFieldMap();
+
+                Mock<IOdbcFieldMap> fieldMapFromDisk = mock.MockRepository.Create<IOdbcFieldMap>();
+                fieldMapFromDisk.SetupGet(f => f.Name).Returns("name from disk");
+
+                var settingsMock = mock.Mock<IOdbcImportSettingsFile>();
+                settingsMock.Setup(s => s.OdbcFieldMap).Returns(fieldMapMock.Object);
+                settingsMock.Setup(s => s.ColumnSourceType).Returns(OdbcColumnSourceType.CustomQuery);
+                settingsMock.Setup(s => s.ColumnSource).Returns("my query");
+                settingsMock.Setup(s => s.OdbcFieldMap).Returns(fieldMapFromDisk.Object);
+
+                Mock<IOdbcDataSource> dataSource = mock.Mock<IOdbcDataSource>();
+                Mock<IOdbcSchema> schema = mock.Mock<IOdbcSchema>();
+                Mock<IOdbcColumnSource> columnSource = mock.MockRepository.Create<IOdbcColumnSource>();
+                columnSource.Setup(c => c.Name).Returns("Orders");
+                OdbcStoreEntity store = new OdbcStoreEntity();
+
+                var testObject = mock.Create<OdbcImportMapSettingsControlViewModel>();
+                testObject.Load(dataSource.Object, schema.Object, "source", store);
+
+                testObject.OpenMapSettingsFileCommand.Execute(null);
+
+                Assert.Equal("name from disk", testObject.MapName);
+            }
+        }
+
+        private Mock<IOdbcFieldMap> MockFieldMap()
+        {
+            Mock<IOdbcFieldMap> fieldMap = mock.Mock<IOdbcFieldMap>();
+            fieldMap.SetupGet(f => f.Name).Returns(DefaultFileName);
+            return fieldMap;
+        }
+
+
+        private Mock<IFileDialog> MockDialog(FileDialogType dialogType, DialogResult result, MemoryStream stream)
+        {
+            var fileDialogMock = mock.MockRepository.Create<IFileDialog>();
+            var dialogIndex = mock.MockRepository.Create<IIndex<FileDialogType, IFileDialog>>();
+
+            fileDialogMock.Setup(d => d.ShowDialog()).Returns(result);
+            fileDialogMock.Setup(d => d.CreateFileStream()).Returns(stream);
+
+            dialogIndex.Setup(i => i[dialogType]).Returns(fileDialogMock.Object);
+
+            mock.Provide(dialogIndex.Object);
+
+            return fileDialogMock;
         }
 
         public void Dispose()

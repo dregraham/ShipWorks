@@ -131,7 +131,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.Controls
             fileDialog.Filter = importSettingsFile.Filter;
             fileDialog.DefaultFileName = fieldMap.Name;
 
-            if (fileDialog.ShowDialog()!=DialogResult.OK)
+            if (fileDialog.ShowDialog() != DialogResult.OK)
             {
                 return;
             }
@@ -150,7 +150,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.Controls
         /// <summary>
         /// Called when [export upload map].
         /// </summary>
-        private void OnExportUploadMap(object sender, EventArgs e)
+        private void OnExportUploadMapClick(object sender, EventArgs e)
         {
             IOdbcFieldMap fieldMap = odbcFieldMapFunc();
             fieldMap.Load(store.UploadMap);

@@ -36,7 +36,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcMapSettingsControlViewModel"/> class.
         /// </summary>
-        public OdbcMapSettingsControlViewModel(IMessageHelper messageHelper, Func<string, IOdbcColumnSource> columnSourceFactory)
+        protected OdbcMapSettingsControlViewModel(IMessageHelper messageHelper, Func<string, IOdbcColumnSource> columnSourceFactory)
         {
             MessageHelper = messageHelper;
             this.columnSourceFactory = columnSourceFactory;
@@ -118,7 +118,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
                 // the map name is changed to "DataSourceName - SelectedColumnName"
                 if (DataSource.Name != null &&
                     (MapName.Equals(DataSource.Name, StringComparison.InvariantCulture) ||
-                     MapName.Equals($"{DataSource.Name} - {ColumnSource.Name}", StringComparison.InvariantCulture)))
+                     MapName.Equals($"{DataSource.Name} - {ColumnSource?.Name}", StringComparison.InvariantCulture)))
                 {
                     MapName = value == null ? $"{DataSource.Name}" : $"{DataSource.Name} - {value.Name}";
                 }
@@ -227,9 +227,18 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
 
             LoadMapSettings(store);
 
+            LoadAndSetColumnSource(columnSourceFromStore);
+        }
+
+        /// <summary>
+        /// Poplates ColumnSource and sets the selected table
+        /// </summary>
+        /// <param name="columnSourceFromStore">The column source from store.</param>
+        protected void LoadAndSetColumnSource(string columnSourceFromStore)
+        {
             IOdbcColumnSource loadedColumnSource;
 
-            Tables = odbcSchema.Tables as IList<IOdbcColumnSource> ?? odbcSchema.Tables.ToList();
+            Tables = schema.Tables as IList<IOdbcColumnSource> ?? schema.Tables.ToList();
 
             if (ColumnSourceIsTable && !string.IsNullOrWhiteSpace(columnSourceFromStore))
             {
@@ -242,7 +251,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
                 }
                 else
                 {
-                    Tables = Tables.Concat(new[] {loadedColumnSource});
+                    Tables = Tables.Concat(new[] { loadedColumnSource });
                     SelectedTable = loadedColumnSource;
                 }
             }

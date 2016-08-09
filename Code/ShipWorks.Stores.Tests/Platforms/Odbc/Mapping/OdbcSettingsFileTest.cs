@@ -1,18 +1,18 @@
-﻿using Autofac.Extras.Moq;
+﻿using Autofac;
+using Autofac.Extras.Moq;
 using Autofac.Features.Indexed;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using Moq;
 using Newtonsoft.Json.Linq;
+using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
 using System;
 using System.IO;
 using System.Linq;
-using System.Windows.Forms;
-using Autofac;
 using System.Text;
-using ShipWorks.Stores.Platforms.Odbc;
+using System.Windows.Forms;
 using Xunit;
 
 namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
@@ -20,7 +20,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
     public class OdbcSettingsFileTest : IDisposable
     {
         private readonly AutoMock mock;
-        private string defaultFileName = "Field map name";
+        private const string DefaultFileName = "Field map name";
 
         public OdbcSettingsFileTest()
         {
@@ -189,7 +189,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
         private Mock<IOdbcFieldMap> MockFieldMap()
         {
             Mock<IOdbcFieldMap> fieldMap = mock.MockRepository.Create<IOdbcFieldMap>();
-            fieldMap.Setup(f => f.Name).Returns(defaultFileName);
+            fieldMap.Setup(f => f.Name).Returns(DefaultFileName);
             return fieldMap;
         }
 

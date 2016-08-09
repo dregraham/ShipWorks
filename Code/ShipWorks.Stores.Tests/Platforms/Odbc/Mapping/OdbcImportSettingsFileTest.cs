@@ -13,8 +13,8 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
 {
     public class OdbcImportSettingsFileTest : IDisposable
     {
-        private AutoMock mock;
-        private string defaultFileName = "Field map name";
+        private readonly AutoMock mock;
+        private const string DefaultFileName = "Field map name";
 
         public OdbcImportSettingsFileTest()
         {
@@ -73,7 +73,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
         private Mock<IOdbcFieldMap> MockFieldMap()
         {
             Mock<IOdbcFieldMap> fieldMap = mock.MockRepository.Create<IOdbcFieldMap>();
-            fieldMap.Setup(f => f.Name).Returns(defaultFileName);
+            fieldMap.Setup(f => f.Name).Returns(DefaultFileName);
             return fieldMap;
         }
 
