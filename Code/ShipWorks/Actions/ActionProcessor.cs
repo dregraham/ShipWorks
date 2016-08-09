@@ -89,7 +89,7 @@ namespace ShipWorks.Actions
                 SqlAdapterRetry<SqlException> sqlAdapterRetry = new SqlAdapterRetry<SqlException>(5, -5, "ActionProcessor.WorkerThread cleaning up queues.");
                 sqlAdapterRetry.ExecuteWithRetry(() =>
                     {
-                        using (SqlConnection sqlConnection = SqlSession.Current.OpenConnection())
+                        using (DbConnection sqlConnection = SqlSession.Current.OpenConnection())
                         {
                             anyWorkToDo = AnyWorkToDo(sqlConnection);
                             if (anyWorkToDo)
@@ -121,7 +121,7 @@ namespace ShipWorks.Actions
         /// <summary>
         /// Checks the queue to see if there's any work to do.
         /// </summary>
-        private static bool AnyWorkToDo(SqlConnection sqlConnection)
+        private static bool AnyWorkToDo(DbConnection sqlConnection)
         {
             // First see if there are any to process
             using (DbCommand cmd = DbCommandProvider.Create(sqlConnection))
@@ -150,7 +150,7 @@ namespace ShipWorks.Actions
         /// <summary>
         /// Cleans up queues
         /// </summary>
-        private static void CleanupQueues(SqlConnection sqlConnection)
+        private static void CleanupQueues(DbConnection sqlConnection)
         {
             // Null out any context ownership for contexts that are no longer active.  This should only happen if a ShipWorks blows up during processing a context.
             using (DbCommand cmd = DbCommandProvider.Create(sqlConnection))

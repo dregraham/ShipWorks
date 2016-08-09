@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Data.Common;
-using System.Data.SqlClient;
 using Common.Logging;
 using Interapptive.Shared.Data;
 
@@ -33,7 +32,7 @@ namespace ShipWorks.Data.Connection
         /// Returns the sql connection that is currently in scope.  Returns null if there is no
         /// connection active.
         /// </summary>
-        public static SqlConnection ScopedConnection
+        public static DbConnection ScopedConnection
         {
             get;
             private set;
@@ -43,7 +42,7 @@ namespace ShipWorks.Data.Connection
         /// Returns the sql transaction that is currently in scope.  Returns null if there is no
         /// connection active.
         /// </summary>
-        public static SqlTransaction ScopedTransaction
+        public static DbTransaction ScopedTransaction
         {
             get;
             private set;

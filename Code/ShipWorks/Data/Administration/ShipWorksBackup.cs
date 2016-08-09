@@ -316,7 +316,7 @@ namespace ShipWorks.Data.Administration
                 Regex percentRegex = new Regex(@"(\d+) percent processed.");
 
                 // InfoMessage will provide progress updates
-                SqlConnection sqlConn = con as SqlConnection;
+                SqlConnection sqlConn = con.AsSqlConnection();
                 if (sqlConn != null)
                 {
                     sqlConn.InfoMessage += delegate (object sender, SqlInfoMessageEventArgs e)
@@ -513,7 +513,7 @@ namespace ShipWorks.Data.Administration
 
             log.InfoFormat("Restoring '{0}'...", database.DatabaseName);
 
-            using (SqlConnection con = SqlSession.Current.OpenConnection())
+            using (DbConnection con = SqlSession.Current.OpenConnection())
             {
                 // Change into the database we are restoring into
                 con.ChangeDatabase(database.DatabaseName);
@@ -593,7 +593,7 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Gets the physical locations of the database files of the active database on the connection
         /// </summary>
-        private static void GetPhysicalFileLocations(SqlConnection con, out string targetPhysDb, out string targetPhysLog)
+        private static void GetPhysicalFileLocations(DbConnection con, out string targetPhysDb, out string targetPhysLog)
         {
             DbCommand cmd = DbCommandProvider.Create(con);
             cmd.CommandText = "sp_helpfile";
@@ -628,7 +628,7 @@ namespace ShipWorks.Data.Administration
         /// Execute the restore operation
         /// </summary>
         [NDependIgnoreTooManyParams]
-        private void ExecuteSqlRestore(SqlConnection con, string databaseName, string backupFilePath, string sourceLogicalDb, string sourceLogicalLog, string targetPhysDb, string targetPhysLog, ProgressItem progress)
+        private void ExecuteSqlRestore(DbConnection con, string databaseName, string backupFilePath, string sourceLogicalDb, string sourceLogicalLog, string targetPhysDb, string targetPhysLog, ProgressItem progress)
         {
             RestoreStarting?.Invoke(this, EventArgs.Empty);
 
@@ -657,15 +657,19 @@ namespace ShipWorks.Data.Administration
                 Regex percentRegex = new Regex(@"(\d+) percent processed.");
 
                 // InfoMessage will provide progress updates
-                con.InfoMessage += delegate (object sender, SqlInfoMessageEventArgs e)
+                SqlConnection sqlConn = con.AsSqlConnection();
+                if (sqlConn != null)
                 {
-                    Match match = percentRegex.Match(e.Message);
-                    if (match.Success)
+                    sqlConn.InfoMessage += delegate (object sender, SqlInfoMessageEventArgs e)
                     {
-                        progress.PercentComplete = Convert.ToInt32(match.Groups[1].Value);
-                        progress.Detail = string.Format("{0}% complete", progress.PercentComplete);
-                    }
-                };
+                        Match match = percentRegex.Match(e.Message);
+                        if (match.Success)
+                        {
+                            progress.PercentComplete = Convert.ToInt32(match.Groups[1].Value);
+                            progress.Detail = string.Format("{0}% complete", progress.PercentComplete);
+                        }
+                    };
+                }
 
                 progress.Detail = "Initiating restore";
 
@@ -740,7 +744,7 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         private int GetTableCount()
         {
-            using (SqlConnection con = SqlSession.Current.OpenConnection())
+            using (DbConnection con = SqlSession.Current.OpenConnection())
             {
                 return (int) DbCommandProvider.ExecuteScalar(con, "select count(*) from sys.tables");
             }

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Common;
-using System.Data.SqlClient;
 using System.Linq;
 using Interapptive.Shared.Data;
 using ShipWorks.Data.Connection;
@@ -181,7 +180,7 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         private static long GetDatabaseSpaceUsed()
         {
-            using (SqlConnection con = SqlSession.Current.OpenConnection())
+            using (DbConnection con = SqlSession.Current.OpenConnection())
             {
                 string sql = @"IF OBJECT_ID('tempdb..#RowCountsAndSizes') IS NOT NULL
                                 DROP TABLE #RowCountsAndSizes
@@ -201,7 +200,7 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         private static long GetTableSpaceUsed(List<EntityType> entityList)
         {
-            using (SqlConnection con = SqlSession.Current.OpenConnection())
+            using (DbConnection con = SqlSession.Current.OpenConnection())
             {
                 long total = 0;
 

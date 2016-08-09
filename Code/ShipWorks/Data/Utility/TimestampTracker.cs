@@ -1,3 +1,4 @@
+using System.Data.Common;
 using System.Data.SqlClient;
 using Interapptive.Shared.Data;
 using ShipWorks.Data.Administration.Retry;
@@ -41,7 +42,7 @@ namespace ShipWorks.Data.Utility
         /// </summary>
         public bool CheckForChange()
         {
-            using (SqlConnection con = SqlSession.Current.OpenConnection())
+            using (DbConnection con = SqlSession.Current.OpenConnection())
             {
                 long current = 0;
                 object value = null;

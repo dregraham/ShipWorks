@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
@@ -85,7 +86,7 @@ namespace ShipWorks.AddressValidation
                 return;
             }
 
-            using (SqlConnection connection = SqlSession.Current.OpenConnection())
+            using (DbConnection connection = SqlSession.Current.OpenConnection())
             {
                 if (!StoreManager.DoAnyStoresHaveAutomaticValidationEnabled())
                 {

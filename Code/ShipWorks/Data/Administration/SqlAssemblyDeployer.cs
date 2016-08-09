@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Data.Common;
-using System.Data.SqlClient;
 using System.IO;
 using System.Reflection;
 using System.Text;
@@ -24,7 +23,7 @@ namespace ShipWorks.Data.Administration
         /// Deploy all ShipWorks assemblies to the SQL Server on the given connection. The assemblies are dropped
         /// before they are deployed.
         /// </summary>
-        public static void DeployAssemblies(SqlConnection con, SqlTransaction transaction)
+        public static void DeployAssemblies(DbConnection con, DbTransaction transaction)
         {
             if (con == null)
             {
@@ -41,7 +40,7 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Drop all ShipWorks assemblies to the SQL Server on the given connection
         /// </summary>
-        public static void DropAssemblies(SqlConnection con, SqlTransaction sqlTransaction)
+        public static void DropAssemblies(DbConnection con, DbTransaction sqlTransaction)
         {
             if (con == null)
             {
@@ -57,7 +56,7 @@ namespace ShipWorks.Data.Administration
         /// Deploy the given assembly to the connection specified by the SQL Session
         /// </summary>
         [NDependIgnoreLongMethod]
-        public static void DeployAssembly(Assembly assembly, SqlConnection con, SqlTransaction transaction)
+        public static void DeployAssembly(Assembly assembly, DbConnection con, DbTransaction transaction)
         {
             if (con == null)
             {
@@ -126,9 +125,9 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Update the stored procedure that specifies the schema version to which the installed assembly applies
         /// </summary>
-        private static void UpdateAssemblySchemaVersionProcedure(SqlConnection con, SqlTransaction transaction)
+        private static void UpdateAssemblySchemaVersionProcedure(DbConnection con, DbTransaction transaction)
         {
-            using (SqlCommand command = con.CreateCommand())
+            using (DbCommand command = con.CreateCommand())
             {
                 command.Transaction = transaction;
                 SqlSchemaUpdater.UpdateAssemblyVersionStoredProcedure(command);
@@ -138,7 +137,7 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Add the specified assembly to the database
         /// </summary>
-        private static void CreateAssembly(Assembly assembly, SqlConnection con, SqlTransaction transaction)
+        private static void CreateAssembly(Assembly assembly, DbConnection con, DbTransaction transaction)
         {
             log.Info("Create assembly");
 
@@ -166,7 +165,7 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Drop the specified assembly from the database
         /// </summary>
-        private static void DropAssembly(Assembly assembly, SqlConnection con, SqlTransaction transaction)
+        private static void DropAssembly(Assembly assembly, DbConnection con, DbTransaction transaction)
         {
             string scriptName = "DropAssembly.sql";
 
@@ -181,7 +180,7 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Register the specified method as a store procedure using metadata from the attribute
         /// </summary>
-        private static void RegisterProcedure(MethodInfo method, SqlProcedureAttribute procedure, SqlConnection con, SqlTransaction transaction)
+        private static void RegisterProcedure(MethodInfo method, SqlProcedureAttribute procedure, DbConnection con, DbTransaction transaction)
         {
             String procedureName = procedure.Name;
             if (string.IsNullOrEmpty(procedureName))
@@ -202,7 +201,7 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Register the specified method as a trigger using metadata from the attribute
         /// </summary>
-        private static void RegisterTrigger(MethodInfo method, SqlTriggerAttribute trigger, SqlConnection con, SqlTransaction transaction)
+        private static void RegisterTrigger(MethodInfo method, SqlTriggerAttribute trigger, DbConnection con, DbTransaction transaction)
         {
             String triggerName = trigger.Name;
             if (string.IsNullOrEmpty(triggerName))
@@ -234,7 +233,7 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Register the specified method as a function using metadata from the attribute
         /// </summary>
-        private static void RegisterFunction(MethodInfo method, SqlFunctionAttribute function, SqlConnection con, SqlTransaction transaction)
+        private static void RegisterFunction(MethodInfo method, SqlFunctionAttribute function, DbConnection con, DbTransaction transaction)
         {
             String functionName = function.Name;
             if (string.IsNullOrEmpty(functionName))

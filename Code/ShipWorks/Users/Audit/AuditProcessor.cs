@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
+using System.Data.Common;
 using System.Diagnostics;
 using System.Linq;
 using Interapptive.Shared;
@@ -75,7 +75,7 @@ namespace ShipWorks.Users.Audit
             log.Info("Starting AsyncProcessAudits at " + DateTime.Now);
             bool lockAcquired = false;
 
-            using (SqlConnection sqlConnection = SqlSession.Current.OpenConnection())
+            using (DbConnection sqlConnection = SqlSession.Current.OpenConnection())
             {
                 try
                 {

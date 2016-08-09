@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
+using System.Data.Common;
 using System.IO;
 using System.Text;
 using System.Xml;
@@ -548,7 +548,7 @@ namespace ShipWorks.Users
             // This will get the database guid.
             SystemDataEntity systemData = SystemData.Fetch();
 
-            using (SqlConnection con = SqlSession.Current.OpenConnection())
+            using (DbConnection con = SqlSession.Current.OpenConnection())
             {
                 // The guid isn't enough.  They could restore the database to a different path, essentially copying it.  In which
                 // case the guid will be the same, but the path will be different.

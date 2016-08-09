@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
+using System.Data.Common;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
@@ -37,7 +37,7 @@ namespace ShipWorks.Stores.Communication
         StoreEntity store;
         IProgressReporter progress;
         long downloadLogID;
-        protected SqlConnection connection;
+        protected DbConnection connection;
 
         StoreType storeType;
 
@@ -134,7 +134,7 @@ namespace ShipWorks.Stores.Communication
         /// <summary>
         /// Download data from the configured store.
         /// </summary>
-        public void Download(IProgressReporter progress, long downloadLogID, SqlConnection connection)
+        public void Download(IProgressReporter progress, long downloadLogID, DbConnection connection)
         {
             if (progress == null)
             {
@@ -487,7 +487,7 @@ namespace ShipWorks.Stores.Communication
         /// </summary>
         protected virtual void SaveDownloadedOrder(OrderEntity order)
         {
-            using (SqlTransaction transaction = connection.BeginTransaction())
+            using (DbTransaction transaction = connection.BeginTransaction())
             {
                 SaveDownloadedOrder(order, transaction);
             }
@@ -497,8 +497,8 @@ namespace ShipWorks.Stores.Communication
         /// Save the given order that has been downloaded.
         /// </summary>
         [NDependIgnoreLongMethod]
-        [NDependIgnoreComplexMethodAttribute]
-        protected virtual void SaveDownloadedOrder(OrderEntity order, SqlTransaction transaction)
+        [NDependIgnoreComplexMethod]
+        protected virtual void SaveDownloadedOrder(OrderEntity order, DbTransaction transaction)
         {
             Stopwatch sw = Stopwatch.StartNew();
 

@@ -9,6 +9,7 @@ using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Adapter.Custom;
 using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.HelperClasses;
@@ -27,7 +28,7 @@ namespace ShipWorks.Shipping.ShipSense.Population
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(ShipSenseLoaderGateway));
 
-        private SqlConnection connection;
+        private DbConnection connection;
         private readonly IKnowledgebase knowledgebase;
 
         private OrderEntity previousProcessedOrder;
@@ -49,7 +50,7 @@ namespace ShipWorks.Shipping.ShipSense.Population
         {
             if (connection == null)
             {
-                connection = new SqlConnection(SqlAdapter.Default.ConnectionString);
+                connection = DataAccessAdapter.CreateConnection(SqlAdapter.Default.ConnectionString);
             }
 
             if (connection.State != ConnectionState.Open)

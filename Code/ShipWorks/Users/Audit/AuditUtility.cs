@@ -1,5 +1,5 @@
 using System;
-using System.Data.SqlClient;
+using System.Data.Common;
 using System.Windows.Forms;
 using Interapptive.Shared.Data;
 using Interapptive.Shared.UI;
@@ -39,7 +39,7 @@ namespace ShipWorks.Users.Audit
         /// </summary>
         public static void Audit(AuditActionType action, long userID)
         {
-            using (SqlConnection con = SqlSession.Current.OpenConnection())
+            using (DbConnection con = SqlSession.Current.OpenConnection())
             {
                 AuditEntity audit = new AuditEntity();
 
@@ -66,7 +66,7 @@ namespace ShipWorks.Users.Audit
         /// <summary>
         /// Get the latest and greatest transaction ID value
         /// </summary>
-        private static long GetTransactionID(SqlConnection con)
+        private static long GetTransactionID(DbConnection con)
         {
             return DbCommandProvider.ExecuteScalar<long>(con, "SELECT dbo.GetTransactionID()");
         }

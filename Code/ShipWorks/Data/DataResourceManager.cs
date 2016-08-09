@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Common;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.IO;
@@ -9,6 +10,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 using Interapptive.Shared;
+using Interapptive.Shared.Data;
 using Interapptive.Shared.IO.Zip;
 using Interapptive.Shared.Utility;
 using log4net;
@@ -44,13 +46,6 @@ namespace ShipWorks.Data
 
         // Sometimes we will want to query without getting the data fields
         static ExcludeIncludeFieldsList excludeDataFields = new ExcludeIncludeFieldsList((IList) new IEntityFieldCore[] { ResourceFields.Data, ResourceFields.Checksum });
-
-        /// <summary>
-        /// Static constructor
-        /// </summary>
-        static DataResourceManager()
-        {
-        }
 
         /// <summary>
         /// Provide method for background process to register thread to clean up resource cache
@@ -412,18 +407,18 @@ namespace ShipWorks.Data
                     // we always want this call to be the deadlock victim
                     using (new SqlDeadlockPriorityScope(-5))
                     {
-                        using (SqlConnection connection = SqlSession.Current.OpenConnection(timeoutSeconds))
+                        using (DbConnection connection = SqlSession.Current.OpenConnection(timeoutSeconds))
                         {
                             try
                             {
-                                using (SqlCommand command = connection.CreateCommand())
+                                using (DbCommand command = connection.CreateCommand())
                                 {
                                     command.CommandType = CommandType.StoredProcedure;
                                     command.CommandText = scriptName;
                                     // Disable the command timeout since the scripts should take care of timing themselves out
                                     command.CommandTimeout = timeoutSeconds;
-                                    command.Parameters.AddWithValue("@olderThan", DateTime.UtcNow);
-                                    command.Parameters.AddWithValue("@runUntil", DateTime.UtcNow.AddMinutes(15));
+                                    command.AddParameterWithValue("@olderThan", DateTime.UtcNow);
+                                    command.AddParameterWithValue("@runUntil", DateTime.UtcNow.AddMinutes(15));
 
                                     command.ExecuteNonQuery();
                                 }

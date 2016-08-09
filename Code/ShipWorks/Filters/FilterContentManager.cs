@@ -271,7 +271,7 @@ namespace ShipWorks.Filters
         /// </summary>
         private static bool IsUpdateCountsNeeded()
         {
-            using (SqlConnection con = SqlSession.Current.OpenConnection())
+            using (DbConnection con = SqlSession.Current.OpenConnection())
             {
                 return (DbCommandProvider.ExecuteScalar(con, "SELECT TOP(1) ObjectID FROM FilterNodeContentDirty WITH (NOLOCK)") != null);
             }
@@ -345,7 +345,7 @@ namespace ShipWorks.Filters
             ApplicationBusyToken token = (ApplicationBusyToken) ((object[]) state)[1];
 
             // Get a connection that will not timeout
-            using (SqlConnection noTimeoutSqlConnection = SqlSession.Current.OpenConnection(0))
+            using (DbConnection noTimeoutSqlConnection = SqlSession.Current.OpenConnection(0))
             {
                 // Create a new connection
                 using (SqlAdapter adapter = new SqlAdapter(noTimeoutSqlConnection))
@@ -398,7 +398,7 @@ namespace ShipWorks.Filters
             log.InfoFormat("Deleting abandoned filter counts....");
 
             // Get a connection that will not timeout
-            using (SqlConnection noTimeoutSqlConnection = SqlSession.Current.OpenConnection(0))
+            using (DbConnection noTimeoutSqlConnection = SqlSession.Current.OpenConnection(0))
             {
                 // Create a new connection
                 using (SqlAdapter adapter = new SqlAdapter(noTimeoutSqlConnection))

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Common;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
@@ -321,7 +322,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
 
                 sqlDeadlockRetry.ExecuteWithRetry(() =>
                 {
-                    using (SqlTransaction transaction = connection.BeginTransaction())
+                    using (DbTransaction transaction = connection.BeginTransaction())
                     {
                         using (SqlAdapter adapter = new SqlAdapter(connection, transaction))
                         {

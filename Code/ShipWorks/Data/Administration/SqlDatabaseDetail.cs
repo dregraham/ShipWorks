@@ -28,7 +28,7 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Load detailed database information about the given database
         /// </summary>
-        public static SqlDatabaseDetail Load(string database, SqlConnection con)
+        public static SqlDatabaseDetail Load(string database, DbConnection con)
         {
             SqlDatabaseDetail detail = new SqlDatabaseDetail();
             detail.name = database;
@@ -69,7 +69,7 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Load the schema version of the ShipWorks database associated with the given connection
         /// </summary>
-        private static void LoadSchemaVersion(SqlDatabaseDetail detail, SqlConnection con)
+        private static void LoadSchemaVersion(SqlDatabaseDetail detail, DbConnection con)
         {
             DbCommand cmd = DbCommandProvider.Create(con);
             cmd.CommandText = "GetSchemaVersion";
@@ -83,7 +83,7 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Load the last user to use the given ShipWorsk database
         /// </summary>
-        private static void LoadLastUsedBy(SqlDatabaseDetail detail, SqlConnection con)
+        private static void LoadLastUsedBy(SqlDatabaseDetail detail, DbConnection con)
         {
             detail.lastUsedBy = "";
             detail.lastUsedOn = DateTime.MinValue;
@@ -112,7 +112,7 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Load the last order found in the given ShipWorks database
         /// </summary>
-        private static void LoadLastOrderNumber(SqlDatabaseDetail detail, SqlConnection con)
+        private static void LoadLastOrderNumber(SqlDatabaseDetail detail, DbConnection con)
         {
             DbCommand cmd = DbCommandProvider.Create(con);
 

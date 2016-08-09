@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Data.Common;
-using System.Data.SqlClient;
 using System.Linq;
 using Interapptive.Shared;
 using Interapptive.Shared.Data;
@@ -347,7 +346,7 @@ namespace ShipWorks.Filters
         /// </summary>
         public bool IsLayoutDirty()
         {
-            using (SqlConnection con = SqlSession.Current.OpenConnection())
+            using (DbConnection con = SqlSession.Current.OpenConnection())
             {
                 // We need to detect any changes to sequences or nodes
                 DbCommand cmd = DbCommandProvider.Create(con);

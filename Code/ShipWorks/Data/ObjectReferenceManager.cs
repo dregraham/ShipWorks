@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Data.Common;
-using System.Data.SqlClient;
 using System.Text;
 using System.Text.RegularExpressions;
 using Interapptive.Shared;
@@ -41,7 +40,7 @@ namespace ShipWorks.Data
         /// </summary>
         public static long SetReference(long consumerID, string key, long objectID, string reason)
         {
-            using (SqlConnection con = SqlSession.Current.OpenConnection())
+            using (DbConnection con = SqlSession.Current.OpenConnection())
             {
                 return SqlObjectReferenceManager.SetReference(consumerID, key, objectID, reason, con);
             }
@@ -52,7 +51,7 @@ namespace ShipWorks.Data
         /// </summary>
         public static void ClearReference(long consumerID, string key)
         {
-            using (SqlConnection con = SqlSession.Current.OpenConnection())
+            using (DbConnection con = SqlSession.Current.OpenConnection())
             {
                 SqlObjectReferenceManager.ClearReference(consumerID, key, con);
             }
@@ -63,7 +62,7 @@ namespace ShipWorks.Data
         /// </summary>
         public static void ClearReferences(long consumerID)
         {
-            using (SqlConnection con = SqlSession.Current.OpenConnection())
+            using (DbConnection con = SqlSession.Current.OpenConnection())
             {
                 SqlObjectReferenceManager.ClearReferences(consumerID, con);
             }
@@ -74,7 +73,7 @@ namespace ShipWorks.Data
         /// </summary>
         public static void ClearReference(long referenceID)
         {
-            using (SqlConnection con = SqlSession.Current.OpenConnection())
+            using (DbConnection con = SqlSession.Current.OpenConnection())
             {
                 SqlObjectReferenceManager.ClearReference(referenceID, con);
             }

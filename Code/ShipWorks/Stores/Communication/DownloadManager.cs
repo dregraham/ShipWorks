@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
@@ -391,7 +392,7 @@ namespace ShipWorks.Stores.Communication
                     // Connection to use during the download cycle, if it disconnects we
                     // show the user an error, this ensures that if the lock taken below
                     // is broken we stop downloading
-                    using (SqlConnection con = SqlSession.Current.OpenConnection())
+                    using (DbConnection con = SqlSession.Current.OpenConnection())
                     {
                         // We open a lock that will stay open for the duration of the store download,
                         // which will serve to lock out any other running instance of ShipWorks from downloading

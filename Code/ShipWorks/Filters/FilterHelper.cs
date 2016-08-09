@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Common;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Drawing;
@@ -556,7 +557,7 @@ namespace ShipWorks.Filters
                 // We need to capture the DBTS on entry - we only care if filters get as up-to-date as what the dirty mark is now.
                 // If changes just keep coming in and coming in, then update counts would always be needed, and we'd never consider filters
                 // up-to-date
-                using (SqlConnection con = SqlSession.Current.OpenConnection())
+                using (DbConnection con = SqlSession.Current.OpenConnection())
                 {
                     rowVersion = (byte[]) DbCommandProvider.ExecuteScalar(con, "SELECT @@DBTS");
                 }
@@ -582,7 +583,7 @@ namespace ShipWorks.Filters
                 // Keep going until we run out of time
                 while (timer.Elapsed < timeout)
                 {
-                    using (SqlConnection con = SqlSession.Current.OpenConnection())
+                    using (DbConnection con = SqlSession.Current.OpenConnection())
                     {
                         object result = DbCommandProvider.ExecuteScalar(con, "SELECT MIN(RowVersion) FROM FilterNodeContentDirty WITH (NOLOCK)");
 

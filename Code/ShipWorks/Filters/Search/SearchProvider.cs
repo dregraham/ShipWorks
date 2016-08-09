@@ -367,7 +367,7 @@ namespace ShipWorks.Filters.Search
             {
                 try
                 {
-                    using (SqlConnection con = SqlSession.Current.OpenConnection())
+                    using (DbConnection con = SqlSession.Current.OpenConnection())
                     {
                         bool gotLock = false;
 

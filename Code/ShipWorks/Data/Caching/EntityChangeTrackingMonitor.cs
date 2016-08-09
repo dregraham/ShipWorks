@@ -73,7 +73,7 @@ namespace ShipWorks.Data.Caching
         /// </summary>
         private static long GetCurrentSyncVersion()
         {
-            using (SqlConnection con = SqlSession.Current.OpenConnection())
+            using (DbConnection con = SqlSession.Current.OpenConnection())
             {
                 object result = DbCommandProvider.ExecuteScalar(con, "SELECT CHANGE_TRACKING_CURRENT_VERSION()");
 

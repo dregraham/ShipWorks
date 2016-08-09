@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Data.Common;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
 using Interapptive.Shared.Data;
 using log4net;
 
@@ -28,7 +26,7 @@ namespace ShipWorks.Data.Connection
         public SingleUserModeScope() :
             this(TimeSpan.FromSeconds(30))
         {
-            
+
         }
 
         /// <summary>
@@ -46,9 +44,9 @@ namespace ShipWorks.Data.Connection
             log.Info("Entering SingleUserModeScope");
 
             // Start by disconnecting all users. We don't use this same connection the whole time, so its possible that
-            // someone could sneak in and take the single connection in between us releasing and getting it.  But if that happened, 
+            // someone could sneak in and take the single connection in between us releasing and getting it.  But if that happened,
             // we would blowup, and the upgrade would just have to start over the next time.
-            using (SqlConnection con = SqlSession.Current.OpenConnection())
+            using (DbConnection con = SqlSession.Current.OpenConnection())
             {
                 SqlUtility.SetSingleUser(con);
             }
@@ -66,7 +64,7 @@ namespace ShipWorks.Data.Connection
         {
             get
             {
-                return reconnectTimeout; 
+                return reconnectTimeout;
             }
         }
 
@@ -81,7 +79,7 @@ namespace ShipWorks.Data.Connection
         /// <summary>
         /// Return the database to multi user mode using the specified connection
         /// </summary>
-        public static void RestoreMultiUserMode(SqlConnection con)
+        public static void RestoreMultiUserMode(DbConnection con)
         {
             if (!active)
             {
@@ -107,7 +105,7 @@ namespace ShipWorks.Data.Connection
         /// <summary>
         /// Return the database to multi user mode using the specified connection
         /// </summary>
-        private static void RestoreMultiUserMode(SqlConnection con, bool clearConnectionPool)
+        private static void RestoreMultiUserMode(DbConnection con, bool clearConnectionPool)
         {
             bool shouldDisposeConnection = false;
 

@@ -63,7 +63,7 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         private static Version GetInstalledAssemblyVersion()
         {
-            using (SqlConnection con = SqlSession.Current.OpenConnection())
+            using (DbConnection con = SqlSession.Current.OpenConnection())
             {
                 try
                 {
@@ -102,7 +102,7 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         public static Version GetInstalledSchemaVersion()
         {
-            using (SqlConnection con = SqlSession.Current.OpenConnection())
+            using (DbConnection con = SqlSession.Current.OpenConnection())
             {
                 try
                 {
@@ -239,7 +239,7 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Update the schema version store procedure to match the required schema version.  This should only be called after installing or updating to the latest schema.
         /// </summary>
-        public static void UpdateSchemaVersionStoredProcedure(SqlConnection con)
+        public static void UpdateSchemaVersionStoredProcedure(DbConnection con)
         {
             UpdateSchemaVersionStoredProcedure(con, GetRequiredSchemaVersion());
         }
@@ -247,7 +247,7 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Update the schema version stored procedure to say the current schema is the given version
         /// </summary>
-        public static void UpdateSchemaVersionStoredProcedure(SqlConnection con, Version version)
+        public static void UpdateSchemaVersionStoredProcedure(DbConnection con, Version version)
         {
             using (DbCommand cmd = DbCommandProvider.Create(con))
             {
@@ -327,7 +327,11 @@ namespace ShipWorks.Data.Administration
             };
 
             // Listen for script messages to display to the user
-            ExistingConnectionScope.ScopedConnection.InfoMessage += infoMessageHandler;
+            SqlConnection sqlConn = ExistingConnectionScope.ScopedConnection.AsSqlConnection();
+            if (sqlConn != null)
+            {
+                sqlConn.InfoMessage += infoMessageHandler;
+            }
 
             // Determine the percent-value of each update script
             double scriptProgressValue = 100.0 / (double) updateScripts.Count;
@@ -362,7 +366,10 @@ namespace ShipWorks.Data.Administration
 
             // Since we have a single, long-lived connection, we want to remove the message handler so future messages
             // get handled normally
-            ExistingConnectionScope.ScopedConnection.InfoMessage -= infoMessageHandler;
+            if (sqlConn != null)
+            {
+                sqlConn.InfoMessage -= infoMessageHandler;
+            }
 
             progress.PercentComplete = 100;
             progress.Detail = "Done";
@@ -383,7 +390,7 @@ namespace ShipWorks.Data.Administration
         /// Since our filters use column masks that are exactly dependent on column positioning, we regenerate them every time
         /// there is a schema change, just in case.
         /// </summary>
-        private static void UpdateFilters(ProgressItem progress, SqlConnection connection, SqlTransaction transaction)
+        private static void UpdateFilters(ProgressItem progress, DbConnection connection, DbTransaction transaction)
         {
             progress.Detail = "Updating filters...";
 
@@ -409,7 +416,7 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Get the schema version of the ShipWorks database on the given connection
         /// </summary>
-        public static Version GetInstalledSchemaVersion(SqlConnection con)
+        public static Version GetInstalledSchemaVersion(DbConnection con)
         {
             DbCommand cmd = DbCommandProvider.Create(con);
             cmd.CommandText = "GetSchemaVersion";
