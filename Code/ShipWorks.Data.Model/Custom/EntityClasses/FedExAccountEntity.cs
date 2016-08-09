@@ -10,11 +10,6 @@ namespace ShipWorks.Data.Model.EntityClasses
     public partial class FedExAccountEntity : ICarrierAccount
     {
         /// <summary>
-        /// Indicates if this account was migrated from ShipWorks2, and has not yet been updated for the new API
-        /// </summary>
-        public bool Is2xMigrationPending => string.IsNullOrEmpty(MeterNumber);
-
-        /// <summary>
         /// Gets the account id in a generic way
         /// </summary>
         public long AccountId => FedExAccountID;

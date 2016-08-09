@@ -5,11 +5,11 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
-using System.Reflection;
 using System.Windows.Forms;
 using System.Xml.Linq;
 using Interapptive.Shared;
 using Interapptive.Shared.Data;
+using Interapptive.Shared.Threading;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Win32;
 using log4net;
@@ -17,11 +17,6 @@ using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Common.Threading;
 using ShipWorks.Data.Administration.SqlServerSetup;
-using ShipWorks.Data.Administration.UpdateFrom2x.Database;
-using ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.PostMigration;
-using ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.PostMigration.ShippingPages;
-using ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.PostMigration.StorePages;
-using ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode;
 using ShipWorks.Data.Connection;
 using ShipWorks.Email;
 using ShipWorks.UI.Wizard;
@@ -57,15 +52,9 @@ namespace ShipWorks.Data.Administration
         SqlServerInstaller sqlInstaller;
         WizardDownloadHelper sqlDownloader;
 
-        // Indicates if a backup has been completed
-        bool backupCompleted = false;
-
         // Indicates if the firewall has been opened'
         bool showFirewallPage = false;
         bool firewallOpened = false;
-
-        // Handles V2 to V3 data migration
-        MigrationController v2migrationController;
 
         /// <summary>
         /// Open the upgrade window and returns true if the wizard completed with an OK result.
@@ -98,7 +87,7 @@ namespace ShipWorks.Data.Administration
         {
             InitializeComponent();
 
-            installed = SqlServerInstaller.IsMsdeMigrationInProgress ? new Version(0, 0, 0, 0) : SqlSchemaUpdater.GetInstalledSchemaVersion();
+            installed = SqlSchemaUpdater.GetInstalledSchemaVersion();
             showFirewallPage = installed < new Version(3, 0);
 
             sqlInstaller = new SqlServerInstaller();
@@ -113,38 +102,22 @@ namespace ShipWorks.Data.Administration
             int placeholderIndex = Pages.IndexOf(wizardPagePrerequisitePlaceholder);
             Pages.Remove(wizardPagePrerequisitePlaceholder);
 
-            if (!SqlServerInstaller.IsMsdeMigrationInProgress)
+            // If its not the current sql version, then sql is going to be upgraded, which means we need some prereqs
+            if (!SqlSession.Current.IsSqlServer2008OrLater())
             {
-                // If its not the current sql version, then sql is going to be upgraded, which means we need some prereqs
-                if (!SqlSession.Current.IsSqlServer2008OrLater())
-                {
-                    // Add the pages to detect and install .NET 3.5 SP1 if necessary
-                    DotNet35DownloadPage dotNet35Page = new DotNet35DownloadPage(
-                        wizardPageLogin,
-                        StartupAction.ContinueDatabaseUpgrade,
-                        () => { return new XElement("Empty"); });
-                    Pages.Insert(placeholderIndex, dotNet35Page);
+                // Add the pages to detect and install .NET 3.5 SP1 if necessary
+                DotNet35DownloadPage dotNet35Page = new DotNet35DownloadPage(
+                    wizardPageLogin,
+                    StartupAction.ContinueDatabaseUpgrade,
+                    () => { return new XElement("Empty"); });
+                Pages.Insert(placeholderIndex, dotNet35Page);
 
-                    // Add the pages to detect and install windows installer if necessary
-                    WindowsInstallerDownloadPage windowsInstallerPage = new WindowsInstallerDownloadPage(
-                        dotNet35Page,
-                        StartupAction.ContinueDatabaseUpgrade,
-                        () => { return new XElement("Empty"); });
-                    Pages.Insert(placeholderIndex, windowsInstallerPage);
-                }
-
-                if (installed.Major < 3)
-                {
-                    v2migrationController = MigrationController.CreateV2ToV3Controller(installed);
-
-                    log.InfoFormat("Created V2 migration controller: {0}", v2migrationController.MigrationState);
-                }
-
-                // Add in the post v2 migration pages if the v2 migration is still in progress
-                if (v2migrationController != null || MigrationController.IsMigrationInProgress())
-                {
-                    InsertV2PostMigrationPages();
-                }
+                // Add the pages to detect and install windows installer if necessary
+                WindowsInstallerDownloadPage windowsInstallerPage = new WindowsInstallerDownloadPage(
+                    dotNet35Page,
+                    StartupAction.ContinueDatabaseUpgrade,
+                    () => { return new XElement("Empty"); });
+                Pages.Insert(placeholderIndex, windowsInstallerPage);
             }
         }
 
@@ -157,7 +130,7 @@ namespace ShipWorks.Data.Administration
 
             if (StartupController.StartupAction == StartupAction.ContinueDatabaseUpgrade)
             {
-                if (!SqlServerInstaller.IsMsdeMigrationInProgress && StartupController.StartupArgument.Name == "AfterInstallSuccess")
+                if (StartupController.StartupArgument.Name == "AfterInstallSuccess")
                 {
                     log.InfoFormat("Replaying upgrade SQL Server after install success needed reboot.");
 
@@ -187,12 +160,6 @@ namespace ShipWorks.Data.Administration
         [NDependIgnoreLongMethod]
         private void OnSteppingIntoUpgradeInfo(object sender, WizardSteppingIntoEventArgs e)
         {
-            if (SqlServerInstaller.IsMsdeMigrationInProgress)
-            {
-                e.Skip = true;
-                return;
-            }
-
             // If its 08, we move right on to the db upgrade
             if (SqlSession.Current.IsSqlServer2008OrLater())
             {
@@ -232,15 +199,6 @@ namespace ShipWorks.Data.Administration
                     }
 
                     con.ChangeDatabase(name);
-
-                    List<string> archives = ShipWorks2xArchiveUtility.GetArchiveDatabaseNames(con);
-                    if (archives.Count > 0)
-                    {
-                        databases[databases.IndexOf(name)] = string.Format("{0} (with {1} archives)", name, archives.Count);
-
-                        // Don't include the archive names in our database list we show to the user
-                        archives.ForEach(a => databases.Remove(a));
-                    }
                 }
 
                 foreach (string name in databases)
@@ -260,115 +218,65 @@ namespace ShipWorks.Data.Administration
         [NDependIgnoreLongMethod]
         private void OnSteppingIntoLogin(object sender, WizardSteppingIntoEventArgs e)
         {
-            if (SqlServerInstaller.IsMsdeMigrationInProgress)
-            {
-                e.Skip = true;
-                return;
-            }
-
             Cursor.Current = Cursors.WaitCursor;
 
             const string loggedInNoRights = "You are currently logged on to ShipWorks as '{0}', a user that does not have rights to update the ShipWorks database.";
-            const string loggedInNeedAdmin = "Please log on to ShipWorks as an administrator to update the ShipWorks database.";
             const string loggedInNeedRights = "Please log on to ShipWorks as a user that has rights to update the ShipWorks database.";
 
-            // Below db version 1.2.0 (ShipWorks 2.4), there were no users.  So to be logged
-            // in at all is to be an admin.
-            if (installed < new Version(1, 2))
+            // If there are no admin users, it would be impossible to go on
+            if (!UserUtility.HasAdminUsers())
             {
-                log.Debug("Pre 2.4 database, no need for admin logon.");
-
                 e.Skip = true;
                 return;
             }
-            // See if we need to login 2.x style
-            else if (installed < new Version(3, 0))
+
+            string username;
+            string password;
+
+            // See if we can try to login automatically
+            if (UserSession.GetSavedUserCredentials(out username, out password))
             {
-                // If there are no admin users, it would be impossible to go on
-                if (!UserUtility.Has2xAdminUsers())
+                long userID = UserUtility.GetShipWorksUserID(username, password);
+
+                // Not a valid user
+                if (userID < 0)
                 {
-                    e.Skip = true;
+                    labelNeedUpgradeRights.Text = loggedInNeedRights;
                     return;
                 }
 
-                string username;
-                string password;
+                log.DebugFormat("3.x credentials found, UserID {0}", userID);
 
-                // See if we can try to login automatically
-                if (UserSession.GetSavedUserCredentials(out username, out password))
+                // Determine if the given user has rights to upgrade shipworks
+                if (SecurityContext.HasPermission(userID, PermissionType.DatabaseSetup))
                 {
-                    log.Debug("2.x credentials found, attempting admin login.");
-
-                    if (UserUtility.IsShipWorks2xAdmin(username, password))
+                    // If they also have the rights to backup, just move on
+                    if (SecurityContext.HasPermission(userID, PermissionType.DatabaseBackup))
                     {
+                        userID3x = userID;
+                        userName3x = username;
+
                         logonAfterUsername = username;
                         logonAfterPassword = password;
 
                         e.Skip = true;
                         return;
                     }
-                }
-
-                labelNeedUpgradeRights.Text = loggedInNeedAdmin;
-            }
-            // Login using 3.0 schema
-            else
-            {
-                // If there are no admin users, it would be impossible to go on
-                if (!UserUtility.HasAdminUsers())
-                {
-                    e.Skip = true;
-                    return;
-                }
-
-                string username;
-                string password;
-
-                // See if we can try to login automatically
-                if (UserSession.GetSavedUserCredentials(out username, out password))
-                {
-                    long userID = UserUtility.GetShipWorksUserID(username, password);
-
-                    // Not a valid user
-                    if (userID < 0)
+                    // If they can't backup, they have to have the opportunity to login as someone who can
+                    else
                     {
                         labelNeedUpgradeRights.Text = loggedInNeedRights;
                         return;
                     }
-
-                    log.DebugFormat("3.x credentials found, UserID {0}", userID);
-
-                    // Determine if the given user has rights to upgrade shipworks
-                    if (SecurityContext.HasPermission(userID, PermissionType.DatabaseSetup))
-                    {
-                        // If they also have the rights to backup, just move on
-                        if (SecurityContext.HasPermission(userID, PermissionType.DatabaseBackup))
-                        {
-                            userID3x = userID;
-                            userName3x = username;
-
-                            logonAfterUsername = username;
-                            logonAfterPassword = password;
-
-                            e.Skip = true;
-                            return;
-                        }
-                        // If they can't backup, they have to have the opportunity to login as someone who can
-                        else
-                        {
-                            labelNeedUpgradeRights.Text = loggedInNeedRights;
-                            return;
-                        }
-                    }
-                    else
-                    {
-                        labelNeedUpgradeRights.Text = string.Format(loggedInNoRights, username);
-                        return;
-                    }
                 }
-
-                labelNeedUpgradeRights.Text = loggedInNeedRights;
+                else
+                {
+                    labelNeedUpgradeRights.Text = string.Format(loggedInNoRights, username);
+                    return;
+                }
             }
+
+            labelNeedUpgradeRights.Text = loggedInNeedRights;
         }
 
         /// <summary>
@@ -410,48 +318,29 @@ namespace ShipWorks.Data.Administration
                 return;
             }
 
-            // See if we need to login 2.x style
-            if (installed < new Version(3, 0))
+            long userID = UserUtility.GetShipWorksUserID(username.Text, password.Text);
+
+            // Not a valid user
+            if (userID < 0)
             {
-                if (!UserUtility.IsShipWorks2xAdmin(username.Text, password.Text))
-                {
-                    MessageHelper.ShowMessage(this, "Incorrect username or password.");
-                    e.NextPage = CurrentPage;
-                    return;
-                }
-                else
-                {
-                    logonAfterUsername = username.Text;
-                    logonAfterPassword = password.Text;
-                }
+                MessageHelper.ShowMessage(this, "Incorrect username or password.");
+                e.NextPage = CurrentPage;
+                return;
             }
-            // Login using 3.0 schema
-            else
+
+            // Determine if the given user has rights to upgrade shipworks
+            if (!SecurityContext.HasPermission(userID, PermissionType.DatabaseSetup))
             {
-                long userID = UserUtility.GetShipWorksUserID(username.Text, password.Text);
-
-                // Not a valid user
-                if (userID < 0)
-                {
-                    MessageHelper.ShowMessage(this, "Incorrect username or password.");
-                    e.NextPage = CurrentPage;
-                    return;
-                }
-
-                // Determine if the given user has rights to upgrade shipworks
-                if (!SecurityContext.HasPermission(userID, PermissionType.DatabaseSetup))
-                {
-                    MessageHelper.ShowMessage(this, "The user does not have permission to update the database.");
-                    e.NextPage = CurrentPage;
-                    return;
-                }
-
-                userID3x = userID;
-                userName3x = username.Text;
-
-                logonAfterUsername = username.Text;
-                logonAfterPassword = password.Text;
+                MessageHelper.ShowMessage(this, "The user does not have permission to update the database.");
+                e.NextPage = CurrentPage;
+                return;
             }
+
+            userID3x = userID;
+            userName3x = username.Text;
+
+            logonAfterUsername = username.Text;
+            logonAfterPassword = password.Text;
         }
 
         #endregion
@@ -463,20 +352,6 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         private void OnSteppingIntoBackup(object sender, WizardSteppingIntoEventArgs e)
         {
-            if (SqlServerInstaller.IsMsdeMigrationInProgress)
-            {
-                e.Skip = true;
-                return;
-            }
-
-            // If a migration is already in progress we don't want to allow them to backup a partially updatd database
-            if ((v2migrationController != null && v2migrationController.MigrationState != MigrationState.NotStarted) ||
-                (v2migrationController == null && MigrationController.IsMigrationInProgress()))
-            {
-                e.Skip = true;
-                return;
-            }
-
             const string backupText = "User '{0}' does not have permissions to create a backup.";
 
             // Make sure we are on the right machine
@@ -492,14 +367,6 @@ namespace ShipWorks.Data.Administration
                 labelBackupNoPermission.Text = string.Format(backupText, userName3x);
                 labelBackupNoPermission.Visible = true;
                 backup.Enabled = false;
-            }
-            // Skip if running an internal version - internal debug versions are 0.0.0.0
-            else if (installed < new Version(3, 0) && !InterapptiveOnly.MagicKeysDown && Assembly.GetExecutingAssembly().GetName().Version.Major == 3)
-            {
-                labelBackupInfo.Text = "You must create a backup before updating your ShipWorks 2 database.  We don't expect anything to go wrong, but it doesn't hurt to be safe.";
-                labelBackupNoPermission.Visible = false;
-
-                NextEnabled = backupCompleted;
             }
             else
             {
@@ -535,8 +402,6 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         private void MarkBackupCompleted()
         {
-            backupCompleted = true;
-
             pictureBackupComplete.Visible = true;
             labelBackupComplete.Visible = true;
         }
@@ -553,7 +418,7 @@ namespace ShipWorks.Data.Administration
             Cursor.Current = Cursors.WaitCursor;
 
             // If the installer is already available, or we don't need to download, just skip over the download.
-            if (sqlInstaller.IsInstallerLocalFileValid(SqlServerInstallerPurpose.Upgrade) || (!SqlServerInstaller.IsMsdeMigrationInProgress && SqlSession.Current.IsSqlServer2008OrLater()))
+            if (sqlInstaller.IsInstallerLocalFileValid(SqlServerInstallerPurpose.Upgrade) || SqlSession.Current.IsSqlServer2008OrLater())
             {
                 e.Skip = true;
                 return;
@@ -593,7 +458,7 @@ namespace ShipWorks.Data.Administration
         private void OnSteppingIntoUpgradeSqlServer(object sender, WizardSteppingIntoEventArgs e)
         {
             // If its already upgraded, move on
-            if (!SqlServerInstaller.IsMsdeMigrationInProgress && SqlSession.Current.IsSqlServer2008OrLater())
+            if (SqlSession.Current.IsSqlServer2008OrLater())
             {
                 e.Skip = true;
                 e.RaiseStepEventWhenSkipping = true;
@@ -613,7 +478,7 @@ namespace ShipWorks.Data.Administration
             }
 
             // If its upgraded now, we are ok to move on.
-            if (!SqlServerInstaller.IsMsdeMigrationInProgress && SqlSession.Current.IsSqlServer2008OrLater())
+            if (SqlSession.Current.IsSqlServer2008OrLater())
             {
                 e.NextPage = wizardPageWindowsFirewall;
                 return;
@@ -775,7 +640,7 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         private void OnSteppingIntoUpgrade(object sender, WizardSteppingIntoEventArgs e)
         {
-            if (SqlSchemaUpdater.IsCorrectSchemaVersion() && Post2xMigrationUtility.IsStepComplete(Post2xMigrationStep.PostMigrationPreparation))
+            if (SqlSchemaUpdater.IsCorrectSchemaVersion())
             {
                 e.Skip = true;
             }
@@ -790,7 +655,7 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         private void OnStepNextUpgrade(object sender, WizardStepEventArgs e)
         {
-            if (SqlSchemaUpdater.IsCorrectSchemaVersion() && Post2xMigrationUtility.IsStepComplete(Post2xMigrationStep.PostMigrationPreparation))
+            if (SqlSchemaUpdater.IsCorrectSchemaVersion())
             {
                 // Let it flow to whatever the next page is.  May be the Admin User page, or may be a PostV2 migration page.
                 return;
@@ -816,7 +681,7 @@ namespace ShipWorks.Data.Administration
             progressDlg.Show(this);
 
             // Used for async invoke
-            MethodInvoker<ProgressProvider> invoker = new MethodInvoker<ProgressProvider>(AsyncUpdateDatabase);
+            MethodInvoker<IProgressProvider> invoker = new MethodInvoker<IProgressProvider>(AsyncUpdateDatabase);
 
             // Pass along user state
             Dictionary<string, object> userState = new Dictionary<string, object>();
@@ -830,31 +695,10 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Method meant to be called from an asycn invoker to update the database in the background
         /// </summary>
-        private void AsyncUpdateDatabase(ProgressProvider progressProvider)
+        private void AsyncUpdateDatabase(IProgressProvider progressProvider)
         {
-            // First see if we need to get migrated from 2x -> 3x
-            if (v2migrationController != null &&
-                (v2migrationController.MigrationState == MigrationState.NotStarted ||
-                 v2migrationController.MigrationState == MigrationState.ResumeRequired))
-            {
-                v2migrationController.Initialize();
-
-                bool completed = v2migrationController.Execute(progressProvider);
-
-                if (!completed)
-                {
-                    throw new OperationCanceledException();
-                }
-            }
-
             // Update to the latest v3 schema
             SqlSchemaUpdater.UpdateDatabase(progressProvider, noSingleUserMode.Checked);
-
-            // After a 2x migration, there are a few steps that need to be performed once the v3 schema is totally current
-            if (!Post2xMigrationUtility.IsStepComplete(Post2xMigrationStep.PostMigrationPreparation))
-            {
-                Post2xMigrationPreparation.PrepareForFinalStepsAfter3xSchemaUpdate(progressProvider);
-            }
         }
 
         /// <summary>
@@ -869,7 +713,7 @@ namespace ShipWorks.Data.Administration
             }
 
             Dictionary<string, object> userState = (Dictionary<string, object>) result.AsyncState;
-            MethodInvoker<ProgressProvider> invoker = (MethodInvoker<ProgressProvider>) userState["invoker"];
+            MethodInvoker<IProgressProvider> invoker = (MethodInvoker<IProgressProvider>) userState["invoker"];
             ProgressDlg progressDlg = (ProgressDlg) userState["progressDlg"];
 
             try
@@ -900,7 +744,7 @@ namespace ShipWorks.Data.Administration
             }
             catch (Exception ex)
             {
-                if (ex is SqlScriptException || ex is SqlException || ex is MigrationException)
+                if (ex is SqlScriptException || ex is SqlException)
                 {
                     log.ErrorFormat("An error occurred during upgrade.", ex);
                     progressDlg.ProgressProvider.Terminate(ex);
@@ -917,38 +761,6 @@ namespace ShipWorks.Data.Administration
                 {
                     throw;
                 }
-            }
-        }
-
-        /// <summary>
-        /// Insert the WizardPages required for performing post v2 migration steps, after the 3x schema is completely up to date with whatever
-        ///  the current schema is.
-        /// </summary>
-        private void InsertV2PostMigrationPages()
-        {
-            List<WizardPage> postPages = new List<WizardPage>
-                {
-                    new ImportTemplatesWizardPage(),
-                    new ImportCertificatesWizardPage(),
-                    new NetworkSolutionsLicenseWizardPage(),
-                    new YahooEmailWizardPage(),
-                    new AmazonWizardPage(),
-                    new ChannelAdvisorAccountKeyWizardPage(),
-                    new FedExWizardPage(),
-                    new UpsShipperWizardPage(),
-                    new WorldShipWizardPage(),
-                    new UspsWizardPage(),
-                    new EndiciaWizardPage(),
-                    new Express1WizardPage(),
-                    new OtherShipperWizardPage(),
-                    new UserSecurityInfoWizardPage(),
-                    new FinalTasksWizardPage()
-                };
-
-            // Add the pages in order right after the "Create Admin User" page
-            foreach (var page in postPages.Reverse<WizardPage>())
-            {
-                Pages.Insert(Pages.IndexOf(wizardPageShipWorksAdmin) + 1, page);
             }
         }
 

@@ -1,14 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Utility;
-using ShipWorks.Data.Model;
-using System.ComponentModel;
+using Interapptive.Shared.Collections;
 using ShipWorks.Core.Messaging;
-using ShipWorks.Data.Connection;
 using ShipWorks.Data;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Data.Utility;
 using ShipWorks.Messaging.Messages;
 
 namespace ShipWorks.Shipping.Carriers.UPS
@@ -19,6 +20,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
     public static class UpsAccountManager
     {
         static TableSynchronizer<UpsAccountEntity> synchronizer;
+        static IEnumerable<IUpsAccountEntity> readOnlyAccounts;
         static bool needCheckForChanges = false;
 
         /// <summary>
@@ -52,6 +54,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 {
                     synchronizer.EntityCollection.Sort((int) UpsAccountFieldIndex.Description, ListSortDirection.Ascending);
                 }
+
+                readOnlyAccounts = synchronizer.EntityCollection.Select(x => x.AsReadOnly()).ToReadOnly();
             }
 
             needCheckForChanges = false;
@@ -77,11 +81,38 @@ namespace ShipWorks.Shipping.Carriers.UPS
         }
 
         /// <summary>
+        /// Return the active list of ups accounts
+        /// </summary>
+        public static IEnumerable<IUpsAccountEntity> AccountsReadOnly
+        {
+            get
+            {
+                lock (synchronizer)
+                {
+                    if (needCheckForChanges)
+                    {
+                        InternalCheckForChanges();
+                    }
+
+                    return readOnlyAccounts;
+                }
+            }
+        }
+
+        /// <summary>
         /// Get the account with the specified ID, or null if not found.
         /// </summary>
         public static UpsAccountEntity GetAccount(long accountID)
         {
             return Accounts.Where(s => s.UpsAccountID == accountID).FirstOrDefault();
+        }
+
+        /// <summary>
+        /// Get the account with the specified ID, or null if not found.
+        /// </summary>
+        public static IUpsAccountEntity GetAccountReadOnly(long accountID)
+        {
+            return AccountsReadOnly.Where(s => s.UpsAccountID == accountID).FirstOrDefault();
         }
 
         /// <summary>

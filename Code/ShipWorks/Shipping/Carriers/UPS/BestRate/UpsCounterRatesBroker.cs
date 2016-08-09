@@ -6,6 +6,7 @@ using Autofac;
 using Interapptive.Shared.Net;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.BestRate.Footnote;
@@ -31,7 +32,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
         /// <summary>
         /// Initializes a new instance of the <see cref="UpsCounterRatesBroker"/> class.
         /// </summary>
-        public UpsCounterRatesBroker(UpsShipmentType upsShipmentType, ICarrierAccountRepository<UpsAccountEntity> accountRepository, ICarrierSettingsRepository settingsRepository)
+        public UpsCounterRatesBroker(UpsShipmentType upsShipmentType, ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> accountRepository, ICarrierSettingsRepository settingsRepository)
             : base(upsShipmentType, accountRepository, settingsRepository)
         {
 
@@ -64,14 +65,14 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
             {
                 // We're passing in our own exception handler to accumulate broker exceptions otherwise
                 // any SurePost exceptions generated will display as having a Warning severity level; later
-                // on we're going to make sure any broker exceptions have the severity level set to 
+                // on we're going to make sure any broker exceptions have the severity level set to
                 // information and then call the exception handler provided.
                 rates = base.GetBestRates(shipment, brokerExceptions);
 
                 foreach (BestRateResultTag bestRateResultTag in rates.Rates.Select(rate => (BestRateResultTag) rate.Tag))
                 {
-                    // We want the UPS account setup wizard to show when a rate is selected so the user 
-                    // can create their own UPS account since these rates are just counter rates 
+                    // We want the UPS account setup wizard to show when a rate is selected so the user
+                    // can create their own UPS account since these rates are just counter rates
                     // using a ShipWorks account.
                     bestRateResultTag.SignUpAction = new Func<bool>(DisplaySetupWizard);
                 }
@@ -86,7 +87,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
             {
                 if (ex.InnerExceptions.Count == 1 && ex.InnerExceptions.OfType<CounterRatesOriginAddressException>().Any())
                 {
-                    // There was a problem with the origin address, so add the invalid store address footer factory 
+                    // There was a problem with the origin address, so add the invalid store address footer factory
                     // to the rate group and eat the exception
                     rates.AddFootnoteFactory(new CounterRatesInvalidStoreAddressFootnoteFactory(ShipmentType.ShipmentTypeCode));
                 }
@@ -101,7 +102,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
         }
 
         /// <summary>
-        /// Updates the shipment origin address for getting counter rates. In cases where a shipment is 
+        /// Updates the shipment origin address for getting counter rates. In cases where a shipment is
         /// configured to use the Account address or there is an incomplete "Other" address, we want
         /// to use the store address for getting counter rates.
         /// </summary>
@@ -132,7 +133,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
                         // We also want to ensure sure that the provider is no longer excluded in
                         // the global settings
                         ShippingSettingsEntity settings = ShippingSettings.Fetch();
-                        settings.ExcludedTypes = settings.ExcludedTypes.Where(shipmentType => shipmentType != (int) ShipmentType.ShipmentTypeCode).ToArray();
+                        settings.ExcludedTypes = settings.ExcludedTypes.Where(shipmentType => shipmentType != ShipmentType.ShipmentTypeCode).ToArray();
 
                         ShippingSettings.Save(settings);
                     }

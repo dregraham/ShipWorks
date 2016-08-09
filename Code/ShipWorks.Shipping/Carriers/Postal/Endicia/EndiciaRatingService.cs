@@ -7,6 +7,7 @@ using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.Postal.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Usps.RateFootnotes.Promotion;
 using ShipWorks.Shipping.Editing.Rating;
@@ -19,7 +20,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
     /// </summary>
     public class EndiciaRatingService : PostalRatingService, ISupportExpress1Rates
     {
-        private readonly IIndex<ShipmentTypeCode, ICarrierAccountRepository<EndiciaAccountEntity>> accountRepository;
+        private readonly IIndex<ShipmentTypeCode, ICarrierAccountRepository<EndiciaAccountEntity, IEndiciaAccountEntity>> accountRepository;
         private readonly ILogEntryFactory logEntryFactory;
         private readonly Func<string, ICertificateInspector> certificateInspectorFactory;
         private bool shouldRetrieveExpress1Rates;
@@ -27,7 +28,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         public EndiciaRatingService(
             IIndex<ShipmentTypeCode, IRatingService> ratingServiceFactory,
             IIndex<ShipmentTypeCode, ShipmentType> shipmentTypeManager,
-            IIndex<ShipmentTypeCode, ICarrierAccountRepository<EndiciaAccountEntity>> accountRepository,
+            IIndex<ShipmentTypeCode, ICarrierAccountRepository<EndiciaAccountEntity, IEndiciaAccountEntity>> accountRepository,
             ILogEntryFactory logEntryFactory,
             Func<string, ICertificateInspector> certificateInspectorFactory)
             : base(ratingServiceFactory, shipmentTypeManager)
@@ -274,7 +275,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <summary>
         /// Returns the an account repository for the given account
         /// </summary>
-        private ICarrierAccountRepository<EndiciaAccountEntity> GetAccountRepository(ShipmentTypeCode shipmentTypeCode)
+        private ICarrierAccountRepository<EndiciaAccountEntity, IEndiciaAccountEntity> GetAccountRepository(ShipmentTypeCode shipmentTypeCode)
         {
             return accountRepository[shipmentTypeCode];
         }
@@ -287,7 +288,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             bool allowExpress1Rates = shouldRetrieveExpress1Rates && settings.EndiciaAutomaticExpress1;
 
             return allowExpress1Rates
-                   && shipment.ShipmentType == (int)ShipmentTypeCode.Endicia
+                   && shipment.ShipmentType == (int) ShipmentTypeCode.Endicia
                    && !shipmentTypeManager[ShipmentTypeCode.Endicia].IsRateDiscountMessagingRestricted
                    && Express1Utilities.IsValidPackagingType(null, (PostalPackagingType) shipment.Postal.PackagingType);
         }

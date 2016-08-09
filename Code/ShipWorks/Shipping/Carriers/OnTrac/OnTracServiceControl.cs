@@ -128,7 +128,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
 
                     // Sets service type only if it is available
                     var onTracServiceType = (OnTracServiceType) shipment.OnTrac.Service;
-                    if (((EnumList<OnTracServiceType>) service.DataSource).Any(x => x.Value == onTracServiceType))
+                    if (((IEnumerable<EnumEntry<OnTracServiceType>>) service.DataSource).Any(x => x.Value == onTracServiceType))
                     {
                         service.ApplyMultiValue(onTracServiceType);
                     }

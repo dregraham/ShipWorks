@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Web.UI.WebControls.WebParts;
 using Microsoft.ApplicationInsights.DataContracts;
@@ -9,7 +8,7 @@ namespace Interapptive.Shared.Metrics
     /// <summary>
     /// Utility class for tracking the duration of an event, along with other metric info
     /// </summary>
-    public class TrackedDurationEvent : IDisposable
+    public class TrackedDurationEvent : ITrackedDurationEvent
     {
         readonly Stopwatch stopwatch;
         private readonly EventTelemetry eventTelemetry;
@@ -23,7 +22,7 @@ namespace Interapptive.Shared.Metrics
 
             stopwatch = Stopwatch.StartNew();
         }
-        
+
         /// <summary>
         /// Add a metric value to the event
         /// </summary>
@@ -67,10 +66,10 @@ namespace Interapptive.Shared.Metrics
 
                 Telemetry.TrackEvent(eventTelemetry);
             }
-            // If for some reason the code throws, we don't want to stop the user from 
-            // doing their work, so igoring all exceptions here.
             catch
             {
+                // If for some reason the code throws, we don't want to stop the user from
+                // doing their work, so igoring all exceptions here.
             }
         }
 

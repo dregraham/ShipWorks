@@ -1,24 +1,18 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Diagnostics;
 using System.Linq;
-using log4net;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Common.Threading;
 using System.Threading;
+using System.Windows.Forms;
+using Interapptive.Shared;
+using Interapptive.Shared.Threading;
+using log4net;
+using ShipWorks.Common.Threading;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Email;
 using ShipWorks.Templates.Processing;
 using ShipWorks.UI.Controls.Html;
-using Interapptive.Shared.Utility;
-using System.Windows.Forms;
-using Rebex.Mail;
-using Rebex.Net;
-using Interapptive.Shared.IO.Text.HtmlAgilityPack;
-using System.IO;
-using ShipWorks.ApplicationCore;
-using ShipWorks.Email;
 using ShipWorks.Users.Security;
-using System.Diagnostics;
-using Interapptive.Shared;
 
 namespace ShipWorks.Templates.Emailing
 {
@@ -26,7 +20,7 @@ namespace ShipWorks.Templates.Emailing
     /// Class for generating email messages and queing them to the outbox
     /// </summary>
     public class EmailGenerator
-    {        
+    {
         // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(EmailGenerator));
 
@@ -254,7 +248,7 @@ namespace ShipWorks.Templates.Emailing
                 // Create the settings to use for formatting the html
                 TemplateResultFormatSettings formatSettings = TemplateResultFormatSettings.FromTemplate(template);
 
-                while (formatSettings.NextResultIndex < templateResults.Count && 
+                while (formatSettings.NextResultIndex < templateResults.Count &&
                        !progressProvider.CancelRequested)
                 {
                     int startResult = formatSettings.NextResultIndex;
@@ -343,8 +337,8 @@ namespace ShipWorks.Templates.Emailing
         private bool AddToOutbox(List<TemplateResult> resultsUsed, string htmlContent, string plainContent)
         {
             long? storeID = settingsResolver.DetermineStore(template, resultsUsed);
-            
-            // Null return means it was canceled 
+
+            // Null return means it was canceled
             if (storeID == null)
             {
                 return false;

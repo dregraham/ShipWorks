@@ -1,19 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
-using System.Reflection;
-using System.Windows.Input;
 using Interapptive.Shared.Utility;
-using log4net;
 using ShipWorks.Core.Messaging;
-using ShipWorks.Core.UI;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Messaging.Messages;
 using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Shipping.Editing.Enums;
 using ShipWorks.Shipping.Editing.Rating;
@@ -26,7 +17,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
     /// </summary>
     public partial class BestRateShipmentViewModel : ShipmentViewModelBase
     {
-        static readonly ILog log = LogManager.GetLogger(typeof(BestRateShipmentViewModel));
         private readonly IDisposable subscriptions;
 
         /// <summary>
@@ -83,8 +73,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         /// </summary>
         public override void Load(ICarrierShipmentAdapter newShipmentAdapter)
         {
-			base.Load(newShipmentAdapter);
-			
+            base.Load(newShipmentAdapter);
+
             ServiceLevel = shipmentAdapter.Shipment.BestRate.ServiceLevel;
         }
 
@@ -109,7 +99,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         /// </summary>
         public override void Save()
         {
-			base.Save();
+            base.Save();
 
             shipmentAdapter.Shipment.BestRate.ServiceLevel = ServiceLevel;
         }
@@ -155,7 +145,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         /// <summary>
         /// Dispose resources
         /// </summary>
-        public override void Dispose() 
+        public override void Dispose()
         {
             base.Dispose();
             subscriptions?.Dispose();

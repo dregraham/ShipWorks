@@ -1,4 +1,5 @@
 ﻿using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.Postal.BestRate;
 using ShipWorks.Shipping.Insurance;
 
@@ -7,14 +8,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.BestRate
     /// <summary>
     /// Best rate broker for USPS accounts
     /// </summary>
-    public class UspsBestRateBroker : PostalResellerBestRateBroker<UspsAccountEntity>
+    public class UspsBestRateBroker : PostalResellerBestRateBroker<UspsAccountEntity, IUspsAccountEntity>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="UspsBestRateBroker"/> class.
         /// </summary>
         /// <param name="shipmentType">Type of the shipment.</param>
         /// <param name="accountRepository">The account repository.</param>
-        public UspsBestRateBroker(UspsShipmentType shipmentType, ICarrierAccountRepository<UspsAccountEntity> accountRepository) :
+        public UspsBestRateBroker(UspsShipmentType shipmentType, ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity> accountRepository) :
             this(shipmentType, accountRepository, "USPS")
         { }
 
@@ -24,7 +25,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.BestRate
         /// <param name="shipmentType">Type of the shipment.</param>
         /// <param name="accountRepository">The account repository.</param>
         /// <param name="carrierDescription">The carrier description.</param>
-        protected UspsBestRateBroker(UspsShipmentType shipmentType, ICarrierAccountRepository<UspsAccountEntity> accountRepository, string carrierDescription) :
+        protected UspsBestRateBroker(UspsShipmentType shipmentType, ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity> accountRepository, string carrierDescription) :
             base(shipmentType, accountRepository, carrierDescription)
         {
             GetRatesAction = (shipment, type) => GetRatesFunction(shipment);

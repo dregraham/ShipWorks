@@ -184,11 +184,6 @@ namespace ShipWorks.Shipping.Services
             ShippingManager.IsShipmentTypeConfigured(shipmentTypeCode);
 
         /// <summary>
-        /// Create a new shipment for the given order
-        /// </summary>
-        public ShipmentEntity CreateShipment(OrderEntity order) => ShippingManager.CreateShipment(order);
-
-        /// <summary>
         /// Create a shipment as a copy of an existing shipment
         /// </summary>
         public ShipmentEntity CreateShipmentCopy(ShipmentEntity shipment) => CreateShipmentCopy(shipment, null);

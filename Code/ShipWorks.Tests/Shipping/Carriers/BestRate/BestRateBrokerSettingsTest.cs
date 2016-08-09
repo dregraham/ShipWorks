@@ -1,9 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Interapptive.Shared.Utility;
-using Xunit;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Editions;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Endicia;
@@ -12,6 +10,7 @@ using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Express1;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
+using Xunit;
 
 namespace ShipWorks.Tests.Shipping.Carriers.BestRate
 {
@@ -21,18 +20,18 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
 
         private ShippingSettingsEntity settings;
         private List<IBestRateShippingBroker> brokers;
-        
+
         public BestRateBrokerSettingsTest()
         {
             settings = new ShippingSettingsEntity();
             brokers = new List<IBestRateShippingBroker>();
-            
 
-            settings.BestRateExcludedTypes = new int[0];
-            settings.ActivatedTypes = new int[]
+
+            settings.BestRateExcludedTypes = Enumerable.Empty<ShipmentTypeCode>();
+            settings.ActivatedTypes = new[]
             {
-                (int)ShipmentTypeCode.Express1Endicia,
-                (int)ShipmentTypeCode.Express1Usps
+                ShipmentTypeCode.Express1Endicia,
+                ShipmentTypeCode.Express1Usps
             };
 
             testObject = new BestRateBrokerSettings(settings, null);
@@ -48,7 +47,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         [Fact]
         public void CheckExpress1Rates_ReturnsFalse_UspsExpress1IsDisabledForUspsInBestRates()
         {
-            settings.BestRateExcludedTypes = new[] { (int)ShipmentTypeCode.Express1Usps };
+            settings.BestRateExcludedTypes = new[] { ShipmentTypeCode.Express1Usps };
             Assert.Equal(false, testObject.CheckExpress1Rates(new UspsShipmentType()));
         }
 
@@ -78,7 +77,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         [Fact]
         public void CheckExpress1Rates_ReturnsFalse_EndiciaExpress1IsDisabledForEndiciaInBestRates()
         {
-            settings.BestRateExcludedTypes = new[] { (int)ShipmentTypeCode.Express1Endicia };
+            settings.BestRateExcludedTypes = new[] { ShipmentTypeCode.Express1Endicia };
             Assert.Equal(false, testObject.CheckExpress1Rates(new EndiciaShipmentType()));
         }
 
@@ -109,7 +108,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         [Fact]
         public void IsMailInnovationsAvailable_ReturnsFalse_OltDisabled()
         {
-            Assert.Equal(false, testObject.IsMailInnovationsAvailable(new UpsOltShipmentType()));            
+            Assert.Equal(false, testObject.IsMailInnovationsAvailable(new UpsOltShipmentType()));
         }
 
         [Fact]

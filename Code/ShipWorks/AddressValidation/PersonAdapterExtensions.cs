@@ -1,6 +1,6 @@
-﻿using Interapptive.Shared.Business;
+﻿using System;
+using Interapptive.Shared.Business;
 using ShipWorks.Data.Utility;
-using System;
 
 namespace ShipWorks.AddressValidation
 {

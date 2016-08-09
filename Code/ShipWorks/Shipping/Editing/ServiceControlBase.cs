@@ -627,5 +627,38 @@ namespace ShipWorks.Shipping.Editing
         {
 
         }
+
+        /// <summary>
+        /// Unload shipments
+        /// </summary>
+        internal void UnloadShipments()
+        {
+            loadedShipments.Clear();
+        }
+
+        /// <summary> 
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                components?.Dispose();
+
+                RecipientDestinationChanged = null;
+                OriginDestinationChanged = null;
+                ShipmentServiceChanged = null;
+                RateCriteriaChanged = null;
+                ShipSenseFieldChanged = null;
+                ShipmentsAdded = null;
+                ShipmentTypeChanged = null;
+                ClearRatesAction = null;
+
+                UnloadShipments();
+            }
+
+            base.Dispose(disposing);
+        }
     }
 }

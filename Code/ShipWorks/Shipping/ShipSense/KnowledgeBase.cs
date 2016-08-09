@@ -3,13 +3,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Interapptive.Shared.IO.Zip;
+using Interapptive.Shared.Threading;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Common.Threading;
 using ShipWorks.Data;
 using ShipWorks.Data.Adapter;
 using ShipWorks.Data.Connection;
-using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Settings;
@@ -109,7 +108,7 @@ namespace ShipWorks.Shipping.ShipSense
                     }
                 }
 
-                // Update the compressed JSON of the entity to reflect the latest KB entry            
+                // Update the compressed JSON of the entity to reflect the latest KB entry
                 entity.Entry = CompressEntry(entry);
 
                 using (SqlAdapter adapter = new SqlAdapter())
@@ -149,8 +148,8 @@ namespace ShipWorks.Shipping.ShipSense
         {
             // Fetch the entity because if it exists, we need the IsNew property to
             // be set to false otherwise a PK violation will be thrown if it already exists
-            // Note: in a later story we should probably look into caching this data to 
-            // reduce the number of database calls 
+            // Note: in a later story we should probably look into caching this data to
+            // reduce the number of database calls
             string shipSenseXml = ShippingSettings.Fetch().ShipSenseUniquenessXml;
             IEnumerable<ShipSenseOrderItemKey> keys = keyFactory.GetKeys(order.OrderItems, shipSenseUniquenessXmlParser.GetItemProperties(shipSenseXml), shipSenseUniquenessXmlParser.GetItemAttributes(shipSenseXml));
 
@@ -169,11 +168,11 @@ namespace ShipWorks.Shipping.ShipSense
 
             if (entity != null)
             {
-                // The entry data is JSON, so deserialize the JSON into 
+                // The entry data is JSON, so deserialize the JSON into
                 // an instance of a KnowledgebaseEntry
                 return CreateKnowledgebaseEntry(entity.Entry);
             }
-            
+
             // There wasn't an entry in the data source for the items in this order,
             // so we'll just return a new, empty entry
             return new KnowledgebaseEntry();
@@ -187,15 +186,15 @@ namespace ShipWorks.Shipping.ShipSense
         public bool IsOverwritten(ShipmentEntity shipment)
         {
             bool isOverwritten = false;
-            
+
             // Make sure we have all of the order information
-            OrderEntity order = (OrderEntity)DataProvider.GetEntity(shipment.OrderID);
+            OrderEntity order = (OrderEntity) DataProvider.GetEntity(shipment.OrderID);
             using (SqlAdapter adapter = new SqlAdapter())
             {
                 adapter.FetchEntityCollection(order.OrderItems, new RelationPredicateBucket(OrderItemFields.OrderID == order.OrderID));
             }
 
-            // A null entity means there is not an ShipSense entry for the order, so 
+            // A null entity means there is not an ShipSense entry for the order, so
             // there was nothing to overwrite
             ShipSenseKnowledgebaseEntity entity = FetchEntity(order);
 
@@ -251,7 +250,7 @@ namespace ShipWorks.Shipping.ShipSense
         /// <summary>
         /// Refreshes the ShipSense status of unprocessed shipments whose order has a hash key matching
         /// the one provided. Shipments corresponding to the list of shipment IDs provided will not be
-        /// impacted. This is useful for the case where the shipping window is open with a batch of 
+        /// impacted. This is useful for the case where the shipping window is open with a batch of
         /// shipments and you don't want the underlying data to be refreshed when processing a shipment.
         /// Otherwise, you would get an error message indicating that the shipment has been updated when
         /// you go to process the next shipment.
@@ -280,9 +279,9 @@ namespace ShipWorks.Shipping.ShipSense
         private ShipSenseKnowledgebaseEntity FetchEntity(OrderEntity order)
         {
             ShipSenseKnowledgebaseEntity lookupEntity = new ShipSenseKnowledgebaseEntity
-                {
-                    Hash = GetHashResult(order).HashValue
-                };
+            {
+                Hash = GetHashResult(order).HashValue
+            };
 
             return FetchEntity(lookupEntity);
         }
@@ -332,6 +331,6 @@ namespace ShipWorks.Shipping.ShipSense
             // Deserialize the compressed JSON into an instance of KnowledgebaseEntry
             string serializedJson = Encoding.UTF8.GetString(GZipUtility.Decompress(compressedJson));
             return new KnowledgebaseEntry(serializedJson);
-        }        
+        }
     }
 }

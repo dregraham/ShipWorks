@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Messaging;
 using ShipWorks.Shipping;
@@ -15,11 +14,11 @@ namespace ShipWorks.Messaging.Messages
         /// <summary>
         /// Constructor
         /// </summary>
-        public EnabledCarriersChangedMessage(object sender, List<int> typesAdded, List<int> typesRemoved)
+        public EnabledCarriersChangedMessage(object sender, IEnumerable<ShipmentTypeCode> typesAdded, IEnumerable<ShipmentTypeCode> typesRemoved)
         {
             Sender = sender;
-            Added = typesAdded.Cast<ShipmentTypeCode>().ToReadOnly();
-            Removed = typesRemoved.Cast<ShipmentTypeCode>().ToReadOnly();
+            Added = typesAdded.ToReadOnly();
+            Removed = typesRemoved.ToReadOnly();
             MessageId = Guid.NewGuid();
         }
 

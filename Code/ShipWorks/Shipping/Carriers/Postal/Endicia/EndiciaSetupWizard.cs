@@ -35,9 +35,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         EndiciaAccountEntity account;
         EndiciaApiClient endiciaApiClient = new EndiciaApiClient();
 
-        // track if the account is one being migrated from 2
-        bool migratingDazzleAccount = false;
-
         // User has completed the signup process for the account
         bool signupCompleted = false;
 
@@ -81,18 +78,17 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
             List<EndiciaAccountEntity> accounts = EndiciaAccountManager.GetAccounts(EndiciaReseller.None, true);
 
-            // See if there's still an account waiting to be migrated from sw2.  That's our starting point if it exists
-            account = accounts.FirstOrDefault(a => a.IsDazzleMigrationPending);
-            migratingDazzleAccount = account != null;
+            // Grab the first account
+            account = accounts.FirstOrDefault();
 
-            if (migratingDazzleAccount)
+            if (account != null)
             {
                 PersonAdapter person = new PersonAdapter(account, "");
                 personControl.LoadEntity(person);
             }
 
             // If there is an account that they started setting up but didn't fully complete the process (and we're not just specifically updating some other account)
-            if (accounts.Any(a => a.AccountNumber == null) && !migratingDazzleAccount)
+            if (accounts.Any(a => a.AccountNumber == null))
             {
                 account = accounts.FirstOrDefault(a => a.AccountNumber == null);
 
@@ -114,7 +110,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 Pages.Add(new ShippingWizardPageAutomation(shipmentType));
 
                 // There are accounts with numbers (migrated v2 label server accounts)
-                if (accounts.Count > 0 && accounts.All(a => a.AccountNumber != null) && !migratingDazzleAccount)
+                if (accounts.Count > 0 && accounts.All(a => a.AccountNumber != null))
                 {
                     account = accounts.FirstOrDefault(a => a.AccountNumber != null);
 

@@ -48,5 +48,10 @@ namespace ShipWorks.Stores
         /// Notify the underlying data manager that there may have been changes
         /// </summary>
         void CheckForChanges();
+
+        /// <summary>
+        /// Checks whether any stores have automatic validation enabled
+        /// </summary>
+        bool DoAnyStoresHaveAutomaticValidationEnabled();
     }
 }

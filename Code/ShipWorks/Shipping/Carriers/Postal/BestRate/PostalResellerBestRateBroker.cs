@@ -1,14 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using Interapptive.Shared.Utility;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.BestRate;
 using Autofac;
+using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.Custom;
-using ShipWorks.Shipping.Editing.Rating;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Properties;
+using ShipWorks.Shipping.Carriers.BestRate;
+using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Stores;
 
 namespace ShipWorks.Shipping.Carriers.Postal.BestRate
@@ -17,12 +17,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.BestRate
     /// Base class for postal reseller brokers, like Usps and Endicia
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public abstract class PostalResellerBestRateBroker<T> : BestRateBroker<T> where T : ICarrierAccount
+    public abstract class PostalResellerBestRateBroker<T, TInterface> : BestRateBroker<T, TInterface>
+        where T : TInterface
+        where TInterface : ICarrierAccount
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        protected PostalResellerBestRateBroker(ShipmentType shipmentType, ICarrierAccountRepository<T> accountRepository, string carrierDescription) :
+        protected PostalResellerBestRateBroker(ShipmentType shipmentType, ICarrierAccountRepository<T, TInterface> accountRepository, string carrierDescription) :
             base(shipmentType, accountRepository, carrierDescription)
         {
 
@@ -106,7 +108,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.BestRate
                 {
                     lastNonSelectable = rate;
                 }
-                
+
                 rate.Description = removeDeliveryConfirmation.Replace(rate.Description, string.Empty);
             }
 
@@ -146,11 +148,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.BestRate
             // ConfigureNewShipment sets these fields, but we need to make sure they're what we expect
             currentShipment.Postal.DimsWeight = originalShipment.BestRate.DimsWeight;
             currentShipment.Postal.DimsAddWeight = originalShipment.BestRate.DimsAddWeight;
-            currentShipment.Postal.PackagingType = (int)PostalPackagingType.Package;
-            currentShipment.Postal.Service = (int)PostalServiceType.PriorityMail;
-            currentShipment.Postal.InsuranceValue = originalShipment.BestRate.InsuranceValue;            
+            currentShipment.Postal.PackagingType = (int) PostalPackagingType.Package;
+            currentShipment.Postal.Service = (int) PostalServiceType.PriorityMail;
+            currentShipment.Postal.InsuranceValue = originalShipment.BestRate.InsuranceValue;
 
-            // Update total weight 
+            // Update total weight
             ShipmentType.UpdateTotalWeight(currentShipment);
 
             UpdateChildAccountId(currentShipment.Postal, account);
@@ -171,7 +173,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.BestRate
         /// <param name="tag">Service type specified in the rate tag</param>
         protected override int GetServiceTypeFromTag(object tag)
         {
-            return (int)((PostalRateSelection) tag).ServiceType;
+            return (int) ((PostalRateSelection) tag).ServiceType;
         }
 
         /// <summary>
@@ -191,10 +193,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.BestRate
         /// <returns>Concatenation of the carrier description and the original rate tag</returns>
         protected override string GetResultKey(RateResult rate)
         {
-            // Account for the rate being a previously cached rate where the tag is already a best rate tag; 
+            // Account for the rate being a previously cached rate where the tag is already a best rate tag;
             // we need to pass the original tag that is a postal service type
             object originalTag = rate.OriginalTag;
-            return "Postal" + EnumHelper.GetDescription((PostalServiceType)GetServiceTypeFromTag(originalTag));
+            return "Postal" + EnumHelper.GetDescription((PostalServiceType) GetServiceTypeFromTag(originalTag));
         }
 
         /// <summary>

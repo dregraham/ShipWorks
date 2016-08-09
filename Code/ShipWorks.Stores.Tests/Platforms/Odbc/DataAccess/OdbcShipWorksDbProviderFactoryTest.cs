@@ -63,7 +63,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         [Fact]
         public void CreateShipworksOdbcCommandBuilder_ReturnsShipworksOdbcCommandBuilder()
         {
-            using (var mock = AutoMock.GetLoose())
             using (var adapter = new OdbcDataAdapter())
             {
                 var shipworksDataAdapter = mock.Mock<IShipWorksOdbcDataAdapter>();

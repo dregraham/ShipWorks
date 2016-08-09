@@ -1,21 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Forms;
 using Divelements.SandRibbon;
+using Interapptive.Shared.Threading;
+using Interapptive.Shared.UI;
+using Interapptive.Shared.Utility;
+using log4net;
 using ShipWorks.Common.Threading;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal;
-using SandMenuItem = Divelements.SandRibbon.MenuItem;
-using SandMenu = Divelements.SandRibbon.Menu;
 using ShipWorks.UI;
-using System.Windows.Forms;
-using ShipWorks.Data.Connection;
-using ShipWorks.Data;
-using System.Drawing;
-using Interapptive.Shared.Utility;
-using ShipWorks.Common.IO.Hardware.Printers;
-using Interapptive.Shared.UI;
-using log4net;
+using SandMenu = Divelements.SandRibbon.Menu;
+using SandMenuItem = Divelements.SandRibbon.MenuItem;
 
 namespace ShipWorks.Shipping.ScanForms
 {
@@ -57,7 +55,7 @@ namespace ShipWorks.Shipping.ScanForms
                 foreach (IScanFormCarrierAccount account in accounts)
                 {
                     SandMenuItem menuItem = new SandMenuItem(account.GetDescription());
-                    menuItem.Tag = account;                    
+                    menuItem.Tag = account;
                     menuItem.Activate += OnCreateScanForm;
 
                     childMenu.Items.Add(menuItem);
@@ -81,8 +79,8 @@ namespace ShipWorks.Shipping.ScanForms
         /// </summary>
         private static void OnCreateScanForm(object sender, EventArgs e)
         {
-            SandMenuItem menuItem = (SandMenuItem)sender;
-            IScanFormCarrierAccount carrierAccount = (IScanFormCarrierAccount)menuItem.Tag;
+            SandMenuItem menuItem = (SandMenuItem) sender;
+            IScanFormCarrierAccount carrierAccount = (IScanFormCarrierAccount) menuItem.Tag;
             Control owner = DisplayHelper.GetActiveForm();
 
             BackgroundExecutor<long> executor = new BackgroundExecutor<long>(owner,
@@ -114,7 +112,7 @@ namespace ShipWorks.Shipping.ScanForms
                 // Generate's the keys to process
                 (IProgressReporter reporter) =>
                 {
-                    return carrierAccount.GetEligibleShipmentIDs().ToList();                    
+                    return carrierAccount.GetEligibleShipmentIDs().ToList();
                 },
 
                 // Process each input key
@@ -131,9 +129,9 @@ namespace ShipWorks.Shipping.ScanForms
 
                             // Not a consolidator and not Endicia DHL
                             if (!ShipmentTypeManager.IsConsolidator(postalServiceType) &&
-                                !(shipment.ShipmentType == (int)ShipmentTypeCode.Endicia && ShipmentTypeManager.IsEndiciaDhl(postalServiceType)))
+                                !(shipment.ShipmentType == (int) ShipmentTypeCode.Endicia && ShipmentTypeManager.IsEndiciaDhl(postalServiceType)))
                             {
-                                shipments.Add(shipment);                                
+                                shipments.Add(shipment);
                             }
                         }
                         catch (ObjectDeletedException)
@@ -224,10 +222,10 @@ namespace ShipWorks.Shipping.ScanForms
         /// </summary>
         private static void OnPrintScanForm(object sender, EventArgs e)
         {
-            SandMenuItem menuItem = (SandMenuItem)sender;
+            SandMenuItem menuItem = (SandMenuItem) sender;
             Control owner = DisplayHelper.GetActiveForm();
 
-            ScanFormBatch scanFormBatch = (ScanFormBatch)menuItem.Tag;
+            ScanFormBatch scanFormBatch = (ScanFormBatch) menuItem.Tag;
             scanFormBatch.Print(owner);
         }
     }

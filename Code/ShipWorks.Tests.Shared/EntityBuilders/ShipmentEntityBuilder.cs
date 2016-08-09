@@ -148,6 +148,7 @@ namespace ShipWorks.Tests.Shared.EntityBuilders
             builderConfiguration?.Invoke(builder);
 
             Set(x => x.CustomsItems.Add(builder.Build()));
+            Set(x => x.CustomsGenerated, true);
 
             return this;
         }

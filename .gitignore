@@ -9,6 +9,7 @@
 *.user
 *.sln.docstates
 .vs
+*.jfm
 
 # Build results
 

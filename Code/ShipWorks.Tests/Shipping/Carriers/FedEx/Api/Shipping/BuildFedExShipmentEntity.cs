@@ -1,8 +1,6 @@
 using System;
 using Interapptive.Shared.Enums;
-using Moq;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping
@@ -18,25 +16,23 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping
         /// <returns>Creates a shipment entity with a mocked FedExShipment and 2 empty FedExPackages</returns>
         public static ShipmentEntity SetupBaseShipmentEntity()
         {
-            EntityCollection<FedExPackageEntity> packages = new EntityCollection<FedExPackageEntity>
-            {
-                new FedExPackageEntity() {DimsHeight = 2, DimsWidth = 2, DimsLength = 2},
-                new FedExPackageEntity() {DimsHeight = 2, DimsWidth = 2, DimsLength = 2}
-            };
-
-            Mock<FedExShipmentEntity> mockedFedExShipmentEntity = new Mock<FedExShipmentEntity>();
-            mockedFedExShipmentEntity.SetupAllProperties();
-            mockedFedExShipmentEntity.Setup(x => x.Packages).Returns(packages);
-            mockedFedExShipmentEntity.SetupProperty(x => x.Signature, (int) FedExSignatureType.NoSignature);
-            mockedFedExShipmentEntity.SetupProperty(x => x.Service, (int) FedExServiceType.FedExGround);
-            mockedFedExShipmentEntity.SetupProperty(x => x.NonStandardContainer, true);
-
             ShipmentEntity shipmentEntity = new ShipmentEntity
             {
-                FedEx = mockedFedExShipmentEntity.Object,
+                FedEx = new FedExShipmentEntity
+                {
+                    Signature = (int) FedExSignatureType.NoSignature,
+                    Service = (int) FedExServiceType.FedExGround,
+                    NonStandardContainer = true,
+                },
                 ShipmentID = 77,
                 OriginCountryCode = "US",
             };
+
+            shipmentEntity.FedEx.Packages.AddRange(new[]
+            {
+                new FedExPackageEntity { DimsHeight = 2, DimsWidth = 2, DimsLength = 2 },
+                new FedExPackageEntity { DimsHeight = 2, DimsWidth = 2, DimsLength = 2 }
+            });
 
             return shipmentEntity;
         }
@@ -79,7 +75,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping
 
             shipment.FedEx.PackagingType = (int) FedExPackagingType.Custom;
             shipment.FedEx.WeightUnitType = (int) WeightUnitOfMeasure.Pounds;
-            shipment.FedEx.LinearUnitType = (int)FedExLinearUnitOfMeasure.IN;
+            shipment.FedEx.LinearUnitType = (int) FedExLinearUnitOfMeasure.IN;
 
             shipment.FedEx.Packages[0] = new FedExPackageEntity(1)
             {

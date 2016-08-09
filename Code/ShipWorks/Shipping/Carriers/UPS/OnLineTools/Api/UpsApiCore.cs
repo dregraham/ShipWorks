@@ -2,21 +2,19 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using Interapptive.Shared.Utility;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.Postal;
-using ShipWorks.Shipping.Carriers.UPS.Enums;
 using System.Xml;
 using Autofac;
 using Interapptive.Shared;
-using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api.ElementWriters;
-using ShipWorks.Shipping.Carriers.UPS.ServiceManager;
-using ShipWorks.Templates.Tokens;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Editions;
-using ShipWorks.Shipping.Api;
+using ShipWorks.Shipping.Carriers.UPS.Enums;
+using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api.ElementWriters;
+using ShipWorks.Templates.Tokens;
 
 namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
 {
@@ -61,7 +59,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             upsPackagingCodes[UpsPackagingType.BPM] = "58";
             upsPackagingCodes[UpsPackagingType.Parcels] = "57";
 
-            // Code for Canada - according to UPS support Express Envelope & Letter service codes 
+            // Code for Canada - according to UPS support Express Envelope & Letter service codes
             // are interchangeable
             upsPackagingCodes[UpsPackagingType.BoxExpress] = "21";
             upsPackagingCodes[UpsPackagingType.ExpressEnvelope] = "01";
@@ -91,14 +89,14 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         /// <summary>
         /// Get the UPS account associated with the given shipment.  Throws an exception if it does not exist.
         /// </summary>
-        public static UpsAccountEntity GetUpsAccount(ShipmentEntity shipment, ICarrierAccountRepository<UpsAccountEntity> accountRepository)
+        public static UpsAccountEntity GetUpsAccount(ShipmentEntity shipment, ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> accountRepository)
         {
             UpsAccountEntity account = accountRepository.GetAccount(shipment.Ups.UpsAccountID);
             if (account == null)
             {
                 throw new UpsException("No UPS account is selected for the shipment.");
             }
-            
+
             if (!AccountAllowed(account.AccountNumber))
             {
                 throw new UpsException(
@@ -107,7 +105,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
 
             using (ILifetimeScope scope = IoC.BeginLifetimeScope())
             {
-                // The window handler is null because A: we are in a static method and B: the 
+                // The window handler is null because A: we are in a static method and B: the
                 // UpsAccountLimitFeatureRestriction doesn't use it at all.
                 ILicenseService licenseService = scope.Resolve<ILicenseService>();
                 licenseService.HandleRestriction(EditionFeature.UpsAccountLimit, UpsAccountManager.Accounts.Count, null);
@@ -205,11 +203,11 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         /// Generate the packages XML for either rating or label generation.
         /// </summary>
         [NDependIgnoreLongMethod]
-        public static void WritePackagesXml(UpsShipmentEntity ups, XmlTextWriter xmlWriter, bool forLabels, 
+        public static void WritePackagesXml(UpsShipmentEntity ups, XmlTextWriter xmlWriter, bool forLabels,
             UpsPackageWeightElementWriter weightElementWriter, UpsPackageServiceOptionsElementWriter serviceOptionsElementWriter)
         {
-            bool isSurePost = UpsUtility.IsUpsSurePostService((UpsServiceType)ups.Service);
-            
+            bool isSurePost = UpsUtility.IsUpsSurePostService((UpsServiceType) ups.Service);
+
             // All packages in the shipment
             foreach (UpsPackageEntity package in ups.Packages.ToList())
             {
@@ -267,9 +265,9 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                 }
 
                 // Service options
-                UpsServicePackageTypeSetting servicePackageSettings = UpsServicePackageTypeSetting.ServicePackageValidationSettings.FirstOrDefault(s => s.ServiceType == (UpsServiceType)ups.Service && s.PackageType == (UpsPackagingType)package.PackagingType);
+                UpsServicePackageTypeSetting servicePackageSettings = UpsServicePackageTypeSetting.ServicePackageValidationSettings.FirstOrDefault(s => s.ServiceType == (UpsServiceType) ups.Service && s.PackageType == (UpsPackagingType) package.PackagingType);
                 serviceOptionsElementWriter.WriteServiceOptionsElement(ups, package, servicePackageSettings);
-                
+
                 // End package
                 xmlWriter.WriteEndElement();
             }

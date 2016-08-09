@@ -1,68 +1,49 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Reflection;
+using System.ComponentModel;
 using System.Drawing;
+using System.Reflection;
 
 namespace Interapptive.Shared.Utility
 {
     /// <summary>
     /// Represents a single value entry in an Enum type
     /// </summary>
-    public struct EnumEntry<T> where T: struct
+    public struct EnumEntry<T> where T : struct
     {
         T value;
+        DescriptionAttribute description;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public EnumEntry(T value)
+        public EnumEntry(T value, DescriptionAttribute description)
         {
             this.value = value;
+            this.description = description;
+            ApiValue = EnumHelper.GetApiValue((Enum) (object) value);
         }
 
         /// <summary>
         /// The enumerated value
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public T Value
-        {
-            get
-            {
-                return value;
-            }
-        }
+        public T Value => value;
 
         /// <summary>
         /// Same as description.  Useful because its common in binding to use Key\Value as the Display\Value member.
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public string Key
-        {
-            get
-            {
-                return Description;
-            }
-        }
+        public string Key => Description;
 
         /// <summary>
         /// ToString returns the enum Description
         /// </summary>
-        public override string ToString()
-        {
-            return Description;
-        }
+        public override string ToString() => Description;
 
         /// <summary>
         /// The description of the enumerated value.
         /// </summary>
-        public string Description
-        {
-            get
-            {
-                return EnumHelper.GetDescription((Enum) (object) value);
-            }
-        }
+        public string Description => description.Description;
 
         /// <summary>
         /// The image of the enumerated value, or null if none.
@@ -78,12 +59,6 @@ namespace Interapptive.Shared.Utility
         /// <summary>
         /// Get the text to be used as the ApiValue for API's
         /// </summary>
-        public string ApiValue
-        {
-            get 
-            { 
-                return EnumHelper.GetApiValue((Enum) (object) value); 
-            }
-        }
+        public string ApiValue { get; }
     }
 }

@@ -1,11 +1,11 @@
-﻿using ShipWorks.Data.Model.EntityClasses;
+﻿using System.Linq;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Settings;
-using System.Linq;
 
 namespace ShipWorks.Shipping.Carriers.None
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public class NoneShipmentProcessingSynchronizer : IShipmentProcessingSynchronizer
     {
@@ -22,7 +22,7 @@ namespace ShipWorks.Shipping.Carriers.None
         /// <summary>
         /// Gets a value indicating whether the shipment type [has accounts].
         /// </summary>
-        public bool HasAccounts => shippingSettings.Fetch().ConfiguredTypes.Contains((int)ShipmentTypeCode.None);
+        public bool HasAccounts => shippingSettings.Fetch().ConfiguredTypes.Contains(ShipmentTypeCode.None);
 
         /// <summary>
         /// Saves the first account ID found to the shipment. The presumption here is that a new

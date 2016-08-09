@@ -39,8 +39,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         [SuppressMessage("SonarQube", "S2290:Field-like events should not be virtual", Justification = "Event is virtual to allow tests to fire it")]
         public virtual event PropertyChangedEventHandler PropertyChanged;
         public event PropertyChangingEventHandler PropertyChanging;
-
-        static readonly ILog log = LogManager.GetLogger(typeof(ShipmentViewModelBase));
+        
         private bool suppressExternalChangeNotifications;
 
         /// <summary>

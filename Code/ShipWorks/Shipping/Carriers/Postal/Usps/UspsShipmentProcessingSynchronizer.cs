@@ -1,19 +1,19 @@
 ﻿using System.Linq;
-using Interapptive.Shared.Collections;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {
     public class UspsShipmentProcessingSynchronizer : IShipmentProcessingSynchronizer
     {
-        private readonly ICarrierAccountRepository<UspsAccountEntity> accountRepository;
+        private readonly ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity> accountRepository;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UspsShipmentProcessingSynchronizer"/> class.
         /// </summary>
         /// <param name="accountRepository">The account repository.</param>
-        public UspsShipmentProcessingSynchronizer(ICarrierAccountRepository<UspsAccountEntity> accountRepository)
+        public UspsShipmentProcessingSynchronizer(ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity> accountRepository)
         {
             this.accountRepository = accountRepository;
         }

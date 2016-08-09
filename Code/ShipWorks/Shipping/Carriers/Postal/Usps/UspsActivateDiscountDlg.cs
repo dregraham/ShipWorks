@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
-using ShipWorks.Core.Messaging;
 using Interapptive.Shared.UI;
+using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Shipping.Editing.Rating;
@@ -13,7 +13,7 @@ using ShipWorks.Shipping.Settings.Defaults;
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {
     /// <summary>
-    /// A dialog for activating the USPS shipment type and creating 
+    /// A dialog for activating the USPS shipment type and creating
     /// a new account or converting an existing account.
     /// </summary>
     public partial class UspsActivateDiscountDlg : Form
@@ -36,9 +36,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
             convertToExpeditedControl.LinkText = "Click here to add these discounted rates through your existing Stamps.com account at no additional cost.";
 
-            signUpForExpeditedControl.DiscountText = "You can now save up to 54% off Retail prices on USPS Priority Mail and Priority Mail Express Shipments " + 
+            signUpForExpeditedControl.DiscountText = "You can now save up to 54% off Retail prices on USPS Priority Mail and Priority Mail Express Shipments " +
                                                     "with ShipWorks, all through one single Stamps.com account." + Environment.NewLine + Environment.NewLine +
-                                                     "To get these discounts, you just need to open a Stamps.com account which will enable you to easily " + 
+                                                     "To get these discounts, you just need to open a Stamps.com account which will enable you to easily " +
                                                      "print USPS Priority Mail, Priority Mail Express labels and First Class shipping labels.";
         }
 
@@ -51,14 +51,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             this.settings = ShippingSettings.Fetch();
             this.shipment = shipment;
 
-            if (shipment.ShipmentType == (int)ShipmentTypeCode.Usps && UspsAccountManager.UspsAccounts.Any())
+            if (shipment.ShipmentType == (int) ShipmentTypeCode.Usps && UspsAccountManager.UspsAccounts.Any())
             {
                 // There are USPS-backed accounts, so we want to show the control to convert their existing account
                 requiresSignup = false;
                 signUpForExpeditedControl.Visible = false;
                 convertToExpeditedControl.Visible = true;
 
-                // Resize the control 
+                // Resize the control
                 convertToExpeditedControl.learnMore.Location = new System.Drawing.Point(26, 81);
                 convertToExpeditedControl.linkLabel1.Location = new System.Drawing.Point(26, 110);
                 convertToExpeditedControl.Size = new System.Drawing.Size(425, 150);
@@ -70,13 +70,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
                 convertToExpeditedControl.AccountConverted += OnAccountConverted;
                 convertToExpeditedControl.AccountConverting += OnAccountConverting;
-                
+
                 UspsAccountEntity accountToConvert = UspsAccountManager.GetAccount(shipment.Postal.Usps.UspsAccountID);
                 convertToExpeditedControl.Initialize(accountToConvert);
             }
             else
             {
-                // Prompt the user to sign up/choose an existing account if there aren't any 
+                // Prompt the user to sign up/choose an existing account if there aren't any
                 // USPS accounts or they are the shipment type isn't Stamps.com
                 requiresSignup = true;
                 signUpForExpeditedControl.Visible = true;
@@ -124,7 +124,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             {
                 return;
             }
-            
+
             // Make sure the settings are valid before trying to save them
             if (signUpForExpeditedControl.UseExpedited && signUpForExpeditedControl.ExpeditedAccountID <= 0)
             {
@@ -135,31 +135,31 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
             ShippingManager.RefreshShipment(shipment);
 
-            // Only way we should require a signup is not already using a USPS account for 
+            // Only way we should require a signup is not already using a USPS account for
             // this shipment, so we need to change the shipment type to USPS
-            // in order to take advantage of the new rates (since USPS API doesn't match 
+            // in order to take advantage of the new rates (since USPS API doesn't match
             // with Endicia API and shipment configurations differ).
             shipment.ShipmentType = (int) ShipmentTypeCode.Usps;
             ShippingManager.SaveShipment(shipment);
 
-            // Now that the shipment has been updated, we need to broadcast that the shipping 
+            // Now that the shipment has been updated, we need to broadcast that the shipping
             // settings have been changed, so any listeners have a chance to react
-            Messenger.Current.Send(new UspsAutomaticExpeditedChangedMessage(this, (ShipmentTypeCode)shipment.ShipmentType));
+            Messenger.Current.Send(new UspsAutomaticExpeditedChangedMessage(this, (ShipmentTypeCode) shipment.ShipmentType));
 
             // We also need to exclude Endicia and Express1 from the list of active providers since
-            // the customer agreed to use USPS 
+            // the customer agreed to use USPS
             ExcludeShipmentType(ShipmentTypeCode.Endicia);
             ExcludeShipmentType(ShipmentTypeCode.Express1Endicia);
             ExcludeShipmentType(ShipmentTypeCode.Express1Usps);
 
             // Be sure the USPS shipment type is not included in the excluded list
-            List<int> excludedTypes = settings.ExcludedTypes.ToList();
-            excludedTypes.Remove((int)ShipmentTypeCode.Usps);
-            settings.ExcludedTypes = excludedTypes.ToArray();
-                
+            List<ShipmentTypeCode> excludedTypes = settings.ExcludedTypes.ToList();
+            excludedTypes.Remove(ShipmentTypeCode.Usps);
+            settings.ExcludedTypes = excludedTypes;
+
             ShippingSettings.Save(settings);
 
-            // Need to update any rules to swap out Endicia and Express1 with USPS 
+            // Need to update any rules to swap out Endicia and Express1 with USPS
             // now that those types are not longer active
             UseUspsInDefaultShippingRulesFor(ShipmentTypeCode.Endicia);
             UseUspsInDefaultShippingRulesFor(ShipmentTypeCode.Express1Endicia);
@@ -177,12 +177,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <param name="shipmentTypeCode">The shipment type code to be excluded.</param>
         private void ExcludeShipmentType(ShipmentTypeCode shipmentTypeCode)
         {
-            if (!settings.ExcludedTypes.Any(t => t == (int) shipmentTypeCode))
+            if (!settings.ExcludedTypes.Any(t => t == shipmentTypeCode))
             {
-                List<int> excludedTypes = settings.ExcludedTypes.ToList();
-                excludedTypes.Add((int)shipmentTypeCode);
+                List<ShipmentTypeCode> excludedTypes = settings.ExcludedTypes.ToList();
+                excludedTypes.Add(shipmentTypeCode);
 
-                settings.ExcludedTypes = excludedTypes.ToArray();
+                settings.ExcludedTypes = excludedTypes;
             }
         }
 

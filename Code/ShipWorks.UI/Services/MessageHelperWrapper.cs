@@ -2,8 +2,10 @@
 using Interapptive.Shared.UI;
 using ShipWorks.Common.Threading;
 using System;
+using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Windows.Forms;
+using Interapptive.Shared.Threading;
 
 namespace ShipWorks.UI.Services
 {
@@ -13,13 +15,15 @@ namespace ShipWorks.UI.Services
     public class MessageHelperWrapper : IMessageHelper
     {
         private readonly Func<Control> ownerFactory;
+        private readonly ISchedulerProvider schedulerProvider;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public MessageHelperWrapper(Func<Control> ownerFactory)
+        public MessageHelperWrapper(Func<Control> ownerFactory, ISchedulerProvider schedulerProvider)
         {
             this.ownerFactory = ownerFactory;
+            this.schedulerProvider = schedulerProvider;
         }
 
         /// <summary>
@@ -58,20 +62,28 @@ namespace ShipWorks.UI.Services
                 ProgressItems = { progressItem }
             };
 
+            IDisposable disposable = ShowProgressDialog(title, description, progressProvider, TimeSpan.Zero);
+
+            return Disposable.Create(() =>
+            {
+                progressItem.Completed();
+                disposable.Dispose();
+            });
+        }
+
+        /// <summary>
+        /// Show a new progress dialog with the given provider
+        /// </summary>
+        public IDisposable ShowProgressDialog(string title, string description, IProgressProvider progressProvider, TimeSpan timeSpan)
+        {
             ProgressDlg progressDialog = new ProgressDlg(progressProvider)
             {
                 Title = title,
                 Description = description
             };
 
-            progressDialog.Show(ownerFactory());
-
-            return Disposable.Create(() =>
-            {
-                progressItem.Completed();
-                progressDialog.CloseForced();
-                progressDialog.Dispose();
-            });
+            return schedulerProvider.WindowsFormsEventLoop
+                .Schedule(progressDialog, timeSpan, OpenProgressDialog);
         }
 
         /// <summary>
@@ -100,5 +112,26 @@ namespace ShipWorks.UI.Services
         /// Show a warning message
         /// </summary>
         public void ShowWarning(string message) => MessageHelper.ShowWarning(ownerFactory(), message);
+
+        /// <summary>
+        /// Close the given progress dialog
+        /// </summary>
+        private IDisposable OpenProgressDialog(IScheduler scheduler, ProgressDlg dialog)
+        {
+            dialog.Show(ownerFactory());
+
+            return Disposable.Create(() => scheduler.Schedule(dialog, CloseProgressDialog));
+        }
+
+        /// <summary>
+        /// Close the given progress dialog
+        /// </summary>
+        private static IDisposable CloseProgressDialog(IScheduler _, ProgressDlg dialog)
+        {
+            dialog?.CloseForced();
+            dialog?.Dispose();
+
+            return Disposable.Empty;
+        }
     }
 }

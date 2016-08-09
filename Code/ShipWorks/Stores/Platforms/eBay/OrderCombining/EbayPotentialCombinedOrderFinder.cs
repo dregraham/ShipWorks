@@ -1,19 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using log4net;
 using System.Windows.Forms;
-using ShipWorks.Data.Model;
-using ShipWorks.Data;
-using ShipWorks.Common.Threading;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Connection;
-using ShipWorks.Stores.Content;
-using ShipWorks.Stores.Platforms.Ebay.WebServices;
-using System.Threading;
 using Interapptive.Shared;
-using ShipWorks.ApplicationCore.Interaction;
+using Interapptive.Shared.Threading;
+using ShipWorks.Common.Threading;
+using ShipWorks.Data;
+using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Ebay.Enums;
 
 namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
@@ -66,7 +60,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
             {
                 throw new ArgumentNullException("orderKeys");
             }
-           
+
             // ensure we were given EbayOrderEntities
             if (orderKeys.Count > 0)
             {
@@ -135,7 +129,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
                             {
                                 // Local Combining can only be done on Paid orders.  Combined Payments can only be done on unpaid orders
                                 if ((combineType == EbayCombinedOrderType.Local && eBayItems.All(i => EbayUtility.GetEffectivePaymentStatus(i) == EbayEffectivePaymentStatus.Paid)) ||
-                                    (combineType == EbayCombinedOrderType.Ebay  && eBayItems.All(i => EbayUtility.GetEffectivePaymentStatus(i) == EbayEffectivePaymentStatus.Incomplete)))
+                                    (combineType == EbayCombinedOrderType.Ebay && eBayItems.All(i => EbayUtility.GetEffectivePaymentStatus(i) == EbayEffectivePaymentStatus.Incomplete)))
                                 {
                                     orders.Add(ebayOrder);
                                 }
@@ -178,14 +172,14 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
 
                     #endregion
 
-                    // return one item so the worker gets called 
+                    // return one item so the worker gets called
                     return combinedPayments;
                 },
 
                 // Worker
                 (EbayCombinedOrderCandidate combinedOrder, object state, BackgroundIssueAdder<EbayCombinedOrderCandidate> issueAdder) =>
                 {
-                    List<EbayCombinedOrderCandidate> combinedOrders = (List<EbayCombinedOrderCandidate>)asyncState["CombinedOrderCollection"];
+                    List<EbayCombinedOrderCandidate> combinedOrders = (List<EbayCombinedOrderCandidate>) asyncState["CombinedOrderCollection"];
 
                     // search for related orders
                     combinedOrder.DiscoverRelatedOrders();
@@ -197,9 +191,9 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
                         combinedOrders.Add(combinedOrder);
                     }
                 },
-                    
+
                 // collection for collating results
-                (object)asyncState);
+                (object) asyncState);
         }
 
         /// <summary>
@@ -207,9 +201,9 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
         /// </summary>
         private void OnSearchComplete(object sender, BackgroundExecutorCompletedEventArgs<EbayCombinedOrderCandidate> e)
         {
-            Dictionary<string, object> state = (Dictionary<string, object>)e.UserState;
+            Dictionary<string, object> state = (Dictionary<string, object>) e.UserState;
 
-            List<EbayCombinedOrderCandidate> candidates = (List<EbayCombinedOrderCandidate>)state["CombinedOrderCollection"];
+            List<EbayCombinedOrderCandidate> candidates = (List<EbayCombinedOrderCandidate>) state["CombinedOrderCollection"];
             if (e.Canceled)
             {
                 candidates.Clear();
@@ -225,7 +219,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
         private void RaiseSearchComplete(Exception error, bool canceled, Dictionary<string, object> state, List<EbayCombinedOrderCandidate> candidates)
         {
             object userState = state["UserState"];
-            EbayCombinedOrderType combineType = (EbayCombinedOrderType)state["CombineType"];
+            EbayCombinedOrderType combineType = (EbayCombinedOrderType) state["CombineType"];
 
             EbayPotentialCombinedOrdersFoundEventHandler handler = SearchComplete;
             if (handler != null)

@@ -337,8 +337,7 @@ namespace ShipWorks.Shipping.ShipSense.Population
                     IEnumerable<IPackageAdapter> packageAdapters = shipmentType.GetPackageAdapters(shipment);
 
                     // Make sure we have all of the order information
-                    OrderEntity order = (OrderEntity)DataProvider.GetEntity(shipment.OrderID);
-                    OrderUtility.PopulateOrderDetails(order);
+                    OrderUtility.PopulateOrderDetails(shipment);
 
                     // Apply the data from the package adapters and the customs items to the knowledge base 
                     // entry, so the shipment data will get saved to the knowledge base; the knowledge base
@@ -346,7 +345,7 @@ namespace ShipWorks.Shipping.ShipSense.Population
                     KnowledgebaseEntry entry = new KnowledgebaseEntry();
                     entry.ApplyFrom(packageAdapters, shipment.CustomsItems);
 
-                    knowledgebase.Save(entry, order);
+                    knowledgebase.Save(entry, shipment.Order);
 
                     ShippingSettingsEntity shippingSettings = ShippingSettings.Fetch();
                     shippingSettings.ShipSenseProcessedShipmentID = shipment.ShipmentID;
@@ -385,7 +384,7 @@ namespace ShipWorks.Shipping.ShipSense.Population
                     if (orders.Any())
                     {
                         orderEntity = orders.First();
-                        OrderUtility.PopulateOrderDetails(orderEntity);
+                        OrderUtility.PopulateOrderDetails(orderEntity, sqlAdapter);
                     }
                 }
             }

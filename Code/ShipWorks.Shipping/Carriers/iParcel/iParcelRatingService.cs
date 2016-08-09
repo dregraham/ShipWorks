@@ -3,6 +3,7 @@ using System.Data;
 using System.Linq;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.iParcel.Enums;
 using ShipWorks.Shipping.Editing.Enums;
 using ShipWorks.Shipping.Editing.Rating;
@@ -16,7 +17,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
     /// </summary>
     public class iParcelRatingService : IRatingService
     {
-        private readonly ICarrierAccountRepository<IParcelAccountEntity> accountRepository;
+        private readonly ICarrierAccountRepository<IParcelAccountEntity, IIParcelAccountEntity> accountRepository;
         private readonly IiParcelServiceGateway serviceGateway;
         private readonly iParcelShipmentType iParcelShipmentType;
         private readonly IExcludedServiceTypeRepository excludedServiceTypeRepository;
@@ -25,7 +26,9 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// <summary>
         /// Initializes a new instance of the <see cref="iParcelRatingService"/> class.
         /// </summary>
-        public iParcelRatingService(ICarrierAccountRepository<IParcelAccountEntity> accountRepository, IiParcelServiceGateway serviceGateway, iParcelShipmentType iParcelShipmentType, IExcludedServiceTypeRepository excludedServiceTypeRepository, IOrderManager orderManager)
+        public iParcelRatingService(ICarrierAccountRepository<IParcelAccountEntity, IIParcelAccountEntity> accountRepository,
+            IiParcelServiceGateway serviceGateway, iParcelShipmentType iParcelShipmentType,
+            IExcludedServiceTypeRepository excludedServiceTypeRepository, IOrderManager orderManager)
         {
             this.accountRepository = accountRepository;
             this.serviceGateway = serviceGateway;

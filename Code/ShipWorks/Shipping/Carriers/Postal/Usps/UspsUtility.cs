@@ -50,7 +50,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             {ServiceType.RRDISAL, PostalServiceType.RrdIsal},
             {ServiceType.RRDEPKT, PostalServiceType.RrdEpsePacketService},
             {ServiceType.RRDGNRC, PostalServiceType.RrdGeneric},
-			{ServiceType.DHLPG, PostalServiceType.DhlParcelGround},
+            {ServiceType.DHLPG, PostalServiceType.DhlParcelGround},
             {ServiceType.DHLPE, PostalServiceType.DhlParcelExpedited},
             {ServiceType.DHLPPE, PostalServiceType.DhlParcelPlusExpedited},
             {ServiceType.DHLPPG, PostalServiceType.DhlParcelPlusGround},
@@ -114,7 +114,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         {
             ServiceType? serviceType = uspsServiceTypeTranslation
                 .Where(pair => pair.Value == postalServiceType)
-                .Select(pair => (ServiceType?)pair.Key)
+                .Select(pair => (ServiceType?) pair.Key)
                 .FirstOrDefault();
 
             if (serviceType.HasValue)
@@ -167,7 +167,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         {
             get
             {
-                return IsStampsInsuranceAllowed && ShippingSettings.Fetch().UspsInsuranceProvider == (int) InsuranceProvider.Carrier;
+                return IsStampsInsuranceAllowed && ShippingSettings.FetchReadOnly().UspsInsuranceProvider == (int) InsuranceProvider.Carrier;
             }
         }
 
@@ -182,7 +182,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 {
                     ILicenseService licenseService = lifetimeScope.Resolve<ILicenseService>();
                     EditionRestrictionLevel restrictionLevel = licenseService.CheckRestriction(EditionFeature.StampsInsurance, null);
-                    
+
                     // If scan based returns is not allowed, show the the default returns control
                     return restrictionLevel == EditionRestrictionLevel.None;
                 }
@@ -236,7 +236,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         {
             return serviceType == PostalServiceType.GlobegisticsGeneric ||
                 serviceType == PostalServiceType.GlobegisticsIpa ||
-                serviceType == PostalServiceType.GlobegisticsIsal||
+                serviceType == PostalServiceType.GlobegisticsIsal ||
                 serviceType == PostalServiceType.GlobegisticsePacket;
         }
 
@@ -261,7 +261,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         {
             return serviceType == PostalServiceType.RrdIpa ||
                 serviceType == PostalServiceType.RrdIsal ||
-                serviceType == PostalServiceType.RrdEpsePacketService  ||
+                serviceType == PostalServiceType.RrdEpsePacketService ||
                 serviceType == PostalServiceType.RrdGeneric;
         }
 

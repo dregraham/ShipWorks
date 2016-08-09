@@ -80,18 +80,18 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules.Editors.UI
             selectAll = new CheckBox();
             monthPanel.SuspendLayout();
             SuspendLayout();
-            // 
+            //
             // onTheMonthsPanel
-            // 
+            //
             monthPanel.BackColor = SystemColors.ControlLightLight;
             monthPanel.Controls.Add(selectAll);
             monthPanel.Name = "monthPanel";
             monthPanel.Size = new Size(130, 306);
             monthPanel.TabIndex = 7;
             monthPanel.Visible = false;
-            // 
+            //
             // onTheSelectAllMonths
-            // 
+            //
             selectAll.AutoSize = true;
             selectAll.Location = new Point(3, 3);
             selectAll.Name = "selectAll";
@@ -100,9 +100,9 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules.Editors.UI
             selectAll.Text = "<Select All Months>";
             selectAll.UseVisualStyleBackColor = true;
             selectAll.CheckedChanged += OnSelectAllMonthsCheckChanged;
-            // 
+            //
             // MonthlyComboPopup
-            // 
+            //
 
             Controls.Add(monthPanel);
             Name = "MonthlyComboPopup";
@@ -117,10 +117,12 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules.Editors.UI
         /// </summary>
         private void BindMonths()
         {
+            EnumEntry<MonthType>[] months = EnumHelper.GetEnumList<MonthType>().ToArray();
+
             // Loop through all the months in MonthTypeEnum.
-            for (int monthIndex = 0; monthIndex < EnumHelper.GetEnumList<MonthType>().Count; monthIndex++)
+            for (int monthIndex = 0; monthIndex < months.Length; monthIndex++)
             {
-                var month = EnumHelper.GetEnumList<MonthType>()[monthIndex];
+                var month = months[monthIndex];
 
                 int verticlePosition = 23 * monthIndex + 23;
 

@@ -6,6 +6,9 @@
 	<language name="C#">
 		<templateBinding templateID="ShipWorks_EntityCollections" filename="EntityCollections.lpt" templateLanguage="C#" />
 		<templateBinding templateID="ShipWorks_EntityTypeProvider" filename="EntityTypeProvider.lpt" templateLanguage="C#" />
+		<templateBinding templateID="ShipWorks_EntityInterfaces" filename="entityInterface.template" templateLanguage="C#" />
+		<templateBinding templateID="ShipWorks_ReadOnlyEntities" filename="entityReadOnly.template" templateLanguage="C#" />
 		<templateBinding templateID="SD_ConstantsEnumsTemplate" filename="constantsEnums.template" templateLanguage="C#" />
+		<templateBinding templateID="SD_EntityInterfacesTemplate" filename="entityInterface.template" templateLanguage="C#" />
 	</language>
 </templateBindings>

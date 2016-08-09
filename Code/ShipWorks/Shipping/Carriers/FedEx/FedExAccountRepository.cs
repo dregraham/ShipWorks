@@ -1,12 +1,14 @@
 ﻿using System.Collections.Generic;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
 {
     /// <summary>
     /// FedEx account repository
     /// </summary>
-    public class FedExAccountRepository : CarrierAccountRepositoryBase<FedExAccountEntity>, ICarrierAccountRepository<FedExAccountEntity>
+    public class FedExAccountRepository : CarrierAccountRepositoryBase<FedExAccountEntity, IFedExAccountEntity>,
+        ICarrierAccountRepository<FedExAccountEntity, IFedExAccountEntity>
     {
         /// <summary>
         /// Gets the accounts for the carrier.
@@ -43,6 +45,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         }
 
         /// <summary>
+        /// Get a collection of readonly accounts
+        /// </summary>
+        public override IEnumerable<IFedExAccountEntity> AccountsReadOnly => FedExAccountManager.AccountsReadOnly;
+
+        /// <summary>
         /// Saves the specified account.
         /// </summary>
         /// <param name="account">The account.</param>
@@ -50,5 +57,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         {
             FedExAccountManager.SaveAccount(account);
         }
+
+        /// <summary>
+        /// Get a readonly version of the specified account
+        /// </summary>
+        public override IFedExAccountEntity GetAccountReadOnly(long accountID) =>
+            FedExAccountManager.GetAccountReadOnly(accountID);
     }
 }

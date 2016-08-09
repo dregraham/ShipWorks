@@ -27,3 +27,12 @@ PRINT N'Adding foreign keys to [dbo].[OdbcStore]'
 GO
 ALTER TABLE [dbo].[OdbcStore] ADD CONSTRAINT [FK_OdbcStore_Store] FOREIGN KEY ([StoreID]) REFERENCES [dbo].[Store] ([StoreID])
 GO
+PRINT N'Altering [dbo].[ShippingSettings]'
+GO
+ALTER TABLE [dbo].[ShippingSettings] ADD
+[ShipmentEditLimit] [int] NOT NULL CONSTRAINT [DF_ShippingSettings_ShipmentEditLimit] DEFAULT ((100000))
+GO
+PRINT N'Dropping constraints from [dbo].[[ShippingSettings]]'
+GO
+ALTER TABLE [dbo].[ShippingSettings] DROP CONSTRAINT [DF_ShippingSettings_ShipmentEditLimit]
+GO

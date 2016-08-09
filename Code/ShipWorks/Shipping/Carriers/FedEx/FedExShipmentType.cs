@@ -16,6 +16,7 @@ using ShipWorks.Data.Adapter.Custom;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.Api;
@@ -292,6 +293,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         [NDependIgnoreLongMethod]
         public override void ConfigureNewShipment(ShipmentEntity shipment)
         {
+            if (shipment.FedEx == null)
+            {
+                shipment.FedEx = new FedExShipmentEntity(shipment.ShipmentID);
+            }
+
             shipment.FedEx.MasterFormID = "";
 
             shipment.FedEx.HomeDeliveryType = (int) FedExHomeDeliveryType.None;
@@ -747,15 +753,15 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // The FedEx object may not yet be set if we are in the middle of creating a new shipment
             if (originID == (int) ShipmentOriginSource.Account && shipment.FedEx != null)
             {
-                FedExAccountEntity account = FedExAccountManager.GetAccount(shipment.FedEx.FedExAccountID);
+                IFedExAccountEntity account = FedExAccountManager.GetAccountReadOnly(shipment.FedEx.FedExAccountID);
                 if (account == null)
                 {
-                    account = FedExAccountManager.Accounts.FirstOrDefault();
+                    account = FedExAccountManager.AccountsReadOnly.FirstOrDefault();
                 }
 
                 if (account != null)
                 {
-                    PersonAdapter.Copy(account, "", person);
+                    account.Address.CopyTo(person);
                     return true;
                 }
                 else

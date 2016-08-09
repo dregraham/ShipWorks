@@ -4,12 +4,13 @@ using System.Net;
 using Interapptive.Shared.Security;
 using log4net;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
-using ShipWorks.Shipping.Settings.Origin;
 using ShipWorks.Shipping.Profiles;
+using ShipWorks.Shipping.Settings.Origin;
 
 namespace ShipWorks.ApplicationCore.Licensing.Activation
 {
@@ -21,7 +22,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Activation
     public class UspsAccountSetupActivity : IUspsAccountSetupActivity
     {
         private readonly Func<UspsResellerType, IUspsWebClient> uspsWebClientFactory;
-        private readonly ICarrierAccountRepository<UspsAccountEntity> uspsAccountRepository;
+        private readonly ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity> uspsAccountRepository;
         private readonly ILog log;
         private readonly IShipmentTypeSetupActivity shipmentTypeSetupActivity;
         private readonly IShippingProfileManager shippingProfileManager;
@@ -30,7 +31,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Activation
         /// Initializes a new instance of the <see cref="UspsAccountSetupActivity"/> class.
         /// </summary>
         public UspsAccountSetupActivity(Func<UspsResellerType, IUspsWebClient> uspsWebClientFactory,
-            ICarrierAccountRepository<UspsAccountEntity> uspsAccountRepository,
+            ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity> uspsAccountRepository,
             IShipmentTypeSetupActivity shipmentTypeSetupActivity,
             IShippingProfileManager shippingProfileManager,
             Func<Type, ILog> logFactory)
@@ -73,7 +74,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Activation
             {
                 Username = username,
                 Password = SecureText.Encrypt(password, username),
-                PendingInitialAccount = (int)UspsPendingAccountType.Existing
+                PendingInitialAccount = (int) UspsPendingAccountType.Existing
             };
 
             try
@@ -88,7 +89,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Activation
                 log.Info("The USPS account has been saved. Setting USPS as the default shipping provider.");
                 shipmentTypeSetupActivity.InitializeShipmentType(ShipmentTypeCode.Usps, ShipmentOriginSource.Account);
             }
-                catch (Exception ex) when (ex is UspsApiException || ex is UspsException || ex is WebException)
+            catch (Exception ex) when (ex is UspsApiException || ex is UspsException || ex is WebException)
             {
                 // Populating the account information failed, due to an issue with USPS
                 // log the error and continue with the activation process
@@ -106,7 +107,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Activation
             {
                 Username = username,
                 Password = SecureText.Encrypt(password, username),
-                PendingInitialAccount = (int)UspsPendingAccountType.Create,
+                PendingInitialAccount = (int) UspsPendingAccountType.Create,
                 CreatedDate = DateTime.UtcNow
             };
 

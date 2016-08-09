@@ -30,7 +30,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
         public void ShouldAutoCreateShipment_ReturnsTrue_WhenAllConditionsAreMet()
         {
             var testObject = mock.Create<ShippingConfiguration>();
-            var result = testObject.ShouldAutoCreateShipment(order);
+            var result = testObject.ShouldAutoCreateShipment(order, true);
             Assert.True(result);
         }
 
@@ -40,7 +40,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
             order.Shipments.Add(new ShipmentEntity());
 
             var testObject = mock.Create<ShippingConfiguration>();
-            var result = testObject.ShouldAutoCreateShipment(order);
+            var result = testObject.ShouldAutoCreateShipment(order, true);
             Assert.False(result);
         }
 
@@ -51,7 +51,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
                 .Setup(x => x.AutoCreateShipments).Returns(false);
 
             var testObject = mock.Create<ShippingConfiguration>();
-            var result = testObject.ShouldAutoCreateShipment(order);
+            var result = testObject.ShouldAutoCreateShipment(order, false);
             Assert.False(result);
         }
 
@@ -65,7 +65,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
                 .Returns(false);
 
             var testObject = mock.Create<ShippingConfiguration>();
-            var result = testObject.ShouldAutoCreateShipment(order);
+            var result = testObject.ShouldAutoCreateShipment(order, true);
             Assert.False(result);
         }
 

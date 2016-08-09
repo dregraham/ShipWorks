@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.UpsEnvironment;
 
@@ -11,7 +12,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
     /// <summary>
     /// A repository for UPS counter rate accounts
     /// </summary>
-    public class UpsCounterRateAccountRepository : UpsSettingsRepository, ICarrierAccountRepository<UpsAccountEntity>
+    public class UpsCounterRateAccountRepository : UpsSettingsRepository, ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity>
     {
         private readonly ICredentialStore credentialStore;
         private readonly Lazy<List<UpsAccountEntity>> lazyAccounts;
@@ -33,6 +34,11 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
         public IEnumerable<UpsAccountEntity> Accounts => lazyAccounts.Value;
 
         /// <summary>
+        /// Gets the accounts for the carrier.
+        /// </summary>
+        public IEnumerable<IUpsAccountEntity> AccountsReadOnly => lazyAccounts.Value;
+
+        /// <summary>
         /// Force a check for changes
         /// </summary>
         public void CheckForChangesNeeded()
@@ -47,6 +53,15 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
         public UpsAccountEntity GetAccount(long accountID)
         {
             return Accounts.First();
+        }
+
+        /// <summary>
+        /// Returns a carrier counter rate account.
+        /// </summary>
+        /// <returns>Returns the first counter rate.</returns>
+        public IUpsAccountEntity GetAccountReadOnly(long accountID)
+        {
+            return AccountsReadOnly.First();
         }
 
         /// <summary>

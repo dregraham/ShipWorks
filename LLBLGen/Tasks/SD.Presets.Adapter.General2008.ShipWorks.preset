@@ -45,6 +45,8 @@
             <parameter name="folderToCreate" value="[dbgenericSubFolder]\ValidatorClasses" />
           </parameters>
         </taskPreset>
+        <taskPreset name="EntityInterfaceDirectoryCreator" />
+        <taskPreset name="ReadOnlyDirectoryCreator" />
         <taskPreset name="SD.Tasks.Generic.LinqDirectoryCreator">
           <parameters>
             <parameter name="folderToCreate" value="[dbgenericSubFolder]\Linq" />
@@ -81,7 +83,7 @@
       <taskPreset name="SD.Tasks.Generic.LinqMetaDataClassGenerator">
         <parameters>
           <parameter name="destinationFolder" value="[dbgenericSubFolder]\Linq" />
-          <parameter name="templateID" value="SD_LinqMetaDataAdapter"/>
+          <parameter name="templateID" value="SD_LinqMetaDataAdapter" />
         </parameters>
       </taskPreset>
       <taskPreset name="SD.Tasks.Generic.EntityRelationsClassGenerator">
@@ -101,6 +103,8 @@
           <parameter name="templateID" value="SD_EntityAdapterTemplate" />
         </parameters>
       </taskPreset>
+      <taskPreset name="EntityInterfaces" />
+      <taskPreset name="ReadOnlyEntities" />
       <taskPreset name="SD.Tasks.Generic.EntityFactoryClassesGenerator">
         <parameters>
           <parameter name="destinationFolder" value="[dbgenericSubFolder]\FactoryClasses" />

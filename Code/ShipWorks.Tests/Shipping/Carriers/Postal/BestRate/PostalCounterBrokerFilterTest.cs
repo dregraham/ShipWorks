@@ -2,6 +2,7 @@
 using System.Linq;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.BestRate;
@@ -16,8 +17,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.BestRate
         [Fact]
         public void Filter_WithMultipleUspsBrokers_ReturnsFirst()
         {
-            var testBroker1 = new UspsCounterRatesBroker(new Mock<ICarrierAccountRepository<UspsAccountEntity>>().Object);
-            var testBroker2 = new UspsCounterRatesBroker(new Mock<ICarrierAccountRepository<UspsAccountEntity>>().Object);
+            var testBroker1 = new UspsCounterRatesBroker(new Mock<ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity>>().Object);
+            var testBroker2 = new UspsCounterRatesBroker(new Mock<ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity>>().Object);
             var brokers = new List<IBestRateShippingBroker> { testBroker1, testBroker2 };
 
             var testObject = new PostalCounterBrokerFilter();

@@ -1,8 +1,8 @@
-﻿using Quartz.Impl;
-using ShipWorks.Data.Connection;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using Quartz.Impl;
+using ShipWorks.Data.Connection;
 
 
 namespace ShipWorks.Actions.Scheduling.QuartzNet
@@ -25,10 +25,11 @@ namespace ShipWorks.Actions.Scheduling.QuartzNet
                 { "quartz.dataSource.shipWorks.connectionString", sqlConfig.GetConnectionString()                     },
                 { "quartz.jobStore.tablePrefix",                  "Scheduling_"                                       },
                 { "quartz.jobStore.useProperties",                "true"                                              },
-                { "quartz.threadPool.threadCount",                "2"                                                 }
+                { "quartz.threadPool.threadCount",                "2"                                                 },
+                { "quartz.serializer.type",                       typeof(VersionAgnosticObjectSerializer).AssemblyQualifiedName  },
             };
 
-            this.innerFactory = new StdSchedulerFactory(properties);
+            innerFactory = new StdSchedulerFactory(properties);
         }
 
 

@@ -5,6 +5,7 @@ using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 using ShipWorks.Shipping.Carriers.Postal.Usps.RateFootnotes.Discounted;
@@ -61,11 +62,11 @@ namespace ShipWorks.Shipping.Carriers.Usps
                 .Keyed<IRateHashingService>(ShipmentTypeCode.Usps);
 
             builder.RegisterType<UspsAccountRepository>()
-                .As<ICarrierAccountRepository<UspsAccountEntity>>();
+                .As<ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity>>();
 
             builder.RegisterType<UspsWebClient>()
                 .AsImplementedInterfaces()
-                .UsingConstructor(typeof(ICarrierAccountRepository<UspsAccountEntity>),
+                .UsingConstructor(typeof(ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity>),
                     typeof(ILogEntryFactory),
                     typeof(Func<string, ICertificateInspector>),
                     typeof(UspsResellerType));

@@ -57,8 +57,8 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
             Create.Profile().AsPrimary().AsOther().Save();
 
             var settings = ShippingSettings.Fetch();
-            settings.ConfiguredTypes = new[] { (int)ShipmentTypeCode.Other };
-            settings.ActivatedTypes = new[] { (int)ShipmentTypeCode.Other };
+            settings.ConfiguredTypes = new[] { ShipmentTypeCode.Other };
+            settings.ActivatedTypes = new[] { ShipmentTypeCode.Other };
             ShippingSettings.Save(settings);
 
             ShippingSettings.MarkAsConfigured(ShipmentTypeCode.Other);

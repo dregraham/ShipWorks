@@ -18,7 +18,6 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Input;
-using SaveFileDialog = Microsoft.Win32.SaveFileDialog;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
 {
@@ -485,41 +484,6 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
             mapEntries.AddRange(Address.Entries);
             mapEntries.AddRange(Items.SelectMany(item => item.Entries));
             return mapEntries;
-        }
-
-        /// <summary>
-        /// Prompt the user and save the map to disk
-        /// </summary>
-        private void SaveMapToDisk()
-        {
-            if (!ValidateRequiredMappingFields())
-            {
-                return;
-            }
-
-            SaveFileDialog dlg = new SaveFileDialog
-            {
-                DefaultExt = "swdbm",
-                Filter = "ShipWorks Database Map|*.swdbm"
-            };
-
-            bool? result = dlg.ShowDialog();
-
-            if (result != null && result.Value)
-            {
-                using (FileStream fs = (FileStream) dlg.OpenFile())
-                {
-                    try
-                    {
-                        OdbcFieldMap map = CreateMap();
-                        map.Save(fs);
-                    }
-                    catch (ShipWorksOdbcException ex)
-                    {
-                        messageHelper.ShowError(ex.Message);
-                    }
-                }
-            }
         }
     }
 }

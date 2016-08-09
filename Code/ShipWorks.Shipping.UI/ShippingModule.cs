@@ -1,11 +1,9 @@
-﻿using System;
-using Autofac;
+﻿using Autofac;
 using Interapptive.Shared;
 using Interapptive.Shared.Net;
 using ShipWorks.AddressValidation;
 using ShipWorks.Core.ApplicationCode;
 using ShipWorks.Shipping.Insurance;
-using ShipWorks.Shipping.Loading;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Rating;
 using ShipWorks.Shipping.Services;
@@ -101,16 +99,8 @@ namespace ShipWorks.Shipping.UI
             builder.RegisterType<BestRateShipmentViewModel>()
                 .FindConstructorsWith(new NonDefaultConstructorFinder());
 
-            builder.RegisterType<ShipmentAddressValidator>()
-                .AsImplementedInterfaces()
-                .SingleInstance();
-
             builder.RegisterType<ShipmentFactory>()
                 .AsImplementedInterfaces();
-
-            builder.RegisterType<ShipmentLoader>()
-                .AsImplementedInterfaces()
-                .SingleInstance();
 
             builder.RegisterType<ShipmentPackageTypesBuilderFactory>()
                 .AsImplementedInterfaces()
@@ -176,7 +166,7 @@ namespace ShipWorks.Shipping.UI
                         case ShipmentTypeCode.Other:
                             return (IShipmentViewModel) container.Resolve<OtherShipmentViewModel>();
                         case ShipmentTypeCode.BestRate:
-                            return (IShipmentViewModel)container.Resolve<BestRateShipmentViewModel>();
+                            return (IShipmentViewModel) container.Resolve<BestRateShipmentViewModel>();
                         default:
                             return container.Resolve<ShipmentViewModel>();
                     }

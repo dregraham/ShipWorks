@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Autofac;
-using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Editions;
 using ShipWorks.Shipping.Carriers.Postal.Endicia;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
@@ -137,7 +137,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// </summary>
         public static List<PostalServiceType> GetDomesticServices(ShipmentTypeCode shipmentType)
         {
-            ShippingSettingsEntity settings = ShippingSettings.Fetch();
+            IShippingSettingsEntity settings = ShippingSettings.FetchReadOnly();
 
             if ((shipmentType == ShipmentTypeCode.Express1Endicia && !settings.Express1EndiciaSingleSource) ||
                (shipmentType == ShipmentTypeCode.Express1Usps && !settings.Express1UspsSingleSource))
@@ -207,7 +207,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// </summary>
         public static List<PostalServiceType> GetInternationalServices(ShipmentTypeCode shipmentType)
         {
-            ShippingSettingsEntity settings = ShippingSettings.Fetch();
+            IShippingSettingsEntity settings = ShippingSettings.FetchReadOnly();
 
             if ((shipmentType == ShipmentTypeCode.Express1Endicia && !settings.Express1EndiciaSingleSource) ||
                (shipmentType == ShipmentTypeCode.Express1Usps && !settings.Express1UspsSingleSource))
@@ -251,7 +251,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
                 {
                     // Get a list of any consolidators that should be available to customers
                     IEnumerable<PostalServiceType> accesibleConsolidatorTypes = uspsConsolidatorServiceTypes
-                        .Where(x =>licenseService.CheckRestriction(x.Key, null) == EditionRestrictionLevel.None)
+                        .Where(x => licenseService.CheckRestriction(x.Key, null) == EditionRestrictionLevel.None)
                         .SelectMany(x => x.Value)
                         .ToList();
 
@@ -370,7 +370,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
             {
                 // As per Stamps.com, envelopes under 16 oz do not require customs.
                 // https://stamps.custhelp.com/app/answers/detail/a_id/406/related/1
-                if ((PostalPackagingType)shipment.Postal.PackagingType == PostalPackagingType.Envelope &&
+                if ((PostalPackagingType) shipment.Postal.PackagingType == PostalPackagingType.Envelope &&
                     shipment.TotalWeight < 1)
                 {
                     return PostalCustomsForm.None;

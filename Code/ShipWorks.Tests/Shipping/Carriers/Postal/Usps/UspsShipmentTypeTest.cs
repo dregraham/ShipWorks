@@ -1,30 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Interapptive.Shared.Utility;
-using Xunit;
 using Moq;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.BestRate;
+using Xunit;
 
 namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
 {
     public class UspsShipmentTypeTest
     {
         private readonly UspsShipmentType testObject;
-        private readonly Mock<ICarrierAccountRepository<UspsAccountEntity>> accountRepository;
+        private readonly Mock<ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity>> accountRepository;
         private readonly List<PostalServicePackagingCombination> allCombinations = new List<PostalServicePackagingCombination>();
         private readonly List<PostalServicePackagingCombination> adultSignatureCombinationsAllowed = new List<PostalServicePackagingCombination>();
 
         public UspsShipmentTypeTest()
         {
-            accountRepository = new Mock<ICarrierAccountRepository<UspsAccountEntity>>();
+            accountRepository = new Mock<ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity>>();
 
             testObject = new UspsShipmentType();
 

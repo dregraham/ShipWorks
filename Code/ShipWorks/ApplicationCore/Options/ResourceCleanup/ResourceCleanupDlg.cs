@@ -1,19 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using ShipWorks.Data.Connection;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using System.IO;
 using System.Reflection;
+using System.Windows.Forms;
 using Interapptive.Shared.Data;
+using Interapptive.Shared.Threading;
 using Interapptive.Shared.UI;
 using ShipWorks.Common.Threading;
-using System.Diagnostics;
+using ShipWorks.Data.Connection;
 
 namespace ShipWorks.ApplicationCore.Options.ResourceCleanup
 {
@@ -60,7 +56,7 @@ namespace ShipWorks.ApplicationCore.Options.ResourceCleanup
             if (MessageHelper.ShowQuestion(this, String.Format("Are you sure you want to delete labels older than {0}?", deleteDate.Value.ToShortDateString())) == System.Windows.Forms.DialogResult.OK)
             {
                 ProgressProvider progress = new ProgressProvider();
-                progress.ProgressItems.Add("Delete Labels");
+                progress.AddItem("Delete Labels");
 
                 ProgressDlg progressDlg = new ProgressDlg(progress);
                 progressDlg.Title = "Delete old labels";
@@ -84,8 +80,8 @@ namespace ShipWorks.ApplicationCore.Options.ResourceCleanup
             Stopwatch timer = new Stopwatch();
             timer.Start();
 
-            ProgressProvider progress = e.Argument as ProgressProvider;
-            ProgressItem progressItem = progress.ProgressItems[0];
+            IProgressProvider progress = e.Argument as IProgressProvider;
+            IProgressReporter progressItem = progress.ProgressItems[0];
 
             progressItem.Starting();
             progressItem.Detail = "Loading script...";
@@ -105,7 +101,7 @@ namespace ShipWorks.ApplicationCore.Options.ResourceCleanup
 
                     // this does alot of thrashing, so give it more than enough time
                     progressItem.Detail = "Deleting labels...";
-                    cmd.CommandTimeout = (int)TimeSpan.FromHours(1).TotalSeconds;
+                    cmd.CommandTimeout = (int) TimeSpan.FromHours(1).TotalSeconds;
 
                     SqlCommandProvider.ExecuteNonQuery(cmd);
                 }
@@ -142,7 +138,7 @@ namespace ShipWorks.ApplicationCore.Options.ResourceCleanup
             }
             else
             {
-                MessageBox.Show(this, "Labels were successfully deleted. Elapsed Time: " + ((TimeSpan)e.Result));
+                MessageBox.Show(this, "Labels were successfully deleted. Elapsed Time: " + ((TimeSpan) e.Result));
 
                 DialogResult = DialogResult.OK;
             }
@@ -168,10 +164,10 @@ namespace ShipWorks.ApplicationCore.Options.ResourceCleanup
 
             if (InvokeRequired)
             {
-                BeginInvoke((MethodInvoker)delegate { DisplayEstimatedBytesFreed(cutoffDate, byteCount); });
+                BeginInvoke((MethodInvoker) delegate { DisplayEstimatedBytesFreed(cutoffDate, byteCount); });
                 return;
             }
-            
+
             estimateLink.Enabled = true;
             statusPicture.Visible = false;
             okButton.Enabled = true;
@@ -182,17 +178,17 @@ namespace ShipWorks.ApplicationCore.Options.ResourceCleanup
             if (byteCount > Math.Pow(2, 30))
             {
                 unit = "GB";
-                result = (decimal)Math.Round(byteCount / Math.Pow(2, 30), 2);
+                result = (decimal) Math.Round(byteCount / Math.Pow(2, 30), 2);
             }
             else if (byteCount > Math.Pow(2, 20))
             {
                 unit = "MB";
-                result = (decimal)Math.Round(byteCount / Math.Pow(2, 20), 2);
+                result = (decimal) Math.Round(byteCount / Math.Pow(2, 20), 2);
             }
             else if (byteCount > Math.Pow(2, 10))
             {
                 unit = "KB";
-                result = (decimal)Math.Round(byteCount / Math.Pow(2, 10), 2);
+                result = (decimal) Math.Round(byteCount / Math.Pow(2, 10), 2);
             }
 
             statusText.Text = String.Format("Deleting older than {0} should free up {1} {2}.", cutoffDate.ToShortDateString(), result, unit);
@@ -203,7 +199,7 @@ namespace ShipWorks.ApplicationCore.Options.ResourceCleanup
         /// </summary>
         void CalculateEstimate(object sender, DoWorkEventArgs e)
         {
-            DateTime selectedDate = (DateTime)e.Argument;
+            DateTime selectedDate = (DateTime) e.Argument;
 
             string estimateScript = LoadScript("ShipWorks.ApplicationCore.Options.ResourceCleanup.Estimate.sql");
 
@@ -213,14 +209,14 @@ namespace ShipWorks.ApplicationCore.Options.ResourceCleanup
             {
                 using (SqlCommand cmd = SqlCommandProvider.Create(con))
                 {
-                    cmd.CommandTimeout = (int)TimeSpan.FromMinutes(5).TotalSeconds;
+                    cmd.CommandTimeout = (int) TimeSpan.FromMinutes(5).TotalSeconds;
                     cmd.CommandText = estimateScript;
 
                     object result = SqlCommandProvider.ExecuteScalar(cmd);
                     long byteCount = 0;
                     if (result != null && result != DBNull.Value)
                     {
-                        byteCount = (long)result;
+                        byteCount = (long) result;
                     }
 
                     e.Result = new object[] { byteCount, selectedDate };
@@ -229,13 +225,13 @@ namespace ShipWorks.ApplicationCore.Options.ResourceCleanup
         }
 
         /// <summary>
-        /// Calculating the estimate is complete 
+        /// Calculating the estimate is complete
         /// </summary>
         void CalculateEstimateComplete(object sender, RunWorkerCompletedEventArgs e)
         {
             object[] result = e.Result as object[];
 
-            DisplayEstimatedBytesFreed((DateTime)result[1], (long)result[0]);
+            DisplayEstimatedBytesFreed((DateTime) result[1], (long) result[0]);
 
             // cleanup
             BackgroundWorker worker = sender as BackgroundWorker;

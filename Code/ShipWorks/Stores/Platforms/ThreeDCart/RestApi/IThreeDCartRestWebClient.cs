@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using ShipWorks.Common.Threading;
+using Interapptive.Shared.Threading;
 using ShipWorks.Stores.Platforms.ThreeDCart.RestApi.DTO;
 
 namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
