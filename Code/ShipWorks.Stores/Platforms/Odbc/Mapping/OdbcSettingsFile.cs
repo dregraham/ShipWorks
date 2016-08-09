@@ -17,9 +17,10 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcSettingsFile"/> class.
         /// </summary>
-        protected OdbcSettingsFile(IMessageHelper messageHelper)
+        protected OdbcSettingsFile(IMessageHelper messageHelper, IOdbcFieldMap fieldMap)
         {
             this.messageHelper = messageHelper;
+            OdbcFieldMap = fieldMap;
         }
 
         /// <summary>
@@ -55,12 +56,12 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <summary>
         /// Reads the additional paramaters from map.
         /// </summary>
-        protected abstract void ReadAdditionalParamatersFromMap(JObject map);
+        protected abstract void ReadAdditionalParamatersFromMap(JObject settings);
 
         /// <summary>
         /// Writes the additional paramaters to map.
         /// </summary>
-        protected abstract void WriteAdditionalParamatersToMap(JObject map);
+        protected abstract void WriteAdditionalParamatersToMap(JObject settings);
 
         /// <summary>
         /// Opens the load file dialog to load the map

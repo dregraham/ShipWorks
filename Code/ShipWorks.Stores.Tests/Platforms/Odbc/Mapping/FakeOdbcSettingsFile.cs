@@ -1,12 +1,12 @@
-﻿using Autofac.Features.Indexed;
-using Interapptive.Shared.UI;
+﻿using Interapptive.Shared.UI;
 using Newtonsoft.Json.Linq;
+using ShipWorks.Stores.Platforms.Odbc.Mapping;
 
 namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
 {
-    public class FakeOdbcSettingsFile : Stores.Platforms.Odbc.Mapping.OdbcSettingsFile
+    public class FakeOdbcSettingsFile : OdbcSettingsFile
     {
-        public FakeOdbcSettingsFile(IMessageHelper messageHelper) : base(messageHelper)
+        public FakeOdbcSettingsFile(IMessageHelper messageHelper, IOdbcFieldMap fieldMap) : base(messageHelper, fieldMap)
         {
         }
 
@@ -14,12 +14,12 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
 
         public override string Extension => "FakeExtension";
 
-        protected override void WriteAdditionalParamatersToMap(JObject map)
+        protected override void WriteAdditionalParamatersToMap(JObject settings)
         {
             // Not Needed
         }
 
-        protected override void ReadAdditionalParamatersFromMap(JObject map)
+        protected override void ReadAdditionalParamatersFromMap(JObject settings)
         {
             // Not Needed
         }
