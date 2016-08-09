@@ -184,12 +184,43 @@ namespace ShipWorks.Data.Administration
                             progressFunctionality.Detail = "Done";
                             progressFunctionality.Completed();
 
-                            // If we were upgrading from 3.9.3.0 or before we adjust the FILEGROW settings.  Can't be in a transaction, so has to be here.
-                            if (installed <= new Version(3, 9, 3, 0))
+                            HandleUpdateDatabaseForV3(installed);
+
+                            // This was needed for databases created before Beta6.  Any ALTER DATABASE statements must happen outside of transaction, so we had to put this here (and do it every time, even if not needed)
+                            SqlUtility.SetChangeTrackingRetention(ExistingConnectionScope.ScopedConnection, 1);
+
+                            // Try to restore multi-user mode with the existing connection, since re-acquiring a connection after a large
+                            // database upgrade can take time and cause a timeout.
+                            if (singleUserScope != null)
                             {
-                                ExistingConnectionScope.ExecuteWithCommand(cmd =>
-                                {
-                                    cmd.CommandText = @"
+                                SingleUserModeScope.RestoreMultiUserMode(ExistingConnectionScope.ScopedConnection);
+                            }
+
+                            HandleUpdateDatabaseForV4(installed);
+
+                            HandleUpdateDatabaseForV5(installed);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    log.Error("UpdateDatabase failed", ex);
+                    throw;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Run v3 specific update database logic
+        /// </summary>
+        private static void HandleUpdateDatabaseForV3(Version installed)
+        {
+            // If we were upgrading from 3.9.3.0 or before we adjust the FILEGROW settings.  Can't be in a transaction, so has to be here.
+            if (installed <= new Version(3, 9, 3, 0))
+            {
+                ExistingConnectionScope.ExecuteWithCommand(cmd =>
+                {
+                    cmd.CommandText = @"
 
                                         DECLARE @dbName nvarchar(100)
                                         DECLARE @isAutoShrink int
@@ -203,13 +234,13 @@ namespace ShipWorks.Data.Administration
                                         IF(@isAutoShrink = 1)
                                             EXECUTE ('ALTER DATABASE ' + @dbName + ' SET AUTO_SHRINK OFF')";
 
-                                    cmd.ExecuteNonQuery();
-                                });
+                    cmd.ExecuteNonQuery();
+                });
 
-                                // Update size and growth of shipworks database
-                                ExistingConnectionScope.ExecuteWithCommand(cmd =>
-                                {
-                                    cmd.CommandText = @"
+                // Update size and growth of shipworks database
+                ExistingConnectionScope.ExecuteWithCommand(cmd =>
+                {
+                    cmd.CommandText = @"
                                         DECLARE @logSize int
                                         DECLARE @dataSize int
                                         DECLARE @dataFileGrowth int
@@ -242,13 +273,13 @@ namespace ShipWorks.Data.Administration
                                             EXECUTE ('ALTER DATABASE ' + @dbName + ' MODIFY FILE ( NAME = N''' + @logName + ''', FILEGROWTH = 200MB)' )
                                     ";
 
-                                    cmd.ExecuteNonQuery();
-                                });
+                    cmd.ExecuteNonQuery();
+                });
 
-                                // Update size and growth of tempdb
-                                ExistingConnectionScope.ExecuteWithCommand(cmd =>
-                                {
-                                    cmd.CommandText = @"
+                // Update size and growth of tempdb
+                ExistingConnectionScope.ExecuteWithCommand(cmd =>
+                {
+                    cmd.CommandText = @"
                                         DECLARE @logSize int
                                         DECLARE @dataSize int
                                         DECLARE @dataFileGrowth int
@@ -278,112 +309,105 @@ namespace ShipWorks.Data.Administration
                                             EXECUTE ('ALTER DATABASE tempdb MODIFY FILE ( NAME = N''' + @logName + ''', FILEGROWTH = 200MB)' )
                                     ";
 
-                                    cmd.ExecuteNonQuery();
-                                });
-                            }
+                    cmd.ExecuteNonQuery();
+                });
+            }
 
-                            // If we were upgrading from this version, add AddressValidation filters.
-                            if (installed < new Version(3, 12, 0, 0))
+            // If we were upgrading from this version, add AddressValidation filters.
+            if (installed < new Version(3, 12, 0, 0))
+            {
+                AddressValidationDatabaseUpgrade addressValidationDatabaseUpgrade = new AddressValidationDatabaseUpgrade();
+                ExistingConnectionScope.ExecuteWithAdapter(addressValidationDatabaseUpgrade.Upgrade);
+            }
+        }
+
+        /// <summary>
+        /// Run v4 specific update database logic
+        /// </summary>
+        private static void HandleUpdateDatabaseForV4(Version installed)
+        {
+            // If we were upgrading from this version, Regenerate scheduled actions
+            // To fix issue caused by breaking out assemblies
+            if (installed < new Version(4, 5, 0, 0))
+            {
+                // Grab all of the actions that are enabled and schedule based
+                ActionManager.InitializeForCurrentSession();
+                IEnumerable<ActionEntity> actions = ActionManager.Actions.Where(a => a.Enabled && a.TriggerType == (int) ActionTriggerType.Scheduled);
+                using (SqlAdapter adapter = new SqlAdapter())
+                {
+                    foreach (ActionEntity action in actions)
+                    {
+                        // Some trigger's state depend on the enabled state of the action
+                        ScheduledTrigger scheduledTrigger = ActionManager.LoadTrigger(action) as ScheduledTrigger;
+
+                        if (scheduledTrigger?.Schedule != null)
+                        {
+                            // Check to see if the action is a One Time action and in the past, if so we disable it
+                            if (scheduledTrigger.Schedule.StartDateTimeInUtc < DateTime.UtcNow &&
+                                scheduledTrigger.Schedule.ScheduleType == ActionScheduleType.OneTime)
                             {
-                                AddressValidationDatabaseUpgrade addressValidationDatabaseUpgrade = new AddressValidationDatabaseUpgrade();
-                                ExistingConnectionScope.ExecuteWithAdapter(addressValidationDatabaseUpgrade.Upgrade);
+                                action.Enabled = false;
                             }
-
-                            // This was needed for databases created before Beta6.  Any ALTER DATABASE statements must happen outside of transaction, so we had to put this here (and do it every time, even if not needed)
-                            SqlUtility.SetChangeTrackingRetention(ExistingConnectionScope.ScopedConnection, 1);
-
-                            // Try to restore multi-user mode with the existing connection, since re-acquiring a connection after a large
-                            // database upgrade can take time and cause a timeout.
-                            if (singleUserScope != null)
+                            else
                             {
-                                SingleUserModeScope.RestoreMultiUserMode(ExistingConnectionScope.ScopedConnection);
-                            }
-
-                            // If we were upgrading from this version, Regenerate scheduled actions
-                            // To fix issue caused by breaking out assemblies
-                            if (installed < new Version(4, 5, 0, 0))
-                            {
-                                // Grab all of the actions that are enabled and schedule based
-                                ActionManager.InitializeForCurrentSession();
-                                IEnumerable<ActionEntity> actions = ActionManager.Actions.Where(a => a.Enabled && a.TriggerType == (int) ActionTriggerType.Scheduled);
-                                using (SqlAdapter adapter = new SqlAdapter())
-                                {
-                                    foreach (ActionEntity action in actions)
-                                    {
-                                        // Some trigger's state depend on the enabled state of the action
-                                        ScheduledTrigger scheduledTrigger = ActionManager.LoadTrigger(action) as ScheduledTrigger;
-
-                                        if (scheduledTrigger?.Schedule != null)
-                                        {
-                                            // Check to see if the action is a One Time action and in the past, if so we disable it
-                                            if (scheduledTrigger.Schedule.StartDateTimeInUtc < DateTime.UtcNow &&
-                                                scheduledTrigger.Schedule.ScheduleType == ActionScheduleType.OneTime)
-                                            {
-                                                action.Enabled = false;
-                                            }
-                                            else
-                                            {
-                                                scheduledTrigger.SaveExtraState(action, adapter);
-                                            }
-                                        }
-
-                                        ActionManager.SaveAction(action, adapter);
-                                    }
-
-                                    adapter.Commit();
-                                }
-                            }
-
-                            // update Configuration table Key column to have an encrypted empty string
-                            // using the GetDatabaseGuid stored procedure as the salt.
-                            if (installed < new Version(5, 0, 0, 0))
-                            {
-                                using (ILifetimeScope iocScope = IoC.BeginLifetimeScope())
-                                {
-                                    // Resolve a CustomerLicense passing in an empty string as the key parameter
-                                    ICustomerLicense customerLicense = iocScope.Resolve<ICustomerLicense>(new TypedParameter(typeof(string), string.Empty));
-
-                                    // Save the license
-                                    customerLicense.Save();
-                                }
-                            }
-
-                            // If we were upgrading from this version, Regenerate scheduled actions
-                            // To fix issue caused by breaking out assemblies
-                            if (installed < new Version(5, 4, 0, 0))
-                            {
-                                // Grab all of the actions that are enabled and schedule based
-                                ActionManager.InitializeForCurrentSession();
-                                using (SqlAdapter adapter = new SqlAdapter())
-                                {
-                                    foreach (ActionEntity action in ActionManager.Actions)
-                                    {
-                                        // Some trigger's state depend on the enabled state of the action
-                                        ScheduledTrigger scheduledTrigger = ActionManager.LoadTrigger(action) as ScheduledTrigger;
-
-                                        if (scheduledTrigger?.Schedule != null)
-                                        {
-                                            // Check to see if the action is a One Time action and in the past, if so we disable it
-                                            if (scheduledTrigger.Schedule.StartDateTimeInUtc >= DateTime.UtcNow ||
-                                                scheduledTrigger.Schedule.ScheduleType != ActionScheduleType.OneTime)
-                                            {
-                                                scheduledTrigger.SaveExtraState(action, adapter);
-                                            }
-                                        }
-
-                                        ActionManager.SaveAction(action, adapter);
-                                    }
-
-                                    adapter.Commit();
-                                }
+                                scheduledTrigger.SaveExtraState(action, adapter);
                             }
                         }
+
+                        ActionManager.SaveAction(action, adapter);
                     }
+
+                    adapter.Commit();
                 }
-                catch (Exception ex)
+            }
+        }
+
+        /// <summary>
+        /// Run v5 specific update database logic
+        /// </summary>
+        private static void HandleUpdateDatabaseForV5(Version installed)
+        {
+            // update Configuration table Key column to have an encrypted empty string
+            // using the GetDatabaseGuid stored procedure as the salt.
+            if (installed < new Version(5, 0, 0, 0))
+            {
+                using (ILifetimeScope iocScope = IoC.BeginLifetimeScope())
                 {
-                    log.Error("UpdateDatabase failed", ex);
-                    throw;
+                    // Resolve a CustomerLicense passing in an empty string as the key parameter
+                    ICustomerLicense customerLicense = iocScope.Resolve<ICustomerLicense>(new TypedParameter(typeof(string), string.Empty));
+
+                    // Save the license
+                    customerLicense.Save();
+                }
+            }
+
+            // If we were upgrading from this version, Regenerate scheduled actions
+            // To fix issue caused by breaking out assemblies
+            if (installed < new Version(5, 4, 0, 0))
+            {
+                // Grab all of the actions that are enabled and schedule based
+                ActionManager.InitializeForCurrentSession();
+                using (SqlAdapter adapter = new SqlAdapter())
+                {
+                    foreach (ActionEntity action in ActionManager.Actions)
+                    {
+                        // Some trigger's state depend on the enabled state of the action
+                        ScheduledTrigger scheduledTrigger = ActionManager.LoadTrigger(action) as ScheduledTrigger;
+
+                        if (scheduledTrigger?.Schedule != null)
+                        {
+                            // Check to see if the action is a One Time action and in the past, if so we disable it
+                            if (scheduledTrigger.Schedule.StartDateTimeInUtc >= DateTime.UtcNow ||
+                                scheduledTrigger.Schedule.ScheduleType != ActionScheduleType.OneTime)
+                            {
+                                scheduledTrigger.SaveExtraState(action, adapter);
+                            }
+                        }
+
+                        ActionManager.SaveAction(action, adapter);
+                    }
+
+                    adapter.Commit();
                 }
             }
         }
