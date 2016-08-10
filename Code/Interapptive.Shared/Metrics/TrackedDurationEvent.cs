@@ -9,7 +9,7 @@ namespace Interapptive.Shared.Metrics
     /// <summary>
     /// Utility class for tracking the duration of an event, along with other metric info
     /// </summary>
-    public class TrackedDurationEvent : IDisposable
+    public class TrackedDurationEvent : IDisposable, ITrackedDurationEvent
     {
         private readonly Stopwatch stopwatch;
         private readonly EventTelemetry eventTelemetry;

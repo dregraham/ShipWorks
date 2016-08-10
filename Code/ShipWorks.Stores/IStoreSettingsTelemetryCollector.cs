@@ -1,4 +1,5 @@
-﻿using ShipWorks.Data.Model.EntityClasses;
+﻿using Interapptive.Shared.Metrics;
+using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Stores
 {
@@ -10,6 +11,6 @@ namespace ShipWorks.Stores
         /// <summary>
         /// Collects telemetry for a store
         /// </summary>
-        void CollectTelemetry(StoreEntity store, StoreSettingsTrackedDurationEvent storeSettingsTrackedDurationEvent);
+        void CollectTelemetry(StoreEntity store, ITrackedDurationEvent trackedDurationEvent);
     }
 }

@@ -84,7 +84,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             builder.RegisterType<OdbcSampleDataCommand>()
                 .AsImplementedInterfaces();
 
-            builder.RegisterType<Controls.OdbcCustomQueryWarningDlg>()
+            builder.RegisterType<OdbcCustomQueryWarningDlg>()
                 .Named<IDialog>("OdbcCustomQueryWarningDlg");
 
             builder.RegisterType<OdbcColumnSource>()
@@ -106,6 +106,9 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
 
             builder.RegisterType<ApiLogEntry>()
                 .As<IApiLogEntry>();
+
+            builder.RegisterType<OdbcStoreSettingsTelemetryCollector>()
+                .Keyed<IStoreSettingsTelemetryCollector>(StoreTypeCode.Odbc);
         }
 
         /// <summary>

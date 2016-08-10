@@ -181,6 +181,8 @@
     <Compile Include="Platforms\Odbc\Mapping\OdbcImportSettingsFile.cs" />
     <Compile Include="Platforms\Odbc\Mapping\OdbcSettingsFile.cs" />
     <Compile Include="Platforms\Odbc\Mapping\OdbcUploadSettingsFile.cs" />
+    <Compile Include="Platforms\Odbc\OdbcStoreSettingsTelemetryCollector.cs" />
+    <Compile Include="Platforms\Odbc\OdbcTableUploadQuery.cs" />
     <Compile Include="Platforms\Odbc\Upload\FieldValueResolvers\IOdbcFieldValueResolver.cs" />
     <Compile Include="Platforms\Odbc\Mapping\OdbcFieldValueResolutionStrategy.cs" />
     <Compile Include="Platforms\Odbc\Upload\FieldValueResolvers\OdbcShippingCarrierFieldValueResolver.cs" />
@@ -189,7 +191,6 @@
     <Compile Include="Platforms\Odbc\Upload\OdbcCustomUploadQuery.cs" />
     <Compile Include="Platforms\Odbc\Upload\FieldValueResolvers\OdbcShippingServiceFieldValueResolver.cs" />
     <Compile Include="Platforms\Odbc\Upload\FieldValueResolvers\OdbcDefaultFieldValueResolver.cs" />
-    <Compile Include="Platforms\Odbc\Upload\OdbcTableUploadQuery.cs" />
     <Compile Include="Platforms\Odbc\Upload\OdbcUploadCommand.cs" />
     <Compile Include="Platforms\Odbc\DataSource\IOdbcDataSourceService.cs" />
     <Compile Include="Platforms\Odbc\DataSource\OdbcDataSourceService.cs" />
