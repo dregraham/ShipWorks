@@ -186,6 +186,16 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
             messageHelper.Verify(m => m.ShowError(It.IsAny<string>()), Times.Once);
         }
 
+        [Fact]
+        public void Open_ThrowsException_WhenUnhandledExceptionIsThrown()
+        {
+            var streamReader = mock.Mock<TextReader>();
+            streamReader.Setup(r => r.ReadToEnd()).Throws(new ArgumentNullException());
+            var testObject = mock.Create<FakeOdbcSettingsFile>();
+
+            Assert.Throws<ArgumentNullException>(() => testObject.Open(streamReader.Object));
+        }
+
         private Mock<IOdbcFieldMap> MockFieldMap()
         {
             Mock<IOdbcFieldMap> fieldMap = mock.MockRepository.Create<IOdbcFieldMap>();
