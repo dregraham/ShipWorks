@@ -104,7 +104,7 @@
             this.exportImportMap.TabIndex = 31;
             this.exportImportMap.Text = "Export Import Map";
             this.exportImportMap.UseVisualStyleBackColor = true;
-            this.exportImportMap.Click += new System.EventHandler(this.OnExportImportMapClick);
+            this.exportImportMap.Click += new System.EventHandler(this.OnSaveImportMapClick);
             // 
             // exportUploadMap
             // 
@@ -114,7 +114,7 @@
             this.exportUploadMap.TabIndex = 32;
             this.exportUploadMap.Text = "Export Upload Map";
             this.exportUploadMap.UseVisualStyleBackColor = true;
-            this.exportUploadMap.Click += new System.EventHandler(this.OnExportUploadMapClick);
+            this.exportUploadMap.Click += new System.EventHandler(this.OnSaveUploadMapClick);
             // 
             // OdbcConnectionSettingsControl
             // 

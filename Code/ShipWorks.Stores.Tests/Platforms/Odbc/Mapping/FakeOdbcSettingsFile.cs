@@ -1,5 +1,4 @@
 ﻿using Interapptive.Shared.UI;
-using Newtonsoft.Json.Linq;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
 
 namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
@@ -26,21 +25,5 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
         /// The file extension.
         /// </summary>
         public override string Extension => "FakeExtension";
-
-        /// <summary>
-        /// Writes the additional paramaters to map.
-        /// </summary>
-        protected override void WriteAdditionalParamatersToMap(JObject settings)
-        {
-            // Not Needed
-        }
-
-        /// <summary>
-        /// Reads the additional paramaters from map.
-        /// </summary>
-        protected override void ReadAdditionalParamatersFromMap(JObject settings)
-        {
-            // Not Needed
-        }
     }
 }

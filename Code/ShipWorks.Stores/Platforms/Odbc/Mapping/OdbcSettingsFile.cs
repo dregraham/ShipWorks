@@ -54,45 +54,17 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         public string Filter => $"ShipWorks ODBC {Action} Map (*{Extension})|*{Extension}";
 
         /// <summary>
-        /// Reads the additional paramaters from map.
-        /// </summary>
-        protected abstract void ReadAdditionalParamatersFromMap(JObject settings);
-
-        /// <summary>
-        /// Writes the additional paramaters to map.
-        /// </summary>
-        protected abstract void WriteAdditionalParamatersToMap(JObject settings);
-
-        /// <summary>
         /// Opens the load file dialog to load the map
         /// </summary>
-        public void Open(TextReader reader)
+        public virtual void Open(TextReader reader)
         {
             try
             {
                 string json = reader.ReadToEnd();
 
-                JObject map = JObject.Parse(json);
+                JObject settings = JObject.Parse(json);
 
-                string columnSourceTypeFromDisk = map.GetValue("ColumnSourceType")?.ToString();
-                if (!string.IsNullOrWhiteSpace(columnSourceTypeFromDisk))
-                {
-                    ColumnSourceType = EnumHelper.GetEnumByApiValue<OdbcColumnSourceType>(columnSourceTypeFromDisk);
-                }
-
-                string columnSourceFromDisk = map.GetValue("ColumnSource")?.ToString();
-                if (!string.IsNullOrWhiteSpace(columnSourceFromDisk))
-                {
-                    ColumnSource = columnSourceFromDisk;
-                }
-
-                string mapFromDisk = map.GetValue("FieldMap")?.ToString();
-                if (!string.IsNullOrWhiteSpace(mapFromDisk))
-                {
-                    OdbcFieldMap.Load(mapFromDisk);
-                }
-
-                ReadAdditionalParamatersFromMap(map);
+                PopulateOdbcSettingsFrom(settings);
             }
             catch (IOException ex)
             {
@@ -109,20 +81,39 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         }
 
         /// <summary>
+        /// Populates the ODBC settings from.
+        /// </summary>
+        protected virtual void PopulateOdbcSettingsFrom(JObject settings)
+        {
+            string columnSourceTypeFromDisk = settings.GetValue("ColumnSourceType")?.ToString();
+            if (!string.IsNullOrWhiteSpace(columnSourceTypeFromDisk))
+            {
+                ColumnSourceType = EnumHelper.GetEnumByApiValue<OdbcColumnSourceType>(columnSourceTypeFromDisk);
+            }
+
+            string columnSourceFromDisk = settings.GetValue("ColumnSource")?.ToString();
+            if (!string.IsNullOrWhiteSpace(columnSourceFromDisk))
+            {
+                ColumnSource = columnSourceFromDisk;
+            }
+
+            string mapFromDisk = settings.GetValue("FieldMap")?.ToString();
+            if (!string.IsNullOrWhiteSpace(mapFromDisk))
+            {
+                OdbcFieldMap.Load(mapFromDisk);
+            }
+        }
+
+        /// <summary>
         /// Opens the save file dialog to save the map
         /// </summary>
-        public void Save(TextWriter textWriter)
+        public virtual void Save(TextWriter textWriter)
         {
             try
             {
-                JObject settings = new JObject
-                {
-                    {"ColumnSourceType", EnumHelper.GetApiValue(ColumnSourceType)},
-                    {"ColumnSource", ColumnSource},
-                    {"FieldMap", OdbcFieldMap.Serialize()}
-                };
+                JObject settings = new JObject();
 
-                WriteAdditionalParamatersToMap(settings);
+                SaveOdbcSettingsTo(settings);
 
                 textWriter.Write(settings.ToString());
                 textWriter.Flush();
@@ -139,6 +130,17 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
             {
                 messageHelper.ShowError(ex.Message);
             }
+        }
+
+        /// <summary>
+        /// Saves the settings to the JObject
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        protected virtual void SaveOdbcSettingsTo(JObject settings)
+        {
+            settings.Add("ColumnSourceType", EnumHelper.GetApiValue(ColumnSourceType));
+            settings.Add("ColumnSource", ColumnSource);
+            settings.Add("FieldMap", OdbcFieldMap.Serialize());
         }
     }
 }

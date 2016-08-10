@@ -48,5 +48,10 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// Gets a map with the specified number of attributes with item numbers started at the specified start number.
         /// </summary>
         IOdbcFieldMap GetAttributeRangeFieldMap(int startAttributeNumber, int numberOfAttributes, int itemIndex);
+
+        /// <summary>
+        /// Creates an empty field map.
+        /// </summary>
+        IOdbcFieldMap CreateEmptyFieldMap();
     }
 }

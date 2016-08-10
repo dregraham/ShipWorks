@@ -23,7 +23,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.Controls
     /// </summary>
     public partial class OdbcConnectionSettingsControl : AccountSettingsControlBase
     {
-        private readonly Func<IOdbcFieldMap> odbcFieldMapFunc;
+        private readonly IOdbcFieldMapFactory odbcFieldMapFactory;
         private readonly IIndex<FileDialogType, IFileDialog> fileDialogFactory;
         private readonly IOdbcImportSettingsFile importSettingsFile;
         private readonly IOdbcSettingsFile uploadSettingsFile;
@@ -33,12 +33,12 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.Controls
         /// Initializes a new instance of the <see cref="OdbcConnectionSettingsControl"/> class.
         /// </summary>
         public OdbcConnectionSettingsControl(
-            Func<IOdbcFieldMap> odbcFieldMapFunc,
+            IOdbcFieldMapFactory odbcFieldMapFactory,
             IIndex<FileDialogType, IFileDialog> fileDialogFactory,
             IOdbcImportSettingsFile importSettingsFile,
             IOdbcSettingsFile uploadSettingsFile)
         {
-            this.odbcFieldMapFunc = odbcFieldMapFunc;
+            this.odbcFieldMapFactory = odbcFieldMapFactory;
             this.fileDialogFactory = fileDialogFactory;
             this.importSettingsFile = importSettingsFile;
             this.uploadSettingsFile = uploadSettingsFile;
@@ -121,9 +121,9 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.Controls
         /// <summary>
         /// Called when [export import map click].
         /// </summary>
-        private void OnExportImportMapClick(object sender, EventArgs e)
+        private void OnSaveImportMapClick(object sender, EventArgs e)
         {
-            IOdbcFieldMap fieldMap = odbcFieldMapFunc();
+            IOdbcFieldMap fieldMap = odbcFieldMapFactory.CreateEmptyFieldMap();
             fieldMap.Load(store.ImportMap);
 
             IFileDialog fileDialog = fileDialogFactory[FileDialogType.Save];
@@ -150,9 +150,9 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.Controls
         /// <summary>
         /// Called when [export upload map].
         /// </summary>
-        private void OnExportUploadMapClick(object sender, EventArgs e)
+        private void OnSaveUploadMapClick(object sender, EventArgs e)
         {
-            IOdbcFieldMap fieldMap = odbcFieldMapFunc();
+            IOdbcFieldMap fieldMap = odbcFieldMapFactory.CreateEmptyFieldMap();
             fieldMap.Load(store.UploadMap);
 
             IFileDialog fileDialog = fileDialogFactory[FileDialogType.Save];
