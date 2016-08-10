@@ -78,19 +78,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
                 log.Error(ex.Message, ex);
                 return GenericResult.FromError<JObject>(ex.Message);
             }
-            catch (IOException ex)
-            {
-                messageHelper.ShowError(ex.Message);
-                log.Error(ex.Message, ex);
-                return GenericResult.FromError<JObject>(ex.Message);
-            }
-            catch (UnauthorizedAccessException ex)
-            {
-                messageHelper.ShowError(ex.Message);
-                log.Error(ex.Message, ex);
-                return GenericResult.FromError<JObject>(ex.Message);
-            }
-            catch (ShipWorksOdbcException ex)
+            catch (Exception ex) when(ex.IsExceptionType(typeof(IOException), typeof(UnauthorizedAccessException), typeof(ShipWorksOdbcException)))
             {
                 messageHelper.ShowError(ex.Message);
                 log.Error(ex.Message, ex);
@@ -136,17 +124,10 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
                 textWriter.Write(settings.ToString());
                 textWriter.Flush();
             }
-            catch (IOException ex)
+            catch (Exception ex) when (ex.IsExceptionType(typeof(IOException), typeof(UnauthorizedAccessException), typeof(ShipWorksOdbcException)))
             {
                 messageHelper.ShowError(ex.Message);
-            }
-            catch (UnauthorizedAccessException ex)
-            {
-                messageHelper.ShowError(ex.Message);
-            }
-            catch (ShipWorksOdbcException ex)
-            {
-                messageHelper.ShowError(ex.Message);
+                log.Error(ex.Message, ex);
             }
         }
 
