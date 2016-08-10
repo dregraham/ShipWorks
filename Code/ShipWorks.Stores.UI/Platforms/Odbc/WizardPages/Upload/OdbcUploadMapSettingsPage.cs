@@ -1,5 +1,4 @@
-﻿using System;
-using Autofac.Features.Indexed;
+﻿using Autofac.Features.Indexed;
 using Interapptive.Shared.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Management;
@@ -9,6 +8,7 @@ using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 using ShipWorks.Stores.Platforms.Odbc.Upload;
 using ShipWorks.Stores.UI.Platforms.Odbc.ViewModels;
 using ShipWorks.UI.Wizard;
+using System;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages.Upload
 {
@@ -92,6 +92,10 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages.Upload
 
                 viewModel.Load(selectedDataSource, schema, store.UploadColumnSource, store);
                 mapSettingsControl.DataContext = viewModel;
+            }
+            else
+            {
+                viewModel.LoadMapSettings(store);
             }
         }
     }

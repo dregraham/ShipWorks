@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Common;
-using System.Linq;
-using Autofac;
+﻿using Autofac;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.UI;
 using Moq;
@@ -14,6 +9,11 @@ using ShipWorks.Stores.Platforms.Odbc.Download;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
 using ShipWorks.Stores.UI.Platforms.Odbc;
 using ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.Common;
+using System.Linq;
 using Xunit;
 
 namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Import

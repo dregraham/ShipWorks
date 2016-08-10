@@ -175,6 +175,11 @@
     <Compile Include="Platforms\Odbc\DataAccess\IOdbcUploadCommandFactory.cs" />
     <Compile Include="Platforms\Odbc\DataAccess\OdbcUploadCommandFactory.cs" />
     <Compile Include="Platforms\Odbc\DataSource\DsnInfo.cs" />
+    <Compile Include="Platforms\Odbc\Mapping\IOdbcImportSettingsFile.cs" />
+    <Compile Include="Platforms\Odbc\Mapping\IOdbcSettingsFile.cs" />
+    <Compile Include="Platforms\Odbc\Mapping\OdbcImportSettingsFile.cs" />
+    <Compile Include="Platforms\Odbc\Mapping\OdbcSettingsFile.cs" />
+    <Compile Include="Platforms\Odbc\Mapping\OdbcUploadSettingsFile.cs" />
     <Compile Include="Platforms\Odbc\Upload\FieldValueResolvers\IOdbcFieldValueResolver.cs" />
     <Compile Include="Platforms\Odbc\Mapping\OdbcFieldValueResolutionStrategy.cs" />
     <Compile Include="Platforms\Odbc\Upload\FieldValueResolvers\OdbcShippingCarrierFieldValueResolver.cs" />
@@ -218,12 +223,12 @@
     <Compile Include="Platforms\Odbc\Mapping\IOdbcFieldMapFactory.cs" />
     <Compile Include="Platforms\Odbc\Mapping\IOdbcFieldMapIOFactory.cs" />
     <Compile Include="Platforms\Odbc\Mapping\IOdbcFieldMapReader.cs" />
-    <Compile Include="Platforms\Odbc\Mapping\IOdbcFieldMapWriter.cs" />
+    <Compile Include="Platforms\Odbc\Mapping\IOdbcFieldMapSerializer.cs" />
     <Compile Include="Platforms\Odbc\Mapping\IOdbcMappableField.cs" />
     <Compile Include="Platforms\Odbc\Mapping\IShipWorksOdbcMappableField.cs" />
     <Compile Include="Platforms\Odbc\Mapping\JsonOdbcFieldMapIOFactory.cs" />
     <Compile Include="Platforms\Odbc\Mapping\JsonOdbcFieldMapReader.cs" />
-    <Compile Include="Platforms\Odbc\Mapping\JsonOdbcFieldMapWriter.cs" />
+    <Compile Include="Platforms\Odbc\Mapping\JsonOdbcFieldMapSerializer.cs" />
     <Compile Include="Platforms\Odbc\Mapping\OdbcFieldMap.cs" />
     <Compile Include="Platforms\Odbc\Mapping\OdbcFieldMapEntry.cs" />
     <Compile Include="Platforms\Odbc\Mapping\OdbcFieldMapFactory.cs" />

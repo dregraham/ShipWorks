@@ -1,10 +1,10 @@
-﻿using System;
-using System.Windows.Interop;
-using ShipWorks.Data.Model.EntityClasses;
+﻿using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import;
 using ShipWorks.UI.Wizard;
+using System;
+using System.Windows.Interop;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages.Import
 {
@@ -35,15 +35,23 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages.Import
         public int Position => 2;
 
         /// <summary>
+        /// Load saved map from store
+        /// </summary>
+        private void OnSteppingInto(object sender, WizardSteppingIntoEventArgs e)
+        {
+            store = GetStore<OdbcStoreEntity>();
+
+            viewModel = viewModelFactory();
+            viewModel.Load(store);
+
+            mappingControl.DataContext = viewModel;
+        }
+
+        /// <summary>
         /// Save the map to the ODBC Store
         /// </summary>
         private void OnNext(object sender, WizardStepEventArgs e)
         {
-            if (store == null)
-            {
-                store = GetStore<OdbcStoreEntity>();
-            }
-
             if (!viewModel.ValidateRequiredMappingFields())
             {
                 e.NextPage = this;
@@ -59,20 +67,6 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages.Import
         private void OnBack(object sender, WizardStepEventArgs e)
         {
             viewModel.Save(GetStore<OdbcStoreEntity>());
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="System.EventArgs" /> instance containing the event data.</param>
-        private void OnSteppingInto(object sender, WizardSteppingIntoEventArgs e)
-        {
-            store = GetStore<OdbcStoreEntity>();
-
-            viewModel = viewModelFactory();
-            viewModel.Load(store);
-
-            mappingControl.DataContext = viewModel;
         }
     }
 }

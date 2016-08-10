@@ -82,6 +82,22 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         }
 
         /// <summary>
+        /// Reads the map name identifier source from the stream
+        /// </summary>
+        public string ReadName()
+        {
+            try
+            {
+                return json["Name"]?.ToString() ?? string.Empty;
+            }
+            catch (Exception ex)
+            {
+                log.Error("Error parsing Record Identifier Source from map.", ex);
+                return string.Empty;
+            }
+        }
+
+        /// <summary>
         /// Reads the custom query source from the stream
         /// </summary>
         /// <returns></returns>

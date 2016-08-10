@@ -1,5 +1,3 @@
-using System.IO;
-
 namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 {
     /// <summary>
@@ -10,16 +8,11 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <summary>
         /// Creates a field map reader.
         /// </summary>
-        IOdbcFieldMapReader CreateReader(Stream stream);
-
-        /// <summary>
-        /// Creates a field map reader.
-        /// </summary>
         IOdbcFieldMapReader CreateReader(string serializedMap);
 
         /// <summary>
         /// Creates a field map writer.
         /// </summary>
-        IOdbcFieldMapWriter CreateWriter(OdbcFieldMap map);
+        IOdbcFieldMapSerializer CreateWriter(OdbcFieldMap map);
     }
 }

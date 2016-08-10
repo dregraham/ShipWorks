@@ -287,6 +287,14 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         }
 
         /// <summary>
+        /// Creates an empty field map.
+        /// </summary>
+        public IOdbcFieldMap CreateEmptyFieldMap()
+        {
+            return new OdbcFieldMap(ioFactory);
+        }
+
+        /// <summary>
         /// Gets the specified number of attributes with item numbers started at the specified start number.
         /// </summary>
         private static IEnumerable<ShipWorksOdbcMappableField> GetAttributeRange(int startAttributeNumber, int numberOfAttributes)

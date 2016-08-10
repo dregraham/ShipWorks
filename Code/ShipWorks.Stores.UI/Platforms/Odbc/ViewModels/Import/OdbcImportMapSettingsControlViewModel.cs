@@ -1,13 +1,19 @@
-﻿using System;
-using System.Reflection;
+﻿using Autofac.Features.Indexed;
 using GalaSoft.MvvmLight.Command;
 using Interapptive.Shared.UI;
-using log4net;
+using Interapptive.Shared.Utility;
+using Newtonsoft.Json.Linq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Stores.Platforms.Odbc.DataAccess;
 using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 using ShipWorks.Stores.Platforms.Odbc.Download;
+using ShipWorks.Stores.Platforms.Odbc.Mapping;
+using System;
+using System.IO;
+using System.Reflection;
+using System.Windows.Forms;
+using System.Windows.Input;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
 {
@@ -20,22 +26,38 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
         private bool downloadStrategyIsLastModified = true;
         private readonly Func<string, IDialog> dialogFactory;
         private readonly IOdbcSampleDataCommand sampleDataCommand;
+        private IOdbcFieldMap fieldMap;
         private const int NumberOfSampleResults = 25;
         private bool isQueryValid;
-        private readonly ILog log;
+        private readonly IIndex<FileDialogType, IFileDialog> fileDialogFactory;
+        private readonly IOdbcImportSettingsFile importSettingsFile;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcImportMapSettingsControlViewModel"/> class.
         /// </summary>
-        public OdbcImportMapSettingsControlViewModel(Func<string, IDialog> dialogFactory, IOdbcSampleDataCommand sampleDataCommand,
-            Func<Type, ILog> logFactory, IMessageHelper messageHelper, Func<string, IOdbcColumnSource> columnSourceFactory) :
-            base(messageHelper, columnSourceFactory)
+        public OdbcImportMapSettingsControlViewModel(Func<string, IDialog> dialogFactory,
+            IOdbcSampleDataCommand sampleDataCommand,
+            IMessageHelper messageHelper,
+            Func<string, IOdbcColumnSource> columnSourceFactory,
+            IOdbcFieldMap fieldMap,
+            IIndex<FileDialogType, IFileDialog> fileDialogFactory,
+            IOdbcImportSettingsFile importSettingsFile) :
+                base(messageHelper, columnSourceFactory)
         {
             this.dialogFactory = dialogFactory;
             this.sampleDataCommand = sampleDataCommand;
-            log = logFactory(typeof(OdbcImportMappingControlViewModel));
+            this.fieldMap = fieldMap;
+            this.fileDialogFactory = fileDialogFactory;
+            this.importSettingsFile = importSettingsFile;
+            OpenMapSettingsFileCommand = new RelayCommand(OpenMapSettingsFile);
             ExecuteQueryCommand = new RelayCommand(ExecuteQuery);
         }
+
+        /// <summary>
+        /// Gets the load map command.
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public ICommand OpenMapSettingsFileCommand { get; }
 
         /// <summary>
         /// Whether the column source selected is table
@@ -70,6 +92,39 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
         }
 
         /// <summary>
+        /// Loads the map from disk.
+        /// </summary>
+        private void OpenMapSettingsFile()
+        {
+
+            IFileDialog fileDialog = fileDialogFactory[FileDialogType.Open];
+            fileDialog.DefaultExt = importSettingsFile.Extension;
+            fileDialog.Filter = importSettingsFile.Filter;
+            fileDialog.DefaultFileName = fieldMap.Name;
+
+            if (fileDialog.ShowDialog() != DialogResult.OK)
+            {
+                return;
+            }
+
+            using (Stream streamToOpen = fileDialog.CreateFileStream())
+            using (StreamReader reader = new StreamReader(streamToOpen))
+            {
+                GenericResult<JObject> openResults = importSettingsFile.Open(reader);
+                if (openResults.Success)
+                {
+                    DownloadStrategyIsLastModified = importSettingsFile.OdbcImportStrategy ==
+                                                     OdbcImportStrategy.ByModifiedTime;
+                    ColumnSourceIsTable = importSettingsFile.ColumnSourceType == OdbcColumnSourceType.Table;
+                    LoadAndSetColumnSource(importSettingsFile.ColumnSource);
+                    MapName = importSettingsFile.OdbcFieldMap.Name;
+
+                    fieldMap = importSettingsFile.OdbcFieldMap;
+                }
+            }
+        }
+
+        /// <summary>
         /// Saves the map settings.
         /// </summary>
         public override void SaveMapSettings(OdbcStoreEntity store)
@@ -85,6 +140,9 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
             store.ImportColumnSource = ColumnSourceIsTable ?
                 SelectedTable.Name :
                 CustomQuery;
+
+            fieldMap.Name = MapName;
+            store.ImportMap = fieldMap.Serialize();
         }
 
         /// <summary>
@@ -116,12 +174,14 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
         /// </summary>
         public override void LoadMapSettings(OdbcStoreEntity store)
         {
+            fieldMap.Load(store.ImportMap);
+            MapName = fieldMap.Name;
+
             DownloadStrategyIsLastModified = store.ImportStrategy == (int)OdbcImportStrategy.ByModifiedTime;
 
             ColumnSourceIsTable = store.ImportColumnSourceType == (int)OdbcColumnSourceType.Table;
         }
-
-
+        
         /// <summary>
         /// Executes the query.
         /// </summary>
@@ -143,7 +203,6 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
             }
             catch (ShipWorksOdbcException ex)
             {
-                log.Error(ex.Message);
                 MessageHelper.ShowError(ex.Message);
                 isQueryValid = false;
             }

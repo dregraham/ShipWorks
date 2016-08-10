@@ -14,7 +14,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Input;
@@ -22,7 +21,7 @@ using System.Windows.Input;
 namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
 {
     /// <summary>
-    /// View Model for the <see cref="OdbcImportMappingControl"/>
+    /// View Model for the OdbcImportMappingControl
     /// </summary>
     public class OdbcImportMappingControlViewModel : IOdbcImportMappingControlViewModel, INotifyPropertyChanged
     {
@@ -40,6 +39,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
         private bool isSingleLineOrder = true;
         private int numberOfAttributesPerItem;
         private int numberOfItemsPerOrder;
+        private string loadedMapName;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcImportMappingControlViewModel"/> class.
@@ -183,28 +183,26 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
 
                 if (delta != 0)
                 {
-                    foreach (OdbcFieldMapDisplay displayMap in itemMaps)
+                    foreach (OdbcFieldMapDisplay itemFieldMap in itemMaps)
                     {
                         // Disabling this condition because the simplification it suggests is invalid code.
                         // The two branches of the if statement do very different things (adding or removing attributes)
 #pragma warning disable S3240 // The simplest possible condition syntax should be used
                         if (delta > 0)
                         {
-                            fieldMapFactory.GetAttributeRangeFieldMap(numberOfAttributesPerItem + 1, delta, displayMap.Index).Entries
+                            fieldMapFactory.GetAttributeRangeFieldMap(numberOfAttributesPerItem + 1, delta, itemFieldMap.Index).Entries
                                 .ToList()
-                                .ForEach(displayMap.Entries.Add);
+                                .ForEach(itemFieldMap.Entries.Add);
                         }
                         else // delta < 0
                         {
-                            FindEntriesBy(displayMap, OrderItemAttributeFields.Name)
+                            IEnumerable<IOdbcFieldMapEntry> attributeEntries = FindEntriesBy(itemFieldMap, OrderItemAttributeFields.Name);
+                            attributeEntries
                                 .Skip(value)
                                 .ToList()
-                                .ForEach(m => displayMap.Entries.Remove(m));
+                                .ForEach(m => itemFieldMap.Entries.Remove(m));
                         }
 #pragma warning restore S3240 // The simplest possible condition syntax should be used
-
-                        Debug.Assert(FindEntriesBy(displayMap, OrderItemAttributeFields.Name).Count() == value,
-                            "Error setting number of attributes");
                     }
                 }
 
@@ -246,6 +244,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
         private void LoadMap(string importMap)
         {
             IOdbcFieldMap storeFieldMap = fieldMapFactory.CreateFieldMapFrom(importMap);
+            loadedMapName = storeFieldMap.Name;
 
             EnsureExternalFieldsExistInColumnSource(storeFieldMap);
 
@@ -301,28 +300,11 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
         /// </summary>
         private void LoadNumberOfItemAttributes(IOdbcFieldMap storeFieldMap)
         {
-            numberOfAttributesPerItem = 0;
-
-            // Go through each item mapping and see how many attributes are mapped to it
-            for (int index = 0; index < numberOfItemsPerOrder; index++)
-            {
-                IEnumerable<IOdbcFieldMapEntry> attributeEntries =
-                    storeFieldMap.FindEntriesBy(OrderItemAttributeFields.Name).Where(e => e.Index == index);
-
-                int attributeCountForThisItem = 0;
-
-                // Get the highest attribute index for this item
-                foreach (IOdbcFieldMapEntry attributeEntry in attributeEntries)
-                {
-                    // Get the attributes index from the name
-                    int attributeIndex = int.Parse(attributeEntry.ShipWorksField.DisplayName.Substring("Attribute ".Length));
-
-                    attributeCountForThisItem = Math.Max(attributeCountForThisItem, attributeIndex);
-                }
-
-                numberOfAttributesPerItem = Math.Max(numberOfAttributesPerItem, attributeCountForThisItem);
-            }
-
+            numberOfAttributesPerItem = storeFieldMap.FindEntriesBy(OrderItemAttributeFields.Name)
+                .Select(a => int.Parse(a.ShipWorksField.DisplayName.Substring("Attribute ".Length)))
+                .DefaultIfEmpty(0)
+                .Max();
+            
             handler.Set(nameof(NumberOfAttributesPerItem), ref numberOfAttributesPerItem, numberOfAttributesPerItem);
         }
 
@@ -397,24 +379,14 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
         {
             MethodConditions.EnsureArgumentIsNotNull(store);
 
-            OdbcFieldMap map = CreateMap();
-
-            using (Stream memoryStream = new MemoryStream())
+            IOdbcFieldMap map = CreateMap();
+            try
             {
-                try
-                {
-                    map.Save(memoryStream);
-                }
-                catch (ShipWorksOdbcException ex)
-                {
-                    messageHelper.ShowError(ex.Message);
-                }
-
-                memoryStream.Position = 0;
-                using (StreamReader reader = new StreamReader(memoryStream))
-                {
-                    store.ImportMap = reader.ReadToEnd();
-                }
+                store.ImportMap = map.Serialize();
+            }
+            catch (ShipWorksOdbcException ex)
+            {
+                messageHelper.ShowError(ex.Message);
             }
         }
 
@@ -456,11 +428,12 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
         /// <summary>
         /// Build a single ODBC Field Map from the Order Address and Item Field Maps
         /// </summary>
-        private OdbcFieldMap CreateMap()
+        private IOdbcFieldMap CreateMap()
         {
             List<IOdbcFieldMapEntry> mapEntries = GetAllMapEntries();
 
-            OdbcFieldMap map = fieldMapFactory.CreateFieldMapFrom(mapEntries);
+            IOdbcFieldMap map = fieldMapFactory.CreateFieldMapFrom(mapEntries);
+            map.Name = loadedMapName;
 
             if (!IsSingleLineOrder)
             {

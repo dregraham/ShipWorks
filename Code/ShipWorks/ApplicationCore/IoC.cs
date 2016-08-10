@@ -7,6 +7,7 @@ using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Pdf;
 using Interapptive.Shared.Security;
 using Interapptive.Shared.Threading;
+using Interapptive.Shared.UI;
 using Interapptive.Shared.Win32;
 using log4net;
 using ShipWorks.AddressValidation;
@@ -92,7 +93,7 @@ namespace ShipWorks.ApplicationCore
             builder.RegisterGeneric(typeof(AccountManagerBase<>))
                 .AsSelf()
                 .SingleInstance();
-            
+
             builder.RegisterInstance(Messenger.Current)
                 .AsImplementedInterfaces()
                 .ExternallyOwned();
@@ -203,6 +204,9 @@ namespace ShipWorks.ApplicationCore
             builder.RegisterType<UspsAccountInfoControl>();
             builder.RegisterType<UspsAccountManagerControl>();
             builder.RegisterType<UspsPurchasePostageDlg>();
+
+            builder.RegisterType<ShipWorksOpenFileDialog>().Keyed<IFileDialog>(FileDialogType.Open);
+            builder.RegisterType<ShipWorksSaveFileDialog>().Keyed<IFileDialog>(FileDialogType.Save);
         }
 
         /// <summary>
