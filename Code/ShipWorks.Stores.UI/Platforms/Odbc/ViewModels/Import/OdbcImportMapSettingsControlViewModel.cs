@@ -54,6 +54,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
         /// <summary>
         /// Gets the load map command.
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public ICommand OpenMapSettingsFileCommand { get; }
 
         /// <summary>
